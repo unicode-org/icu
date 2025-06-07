@@ -12,10 +12,12 @@
  */
 package com.ibm.icu.dev.tool.layout;
 
-public abstract class TreeWalker
-{
+public abstract class TreeWalker {
     abstract void down(int ch);
+
     abstract void up();
+
     abstract void ligature(int lig);
+
     abstract void done();
 }

@@ -2,15 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.dev.test.util;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.tool.locale.LocaleDistanceBuilder;
 import com.ibm.icu.impl.locale.LocaleDistance;
@@ -18,21 +9,29 @@ import com.ibm.icu.util.LocaleMatcher;
 import com.ibm.icu.util.LocaleMatcher.FavorSubtag;
 import com.ibm.icu.util.Output;
 import com.ibm.icu.util.ULocale;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 /**
- * Test the LocaleDistance.
- * TODO: Rename to LocaleDistanceTest.
+ * Test the LocaleDistance. TODO: Rename to LocaleDistanceTest.
  *
  * @author markdavis
  */
 @RunWith(JUnit4.class)
 public class LocaleDistanceTest extends CoreTestFmwk {
-    private static final boolean REFORMAT = false; // set to true to get a reformatted data file listed
+    private static final boolean REFORMAT =
+            false; // set to true to get a reformatted data file listed
 
     private LocaleDistance localeDistance = LocaleDistance.INSTANCE;
-    DataDrivenTestHelper tfh = new MyTestFileHandler()
-            .setFramework(this)
-            .load(LocaleDistanceTest.class, "data/localeDistanceTest.txt");
+    DataDrivenTestHelper tfh =
+            new MyTestFileHandler()
+                    .setFramework(this)
+                    .load(LocaleDistanceTest.class, "data/localeDistanceTest.txt");
 
     static class Arguments {
         final ULocale desired;
@@ -41,10 +40,14 @@ public class LocaleDistanceTest extends CoreTestFmwk {
         final int supportedToDesired;
 
         public Arguments(List<String> args) {
-            this.desired = new ULocale.Builder().setLanguageTag(args.get(0)).build(); // use more complicated expression to check syntax
+            this.desired =
+                    new ULocale.Builder()
+                            .setLanguageTag(args.get(0))
+                            .build(); // use more complicated expression to check syntax
             this.supported = new ULocale.Builder().setLanguageTag(args.get(1)).build();
             this.desiredToSupported = Integer.parseInt(args.get(2));
-            this.supportedToDesired = args.size() > 3 ? Integer.parseInt(args.get(3)) : this.desiredToSupported;
+            this.supportedToDesired =
+                    args.size() > 3 ? Integer.parseInt(args.get(3)) : this.desiredToSupported;
         }
     }
 
@@ -72,7 +75,7 @@ public class LocaleDistanceTest extends CoreTestFmwk {
         long likelyTime = 0;
         long newLikelyTime = 0;
         long newTimeMinusLikely = 0;
-        //long intTime = 0;
+        // long intTime = 0;
         long oldTimeMinusLikely = 0;
         final int maxIterations = 1000;
 
@@ -81,41 +84,47 @@ public class LocaleDistanceTest extends CoreTestFmwk {
             for (Arguments test : tests) {
                 final ULocale desired = test.desired;
                 final ULocale supported = test.supported;
-                //final int desiredToSupported = test.desiredToSupported;
-                //final int supportedToDesired = test.supportedToDesired;
+                // final int desiredToSupported = test.desiredToSupported;
+                // final int supportedToDesired = test.supportedToDesired;
 
                 long temp = System.nanoTime();
                 final ULocale desiredMax = ULocale.addLikelySubtags(desired);
                 final ULocale supportedMax = ULocale.addLikelySubtags(supported);
-                likelyTime += System.nanoTime()-temp;
+                likelyTime += System.nanoTime() - temp;
 
                 temp = System.nanoTime();
-                //double distOld1 = oldLocaleMatcher.match(desired, desiredMax, supported, supportedMax);
-                //double distOld2 = oldLocaleMatcher.match(supported, supportedMax, desired, desiredMax);
-                oldTimeMinusLikely += System.nanoTime()-temp;
+                // double distOld1 = oldLocaleMatcher.match(desired, desiredMax, supported,
+                // supportedMax);
+                // double distOld2 = oldLocaleMatcher.match(supported, supportedMax, desired,
+                // desiredMax);
+                oldTimeMinusLikely += System.nanoTime() - temp;
 
                 temp = System.nanoTime();
-//                final LSR desiredLSR = LSR.maximizedFrom(desired);
-//                final LSR supportedLSR = LSR.maximizedFrom(supported);
-                newLikelyTime += System.nanoTime()-temp;
+                //                final LSR desiredLSR = LSR.maximizedFrom(desired);
+                //                final LSR supportedLSR = LSR.maximizedFrom(supported);
+                newLikelyTime += System.nanoTime() - temp;
 
                 temp = System.nanoTime();
-                int dist1 = localeDistance.testOnlyDistance(desired, supported, 1000, FavorSubtag.LANGUAGE);
-                int dist2 = localeDistance.testOnlyDistance(supported, desired, 1000, FavorSubtag.LANGUAGE);
-                newTimeMinusLikely += System.nanoTime()-temp;
+                int dist1 =
+                        localeDistance.testOnlyDistance(
+                                desired, supported, 1000, FavorSubtag.LANGUAGE);
+                int dist2 =
+                        localeDistance.testOnlyDistance(
+                                supported, desired, 1000, FavorSubtag.LANGUAGE);
+                newTimeMinusLikely += System.nanoTime() - temp;
             }
         }
-        final long oldTime = oldTimeMinusLikely+likelyTime;
-        final long newTime = newLikelyTime+newTimeMinusLikely;
+        final long oldTime = oldTimeMinusLikely + likelyTime;
+        final long newTime = newLikelyTime + newTimeMinusLikely;
         logln("\n");
-        logln("\tlikelyTime:\t" + likelyTime/maxIterations);
-        logln("\toldTime-likelyTime:\t" + oldTimeMinusLikely/maxIterations);
-        logln("totalOld:\t" + oldTime/maxIterations);
-        logln("\tnewLikelyTime:\t" + newLikelyTime/maxIterations);
-        logln("totalNew:\t" + newTime/maxIterations);
+        logln("\tlikelyTime:\t" + likelyTime / maxIterations);
+        logln("\toldTime-likelyTime:\t" + oldTimeMinusLikely / maxIterations);
+        logln("totalOld:\t" + oldTime / maxIterations);
+        logln("\tnewLikelyTime:\t" + newLikelyTime / maxIterations);
+        logln("totalNew:\t" + newTime / maxIterations);
         assertTrue("newTime < 20% of oldTime", newTime * 5 < oldTime);
-        //logln("\tnewIntTime-newLikelyTime-extractTime:\t" + intTime/maxIterations);
-        //logln("totalInt:\t" + (intTime)/maxIterations);
+        // logln("\tnewIntTime-newLikelyTime-extractTime:\t" + intTime/maxIterations);
+        // logln("totalInt:\t" + (intTime)/maxIterations);
     }
 
     @Test
@@ -139,7 +148,8 @@ public class LocaleDistanceTest extends CoreTestFmwk {
         private Integer threshold = localeDistance.getDefaultScriptDistance();
 
         @Override
-        public void handle(int lineNumber, boolean breakpoint, String commentBase, List<String> arguments) {
+        public void handle(
+                int lineNumber, boolean breakpoint, String commentBase, List<String> arguments) {
             if (breakpoint) {
                 breakpoint = false; // put debugger breakpoint here to break at @debug in test file
             }
@@ -147,13 +157,22 @@ public class LocaleDistanceTest extends CoreTestFmwk {
             String desiredTag = args.desired.toLanguageTag();
             String supportedTag = args.supported.toLanguageTag();
             final String comment = commentBase.isEmpty() ? "" : "\t# " + commentBase;
-            int supportedToDesiredActual = localeDistance.testOnlyDistance(args.supported, args.desired, threshold, favorSubtag);
-            assertEquals("(" + lineNumber + ") " + supportedTag + " to " + desiredTag + comment,
-                    args.supportedToDesired, supportedToDesiredActual);
-            int desiredToSupportedActual = localeDistance.testOnlyDistance(args.desired, args.supported, threshold, favorSubtag);
-            assertEquals("(" + lineNumber + ") " + desiredTag + " to " + supportedTag + comment,
-                    args.desiredToSupported, desiredToSupportedActual);
+            int supportedToDesiredActual =
+                    localeDistance.testOnlyDistance(
+                            args.supported, args.desired, threshold, favorSubtag);
+            assertEquals(
+                    "(" + lineNumber + ") " + supportedTag + " to " + desiredTag + comment,
+                    args.supportedToDesired,
+                    supportedToDesiredActual);
+            int desiredToSupportedActual =
+                    localeDistance.testOnlyDistance(
+                            args.desired, args.supported, threshold, favorSubtag);
+            assertEquals(
+                    "(" + lineNumber + ") " + desiredTag + " to " + supportedTag + comment,
+                    args.desiredToSupported,
+                    desiredToSupportedActual);
         }
+
         @Override
         public void handleParams(String comment, List<String> arguments) {
             String switchArg = arguments.get(0);

@@ -2,6 +2,13 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.locale;
 
+import com.ibm.icu.impl.ICUData;
+import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.UResource;
+import com.ibm.icu.util.BytesTrie;
+import com.ibm.icu.util.LocaleMatcher;
+import com.ibm.icu.util.LocaleMatcher.FavorSubtag;
+import com.ibm.icu.util.ULocale;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Collections;
@@ -11,28 +18,23 @@ import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.TreeMap;
 
-import com.ibm.icu.impl.ICUData;
-import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.impl.UResource;
-import com.ibm.icu.util.BytesTrie;
-import com.ibm.icu.util.LocaleMatcher;
-import com.ibm.icu.util.LocaleMatcher.FavorSubtag;
-import com.ibm.icu.util.ULocale;
-
 /**
- * Offline-built data for LocaleMatcher.
- * Mostly but not only the data for mapping locales to their maximized forms.
+ * Offline-built data for LocaleMatcher. Mostly but not only the data for mapping locales to their
+ * maximized forms.
  */
 public class LocaleDistance {
     /**
-     * Bit flag used on the last character of a subtag in the trie.
-     * Must be set consistently by the builder and the lookup code.
+     * Bit flag used on the last character of a subtag in the trie. Must be set consistently by the
+     * builder and the lookup code.
      */
     public static final int END_OF_SUBTAG = 0x80;
+
     /** Distance value bit flag, set by the builder. */
     public static final int DISTANCE_SKIP_SCRIPT = 0x80;
+
     /** Distance value bit flag, set by trieNext(). */
     private static final int DISTANCE_IS_FINAL = 0x100;
+
     private static final int DISTANCE_IS_FINAL_OR_SKIP_SCRIPT =
             DISTANCE_IS_FINAL | DISTANCE_SKIP_SCRIPT;
 
@@ -62,15 +64,12 @@ public class LocaleDistance {
     // One '*' is used for a (desired, supported) pair of "und", "Zzzz"/"", or "ZZ"/"".
     private final BytesTrie trie;
 
-    /**
-     * Maps each region to zero or more single-character partitions.
-     */
+    /** Maps each region to zero or more single-character partitions. */
     private final byte[] regionToPartitionsIndex;
+
     private final String[] partitionArrays;
 
-    /**
-     * Used to get the paradigm region for a cluster, if there is one.
-     */
+    /** Used to get the paradigm region for a cluster, if there is one. */
     private final Set<LSR> paradigmLSRs;
 
     private final int defaultLanguageDistance;
@@ -109,9 +108,12 @@ public class LocaleDistance {
         public Set<LSR> paradigmLSRs;
         public int[] distances;
 
-        public Data(byte[] trie,
-                byte[] regionToPartitionsIndex, String[] partitionArrays,
-                Set<LSR> paradigmLSRs, int[] distances) {
+        public Data(
+                byte[] trie,
+                byte[] regionToPartitionsIndex,
+                String[] partitionArrays,
+                Set<LSR> paradigmLSRs,
+                int[] distances) {
             this.trie = trie;
             this.regionToPartitionsIndex = regionToPartitionsIndex;
             this.partitionArrays = partitionArrays;
@@ -119,20 +121,22 @@ public class LocaleDistance {
             this.distances = distances;
         }
 
-        private static UResource.Value getValue(UResource.Table table,
-                String key, UResource.Value value) {
+        private static UResource.Value getValue(
+                UResource.Table table, String key, UResource.Value value) {
             if (!table.findValue(key, value)) {
-                throw new MissingResourceException(
-                        "langInfo.res missing data", "", "match/" + key);
+                throw new MissingResourceException("langInfo.res missing data", "", "match/" + key);
             }
             return value;
         }
 
         // VisibleForTesting
         public static Data load() throws MissingResourceException {
-            ICUResourceBundle langInfo = ICUResourceBundle.getBundleInstance(
-                    ICUData.ICU_BASE_NAME, "langInfo",
-                    ICUResourceBundle.ICU_DATA_CLASS_LOADER, ICUResourceBundle.OpenType.DIRECT);
+            ICUResourceBundle langInfo =
+                    ICUResourceBundle.getBundleInstance(
+                            ICUData.ICU_BASE_NAME,
+                            "langInfo",
+                            ICUResourceBundle.ICU_DATA_CLASS_LOADER,
+                            ICUResourceBundle.OpenType.DIRECT);
             UResource.Value value = langInfo.getValueWithFallback("match");
             UResource.Table matchTable = value.getTable();
 
@@ -152,9 +156,12 @@ public class LocaleDistance {
 
             Set<LSR> paradigmLSRs;
             if (matchTable.findValue("paradigmnum", value)) {
-                String[] m49 = getValue(langInfo.getValueWithFallback("likely").getTable(),
-                    "m49", value).getStringArray();
-                LSR[] paradigms = LSR.decodeInts(getValue(matchTable, "paradigmnum", value).getIntVector(), m49);
+                String[] m49 =
+                        getValue(langInfo.getValueWithFallback("likely").getTable(), "m49", value)
+                                .getStringArray();
+                LSR[] paradigms =
+                        LSR.decodeInts(
+                                getValue(matchTable, "paradigmnum", value).getIntVector(), m49);
                 // LinkedHashSet for stable order; otherwise a unit test is flaky.
                 paradigmLSRs = new LinkedHashSet<LSR>(Arrays.asList(paradigms));
             } else {
@@ -172,18 +179,22 @@ public class LocaleDistance {
 
         @Override
         public boolean equals(Object other) {
-            if (this == other) { return true; }
-            if (other == null || !getClass().equals(other.getClass())) { return false; }
-            Data od = (Data)other;
-            return Arrays.equals(trie, od.trie) &&
-                    Arrays.equals(regionToPartitionsIndex, od.regionToPartitionsIndex) &&
-                    Arrays.equals(partitionArrays, od.partitionArrays) &&
-                    paradigmLSRs.equals(od.paradigmLSRs) &&
-                    Arrays.equals(distances, od.distances);
+            if (this == other) {
+                return true;
+            }
+            if (other == null || !getClass().equals(other.getClass())) {
+                return false;
+            }
+            Data od = (Data) other;
+            return Arrays.equals(trie, od.trie)
+                    && Arrays.equals(regionToPartitionsIndex, od.regionToPartitionsIndex)
+                    && Arrays.equals(partitionArrays, od.partitionArrays)
+                    && paradigmLSRs.equals(od.paradigmLSRs)
+                    && Arrays.equals(distances, od.distances);
         }
 
         @Override
-        public int hashCode() {  // unused; silence ErrorProne
+        public int hashCode() { // unused; silence ErrorProne
             return 1;
         }
     }
@@ -209,9 +220,15 @@ public class LocaleDistance {
         // As of CLDR 36, we have <languageMatch desired="en_*_*" supported="en_*_*" distance="5"/>.
         LSR en = new LSR("en", "Latn", "US", LSR.EXPLICIT_LSR);
         LSR enGB = new LSR("en", "Latn", "GB", LSR.EXPLICIT_LSR);
-        int indexAndDistance = getBestIndexAndDistance(en, new LSR[] { enGB }, 1,
-                shiftDistance(50), FavorSubtag.LANGUAGE, LocaleMatcher.Direction.WITH_ONE_WAY);
-        defaultDemotionPerDesiredLocale  = getDistanceFloor(indexAndDistance);
+        int indexAndDistance =
+                getBestIndexAndDistance(
+                        en,
+                        new LSR[] {enGB},
+                        1,
+                        shiftDistance(50),
+                        FavorSubtag.LANGUAGE,
+                        LocaleMatcher.Direction.WITH_ONE_WAY);
+        defaultDemotionPerDesiredLocale = getDistanceFloor(indexAndDistance);
 
         if (DEBUG_OUTPUT) {
             System.out.println("*** locale distance");
@@ -223,25 +240,35 @@ public class LocaleDistance {
     }
 
     // VisibleForTesting
-    public int testOnlyDistance(ULocale desired, ULocale supported,
-            int threshold, FavorSubtag favorSubtag) {
+    public int testOnlyDistance(
+            ULocale desired, ULocale supported, int threshold, FavorSubtag favorSubtag) {
         LSR supportedLSR = LikelySubtags.INSTANCE.makeMaximizedLsrFrom(supported, false);
         LSR desiredLSR = LikelySubtags.INSTANCE.makeMaximizedLsrFrom(desired, false);
-        int indexAndDistance = getBestIndexAndDistance(desiredLSR, new LSR[] { supportedLSR }, 1,
-                shiftDistance(threshold), favorSubtag, LocaleMatcher.Direction.WITH_ONE_WAY);
+        int indexAndDistance =
+                getBestIndexAndDistance(
+                        desiredLSR,
+                        new LSR[] {supportedLSR},
+                        1,
+                        shiftDistance(threshold),
+                        favorSubtag,
+                        LocaleMatcher.Direction.WITH_ONE_WAY);
         return getDistanceFloor(indexAndDistance);
     }
 
     /**
-     * Finds the supported LSR with the smallest distance from the desired one.
-     * Equivalent LSR subtags must be normalized into a canonical form.
+     * Finds the supported LSR with the smallest distance from the desired one. Equivalent LSR
+     * subtags must be normalized into a canonical form.
      *
-     * <p>Returns the index of the lowest-distance supported LSR in the high bits
-     * (negative if none has a distance below the threshold),
-     * and its distance (0..ABOVE_THRESHOLD) in the low bits.
+     * <p>Returns the index of the lowest-distance supported LSR in the high bits (negative if none
+     * has a distance below the threshold), and its distance (0..ABOVE_THRESHOLD) in the low bits.
      */
-    public int getBestIndexAndDistance(LSR desired, LSR[] supportedLSRs, int supportedLSRsLength,
-            int shiftedThreshold, FavorSubtag favorSubtag, LocaleMatcher.Direction direction) {
+    public int getBestIndexAndDistance(
+            LSR desired,
+            LSR[] supportedLSRs,
+            int supportedLSRsLength,
+            int shiftedThreshold,
+            FavorSubtag favorSubtag,
+            LocaleMatcher.Direction direction) {
         BytesTrie iter = new BytesTrie(trie);
         // Look up the desired language only once for all supported LSRs.
         // Its "distance" is either a match point value of 0, or a non-match negative value.
@@ -271,7 +298,7 @@ public class LocaleDistance {
             if (distance >= 0) {
                 flags = distance & DISTANCE_IS_FINAL_OR_SKIP_SCRIPT;
                 distance &= ~DISTANCE_IS_FINAL_OR_SKIP_SCRIPT;
-            } else {  // <*, *>
+            } else { // <*, *>
                 if (desired.language.equals(supported.language)) {
                     distance = 0;
                 } else {
@@ -308,8 +335,9 @@ public class LocaleDistance {
                     scriptDistance = defaultScriptDistance;
                 }
             } else {
-                scriptDistance = getDesSuppScriptDistance(iter, iter.getState64(),
-                        desired.script, supported.script);
+                scriptDistance =
+                        getDesSuppScriptDistance(
+                                iter, iter.getState64(), desired.script, supported.script);
                 flags = scriptDistance & DISTANCE_IS_FINAL;
                 scriptDistance &= ~DISTANCE_IS_FINAL;
             }
@@ -333,11 +361,13 @@ public class LocaleDistance {
                 // (Each array of single-character partition strings is encoded as one string.)
                 // If either side has more than one, then we find the maximum distance.
                 // This could be optimized by adding some more structure, but probably not worth it.
-                distance += getRegionPartitionsDistance(
-                        iter, iter.getState64(),
-                        partitionsForRegion(desired),
-                        partitionsForRegion(supported),
-                        remainingThreshold);
+                distance +=
+                        getRegionPartitionsDistance(
+                                iter,
+                                iter.getState64(),
+                                partitionsForRegion(desired),
+                                partitionsForRegion(supported),
+                                remainingThreshold);
             }
             int shiftedDistance = shiftDistance(distance);
             if (shiftedDistance == 0) {
@@ -345,7 +375,8 @@ public class LocaleDistance {
                 // additional micro distance.
                 shiftedDistance |= (desired.flags ^ supported.flags);
                 if (shiftedDistance < shiftedThreshold) {
-                    if (direction != LocaleMatcher.Direction.ONLY_TWO_WAY ||
+                    if (direction != LocaleMatcher.Direction.ONLY_TWO_WAY
+                            ||
                             // Is there also a match when we swap desired/supported?
                             isMatch(supported, desired, shiftedThreshold, favorSubtag)) {
                         if (shiftedDistance == 0) {
@@ -358,7 +389,8 @@ public class LocaleDistance {
                 }
             } else {
                 if (shiftedDistance < shiftedThreshold) {
-                    if (direction != LocaleMatcher.Direction.ONLY_TWO_WAY ||
+                    if (direction != LocaleMatcher.Direction.ONLY_TWO_WAY
+                            ||
                             // Is there also a match when we swap desired/supported?
                             isMatch(supported, desired, shiftedThreshold, favorSubtag)) {
                         bestIndex = slIndex;
@@ -366,11 +398,13 @@ public class LocaleDistance {
                         bestLikelyInfo = -1;
                     }
                 } else if (shiftedDistance == shiftedThreshold && bestIndex >= 0) {
-                    if (direction != LocaleMatcher.Direction.ONLY_TWO_WAY ||
+                    if (direction != LocaleMatcher.Direction.ONLY_TWO_WAY
+                            ||
                             // Is there also a match when we swap desired/supported?
                             isMatch(supported, desired, shiftedThreshold, favorSubtag)) {
-                        bestLikelyInfo = LikelySubtags.INSTANCE.compareLikely(
-                                supported, supportedLSRs[bestIndex], bestLikelyInfo);
+                        bestLikelyInfo =
+                                LikelySubtags.INSTANCE.compareLikely(
+                                        supported, supportedLSRs[bestIndex], bestLikelyInfo);
                         if ((bestLikelyInfo & 1) != 0) {
                             // This supported locale matches as well as the previous best match,
                             // and neither matches perfectly,
@@ -381,30 +415,30 @@ public class LocaleDistance {
                 }
             }
         }
-        return bestIndex >= 0 ?
-                (bestIndex << INDEX_SHIFT) | shiftedThreshold :
-                INDEX_NEG_1 | shiftDistance(ABOVE_THRESHOLD);
+        return bestIndex >= 0
+                ? (bestIndex << INDEX_SHIFT) | shiftedThreshold
+                : INDEX_NEG_1 | shiftDistance(ABOVE_THRESHOLD);
     }
 
-    private boolean isMatch(LSR desired, LSR supported,
-            int shiftedThreshold, FavorSubtag favorSubtag) {
+    private boolean isMatch(
+            LSR desired, LSR supported, int shiftedThreshold, FavorSubtag favorSubtag) {
         return getBestIndexAndDistance(
-                desired, new LSR[] { supported }, 1,
-                shiftedThreshold, favorSubtag, null) >= 0;
+                        desired, new LSR[] {supported}, 1, shiftedThreshold, favorSubtag, null)
+                >= 0;
     }
 
-    private static final int getDesSuppScriptDistance(BytesTrie iter, long startState,
-            String desired, String supported) {
+    private static final int getDesSuppScriptDistance(
+            BytesTrie iter, long startState, String desired, String supported) {
         // Note: The data builder verifies that there are no <*, supported> or <desired, *> rules.
         int distance = trieNext(iter, desired, false);
         if (distance >= 0) {
             distance = trieNext(iter, supported, true);
         }
         if (distance < 0) {
-            BytesTrie.Result result = iter.resetToState64(startState).next('*');  // <*, *>
+            BytesTrie.Result result = iter.resetToState64(startState).next('*'); // <*, *>
             assert result.hasValue();
             if (desired.equals(supported)) {
-                distance = 0;  // same script
+                distance = 0; // same script
             } else {
                 distance = iter.getValue();
                 assert distance >= 0;
@@ -416,8 +450,12 @@ public class LocaleDistance {
         return distance;
     }
 
-    private static final int getRegionPartitionsDistance(BytesTrie iter, long startState,
-            String desiredPartitions, String supportedPartitions, int threshold) {
+    private static final int getRegionPartitionsDistance(
+            BytesTrie iter,
+            long startState,
+            String desiredPartitions,
+            String supportedPartitions,
+            int threshold) {
         int desLength = desiredPartitions.length();
         int suppLength = supportedPartitions.length();
         if (desLength == 1 && suppLength == 1) {
@@ -435,13 +473,13 @@ public class LocaleDistance {
         int regionDistance = 0;
         // Fall back to * only once, not for each pair of partition strings.
         boolean star = false;
-        for (int di = 0;;) {
+        for (int di = 0; ; ) {
             // Look up each desired-partition string only once,
             // not for each (desired, supported) pair.
             BytesTrie.Result result = iter.next(desiredPartitions.charAt(di++) | END_OF_SUBTAG);
             if (result.hasNext()) {
                 long desState = suppLength > 1 ? iter.getState64() : 0;
-                for (int si = 0;;) {
+                for (int si = 0; ; ) {
                     result = iter.next(supportedPartitions.charAt(si++) | END_OF_SUBTAG);
                     int d;
                     if (result.hasValue()) {
@@ -482,7 +520,7 @@ public class LocaleDistance {
     }
 
     private static final int getFallbackRegionDistance(BytesTrie iter, long startState) {
-        BytesTrie.Result result = iter.resetToState64(startState).next('*');  // <*, *>
+        BytesTrie.Result result = iter.resetToState64(startState).next('*'); // <*, *>
         assert result.hasValue();
         int distance = iter.getValue();
         assert distance >= 0;
@@ -491,9 +529,9 @@ public class LocaleDistance {
 
     private static final int trieNext(BytesTrie iter, String s, boolean wantValue) {
         if (s.isEmpty()) {
-            return -1;  // no empty subtags in the distance data
+            return -1; // no empty subtags in the distance data
         }
-        for (int i = 0, end = s.length() - 1;; ++i) {
+        for (int i = 0, end = s.length() - 1; ; ++i) {
             int c = s.charAt(i);
             if (i < end) {
                 if (!iter.next(c).hasNext()) {
@@ -573,7 +611,7 @@ public class LocaleDistance {
                 } else {
                     if (b >= 0) {
                         sb.append((char) b);
-                    } else {  // end of subtag
+                    } else { // end of subtag
                         sb.append((char) (b & 0x7f)).append('-');
                     }
                 }

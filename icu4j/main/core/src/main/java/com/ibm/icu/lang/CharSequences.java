@@ -8,19 +8,20 @@
  */
 package com.ibm.icu.lang;
 
-
 /**
- * A number of utilities for dealing with CharSequences and related classes.
- * For accessing codepoints with a CharSequence, also see 
+ * A number of utilities for dealing with CharSequences and related classes. For accessing
+ * codepoints with a CharSequence, also see
+ *
  * <ul>
- * <li>{@link java.lang.Character#codePointAt(CharSequence, int)}</li>
- * <li>{@link java.lang.Character#codePointBefore(CharSequence, int)}</li>
- * <li>{@link java.lang.Character#codePointCount(CharSequence, int, int)}</li>
- * <li>{@link java.lang.Character#charCount(int)}</li>
- * <li>{@link java.lang.Character#offsetByCodePoints(CharSequence, int, int)}</li>
- * <li>{@link java.lang.Character#toChars(int, char[], int)}</li>
- * <li>{@link java.lang.Character#toCodePoint(char, char)}</li>
+ *   <li>{@link java.lang.Character#codePointAt(CharSequence, int)}
+ *   <li>{@link java.lang.Character#codePointBefore(CharSequence, int)}
+ *   <li>{@link java.lang.Character#codePointCount(CharSequence, int, int)}
+ *   <li>{@link java.lang.Character#charCount(int)}
+ *   <li>{@link java.lang.Character#offsetByCodePoints(CharSequence, int, int)}
+ *   <li>{@link java.lang.Character#toChars(int, char[], int)}
+ *   <li>{@link java.lang.Character#toCodePoint(char, char)}
  * </ul>
+ *
  * @author markdavis
  * @internal
  * @deprecated This API is ICU internal only.
@@ -41,11 +42,13 @@ public class CharSequences {
     // indexOf(a, ch, fromIndex)
     // lastIndexOf(a, ch, fromIndex);
 
-    // s.trim() => UnicodeSet.trim(CharSequence s); return a subsequence starting with the first character not in the set to the last character not in the set.
+    // s.trim() => UnicodeSet.trim(CharSequence s); return a subsequence starting with the first
+    // character not in the set to the last character not in the set.
     // add UnicodeSet.split(CharSequence s);
 
     /**
      * Find the longest n such that a[aIndex,n] = b[bIndex,n], and n is on a character boundary.
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -68,32 +71,32 @@ public class CharSequences {
         }
         return result;
     }
-    
+
     /**
      * Count the code point length. Unpaired surrogates count as 1.
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
     public int codePointLength(CharSequence s) {
         return Character.codePointCount(s, 0, s.length());
-//        int length = s.length();
-//        int result = length;
-//        for (int i = 1; i < length; ++i) {
-//            char ch = s.charAt(i);
-//            if (0xDC00 <= ch && ch <= 0xDFFF) {
-//                char ch0 = s.charAt(i-1);
-//                if (0xD800 <= ch && ch <= 0xDbFF) {
-//                    --result;
-//                }
-//            }
-//        }
+        //        int length = s.length();
+        //        int result = length;
+        //        for (int i = 1; i < length; ++i) {
+        //            char ch = s.charAt(i);
+        //            if (0xDC00 <= ch && ch <= 0xDFFF) {
+        //                char ch0 = s.charAt(i-1);
+        //                if (0xD800 <= ch && ch <= 0xDbFF) {
+        //                    --result;
+        //                }
+        //            }
+        //        }
     }
-    
+
     /**
-     * Utility function for comparing codepoint to string without generating new
-     * string.
-     * 
+     * Utility function for comparing codepoint to string without generating new string.
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -103,9 +106,12 @@ public class CharSequences {
             return false;
         }
         switch (other.length()) {
-        case 1: return codepoint == other.charAt(0);
-        case 2: return codepoint > 0xFFFF && codepoint == Character.codePointAt(other, 0);
-        default: return false;
+            case 1:
+                return codepoint == other.charAt(0);
+            case 2:
+                return codepoint > 0xFFFF && codepoint == Character.codePointAt(other, 0);
+            default:
+                return false;
         }
     }
 
@@ -119,12 +125,12 @@ public class CharSequences {
     }
 
     /**
-     * Utility to compare a string to a code point.
-     * Same results as turning the code point into a string (with the [ugly] new StringBuilder().appendCodePoint(codepoint).toString())
-     * and comparing, but much faster (no object creation). 
-     * Actually, there is one difference; a null compares as less.
-     * Note that this (=String) order is UTF-16 order -- <i>not</i> code point order.
-     * 
+     * Utility to compare a string to a code point. Same results as turning the code point into a
+     * string (with the [ugly] new StringBuilder().appendCodePoint(codepoint).toString()) and
+     * comparing, but much faster (no object creation). Actually, there is one difference; a null
+     * compares as less. Note that this (=String) order is UTF-16 order -- <i>not</i> code point
+     * order.
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -146,15 +152,15 @@ public class CharSequences {
                 return result;
             }
             return stringLength - 1;
-        } 
+        }
         // non BMP
-        char lead = (char)((offset >>> 10) + Character.MIN_HIGH_SURROGATE);
+        char lead = (char) ((offset >>> 10) + Character.MIN_HIGH_SURROGATE);
         int result = firstChar - lead;
         if (result != 0) {
             return result;
         }
         if (stringLength > 1) {
-            char trail = (char)((offset & 0x3ff) + Character.MIN_LOW_SURROGATE);
+            char trail = (char) ((offset & 0x3ff) + Character.MIN_LOW_SURROGATE);
             result = string.charAt(1) - trail;
             if (result != 0) {
                 return result;
@@ -164,11 +170,11 @@ public class CharSequences {
     }
 
     /**
-     * Utility to compare a string to a code point.
-     * Same results as turning the code point into a string and comparing, but much faster (no object creation). 
-     * Actually, there is one difference; a null compares as less.
-     * Note that this (=String) order is UTF-16 order -- <i>not</i> code point order.
-     * 
+     * Utility to compare a string to a code point. Same results as turning the code point into a
+     * string and comparing, but much faster (no object creation). Actually, there is one
+     * difference; a null compares as less. Note that this (=String) order is UTF-16 order --
+     * <i>not</i> code point order.
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -179,8 +185,9 @@ public class CharSequences {
     }
 
     /**
-     * Return the value of the first code point, if the string is exactly one code point. Otherwise return Integer.MAX_VALUE.
-     * 
+     * Return the value of the first code point, if the string is exactly one code point. Otherwise
+     * return Integer.MAX_VALUE.
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -193,24 +200,21 @@ public class CharSequences {
         int result = Character.codePointAt(s, 0);
         return (result < 0x10000) == (length == 1) ? result : Integer.MAX_VALUE;
     }
-    
+
     /**
-     * Utility function for comparing objects that may be null
-     * string.
-     * 
+     * Utility function for comparing objects that may be null string.
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
     public static final <T extends Object> boolean equals(T a, T b) {
-        return a == null ? b == null
-                : b == null ? false
-                        : a.equals(b);
+        return a == null ? b == null : b == null ? false : a.equals(b);
     }
-    
+
     /**
      * Utility for comparing the contents of CharSequences
-     * 
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -230,33 +234,33 @@ public class CharSequences {
 
     /**
      * Utility for comparing the contents of CharSequences
-     * 
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
     public static boolean equalsChars(CharSequence a, CharSequence b) {
         // do length test first for fast path
-        return a.length() == b.length() && compare(a,b) == 0;
+        return a.length() == b.length() && compare(a, b) == 0;
     }
 
     /**
      * Are we on a character boundary?
-     * 
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
     public static boolean onCharacterBoundary(CharSequence s, int i) {
-        return i <= 0 
-        || i >= s.length() 
-        || !Character.isHighSurrogate(s.charAt(i-1))
-        || !Character.isLowSurrogate(s.charAt(i));
+        return i <= 0
+                || i >= s.length()
+                || !Character.isHighSurrogate(s.charAt(i - 1))
+                || !Character.isLowSurrogate(s.charAt(i));
     }
 
     /**
      * Find code point in string.
-     * 
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -274,12 +278,13 @@ public class CharSequences {
 
     /**
      * Utility function for simplified, more robust loops, such as:
+     *
      * <pre>
      *   for (int codePoint : CharSequences.codePoints(string)) {
      *     doSomethingWith(codePoint);
      *   }
      * </pre>
-     * 
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -289,11 +294,12 @@ public class CharSequences {
         int j = 0;
         for (int i = 0; i < s.length(); ++i) {
             char cp = s.charAt(i);
-            if (cp >= 0xDC00 && cp <= 0xDFFF && i != 0 ) { // hand-code for speed
-                char last = (char) result[j-1];
+            if (cp >= 0xDC00 && cp <= 0xDFFF && i != 0) { // hand-code for speed
+                char last = (char) result[j - 1];
                 if (last >= 0xD800 && last <= 0xDBFF) {
-                    // Note: j-1 is safe, because j can only be zero if i is zero. But i!=0 in this block.
-                    result[j-1] = Character.toCodePoint(last, cp);
+                    // Note: j-1 is safe, because j can only be zero if i is zero. But i!=0 in this
+                    // block.
+                    result[j - 1] = Character.toCodePoint(last, cp);
                     continue;
                 }
             }
@@ -307,6 +313,5 @@ public class CharSequences {
         return shortResult;
     }
 
-    private CharSequences() {
-    }
+    private CharSequences() {}
 }

@@ -8,36 +8,33 @@
  */
 package com.ibm.icu.util;
 
+import com.ibm.icu.impl.Grego;
 import java.util.BitSet;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.ibm.icu.impl.Grego;
-
 /**
- * {@icu} BasicTimeZone extends <code>TimeZone</code> with additional methods to access
- * time zone transitions and rules.  All ICU <code>TimeZone</code> concrete subclasses
- * extend this class. APIs added to <code>java.util.TimeZone</code> by
- * <code>BasicTimeZone</code> are annotated with <strong>'<span
- * style="color:red">[icu]</span>'</strong>.
+ * {@icu} BasicTimeZone extends <code>TimeZone</code> with additional methods to access time zone
+ * transitions and rules. All ICU <code>TimeZone</code> concrete subclasses extend this class. APIs
+ * added to <code>java.util.TimeZone</code> by <code>BasicTimeZone</code> are annotated with
+ * <strong>'<span style="color:red">[icu]</span>'</strong>.
  *
  * @see com.ibm.icu.util.TimeZoneRule
  * @see com.ibm.icu.util.TimeZoneTransition
- *
  * @stable ICU 3.8
  */
 public abstract class BasicTimeZone extends TimeZone {
 
     private static final long serialVersionUID = -3204278532246180932L;
 
-    private static final long MILLIS_PER_YEAR = 365*24*60*60*1000L;
+    private static final long MILLIS_PER_YEAR = 365 * 24 * 60 * 60 * 1000L;
 
     /**
      * {@icu} Returns the first time zone transition after the base time.
-     *
      * <!-- From: com.ibm.icu.samples.util.timezone.BasicTimeZoneExample:getNextTransitionExample -->
-     * <p>Example code:</p>
+     *
+     * <p>Example code:
      *
      * <pre>
      * System.out.println("### Iterates time zone transitions in America/Los_Angeles starting 2005-01-01 and forward");
@@ -64,22 +61,19 @@ public abstract class BasicTimeZone extends TimeZone {
      * }
      * </pre>
      *
-     * @param base      The base time.
+     * @param base The base time.
      * @param inclusive Whether the base time is inclusive or not.
-     *
-     * @return  A <code>Date</code> holding the first time zone transition time
-     *          after the given base time, or null if no time zone transitions
-     *          are available after the base time.
-     *
+     * @return A <code>Date</code> holding the first time zone transition time after the given base
+     *     time, or null if no time zone transitions are available after the base time.
      * @stable ICU 3.8
      */
     public abstract TimeZoneTransition getNextTransition(long base, boolean inclusive);
 
     /**
      * {@icu} Returns the last time zone transition before the base time.
-     *
      * <!-- From: com.ibm.icu.samples.util.timezone.BasicTimeZoneExample:getPreviousTransitionExample -->
-     * <p>Example code:</p>
+     *
+     * <p>Example code:
      *
      * <pre>
      * System.out.println("### Iterates time zone transitions in America/Los_Angeles starting 2010-01-01 and backward");
@@ -106,25 +100,21 @@ public abstract class BasicTimeZone extends TimeZone {
      * }
      * </pre>
      *
-     * @param base      The base time.
+     * @param base The base time.
      * @param inclusive Whether the base time is inclusive or not.
-     *
-     * @return  A <code>Date</code> holding the last time zone transition time
-     *          before the given base time, or null if no time zone transitions
-     *          are available before the base time.
-     *
+     * @return A <code>Date</code> holding the last time zone transition time before the given base
+     *     time, or null if no time zone transitions are available before the base time.
      * @stable ICU 3.8
      */
     public abstract TimeZoneTransition getPreviousTransition(long base, boolean inclusive);
 
     /**
-     * {@icu} Checks if the time zone has equivalent transitions in the time range.
-     * This method returns true when all of transition times, from/to standard
-     * offsets and DST savings used by this time zone match the other in the
-     * time range.
-     *
+     * {@icu} Checks if the time zone has equivalent transitions in the time range. This method
+     * returns true when all of transition times, from/to standard offsets and DST savings used by
+     * this time zone match the other in the time range.
      * <!-- From: com.ibm.icu.samples.util.timezone.BasicTimeZoneExample:hasEquivalentTransitionsExample -->
-     * <p>Example code:</p>
+     *
+     * <p>Example code:
      *
      * <pre>
      * System.out.println("### Compare America/New_York and America/Detroit since year 1970");
@@ -154,14 +144,11 @@ public abstract class BasicTimeZone extends TimeZone {
      * }
      * </pre>
      *
-     * @param tz    The instance of <code>TimeZone</code>
+     * @param tz The instance of <code>TimeZone</code>
      * @param start The start time of the evaluated time range (inclusive)
-     * @param end   The end time of the evaluated time range (inclusive)
-     *
-     * @return true if the other time zone has the equivalent transitions in the
-     * time range.  When tz is not a <code>BasicTimeZone</code>, this method
-     * returns false.
-     *
+     * @param end The end time of the evaluated time range (inclusive)
+     * @return true if the other time zone has the equivalent transitions in the time range. When tz
+     *     is not a <code>BasicTimeZone</code>, this method returns false.
      * @stable ICU 3.8
      */
     public boolean hasEquivalentTransitions(TimeZone tz, long start, long end) {
@@ -169,28 +156,24 @@ public abstract class BasicTimeZone extends TimeZone {
     }
 
     /**
-     * {@icu} Checks if the time zone has equivalent transitions in the time range.
-     * This method returns true when all of transition times, from/to standard
-     * offsets and DST savings used by this time zone match the other in the
-     * time range.
+     * {@icu} Checks if the time zone has equivalent transitions in the time range. This method
+     * returns true when all of transition times, from/to standard offsets and DST savings used by
+     * this time zone match the other in the time range.
      *
-     * @param tz    The instance of <code>TimeZone</code>
+     * @param tz The instance of <code>TimeZone</code>
      * @param start The start time of the evaluated time range (inclusive)
-     * @param end   The end time of the evaluated time range (inclusive)
-     * @param ignoreDstAmount When true, any transitions with only daylight saving amount
-     * changes will be ignored, except either of them is zero. For example, a transition
-     * from rawoffset 3:00/dstsavings 1:00 to rawoffset 2:00/dstsavings 2:00 is excluded
-     * from the comparison, but a transition from rawoffset 2:00/dstsavings 1:00 to
-     * rawoffset 3:00/dstsavings 0:00 is included.
-     *
-     * @return true if the other time zone has the equivalent transitions in the
-     * time range.  When tz is not a <code>BasicTimeZone</code>, this method
-     * returns false.
-     *
+     * @param end The end time of the evaluated time range (inclusive)
+     * @param ignoreDstAmount When true, any transitions with only daylight saving amount changes
+     *     will be ignored, except either of them is zero. For example, a transition from rawoffset
+     *     3:00/dstsavings 1:00 to rawoffset 2:00/dstsavings 2:00 is excluded from the comparison,
+     *     but a transition from rawoffset 2:00/dstsavings 1:00 to rawoffset 3:00/dstsavings 0:00 is
+     *     included.
+     * @return true if the other time zone has the equivalent transitions in the time range. When tz
+     *     is not a <code>BasicTimeZone</code>, this method returns false.
      * @stable ICU 3.8
      */
-    public boolean hasEquivalentTransitions(TimeZone tz, long start, long end,
-                                            boolean ignoreDstAmount) {
+    public boolean hasEquivalentTransitions(
+            TimeZone tz, long start, long end, boolean ignoreDstAmount) {
         if (this == tz) {
             return true;
         }
@@ -208,8 +191,8 @@ public abstract class BasicTimeZone extends TimeZone {
 
         if (ignoreDstAmount) {
             if ((offsets1[0] + offsets1[1] != offsets2[0] + offsets2[1])
-                || (offsets1[1] != 0 && offsets2[1] == 0)
-                || (offsets1[1] == 0 && offsets2[1] != 0)) {
+                    || (offsets1[1] != 0 && offsets2[1] == 0)
+                    || (offsets1[1] == 0 && offsets2[1] != 0)) {
                 return false;
             }
         } else {
@@ -222,7 +205,7 @@ public abstract class BasicTimeZone extends TimeZone {
         long time = start;
         while (true) {
             TimeZoneTransition tr1 = getNextTransition(time, false);
-            TimeZoneTransition tr2 = ((BasicTimeZone)tz).getNextTransition(time, false);
+            TimeZoneTransition tr2 = ((BasicTimeZone) tz).getNextTransition(time, false);
 
             if (ignoreDstAmount) {
                 // Skip a transition which only differ the amount of DST savings
@@ -231,7 +214,8 @@ public abstract class BasicTimeZone extends TimeZone {
                             && tr1.getTime() <= end
                             && (tr1.getFrom().getRawOffset() + tr1.getFrom().getDSTSavings()
                                     == tr1.getTo().getRawOffset() + tr1.getTo().getDSTSavings())
-                            && (tr1.getFrom().getDSTSavings() != 0 && tr1.getTo().getDSTSavings() != 0)) {
+                            && (tr1.getFrom().getDSTSavings() != 0
+                                    && tr1.getTo().getDSTSavings() != 0)) {
                         tr1 = getNextTransition(tr1.getTime(), false);
                     } else {
                         break;
@@ -242,8 +226,9 @@ public abstract class BasicTimeZone extends TimeZone {
                             && tr2.getTime() <= end
                             && (tr2.getFrom().getRawOffset() + tr2.getFrom().getDSTSavings()
                                     == tr2.getTo().getRawOffset() + tr2.getTo().getDSTSavings())
-                            && (tr2.getFrom().getDSTSavings() != 0 && tr2.getTo().getDSTSavings() != 0)) {
-                        tr2 = ((BasicTimeZone)tz).getNextTransition(tr2.getTime(), false);
+                            && (tr2.getFrom().getDSTSavings() != 0
+                                    && tr2.getTo().getDSTSavings() != 0)) {
+                        tr2 = ((BasicTimeZone) tz).getNextTransition(tr2.getTime(), false);
                     } else {
                         break;
                     }
@@ -274,14 +259,14 @@ public abstract class BasicTimeZone extends TimeZone {
             }
             if (ignoreDstAmount) {
                 if (tr1.getTo().getRawOffset() + tr1.getTo().getDSTSavings()
-                            != tr2.getTo().getRawOffset() + tr2.getTo().getDSTSavings()
-                        || tr1.getTo().getDSTSavings() != 0 &&  tr2.getTo().getDSTSavings() == 0
-                        || tr1.getTo().getDSTSavings() == 0 &&  tr2.getTo().getDSTSavings() != 0) {
+                                != tr2.getTo().getRawOffset() + tr2.getTo().getDSTSavings()
+                        || tr1.getTo().getDSTSavings() != 0 && tr2.getTo().getDSTSavings() == 0
+                        || tr1.getTo().getDSTSavings() == 0 && tr2.getTo().getDSTSavings() != 0) {
                     return false;
                 }
             } else {
-                if (tr1.getTo().getRawOffset() != tr2.getTo().getRawOffset() ||
-                    tr1.getTo().getDSTSavings() != tr2.getTo().getDSTSavings()) {
+                if (tr1.getTo().getRawOffset() != tr2.getTo().getRawOffset()
+                        || tr1.getTo().getDSTSavings() != tr2.getTo().getDSTSavings()) {
                     return false;
                 }
             }
@@ -291,29 +276,25 @@ public abstract class BasicTimeZone extends TimeZone {
     }
 
     /**
-     * {@icu} Returns the array of <code>TimeZoneRule</code> which represents the rule
-     * of this time zone object.  The first element in the result array will
-     * be the <code>InitialTimeZoneRule</code> instance for the initial rule.
-     * The rest will be either <code>AnnualTimeZoneRule</code> or
-     * <code>TimeArrayTimeZoneRule</code> instances representing transitions.
+     * {@icu} Returns the array of <code>TimeZoneRule</code> which represents the rule of this time
+     * zone object. The first element in the result array will be the <code>InitialTimeZoneRule
+     * </code> instance for the initial rule. The rest will be either <code>AnnualTimeZoneRule
+     * </code> or <code>TimeArrayTimeZoneRule</code> instances representing transitions.
      *
-     * @return  The array of <code>TimeZoneRule</code> which represents this
-     *          time zone.
-     *
+     * @return The array of <code>TimeZoneRule</code> which represents this time zone.
      * @stable ICU 3.8
      */
     public abstract TimeZoneRule[] getTimeZoneRules();
 
     /**
-     * {@icu} Returns the array of <code>TimeZoneRule</code> which represents the rule
-     * of this time zone object since the specified start time.  The first
-     * element in the result array will be the <code>InitialTimeZoneRule</code>
-     * instance for the initial rule.  The rest will be either
-     * <code>AnnualTimeZoneRule</code> or <code>TimeArrayTimeZoneRule</code>
-     * instances representing transitions.
-     *
+     * {@icu} Returns the array of <code>TimeZoneRule</code> which represents the rule of this time
+     * zone object since the specified start time. The first element in the result array will be the
+     * <code>InitialTimeZoneRule</code> instance for the initial rule. The rest will be either
+     * <code>AnnualTimeZoneRule</code> or <code>TimeArrayTimeZoneRule</code> instances representing
+     * transitions.
      * <!-- From: com.ibm.icu.samples.util.timezone.BasicTimeZoneExample:getTimeZoneRulesExample -->
-     * <p>Example code:</p>
+     *
+     * <p>Example code:
      *
      * <pre>
      * System.out.println("### Extracts time zone rules used by America/Los_Angeles since year 2005");
@@ -329,9 +310,8 @@ public abstract class BasicTimeZone extends TimeZone {
      * </pre>
      *
      * @param start The start time (inclusive).
-     * @return  The array of <code>TimeZoneRule</code> which represents this
-     *          time zone since the start time.
-     *
+     * @return The array of <code>TimeZoneRule</code> which represents this time zone since the
+     *     start time.
      * @stable ICU 3.8
      */
     public TimeZoneRule[] getTimeZoneRules(long start) {
@@ -346,15 +326,19 @@ public abstract class BasicTimeZone extends TimeZone {
         List<TimeZoneRule> filteredRules = new LinkedList<>();
 
         // Create initial rule
-        TimeZoneRule initial = new InitialTimeZoneRule(tzt.getTo().getName(),
-                tzt.getTo().getRawOffset(), tzt.getTo().getDSTSavings());
+        TimeZoneRule initial =
+                new InitialTimeZoneRule(
+                        tzt.getTo().getName(),
+                        tzt.getTo().getRawOffset(),
+                        tzt.getTo().getDSTSavings());
         filteredRules.add(initial);
         isProcessed.set(0);
 
         // Mark rules which does not need to be processed
         for (int i = 1; i < all.length; i++) {
-            Date d = all[i].getNextStart(start, initial.getRawOffset(),
-                    initial.getDSTSavings(), false);
+            Date d =
+                    all[i].getNextStart(
+                            start, initial.getRawOffset(), initial.getDSTSavings(), false);
             if (d == null) {
                 isProcessed.set(i);
             }
@@ -362,7 +346,7 @@ public abstract class BasicTimeZone extends TimeZone {
 
         long time = start;
         boolean bFinalStd = false, bFinalDst = false;
-        while(!bFinalStd || !bFinalDst) {
+        while (!bFinalStd || !bFinalDst) {
             tzt = getNextTransition(time, false);
             if (tzt == null) {
                 break;
@@ -383,11 +367,11 @@ public abstract class BasicTimeZone extends TimeZone {
                 continue;
             }
             if (toRule instanceof TimeArrayTimeZoneRule) {
-                TimeArrayTimeZoneRule tar = (TimeArrayTimeZoneRule)toRule;
+                TimeArrayTimeZoneRule tar = (TimeArrayTimeZoneRule) toRule;
 
                 // Get the previous raw offset and DST savings before the very first start time
                 long t = start;
-                while(true) {
+                while (true) {
                     tzt = getNextTransition(t, false);
                     if (tzt == null) {
                         break;
@@ -399,8 +383,9 @@ public abstract class BasicTimeZone extends TimeZone {
                 }
                 if (tzt != null) {
                     // Check if the entire start times to be added
-                    Date firstStart = tar.getFirstStart(tzt.getFrom().getRawOffset(),
-                            tzt.getFrom().getDSTSavings());
+                    Date firstStart =
+                            tar.getFirstStart(
+                                    tzt.getFrom().getRawOffset(), tzt.getFrom().getDSTSavings());
                     if (firstStart.getTime() > start) {
                         // Just add the rule as is
                         filteredRules.add(tar);
@@ -425,26 +410,36 @@ public abstract class BasicTimeZone extends TimeZone {
                         if (asize > 0) {
                             long[] newtimes = new long[asize];
                             System.arraycopy(times, idx, newtimes, 0, asize);
-                            TimeArrayTimeZoneRule newtar = new TimeArrayTimeZoneRule(
-                                    tar.getName(), tar.getRawOffset(), tar.getDSTSavings(),
-                                    newtimes, tar.getTimeType());
+                            TimeArrayTimeZoneRule newtar =
+                                    new TimeArrayTimeZoneRule(
+                                            tar.getName(),
+                                            tar.getRawOffset(),
+                                            tar.getDSTSavings(),
+                                            newtimes,
+                                            tar.getTimeType());
                             filteredRules.add(newtar);
                         }
                     }
                 }
             } else if (toRule instanceof AnnualTimeZoneRule) {
-                AnnualTimeZoneRule ar = (AnnualTimeZoneRule)toRule;
-                Date firstStart = ar.getFirstStart(tzt.getFrom().getRawOffset(),
-                        tzt.getFrom().getDSTSavings());
+                AnnualTimeZoneRule ar = (AnnualTimeZoneRule) toRule;
+                Date firstStart =
+                        ar.getFirstStart(
+                                tzt.getFrom().getRawOffset(), tzt.getFrom().getDSTSavings());
                 if (firstStart.getTime() == tzt.getTime()) {
                     // Just add the rule as is
                     filteredRules.add(ar);
                 } else {
                     // Calculate the transition year
                     // Recreate the rule
-                    AnnualTimeZoneRule newar = new AnnualTimeZoneRule(ar.getName(),
-                            ar.getRawOffset(), ar.getDSTSavings(),
-                            ar.getRule(), Grego.timeToYear(tzt.getTime()), ar.getEndYear());
+                    AnnualTimeZoneRule newar =
+                            new AnnualTimeZoneRule(
+                                    ar.getName(),
+                                    ar.getRawOffset(),
+                                    ar.getDSTSavings(),
+                                    ar.getRule(),
+                                    Grego.timeToYear(tzt.getTime()),
+                                    ar.getEndYear());
                     filteredRules.add(newar);
                 }
                 // Check if this is a final rule
@@ -465,25 +460,21 @@ public abstract class BasicTimeZone extends TimeZone {
     }
 
     /**
-     * {@icu} Returns the array of <code>TimeZoneRule</code> which represents the rule of
-     * this time zone object near the specified date.  Some applications are not
-     * capable to handle historic time zone rule changes.  Also some applications
-     * can only handle certain type of rule definitions.  This method returns
-     * either a single <code>InitialTimeZoneRule</code> if this time zone does not
-     * have any daylight saving time within 1 year from the specified time, or a
-     * pair of <code>AnnualTimeZoneRule</code> whose rule type is
-     * <code>DateTimeRule.DOW</code> for date and <code>DateTimeRule.WALL_TIME</code>
-     * for time with a single <code>InitialTimeZoneRule</code> representing the
-     * initial time, when this time zone observes daylight saving time near the
-     * specified date.  Thus, the result may be only valid for dates around the
-     * specified date.
+     * {@icu} Returns the array of <code>TimeZoneRule</code> which represents the rule of this time
+     * zone object near the specified date. Some applications are not capable to handle historic
+     * time zone rule changes. Also some applications can only handle certain type of rule
+     * definitions. This method returns either a single <code>InitialTimeZoneRule</code> if this
+     * time zone does not have any daylight saving time within 1 year from the specified time, or a
+     * pair of <code>AnnualTimeZoneRule</code> whose rule type is <code>DateTimeRule.DOW</code> for
+     * date and <code>DateTimeRule.WALL_TIME</code> for time with a single <code>InitialTimeZoneRule
+     * </code> representing the initial time, when this time zone observes daylight saving time near
+     * the specified date. Thus, the result may be only valid for dates around the specified date.
      *
      * @param date The date to be used for <code>TimeZoneRule</code> extraction.
-     * @return The array of <code>TimeZoneRule</code>, either a single
-     * <code>InitialTimeZoneRule</code> object, or a pair of <code>AnnualTimeZoneRule</code>
-     * with a single <code>InitialTimeZoneRule</code>.  The first element in the
-     * array is always a <code>InitialTimeZoneRule</code>.
-     *
+     * @return The array of <code>TimeZoneRule</code>, either a single <code>InitialTimeZoneRule
+     *     </code> object, or a pair of <code>AnnualTimeZoneRule</code> with a single <code>
+     *     InitialTimeZoneRule</code>. The first element in the array is always a <code>
+     *     InitialTimeZoneRule</code>.
      * @stable ICU 3.8
      */
     public TimeZoneRule[] getSimpleTimeZoneRulesNear(long date) {
@@ -500,16 +491,26 @@ public abstract class BasicTimeZone extends TimeZone {
             // within roughly 1 year from the specified date
             long nextTransitionTime = tr.getTime();
             if (((tr.getFrom().getDSTSavings() == 0 && tr.getTo().getDSTSavings() != 0)
-                    || (tr.getFrom().getDSTSavings() != 0 && tr.getTo().getDSTSavings() == 0))
-                        && date + MILLIS_PER_YEAR > nextTransitionTime) {
+                            || (tr.getFrom().getDSTSavings() != 0
+                                    && tr.getTo().getDSTSavings() == 0))
+                    && date + MILLIS_PER_YEAR > nextTransitionTime) {
                 annualRules = new AnnualTimeZoneRule[2];
                 // Get local wall time for the transition time
-                int dtfields[] = Grego.timeToFields(nextTransitionTime
-                        + tr.getFrom().getRawOffset() + tr.getFrom().getDSTSavings(), null);
+                int dtfields[] =
+                        Grego.timeToFields(
+                                nextTransitionTime
+                                        + tr.getFrom().getRawOffset()
+                                        + tr.getFrom().getDSTSavings(),
+                                null);
                 int weekInMonth = Grego.getDayOfWeekInMonth(dtfields[0], dtfields[1], dtfields[2]);
                 // Create DOW rule
-                DateTimeRule dtr = new DateTimeRule(dtfields[1], weekInMonth, dtfields[3],
-                        dtfields[5], DateTimeRule.WALL_TIME);
+                DateTimeRule dtr =
+                        new DateTimeRule(
+                                dtfields[1],
+                                weekInMonth,
+                                dtfields[3],
+                                dtfields[5],
+                                DateTimeRule.WALL_TIME);
 
                 AnnualTimeZoneRule secondRule = null;
 
@@ -519,9 +520,14 @@ public abstract class BasicTimeZone extends TimeZone {
                 // zone to return wrong offset after the transition.
                 // When we encounter such case, we do not inspect next next
                 // transition for another rule.
-                annualRules[0] = new AnnualTimeZoneRule(tr.getTo().getName(),
-                        initialRaw, tr.getTo().getDSTSavings(),
-                        dtr, dtfields[0], AnnualTimeZoneRule.MAX_YEAR);
+                annualRules[0] =
+                        new AnnualTimeZoneRule(
+                                tr.getTo().getName(),
+                                initialRaw,
+                                tr.getTo().getDSTSavings(),
+                                dtr,
+                                dtfields[0],
+                                AnnualTimeZoneRule.MAX_YEAR);
 
                 if (tr.getTo().getRawOffset() == initialRaw) {
 
@@ -531,24 +537,43 @@ public abstract class BasicTimeZone extends TimeZone {
                         // Check if the next next transition is either DST->STD or STD->DST
                         // and within roughly 1 year from the next transition
                         if (((tr.getFrom().getDSTSavings() == 0 && tr.getTo().getDSTSavings() != 0)
-                                || (tr.getFrom().getDSTSavings() != 0
-                                    && tr.getTo().getDSTSavings() == 0))
-                            && nextTransitionTime + MILLIS_PER_YEAR > tr.getTime()) {
+                                        || (tr.getFrom().getDSTSavings() != 0
+                                                && tr.getTo().getDSTSavings() == 0))
+                                && nextTransitionTime + MILLIS_PER_YEAR > tr.getTime()) {
                             // Generate another DOW rule
-                            dtfields = Grego.timeToFields(tr.getTime()
-                                    + tr.getFrom().getRawOffset() + tr.getFrom().getDSTSavings(),
-                                                          dtfields);
-                            weekInMonth = Grego.getDayOfWeekInMonth(dtfields[0], dtfields[1],
-                                                                    dtfields[2]);
-                            dtr = new DateTimeRule(dtfields[1], weekInMonth, dtfields[3],
-                                                   dtfields[5], DateTimeRule.WALL_TIME);
-                            secondRule = new AnnualTimeZoneRule(tr.getTo().getName(),
-                                    tr.getTo().getRawOffset(), tr.getTo().getDSTSavings(),
-                                    dtr, dtfields[0] - 1, AnnualTimeZoneRule.MAX_YEAR);
+                            dtfields =
+                                    Grego.timeToFields(
+                                            tr.getTime()
+                                                    + tr.getFrom().getRawOffset()
+                                                    + tr.getFrom().getDSTSavings(),
+                                            dtfields);
+                            weekInMonth =
+                                    Grego.getDayOfWeekInMonth(
+                                            dtfields[0], dtfields[1], dtfields[2]);
+                            dtr =
+                                    new DateTimeRule(
+                                            dtfields[1],
+                                            weekInMonth,
+                                            dtfields[3],
+                                            dtfields[5],
+                                            DateTimeRule.WALL_TIME);
+                            secondRule =
+                                    new AnnualTimeZoneRule(
+                                            tr.getTo().getName(),
+                                            tr.getTo().getRawOffset(),
+                                            tr.getTo().getDSTSavings(),
+                                            dtr,
+                                            dtfields[0] - 1,
+                                            AnnualTimeZoneRule.MAX_YEAR);
                             // Make sure this rule can be applied to the specified date
-                            Date d = secondRule.getPreviousStart(date, tr.getFrom().getRawOffset(),
-                                    tr.getFrom().getDSTSavings(), true);
-                            if (d != null && d.getTime() <= date
+                            Date d =
+                                    secondRule.getPreviousStart(
+                                            date,
+                                            tr.getFrom().getRawOffset(),
+                                            tr.getFrom().getDSTSavings(),
+                                            true);
+                            if (d != null
+                                    && d.getTime() <= date
                                     && initialRaw == tr.getTo().getRawOffset()
                                     && initialDst == tr.getTo().getDSTSavings()) {
                                 // We can use this rule as the second transition rule
@@ -566,26 +591,44 @@ public abstract class BasicTimeZone extends TimeZone {
                         // The actual transition time does not matter here.
                         if ((tr.getFrom().getDSTSavings() == 0 && tr.getTo().getDSTSavings() != 0)
                                 || (tr.getFrom().getDSTSavings() != 0
-                                    && tr.getTo().getDSTSavings() == 0)) {
+                                        && tr.getTo().getDSTSavings() == 0)) {
                             // Generate another DOW rule
-                            dtfields = Grego.timeToFields(tr.getTime()
-                                    + tr.getFrom().getRawOffset() + tr.getFrom().getDSTSavings(),
-                                                          dtfields);
-                            weekInMonth = Grego.getDayOfWeekInMonth(dtfields[0], dtfields[1],
-                                                                    dtfields[2]);
-                            dtr = new DateTimeRule(dtfields[1], weekInMonth, dtfields[3],
-                                                   dtfields[5], DateTimeRule.WALL_TIME);
+                            dtfields =
+                                    Grego.timeToFields(
+                                            tr.getTime()
+                                                    + tr.getFrom().getRawOffset()
+                                                    + tr.getFrom().getDSTSavings(),
+                                            dtfields);
+                            weekInMonth =
+                                    Grego.getDayOfWeekInMonth(
+                                            dtfields[0], dtfields[1], dtfields[2]);
+                            dtr =
+                                    new DateTimeRule(
+                                            dtfields[1],
+                                            weekInMonth,
+                                            dtfields[3],
+                                            dtfields[5],
+                                            DateTimeRule.WALL_TIME);
 
                             // second rule raw/dst offsets should match raw/dst offsets
                             // at the given time
-                            secondRule = new AnnualTimeZoneRule(
-                                tr.getTo().getName(), initialRaw, initialDst, dtr,
-                                annualRules[0].getStartYear() - 1, AnnualTimeZoneRule.MAX_YEAR);
+                            secondRule =
+                                    new AnnualTimeZoneRule(
+                                            tr.getTo().getName(),
+                                            initialRaw,
+                                            initialDst,
+                                            dtr,
+                                            annualRules[0].getStartYear() - 1,
+                                            AnnualTimeZoneRule.MAX_YEAR);
 
                             // Check if this rule start after the first rule after the
                             // specified date
-                            Date d = secondRule.getNextStart(date, tr.getFrom().getRawOffset(),
-                                                             tr.getFrom().getDSTSavings(), false);
+                            Date d =
+                                    secondRule.getNextStart(
+                                            date,
+                                            tr.getFrom().getRawOffset(),
+                                            tr.getFrom().getDSTSavings(),
+                                            false);
                             if (d.getTime() > nextTransitionTime) {
                                 // We can use this rule as the second transition rule
                                 annualRules[1] = secondRule;
@@ -608,8 +651,11 @@ public abstract class BasicTimeZone extends TimeZone {
             // Try the previous one
             tr = getPreviousTransition(date, true);
             if (tr != null) {
-                initialRule = new InitialTimeZoneRule(tr.getTo().getName(),
-                        tr.getTo().getRawOffset(), tr.getTo().getDSTSavings());
+                initialRule =
+                        new InitialTimeZoneRule(
+                                tr.getTo().getName(),
+                                tr.getTo().getRawOffset(),
+                                tr.getTo().getDSTSavings());
             } else {
                 // No transitions in the past.  Just use the current offsets
                 int[] offsets = new int[2];
@@ -633,58 +679,54 @@ public abstract class BasicTimeZone extends TimeZone {
     }
 
     /**
-     * {@icu} Options used by {@link #getOffsetFromLocal(long, LocalOption, LocalOption, int[])}
-     * to specify how to interpret an input time when it does not exist, or when it is ambiguous,
+     * {@icu} Options used by {@link #getOffsetFromLocal(long, LocalOption, LocalOption, int[])} to
+     * specify how to interpret an input time when it does not exist, or when it is ambiguous,
      * around a time zone transition.
      *
      * @stable ICU 69
      */
     public static enum LocalOption {
         /**
-         * An input time is always interpreted as local time before
-         * a time zone transition.
+         * An input time is always interpreted as local time before a time zone transition.
+         *
          * @stable ICU 69
          */
         FORMER(0x04),
         /**
-         * An input time is always interpreted as local time after
-         * a time zone transition.
+         * An input time is always interpreted as local time after a time zone transition.
+         *
          * @stable ICU 69
          */
         LATTER(0x0C),
         /**
-         * An input time is interpreted as standard time when local
-         * time is switched to/from daylight saving time. When both
-         * sides of a time zone transition are standard time,
-         * or daylight saving time, the local time before the
-         * transition is used.
+         * An input time is interpreted as standard time when local time is switched to/from
+         * daylight saving time. When both sides of a time zone transition are standard time, or
+         * daylight saving time, the local time before the transition is used.
+         *
          * @stable ICU 69
          */
         STANDARD_FORMER(0x05),
         /**
-         * An input time is interpreted as standard time when local
-         * time is switched to/from daylight saving time. When both
-         * sides of a time zone transition are standard time,
-         * or daylight saving time, the local time after the
-         * transition is used.
+         * An input time is interpreted as standard time when local time is switched to/from
+         * daylight saving time. When both sides of a time zone transition are standard time, or
+         * daylight saving time, the local time after the transition is used.
+         *
          * @stable ICU 69
          */
         STANDARD_LATTER(0x0D),
         /**
-         * An input time is interpreted as daylight saving time when
-         * local time is switched to/from standard time. When both
-         * sides of a time zone transition are standard time,
-         * or daylight saving time, the local time before the
-         * transition is used.
+         * An input time is interpreted as daylight saving time when local time is switched to/from
+         * standard time. When both sides of a time zone transition are standard time, or daylight
+         * saving time, the local time before the transition is used.
+         *
          * @stable ICU 69
          */
         DAYLIGHT_FORMER(0x07),
         /**
-         * An input time is interpreted as daylight saving time when
-         * local time is switched to/from standard time. When both
-         * sides of a time zone transition are standard time,
-         * or daylight saving time, the local time after the
-         * transition is used.
+         * An input time is interpreted as daylight saving time when local time is switched to/from
+         * standard time. When both sides of a time zone transition are standard time, or daylight
+         * saving time, the local time after the transition is used.
+         *
          * @stable ICU 69
          */
         DAYLIGHT_LATTER(0x0F);
@@ -697,9 +739,10 @@ public abstract class BasicTimeZone extends TimeZone {
     }
 
     /**
-     * Get {@link LocalOption}'s internal flag value. This is used by ICU internal
-     * implementation only.
-     * @param locOpt    A LocalOption
+     * Get {@link LocalOption}'s internal flag value. This is used by ICU internal implementation
+     * only.
+     *
+     * @param locOpt A LocalOption
      * @return LocalOption's internal flag value.
      * @internal
      * @deprecated This API is ICU internal only.
@@ -711,70 +754,75 @@ public abstract class BasicTimeZone extends TimeZone {
 
     /**
      * The time type option for standard time used by internal implementation.
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    @Deprecated
-    protected static final int LOCAL_STD = 0x01;
+    @Deprecated protected static final int LOCAL_STD = 0x01;
 
     /**
      * The time type option for daylight saving time used internally.
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    @Deprecated
-    protected static final int LOCAL_DST = 0x03;
+    @Deprecated protected static final int LOCAL_DST = 0x03;
 
     /**
      * The option designate former time used by internal implementation.
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    @Deprecated
-    protected static final int LOCAL_FORMER = 0x04;
+    @Deprecated protected static final int LOCAL_FORMER = 0x04;
 
     /**
      * The option designate latter time used by internal implementation.
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    @Deprecated
-    protected static final int LOCAL_LATTER = 0x0C;
+    @Deprecated protected static final int LOCAL_LATTER = 0x0C;
 
     /**
      * The bit mask for the time type option used by internal implementation.
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    @Deprecated
-    protected static final int STD_DST_MASK = 0x03;
+    @Deprecated protected static final int STD_DST_MASK = 0x03;
 
     /**
      * The bit mask for the former/latter option used by internal implementation.
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    @Deprecated
-    protected static final int FORMER_LATTER_MASK = 0x0C;
+    @Deprecated protected static final int FORMER_LATTER_MASK = 0x0C;
 
     /**
      * {@icu} Returns time zone offsets from local wall time.
+     *
      * @stable ICU 69
      */
-    public void getOffsetFromLocal(long date,
-            LocalOption nonExistingTimeOpt, LocalOption duplicatedTimeOpt, int[] offsets) {
+    public void getOffsetFromLocal(
+            long date,
+            LocalOption nonExistingTimeOpt,
+            LocalOption duplicatedTimeOpt,
+            int[] offsets) {
         throw new IllegalStateException("Not implemented");
     }
 
     /**
      * Protected no arg constructor.
+     *
      * @stable ICU 3.8
      */
-    protected BasicTimeZone() {
-    }
+    protected BasicTimeZone() {}
 
     /**
      * Constructing a BasicTimeZone with the given time zone ID.
+     *
      * @param ID the time zone ID.
      * @internal
      * @deprecated This API is ICU internal only.

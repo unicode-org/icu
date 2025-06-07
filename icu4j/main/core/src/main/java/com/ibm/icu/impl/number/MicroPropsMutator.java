@@ -4,10 +4,8 @@ package com.ibm.icu.impl.number;
 
 /**
  * @author sffc
- *
  */
 public interface MicroPropsMutator<T> {
 
     public void mutateMicros(MicroProps micros, T value);
-
 }

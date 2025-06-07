@@ -8,19 +8,18 @@
  */
 package com.ibm.icu.text;
 
+import com.ibm.icu.impl.duration.BasicDurationFormat;
+import com.ibm.icu.util.ULocale;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
 import java.util.Date;
 
-import com.ibm.icu.impl.duration.BasicDurationFormat;
-import com.ibm.icu.util.ULocale;
-
 /**
- * This <b>deprecated</b> class implements a formatter over a duration in time
- * such as "2 days from now" or "3 hours ago".
+ * This <b>deprecated</b> class implements a formatter over a duration in time such as "2 days from
+ * now" or "3 hours ago".
  *
- * <p>Use MeasureFormat to format periods like "5 days, 3 hours";
- * use RelativeDateTimeFormatter to format relative dates like "5 days ago".
+ * <p>Use MeasureFormat to format periods like "5 days, 3 hours"; use RelativeDateTimeFormatter to
+ * format relative dates like "5 days ago".
  *
  * @see MeasureFormat
  * @see RelativeDateTimeFormatter
@@ -33,6 +32,7 @@ public abstract class DurationFormat extends UFormat {
 
     /**
      * Construct a duration format for the specified locale
+     *
      * @deprecated ICU 56
      */
     @Deprecated
@@ -40,30 +40,32 @@ public abstract class DurationFormat extends UFormat {
         return BasicDurationFormat.getInstance(locale);
     }
 
-
     /**
      * Subclass interface
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
-    protected DurationFormat() {
-    }
+    protected DurationFormat() {}
 
     /**
      * Subclass interface
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
     protected DurationFormat(ULocale locale) {
-        setLocale(locale,locale);
+        setLocale(locale, locale);
     }
 
     /**
-     * Format an arbitrary object.
-     * Defaults to a call to formatDurationFromNow() for either Long or Date objects.
-     * @param object the object to format. Should be either a Long, Date, or javax.xml.datatype.Duration object.
+     * Format an arbitrary object. Defaults to a call to formatDurationFromNow() for either Long or
+     * Date objects.
+     *
+     * @param object the object to format. Should be either a Long, Date, or
+     *     javax.xml.datatype.Duration object.
      * @param toAppend the buffer to append to
      * @param pos the field position, may contain additional error messages.
      * @return the toAppend buffer
@@ -71,26 +73,26 @@ public abstract class DurationFormat extends UFormat {
      */
     @Deprecated
     @Override
-    public abstract StringBuffer format(Object object, StringBuffer toAppend,
-            FieldPosition pos);
+    public abstract StringBuffer format(Object object, StringBuffer toAppend, FieldPosition pos);
 
     /**
-     * DurationFormat cannot parse, by default. This method will throw an UnsupportedOperationException.
+     * DurationFormat cannot parse, by default. This method will throw an
+     * UnsupportedOperationException.
+     *
      * @deprecated ICU 56
      */
     @Override
     @Deprecated
     public Object parseObject(String source, ParsePosition pos) {
-       throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException();
     }
 
     /**
      * Formats the duration between now and a target date.
-     * <p>
-     * This is a convenience method that calls
-     * formatDurationFrom(long, long) using now
-     * as the reference date, and the difference between now and
-     * <code>targetDate.getTime()</code> as the duration.
+     *
+     * <p>This is a convenience method that calls formatDurationFrom(long, long) using now as the
+     * reference date, and the difference between now and <code>targetDate.getTime()</code> as the
+     * duration.
      *
      * @param targetDate the ending date
      * @return the formatted time
@@ -101,9 +103,9 @@ public abstract class DurationFormat extends UFormat {
 
     /**
      * Formats a duration expressed in milliseconds.
-     * <p>
-     * This is a convenience method that calls formatDurationFrom
-     * using the current system time as the reference date.
+     *
+     * <p>This is a convenience method that calls formatDurationFrom using the current system time
+     * as the reference date.
      *
      * @param duration the duration in milliseconds
      * @return the formatted time
@@ -114,13 +116,13 @@ public abstract class DurationFormat extends UFormat {
 
     /**
      * Formats a duration expressed in milliseconds from a reference date.
-     * <p>
-     * The reference date allows formatters to use actual durations of
-     * variable-length periods (like months) if they wish.
-     * <p>
-     * The duration is expressed as the number of milliseconds in the
-     * past (negative values) or future (positive values) with respect
-     * to a reference date (expressed as milliseconds in epoch).
+     *
+     * <p>The reference date allows formatters to use actual durations of variable-length periods
+     * (like months) if they wish.
+     *
+     * <p>The duration is expressed as the number of milliseconds in the past (negative values) or
+     * future (positive values) with respect to a reference date (expressed as milliseconds in
+     * epoch).
      *
      * @param duration the duration in milliseconds
      * @param referenceDate the date from which to compute the duration

@@ -2,9 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.number;
 
-import java.math.BigDecimal;
-import java.math.MathContext;
-
 import com.ibm.icu.impl.number.AffixPatternProvider;
 import com.ibm.icu.impl.number.CustomSymbolCurrency;
 import com.ibm.icu.impl.number.DecimalFormatProperties;
@@ -26,18 +23,18 @@ import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Currency.CurrencyUsage;
 import com.ibm.icu.util.ULocale;
+import java.math.BigDecimal;
+import java.math.MathContext;
 
 /**
- * <p>
- * This class, as well as NumberFormatterImpl, could go into the impl package, but they depend on too
- * many package-private members of the public APIs.
+ * This class, as well as NumberFormatterImpl, could go into the impl package, but they depend on
+ * too many package-private members of the public APIs.
  */
 final class NumberPropertyMapper {
 
     /** Convenience method to create a NumberFormatter directly from Properties. */
     public static UnlocalizedNumberFormatter create(
-            DecimalFormatProperties properties,
-            DecimalFormatSymbols symbols) {
+            DecimalFormatProperties properties, DecimalFormatSymbols symbols) {
         MacroProps macros = oldToNew(properties, symbols, null);
         return NumberFormatter.with().macros(macros);
     }
@@ -52,10 +49,10 @@ final class NumberPropertyMapper {
     }
 
     /**
-     * Convenience method to create a NumberFormatter directly from a pattern string. Something like this
-     * could become public API if there is demand.
+     * Convenience method to create a NumberFormatter directly from a pattern string. Something like
+     * this could become public API if there is demand.
      *
-     * NOTE: This appears to be dead code.
+     * <p>NOTE: This appears to be dead code.
      */
     public static UnlocalizedNumberFormatter create(String pattern, DecimalFormatSymbols symbols) {
         DecimalFormatProperties properties = PatternStringParser.parseToProperties(pattern);
@@ -63,17 +60,15 @@ final class NumberPropertyMapper {
     }
 
     /**
-     * Creates a new {@link MacroProps} object based on the content of a {@link DecimalFormatProperties}
-     * object. In other words, maps Properties to MacroProps. This function is used by the
-     * JDK-compatibility API to call into the ICU 60 fluent number formatting pipeline.
+     * Creates a new {@link MacroProps} object based on the content of a {@link
+     * DecimalFormatProperties} object. In other words, maps Properties to MacroProps. This function
+     * is used by the JDK-compatibility API to call into the ICU 60 fluent number formatting
+     * pipeline.
      *
-     * @param properties
-     *            The property bag to be mapped.
-     * @param symbols
-     *            The symbols associated with the property bag.
-     * @param exportedProperties
-     *            A property bag in which to store validated properties. Used by some DecimalFormat
-     *            getters.
+     * @param properties The property bag to be mapped.
+     * @param symbols The symbols associated with the property bag.
+     * @param exportedProperties A property bag in which to store validated properties. Used by some
+     *     DecimalFormat getters.
      * @return A new MacroProps containing all of the information in the Properties.
      */
     public static MacroProps oldToNew(
@@ -103,17 +98,19 @@ final class NumberPropertyMapper {
         // AFFIXES //
         /////////////
 
-        AffixPatternProvider affixProvider = PropertiesAffixPatternProvider.forProperties(properties);
+        AffixPatternProvider affixProvider =
+                PropertiesAffixPatternProvider.forProperties(properties);
         macros.affixProvider = affixProvider;
 
         ///////////
         // UNITS //
         ///////////
 
-        boolean useCurrency = ((properties.getCurrency() != null)
-                || properties.getCurrencyPluralInfo() != null
-                || properties.getCurrencyUsage() != null
-                || affixProvider.hasCurrencySign());
+        boolean useCurrency =
+                ((properties.getCurrency() != null)
+                        || properties.getCurrencyPluralInfo() != null
+                        || properties.getCurrencyUsage() != null
+                        || affixProvider.hasCurrencySign());
         Currency currency = CustomSymbolCurrency.resolve(properties.getCurrency(), locale, symbols);
         CurrencyUsage currencyUsage = properties.getCurrencyUsage();
         boolean explicitCurrencyUsage = currencyUsage != null;
@@ -138,7 +135,8 @@ final class NumberPropertyMapper {
         MathContext mathContext = RoundingUtils.getMathContextOrUnlimited(properties);
         boolean explicitMinMaxFrac = minFrac != -1 || maxFrac != -1;
         boolean explicitMinMaxSig = minSig != -1 || maxSig != -1;
-        // Resolve min/max frac for currencies, required for the validation logic and for when minFrac or
+        // Resolve min/max frac for currencies, required for the validation logic and for when
+        // minFrac or
         // maxFrac was set (but not both) on a currency instance.
         // NOTE: Increments are handled in "Rounder.constructCurrency()".
         if (useCurrency) {
@@ -165,8 +163,12 @@ final class NumberPropertyMapper {
             minFrac = minFrac < 0 ? 0 : minFrac;
             maxFrac = maxFrac < 0 ? -1 : maxFrac < minFrac ? minFrac : maxFrac;
             minInt = minInt <= 0 ? 1 : minInt > RoundingUtils.MAX_INT_FRAC_SIG ? 1 : minInt;
-            maxInt = maxInt < 0 ? -1
-                    : maxInt < minInt ? minInt : maxInt > RoundingUtils.MAX_INT_FRAC_SIG ? -1 : maxInt;
+            maxInt =
+                    maxInt < 0
+                            ? -1
+                            : maxInt < minInt
+                                    ? minInt
+                                    : maxInt > RoundingUtils.MAX_INT_FRAC_SIG ? -1 : maxInt;
         }
         Precision rounding = null;
         if (explicitCurrencyUsage) {
@@ -181,12 +183,20 @@ final class NumberPropertyMapper {
                 rounding = Precision.constructIncrement(roundingIncrement);
             }
         } else if (explicitMinMaxSig) {
-            minSig = minSig < 1 ? 1
-                    : minSig > RoundingUtils.MAX_INT_FRAC_SIG ? RoundingUtils.MAX_INT_FRAC_SIG : minSig;
-            maxSig = maxSig < 0 ? RoundingUtils.MAX_INT_FRAC_SIG
-                    : maxSig < minSig ? minSig
-                            : maxSig > RoundingUtils.MAX_INT_FRAC_SIG ? RoundingUtils.MAX_INT_FRAC_SIG
-                                    : maxSig;
+            minSig =
+                    minSig < 1
+                            ? 1
+                            : minSig > RoundingUtils.MAX_INT_FRAC_SIG
+                                    ? RoundingUtils.MAX_INT_FRAC_SIG
+                                    : minSig;
+            maxSig =
+                    maxSig < 0
+                            ? RoundingUtils.MAX_INT_FRAC_SIG
+                            : maxSig < minSig
+                                    ? minSig
+                                    : maxSig > RoundingUtils.MAX_INT_FRAC_SIG
+                                            ? RoundingUtils.MAX_INT_FRAC_SIG
+                                            : maxSig;
             rounding = Precision.constructSignificant(minSig, maxSig);
         } else if (explicitMinMaxFrac) {
             rounding = Precision.constructFraction(minFrac, maxFrac);
@@ -222,8 +232,10 @@ final class NumberPropertyMapper {
         // DECIMAL MARK ALWAYS SHOWN //
         ///////////////////////////////
 
-        macros.decimal = properties.getDecimalSeparatorAlwaysShown() ? DecimalSeparatorDisplay.ALWAYS
-                : DecimalSeparatorDisplay.AUTO;
+        macros.decimal =
+                properties.getDecimalSeparatorAlwaysShown()
+                        ? DecimalSeparatorDisplay.ALWAYS
+                        : DecimalSeparatorDisplay.AUTO;
 
         ///////////////////////
         // SIGN ALWAYS SHOWN //
@@ -241,7 +253,8 @@ final class NumberPropertyMapper {
             // The mapping from property bag to scientific notation is nontrivial due to LDML rules.
             if (maxInt > 8) {
                 // But #13110: The maximum of 8 digits has unknown origins and is not in the spec.
-                // If maxInt is greater than 8, it is set to minInt, even if minInt is greater than 8.
+                // If maxInt is greater than 8, it is set to minInt, even if minInt is greater than
+                // 8.
                 maxInt = minInt;
                 macros.integerWidth = IntegerWidth.zeroFillTo(minInt).truncateAt(maxInt);
             } else if (maxInt > minInt && minInt > 1) {
@@ -250,15 +263,18 @@ final class NumberPropertyMapper {
                 macros.integerWidth = IntegerWidth.zeroFillTo(minInt).truncateAt(maxInt);
             }
             int engineering = maxInt < 0 ? -1 : maxInt;
-            macros.notation = new ScientificNotation(
-                    // Engineering interval:
-                    engineering,
-                    // Enforce minimum integer digits (for patterns like "000.00E0"):
-                    (engineering == minInt),
-                    // Minimum exponent digits:
-                    properties.getMinimumExponentDigits(),
-                    // Exponent sign always shown:
-                    properties.getExponentSignAlwaysShown() ? SignDisplay.ALWAYS : SignDisplay.AUTO);
+            macros.notation =
+                    new ScientificNotation(
+                            // Engineering interval:
+                            engineering,
+                            // Enforce minimum integer digits (for patterns like "000.00E0"):
+                            (engineering == minInt),
+                            // Minimum exponent digits:
+                            properties.getMinimumExponentDigits(),
+                            // Exponent sign always shown:
+                            properties.getExponentSignAlwaysShown()
+                                    ? SignDisplay.ALWAYS
+                                    : SignDisplay.AUTO);
             // Scientific notation also involves overriding the rounding mode.
             // TODO: Overriding here is a bit of a hack. Should this logic go earlier?
             if (macros.precision instanceof FractionPrecision) {
@@ -272,8 +288,10 @@ final class NumberPropertyMapper {
                     // Patterns like "#E0" and "##E0", which mean no rounding!
                     macros.precision = Precision.constructInfinite().withMode(mathContext);
                 } else if (minInt_ == 0 && minFrac_ == 0) {
-                    // Patterns like "#.##E0" (no zeros in the mantissa), which mean round to maxFrac+1
-                    macros.precision = Precision.constructSignificant(1, maxFrac_ + 1).withMode(mathContext);
+                    // Patterns like "#.##E0" (no zeros in the mantissa), which mean round to
+                    // maxFrac+1
+                    macros.precision =
+                            Precision.constructSignificant(1, maxFrac_ + 1).withMode(mathContext);
                 } else {
                     int maxSig_ = minInt_ + maxFrac_;
                     // Bug #20058: if maxInt_ > minInt_ > 1, then minInt_ should be 1.
@@ -283,8 +301,8 @@ final class NumberPropertyMapper {
                     int minSig_ = minInt_ + minFrac_;
                     // To avoid regression, maxSig is not reset when minInt_ set to 1.
                     // TODO: Reset maxSig_ = 1 + minFrac_ to follow the spec.
-                    macros.precision = Precision.constructSignificant(minSig_, maxSig_)
-                            .withMode(mathContext);
+                    macros.precision =
+                            Precision.constructSignificant(minSig_, maxSig_).withMode(mathContext);
                 }
             }
         }

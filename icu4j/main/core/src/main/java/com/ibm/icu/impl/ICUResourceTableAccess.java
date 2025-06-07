@@ -11,31 +11,32 @@ package com.ibm.icu.impl;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
-/**
- * Static utility functions for probing resource tables, used by ULocale and
- * LocaleDisplayNames.
- */
+/** Static utility functions for probing resource tables, used by ULocale and LocaleDisplayNames. */
 public class ICUResourceTableAccess {
     /**
-     * Utility to fetch locale display data from resource bundle tables.  Convenience
-     * wrapper for {@link #getTableString(ICUResourceBundle, String, String, String, String)}.
+     * Utility to fetch locale display data from resource bundle tables. Convenience wrapper for
+     * {@link #getTableString(ICUResourceBundle, String, String, String, String)}.
      */
-    public static String getTableString(String path, ULocale locale, String tableName,
-            String itemName, String defaultValue) {
-        ICUResourceBundle bundle = (ICUResourceBundle) UResourceBundle.
-            getBundleInstance(path, locale.getBaseName());
+    public static String getTableString(
+            String path, ULocale locale, String tableName, String itemName, String defaultValue) {
+        ICUResourceBundle bundle =
+                (ICUResourceBundle) UResourceBundle.getBundleInstance(path, locale.getBaseName());
         return getTableString(bundle, tableName, null, itemName, defaultValue);
     }
 
     /**
-     * Utility to fetch locale display data from resource bundle tables.  Uses fallback
-     * through the "Fallback" resource if available.
+     * Utility to fetch locale display data from resource bundle tables. Uses fallback through the
+     * "Fallback" resource if available.
      */
-    public static String getTableString(ICUResourceBundle bundle, String tableName,
-            String subtableName, String item, String defaultValue) {
+    public static String getTableString(
+            ICUResourceBundle bundle,
+            String tableName,
+            String subtableName,
+            String item,
+            String defaultValue) {
         String result = null;
         try {
-            for (;;) {
+            for (; ; ) {
                 ICUResourceBundle table = bundle.findWithFallback(tableName);
                 if (table == null) {
                     return defaultValue;
@@ -69,7 +70,8 @@ public class ICUResourceTableAccess {
                 }
 
                 // still can't figure it out? try the fallback mechanism
-                String fallbackLocale = table.findStringWithFallback("Fallback"); // again, possible exception
+                String fallbackLocale =
+                        table.findStringWithFallback("Fallback"); // again, possible exception
                 if (fallbackLocale == null) {
                     return defaultValue;
                 }
@@ -82,8 +84,10 @@ public class ICUResourceTableAccess {
                     return defaultValue;
                 }
 
-                bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(
-                        bundle.getBaseName(), fallbackLocale);
+                bundle =
+                        (ICUResourceBundle)
+                                UResourceBundle.getBundleInstance(
+                                        bundle.getBaseName(), fallbackLocale);
             }
         } catch (Exception e) {
             // If something is seriously wrong, we might call getString on a resource that is

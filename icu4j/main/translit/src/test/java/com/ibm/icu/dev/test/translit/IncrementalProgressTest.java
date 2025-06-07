@@ -2,17 +2,15 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.dev.test.translit;
 
-import java.util.Enumeration;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.UtilityExtensions;
 import com.ibm.icu.text.Replaceable;
 import com.ibm.icu.text.ReplaceableString;
 import com.ibm.icu.text.Transliterator;
+import java.util.Enumeration;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
 // Check to see that incremental gets at least part way through a reasonable string.
 @RunWith(Parameterized.class)
@@ -20,30 +18,31 @@ public class IncrementalProgressTest extends TestFmwk {
     private String lang;
     private String text;
 
-    public IncrementalProgressTest(String lang, String text){
+    public IncrementalProgressTest(String lang, String text) {
         this.lang = lang;
         this.text = text;
     }
 
     @Parameterized.Parameters
-    public static String[][] testData(){
+    public static String[][] testData() {
         String latinTest = "The Quick Brown Fox.";
         String devaTest = Transliterator.getInstance("Latin-Devanagari").transliterate(latinTest);
         String kataTest = Transliterator.getInstance("Latin-Katakana").transliterate(latinTest);
         // Labels have to be valid transliterator source names.
         String[][] tests = {
-                {"Any", latinTest},
-                {"Latin", latinTest},
-                {"Halfwidth", latinTest},
-                {"Devanagari", devaTest},
-                {"Katakana", kataTest},
+            {"Any", latinTest},
+            {"Latin", latinTest},
+            {"Halfwidth", latinTest},
+            {"Devanagari", devaTest},
+            {"Katakana", kataTest},
         };
         return tests;
     }
 
     public void CheckIncrementalAux(Transliterator t, String input) {
         Replaceable test = new ReplaceableString(input);
-        Transliterator.Position pos = new Transliterator.Position(0, test.length(), 0, test.length());
+        Transliterator.Position pos =
+                new Transliterator.Position(0, test.length(), 0, test.length());
         t.transliterate(test, pos);
         boolean gotError = false;
 
@@ -59,18 +58,18 @@ public class IncrementalProgressTest extends TestFmwk {
             errln("Incomplete, " + t.getID() + ":  " + UtilityExtensions.formatInput(test, pos));
             gotError = true;
         }
-        if(!gotError){
-            //errln("FAIL: Did not get expected error");
+        if (!gotError) {
+            // errln("FAIL: Did not get expected error");
         }
     }
 
     @Test
     public void TestIncrementalProgress() {
         Enumeration<String> targets = Transliterator.getAvailableTargets(this.lang);
-        while(targets.hasMoreElements()) {
+        while (targets.hasMoreElements()) {
             String target = targets.nextElement();
             Enumeration<String> variants = Transliterator.getAvailableVariants(this.lang, target);
-            while(variants.hasMoreElements()) {
+            while (variants.hasMoreElements()) {
                 String variant = variants.nextElement();
                 String id = this.lang + "-" + target + "/" + variant;
                 logln("id: " + id);
@@ -81,13 +80,11 @@ public class IncrementalProgressTest extends TestFmwk {
                 String rev = t.transliterate(text);
 
                 // Special treatment: This transliterator has no registered inverse, skip for now.
-                if (id.equals("Devanagari-Arabic/"))
-                    continue;
+                if (id.equals("Devanagari-Arabic/")) continue;
 
                 Transliterator inv = t.getInverse();
                 CheckIncrementalAux(inv, rev);
             }
         }
     }
-
 }

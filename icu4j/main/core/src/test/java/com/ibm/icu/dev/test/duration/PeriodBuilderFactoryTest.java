@@ -1,19 +1,15 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /*
-******************************************************************************
-* Copyright (C) 2007-2011, International Business Machines Corporation and   *
-* others. All Rights Reserved.                                               *
-******************************************************************************
-*/
+ ******************************************************************************
+ * Copyright (C) 2007-2011, International Business Machines Corporation and   *
+ * others. All Rights Reserved.                                               *
+ ******************************************************************************
+ */
 
 // Copyright 2007 Google Inc.  All Rights Reserved.
 
 package com.ibm.icu.dev.test.duration;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.duration.BasicPeriodFormatterService;
@@ -22,14 +18,23 @@ import com.ibm.icu.impl.duration.PeriodBuilder;
 import com.ibm.icu.impl.duration.PeriodBuilderFactory;
 import com.ibm.icu.impl.duration.TimeUnit;
 import com.ibm.icu.impl.duration.TimeUnitConstants;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public class PeriodBuilderFactoryTest extends CoreTestFmwk implements TimeUnitConstants {
     private PeriodBuilderFactory pbf;
 
     private static final long[] approxDurations = {
-      36525L*24*60*60*10, 3045*24*60*60*10L, 7*24*60*60*1000L, 24*60*60*1000L,
-      60*60*1000L, 60*1000L, 1000L, 1L
+        36525L * 24 * 60 * 60 * 10,
+        3045 * 24 * 60 * 60 * 10L,
+        7 * 24 * 60 * 60 * 1000L,
+        24 * 60 * 60 * 1000L,
+        60 * 60 * 1000L,
+        60 * 1000L,
+        1000L,
+        1L
     };
 
     @Test
@@ -39,7 +44,7 @@ public class PeriodBuilderFactoryTest extends CoreTestFmwk implements TimeUnitCo
         pbf.setLocale("en"); // in en locale, all units always available
         PeriodBuilder b = pbf.getSingleUnitBuilder();
         for (TimeUnit unit = YEAR; unit != null; unit = unit.smaller()) {
-            Period p = b.create((long)(approxDurations[unit.ordinal()]*2.5));
+            Period p = b.create((long) (approxDurations[unit.ordinal()] * 2.5));
             assertTrue(null, p.isSet(unit));
         }
 
@@ -47,8 +52,11 @@ public class PeriodBuilderFactoryTest extends CoreTestFmwk implements TimeUnitCo
         // units that are not available are never set
         b = pbf.getSingleUnitBuilder();
         for (TimeUnit unit = YEAR; unit != null; unit = unit.smaller()) {
-            Period p = b.create((long)(approxDurations[unit.ordinal()]*2.5));
-            assertEquals(null, p.isSet(unit), unit.ordinal() >= MONTH.ordinal() && unit.ordinal() <= MINUTE.ordinal());
+            Period p = b.create((long) (approxDurations[unit.ordinal()] * 2.5));
+            assertEquals(
+                    null,
+                    p.isSet(unit),
+                    unit.ordinal() >= MONTH.ordinal() && unit.ordinal() <= MINUTE.ordinal());
         }
 
         // fixed unit builder returns null when unit is not available

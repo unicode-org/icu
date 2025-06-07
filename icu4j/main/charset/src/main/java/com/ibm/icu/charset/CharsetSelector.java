@@ -7,36 +7,34 @@
  ******************************************************************************
  */
 
-/* 
- * This is a port of the C++ class UConverterSelector. 
+/*
+ * This is a port of the C++ class UConverterSelector.
  *
  * Methods related to serialization are not ported in this version. In addition,
  * the selectForUTF8 method is not going to be ported, as UTF8 is seldom used
  * in Java.
- * 
+ *
  * @author Shaopeng Jia
  */
 
 package com.ibm.icu.charset;
 
+import com.ibm.icu.impl.IntTrie;
+import com.ibm.icu.impl.PropsVectors;
+import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeSet;
 import java.nio.charset.Charset;
 import java.nio.charset.IllegalCharsetNameException;
 import java.nio.charset.UnsupportedCharsetException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ibm.icu.impl.IntTrie;
-import com.ibm.icu.impl.PropsVectors;
-import com.ibm.icu.text.UTF16;
-import com.ibm.icu.text.UnicodeSet;
-
 /**
  * Charset Selector
- * 
- * A charset selector is built with a list of charset names and given an input
- * CharSequence returns the list of names the corresponding charsets which can
- * convert the CharSequence.
- * 
+ *
+ * <p>A charset selector is built with a list of charset names and given an input CharSequence
+ * returns the list of names the corresponding charsets which can convert the CharSequence.
+ *
  * @stable ICU 4.2
  */
 public final class CharsetSelector {
@@ -44,21 +42,19 @@ public final class CharsetSelector {
     private int[] pv; // table of bits
     private String[] encodings; // encodings users ask to use
 
-    private void generateSelectorData(PropsVectors pvec,
-            UnicodeSet excludedCodePoints, int mappingTypes) {
+    private void generateSelectorData(
+            PropsVectors pvec, UnicodeSet excludedCodePoints, int mappingTypes) {
         int columns = (encodings.length + 31) / 32;
 
         // set errorValue to all-ones
         for (int col = 0; col < columns; ++col) {
-            pvec.setValue(PropsVectors.ERROR_VALUE_CP,
-                    PropsVectors.ERROR_VALUE_CP, col, ~0, ~0);
+            pvec.setValue(PropsVectors.ERROR_VALUE_CP, PropsVectors.ERROR_VALUE_CP, col, ~0, ~0);
         }
 
         for (int i = 0; i < encodings.length; ++i) {
             Charset testCharset = CharsetICU.forNameICU(encodings[i]);
             UnicodeSet unicodePointSet = new UnicodeSet(); // empty set
-            ((CharsetICU) testCharset).getUnicodeSet(unicodePointSet,
-                    mappingTypes);
+            ((CharsetICU) testCharset).getUnicodeSet(unicodePointSet, mappingTypes);
             int column = i / 32;
             int mask = 1 << (i % 32);
             // now iterate over intervals on set i
@@ -89,7 +85,7 @@ public final class CharsetSelector {
 
     // internal function to intersect two sets of masks
     // returns whether the mask has reduced to all zeros. The
-    // second set of mask consists of len elements in pv starting from 
+    // second set of mask consists of len elements in pv starting from
     // pvIndex
     private boolean intersectMasks(int[] dest, int pvIndex, int len) {
         int oredDest = 0;
@@ -141,31 +137,23 @@ public final class CharsetSelector {
 
     /**
      * Construct a CharsetSelector from a list of charset names.
-     * 
-     * @param charsetList
-     *            a list of charset names in the form of strings. If charsetList
-     *            is empty, a selector for all available charset is constructed.
-     * @param excludedCodePoints
-     *            a set of code points to be excluded from consideration.
-     *            Excluded code points appearing in the input CharSequence do
-     *            not change the selection result. It could be empty when no
-     *            code point should be excluded.
-     * @param mappingTypes
-     *            an int which determines whether to consider only roundtrip
-     *            mappings or also fallbacks, e.g. CharsetICU.ROUNDTRIP_SET. See
-     *            CharsetICU.java for the constants that are currently
-     *            supported.
-     * @throws IllegalArgumentException
-     *             if the parameters is invalid.
-     * @throws IllegalCharsetNameException
-     *             If the given charset name is illegal.
-     * @throws UnsupportedCharsetException
-     *             If no support for the named charset is available in this
-     *             instance of the Java virtual machine.
+     *
+     * @param charsetList a list of charset names in the form of strings. If charsetList is empty, a
+     *     selector for all available charset is constructed.
+     * @param excludedCodePoints a set of code points to be excluded from consideration. Excluded
+     *     code points appearing in the input CharSequence do not change the selection result. It
+     *     could be empty when no code point should be excluded.
+     * @param mappingTypes an int which determines whether to consider only roundtrip mappings or
+     *     also fallbacks, e.g. CharsetICU.ROUNDTRIP_SET. See CharsetICU.java for the constants that
+     *     are currently supported.
+     * @throws IllegalArgumentException if the parameters is invalid.
+     * @throws IllegalCharsetNameException If the given charset name is illegal.
+     * @throws UnsupportedCharsetException If no support for the named charset is available in this
+     *     instance of the Java virtual machine.
      * @stable ICU 4.2
      */
-    public CharsetSelector(List<String> charsetList, UnicodeSet excludedCodePoints,
-            int mappingTypes) {
+    public CharsetSelector(
+            List<String> charsetList, UnicodeSet excludedCodePoints, int mappingTypes) {
         if (mappingTypes != CharsetICU.ROUNDTRIP_AND_FALLBACK_SET
                 && mappingTypes != CharsetICU.ROUNDTRIP_SET) {
             throw new IllegalArgumentException("Unsupported mappingTypes");
@@ -184,24 +172,21 @@ public final class CharsetSelector {
     }
 
     /**
-     * Select charsets that can map all characters in a CharSequence, ignoring
-     * the excluded code points.
-     * 
-     * @param unicodeText
-     *            a CharSequence. It could be empty.
-     * @return a list that contains charset names in the form of strings. The
-     *         returned encoding names and their order will be the same as
-     *         supplied when building the selector.
-     * 
+     * Select charsets that can map all characters in a CharSequence, ignoring the excluded code
+     * points.
+     *
+     * @param unicodeText a CharSequence. It could be empty.
+     * @return a list that contains charset names in the form of strings. The returned encoding
+     *     names and their order will be the same as supplied when building the selector.
      * @stable ICU 4.2
      */
     public List<String> selectForString(CharSequence unicodeText) {
         int columns = (encodings.length + 31) / 32;
         int[] mask = new int[columns];
         for (int i = 0; i < columns; i++) {
-            mask[i] = - 1; // set each bit to 1
-                           // Note: All integers are signed in Java, assigning
-                           // 2 ^ 32 -1 to mask is wrong!
+            mask[i] = -1; // set each bit to 1
+            // Note: All integers are signed in Java, assigning
+            // 2 ^ 32 -1 to mask is wrong!
         }
         int index = 0;
         while (index < unicodeText.length()) {

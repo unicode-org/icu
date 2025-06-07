@@ -8,54 +8,44 @@
  */
 package com.ibm.icu.text;
 
+import com.ibm.icu.impl.UtilityExtensions;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ibm.icu.impl.UtilityExtensions;
-
 /**
- * A set of rules for a <code>RuleBasedTransliterator</code>.  This set encodes
- * the transliteration in one direction from one set of characters or short
- * strings to another.  A <code>RuleBasedTransliterator</code> consists of up to
- * two such sets, one for the forward direction, and one for the reverse.
+ * A set of rules for a <code>RuleBasedTransliterator</code>. This set encodes the transliteration
+ * in one direction from one set of characters or short strings to another. A <code>
+ * RuleBasedTransliterator</code> consists of up to two such sets, one for the forward direction,
+ * and one for the reverse.
  *
- * <p>A <code>TransliterationRuleSet</code> has one important operation, that of
- * finding a matching rule at a given point in the text.  This is accomplished
- * by the <code>findMatch()</code> method.
+ * <p>A <code>TransliterationRuleSet</code> has one important operation, that of finding a matching
+ * rule at a given point in the text. This is accomplished by the <code>findMatch()</code> method.
  *
- * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
+ * <p>Copyright &copy; IBM Corporation 1999. All rights reserved.
  *
  * @author Alan Liu
  */
 class TransliterationRuleSet {
-    /**
-     * Vector of rules, in the order added.
-     */
+    /** Vector of rules, in the order added. */
     private List<TransliterationRule> ruleVector;
 
-    /**
-     * Length of the longest preceding context
-     */
+    /** Length of the longest preceding context */
     private int maxContextLength;
 
     /**
-     * Sorted and indexed table of rules.  This is created by freeze() from
-     * the rules in ruleVector.  rules.length >= ruleVector.size(), and the
-     * references in rules[] are aliases of the references in ruleVector.
-     * A single rule in ruleVector is listed one or more times in rules[].
+     * Sorted and indexed table of rules. This is created by freeze() from the rules in ruleVector.
+     * rules.length >= ruleVector.size(), and the references in rules[] are aliases of the
+     * references in ruleVector. A single rule in ruleVector is listed one or more times in rules[].
      */
     private TransliterationRule[] rules;
 
     /**
-     * Index table.  For text having a first character c, compute x = c&0xFF.
-     * Now use rules[index[x]..index[x+1]-1].  This index table is created by
-     * freeze().
+     * Index table. For text having a first character c, compute x = c&0xFF. Now use
+     * rules[index[x]..index[x+1]-1]. This index table is created by freeze().
      */
     private int[] index;
 
-    /**
-     * Construct a new empty rule set.
-     */
+    /** Construct a new empty rule set. */
     public TransliterationRuleSet() {
         ruleVector = new ArrayList<TransliterationRule>();
         maxContextLength = 0;
@@ -63,6 +53,7 @@ class TransliterationRuleSet {
 
     /**
      * Return the maximum context length.
+     *
      * @return the length of the longest preceding context.
      */
     public int getMaximumContextLength() {
@@ -70,8 +61,8 @@ class TransliterationRuleSet {
     }
 
     /**
-     * Add a rule to this set.  Rules are added in order, and order is
-     * significant.
+     * Add a rule to this set. Rules are added in order, and order is significant.
+     *
      * @param rule the rule to add
      */
     public void addRule(TransliterationRule rule) {
@@ -85,8 +76,9 @@ class TransliterationRuleSet {
     }
 
     /**
-     * Close this rule set to further additions, check it for masked rules,
-     * and index it to optimize performance.
+     * Close this rule set to further additions, check it for masked rules, and index it to optimize
+     * performance.
+     *
      * @exception IllegalArgumentException if some rules are masked
      */
     public void freeze() {
@@ -108,18 +100,19 @@ class TransliterationRuleSet {
          */
         int n = ruleVector.size();
         index = new int[257]; // [sic]
-        List<TransliterationRule> v = new ArrayList<TransliterationRule>(2*n); // heuristic; adjust as needed
+        List<TransliterationRule> v =
+                new ArrayList<TransliterationRule>(2 * n); // heuristic; adjust as needed
 
         /* Precompute the index values.  This saves a LOT of time.
          */
         int[] indexValue = new int[n];
-        for (int j=0; j<n; ++j) {
+        for (int j = 0; j < n; ++j) {
             TransliterationRule r = ruleVector.get(j);
             indexValue[j] = r.getIndexValue();
         }
-        for (int x=0; x<256; ++x) {
+        for (int x = 0; x < 256; ++x) {
             index[x] = v.size();
-            for (int j=0; j<n; ++j) {
+            for (int j = 0; j < n; ++j) {
                 if (indexValue[j] >= 0) {
                     if (indexValue[j] == x) {
                         v.add(ruleVector.get(j));
@@ -152,10 +145,10 @@ class TransliterationRuleSet {
          * count, and n2 is the per-bin rule count.  But n2<<n1, so
          * it's a big win.
          */
-        for (int x=0; x<256; ++x) {
-            for (int j=index[x]; j<index[x+1]-1; ++j) {
+        for (int x = 0; x < 256; ++x) {
+            for (int j = index[x]; j < index[x + 1] - 1; ++j) {
                 TransliterationRule r1 = rules[j];
-                for (int k=j+1; k<index[x+1]; ++k) {
+                for (int k = j + 1; k < index[x + 1]; ++k) {
                     TransliterationRule r2 = rules[k];
                     if (r1.masks(r2)) {
                         if (errors == null) {
@@ -175,39 +168,41 @@ class TransliterationRuleSet {
     }
 
     /**
-     * Transliterate the given text with the given UTransPosition
-     * indices.  Return true if the transliteration should continue
-     * or false if it should halt (because of a U_PARTIAL_MATCH match).
-     * Note that false is only ever returned if isIncremental is true.
+     * Transliterate the given text with the given UTransPosition indices. Return true if the
+     * transliteration should continue or false if it should halt (because of a U_PARTIAL_MATCH
+     * match). Note that false is only ever returned if isIncremental is true.
+     *
      * @param text the text to be transliterated
      * @param pos the position indices, which will be updated
-     * @param incremental if true, assume new text may be inserted
-     * at index.limit, and return false if there is a partial match.
-     * @return true unless a U_PARTIAL_MATCH has been obtained,
-     * indicating that transliteration should stop until more text
-     * arrives.
+     * @param incremental if true, assume new text may be inserted at index.limit, and return false
+     *     if there is a partial match.
+     * @return true unless a U_PARTIAL_MATCH has been obtained, indicating that transliteration
+     *     should stop until more text arrives.
      */
-    public boolean transliterate(Replaceable text,
-                                 Transliterator.Position pos,
-                                 boolean incremental) {
+    public boolean transliterate(
+            Replaceable text, Transliterator.Position pos, boolean incremental) {
         int indexByte = text.char32At(pos.start) & 0xFF;
-        for (int i=index[indexByte]; i<index[indexByte+1]; ++i) {
+        for (int i = index[indexByte]; i < index[indexByte + 1]; ++i) {
             int m = rules[i].matchAndReplace(text, pos, incremental);
             switch (m) {
-            case UnicodeMatcher.U_MATCH:
-                if (Transliterator.DEBUG) {
-                    System.out.println((incremental ? "Rule.i: match ":"Rule: match ") +
-                                       rules[i].toRule(true) + " => " +
-                                       UtilityExtensions.formatInput(text, pos));
-                }
-                return true;
-            case UnicodeMatcher.U_PARTIAL_MATCH:
-                if (Transliterator.DEBUG) {
-                    System.out.println((incremental ? "Rule.i: partial match ":"Rule: partial match ") +
-                                       rules[i].toRule(true) + " => " +
-                                       UtilityExtensions.formatInput(text, pos));
-                }
-                return false;
+                case UnicodeMatcher.U_MATCH:
+                    if (Transliterator.DEBUG) {
+                        System.out.println(
+                                (incremental ? "Rule.i: match " : "Rule: match ")
+                                        + rules[i].toRule(true)
+                                        + " => "
+                                        + UtilityExtensions.formatInput(text, pos));
+                    }
+                    return true;
+                case UnicodeMatcher.U_PARTIAL_MATCH:
+                    if (Transliterator.DEBUG) {
+                        System.out.println(
+                                (incremental ? "Rule.i: partial match " : "Rule: partial match ")
+                                        + rules[i].toRule(true)
+                                        + " => "
+                                        + UtilityExtensions.formatInput(text, pos));
+                    }
+                    return false;
                 default:
                     if (Transliterator.DEBUG) {
                         System.out.println("Rule: no match " + rules[i]);
@@ -217,20 +212,19 @@ class TransliterationRuleSet {
         // No match or partial match from any rule
         pos.start += UTF16.getCharCount(text.char32At(pos.start));
         if (Transliterator.DEBUG) {
-            System.out.println((incremental ? "Rule.i: no match => ":"Rule: no match => ") +
-                               UtilityExtensions.formatInput(text, pos));
+            System.out.println(
+                    (incremental ? "Rule.i: no match => " : "Rule: no match => ")
+                            + UtilityExtensions.formatInput(text, pos));
         }
         return true;
     }
 
-    /**
-     * Create rule strings that represents this rule set.
-     */
+    /** Create rule strings that represents this rule set. */
     String toRules(boolean escapeUnprintable) {
         int i;
         int count = ruleVector.size();
         StringBuilder ruleSource = new StringBuilder();
-        for (i=0; i<count; ++i) {
+        for (i = 0; i < count; ++i) {
             if (i != 0) {
                 ruleSource.append('\n');
             }
@@ -246,11 +240,10 @@ class TransliterationRuleSet {
         UnicodeSet currentFilter = new UnicodeSet(filter);
         UnicodeSet revisiting = new UnicodeSet();
         int count = ruleVector.size();
-        for (int i=0; i<count; ++i) {
+        for (int i = 0; i < count; ++i) {
             TransliterationRule r = ruleVector.get(i);
             r.addSourceTargetSet(currentFilter, sourceSet, targetSet, revisiting.clear());
             currentFilter.addAll(revisiting);
         }
     }
-
 }

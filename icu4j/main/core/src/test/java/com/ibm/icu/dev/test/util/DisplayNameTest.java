@@ -8,6 +8,14 @@
  */
 package com.ibm.icu.dev.test.util;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
+import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.Currency;
+import com.ibm.icu.util.GregorianCalendar;
+import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.UResourceBundle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -17,20 +25,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
-import com.ibm.icu.dev.test.CoreTestFmwk;
-import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.util.Calendar;
-import com.ibm.icu.util.Currency;
-import com.ibm.icu.util.GregorianCalendar;
-import com.ibm.icu.util.TimeZone;
-import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.UResourceBundle;
 
 // TODO(junit): test is broken in main branch
 
@@ -43,6 +41,7 @@ public class DisplayNameTest extends CoreTestFmwk {
     }
 
     Map<String, String>[] codeToName = new Map[10];
+
     {
         for (int k = 0; k < codeToName.length; ++k) codeToName[k] = new HashMap<>();
     }
@@ -61,12 +60,13 @@ public class DisplayNameTest extends CoreTestFmwk {
         JULY1 = cal.getTime();
     }
 
-    String[] countries = addUnknown(ULocale.getISOCountries(),2);
-    String[] languages = addUnknown(ULocale.getISOLanguages(),2);
-    String[] zones = addUnknown(getRealZoneIDs(),5);
-    String[] scripts = addUnknown(getCodes(new ULocale("en","US",""), "Scripts"),4);
+    String[] countries = addUnknown(ULocale.getISOCountries(), 2);
+    String[] languages = addUnknown(ULocale.getISOLanguages(), 2);
+    String[] zones = addUnknown(getRealZoneIDs(), 5);
+    String[] scripts = addUnknown(getCodes(new ULocale("en", "US", ""), "Scripts"), 4);
     // TODO fix once there is a way to get a list of all script codes
-    String[] currencies = addUnknown(getCodes(new ULocale("en","",""), "Currencies"),3);
+    String[] currencies = addUnknown(getCodes(new ULocale("en", "", ""), "Currencies"), 3);
+
     // TODO fix once there is a way to get a list of all currency codes
 
     @Ignore
@@ -101,44 +101,69 @@ public class DisplayNameTest extends CoreTestFmwk {
 
     private void checkLocale(ULocale locale) {
         logln("Checking " + locale);
-        check("Language", locale, languages, null, new DisplayNameGetter() {
-            @Override
-            public String get(ULocale loc, String code, Object context) {
-                return ULocale.getDisplayLanguage(code, loc);
-            }
-        });
-        check("Script", locale, scripts, null, new DisplayNameGetter() {
-            @Override
-            public String get(ULocale loc, String code, Object context) {
-                // TODO This is kinda a hack; ought to be direct way.
-                return ULocale.getDisplayScript("en_"+code, loc);
-            }
-        });
-        check("Country", locale, countries, null, new DisplayNameGetter() {
-            @Override
-            public String get(ULocale loc, String code, Object context) {
-                // TODO This is kinda a hack; ought to be direct way.
-                return ULocale.getDisplayCountry("en_"+code, loc);
-            }
-        });
-        check("Currencies", locale, currencies, currencyFormats, new DisplayNameGetter() {
-            @Override
-            public String get(ULocale loc, String code, Object context) {
-                Currency s = Currency.getInstance(code);
-                return s.getName(loc, ((Integer)context).intValue(), null /* isChoiceFormat */);
-            }
-        });
+        check(
+                "Language",
+                locale,
+                languages,
+                null,
+                new DisplayNameGetter() {
+                    @Override
+                    public String get(ULocale loc, String code, Object context) {
+                        return ULocale.getDisplayLanguage(code, loc);
+                    }
+                });
+        check(
+                "Script",
+                locale,
+                scripts,
+                null,
+                new DisplayNameGetter() {
+                    @Override
+                    public String get(ULocale loc, String code, Object context) {
+                        // TODO This is kinda a hack; ought to be direct way.
+                        return ULocale.getDisplayScript("en_" + code, loc);
+                    }
+                });
+        check(
+                "Country",
+                locale,
+                countries,
+                null,
+                new DisplayNameGetter() {
+                    @Override
+                    public String get(ULocale loc, String code, Object context) {
+                        // TODO This is kinda a hack; ought to be direct way.
+                        return ULocale.getDisplayCountry("en_" + code, loc);
+                    }
+                });
+        check(
+                "Currencies",
+                locale,
+                currencies,
+                currencyFormats,
+                new DisplayNameGetter() {
+                    @Override
+                    public String get(ULocale loc, String code, Object context) {
+                        Currency s = Currency.getInstance(code);
+                        return s.getName(
+                                loc, ((Integer) context).intValue(), null /* isChoiceFormat */);
+                    }
+                });
         // comment this out, because the zone string information is lost
         // we'd have to access the resources directly to test them
 
-        check("Zones", locale, zones, zoneFormats, new DisplayNameGetter() {
-            // TODO replace once we have real API
-            @Override
-            public String get(ULocale loc, String code, Object context) {
-                return getZoneString(loc, code, ((Integer)context).intValue());
-            }
-        });
-
+        check(
+                "Zones",
+                locale,
+                zones,
+                zoneFormats,
+                new DisplayNameGetter() {
+                    // TODO replace once we have real API
+                    @Override
+                    public String get(ULocale loc, String code, Object context) {
+                        return getZoneString(loc, code, ((Integer) context).intValue());
+                    }
+                });
     }
 
     Map<ULocale, Map<String, String[]>> zoneData = new HashMap<>();
@@ -149,11 +174,12 @@ public class DisplayNameTest extends CoreTestFmwk {
             data = new HashMap<>();
             if (SHOW_ALL) System.out.println();
             if (SHOW_ALL) System.out.println("zones for " + locale);
-            ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(locale);
+            ICUResourceBundle bundle =
+                    (ICUResourceBundle) UResourceBundle.getBundleInstance(locale);
             ICUResourceBundle table = bundle.getWithFallback("zoneStrings");
             for (int i = 0; i < table.getSize(); ++i) {
                 UResourceBundle stringSet = table.get(i);
-                //ICUResourceBundle stringSet = table.getWithFallback(String.valueOf(i));
+                // ICUResourceBundle stringSet = table.getWithFallback(String.valueOf(i));
                 String key = stringSet.getString(0);
                 if (SHOW_ALL) System.out.println("key: " + key);
                 ArrayList<String> list = new ArrayList<>();
@@ -329,33 +355,35 @@ public class DisplayNameTest extends CoreTestFmwk {
 
     /**
      * Hack to get code list
+     *
      * @return
      */
     private static String[] getCodes(ULocale locale, String tableName) {
         // TODO remove Ugly Hack
         // get stuff
-        ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(locale);
+        ICUResourceBundle bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(locale);
         ICUResourceBundle table = bundle.getWithFallback(tableName);
         // copy into array
         ArrayList<String> stuff = new ArrayList<>();
-        for (Enumeration<String> keys = table.getKeys(); keys.hasMoreElements();) {
+        for (Enumeration<String> keys = table.getKeys(); keys.hasMoreElements(); ) {
             stuff.add(keys.nextElement());
         }
         String[] result = new String[stuff.size()];
         return (String[]) stuff.toArray(result);
-        //return new String[] {"Latn", "Cyrl"};
+        // return new String[] {"Latn", "Cyrl"};
     }
 
     /**
      * Add two unknown strings, just to make sure they get passed through without colliding
+     *
      * @param strings
      * @return
      */
     private String[] addUnknown(String[] strings, int len) {
         String[] result = new String[strings.length + 2];
-        result[0] = "x1unknown".substring(0,len);
-        result[1] = "y1nknown".substring(0,len);
-        System.arraycopy(strings,0,result,2,strings.length);
+        result[0] = "x1unknown".substring(0, len);
+        result[1] = "y1nknown".substring(0, len);
+        System.arraycopy(strings, 0, result, 2, strings.length);
         return result;
     }
 
@@ -367,8 +395,12 @@ public class DisplayNameTest extends CoreTestFmwk {
         return bogusZones;
     }
 
-    private void check(String type, ULocale locale,
-      String[] codes, Object[] contextList, DisplayNameGetter getter) {
+    private void check(
+            String type,
+            ULocale locale,
+            String[] codes,
+            Object[] contextList,
+            DisplayNameGetter getter) {
         if (contextList == null) contextList = NO_CONTEXT;
         for (int k = 0; k < contextList.length; ++k) codeToName[k].clear();
         for (int j = 0; j < codes.length; ++j) {
@@ -378,31 +410,68 @@ public class DisplayNameTest extends CoreTestFmwk {
                 String name = getter.get(locale, code, context);
                 if (name == null || name.length() == 0) {
                     errln(
-                        "Null or Zero-Length Display Name\t" + type
-                        + "\t(" + ((context != null) ? context : "") + ")"
-                        + ":\t" + locale + " [" + locale.getDisplayName(ULocale.ENGLISH) + "]"
-                        + "\t" + code + " [" + getter.get(ULocale.ENGLISH, code, context) + "]"
-                    );
+                            "Null or Zero-Length Display Name\t"
+                                    + type
+                                    + "\t("
+                                    + ((context != null) ? context : "")
+                                    + ")"
+                                    + ":\t"
+                                    + locale
+                                    + " ["
+                                    + locale.getDisplayName(ULocale.ENGLISH)
+                                    + "]"
+                                    + "\t"
+                                    + code
+                                    + " ["
+                                    + getter.get(ULocale.ENGLISH, code, context)
+                                    + "]");
                     continue;
                 }
                 String otherCode = (String) codeToName[k].get(name);
                 if (otherCode != null) {
                     errln(
-                        "Display Names collide for\t" + type                        + "\t(" + ((context != null) ? context : "") + ")"
-                        + ":\t" + locale + " [" + locale.getDisplayName(ULocale.ENGLISH) + "]"
-                        + "\t" + code + " [" + getter.get(ULocale.ENGLISH, code, context) + "]"
-                        + "\t& " + otherCode + " [" + getter.get(ULocale.ENGLISH, otherCode, context) + "]"
-                        + "\t=> " + name
-                    );
+                            "Display Names collide for\t"
+                                    + type
+                                    + "\t("
+                                    + ((context != null) ? context : "")
+                                    + ")"
+                                    + ":\t"
+                                    + locale
+                                    + " ["
+                                    + locale.getDisplayName(ULocale.ENGLISH)
+                                    + "]"
+                                    + "\t"
+                                    + code
+                                    + " ["
+                                    + getter.get(ULocale.ENGLISH, code, context)
+                                    + "]"
+                                    + "\t& "
+                                    + otherCode
+                                    + " ["
+                                    + getter.get(ULocale.ENGLISH, otherCode, context)
+                                    + "]"
+                                    + "\t=> "
+                                    + name);
                 } else {
                     codeToName[k].put(name, code);
-                    if (SHOW_ALL) logln(
-                        type
-                        + " (" + ((context != null) ? context : "") + ")"
-                        + "\t" + locale + " [" + locale.getDisplayName(ULocale.ENGLISH) + "]"
-                        + "\t" + code + "[" + getter.get(ULocale.ENGLISH, code, context) + "]"
-                        + "\t=> " + name
-                    );
+                    if (SHOW_ALL)
+                        logln(
+                                type
+                                        + " ("
+                                        + ((context != null) ? context : "")
+                                        + ")"
+                                        + "\t"
+                                        + locale
+                                        + " ["
+                                        + locale.getDisplayName(ULocale.ENGLISH)
+                                        + "]"
+                                        + "\t"
+                                        + code
+                                        + "["
+                                        + getter.get(ULocale.ENGLISH, code, context)
+                                        + "]"
+                                        + "\t=> "
+                                        + name);
                 }
             }
         }

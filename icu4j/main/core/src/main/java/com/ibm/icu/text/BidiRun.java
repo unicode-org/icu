@@ -1,11 +1,11 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /*
-*******************************************************************************
-*   Copyright (C) 2001-2016, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-*******************************************************************************
-*/
+ *******************************************************************************
+ *   Copyright (C) 2001-2016, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ *******************************************************************************
+ */
 /* Written by Simon Montagu, Matitiahu Allouche
  * (ported from C code written by Markus W. Scherer)
  */
@@ -13,27 +13,26 @@
 package com.ibm.icu.text;
 
 /**
- * A BidiRun represents a sequence of characters at the same embedding level.
- * The Bidi algorithm decomposes a piece of text into sequences of characters
- * at the same embedding level, each such sequence is called a "run".
+ * A BidiRun represents a sequence of characters at the same embedding level. The Bidi algorithm
+ * decomposes a piece of text into sequences of characters at the same embedding level, each such
+ * sequence is called a "run".
  *
- * <p>A BidiRun represents such a run by storing its essential properties,
- * but does not duplicate the characters which form the run.
+ * <p>A BidiRun represents such a run by storing its essential properties, but does not duplicate
+ * the characters which form the run.
  *
- * <p>The &quot;limit&quot; of the run is the position just after the
- * last character, i.e., one more than that position.
+ * <p>The &quot;limit&quot; of the run is the position just after the last character, i.e., one more
+ * than that position.
  *
- * <p>This class has no public constructor, and its members cannot be
- * modified by users.
+ * <p>This class has no public constructor, and its members cannot be modified by users.
  *
  * @see com.ibm.icu.text.Bidi
  * @stable ICU 3.8
  */
 public class BidiRun {
 
-    int start;              /* first logical position of the run */
-    int limit;              /* last visual position of the run +1 */
-    int insertRemove;       /* if >0, flags for inserting LRM/RLM before/after run,
+    int start; /* first logical position of the run */
+    int limit; /* last visual position of the run +1 */
+    int insertRemove; /* if >0, flags for inserting LRM/RLM before/after run,
                                if <0, count of bidi controls within run            */
     byte level;
 
@@ -51,16 +50,14 @@ public class BidiRun {
      *   - start is the first logical position of the run in the source text.
      *   - limit is one after the last logical position of the run.
      */
-    BidiRun()
-    {
-        this(0, 0, (byte)0);
+    BidiRun() {
+        this(0, 0, (byte) 0);
     }
 
     /*
      * Constructor
      */
-    BidiRun(int start, int limit, byte embeddingLevel)
-    {
+    BidiRun(int start, int limit, byte embeddingLevel) {
         this.start = start;
         this.limit = limit;
         this.level = embeddingLevel;
@@ -69,8 +66,7 @@ public class BidiRun {
     /*
      * Copy the content of a BidiRun instance
      */
-    void copyFrom(BidiRun run)
-    {
+    void copyFrom(BidiRun run) {
         this.start = run.start;
         this.limit = run.limit;
         this.level = run.level;
@@ -79,78 +75,76 @@ public class BidiRun {
 
     /**
      * Get the first logical position of the run in the source text
+     *
      * @stable ICU 3.8
      */
-    public int getStart()
-    {
+    public int getStart() {
         return start;
     }
 
     /**
      * Get position of one character after the end of the run in the source text
+     *
      * @stable ICU 3.8
      */
-    public int getLimit()
-    {
+    public int getLimit() {
         return limit;
     }
 
     /**
      * Get length of run
+     *
      * @stable ICU 3.8
      */
-    public int getLength()
-    {
+    public int getLength() {
         return limit - start;
     }
 
     /**
      * Get level of run
+     *
      * @stable ICU 3.8
      */
-    public byte getEmbeddingLevel()
-    {
+    public byte getEmbeddingLevel() {
         return level;
     }
 
     /**
      * Check if run level is odd
-     * @return true if the embedding level of this run is odd, i.e. it is a
-     *  right-to-left run.
+     *
+     * @return true if the embedding level of this run is odd, i.e. it is a right-to-left run.
      * @stable ICU 3.8
      */
-    public boolean isOddRun()
-    {
+    public boolean isOddRun() {
         return (level & 1) == 1;
     }
 
     /**
      * Check if run level is even
-     * @return true if the embedding level of this run is even, i.e. it is a
-     *  left-to-right run.
+     *
+     * @return true if the embedding level of this run is even, i.e. it is a left-to-right run.
      * @stable ICU 3.8
      */
-    public boolean isEvenRun()
-    {
+    public boolean isEvenRun() {
         return (level & 1) == 0;
     }
 
     /**
      * Get direction of run
+     *
      * @stable ICU 3.8
      */
-    public byte getDirection()
-    {
-        return (byte)(level & 1);
+    public byte getDirection() {
+        return (byte) (level & 1);
     }
 
     /**
      * String to display run
+     *
      * @stable ICU 3.8
      */
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "BidiRun " + start + " - " + limit + " @ " + level;
     }
 }

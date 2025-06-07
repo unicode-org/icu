@@ -2,10 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.number;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.math.MathContext;
-
 import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.impl.number.MultiplierProducer;
 import com.ibm.icu.impl.number.RoundingUtils;
@@ -14,12 +10,15 @@ import com.ibm.icu.number.NumberFormatter.TrailingZeroDisplay;
 import com.ibm.icu.text.PluralRules.Operand;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Currency.CurrencyUsage;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.MathContext;
 
 /**
- * A class that defines the rounding precision to be used when formatting numbers in NumberFormatter.
+ * A class that defines the rounding precision to be used when formatting numbers in
+ * NumberFormatter.
  *
- * <p>
- * To create a Precision, use one of the factory methods.
+ * <p>To create a Precision, use one of the factory methods.
  *
  * @stable ICU 62
  * @see NumberFormatter
@@ -36,16 +35,14 @@ public abstract class Precision {
     /**
      * Show all available digits to full precision.
      *
-     * <p>
-     * <strong>NOTE:</strong> When formatting a <em>double</em>, this method, along with
-     * {@link #minFraction} and {@link #minSignificantDigits}, will trigger complex algorithm similar to
-     * <em>Dragon4</em> to determine the low-order digits and the number of digits to display based on
-     * the value of the double. If the number of fraction places or significant digits can be bounded,
-     * consider using {@link #maxFraction} or {@link #maxSignificantDigits} instead to maximize performance.
-     * For more information, read the following blog post.
+     * <p><strong>NOTE:</strong> When formatting a <em>double</em>, this method, along with {@link
+     * #minFraction} and {@link #minSignificantDigits}, will trigger complex algorithm similar to
+     * <em>Dragon4</em> to determine the low-order digits and the number of digits to display based
+     * on the value of the double. If the number of fraction places or significant digits can be
+     * bounded, consider using {@link #maxFraction} or {@link #maxSignificantDigits} instead to
+     * maximize performance. For more information, read the following blog post.
      *
-     * <p>
-     * http://www.serpentine.com/blog/2011/06/29/here-be-dragons-advances-in-problems-you-didnt-even-know-you-had/
+     * <p>http://www.serpentine.com/blog/2011/06/29/here-be-dragons-advances-in-problems-you-didnt-even-know-you-had/
      *
      * @return A Precision for chaining or passing to the NumberFormatter precision() setter.
      * @stable ICU 60
@@ -58,7 +55,8 @@ public abstract class Precision {
     /**
      * Show numbers rounded if necessary to the nearest integer.
      *
-     * @return A FractionPrecision for chaining or passing to the NumberFormatter precision() setter.
+     * @return A FractionPrecision for chaining or passing to the NumberFormatter precision()
+     *     setter.
      * @stable ICU 60
      * @see NumberFormatter
      */
@@ -68,14 +66,12 @@ public abstract class Precision {
 
     /**
      * Show numbers rounded if necessary to a certain number of fraction places (numerals after the
-     * decimal separator). Additionally, pad with zeros to ensure that this number of places are always
-     * shown.
+     * decimal separator). Additionally, pad with zeros to ensure that this number of places are
+     * always shown.
      *
-     * <p>
-     * Example output with minMaxFractionPlaces = 3:
+     * <p>Example output with minMaxFractionPlaces = 3:
      *
-     * <p>
-     * 87,650.000<br>
+     * <p>87,650.000<br>
      * 8,765.000<br>
      * 876.500<br>
      * 87.650<br>
@@ -85,13 +81,12 @@ public abstract class Precision {
      * 0.009<br>
      * 0.000 (zero)
      *
-     * <p>
-     * This method is equivalent to {@link #minMaxFraction} with both arguments equal.
+     * <p>This method is equivalent to {@link #minMaxFraction} with both arguments equal.
      *
-     * @param minMaxFractionPlaces
-     *            The minimum and maximum number of numerals to display after the decimal separator
-     *            (rounding if too long or padding with zeros if too short).
-     * @return A FractionPrecision for chaining or passing to the NumberFormatter precision() setter.
+     * @param minMaxFractionPlaces The minimum and maximum number of numerals to display after the
+     *     decimal separator (rounding if too long or padding with zeros if too short).
+     * @return A FractionPrecision for chaining or passing to the NumberFormatter precision()
+     *     setter.
      * @throws IllegalArgumentException if the input number is too big or smaller than 0.
      * @stable ICU 60
      * @see NumberFormatter
@@ -100,24 +95,24 @@ public abstract class Precision {
         if (minMaxFractionPlaces >= 0 && minMaxFractionPlaces <= RoundingUtils.MAX_INT_FRAC_SIG) {
             return constructFraction(minMaxFractionPlaces, minMaxFractionPlaces);
         } else {
-            throw new IllegalArgumentException("Fraction length must be between 0 and "
-                    + RoundingUtils.MAX_INT_FRAC_SIG
-                    + " (inclusive)");
+            throw new IllegalArgumentException(
+                    "Fraction length must be between 0 and "
+                            + RoundingUtils.MAX_INT_FRAC_SIG
+                            + " (inclusive)");
         }
     }
 
     /**
-     * Always show at least a certain number of fraction places after the decimal separator, padding with
-     * zeros if necessary. Do not perform rounding (display numbers to their full precision).
+     * Always show at least a certain number of fraction places after the decimal separator, padding
+     * with zeros if necessary. Do not perform rounding (display numbers to their full precision).
      *
-     * <p>
-     * <strong>NOTE:</strong> If you are formatting <em>doubles</em>, see the performance note in
+     * <p><strong>NOTE:</strong> If you are formatting <em>doubles</em>, see the performance note in
      * {@link #unlimited}.
      *
-     * @param minFractionPlaces
-     *            The minimum number of numerals to display after the decimal separator (padding with
-     *            zeros if necessary).
-     * @return A FractionPrecision for chaining or passing to the NumberFormatter precision() setter.
+     * @param minFractionPlaces The minimum number of numerals to display after the decimal
+     *     separator (padding with zeros if necessary).
+     * @return A FractionPrecision for chaining or passing to the NumberFormatter precision()
+     *     setter.
      * @throws IllegalArgumentException if the input number is too big or smaller than 0.
      * @stable ICU 60
      * @see NumberFormatter
@@ -126,21 +121,22 @@ public abstract class Precision {
         if (minFractionPlaces >= 0 && minFractionPlaces <= RoundingUtils.MAX_INT_FRAC_SIG) {
             return constructFraction(minFractionPlaces, -1);
         } else {
-            throw new IllegalArgumentException("Fraction length must be between 0 and "
-                    + RoundingUtils.MAX_INT_FRAC_SIG
-                    + " (inclusive)");
+            throw new IllegalArgumentException(
+                    "Fraction length must be between 0 and "
+                            + RoundingUtils.MAX_INT_FRAC_SIG
+                            + " (inclusive)");
         }
     }
 
     /**
      * Show numbers rounded if necessary to a certain number of fraction places (numerals after the
-     * decimal separator). Unlike the other fraction rounding strategies, this strategy does <em>not</em>
-     * pad zeros to the end of the number.
+     * decimal separator). Unlike the other fraction rounding strategies, this strategy does
+     * <em>not</em> pad zeros to the end of the number.
      *
-     * @param maxFractionPlaces
-     *            The maximum number of numerals to display after the decimal mark (rounding if
-     *            necessary).
-     * @return A FractionPrecision for chaining or passing to the NumberFormatter precision() setter.
+     * @param maxFractionPlaces The maximum number of numerals to display after the decimal mark
+     *     (rounding if necessary).
+     * @return A FractionPrecision for chaining or passing to the NumberFormatter precision()
+     *     setter.
      * @throws IllegalArgumentException if the input number is too big or smaller than 0.
      * @stable ICU 60
      * @see NumberFormatter
@@ -149,24 +145,24 @@ public abstract class Precision {
         if (maxFractionPlaces >= 0 && maxFractionPlaces <= RoundingUtils.MAX_INT_FRAC_SIG) {
             return constructFraction(0, maxFractionPlaces);
         } else {
-            throw new IllegalArgumentException("Fraction length must be between 0 and "
-                    + RoundingUtils.MAX_INT_FRAC_SIG
-                    + " (inclusive)");
+            throw new IllegalArgumentException(
+                    "Fraction length must be between 0 and "
+                            + RoundingUtils.MAX_INT_FRAC_SIG
+                            + " (inclusive)");
         }
     }
 
     /**
      * Show numbers rounded if necessary to a certain number of fraction places (numerals after the
-     * decimal separator); in addition, always show at least a certain number of places after the decimal
-     * separator, padding with zeros if necessary.
+     * decimal separator); in addition, always show at least a certain number of places after the
+     * decimal separator, padding with zeros if necessary.
      *
-     * @param minFractionPlaces
-     *            The minimum number of numerals to display after the decimal separator (padding with
-     *            zeros if necessary).
-     * @param maxFractionPlaces
-     *            The maximum number of numerals to display after the decimal separator (rounding if
-     *            necessary).
-     * @return A FractionPrecision for chaining or passing to the NumberFormatter precision() setter.
+     * @param minFractionPlaces The minimum number of numerals to display after the decimal
+     *     separator (padding with zeros if necessary).
+     * @param maxFractionPlaces The maximum number of numerals to display after the decimal
+     *     separator (rounding if necessary).
+     * @return A FractionPrecision for chaining or passing to the NumberFormatter precision()
+     *     setter.
      * @throws IllegalArgumentException if the input number is too big or smaller than 0.
      * @stable ICU 60
      * @see NumberFormatter
@@ -177,35 +173,36 @@ public abstract class Precision {
                 && minFractionPlaces <= maxFractionPlaces) {
             return constructFraction(minFractionPlaces, maxFractionPlaces);
         } else {
-            throw new IllegalArgumentException("Fraction length must be between 0 and "
-                    + RoundingUtils.MAX_INT_FRAC_SIG
-                    + " (inclusive)");
+            throw new IllegalArgumentException(
+                    "Fraction length must be between 0 and "
+                            + RoundingUtils.MAX_INT_FRAC_SIG
+                            + " (inclusive)");
         }
     }
 
     /**
      * Show numbers rounded if necessary to a certain number of significant digits or significant
-     * figures. Additionally, pad with zeros to ensure that this number of significant digits/figures are
-     * always shown.
+     * figures. Additionally, pad with zeros to ensure that this number of significant
+     * digits/figures are always shown.
      *
-     * <p>
-     * This method is equivalent to {@link #minMaxSignificantDigits} with both arguments equal.
+     * <p>This method is equivalent to {@link #minMaxSignificantDigits} with both arguments equal.
      *
-     * @param minMaxSignificantDigits
-     *            The minimum and maximum number of significant digits to display (rounding if too long
-     *            or padding with zeros if too short).
+     * @param minMaxSignificantDigits The minimum and maximum number of significant digits to
+     *     display (rounding if too long or padding with zeros if too short).
      * @return A Precision for chaining or passing to the NumberFormatter precision() setter.
      * @throws IllegalArgumentException if the input number is too big or smaller than 1.
      * @stable ICU 62
      * @see NumberFormatter
      */
     public static Precision fixedSignificantDigits(int minMaxSignificantDigits) {
-        if (minMaxSignificantDigits >= 1 && minMaxSignificantDigits <= RoundingUtils.MAX_INT_FRAC_SIG) {
+        if (minMaxSignificantDigits >= 1
+                && minMaxSignificantDigits <= RoundingUtils.MAX_INT_FRAC_SIG) {
             return constructSignificant(minMaxSignificantDigits, minMaxSignificantDigits);
         } else {
-            throw new IllegalArgumentException("Significant digits must be between 1 and "
-                    + RoundingUtils.MAX_INT_FRAC_SIG
-                    + " (inclusive)");
+            throw new IllegalArgumentException(
+                    "Significant digits must be between 1 and "
+                            + RoundingUtils.MAX_INT_FRAC_SIG
+                            + " (inclusive)");
         }
     }
 
@@ -213,12 +210,11 @@ public abstract class Precision {
      * Always show at least a certain number of significant digits/figures, padding with zeros if
      * necessary. Do not perform rounding (display numbers to their full precision).
      *
-     * <p>
-     * <strong>NOTE:</strong> If you are formatting <em>doubles</em>, see the performance note in
+     * <p><strong>NOTE:</strong> If you are formatting <em>doubles</em>, see the performance note in
      * {@link #unlimited}.
      *
-     * @param minSignificantDigits
-     *            The minimum number of significant digits to display (padding with zeros if too short).
+     * @param minSignificantDigits The minimum number of significant digits to display (padding with
+     *     zeros if too short).
      * @return A Precision for chaining or passing to the NumberFormatter precision() setter.
      * @throws IllegalArgumentException if the input number is too big or smaller than 1.
      * @stable ICU 62
@@ -228,17 +224,18 @@ public abstract class Precision {
         if (minSignificantDigits >= 1 && minSignificantDigits <= RoundingUtils.MAX_INT_FRAC_SIG) {
             return constructSignificant(minSignificantDigits, -1);
         } else {
-            throw new IllegalArgumentException("Significant digits must be between 1 and "
-                    + RoundingUtils.MAX_INT_FRAC_SIG
-                    + " (inclusive)");
+            throw new IllegalArgumentException(
+                    "Significant digits must be between 1 and "
+                            + RoundingUtils.MAX_INT_FRAC_SIG
+                            + " (inclusive)");
         }
     }
 
     /**
      * Show numbers rounded if necessary to a certain number of significant digits/figures.
      *
-     * @param maxSignificantDigits
-     *            The maximum number of significant digits to display (rounding if too long).
+     * @param maxSignificantDigits The maximum number of significant digits to display (rounding if
+     *     too long).
      * @return A Precision for chaining or passing to the NumberFormatter precision() setter.
      * @throws IllegalArgumentException if the input number is too big or smaller than 1.
      * @stable ICU 62
@@ -248,56 +245,58 @@ public abstract class Precision {
         if (maxSignificantDigits >= 1 && maxSignificantDigits <= RoundingUtils.MAX_INT_FRAC_SIG) {
             return constructSignificant(1, maxSignificantDigits);
         } else {
-            throw new IllegalArgumentException("Significant digits must be between 1 and "
-                    + RoundingUtils.MAX_INT_FRAC_SIG
-                    + " (inclusive)");
+            throw new IllegalArgumentException(
+                    "Significant digits must be between 1 and "
+                            + RoundingUtils.MAX_INT_FRAC_SIG
+                            + " (inclusive)");
         }
     }
 
     /**
-     * Show numbers rounded if necessary to a certain number of significant digits/figures; in addition,
-     * always show at least a certain number of significant digits, padding with zeros if necessary.
+     * Show numbers rounded if necessary to a certain number of significant digits/figures; in
+     * addition, always show at least a certain number of significant digits, padding with zeros if
+     * necessary.
      *
-     * @param minSignificantDigits
-     *            The minimum number of significant digits to display (padding with zeros if necessary).
-     * @param maxSignificantDigits
-     *            The maximum number of significant digits to display (rounding if necessary).
+     * @param minSignificantDigits The minimum number of significant digits to display (padding with
+     *     zeros if necessary).
+     * @param maxSignificantDigits The maximum number of significant digits to display (rounding if
+     *     necessary).
      * @return A Precision for chaining or passing to the NumberFormatter precision() setter.
      * @throws IllegalArgumentException if the input number is too big or smaller than 1.
      * @stable ICU 62
      * @see NumberFormatter
      */
-    public static Precision minMaxSignificantDigits(int minSignificantDigits, int maxSignificantDigits) {
+    public static Precision minMaxSignificantDigits(
+            int minSignificantDigits, int maxSignificantDigits) {
         if (minSignificantDigits >= 1
                 && maxSignificantDigits <= RoundingUtils.MAX_INT_FRAC_SIG
                 && minSignificantDigits <= maxSignificantDigits) {
             return constructSignificant(minSignificantDigits, maxSignificantDigits);
         } else {
-            throw new IllegalArgumentException("Significant digits must be between 1 and "
-                    + RoundingUtils.MAX_INT_FRAC_SIG
-                    + " (inclusive)");
+            throw new IllegalArgumentException(
+                    "Significant digits must be between 1 and "
+                            + RoundingUtils.MAX_INT_FRAC_SIG
+                            + " (inclusive)");
         }
     }
 
     /**
-     * Show numbers rounded if necessary to the closest multiple of a certain rounding increment. For
-     * example, if the rounding increment is 0.5, then round 1.2 to 1 and round 1.3 to 1.5.
+     * Show numbers rounded if necessary to the closest multiple of a certain rounding increment.
+     * For example, if the rounding increment is 0.5, then round 1.2 to 1 and round 1.3 to 1.5.
      *
-     * <p>
-     * In order to ensure that numbers are padded to the appropriate number of fraction places, set the
-     * scale on the rounding increment BigDecimal. For example, to round to the nearest 0.5 and always
-     * display 2 numerals after the decimal separator (to display 1.2 as "1.00" and 1.3 as "1.50"), you
-     * can run:
+     * <p>In order to ensure that numbers are padded to the appropriate number of fraction places,
+     * set the scale on the rounding increment BigDecimal. For example, to round to the nearest 0.5
+     * and always display 2 numerals after the decimal separator (to display 1.2 as "1.00" and 1.3
+     * as "1.50"), you can run:
      *
      * <pre>
      * Precision.increment(new BigDecimal("0.50"))
      * </pre>
      *
-     * <p>
-     * For more information on the scale of Java BigDecimal, see {@link java.math.BigDecimal#scale()}.
+     * <p>For more information on the scale of Java BigDecimal, see {@link
+     * java.math.BigDecimal#scale()}.
      *
-     * @param roundingIncrement
-     *            The increment to which to round numbers.
+     * @param roundingIncrement The increment to which to round numbers.
      * @return A Precision for chaining or passing to the NumberFormatter precision() setter.
      * @throws IllegalArgumentException if the rounding increment is null or non-positive.
      * @stable ICU 60
@@ -314,19 +313,19 @@ public abstract class Precision {
     /**
      * Show numbers rounded and padded according to the rules for the currency unit. The most common
      * rounding precision settings for currencies include <code>Precision.fixedFraction(2)</code>,
-     * <code>Precision.integer()</code>, and <code>Precision.increment(0.05)</code> for cash transactions
-     * ("nickel rounding").
+     * <code>Precision.integer()</code>, and <code>Precision.increment(0.05)</code> for cash
+     * transactions ("nickel rounding").
      *
-     * <p>
-     * The exact rounding details will be resolved at runtime based on the currency unit specified in the
-     * NumberFormatter chain. To round according to the rules for one currency while displaying the
-     * symbol for another currency, the withCurrency() method can be called on the return value of this
-     * method.
+     * <p>The exact rounding details will be resolved at runtime based on the currency unit
+     * specified in the NumberFormatter chain. To round according to the rules for one currency
+     * while displaying the symbol for another currency, the withCurrency() method can be called on
+     * the return value of this method.
      *
-     * @param currencyUsage
-     *            Either STANDARD (for digital transactions) or CASH (for transactions where the rounding
-     *            increment may be limited by the available denominations of cash or coins).
-     * @return A CurrencyPrecision for chaining or passing to the NumberFormatter precision() setter.
+     * @param currencyUsage Either STANDARD (for digital transactions) or CASH (for transactions
+     *     where the rounding increment may be limited by the available denominations of cash or
+     *     coins).
+     * @return A CurrencyPrecision for chaining or passing to the NumberFormatter precision()
+     *     setter.
      * @throws IllegalArgumentException if currencyUsage is null.
      * @stable ICU 60
      * @see NumberFormatter
@@ -374,7 +373,8 @@ public abstract class Precision {
     /**
      * Call this function to copy the fields from the Precision base class.
      *
-     * Note: It would be nice if this returned the copy, but most impls return the child class, not Precision.
+     * <p>Note: It would be nice if this returned the copy, but most impls return the child class,
+     * not Precision.
      */
     /* package-private */ void createCopyHelper(Precision copy) {
         copy.mathContext = mathContext;
@@ -396,8 +396,7 @@ public abstract class Precision {
      * @internal
      * @deprecated ICU internal only.
      */
-    @Deprecated
-    public static final BogusRounder BOGUS_PRECISION = new BogusRounder();
+    @Deprecated public static final BogusRounder BOGUS_PRECISION = new BogusRounder();
 
     static final InfiniteRounderImpl NONE = new InfiniteRounderImpl();
 
@@ -409,12 +408,14 @@ public abstract class Precision {
     static final SignificantRounderImpl FIXED_SIG_3 = new SignificantRounderImpl(3, 3);
     static final SignificantRounderImpl RANGE_SIG_2_3 = new SignificantRounderImpl(2, 3);
 
-    static final FracSigRounderImpl COMPACT_STRATEGY = new FracSigRounderImpl(0, 0, 1, 2, RoundingPriority.RELAXED,
-            false);
+    static final FracSigRounderImpl COMPACT_STRATEGY =
+            new FracSigRounderImpl(0, 0, 1, 2, RoundingPriority.RELAXED, false);
 
-    static final IncrementFiveRounderImpl NICKEL = new IncrementFiveRounderImpl(new BigDecimal("0.05"), 2, 2);
+    static final IncrementFiveRounderImpl NICKEL =
+            new IncrementFiveRounderImpl(new BigDecimal("0.05"), 2, 2);
 
-    static final CurrencyRounderImpl MONETARY_STANDARD = new CurrencyRounderImpl(CurrencyUsage.STANDARD);
+    static final CurrencyRounderImpl MONETARY_STANDARD =
+            new CurrencyRounderImpl(CurrencyUsage.STANDARD);
     static final CurrencyRounderImpl MONETARY_CASH = new CurrencyRounderImpl(CurrencyUsage.CASH);
 
     static Precision constructInfinite() {
@@ -446,16 +447,26 @@ public abstract class Precision {
         }
     }
 
-    static Precision constructFractionSignificant(FractionPrecision base_, int minSig, int maxSig,
-            RoundingPriority priority, boolean retain) {
+    static Precision constructFractionSignificant(
+            FractionPrecision base_,
+            int minSig,
+            int maxSig,
+            RoundingPriority priority,
+            boolean retain) {
         assert base_ instanceof FractionRounderImpl;
         FractionRounderImpl base = (FractionRounderImpl) base_;
         Precision returnValue;
-        if (base.minFrac == 0 && base.maxFrac == 0 && minSig == 1 && maxSig == 2 && priority == RoundingPriority.RELAXED
+        if (base.minFrac == 0
+                && base.maxFrac == 0
+                && minSig == 1
+                && maxSig == 2
+                && priority == RoundingPriority.RELAXED
                 && !retain) {
             returnValue = COMPACT_STRATEGY;
         } else {
-            returnValue = new FracSigRounderImpl(base.minFrac, base.maxFrac, minSig, maxSig, priority, retain);
+            returnValue =
+                    new FracSigRounderImpl(
+                            base.minFrac, base.maxFrac, minSig, maxSig, priority, retain);
         }
         return returnValue.withMode(base.mathContext);
     }
@@ -508,11 +519,10 @@ public abstract class Precision {
     }
 
     /**
-     * Returns a valid working Rounder. If the Rounder is a CurrencyRounder, applies the given currency.
-     * Otherwise, simply passes through the argument.
+     * Returns a valid working Rounder. If the Rounder is a CurrencyRounder, applies the given
+     * currency. Otherwise, simply passes through the argument.
      *
-     * @param currency
-     *            A currency object to use in case the input object needs it.
+     * @param currency A currency object to use in case the input object needs it.
      * @return A Rounder object ready for use.
      */
     Precision withLocaleData(Currency currency) {
@@ -528,17 +538,14 @@ public abstract class Precision {
      * multiplier (magnitude adjustment), applies the adjustment, rounds, and returns the chosen
      * multiplier.
      *
-     * <p>
-     * In most cases, this is simple. However, when rounding the number causes it to cross a multiplier
-     * boundary, we need to re-do the rounding. For example, to display 999,999 in Engineering notation
-     * with 2 sigfigs, first you guess the multiplier to be -3. However, then you end up getting 1000E3,
-     * which is not the correct output. You then change your multiplier to be -6, and you get 1.0E6,
-     * which is correct.
+     * <p>In most cases, this is simple. However, when rounding the number causes it to cross a
+     * multiplier boundary, we need to re-do the rounding. For example, to display 999,999 in
+     * Engineering notation with 2 sigfigs, first you guess the multiplier to be -3. However, then
+     * you end up getting 1000E3, which is not the correct output. You then change your multiplier
+     * to be -6, and you get 1.0E6, which is correct.
      *
-     * @param input
-     *            The quantity to process.
-     * @param producer
-     *            Function to call to return a multiplier based on a magnitude.
+     * @param input The quantity to process.
+     * @param producer Function to call to return a multiplier based on a magnitude.
      * @return The number of orders of magnitude the input was adjusted by this method.
      */
     int chooseMultiplierAndApply(DecimalQuantity input, MultiplierProducer producer) {
@@ -556,14 +563,16 @@ public abstract class Precision {
             return multiplier;
         }
 
-        // If the new magnitude after rounding is the same as it was before rounding, then we are done.
+        // If the new magnitude after rounding is the same as it was before rounding, then we are
+        // done.
         // This case applies to most numbers.
         if (input.getMagnitude() == magnitude + multiplier) {
             return multiplier;
         }
 
         // If the above case DIDN'T apply, then we have a case like 99.9 -> 100 or 999.9 -> 1000:
-        // The number rounded up to the next magnitude. Check if the multiplier changes; if it doesn't,
+        // The number rounded up to the next magnitude. Check if the multiplier changes; if it
+        // doesn't,
         // we do not need to make any more adjustments.
         int _multiplier = producer.getMultiplier(magnitude + 1);
         if (multiplier == _multiplier) {
@@ -591,15 +600,16 @@ public abstract class Precision {
     public static class BogusRounder extends Precision {
         /**
          * Default constructor.
+         *
          * @internal
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
-        public BogusRounder() {
-        }
+        public BogusRounder() {}
 
         /**
          * {@inheritDoc}
+         *
          * @internal
          * @deprecated This API is ICU internal only.
          */
@@ -632,8 +642,7 @@ public abstract class Precision {
 
     static class InfiniteRounderImpl extends Precision {
 
-        public InfiniteRounderImpl() {
-        }
+        public InfiniteRounderImpl() {}
 
         @Override
         public void apply(DecimalQuantity value) {
@@ -684,7 +693,8 @@ public abstract class Precision {
         @Override
         public void apply(DecimalQuantity value) {
             value.roundToMagnitude(getRoundingMagnitudeSignificant(value, maxSig), mathContext);
-            setResolvedMinFraction(value, Math.max(0, -getDisplayMagnitudeSignificant(value, minSig)));
+            setResolvedMinFraction(
+                    value, Math.max(0, -getDisplayMagnitudeSignificant(value, minSig)));
             // Make sure that digits are displayed on zero.
             if (value.isZeroish() && minSig > 0) {
                 value.setMinInteger(1);
@@ -716,7 +726,12 @@ public abstract class Precision {
         final RoundingPriority priority;
         final boolean retain;
 
-        public FracSigRounderImpl(int minFrac, int maxFrac, int minSig, int maxSig, RoundingPriority priority,
+        public FracSigRounderImpl(
+                int minFrac,
+                int maxFrac,
+                int minSig,
+                int maxSig,
+                RoundingPriority priority,
                 boolean retain) {
             this.minFrac = minFrac;
             this.maxFrac = maxFrac;
@@ -739,7 +754,9 @@ public abstract class Precision {
             if (!value.isZeroish()) {
                 int upperMag = value.getMagnitude();
                 value.roundToMagnitude(roundingMag, mathContext);
-                if (!value.isZeroish() && value.getMagnitude() != upperMag && roundingMag1 == roundingMag2) {
+                if (!value.isZeroish()
+                        && value.getMagnitude() != upperMag
+                        && roundingMag1 == roundingMag2) {
                     // roundingMag2 needs to be the magnitude after rounding
                     roundingMag2 += 1;
                 }
@@ -758,7 +775,7 @@ public abstract class Precision {
                     displayMag = displayMag1;
                 }
             } else {
-                assert(priority == RoundingPriority.STRICT);
+                assert (priority == RoundingPriority.STRICT);
                 if (roundingMag2 <= roundingMag1) {
                     displayMag = displayMag1;
                 } else {
@@ -770,15 +787,14 @@ public abstract class Precision {
 
         @Override
         FracSigRounderImpl createCopy() {
-            FracSigRounderImpl copy = new FracSigRounderImpl(minFrac, maxFrac, minSig, maxSig, priority, retain);
+            FracSigRounderImpl copy =
+                    new FracSigRounderImpl(minFrac, maxFrac, minSig, maxSig, priority, retain);
             createCopyHelper(copy);
             return copy;
         }
     }
 
-    /**
-     * Used for strange increments like 3.14.
-     */
+    /** Used for strange increments like 3.14. */
     static class IncrementRounderImpl extends Precision {
         final BigDecimal increment;
 
@@ -801,9 +817,9 @@ public abstract class Precision {
     }
 
     /**
-     * Used for increments with 1 as the only digit. This is different than fraction
-     * rounding because it supports having additional trailing zeros. For example, this
-     * class is used to round with the increment 0.010.
+     * Used for increments with 1 as the only digit. This is different than fraction rounding
+     * because it supports having additional trailing zeros. For example, this class is used to
+     * round with the increment 0.010.
      */
     static class IncrementOneRounderImpl extends IncrementRounderImpl {
         final int minFrac;
@@ -829,9 +845,7 @@ public abstract class Precision {
         }
     }
 
-    /**
-     * Used for increments with 5 as the only digit (nickel rounding).
-     */
+    /** Used for increments with 5 as the only digit (nickel rounding). */
     static class IncrementFiveRounderImpl extends IncrementRounderImpl {
         final int minFrac;
         final int maxFrac;
@@ -850,7 +864,8 @@ public abstract class Precision {
 
         @Override
         IncrementFiveRounderImpl createCopy() {
-            IncrementFiveRounderImpl copy = new IncrementFiveRounderImpl(increment, minFrac, maxFrac);
+            IncrementFiveRounderImpl copy =
+                    new IncrementFiveRounderImpl(increment, minFrac, maxFrac);
             createCopyHelper(copy);
             return copy;
         }
@@ -900,8 +915,9 @@ public abstract class Precision {
     }
 
     void setResolvedMinFraction(DecimalQuantity value, int resolvedMinFraction) {
-        if (trailingZeroDisplay == null ||
-                trailingZeroDisplay == TrailingZeroDisplay.AUTO ||
+        if (trailingZeroDisplay == null
+                || trailingZeroDisplay == TrailingZeroDisplay.AUTO
+                ||
                 // PLURAL_OPERAND_T returns fraction digits as an integer
                 value.getPluralOperand(Operand.t) != 0) {
             value.setMinFraction(resolvedMinFraction);

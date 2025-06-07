@@ -2,42 +2,40 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.units;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-
 import com.ibm.icu.util.BytesTrie;
 import com.ibm.icu.util.CharsTrie;
 import com.ibm.icu.util.CharsTrieBuilder;
 import com.ibm.icu.util.ICUCloneNotSupportedException;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.StringTrieBuilder;
-
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class MeasureUnitImpl {
 
-    /**
-     * The full unit identifier. Null if not computed.
-     */
+    /** The full unit identifier. Null if not computed. */
     private String identifier = null;
-    /**
-     * The complexity, either SINGLE, COMPOUND, or MIXED.
-     */
+
+    /** The complexity, either SINGLE, COMPOUND, or MIXED. */
     private MeasureUnit.Complexity complexity = MeasureUnit.Complexity.SINGLE;
+
     /**
      * The constant denominator.
-     * 
-     * NOTE: when it is 0, it means there is no constant denominator.
+     *
+     * <p>NOTE: when it is 0, it means there is no constant denominator.
      */
     private long constantDenominator = 0;
+
     /**
-     * The list of single units. These may be summed or multiplied, based on the
-     * value of the complexity field.
-     * <p>
-     * The "dimensionless" unit (SingleUnitImpl default constructor) must not be added to this list.
-     * <p>
-     * The "dimensionless" <code>MeasureUnitImpl</code> has an empty <code>singleUnits</code>.
+     * The list of single units. These may be summed or multiplied, based on the value of the
+     * complexity field.
+     *
+     * <p>The "dimensionless" unit (SingleUnitImpl default constructor) must not be added to this
+     * list.
+     *
+     * <p>The "dimensionless" <code>MeasureUnitImpl</code> has an empty <code>singleUnits</code>.
      */
     private final ArrayList<SingleUnitImpl> singleUnits;
 
@@ -61,9 +59,7 @@ public class MeasureUnitImpl {
         return UnitsParser.parseForIdentifier(identifier);
     }
 
-    /**
-     * Used for currency units.
-     */
+    /** Used for currency units. */
     public static MeasureUnitImpl forCurrencyCode(String currencyCode) {
         MeasureUnitImpl result = new MeasureUnitImpl();
         result.identifier = currencyCode;
@@ -82,12 +78,11 @@ public class MeasureUnitImpl {
     }
 
     /**
-     * Returns a simplified version of the unit.
-     * NOTE: the simplification happen when there are two units equals in their base unit and their
-     * prefixes.
+     * Returns a simplified version of the unit. NOTE: the simplification happen when there are two
+     * units equals in their base unit and their prefixes.
      *
-     * Example 1: "square-meter-per-meter" --> "meter"
-     * Example 2: "square-millimeter-per-meter" --> "square-millimeter-per-meter"
+     * <p>Example 1: "square-meter-per-meter" --> "meter" Example 2: "square-millimeter-per-meter"
+     * --> "square-millimeter-per-meter"
      */
     public MeasureUnitImpl copyAndSimplify() {
         MeasureUnitImpl result = new MeasureUnitImpl();
@@ -96,17 +91,20 @@ public class MeasureUnitImpl {
             // However, n is very small (number of units, generally, at maximum equal to 10)
             boolean unitExist = false;
             for (SingleUnitImpl resultSingleUnit : result.getSingleUnits()) {
-                if(resultSingleUnit.getSimpleUnitID().compareTo(singleUnit.getSimpleUnitID()) == 0
-                &&
-                        resultSingleUnit.getPrefix().getIdentifier().compareTo(singleUnit.getPrefix().getIdentifier()) == 0
-                ) {
+                if (resultSingleUnit.getSimpleUnitID().compareTo(singleUnit.getSimpleUnitID()) == 0
+                        && resultSingleUnit
+                                        .getPrefix()
+                                        .getIdentifier()
+                                        .compareTo(singleUnit.getPrefix().getIdentifier())
+                                == 0) {
                     unitExist = true;
-                    resultSingleUnit.setDimensionality(resultSingleUnit.getDimensionality() + singleUnit.getDimensionality());
+                    resultSingleUnit.setDimensionality(
+                            resultSingleUnit.getDimensionality() + singleUnit.getDimensionality());
                     break;
                 }
             }
 
-            if(!unitExist) {
+            if (!unitExist) {
                 result.appendSingleUnit(singleUnit);
             }
         }
@@ -114,20 +112,15 @@ public class MeasureUnitImpl {
         return result;
     }
 
-    /**
-     * Returns the list of simple units.
-     */
+    /** Returns the list of simple units. */
     public ArrayList<SingleUnitImpl> getSingleUnits() {
         return singleUnits;
     }
 
-    /**
-     * Mutates this MeasureUnitImpl to take the reciprocal.
-     */
+    /** Mutates this MeasureUnitImpl to take the reciprocal. */
     public void takeReciprocal() {
         this.identifier = null;
-        for (SingleUnitImpl singleUnit :
-                this.singleUnits) {
+        for (SingleUnitImpl singleUnit : this.singleUnits) {
             singleUnit.setDimensionality(singleUnit.getDimensionality() * -1);
         }
     }
@@ -135,10 +128,10 @@ public class MeasureUnitImpl {
     public ArrayList<MeasureUnitImplWithIndex> extractIndividualUnitsWithIndices() {
         ArrayList<MeasureUnitImplWithIndex> result = new ArrayList<>();
         if (this.getComplexity() == MeasureUnit.Complexity.MIXED) {
-            // In case of mixed units, each single unit can be considered as a stand alone MeasureUnitImpl.
+            // In case of mixed units, each single unit can be considered as a stand alone
+            // MeasureUnitImpl.
             int i = 0;
-            for (SingleUnitImpl singleUnit :
-                    this.getSingleUnits()) {
+            for (SingleUnitImpl singleUnit : this.getSingleUnits()) {
                 result.add(new MeasureUnitImplWithIndex(i++, new MeasureUnitImpl(singleUnit)));
             }
 
@@ -150,12 +143,12 @@ public class MeasureUnitImpl {
     }
 
     /**
-     * Applies dimensionality to all the internal single units.
-     * For example: <b>square-meter-per-second</b>, when we apply dimensionality -2, it will be <b>square-second-per-p4-meter</b>
+     * Applies dimensionality to all the internal single units. For example:
+     * <b>square-meter-per-second</b>, when we apply dimensionality -2, it will be
+     * <b>square-second-per-p4-meter</b>
      */
     public void applyDimensionality(int dimensionality) {
-        for (SingleUnitImpl singleUnit :
-                singleUnits) {
+        for (SingleUnitImpl singleUnit : singleUnits) {
             singleUnit.setDimensionality(singleUnit.getDimensionality() * dimensionality);
         }
     }
@@ -163,8 +156,8 @@ public class MeasureUnitImpl {
     /**
      * Mutates this MeasureUnitImpl to append a single unit.
      *
-     * @return true if a new item was added. If unit is the dimensionless unit,
-     * it is never added: the return value will always be false.
+     * @return true if a new item was added. If unit is the dimensionless unit, it is never added:
+     *     the return value will always be false.
      */
     public boolean appendSingleUnit(SingleUnitImpl singleUnit) {
         identifier = null;
@@ -194,7 +187,8 @@ public class MeasureUnitImpl {
         // Add a copy of singleUnit
         this.singleUnits.add(singleUnit.copy());
 
-        // If the MeasureUnitImpl is `UMEASURE_UNIT_SINGLE` and after the appending a unit, the singleUnits contains
+        // If the MeasureUnitImpl is `UMEASURE_UNIT_SINGLE` and after the appending a unit, the
+        // singleUnits contains
         // more than one. thus means the complexity should be `UMEASURE_UNIT_COMPOUND`
         if (this.singleUnits.size() > 1 && this.complexity == MeasureUnit.Complexity.SINGLE) {
             this.setComplexity(MeasureUnit.Complexity.COMPOUND);
@@ -205,8 +199,8 @@ public class MeasureUnitImpl {
 
     /**
      * Transform this MeasureUnitImpl into a MeasureUnit, simplifying if possible.
-     * <p>
-     * NOTE: this function must be called from a thread-safe class
+     *
+     * <p>NOTE: this function must be called from a thread-safe class
      */
     public MeasureUnit build() {
         return MeasureUnit.fromMeasureUnitImpl(this);
@@ -227,9 +221,7 @@ public class MeasureUnitImpl {
         throw new UnsupportedOperationException();
     }
 
-    /**
-     * Returns the CLDR unit identifier and null if not computed.
-     */
+    /** Returns the CLDR unit identifier and null if not computed. */
     public String getIdentifier() {
         return identifier;
     }
@@ -242,16 +234,12 @@ public class MeasureUnitImpl {
         this.complexity = complexity;
     }
 
-    /**
-     * Get the constant denominator.
-     */
+    /** Get the constant denominator. */
     public long getConstantDenominator() {
         return constantDenominator;
     }
 
-    /**
-     * Set the constant denominator.
-     */
+    /** Set the constant denominator. */
     public void setConstantDenominator(long constantDenominator) {
         this.constantDenominator = constantDenominator;
     }
@@ -267,15 +255,11 @@ public class MeasureUnitImpl {
     }
 
     /**
-     * Internal function that returns a string of the constants in the correct
-     * format.
-     * 
-     * Example:
-     * 1000 --> "-per-1000"
-     * 1000000 --> "-per-1e6"
-     * 
-     * NOTE: this function is only used when the constant denominator is greater
-     * than 0.
+     * Internal function that returns a string of the constants in the correct format.
+     *
+     * <p>Example: 1000 --> "-per-1000" 1000000 --> "-per-1e6"
+     *
+     * <p>NOTE: this function is only used when the constant denominator is greater than 0.
      */
     private String getConstantsString(long constantDenominator) {
         assert constantDenominator > 0;
@@ -296,9 +280,7 @@ public class MeasureUnitImpl {
         return result;
     }
 
-    /**
-     * Normalizes the MeasureUnitImpl and generates the identifier string in place.
-     */
+    /** Normalizes the MeasureUnitImpl and generates the identifier string in place. */
     public void serialize() {
         if (this.getSingleUnits().size() == 0 && this.constantDenominator == 0) {
             // Dimensionless, constructed by the default constructor: no appending
@@ -464,7 +446,6 @@ public class MeasureUnitImpl {
         public int getValue() {
             return index;
         }
-
     }
 
     public static class MeasureUnitImplWithIndex {
@@ -481,11 +462,10 @@ public class MeasureUnitImpl {
 
         /**
          * Contains a single unit or a constant.
-         * 
-         * @throws IllegalArgumentException when both singleUnit and constant are
-         *                                  existing.
+         *
+         * @throws IllegalArgumentException when both singleUnit and constant are existing.
          * @param singleUnit the single unit
-         * @param constant   the constant
+         * @param constant the constant
          */
         private class SingleUnitOrConstant {
             SingleUnitImpl singleUnit;
@@ -493,7 +473,8 @@ public class MeasureUnitImpl {
 
             SingleUnitOrConstant(SingleUnitImpl singleUnit, Long constant) {
                 if (singleUnit != null && constant != null) {
-                    throw new IllegalArgumentException("It is a SingleUnit Or a Constant, not both");
+                    throw new IllegalArgumentException(
+                            "It is a SingleUnit Or a Constant, not both");
                 }
                 this.singleUnit = singleUnit;
                 this.constant = constant;
@@ -501,7 +482,7 @@ public class MeasureUnitImpl {
         }
 
         // This used only to not build the trie each time we use the parser
-        private volatile static CharsTrie savedTrie = null;
+        private static volatile CharsTrie savedTrie = null;
 
         // This trie used in the parsing operation.
         private final CharsTrie trie;
@@ -524,7 +505,8 @@ public class MeasureUnitImpl {
 
         // Cache the MeasurePrefix values array to make getPrefixFromTrieIndex()
         // more efficient
-        private static MeasureUnit.MeasurePrefix[] measurePrefixValues = MeasureUnit.MeasurePrefix.values();
+        private static MeasureUnit.MeasurePrefix[] measurePrefixValues =
+                MeasureUnit.MeasurePrefix.values();
 
         private UnitsParser(String identifier) {
             this.fSource = identifier;
@@ -572,7 +554,6 @@ public class MeasureUnitImpl {
             String[] simpleUnits = UnitsData.getSimpleUnits();
             for (int i = 0; i < simpleUnits.length; i++) {
                 trieBuilder.add(simpleUnits[i], i + UnitsData.Constants.kSimpleUnitOffset);
-
             }
 
             // TODO: Use SLOW or FAST here?
@@ -580,8 +561,8 @@ public class MeasureUnitImpl {
         }
 
         /**
-         * Construct a MeasureUnit from a CLDR Unit Identifier, defined in UTS 35.
-         * Validates and canonicalizes the identifier.
+         * Construct a MeasureUnit from a CLDR Unit Identifier, defined in UTS 35. Validates and
+         * canonicalizes the identifier.
          *
          * @return MeasureUnitImpl object or null if the identifier is empty.
          * @throws IllegalArgumentException in case of invalid identifier.
@@ -593,7 +574,6 @@ public class MeasureUnitImpl {
 
             UnitsParser parser = new UnitsParser(identifier);
             return parser.parse();
-
         }
 
         private static MeasureUnit.MeasurePrefix getPrefixFromTrieIndex(int trieIndex) {
@@ -626,7 +606,8 @@ public class MeasureUnitImpl {
 
                 boolean added = result.appendSingleUnit(singleUnit);
                 if (fSawAnd && !added) {
-                    throw new IllegalArgumentException("Two similar units are not allowed in a mixed unit.");
+                    throw new IllegalArgumentException(
+                            "Two similar units are not allowed in a mixed unit.");
                 }
 
                 if ((result.singleUnits.size()) >= 2) {
@@ -634,8 +615,10 @@ public class MeasureUnitImpl {
                     // same identifier. It doesn't fail for other compound units
                     // (COMPOUND_PART_TIMES). Consequently we take care of that
                     // here.
-                    MeasureUnit.Complexity complexity = fSawAnd ? MeasureUnit.Complexity.MIXED
-                            : MeasureUnit.Complexity.COMPOUND;
+                    MeasureUnit.Complexity complexity =
+                            fSawAnd
+                                    ? MeasureUnit.Complexity.MIXED
+                                    : MeasureUnit.Complexity.COMPOUND;
                     if (result.getSingleUnits().size() == 2) {
                         // After appending two singleUnits, the complexity will be
                         // MeasureUnit.Complexity.COMPOUND
@@ -654,29 +637,26 @@ public class MeasureUnitImpl {
             return result;
         }
 
-        /**
-         * Token states definitions.
-         */
+        /** Token states definitions. */
         enum TokenState {
             // No tokens seen yet (will accept power, SI or binary prefix, or simple unit)
             NO_TOKENS_SEEN,
             // Power token seen (will not accept another power token)
             POWER_TOKEN_SEEN,
-            // SI or binary prefix token seen (will not accept a power, or SI or binary prefix token)
+            // SI or binary prefix token seen (will not accept a power, or SI or binary prefix
+            // token)
             PREFIX_TOKEN_SEEN
         }
 
         /**
          * Returns the next "single unit" via result.
-         * <p>
-         * If a "-per-" was parsed, the result will have appropriate negative
-         * dimensionality.
+         *
+         * <p>If a "-per-" was parsed, the result will have appropriate negative dimensionality.
+         *
          * <p>
          *
-         * @throws IllegalArgumentException if we parse both compound units and "-and-",
-         *                                  since mixed
-         *                                  compound units are not yet supported -
-         *                                  TODO(CLDR-13701).
+         * @throws IllegalArgumentException if we parse both compound units and "-and-", since mixed
+         *     compound units are not yet supported - TODO(CLDR-13701).
          */
         private SingleUnitOrConstant nextSingleUnit() {
             SingleUnitImpl result = new SingleUnitImpl();
@@ -693,7 +673,8 @@ public class MeasureUnitImpl {
                 }
                 // Identifiers optionally start with "per-".
                 if (token.getType() == Token.Type.TYPE_INITIAL_COMPOUND_PART) {
-                    assert token.getInitialCompoundPart() == InitialCompoundPart.INITIAL_COMPOUND_PART_PER;
+                    assert token.getInitialCompoundPart()
+                            == InitialCompoundPart.INITIAL_COMPOUND_PART_PER;
 
                     fAfterPer = true;
                     fJustAfterPer = true;
@@ -708,11 +689,13 @@ public class MeasureUnitImpl {
                     throw new IllegalArgumentException("token type must be TYPE_COMPOUND_PART");
                 }
 
-                CompoundPart compoundPart = CompoundPart.getCompoundPartFromTrieIndex(token.getMatch());
+                CompoundPart compoundPart =
+                        CompoundPart.getCompoundPartFromTrieIndex(token.getMatch());
                 switch (compoundPart) {
                     case PER:
                         if (fSawAnd) {
-                            throw new IllegalArgumentException("Mixed compound units not yet supported");
+                            throw new IllegalArgumentException(
+                                    "Mixed compound units not yet supported");
                             // TODO(CLDR-13701).
                         }
 
@@ -730,7 +713,8 @@ public class MeasureUnitImpl {
                     case AND:
                         if (fAfterPer) {
                             // not yet supported, TODO(CLDR-13701).
-                            throw new IllegalArgumentException("Can't start with \"-and-\", and mixed compound units");
+                            throw new IllegalArgumentException(
+                                    "Can't start with \"-and-\", and mixed compound units");
                         }
                         fSawAnd = true;
                         break;
@@ -770,7 +754,8 @@ public class MeasureUnitImpl {
                         break;
 
                     case TYPE_SIMPLE_UNIT:
-                        result.setSimpleUnit(token.getSimpleUnitIndex(), UnitsData.getSimpleUnits());
+                        result.setSimpleUnit(
+                                token.getSimpleUnitIndex(), UnitsData.getSimpleUnits());
                         return new SingleUnitOrConstant(result, null);
 
                     default:
@@ -778,7 +763,8 @@ public class MeasureUnitImpl {
                 }
 
                 if (!hasNext()) {
-                    throw new IllegalArgumentException("We ran out of tokens before finding a complete single unit.");
+                    throw new IllegalArgumentException(
+                            "We ran out of tokens before finding a complete single unit.");
                 }
 
                 token = nextToken();
@@ -827,14 +813,17 @@ public class MeasureUnitImpl {
                     int hyphenIndex = fSource.indexOf('-', savedIndex);
 
                     // extract the unit constant from the string
-                    String unitConstant = (hyphenIndex == -1) ? fSource.substring(savedIndex)
-                            : fSource.substring(savedIndex, hyphenIndex);
+                    String unitConstant =
+                            (hyphenIndex == -1)
+                                    ? fSource.substring(savedIndex)
+                                    : fSource.substring(savedIndex, hyphenIndex);
                     fIndex = (hyphenIndex == -1) ? fSource.length() : hyphenIndex;
 
                     return Token.tokenWithConstant(unitConstant);
 
                 } else {
-                    throw new IllegalArgumentException("Encountered unknown token starting at index " + prevIndex);
+                    throw new IllegalArgumentException(
+                            "Encountered unknown token starting at index " + prevIndex);
                 }
             } else {
                 fIndex = prevIndex;
@@ -860,7 +849,8 @@ public class MeasureUnitImpl {
 
             public static Token tokenWithConstant(String constantStr) {
                 BigDecimal unitConstantValue = new BigDecimal(constantStr);
-                if (unitConstantValue.scale() <= 0 && unitConstantValue.compareTo(BigDecimal.ZERO) >= 0
+                if (unitConstantValue.scale() <= 0
+                        && unitConstantValue.compareTo(BigDecimal.ZERO) >= 0
                         && unitConstantValue.compareTo(BigDecimal.valueOf(Long.MAX_VALUE)) <= 0) {
                     return new Token(unitConstantValue.longValueExact(), Type.TYPE_UNIT_CONSTANT);
                 } else {
@@ -985,7 +975,8 @@ public class MeasureUnitImpl {
         }
     }
 
-    static class MeasureUnitImplWithIndexComparator implements Comparator<MeasureUnitImplWithIndex> {
+    static class MeasureUnitImplWithIndexComparator
+            implements Comparator<MeasureUnitImplWithIndex> {
         private MeasureUnitImplComparator measureUnitImplComparator;
 
         public MeasureUnitImplWithIndexComparator(ConversionRates conversionRates) {

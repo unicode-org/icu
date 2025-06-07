@@ -8,18 +8,17 @@
  */
 package com.ibm.icu.impl.jdkadapter;
 
+import com.ibm.icu.impl.icuadapter.NumberFormatJDK;
+import com.ibm.icu.text.NumberFormat;
 import java.math.RoundingMode;
 import java.text.FieldPosition;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Currency;
 
-import com.ibm.icu.impl.icuadapter.NumberFormatJDK;
-import com.ibm.icu.text.NumberFormat;
-
 /**
- * NumberFormatICU is an adapter class which wraps ICU4J NumberFormat and
- * implements java.text.NumberFormat APIs.
+ * NumberFormatICU is an adapter class which wraps ICU4J NumberFormat and implements
+ * java.text.NumberFormat APIs.
  */
 public class NumberFormatICU extends java.text.NumberFormat {
 
@@ -33,7 +32,7 @@ public class NumberFormatICU extends java.text.NumberFormat {
 
     public static java.text.NumberFormat wrap(NumberFormat icuNfmt) {
         if (icuNfmt instanceof NumberFormatJDK) {
-            return ((NumberFormatJDK)icuNfmt).unwrap();
+            return ((NumberFormatJDK) icuNfmt).unwrap();
         }
         return new NumberFormatICU(icuNfmt);
     }
@@ -44,27 +43,27 @@ public class NumberFormatICU extends java.text.NumberFormat {
 
     @Override
     public Object clone() {
-        NumberFormatICU other = (NumberFormatICU)super.clone();
-        other.fIcuNfmt = (NumberFormat)fIcuNfmt.clone();
+        NumberFormatICU other = (NumberFormatICU) super.clone();
+        other.fIcuNfmt = (NumberFormat) fIcuNfmt.clone();
         return other;
     }
 
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof NumberFormatICU) {
-            return ((NumberFormatICU)obj).fIcuNfmt.equals(fIcuNfmt);
+            return ((NumberFormatICU) obj).fIcuNfmt.equals(fIcuNfmt);
         }
         return false;
     }
 
-    //public String format(double number)
+    // public String format(double number)
 
     @Override
     public StringBuffer format(double number, StringBuffer toAppendTo, FieldPosition pos) {
         return fIcuNfmt.format(number, toAppendTo, pos);
     }
 
-    //public String format(long number);
+    // public String format(long number);
 
     @Override
     public StringBuffer format(long number, StringBuffer toAppendTo, FieldPosition pos) {
@@ -110,30 +109,30 @@ public class NumberFormatICU extends java.text.NumberFormat {
         int icuMode = fIcuNfmt.getRoundingMode();
         RoundingMode mode = RoundingMode.UP;
         switch (icuMode) {
-        case com.ibm.icu.math.BigDecimal.ROUND_CEILING:
-            mode = RoundingMode.CEILING;
-            break;
-        case com.ibm.icu.math.BigDecimal.ROUND_DOWN:
-            mode = RoundingMode.DOWN;
-            break;
-        case com.ibm.icu.math.BigDecimal.ROUND_FLOOR:
-            mode = RoundingMode.FLOOR;
-            break;
-        case com.ibm.icu.math.BigDecimal.ROUND_HALF_DOWN:
-            mode = RoundingMode.HALF_DOWN;
-            break;
-        case com.ibm.icu.math.BigDecimal.ROUND_HALF_EVEN:
-            mode = RoundingMode.HALF_EVEN;
-            break;
-        case com.ibm.icu.math.BigDecimal.ROUND_HALF_UP:
-            mode = RoundingMode.HALF_UP;
-            break;
-        case com.ibm.icu.math.BigDecimal.ROUND_UNNECESSARY:
-            mode = RoundingMode.UNNECESSARY;
-            break;
-        case com.ibm.icu.math.BigDecimal.ROUND_UP:
-            mode = RoundingMode.UP;
-            break;
+            case com.ibm.icu.math.BigDecimal.ROUND_CEILING:
+                mode = RoundingMode.CEILING;
+                break;
+            case com.ibm.icu.math.BigDecimal.ROUND_DOWN:
+                mode = RoundingMode.DOWN;
+                break;
+            case com.ibm.icu.math.BigDecimal.ROUND_FLOOR:
+                mode = RoundingMode.FLOOR;
+                break;
+            case com.ibm.icu.math.BigDecimal.ROUND_HALF_DOWN:
+                mode = RoundingMode.HALF_DOWN;
+                break;
+            case com.ibm.icu.math.BigDecimal.ROUND_HALF_EVEN:
+                mode = RoundingMode.HALF_EVEN;
+                break;
+            case com.ibm.icu.math.BigDecimal.ROUND_HALF_UP:
+                mode = RoundingMode.HALF_UP;
+                break;
+            case com.ibm.icu.math.BigDecimal.ROUND_UNNECESSARY:
+                mode = RoundingMode.UNNECESSARY;
+                break;
+            case com.ibm.icu.math.BigDecimal.ROUND_UP:
+                mode = RoundingMode.UP;
+                break;
         }
         return mode;
     }
@@ -163,7 +162,7 @@ public class NumberFormatICU extends java.text.NumberFormat {
         return fIcuNfmt.parse(source, parsePosition);
     }
 
-    //public Object parseObject(String source, ParsePosition pos)
+    // public Object parseObject(String source, ParsePosition pos)
 
     @Override
     public void setCurrency(Currency currency) {

@@ -1,67 +1,58 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /**
- *******************************************************************************
- * Copyright (C) 2001-2016, International Business Machines Corporation and
- * others. All Rights Reserved.
- *******************************************************************************
+ * ****************************************************************************** Copyright (C)
+ * 2001-2016, International Business Machines Corporation and others. All Rights Reserved.
+ * ******************************************************************************
  */
 package com.ibm.icu.impl;
 
+import com.ibm.icu.util.ULocale;
 import java.util.Collections;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import com.ibm.icu.util.ULocale;
-
 public class ICULocaleService extends ICUService {
     private ULocale fallbackLocale;
     private String fallbackLocaleName;
 
-    /**
-     * Construct an ICULocaleService.
-     */
-    public ICULocaleService() {
-    }
+    /** Construct an ICULocaleService. */
+    public ICULocaleService() {}
 
-    /**
-     * Construct an ICULocaleService with a name (useful for debugging).
-     */
+    /** Construct an ICULocaleService with a name (useful for debugging). */
     public ICULocaleService(String name) {
         super(name);
     }
 
     /**
-     * Convenience override for callers using locales.  This calls
-     * get(ULocale, int, ULocale[]) with KIND_ANY for kind and null for
-     * actualReturn.
+     * Convenience override for callers using locales. This calls get(ULocale, int, ULocale[]) with
+     * KIND_ANY for kind and null for actualReturn.
      */
     public Object get(ULocale locale) {
         return get(locale, LocaleKey.KIND_ANY, null);
     }
 
     /**
-     * Convenience override for callers using locales.  This calls
-     * get(ULocale, int, ULocale[]) with a null actualReturn.
+     * Convenience override for callers using locales. This calls get(ULocale, int, ULocale[]) with
+     * a null actualReturn.
      */
     public Object get(ULocale locale, int kind) {
         return get(locale, kind, null);
     }
 
     /**
-     * Convenience override for callers using locales.  This calls
-     * get(ULocale, int, ULocale[]) with KIND_ANY for kind.
+     * Convenience override for callers using locales. This calls get(ULocale, int, ULocale[]) with
+     * KIND_ANY for kind.
      */
     public Object get(ULocale locale, ULocale[] actualReturn) {
         return get(locale, LocaleKey.KIND_ANY, actualReturn);
     }
 
     /**
-     * Convenience override for callers using locales.  This uses
-     * createKey(ULocale.toString(), kind) to create a key, calls getKey, and then
-     * if actualReturn is not null, returns the actualResult from
-     * getKey (stripping any prefix) into a ULocale.
+     * Convenience override for callers using locales. This uses createKey(ULocale.toString(), kind)
+     * to create a key, calls getKey, and then if actualReturn is not null, returns the actualResult
+     * from getKey (stripping any prefix) into a ULocale.
      */
     public Object get(ULocale locale, int kind, ULocale[] actualReturn) {
         Key key = createKey(locale, kind);
@@ -74,7 +65,7 @@ public class ICULocaleService extends ICUService {
         if (result != null) {
             int n = temp[0].indexOf("/");
             if (n >= 0) {
-                temp[0] = temp[0].substring(n+1);
+                temp[0] = temp[0].substring(n + 1);
             }
             actualReturn[0] = new ULocale(temp[0]);
         }
@@ -82,35 +73,32 @@ public class ICULocaleService extends ICUService {
     }
 
     /**
-     * Convenience override for callers using locales.  This calls
-     * registerObject(Object, ULocale, int kind, boolean visible)
-     * passing KIND_ANY for the kind, and true for the visibility.
+     * Convenience override for callers using locales. This calls registerObject(Object, ULocale,
+     * int kind, boolean visible) passing KIND_ANY for the kind, and true for the visibility.
      */
     public Factory registerObject(Object obj, ULocale locale) {
         return registerObject(obj, locale, LocaleKey.KIND_ANY, true);
     }
 
     /**
-     * Convenience override for callers using locales.  This calls
-     * registerObject(Object, ULocale, int kind, boolean visible)
-     * passing KIND_ANY for the kind.
+     * Convenience override for callers using locales. This calls registerObject(Object, ULocale,
+     * int kind, boolean visible) passing KIND_ANY for the kind.
      */
     public Factory registerObject(Object obj, ULocale locale, boolean visible) {
         return registerObject(obj, locale, LocaleKey.KIND_ANY, visible);
     }
 
     /**
-     * Convenience function for callers using locales.  This calls
-     * registerObject(Object, ULocale, int kind, boolean visible)
-     * passing true for the visibility.
+     * Convenience function for callers using locales. This calls registerObject(Object, ULocale,
+     * int kind, boolean visible) passing true for the visibility.
      */
     public Factory registerObject(Object obj, ULocale locale, int kind) {
         return registerObject(obj, locale, kind, true);
     }
 
     /**
-     * Convenience function for callers using locales.  This  instantiates
-     * a SimpleLocaleKeyFactory, and registers the factory.
+     * Convenience function for callers using locales. This instantiates a SimpleLocaleKeyFactory,
+     * and registers the factory.
      */
     public Factory registerObject(Object obj, ULocale locale, int kind, boolean visible) {
         Factory factory = new SimpleLocaleKeyFactory(obj, locale, kind, visible);
@@ -118,8 +106,8 @@ public class ICULocaleService extends ICUService {
     }
 
     /**
-     * Convenience method for callers using locales.  This returns the standard
-     * Locale list, built from the Set of visible ids.
+     * Convenience method for callers using locales. This returns the standard Locale list, built
+     * from the Set of visible ids.
      */
     public Locale[] getAvailableLocales() {
         // TODO make this wrap getAvailableULocales later
@@ -134,8 +122,8 @@ public class ICULocaleService extends ICUService {
     }
 
     /**
-     * Convenience method for callers using locales.  This returns the standard
-     * ULocale list, built from the Set of visible ids.
+     * Convenience method for callers using locales. This returns the standard ULocale list, built
+     * from the Set of visible ids.
      */
     public ULocale[] getAvailableULocales() {
         Set<String> visIDs = getVisibleIDs();
@@ -148,16 +136,13 @@ public class ICULocaleService extends ICUService {
     }
 
     /**
-     * A subclass of Key that implements a locale fallback mechanism.
-     * The first locale to search for is the locale provided by the
-     * client, and the fallback locale to search for is the current
-     * default locale.  If a prefix is present, the currentDescriptor
-     * includes it before the locale proper, separated by "/".  This
-     * is the default key instantiated by ICULocaleService.</p>
+     * A subclass of Key that implements a locale fallback mechanism. The first locale to search for
+     * is the locale provided by the client, and the fallback locale to search for is the current
+     * default locale. If a prefix is present, the currentDescriptor includes it before the locale
+     * proper, separated by "/". This is the default key instantiated by ICULocaleService.
      *
-     * <p>Canonicalization adjusts the locale string so that the
-     * section before the first understore is in lower case, and the rest
-     * is in upper case, with no trailing underscores.</p>
+     * <p>Canonicalization adjusts the locale string so that the section before the first understore
+     * is in lower case, and the rest is in upper case, with no trailing underscores.
      */
     public static class LocaleKey extends ICUService.Key {
         private int kind;
@@ -168,17 +153,15 @@ public class ICULocaleService extends ICUService {
 
         public static final int KIND_ANY = -1;
 
-        /**
-         * Create a LocaleKey with canonical primary and fallback IDs.
-         */
-        public static LocaleKey createWithCanonicalFallback(String primaryID, String canonicalFallbackID) {
+        /** Create a LocaleKey with canonical primary and fallback IDs. */
+        public static LocaleKey createWithCanonicalFallback(
+                String primaryID, String canonicalFallbackID) {
             return createWithCanonicalFallback(primaryID, canonicalFallbackID, KIND_ANY);
         }
 
-        /**
-         * Create a LocaleKey with canonical primary and fallback IDs.
-         */
-        public static LocaleKey createWithCanonicalFallback(String primaryID, String canonicalFallbackID, int kind) {
+        /** Create a LocaleKey with canonical primary and fallback IDs. */
+        public static LocaleKey createWithCanonicalFallback(
+                String primaryID, String canonicalFallbackID, int kind) {
             if (primaryID == null) {
                 return null;
             }
@@ -186,10 +169,9 @@ public class ICULocaleService extends ICUService {
             return new LocaleKey(primaryID, canonicalPrimaryID, canonicalFallbackID, kind);
         }
 
-        /**
-         * Create a LocaleKey with canonical primary and fallback IDs.
-         */
-        public static LocaleKey createWithCanonical(ULocale locale, String canonicalFallbackID, int kind) {
+        /** Create a LocaleKey with canonical primary and fallback IDs. */
+        public static LocaleKey createWithCanonical(
+                ULocale locale, String canonicalFallbackID, int kind) {
             if (locale == null) {
                 return null;
             }
@@ -198,12 +180,11 @@ public class ICULocaleService extends ICUService {
         }
 
         /**
-         * PrimaryID is the user's requested locale string,
-         * canonicalPrimaryID is this string in canonical form,
-         * fallbackID is the current default locale's string in
-         * canonical form.
+         * PrimaryID is the user's requested locale string, canonicalPrimaryID is this string in
+         * canonical form, fallbackID is the current default locale's string in canonical form.
          */
-        protected LocaleKey(String primaryID, String canonicalPrimaryID, String canonicalFallbackID, int kind) {
+        protected LocaleKey(
+                String primaryID, String canonicalPrimaryID, String canonicalFallbackID, int kind) {
             super(primaryID);
             this.kind = kind;
 
@@ -228,48 +209,42 @@ public class ICULocaleService extends ICUService {
                 }
             }
 
-            this.currentID = varstart == -1 ? this.primaryID : this.primaryID.substring(0, varstart);
+            this.currentID =
+                    varstart == -1 ? this.primaryID : this.primaryID.substring(0, varstart);
         }
 
-        /**
-         * Return the prefix associated with the kind, or null if the kind is KIND_ANY.
-         */
+        /** Return the prefix associated with the kind, or null if the kind is KIND_ANY. */
         public String prefix() {
             return kind == KIND_ANY ? null : Integer.toString(kind());
         }
 
-        /**
-         * Return the kind code associated with this key.
-         */
+        /** Return the kind code associated with this key. */
         public int kind() {
             return kind;
         }
 
-        /**
-         * Return the (canonical) original ID.
-         */
+        /** Return the (canonical) original ID. */
         @Override
         public String canonicalID() {
             return primaryID;
         }
 
-        /**
-         * Return the (canonical) current ID, or null if no current id.
-         */
+        /** Return the (canonical) current ID, or null if no current id. */
         @Override
         public String currentID() {
             return currentID;
         }
 
         /**
-         * Return the (canonical) current descriptor, or null if no current id.
-         * Includes the keywords, whereas the ID does not include keywords.
+         * Return the (canonical) current descriptor, or null if no current id. Includes the
+         * keywords, whereas the ID does not include keywords.
          */
         @Override
         public String currentDescriptor() {
             String result = currentID();
             if (result != null) {
-                StringBuilder buf = new StringBuilder(); // default capacity 16 is usually good enough
+                StringBuilder buf =
+                        new StringBuilder(); // default capacity 16 is usually good enough
                 if (kind != KIND_ANY) {
                     buf.append(prefix());
                 }
@@ -283,16 +258,12 @@ public class ICULocaleService extends ICUService {
             return result;
         }
 
-        /**
-         * Convenience method to return the locale corresponding to the (canonical) original ID.
-         */
+        /** Convenience method to return the locale corresponding to the (canonical) original ID. */
         public ULocale canonicalLocale() {
             return new ULocale(primaryID);
         }
 
-        /**
-         * Convenience method to return the ulocale corresponding to the (canonical) currentID.
-         */
+        /** Convenience method to return the ulocale corresponding to the (canonical) currentID. */
         public ULocale currentLocale() {
             if (varstart == -1) {
                 return new ULocale(currentID);
@@ -302,13 +273,11 @@ public class ICULocaleService extends ICUService {
         }
 
         /**
-         * If the key has a fallback, modify the key and return true,
-         * otherwise return false.</p>
+         * If the key has a fallback, modify the key and return true, otherwise return false.
          *
-         * <p>First falls back through the primary ID, then through
-         * the fallbackID.  The final fallback is "" (root)
-         * unless the primary id was "" (root), in which case
-         * there is no fallback.
+         * <p>First falls back through the primary ID, then through the fallbackID. The final
+         * fallback is "" (root) unless the primary id was "" (root), in which case there is no
+         * fallback.
          */
         @Override
         public boolean fallback() {
@@ -316,7 +285,7 @@ public class ICULocaleService extends ICUService {
             if (x != -1) {
                 while (--x >= 0 && currentID.charAt(x) == '_') { // handle zh__PINYIN
                 }
-                currentID = currentID.substring(0, x+1);
+                currentID = currentID.substring(0, x + 1);
                 return true;
             }
             if (fallbackID != null) {
@@ -333,8 +302,8 @@ public class ICULocaleService extends ICUService {
         }
 
         /**
-         * If a key created from id would eventually fallback to match the
-         * canonical ID of this key, return true.
+         * If a key created from id would eventually fallback to match the canonical ID of this key,
+         * return true.
          */
         @Override
         public boolean isFallbackOf(String id) {
@@ -342,48 +311,42 @@ public class ICULocaleService extends ICUService {
         }
     }
 
-    /**
-     * A subclass of Factory that uses LocaleKeys.  If 'visible' the
-     * factory reports its IDs.
-     */
-    public static abstract class LocaleKeyFactory implements Factory {
+    /** A subclass of Factory that uses LocaleKeys. If 'visible' the factory reports its IDs. */
+    public abstract static class LocaleKeyFactory implements Factory {
         protected final String name;
         protected final boolean visible;
 
         public static final boolean VISIBLE = true;
         public static final boolean INVISIBLE = false;
 
-        /**
-         * Constructor used by subclasses.
-         */
+        /** Constructor used by subclasses. */
         protected LocaleKeyFactory(boolean visible) {
             this.visible = visible;
             this.name = null;
         }
 
-        /**
-         * Constructor used by subclasses.
-         */
+        /** Constructor used by subclasses. */
         protected LocaleKeyFactory(boolean visible, String name) {
             this.visible = visible;
             this.name = name;
         }
 
         /**
-         * Implement superclass abstract method.  This checks the currentID of
-         * the key against the supported IDs, and passes the canonicalLocale and
-         * kind off to handleCreate (which subclasses must implement).
+         * Implement superclass abstract method. This checks the currentID of the key against the
+         * supported IDs, and passes the canonicalLocale and kind off to handleCreate (which
+         * subclasses must implement).
          */
         @Override
         public Object create(Key key, ICUService service) {
             if (handlesKey(key)) {
-                LocaleKey lkey = (LocaleKey)key;
+                LocaleKey lkey = (LocaleKey) key;
                 int kind = lkey.kind();
 
                 ULocale uloc = lkey.currentLocale();
                 return handleCreate(uloc, kind, service);
             } else {
-                // System.out.println("factory: " + this + " did not support id: " + key.currentID());
+                // System.out.println("factory: " + this + " did not support id: " +
+                // key.currentID());
                 // System.out.println("supported ids: " + getSupportedIDs());
             }
             return null;
@@ -398,9 +361,7 @@ public class ICULocaleService extends ICUService {
             return false;
         }
 
-        /**
-         * Override of superclass method.
-         */
+        /** Override of superclass method. */
         @Override
         public void updateVisibleIDs(Map<String, Factory> result) {
             Set<String> cache = getSupportedIDs();
@@ -411,11 +372,9 @@ public class ICULocaleService extends ICUService {
                     result.remove(id);
                 }
             }
-       }
+        }
 
-        /**
-         * Return a localized name for the locale represented by id.
-         */
+        /** Return a localized name for the locale represented by id. */
         @Override
         public String getDisplayName(String id, ULocale locale) {
             // assume if the user called this on us, we must have handled some fallback of this id
@@ -429,36 +388,31 @@ public class ICULocaleService extends ICUService {
             //          return null;
         }
 
-        ///CLOVER:OFF
+        /// CLOVER:OFF
         /**
-         * Utility method used by create(Key, ICUService).  Subclasses can
-         * implement this instead of create.
+         * Utility method used by create(Key, ICUService). Subclasses can implement this instead of
+         * create.
          */
         protected Object handleCreate(ULocale loc, int kind, ICUService service) {
             return null;
         }
-        ///CLOVER:ON
 
-        /**
-         * Return true if this id is one the factory supports (visible or
-         * otherwise).
-         */
+        /// CLOVER:ON
+
+        /** Return true if this id is one the factory supports (visible or otherwise). */
         protected boolean isSupportedID(String id) {
             return getSupportedIDs().contains(id);
         }
 
         /**
-         * Return the set of ids that this factory supports (visible or
-         * otherwise).  This can be called often and might need to be
-         * cached if it is expensive to create.
+         * Return the set of ids that this factory supports (visible or otherwise). This can be
+         * called often and might need to be cached if it is expensive to create.
          */
         protected Set<String> getSupportedIDs() {
             return Collections.emptySet();
         }
 
-        /**
-         * For debugging.
-         */
+        /** For debugging. */
         @Override
         public String toString() {
             StringBuilder buf = new StringBuilder(super.toString());
@@ -472,9 +426,7 @@ public class ICULocaleService extends ICUService {
         }
     }
 
-    /**
-     * A LocaleKeyFactory that just returns a single object for a kind/locale.
-     */
+    /** A LocaleKeyFactory that just returns a single object for a kind/locale. */
     public static class SimpleLocaleKeyFactory extends LocaleKeyFactory {
         private final Object obj;
         private final String id;
@@ -485,7 +437,8 @@ public class ICULocaleService extends ICUService {
             this(obj, locale, kind, visible, null);
         }
 
-        public SimpleLocaleKeyFactory(Object obj, ULocale locale, int kind, boolean visible, String name) {
+        public SimpleLocaleKeyFactory(
+                Object obj, ULocale locale, int kind, boolean visible, String name) {
             super(visible, name);
 
             this.obj = obj;
@@ -493,16 +446,14 @@ public class ICULocaleService extends ICUService {
             this.kind = kind;
         }
 
-        /**
-         * Returns the service object if kind/locale match.  Service is not used.
-         */
+        /** Returns the service object if kind/locale match. Service is not used. */
         @Override
         public Object create(Key key, ICUService service) {
             if (!(key instanceof LocaleKey)) {
                 return null;
             }
 
-            LocaleKey lkey = (LocaleKey)key;
+            LocaleKey lkey = (LocaleKey) key;
             if (kind != LocaleKey.KIND_ANY && kind != lkey.kind()) {
                 return null;
             }
@@ -539,54 +490,46 @@ public class ICULocaleService extends ICUService {
     }
 
     /**
-     * A LocaleKeyFactory that creates a service based on the ICU locale data.
-     * This is a base class for most ICU factories.  Subclasses instantiate it
-     * with a constructor that takes a bundle name, which determines the supported
-     * IDs.  Subclasses then override handleCreate to create the actual service
-     * object.  The default implementation returns a resource bundle.
+     * A LocaleKeyFactory that creates a service based on the ICU locale data. This is a base class
+     * for most ICU factories. Subclasses instantiate it with a constructor that takes a bundle
+     * name, which determines the supported IDs. Subclasses then override handleCreate to create the
+     * actual service object. The default implementation returns a resource bundle.
      */
     public static class ICUResourceBundleFactory extends LocaleKeyFactory {
         protected final String bundleName;
 
-        /**
-         * Convenience constructor that uses the main ICU bundle name.
-         */
+        /** Convenience constructor that uses the main ICU bundle name. */
         public ICUResourceBundleFactory() {
             this(ICUData.ICU_BASE_NAME);
         }
 
-        /**
-         * A service factory based on ICU resource data in resources
-         * with the given name.
-         */
+        /** A service factory based on ICU resource data in resources with the given name. */
         public ICUResourceBundleFactory(String bundleName) {
             super(true);
 
             this.bundleName = bundleName;
         }
 
-        /**
-         * Return the supported IDs.  This is the set of all locale names for the bundleName.
-         */
+        /** Return the supported IDs. This is the set of all locale names for the bundleName. */
         @Override
         protected Set<String> getSupportedIDs() {
             return ICUResourceBundle.getFullLocaleNameSet(bundleName, loader());
         }
 
-        /**
-         * Override of superclass method.
-         */
+        /** Override of superclass method. */
         @Override
         public void updateVisibleIDs(Map<String, Factory> result) {
-          Set<String> visibleIDs = ICUResourceBundle.getAvailableLocaleNameSet(bundleName, loader()); // only visible ids
+            Set<String> visibleIDs =
+                    ICUResourceBundle.getAvailableLocaleNameSet(
+                            bundleName, loader()); // only visible ids
             for (String id : visibleIDs) {
                 result.put(id, this);
             }
         }
 
         /**
-         * Create the service.  The default implementation returns the resource bundle
-         * for the locale, ignoring kind, and service.
+         * Create the service. The default implementation returns the resource bundle for the
+         * locale, ignoring kind, and service.
          */
         @Override
         protected Object handleCreate(ULocale loc, int kind, ICUService service) {
@@ -604,8 +547,8 @@ public class ICULocaleService extends ICUService {
     }
 
     /**
-     * Return the name of the current fallback locale.  If it has changed since this was
-     * last accessed, the service cache is cleared.
+     * Return the name of the current fallback locale. If it has changed since this was last
+     * accessed, the service cache is cleared.
      */
     public String validateFallbackLocale() {
         ULocale loc = ULocale.getDefault();

@@ -10,6 +10,7 @@
  */
 package com.ibm.icu.impl;
 
+import com.ibm.icu.util.Freezable;
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.Collection;
@@ -21,16 +22,15 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import com.ibm.icu.util.Freezable;
-
 /**
- * A Relation is a set of mappings from keys to values.
- * Unlike Map, there is not guaranteed to be a single value per key.
- * The Map-like APIs return collections for values.
+ * A Relation is a set of mappings from keys to values. Unlike Map, there is not guaranteed to be a
+ * single value per key. The Map-like APIs return collections for values.
+ *
  * @author medavis
-
  */
-public class Relation<K, V> implements Freezable<Relation<K,V>> { // TODO: add , Map<K, Collection<V>>, but requires API changes
+public class Relation<K, V>
+        implements Freezable<
+                Relation<K, V>> { // TODO: add , Map<K, Collection<V>>, but requires API changes
     private Map<K, Set<V>> data;
 
     Constructor<? extends Set<V>> setCreator;
@@ -40,7 +40,8 @@ public class Relation<K, V> implements Freezable<Relation<K,V>> { // TODO: add ,
         return new Relation<>(map, setCreator);
     }
 
-    public static <K,V> Relation<K, V> of(Map<K, Set<V>> map, Class<?> setCreator, Comparator<V> setComparator) {
+    public static <K, V> Relation<K, V> of(
+            Map<K, Set<V>> map, Class<?> setCreator, Comparator<V> setComparator) {
         return new Relation<>(map, setCreator, setComparator);
     }
 
@@ -51,17 +52,19 @@ public class Relation<K, V> implements Freezable<Relation<K,V>> { // TODO: add ,
     @SuppressWarnings("unchecked")
     public Relation(Map<K, Set<V>> map, Class<?> setCreator, Comparator<V> setComparator) {
         try {
-            setComparatorParam = setComparator == null ? null : new Object[]{setComparator};
+            setComparatorParam = setComparator == null ? null : new Object[] {setComparator};
             if (setComparator == null) {
-                this.setCreator = ((Class<? extends Set<V>>)setCreator).getConstructor();
+                this.setCreator = ((Class<? extends Set<V>>) setCreator).getConstructor();
                 this.setCreator.newInstance(setComparatorParam); // check to make sure compiles
             } else {
-                this.setCreator = ((Class<? extends Set<V>>)setCreator).getConstructor(Comparator.class);
+                this.setCreator =
+                        ((Class<? extends Set<V>>) setCreator).getConstructor(Comparator.class);
                 this.setCreator.newInstance(setComparatorParam); // check to make sure compiles
             }
             data = map == null ? new HashMap<K, Set<V>>() : map;
         } catch (Exception e) {
-            throw (RuntimeException) new IllegalArgumentException("Can't create new set").initCause(e);
+            throw (RuntimeException)
+                    new IllegalArgumentException("Can't create new set").initCause(e);
         }
     }
 
@@ -102,10 +105,8 @@ public class Relation<K, V> implements Freezable<Relation<K,V>> { // TODO: add ,
 
     @Override
     public boolean equals(Object o) {
-        if (o == null)
-            return false;
-        if (o.getClass() != this.getClass())
-            return false;
+        if (o == null) return false;
+        if (o.getClass() != this.getClass()) return false;
         return data.equals(((Relation<?, ?>) o).data);
     }
 
@@ -167,7 +168,8 @@ public class Relation<K, V> implements Freezable<Relation<K,V>> { // TODO: add ,
         try {
             return setCreator.newInstance(setComparatorParam);
         } catch (Exception e) {
-            throw (RuntimeException) new IllegalArgumentException("Can't create new set").initCause(e);
+            throw (RuntimeException)
+                    new IllegalArgumentException("Can't create new set").initCause(e);
         }
     }
 
@@ -262,7 +264,7 @@ public class Relation<K, V> implements Freezable<Relation<K,V>> { // TODO: add ,
         }
     }
 
-    public Relation<K,V> addAllInverted(Relation<V,K> source) {
+    public Relation<K, V> addAllInverted(Relation<V, K> source) {
         for (V value : source.data.keySet()) {
             for (K key : source.data.get(value)) {
                 put(key, value);
@@ -271,8 +273,8 @@ public class Relation<K, V> implements Freezable<Relation<K,V>> { // TODO: add ,
         return this;
     }
 
-    public Relation<K,V> addAllInverted(Map<V,K> source) {
-        for (Map.Entry<V,K> entry : source.entrySet()) {
+    public Relation<K, V> addAllInverted(Map<V, K> source) {
+        for (Map.Entry<V, K> entry : source.entrySet()) {
             put(entry.getValue(), entry.getKey());
         }
         return this;
@@ -321,7 +323,7 @@ public class Relation<K, V> implements Freezable<Relation<K,V>> { // TODO: add ,
     }
 
     @SafeVarargs
-    @SuppressWarnings("varargs")    // Not supported by Eclipse, but we need this for javac
+    @SuppressWarnings("varargs") // Not supported by Eclipse, but we need this for javac
     public final Set<V> removeAll(K... keys) {
         return removeAll(Arrays.asList(keys));
     }

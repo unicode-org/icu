@@ -8,18 +8,14 @@
  */
 package com.ibm.icu.impl;
 
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.text.UnicodeSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
-import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.text.UnicodeSet;
-
-/**
- * TextTrieMap is a trie implementation for supporting
- * fast prefix match for the key.
- */
+/** TextTrieMap is a trie implementation for supporting fast prefix match for the key. */
 public class TextTrieMap<V> {
 
     private Node _root = new Node();
@@ -52,28 +48,24 @@ public class TextTrieMap<V> {
     }
 
     /**
-     * Gets an iterator of the objects associated with the
-     * longest prefix matching string key.
+     * Gets an iterator of the objects associated with the longest prefix matching string key.
      *
      * @param text The text to be matched with prefixes.
-     * @return An iterator of the objects associated with
-     * the longest prefix matching matching key, or null
-     * if no matching entry is found.
+     * @return An iterator of the objects associated with the longest prefix matching matching key,
+     *     or null if no matching entry is found.
      */
     public Iterator<V> get(String text) {
         return get(text, 0);
     }
 
     /**
-     * Gets an iterator of the objects associated with the
-     * longest prefix matching string key starting at the
-     * specified position.
+     * Gets an iterator of the objects associated with the longest prefix matching string key
+     * starting at the specified position.
      *
      * @param text The text to be matched with prefixes.
      * @param start The start index of of the text
-     * @return An iterator of the objects associated with the
-     * longest prefix matching matching key, or null if no
-     * matching entry is found.
+     * @return An iterator of the objects associated with the longest prefix matching matching key,
+     *     or null if no matching entry is found.
      */
     public Iterator<V> get(CharSequence text, int start) {
         return get(text, start, null);
@@ -101,7 +93,8 @@ public class TextTrieMap<V> {
         find(_root, chitr, handler, output);
     }
 
-    private synchronized void find(Node node, CharIterator chitr, ResultHandler<V> handler, Output output) {
+    private synchronized void find(
+            Node node, CharIterator chitr, ResultHandler<V> handler, Output output) {
         Iterator<V> values = node.values();
         if (values != null) {
             if (!handler.handlePrefixMatch(chitr.processedLength(), values)) {
@@ -194,10 +187,7 @@ public class TextTrieMap<V> {
         }
     }
 
-    /**
-     * Callback handler for processing prefix matches used by
-     * find method.
-     */
+    /** Callback handler for processing prefix matches used by find method. */
     public interface ResultHandler<V> {
         /**
          * Handles a prefix key match
@@ -231,16 +221,13 @@ public class TextTrieMap<V> {
         }
     }
 
-    /**
-     * Inner class representing a text node in the trie.
-     */
+    /** Inner class representing a text node in the trie. */
     private class Node {
         private char[] _text;
         private List<V> _values;
         private List<Node> _children;
 
-        private Node() {
-        }
+        private Node() {}
 
         private Node(char[] text, List<V> values, List<Node> children) {
             _text = text;
@@ -249,7 +236,7 @@ public class TextTrieMap<V> {
         }
 
         public int charCount() {
-          return _text == null ? 0 : _text.length;
+            return _text == null ? 0 : _text.length;
         }
 
         public Iterator<V> values() {
@@ -356,7 +343,7 @@ public class TextTrieMap<V> {
             boolean matched = true;
             int idx = 1;
             while (idx < _text.length) {
-                if(!chitr.hasNext()) {
+                if (!chitr.hasNext()) {
                     if (output != null) {
                         output.partialMatch = true;
                     }

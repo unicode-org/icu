@@ -1,29 +1,30 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /*
-**********************************************************************
-* Copyright (c) 2003-2010, International Business Machines
-* Corporation and others.  All Rights Reserved.
-**********************************************************************
-* Author: Mark Davis
-* Created: May 22 2003
-* Since: ICU 2.6
-**********************************************************************
-*/
+ **********************************************************************
+ * Copyright (c) 2003-2010, International Business Machines
+ * Corporation and others.  All Rights Reserved.
+ **********************************************************************
+ * Author: Mark Davis
+ * Created: May 22 2003
+ * Since: ICU 2.6
+ **********************************************************************
+ */
 package com.ibm.icu.dev.demo.number;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
 
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.util.Currency;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 /**
- * Demonstration code to illustrate how to obtain ICU 2.6-like currency
- * behavior using pre-ICU 2.6 ICU4J.
+ * Demonstration code to illustrate how to obtain ICU 2.6-like currency behavior using pre-ICU 2.6
+ * ICU4J.
+ *
  * @author Mark Davis
  */
 public class CurrencyDemo {
@@ -32,9 +33,7 @@ public class CurrencyDemo {
         testFormatHack(true);
     }
 
-    static NumberFormat getCurrencyFormat(Currency currency,
-                                          Locale displayLocale,
-                                          boolean ICU26) {
+    static NumberFormat getCurrencyFormat(Currency currency, Locale displayLocale, boolean ICU26) {
         // code for ICU 2.6
         if (ICU26) {
             NumberFormat result = NumberFormat.getCurrencyInstance(displayLocale);
@@ -43,8 +42,8 @@ public class CurrencyDemo {
         }
 
         // ugly work-around for 2.4
-        DecimalFormat result = (DecimalFormat)NumberFormat.getCurrencyInstance(displayLocale);
-        HackCurrencyInfo hack = (HackCurrencyInfo)(hackData.get(currency.getCurrencyCode()));
+        DecimalFormat result = (DecimalFormat) NumberFormat.getCurrencyInstance(displayLocale);
+        HackCurrencyInfo hack = (HackCurrencyInfo) (hackData.get(currency.getCurrencyCode()));
         result.setMinimumFractionDigits(hack.decimals);
         result.setMaximumFractionDigits(hack.decimals);
         result.setRoundingIncrement(hack.rounding);
@@ -53,18 +52,21 @@ public class CurrencyDemo {
         result.setDecimalFormatSymbols(symbols);
         return result;
     }
-        
+
     static Map hackData = new HashMap();
+
     static class HackCurrencyInfo {
         int decimals;
         double rounding;
         String symbol;
+
         HackCurrencyInfo(int decimals, double rounding, String symbol) {
             this.decimals = decimals;
             this.rounding = rounding;
             this.symbol = symbol;
         }
     }
+
     static {
         hackData.put("USD", new HackCurrencyInfo(2, 0, "$"));
         hackData.put("GBP", new HackCurrencyInfo(2, 0, "\u00A3"));
@@ -73,13 +75,13 @@ public class CurrencyDemo {
     }
 
     /**
-     * Walk through all locales and compare the output of the ICU26
-     * currency format with the "hacked" currency format.
-     * @param quiet if true, only display discrepancies.  Otherwise,
-     * display all results.
+     * Walk through all locales and compare the output of the ICU26 currency format with the
+     * "hacked" currency format.
+     *
+     * @param quiet if true, only display discrepancies. Otherwise, display all results.
      */
     static void testFormatHack(boolean quiet) {
-        String[] testCurrencies = {"USD","GBP","JPY","EUR"};
+        String[] testCurrencies = {"USD", "GBP", "JPY", "EUR"};
         Locale[] testLocales = NumberFormat.getAvailableLocales();
         for (int i = 0; i < testLocales.length; ++i) {
             // since none of this should vary by country, we'll just do by language
@@ -90,12 +92,16 @@ public class CurrencyDemo {
                 noOutput = false;
             }
             for (int j = 0; j < testCurrencies.length; ++j) {
-                NumberFormat nf26 = getCurrencyFormat(Currency.getInstance(testCurrencies[j]), testLocales[i], true);
+                NumberFormat nf26 =
+                        getCurrencyFormat(
+                                Currency.getInstance(testCurrencies[j]), testLocales[i], true);
                 String str26 = nf26.format(1234.567);
                 if (!quiet) {
                     System.out.print("\t" + Utility.escape(str26));
                 }
-                NumberFormat nf24 = getCurrencyFormat(Currency.getInstance(testCurrencies[j]), testLocales[i], false);
+                NumberFormat nf24 =
+                        getCurrencyFormat(
+                                Currency.getInstance(testCurrencies[j]), testLocales[i], false);
                 String str24 = nf24.format(1234.567);
                 if (!str24.equals(str26)) {
                     if (noOutput) {

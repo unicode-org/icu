@@ -7,6 +7,7 @@
  *******************************************************************************
  */
 package com.ibm.icu.dev.demo.impl;
+
 import java.text.BreakIterator;
 
 public final class Selection {
@@ -42,10 +43,8 @@ public final class Selection {
     }
 
     public boolean equals(Object other) {
-        Selection other2 = (Selection)other;
-        return anchor == other2.anchor
-          && caret == other2.caret
-          && clickAfter == other2.clickAfter;
+        Selection other2 = (Selection) other;
+        return anchor == other2.anchor && caret == other2.caret && clickAfter == other2.clickAfter;
     }
 
     public boolean isLessThan(Selection other) {
@@ -93,21 +92,20 @@ public final class Selection {
         return this;
     }
 
-        // Mac & Windows considerably different
-        // Mac: end++. If start!=end, start=end
-        //  SHIFT: move end right
-        //  CTL: no different
-        // Windows:
-        //  UNSHIFTED: if start!=end, start = end, else start=end=end+1;
-        //       anchor = tip = start
-        //  SHIFT: tip++
-        //  CTL: if start!=end, start = end = nextbound(end-1),
-        //   else start=end=nextbound(end)
-        //       anchor = tip = start
-        //  CTL/SHIFT: tip = nextbound(tip)
+    // Mac & Windows considerably different
+    // Mac: end++. If start!=end, start=end
+    //  SHIFT: move end right
+    //  CTL: no different
+    // Windows:
+    //  UNSHIFTED: if start!=end, start = end, else start=end=end+1;
+    //       anchor = tip = start
+    //  SHIFT: tip++
+    //  CTL: if start!=end, start = end = nextbound(end-1),
+    //   else start=end=nextbound(end)
+    //       anchor = tip = start
+    //  CTL/SHIFT: tip = nextbound(tip)
 
-    public Selection nextBound(BreakIterator breaker,
-      int direction, boolean extend) {
+    public Selection nextBound(BreakIterator breaker, int direction, boolean extend) {
         if (!extend && anchor != caret) caret -= direction;
         caret = next(caret, breaker, direction, true);
         if (!extend) anchor = caret;
@@ -118,8 +116,8 @@ public final class Selection {
     // expand start and end to word breaks--if they are not already on one
     public void expand(BreakIterator breaker) {
         if (anchor <= caret) {
-            anchor = next(anchor,breaker,-1,false);
-            caret = next(caret,breaker,1,false);
+            anchor = next(anchor, breaker, -1, false);
+            caret = next(caret, breaker, 1, false);
             /*
             try {
                 breaker.following(anchor);
@@ -130,8 +128,8 @@ public final class Selection {
             } catch (Exception e) {}
             */
         } else {
-            anchor = next(anchor,breaker,1,false);
-            caret = next(caret,breaker,-1,false);
+            anchor = next(anchor, breaker, 1, false);
+            caret = next(caret, breaker, -1, false);
             /*
             try {
                 breaker.following(caret);
@@ -146,18 +144,17 @@ public final class Selection {
 
     // different = false - move to next boundary, unless on one
     // true - move to next boundary, even if on one
-    public static int next(int position, BreakIterator breaker,
-      int direction, boolean different) {
+    public static int next(int position, BreakIterator breaker, int direction, boolean different) {
         if (!different) position -= direction;
         try {
             if (direction > 0) {
                 position = breaker.following(position);
             } else {
-                breaker.following(position-1);
+                breaker.following(position - 1);
                 position = breaker.previous();
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
         return position;
     }
 }
-

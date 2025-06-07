@@ -9,8 +9,8 @@
 package com.ibm.icu.util;
 
 /**
- * Simple struct-like class for int output parameters.
- * Like <code>Output&lt;Integer&gt;</code> but without auto-boxing.
+ * Simple struct-like class for int output parameters. Like <code>Output&lt;Integer&gt;</code> but
+ * without auto-boxing.
  *
  * @internal but could become public
  * @deprecated This API is ICU internal only.
@@ -23,8 +23,7 @@ public class OutputInt {
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    @Deprecated
-    public int value;
+    @Deprecated public int value;
 
     /**
      * Constructs an <code>OutputInt</code> with value 0.
@@ -33,8 +32,7 @@ public class OutputInt {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
-    public OutputInt() {
-    }
+    public OutputInt() {}
 
     /**
      * Constructs an <code>OutputInt</code> with the given value.
@@ -50,6 +48,7 @@ public class OutputInt {
 
     /**
      * {@inheritDoc}
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */

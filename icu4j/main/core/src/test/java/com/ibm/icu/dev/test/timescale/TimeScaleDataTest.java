@@ -10,63 +10,70 @@
 
 package com.ibm.icu.dev.test.timescale;
 
-import java.util.Date;
-import java.util.Locale;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.SimpleTimeZone;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.UniversalTimeScale;
+import java.util.Date;
+import java.util.Locale;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 /**
  * @author Owner
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
+ *     <p>TODO To change the template for this generated type comment go to Window - Preferences -
+ *     Java - Code Style - Code Templates
  */
 @RunWith(JUnit4.class)
-public class TimeScaleDataTest extends CoreTestFmwk
-{
+public class TimeScaleDataTest extends CoreTestFmwk {
 
-    /**
-     * Default contstructor.
-     */
-    public TimeScaleDataTest()
-    {
-    }
+    /** Default contstructor. */
+    public TimeScaleDataTest() {}
 
-    private void roundTripTest(long value, int scale)
-    {
+    private void roundTripTest(long value, int scale) {
         long rt = UniversalTimeScale.toLong(UniversalTimeScale.from(value, scale), scale);
 
         if (rt != value) {
-            errln("Round-trip error: time scale = " + scale + ", value = " + value + ", round-trip = " + rt);
+            errln(
+                    "Round-trip error: time scale = "
+                            + scale
+                            + ", value = "
+                            + value
+                            + ", round-trip = "
+                            + rt);
         }
     }
 
-    private void toLimitTest(long toLimit, long fromLimit, int scale)
-    {
+    private void toLimitTest(long toLimit, long fromLimit, int scale) {
         long result = UniversalTimeScale.toLong(toLimit, scale);
 
         if (result != fromLimit) {
-            errln("toLimit failure: scale = " + scale + ", toLimit = " + toLimit +
-                  ", toLong(toLimit, scale) = " + result + ", fromLimit = " + fromLimit);
+            errln(
+                    "toLimit failure: scale = "
+                            + scale
+                            + ", toLimit = "
+                            + toLimit
+                            + ", toLong(toLimit, scale) = "
+                            + result
+                            + ", fromLimit = "
+                            + fromLimit);
         }
     }
 
-    private void epochOffsetTest(long epochOffset, long units, int scale)
-    {
+    private void epochOffsetTest(long epochOffset, long units, int scale) {
         long universalEpoch = epochOffset * units;
         long local = UniversalTimeScale.toLong(universalEpoch, scale);
 
         if (local != 0) {
-            errln("toLong(epochOffset, scale): scale = " + scale + ", epochOffset = " + universalEpoch +
-                  ", result = " + local);
+            errln(
+                    "toLong(epochOffset, scale): scale = "
+                            + scale
+                            + ", epochOffset = "
+                            + universalEpoch
+                            + ", result = "
+                            + local);
         }
 
         local = UniversalTimeScale.toLong(0, scale);
@@ -78,8 +85,13 @@ public class TimeScaleDataTest extends CoreTestFmwk
         long universal = UniversalTimeScale.from(-epochOffset, scale);
 
         if (universal != 0) {
-            errln("from(-epochOffest, scale): scale = " + scale + ", epochOffset = " + epochOffset +
-                  ", result = " + universal);
+            errln(
+                    "from(-epochOffest, scale): scale = "
+                            + scale
+                            + ", epochOffset = "
+                            + epochOffset
+                            + ", result = "
+                            + universal);
         }
 
         universal = UniversalTimeScale.from(0, scale);
@@ -90,22 +102,25 @@ public class TimeScaleDataTest extends CoreTestFmwk
     }
 
     @Test
-    public void TestEpochOffsets()
-    {
+    public void TestEpochOffsets() {
         for (int scale = 0; scale < UniversalTimeScale.MAX_SCALE; scale += 1) {
-            long units       = UniversalTimeScale.getTimeScaleValue(scale, UniversalTimeScale.UNITS_VALUE);
-            long epochOffset = UniversalTimeScale.getTimeScaleValue(scale, UniversalTimeScale.EPOCH_OFFSET_VALUE);
+            long units =
+                    UniversalTimeScale.getTimeScaleValue(scale, UniversalTimeScale.UNITS_VALUE);
+            long epochOffset =
+                    UniversalTimeScale.getTimeScaleValue(
+                            scale, UniversalTimeScale.EPOCH_OFFSET_VALUE);
 
             epochOffsetTest(epochOffset, units, scale);
         }
     }
 
     @Test
-    public void TestFromLimits()
-    {
+    public void TestFromLimits() {
         for (int scale = 0; scale < UniversalTimeScale.MAX_SCALE; scale += 1) {
-            long fromMin = UniversalTimeScale.getTimeScaleValue(scale, UniversalTimeScale.FROM_MIN_VALUE);
-            long fromMax = UniversalTimeScale.getTimeScaleValue(scale, UniversalTimeScale.FROM_MAX_VALUE);
+            long fromMin =
+                    UniversalTimeScale.getTimeScaleValue(scale, UniversalTimeScale.FROM_MIN_VALUE);
+            long fromMax =
+                    UniversalTimeScale.getTimeScaleValue(scale, UniversalTimeScale.FROM_MAX_VALUE);
 
             roundTripTest(fromMin, scale);
             roundTripTest(fromMax, scale);
@@ -113,17 +128,20 @@ public class TimeScaleDataTest extends CoreTestFmwk
     }
 
     @Test
-    public void TestToLimits()
-    {
+    public void TestToLimits() {
         for (int scale = 0; scale < UniversalTimeScale.MAX_SCALE; scale += 1) {
-            long fromMin = UniversalTimeScale.getTimeScaleValue(scale, UniversalTimeScale.FROM_MIN_VALUE);
-            long fromMax = UniversalTimeScale.getTimeScaleValue(scale, UniversalTimeScale.FROM_MAX_VALUE);
-            long toMin   = UniversalTimeScale.getTimeScaleValue(scale, UniversalTimeScale.TO_MIN_VALUE);
-            long toMax   = UniversalTimeScale.getTimeScaleValue(scale, UniversalTimeScale.TO_MAX_VALUE);
+            long fromMin =
+                    UniversalTimeScale.getTimeScaleValue(scale, UniversalTimeScale.FROM_MIN_VALUE);
+            long fromMax =
+                    UniversalTimeScale.getTimeScaleValue(scale, UniversalTimeScale.FROM_MAX_VALUE);
+            long toMin =
+                    UniversalTimeScale.getTimeScaleValue(scale, UniversalTimeScale.TO_MIN_VALUE);
+            long toMax =
+                    UniversalTimeScale.getTimeScaleValue(scale, UniversalTimeScale.TO_MAX_VALUE);
 
             toLimitTest(toMin, fromMin, scale);
             toLimitTest(toMax, fromMax, scale);
-       }
+        }
     }
 
     // Test with data from .Net System.DateTime ---------------------------- ***
@@ -133,7 +151,7 @@ public class TimeScaleDataTest extends CoreTestFmwk
      * Console::WriteLine(L"    {{ {0}, 1, 1, INT64_C({1}) }},", year, DateTime(year, 1, 1).Ticks);
      * with the DateTime constructor taking int values for year, month, and date.
      */
-    static private final long dotNetDateTimeTicks[] = {
+    private static final long dotNetDateTimeTicks[] = {
         /* year, month, day, ticks */
         100, 1, 1, 31241376000000000L,
         100, 3, 1, 31292352000000000L,
@@ -216,9 +234,9 @@ public class TimeScaleDataTest extends CoreTestFmwk
     @Test
     public void TestDotNet() {
         TimeZone utc;
-        final long dayMillis = 86400 * 1000L;    /* 1 day = 86400 seconds */
+        final long dayMillis = 86400 * 1000L; /* 1 day = 86400 seconds */
         final long dayTicks = 86400 * 10000000L;
-        final int kYear = 0;  // offset for dotNetDateTimeTicks[] field
+        final int kYear = 0; // offset for dotNetDateTimeTicks[] field
         final int kMonth = 1;
         final int kDay = 2;
         final int kTicks = 3;
@@ -233,32 +251,54 @@ public class TimeScaleDataTest extends CoreTestFmwk
         utc = new SimpleTimeZone(0, "UTC");
         cal = new GregorianCalendar(utc, Locale.ENGLISH);
         cal.setGregorianChange(new Date(before0001AD));
-        for(i = 0; i < dotNetDateTimeTicks.length; i += kIncrement) {
+        for (i = 0; i < dotNetDateTimeTicks.length; i += kIncrement) {
             /* Test conversion from .Net/Universal time to ICU time. */
-            millis = UniversalTimeScale.toLong(dotNetDateTimeTicks[i + kTicks], UniversalTimeScale.ICU4C_TIME);
+            millis =
+                    UniversalTimeScale.toLong(
+                            dotNetDateTimeTicks[i + kTicks], UniversalTimeScale.ICU4C_TIME);
             cal.clear();
-            cal.set((int)dotNetDateTimeTicks[i + kYear],
-                    (int)dotNetDateTimeTicks[i + kMonth] - 1, /* Java & ICU use January = month 0. */
-                    (int)dotNetDateTimeTicks[i + kDay]);
+            cal.set(
+                    (int) dotNetDateTimeTicks[i + kYear],
+                    (int) dotNetDateTimeTicks[i + kMonth]
+                            - 1, /* Java & ICU use January = month 0. */
+                    (int) dotNetDateTimeTicks[i + kDay]);
             icuDate = cal.getTimeInMillis();
-            if(millis != icuDate) {
+            if (millis != icuDate) {
                 /* Print days not millis. */
-                errln("UniversalTimeScale.toLong(ticks[" + i + "], ICU4C)=" +
-                      (millis/dayMillis) + " != " + (icuDate/dayMillis) +
-                      "=ucal_getMillis(" + dotNetDateTimeTicks[i + kYear] +
-                      "-" + dotNetDateTimeTicks[i + kMonth] +
-                      "-" + dotNetDateTimeTicks[i + kDay] + ")");
+                errln(
+                        "UniversalTimeScale.toLong(ticks["
+                                + i
+                                + "], ICU4C)="
+                                + (millis / dayMillis)
+                                + " != "
+                                + (icuDate / dayMillis)
+                                + "=ucal_getMillis("
+                                + dotNetDateTimeTicks[i + kYear]
+                                + "-"
+                                + dotNetDateTimeTicks[i + kMonth]
+                                + "-"
+                                + dotNetDateTimeTicks[i + kDay]
+                                + ")");
             }
 
             /* Test conversion from ICU time to .Net/Universal time. */
             ticks = UniversalTimeScale.from(icuDate, UniversalTimeScale.ICU4C_TIME);
-            if(ticks != dotNetDateTimeTicks[i + kTicks]) {
+            if (ticks != dotNetDateTimeTicks[i + kTicks]) {
                 /* Print days not ticks. */
-                errln("UniversalTimeScale.from(date[" + i + "], ICU4C)=" +
-                      (ticks/dayTicks) + " != " + dotNetDateTimeTicks[i + kTicks]/dayTicks +
-                      "=.Net System.DateTime(" + dotNetDateTimeTicks[i + kYear] +
-                      "-" + dotNetDateTimeTicks[i + kMonth] +
-                      "-" + dotNetDateTimeTicks[i + kDay] + ").Ticks");
+                errln(
+                        "UniversalTimeScale.from(date["
+                                + i
+                                + "], ICU4C)="
+                                + (ticks / dayTicks)
+                                + " != "
+                                + dotNetDateTimeTicks[i + kTicks] / dayTicks
+                                + "=.Net System.DateTime("
+                                + dotNetDateTimeTicks[i + kYear]
+                                + "-"
+                                + dotNetDateTimeTicks[i + kMonth]
+                                + "-"
+                                + dotNetDateTimeTicks[i + kDay]
+                                + ").Ticks");
             }
         }
     }

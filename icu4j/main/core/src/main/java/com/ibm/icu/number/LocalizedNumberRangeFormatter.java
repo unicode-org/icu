@@ -6,15 +6,17 @@ import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
 
 /**
- * A NumberRangeFormatter that has a locale associated with it; this means .formatRange() methods are available.
+ * A NumberRangeFormatter that has a locale associated with it; this means .formatRange() methods
+ * are available.
  *
- * Instances of this class are immutable and thread-safe.
+ * <p>Instances of this class are immutable and thread-safe.
  *
  * @author sffc
  * @stable ICU 63
  * @see NumberRangeFormatter
  */
-public class LocalizedNumberRangeFormatter extends NumberRangeFormatterSettings<LocalizedNumberRangeFormatter> {
+public class LocalizedNumberRangeFormatter
+        extends NumberRangeFormatterSettings<LocalizedNumberRangeFormatter> {
 
     private volatile NumberRangeFormatterImpl fImpl;
 
@@ -23,13 +25,11 @@ public class LocalizedNumberRangeFormatter extends NumberRangeFormatterSettings<
     }
 
     /**
-     * Format the given integers to a string using the settings specified in the NumberRangeFormatter fluent setting
-     * chain.
+     * Format the given integers to a string using the settings specified in the
+     * NumberRangeFormatter fluent setting chain.
      *
-     * @param first
-     *            The first number in the range, usually to the left in LTR locales.
-     * @param second
-     *            The second number in the range, usually to the right in LTR locales.
+     * @param first The first number in the range, usually to the left in LTR locales.
+     * @param second The second number in the range, usually to the right in LTR locales.
      * @return A FormattedNumberRange object; call .toString() to get the string.
      * @stable ICU 63
      * @see NumberRangeFormatter
@@ -41,13 +41,11 @@ public class LocalizedNumberRangeFormatter extends NumberRangeFormatterSettings<
     }
 
     /**
-     * Format the given doubles to a string using the settings specified in the NumberRangeFormatter fluent setting
-     * chain.
+     * Format the given doubles to a string using the settings specified in the NumberRangeFormatter
+     * fluent setting chain.
      *
-     * @param first
-     *            The first number in the range, usually to the left in LTR locales.
-     * @param second
-     *            The second number in the range, usually to the right in LTR locales.
+     * @param first The first number in the range, usually to the left in LTR locales.
+     * @param second The second number in the range, usually to the right in LTR locales.
      * @return A FormattedNumberRange object; call .toString() to get the string.
      * @stable ICU 63
      * @see NumberRangeFormatter
@@ -61,13 +59,11 @@ public class LocalizedNumberRangeFormatter extends NumberRangeFormatterSettings<
     }
 
     /**
-     * Format the given Numbers to a string using the settings specified in the NumberRangeFormatter fluent setting
-     * chain.
+     * Format the given Numbers to a string using the settings specified in the NumberRangeFormatter
+     * fluent setting chain.
      *
-     * @param first
-     *            The first number in the range, usually to the left in LTR locales.
-     * @param second
-     *            The second number in the range, usually to the right in LTR locales.
+     * @param first The first number in the range, usually to the left in LTR locales.
+     * @param second The second number in the range, usually to the right in LTR locales.
      * @return A FormattedNumberRange object; call .toString() to get the string.
      * @throws IllegalArgumentException if first or second is null
      * @stable ICU 63
@@ -92,7 +88,8 @@ public class LocalizedNumberRangeFormatter extends NumberRangeFormatterSettings<
         return new UnlocalizedNumberRangeFormatter(this, KEY_LOCALE, null);
     }
 
-    FormattedNumberRange formatImpl(DecimalQuantity first, DecimalQuantity second, boolean equalBeforeRounding) {
+    FormattedNumberRange formatImpl(
+            DecimalQuantity first, DecimalQuantity second, boolean equalBeforeRounding) {
         if (fImpl == null) {
             fImpl = new NumberRangeFormatterImpl(resolve());
         }
@@ -103,5 +100,4 @@ public class LocalizedNumberRangeFormatter extends NumberRangeFormatterSettings<
     LocalizedNumberRangeFormatter create(int key, Object value) {
         return new LocalizedNumberRangeFormatter(this, key, value);
     }
-
 }

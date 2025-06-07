@@ -5,20 +5,18 @@ package com.ibm.icu.dev.test.normalizer;
 import java.util.HashMap;
 import java.util.Map;
 
-
 /**
- *******************************************************************************
- * Copyright (C) 1998-2010, International Business Machines Corporation and    *
- * Unicode, Inc. All Rights Reserved.                                          *
- *******************************************************************************
+ * ****************************************************************************** Copyright (C)
+ * 1998-2010, International Business Machines Corporation and * Unicode, Inc. All Rights Reserved. *
+ * ******************************************************************************
  *
- * Integer hash table.
+ * <p>Integer hash table.
+ *
  * @author Mark Davis
  */
- 
 public class IntHashtable {
 
-    public IntHashtable (int defaultValue) {
+    public IntHashtable(int defaultValue) {
         this.defaultValue = defaultValue;
     }
 

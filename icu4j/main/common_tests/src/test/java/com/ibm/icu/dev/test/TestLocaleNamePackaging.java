@@ -11,21 +11,18 @@ package com.ibm.icu.dev.test;
 import static com.ibm.icu.impl.LocaleDisplayNamesImpl.DataTableType.LANG;
 import static com.ibm.icu.impl.LocaleDisplayNamesImpl.DataTableType.REGION;
 
-import java.util.Locale;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
 import com.ibm.icu.impl.LocaleDisplayNamesImpl;
 import com.ibm.icu.text.LocaleDisplayNames;
 import com.ibm.icu.text.LocaleDisplayNames.DialectHandling;
 import com.ibm.icu.util.ULocale;
+import java.util.Locale;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public class TestLocaleNamePackaging extends CoreTestFmwk {
-    public TestLocaleNamePackaging() {
-    }
+    public TestLocaleNamePackaging() {}
 
     public boolean validate() {
         logln("language data: " + LocaleDisplayNamesImpl.haveData(LANG));
@@ -34,14 +31,12 @@ public class TestLocaleNamePackaging extends CoreTestFmwk {
     }
 
     private static ULocale[] locales = {
-        ULocale.ROOT, ULocale.US, new ULocale("es_ES"), ULocale.GERMANY,
-        new ULocale("und_TH")
+        ULocale.ROOT, ULocale.US, new ULocale("es_ES"), ULocale.GERMANY, new ULocale("und_TH")
     };
 
     // Java Locales equivalent to above
     private static Locale[] javaLocales = {
-        new Locale(""), Locale.US, new Locale("es", "ES"), Locale.GERMANY,
-        new Locale("und", "TH")
+        new Locale(""), Locale.US, new Locale("es", "ES"), Locale.GERMANY, new Locale("und", "TH")
     };
 
     @Test
@@ -74,14 +69,12 @@ public class TestLocaleNamePackaging extends CoreTestFmwk {
             "TH",
         };
         String[] expectedWithoutRegionData = {
-            "",
-            "US",
-            "ES",
-            "DE",
-            "TH",
+            "", "US", "ES", "DE", "TH",
         };
-        String[] expected = LocaleDisplayNamesImpl.haveData(REGION) ?
-            expectedWithRegionData : expectedWithoutRegionData;
+        String[] expected =
+                LocaleDisplayNamesImpl.haveData(REGION)
+                        ? expectedWithRegionData
+                        : expectedWithoutRegionData;
 
         int n = 0;
         for (ULocale displayLocale : locales) {
@@ -107,7 +100,6 @@ public class TestLocaleNamePackaging extends CoreTestFmwk {
                 }
             }
         }
-
     }
 
     @Test
@@ -140,14 +132,12 @@ public class TestLocaleNamePackaging extends CoreTestFmwk {
             "",
         };
         String[] expectedWithoutLanguageData = {
-            "",
-            "en",
-            "es",
-            "de",
-            "",
+            "", "en", "es", "de", "",
         };
-        String[] expected = LocaleDisplayNamesImpl.haveData(LANG) ?
-            expectedWithLanguageData : expectedWithoutLanguageData;
+        String[] expected =
+                LocaleDisplayNamesImpl.haveData(LANG)
+                        ? expectedWithLanguageData
+                        : expectedWithoutLanguageData;
 
         int n = 0;
         for (ULocale displayLocale : locales) {
@@ -176,7 +166,6 @@ public class TestLocaleNamePackaging extends CoreTestFmwk {
                 }
             }
         }
-
     }
 
     // test a 'root' locale, with keywords
@@ -192,8 +181,10 @@ public class TestLocaleNamePackaging extends CoreTestFmwk {
         String[] expectedWithoutLanguageData = {
             "und (collation=phonebook)",
         };
-        String[] expected = LocaleDisplayNamesImpl.haveData(LANG) ?
-            expectedWithLanguageData : expectedWithoutLanguageData;
+        String[] expected =
+                LocaleDisplayNamesImpl.haveData(LANG)
+                        ? expectedWithLanguageData
+                        : expectedWithoutLanguageData;
 
         ULocale kl = new ULocale("@collation=phonebook");
 
@@ -219,26 +210,28 @@ public class TestLocaleNamePackaging extends CoreTestFmwk {
     @Test
     public void testLanguageDisplayNameDoesNotTranslateDialects() {
         // Dialect ids are also not language codes.
-        LocaleDisplayNames dn = LocaleDisplayNames.getInstance(ULocale.US,
-                                                               DialectHandling.DIALECT_NAMES);
+        LocaleDisplayNames dn =
+                LocaleDisplayNames.getInstance(ULocale.US, DialectHandling.DIALECT_NAMES);
         assertEquals("dialect", "en_GB", dn.languageDisplayName("en_GB"));
 
-        String target = LocaleDisplayNamesImpl.haveData(LANG)
-            ? "British English"
-            : (LocaleDisplayNamesImpl.haveData(REGION)
-               ? "en (United Kingdom)"
-               : "en (GB)");
+        String target =
+                LocaleDisplayNamesImpl.haveData(LANG)
+                        ? "British English"
+                        : (LocaleDisplayNamesImpl.haveData(REGION)
+                                ? "en (United Kingdom)"
+                                : "en (GB)");
         assertEquals("dialect 2", target, dn.localeDisplayName("en_GB"));
     }
 
     @Test
     public void testLocaleKeywords() {
-        LocaleDisplayNames dn = LocaleDisplayNames.getInstance(ULocale.US,
-                DialectHandling.DIALECT_NAMES);
+        LocaleDisplayNames dn =
+                LocaleDisplayNames.getInstance(ULocale.US, DialectHandling.DIALECT_NAMES);
         String name = dn.localeDisplayName("de@collation=phonebook");
-        String target = LocaleDisplayNamesImpl.haveData(LANG) ?
-                "German (Phonebook Sort Order)" : "de (collation=phonebook)";
+        String target =
+                LocaleDisplayNamesImpl.haveData(LANG)
+                        ? "German (Phonebook Sort Order)"
+                        : "de (collation=phonebook)";
         assertEquals("collation", target, name);
-
     }
 }

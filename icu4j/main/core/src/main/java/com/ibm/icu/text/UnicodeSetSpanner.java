@@ -12,24 +12,28 @@ import com.ibm.icu.text.UnicodeSet.SpanCondition;
 import com.ibm.icu.util.OutputInt;
 
 /**
- * A helper class used to count, replace, and trim CharSequences based on UnicodeSet matches.
- * An instance is immutable (and thus thread-safe) iff the source UnicodeSet is frozen.
- * <p><b>Note:</b> The counting, deletion, and replacement depend on alternating a {@link SpanCondition} with
- * its inverse. That is, the code spans, then spans for the inverse, then spans, and so on.
- * For the inverse, the following mapping is used:
+ * A helper class used to count, replace, and trim CharSequences based on UnicodeSet matches. An
+ * instance is immutable (and thus thread-safe) iff the source UnicodeSet is frozen.
+ *
+ * <p><b>Note:</b> The counting, deletion, and replacement depend on alternating a {@link
+ * SpanCondition} with its inverse. That is, the code spans, then spans for the inverse, then spans,
+ * and so on. For the inverse, the following mapping is used:
+ *
  * <ul>
- * <li>{@link UnicodeSet.SpanCondition#SIMPLE} → {@link UnicodeSet.SpanCondition#NOT_CONTAINED}</li>
- * <li>{@link UnicodeSet.SpanCondition#CONTAINED} → {@link UnicodeSet.SpanCondition#NOT_CONTAINED}</li>
- * <li>{@link UnicodeSet.SpanCondition#NOT_CONTAINED} → {@link UnicodeSet.SpanCondition#SIMPLE}</li>
+ *   <li>{@link UnicodeSet.SpanCondition#SIMPLE} → {@link UnicodeSet.SpanCondition#NOT_CONTAINED}
+ *   <li>{@link UnicodeSet.SpanCondition#CONTAINED} → {@link UnicodeSet.SpanCondition#NOT_CONTAINED}
+ *   <li>{@link UnicodeSet.SpanCondition#NOT_CONTAINED} → {@link UnicodeSet.SpanCondition#SIMPLE}
  * </ul>
- * These are actually not complete inverses. However, the alternating works because there are no gaps.
- * For example, with [a{ab}{bc}], you get the following behavior when scanning forward:
+ *
+ * These are actually not complete inverses. However, the alternating works because there are no
+ * gaps. For example, with [a{ab}{bc}], you get the following behavior when scanning forward:
  *
  * <table border="1">
  * <tr><th>SIMPLE</th><td>xxx[ab]cyyy</td></tr>
  * <tr><th>CONTAINED</th><td>xxx[abc]yyy</td></tr>
  * <tr><th>NOT_CONTAINED</th><td>[xxx]ab[cyyy]</td></tr>
  * </table>
+ *
  * <p>So here is what happens when you alternate:
  *
  * <table border="1">
@@ -38,8 +42,9 @@ import com.ibm.icu.util.OutputInt;
  * <tr><th>CONTAINED</th><td>xxxabc|yyy</td></tr>
  * <tr><th>NOT_CONTAINED</th><td>xxxabcyyy|</td></tr>
  * </table>
+ *
  * <p>The entire string is traversed.
- * 
+ *
  * @stable ICU 54
  */
 public class UnicodeSetSpanner {
@@ -47,12 +52,10 @@ public class UnicodeSetSpanner {
     private final UnicodeSet unicodeSet;
 
     /**
-     * Create a spanner from a UnicodeSet. For speed and safety, the UnicodeSet should be frozen. However, this class
-     * can be used with a non-frozen version to avoid the cost of freezing.
-     * 
-     * @param source
-     *            the original UnicodeSet
+     * Create a spanner from a UnicodeSet. For speed and safety, the UnicodeSet should be frozen.
+     * However, this class can be used with a non-frozen version to avoid the cost of freezing.
      *
+     * @param source the original UnicodeSet
      * @stable ICU 54
      */
     public UnicodeSetSpanner(UnicodeSet source) {
@@ -61,29 +64,28 @@ public class UnicodeSetSpanner {
 
     /**
      * Returns the UnicodeSet used for processing. It is frozen iff the original was.
-     * 
-     * @return the construction set.
      *
+     * @return the construction set.
      * @stable ICU 54
      */
     public UnicodeSet getUnicodeSet() {
         return unicodeSet;
     }
 
-
     /**
      * {@inheritDoc}
-     * 
+     *
      * @stable ICU 54
      */
     @Override
     public boolean equals(Object other) {
-        return other instanceof UnicodeSetSpanner && unicodeSet.equals(((UnicodeSetSpanner) other).unicodeSet);
+        return other instanceof UnicodeSetSpanner
+                && unicodeSet.equals(((UnicodeSetSpanner) other).unicodeSet);
     }
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @stable ICU 54
      */
     @Override
@@ -92,28 +94,30 @@ public class UnicodeSetSpanner {
     }
 
     /**
-     * Options for replaceFrom and countIn to control how to treat each matched span. 
-     * It is similar to whether one is replacing [abc] by x, or [abc]* by x.
-     * 
+     * Options for replaceFrom and countIn to control how to treat each matched span. It is similar
+     * to whether one is replacing [abc] by x, or [abc]* by x.
+     *
      * @stable ICU 54
      */
     public enum CountMethod {
         /**
-         * Collapse spans. That is, modify/count the entire matching span as a single item, instead of separate
-         * set elements.
+         * Collapse spans. That is, modify/count the entire matching span as a single item, instead
+         * of separate set elements.
          *
          * @stable ICU 54
          */
         WHOLE_SPAN,
         /**
          * Use the smallest number of elements in the spanned range for counting and modification,
-         * based on the {@link UnicodeSet.SpanCondition}.
-         * If the set has no strings, this will be the same as the number of spanned code points.
+         * based on the {@link UnicodeSet.SpanCondition}. If the set has no strings, this will be
+         * the same as the number of spanned code points.
+         *
          * <p>For example, in the string "abab" with SpanCondition.SIMPLE:
+         *
          * <ul>
-         * <li>spanning with [ab] will count four MIN_ELEMENTS.</li>
-         * <li>spanning with [{ab}] will count two MIN_ELEMENTS.</li>
-         * <li>spanning with [ab{ab}] will also count two MIN_ELEMENTS.</li>
+         *   <li>spanning with [ab] will count four MIN_ELEMENTS.
+         *   <li>spanning with [{ab}] will count two MIN_ELEMENTS.
+         *   <li>spanning with [ab{ab}] will also count two MIN_ELEMENTS.
          * </ul>
          *
          * @stable ICU 54
@@ -123,13 +127,12 @@ public class UnicodeSetSpanner {
     }
 
     /**
-     * Returns the number of matching characters found in a character sequence, 
-     * counting by CountMethod.MIN_ELEMENTS using SpanCondition.SIMPLE.
-     * The code alternates spans; see the class doc for {@link UnicodeSetSpanner} for a note about boundary conditions.
-     * @param sequence
-     *            the sequence to count characters in
+     * Returns the number of matching characters found in a character sequence, counting by
+     * CountMethod.MIN_ELEMENTS using SpanCondition.SIMPLE. The code alternates spans; see the class
+     * doc for {@link UnicodeSetSpanner} for a note about boundary conditions.
+     *
+     * @param sequence the sequence to count characters in
      * @return the count. Zero if there are none.
-     * 
      * @stable ICU 54
      */
     public int countIn(CharSequence sequence) {
@@ -137,14 +140,14 @@ public class UnicodeSetSpanner {
     }
 
     /**
-     * Returns the number of matching characters found in a character sequence, using SpanCondition.SIMPLE.
-     * The code alternates spans; see the class doc for {@link UnicodeSetSpanner} for a note about boundary conditions.
-     * @param sequence
-     *            the sequence to count characters in
-     * @param countMethod
-     *            whether to treat an entire span as a match, or individual elements as matches
+     * Returns the number of matching characters found in a character sequence, using
+     * SpanCondition.SIMPLE. The code alternates spans; see the class doc for {@link
+     * UnicodeSetSpanner} for a note about boundary conditions.
+     *
+     * @param sequence the sequence to count characters in
+     * @param countMethod whether to treat an entire span as a match, or individual elements as
+     *     matches
      * @return the count. Zero if there are none.
-     * 
      * @stable ICU 54
      */
     public int countIn(CharSequence sequence, CountMethod countMethod) {
@@ -152,25 +155,27 @@ public class UnicodeSetSpanner {
     }
 
     /**
-     * Returns the number of matching characters found in a character sequence.
-     * The code alternates spans; see the class doc for {@link UnicodeSetSpanner} for a note about boundary conditions.
-     * @param sequence
-     *            the sequence to count characters in
-     * @param countMethod
-     *            whether to treat an entire span as a match, or individual elements as matches
-     * @param spanCondition
-     *            the spanCondition to use. SIMPLE or CONTAINED means only count the elements in the span;
-     *            NOT_CONTAINED is the reverse.
-     *            <br><b>WARNING: </b> when a UnicodeSet contains strings, there may be unexpected behavior in edge cases.
+     * Returns the number of matching characters found in a character sequence. The code alternates
+     * spans; see the class doc for {@link UnicodeSetSpanner} for a note about boundary conditions.
+     *
+     * @param sequence the sequence to count characters in
+     * @param countMethod whether to treat an entire span as a match, or individual elements as
+     *     matches
+     * @param spanCondition the spanCondition to use. SIMPLE or CONTAINED means only count the
+     *     elements in the span; NOT_CONTAINED is the reverse. <br>
+     *     <b>WARNING: </b> when a UnicodeSet contains strings, there may be unexpected behavior in
+     *     edge cases.
      * @return the count. Zero if there are none.
-     * 
      * @stable ICU 54
      */
-    public int countIn(CharSequence sequence, CountMethod countMethod, SpanCondition spanCondition) {
+    public int countIn(
+            CharSequence sequence, CountMethod countMethod, SpanCondition spanCondition) {
         int count = 0;
         int start = 0;
-        SpanCondition skipSpan = spanCondition == SpanCondition.NOT_CONTAINED ? SpanCondition.SIMPLE
-                : SpanCondition.NOT_CONTAINED;
+        SpanCondition skipSpan =
+                spanCondition == SpanCondition.NOT_CONTAINED
+                        ? SpanCondition.SIMPLE
+                        : SpanCondition.NOT_CONTAINED;
         final int length = sequence.length();
         OutputInt spanCount = null;
         while (start != length) {
@@ -193,12 +198,11 @@ public class UnicodeSetSpanner {
     }
 
     /**
-     * Delete all the matching spans in sequence, using SpanCondition.SIMPLE
-     * The code alternates spans; see the class doc for {@link UnicodeSetSpanner} for a note about boundary conditions.
-     * @param sequence
-     *            charsequence to replace matching spans in.
+     * Delete all the matching spans in sequence, using SpanCondition.SIMPLE The code alternates
+     * spans; see the class doc for {@link UnicodeSetSpanner} for a note about boundary conditions.
+     *
+     * @param sequence charsequence to replace matching spans in.
      * @return modified string.
-     * 
      * @stable ICU 54
      */
     public String deleteFrom(CharSequence sequence) {
@@ -206,14 +210,13 @@ public class UnicodeSetSpanner {
     }
 
     /**
-     * Delete all matching spans in sequence, according to the spanCondition.
-     * The code alternates spans; see the class doc for {@link UnicodeSetSpanner} for a note about boundary conditions.
-     * @param sequence
-     *            charsequence to replace matching spans in.
-     * @param spanCondition
-     *            specify whether to modify the matching spans (CONTAINED or SIMPLE) or the non-matching (NOT_CONTAINED)
+     * Delete all matching spans in sequence, according to the spanCondition. The code alternates
+     * spans; see the class doc for {@link UnicodeSetSpanner} for a note about boundary conditions.
+     *
+     * @param sequence charsequence to replace matching spans in.
+     * @param spanCondition specify whether to modify the matching spans (CONTAINED or SIMPLE) or
+     *     the non-matching (NOT_CONTAINED)
      * @return modified string.
-     * 
      * @stable ICU 54
      */
     public String deleteFrom(CharSequence sequence, SpanCondition spanCondition) {
@@ -221,15 +224,13 @@ public class UnicodeSetSpanner {
     }
 
     /**
-     * Replace all matching spans in sequence by the replacement,
-     * counting by CountMethod.MIN_ELEMENTS using SpanCondition.SIMPLE.
-     * The code alternates spans; see the class doc for {@link UnicodeSetSpanner} for a note about boundary conditions.
-     * @param sequence
-     *            charsequence to replace matching spans in.
-     * @param replacement
-     *            replacement sequence. To delete, use ""
+     * Replace all matching spans in sequence by the replacement, counting by
+     * CountMethod.MIN_ELEMENTS using SpanCondition.SIMPLE. The code alternates spans; see the class
+     * doc for {@link UnicodeSetSpanner} for a note about boundary conditions.
+     *
+     * @param sequence charsequence to replace matching spans in.
+     * @param replacement replacement sequence. To delete, use ""
      * @return modified string.
-     * 
      * @stable ICU 54
      */
     public String replaceFrom(CharSequence sequence, CharSequence replacement) {
@@ -237,43 +238,45 @@ public class UnicodeSetSpanner {
     }
 
     /**
-     * Replace all matching spans in sequence by replacement, according to the CountMethod, using SpanCondition.SIMPLE.
-     * The code alternates spans; see the class doc for {@link UnicodeSetSpanner} for a note about boundary conditions.
-     * 
-     * @param sequence
-     *            charsequence to replace matching spans in.
-     * @param replacement
-     *            replacement sequence. To delete, use ""
-     * @param countMethod
-     *            whether to treat an entire span as a match, or individual elements as matches
+     * Replace all matching spans in sequence by replacement, according to the CountMethod, using
+     * SpanCondition.SIMPLE. The code alternates spans; see the class doc for {@link
+     * UnicodeSetSpanner} for a note about boundary conditions.
+     *
+     * @param sequence charsequence to replace matching spans in.
+     * @param replacement replacement sequence. To delete, use ""
+     * @param countMethod whether to treat an entire span as a match, or individual elements as
+     *     matches
      * @return modified string.
-     * 
      * @stable ICU 54
      */
-    public String replaceFrom(CharSequence sequence, CharSequence replacement, CountMethod countMethod) {
+    public String replaceFrom(
+            CharSequence sequence, CharSequence replacement, CountMethod countMethod) {
         return replaceFrom(sequence, replacement, countMethod, SpanCondition.SIMPLE);
     }
 
     /**
-     * Replace all matching spans in sequence by replacement, according to the countMethod and spanCondition.
-     * The code alternates spans; see the class doc for {@link UnicodeSetSpanner} for a note about boundary conditions.
-     * @param sequence
-     *            charsequence to replace matching spans in.
-     * @param replacement
-     *            replacement sequence. To delete, use ""
-     * @param countMethod 
-     *            whether to treat an entire span as a match, or individual elements as matches
-     * @param spanCondition
-     *            specify whether to modify the matching spans (CONTAINED or SIMPLE) or the non-matching
-     *            (NOT_CONTAINED)
+     * Replace all matching spans in sequence by replacement, according to the countMethod and
+     * spanCondition. The code alternates spans; see the class doc for {@link UnicodeSetSpanner} for
+     * a note about boundary conditions.
+     *
+     * @param sequence charsequence to replace matching spans in.
+     * @param replacement replacement sequence. To delete, use ""
+     * @param countMethod whether to treat an entire span as a match, or individual elements as
+     *     matches
+     * @param spanCondition specify whether to modify the matching spans (CONTAINED or SIMPLE) or
+     *     the non-matching (NOT_CONTAINED)
      * @return modified string.
-     * 
      * @stable ICU 54
      */
-    public String replaceFrom(CharSequence sequence, CharSequence replacement, CountMethod countMethod,
+    public String replaceFrom(
+            CharSequence sequence,
+            CharSequence replacement,
+            CountMethod countMethod,
             SpanCondition spanCondition) {
-        SpanCondition copySpan = spanCondition == SpanCondition.NOT_CONTAINED ? SpanCondition.SIMPLE
-                : SpanCondition.NOT_CONTAINED;
+        SpanCondition copySpan =
+                spanCondition == SpanCondition.NOT_CONTAINED
+                        ? SpanCondition.SIMPLE
+                        : SpanCondition.NOT_CONTAINED;
         final boolean remove = replacement.length() == 0;
         StringBuilder result = new StringBuilder();
         // TODO, we can optimize this to
@@ -281,7 +284,7 @@ public class UnicodeSetSpanner {
 
         final int length = sequence.length();
         OutputInt spanCount = null;
-        for (int endCopy = 0; endCopy != length;) {
+        for (int endCopy = 0; endCopy != length; ) {
             int endModify;
             if (countMethod == CountMethod.WHOLE_SPAN) {
                 endModify = unicodeSet.span(sequence, endCopy, spanCondition);
@@ -311,45 +314,43 @@ public class UnicodeSetSpanner {
 
     /**
      * Options for the trim() method
-     * 
+     *
      * @stable ICU 54
      */
     public enum TrimOption {
         /**
          * Trim leading spans.
-         * 
+         *
          * @stable ICU 54
          */
         LEADING,
         /**
          * Trim leading and trailing spans.
-         * 
+         *
          * @stable ICU 54
          */
         BOTH,
         /**
          * Trim trailing spans.
-         * 
+         *
          * @stable ICU 54
          */
         TRAILING;
     }
 
     /**
-     * Returns a trimmed sequence (using CharSequence.subsequence()), that omits matching elements at the start and
-     * end of the string, using TrimOption.BOTH and SpanCondition.SIMPLE. For example:
-     * 
-     * <pre>
-     * {@code
-     * 
-     *   new UnicodeSet("[ab]").trim("abacatbab")}
-     * </pre>
-     * 
+     * Returns a trimmed sequence (using CharSequence.subsequence()), that omits matching elements
+     * at the start and end of the string, using TrimOption.BOTH and SpanCondition.SIMPLE. For
+     * example:
+     *
+     * <pre>{@code
+     * new UnicodeSet("[ab]").trim("abacatbab")
+     * }</pre>
+     *
      * ... returns {@code "cat"}.
-     * @param sequence
-     *            the sequence to trim
+     *
+     * @param sequence the sequence to trim
      * @return a subsequence
-     * 
      * @stable ICU 54
      */
     public CharSequence trim(CharSequence sequence) {
@@ -357,23 +358,19 @@ public class UnicodeSetSpanner {
     }
 
     /**
-     * Returns a trimmed sequence (using CharSequence.subsequence()), that omits matching elements at the start or
-     * end of the string, using the trimOption and SpanCondition.SIMPLE. For example:
-     * 
-     * <pre>
-     * {@code
-     * 
-     *   new UnicodeSet("[ab]").trim("abacatbab", TrimOption.LEADING)}
-     * </pre>
-     * 
+     * Returns a trimmed sequence (using CharSequence.subsequence()), that omits matching elements
+     * at the start or end of the string, using the trimOption and SpanCondition.SIMPLE. For
+     * example:
+     *
+     * <pre>{@code
+     * new UnicodeSet("[ab]").trim("abacatbab", TrimOption.LEADING)
+     * }</pre>
+     *
      * ... returns {@code "catbab"}.
-     * 
-     * @param sequence
-     *            the sequence to trim
-     * @param trimOption
-     *            LEADING, TRAILING, or BOTH
+     *
+     * @param sequence the sequence to trim
+     * @param trimOption LEADING, TRAILING, or BOTH
      * @return a subsequence
-     * 
      * @stable ICU 54
      */
     public CharSequence trim(CharSequence sequence, TrimOption trimOption) {
@@ -381,28 +378,24 @@ public class UnicodeSetSpanner {
     }
 
     /**
-     * Returns a trimmed sequence (using CharSequence.subsequence()), that omits matching elements at the start or
-     * end of the string, depending on the trimOption and spanCondition. For example:
-     * 
-     * <pre>
-     * {@code
-     * 
-     *   new UnicodeSet("[ab]").trim("abacatbab", TrimOption.LEADING, SpanCondition.SIMPLE)}
-     * </pre>
-     * 
+     * Returns a trimmed sequence (using CharSequence.subsequence()), that omits matching elements
+     * at the start or end of the string, depending on the trimOption and spanCondition. For
+     * example:
+     *
+     * <pre>{@code
+     * new UnicodeSet("[ab]").trim("abacatbab", TrimOption.LEADING, SpanCondition.SIMPLE)
+     * }</pre>
+     *
      * ... returns {@code "catbab"}.
-     * 
-     * @param sequence
-     *            the sequence to trim
-     * @param trimOption
-     *            LEADING, TRAILING, or BOTH
-     * @param spanCondition
-     *            SIMPLE, CONTAINED or NOT_CONTAINED
+     *
+     * @param sequence the sequence to trim
+     * @param trimOption LEADING, TRAILING, or BOTH
+     * @param spanCondition SIMPLE, CONTAINED or NOT_CONTAINED
      * @return a subsequence
-     * 
      * @stable ICU 54
      */
-    public CharSequence trim(CharSequence sequence, TrimOption trimOption, SpanCondition spanCondition) {
+    public CharSequence trim(
+            CharSequence sequence, TrimOption trimOption, SpanCondition spanCondition) {
         int endLeadContained, startTrailContained;
         final int length = sequence.length();
         if (trimOption != TrimOption.TRAILING) {
@@ -418,8 +411,8 @@ public class UnicodeSetSpanner {
         } else {
             startTrailContained = length;
         }
-        return endLeadContained == 0 && startTrailContained == length ? sequence : sequence.subSequence(
-                endLeadContained, startTrailContained);
+        return endLeadContained == 0 && startTrailContained == length
+                ? sequence
+                : sequence.subSequence(endLeadContained, startTrailContained);
     }
-
 }

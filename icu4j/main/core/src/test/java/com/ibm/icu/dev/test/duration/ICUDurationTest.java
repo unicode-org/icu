@@ -8,37 +8,32 @@
  */
 package com.ibm.icu.dev.test.duration;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
+import com.ibm.icu.text.DurationFormat;
+import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.ULocale;
 import java.math.BigDecimal;
 import java.text.FieldPosition;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.MissingResourceException;
-
 import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeConstants.Field;
 import javax.xml.datatype.Duration;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.CoreTestFmwk;
-import com.ibm.icu.text.DurationFormat;
-import com.ibm.icu.util.Calendar;
-import com.ibm.icu.util.ULocale;
-
 /**
  * @author srl
- *
  */
 @RunWith(JUnit4.class)
 public class ICUDurationTest extends CoreTestFmwk {
     /**
-     * Allows us to not depend on javax.xml.datatype.DatatypeFactory.
-     * We need just a tiny subset of the Duration API:
-     * The ICU DurationFormat just extracts the field values,
-     * to convert the Duration into an internal Period type.
+     * Allows us to not depend on javax.xml.datatype.DatatypeFactory. We need just a tiny subset of
+     * the Duration API: The ICU DurationFormat just extracts the field values, to convert the
+     * Duration into an internal Period type.
      */
     private static final class ICUTestDuration extends javax.xml.datatype.Duration {
         private final int sign;
@@ -72,21 +67,31 @@ public class ICUDurationTest extends CoreTestFmwk {
             if (m > 0) {
                 fields.put(DatatypeConstants.MINUTES, m);
             }
-            fields.put(DatatypeConstants.SECONDS, (float)millis / 1000);
+            fields.put(DatatypeConstants.SECONDS, (float) millis / 1000);
         }
 
-        /**
-         * Pass in negative values for fields not to be set.
-         */
+        /** Pass in negative values for fields not to be set. */
         ICUTestDuration(int sgn, int y, int months, int d, int h, int m, float s) {
             sign = sgn;
             fields = new HashMap<Field, Number>();
-            if (y >= 0) { fields.put(DatatypeConstants.YEARS, y); }
-            if (months >= 0) { fields.put(DatatypeConstants.MONTHS, months); }
-            if (d >= 0) { fields.put(DatatypeConstants.DAYS, d); }
-            if (h >= 0) { fields.put(DatatypeConstants.HOURS, h); }
-            if (m >= 0) { fields.put(DatatypeConstants.MINUTES, m); }
-            if (s >= 0) { fields.put(DatatypeConstants.SECONDS, s); }
+            if (y >= 0) {
+                fields.put(DatatypeConstants.YEARS, y);
+            }
+            if (months >= 0) {
+                fields.put(DatatypeConstants.MONTHS, months);
+            }
+            if (d >= 0) {
+                fields.put(DatatypeConstants.DAYS, d);
+            }
+            if (h >= 0) {
+                fields.put(DatatypeConstants.HOURS, h);
+            }
+            if (m >= 0) {
+                fields.put(DatatypeConstants.MINUTES, m);
+            }
+            if (s >= 0) {
+                fields.put(DatatypeConstants.SECONDS, s);
+            }
         }
 
         private ICUTestDuration(int sgn, Map<Field, Number> f) {
@@ -150,28 +155,27 @@ public class ICUDurationTest extends CoreTestFmwk {
             return signString + " fields=" + fields;
         }
     }
+
     private static final ICUTestDuration newDuration(long millis) {
         return new ICUTestDuration(millis);
     }
+
     private static final ICUTestDuration newDuration(int sgn, int d, int h, int m, float s) {
         return new ICUTestDuration(sgn, -1, -1, d, h, m, s);
     }
+
     private static final ICUTestDuration newDuration(int sgn, int h, int m, float s) {
         return new ICUTestDuration(sgn, -1, -1, -1, h, m, s);
     }
+
     private static final ICUTestDuration newDuration(int sgn, float s) {
         return new ICUTestDuration(sgn, -1, -1, -1, -1, -1, s);
     }
 
-    /**
-     *
-     */
-    public ICUDurationTest() {
-    }
+    /** */
+    public ICUDurationTest() {}
 
-    /**
-     * Basic test
-     */
+    /** Basic test */
     @Test
     public void TestBasics() {
         DurationFormat df;
@@ -181,7 +185,7 @@ public class ICUDurationTest extends CoreTestFmwk {
         df = DurationFormat.getInstance(new ULocale("it"));
         formatted = df.formatDurationFromNow(4096);
         expect = "fra quattro secondi";
-        if(!expect.equals(formatted)) {
+        if (!expect.equals(formatted)) {
             errln("Expected " + expect + " but got " + formatted);
         } else {
             logln("format duration -> " + formatted);
@@ -191,23 +195,23 @@ public class ICUDurationTest extends CoreTestFmwk {
         Calendar cal = Calendar.getInstance();
         int years = cal.get(Calendar.YEAR) - 1970; // year of Date(0)
         expect = years + " anni fa";
-        if(!expect.equals(formatted)) {
+        if (!expect.equals(formatted)) {
             errln("Expected " + expect + " but got " + formatted);
         } else {
             logln("format date  -> " + formatted);
         }
 
-        formatted = df.formatDurationFrom(1000*3600*24, new Date(0).getTime());
+        formatted = df.formatDurationFrom(1000 * 3600 * 24, new Date(0).getTime());
         expect = "fra un giorno";
-        if(!expect.equals(formatted)) {
+        if (!expect.equals(formatted)) {
             errln("Expected " + expect + " but got " + formatted);
         } else {
             logln("format date from -> " + formatted);
         }
 
-        formatted = df.format(1000L*3600*24*2);
+        formatted = df.format(1000L * 3600 * 24 * 2);
         expect = "fra due giorni";
-        if(!expect.equals(formatted)) {
+        if (!expect.equals(formatted)) {
             errln("Expected " + expect + " but got " + formatted);
         } else {
             logln("format long obj -> " + formatted);
@@ -223,11 +227,11 @@ public class ICUDurationTest extends CoreTestFmwk {
         String expected2;
 
         // test 1
-        d = newDuration(1, 2, 46, 40);  // "PT2H46M40S"
+        d = newDuration(1, 2, 46, 40); // "PT2H46M40S"
         df = DurationFormat.getInstance(new ULocale("en"));
         expected = "2 hours, 46 minutes, and 40 seconds";
         out = df.format(d);
-        if(out.equals(expected)) {
+        if (out.equals(expected)) {
             logln("out=expected: " + expected + " from " + d);
         } else {
             errln("FAIL: got " + out + " wanted " + expected + " from " + d);
@@ -238,17 +242,17 @@ public class ICUDurationTest extends CoreTestFmwk {
         df = DurationFormat.getInstance(new ULocale("en"));
         expected = "10 seconds";
         out = df.format(d);
-        if(out.equals(expected)) {
+        if (out.equals(expected)) {
             logln("out=expected: " + expected + " from " + d);
         } else {
             errln("FAIL: got " + out + " wanted " + expected + " from " + d);
         }
         // test 3
-        d = newDuration(1, 0, 0, 0, 10);  // "P0DT0H0M10.0S"
+        d = newDuration(1, 0, 0, 0, 10); // "P0DT0H0M10.0S"
         df = DurationFormat.getInstance(new ULocale("en"));
         expected = "10 seconds";
         out = df.format(d);
-        if(out.equals(expected)) {
+        if (out.equals(expected)) {
             logln("out=expected: " + expected + " from " + d);
         } else {
             errln("FAIL: got " + out + " wanted " + expected + " from " + d);
@@ -259,12 +263,12 @@ public class ICUDurationTest extends CoreTestFmwk {
         expected = "1 day, 0 hours, 0 minutes, and 0 seconds";
         expected2 = "1 day and 0 seconds"; // This is the expected result for Windows with IBM JRE6
         out = df.format(d);
-        if(out.equals(expected)) {
+        if (out.equals(expected)) {
             logln("out=expected: " + expected + " from " + d);
         } else {
-            if(out.equals(expected2)){
+            if (out.equals(expected2)) {
                 logln("WARNING: got " + out + " wanted " + expected + " from " + d);
-            } else{
+            } else {
                 errln("FAIL: got " + out + " wanted " + expected + " from " + d);
             }
         }
@@ -289,21 +293,30 @@ public class ICUDurationTest extends CoreTestFmwk {
         }
 
         TestCase cases[] = {
-            new TestCase("en", "PT10.00099S",  newDuration(1, 10.00099F),  "10 seconds"),
-            new TestCase("en", "#10000",       newDuration(10000),         "10 seconds"),
+            new TestCase("en", "PT10.00099S", newDuration(1, 10.00099F), "10 seconds"),
+            new TestCase("en", "#10000", newDuration(10000), "10 seconds"),
             new TestCase("en", "-PT10.00099S", newDuration(-1, 10.00099F), "10 seconds"),
-            new TestCase("en", "#-10000",      newDuration(-10000),        "10 seconds"),
+            new TestCase("en", "#-10000", newDuration(-10000), "10 seconds"),
 
             // from BD req's
-            new TestCase("en", "PT2H46M40S",   newDuration(1, 2, 46, 40),  "2 hours, 46 minutes, and 40 seconds"),
-            new TestCase("it", "PT2H46M40S",   newDuration(1, 2, 46, 40),  "due ore, 46 minuti e 40 secondi"),
+            new TestCase(
+                    "en",
+                    "PT2H46M40S",
+                    newDuration(1, 2, 46, 40),
+                    "2 hours, 46 minutes, and 40 seconds"),
+            new TestCase(
+                    "it",
+                    "PT2H46M40S",
+                    newDuration(1, 2, 46, 40),
+                    "due ore, 46 minuti e 40 secondi"),
 
             // more cases
-            new TestCase("en", "PT10S",        newDuration(1, 10),         "10 seconds"),
-            new TestCase("en", "PT88M70S",     newDuration(1, -1, 88, 70), "88 minutes and 70 seconds"),
-            new TestCase("en", "PT10.100S",    newDuration(1, 10.100F),    "10 seconds and 100 milliseconds"),
-            new TestCase("en", "-PT10S",       newDuration(-1, 10),        "10 seconds"),
-            new TestCase("en", "PT0H5M0S",     newDuration(1, 0, 5, 0),    "5 minutes and 0 seconds")
+            new TestCase("en", "PT10S", newDuration(1, 10), "10 seconds"),
+            new TestCase("en", "PT88M70S", newDuration(1, -1, 88, 70), "88 minutes and 70 seconds"),
+            new TestCase(
+                    "en", "PT10.100S", newDuration(1, 10.100F), "10 seconds and 100 milliseconds"),
+            new TestCase("en", "-PT10S", newDuration(-1, 10), "10 seconds"),
+            new TestCase("en", "PT0H5M0S", newDuration(1, 0, 5, 0), "5 minutes and 0 seconds")
         };
 
         for (TestCase tc : cases) {
@@ -317,14 +330,35 @@ public class ICUDurationTest extends CoreTestFmwk {
             DurationFormat df = DurationFormat.getInstance(locale);
             String output = df.format(d);
 
-            if(output.equals(to)) {
-                logln("SUCCESS: locale: " + loc + ", from " + from + " ["+d.toString()+"] " +" to " + to + "= " + output);
+            if (output.equals(to)) {
+                logln(
+                        "SUCCESS: locale: "
+                                + loc
+                                + ", from "
+                                + from
+                                + " ["
+                                + d.toString()
+                                + "] "
+                                + " to "
+                                + to
+                                + "= "
+                                + output);
             } else {
-                logln("FAIL: locale: " + loc + ", from " + from + " ["+d.toString()+"] " +": expected " + to + " got " + output);
+                logln(
+                        "FAIL: locale: "
+                                + loc
+                                + ", from "
+                                + from
+                                + " ["
+                                + d.toString()
+                                + "] "
+                                + ": expected "
+                                + to
+                                + " got "
+                                + output);
             }
         }
     }
-
 
     @Test
     public void TestBadObjectError() {
@@ -333,16 +367,22 @@ public class ICUDurationTest extends CoreTestFmwk {
         String output = null;
         try {
             output = df.format(r);
-            errln("FAIL: did NOT get IllegalArgumentException! Should have. Formatted Runtime as " + output + " ???");
+            errln(
+                    "FAIL: did NOT get IllegalArgumentException! Should have. Formatted Runtime as "
+                            + output
+                            + " ???");
         } catch (IllegalArgumentException iae) {
-            logln("PASS: expected: Caught iae: " + iae.toString() );
+            logln("PASS: expected: Caught iae: " + iae.toString());
         }
         // try a second time, because it is a different code path for java < 1.5
         try {
             output = df.format(r);
-            errln("FAIL: [#2] did NOT get IllegalArgumentException! Should have. Formatted Runtime as " + output + " ???");
+            errln(
+                    "FAIL: [#2] did NOT get IllegalArgumentException! Should have. Formatted Runtime as "
+                            + output
+                            + " ???");
         } catch (IllegalArgumentException iae) {
-            logln("PASS: [#2] expected: Caught iae: " + iae.toString() );
+            logln("PASS: [#2] expected: Caught iae: " + iae.toString());
         }
     }
 
@@ -353,7 +393,7 @@ public class ICUDurationTest extends CoreTestFmwk {
             df.format(new Date());
             logln("Should have thrown err.");
             errln("failed, should have thrown err.");
-        } catch(MissingResourceException mre) {
+        } catch (MissingResourceException mre) {
             logln("PASS: caught missing resource exception on locale 'und'");
             logln(mre.toString());
         }
@@ -372,29 +412,44 @@ public class ICUDurationTest extends CoreTestFmwk {
      *      DurationFormat
      */
     @Test
-    public void TestDurationFormat(){
+    public void TestDurationFormat() {
         @SuppressWarnings("serial")
         class TestDurationFormat extends DurationFormat {
             @Override
-            public StringBuffer format(Object object, StringBuffer toAppend, FieldPosition pos) {return null;}
-            @Override
-            public String formatDurationFrom(long duration, long referenceDate) {return null;}
-            @Override
-            public String formatDurationFromNow(long duration) {return null;}
-            @Override
-            public String formatDurationFromNowTo(Date targetDate) {return null;}
-            public TestDurationFormat() {super();}
+            public StringBuffer format(Object object, StringBuffer toAppend, FieldPosition pos) {
+                return null;
+            }
 
+            @Override
+            public String formatDurationFrom(long duration, long referenceDate) {
+                return null;
+            }
+
+            @Override
+            public String formatDurationFromNow(long duration) {
+                return null;
+            }
+
+            @Override
+            public String formatDurationFromNowTo(Date targetDate) {
+                return null;
+            }
+
+            public TestDurationFormat() {
+                super();
+            }
         }
 
         // Tests the constructor and the following method
         //      public Object parseObject(String source, ParsePosition pos)
-        try{
+        try {
             TestDurationFormat tdf = new TestDurationFormat();
-            tdf.parseObject("",null);
-            errln("DurationFormat.parseObjet(String,ParsePosition) was " +
-                    "to return an exception for an unsupported operation.");
-        } catch(Exception e){}
+            tdf.parseObject("", null);
+            errln(
+                    "DurationFormat.parseObjet(String,ParsePosition) was "
+                            + "to return an exception for an unsupported operation.");
+        } catch (Exception e) {
+        }
     }
 
     @Test
@@ -403,6 +458,7 @@ public class ICUDurationTest extends CoreTestFmwk {
             ULocale locale;
             int diffInSeconds;
             String expected;
+
             TestCase(ULocale locale, int diffInSeconds, String expected) {
                 this.locale = locale;
                 this.diffInSeconds = diffInSeconds;
@@ -420,8 +476,8 @@ public class ICUDurationTest extends CoreTestFmwk {
             new TestCase(ULocale.ITALY, 10000, "fra due ore"),
         };
 
-        final long delayMS = 10;    // Safe margin - 10 milliseconds
-                                    // See the comments below
+        final long delayMS = 10; // Safe margin - 10 milliseconds
+        // See the comments below
         for (TestCase test : testCases) {
             DurationFormat df = DurationFormat.getInstance(test.locale);
             long target = System.currentTimeMillis() + test.diffInSeconds * 1000;
@@ -430,8 +486,10 @@ public class ICUDurationTest extends CoreTestFmwk {
             target = test.diffInSeconds > 0 ? target + delayMS : target - delayMS;
             Date d = new Date(target);
             String result = df.formatDurationFromNowTo(d);
-            assertEquals("TestFromNowTo (" + test.locale + ", " + test.diffInSeconds + "sec)",
-                    test.expected, result);
+            assertEquals(
+                    "TestFromNowTo (" + test.locale + ", " + test.diffInSeconds + "sec)",
+                    test.expected,
+                    result);
         }
     }
 }

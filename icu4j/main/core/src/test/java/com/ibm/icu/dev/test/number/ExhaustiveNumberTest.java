@@ -4,12 +4,6 @@ package com.ibm.icu.dev.test.number;
 
 import static com.ibm.icu.impl.StaticUnicodeSets.get;
 
-import java.math.BigDecimal;
-import java.util.Random;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.StaticUnicodeSets.Key;
 import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
@@ -22,6 +16,10 @@ import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.NoUnit;
 import com.ibm.icu.util.ULocale;
+import java.math.BigDecimal;
+import java.util.Random;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * Tests that are disabled except in exhaustive mode due to runtime.
@@ -40,15 +38,17 @@ public class ExhaustiveNumberTest extends CoreTestFmwk {
     public void testSetCoverage() {
         // Lenient comma/period should be supersets of strict comma/period;
         // it also makes the coverage logic cheaper.
-        assertTrue("COMMA should be superset of STRICT_COMMA",
+        assertTrue(
+                "COMMA should be superset of STRICT_COMMA",
                 get(Key.COMMA).containsAll(get(Key.STRICT_COMMA)));
-        assertTrue("PERIOD should be superset of STRICT_PERIOD",
+        assertTrue(
+                "PERIOD should be superset of STRICT_PERIOD",
                 get(Key.PERIOD).containsAll(get(Key.STRICT_PERIOD)));
 
-        UnicodeSet decimals = get(Key.STRICT_COMMA).cloneAsThawed().addAll(get(Key.STRICT_PERIOD))
-                .freeze();
-        UnicodeSet grouping = decimals.cloneAsThawed().addAll(get(Key.OTHER_GROUPING_SEPARATORS))
-                .freeze();
+        UnicodeSet decimals =
+                get(Key.STRICT_COMMA).cloneAsThawed().addAll(get(Key.STRICT_PERIOD)).freeze();
+        UnicodeSet grouping =
+                decimals.cloneAsThawed().addAll(get(Key.OTHER_GROUPING_SEPARATORS)).freeze();
         UnicodeSet plusSign = get(Key.PLUS_SIGN);
         UnicodeSet minusSign = get(Key.MINUS_SIGN);
         UnicodeSet percent = get(Key.PERCENT_SIGN);
@@ -58,10 +58,14 @@ public class ExhaustiveNumberTest extends CoreTestFmwk {
         for (ULocale locale : ULocale.getAvailableLocales()) {
             DecimalFormatSymbols dfs = DecimalFormatSymbols.getInstance(locale);
 
-            if (!locale.getBaseName().startsWith("ks_Deva") || !logKnownIssue("22099", "locale-specific parse sets not supported")) {
+            if (!locale.getBaseName().startsWith("ks_Deva")
+                    || !logKnownIssue("22099", "locale-specific parse sets not supported")) {
                 assertInSet(locale, decimals, dfs.getDecimalSeparatorString());
             }
-            if (!locale.getBaseName().startsWith("nqo") || !logKnownIssue("CLDR-17023", "Number symbols and/or parseLenients messed up for N’Ko")) {
+            if (!locale.getBaseName().startsWith("nqo")
+                    || !logKnownIssue(
+                            "CLDR-17023",
+                            "Number symbols and/or parseLenients messed up for N’Ko")) {
                 assertInSet(locale, grouping, dfs.getGroupingSeparatorString());
             }
             assertInSet(locale, plusSign, dfs.getPlusSignString());
@@ -98,8 +102,10 @@ public class ExhaustiveNumberTest extends CoreTestFmwk {
     public void test20417_PercentParity() {
         UnlocalizedNumberFormatter uNoUnitPercent = NumberFormatter.with().unit(NoUnit.PERCENT);
         UnlocalizedNumberFormatter uNoUnitPermille = NumberFormatter.with().unit(NoUnit.PERMILLE);
-        UnlocalizedNumberFormatter uMeasurePercent = NumberFormatter.with().unit(MeasureUnit.PERCENT);
-        UnlocalizedNumberFormatter uMeasurePermille = NumberFormatter.with().unit(MeasureUnit.PERMILLE);
+        UnlocalizedNumberFormatter uMeasurePercent =
+                NumberFormatter.with().unit(MeasureUnit.PERCENT);
+        UnlocalizedNumberFormatter uMeasurePermille =
+                NumberFormatter.with().unit(MeasureUnit.PERMILLE);
 
         for (ULocale locale : ULocale.getAvailableLocales()) {
             String sNoUnitPercent = uNoUnitPercent.locale(locale).format(50).toString();
@@ -117,8 +123,11 @@ public class ExhaustiveNumberTest extends CoreTestFmwk {
         BigDecimal ten10000 = BigDecimal.valueOf(10).pow(10000);
         BigDecimal longFraction = ten10000.subtract(BigDecimal.ONE).divide(ten10000);
         String expected = longFraction.toPlainString();
-        String actual = NumberFormatter.withLocale(ULocale.ENGLISH).precision(Precision.unlimited())
-                .format(longFraction).toString();
+        String actual =
+                NumberFormatter.withLocale(ULocale.ENGLISH)
+                        .precision(Precision.unlimited())
+                        .format(longFraction)
+                        .toString();
         assertEquals("All digits should be displayed", expected, actual);
     }
 
@@ -126,40 +135,42 @@ public class ExhaustiveNumberTest extends CoreTestFmwk {
     public void testConvertToAccurateDouble() {
         // based on https://github.com/google/double-conversion/issues/28
         double[] hardDoubles = {
-                1651087494906221570.0,
-                2.207817077636718750000000000000,
-                1.818351745605468750000000000000,
-                3.941719055175781250000000000000,
-                3.738609313964843750000000000000,
-                3.967735290527343750000000000000,
-                1.328025817871093750000000000000,
-                3.920967102050781250000000000000,
-                1.015235900878906250000000000000,
-                1.335227966308593750000000000000,
-                1.344520568847656250000000000000,
-                2.879127502441406250000000000000,
-                3.695838928222656250000000000000,
-                1.845344543457031250000000000000,
-                3.793952941894531250000000000000,
-                3.211402893066406250000000000000,
-                2.565971374511718750000000000000,
-                0.965156555175781250000000000000,
-                2.700004577636718750000000000000,
-                0.767097473144531250000000000000,
-                1.780448913574218750000000000000,
-                2.624839782714843750000000000000,
-                1.305290222167968750000000000000,
-                3.834922790527343750000000000000, };
+            1651087494906221570.0,
+            2.207817077636718750000000000000,
+            1.818351745605468750000000000000,
+            3.941719055175781250000000000000,
+            3.738609313964843750000000000000,
+            3.967735290527343750000000000000,
+            1.328025817871093750000000000000,
+            3.920967102050781250000000000000,
+            1.015235900878906250000000000000,
+            1.335227966308593750000000000000,
+            1.344520568847656250000000000000,
+            2.879127502441406250000000000000,
+            3.695838928222656250000000000000,
+            1.845344543457031250000000000000,
+            3.793952941894531250000000000000,
+            3.211402893066406250000000000000,
+            2.565971374511718750000000000000,
+            0.965156555175781250000000000000,
+            2.700004577636718750000000000000,
+            0.767097473144531250000000000000,
+            1.780448913574218750000000000000,
+            2.624839782714843750000000000000,
+            1.305290222167968750000000000000,
+            3.834922790527343750000000000000,
+        };
 
         double[] exactDoubles = {
-                51423,
-                51423e10,
-                -5074790912492772E-327,
-                83602530019752571E-327,
-                4.503599627370496E15,
-                6.789512076111555E15,
-                9.007199254740991E15,
-                9.007199254740992E15 };
+            51423,
+            51423e10,
+            -5074790912492772E-327,
+            83602530019752571E-327,
+            4.503599627370496E15,
+            6.789512076111555E15,
+            9.007199254740991E15,
+            9.007199254740992E15
+        };
 
         for (double d : hardDoubles) {
             checkDoubleBehavior(d, true, "");
@@ -169,13 +180,16 @@ public class ExhaustiveNumberTest extends CoreTestFmwk {
             checkDoubleBehavior(d, false, "");
         }
 
-        assertEquals("NaN check failed",
+        assertEquals(
+                "NaN check failed",
                 Double.NaN,
                 new DecimalQuantity_DualStorageBCD(Double.NaN).toDouble());
-        assertEquals("Inf check failed",
+        assertEquals(
+                "Inf check failed",
                 Double.POSITIVE_INFINITY,
                 new DecimalQuantity_DualStorageBCD(Double.POSITIVE_INFINITY).toDouble());
-        assertEquals("-Inf check failed",
+        assertEquals(
+                "-Inf check failed",
                 Double.NEGATIVE_INFINITY,
                 new DecimalQuantity_DualStorageBCD(Double.NEGATIVE_INFINITY).toDouble());
 
@@ -184,8 +198,7 @@ public class ExhaustiveNumberTest extends CoreTestFmwk {
         Random rnd = new Random();
         for (int i = 0; i < 100000; i++) {
             double d = Double.longBitsToDouble(rnd.nextLong());
-            if (Double.isNaN(d) || Double.isInfinite(d))
-                continue;
+            if (Double.isNaN(d) || Double.isInfinite(d)) continue;
             checkDoubleBehavior(d, false, alert);
         }
     }
@@ -199,9 +212,10 @@ public class ExhaustiveNumberTest extends CoreTestFmwk {
         if (explicitRequired) {
             assertTrue(alert + "Should not be using approximate double", fq.explicitExactDouble);
         }
-        DecimalQuantityTest
-                .assertDoubleEquals(alert + "After conversion to exact BCD (double)", d, fq.toDouble());
-        DecimalQuantityTest.assertBigDecimalEquals(alert + "After conversion to exact BCD (BigDecimal)",
+        DecimalQuantityTest.assertDoubleEquals(
+                alert + "After conversion to exact BCD (double)", d, fq.toDouble());
+        DecimalQuantityTest.assertBigDecimalEquals(
+                alert + "After conversion to exact BCD (BigDecimal)",
                 new BigDecimal(Double.toString(d)),
                 fq.toBigDecimal());
     }

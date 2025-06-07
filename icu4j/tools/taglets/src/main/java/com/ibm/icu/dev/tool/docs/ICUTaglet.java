@@ -1,26 +1,21 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /**
- *******************************************************************************
- * Copyright (C) 2002-2016 International Business Machines Corporation         *
- * and others. All Rights Reserved.                                            *
- *******************************************************************************
+ * ****************************************************************************** Copyright (C)
+ * 2002-2016 International Business Machines Corporation * and others. All Rights Reserved. *
+ * ******************************************************************************
  */
-
 package com.ibm.icu.dev.tool.docs;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.lang.model.element.Element;
 
 import com.sun.source.doctree.DocTree;
 import com.sun.source.doctree.TextTree;
 import com.sun.source.doctree.UnknownBlockTagTree;
 import com.sun.source.doctree.UnknownInlineTagTree;
 import com.sun.source.util.SimpleDocTreeVisitor;
-
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import javax.lang.model.element.Element;
 import jdk.javadoc.doclet.Taglet;
 
 public abstract class ICUTaglet implements Taglet {
@@ -74,27 +69,29 @@ public abstract class ICUTaglet implements Taglet {
     }
 
     static String getText(DocTree dt, Element element) {
-        return dt.accept(new SimpleDocTreeVisitor<String, Void>() {
-            @Override
-            public String visitUnknownBlockTag(UnknownBlockTagTree node, Void p) {
-                for (DocTree dt : node.getContent()) {
-                    return dt.accept(this, null);
-                }
-                return "";
-            }
+        return dt.accept(
+                new SimpleDocTreeVisitor<String, Void>() {
+                    @Override
+                    public String visitUnknownBlockTag(UnknownBlockTagTree node, Void p) {
+                        for (DocTree dt : node.getContent()) {
+                            return dt.accept(this, null);
+                        }
+                        return "";
+                    }
 
-            @Override
-            public String visitUnknownInlineTag(UnknownInlineTagTree node, Void p) {
-                for (DocTree dt : node.getContent()) {
-                    return dt.accept(this, null);
-                }
-                return "";
-            }
+                    @Override
+                    public String visitUnknownInlineTag(UnknownInlineTagTree node, Void p) {
+                        for (DocTree dt : node.getContent()) {
+                            return dt.accept(this, null);
+                        }
+                        return "";
+                    }
 
-            @Override
-            public String visitText(TextTree node, Void p) {
-                return node.getBody();
-            }
-        }, null);
+                    @Override
+                    public String visitText(TextTree node, Void p) {
+                        return node.getBody();
+                    }
+                },
+                null);
     }
 }

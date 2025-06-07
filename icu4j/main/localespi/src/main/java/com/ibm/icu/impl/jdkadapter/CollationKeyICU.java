@@ -11,8 +11,8 @@ package com.ibm.icu.impl.jdkadapter;
 import com.ibm.icu.text.CollationKey;
 
 /**
- * CollationKeyICU is an adapter class which wraps ICU4J CollationKey and
- * implements java.text.CollationKey APIs.
+ * CollationKeyICU is an adapter class which wraps ICU4J CollationKey and implements
+ * java.text.CollationKey APIs.
  */
 public class CollationKeyICU extends java.text.CollationKey {
 
@@ -34,7 +34,7 @@ public class CollationKeyICU extends java.text.CollationKey {
     @Override
     public int compareTo(java.text.CollationKey target) {
         if (target instanceof CollationKeyICU) {
-            return fIcuCollKey.compareTo(((CollationKeyICU)target).fIcuCollKey);
+            return fIcuCollKey.compareTo(((CollationKeyICU) target).fIcuCollKey);
         }
         return 0;
     }
@@ -52,7 +52,7 @@ public class CollationKeyICU extends java.text.CollationKey {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof CollationKeyICU) {
-            return ((CollationKeyICU)obj).fIcuCollKey.equals(fIcuCollKey);
+            return ((CollationKeyICU) obj).fIcuCollKey.equals(fIcuCollKey);
         }
         return false;
     }

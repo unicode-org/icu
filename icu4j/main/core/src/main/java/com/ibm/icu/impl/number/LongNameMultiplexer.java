@@ -2,27 +2,25 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.number;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.ibm.icu.number.NumberFormatter;
 import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.ULocale;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * A MicroPropsGenerator that multiplexes between different LongNameHandlers,
- * depending on the outputUnit.
+ * A MicroPropsGenerator that multiplexes between different LongNameHandlers, depending on the
+ * outputUnit.
  *
- * See processQuantity() for the input requirements.
+ * <p>See processQuantity() for the input requirements.
  */
 public class LongNameMultiplexer implements MicroPropsGenerator {
     /**
-     * LongNameMultiplexer calls the parent MicroPropsGenerator itself,
-     * receiving the MicroProps instance in use for this formatting pipeline.
-     * Next it multiplexes between name handlers (fHandlers) which are not given
-     * access to a parent. Consequently LongNameMultiplexer must give these
-     * handlers the MicroProps instance.
+     * LongNameMultiplexer calls the parent MicroPropsGenerator itself, receiving the MicroProps
+     * instance in use for this formatting pipeline. Next it multiplexes between name handlers
+     * (fHandlers) which are not given access to a parent. Consequently LongNameMultiplexer must
+     * give these handlers the MicroProps instance.
      */
     public static interface ParentlessMicroPropsGenerator {
         public MicroProps processQuantityWithMicros(DecimalQuantity quantity, MicroProps micros);
@@ -42,12 +40,13 @@ public class LongNameMultiplexer implements MicroPropsGenerator {
 
     // Produces a multiplexer for LongNameHandlers, one for each unit in
     // `units`. An individual unit might be a mixed unit.
-    public static LongNameMultiplexer forMeasureUnits(ULocale locale,
-                                                      List<MeasureUnit> units,
-                                                      NumberFormatter.UnitWidth width,
-                                                      String unitDisplayCase,
-                                                      PluralRules rules,
-                                                      MicroPropsGenerator parent) {
+    public static LongNameMultiplexer forMeasureUnits(
+            ULocale locale,
+            List<MeasureUnit> units,
+            NumberFormatter.UnitWidth width,
+            String unitDisplayCase,
+            PluralRules rules,
+            MicroPropsGenerator parent) {
         LongNameMultiplexer result = new LongNameMultiplexer(parent);
 
         assert (units.size() > 0);
@@ -55,16 +54,18 @@ public class LongNameMultiplexer implements MicroPropsGenerator {
         result.fMeasureUnits = new ArrayList<>();
         result.fHandlers = new ArrayList<>();
 
-
         for (int i = 0; i < units.size(); i++) {
             MeasureUnit unit = units.get(i);
             result.fMeasureUnits.add(unit);
             if (unit.getComplexity() == MeasureUnit.Complexity.MIXED) {
-                MixedUnitLongNameHandler mlnh = MixedUnitLongNameHandler
-                        .forMeasureUnit(locale, unit, width, unitDisplayCase, rules, null);
+                MixedUnitLongNameHandler mlnh =
+                        MixedUnitLongNameHandler.forMeasureUnit(
+                                locale, unit, width, unitDisplayCase, rules, null);
                 result.fHandlers.add(mlnh);
             } else {
-                LongNameHandler lnh = LongNameHandler.forMeasureUnit(locale, unit, width, unitDisplayCase, rules, null);
+                LongNameHandler lnh =
+                        LongNameHandler.forMeasureUnit(
+                                locale, unit, width, unitDisplayCase, rules, null);
                 result.fHandlers.add(lnh);
             }
         }
@@ -88,7 +89,7 @@ public class LongNameMultiplexer implements MicroPropsGenerator {
                 return handler.processQuantityWithMicros(quantity, micros);
             }
         }
-        throw new AssertionError
-                (" We shouldn't receive any outputUnit for which we haven't already got a LongNameHandler");
+        throw new AssertionError(
+                " We shouldn't receive any outputUnit for which we haven't already got a LongNameHandler");
     }
 }

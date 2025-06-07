@@ -14,39 +14,29 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 
-
 /**
  * @author aheninger
- * 
- * A read-only Trie2, holding 16 bit data values.
- * 
- * A Trie2 is a highly optimized data structure for mapping from Unicode
- * code points (values ranging from 0 to 0x10ffff) to a 16 or 32 bit value.
- *
- * See class Trie2 for descriptions of the API for accessing the contents of a trie.
- * 
- * The fundamental data access methods are declared final in this class, with
- * the intent that applications might gain a little extra performance, when compared
- * with calling the same methods via the abstract UTrie2 base class.
+ *     <p>A read-only Trie2, holding 16 bit data values.
+ *     <p>A Trie2 is a highly optimized data structure for mapping from Unicode code points (values
+ *     ranging from 0 to 0x10ffff) to a 16 or 32 bit value.
+ *     <p>See class Trie2 for descriptions of the API for accessing the contents of a trie.
+ *     <p>The fundamental data access methods are declared final in this class, with the intent that
+ *     applications might gain a little extra performance, when compared with calling the same
+ *     methods via the abstract UTrie2 base class.
  */
 public final class Trie2_16 extends Trie2 {
-    
-    
+
+    /** Internal constructor, not for general use. */
+    Trie2_16() {}
+
     /**
-     *  Internal constructor, not for general use.
-     */
-    Trie2_16() {        
-    }
-    
-    
-    /**
-     * Create a Trie2 from its serialized form.  Inverse of utrie2_serialize().
-     * The serialized format is identical between ICU4C and ICU4J, so this function
-     * will work with serialized Trie2s from either.
+     * Create a Trie2 from its serialized form. Inverse of utrie2_serialize(). The serialized format
+     * is identical between ICU4C and ICU4J, so this function will work with serialized Trie2s from
+     * either.
      *
-     * The serialized Trie2 in the bytes may be in either little or big endian byte order.
-     * This allows using serialized Tries from ICU4C without needing to consider the
-     * byte order of the system that created them.
+     * <p>The serialized Trie2 in the bytes may be in either little or big endian byte order. This
+     * allows using serialized Tries from ICU4C without needing to consider the byte order of the
+     * system that created them.
      *
      * @param bytes a byte buffer to the serialized form of a UTrie2.
      * @return An unserialized Trie2_16, ready for use.
@@ -54,7 +44,7 @@ public final class Trie2_16 extends Trie2 {
      * @throws IOException if a read error occurs in the buffer.
      * @throws ClassCastException if the bytes contain a serialized Trie2_32
      */
-    public static Trie2_16  createFromSerialized(ByteBuffer bytes) throws IOException {
+    public static Trie2_16 createFromSerialized(ByteBuffer bytes) throws IOException {
         return (Trie2_16) Trie2.createFromSerialized(bytes);
     }
 
@@ -68,7 +58,7 @@ public final class Trie2_16 extends Trie2 {
     public final int get(int codePoint) {
         int value;
         int ix;
-        
+
         if (codePoint >= 0) {
             if (codePoint < 0x0d800 || (codePoint > 0x0dbff && codePoint <= 0x0ffff)) {
                 // Ordinary BMP code point, excluding leading surrogates.
@@ -78,7 +68,7 @@ public final class Trie2_16 extends Trie2 {
                 ix = (ix << UTRIE2_INDEX_SHIFT) + (codePoint & UTRIE2_DATA_MASK);
                 value = index[ix];
                 return value;
-            } 
+            }
             if (codePoint <= 0xffff) {
                 // Lead Surrogate Code Point.  A Separate index section is stored for
                 // lead surrogate code units and code points.
@@ -93,7 +83,9 @@ public final class Trie2_16 extends Trie2 {
             }
             if (codePoint < highStart) {
                 // Supplemental code point, use two-level lookup.
-                ix = (UTRIE2_INDEX_1_OFFSET - UTRIE2_OMITTED_BMP_INDEX_1_LENGTH) + (codePoint >> UTRIE2_SHIFT_1);
+                ix =
+                        (UTRIE2_INDEX_1_OFFSET - UTRIE2_OMITTED_BMP_INDEX_1_LENGTH)
+                                + (codePoint >> UTRIE2_SHIFT_1);
                 ix = index[ix];
                 ix += (codePoint >> UTRIE2_SHIFT_2) & UTRIE2_INDEX_2_MASK;
                 ix = index[ix];
@@ -106,22 +98,20 @@ public final class Trie2_16 extends Trie2 {
                 return value;
             }
         }
-        
+
         // Fall through.  The code point is outside of the legal range of 0..0x10ffff.
         return errorValue;
     }
 
-    
     /**
      * Get a Trie2 value for a UTF-16 code unit.
-     * 
-     * This function returns the same value as get() if the input 
-     * character is outside of the lead surrogate range
-     * 
-     * There are two values stored in a Trie2 for inputs in the lead
-     * surrogate range.  This function returns the alternate value,
-     * while Trie2.get() returns the main value.
-     * 
+     *
+     * <p>This function returns the same value as get() if the input character is outside of the
+     * lead surrogate range
+     *
+     * <p>There are two values stored in a Trie2 for inputs in the lead surrogate range. This
+     * function returns the alternate value, while Trie2.get() returns the main value.
+     *
      * @param codeUnit a 16 bit code unit or lead surrogate value.
      * @return the value
      */
@@ -137,28 +127,26 @@ public final class Trie2_16 extends Trie2 {
         value = index[ix];
         return value;
     }
-    
-    
+
     /**
      * Serialize a Trie2_16 onto an OutputStream.
-     * 
-     * A Trie2 can be serialized multiple times.
-     * The serialized data is compatible with ICU4C UTrie2 serialization.
-     * Trie2 serialization is unrelated to Java object serialization.
-     *  
+     *
+     * <p>A Trie2 can be serialized multiple times. The serialized data is compatible with ICU4C
+     * UTrie2 serialization. Trie2 serialization is unrelated to Java object serialization.
+     *
      * @param os the stream to which the serialized Trie2 data will be written.
      * @return the number of bytes written.
      * @throw IOException on an error writing to the OutputStream.
      */
     public int serialize(OutputStream os) throws IOException {
         DataOutputStream dos = new DataOutputStream(os);
-        int  bytesWritten = 0;
-        
-        bytesWritten += serializeHeader(dos);        
-        for (int i=0; i<dataLength; i++) {
-            dos.writeChar(index[data16+i]);
+        int bytesWritten = 0;
+
+        bytesWritten += serializeHeader(dos);
+        for (int i = 0; i < dataLength; i++) {
+            dos.writeChar(index[data16 + i]);
         }
-        bytesWritten += dataLength*2;        
+        bytesWritten += dataLength * 2;
         return bytesWritten;
     }
 
@@ -166,31 +154,31 @@ public final class Trie2_16 extends Trie2 {
      * @return the number of bytes of the serialized trie
      */
     public int getSerializedLength() {
-        return 16+(header.indexLength+dataLength)*2;
+        return 16 + (header.indexLength + dataLength) * 2;
     }
 
     /**
-     * Given a starting code point, find the last in a range of code points,
-     * all with the same value.
-     * 
-     * This function is part of the implementation of iterating over the
-     * Trie2's contents.
+     * Given a starting code point, find the last in a range of code points, all with the same
+     * value.
+     *
+     * <p>This function is part of the implementation of iterating over the Trie2's contents.
+     *
      * @param startingCP The code point at which to begin looking.
      * @return The last code point with the same value as the starting code point.
      */
     @Override
     int rangeEnd(int startingCP, int limit, int value) {
-        int   cp = startingCP;
-        int   block = 0;
-        int   index2Block = 0;
-        
+        int cp = startingCP;
+        int block = 0;
+        int index2Block = 0;
+
         // Loop runs once for each of
         //   - a partial data block
         //   - a reference to the null (default) data block.
         //   - a reference to the index2 null block
-        
-      outerLoop:
-        for (;;) {
+
+        outerLoop:
+        for (; ; ) {
             if (cp >= limit) {
                 break;
             }
@@ -199,24 +187,30 @@ public final class Trie2_16 extends Trie2 {
                 // BMP uses a single level lookup.  BMP index starts at offset 0 in the Trie2 index.
                 // 16 bit data is stored in the index array itself.
                 index2Block = 0;
-                block       = index[cp >> UTRIE2_SHIFT_2] << UTRIE2_INDEX_SHIFT;
+                block = index[cp >> UTRIE2_SHIFT_2] << UTRIE2_INDEX_SHIFT;
             } else if (cp < 0xffff) {
                 // Lead Surrogate Code Point, 0xd800 <= cp < 0xdc00
                 index2Block = UTRIE2_LSCP_INDEX_2_OFFSET;
-                block       = index[index2Block + ((cp - 0xd800) >> UTRIE2_SHIFT_2)] << UTRIE2_INDEX_SHIFT;
+                block =
+                        index[index2Block + ((cp - 0xd800) >> UTRIE2_SHIFT_2)]
+                                << UTRIE2_INDEX_SHIFT;
             } else if (cp < highStart) {
                 // Supplemental code point, use two-level lookup.
-                int ix = (UTRIE2_INDEX_1_OFFSET - UTRIE2_OMITTED_BMP_INDEX_1_LENGTH) + (cp >> UTRIE2_SHIFT_1);
+                int ix =
+                        (UTRIE2_INDEX_1_OFFSET - UTRIE2_OMITTED_BMP_INDEX_1_LENGTH)
+                                + (cp >> UTRIE2_SHIFT_1);
                 index2Block = index[ix];
-                block = index[index2Block + ((cp >> UTRIE2_SHIFT_2) & UTRIE2_INDEX_2_MASK)] << UTRIE2_INDEX_SHIFT;
-            } else  {
+                block =
+                        index[index2Block + ((cp >> UTRIE2_SHIFT_2) & UTRIE2_INDEX_2_MASK)]
+                                << UTRIE2_INDEX_SHIFT;
+            } else {
                 // Code point above highStart.
                 if (value == index[highValueIndex]) {
                     cp = limit;
                 }
                 break;
-            } 
-            
+            }
+
             if (index2Block == index2NullOffset) {
                 if (value != initialValue) {
                     break;
@@ -236,7 +230,7 @@ public final class Trie2_16 extends Trie2 {
                 // Walk over the data entries, checking the values.
                 int startIx = block + (cp & UTRIE2_DATA_MASK);
                 int limitIx = block + UTRIE2_DATA_BLOCK_LENGTH;
-                for (int ix = startIx; ix<limitIx; ix++) {
+                for (int ix = startIx; ix < limitIx; ix++) {
                     if (index[ix] != value) {
                         // We came to an entry with a different value.
                         //   We are done.
@@ -252,7 +246,7 @@ public final class Trie2_16 extends Trie2 {
         if (cp > limit) {
             cp = limit;
         }
-    
+
         return cp - 1;
     }
 }

@@ -2,6 +2,11 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.dev.test.util;
 
+import com.ibm.icu.dev.test.AbstractTestLog;
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.impl.locale.XCldrStub.FileUtilities;
+import com.ibm.icu.impl.locale.XCldrStub.Splitter;
+import com.ibm.icu.util.ICUUncheckedIOException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -9,13 +14,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import com.ibm.icu.dev.test.AbstractTestLog;
-import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.impl.locale.XCldrStub.FileUtilities;
-import com.ibm.icu.impl.locale.XCldrStub.Splitter;
-import com.ibm.icu.util.ICUUncheckedIOException;
-
-abstract public class DataDrivenTestHelper {
+public abstract class DataDrivenTestHelper {
 
     public static final List<String> DEBUG_LINE = Collections.singletonList("@debug");
     public static final Splitter SEMICOLON = Splitter.on(';').trimResults();
@@ -39,7 +38,7 @@ abstract public class DataDrivenTestHelper {
                 List<String> components = lines.get(i);
                 String comment = comments.get(i);
                 if (components.isEmpty()) {
-                    if(!comment.isEmpty()) {
+                    if (!comment.isEmpty()) {
                         out.append("# ").append(comment);
                     }
                 } else {
@@ -65,8 +64,7 @@ abstract public class DataDrivenTestHelper {
     }
 
     public DataDrivenTestHelper run(Class<?> classFileIsRelativeTo, String file) {
-        return load(classFileIsRelativeTo, file)
-            .test();
+        return load(classFileIsRelativeTo, file).test();
     }
 
     public boolean isTestLine(List<String> arguments) {
@@ -97,7 +95,8 @@ abstract public class DataDrivenTestHelper {
                 handle(i, breakpoint, comment, arguments);
             } catch (Exception e) {
                 e.printStackTrace();
-                AbstractTestLog.errln("Illegal data test file entry (" + i + "): " + arguments + " # " + comment);
+                AbstractTestLog.errln(
+                        "Illegal data test file entry (" + i + "): " + arguments + " # " + comment);
             }
             breakpoint = false;
         }
@@ -108,7 +107,7 @@ abstract public class DataDrivenTestHelper {
         BufferedReader in = null;
         try {
             in = FileUtilities.openFile(classFileIsRelativeTo, file);
-            //boolean breakpoint = false;
+            // boolean breakpoint = false;
 
             while (true) {
                 String line = in.readLine();
@@ -124,8 +123,8 @@ abstract public class DataDrivenTestHelper {
                 String comment = "";
                 String commentBase = "";
                 if (hash >= 0) {
-                    commentBase = line.substring(hash+1).trim();
-                    line = line.substring(0,hash).trim();
+                    commentBase = line.substring(hash + 1).trim();
+                    line = line.substring(0, hash).trim();
                     comment = "# " + commentBase;
                     if (!line.isEmpty()) {
                         comment = "\t" + comment;
@@ -164,17 +163,27 @@ abstract public class DataDrivenTestHelper {
     }
 
     protected boolean assertEquals(String message, Object expected, Object actual) {
-        return TestFmwk.handleAssert(Objects.equals(expected, actual), message, stringFor(expected), stringFor(actual), null, false);
+        return TestFmwk.handleAssert(
+                Objects.equals(expected, actual),
+                message,
+                stringFor(expected),
+                stringFor(actual),
+                null,
+                false);
     }
 
     private final String stringFor(Object obj) {
-        return obj == null ? "null"
-            : obj instanceof String ? "\"" + obj + '"'
-                : obj instanceof Number ? String.valueOf(obj)
-                    : obj.getClass().getName() + "<" + obj + ">";
+        return obj == null
+                ? "null"
+                : obj instanceof String
+                        ? "\"" + obj + '"'
+                        : obj instanceof Number
+                                ? String.valueOf(obj)
+                                : obj.getClass().getName() + "<" + obj + ">";
     }
 
-    abstract public void handle(int lineNumber, boolean breakpoint, String commentBase, List<String> arguments);
+    public abstract void handle(
+            int lineNumber, boolean breakpoint, String commentBase, List<String> arguments);
 
     public void handleParams(String comment, List<String> arguments) {
         throw new IllegalArgumentException("Unrecognized parameter: " + arguments);

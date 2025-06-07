@@ -13,11 +13,12 @@ import java.util.ListResourceBundle;
 
 public class HolidayBundle_iw extends ListResourceBundle {
 
-    static private final Object[][] fContents = {
-        {   "", ""  },      // Can't be empty!
+    private static final Object[][] fContents = {
+        {"", ""}, // Can't be empty!
     };
 
     @Override
-    public synchronized Object[][] getContents() { return fContents; }
-
+    public synchronized Object[][] getContents() {
+        return fContents;
+    }
 }

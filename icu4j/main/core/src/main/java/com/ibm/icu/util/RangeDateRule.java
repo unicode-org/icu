@@ -14,26 +14,26 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * <b>Note:</b> The Holiday framework is a technology preview.
- * Despite its age, is still draft API, and clients should treat it as such.
+ * <b>Note:</b> The Holiday framework is a technology preview. Despite its age, is still draft API,
+ * and clients should treat it as such.
  *
- * Implementation of DateRule that takes a range.
+ * <p>Implementation of DateRule that takes a range.
+ *
  * @draft ICU 2.8 (retainAll)
  */
 public class RangeDateRule implements DateRule {
     /**
      * @draft ICU 2.8
      */
-    public RangeDateRule() {
-    }
+    public RangeDateRule() {}
 
     // Range is a package-private class so this should be package-private too, probably
-//    public RangeDateRule(Range[] ranges)
-//    {
-//        for (int i = 0; i < ranges.length; i++) {
-//            this.ranges.addElement(ranges[i]);
-//        }
-//    }
+    //    public RangeDateRule(Range[] ranges)
+    //    {
+    //        for (int i = 0; i < ranges.length; i++) {
+    //            this.ranges.addElement(ranges[i]);
+    //        }
+    //    }
 
     /**
      * @draft ICU 2.8
@@ -51,7 +51,7 @@ public class RangeDateRule implements DateRule {
         ranges.add(new Range(start, rule));
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
 
     /**
      * @draft ICU 2.8
@@ -66,10 +66,9 @@ public class RangeDateRule implements DateRule {
         Date result = null;
 
         Range r = rangeAt(index);
-        Range e = rangeAt(index+1);
+        Range e = rangeAt(index + 1);
 
-        if (r != null && r.rule != null)
-        {
+        if (r != null && r.rule != null) {
             if (e != null) {
                 result = r.rule.firstBetween(start, e.start);
             } else {
@@ -94,14 +93,12 @@ public class RangeDateRule implements DateRule {
 
         Range next = rangeAt(index);
 
-        while (result == null && next != null && !next.start.after(end))
-        {
+        while (result == null && next != null && !next.start.after(end)) {
             Range r = next;
-            next = rangeAt(index+1);
+            next = rangeAt(index + 1);
 
             if (r.rule != null) {
-                Date e = (next != null && !next.start.after(end)) ? next.start
-                                                                  : end;
+                Date e = (next != null && !next.start.after(end)) ? next.start : end;
                 result = r.rule.firstBetween(start, e);
             }
         }
@@ -118,13 +115,13 @@ public class RangeDateRule implements DateRule {
     }
 
     /**
-     * Check whether this event occurs at least once between the two
-     * dates given.
+     * Check whether this event occurs at least once between the two dates given.
+     *
      * @draft ICU 2.8
      */
     @Override
     public boolean isBetween(Date start, Date end) {
-        return firstBetween(start,end) == null;
+        return firstBetween(start, end) == null;
     }
 
     /*
@@ -145,14 +142,13 @@ public class RangeDateRule implements DateRule {
     }
 
     private Range rangeAt(int index) {
-       return (index < ranges.size()) ? ranges.get(index)
-                                      : null;
+        return (index < ranges.size()) ? ranges.get(index) : null;
     }
 
     List<Range> ranges = new ArrayList<>(2);
 }
 
-//-----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // Privates
 //
 
@@ -161,7 +157,7 @@ class Range {
         this.start = start;
         this.rule = rule;
     }
-    public Date     start;
+
+    public Date start;
     public DateRule rule;
 }
-

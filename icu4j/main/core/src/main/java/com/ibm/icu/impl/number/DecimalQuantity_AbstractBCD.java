@@ -2,18 +2,17 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.number;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.math.MathContext;
-import java.text.FieldPosition;
-import java.util.Objects;
-
 import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.number.Modifier.Signum;
 import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.text.PluralRules.Operand;
 import com.ibm.icu.text.UFieldPosition;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.MathContext;
+import java.text.FieldPosition;
+import java.util.Objects;
 
 /**
  * Represents numbers and digit display properties using Binary Coded Decimal (BCD).
@@ -23,12 +22,11 @@ import com.ibm.icu.text.UFieldPosition;
 public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
 
     /**
-     * The power of ten corresponding to the least significant digit in the BCD. For example, if this
-     * object represents the number "3.14", the BCD will be "0x314" and the scale will be -2.
+     * The power of ten corresponding to the least significant digit in the BCD. For example, if
+     * this object represents the number "3.14", the BCD will be "0x314" and the scale will be -2.
      *
-     * <p>
-     * Note that in {@link java.math.BigDecimal}, the scale is defined differently: the number of digits
-     * after the decimal place, which is the negative of our definition of scale.
+     * <p>Note that in {@link java.math.BigDecimal}, the scale is defined differently: the number of
+     * digits after the decimal place, which is the negative of our definition of scale.
      */
     protected int scale;
 
@@ -36,9 +34,8 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
      * The number of digits in the BCD. For example, "1007" has BCD "0x1007" and precision 4. A long
      * cannot represent precisions greater than 16.
      *
-     * <p>
-     * This value must be re-calculated whenever the value in bcd changes by using
-     * {@link #computePrecisionAndCompact()}.
+     * <p>This value must be re-calculated whenever the value in bcd changes by using {@link
+     * #computePrecisionAndCompact()}.
      */
     protected int precision;
 
@@ -64,20 +61,20 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
     // you don't round, assertions will fail in certain other methods if you try calling them.
 
     /**
-     * The original number provided by the user and which is represented in BCD. Used when we need to
-     * re-compute the BCD for an exact double representation.
+     * The original number provided by the user and which is represented in BCD. Used when we need
+     * to re-compute the BCD for an exact double representation.
      */
     protected double origDouble;
 
     /**
-     * The change in magnitude relative to the original double. Used when we need to re-compute the BCD
-     * for an exact double representation.
+     * The change in magnitude relative to the original double. Used when we need to re-compute the
+     * BCD for an exact double representation.
      */
     protected int origDelta;
 
     /**
-     * Whether the value in the BCD comes from the double fast path without having been rounded to ensure
-     * correctness
+     * Whether the value in the BCD comes from the double fast path without having been rounded to
+     * ensure correctness
      */
     protected boolean isApproximate;
 
@@ -88,8 +85,8 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
     protected int rReqPos = 0;
 
     /**
-     * The value of the (suppressed) exponent after the number has been put into
-     * a notation with exponents (ex: compact, scientific).
+     * The value of the (suppressed) exponent after the number has been put into a notation with
+     * exponents (ex: compact, scientific).
      */
     protected int exponent = 0;
 
@@ -112,7 +109,8 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
         lReqPos = 0;
         rReqPos = 0;
         flags = 0;
-        setBcdToZero(); // sets scale, precision, hasDouble, origDouble, origDelta, exponent, and BCD data
+        setBcdToZero(); // sets scale, precision, hasDouble, origDouble, origDelta, exponent, and
+        // BCD data
         return this;
     }
 
@@ -180,9 +178,10 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
                 || roundingIncrement.stripTrailingZeros().unscaledValue().intValue() != 5
                 || roundingIncrement.stripTrailingZeros().unscaledValue().intValue() != 1;
         BigDecimal temp = toBigDecimal();
-        temp = temp.divide(roundingIncrement, 0, mathContext.getRoundingMode())
-                .multiply(roundingIncrement)
-                .round(mathContext);
+        temp =
+                temp.divide(roundingIncrement, 0, mathContext.getRoundingMode())
+                        .multiply(roundingIncrement)
+                        .round(mathContext);
         if (temp.signum() == 0) {
             setBcdToZero(); // keeps negative flag for -0.0
         } else {
@@ -202,7 +201,7 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
 
     @Override
     public void negate() {
-      flags ^= NEGATIVE_FLAG;
+        flags ^= NEGATIVE_FLAG;
     }
 
     @Override
@@ -259,43 +258,46 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
 
     @Override
     public double getPluralOperand(Operand operand) {
-        // If this assertion fails, you need to call roundToInfinity() or some other rounding method.
+        // If this assertion fails, you need to call roundToInfinity() or some other rounding
+        // method.
         // See the comment at the top of this file explaining the "isApproximate" field.
         assert !isApproximate;
 
         switch (operand) {
-        case i:
-            // Invert the negative sign if necessary
-            return isNegative() ? -toLong(true) : toLong(true);
-        case f:
-            return toFractionLong(true);
-        case t:
-            return toFractionLong(false);
-        case v:
-            return fractionCount();
-        case w:
-            return fractionCountWithoutTrailingZeros();
-        case e:
-            return getExponent();
-        case c:
-            // Plural operand `c` is currently an alias for `e`.
-            return getExponent();
-        default:
-            return Math.abs(toDouble());
+            case i:
+                // Invert the negative sign if necessary
+                return isNegative() ? -toLong(true) : toLong(true);
+            case f:
+                return toFractionLong(true);
+            case t:
+                return toFractionLong(false);
+            case v:
+                return fractionCount();
+            case w:
+                return fractionCountWithoutTrailingZeros();
+            case e:
+                return getExponent();
+            case c:
+                // Plural operand `c` is currently an alias for `e`.
+                return getExponent();
+            default:
+                return Math.abs(toDouble());
         }
     }
 
     @Override
     public void populateUFieldPosition(FieldPosition fp) {
         if (fp instanceof UFieldPosition) {
-            ((UFieldPosition) fp).setFractionDigits((int) getPluralOperand(Operand.v),
-                    (long) getPluralOperand(Operand.f));
+            ((UFieldPosition) fp)
+                    .setFractionDigits(
+                            (int) getPluralOperand(Operand.v), (long) getPluralOperand(Operand.f));
         }
     }
 
     @Override
     public int getUpperDisplayMagnitude() {
-        // If this assertion fails, you need to call roundToInfinity() or some other rounding method.
+        // If this assertion fails, you need to call roundToInfinity() or some other rounding
+        // method.
         // See the comment at the top of this file explaining the "isApproximate" field.
         assert !isApproximate;
 
@@ -306,7 +308,8 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
 
     @Override
     public int getLowerDisplayMagnitude() {
-        // If this assertion fails, you need to call roundToInfinity() or some other rounding method.
+        // If this assertion fails, you need to call roundToInfinity() or some other rounding
+        // method.
         // See the comment at the top of this file explaining the "isApproximate" field.
         assert !isApproximate;
 
@@ -317,7 +320,8 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
 
     @Override
     public byte getDigit(int magnitude) {
-        // If this assertion fails, you need to call roundToInfinity() or some other rounding method.
+        // If this assertion fails, you need to call roundToInfinity() or some other rounding
+        // method.
         // See the comment at the top of this file explaining the "isApproximate" field.
         assert !isApproximate;
 
@@ -437,8 +441,7 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
     /**
      * Sets the internal BCD state to represent the value in the given double.
      *
-     * @param n
-     *            The value to consume.
+     * @param n The value to consume.
      */
     public void setToDouble(double n) {
         setBcdToZero();
@@ -461,32 +464,14 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
     }
 
     private static final double[] DOUBLE_MULTIPLIERS = {
-            1e0,
-            1e1,
-            1e2,
-            1e3,
-            1e4,
-            1e5,
-            1e6,
-            1e7,
-            1e8,
-            1e9,
-            1e10,
-            1e11,
-            1e12,
-            1e13,
-            1e14,
-            1e15,
-            1e16,
-            1e17,
-            1e18,
-            1e19,
-            1e20,
-            1e21 };
+        1e0, 1e1, 1e2, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8, 1e9, 1e10, 1e11, 1e12, 1e13, 1e14, 1e15, 1e16,
+        1e17, 1e18, 1e19, 1e20, 1e21
+    };
 
     /**
-     * Uses double multiplication and division to get the number into integer space before converting to
-     * digits. Since double arithmetic is inexact, the resulting digits may not be accurate.
+     * Uses double multiplication and division to get the number into integer space before
+     * converting to digits. Since double arithmetic is inexact, the resulting digits may not be
+     * accurate.
      */
     private void _setToDoubleFast(double n) {
         isApproximate = true;
@@ -514,14 +499,12 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
         if (fracLength >= 0) {
             int i = fracLength;
             // 1e22 is the largest exact double.
-            for (; i >= 22; i -= 22)
-                n *= 1e22;
+            for (; i >= 22; i -= 22) n *= 1e22;
             n *= DOUBLE_MULTIPLIERS[i];
         } else {
             int i = fracLength;
             // 1e22 is the largest exact double.
-            for (; i <= -22; i += 22)
-                n /= 1e22;
+            for (; i <= -22; i += 22) n /= 1e22;
             n /= DOUBLE_MULTIPLIERS[-i];
         }
         long result = Math.round(n);
@@ -532,8 +515,8 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
     }
 
     /**
-     * Uses Double.toString() to obtain an exact accurate representation of the double, overwriting it
-     * into the BCD. This method can be called at any point after {@link #_setToDoubleFast} while
+     * Uses Double.toString() to obtain an exact accurate representation of the double, overwriting
+     * it into the BCD. This method can be called at any point after {@link #_setToDoubleFast} while
      * {@link #isApproximate} is still true.
      */
     private void convertToAccurateDouble() {
@@ -567,7 +550,8 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
         } else {
             // Case 4: Number with both a fraction and an integer.
             int decimalPos = dstr.indexOf('.');
-            _setToLong(Long.parseLong(dstr.substring(0, decimalPos) + dstr.substring(decimalPos + 1)));
+            _setToLong(
+                    Long.parseLong(dstr.substring(0, decimalPos) + dstr.substring(decimalPos + 1)));
             scale += decimalPos - dstr.length() + 1;
         }
 
@@ -584,14 +568,12 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    @Deprecated
-    public boolean explicitExactDouble = false;
+    @Deprecated public boolean explicitExactDouble = false;
 
     /**
      * Sets the internal BCD state to represent the value in the given BigDecimal.
      *
-     * @param n
-     *            The value to consume.
+     * @param n The value to consume.
      */
     @Override
     public void setToBigDecimal(BigDecimal n) {
@@ -620,7 +602,7 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
         // NOTE: Call sites should be guarded by fitsInLong(), like this:
         // if (dq.fitsInLong()) { /* use dq.toLong() */ } else { /* use some fallback */ }
         // Fallback behavior upon truncateIfOverflow is to truncate at 17 digits.
-        assert(truncateIfOverflow || fitsInLong());
+        assert (truncateIfOverflow || fitsInLong());
         long result = 0L;
         int upperMagnitude = exponent + scale + precision - 1;
         if (truncateIfOverflow) {
@@ -636,12 +618,11 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
     }
 
     /**
-     * This returns a long representing the fraction digits of the number, as required by PluralRules.
-     * For example, if we represent the number "1.20" (including optional and required digits), then this
-     * function returns "20" if includeTrailingZeros is true or "2" if false.
-     * Note: this method incorporates the value of {@code exponent}
-     * (for cases such as compact notation) to return the proper long value
-     * represented by the result.
+     * This returns a long representing the fraction digits of the number, as required by
+     * PluralRules. For example, if we represent the number "1.20" (including optional and required
+     * digits), then this function returns "20" if includeTrailingZeros is true or "2" if false.
+     * Note: this method incorporates the value of {@code exponent} (for cases such as compact
+     * notation) to return the proper long value represented by the result.
      */
     public long toFractionLong(boolean includeTrailingZeros) {
         long result = 0L;
@@ -663,7 +644,7 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
         return result;
     }
 
-    static final byte[] INT64_BCD = { 9, 2, 2, 3, 3, 7, 2, 0, 3, 6, 8, 5, 4, 7, 7, 5, 8, 0, 8 };
+    static final byte[] INT64_BCD = {9, 2, 2, 3, 3, 7, 2, 0, 3, 6, 8, 5, 4, 7, 7, 5, 8, 0, 8};
 
     /**
      * Returns whether or not a Long can fully represent the value stored in this DecimalQuantity.
@@ -700,14 +681,15 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
     }
 
     /**
-     * Returns a double approximating the internal BCD. The double may not retain all of the information
-     * encoded in the BCD if the BCD represents a number out of range of a double.
+     * Returns a double approximating the internal BCD. The double may not retain all of the
+     * information encoded in the BCD if the BCD represents a number out of range of a double.
      *
      * @return A double representation of the internal BCD.
      */
     @Override
     public double toDouble() {
-        // If this assertion fails, you need to call roundToInfinity() or some other rounding method.
+        // If this assertion fails, you need to call roundToInfinity() or some other rounding
+        // method.
         // See the comment at the top of this file explaining the "isApproximate" field.
         assert !isApproximate;
 
@@ -733,10 +715,8 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
 
     private static int safeSubtract(int a, int b) {
         int diff = a - b;
-        if (b < 0 && diff < a)
-            return Integer.MAX_VALUE;
-        if (b > 0 && diff > a)
-            return Integer.MIN_VALUE;
+        if (b < 0 && diff < a) return Integer.MAX_VALUE;
+        if (b > 0 && diff > a) return Integer.MIN_VALUE;
         return diff;
     }
 
@@ -763,7 +743,8 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
     }
 
     private void roundToMagnitude(int magnitude, MathContext mathContext, boolean nickel) {
-        // The position in the BCD at which rounding will be performed; digits to the right of position
+        // The position in the BCD at which rounding will be performed; digits to the right of
+        // position
         // will be rounded away.
         int position = safeSubtract(magnitude, scale);
 
@@ -776,7 +757,9 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
         // "trailing" = least significant digit to the left of rounding
         byte trailingDigit = getDigitPos(position);
 
-        if (position <= 0 && !isApproximate && (!nickel || trailingDigit == 0 || trailingDigit == 5)) {
+        if (position <= 0
+                && !isApproximate
+                && (!nickel || trailingDigit == 0 || trailingDigit == 5)) {
             // All digits are to the left of the rounding magnitude.
         } else if (precision == 0) {
             // No rounding for zero.
@@ -834,7 +817,8 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
                             break;
                         }
                     }
-                } else if (leadingDigit == 4 && (!nickel || trailingDigit == 2 || trailingDigit == 7)) {
+                } else if (leadingDigit == 4
+                        && (!nickel || trailingDigit == 2 || trailingDigit == 7)) {
                     section = RoundingUtils.SECTION_MIDPOINT;
                     for (; p >= minP; p--) {
                         if (getDigitPos(p) != 9) {
@@ -842,7 +826,8 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
                             break;
                         }
                     }
-                } else if (leadingDigit == 5 && (!nickel || trailingDigit == 2 || trailingDigit == 7)) {
+                } else if (leadingDigit == 5
+                        && (!nickel || trailingDigit == 2 || trailingDigit == 7)) {
                     section = RoundingUtils.SECTION_MIDPOINT;
                     for (; p >= minP; p--) {
                         if (getDigitPos(p) != 0) {
@@ -850,7 +835,8 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
                             break;
                         }
                     }
-                } else if (leadingDigit == 9 && (!nickel || trailingDigit == 4 || trailingDigit == 9)) {
+                } else if (leadingDigit == 9
+                        && (!nickel || trailingDigit == 4 || trailingDigit == 9)) {
                     section = SECTION_UPPER_EDGE;
                     for (; p >= minP; p--) {
                         if (getDigitPos(p) != 9) {
@@ -881,8 +867,8 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
                     section = RoundingUtils.SECTION_UPPER;
                 }
 
-                boolean roundsAtMidpoint = RoundingUtils
-                        .roundsAtMidpoint(mathContext.getRoundingMode().ordinal());
+                boolean roundsAtMidpoint =
+                        RoundingUtils.roundsAtMidpoint(mathContext.getRoundingMode().ordinal());
                 if (safeSubtract(position, 1) < precision - 14
                         || (roundsAtMidpoint && section == RoundingUtils.SECTION_MIDPOINT)
                         || (!roundsAtMidpoint && section < 0 /* i.e. at upper or lower edge */)) {
@@ -893,7 +879,8 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
                     return;
                 }
 
-                // Turn off the approximate double flag, since the value is now confirmed to be exact.
+                // Turn off the approximate double flag, since the value is now confirmed to be
+                // exact.
                 isApproximate = false;
                 origDouble = 0.0;
                 origDelta = 0;
@@ -904,24 +891,28 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
                 }
 
                 // Good to continue rounding.
-                if (section == SECTION_LOWER_EDGE)
-                    section = RoundingUtils.SECTION_LOWER;
-                if (section == SECTION_UPPER_EDGE)
-                    section = RoundingUtils.SECTION_UPPER;
+                if (section == SECTION_LOWER_EDGE) section = RoundingUtils.SECTION_LOWER;
+                if (section == SECTION_UPPER_EDGE) section = RoundingUtils.SECTION_UPPER;
             }
 
             // Nickel rounding "half even" goes to the nearest whole (away from the 5).
-            boolean isEven = nickel
-                    ? (trailingDigit < 2 || trailingDigit > 7
-                            || (trailingDigit == 2 && section != RoundingUtils.SECTION_UPPER)
-                            || (trailingDigit == 7 && section == RoundingUtils.SECTION_UPPER))
-                    : (trailingDigit % 2) == 0;
+            boolean isEven =
+                    nickel
+                            ? (trailingDigit < 2
+                                    || trailingDigit > 7
+                                    || (trailingDigit == 2
+                                            && section != RoundingUtils.SECTION_UPPER)
+                                    || (trailingDigit == 7
+                                            && section == RoundingUtils.SECTION_UPPER))
+                            : (trailingDigit % 2) == 0;
 
-            boolean roundDown = RoundingUtils.getRoundingDirection(isEven,
-                    isNegative(),
-                    section,
-                    mathContext.getRoundingMode().ordinal(),
-                    this);
+            boolean roundDown =
+                    RoundingUtils.getRoundingDirection(
+                            isEven,
+                            isNegative(),
+                            section,
+                            mathContext.getRoundingMode().ordinal(),
+                            this);
 
             // Perform truncation
             if (position >= precision) {
@@ -956,10 +947,10 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
             if (!roundDown) {
                 if (trailingDigit == 9) {
                     int bubblePos = 0;
-                    // Note: in the long implementation, the most digits BCD can have at this point is
+                    // Note: in the long implementation, the most digits BCD can have at this point
+                    // is
                     // 15, so bubblePos <= 15 and getDigitPos(bubblePos) is safe.
-                    for (; getDigitPos(bubblePos) == 9; bubblePos++) {
-                    }
+                    for (; getDigitPos(bubblePos) == 9; bubblePos++) {}
                     shiftRight(bubblePos); // shift off the trailing 9s
                 }
                 byte digit0 = getDigitPos(0);
@@ -980,23 +971,19 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
     }
 
     /**
-     * Appends a digit, optionally with one or more leading zeros, to the end of the value represented by
-     * this DecimalQuantity.
+     * Appends a digit, optionally with one or more leading zeros, to the end of the value
+     * represented by this DecimalQuantity.
      *
-     * <p>
-     * The primary use of this method is to construct numbers during a parsing loop. It allows parsing to
-     * take advantage of the digit list infrastructure primarily designed for formatting.
+     * <p>The primary use of this method is to construct numbers during a parsing loop. It allows
+     * parsing to take advantage of the digit list infrastructure primarily designed for formatting.
      *
-     * @param value
-     *            The digit to append.
-     * @param leadingZeros
-     *            The number of zeros to append before the digit. For example, if the value in this
-     *            instance starts as 12.3, and you append a 4 with 1 leading zero, the value becomes
-     *            12.304.
-     * @param appendAsInteger
-     *            If true, increase the magnitude of existing digits to make room for the new digit. If
-     *            false, append to the end like a fraction digit. If true, there must not be any fraction
-     *            digits already in the number.
+     * @param value The digit to append.
+     * @param leadingZeros The number of zeros to append before the digit. For example, if the value
+     *     in this instance starts as 12.3, and you append a 4 with 1 leading zero, the value
+     *     becomes 12.304.
+     * @param appendAsInteger If true, increase the magnitude of existing digits to make room for
+     *     the new digit. If false, append to the end like a fraction digit. If true, there must not
+     *     be any fraction digits already in the number.
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -1039,7 +1026,7 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
     }
 
     public void toPlainString(StringBuilder result) {
-        assert(!isApproximate);
+        assert (!isApproximate);
         if (isNegative()) {
             result.append('-');
         }
@@ -1067,7 +1054,7 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
         if (lower < 0) {
             result.append('.');
         }
-        for(; p >= lower; p--) {
+        for (; p >= lower; p--) {
             result.append((char) ('0' + getDigitPos(p - scale - exponent)));
         }
     }
@@ -1079,7 +1066,7 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
     }
 
     public void toScientificString(StringBuilder result) {
-        assert(!isApproximate);
+        assert (!isApproximate);
         if (isNegative()) {
             result.append('-');
         }
@@ -1130,7 +1117,7 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
     }
 
     private void toExponentString(StringBuilder result) {
-        assert(!isApproximate);
+        assert (!isApproximate);
         if (isNegative()) {
             result.append('-');
         }
@@ -1154,7 +1141,7 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
         if (lower < 0) {
             result.append('.');
         }
-        for(; p >= lower; p--) {
+        for (; p >= lower; p--) {
             result.append((char) ('0' + getDigitPos(p - scale)));
         }
 
@@ -1179,11 +1166,11 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
 
         boolean basicEquals =
                 scale == _other.scale
-                && precision == _other.precision
-                && flags == _other.flags
-                && lReqPos == _other.lReqPos
-                && rReqPos == _other.rReqPos
-                && isApproximate == _other.isApproximate;
+                        && precision == _other.precision
+                        && flags == _other.flags
+                        && lReqPos == _other.lReqPos
+                        && rReqPos == _other.rReqPos
+                        && isApproximate == _other.isApproximate;
         if (!basicEquals) {
             return false;
         }
@@ -1220,87 +1207,82 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
     }
 
     /**
-     * Returns a single digit from the BCD list. No internal state is changed by calling this method.
+     * Returns a single digit from the BCD list. No internal state is changed by calling this
+     * method.
      *
-     * @param position
-     *            The position of the digit to pop, counted in BCD units from the least significant
-     *            digit. If outside the range supported by the implementation, zero is returned.
+     * @param position The position of the digit to pop, counted in BCD units from the least
+     *     significant digit. If outside the range supported by the implementation, zero is
+     *     returned.
      * @return The digit at the specified location.
      */
     protected abstract byte getDigitPos(int position);
 
     /**
      * Sets the digit in the BCD list. This method only sets the digit; it is the caller's
-     * responsibility to call {@link #compact} after setting the digit, and to ensure
-     * that the precision field is updated to reflect the correct number of digits if a
-     * nonzero digit is added to the decimal.
+     * responsibility to call {@link #compact} after setting the digit, and to ensure that the
+     * precision field is updated to reflect the correct number of digits if a nonzero digit is
+     * added to the decimal.
      *
-     * @param position
-     *            The position of the digit to pop, counted in BCD units from the least significant
-     *            digit. If outside the range supported by the implementation, an AssertionError is
-     *            thrown.
-     * @param value
-     *            The digit to set at the specified location.
+     * @param position The position of the digit to pop, counted in BCD units from the least
+     *     significant digit. If outside the range supported by the implementation, an
+     *     AssertionError is thrown.
+     * @param value The digit to set at the specified location.
      */
     protected abstract void setDigitPos(int position, byte value);
 
     /**
-     * Adds zeros to the end of the BCD list. This will result in an invalid BCD representation; it is
-     * the caller's responsibility to do further manipulation and then call {@link #compact}.
+     * Adds zeros to the end of the BCD list. This will result in an invalid BCD representation; it
+     * is the caller's responsibility to do further manipulation and then call {@link #compact}.
      *
-     * @param numDigits
-     *            The number of zeros to add.
+     * @param numDigits The number of zeros to add.
      */
     protected abstract void shiftLeft(int numDigits);
 
     /**
-     * Removes digits from the end of the BCD list. This may result in an invalid BCD representation; it
-     * is the caller's responsibility to follow-up with a call to {@link #compact}.
+     * Removes digits from the end of the BCD list. This may result in an invalid BCD
+     * representation; it is the caller's responsibility to follow-up with a call to {@link
+     * #compact}.
      *
-     * @param numDigits
-     *            The number of digits to remove.
+     * @param numDigits The number of digits to remove.
      */
     protected abstract void shiftRight(int numDigits);
 
     /**
-     * Directly removes digits from the front of the BCD list.
-     * Updates precision.
+     * Directly removes digits from the front of the BCD list. Updates precision.
      *
-     * CAUTION: it is the caller's responsibility to call {@link #compact} after this method.
+     * <p>CAUTION: it is the caller's responsibility to call {@link #compact} after this method.
      */
     protected abstract void popFromLeft(int numDigits);
 
     /**
-     * Sets the internal representation to zero. Clears any values stored in scale, precision, hasDouble,
-     * origDouble, origDelta, exponent, and BCD data.
+     * Sets the internal representation to zero. Clears any values stored in scale, precision,
+     * hasDouble, origDouble, origDelta, exponent, and BCD data.
      */
     protected abstract void setBcdToZero();
 
     /**
-     * Sets the internal BCD state to represent the value in the given int. The int is guaranteed to be
-     * either positive. The internal state is guaranteed to be empty when this method is called.
+     * Sets the internal BCD state to represent the value in the given int. The int is guaranteed to
+     * be either positive. The internal state is guaranteed to be empty when this method is called.
      *
-     * @param n
-     *            The value to consume.
+     * @param n The value to consume.
      */
     protected abstract void readIntToBcd(int input);
 
     /**
-     * Sets the internal BCD state to represent the value in the given long. The long is guaranteed to be
-     * either positive. The internal state is guaranteed to be empty when this method is called.
+     * Sets the internal BCD state to represent the value in the given long. The long is guaranteed
+     * to be either positive. The internal state is guaranteed to be empty when this method is
+     * called.
      *
-     * @param n
-     *            The value to consume.
+     * @param n The value to consume.
      */
     protected abstract void readLongToBcd(long input);
 
     /**
      * Sets the internal BCD state to represent the value in the given BigInteger. The BigInteger is
-     * guaranteed to be positive, and it is guaranteed to be larger than Long.MAX_VALUE. The internal
-     * state is guaranteed to be empty when this method is called.
+     * guaranteed to be positive, and it is guaranteed to be larger than Long.MAX_VALUE. The
+     * internal state is guaranteed to be empty when this method is called.
      *
-     * @param n
-     *            The value to consume.
+     * @param n The value to consume.
      */
     protected abstract void readBigIntegerToBcd(BigInteger input);
 
@@ -1315,12 +1297,11 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
 
     /**
      * Removes trailing zeros from the BCD (adjusting the scale as required) and then computes the
-     * precision. The precision is the number of digits in the number up through the greatest nonzero
-     * digit.
+     * precision. The precision is the number of digits in the number up through the greatest
+     * nonzero digit.
      *
-     * <p>
-     * This method must always be called when bcd changes in order for assumptions to be correct in
-     * methods like {@link #fractionCount()}.
+     * <p>This method must always be called when bcd changes in order for assumptions to be correct
+     * in methods like {@link #fractionCount()}.
      */
     protected abstract void compact();
 }

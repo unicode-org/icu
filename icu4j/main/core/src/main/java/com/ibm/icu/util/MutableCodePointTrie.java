@@ -8,30 +8,26 @@ package com.ibm.icu.util;
 import java.util.Arrays;
 
 /**
- * Mutable Unicode code point trie.
- * Fast map from Unicode code points (U+0000..U+10FFFF) to 32-bit integer values.
- * For details see https://icu.unicode.org/design/struct/utrie
+ * Mutable Unicode code point trie. Fast map from Unicode code points (U+0000..U+10FFFF) to 32-bit
+ * integer values. For details see https://icu.unicode.org/design/struct/utrie
  *
- * <p>Setting values (especially ranges) and lookup is fast.
- * The mutable trie is only somewhat space-efficient.
- * It builds a compacted, immutable {@link CodePointTrie}.
+ * <p>Setting values (especially ranges) and lookup is fast. The mutable trie is only somewhat
+ * space-efficient. It builds a compacted, immutable {@link CodePointTrie}.
  *
- * <p>This trie can be modified while iterating over its contents.
- * For example, it is possible to merge its values with those from another
- * set of ranges (e.g., another @{link CodePointMap}):
- * Iterate over those source ranges; for each of them iterate over this trie;
- * add the source value into the value of each trie range.
+ * <p>This trie can be modified while iterating over its contents. For example, it is possible to
+ * merge its values with those from another set of ranges (e.g., another @{link CodePointMap}):
+ * Iterate over those source ranges; for each of them iterate over this trie; add the source value
+ * into the value of each trie range.
  *
  * @stable ICU 63
  */
 public final class MutableCodePointTrie extends CodePointMap implements Cloneable {
     /**
-     * Constructs a mutable trie that initially maps each Unicode code point to the same value.
-     * It uses 32-bit data values until
-     * {@link #buildImmutable(com.ibm.icu.util.CodePointTrie.Type, com.ibm.icu.util.CodePointTrie.ValueWidth)}
-     * is called.
-     * buildImmutable() takes a valueWidth parameter which
-     * determines the number of bits in the data value in the resulting {@link CodePointTrie}.
+     * Constructs a mutable trie that initially maps each Unicode code point to the same value. It
+     * uses 32-bit data values until {@link #buildImmutable(com.ibm.icu.util.CodePointTrie.Type,
+     * com.ibm.icu.util.CodePointTrie.ValueWidth)} is called. buildImmutable() takes a valueWidth
+     * parameter which determines the number of bits in the data value in the resulting {@link
+     * CodePointTrie}.
      *
      * @param initialValue the initial value that is set for all code points
      * @param errorValue the value for out-of-range code points and ill-formed UTF-8/16
@@ -122,6 +118,7 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 63
      */
     @Override
@@ -140,8 +137,8 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
         }
     }
 
-    private static final int maybeFilterValue(int value, int initialValue, int nullValue,
-            ValueFilter filter) {
+    private static final int maybeFilterValue(
+            int value, int initialValue, int nullValue, ValueFilter filter) {
         if (value == initialValue) {
             value = nullValue;
         } else if (filter != null) {
@@ -158,19 +155,23 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
      * @stable ICU 63
      */
     @Override
-    public boolean getRange(int start, CodePointTrie.ValueFilter filter,
-            CodePointTrie.Range range) {
+    public boolean getRange(
+            int start, CodePointTrie.ValueFilter filter, CodePointTrie.Range range) {
         if (start < 0 || MAX_UNICODE < start) {
             return false;
         }
         if (start >= highStart) {
             int value = highValue;
-            if (filter != null) { value = filter.apply(value); }
+            if (filter != null) {
+                value = filter.apply(value);
+            }
             range.set(start, MAX_UNICODE, value);
             return true;
         }
         int nullValue = initialValue;
-        if (filter != null) { nullValue = filter.apply(nullValue); }
+        if (filter != null) {
+            nullValue = filter.apply(nullValue);
+        }
         int c = start;
         // Initialize to make compiler happy. Real value when haveValue is true.
         int trieValue = 0, value = 0;
@@ -181,13 +182,13 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
                 int trieValue2 = index[i];
                 if (haveValue) {
                     if (trieValue2 != trieValue) {
-                        if (filter == null ||
-                                maybeFilterValue(trieValue2, initialValue, nullValue,
-                                        filter) != value) {
+                        if (filter == null
+                                || maybeFilterValue(trieValue2, initialValue, nullValue, filter)
+                                        != value) {
                             range.set(start, c - 1, value);
                             return true;
                         }
-                        trieValue = trieValue2;  // may or may not help
+                        trieValue = trieValue2; // may or may not help
                     }
                 } else {
                     trieValue = trieValue2;
@@ -200,13 +201,13 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
                 int trieValue2 = data[di];
                 if (haveValue) {
                     if (trieValue2 != trieValue) {
-                        if (filter == null ||
-                                maybeFilterValue(trieValue2, initialValue, nullValue,
-                                        filter) != value) {
+                        if (filter == null
+                                || maybeFilterValue(trieValue2, initialValue, nullValue, filter)
+                                        != value) {
                             range.set(start, c - 1, value);
                             return true;
                         }
-                        trieValue = trieValue2;  // may or may not help
+                        trieValue = trieValue2; // may or may not help
                     }
                 } else {
                     trieValue = trieValue2;
@@ -216,19 +217,19 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
                 while ((++c & CodePointTrie.SMALL_DATA_MASK) != 0) {
                     trieValue2 = data[++di];
                     if (trieValue2 != trieValue) {
-                        if (filter == null ||
-                                maybeFilterValue(trieValue2, initialValue, nullValue,
-                                        filter) != value) {
+                        if (filter == null
+                                || maybeFilterValue(trieValue2, initialValue, nullValue, filter)
+                                        != value) {
                             range.set(start, c - 1, value);
                             return true;
                         }
-                        trieValue = trieValue2;  // may or may not help
+                        trieValue = trieValue2; // may or may not help
                     }
                 }
             }
             ++i;
         } while (c < highStart);
-        assert(haveValue);
+        assert (haveValue);
         if (maybeFilterValue(highValue, initialValue, nullValue, filter) != value) {
             range.set(start, c - 1, value);
         } else {
@@ -264,8 +265,8 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
     }
 
     /**
-     * Sets a value for each code point [start..end].
-     * Faster and more space-efficient than setting the value for each code point separately.
+     * Sets a value for each code point [start..end]. Faster and more space-efficient than setting
+     * the value for each code point separately.
      *
      * @param start the first code point to get the value
      * @param end the last code point to get the value (inclusive)
@@ -282,14 +283,21 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
         if ((start & CodePointTrie.SMALL_DATA_MASK) != 0) {
             // Set partial block at [start..following block boundary[.
             int block = getDataBlock(start >> CodePointTrie.SHIFT_3);
-            int nextStart = (start + CodePointTrie.SMALL_DATA_MASK) & ~CodePointTrie.SMALL_DATA_MASK;
+            int nextStart =
+                    (start + CodePointTrie.SMALL_DATA_MASK) & ~CodePointTrie.SMALL_DATA_MASK;
             if (nextStart <= limit) {
-                fillBlock(block, start & CodePointTrie.SMALL_DATA_MASK,
-                          CodePointTrie.SMALL_DATA_BLOCK_LENGTH, value);
+                fillBlock(
+                        block,
+                        start & CodePointTrie.SMALL_DATA_MASK,
+                        CodePointTrie.SMALL_DATA_BLOCK_LENGTH,
+                        value);
                 start = nextStart;
             } else {
-                fillBlock(block, start & CodePointTrie.SMALL_DATA_MASK,
-                          limit & CodePointTrie.SMALL_DATA_MASK, value);
+                fillBlock(
+                        block,
+                        start & CodePointTrie.SMALL_DATA_MASK,
+                        limit & CodePointTrie.SMALL_DATA_MASK,
+                        value);
                 return;
             }
         }
@@ -322,32 +330,29 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
      * Compacts the data and builds an immutable {@link CodePointTrie} according to the parameters.
      * After this, the mutable trie will be empty.
      *
-     * <p>The mutable trie stores 32-bit values until buildImmutable() is called.
-     * If values shorter than 32 bits are to be stored in the immutable trie,
-     * then the upper bits are discarded.
-     * For example, when the mutable trie contains values 0x81, -0x7f, and 0xa581,
-     * and the value width is 8 bits, then each of these is stored as 0x81
-     * and the immutable trie will return that as an unsigned value.
-     * (Some implementations may want to make productive temporary use of the upper bits
-     * until buildImmutable() discards them.)
+     * <p>The mutable trie stores 32-bit values until buildImmutable() is called. If values shorter
+     * than 32 bits are to be stored in the immutable trie, then the upper bits are discarded. For
+     * example, when the mutable trie contains values 0x81, -0x7f, and 0xa581, and the value width
+     * is 8 bits, then each of these is stored as 0x81 and the immutable trie will return that as an
+     * unsigned value. (Some implementations may want to make productive temporary use of the upper
+     * bits until buildImmutable() discards them.)
      *
-     * <p>Not every possible set of mappings can be built into a CodePointTrie,
-     * because of limitations resulting from speed and space optimizations.
-     * Every Unicode assigned character can be mapped to a unique value.
-     * Typical data yields data structures far smaller than the limitations.
+     * <p>Not every possible set of mappings can be built into a CodePointTrie, because of
+     * limitations resulting from speed and space optimizations. Every Unicode assigned character
+     * can be mapped to a unique value. Typical data yields data structures far smaller than the
+     * limitations.
      *
-     * <p>It is possible to construct extremely unusual mappings that exceed the
-     * data structure limits.
-     * In such a case this function will throw an exception.
+     * <p>It is possible to construct extremely unusual mappings that exceed the data structure
+     * limits. In such a case this function will throw an exception.
      *
      * @param type selects the trie type
      * @param valueWidth selects the number of bits in a trie data value; if smaller than 32 bits,
-     *                   then the values stored in the trie will be truncated first
-     *
+     *     then the values stored in the trie will be truncated first
      * @see #fromCodePointMap(CodePointMap)
      * @stable ICU 63
      */
-    public CodePointTrie buildImmutable(CodePointTrie.Type type, CodePointTrie.ValueWidth valueWidth) {
+    public CodePointTrie buildImmutable(
+            CodePointTrie.Type type, CodePointTrie.ValueWidth valueWidth) {
         if (type == null || valueWidth == null) {
             throw new IllegalArgumentException("The type and valueWidth must be specified.");
         }
@@ -369,7 +374,8 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
     private static final int BMP_I_LIMIT = BMP_LIMIT >> CodePointTrie.SHIFT_3;
     private static final int ASCII_I_LIMIT = ASCII_LIMIT >> CodePointTrie.SHIFT_3;
 
-    private static final int SMALL_DATA_BLOCKS_PER_BMP_BLOCK = (1 << (CodePointTrie.FAST_SHIFT - CodePointTrie.SHIFT_3));
+    private static final int SMALL_DATA_BLOCKS_PER_BMP_BLOCK =
+            (1 << (CodePointTrie.FAST_SHIFT - CodePointTrie.SHIFT_3));
 
     // Flag values for data blocks.
     private static final byte ALL_SAME = 0;
@@ -382,10 +388,7 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
     /** Grow about 8x each time. */
     private static final int MEDIUM_DATA_LENGTH = (1 << 17);
 
-    /**
-     * Maximum length of the build-time data array.
-     * One entry per 0x110000 code points.
-     */
+    /** Maximum length of the build-time data array. One entry per 0x110000 code points. */
     private static final int MAX_DATA_LENGTH = UNICODE_LIMIT;
 
     // Flag values for index-3 blocks while compacting/building.
@@ -394,7 +397,8 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
     private static final byte I3_16 = 2;
     private static final byte I3_18 = 3;
 
-    private static final int INDEX_3_18BIT_BLOCK_LENGTH = CodePointTrie.INDEX_3_BLOCK_LENGTH + CodePointTrie.INDEX_3_BLOCK_LENGTH / 8;
+    private static final int INDEX_3_18BIT_BLOCK_LENGTH =
+            CodePointTrie.INDEX_3_BLOCK_LENGTH + CodePointTrie.INDEX_3_BLOCK_LENGTH / 8;
 
     private int[] index;
     private int index3NullOffset;
@@ -410,23 +414,28 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
 
     /** Temporary array while building the final data. */
     private char[] index16;
+
     private byte[] flags = new byte[UNICODE_LIMIT >> CodePointTrie.SHIFT_3];
 
     private void ensureHighStart(int c) {
         if (c >= highStart) {
             // Round up to a CodePointTrie.CP_PER_INDEX_2_ENTRY boundary to simplify compaction.
-            c = (c + CodePointTrie.CP_PER_INDEX_2_ENTRY) & ~(CodePointTrie.CP_PER_INDEX_2_ENTRY - 1);
+            c =
+                    (c + CodePointTrie.CP_PER_INDEX_2_ENTRY)
+                            & ~(CodePointTrie.CP_PER_INDEX_2_ENTRY - 1);
             int i = highStart >> CodePointTrie.SHIFT_3;
             int iLimit = c >> CodePointTrie.SHIFT_3;
             if (iLimit > index.length) {
                 int[] newIndex = new int[I_LIMIT];
-                for (int j = 0; j < i; ++j) { newIndex[j] = index[j]; }
+                for (int j = 0; j < i; ++j) {
+                    newIndex[j] = index[j];
+                }
                 index = newIndex;
             }
             do {
                 flags[i] = ALL_SAME;
                 index[i] = initialValue;
-            } while(++i < iLimit);
+            } while (++i < iLimit);
             highStart = c;
         }
     }
@@ -447,7 +456,9 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
                 throw new AssertionError();
             }
             int[] newData = new int[capacity];
-            for (int j = 0; j < dataLength; ++j) { newData[j] = data[j]; }
+            for (int j = 0; j < dataLength; ++j) {
+                newData[j] = data[j];
+            }
             data = newData;
         }
         dataLength = newTop;
@@ -455,8 +466,7 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
     }
 
     /**
-     * No error checking for illegal arguments.
-     * The Java version always returns non-negative values.
+     * No error checking for illegal arguments. The Java version always returns non-negative values.
      */
     private int getDataBlock(int i) {
         if (flags[i] == MIXED) {
@@ -464,10 +474,10 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
         }
         if (i < BMP_I_LIMIT) {
             int newBlock = allocDataBlock(CodePointTrie.FAST_DATA_BLOCK_LENGTH);
-            int iStart = i & ~(SMALL_DATA_BLOCKS_PER_BMP_BLOCK -1);
+            int iStart = i & ~(SMALL_DATA_BLOCKS_PER_BMP_BLOCK - 1);
             int iLimit = iStart + SMALL_DATA_BLOCKS_PER_BMP_BLOCK;
             do {
-                assert(flags[iStart] == ALL_SAME);
+                assert (flags[iStart] == ALL_SAME);
                 writeBlock(newBlock, index[iStart]);
                 flags[iStart] = MIXED;
                 index[iStart++] = newBlock;
@@ -476,7 +486,9 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
             return index[i];
         } else {
             int newBlock = allocDataBlock(CodePointTrie.SMALL_DATA_BLOCK_LENGTH);
-            if (newBlock < 0) { return newBlock; }
+            if (newBlock < 0) {
+                return newBlock;
+            }
             writeBlock(newBlock, index[i]);
             flags[i] = MIXED;
             index[i] = newBlock;
@@ -530,13 +542,15 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
 
     private static boolean allValuesSameAs(int[] p, int pi, int length, int value) {
         int pLimit = pi + length;
-        while (pi < pLimit && p[pi] == value) { ++pi; }
+        while (pi < pLimit && p[pi] == value) {
+            ++pi;
+        }
         return pi == pLimit;
     }
 
     /** Search for an identical block. */
-    private static int findSameBlock(char[] p, int pStart, int length,
-            char[] q, int qStart, int blockLength) {
+    private static int findSameBlock(
+            char[] p, int pStart, int length, char[] q, int qStart, int blockLength) {
         // Ensure that we do not even partially get past length.
         length -= blockLength;
 
@@ -549,14 +563,13 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
         return -1;
     }
 
-    private static int findAllSameBlock(int[] p, int start, int limit,
-            int value, int blockLength) {
+    private static int findAllSameBlock(int[] p, int start, int limit, int value, int blockLength) {
         // Ensure that we do not even partially get past limit.
         limit -= blockLength;
 
         for (int block = start; block <= limit; ++block) {
             if (p[block] == value) {
-                for (int i = 1;; ++i) {
+                for (int i = 1; ; ++i) {
                     if (i == blockLength) {
                         return block;
                     }
@@ -571,12 +584,12 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
     }
 
     /**
-     * Look for maximum overlap of the beginning of the other block
-     * with the previous, adjacent block.
+     * Look for maximum overlap of the beginning of the other block with the previous, adjacent
+     * block.
      */
     private static int getOverlap(int[] p, int length, int[] q, int qStart, int blockLength) {
         int overlap = blockLength - 1;
-        assert(overlap <= length);
+        assert (overlap <= length);
         while (overlap > 0 && !equalBlocks(p, length - overlap, q, qStart, overlap)) {
             --overlap;
         }
@@ -585,7 +598,7 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
 
     private static int getOverlap(char[] p, int length, int[] q, int qStart, int blockLength) {
         int overlap = blockLength - 1;
-        assert(overlap <= length);
+        assert (overlap <= length);
         while (overlap > 0 && !equalBlocks(p, length - overlap, q, qStart, overlap)) {
             --overlap;
         }
@@ -594,7 +607,7 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
 
     private static int getOverlap(char[] p, int length, char[] q, int qStart, int blockLength) {
         int overlap = blockLength - 1;
-        assert(overlap <= length);
+        assert (overlap <= length);
         while (overlap > 0 && !equalBlocks(p, length - overlap, q, qStart, overlap)) {
             --overlap;
         }
@@ -604,7 +617,9 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
     private static int getAllSameOverlap(int[] p, int length, int value, int blockLength) {
         int min = length - (blockLength - 1);
         int i = length;
-        while (min < i && p[i - 1] == value) { --i; }
+        while (min < i && p[i - 1] == value) {
+            --i;
+        }
         return length - i;
     }
 
@@ -618,8 +633,8 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
     }
 
     /**
-     * Finds the start of the last range in the trie by enumerating backward.
-     * Indexes for code points higher than this will be omitted.
+     * Finds the start of the last range in the trie by enumerating backward. Indexes for code
+     * points higher than this will be omitted.
      */
     private int findHighStart() {
         int i = highStart >> CodePointTrie.SHIFT_3;
@@ -629,7 +644,7 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
                 match = index[i] == highValue;
             } else /* MIXED */ {
                 int p = index[i];
-                for (int j = 0;; ++j) {
+                for (int j = 0; ; ++j) {
                     if (j == CodePointTrie.SMALL_DATA_BLOCK_LENGTH) {
                         match = true;
                         break;
@@ -679,17 +694,17 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
 
         /** Replaces the block which has the lowest reference count. */
         void add(int index, int count, int value) {
-            assert(length == CAPACITY);
+            assert (length == CAPACITY);
             int least = -1;
             int leastCount = I_LIMIT;
             for (int i = 0; i < length; ++i) {
-                assert(values[i] != value);
+                assert (values[i] != value);
                 if (refCounts[i] < leastCount) {
                     least = i;
                     leastCount = refCounts[i];
                 }
             }
-            assert(least >= 0);
+            assert (least >= 0);
             mostRecent = least;
             indexes[least] = index;
             values[least] = value;
@@ -697,7 +712,9 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
         }
 
         int findMostUsed() {
-            if (length == 0) { return -1; }
+            if (length == 0) {
+                return -1;
+            }
             int max = -1;
             int maxCount = 0;
             for (int i = 0; i < length; ++i) {
@@ -726,15 +743,15 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
             // We store actual data indexes + 1 to reserve 0 for empty entries.
             int maxDataIndex = maxLength - newBlockLength + 1;
             int newLength;
-            if (maxDataIndex <= 0xfff) {  // 4k
+            if (maxDataIndex <= 0xfff) { // 4k
                 newLength = 6007;
                 shift = 12;
                 mask = 0xfff;
-            } else if (maxDataIndex <= 0x7fff) {  // 32k
+            } else if (maxDataIndex <= 0x7fff) { // 32k
                 newLength = 50021;
                 shift = 15;
                 mask = 0x7fff;
-            } else if (maxDataIndex <= 0x1ffff) {  // 128k
+            } else if (maxDataIndex <= 0x1ffff) { // 128k
                 newLength = 200003;
                 shift = 17;
                 mask = 0x1ffff;
@@ -757,9 +774,9 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
         void extend(int[] data, int minStart, int prevDataLength, int newDataLength) {
             int start = prevDataLength - blockLength;
             if (start >= minStart) {
-                ++start;  // Skip the last block that we added last time.
+                ++start; // Skip the last block that we added last time.
             } else {
-                start = minStart;  // Begin with the first full block.
+                start = minStart; // Begin with the first full block.
             }
             for (int end = newDataLength - blockLength; start <= end; ++start) {
                 int hashCode = makeHashCode(data, start);
@@ -770,9 +787,9 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
         void extend(char[] data, int minStart, int prevDataLength, int newDataLength) {
             int start = prevDataLength - blockLength;
             if (start >= minStart) {
-                ++start;  // Skip the last block that we added last time.
+                ++start; // Skip the last block that we added last time.
             } else {
-                start = minStart;  // Begin with the first full block.
+                start = minStart; // Begin with the first full block.
             }
             for (int end = newDataLength - blockLength; start <= end; ++start) {
                 int hashCode = makeHashCode(data, start);
@@ -846,30 +863,42 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
             return hashCode;
         }
 
-        private void addEntry(int[] data32, char[] data16, int blockStart, int hashCode, int dataIndex) {
-            assert(0 <= dataIndex && dataIndex < mask);
+        private void addEntry(
+                int[] data32, char[] data16, int blockStart, int hashCode, int dataIndex) {
+            assert (0 <= dataIndex && dataIndex < mask);
             int entryIndex = findEntry(data32, data16, data32, data16, blockStart, hashCode);
             if (entryIndex < 0) {
                 table[~entryIndex] = (hashCode << shift) | (dataIndex + 1);
             }
         }
 
-        private int findEntry(int[] data32, char[] data16,
-                int[] blockData32, char[] blockData16, int blockStart, int hashCode) {
+        private int findEntry(
+                int[] data32,
+                char[] data16,
+                int[] blockData32,
+                char[] blockData16,
+                int blockStart,
+                int hashCode) {
             int shiftedHashCode = hashCode << shift;
-            int initialEntryIndex = modulo(hashCode, length - 1) + 1;  // 1..length-1
-            for (int entryIndex = initialEntryIndex;;) {
+            int initialEntryIndex = modulo(hashCode, length - 1) + 1; // 1..length-1
+            for (int entryIndex = initialEntryIndex; ; ) {
                 int entry = table[entryIndex];
                 if (entry == 0) {
                     return ~entryIndex;
                 }
                 if ((entry & ~mask) == shiftedHashCode) {
                     int dataIndex = (entry & mask) - 1;
-                    if (data32 != null ?
-                            equalBlocks(data32, dataIndex, blockData32, blockStart, blockLength) :
-                            blockData32 != null ?
-                                equalBlocks(data16, dataIndex, blockData32, blockStart, blockLength) :
-                                equalBlocks(data16, dataIndex, blockData16, blockStart, blockLength)) {
+                    if (data32 != null
+                            ? equalBlocks(data32, dataIndex, blockData32, blockStart, blockLength)
+                            : blockData32 != null
+                                    ? equalBlocks(
+                                            data16, dataIndex, blockData32, blockStart, blockLength)
+                                    : equalBlocks(
+                                            data16,
+                                            dataIndex,
+                                            blockData16,
+                                            blockStart,
+                                            blockLength)) {
                         return entryIndex;
                     }
                 }
@@ -879,8 +908,8 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
 
         private int findEntry(int[] data, int blockValue, int hashCode) {
             int shiftedHashCode = hashCode << shift;
-            int initialEntryIndex = modulo(hashCode, length - 1) + 1;  // 1..length-1
-            for (int entryIndex = initialEntryIndex;;) {
+            int initialEntryIndex = modulo(hashCode, length - 1) + 1; // 1..length-1
+            for (int entryIndex = initialEntryIndex; ; ) {
                 int entry = table[entryIndex];
                 if (entry == 0) {
                     return ~entryIndex;
@@ -952,13 +981,13 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
                     continue;
                 }
             } else {
-                assert(flags[i] == ALL_SAME);
+                assert (flags[i] == ALL_SAME);
                 if (inc > 1) {
                     // Do all of the fast-range data block's ALL_SAME parts have the same value?
                     boolean allSame = true;
                     int next_i = i + inc;
                     for (int j = i + 1; j < next_i; ++j) {
-                        assert(flags[j] == ALL_SAME);
+                        assert (flags[j] == ALL_SAME);
                         if (index[j] != value) {
                             allSame = false;
                             break;
@@ -979,7 +1008,7 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
             if (other == AllSameBlocks.OVERFLOW) {
                 // The fixed-size array overflowed. Slow check for a duplicate block.
                 int jInc = SMALL_DATA_BLOCKS_PER_BMP_BLOCK;
-                for (int j = 0;; j += jInc) {
+                for (int j = 0; ; j += jInc) {
                     if (j == i) {
                         allSameBlocks.add(i, inc, value);
                         break;
@@ -1011,20 +1040,21 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
     /**
      * Compacts a build-time trie.
      *
-     * The compaction
-     * - removes blocks that are identical with earlier ones
-     * - overlaps each new non-duplicate block as much as possible with the previously-written one
-     * - works with fast-range data blocks whose length is a multiple of that of
-     *   higher-code-point data blocks
+     * <p>The compaction - removes blocks that are identical with earlier ones - overlaps each new
+     * non-duplicate block as much as possible with the previously-written one - works with
+     * fast-range data blocks whose length is a multiple of that of higher-code-point data blocks
      *
-     * It does not try to find an optimal order of writing, deduplicating, and overlapping blocks.
+     * <p>It does not try to find an optimal order of writing, deduplicating, and overlapping
+     * blocks.
      */
     private int compactData(
             int fastILimit, int[] newData, int dataNullIndex, MixedBlocks mixedBlocks) {
         // The linear ASCII data has been copied into newData already.
         int newDataLength = 0;
-        for (int i = 0; newDataLength < ASCII_LIMIT;
-                newDataLength += CodePointTrie.FAST_DATA_BLOCK_LENGTH, i += SMALL_DATA_BLOCKS_PER_BMP_BLOCK) {
+        for (int i = 0;
+                newDataLength < ASCII_LIMIT;
+                newDataLength += CodePointTrie.FAST_DATA_BLOCK_LENGTH,
+                        i += SMALL_DATA_BLOCKS_PER_BMP_BLOCK) {
             index[i] = newDataLength;
         }
 
@@ -1055,8 +1085,11 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
                 // and not all of the rest of the fast block is filled with this value.
                 // Otherwise trie.getRange() would detect that the fast block starts at
                 // dataNullOffset and assume incorrectly that it is filled with the null value.
-                while (n >= 0 && i == dataNullIndex && i >= fastILimit && n < fastLength &&
-                        isStartOfSomeFastBlock(n, index, fastILimit)) {
+                while (n >= 0
+                        && i == dataNullIndex
+                        && i >= fastILimit
+                        && n < fastLength
+                        && isStartOfSomeFastBlock(n, index, fastILimit)) {
                     n = findAllSameBlock(newData, n + 1, newDataLength, value, blockLength);
                 }
                 if (n >= 0) {
@@ -1108,12 +1141,12 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
         int i3FirstNull = -1;
         for (int i = 0, j = 0; i < fastILimit; ++j) {
             int i3 = index[i];
-            fastIndex[j] = (char)i3;
+            fastIndex[j] = (char) i3;
             if (i3 == dataNullOffset) {
                 if (i3FirstNull < 0) {
                     i3FirstNull = j;
-                } else if (index3NullOffset < 0 &&
-                        (j - i3FirstNull + 1) == CodePointTrie.INDEX_3_BLOCK_LENGTH) {
+                } else if (index3NullOffset < 0
+                        && (j - i3FirstNull + 1) == CodePointTrie.INDEX_3_BLOCK_LENGTH) {
                     index3NullOffset = i3FirstNull;
                 }
             } else {
@@ -1147,7 +1180,7 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
         // Otherwise, the multi-stage index covers all of Unicode.
         int iStart = fastILimit < BMP_I_LIMIT ? 0 : BMP_I_LIMIT;
         int iLimit = highStart >> CodePointTrie.SHIFT_3;
-        for (int i = iStart; i < iLimit;) {
+        for (int i = iStart; i < iLimit; ) {
             int j = i;
             int jLimit = i + CodePointTrie.INDEX_3_BLOCK_LENGTH;
             int oredI3 = 0;
@@ -1216,7 +1249,8 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
             int i3;
             byte f = flags[i];
             if (f == I3_NULL && i3FirstNull < 0) {
-                // First index-3 null block. Write & overlap it like a normal block, then remember it.
+                // First index-3 null block. Write & overlap it like a normal block, then remember
+                // it.
                 f = dataNullOffset <= 0xffff ? I3_16 : I3_18;
                 i3FirstNull = 0;
             }
@@ -1233,13 +1267,18 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
                         // No overlap at the boundary between the index-1 and index-3 tables.
                         n = 0;
                     } else {
-                        n = getOverlap(index16, indexLength,
-                                       index, i, CodePointTrie.INDEX_3_BLOCK_LENGTH);
+                        n =
+                                getOverlap(
+                                        index16,
+                                        indexLength,
+                                        index,
+                                        i,
+                                        CodePointTrie.INDEX_3_BLOCK_LENGTH);
                     }
                     i3 = indexLength - n;
                     int prevIndexLength = indexLength;
                     while (n < CodePointTrie.INDEX_3_BLOCK_LENGTH) {
-                        index16[indexLength++] = (char)index[i + n++];
+                        index16[indexLength++] = (char) index[i + n++];
                     }
                     mixedBlocks.extend(index16, index3Start, prevIndexLength, indexLength);
                     if (hasLongI3Blocks) {
@@ -1247,8 +1286,8 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
                     }
                 }
             } else {
-                assert(f == I3_18);
-                assert(hasLongI3Blocks);
+                assert (f == I3_18);
+                assert (hasLongI3Blocks);
                 // Encode an index-3 block that contains one or more data indexes exceeding 16 bits.
                 int j = i;
                 int jLimit = i + CodePointTrie.INDEX_3_BLOCK_LENGTH;
@@ -1257,29 +1296,29 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
                     ++k;
                     int v = index[j++];
                     int upperBits = (v & 0x30000) >> 2;
-                    index16[k++] = (char)v;
+                    index16[k++] = (char) v;
                     v = index[j++];
                     upperBits |= (v & 0x30000) >> 4;
-                    index16[k++] = (char)v;
+                    index16[k++] = (char) v;
                     v = index[j++];
                     upperBits |= (v & 0x30000) >> 6;
-                    index16[k++] = (char)v;
+                    index16[k++] = (char) v;
                     v = index[j++];
                     upperBits |= (v & 0x30000) >> 8;
-                    index16[k++] = (char)v;
+                    index16[k++] = (char) v;
                     v = index[j++];
                     upperBits |= (v & 0x30000) >> 10;
-                    index16[k++] = (char)v;
+                    index16[k++] = (char) v;
                     v = index[j++];
                     upperBits |= (v & 0x30000) >> 12;
-                    index16[k++] = (char)v;
+                    index16[k++] = (char) v;
                     v = index[j++];
                     upperBits |= (v & 0x30000) >> 14;
-                    index16[k++] = (char)v;
+                    index16[k++] = (char) v;
                     v = index[j++];
                     upperBits |= (v & 0x30000) >> 16;
-                    index16[k++] = (char)v;
-                    index16[k - 9] = (char)upperBits;
+                    index16[k++] = (char) v;
+                    index16[k - 9] = (char) upperBits;
                 } while (j < jLimit);
                 int n = longI3Blocks.findBlock(index16, index16, indexLength);
                 if (n >= 0) {
@@ -1289,8 +1328,13 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
                         // No overlap at the boundary between the index-1 and index-3 tables.
                         n = 0;
                     } else {
-                        n = getOverlap(index16, indexLength,
-                                       index16, indexLength, INDEX_3_18BIT_BLOCK_LENGTH);
+                        n =
+                                getOverlap(
+                                        index16,
+                                        indexLength,
+                                        index16,
+                                        indexLength,
+                                        INDEX_3_18BIT_BLOCK_LENGTH);
                     }
                     i3 = (indexLength - n) | 0x8000;
                     int prevIndexLength = indexLength;
@@ -1312,15 +1356,16 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
                 index3NullOffset = i3;
             }
             // Set the index-2 table entry.
-            index2[i2Length++] = (char)i3;
+            index2[i2Length++] = (char) i3;
         }
-        assert(i2Length == index2Capacity);
-        assert(indexLength <= index3Start + index3Capacity);
+        assert (i2Length == index2Capacity);
+        assert (indexLength <= index3Start + index3Capacity);
 
         if (index3NullOffset < 0) {
             index3NullOffset = CodePointTrie.NO_INDEX3_NULL_OFFSET;
         }
-        if (indexLength >= (CodePointTrie.NO_INDEX3_NULL_OFFSET + CodePointTrie.INDEX_3_BLOCK_LENGTH)) {
+        if (indexLength
+                >= (CodePointTrie.NO_INDEX3_NULL_OFFSET + CodePointTrie.INDEX_3_BLOCK_LENGTH)) {
             // The index-3 offsets exceed 15 bits, or
             // the last one cannot be distinguished from the no-null-block value.
             throw new IndexOutOfBoundsException(
@@ -1336,13 +1381,12 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
             int n;
             if ((i2Length - i) >= blockLength) {
                 // normal block
-                assert(blockLength == CodePointTrie.INDEX_2_BLOCK_LENGTH);
+                assert (blockLength == CodePointTrie.INDEX_2_BLOCK_LENGTH);
                 n = mixedBlocks.findBlock(index16, index2, i);
             } else {
                 // highStart is inside the last index-2 block. Shorten it.
                 blockLength = i2Length - i;
-                n = findSameBlock(index16, index3Start, indexLength,
-                        index2, i, blockLength);
+                n = findSameBlock(index16, index3Start, indexLength, index2, i, blockLength);
             }
             int i2;
             if (n >= 0) {
@@ -1362,21 +1406,22 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
                 mixedBlocks.extend(index16, index3Start, prevIndexLength, indexLength);
             }
             // Set the index-1 table entry.
-            index16[i1++] = (char)i2;
+            index16[i1++] = (char) i2;
         }
-        assert(i1 == index3Start);
-        assert(indexLength <= index16Capacity);
+        assert (i1 == index3Start);
+        assert (indexLength <= index16Capacity);
 
         return indexLength;
     }
 
     private int compactTrie(int fastILimit) {
         // Find the real highStart and round it up.
-        assert((highStart & (CodePointTrie.CP_PER_INDEX_2_ENTRY - 1)) == 0);
+        assert ((highStart & (CodePointTrie.CP_PER_INDEX_2_ENTRY - 1)) == 0);
         highValue = get(MAX_UNICODE);
         int realHighStart = findHighStart();
-        realHighStart = (realHighStart + (CodePointTrie.CP_PER_INDEX_2_ENTRY - 1)) &
-            ~(CodePointTrie.CP_PER_INDEX_2_ENTRY - 1);
+        realHighStart =
+                (realHighStart + (CodePointTrie.CP_PER_INDEX_2_ENTRY - 1))
+                        & ~(CodePointTrie.CP_PER_INDEX_2_ENTRY - 1);
         if (realHighStart == UNICODE_LIMIT) {
             highValue = initialValue;
         }
@@ -1410,7 +1455,7 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
 
         MixedBlocks mixedBlocks = new MixedBlocks();
         int newDataLength = compactData(fastILimit, newData, dataNullIndex, mixedBlocks);
-        assert(newDataLength <= newDataCapacity);
+        assert (newDataLength <= newDataCapacity);
         data = newData;
         dataLength = newDataLength;
         if (dataLength > (0x3ffff + CodePointTrie.SMALL_DATA_BLOCK_LENGTH)) {
@@ -1436,17 +1481,17 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
         // When we build a UCPTrie for a smaller value width, we first mask off unused bits
         // before compacting the data.
         switch (valueWidth) {
-        case BITS_32:
-            break;
-        case BITS_16:
-            maskValues(0xffff);
-            break;
-        case BITS_8:
-            maskValues(0xff);
-            break;
-        default:
-            // Should be unreachable.
-            throw new IllegalArgumentException();
+            case BITS_32:
+                break;
+            case BITS_16:
+                maskValues(0xffff);
+                break;
+            case BITS_8:
+                maskValues(0xff);
+                break;
+            default:
+                // Should be unreachable.
+                throw new IllegalArgumentException();
         }
 
         int fastLimit = type == CodePointTrie.Type.FAST ? BMP_LIMIT : CodePointTrie.SMALL_LIMIT;
@@ -1454,7 +1499,7 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
 
         // Ensure data table alignment: The index length must be even for uint32_t data.
         if (valueWidth == CodePointTrie.ValueWidth.BITS_32 && (indexLength & 1) != 0) {
-            index16[indexLength++] = 0xffee;  // arbitrary value
+            index16[indexLength++] = 0xffee; // arbitrary value
         }
 
         // Make the total trie structure length a multiple of 4 bytes by padding the data table,
@@ -1481,9 +1526,11 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
             length += dataLength * 4;
         } else {
             int and3 = (length + dataLength) & 3;
-            if (and3 == 0 && data[dataLength - 1] == errorValue && data[dataLength - 2] == highValue) {
+            if (and3 == 0
+                    && data[dataLength - 1] == errorValue
+                    && data[dataLength - 2] == highValue) {
                 // all set
-            } else if(and3 == 3 && data[dataLength - 1] == highValue) {
+            } else if (and3 == 3 && data[dataLength - 1] == highValue) {
                 data[dataLength++] = errorValue;
             } else {
                 while (and3 != 2) {
@@ -1495,7 +1542,7 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
             }
             length += dataLength;
         }
-        assert((length & 3) == 0);
+        assert ((length & 3) == 0);
 
         // Fill the index and data arrays.
         char[] trieIndex;
@@ -1503,7 +1550,7 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
             // Condense only the fast index from the mutable-trie index.
             trieIndex = new char[indexLength];
             for (int i = 0, j = 0; j < indexLength; i += SMALL_DATA_BLOCKS_PER_BMP_BLOCK, ++j) {
-                trieIndex[j] = (char)index[i];
+                trieIndex[j] = (char) index[i];
             }
         } else {
             if (indexLength == index16.length) {
@@ -1516,38 +1563,45 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
 
         // Write the data array.
         switch (valueWidth) {
-        case BITS_16: {
-            // Write 16-bit data values.
-            char[] data16 = new char[dataLength];
-            for (int i = 0; i < dataLength; ++i) { data16[i] = (char)data[i]; }
-            return type == CodePointTrie.Type.FAST ?
-                    new CodePointTrie.Fast16(trieIndex, data16, highStart,
-                            index3NullOffset, dataNullOffset) :
-                    new CodePointTrie.Small16(trieIndex, data16, highStart,
-                            index3NullOffset, dataNullOffset);
-        }
-        case BITS_32: {
-            // Write 32-bit data values.
-            int[] data32 = Arrays.copyOf(data, dataLength);
-            return type == CodePointTrie.Type.FAST ?
-                    new CodePointTrie.Fast32(trieIndex, data32, highStart,
-                            index3NullOffset, dataNullOffset) :
-                    new CodePointTrie.Small32(trieIndex, data32, highStart,
-                            index3NullOffset, dataNullOffset);
-        }
-        case BITS_8: {
-            // Write 8-bit data values.
-            byte[] data8 = new byte[dataLength];
-            for (int i = 0; i < dataLength; ++i) { data8[i] = (byte)data[i]; }
-            return type == CodePointTrie.Type.FAST ?
-                    new CodePointTrie.Fast8(trieIndex, data8, highStart,
-                            index3NullOffset, dataNullOffset) :
-                    new CodePointTrie.Small8(trieIndex, data8, highStart,
-                            index3NullOffset, dataNullOffset);
-        }
-        default:
-            // Should be unreachable.
-            throw new IllegalArgumentException();
+            case BITS_16:
+                {
+                    // Write 16-bit data values.
+                    char[] data16 = new char[dataLength];
+                    for (int i = 0; i < dataLength; ++i) {
+                        data16[i] = (char) data[i];
+                    }
+                    return type == CodePointTrie.Type.FAST
+                            ? new CodePointTrie.Fast16(
+                                    trieIndex, data16, highStart, index3NullOffset, dataNullOffset)
+                            : new CodePointTrie.Small16(
+                                    trieIndex, data16, highStart, index3NullOffset, dataNullOffset);
+                }
+            case BITS_32:
+                {
+                    // Write 32-bit data values.
+                    int[] data32 = Arrays.copyOf(data, dataLength);
+                    return type == CodePointTrie.Type.FAST
+                            ? new CodePointTrie.Fast32(
+                                    trieIndex, data32, highStart, index3NullOffset, dataNullOffset)
+                            : new CodePointTrie.Small32(
+                                    trieIndex, data32, highStart, index3NullOffset, dataNullOffset);
+                }
+            case BITS_8:
+                {
+                    // Write 8-bit data values.
+                    byte[] data8 = new byte[dataLength];
+                    for (int i = 0; i < dataLength; ++i) {
+                        data8[i] = (byte) data[i];
+                    }
+                    return type == CodePointTrie.Type.FAST
+                            ? new CodePointTrie.Fast8(
+                                    trieIndex, data8, highStart, index3NullOffset, dataNullOffset)
+                            : new CodePointTrie.Small8(
+                                    trieIndex, data8, highStart, index3NullOffset, dataNullOffset);
+                }
+            default:
+                // Should be unreachable.
+                throw new IllegalArgumentException();
         }
     }
 }

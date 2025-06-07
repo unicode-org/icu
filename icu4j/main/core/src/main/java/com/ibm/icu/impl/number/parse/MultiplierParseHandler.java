@@ -4,9 +4,7 @@ package com.ibm.icu.impl.number.parse;
 
 import com.ibm.icu.number.Scale;
 
-/**
- * Wraps a {@link Scale} for use in the number parsing pipeline.
- */
+/** Wraps a {@link Scale} for use in the number parsing pipeline. */
 public class MultiplierParseHandler extends ValidationMatcher {
 
     private final Scale multiplier;

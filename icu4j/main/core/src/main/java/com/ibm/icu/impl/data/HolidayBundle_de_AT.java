@@ -9,15 +9,14 @@
 
 package com.ibm.icu.impl.data;
 
-import java.util.Calendar;
-import java.util.ListResourceBundle;
-
 import com.ibm.icu.util.EasterHoliday;
 import com.ibm.icu.util.Holiday;
 import com.ibm.icu.util.SimpleHoliday;
+import java.util.Calendar;
+import java.util.ListResourceBundle;
 
 public class HolidayBundle_de_AT extends ListResourceBundle {
-    static private final Holiday[] fHolidays = {
+    private static final Holiday[] fHolidays = {
         SimpleHoliday.NEW_YEARS_DAY,
         SimpleHoliday.EPIPHANY,
         EasterHoliday.GOOD_FRIDAY,
@@ -32,18 +31,20 @@ public class HolidayBundle_de_AT extends ListResourceBundle {
         SimpleHoliday.IMMACULATE_CONCEPTION,
         SimpleHoliday.CHRISTMAS,
         SimpleHoliday.ST_STEPHENS_DAY,
-
-        new SimpleHoliday(Calendar.MAY,        1,  0,               "National Holiday"),
-        new SimpleHoliday(Calendar.OCTOBER,   31, -Calendar.MONDAY, "National Holiday"),
+        new SimpleHoliday(Calendar.MAY, 1, 0, "National Holiday"),
+        new SimpleHoliday(Calendar.OCTOBER, 31, -Calendar.MONDAY, "National Holiday"),
     };
 
-    static private final Object[][] fContents = {
-        { "holidays",   fHolidays },
+    private static final Object[][] fContents = {
+        {"holidays", fHolidays},
 
         // Only holidays names different from those used in Germany are listed here
-        {   "Christmas",        "Christtag" },
-        {   "New Year's Day",   "Neujahrstag" },
+        {"Christmas", "Christtag"},
+        {"New Year's Day", "Neujahrstag"},
     };
+
     @Override
-    public synchronized Object[][] getContents() { return fContents; }
+    public synchronized Object[][] getContents() {
+        return fContents;
+    }
 }

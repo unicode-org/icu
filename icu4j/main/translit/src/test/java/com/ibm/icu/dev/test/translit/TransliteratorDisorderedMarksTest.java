@@ -3,22 +3,19 @@
 
 package com.ibm.icu.dev.test.translit;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.CanonicalIterator;
 import com.ibm.icu.text.Normalizer2;
 import com.ibm.icu.text.Transliterator;
 import com.ibm.icu.text.UnicodeSet;
-
+import java.util.HashMap;
+import java.util.Map;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 /**
  * @test
@@ -100,7 +97,6 @@ public class TransliteratorDisorderedMarksTest extends TestFmwk {
             sourcesSet.add(i);
         }
 
-
         for (Map.Entry<Integer, UnicodeSet> x : leadToSources.entrySet()) {
             Integer lead = x.getKey();
             UnicodeSet sources = x.getValue();
@@ -116,10 +112,9 @@ public class TransliteratorDisorderedMarksTest extends TestFmwk {
             }
         }
 
-
         for (String s : nonStarters) {
             disorderedMarks.add("\u0345" + s);
-            disorderedMarks.add(s+"\u0323");
+            disorderedMarks.add(s + "\u0323");
             String xx = nfc.normalize("\u01EC" + s);
             if (!xx.startsWith("\u01EC")) {
                 logln("??");
@@ -156,38 +151,30 @@ public class TransliteratorDisorderedMarksTest extends TestFmwk {
         //            }
         //        }
         logln("Test cases: " + disorderedMarks.size());
-        disorderedMarks.addAll(0,0x10FFFF).freeze();
+        disorderedMarks.addAll(0, 0x10FFFF).freeze();
         logln("isInert \u0104 " + nfc.isInert('\u0104'));
     }
 
     @Test
     @Parameters({
-            ":: [:sc=COMMON:] any-name;",
-
-            ":: [:Greek:] hex-any/C;",
-            ":: [:Greek:] any-hex/C;",
-
-            ":: [[:Mn:][:Me:]] remove;",
-            ":: [[:Mn:][:Me:]] null;",
-
-
-            ":: lower;",
-            ":: upper;",
-            ":: title;",
-            ":: CaseFold;",
-
-            ":: NFD;",
-            ":: NFC;",
-            ":: NFKD;",
-            ":: NFKC;",
-
-            ":: [[:Mn:][:Me:]] NFKD;",
-            ":: Latin-Greek;",
-            ":: [:Latin:] NFKD;",
-            ":: NFKD;",
-            ":: NFKD;\n" +
-                ":: [[:Mn:][:Me:]] remove;\n" +
-                ":: NFC;",
+        ":: [:sc=COMMON:] any-name;",
+        ":: [:Greek:] hex-any/C;",
+        ":: [:Greek:] any-hex/C;",
+        ":: [[:Mn:][:Me:]] remove;",
+        ":: [[:Mn:][:Me:]] null;",
+        ":: lower;",
+        ":: upper;",
+        ":: title;",
+        ":: CaseFold;",
+        ":: NFD;",
+        ":: NFC;",
+        ":: NFKD;",
+        ":: NFKC;",
+        ":: [[:Mn:][:Me:]] NFKD;",
+        ":: Latin-Greek;",
+        ":: [:Latin:] NFKD;",
+        ":: NFKD;",
+        ":: NFKD;\n" + ":: [[:Mn:][:Me:]] remove;\n" + ":: NFC;",
     })
     public void TestSourceTargetSet2(String rule) {
         Transliterator trans = Transliterator.createFromRules("temp", rule, Transliterator.FORWARD);
@@ -236,7 +223,15 @@ public class TransliteratorDisorderedMarksTest extends TestFmwk {
             // See the comment in TestCasing() about the iota subscript.
             empiricalSource.remove(0x345);
         }
-        TransliteratorTest.assertEquals("getSource(" + ruleDisplay + ")", empiricalSource, actualSource, TransliteratorTest.SetAssert.MISSING_OK);
-        TransliteratorTest.assertEquals("getTarget(" + ruleDisplay + ")", empiricalTarget, actualTarget, TransliteratorTest.SetAssert.MISSING_OK);
+        TransliteratorTest.assertEquals(
+                "getSource(" + ruleDisplay + ")",
+                empiricalSource,
+                actualSource,
+                TransliteratorTest.SetAssert.MISSING_OK);
+        TransliteratorTest.assertEquals(
+                "getTarget(" + ruleDisplay + ")",
+                empiricalTarget,
+                actualTarget,
+                TransliteratorTest.SetAssert.MISSING_OK);
     }
 }

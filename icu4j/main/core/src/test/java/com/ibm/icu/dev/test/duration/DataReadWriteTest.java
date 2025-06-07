@@ -1,26 +1,24 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /*
-******************************************************************************
-* Copyright (C) 2007-2010, International Business Machines Corporation and   *
-* others. All Rights Reserved.                                               *
-******************************************************************************
-*/
+ ******************************************************************************
+ * Copyright (C) 2007-2010, International Business Machines Corporation and   *
+ * others. All Rights Reserved.                                               *
+ ******************************************************************************
+ */
 
 // Copyright 2006 Google Inc.  All Rights Reserved.
 
 package com.ibm.icu.dev.test.duration;
 
-import java.io.StringReader;
-import java.io.StringWriter;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.duration.impl.XMLRecordReader;
 import com.ibm.icu.impl.duration.impl.XMLRecordWriter;
+import java.io.StringReader;
+import java.io.StringWriter;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public class DataReadWriteTest extends CoreTestFmwk {
@@ -78,18 +76,14 @@ public class DataReadWriteTest extends CoreTestFmwk {
     @Test
     public void testBoolArray() {
         boolean[][] datas = {
-            {},
-            { true },
-            { true, false },
-            { true, false, true },
+            {}, {true}, {true, false}, {true, false, true},
         };
 
         String[] targets = {
             "<testList></testList>",
             "<testList><test>true</test></testList>",
             "<testList><test>true</test><test>false</test></testList>",
-            "<testList><test>true</test><test>false</test>" +
-            "<test>true</test></testList>",
+            "<testList><test>true</test><test>false</test>" + "<test>true</test></testList>",
         };
 
         for (int j = 0; j < datas.length; ++j) {
@@ -134,18 +128,14 @@ public class DataReadWriteTest extends CoreTestFmwk {
     @Test
     public void testCharacterArray() {
         char[][] datas = {
-            {},
-            { 'a' },
-            { 'a', 'b' },
-            { 'a', 'b', 'c' },
+            {}, {'a'}, {'a', 'b'}, {'a', 'b', 'c'},
         };
 
         String[] targets = {
             "<testList></testList>",
             "<testList><test>a</test></testList>",
             "<testList><test>a</test><test>b</test></testList>",
-            "<testList><test>a</test><test>b</test>" +
-            "<test>c</test></testList>",
+            "<testList><test>a</test><test>b</test>" + "<test>c</test></testList>",
         };
 
         for (int j = 0; j < datas.length; ++j) {
@@ -175,7 +165,7 @@ public class DataReadWriteTest extends CoreTestFmwk {
     public void testNamedIndex() {
         StringWriter sw = new StringWriter();
         XMLRecordWriter xrw = new XMLRecordWriter(sw);
-        String[] names = { "zero", "one" };
+        String[] names = {"zero", "one"};
 
         xrw.namedIndex("x", names, 0);
         xrw.namedIndex("y", names, 1);
@@ -191,20 +181,16 @@ public class DataReadWriteTest extends CoreTestFmwk {
 
     @Test
     public void testNamedIndexArray() {
-        String[] names = { "zero", "one" };
+        String[] names = {"zero", "one"};
         byte[][] datas = {
-            {},
-            { 0 },
-            { 1, 0 },
-            { 0, 1, 0 },
+            {}, {0}, {1, 0}, {0, 1, 0},
         };
 
         String[] targets = {
             "<testList></testList>",
             "<testList><test>zero</test></testList>",
             "<testList><test>one</test><test>zero</test></testList>",
-            "<testList><test>zero</test><test>one</test>" +
-            "<test>zero</test></testList>",
+            "<testList><test>zero</test><test>one</test>" + "<test>zero</test></testList>",
         };
 
         for (int j = 0; j < datas.length; ++j) {
@@ -241,8 +227,10 @@ public class DataReadWriteTest extends CoreTestFmwk {
         xrw.string("x", s);
         xrw.flush();
         String str = sw.toString();
-        assertEquals("\n'" + normalize(str) + "' = \n'<x>" + t + "</x>", "<x>"
-                + t + "</x>", normalize(str));
+        assertEquals(
+                "\n'" + normalize(str) + "' = \n'<x>" + t + "</x>",
+                "<x>" + t + "</x>",
+                normalize(str));
 
         StringReader sr = new StringReader(str);
         XMLRecordReader xrr = new XMLRecordReader(sr);
@@ -259,24 +247,34 @@ public class DataReadWriteTest extends CoreTestFmwk {
         String s4x = " It is only a test ";
 
         String[][] datas = {
-            {},
-            { s1 },
-            { s2, s1 },
-            { s3, s2, s1 },
-            { s3, null, s1, null },
-            { s4, s1, s3, s2 }
+            {}, {s1}, {s2, s1}, {s3, s2, s1}, {s3, null, s1, null}, {s4, s1, s3, s2}
         };
 
         String[] targets = {
             "<testList></testList>",
             "<testList><test>" + s1 + "</test></testList>",
             "<testList><test>" + s2 + "</test><test>" + s1 + "</test></testList>",
-            "<testList><test>" + s3 + "</test><test>" + s2 +
-                "</test><test>" + s1 + "</test></testList>",
-            "<testList><test>" + s3 + "</test><test>Null</test><test>" + s1 +
-                "</test><test>Null</test></testList>",
-            "<testList><test>" + s4x + "</test><test>" + s1 +
-                "</test><test>" + s3 + "</test><test>" + s2 + "</test></testList>",
+            "<testList><test>"
+                    + s3
+                    + "</test><test>"
+                    + s2
+                    + "</test><test>"
+                    + s1
+                    + "</test></testList>",
+            "<testList><test>"
+                    + s3
+                    + "</test><test>Null</test><test>"
+                    + s1
+                    + "</test><test>Null</test></testList>",
+            "<testList><test>"
+                    + s4x
+                    + "</test><test>"
+                    + s1
+                    + "</test><test>"
+                    + s3
+                    + "</test><test>"
+                    + s2
+                    + "</test></testList>",
         };
 
         for (int j = 0; j < datas.length; ++j) {
@@ -301,8 +299,7 @@ public class DataReadWriteTest extends CoreTestFmwk {
                 if (s4.equals(standin)) {
                     standin = s4x;
                 }
-                assertEquals("" + j + "/" + i + " '" + out[i] + "'", standin,
-                        out[i]);
+                assertEquals("" + j + "/" + i + " '" + out[i] + "'", standin, out[i]);
             }
         }
     }
@@ -314,25 +311,19 @@ public class DataReadWriteTest extends CoreTestFmwk {
         String s3 = "This is a test";
         String s4 = "It is only a test";
 
-        String[][] table = {
-            {},
-            { s1 },
-            { s2, s1 },
-            { s3, s2, s1 },
-            null,
-            { s4, s1, s3, s2 }
-        };
+        String[][] table = {{}, {s1}, {s2, s1}, {s3, s2, s1}, null, {s4, s1, s3, s2}};
 
-        String target = "<testTable>" +
-            "<testList></testList>" +
-            "<testList><test></test></testList>" +
-            "<testList><test> </test><test></test></testList>" +
-            "<testList><test>This is a test</test><test> </test>" +
-                "<test></test></testList>" +
-            "<testList>Null</testList>" +
-            "<testList><test>It is only a test</test><test></test>" +
-                "<test>This is a test</test><test> </test></testList>" +
-            "</testTable>";
+        String target =
+                "<testTable>"
+                        + "<testList></testList>"
+                        + "<testList><test></test></testList>"
+                        + "<testList><test> </test><test></test></testList>"
+                        + "<testList><test>This is a test</test><test> </test>"
+                        + "<test></test></testList>"
+                        + "<testList>Null</testList>"
+                        + "<testList><test>It is only a test</test><test></test>"
+                        + "<test>This is a test</test><test> </test></testList>"
+                        + "</testTable>";
 
         StringWriter sw = new StringWriter();
         XMLRecordWriter xrw = new XMLRecordWriter(sw);

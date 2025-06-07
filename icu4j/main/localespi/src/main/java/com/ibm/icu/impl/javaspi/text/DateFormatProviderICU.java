@@ -8,13 +8,12 @@
  */
 package com.ibm.icu.impl.javaspi.text;
 
-import java.text.DateFormat;
-import java.text.spi.DateFormatProvider;
-import java.util.Locale;
-
 import com.ibm.icu.impl.javaspi.ICULocaleServiceProvider;
 import com.ibm.icu.impl.jdkadapter.SimpleDateFormatICU;
 import com.ibm.icu.util.ULocale;
+import java.text.DateFormat;
+import java.text.spi.DateFormatProvider;
+import java.util.Locale;
 
 public class DateFormatProviderICU extends DateFormatProvider {
 
@@ -55,6 +54,6 @@ public class DateFormatProviderICU extends DateFormatProvider {
             return null;
         }
 
-        return SimpleDateFormatICU.wrap((com.ibm.icu.text.SimpleDateFormat)icuDfmt);
+        return SimpleDateFormatICU.wrap((com.ibm.icu.text.SimpleDateFormat) icuDfmt);
     }
 }

@@ -2,18 +2,17 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.units;
 
+import com.ibm.icu.impl.ICUData;
+import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.UResource;
+import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.UResourceBundle;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.ibm.icu.impl.ICUData;
-import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.impl.UResource;
-import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.UResourceBundle;
 
 public class UnitPreferences {
     private static final Map<String, String> measurementSystem;
@@ -26,13 +25,15 @@ public class UnitPreferences {
         measurementSystem = Collections.unmodifiableMap(tempMS);
     }
 
-
-    private HashMap<String, HashMap<String, UnitPreference[]>> mapToUnitPreferences = new HashMap<>();
+    private HashMap<String, HashMap<String, UnitPreference[]>> mapToUnitPreferences =
+            new HashMap<>();
 
     public UnitPreferences() {
         // Read unit preferences
         ICUResourceBundle resource;
-        resource = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "units");
+        resource =
+                (ICUResourceBundle)
+                        UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "units");
         UnitPreferencesSink sink = new UnitPreferencesSink();
         resource.getAllItemsWithFallback(UnitsData.Constants.UNIT_PREFERENCE_TABLE_NAME, sink);
         this.mapToUnitPreferences = sink.getMapToUnitPreferences();
@@ -43,14 +44,10 @@ public class UnitPreferences {
     }
 
     /**
-     * Extracts all the sub-usages from a usage including the default one in the end.
-     * The usages will be in order starting with the longest matching one.
-     * For example:
-     * if usage                :   "person-height-child"
-     * the function will return:   "person-height-child"
-     * "person-height"
-     * "person"
-     * "default"
+     * Extracts all the sub-usages from a usage including the default one in the end. The usages
+     * will be in order starting with the longest matching one. For example: if usage :
+     * "person-height-child" the function will return: "person-height-child" "person-height"
+     * "person" "default"
      *
      * @param usage
      * @return
@@ -70,9 +67,11 @@ public class UnitPreferences {
         return result.toArray(new String[0]);
     }
 
-    public UnitPreference[] getPreferencesFor(String category, String usage, ULocale locale, UnitsData data) {
+    public UnitPreference[] getPreferencesFor(
+            String category, String usage, ULocale locale, UnitsData data) {
         // TODO: remove this condition when all the categories are allowed.
-        // WARNING: when this is removed please make sure to keep the "fahrenhe" => "fahrenheit" mapping
+        // WARNING: when this is removed please make sure to keep the "fahrenhe" => "fahrenheit"
+        // mapping
         if ("temperature".equals(category)) {
             String localeUnit = locale.getKeywordValue("mu");
             // The value for -u-mu- is `fahrenhe`, but CLDR and everything else uses `fahrenheit`
@@ -81,7 +80,10 @@ public class UnitPreferences {
             }
             String localeUnitCategory;
             try {
-                localeUnitCategory = localeUnit == null ? null : data.getCategory(MeasureUnitImpl.forIdentifier(localeUnit));
+                localeUnitCategory =
+                        localeUnit == null
+                                ? null
+                                : data.getCategory(MeasureUnitImpl.forIdentifier(localeUnit));
             } catch (Exception e) {
                 localeUnitCategory = null;
             }
@@ -100,8 +102,7 @@ public class UnitPreferences {
 
         String[] subUsages = getAllUsages(usage);
         UnitPreference[] result = null;
-        for (String subUsage :
-                subUsages) {
+        for (String subUsage : subUsages) {
             result = getUnitPreferences(category, subUsage, region);
 
             if (result != null && isLocaleSystem) {
@@ -109,7 +110,8 @@ public class UnitPreferences {
                 boolean unitsMatchSystem = true;
                 for (UnitPreference unitPref : result) {
                     MeasureUnitImpl measureUnit = MeasureUnitImpl.forIdentifier(unitPref.getUnit());
-                    List<SingleUnitImpl> singleUnits = new ArrayList<>(measureUnit.getSingleUnits());
+                    List<SingleUnitImpl> singleUnits =
+                            new ArrayList<>(measureUnit.getSingleUnits());
                     for (SingleUnitImpl singleUnit : singleUnits) {
                         String systems = rates.extractSystems(singleUnit);
                         if (!systems.contains("metric_adjacent")) {
@@ -139,16 +141,18 @@ public class UnitPreferences {
      * @param category
      * @param usage
      * @param region
-     * @return null if there is no entry associated to the category and usage. O.W. returns the corresponding UnitPreference[]
+     * @return null if there is no entry associated to the category and usage. O.W. returns the
+     *     corresponding UnitPreference[]
      */
     private UnitPreference[] getUnitPreferences(String category, String usage, String region) {
         String key = formMapKey(category, usage);
         if (this.mapToUnitPreferences.containsKey(key)) {
-            HashMap<String, UnitPreference[]> unitPreferencesMap = this.mapToUnitPreferences.get(key);
+            HashMap<String, UnitPreference[]> unitPreferencesMap =
+                    this.mapToUnitPreferences.get(key);
             UnitPreference[] result =
-                    unitPreferencesMap.containsKey(region) ?
-                            unitPreferencesMap.get(region) :
-                            unitPreferencesMap.get(UnitsData.Constants.DEFAULT_REGION);
+                    unitPreferencesMap.containsKey(region)
+                            ? unitPreferencesMap.get(region)
+                            : unitPreferencesMap.get(UnitsData.Constants.DEFAULT_REGION);
 
             assert (result != null);
             return result;
@@ -162,11 +166,13 @@ public class UnitPreferences {
         private final BigDecimal geq;
         private final String skeleton;
 
-
         public UnitPreference(String unit, String geq, String skeleton) {
             this.unit = unit;
-            this.geq = geq == null ? BigDecimal.valueOf( Double.MIN_VALUE) /* -inf */ :  new BigDecimal(geq);
-            this.skeleton = skeleton == null? "" : skeleton;
+            this.geq =
+                    geq == null
+                            ? BigDecimal.valueOf(Double.MIN_VALUE) /* -inf */
+                            : new BigDecimal(geq);
+            this.skeleton = skeleton == null ? "" : skeleton;
         }
 
         public String getUnit() {
@@ -196,9 +202,8 @@ public class UnitPreferences {
 
         /**
          * The unitPreferenceData structure (see icu4c/source/data/misc/units.txt) contains a
-         * hierarchy of category/usage/region, within which are a set of
-         * preferences. Hence three for-loops and another loop for the
-         * preferences themselves.
+         * hierarchy of category/usage/region, within which are a set of preferences. Hence three
+         * for-loops and another loop for the preferences themselves.
          */
         @Override
         public void put(UResource.Key key, UResource.Value value, boolean noFallback) {
@@ -251,14 +256,14 @@ public class UnitPreferences {
                                 category,
                                 usage,
                                 region,
-                                unitPreferences.toArray(new UnitPreference[0])
-                        );
+                                unitPreferences.toArray(new UnitPreference[0]));
                     }
                 }
             }
         }
 
-        private void insertUnitPreferences(String category, String usage, String region, UnitPreference[] unitPreferences) {
+        private void insertUnitPreferences(
+                String category, String usage, String region, UnitPreference[] unitPreferences) {
             String key = formMapKey(category, usage);
             HashMap<String, UnitPreference[]> shouldInsert;
             if (this.mapToUnitPreferences.containsKey(key)) {

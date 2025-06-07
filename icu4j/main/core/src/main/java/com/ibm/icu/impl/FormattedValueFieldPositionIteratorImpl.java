@@ -2,19 +2,18 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl;
 
+import com.ibm.icu.text.ConstrainedFieldPosition;
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
 import java.text.FieldPosition;
 import java.text.Format;
 import java.util.List;
 
-import com.ibm.icu.text.ConstrainedFieldPosition;
-
 /**
  * Implementation of FormattedValue based on FieldPositionIterator.
  *
- * In C++, this implements FormattedValue. In Java, it is a stateless
- * collection of static functions to avoid having to use nested objects.
+ * <p>In C++, this implements FormattedValue. In Java, it is a stateless collection of static
+ * functions to avoid having to use nested objects.
  */
 public class FormattedValueFieldPositionIteratorImpl {
 
@@ -35,7 +34,8 @@ public class FormattedValueFieldPositionIteratorImpl {
         }
     }
 
-    public static boolean nextPosition(List<FieldPosition> attributes, ConstrainedFieldPosition cfpos) {
+    public static boolean nextPosition(
+            List<FieldPosition> attributes, ConstrainedFieldPosition cfpos) {
         int numFields = attributes.size();
         int i = (int) cfpos.getInt64IterationContext();
         for (; i < numFields; i++) {
@@ -57,7 +57,8 @@ public class FormattedValueFieldPositionIteratorImpl {
         return i < numFields;
     }
 
-    public static AttributedCharacterIterator toCharacterIterator(CharSequence cs, List<FieldPosition> attributes) {
+    public static AttributedCharacterIterator toCharacterIterator(
+            CharSequence cs, List<FieldPosition> attributes) {
         AttributedString as = new AttributedString(cs.toString());
 
         // add attributes to the AttributedString
@@ -76,7 +77,8 @@ public class FormattedValueFieldPositionIteratorImpl {
         return as.getIterator();
     }
 
-    public static void addOverlapSpans(List<FieldPosition> attributes, Format.Field spanField, int firstIndex) {
+    public static void addOverlapSpans(
+            List<FieldPosition> attributes, Format.Field spanField, int firstIndex) {
         // In order to avoid fancy data structures, this is an O(N^2) algorithm,
         // which should be fine for all real-life applications of this function.
         int s1a = Integer.MAX_VALUE;
@@ -84,9 +86,9 @@ public class FormattedValueFieldPositionIteratorImpl {
         int s2a = Integer.MAX_VALUE;
         int s2b = 0;
         int numFields = attributes.size();
-        for (int i = 0; i<numFields; i++) {
+        for (int i = 0; i < numFields; i++) {
             FieldPosition fp1 = attributes.get(i);
-            for (int j = i + 1; j<numFields; j++) {
+            for (int j = i + 1; j < numFields; j++) {
                 FieldPosition fp2 = attributes.get(j);
                 if (fp1.getFieldAttribute() != fp2.getFieldAttribute()) {
                     continue;
@@ -117,7 +119,7 @@ public class FormattedValueFieldPositionIteratorImpl {
         int numFields = attributes.size();
         while (true) {
             boolean isSorted = true;
-            for (int i=0; i<numFields-1; i++) {
+            for (int i = 0; i < numFields - 1; i++) {
                 FieldPosition fp1 = attributes.get(i);
                 FieldPosition fp2 = attributes.get(i + 1);
                 long comparison = 0;

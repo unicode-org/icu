@@ -8,16 +8,14 @@
  */
 package com.ibm.icu.dev.test.format;
 
-import java.util.Arrays;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.NumberFormat.SimpleNumberFormatFactory;
 import com.ibm.icu.util.ULocale;
+import java.util.Arrays;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public class NumberFormatRegistrationTest extends CoreTestFmwk {
@@ -53,16 +51,14 @@ public class NumberFormatRegistrationTest extends CoreTestFmwk {
             try {
                 NumberFormat.unregister(null);
                 errln("did not throw exception on null unregister");
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 logln("PASS: null unregister failed as expected");
             }
 
             try {
                 NumberFormat.registerFactory(null);
                 errln("did not throw exception on null register");
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 logln("PASS: null register failed as expected");
             }
 
@@ -74,8 +70,7 @@ public class NumberFormatRegistrationTest extends CoreTestFmwk {
                 if (NumberFormat.unregister("")) {
                     errln("unregister of empty string key succeeded");
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
             }
         }
 

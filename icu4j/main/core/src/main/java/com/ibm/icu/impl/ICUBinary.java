@@ -9,6 +9,8 @@
 
 package com.ibm.icu.impl;
 
+import com.ibm.icu.util.ICUUncheckedIOException;
+import com.ibm.icu.util.VersionInfo;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,19 +26,13 @@ import java.util.List;
 import java.util.MissingResourceException;
 import java.util.Set;
 
-import com.ibm.icu.util.ICUUncheckedIOException;
-import com.ibm.icu.util.VersionInfo;
-
 public final class ICUBinary {
     /**
-     * Reads the ICU .dat package file format.
-     * Most methods do not modify the ByteBuffer in any way,
+     * Reads the ICU .dat package file format. Most methods do not modify the ByteBuffer in any way,
      * not even its position or other state.
      */
     private static final class DatPackageReader {
-        /**
-         * .dat package data format ID "CmnD".
-         */
+        /** .dat package data format ID "CmnD". */
         private static final int DATA_FORMAT = 0x436d6e44;
 
         private static final class IsAcceptable implements Authenticate {
@@ -45,11 +41,12 @@ public final class ICUBinary {
                 return version[0] == 1;
             }
         }
+
         private static final IsAcceptable IS_ACCEPTABLE = new IsAcceptable();
 
         /**
-         * Checks that the ByteBuffer contains a valid, usable ICU .dat package.
-         * Moves the buffer position from 0 to after the data header.
+         * Checks that the ByteBuffer contains a valid, usable ICU .dat package. Moves the buffer
+         * position from 0 to after the data header.
          */
         static boolean validate(ByteBuffer bytes) {
             try {
@@ -57,7 +54,7 @@ public final class ICUBinary {
             } catch (IOException ignored) {
                 return false;
             }
-            int count = bytes.getInt(bytes.position());  // Do not move the position.
+            int count = bytes.getInt(bytes.position()); // Do not move the position.
             if (count <= 0) {
                 return false;
             }
@@ -67,8 +64,8 @@ public final class ICUBinary {
             if (bytes.position() + 4 + count * (8 + 16) > bytes.capacity()) {
                 return false;
             }
-            if (!startsWithPackageName(bytes, getNameOffset(bytes, 0)) ||
-                    !startsWithPackageName(bytes, getNameOffset(bytes, count - 1))) {
+            if (!startsWithPackageName(bytes, getNameOffset(bytes, 0))
+                    || !startsWithPackageName(bytes, getNameOffset(bytes, count - 1))) {
                 return false;
             }
             return true;
@@ -102,11 +99,12 @@ public final class ICUBinary {
             }
         }
 
-        static void addBaseNamesInFolder(ByteBuffer bytes, String folder, String suffix, Set<String> names) {
+        static void addBaseNamesInFolder(
+                ByteBuffer bytes, String folder, String suffix, Set<String> names) {
             // Find the first data item name that starts with the folder name.
             int index = binarySearch(bytes, folder);
             if (index < 0) {
-                index = ~index;  // Normal: Otherwise the folder itself is the name of a data item.
+                index = ~index; // Normal: Otherwise the folder itself is the name of a data item.
             }
 
             int base = bytes.position();
@@ -139,12 +137,12 @@ public final class ICUBinary {
                     return mid;
                 }
             }
-            return ~start;  // Not found or table is empty.
+            return ~start; // Not found or table is empty.
         }
 
         private static int getNameOffset(ByteBuffer bytes, int index) {
             int base = bytes.position();
-            assert 0 <= index && index < bytes.getInt(base);  // count
+            assert 0 <= index && index < bytes.getInt(base); // count
             // The count integer (4 bytes)
             // is followed by count (nameOffset, dataOffset) integer pairs (8 bytes per pair).
             return base + bytes.getInt(base + 4 + index * 8);
@@ -164,8 +162,13 @@ public final class ICUBinary {
             return base + bytes.getInt(base + 4 + 4 + index * 8);
         }
 
-        static boolean addBaseName(ByteBuffer bytes, int index,
-                String folder, String suffix, StringBuilder sb, Set<String> names) {
+        static boolean addBaseName(
+                ByteBuffer bytes,
+                int index,
+                String folder,
+                String suffix,
+                StringBuilder sb,
+                Set<String> names) {
             int offset = getNameOffset(bytes, index);
             // Skip "icudt54b/".
             offset += ICUData.PACKAGE_NAME.length() + 1;
@@ -186,7 +189,7 @@ public final class ICUBinary {
             while ((b = bytes.get(offset++)) != 0) {
                 char c = (char) b;
                 if (c == '/') {
-                    return true;  // Skip subfolder contents.
+                    return true; // Skip subfolder contents.
                 }
                 sb.append(c);
             }
@@ -198,12 +201,13 @@ public final class ICUBinary {
         }
     }
 
-    private static abstract class DataFile {
+    private abstract static class DataFile {
         protected final String itemPath;
 
         DataFile(String item) {
             itemPath = item;
         }
+
         @Override
         public String toString() {
             return itemPath;
@@ -214,8 +218,8 @@ public final class ICUBinary {
         /**
          * @param folder The relative ICU data folder, like "" or "coll".
          * @param suffix Usually ".res".
-         * @param names File base names relative to the folder are added without the suffix,
-         *        for example "de_CH".
+         * @param names File base names relative to the folder are added without the suffix, for
+         *     example "de_CH".
          */
         abstract void addBaseNamesInFolder(String folder, String suffix, Set<String> names);
     }
@@ -227,6 +231,7 @@ public final class ICUBinary {
             super(item);
             this.path = path;
         }
+
         @Override
         public String toString() {
             return path.toString();
@@ -243,22 +248,22 @@ public final class ICUBinary {
 
         @Override
         void addBaseNamesInFolder(String folder, String suffix, Set<String> names) {
-            if (itemPath.length() > folder.length() + suffix.length() &&
-                    itemPath.startsWith(folder) &&
-                    itemPath.endsWith(suffix) &&
-                    itemPath.charAt(folder.length()) == '/' &&
-                    itemPath.indexOf('/', folder.length() + 1) < 0) {
-                names.add(itemPath.substring(folder.length() + 1,
-                        itemPath.length() - suffix.length()));
+            if (itemPath.length() > folder.length() + suffix.length()
+                    && itemPath.startsWith(folder)
+                    && itemPath.endsWith(suffix)
+                    && itemPath.charAt(folder.length()) == '/'
+                    && itemPath.indexOf('/', folder.length() + 1) < 0) {
+                names.add(
+                        itemPath.substring(
+                                folder.length() + 1, itemPath.length() - suffix.length()));
             }
         }
     }
 
     private static final class PackageDataFile extends DataFile {
         /**
-         * .dat package bytes, or null if not a .dat package.
-         * position() is after the header.
-         * Do not modify the position or other state, for thread safety.
+         * .dat package bytes, or null if not a .dat package. position() is after the header. Do not
+         * modify the position or other state, for thread safety.
          */
         private final ByteBuffer pkgBytes;
 
@@ -317,8 +322,8 @@ public final class ICUBinary {
         }
     }
 
-    private static void addDataFilesFromFolder(File folder, StringBuilder itemPath,
-            List<DataFile> dataFiles) {
+    private static void addDataFilesFromFolder(
+            File folder, StringBuilder itemPath, List<DataFile> dataFiles) {
         File[] files = folder.listFiles();
         if (files == null || files.length == 0) {
             return;
@@ -352,21 +357,18 @@ public final class ICUBinary {
         }
     }
 
-    /**
-     * Compares the length-specified input key with the
-     * NUL-terminated table key. (ASCII)
-     */
+    /** Compares the length-specified input key with the NUL-terminated table key. (ASCII) */
     static int compareKeys(CharSequence key, ByteBuffer bytes, int offset) {
-        for (int i = 0;; ++i, ++offset) {
+        for (int i = 0; ; ++i, ++offset) {
             int c2 = bytes.get(offset);
             if (c2 == 0) {
                 if (i == key.length()) {
                     return 0;
                 } else {
-                    return 1;  // key > table key because key is longer.
+                    return 1; // key > table key because key is longer.
                 }
             } else if (i == key.length()) {
-                return -1;  // key < table key because key is shorter.
+                return -1; // key < table key because key is shorter.
             }
             int diff = key.charAt(i) - c2;
             if (diff != 0) {
@@ -376,16 +378,16 @@ public final class ICUBinary {
     }
 
     static int compareKeys(CharSequence key, byte[] bytes, int offset) {
-        for (int i = 0;; ++i, ++offset) {
+        for (int i = 0; ; ++i, ++offset) {
             int c2 = bytes[offset];
             if (c2 == 0) {
                 if (i == key.length()) {
                     return 0;
                 } else {
-                    return 1;  // key > table key because key is longer.
+                    return 1; // key > table key because key is longer.
                 }
             } else if (i == key.length()) {
-                return -1;  // key < table key because key is shorter.
+                return -1; // key < table key because key is shorter.
             }
             int diff = key.charAt(i) - c2;
             if (diff != 0) {
@@ -396,14 +398,11 @@ public final class ICUBinary {
 
     // public inner interface ------------------------------------------------
 
-    /**
-     * Special interface for data authentication
-     */
-    public static interface Authenticate
-    {
+    /** Special interface for data authentication */
+    public static interface Authenticate {
         /**
-         * Method used in ICUBinary.readHeader() to provide data format
-         * authentication.
+         * Method used in ICUBinary.readHeader() to provide data format authentication.
+         *
          * @param version version of the current data
          * @return true if dataformat is an acceptable version, false otherwise
          */
@@ -413,34 +412,32 @@ public final class ICUBinary {
     // public methods --------------------------------------------------------
 
     /**
-     * Loads an ICU binary data file and returns it as a ByteBuffer.
-     * The buffer contents is normally read-only, but its position etc. can be modified.
+     * Loads an ICU binary data file and returns it as a ByteBuffer. The buffer contents is normally
+     * read-only, but its position etc. can be modified.
      *
      * @param itemPath Relative ICU data item path, for example "root.res" or "coll/ucadata.icu".
-     * @return The data as a read-only ByteBuffer,
-     *         or null if the resource could not be found.
+     * @return The data as a read-only ByteBuffer, or null if the resource could not be found.
      */
     public static ByteBuffer getData(String itemPath) {
         return getData(null, null, itemPath, false);
     }
 
     /**
-     * Loads an ICU binary data file and returns it as a ByteBuffer.
-     * The buffer contents is normally read-only, but its position etc. can be modified.
+     * Loads an ICU binary data file and returns it as a ByteBuffer. The buffer contents is normally
+     * read-only, but its position etc. can be modified.
      *
      * @param loader Used for loader.getResourceAsStream() unless the data is found elsewhere.
      * @param resourceName Resource name for use with the loader.
      * @param itemPath Relative ICU data item path, for example "root.res" or "coll/ucadata.icu".
-     * @return The data as a read-only ByteBuffer,
-     *         or null if the resource could not be found.
+     * @return The data as a read-only ByteBuffer, or null if the resource could not be found.
      */
     public static ByteBuffer getData(ClassLoader loader, String resourceName, String itemPath) {
         return getData(loader, resourceName, itemPath, false);
     }
 
     /**
-     * Loads an ICU binary data file and returns it as a ByteBuffer.
-     * The buffer contents is normally read-only, but its position etc. can be modified.
+     * Loads an ICU binary data file and returns it as a ByteBuffer. The buffer contents is normally
+     * read-only, but its position etc. can be modified.
      *
      * @param itemPath Relative ICU data item path, for example "root.res" or "coll/ucadata.icu".
      * @return The data as a read-only ByteBuffer.
@@ -451,8 +448,8 @@ public final class ICUBinary {
     }
 
     /**
-     * Loads an ICU binary data file and returns it as a ByteBuffer.
-     * The buffer contents is normally read-only, but its position etc. can be modified.
+     * Loads an ICU binary data file and returns it as a ByteBuffer. The buffer contents is normally
+     * read-only, but its position etc. can be modified.
      *
      * @param loader Used for loader.getResourceAsStream() unless the data is found elsewhere.
      * @param resourceName Resource name for use with the loader.
@@ -460,26 +457,26 @@ public final class ICUBinary {
      * @return The data as a read-only ByteBuffer.
      * @throws MissingResourceException if required==true and the resource could not be found
      */
-//    public static ByteBuffer getRequiredData(ClassLoader loader, String resourceName,
-//            String itemPath) {
-//        return getData(loader, resourceName, itemPath, true);
-//    }
+    //    public static ByteBuffer getRequiredData(ClassLoader loader, String resourceName,
+    //            String itemPath) {
+    //        return getData(loader, resourceName, itemPath, true);
+    //    }
 
     /**
-     * Loads an ICU binary data file and returns it as a ByteBuffer.
-     * The buffer contents is normally read-only, but its position etc. can be modified.
+     * Loads an ICU binary data file and returns it as a ByteBuffer. The buffer contents is normally
+     * read-only, but its position etc. can be modified.
      *
      * @param loader Used for loader.getResourceAsStream() unless the data is found elsewhere.
      * @param resourceName Resource name for use with the loader.
      * @param itemPath Relative ICU data item path, for example "root.res" or "coll/ucadata.icu".
-     * @param required If the resource cannot be found,
-     *        this method returns null (!required) or throws an exception (required).
-     * @return The data as a read-only ByteBuffer,
-     *         or null if required==false and the resource could not be found.
+     * @param required If the resource cannot be found, this method returns null (!required) or
+     *     throws an exception (required).
+     * @return The data as a read-only ByteBuffer, or null if required==false and the resource could
+     *     not be found.
      * @throws MissingResourceException if required==true and the resource could not be found
      */
-    private static ByteBuffer getData(ClassLoader loader, String resourceName,
-            String itemPath, boolean required) {
+    private static ByteBuffer getData(
+            ClassLoader loader, String resourceName, String itemPath, boolean required) {
         ByteBuffer bytes = getDataFromFile(itemPath);
         if (bytes != null) {
             return bytes;
@@ -492,7 +489,7 @@ public final class ICUBinary {
         }
         ByteBuffer buffer = null;
         try {
-            @SuppressWarnings("resource")  // Closed by getByteBufferFromInputStreamAndCloseStream().
+            @SuppressWarnings("resource") // Closed by getByteBufferFromInputStreamAndCloseStream().
             InputStream is = ICUData.getStream(loader, resourceName, required);
             if (is == null) {
                 return null;
@@ -514,7 +511,7 @@ public final class ICUBinary {
         return null;
     }
 
-    @SuppressWarnings("resource")  // Closing a file closes its channel.
+    @SuppressWarnings("resource") // Closing a file closes its channel.
     private static ByteBuffer mapFile(File path) {
         FileInputStream file;
         try {
@@ -538,8 +535,8 @@ public final class ICUBinary {
     /**
      * @param folder The relative ICU data folder, like "" or "coll".
      * @param suffix Usually ".res".
-     * @param names File base names relative to the folder are added without the suffix,
-     *        for example "de_CH".
+     * @param names File base names relative to the folder are added without the suffix, for example
+     *     "de_CH".
      */
     public static void addBaseNamesInFileFolder(String folder, String suffix, Set<String> names) {
         for (DataFile dataFile : icuDataFiles) {
@@ -547,22 +544,18 @@ public final class ICUBinary {
         }
     }
 
-    /**
-     * Same as readHeader(), but returns a VersionInfo rather than a compact int.
-     */
-    public static VersionInfo readHeaderAndDataVersion(ByteBuffer bytes,
-                                                             int dataFormat,
-                                                             Authenticate authenticate)
-                                                                throws IOException {
+    /** Same as readHeader(), but returns a VersionInfo rather than a compact int. */
+    public static VersionInfo readHeaderAndDataVersion(
+            ByteBuffer bytes, int dataFormat, Authenticate authenticate) throws IOException {
         return getVersionInfoFromCompactInt(readHeader(bytes, dataFormat, authenticate));
     }
 
     /**
      * Reads an ICU data header, checks the data format, and returns the data version.
      *
-     * <p>Assumes that the ByteBuffer position is 0 on input.
-     * The buffer byte order is set according to the data.
-     * The buffer position is advanced past the header (including UDataInfo and comment).
+     * <p>Assumes that the ByteBuffer position is 0 on input. The buffer byte order is set according
+     * to the data. The buffer position is advanced past the header (including UDataInfo and
+     * comment).
      *
      * <p>See C++ ucmndata.h and unicode/udata.h.
      *
@@ -581,8 +574,10 @@ public final class ICUBinary {
         byte isBigEndian = bytes.get(8);
         byte charsetFamily = bytes.get(9);
         byte sizeofUChar = bytes.get(10);
-        if (isBigEndian < 0 || 1 < isBigEndian ||
-                charsetFamily != CHAR_SET_ || sizeofUChar != CHAR_SIZE_) {
+        if (isBigEndian < 0
+                || 1 < isBigEndian
+                || charsetFamily != CHAR_SET_
+                || sizeofUChar != CHAR_SIZE_) {
             throw new IOException(HEADER_AUTHENTICATION_FAILED_);
         }
         bytes.order(isBigEndian != 0 ? ByteOrder.BIG_ENDIAN : ByteOrder.LITTLE_ENDIAN);
@@ -594,49 +589,55 @@ public final class ICUBinary {
         }
         // TODO: Change Authenticate to take int major, int minor, int milli, int micro
         // to avoid array allocation.
-        byte[] formatVersion = new byte[] {
-            bytes.get(16), bytes.get(17), bytes.get(18), bytes.get(19)
-        };
-        if (bytes.get(12) != (byte)(dataFormat >> 24) ||
-                bytes.get(13) != (byte)(dataFormat >> 16) ||
-                bytes.get(14) != (byte)(dataFormat >> 8) ||
-                bytes.get(15) != (byte)dataFormat ||
-                (authenticate != null && !authenticate.isDataVersionAcceptable(formatVersion))) {
-            throw new IOException(HEADER_AUTHENTICATION_FAILED_ +
-                    String.format("; data format %02x%02x%02x%02x, format version %d.%d.%d.%d",
-                            bytes.get(12), bytes.get(13), bytes.get(14), bytes.get(15),
-                            formatVersion[0] & 0xff, formatVersion[1] & 0xff,
-                            formatVersion[2] & 0xff, formatVersion[3] & 0xff));
+        byte[] formatVersion =
+                new byte[] {bytes.get(16), bytes.get(17), bytes.get(18), bytes.get(19)};
+        if (bytes.get(12) != (byte) (dataFormat >> 24)
+                || bytes.get(13) != (byte) (dataFormat >> 16)
+                || bytes.get(14) != (byte) (dataFormat >> 8)
+                || bytes.get(15) != (byte) dataFormat
+                || (authenticate != null && !authenticate.isDataVersionAcceptable(formatVersion))) {
+            throw new IOException(
+                    HEADER_AUTHENTICATION_FAILED_
+                            + String.format(
+                                    "; data format %02x%02x%02x%02x, format version %d.%d.%d.%d",
+                                    bytes.get(12),
+                                    bytes.get(13),
+                                    bytes.get(14),
+                                    bytes.get(15),
+                                    formatVersion[0] & 0xff,
+                                    formatVersion[1] & 0xff,
+                                    formatVersion[2] & 0xff,
+                                    formatVersion[3] & 0xff));
         }
 
         bytes.position(headerSize);
-        return  // dataVersion
-                (bytes.get(20) << 24) |
-                ((bytes.get(21) & 0xff) << 16) |
-                ((bytes.get(22) & 0xff) << 8) |
-                (bytes.get(23) & 0xff);
+        return // dataVersion
+        (bytes.get(20) << 24)
+                | ((bytes.get(21) & 0xff) << 16)
+                | ((bytes.get(22) & 0xff) << 8)
+                | (bytes.get(23) & 0xff);
     }
 
     /**
-     * Writes an ICU data header.
-     * Does not write a copyright string.
+     * Writes an ICU data header. Does not write a copyright string.
      *
      * @return The length of the header (number of bytes written).
      * @throws IOException from the DataOutputStream
      */
-    public static int writeHeader(int dataFormat, int formatVersion, int dataVersion,
-            DataOutputStream dos) throws IOException {
+    public static int writeHeader(
+            int dataFormat, int formatVersion, int dataVersion, DataOutputStream dos)
+            throws IOException {
         // ucmndata.h MappedData
-        dos.writeChar(32);  // headerSize
+        dos.writeChar(32); // headerSize
         dos.writeByte(MAGIC1);
         dos.writeByte(MAGIC2);
         // unicode/udata.h UDataInfo
-        dos.writeChar(20);  // sizeof(UDataInfo)
-        dos.writeChar(0);  // reservedWord
-        dos.writeByte(1);  // isBigEndian
-        dos.writeByte(CHAR_SET_);  // charsetFamily
-        dos.writeByte(CHAR_SIZE_);  // sizeofUChar
-        dos.writeByte(0);  // reservedByte
+        dos.writeChar(20); // sizeof(UDataInfo)
+        dos.writeChar(0); // reservedWord
+        dos.writeByte(1); // isBigEndian
+        dos.writeByte(CHAR_SET_); // charsetFamily
+        dos.writeByte(CHAR_SIZE_); // sizeofUChar
+        dos.writeByte(0); // reservedByte
         dos.writeInt(dataFormat);
         dos.writeInt(formatVersion);
         dos.writeInt(dataVersion);
@@ -696,19 +697,18 @@ public final class ICUBinary {
         return dest;
     }
 
-    /**
-     * Same as ByteBuffer.slice() plus preserving the byte order.
-     */
+    /** Same as ByteBuffer.slice() plus preserving the byte order. */
     public static ByteBuffer sliceWithOrder(ByteBuffer bytes) {
         ByteBuffer b = bytes.slice();
         return b.order(bytes.order());
     }
 
     /**
-     * Reads the entire contents from the stream into a byte array
-     * and wraps it into a ByteBuffer. Closes the InputStream at the end.
+     * Reads the entire contents from the stream into a byte array and wraps it into a ByteBuffer.
+     * Closes the InputStream at the end.
      */
-    public static ByteBuffer getByteBufferFromInputStreamAndCloseStream(InputStream is) throws IOException {
+    public static ByteBuffer getByteBufferFromInputStreamAndCloseStream(InputStream is)
+            throws IOException {
         try {
             // is.available() may return 0, or 1, or the total number of bytes in the stream,
             // or some other number.
@@ -720,15 +720,15 @@ public final class ICUBinary {
                 // With luck, it is the total number of bytes.
                 bytes = new byte[avail];
             } else {
-                bytes = new byte[128];  // empty .res files are even smaller
+                bytes = new byte[128]; // empty .res files are even smaller
             }
             // Call is.read(...) until one returns a negative value.
             int length = 0;
-            for(;;) {
+            for (; ; ) {
                 if (length < bytes.length) {
                     int numRead = is.read(bytes, length, bytes.length - length);
                     if (numRead < 0) {
-                        break;  // end of stream
+                        break; // end of stream
                     }
                     length += numRead;
                 } else {
@@ -741,7 +741,7 @@ public final class ICUBinary {
                     if (capacity < 128) {
                         capacity = 128;
                     } else if (capacity < 0x4000) {
-                        capacity *= 2;  // Grow faster until we reach 16kB.
+                        capacity *= 2; // Grow faster until we reach 16kB.
                     }
                     bytes = Arrays.copyOf(bytes, capacity);
                     bytes[length++] = (byte) nextByte;
@@ -753,45 +753,35 @@ public final class ICUBinary {
         }
     }
 
-    /**
-     * Returns a VersionInfo for the bytes in the compact version integer.
-     */
+    /** Returns a VersionInfo for the bytes in the compact version integer. */
     public static VersionInfo getVersionInfoFromCompactInt(int version) {
         return VersionInfo.getInstance(
                 version >>> 24, (version >> 16) & 0xff, (version >> 8) & 0xff, version & 0xff);
     }
 
-    /**
-     * Returns an array of the bytes in the compact version integer.
-     */
+    /** Returns an array of the bytes in the compact version integer. */
     public static byte[] getVersionByteArrayFromCompactInt(int version) {
         return new byte[] {
-                (byte)(version >> 24),
-                (byte)(version >> 16),
-                (byte)(version >> 8),
-                (byte)(version)
+            (byte) (version >> 24), (byte) (version >> 16), (byte) (version >> 8), (byte) (version)
         };
     }
 
     // private variables -------------------------------------------------
 
-    /**
-    * Magic numbers to authenticate the data file
-    */
-    private static final byte MAGIC1 = (byte)0xda;
-    private static final byte MAGIC2 = (byte)0x27;
+    /** Magic numbers to authenticate the data file */
+    private static final byte MAGIC1 = (byte) 0xda;
 
-    /**
-    * File format authentication values
-    */
+    private static final byte MAGIC2 = (byte) 0x27;
+
+    /** File format authentication values */
     private static final byte CHAR_SET_ = 0;
+
     private static final byte CHAR_SIZE_ = 2;
 
-    /**
-    * Error messages
-    */
+    /** Error messages */
     private static final String MAGIC_NUMBER_AUTHENTICATION_FAILED_ =
-                       "ICU data file error: Not an ICU data file";
+            "ICU data file error: Not an ICU data file";
+
     private static final String HEADER_AUTHENTICATION_FAILED_ =
-        "ICU data file error: Header authentication failed, please check if you have a valid ICU data file";
+            "ICU data file error: Header authentication failed, please check if you have a valid ICU data file";
 }

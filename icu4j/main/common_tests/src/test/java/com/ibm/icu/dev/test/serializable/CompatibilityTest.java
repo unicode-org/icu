@@ -10,6 +10,8 @@
 
 package com.ibm.icu.dev.test.serializable;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
+import com.ibm.icu.dev.test.serializable.SerializableTestUtility.Handler;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
@@ -22,23 +24,17 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import com.ibm.icu.dev.test.CoreTestFmwk;
-import com.ibm.icu.dev.test.serializable.SerializableTestUtility.Handler;
-
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 /**
  * @author sgill
  * @author emader
  */
 @RunWith(JUnitParamsRunner.class)
-public class CompatibilityTest extends CoreTestFmwk
-{
+public class CompatibilityTest extends CoreTestFmwk {
     private static final class FileHolder {
         String className;
         String icuVersion;
@@ -64,7 +60,8 @@ public class CompatibilityTest extends CoreTestFmwk
 
         private static boolean skipFile(String icuVersion, String className) {
             for (int skip = 0; skip < SKIP_CASES.length; skip++) {
-                if (icuVersion.equals(SKIP_CASES[skip][0]) && className.equals(SKIP_CASES[skip][1])) {
+                if (icuVersion.equals(SKIP_CASES[skip][0])
+                        && className.equals(SKIP_CASES[skip][1])) {
                     return true;
                 }
             }
@@ -78,7 +75,7 @@ public class CompatibilityTest extends CoreTestFmwk
     }
 
     @Test
-    @Parameters(method="generateClassList")
+    @Parameters(method = "generateClassList")
     public void testCompatibility(FileHolder holder) throws ClassNotFoundException, IOException {
         if (holder.skip) {
             logln("Skipping File = " + holder);
@@ -91,15 +88,20 @@ public class CompatibilityTest extends CoreTestFmwk
         Object[] testObjects = classHandler.getTestObjects();
         for (int i = 0; i < testObjects.length; i++) {
             if (!classHandler.hasSameBehavior(oldObjects[i], testObjects[i])) {
-                errln("Input object " + i + ", className " + holder.className + ": failed behavior test.");
+                errln(
+                        "Input object "
+                                + i
+                                + ", className "
+                                + holder.className
+                                + ": failed behavior test.");
             }
         }
     }
 
     /**
-     * The path to an actual data resource file in the JAR. This is needed because when the
-     * code is packaged for Android the resulting archive does not have entries for directories
-     * and so only actual resources can be found.
+     * The path to an actual data resource file in the JAR. This is needed because when the code is
+     * packaged for Android the resulting archive does not have entries for directories and so only
+     * actual resources can be found.
      */
     private static final String ACTUAL_RESOURCE = "/ICU_3.6/com.ibm.icu.impl.OlsonTimeZone.dat";
 
@@ -129,29 +131,35 @@ public class CompatibilityTest extends CoreTestFmwk
         List<FileHolder> classList = new ArrayList<>();
 
         File topDir = new File(dataURL.getPath());
-        File dataDirs[] = topDir.listFiles(new FileFilter() {
-            @Override
-            public boolean accept(File pathname) {
-                return pathname.isDirectory();
-            }});
+        File dataDirs[] =
+                topDir.listFiles(
+                        new FileFilter() {
+                            @Override
+                            public boolean accept(File pathname) {
+                                return pathname.isDirectory();
+                            }
+                        });
 
         for (File dataDir : dataDirs) {
-            File files[] = dataDir.listFiles(new FileFilter() {
-                @Override
-                public boolean accept(File pathname) {
-                    return pathname.isFile() && pathname.getName().endsWith(".dat");
-                }});
+            File files[] =
+                    dataDir.listFiles(
+                            new FileFilter() {
+                                @Override
+                                public boolean accept(File pathname) {
+                                    return pathname.isFile() && pathname.getName().endsWith(".dat");
+                                }
+                            });
 
-                for (File file : files) {
-                    FileInputStream fis = new FileInputStream(file);
-                    byte[] fileBytes;
-                    try {
-                        fileBytes = SerializableTestUtility.copyStreamBytes(fis);
-                    } finally {
-                        fis.close();
-                    }
-                    classList.add(new FileHolder(file.getAbsolutePath(), fileBytes));
+            for (File file : files) {
+                FileInputStream fis = new FileInputStream(file);
+                byte[] fileBytes;
+                try {
+                    fileBytes = SerializableTestUtility.copyStreamBytes(fis);
+                } finally {
+                    fis.close();
                 }
+                classList.add(new FileHolder(file.getAbsolutePath(), fileBytes));
+            }
         }
         return classList;
     }
@@ -182,10 +190,12 @@ public class CompatibilityTest extends CoreTestFmwk
                     String entryName = entry.getName();
 
                     if (entryName.startsWith(prefix) && entryName.endsWith(".dat")) {
-                        FileHolder holder = new FileHolder(entryName,
-                                SerializableTestUtility.copyStreamBytes(jarFile.getInputStream(entry)));
+                        FileHolder holder =
+                                new FileHolder(
+                                        entryName,
+                                        SerializableTestUtility.copyStreamBytes(
+                                                jarFile.getInputStream(entry)));
                         classList.add(holder);
-
                     }
                 }
             }
@@ -198,29 +208,27 @@ public class CompatibilityTest extends CoreTestFmwk
     }
 
     private static final String[][] SKIP_CASES = {
-            // com.ibm.icu.message2.Mf2DataModel$OrderedMap was very drafty
-            {"ICU_72.1", "com.ibm.icu.message2.Mf2DataModel$OrderedMap"},
-            {"ICU_73.1", "com.ibm.icu.message2.Mf2DataModel$OrderedMap"},
-            {"ICU_74.1", "com.ibm.icu.message2.Mf2DataModel$OrderedMap"},
+        // com.ibm.icu.message2.Mf2DataModel$OrderedMap was very drafty
+        {"ICU_72.1", "com.ibm.icu.message2.Mf2DataModel$OrderedMap"},
+        {"ICU_73.1", "com.ibm.icu.message2.Mf2DataModel$OrderedMap"},
+        {"ICU_74.1", "com.ibm.icu.message2.Mf2DataModel$OrderedMap"},
 
-            // ICU 52+ PluralRules/PluralFormat/CurrencyPluralInfo are not
-            // serialization-compatible with previous versions.
-            {"ICU_50.1", "com.ibm.icu.text.CurrencyPluralInfo"},
-            {"ICU_51.1", "com.ibm.icu.text.CurrencyPluralInfo"},
+        // ICU 52+ PluralRules/PluralFormat/CurrencyPluralInfo are not
+        // serialization-compatible with previous versions.
+        {"ICU_50.1", "com.ibm.icu.text.CurrencyPluralInfo"},
+        {"ICU_51.1", "com.ibm.icu.text.CurrencyPluralInfo"},
+        {"ICU_50.1", "com.ibm.icu.text.PluralFormat"},
+        {"ICU_51.1", "com.ibm.icu.text.PluralFormat"},
+        {"ICU_50.1", "com.ibm.icu.text.PluralRules"},
+        {"ICU_51.1", "com.ibm.icu.text.PluralRules"},
 
-            {"ICU_50.1", "com.ibm.icu.text.PluralFormat"},
-            {"ICU_51.1", "com.ibm.icu.text.PluralFormat"},
+        // GeneralMeasureFormat was in technical preview, but is going away after ICU 52.1.
+        {"ICU_52.1", "com.ibm.icu.text.GeneralMeasureFormat"},
 
-            {"ICU_50.1", "com.ibm.icu.text.PluralRules"},
-            {"ICU_51.1", "com.ibm.icu.text.PluralRules"},
+        // RuleBasedNumberFormat
+        {"ICU_3.6", "com.ibm.icu.text.RuleBasedNumberFormat"},
 
-            // GeneralMeasureFormat was in technical preview, but is going away after ICU 52.1.
-            {"ICU_52.1", "com.ibm.icu.text.GeneralMeasureFormat"},
-
-            // RuleBasedNumberFormat
-            {"ICU_3.6",     "com.ibm.icu.text.RuleBasedNumberFormat"},
-
-            // ICU 4.8+ MessageFormat is not serialization-compatible with previous versions.
-            {"ICU_3.6",     "com.ibm.icu.text.MessageFormat"},
+        // ICU 4.8+ MessageFormat is not serialization-compatible with previous versions.
+        {"ICU_3.6", "com.ibm.icu.text.MessageFormat"},
     };
 }

@@ -8,21 +8,20 @@
  */
 package com.ibm.icu.impl.javaspi.text;
 
-import java.text.NumberFormat;
-import java.text.spi.NumberFormatProvider;
-import java.util.Locale;
-
 import com.ibm.icu.impl.javaspi.ICULocaleServiceProvider;
 import com.ibm.icu.impl.jdkadapter.DecimalFormatICU;
 import com.ibm.icu.impl.jdkadapter.NumberFormatICU;
 import com.ibm.icu.util.ULocale;
+import java.text.NumberFormat;
+import java.text.spi.NumberFormatProvider;
+import java.util.Locale;
 
 public class NumberFormatProviderICU extends NumberFormatProvider {
 
-    private final static int NUMBER   = 0;
-    private final static int INTEGER  = 1;
-    private final static int CURRENCY = 2;
-    private final static int PERCENT  = 3;
+    private static final int NUMBER = 0;
+    private static final int INTEGER = 1;
+    private static final int CURRENCY = 2;
+    private static final int PERCENT = 3;
 
     @Override
     public NumberFormat getCurrencyInstance(Locale locale) {
@@ -53,20 +52,20 @@ public class NumberFormatProviderICU extends NumberFormatProvider {
         com.ibm.icu.text.NumberFormat icuNfmt;
         ULocale actual = ICULocaleServiceProvider.toULocaleNoSpecialVariant(locale);
         switch (type) {
-        case NUMBER:
-            icuNfmt = com.ibm.icu.text.NumberFormat.getNumberInstance(actual);
-            break;
-        case INTEGER:
-            icuNfmt = com.ibm.icu.text.NumberFormat.getIntegerInstance(actual);
-            break;
-        case CURRENCY:
-            icuNfmt = com.ibm.icu.text.NumberFormat.getCurrencyInstance(actual);
-            break;
-        case PERCENT:
-            icuNfmt = com.ibm.icu.text.NumberFormat.getPercentInstance(actual);
-            break;
-        default:
-            return null;
+            case NUMBER:
+                icuNfmt = com.ibm.icu.text.NumberFormat.getNumberInstance(actual);
+                break;
+            case INTEGER:
+                icuNfmt = com.ibm.icu.text.NumberFormat.getIntegerInstance(actual);
+                break;
+            case CURRENCY:
+                icuNfmt = com.ibm.icu.text.NumberFormat.getCurrencyInstance(actual);
+                break;
+            case PERCENT:
+                icuNfmt = com.ibm.icu.text.NumberFormat.getPercentInstance(actual);
+                break;
+            default:
+                return null;
         }
 
         if (!(icuNfmt instanceof com.ibm.icu.text.DecimalFormat)) {
@@ -76,7 +75,7 @@ public class NumberFormatProviderICU extends NumberFormatProvider {
 
         NumberFormat nf = null;
         if (ICULocaleServiceProvider.useDecimalFormat()) {
-            nf = DecimalFormatICU.wrap((com.ibm.icu.text.DecimalFormat)icuNfmt);
+            nf = DecimalFormatICU.wrap((com.ibm.icu.text.DecimalFormat) icuNfmt);
         } else {
             nf = NumberFormatICU.wrap(icuNfmt);
         }

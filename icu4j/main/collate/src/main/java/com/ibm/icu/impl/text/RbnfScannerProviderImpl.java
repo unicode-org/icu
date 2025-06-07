@@ -1,16 +1,13 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /*
-*******************************************************************************
-* Copyright (C) 2009-2014, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
-*******************************************************************************
-*/
+ *******************************************************************************
+ * Copyright (C) 2009-2014, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ */
 
 package com.ibm.icu.impl.text;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.text.CollationElementIterator;
@@ -19,10 +16,13 @@ import com.ibm.icu.text.RbnfLenientScanner;
 import com.ibm.icu.text.RbnfLenientScannerProvider;
 import com.ibm.icu.text.RuleBasedCollator;
 import com.ibm.icu.util.ULocale;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * Returns RbnfLenientScanners that use the old RuleBasedNumberFormat
- * implementation behind setLenientParseMode, which is based on Collator.
+ * Returns RbnfLenientScanners that use the old RuleBasedNumberFormat implementation behind
+ * setLenientParseMode, which is based on Collator.
+ *
  * @internal
  * @deprecated This API is ICU internal only.
  */
@@ -43,31 +43,29 @@ public class RbnfScannerProviderImpl implements RbnfLenientScannerProvider {
     /**
      * Returns a collation-based scanner.
      *
-     * Only primary differences are treated as significant.  This means that case
-     * differences, accent differences, alternate spellings of the same letter
-     * (e.g., ae and a-umlaut in German), ignorable characters, etc. are ignored in
-     * matching the text.  In many cases, numerals will be accepted in place of words
-     * or phrases as well.
+     * <p>Only primary differences are treated as significant. This means that case differences,
+     * accent differences, alternate spellings of the same letter (e.g., ae and a-umlaut in German),
+     * ignorable characters, etc. are ignored in matching the text. In many cases, numerals will be
+     * accepted in place of words or phrases as well.
      *
-     * For example, all of the following will correctly parse as 255 in English in
-     * lenient-parse mode:
-     * <br>"two hundred fifty-five"
-     * <br>"two hundred fifty five"
-     * <br>"TWO HUNDRED FIFTY-FIVE"
-     * <br>"twohundredfiftyfive"
-     * <br>"2 hundred fifty-5"
+     * <p>For example, all of the following will correctly parse as 255 in English in lenient-parse
+     * mode: <br>
+     * "two hundred fifty-five" <br>
+     * "two hundred fifty five" <br>
+     * "TWO HUNDRED FIFTY-FIVE" <br>
+     * "twohundredfiftyfive" <br>
+     * "2 hundred fifty-5"
      *
-     * The Collator used is determined by the locale that was
-     * passed to this object on construction.  The description passed to this object
-     * on construction may supply additional collation rules that are appended to the
-     * end of the default collator for the locale, enabling additional equivalences
-     * (such as adding more ignorable characters or permitting spelled-out version of
-     * symbols; see the demo program for examples).
+     * <p>The Collator used is determined by the locale that was passed to this object on
+     * construction. The description passed to this object on construction may supply additional
+     * collation rules that are appended to the end of the default collator for the locale, enabling
+     * additional equivalences (such as adding more ignorable characters or permitting spelled-out
+     * version of symbols; see the demo program for examples).
      *
-     * It's important to emphasize that even strict parsing is relatively lenient: it
-     * will accept some text that it won't produce as output.  In English, for example,
-     * it will correctly parse "two hundred zero" and "fifteen hundred".
-     * 
+     * <p>It's important to emphasize that even strict parsing is relatively lenient: it will accept
+     * some text that it won't produce as output. In English, for example, it will correctly parse
+     * "two hundred zero" and "fifteen hundred".
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -75,14 +73,14 @@ public class RbnfScannerProviderImpl implements RbnfLenientScannerProvider {
     public RbnfLenientScanner get(ULocale locale, String extras) {
         RbnfLenientScanner result = null;
         String key = locale.toString() + "/" + extras;
-        synchronized(cache) {
+        synchronized (cache) {
             result = cache.get(key);
             if (result != null) {
                 return result;
             }
         }
         result = createScanner(locale, extras);
-        synchronized(cache) {
+        synchronized (cache) {
             cache.put(key, result);
         }
         return result;
@@ -100,22 +98,22 @@ public class RbnfScannerProviderImpl implements RbnfLenientScannerProvider {
             // then pull out that collator's rules, append any additional
             // rules specified in the description, and create a _new_
             // collator based on the combination of those rules
-            collator = (RuleBasedCollator)Collator.getInstance(locale.toLocale());
+            collator = (RuleBasedCollator) Collator.getInstance(locale.toLocale());
             if (extras != null) {
                 String rules = collator.getRules() + extras;
                 collator = new RuleBasedCollator(rules);
             }
             collator.setDecomposition(Collator.CANONICAL_DECOMPOSITION);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             // If we get here, it means we have a malformed set of
             // collation rules, which hopefully won't happen
-            ///CLOVER:OFF
-            if (DEBUG){ // debug hook
-                e.printStackTrace(); System.out.println("++++");
+            /// CLOVER:OFF
+            if (DEBUG) { // debug hook
+                e.printStackTrace();
+                System.out.println("++++");
             }
             collator = null;
-            ///CLOVER:ON
+            /// CLOVER:ON
         }
 
         return new RbnfLenientScannerImpl(collator);
@@ -133,7 +131,7 @@ public class RbnfScannerProviderImpl implements RbnfLenientScannerProvider {
 
             int o = iter.next();
             while (o != CollationElementIterator.NULLORDER
-                   && CollationElementIterator.primaryOrder(o) == 0) {
+                    && CollationElementIterator.primaryOrder(o) == 0) {
                 o = iter.next();
             }
             return o == CollationElementIterator.NULLORDER;
@@ -153,17 +151,17 @@ public class RbnfScannerProviderImpl implements RbnfLenientScannerProvider {
             while (p < str.length() && keyLen == 0) {
                 keyLen = prefixLength(str.substring(p), key);
                 if (keyLen != 0) {
-                    return new int[] { p, keyLen };
+                    return new int[] {p, keyLen};
                 }
                 ++p;
             }
             // if we make it to here, we didn't find it.  Return -1 for the
             // location.  The length should be ignored, but set it to 0,
             // which should be "safe"
-            return new int[] { -1, 0 };
+            return new int[] {-1, 0};
         }
 
-        ///CLOVER:OFF
+        /// CLOVER:OFF
         // The following method contains the same signature as findText
         //  and has never been used by anything once.
         @SuppressWarnings("unused")
@@ -179,26 +177,26 @@ public class RbnfScannerProviderImpl implements RbnfLenientScannerProvider {
             int oStr = strIter.next();
             int oKey = keyIter.next();
             while (oKey != CollationElementIterator.NULLORDER) {
-                while (oStr != CollationElementIterator.NULLORDER &&
-                       CollationElementIterator.primaryOrder(oStr) == 0) {
+                while (oStr != CollationElementIterator.NULLORDER
+                        && CollationElementIterator.primaryOrder(oStr) == 0) {
                     oStr = strIter.next();
                 }
 
-                while (oKey != CollationElementIterator.NULLORDER &&
-                       CollationElementIterator.primaryOrder(oKey) == 0) {
+                while (oKey != CollationElementIterator.NULLORDER
+                        && CollationElementIterator.primaryOrder(oKey) == 0) {
                     oKey = keyIter.next();
                 }
 
                 if (oStr == CollationElementIterator.NULLORDER) {
-                    return new int[] { -1, 0 };
+                    return new int[] {-1, 0};
                 }
 
                 if (oKey == CollationElementIterator.NULLORDER) {
                     break;
                 }
 
-                if (CollationElementIterator.primaryOrder(oStr) ==
-                    CollationElementIterator.primaryOrder(oKey)) {
+                if (CollationElementIterator.primaryOrder(oStr)
+                        == CollationElementIterator.primaryOrder(oKey)) {
                     keyStart = strIter.getOffset();
                     oStr = strIter.next();
                     oKey = keyIter.next();
@@ -212,9 +210,10 @@ public class RbnfScannerProviderImpl implements RbnfLenientScannerProvider {
                 }
             }
 
-            return new int[] { keyStart, strIter.getOffset() - keyStart };
+            return new int[] {keyStart, strIter.getOffset() - keyStart};
         }
-        ///CLOVER:ON
+
+        /// CLOVER:ON
 
         public int prefixLength(String str, String prefix) {
             // Create two collation element iterators, one over the target string
@@ -235,14 +234,14 @@ public class RbnfScannerProviderImpl implements RbnfLenientScannerProvider {
 
             while (oPrefix != CollationElementIterator.NULLORDER) {
                 // skip over ignorable characters in the target string
-                while (CollationElementIterator.primaryOrder(oStr) == 0 && oStr !=
-                       CollationElementIterator.NULLORDER) {
+                while (CollationElementIterator.primaryOrder(oStr) == 0
+                        && oStr != CollationElementIterator.NULLORDER) {
                     oStr = strIter.next();
                 }
 
                 // skip over ignorable characters in the prefix
-                while (CollationElementIterator.primaryOrder(oPrefix) == 0 && oPrefix !=
-                       CollationElementIterator.NULLORDER) {
+                while (CollationElementIterator.primaryOrder(oPrefix) == 0
+                        && oPrefix != CollationElementIterator.NULLORDER) {
                     oPrefix = prefixIter.next();
                 }
 
@@ -261,8 +260,8 @@ public class RbnfScannerProviderImpl implements RbnfLenientScannerProvider {
                 // match collation elements from the two strings
                 // (considering only primary differences).  If we
                 // get a mismatch, dump out and return 0
-                if (CollationElementIterator.primaryOrder(oStr) != 
-                    CollationElementIterator.primaryOrder(oPrefix)) {
+                if (CollationElementIterator.primaryOrder(oStr)
+                        != CollationElementIterator.primaryOrder(oPrefix)) {
                     return 0;
                 }
 

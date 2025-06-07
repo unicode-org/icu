@@ -8,26 +8,26 @@
  */
 package com.ibm.icu.impl;
 
+import com.ibm.icu.text.CurrencyMetaInfo;
+import com.ibm.icu.util.Currency.CurrencyUsage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.ibm.icu.text.CurrencyMetaInfo;
-import com.ibm.icu.util.Currency.CurrencyUsage;
-
-/**
- * ICU's currency meta info data.
- */
+/** ICU's currency meta info data. */
 public class ICUCurrencyMetaInfo extends CurrencyMetaInfo {
     private ICUResourceBundle regionInfo;
     private ICUResourceBundle digitInfo;
 
     public ICUCurrencyMetaInfo() {
-        ICUResourceBundle bundle = (ICUResourceBundle) ICUResourceBundle.getBundleInstance(
-            ICUData.ICU_CURR_BASE_NAME, "supplementalData",
-            ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+        ICUResourceBundle bundle =
+                (ICUResourceBundle)
+                        ICUResourceBundle.getBundleInstance(
+                                ICUData.ICU_CURR_BASE_NAME,
+                                "supplementalData",
+                                ICUResourceBundle.ICU_DATA_CLASS_LOADER);
         regionInfo = bundle.findTopLevel("CurrencyMap");
         digitInfo = bundle.findTopLevel("CurrencyMeta");
     }
@@ -40,7 +40,7 @@ public class ICUCurrencyMetaInfo extends CurrencyMetaInfo {
     @Override
     public List<String> currencies(CurrencyFilter filter) {
         return collect(new CurrencyCollector(), filter);
-   }
+    }
 
     @Override
     public List<String> regions(CurrencyFilter filter) {
@@ -106,8 +106,8 @@ public class ICUCurrencyMetaInfo extends CurrencyMetaInfo {
         return collector.getList();
     }
 
-    private <T> void collectRegion(Collector<T> collector, CurrencyFilter filter,
-            int needed, ICUResourceBundle b) {
+    private <T> void collectRegion(
+            Collector<T> collector, CurrencyFilter filter, int needed, ICUResourceBundle b) {
 
         String region = b.getKey();
         if (needed == Region) {
@@ -164,6 +164,7 @@ public class ICUCurrencyMetaInfo extends CurrencyMetaInfo {
     }
 
     private static final long MASK = 4294967295L;
+
     private long getDate(ICUResourceBundle b, long defaultValue, boolean endOfDay) {
         if (b == null) {
             return defaultValue;
@@ -200,7 +201,8 @@ public class ICUCurrencyMetaInfo extends CurrencyMetaInfo {
         private List<CurrencyInfo> result = new ArrayList<CurrencyInfo>();
 
         @Override
-        public void collect(String region, String currency, long from, long to, int priority, boolean tender) {
+        public void collect(
+                String region, String currency, long from, long to, int priority, boolean tender) {
             result.add(new CurrencyInfo(region, currency, from, to, priority, tender));
         }
 
@@ -264,12 +266,14 @@ public class ICUCurrencyMetaInfo extends CurrencyMetaInfo {
     private static interface Collector<T> {
         /**
          * A bitmask of Region/Currency/Date indicating which features we collect.
+         *
          * @return the bitmask
          */
         int collects();
 
         /**
-         * Called with data passed by filter.  Values not collected by filter should be ignored.
+         * Called with data passed by filter. Values not collected by filter should be ignored.
+         *
          * @param region the region code (null if ignored)
          * @param currency the currency code (null if ignored)
          * @param from start time (0 if ignored)
@@ -277,11 +281,13 @@ public class ICUCurrencyMetaInfo extends CurrencyMetaInfo {
          * @param priority priority (-1 if ignored)
          * @param tender true if currency is legal tender.
          */
-        void collect(String region, String currency, long from, long to, int priority, boolean tender);
+        void collect(
+                String region, String currency, long from, long to, int priority, boolean tender);
 
         /**
-         * Return the list of unique items in the order in which we encountered them for the
-         * first time.  The returned list is unmodifiable.
+         * Return the list of unique items in the order in which we encountered them for the first
+         * time. The returned list is unmodifiable.
+         *
          * @return the list
          */
         List<T> getList();

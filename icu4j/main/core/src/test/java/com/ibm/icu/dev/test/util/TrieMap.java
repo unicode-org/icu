@@ -8,13 +8,6 @@
  */
 package com.ibm.icu.dev.test.util;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.BytesTrie;
 import com.ibm.icu.util.BytesTrie.Result;
@@ -22,18 +15,27 @@ import com.ibm.icu.util.BytesTrieBuilder;
 import com.ibm.icu.util.CharsTrie;
 import com.ibm.icu.util.CharsTrieBuilder;
 import com.ibm.icu.util.StringTrieBuilder.Option;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 // would be nice to have a BytesTrieBuilder.add(aByte);
 // question: can bytetrie store <"",x>?
-// can you store the same string twice, eg add(bytes1, value), add(bytes1, value)? What happens? If an error,
+// can you store the same string twice, eg add(bytes1, value), add(bytes1, value)? What happens? If
+// an error,
 // should happen on add, not on build.
-// the BytesTrieBuilder.build should create a BytesTrie, not a raw array. For the latter, use buildArray or something.
+// the BytesTrieBuilder.build should create a BytesTrie, not a raw array. For the latter, use
+// buildArray or something.
 // need class description; examples of usage; which method can/should be called after which others.
 
 public abstract class TrieMap<V> implements Iterable<Entry<CharSequence, V>> {
 
     public enum Style {
-        BYTES, CHARS
+        BYTES,
+        CHARS
     }
 
     private static final boolean DEBUG = true;
@@ -50,29 +52,36 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence, V>> {
         return size;
     }
 
-    public static abstract class Builder<V> {
+    public abstract static class Builder<V> {
         Option option;
         protected List<V> intToValueTemp = new ArrayList<V>();
         protected Map<V, Integer> valueToIntegerTemp = new HashMap<V, Integer>();
 
-        static public <K extends CharSequence, V> Builder<V> with(Style style, Map<K, V> keyValuePairs) {
+        public static <K extends CharSequence, V> Builder<V> with(
+                Style style, Map<K, V> keyValuePairs) {
             return with(style, Option.SMALL, keyValuePairs);
         }
-        
-        static public <K extends CharSequence, V> Builder<V> with(Style style, Option option, Map<K, V> keyValuePairs) {
-            Builder<V> result = style == Style.BYTES ? new BytesTrieMap.BytesBuilder<V>()
-                    : new CharsTrieMap.CharsBuilder<V>();
+
+        public static <K extends CharSequence, V> Builder<V> with(
+                Style style, Option option, Map<K, V> keyValuePairs) {
+            Builder<V> result =
+                    style == Style.BYTES
+                            ? new BytesTrieMap.BytesBuilder<V>()
+                            : new CharsTrieMap.CharsBuilder<V>();
             result.option = option;
             return result.addAll(keyValuePairs);
         }
 
-        static public <K extends CharSequence, V> Builder<V> with(Style style, K key, V value) {
+        public static <K extends CharSequence, V> Builder<V> with(Style style, K key, V value) {
             return with(style, Option.SMALL, key, value);
         }
 
-        static public <K extends CharSequence, V> Builder<V> with(Style style, Option option, K key, V value) {
-            Builder<V> result = style == Style.BYTES ? new BytesTrieMap.BytesBuilder<V>()
-                    : new CharsTrieMap.CharsBuilder<V>();
+        public static <K extends CharSequence, V> Builder<V> with(
+                Style style, Option option, K key, V value) {
+            Builder<V> result =
+                    style == Style.BYTES
+                            ? new BytesTrieMap.BytesBuilder<V>()
+                            : new CharsTrieMap.CharsBuilder<V>();
             result.option = option;
             return result.add(key, value);
         }
@@ -84,14 +93,12 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence, V>> {
         public abstract TrieMap<V> build();
     }
 
-    abstract public V get(CharSequence test);
+    public abstract V get(CharSequence test);
 
-    /**
-     * Warning: the entry contents are only valid until the next next() call!!
-     */
-    abstract public Iterator<Entry<CharSequence, V>> iterator();
+    /** Warning: the entry contents are only valid until the next next() call!! */
+    public abstract Iterator<Entry<CharSequence, V>> iterator();
 
-    abstract public Matcher<V> getMatcher();
+    public abstract Matcher<V> getMatcher();
 
     public abstract static class Matcher<V> {
         protected CharSequence text = "";
@@ -161,9 +168,7 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence, V>> {
             return toString(bytesTrie, " : ", "\n");
         }
 
-        /**
-         * Warning: the entry contents are only valid until the next next() call!!
-         */
+        /** Warning: the entry contents are only valid until the next next() call!! */
         public Iterator<Entry<CharSequence, V>> iterator() {
             // TODO Auto-generated method stub
             return new BytesIterator();
@@ -229,9 +234,10 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence, V>> {
             }
 
             /**
-             * Finds the next match. Returns false when there are no possible further matches from the current start
-             * point. Once that happens, call nextStart(); Call getValue to get the current value.
-             * 
+             * Finds the next match. Returns false when there are no possible further matches from
+             * the current start point. Once that happens, call nextStart(); Call getValue to get
+             * the current value.
+             *
              * @return false when done. There may be a value, however.
              */
             public boolean next() {
@@ -310,7 +316,8 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence, V>> {
                 for (int i = 0; i < limit; ++i) {
                     list.add(Utility.hex(bytes[i]));
                 }
-                throw new IllegalArgumentException("Failed to add " + value + ", " + key + "=" + list, e);
+                throw new IllegalArgumentException(
+                        "Failed to add " + value + ", " + key + "=" + list, e);
             }
         }
 
@@ -347,9 +354,7 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence, V>> {
             return toString(charsTrie, " : ", "\n");
         }
 
-        /**
-         * Warning: the entry contents are only valid until the next next() call!!
-         */
+        /** Warning: the entry contents are only valid until the next next() call!! */
         public Iterator<Entry<CharSequence, V>> iterator() {
             // TODO Auto-generated method stub
             return new CharsIterator();
@@ -375,7 +380,6 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence, V>> {
             public void remove() {
                 throw new UnsupportedOperationException();
             }
-
         }
 
         private class CharsEntry implements Entry<CharSequence, V> {
@@ -412,9 +416,10 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence, V>> {
             }
 
             /**
-             * Finds the next match. Returns false when there are no possible further matches from the current start
-             * point. Once that happens, call nextStart(); Call getValue to get the current value.
-             * 
+             * Finds the next match. Returns false when there are no possible further matches from
+             * the current start point. Once that happens, call nextStart(); Call getValue to get
+             * the current value.
+             *
              * @return false when done. There may be a value, however.
              */
             public boolean next() {
@@ -427,7 +432,6 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence, V>> {
                     } else if (!result.matches()) {
                         value = null;
                         return false;
-
                     }
                 }
                 value = null;
@@ -472,7 +476,8 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence, V>> {
                 builder.add(key.toString(), index);
                 return this;
             } catch (Exception e) {
-                throw new IllegalArgumentException("Failed to add " + value + ", " + key + "=" + Utility.hex(key), e);
+                throw new IllegalArgumentException(
+                        "Failed to add " + value + ", " + key + "=" + Utility.hex(key), e);
             }
         }
 
@@ -495,10 +500,10 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence, V>> {
     }
 
     /**
-     * Supports the following format for encoding chars (Unicode 16-bit code units). The format is slightly simpler and
-     * more compact than UTF8, but also maintains ordering. It is not, however self-synchronizing, and is not intended
-     * for general usage
-     * 
+     * Supports the following format for encoding chars (Unicode 16-bit code units). The format is
+     * slightly simpler and more compact than UTF8, but also maintains ordering. It is not, however
+     * self-synchronizing, and is not intended for general usage
+     *
      * <pre>
      * 0000..007F - 0xxx xxxx
      * 0000..7EFF - 1yyy yyyy xxxx xxxx
@@ -521,7 +526,8 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence, V>> {
         }
 
         /**
-         * Transform the string into a sequence of bytes, appending them after start, and return the new limit.
+         * Transform the string into a sequence of bytes, appending them after start, and return the
+         * new limit.
          */
         public static int getBytes(CharSequence source, byte[] bytes, int limit) {
             for (int i = 0; i < source.length(); ++i) {
@@ -531,12 +537,13 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence, V>> {
         }
 
         /**
-         * Transform a sequence of bytes into a string, according to the format in getBytes. No error checking.
+         * Transform a sequence of bytes into a string, according to the format in getBytes. No
+         * error checking.
          */
         public static String getChars(byte[] bytes, int start, int limit) {
             StringBuilder buffer = new StringBuilder();
             char[] output = new char[1];
-            for (int i = start; i < limit;) {
+            for (int i = start; i < limit; ) {
                 i = getChar(bytes, i, output);
                 buffer.append(output[0]);
             }
@@ -561,7 +568,7 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence, V>> {
 
         private static void getChars(BytesTrie.Entry entry, StringBuilder stringBuilder) {
             int len = entry.bytesLength();
-            for (int i = 0; i < len;) {
+            for (int i = 0; i < len; ) {
                 byte b = entry.byteAt(i++);
                 if (b >= 0) {
                     stringBuilder.append((char) b);
@@ -582,7 +589,8 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence, V>> {
         return toString(bytesTrie2, " : ", "\n");
     }
 
-    public static String toString(BytesTrie bytesTrie2, String keyValueSeparator, String itemSeparator) {
+    public static String toString(
+            BytesTrie bytesTrie2, String keyValueSeparator, String itemSeparator) {
         StringBuilder buffer = new StringBuilder();
         BytesTrie.Iterator iterator = bytesTrie2.iterator();
         while (iterator.hasNext()) {
@@ -598,7 +606,8 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence, V>> {
         return buffer.toString();
     }
 
-    public static String toString(CharsTrie bytesTrie2, String keyValueSeparator, String itemSeparator) {
+    public static String toString(
+            CharsTrie bytesTrie2, String keyValueSeparator, String itemSeparator) {
         StringBuilder buffer = new StringBuilder();
         CharsTrie.Iterator iterator = bytesTrie2.iterator();
         while (iterator.hasNext()) {
@@ -610,5 +619,4 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence, V>> {
         }
         return buffer.toString();
     }
-
 }

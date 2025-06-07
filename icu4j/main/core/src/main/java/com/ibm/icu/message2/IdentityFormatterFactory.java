@@ -8,12 +8,11 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Creates a {@link Formatter} that simply returns the String non-i18n aware representation of an object.
+ * Creates a {@link Formatter} that simply returns the String non-i18n aware representation of an
+ * object.
  */
 class IdentityFormatterFactory implements FormatterFactory {
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public Formatter createFormatter(Locale locale, Map<String, Object> fixedOptions) {
         return new IdentityFormatterImpl(OptUtils.getDirectionality(fixedOptions));
@@ -26,19 +25,17 @@ class IdentityFormatterFactory implements FormatterFactory {
             this.directionality = directionality == null ? Directionality.INHERIT : directionality;
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        /** {@inheritDoc} */
         @Override
         public FormattedPlaceholder format(Object toFormat, Map<String, Object> variableOptions) {
             return new FormattedPlaceholder(
-                    toFormat, new PlainStringFormattedValue(Objects.toString(toFormat)),
-                    directionality, true);
+                    toFormat,
+                    new PlainStringFormattedValue(Objects.toString(toFormat)),
+                    directionality,
+                    true);
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        /** {@inheritDoc} */
         @Override
         public String formatToString(Object toFormat, Map<String, Object> variableOptions) {
             return format(toFormat, variableOptions).toString();

@@ -8,64 +8,60 @@
  */
 package com.ibm.icu.impl;
 
+import com.ibm.icu.util.ICUUncheckedIOException;
 import java.io.IOException;
 import java.text.Format;
 
-import com.ibm.icu.util.ICUUncheckedIOException;
-
 /**
- * Formats simple patterns like "{1} was born in {0}".
- * Internal version of {@link com.ibm.icu.text.SimpleFormatter}
- * with only static methods, to avoid wrapper objects.
+ * Formats simple patterns like "{1} was born in {0}". Internal version of {@link
+ * com.ibm.icu.text.SimpleFormatter} with only static methods, to avoid wrapper objects.
  *
- * <p>This class "compiles" pattern strings into a binary format
- * and implements formatting etc. based on that.
+ * <p>This class "compiles" pattern strings into a binary format and implements formatting etc.
+ * based on that.
  *
- * <p>Format:
- * Index 0: One more than the highest argument number.
- * Followed by zero or more arguments or literal-text segments.
+ * <p>Format: Index 0: One more than the highest argument number. Followed by zero or more arguments
+ * or literal-text segments.
  *
- * <p>An argument is stored as its number, less than ARG_NUM_LIMIT.
- * A literal-text segment is stored as its length (at least 1) offset by ARG_NUM_LIMIT,
- * followed by that many chars.
+ * <p>An argument is stored as its number, less than ARG_NUM_LIMIT. A literal-text segment is stored
+ * as its length (at least 1) offset by ARG_NUM_LIMIT, followed by that many chars.
  */
 public final class SimpleFormatterImpl {
     /**
-     * Argument numbers must be smaller than this limit.
-     * Text segment lengths are offset by this much.
-     * This is currently the only unused char value in compiled patterns,
-     * except it is the maximum value of the first unit (max arg +1).
+     * Argument numbers must be smaller than this limit. Text segment lengths are offset by this
+     * much. This is currently the only unused char value in compiled patterns, except it is the
+     * maximum value of the first unit (max arg +1).
      */
     private static final int ARG_NUM_LIMIT = 0x100;
-    private static final char LEN1_CHAR = (char)(ARG_NUM_LIMIT + 1);
-    private static final char LEN2_CHAR = (char)(ARG_NUM_LIMIT + 2);
-    private static final char LEN3_CHAR = (char)(ARG_NUM_LIMIT + 3);
+
+    private static final char LEN1_CHAR = (char) (ARG_NUM_LIMIT + 1);
+    private static final char LEN2_CHAR = (char) (ARG_NUM_LIMIT + 2);
+    private static final char LEN3_CHAR = (char) (ARG_NUM_LIMIT + 3);
+
     /**
-     * Initial and maximum char/UChar value set for a text segment.
-     * Segment length char values are from ARG_NUM_LIMIT+1 to this value here.
-     * Normally 0xffff, but can be as small as ARG_NUM_LIMIT+1 for testing.
+     * Initial and maximum char/UChar value set for a text segment. Segment length char values are
+     * from ARG_NUM_LIMIT+1 to this value here. Normally 0xffff, but can be as small as
+     * ARG_NUM_LIMIT+1 for testing.
      */
-    private static final char SEGMENT_LENGTH_ARGUMENT_CHAR = (char)0xffff;
-    /**
-     * Maximum length of a text segment. Longer segments are split into shorter ones.
-     */
+    private static final char SEGMENT_LENGTH_ARGUMENT_CHAR = (char) 0xffff;
+
+    /** Maximum length of a text segment. Longer segments are split into shorter ones. */
     private static final int MAX_SEGMENT_LENGTH = SEGMENT_LENGTH_ARGUMENT_CHAR - ARG_NUM_LIMIT;
 
     /** "Intern" some common patterns. */
     private static final String[][] COMMON_PATTERNS = {
-        { "{0} {1}", "\u0002\u0000" + LEN1_CHAR + " \u0001" },
-        { "{0} ({1})", "\u0002\u0000" + LEN2_CHAR + " (\u0001" + LEN1_CHAR + ')' },
-        { "{0}, {1}", "\u0002\u0000" + LEN2_CHAR + ", \u0001" },
-        { "{0} – {1}", "\u0002\u0000" + LEN3_CHAR + " – \u0001" },  // en dash
+        {"{0} {1}", "\u0002\u0000" + LEN1_CHAR + " \u0001"},
+        {"{0} ({1})", "\u0002\u0000" + LEN2_CHAR + " (\u0001" + LEN1_CHAR + ')'},
+        {"{0}, {1}", "\u0002\u0000" + LEN2_CHAR + ", \u0001"},
+        {"{0} – {1}", "\u0002\u0000" + LEN3_CHAR + " – \u0001"}, // en dash
     };
 
     /** Use only static methods. */
     private SimpleFormatterImpl() {}
 
     /**
-     * Creates a compiled form of the pattern string, for use with appropriate static methods.
-     * The number of arguments checked against the given limits is the
-     * highest argument number plus one, not the number of occurrences of arguments.
+     * Creates a compiled form of the pattern string, for use with appropriate static methods. The
+     * number of arguments checked against the given limits is the highest argument number plus one,
+     * not the number of occurrences of arguments.
      *
      * @param pattern The pattern string.
      * @param sb A StringBuilder instance which may or may not be used.
@@ -95,7 +91,7 @@ public final class SimpleFormatterImpl {
         int textLength = 0;
         int maxArg = -1;
         boolean inQuote = false;
-        for (int i = 0; i < patternLength;) {
+        for (int i = 0; i < patternLength; ) {
             char c = pattern.charAt(i++);
             if (c == '\'') {
                 if (i < patternLength && (c = pattern.charAt(i)) == '\'') {
@@ -115,13 +111,14 @@ public final class SimpleFormatterImpl {
                 }
             } else if (!inQuote && c == '{') {
                 if (textLength > 0) {
-                    sb.setCharAt(sb.length() - textLength - 1, (char)(ARG_NUM_LIMIT + textLength));
+                    sb.setCharAt(sb.length() - textLength - 1, (char) (ARG_NUM_LIMIT + textLength));
                     textLength = 0;
                 }
                 int argNumber;
-                if ((i + 1) < patternLength &&
-                        0 <= (argNumber = pattern.charAt(i) - '0') && argNumber <= 9 &&
-                        pattern.charAt(i + 1) == '}') {
+                if ((i + 1) < patternLength
+                        && 0 <= (argNumber = pattern.charAt(i) - '0')
+                        && argNumber <= 9
+                        && pattern.charAt(i + 1) == '}') {
                     i += 2;
                 } else {
                     // Multi-digit argument number (no leading zero) or syntax error.
@@ -140,17 +137,20 @@ public final class SimpleFormatterImpl {
                     }
                     if (argNumber < 0 || c != '}') {
                         throw new IllegalArgumentException(
-                                "Argument syntax error in pattern \"" + pattern +
-                                "\" at index " + argStart +
-                                ": " + pattern.subSequence(argStart, i));
+                                "Argument syntax error in pattern \""
+                                        + pattern
+                                        + "\" at index "
+                                        + argStart
+                                        + ": "
+                                        + pattern.subSequence(argStart, i));
                     }
                 }
                 if (argNumber > maxArg) {
                     maxArg = argNumber;
                 }
-                sb.append((char)argNumber);
+                sb.append((char) argNumber);
                 continue;
-            }  // else: c is part of literal text
+            } // else: c is part of literal text
             // Append c and track the literal-text segment length.
             if (textLength == 0) {
                 // Reserve a char for the length of a new text segment, preset the maximum length.
@@ -162,7 +162,7 @@ public final class SimpleFormatterImpl {
             }
         }
         if (textLength > 0) {
-            sb.setCharAt(sb.length() - textLength - 1, (char)(ARG_NUM_LIMIT + textLength));
+            sb.setCharAt(sb.length() - textLength - 1, (char) (ARG_NUM_LIMIT + textLength));
         }
         int argCount = maxArg + 1;
         if (argCount < min) {
@@ -173,7 +173,7 @@ public final class SimpleFormatterImpl {
             throw new IllegalArgumentException(
                     "More than maximum " + max + " arguments in pattern \"" + pattern + "\"");
         }
-        sb.setCharAt(0, (char)argCount);
+        sb.setCharAt(0, (char) argCount);
         return sb.toString();
     }
 
@@ -195,10 +195,10 @@ public final class SimpleFormatterImpl {
     }
 
     /**
-     * Formats the not-compiled pattern with the given values.
-     * Equivalent to compileToStringMinMaxArguments() followed by formatCompiledPattern().
-     * The number of arguments checked against the given limits is the
-     * highest argument number plus one, not the number of occurrences of arguments.
+     * Formats the not-compiled pattern with the given values. Equivalent to
+     * compileToStringMinMaxArguments() followed by formatCompiledPattern(). The number of arguments
+     * checked against the given limits is the highest argument number plus one, not the number of
+     * occurrences of arguments.
      *
      * @param pattern Not-compiled form of a pattern string.
      * @param min The pattern must have at least this many arguments.
@@ -206,7 +206,8 @@ public final class SimpleFormatterImpl {
      * @return The compiled-pattern string.
      * @throws IllegalArgumentException for bad argument syntax and too few or too many arguments.
      */
-    public static String formatRawPattern(String pattern, int min, int max, CharSequence... values) {
+    public static String formatRawPattern(
+            String pattern, int min, int max, CharSequence... values) {
         StringBuilder sb = new StringBuilder();
         String compiledPattern = compileToStringMinMaxArguments(pattern, sb, min, max);
         sb.setLength(0);
@@ -218,14 +219,11 @@ public final class SimpleFormatterImpl {
      *
      * @param compiledPattern Compiled form of a pattern string.
      * @param appendTo Gets the formatted pattern and values appended.
-     * @param offsets offsets[i] receives the offset of where
-     *                values[i] replaced pattern argument {i}.
-     *                Can be null, or can be shorter or longer than values.
-     *                If there is no {i} in the pattern, then offsets[i] is set to -1.
-     * @param values The argument values.
-     *               An argument value must not be the same object as appendTo.
-     *               values.length must be at least getArgumentLimit().
-     *               Can be null if getArgumentLimit()==0.
+     * @param offsets offsets[i] receives the offset of where values[i] replaced pattern argument
+     *     {i}. Can be null, or can be shorter or longer than values. If there is no {i} in the
+     *     pattern, then offsets[i] is set to -1.
+     * @param values The argument values. An argument value must not be the same object as appendTo.
+     *     values.length must be at least getArgumentLimit(). Can be null if getArgumentLimit()==0.
      * @return appendTo
      */
     public static StringBuilder formatAndAppend(
@@ -238,19 +236,17 @@ public final class SimpleFormatterImpl {
     }
 
     /**
-     * Formats the given values, replacing the contents of the result builder.
-     * May optimize by actually appending to the result if it is the same object
-     * as the value corresponding to the initial argument in the pattern.
+     * Formats the given values, replacing the contents of the result builder. May optimize by
+     * actually appending to the result if it is the same object as the value corresponding to the
+     * initial argument in the pattern.
      *
      * @param compiledPattern Compiled form of a pattern string.
      * @param result Gets its contents replaced by the formatted pattern and values.
-     * @param offsets offsets[i] receives the offset of where
-     *                values[i] replaced pattern argument {i}.
-     *                Can be null, or can be shorter or longer than values.
-     *                If there is no {i} in the pattern, then offsets[i] is set to -1.
-     * @param values The argument values.
-     *               An argument value may be the same object as result.
-     *               values.length must be at least getArgumentLimit().
+     * @param offsets offsets[i] receives the offset of where values[i] replaced pattern argument
+     *     {i}. Can be null, or can be shorter or longer than values. If there is no {i} in the
+     *     pattern, then offsets[i] is set to -1.
+     * @param values The argument values. An argument value may be the same object as result.
+     *     values.length must be at least getArgumentLimit().
      * @return result
      */
     public static StringBuilder formatAndReplace(
@@ -268,7 +264,7 @@ public final class SimpleFormatterImpl {
         // then we first copy its contents and use that instead while formatting.
         String resultCopy = null;
         if (getArgumentLimit(compiledPattern) > 0) {
-            for (int i = 1; i < compiledPattern.length();) {
+            for (int i = 1; i < compiledPattern.length(); ) {
                 int n = compiledPattern.charAt(i++);
                 if (n < ARG_NUM_LIMIT) {
                     if (values[n] == result) {
@@ -290,15 +286,15 @@ public final class SimpleFormatterImpl {
     }
 
     /**
-     * Returns the pattern text with none of the arguments.
-     * Like formatting with all-empty string values.
+     * Returns the pattern text with none of the arguments. Like formatting with all-empty string
+     * values.
      *
      * @param compiledPattern Compiled form of a pattern string.
      */
     public static String getTextWithNoArguments(String compiledPattern) {
         int capacity = compiledPattern.length() - 1 - getArgumentLimit(compiledPattern);
         StringBuilder sb = new StringBuilder(capacity);
-        for (int i = 1; i < compiledPattern.length();) {
+        for (int i = 1; i < compiledPattern.length(); ) {
             int segmentLength = compiledPattern.charAt(i++) - ARG_NUM_LIMIT;
             if (segmentLength > 0) {
                 int limit = i + segmentLength;
@@ -311,13 +307,14 @@ public final class SimpleFormatterImpl {
 
     /**
      * Returns the length of the pattern text with none of the arguments.
+     *
      * @param compiledPattern Compiled form of a pattern string.
      * @param codePoints true to count code points; false to count code units.
      * @return The number of code points or code units.
      */
     public static int getLength(String compiledPattern, boolean codePoints) {
         int result = 0;
-        for (int i = 1; i < compiledPattern.length();) {
+        for (int i = 1; i < compiledPattern.length(); ) {
             int segmentLength = compiledPattern.charAt(i++) - ARG_NUM_LIMIT;
             if (segmentLength > 0) {
                 int limit = i + segmentLength;
@@ -334,6 +331,7 @@ public final class SimpleFormatterImpl {
 
     /**
      * Returns the length in code units of the pattern text up until the first argument.
+     *
      * @param compiledPattern Compiled form of a pattern string.
      * @return The number of code units.
      */
@@ -352,12 +350,12 @@ public final class SimpleFormatterImpl {
     /**
      * Special case for using FormattedStringBuilder with patterns with 0 or 1 argument.
      *
-     * With 1 argument, treat the current contents of the FormattedStringBuilder between
-     * start and end as the argument {0}. Insert the extra strings from compiledPattern
-     * to surround the argument in the output.
+     * <p>With 1 argument, treat the current contents of the FormattedStringBuilder between start
+     * and end as the argument {0}. Insert the extra strings from compiledPattern to surround the
+     * argument in the output.
      *
-     * With 0 arguments, overwrite the entire contents of the FormattedStringBuilder
-     * between start and end.
+     * <p>With 0 arguments, overwrite the entire contents of the FormattedStringBuilder between
+     * start and end.
      *
      * @param compiledPattern Compiled form of a pattern string.
      * @param field Field to use when adding chars to the output.
@@ -389,16 +387,22 @@ public final class SimpleFormatterImpl {
             }
             if (suffixOffset < compiledPattern.length()) {
                 int suffixLength = compiledPattern.charAt(suffixOffset) - ARG_NUM_LIMIT;
-                length += output.insert(end + length, compiledPattern, 1 + suffixOffset,
-                        1 + suffixOffset + suffixLength, field);
+                length +=
+                        output.insert(
+                                end + length,
+                                compiledPattern,
+                                1 + suffixOffset,
+                                1 + suffixOffset + suffixLength,
+                                field);
             }
             return length;
         }
     }
 
-    /** Internal iterator interface for maximum efficiency.
+    /**
+     * Internal iterator interface for maximum efficiency.
      *
-     * Usage boilerplate:
+     * <p>Usage boilerplate:
      *
      * <pre>
      * long state = 0;
@@ -411,7 +415,6 @@ public final class SimpleFormatterImpl {
      *     // Append the string corresponding to argIndex to output
      * }
      * </pre>
-     *
      */
     public static class IterInternal {
         public static final long DONE = -1;
@@ -441,8 +444,11 @@ public final class SimpleFormatterImpl {
     }
 
     private static StringBuilder format(
-            String compiledPattern, CharSequence[] values,
-            StringBuilder result, String resultCopy, boolean forbidResultAsValue,
+            String compiledPattern,
+            CharSequence[] values,
+            StringBuilder result,
+            String resultCopy,
+            boolean forbidResultAsValue,
             int[] offsets) {
         int offsetsLength;
         if (offsets == null) {
@@ -453,13 +459,14 @@ public final class SimpleFormatterImpl {
                 offsets[i] = -1;
             }
         }
-        for (int i = 1; i < compiledPattern.length();) {
+        for (int i = 1; i < compiledPattern.length(); ) {
             int n = compiledPattern.charAt(i++);
             if (n < ARG_NUM_LIMIT) {
                 CharSequence value = values[n];
                 if (value == result) {
                     if (forbidResultAsValue) {
-                        throw new IllegalArgumentException("Value must not be same object as result");
+                        throw new IllegalArgumentException(
+                                "Value must not be same object as result");
                     }
                     if (i == 2) {
                         // We are appending to result which is also the first value object.

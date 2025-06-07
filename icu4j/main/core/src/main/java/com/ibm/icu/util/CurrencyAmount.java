@@ -1,21 +1,20 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /*
-**********************************************************************
-* Copyright (c) 2004-2010, International Business Machines
-* Corporation and others.  All Rights Reserved.
-**********************************************************************
-* Author: Alan Liu
-* Created: April 12, 2004
-* Since: ICU 3.0
-**********************************************************************
-*/
+ **********************************************************************
+ * Copyright (c) 2004-2010, International Business Machines
+ * Corporation and others.  All Rights Reserved.
+ **********************************************************************
+ * Author: Alan Liu
+ * Created: April 12, 2004
+ * Since: ICU 3.0
+ **********************************************************************
+ */
 package com.ibm.icu.util;
 
-
 /**
- * An amount of currency, consisting of a Number and a Currency.
- * CurrencyAmount objects are immutable.
+ * An amount of currency, consisting of a Number and a Currency. CurrencyAmount objects are
+ * immutable.
  *
  * @see java.lang.Number
  * @see Currency
@@ -26,6 +25,7 @@ public class CurrencyAmount extends Measure {
 
     /**
      * Constructs a new object given a number and a currency.
+     *
      * @param number the number
      * @param currency the currency
      * @stable ICU 3.0
@@ -36,6 +36,7 @@ public class CurrencyAmount extends Measure {
 
     /**
      * Constructs a new object given a double value and a currency.
+     *
      * @param number a double value
      * @param currency the currency
      * @stable ICU 3.0
@@ -46,6 +47,7 @@ public class CurrencyAmount extends Measure {
 
     /**
      * Constructs a new object given a number and a Java currency.
+     *
      * @param number the number
      * @param currency the currency
      * @stable ICU 60
@@ -56,6 +58,7 @@ public class CurrencyAmount extends Measure {
 
     /**
      * Constructs a new object given a double value and a Java currency.
+     *
      * @param number a double value
      * @param currency the currency
      * @stable ICU 60
@@ -66,6 +69,7 @@ public class CurrencyAmount extends Measure {
 
     /**
      * Returns the currency of this object.
+     *
      * @return this object's Currency
      * @stable ICU 3.0
      */

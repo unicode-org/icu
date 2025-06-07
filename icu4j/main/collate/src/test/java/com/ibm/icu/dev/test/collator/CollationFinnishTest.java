@@ -8,21 +8,19 @@
  */
 
 /**
- * Port From:   ICU4C v2.1 : Collate/CollationFinnishTest
- * Source File: $ICU4CRoot/source/test/intltest/ficoll.cpp
- **/
-
+ * Port From: ICU4C v2.1 : Collate/CollationFinnishTest Source File:
+ * $ICU4CRoot/source/test/intltest/ficoll.cpp
+ */
 package com.ibm.icu.dev.test.collator;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.CollationKey;
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.util.ULocale;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public class CollationFinnishTest extends TestFmwk {
@@ -48,26 +46,24 @@ public class CollationFinnishTest extends TestFmwk {
         1,
         -1,
         // test primary > 4
-        1,  // v < w per cldrbug 6615
+        1, // v < w per cldrbug 6615
     };
 
     private Collator myCollation = null;
 
-    public CollationFinnishTest() {
-    }
+    public CollationFinnishTest() {}
 
     @Before
-    public void init()throws Exception{
+    public void init() throws Exception {
         myCollation = Collator.getInstance(new ULocale("fi_FI@collation=standard"));
     }
-
 
     // perform tests with strength PRIMARY
     @Test
     public void TestPrimary() {
         int i = 0;
         myCollation.setStrength(Collator.PRIMARY);
-        for(i = 4; i < 5; i++) {
+        for (i = 4; i < 5; i++) {
             doTest(testSourceCases[i], testTargetCases[i], results[i]);
         }
     }
@@ -77,7 +73,7 @@ public class CollationFinnishTest extends TestFmwk {
     public void TestTertiary() {
         int i = 0;
         myCollation.setStrength(Collator.TERTIARY);
-        for(i = 0; i < 4; i++ ) {
+        for (i = 0; i < 4; i++) {
             doTest(testSourceCases[i], testTargetCases[i], results[i]);
         }
     }
@@ -94,8 +90,15 @@ public class CollationFinnishTest extends TestFmwk {
         reportCResult(s, t, sortKey1, sortKey2, compareResult, keyResult, compareResult, result);
     }
 
-    private void reportCResult( String source, String target, CollationKey sourceKey, CollationKey targetKey,
-                                int compareResult, int keyResult, int incResult, int expectedResult ) {
+    private void reportCResult(
+            String source,
+            String target,
+            CollationKey sourceKey,
+            CollationKey targetKey,
+            int compareResult,
+            int keyResult,
+            int incResult,
+            int expectedResult) {
         if (expectedResult < -1 || expectedResult > 1) {
             errln("***** invalid call to reportCResult ****");
             return;
@@ -108,7 +111,7 @@ public class CollationFinnishTest extends TestFmwk {
         if (ok1 && ok2 && ok3 && !isVerbose()) {
             return;
         } else {
-            String msg1 = ok1? "Ok: compare(\"" : "FAIL: compare(\"";
+            String msg1 = ok1 ? "Ok: compare(\"" : "FAIL: compare(\"";
             String msg2 = "\", \"";
             String msg3 = "\") returned ";
             String msg4 = "; expected ";
@@ -133,7 +136,11 @@ public class CollationFinnishTest extends TestFmwk {
                 errln(msg1 + source + msg2 + target + msg3 + sResult + msg4 + sExpect);
                 msg1 = "  ";
                 msg2 = " vs. ";
-                errln(msg1 + CollationTest.prettify(sourceKey) + msg2 + CollationTest.prettify(targetKey));
+                errln(
+                        msg1
+                                + CollationTest.prettify(sourceKey)
+                                + msg2
+                                + CollationTest.prettify(targetKey));
             }
 
             msg1 = ok3 ? "Ok: incCompare(\"" : "FAIL: incCompare(\"";

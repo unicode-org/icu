@@ -8,15 +8,14 @@
  */
 package com.ibm.icu.impl.jdkadapter;
 
+import com.ibm.icu.impl.icuadapter.TimeZoneJDK;
+import com.ibm.icu.util.TimeZone;
 import java.util.Date;
 import java.util.Locale;
 
-import com.ibm.icu.impl.icuadapter.TimeZoneJDK;
-import com.ibm.icu.util.TimeZone;
-
 /**
- * TimeZoneICU is an adapter class which wraps ICU4J TimeZone and
- * implements java.util.TimeZone APIs.
+ * TimeZoneICU is an adapter class which wraps ICU4J TimeZone and implements java.util.TimeZone
+ * APIs.
  */
 public class TimeZoneICU extends java.util.TimeZone {
 
@@ -30,7 +29,7 @@ public class TimeZoneICU extends java.util.TimeZone {
 
     public static java.util.TimeZone wrap(TimeZone icuTz) {
         if (icuTz instanceof TimeZoneJDK) {
-            return ((TimeZoneJDK)icuTz).unwrap();
+            return ((TimeZoneJDK) icuTz).unwrap();
         }
         return new TimeZoneICU(icuTz);
     }
@@ -41,14 +40,14 @@ public class TimeZoneICU extends java.util.TimeZone {
 
     @Override
     public Object clone() {
-        TimeZoneICU other = (TimeZoneICU)super.clone();
-        other.fIcuTz = (TimeZone)fIcuTz.clone();
+        TimeZoneICU other = (TimeZoneICU) super.clone();
+        other.fIcuTz = (TimeZone) fIcuTz.clone();
         return other;
     }
 
-    //public String getDisplayName()
-    //public String getDisplayName(boolean daylight, int style)
-    //public String getDisplayName(Locale locale)
+    // public String getDisplayName()
+    // public String getDisplayName(boolean daylight, int style)
+    // public String getDisplayName(Locale locale)
 
     @Override
     public String getDisplayName(boolean daylight, int style, Locale locale) {

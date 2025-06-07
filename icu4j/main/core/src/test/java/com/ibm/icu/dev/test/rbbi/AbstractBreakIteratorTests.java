@@ -2,20 +2,17 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.dev.test.rbbi;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.text.BreakIterator;
 import java.text.CharacterIterator;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.CoreTestFmwk;
-import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.text.BreakIterator;
-
 /**
  * @author sgill
- *
  */
 @RunWith(JUnit4.class)
 public class AbstractBreakIteratorTests extends CoreTestFmwk {
@@ -78,9 +75,7 @@ public class AbstractBreakIteratorTests extends CoreTestFmwk {
         }
 
         @Override
-        public void setText(CharacterIterator newText) {
-        }
-
+        public void setText(CharacterIterator newText) {}
     }
 
     private BreakIterator bi;
@@ -93,7 +88,8 @@ public class AbstractBreakIteratorTests extends CoreTestFmwk {
     @Test
     public void testPreceding() {
         int pos = bi.preceding(0);
-        TestFmwk.assertEquals("BreakIterator preceding position not correct", BreakIterator.DONE, pos);
+        TestFmwk.assertEquals(
+                "BreakIterator preceding position not correct", BreakIterator.DONE, pos);
 
         pos = bi.preceding(5);
         TestFmwk.assertEquals("BreakIterator preceding position not correct", 4, pos);
@@ -107,5 +103,4 @@ public class AbstractBreakIteratorTests extends CoreTestFmwk {
         b = bi.isBoundary(5);
         TestFmwk.assertTrue("BreakIterator is boundary not correct", b);
     }
-
 }

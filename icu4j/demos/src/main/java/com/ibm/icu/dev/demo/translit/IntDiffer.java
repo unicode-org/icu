@@ -1,24 +1,22 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /**
-*******************************************************************************
-* Copyright (C) 1996-2016, International Business Machines Corporation and
-* others. All Rights Reserved.
-*******************************************************************************
-*/
-
+ * ****************************************************************************** Copyright (C)
+ * 1996-2016, International Business Machines Corporation and others. All Rights Reserved.
+ * ******************************************************************************
+ */
 package com.ibm.icu.dev.demo.translit;
 
 /**
- * VERY Basic Diff program. Compares two sequences of ints fed into it, and
- * lets you know where they are different.
+ * VERY Basic Diff program. Compares two sequences of ints fed into it, and lets you know where they
+ * are different.
  *
  * <p>This version compares ints while the CLDR class Differ compares Objects.
  *
  * @author Mark Davis
  * @version 1.0
  */
-final public class IntDiffer {
+public final class IntDiffer {
     /**
      * @param stackSize The size of the largest difference you expect.
      * @param matchCount The number of items that have to be the same to count as a match
@@ -26,8 +24,8 @@ final public class IntDiffer {
     public IntDiffer(int stackSize, int matchCount) {
         this.STACKSIZE = stackSize;
         this.EQUALSIZE = matchCount;
-        a = new int[stackSize+matchCount];
-        b = new int[stackSize+matchCount];
+        a = new int[stackSize + matchCount];
+        b = new int[stackSize + matchCount];
     }
 
     public void addA(int aStr) {
@@ -45,11 +43,11 @@ final public class IntDiffer {
     }
 
     public int getACount() {
-        return aTop-maxSame;
+        return aTop - maxSame;
     }
 
     public int getBCount() {
-        return bTop-maxSame;
+        return bTop - maxSame;
     }
 
     public int getB(int offset) {
@@ -57,9 +55,8 @@ final public class IntDiffer {
     }
 
     /**
-     * Checks for initial & final match.
-     * To be called after addA() and addB().
-     * Middle segments that are different are returned via get*Count() and get*().
+     * Checks for initial & final match. To be called after addA() and addB(). Middle segments that
+     * are different are returned via get*Count() and get*().
      *
      * @param finalPass true if no more input
      */
@@ -84,15 +81,15 @@ final public class IntDiffer {
         if (aCount - maxSame < EQUALSIZE || bCount - maxSame < EQUALSIZE) return;
 
         // now see if the last few a's occur anywhere in the b's, or vice versa
-        int match = find(a, aCount-EQUALSIZE, aCount, b, maxSame, bCount);
+        int match = find(a, aCount - EQUALSIZE, aCount, b, maxSame, bCount);
         if (match != -1) {
-            aTop = aCount-EQUALSIZE;
+            aTop = aCount - EQUALSIZE;
             bTop = match;
             return;
         }
-        match = find(b, bCount-EQUALSIZE, bCount, a, maxSame, aCount);
+        match = find(b, bCount - EQUALSIZE, bCount, a, maxSame, aCount);
         if (match != -1) {
-            bTop = bCount-EQUALSIZE;
+            bTop = bCount - EQUALSIZE;
             aTop = match;
             return;
         }
@@ -105,6 +102,7 @@ final public class IntDiffer {
 
     /**
      * Finds a segment of the first array in the second array.
+     *
      * @return -1 if not found, otherwise start position in bArr
      */
     private int find(int[] aArr, int aStart, int aEnd, int[] bArr, int bStart, int bEnd) {
@@ -125,14 +123,14 @@ final public class IntDiffer {
     /** Removes equal prefixes of both arrays. */
     private void flush() {
         if (aTop != 0) {
-            int newCount = aCount-aTop;
+            int newCount = aCount - aTop;
             System.arraycopy(a, aTop, a, 0, newCount);
             aCount = newCount;
             aTop = 0;
         }
 
         if (bTop != 0) {
-            int newCount = bCount-bTop;
+            int newCount = bCount - bTop;
             System.arraycopy(b, bTop, b, 0, newCount);
             bCount = newCount;
             bTop = 0;
@@ -145,8 +143,8 @@ final public class IntDiffer {
     // a[] and b[] are equal at 0 to before maxSame.
     // maxSame to before *Top are different.
     // *Top to *Count are equal again.
-    private int [] a;
-    private int [] b;
+    private int[] a;
+    private int[] b;
     private int aCount = 0;
     private int bCount = 0;
     private int maxSame = 0, aTop = 0, bTop = 0;

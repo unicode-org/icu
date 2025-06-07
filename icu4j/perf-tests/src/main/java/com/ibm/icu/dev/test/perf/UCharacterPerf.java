@@ -1,35 +1,28 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /**
- *******************************************************************************
- * Copyright (C) 2001-2004, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
- *******************************************************************************
+ * ****************************************************************************** Copyright (C)
+ * 2001-2004, International Business Machines Corporation and * others. All Rights Reserved. *
+ * ******************************************************************************
  */
-
 package com.ibm.icu.dev.test.perf;
 
 import com.ibm.icu.lang.UCharacter;
 
 /**
- * Base performance test that takes in a method name for testing with JDK.
- * To use 
- * <code>
- * java com.ibm.icu.dev.test.perf.UCharacterPerf $MethodName $LoopCount - 
+ * Base performance test that takes in a method name for testing with JDK. To use <code>
+ * java com.ibm.icu.dev.test.perf.UCharacterPerf $MethodName $LoopCount -
  *                                  $START_TEST_CHARACTER $END_TEST_CHARACTER
- * </code>
- * where $*_TEST_CHARACTER are in hex decimals with a leading 0x
+ * </code> where $*_TEST_CHARACTER are in hex decimals with a leading 0x
  */
-public final class UCharacterPerf extends PerfTest 
-{
+public final class UCharacterPerf extends PerfTest {
     // public methods ------------------------------------------------------
-    
-    public static void main(String[] args) throws Exception
-    {   
+
+    public static void main(String[] args) throws Exception {
         new UCharacterPerf().run(args);
         // new UCharacterPerf().TestPerformance();
     }
-    
+
     protected void setup(String[] args) {
         // We only take one argument, the pattern
         MIN_ = Character.MIN_VALUE;
@@ -41,12 +34,11 @@ public final class UCharacterPerf extends PerfTest
             MAX_ = Integer.parseInt(args[1], 16);
         }
     }
-    
-    PerfTest.Function testDigit() 
-    {
+
+    PerfTest.Function testDigit() {
         return new PerfTest.Function() {
             public void call() {
-                for (int ch = MIN_; ch < MAX_; ch ++) {
+                for (int ch = MIN_; ch < MAX_; ch++) {
                     UCharacter.digit(ch, 10);
                 }
             }
@@ -56,12 +48,11 @@ public final class UCharacterPerf extends PerfTest
             }
         };
     }
-    
-    PerfTest.Function testJDKDigit() 
-    {
+
+    PerfTest.Function testJDKDigit() {
         return new PerfTest.Function() {
             public void call() {
-                for (char ch = (char)MIN_; ch < (char)MAX_; ch ++) {
+                for (char ch = (char) MIN_; ch < (char) MAX_; ch++) {
                     Character.digit(ch, 10);
                 }
             }
@@ -71,12 +62,11 @@ public final class UCharacterPerf extends PerfTest
             }
         };
     }
-    
-    PerfTest.Function testGetNumericValue() 
-    {
+
+    PerfTest.Function testGetNumericValue() {
         return new PerfTest.Function() {
             public void call() {
-                for (int ch = MIN_; ch < MAX_; ch ++) {
+                for (int ch = MIN_; ch < MAX_; ch++) {
                     UCharacter.getNumericValue(ch);
                 }
             }
@@ -87,11 +77,10 @@ public final class UCharacterPerf extends PerfTest
         };
     }
 
-    PerfTest.Function testJDKGetNumericValue() 
-    {
+    PerfTest.Function testJDKGetNumericValue() {
         return new PerfTest.Function() {
             public void call() {
-                for (char ch = (char)MIN_; ch < (char)MAX_; ch ++) {
+                for (char ch = (char) MIN_; ch < (char) MAX_; ch++) {
                     Character.getNumericValue(ch);
                 }
             }
@@ -101,12 +90,11 @@ public final class UCharacterPerf extends PerfTest
             }
         };
     }
-     
-    PerfTest.Function testGetType() 
-    {
+
+    PerfTest.Function testGetType() {
         return new PerfTest.Function() {
             public void call() {
-                for (int ch = MIN_; ch < MAX_; ch ++) {
+                for (int ch = MIN_; ch < MAX_; ch++) {
                     UCharacter.getType(ch);
                 }
             }
@@ -115,13 +103,12 @@ public final class UCharacterPerf extends PerfTest
                 return MAX_ - MIN_ + 1;
             }
         };
-    }   
+    }
 
-    PerfTest.Function testJDKGetType() 
-    {
+    PerfTest.Function testJDKGetType() {
         return new PerfTest.Function() {
             public void call() {
-                for (char ch = (char)MIN_; ch < (char)MAX_; ch ++) {
+                for (char ch = (char) MIN_; ch < (char) MAX_; ch++) {
                     Character.getType(ch);
                 }
             }
@@ -132,11 +119,10 @@ public final class UCharacterPerf extends PerfTest
         };
     }
 
-    PerfTest.Function testIsDefined() 
-    {
+    PerfTest.Function testIsDefined() {
         return new PerfTest.Function() {
             public void call() {
-                for (int ch = MIN_; ch < MAX_; ch ++) {
+                for (int ch = MIN_; ch < MAX_; ch++) {
                     UCharacter.isDefined(ch);
                 }
             }
@@ -145,13 +131,12 @@ public final class UCharacterPerf extends PerfTest
                 return MAX_ - MIN_ + 1;
             }
         };
-    }    
-    
-    PerfTest.Function testJDKIsDefined() 
-    {
+    }
+
+    PerfTest.Function testJDKIsDefined() {
         return new PerfTest.Function() {
             public void call() {
-                for (char ch = (char)MIN_; ch < (char)MAX_; ch ++) {
+                for (char ch = (char) MIN_; ch < (char) MAX_; ch++) {
                     Character.isDefined(ch);
                 }
             }
@@ -160,13 +145,12 @@ public final class UCharacterPerf extends PerfTest
                 return MAX_ - MIN_ + 1;
             }
         };
-    }    
+    }
 
-    PerfTest.Function testIsDigit() 
-    {
+    PerfTest.Function testIsDigit() {
         return new PerfTest.Function() {
             public void call() {
-                for (int ch = MIN_; ch < MAX_; ch ++) {
+                for (int ch = MIN_; ch < MAX_; ch++) {
                     UCharacter.isDigit(ch);
                 }
             }
@@ -175,13 +159,12 @@ public final class UCharacterPerf extends PerfTest
                 return MAX_ - MIN_ + 1;
             }
         };
-    }    
-    
-    PerfTest.Function testJDKIsDigit() 
-    {
+    }
+
+    PerfTest.Function testJDKIsDigit() {
         return new PerfTest.Function() {
             public void call() {
-                for (char ch = (char)MIN_; ch < (char)MAX_; ch ++) {
+                for (char ch = (char) MIN_; ch < (char) MAX_; ch++) {
                     Character.isDigit(ch);
                 }
             }
@@ -191,12 +174,11 @@ public final class UCharacterPerf extends PerfTest
             }
         };
     }
-    
-    PerfTest.Function testIsIdentifierIgnorable() 
-    {
+
+    PerfTest.Function testIsIdentifierIgnorable() {
         return new PerfTest.Function() {
             public void call() {
-                for (int ch = MIN_; ch < MAX_; ch ++) {
+                for (int ch = MIN_; ch < MAX_; ch++) {
                     UCharacter.isIdentifierIgnorable(ch);
                 }
             }
@@ -205,13 +187,12 @@ public final class UCharacterPerf extends PerfTest
                 return MAX_ - MIN_ + 1;
             }
         };
-    }    
-    
-    PerfTest.Function testJDKIsIdentifierIgnorable() 
-    {
+    }
+
+    PerfTest.Function testJDKIsIdentifierIgnorable() {
         return new PerfTest.Function() {
             public void call() {
-                for (char ch = (char)MIN_; ch < (char)MAX_; ch ++) {
+                for (char ch = (char) MIN_; ch < (char) MAX_; ch++) {
                     Character.isIdentifierIgnorable(ch);
                 }
             }
@@ -221,12 +202,11 @@ public final class UCharacterPerf extends PerfTest
             }
         };
     }
-    
-    PerfTest.Function testIsISOControl() 
-    {
+
+    PerfTest.Function testIsISOControl() {
         return new PerfTest.Function() {
             public void call() {
-                for (int ch = MIN_; ch < MAX_; ch ++) {
+                for (int ch = MIN_; ch < MAX_; ch++) {
                     UCharacter.isISOControl(ch);
                 }
             }
@@ -236,12 +216,11 @@ public final class UCharacterPerf extends PerfTest
             }
         };
     }
-    
-    PerfTest.Function testJDKIsISOControl() 
-    {
+
+    PerfTest.Function testJDKIsISOControl() {
         return new PerfTest.Function() {
             public void call() {
-                for (char ch = (char)MIN_; ch < (char)MAX_; ch ++) {
+                for (char ch = (char) MIN_; ch < (char) MAX_; ch++) {
                     Character.isISOControl(ch);
                 }
             }
@@ -251,12 +230,11 @@ public final class UCharacterPerf extends PerfTest
             }
         };
     }
-    
-    PerfTest.Function testIsLetter() 
-    {
+
+    PerfTest.Function testIsLetter() {
         return new PerfTest.Function() {
             public void call() {
-                for (int ch = MIN_; ch < MAX_; ch ++) {
+                for (int ch = MIN_; ch < MAX_; ch++) {
                     UCharacter.isLetter(ch);
                 }
             }
@@ -266,12 +244,11 @@ public final class UCharacterPerf extends PerfTest
             }
         };
     }
-    
-    PerfTest.Function testJDKIsLetter() 
-    {
+
+    PerfTest.Function testJDKIsLetter() {
         return new PerfTest.Function() {
             public void call() {
-                for (char ch = (char)MIN_; ch < (char)MAX_; ch ++) {
+                for (char ch = (char) MIN_; ch < (char) MAX_; ch++) {
                     Character.isLetter(ch);
                 }
             }
@@ -281,12 +258,11 @@ public final class UCharacterPerf extends PerfTest
             }
         };
     }
-    
-    PerfTest.Function testIsLetterOrDigit() 
-    {
+
+    PerfTest.Function testIsLetterOrDigit() {
         return new PerfTest.Function() {
             public void call() {
-                for (int ch = MIN_; ch < MAX_; ch ++) {
+                for (int ch = MIN_; ch < MAX_; ch++) {
                     UCharacter.isLetterOrDigit(ch);
                 }
             }
@@ -296,12 +272,11 @@ public final class UCharacterPerf extends PerfTest
             }
         };
     }
-    
-    PerfTest.Function testJDKIsLetterOrDigit() 
-    {
+
+    PerfTest.Function testJDKIsLetterOrDigit() {
         return new PerfTest.Function() {
             public void call() {
-                for (char ch = (char)MIN_; ch < (char)MAX_; ch ++) {
+                for (char ch = (char) MIN_; ch < (char) MAX_; ch++) {
                     Character.isLetterOrDigit(ch);
                 }
             }
@@ -312,11 +287,10 @@ public final class UCharacterPerf extends PerfTest
         };
     }
 
-    PerfTest.Function testIsLowerCase() 
-    {
+    PerfTest.Function testIsLowerCase() {
         return new PerfTest.Function() {
             public void call() {
-                for (int ch = MIN_; ch < MAX_; ch ++) {
+                for (int ch = MIN_; ch < MAX_; ch++) {
                     UCharacter.isLowerCase(ch);
                 }
             }
@@ -325,13 +299,12 @@ public final class UCharacterPerf extends PerfTest
                 return MAX_ - MIN_ + 1;
             }
         };
-    }    
-    
-    PerfTest.Function testJDKIsLowerCase() 
-    {
+    }
+
+    PerfTest.Function testJDKIsLowerCase() {
         return new PerfTest.Function() {
             public void call() {
-                for (char ch = (char)MIN_; ch < (char)MAX_; ch ++) {
+                for (char ch = (char) MIN_; ch < (char) MAX_; ch++) {
                     Character.isLowerCase(ch);
                 }
             }
@@ -340,13 +313,12 @@ public final class UCharacterPerf extends PerfTest
                 return MAX_ - MIN_ + 1;
             }
         };
-    }    
-    
-    PerfTest.Function testIsSpaceChar() 
-    {
+    }
+
+    PerfTest.Function testIsSpaceChar() {
         return new PerfTest.Function() {
             public void call() {
-                for (int ch = MIN_; ch < MAX_; ch ++) {
+                for (int ch = MIN_; ch < MAX_; ch++) {
                     UCharacter.isSpaceChar(ch);
                 }
             }
@@ -355,13 +327,12 @@ public final class UCharacterPerf extends PerfTest
                 return MAX_ - MIN_ + 1;
             }
         };
-    } 
-    
-    PerfTest.Function testJDKIsSpaceChar() 
-    {
+    }
+
+    PerfTest.Function testJDKIsSpaceChar() {
         return new PerfTest.Function() {
             public void call() {
-                for (char ch = (char)MIN_; ch < (char)MAX_; ch ++) {
+                for (char ch = (char) MIN_; ch < (char) MAX_; ch++) {
                     Character.isSpaceChar(ch);
                 }
             }
@@ -370,13 +341,12 @@ public final class UCharacterPerf extends PerfTest
                 return MAX_ - MIN_ + 1;
             }
         };
-    }  
-    
-    PerfTest.Function testIsTitleCase() 
-    {
+    }
+
+    PerfTest.Function testIsTitleCase() {
         return new PerfTest.Function() {
             public void call() {
-                for (int ch = MIN_; ch < MAX_; ch ++) {
+                for (int ch = MIN_; ch < MAX_; ch++) {
                     UCharacter.isTitleCase(ch);
                 }
             }
@@ -386,12 +356,11 @@ public final class UCharacterPerf extends PerfTest
             }
         };
     }
-    
-    PerfTest.Function testJDKIsTitleCase() 
-    {
+
+    PerfTest.Function testJDKIsTitleCase() {
         return new PerfTest.Function() {
             public void call() {
-                for (char ch = (char)MIN_; ch < (char)MAX_; ch ++) {
+                for (char ch = (char) MIN_; ch < (char) MAX_; ch++) {
                     Character.isTitleCase(ch);
                 }
             }
@@ -400,13 +369,12 @@ public final class UCharacterPerf extends PerfTest
                 return MAX_ - MIN_ + 1;
             }
         };
-    }    
-    
-    PerfTest.Function testIsUnicodeIdentifierPart() 
-    {
+    }
+
+    PerfTest.Function testIsUnicodeIdentifierPart() {
         return new PerfTest.Function() {
             public void call() {
-                for (int ch = MIN_; ch < MAX_; ch ++) {
+                for (int ch = MIN_; ch < MAX_; ch++) {
                     UCharacter.isUnicodeIdentifierPart(ch);
                 }
             }
@@ -415,13 +383,12 @@ public final class UCharacterPerf extends PerfTest
                 return MAX_ - MIN_ + 1;
             }
         };
-    } 
-    
-    PerfTest.Function testJDKIsUnicodeIdentifierPart() 
-    {
+    }
+
+    PerfTest.Function testJDKIsUnicodeIdentifierPart() {
         return new PerfTest.Function() {
             public void call() {
-                for (char ch = (char)MIN_; ch < (char)MAX_; ch ++) {
+                for (char ch = (char) MIN_; ch < (char) MAX_; ch++) {
                     Character.isUnicodeIdentifierPart(ch);
                 }
             }
@@ -430,13 +397,12 @@ public final class UCharacterPerf extends PerfTest
                 return MAX_ - MIN_ + 1;
             }
         };
-    } 
-    
-    PerfTest.Function testIsUnicodeIdentifierStart() 
-    {
+    }
+
+    PerfTest.Function testIsUnicodeIdentifierStart() {
         return new PerfTest.Function() {
             public void call() {
-                for (int ch = MIN_; ch < MAX_; ch ++) {
+                for (int ch = MIN_; ch < MAX_; ch++) {
                     UCharacter.isUnicodeIdentifierStart(ch);
                 }
             }
@@ -445,13 +411,12 @@ public final class UCharacterPerf extends PerfTest
                 return MAX_ - MIN_ + 1;
             }
         };
-    } 
-    
-    PerfTest.Function testJDKIsUnicodeIdentifierStart() 
-    {
+    }
+
+    PerfTest.Function testJDKIsUnicodeIdentifierStart() {
         return new PerfTest.Function() {
             public void call() {
-                for (char ch = (char)MIN_; ch < (char)MAX_; ch ++) {
+                for (char ch = (char) MIN_; ch < (char) MAX_; ch++) {
                     Character.isUnicodeIdentifierStart(ch);
                 }
             }
@@ -460,13 +425,12 @@ public final class UCharacterPerf extends PerfTest
                 return MAX_ - MIN_ + 1;
             }
         };
-    } 
-    
-    PerfTest.Function testIsUpperCase() 
-    {
+    }
+
+    PerfTest.Function testIsUpperCase() {
         return new PerfTest.Function() {
             public void call() {
-                for (char ch = (char)MIN_; ch < (char)MAX_; ch ++) {
+                for (char ch = (char) MIN_; ch < (char) MAX_; ch++) {
                     UCharacter.isUpperCase(ch);
                 }
             }
@@ -476,12 +440,11 @@ public final class UCharacterPerf extends PerfTest
             }
         };
     }
-    
-    PerfTest.Function testJDKIsUpperCase() 
-    {
+
+    PerfTest.Function testJDKIsUpperCase() {
         return new PerfTest.Function() {
             public void call() {
-                for (char ch = (char)MIN_; ch < (char)MAX_; ch ++) {
+                for (char ch = (char) MIN_; ch < (char) MAX_; ch++) {
                     Character.isUpperCase(ch);
                 }
             }
@@ -490,13 +453,12 @@ public final class UCharacterPerf extends PerfTest
                 return MAX_ - MIN_ + 1;
             }
         };
-    }    
-         
-    PerfTest.Function testIsWhiteSpace() 
-    {
+    }
+
+    PerfTest.Function testIsWhiteSpace() {
         return new PerfTest.Function() {
             public void call() {
-                for (int ch = MIN_; ch < MAX_; ch ++) {
+                for (int ch = MIN_; ch < MAX_; ch++) {
                     UCharacter.isWhitespace(ch);
                 }
             }
@@ -506,12 +468,11 @@ public final class UCharacterPerf extends PerfTest
             }
         };
     }
-    
-    PerfTest.Function testJDKIsWhiteSpace() 
-    {
+
+    PerfTest.Function testJDKIsWhiteSpace() {
         return new PerfTest.Function() {
             public void call() {
-                for (char ch = (char)MIN_; ch < (char)MAX_; ch ++) {
+                for (char ch = (char) MIN_; ch < (char) MAX_; ch++) {
                     Character.isWhitespace(ch);
                 }
             }
@@ -521,15 +482,12 @@ public final class UCharacterPerf extends PerfTest
             }
         };
     }
-    
+
     // private data member --------------------------------------------------
-    
-    /**
-     * Minimum codepoint to do test. Test is ran from MIN_ to MAX_
-     */
+
+    /** Minimum codepoint to do test. Test is ran from MIN_ to MAX_ */
     private static int MIN_;
-    /**
-     * Minimum codepoint to do test. Test is ran from MIN_ to MAX_
-     */
+
+    /** Minimum codepoint to do test. Test is ran from MIN_ to MAX_ */
     private static int MAX_;
 }

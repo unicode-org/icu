@@ -8,19 +8,10 @@
  */
 
 /**
- * Port From:   ICU4C v2.1 : Collate/CollationDummyTest
- * Source File: $ICU4CRoot/source/test/intltest/allcoll.cpp
- *              $ICU4CRoot/source/test/cintltst/callcoll.c
- **/
-
+ * Port From: ICU4C v2.1 : Collate/CollationDummyTest Source File:
+ * $ICU4CRoot/source/test/intltest/allcoll.cpp $ICU4CRoot/source/test/cintltst/callcoll.c
+ */
 package com.ibm.icu.dev.test.collator;
-
-import java.util.Locale;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.CollationElementIterator;
@@ -28,10 +19,16 @@ import com.ibm.icu.text.CollationKey;
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.RuleBasedCollator;
+import java.util.Locale;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public class CollationDummyTest extends TestFmwk {
-    //testSourceCases[][] and testTargetCases[][], testCases[][] are ported from the file callcoll.c in icu4c
+    // testSourceCases[][] and testTargetCases[][], testCases[][] are ported from the file
+    // callcoll.c in icu4c
     private static char[][] testSourceCases = {
         {0x61, 0x62, 0x27, 0x63},
         {0x63, 0x6f, 0x2d, 0x6f, 0x70},
@@ -42,34 +39,34 @@ public class CollationDummyTest extends TestFmwk {
         {0x66, 0x69, 0x76, 0x65},
         {0x31},
         {0x31},
-        {0x31},                                            //  10
+        {0x31}, //  10
         {0x32},
         {0x32},
         {0x48, 0x65, 0x6c, 0x6c, 0x6f},
         {0x61, 0x3c, 0x62},
         {0x61, 0x3c, 0x62},
         {0x61, 0x63, 0x63},
-        {0x61, 0x63, 0x48, 0x63},  //  simple test
+        {0x61, 0x63, 0x48, 0x63}, //  simple test
         {0x70, 0x00EA, 0x63, 0x68, 0x65},
         {0x61, 0x62, 0x63},
-        {0x61, 0x62, 0x63},                                  //  20
+        {0x61, 0x62, 0x63}, //  20
         {0x61, 0x62, 0x63},
         {0x61, 0x62, 0x63},
         {0x61, 0x62, 0x63},
         {0x61, 0x00E6, 0x63},
-        {0x61, 0x63, 0x48, 0x63},  //  primary test
+        {0x61, 0x63, 0x48, 0x63}, //  primary test
         {0x62, 0x6c, 0x61, 0x63, 0x6b},
         {0x66, 0x6f, 0x75, 0x72},
         {0x66, 0x69, 0x76, 0x65},
         {0x31},
-        {0x61, 0x62, 0x63},                                        //  30
+        {0x61, 0x62, 0x63}, //  30
         {0x61, 0x62, 0x63},
         {0x61, 0x62, 0x63, 0x48},
         {0x61, 0x62, 0x63},
-        {0x61, 0x63, 0x48, 0x63},                              //  34
+        {0x61, 0x63, 0x48, 0x63}, //  34
         {0x61, 0x63, 0x65, 0x30},
         {0x31, 0x30},
-        {0x70, 0x00EA,0x30}                                    // 37
+        {0x70, 0x00EA, 0x30} // 37
     };
 
     private static char[][] testTargetCases = {
@@ -82,34 +79,34 @@ public class CollationDummyTest extends TestFmwk {
         {0x35},
         {0x6f, 0x6e, 0x65},
         {0x6e, 0x6e, 0x65},
-        {0x70, 0x6e, 0x65},                                  //  10
+        {0x70, 0x6e, 0x65}, //  10
         {0x74, 0x77, 0x6f},
         {0x75, 0x77, 0x6f},
         {0x68, 0x65, 0x6c, 0x6c, 0x4f},
         {0x61, 0x3c, 0x3d, 0x62},
         {0x61, 0x62, 0x63},
         {0x61, 0x43, 0x48, 0x63},
-        {0x61, 0x43, 0x48, 0x63},  //  simple test
+        {0x61, 0x43, 0x48, 0x63}, //  simple test
         {0x70, 0x00E9, 0x63, 0x68, 0x00E9},
         {0x61, 0x62, 0x63},
-        {0x61, 0x42, 0x43},                                  //  20
+        {0x61, 0x42, 0x43}, //  20
         {0x61, 0x62, 0x63, 0x68},
         {0x61, 0x62, 0x64},
         {0x00E4, 0x62, 0x63},
         {0x61, 0x00C6, 0x63},
-        {0x61, 0x43, 0x48, 0x63},  //  primary test
+        {0x61, 0x43, 0x48, 0x63}, //  primary test
         {0x62, 0x6c, 0x61, 0x63, 0x6b, 0x2d, 0x62, 0x69, 0x72, 0x64},
         {0x34},
         {0x35},
         {0x6f, 0x6e, 0x65},
         {0x61, 0x62, 0x63},
-        {0x61, 0x42, 0x63},                                  //  30
+        {0x61, 0x42, 0x63}, //  30
         {0x61, 0x62, 0x63, 0x68},
         {0x61, 0x62, 0x64},
-        {0x61, 0x43, 0x48, 0x63},                                //  34
+        {0x61, 0x43, 0x48, 0x63}, //  34
         {0x61, 0x63, 0x65, 0x30},
         {0x31, 0x30},
-        {0x70, 0x00EB,0x30}                                    // 37
+        {0x70, 0x00EB, 0x30} // 37
     };
 
     private static char[][] testCases = {
@@ -130,7 +127,7 @@ public class CollationDummyTest extends TestFmwk {
 
     int[] results = {
         -1,
-        -1, //Collator::GREATER,
+        -1, // Collator::GREATER,
         -1,
         -1,
         -1,
@@ -138,7 +135,7 @@ public class CollationDummyTest extends TestFmwk {
         -1,
         1,
         1,
-        -1,                                     //  10
+        -1, //  10
         1,
         -1,
         1,
@@ -146,25 +143,25 @@ public class CollationDummyTest extends TestFmwk {
         -1,
         -1,
         -1,
-    //  test primary > 17
+        //  test primary > 17
         0,
         0,
-        0,                                    //  20
+        0, //  20
         -1,
         -1,
         0,
         0,
         0,
         -1,
-    //  test secondary > 26
+        //  test secondary > 26
         0,
         0,
         0,
         0,
-        0,                                    //  30
+        0, //  30
         0,
         -1,
-        0,                                     //  34
+        0, //  34
         0,
         0,
         -1
@@ -174,12 +171,12 @@ public class CollationDummyTest extends TestFmwk {
 
     private RuleBasedCollator myCollation;
 
-    public CollationDummyTest() {
-    }
+    public CollationDummyTest() {}
 
     @Before
     public void init() throws Exception {
-        String ruleset = "& C < ch, cH, Ch, CH & Five, 5 & Four, 4 & one, 1 & Ampersand; '&' & Two, 2 ";
+        String ruleset =
+                "& C < ch, cH, Ch, CH & Five, 5 & Four, 4 & one, 1 & Ampersand; '&' & Two, 2 ";
         // String ruleset = "& Four, 4";
         myCollation = new RuleBasedCollator(ruleset);
     }
@@ -189,7 +186,7 @@ public class CollationDummyTest extends TestFmwk {
     public void TestTertiary() {
         int i = 0;
         myCollation.setStrength(Collator.TERTIARY);
-        for (i = 0; i < 17 ; i++) {
+        for (i = 0; i < 17; i++) {
             doTest(myCollation, testSourceCases[i], testTargetCases[i], results[i]);
         }
     }
@@ -197,14 +194,14 @@ public class CollationDummyTest extends TestFmwk {
     // perform test with strength PRIMARY
     @Test
     public void TestPrimary() {
-       // problem in strcollinc for unfinshed contractions
-       myCollation.setStrength(Collator.PRIMARY);
-        for (int i = 17; i < 26 ; i++) {
+        // problem in strcollinc for unfinshed contractions
+        myCollation.setStrength(Collator.PRIMARY);
+        for (int i = 17; i < 26; i++) {
             doTest(myCollation, testSourceCases[i], testTargetCases[i], results[i]);
         }
     }
 
-    //perform test with strength SECONDARY
+    // perform test with strength SECONDARY
     @Test
     public void TestSecondary() {
         int i;
@@ -230,7 +227,7 @@ public class CollationDummyTest extends TestFmwk {
     public void TestIdentical() {
         int i;
         myCollation.setStrength(Collator.IDENTICAL);
-        for (i= 34; i<37; i++) {
+        for (i = 34; i < 37; i++) {
             doTest(myCollation, testSourceCases[i], testTargetCases[i], results[i]);
         }
     }
@@ -274,26 +271,15 @@ public class CollationDummyTest extends TestFmwk {
         }
     }
 
-    //TestSurrogates() is ported from cintltst/callcoll.c
+    // TestSurrogates() is ported from cintltst/callcoll.c
 
-    /**
-    * Tests surrogate support.
-    */
+    /** Tests surrogate support. */
     @Test
-    public void TestSurrogates()
-    {
+    public void TestSurrogates() {
         String rules = "&z<'\ud800\udc00'<'\ud800\udc0a\u0308'<A";
-        String source[] = {"z",
-                           "\uD800\uDC00",
-                           "\ud800\udc0a\u0308",
-                           "\ud800\udc02"
-        };
+        String source[] = {"z", "\uD800\uDC00", "\ud800\udc0a\u0308", "\ud800\udc02"};
 
-        String target[] = {"\uD800\uDC00",
-                           "\ud800\udc0a\u0308",
-                           "A",
-                           "\ud800\udc03"
-        };
+        String target[] = {"\uD800\uDC00", "\ud800\udc0a\u0308", "A", "\ud800\udc03"};
 
         // this test is to verify the supplementary sort key order in the english
         // collator
@@ -310,7 +296,7 @@ public class CollationDummyTest extends TestFmwk {
         // logln("start of english collation supplementary characters test\n");
         while (count < 2) {
             doTest(enCollation, source[count], target[count], -1);
-            count ++;
+            count++;
         }
         doTest(enCollation, source[count], target[count], 1);
 
@@ -327,25 +313,25 @@ public class CollationDummyTest extends TestFmwk {
         // tests getting collation elements for surrogates for tailored rules
         while (count < 4) {
             doTest(newCollation, source[count], target[count], -1);
-            count ++;
+            count++;
         }
 
         // tests that \uD801\uDC01 still has the same value, not changed
         CollationKey enKey = enCollation.getCollationKey(source[3]);
         CollationKey newKey = newCollation.getCollationKey(source[3]);
         int keyResult = enKey.compareTo(newKey);
-        if(keyResult != 0) {
+        if (keyResult != 0) {
             errln("Failed : non-tailored supplementary characters should have the same value\n");
         }
     }
 
     private static final boolean SUPPORT_VARIABLE_TOP_RELATION = false;
-    //TestVariableTop() is ported from cintltst/callcoll.c
+
+    // TestVariableTop() is ported from cintltst/callcoll.c
     /**
-    * Tests the [variable top] tag in rule syntax. Since the default [alternate]
-    * tag has the value shifted, any codepoints before [variable top] should give
-    * a primary ce of 0.
-    */
+     * Tests the [variable top] tag in rule syntax. Since the default [alternate] tag has the value
+     * shifted, any codepoints before [variable top] should give a primary ce of 0.
+     */
     @Test
     public void TestVariableTop() {
         /*
@@ -354,10 +340,12 @@ public class CollationDummyTest extends TestFmwk {
          * It was replaced by the [maxVariable symbol] setting.
          * See ICU tickets #9958 and #8032.
          */
-        if(!SUPPORT_VARIABLE_TOP_RELATION) { return; }
+        if (!SUPPORT_VARIABLE_TOP_RELATION) {
+            return;
+        }
         String rule = "&z = [variable top]";
-        Collator  myColl;
-        Collator  enColl;
+        Collator myColl;
+        Collator enColl;
         char[] source = new char[1];
         char ch;
         int expected[] = {0};
@@ -369,19 +357,19 @@ public class CollationDummyTest extends TestFmwk {
             return;
         }
 
-        try{
+        try {
             myColl = new RuleBasedCollator(rule);
-        } catch(Exception e){
+        } catch (Exception e) {
             errln("Fail to create RuleBasedCollator with rules:" + rule);
             return;
         }
         enColl.setStrength(Collator.PRIMARY);
         myColl.setStrength(Collator.PRIMARY);
 
-        ((RuleBasedCollator)enColl).setAlternateHandlingShifted(true);
-        ((RuleBasedCollator)myColl).setAlternateHandlingShifted(true);
+        ((RuleBasedCollator) enColl).setAlternateHandlingShifted(true);
+        ((RuleBasedCollator) myColl).setAlternateHandlingShifted(true);
 
-        if(((RuleBasedCollator)enColl).isAlternateHandlingShifted() != true) {
+        if (((RuleBasedCollator) enColl).isAlternateHandlingShifted() != true) {
             errln("ERROR: ALTERNATE_HANDLING value can not be set to SHIFTED\n");
         }
 
@@ -389,8 +377,8 @@ public class CollationDummyTest extends TestFmwk {
         CollationKey key = enColl.getCollationKey(" ");
         byte[] result = key.toByteArray();
 
-        for(int i = 0; i < result.length; i++) {
-            if(result[i]!= expected[i]) {
+        for (int i = 0; i < result.length; i++) {
+            if (result[i] != expected[i]) {
                 errln("ERROR: SHIFTED alternate does not return 0 for primary of space\n");
                 break;
             }
@@ -402,46 +390,48 @@ public class CollationDummyTest extends TestFmwk {
             key = myColl.getCollationKey(new String(source));
             result = key.toByteArray();
 
-            for(int i = 0; i < result.length; i++) {
-                if(result[i]!= expected[i]) {
+            for (int i = 0; i < result.length; i++) {
+                if (result[i] != expected[i]) {
                     errln("ERROR: SHIFTED alternate does not return 0 for primary of space\n");
                     break;
                 }
             }
-            ch ++;
+            ch++;
         }
     }
 
     @Test
     public void TestJB1401() {
-        Collator     myCollator = null;
+        Collator myCollator = null;
         char[] NFD_UnsafeStartChars = {
-            0x0f73,          // Tibetan Vowel Sign II
-            0x0f75,          // Tibetan Vowel Sign UU
-            0x0f81,          // Tibetan Vowel Sign Reversed II
+            0x0f73, // Tibetan Vowel Sign II
+            0x0f75, // Tibetan Vowel Sign UU
+            0x0f81, // Tibetan Vowel Sign Reversed II
             0
         };
         int i;
 
-        try{
+        try {
             myCollator = Collator.getInstance(Locale.ENGLISH);
-        } catch(Exception e) {
+        } catch (Exception e) {
             errln("ERROR: Failed to create the collator for ENGLISH");
             return;
         }
         myCollator.setDecomposition(Collator.CANONICAL_DECOMPOSITION);
-        for (i=0; ; i++) {
+        for (i = 0; ; i++) {
             // Get the next funny character to be tested, and set up the
             // three test strings X, Y, Z, consisting of an A-grave + test char,
             // in original form, NFD, and then NFC form.
             char c = NFD_UnsafeStartChars[i];
-            if (c==0) {break;}
+            if (c == 0) {
+                break;
+            }
 
-            String x = "\u00C0" + c;       // \u00C0 is A Grave
+            String x = "\u00C0" + c; // \u00C0 is A Grave
             String y;
             String z;
 
-            try{
+            try {
                 y = Normalizer.decompose(x, false);
                 z = Normalizer.decompose(y, true);
             } catch (Exception e) {
@@ -455,23 +445,24 @@ public class CollationDummyTest extends TestFmwk {
             doTest(myCollator, x, z, 0);
             doTest(myCollator, y, z, 0);
 
-            // Run collation element iterators over the three strings.  Results should be same for each.
+            // Run collation element iterators over the three strings.  Results should be same for
+            // each.
 
             {
                 CollationElementIterator ceiX, ceiY, ceiZ;
                 int ceX, ceY, ceZ;
                 int j;
                 try {
-                    ceiX = ((RuleBasedCollator)myCollator).getCollationElementIterator(x);
-                    ceiY = ((RuleBasedCollator)myCollator).getCollationElementIterator(y);
-                    ceiZ = ((RuleBasedCollator)myCollator).getCollationElementIterator(z);
-                } catch(Exception e) {
+                    ceiX = ((RuleBasedCollator) myCollator).getCollationElementIterator(x);
+                    ceiY = ((RuleBasedCollator) myCollator).getCollationElementIterator(y);
+                    ceiZ = ((RuleBasedCollator) myCollator).getCollationElementIterator(z);
+                } catch (Exception e) {
                     errln("ERROR: getCollationElementIterator failed");
                     return;
                 }
 
-                for (j=0;; j++) {
-                    try{
+                for (j = 0; ; j++) {
+                    try {
                         ceX = ceiX.next();
                         ceY = ceiY.next();
                         ceZ = ceiZ.next();
@@ -499,9 +490,9 @@ public class CollationDummyTest extends TestFmwk {
         String s = new String(source);
         String t = new String(target);
         doTestVariant(collation, s, t, result);
-        if(result == -1) {
+        if (result == -1) {
             doTestVariant(collation, t, s, 1);
-        } else if(result == 1) {
+        } else if (result == 1) {
             doTestVariant(collation, t, s, -1);
         } else {
             doTestVariant(collation, t, s, 0);
@@ -511,11 +502,11 @@ public class CollationDummyTest extends TestFmwk {
     // main test method called with different strengths,
     // tests comparison of custum collation with different strengths
 
-    private void doTest(Collator collation,String s, String t, int result) {
+    private void doTest(Collator collation, String s, String t, int result) {
         doTestVariant(collation, s, t, result);
-        if(result == -1) {
+        if (result == -1) {
             doTestVariant(collation, t, s, 1);
-        } else if(result == 1) {
+        } else if (result == 1) {
             doTestVariant(collation, t, s, -1);
         } else {
             doTestVariant(collation, t, s, 0);
@@ -524,7 +515,7 @@ public class CollationDummyTest extends TestFmwk {
 
     private void doTestVariant(Collator collation, String source, String target, int result) {
         int compareResult = collation.compare(source, target);
-        CollationKey srckey , tgtkey;
+        CollationKey srckey, tgtkey;
         srckey = collation.getCollationKey(source);
         tgtkey = collation.getCollationKey(target);
         int keyResult = srckey.compareTo(tgtkey);

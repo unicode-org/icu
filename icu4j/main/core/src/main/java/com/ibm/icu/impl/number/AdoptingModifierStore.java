@@ -8,7 +8,7 @@ import com.ibm.icu.impl.number.Modifier.Signum;
 /**
  * This implementation of ModifierStore adopts references to Modifiers.
  *
- * (This is named "adopting" because in C++, this class takes ownership of the Modifiers.)
+ * <p>(This is named "adopting" because in C++, this class takes ownership of the Modifiers.)
  */
 public class AdoptingModifierStore implements ModifierStore {
     private final Modifier positive;
@@ -19,12 +19,13 @@ public class AdoptingModifierStore implements ModifierStore {
     boolean frozen;
 
     /**
-     * This constructor populates the ParameterizedModifier with a single positive and negative form.
+     * This constructor populates the ParameterizedModifier with a single positive and negative
+     * form.
      *
-     * <p>
-     * If this constructor is used, a plural form CANNOT be passed to {@link #getModifier}.
+     * <p>If this constructor is used, a plural form CANNOT be passed to {@link #getModifier}.
      */
-    public AdoptingModifierStore(Modifier positive, Modifier posZero, Modifier negZero, Modifier negative) {
+    public AdoptingModifierStore(
+            Modifier positive, Modifier posZero, Modifier negZero, Modifier negative) {
         this.positive = positive;
         this.posZero = posZero;
         this.negZero = negZero;
@@ -34,11 +35,10 @@ public class AdoptingModifierStore implements ModifierStore {
     }
 
     /**
-     * This constructor prepares the ParameterizedModifier to be populated with a positive and negative
-     * Modifier for multiple plural forms.
+     * This constructor prepares the ParameterizedModifier to be populated with a positive and
+     * negative Modifier for multiple plural forms.
      *
-     * <p>
-     * If this constructor is used, a plural form MUST be passed to {@link #getModifier}.
+     * <p>If this constructor is used, a plural form MUST be passed to {@link #getModifier}.
      */
     public AdoptingModifierStore() {
         this.positive = null;

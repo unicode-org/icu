@@ -8,11 +8,10 @@ import java.util.Objects;
 /**
  * Represents a span of a string containing a given field.
  *
- * This class differs from FieldPosition in the following ways:
+ * <p>This class differs from FieldPosition in the following ways:
  *
- *   1. It has information on the field category.
- *   2. It allows you to set constraints to use when iterating over field positions.
- *   3. It is used for the newer FormattedValue APIs.
+ * <p>1. It has information on the field category. 2. It allows you to set constraints to use when
+ * iterating over field positions. 3. It is used for the newer FormattedValue APIs.
  *
  * @author sffc
  * @stable ICU 64
@@ -22,44 +21,43 @@ public class ConstrainedFieldPosition {
     /**
      * Represents the type of constraint for ConstrainedFieldPosition.
      *
-     * Constraints are used to control the behavior of iteration in FormattedValue.
+     * <p>Constraints are used to control the behavior of iteration in FormattedValue.
      */
     private enum ConstraintType {
         /**
          * Represents the lack of a constraint.
          *
-         * This is the value of fConstraint
-         * if no "constrain" methods were called.
+         * <p>This is the value of fConstraint if no "constrain" methods were called.
          */
         NONE,
 
         /**
          * Represents that the field class is constrained.
          *
-         * This is the value of fConstraint
-         * after {@link #constrainClass} is called.
+         * <p>This is the value of fConstraint after {@link #constrainClass} is called.
          *
-         * FormattedValue implementations should not change the field class when this constraint is active.
+         * <p>FormattedValue implementations should not change the field class when this constraint
+         * is active.
          */
         CLASS,
 
         /**
          * Represents that the field is constrained.
          *
-         * This is the value of fConstraint
-         * after {@link #constrainField} is called.
+         * <p>This is the value of fConstraint after {@link #constrainField} is called.
          *
-         * FormattedValue implementations should not change the field when this constraint is active.
+         * <p>FormattedValue implementations should not change the field when this constraint is
+         * active.
          */
         FIELD,
 
         /**
          * Represents that the field value is constrained.
          *
-         * This is the value of fConstraint
-         * after {@link #constrainField} is called.
+         * <p>This is the value of fConstraint after {@link #constrainField} is called.
          *
-         * FormattedValue implementations should not change the field or value with this constraint.
+         * <p>FormattedValue implementations should not change the field or value with this
+         * constraint.
          */
         VALUE
     };
@@ -75,7 +73,7 @@ public class ConstrainedFieldPosition {
     /**
      * Initializes a CategoryFieldPosition.
      *
-     * By default, the CategoryFieldPosition has no iteration constraints.
+     * <p>By default, the CategoryFieldPosition has no iteration constraints.
      *
      * @stable ICU 64
      */
@@ -86,8 +84,8 @@ public class ConstrainedFieldPosition {
     /**
      * Resets this ConstrainedFieldPosition to its initial state, as if it were newly created:
      *
-     * - Removes any constraints that may have been set on the instance.
-     * - Resets the iteration position.
+     * <p>- Removes any constraints that may have been set on the instance. - Resets the iteration
+     * position.
      *
      * @stable ICU 64
      */
@@ -104,12 +102,12 @@ public class ConstrainedFieldPosition {
     /**
      * Sets a constraint on the field.
      *
-     * When this instance of ConstrainedFieldPosition is passed to {@link FormattedValue#nextPosition}, positions are
-     * skipped unless they have the given field.
+     * <p>When this instance of ConstrainedFieldPosition is passed to {@link
+     * FormattedValue#nextPosition}, positions are skipped unless they have the given field.
      *
-     * Any previously set constraints are cleared.
+     * <p>Any previously set constraints are cleared.
      *
-     * For example, to loop over all grouping separators:
+     * <p>For example, to loop over all grouping separators:
      *
      * <pre>
      * ConstrainedFieldPosition cfpos;
@@ -119,11 +117,10 @@ public class ConstrainedFieldPosition {
      * }
      * </pre>
      *
-     * Changing the constraint while in the middle of iterating over a FormattedValue
-     * does not generally have well-defined behavior.
+     * Changing the constraint while in the middle of iterating over a FormattedValue does not
+     * generally have well-defined behavior.
      *
-     * @param field
-     *            The field to fix when iterating.
+     * @param field The field to fix when iterating.
      * @stable ICU 64
      */
     public void constrainField(Field field) {
@@ -139,12 +136,13 @@ public class ConstrainedFieldPosition {
     /**
      * Sets a constraint on the field class.
      *
-     * When this instance of ConstrainedFieldPosition is passed to {@link FormattedValue#nextPosition}, positions are
-     * skipped unless the field is an instance of the class constraint, including subclasses.
+     * <p>When this instance of ConstrainedFieldPosition is passed to {@link
+     * FormattedValue#nextPosition}, positions are skipped unless the field is an instance of the
+     * class constraint, including subclasses.
      *
-     * Any previously set constraints are cleared.
+     * <p>Any previously set constraints are cleared.
      *
-     * For example, to loop over only the number-related fields:
+     * <p>For example, to loop over only the number-related fields:
      *
      * <pre>
      * ConstrainedFieldPosition cfpos;
@@ -154,8 +152,7 @@ public class ConstrainedFieldPosition {
      * }
      * </pre>
      *
-     * @param classConstraint
-     *            The field class to fix when iterating.
+     * @param classConstraint The field class to fix when iterating.
      * @stable ICU 64
      */
     public void constrainClass(Class<?> classConstraint) {
@@ -171,12 +168,13 @@ public class ConstrainedFieldPosition {
     /**
      * Sets a constraint on field and field value.
      *
-     * When this instance of ConstrainedFieldPosition is passed to {@link FormattedValue#nextPosition}, positions are
-     * skipped unless both the field and the field value are equal.
+     * <p>When this instance of ConstrainedFieldPosition is passed to {@link
+     * FormattedValue#nextPosition}, positions are skipped unless both the field and the field value
+     * are equal.
      *
-     * Any previously set constraints are cleared.
+     * <p>Any previously set constraints are cleared.
      *
-     * For example, to find the span a date interval corresponding to the first date:
+     * <p>For example, to find the span a date interval corresponding to the first date:
      *
      * <pre>
      * ConstrainedFieldPosition cfpos;
@@ -189,7 +187,8 @@ public class ConstrainedFieldPosition {
      * @param field The field to fix when iterating.
      * @param fieldValue The field value to fix when iterating.
      * @internal ICU 64 technology preview
-     * @deprecated This API is for technology preview and might be changed or removed in a future release.
+     * @deprecated This API is for technology preview and might be changed or removed in a future
+     *     release.
      */
     @Deprecated
     public void constrainFieldAndValue(Field field, Object fieldValue) {
@@ -202,8 +201,8 @@ public class ConstrainedFieldPosition {
     /**
      * Gets the field for the current position.
      *
-     * The return value is well-defined and non-null only after
-     * FormattedValue#nextPosition returns true.
+     * <p>The return value is well-defined and non-null only after FormattedValue#nextPosition
+     * returns true.
      *
      * @return The field saved in the instance. See above for null conditions.
      * @stable ICU 64
@@ -215,7 +214,7 @@ public class ConstrainedFieldPosition {
     /**
      * Gets the INCLUSIVE start index for the current position.
      *
-     * The return value is well-defined only after FormattedValue#nextPosition returns true.
+     * <p>The return value is well-defined only after FormattedValue#nextPosition returns true.
      *
      * @return The start index saved in the instance.
      * @stable ICU 64
@@ -227,7 +226,7 @@ public class ConstrainedFieldPosition {
     /**
      * Gets the EXCLUSIVE end index stored for the current position.
      *
-     * The return value is well-defined only after FormattedValue#nextPosition returns true.
+     * <p>The return value is well-defined only after FormattedValue#nextPosition returns true.
      *
      * @return The end index saved in the instance.
      * @stable ICU 64
@@ -239,7 +238,7 @@ public class ConstrainedFieldPosition {
     /**
      * Gets the value associated with the current field position. The field value is often not set.
      *
-     * The return value is well-defined only after FormattedValue#nextPosition returns true.
+     * <p>The return value is well-defined only after FormattedValue#nextPosition returns true.
      *
      * @return The value for the current position. Might be null.
      * @stable ICU 64
@@ -251,9 +250,9 @@ public class ConstrainedFieldPosition {
     /**
      * Gets an int64 that FormattedValue implementations may use for storage.
      *
-     * The initial value is zero.
+     * <p>The initial value is zero.
      *
-     * Users of FormattedValue should not need to call this method.
+     * <p>Users of FormattedValue should not need to call this method.
      *
      * @return The current iteration context from {@link #setInt64IterationContext}.
      * @stable ICU 64
@@ -265,10 +264,9 @@ public class ConstrainedFieldPosition {
     /**
      * Sets an int64 that FormattedValue implementations may use for storage.
      *
-     * Intended to be used by FormattedValue implementations.
+     * <p>Intended to be used by FormattedValue implementations.
      *
-     * @param context
-     *            The new iteration context.
+     * @param context The new iteration context.
      * @stable ICU 64
      */
     public void setInt64IterationContext(long context) {
@@ -278,19 +276,15 @@ public class ConstrainedFieldPosition {
     /**
      * Sets new values for the primary public getters.
      *
-     * Intended to be used by FormattedValue implementations.
+     * <p>Intended to be used by FormattedValue implementations.
      *
-     * It is up to the implementation to ensure that the user-requested
-     * constraints are satisfied. This method does not check!
+     * <p>It is up to the implementation to ensure that the user-requested constraints are
+     * satisfied. This method does not check!
      *
-     * @param field
-     *            The new field.
-     * @param value
-     *            The new field value. Should be null if there is no value.
-     * @param start
-     *            The new inclusive start index.
-     * @param limit
-     *            The new exclusive end index.
+     * @param field The new field.
+     * @param value The new field value. Should be null if there is no value.
+     * @param start The new inclusive start index.
+     * @param limit The new exclusive end index.
      * @stable ICU 64
      */
     public void setState(Field field, Object value, int start, int limit) {
@@ -306,10 +300,9 @@ public class ConstrainedFieldPosition {
     }
 
     /**
-     * Determines whether a given field and value should be included given the
-     * constraints.
+     * Determines whether a given field and value should be included given the constraints.
      *
-     * Intended to be used by FormattedValue implementations.
+     * <p>Intended to be used by FormattedValue implementations.
      *
      * @param field The field to test.
      * @param fieldValue The field value to test. Should be null if there is no value.
@@ -321,22 +314,23 @@ public class ConstrainedFieldPosition {
             throw new IllegalArgumentException("field must not be null");
         }
         switch (fConstraint) {
-        case NONE:
-            return true;
-        case CLASS:
-            return fClassConstraint.isAssignableFrom(field.getClass());
-        case FIELD:
-            return fField == field;
-        case VALUE:
-            // Note: Objects.equals is Android API level 19 and Java 1.7
-            return fField == field && Objects.equals(fValue, fieldValue);
-        default:
-            throw new AssertionError();
+            case NONE:
+                return true;
+            case CLASS:
+                return fClassConstraint.isAssignableFrom(field.getClass());
+            case FIELD:
+                return fField == field;
+            case VALUE:
+                // Note: Objects.equals is Android API level 19 and Java 1.7
+                return fField == field && Objects.equals(fValue, fieldValue);
+            default:
+                throw new AssertionError();
         }
     }
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 64
      */
     @Override

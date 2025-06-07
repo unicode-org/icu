@@ -8,6 +8,8 @@
  */
 package com.ibm.icu.impl.jdkadapter;
 
+import com.ibm.icu.text.DecimalFormat;
+import com.ibm.icu.text.NumberFormat;
 import java.math.RoundingMode;
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
@@ -20,12 +22,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.ibm.icu.text.DecimalFormat;
-import com.ibm.icu.text.NumberFormat;
-
 /**
- * DecimalFormatICU is an adapter class which wraps ICU4J DecimalFormat and
- * implements java.text.DecimalFormat APIs.
+ * DecimalFormatICU is an adapter class which wraps ICU4J DecimalFormat and implements
+ * java.text.DecimalFormat APIs.
  */
 public class DecimalFormatICU extends java.text.DecimalFormat {
 
@@ -58,15 +57,15 @@ public class DecimalFormatICU extends java.text.DecimalFormat {
 
     @Override
     public Object clone() {
-        DecimalFormatICU other = (DecimalFormatICU)super.clone();
-        other.fIcuDecfmt = (DecimalFormat)fIcuDecfmt.clone();
+        DecimalFormatICU other = (DecimalFormatICU) super.clone();
+        other.fIcuDecfmt = (DecimalFormat) fIcuDecfmt.clone();
         return other;
     }
 
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof DecimalFormatICU) {
-            return ((DecimalFormatICU)obj).fIcuDecfmt.equals(fIcuDecfmt);
+            return ((DecimalFormatICU) obj).fIcuDecfmt.equals(fIcuDecfmt);
         }
         return false;
     }
@@ -98,7 +97,7 @@ public class DecimalFormatICU extends java.text.DecimalFormat {
         AttributedString resstr = new AttributedString(sb.toString());
 
         // Mapping attributes
-        Map<AttributedCharacterIterator.Attribute,Object> attributes = null;
+        Map<AttributedCharacterIterator.Attribute, Object> attributes = null;
         int index = aci.getBeginIndex();
         int residx = 0;
         while (true) {
@@ -108,15 +107,15 @@ public class DecimalFormatICU extends java.text.DecimalFormat {
             attributes = aci.getAttributes();
             if (attributes != null) {
                 int end = aci.getRunLimit();
-                Map<AttributedCharacterIterator.Attribute,Object> jdkAttributes = 
-                    new HashMap<AttributedCharacterIterator.Attribute,Object>();
-                for (Entry<AttributedCharacterIterator.Attribute, Object> entry
-                        : attributes.entrySet()) {
+                Map<AttributedCharacterIterator.Attribute, Object> jdkAttributes =
+                        new HashMap<AttributedCharacterIterator.Attribute, Object>();
+                for (Entry<AttributedCharacterIterator.Attribute, Object> entry :
+                        attributes.entrySet()) {
                     AttributedCharacterIterator.Attribute key = entry.getKey();
                     AttributedCharacterIterator.Attribute jdkKey = mapAttribute(key);
                     Object jdkVal = entry.getValue();
                     if (jdkVal instanceof AttributedCharacterIterator.Attribute) {
-                        jdkVal = mapAttribute((AttributedCharacterIterator.Attribute)jdkVal);
+                        jdkVal = mapAttribute((AttributedCharacterIterator.Attribute) jdkVal);
                     }
                     jdkAttributes.put(jdkKey, jdkVal);
                 }
@@ -199,30 +198,30 @@ public class DecimalFormatICU extends java.text.DecimalFormat {
         int icuMode = fIcuDecfmt.getRoundingMode();
         RoundingMode mode = RoundingMode.UP;
         switch (icuMode) {
-        case com.ibm.icu.math.BigDecimal.ROUND_CEILING:
-            mode = RoundingMode.CEILING;
-            break;
-        case com.ibm.icu.math.BigDecimal.ROUND_DOWN:
-            mode = RoundingMode.DOWN;
-            break;
-        case com.ibm.icu.math.BigDecimal.ROUND_FLOOR:
-            mode = RoundingMode.FLOOR;
-            break;
-        case com.ibm.icu.math.BigDecimal.ROUND_HALF_DOWN:
-            mode = RoundingMode.HALF_DOWN;
-            break;
-        case com.ibm.icu.math.BigDecimal.ROUND_HALF_EVEN:
-            mode = RoundingMode.HALF_EVEN;
-            break;
-        case com.ibm.icu.math.BigDecimal.ROUND_HALF_UP:
-            mode = RoundingMode.HALF_UP;
-            break;
-        case com.ibm.icu.math.BigDecimal.ROUND_UNNECESSARY:
-            mode = RoundingMode.UNNECESSARY;
-            break;
-        case com.ibm.icu.math.BigDecimal.ROUND_UP:
-            mode = RoundingMode.UP;
-            break;
+            case com.ibm.icu.math.BigDecimal.ROUND_CEILING:
+                mode = RoundingMode.CEILING;
+                break;
+            case com.ibm.icu.math.BigDecimal.ROUND_DOWN:
+                mode = RoundingMode.DOWN;
+                break;
+            case com.ibm.icu.math.BigDecimal.ROUND_FLOOR:
+                mode = RoundingMode.FLOOR;
+                break;
+            case com.ibm.icu.math.BigDecimal.ROUND_HALF_DOWN:
+                mode = RoundingMode.HALF_DOWN;
+                break;
+            case com.ibm.icu.math.BigDecimal.ROUND_HALF_EVEN:
+                mode = RoundingMode.HALF_EVEN;
+                break;
+            case com.ibm.icu.math.BigDecimal.ROUND_HALF_UP:
+                mode = RoundingMode.HALF_UP;
+                break;
+            case com.ibm.icu.math.BigDecimal.ROUND_UNNECESSARY:
+                mode = RoundingMode.UNNECESSARY;
+                break;
+            case com.ibm.icu.math.BigDecimal.ROUND_UP:
+                mode = RoundingMode.UP;
+                break;
         }
         return mode;
     }
@@ -252,7 +251,8 @@ public class DecimalFormatICU extends java.text.DecimalFormat {
         if (currency == null) {
             fIcuDecfmt.setCurrency(null);
         } else {
-            fIcuDecfmt.setCurrency(com.ibm.icu.util.Currency.getInstance(currency.getCurrencyCode()));
+            fIcuDecfmt.setCurrency(
+                    com.ibm.icu.util.Currency.getInstance(currency.getCurrencyCode()));
         }
     }
 
@@ -260,7 +260,7 @@ public class DecimalFormatICU extends java.text.DecimalFormat {
     public void setDecimalFormatSymbols(DecimalFormatSymbols newSymbols) {
         com.ibm.icu.text.DecimalFormatSymbols icuDecfs = null;
         if (newSymbols instanceof DecimalFormatSymbolsICU) {
-            icuDecfs = ((DecimalFormatSymbolsICU)newSymbols).unwrap();
+            icuDecfs = ((DecimalFormatSymbolsICU) newSymbols).unwrap();
         } else {
             icuDecfs = fIcuDecfmt.getDecimalFormatSymbols();
 
@@ -268,7 +268,8 @@ public class DecimalFormatICU extends java.text.DecimalFormat {
             if (currency == null) {
                 icuDecfs.setCurrency(null);
             } else {
-                icuDecfs.setCurrency(com.ibm.icu.util.Currency.getInstance(currency.getCurrencyCode()));
+                icuDecfs.setCurrency(
+                        com.ibm.icu.util.Currency.getInstance(currency.getCurrencyCode()));
             }
 
             // Copy symbols
@@ -419,7 +420,8 @@ public class DecimalFormatICU extends java.text.DecimalFormat {
         fIcuDecfmt.setParseIntegerOnly(value);
     }
 
-    private static AttributedCharacterIterator.Attribute mapAttribute(AttributedCharacterIterator.Attribute icuAttribute) {
+    private static AttributedCharacterIterator.Attribute mapAttribute(
+            AttributedCharacterIterator.Attribute icuAttribute) {
         AttributedCharacterIterator.Attribute jdkAttribute = icuAttribute;
 
         if (icuAttribute == NumberFormat.Field.CURRENCY) {
@@ -448,5 +450,4 @@ public class DecimalFormatICU extends java.text.DecimalFormat {
 
         return jdkAttribute;
     }
-
 }

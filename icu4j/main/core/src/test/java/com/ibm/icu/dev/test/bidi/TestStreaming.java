@@ -1,25 +1,23 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /*
-*******************************************************************************
-*   Copyright (C) 2001-2013, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-*******************************************************************************
-*/
+ *******************************************************************************
+ *   Copyright (C) 2001-2013, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ *******************************************************************************
+ */
 
 package com.ibm.icu.dev.test.bidi;
 
-import org.junit.Test;
-
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.Bidi;
+import org.junit.Test;
 
 /**
  * Regression test for streaming mode
  *
  * @author Lina Kemmel, Matitiahu Allouche
  */
-
 public class TestStreaming extends BidiFmwk {
 
     static final int MAXPORTIONS = 10;
@@ -41,38 +39,36 @@ public class TestStreaming extends BidiFmwk {
     }
 
     static final TestCase[] testCases = {
-        new TestCase("123\n"    +
-                     "abc45\r"  +
-                     "67890\n"  +
-                     "\r"       +
-                     "02468\r"  +
-                     "ghi",
-            6, new int[] { 6, 6 },
-            new int[][] {{ 4, 6, 6, 1, 6, 3}, { 4, 6, 6, 1, 6, 3 }},
-            new String[] {"4, 6, 6, 1, 6, 3",  "4, 6, 6, 1, 6, 3"}
-        ),
-        new TestCase("abcd\nfgh\r12345\n456",
-            6, new int[] { 4, 4 },
-            new int[][] {{ 5, 4, 6, 3 }, { 5, 4, 6, 3 }},
-            new String[] {"5, 4, 6, 3",   "5, 4, 6, 3"}
-        ),
-        new TestCase("abcd\nfgh\r12345\n45\r",
-            6, new int[] { 4, 4 },
-            new int[][] {{ 5, 4, 6, 3 }, { 5, 4, 6, 3 }},
-            new String[] {"5, 4, 6, 3",   "5, 4, 6, 3"}
-        ),
-        new TestCase("abcde\nfghi",
-            10, new int[] { 2, 2 },
-            new int[][] {{ 6, 4 }, { 6, 4 }},
-            new String[] {"6, 4",   "6, 4"}
-        )
+        new TestCase(
+                "123\n" + "abc45\r" + "67890\n" + "\r" + "02468\r" + "ghi",
+                6,
+                new int[] {6, 6},
+                new int[][] {{4, 6, 6, 1, 6, 3}, {4, 6, 6, 1, 6, 3}},
+                new String[] {"4, 6, 6, 1, 6, 3", "4, 6, 6, 1, 6, 3"}),
+        new TestCase(
+                "abcd\nfgh\r12345\n456",
+                6,
+                new int[] {4, 4},
+                new int[][] {{5, 4, 6, 3}, {5, 4, 6, 3}},
+                new String[] {"5, 4, 6, 3", "5, 4, 6, 3"}),
+        new TestCase(
+                "abcd\nfgh\r12345\n45\r",
+                6,
+                new int[] {4, 4},
+                new int[][] {{5, 4, 6, 3}, {5, 4, 6, 3}},
+                new String[] {"5, 4, 6, 3", "5, 4, 6, 3"}),
+        new TestCase(
+                "abcde\nfghi",
+                10,
+                new int[] {2, 2},
+                new int[][] {{6, 4}, {6, 4}},
+                new String[] {"6, 4", "6, 4"})
     };
     static final int MAXLOOPS = 20;
-    static final byte[] paraLevels = { Bidi.LTR, Bidi.RTL };
+    static final byte[] paraLevels = {Bidi.LTR, Bidi.RTL};
 
     @Test
-    public void testStreaming()
-    {
+    public void testStreaming() {
         String src, subsrc;
         Bidi bidi;
         int srcLen, processedLen, chunk, len, nPortions, offset;
@@ -115,8 +111,9 @@ public class TestStreaming extends BidiFmwk {
                     }
                     bidi.setReorderingOptions(Bidi.OPTION_STREAMING);
 
-                    mismatch |= j >= nPortions ||
-                               processedLen != testCases[i].portionLens[levelIndex][j];
+                    mismatch |=
+                            j >= nPortions
+                                    || processedLen != testCases[i].portionLens[levelIndex][j];
 
                     processedLenStr.append(Integer.toString(processedLen) + " ");
                     srcLen -= processedLen;
@@ -124,14 +121,20 @@ public class TestStreaming extends BidiFmwk {
 
                 if (mismatch || j != nPortions) {
                     testOK = false;
-                    errln("\nProcessed lengths mismatch for" +
-                          "\n\tParagraph level = " + level +
-                          "\n\tInput string: " + Utility.escape(src) +
-                          "\n\tChunk = " + chunk +
-                          "\n\tActually processed portion lengths: { " +
-                                processedLenStr + " }" +
-                          "\n\tExpected portion lengths          : { " +
-                                testCases[i].message[levelIndex] + " }\n");
+                    errln(
+                            "\nProcessed lengths mismatch for"
+                                    + "\n\tParagraph level = "
+                                    + level
+                                    + "\n\tInput string: "
+                                    + Utility.escape(src)
+                                    + "\n\tChunk = "
+                                    + chunk
+                                    + "\n\tActually processed portion lengths: { "
+                                    + processedLenStr
+                                    + " }"
+                                    + "\n\tExpected portion lengths          : { "
+                                    + testCases[i].message[levelIndex]
+                                    + " }\n");
                 }
             }
         }

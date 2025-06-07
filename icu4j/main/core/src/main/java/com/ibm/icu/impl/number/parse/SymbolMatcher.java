@@ -7,7 +7,8 @@ import com.ibm.icu.impl.StringSegment;
 import com.ibm.icu.text.UnicodeSet;
 
 /**
- * A base class for many matchers that performs a simple match against a UnicodeString and/or UnicodeSet.
+ * A base class for many matchers that performs a simple match against a UnicodeString and/or
+ * UnicodeSet.
  *
  * @author sffc
  */

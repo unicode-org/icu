@@ -3,21 +3,18 @@
 
 package com.ibm.icu.dev.test.rbbi;
 
-import java.text.ParsePosition;
-
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSet.EntryRange;
+import java.text.ParsePosition;
 
 /**
  * A segmentation rule expressed as in UAXes #14 and #29.
- * 
- * Rules are applied sequentially.
- * Rules operate on a mutable remapped string (which the caller should initially
- * set to the string
- * to be segmented), and can resolve positions in the original string to either
- * BREAK or NO_BREAK.
+ *
+ * <p>Rules are applied sequentially. Rules operate on a mutable remapped string (which the caller
+ * should initially set to the string to be segmented), and can resolve positions in the original
+ * string to either BREAK or NO_BREAK.
  */
 public abstract class SegmentationRule {
     enum Resolution {
@@ -32,7 +29,8 @@ public abstract class SegmentationRule {
 
         Integer indexInRemapped;
         SegmentationRule appliedRule = null;
-    };
+    }
+    ;
 
     SegmentationRule(String name) {
         name_ = name;
@@ -43,8 +41,10 @@ public abstract class SegmentationRule {
         if (codePoint <= 0xFFFF) {
             return "\\u" + Utility.hex(codePoint);
         } else {
-            return "\\u" + Utility.hex(UTF16.getLeadSurrogate(codePoint)) + "\\u"
-            + Utility.hex(UTF16.getTrailSurrogate(codePoint));
+            return "\\u"
+                    + Utility.hex(UTF16.getLeadSurrogate(codePoint))
+                    + "\\u"
+                    + Utility.hex(UTF16.getTrailSurrogate(codePoint));
         }
     }
 

@@ -8,8 +8,6 @@
  */
 /**
  * @author srl
- * 
- *  This package contains samples for the IUC ICU workshops.
- *
+ *     <p>This package contains samples for the IUC ICU workshops.
  */
 package com.ibm.icu.samples.iuc;

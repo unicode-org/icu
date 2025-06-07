@@ -8,12 +8,11 @@
  */
 package com.ibm.icu.impl.breakiter;
 
-import java.text.CharacterIterator;
-
 import com.ibm.icu.impl.Assert;
 import com.ibm.icu.text.UCharacterIterator;
 import com.ibm.icu.util.BytesTrie;
 import com.ibm.icu.util.BytesTrie.Result;
+import java.text.CharacterIterator;
 
 class BytesDictionaryMatcher extends DictionaryMatcher {
     private final byte[] characters;
@@ -21,7 +20,9 @@ class BytesDictionaryMatcher extends DictionaryMatcher {
 
     public BytesDictionaryMatcher(byte[] chars, int transform) {
         characters = chars;
-        Assert.assrt((transform & DictionaryData.TRANSFORM_TYPE_MASK) == DictionaryData.TRANSFORM_TYPE_OFFSET);
+        Assert.assrt(
+                (transform & DictionaryData.TRANSFORM_TYPE_MASK)
+                        == DictionaryData.TRANSFORM_TYPE_OFFSET);
         // while there is only one transform type so far, save the entire transform constant so that
         // if we add any others, we need only change code in transform() and the assert above rather
         // than adding a "transform type" variable
@@ -43,7 +44,13 @@ class BytesDictionaryMatcher extends DictionaryMatcher {
     }
 
     @Override
-    public int matches(CharacterIterator text_, int maxLength, int[] lengths, int[] count_, int limit, int[] values) {
+    public int matches(
+            CharacterIterator text_,
+            int maxLength,
+            int[] lengths,
+            int[] count_,
+            int limit,
+            int[] values) {
         UCharacterIterator text = UCharacterIterator.getInstance(text_);
         BytesTrie bt = new BytesTrie(characters, 0);
         int c = text.nextCodePoint();
@@ -54,7 +61,7 @@ class BytesDictionaryMatcher extends DictionaryMatcher {
         // TODO: should numChars count Character.charCount() ?
         int numChars = 1;
         int count = 0;
-        for (;;) {
+        for (; ; ) {
             if (result.hasValue()) {
                 if (count < limit) {
                     if (values != null) {
@@ -90,5 +97,3 @@ class BytesDictionaryMatcher extends DictionaryMatcher {
         return DictionaryData.TRIE_TYPE_BYTES;
     }
 }
-
-

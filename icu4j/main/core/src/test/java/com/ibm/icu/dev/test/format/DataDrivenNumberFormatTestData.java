@@ -8,6 +8,11 @@
  */
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.math.BigDecimal;
+import com.ibm.icu.text.DecimalFormat;
+import com.ibm.icu.text.NumberFormat;
+import com.ibm.icu.util.Currency;
+import com.ibm.icu.util.ULocale;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -15,71 +20,50 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-import com.ibm.icu.math.BigDecimal;
-import com.ibm.icu.text.DecimalFormat;
-import com.ibm.icu.text.NumberFormat;
-import com.ibm.icu.util.Currency;
-import com.ibm.icu.util.ULocale;
-
 /**
  * A representation of a single NumberFormat specification test from a data driven test file.
- * <p>
- * The purpose of this class is to hide the details of the data driven test file from the
- * main testing code.
- * <p>
- * This class contains fields describing an attribute of the test that may or may
- * not be set. The name of each attribute corresponds to the name used in the
- * data driven test file.
- * <p>
- * <b>Adding new attributes</b>
- * <p>
- * Each attribute name is lower case. Moreover, for each attribute there is also a
- * setXXX method for that attribute that is used to initialize the attribute from a
- * String value read from the data file. For example, there is a setLocale(String) method
- * for the locale attribute and a setCurrency(String) method for the currency attribute.
- * In general, for an attribute named abcd, the setter will be setAbcd(String).
- * This naming rule must be strictly followed or else the test runner will not know how to
- * initialize instances of this class.
- * <p>
- * In addition each attribute is listed in the fieldOrdering static array which specifies
- * The order that attributes are printed whenever there is a test failure.
- * <p>
- * To add a new attribute, first create a public field for it.
- * Next, add the attribute name to the fieldOrdering array.
- * Finally, create a setter method for it.
+ *
+ * <p>The purpose of this class is to hide the details of the data driven test file from the main
+ * testing code.
+ *
+ * <p>This class contains fields describing an attribute of the test that may or may not be set. The
+ * name of each attribute corresponds to the name used in the data driven test file.
+ *
+ * <p><b>Adding new attributes</b>
+ *
+ * <p>Each attribute name is lower case. Moreover, for each attribute there is also a setXXX method
+ * for that attribute that is used to initialize the attribute from a String value read from the
+ * data file. For example, there is a setLocale(String) method for the locale attribute and a
+ * setCurrency(String) method for the currency attribute. In general, for an attribute named abcd,
+ * the setter will be setAbcd(String). This naming rule must be strictly followed or else the test
+ * runner will not know how to initialize instances of this class.
+ *
+ * <p>In addition each attribute is listed in the fieldOrdering static array which specifies The
+ * order that attributes are printed whenever there is a test failure.
+ *
+ * <p>To add a new attribute, first create a public field for it. Next, add the attribute name to
+ * the fieldOrdering array. Finally, create a setter method for it.
  *
  * @author rocketman
  */
 public class DataDrivenNumberFormatTestData {
 
-    /**
-     * The locale.
-     */
+    /** The locale. */
     public ULocale locale = null;
 
-    /**
-     * The currency.
-     */
+    /** The currency. */
     public Currency currency = null;
 
-    /**
-     * The pattern to initialize the formatter, for example 0.00"
-     */
+    /** The pattern to initialize the formatter, for example 0.00" */
     public String pattern = null;
 
-    /**
-     * The value to format as a string. For example 1234.5 would be "1234.5"
-     */
+    /** The value to format as a string. For example 1234.5 would be "1234.5" */
     public String format = null;
 
-    /**
-     * The formatted value.
-     */
+    /** The formatted value. */
     public String output = null;
 
-    /**
-     * Field for arbitrary comments.
-     */
+    /** Field for arbitrary comments. */
     public String comment = null;
 
     public Integer minIntegerDigits = null;
@@ -122,17 +106,14 @@ public class DataDrivenNumberFormatTestData {
     public Integer parseNoExponent = null;
     public String outputCurrency = null;
 
-
-
     /**
-     * nothing or empty means that test ought to work for both C and JAVA;
-     * "C" means test is known to fail in C. "J" means test is known to fail in JAVA.
-     * "CJ" means test is known to fail for both languages.
+     * nothing or empty means that test ought to work for both C and JAVA; "C" means test is known
+     * to fail in C. "J" means test is known to fail in JAVA. "CJ" means test is known to fail for
+     * both languages.
      */
     public String breaks = null;
 
-    private static Map<String, Integer> roundingModeMap =
-            new HashMap<String, Integer>();
+    private static Map<String, Integer> roundingModeMap = new HashMap<String, Integer>();
 
     static {
         roundingModeMap.put("ceiling", BigDecimal.ROUND_CEILING);
@@ -158,8 +139,7 @@ public class DataDrivenNumberFormatTestData {
         currencyUsageMap.put("cash", Currency.CurrencyUsage.CASH);
     }
 
-    private static Map<String, Integer> padPositionMap =
-            new HashMap<String, Integer>();
+    private static Map<String, Integer> padPositionMap = new HashMap<String, Integer>();
 
     static {
         // TODO: Fix so that it doesn't depend on DecimalFormat.
@@ -169,8 +149,7 @@ public class DataDrivenNumberFormatTestData {
         padPositionMap.put("afterSuffix", DecimalFormat.PAD_AFTER_SUFFIX);
     }
 
-    private static Map<String, Integer> formatStyleMap =
-            new HashMap<String, Integer>();
+    private static Map<String, Integer> formatStyleMap = new HashMap<String, Integer>();
 
     static {
         formatStyleMap.put("decimal", NumberFormat.NUMBERSTYLE);
@@ -245,7 +224,7 @@ public class DataDrivenNumberFormatTestData {
     private static <T> T fromString(Map<String, T> map, String key) {
         T value = map.get(key);
         if (value == null) {
-            throw new IllegalArgumentException("Bad value: "+ key);
+            throw new IllegalArgumentException("Bad value: " + key);
         }
         return value;
     }
@@ -473,10 +452,8 @@ public class DataDrivenNumberFormatTestData {
 
     // end field clearers
 
-    public void setField(String fieldName, String valueString)
-            throws NoSuchMethodException {
-        Method m = getClass().getMethod(
-                fieldToSetter(fieldName), String.class);
+    public void setField(String fieldName, String valueString) throws NoSuchMethodException {
+        Method m = getClass().getMethod(fieldToSetter(fieldName), String.class);
         try {
             m.invoke(this, valueString);
         } catch (IllegalAccessException e) {
@@ -486,8 +463,7 @@ public class DataDrivenNumberFormatTestData {
         }
     }
 
-    public void clearField(String fieldName)
-            throws NoSuchMethodException {
+    public void clearField(String fieldName) throws NoSuchMethodException {
         Method m = getClass().getMethod(fieldToClearer(fieldName));
         try {
             m.invoke(this);
@@ -499,7 +475,7 @@ public class DataDrivenNumberFormatTestData {
     }
 
     @Override
-  public String toString() {
+    public String toString() {
         StringBuilder result = new StringBuilder();
         result.append("{");
         boolean first = true;
@@ -530,15 +506,10 @@ public class DataDrivenNumberFormatTestData {
     }
 
     private static String fieldToSetter(String fieldName) {
-        return "set"
-                + Character.toUpperCase(fieldName.charAt(0))
-                + fieldName.substring(1);
+        return "set" + Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1);
     }
 
     private static String fieldToClearer(String fieldName) {
-        return "clear"
-                + Character.toUpperCase(fieldName.charAt(0))
-                + fieldName.substring(1);
+        return "clear" + Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1);
     }
-
 }

@@ -2,13 +2,10 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.number;
 
+import com.ibm.icu.impl.FormattedStringBuilder;
 import java.text.Format.Field;
 
-import com.ibm.icu.impl.FormattedStringBuilder;
-
-/**
- * The canonical implementation of {@link Modifier}, containing a prefix and suffix string.
- */
+/** The canonical implementation of {@link Modifier}, containing a prefix and suffix string. */
 public class ConstantAffixModifier implements Modifier {
 
     // TODO: Avoid making a new instance by default if prefix and suffix are empty
@@ -22,18 +19,13 @@ public class ConstantAffixModifier implements Modifier {
     /**
      * Constructs an instance with the given strings.
      *
-     * <p>
-     * The arguments need to be Strings, not CharSequences, because Strings are immutable but
+     * <p>The arguments need to be Strings, not CharSequences, because Strings are immutable but
      * CharSequences are not.
      *
-     * @param prefix
-     *            The prefix string.
-     * @param suffix
-     *            The suffix string.
-     * @param field
-     *            The field type to be associated with this modifier. Can be null.
-     * @param strong
-     *            Whether this modifier should be strongly applied.
+     * @param prefix The prefix string.
+     * @param suffix The suffix string.
+     * @param field The field type to be associated with this modifier. Can be null.
+     * @param strong Whether this modifier should be strongly applied.
      * @see Field
      */
     public ConstantAffixModifier(String prefix, String suffix, Field field, boolean strong) {
@@ -68,7 +60,8 @@ public class ConstantAffixModifier implements Modifier {
 
     @Override
     public int getCodePointCount() {
-        return prefix.codePointCount(0, prefix.length()) + suffix.codePointCount(0, suffix.length());
+        return prefix.codePointCount(0, prefix.length())
+                + suffix.codePointCount(0, suffix.length());
     }
 
     @Override
@@ -94,7 +87,9 @@ public class ConstantAffixModifier implements Modifier {
             return false;
         }
         ConstantAffixModifier _other = (ConstantAffixModifier) other;
-        return prefix.equals(_other.prefix) && suffix.equals(_other.suffix) && field == _other.field
+        return prefix.equals(_other.prefix)
+                && suffix.equals(_other.suffix)
+                && field == _other.field
                 && strong == _other.strong;
     }
 

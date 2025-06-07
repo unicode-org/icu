@@ -3,39 +3,35 @@
 
 package com.ibm.icu.message2;
 
+import com.ibm.icu.message2.MFDataModel.CatchallKey;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
-import com.ibm.icu.message2.MFDataModel.CatchallKey;
-
 /**
- * Creates a {@link Selector} doing literal selection, similar to <code>{exp, select}</code>
- * in {@link com.ibm.icu.text.MessageFormat}.
+ * Creates a {@link Selector} doing literal selection, similar to <code>{exp, select}</code> in
+ * {@link com.ibm.icu.text.MessageFormat}.
  */
 class TextSelectorFactory implements SelectorFactory {
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public Selector createSelector(Locale locale, Map<String, Object> fixedOptions) {
         return new TextSelector();
     }
 
     private static class TextSelector implements Selector {
-        /**
-         * {@inheritDoc}
-         */
+        /** {@inheritDoc} */
         @Override
         public List<String> matches(
                 Object value, List<String> keys, Map<String, Object> variableOptions) {
             List<String> result = new ArrayList<>();
             if (value == null) {
                 if (OptUtils.reportErrors(variableOptions)) {
-                    throw new IllegalArgumentException("unresolved-variable: argument to match on can't be null");
+                    throw new IllegalArgumentException(
+                            "unresolved-variable: argument to match on can't be null");
                 }
                 return result;
             }

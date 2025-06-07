@@ -9,57 +9,55 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * Abstract map from Unicode code points (U+0000..U+10FFFF) to integer values.
- * This does not implement java.util.Map.
+ * Abstract map from Unicode code points (U+0000..U+10FFFF) to integer values. This does not
+ * implement java.util.Map.
  *
  * @stable ICU 63
  */
 public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
     /**
-     * Selectors for how getRange() should report value ranges overlapping with surrogates.
-     * Most users should use NORMAL.
+     * Selectors for how getRange() should report value ranges overlapping with surrogates. Most
+     * users should use NORMAL.
      *
      * @see #getRange
      * @stable ICU 63
      */
     public enum RangeOption {
         /**
-         * getRange() enumerates all same-value ranges as stored in the map.
-         * Most users should use this option.
+         * getRange() enumerates all same-value ranges as stored in the map. Most users should use
+         * this option.
          *
          * @stable ICU 63
          */
         NORMAL,
         /**
-         * getRange() enumerates all same-value ranges as stored in the map,
-         * except that lead surrogates (U+D800..U+DBFF) are treated as having the
-         * surrogateValue, which is passed to getRange() as a separate parameter.
-         * The surrogateValue is not transformed via filter().
+         * getRange() enumerates all same-value ranges as stored in the map, except that lead
+         * surrogates (U+D800..U+DBFF) are treated as having the surrogateValue, which is passed to
+         * getRange() as a separate parameter. The surrogateValue is not transformed via filter().
          * See {@link Character#isHighSurrogate}.
          *
          * <p>Most users should use NORMAL instead.
          *
-         * <p>This option is useful for maps that map surrogate code <i>units</i> to
-         * special values optimized for UTF-16 string processing
-         * or for special error behavior for unpaired surrogates,
-         * but those values are not to be associated with the lead surrogate code <i>points</i>.
+         * <p>This option is useful for maps that map surrogate code <i>units</i> to special values
+         * optimized for UTF-16 string processing or for special error behavior for unpaired
+         * surrogates, but those values are not to be associated with the lead surrogate code
+         * <i>points</i>.
          *
          * @stable ICU 63
          */
         FIXED_LEAD_SURROGATES,
         /**
-         * getRange() enumerates all same-value ranges as stored in the map,
-         * except that all surrogates (U+D800..U+DFFF) are treated as having the
-         * surrogateValue, which is passed to getRange() as a separate parameter.
-         * The surrogateValue is not transformed via filter().
+         * getRange() enumerates all same-value ranges as stored in the map, except that all
+         * surrogates (U+D800..U+DFFF) are treated as having the surrogateValue, which is passed to
+         * getRange() as a separate parameter. The surrogateValue is not transformed via filter().
          * See {@link Character#isSurrogate}.
          *
          * <p>Most users should use NORMAL instead.
          *
-         * <p>This option is useful for maps that map surrogate code <i>units</i> to
-         * special values optimized for UTF-16 string processing
-         * or for special error behavior for unpaired surrogates,
-         * but those values are not to be associated with the lead surrogate code <i>points</i>.
+         * <p>This option is useful for maps that map surrogate code <i>units</i> to special values
+         * optimized for UTF-16 string processing or for special error behavior for unpaired
+         * surrogates, but those values are not to be associated with the lead surrogate code
+         * <i>points</i>.
          *
          * @stable ICU 63
          */
@@ -67,12 +65,10 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
     }
 
     /**
-     * Callback function interface: Modifies a map value.
-     * Optionally called by getRange().
-     * The modified value will be returned by the getRange() function.
+     * Callback function interface: Modifies a map value. Optionally called by getRange(). The
+     * modified value will be returned by the getRange() function.
      *
-     * <p>Can be used to ignore some of the value bits,
-     * make a filter for one of several values,
+     * <p>Can be used to ignore some of the value bits, make a filter for one of several values,
      * return a value index computed from the map value, etc.
      *
      * @see #getRange
@@ -91,10 +87,9 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
     }
 
     /**
-     * Range iteration result data.
-     * Code points from start to end map to the same value.
-     * The value may have been modified by {@link ValueFilter#apply(int)},
-     * or it may be the surrogateValue if a RangeOption other than "normal" was used.
+     * Range iteration result data. Code points from start to end map to the same value. The value
+     * may have been modified by {@link ValueFilter#apply(int)}, or it may be the surrogateValue if
+     * a RangeOption other than "normal" was used.
      *
      * @see #getRange
      * @see #iterator
@@ -119,20 +114,29 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
          * @return the start code point
          * @stable ICU 63
          */
-        public int getStart() { return start; }
+        public int getStart() {
+            return start;
+        }
+
         /**
          * @return the (inclusive) end code point
          * @stable ICU 63
          */
-        public int getEnd() { return end; }
+        public int getEnd() {
+            return end;
+        }
+
         /**
          * @return the range value
          * @stable ICU 63
          */
-        public int getValue() { return value; }
+        public int getValue() {
+            return value;
+        }
+
         /**
-         * Sets the range. When using {@link #iterator()},
-         * iteration will resume after the newly set end.
+         * Sets the range. When using {@link #iterator()}, iteration will resume after the newly set
+         * end.
          *
          * @param start new start code point
          * @param end new end code point
@@ -170,8 +174,8 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
     }
 
     /**
-     * Iterates over code points of a string and fetches map values.
-     * This does not implement java.util.Iterator.
+     * Iterates over code points of a string and fetches map values. This does not implement
+     * java.util.Iterator.
      *
      * <pre>
      * void onString(CodePointMap map, CharSequence s, int start) {
@@ -193,26 +197,25 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
          * @internal
          * @deprecated This API is ICU internal only.
          */
-        @Deprecated
-        protected CharSequence s;
+        @Deprecated protected CharSequence s;
+
         /**
          * @internal
          * @deprecated This API is ICU internal only.
          */
-        @Deprecated
-        protected int sIndex;
+        @Deprecated protected int sIndex;
+
         /**
          * @internal
          * @deprecated This API is ICU internal only.
          */
-        @Deprecated
-        protected int c;
+        @Deprecated protected int c;
+
         /**
          * @internal
          * @deprecated This API is ICU internal only.
          */
-        @Deprecated
-        protected int value;
+        @Deprecated protected int value;
 
         /**
          * @internal
@@ -241,12 +244,12 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
         }
 
         /**
-         * Reads the next code point, post-increments the string index,
-         * and gets a value from the map.
-         * Sets an implementation-defined error value if the code point is an unpaired surrogate.
+         * Reads the next code point, post-increments the string index, and gets a value from the
+         * map. Sets an implementation-defined error value if the code point is an unpaired
+         * surrogate.
          *
-         * @return true if the string index was not yet at the end of the string;
-         *         otherwise the iterator did not advance
+         * @return true if the string index was not yet at the end of the string; otherwise the
+         *     iterator did not advance
          * @stable ICU 63
          */
         public boolean next() {
@@ -260,12 +263,12 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
         }
 
         /**
-         * Reads the previous code point, pre-decrements the string index,
-         * and gets a value from the map.
-         * Sets an implementation-defined error value if the code point is an unpaired surrogate.
+         * Reads the previous code point, pre-decrements the string index, and gets a value from the
+         * map. Sets an implementation-defined error value if the code point is an unpaired
+         * surrogate.
          *
-         * @return true if the string index was not yet at the start of the string;
-         *         otherwise the iterator did not advance
+         * @return true if the string index was not yet at the start of the string; otherwise the
+         *     iterator did not advance
          * @stable ICU 63
          */
         public boolean previous() {
@@ -277,23 +280,31 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
             value = get(c);
             return true;
         }
+
         /**
          * @return the string index
          * @stable ICU 63
          */
-        public final int getIndex() { return sIndex; }
+        public final int getIndex() {
+            return sIndex;
+        }
+
         /**
          * @return the code point
          * @stable ICU 63
          */
-        public final int getCodePoint() { return c; }
+        public final int getCodePoint() {
+            return c;
+        }
+
         /**
-         * @return the map value,
-         *         or an implementation-defined error value if
-         *         the code point is an unpaired surrogate
+         * @return the map value, or an implementation-defined error value if the code point is an
+         *     unpaired surrogate
          * @stable ICU 63
          */
-        public final int getValue() { return value; }
+        public final int getValue() {
+            return value;
+        }
     }
 
     /**
@@ -301,38 +312,34 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
      *
      * @stable ICU 63
      */
-    protected CodePointMap() {
-    }
+    protected CodePointMap() {}
 
     /**
-     * Returns the value for a code point as stored in the map, with range checking.
-     * Returns an implementation-defined error value if c is not in the range 0..U+10FFFF.
+     * Returns the value for a code point as stored in the map, with range checking. Returns an
+     * implementation-defined error value if c is not in the range 0..U+10FFFF.
      *
      * @param c the code point
-     * @return the map value,
-     *         or an implementation-defined error value if
-     *         the code point is not in the range 0..U+10FFFF
+     * @return the map value, or an implementation-defined error value if the code point is not in
+     *     the range 0..U+10FFFF
      * @stable ICU 63
      */
     public abstract int get(int c);
 
     /**
-     * Sets the range object to a range of code points beginning with the start parameter.
-     * The range start is the same as the start input parameter
-     * (even if there are preceding code points that have the same value).
-     * The range end is the last code point such that
-     * all those from start to there have the same value.
-     * Returns false if start is not 0..U+10FFFF.
-     * Can be used to efficiently iterate over all same-value ranges in a map.
-     * (This is normally faster than iterating over code points and get()ting each value,
-     * but may be much slower than a data structure that stores ranges directly.)
+     * Sets the range object to a range of code points beginning with the start parameter. The range
+     * start is the same as the start input parameter (even if there are preceding code points that
+     * have the same value). The range end is the last code point such that all those from start to
+     * there have the same value. Returns false if start is not 0..U+10FFFF. Can be used to
+     * efficiently iterate over all same-value ranges in a map. (This is normally faster than
+     * iterating over code points and get()ting each value, but may be much slower than a data
+     * structure that stores ranges directly.)
      *
-     * <p>If the {@link ValueFilter} parameter is not null, then
-     * the value to be delivered is passed through that filter, and the return value is the end
-     * of the range where all values are modified to the same actual value.
-     * The value is unchanged if that parameter is null.
+     * <p>If the {@link ValueFilter} parameter is not null, then the value to be delivered is passed
+     * through that filter, and the return value is the end of the range where all values are
+     * modified to the same actual value. The value is unchanged if that parameter is null.
      *
      * <p>Example:
+     *
      * <pre>
      * int start = 0;
      * CodePointMap.Range range = new CodePointMap.Range();
@@ -345,8 +352,8 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
      * </pre>
      *
      * @param start range start
-     * @param filter an object that may modify the map data value,
-     *     or null if the values from the map are to be used unmodified
+     * @param filter an object that may modify the map data value, or null if the values from the
+     *     map are to be used unmodified
      * @param range the range object that will be set to the code point range and value
      * @return true if start is 0..U+10FFFF; otherwise no new range is fetched
      * @stable ICU 63
@@ -354,28 +361,26 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
     public abstract boolean getRange(int start, ValueFilter filter, Range range);
 
     /**
-     * Sets the range object to a range of code points beginning with the start parameter.
-     * The range start is the same as the start input parameter
-     * (even if there are preceding code points that have the same value).
-     * The range end is the last code point such that
-     * all those from start to there have the same value.
-     * Returns false if start is not 0..U+10FFFF.
+     * Sets the range object to a range of code points beginning with the start parameter. The range
+     * start is the same as the start input parameter (even if there are preceding code points that
+     * have the same value). The range end is the last code point such that all those from start to
+     * there have the same value. Returns false if start is not 0..U+10FFFF.
      *
-     * <p>Same as the simpler {@link #getRange(int, ValueFilter, Range)} but optionally
-     * modifies the range if it overlaps with surrogate code points.
+     * <p>Same as the simpler {@link #getRange(int, ValueFilter, Range)} but optionally modifies the
+     * range if it overlaps with surrogate code points.
      *
      * @param start range start
-     * @param option defines whether surrogates are treated normally,
-     *               or as having the surrogateValue; usually {@link RangeOption#NORMAL}
+     * @param option defines whether surrogates are treated normally, or as having the
+     *     surrogateValue; usually {@link RangeOption#NORMAL}
      * @param surrogateValue value for surrogates; ignored if option=={@link RangeOption#NORMAL}
-     * @param filter an object that may modify the map data value,
-     *     or null if the values from the map are to be used unmodified
+     * @param filter an object that may modify the map data value, or null if the values from the
+     *     map are to be used unmodified
      * @param range the range object that will be set to the code point range and value
      * @return true if start is 0..U+10FFFF; otherwise no new range is fetched
      * @stable ICU 63
      */
-    public boolean getRange(int start, RangeOption option, int surrogateValue,
-            ValueFilter filter, Range range) {
+    public boolean getRange(
+            int start, RangeOption option, int surrogateValue, ValueFilter filter, Range range) {
         assert option != null;
         if (!getRange(start, filter, range)) {
             return false;
@@ -397,14 +402,14 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
             }
         } else {
             if (start <= 0xd7ff) {
-                range.end = 0xd7ff;  // Non-surrValue range ends before surrValue surrogates.
+                range.end = 0xd7ff; // Non-surrValue range ends before surrValue surrogates.
                 return true;
             }
             // Start is a surrogate with a non-surrValue code *unit* value.
             // Return a surrValue code *point* range.
             range.value = surrogateValue;
             if (end > surrEnd) {
-                range.end = surrEnd;  // Surrogate range ends before non-surrValue rest of range.
+                range.end = surrEnd; // Surrogate range ends before non-surrValue rest of range.
                 return true;
             }
         }
@@ -421,10 +426,9 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
     }
 
     /**
-     * Convenience iterator over same-map-value code point ranges.
-     * Same as looping over all ranges with {@link #getRange(int, ValueFilter, Range)}
-     * without filtering.
-     * Adjacent ranges have different map values.
+     * Convenience iterator over same-map-value code point ranges. Same as looping over all ranges
+     * with {@link #getRange(int, ValueFilter, Range)} without filtering. Adjacent ranges have
+     * different map values.
      *
      * <p>The iterator always returns the same Range object.
      *
@@ -437,8 +441,8 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
     }
 
     /**
-     * Returns an iterator (not a java.util.Iterator) over code points of a string
-     * for fetching map values.
+     * Returns an iterator (not a java.util.Iterator) over code points of a string for fetching map
+     * values.
      *
      * @param s string to iterate over
      * @param sIndex string index where the iteration will start

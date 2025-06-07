@@ -2,10 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.number;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.Set;
-
 import com.ibm.icu.impl.CacheBase;
 import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.impl.SoftCache;
@@ -28,10 +24,12 @@ import com.ibm.icu.util.Currency.CurrencyUsage;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.NoUnit;
 import com.ibm.icu.util.StringTrieBuilder;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Set;
 
 /**
  * @author sffc
- *
  */
 class NumberSkeletonImpl {
 
@@ -42,9 +40,7 @@ class NumberSkeletonImpl {
     // https://github.com/unicode-org/icu/commit/6fe86f3934a8a5701034f648a8f7c5087e84aa28   //
     //////////////////////////////////////////////////////////////////////////////////////////
 
-    /**
-     * While parsing a skeleton, this enum records what type of option we expect to find next.
-     */
+    /** While parsing a skeleton, this enum records what type of option we expect to find next. */
     static enum ParseState {
         // Section 0: We expect whitespace or a stem, but not an option:
         STATE_NULL,
@@ -67,8 +63,8 @@ class NumberSkeletonImpl {
     }
 
     /**
-     * All possible stem literals have an entry in the StemEnum. The enum name is the kebab case stem
-     * string literal written in upper snake case.
+     * All possible stem literals have an entry in the StemEnum. The enum name is the kebab case
+     * stem string literal written in upper snake case.
      *
      * @see StemToObject
      * @see #SERIALIZED_STEM_TRIE
@@ -242,278 +238,279 @@ class NumberSkeletonImpl {
 
         private static Notation notation(StemEnum stem) {
             switch (stem) {
-            case STEM_COMPACT_SHORT:
-                return Notation.compactShort();
-            case STEM_COMPACT_LONG:
-                return Notation.compactLong();
-            case STEM_SCIENTIFIC:
-                return Notation.scientific();
-            case STEM_ENGINEERING:
-                return Notation.engineering();
-            case STEM_NOTATION_SIMPLE:
-                return Notation.simple();
-            default:
-                throw new AssertionError();
+                case STEM_COMPACT_SHORT:
+                    return Notation.compactShort();
+                case STEM_COMPACT_LONG:
+                    return Notation.compactLong();
+                case STEM_SCIENTIFIC:
+                    return Notation.scientific();
+                case STEM_ENGINEERING:
+                    return Notation.engineering();
+                case STEM_NOTATION_SIMPLE:
+                    return Notation.simple();
+                default:
+                    throw new AssertionError();
             }
         }
 
         private static MeasureUnit unit(StemEnum stem) {
             switch (stem) {
-            case STEM_BASE_UNIT:
-                return NoUnit.BASE;
-            case STEM_PERCENT:
-                return NoUnit.PERCENT;
-            case STEM_PERMILLE:
-                return NoUnit.PERMILLE;
-            default:
-                throw new AssertionError();
+                case STEM_BASE_UNIT:
+                    return NoUnit.BASE;
+                case STEM_PERCENT:
+                    return NoUnit.PERCENT;
+                case STEM_PERMILLE:
+                    return NoUnit.PERMILLE;
+                default:
+                    throw new AssertionError();
             }
         }
 
         private static Precision precision(StemEnum stem) {
             switch (stem) {
-            case STEM_PRECISION_INTEGER:
-                return Precision.integer();
-            case STEM_PRECISION_UNLIMITED:
-                return Precision.unlimited();
-            case STEM_PRECISION_CURRENCY_STANDARD:
-                return Precision.currency(CurrencyUsage.STANDARD);
-            case STEM_PRECISION_CURRENCY_CASH:
-                return Precision.currency(CurrencyUsage.CASH);
-            default:
-                throw new AssertionError();
+                case STEM_PRECISION_INTEGER:
+                    return Precision.integer();
+                case STEM_PRECISION_UNLIMITED:
+                    return Precision.unlimited();
+                case STEM_PRECISION_CURRENCY_STANDARD:
+                    return Precision.currency(CurrencyUsage.STANDARD);
+                case STEM_PRECISION_CURRENCY_CASH:
+                    return Precision.currency(CurrencyUsage.CASH);
+                default:
+                    throw new AssertionError();
             }
         }
 
         private static RoundingMode roundingMode(StemEnum stem) {
             switch (stem) {
-            case STEM_ROUNDING_MODE_CEILING:
-                return RoundingMode.CEILING;
-            case STEM_ROUNDING_MODE_FLOOR:
-                return RoundingMode.FLOOR;
-            case STEM_ROUNDING_MODE_DOWN:
-                return RoundingMode.DOWN;
-            case STEM_ROUNDING_MODE_UP:
-                return RoundingMode.UP;
-            case STEM_ROUNDING_MODE_HALF_EVEN:
-                return RoundingMode.HALF_EVEN;
-            case STEM_ROUNDING_MODE_HALF_DOWN:
-                return RoundingMode.HALF_DOWN;
-            case STEM_ROUNDING_MODE_HALF_UP:
-                return RoundingMode.HALF_UP;
-            case STEM_ROUNDING_MODE_UNNECESSARY:
-                return RoundingMode.UNNECESSARY;
-            default:
-                throw new AssertionError();
+                case STEM_ROUNDING_MODE_CEILING:
+                    return RoundingMode.CEILING;
+                case STEM_ROUNDING_MODE_FLOOR:
+                    return RoundingMode.FLOOR;
+                case STEM_ROUNDING_MODE_DOWN:
+                    return RoundingMode.DOWN;
+                case STEM_ROUNDING_MODE_UP:
+                    return RoundingMode.UP;
+                case STEM_ROUNDING_MODE_HALF_EVEN:
+                    return RoundingMode.HALF_EVEN;
+                case STEM_ROUNDING_MODE_HALF_DOWN:
+                    return RoundingMode.HALF_DOWN;
+                case STEM_ROUNDING_MODE_HALF_UP:
+                    return RoundingMode.HALF_UP;
+                case STEM_ROUNDING_MODE_UNNECESSARY:
+                    return RoundingMode.UNNECESSARY;
+                default:
+                    throw new AssertionError();
             }
         }
 
         private static GroupingStrategy groupingStrategy(StemEnum stem) {
             switch (stem) {
-            case STEM_GROUP_OFF:
-                return GroupingStrategy.OFF;
-            case STEM_GROUP_MIN2:
-                return GroupingStrategy.MIN2;
-            case STEM_GROUP_AUTO:
-                return GroupingStrategy.AUTO;
-            case STEM_GROUP_ON_ALIGNED:
-                return GroupingStrategy.ON_ALIGNED;
-            case STEM_GROUP_THOUSANDS:
-                return GroupingStrategy.THOUSANDS;
-            default:
-                return null; // for objects, throw; for enums, return null
+                case STEM_GROUP_OFF:
+                    return GroupingStrategy.OFF;
+                case STEM_GROUP_MIN2:
+                    return GroupingStrategy.MIN2;
+                case STEM_GROUP_AUTO:
+                    return GroupingStrategy.AUTO;
+                case STEM_GROUP_ON_ALIGNED:
+                    return GroupingStrategy.ON_ALIGNED;
+                case STEM_GROUP_THOUSANDS:
+                    return GroupingStrategy.THOUSANDS;
+                default:
+                    return null; // for objects, throw; for enums, return null
             }
         }
 
         private static UnitWidth unitWidth(StemEnum stem) {
             switch (stem) {
-            case STEM_UNIT_WIDTH_NARROW:
-                return UnitWidth.NARROW;
-            case STEM_UNIT_WIDTH_SHORT:
-                return UnitWidth.SHORT;
-            case STEM_UNIT_WIDTH_FULL_NAME:
-                return UnitWidth.FULL_NAME;
-            case STEM_UNIT_WIDTH_ISO_CODE:
-                return UnitWidth.ISO_CODE;
-            case STEM_UNIT_WIDTH_FORMAL:
-                return UnitWidth.FORMAL;
-            case STEM_UNIT_WIDTH_VARIANT:
-                return UnitWidth.VARIANT;
-            case STEM_UNIT_WIDTH_HIDDEN:
-                return UnitWidth.HIDDEN;
-            default:
-                return null; // for objects, throw; for enums, return null
+                case STEM_UNIT_WIDTH_NARROW:
+                    return UnitWidth.NARROW;
+                case STEM_UNIT_WIDTH_SHORT:
+                    return UnitWidth.SHORT;
+                case STEM_UNIT_WIDTH_FULL_NAME:
+                    return UnitWidth.FULL_NAME;
+                case STEM_UNIT_WIDTH_ISO_CODE:
+                    return UnitWidth.ISO_CODE;
+                case STEM_UNIT_WIDTH_FORMAL:
+                    return UnitWidth.FORMAL;
+                case STEM_UNIT_WIDTH_VARIANT:
+                    return UnitWidth.VARIANT;
+                case STEM_UNIT_WIDTH_HIDDEN:
+                    return UnitWidth.HIDDEN;
+                default:
+                    return null; // for objects, throw; for enums, return null
             }
         }
 
         private static SignDisplay signDisplay(StemEnum stem) {
             switch (stem) {
-            case STEM_SIGN_AUTO:
-                return SignDisplay.AUTO;
-            case STEM_SIGN_ALWAYS:
-                return SignDisplay.ALWAYS;
-            case STEM_SIGN_NEVER:
-                return SignDisplay.NEVER;
-            case STEM_SIGN_ACCOUNTING:
-                return SignDisplay.ACCOUNTING;
-            case STEM_SIGN_ACCOUNTING_ALWAYS:
-                return SignDisplay.ACCOUNTING_ALWAYS;
-            case STEM_SIGN_EXCEPT_ZERO:
-                return SignDisplay.EXCEPT_ZERO;
-            case STEM_SIGN_ACCOUNTING_EXCEPT_ZERO:
-                return SignDisplay.ACCOUNTING_EXCEPT_ZERO;
-            case STEM_SIGN_NEGATIVE:
-                return SignDisplay.NEGATIVE;
-            case STEM_SIGN_ACCOUNTING_NEGATIVE:
-                return SignDisplay.ACCOUNTING_NEGATIVE;
-            default:
-                return null; // for objects, throw; for enums, return null
+                case STEM_SIGN_AUTO:
+                    return SignDisplay.AUTO;
+                case STEM_SIGN_ALWAYS:
+                    return SignDisplay.ALWAYS;
+                case STEM_SIGN_NEVER:
+                    return SignDisplay.NEVER;
+                case STEM_SIGN_ACCOUNTING:
+                    return SignDisplay.ACCOUNTING;
+                case STEM_SIGN_ACCOUNTING_ALWAYS:
+                    return SignDisplay.ACCOUNTING_ALWAYS;
+                case STEM_SIGN_EXCEPT_ZERO:
+                    return SignDisplay.EXCEPT_ZERO;
+                case STEM_SIGN_ACCOUNTING_EXCEPT_ZERO:
+                    return SignDisplay.ACCOUNTING_EXCEPT_ZERO;
+                case STEM_SIGN_NEGATIVE:
+                    return SignDisplay.NEGATIVE;
+                case STEM_SIGN_ACCOUNTING_NEGATIVE:
+                    return SignDisplay.ACCOUNTING_NEGATIVE;
+                default:
+                    return null; // for objects, throw; for enums, return null
             }
         }
 
         private static DecimalSeparatorDisplay decimalSeparatorDisplay(StemEnum stem) {
             switch (stem) {
-            case STEM_DECIMAL_AUTO:
-                return DecimalSeparatorDisplay.AUTO;
-            case STEM_DECIMAL_ALWAYS:
-                return DecimalSeparatorDisplay.ALWAYS;
-            default:
-                return null; // for objects, throw; for enums, return null
+                case STEM_DECIMAL_AUTO:
+                    return DecimalSeparatorDisplay.AUTO;
+                case STEM_DECIMAL_ALWAYS:
+                    return DecimalSeparatorDisplay.ALWAYS;
+                default:
+                    return null; // for objects, throw; for enums, return null
             }
         }
     }
 
     /**
-     * Utility class for methods that convert from enums to stem strings. More complex object conversions
-     * take place in ObjectToStemString.
+     * Utility class for methods that convert from enums to stem strings. More complex object
+     * conversions take place in ObjectToStemString.
      */
     static final class EnumToStemString {
 
         private static void roundingMode(RoundingMode value, StringBuilder sb) {
             switch (value) {
-            case CEILING:
-                sb.append("rounding-mode-ceiling");
-                break;
-            case FLOOR:
-                sb.append("rounding-mode-floor");
-                break;
-            case DOWN:
-                sb.append("rounding-mode-down");
-                break;
-            case UP:
-                sb.append("rounding-mode-up");
-                break;
-            case HALF_EVEN:
-                sb.append("rounding-mode-half-even");
-                break;
-            case HALF_DOWN:
-                sb.append("rounding-mode-half-down");
-                break;
-            case HALF_UP:
-                sb.append("rounding-mode-half-up");
-                break;
-            case UNNECESSARY:
-                sb.append("rounding-mode-unnecessary");
-                break;
-            default:
-                throw new AssertionError();
+                case CEILING:
+                    sb.append("rounding-mode-ceiling");
+                    break;
+                case FLOOR:
+                    sb.append("rounding-mode-floor");
+                    break;
+                case DOWN:
+                    sb.append("rounding-mode-down");
+                    break;
+                case UP:
+                    sb.append("rounding-mode-up");
+                    break;
+                case HALF_EVEN:
+                    sb.append("rounding-mode-half-even");
+                    break;
+                case HALF_DOWN:
+                    sb.append("rounding-mode-half-down");
+                    break;
+                case HALF_UP:
+                    sb.append("rounding-mode-half-up");
+                    break;
+                case UNNECESSARY:
+                    sb.append("rounding-mode-unnecessary");
+                    break;
+                default:
+                    throw new AssertionError();
             }
         }
 
         private static void groupingStrategy(GroupingStrategy value, StringBuilder sb) {
             switch (value) {
-            case OFF:
-                sb.append("group-off");
-                break;
-            case MIN2:
-                sb.append("group-min2");
-                break;
-            case AUTO:
-                sb.append("group-auto");
-                break;
-            case ON_ALIGNED:
-                sb.append("group-on-aligned");
-                break;
-            case THOUSANDS:
-                sb.append("group-thousands");
-                break;
-            default:
-                throw new AssertionError();
+                case OFF:
+                    sb.append("group-off");
+                    break;
+                case MIN2:
+                    sb.append("group-min2");
+                    break;
+                case AUTO:
+                    sb.append("group-auto");
+                    break;
+                case ON_ALIGNED:
+                    sb.append("group-on-aligned");
+                    break;
+                case THOUSANDS:
+                    sb.append("group-thousands");
+                    break;
+                default:
+                    throw new AssertionError();
             }
         }
 
         private static void unitWidth(UnitWidth value, StringBuilder sb) {
             switch (value) {
-            case NARROW:
-                sb.append("unit-width-narrow");
-                break;
-            case SHORT:
-                sb.append("unit-width-short");
-                break;
-            case FULL_NAME:
-                sb.append("unit-width-full-name");
-                break;
-            case ISO_CODE:
-                sb.append("unit-width-iso-code");
-                break;
-            case FORMAL:
-                sb.append("unit-width-formal");
-                break;
-            case VARIANT:
-                sb.append("unit-width-variant");
-                break;
-            case HIDDEN:
-                sb.append("unit-width-hidden");
-                break;
-            default:
-                throw new AssertionError();
+                case NARROW:
+                    sb.append("unit-width-narrow");
+                    break;
+                case SHORT:
+                    sb.append("unit-width-short");
+                    break;
+                case FULL_NAME:
+                    sb.append("unit-width-full-name");
+                    break;
+                case ISO_CODE:
+                    sb.append("unit-width-iso-code");
+                    break;
+                case FORMAL:
+                    sb.append("unit-width-formal");
+                    break;
+                case VARIANT:
+                    sb.append("unit-width-variant");
+                    break;
+                case HIDDEN:
+                    sb.append("unit-width-hidden");
+                    break;
+                default:
+                    throw new AssertionError();
             }
         }
 
         private static void signDisplay(SignDisplay value, StringBuilder sb) {
             switch (value) {
-            case AUTO:
-                sb.append("sign-auto");
-                break;
-            case ALWAYS:
-                sb.append("sign-always");
-                break;
-            case NEVER:
-                sb.append("sign-never");
-                break;
-            case ACCOUNTING:
-                sb.append("sign-accounting");
-                break;
-            case ACCOUNTING_ALWAYS:
-                sb.append("sign-accounting-always");
-                break;
-            case EXCEPT_ZERO:
-                sb.append("sign-except-zero");
-                break;
-            case ACCOUNTING_EXCEPT_ZERO:
-                sb.append("sign-accounting-except-zero");
-                break;
-            case NEGATIVE:
-                sb.append("sign-negative");
-                break;
-            case ACCOUNTING_NEGATIVE:
-                sb.append("sign-accounting-negative");
-                break;
-            default:
-                throw new AssertionError();
+                case AUTO:
+                    sb.append("sign-auto");
+                    break;
+                case ALWAYS:
+                    sb.append("sign-always");
+                    break;
+                case NEVER:
+                    sb.append("sign-never");
+                    break;
+                case ACCOUNTING:
+                    sb.append("sign-accounting");
+                    break;
+                case ACCOUNTING_ALWAYS:
+                    sb.append("sign-accounting-always");
+                    break;
+                case EXCEPT_ZERO:
+                    sb.append("sign-except-zero");
+                    break;
+                case ACCOUNTING_EXCEPT_ZERO:
+                    sb.append("sign-accounting-except-zero");
+                    break;
+                case NEGATIVE:
+                    sb.append("sign-negative");
+                    break;
+                case ACCOUNTING_NEGATIVE:
+                    sb.append("sign-accounting-negative");
+                    break;
+                default:
+                    throw new AssertionError();
             }
         }
 
-        private static void decimalSeparatorDisplay(DecimalSeparatorDisplay value, StringBuilder sb) {
+        private static void decimalSeparatorDisplay(
+                DecimalSeparatorDisplay value, StringBuilder sb) {
             switch (value) {
-            case AUTO:
-                sb.append("decimal-auto");
-                break;
-            case ALWAYS:
-                sb.append("decimal-always");
-                break;
-            default:
-                throw new AssertionError();
+                case AUTO:
+                    sb.append("decimal-auto");
+                    break;
+                case ALWAYS:
+                    sb.append("decimal-always");
+                    break;
+                default:
+                    throw new AssertionError();
             }
         }
     }
@@ -521,19 +518,20 @@ class NumberSkeletonImpl {
     ///// ENTRYPOINT FUNCTIONS /////
 
     /** Cache for parsed skeleton strings. */
-    private static final CacheBase<String, UnlocalizedNumberFormatter, Void> cache = new SoftCache<String, UnlocalizedNumberFormatter, Void>() {
-        @Override
-        protected UnlocalizedNumberFormatter createInstance(String skeletonString, Void unused) {
-            return create(skeletonString);
-        }
-    };
+    private static final CacheBase<String, UnlocalizedNumberFormatter, Void> cache =
+            new SoftCache<String, UnlocalizedNumberFormatter, Void>() {
+                @Override
+                protected UnlocalizedNumberFormatter createInstance(
+                        String skeletonString, Void unused) {
+                    return create(skeletonString);
+                }
+            };
 
     /**
-     * Gets the number formatter for the given number skeleton string from the cache, creating it if it
-     * does not exist in the cache.
+     * Gets the number formatter for the given number skeleton string from the cache, creating it if
+     * it does not exist in the cache.
      *
-     * @param skeletonString
-     *            A number skeleton string, possibly not in its shortest form.
+     * @param skeletonString A number skeleton string, possibly not in its shortest form.
      * @return An UnlocalizedNumberFormatter with behavior defined by the given skeleton string.
      */
     public static UnlocalizedNumberFormatter getOrCreate(String skeletonString) {
@@ -545,8 +543,7 @@ class NumberSkeletonImpl {
     /**
      * Creates a NumberFormatter corresponding to the given skeleton string.
      *
-     * @param skeletonString
-     *            A number skeleton string, possibly not in its shortest form.
+     * @param skeletonString A number skeleton string, possibly not in its shortest form.
      * @return An UnlocalizedNumberFormatter with behavior defined by the given skeleton string.
      */
     public static UnlocalizedNumberFormatter create(String skeletonString) {
@@ -557,8 +554,7 @@ class NumberSkeletonImpl {
     /**
      * Create a skeleton string corresponding to the given NumberFormatter.
      *
-     * @param macros
-     *            The NumberFormatter options object.
+     * @param macros The NumberFormatter options object.
      * @return A skeleton string in normalized form.
      */
     public static String generate(MacroProps macros) {
@@ -636,19 +632,19 @@ class NumberSkeletonImpl {
             // Does the current stem require an option?
             if (isTokenSeparator && stem != ParseState.STATE_NULL) {
                 switch (stem) {
-                case STATE_INCREMENT_PRECISION:
-                case STATE_MEASURE_UNIT:
-                case STATE_PER_MEASURE_UNIT:
-                case STATE_IDENTIFIER_UNIT:
-                case STATE_UNIT_USAGE:
-                case STATE_CURRENCY_UNIT:
-                case STATE_INTEGER_WIDTH:
-                case STATE_NUMBERING_SYSTEM:
-                case STATE_SCALE:
-                    segment.setLength(Character.charCount(cp)); // for error message
-                    throw new SkeletonSyntaxException("Stem requires an option", segment);
-                default:
-                    break;
+                    case STATE_INCREMENT_PRECISION:
+                    case STATE_MEASURE_UNIT:
+                    case STATE_PER_MEASURE_UNIT:
+                    case STATE_IDENTIFIER_UNIT:
+                    case STATE_UNIT_USAGE:
+                    case STATE_CURRENCY_UNIT:
+                    case STATE_INTEGER_WIDTH:
+                    case STATE_NUMBERING_SYSTEM:
+                    case STATE_SCALE:
+                        segment.setLength(Character.charCount(cp)); // for error message
+                        throw new SkeletonSyntaxException("Stem requires an option", segment);
+                    default:
+                        break;
                 }
                 stem = ParseState.STATE_NULL;
             }
@@ -663,27 +659,29 @@ class NumberSkeletonImpl {
     /**
      * Given that the current segment represents a stem, parse it and save the result.
      *
-     * @return The next state after parsing this stem, corresponding to what subset of options to expect.
+     * @return The next state after parsing this stem, corresponding to what subset of options to
+     *     expect.
      */
-    private static ParseState parseStem(StringSegment segment, CharsTrie stemTrie, MacroProps macros) {
+    private static ParseState parseStem(
+            StringSegment segment, CharsTrie stemTrie, MacroProps macros) {
         // First check for "blueprint" stems, which start with a "signal char"
         switch (segment.charAt(0)) {
-        case '.':
-            checkNull(macros.precision, segment);
-            BlueprintHelpers.parseFractionStem(segment, macros);
-            return ParseState.STATE_FRACTION_PRECISION;
-        case '@':
-            checkNull(macros.precision, segment);
-            BlueprintHelpers.parseDigitsStem(segment, macros);
-            return ParseState.STATE_PRECISION;
-        case 'E':
-            checkNull(macros.notation, segment);
-            BlueprintHelpers.parseScientificStem(segment, macros);
-            return ParseState.STATE_NULL;
-        case '0':
-            checkNull(macros.integerWidth, segment);
-            BlueprintHelpers.parseIntegerStem(segment, macros);
-            return ParseState.STATE_NULL;
+            case '.':
+                checkNull(macros.precision, segment);
+                BlueprintHelpers.parseFractionStem(segment, macros);
+                return ParseState.STATE_FRACTION_PRECISION;
+            case '@':
+                checkNull(macros.precision, segment);
+                BlueprintHelpers.parseDigitsStem(segment, macros);
+                return ParseState.STATE_PRECISION;
+            case 'E':
+                checkNull(macros.notation, segment);
+                BlueprintHelpers.parseScientificStem(segment, macros);
+                return ParseState.STATE_NULL;
+            case '0':
+                checkNull(macros.integerWidth, segment);
+                BlueprintHelpers.parseIntegerStem(segment, macros);
+                return ParseState.STATE_NULL;
         }
 
         // Now look at the stemsTrie, which is already be pointing at our stem.
@@ -697,158 +695,159 @@ class NumberSkeletonImpl {
         StemEnum stem = STEM_ENUM_VALUES[stemTrie.getValue()];
         switch (stem) {
 
-        // Stems with meaning on their own, not requiring an option:
+                // Stems with meaning on their own, not requiring an option:
 
-        case STEM_COMPACT_SHORT:
-        case STEM_COMPACT_LONG:
-        case STEM_SCIENTIFIC:
-        case STEM_ENGINEERING:
-        case STEM_NOTATION_SIMPLE:
-            checkNull(macros.notation, segment);
-            macros.notation = StemToObject.notation(stem);
-            switch (stem) {
+            case STEM_COMPACT_SHORT:
+            case STEM_COMPACT_LONG:
             case STEM_SCIENTIFIC:
             case STEM_ENGINEERING:
-                return ParseState.STATE_SCIENTIFIC; // allows for scientific options
-            default:
+            case STEM_NOTATION_SIMPLE:
+                checkNull(macros.notation, segment);
+                macros.notation = StemToObject.notation(stem);
+                switch (stem) {
+                    case STEM_SCIENTIFIC:
+                    case STEM_ENGINEERING:
+                        return ParseState.STATE_SCIENTIFIC; // allows for scientific options
+                    default:
+                        return ParseState.STATE_NULL;
+                }
+
+            case STEM_BASE_UNIT:
+            case STEM_PERCENT:
+            case STEM_PERMILLE:
+                checkNull(macros.unit, segment);
+                macros.unit = StemToObject.unit(stem);
                 return ParseState.STATE_NULL;
-            }
 
-        case STEM_BASE_UNIT:
-        case STEM_PERCENT:
-        case STEM_PERMILLE:
-            checkNull(macros.unit, segment);
-            macros.unit = StemToObject.unit(stem);
-            return ParseState.STATE_NULL;
+            case STEM_PERCENT_100:
+                checkNull(macros.scale, segment);
+                checkNull(macros.unit, segment);
+                macros.scale = Scale.powerOfTen(2);
+                macros.unit = NoUnit.PERCENT;
+                return ParseState.STATE_NULL;
 
-        case STEM_PERCENT_100:
-            checkNull(macros.scale, segment);
-            checkNull(macros.unit, segment);
-            macros.scale = Scale.powerOfTen(2);
-            macros.unit = NoUnit.PERCENT;
-            return ParseState.STATE_NULL;
-
-        case STEM_PRECISION_INTEGER:
-        case STEM_PRECISION_UNLIMITED:
-        case STEM_PRECISION_CURRENCY_STANDARD:
-        case STEM_PRECISION_CURRENCY_CASH:
-            checkNull(macros.precision, segment);
-            macros.precision = StemToObject.precision(stem);
-            switch (stem) {
             case STEM_PRECISION_INTEGER:
-                return ParseState.STATE_FRACTION_PRECISION; // allows for "precision-integer/@##"
+            case STEM_PRECISION_UNLIMITED:
+            case STEM_PRECISION_CURRENCY_STANDARD:
+            case STEM_PRECISION_CURRENCY_CASH:
+                checkNull(macros.precision, segment);
+                macros.precision = StemToObject.precision(stem);
+                switch (stem) {
+                    case STEM_PRECISION_INTEGER:
+                        return ParseState
+                                .STATE_FRACTION_PRECISION; // allows for "precision-integer/@##"
+                    default:
+                        return ParseState.STATE_PRECISION;
+                }
+
+            case STEM_ROUNDING_MODE_CEILING:
+            case STEM_ROUNDING_MODE_FLOOR:
+            case STEM_ROUNDING_MODE_DOWN:
+            case STEM_ROUNDING_MODE_UP:
+            case STEM_ROUNDING_MODE_HALF_EVEN:
+            case STEM_ROUNDING_MODE_HALF_DOWN:
+            case STEM_ROUNDING_MODE_HALF_UP:
+            case STEM_ROUNDING_MODE_UNNECESSARY:
+                checkNull(macros.roundingMode, segment);
+                macros.roundingMode = StemToObject.roundingMode(stem);
+                return ParseState.STATE_NULL;
+
+            case STEM_INTEGER_WIDTH_TRUNC:
+                checkNull(macros.integerWidth, segment);
+                macros.integerWidth = IntegerWidth.zeroFillTo(0).truncateAt(0);
+                return ParseState.STATE_NULL;
+
+            case STEM_GROUP_OFF:
+            case STEM_GROUP_MIN2:
+            case STEM_GROUP_AUTO:
+            case STEM_GROUP_ON_ALIGNED:
+            case STEM_GROUP_THOUSANDS:
+                checkNull(macros.grouping, segment);
+                macros.grouping = StemToObject.groupingStrategy(stem);
+                return ParseState.STATE_NULL;
+
+            case STEM_LATIN:
+                checkNull(macros.symbols, segment);
+                macros.symbols = NumberingSystem.LATIN;
+                return ParseState.STATE_NULL;
+
+            case STEM_UNIT_WIDTH_NARROW:
+            case STEM_UNIT_WIDTH_SHORT:
+            case STEM_UNIT_WIDTH_FULL_NAME:
+            case STEM_UNIT_WIDTH_ISO_CODE:
+            case STEM_UNIT_WIDTH_FORMAL:
+            case STEM_UNIT_WIDTH_VARIANT:
+            case STEM_UNIT_WIDTH_HIDDEN:
+                checkNull(macros.unitWidth, segment);
+                macros.unitWidth = StemToObject.unitWidth(stem);
+                return ParseState.STATE_NULL;
+
+            case STEM_SIGN_AUTO:
+            case STEM_SIGN_ALWAYS:
+            case STEM_SIGN_NEVER:
+            case STEM_SIGN_ACCOUNTING:
+            case STEM_SIGN_ACCOUNTING_ALWAYS:
+            case STEM_SIGN_EXCEPT_ZERO:
+            case STEM_SIGN_ACCOUNTING_EXCEPT_ZERO:
+            case STEM_SIGN_NEGATIVE:
+            case STEM_SIGN_ACCOUNTING_NEGATIVE:
+                checkNull(macros.sign, segment);
+                macros.sign = StemToObject.signDisplay(stem);
+                return ParseState.STATE_NULL;
+
+            case STEM_DECIMAL_AUTO:
+            case STEM_DECIMAL_ALWAYS:
+                checkNull(macros.decimal, segment);
+                macros.decimal = StemToObject.decimalSeparatorDisplay(stem);
+                return ParseState.STATE_NULL;
+
+                // Stems requiring an option:
+
+            case STEM_PRECISION_INCREMENT:
+                checkNull(macros.precision, segment);
+                return ParseState.STATE_INCREMENT_PRECISION;
+
+            case STEM_MEASURE_UNIT:
+                checkNull(macros.unit, segment);
+                return ParseState.STATE_MEASURE_UNIT;
+
+            case STEM_PER_MEASURE_UNIT:
+                // In C++, STEM_CURRENCY's checks mark perUnit as "seen". Here we do
+                // the inverse: checking that macros.unit is not set to a currency.
+                if (macros.unit instanceof Currency) {
+                    throw new SkeletonSyntaxException("Duplicated setting", segment);
+                }
+                checkNull(macros.perUnit, segment);
+                return ParseState.STATE_PER_MEASURE_UNIT;
+
+            case STEM_UNIT:
+                checkNull(macros.unit, segment);
+                checkNull(macros.perUnit, segment);
+                return ParseState.STATE_IDENTIFIER_UNIT;
+
+            case STEM_UNIT_USAGE:
+                checkNull(macros.usage, segment);
+                return ParseState.STATE_UNIT_USAGE;
+
+            case STEM_CURRENCY:
+                checkNull(macros.unit, segment);
+                checkNull(macros.perUnit, segment);
+                return ParseState.STATE_CURRENCY_UNIT;
+
+            case STEM_INTEGER_WIDTH:
+                checkNull(macros.integerWidth, segment);
+                return ParseState.STATE_INTEGER_WIDTH;
+
+            case STEM_NUMBERING_SYSTEM:
+                checkNull(macros.symbols, segment);
+                return ParseState.STATE_NUMBERING_SYSTEM;
+
+            case STEM_SCALE:
+                checkNull(macros.scale, segment);
+                return ParseState.STATE_SCALE;
+
             default:
-                return ParseState.STATE_PRECISION;
-            }
-
-        case STEM_ROUNDING_MODE_CEILING:
-        case STEM_ROUNDING_MODE_FLOOR:
-        case STEM_ROUNDING_MODE_DOWN:
-        case STEM_ROUNDING_MODE_UP:
-        case STEM_ROUNDING_MODE_HALF_EVEN:
-        case STEM_ROUNDING_MODE_HALF_DOWN:
-        case STEM_ROUNDING_MODE_HALF_UP:
-        case STEM_ROUNDING_MODE_UNNECESSARY:
-            checkNull(macros.roundingMode, segment);
-            macros.roundingMode = StemToObject.roundingMode(stem);
-            return ParseState.STATE_NULL;
-
-        case STEM_INTEGER_WIDTH_TRUNC:
-            checkNull(macros.integerWidth, segment);
-            macros.integerWidth = IntegerWidth.zeroFillTo(0).truncateAt(0);
-            return ParseState.STATE_NULL;
-
-        case STEM_GROUP_OFF:
-        case STEM_GROUP_MIN2:
-        case STEM_GROUP_AUTO:
-        case STEM_GROUP_ON_ALIGNED:
-        case STEM_GROUP_THOUSANDS:
-            checkNull(macros.grouping, segment);
-            macros.grouping = StemToObject.groupingStrategy(stem);
-            return ParseState.STATE_NULL;
-
-        case STEM_LATIN:
-            checkNull(macros.symbols, segment);
-            macros.symbols = NumberingSystem.LATIN;
-            return ParseState.STATE_NULL;
-
-        case STEM_UNIT_WIDTH_NARROW:
-        case STEM_UNIT_WIDTH_SHORT:
-        case STEM_UNIT_WIDTH_FULL_NAME:
-        case STEM_UNIT_WIDTH_ISO_CODE:
-        case STEM_UNIT_WIDTH_FORMAL:
-        case STEM_UNIT_WIDTH_VARIANT:
-        case STEM_UNIT_WIDTH_HIDDEN:
-            checkNull(macros.unitWidth, segment);
-            macros.unitWidth = StemToObject.unitWidth(stem);
-            return ParseState.STATE_NULL;
-
-        case STEM_SIGN_AUTO:
-        case STEM_SIGN_ALWAYS:
-        case STEM_SIGN_NEVER:
-        case STEM_SIGN_ACCOUNTING:
-        case STEM_SIGN_ACCOUNTING_ALWAYS:
-        case STEM_SIGN_EXCEPT_ZERO:
-        case STEM_SIGN_ACCOUNTING_EXCEPT_ZERO:
-        case STEM_SIGN_NEGATIVE:
-        case STEM_SIGN_ACCOUNTING_NEGATIVE:
-            checkNull(macros.sign, segment);
-            macros.sign = StemToObject.signDisplay(stem);
-            return ParseState.STATE_NULL;
-
-        case STEM_DECIMAL_AUTO:
-        case STEM_DECIMAL_ALWAYS:
-            checkNull(macros.decimal, segment);
-            macros.decimal = StemToObject.decimalSeparatorDisplay(stem);
-            return ParseState.STATE_NULL;
-
-        // Stems requiring an option:
-
-        case STEM_PRECISION_INCREMENT:
-            checkNull(macros.precision, segment);
-            return ParseState.STATE_INCREMENT_PRECISION;
-
-        case STEM_MEASURE_UNIT:
-            checkNull(macros.unit, segment);
-            return ParseState.STATE_MEASURE_UNIT;
-
-        case STEM_PER_MEASURE_UNIT:
-            // In C++, STEM_CURRENCY's checks mark perUnit as "seen". Here we do
-            // the inverse: checking that macros.unit is not set to a currency.
-            if (macros.unit instanceof Currency) {
-                throw new SkeletonSyntaxException("Duplicated setting", segment);
-            }
-            checkNull(macros.perUnit, segment);
-            return ParseState.STATE_PER_MEASURE_UNIT;
-
-        case STEM_UNIT:
-            checkNull(macros.unit, segment);
-            checkNull(macros.perUnit, segment);
-            return ParseState.STATE_IDENTIFIER_UNIT;
-
-        case STEM_UNIT_USAGE:
-            checkNull(macros.usage, segment);
-            return ParseState.STATE_UNIT_USAGE;
-
-        case STEM_CURRENCY:
-            checkNull(macros.unit, segment);
-            checkNull(macros.perUnit, segment);
-            return ParseState.STATE_CURRENCY_UNIT;
-
-        case STEM_INTEGER_WIDTH:
-            checkNull(macros.integerWidth, segment);
-            return ParseState.STATE_INTEGER_WIDTH;
-
-        case STEM_NUMBERING_SYSTEM:
-            checkNull(macros.symbols, segment);
-            return ParseState.STATE_NUMBERING_SYSTEM;
-
-        case STEM_SCALE:
-            checkNull(macros.scale, segment);
-            return ParseState.STATE_SCALE;
-
-        default:
-            throw new AssertionError();
+                throw new AssertionError();
         }
     }
 
@@ -856,82 +855,83 @@ class NumberSkeletonImpl {
      * Given that the current segment represents an option, parse it and save the result.
      *
      * @return The next state after parsing this option, corresponding to what subset of options to
-     *         expect next.
+     *     expect next.
      */
-    private static ParseState parseOption(ParseState stem, StringSegment segment, MacroProps macros) {
+    private static ParseState parseOption(
+            ParseState stem, StringSegment segment, MacroProps macros) {
 
         ///// Required options: /////
 
         switch (stem) {
-        case STATE_CURRENCY_UNIT:
-            BlueprintHelpers.parseCurrencyOption(segment, macros);
-            return ParseState.STATE_NULL;
-        case STATE_MEASURE_UNIT:
-            BlueprintHelpers.parseMeasureUnitOption(segment, macros);
-            return ParseState.STATE_NULL;
-        case STATE_PER_MEASURE_UNIT:
-            BlueprintHelpers.parseMeasurePerUnitOption(segment, macros);
-            return ParseState.STATE_NULL;
-        case STATE_IDENTIFIER_UNIT:
-            BlueprintHelpers.parseIdentifierUnitOption(segment, macros);
-            return ParseState.STATE_NULL;
-        case STATE_UNIT_USAGE:
-            BlueprintHelpers.parseUnitUsageOption(segment, macros);
-            return ParseState.STATE_NULL;
-        case STATE_INCREMENT_PRECISION:
-            BlueprintHelpers.parseIncrementOption(segment, macros);
-            return ParseState.STATE_PRECISION;
-        case STATE_INTEGER_WIDTH:
-            BlueprintHelpers.parseIntegerWidthOption(segment, macros);
-            return ParseState.STATE_NULL;
-        case STATE_NUMBERING_SYSTEM:
-            BlueprintHelpers.parseNumberingSystemOption(segment, macros);
-            return ParseState.STATE_NULL;
-        case STATE_SCALE:
-            BlueprintHelpers.parseScaleOption(segment, macros);
-            return ParseState.STATE_NULL;
-        default:
-            break;
+            case STATE_CURRENCY_UNIT:
+                BlueprintHelpers.parseCurrencyOption(segment, macros);
+                return ParseState.STATE_NULL;
+            case STATE_MEASURE_UNIT:
+                BlueprintHelpers.parseMeasureUnitOption(segment, macros);
+                return ParseState.STATE_NULL;
+            case STATE_PER_MEASURE_UNIT:
+                BlueprintHelpers.parseMeasurePerUnitOption(segment, macros);
+                return ParseState.STATE_NULL;
+            case STATE_IDENTIFIER_UNIT:
+                BlueprintHelpers.parseIdentifierUnitOption(segment, macros);
+                return ParseState.STATE_NULL;
+            case STATE_UNIT_USAGE:
+                BlueprintHelpers.parseUnitUsageOption(segment, macros);
+                return ParseState.STATE_NULL;
+            case STATE_INCREMENT_PRECISION:
+                BlueprintHelpers.parseIncrementOption(segment, macros);
+                return ParseState.STATE_PRECISION;
+            case STATE_INTEGER_WIDTH:
+                BlueprintHelpers.parseIntegerWidthOption(segment, macros);
+                return ParseState.STATE_NULL;
+            case STATE_NUMBERING_SYSTEM:
+                BlueprintHelpers.parseNumberingSystemOption(segment, macros);
+                return ParseState.STATE_NULL;
+            case STATE_SCALE:
+                BlueprintHelpers.parseScaleOption(segment, macros);
+                return ParseState.STATE_NULL;
+            default:
+                break;
         }
 
         ///// Non-required options: /////
 
         // Scientific options
         switch (stem) {
-        case STATE_SCIENTIFIC:
-            if (BlueprintHelpers.parseExponentWidthOption(segment, macros)) {
-                return ParseState.STATE_SCIENTIFIC;
-            }
-            if (BlueprintHelpers.parseExponentSignOption(segment, macros)) {
-                return ParseState.STATE_SCIENTIFIC;
-            }
-            break;
-        default:
-            break;
+            case STATE_SCIENTIFIC:
+                if (BlueprintHelpers.parseExponentWidthOption(segment, macros)) {
+                    return ParseState.STATE_SCIENTIFIC;
+                }
+                if (BlueprintHelpers.parseExponentSignOption(segment, macros)) {
+                    return ParseState.STATE_SCIENTIFIC;
+                }
+                break;
+            default:
+                break;
         }
 
         // Frac-sig option
         switch (stem) {
-        case STATE_FRACTION_PRECISION:
-            if (BlueprintHelpers.parseFracSigOption(segment, macros)) {
-                return ParseState.STATE_PRECISION;
-            }
-            // If the fracSig option was not found, try normal precision options.
-            stem = ParseState.STATE_PRECISION;
-            break;
-        default:
-            break;
+            case STATE_FRACTION_PRECISION:
+                if (BlueprintHelpers.parseFracSigOption(segment, macros)) {
+                    return ParseState.STATE_PRECISION;
+                }
+                // If the fracSig option was not found, try normal precision options.
+                stem = ParseState.STATE_PRECISION;
+                break;
+            default:
+                break;
         }
 
         // Trailing zeros option
         switch (stem) {
-        case STATE_PRECISION:
-            if (BlueprintHelpers.parseTrailingZeroOption(segment, macros)) {
-                return ParseState.STATE_NULL;
-            }
-            break;
-        default:
-            break;
+            case STATE_PRECISION:
+                if (BlueprintHelpers.parseTrailingZeroOption(segment, macros)) {
+                    return ParseState.STATE_NULL;
+                }
+                break;
+            default:
+                break;
         }
 
         // Unknown option
@@ -941,8 +941,8 @@ class NumberSkeletonImpl {
     ///// MAIN SKELETON GENERATION FUNCTION /////
 
     /**
-     * Main skeleton generator function. Appends the normalized skeleton for the MacroProps to the given
-     * StringBuilder.
+     * Main skeleton generator function. Appends the normalized skeleton for the MacroProps to the
+     * given StringBuilder.
      */
     private static void generateSkeleton(MacroProps macros, StringBuilder sb) {
         // Supported options
@@ -1010,11 +1010,14 @@ class NumberSkeletonImpl {
     ///// BLUEPRINT HELPER FUNCTIONS /////
 
     /**
-     * Utility class for methods for processing stems and options that cannot be interpreted literally.
+     * Utility class for methods for processing stems and options that cannot be interpreted
+     * literally.
      */
     static final class BlueprintHelpers {
 
-        /** @return Whether we successfully found and parsed an exponent width option. */
+        /**
+         * @return Whether we successfully found and parsed an exponent width option.
+         */
         private static boolean parseExponentWidthOption(StringSegment segment, MacroProps macros) {
             if (!isWildcardChar(segment.charAt(0))) {
                 return false;
@@ -1041,10 +1044,13 @@ class NumberSkeletonImpl {
             appendMultiple(sb, 'e', minExponentDigits);
         }
 
-        /** @return Whether we successfully found and parsed an exponent sign option. */
+        /**
+         * @return Whether we successfully found and parsed an exponent sign option.
+         */
         private static boolean parseExponentSignOption(StringSegment segment, MacroProps macros) {
             // Get the sign display type out of the CharsTrie data structure.
-            // TODO: Make this more efficient (avoid object allocation)? It shouldn't be very hot code.
+            // TODO: Make this more efficient (avoid object allocation)? It shouldn't be very hot
+            // code.
             CharsTrie tempStemTrie = new CharsTrie(SERIALIZED_STEM_TRIE, 0);
             BytesTrie.Result result = tempStemTrie.next(segment, 0, segment.length());
             if (result != BytesTrie.Result.INTERMEDIATE_VALUE
@@ -1077,7 +1083,8 @@ class NumberSkeletonImpl {
 
         // "measure-unit/" is deprecated in favour of "unit/".
         private static void parseMeasureUnitOption(StringSegment segment, MacroProps macros) {
-            // NOTE: The category (type) of the unit is guaranteed to be a valid subtag (alphanumeric)
+            // NOTE: The category (type) of the unit is guaranteed to be a valid subtag
+            // (alphanumeric)
             // http://unicode.org/reports/tr35/#Validity_Data
             int firstHyphen = 0;
             while (firstHyphen < segment.length() && segment.charAt(firstHyphen) != '-') {
@@ -1109,8 +1116,8 @@ class NumberSkeletonImpl {
         }
 
         /**
-         * Parses unit identifiers like "meter-per-second" and "foot-and-inch", as
-         * specified via a "unit/" concise skeleton.
+         * Parses unit identifiers like "meter-per-second" and "foot-and-inch", as specified via a
+         * "unit/" concise skeleton.
          */
         private static void parseIdentifierUnitOption(StringSegment segment, MacroProps macros) {
             try {
@@ -1234,7 +1241,7 @@ class NumberSkeletonImpl {
         }
 
         private static void parseScientificStem(StringSegment segment, MacroProps macros) {
-            assert(segment.charAt(0) == 'E');
+            assert (segment.charAt(0) == 'E');
             block:
             {
                 int offset = 1;
@@ -1260,7 +1267,8 @@ class NumberSkeletonImpl {
                     } else if (segment.charAt(offset) == '?') {
                         signDisplay = SignDisplay.EXCEPT_ZERO;
                     } else {
-                        // NOTE: Other sign displays are not included because they aren't useful in this context
+                        // NOTE: Other sign displays are not included because they aren't useful in
+                        // this context
                         break block;
                     }
                     offset++;
@@ -1275,16 +1283,17 @@ class NumberSkeletonImpl {
                     }
                     minDigits++;
                 }
-                macros.notation = (isEngineering ? Notation.engineering() : Notation.scientific())
-                    .withExponentSignDisplay(signDisplay)
-                    .withMinExponentDigits(minDigits);
+                macros.notation =
+                        (isEngineering ? Notation.engineering() : Notation.scientific())
+                                .withExponentSignDisplay(signDisplay)
+                                .withMinExponentDigits(minDigits);
                 return;
             }
             throw new SkeletonSyntaxException("Invalid scientific stem", segment);
         }
 
         private static void parseIntegerStem(StringSegment segment, MacroProps macros) {
-            assert(segment.charAt(0) == '0');
+            assert (segment.charAt(0) == '0');
             int offset = 1;
             for (; offset < segment.length(); offset++) {
                 if (segment.charAt(offset) != '0') {
@@ -1293,13 +1302,15 @@ class NumberSkeletonImpl {
                 }
             }
             if (offset < segment.length()) {
-                 throw new SkeletonSyntaxException("Invalid integer stem", segment);
+                throw new SkeletonSyntaxException("Invalid integer stem", segment);
             }
             macros.integerWidth = IntegerWidth.zeroFillTo(offset);
             return;
         }
 
-        /** @return Whether we successfully found and parsed a frac-sig option. */
+        /**
+         * @return Whether we successfully found and parsed a frac-sig option.
+         */
         private static boolean parseFracSigOption(StringSegment segment, MacroProps macros) {
             if (segment.charAt(0) != '@') {
                 return false;
@@ -1340,7 +1351,8 @@ class NumberSkeletonImpl {
                 RoundingPriority priority;
                 if (maxSig == -1) {
                     throw new SkeletonSyntaxException(
-                        "Invalid digits option: Wildcard character not allowed with the priority annotation", segment);
+                            "Invalid digits option: Wildcard character not allowed with the priority annotation",
+                            segment);
                 }
                 if (segment.codePointAt(offset) == 'r') {
                     priority = RoundingPriority.RELAXED;
@@ -1350,11 +1362,13 @@ class NumberSkeletonImpl {
                     offset++;
                 } else {
                     assert offset < segment.length();
-                    priority = RoundingPriority.RELAXED; // make compiler happy (uninitialized variable)
+                    priority =
+                            RoundingPriority
+                                    .RELAXED; // make compiler happy (uninitialized variable)
                 }
                 if (offset < segment.length()) {
                     throw new SkeletonSyntaxException(
-                        "Invalid digits option for fraction rounder", segment);
+                            "Invalid digits option for fraction rounder", segment);
                 }
                 macros.precision = oldRounder.withSignificantDigits(minSig, maxSig, priority);
             } else if (maxSig == -1) {
@@ -1365,16 +1379,19 @@ class NumberSkeletonImpl {
                 macros.precision = oldRounder.withMaxDigits(maxSig);
             } else {
                 throw new SkeletonSyntaxException(
-                    "Invalid digits option: Priority annotation required", segment);
+                        "Invalid digits option: Priority annotation required", segment);
             }
 
             return true;
         }
 
-        /** @return Whether we successfully found and parsed a trailing zero option. */
+        /**
+         * @return Whether we successfully found and parsed a trailing zero option.
+         */
         private static boolean parseTrailingZeroOption(StringSegment segment, MacroProps macros) {
             if (segment.contentEquals("w")) {
-                macros.precision = macros.precision.trailingZeroDisplay(TrailingZeroDisplay.HIDE_IF_WHOLE);
+                macros.precision =
+                        macros.precision.trailingZeroDisplay(TrailingZeroDisplay.HIDE_IF_WHOLE);
                 return true;
             }
             return false;
@@ -1484,8 +1501,8 @@ class NumberSkeletonImpl {
     ///// STEM GENERATION HELPER FUNCTIONS /////
 
     /**
-     * Utility class for methods for generating a token corresponding to each macro-prop. Each method
-     * returns whether or not a token was written to the string builder.
+     * Utility class for methods for generating a token corresponding to each macro-prop. Each
+     * method returns whether or not a token was written to the string builder.
      */
     static final class GeneratorHelpers {
 
@@ -1531,13 +1548,13 @@ class NumberSkeletonImpl {
             if (macros.perUnit != null) {
                 if (macros.unit instanceof Currency || macros.perUnit instanceof Currency) {
                     throw new UnsupportedOperationException(
-                        "Cannot generate number skeleton with currency unit and per-unit");
+                            "Cannot generate number skeleton with currency unit and per-unit");
                 }
                 unit = unit.product(macros.perUnit.reciprocal());
             }
             if (unit instanceof Currency) {
                 sb.append("currency/");
-                BlueprintHelpers.generateCurrencyOption((Currency)unit, sb);
+                BlueprintHelpers.generateCurrencyOption((Currency) unit, sb);
                 return true;
             } else if (unit.equals(MeasureUnit.PERCENT)) {
                 sb.append("percent");
@@ -1553,7 +1570,7 @@ class NumberSkeletonImpl {
         }
 
         private static boolean usage(MacroProps macros, StringBuilder sb) {
-            if (macros.usage != null  && macros.usage.length() > 0) {
+            if (macros.usage != null && macros.usage.length() > 0) {
                 sb.append("usage/");
                 sb.append(macros.usage);
 
@@ -1566,10 +1583,12 @@ class NumberSkeletonImpl {
             if (macros.precision instanceof Precision.InfiniteRounderImpl) {
                 sb.append("precision-unlimited");
             } else if (macros.precision instanceof Precision.FractionRounderImpl) {
-                Precision.FractionRounderImpl impl = (Precision.FractionRounderImpl) macros.precision;
+                Precision.FractionRounderImpl impl =
+                        (Precision.FractionRounderImpl) macros.precision;
                 BlueprintHelpers.generateFractionStem(impl.minFrac, impl.maxFrac, sb);
             } else if (macros.precision instanceof Precision.SignificantRounderImpl) {
-                Precision.SignificantRounderImpl impl = (Precision.SignificantRounderImpl) macros.precision;
+                Precision.SignificantRounderImpl impl =
+                        (Precision.SignificantRounderImpl) macros.precision;
                 BlueprintHelpers.generateDigitsStem(impl.minSig, impl.maxSig, sb);
             } else if (macros.precision instanceof Precision.FracSigRounderImpl) {
                 Precision.FracSigRounderImpl impl = (Precision.FracSigRounderImpl) macros.precision;
@@ -1590,12 +1609,14 @@ class NumberSkeletonImpl {
                     }
                 }
             } else if (macros.precision instanceof Precision.IncrementRounderImpl) {
-                Precision.IncrementRounderImpl impl = (Precision.IncrementRounderImpl) macros.precision;
+                Precision.IncrementRounderImpl impl =
+                        (Precision.IncrementRounderImpl) macros.precision;
                 sb.append("precision-increment/");
                 BlueprintHelpers.generateIncrementOption(impl.increment, sb);
             } else {
                 assert macros.precision instanceof Precision.CurrencyRounderImpl;
-                Precision.CurrencyRounderImpl impl = (Precision.CurrencyRounderImpl) macros.precision;
+                Precision.CurrencyRounderImpl impl =
+                        (Precision.CurrencyRounderImpl) macros.precision;
                 if (impl.usage == CurrencyUsage.STANDARD) {
                     sb.append("precision-currency-standard");
                 } else {
@@ -1607,7 +1628,8 @@ class NumberSkeletonImpl {
                 sb.append("/w");
             }
 
-            // NOTE: Always return true for rounding because the default value depends on other options.
+            // NOTE: Always return true for rounding because the default value depends on other
+            // options.
             return true;
         }
 
@@ -1641,9 +1663,8 @@ class NumberSkeletonImpl {
                 return true;
             }
             sb.append("integer-width/");
-            BlueprintHelpers.generateIntegerWidthOption(macros.integerWidth.minInt,
-                    macros.integerWidth.maxInt,
-                    sb);
+            BlueprintHelpers.generateIntegerWidthOption(
+                    macros.integerWidth.minInt, macros.integerWidth.maxInt, sb);
             return true;
         }
 
@@ -1696,7 +1717,6 @@ class NumberSkeletonImpl {
             BlueprintHelpers.generateScaleOption(macros.scale, sb);
             return true;
         }
-
     }
 
     ///// OTHER UTILITY FUNCTIONS /////

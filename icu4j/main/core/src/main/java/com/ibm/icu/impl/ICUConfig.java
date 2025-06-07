@@ -16,9 +16,7 @@ import java.security.PrivilegedAction;
 import java.util.MissingResourceException;
 import java.util.Properties;
 
-/**
- * ICUConfig is a class used for accessing ICU4J runtime configuration.
- */
+/** ICUConfig is a class used for accessing ICU4J runtime configuration. */
 public class ICUConfig {
     public static final String CONFIG_PROPS_FILE = "/com/ibm/icu/ICUConfig.properties";
     private static final Properties CONFIG_PROPS;
@@ -43,6 +41,7 @@ public class ICUConfig {
 
     /**
      * Get ICU configuration property value for the given name.
+     *
      * @param name The configuration property name
      * @return The configuration property value, or null if it does not exist.
      */
@@ -52,22 +51,25 @@ public class ICUConfig {
 
     /**
      * Get ICU configuration property value for the given name.
+     *
      * @param name The configuration property name
      * @param def The default value
-     * @return The configuration property value.  If the property does not
-     * exist, <code>def</code> is returned.
+     * @return The configuration property value. If the property does not exist, <code>def</code> is
+     *     returned.
      */
     public static String get(String name, String def) {
         String val = null;
         final String fname = name;
         if (System.getSecurityManager() != null) {
             try {
-                val = AccessController.doPrivileged(new PrivilegedAction<String>() {
-                    @Override
-                    public String run() {
-                        return System.getProperty(fname);
-                    }
-                });
+                val =
+                        AccessController.doPrivileged(
+                                new PrivilegedAction<String>() {
+                                    @Override
+                                    public String run() {
+                                        return System.getProperty(fname);
+                                    }
+                                });
             } catch (AccessControlException e) {
                 // ignore
                 // TODO log this message

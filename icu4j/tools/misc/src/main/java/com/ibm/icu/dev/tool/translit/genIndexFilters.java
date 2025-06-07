@@ -1,33 +1,31 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /*
-**********************************************************************
-*   Copyright (c) 2001-2010, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-**********************************************************************
-*   Date        Name        Description
-*   11/29/2001  aliu        Creation.
-**********************************************************************
-*/
+ **********************************************************************
+ *   Copyright (c) 2001-2010, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ **********************************************************************
+ *   Date        Name        Description
+ *   11/29/2001  aliu        Creation.
+ **********************************************************************
+ */
 package com.ibm.icu.dev.tool.translit;
+
 import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.Transliterator;
 import com.ibm.icu.text.UnicodeSet;
 
 /**
- * Adjunct class to getIndexFilters.bat.  Just generates source sets
- * and their closures.
+ * Adjunct class to getIndexFilters.bat. Just generates source sets and their closures.
  *
- * Usage: ID [ NFD|NFKD [lower] ]
+ * <p>Usage: ID [ NFD|NFKD [lower] ]
  *
- *   java -classpath classes com.ibm.icu.dev.tool.translit.genIndexFilters
- *                              Latin-Greek NFD lower
+ * <p>java -classpath classes com.ibm.icu.dev.tool.translit.genIndexFilters Latin-Greek NFD lower
  *
- * The 'NFD'|'NFKD' and 'lower' args are optional, but 'lower' can
- * only be specified if 'NFD' or 'NFKD' is.
+ * <p>The 'NFD'|'NFKD' and 'lower' args are optional, but 'lower' can only be specified if 'NFD' or
+ * 'NFKD' is.
  *
- * DO NOT CHANGE OUTPUT FORMAT.  This tool's output is read by a Perl
- * script.
+ * <p>DO NOT CHANGE OUTPUT FORMAT. This tool's output is read by a Perl script.
  */
 public class genIndexFilters {
 

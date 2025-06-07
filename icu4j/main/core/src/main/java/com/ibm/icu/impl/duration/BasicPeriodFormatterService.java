@@ -9,15 +9,11 @@
 
 package com.ibm.icu.impl.duration;
 
-import java.util.Collection;
-
 import com.ibm.icu.impl.duration.impl.PeriodFormatterDataService;
 import com.ibm.icu.impl.duration.impl.ResourceBasedPeriodFormatterDataService;
+import java.util.Collection;
 
-/**
- * An implementation of PeriodFormatterService that constructs a
- * BasicPeriodFormatterFactory.
- */
+/** An implementation of PeriodFormatterService that constructs a BasicPeriodFormatterFactory. */
 public class BasicPeriodFormatterService implements PeriodFormatterService {
     private static BasicPeriodFormatterService instance;
     private PeriodFormatterDataService ds;
@@ -29,16 +25,14 @@ public class BasicPeriodFormatterService implements PeriodFormatterService {
      */
     public static BasicPeriodFormatterService getInstance() {
         if (instance == null) {
-            PeriodFormatterDataService ds = ResourceBasedPeriodFormatterDataService
-                    .getInstance();
+            PeriodFormatterDataService ds = ResourceBasedPeriodFormatterDataService.getInstance();
             instance = new BasicPeriodFormatterService(ds);
         }
         return instance;
     }
 
     /**
-     * Construct a BasicPeriodFormatterService using the given
-     * PeriodFormatterDataService.
+     * Construct a BasicPeriodFormatterService using the given PeriodFormatterDataService.
      *
      * @param ds the data service to use
      */

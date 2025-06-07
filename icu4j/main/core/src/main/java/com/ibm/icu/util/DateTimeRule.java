@@ -11,9 +11,8 @@ package com.ibm.icu.util;
 import java.io.Serializable;
 
 /**
- * <code>DateTimeRule</code> is a class representing a time in a year by
- * a rule specified by month, day of month, day of week and
- * time in the day.
+ * <code>DateTimeRule</code> is a class representing a time in a year by a rule specified by month,
+ * day of month, day of week and time in the day.
  *
  * @stable ICU 3.8
  */
@@ -22,34 +21,30 @@ public class DateTimeRule implements Serializable {
     private static final long serialVersionUID = 2183055795738051443L;
 
     /**
-     * Date rule type defined by exact day of month.
-     * For example, March 14.
+     * Date rule type defined by exact day of month. For example, March 14.
      *
      * @stable ICU 3.8
      */
     public static final int DOM = 0;
 
     /**
-     * Date rule type defined by day of week in month.
-     * For example, 2nd Sunday in March.
+     * Date rule type defined by day of week in month. For example, 2nd Sunday in March.
      *
      * @stable ICU 3.8
      */
     public static final int DOW = 1;
 
     /**
-     * Date rule type defined by first day of week on or
-     * after exact day of month.
-     * For example, 1st Monday on or after March 15.
+     * Date rule type defined by first day of week on or after exact day of month. For example, 1st
+     * Monday on or after March 15.
      *
      * @stable ICU 3.8
      */
     public static final int DOW_GEQ_DOM = 2;
 
     /**
-     * Date rule type defined by last day of week on or
-     * before exact day of month.
-     * For example, last Saturday on or before March 15.
+     * Date rule type defined by last day of week on or before exact day of month. For example, last
+     * Saturday on or before March 15.
      *
      * @stable ICU 3.8
      */
@@ -87,20 +82,17 @@ public class DateTimeRule implements Serializable {
     private final int millisInDay;
 
     /**
-     * Constructs a <code>DateTimeRule</code> by the day of month and
-     * the time rule.  The date rule type for an instance created by
-     * this constructor is <code>DOM</code>.
+     * Constructs a <code>DateTimeRule</code> by the day of month and the time rule. The date rule
+     * type for an instance created by this constructor is <code>DOM</code>.
      *
-     * @param month         The rule month, for example, <code>Calendar.JANUARY</code>
-     * @param dayOfMonth    The day of month, 1-based.
-     * @param millisInDay   The milliseconds in the rule date.
-     * @param timeType      The time type, <code>WALL_TIME</code> or <code>STANDARD_TIME</code>
-     *                      or <code>UTC_TIME</code>.
-     *
+     * @param month The rule month, for example, <code>Calendar.JANUARY</code>
+     * @param dayOfMonth The day of month, 1-based.
+     * @param millisInDay The milliseconds in the rule date.
+     * @param timeType The time type, <code>WALL_TIME</code> or <code>STANDARD_TIME</code> or <code>
+     *     UTC_TIME</code>.
      * @stable ICU 3.8
      */
-    public DateTimeRule(int month, int dayOfMonth,
-            int millisInDay, int timeType) {
+    public DateTimeRule(int month, int dayOfMonth, int millisInDay, int timeType) {
         dateRuleType = DOM;
         this.month = month;
         this.dayOfMonth = dayOfMonth;
@@ -114,23 +106,19 @@ public class DateTimeRule implements Serializable {
     }
 
     /**
-     * Constructs a <code>DateTimeRule</code> by the day of week and its ordinal
-     * number and the time rule.  The date rule type for an instance created
-     * by this constructor is <code>DOW</code>.
+     * Constructs a <code>DateTimeRule</code> by the day of week and its ordinal number and the time
+     * rule. The date rule type for an instance created by this constructor is <code>DOW</code>.
      *
-     * @param month         The rule month, for example, <code>Calendar.JANUARY</code>.
-     * @param weekInMonth   The ordinal number of the day of week.  Negative number
-     *                      may be used for specifying a rule date counted from the
-     *                      end of the rule month.
-     * @param dayOfWeek     The day of week, for example, <code>Calendar.SUNDAY</code>.
-     * @param millisInDay   The milliseconds in the rule date.
-     * @param timeType      The time type, <code>WALL_TIME</code> or <code>STANDARD_TIME</code>
-     *                      or <code>UTC_TIME</code>.
-     *
+     * @param month The rule month, for example, <code>Calendar.JANUARY</code>.
+     * @param weekInMonth The ordinal number of the day of week. Negative number may be used for
+     *     specifying a rule date counted from the end of the rule month.
+     * @param dayOfWeek The day of week, for example, <code>Calendar.SUNDAY</code>.
+     * @param millisInDay The milliseconds in the rule date.
+     * @param timeType The time type, <code>WALL_TIME</code> or <code>STANDARD_TIME</code> or <code>
+     *     UTC_TIME</code>.
      * @stable ICU 3.8
      */
-    public DateTimeRule(int month, int weekInMonth, int dayOfWeek,
-            int millisInDay, int timeType) {
+    public DateTimeRule(int month, int weekInMonth, int dayOfWeek, int millisInDay, int timeType) {
         dateRuleType = DOW;
         this.month = month;
         this.weekInMonth = weekInMonth;
@@ -144,23 +132,26 @@ public class DateTimeRule implements Serializable {
     }
 
     /**
-     * Constructs a <code>DateTimeRule</code> by the first/last day of week
-     * on or after/before the day of month and the time rule.  The date rule
-     * type for an instance created by this constructor is either
-     * <code>DOM_GEQ_DOM</code> or <code>DOM_LEQ_DOM</code>.
+     * Constructs a <code>DateTimeRule</code> by the first/last day of week on or after/before the
+     * day of month and the time rule. The date rule type for an instance created by this
+     * constructor is either <code>DOM_GEQ_DOM</code> or <code>DOM_LEQ_DOM</code>.
      *
-     * @param month         The rule month, for example, <code>Calendar.JANUARY</code>
-     * @param dayOfMonth    The day of month, 1-based.
-     * @param dayOfWeek     The day of week, for example, <code>Calendar.SUNDAY</code>.
-     * @param after         true if the rule date is on or after the day of month.
-     * @param millisInDay   The milliseconds in the rule date.
-     * @param timeType      The time type, <code>WALL_TIME</code> or <code>STANDARD_TIME</code>
-     *                      or <code>UTC_TIME</code>.
-     *
+     * @param month The rule month, for example, <code>Calendar.JANUARY</code>
+     * @param dayOfMonth The day of month, 1-based.
+     * @param dayOfWeek The day of week, for example, <code>Calendar.SUNDAY</code>.
+     * @param after true if the rule date is on or after the day of month.
+     * @param millisInDay The milliseconds in the rule date.
+     * @param timeType The time type, <code>WALL_TIME</code> or <code>STANDARD_TIME</code> or <code>
+     *     UTC_TIME</code>.
      * @stable ICU 3.8
      */
-    public DateTimeRule(int month, int dayOfMonth, int dayOfWeek, boolean after,
-            int millisInDay, int timeType) {
+    public DateTimeRule(
+            int month,
+            int dayOfMonth,
+            int dayOfWeek,
+            boolean after,
+            int millisInDay,
+            int timeType) {
         this.dateRuleType = after ? DOW_GEQ_DOM : DOW_LEQ_DOM;
         this.month = month;
         this.dayOfMonth = dayOfMonth;
@@ -177,7 +168,6 @@ public class DateTimeRule implements Serializable {
      * Gets the date rule type, such as <code>DOM</code>
      *
      * @return The date rule type.
-     *
      * @stable ICU 3.8
      */
     public int getDateRuleType() {
@@ -188,7 +178,6 @@ public class DateTimeRule implements Serializable {
      * Gets the rule month.
      *
      * @return The rule month.
-     *
      * @stable ICU 3.8
      */
     public int getRuleMonth() {
@@ -196,11 +185,10 @@ public class DateTimeRule implements Serializable {
     }
 
     /**
-     * Gets the rule day of month.  When the date rule type
-     * is <code>DOW</code>, the value is always 0.
+     * Gets the rule day of month. When the date rule type is <code>DOW</code>, the value is always
+     * 0.
      *
      * @return The rule day of month
-     *
      * @stable ICU 3.8
      */
     public int getRuleDayOfMonth() {
@@ -208,11 +196,10 @@ public class DateTimeRule implements Serializable {
     }
 
     /**
-     * Gets the rule day of week.  When the date rule type
-     * is <code>DOM</code>, the value is always 0.
+     * Gets the rule day of week. When the date rule type is <code>DOM</code>, the value is always
+     * 0.
      *
      * @return The rule day of week.
-     *
      * @stable ICU 3.8
      */
     public int getRuleDayOfWeek() {
@@ -220,12 +207,10 @@ public class DateTimeRule implements Serializable {
     }
 
     /**
-     * Gets the rule day of week ordinal number in the month.
-     * When the date rule type is not <code>DOW</code>, the value is
-     * always 0.
+     * Gets the rule day of week ordinal number in the month. When the date rule type is not <code>
+     * DOW</code>, the value is always 0.
      *
      * @return The rule day of week ordinal number in the month.
-     *
      * @stable ICU 3.8
      */
     public int getRuleWeekInMonth() {
@@ -235,9 +220,8 @@ public class DateTimeRule implements Serializable {
     /**
      * Gets the time rule type
      *
-     * @return The time rule type, either <code>WALL_TIME</code> or <code>STANDARD_TIME</code>
-     *         or <code>UTC_TIME</code>.
-     *
+     * @return The time rule type, either <code>WALL_TIME</code> or <code>STANDARD_TIME</code> or
+     *     <code>UTC_TIME</code>.
      * @stable ICU 3.8
      */
     public int getTimeRuleType() {
@@ -248,7 +232,6 @@ public class DateTimeRule implements Serializable {
      * Gets the rule time in the rule day.
      *
      * @return The time in the rule day in milliseconds.
-     *
      * @stable ICU 3.8
      */
     public int getRuleMillisInDay() {
@@ -256,12 +239,14 @@ public class DateTimeRule implements Serializable {
     }
 
     private static final String[] DOWSTR = {"", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
-    private static final String[] MONSTR = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+    private static final String[] MONSTR = {
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    };
 
     /**
-     * Returns a <code>String</code> representation of this <code>DateTimeRule</code> object.
-     * This method is used for debugging purpose only.  The string representation can be changed
-     * in future version of ICU without any notice.
+     * Returns a <code>String</code> representation of this <code>DateTimeRule</code> object. This
+     * method is used for debugging purpose only. The string representation can be changed in future
+     * version of ICU without any notice.
      *
      * @stable ICU 3.8
      */
@@ -271,30 +256,30 @@ public class DateTimeRule implements Serializable {
         String sTimeRuleType = null;
 
         switch (dateRuleType) {
-        case DOM:
-            sDate = Integer.toString(dayOfMonth);
-            break;
-        case DOW:
-            sDate = Integer.toString(weekInMonth) + DOWSTR[dayOfWeek];
-            break;
-        case DOW_GEQ_DOM:
-            sDate = DOWSTR[dayOfWeek] + ">=" + Integer.toString(dayOfMonth);
-            break;
-        case DOW_LEQ_DOM:
-            sDate = DOWSTR[dayOfWeek] + "<=" + Integer.toString(dayOfMonth);
-            break;
+            case DOM:
+                sDate = Integer.toString(dayOfMonth);
+                break;
+            case DOW:
+                sDate = Integer.toString(weekInMonth) + DOWSTR[dayOfWeek];
+                break;
+            case DOW_GEQ_DOM:
+                sDate = DOWSTR[dayOfWeek] + ">=" + Integer.toString(dayOfMonth);
+                break;
+            case DOW_LEQ_DOM:
+                sDate = DOWSTR[dayOfWeek] + "<=" + Integer.toString(dayOfMonth);
+                break;
         }
 
         switch (timeRuleType) {
-        case WALL_TIME:
-            sTimeRuleType = "WALL";
-            break;
-        case STANDARD_TIME:
-            sTimeRuleType = "STD";
-            break;
-        case UTC_TIME:
-            sTimeRuleType = "UTC";
-            break;
+            case WALL_TIME:
+                sTimeRuleType = "WALL";
+                break;
+            case STANDARD_TIME:
+                sTimeRuleType = "STD";
+                break;
+            case UTC_TIME:
+                sTimeRuleType = "UTC";
+                break;
         }
 
         int time = millisInDay;
@@ -313,15 +298,15 @@ public class DateTimeRule implements Serializable {
         buf.append(", time=");
         buf.append(hours);
         buf.append(":");
-        buf.append(mins/10);
-        buf.append(mins%10);
+        buf.append(mins / 10);
+        buf.append(mins % 10);
         buf.append(":");
-        buf.append(secs/10);
-        buf.append(secs%10);
+        buf.append(secs / 10);
+        buf.append(secs % 10);
         buf.append(".");
-        buf.append(millis/100);
-        buf.append((millis/10)%10);
-        buf.append(millis%10);
+        buf.append(millis / 100);
+        buf.append((millis / 10) % 10);
+        buf.append(millis % 10);
         buf.append("(");
         buf.append(sTimeRuleType);
         buf.append(")");

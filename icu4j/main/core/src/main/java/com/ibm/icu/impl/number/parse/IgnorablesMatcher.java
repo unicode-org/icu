@@ -8,18 +8,17 @@ import com.ibm.icu.text.UnicodeSet;
 
 /**
  * @author sffc
- *
  */
 public class IgnorablesMatcher extends SymbolMatcher implements NumberParseMatcher.Flexible {
 
-    private static final IgnorablesMatcher DEFAULT = new IgnorablesMatcher(
-            StaticUnicodeSets.get(StaticUnicodeSets.Key.DEFAULT_IGNORABLES));
+    private static final IgnorablesMatcher DEFAULT =
+            new IgnorablesMatcher(StaticUnicodeSets.get(StaticUnicodeSets.Key.DEFAULT_IGNORABLES));
 
-    private static final IgnorablesMatcher STRICT = new IgnorablesMatcher(
-            StaticUnicodeSets.get(StaticUnicodeSets.Key.STRICT_IGNORABLES));
+    private static final IgnorablesMatcher STRICT =
+            new IgnorablesMatcher(StaticUnicodeSets.get(StaticUnicodeSets.Key.STRICT_IGNORABLES));
 
-    private static final IgnorablesMatcher JAVA_COMPATIBILITY = new IgnorablesMatcher(
-            StaticUnicodeSets.get(StaticUnicodeSets.Key.EMPTY));
+    private static final IgnorablesMatcher JAVA_COMPATIBILITY =
+            new IgnorablesMatcher(StaticUnicodeSets.get(StaticUnicodeSets.Key.EMPTY));
 
     public static IgnorablesMatcher getInstance(int parseFlags) {
         if (0 != (parseFlags & ParsingUtils.PARSE_FLAG_JAVA_COMPATIBILITY_IGNORABLES)) {

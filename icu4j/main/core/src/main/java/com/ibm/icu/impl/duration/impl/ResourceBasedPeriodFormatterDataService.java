@@ -9,6 +9,8 @@
 
 package com.ibm.icu.impl.duration.impl;
 
+import com.ibm.icu.impl.ICUData;
+import com.ibm.icu.util.ICUUncheckedIOException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,45 +24,37 @@ import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
 
-import com.ibm.icu.impl.ICUData;
-import com.ibm.icu.util.ICUUncheckedIOException;
-
 /**
- * A PeriodFormatterDataService that serves PeriodFormatterData objects based on
- * data files stored as resources in this directory. These are text files named
- * after the locale, for example, 'pfd_he_IL.txt' specifies an period formatter
- * data file for Hebrew as spoken in Israel. Data is in a JSON-like format.
+ * A PeriodFormatterDataService that serves PeriodFormatterData objects based on data files stored
+ * as resources in this directory. These are text files named after the locale, for example,
+ * 'pfd_he_IL.txt' specifies an period formatter data file for Hebrew as spoken in Israel. Data is
+ * in a JSON-like format.
  */
-public class ResourceBasedPeriodFormatterDataService extends
-        PeriodFormatterDataService {
+public class ResourceBasedPeriodFormatterDataService extends PeriodFormatterDataService {
     private Collection<String> availableLocales; // of String
 
     private PeriodFormatterData lastData = null;
     private String lastLocale = null;
-    private Map<String, PeriodFormatterData> cache = new HashMap<String, PeriodFormatterData>(); // String -> PeriodFormatterData
+    private Map<String, PeriodFormatterData> cache =
+            new HashMap<String, PeriodFormatterData>(); // String -> PeriodFormatterData
     // private PeriodFormatterData fallbackFormatterData;
 
     private static final String PATH = "data/";
 
-    private static final ResourceBasedPeriodFormatterDataService singleton = new ResourceBasedPeriodFormatterDataService();
+    private static final ResourceBasedPeriodFormatterDataService singleton =
+            new ResourceBasedPeriodFormatterDataService();
 
-    /**
-     * Returns the singleton instance of this class.
-     */
+    /** Returns the singleton instance of this class. */
     public static ResourceBasedPeriodFormatterDataService getInstance() {
         return singleton;
     }
 
-    /**
-     * Constructs the service.
-     */
+    /** Constructs the service. */
     private ResourceBasedPeriodFormatterDataService() {
         List<String> localeNames = new ArrayList<String>(); // of String
-        InputStream is = ICUData.getRequiredStream(getClass(), PATH
-                + "index.txt");
+        InputStream is = ICUData.getRequiredStream(getClass(), PATH + "index.txt");
         try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(is,
-                    "UTF-8"));
+            BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
             String string = null;
             while (null != (string = br.readLine())) {
                 string = string.trim();
@@ -71,8 +65,8 @@ public class ResourceBasedPeriodFormatterDataService extends
             }
             br.close();
         } catch (IOException e) {
-            throw new IllegalStateException("IO Error reading " + PATH
-                    + "index.txt: " + e.toString());
+            throw new IllegalStateException(
+                    "IO Error reading " + PATH + "index.txt: " + e.toString());
         } finally {
             try {
                 is.close();
@@ -112,8 +106,9 @@ public class ResourceBasedPeriodFormatterDataService extends
                 if (ln != null) {
                     String name = PATH + "pfd_" + ln + ".xml";
                     try {
-                        InputStreamReader reader = new InputStreamReader(
-                                ICUData.getRequiredStream(getClass(), name), "UTF-8");
+                        InputStreamReader reader =
+                                new InputStreamReader(
+                                        ICUData.getRequiredStream(getClass(), name), "UTF-8");
                         DataRecord dr = DataRecord.read(ln, new XMLRecordReader(reader));
                         reader.close();
                         if (dr != null) {
@@ -132,13 +127,11 @@ public class ResourceBasedPeriodFormatterDataService extends
                         throw new MissingResourceException(
                                 "Unhandled encoding for resource " + name, name, "");
                     } catch (IOException e) {
-                        throw new ICUUncheckedIOException(
-                                "Failed to close() resource " + name, e);
+                        throw new ICUUncheckedIOException("Failed to close() resource " + name, e);
                     }
                 } else {
                     throw new MissingResourceException(
-                            "Duration data not found for  " + localeName, PATH,
-                            localeName);
+                            "Duration data not found for  " + localeName, PATH, localeName);
                 }
 
                 // if (ld == null) {

@@ -4,7 +4,6 @@ package com.ibm.icu.impl.number.parse;
 
 /**
  * @author sffc
- *
  */
 public class RequireCurrencyValidator extends ValidationMatcher {
 
@@ -19,5 +18,4 @@ public class RequireCurrencyValidator extends ValidationMatcher {
     public String toString() {
         return "<RequireCurrency>";
     }
-
 }

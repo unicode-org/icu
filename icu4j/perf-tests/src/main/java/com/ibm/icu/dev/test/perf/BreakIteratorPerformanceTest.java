@@ -43,7 +43,8 @@ public class BreakIteratorPerformanceTest extends PerfTest {
             BOMFreeReader reader = new BOMFreeReader(in, encoding);
             fileContents = new String(readToEOS(reader));
 
-            // // get rid of any characters that may cause differences between ICU4J and Java BreakIterator
+            // // get rid of any characters that may cause differences between ICU4J and Java
+            // BreakIterator
             // // fileContents = fileContents.replaceAll("[\t\f\r\n\\-/ ]+", " ");
             // String res = "";
             // StringTokenizer tokenizer = new StringTokenizer(fileContents, "\t\f\r\n-/ ");
@@ -99,8 +100,9 @@ public class BreakIteratorPerformanceTest extends PerfTest {
         // produce a token list
         ArrayList tokenList = new ArrayList();
         int start = iter.first();
-        for (int end = iter.next(); end != com.ibm.icu.text.BreakIterator.DONE; start = end, end = iter.next())
-            tokenList.add(fileContents.substring(start, end));
+        for (int end = iter.next();
+                end != com.ibm.icu.text.BreakIterator.DONE;
+                start = end, end = iter.next()) tokenList.add(fileContents.substring(start, end));
 
         // return the token list as a string array
         return (String[]) tokenList.toArray(new String[0]);
@@ -113,27 +115,37 @@ public class BreakIteratorPerformanceTest extends PerfTest {
         // produce a token list
         ArrayList tokenList = new ArrayList();
         int start = iter.first();
-        for (int end = iter.next(); end != com.ibm.icu.text.BreakIterator.DONE; start = end, end = iter.next())
-            tokenList.add(fileContents.substring(start, end));
+        for (int end = iter.next();
+                end != com.ibm.icu.text.BreakIterator.DONE;
+                start = end, end = iter.next()) tokenList.add(fileContents.substring(start, end));
 
         // return the token list as a string array
         return (String[]) tokenList.toArray(new String[0]);
     }
 
-    PerfTest.Function createTestICU(final com.ibm.icu.text.BreakIterator iIter, final String[] correct,
+    PerfTest.Function createTestICU(
+            final com.ibm.icu.text.BreakIterator iIter,
+            final String[] correct,
             final String breakType) {
         return new PerfTest.Function() {
             public void call() {
                 int k = 0;
                 int start = iIter.first();
-                for (int end = iIter.next(); end != com.ibm.icu.text.BreakIterator.DONE; start = end, end = iIter
-                        .next())
+                for (int end = iIter.next();
+                        end != com.ibm.icu.text.BreakIterator.DONE;
+                        start = end, end = iIter.next())
                     if (!correct[k++].equals(fileContents.substring(start, end)))
-                        throw new RuntimeException("ICU4J BreakIterator gave the wrong answer for " + breakType + " "
-                                + (k - 1) + " during the performance test. Cannot continue the performance test.");
+                        throw new RuntimeException(
+                                "ICU4J BreakIterator gave the wrong answer for "
+                                        + breakType
+                                        + " "
+                                        + (k - 1)
+                                        + " during the performance test. Cannot continue the performance test.");
                 if (k != correct.length)
-                    throw new RuntimeException("ICU4J BreakIterator gave the wrong number of " + breakType
-                            + "s during the performance test. Cannot continue the performance test.");
+                    throw new RuntimeException(
+                            "ICU4J BreakIterator gave the wrong number of "
+                                    + breakType
+                                    + "s during the performance test. Cannot continue the performance test.");
             }
 
             public long getOperationsPerIteration() {
@@ -142,18 +154,27 @@ public class BreakIteratorPerformanceTest extends PerfTest {
         };
     }
 
-    PerfTest.Function createTestJava(final java.text.BreakIterator jIter, final String[] correct, final String breakType) {
+    PerfTest.Function createTestJava(
+            final java.text.BreakIterator jIter, final String[] correct, final String breakType) {
         return new PerfTest.Function() {
             public void call() {
                 int k = 0;
                 int start = jIter.first();
-                for (int end = jIter.next(); end != java.text.BreakIterator.DONE; start = end, end = jIter.next())
+                for (int end = jIter.next();
+                        end != java.text.BreakIterator.DONE;
+                        start = end, end = jIter.next())
                     if (!correct[k++].equals(fileContents.substring(start, end)))
-                        throw new RuntimeException("Java BreakIterator gave the wrong answer for " + breakType + " "
-                                + (k - 1) + " during the performance test. Cannot continue the performance test.");
+                        throw new RuntimeException(
+                                "Java BreakIterator gave the wrong answer for "
+                                        + breakType
+                                        + " "
+                                        + (k - 1)
+                                        + " during the performance test. Cannot continue the performance test.");
                 if (k != correct.length)
-                    throw new RuntimeException("Java BreakIterator gave the wrong number of " + breakType
-                            + "s during the performance test. Cannot continue the performance test.");
+                    throw new RuntimeException(
+                            "Java BreakIterator gave the wrong number of "
+                                    + breakType
+                                    + "s during the performance test. Cannot continue the performance test.");
             }
 
             public long getOperationsPerIteration() {

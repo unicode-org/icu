@@ -2,10 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.number;
 
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Set;
-
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.StandardPlural;
@@ -15,14 +11,16 @@ import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.util.ICUException;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Set;
 
-/**
- * Datatype for compact notation data. Includes logic for data loading.
- */
+/** Datatype for compact notation data. Includes logic for data loading. */
 public class CompactData implements MultiplierProducer {
 
     public enum CompactType {
-        DECIMAL, CURRENCY
+        DECIMAL,
+        CURRENCY
     }
 
     // A dummy object used when a "0" compact decimal entry is encountered. This is necessary
@@ -44,14 +42,12 @@ public class CompactData implements MultiplierProducer {
     }
 
     public void populate(
-            ULocale locale,
-            String nsName,
-            CompactStyle compactStyle,
-            CompactType compactType) {
+            ULocale locale, String nsName, CompactStyle compactStyle, CompactType compactType) {
         assert isEmpty;
         CompactDataSink sink = new CompactDataSink(this);
-        ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle
-                .getBundleInstance(ICUData.ICU_BASE_NAME, locale);
+        ICUResourceBundle rb =
+                (ICUResourceBundle)
+                        UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, locale);
 
         boolean nsIsLatn = nsName.equals("latn");
         boolean compactIsShort = compactStyle == CompactStyle.SHORT;
@@ -81,10 +77,7 @@ public class CompactData implements MultiplierProducer {
 
     /** Produces a string like "NumberElements/latn/patternsShort/decimalFormat". */
     private static void getResourceBundleKey(
-            String nsName,
-            CompactStyle compactStyle,
-            CompactType compactType,
-            StringBuilder sb) {
+            String nsName, CompactStyle compactStyle, CompactType compactType, StringBuilder sb) {
         sb.setLength(0);
         sb.append("NumberElements/");
         sb.append(nsName);
@@ -95,8 +88,8 @@ public class CompactData implements MultiplierProducer {
     /** Java-only method used by CLDR tooling. */
     public void populate(Map<String, Map<String, String>> powersToPluralsToPatterns) {
         assert isEmpty;
-        for (Map.Entry<String, Map<String, String>> magnitudeEntry : powersToPluralsToPatterns
-                .entrySet()) {
+        for (Map.Entry<String, Map<String, String>> magnitudeEntry :
+                powersToPluralsToPatterns.entrySet()) {
             byte magnitude = (byte) (magnitudeEntry.getKey().length() - 1);
             for (Map.Entry<String, String> pluralEntry : magnitudeEntry.getValue().entrySet()) {
                 String pluralString = pluralEntry.getKey().toString();

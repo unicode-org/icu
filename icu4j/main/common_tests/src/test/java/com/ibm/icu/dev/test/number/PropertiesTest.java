@@ -2,6 +2,20 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.dev.test.number;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
+import com.ibm.icu.dev.test.serializable.SerializableTestUtility;
+import com.ibm.icu.impl.number.DecimalFormatProperties;
+import com.ibm.icu.impl.number.DecimalFormatProperties.ParseMode;
+import com.ibm.icu.impl.number.Padder.PadPosition;
+import com.ibm.icu.impl.number.PatternStringParser;
+import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
+import com.ibm.icu.text.CurrencyPluralInfo;
+import com.ibm.icu.text.MeasureFormat.FormatWidth;
+import com.ibm.icu.text.PluralRules;
+import com.ibm.icu.util.Currency;
+import com.ibm.icu.util.Currency.CurrencyUsage;
+import com.ibm.icu.util.MeasureUnit;
+import com.ibm.icu.util.ULocale;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -20,23 +34,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
 import org.junit.Test;
-
-import com.ibm.icu.dev.test.CoreTestFmwk;
-import com.ibm.icu.dev.test.serializable.SerializableTestUtility;
-import com.ibm.icu.impl.number.DecimalFormatProperties;
-import com.ibm.icu.impl.number.DecimalFormatProperties.ParseMode;
-import com.ibm.icu.impl.number.Padder.PadPosition;
-import com.ibm.icu.impl.number.PatternStringParser;
-import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
-import com.ibm.icu.text.CurrencyPluralInfo;
-import com.ibm.icu.text.MeasureFormat.FormatWidth;
-import com.ibm.icu.text.PluralRules;
-import com.ibm.icu.util.Currency;
-import com.ibm.icu.util.Currency.CurrencyUsage;
-import com.ibm.icu.util.MeasureUnit;
-import com.ibm.icu.util.ULocale;
 
 public class PropertiesTest extends CoreTestFmwk {
 
@@ -70,14 +68,15 @@ public class PropertiesTest extends CoreTestFmwk {
             }
 
             // Check for getters and setters
-            String fieldNamePascalCase = Character.toUpperCase(field.getName().charAt(0))
-                    + field.getName().substring(1);
+            String fieldNamePascalCase =
+                    Character.toUpperCase(field.getName().charAt(0)) + field.getName().substring(1);
             String getterName = "get" + fieldNamePascalCase;
             String setterName = "set" + fieldNamePascalCase;
             Method getter, setter;
             try {
                 getter = DecimalFormatProperties.class.getMethod(getterName);
-                assertEquals("Getter does not return correct type",
+                assertEquals(
+                        "Getter does not return correct type",
                         field.getType(),
                         getter.getReturnType());
             } catch (NoSuchMethodException e) {
@@ -89,7 +88,8 @@ public class PropertiesTest extends CoreTestFmwk {
             }
             try {
                 setter = DecimalFormatProperties.class.getMethod(setterName, field.getType());
-                assertEquals("Method " + setterName + " does not return correct type",
+                assertEquals(
+                        "Method " + setterName + " does not return correct type",
                         DecimalFormatProperties.class,
                         setter.getReturnType());
             } catch (NoSuchMethodException e) {
@@ -124,46 +124,85 @@ public class PropertiesTest extends CoreTestFmwk {
                 setter.invoke(p1, val0);
                 setter.invoke(p2, val0);
                 assertEquals("Equal outputs for equal DecimalFormatProperties inputs", p1, p2);
-                assertEquals("Equal outputs for equal DecimalFormatProperties inputs", p1.hashCode(), p2.hashCode());
-                assertEquals("Equal outputs for equal DecimalFormatProperties inputs", getter.invoke(p1), getter.invoke(p2));
-                assertEquals("Getter returns equal val set by setter for DecimalFormatProperties", getter.invoke(p1), val0);
-                assertNotEquals("Getter returns equal vals for equal inputs", getter.invoke(p1), val1);
+                assertEquals(
+                        "Equal outputs for equal DecimalFormatProperties inputs",
+                        p1.hashCode(),
+                        p2.hashCode());
+                assertEquals(
+                        "Equal outputs for equal DecimalFormatProperties inputs",
+                        getter.invoke(p1),
+                        getter.invoke(p2));
+                assertEquals(
+                        "Getter returns equal val set by setter for DecimalFormatProperties",
+                        getter.invoke(p1),
+                        val0);
+                assertNotEquals(
+                        "Getter returns equal vals for equal inputs", getter.invoke(p1), val1);
                 hashCodes.add(p1.hashCode());
                 setter.invoke(p1, val1);
                 assertNotEquals("Field " + field + " is missing from equals()", p1, p2);
-                assertNotEquals("Getter returns equal vals for equal inputs", getter.invoke(p1), getter.invoke(p2));
-                assertNotEquals("Getter returns equal vals for equal inputs", getter.invoke(p1), val0);
+                assertNotEquals(
+                        "Getter returns equal vals for equal inputs",
+                        getter.invoke(p1),
+                        getter.invoke(p2));
+                assertNotEquals(
+                        "Getter returns equal vals for equal inputs", getter.invoke(p1), val0);
                 assertEquals("Getter returns equal vals for equal inputs", getter.invoke(p1), val1);
                 setter.invoke(p1, val0);
                 assertEquals("Field " + field + " setter might have side effects", p1, p2);
-                assertEquals("Getter returns equal vals for equal inputs", p1.hashCode(), p2.hashCode());
-                assertEquals("Getter returns equal vals for equal inputs", getter.invoke(p1), getter.invoke(p2));
+                assertEquals(
+                        "Getter returns equal vals for equal inputs", p1.hashCode(), p2.hashCode());
+                assertEquals(
+                        "Getter returns equal vals for equal inputs",
+                        getter.invoke(p1),
+                        getter.invoke(p2));
                 setter.invoke(p1, val1);
                 setter.invoke(p2, val1);
                 assertEquals("Getter returns equal vals for equal inputs", p1, p2);
-                assertEquals("Getter returns equal vals for equal inputs", p1.hashCode(), p2.hashCode());
-                assertEquals("Getter returns equal vals for equal inputs", getter.invoke(p1), getter.invoke(p2));
+                assertEquals(
+                        "Getter returns equal vals for equal inputs", p1.hashCode(), p2.hashCode());
+                assertEquals(
+                        "Getter returns equal vals for equal inputs",
+                        getter.invoke(p1),
+                        getter.invoke(p2));
                 setter.invoke(p1, val2);
                 setter.invoke(p1, val1);
                 assertEquals("Field " + field + " setter might have side effects", p1, p2);
-                assertEquals("Getter returns equal vals for equal inputs", p1.hashCode(), p2.hashCode());
-                assertEquals("Getter returns equal vals for equal inputs", getter.invoke(p1), getter.invoke(p2));
+                assertEquals(
+                        "Getter returns equal vals for equal inputs", p1.hashCode(), p2.hashCode());
+                assertEquals(
+                        "Getter returns equal vals for equal inputs",
+                        getter.invoke(p1),
+                        getter.invoke(p2));
                 hashCodes.add(p1.hashCode());
 
                 // Check for clone behavior
                 DecimalFormatProperties copy = p1.clone();
                 assertEquals("Field " + field + " did not get copied in clone", p1, copy);
-                assertEquals("Getter returns equal vals for equal inputs", p1.hashCode(), copy.hashCode());
-                assertEquals("Getter returns equal vals for equal inputs", getter.invoke(p1), getter.invoke(copy));
+                assertEquals(
+                        "Getter returns equal vals for equal inputs",
+                        p1.hashCode(),
+                        copy.hashCode());
+                assertEquals(
+                        "Getter returns equal vals for equal inputs",
+                        getter.invoke(p1),
+                        getter.invoke(copy));
 
                 // Check for copyFrom behavior
                 setter.invoke(p1, val0);
                 assertNotEquals("Getter returns equal vals for equal inputs", p1, p2);
-                assertNotEquals("Getter returns equal vals for equal inputs", getter.invoke(p1), getter.invoke(p2));
+                assertNotEquals(
+                        "Getter returns equal vals for equal inputs",
+                        getter.invoke(p1),
+                        getter.invoke(p2));
                 p2.copyFrom(p1);
                 assertEquals("Field " + field + " is missing from copyFrom()", p1, p2);
-                assertEquals("Getter returns equal vals for equal inputs", p1.hashCode(), p2.hashCode());
-                assertEquals("Getter returns equal vals for equal inputs", getter.invoke(p1), getter.invoke(p2));
+                assertEquals(
+                        "Getter returns equal vals for equal inputs", p1.hashCode(), p2.hashCode());
+                assertEquals(
+                        "Getter returns equal vals for equal inputs",
+                        getter.invoke(p1),
+                        getter.invoke(p2));
 
                 // Load values into p3 and p4 for clear() behavior test
                 setter.invoke(p3, getSampleValueForType(field.getType(), 3));
@@ -190,20 +229,21 @@ public class PropertiesTest extends CoreTestFmwk {
         // fields.length unique values.
         // TODO: Should the requirement be stronger than this?
         assertTrue(
-                "Too many hash code collisions: " + hashCodes.size() + " out of " + (fields.length * 4),
+                "Too many hash code collisions: "
+                        + hashCodes.size()
+                        + " out of "
+                        + (fields.length * 4),
                 hashCodes.size() >= fields.length);
     }
 
     /**
      * Creates a valid sample instance of the given type. Used to simulate getters and setters.
      *
-     * @param type
-     *            The type to generate.
-     * @param seed
-     *            An integer seed, guaranteed to be positive. The same seed should generate two instances
-     *            that are equal. A different seed should in general generate two instances that are not
-     *            equal; this might not always be possible, such as with booleans or enums where there
-     *            are limited possible values.
+     * @param type The type to generate.
+     * @param seed An integer seed, guaranteed to be positive. The same seed should generate two
+     *     instances that are equal. A different seed should in general generate two instances that
+     *     are not equal; this might not always be possible, such as with booleans or enums where
+     *     there are limited possible values.
      * @return An instance of the specified type.
      */
     Object getSampleValueForType(Class<?> type, int seed) {
@@ -214,49 +254,41 @@ public class PropertiesTest extends CoreTestFmwk {
             return (seed % 2) == 0;
 
         } else if (type == BigDecimal.class) {
-            if (seed == 0)
-                return null;
+            if (seed == 0) return null;
             return new BigDecimal(seed * 1000002);
 
         } else if (type == String.class) {
-            if (seed == 0)
-                return null;
+            if (seed == 0) return null;
             return BigInteger.valueOf(seed * 1000003).toString(32);
 
         } else if (type == CompactStyle.class) {
-            if (seed == 0)
-                return null;
+            if (seed == 0) return null;
             CompactStyle[] values = CompactStyle.values();
             return values[seed % values.length];
 
         } else if (type == Currency.class) {
-            if (seed == 0)
-                return null;
+            if (seed == 0) return null;
             Object[] currencies = Currency.getAvailableCurrencies().toArray();
             return currencies[seed % currencies.length];
 
         } else if (type == CurrencyPluralInfo.class) {
-            if (seed == 0)
-                return null;
+            if (seed == 0) return null;
             ULocale[] locales = ULocale.getAvailableLocales();
             return CurrencyPluralInfo.getInstance(locales[seed % locales.length]);
 
         } else if (type == CurrencyUsage.class) {
-            if (seed == 0)
-                return null;
+            if (seed == 0) return null;
             CurrencyUsage[] values = CurrencyUsage.values();
             return values[seed % values.length];
 
         } else if (type == FormatWidth.class) {
-            if (seed == 0)
-                return null;
+            if (seed == 0) return null;
             FormatWidth[] values = FormatWidth.values();
             return values[seed % values.length];
 
         } else if (type == Map.class) {
             // Map<String,Map<String,String>> for compactCustomData property
-            if (seed == 0)
-                return null;
+            if (seed == 0) return null;
             Map<String, Map<String, String>> outer = new HashMap<String, Map<String, String>>();
             Map<String, String> inner = new HashMap<String, String>();
             inner.put("one", "0 thousand");
@@ -269,45 +301,40 @@ public class PropertiesTest extends CoreTestFmwk {
             return outer;
 
         } else if (type == MathContext.class) {
-            if (seed == 0)
-                return null;
+            if (seed == 0) return null;
             RoundingMode[] modes = RoundingMode.values();
             return new MathContext(seed, modes[seed % modes.length]);
 
         } else if (type == MeasureUnit.class) {
-            if (seed == 0)
-                return null;
+            if (seed == 0) return null;
             Object[] units = MeasureUnit.getAvailable().toArray();
             return units[seed % units.length];
 
         } else if (type == PadPosition.class) {
-            if (seed == 0)
-                return null;
+            if (seed == 0) return null;
             PadPosition[] values = PadPosition.values();
             return values[seed % values.length];
 
         } else if (type == ParseMode.class) {
-            if (seed == 0)
-                return null;
+            if (seed == 0) return null;
             ParseMode[] values = ParseMode.values();
             return values[seed % values.length];
 
         } else if (type == PluralRules.class) {
-            if (seed == 0)
-                return null;
+            if (seed == 0) return null;
             ULocale[] locales = PluralRules.getAvailableULocales();
             return PluralRules.forLocale(locales[seed % locales.length]);
 
         } else if (type == RoundingMode.class) {
-            if (seed == 0)
-                return null;
+            if (seed == 0) return null;
             RoundingMode[] values = RoundingMode.values();
             return values[seed % values.length];
 
         } else {
-            fail("Don't know how to handle type "
-                    + type
-                    + ". Please add it to getSampleValueForType().");
+            fail(
+                    "Don't know how to handle type "
+                            + type
+                            + ". Please add it to getSampleValueForType().");
             return null;
         }
     }
@@ -343,10 +370,12 @@ public class PropertiesTest extends CoreTestFmwk {
         @Override
         public Object[] getTestObjects() {
             return new Object[] {
-                    new DecimalFormatProperties(),
-                    PatternStringParser.parseToProperties("x#,##0.00%"),
-                    new DecimalFormatProperties().setCompactStyle(CompactStyle.LONG)
-                            .setMinimumExponentDigits(2) };
+                new DecimalFormatProperties(),
+                PatternStringParser.parseToProperties("x#,##0.00%"),
+                new DecimalFormatProperties()
+                        .setCompactStyle(CompactStyle.LONG)
+                        .setMinimumExponentDigits(2)
+            };
         }
 
         @Override
@@ -363,7 +392,7 @@ public class PropertiesTest extends CoreTestFmwk {
 
         @Override
         public Object[] getTestObjects() {
-            return new Object[] { new com.ibm.icu.impl.number.Properties() };
+            return new Object[] {new com.ibm.icu.impl.number.Properties()};
         }
 
         @Override

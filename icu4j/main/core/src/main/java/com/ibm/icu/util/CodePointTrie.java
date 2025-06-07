@@ -5,19 +5,17 @@
 
 package com.ibm.icu.util;
 
+import com.ibm.icu.impl.ICUBinary;
+import com.ibm.icu.impl.Normalizer2Impl.UTF16Plus;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-import com.ibm.icu.impl.ICUBinary;
-import com.ibm.icu.impl.Normalizer2Impl.UTF16Plus;
-
 /**
- * Immutable Unicode code point trie.
- * Fast, reasonably compact, map from Unicode code points (U+0000..U+10FFFF) to integer values.
- * For details see https://icu.unicode.org/design/struct/utrie
+ * Immutable Unicode code point trie. Fast, reasonably compact, map from Unicode code points
+ * (U+0000..U+10FFFF) to integer values. For details see https://icu.unicode.org/design/struct/utrie
  *
  * <p>This class is not intended for public subclassing.
  *
@@ -26,11 +24,10 @@ import com.ibm.icu.impl.Normalizer2Impl.UTF16Plus;
  */
 public abstract class CodePointTrie extends CodePointMap {
     /**
-     * Selectors for the type of a CodePointTrie.
-     * Different trade-offs for size vs. speed.
+     * Selectors for the type of a CodePointTrie. Different trade-offs for size vs. speed.
      *
-     * <p>Use null for {@link #fromBinary} to accept any type;
-     * {@link #getType} will return the actual type.
+     * <p>Use null for {@link #fromBinary} to accept any type; {@link #getType} will return the
+     * actual type.
      *
      * @see MutableCodePointTrie#buildImmutable(CodePointTrie.Type, CodePointTrie.ValueWidth)
      * @see #fromBinary
@@ -39,8 +36,8 @@ public abstract class CodePointTrie extends CodePointMap {
      */
     public enum Type {
         /**
-         * Fast/simple/larger BMP data structure.
-         * The {@link Fast} subclasses have additional functions for lookup for BMP and supplementary code points.
+         * Fast/simple/larger BMP data structure. The {@link Fast} subclasses have additional
+         * functions for lookup for BMP and supplementary code points.
          *
          * @see Fast
          * @stable ICU 63
@@ -58,15 +55,15 @@ public abstract class CodePointTrie extends CodePointMap {
     /**
      * Selectors for the number of bits in a CodePointTrie data value.
      *
-     * <p>Use null for {@link #fromBinary} to accept any data value width;
-     * {@link #getValueWidth} will return the actual data value width.
+     * <p>Use null for {@link #fromBinary} to accept any data value width; {@link #getValueWidth}
+     * will return the actual data value width.
      *
      * @stable ICU 63
      */
     public enum ValueWidth {
         /**
-         * The trie stores 16 bits per data value.
-         * It returns them as unsigned values 0..0xffff=65535.
+         * The trie stores 16 bits per data value. It returns them as unsigned values
+         * 0..0xffff=65535.
          *
          * @stable ICU 63
          */
@@ -78,16 +75,15 @@ public abstract class CodePointTrie extends CodePointMap {
          */
         BITS_32,
         /**
-         * The trie stores 8 bits per data value.
-         * It returns them as unsigned values 0..0xff=255.
+         * The trie stores 8 bits per data value. It returns them as unsigned values 0..0xff=255.
          *
          * @stable ICU 63
          */
         BITS_8
     }
 
-    private CodePointTrie(char[] index, Data data, int highStart,
-            int index3NullOffset, int dataNullOffset) {
+    private CodePointTrie(
+            char[] index, Data data, int highStart, int index3NullOffset, int dataNullOffset) {
         this.ascii = new int[ASCII_LIMIT];
         this.index = index;
         this.data = data;
@@ -108,20 +104,17 @@ public abstract class CodePointTrie extends CodePointMap {
     }
 
     /**
-     * Creates a trie from its binary form,
-     * stored in the ByteBuffer starting at the current position.
-     * Advances the buffer position to just after the trie data.
-     * Inverse of {@link #toBinary(OutputStream)}.
+     * Creates a trie from its binary form, stored in the ByteBuffer starting at the current
+     * position. Advances the buffer position to just after the trie data. Inverse of {@link
+     * #toBinary(OutputStream)}.
      *
-     * <p>The data is copied from the buffer;
-     * later modification of the buffer will not affect the trie.
+     * <p>The data is copied from the buffer; later modification of the buffer will not affect the
+     * trie.
      *
-     * @param type selects the trie type; this method throws an exception
-     *             if the type does not match the binary data;
-     *             use null to accept any type
+     * @param type selects the trie type; this method throws an exception if the type does not match
+     *     the binary data; use null to accept any type
      * @param valueWidth selects the number of bits in a data value; this method throws an exception
-     *                  if the valueWidth does not match the binary data;
-     *                  use null to accept any data value width
+     *     if the valueWidth does not match the binary data; use null to accept any data value width
      * @param bytes a buffer containing the binary data of a CodePointTrie
      * @return the trie
      * @see MutableCodePointTrie#MutableCodePointTrie(int, int)
@@ -143,27 +136,25 @@ public abstract class CodePointTrie extends CodePointMap {
 
             // Check the signature.
             switch (signature) {
-            case 0x54726933:
-                // The buffer is already set to the trie data byte order.
-                break;
-            case 0x33697254:
-                // Temporarily reverse the byte order.
-                boolean isBigEndian = outerByteOrder == ByteOrder.BIG_ENDIAN;
-                bytes.order(isBigEndian ? ByteOrder.LITTLE_ENDIAN : ByteOrder.BIG_ENDIAN);
-                signature = 0x54726933;
-                break;
-            default:
-                throw new ICUUncheckedIOException("Buffer does not contain a serialized CodePointTrie");
+                case 0x54726933:
+                    // The buffer is already set to the trie data byte order.
+                    break;
+                case 0x33697254:
+                    // Temporarily reverse the byte order.
+                    boolean isBigEndian = outerByteOrder == ByteOrder.BIG_ENDIAN;
+                    bytes.order(isBigEndian ? ByteOrder.LITTLE_ENDIAN : ByteOrder.BIG_ENDIAN);
+                    signature = 0x54726933;
+                    break;
+                default:
+                    throw new ICUUncheckedIOException(
+                            "Buffer does not contain a serialized CodePointTrie");
             }
 
             // struct UCPTrieHeader continued
             /**
-             * Options bit field:
-             * Bits 15..12: Data length bits 19..16.
-             * Bits 11..8: Data null block offset bits 19..16.
-             * Bits 7..6: UCPTrieType
-             * Bits 5..3: Reserved (0).
-             * Bits 2..0: UCPTrieValueWidth
+             * Options bit field: Bits 15..12: Data length bits 19..16. Bits 11..8: Data null block
+             * offset bits 19..16. Bits 7..6: UCPTrieType Bits 5..3: Reserved (0). Bits 2..0:
+             * UCPTrieValueWidth
              */
             int options = bytes.getChar();
 
@@ -180,8 +171,8 @@ public abstract class CodePointTrie extends CodePointMap {
             int dataNullOffset = bytes.getChar();
 
             /**
-             * First code point of the single-value range ending with U+10ffff,
-             * rounded up and then shifted right by SHIFT_2.
+             * First code point of the single-value range ending with U+10ffff, rounded up and then
+             * shifted right by SHIFT_2.
              */
             int shiftedHighStart = bytes.getChar();
             // struct UCPTrieHeader end
@@ -189,24 +180,37 @@ public abstract class CodePointTrie extends CodePointMap {
             int typeInt = (options >> 6) & 3;
             Type actualType;
             switch (typeInt) {
-            case 0: actualType = Type.FAST; break;
-            case 1: actualType = Type.SMALL; break;
-            default:
-                throw new ICUUncheckedIOException("CodePointTrie data header has an unsupported type");
+                case 0:
+                    actualType = Type.FAST;
+                    break;
+                case 1:
+                    actualType = Type.SMALL;
+                    break;
+                default:
+                    throw new ICUUncheckedIOException(
+                            "CodePointTrie data header has an unsupported type");
             }
 
             int valueWidthInt = options & OPTIONS_VALUE_BITS_MASK;
             ValueWidth actualValueWidth;
             switch (valueWidthInt) {
-            case 0: actualValueWidth = ValueWidth.BITS_16; break;
-            case 1: actualValueWidth = ValueWidth.BITS_32; break;
-            case 2: actualValueWidth = ValueWidth.BITS_8; break;
-            default:
-                throw new ICUUncheckedIOException("CodePointTrie data header has an unsupported value width");
+                case 0:
+                    actualValueWidth = ValueWidth.BITS_16;
+                    break;
+                case 1:
+                    actualValueWidth = ValueWidth.BITS_32;
+                    break;
+                case 2:
+                    actualValueWidth = ValueWidth.BITS_8;
+                    break;
+                default:
+                    throw new ICUUncheckedIOException(
+                            "CodePointTrie data header has an unsupported value width");
             }
 
             if ((options & OPTIONS_RESERVED_MASK) != 0) {
-                throw new ICUUncheckedIOException("CodePointTrie data header has unsupported options");
+                throw new ICUUncheckedIOException(
+                        "CodePointTrie data header has unsupported options");
             }
 
             if (type == null) {
@@ -216,7 +220,8 @@ public abstract class CodePointTrie extends CodePointMap {
                 valueWidth = actualValueWidth;
             }
             if (type != actualType || valueWidth != actualValueWidth) {
-                throw new ICUUncheckedIOException("CodePointTrie data header has a different type or value width than required");
+                throw new ICUUncheckedIOException(
+                        "CodePointTrie data header has a different type or value width than required");
             }
 
             // Get the length values and offsets.
@@ -240,26 +245,35 @@ public abstract class CodePointTrie extends CodePointMap {
 
             char[] index = ICUBinary.getChars(bytes, indexLength, 0);
             switch (valueWidth) {
-            case BITS_16: {
-                char[] data16 = ICUBinary.getChars(bytes, dataLength, 0);
-                return type == Type.FAST ?
-                        new Fast16(index, data16, highStart, index3NullOffset, dataNullOffset) :
-                            new Small16(index, data16, highStart, index3NullOffset, dataNullOffset);
-            }
-            case BITS_32: {
-                int[] data32 = ICUBinary.getInts(bytes, dataLength, 0);
-                return type == Type.FAST ?
-                        new Fast32(index, data32, highStart, index3NullOffset, dataNullOffset) :
-                            new Small32(index, data32, highStart, index3NullOffset, dataNullOffset);
-            }
-            case BITS_8: {
-                byte[] data8 = ICUBinary.getBytes(bytes, dataLength, 0);
-                return type == Type.FAST ?
-                        new Fast8(index, data8, highStart, index3NullOffset, dataNullOffset) :
-                            new Small8(index, data8, highStart, index3NullOffset, dataNullOffset);
-            }
-            default:
-                throw new AssertionError("should be unreachable");
+                case BITS_16:
+                    {
+                        char[] data16 = ICUBinary.getChars(bytes, dataLength, 0);
+                        return type == Type.FAST
+                                ? new Fast16(
+                                        index, data16, highStart, index3NullOffset, dataNullOffset)
+                                : new Small16(
+                                        index, data16, highStart, index3NullOffset, dataNullOffset);
+                    }
+                case BITS_32:
+                    {
+                        int[] data32 = ICUBinary.getInts(bytes, dataLength, 0);
+                        return type == Type.FAST
+                                ? new Fast32(
+                                        index, data32, highStart, index3NullOffset, dataNullOffset)
+                                : new Small32(
+                                        index, data32, highStart, index3NullOffset, dataNullOffset);
+                    }
+                case BITS_8:
+                    {
+                        byte[] data8 = ICUBinary.getBytes(bytes, dataLength, 0);
+                        return type == Type.FAST
+                                ? new Fast8(
+                                        index, data8, highStart, index3NullOffset, dataNullOffset)
+                                : new Small8(
+                                        index, data8, highStart, index3NullOffset, dataNullOffset);
+                    }
+                default:
+                    throw new AssertionError("should be unreachable");
             }
         } finally {
             bytes.order(outerByteOrder);
@@ -273,16 +287,20 @@ public abstract class CodePointTrie extends CodePointMap {
      * @stable ICU 63
      */
     public abstract Type getType();
+
     /**
      * Returns the number of bits in a trie data value.
      *
      * @return the number of bits in a trie data value
      * @stable ICU 63
      */
-    public final ValueWidth getValueWidth() { return data.getValueWidth(); }
+    public final ValueWidth getValueWidth() {
+        return data.getValueWidth();
+    }
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 63
      */
     @Override
@@ -305,8 +323,8 @@ public abstract class CodePointTrie extends CodePointMap {
 
     private static final int ASCII_LIMIT = 0x80;
 
-    private static final int maybeFilterValue(int value, int trieNullValue, int nullValue,
-            ValueFilter filter) {
+    private static final int maybeFilterValue(
+            int value, int trieNullValue, int nullValue, ValueFilter filter) {
         if (value == trieNullValue) {
             value = nullValue;
         } else if (filter != null) {
@@ -317,6 +335,7 @@ public abstract class CodePointTrie extends CodePointMap {
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 63
      */
     @Override
@@ -327,13 +346,17 @@ public abstract class CodePointTrie extends CodePointMap {
         if (start >= highStart) {
             int di = dataLength - HIGH_VALUE_NEG_DATA_OFFSET;
             int value = data.getFromIndex(di);
-            if (filter != null) { value = filter.apply(value); }
+            if (filter != null) {
+                value = filter.apply(value);
+            }
             range.set(start, MAX_UNICODE, value);
             return true;
         }
 
         int nullValue = this.nullValue;
-        if (filter != null) { nullValue = filter.apply(nullValue); }
+        if (filter != null) {
+            nullValue = filter.apply(nullValue);
+        }
         Type type = getType();
 
         int prevI3Block = -1;
@@ -356,16 +379,16 @@ public abstract class CodePointTrie extends CodePointMap {
                 // Use the multi-stage index.
                 int i1 = c >> SHIFT_1;
                 if (type == Type.FAST) {
-                    assert(0xffff < c && c < highStart);
+                    assert (0xffff < c && c < highStart);
                     i1 += BMP_INDEX_LENGTH - OMITTED_BMP_INDEX_1_LENGTH;
                 } else {
-                    assert(c < highStart && highStart > SMALL_LIMIT);
+                    assert (c < highStart && highStart > SMALL_LIMIT);
                     i1 += SMALL_INDEX_LENGTH;
                 }
                 i3Block = index[index[i1] + ((c >> SHIFT_2) & INDEX_2_MASK)];
                 if (i3Block == prevI3Block && (c - start) >= CP_PER_INDEX_2_ENTRY) {
                     // The index-3 block is the same as the previous one, and filled with value.
-                    assert((c & (CP_PER_INDEX_2_ENTRY - 1)) == 0);
+                    assert ((c & (CP_PER_INDEX_2_ENTRY - 1)) == 0);
                     c += CP_PER_INDEX_2_ENTRY;
                     continue;
                 }
@@ -404,7 +427,7 @@ public abstract class CodePointTrie extends CodePointMap {
                 }
                 if (block == prevBlock && (c - start) >= dataBlockLength) {
                     // The block is the same as the previous one, and filled with value.
-                    assert((c & (dataBlockLength - 1)) == 0);
+                    assert ((c & (dataBlockLength - 1)) == 0);
                     c += dataBlockLength;
                 } else {
                     int dataMask = dataBlockLength - 1;
@@ -427,13 +450,17 @@ public abstract class CodePointTrie extends CodePointMap {
                         int trieValue2 = data.getFromIndex(di);
                         if (haveValue) {
                             if (trieValue2 != trieValue) {
-                                if (filter == null ||
-                                        maybeFilterValue(trieValue2, this.nullValue, nullValue,
-                                                filter) != value) {
+                                if (filter == null
+                                        || maybeFilterValue(
+                                                        trieValue2,
+                                                        this.nullValue,
+                                                        nullValue,
+                                                        filter)
+                                                != value) {
                                     range.set(start, c - 1, value);
                                     return true;
                                 }
-                                trieValue = trieValue2;  // may or may not help
+                                trieValue = trieValue2; // may or may not help
                             }
                         } else {
                             trieValue = trieValue2;
@@ -443,20 +470,24 @@ public abstract class CodePointTrie extends CodePointMap {
                         while ((++c & dataMask) != 0) {
                             trieValue2 = data.getFromIndex(++di);
                             if (trieValue2 != trieValue) {
-                                if (filter == null ||
-                                        maybeFilterValue(trieValue2, this.nullValue, nullValue,
-                                                filter) != value) {
+                                if (filter == null
+                                        || maybeFilterValue(
+                                                        trieValue2,
+                                                        this.nullValue,
+                                                        nullValue,
+                                                        filter)
+                                                != value) {
                                     range.set(start, c - 1, value);
                                     return true;
                                 }
-                                trieValue = trieValue2;  // may or may not help
+                                trieValue = trieValue2; // may or may not help
                             }
                         }
                     }
                 }
             } while (++i3 < i3BlockLength);
         } while (c < highStart);
-        assert(haveValue);
+        assert (haveValue);
         int di = dataLength - HIGH_VALUE_NEG_DATA_OFFSET;
         int highValue = data.getFromIndex(di);
         if (maybeFilterValue(highValue, this.nullValue, nullValue, filter) != value) {
@@ -469,8 +500,7 @@ public abstract class CodePointTrie extends CodePointMap {
     }
 
     /**
-     * Writes a representation of the trie to the output stream.
-     * Inverse of {@link #fromBinary}.
+     * Writes a representation of the trie to the output stream. Inverse of {@link #fromBinary}.
      *
      * @param os the output stream
      * @return the number of bytes written
@@ -481,20 +511,22 @@ public abstract class CodePointTrie extends CodePointMap {
             DataOutputStream dos = new DataOutputStream(os);
 
             // Write the UCPTrieHeader
-            dos.writeInt(0x54726933);  // signature="Tri3"
-            dos.writeChar(  // options
-                ((dataLength & 0xf0000) >> 4) |
-                ((dataNullOffset & 0xf0000) >> 8) |
-                (getType().ordinal() << 6) |
-                getValueWidth().ordinal());
+            dos.writeInt(0x54726933); // signature="Tri3"
+            dos.writeChar( // options
+                    ((dataLength & 0xf0000) >> 4)
+                            | ((dataNullOffset & 0xf0000) >> 8)
+                            | (getType().ordinal() << 6)
+                            | getValueWidth().ordinal());
             dos.writeChar(index.length);
             dos.writeChar(dataLength);
             dos.writeChar(index3NullOffset);
             dos.writeChar(dataNullOffset);
-            dos.writeChar(highStart >> SHIFT_2);  // shiftedHighStart
-            int length = 16;  // sizeof(UCPTrieHeader)
+            dos.writeChar(highStart >> SHIFT_2); // shiftedHighStart
+            int length = 16; // sizeof(UCPTrieHeader)
 
-            for (char i : index) { dos.writeChar(i); }
+            for (char i : index) {
+                dos.writeChar(i);
+            }
             length += index.length * 2;
             length += data.write(dos);
             return length;
@@ -503,7 +535,9 @@ public abstract class CodePointTrie extends CodePointMap {
         }
     }
 
-    /** @internal */
+    /**
+     * @internal
+     */
     static final int FAST_SHIFT = 6;
 
     /** Number of entries in a data block for code points below the fast limit. 64=0x40 @internal */
@@ -512,18 +546,23 @@ public abstract class CodePointTrie extends CodePointMap {
     /** Mask for getting the lower bits for the in-fast-data-block offset. @internal */
     private static final int FAST_DATA_MASK = FAST_DATA_BLOCK_LENGTH - 1;
 
-    /** @internal */
+    /**
+     * @internal
+     */
     private static final int SMALL_MAX = 0xfff;
 
     /**
-     * Offset from dataLength (to be subtracted) for fetching the
-     * value returned for out-of-range code points and ill-formed UTF-8/16.
+     * Offset from dataLength (to be subtracted) for fetching the value returned for out-of-range
+     * code points and ill-formed UTF-8/16.
+     *
      * @internal
      */
     private static final int ERROR_VALUE_NEG_DATA_OFFSET = 1;
+
     /**
-     * Offset from dataLength (to be subtracted) for fetching the
-     * value returned for code points highStart..U+10FFFF.
+     * Offset from dataLength (to be subtracted) for fetching the value returned for code points
+     * highStart..U+10FFFF.
+     *
      * @internal
      */
     private static final int HIGH_VALUE_NEG_DATA_OFFSET = 2;
@@ -546,20 +585,20 @@ public abstract class CodePointTrie extends CodePointMap {
     private static final int SHIFT_1 = 5 + SHIFT_2;
 
     /**
-     * Difference between two shift sizes,
-     * for getting an index-2 offset from an index-3 offset. 5=9-4
+     * Difference between two shift sizes, for getting an index-2 offset from an index-3 offset.
+     * 5=9-4
      */
     static final int SHIFT_2_3 = SHIFT_2 - SHIFT_3;
 
     /**
-     * Difference between two shift sizes,
-     * for getting an index-1 offset from an index-2 offset. 5=14-9
+     * Difference between two shift sizes, for getting an index-1 offset from an index-2 offset.
+     * 5=14-9
      */
     static final int SHIFT_1_2 = SHIFT_1 - SHIFT_2;
 
     /**
-     * Number of index-1 entries for the BMP. (4)
-     * This part of the index-1 table is omitted from the serialized form.
+     * Number of index-1 entries for the BMP. (4) This part of the index-1 table is omitted from the
+     * serialized form.
      */
     private static final int OMITTED_BMP_INDEX_1_LENGTH = 0x10000 >> SHIFT_1;
 
@@ -589,96 +628,167 @@ public abstract class CodePointTrie extends CodePointMap {
     private static final int OPTIONS_DATA_NULL_OFFSET_MASK = 0xf00;
     private static final int OPTIONS_RESERVED_MASK = 0x38;
     private static final int OPTIONS_VALUE_BITS_MASK = 7;
+
     /**
-     * Value for index3NullOffset which indicates that there is no index-3 null block.
-     * Bit 15 is unused for this value because this bit is used if the index-3 contains
-     * 18-bit indexes.
+     * Value for index3NullOffset which indicates that there is no index-3 null block. Bit 15 is
+     * unused for this value because this bit is used if the index-3 contains 18-bit indexes.
      */
     static final int NO_INDEX3_NULL_OFFSET = 0x7fff;
+
     static final int NO_DATA_NULL_OFFSET = 0xfffff;
 
-    private static abstract class Data {
+    private abstract static class Data {
         abstract ValueWidth getValueWidth();
+
         abstract int getDataLength();
+
         abstract int getFromIndex(int index);
+
         abstract int write(DataOutputStream dos) throws IOException;
     }
 
     private static final class Data16 extends Data {
         char[] array;
-        Data16(char[] a) { array = a; }
-        @Override ValueWidth getValueWidth() { return ValueWidth.BITS_16; }
-        @Override int getDataLength() { return array.length; }
-        @Override int getFromIndex(int index) { return array[index]; }
-        @Override int write(DataOutputStream dos) throws IOException {
-            for (char v : array) { dos.writeChar(v); }
+
+        Data16(char[] a) {
+            array = a;
+        }
+
+        @Override
+        ValueWidth getValueWidth() {
+            return ValueWidth.BITS_16;
+        }
+
+        @Override
+        int getDataLength() {
+            return array.length;
+        }
+
+        @Override
+        int getFromIndex(int index) {
+            return array[index];
+        }
+
+        @Override
+        int write(DataOutputStream dos) throws IOException {
+            for (char v : array) {
+                dos.writeChar(v);
+            }
             return array.length * 2;
         }
     }
 
     private static final class Data32 extends Data {
         int[] array;
-        Data32(int[] a) { array = a; }
-        @Override ValueWidth getValueWidth() { return ValueWidth.BITS_32; }
-        @Override int getDataLength() { return array.length; }
-        @Override int getFromIndex(int index) { return array[index]; }
-        @Override int write(DataOutputStream dos) throws IOException {
-            for (int v : array) { dos.writeInt(v); }
+
+        Data32(int[] a) {
+            array = a;
+        }
+
+        @Override
+        ValueWidth getValueWidth() {
+            return ValueWidth.BITS_32;
+        }
+
+        @Override
+        int getDataLength() {
+            return array.length;
+        }
+
+        @Override
+        int getFromIndex(int index) {
+            return array[index];
+        }
+
+        @Override
+        int write(DataOutputStream dos) throws IOException {
+            for (int v : array) {
+                dos.writeInt(v);
+            }
             return array.length * 4;
         }
     }
 
     private static final class Data8 extends Data {
         byte[] array;
-        Data8(byte[] a) { array = a; }
-        @Override ValueWidth getValueWidth() { return ValueWidth.BITS_8; }
-        @Override int getDataLength() { return array.length; }
-        @Override int getFromIndex(int index) { return array[index] & 0xff; }
-        @Override int write(DataOutputStream dos) throws IOException {
-            for (byte v : array) { dos.writeByte(v); }
+
+        Data8(byte[] a) {
+            array = a;
+        }
+
+        @Override
+        ValueWidth getValueWidth() {
+            return ValueWidth.BITS_8;
+        }
+
+        @Override
+        int getDataLength() {
+            return array.length;
+        }
+
+        @Override
+        int getFromIndex(int index) {
+            return array[index] & 0xff;
+        }
+
+        @Override
+        int write(DataOutputStream dos) throws IOException {
+            for (byte v : array) {
+                dos.writeByte(v);
+            }
             return array.length;
         }
     }
 
-    /** @internal */
+    /**
+     * @internal
+     */
     private final int[] ascii;
 
-    /** @internal */
+    /**
+     * @internal
+     */
     private final char[] index;
 
     /**
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    @Deprecated
-    protected final Data data;
-    /**
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    @Deprecated
-    protected final int dataLength;
-    /**
-     * Start of the last range which ends at U+10FFFF.
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    @Deprecated
-    protected final int highStart;
+    @Deprecated protected final Data data;
 
     /**
-     * Internal index-3 null block offset.
-     * Set to an impossibly high value (e.g., 0xffff) if there is no dedicated index-3 null block.
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated protected final int dataLength;
+
+    /**
+     * Start of the last range which ends at U+10FFFF.
+     *
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated protected final int highStart;
+
+    /**
+     * Internal index-3 null block offset. Set to an impossibly high value (e.g., 0xffff) if there
+     * is no dedicated index-3 null block.
+     *
      * @internal
      */
     private final int index3NullOffset;
+
     /**
-     * Internal data null block offset, not shifted.
-     * Set to an impossibly high value (e.g., 0xfffff) if there is no dedicated data null block.
+     * Internal data null block offset, not shifted. Set to an impossibly high value (e.g., 0xfffff)
+     * if there is no dedicated data null block.
+     *
      * @internal
      */
     private final int dataNullOffset;
-    /** @internal */
+
+    /**
+     * @internal
+     */
     private final int nullValue;
 
     /**
@@ -707,10 +817,10 @@ public abstract class CodePointTrie extends CodePointMap {
     private final int internalSmallIndex(Type type, int c) {
         int i1 = c >> SHIFT_1;
         if (type == Type.FAST) {
-            assert(0xffff < c && c < highStart);
+            assert (0xffff < c && c < highStart);
             i1 += BMP_INDEX_LENGTH - OMITTED_BMP_INDEX_1_LENGTH;
         } else {
-            assert(0 <= c && c < highStart && highStart > SMALL_LIMIT);
+            assert (0 <= c && c < highStart && highStart > SMALL_LIMIT);
             i1 += SMALL_INDEX_LENGTH;
         }
         int i3Block = index[index[i1] + ((c >> SHIFT_2) & INDEX_2_MASK)];
@@ -741,20 +851,19 @@ public abstract class CodePointTrie extends CodePointMap {
      *
      * @stable ICU 63
      */
-    public static abstract class Fast extends CodePointTrie {
-        private Fast(char[] index, Data data, int highStart,
-                int index3NullOffset, int dataNullOffset) {
+    public abstract static class Fast extends CodePointTrie {
+        private Fast(
+                char[] index, Data data, int highStart, int index3NullOffset, int dataNullOffset) {
             super(index, data, highStart, index3NullOffset, dataNullOffset);
         }
 
         /**
-         * Creates a trie from its binary form.
-         * Same as {@link CodePointTrie#fromBinary(Type, ValueWidth, ByteBuffer)}
-         * with {@link Type#FAST}.
+         * Creates a trie from its binary form. Same as {@link CodePointTrie#fromBinary(Type,
+         * ValueWidth, ByteBuffer)} with {@link Type#FAST}.
          *
-         * @param valueWidth selects the number of bits in a data value; this method throws an exception
-         *                  if the valueWidth does not match the binary data;
-         *                  use null to accept any data value width
+         * @param valueWidth selects the number of bits in a data value; this method throws an
+         *     exception if the valueWidth does not match the binary data; use null to accept any
+         *     data value width
          * @param bytes a buffer containing the binary data of a CodePointTrie
          * @return the trie
          * @stable ICU 63
@@ -768,12 +877,14 @@ public abstract class CodePointTrie extends CodePointMap {
          * @stable ICU 63
          */
         @Override
-        public final Type getType() { return Type.FAST; }
+        public final Type getType() {
+            return Type.FAST;
+        }
 
         /**
-         * Returns a trie value for a BMP code point (U+0000..U+FFFF), without range checking.
-         * Can be used to look up a value for a UTF-16 code unit if other parts of
-         * the string processing check for surrogates.
+         * Returns a trie value for a BMP code point (U+0000..U+FFFF), without range checking. Can
+         * be used to look up a value for a UTF-16 code unit if other parts of the string processing
+         * check for surrogates.
          *
          * @param c the input code point, must be U+0000..U+FFFF
          * @return The BMP code point's trie value.
@@ -782,8 +893,8 @@ public abstract class CodePointTrie extends CodePointMap {
         public abstract int bmpGet(int c);
 
         /**
-         * Returns a trie value for a supplementary code point (U+10000..U+10FFFF),
-         * without range checking.
+         * Returns a trie value for a supplementary code point (U+10000..U+10FFFF), without range
+         * checking.
          *
          * @param c the input code point, must be U+10000..U+10FFFF
          * @return The supplementary code point's trie value.
@@ -810,6 +921,7 @@ public abstract class CodePointTrie extends CodePointMap {
 
         /**
          * {@inheritDoc}
+         *
          * @stable ICU 63
          */
         @Override
@@ -834,8 +946,9 @@ public abstract class CodePointTrie extends CodePointMap {
                     dataIndex = fastIndex(c);
                 } else {
                     char trail;
-                    if (UTF16Plus.isSurrogateLead(lead) && sIndex < s.length() &&
-                            Character.isLowSurrogate(trail = s.charAt(sIndex))) {
+                    if (UTF16Plus.isSurrogateLead(lead)
+                            && sIndex < s.length()
+                            && Character.isLowSurrogate(trail = s.charAt(sIndex))) {
                         ++sIndex;
                         c = Character.toCodePoint(lead, trail);
                         dataIndex = smallIndex(Type.FAST, c);
@@ -859,8 +972,9 @@ public abstract class CodePointTrie extends CodePointMap {
                     dataIndex = fastIndex(c);
                 } else {
                     char lead;
-                    if (!UTF16Plus.isSurrogateLead(trail) && sIndex > 0 &&
-                            Character.isHighSurrogate(lead = s.charAt(sIndex - 1))) {
+                    if (!UTF16Plus.isSurrogateLead(trail)
+                            && sIndex > 0
+                            && Character.isHighSurrogate(lead = s.charAt(sIndex - 1))) {
                         --sIndex;
                         c = Character.toCodePoint(lead, trail);
                         dataIndex = smallIndex(Type.FAST, c);
@@ -879,20 +993,19 @@ public abstract class CodePointTrie extends CodePointMap {
      *
      * @stable ICU 63
      */
-    public static abstract class Small extends CodePointTrie {
-        private Small(char[] index, Data data, int highStart,
-                int index3NullOffset, int dataNullOffset) {
+    public abstract static class Small extends CodePointTrie {
+        private Small(
+                char[] index, Data data, int highStart, int index3NullOffset, int dataNullOffset) {
             super(index, data, highStart, index3NullOffset, dataNullOffset);
         }
 
         /**
-         * Creates a trie from its binary form.
-         * Same as {@link CodePointTrie#fromBinary(Type, ValueWidth, ByteBuffer)}
-         * with {@link Type#SMALL}.
+         * Creates a trie from its binary form. Same as {@link CodePointTrie#fromBinary(Type,
+         * ValueWidth, ByteBuffer)} with {@link Type#SMALL}.
          *
-         * @param valueWidth selects the number of bits in a data value; this method throws an exception
-         *                  if the valueWidth does not match the binary data;
-         *                  use null to accept any data value width
+         * @param valueWidth selects the number of bits in a data value; this method throws an
+         *     exception if the valueWidth does not match the binary data; use null to accept any
+         *     data value width
          * @param bytes a buffer containing the binary data of a CodePointTrie
          * @return the trie
          * @stable ICU 63
@@ -906,7 +1019,9 @@ public abstract class CodePointTrie extends CodePointMap {
          * @stable ICU 63
          */
         @Override
-        public final Type getType() { return Type.SMALL; }
+        public final Type getType() {
+            return Type.SMALL;
+        }
 
         /**
          * @internal
@@ -927,6 +1042,7 @@ public abstract class CodePointTrie extends CodePointMap {
 
         /**
          * {@inheritDoc}
+         *
          * @stable ICU 63
          */
         @Override
@@ -951,8 +1067,9 @@ public abstract class CodePointTrie extends CodePointMap {
                     dataIndex = cpIndex(c);
                 } else {
                     char trail;
-                    if (UTF16Plus.isSurrogateLead(lead) && sIndex < s.length() &&
-                            Character.isLowSurrogate(trail = s.charAt(sIndex))) {
+                    if (UTF16Plus.isSurrogateLead(lead)
+                            && sIndex < s.length()
+                            && Character.isLowSurrogate(trail = s.charAt(sIndex))) {
                         ++sIndex;
                         c = Character.toCodePoint(lead, trail);
                         dataIndex = smallIndex(Type.SMALL, c);
@@ -976,8 +1093,9 @@ public abstract class CodePointTrie extends CodePointMap {
                     dataIndex = cpIndex(c);
                 } else {
                     char lead;
-                    if (!UTF16Plus.isSurrogateLead(trail) && sIndex > 0 &&
-                            Character.isHighSurrogate(lead = s.charAt(sIndex - 1))) {
+                    if (!UTF16Plus.isSurrogateLead(trail)
+                            && sIndex > 0
+                            && Character.isHighSurrogate(lead = s.charAt(sIndex - 1))) {
                         --sIndex;
                         c = Character.toCodePoint(lead, trail);
                         dataIndex = smallIndex(Type.SMALL, c);
@@ -999,16 +1117,19 @@ public abstract class CodePointTrie extends CodePointMap {
     public static final class Fast16 extends Fast {
         private final char[] dataArray;
 
-        Fast16(char[] index, char[] data16, int highStart,
-                int index3NullOffset, int dataNullOffset) {
+        Fast16(
+                char[] index,
+                char[] data16,
+                int highStart,
+                int index3NullOffset,
+                int dataNullOffset) {
             super(index, new Data16(data16), highStart, index3NullOffset, dataNullOffset);
             this.dataArray = data16;
         }
 
         /**
-         * Creates a trie from its binary form.
-         * Same as {@link CodePointTrie#fromBinary(Type, ValueWidth, ByteBuffer)}
-         * with {@link Type#FAST} and {@link ValueWidth#BITS_16}.
+         * Creates a trie from its binary form. Same as {@link CodePointTrie#fromBinary(Type,
+         * ValueWidth, ByteBuffer)} with {@link Type#FAST} and {@link ValueWidth#BITS_16}.
          *
          * @param bytes a buffer containing the binary data of a CodePointTrie
          * @return the trie
@@ -1020,6 +1141,7 @@ public abstract class CodePointTrie extends CodePointMap {
 
         /**
          * {@inheritDoc}
+         *
          * @stable ICU 63
          */
         @Override
@@ -1029,6 +1151,7 @@ public abstract class CodePointTrie extends CodePointMap {
 
         /**
          * {@inheritDoc}
+         *
          * @stable ICU 63
          */
         @Override
@@ -1039,6 +1162,7 @@ public abstract class CodePointTrie extends CodePointMap {
 
         /**
          * {@inheritDoc}
+         *
          * @stable ICU 63
          */
         @Override
@@ -1056,16 +1180,19 @@ public abstract class CodePointTrie extends CodePointMap {
     public static final class Fast32 extends Fast {
         private final int[] dataArray;
 
-        Fast32(char[] index, int[] data32, int highStart,
-                int index3NullOffset, int dataNullOffset) {
+        Fast32(
+                char[] index,
+                int[] data32,
+                int highStart,
+                int index3NullOffset,
+                int dataNullOffset) {
             super(index, new Data32(data32), highStart, index3NullOffset, dataNullOffset);
             this.dataArray = data32;
         }
 
         /**
-         * Creates a trie from its binary form.
-         * Same as {@link CodePointTrie#fromBinary(Type, ValueWidth, ByteBuffer)}
-         * with {@link Type#FAST} and {@link ValueWidth#BITS_32}.
+         * Creates a trie from its binary form. Same as {@link CodePointTrie#fromBinary(Type,
+         * ValueWidth, ByteBuffer)} with {@link Type#FAST} and {@link ValueWidth#BITS_32}.
          *
          * @param bytes a buffer containing the binary data of a CodePointTrie
          * @return the trie
@@ -1077,6 +1204,7 @@ public abstract class CodePointTrie extends CodePointMap {
 
         /**
          * {@inheritDoc}
+         *
          * @stable ICU 63
          */
         @Override
@@ -1086,6 +1214,7 @@ public abstract class CodePointTrie extends CodePointMap {
 
         /**
          * {@inheritDoc}
+         *
          * @stable ICU 63
          */
         @Override
@@ -1096,6 +1225,7 @@ public abstract class CodePointTrie extends CodePointMap {
 
         /**
          * {@inheritDoc}
+         *
          * @stable ICU 63
          */
         @Override
@@ -1113,16 +1243,14 @@ public abstract class CodePointTrie extends CodePointMap {
     public static final class Fast8 extends Fast {
         private final byte[] dataArray;
 
-        Fast8(char[] index, byte[] data8, int highStart,
-                int index3NullOffset, int dataNullOffset) {
+        Fast8(char[] index, byte[] data8, int highStart, int index3NullOffset, int dataNullOffset) {
             super(index, new Data8(data8), highStart, index3NullOffset, dataNullOffset);
             this.dataArray = data8;
         }
 
         /**
-         * Creates a trie from its binary form.
-         * Same as {@link CodePointTrie#fromBinary(Type, ValueWidth, ByteBuffer)}
-         * with {@link Type#FAST} and {@link ValueWidth#BITS_8}.
+         * Creates a trie from its binary form. Same as {@link CodePointTrie#fromBinary(Type,
+         * ValueWidth, ByteBuffer)} with {@link Type#FAST} and {@link ValueWidth#BITS_8}.
          *
          * @param bytes a buffer containing the binary data of a CodePointTrie
          * @return the trie
@@ -1134,6 +1262,7 @@ public abstract class CodePointTrie extends CodePointMap {
 
         /**
          * {@inheritDoc}
+         *
          * @stable ICU 63
          */
         @Override
@@ -1143,6 +1272,7 @@ public abstract class CodePointTrie extends CodePointMap {
 
         /**
          * {@inheritDoc}
+         *
          * @stable ICU 63
          */
         @Override
@@ -1153,6 +1283,7 @@ public abstract class CodePointTrie extends CodePointMap {
 
         /**
          * {@inheritDoc}
+         *
          * @stable ICU 63
          */
         @Override
@@ -1168,15 +1299,18 @@ public abstract class CodePointTrie extends CodePointMap {
      * @stable ICU 63
      */
     public static final class Small16 extends Small {
-        Small16(char[] index, char[] data16, int highStart,
-                int index3NullOffset, int dataNullOffset) {
+        Small16(
+                char[] index,
+                char[] data16,
+                int highStart,
+                int index3NullOffset,
+                int dataNullOffset) {
             super(index, new Data16(data16), highStart, index3NullOffset, dataNullOffset);
         }
 
         /**
-         * Creates a trie from its binary form.
-         * Same as {@link CodePointTrie#fromBinary(Type, ValueWidth, ByteBuffer)}
-         * with {@link Type#SMALL} and {@link ValueWidth#BITS_16}.
+         * Creates a trie from its binary form. Same as {@link CodePointTrie#fromBinary(Type,
+         * ValueWidth, ByteBuffer)} with {@link Type#SMALL} and {@link ValueWidth#BITS_16}.
          *
          * @param bytes a buffer containing the binary data of a CodePointTrie
          * @return the trie
@@ -1193,15 +1327,18 @@ public abstract class CodePointTrie extends CodePointMap {
      * @stable ICU 63
      */
     public static final class Small32 extends Small {
-        Small32(char[] index, int[] data32, int highStart,
-                int index3NullOffset, int dataNullOffset) {
+        Small32(
+                char[] index,
+                int[] data32,
+                int highStart,
+                int index3NullOffset,
+                int dataNullOffset) {
             super(index, new Data32(data32), highStart, index3NullOffset, dataNullOffset);
         }
 
         /**
-         * Creates a trie from its binary form.
-         * Same as {@link CodePointTrie#fromBinary(Type, ValueWidth, ByteBuffer)}
-         * with {@link Type#SMALL} and {@link ValueWidth#BITS_32}.
+         * Creates a trie from its binary form. Same as {@link CodePointTrie#fromBinary(Type,
+         * ValueWidth, ByteBuffer)} with {@link Type#SMALL} and {@link ValueWidth#BITS_32}.
          *
          * @param bytes a buffer containing the binary data of a CodePointTrie
          * @return the trie
@@ -1218,15 +1355,18 @@ public abstract class CodePointTrie extends CodePointMap {
      * @stable ICU 63
      */
     public static final class Small8 extends Small {
-        Small8(char[] index, byte[] data8, int highStart,
-                int index3NullOffset, int dataNullOffset) {
+        Small8(
+                char[] index,
+                byte[] data8,
+                int highStart,
+                int index3NullOffset,
+                int dataNullOffset) {
             super(index, new Data8(data8), highStart, index3NullOffset, dataNullOffset);
         }
 
         /**
-         * Creates a trie from its binary form.
-         * Same as {@link CodePointTrie#fromBinary(Type, ValueWidth, ByteBuffer)}
-         * with {@link Type#SMALL} and {@link ValueWidth#BITS_8}.
+         * Creates a trie from its binary form. Same as {@link CodePointTrie#fromBinary(Type,
+         * ValueWidth, ByteBuffer)} with {@link Type#SMALL} and {@link ValueWidth#BITS_8}.
          *
          * @param bytes a buffer containing the binary data of a CodePointTrie
          * @return the trie

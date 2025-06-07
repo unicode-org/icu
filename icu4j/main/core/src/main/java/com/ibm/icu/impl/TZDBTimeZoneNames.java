@@ -8,6 +8,10 @@
  */
 package com.ibm.icu.impl;
 
+import com.ibm.icu.impl.TextTrieMap.ResultHandler;
+import com.ibm.icu.text.TimeZoneNames;
+import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.UResourceBundle;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
@@ -17,25 +21,17 @@ import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.ibm.icu.impl.TextTrieMap.ResultHandler;
-import com.ibm.icu.text.TimeZoneNames;
-import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.UResourceBundle;
-
 /**
- * Yet another TimeZoneNames implementation based on the tz database.
- * This implementation contains only tz abbreviations (short standard
- * and daylight names) for each metazone.
+ * Yet another TimeZoneNames implementation based on the tz database. This implementation contains
+ * only tz abbreviations (short standard and daylight names) for each metazone.
  *
- * The data file $ICU4C_ROOT/source/data/zone/tzdbNames.txt contains
- * the metazone - abbreviations mapping data (manually edited).
+ * <p>The data file $ICU4C_ROOT/source/data/zone/tzdbNames.txt contains the metazone - abbreviations
+ * mapping data (manually edited).
  *
- * Note: The abbreviations in the tz database are not necessarily
- * unique. For example, parsing abbreviation "IST" is ambiguous
- * (can be parsed as India Standard Time or Israel Standard Time).
- * The data file (tzdbNames.txt) contains regional mapping, and
- * the locale in the constructor is used as a hint for resolving
- * these ambiguous names.
+ * <p>Note: The abbreviations in the tz database are not necessarily unique. For example, parsing
+ * abbreviation "IST" is ambiguous (can be parsed as India Standard Time or Israel Standard Time).
+ * The data file (tzdbNames.txt) contains regional mapping, and the locale in the constructor is
+ * used as a hint for resolving these ambiguous names.
  */
 public class TZDBTimeZoneNames extends TimeZoneNames {
     private static final long serialVersionUID = 1L;
@@ -46,10 +42,11 @@ public class TZDBTimeZoneNames extends TimeZoneNames {
     private static volatile TextTrieMap<TZDBNameInfo> TZDB_NAMES_TRIE = null;
 
     private static final ICUResourceBundle ZONESTRINGS;
+
     static {
-        UResourceBundle bundle = ICUResourceBundle
-                .getBundleInstance(ICUData.ICU_ZONE_BASE_NAME, "tzdbNames");
-        ZONESTRINGS = (ICUResourceBundle)bundle.get("zoneStrings");
+        UResourceBundle bundle =
+                ICUResourceBundle.getBundleInstance(ICUData.ICU_ZONE_BASE_NAME, "tzdbNames");
+        ZONESTRINGS = (ICUResourceBundle) bundle.get("zoneStrings");
     }
 
     private ULocale _locale;
@@ -97,8 +94,9 @@ public class TZDBTimeZoneNames extends TimeZoneNames {
      */
     @Override
     public String getMetaZoneDisplayName(String mzID, NameType type) {
-        if (mzID == null || mzID.length() == 0 ||
-                (type != NameType.SHORT_STANDARD && type != NameType.SHORT_DAYLIGHT)) {
+        if (mzID == null
+                || mzID.length() == 0
+                || (type != NameType.SHORT_STANDARD && type != NameType.SHORT_DAYLIGHT)) {
             return null;
         }
         return getMetaZoneNames(mzID).getName(type);
@@ -114,12 +112,12 @@ public class TZDBTimeZoneNames extends TimeZoneNames {
         return null;
     }
 
-//    /* (non-Javadoc)
-//     * @see com.ibm.icu.text.TimeZoneNames#getExemplarLocationName(java.lang.String)
-//     */
-//    public String getExemplarLocationName(String tzID) {
-//        return super.getExemplarLocationName(tzID);
-//    }
+    //    /* (non-Javadoc)
+    //     * @see com.ibm.icu.text.TimeZoneNames#getExemplarLocationName(java.lang.String)
+    //     */
+    //    public String getExemplarLocationName(String tzID) {
+    //        return super.getExemplarLocationName(tzID);
+    //    }
 
     /* (non-Javadoc)
      * @see com.ibm.icu.text.TimeZoneNames#find(java.lang.CharSequence, int, java.util.EnumSet)
@@ -155,7 +153,7 @@ public class TZDBTimeZoneNames extends TimeZoneNames {
 
             ICUResourceBundle table = null;
             try {
-                table = (ICUResourceBundle)zoneStrings.get(key);
+                table = (ICUResourceBundle) zoneStrings.get(key);
             } catch (MissingResourceException e) {
                 return EMPTY_TZDBNAMES;
             }
@@ -177,7 +175,7 @@ public class TZDBTimeZoneNames extends TimeZoneNames {
 
             String[] parseRegions = null;
             try {
-                ICUResourceBundle regionsRes = (ICUResourceBundle)table.get("parseRegions");
+                ICUResourceBundle regionsRes = (ICUResourceBundle) table.get("parseRegions");
                 if (regionsRes.getType() == UResourceBundle.STRING) {
                     parseRegions = new String[1];
                     parseRegions[0] = regionsRes.getString();
@@ -197,16 +195,16 @@ public class TZDBTimeZoneNames extends TimeZoneNames {
             }
             String name = null;
             switch (type) {
-            case SHORT_STANDARD:
-                name = _names[0];
-                break;
-            case SHORT_DAYLIGHT:
-                name = _names[1];
-                break;
-            default:
-                // No names for all other types handled by
-                // this class.
-                break;
+                case SHORT_STANDARD:
+                    name = _names[0];
+                    break;
+                case SHORT_DAYLIGHT:
+                    name = _names[1];
+                    break;
+                default:
+                    // No names for all other types handled by
+                    // this class.
+                    break;
             }
 
             return name;
@@ -326,6 +324,7 @@ public class TZDBTimeZoneNames extends TimeZoneNames {
 
         /**
          * Returns the match results
+         *
          * @return the match results
          */
         public Collection<MatchInfo> getMatches() {
@@ -349,7 +348,7 @@ public class TZDBTimeZoneNames extends TimeZoneNames {
 
     private static void prepareFind() {
         if (TZDB_NAMES_TRIE == null) {
-            synchronized(TZDBTimeZoneNames.class) {
+            synchronized (TZDBTimeZoneNames.class) {
                 if (TZDB_NAMES_TRIE == null) {
                     // loading all names into trie
                     TextTrieMap<TZDBNameInfo> trie = new TextTrieMap<TZDBNameInfo>(true);
@@ -372,17 +371,21 @@ public class TZDBTimeZoneNames extends TimeZoneNames {
                         boolean ambiguousType = (std != null && dst != null && std.equals(dst));
 
                         if (std != null) {
-                            TZDBNameInfo stdInf = new TZDBNameInfo(mzID,
-                                    NameType.SHORT_STANDARD,
-                                    ambiguousType,
-                                    parseRegions);
+                            TZDBNameInfo stdInf =
+                                    new TZDBNameInfo(
+                                            mzID,
+                                            NameType.SHORT_STANDARD,
+                                            ambiguousType,
+                                            parseRegions);
                             trie.put(std, stdInf);
                         }
                         if (dst != null) {
-                            TZDBNameInfo dstInf = new TZDBNameInfo(mzID,
-                                    NameType.SHORT_DAYLIGHT,
-                                    ambiguousType,
-                                    parseRegions);
+                            TZDBNameInfo dstInf =
+                                    new TZDBNameInfo(
+                                            mzID,
+                                            NameType.SHORT_DAYLIGHT,
+                                            ambiguousType,
+                                            parseRegions);
                             trie.put(dst, dstInf);
                         }
                     }

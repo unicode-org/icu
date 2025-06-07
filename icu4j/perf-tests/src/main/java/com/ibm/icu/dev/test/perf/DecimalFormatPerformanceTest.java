@@ -37,16 +37,17 @@ public class DecimalFormatPerformanceTest extends PerfTest {
 
             pattern = args[0];
 
-            if (locale == null)
-                locale = Locale.getDefault();
+            if (locale == null) locale = Locale.getDefault();
 
             icuDecimalFormat = new com.ibm.icu.text.DecimalFormat[threads];
             javaDecimalFormat = new java.text.DecimalFormat[threads];
             for (int i = 0; i < threads; i++) {
-                icuDecimalFormat[i] = new com.ibm.icu.text.DecimalFormat(pattern,
-                        new com.ibm.icu.text.DecimalFormatSymbols(locale));
-                javaDecimalFormat[i] = new java.text.DecimalFormat(pattern,
-                        new java.text.DecimalFormatSymbols(locale));
+                icuDecimalFormat[i] =
+                        new com.ibm.icu.text.DecimalFormat(
+                                pattern, new com.ibm.icu.text.DecimalFormatSymbols(locale));
+                javaDecimalFormat[i] =
+                        new java.text.DecimalFormat(
+                                pattern, new java.text.DecimalFormatSymbols(locale));
             }
 
             if (args.length == 2) {
@@ -57,14 +58,13 @@ public class DecimalFormatPerformanceTest extends PerfTest {
             e.printStackTrace();
             throw new RuntimeException(e.getMessage());
         }
-
     }
 
     PerfTest.Function TestICUConstruction() {
         return new PerfTest.Function() {
             public void call() {
-                new com.ibm.icu.text.DecimalFormat(pattern,
-                        new com.ibm.icu.text.DecimalFormatSymbols(locale));
+                new com.ibm.icu.text.DecimalFormat(
+                        pattern, new com.ibm.icu.text.DecimalFormatSymbols(locale));
             }
         };
     }

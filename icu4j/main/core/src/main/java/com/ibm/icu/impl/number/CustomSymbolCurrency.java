@@ -13,7 +13,8 @@ public class CustomSymbolCurrency extends Currency {
     private String symbol1;
     private String symbol2;
 
-    public static Currency resolve(Currency currency, ULocale locale, DecimalFormatSymbols symbols) {
+    public static Currency resolve(
+            Currency currency, ULocale locale, DecimalFormatSymbols symbols) {
         if (currency == null) {
             currency = symbols.getCurrency();
         }
@@ -51,7 +52,8 @@ public class CustomSymbolCurrency extends Currency {
     }
 
     @Override
-    public String getName(ULocale locale, int nameStyle, String pluralCount, boolean[] isChoiceFormat) {
+    public String getName(
+            ULocale locale, int nameStyle, String pluralCount, boolean[] isChoiceFormat) {
         return super.getName(locale, nameStyle, pluralCount, isChoiceFormat);
     }
 

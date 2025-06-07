@@ -13,6 +13,7 @@ import java.text.Format.Field;
 
 /**
  * Adds the ability to get the decimal digits
+ *
  * @internal
  * @deprecated This API is ICU internal only.
  */
@@ -62,7 +63,7 @@ public class UFieldPosition extends FieldPosition {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
-    public void setFractionDigits(int countVisibleFractionDigits, long fractionDigits ) {
+    public void setFractionDigits(int countVisibleFractionDigits, long fractionDigits) {
         this.countVisibleFractionDigits = countVisibleFractionDigits;
         this.fractionDigits = fractionDigits;
     }

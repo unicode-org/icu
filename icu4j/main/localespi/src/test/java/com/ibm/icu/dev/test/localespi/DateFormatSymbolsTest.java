@@ -8,15 +8,13 @@
  */
 package com.ibm.icu.dev.test.localespi;
 
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.util.ULocale;
 import java.text.DateFormatSymbols;
 import java.util.Locale;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
-import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.util.ULocale;
 
 @RunWith(JUnit4.class)
 public class DateFormatSymbolsTest extends TestFmwk {
@@ -43,8 +41,11 @@ public class DateFormatSymbolsTest extends TestFmwk {
                 Locale iculoc = TestUtil.toICUExtendedLocale(loc);
                 DateFormatSymbols dfsIcu = DateFormatSymbols.getInstance(iculoc);
                 if (!dfs.equals(dfsIcu)) {
-                    errln("FAIL: getInstance returned ICU DateFormatSymbols for locale " + loc
-                            + ", but different from the one for locale " + iculoc);
+                    errln(
+                            "FAIL: getInstance returned ICU DateFormatSymbols for locale "
+                                    + loc
+                                    + ", but different from the one for locale "
+                                    + iculoc);
                 }
             }
         }
@@ -57,22 +58,24 @@ public class DateFormatSymbolsTest extends TestFmwk {
     @Test
     public void TestICUEquivalent() {
         Locale[] TEST_LOCALES = {
-                new Locale("en", "US"),
-                new Locale("es", "ES"),
-                new Locale("ja", "JP", "JP"),
-                new Locale("th", "TH"),
+            new Locale("en", "US"),
+            new Locale("es", "ES"),
+            new Locale("ja", "JP", "JP"),
+            new Locale("th", "TH"),
         };
 
         for (Locale loc : TEST_LOCALES) {
             Locale iculoc = TestUtil.toICUExtendedLocale(loc);
             DateFormatSymbols jdkDfs = DateFormatSymbols.getInstance(iculoc);
-            com.ibm.icu.text.DateFormatSymbols icuDfs = com.ibm.icu.text.DateFormatSymbols.getInstance(loc);
+            com.ibm.icu.text.DateFormatSymbols icuDfs =
+                    com.ibm.icu.text.DateFormatSymbols.getInstance(loc);
 
             compareArrays(jdkDfs.getAmPmStrings(), icuDfs.getAmPmStrings(), loc, "getAmPmStrings");
             compareArrays(jdkDfs.getEras(), icuDfs.getEras(), loc, "getEras");
             compareArrays(jdkDfs.getMonths(), icuDfs.getMonths(), loc, "getMonths");
             compareArrays(jdkDfs.getShortMonths(), icuDfs.getShortMonths(), loc, "getShortMonths");
-            compareArrays(jdkDfs.getShortWeekdays(), icuDfs.getShortWeekdays(), loc, "getShortWeekdays");
+            compareArrays(
+                    jdkDfs.getShortWeekdays(), icuDfs.getShortWeekdays(), loc, "getShortWeekdays");
             compareArrays(jdkDfs.getWeekdays(), icuDfs.getWeekdays(), loc, "getWeekdays");
             compareArrays(jdkDfs.getZoneStrings(), icuDfs.getZoneStrings(), loc, "getZoneStrings");
         }
@@ -110,38 +113,77 @@ public class DateFormatSymbolsTest extends TestFmwk {
 
     private void compareArrays(Object jarray, Object iarray, Locale loc, String method) {
         if (jarray instanceof String[][]) {
-            String[][] jaa = (String[][])jarray;
-            String[][] iaa = (String[][])iarray;
+            String[][] jaa = (String[][]) jarray;
+            String[][] iaa = (String[][]) iarray;
 
             if (jaa.length != iaa.length || jaa[0].length != iaa[0].length) {
-                errln("FAIL: Different array size returned by " + method + "for locale "
-                        + loc + "(jdksize=" + jaa.length + "x" + jaa[0].length
-                        + ",icusize=" + iaa.length + "x" + iaa[0].length + ")");
+                errln(
+                        "FAIL: Different array size returned by "
+                                + method
+                                + "for locale "
+                                + loc
+                                + "(jdksize="
+                                + jaa.length
+                                + "x"
+                                + jaa[0].length
+                                + ",icusize="
+                                + iaa.length
+                                + "x"
+                                + iaa[0].length
+                                + ")");
             }
 
             for (int i = 0; i < jaa.length; i++) {
                 for (int j = 0; j < jaa[i].length; j++) {
                     if (!TestUtil.equals(jaa[i][j], iaa[i][j])) {
-                        errln("FAIL: Different symbols returned by " + method + "for locale "
-                                + loc + " at index " + i + "," + j
-                                + " (jdk=" + jaa[i][j] + ",icu=" + iaa[i][j] + ")");
+                        errln(
+                                "FAIL: Different symbols returned by "
+                                        + method
+                                        + "for locale "
+                                        + loc
+                                        + " at index "
+                                        + i
+                                        + ","
+                                        + j
+                                        + " (jdk="
+                                        + jaa[i][j]
+                                        + ",icu="
+                                        + iaa[i][j]
+                                        + ")");
                     }
                 }
             }
 
         } else {
-            String[] ja = (String[])jarray;
-            String[] ia = (String[])iarray;
+            String[] ja = (String[]) jarray;
+            String[] ia = (String[]) iarray;
 
             if (ja.length != ia.length) {
-                errln("FAIL: Different array size returned by " + method + "for locale "
-                        + loc + "(jdksize=" + ja.length
-                        + ",icusize=" + ia.length + ")");
+                errln(
+                        "FAIL: Different array size returned by "
+                                + method
+                                + "for locale "
+                                + loc
+                                + "(jdksize="
+                                + ja.length
+                                + ",icusize="
+                                + ia.length
+                                + ")");
             } else {
                 for (int i = 0; i < ja.length; i++) {
                     if (!TestUtil.equals(ja[i], ia[i])) {
-                        errln("FAIL: Different symbols returned by " + method + "for locale "
-                                + loc + " at index " + i + " (jdk=" + ja[i] + ",icu=" + ia[i] + ")");
+                        errln(
+                                "FAIL: Different symbols returned by "
+                                        + method
+                                        + "for locale "
+                                        + loc
+                                        + " at index "
+                                        + i
+                                        + " (jdk="
+                                        + ja[i]
+                                        + ",icu="
+                                        + ia[i]
+                                        + ")");
                     }
                 }
             }
@@ -157,8 +199,10 @@ public class DateFormatSymbolsTest extends TestFmwk {
         Locale noNONY = new Locale("no", "NO", "NY");
 
         DateFormatSymbols dfs_nnNO = DateFormatSymbols.getInstance(nnNO);
-        DateFormatSymbols dfs_nnNO_ICU = DateFormatSymbols.getInstance(TestUtil.toICUExtendedLocale(nnNO));
-        DateFormatSymbols dfs_noNONY_ICU = DateFormatSymbols.getInstance(TestUtil.toICUExtendedLocale(noNONY));
+        DateFormatSymbols dfs_nnNO_ICU =
+                DateFormatSymbols.getInstance(TestUtil.toICUExtendedLocale(nnNO));
+        DateFormatSymbols dfs_noNONY_ICU =
+                DateFormatSymbols.getInstance(TestUtil.toICUExtendedLocale(noNONY));
 
         // Weekday names should be identical for these three.
         // If data is taken from no/nb, then this check will fail.
@@ -168,14 +212,24 @@ public class DateFormatSymbolsTest extends TestFmwk {
 
         for (int i = 1; i < dow_nnNO.length; i++) {
             if (!dow_nnNO[i].equals(dow_nnNO_ICU[i])) {
-                errln("FAIL: Different weekday name - index=" + i
-                        + ", nn_NO:" + dow_nnNO[i] + ", nn_NO_ICU:" + dow_nnNO_ICU[i]);
+                errln(
+                        "FAIL: Different weekday name - index="
+                                + i
+                                + ", nn_NO:"
+                                + dow_nnNO[i]
+                                + ", nn_NO_ICU:"
+                                + dow_nnNO_ICU[i]);
             }
         }
         for (int i = 1; i < dow_nnNO.length; i++) {
             if (!dow_nnNO[i].equals(dow_noNONY_ICU[i])) {
-                errln("FAIL: Different weekday name - index=" + i
-                        + ", nn_NO:" + dow_nnNO[i] + ", no_NO_NY_ICU:" + dow_nnNO_ICU[i]);
+                errln(
+                        "FAIL: Different weekday name - index="
+                                + i
+                                + ", nn_NO:"
+                                + dow_nnNO[i]
+                                + ", no_NO_NY_ICU:"
+                                + dow_nnNO_ICU[i]);
             }
         }
     }
@@ -186,7 +240,8 @@ public class DateFormatSymbolsTest extends TestFmwk {
         ULocale uloc = new ULocale("en_US_" + TestUtil.ICU_VARIANT + "@calendar=japanese");
         Locale loc = uloc.toLocale();
         DateFormatSymbols jdkDfs = DateFormatSymbols.getInstance(loc);
-        com.ibm.icu.text.DateFormatSymbols icuDfs = com.ibm.icu.text.DateFormatSymbols.getInstance(uloc);
+        com.ibm.icu.text.DateFormatSymbols icuDfs =
+                com.ibm.icu.text.DateFormatSymbols.getInstance(uloc);
 
         // Check the length of era, so we can check if Japanese calendar is picked up
         if (jdkDfs.getEras().length != icuDfs.getEras().length) {

@@ -8,17 +8,15 @@
  */
 package com.ibm.icu.dev.test.stringprep;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
+import com.ibm.icu.text.StringPrep;
+import com.ibm.icu.text.StringPrepParseException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.CoreTestFmwk;
-import com.ibm.icu.text.StringPrep;
-import com.ibm.icu.text.StringPrepParseException;
-
 /**
  * @author Michael Ow
- *
  */
 @RunWith(JUnit4.class)
 public class TestStringPrepProfiles extends CoreTestFmwk {
@@ -36,41 +34,21 @@ public class TestStringPrepProfiles extends CoreTestFmwk {
      * *Note: For expected failures add FAIL to beginning of the source string and for expected result use "FAIL".
      */
     private static String[][] testCases = {
-        {
-            "RFC4013_SASLPREP",
-            "user:\u00A0\u0AC6\u1680\u00ADpassword1",
-            "user: \u0AC6 password1"
-        },
-        {
-            "RFC4011_MIB",
-            "Policy\u034F\u200DBase\u0020d\u1806\u200C",
-            "PolicyBase d"
-        },
+        {"RFC4013_SASLPREP", "user:\u00A0\u0AC6\u1680\u00ADpassword1", "user: \u0AC6 password1"},
+        {"RFC4011_MIB", "Policy\u034F\u200DBase\u0020d\u1806\u200C", "PolicyBase d"},
         {
             "RFC4505_TRACE",
             "Anony\u0020\u00A0mous\u3000\u0B9D\u034F\u00AD",
             "Anony\u0020\u00A0mous\u3000\u0B9D\u034F\u00AD"
         },
-        {
-            "RFC4518_LDAP",
-            "Ldap\uFB01\u00ADTest\u0020\u00A0\u2062ing",
-            "LdapfiTest  ing"
-        },
+        {"RFC4518_LDAP", "Ldap\uFB01\u00ADTest\u0020\u00A0\u2062ing", "LdapfiTest  ing"},
         {
             "RFC4518_LDAP_CI",
             "Ldap\uFB01\u00ADTest\u0020\u00A0\u2062ing12345",
             "ldapfitest  ing12345"
         },
-        {
-            "RFC3920_RESOURCEPREP",
-            "ServerXM\u2060\uFE00\uFE09PP s p ",
-            "ServerXMPP s p "
-        },
-        {
-            "RFC3920_NODEPREP",
-            "Server\u200DXMPPGreEK\u03D0",
-            "serverxmppgreek\u03B2"
-        },
+        {"RFC3920_RESOURCEPREP", "ServerXM\u2060\uFE00\uFE09PP s p ", "ServerXMPP s p "},
+        {"RFC3920_NODEPREP", "Server\u200DXMPPGreEK\u03D0", "serverxmppgreek\u03B2"},
         {
             "RFC3722_ISCSI",
             "InternetSmallComputer\uFB01\u0032\u2075Interface",
@@ -88,16 +66,8 @@ public class TestStringPrepProfiles extends CoreTestFmwk {
             "\u00ADUser\u2060Name@ \u06DDDOMAIN.com",
             "username@ \u06DDdomain.com"
         },
-        {
-            "RFC3530_NFS4_CIS_PREP",
-            "AA\u200C\u200D @@DomAin.org",
-            "aa @@domain.org"
-        },
-        {
-            "RFC3530_NFS4_MIXED_PREP_PREFIX",
-            "PrefixUser \u007F\uFB01End",
-            "PrefixUser \u007FfiEnd"
-        },
+        {"RFC3530_NFS4_CIS_PREP", "AA\u200C\u200D @@DomAin.org", "aa @@domain.org"},
+        {"RFC3530_NFS4_MIXED_PREP_PREFIX", "PrefixUser \u007F\uFB01End", "PrefixUser \u007FfiEnd"},
         {
             "RFC3530_NFS4_MIXED_PREP_SUFFIX",
             "SuffixDomain \u007F\uFB01EnD",
@@ -158,13 +128,27 @@ public class TestStringPrepProfiles extends CoreTestFmwk {
                     try {
                         result = sprep.prepare(src, StringPrep.ALLOW_UNASSIGNED);
                         if (src.startsWith("FAIL")) {
-                            errln("Failed: Expected error for Test[" + i +"] Profile: " + profileName);
+                            errln(
+                                    "Failed: Expected error for Test["
+                                            + i
+                                            + "] Profile: "
+                                            + profileName);
                         } else if (!result.equals(expected)) {
-                            errln("Failed: Test[" + i + "] Result string does not match expected string for StringPrep test for profile: " + profileName);
+                            errln(
+                                    "Failed: Test["
+                                            + i
+                                            + "] Result string does not match expected string for StringPrep test for profile: "
+                                            + profileName);
                         }
                     } catch (StringPrepParseException ex) {
                         if (!src.startsWith("FAIL")) {
-                            errln("Failed: Test[" + i + "] StringPrep profile " + profileName + " got error: " + ex);
+                            errln(
+                                    "Failed: Test["
+                                            + i
+                                            + "] StringPrep profile "
+                                            + profileName
+                                            + " got error: "
+                                            + ex);
                         }
                     }
                 }

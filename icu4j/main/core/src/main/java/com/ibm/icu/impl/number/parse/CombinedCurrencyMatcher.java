@@ -2,23 +2,23 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.number.parse;
 
-import java.util.Iterator;
-
 import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.impl.StringSegment;
 import com.ibm.icu.impl.TextTrieMap;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Currency.CurrencyStringInfo;
+import java.util.Iterator;
 
 /**
  * Matches a currency, either a custom currency or one from the data bundle. The class is called
  * "combined" to emphasize that the currency string may come from one of multiple sources.
  *
- * Will match currency spacing either before or after the number depending on whether we are currently in
- * the prefix or suffix.
+ * <p>Will match currency spacing either before or after the number depending on whether we are
+ * currently in the prefix or suffix.
  *
- * The implementation of this class is slightly different between J and C. See #13584 for a follow-up.
+ * <p>The implementation of this class is slightly different between J and C. See #13584 for a
+ * follow-up.
  *
  * @author sffc
  */
@@ -39,7 +39,8 @@ public class CombinedCurrencyMatcher implements NumberParseMatcher {
     // TODO: See comments in constructor.
     // private final UnicodeSet leadCodePoints;
 
-    public static CombinedCurrencyMatcher getInstance(Currency currency, DecimalFormatSymbols dfs, int parseFlags) {
+    public static CombinedCurrencyMatcher getInstance(
+            Currency currency, DecimalFormatSymbols dfs, int parseFlags) {
         // TODO: Cache these instances. They are somewhat expensive.
         return new CombinedCurrencyMatcher(currency, dfs, parseFlags);
     }
@@ -49,13 +50,14 @@ public class CombinedCurrencyMatcher implements NumberParseMatcher {
         this.currency1 = currency.getSymbol(dfs.getULocale());
         this.currency2 = currency.getCurrencyCode();
 
-        afterPrefixInsert = dfs.getPatternForCurrencySpacing(DecimalFormatSymbols.CURRENCY_SPC_INSERT,
-                false);
-        beforeSuffixInsert = dfs.getPatternForCurrencySpacing(DecimalFormatSymbols.CURRENCY_SPC_INSERT,
-                true);
+        afterPrefixInsert =
+                dfs.getPatternForCurrencySpacing(DecimalFormatSymbols.CURRENCY_SPC_INSERT, false);
+        beforeSuffixInsert =
+                dfs.getPatternForCurrencySpacing(DecimalFormatSymbols.CURRENCY_SPC_INSERT, true);
 
         if (0 == (parseFlags & ParsingUtils.PARSE_FLAG_NO_FOREIGN_CURRENCIES)) {
-            // TODO: Currency trie does not currently have an option for case folding. It defaults to use
+            // TODO: Currency trie does not currently have an option for case folding. It defaults
+            // to use
             // case folding on long-names but not symbols.
             longNameTrie = Currency.getParsingTrie(dfs.getULocale(), Currency.LONG_NAME);
             symbolTrie = Currency.getParsingTrie(dfs.getULocale(), Currency.SYMBOL_NAME);
@@ -67,8 +69,9 @@ public class CombinedCurrencyMatcher implements NumberParseMatcher {
             localLongNames = new String[StandardPlural.COUNT];
             for (int i = 0; i < StandardPlural.COUNT; i++) {
                 String pluralKeyword = StandardPlural.VALUES.get(i).getKeyword();
-                localLongNames[i] = currency
-                        .getName(dfs.getLocale(), Currency.PLURAL_LONG_NAME, pluralKeyword, null);
+                localLongNames[i] =
+                        currency.getName(
+                                dfs.getLocale(), Currency.PLURAL_LONG_NAME, pluralKeyword, null);
             }
         }
 
@@ -179,7 +182,7 @@ public class CombinedCurrencyMatcher implements NumberParseMatcher {
         } else {
             // Use the locale long names.
             int longestFullMatch = 0;
-            for (int i=0; i<StandardPlural.COUNT; i++) {
+            for (int i = 0; i < StandardPlural.COUNT; i++) {
                 String name = localLongNames[i];
                 if (name.isEmpty()) {
                     continue;
@@ -218,5 +221,4 @@ public class CombinedCurrencyMatcher implements NumberParseMatcher {
     public String toString() {
         return "<CombinedCurrencyMatcher " + isoCode + ">";
     }
-
 }

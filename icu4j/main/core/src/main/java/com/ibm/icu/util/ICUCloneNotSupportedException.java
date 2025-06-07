@@ -9,9 +9,8 @@
 package com.ibm.icu.util;
 
 /**
- * Unchecked version of {@link CloneNotSupportedException}.
- * Some ICU APIs do not throw the standard exception but instead wrap it
- * into this unchecked version.
+ * Unchecked version of {@link CloneNotSupportedException}. Some ICU APIs do not throw the standard
+ * exception but instead wrap it into this unchecked version.
  *
  * @stable ICU 53
  */
@@ -23,8 +22,7 @@ public class ICUCloneNotSupportedException extends ICUException {
      *
      * @stable ICU 53
      */
-    public ICUCloneNotSupportedException() {
-    }
+    public ICUCloneNotSupportedException() {}
 
     /**
      * Constructor.

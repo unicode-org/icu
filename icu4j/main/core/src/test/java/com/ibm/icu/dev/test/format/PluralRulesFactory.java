@@ -14,7 +14,6 @@ import com.ibm.icu.util.ULocale;
 
 /**
  * @author markdavis
- *
  */
 public abstract class PluralRulesFactory extends PluralRules.Factory {
 
@@ -27,14 +26,17 @@ public abstract class PluralRulesFactory extends PluralRules.Factory {
         public boolean hasOverride(ULocale locale) {
             return false;
         }
+
         @Override
         public PluralRules forLocale(ULocale locale, PluralType ordinal) {
             return PluralRules.forLocale(locale, ordinal);
         }
+
         @Override
         public ULocale[] getAvailableULocales() {
             return PluralRules.getAvailableULocales();
         }
+
         @Override
         public ULocale getFunctionalEquivalent(ULocale locale, boolean[] isAvailable) {
             return PluralRules.getFunctionalEquivalent(locale, isAvailable);

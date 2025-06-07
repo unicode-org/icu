@@ -8,14 +8,12 @@
  */
 package com.ibm.icu.impl.breakiter;
 
-import java.io.IOException;
-import java.text.CharacterIterator;
-
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.UnicodeSet;
-
+import java.io.IOException;
+import java.text.CharacterIterator;
 
 public class BurmeseBreakEngine extends DictionaryBreakEngine {
 
@@ -37,7 +35,7 @@ public class BurmeseBreakEngine extends DictionaryBreakEngine {
 
     public BurmeseBreakEngine() throws IOException {
         // Initialize UnicodeSets
-        fBeginWordSet = new UnicodeSet(0x1000, 0x102A);      // basic consonants and independent vowels
+        fBeginWordSet = new UnicodeSet(0x1000, 0x102A); // basic consonants and independent vowels
         fEndWordSet = new UnicodeSet("[[:Mymr:]&[:LineBreak=SA:]]");
         fMarkSet = new UnicodeSet("[[:Mymr:]&[:LineBreak=SA:]&[:M:]]");
         fMarkSet.add(0x0020);
@@ -76,12 +74,15 @@ public class BurmeseBreakEngine extends DictionaryBreakEngine {
     }
 
     @Override
-    public int divideUpDictionaryRange(CharacterIterator fIter, int rangeStart, int rangeEnd,
-            DequeI foundBreaks, boolean isPhraseBreaking) {
-
+    public int divideUpDictionaryRange(
+            CharacterIterator fIter,
+            int rangeStart,
+            int rangeEnd,
+            DequeI foundBreaks,
+            boolean isPhraseBreaking) {
 
         if ((rangeEnd - rangeStart) < BURMESE_MIN_WORD) {
-            return 0;  // Not enough characters for word
+            return 0; // Not enough characters for word
         }
         int wordsFound = 0;
         int wordLength;
@@ -96,12 +97,13 @@ public class BurmeseBreakEngine extends DictionaryBreakEngine {
         while ((current = fIter.getIndex()) < rangeEnd) {
             wordLength = 0;
 
-            //Look for candidate words at the current position
-            int candidates = words[wordsFound%BURMESE_LOOKAHEAD].candidates(fIter, fDictionary, rangeEnd);
+            // Look for candidate words at the current position
+            int candidates =
+                    words[wordsFound % BURMESE_LOOKAHEAD].candidates(fIter, fDictionary, rangeEnd);
 
             // If we found exactly one, use that
             if (candidates == 1) {
-                wordLength = words[wordsFound%BURMESE_LOOKAHEAD].acceptMarked(fIter);
+                wordLength = words[wordsFound % BURMESE_LOOKAHEAD].acceptMarked(fIter);
                 wordsFound += 1;
             }
 
@@ -111,9 +113,12 @@ public class BurmeseBreakEngine extends DictionaryBreakEngine {
                 // If we're already at the end of the range, we're done
                 if (fIter.getIndex() < rangeEnd) {
                     do {
-                        if (words[(wordsFound+1)%BURMESE_LOOKAHEAD].candidates(fIter, fDictionary, rangeEnd) > 0) {
-                            // Followed by another dictionary word; mark first word as a good candidate
-                            words[wordsFound%BURMESE_LOOKAHEAD].markCurrent();
+                        if (words[(wordsFound + 1) % BURMESE_LOOKAHEAD].candidates(
+                                        fIter, fDictionary, rangeEnd)
+                                > 0) {
+                            // Followed by another dictionary word; mark first word as a good
+                            // candidate
+                            words[wordsFound % BURMESE_LOOKAHEAD].markCurrent();
 
                             // If we're already at the end of the range, we're done
                             if (fIter.getIndex() >= rangeEnd) {
@@ -123,16 +128,18 @@ public class BurmeseBreakEngine extends DictionaryBreakEngine {
                             // See if any of the possible second words is followed by a third word
                             do {
                                 // If we find a third word, stop right away
-                                if (words[(wordsFound+2)%BURMESE_LOOKAHEAD].candidates(fIter, fDictionary, rangeEnd) > 0) {
-                                    words[wordsFound%BURMESE_LOOKAHEAD].markCurrent();
+                                if (words[(wordsFound + 2) % BURMESE_LOOKAHEAD].candidates(
+                                                fIter, fDictionary, rangeEnd)
+                                        > 0) {
+                                    words[wordsFound % BURMESE_LOOKAHEAD].markCurrent();
                                     foundBest = true;
                                     break;
                                 }
-                            } while (words[(wordsFound+1)%BURMESE_LOOKAHEAD].backUp(fIter));
+                            } while (words[(wordsFound + 1) % BURMESE_LOOKAHEAD].backUp(fIter));
                         }
-                    } while (words[wordsFound%BURMESE_LOOKAHEAD].backUp(fIter) && !foundBest);
+                    } while (words[wordsFound % BURMESE_LOOKAHEAD].backUp(fIter) && !foundBest);
                 }
-                wordLength = words[wordsFound%BURMESE_LOOKAHEAD].acceptMarked(fIter);
+                wordLength = words[wordsFound % BURMESE_LOOKAHEAD].acceptMarked(fIter);
                 wordsFound += 1;
             }
 
@@ -145,14 +152,16 @@ public class BurmeseBreakEngine extends DictionaryBreakEngine {
                 // If it is a dictionary word, do nothing. If it isn't, then if there is
                 // no preceding word, or the non-word shares less than the minimum threshold
                 // of characters with a dictionary word, then scan to resynchronize
-                if (words[wordsFound%BURMESE_LOOKAHEAD].candidates(fIter, fDictionary, rangeEnd) <= 0 &&
-                        (wordLength == 0 ||
-                                words[wordsFound%BURMESE_LOOKAHEAD].longestPrefix() < BURMESE_PREFIX_COMBINE_THRESHOLD)) {
+                if (words[wordsFound % BURMESE_LOOKAHEAD].candidates(fIter, fDictionary, rangeEnd)
+                                <= 0
+                        && (wordLength == 0
+                                || words[wordsFound % BURMESE_LOOKAHEAD].longestPrefix()
+                                        < BURMESE_PREFIX_COMBINE_THRESHOLD)) {
                     // Look for a plausible word boundary
                     int remaining = rangeEnd - (current + wordLength);
                     int pc = fIter.current();
                     int chars = 0;
-                    for (;;) {
+                    for (; ; ) {
                         fIter.next();
                         uc = fIter.current();
                         chars += 1;
@@ -161,7 +170,9 @@ public class BurmeseBreakEngine extends DictionaryBreakEngine {
                         }
                         if (fEndWordSet.contains(pc) && fBeginWordSet.contains(uc)) {
                             // Maybe. See if it's in the dictionary.
-                            int candidate = words[(wordsFound + 1) %BURMESE_LOOKAHEAD].candidates(fIter, fDictionary, rangeEnd);
+                            int candidate =
+                                    words[(wordsFound + 1) % BURMESE_LOOKAHEAD].candidates(
+                                            fIter, fDictionary, rangeEnd);
                             fIter.setIndex(current + wordLength + chars);
                             if (candidate > 0) {
                                 break;
@@ -179,7 +190,7 @@ public class BurmeseBreakEngine extends DictionaryBreakEngine {
                     wordLength += chars;
                 } else {
                     // Backup to where we were for next iteration
-                    fIter.setIndex(current+wordLength);
+                    fIter.setIndex(current + wordLength);
                 }
             }
 
@@ -210,5 +221,4 @@ public class BurmeseBreakEngine extends DictionaryBreakEngine {
 
         return wordsFound;
     }
-
 }

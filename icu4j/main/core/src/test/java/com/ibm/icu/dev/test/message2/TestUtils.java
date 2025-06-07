@@ -6,6 +6,12 @@ package com.ibm.icu.dev.test.message2;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.ibm.icu.message2.MFFunctionRegistry;
+import com.ibm.icu.message2.MessageFormatter;
+import com.ibm.icu.message2.MessageFormatter.BidiIsolation;
+import com.ibm.icu.message2.MessageFormatter.ErrorHandlingBehavior;
 import java.io.IOException;
 import java.io.Reader;
 import java.net.URI;
@@ -19,33 +25,27 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
-
 import org.junit.Ignore;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.ibm.icu.message2.MFFunctionRegistry;
-import com.ibm.icu.message2.MessageFormatter;
-import com.ibm.icu.message2.MessageFormatter.BidiIsolation;
-import com.ibm.icu.message2.MessageFormatter.ErrorHandlingBehavior;
 
 /** Utility class, has no test methods. */
 @Ignore("Utility class, has no test methods.")
 public class TestUtils {
 
-    static final Gson GSON = new GsonBuilder()
-        .setDateFormat("yyyy-MM-dd HH:mm:ss")
-        .registerTypeAdapter(Sources.class, new StringToListAdapter())
-        .registerTypeAdapter(ExpErrors.class, new ExpectedErrorAdapter())
-        .create();
+    static final Gson GSON =
+            new GsonBuilder()
+                    .setDateFormat("yyyy-MM-dd HH:mm:ss")
+                    .registerTypeAdapter(Sources.class, new StringToListAdapter())
+                    .registerTypeAdapter(ExpErrors.class, new ExpectedErrorAdapter())
+                    .create();
 
-    private static final MFFunctionRegistry TEST_REGISTRY = MFFunctionRegistry.builder()
-            .setFormatter("test:function", new TestFunctionFactory("function"))
-            .setFormatter("test:format", new TestFunctionFactory("format"))
-            .setFormatter("test:select", new TestFunctionFactory("select"))
-            .setSelector("test:function", new TestFunctionFactory("function"))
-            .setSelector("test:select", new TestFunctionFactory("select"))
-            .build();
+    private static final MFFunctionRegistry TEST_REGISTRY =
+            MFFunctionRegistry.builder()
+                    .setFormatter("test:function", new TestFunctionFactory("function"))
+                    .setFormatter("test:format", new TestFunctionFactory("format"))
+                    .setFormatter("test:select", new TestFunctionFactory("select"))
+                    .setSelector("test:function", new TestFunctionFactory("function"))
+                    .setSelector("test:select", new TestFunctionFactory("select"))
+                    .build();
 
     // ======= Legacy TestCase utilities, no json-compatible ========
 
@@ -60,9 +60,8 @@ public class TestUtils {
 
         // We can call the "complete" constructor with null values, but we want to test that
         // all constructors work properly.
-        MessageFormatter.Builder mfBuilder = MessageFormatter.builder()
-                .setPattern(testCase.message)
-                .setLocale(testCase.locale);
+        MessageFormatter.Builder mfBuilder =
+                MessageFormatter.builder().setPattern(testCase.message).setLocale(testCase.locale);
         if (customFunctionsRegistry != null) {
             mfBuilder.setFunctionRegistry(customFunctionsRegistry);
         }
@@ -70,15 +69,21 @@ public class TestUtils {
             MessageFormatter mf = mfBuilder.build();
             String result = mf.formatToString(testCase.arguments);
             if (!testCase.errors.isEmpty()) {
-                fail(reportCase(testCase) + "\nExpected error, but it didn't happen.\n"
-                        + "Result: '" + result + "'");
+                fail(
+                        reportCase(testCase)
+                                + "\nExpected error, but it didn't happen.\n"
+                                + "Result: '"
+                                + result
+                                + "'");
             } else {
                 assertEquals(reportCase(testCase), testCase.expected, result);
             }
         } catch (IllegalArgumentException | NullPointerException e) {
             if (testCase.errors.isEmpty()) {
-                fail(reportCase(testCase) + "\nNo error was expected here, but it happened:\n"
-                        + e.getMessage());
+                fail(
+                        reportCase(testCase)
+                                + "\nNo error was expected here, but it happened:\n"
+                                + e.getMessage());
             }
         }
     }
@@ -100,7 +105,9 @@ public class TestUtils {
             if (pair.value instanceof Map<?, ?>) {
                 @SuppressWarnings("unchecked")
                 Map<String, Object> innerMap = (Map<String, Object>) pair.value;
-                if (innerMap.size() == 1 && innerMap.containsKey("date") && innerMap.get("date") instanceof Double) {
+                if (innerMap.size() == 1
+                        && innerMap.containsKey("date")
+                        && innerMap.get("date") instanceof Double) {
                     Long dateValue = Double.valueOf((Double) innerMap.get("date")).longValue();
                     params[i] = new Param(pair.name, new Date(dateValue));
                 }
@@ -119,8 +126,9 @@ public class TestUtils {
             if (pair.value instanceof Map<?, ?>) {
                 @SuppressWarnings("unchecked")
                 Map<String, Object> innerMap = (Map<String, Object>) pair.value;
-                if (innerMap.size() == 1 && innerMap.containsKey("decimal")
-                    && innerMap.get("decimal") instanceof String) {
+                if (innerMap.size() == 1
+                        && innerMap.containsKey("decimal")
+                        && innerMap.get("decimal") instanceof String) {
                     String decimalValue = (String) innerMap.get("decimal");
                     params[i] = new Param(pair.name, new com.ibm.icu.math.BigDecimal(decimalValue));
                 }
@@ -141,7 +149,7 @@ public class TestUtils {
 
     static boolean expectsErrors(DefaultTestProperties defaults, Unit unit) {
         return (unit.expErrors != null && unit.expErrors.expectErrors())
-            || (defaults.getExpErrors().expectErrors());
+                || (defaults.getExpErrors().expectErrors());
     }
 
     static void runTestCase(DefaultTestProperties defaults, Unit unit) {
@@ -162,9 +170,10 @@ public class TestUtils {
 
         // We can call the "complete" constructor with null values, but we want to test that
         // all constructors work properly.
-        MessageFormatter.Builder mfBuilder = MessageFormatter.builder()
-                .setPattern(pattern.toString())
-                .setFunctionRegistry(TEST_REGISTRY);
+        MessageFormatter.Builder mfBuilder =
+                MessageFormatter.builder()
+                        .setPattern(pattern.toString())
+                        .setFunctionRegistry(TEST_REGISTRY);
 
         if (expectsErrors(defaults, unit)) {
             mfBuilder.setErrorHandlingBehavior(ErrorHandlingBehavior.STRICT);
@@ -198,11 +207,17 @@ public class TestUtils {
             }
             String result = mf.formatToString(paramsToMap(params));
             if (expectsErrors(defaults, unit)) {
-                fail(reportCase(unit)
-                        + "\nExpected error, but it didn't happen.\n"
-                        + "Result: '" + result + "'\n"
-                        + "Params: " + Arrays.toString(params) + "\n"
-                        + "Errors expected: " + unit.expErrors);
+                fail(
+                        reportCase(unit)
+                                + "\nExpected error, but it didn't happen.\n"
+                                + "Result: '"
+                                + result
+                                + "'\n"
+                                + "Params: "
+                                + Arrays.toString(params)
+                                + "\n"
+                                + "Errors expected: "
+                                + unit.expErrors);
             } else {
                 if (unit.exp != null) {
                     assertEquals(reportCase(unit), unit.exp, result);
@@ -210,9 +225,10 @@ public class TestUtils {
             }
         } catch (IllegalArgumentException | NullPointerException e) {
             if (!expectsErrors(defaults, unit)) {
-                fail(reportCase(unit)
-                        + "\nNo error was expected here, but it happened:\n"
-                        + e.getMessage());
+                fail(
+                        reportCase(unit)
+                                + "\nNo error was expected here, but it happened:\n"
+                                + e.getMessage());
             }
         }
     }
@@ -226,7 +242,8 @@ public class TestUtils {
         return Files.newBufferedReader(json, StandardCharsets.UTF_8);
     }
 
-    private static Path getTestFile(Class<?> cls, String fileName) throws URISyntaxException, IOException {
+    private static Path getTestFile(Class<?> cls, String fileName)
+            throws URISyntaxException, IOException {
         String packageName = cls.getPackage().getName().replace('.', '/');
         URI getPath = cls.getClassLoader().getResource(packageName).toURI();
         Path filePath = Paths.get(getPath);

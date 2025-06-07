@@ -8,6 +8,8 @@
  */
 package com.ibm.icu.impl.locale;
 
+import com.ibm.icu.impl.locale.InternalLocaleBuilder.CaseInsensitiveChar;
+import com.ibm.icu.impl.locale.InternalLocaleBuilder.CaseInsensitiveString;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -16,17 +18,13 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import com.ibm.icu.impl.locale.InternalLocaleBuilder.CaseInsensitiveChar;
-import com.ibm.icu.impl.locale.InternalLocaleBuilder.CaseInsensitiveString;
-
-
 public class LocaleExtensions {
 
     private SortedMap<Character, Extension> _map;
     private String _id;
 
     private static final SortedMap<Character, Extension> EMPTY_MAP =
-        Collections.unmodifiableSortedMap(new TreeMap<Character, Extension>());
+            Collections.unmodifiableSortedMap(new TreeMap<Character, Extension>());
 
     public static final LocaleExtensions EMPTY_EXTENSIONS;
     public static final LocaleExtensions CALENDAR_JAPANESE;
@@ -40,7 +38,8 @@ public class LocaleExtensions {
         CALENDAR_JAPANESE = new LocaleExtensions();
         CALENDAR_JAPANESE._id = "u-ca-japanese";
         CALENDAR_JAPANESE._map = new TreeMap<Character, Extension>();
-        CALENDAR_JAPANESE._map.put(UnicodeLocaleExtension.SINGLETON, UnicodeLocaleExtension.CA_JAPANESE);
+        CALENDAR_JAPANESE._map.put(
+                UnicodeLocaleExtension.SINGLETON, UnicodeLocaleExtension.CA_JAPANESE);
 
         NUMBER_THAI = new LocaleExtensions();
         NUMBER_THAI._id = "u-nu-thai";
@@ -48,14 +47,15 @@ public class LocaleExtensions {
         NUMBER_THAI._map.put(UnicodeLocaleExtension.SINGLETON, UnicodeLocaleExtension.NU_THAI);
     }
 
-    private LocaleExtensions() {
-    }
+    private LocaleExtensions() {}
 
     /*
      * Package local constructor, only used by InternalLocaleBuilder.
      */
-    LocaleExtensions(Map<CaseInsensitiveChar, String> extensions,
-            Set<CaseInsensitiveString> uattributes, Map<CaseInsensitiveString, String> ukeywords) {
+    LocaleExtensions(
+            Map<CaseInsensitiveChar, String> extensions,
+            Set<CaseInsensitiveString> uattributes,
+            Map<CaseInsensitiveString, String> ukeywords) {
         boolean hasExtension = (extensions != null && extensions.size() > 0);
         boolean hasUAttributes = (uattributes != null && uattributes.size() > 0);
         boolean hasUKeywords = (ukeywords != null && ukeywords.size() > 0);
@@ -141,7 +141,7 @@ public class LocaleExtensions {
             return Collections.emptySet();
         }
         assert (ext instanceof UnicodeLocaleExtension);
-        return ((UnicodeLocaleExtension)ext).getUnicodeLocaleAttributes();
+        return ((UnicodeLocaleExtension) ext).getUnicodeLocaleAttributes();
     }
 
     public Set<String> getUnicodeLocaleKeys() {
@@ -150,7 +150,7 @@ public class LocaleExtensions {
             return Collections.emptySet();
         }
         assert (ext instanceof UnicodeLocaleExtension);
-        return ((UnicodeLocaleExtension)ext).getUnicodeLocaleKeys();
+        return ((UnicodeLocaleExtension) ext).getUnicodeLocaleKeys();
     }
 
     public String getUnicodeLocaleType(String unicodeLocaleKey) {
@@ -159,7 +159,8 @@ public class LocaleExtensions {
             return null;
         }
         assert (ext instanceof UnicodeLocaleExtension);
-        return ((UnicodeLocaleExtension)ext).getUnicodeLocaleType(AsciiUtil.toLowerString(unicodeLocaleKey));
+        return ((UnicodeLocaleExtension) ext)
+                .getUnicodeLocaleType(AsciiUtil.toLowerString(unicodeLocaleKey));
     }
 
     public boolean isEmpty() {
@@ -198,7 +199,6 @@ public class LocaleExtensions {
         return buf.toString();
     }
 
-
     @Override
     public String toString() {
         return _id;
@@ -221,6 +221,6 @@ public class LocaleExtensions {
         if (!(other instanceof LocaleExtensions)) {
             return false;
         }
-        return this._id.equals(((LocaleExtensions)other)._id);
+        return this._id.equals(((LocaleExtensions) other)._id);
     }
 }

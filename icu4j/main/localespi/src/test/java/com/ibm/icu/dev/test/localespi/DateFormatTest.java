@@ -8,19 +8,17 @@
  */
 package com.ibm.icu.dev.test.localespi;
 
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.impl.jdkadapter.CalendarICU;
+import com.ibm.icu.util.ULocale;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
-import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.impl.jdkadapter.CalendarICU;
-import com.ibm.icu.util.ULocale;
 
 @RunWith(JUnit4.class)
 public class DateFormatTest extends TestFmwk {
@@ -55,8 +53,13 @@ public class DateFormatTest extends TestFmwk {
             Locale iculoc = TestUtil.toICUExtendedLocale(loc);
             DateFormat dfIcu = getJDKInstance(dstyle, tstyle, iculoc, null);
             if (!df.equals(dfIcu)) {
-                errln("FAIL: " + method[0] + " returned ICU DateFormat for locale " + loc
-                        + ", but different from the one for locale " + iculoc);
+                errln(
+                        "FAIL: "
+                                + method[0]
+                                + " returned ICU DateFormat for locale "
+                                + loc
+                                + ", but different from the one for locale "
+                                + iculoc);
             }
         }
     }
@@ -80,7 +83,8 @@ public class DateFormatTest extends TestFmwk {
         return df;
     }
 
-    private com.ibm.icu.text.DateFormat getICUInstance(int dstyle, int tstyle, Locale loc, String[] methodName) {
+    private com.ibm.icu.text.DateFormat getICUInstance(
+            int dstyle, int tstyle, Locale loc, String[] methodName) {
         com.ibm.icu.text.DateFormat icudf;
         String method;
         if (dstyle < 0) {
@@ -106,17 +110,17 @@ public class DateFormatTest extends TestFmwk {
     @Test
     public void TestICUEquivalent() {
         Locale[] TEST_LOCALES = {
-                new Locale("en", "US"),
-                new Locale("it", "IT"),
-                new Locale("iw", "IL"),
-                new Locale("ja", "JP", "JP"),
-                new Locale("th", "TH"),
-                new Locale("zh", "TW"),
+            new Locale("en", "US"),
+            new Locale("it", "IT"),
+            new Locale("iw", "IL"),
+            new Locale("ja", "JP", "JP"),
+            new Locale("th", "TH"),
+            new Locale("zh", "TW"),
         };
 
         long[] TEST_DATES = {
-                1199499330543L, // 2008-01-05T02:15:30.543Z
-                1217001308085L, // 2008-07-25T15:55:08.085Z
+            1199499330543L, // 2008-01-05T02:15:30.543Z
+            1217001308085L, // 2008-07-25T15:55:08.085Z
         };
 
         for (Locale loc : TEST_LOCALES) {
@@ -136,9 +140,19 @@ public class DateFormatTest extends TestFmwk {
                         String dstr2 = icudf.format(d);
 
                         if (!dstr1.equals(dstr2)) {
-                            errln("FAIL: Different format results for locale " + loc + " (dstyle=" + dstyle
-                                    + ",tstyle=" + tstyle + ") at time " + t + " - JDK:" + dstr1
-                                    + " ICU:" + dstr2);
+                            errln(
+                                    "FAIL: Different format results for locale "
+                                            + loc
+                                            + " (dstyle="
+                                            + dstyle
+                                            + ",tstyle="
+                                            + tstyle
+                                            + ") at time "
+                                            + t
+                                            + " - JDK:"
+                                            + dstr1
+                                            + " ICU:"
+                                            + dstr2);
                             continue;
                         }
 
@@ -147,22 +161,49 @@ public class DateFormatTest extends TestFmwk {
                         try {
                             d1 = df.parse(dstr1);
                         } catch (ParseException e) {
-                            errln("FAIL: ParseException thrown for JDK DateFormat for string "
-                                    + dstr1 + "(locale=" + iculoc + ",dstyle=" + dstyle + ",tstyle=" + tstyle + ")");
+                            errln(
+                                    "FAIL: ParseException thrown for JDK DateFormat for string "
+                                            + dstr1
+                                            + "(locale="
+                                            + iculoc
+                                            + ",dstyle="
+                                            + dstyle
+                                            + ",tstyle="
+                                            + tstyle
+                                            + ")");
                             continue;
                         }
                         try {
                             d2 = icudf.parse(dstr1);
                         } catch (ParseException e) {
-                            errln("FAIL: ParseException thrown for ICU DateFormat for string "
-                                    + dstr1 + "(locale=" + loc + ",dstyle=" + dstyle + ",tstyle=" + tstyle + ")");
+                            errln(
+                                    "FAIL: ParseException thrown for ICU DateFormat for string "
+                                            + dstr1
+                                            + "(locale="
+                                            + loc
+                                            + ",dstyle="
+                                            + dstyle
+                                            + ",tstyle="
+                                            + tstyle
+                                            + ")");
                             continue;
                         }
                         if (!d1.equals(d2)) {
-                            errln("FAIL: Different parse results for locale " + loc
-                                    + " for date string " + dstr1 + " (dstyle=" + dstyle
-                                    + ",tstyle=" + tstyle + ") at time " + t + " - JDK:" + dstr1
-                                    + " ICU:" + dstr2);
+                            errln(
+                                    "FAIL: Different parse results for locale "
+                                            + loc
+                                            + " for date string "
+                                            + dstr1
+                                            + " (dstyle="
+                                            + dstyle
+                                            + ",tstyle="
+                                            + tstyle
+                                            + ") at time "
+                                            + t
+                                            + " - JDK:"
+                                            + dstr1
+                                            + " ICU:"
+                                            + dstr2);
                         }
                     }
                 }
@@ -180,10 +221,11 @@ public class DateFormatTest extends TestFmwk {
         String pattern = "yyyy-MM-dd";
 
         DateFormat dfmt = DateFormat.getDateInstance(DateFormat.FULL, thTHTH);
-        DateFormat dfmtIcu = DateFormat.getDateInstance(DateFormat.FULL, TestUtil.toICUExtendedLocale(thTHTH));
+        DateFormat dfmtIcu =
+                DateFormat.getDateInstance(DateFormat.FULL, TestUtil.toICUExtendedLocale(thTHTH));
 
-        ((java.text.SimpleDateFormat)dfmt).applyPattern(pattern);
-        ((java.text.SimpleDateFormat)dfmtIcu).applyPattern(pattern);
+        ((java.text.SimpleDateFormat) dfmt).applyPattern(pattern);
+        ((java.text.SimpleDateFormat) dfmtIcu).applyPattern(pattern);
 
         Date d = new Date();
         String str1 = dfmt.format(d);
@@ -203,7 +245,7 @@ public class DateFormatTest extends TestFmwk {
         Calendar cal = jdkDfmt.getCalendar();
         boolean isBuddhist = false;
         if (cal instanceof CalendarICU) {
-            com.ibm.icu.util.Calendar icuCal = ((CalendarICU)cal).unwrap();
+            com.ibm.icu.util.Calendar icuCal = ((CalendarICU) cal).unwrap();
             isBuddhist = icuCal.getType().equals("buddhist");
         }
         if (!isBuddhist) {

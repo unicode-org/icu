@@ -7,7 +7,6 @@ import com.ibm.icu.text.UnicodeSet;
 
 /**
  * @author sffc
- *
  */
 public class PaddingMatcher extends SymbolMatcher implements NumberParseMatcher.Flexible {
 

@@ -8,11 +8,10 @@
  */
 package com.ibm.icu.impl.breakiter;
 
-import java.text.CharacterIterator;
-
 import com.ibm.icu.text.UCharacterIterator;
 import com.ibm.icu.util.BytesTrie.Result;
 import com.ibm.icu.util.CharsTrie;
+import java.text.CharacterIterator;
 
 class CharsDictionaryMatcher extends DictionaryMatcher {
     private CharSequence characters;
@@ -22,7 +21,13 @@ class CharsDictionaryMatcher extends DictionaryMatcher {
     }
 
     @Override
-    public int matches(CharacterIterator text_, int maxLength, int[] lengths, int[] count_, int limit, int[] values) {
+    public int matches(
+            CharacterIterator text_,
+            int maxLength,
+            int[] lengths,
+            int[] count_,
+            int limit,
+            int[] values) {
         UCharacterIterator text = UCharacterIterator.getInstance(text_);
         CharsTrie uct = new CharsTrie(characters, 0);
         int c = text.nextCodePoint();
@@ -33,7 +38,7 @@ class CharsDictionaryMatcher extends DictionaryMatcher {
         // TODO: should numChars count Character.charCount?
         int numChars = 1;
         int count = 0;
-        for (;;) {
+        for (; ; ) {
             if (result.hasValue()) {
                 if (count < limit) {
                     if (values != null) {
@@ -69,4 +74,3 @@ class CharsDictionaryMatcher extends DictionaryMatcher {
         return DictionaryData.TRIE_TYPE_UCHARS;
     }
 }
-

@@ -27,7 +27,7 @@ class StringUtils {
                 || (cp >= 0x0041 && cp <= 0x005B) // omit \ (%x5C)
                 || (cp >= 0x005D && cp <= 0x007A) // omit { | } (%x7B-7D)
                 || (cp >= 0x007E && cp <= 0x2FFF) // omit IDEOGRAPHIC SPACE (%x3000)
-                || (cp >= 0x3001 && cp <= 0x10FFFF); //allowing surrogates is intentional
+                || (cp >= 0x3001 && cp <= 0x10FFFF); // allowing surrogates is intentional
     }
 
     // abnf: text-char = content-char / ws / "." / "@" / "|"
@@ -130,7 +130,7 @@ class StringUtils {
         return cp == ':';
     }
 
-    final private static Normalizer2 NFC_NORMALIZER = Normalizer2.getNFCInstance();
+    private static final Normalizer2 NFC_NORMALIZER = Normalizer2.getNFCInstance();
 
     static String toNfc(CharSequence value) {
         return value == null ? null : NFC_NORMALIZER.normalize(value);

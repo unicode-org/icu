@@ -12,30 +12,25 @@
  */
 package com.ibm.icu.dev.tool.layout;
 
-public class LigatureEntry
-{
+public class LigatureEntry {
     private int[] componentChars;
     private int ligature;
-    
-    public LigatureEntry(int ligature, int[] componentChars, int componentCount)
-    {
+
+    public LigatureEntry(int ligature, int[] componentChars, int componentCount) {
         this.componentChars = new int[componentCount];
         this.ligature = ligature;
         System.arraycopy(componentChars, 0, this.componentChars, 0, componentCount);
-}
-    
-    public int getComponentCount()
-    {
+    }
+
+    public int getComponentCount() {
         return componentChars.length;
     }
-    
-    public int getComponentChar(int componentIndex)
-    {
+
+    public int getComponentChar(int componentIndex) {
         return componentChars[componentIndex];
     }
-    
-    public int getLigature()
-    {
+
+    public int getLigature() {
         return ligature;
     }
 }

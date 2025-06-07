@@ -9,23 +9,17 @@
 
 package com.ibm.icu.dev.demo.calendar;
 
+import com.ibm.icu.dev.demo.impl.DemoApplet;
 import java.awt.Frame;
 
-import com.ibm.icu.dev.demo.impl.DemoApplet;
-
-/**
- * CalendarApp demonstrates how Calendar works.
- */
-public class CalendarApp extends DemoApplet
-{
-    /**
-     * For serialization
-     */
+/** CalendarApp demonstrates how Calendar works. */
+public class CalendarApp extends DemoApplet {
+    /** For serialization */
     private static final long serialVersionUID = -4270137898405840825L;
 
     /**
-     * The main function which defines the behavior of the CalendarDemo
-     * applet when an applet is started.
+     * The main function which defines the behavior of the CalendarDemo applet when an applet is
+     * started.
      */
     public static void main(String argv[]) {
 

@@ -8,6 +8,9 @@
  */
 package com.ibm.icu.dev.demo.rbnf;
 
+import com.ibm.icu.dev.demo.impl.DemoApplet;
+import com.ibm.icu.math.BigDecimal;
+import com.ibm.icu.text.RuleBasedNumberFormat;
 import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.CardLayout;
@@ -44,21 +47,13 @@ import java.text.DecimalFormat;
 import java.text.ParsePosition;
 import java.util.Locale;
 
-import com.ibm.icu.dev.demo.impl.DemoApplet;
-import com.ibm.icu.math.BigDecimal;
-import com.ibm.icu.text.RuleBasedNumberFormat;
-
 public class RbnfDemo extends DemoApplet {
-    /**
-     * For serialization
-     */
+    /** For serialization */
     private static final long serialVersionUID = -9119861296873763536L;
 
-    /**
-     * Puts a copyright in the .class file
-     */
-//    private static final String copyrightNotice
-//        = "Copyright \u00a91997-1998 IBM Corp.  All rights reserved.";
+    /** Puts a copyright in the .class file */
+    //    private static final String copyrightNotice
+    //        = "Copyright \u00a91997-1998 IBM Corp.  All rights reserved.";
 
     /*
      * code to run the demo as an application
@@ -69,7 +64,7 @@ public class RbnfDemo extends DemoApplet {
 
     @Override
     protected Dimension getDefaultFrameSize(DemoApplet applet, Frame f) {
-        return new Dimension(430,270);
+        return new Dimension(430, 270);
     }
 
     @Override
@@ -79,7 +74,7 @@ public class RbnfDemo extends DemoApplet {
         window.setLayout(new BorderLayout());
 
         Panel mainPanel = new Panel();
-        mainPanel.setLayout(new GridLayout(1,2));
+        mainPanel.setLayout(new GridLayout(1, 2));
 
         commentaryField = new TextArea("", 0, 0, TextArea.SCROLLBARS_VERTICAL_ONLY);
         commentaryField.setSize(800, 50);
@@ -102,150 +97,174 @@ public class RbnfDemo extends DemoApplet {
         rulesField.setFont(new Font("Serif", Font.PLAIN, 14));
         lenientParseButton = new Checkbox("Lenient parse", lenientParse);
 
-        numberField.addTextListener(new TextListener() {
-            @Override
-            public void textValueChanged(TextEvent e) {
-                if (!numberFieldHasFocus)
-                    return;
+        numberField.addTextListener(
+                new TextListener() {
+                    @Override
+                    public void textValueChanged(TextEvent e) {
+                        if (!numberFieldHasFocus) return;
 
-                String fieldText = ((TextComponent)(e.getSource())).getText();
-                parsePosition.setIndex(0);
-                Number temp = numberFormatter.parse(fieldText, parsePosition);
-                if (temp == null || parsePosition.getIndex() == 0) {
-                    theNumber = BigDecimal.ZERO;
-                    textField.setText("PARSE ERROR");
-                }
-                else {
-                    theNumber = new BigDecimal(temp instanceof Long ? temp.longValue() : temp.doubleValue());
-                    textField.setText(spelloutFormatter.format(
-                            theNumber.scale() == 0 ? theNumber.longValue() : theNumber.doubleValue(), ruleSetName));
-                }
-            }
-        } );
-
-        numberField.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusLost(FocusEvent e) {
-                numberFieldHasFocus = false;
-                numberField.setText(numberFormatter.format(theNumber));
-            }
-
-            @Override
-            public void focusGained(FocusEvent e) {
-                numberFieldHasFocus = true;
-                numberField.selectAll();
-            }
-        } );
-
-        textField.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                if (e.getKeyChar() == '\t') {
-                    String fieldText = ((TextComponent)(e.getSource())).getText();
-                    parsePosition.setIndex(0);
-                    theNumber = new BigDecimal(spelloutFormatter.parse(fieldText, parsePosition)
-                                    .doubleValue());
-                    if (parsePosition.getIndex() == 0) {
-                        theNumber = BigDecimal.ZERO;
-                        numberField.setText("PARSE ERROR");
-                        textField.selectAll();
-                    }
-                    else if (parsePosition.getIndex() < fieldText.length()) {
-                        textField.select(parsePosition.getIndex(), fieldText.length());
-                        numberField.setText(numberFormatter.format(theNumber));
-                    }
-                    else {
-                        textField.selectAll();
-                        numberField.setText(numberFormatter.format(theNumber));
-                    }
-                    e.consume();
-                }
-            }
-        } );
-
-        textField.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusLost(FocusEvent e) {
-                String fieldText = ((TextComponent)(e.getSource())).getText();
-                parsePosition.setIndex(0);
-                theNumber = new BigDecimal(spelloutFormatter.parse(fieldText, parsePosition)
-                                .doubleValue());
-                if (parsePosition.getIndex() == 0)
-                    numberField.setText("PARSE ERROR");
-                else
-                    numberField.setText(numberFormatter.format(theNumber));
-                textField.setText(textField.getText()); // textField.repaint() didn't work right
-            }
-
-            @Override
-            public void focusGained(FocusEvent e) {
-                textField.selectAll();
-            }
-        } );
-
-        rulesField.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                if (e.getKeyChar() == '\t') {
-                    String fieldText = ((TextComponent)(e.getSource())).getText();
-                    if (formatterMenu.getSelectedItem().equals("Custom") || !fieldText.equals(
-                                    RbnfSampleRuleSets.sampleRuleSets[formatterMenu.getSelectedIndex()])) {
-                        try {
-                            RuleBasedNumberFormat temp = new RuleBasedNumberFormat(fieldText);
-                            temp.setLenientParseMode(lenientParse);
-                            populateRuleSetMenu();
-                            spelloutFormatter = temp;
-                            customRuleSet = fieldText;
-                            formatterMenu.select("Custom");
-                            commentaryField.setText(RbnfSampleRuleSets.
-                                sampleRuleSetCommentary[RbnfSampleRuleSets.
-                                sampleRuleSetCommentary.length - 1]);
-                            redisplay();
-                        }
-                        catch (Exception x) {
-                            textField.setText(x.toString());
+                        String fieldText = ((TextComponent) (e.getSource())).getText();
+                        parsePosition.setIndex(0);
+                        Number temp = numberFormatter.parse(fieldText, parsePosition);
+                        if (temp == null || parsePosition.getIndex() == 0) {
+                            theNumber = BigDecimal.ZERO;
+                            textField.setText("PARSE ERROR");
+                        } else {
+                            theNumber =
+                                    new BigDecimal(
+                                            temp instanceof Long
+                                                    ? temp.longValue()
+                                                    : temp.doubleValue());
+                            textField.setText(
+                                    spelloutFormatter.format(
+                                            theNumber.scale() == 0
+                                                    ? theNumber.longValue()
+                                                    : theNumber.doubleValue(),
+                                            ruleSetName));
                         }
                     }
-                    e.consume();
-                }
-            }
-        } );
+                });
 
-        rulesField.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusLost(FocusEvent e) {
-                String fieldText = ((TextComponent)(e.getSource())).getText();
-                if (formatterMenu.getSelectedItem().equals("Custom") || !fieldText.equals(
-                                RbnfSampleRuleSets.sampleRuleSets[formatterMenu.getSelectedIndex()])) {
-                    try {
-                        RuleBasedNumberFormat temp = new RuleBasedNumberFormat(fieldText);
-                        temp.setLenientParseMode(lenientParse);
-                        populateRuleSetMenu();
-                        spelloutFormatter = temp;
-                        customRuleSet = fieldText;
-                        formatterMenu.select("Custom");
-                        redisplay();
+        numberField.addFocusListener(
+                new FocusAdapter() {
+                    @Override
+                    public void focusLost(FocusEvent e) {
+                        numberFieldHasFocus = false;
+                        numberField.setText(numberFormatter.format(theNumber));
                     }
-                    catch (Exception x) {
-                        textField.setText(x.toString());
-                    }
-                }
-                rulesField.setText(rulesField.getText()); // rulesField.repaint() didn't work right
-            }
-        } );
 
-        lenientParseButton.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                lenientParse = lenientParseButton.getState();
-                spelloutFormatter.setLenientParseMode(lenientParse);
-            }
-        } );
+                    @Override
+                    public void focusGained(FocusEvent e) {
+                        numberFieldHasFocus = true;
+                        numberField.selectAll();
+                    }
+                });
+
+        textField.addKeyListener(
+                new KeyAdapter() {
+                    @Override
+                    public void keyTyped(KeyEvent e) {
+                        if (e.getKeyChar() == '\t') {
+                            String fieldText = ((TextComponent) (e.getSource())).getText();
+                            parsePosition.setIndex(0);
+                            theNumber =
+                                    new BigDecimal(
+                                            spelloutFormatter
+                                                    .parse(fieldText, parsePosition)
+                                                    .doubleValue());
+                            if (parsePosition.getIndex() == 0) {
+                                theNumber = BigDecimal.ZERO;
+                                numberField.setText("PARSE ERROR");
+                                textField.selectAll();
+                            } else if (parsePosition.getIndex() < fieldText.length()) {
+                                textField.select(parsePosition.getIndex(), fieldText.length());
+                                numberField.setText(numberFormatter.format(theNumber));
+                            } else {
+                                textField.selectAll();
+                                numberField.setText(numberFormatter.format(theNumber));
+                            }
+                            e.consume();
+                        }
+                    }
+                });
+
+        textField.addFocusListener(
+                new FocusAdapter() {
+                    @Override
+                    public void focusLost(FocusEvent e) {
+                        String fieldText = ((TextComponent) (e.getSource())).getText();
+                        parsePosition.setIndex(0);
+                        theNumber =
+                                new BigDecimal(
+                                        spelloutFormatter
+                                                .parse(fieldText, parsePosition)
+                                                .doubleValue());
+                        if (parsePosition.getIndex() == 0) numberField.setText("PARSE ERROR");
+                        else numberField.setText(numberFormatter.format(theNumber));
+                        textField.setText(
+                                textField.getText()); // textField.repaint() didn't work right
+                    }
+
+                    @Override
+                    public void focusGained(FocusEvent e) {
+                        textField.selectAll();
+                    }
+                });
+
+        rulesField.addKeyListener(
+                new KeyAdapter() {
+                    @Override
+                    public void keyTyped(KeyEvent e) {
+                        if (e.getKeyChar() == '\t') {
+                            String fieldText = ((TextComponent) (e.getSource())).getText();
+                            if (formatterMenu.getSelectedItem().equals("Custom")
+                                    || !fieldText.equals(
+                                            RbnfSampleRuleSets.sampleRuleSets[
+                                                    formatterMenu.getSelectedIndex()])) {
+                                try {
+                                    RuleBasedNumberFormat temp =
+                                            new RuleBasedNumberFormat(fieldText);
+                                    temp.setLenientParseMode(lenientParse);
+                                    populateRuleSetMenu();
+                                    spelloutFormatter = temp;
+                                    customRuleSet = fieldText;
+                                    formatterMenu.select("Custom");
+                                    commentaryField.setText(
+                                            RbnfSampleRuleSets.sampleRuleSetCommentary[
+                                                    RbnfSampleRuleSets.sampleRuleSetCommentary
+                                                                    .length
+                                                            - 1]);
+                                    redisplay();
+                                } catch (Exception x) {
+                                    textField.setText(x.toString());
+                                }
+                            }
+                            e.consume();
+                        }
+                    }
+                });
+
+        rulesField.addFocusListener(
+                new FocusAdapter() {
+                    @Override
+                    public void focusLost(FocusEvent e) {
+                        String fieldText = ((TextComponent) (e.getSource())).getText();
+                        if (formatterMenu.getSelectedItem().equals("Custom")
+                                || !fieldText.equals(
+                                        RbnfSampleRuleSets.sampleRuleSets[
+                                                formatterMenu.getSelectedIndex()])) {
+                            try {
+                                RuleBasedNumberFormat temp = new RuleBasedNumberFormat(fieldText);
+                                temp.setLenientParseMode(lenientParse);
+                                populateRuleSetMenu();
+                                spelloutFormatter = temp;
+                                customRuleSet = fieldText;
+                                formatterMenu.select("Custom");
+                                redisplay();
+                            } catch (Exception x) {
+                                textField.setText(x.toString());
+                            }
+                        }
+                        rulesField.setText(
+                                rulesField.getText()); // rulesField.repaint() didn't work right
+                    }
+                });
+
+        lenientParseButton.addItemListener(
+                new ItemListener() {
+                    @Override
+                    public void itemStateChanged(ItemEvent e) {
+                        lenientParse = lenientParseButton.getState();
+                        spelloutFormatter.setLenientParseMode(lenientParse);
+                    }
+                });
 
         numberField.setText(numberFormatter.format(theNumber));
         numberField.selectAll();
-        textField.setText(spelloutFormatter
-                .format(theNumber.scale() == 0 ? theNumber.longValue() : theNumber.doubleValue(), ruleSetName));
+        textField.setText(
+                spelloutFormatter.format(
+                        theNumber.scale() == 0 ? theNumber.longValue() : theNumber.doubleValue(),
+                        ruleSetName));
 
         Panel leftPanel = new Panel();
         leftPanel.setLayout(new BorderLayout());
@@ -260,71 +279,82 @@ public class RbnfDemo extends DemoApplet {
         Panel panel2 = new Panel();
         panel2.setLayout(new GridLayout(3, 3));
         Button button = new Button("+100");
-        button.addActionListener( new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                roll(100);
-            }
-        } );
+        button.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        roll(100);
+                    }
+                });
         panel2.add(button);
         button = new Button("+10");
-        button.addActionListener( new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                roll(10);
-            }
-        } );
+        button.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        roll(10);
+                    }
+                });
         panel2.add(button);
         button = new Button("+1");
-        button.addActionListener( new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                roll(1);
-            }
-        } );
+        button.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        roll(1);
+                    }
+                });
         panel2.add(button);
         button = new Button("<");
-        button.addActionListener( new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                theNumber = new BigDecimal(theNumber.toString()).multiply(new BigDecimal("10"));
-                redisplay();
-            }
-        } );
+        button.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        theNumber =
+                                new BigDecimal(theNumber.toString()).multiply(new BigDecimal("10"));
+                        redisplay();
+                    }
+                });
         panel2.add(button);
         panel2.add(new Panel());
         button = new Button(">");
-        button.addActionListener( new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                theNumber = new BigDecimal(theNumber.toString()).multiply(new BigDecimal("0.1"));
-                redisplay();
-            }
-        } );
+        button.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        theNumber =
+                                new BigDecimal(theNumber.toString())
+                                        .multiply(new BigDecimal("0.1"));
+                        redisplay();
+                    }
+                });
         panel2.add(button);
         button = new Button("-100");
-        button.addActionListener( new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                roll(-100);
-            }
-        } );
+        button.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        roll(-100);
+                    }
+                });
         panel2.add(button);
         button = new Button("-10");
-        button.addActionListener( new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                roll(-10);
-            }
-        } );
+        button.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        roll(-10);
+                    }
+                });
         panel2.add(button);
         button = new Button("-1");
-        button.addActionListener( new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                roll(-1);
-            }
-        } );
+        button.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        roll(-1);
+                    }
+                });
         panel2.add(button);
         panel.add(panel2, "East");
         leftPanel.add(panel, "North");
@@ -336,43 +366,45 @@ public class RbnfDemo extends DemoApplet {
         for (int i = 0; i < RbnfSampleRuleSets.sampleRuleSetNames.length; i++)
             formatterMenu.addItem(RbnfSampleRuleSets.sampleRuleSetNames[i]);
         formatterMenu.addItem("Custom");
-        formatterMenu.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                Choice source = (Choice)(e.getSource());
-                int item = source.getSelectedIndex();
-                Locale locale = RbnfSampleRuleSets.sampleRuleSetLocales[item];
+        formatterMenu.addItemListener(
+                new ItemListener() {
+                    @Override
+                    public void itemStateChanged(ItemEvent e) {
+                        Choice source = (Choice) (e.getSource());
+                        int item = source.getSelectedIndex();
+                        Locale locale = RbnfSampleRuleSets.sampleRuleSetLocales[item];
 
-                commentaryField.setText(RbnfSampleRuleSets.
-                                sampleRuleSetCommentary[item]);
+                        commentaryField.setText(RbnfSampleRuleSets.sampleRuleSetCommentary[item]);
 
-                if (locale != null && (locale.getLanguage().equals("iw")
-                        || locale.getLanguage().equals("ru") || locale.getLanguage().equals("ja")
-                        || locale.getLanguage().equals("el")
-                        || locale.getLanguage().equals("zh"))) {
-                    textField.togglePanes(false);
-                    rulesField.togglePanes(false);
-                }
-                else {
-                    textField.togglePanes(true);
-                    rulesField.togglePanes(true);
-                }
+                        if (locale != null
+                                && (locale.getLanguage().equals("iw")
+                                        || locale.getLanguage().equals("ru")
+                                        || locale.getLanguage().equals("ja")
+                                        || locale.getLanguage().equals("el")
+                                        || locale.getLanguage().equals("zh"))) {
+                            textField.togglePanes(false);
+                            rulesField.togglePanes(false);
+                        } else {
+                            textField.togglePanes(true);
+                            rulesField.togglePanes(true);
+                        }
 
-                makeNewSpelloutFormatter();
-                redisplay();
-            }
-        } );
+                        makeNewSpelloutFormatter();
+                        redisplay();
+                    }
+                });
 
         ruleSetMenu = new Choice();
         populateRuleSetMenu();
 
-        ruleSetMenu.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                ruleSetName = ruleSetMenu.getSelectedItem();
-                redisplay();
-            }
-        } );
+        ruleSetMenu.addItemListener(
+                new ItemListener() {
+                    @Override
+                    public void itemStateChanged(ItemEvent e) {
+                        ruleSetName = ruleSetMenu.getSelectedItem();
+                        redisplay();
+                    }
+                });
 
         Panel menuPanel = new Panel();
         menuPanel.setLayout(new GridLayout(1, 2));
@@ -403,7 +435,7 @@ public class RbnfDemo extends DemoApplet {
                             theApplet.demoClosed();
                         } else System.exit(0);
                     }
-                } );
+                });
         return window;
     }
 
@@ -414,8 +446,10 @@ public class RbnfDemo extends DemoApplet {
 
     void redisplay() {
         numberField.setText(numberFormatter.format(theNumber));
-        textField.setText(spelloutFormatter
-                .format(theNumber.scale() == 0 ? theNumber.longValue() : theNumber.doubleValue(), ruleSetName));
+        textField.setText(
+                spelloutFormatter.format(
+                        theNumber.scale() == 0 ? theNumber.longValue() : theNumber.doubleValue(),
+                        ruleSetName));
     }
 
     void makeNewSpelloutFormatter() {
@@ -425,16 +459,14 @@ public class RbnfDemo extends DemoApplet {
         if (formatterMenuItem.equals("Custom")) {
             rulesField.setText(customRuleSet);
             spelloutFormatter = new RuleBasedNumberFormat(customRuleSet);
-        }
-        else {
+        } else {
             rulesField.setText(RbnfSampleRuleSets.sampleRuleSets[item]);
 
             Locale locale = RbnfSampleRuleSets.sampleRuleSetLocales[item];
-            if (locale == null)
-                locale = Locale.getDefault();
+            if (locale == null) locale = Locale.getDefault();
 
-            spelloutFormatter = new RuleBasedNumberFormat(RbnfSampleRuleSets.
-                            sampleRuleSets[item], locale);
+            spelloutFormatter =
+                    new RuleBasedNumberFormat(RbnfSampleRuleSets.sampleRuleSets[item], locale);
         }
         spelloutFormatter.setLenientParseMode(lenientParse);
         populateRuleSetMenu();
@@ -445,16 +477,13 @@ public class RbnfDemo extends DemoApplet {
 
         if (ruleSetMenu != null) {
             ruleSetMenu.removeAll();
-            for (int i = 0; i < ruleSetNames.length; i++)
-                ruleSetMenu.addItem(ruleSetNames[i]);
+            for (int i = 0; i < ruleSetNames.length; i++) ruleSetMenu.addItem(ruleSetNames[i]);
 
             ruleSetName = ruleSetMenu.getSelectedItem();
-        }
-        else
-            ruleSetName = ruleSetNames[0];
+        } else ruleSetName = ruleSetNames[0];
     }
 
-//    private Frame demoWindow = null;
+    //    private Frame demoWindow = null;
 
     private TextComponent numberField;
     private DemoTextFieldHolder textField;
@@ -471,7 +500,7 @@ public class RbnfDemo extends DemoApplet {
     private boolean lenientParse = true;
 
     private BigDecimal theNumber = BigDecimal.ZERO;
-//    private boolean canEdit = true;
+    //    private boolean canEdit = true;
 
     private Choice formatterMenu;
     private Choice ruleSetMenu;
@@ -481,12 +510,10 @@ public class RbnfDemo extends DemoApplet {
 }
 
 class DemoTextField extends Component {
-    /**
-     * For serialization
-     */
+    /** For serialization */
     private static final long serialVersionUID = -7947090021239472658L;
-    public DemoTextField() {
-    }
+
+    public DemoTextField() {}
 
     public void setText(String text) {
         this.text = text;
@@ -516,46 +543,40 @@ class DemoTextField extends Component {
 
         while (lineStart < txt.length()) {
             maxLineEnd = txt.indexOf('\n', lineStart);
-            if (maxLineEnd == -1)
-                maxLineEnd = Integer.MAX_VALUE;
-            while (tempLineEnd != BreakIterator.DONE && fm.stringWidth(txt.substring(
-                            lineStart, tempLineEnd)) < width) {
+            if (maxLineEnd == -1) maxLineEnd = Integer.MAX_VALUE;
+            while (tempLineEnd != BreakIterator.DONE
+                    && fm.stringWidth(txt.substring(lineStart, tempLineEnd)) < width) {
                 lineEnd = tempLineEnd;
                 tempLineEnd = bi.next();
             }
             if (lineStart >= lineEnd) {
-                if (tempLineEnd == BreakIterator.DONE)
-                    lineEnd = txt.length();
-                else
-                    lineEnd = tempLineEnd;
+                if (tempLineEnd == BreakIterator.DONE) lineEnd = txt.length();
+                else lineEnd = tempLineEnd;
             }
-            if (lineEnd > maxLineEnd)
-                lineEnd = maxLineEnd;
+            if (lineEnd > maxLineEnd) lineEnd = maxLineEnd;
             g.drawString(txt.substring(lineStart, lineEnd), 0, penY);
             penY += lineHeight;
             totalHeight += lineHeight;
             lineStart = lineEnd;
-            if (lineStart < txt.length() && txt.charAt(lineStart) == '\n')
-                ++lineStart;
+            if (lineStart < txt.length() && txt.charAt(lineStart) == '\n') ++lineStart;
         }
     }
 
-/*
-    public Dimension getPreferredSize() {
-        Dimension size = getParent().getSize();
-        return new Dimension(size.width, totalHeight);
-    }
-*/
+    /*
+        public Dimension getPreferredSize() {
+            Dimension size = getParent().getSize();
+            return new Dimension(size.width, totalHeight);
+        }
+    */
 
     private String text;
     private int totalHeight;
 }
 
 class DemoTextFieldHolder extends Panel {
-    /**
-     * For serialization
-     */
+    /** For serialization */
     private static final long serialVersionUID = 7514498764062569858L;
+
     public DemoTextFieldHolder() {
         tf1 = new TextArea("", 0, 0, TextArea.SCROLLBARS_VERTICAL_ONLY);
         tf2 = new DemoTextField();
@@ -598,7 +619,7 @@ class DemoTextFieldHolder extends Panel {
 
     public void togglePanes(boolean canShowRealTextField) {
         if (canShowRealTextField != showingRealTextField) {
-            CardLayout layout = (CardLayout)(getLayout());
+            CardLayout layout = (CardLayout) (getLayout());
             layout.next(this);
             showingRealTextField = canShowRealTextField;
         }

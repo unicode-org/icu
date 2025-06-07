@@ -8,6 +8,9 @@
  */
 package com.ibm.icu.util;
 
+import com.ibm.icu.impl.locale.LSR;
+import com.ibm.icu.impl.locale.LikelySubtags;
+import com.ibm.icu.impl.locale.LocaleDistance;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -16,46 +19,38 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import com.ibm.icu.impl.locale.LSR;
-import com.ibm.icu.impl.locale.LikelySubtags;
-import com.ibm.icu.impl.locale.LocaleDistance;
-
 /**
- * Immutable class that picks the best match between a user's desired locales and
- * an application's supported locales.
+ * Immutable class that picks the best match between a user's desired locales and an application's
+ * supported locales.
  *
  * <p>Example:
+ *
  * <pre>
  * LocaleMatcher matcher = LocaleMatcher.builder().setSupportedLocales("fr, en-GB, en").build();
  * Locale bestSupported = matcher.getBestLocale(Locale.US);  // "en"
  * </pre>
  *
- * <p>A matcher takes into account when languages are close to one another,
- * such as Danish and Norwegian,
- * and when regional variants are close, like en-GB and en-AU as opposed to en-US.
+ * <p>A matcher takes into account when languages are close to one another, such as Danish and
+ * Norwegian, and when regional variants are close, like en-GB and en-AU as opposed to en-US.
  *
- * <p>If there are multiple supported locales with the same (language, script, region)
- * likely subtags, then the current implementation returns the first of those locales.
- * It ignores variant subtags (except for pseudolocale variants) and extensions.
- * This may change in future versions.
+ * <p>If there are multiple supported locales with the same (language, script, region) likely
+ * subtags, then the current implementation returns the first of those locales. It ignores variant
+ * subtags (except for pseudolocale variants) and extensions. This may change in future versions.
  *
- * <p>For example, the current implementation does not distinguish between
- * de, de-DE, de-Latn, de-1901, de-u-co-phonebk.
+ * <p>For example, the current implementation does not distinguish between de, de-DE, de-Latn,
+ * de-1901, de-u-co-phonebk.
  *
- * <p>If you prefer one equivalent locale over another, then provide only the preferred one,
- * or place it earlier in the list of supported locales.
+ * <p>If you prefer one equivalent locale over another, then provide only the preferred one, or
+ * place it earlier in the list of supported locales.
  *
- * <p>Otherwise, the order of supported locales may have no effect on the best-match results.
- * The current implementation compares each desired locale with supported locales
- * in the following order:
- * 1. Default locale, if supported;
- * 2. CLDR "paradigm locales" like en-GB and es-419;
- * 3. other supported locales.
- * This may change in future versions.
+ * <p>Otherwise, the order of supported locales may have no effect on the best-match results. The
+ * current implementation compares each desired locale with supported locales in the following
+ * order: 1. Default locale, if supported; 2. CLDR "paradigm locales" like en-GB and es-419; 3.
+ * other supported locales. This may change in future versions.
  *
- * <p>Often a product will just need one matcher instance, built with the languages
- * that it supports. However, it may want multiple instances with different
- * default languages based on additional information, such as the domain.
+ * <p>Often a product will just need one matcher instance, built with the languages that it
+ * supports. However, it may want multiple instances with different default languages based on
+ * additional information, such as the domain.
  *
  * <p>This class is not intended for public subclassing.
  *
@@ -63,7 +58,7 @@ import com.ibm.icu.impl.locale.LocaleDistance;
  * @stable ICU 4.4
  */
 public final class LocaleMatcher {
-    private static final LSR UND_LSR = new LSR("und","","", LSR.EXPLICIT_LSR);
+    private static final LSR UND_LSR = new LSR("und", "", "", LSR.EXPLICIT_LSR);
     // In ULocale, "und" and "" make the same object.
     private static final ULocale UND_ULOCALE = new ULocale("und");
     // In Locale, "und" and "" make different objects.
@@ -73,7 +68,7 @@ public final class LocaleMatcher {
     // Activates debugging output to stderr with details of GetBestMatch.
     private static final boolean TRACE_MATCHER = false;
 
-    private static abstract class LsrIterator implements Iterator<LSR> {
+    private abstract static class LsrIterator implements Iterator<LSR> {
         int bestDesiredIndex = -1;
 
         @Override
@@ -92,8 +87,8 @@ public final class LocaleMatcher {
      */
     public enum FavorSubtag {
         /**
-         * Language differences are most important, then script differences, then region differences.
-         * (This is the default behavior.)
+         * Language differences are most important, then script differences, then region
+         * differences. (This is the default behavior.)
          *
          * @stable ICU 65
          */
@@ -107,8 +102,8 @@ public final class LocaleMatcher {
     }
 
     /**
-     * Builder option for whether all desired locales are treated equally or
-     * earlier ones are preferred.
+     * Builder option for whether all desired locales are treated equally or earlier ones are
+     * preferred.
      *
      * @see LocaleMatcher.Builder#setDemotionPerDesiredLocale(LocaleMatcher.Demotion)
      * @stable ICU 65
@@ -123,25 +118,23 @@ public final class LocaleMatcher {
         /**
          * Earlier desired locales are preferred.
          *
-         * <p>From each desired locale to the next,
-         * the distance to any supported locale is increased by an additional amount
-         * which is at least as large as most region mismatches.
-         * A later desired locale has to have a better match with some supported locale
-         * due to more than merely having the same region subtag.
+         * <p>From each desired locale to the next, the distance to any supported locale is
+         * increased by an additional amount which is at least as large as most region mismatches. A
+         * later desired locale has to have a better match with some supported locale due to more
+         * than merely having the same region subtag.
          *
-         * <p>For example: <code>Supported={en, sv}  desired=[en-GB, sv]</code>
-         * yields <code>Result(en-GB, en)</code> because
-         * with the demotion of sv its perfect match is no better than
-         * the region distance between the earlier desired locale en-GB and en=en-US.
+         * <p>For example: <code>Supported={en, sv}  desired=[en-GB, sv]</code> yields <code>
+         * Result(en-GB, en)</code> because with the demotion of sv its perfect match is no better
+         * than the region distance between the earlier desired locale en-GB and en=en-US.
          *
          * <p>Notes:
+         *
          * <ul>
-         *   <li>In some cases, language and/or script differences can be as small as
-         *       the typical region difference. (Example: sr-Latn vs. sr-Cyrl)
-         *   <li>It is possible for certain region differences to be larger than usual,
-         *       and larger than the demotion.
-         *       (As of CLDR 35 there is no such case, but
-         *        this is possible in future versions of the data.)
+         *   <li>In some cases, language and/or script differences can be as small as the typical
+         *       region difference. (Example: sr-Latn vs. sr-Cyrl)
+         *   <li>It is possible for certain region differences to be larger than usual, and larger
+         *       than the demotion. (As of CLDR 35 there is no such case, but this is possible in
+         *       future versions of the data.)
          * </ul>
          *
          * @stable ICU 65
@@ -150,18 +143,16 @@ public final class LocaleMatcher {
     }
 
     /**
-     * Builder option for whether to include or ignore one-way (fallback) match data.
-     * The LocaleMatcher uses CLDR languageMatch data which includes fallback (oneway=true) entries.
+     * Builder option for whether to include or ignore one-way (fallback) match data. The
+     * LocaleMatcher uses CLDR languageMatch data which includes fallback (oneway=true) entries.
      * Sometimes it is desirable to ignore those.
      *
-     * <p>For example, consider a web application with the UI in a given language,
-     * with a link to another, related web app.
-     * The link should include the UI language, and the target server may also use
-     * the client’s Accept-Language header data.
-     * The target server has its own list of supported languages.
-     * One may want to favor UI language consistency, that is,
-     * if there is a decent match for the original UI language, we want to use it,
-     * but not if it is merely a fallback.
+     * <p>For example, consider a web application with the UI in a given language, with a link to
+     * another, related web app. The link should include the UI language, and the target server may
+     * also use the client’s Accept-Language header data. The target server has its own list of
+     * supported languages. One may want to favor UI language consistency, that is, if there is a
+     * decent match for the original UI language, we want to use it, but not if it is merely a
+     * fallback.
      *
      * @see LocaleMatcher.Builder#setDirection(LocaleMatcher.Direction)
      * @stable ICU 67
@@ -174,8 +165,8 @@ public final class LocaleMatcher {
          */
         WITH_ONE_WAY,
         /**
-         * Locale matching limited to two-way matches including e.g. Danish↔Norwegian
-         * but ignoring one-way matches.
+         * Locale matching limited to two-way matches including e.g. Danish↔Norwegian but ignoring
+         * one-way matches.
          *
          * @stable ICU 67
          */
@@ -195,9 +186,13 @@ public final class LocaleMatcher {
         private final int desiredIndex;
         private final int supportedIndex;
 
-        private Result(ULocale udesired, ULocale usupported,
-                Locale desired, Locale supported,
-                int desIndex, int suppIndex) {
+        private Result(
+                ULocale udesired,
+                ULocale usupported,
+                Locale desired,
+                Locale supported,
+                int desIndex,
+                int suppIndex) {
             desiredULocale = udesired;
             supportedULocale = usupported;
             desiredLocale = desired;
@@ -207,76 +202,87 @@ public final class LocaleMatcher {
         }
 
         /**
-         * Returns the best-matching desired locale.
-         * null if the list of desired locales is empty or if none matched well enough.
+         * Returns the best-matching desired locale. null if the list of desired locales is empty or
+         * if none matched well enough.
          *
          * @return the best-matching desired locale, or null.
          * @stable ICU 65
          */
         public ULocale getDesiredULocale() {
-            return desiredULocale == null && desiredLocale != null ?
-                    ULocale.forLocale(desiredLocale) : desiredULocale;
+            return desiredULocale == null && desiredLocale != null
+                    ? ULocale.forLocale(desiredLocale)
+                    : desiredULocale;
         }
+
         /**
-         * Returns the best-matching desired locale.
-         * null if the list of desired locales is empty or if none matched well enough.
+         * Returns the best-matching desired locale. null if the list of desired locales is empty or
+         * if none matched well enough.
          *
          * @return the best-matching desired locale, or null.
          * @stable ICU 65
          */
         public Locale getDesiredLocale() {
-            return desiredLocale == null && desiredULocale != null ?
-                    desiredULocale.toLocale() : desiredLocale;
+            return desiredLocale == null && desiredULocale != null
+                    ? desiredULocale.toLocale()
+                    : desiredLocale;
         }
 
         /**
-         * Returns the best-matching supported locale.
-         * If none matched well enough, this is the default locale.
-         * The default locale is null if {@link Builder#setNoDefaultLocale()} was called,
-         * or if the list of supported locales is empty and no explicit default locale is set.
+         * Returns the best-matching supported locale. If none matched well enough, this is the
+         * default locale. The default locale is null if {@link Builder#setNoDefaultLocale()} was
+         * called, or if the list of supported locales is empty and no explicit default locale is
+         * set.
          *
          * @return the best-matching supported locale, or null.
          * @stable ICU 65
          */
-        public ULocale getSupportedULocale() { return supportedULocale; }
-        /**
-         * Returns the best-matching supported locale.
-         * If none matched well enough, this is the default locale.
-         * The default locale is null if {@link Builder#setNoDefaultLocale()} was called,
-         * or if the list of supported locales is empty and no explicit default locale is set.
-         *
-         * @return the best-matching supported locale, or null.
-         * @stable ICU 65
-         */
-        public Locale getSupportedLocale() { return supportedLocale; }
+        public ULocale getSupportedULocale() {
+            return supportedULocale;
+        }
 
         /**
-         * Returns the index of the best-matching desired locale in the input Iterable order.
-         * -1 if the list of desired locales is empty or if none matched well enough.
+         * Returns the best-matching supported locale. If none matched well enough, this is the
+         * default locale. The default locale is null if {@link Builder#setNoDefaultLocale()} was
+         * called, or if the list of supported locales is empty and no explicit default locale is
+         * set.
+         *
+         * @return the best-matching supported locale, or null.
+         * @stable ICU 65
+         */
+        public Locale getSupportedLocale() {
+            return supportedLocale;
+        }
+
+        /**
+         * Returns the index of the best-matching desired locale in the input Iterable order. -1 if
+         * the list of desired locales is empty or if none matched well enough.
          *
          * @return the index of the best-matching desired locale, or -1.
          * @stable ICU 65
          */
-        public int getDesiredIndex() { return desiredIndex; }
+        public int getDesiredIndex() {
+            return desiredIndex;
+        }
 
         /**
-         * Returns the index of the best-matching supported locale in the
-         * constructor’s or builder’s input order (“set” Collection plus “added” locales).
-         * If the matcher was built from a locale list string, then the iteration order is that
-         * of a LocalePriorityList built from the same string.
-         * -1 if the list of supported locales is empty or if none matched well enough.
+         * Returns the index of the best-matching supported locale in the constructor’s or builder’s
+         * input order (“set” Collection plus “added” locales). If the matcher was built from a
+         * locale list string, then the iteration order is that of a LocalePriorityList built from
+         * the same string. -1 if the list of supported locales is empty or if none matched well
+         * enough.
          *
          * @return the index of the best-matching supported locale, or -1.
          * @stable ICU 65
          */
-        public int getSupportedIndex() { return supportedIndex; }
+        public int getSupportedIndex() {
+            return supportedIndex;
+        }
 
         /**
-         * Takes the best-matching supported locale and adds relevant fields of the
-         * best-matching desired locale, such as the -t- and -u- extensions.
-         * May replace some fields of the supported locale.
-         * The result is the locale that should be used for date and number formatting, collation, etc.
-         * Returns null if getSupportedLocale() returns null.
+         * Takes the best-matching supported locale and adds relevant fields of the best-matching
+         * desired locale, such as the -t- and -u- extensions. May replace some fields of the
+         * supported locale. The result is the locale that should be used for date and number
+         * formatting, collation, etc. Returns null if getSupportedLocale() returns null.
          *
          * <p>Example: desired=ar-SA-u-nu-latn, supported=ar-EG, resolved locale=ar-SA-u-nu-latn
          *
@@ -285,8 +291,9 @@ public final class LocaleMatcher {
          */
         public ULocale makeResolvedULocale() {
             ULocale bestDesired = getDesiredULocale();
-            if (supportedULocale == null || bestDesired == null ||
-                    supportedULocale.equals(bestDesired)) {
+            if (supportedULocale == null
+                    || bestDesired == null
+                    || supportedULocale.equals(bestDesired)) {
                 return supportedULocale;
             }
             ULocale.Builder b = new ULocale.Builder().setLocale(supportedULocale);
@@ -316,12 +323,10 @@ public final class LocaleMatcher {
         }
 
         /**
-         * Takes the best-matching supported locale and adds relevant fields of the
-         * best-matching desired locale, such as the -t- and -u- extensions.
-         * May replace some fields of the supported locale.
-         * The result is the locale that should be used for
-         * date and number formatting, collation, etc.
-         * Returns null if getSupportedLocale() returns null.
+         * Takes the best-matching supported locale and adds relevant fields of the best-matching
+         * desired locale, such as the -t- and -u- extensions. May replace some fields of the
+         * supported locale. The result is the locale that should be used for date and number
+         * formatting, collation, etc. Returns null if getSupportedLocale() returns null.
          *
          * <p>Example: desired=ar-SA-u-nu-latn, supported=ar-EG, resolved locale=ar-SA-u-nu-latn
          *
@@ -372,9 +377,8 @@ public final class LocaleMatcher {
         private Builder() {}
 
         /**
-         * Parses the string like {@link LocalePriorityList} does and
-         * sets the supported locales accordingly.
-         * Clears any previously set/added supported locales first.
+         * Parses the string like {@link LocalePriorityList} does and sets the supported locales
+         * accordingly. Clears any previously set/added supported locales first.
          *
          * @param locales the string of locales to set, to be parsed like LocalePriorityList does
          * @return this Builder object
@@ -385,9 +389,8 @@ public final class LocaleMatcher {
         }
 
         /**
-         * Copies the supported locales, preserving iteration order.
-         * Clears any previously set/added supported locales first.
-         * Duplicates are allowed, and are not removed.
+         * Copies the supported locales, preserving iteration order. Clears any previously set/added
+         * supported locales first. Duplicates are allowed, and are not removed.
          *
          * @param locales the list of locales
          * @return this Builder object
@@ -399,9 +402,8 @@ public final class LocaleMatcher {
         }
 
         /**
-         * Copies the supported locales, preserving iteration order.
-         * Clears any previously set/added supported locales first.
-         * Duplicates are allowed, and are not removed.
+         * Copies the supported locales, preserving iteration order. Clears any previously set/added
+         * supported locales first. Duplicates are allowed, and are not removed.
          *
          * @param locales the list of locale
          * @return this Builder object
@@ -416,8 +418,7 @@ public final class LocaleMatcher {
         }
 
         /**
-         * Adds another supported locale.
-         * Duplicates are allowed, and are not removed.
+         * Adds another supported locale. Duplicates are allowed, and are not removed.
          *
          * @param locale another locale
          * @return this Builder object
@@ -432,8 +433,7 @@ public final class LocaleMatcher {
         }
 
         /**
-         * Adds another supported locale.
-         * Duplicates are allowed, and are not removed.
+         * Adds another supported locale. Duplicates are allowed, and are not removed.
          *
          * @param locale another locale
          * @return this Builder object
@@ -444,10 +444,8 @@ public final class LocaleMatcher {
         }
 
         /**
-         * Sets no default locale.
-         * There will be no explicit or implicit default locale.
-         * If there is no good match, then the matcher will return null for the
-         * best supported locale.
+         * Sets no default locale. There will be no explicit or implicit default locale. If there is
+         * no good match, then the matcher will return null for the best supported locale.
          *
          * @stable ICU 68
          */
@@ -458,10 +456,9 @@ public final class LocaleMatcher {
         }
 
         /**
-         * Sets the default locale; if null, or if it is not set explicitly,
-         * then the first supported locale is used as the default locale.
-         * There is no default locale at all (null will be returned instead)
-         * if {@link #setNoDefaultLocale()} is called.
+         * Sets the default locale; if null, or if it is not set explicitly, then the first
+         * supported locale is used as the default locale. There is no default locale at all (null
+         * will be returned instead) if {@link #setNoDefaultLocale()} is called.
          *
          * @param defaultLocale the default locale
          * @return this Builder object
@@ -474,10 +471,9 @@ public final class LocaleMatcher {
         }
 
         /**
-         * Sets the default locale; if null, or if it is not set explicitly,
-         * then the first supported locale is used as the default locale.
-         * There is no default locale at all (null will be returned instead)
-         * if {@link #setNoDefaultLocale()} is called.
+         * Sets the default locale; if null, or if it is not set explicitly, then the first
+         * supported locale is used as the default locale. There is no default locale at all (null
+         * will be returned instead) if {@link #setNoDefaultLocale()} is called.
          *
          * @param defaultLocale the default locale
          * @return this Builder object
@@ -490,9 +486,9 @@ public final class LocaleMatcher {
         }
 
         /**
-         * If SCRIPT, then the language differences are smaller than script differences.
-         * This is used in situations (such as maps) where
-         * it is better to fall back to the same script than a similar language.
+         * If SCRIPT, then the language differences are smaller than script differences. This is
+         * used in situations (such as maps) where it is better to fall back to the same script than
+         * a similar language.
          *
          * @param subtag the subtag to favor
          * @return this Builder object
@@ -504,8 +500,8 @@ public final class LocaleMatcher {
         }
 
         /**
-         * Option for whether all desired locales are treated equally or
-         * earlier ones are preferred (this is the default).
+         * Option for whether all desired locales are treated equally or earlier ones are preferred
+         * (this is the default).
          *
          * @param demotion the demotion per desired locale to set.
          * @return this Builder object
@@ -517,8 +513,8 @@ public final class LocaleMatcher {
         }
 
         /**
-         * Option for whether to include or ignore one-way (fallback) match data.
-         * By default, they are included.
+         * Option for whether to include or ignore one-way (fallback) match data. By default, they
+         * are included.
          *
          * @param direction the match direction to set.
          * @return this Builder object
@@ -530,20 +526,17 @@ public final class LocaleMatcher {
         }
 
         /**
-         * Sets the maximum distance for an acceptable match.
-         * The matcher will return a match for a pair of locales only if
-         * they match at least as well as the pair given here.
+         * Sets the maximum distance for an acceptable match. The matcher will return a match for a
+         * pair of locales only if they match at least as well as the pair given here.
          *
-         * <p>For example, setMaxDistance(en-US, en-GB) limits matches to ones where the
-         * (desired, support) locales have a distance no greater than a region subtag difference.
-         * This is much stricter than the CLDR default.
+         * <p>For example, setMaxDistance(en-US, en-GB) limits matches to ones where the (desired,
+         * support) locales have a distance no greater than a region subtag difference. This is much
+         * stricter than the CLDR default.
          *
-         * <p>The details of locale matching are subject to changes in
-         * CLDR data and in the algorithm.
-         * Specifying a maximum distance in relative terms via a sample pair of locales
-         * insulates from changes that affect all distance metrics similarly,
-         * but some changes will necessarily affect relative distances between
-         * different pairs of locales.
+         * <p>The details of locale matching are subject to changes in CLDR data and in the
+         * algorithm. Specifying a maximum distance in relative terms via a sample pair of locales
+         * insulates from changes that affect all distance metrics similarly, but some changes will
+         * necessarily affect relative distances between different pairs of locales.
          *
          * @param desired the desired locale for distance comparison.
          * @param supported the supported locale for distance comparison.
@@ -558,20 +551,17 @@ public final class LocaleMatcher {
         }
 
         /**
-         * Sets the maximum distance for an acceptable match.
-         * The matcher will return a match for a pair of locales only if
-         * they match at least as well as the pair given here.
+         * Sets the maximum distance for an acceptable match. The matcher will return a match for a
+         * pair of locales only if they match at least as well as the pair given here.
          *
-         * <p>For example, setMaxDistance(en-US, en-GB) limits matches to ones where the
-         * (desired, support) locales have a distance no greater than a region subtag difference.
-         * This is much stricter than the CLDR default.
+         * <p>For example, setMaxDistance(en-US, en-GB) limits matches to ones where the (desired,
+         * support) locales have a distance no greater than a region subtag difference. This is much
+         * stricter than the CLDR default.
          *
-         * <p>The details of locale matching are subject to changes in
-         * CLDR data and in the algorithm.
-         * Specifying a maximum distance in relative terms via a sample pair of locales
-         * insulates from changes that affect all distance metrics similarly,
-         * but some changes will necessarily affect relative distances between
-         * different pairs of locales.
+         * <p>The details of locale matching are subject to changes in CLDR data and in the
+         * algorithm. Specifying a maximum distance in relative terms via a sample pair of locales
+         * insulates from changes that affect all distance metrics similarly, but some changes will
+         * necessarily affect relative distances between different pairs of locales.
          *
          * @param desired the desired locale for distance comparison.
          * @param supported the supported locale for distance comparison.
@@ -605,8 +595,7 @@ public final class LocaleMatcher {
         }
 
         /**
-         * Builds and returns a new locale matcher.
-         * This builder can continue to be used.
+         * Builds and returns a new locale matcher. This builder can continue to be used.
          *
          * @return new LocaleMatcher.
          * @stable ICU 65
@@ -617,6 +606,7 @@ public final class LocaleMatcher {
 
         /**
          * {@inheritDoc}
+         *
          * @stable ICU 65
          */
         @Override
@@ -652,8 +642,8 @@ public final class LocaleMatcher {
     }
 
     /**
-     * Copies the supported locales, preserving iteration order, and constructs a LocaleMatcher.
-     * The first locale is used as the default locale for when there is no good match.
+     * Copies the supported locales, preserving iteration order, and constructs a LocaleMatcher. The
+     * first locale is used as the default locale for when there is no good match.
      *
      * @param supportedLocales list of locales
      * @stable ICU 4.4
@@ -663,13 +653,12 @@ public final class LocaleMatcher {
     }
 
     /**
-     * Parses the string like {@link LocalePriorityList} does and
-     * constructs a LocaleMatcher for the supported locales parsed from the string.
-     * The first one (in LocalePriorityList iteration order) is used as the default locale for
-     * when there is no good match.
+     * Parses the string like {@link LocalePriorityList} does and constructs a LocaleMatcher for the
+     * supported locales parsed from the string. The first one (in LocalePriorityList iteration
+     * order) is used as the default locale for when there is no good match.
      *
-     * @param supportedLocales the string of locales to set,
-     *          to be parsed like LocalePriorityList does
+     * @param supportedLocales the string of locales to set, to be parsed like LocalePriorityList
+     *     does
      * @stable ICU 4.4
      */
     public LocaleMatcher(String supportedLocales) {
@@ -687,8 +676,8 @@ public final class LocaleMatcher {
         // Store the supported locales in input order,
         // so that when different types are used (e.g., java.util.Locale)
         // we can return those by parallel index.
-        int supportedLocalesLength = builder.supportedLocales != null ?
-                builder.supportedLocales.size() : 0;
+        int supportedLocalesLength =
+                builder.supportedLocales != null ? builder.supportedLocales.size() : 0;
         supportedULocales = new ULocale[supportedLocalesLength];
         supportedLocales = new Locale[supportedLocalesLength];
         // Supported LRSs in input order.
@@ -758,8 +747,10 @@ public final class LocaleMatcher {
         defaultULocale = udef;
         defaultLocale = def;
         demotionPerDesiredLocale =
-                builder.demotion == Demotion.NONE ? 0 :
-                    LocaleDistance.INSTANCE.getDefaultDemotionPerDesiredLocale();  // null or REGION
+                builder.demotion == Demotion.NONE
+                        ? 0
+                        : LocaleDistance.INSTANCE
+                                .getDefaultDemotionPerDesiredLocale(); // null or REGION
         favorSubtag = builder.favor;
         direction = builder.direction;
 
@@ -767,10 +758,14 @@ public final class LocaleMatcher {
         if (builder.thresholdDistance >= 0) {
             threshold = builder.thresholdDistance;
         } else if (builder.maxDistanceDesired != null) {
-            int indexAndDistance = LocaleDistance.INSTANCE.getBestIndexAndDistance(
-                    getMaximalLsrOrUnd(builder.maxDistanceDesired),
-                    new LSR[] { getMaximalLsrOrUnd(builder.maxDistanceSupported) }, 1,
-                    LocaleDistance.shiftDistance(100), favorSubtag, direction);
+            int indexAndDistance =
+                    LocaleDistance.INSTANCE.getBestIndexAndDistance(
+                            getMaximalLsrOrUnd(builder.maxDistanceDesired),
+                            new LSR[] {getMaximalLsrOrUnd(builder.maxDistanceSupported)},
+                            1,
+                            LocaleDistance.shiftDistance(100),
+                            favorSubtag,
+                            direction);
             // +1 for an exclusive threshold from an inclusive max.
             threshold = LocaleDistance.getDistanceFloor(indexAndDistance) + 1;
         } else {
@@ -876,8 +871,8 @@ public final class LocaleMatcher {
     /**
      * Returns the supported locale which best matches one of the desired locales.
      *
-     * @param desiredLocales Typically a user's languages, in order of preference (descending).
-     *          (In ICU 4.4..63 this parameter had type LocalePriorityList.)
+     * @param desiredLocales Typically a user's languages, in order of preference (descending). (In
+     *     ICU 4.4..63 this parameter had type LocalePriorityList.)
      * @return the best-matching supported locale.
      * @stable ICU 4.4
      */
@@ -893,11 +888,11 @@ public final class LocaleMatcher {
     }
 
     /**
-     * Parses the string like {@link LocalePriorityList} does and
-     * returns the supported locale which best matches one of the desired locales.
+     * Parses the string like {@link LocalePriorityList} does and returns the supported locale which
+     * best matches one of the desired locales.
      *
-     * @param desiredLocaleList Typically a user's languages,
-     *          as a string which is to be parsed like LocalePriorityList does.
+     * @param desiredLocaleList Typically a user's languages, as a string which is to be parsed like
+     *     LocalePriorityList does.
      * @return the best-matching supported locale.
      * @stable ICU 4.4
      */
@@ -944,11 +939,21 @@ public final class LocaleMatcher {
         if (suppIndex < 0) {
             return defaultResult();
         } else if (desiredLocale != null) {
-            return new Result(desiredLocale, supportedULocales[suppIndex],
-                    null, supportedLocales[suppIndex], 0, suppIndex);
+            return new Result(
+                    desiredLocale,
+                    supportedULocales[suppIndex],
+                    null,
+                    supportedLocales[suppIndex],
+                    0,
+                    suppIndex);
         } else {
-            return new Result(lsrIter.remembered, supportedULocales[suppIndex],
-                    null, supportedLocales[suppIndex], lsrIter.bestDesiredIndex, suppIndex);
+            return new Result(
+                    lsrIter.remembered,
+                    supportedULocales[suppIndex],
+                    null,
+                    supportedLocales[suppIndex],
+                    lsrIter.bestDesiredIndex,
+                    suppIndex);
         }
     }
 
@@ -956,12 +961,21 @@ public final class LocaleMatcher {
         if (suppIndex < 0) {
             return defaultResult();
         } else if (desiredLocale != null) {
-            return new Result(null, supportedULocales[suppIndex],
-                    desiredLocale, supportedLocales[suppIndex], 0, suppIndex);
+            return new Result(
+                    null,
+                    supportedULocales[suppIndex],
+                    desiredLocale,
+                    supportedLocales[suppIndex],
+                    0,
+                    suppIndex);
         } else {
-            return new Result(null, supportedULocales[suppIndex],
-                    lsrIter.remembered, supportedLocales[suppIndex],
-                    lsrIter.bestDesiredIndex, suppIndex);
+            return new Result(
+                    null,
+                    supportedULocales[suppIndex],
+                    lsrIter.remembered,
+                    supportedLocales[suppIndex],
+                    lsrIter.bestDesiredIndex,
+                    suppIndex);
         }
     }
 
@@ -1039,7 +1053,7 @@ public final class LocaleMatcher {
         if (TRACE_MATCHER) {
             sb = new StringBuilder("LocaleMatcher desired:");
         }
-        for (int bestShiftedDistance = LocaleDistance.shiftDistance(thresholdDistance);;) {
+        for (int bestShiftedDistance = LocaleDistance.shiftDistance(thresholdDistance); ; ) {
             if (TRACE_MATCHER) {
                 sb.append(' ').append(desiredLSR);
             }
@@ -1048,18 +1062,28 @@ public final class LocaleMatcher {
             if (index != null) {
                 int suppIndex = index;
                 if (TRACE_MATCHER) {
-                    System.err.printf("%s --> best=%s: desiredLSR=supportedLSR\n",
+                    System.err.printf(
+                            "%s --> best=%s: desiredLSR=supportedLSR\n",
                             sb, supportedULocales[suppIndex]);
                 }
-                if (remainingIter != null) { remainingIter.rememberCurrent(desiredIndex); }
+                if (remainingIter != null) {
+                    remainingIter.rememberCurrent(desiredIndex);
+                }
                 return suppIndex;
             }
-            int bestIndexAndDistance = LocaleDistance.INSTANCE.getBestIndexAndDistance(
-                    desiredLSR, supportedLSRs, supportedLSRsLength,
-                    bestShiftedDistance, favorSubtag, direction);
+            int bestIndexAndDistance =
+                    LocaleDistance.INSTANCE.getBestIndexAndDistance(
+                            desiredLSR,
+                            supportedLSRs,
+                            supportedLSRsLength,
+                            bestShiftedDistance,
+                            favorSubtag,
+                            direction);
             if (bestIndexAndDistance >= 0) {
                 bestShiftedDistance = LocaleDistance.getShiftedDistance(bestIndexAndDistance);
-                if (remainingIter != null) { remainingIter.rememberCurrent(desiredIndex); }
+                if (remainingIter != null) {
+                    remainingIter.rememberCurrent(desiredIndex);
+                }
                 bestSupportedLsrIndex = LocaleDistance.getIndex(bestIndexAndDistance);
             }
             if ((bestShiftedDistance -= LocaleDistance.shiftDistance(demotionPerDesiredLocale))
@@ -1080,16 +1104,16 @@ public final class LocaleMatcher {
         }
         int suppIndex = supportedIndexes[bestSupportedLsrIndex];
         if (TRACE_MATCHER) {
-            System.err.printf("%s --> best=%s: best matching supported locale\n",
+            System.err.printf(
+                    "%s --> best=%s: best matching supported locale\n",
                     sb, supportedULocales[suppIndex]);
         }
         return suppIndex;
     }
 
     /**
-     * Returns true if the pair of locales matches acceptably.
-     * This is influenced by Builder options such as setDirection(), setFavorSubtag(),
-     * and setMaxDistance().
+     * Returns true if the pair of locales matches acceptably. This is influenced by Builder options
+     * such as setDirection(), setFavorSubtag(), and setMaxDistance().
      *
      * @param desired The desired locale.
      * @param supported The supported locale.
@@ -1097,17 +1121,20 @@ public final class LocaleMatcher {
      * @stable ICU 68
      */
     public boolean isMatch(Locale desired, Locale supported) {
-        int indexAndDistance = LocaleDistance.INSTANCE.getBestIndexAndDistance(
-                getMaximalLsrOrUnd(desired),
-                new LSR[] { getMaximalLsrOrUnd(supported) }, 1,
-                LocaleDistance.shiftDistance(thresholdDistance), favorSubtag, direction);
+        int indexAndDistance =
+                LocaleDistance.INSTANCE.getBestIndexAndDistance(
+                        getMaximalLsrOrUnd(desired),
+                        new LSR[] {getMaximalLsrOrUnd(supported)},
+                        1,
+                        LocaleDistance.shiftDistance(thresholdDistance),
+                        favorSubtag,
+                        direction);
         return indexAndDistance >= 0;
     }
 
     /**
-     * Returns true if the pair of locales matches acceptably.
-     * This is influenced by Builder options such as setDirection(), setFavorSubtag(),
-     * and setMaxDistance().
+     * Returns true if the pair of locales matches acceptably. This is influenced by Builder options
+     * such as setDirection(), setFavorSubtag(), and setMaxDistance().
      *
      * @param desired The desired locale.
      * @param supported The supported locale.
@@ -1115,20 +1142,24 @@ public final class LocaleMatcher {
      * @stable ICU 68
      */
     public boolean isMatch(ULocale desired, ULocale supported) {
-        int indexAndDistance = LocaleDistance.INSTANCE.getBestIndexAndDistance(
-                getMaximalLsrOrUnd(desired),
-                new LSR[] { getMaximalLsrOrUnd(supported) }, 1,
-                LocaleDistance.shiftDistance(thresholdDistance), favorSubtag, direction);
+        int indexAndDistance =
+                LocaleDistance.INSTANCE.getBestIndexAndDistance(
+                        getMaximalLsrOrUnd(desired),
+                        new LSR[] {getMaximalLsrOrUnd(supported)},
+                        1,
+                        LocaleDistance.shiftDistance(thresholdDistance),
+                        favorSubtag,
+                        direction);
         return indexAndDistance >= 0;
     }
 
     /**
-     * Returns a fraction between 0 and 1, where 1 means that the languages are a
-     * perfect match, and 0 means that they are completely different.
+     * Returns a fraction between 0 and 1, where 1 means that the languages are a perfect match, and
+     * 0 means that they are completely different.
      *
-     * <p>This is mostly an implementation detail, and the precise values may change over time.
-     * The implementation may use either the maximized forms or the others ones, or both.
-     * The implementation may or may not rely on the forms to be consistent with each other.
+     * <p>This is mostly an implementation detail, and the precise values may change over time. The
+     * implementation may use either the maximized forms or the others ones, or both. The
+     * implementation may or may not rely on the forms to be consistent with each other.
      *
      * <p>Callers should construct and use a matcher rather than match pairs of locales directly.
      *
@@ -1140,29 +1171,35 @@ public final class LocaleMatcher {
      * @deprecated ICU 65 Build and use a matcher rather than comparing pairs of locales.
      */
     @Deprecated
-    public double match(ULocale desired, ULocale desiredMax, ULocale supported, ULocale supportedMax) {
+    public double match(
+            ULocale desired, ULocale desiredMax, ULocale supported, ULocale supportedMax) {
         // Returns the inverse of the distance: That is, 1-distance(desired, supported).
-        int indexAndDistance = LocaleDistance.INSTANCE.getBestIndexAndDistance(
-                getMaximalLsrOrUnd(desired),
-                new LSR[] { getMaximalLsrOrUnd(supported) }, 1,
-                LocaleDistance.shiftDistance(thresholdDistance), favorSubtag, direction);
+        int indexAndDistance =
+                LocaleDistance.INSTANCE.getBestIndexAndDistance(
+                        getMaximalLsrOrUnd(desired),
+                        new LSR[] {getMaximalLsrOrUnd(supported)},
+                        1,
+                        LocaleDistance.shiftDistance(thresholdDistance),
+                        favorSubtag,
+                        direction);
         double distance = LocaleDistance.getDistanceDouble(indexAndDistance);
         if (TRACE_MATCHER) {
-            System.err.printf("LocaleMatcher distance(desired=%s, supported=%s)=%g\n",
-                String.valueOf(desired), String.valueOf(supported), distance);
+            System.err.printf(
+                    "LocaleMatcher distance(desired=%s, supported=%s)=%g\n",
+                    String.valueOf(desired), String.valueOf(supported), distance);
         }
         return (100.0 - distance) / 100.0;
     }
 
     /**
      * Partially canonicalizes a locale (language). Note that for now, it is canonicalizing
-     * according to CLDR conventions (he vs iw, etc), since that is what is needed
-     * for likelySubtags.
+     * according to CLDR conventions (he vs iw, etc), since that is what is needed for
+     * likelySubtags.
      *
-     * <p>Currently, this is a much simpler canonicalization than what the ULocale class does:
-     * The language/script/region subtags are each mapped separately, ignoring the other subtags.
-     * If none of these change, then the input locale is returned.
-     * Otherwise a new ULocale with only those subtags is returned, removing variants and extensions.
+     * <p>Currently, this is a much simpler canonicalization than what the ULocale class does: The
+     * language/script/region subtags are each mapped separately, ignoring the other subtags. If
+     * none of these change, then the input locale is returned. Otherwise a new ULocale with only
+     * those subtags is returned, removing variants and extensions.
      *
      * @param locale language/locale code
      * @return ULocale with remapped subtags.
@@ -1174,6 +1211,7 @@ public final class LocaleMatcher {
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 4.4
      */
     @Override

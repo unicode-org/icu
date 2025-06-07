@@ -3,13 +3,6 @@
 
 package com.ibm.icu.dev.test.message2;
 
-import java.util.Locale;
-import java.util.Map;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.message2.FormattedPlaceholder;
 import com.ibm.icu.message2.Formatter;
@@ -17,10 +10,13 @@ import com.ibm.icu.message2.FormatterFactory;
 import com.ibm.icu.message2.MFFunctionRegistry;
 import com.ibm.icu.message2.MessageFormatter;
 import com.ibm.icu.message2.PlainStringFormattedValue;
+import java.util.Locale;
+import java.util.Map;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
-/**
- * Showing a custom formatter that can handle grammatical cases.
- */
+/** Showing a custom formatter that can handle grammatical cases. */
 @RunWith(JUnit4.class)
 @SuppressWarnings({"static-method", "javadoc"})
 public class CustomFormatterGrammarCaseTest extends CoreTestFmwk {
@@ -63,7 +59,8 @@ public class CustomFormatterGrammarCaseTest extends CoreTestFmwk {
             }
 
             @Override
-            public FormattedPlaceholder format(Object toFormat, Map<String, Object> variableOptions) {
+            public FormattedPlaceholder format(
+                    Object toFormat, Map<String, Object> variableOptions) {
                 String result;
                 if (toFormat == null) {
                     result = null;
@@ -86,32 +83,53 @@ public class CustomFormatterGrammarCaseTest extends CoreTestFmwk {
         }
     }
 
-    static final MFFunctionRegistry REGISTRY = MFFunctionRegistry.builder()
-            .setFormatter("grammarBB", new GrammarCasesFormatterFactory())
-            .build();
+    static final MFFunctionRegistry REGISTRY =
+            MFFunctionRegistry.builder()
+                    .setFormatter("grammarBB", new GrammarCasesFormatterFactory())
+                    .build();
 
     @Test
     public void test() {
-        MessageFormatter mf = MessageFormatter.builder()
-                .setFunctionRegistry(REGISTRY)
-                .setLocale(Locale.forLanguageTag("ro"))
-                .setPattern("Cartea {$owner :grammarBB case=genitive}")
-                .build();
+        MessageFormatter mf =
+                MessageFormatter.builder()
+                        .setFunctionRegistry(REGISTRY)
+                        .setLocale(Locale.forLanguageTag("ro"))
+                        .setPattern("Cartea {$owner :grammarBB case=genitive}")
+                        .build();
 
-        assertEquals("case - genitive", "Cartea Mariei", mf.formatToString(Args.of("owner", "Maria")));
-        assertEquals("case - genitive", "Cartea Rodicăi", mf.formatToString(Args.of("owner", "Rodica")));
-        assertEquals("case - genitive", "Cartea Ilenei", mf.formatToString(Args.of("owner", "Ileana")));
-        assertEquals("case - genitive", "Cartea lui Petre", mf.formatToString(Args.of("owner", "Petre")));
+        assertEquals(
+                "case - genitive", "Cartea Mariei", mf.formatToString(Args.of("owner", "Maria")));
+        assertEquals(
+                "case - genitive", "Cartea Rodicăi", mf.formatToString(Args.of("owner", "Rodica")));
+        assertEquals(
+                "case - genitive", "Cartea Ilenei", mf.formatToString(Args.of("owner", "Ileana")));
+        assertEquals(
+                "case - genitive",
+                "Cartea lui Petre",
+                mf.formatToString(Args.of("owner", "Petre")));
 
-        mf = MessageFormatter.builder()
-                .setFunctionRegistry(REGISTRY)
-                .setLocale(Locale.forLanguageTag("ro"))
-                .setPattern("M-a sunat {$owner :grammarBB case=nominative}")
-                .build();
+        mf =
+                MessageFormatter.builder()
+                        .setFunctionRegistry(REGISTRY)
+                        .setLocale(Locale.forLanguageTag("ro"))
+                        .setPattern("M-a sunat {$owner :grammarBB case=nominative}")
+                        .build();
 
-        assertEquals("case - nominative", "M-a sunat Maria", mf.formatToString(Args.of("owner", "Maria")));
-        assertEquals("case - nominative", "M-a sunat Rodica", mf.formatToString(Args.of("owner", "Rodica")));
-        assertEquals("case - nominative", "M-a sunat Ileana", mf.formatToString(Args.of("owner", "Ileana")));
-        assertEquals("case - nominative", "M-a sunat Petre", mf.formatToString(Args.of("owner", "Petre")));
+        assertEquals(
+                "case - nominative",
+                "M-a sunat Maria",
+                mf.formatToString(Args.of("owner", "Maria")));
+        assertEquals(
+                "case - nominative",
+                "M-a sunat Rodica",
+                mf.formatToString(Args.of("owner", "Rodica")));
+        assertEquals(
+                "case - nominative",
+                "M-a sunat Ileana",
+                mf.formatToString(Args.of("owner", "Ileana")));
+        assertEquals(
+                "case - nominative",
+                "M-a sunat Petre",
+                mf.formatToString(Args.of("owner", "Petre")));
     }
 }

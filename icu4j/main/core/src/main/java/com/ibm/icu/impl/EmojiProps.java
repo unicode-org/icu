@@ -6,9 +6,6 @@
 
 package com.ibm.icu.impl;
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
-
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.BytesTrie;
@@ -16,6 +13,8 @@ import com.ibm.icu.util.CharsTrie;
 import com.ibm.icu.util.CodePointMap;
 import com.ibm.icu.util.CodePointTrie;
 import com.ibm.icu.util.ICUUncheckedIOException;
+import java.io.IOException;
+import java.nio.ByteBuffer;
 
 public final class EmojiProps {
     private static final class IsAcceptable implements ICUBinary.Authenticate {
@@ -24,8 +23,9 @@ public final class EmojiProps {
             return version[0] == 1;
         }
     }
+
     private static final IsAcceptable IS_ACCEPTABLE = new IsAcceptable();
-    private static final int DATA_FORMAT = 0x456d6f6a;  // "Emoj"
+    private static final int DATA_FORMAT = 0x456d6f6a; // "Emoj"
 
     // Byte offsets from the start of the data, after the generic header,
     // in ascending order.
@@ -34,10 +34,10 @@ public final class EmojiProps {
 
     // UCharsTrie=CharsTrie
     private static final int IX_BASIC_EMOJI_TRIE_OFFSET = 4;
-    //ivate static final int IX_EMOJI_KEYCAP_SEQUENCE_TRIE_OFFSET = 5;
-    //ivate static final int IX_RGI_EMOJI_MODIFIER_SEQUENCE_TRIE_OFFSET = 6;
-    //ivate static final int IX_RGI_EMOJI_FLAG_SEQUENCE_TRIE_OFFSET = 7;
-    //ivate static final int IX_RGI_EMOJI_TAG_SEQUENCE_TRIE_OFFSET = 8;
+    // ivate static final int IX_EMOJI_KEYCAP_SEQUENCE_TRIE_OFFSET = 5;
+    // ivate static final int IX_RGI_EMOJI_MODIFIER_SEQUENCE_TRIE_OFFSET = 6;
+    // ivate static final int IX_RGI_EMOJI_FLAG_SEQUENCE_TRIE_OFFSET = 7;
+    // ivate static final int IX_RGI_EMOJI_TAG_SEQUENCE_TRIE_OFFSET = 8;
     private static final int IX_RGI_EMOJI_ZWJ_SEQUENCE_TRIE_OFFSET = 9;
 
     // Properties in the code point trie.
@@ -67,11 +67,10 @@ public final class EmojiProps {
             ICUBinary.readHeaderAndDataVersion(bytes, DATA_FORMAT, IS_ACCEPTABLE);
             int startPos = bytes.position();
 
-            int cpTrieOffset = bytes.getInt();  // inIndexes[IX_CPTRIE_OFFSET]
+            int cpTrieOffset = bytes.getInt(); // inIndexes[IX_CPTRIE_OFFSET]
             int indexesLength = cpTrieOffset / 4;
             if (indexesLength <= IX_RGI_EMOJI_ZWJ_SEQUENCE_TRIE_OFFSET) {
-                throw new ICUUncheckedIOException(
-                        "Emoji properties data: not enough indexes");
+                throw new ICUUncheckedIOException("Emoji properties data: not enough indexes");
             }
 
             int[] inIndexes = new int[indexesLength];
@@ -86,11 +85,11 @@ public final class EmojiProps {
             cpTrie = CodePointTrie.Fast8.fromBinary(bytes);
             int pos = bytes.position() - startPos;
             assert nextOffset >= pos;
-            ICUBinary.skipBytes(bytes, nextOffset - pos);  // skip padding after trie bytes
+            ICUBinary.skipBytes(bytes, nextOffset - pos); // skip padding after trie bytes
 
             offset = nextOffset;
             nextOffset = inIndexes[IX_BASIC_EMOJI_TRIE_OFFSET];
-            ICUBinary.skipBytes(bytes, nextOffset - offset);  // skip unknown bytes
+            ICUBinary.skipBytes(bytes, nextOffset - offset); // skip unknown bytes
 
             for (i = IX_BASIC_EMOJI_TRIE_OFFSET; i <= IX_RGI_EMOJI_ZWJ_SEQUENCE_TRIE_OFFSET; ++i) {
                 offset = inIndexes[i];
@@ -101,7 +100,7 @@ public final class EmojiProps {
                             ICUBinary.getString(bytes, (nextOffset - offset) / 2, 0);
                 }
             }
-        } catch(IOException e) {
+        } catch (IOException e) {
             throw new ICUUncheckedIOException(e);
         }
     }
@@ -119,21 +118,21 @@ public final class EmojiProps {
 
     // Note: REGIONAL_INDICATOR is a single, hardcoded range implemented elsewhere.
     private static final byte[] bitFlags = {
-        BIT_EMOJI,                  // UCHAR_EMOJI=57
-        BIT_EMOJI_PRESENTATION,     // UCHAR_EMOJI_PRESENTATION=58
-        BIT_EMOJI_MODIFIER,         // UCHAR_EMOJI_MODIFIER=59
-        BIT_EMOJI_MODIFIER_BASE,    // UCHAR_EMOJI_MODIFIER_BASE=60
-        BIT_EMOJI_COMPONENT,        // UCHAR_EMOJI_COMPONENT=61
-        -1,                         // UCHAR_REGIONAL_INDICATOR=62
-        -1,                         // UCHAR_PREPENDED_CONCATENATION_MARK=63
-        BIT_EXTENDED_PICTOGRAPHIC,  // UCHAR_EXTENDED_PICTOGRAPHIC=64
-        BIT_BASIC_EMOJI,            // UCHAR_BASIC_EMOJI=65
-        -1,                         // UCHAR_EMOJI_KEYCAP_SEQUENCE=66
-        -1,                         // UCHAR_RGI_EMOJI_MODIFIER_SEQUENCE=67
-        -1,                         // UCHAR_RGI_EMOJI_FLAG_SEQUENCE=68
-        -1,                         // UCHAR_RGI_EMOJI_TAG_SEQUENCE=69
-        -1,                         // UCHAR_RGI_EMOJI_ZWJ_SEQUENCE=70
-        BIT_BASIC_EMOJI,            // UCHAR_RGI_EMOJI=71
+        BIT_EMOJI, // UCHAR_EMOJI=57
+        BIT_EMOJI_PRESENTATION, // UCHAR_EMOJI_PRESENTATION=58
+        BIT_EMOJI_MODIFIER, // UCHAR_EMOJI_MODIFIER=59
+        BIT_EMOJI_MODIFIER_BASE, // UCHAR_EMOJI_MODIFIER_BASE=60
+        BIT_EMOJI_COMPONENT, // UCHAR_EMOJI_COMPONENT=61
+        -1, // UCHAR_REGIONAL_INDICATOR=62
+        -1, // UCHAR_PREPENDED_CONCATENATION_MARK=63
+        BIT_EXTENDED_PICTOGRAPHIC, // UCHAR_EXTENDED_PICTOGRAPHIC=64
+        BIT_BASIC_EMOJI, // UCHAR_BASIC_EMOJI=65
+        -1, // UCHAR_EMOJI_KEYCAP_SEQUENCE=66
+        -1, // UCHAR_RGI_EMOJI_MODIFIER_SEQUENCE=67
+        -1, // UCHAR_RGI_EMOJI_FLAG_SEQUENCE=68
+        -1, // UCHAR_RGI_EMOJI_TAG_SEQUENCE=69
+        -1, // UCHAR_RGI_EMOJI_ZWJ_SEQUENCE=70
+        BIT_BASIC_EMOJI, // UCHAR_RGI_EMOJI=71
     };
 
     public boolean hasBinaryProperty(int c, int which) {
@@ -142,7 +141,7 @@ public final class EmojiProps {
         }
         int bit = bitFlags[which - UProperty.EMOJI];
         if (bit < 0) {
-            return false;  // not a property that we support in this function
+            return false; // not a property that we support in this function
         }
         int bits = cpTrie.get(c);
         return ((bits >> bit) & 1) != 0;
@@ -150,7 +149,9 @@ public final class EmojiProps {
 
     public boolean hasBinaryProperty(CharSequence s, int which) {
         int length = s.length();
-        if (length == 0) { return false; }  // empty string
+        if (length == 0) {
+            return false;
+        } // empty string
         // The caller should have delegated single code points to hasBinaryProperty(c, which).
         if (which < UProperty.BASIC_EMOJI || UProperty.RGI_EMOJI < which) {
             return false;

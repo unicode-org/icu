@@ -8,13 +8,12 @@
  */
 package com.ibm.icu.impl.jdkadapter;
 
+import com.ibm.icu.text.DecimalFormatSymbols;
 import java.util.Currency;
 
-import com.ibm.icu.text.DecimalFormatSymbols;
-
 /**
- * DecimalFormatSymbolsICU is an adapter class which wraps ICU4J DecimalFormatSymbols and
- * implements java.text.DecimalFormatSymbols APIs.
+ * DecimalFormatSymbolsICU is an adapter class which wraps ICU4J DecimalFormatSymbols and implements
+ * java.text.DecimalFormatSymbols APIs.
  */
 public class DecimalFormatSymbolsICU extends java.text.DecimalFormatSymbols {
 
@@ -36,15 +35,15 @@ public class DecimalFormatSymbolsICU extends java.text.DecimalFormatSymbols {
 
     @Override
     public Object clone() {
-        DecimalFormatSymbolsICU other = (DecimalFormatSymbolsICU)super.clone();
-        other.fIcuDecfs = (DecimalFormatSymbols)fIcuDecfs.clone();
+        DecimalFormatSymbolsICU other = (DecimalFormatSymbolsICU) super.clone();
+        other.fIcuDecfs = (DecimalFormatSymbols) fIcuDecfs.clone();
         return other;
     }
 
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof DecimalFormatSymbolsICU) {
-            return ((DecimalFormatSymbolsICU)obj).fIcuDecfs.equals(fIcuDecfs);
+            return ((DecimalFormatSymbolsICU) obj).fIcuDecfs.equals(fIcuDecfs);
         }
         return false;
     }

@@ -21,12 +21,12 @@ public class HolidayBundle extends ListResourceBundle {
     // For holidays where the key is _not_ the English name, e.g. in the
     // case of conflicts, the English name must be given here.
     //
-    static private final Object[][] fContents = { { "", "" }, // Can't be empty!
+    private static final Object[][] fContents = {
+        {"", ""}, // Can't be empty!
     };
 
     @Override
     public synchronized Object[][] getContents() {
         return fContents;
     }
-
 }

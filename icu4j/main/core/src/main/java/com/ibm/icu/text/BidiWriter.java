@@ -1,11 +1,11 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /*
-*******************************************************************************
-*   Copyright (C) 2001-2010, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-*******************************************************************************
-*/
+ *******************************************************************************
+ *   Copyright (C) 2001-2010, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ *******************************************************************************
+ */
 /* Written by Simon Montagu, Matitiahu Allouche
  * (ported from C code written by Markus W. Scherer)
  */
@@ -18,16 +18,17 @@ final class BidiWriter {
 
     /** Bidi control code points */
     static final char LRM_CHAR = 0x200e;
-    static final char RLM_CHAR = 0x200f;
-    static final int MASK_R_AL = (1 << UCharacter.RIGHT_TO_LEFT |
-                                  1 << UCharacter.RIGHT_TO_LEFT_ARABIC);
 
-    private static boolean IsCombining(int type)
-    {
-        return ((1<<type &
-                (1<<UCharacter.NON_SPACING_MARK |
-                 1<<UCharacter.COMBINING_SPACING_MARK |
-                 1<<UCharacter.ENCLOSING_MARK)) != 0);
+    static final char RLM_CHAR = 0x200f;
+    static final int MASK_R_AL =
+            (1 << UCharacter.RIGHT_TO_LEFT | 1 << UCharacter.RIGHT_TO_LEFT_ARABIC);
+
+    private static boolean IsCombining(int type) {
+        return ((1 << type
+                        & (1 << UCharacter.NON_SPACING_MARK
+                                | 1 << UCharacter.COMBINING_SPACING_MARK
+                                | 1 << UCharacter.ENCLOSING_MARK))
+                != 0);
     }
 
     /*
@@ -41,60 +42,62 @@ final class BidiWriter {
      */
     private static String doWriteForward(String src, int options) {
         /* optimize for several combinations of options */
-        switch(options&(Bidi.REMOVE_BIDI_CONTROLS|Bidi.DO_MIRRORING)) {
-        case 0: {
-            /* simply return the LTR run */
-            return src;
-        }
-        case Bidi.DO_MIRRORING: {
-            StringBuffer dest = new StringBuffer(src.length());
-
-            /* do mirroring */
-            int i=0;
-            int c;
-
-            do {
-                c = UTF16.charAt(src, i);
-                i += UTF16.getCharCount(c);
-                UTF16.append(dest, UCharacter.getMirror(c));
-            } while(i < src.length());
-            return dest.toString();
-        }
-        case Bidi.REMOVE_BIDI_CONTROLS: {
-            StringBuilder dest = new StringBuilder(src.length());
-
-            /* copy the LTR run and remove any Bidi control characters */
-            int i = 0;
-            char c;
-            do {
-                c = src.charAt(i++);
-                if(!Bidi.IsBidiControlChar(c)) {
-                    dest.append(c);
+        switch (options & (Bidi.REMOVE_BIDI_CONTROLS | Bidi.DO_MIRRORING)) {
+            case 0:
+                {
+                    /* simply return the LTR run */
+                    return src;
                 }
-            } while(i < src.length());
-            return dest.toString();
-        }
-        default: {
-            StringBuffer dest = new StringBuffer(src.length());
+            case Bidi.DO_MIRRORING:
+                {
+                    StringBuffer dest = new StringBuffer(src.length());
 
-            /* remove Bidi control characters and do mirroring */
-            int i = 0;
-            int c;
-            do {
-                c = UTF16.charAt(src, i);
-                i += UTF16.getCharCount(c);
-                if(!Bidi.IsBidiControlChar(c)) {
-                    UTF16.append(dest, UCharacter.getMirror(c));
+                    /* do mirroring */
+                    int i = 0;
+                    int c;
+
+                    do {
+                        c = UTF16.charAt(src, i);
+                        i += UTF16.getCharCount(c);
+                        UTF16.append(dest, UCharacter.getMirror(c));
+                    } while (i < src.length());
+                    return dest.toString();
                 }
-            } while(i < src.length());
-            return dest.toString();
-        }
+            case Bidi.REMOVE_BIDI_CONTROLS:
+                {
+                    StringBuilder dest = new StringBuilder(src.length());
+
+                    /* copy the LTR run and remove any Bidi control characters */
+                    int i = 0;
+                    char c;
+                    do {
+                        c = src.charAt(i++);
+                        if (!Bidi.IsBidiControlChar(c)) {
+                            dest.append(c);
+                        }
+                    } while (i < src.length());
+                    return dest.toString();
+                }
+            default:
+                {
+                    StringBuffer dest = new StringBuffer(src.length());
+
+                    /* remove Bidi control characters and do mirroring */
+                    int i = 0;
+                    int c;
+                    do {
+                        c = UTF16.charAt(src, i);
+                        i += UTF16.getCharCount(c);
+                        if (!Bidi.IsBidiControlChar(c)) {
+                            UTF16.append(dest, UCharacter.getMirror(c));
+                        }
+                    } while (i < src.length());
+                    return dest.toString();
+                }
         } /* end of switch */
     }
 
-    private static String doWriteForward(char[] text, int start, int limit,
-                                         int options)
-    {
+    private static String doWriteForward(char[] text, int start, int limit, int options) {
         return doWriteForward(new String(text, start, limit - start), options);
     }
 
@@ -120,123 +123,116 @@ final class BidiWriter {
         StringBuffer dest = new StringBuffer(src.length());
 
         /* optimize for several combinations of options */
-        switch (options &
-                (Bidi.REMOVE_BIDI_CONTROLS |
-                 Bidi.DO_MIRRORING |
-                 Bidi.KEEP_BASE_COMBINING)) {
+        switch (options
+                & (Bidi.REMOVE_BIDI_CONTROLS | Bidi.DO_MIRRORING | Bidi.KEEP_BASE_COMBINING)) {
+            case 0:
+                /*
+                 * With none of the "complicated" options set, the destination
+                 * run will have the same length as the source run,
+                 * and there is no mirroring and no keeping combining characters
+                 * with their base characters.
+                 *
+                 * XXX: or dest = UTF16.reverse(new StringBuffer(src));
+                 */
 
-        case 0:
-            /*
-             * With none of the "complicated" options set, the destination
-             * run will have the same length as the source run,
-             * and there is no mirroring and no keeping combining characters
-             * with their base characters.
-             *
-             * XXX: or dest = UTF16.reverse(new StringBuffer(src));
-             */
+                int srcLength = src.length();
 
-            int srcLength = src.length();
-
-            /* preserve character integrity */
-            do {
-                /* i is always after the last code unit known to need to be kept
-                 *  in this segment */
-                int i = srcLength;
-
-                /* collect code units for one base character */
-                srcLength -= UTF16.getCharCount(UTF16.charAt(src,
-                                                             srcLength - 1));
-
-                /* copy this base character */
-                dest.append(src.substring(srcLength, i));
-            } while(srcLength > 0);
-            break;
-
-        case Bidi.KEEP_BASE_COMBINING:
-            /*
-             * Here, too, the destination
-             * run will have the same length as the source run,
-             * and there is no mirroring.
-             * We do need to keep combining characters with their base
-             * characters.
-             */
-            srcLength = src.length();
-
-            /* preserve character integrity */
-            do {
-                /* i is always after the last code unit known to need to be kept
-                 *  in this segment */
-                int c;
-                int i = srcLength;
-
-                /* collect code units and modifier letters for one base
-                 * character */
+                /* preserve character integrity */
                 do {
-                    c = UTF16.charAt(src, srcLength - 1);
-                    srcLength -= UTF16.getCharCount(c);
-                } while(srcLength > 0 && IsCombining(UCharacter.getType(c)));
+                    /* i is always after the last code unit known to need to be kept
+                     *  in this segment */
+                    int i = srcLength;
 
-                /* copy this "user character" */
-                dest.append(src.substring(srcLength, i));
-            } while(srcLength > 0);
-            break;
+                    /* collect code units for one base character */
+                    srcLength -= UTF16.getCharCount(UTF16.charAt(src, srcLength - 1));
 
-        default:
-            /*
-             * With several "complicated" options set, this is the most
-             * general and the slowest copying of an RTL run.
-             * We will do mirroring, remove Bidi controls, and
-             * keep combining characters with their base characters
-             * as requested.
-             */
-            srcLength = src.length();
+                    /* copy this base character */
+                    dest.append(src.substring(srcLength, i));
+                } while (srcLength > 0);
+                break;
 
-            /* preserve character integrity */
-            do {
-                /* i is always after the last code unit known to need to be kept
-                 *  in this segment */
-                int i = srcLength;
+            case Bidi.KEEP_BASE_COMBINING:
+                /*
+                 * Here, too, the destination
+                 * run will have the same length as the source run,
+                 * and there is no mirroring.
+                 * We do need to keep combining characters with their base
+                 * characters.
+                 */
+                srcLength = src.length();
 
-                /* collect code units for one base character */
-                int c = UTF16.charAt(src, srcLength - 1);
-                srcLength -= UTF16.getCharCount(c);
-                if ((options & Bidi.KEEP_BASE_COMBINING) != 0) {
-                    /* collect modifier letters for this base character */
-                    while(srcLength > 0 && IsCombining(UCharacter.getType(c))) {
+                /* preserve character integrity */
+                do {
+                    /* i is always after the last code unit known to need to be kept
+                     *  in this segment */
+                    int c;
+                    int i = srcLength;
+
+                    /* collect code units and modifier letters for one base
+                     * character */
+                    do {
                         c = UTF16.charAt(src, srcLength - 1);
                         srcLength -= UTF16.getCharCount(c);
+                    } while (srcLength > 0 && IsCombining(UCharacter.getType(c)));
+
+                    /* copy this "user character" */
+                    dest.append(src.substring(srcLength, i));
+                } while (srcLength > 0);
+                break;
+
+            default:
+                /*
+                 * With several "complicated" options set, this is the most
+                 * general and the slowest copying of an RTL run.
+                 * We will do mirroring, remove Bidi controls, and
+                 * keep combining characters with their base characters
+                 * as requested.
+                 */
+                srcLength = src.length();
+
+                /* preserve character integrity */
+                do {
+                    /* i is always after the last code unit known to need to be kept
+                     *  in this segment */
+                    int i = srcLength;
+
+                    /* collect code units for one base character */
+                    int c = UTF16.charAt(src, srcLength - 1);
+                    srcLength -= UTF16.getCharCount(c);
+                    if ((options & Bidi.KEEP_BASE_COMBINING) != 0) {
+                        /* collect modifier letters for this base character */
+                        while (srcLength > 0 && IsCombining(UCharacter.getType(c))) {
+                            c = UTF16.charAt(src, srcLength - 1);
+                            srcLength -= UTF16.getCharCount(c);
+                        }
                     }
-                }
 
-                if ((options & Bidi.REMOVE_BIDI_CONTROLS) != 0 &&
-                    Bidi.IsBidiControlChar(c)) {
-                    /* do not copy this Bidi control character */
-                    continue;
-                }
+                    if ((options & Bidi.REMOVE_BIDI_CONTROLS) != 0 && Bidi.IsBidiControlChar(c)) {
+                        /* do not copy this Bidi control character */
+                        continue;
+                    }
 
-                /* copy this "user character" */
-                int j = srcLength;
-                if((options & Bidi.DO_MIRRORING) != 0) {
-                    /* mirror only the base character */
-                    c = UCharacter.getMirror(c);
-                    UTF16.append(dest, c);
-                    j += UTF16.getCharCount(c);
-                }
-                dest.append(src.substring(j, i));
-            } while(srcLength > 0);
-            break;
+                    /* copy this "user character" */
+                    int j = srcLength;
+                    if ((options & Bidi.DO_MIRRORING) != 0) {
+                        /* mirror only the base character */
+                        c = UCharacter.getMirror(c);
+                        UTF16.append(dest, c);
+                        j += UTF16.getCharCount(c);
+                    }
+                    dest.append(src.substring(j, i));
+                } while (srcLength > 0);
+                break;
         } /* end of switch */
 
         return dest.toString();
     }
 
-    static String doWriteReverse(char[] text, int start, int limit, int options)
-    {
+    static String doWriteReverse(char[] text, int start, int limit, int options) {
         return writeReverse(new String(text, start, limit - start), options);
     }
 
-    static String writeReordered(Bidi bidi, int options)
-    {
+    static String writeReordered(Bidi bidi, int options) {
         int run, runCount;
         StringBuilder dest;
         char[] text = bidi.text;
@@ -262,14 +258,17 @@ final class BidiWriter {
          * If we do not perform the "inverse Bidi" algorithm, then we
          * don't need to insert any LRMs, and don't need to test for it.
          */
-        if ((bidi.reorderingMode != Bidi.REORDER_INVERSE_NUMBERS_AS_L) &&
-            (bidi.reorderingMode != Bidi.REORDER_INVERSE_LIKE_DIRECT)  &&
-            (bidi.reorderingMode != Bidi.REORDER_INVERSE_FOR_NUMBERS_SPECIAL) &&
-            (bidi.reorderingMode != Bidi.REORDER_RUNS_ONLY)) {
+        if ((bidi.reorderingMode != Bidi.REORDER_INVERSE_NUMBERS_AS_L)
+                && (bidi.reorderingMode != Bidi.REORDER_INVERSE_LIKE_DIRECT)
+                && (bidi.reorderingMode != Bidi.REORDER_INVERSE_FOR_NUMBERS_SPECIAL)
+                && (bidi.reorderingMode != Bidi.REORDER_RUNS_ONLY)) {
             options &= ~Bidi.INSERT_LRM_FOR_NUMERIC;
         }
-        dest = new StringBuilder((options & Bidi.INSERT_LRM_FOR_NUMERIC) != 0 ?
-                                 bidi.length * 2 : bidi.length);
+        dest =
+                new StringBuilder(
+                        (options & Bidi.INSERT_LRM_FOR_NUMERIC) != 0
+                                ? bidi.length * 2
+                                : bidi.length);
         /*
          * Iterate through all visual runs and copy the run text segments to
          * the destination, according to the options.
@@ -286,13 +285,15 @@ final class BidiWriter {
                 for (run = 0; run < runCount; ++run) {
                     BidiRun bidiRun = bidi.getVisualRun(run);
                     if (bidiRun.isEvenRun()) {
-                        dest.append(doWriteForward(text, bidiRun.start,
-                                                   bidiRun.limit,
-                                                   options & ~Bidi.DO_MIRRORING));
-                     } else {
-                        dest.append(doWriteReverse(text, bidiRun.start,
-                                                   bidiRun.limit, options));
-                     }
+                        dest.append(
+                                doWriteForward(
+                                        text,
+                                        bidiRun.start,
+                                        bidiRun.limit,
+                                        options & ~Bidi.DO_MIRRORING));
+                    } else {
+                        dest.append(doWriteReverse(text, bidiRun.start, bidiRun.limit, options));
+                    }
                 }
             } else {
                 /* insert Bidi controls for "inverse Bidi" */
@@ -302,15 +303,15 @@ final class BidiWriter {
 
                 for (run = 0; run < runCount; ++run) {
                     BidiRun bidiRun = bidi.getVisualRun(run);
-                    markFlag=0;
+                    markFlag = 0;
                     /* check if something relevant in insertPoints */
                     markFlag = bidi.runs[run].insertRemove;
-                    if (markFlag < 0) { /* bidi controls count */
+                    if (markFlag < 0) {
+                        /* bidi controls count */
                         markFlag = 0;
                     }
                     if (bidiRun.isEvenRun()) {
-                        if (bidi.isInverse() &&
-                                dirProps[bidiRun.start] != Bidi.L) {
+                        if (bidi.isInverse() && dirProps[bidiRun.start] != Bidi.L) {
                             markFlag |= Bidi.LRM_BEFORE;
                         }
                         if ((markFlag & Bidi.LRM_BEFORE) != 0) {
@@ -323,12 +324,14 @@ final class BidiWriter {
                         if (uc != 0) {
                             dest.append(uc);
                         }
-                        dest.append(doWriteForward(text,
-                                                   bidiRun.start, bidiRun.limit,
-                                                   options & ~Bidi.DO_MIRRORING));
+                        dest.append(
+                                doWriteForward(
+                                        text,
+                                        bidiRun.start,
+                                        bidiRun.limit,
+                                        options & ~Bidi.DO_MIRRORING));
 
-                        if (bidi.isInverse() &&
-                             dirProps[bidiRun.limit - 1] != Bidi.L) {
+                        if (bidi.isInverse() && dirProps[bidiRun.limit - 1] != Bidi.L) {
                             markFlag |= Bidi.LRM_AFTER;
                         }
                         if ((markFlag & Bidi.LRM_AFTER) != 0) {
@@ -341,10 +344,10 @@ final class BidiWriter {
                         if (uc != 0) {
                             dest.append(uc);
                         }
-                    } else { /* RTL run */
-                        if (bidi.isInverse() &&
-                            !bidi.testDirPropFlagAt(MASK_R_AL,
-                                                    bidiRun.limit - 1)) {
+                    } else {
+                        /* RTL run */
+                        if (bidi.isInverse()
+                                && !bidi.testDirPropFlagAt(MASK_R_AL, bidiRun.limit - 1)) {
                             markFlag |= Bidi.RLM_BEFORE;
                         }
                         if ((markFlag & Bidi.LRM_BEFORE) != 0) {
@@ -357,11 +360,10 @@ final class BidiWriter {
                         if (uc != 0) {
                             dest.append(uc);
                         }
-                        dest.append(doWriteReverse(text, bidiRun.start,
-                                                   bidiRun.limit, options));
+                        dest.append(doWriteReverse(text, bidiRun.start, bidiRun.limit, options));
 
-                        if(bidi.isInverse() &&
-                                (MASK_R_AL & Bidi.DirPropFlag(dirProps[bidiRun.start])) == 0) {
+                        if (bidi.isInverse()
+                                && (MASK_R_AL & Bidi.DirPropFlag(dirProps[bidiRun.start])) == 0) {
                             markFlag |= Bidi.RLM_AFTER;
                         }
                         if ((markFlag & Bidi.LRM_AFTER) != 0) {
@@ -379,17 +381,19 @@ final class BidiWriter {
             }
         } else {
             /* reverse output */
-            if((options & Bidi.INSERT_LRM_FOR_NUMERIC) == 0) {
+            if ((options & Bidi.INSERT_LRM_FOR_NUMERIC) == 0) {
                 /* do not insert Bidi controls */
-                for(run = runCount; --run >= 0; ) {
+                for (run = runCount; --run >= 0; ) {
                     BidiRun bidiRun = bidi.getVisualRun(run);
                     if (bidiRun.isEvenRun()) {
-                        dest.append(doWriteReverse(text,
-                                                   bidiRun.start, bidiRun.limit,
-                                                   options & ~Bidi.DO_MIRRORING));
+                        dest.append(
+                                doWriteReverse(
+                                        text,
+                                        bidiRun.start,
+                                        bidiRun.limit,
+                                        options & ~Bidi.DO_MIRRORING));
                     } else {
-                        dest.append(doWriteForward(text, bidiRun.start,
-                                                   bidiRun.limit, options));
+                        dest.append(doWriteForward(text, bidiRun.start, bidiRun.limit, options));
                     }
                 }
             } else {
@@ -405,8 +409,12 @@ final class BidiWriter {
                             dest.append(LRM_CHAR);
                         }
 
-                        dest.append(doWriteReverse(text, bidiRun.start,
-                                bidiRun.limit, options & ~Bidi.DO_MIRRORING));
+                        dest.append(
+                                doWriteReverse(
+                                        text,
+                                        bidiRun.start,
+                                        bidiRun.limit,
+                                        options & ~Bidi.DO_MIRRORING));
 
                         if (dirProps[bidiRun.start] != Bidi.L) {
                             dest.append(LRM_CHAR);
@@ -416,8 +424,7 @@ final class BidiWriter {
                             dest.append(RLM_CHAR);
                         }
 
-                        dest.append(doWriteForward(text, bidiRun.start,
-                                                   bidiRun.limit, options));
+                        dest.append(doWriteForward(text, bidiRun.start, bidiRun.limit, options));
 
                         if ((MASK_R_AL & Bidi.DirPropFlag(dirProps[bidiRun.limit - 1])) == 0) {
                             dest.append(RLM_CHAR);

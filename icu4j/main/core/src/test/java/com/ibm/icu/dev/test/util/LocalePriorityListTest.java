@@ -9,18 +9,17 @@
 
 package com.ibm.icu.dev.test.util;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
+import com.ibm.icu.util.LocalePriorityList;
+import com.ibm.icu.util.ULocale;
 import java.util.Set;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.CoreTestFmwk;
-import com.ibm.icu.util.LocalePriorityList;
-import com.ibm.icu.util.ULocale;
-
 /**
  * Test the LanguagePriorityList
+ *
  * @author markdavis@google.com
  */
 @RunWith(JUnit4.class)
@@ -33,16 +32,16 @@ public class LocalePriorityListTest extends CoreTestFmwk {
         assertEquals(expected, list.toString());
 
         // check looseness, and that later values win
-        LocalePriorityList list2 = LocalePriorityList.add(
-            ", fr ; q = 0.9 ,   en;q=0.1 , af, en, de;q=0, ").build();
+        LocalePriorityList list2 =
+                LocalePriorityList.add(", fr ; q = 0.9 ,   en;q=0.1 , af, en, de;q=0, ").build();
         assertEquals(expected, list2.toString());
         assertEquals(list, list2);
 
-        LocalePriorityList list3 = LocalePriorityList
-            .add(new ULocale("af"))
-            .add(ULocale.FRENCH, 0.9d)
-            .add(ULocale.ENGLISH)
-            .build();
+        LocalePriorityList list3 =
+                LocalePriorityList.add(new ULocale("af"))
+                        .add(ULocale.FRENCH, 0.9d)
+                        .add(ULocale.ENGLISH)
+                        .build();
         assertEquals(expected, list3.toString());
         assertEquals(list, list3);
 
@@ -68,9 +67,11 @@ public class LocalePriorityListTest extends CoreTestFmwk {
         ULocale af = new ULocale("af");
         int count = 0;
         for (ULocale locale : list) {
-            assertTrue("expected locale",
-                    locale.equals(af) || locale.equals(ULocale.ENGLISH) ||
-                    locale.equals(ULocale.FRENCH));
+            assertTrue(
+                    "expected locale",
+                    locale.equals(af)
+                            || locale.equals(ULocale.ENGLISH)
+                            || locale.equals(ULocale.FRENCH));
             ++count;
         }
         assertEquals("number of locales", 3, count);
@@ -81,13 +82,13 @@ public class LocalePriorityListTest extends CoreTestFmwk {
         try {
             LocalePriorityList.add("de;q=-0.1");
             errln("negative accept-language qvalue should fail");
-        } catch(IllegalArgumentException expected) {
+        } catch (IllegalArgumentException expected) {
             // good
         }
         try {
             LocalePriorityList.add("de;q=1.001");
             errln("accept-language qvalue > 1 should fail");
-        } catch(IllegalArgumentException expected) {
+        } catch (IllegalArgumentException expected) {
             // good
         }
         LocalePriorityList list = LocalePriorityList.add("de;q=0.555555555").build(true);

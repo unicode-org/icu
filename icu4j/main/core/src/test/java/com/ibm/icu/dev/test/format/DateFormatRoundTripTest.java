@@ -8,21 +8,10 @@
  */
 
 /**
- * Port From:   ICU4C v1.8.1 : format : DateFormatRoundTripTest
- * Source File: $ICU4CRoot/source/test/intltest/dtfmtrtts.cpp
- **/
-
+ * Port From: ICU4C v1.8.1 : format : DateFormatRoundTripTest Source File:
+ * $ICU4CRoot/source/test/intltest/dtfmtrtts.cpp
+ */
 package com.ibm.icu.dev.test.format;
-
-import java.text.FieldPosition;
-import java.text.ParseException;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Random;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.text.DateFormat;
@@ -30,10 +19,16 @@ import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.TimeZone;
+import java.text.FieldPosition;
+import java.text.ParseException;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Random;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
-/**
- * Performs round-trip tests for DateFormat
- **/
+/** Performs round-trip tests for DateFormat */
 @RunWith(JUnit4.class)
 public class DateFormatRoundTripTest extends CoreTestFmwk {
     public boolean INFINITE = false;
@@ -56,8 +51,7 @@ public class DateFormatRoundTripTest extends CoreTestFmwk {
         int locCount = avail.length;
         logln("DateFormat available locales: " + locCount);
         if (quick) {
-            if (locCount > 5)
-                locCount = 5;
+            if (locCount > 5) locCount = 5;
             logln("Quick mode: only testing first 5 Locales");
         }
         TimeZone tz = TimeZone.getDefault();
@@ -67,7 +61,7 @@ public class DateFormatRoundTripTest extends CoreTestFmwk {
             // Special infinite loop test mode for finding hard to reproduce errors
             Locale loc = Locale.getDefault();
             logln("ENTERING INFINITE TEST LOOP FOR Locale: " + loc.getDisplayName());
-            for (;;) {
+            for (; ; ) {
                 _test(loc);
             }
         } else {
@@ -80,15 +74,15 @@ public class DateFormatRoundTripTest extends CoreTestFmwk {
 
     private String styleName(int s) {
         switch (s) {
-            case DateFormat.SHORT :
+            case DateFormat.SHORT:
                 return "SHORT";
-            case DateFormat.MEDIUM :
+            case DateFormat.MEDIUM:
                 return "MEDIUM";
-            case DateFormat.LONG :
+            case DateFormat.LONG:
                 return "LONG";
-            case DateFormat.FULL :
+            case DateFormat.FULL:
                 return "FULL";
-            default :
+            default:
                 return "Unknown";
         }
     }
@@ -103,8 +97,7 @@ public class DateFormatRoundTripTest extends CoreTestFmwk {
         //  16 date-time
         boolean[] TEST_TABLE = new boolean[24];
         int i = 0;
-        for (i = 0; i < 24; ++i)
-            TEST_TABLE[i] = true;
+        for (i = 0; i < 24; ++i) TEST_TABLE[i] = true;
 
         // If we have some sparseness, implement it here.  Sparseness decreases
         // test time by eliminating some tests, up to 23.
@@ -128,7 +121,7 @@ public class DateFormatRoundTripTest extends CoreTestFmwk {
         for (style = DateFormat.FULL; style <= DateFormat.SHORT; ++style) {
             if (TEST_TABLE[itable++]) {
                 logln("Testing style " + styleName(style));
-                DateFormat  df = DateFormat.getTimeInstance(style, loc);
+                DateFormat df = DateFormat.getTimeInstance(style, loc);
                 _test(df, true);
             }
         }
@@ -160,7 +153,8 @@ public class DateFormatRoundTripTest extends CoreTestFmwk {
         // patterns we have, but it may be a problem later.
 
         boolean hasEra = (pat.indexOf("G") != -1);
-        boolean hasZoneDisplayName = (pat.indexOf("z") != -1) || (pat.indexOf("v") != -1) || (pat.indexOf("V") != -1);
+        boolean hasZoneDisplayName =
+                (pat.indexOf("z") != -1) || (pat.indexOf("v") != -1) || (pat.indexOf("V") != -1);
         boolean hasTwoDigitYear = pat.indexOf("yy") >= 0 && pat.indexOf("yyy") < 0;
 
         // Because patterns contain incomplete data representing the Date,
@@ -197,26 +191,19 @@ public class DateFormatRoundTripTest extends CoreTestFmwk {
                         if (smatch == 0) {
                             boolean match = s[loop].equals(s[loop - 1]);
                             if (smatch == 0) {
-                                if (match)
-                                    smatch = loop;
-                            } else
-                                if (!match)
-                                    errln("FAIL: String mismatch after match");
+                                if (match) smatch = loop;
+                            } else if (!match) errln("FAIL: String mismatch after match");
                         }
 
                         if (dmatch == 0) {
                             // {sfb} watch out here, this might not work
                             boolean match = d[loop].getTime() == d[loop - 1].getTime();
                             if (dmatch == 0) {
-                                if (match)
-                                    dmatch = loop;
-                            } else
-                                if (!match)
-                                    errln("FAIL: Date mismatch after match");
+                                if (match) dmatch = loop;
+                            } else if (!match) errln("FAIL: Date mismatch after match");
                         }
 
-                        if (smatch != 0 && dmatch != 0)
-                            break;
+                        if (smatch != 0 && dmatch != 0) break;
                     }
                 }
                 // At this point loop == DEPTH if we've failed, otherwise loop is the
@@ -227,17 +214,19 @@ public class DateFormatRoundTripTest extends CoreTestFmwk {
                 int maxDmatch = 2;
                 int maxSmatch = 1;
                 if (dmatch > maxDmatch || smatch > maxSmatch) {
-                    //If the Date is BC
-                    if (!timeOnly && !hasEra && getField(d[0], Calendar.ERA) == GregorianCalendar.BC) {
+                    // If the Date is BC
+                    if (!timeOnly
+                            && !hasEra
+                            && getField(d[0], Calendar.ERA) == GregorianCalendar.BC) {
                         maxDmatch = 3;
                         maxSmatch = 2;
                     }
-                    if (hasZoneDisplayName &&
-                            (fmt.getTimeZone().inDaylightTime(d[0])
+                    if (hasZoneDisplayName
+                            && (fmt.getTimeZone().inDaylightTime(d[0])
                                     || fmt.getTimeZone().inDaylightTime(d[1])
                                     || d[0].getTime() < 0L /* before 1970 */
                                     || hasTwoDigitYear && d[1].getTime() < 0L
-                                       /* before 1970 as the result of 2-digit year parse */)) {
+                            /* before 1970 as the result of 2-digit year parse */ )) {
                         maxSmatch = 2;
                         if (timeOnly) {
                             maxDmatch = 3;
@@ -246,15 +235,30 @@ public class DateFormatRoundTripTest extends CoreTestFmwk {
                 }
 
                 if (dmatch > maxDmatch || smatch > maxSmatch) {
-                    SimpleDateFormat sdf = new SimpleDateFormat("EEEE, MMMM d, yyyy HH:mm:ss, z G", Locale.US);
+                    SimpleDateFormat sdf =
+                            new SimpleDateFormat("EEEE, MMMM d, yyyy HH:mm:ss, z G", Locale.US);
                     logln("Date = " + sdf.format(d[0]) + "; ms = " + d[0].getTime());
-                    logln("Dmatch: " + dmatch + " maxD: " + maxDmatch + " Smatch:" + smatch + " maxS:" + maxSmatch);
+                    logln(
+                            "Dmatch: "
+                                    + dmatch
+                                    + " maxD: "
+                                    + maxDmatch
+                                    + " Smatch:"
+                                    + smatch
+                                    + " maxS:"
+                                    + maxSmatch);
                     for (int j = 0; j <= loop && j < DEPTH; ++j) {
                         StringBuffer temp = new StringBuffer("");
                         FieldPosition pos = new FieldPosition(0);
-                        logln((j > 0 ? " P> " : "    ") + dateFormat.format(d[j], temp, pos)
-                            + " F> " + s[j] + (j > 0 && d[j].getTime() == d[j - 1].getTime() ? " d==" : "")
-                            + (j > 0 && s[j].equals(s[j - 1]) ? " s==" : ""));
+                        logln(
+                                (j > 0 ? " P> " : "    ")
+                                        + dateFormat.format(d[j], temp, pos)
+                                        + " F> "
+                                        + s[j]
+                                        + (j > 0 && d[j].getTime() == d[j - 1].getTime()
+                                                ? " d=="
+                                                : "")
+                                        + (j > 0 && s[j].equals(s[j - 1]) ? " s==" : ""));
                     }
                     errln("Pattern: " + pat + " failed to match" + "; ms = " + d[0].getTime());
                 }
@@ -279,6 +283,6 @@ public class DateFormatRoundTripTest extends CoreTestFmwk {
         a -= 4000;
         // Now scale up to ms
         a *= 365.25 * 24 * 60 * 60 * 1000;
-        return new Date((long)a);
+        return new Date((long) a);
     }
 }

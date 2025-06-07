@@ -3,6 +3,8 @@
 
 package com.ibm.icu.message2;
 
+import com.ibm.icu.impl.JavaTimeConverters;
+import com.ibm.icu.text.DateFormat;
 import java.time.temporal.Temporal;
 import java.util.Calendar;
 import java.util.Locale;
@@ -11,12 +13,9 @@ import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.ibm.icu.impl.JavaTimeConverters;
-import com.ibm.icu.text.DateFormat;
-
 /**
- * Creates a {@link Formatter} doing formatting of date / time, similar to
- * <code>{exp, date}</code> and <code>{exp, time}</code> in {@link com.ibm.icu.text.MessageFormat}.
+ * Creates a {@link Formatter} doing formatting of date / time, similar to <code>{exp, date}</code>
+ * and <code>{exp, time}</code> in {@link com.ibm.icu.text.MessageFormat}.
  */
 class DateTimeFormatterFactory implements FormatterFactory {
     private final String kind;
@@ -54,8 +53,8 @@ class DateTimeFormatterFactory implements FormatterFactory {
     /**
      * {@inheritDoc}
      *
-     * @throws IllegalArgumentException when something goes wrong
-     *         (for example conflicting options, invalid option values, etc.)
+     * @throws IllegalArgumentException when something goes wrong (for example conflicting options,
+     *     invalid option values, etc.)
      */
     @Override
     public Formatter createFormatter(Locale locale, Map<String, Object> fixedOptions) {
@@ -341,9 +340,7 @@ class DateTimeFormatterFactory implements FormatterFactory {
             this.reportErrors = reportErrors;
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        /** {@inheritDoc} */
         @Override
         public FormattedPlaceholder format(Object toFormat, Map<String, Object> variableOptions) {
             // TODO: use a special type to indicate function without input argument.
@@ -355,7 +352,8 @@ class DateTimeFormatterFactory implements FormatterFactory {
                 // We were unable to parse the input as iso date
                 if (toFormat instanceof CharSequence) {
                     if (reportErrors) {
-                        throw new IllegalArgumentException("bad-operand: argument must be ISO 8601");
+                        throw new IllegalArgumentException(
+                                "bad-operand: argument must be ISO 8601");
                     }
                     return new FormattedPlaceholder(
                             toFormat, new PlainStringFormattedValue("{|" + toFormat + "|}"));
@@ -363,7 +361,8 @@ class DateTimeFormatterFactory implements FormatterFactory {
             } else if (toFormat instanceof Temporal) {
                 toFormat = JavaTimeConverters.temporalToCalendar((Temporal) toFormat);
             }
-            // Not an else-if here, because the `Temporal` conditions before make `toFormat` a `Calendar`
+            // Not an else-if here, because the `Temporal` conditions before make `toFormat` a
+            // `Calendar`
             if (toFormat instanceof Calendar) {
                 TimeZone tz = ((Calendar) toFormat).getTimeZone();
                 long milis = ((Calendar) toFormat).getTimeInMillis();
@@ -377,9 +376,7 @@ class DateTimeFormatterFactory implements FormatterFactory {
             return new FormattedPlaceholder(toFormat, new PlainStringFormattedValue(result));
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        /** {@inheritDoc} */
         @Override
         public String formatToString(Object toFormat, Map<String, Object> variableOptions) {
             FormattedPlaceholder result = format(toFormat, variableOptions);
@@ -387,12 +384,12 @@ class DateTimeFormatterFactory implements FormatterFactory {
         }
     }
 
-    private final static Pattern ISO_PATTERN = Pattern.compile(
-            "^(([0-9]{4})-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])){1}(T([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])(\\.[0-9]{1,3})?(Z|[+-]((0[0-9]|1[0-3]):[0-5][0-9]|14:00))?)?$");
+    private static final Pattern ISO_PATTERN =
+            Pattern.compile(
+                    "^(([0-9]{4})-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])){1}(T([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])(\\.[0-9]{1,3})?(Z|[+-]((0[0-9]|1[0-3]):[0-5][0-9]|14:00))?)?$");
 
     private static Integer safeParse(String str) {
-        if (str == null || str.isEmpty())
-            return null;
+        if (str == null || str.isEmpty()) return null;
         return Integer.parseInt(str);
     }
 
@@ -420,8 +417,9 @@ class DateTimeFormatterFactory implements FormatterFactory {
                 second = 0;
             }
 
-            com.ibm.icu.util.GregorianCalendar gc = new com.ibm.icu.util.GregorianCalendar(
-                    year, month - 1, day, hour, minute, second);
+            com.ibm.icu.util.GregorianCalendar gc =
+                    new com.ibm.icu.util.GregorianCalendar(
+                            year, month - 1, day, hour, minute, second);
             gc.set(com.ibm.icu.util.Calendar.MILLISECOND, millisecond);
 
             if (tzPart != null) {
@@ -445,5 +443,4 @@ class DateTimeFormatterFactory implements FormatterFactory {
         }
         return text;
     }
-
 }

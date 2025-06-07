@@ -6,13 +6,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.Test;
-
 import com.ibm.icu.impl.StringSegment;
+import org.junit.Test;
 
 /**
  * @author sffc
- *
  */
 public class StringSegmentTest {
     static final String SAMPLE_STRING = "📻 radio 📻";

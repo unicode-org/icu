@@ -8,18 +8,16 @@
  */
 package com.ibm.icu.dev.test.localespi;
 
+import com.ibm.icu.dev.test.TestFmwk;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.Currency;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
-import com.ibm.icu.dev.test.TestFmwk;
 
 @SuppressWarnings("unchecked")
 @RunWith(JUnit4.class)
@@ -31,9 +29,11 @@ public class CurrencyNameTest extends TestFmwk {
         Method mGetDisplayName = null;
         Set<Currency> currencies = null;
         try {
-            mGetDisplayName = Currency.class.getMethod("getDisplayName", new Class[] {Locale.class});
-            Method mGetAvailableCurrencies = Currency.class.getMethod("getAvailableCurrencies", (Class[]) null);
-            currencies = (Set<Currency>)mGetAvailableCurrencies.invoke(null, (Object[]) null);
+            mGetDisplayName =
+                    Currency.class.getMethod("getDisplayName", new Class[] {Locale.class});
+            Method mGetAvailableCurrencies =
+                    Currency.class.getMethod("getAvailableCurrencies", (Class[]) null);
+            currencies = (Set<Currency>) mGetAvailableCurrencies.invoke(null, (Object[]) null);
         } catch (Exception e) {
             // fall through
         }
@@ -63,7 +63,8 @@ public class CurrencyNameTest extends TestFmwk {
     public void TestCurrencySymbols() {
         for (Currency currency : AVAILABLE_CURRENCIES) {
             String currencyCode = currency.getCurrencyCode();
-            com.ibm.icu.util.Currency currencyIcu = com.ibm.icu.util.Currency.getInstance(currencyCode);
+            com.ibm.icu.util.Currency currencyIcu =
+                    com.ibm.icu.util.Currency.getInstance(currencyCode);
             for (Locale loc : Locale.getAvailableLocales()) {
                 if (TestUtil.isExcluded(loc)) {
                     logln("Skipped " + loc);
@@ -76,28 +77,53 @@ public class CurrencyNameTest extends TestFmwk {
                 if (curSymbolIcu.equals(currencyCode)) {
                     // No data in ICU
                     if (!curSymbol.equals(currencyCode)) {
-                        logln("INFO: JDK has currency symbol " + curSymbol + " for locale " +
-                                loc + ", but ICU does not");
+                        logln(
+                                "INFO: JDK has currency symbol "
+                                        + curSymbol
+                                        + " for locale "
+                                        + loc
+                                        + ", but ICU does not");
                     }
                     continue;
                 }
 
                 if (TestUtil.isICUExtendedLocale(loc)) {
                     if (!curSymbol.equals(curSymbolIcu)) {
-                        errln("FAIL: Currency symbol for " + currencyCode + " by ICU is " + curSymbolIcu
-                                + ", but got " + curSymbol + " in locale " + loc);
+                        errln(
+                                "FAIL: Currency symbol for "
+                                        + currencyCode
+                                        + " by ICU is "
+                                        + curSymbolIcu
+                                        + ", but got "
+                                        + curSymbol
+                                        + " in locale "
+                                        + loc);
                     }
                 } else {
                     if (!curSymbol.equals(curSymbolIcu)) {
-                        logln("INFO: Currency symbol for " + currencyCode +  " by ICU is " + curSymbolIcu
-                                + ", but " + curSymbol + " by JDK in locale " + loc);
+                        logln(
+                                "INFO: Currency symbol for "
+                                        + currencyCode
+                                        + " by ICU is "
+                                        + curSymbolIcu
+                                        + ", but "
+                                        + curSymbol
+                                        + " by JDK in locale "
+                                        + loc);
                     }
                     // Try explicit ICU locale (xx_yy_ICU)
                     Locale locIcu = TestUtil.toICUExtendedLocale(loc);
                     curSymbol = currency.getSymbol(locIcu);
                     if (!curSymbol.equals(curSymbolIcu)) {
-                        errln("FAIL: Currency symbol for " + currencyCode + " by ICU is " + curSymbolIcu
-                                + ", but got " + curSymbol + " in locale " + locIcu);
+                        errln(
+                                "FAIL: Currency symbol for "
+                                        + currencyCode
+                                        + " by ICU is "
+                                        + curSymbolIcu
+                                        + ", but got "
+                                        + curSymbol
+                                        + " in locale "
+                                        + locIcu);
                     }
                 }
             }
@@ -113,7 +139,8 @@ public class CurrencyNameTest extends TestFmwk {
 
         for (Currency currency : AVAILABLE_CURRENCIES) {
             String currencyCode = currency.getCurrencyCode();
-            com.ibm.icu.util.Currency currencyIcu = com.ibm.icu.util.Currency.getInstance(currencyCode);
+            com.ibm.icu.util.Currency currencyIcu =
+                    com.ibm.icu.util.Currency.getInstance(currencyCode);
             for (Locale loc : Locale.getAvailableLocales()) {
                 if (TestUtil.isExcluded(loc)) {
                     logln("Skipped " + loc);
@@ -122,9 +149,15 @@ public class CurrencyNameTest extends TestFmwk {
 
                 String curName = null;
                 try {
-                    curName = (String)GETDISPLAYNAME_METHOD.invoke(currency, new Object[] {loc});
+                    curName = (String) GETDISPLAYNAME_METHOD.invoke(currency, new Object[] {loc});
                 } catch (Exception e) {
-                    errln("FAIL: JDK Currency#getDisplayName(\"" + currency + "\", \"" + loc + "\") throws exception: " + e.getMessage());
+                    errln(
+                            "FAIL: JDK Currency#getDisplayName(\""
+                                    + currency
+                                    + "\", \""
+                                    + loc
+                                    + "\") throws exception: "
+                                    + e.getMessage());
                     continue;
                 }
 
@@ -133,37 +166,70 @@ public class CurrencyNameTest extends TestFmwk {
                 if (curNameIcu.equals(currencyCode)) {
                     // No data in ICU
                     if (!curName.equals(currencyCode)) {
-                        logln("INFO: JDK has currency display name " + curName + " for locale " +
-                                loc + ", but ICU does not");
+                        logln(
+                                "INFO: JDK has currency display name "
+                                        + curName
+                                        + " for locale "
+                                        + loc
+                                        + ", but ICU does not");
                     }
                     continue;
                 }
 
                 if (TestUtil.isICUExtendedLocale(loc)) {
                     if (!curName.equals(curNameIcu)) {
-                        errln("FAIL: Currency display name for " + currencyCode + " by ICU is " + curNameIcu
-                                + ", but got " + curName + " in locale " + loc);
+                        errln(
+                                "FAIL: Currency display name for "
+                                        + currencyCode
+                                        + " by ICU is "
+                                        + curNameIcu
+                                        + ", but got "
+                                        + curName
+                                        + " in locale "
+                                        + loc);
                     }
                 } else {
                     if (!curName.equals(curNameIcu)) {
-                        logln("INFO: Currency display name for " + currencyCode +  " by ICU is " + curNameIcu
-                                + ", but " + curName + " by JDK in locale " + loc);
+                        logln(
+                                "INFO: Currency display name for "
+                                        + currencyCode
+                                        + " by ICU is "
+                                        + curNameIcu
+                                        + ", but "
+                                        + curName
+                                        + " by JDK in locale "
+                                        + loc);
                     }
                     // Try explicit ICU locale (xx_yy_ICU)
                     Locale locIcu = TestUtil.toICUExtendedLocale(loc);
                     try {
-                        curName = (String)GETDISPLAYNAME_METHOD.invoke(currency, new Object[] {locIcu});
+                        curName =
+                                (String)
+                                        GETDISPLAYNAME_METHOD.invoke(
+                                                currency, new Object[] {locIcu});
                     } catch (Exception e) {
-                        errln("FAIL: JDK Currency#getDisplayName(\"" + currency + "\", \"" + locIcu + "\") throws exception: " + e.getMessage());
+                        errln(
+                                "FAIL: JDK Currency#getDisplayName(\""
+                                        + currency
+                                        + "\", \""
+                                        + locIcu
+                                        + "\") throws exception: "
+                                        + e.getMessage());
                         continue;
                     }
                     if (!curName.equals(curNameIcu)) {
-                        errln("FAIL: Currency display name for " + currencyCode + " by ICU is " + curNameIcu
-                                + ", but got " + curName + " in locale " + locIcu);
+                        errln(
+                                "FAIL: Currency display name for "
+                                        + currencyCode
+                                        + " by ICU is "
+                                        + curNameIcu
+                                        + ", but got "
+                                        + curName
+                                        + " in locale "
+                                        + locIcu);
                     }
                 }
             }
         }
     }
-
 }

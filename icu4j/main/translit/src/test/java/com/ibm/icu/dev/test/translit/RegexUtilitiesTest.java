@@ -8,15 +8,6 @@
  */
 package com.ibm.icu.dev.test.translit;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.UnicodeRegex;
 import com.ibm.icu.lang.UCharacter;
@@ -25,27 +16,32 @@ import com.ibm.icu.lang.UProperty.NameChoice;
 import com.ibm.icu.text.Transliterator;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 /**
  * @author markdavis
  */
 @RunWith(JUnit4.class)
 public class RegexUtilitiesTest extends TestFmwk {
-    /**
-     * Check basic construction.
-     */
+    /** Check basic construction. */
     @Test
     public void TestConstruction() {
         String[][] tests = {
-                {"a"},
-                {"a[a-z]b"},
-                {"[ba-z]", "[a-z]"},
-                {"q[ba-z]", "q[a-z]"},
-                {"[ba-z]q", "[a-z]q"},
-                {"a\\p{joincontrol}b", "a[\u200C\u200D]b"},
-                {"a\\P{joincontrol}b", "a[^\u200C\u200D]b"},
-                {"a[[:whitespace:]&[:Zl:]]b", "a[\\\u2028]b"},
-                {"a [[:bc=cs:]&[:wspace:]] b", "a [\u00A0\u202F] b"},
+            {"a"},
+            {"a[a-z]b"},
+            {"[ba-z]", "[a-z]"},
+            {"q[ba-z]", "q[a-z]"},
+            {"[ba-z]q", "[a-z]q"},
+            {"a\\p{joincontrol}b", "a[\u200C\u200D]b"},
+            {"a\\P{joincontrol}b", "a[^\u200C\u200D]b"},
+            {"a[[:whitespace:]&[:Zl:]]b", "a[\\\u2028]b"},
+            {"a [[:bc=cs:]&[:wspace:]] b", "a [\u00A0\u202F] b"},
         };
         for (int i = 0; i < tests.length; ++i) {
             final String source = tests[i][0];
@@ -58,12 +54,13 @@ public class RegexUtilitiesTest extends TestFmwk {
     Transliterator hex = Transliterator.getInstance("hex");
 
     /**
-     * Perform an exhaustive test on all Unicode characters to make sure that the UnicodeSet with each
-     * character works.
+     * Perform an exhaustive test on all Unicode characters to make sure that the UnicodeSet with
+     * each character works.
      */
     @Test
     public void TestCharacters() {
-        UnicodeSet requiresQuote = new UnicodeSet("[\\$\\&\\-\\:\\[\\\\\\]\\^\\{\\}[:pattern_whitespace:]]");
+        UnicodeSet requiresQuote =
+                new UnicodeSet("[\\$\\&\\-\\:\\[\\\\\\]\\^\\{\\}[:pattern_whitespace:]]");
         boolean skip = TestFmwk.getExhaustiveness() < 10;
         for (int cp = 0; cp < 0x110000; ++cp) {
             // Do always test U+1FFFE to cover UnicodeSet escaping a supplementary noncharacter.
@@ -80,12 +77,14 @@ public class RegexUtilitiesTest extends TestFmwk {
                 errln(e.getMessage());
                 continue;
             }
-            String expected = "[" + s + "]";  // Try this first for faster testing.
+            String expected = "[" + s + "]"; // Try this first for faster testing.
             boolean ok = pattern.equals(expected);
             if (!ok) {
                 // Escape like in UnicodeSet, and change supplementary escapes to Java regex syntax.
-                expected = new UnicodeSet(expected).toPattern(false).
-                        replaceAll("\\\\U00([0-9a-fA-F]{6})", "\\\\x{$1}");
+                expected =
+                        new UnicodeSet(expected)
+                                .toPattern(false)
+                                .replaceAll("\\\\U00([0-9a-fA-F]{6})", "\\\\x{$1}");
                 ok = pattern.equals(expected);
             }
             assertTrue("Doubled character works " + hex.transform(s), ok);
@@ -99,9 +98,7 @@ public class RegexUtilitiesTest extends TestFmwk {
         }
     }
 
-    /**
-     * Check all integer Unicode properties to make sure they work.
-     */
+    /** Check all integer Unicode properties to make sure they work. */
     @Test
     public void TestUnicodeProperties() {
         final boolean skip = TestFmwk.getExhaustiveness() < 10;
@@ -118,9 +115,11 @@ public class RegexUtilitiesTest extends TestFmwk {
             }
             for (int valueNum = intPropertyMinValue; valueNum <= intPropertyMaxValue; ++valueNum) {
                 // hack for getting property value name
-                String valueName = UCharacter.getPropertyValueName(propNum, valueNum, NameChoice.LONG);
+                String valueName =
+                        UCharacter.getPropertyValueName(propNum, valueNum, NameChoice.LONG);
                 if (valueName == null) {
-                    valueName = UCharacter.getPropertyValueName(propNum, valueNum, NameChoice.SHORT);
+                    valueName =
+                            UCharacter.getPropertyValueName(propNum, valueNum, NameChoice.SHORT);
                     if (valueName == null) {
                         valueName = Integer.toString(valueNum);
                     }
@@ -137,15 +136,26 @@ public class RegexUtilitiesTest extends TestFmwk {
 
                 // posix style pattern
                 String rawPattern = prefix + "[:" + propName + "=" + valueName + ":]" + suffix;
-                String rawNegativePattern = prefix + "[:^" + propName + "=" + valueName + ":]" + suffix;
-                checkCharPattern(UnicodeRegex.compile(rawPattern), rawPattern, shouldMatch, shouldNotMatch);
-                checkCharPattern(UnicodeRegex.compile(rawNegativePattern), rawNegativePattern, shouldNotMatch, shouldMatch);
+                String rawNegativePattern =
+                        prefix + "[:^" + propName + "=" + valueName + ":]" + suffix;
+                checkCharPattern(
+                        UnicodeRegex.compile(rawPattern), rawPattern, shouldMatch, shouldNotMatch);
+                checkCharPattern(
+                        UnicodeRegex.compile(rawNegativePattern),
+                        rawNegativePattern,
+                        shouldNotMatch,
+                        shouldMatch);
 
                 // perl style pattern
                 rawPattern = prefix + "\\p{" + propName + "=" + valueName + "}" + suffix;
                 rawNegativePattern = prefix + "\\P{" + propName + "=" + valueName + "}" + suffix;
-                checkCharPattern(UnicodeRegex.compile(rawPattern), rawPattern, shouldMatch, shouldNotMatch);
-                checkCharPattern(UnicodeRegex.compile(rawNegativePattern), rawNegativePattern, shouldNotMatch, shouldMatch);
+                checkCharPattern(
+                        UnicodeRegex.compile(rawPattern), rawPattern, shouldMatch, shouldNotMatch);
+                checkCharPattern(
+                        UnicodeRegex.compile(rawNegativePattern),
+                        rawNegativePattern,
+                        shouldNotMatch,
+                        shouldMatch);
             }
         }
     }
@@ -154,32 +164,23 @@ public class RegexUtilitiesTest extends TestFmwk {
     public void TestBnf() {
         UnicodeRegex regex = new UnicodeRegex();
         final String[][] tests = {
-                {
-                    "c = a wq;\n" +
-                    "a = xyz;\n" +
-                    "b = a a c;\n"
-                },
-                {
-                    "c = a b;\n" +
-                    "a = xyz;\n" +
-                    "b = a a c;\n",
-                    "Exception"
-                },
-                {
-                    "uri = (?: (scheme) \\:)? (host) (?: \\? (query))? (?: \\u0023 (fragment))?;\n" +
-                    "scheme = reserved+;\n" +
-                    "host = // reserved+;\n" +
-                    "query = [\\=reserved]+;\n" +
-                    "fragment = reserved+;\n" +
-                    "reserved = [[:ascii:][:sc=grek:]&[:alphabetic:]];\n",
-                "http://\u03B1\u03B2\u03B3?huh=hi#there"},
-                {
-                    "langtagRegex.txt"
-                }
+            {"c = a wq;\n" + "a = xyz;\n" + "b = a a c;\n"},
+            {"c = a b;\n" + "a = xyz;\n" + "b = a a c;\n", "Exception"},
+            {
+                "uri = (?: (scheme) \\:)? (host) (?: \\? (query))? (?: \\u0023 (fragment))?;\n"
+                        + "scheme = reserved+;\n"
+                        + "host = // reserved+;\n"
+                        + "query = [\\=reserved]+;\n"
+                        + "fragment = reserved+;\n"
+                        + "reserved = [[:ascii:][:sc=grek:]&[:alphabetic:]];\n",
+                "http://\u03B1\u03B2\u03B3?huh=hi#there"
+            },
+            {"langtagRegex.txt"}
         };
         for (int i = 0; i < tests.length; ++i) {
             String test = tests[i][0];
-            final boolean expectException = tests[i].length < 2 ? false : tests[i][1].equals("Exception");
+            final boolean expectException =
+                    tests[i].length < 2 ? false : tests[i][1].equals("Exception");
             try {
                 String result;
                 if (test.endsWith(".txt")) {
@@ -198,7 +199,9 @@ public class RegexUtilitiesTest extends TestFmwk {
                     errln("Expected exception for " + test);
                     continue;
                 }
-                result = result.replaceAll("[0-9]+%", ""); // just so we can use the language subtag stuff
+                result =
+                        result.replaceAll(
+                                "[0-9]+%", ""); // just so we can use the language subtag stuff
                 String resolved = regex.transform(result);
                 logln(resolved);
                 Matcher m = Pattern.compile(resolved, Pattern.COMMENTS).matcher("");
@@ -224,19 +227,17 @@ public class RegexUtilitiesTest extends TestFmwk {
         }
     }
 
-    /**
-     * Check {@code \Q} and {@code \E}.
-     */
+    /** Check {@code \Q} and {@code \E}. */
     @Test
     public void TestTransformQuotation() {
         String[][] tests = {
-                {"a\\Qb", "a\\Qb"},
-                {"a\\Eb", "a\\Eb"},
-                {"\\Q[ba]", "\\Q[ba]"},
-                {"\\\\Q[ba]", "\\\\Q[ab]"},
-                {"\\Q[ba]\\e[ba]", "\\Q[ba]\\e[ba]"},
-                {"\\Q[ba]\\E[ba]", "\\Q[ba]\\E[ab]"},
-                {"\\Q[ba]\\\\E[ba]", "\\Q[ba]\\\\E[ab]"},
+            {"a\\Qb", "a\\Qb"},
+            {"a\\Eb", "a\\Eb"},
+            {"\\Q[ba]", "\\Q[ba]"},
+            {"\\\\Q[ba]", "\\\\Q[ab]"},
+            {"\\Q[ba]\\e[ba]", "\\Q[ba]\\e[ba]"},
+            {"\\Q[ba]\\E[ba]", "\\Q[ba]\\E[ab]"},
+            {"\\Q[ba]\\\\E[ba]", "\\Q[ba]\\\\E[ab]"},
         };
         UnicodeRegex regex = new UnicodeRegex();
         for (int i = 0; i < tests.length; ++i) {
@@ -247,10 +248,9 @@ public class RegexUtilitiesTest extends TestFmwk {
         }
     }
 
-    /**
-     * Utility for checking patterns
-     */
-    private void checkCharPattern(Pattern pat, String matchTitle, String shouldMatch, String shouldNotMatch) {
+    /** Utility for checking patterns */
+    private void checkCharPattern(
+            Pattern pat, String matchTitle, String shouldMatch, String shouldNotMatch) {
         Matcher matcher = pat.matcher(shouldMatch);
         assertTrue(matchTitle + " and " + shouldMatch, matcher.matches());
         matcher.reset(shouldNotMatch);

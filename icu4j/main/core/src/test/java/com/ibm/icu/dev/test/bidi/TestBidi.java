@@ -1,27 +1,24 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /*
-*******************************************************************************
-*   Copyright (C) 2007-2013, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-*******************************************************************************
-*/
+ *******************************************************************************
+ *   Copyright (C) 2007-2013, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ *******************************************************************************
+ */
 
 package com.ibm.icu.dev.test.bidi;
 
-import java.util.Arrays;
-
-import org.junit.Test;
-
 import com.ibm.icu.text.Bidi;
 import com.ibm.icu.text.BidiRun;
+import java.util.Arrays;
+import org.junit.Test;
 
 /**
  * Regression test for Bidi class override.
  *
  * @author Lina Kemmel, Matitiahu Allouche
  */
-
 public class TestBidi extends BidiFmwk {
 
     private static final int MAXLEN = 256;
@@ -55,13 +52,21 @@ public class TestBidi extends BidiFmwk {
             paraLevel = test.paraLevel;
             try {
                 bidi.setPara(string, paraLevel, null);
-                logln("Bidi.setPara(tests[" + testNumber + "] OK, direction "
-                        + bidi.getDirection() + " paraLevel "
-                        + paraLevel);
+                logln(
+                        "Bidi.setPara(tests["
+                                + testNumber
+                                + "] OK, direction "
+                                + bidi.getDirection()
+                                + " paraLevel "
+                                + paraLevel);
             } catch (Exception e) {
-                errln("Bidi.setPara(tests[" + testNumber + "] failed, direction "
-                        + bidi.getDirection() + " paraLevel "
-                        + paraLevel);
+                errln(
+                        "Bidi.setPara(tests["
+                                + testNumber
+                                + "] failed, direction "
+                                + bidi.getDirection()
+                                + " paraLevel "
+                                + paraLevel);
             }
             lineStart = test.lineStart;
             if (lineStart == -1) {
@@ -69,33 +74,59 @@ public class TestBidi extends BidiFmwk {
             } else {
                 try {
                     bidiLine = bidi.setLine(lineStart, test.lineLimit);
-                    logln("Bidi.setLine(" + lineStart + ", " + test.lineLimit
-                            + "), in tests[" + testNumber + "] OK, direction "
-                            + bidiLine.getDirection() + " paraLevel "
-                            + bidiLine.getBaseLevel());
+                    logln(
+                            "Bidi.setLine("
+                                    + lineStart
+                                    + ", "
+                                    + test.lineLimit
+                                    + "), in tests["
+                                    + testNumber
+                                    + "] OK, direction "
+                                    + bidiLine.getDirection()
+                                    + " paraLevel "
+                                    + bidiLine.getBaseLevel());
                     doTest(bidiLine, testNumber, test, lineStart, countRunsFirst);
-                } catch (Exception e)  {
-                    errln("Bidi.setLine(" + lineStart + ", " + test.lineLimit
-                            + "), in runAll test[" + testNumber + "] failed");
+                } catch (Exception e) {
+                    errln(
+                            "Bidi.setLine("
+                                    + lineStart
+                                    + ", "
+                                    + test.lineLimit
+                                    + "), in runAll test["
+                                    + testNumber
+                                    + "] failed");
                 }
                 /* do it again using createLineBidi instead of setLine */
                 try {
                     bidiLine = bidi.createLineBidi(lineStart, test.lineLimit);
-                    logln("Bidi.createLineBidi(" + lineStart + ", " + test.lineLimit
-                            + "), in tests[" + testNumber + "] OK, direction "
-                            + bidiLine.getDirection() + " paraLevel "
-                            + bidiLine.getBaseLevel());
+                    logln(
+                            "Bidi.createLineBidi("
+                                    + lineStart
+                                    + ", "
+                                    + test.lineLimit
+                                    + "), in tests["
+                                    + testNumber
+                                    + "] OK, direction "
+                                    + bidiLine.getDirection()
+                                    + " paraLevel "
+                                    + bidiLine.getBaseLevel());
                     doTest(bidiLine, testNumber, test, lineStart, countRunsFirst);
-                } catch (Exception e)  {
-                    errln("Bidi.createLineBidi(" + lineStart + ", " + test.lineLimit
-                            + "), in runAll test[" + testNumber + "] failed");
+                } catch (Exception e) {
+                    errln(
+                            "Bidi.createLineBidi("
+                                    + lineStart
+                                    + ", "
+                                    + test.lineLimit
+                                    + "), in runAll test["
+                                    + testNumber
+                                    + "] failed");
                 }
             }
         }
     }
 
-    private void doTest(Bidi bidi, int testNumber, TestData test,
-                        int lineStart, boolean countRunsFirst) {
+    private void doTest(
+            Bidi bidi, int testNumber, TestData test, int lineStart, boolean countRunsFirst) {
         short[] dirProps = test.dirProps;
         byte[] levels = test.levels;
         int[] visualMap = test.visualMap;
@@ -116,9 +147,15 @@ public class TestBidi extends BidiFmwk {
         _testReordering(bidi, testNumber);
 
         for (i = 0; i < len; ++i) {
-            logln(i + "  " + bidi.getLevelAt(i) + "  " + levelString
-                    + TestData.dirPropNames[dirProps[lineStart + i]] + "  "
-                    + bidi.getVisualIndex(i));
+            logln(
+                    i
+                            + "  "
+                            + bidi.getLevelAt(i)
+                            + "  "
+                            + levelString
+                            + TestData.dirPropNames[dirProps[lineStart + i]]
+                            + "  "
+                            + bidi.getVisualIndex(i));
         }
 
         log("\n-----levels:");
@@ -138,28 +175,33 @@ public class TestBidi extends BidiFmwk {
         }
         log("\n");
 
-        assertEquals("\nFailure in Bidi.getDirection(test[" + testNumber + "])",
-                     test.direction, bidi.getDirection());
-        assertEquals("\nFailure in Bidi.getParaLevel(test[" + testNumber + "])",
-                     test.resultLevel, bidi.getParaLevel());
+        assertEquals(
+                "\nFailure in Bidi.getDirection(test[" + testNumber + "])",
+                test.direction,
+                bidi.getDirection());
+        assertEquals(
+                "\nFailure in Bidi.getParaLevel(test[" + testNumber + "])",
+                test.resultLevel,
+                bidi.getParaLevel());
 
         for (i = 0; i < len; ++i) {
-            assertEquals("\nFailure in Bidi.getLevelAt(" + i +
-                         ") in test[" + testNumber + "]",
-                         levels[i], bidi.getLevelAt(i));
+            assertEquals(
+                    "\nFailure in Bidi.getLevelAt(" + i + ") in test[" + testNumber + "]",
+                    levels[i],
+                    bidi.getLevelAt(i));
         }
 
         for (i = 0; i < len; ++i) {
             try {
                 logicalIndex = bidi.getVisualIndex(i);
             } catch (Throwable th) {
-                errln("Bidi.getVisualIndex(" + i + ") in test[" + testNumber
-                        + "] failed");
+                errln("Bidi.getVisualIndex(" + i + ") in test[" + testNumber + "] failed");
             }
-            if(visualMap[i] != logicalIndex) {
-                assertEquals("\nFailure in Bidi.getVisualIndex(" + i +
-                             ") in test[" + testNumber + "])",
-                             visualMap[i], logicalIndex);
+            if (visualMap[i] != logicalIndex) {
+                assertEquals(
+                        "\nFailure in Bidi.getVisualIndex(" + i + ") in test[" + testNumber + "])",
+                        visualMap[i],
+                        logicalIndex);
             }
         }
 
@@ -178,19 +220,24 @@ public class TestBidi extends BidiFmwk {
             run = bidi.getLogicalRun(logicalIndex);
             logicalIndex = run.getLimit();
             level2 = run.getEmbeddingLevel();
-            assertEquals("Logical " + run.toString() +
-                         " in test[" + testNumber + "]: wrong level",
-                         level, level2);
+            assertEquals(
+                    "Logical " + run.toString() + " in test[" + testNumber + "]: wrong level",
+                    level,
+                    level2);
             if (--runCount < 0) {
-                errln("Bidi.getLogicalRun(test[" + testNumber
-                      + "]): wrong number of runs compared to Bidi.countRuns() = "
-                      + bidi.countRuns());
+                errln(
+                        "Bidi.getLogicalRun(test["
+                                + testNumber
+                                + "]): wrong number of runs compared to Bidi.countRuns() = "
+                                + bidi.countRuns());
             }
         }
         if (runCount != 0) {
-            errln("Bidi.getLogicalRun(test[" + testNumber
-                    + "]): wrong number of runs compared to Bidi.countRuns() = "
-                    + bidi.countRuns());
+            errln(
+                    "Bidi.getLogicalRun(test["
+                            + testNumber
+                            + "]): wrong number of runs compared to Bidi.countRuns() = "
+                            + bidi.countRuns());
         }
 
         log("\n\n");
@@ -205,12 +252,11 @@ public class TestBidi extends BidiFmwk {
         int[] visualMap3;
         int[] visualMap4 = new int[MAXLEN];
         byte[] levels;
-        int i, length = bidi.getLength(),
-               destLength = bidi.getResultLength();
+        int i, length = bidi.getLength(), destLength = bidi.getResultLength();
         int runCount, visualIndex, logicalIndex = -1, logicalStart, runLength;
         boolean odd;
 
-        if(length <= 0) {
+        if (length <= 0) {
             return;
         }
         /* get the logical and visual maps from the object */
@@ -255,8 +301,7 @@ public class TestBidi extends BidiFmwk {
         for (i = 0; i < runCount; ++i) {
             run = bidi.getVisualRun(i);
             if (run == null) {
-                errln("null visual run encountered at index " + i +
-                      ", in test " + testNumber);
+                errln("null visual run encountered at index " + i + ", in test " + testNumber);
                 continue;
             }
             odd = run.isOddRun();
@@ -265,12 +310,14 @@ public class TestBidi extends BidiFmwk {
             log("(" + (run.isOddRun() ? "R" : "L"));
             log(" @" + run.getStart() + '[' + run.getLength() + "])\n");
             if (!odd) {
-                do {    /* LTR */
+                do {
+                    /* LTR */
                     visualMap4[visualIndex++] = logicalStart++;
                 } while (--runLength > 0);
             } else {
-                logicalStart += runLength;  /* logicalLimit */
-                do {    /* RTL */
+                logicalStart += runLength; /* logicalLimit */
+                do {
+                    /* RTL */
                     visualMap4[visualIndex++] = --logicalStart;
                 } while (--runLength > 0);
             }
@@ -312,51 +359,112 @@ public class TestBidi extends BidiFmwk {
         /* check that the indexes are the same between these and Bidi.getLogical/VisualIndex() */
         for (i = 0; i < length; ++i) {
             if (logicalMap1[i] != logicalMap2[i]) {
-                errln("Error in tests[" + testNumber + "]: (logicalMap1[" + i +
-                      "] == " + logicalMap1[i] + ") != (logicalMap2[" + i +
-                      "] == " + logicalMap2[i] + ")");
+                errln(
+                        "Error in tests["
+                                + testNumber
+                                + "]: (logicalMap1["
+                                + i
+                                + "] == "
+                                + logicalMap1[i]
+                                + ") != (logicalMap2["
+                                + i
+                                + "] == "
+                                + logicalMap2[i]
+                                + ")");
             }
             if (logicalMap1[i] != logicalMap3[i]) {
-                errln("Error in tests[" + testNumber + "]: (logicalMap1[" + i +
-                      "] == " + logicalMap1[i] + ") != (logicalMap3[" + i +
-                      "] == " + logicalMap3[i] + ")");
+                errln(
+                        "Error in tests["
+                                + testNumber
+                                + "]: (logicalMap1["
+                                + i
+                                + "] == "
+                                + logicalMap1[i]
+                                + ") != (logicalMap3["
+                                + i
+                                + "] == "
+                                + logicalMap3[i]
+                                + ")");
             }
             if (visualMap1[i] != visualMap2[i]) {
-                errln("Error in tests[" + testNumber + "]: (visualMap1[" + i +
-                      "] == " + visualMap1[i] + ") != (visualMap2[" + i +
-                      "] == " + visualMap2[i] + ")");
+                errln(
+                        "Error in tests["
+                                + testNumber
+                                + "]: (visualMap1["
+                                + i
+                                + "] == "
+                                + visualMap1[i]
+                                + ") != (visualMap2["
+                                + i
+                                + "] == "
+                                + visualMap2[i]
+                                + ")");
             }
             if (visualMap1[i] != visualMap3[i]) {
-                errln("Error in tests[" + testNumber + "]: (visualMap1[" + i +
-                      "] == " + visualMap1[i] + ") != (visualMap3[" + i +
-                      "] == " + visualMap3[i] + ")");
+                errln(
+                        "Error in tests["
+                                + testNumber
+                                + "]: (visualMap1["
+                                + i
+                                + "] == "
+                                + visualMap1[i]
+                                + ") != (visualMap3["
+                                + i
+                                + "] == "
+                                + visualMap3[i]
+                                + ")");
             }
             if (visualMap1[i] != visualMap4[i]) {
-                errln("Error in tests[" + testNumber + "]: (visualMap1[" + i +
-                      "] == " + visualMap1[i] + ") != (visualMap4[" + i +
-                      "] == " + visualMap4[i] + ")");
+                errln(
+                        "Error in tests["
+                                + testNumber
+                                + "]: (visualMap1["
+                                + i
+                                + "] == "
+                                + visualMap1[i]
+                                + ") != (visualMap4["
+                                + i
+                                + "] == "
+                                + visualMap4[i]
+                                + ")");
             }
             try {
                 visualIndex = bidi.getVisualIndex(i);
             } catch (Exception e) {
-                errln("Bidi.getVisualIndex(" + i + ") failed in tests[" +
-                      testNumber + "]");
+                errln("Bidi.getVisualIndex(" + i + ") failed in tests[" + testNumber + "]");
             }
             if (logicalMap1[i] != visualIndex) {
-                errln("Error in tests[" + testNumber + "]: (logicalMap1[" + i +
-                      "] == " + logicalMap1[i] + ") != (Bidi.getVisualIndex(" + i +
-                      ") == " + visualIndex + ")");
+                errln(
+                        "Error in tests["
+                                + testNumber
+                                + "]: (logicalMap1["
+                                + i
+                                + "] == "
+                                + logicalMap1[i]
+                                + ") != (Bidi.getVisualIndex("
+                                + i
+                                + ") == "
+                                + visualIndex
+                                + ")");
             }
             try {
                 logicalIndex = bidi.getLogicalIndex(i);
             } catch (Exception e) {
-                errln("Bidi.getLogicalIndex(" + i + ") failed in tests[" +
-                      testNumber + "]");
+                errln("Bidi.getLogicalIndex(" + i + ") failed in tests[" + testNumber + "]");
             }
             if (visualMap1[i] != logicalIndex) {
-                errln("Error in tests[" + testNumber + "]: (visualMap1[" + i +
-                      "] == " + visualMap1[i] + ") != (Bidi.getLogicalIndex(" + i +
-                      ") == " + logicalIndex + ")");
+                errln(
+                        "Error in tests["
+                                + testNumber
+                                + "]: (visualMap1["
+                                + i
+                                + "] == "
+                                + visualMap1[i]
+                                + ") != (Bidi.getLogicalIndex("
+                                + i
+                                + ") == "
+                                + logicalIndex
+                                + ")");
             }
         }
     }
@@ -378,41 +486,41 @@ public class TestBidi extends BidiFmwk {
     }
 
     private void doMisc() {
-    /* Miscellaneous tests to exercize less popular code paths */
+        /* Miscellaneous tests to exercize less popular code paths */
         Bidi bidi = new Bidi(120, 66), bidiLine;
 
-        assertEquals("\nwriteReverse should return an empty string",
-                     "", Bidi.writeReverse("", 0));
+        assertEquals("\nwriteReverse should return an empty string", "", Bidi.writeReverse("", 0));
 
         bidi.setPara("", Bidi.LTR, null);
-        assertEquals("\nwriteReordered should return an empty string",
-                     "", bidi.writeReordered(0));
+        assertEquals("\nwriteReordered should return an empty string", "", bidi.writeReordered(0));
 
         bidi.setPara("abc", Bidi.LTR, null);
-        assertEquals("\ngetRunStart should return 0",
-                     0, bidi.getRunStart(0));
-        assertEquals("\ngetRunLimit should return 3",
-                     3, bidi.getRunLimit(0));
+        assertEquals("\ngetRunStart should return 0", 0, bidi.getRunStart(0));
+        assertEquals("\ngetRunLimit should return 3", 3, bidi.getRunLimit(0));
 
         bidi.setPara("abc          ", Bidi.RTL, null);
         bidiLine = bidi.setLine(0, 6);
         for (int i = 3; i < 6; i++) {
-            assertEquals("\nTrailing space at " + i + " should get paragraph level",
-                         Bidi.RTL, bidiLine.getLevelAt(i));
+            assertEquals(
+                    "\nTrailing space at " + i + " should get paragraph level",
+                    Bidi.RTL,
+                    bidiLine.getLevelAt(i));
         }
 
         bidi.setPara("abc       def", Bidi.RTL, null);
         bidiLine = bidi.setLine(0, 6);
         for (int i = 3; i < 6; i++) {
-            assertEquals("\nTrailing space at " + i + " should get paragraph level",
-                         Bidi.RTL, bidiLine.getLevelAt(i));
+            assertEquals(
+                    "\nTrailing space at " + i + " should get paragraph level",
+                    Bidi.RTL,
+                    bidiLine.getLevelAt(i));
         }
 
         bidi.setPara("abcdefghi    ", Bidi.RTL, null);
         bidiLine = bidi.setLine(0, 6);
         for (int i = 3; i < 6; i++) {
-            assertEquals("\nTrailing char at " + i + " should get level 2",
-                         2, bidiLine.getLevelAt(i));
+            assertEquals(
+                    "\nTrailing char at " + i + " should get level 2", 2, bidiLine.getLevelAt(i));
         }
 
         bidi.setReorderingOptions(Bidi.OPTION_REMOVE_CONTROLS);
@@ -441,7 +549,7 @@ public class TestBidi extends BidiFmwk {
 
         int[] map = Bidi.reorderLogical(null);
         assertTrue("\nWe should have got a null map #1", map == null);
-        map = Bidi.reorderLogical(new byte[] {0,126, 127});
+        map = Bidi.reorderLogical(new byte[] {0, 126, 127});
         assertTrue("\nWe should have got a null map #2", map == null);
         map = Bidi.reorderVisual(null);
         assertTrue("\nWe should have got a null map #3", map == null);
@@ -450,9 +558,8 @@ public class TestBidi extends BidiFmwk {
 
         map = Bidi.invertMap(null);
         assertTrue("\nWe should have got a null map #5", map == null);
-        map = Bidi.invertMap(new int[] {0,1,-1,5,4});
-        assertTrue("\nUnexpected inverted Map",
-                   Arrays.equals(map, new int[] {0,1,-1,-1,4,3}));
+        map = Bidi.invertMap(new int[] {0, 1, -1, 5, 4});
+        assertTrue("\nUnexpected inverted Map", Arrays.equals(map, new int[] {0, 1, -1, -1, 4, 3}));
 
         bidi.setPara("", Bidi.LTR, null);
         map = bidi.getLogicalMap();
@@ -462,8 +569,7 @@ public class TestBidi extends BidiFmwk {
 
         /* test BidiRun.toString and allocation of run memory > 1 */
         bidi.setPara("abc", Bidi.LTR, null);
-        assertEquals("\nWrong run display", "BidiRun 0 - 3 @ 0",
-                     bidi.getLogicalRun(0).toString());
+        assertEquals("\nWrong run display", "BidiRun 0 - 3 @ 0", bidi.getLogicalRun(0).toString());
 
         /* test REMOVE_BIDI_CONTROLS together with DO_MIRRORING */
         bidi.setPara("abc\u200e", Bidi.LTR, null);
@@ -495,14 +601,19 @@ public class TestBidi extends BidiFmwk {
         out = bidi.writeReordered(0);
         assertEquals("\nWrong result #8", "\u200f=-. abc \u05d1\u05d0", out);
         bidi.orderParagraphsLTR(true);
-        bidi.setPara("\n\r   \n\rabc\n\u05d0\u05d1\rabc \u05d2\u05d3\n\r" +
-                     "\u05d4\u05d5 abc\n\u05d6\u05d7 abc .-=\r\n" +
-                     "-* \u05d8\u05d9 abc .-=", Bidi.LEVEL_DEFAULT_RTL, null);
+        bidi.setPara(
+                "\n\r   \n\rabc\n\u05d0\u05d1\rabc \u05d2\u05d3\n\r"
+                        + "\u05d4\u05d5 abc\n\u05d6\u05d7 abc .-=\r\n"
+                        + "-* \u05d8\u05d9 abc .-=",
+                Bidi.LEVEL_DEFAULT_RTL,
+                null);
         out = bidi.writeReordered(0);
-        assertEquals("\nWrong result #9",
-                     "\n\r   \n\rabc\n\u05d1\u05d0\r\u05d3\u05d2 abc\n\r" +
-                     "\u200fabc \u05d5\u05d4\n\u200f=-. abc \u05d7\u05d6\r\n" +
-                     "\u200f=-. abc \u05d9\u05d8 *-", out);
+        assertEquals(
+                "\nWrong result #9",
+                "\n\r   \n\rabc\n\u05d1\u05d0\r\u05d3\u05d2 abc\n\r"
+                        + "\u200fabc \u05d5\u05d4\n\u200f=-. abc \u05d7\u05d6\r\n"
+                        + "\u200f=-. abc \u05d9\u05d8 *-",
+                out);
 
         bidi.setPara("\u05d0 \t", Bidi.LTR, null);
         out = bidi.writeReordered(0);
@@ -519,7 +630,10 @@ public class TestBidi extends BidiFmwk {
 
         /* check exceeding para level */
         bidi = new Bidi();
-        bidi.setPara("A\u202a\u05d0\u202aC\u202c\u05d1\u202cE", (byte)(Bidi.MAX_EXPLICIT_LEVEL - 1), null);
+        bidi.setPara(
+                "A\u202a\u05d0\u202aC\u202c\u05d1\u202cE",
+                (byte) (Bidi.MAX_EXPLICIT_LEVEL - 1),
+                null);
         assertEquals("\nWrong level at index 2", Bidi.MAX_EXPLICIT_LEVEL, bidi.getLevelAt(2));
 
         /* check 1-char runs with RUNS_ONLY */
@@ -530,63 +644,109 @@ public class TestBidi extends BidiFmwk {
         /* test testGetBaseDirection to verify fast string direction detection function */
         /* mixed start with L */
         String mixedEnglishFirst = "\u0061\u0627\u0032\u06f3\u0061\u0034";
-        assertEquals("\nWrong direction through fast detection #1", Bidi.LTR, Bidi.getBaseDirection(mixedEnglishFirst));
+        assertEquals(
+                "\nWrong direction through fast detection #1",
+                Bidi.LTR,
+                Bidi.getBaseDirection(mixedEnglishFirst));
         /* mixed start with AL */
         String mixedArabicFirst = "\u0661\u0627\u0662\u06f3\u0061\u0664";
-        assertEquals("\nWrong direction through fast detection #2", Bidi.RTL, Bidi.getBaseDirection(mixedArabicFirst));
+        assertEquals(
+                "\nWrong direction through fast detection #2",
+                Bidi.RTL,
+                Bidi.getBaseDirection(mixedArabicFirst));
         /* mixed Start with R */
         String mixedHebrewFirst = "\u05EA\u0627\u0662\u06f3\u0061\u0664";
-        assertEquals("\nWrong direction through fast detection #3", Bidi.RTL, Bidi.getBaseDirection(mixedHebrewFirst));
+        assertEquals(
+                "\nWrong direction through fast detection #3",
+                Bidi.RTL,
+                Bidi.getBaseDirection(mixedHebrewFirst));
         /* all AL (Arabic. Persian) */
         String persian = "\u0698\u067E\u0686\u06AF";
-        assertEquals("\nWrong direction through fast detection #4", Bidi.RTL, Bidi.getBaseDirection(persian));
+        assertEquals(
+                "\nWrong direction through fast detection #4",
+                Bidi.RTL,
+                Bidi.getBaseDirection(persian));
         /* all R (Hebrew etc.) */
         String hebrew = "\u0590\u05D5\u05EA\u05F1";
-        assertEquals("\nWrong direction through fast detection #5", Bidi.RTL, Bidi.getBaseDirection(hebrew));
+        assertEquals(
+                "\nWrong direction through fast detection #5",
+                Bidi.RTL,
+                Bidi.getBaseDirection(hebrew));
         /* all L (English) */
         String english = "\u0071\u0061\u0066";
-        assertEquals("\nWrong direction through fast detection #6", Bidi.LTR, Bidi.getBaseDirection(english));
+        assertEquals(
+                "\nWrong direction through fast detection #6",
+                Bidi.LTR,
+                Bidi.getBaseDirection(english));
         /* mixed start with weak AL an then L */
         String startWeakAL = "\u0663\u0071\u0061\u0066";
-        assertEquals("\nWrong direction through fast detection #7", Bidi.LTR, Bidi.getBaseDirection(startWeakAL));
+        assertEquals(
+                "\nWrong direction through fast detection #7",
+                Bidi.LTR,
+                Bidi.getBaseDirection(startWeakAL));
         /* mixed start with weak L and then AL */
         String startWeakL = "\u0031\u0698\u067E\u0686\u06AF";
-        assertEquals("\nWrong direction through fast detection #8", Bidi.RTL, Bidi.getBaseDirection(startWeakL));
+        assertEquals(
+                "\nWrong direction through fast detection #8",
+                Bidi.RTL,
+                Bidi.getBaseDirection(startWeakL));
         /* empty */
         String empty = "";
-        assertEquals("\nWrong direction through fast detection #9", Bidi.NEUTRAL, Bidi.getBaseDirection(empty));
+        assertEquals(
+                "\nWrong direction through fast detection #9",
+                Bidi.NEUTRAL,
+                Bidi.getBaseDirection(empty));
         /* surrogate character */
         String surrogateChar = "\uD800\uDC00";
-        assertEquals("\nWrong direction through fast detection #10", Bidi.LTR, Bidi.getBaseDirection(surrogateChar));
+        assertEquals(
+                "\nWrong direction through fast detection #10",
+                Bidi.LTR,
+                Bidi.getBaseDirection(surrogateChar));
         /* all weak L (English digits) */
         String allEnglishDigits = "\u0031\u0032\u0033";
-        assertEquals("\nWrong direction through fast detection #11", Bidi.NEUTRAL, Bidi.getBaseDirection(allEnglishDigits));
+        assertEquals(
+                "\nWrong direction through fast detection #11",
+                Bidi.NEUTRAL,
+                Bidi.getBaseDirection(allEnglishDigits));
         /* all weak AL (Arabic digits) */
         String allArabicDigits = "\u0663\u0664\u0665";
-        assertEquals("\nWrong direction through fast detection #12", Bidi.NEUTRAL, Bidi.getBaseDirection(allArabicDigits));
+        assertEquals(
+                "\nWrong direction through fast detection #12",
+                Bidi.NEUTRAL,
+                Bidi.getBaseDirection(allArabicDigits));
         /* null string */
         String nullString = null;
-        assertEquals("\nWrong direction through fast detection #13", Bidi.NEUTRAL, Bidi.getBaseDirection(nullString));
+        assertEquals(
+                "\nWrong direction through fast detection #13",
+                Bidi.NEUTRAL,
+                Bidi.getBaseDirection(nullString));
         /* first L (English) others are R (Hebrew etc.) */
         String startEnglishOthersHebrew = "\u0071\u0590\u05D5\u05EA\u05F1";
-        assertEquals("\nWrong direction through fast detection #14", Bidi.LTR, Bidi.getBaseDirection(startEnglishOthersHebrew));
+        assertEquals(
+                "\nWrong direction through fast detection #14",
+                Bidi.LTR,
+                Bidi.getBaseDirection(startEnglishOthersHebrew));
         /* last R (Hebrew etc.) others are weak L (English Digits) */
         String lastHebrewOthersEnglishDigit = "\u0031\u0032\u0033\u05F1";
-        assertEquals("\nWrong direction through fast detection #15", Bidi.RTL, Bidi.getBaseDirection(lastHebrewOthersEnglishDigit));
+        assertEquals(
+                "\nWrong direction through fast detection #15",
+                Bidi.RTL,
+                Bidi.getBaseDirection(lastHebrewOthersEnglishDigit));
     }
 
     @Test
     public void testExplicitLevel0() {
         // The following used to fail with an error, see ICU ticket #12922.
         String text = "\u202d\u05d0";
-        byte[] embeddings = new byte[2];  // all 0
-        int flags = Bidi.DIRECTION_DEFAULT_LEFT_TO_RIGHT;  // 0x7e
+        byte[] embeddings = new byte[2]; // all 0
+        int flags = Bidi.DIRECTION_DEFAULT_LEFT_TO_RIGHT; // 0x7e
         Bidi bidi = new Bidi(text.toCharArray(), 0, embeddings, 0, text.length(), flags);
         assertEquals("resolved level at 0", 1, bidi.getLevelAt(0));
         assertEquals("resolved level at 1", 1, bidi.getLevelAt(1));
 
-        flags = java.text.Bidi.DIRECTION_DEFAULT_LEFT_TO_RIGHT;  // -2
-        java.text.Bidi jb = new java.text.Bidi(text.toCharArray(), 0, embeddings, 0, text.length(), flags);
+        flags = java.text.Bidi.DIRECTION_DEFAULT_LEFT_TO_RIGHT; // -2
+        java.text.Bidi jb =
+                new java.text.Bidi(text.toCharArray(), 0, embeddings, 0, text.length(), flags);
         assertEquals("java.text resolved level at 0", 1, jb.getLevelAt(0));
         assertEquals("java.text resolved level at 1", 1, jb.getLevelAt(1));
     }

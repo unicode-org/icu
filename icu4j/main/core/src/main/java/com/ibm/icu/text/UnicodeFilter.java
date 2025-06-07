@@ -9,39 +9,34 @@
 package com.ibm.icu.text;
 
 /**
- * <code>UnicodeFilter</code> defines a protocol for selecting a
- * subset of the full range (U+0000 to U+FFFF) of Unicode characters.
- * Currently, filters are used in conjunction with classes like
- * {@link com.ibm.icu.text.Transliterator}
- * to only process selected characters through a
+ * <code>UnicodeFilter</code> defines a protocol for selecting a subset of the full range (U+0000 to
+ * U+FFFF) of Unicode characters. Currently, filters are used in conjunction with classes like
+ * {@link com.ibm.icu.text.Transliterator} to only process selected characters through a
  * transformation.
+ *
  * @stable ICU 2.0
  */
-@SuppressWarnings("javadoc")    // com.imb.icu.text.Transliterator is in another project
+@SuppressWarnings("javadoc") // com.imb.icu.text.Transliterator is in another project
 public abstract class UnicodeFilter implements UnicodeMatcher {
 
     /**
-     * Returns {@code true} for characters that are in the selected
-     * subset.  In other words, if a character is <b>to be
-     * filtered</b>, then {@code contains()} returns
-     * <b>{@code false}</b>.
+     * Returns {@code true} for characters that are in the selected subset. In other words, if a
+     * character is <b>to be filtered</b>, then {@code contains()} returns <b>{@code false}</b>.
+     *
      * @stable ICU 2.0
      */
     public abstract boolean contains(int c);
 
     /**
-     * Default implementation of UnicodeMatcher::matches() for Unicode
-     * filters.  Matches a single 16-bit code unit at offset.
+     * Default implementation of UnicodeMatcher::matches() for Unicode filters. Matches a single
+     * 16-bit code unit at offset.
+     *
      * @stable ICU 2.0
      */
     @Override
-    public int matches(Replaceable text,
-                       int[] offset,
-                       int limit,
-                       boolean incremental) {
+    public int matches(Replaceable text, int[] offset, int limit, boolean incremental) {
         int c;
-        if (offset[0] < limit &&
-            contains(c = text.char32At(offset[0]))) {
+        if (offset[0] < limit && contains(c = text.char32At(offset[0]))) {
             offset[0] += UTF16.getCharCount(c);
             return U_MATCH;
         }
@@ -63,9 +58,8 @@ public abstract class UnicodeFilter implements UnicodeMatcher {
 
     // TODO Remove this when the JDK property implements MemberDoc.isSynthetic
     /**
-     * (This should not be here; it is declared to make CheckTags
-     * happy.  Java inserts a synthetic constructor and CheckTags
-     * can't tell that it's synthetic.)
+     * (This should not be here; it is declared to make CheckTags happy. Java inserts a synthetic
+     * constructor and CheckTags can't tell that it's synthetic.)
      *
      * @internal
      * @deprecated This API is ICU internal only.

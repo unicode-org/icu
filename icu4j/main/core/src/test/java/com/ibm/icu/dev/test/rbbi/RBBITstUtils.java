@@ -8,10 +8,9 @@
  */
 package com.ibm.icu.dev.test.rbbi;
 
-import java.util.MissingResourceException;
-
 import com.ibm.icu.impl.breakiter.LSTMBreakEngine;
 import com.ibm.icu.lang.UScript;
+import java.util.MissingResourceException;
 
 public class RBBITstUtils {
     static boolean lstmDataIsBuilt() {
@@ -31,7 +30,7 @@ public class RBBITstUtils {
     }
 
     static boolean skipLSTMTest() {
-        return ! lstmDataIsBuilt();
+        return !lstmDataIsBuilt();
     }
 
     public static boolean skipDictionaryTest() {

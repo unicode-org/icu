@@ -8,27 +8,22 @@
  */
 package com.ibm.icu.dev.test;
 
+import com.ibm.icu.impl.UnicodeMap;
 import java.util.List;
-
 import org.junit.Test;
 
-import com.ibm.icu.impl.UnicodeMap;
-
-/**
- * Moved from UnicodeMapTest
- */
+/** Moved from UnicodeMapTest */
 public class UnicodeMapBoilerplateTest extends TestBoilerplate<UnicodeMap<String>> {
 
     private static String[] TEST_VALUES = {"A", "B", "C", "D", "E", "F"};
 
-    public void TestUnicodeMapBoilerplate() throws Exception {
-    }
+    public void TestUnicodeMapBoilerplate() throws Exception {}
 
     @Test
     public void test() throws Exception {
         _test();
     }
-    
+
     /* (non-Javadoc)
      * @see com.ibm.icu.dev.test.TestBoilerplate#_hasSameBehavior(java.lang.Object, java.lang.Object)
      */
@@ -51,5 +46,4 @@ public class UnicodeMapBoilerplateTest extends TestBoilerplate<UnicodeMap<String
         list.add(result);
         return true;
     }
-
 }

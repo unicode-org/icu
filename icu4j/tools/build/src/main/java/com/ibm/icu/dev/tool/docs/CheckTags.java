@@ -1,55 +1,44 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /**
-*******************************************************************************
-* Copyright (C) 2002-2010, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
-*******************************************************************************
-*/
-/**
- * This is a tool to check the tags on ICU4J files.  In particular, we're looking for:
- *
- * - methods that have no tags
- * - custom tags: @draft, @stable, @internal?
- * - standard tags: @since, @deprecated
- *
- * Syntax of tags:
- * '@draft ICU X.X.X'
- * '@stable ICU X.X.X'
- * '@internal'
- * '@since  (don't use)'
- * '@obsolete ICU X.X.X'
- * '@deprecated to be removed in ICU X.X. [Use ...]'
- *
- * flags names of classes and their members that have no tags or incorrect syntax.
- *
- * Requires JDK 1.4 or later
- *
- * Use build.xml 'checktags' ant target, or
- * run from directory containing CheckTags.class as follows:
- * javadoc -classpath ${JAVA_HOME}/lib/tools.jar -doclet CheckTags -sourcepath ${ICU4J_src} [packagenames]
+ * ****************************************************************************** Copyright (C)
+ * 2002-2010, International Business Machines Corporation and * others. All Rights Reserved. *
+ * ******************************************************************************
  */
-
+/**
+ * This is a tool to check the tags on ICU4J files. In particular, we're looking for:
+ *
+ * <p>- methods that have no tags - custom tags: @draft, @stable, @internal? - standard
+ * tags: @since, @deprecated
+ *
+ * <p>Syntax of tags: '@draft ICU X.X.X' '@stable ICU X.X.X' '@internal' '@since (don't use)'
+ * '@obsolete ICU X.X.X' '@deprecated to be removed in ICU X.X. [Use ...]'
+ *
+ * <p>flags names of classes and their members that have no tags or incorrect syntax.
+ *
+ * <p>Requires JDK 1.4 or later
+ *
+ * <p>Use build.xml 'checktags' ant target, or run from directory containing CheckTags.class as
+ * follows: javadoc -classpath ${JAVA_HOME}/lib/tools.jar -doclet CheckTags -sourcepath ${ICU4J_src}
+ * [packagenames]
+ */
 package com.ibm.icu.dev.tool.docs;
 
+import com.sun.source.doctree.BlockTagTree;
+import com.sun.source.doctree.DocTree;
+import com.sun.source.doctree.InlineTagTree;
+import com.sun.source.util.DocTrees;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.QualifiedNameable;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
-
-import com.sun.source.doctree.BlockTagTree;
-import com.sun.source.doctree.DocTree;
-import com.sun.source.doctree.InlineTagTree;
-import com.sun.source.util.DocTrees;
-
 import jdk.javadoc.doclet.Doclet;
 import jdk.javadoc.doclet.DocletEnvironment;
 import jdk.javadoc.doclet.Reporter;
@@ -74,11 +63,15 @@ public class CheckTags implements Doclet {
             this.errorCount = 0;
             this.reportError = reportError;
         }
+
         public String toString() {
-            return header +
-                " printed: " + printed +
-                " reportError: " + reportError +
-                " errorCount: " + errorCount;
+            return header
+                    + " printed: "
+                    + printed
+                    + " reportError: "
+                    + reportError
+                    + " errorCount: "
+                    + errorCount;
         }
     }
 
@@ -100,7 +93,8 @@ public class CheckTags implements Doclet {
             if (stack[index] == null) {
                 stack[index] = new DocNode();
             }
-            //  System.out.println("reset [" + index + "] header: " + header + " report: " + reportError);
+            //  System.out.println("reset [" + index + "] header: " + header + " report: " +
+            // reportError);
             stack[index++].reset(header, reportError);
         }
 
@@ -127,7 +121,7 @@ public class CheckTags implements Doclet {
         }
 
         public void output(String msg, boolean error, boolean newline) {
-            output(msg, error, newline, index-1);
+            output(msg, error, newline, index - 1);
         }
 
         void output(String msg, boolean error, boolean newline, int ix) {
@@ -138,13 +132,15 @@ public class CheckTags implements Doclet {
 
             boolean show = !brief || last.reportError;
             // boolean nomsg = show && brief && error;
-            //            System.out.println(">>> " + last + " error: " + error + " show: " + show + " nomsg: " + nomsg);
+            //            System.out.println(">>> " + last + " error: " + error + " show: " + show +
+            // " nomsg: " + nomsg);
 
             if (show) {
                 if (isShort || (brief && error)) {
-                    msg = null; // nuke error messages if we're brief, just report headers and totals
+                    msg = null; // nuke error messages if we're brief, just report headers and
+                    // totals
                 }
-                for (int i = 0; i <= ix;) {
+                for (int i = 0; i <= ix; ) {
                     DocNode n = stack[i];
                     if (n.printed) {
                         if (msg != null || !last.printed) { // since index > 0 last is not null
@@ -188,8 +184,7 @@ public class CheckTags implements Doclet {
     }
 
     @Override
-    public void init(Locale locale, Reporter reporter) {
-    }
+    public void init(Locale locale, Reporter reporter) {}
 
     @Override
     public String getName() {
@@ -201,10 +196,14 @@ public class CheckTags implements Doclet {
         return SUPPORTED_OPTIONS;
     }
 
-    private final static Set<Option> SUPPORTED_OPTIONS = Set.of(
-            new JavadocHelper.GatherApiDataOption(0, "-log", "log", "the description of name"),
-            new JavadocHelper.GatherApiDataOption(0, "-brief", "brief", "the description of output"),
-            new JavadocHelper.GatherApiDataOption(0, "-short", "short", "the description of base"));
+    private static final Set<Option> SUPPORTED_OPTIONS =
+            Set.of(
+                    new JavadocHelper.GatherApiDataOption(
+                            0, "-log", "log", "the description of name"),
+                    new JavadocHelper.GatherApiDataOption(
+                            0, "-brief", "brief", "the description of output"),
+                    new JavadocHelper.GatherApiDataOption(
+                            0, "-short", "short", "the description of base"));
 
     private void initFromOptions() {
         for (Option opt : SUPPORTED_OPTIONS) {
@@ -228,9 +227,10 @@ public class CheckTags implements Doclet {
         docTrees = environment.getDocTrees();
         elements = environment.getElementUtils();
         initFromOptions();
-        List<? extends Element> allClasses = environment.getIncludedElements().stream()
-                .filter(e-> e.getKind().isClass())
-                .collect(Collectors.toList());
+        List<? extends Element> allClasses =
+                environment.getIncludedElements().stream()
+                        .filter(e -> e.getKind().isClass())
+                        .collect(Collectors.toList());
         doElements(allClasses, "Package", true);
         return true;
     }
@@ -269,8 +269,14 @@ public class CheckTags implements Doclet {
         if (msg.length() > 0) {
             msg += ": ";
         }
-        errln(msg + tag.toString() + " [" + JavadocHelper.position(elements, docTrees, element, tag) + "]");
-    };
+        errln(
+                msg
+                        + tag.toString()
+                        + " ["
+                        + JavadocHelper.position(elements, docTrees, element, tag)
+                        + "]");
+    }
+    ;
 
     void tagErr(Element element, BlockTagTree tag) {
         tagErr("", element, tag);
@@ -287,8 +293,10 @@ public class CheckTags implements Doclet {
     }
 
     void doElement(Element element) {
-        if (element != null && (JavadocHelper.isPublic(element) || JavadocHelper.isProtected(element))
-            && !(JavadocHelper.isKindConstructor(element) && JavadocHelper.isSynthetic(elements, element))) {
+        if (element != null
+                && (JavadocHelper.isPublic(element) || JavadocHelper.isProtected(element))
+                && !(JavadocHelper.isKindConstructor(element)
+                        && JavadocHelper.isSynthetic(elements, element))) {
             // unfortunately, in JDK 1.4.1 MemberDoc.isSynthetic is not properly implemented for
             // synthetic constructors.  So you'll have to live with spurious errors or 'implement'
             // the synthetic constructors...
@@ -303,7 +311,10 @@ public class CheckTags implements Doclet {
             if (element instanceof ExecutableElement) {
                 header += JavadocHelper.flatSignature(element);
             } else {
-                header += (isClass ? ((QualifiedNameable) element).getQualifiedName() : element.getSimpleName());
+                header +=
+                        (isClass
+                                ? ((QualifiedNameable) element).getQualifiedName()
+                                : element.getSimpleName());
             }
             if (!isShort || isClass) {
                 header += " ---";
@@ -314,15 +325,21 @@ public class CheckTags implements Doclet {
             }
             boolean recurse = doTags(element);
             if (recurse && isClass) {
-                TypeElement typeElement = (TypeElement)element;
-                List<? extends Element> fields = typeElement.getEnclosedElements().stream()
-                        .filter(JavadocHelper::isKindField).collect(Collectors.toList());
+                TypeElement typeElement = (TypeElement) element;
+                List<? extends Element> fields =
+                        typeElement.getEnclosedElements().stream()
+                                .filter(JavadocHelper::isKindField)
+                                .collect(Collectors.toList());
                 doElements(fields, "Fields", !brief);
-                List<? extends Element> constructors = typeElement.getEnclosedElements().stream()
-                        .filter(JavadocHelper::isKindConstructor).collect(Collectors.toList());
+                List<? extends Element> constructors =
+                        typeElement.getEnclosedElements().stream()
+                                .filter(JavadocHelper::isKindConstructor)
+                                .collect(Collectors.toList());
                 doElements(constructors, "Constructors", !brief);
-                List<? extends Element> methods = typeElement.getEnclosedElements().stream()
-                        .filter(JavadocHelper::isKindMethod).collect(Collectors.toList());
+                List<? extends Element> methods =
+                        typeElement.getEnclosedElements().stream()
+                                .filter(JavadocHelper::isKindMethod)
+                                .collect(Collectors.toList());
                 doElements(methods, "Methods", !brief);
             }
             stack.pop();
@@ -349,24 +366,33 @@ public class CheckTags implements Doclet {
             JavadocHelper.IcuTagKind tagKind = JavadocHelper.IcuTagKind.ofTag(tag);
             String text = JavadocHelper.toText(tag).trim();
             switch (tagKind) {
-                case ICU: {
-                    if (JavadocHelper.isKindClassOrInterface(element)) {
-                        tagErr("tag should appear only in member elements", element, tag);
+                case ICU:
+                    {
+                        if (JavadocHelper.isKindClassOrInterface(element)) {
+                            tagErr("tag should appear only in member elements", element, tag);
+                        }
                     }
-                } break;
-                case ICUNOTE: {
-                    if (!text.isEmpty()) {
-                        tagErr("tag should not contain text", element, tag);
+                    break;
+                case ICUNOTE:
+                    {
+                        if (!text.isEmpty()) {
+                            tagErr("tag should not contain text", element, tag);
+                        }
                     }
-                } break;
-                case ICUENHANCED: {
-                    if (text.isEmpty()) {
-                        tagErr("text should name related jdk class", element, tag);
+                    break;
+                case ICUENHANCED:
+                    {
+                        if (text.isEmpty()) {
+                            tagErr("text should name related jdk class", element, tag);
+                        }
+                        if (!(JavadocHelper.isKindClassOrInterface(element))) {
+                            tagErr(
+                                    "tag should appear only in class/interface elements",
+                                    element,
+                                    tag);
+                        }
                     }
-                    if (!(JavadocHelper.isKindClassOrInterface(element))) {
-                        tagErr("tag should appear only in class/interface elements", element, tag);
-                    }
-                } break;
+                    break;
                 case UNKNOWN:
                     // It might be a standard tag, so we don't complain about this
                     break;
@@ -393,8 +419,9 @@ public class CheckTags implements Doclet {
                 case DRAFT:
                     foundRequiredTag = true;
                     foundDraftTag = true;
-                    if (tagText.indexOf("ICU 2.8") != -1 &&
-                            tagText.indexOf("(retain") == -1) { // catch both retain and retainAll
+                    if (tagText.indexOf("ICU 2.8") != -1
+                            && tagText.indexOf("(retain")
+                                    == -1) { // catch both retain and retainAll
                         tagErr(element, tag);
                         break;
                     }
@@ -425,21 +452,21 @@ public class CheckTags implements Doclet {
                     break;
 
                 case STABLE:
-                {
-                    if (tagText.length() != 0 && tagText.indexOf("ICU") != 0) {
-                        tagErr(tagText, element, tag);
+                    {
+                        if (tagText.length() != 0 && tagText.indexOf("ICU") != 0) {
+                            tagErr(tagText, element, tag);
+                        }
+                        foundRequiredTag = true;
+                        foundStableTag = true;
                     }
-                    foundRequiredTag = true;
-                    foundStableTag = true;
-                }
-                break;
+                    break;
 
                 case SINCE:
                     tagErr(element, tag);
                     break;
 
                 case EXCEPTION:
-                    //TODO: Why would we report this?
+                    // TODO: Why would we report this?
                     // logln("You really ought to use @throws, you know... :-)");
                     break;
 
@@ -462,7 +489,10 @@ public class CheckTags implements Doclet {
             } // end if switch
         } // end of iteration on tags
         if (!foundRequiredTag) {
-            errln("missing required tag [" + JavadocHelper.position(elements, docTrees, element) + "]");
+            errln(
+                    "missing required tag ["
+                            + JavadocHelper.position(elements, docTrees, element)
+                            + "]");
         }
         if (foundInternalTag && !foundDeprecatedTag) {
             errln("internal tag missing deprecated");

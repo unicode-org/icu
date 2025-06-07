@@ -8,44 +8,33 @@
  */
 package com.ibm.icu.text;
 
-
-/**
- * A transliterator that removes characters.  This is useful in conjunction
- * with a filter.
- */
+/** A transliterator that removes characters. This is useful in conjunction with a filter. */
 class RemoveTransliterator extends Transliterator {
 
-    /**
-     * ID for this transliterator.
-     */
+    /** ID for this transliterator. */
     private static final String _ID = "Any-Remove";
 
-    /**
-     * System registration hook.
-     */
+    /** System registration hook. */
     static void register() {
-        Transliterator.registerFactory(_ID, new Transliterator.Factory() {
-            @Override
-            public Transliterator getInstance(String ID) {
-                return new RemoveTransliterator();
-            }
-        });
+        Transliterator.registerFactory(
+                _ID,
+                new Transliterator.Factory() {
+                    @Override
+                    public Transliterator getInstance(String ID) {
+                        return new RemoveTransliterator();
+                    }
+                });
         Transliterator.registerSpecialInverse("Remove", "Null", false);
     }
 
-    /**
-     * Constructs a transliterator.
-     */
+    /** Constructs a transliterator. */
     public RemoveTransliterator() {
         super(_ID, null);
     }
 
-    /**
-     * Implements {@link Transliterator#handleTransliterate}.
-     */
+    /** Implements {@link Transliterator#handleTransliterate}. */
     @Override
-    protected void handleTransliterate(Replaceable text,
-                                       Position index, boolean incremental) {
+    protected void handleTransliterate(Replaceable text, Position index, boolean incremental) {
         // Our caller (filteredTransliterate) has already narrowed us
         // to an unfiltered run.  Delete it.
         text.replace(index.start, index.limit, "");
@@ -58,7 +47,8 @@ class RemoveTransliterator extends Transliterator {
      * @see com.ibm.icu.text.Transliterator#addSourceTargetSet(boolean, com.ibm.icu.text.UnicodeSet, com.ibm.icu.text.UnicodeSet)
      */
     @Override
-    public void addSourceTargetSet(UnicodeSet inputFilter, UnicodeSet sourceSet, UnicodeSet targetSet) {
+    public void addSourceTargetSet(
+            UnicodeSet inputFilter, UnicodeSet sourceSet, UnicodeSet targetSet) {
         // intersect myFilter with the input filter
         UnicodeSet myFilter = getFilterAsUnicodeSet(inputFilter);
         sourceSet.addAll(myFilter);

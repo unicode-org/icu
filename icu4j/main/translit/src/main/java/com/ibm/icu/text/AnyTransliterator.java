@@ -1,16 +1,17 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /*
-*****************************************************************
-* Copyright (c) 2002-2014, International Business Machines Corporation
-* and others.  All Rights Reserved.
-*****************************************************************
-* Date        Name        Description
-* 06/06/2002  aliu        Creation.
-*****************************************************************
-*/
+ *****************************************************************
+ * Copyright (c) 2002-2014, International Business Machines Corporation
+ * and others.  All Rights Reserved.
+ *****************************************************************
+ * Date        Name        Description
+ * 06/06/2002  aliu        Creation.
+ *****************************************************************
+ */
 package com.ibm.icu.text;
 
+import com.ibm.icu.lang.UScript;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -20,30 +21,25 @@ import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.ibm.icu.lang.UScript;
 /**
- * A transliterator that translates multiple input scripts to a single
- * output script.  It is named Any-T or Any-T/V, where T is the target
- * and V is the optional variant.  The target T is a script.
+ * A transliterator that translates multiple input scripts to a single output script. It is named
+ * Any-T or Any-T/V, where T is the target and V is the optional variant. The target T is a script.
  *
- * <p>An AnyTransliterator partitions text into runs of the same
- * script, together with adjacent COMMON or INHERITED characters.
- * After determining the script of each run, it transliterates from
- * that script to the given target/variant.  It does so by
- * instantiating a transliterator from the source script to the
- * target/variant.  If a run consists only of the target script,
- * COMMON, or INHERITED characters, then the run is not changed.
+ * <p>An AnyTransliterator partitions text into runs of the same script, together with adjacent
+ * COMMON or INHERITED characters. After determining the script of each run, it transliterates from
+ * that script to the given target/variant. It does so by instantiating a transliterator from the
+ * source script to the target/variant. If a run consists only of the target script, COMMON, or
+ * INHERITED characters, then the run is not changed.
  *
- * <p>At startup, all possible AnyTransliterators are registered with
- * the system, as determined by examining the registered script
- * transliterators.
+ * <p>At startup, all possible AnyTransliterators are registered with the system, as determined by
+ * examining the registered script transliterators.
  *
  * @since ICU 2.2
  * @author Alan Liu
  */
 class AnyTransliterator extends Transliterator {
 
-    //------------------------------------------------------------
+    // ------------------------------------------------------------
     // Constants
 
     static final char TARGET_SEP = '-';
@@ -52,41 +48,29 @@ class AnyTransliterator extends Transliterator {
     static final String NULL_ID = "Null";
     static final String LATIN_PIVOT = "-Latin;Latin-";
 
-    /**
-     * Cache mapping UScriptCode values to Transliterator*.
-     */
+    /** Cache mapping UScriptCode values to Transliterator*. */
     private ConcurrentHashMap<Integer, Transliterator> cache;
 
-    /**
-     * The target or target/variant string.
-     */
+    /** The target or target/variant string. */
     private String target;
 
-    /**
-     * The target script code.  Never USCRIPT_INVALID_CODE.
-     */
+    /** The target script code. Never USCRIPT_INVALID_CODE. */
     private int targetScript;
 
-    /**
-     * Lazily initialize a special Transliterator for handling width characters.
-     */
+    /** Lazily initialize a special Transliterator for handling width characters. */
     private static class WidthFix {
         private static final String ID = "[[:dt=Nar:][:dt=Wide:]] nfkd";
 
         static final Transliterator INSTANCE = Transliterator.getInstance(ID);
     }
 
-    /**
-     * Implements {@link Transliterator#handleTransliterate}.
-     */
+    /** Implements {@link Transliterator#handleTransliterate}. */
     @Override
-    protected void handleTransliterate(Replaceable text,
-                                       Position pos, boolean isIncremental) {
+    protected void handleTransliterate(Replaceable text, Position pos, boolean isIncremental) {
         int allStart = pos.start;
         int allLimit = pos.limit;
 
-        ScriptRunIterator it =
-            new ScriptRunIterator(text, pos.contextStart, pos.contextLimit);
+        ScriptRunIterator it = new ScriptRunIterator(text, pos.contextStart, pos.contextLimit);
 
         while (it.next()) {
             // Ignore runs in the ante context
@@ -127,19 +111,15 @@ class AnyTransliterator extends Transliterator {
 
     /**
      * Private constructor
-     * @param id the ID of the form S-T or S-T/V, where T is theTarget
-     * and V is theVariant.  Must not be empty.
-     * @param theTarget the target name.  Must not be empty, and must
-     * name a script corresponding to theTargetScript.
-     * @param theVariant the variant name, or the empty string if
-     * there is no variant
-     * @param theTargetScript the script code corresponding to
-     * theTarget.
+     *
+     * @param id the ID of the form S-T or S-T/V, where T is theTarget and V is theVariant. Must not
+     *     be empty.
+     * @param theTarget the target name. Must not be empty, and must name a script corresponding to
+     *     theTargetScript.
+     * @param theVariant the variant name, or the empty string if there is no variant
+     * @param theTargetScript the script code corresponding to theTarget.
      */
-    private AnyTransliterator(String id,
-                              String theTarget,
-                              String theVariant,
-                              int theTargetScript) {
+    private AnyTransliterator(String id, String theTarget, String theVariant, int theTargetScript) {
         super(id, null);
         targetScript = theTargetScript;
         cache = new ConcurrentHashMap<Integer, Transliterator>();
@@ -151,16 +131,21 @@ class AnyTransliterator extends Transliterator {
     }
 
     /**
-     * @param id the ID of the form S-T or S-T/V, where T is theTarget
-     * and V is theVariant.  Must not be empty.
+     * @param id the ID of the form S-T or S-T/V, where T is theTarget and V is theVariant. Must not
+     *     be empty.
      * @param filter The Unicode filter.
      * @param target2 the target name.
      * @param targetScript2 the script code corresponding to theTarget.
      * @param widthFix2 Not used. This parameter is deprecated.
      * @param cache2 The Map object for cache.
      */
-    public AnyTransliterator(String id, UnicodeFilter filter, String target2,
-            int targetScript2, Transliterator widthFix2, ConcurrentHashMap<Integer, Transliterator> cache2) {
+    public AnyTransliterator(
+            String id,
+            UnicodeFilter filter,
+            String target2,
+            int targetScript2,
+            Transliterator widthFix2,
+            ConcurrentHashMap<Integer, Transliterator> cache2) {
         super(id, filter);
         targetScript = targetScript2;
         cache = cache2;
@@ -168,12 +153,10 @@ class AnyTransliterator extends Transliterator {
     }
 
     /**
-     * Returns a transliterator from the given source to our target or
-     * target/variant.  Returns NULL if the source is the same as our
-     * target script, or if the source is USCRIPT_INVALID_CODE.
-     * Caches the result and returns the same transliterator the next
-     * time.  The caller does NOT own the result and must not delete
-     * it.
+     * Returns a transliterator from the given source to our target or target/variant. Returns NULL
+     * if the source is the same as our target script, or if the source is USCRIPT_INVALID_CODE.
+     * Caches the result and returns the same transliterator the next time. The caller does NOT own
+     * the result and must not delete it.
      */
     private Transliterator getTransliterator(int source) {
         if (source == targetScript || source == UScript.INVALID_CODE) {
@@ -192,14 +175,16 @@ class AnyTransliterator extends Transliterator {
 
             try {
                 t = Transliterator.getInstance(id, FORWARD);
-            } catch (RuntimeException e) { }
+            } catch (RuntimeException e) {
+            }
             if (t == null) {
 
                 // Try to pivot around Latin, our most common script
                 id = sourceName + LATIN_PIVOT + target;
                 try {
                     t = Transliterator.getInstance(id, FORWARD);
-                } catch (RuntimeException e) { }
+                } catch (RuntimeException e) {
+                }
             }
 
             if (t != null) {
@@ -226,17 +211,21 @@ class AnyTransliterator extends Transliterator {
      * @return
      */
     private boolean isWide(int script) {
-        return script == UScript.BOPOMOFO || script == UScript.HAN || script == UScript.HANGUL || script == UScript.HIRAGANA || script == UScript.KATAKANA;
+        return script == UScript.BOPOMOFO
+                || script == UScript.HAN
+                || script == UScript.HANGUL
+                || script == UScript.HIRAGANA
+                || script == UScript.KATAKANA;
     }
 
     /**
-     * Registers standard transliterators with the system.  Called by
-     * Transliterator during initialization.  Scan all current targets
-     * and register those that are scripts T as Any-T/V.
+     * Registers standard transliterators with the system. Called by Transliterator during
+     * initialization. Scan all current targets and register those that are scripts T as Any-T/V.
      */
     static void register() {
 
-        HashMap<String, Set<String>> seen = new HashMap<String, Set<String>>(); // old code used set, but was dependent on order
+        HashMap<String, Set<String>> seen =
+                new HashMap<String, Set<String>>(); // old code used set, but was dependent on order
 
         for (Enumeration<String> s = Transliterator.getAvailableSources(); s.hasMoreElements(); ) {
             String source = s.nextElement();
@@ -245,7 +234,7 @@ class AnyTransliterator extends Transliterator {
             if (source.equalsIgnoreCase(ANY)) continue;
 
             for (Enumeration<String> t = Transliterator.getAvailableTargets(source);
-                 t.hasMoreElements(); ) {
+                    t.hasMoreElements(); ) {
                 String target = t.nextElement();
 
                 // Get the script code for the target.  If not a script, ignore.
@@ -260,7 +249,7 @@ class AnyTransliterator extends Transliterator {
                 }
 
                 for (Enumeration<String> v = Transliterator.getAvailableVariants(source, target);
-                     v.hasMoreElements(); ) {
+                        v.hasMoreElements(); ) {
                     String variant = v.nextElement();
 
                     // Only process each target/variant pair once
@@ -271,8 +260,8 @@ class AnyTransliterator extends Transliterator {
 
                     String id;
                     id = TransliteratorIDParser.STVtoID(ANY, target, variant);
-                    AnyTransliterator trans = new AnyTransliterator(id, target, variant,
-                                                                    targetScript);
+                    AnyTransliterator trans =
+                            new AnyTransliterator(id, target, variant, targetScript);
                     Transliterator.registerInstance(trans);
                     Transliterator.registerSpecialInverse(target, NULL_ID, false);
                 }
@@ -280,35 +269,29 @@ class AnyTransliterator extends Transliterator {
         }
     }
 
-    /**
-     * Return the script code for a given name, or
-     * UScript.INVALID_CODE if not found.
-     */
+    /** Return the script code for a given name, or UScript.INVALID_CODE if not found. */
     private static int scriptNameToCode(String name) {
-        try{
+        try {
             int[] codes = UScript.getCode(name);
             return codes != null ? codes[0] : UScript.INVALID_CODE;
-        }catch( MissingResourceException e){
-            ///CLOVER:OFF
+        } catch (MissingResourceException e) {
+            /// CLOVER:OFF
             return UScript.INVALID_CODE;
-            ///CLOVER:ON
+            /// CLOVER:ON
         }
     }
 
-    //------------------------------------------------------------
+    // ------------------------------------------------------------
     // ScriptRunIterator
 
     /**
-     * Returns a series of ranges corresponding to scripts. They will be
-     * of the form:
+     * Returns a series of ranges corresponding to scripts. They will be of the form:
      *
-     * ccccSScSSccccTTcTcccc   - c = common, S = first script, T = second
-     * |            |          - first run (start, limit)
-     *          |           |  - second run (start, limit)
+     * <p>ccccSScSSccccTTcTcccc - c = common, S = first script, T = second | | - first run (start,
+     * limit) | | - second run (start, limit)
      *
-     * That is, the runs will overlap. The reason for this is so that a
-     * transliterator can consider common characters both before and after
-     * the scripts.
+     * <p>That is, the runs will overlap. The reason for this is so that a transliterator can
+     * consider common characters both before and after the scripts.
      */
     private static class ScriptRunIterator {
 
@@ -317,25 +300,20 @@ class AnyTransliterator extends Transliterator {
         private int textLimit;
 
         /**
-         * The code of the current run, valid after next() returns.  May
-         * be UScript.INVALID_CODE if and only if the entire text is
-         * COMMON/INHERITED.
+         * The code of the current run, valid after next() returns. May be UScript.INVALID_CODE if
+         * and only if the entire text is COMMON/INHERITED.
          */
         public int scriptCode;
 
-        /**
-         * The start of the run, inclusive, valid after next() returns.
-         */
+        /** The start of the run, inclusive, valid after next() returns. */
         public int start;
 
-        /**
-         * The end of the run, exclusive, valid after next() returns.
-         */
+        /** The end of the run, exclusive, valid after next() returns. */
         public int limit;
 
         /**
-         * Constructs a run iterator over the given text from start
-         * (inclusive) to limit (exclusive).
+         * Constructs a run iterator over the given text from start (inclusive) to limit
+         * (exclusive).
          */
         public ScriptRunIterator(Replaceable text, int start, int limit) {
             this.text = text;
@@ -344,11 +322,9 @@ class AnyTransliterator extends Transliterator {
             this.limit = start;
         }
 
-
         /**
-         * Returns true if there are any more runs.  true is always
-         * returned at least once.  Upon return, the caller should
-         * examine scriptCode, start, and limit.
+         * Returns true if there are any more runs. true is always returned at least once. Upon
+         * return, the caller should examine scriptCode, start, and limit.
          */
         public boolean next() {
             int ch;
@@ -395,8 +371,8 @@ class AnyTransliterator extends Transliterator {
         }
 
         /**
-         * Adjusts internal indices for a change in the limit index of the
-         * given delta.  A positive delta means the limit has increased.
+         * Adjusts internal indices for a change in the limit index of the given delta. A positive
+         * delta means the limit has increased.
          */
         public void adjustLimit(int delta) {
             limit += delta;
@@ -404,13 +380,11 @@ class AnyTransliterator extends Transliterator {
         }
     }
 
-    /**
-     * Temporary hack for registry problem. Needs to be replaced by better architecture.
-     */
+    /** Temporary hack for registry problem. Needs to be replaced by better architecture. */
     public Transliterator safeClone() {
         UnicodeFilter filter = getFilter();
         if (filter != null && filter instanceof UnicodeSet) {
-            filter = new UnicodeSet((UnicodeSet)filter);
+            filter = new UnicodeSet((UnicodeSet) filter);
         }
         return new AnyTransliterator(getID(), filter, target, targetScript, null, cache);
     }
@@ -419,7 +393,8 @@ class AnyTransliterator extends Transliterator {
      * @see com.ibm.icu.text.Transliterator#addSourceTargetSet(com.ibm.icu.text.UnicodeSet, com.ibm.icu.text.UnicodeSet, com.ibm.icu.text.UnicodeSet)
      */
     @Override
-    public void addSourceTargetSet(UnicodeSet inputFilter, UnicodeSet sourceSet, UnicodeSet targetSet) {
+    public void addSourceTargetSet(
+            UnicodeSet inputFilter, UnicodeSet sourceSet, UnicodeSet targetSet) {
         UnicodeSet myFilter = getFilterAsUnicodeSet(inputFilter);
         // Assume that it can modify any character to any other character
         sourceSet.addAll(myFilter);
@@ -428,4 +403,3 @@ class AnyTransliterator extends Transliterator {
         }
     }
 }
-

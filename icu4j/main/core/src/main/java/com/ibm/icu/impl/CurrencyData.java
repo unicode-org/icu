@@ -8,12 +8,11 @@
  */
 package com.ibm.icu.impl;
 
-import java.util.Collections;
-import java.util.Map;
-
 import com.ibm.icu.text.CurrencyDisplayNames;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.ULocale;
+import java.util.Collections;
+import java.util.Map;
 
 public class CurrencyData {
     public static final CurrencyDisplayInfoProvider provider;
@@ -22,12 +21,15 @@ public class CurrencyData {
 
     public static interface CurrencyDisplayInfoProvider {
         CurrencyDisplayInfo getInstance(ULocale locale, boolean withFallback);
+
         boolean hasData();
     }
 
-    public static abstract class CurrencyDisplayInfo extends CurrencyDisplayNames {
+    public abstract static class CurrencyDisplayInfo extends CurrencyDisplayNames {
         public abstract Map<String, String> getUnitPatterns();
+
         public abstract CurrencyFormatInfo getFormatInfo(String isoCode);
+
         public abstract CurrencySpacingInfo getSpacingInfo();
     }
 
@@ -37,7 +39,10 @@ public class CurrencyData {
         public final String monetaryDecimalSeparator;
         public final String monetaryGroupingSeparator;
 
-        public CurrencyFormatInfo(String isoCode, String currencyPattern, String monetarySeparator,
+        public CurrencyFormatInfo(
+                String isoCode,
+                String currencyPattern,
+                String monetarySeparator,
                 String monetaryGroupingSeparator) {
             this.isoCode = isoCode;
             this.currencyPattern = currencyPattern;
@@ -47,12 +52,18 @@ public class CurrencyData {
     }
 
     public static final class CurrencySpacingInfo {
-        private final String[][] symbols = new String[SpacingType.COUNT.ordinal()][SpacingPattern.COUNT.ordinal()];
+        private final String[][] symbols =
+                new String[SpacingType.COUNT.ordinal()][SpacingPattern.COUNT.ordinal()];
 
         public boolean hasBeforeCurrency = false;
         public boolean hasAfterCurrency = false;
 
-        public static enum SpacingType { BEFORE, AFTER, COUNT };
+        public static enum SpacingType {
+            BEFORE,
+            AFTER,
+            COUNT
+        };
+
         public static enum SpacingPattern {
             CURRENCY_MATCH(DecimalFormatSymbols.CURRENCY_SPC_CURRENCY_MATCH),
             SURROUNDING_MATCH(DecimalFormatSymbols.CURRENCY_SPC_SURROUNDING_MATCH),
@@ -60,7 +71,10 @@ public class CurrencyData {
             COUNT;
 
             SpacingPattern() {}
-            SpacingPattern(int value) { assert value == ordinal(); }
+
+            SpacingPattern(int value) {
+                assert value == ordinal();
+            }
         };
 
         public CurrencySpacingInfo() {}
@@ -69,8 +83,8 @@ public class CurrencyData {
             assert strings.length == 6;
 
             int k = 0;
-            for (int i=0; i<SpacingType.COUNT.ordinal(); i++) {
-                for (int j=0; j<SpacingPattern.COUNT.ordinal(); j++) {
+            for (int i = 0; i < SpacingType.COUNT.ordinal(); i++) {
+                for (int j = 0; j < SpacingPattern.COUNT.ordinal(); j++) {
                     symbols[i][j] = strings[k];
                     k++;
                 }
@@ -97,9 +111,14 @@ public class CurrencyData {
         private static final String DEFAULT_CTX_MATCH = "[:digit:]";
         private static final String DEFAULT_INSERT = " ";
 
-        public static final CurrencySpacingInfo DEFAULT = new CurrencySpacingInfo(
-                DEFAULT_CUR_MATCH, DEFAULT_CTX_MATCH, DEFAULT_INSERT,
-                DEFAULT_CUR_MATCH, DEFAULT_CTX_MATCH, DEFAULT_INSERT);
+        public static final CurrencySpacingInfo DEFAULT =
+                new CurrencySpacingInfo(
+                        DEFAULT_CUR_MATCH,
+                        DEFAULT_CTX_MATCH,
+                        DEFAULT_INSERT,
+                        DEFAULT_CUR_MATCH,
+                        DEFAULT_CTX_MATCH,
+                        DEFAULT_INSERT);
     }
 
     static {
@@ -108,17 +127,19 @@ public class CurrencyData {
             Class<?> clzz = Class.forName("com.ibm.icu.impl.ICUCurrencyDisplayInfoProvider");
             temp = (CurrencyDisplayInfoProvider) clzz.newInstance();
         } catch (Throwable t) {
-            temp = new CurrencyDisplayInfoProvider() {
-                @Override
-                public CurrencyDisplayInfo getInstance(ULocale locale, boolean withFallback) {
-                    return DefaultInfo.getWithFallback(withFallback);
-                }
+            temp =
+                    new CurrencyDisplayInfoProvider() {
+                        @Override
+                        public CurrencyDisplayInfo getInstance(
+                                ULocale locale, boolean withFallback) {
+                            return DefaultInfo.getWithFallback(withFallback);
+                        }
 
-                @Override
-                public boolean hasData() {
-                    return false;
-                }
-            };
+                        @Override
+                        public boolean hasData() {
+                            return false;
+                        }
+                    };
         }
         provider = temp;
     }

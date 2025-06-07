@@ -8,13 +8,12 @@
  */
 package com.ibm.icu.impl.breakiter;
 
-import java.io.IOException;
-import java.text.CharacterIterator;
-
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.UnicodeSet;
+import java.io.IOException;
+import java.text.CharacterIterator;
 
 public class ThaiBreakEngine extends DictionaryBreakEngine {
 
@@ -46,8 +45,10 @@ public class ThaiBreakEngine extends DictionaryBreakEngine {
         UnicodeSet thaiWordSet = new UnicodeSet("[[:Thai:]&[:LineBreak=SA:]]");
         fMarkSet = new UnicodeSet("[[:Thai:]&[:LineBreak=SA:]&[:M:]]");
         fMarkSet.add(0x0020);
-        fBeginWordSet = new UnicodeSet(0x0E01, 0x0E2E,  //KO KAI through HO NOKHUK
-                                       0x0E40, 0x0E44); // SARA E through SARA AI MAIMALAI
+        fBeginWordSet =
+                new UnicodeSet(
+                        0x0E01, 0x0E2E, // KO KAI through HO NOKHUK
+                        0x0E40, 0x0E44); // SARA E through SARA AI MAIMALAI
         fSuffixSet = new UnicodeSet();
         fSuffixSet.add(THAI_PAIYANNOI);
         fSuffixSet.add(THAI_MAIYAMOK);
@@ -95,11 +96,15 @@ public class ThaiBreakEngine extends DictionaryBreakEngine {
     }
 
     @Override
-    public int divideUpDictionaryRange(CharacterIterator fIter, int rangeStart, int rangeEnd,
-            DequeI foundBreaks, boolean isPhraseBreaking) {
+    public int divideUpDictionaryRange(
+            CharacterIterator fIter,
+            int rangeStart,
+            int rangeEnd,
+            DequeI foundBreaks,
+            boolean isPhraseBreaking) {
 
         if ((rangeEnd - rangeStart) < THAI_MIN_WORD_SPAN) {
-            return 0;  // Not enough characters for word
+            return 0; // Not enough characters for word
         }
         int wordsFound = 0;
         int wordLength;
@@ -114,12 +119,13 @@ public class ThaiBreakEngine extends DictionaryBreakEngine {
         while ((current = fIter.getIndex()) < rangeEnd) {
             wordLength = 0;
 
-            //Look for candidate words at the current position
-            int candidates = words[wordsFound%THAI_LOOKAHEAD].candidates(fIter, fDictionary, rangeEnd);
+            // Look for candidate words at the current position
+            int candidates =
+                    words[wordsFound % THAI_LOOKAHEAD].candidates(fIter, fDictionary, rangeEnd);
 
             // If we found exactly one, use that
             if (candidates == 1) {
-                wordLength = words[wordsFound%THAI_LOOKAHEAD].acceptMarked(fIter);
+                wordLength = words[wordsFound % THAI_LOOKAHEAD].acceptMarked(fIter);
                 wordsFound += 1;
             }
 
@@ -127,11 +133,14 @@ public class ThaiBreakEngine extends DictionaryBreakEngine {
             else if (candidates > 1) {
                 // If we're already at the end of the range, we're done
                 if (fIter.getIndex() < rangeEnd) {
-                  foundBest:
+                    foundBest:
                     do {
-                        if (words[(wordsFound+1)%THAI_LOOKAHEAD].candidates(fIter, fDictionary, rangeEnd) > 0) {
-                            // Followed by another dictionary word; mark first word as a good candidate
-                            words[wordsFound%THAI_LOOKAHEAD].markCurrent();
+                        if (words[(wordsFound + 1) % THAI_LOOKAHEAD].candidates(
+                                        fIter, fDictionary, rangeEnd)
+                                > 0) {
+                            // Followed by another dictionary word; mark first word as a good
+                            // candidate
+                            words[wordsFound % THAI_LOOKAHEAD].markCurrent();
 
                             // If we're already at the end of the range, we're done
                             if (fIter.getIndex() >= rangeEnd) {
@@ -141,17 +150,18 @@ public class ThaiBreakEngine extends DictionaryBreakEngine {
                             // See if any of the possible second words is followed by a third word
                             do {
                                 // If we find a third word, stop right away
-                                if (words[(wordsFound+2)%THAI_LOOKAHEAD].candidates(fIter, fDictionary, rangeEnd) > 0) {
-                                    words[wordsFound%THAI_LOOKAHEAD].markCurrent();
+                                if (words[(wordsFound + 2) % THAI_LOOKAHEAD].candidates(
+                                                fIter, fDictionary, rangeEnd)
+                                        > 0) {
+                                    words[wordsFound % THAI_LOOKAHEAD].markCurrent();
                                     break foundBest;
                                 }
-                            } while (words[(wordsFound+1)%THAI_LOOKAHEAD].backUp(fIter));
+                            } while (words[(wordsFound + 1) % THAI_LOOKAHEAD].backUp(fIter));
                         }
-                    }
-                    while (words[wordsFound%THAI_LOOKAHEAD].backUp(fIter));
+                    } while (words[wordsFound % THAI_LOOKAHEAD].backUp(fIter));
                     // foundBest: end of loop
                 }
-                wordLength = words[wordsFound%THAI_LOOKAHEAD].acceptMarked(fIter);
+                wordLength = words[wordsFound % THAI_LOOKAHEAD].acceptMarked(fIter);
                 wordsFound += 1;
             }
 
@@ -164,14 +174,15 @@ public class ThaiBreakEngine extends DictionaryBreakEngine {
                 // If it is a dictionary word, do nothing. If it isn't, then if there is
                 // no preceding word, or the non-word shares less than the minimum threshold
                 // of characters with a dictionary word, then scan to resynchronize
-                if (words[wordsFound%THAI_LOOKAHEAD].candidates(fIter, fDictionary, rangeEnd) <= 0 &&
-                        (wordLength == 0 ||
-                                words[wordsFound%THAI_LOOKAHEAD].longestPrefix() < THAI_PREFIX_COMBINE_THRESHOLD)) {
+                if (words[wordsFound % THAI_LOOKAHEAD].candidates(fIter, fDictionary, rangeEnd) <= 0
+                        && (wordLength == 0
+                                || words[wordsFound % THAI_LOOKAHEAD].longestPrefix()
+                                        < THAI_PREFIX_COMBINE_THRESHOLD)) {
                     // Look for a plausible word boundary
                     int remaining = rangeEnd - (current + wordLength);
                     int pc = fIter.current();
                     int chars = 0;
-                    for (;;) {
+                    for (; ; ) {
                         fIter.next();
                         uc = fIter.current();
                         chars += 1;
@@ -184,7 +195,9 @@ public class ThaiBreakEngine extends DictionaryBreakEngine {
                             // two characters after uc were not 0x0E4C THANTHAKHAT before
                             // checking the dictionary. That is just a performance filter,
                             // but it's not clear it's faster than checking the trie
-                            int candidate = words[(wordsFound + 1) %THAI_LOOKAHEAD].candidates(fIter, fDictionary, rangeEnd);
+                            int candidate =
+                                    words[(wordsFound + 1) % THAI_LOOKAHEAD].candidates(
+                                            fIter, fDictionary, rangeEnd);
                             fIter.setIndex(current + wordLength + chars);
                             if (candidate > 0) {
                                 break;
@@ -202,7 +215,7 @@ public class ThaiBreakEngine extends DictionaryBreakEngine {
                     wordLength += chars;
                 } else {
                     // Backup to where we were for next iteration
-                    fIter.setIndex(current+wordLength);
+                    fIter.setIndex(current + wordLength);
                 }
             }
 
@@ -218,8 +231,8 @@ public class ThaiBreakEngine extends DictionaryBreakEngine {
             // resynch continues to function. For example, one of the suffix characters
             // could be a typo in the middle of a word.
             if (fIter.getIndex() < rangeEnd && wordLength > 0) {
-                if (words[wordsFound%THAI_LOOKAHEAD].candidates(fIter, fDictionary, rangeEnd) <= 0 &&
-                        fSuffixSet.contains(uc = fIter.current())) {
+                if (words[wordsFound % THAI_LOOKAHEAD].candidates(fIter, fDictionary, rangeEnd) <= 0
+                        && fSuffixSet.contains(uc = fIter.current())) {
                     if (uc == THAI_PAIYANNOI) {
                         if (!fSuffixSet.contains(fIter.previous())) {
                             // Skip over previous end and PAIYANNOI
@@ -262,5 +275,4 @@ public class ThaiBreakEngine extends DictionaryBreakEngine {
 
         return wordsFound;
     }
-
 }

@@ -3,14 +3,13 @@
 
 package com.ibm.icu.dev.tool.errorprone;
 
+import com.google.errorprone.BugCheckerInfo;
+import com.google.errorprone.BugPattern;
+import com.google.errorprone.scanner.BuiltInCheckerSuppliers;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import com.google.errorprone.BugCheckerInfo;
-import com.google.errorprone.BugPattern;
-import com.google.errorprone.scanner.BuiltInCheckerSuppliers;
 
 class ErrorProneUtils {
 
@@ -45,61 +44,63 @@ class ErrorProneUtils {
     // It is likely a bug, might be fixed in the meantime, but another one might come back
     // at some point in the future.
     // We never know, so we take care of that special case.
-    static final List<String> SEVERITY_LEVELS_TO_REPORT = Arrays.asList(
-            // A special severity class, where we show first what ICU considers important to fix.
-            SEVERITY_ICU_PRI1,
-            SEVERITY_ICU_PRI2,
-            BugPattern.SeverityLevel.ERROR.toString(),
-            ErrorProneUtils.SEVERITY_UNKNOWN,
-            BugPattern.SeverityLevel.WARNING.toString(),
-            BugPattern.SeverityLevel.SUGGESTION.toString());
+    static final List<String> SEVERITY_LEVELS_TO_REPORT =
+            Arrays.asList(
+                    // A special severity class, where we show first what ICU considers important to
+                    // fix.
+                    SEVERITY_ICU_PRI1,
+                    SEVERITY_ICU_PRI2,
+                    BugPattern.SeverityLevel.ERROR.toString(),
+                    ErrorProneUtils.SEVERITY_UNKNOWN,
+                    BugPattern.SeverityLevel.WARNING.toString(),
+                    BugPattern.SeverityLevel.SUGGESTION.toString());
 
     // A special severity class, where we show first what ICU considers important to fix.
-    static final Map<String, String> ICU_SPECIAL_SEVERITIES = Map.ofEntries(
-            // Example:
-            // Map.entry("MissingFail", SEVERITY_ICU_PRI1),
-            // Map.entry("ReferenceEquality", SEVERITY_ICU_PRI2)
-            Map.entry("DefaultCharset", SEVERITY_ICU_PRI1),
-            Map.entry("Finally", SEVERITY_ICU_PRI1),
-            Map.entry("InvalidBlockTag", SEVERITY_ICU_PRI1),
-            Map.entry("JdkObsolete", SEVERITY_ICU_PRI1),
-            Map.entry("MissingFail", SEVERITY_ICU_PRI1),
-            Map.entry("MutablePublicArray", SEVERITY_ICU_PRI1),
-            Map.entry("ObjectToString", SEVERITY_ICU_PRI1),
-            Map.entry("OperatorPrecedence", SEVERITY_ICU_PRI1),
-            Map.entry("ReferenceEquality", SEVERITY_ICU_PRI1),
-            Map.entry("StringSplitter", SEVERITY_ICU_PRI1),
-            Map.entry("SynchronizeOnNonFinalField", SEVERITY_ICU_PRI1),
-            Map.entry("UnicodeEscape", SEVERITY_ICU_PRI1),
-            Map.entry("UnusedMethod", SEVERITY_ICU_PRI1),
-            Map.entry("UnusedVariable", SEVERITY_ICU_PRI1),
-            Map.entry("AlmostJavadoc", SEVERITY_ICU_PRI2),
-            Map.entry("BadImport", SEVERITY_ICU_PRI2),
-            Map.entry("ClassCanBeStatic", SEVERITY_ICU_PRI2),
-            Map.entry("EmptyCatch", SEVERITY_ICU_PRI2),
-            Map.entry("EqualsGetClass", SEVERITY_ICU_PRI2),
-            Map.entry("EqualsUnsafeCast", SEVERITY_ICU_PRI2),
-            Map.entry("FallThrough", SEVERITY_ICU_PRI2),
-            Map.entry("Finalize", SEVERITY_ICU_PRI2),
-            Map.entry("FloatingPointLiteralPrecision", SEVERITY_ICU_PRI2),
-            Map.entry("IncrementInForLoopAndHeader", SEVERITY_ICU_PRI2),
-            Map.entry("JavaUtilDate", SEVERITY_ICU_PRI2),
-            Map.entry("LabelledBreakTarget", SEVERITY_ICU_PRI2),
-            Map.entry("LockOnNonEnclosingClassLiteral", SEVERITY_ICU_PRI2),
-            Map.entry("NarrowCalculation", SEVERITY_ICU_PRI2),
-            Map.entry("NarrowingCompoundAssignment", SEVERITY_ICU_PRI2),
-            Map.entry("ShortCircuitBoolean", SEVERITY_ICU_PRI2),
-            Map.entry("StaticAssignmentInConstructor", SEVERITY_ICU_PRI2),
-            Map.entry("StringCaseLocaleUsage", SEVERITY_ICU_PRI2),
-            Map.entry("StringCharset", SEVERITY_ICU_PRI2),
-            Map.entry("UndefinedEquals", SEVERITY_ICU_PRI2),
-            Map.entry("UnnecessaryStringBuilder", SEVERITY_ICU_PRI2),
-            Map.entry("UnsynchronizedOverridesSynchronized", SEVERITY_ICU_PRI2)
-    );
+    static final Map<String, String> ICU_SPECIAL_SEVERITIES =
+            Map.ofEntries(
+                    // Example:
+                    // Map.entry("MissingFail", SEVERITY_ICU_PRI1),
+                    // Map.entry("ReferenceEquality", SEVERITY_ICU_PRI2)
+                    Map.entry("DefaultCharset", SEVERITY_ICU_PRI1),
+                    Map.entry("Finally", SEVERITY_ICU_PRI1),
+                    Map.entry("InvalidBlockTag", SEVERITY_ICU_PRI1),
+                    Map.entry("JdkObsolete", SEVERITY_ICU_PRI1),
+                    Map.entry("MissingFail", SEVERITY_ICU_PRI1),
+                    Map.entry("MutablePublicArray", SEVERITY_ICU_PRI1),
+                    Map.entry("ObjectToString", SEVERITY_ICU_PRI1),
+                    Map.entry("OperatorPrecedence", SEVERITY_ICU_PRI1),
+                    Map.entry("ReferenceEquality", SEVERITY_ICU_PRI1),
+                    Map.entry("StringSplitter", SEVERITY_ICU_PRI1),
+                    Map.entry("SynchronizeOnNonFinalField", SEVERITY_ICU_PRI1),
+                    Map.entry("UnicodeEscape", SEVERITY_ICU_PRI1),
+                    Map.entry("UnusedMethod", SEVERITY_ICU_PRI1),
+                    Map.entry("UnusedVariable", SEVERITY_ICU_PRI1),
+                    Map.entry("AlmostJavadoc", SEVERITY_ICU_PRI2),
+                    Map.entry("BadImport", SEVERITY_ICU_PRI2),
+                    Map.entry("ClassCanBeStatic", SEVERITY_ICU_PRI2),
+                    Map.entry("EmptyCatch", SEVERITY_ICU_PRI2),
+                    Map.entry("EqualsGetClass", SEVERITY_ICU_PRI2),
+                    Map.entry("EqualsUnsafeCast", SEVERITY_ICU_PRI2),
+                    Map.entry("FallThrough", SEVERITY_ICU_PRI2),
+                    Map.entry("Finalize", SEVERITY_ICU_PRI2),
+                    Map.entry("FloatingPointLiteralPrecision", SEVERITY_ICU_PRI2),
+                    Map.entry("IncrementInForLoopAndHeader", SEVERITY_ICU_PRI2),
+                    Map.entry("JavaUtilDate", SEVERITY_ICU_PRI2),
+                    Map.entry("LabelledBreakTarget", SEVERITY_ICU_PRI2),
+                    Map.entry("LockOnNonEnclosingClassLiteral", SEVERITY_ICU_PRI2),
+                    Map.entry("NarrowCalculation", SEVERITY_ICU_PRI2),
+                    Map.entry("NarrowingCompoundAssignment", SEVERITY_ICU_PRI2),
+                    Map.entry("ShortCircuitBoolean", SEVERITY_ICU_PRI2),
+                    Map.entry("StaticAssignmentInConstructor", SEVERITY_ICU_PRI2),
+                    Map.entry("StringCaseLocaleUsage", SEVERITY_ICU_PRI2),
+                    Map.entry("StringCharset", SEVERITY_ICU_PRI2),
+                    Map.entry("UndefinedEquals", SEVERITY_ICU_PRI2),
+                    Map.entry("UnnecessaryStringBuilder", SEVERITY_ICU_PRI2),
+                    Map.entry("UnsynchronizedOverridesSynchronized", SEVERITY_ICU_PRI2));
 
     /**
-     * Given an error type (for example `BadImport`, `UnusedVariable`)
-     * it returns the error level (error, warning, info, etc).
+     * Given an error type (for example `BadImport`, `UnusedVariable`) it returns the error level
+     * (error, warning, info, etc).
      *
      * @param errorType the error type, as reported by errorprone
      * @return the error level (severity)
@@ -110,14 +111,12 @@ class ErrorProneUtils {
             return icuSpecialSeverity;
         }
         BugCheckerInfo found = KNOWN_ERRORS.get(errorType);
-        return found == null
-                ? SEVERITY_UNKNOWN
-                : found.defaultSeverity().toString();
+        return found == null ? SEVERITY_UNKNOWN : found.defaultSeverity().toString();
     }
 
     /**
-     * Given an error type (for example `BadImport`, `UnusedVariable`)
-     * it returns the url to a public page explaining the error.
+     * Given an error type (for example `BadImport`, `UnusedVariable`) it returns the url to a
+     * public page explaining the error.
      *
      * @param errorType the error type, as reported by errorprone
      * @return the url to a public explanation page
@@ -128,8 +127,8 @@ class ErrorProneUtils {
     }
 
     /**
-     * Given an error type (for example `BadImport`, `UnusedVariable`)
-     * it returns the tags associtated with it (`FragileCode`, `Style`, etc.)
+     * Given an error type (for example `BadImport`, `UnusedVariable`) it returns the tags
+     * associtated with it (`FragileCode`, `Style`, etc.)
      *
      * @param errorType the error type, as reported by errorprone
      * @return the url to a public explanation page

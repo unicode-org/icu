@@ -9,15 +9,6 @@
 
 package com.ibm.icu.dev.test.format;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.Collator;
@@ -33,6 +24,13 @@ import com.ibm.icu.util.IslamicCalendar;
 import com.ibm.icu.util.JapaneseCalendar;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public class GlobalizationPreferencesTest extends TestFmwk {
@@ -290,16 +288,24 @@ public class GlobalizationPreferencesTest extends TestFmwk {
 
             List<ULocale> resultLocales = gp.getLocales();
             if (resultLocales.size() != RESULTS_LOCALEIDS[i].length) {
-                errln("FAIL: Number of locales mismatch - GP:" + resultLocales.size()
-                        + " Expected:" + RESULTS_LOCALEIDS[i].length);
+                errln(
+                        "FAIL: Number of locales mismatch - GP:"
+                                + resultLocales.size()
+                                + " Expected:"
+                                + RESULTS_LOCALEIDS[i].length);
             } else {
 
                 for (int j = 0; j < RESULTS_LOCALEIDS[i].length; j++) {
                     ULocale loc = gp.getLocale(j);
                     logln("Locale[" + j + "]: " + loc.toString());
                     if (!gp.getLocale(j).toString().equals(RESULTS_LOCALEIDS[i][j])) {
-                        errln("FAIL: Locale index(" + j + ") does not match - GP:" + loc.toString()
-                                + " Expected:" + RESULTS_LOCALEIDS[i][j]);
+                        errln(
+                                "FAIL: Locale index("
+                                        + j
+                                        + ") does not match - GP:"
+                                        + loc.toString()
+                                        + " Expected:"
+                                        + RESULTS_LOCALEIDS[i][j]);
                     }
                 }
             }
@@ -324,16 +330,24 @@ public class GlobalizationPreferencesTest extends TestFmwk {
 
             List<ULocale> resultLocales = gp.getLocales();
             if (resultLocales.size() != RESULTS_LOCALEIDS[i].length) {
-                errln("FAIL: Number of locales mismatch - GP:" + resultLocales.size()
-                        + " Expected:" + RESULTS_LOCALEIDS[i].length);
+                errln(
+                        "FAIL: Number of locales mismatch - GP:"
+                                + resultLocales.size()
+                                + " Expected:"
+                                + RESULTS_LOCALEIDS[i].length);
             } else {
 
                 for (int j = 0; j < RESULTS_LOCALEIDS[i].length; j++) {
                     ULocale loc = gp.getLocale(j);
                     logln("Locale[" + j + "]: " + loc.toString());
                     if (!gp.getLocale(j).toString().equals(RESULTS_LOCALEIDS[i][j])) {
-                        errln("FAIL: Locale index(" + j + ") does not match - GP:" + loc.toString()
-                                + " Expected:" + RESULTS_LOCALEIDS[i][j]);
+                        errln(
+                                "FAIL: Locale index("
+                                        + j
+                                        + ") does not match - GP:"
+                                        + loc.toString()
+                                        + " Expected:"
+                                        + RESULTS_LOCALEIDS[i][j]);
                     }
                 }
             }
@@ -356,23 +370,34 @@ public class GlobalizationPreferencesTest extends TestFmwk {
             if (resultLocales.size() != RESULTS_LOCALEIDS[i].length) {
                 StringBuilder res = new StringBuilder();
                 for (ULocale l : resultLocales) {
-                  res.append(l.toString()).append(",");
+                    res.append(l.toString()).append(",");
                 }
-                errln("FAIL: Number of locales mismatch - GP:" + resultLocales.size()
-                        + " Expected:" + RESULTS_LOCALEIDS[i].length + " index: " + i + " " + res.toString());
+                errln(
+                        "FAIL: Number of locales mismatch - GP:"
+                                + resultLocales.size()
+                                + " Expected:"
+                                + RESULTS_LOCALEIDS[i].length
+                                + " index: "
+                                + i
+                                + " "
+                                + res.toString());
             } else {
 
                 for (int j = 0; j < RESULTS_LOCALEIDS[i].length; j++) {
                     ULocale loc = gp.getLocale(j);
                     logln("Locale[" + j + "]: " + loc.toString());
                     if (!gp.getLocale(j).toString().equals(RESULTS_LOCALEIDS[i][j])) {
-                        errln("FAIL: Locale index(" + j + ") does not match - GP:" + loc.toString()
-                                + " Expected:" + RESULTS_LOCALEIDS[i][j]);
+                        errln(
+                                "FAIL: Locale index("
+                                        + j
+                                        + ") does not match - GP:"
+                                        + loc.toString()
+                                        + " Expected:"
+                                        + RESULTS_LOCALEIDS[i][j]);
                     }
                 }
             }
         }
-
 
         // accept-language without q-value
         logln("Set accept-language - de,de-AT");
@@ -383,22 +408,23 @@ public class GlobalizationPreferencesTest extends TestFmwk {
 
         // Invalid accept-language
         // ICU-20700 changed the parser to using LocalePriorityList which is more lenient.
-//        logln("Set locale - ko_KR");
-//        gp.setLocale(new ULocale("ko_KR"));
-//        boolean bException = false;
-//        try {
-//            logln("Set invalid accept-language - ko=100");
-//            gp.setLocales("ko=100");
-//        } catch (IllegalArgumentException iae) {
-//            logln("IllegalArgumentException was thrown");
-//            bException = true;
-//        }
-//        if (!bException) {
-//            errln("FAIL: IllegalArgumentException was not thrown for illegal accept-language - ko=100");
-//        }
-//        if (!gp.getLocale(0).toString().equals("ko_KR")) {
-//            errln("FAIL: Previous valid locale list had gone");
-//        }
+        //        logln("Set locale - ko_KR");
+        //        gp.setLocale(new ULocale("ko_KR"));
+        //        boolean bException = false;
+        //        try {
+        //            logln("Set invalid accept-language - ko=100");
+        //            gp.setLocales("ko=100");
+        //        } catch (IllegalArgumentException iae) {
+        //            logln("IllegalArgumentException was thrown");
+        //            bException = true;
+        //        }
+        //        if (!bException) {
+        //            errln("FAIL: IllegalArgumentException was not thrown for illegal
+        // accept-language - ko=100");
+        //        }
+        //        if (!gp.getLocale(0).toString().equals("ko_KR")) {
+        //            errln("FAIL: Previous valid locale list had gone");
+        //        }
     }
 
     @Test
@@ -406,8 +432,10 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         String baseName = "com.ibm.icu.dev.data.resources.TestDataElements";
         ResourceBundle rb;
 
-        logln("Get a resource bundle " + baseName +
-                " using GlobalizationPreferences initialized by locales - en_GB, en_US");
+        logln(
+                "Get a resource bundle "
+                        + baseName
+                        + " using GlobalizationPreferences initialized by locales - en_GB, en_US");
         GlobalizationPreferences gp = new GlobalizationPreferences();
         ULocale[] locales = new ULocale[2];
         locales[0] = new ULocale("en_GB");
@@ -426,8 +454,10 @@ public class GlobalizationPreferencesTest extends TestFmwk {
 
         gp.reset();
 
-        logln("Get a resource bundle " + baseName +
-        " using GlobalizationPreferences initialized by locales - ja, en_US_California");
+        logln(
+                "Get a resource bundle "
+                        + baseName
+                        + " using GlobalizationPreferences initialized by locales - ja, en_US_California");
 
         locales = new ULocale[2];
         locales[0] = new ULocale("ja");
@@ -447,7 +477,9 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         logln("Get a resource bundle which does not exist");
         boolean bException = false;
         try {
-            rb = gp.getResourceBundle("foo.bar.XXX", Thread.currentThread().getContextClassLoader());
+            rb =
+                    gp.getResourceBundle(
+                            "foo.bar.XXX", Thread.currentThread().getContextClassLoader());
         } catch (MissingResourceException mre) {
             logln("Missing resource exception for getting resource bundle - foo.bar.XXX");
             bException = true;
@@ -476,7 +508,6 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         if (!territory.equals("FR")) {
             errln("FAIL: Territory is " + territory + " - Expected: FR");
         }
-
 
         // Set explicit territory
         logln("Set explicit territory - CA");
@@ -696,7 +727,8 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         gp1.setCalendar(ical);
         cal = gp1.getCalendar();
         calType = cal.getType();
-        if (!calType.equals("islamic-civil")) { // default constructed IslamicCalendar is islamic-civil
+        if (!calType.equals(
+                "islamic-civil")) { // default constructed IslamicCalendar is islamic-civil
             errln("FAIL: Calendar type afte clone is " + calType + " Expected: islamic-civil");
         }
     }
@@ -1193,7 +1225,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
 
         // Date - short
         df = gp.getDateFormat(GlobalizationPreferences.DF_SHORT, GlobalizationPreferences.DF_NONE);
-        pattern = ((SimpleDateFormat)df).toPattern();
+        pattern = ((SimpleDateFormat) df).toPattern();
         // root pattern must be used
         if (!pattern.equals("y-MM-dd")) {
             errln("FAIL: SHORT date pattern is " + pattern + " Expected: y-MM-dd");
@@ -1208,12 +1240,11 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         gp.setLocales(lcls);
         // Date - short
         df = gp.getDateFormat(GlobalizationPreferences.DF_SHORT, GlobalizationPreferences.DF_NONE);
-        pattern = ((SimpleDateFormat)df).toPattern();
+        pattern = ((SimpleDateFormat) df).toPattern();
         // fr_CA pattern must be used
         if (!pattern.equals("y-MM-dd")) {
             errln("FAIL: SHORT date pattern is " + pattern + " Expected: y-MM-dd");
         }
-
 
         // Set locale - en_GB
         logln("Set locale - en_GB");
@@ -1221,65 +1252,68 @@ public class GlobalizationPreferencesTest extends TestFmwk {
 
         // Date - full
         df = gp.getDateFormat(GlobalizationPreferences.DF_FULL, GlobalizationPreferences.DF_NONE);
-        pattern = ((SimpleDateFormat)df).toPattern();
+        pattern = ((SimpleDateFormat) df).toPattern();
         if (!pattern.equals("EEEE, d MMMM y")) {
             errln("FAIL: FULL date pattern is " + pattern + " Expected: EEEE, d MMMM y");
         }
 
         // Date - long
         df = gp.getDateFormat(GlobalizationPreferences.DF_LONG, GlobalizationPreferences.DF_NONE);
-        pattern = ((SimpleDateFormat)df).toPattern();
+        pattern = ((SimpleDateFormat) df).toPattern();
         if (!pattern.equals("d MMMM y")) {
             errln("FAIL: LONG date pattern is " + pattern + " Expected: d MMMM y");
         }
 
         // Date - medium
         df = gp.getDateFormat(GlobalizationPreferences.DF_MEDIUM, GlobalizationPreferences.DF_NONE);
-        pattern = ((SimpleDateFormat)df).toPattern();
+        pattern = ((SimpleDateFormat) df).toPattern();
         if (!pattern.equals("d MMM y")) {
             errln("FAIL: MEDIUM date pattern is " + pattern + " Expected: d MMM y");
         }
 
         // Date - short
         df = gp.getDateFormat(GlobalizationPreferences.DF_SHORT, GlobalizationPreferences.DF_NONE);
-        pattern = ((SimpleDateFormat)df).toPattern();
+        pattern = ((SimpleDateFormat) df).toPattern();
         if (!pattern.equals("dd/MM/y")) {
             errln("FAIL: SHORT date pattern is " + pattern + " Expected: dd/MM/y");
         }
 
         // Time - full
         df = gp.getDateFormat(GlobalizationPreferences.DF_NONE, GlobalizationPreferences.DF_FULL);
-        pattern = ((SimpleDateFormat)df).toPattern();
+        pattern = ((SimpleDateFormat) df).toPattern();
         if (!pattern.equals("HH:mm:ss zzzz")) {
             errln("FAIL: FULL time pattern is " + pattern + " Expected: HH:mm:ss zzzz");
         }
 
         // Time - long
         df = gp.getDateFormat(GlobalizationPreferences.DF_NONE, GlobalizationPreferences.DF_LONG);
-        pattern = ((SimpleDateFormat)df).toPattern();
+        pattern = ((SimpleDateFormat) df).toPattern();
         if (!pattern.equals("HH:mm:ss z")) {
             errln("FAIL: LONG time pattern is " + pattern + " Expected: HH:mm:ss z");
         }
 
         // Time - medium
         df = gp.getDateFormat(GlobalizationPreferences.DF_NONE, GlobalizationPreferences.DF_MEDIUM);
-        pattern = ((SimpleDateFormat)df).toPattern();
+        pattern = ((SimpleDateFormat) df).toPattern();
         if (!pattern.equals("HH:mm:ss")) {
             errln("FAIL: MEDIUM time pattern is " + pattern + " Expected: HH:mm:ss");
         }
 
         // Time - short
         df = gp.getDateFormat(GlobalizationPreferences.DF_NONE, GlobalizationPreferences.DF_SHORT);
-        pattern = ((SimpleDateFormat)df).toPattern();
+        pattern = ((SimpleDateFormat) df).toPattern();
         if (!pattern.equals("HH:mm")) {
             errln("FAIL: SHORT time pattern is " + pattern + " Expected: HH:mm");
         }
 
         // Date/Time - full
         df = gp.getDateFormat(GlobalizationPreferences.DF_FULL, GlobalizationPreferences.DF_FULL);
-        pattern = ((SimpleDateFormat)df).toPattern();
+        pattern = ((SimpleDateFormat) df).toPattern();
         if (!pattern.equals("EEEE, d MMMM y 'at' HH:mm:ss zzzz")) {
-            errln("FAIL: FULL date/time pattern is " + pattern + " Expected: EEEE, d MMMM y 'at' HH:mm:ss zzzz");
+            errln(
+                    "FAIL: FULL date/time pattern is "
+                            + pattern
+                            + " Expected: EEEE, d MMMM y 'at' HH:mm:ss zzzz");
         }
 
         // Invalid style
@@ -1296,13 +1330,16 @@ public class GlobalizationPreferencesTest extends TestFmwk {
 
         illegalArg = false;
         try {
-            df = gp.getDateFormat(GlobalizationPreferences.DF_NONE, GlobalizationPreferences.DF_NONE);
+            df =
+                    gp.getDateFormat(
+                            GlobalizationPreferences.DF_NONE, GlobalizationPreferences.DF_NONE);
         } catch (IllegalArgumentException iae) {
             logln("Illegal style - dateStyle:DF_NONE / timeStyle:DF_NONE");
             illegalArg = true;
         }
         if (!illegalArg) {
-            errln("FAIL: getDateFormat() must throw IllegalArgumentException for dateStyle:DF_NONE/timeStyle:DF_NONE");
+            errln(
+                    "FAIL: getDateFormat() must throw IllegalArgumentException for dateStyle:DF_NONE/timeStyle:DF_NONE");
         }
 
         // Set explicit time zone
@@ -1333,9 +1370,12 @@ public class GlobalizationPreferencesTest extends TestFmwk {
 
         // Set explicit DateFormat
         logln("Set explicit date format - full date");
-        DateFormat customFD = DateFormat.getDateInstance(new IslamicCalendar(), DateFormat.FULL, new ULocale("ar_SA"));
+        DateFormat customFD =
+                DateFormat.getDateInstance(
+                        new IslamicCalendar(), DateFormat.FULL, new ULocale("ar_SA"));
         customFD.setTimeZone(TimeZone.getTimeZone("Asia/Riyadh"));
-        gp.setDateFormat(GlobalizationPreferences.DF_FULL, GlobalizationPreferences.DF_NONE, customFD);
+        gp.setDateFormat(
+                GlobalizationPreferences.DF_FULL, GlobalizationPreferences.DF_NONE, customFD);
         df = gp.getDateFormat(GlobalizationPreferences.DF_FULL, GlobalizationPreferences.DF_NONE);
         dfCal = df.getCalendar();
         if (!(dfCal instanceof IslamicCalendar)) {
@@ -1350,11 +1390,14 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         // Freeze
         logln("Freeze this object");
         gp.freeze();
-        DateFormat customLD = DateFormat.getDateInstance(new BuddhistCalendar(), DateFormat.LONG, new ULocale("th"));
+        DateFormat customLD =
+                DateFormat.getDateInstance(
+                        new BuddhistCalendar(), DateFormat.LONG, new ULocale("th"));
         customLD.setTimeZone(TimeZone.getTimeZone("Asia/Bangkok"));
         boolean isFrozen = false;
         try {
-            gp.setDateFormat(GlobalizationPreferences.DF_LONG, GlobalizationPreferences.DF_NONE, customLD);
+            gp.setDateFormat(
+                    GlobalizationPreferences.DF_LONG, GlobalizationPreferences.DF_NONE, customLD);
         } catch (UnsupportedOperationException uoe) {
             logln("setDateFormat is blocked");
             isFrozen = true;
@@ -1366,9 +1409,12 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         // Modifiable clone
         logln("cloneAsThawed");
         GlobalizationPreferences gp1 = gp.cloneAsThawed();
-        gp1.setDateFormat(GlobalizationPreferences.DF_LONG, GlobalizationPreferences.DF_NONE, customLD);
+        gp1.setDateFormat(
+                GlobalizationPreferences.DF_LONG, GlobalizationPreferences.DF_NONE, customLD);
 
-        df = gp1.getDateFormat(GlobalizationPreferences.DF_SHORT, GlobalizationPreferences.DF_SHORT);
+        df =
+                gp1.getDateFormat(
+                        GlobalizationPreferences.DF_SHORT, GlobalizationPreferences.DF_SHORT);
         dfCal = df.getCalendar();
         if (!(dfCal instanceof JapaneseCalendar)) {
             errln("FAIL: The DateFormat instance must use Japanese calendar");
@@ -1389,7 +1435,6 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         if (!tzid.equals("America/Sao_Paulo")) {
             errln("FAIL: The DateFormat instance must use timezone America/Sao_Paulo");
         }
-
     }
 
     @Test
@@ -1507,7 +1552,6 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         NumberFormat customInt = NumberFormat.getIntegerInstance(new ULocale("pt_PT"));
         gp.setNumberFormat(GlobalizationPreferences.NF_INTEGER, customInt);
 
-
         nf = gp.getNumberFormat(GlobalizationPreferences.NF_NUMBER);
         if (!nf.getLocale(ULocale.VALID_LOCALE).toString().equals("he_IL")) {
             errln("FAIL: The NumberFormat instance must use locale he_IL");
@@ -1583,7 +1627,9 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         long timeDiff = System.currentTimeMillis() - cal.getTimeInMillis();
         if (Math.abs(timeDiff) > 1000) {
             // if difference is more than 1 second..
-            errln("FAIL: The Calendar was not initialized by current time - difference:" + timeDiff);
+            errln(
+                    "FAIL: The Calendar was not initialized by current time - difference:"
+                            + timeDiff);
         }
     }
 }

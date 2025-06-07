@@ -10,31 +10,22 @@
 
 package com.ibm.icu.dev.test.timescale;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
+import com.ibm.icu.math.BigDecimal;
+import com.ibm.icu.util.UniversalTimeScale;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.CoreTestFmwk;
-import com.ibm.icu.math.BigDecimal;
-import com.ibm.icu.util.UniversalTimeScale;
-
-/**
- * Test UniversalTimeScale API
- */
+/** Test UniversalTimeScale API */
 @RunWith(JUnit4.class)
-public class TimeScaleAPITest extends CoreTestFmwk
-{
+public class TimeScaleAPITest extends CoreTestFmwk {
 
-    /**
-     *
-     */
-    public TimeScaleAPITest()
-    {
-    }
+    /** */
+    public TimeScaleAPITest() {}
 
     @Test
-    public void TestBigDecimalFromBigDecimal()
-    {
+    public void TestBigDecimalFromBigDecimal() {
         BigDecimal bigZero = new BigDecimal(0);
 
         try {
@@ -61,8 +52,7 @@ public class TimeScaleAPITest extends CoreTestFmwk
     }
 
     @Test
-    public void TestBigDecimalFromDouble()
-    {
+    public void TestBigDecimalFromDouble() {
         try {
             UniversalTimeScale.bigDecimalFrom(0.0, -1);
             errln("bigDecimalFrom(0.0, -1) did not throw IllegalArgumentException.");
@@ -76,7 +66,7 @@ public class TimeScaleAPITest extends CoreTestFmwk
             } catch (IllegalArgumentException iae) {
                 errln("bigDecimalFrom(0.0, " + scale + ") threw IllegalArgumentException.");
             }
-       }
+        }
 
         try {
             UniversalTimeScale.bigDecimalFrom(0.0, UniversalTimeScale.MAX_SCALE);
@@ -87,8 +77,7 @@ public class TimeScaleAPITest extends CoreTestFmwk
     }
 
     @Test
-    public void TestBigDecimalFromLong()
-    {
+    public void TestBigDecimalFromLong() {
         try {
             UniversalTimeScale.bigDecimalFrom(0L, -1);
             errln("bigDecimalFrom(0L, -1) did not throw IllegalArgumentException.");
@@ -102,7 +91,7 @@ public class TimeScaleAPITest extends CoreTestFmwk
             } catch (IllegalArgumentException iae) {
                 errln("bigDecimalFrom(0L, " + scale + ") threw IllegalArgumentException.");
             }
-       }
+        }
 
         try {
             UniversalTimeScale.bigDecimalFrom(0L, UniversalTimeScale.MAX_SCALE);
@@ -113,8 +102,7 @@ public class TimeScaleAPITest extends CoreTestFmwk
     }
 
     @Test
-    public void TestFromLong()
-    {
+    public void TestFromLong() {
         long result;
 
         try {
@@ -125,8 +113,10 @@ public class TimeScaleAPITest extends CoreTestFmwk
         }
 
         for (int scale = 0; scale < UniversalTimeScale.MAX_SCALE; scale += 1) {
-            long fromMin = UniversalTimeScale.getTimeScaleValue(scale, UniversalTimeScale.FROM_MIN_VALUE);
-            long fromMax = UniversalTimeScale.getTimeScaleValue(scale, UniversalTimeScale.FROM_MAX_VALUE);
+            long fromMin =
+                    UniversalTimeScale.getTimeScaleValue(scale, UniversalTimeScale.FROM_MIN_VALUE);
+            long fromMax =
+                    UniversalTimeScale.getTimeScaleValue(scale, UniversalTimeScale.FROM_MAX_VALUE);
 
             try {
                 result = UniversalTimeScale.from(0L, scale);
@@ -145,7 +135,10 @@ public class TimeScaleAPITest extends CoreTestFmwk
             if (fromMin > Long.MIN_VALUE) {
                 try {
                     result = UniversalTimeScale.from(fromMin - 1, scale);
-                    errln("from(fromMin - 1, " + scale + ") did not throw IllegalArgumentException.");
+                    errln(
+                            "from(fromMin - 1, "
+                                    + scale
+                                    + ") did not throw IllegalArgumentException.");
                 } catch (IllegalArgumentException iae) {
                     logln("PASS: UniversalTimeScale.from failed as expected");
                 }
@@ -161,12 +154,15 @@ public class TimeScaleAPITest extends CoreTestFmwk
             if (fromMax < Long.MAX_VALUE) {
                 try {
                     result = UniversalTimeScale.from(fromMax + 1, scale);
-                    errln("from(fromMax + 1, " + scale + ") did not throw IllegalArgumentException.");
-               } catch (IllegalArgumentException iae) {
-                logln("PASS: UniversalTimeScale.from failed as expected");
-               }
+                    errln(
+                            "from(fromMax + 1, "
+                                    + scale
+                                    + ") did not throw IllegalArgumentException.");
+                } catch (IllegalArgumentException iae) {
+                    logln("PASS: UniversalTimeScale.from failed as expected");
+                }
             }
-       }
+        }
 
         try {
             result = UniversalTimeScale.from(0L, UniversalTimeScale.MAX_SCALE);
@@ -177,8 +173,7 @@ public class TimeScaleAPITest extends CoreTestFmwk
     }
 
     @Test
-    public void TestGetTimeScale()
-    {
+    public void TestGetTimeScale() {
         long value;
 
         try {
@@ -220,8 +215,7 @@ public class TimeScaleAPITest extends CoreTestFmwk
     }
 
     @Test
-    public void TestToBigDecimalFromBigDecimal()
-    {
+    public void TestToBigDecimalFromBigDecimal() {
         BigDecimal bigZero = new BigDecimal(0);
 
         try {
@@ -248,8 +242,7 @@ public class TimeScaleAPITest extends CoreTestFmwk
     }
 
     @Test
-    public void TestToBigDecimalTrunc()
-    {
+    public void TestToBigDecimalTrunc() {
         BigDecimal bigZero = new BigDecimal(0);
 
         try {
@@ -276,8 +269,7 @@ public class TimeScaleAPITest extends CoreTestFmwk
     }
 
     @Test
-    public void TestToBigDecimalFromLong()
-    {
+    public void TestToBigDecimalFromLong() {
         try {
             UniversalTimeScale.toBigDecimal(0L, -1);
             errln("toBigDecimal(0L, -1) did not throw IllegalArgumentException.");
@@ -302,8 +294,7 @@ public class TimeScaleAPITest extends CoreTestFmwk
     }
 
     @Test
-    public void TestToLong()
-    {
+    public void TestToLong() {
         long result;
 
         try {
@@ -314,8 +305,10 @@ public class TimeScaleAPITest extends CoreTestFmwk
         }
 
         for (int scale = 0; scale < UniversalTimeScale.MAX_SCALE; scale += 1) {
-            long toMin = UniversalTimeScale.getTimeScaleValue(scale, UniversalTimeScale.TO_MIN_VALUE);
-            long toMax = UniversalTimeScale.getTimeScaleValue(scale, UniversalTimeScale.TO_MAX_VALUE);
+            long toMin =
+                    UniversalTimeScale.getTimeScaleValue(scale, UniversalTimeScale.TO_MIN_VALUE);
+            long toMax =
+                    UniversalTimeScale.getTimeScaleValue(scale, UniversalTimeScale.TO_MAX_VALUE);
 
             try {
                 result = UniversalTimeScale.toLong(0L, scale);
@@ -334,7 +327,10 @@ public class TimeScaleAPITest extends CoreTestFmwk
             if (toMin > Long.MIN_VALUE) {
                 try {
                     result = UniversalTimeScale.toLong(toMin - 1, scale);
-                    errln("toLong(toMin - 1, " + scale + ") did not throw IllegalArgumentException.");
+                    errln(
+                            "toLong(toMin - 1, "
+                                    + scale
+                                    + ") did not throw IllegalArgumentException.");
                 } catch (IllegalArgumentException iae) {
                     logln("PASS: UniversalTimeScale.toLong failed as expected");
                 }
@@ -350,12 +346,15 @@ public class TimeScaleAPITest extends CoreTestFmwk
             if (toMax < Long.MAX_VALUE) {
                 try {
                     result = UniversalTimeScale.toLong(toMax + 1, scale);
-                    errln("toLong(toMax + 1, " + scale + ") did not throw IllegalArgumentException.");
-               } catch (IllegalArgumentException iae) {
-                logln("PASS: UniversalTimeScale.toLong failed as expected");
-               }
+                    errln(
+                            "toLong(toMax + 1, "
+                                    + scale
+                                    + ") did not throw IllegalArgumentException.");
+                } catch (IllegalArgumentException iae) {
+                    logln("PASS: UniversalTimeScale.toLong failed as expected");
+                }
             }
-       }
+        }
 
         try {
             result = UniversalTimeScale.toLong(0L, UniversalTimeScale.MAX_SCALE);

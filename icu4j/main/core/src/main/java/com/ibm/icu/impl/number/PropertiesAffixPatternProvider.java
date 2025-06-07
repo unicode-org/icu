@@ -14,18 +14,22 @@ public class PropertiesAffixPatternProvider implements AffixPatternProvider {
         if (properties.getCurrencyPluralInfo() == null) {
             return new PropertiesAffixPatternProvider(properties);
         } else {
-            return new CurrencyPluralInfoAffixProvider(properties.getCurrencyPluralInfo(), properties);
+            return new CurrencyPluralInfoAffixProvider(
+                    properties.getCurrencyPluralInfo(), properties);
         }
     }
 
     PropertiesAffixPatternProvider(DecimalFormatProperties properties) {
-        // There are two ways to set affixes in DecimalFormat: via the pattern string (applyPattern), and via the
-        // explicit setters (setPositivePrefix and friends).  The way to resolve the settings is as follows:
+        // There are two ways to set affixes in DecimalFormat: via the pattern string
+        // (applyPattern), and via the
+        // explicit setters (setPositivePrefix and friends).  The way to resolve the settings is as
+        // follows:
         //
         // 1) If the explicit setting is present for the field, use it.
         // 2) Otherwise, follows UTS 35 rules based on the pattern string.
         //
-        // Importantly, the explicit setters affect only the one field they override.  If you set the positive
+        // Importantly, the explicit setters affect only the one field they override.  If you set
+        // the positive
         // prefix, that should not affect the negative prefix.
 
         // Convenience: Extract the properties into local variables.
@@ -81,12 +85,12 @@ public class PropertiesAffixPatternProvider implements AffixPatternProvider {
 
         // For declaring if this is a currency pattern, we need to look at the
         // original pattern, not at any user-specified overrides.
-        isCurrencyPattern = (
-            AffixUtils.hasCurrencySymbols(ppp) ||
-            AffixUtils.hasCurrencySymbols(psp) ||
-            AffixUtils.hasCurrencySymbols(npp) ||
-            AffixUtils.hasCurrencySymbols(nsp) ||
-            properties.getCurrencyAsDecimal());
+        isCurrencyPattern =
+                (AffixUtils.hasCurrencySymbols(ppp)
+                        || AffixUtils.hasCurrencySymbols(psp)
+                        || AffixUtils.hasCurrencySymbols(npp)
+                        || AffixUtils.hasCurrencySymbols(nsp)
+                        || properties.getCurrencyAsDecimal());
 
         currencyAsDecimal = properties.getCurrencyAsDecimal();
     }
@@ -124,12 +128,10 @@ public class PropertiesAffixPatternProvider implements AffixPatternProvider {
 
     @Override
     public boolean hasNegativeSubpattern() {
-        return (
-            negSuffix != posSuffix ||
-            negPrefix.length() != posPrefix.length() + 1 ||
-            !negPrefix.regionMatches(1, posPrefix, 0, posPrefix.length()) ||
-            negPrefix.charAt(0) != '-'
-        );
+        return (negSuffix != posSuffix
+                || negPrefix.length() != posPrefix.length() + 1
+                || !negPrefix.regionMatches(1, posPrefix, 0, posPrefix.length())
+                || negPrefix.charAt(0) != '-');
     }
 
     @Override
@@ -145,8 +147,10 @@ public class PropertiesAffixPatternProvider implements AffixPatternProvider {
 
     @Override
     public boolean containsSymbolType(int type) {
-        return AffixUtils.containsType(posPrefix, type) || AffixUtils.containsType(posSuffix, type)
-                || AffixUtils.containsType(negPrefix, type) || AffixUtils.containsType(negSuffix, type);
+        return AffixUtils.containsType(posPrefix, type)
+                || AffixUtils.containsType(posSuffix, type)
+                || AffixUtils.containsType(negPrefix, type)
+                || AffixUtils.containsType(negSuffix, type);
     }
 
     @Override

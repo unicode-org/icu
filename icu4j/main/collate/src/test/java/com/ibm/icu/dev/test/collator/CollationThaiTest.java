@@ -8,21 +8,10 @@
  */
 
 /**
- * Port From:   ICU4C v2.1 : collate/CollationRegressionTest
- * Source File: $ICU4CRoot/source/test/intltest/regcoll.cpp
- **/
-
+ * Port From: ICU4C v2.1 : collate/CollationRegressionTest Source File:
+ * $ICU4CRoot/source/test/intltest/regcoll.cpp
+ */
 package com.ibm.icu.dev.test.collator;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Locale;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
@@ -30,6 +19,14 @@ import com.ibm.icu.text.CollationElementIterator;
 import com.ibm.icu.text.CollationKey;
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.RuleBasedCollator;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Locale;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public class CollationThaiTest extends TestFmwk {
@@ -37,47 +34,47 @@ public class CollationThaiTest extends TestFmwk {
     final int MAX_FAILURES_TO_SHOW = -1;
 
     /**
-     * Odd corner conditions taken from "How to Sort Thai Without Rewriting Sort",
-     * by Doug Cooper, http://seasrc.th.net/paper/thaisort.zip
+     * Odd corner conditions taken from "How to Sort Thai Without Rewriting Sort", by Doug Cooper,
+     * http://seasrc.th.net/paper/thaisort.zip
      */
     @Test
     public void TestCornerCases() {
         String TESTS[] = {
             // Shorter words precede longer
-            "\u0e01",                               "<",    "\u0e01\u0e01",
+            "\u0e01", "<", "\u0e01\u0e01",
 
             // Tone marks are considered after letters (i.e. are primary ignorable)
-            "\u0e01\u0e32",                        "<",    "\u0e01\u0e49\u0e32",
+            "\u0e01\u0e32", "<", "\u0e01\u0e49\u0e32",
 
             // ditto for other over-marks
-            "\u0e01\u0e32",                        "<",    "\u0e01\u0e32\u0e4c",
+            "\u0e01\u0e32", "<", "\u0e01\u0e32\u0e4c",
 
             // commonly used mark-in-context order.
             // In effect, marks are sorted after each syllable.
-            "\u0e01\u0e32\u0e01\u0e49\u0e32",   "<",    "\u0e01\u0e48\u0e32\u0e01\u0e49\u0e32",
+            "\u0e01\u0e32\u0e01\u0e49\u0e32", "<", "\u0e01\u0e48\u0e32\u0e01\u0e49\u0e32",
 
             // Hyphens and other punctuation follow whitespace but come before letters
-            "\u0e01\u0e32",                        "=",    "\u0e01\u0e32-",
-            "\u0e01\u0e32-",                       "<",    "\u0e01\u0e32\u0e01\u0e32",
+            "\u0e01\u0e32", "=", "\u0e01\u0e32-",
+            "\u0e01\u0e32-", "<", "\u0e01\u0e32\u0e01\u0e32",
 
             // Doubler follows an identical word without the doubler
-            "\u0e01\u0e32",                        "=",    "\u0e01\u0e32\u0e46",
-            "\u0e01\u0e32\u0e46",                 "<",    "\u0e01\u0e32\u0e01\u0e32",
+            "\u0e01\u0e32", "=", "\u0e01\u0e32\u0e46",
+            "\u0e01\u0e32\u0e46", "<", "\u0e01\u0e32\u0e01\u0e32",
 
             // \u0e45 after either \u0e24 or \u0e26 is treated as a single
             // combining character, similar to "c < ch" in traditional spanish.
             // TODO: beef up this case
-            "\u0e24\u0e29\u0e35",                 "<",    "\u0e24\u0e45\u0e29\u0e35",
-            "\u0e26\u0e29\u0e35",                 "<",    "\u0e26\u0e45\u0e29\u0e35",
+            "\u0e24\u0e29\u0e35", "<", "\u0e24\u0e45\u0e29\u0e35",
+            "\u0e26\u0e29\u0e35", "<", "\u0e26\u0e45\u0e29\u0e35",
 
             // Vowels reorder, should compare \u0e2d and \u0e34
-            "\u0e40\u0e01\u0e2d",                 "<",    "\u0e40\u0e01\u0e34",
+            "\u0e40\u0e01\u0e2d", "<", "\u0e40\u0e01\u0e34",
 
             // Tones are compared after the rest of the word (e.g. primary ignorable)
-            "\u0e01\u0e32\u0e01\u0e48\u0e32",   "<",    "\u0e01\u0e49\u0e32\u0e01\u0e32",
+            "\u0e01\u0e32\u0e01\u0e48\u0e32", "<", "\u0e01\u0e49\u0e32\u0e01\u0e32",
 
             // Periods are ignored entirely
-            "\u0e01.\u0e01.",                      "<",    "\u0e01\u0e32",
+            "\u0e01.\u0e01.", "<", "\u0e01\u0e32",
         };
 
         RuleBasedCollator coll = null;
@@ -93,33 +90,32 @@ public class CollationThaiTest extends TestFmwk {
     void compareArray(RuleBasedCollator c, String[] tests) {
         for (int i = 0; i < tests.length; i += 3) {
             int expect = 0;
-            if (tests[i+1].equals("<")) {
+            if (tests[i + 1].equals("<")) {
                 expect = -1;
-            } else if (tests[i+1].equals(">")) {
+            } else if (tests[i + 1].equals(">")) {
                 expect = 1;
-            } else if (tests[i+1].equals("=")) {
+            } else if (tests[i + 1].equals("=")) {
                 expect = 0;
             } else {
                 // expect = Integer.decode(tests[i+1]).intValue();
-                errln("Error: unknown operator " + tests[i+1]);
+                errln("Error: unknown operator " + tests[i + 1]);
                 return;
             }
             String s1 = tests[i];
-            String s2 = tests[i+2];
+            String s2 = tests[i + 2];
             CollationTest.doTest(this, c, s1, s2, expect);
         }
     }
 
-    int sign(int i ) {
+    int sign(int i) {
         if (i < 0) return -1;
         if (i > 0) return 1;
         return 0;
     }
 
     /**
-     * Read the external dictionary file, which is already in proper
-     * sorted order, and confirm that the collator compares each line as
-     * preceding the following line.
+     * Read the external dictionary file, which is already in proper sorted order, and confirm that
+     * the collator compares each line as preceding the following line.
      */
     @Test
     public void TestDictionary() {
@@ -163,7 +159,8 @@ public class CollationThaiTest extends TestFmwk {
 
                 if (lastWord.length() > 0) {
                     // CollationTest.doTest isn't really set up to handle situations where
-                    // the result can be equal or greater than the previous, so have to skip for now.
+                    // the result can be equal or greater than the previous, so have to skip for
+                    // now.
                     // Not a big deal, since we're still testing to make sure everything sorts out
                     // right, just not looking at the colation keys in detail...
                     // CollationTest.doTest(this, coll, lastWord, word, -1);
@@ -172,12 +169,25 @@ public class CollationThaiTest extends TestFmwk {
                     if (result > 0) {
                         failed++;
                         if (MAX_FAILURES_TO_SHOW < 0 || failed <= MAX_FAILURES_TO_SHOW) {
-                            String msg = "--------------------------------------------\n" + line + " compare("
-                                    + lastWord + ", " + word + ") returned " + result + ", expected -1\n";
+                            String msg =
+                                    "--------------------------------------------\n"
+                                            + line
+                                            + " compare("
+                                            + lastWord
+                                            + ", "
+                                            + word
+                                            + ") returned "
+                                            + result
+                                            + ", expected -1\n";
                             CollationKey k1, k2;
                             k1 = coll.getCollationKey(lastWord);
                             k2 = coll.getCollationKey(word);
-                            msg += "key1: " + CollationTest.prettify(k1) + "\n" + "key2: " + CollationTest.prettify(k2);
+                            msg +=
+                                    "key1: "
+                                            + CollationTest.prettify(k1)
+                                            + "\n"
+                                            + "key2: "
+                                            + CollationTest.prettify(k2);
                             errln(msg);
                         }
                     }
@@ -201,26 +211,27 @@ public class CollationThaiTest extends TestFmwk {
 
         if (failed != 0) {
             if (failed > MAX_FAILURES_TO_SHOW) {
-                errln("Too many failures; only the first " +
-                      MAX_FAILURES_TO_SHOW + " failures were shown");
+                errln(
+                        "Too many failures; only the first "
+                                + MAX_FAILURES_TO_SHOW
+                                + " failures were shown");
             }
-            errln("Summary: " + failed + " of " + (line - 1) +
-                  " comparisons failed");
+            errln("Summary: " + failed + " of " + (line - 1) + " comparisons failed");
         }
 
         logln("Words checked: " + wordCount);
     }
 
     @Test
-    public void TestInvalidThai()
-    {
-        String tests[] = { "\u0E44\u0E01\u0E44\u0E01",
-                           "\u0E44\u0E01\u0E01\u0E44",
-                           "\u0E01\u0E44\u0E01\u0E44",
-                           "\u0E01\u0E01\u0E44\u0E44",
-                           "\u0E44\u0E44\u0E01\u0E01",
-                           "\u0E01\u0E44\u0E44\u0E01",
-                         };
+    public void TestInvalidThai() {
+        String tests[] = {
+            "\u0E44\u0E01\u0E44\u0E01",
+            "\u0E44\u0E01\u0E01\u0E44",
+            "\u0E01\u0E44\u0E01\u0E44",
+            "\u0E01\u0E01\u0E44\u0E44",
+            "\u0E44\u0E44\u0E01\u0E01",
+            "\u0E01\u0E44\u0E44\u0E01",
+        };
 
         RuleBasedCollator collator;
         StrCmp comparator;
@@ -234,51 +245,56 @@ public class CollationThaiTest extends TestFmwk {
 
         Arrays.sort(tests, comparator);
 
-        for (int i = 0; i < tests.length; i ++)
-        {
-            for (int j = i + 1; j < tests.length; j ++) {
+        for (int i = 0; i < tests.length; i++) {
+            for (int j = i + 1; j < tests.length; j++) {
                 if (collator.compare(tests[i], tests[j]) > 0) {
                     // inconsistency ordering found!
-                    errln("Inconsistent ordering between strings " + i
-                          + " and " + j);
+                    errln("Inconsistent ordering between strings " + i + " and " + j);
                 }
             }
-            CollationElementIterator iterator
-                = collator.getCollationElementIterator(tests[i]);
+            CollationElementIterator iterator = collator.getCollationElementIterator(tests[i]);
             CollationTest.backAndForth(this, iterator);
         }
     }
 
     @Test
-    public void TestReordering()
-    {
+    public void TestReordering() {
         String tests[] = {
-            "\u0E41c\u0301",      "=", "\u0E41\u0107", // composition
+            "\u0E41c\u0301", "=", "\u0E41\u0107", // composition
             "\u0E41\uD835\uDFCE", "<", "\u0E41\uD835\uDFCF", // supplementaries
-            "\u0E41\uD834\uDD5F", "=", "\u0E41\uD834\uDD58\uD834\uDD65", // supplementary composition decomps to supplementary
+            "\u0E41\uD834\uDD5F", "=",
+                    "\u0E41\uD834\uDD58\uD834\uDD65", // supplementary composition decomps to
+            // supplementary
             "\u0E41\uD87E\uDC02", "=", "\u0E41\u4E41", // supplementary composition decomps to BMP
-            "\u0E41\u0301",       "=", "\u0E41\u0301", // unsafe (just checking backwards iteration)
+            "\u0E41\u0301", "=", "\u0E41\u0301", // unsafe (just checking backwards iteration)
             "\u0E41\u0301\u0316", "=", "\u0E41\u0316\u0301",
-
-            "abc\u0E41c\u0301",      "=", "abc\u0E41\u0107", // composition
+            "abc\u0E41c\u0301", "=", "abc\u0E41\u0107", // composition
             "abc\u0E41\uD834\uDC00", "<", "abc\u0E41\uD834\uDC01", // supplementaries
-            "abc\u0E41\uD834\uDD5F", "=", "abc\u0E41\uD834\uDD58\uD834\uDD65", // supplementary composition decomps to supplementary
-            "abc\u0E41\uD87E\uDC02", "=", "abc\u0E41\u4E41", // supplementary composition decomps to BMP
-            "abc\u0E41\u0301",       "=", "abc\u0E41\u0301", // unsafe (just checking backwards iteration)
+            "abc\u0E41\uD834\uDD5F", "=",
+                    "abc\u0E41\uD834\uDD58\uD834\uDD65", // supplementary composition decomps to
+            // supplementary
+            "abc\u0E41\uD87E\uDC02", "=",
+                    "abc\u0E41\u4E41", // supplementary composition decomps to BMP
+            "abc\u0E41\u0301", "=", "abc\u0E41\u0301", // unsafe (just checking backwards iteration)
             "abc\u0E41\u0301\u0316", "=", "abc\u0E41\u0316\u0301",
-
-            "\u0E41c\u0301abc",      "=", "\u0E41\u0107abc", // composition
+            "\u0E41c\u0301abc", "=", "\u0E41\u0107abc", // composition
             "\u0E41\uD834\uDC00abc", "<", "\u0E41\uD834\uDC01abc", // supplementaries
-            "\u0E41\uD834\uDD5Fabc", "=", "\u0E41\uD834\uDD58\uD834\uDD65abc", // supplementary composition decomps to supplementary
-            "\u0E41\uD87E\uDC02abc", "=", "\u0E41\u4E41abc", // supplementary composition decomps to BMP
-            "\u0E41\u0301abc",       "=", "\u0E41\u0301abc", // unsafe (just checking backwards iteration)
+            "\u0E41\uD834\uDD5Fabc", "=",
+                    "\u0E41\uD834\uDD58\uD834\uDD65abc", // supplementary composition decomps to
+            // supplementary
+            "\u0E41\uD87E\uDC02abc", "=",
+                    "\u0E41\u4E41abc", // supplementary composition decomps to BMP
+            "\u0E41\u0301abc", "=", "\u0E41\u0301abc", // unsafe (just checking backwards iteration)
             "\u0E41\u0301\u0316abc", "=", "\u0E41\u0316\u0301abc",
-
-            "abc\u0E41c\u0301abc",      "=", "abc\u0E41\u0107abc", // composition
+            "abc\u0E41c\u0301abc", "=", "abc\u0E41\u0107abc", // composition
             "abc\u0E41\uD834\uDC00abc", "<", "abc\u0E41\uD834\uDC01abc", // supplementaries
-            "abc\u0E41\uD834\uDD5Fabc", "=", "abc\u0E41\uD834\uDD58\uD834\uDD65abc", // supplementary composition decomps to supplementary
-            "abc\u0E41\uD87E\uDC02abc", "=", "abc\u0E41\u4E41abc", // supplementary composition decomps to BMP
-            "abc\u0E41\u0301abc",       "=", "abc\u0E41\u0301abc", // unsafe (just checking backwards iteration)
+            "abc\u0E41\uD834\uDD5Fabc", "=",
+                    "abc\u0E41\uD834\uDD58\uD834\uDD65abc", // supplementary composition decomps to
+            // supplementary
+            "abc\u0E41\uD87E\uDC02abc", "=",
+                    "abc\u0E41\u4E41abc", // supplementary composition decomps to BMP
+            "abc\u0E41\u0301abc", "=",
+                    "abc\u0E41\u0301abc", // unsafe (just checking backwards iteration)
             "abc\u0E41\u0301\u0316abc", "=", "abc\u0E41\u0316\u0301abc",
         };
 
@@ -292,7 +308,7 @@ public class CollationThaiTest extends TestFmwk {
         compareArray(collator, tests);
 
         String rule = "& c < ab";
-        String testcontraction[] = { "\u0E41ab", ">", "\u0E41c"};
+        String testcontraction[] = {"\u0E41ab", ">", "\u0E41c"};
         try {
             collator = new RuleBasedCollator(rule);
         } catch (Exception e) {
@@ -304,16 +320,13 @@ public class CollationThaiTest extends TestFmwk {
 
     // private inner class -------------------------------------------------
 
-    private static final class StrCmp implements Comparator<String>
-    {
+    private static final class StrCmp implements Comparator<String> {
         @Override
-        public int compare(String string1, String string2)
-        {
+        public int compare(String string1, String string2) {
             return collator.compare(string1, string2);
         }
 
-        StrCmp() throws Exception
-        {
+        StrCmp() throws Exception {
             collator = getThaiCollator();
         }
 
@@ -326,11 +339,9 @@ public class CollationThaiTest extends TestFmwk {
 
     // private methods -----------------------------------------------------
 
-    private static RuleBasedCollator getThaiCollator() throws Exception
-    {
+    private static RuleBasedCollator getThaiCollator() throws Exception {
         if (m_collator_ == null) {
-            m_collator_ = (RuleBasedCollator)Collator.getInstance(
-                                                new Locale("th", "TH", ""));
+            m_collator_ = (RuleBasedCollator) Collator.getInstance(new Locale("th", "TH", ""));
         }
         return m_collator_;
     }

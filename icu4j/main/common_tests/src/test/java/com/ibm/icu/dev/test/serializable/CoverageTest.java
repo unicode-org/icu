@@ -8,29 +8,25 @@
  */
 package com.ibm.icu.dev.test.serializable;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
+import com.ibm.icu.dev.test.serializable.SerializableTestUtility.Handler;
 import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.util.List;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import com.ibm.icu.dev.test.CoreTestFmwk;
-import com.ibm.icu.dev.test.serializable.SerializableTestUtility.Handler;
-
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 /**
  * @author sgill
  * @author emader
- *
  */
 @RunWith(JUnitParamsRunner.class)
 public class CoverageTest extends CoreTestFmwk {
 
     @Test
-    @Parameters(method="generateClassList")
+    @Parameters(method = "generateClassList")
     public void testSerialization(String className) throws ClassNotFoundException, IOException {
         Class<?> c = Class.forName(className);
         int m = c.getModifiers();
@@ -38,7 +34,9 @@ public class CoverageTest extends CoreTestFmwk {
         Handler classHandler = SerializableTestUtility.getHandler(className);
         if (classHandler == null) {
             if (!Modifier.isAbstract(m)) {
-                errln("Missing test handler. Update the list of tests in SerializableTest.java to include a test case for " + className);
+                errln(
+                        "Missing test handler. Update the list of tests in SerializableTest.java to include a test case for "
+                                + className);
             }
             return;
         }
@@ -55,5 +53,4 @@ public class CoverageTest extends CoreTestFmwk {
     List<String> generateClassList() throws IOException {
         return SerializableTestUtility.getSerializationClassList(this);
     }
-
 }

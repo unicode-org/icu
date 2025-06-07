@@ -9,11 +9,6 @@
 
 package com.ibm.icu.text;
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.util.Locale;
-import java.util.MissingResourceException;
-
 import com.ibm.icu.impl.Assert;
 import com.ibm.icu.impl.ICUBinary;
 import com.ibm.icu.impl.ICUData;
@@ -22,14 +17,16 @@ import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.ICUService;
 import com.ibm.icu.impl.ICUService.Factory;
 import com.ibm.icu.util.ULocale;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.util.Locale;
+import java.util.MissingResourceException;
 
 /**
  * @author Ram
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
- * To enable and disable the creation of type comments go to
- * Window>Preferences>Java>Code Generation.
+ *     <p>To change this generated comment edit the template variable "typecomment":
+ *     Window>Preferences>Java>Templates. To enable and disable the creation of type comments go to
+ *     Window>Preferences>Java>Code Generation.
  */
 final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim {
 
@@ -44,7 +41,7 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
         if (service.isDefault()) {
             return false;
         }
-        return service.unregisterFactory((Factory)key);
+        return service.unregisterFactory((Factory) key);
     }
 
     @Override
@@ -67,13 +64,14 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
 
     @Override
     public BreakIterator createBreakIterator(ULocale locale, int kind) {
-    // TODO: convert to ULocale when service switches over
+        // TODO: convert to ULocale when service switches over
         if (service.isDefault()) {
             return createBreakInstance(locale, kind);
         }
         ULocale[] actualLoc = new ULocale[1];
-        BreakIterator iter = (BreakIterator)service.get(locale, kind, actualLoc);
-        iter.setLocale(actualLoc[0], actualLoc[0]); // services make no distinction between actual & valid
+        BreakIterator iter = (BreakIterator) service.get(locale, kind, actualLoc);
+        iter.setLocale(
+                actualLoc[0], actualLoc[0]); // services make no distinction between actual & valid
         return iter;
     }
 
@@ -93,36 +91,34 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
         }
 
         /**
-         * createBreakInstance() returns an appropriate BreakIterator for any locale.
-         * It falls back to root if there is no specific data.
+         * createBreakInstance() returns an appropriate BreakIterator for any locale. It falls back
+         * to root if there is no specific data.
          *
-         * <p>Without this override, the service code would fall back to the default locale
-         * which is not desirable for an algorithm with a good Unicode default,
-         * like break iteration.
+         * <p>Without this override, the service code would fall back to the default locale which is
+         * not desirable for an algorithm with a good Unicode default, like break iteration.
          */
         @Override
         public String validateFallbackLocale() {
             return "";
         }
     }
+
     static final ICULocaleService service = new BFService();
 
-
-    /** KIND_NAMES are the resource key to be used to fetch the name of the
-     *             pre-compiled break rules.  The resource bundle name is "boundaries".
-     *             The value for each key will be the rules to be used for the
-     *             specified locale - "word" -> "word_th" for Thai, for example.
+    /**
+     * KIND_NAMES are the resource key to be used to fetch the name of the pre-compiled break rules.
+     * The resource bundle name is "boundaries". The value for each key will be the rules to be used
+     * for the specified locale - "word" -> "word_th" for Thai, for example.
      */
-    private static final String[] KIND_NAMES = {
-            "grapheme", "word", "line", "sentence", "title"
-    };
-
+    private static final String[] KIND_NAMES = {"grapheme", "word", "line", "sentence", "title"};
 
     private static BreakIterator createBreakInstance(ULocale locale, int kind) {
 
-        RuleBasedBreakIterator    iter = null;
-        ICUResourceBundle rb           = ICUResourceBundle.
-                getBundleInstance(ICUData.ICU_BRKITR_BASE_NAME, locale,
+        RuleBasedBreakIterator iter = null;
+        ICUResourceBundle rb =
+                ICUResourceBundle.getBundleInstance(
+                        ICUData.ICU_BRKITR_BASE_NAME,
+                        locale,
                         ICUResourceBundle.OpenType.LOCALE_ROOT);
 
         //
@@ -132,7 +128,10 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
         String typeKeyExt = "";
         if (kind == BreakIterator.KIND_LINE) {
             String keyValue = locale.getKeywordValue("lb");
-            if ( keyValue != null && (keyValue.equals("strict") || keyValue.equals("normal") || keyValue.equals("loose")) ) {
+            if (keyValue != null
+                    && (keyValue.equals("strict")
+                            || keyValue.equals("normal")
+                            || keyValue.equals("loose"))) {
                 typeKeyExt = "_" + keyValue;
             }
             String language = locale.getLanguage();
@@ -147,13 +146,13 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
 
         String brkfname;
         try {
-            String         typeKey       = typeKeyExt.isEmpty() ? KIND_NAMES[kind] : KIND_NAMES[kind] + typeKeyExt;
-                           brkfname      = rb.getStringWithFallback("boundaries/" + typeKey);
-            String         rulesFileName = ICUData.ICU_BRKITR_NAME+ '/' + brkfname;
-                           bytes         = ICUBinary.getRequiredData(rulesFileName);
-        }
-        catch (Exception e) {
-            throw new MissingResourceException(e.toString(),"","");
+            String typeKey =
+                    typeKeyExt.isEmpty() ? KIND_NAMES[kind] : KIND_NAMES[kind] + typeKeyExt;
+            brkfname = rb.getStringWithFallback("boundaries/" + typeKey);
+            String rulesFileName = ICUData.ICU_BRKITR_NAME + '/' + brkfname;
+            bytes = ICUBinary.getRequiredData(rulesFileName);
+        } catch (Exception e) {
+            throw new MissingResourceException(e.toString(), "", "");
         }
 
         //
@@ -162,8 +161,7 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
         try {
             boolean isPhraseBreaking = (brkfname != null) && brkfname.contains("phrase");
             iter = RuleBasedBreakIterator.getInstanceFromCompiledRules(bytes, isPhraseBreaking);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             // Shouldn't be possible to get here.
             // If it happens, the compiled rules are probably corrupted in some way.
             Assert.fail(e);
@@ -182,7 +180,5 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
         }
 
         return iter;
-
     }
-
 }

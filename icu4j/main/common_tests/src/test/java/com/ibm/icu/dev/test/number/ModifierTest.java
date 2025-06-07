@@ -5,8 +5,6 @@ package com.ibm.icu.dev.test.number;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.Test;
-
 import com.ibm.icu.impl.FormattedStringBuilder;
 import com.ibm.icu.impl.SimpleFormatterImpl;
 import com.ibm.icu.impl.number.ConstantAffixModifier;
@@ -17,6 +15,7 @@ import com.ibm.icu.impl.number.SimpleModifier;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.util.ULocale;
+import org.junit.Test;
 
 public class ModifierTest {
     @Test
@@ -45,34 +44,35 @@ public class ModifierTest {
 
     @Test
     public void testSimpleModifier() {
-        String[] patterns = { "{0}", "X{0}Y", "XX{0}YYY", "{0}YY", "XX📺XX{0}" };
+        String[] patterns = {"{0}", "X{0}Y", "XX{0}YYY", "{0}YY", "XX📺XX{0}"};
         Object[][] outputs = {
-                { "", 0, 0 },
-                { "a📻bcde", 0, 0 },
-                { "a📻bcde", 4, 4 },
-                { "a📻bcde", 3, 5 } };
-        int[] prefixLens = { 0, 1, 2, 0, 6 };
+            {"", 0, 0},
+            {"a📻bcde", 0, 0},
+            {"a📻bcde", 4, 4},
+            {"a📻bcde", 3, 5}
+        };
+        int[] prefixLens = {0, 1, 2, 0, 6};
         String[][] expectedCharFields = {
-                { "|", "n" },
-                { "X|Y", "%n%" },
-                { "XX|YYY", "%%n%%%" },
-                { "|YY", "n%%" },
-                { "XX📺XX|", "%%%%%%n" } };
+            {"|", "n"},
+            {"X|Y", "%n%"},
+            {"XX|YYY", "%%n%%%"},
+            {"|YY", "n%%"},
+            {"XX📺XX|", "%%%%%%n"}
+        };
         String[][] expecteds = {
-                { "", "XY", "XXYYY", "YY", "XX📺XX" },
-                { "a📻bcde", "XYa📻bcde", "XXYYYa📻bcde", "YYa📻bcde", "XX📺XXa📻bcde" },
-                { "a📻bcde", "a📻bXYcde", "a📻bXXYYYcde", "a📻bYYcde", "a📻bXX📺XXcde" },
-                { "a📻bcde", "a📻XbcYde", "a📻XXbcYYYde", "a📻bcYYde", "a📻XX📺XXbcde" } };
+            {"", "XY", "XXYYY", "YY", "XX📺XX"},
+            {"a📻bcde", "XYa📻bcde", "XXYYYa📻bcde", "YYa📻bcde", "XX📺XXa📻bcde"},
+            {"a📻bcde", "a📻bXYcde", "a📻bXXYYYcde", "a📻bYYcde", "a📻bXX📺XXcde"},
+            {"a📻bcde", "a📻XbcYde", "a📻XXbcYYYde", "a📻bcYYde", "a📻XX📺XXbcde"}
+        };
         for (int i = 0; i < patterns.length; i++) {
             String pattern = patterns[i];
-            String compiledPattern = SimpleFormatterImpl
-                    .compileToStringMinMaxArguments(pattern, new StringBuilder(), 1, 1);
+            String compiledPattern =
+                    SimpleFormatterImpl.compileToStringMinMaxArguments(
+                            pattern, new StringBuilder(), 1, 1);
             Modifier mod = new SimpleModifier(compiledPattern, NumberFormat.Field.PERCENT, false);
-            assertModifierEquals(mod,
-                    prefixLens[i],
-                    false,
-                    expectedCharFields[i][0],
-                    expectedCharFields[i][1]);
+            assertModifierEquals(
+                    mod, prefixLens[i], false, expectedCharFields[i][0], expectedCharFields[i][1]);
 
             // Test strange insertion positions
             for (int j = 0; j < outputs.length; j++) {
@@ -111,10 +111,10 @@ public class ModifierTest {
         assertTrue(sb1.toDebugString() + " vs " + sb2.toDebugString(), sb1.contentEquals(sb2));
 
         // Test custom patterns
-        // The following line means that the last char of the number should be a | (rather than a digit)
-        symbols.setPatternForCurrencySpacing(DecimalFormatSymbols.CURRENCY_SPC_SURROUNDING_MATCH,
-                true,
-                "[|]");
+        // The following line means that the last char of the number should be a | (rather than a
+        // digit)
+        symbols.setPatternForCurrencySpacing(
+                DecimalFormatSymbols.CURRENCY_SPC_SURROUNDING_MATCH, true, "[|]");
         suffix.append("XYZ", NumberFormat.Field.CURRENCY);
         Modifier mod3 = new CurrencySpacingEnabledModifier(prefix, suffix, false, true, symbols);
         assertModifierEquals(mod3, 3, true, "USD|\u00A0XYZ", "$$$nn$$$");
@@ -127,18 +127,22 @@ public class ModifierTest {
         // If this test starts failing, please update the method #getUnicodeSet() in
         // BOTH CurrencySpacingEnabledModifier.java AND in C++.
         DecimalFormatSymbols dfs = DecimalFormatSymbols.getInstance(new ULocale("en-US"));
-        assertEquals("[[:^S:]&[:^Z:]]",
-                dfs.getPatternForCurrencySpacing(DecimalFormatSymbols.CURRENCY_SPC_CURRENCY_MATCH,
-                        true));
-        assertEquals("[[:^S:]&[:^Z:]]",
-                dfs.getPatternForCurrencySpacing(DecimalFormatSymbols.CURRENCY_SPC_CURRENCY_MATCH,
-                        false));
-        assertEquals("[:digit:]",
-                dfs.getPatternForCurrencySpacing(DecimalFormatSymbols.CURRENCY_SPC_SURROUNDING_MATCH,
-                        true));
-        assertEquals("[:digit:]",
-                dfs.getPatternForCurrencySpacing(DecimalFormatSymbols.CURRENCY_SPC_SURROUNDING_MATCH,
-                        false));
+        assertEquals(
+                "[[:^S:]&[:^Z:]]",
+                dfs.getPatternForCurrencySpacing(
+                        DecimalFormatSymbols.CURRENCY_SPC_CURRENCY_MATCH, true));
+        assertEquals(
+                "[[:^S:]&[:^Z:]]",
+                dfs.getPatternForCurrencySpacing(
+                        DecimalFormatSymbols.CURRENCY_SPC_CURRENCY_MATCH, false));
+        assertEquals(
+                "[:digit:]",
+                dfs.getPatternForCurrencySpacing(
+                        DecimalFormatSymbols.CURRENCY_SPC_SURROUNDING_MATCH, true));
+        assertEquals(
+                "[:digit:]",
+                dfs.getPatternForCurrencySpacing(
+                        DecimalFormatSymbols.CURRENCY_SPC_SURROUNDING_MATCH, false));
     }
 
     private void assertModifierEquals(
@@ -149,12 +153,8 @@ public class ModifierTest {
             String expectedFields) {
         FormattedStringBuilder sb = new FormattedStringBuilder();
         sb.appendCodePoint('|', null);
-        assertModifierEquals(mod,
-                sb,
-                expectedPrefixLength,
-                expectedStrong,
-                expectedChars,
-                expectedFields);
+        assertModifierEquals(
+                mod, sb, expectedPrefixLength, expectedStrong, expectedChars, expectedFields);
     }
 
     private void assertModifierEquals(
@@ -169,11 +169,13 @@ public class ModifierTest {
         assertEquals("Prefix length on " + sb, expectedPrefixLength, mod.getPrefixLength());
         assertEquals("Strong on " + sb, expectedStrong, mod.isStrong());
         if (!(mod instanceof CurrencySpacingEnabledModifier)) {
-            assertEquals("Code point count equals actual code point count",
+            assertEquals(
+                    "Code point count equals actual code point count",
                     sb.codePointCount() - oldCount,
                     mod.getCodePointCount());
         }
-        assertEquals("<FormattedStringBuilder [" + expectedChars + "] [" + expectedFields + "]>",
+        assertEquals(
+                "<FormattedStringBuilder [" + expectedChars + "] [" + expectedFields + "]>",
                 sb.toDebugString());
     }
 }
