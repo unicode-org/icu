@@ -249,6 +249,7 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
     TESTCASE_AUTO(TestCreateUnicodeKeywordSetWithPrivateUse);
     TESTCASE_AUTO(TestGetKeywordValueStdString);
     TESTCASE_AUTO(TestGetUnicodeKeywordValueStdString);
+    TESTCASE_AUTO(TestSetKeywordValueImp);
     TESTCASE_AUTO(TestSetKeywordValue);
     TESTCASE_AUTO(TestSetKeywordValueStringPiece);
     TESTCASE_AUTO(TestSetUnicodeKeywordValueStringPiece);
@@ -4512,6 +4513,35 @@ LocaleTest::TestGetUnicodeKeywordValueStdString() {
     std::string result = l.getUnicodeKeywordValue<std::string>(keyword, status);
     status.errIfFailureAndReset("\"%s\"", keyword);
     assertEquals(keyword, expected, result.c_str());
+}
+
+void
+LocaleTest::TestSetKeywordValueImp() {
+    IcuTestErrorCode status(*this, "TestSetKeywordValueImp()");
+
+    {
+        CharString localeID("aa", status);
+        ulocimp_setKeywordValue("bb", "cc", localeID, status);
+        assertEquals("", "aa@bb=cc", localeID.data());
+    }
+
+    {
+        CharString localeID("aa@bb=cc", status);
+        ulocimp_setKeywordValue("bb", "", localeID, status);
+        assertEquals("", "aa", localeID.data());
+    }
+
+    {
+        CharString localeID("aa", status);
+        ulocimp_setKeywordValue("zz", "", localeID, status);
+        assertEquals("", "aa", localeID.data());
+    }
+
+    {
+        CharString localeID("aa@bb=cc", status);
+        ulocimp_setKeywordValue("zz", "", localeID, status);
+        assertEquals("", "aa@bb=cc", localeID.data());
+    }
 }
 
 void

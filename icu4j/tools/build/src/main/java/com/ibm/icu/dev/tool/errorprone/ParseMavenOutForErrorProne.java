@@ -10,16 +10,23 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 class ParseMavenOutForErrorProne {
-	// The `(?:[A-F]:)?` in the beginning is for the Windows drive letter (for example D:)
+    // The `(?:[A-F]:)?` in the beginning is for the Windows drive letter (for example D:)
     private static final String RE_ERROR_PRONE_START =
             "^\\[WARNING\\] ((?:[A-F]:)?[\\\\/a-zA-Z0-9_.\\-]+\\.java):\\[(\\d+),(\\d+)\\]"
                 + " \\[(\\S+)\\] (.+)";
     private static final Pattern PATTERN = Pattern.compile(RE_ERROR_PRONE_START);
+
+    // These are ICU custom tags, but errorprone does not allow us to exclude them.
+    // So we will filter them out in our code.
+    private static final Set<String> CUSTOM_ICU_TAGS = Set.of(
+            "bug", "category", "discouraged", "draft", "icuenhanced", "internal", "icu",
+            "icunote", "obsolete", "provisional", "stable", "summary", "test");
 
     /**
      * The result contains the issues reported by errorprone.
@@ -91,19 +98,44 @@ class ParseMavenOutForErrorProne {
         return errorReport;
     }
 
+    private static boolean isCustomIcuTag(ErrorProneEntry crtError) {
+        String errorType = crtError.type;
+        if (errorType.equals("InvalidBlockTag")) {
+            return false;
+        }
+        String message = crtError.message;
+        // We will filter out the custom ICU tags.
+        // There is no programatic way to find the name of the tag, we must extract it from the error message.
+        // Message text 1:
+        // "Tag name `stable` is unknown. If this is a commonly-used custom tag, please click 'not useful' and file a bug."
+        int firstBackTick = message.indexOf('`');
+        if (firstBackTick >= 0) {
+            int secondBackTick = message.indexOf('`', firstBackTick + 1);
+            if (secondBackTick >= 0) {
+                String tagName = message.substring(firstBackTick + 1, secondBackTick);
+                if (CUSTOM_ICU_TAGS.contains(tagName)) {
+                    return true;
+                }
+            }
+        }
+        // Message text 2:
+        // "@summary is not a valid block tag. Should it be an inline tag instead?"
+        if (message.startsWith("@")) {
+            int firstSpace = message.indexOf(' ');
+            if (firstSpace >= 0) {
+                String tagName = message.substring(1, firstSpace);
+                if (CUSTOM_ICU_TAGS.contains(tagName)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     static ErrorProneEntry addErrorToReportAndReset(Map<String, List<ErrorProneEntry>> errorReport,
             ErrorProneEntry crtError) {
-        if (crtError != null) {
-            String errorType = crtError.type;
-            // Fix the severity from parsing, which is never error, to the proper errorprone one
-            crtError.severity = ErrorProneUtils.getErrorLevel(errorType);
-            List<ErrorProneEntry> list = errorReport.computeIfAbsent(
-                    errorType, e -> new ArrayList<ErrorProneEntry>());
-            list.add(crtError);
-            crtError = null;
-        }
         // We want to reset the currentError after we record it.
-        // One errorprone issue can take several lines in the log. 
+        // One errorprone issue can take several lines in the log.
         // The parsing creates currentError when the start of an issue is detected.
         // We add more info to the currentError from the following lines.
         // When we find something that does not look like an errorprone line, or at the end of the
@@ -113,6 +145,18 @@ class ParseMavenOutForErrorProne {
         // If we return nothing (void method) we would need to do this in the caller (several times):
         //   addErrorToReport(errorReport, currentError); => report
         //   currentError = null; => reset
+        if (crtError == null) {
+            return null;
+        }
+        if (isCustomIcuTag(crtError)) {
+            return null;
+        }
+        // Fix the severity from parsing, which is never error, to the proper errorprone one
+        String errorType = crtError.type;
+        crtError.severity = ErrorProneUtils.getErrorLevel(errorType);
+        List<ErrorProneEntry> list = errorReport.computeIfAbsent(
+                errorType, e -> new ArrayList<ErrorProneEntry>());
+        list.add(crtError);
         return null;
     }
 

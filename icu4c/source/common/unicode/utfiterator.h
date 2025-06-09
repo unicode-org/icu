@@ -201,7 +201,7 @@ public:
      *     UTFIllFormedBehavior template parameter.
      * @draft ICU 78
      */
-    UChar32 codePoint() const { return c_; }
+    CP32 codePoint() const { return c_; }
 
     /**
      * @return the start of the code unit sequence for one code point.
@@ -269,7 +269,7 @@ public:
     UnsafeCodeUnits(const UnsafeCodeUnits &other) = default;
     UnsafeCodeUnits &operator=(const UnsafeCodeUnits &other) = default;
 
-    UChar32 codePoint() const { return c_; }
+    CP32 codePoint() const { return c_; }
 
     uint8_t length() const { return len_; }
 

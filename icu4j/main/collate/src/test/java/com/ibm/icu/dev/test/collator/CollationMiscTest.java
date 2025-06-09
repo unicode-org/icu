@@ -2982,6 +2982,7 @@ public class CollationMiscTest extends TestFmwk {
 
     /* Test the method public int compareTo(RawCollationKey rhs) */
     @Test
+    @SuppressWarnings("SelfComparison")
     public void TestRawCollationKeyCompareTo(){
         RawCollationKey rck = new RawCollationKey();
         byte[] b = {(byte) 10, (byte) 20};
