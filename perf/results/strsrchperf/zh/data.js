@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1749248939776,
+  "lastUpdate": 1749495326160,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -43017,6 +43017,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 52.2892,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "e5bfeb19aff5a9e7a2055b34810041d51e850a6c",
+          "message": "ICU-23071 Remove Locale Service Provider (localespi)",
+          "timestamp": "2025-06-09T11:32:49-07:00",
+          "tree_id": "fc542ad81f4ef39f1fdda7630f6fe17e6ef20b62",
+          "url": "https://github.com/unicode-org/icu/commit/e5bfeb19aff5a9e7a2055b34810041d51e850a6c"
+        },
+        "date": 1749494640444,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 23.0123,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 52.6894,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
