@@ -567,6 +567,60 @@ public class MeasureUnit implements Serializable {
     }
 
     /**
+     * Converts a Measure from another unit to this unit.
+     *
+     * <p>
+     * Example usage:
+     * </p>
+     * 
+     * <pre>{@code
+     * MeasureUnit meter = MeasureUnit.METER;
+     * MeasureUnit centimeter = MeasureUnit.CENTIMETER;
+     * Measure measure = new Measure(new BigDecimal("100"), centimeter);
+     * Measure convertedMeasure = meter.convertFrom(measure);
+     * }</pre>
+     *
+     * <p>
+     * Note: This method supports conversion only between SINGLE and COMPOUND units.
+     * Conversion involving MIXED units is not supported.
+     * </p>
+     *
+     * <p>
+     * See {@link Complexity} for details on unit types.
+     * </p>
+     * 
+     * <p>
+     * Note: This method is a wrapper around {@link #convertFrom(MeasureUnit, BigDecimal)}.
+     * </p>
+     * 
+     * @param measure The measure to be converted.
+     * @return The measure converted to this unit.
+     * @throws UnsupportedOperationException if the units are not convertible or if
+     *                                       one of the units is MIXED.
+     *
+     * @draft ICU 78
+     */
+    public Measure convertFrom(Measure measure) {
+        if (measure == null) {
+            throw new UnsupportedOperationException("`measure` must not be null");
+        }
+
+        MeasureUnit sourceUnit = measure.getUnit();
+        if (this.equals(sourceUnit)) {
+            return measure;
+        }
+
+        if (this.getComplexity() == Complexity.MIXED || sourceUnit.getComplexity() == Complexity.MIXED) {
+            throw new UnsupportedOperationException("Conversion involving MIXED units is not supported");
+        }
+
+        BigDecimal sourceValue = new BigDecimal(measure.getNumber().toString());
+        BigDecimal convertedValue = this.convertFrom(sourceUnit, sourceValue);
+
+        return new Measure(convertedValue, this);
+    }
+
+    /**
      * Constructs a MeasureUnit from a CLDR Core Unit Identifier, as defined in UTS
      * 35.
      * This method supports core unit identifiers and mixed unit identifiers.

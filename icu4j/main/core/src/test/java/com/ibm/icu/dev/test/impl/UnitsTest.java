@@ -897,4 +897,46 @@ public class UnitsTest {
         assertEquals(100, centimeter.convertFrom(meter, BigDecimal.ONE).doubleValue(), 1e-9);
         assertEquals(100000, centimeter.convertFrom(kilometer, BigDecimal.ONE).doubleValue(), 1e-9);
     }
+
+    @Test
+    public void testNewMeasureUnitConversionWithMeasure() {
+        MeasureUnit meter = MeasureUnit.METER;
+        MeasureUnit kilometer = MeasureUnit.KILOMETER;
+        MeasureUnit mile = MeasureUnit.MILE;
+        MeasureUnit foot = MeasureUnit.FOOT;
+        MeasureUnit inch = MeasureUnit.INCH;
+        MeasureUnit centimeter = MeasureUnit.CENTIMETER;
+
+        Measure measureInCentimeters = new Measure(BigDecimal.ONE, centimeter);
+
+        Measure convertedToMeters = meter.convertFrom(measureInCentimeters);
+        assertEquals(0.01, convertedToMeters.getNumber().doubleValue(), 1e-9);
+        assertEquals(meter, convertedToMeters.getUnit());
+
+        Measure convertedToKilometers = kilometer.convertFrom(measureInCentimeters);
+        assertEquals(0.00001, convertedToKilometers.getNumber().doubleValue(), 1e-9);
+        assertEquals(kilometer, convertedToKilometers.getUnit());
+
+        Measure convertedToMiles = mile.convertFrom(measureInCentimeters);
+        assertEquals(6.21371e-6, convertedToMiles.getNumber().doubleValue(), 1e-5);
+        assertEquals(mile, convertedToMiles.getUnit());
+
+        Measure convertedToFeet = foot.convertFrom(measureInCentimeters);
+        assertEquals(0.03280839895, convertedToFeet.getNumber().doubleValue(), 1e-9);
+        assertEquals(foot, convertedToFeet.getUnit());
+
+        Measure convertedToInches = inch.convertFrom(measureInCentimeters);
+        assertEquals(0.3937007874, convertedToInches.getNumber().doubleValue(), 1e-9);
+        assertEquals(inch, convertedToInches.getUnit());
+
+        Measure measureInMeters = new Measure(BigDecimal.ONE, meter);
+        Measure convertedToCentimeters = centimeter.convertFrom(measureInMeters);
+        assertEquals(100, convertedToCentimeters.getNumber().doubleValue(), 1e-9);
+        assertEquals(centimeter, convertedToCentimeters.getUnit());
+
+        Measure measureInKilometers = new Measure(BigDecimal.ONE, kilometer);
+        Measure convertedToCentimetersFromKilometer = centimeter.convertFrom(measureInKilometers);
+        assertEquals(100000, convertedToCentimetersFromKilometer.getNumber().doubleValue(), 1e-9);
+        assertEquals(centimeter, convertedToCentimetersFromKilometer.getUnit());
+    }
 }
