@@ -38,7 +38,6 @@ rm   -fr ${release_folder}
 mkdir -p ${release_folder}
 copyArtifactForGithubRelease icu4j
 copyArtifactForGithubRelease icu4j-charset
-copyArtifactForGithubRelease icu4j-localespi
 
 # ====================================================================================
 # Build complete javadoc and copy it in the output folder
