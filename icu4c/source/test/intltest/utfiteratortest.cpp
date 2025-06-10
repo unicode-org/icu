@@ -586,7 +586,7 @@ public:
     }
 
     void testCommonBidirectionalRange() {
-        const std::u8string card = u8"\xF0\x92\xFF\x89\xFF\xFF\xAD";
+        const std::u8string card{0xF0, 0x92, 0xFF, 0x89, 0xFF, 0xFF, 0xAD};
         // Read code units from `card`, skipping any bytes set to FF.
         auto codeUnits = card | std::ranges::views::filter([](char8_t c) { return c != 0xFF; });
         using CodeUnitRange = decltype(codeUnits);
