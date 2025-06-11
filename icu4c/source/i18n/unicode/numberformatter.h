@@ -1519,7 +1519,7 @@ class U_I18N_API Padder : public UMemory {
 
 // Do not enclose entire MacroProps with #ifndef U_HIDE_INTERNAL_API, needed for a protected field
 /** @internal */
-struct U_I18N_API MacroProps : public UMemory {
+struct MacroProps : public UMemory {
     /** @internal */
     Notation notation;
 
