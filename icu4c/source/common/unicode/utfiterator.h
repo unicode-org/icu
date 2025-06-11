@@ -1656,19 +1656,10 @@ public:
     /** Copy assignment operator. @draft ICU 78 */
     UTFStringCodePoints &operator=(const UTFStringCodePoints &other) = default;
 
-    // If a const `begin()` is available for the code unit `Range`, only a const
-    // `begin()` is provided for this type.  The alternative would be to provide
-    // not only both non-const and const `begin()`, but also non-const and const
-    // `end()`: if `begin()` is non-const and based on the code unit `iterator`,
-    // but `end()` is const only and based on the code unit `const_iterator`, we
-    // end up with uncommon non-const `UTFStringCodePoints` for a `common_range`
-    // `Range`.
-
     /**
      * @return the range start iterator
      * @draft ICU 78
      */
-    template <typename R = Range, typename = std::enable_if_t<!prv::range<const R>>>
     auto begin() {
         return utfIterator<CP32, behavior>(unitRange.begin(), unitRange.end());
     }
@@ -1686,9 +1677,28 @@ public:
      * @return the range limit (exclusive end) iterator
      * @draft ICU 78
      */
+    auto end() {
+        using UnitIter = decltype(unitRange.begin());
+        using LimitIter = decltype(unitRange.end());
+        if constexpr (!std::is_same_v<UnitIter, LimitIter>) {
+            // Return the code unit sentinel.
+            return unitRange.end();
+        } else if constexpr (prv::bidirectional_iterator<UnitIter>) {
+            return utfIterator<CP32, behavior>(unitRange.begin(), unitRange.end(), unitRange.end());
+        } else {
+            // The input iterator specialization has no three-argument constructor.
+            return utfIterator<CP32, behavior>(unitRange.end(), unitRange.end());
+        }
+    }
+
+    /**
+     * @return the range limit (exclusive end) iterator
+     * @draft ICU 78
+     */
+    template <typename R = Range, typename = std::enable_if_t<prv::range<const R>>>
     auto end() const {
-        using UnitIter = decltype(std::declval<Range>().begin());
-        using LimitIter = decltype(std::declval<Range>().end());
+        using UnitIter = decltype(unitRange.begin());
+        using LimitIter = decltype(unitRange.end());
         if constexpr (!std::is_same_v<UnitIter, LimitIter>) {
             // Return the code unit sentinel.
             return unitRange.end();
