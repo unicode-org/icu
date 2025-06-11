@@ -1745,7 +1745,11 @@ private:
  */
 template<typename CP32, UTFIllFormedBehavior behavior, typename Range>
 auto utfStringCodePoints(Range&& unitRange) {
+#if defined(__cpp_lib_ranges)
     return UTFStringCodePoints<CP32, behavior, std::ranges::views::all_t<Range>>(unitRange);
+#else
+    return UTFStringCodePoints<CP32, behavior, Range>(unitRange);
+#endif
 }
 
 // Non-validating iterators ------------------------------------------------ ***
@@ -2389,7 +2393,11 @@ private:
  */
 template<typename CP32, typename Range>
 auto unsafeUTFStringCodePoints(Range&& unitRange) {
+#if defined(__cpp_lib_ranges)
     return UnsafeUTFStringCodePoints<CP32, std::ranges::views::all_t<Range>>(unitRange);
+#else
+    return UnsafeUTFStringCodePoints<CP32, Range>(unitRange);
+#endif
 }
 
 }  // namespace U_HEADER_ONLY_NAMESPACE
