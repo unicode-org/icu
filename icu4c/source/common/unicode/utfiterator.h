@@ -1744,8 +1744,8 @@ private:
  * @draft ICU 78
  */
 template<typename CP32, UTFIllFormedBehavior behavior, typename Range>
-auto utfStringCodePoints(Range unitRange) {
-    return UTFStringCodePoints<CP32, behavior, Range>(unitRange);
+auto utfStringCodePoints(Range&& unitRange) {
+    return UTFStringCodePoints<CP32, behavior, std::ranges::views::all_t<Range>>(unitRange);
 }
 
 // Non-validating iterators ------------------------------------------------ ***
@@ -2388,8 +2388,8 @@ private:
  * @draft ICU 78
  */
 template<typename CP32, typename Range>
-auto unsafeUTFStringCodePoints(Range unitRange) {
-    return UnsafeUTFStringCodePoints<CP32, Range>(unitRange);
+auto unsafeUTFStringCodePoints(Range&& unitRange) {
+    return UnsafeUTFStringCodePoints<CP32, std::ranges::views::all_t<Range>>(unitRange);
 }
 
 }  // namespace U_HEADER_ONLY_NAMESPACE
