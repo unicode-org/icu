@@ -35,8 +35,7 @@ Options](../icu4c/build#recommended-build-options)
 default simply for compatibility with older ICU-using code.
 
 Starting with ICU 49, the ICU4C Readme has a short section about
-[User-Configurable
-Settings](../icu4c/build#user-configurable-settings).
+[User-Configurable Settings](../icu4c/build#user-configurable-settings).
 
 ## C++ Makefiles
 
@@ -52,7 +51,7 @@ This table shows the package names used within pkg-config.
 |icu-uc|Common (uc) and Data (dt/data) libraries|
 |icu-i18n|Internationalization (in/i18n) library|icu-le [Layout Engine](../layoutengine/index.md)|
 |icu-lx|Paragraph Layout|
-|icu-io|[Ustdio](io/ustdio.md)/[iostream](io/ustream.md) library (icuio)
+|icu-io|[Ustdio](../io/ustdio.md)/[iostream](../io/ustream.md) library (icuio)
 
 For example, to compile a simple application, you could run the following
 command. See the [pkg-config](http://pkg-config.freedesktop.org/) manpage for
@@ -159,8 +158,7 @@ libraries.](../icu4c/build#recommended-build-options))
 By default, and only for backward compatibility, the ICU headers contain a line
 `using namespace icu_50;` which makes all ICU APIs visible in/with the global
 namespace (and potentially collide with non-ICU APIs there). One of the
-[Recommended Build
-Options](../icu4c/build#recommended-build-options)
+[Recommended Build Options](../icu4c/build#recommended-build-options)
 is to turn this off.
 
 To write forward declarations, use
@@ -189,7 +187,7 @@ samples. Their paths are given in the installed `Makefile.inc` (see above).
 
 ### Data Packaging Settings
 
-The `pkgdata` tool (see [Packaging ICU4C](../icu4c/packaging/index.md) ) makes use of the
+The `pkgdata` tool (see [Packaging ICU4C](../icu4c/packaging.md)) makes use of the
 installed file `**$(prefix)/lib/icu/pkgdata.inc**` to set parameters for data
 packaging operations that require use of platform compilers and linkers ( in
 `static` or `dll` mode). `pkgdata` uses the icu-config script in order to locate
