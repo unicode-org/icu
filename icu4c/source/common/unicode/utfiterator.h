@@ -1756,7 +1756,7 @@ struct UTFStringCodePointsAdaptor
         return UTFStringCodePoints<CP32, behavior, std::ranges::views::all_t<Range>>(
             std::forward<Range>(unitRange));
 #else
-        return UTFStringCodePoints<CP32, behavior, Range>(unitRange);
+        return UTFStringCodePoints<CP32, behavior, Range>(std::forward<Range>(unitRange));
 #endif
     }
 };
@@ -2455,7 +2455,7 @@ struct UnsafeUTFStringCodePointsAdaptor
 #if defined(__cpp_lib_ranges)
         return UnsafeUTFStringCodePoints<CP32, std::ranges::views::all_t<Range>>(std::forward<Range>(unitRange));
 #else
-        return UnsafeUTFStringCodePoints<CP32, Range>(unitRange);
+        return UnsafeUTFStringCodePoints<CP32, Range>(std::forward<Range>(unitRange));
 #endif
     }
 };

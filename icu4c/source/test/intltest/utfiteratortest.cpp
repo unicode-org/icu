@@ -9,7 +9,9 @@
 #include <iterator>
 #include <forward_list>
 #include <list>
+#if defined(__cpp_lib_ranges)
 #include <ranges>
+#endif
 #include <streambuf>
 #include <sstream>
 #include <string>
@@ -304,6 +306,8 @@ public:
         TESTCASE_AUTO(testUnsafe16ZigzagReverse);
         TESTCASE_AUTO(testUnsafe8ZigzagReverse);
         TESTCASE_AUTO(testUnsafe32ZigzagReverse);
+
+        TESTCASE_AUTO(testOwnership);
 
         // C++20 ranges with all 2021 defect reports.  There is no separate
         // feature test macro value for https://wg21.link/P2210R2, but 2021'10
@@ -1005,6 +1009,37 @@ public:
     }
     void testUnsafe32ZigzagReverse() {
         testZigzagReverse<UNSAFE, ANY_B, char32_t>(longGood32);
+    }
+    void testOwnership() {
+        class NonCopyableString : public std::u16string {
+          public:
+            NonCopyableString(std::u16string s) : std::u16string(std::move(s)) {}
+            NonCopyableString(NonCopyableString const&) = delete;
+            NonCopyableString &operator=(NonCopyableString const&) = delete;
+            NonCopyableString(NonCopyableString&&) = default;
+            NonCopyableString &operator=(NonCopyableString&&) = default;
+        };
+        const NonCopyableString referenced(u"𒀭𒊺𒉀 𒍠𒊩");
+        {
+            auto referencingRange = utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(referenced);
+            auto owningRange =
+                utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(NonCopyableString(u"𒀭𒊺𒉀 𒍠𒊩"));
+            auto itr = referencingRange.begin();
+            auto ito = owningRange.begin();
+            for (; itr != referencingRange.end() && ito != owningRange.end(); ++itr, ++ito) {
+                assertEquals("Referenced and owned iteration", itr->codePoint(), ito->codePoint());
+            }
+        }
+        {
+            auto unsafeReferencingRange = unsafeUTFStringCodePoints<char32_t>(referenced);
+            auto unsafeOwningRange = unsafeUTFStringCodePoints<char32_t>(NonCopyableString(u"𒀭𒊺𒉀 𒍠𒊩"));
+            auto itr = unsafeReferencingRange.begin();
+            auto ito = unsafeOwningRange.begin();
+            for (; itr != unsafeReferencingRange.end() && ito != unsafeOwningRange.end(); ++itr, ++ito) {
+                assertEquals("Referenced and owned unsafe iteration", itr->codePoint(),
+                             ito->codePoint());
+            }
+        }
     }
 
     ImplTest<char> longGood8;
