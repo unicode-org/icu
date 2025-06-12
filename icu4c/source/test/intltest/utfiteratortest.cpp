@@ -480,6 +480,7 @@ public:
 
 #if defined(__cpp_lib_ranges) && __cpp_lib_ranges >= 2021'10 // See above for the value.
     void testUncommonInputRange() {
+        auto codePoint = [](const auto &codeUnits) { return codeUnits.codePoint(); };
         constexpr char source[] = "D808 DC2D D808 DEBA D808 DE40 200B D808 DF60 D808 DEA9";
         // Reads a sequence of space-separated hex code units from a stream.
         auto streamCodeUnits = [](std::stringstream&& s) {
@@ -493,45 +494,44 @@ public:
         {
             using CodePoints =
                 decltype(utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(streamCodeUnits({})));
-            using CodeUnits = decltype(*std::declval<CodePoints>().begin());
             static_assert(!std::ranges::common_range<CodePoints>);
             static_assert(std::ranges::input_range<CodePoints>);
             static_assert(!std::ranges::forward_range<CodePoints>);
             assertTrue("uncommon input streamed range",
                        std::ranges::equal(utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(
                                               streamCodeUnits(std::stringstream(source))) |
-                                              std::ranges::views::transform(&CodeUnits::codePoint),
+                                              std::ranges::views::transform(codePoint),
                                           std::u32string_view(U"𒀭𒊺𒉀\u200B𒍠𒊩")));
             assertFalse("uncommon input streamed range: find",
                         std::ranges::find_if(utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(
                                                  streamCodeUnits(std::stringstream(source)))
                                                  .begin(),
-                                             std::default_sentinel, [](CodeUnits u) {
+                                             std::default_sentinel, [](auto u) {
                                                  return u.codePoint() == U'𒊩';
                                              }) == std::default_sentinel);
         }
         {
             using UnsafeCodePoints = decltype(unsafeUTFStringCodePoints<char32_t>(streamCodeUnits({})));
-            using UnsafeCodeUnits = decltype(*std::declval<UnsafeCodePoints>().begin());
             static_assert(!std::ranges::common_range<UnsafeCodePoints>);
             static_assert(std::ranges::input_range<UnsafeCodePoints>);
             static_assert(!std::ranges::forward_range<UnsafeCodePoints>);
             assertTrue("unsafe uncommon input streamed range",
                        std::ranges::equal(unsafeUTFStringCodePoints<char32_t>(
                                               streamCodeUnits(std::stringstream(source))) |
-                                              std::ranges::views::transform(&UnsafeCodeUnits::codePoint),
+                                              std::ranges::views::transform(codePoint),
                                           std::u32string_view(U"𒀭𒊺𒉀\u200B𒍠𒊩")));
             assertFalse("unsafe uncommon input streamed range: find",
                         std::ranges::find_if(unsafeUTFStringCodePoints<char32_t>(
                                                  streamCodeUnits(std::stringstream(source)))
                                                  .begin(),
-                                             std::default_sentinel, [](UnsafeCodeUnits u) {
+                                             std::default_sentinel, [](auto u) {
                                                  return u.codePoint() == U'𒊩';
                                              }) == std::default_sentinel);
         }
     }
 
     void testUncommonForwardRange() {
+        auto codePoint = [](const auto &codeUnits) { return codeUnits.codePoint(); };
         const std::u16string text = u"𒌉 𒂍𒁾𒁀𒀀 𒌓 𒌌𒆷𒀀𒀭 𒈨𒂠 𒉌𒁺𒉈𒂗\n"
                                         u"𒂍𒁾𒁀𒀀𒂠 𒉌𒁺𒉈𒂗\n"
                                         u"𒂍𒁾𒁀𒀀 𒀀𒈾𒀀𒀭 𒉌𒀝\n"
@@ -546,29 +546,28 @@ public:
         static_assert(!std::ranges::bidirectional_range<CodeUnitRange>);
         {
             using CodePoints = decltype(utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(codeUnits));
-            using CodeUnits = decltype(*std::declval<CodePoints>().begin());
             static_assert(!std::ranges::common_range<CodePoints>);
             static_assert(std::ranges::forward_range<CodePoints>);
             static_assert(!std::ranges::bidirectional_range<CodePoints>);
             assertTrue("uncommon forward lazily split range",
                        std::ranges::equal(utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(codeUnits) |
-                                              std::ranges::views::transform(&CodeUnits::codePoint),
+                                              std::ranges::views::transform(codePoint),
                                           std::u32string_view(U"𒂍𒁾𒁀𒀀 𒀀𒈾𒀀𒀭 𒉌𒀝")));
         }
         {
             using UnsafeCodePoints = decltype(unsafeUTFStringCodePoints<char32_t>(codeUnits));
-            using UnsafeCodeUnits = decltype(*std::declval<UnsafeCodePoints>().begin());
             static_assert(!std::ranges::common_range<UnsafeCodePoints>);
             static_assert(std::ranges::forward_range<UnsafeCodePoints>);
             static_assert(!std::ranges::bidirectional_range<UnsafeCodePoints>);
             assertTrue("unsafe uncommon forward lazily split range",
                        std::ranges::equal(unsafeUTFStringCodePoints<char32_t>(codeUnits) |
-                                              std::ranges::views::transform(&UnsafeCodeUnits::codePoint),
+                                              std::ranges::views::transform(codePoint),
                                           std::u32string_view(U"𒂍𒁾𒁀𒀀 𒀀𒈾𒀀𒀭 𒉌𒀝")));
         }
     }
 
     void testUncommonContiguousRange() {
+        auto codePoint = [](const auto &codeUnits) { return codeUnits.codePoint(); };
         const std::u8string text = u8"𒀭𒊺𒉀 𒍠𒊩  # ᵈnisaba za₃-mim";
         // Code units before the #.
         auto codeUnits = text | std::ranges::views::take_while([](char8_t c) { return c != u8'#'; });
@@ -578,29 +577,28 @@ public:
         static_assert(std::ranges::contiguous_range<CodeUnitRange>);
         {
             using CodePoints = decltype(utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(codeUnits));
-            using CodeUnits = decltype(*std::declval<CodePoints>().begin());
             static_assert(!std::ranges::common_range<CodePoints>);
             static_assert(std::ranges::bidirectional_range<CodePoints>);
             static_assert(!std::ranges::random_access_range<CodePoints>);
             assertTrue("uncommon contiguous prefix range",
                        std::ranges::equal(utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(codeUnits) |
-                                              std::ranges::views::transform(&CodeUnits::codePoint),
+                                              std::ranges::views::transform(codePoint),
                                           std::u32string_view(U"𒀭𒊺𒉀 𒍠𒊩  ")));
         }
         {
             using UnsafeCodePoints = decltype(unsafeUTFStringCodePoints<char32_t>(codeUnits));
-            using UnsafeCodeUnits = decltype(*std::declval<UnsafeCodePoints>().begin());
             static_assert(!std::ranges::common_range<UnsafeCodePoints>);
             static_assert(std::ranges::bidirectional_range<UnsafeCodePoints>);
             static_assert(!std::ranges::random_access_range<UnsafeCodePoints>);
             assertTrue("unsafe uncommon contiguous prefix range",
                        std::ranges::equal(unsafeUTFStringCodePoints<char32_t>(codeUnits) |
-                                              std::ranges::views::transform(&UnsafeCodeUnits::codePoint),
+                                              std::ranges::views::transform(codePoint),
                                           std::u32string_view(U"𒀭𒊺𒉀 𒍠𒊩  ")));
         }
     }
 
     void testCommonForwardRange() {
+        auto codePoint = [](const auto &codeUnits) { return codeUnits.codePoint(); };
         const std::forward_list<std::u16string_view> words{u"𒌉",
                                                            u"𒂍𒁾𒁀𒀀",
                                                            u"𒌓",
@@ -617,29 +615,28 @@ public:
         static_assert(!std::ranges::bidirectional_range<CodeUnitRange>);
         {
             using CodePoints = decltype(utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(codeUnits));
-            using CodeUnits = decltype(*std::declval<CodePoints>().begin());
             static_assert(std::ranges::common_range<CodePoints>);
             static_assert(std::ranges::forward_range<CodePoints>);
             static_assert(!std::ranges::bidirectional_range<CodePoints>);
             assertTrue("common forward concatenated range",
                        std::ranges::equal(utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(codeUnits) |
-                                              std::ranges::views::transform(&CodeUnits::codePoint),
+                                              std::ranges::views::transform(codePoint),
                                           std::u32string_view(U"𒌉𒂍𒁾𒁀𒀀𒌓𒌌𒆷𒀀𒀭𒈨𒂠𒉌𒁺𒉈𒂗")));
         }
         {
             using UnsafeCodePoints = decltype(unsafeUTFStringCodePoints<char32_t>(codeUnits));
-            using UnsafeCodeUnits = decltype(*std::declval<UnsafeCodePoints>().begin());
             static_assert(std::ranges::common_range<UnsafeCodePoints>);
             static_assert(std::ranges::forward_range<UnsafeCodePoints>);
             static_assert(!std::ranges::bidirectional_range<UnsafeCodePoints>);
             assertTrue("unsafe common forward concatenated range",
                        std::ranges::equal(unsafeUTFStringCodePoints<char32_t>(codeUnits) |
-                                              std::ranges::views::transform(&UnsafeCodeUnits::codePoint),
+                                              std::ranges::views::transform(codePoint),
                                           std::u32string_view(U"𒌉𒂍𒁾𒁀𒀀𒌓𒌌𒆷𒀀𒀭𒈨𒂠𒉌𒁺𒉈𒂗")));
         }
     }
 
     void testCommonBidirectionalRange() {
+        auto codePoint = [](const auto &codeUnits) { return codeUnits.codePoint(); };
         const std::u8string card{0xF0, 0x92, 0xFF, 0x89, 0xFF, 0xFF, 0xAD};
         // Read code units from `card`, skipping any bytes set to FF.
         auto codeUnits = card | std::ranges::views::filter([](char8_t c) { return c != 0xFF; });
@@ -651,29 +648,28 @@ public:
         static_assert(!std::ranges::contiguous_range<CodeUnitRange>);
         {
             using CodePoints = decltype(utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(codeUnits));
-            using CodeUnits = decltype(*std::declval<CodePoints>().begin());
             static_assert(std::ranges::common_range<CodePoints>);
             static_assert(std::ranges::forward_range<CodePoints>);
             static_assert(std::ranges::bidirectional_range<CodePoints>);
             assertTrue("common bidirectional filtered range",
                        std::ranges::equal(utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(codeUnits) |
-                                              std::ranges::views::transform(&CodeUnits::codePoint),
+                                              std::ranges::views::transform(codePoint),
                                           std::u32string_view(U"𒉭")));
         }
         {
             using UnsafeCodePoints = decltype(unsafeUTFStringCodePoints<char32_t>(codeUnits));
-            using UnsafeCodeUnits = decltype(*std::declval<UnsafeCodePoints>().begin());
             static_assert(std::ranges::common_range<UnsafeCodePoints>);
             static_assert(std::ranges::forward_range<UnsafeCodePoints>);
             static_assert(std::ranges::bidirectional_range<UnsafeCodePoints>);
             assertTrue("unsafe common bidirectional filtered range",
                        std::ranges::equal(unsafeUTFStringCodePoints<char32_t>(codeUnits) |
-                                              std::ranges::views::transform(&UnsafeCodeUnits::codePoint),
+                                              std::ranges::views::transform(codePoint),
                                           std::u32string_view(U"𒉭")));
         }
     }
 
     void testCommonContiguousRange() {
+        auto codePoint = [](const auto &codeUnits) { return codeUnits.codePoint(); };
         const std::u16string codeUnits = u"𒀭𒊺𒉀​𒍠𒊩";
         static_assert(std::ranges::contiguous_range<decltype(codeUnits)>);
         auto codePoints = utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(codeUnits);
@@ -685,13 +681,10 @@ public:
         static_assert(std::ranges::bidirectional_range<decltype(unsafeCodePoints)>);
         static_assert(!std::ranges::random_access_range<decltype(unsafeCodePoints)>);
         assertTrue("safe contiguous range",
-                   std::ranges::equal(codePoints | std::ranges::views::transform(
-                                                       [](auto units) { return units.codePoint(); }),
+                   std::ranges::equal(codePoints | std::ranges::views::transform(codePoint),
                                       std::u32string_view(U"𒀭𒊺𒉀​𒍠𒊩")));
         assertTrue("unsafe contiguous range",
-                   std::ranges::equal(unsafeCodePoints | std::ranges::views::transform([](auto units) {
-                                          return units.codePoint();
-                                      }),
+                   std::ranges::equal(unsafeCodePoints | std::ranges::views::transform(codePoint),
                                       std::u32string_view(U"𒀭𒊺𒉀​𒍠𒊩")));
     }
 #endif
