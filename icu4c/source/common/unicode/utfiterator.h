@@ -1753,7 +1753,8 @@ struct UTFStringCodePointsAdaptor
     template<typename Range>
     auto operator()(Range &&unitRange) const {
 #if defined(__cpp_lib_ranges)
-        return UTFStringCodePoints<CP32, behavior, std::ranges::views::all_t<Range>>(unitRange);
+        return UTFStringCodePoints<CP32, behavior, std::ranges::views::all_t<Range>>(
+            std::forward<Range>(unitRange));
 #else
         return UTFStringCodePoints<CP32, behavior, Range>(unitRange);
 #endif
@@ -2452,7 +2453,7 @@ struct UnsafeUTFStringCodePointsAdaptor
     template<typename Range>
     auto operator()(Range &&unitRange) const {
 #if defined(__cpp_lib_ranges)
-        return UnsafeUTFStringCodePoints<CP32, std::ranges::views::all_t<Range>>(unitRange);
+        return UnsafeUTFStringCodePoints<CP32, std::ranges::views::all_t<Range>>(std::forward<Range>(unitRange));
 #else
         return UnsafeUTFStringCodePoints<CP32, Range>(unitRange);
 #endif

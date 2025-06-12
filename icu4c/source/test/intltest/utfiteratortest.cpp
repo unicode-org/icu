@@ -689,18 +689,41 @@ public:
         const std::u16string codeUnits = u"𒀭𒊺𒉀​𒍠𒊩";
         static_assert(std::ranges::contiguous_range<decltype(codeUnits)>);
         auto codePoints = utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(codeUnits);
+        static_assert(std::is_same_v<decltype(codePoints),
+                                     UTFStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD,
+                                                         std::ranges::ref_view<const std::u16string>>>);
         static_assert(std::ranges::common_range<decltype(codePoints)>);
         static_assert(std::ranges::bidirectional_range<decltype(codePoints)>);
         static_assert(!std::ranges::random_access_range<decltype(codePoints)>);
         auto unsafeCodePoints = unsafeUTFStringCodePoints<char32_t>(codeUnits);
+        static_assert(std::is_same_v<
+                      decltype(unsafeCodePoints),
+                      UnsafeUTFStringCodePoints<char32_t, std::ranges::ref_view<const std::u16string>>>);
         static_assert(std::ranges::common_range<decltype(unsafeCodePoints)>);
         static_assert(std::ranges::bidirectional_range<decltype(unsafeCodePoints)>);
         static_assert(!std::ranges::random_access_range<decltype(unsafeCodePoints)>);
-        assertTrue("safe contiguous range",
+        assertTrue("safe contiguous range by reference",
                    std::ranges::equal(codePoints | std::ranges::views::transform(codePoint),
                                       std::u32string_view(U"𒀭𒊺𒉀​𒍠𒊩")));
-        assertTrue("unsafe contiguous range",
+        assertTrue("unsafe contiguous range by reference",
                    std::ranges::equal(unsafeCodePoints | std::ranges::views::transform(codePoint),
+                                      std::u32string_view(U"𒀭𒊺𒉀​𒍠𒊩")));
+        auto ownedCodePoints =
+            utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(std::u16string(u"𒀭𒊺𒉀​𒍠𒊩"));
+        static_assert(std::is_same_v<
+                      decltype(ownedCodePoints),
+                           UTFStringCodePoints<
+                               char32_t, UTF_BEHAVIOR_FFFD, std::ranges::owning_view<std::u16string>>>);
+        auto unsafeOwnedCodePoints =
+            unsafeUTFStringCodePoints<char32_t>(std::u16string(u"𒀭𒊺𒉀​𒍠𒊩"));
+        static_assert(std::is_same_v<
+                      decltype(unsafeOwnedCodePoints),
+                      UnsafeUTFStringCodePoints<char32_t, std::ranges::owning_view<std::u16string>>>);
+        assertTrue("safe owned contiguous range",
+                   std::ranges::equal(ownedCodePoints | std::ranges::views::transform(codePoint),
+                                      std::u32string_view(U"𒀭𒊺𒉀​𒍠𒊩")));
+        assertTrue("unsafe owned contiguous range",
+                   std::ranges::equal(unsafeOwnedCodePoints | std::ranges::views::transform(codePoint),
                                       std::u32string_view(U"𒀭𒊺𒉀​𒍠𒊩")));
     }
 #endif
