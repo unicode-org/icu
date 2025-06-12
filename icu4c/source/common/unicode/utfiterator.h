@@ -1645,7 +1645,18 @@ public:
      * @param unitRange input range
      * @draft ICU 78
      */
+    template <typename R = Range, typename = std::enable_if_t<!std::is_reference_v<R>>>
     explicit UTFStringCodePoints(Range unitRange) : unitRange(std::move(unitRange)) {}
+    /**
+     * Constructs a C++ "range" object over the code points in the string,
+     * keeping a reference to the code unit range.  This overload is used by
+     * utfStringCodePoints in C++17; in C+20, a ref_view is used instead (via
+     * views::all).
+     * @param unitRange input range
+     * @draft ICU 78
+     */
+    template <typename R = Range, typename = std::enable_if_t<std::is_reference_v<R>>, typename = void>
+    explicit UTFStringCodePoints(Range unitRange) : unitRange(unitRange) {}
     // TODO: If I just take a const Range &unitRange and keep the reference in this object,
     // then some tests fail & others crash.
     // Should we take the reference and change the test code?
@@ -2329,7 +2340,18 @@ public:
      * @param unitRange input range
      * @draft ICU 78
      */
+    template <typename R = Range, typename = std::enable_if_t<!std::is_reference_v<R>>>
     explicit UnsafeUTFStringCodePoints(Range unitRange) : unitRange(std::move(unitRange)) {}
+    /**
+     * Constructs a C++ "range" object over the code points in the string,
+     * keeping a reference to the code unit range.  This overload is used by
+     * utfStringCodePoints in C++17; in C+20, a ref_view is used instead (via
+     * views::all).
+     * @param unitRange input range
+     * @draft ICU 78
+     */
+    template <typename R = Range, typename = std::enable_if_t<std::is_reference_v<R>>, typename = void>
+    explicit UnsafeUTFStringCodePoints(Range unitRange) : unitRange(unitRange) {}
 
     /** Copy constructor. @draft ICU 78 */
     UnsafeUTFStringCodePoints(const UnsafeUTFStringCodePoints &other) = default;
