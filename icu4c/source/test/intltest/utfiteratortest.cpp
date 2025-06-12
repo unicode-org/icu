@@ -655,6 +655,14 @@ public:
                        std::ranges::equal(utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(codeUnits) |
                                               std::ranges::views::transform(codePoint),
                                           std::u32string_view(U"𒉭")));
+#if __cpp_lib_ranges >= 2022'02
+            assertTrue("common bidirectional filtered range: one big pipeline",
+                       std::ranges::equal(card | std::ranges::views::filter([](char8_t c) {
+                                              return c != 0xFF;
+                                          }) | utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD> |
+                                              std::ranges::views::transform(codePoint),
+                                          std::u32string_view(U"𒉭")));
+#endif
         }
         {
             using UnsafeCodePoints = decltype(unsafeUTFStringCodePoints<char32_t>(codeUnits));
@@ -665,6 +673,14 @@ public:
                        std::ranges::equal(unsafeUTFStringCodePoints<char32_t>(codeUnits) |
                                               std::ranges::views::transform(codePoint),
                                           std::u32string_view(U"𒉭")));
+#if __cpp_lib_ranges >= 2022'02
+            assertTrue("unsafe common bidirectional filtered range: one big pipeline",
+                       std::ranges::equal(card | std::ranges::views::filter([](char8_t c) {
+                                              return c != 0xFF;
+                                          }) | unsafeUTFStringCodePoints<char32_t> |
+                                              std::ranges::views::transform(codePoint),
+                                          std::u32string_view(U"𒉭")));
+#endif
         }
     }
 
