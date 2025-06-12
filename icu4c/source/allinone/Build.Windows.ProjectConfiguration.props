@@ -97,7 +97,7 @@
       <!-- Enable parallel compilation for faster builds. -->
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <!-- Set the C/C++ versions supported. -->
-      <LanguageStandard Condition="'$(OverrideLanguageStandard)'==''">stdcpp20</LanguageStandard>
+      <LanguageStandard Condition="'$(OverrideLanguageStandard)'==''">stdcpplatest</LanguageStandard>
       <LanguageStandard Condition="'$(OverrideLanguageStandard)'!=''">$(OverrideLanguageStandard)</LanguageStandard>
       <LanguageStandard_C>stdc11</LanguageStandard_C>
     </ClCompile>

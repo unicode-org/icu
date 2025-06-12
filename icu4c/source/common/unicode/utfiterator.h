@@ -1645,7 +1645,7 @@ public:
      * @param unitRange input range
      * @draft ICU 78
      */
-    template <typename R = Range, typename = std::enable_if_t<!std::is_reference_v<R>>>
+    template<typename R = Range, typename = std::enable_if_t<!std::is_reference_v<R>>>
     explicit UTFStringCodePoints(Range unitRange) : unitRange(std::move(unitRange)) {}
     /**
      * Constructs a C++ "range" object over the code points in the string,
@@ -1655,7 +1655,7 @@ public:
      * @param unitRange input range
      * @draft ICU 78
      */
-    template <typename R = Range, typename = std::enable_if_t<std::is_reference_v<R>>, typename = void>
+    template<typename R = Range, typename = std::enable_if_t<std::is_reference_v<R>>, typename = void>
     explicit UTFStringCodePoints(Range unitRange) : unitRange(unitRange) {}
     // TODO: If I just take a const Range &unitRange and keep the reference in this object,
     // then some tests fail & others crash.
@@ -1679,7 +1679,7 @@ public:
      * @return the range start iterator
      * @draft ICU 78
      */
-    template <typename R = Range, typename = std::enable_if_t<prv::range<const R>>>
+    template<typename R = Range, typename = std::enable_if_t<prv::range<const R>>>
     auto begin() const {
         return utfIterator<CP32, behavior>(unitRange.begin(), unitRange.end());
     }
@@ -1706,7 +1706,7 @@ public:
      * @return the range limit (exclusive end) iterator
      * @draft ICU 78
      */
-    template <typename R = Range, typename = std::enable_if_t<prv::range<const R>>>
+    template<typename R = Range, typename = std::enable_if_t<prv::range<const R>>>
     auto end() const {
         using UnitIter = decltype(unitRange.begin());
         using LimitIter = decltype(unitRange.end());
@@ -1742,6 +1742,25 @@ private:
 };
 
 /**
+ * @internal
+ */
+template<typename CP32, UTFIllFormedBehavior behavior>
+struct UTFStringCodePointsAdaptor
+#if defined(__cpp_lib_ranges) && __cpp_lib_ranges >= 2022'02
+    : std::ranges::range_adaptor_closure<UTFStringCodePointsAdaptor<CP32, behavior>>
+#endif
+{
+    template<typename Range>
+    auto operator()(Range &&unitRange) const {
+#if defined(__cpp_lib_ranges)
+        return UTFStringCodePoints<CP32, behavior, std::ranges::views::all_t<Range>>(unitRange);
+#else
+        return UTFStringCodePoints<CP32, behavior, Range>(unitRange);
+#endif
+    }
+};
+
+/**
  * UTFStringCodePoints factory function for a "range" of code points in a code unit range,
  * which validates while decoding.
  * Deduces the Range template parameter from the input.
@@ -1754,14 +1773,8 @@ private:
  * @return a UTFStringCodePoints&lt;CP32, behavior, Range&gt; for the given unitRange
  * @draft ICU 78
  */
-template<typename CP32, UTFIllFormedBehavior behavior, typename Range>
-auto utfStringCodePoints(Range&& unitRange) {
-#if defined(__cpp_lib_ranges)
-    return UTFStringCodePoints<CP32, behavior, std::ranges::views::all_t<Range>>(unitRange);
-#else
-    return UTFStringCodePoints<CP32, behavior, Range>(unitRange);
-#endif
-}
+template<typename CP32, UTFIllFormedBehavior behavior>
+constexpr UTFStringCodePointsAdaptor<CP32, behavior> utfStringCodePoints;
 
 // Non-validating iterators ------------------------------------------------ ***
 
@@ -2340,7 +2353,7 @@ public:
      * @param unitRange input range
      * @draft ICU 78
      */
-    template <typename R = Range, typename = std::enable_if_t<!std::is_reference_v<R>>>
+    template<typename R = Range, typename = std::enable_if_t<!std::is_reference_v<R>>>
     explicit UnsafeUTFStringCodePoints(Range unitRange) : unitRange(std::move(unitRange)) {}
     /**
      * Constructs a C++ "range" object over the code points in the string,
@@ -2350,7 +2363,7 @@ public:
      * @param unitRange input range
      * @draft ICU 78
      */
-    template <typename R = Range, typename = std::enable_if_t<std::is_reference_v<R>>, typename = void>
+    template<typename R = Range, typename = std::enable_if_t<std::is_reference_v<R>>, typename = void>
     explicit UnsafeUTFStringCodePoints(Range unitRange) : unitRange(unitRange) {}
 
     /** Copy constructor. @draft ICU 78 */
@@ -2363,6 +2376,15 @@ public:
      * @return the range start iterator
      * @draft ICU 78
      */
+    auto begin() {
+        return unsafeUTFIterator<CP32>(unitRange.begin());
+    }
+
+    /**
+     * @return the range start iterator
+     * @draft ICU 78
+     */
+    template<typename R = Range, typename = std::enable_if_t<prv::range<const R>>>
     auto begin() const {
         return unsafeUTFIterator<CP32>(unitRange.begin());
     }
@@ -2371,6 +2393,22 @@ public:
      * @return the range limit (exclusive end) iterator
      * @draft ICU 78
      */
+    auto end() {
+        using UnitIter = decltype(unitRange.begin());
+        using LimitIter = decltype(unitRange.end());
+        if constexpr (!std::is_same_v<UnitIter, LimitIter>) {
+            // Return the code unit sentinel.
+            return unitRange.end();
+        } else {
+            return unsafeUTFIterator<CP32>(unitRange.end());
+        }
+    }
+
+    /**
+     * @return the range limit (exclusive end) iterator
+     * @draft ICU 78
+     */
+    template<typename R = Range, typename = std::enable_if_t<prv::range<const R>>>
     auto end() const {
         using UnitIter = decltype(unitRange.begin());
         using LimitIter = decltype(unitRange.end());
@@ -2403,6 +2441,26 @@ private:
 };
 
 /**
+ * @internal
+ */
+template<typename CP32>
+struct UnsafeUTFStringCodePointsAdaptor
+#if defined(__cpp_lib_ranges) && __cpp_lib_ranges >= 2022'02
+    : std::ranges::range_adaptor_closure<UnsafeUTFStringCodePointsAdaptor<CP32>>
+#endif
+{
+    template<typename Range>
+    auto operator()(Range &&unitRange) const {
+#if defined(__cpp_lib_ranges)
+        return UnsafeUTFStringCodePoints<CP32, std::ranges::views::all_t<Range>>(unitRange);
+#else
+        return UnsafeUTFStringCodePoints<CP32, Range>(unitRange);
+#endif
+    }
+};
+
+
+/**
  * UnsafeUTFStringCodePoints factory function for a "range" of code points in a code unit range.
  * The string must be well-formed.
  * Deduces the Range template parameter from the input.
@@ -2413,14 +2471,8 @@ private:
  * @return an UnsafeUTFStringCodePoints&lt;CP32, Range&gt; for the given unitRange
  * @draft ICU 78
  */
-template<typename CP32, typename Range>
-auto unsafeUTFStringCodePoints(Range&& unitRange) {
-#if defined(__cpp_lib_ranges)
-    return UnsafeUTFStringCodePoints<CP32, std::ranges::views::all_t<Range>>(unitRange);
-#else
-    return UnsafeUTFStringCodePoints<CP32, Range>(unitRange);
-#endif
-}
+template<typename CP32>
+constexpr UnsafeUTFStringCodePointsAdaptor<CP32> unsafeUTFStringCodePoints;
 
 }  // namespace U_HEADER_ONLY_NAMESPACE
 
