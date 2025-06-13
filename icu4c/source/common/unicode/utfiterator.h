@@ -1657,9 +1657,6 @@ public:
      */
     template<typename R = Range, typename = std::enable_if_t<std::is_reference_v<R>>, typename = void>
     explicit UTFStringCodePoints(Range unitRange) : unitRange(unitRange) {}
-    // TODO: If I just take a const Range &unitRange and keep the reference in this object,
-    // then some tests fail & others crash.
-    // Should we take the reference and change the test code?
 
     /** Copy constructor. @draft ICU 78 */
     UTFStringCodePoints(const UTFStringCodePoints &other) = default;
