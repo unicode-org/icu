@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1749655331613,
+  "lastUpdate": 1749953578780,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -120093,6 +120093,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 38.2969,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "grhoten@users.noreply.github.com",
+            "name": "George Rhoten",
+            "username": "grhoten"
+          },
+          "committer": {
+            "email": "grhoten@users.noreply.github.com",
+            "name": "George Rhoten",
+            "username": "grhoten"
+          },
+          "distinct": true,
+          "id": "a2b255622b8494075a9b1a7e77f4544f8513d4b1",
+          "message": "ICU-23130 Read new RBNF rule data structure from CLDR-8909",
+          "timestamp": "2025-06-14T18:32:47-07:00",
+          "tree_id": "4cfdc2e136aa0bbdaf1dbfe418a70efb0bead34d",
+          "url": "https://github.com/unicode-org/icu/commit/a2b255622b8494075a9b1a7e77f4544f8513d4b1"
+        },
+        "date": 1749953309147,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 18.6585,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 20.3181,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 23.7437,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 26.6682,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 38.1685,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 32.555,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 28.1964,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 16.6085,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 81.6747,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 21.3556,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 36.7761,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 38.3772,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
