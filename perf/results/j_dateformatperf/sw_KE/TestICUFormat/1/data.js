@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1749653961346,
+  "lastUpdate": 1749952585793,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -35067,6 +35067,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 222.53114418618378,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "grhoten@users.noreply.github.com",
+            "name": "George Rhoten",
+            "username": "grhoten"
+          },
+          "committer": {
+            "email": "grhoten@users.noreply.github.com",
+            "name": "George Rhoten",
+            "username": "grhoten"
+          },
+          "distinct": true,
+          "id": "a2b255622b8494075a9b1a7e77f4544f8513d4b1",
+          "message": "ICU-23130 Read new RBNF rule data structure from CLDR-8909",
+          "timestamp": "2025-06-14T18:32:47-07:00",
+          "tree_id": "4cfdc2e136aa0bbdaf1dbfe418a70efb0bead34d",
+          "url": "https://github.com/unicode-org/icu/commit/a2b255622b8494075a9b1a7e77f4544f8513d4b1"
+        },
+        "date": 1749952316227,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 264.3247804719537,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
