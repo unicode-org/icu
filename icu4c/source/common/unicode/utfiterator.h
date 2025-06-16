@@ -305,15 +305,14 @@ public:
      * Only works if UnitIter is a pointer or a contiguous_iterator.
      * @draft ICU 78
      */
-    template<typename Iter = UnitIter>
-    std::enable_if_t<
-        std::is_base_of_v<
-            std::random_access_iterator_tag,
-            typename std::iterator_traits<Iter>::iterator_category>,
-        std::basic_string_view<Unit>>
+    template <typename Iter = UnitIter, typename Unit = std::iterator_traits<Iter>::value_type>
+    std::enable_if_t<std::is_pointer_v<Iter> ||
+                         std::is_same_v<Iter, typename std::basic_string<Unit>::iterator> ||
+                         std::is_same_v<Iter, typename std::basic_string<Unit>::const_iterator> ||
+                         std::is_same_v<Iter, typename std::basic_string_view<Unit>::iterator> ||
+                         std::is_same_v<Iter, typename std::basic_string_view<Unit>::const_iterator>,
+                     std::basic_string_view<Unit>>
     stringView() const {
-        // This fails if Iter is a random_access_iterator but not a contiguous_iterator.
-        // C++17 has no contiguous_iterator_tag so we cannot reliably test more specifically.
         return std::basic_string_view<Unit>(&*start_, len_);
     }
 #endif
