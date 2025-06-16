@@ -1743,7 +1743,7 @@ private:
  */
 template<typename CP32, UTFIllFormedBehavior behavior>
 struct UTFStringCodePointsAdaptor
-#if defined(__cpp_lib_ranges) && __cpp_lib_ranges >= 2022'02
+#if U_CPLUSPLUS_VERSION >= 23 && defined(__cpp_lib_ranges) && __cpp_lib_ranges >= 2022'02
     : std::ranges::range_adaptor_closure<UTFStringCodePointsAdaptor<CP32, behavior>>
 #endif
 {
@@ -2443,7 +2443,7 @@ private:
  */
 template<typename CP32>
 struct UnsafeUTFStringCodePointsAdaptor
-#if defined(__cpp_lib_ranges) && __cpp_lib_ranges >= 2022'02
+#if U_CPLUSPLUS_VERSION >= 23 && defined(__cpp_lib_ranges) && __cpp_lib_ranges >= 2022'02
     : std::ranges::range_adaptor_closure<UnsafeUTFStringCodePointsAdaptor<CP32>>
 #endif
 {
