@@ -1744,6 +1744,7 @@ struct UTFStringCodePointsAdaptor
     : std::ranges::range_adaptor_closure<UTFStringCodePointsAdaptor<CP32, behavior>>
 #endif
 {
+    /** @internal */
     template<typename Range>
     auto operator()(Range &&unitRange) const {
 #if defined(__cpp_lib_ranges) && __cpp_lib_ranges >= 2021'10  // We need https://wg21.link/P2415R2.
@@ -1756,9 +1757,10 @@ struct UTFStringCodePointsAdaptor
 };
 
 /**
- * UTFStringCodePoints factory function for a "range" of code points in a code unit range,
- * which validates while decoding.
- * Deduces the Range template parameter from the input.
+ * Range adaptor function object returning a UTFStringCodePoints object that represents a "range" of code
+ * points in a code unit range, which validates while decoding.
+ * Deduces the Range template parameter from the input, taking into account the value category: the
+ * code units will be referenced if possible, and moved if necessary.
  *
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t;
  *              should be signed if UTF_BEHAVIOR_NEGATIVE
@@ -2442,6 +2444,7 @@ struct UnsafeUTFStringCodePointsAdaptor
     : std::ranges::range_adaptor_closure<UnsafeUTFStringCodePointsAdaptor<CP32>>
 #endif
 {
+    /** @internal */
     template<typename Range>
     auto operator()(Range &&unitRange) const {
 #if defined(__cpp_lib_ranges) && __cpp_lib_ranges >= 2021'10  // We need https://wg21.link/P2415R2.
@@ -2454,9 +2457,10 @@ struct UnsafeUTFStringCodePointsAdaptor
 
 
 /**
- * UnsafeUTFStringCodePoints factory function for a "range" of code points in a code unit range.
- * The string must be well-formed.
- * Deduces the Range template parameter from the input.
+ * Range adaptor function object returning a UnsafeUTFStringCodePoints object that represents a
+ * "range" of code points in a code unit range. The string must be well-formed.
+ * Deduces the Range template parameter from the input, taking into account the value category: the
+ * code units will be referenced if possible, and moved if necessary.
  *
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t
  * @tparam Range A C++ "range" of Unicode UTF-8/16/32 code units
