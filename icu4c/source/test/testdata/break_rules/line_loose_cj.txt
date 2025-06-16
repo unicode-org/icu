@@ -20,7 +20,7 @@
 #         line-break=loose (BCP47 -u-lb-loose) as defined for Chinese & Japanese.
 #         It sets characters of class CJ to behave like ID.
 #         In addition, it allows breaks:
-#         * between ID and hyphens 2010 & 2013 (both BA)
+#         * between ID and hyphens 2010 & 2013 (as well as the rest of the HH class)
 #         * before 301C, 30A0 (both NS)
 #         * before iteration marks 3005, 303B, 309D, 309E, 30FD, 30FE (all NS)
 #         * between characters of LineBreak class IN such as 2026
@@ -42,8 +42,7 @@ AK = [:LineBreak =  Aksara:];
 AL = [:LineBreak =  Alphabetic:];
 AP = [:LineBreak =  Aksara_Prebase:];
 AS = [:LineBreak =  Aksara_Start:];
-BAX = [\u2010 \u2013];
-BA = [[:LineBreak =  Break_After:] - BAX];
+BA = [:LineBreak =  Break_After:];
 HH = [:LineBreak =  Unambiguous_Hyphen:];
 BB = [:LineBreak =  Break_Before:];
 BK = [:LineBreak =  Mandatory_Break:];
@@ -203,7 +202,7 @@ LB11.3:      WJ CM* [^CM];
 LB20a.2:   GL CM* (HY | HH) CM* (AL | HL);
 LB12:      GL CM* [^CM];
 
-LB12a:       [^SP BA BAX HY HH] CM* GL;
+LB12a:       [^SP BA HY HH] CM* GL;
 
 # LB 13 Do not break before ‘]’ or ‘!’ or ‘/’, even after spaces.
 LB13.1: [^SP] CM* [CL CP EX SY];
@@ -238,8 +237,8 @@ LB20a.1:     ^(HY | HH) CM* (AL | HL);
 
 LB21a:       HL CM* (HY | HH) CM* [^CM CB HL];
 
-LB21.1:      [^ID] CM* [BA BAX HY HH NS];
-LB21.2:      ID CM* [BA HY HH NS];
+LB21.1:      [^ID] CM* [BA HY HH NS];
+LB21.2:      ID CM* [BA HY NS];
 LB21.3:      BB CM* [^CM CB];
 
 LB21b:       SY CM* HL;
@@ -277,9 +276,9 @@ LB30.1:      (AL | CM | HL | NU) CM* OP30;
 LB30.2:      CP30 CM* (AL | HL | NU);
 
 # LB30a  keep pairs of RI together.
-LB30a.1:     RI CM* RI         ÷ [^BK CR LF NL SP ZW WJ CL CP EX IS SY GL QU BA BAX HY NS IN CM];
-LB30a.2:     RI CM* RI CM* CMS ÷ [^BK CR LF NL SP ZW WJ CL CP EX IS SY GL QU BA BAX HY NS IN CM];
-LB30a.3:     RI CM* RI CM* [BK CR LF NL SP ZW WJ GL CL CP EX IS SY QU BA BAX HY NS IN ZWJ]?;
+LB30a.1:     RI CM* RI         ÷ [^BK CR LF NL SP ZW WJ CL CP EX IS SY GL QU BA HY NS IN CM];
+LB30a.2:     RI CM* RI CM* CMS ÷ [^BK CR LF NL SP ZW WJ CL CP EX IS SY GL QU BA HY NS IN CM];
+LB30a.3:     RI CM* RI CM* [BK CR LF NL SP ZW WJ GL CL CP EX IS SY QU BA HY NS IN ZWJ]?;
 
 # LB30b Do not break between Emoji Base (or potential emoji) and Emoji Modifier
 LB30b.1:       EB CM* EM;
