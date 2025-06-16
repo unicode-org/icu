@@ -321,7 +321,7 @@ public:
 #if defined(__cpp_lib_ranges) && __cpp_lib_ranges >= 2021'10
         TESTCASE_AUTO(testUncommonInputRange);
         TESTCASE_AUTO(testUncommonForwardRange);
-        TESTCASE_AUTO(testUncommonContiguousRange);
+        TESTCASE_AUTO(testUncommonBidirectionalRange);
         TESTCASE_AUTO(testCommonForwardRange);
         TESTCASE_AUTO(testCommonBidirectionalRange);
         TESTCASE_AUTO(testCommonContiguousRange);
@@ -570,7 +570,7 @@ public:
         }
     }
 
-    void testUncommonContiguousRange() {
+    void testUncommonBidirectionalRange() {
         auto codePoint = [](const auto &codeUnits) { return codeUnits.codePoint(); };
         const std::u8string text = u8"𒀭𒊺𒉀 𒍠𒊩  # ᵈnisaba za₃-mim";
         // Code units before the #.
@@ -584,20 +584,30 @@ public:
             static_assert(!std::ranges::common_range<CodePoints>);
             static_assert(std::ranges::bidirectional_range<CodePoints>);
             static_assert(!std::ranges::random_access_range<CodePoints>);
-            assertTrue("uncommon contiguous prefix range",
+            assertTrue("uncommon bidirectional prefix range",
                        std::ranges::equal(utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(codeUnits) |
                                               std::ranges::views::transform(codePoint),
                                           std::u32string_view(U"𒀭𒊺𒉀 𒍠𒊩  ")));
+            assertTrue("reversed uncommon bidirectional prefix range",
+                       std::ranges::equal(utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(codeUnits) |
+                                              std::ranges::views::reverse |
+                                              std::ranges::views::transform(codePoint),
+                                          std::u32string_view(U"  𒊩𒍠 𒉀𒊺𒀭")));
         }
         {
             using UnsafeCodePoints = decltype(unsafeUTFStringCodePoints<char32_t>(codeUnits));
             static_assert(!std::ranges::common_range<UnsafeCodePoints>);
             static_assert(std::ranges::bidirectional_range<UnsafeCodePoints>);
             static_assert(!std::ranges::random_access_range<UnsafeCodePoints>);
-            assertTrue("unsafe uncommon contiguous prefix range",
+            assertTrue("unsafe uncommon bidirectional prefix range",
                        std::ranges::equal(unsafeUTFStringCodePoints<char32_t>(codeUnits) |
                                               std::ranges::views::transform(codePoint),
                                           std::u32string_view(U"𒀭𒊺𒉀 𒍠𒊩  ")));
+            assertTrue("reversed unsafe uncommon bidirectional prefix range",
+                       std::ranges::equal(unsafeUTFStringCodePoints<char32_t>(codeUnits) |
+                                              std::ranges::views::reverse |
+                                              std::ranges::views::transform(codePoint),
+                                          std::u32string_view(U"  𒊩𒍠 𒉀𒊺𒀭")));
         }
     }
 
@@ -659,13 +669,20 @@ public:
                        std::ranges::equal(utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(codeUnits) |
                                               std::ranges::views::transform(codePoint),
                                           std::u32string_view(U"𒉭")));
-#if __cpp_lib_ranges >= 2022'02
-            assertTrue("common bidirectional filtered range: one big pipeline",
-                       std::ranges::equal(card | std::ranges::views::filter([](char8_t c) {
-                                              return c != 0xFF;
-                                          }) | utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD> |
+            assertTrue("reversed common bidirectional filtered range",
+                       std::ranges::equal(utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(codeUnits) |
+                                              std::ranges::views::reverse |
                                               std::ranges::views::transform(codePoint),
                                           std::u32string_view(U"𒉭")));
+#if __cpp_lib_ranges >= 2022'02
+            assertTrue("reversed common bidirectional filtered range: one big pipeline",
+                       std::ranges::equal(
+                           card
+                           | std::ranges::views::filter([](char8_t c) { return c != 0xFF; })
+                           | utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>
+                           | std::ranges::views::reverse
+                           | std::ranges::views::transform(codePoint),
+                           std::u32string_view(U"𒉭")));
 #endif
         }
         {
@@ -677,13 +694,20 @@ public:
                        std::ranges::equal(unsafeUTFStringCodePoints<char32_t>(codeUnits) |
                                               std::ranges::views::transform(codePoint),
                                           std::u32string_view(U"𒉭")));
-#if __cpp_lib_ranges >= 2022'02
-            assertTrue("unsafe common bidirectional filtered range: one big pipeline",
-                       std::ranges::equal(card | std::ranges::views::filter([](char8_t c) {
-                                              return c != 0xFF;
-                                          }) | unsafeUTFStringCodePoints<char32_t> |
+            assertTrue("reversed unsafe common bidirectional filtered range",
+                       std::ranges::equal(unsafeUTFStringCodePoints<char32_t>(codeUnits) |
+                                              std::ranges::views::reverse |
                                               std::ranges::views::transform(codePoint),
                                           std::u32string_view(U"𒉭")));
+#if __cpp_lib_ranges >= 2022'02
+            assertTrue("reversed unsafe common bidirectional filtered range: one big pipeline",
+                       std::ranges::equal(
+                           card
+                           | std::ranges::views::filter([](char8_t c) { return c != 0xFF; })
+                           | unsafeUTFStringCodePoints<char32_t>
+                           | std::ranges::views::reverse
+                           | std::ranges::views::transform(codePoint),
+                           std::u32string_view(U"𒉭")));
 #endif
         }
     }
