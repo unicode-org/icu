@@ -305,7 +305,7 @@ public:
      * Only works if UnitIter is a pointer or a contiguous_iterator.
      * @draft ICU 78
      */
-    template <typename Iter = UnitIter, typename Unit = std::iterator_traits<Iter>::value_type>
+    template<typename Iter = UnitIter, typename Unit = typename std::iterator_traits<Iter>::value_type>
     std::enable_if_t<std::is_pointer_v<Iter> ||
                          std::is_same_v<Iter, typename std::basic_string<Unit>::iterator> ||
                          std::is_same_v<Iter, typename std::basic_string<Unit>::const_iterator> ||
@@ -1740,7 +1740,7 @@ private:
 /** @internal */
 template<typename CP32, UTFIllFormedBehavior behavior>
 struct UTFStringCodePointsAdaptor
-#if U_CPLUSPLUS_VERSION >= 23 && defined(__cpp_lib_ranges) && __cpp_lib_ranges >= 2022'02
+#if U_CPLUSPLUS_VERSION >= 23 && __cpp_lib_ranges >= 2022'02  // http://wg21.link/P2387R3.
     : std::ranges::range_adaptor_closure<UTFStringCodePointsAdaptor<CP32, behavior>>
 #endif
 {
@@ -2438,13 +2438,13 @@ private:
 /** @internal */
 template<typename CP32>
 struct UnsafeUTFStringCodePointsAdaptor
-#if U_CPLUSPLUS_VERSION >= 23 && defined(__cpp_lib_ranges) && __cpp_lib_ranges >= 2022'02
+#if U_CPLUSPLUS_VERSION >= 23 && __cpp_lib_ranges >= 2022'02  // http://wg21.link/P2387R3.
     : std::ranges::range_adaptor_closure<UnsafeUTFStringCodePointsAdaptor<CP32>>
 #endif
 {
     template<typename Range>
     auto operator()(Range &&unitRange) const {
-#if defined(__cpp_lib_ranges) && __cpp_lib_ranges >= 2021'10 // We need https://wg21.link/P2415R2.
+#if defined(__cpp_lib_ranges) && __cpp_lib_ranges >= 2021'10  // We need https://wg21.link/P2415R2.
         return UnsafeUTFStringCodePoints<CP32, std::ranges::views::all_t<Range>>(std::forward<Range>(unitRange));
 #else
         return UnsafeUTFStringCodePoints<CP32, Range>(std::forward<Range>(unitRange));
