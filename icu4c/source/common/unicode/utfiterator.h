@@ -1738,9 +1738,7 @@ private:
     Range unitRange;
 };
 
-/**
- * @internal
- */
+/** @internal */
 template<typename CP32, UTFIllFormedBehavior behavior>
 struct UTFStringCodePointsAdaptor
 #if U_CPLUSPLUS_VERSION >= 23 && defined(__cpp_lib_ranges) && __cpp_lib_ranges >= 2022'02
@@ -2438,9 +2436,7 @@ private:
     Range unitRange;
 };
 
-/**
- * @internal
- */
+/** @internal */
 template<typename CP32>
 struct UnsafeUTFStringCodePointsAdaptor
 #if U_CPLUSPLUS_VERSION >= 23 && defined(__cpp_lib_ranges) && __cpp_lib_ranges >= 2022'02
