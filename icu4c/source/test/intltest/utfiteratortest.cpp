@@ -45,6 +45,9 @@ using U_HEADER_ONLY_NAMESPACE::unsafeUTFStringCodePoints;
 
 namespace {
 
+// Sentinel for NUL-terminated strings.
+class Nul {};
+
 template<typename Unit>
 class SinglePassIter;
 
@@ -54,7 +57,10 @@ class SinglePassIter;
 template<typename Unit>
 class SinglePassSource {
 public:
-    explicit SinglePassSource(std::basic_string_view<Unit> s) : p(s.data()), limit(s.data() + s.length()) {}
+    explicit SinglePassSource(std::basic_string_view<Unit> s) :
+            p(s.data()), limit(s.data() + s.length()) {}
+    SinglePassSource(const Unit *s, const Nul &) :
+            p(s), limit(nullptr) {}
 
     SinglePassIter<Unit> begin() { return SinglePassIter<Unit>(*this); }
     SinglePassIter<Unit> end() { return SinglePassIter<Unit>(); }
@@ -97,6 +103,19 @@ public:
     }
     bool operator!=(const SinglePassIter &other) const { return !operator==(other); }
 
+    // Asymmetric equality & nonequality with a sentinel type.
+    // C++17: Need to define all four combinations of == / != vs. parameter order.
+    // Once we require C++20, we could remove all but the first == because
+    // the compiler would generate the rest.
+    friend bool operator==(const SinglePassIter &iter, const Nul &) {
+        return *iter.src->p == 0;
+    }
+    friend bool operator==(const Nul &, const SinglePassIter &iter) {
+        return *iter.src->p == 0;
+    }
+    friend bool operator!=(const SinglePassIter &iter, const Nul &nul) { return !(iter == nul); }
+    friend bool operator!=(const Nul &nul, const SinglePassIter &iter) { return !(iter == nul); }
+
     Unit operator*() const { return *(src->p); }
     SinglePassIter &operator++() {  // pre-increment
         ++(src->p);
@@ -125,6 +144,19 @@ public:
 
     bool operator==(const FwdIter &other) const { return p == other.p; }
     bool operator!=(const FwdIter &other) const { return !operator==(other); }
+
+    // Asymmetric equality & nonequality with a sentinel type.
+    // C++17: Need to define all four combinations of == / != vs. parameter order.
+    // Once we require C++20, we could remove all but the first == because
+    // the compiler would generate the rest.
+    friend bool operator==(const FwdIter &iter, const Nul &) {
+        return *iter.p == 0;
+    }
+    friend bool operator==(const Nul &, const FwdIter &iter) {
+        return *iter.p == 0;
+    }
+    friend bool operator!=(const FwdIter &iter, const Nul &nul) { return !(iter == nul); }
+    friend bool operator!=(const Nul &nul, const FwdIter &iter) { return !(iter == nul); }
 
     Unit operator*() const { return *p; }
     FwdIter &operator++() {  // pre-increment
@@ -222,6 +254,7 @@ public:
         TESTCASE_AUTO(testSafe16SinglePassIterGood);
         TESTCASE_AUTO(testSafe16SinglePassIterNegative);
         TESTCASE_AUTO(testUnsafe16SinglePassIter);
+        TESTCASE_AUTO(testSafe16SinglePassIterNulGood);
 
         TESTCASE_AUTO(testSafe16FwdIter);
         TESTCASE_AUTO(testUnsafe16FwdIter);
@@ -234,9 +267,11 @@ public:
         TESTCASE_AUTO(testSafe8SinglePassIterGood);
         TESTCASE_AUTO(testSafe8SinglePassIterFFFD);
         TESTCASE_AUTO(testUnsafe8SinglePassIter);
+        TESTCASE_AUTO(testUnsafe8SinglePassIterNul);
 
         TESTCASE_AUTO(testSafe8FwdIter);
         TESTCASE_AUTO(testUnsafe8FwdIter);
+        TESTCASE_AUTO(testSafe8FwdIterNul);
 
         TESTCASE_AUTO(testSafe32Good);
         TESTCASE_AUTO(testSafe32Negative);
@@ -250,6 +285,7 @@ public:
 
         TESTCASE_AUTO(testSafe32FwdIter);
         TESTCASE_AUTO(testUnsafe32FwdIter);
+        TESTCASE_AUTO(testUnsafe32FwdIterNul);
 
         TESTCASE_AUTO(testSafe16LongLinearContig);
         TESTCASE_AUTO(testSafe8LongLinearContig);
@@ -352,16 +388,24 @@ public:
     template<TestMode mode, typename CP32, UTFIllFormedBehavior behavior, typename StringView>
     void testSinglePassIter(StringView piped);
 
+    template<TestMode mode, typename CP32, UTFIllFormedBehavior behavior, typename StringView>
+    void testSinglePassIterNul(StringView piped);
+
     template<TestMode mode, typename CP32, UTFIllFormedBehavior behavior,
-             typename StringView, typename Iter>
-    void testSinglePassIter(const std::vector<StringView> &parts, Iter &iter, const Iter &rangeLimit);
+             typename StringView, typename Iter, typename Sentinel>
+    void testSinglePassIter(const std::vector<StringView> &parts,
+                            Iter &iter, const Sentinel &rangeLimit);
 
     template<TestMode mode, typename CP32, UTFIllFormedBehavior behavior, typename StringView>
     void testFwdIter(StringView piped);
 
-    template<TestMode mode, typename StringView, typename UnitIter, typename Iter>
-    void testFwdIter(const std::vector<StringView> &parts, UnitIter goodLimit,
-                     Iter iter, Iter rangeLimit);
+    template<TestMode mode, typename CP32, UTFIllFormedBehavior behavior, typename StringView>
+    void testFwdIterNul(StringView piped);
+
+    template<TestMode mode, typename StringView,
+             typename LimitIter, typename Iter, typename Sentinel>
+    void testFwdIter(const std::vector<StringView> &parts, LimitIter goodLimit,
+                     Iter iter, Sentinel rangeLimit);
 
     static constexpr std::u16string_view good16{u"a|b|ç|カ|🚴"};
     static const char *good8Chars;
@@ -407,6 +451,9 @@ public:
     void testUnsafe16SinglePassIter() {
         testSinglePassIter<UNSAFE, UChar32, ANY_B>(good16);
     }
+    void testSafe16SinglePassIterNulGood() {
+        testSinglePassIterNul<WELL_FORMED, UChar32, UTF_BEHAVIOR_NEGATIVE>(good16);
+    }
 
     void testSafe16FwdIter() {
         testFwdIter<SAFE, UChar32, UTF_BEHAVIOR_NEGATIVE>(good16);
@@ -441,12 +488,18 @@ public:
     void testUnsafe8SinglePassIter() {
         testSinglePassIter<UNSAFE, UChar32, ANY_B>(std::string_view{good8Chars});
     }
+    void testUnsafe8SinglePassIterNul() {
+        testSinglePassIterNul<UNSAFE, UChar32, ANY_B>(std::string_view{good8Chars});
+    }
 
     void testSafe8FwdIter() {
         testFwdIter<SAFE, UChar32, UTF_BEHAVIOR_NEGATIVE>(std::string_view{good8Chars});
     }
     void testUnsafe8FwdIter() {
         testFwdIter<UNSAFE, UChar32, ANY_B>(std::string_view{good8Chars});
+    }
+    void testSafe8FwdIterNul() {
+        testFwdIterNul<SAFE, UChar32, UTF_BEHAVIOR_NEGATIVE>(std::string_view{good8Chars});
     }
 
     void testSafe32Good() {
@@ -480,6 +533,9 @@ public:
     }
     void testUnsafe32FwdIter() {
         testFwdIter<UNSAFE, UChar32, ANY_B>(good32);
+    }
+    void testUnsafe32FwdIterNul() {
+        testFwdIterNul<UNSAFE, UChar32, ANY_B>(good32);
     }
 
 #if defined(__cpp_lib_ranges) && __cpp_lib_ranges >= 2021'10 // See above for the value.
@@ -1208,10 +1264,29 @@ void UTFIteratorTest::testSinglePassIter(StringView piped) {
     }
 }
 
+template<TestMode mode, typename CP32, UTFIllFormedBehavior behavior, typename StringView>
+void UTFIteratorTest::testSinglePassIterNul(StringView piped) {
+    using Unit = typename StringView::value_type;
+    auto parts = split(piped);
+    auto joined = join<Unit>(parts);
+    Nul sentinel;
+    SinglePassSource<Unit> good(joined.c_str(), sentinel);
+    // "abçカ🚴"
+    // or
+    // "a?ç?🚴" where the ? sequences are ill-formed
+    if constexpr (mode == UNSAFE) {
+        auto iter = unsafeUTFIterator<CP32>(good.begin());
+        testSinglePassIter<mode, CP32, behavior>(parts, iter, sentinel);
+    } else {
+        auto iter = utfIterator<CP32, behavior>(good.begin(), sentinel);
+        testSinglePassIter<mode, CP32, behavior>(parts, iter, sentinel);
+    }
+}
+
 template<TestMode mode, typename CP32, UTFIllFormedBehavior behavior,
-         typename StringView, typename Iter>
+         typename StringView, typename Iter, typename Sentinel>
 void UTFIteratorTest::testSinglePassIter(
-        const std::vector<StringView> &parts, Iter &iter, const Iter &rangeLimit) {
+        const std::vector<StringView> &parts, Iter &iter, const Sentinel &rangeLimit) {
     constexpr bool isWellFormed = mode != ILL_FORMED;
     assertTrue(
         "input_iterator_tag",
@@ -1237,6 +1312,7 @@ void UTFIteratorTest::testSinglePassIter(
     assertEquals("iter[3] -> codePoint", expectedCP, iter->codePoint());
     ++iter;
     // Fetch the current code point twice.
+    assertFalse("iter != endIter", iter == rangeLimit);
     assertEquals("iter[4.0] * codePoint", U'🚴', (*iter).codePoint());
     units = *iter++;
     assertEquals("iter[4] * codePoint", U'🚴', units.codePoint());
@@ -1266,9 +1342,27 @@ void UTFIteratorTest::testFwdIter(StringView piped) {
     }
 }
 
-template<TestMode mode, typename StringView, typename UnitIter, typename Iter>
-void UTFIteratorTest::testFwdIter(const std::vector<StringView> &parts, UnitIter goodLimit,
-                                  Iter iter, Iter rangeLimit) {
+template<TestMode mode, typename CP32, UTFIllFormedBehavior behavior, typename StringView>
+void UTFIteratorTest::testFwdIterNul(StringView piped) {
+    using Unit = typename StringView::value_type;
+    auto parts = split(piped);
+    auto joined = join<Unit>(parts);
+    // "abçカ🚴"
+    FwdIter<Unit> goodBegin(joined.data());
+    Nul sentinel;
+    if constexpr (mode == UNSAFE) {
+        auto iter = unsafeUTFIterator<CP32>(goodBegin);
+        testFwdIter<mode, StringView>(parts, sentinel, iter, sentinel);
+    } else {
+        auto iter = utfIterator<CP32, behavior>(goodBegin, sentinel);
+        testFwdIter<mode, StringView>(parts, sentinel, iter, sentinel);
+    }
+}
+
+template<TestMode mode, typename StringView,
+         typename LimitIter, typename Iter, typename Sentinel>
+void UTFIteratorTest::testFwdIter(const std::vector<StringView> &parts, LimitIter goodLimit,
+                                  Iter iter, Sentinel rangeLimit) {
     assertTrue(
         "forward_iterator_tag",
         std::is_same_v<
@@ -1293,8 +1387,10 @@ void UTFIteratorTest::testFwdIter(const std::vector<StringView> &parts, UnitIter
     ++iter;
     assertEquals("iter[2] * codePoint", u'ç', (*iter++).codePoint());  // post-increment
     assertEquals("iter[3] -> codePoint", u'カ', iter->codePoint());
+    assertFalse("iter[3] * end() != endIter", units.end() == goodLimit);
     ++iter;
     // Fetch the current code point twice.
+    assertFalse("iter != endIter", iter == rangeLimit);
     assertEquals("iter[4.0] * codePoint", U'🚴', (*iter).codePoint());
     units = *iter++;
     assertEquals("iter[4] * codePoint", U'🚴', units.codePoint());
