@@ -108,10 +108,10 @@ public:
     // Once we require C++20, we could remove all but the first == because
     // the compiler would generate the rest.
     friend bool operator==(const SinglePassIter &iter, const Nul &) {
-        return *iter.src->p == 0;
+        return iter.atNul();
     }
     friend bool operator==(const Nul &, const SinglePassIter &iter) {
-        return *iter.src->p == 0;
+        return iter.atNul();
     }
     friend bool operator!=(const SinglePassIter &iter, const Nul &nul) { return !(iter == nul); }
     friend bool operator!=(const Nul &nul, const SinglePassIter &iter) { return !(iter == nul); }
@@ -125,6 +125,7 @@ public:
 
 private:
     bool isDone() const { return src == nullptr || src->p == src->limit; }
+    bool atNul() const { return *src->p == 0; }
 
     SinglePassSource<Unit> *src;
 };
