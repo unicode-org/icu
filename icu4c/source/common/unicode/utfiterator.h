@@ -2457,7 +2457,7 @@ struct UnsafeUTFStringCodePointsAdaptor
 
 
 /**
- * Range adaptor function object returning a UnsafeUTFStringCodePoints object that represents a
+ * Range adaptor function object returning an UnsafeUTFStringCodePoints object that represents a
  * "range" of code points in a code unit range. The string must be well-formed.
  * Deduces the Range template parameter from the input, taking into account the value category: the
  * code units will be referenced if possible, and moved if necessary.
