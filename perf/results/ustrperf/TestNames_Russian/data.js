@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1750202142894,
+  "lastUpdate": 1750269596797,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -120477,6 +120477,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 43.8758,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ohadshai@gmail.com",
+            "name": "Ohad Shai",
+            "username": "oshai"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "09c6428b5fd88516704af53bb6a63a79b5c82e22",
+          "message": "ICU-20824 Fix - avoid potential out-of-bounds array access (undefined behaviour)\n\nThis is a backport of a fix from mapnik clone of this class:\nhttps://github.com/mapnik/mapnik/pull/4096\n\nAlso suggested to icu as:\nhttps://unicode-org.atlassian.net/browse/ICU-20824\n\nWe encountered it in mapnik and fixed it in our own mapnik 3.0 fork. I think it worth backporting the fix to here as well.",
+          "timestamp": "2025-06-18T10:24:21-07:00",
+          "tree_id": "ca9174b8cee9ab8b8e36eae1763115a7b6ce8993",
+          "url": "https://github.com/unicode-org/icu/commit/09c6428b5fd88516704af53bb6a63a79b5c82e22"
+        },
+        "date": 1750269323283,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 20.1238,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 22.395,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 26.8835,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 44.0682,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 52.7524,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 36.155,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 26.4331,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 16.0046,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 95.4142,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 23.3572,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 40.1563,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 43.8108,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
