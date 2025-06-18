@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1750201838121,
+  "lastUpdate": 1750269345576,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -98433,6 +98433,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 1453.9131,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ohadshai@gmail.com",
+            "name": "Ohad Shai",
+            "username": "oshai"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "09c6428b5fd88516704af53bb6a63a79b5c82e22",
+          "message": "ICU-20824 Fix - avoid potential out-of-bounds array access (undefined behaviour)\n\nThis is a backport of a fix from mapnik clone of this class:\nhttps://github.com/mapnik/mapnik/pull/4096\n\nAlso suggested to icu as:\nhttps://unicode-org.atlassian.net/browse/ICU-20824\n\nWe encountered it in mapnik and fixed it in our own mapnik 3.0 fork. I think it worth backporting the fix to here as well.",
+          "timestamp": "2025-06-18T10:24:21-07:00",
+          "tree_id": "ca9174b8cee9ab8b8e36eae1763115a7b6ce8993",
+          "url": "https://github.com/unicode-org/icu/commit/09c6428b5fd88516704af53bb6a63a79b5c82e22"
+        },
+        "date": 1750269073298,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 78273.2127,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 167562.2033,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.5419,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 10.7471,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 6.3395,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 8648.3939,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 32564.1763,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 1466.8228,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
