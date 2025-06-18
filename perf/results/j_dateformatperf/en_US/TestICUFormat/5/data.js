@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1750200987025,
+  "lastUpdate": 1750268319539,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -35427,6 +35427,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 277.24551756159406,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ohadshai@gmail.com",
+            "name": "Ohad Shai",
+            "username": "oshai"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "09c6428b5fd88516704af53bb6a63a79b5c82e22",
+          "message": "ICU-20824 Fix - avoid potential out-of-bounds array access (undefined behaviour)\n\nThis is a backport of a fix from mapnik clone of this class:\nhttps://github.com/mapnik/mapnik/pull/4096\n\nAlso suggested to icu as:\nhttps://unicode-org.atlassian.net/browse/ICU-20824\n\nWe encountered it in mapnik and fixed it in our own mapnik 3.0 fork. I think it worth backporting the fix to here as well.",
+          "timestamp": "2025-06-18T10:24:21-07:00",
+          "tree_id": "ca9174b8cee9ab8b8e36eae1763115a7b6ce8993",
+          "url": "https://github.com/unicode-org/icu/commit/09c6428b5fd88516704af53bb6a63a79b5c82e22"
+        },
+        "date": 1750268055595,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 281.14750709408065,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
