@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1750201856929,
+  "lastUpdate": 1750269538851,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -75477,6 +75477,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 13.1823,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ohadshai@gmail.com",
+            "name": "Ohad Shai",
+            "username": "oshai"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "09c6428b5fd88516704af53bb6a63a79b5c82e22",
+          "message": "ICU-20824 Fix - avoid potential out-of-bounds array access (undefined behaviour)\n\nThis is a backport of a fix from mapnik clone of this class:\nhttps://github.com/mapnik/mapnik/pull/4096\n\nAlso suggested to icu as:\nhttps://unicode-org.atlassian.net/browse/ICU-20824\n\nWe encountered it in mapnik and fixed it in our own mapnik 3.0 fork. I think it worth backporting the fix to here as well.",
+          "timestamp": "2025-06-18T10:24:21-07:00",
+          "tree_id": "ca9174b8cee9ab8b8e36eae1763115a7b6ce8993",
+          "url": "https://github.com/unicode-org/icu/commit/09c6428b5fd88516704af53bb6a63a79b5c82e22"
+        },
+        "date": 1750269267086,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 12.6333,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 12.6358,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 12.6124,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 13.1657,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 13.1669,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 13.1887,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
