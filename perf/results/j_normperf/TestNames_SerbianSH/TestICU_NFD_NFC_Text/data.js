@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1750268748440,
+  "lastUpdate": 1750275514324,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -70616,6 +70616,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 9.36809923266343,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "distinct": true,
+          "id": "810b94cce9d985ce9a46bad60517afb3f9161653",
+          "message": "ICU-22763 MF2: Bump API version number for DateInfo struct",
+          "timestamp": "2025-06-18T12:20:56-07:00",
+          "tree_id": "bfa559a9ac49974c55fa48197beffa81f655b4bd",
+          "url": "https://github.com/unicode-org/icu/commit/810b94cce9d985ce9a46bad60517afb3f9161653"
+        },
+        "date": 1750275241163,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 8.976583342395298,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
