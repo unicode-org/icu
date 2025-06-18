@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1750268077204,
+  "lastUpdate": 1750275131958,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -35367,6 +35367,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "UnicodeSetAdd",
             "value": 8.014571865036006,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "distinct": true,
+          "id": "810b94cce9d985ce9a46bad60517afb3f9161653",
+          "message": "ICU-22763 MF2: Bump API version number for DateInfo struct",
+          "timestamp": "2025-06-18T12:20:56-07:00",
+          "tree_id": "bfa559a9ac49974c55fa48197beffa81f655b4bd",
+          "url": "https://github.com/unicode-org/icu/commit/810b94cce9d985ce9a46bad60517afb3f9161653"
+        },
+        "date": 1750274862312,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "UnicodeSetAdd",
+            "value": 8.209103209586429,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
