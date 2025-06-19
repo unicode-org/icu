@@ -253,7 +253,7 @@ zu{
                 "EEEE dd MMMM y G",
                 "d MMMM y G",
                 "d MMM y G",
-                "GGGGG y-MM-dd",
+                "G y-MM-dd",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

@@ -845,7 +845,7 @@ class LocaleFallbackData {
         t.put("sts", "Arab");
         t.put("stv", "Ethi");
         t.put("sty", "Cyrl");
-        t.put("suz", "Sunu");
+        t.put("suz", "Deva");
         t.put("sva", "Geor");
         t.put("swb", "Arab");
         t.put("swi", "Hani");
@@ -991,6 +991,7 @@ class LocaleFallbackData {
         t.put("xrm", "Cyrl");
         t.put("xrn", "Cyrl");
         t.put("xsa", "Sarb");
+        t.put("xsd", "Sidt");
         t.put("xsr", "Deva");
         t.put("xtq", "Brah");
         t.put("xub", "Taml");
@@ -1114,6 +1115,7 @@ class LocaleFallbackData {
         t.put("en_DK", "en_150");
         t.put("en_DM", "en_001");
         t.put("en_Dsrt", "root");
+        t.put("en_EE", "en_150");
         t.put("en_ER", "en_001");
         t.put("en_ES", "en_150");
         t.put("en_FI", "en_150");
@@ -1123,6 +1125,7 @@ class LocaleFallbackData {
         t.put("en_FR", "en_150");
         t.put("en_GB", "en_001");
         t.put("en_GD", "en_001");
+        t.put("en_GE", "en_150");
         t.put("en_GG", "en_001");
         t.put("en_GH", "en_001");
         t.put("en_GI", "en_001");
@@ -1147,6 +1150,8 @@ class LocaleFallbackData {
         t.put("en_LC", "en_001");
         t.put("en_LR", "en_001");
         t.put("en_LS", "en_001");
+        t.put("en_LT", "en_150");
+        t.put("en_LV", "en_150");
         t.put("en_MG", "en_001");
         t.put("en_MO", "en_001");
         t.put("en_MS", "en_001");
@@ -1190,6 +1195,7 @@ class LocaleFallbackData {
         t.put("en_TT", "en_001");
         t.put("en_TV", "en_001");
         t.put("en_TZ", "en_001");
+        t.put("en_UA", "en_150");
         t.put("en_UG", "en_001");
         t.put("en_VC", "en_001");
         t.put("en_VG", "en_001");
@@ -1263,6 +1269,7 @@ class LocaleFallbackData {
         t.put("shi_Latn", "root");
         t.put("so_Arab", "root");
         t.put("sr_Latn", "root");
+        t.put("suz_Sunu", "root");
         t.put("sw_Arab", "root");
         t.put("tg_Arab", "root");
         t.put("ug_Cyrl", "root");

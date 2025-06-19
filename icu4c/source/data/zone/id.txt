@@ -769,6 +769,11 @@ id{
         "meta:Truk"{
             ls{"Waktu Chuuk"}
         }
+        "meta:Turkey"{
+            ld{"Waktu Musim Panas Turki"}
+            lg{"Waktu Turki"}
+            ls{"Waktu Standar Turki"}
+        }
         "meta:Turkmenistan"{
             ld{"Waktu Musim Panas Turkmenistan"}
             lg{"Waktu Turkmenistan"}

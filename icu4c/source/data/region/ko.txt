@@ -303,6 +303,7 @@ ko{
     }
     Countries%short{
         HK{"홍콩"}
+        KR{"한국"}
         MO{"마카오"}
         PS{"팔레스타인"}
         UN{"유엔"}

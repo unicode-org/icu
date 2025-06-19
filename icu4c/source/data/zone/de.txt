@@ -895,6 +895,11 @@ de{
         "meta:Truk"{
             ls{"Chuuk-Zeit"}
         }
+        "meta:Turkey"{
+            ld{"Türkische Sommerzeit"}
+            lg{"Türkische Zeit"}
+            ls{"Türkische Normalzeit"}
+        }
         "meta:Turkmenistan"{
             ld{"Turkmenische Sommerzeit"}
             lg{"Turkmenistan-Zeit"}

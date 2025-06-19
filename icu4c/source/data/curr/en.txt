@@ -541,7 +541,7 @@ en{
         }
         KGS{
             "KGS",
-            "Kyrgystani Som",
+            "Kyrgyz Som",
         }
         KHR{
             "KHR",
@@ -1770,8 +1770,8 @@ en{
             other{"Kenyan shillings"}
         }
         KGS{
-            one{"Kyrgystani som"}
-            other{"Kyrgystani soms"}
+            one{"Kyrgyz som"}
+            other{"Kyrgyz soms"}
         }
         KHR{
             one{"Cambodian riel"}

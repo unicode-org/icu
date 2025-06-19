@@ -920,6 +920,11 @@ hr{
         "meta:Truk"{
             ls{"vrijeme Chuuka"}
         }
+        "meta:Turkey"{
+            ld{"tursko ljetno vrijeme"}
+            lg{"tursko vrijeme"}
+            ls{"tursko standardno vrijeme"}
+        }
         "meta:Turkmenistan"{
             ld{"turkmenistansko ljetno vrijeme"}
             lg{"turkmenistansko vrijeme"}

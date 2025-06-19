@@ -1853,6 +1853,11 @@ sr_Latn{
         "meta:Truk"{
             ls{"Čuuk vreme"}
         }
+        "meta:Turkey"{
+            ld{"Turska letnje računanje vremena"}
+            lg{"Turska vreme"}
+            ls{"Turska standardno vreme"}
+        }
         "meta:Turkmenistan"{
             ld{"Turkmenistan, letnje vreme"}
             lg{"Turkmenistan vreme"}

@@ -934,6 +934,11 @@ sl{
         "meta:Truk"{
             ls{"Čas: Otok Chuuk"}
         }
+        "meta:Turkey"{
+            ld{"Turški poletni čas"}
+            lg{"Turški čas"}
+            ls{"Turški standardni čas"}
+        }
         "meta:Turkmenistan"{
             ld{"Turkmenistanski poletni čas"}
             lg{"Turkmenistanski čas"}

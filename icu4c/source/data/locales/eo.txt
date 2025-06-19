@@ -28,7 +28,7 @@ eo{
                 "EEEE, 'la' d-'a' 'de' MMMM y G",
                 "G y-MMMM-dd",
                 "G y-MMM-dd",
-                "GGGGG y-MM-dd",
+                "G y-MM-dd",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

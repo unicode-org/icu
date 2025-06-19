@@ -1848,6 +1848,11 @@ ja{
         "meta:Truk"{
             ls{"チューク時間"}
         }
+        "meta:Turkey"{
+            ld{"トルコ夏時間"}
+            lg{"トルコ時間"}
+            ls{"トルコ標準時"}
+        }
         "meta:Turkmenistan"{
             ld{"トルクメニスタン夏時間"}
             lg{"トルクメニスタン時間"}

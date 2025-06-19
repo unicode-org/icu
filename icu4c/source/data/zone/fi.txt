@@ -942,6 +942,11 @@ fi{
         "meta:Truk"{
             ls{"Chuukin aika"}
         }
+        "meta:Turkey"{
+            ld{"Turkin kesäaika"}
+            lg{"Turkin aika"}
+            ls{"Turkin normaaliaika"}
+        }
         "meta:Turkmenistan"{
             ld{"Turkmenistanin kesäaika"}
             lg{"Turkmenistanin aika"}

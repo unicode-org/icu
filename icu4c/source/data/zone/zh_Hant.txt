@@ -1868,6 +1868,11 @@ zh_Hant{
         "meta:Truk"{
             ls{"楚克島時間"}
         }
+        "meta:Turkey"{
+            ld{"土耳其夏令時間"}
+            lg{"土耳其時間"}
+            ls{"土耳其標準時間"}
+        }
         "meta:Turkmenistan"{
             ld{"土庫曼夏令時間"}
             lg{"土庫曼時間"}

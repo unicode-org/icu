@@ -688,6 +688,11 @@ vi{
         "meta:Truk"{
             ls{"Giờ Chuuk"}
         }
+        "meta:Turkey"{
+            ld{"Giờ Mùa Hè Thổ Nhĩ Kỳ"}
+            lg{"Giờ Thổ Nhĩ Kỳ"}
+            ls{"Giờ Chuẩn Thổ Nhĩ Kỳ"}
+        }
         "meta:Turkmenistan"{
             ld{"Giờ Mùa Hè Turkmenistan"}
             lg{"Giờ Turkmenistan"}

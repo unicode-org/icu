@@ -947,6 +947,12 @@ tr{
         "meta:Truk"{
             ls{"Chuuk Saati"}
         }
+        "meta:Turkey"{
+            ld{"Türkiye Yaz Saati"}
+            lg{"Türkiye Saati"}
+            ls{"Türkiye Standart Saati"}
+            sg{"TSİ"}
+        }
         "meta:Turkmenistan"{
             ld{"Türkmenistan Yaz Saati"}
             lg{"Türkmenistan Saati"}

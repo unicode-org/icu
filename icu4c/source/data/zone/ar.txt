@@ -1520,7 +1520,6 @@ ar{
         }
         "meta:Gulf"{
             ls{"توقيت الخليج"}
-            ss{"GST"}
         }
         "meta:Guyana"{
             ls{"توقيت غيانا"}

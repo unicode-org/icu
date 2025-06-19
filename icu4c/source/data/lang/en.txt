@@ -24,8 +24,8 @@ en{
         i0{"Input Method"}
         k0{"Keyboard"}
         kv{"Highest Ignored"}
-        lb{"Line Break Strictness"}
-        lw{"Line Breaks In Words Setting"}
+        lb{"CJK Line Break"}
+        lw{"Line Breaks within Words"}
         m0{"Transform Rules"}
         ms{"Measurement System"}
         mu{"Measurement Unit"}
@@ -744,6 +744,7 @@ en{
         hi_Latn{"Hinglish"}
         ky{"Kirghiz"}
         my{"Myanmar Language"}
+        oka{"Colville Salish"}
         pi{"Pāli"}
         ps{"Pushto"}
         ug{"Uighur"}
@@ -1009,8 +1010,10 @@ en{
             indian{"Indian National"}
             islamic{"Hijri"}
             islamic-civil{"Hijri (tabular, civil epoch)"}
+            islamic-rgsa{"Hijri, Saudi Arabia sighting"}
             islamic-tbla{"Hijri (tabular, astronomical epoch)"}
             islamic-umalqura{"Hijri (Umm al-Qura)"}
+            iso8601{"Gregorian YMD"}
             japanese{"Japanese"}
             persian{"Persian"}
             roc{"Minguo"}
@@ -1083,10 +1086,13 @@ en{
             compat{"Compatibility"}
             dictionary{"Dictionary"}
             ducet{"Default Unicode"}
+            emoji{"Emoji"}
+            eor{"European rules"}
             phonebook{"Phonebook"}
             phonetic{"Phonetic"}
             pinyin{"Pinyin"}
             search{"Search"}
+            searchjl{"Korean initial consonant"}
             standard{"Standard"}
             stroke{"Stroke"}
             traditional{"Traditional"}
@@ -1119,9 +1125,9 @@ en{
             zawgyi{"To Zawgyi Myanmar Encoding"}
         }
         em{
-            default{"Use Default Presentation For Emoji Characters"}
-            emoji{"Prefer Emoji Presentation For Emoji Characters"}
-            text{"Prefer Text Presentation For Emoji Characters"}
+            default{"Default Presentation For Emoji"}
+            emoji{"Emoji Presentation For Emoji"}
+            text{"Text Presentation For Emoji"}
         }
         em%core{
             default{"Default"}
@@ -1129,13 +1135,13 @@ en{
             text{"Text"}
         }
         fw{
-            fri{"First Day of Week Is Friday"}
-            mon{"First Day of Week Is Monday"}
-            sat{"First Day of Week Is Saturday"}
-            sun{"First Day of Week Is Sunday"}
-            thu{"First Day of Week Is Thursday"}
-            tue{"First Day of Week Is Tuesday"}
-            wed{"First Day of Week Is Wednesday"}
+            fri{"First day of week: Friday"}
+            mon{"First day of week: Monday"}
+            sat{"First day of week: Saturday"}
+            sun{"First day of week: Sunday"}
+            thu{"First day of week: Thursday"}
+            tue{"First day of week: Tuesday"}
+            wed{"First day of week: Wednesday"}
         }
         h0{
             hybrid{"Hybrid"}
@@ -1194,6 +1200,12 @@ en{
             punct{"Ignore Symbols affects spaces and punctuation only"}
             space{"Ignore Symbols affects spaces only"}
             symbol{"Ignore Symbols affects spaces, punctuation, non-currency symbols"}
+        }
+        kv%core{
+            currency{"Shift Spaces, punctuation, all symbols"}
+            punct{"Shift spaces, punctuation"}
+            space{"Shift spaces, punctuation"}
+            symbol{"Shift spaces, punctuation, non-currency symbols"}
         }
         lb{
             loose{"Loose Line Break Style"}
@@ -1282,6 +1294,7 @@ en{
             brah{"Brahmi Digits"}
             cakm{"Chakma Digits"}
             cham{"Cham Digits"}
+            chis{"Chisoi Digits"}
             cyrl{"Cyrillic Numerals"}
             deva{"Devanagari Digits"}
             diak{"Dives Akuru Digits"}
@@ -1365,10 +1378,41 @@ en{
             tibt{"Tibetan Digits"}
             tirh{"Tirhuta Digits"}
             tnsa{"Tangsa Digits"}
+            tols{"Tolong Siki Digits"}
             traditional{"Traditional Numerals"}
             vaii{"Vai Digits"}
             wara{"Warang Citi Digits"}
             wcho{"Wancho Digits"}
+        }
+        numbers%core{
+            arabext{"Extended Arabic-Indic"}
+            armnlow{"Armenian lowercase"}
+            finance{"Financial"}
+            fullwide{"Full-width"}
+            greklow{"Greek lowercase"}
+            hanidays{"Han-character day-of-month numbering for traditional calendars"}
+            hanidec{"Positional decimal system using Chinese number ideographs as digits"}
+            hansfin{"Simplified Chinese financial"}
+            hantfin{"Traditional Chinese financial"}
+            jpanfin{"Japanese financial"}
+            jpanyear{"Japanese first-year Gannen numbering"}
+            lanatham{"Tai Tham Tham (ecclesiastical)"}
+            mathbold{"Mathematical bold"}
+            mathdbl{"Mathematical double-struck"}
+            mathmono{"Mathematical monospace"}
+            mathsanb{"Mathematical sans-serif bold"}
+            mathsans{"Mathematical sans-serif"}
+            mymrepka{"Myanmar Eastern Pwo Karen"}
+            mymrpao{"Myanmar Pao"}
+            mymrshan{"Myanmar Shan"}
+            mymrtlng{"Myanmar Tai Laing"}
+            native{"Native digits"}
+            outlined{"Outlined"}
+            roman{"Roman uppercase"}
+            romanlow{"Roman lowercase"}
+            segment{"Segmented"}
+            tamldec{"Modern Tamil"}
+            traditional{"Traditional numerals"}
         }
         s0{
             accents{"From Accented Characters To ASCII Sequence"}
@@ -1392,6 +1436,9 @@ en{
         }
         va{
             posix{"POSIX Compliant Locale"}
+        }
+        va%core{
+            posix{"POSIX variant"}
         }
     }
     Types%short{
@@ -1443,7 +1490,7 @@ en{
         OSOJS{"Oseacco/Osojane dialect"}
         OXENDICT{"Oxford English Dictionary spelling"}
         PAMAKA{"Pamaka dialect"}
-        PINYIN{"Pinyin Romanization"}
+        PINYIN{"Pinyin romanization"}
         POLYTON{"Polytonic"}
         POSIX{"Computer"}
         REVISED{"Revised Orthography"}
@@ -1459,7 +1506,7 @@ en{
         UCRCOR{"Unified Revised Orthography"}
         UNIFON{"Unifon phonetic alphabet"}
         VALENCIA{"Valencian"}
-        WADEGILE{"Wade-Giles Romanization"}
+        WADEGILE{"Wade-Giles romanization"}
     }
     characterLabelPattern{
         all{"{0} — all"}

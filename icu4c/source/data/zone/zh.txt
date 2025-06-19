@@ -1845,6 +1845,11 @@ zh{
         "meta:Truk"{
             ls{"楚克时间"}
         }
+        "meta:Turkey"{
+            ld{"土耳其夏令时间"}
+            lg{"土耳其时间"}
+            ls{"土耳其标准时间"}
+        }
         "meta:Turkmenistan"{
             ld{"土库曼斯坦夏令时间"}
             lg{"土库曼斯坦时间"}

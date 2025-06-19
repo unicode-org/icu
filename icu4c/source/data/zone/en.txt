@@ -729,6 +729,11 @@ en{
         "meta:Truk"{
             ls{"Chuuk Time"}
         }
+        "meta:Turkey"{
+            ld{"Türkiye Summer Time"}
+            lg{"Türkiye Time"}
+            ls{"Türkiye Standard Time"}
+        }
         "meta:Turkmenistan"{
             ld{"Turkmenistan Summer Time"}
             lg{"Turkmenistan Time"}

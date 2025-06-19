@@ -90,7 +90,7 @@ dz{
                 "EEEE, G སྤྱི་ལོ་y MMMM ཚེས་dd",
                 "G སྤྱི་ལོ་y MMMM ཚེས་ dd",
                 "G སྤྱི་ལོ་y ཟླ་MMM ཚེས་dd",
-                "GGGGG y-MM-dd",
+                "G y-MM-dd",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

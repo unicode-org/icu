@@ -1055,6 +1055,11 @@ cs{
         "meta:Truk"{
             ls{"chuukský čas"}
         }
+        "meta:Turkey"{
+            ld{"Turecký letní čas"}
+            lg{"Turecký čas"}
+            ls{"Turecký standardní čas"}
+        }
         "meta:Turkmenistan"{
             ld{"turkmenský letní čas"}
             lg{"turkmenský čas"}

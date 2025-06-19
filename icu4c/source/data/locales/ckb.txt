@@ -35,7 +35,7 @@ ckb{
                 "G y MMMM d, EEEE",
                 "dی MMMMی y G",
                 "G y MMM d",
-                "GGGGG y-MM-dd",
+                "G y-MM-dd",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

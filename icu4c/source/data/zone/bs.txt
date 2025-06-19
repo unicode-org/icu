@@ -972,6 +972,11 @@ bs{
         "meta:Truk"{
             ls{"Čučko vrijeme"}
         }
+        "meta:Turkey"{
+            ld{"Turska letnje računanje vremena"}
+            lg{"Turska vreme"}
+            ls{"Turska standardno vreme"}
+        }
         "meta:Turkmenistan"{
             ld{"turkmenistansko ljetno vrijeme"}
             lg{"turkmenistansko vrijeme"}

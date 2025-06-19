@@ -29,7 +29,7 @@ bo{
                 "G y MMMM d, EEEE",
                 "G སྤྱི་ལོ་y MMMMའི་ཚེས་d",
                 "G y ལོའི་MMMཚེས་d",
-                "GGGGG y-MM-dd",
+                "G y-MM-dd",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

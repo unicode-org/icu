@@ -1022,6 +1022,11 @@ pt{
         "meta:Truk"{
             ls{"Horário de Chuuk"}
         }
+        "meta:Turkey"{
+            ld{"Horário de Verão da Turquia"}
+            lg{"Horário da Turquia"}
+            ls{"Horário Padrão da Turquia"}
+        }
         "meta:Turkmenistan"{
             ld{"Horário de Verão do Turcomenistão"}
             lg{"Horário do Turcomenistão"}

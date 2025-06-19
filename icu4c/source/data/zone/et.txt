@@ -954,6 +954,11 @@ et{
         "meta:Truk"{
             ls{"Chuuki aeg"}
         }
+        "meta:Turkey"{
+            ld{"Türgi suveaeg"}
+            lg{"Türgi aeg"}
+            ls{"Türgi standardaeg"}
+        }
         "meta:Turkmenistan"{
             ld{"Türkmenistani suveaeg"}
             lg{"Türkmenistani aeg"}

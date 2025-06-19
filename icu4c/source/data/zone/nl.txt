@@ -906,6 +906,11 @@ nl{
         "meta:Truk"{
             ls{"Chuukse tijd"}
         }
+        "meta:Turkey"{
+            ld{"Turkse zomertijd"}
+            lg{"Turkse tijd"}
+            ls{"Turkse standaardtijd"}
+        }
         "meta:Turkmenistan"{
             ld{"Turkmeense zomertijd"}
             lg{"Turkmeense tijd"}

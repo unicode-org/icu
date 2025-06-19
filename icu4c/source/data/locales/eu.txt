@@ -346,7 +346,7 @@ eu{
                 "G. 'aroko' y. 'urteko' MMMM d, EEEE",
                 "G. 'aroko' y. 'urteko' MMMM d",
                 "G. 'aroko' y('e')'ko' MMM d",
-                "GGGGG y-MM-dd",
+                "G y-MM-dd",
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",

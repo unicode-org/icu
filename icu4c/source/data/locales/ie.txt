@@ -11,6 +11,58 @@ ie{
             patterns{
                 currencyFormat{"¤ #,##0.00;¤ -#,##0.00"}
             }
+            patternsLong{
+                decimalFormat{
+                    1000{
+                        one{"0 mill"}
+                        other{"0 milles"}
+                    }
+                    10000{
+                        one{"00 mill"}
+                        other{"00 milles"}
+                    }
+                    100000{
+                        one{"000 mill"}
+                        other{"000 milles"}
+                    }
+                    1000000{
+                        one{"0 million"}
+                        other{"0 milliones"}
+                    }
+                    10000000{
+                        one{"00 million"}
+                        other{"00 milliones"}
+                    }
+                    100000000{
+                        one{"000 million"}
+                        other{"000 milliones"}
+                    }
+                    1000000000{
+                        one{"0 milliard"}
+                        other{"0 milliardes"}
+                    }
+                    10000000000{
+                        one{"00 milliard"}
+                        other{"00 milliardes"}
+                    }
+                    100000000000{
+                        one{"000 milliard"}
+                        other{"000 milliardes"}
+                    }
+                    1000000000000{
+                        one{"0 billion"}
+                        other{"0 billiones"}
+                    }
+                    10000000000000{
+                        one{"00 billion"}
+                        other{"00 billiones"}
+                    }
+                    100000000000000{
+                        one{"000 billion"}
+                        other{"000 billiones"}
+                    }
+                }
+            }
             symbols{
                 decimal{","}
                 group{" "}
@@ -21,6 +73,7 @@ ie{
                 other{"Li {0}-im edition"}
             }
             plural{
+                one{"{0} die"}
                 other{"{0} dies"}
             }
         }

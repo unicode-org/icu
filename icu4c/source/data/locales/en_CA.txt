@@ -68,7 +68,7 @@ en_CA{
                 "EEEE, MMMM d, y G",
                 "MMMM d, y G",
                 "MMM d, y G",
-                "M/d/y GGGGG",
+                "M/d/y G",
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",

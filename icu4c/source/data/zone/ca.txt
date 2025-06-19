@@ -930,6 +930,11 @@ ca{
         "meta:Truk"{
             ls{"Hora de Chuuk"}
         }
+        "meta:Turkey"{
+            ld{"Hora d'estiu de Turquia"}
+            lg{"Hora de Turquia"}
+            ls{"Hora estàndard de Turquia"}
+        }
         "meta:Turkmenistan"{
             ld{"Hora d’estiu del Turkmenistan"}
             lg{"Hora del Turkmenistan"}

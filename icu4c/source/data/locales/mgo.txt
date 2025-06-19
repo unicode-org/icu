@@ -16,7 +16,7 @@ mgo{
                 "EEEE, G y MMMM dd",
                 "G y MMMM d",
                 "G y MMM d",
-                "GGGGG y-MM-dd",
+                "G y-MM-dd",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

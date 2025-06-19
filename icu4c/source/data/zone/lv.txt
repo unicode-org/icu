@@ -1659,6 +1659,11 @@ lv{
         "meta:Truk"{
             ls{"Čūkas laiks"}
         }
+        "meta:Turkey"{
+            ld{"Turcijas vasaras laiks"}
+            lg{"Turcijas laiks"}
+            ls{"Turcijas ziemas laiks"}
+        }
         "meta:Turkmenistan"{
             ld{"Turkmenistānas vasaras laiks"}
             lg{"Turkmenistānas laiks"}

@@ -1746,6 +1746,11 @@ lt{
         "meta:Truk"{
             ls{"Čuko laikas"}
         }
+        "meta:Turkey"{
+            ld{"Turkijos vasaros laikas"}
+            lg{"Turkijos laikas"}
+            ls{"Turkijos žiemos laikas"}
+        }
         "meta:Turkmenistan"{
             ld{"Turkmėnistano vasaros laikas"}
             lg{"Turkmėnistano laikas"}

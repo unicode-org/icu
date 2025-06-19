@@ -772,6 +772,11 @@ da{
         "meta:Truk"{
             ls{"Chuuk-tid"}
         }
+        "meta:Turkey"{
+            ld{"Tyrkisk sommertid"}
+            lg{"Tyrkisk tid"}
+            ls{"Tyrkisk normaltid"}
+        }
         "meta:Turkmenistan"{
             ld{"Turkmensk sommertid"}
             lg{"Turkmensk tid"}

@@ -641,6 +641,7 @@ keyTypeData:table(nofallback){
             brah{""}
             cakm{""}
             cham{""}
+            chis{""}
             cyrl{""}
             deva{""}
             diak{""}
@@ -724,6 +725,7 @@ keyTypeData:table(nofallback){
             tibt{""}
             tirh{""}
             tnsa{""}
+            tols{""}
             traditional{"traditio"}
             vaii{""}
             wara{""}

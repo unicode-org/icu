@@ -1446,6 +1446,11 @@ az{
         "meta:Truk"{
             ls{"Çuuk Vaxtı"}
         }
+        "meta:Turkey"{
+            ld{"Türkiya yay vaxtı"}
+            lg{"Türkiya vaxtı"}
+            ls{"Türkiya standart vaxtı"}
+        }
         "meta:Turkmenistan"{
             ld{"Türkmənistan Yay Vaxtı"}
             lg{"Türkmənistan Vaxtı"}

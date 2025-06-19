@@ -20,8 +20,8 @@ supplementalData:table(nofallback){
                 0{
                     start:intvector{
                         -2636,
-                        1,
-                        1,
+                        2,
+                        15,
                     }
                 }
             }
@@ -51,8 +51,8 @@ supplementalData:table(nofallback){
                 0{
                     start:intvector{
                         -2332,
-                        1,
-                        1,
+                        2,
+                        15,
                     }
                 }
             }
@@ -61,17 +61,17 @@ supplementalData:table(nofallback){
         ethiopic{
             eras{
                 0{
-                    end:intvector{
-                        8,
-                        8,
-                        28,
+                    start:intvector{
+                        -5492,
+                        7,
+                        17,
                     }
                 }
                 1{
                     start:intvector{
                         8,
                         8,
-                        29,
+                        27,
                     }
                 }
             }
@@ -80,10 +80,10 @@ supplementalData:table(nofallback){
         ethiopic-amete-alem{
             eras{
                 0{
-                    end:intvector{
+                    start:intvector{
                         -5492,
-                        8,
-                        29,
+                        7,
+                        17,
                     }
                 }
             }
@@ -112,7 +112,7 @@ supplementalData:table(nofallback){
                 0{
                     start:intvector{
                         -3760,
-                        10,
+                        9,
                         7,
                     }
                 }
@@ -124,8 +124,8 @@ supplementalData:table(nofallback){
                 0{
                     start:intvector{
                         79,
-                        1,
-                        1,
+                        3,
+                        22,
                     }
                 }
             }
@@ -136,14 +136,14 @@ supplementalData:table(nofallback){
                     start:intvector{
                         622,
                         7,
-                        15,
+                        19,
                     }
                 }
                 1{
                     end:intvector{
                         622,
                         7,
-                        14,
+                        18,
                     }
                 }
             }
@@ -155,14 +155,14 @@ supplementalData:table(nofallback){
                     start:intvector{
                         622,
                         7,
-                        16,
+                        19,
                     }
                 }
                 1{
                     end:intvector{
                         622,
                         7,
-                        15,
+                        18,
                     }
                 }
             }
@@ -174,14 +174,14 @@ supplementalData:table(nofallback){
                     start:intvector{
                         622,
                         7,
-                        15,
+                        19,
                     }
                 }
                 1{
                     end:intvector{
                         622,
                         7,
-                        14,
+                        18,
                     }
                 }
             }
@@ -193,14 +193,14 @@ supplementalData:table(nofallback){
                     start:intvector{
                         622,
                         7,
-                        15,
+                        18,
                     }
                 }
                 1{
                     end:intvector{
                         622,
                         7,
-                        14,
+                        17,
                     }
                 }
             }
@@ -212,14 +212,14 @@ supplementalData:table(nofallback){
                     start:intvector{
                         622,
                         7,
-                        15,
+                        19,
                     }
                 }
                 1{
                     end:intvector{
                         622,
                         7,
-                        14,
+                        18,
                     }
                 }
             }
@@ -1273,8 +1273,8 @@ supplementalData:table(nofallback){
                 232{
                     start:intvector{
                         1868,
-                        9,
-                        8,
+                        10,
+                        23,
                     }
                 }
                 233{
@@ -1895,8 +1895,8 @@ supplementalData:table(nofallback){
                 0{
                     start:intvector{
                         622,
-                        1,
-                        1,
+                        3,
+                        21,
                     }
                 }
             }
@@ -14816,6 +14816,14 @@ supplementalData:table(nofallback){
                 scripts{"Latn"}
             }
         }
+        mww{
+            primary{
+                scripts{"Latn"}
+            }
+            secondary{
+                scripts{"Hmnp"}
+            }
+        }
         mxc{
             primary{
                 scripts{"Latn"}
@@ -15827,6 +15835,14 @@ supplementalData:table(nofallback){
             }
             secondary{
                 scripts{"Arab"}
+            }
+        }
+        suz{
+            primary{
+                scripts{"Deva"}
+            }
+            secondary{
+                scripts{"Sunu"}
             }
         }
         sv{
@@ -19128,11 +19144,15 @@ supplementalData:table(nofallback){
             "en_CZ",
             "en_DE",
             "en_DK",
+            "en_EE",
             "en_ES",
             "en_FI",
             "en_FR",
+            "en_GE",
             "en_HU",
             "en_IT",
+            "en_LT",
+            "en_LV",
             "en_NL",
             "en_NO",
             "en_PL",
@@ -19141,6 +19161,7 @@ supplementalData:table(nofallback){
             "en_SE",
             "en_SI",
             "en_SK",
+            "en_UA",
         }
         en_IN{"hi_Latn"}
         es_419{
@@ -27034,6 +27055,9 @@ supplementalData:table(nofallback){
                 officialStatus{"official_regional"}
                 populationShareF:int{47260000}
             }
+            mww{
+                populationShareF:int{46170000}
+            }
             nan{
                 populationShareF:int{48190000}
             }
@@ -27799,6 +27823,9 @@ supplementalData:table(nofallback){
             }
             it{
                 populationShareF:int{48170000}
+            }
+            mww{
+                populationShareF:int{46150000}
             }
             nl{
                 populationShareF:int{47130000}
@@ -29478,6 +29505,9 @@ supplementalData:table(nofallback){
                 officialStatus{"official"}
                 populationShareF:int{49690000}
             }
+            mww{
+                populationShareF:int{48230000}
+            }
             territoryF:intvector{
                 60641700,
                 49727000,
@@ -30586,6 +30616,9 @@ supplementalData:table(nofallback){
             rjs{
                 literacyShareF:int{49670000}
                 populationShareF:int{47440000}
+            }
+            suz{
+                populationShareF:int{47130000}
             }
             taj{
                 populationShareF:int{47430000}
@@ -31958,6 +31991,9 @@ supplementalData:table(nofallback){
             mnw{
                 populationShareF:int{47170000}
             }
+            mww{
+                populationShareF:int{46470000}
+            }
             nod{
                 populationShareF:int{48960000}
                 writingShareF:int{48500000}
@@ -32473,8 +32509,14 @@ supplementalData:table(nofallback){
             mus{
                 populationShareF:int{45120000}
             }
+            mww{
+                populationShareF:int{46680000}
+            }
             nv{
                 populationShareF:int{46500000}
+            }
+            oka{
+                populationShareF:int{44100000}
             }
             osa{
                 populationShareF:int{0}
@@ -32606,6 +32648,9 @@ supplementalData:table(nofallback){
             }
             hnj{
                 populationShareF:int{47170000}
+            }
+            mww{
+                populationShareF:int{48140000}
             }
             territoryF:intvector{
                 62135400,

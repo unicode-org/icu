@@ -67,7 +67,7 @@ ii{
                 "G y MMMM dꑍ,EEEE",
                 "G y MMMM dꑍ",
                 "G y MMM dꑍ",
-                "GGGGG y-MM-dd",
+                "G y-MM-dd",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

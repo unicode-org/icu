@@ -1088,6 +1088,11 @@ hu{
         "meta:Truk"{
             ls{"truki idő"}
         }
+        "meta:Turkey"{
+            ld{"Törökországi nyári idő"}
+            lg{"Törökországi idő"}
+            ls{"Törökországi zónaidő"}
+        }
         "meta:Turkmenistan"{
             ld{"türkmenisztáni nyári idő"}
             lg{"türkmenisztáni idő"}

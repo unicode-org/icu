@@ -248,14 +248,14 @@ en{
         }
         minimalPairs{
             ordinal{
-                few{"Take the {0}rd right."}
-                one{"Take the {0}st right."}
-                other{"Take the {0}th right."}
-                two{"Take the {0}nd right."}
+                few{"Take the {0}rd right."}
+                one{"Take the {0}st right."}
+                other{"Take the {0}th right."}
+                two{"Take the {0}nd right."}
             }
             plural{
-                one{"{0} day"}
-                other{"{0} days"}
+                one{"{0} day"}
+                other{"{0} days"}
             }
         }
     }
@@ -310,11 +310,14 @@ en{
                 Bhm{"h:mm B"}
                 Bhms{"h:mm:ss B"}
                 E{"ccc"}
+                EBh{"E h B"}
                 EBhm{"E h:mm B"}
                 EBhms{"E h:mm:ss B"}
+                EH{"E HH'h'"}
                 EHm{"E HH:mm"}
                 EHms{"E HH:mm:ss"}
                 Ed{"d E"}
+                Eh{"E h a"}
                 Ehm{"E h:mm a"}
                 Ehms{"E h:mm:ss a"}
                 Gy{"r(U)"}
@@ -324,9 +327,10 @@ en{
                 GyMMMMEd{"E, MMMM d, r(U)"}
                 GyMMMMd{"MMMM d, r(U)"}
                 GyMMMd{"MMM d, r"}
-                H{"HH"}
+                H{"HH'h'"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
+                Hv{"HH'h' v"}
                 M{"L"}
                 MEd{"E, M/d"}
                 MMM{"LLL"}
@@ -342,6 +346,7 @@ en{
                 h{"h a"}
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
+                hv{"h a v"}
                 ms{"mm:ss"}
                 y{"r(U)"}
                 yyyy{"r(U)"}
@@ -388,7 +393,7 @@ en{
                     m{"h:mm – h:mm B"}
                 }
                 H{
-                    H{"HH – HH"}
+                    H{"HH – HH'h'"}
                 }
                 Hm{
                     H{"HH:mm – HH:mm"}
@@ -399,7 +404,7 @@ en{
                     m{"HH:mm – HH:mm v"}
                 }
                 Hv{
-                    H{"HH – HH v"}
+                    H{"HH – HH'h' v"}
                 }
                 M{
                     M{"M – M"}
@@ -567,7 +572,7 @@ en{
                 "EEEE, MMMM d, y G",
                 "MMMM d, y G",
                 "MMM d, y G",
-                "M/d/y GGGGG",
+                "M/d/y G",
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
@@ -614,21 +619,27 @@ en{
                 Bhm{"h:mm B"}
                 Bhms{"h:mm:ss B"}
                 E{"ccc"}
+                EBh{"E h B"}
                 EBhm{"E h:mm B"}
                 EBhms{"E h:mm:ss B"}
+                EH{"E HH'h'"}
                 EHm{"E HH:mm"}
                 EHms{"E HH:mm:ss"}
                 Ed{"d E"}
+                Eh{"E h a"}
                 Ehm{"E h:mm a"}
                 Ehms{"E h:mm:ss a"}
                 Gy{"y G"}
+                GyM{"M/y G"}
+                GyMEd{"E, M/d/y G"}
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, MMM d, y G"}
                 GyMMMd{"MMM d, y G"}
-                GyMd{"M/d/y GGGGG"}
-                H{"HH"}
+                GyMd{"M/d/y G"}
+                H{"HH'h'"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
+                Hv{"HH'h' v"}
                 M{"L"}
                 MEd{"E, M/d"}
                 MMM{"LLL"}
@@ -640,16 +651,17 @@ en{
                 h{"h a"}
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
+                hv{"h a v"}
                 ms{"mm:ss"}
                 y{"y G"}
                 yyyy{"y G"}
-                yyyyM{"M/y GGGGG"}
-                yyyyMEd{"E, M/d/y GGGGG"}
+                yyyyM{"M/y G"}
+                yyyyMEd{"E, M/d/y G"}
                 yyyyMMM{"MMM y G"}
                 yyyyMMMEd{"E, MMM d, y G"}
                 yyyyMMMM{"MMMM y G"}
                 yyyyMMMd{"MMM d, y G"}
-                yyyyMd{"M/d/y GGGGG"}
+                yyyyMd{"M/d/y G"}
                 yyyyQQQ{"QQQ y G"}
                 yyyyQQQQ{"QQQQ y G"}
             }
@@ -668,15 +680,15 @@ en{
                     y{"y – y G"}
                 }
                 GyM{
-                    G{"M/y GGGGG – M/y GGGGG"}
-                    M{"M/y – M/y GGGGG"}
-                    y{"M/y – M/y GGGGG"}
+                    G{"M/y G – M/y G"}
+                    M{"M/y – M/y G"}
+                    y{"M/y – M/y G"}
                 }
                 GyMEd{
-                    G{"E, M/d/y GGGGG – E, M/d/y GGGGG"}
-                    M{"E, M/d/y – E, M/d/y GGGGG"}
-                    d{"E, M/d/y – E, M/d/y GGGGG"}
-                    y{"E, M/d/y – E, M/d/y GGGGG"}
+                    G{"E, M/d/y G – E, M/d/y G"}
+                    M{"E, M/d/y – E, M/d/y G"}
+                    d{"E, M/d/y – E, M/d/y G"}
+                    y{"E, M/d/y – E, M/d/y G"}
                 }
                 GyMMM{
                     G{"MMM y G – MMM y G"}
@@ -696,13 +708,13 @@ en{
                     y{"MMM d, y – MMM d, y G"}
                 }
                 GyMd{
-                    G{"M/d/y GGGGG – M/d/y GGGGG"}
-                    M{"M/d/y – M/d/y GGGGG"}
-                    d{"M/d/y – M/d/y GGGGG"}
-                    y{"M/d/y – M/d/y GGGGG"}
+                    G{"M/d/y G – M/d/y G"}
+                    M{"M/d/y – M/d/y G"}
+                    d{"M/d/y – M/d/y G"}
+                    y{"M/d/y – M/d/y G"}
                 }
                 H{
-                    H{"HH – HH"}
+                    H{"HH – HH'h'"}
                 }
                 Hm{
                     H{"HH:mm – HH:mm"}
@@ -713,7 +725,7 @@ en{
                     m{"HH:mm – HH:mm v"}
                 }
                 Hv{
-                    H{"HH – HH v"}
+                    H{"HH – HH'h' v"}
                 }
                 M{
                     M{"M – M"}
@@ -763,13 +775,13 @@ en{
                     y{"y – y G"}
                 }
                 yM{
-                    M{"M/y – M/y GGGGG"}
-                    y{"M/y – M/y GGGGG"}
+                    M{"M/y – M/y G"}
+                    y{"M/y – M/y G"}
                 }
                 yMEd{
-                    M{"E, M/d/y – E, M/d/y GGGGG"}
-                    d{"E, M/d/y – E, M/d/y GGGGG"}
-                    y{"E, M/d/y – E, M/d/y GGGGG"}
+                    M{"E, M/d/y – E, M/d/y G"}
+                    d{"E, M/d/y – E, M/d/y G"}
+                    y{"E, M/d/y – E, M/d/y G"}
                 }
                 yMMM{
                     M{"MMM – MMM y G"}
@@ -790,9 +802,9 @@ en{
                     y{"MMM d, y – MMM d, y G"}
                 }
                 yMd{
-                    M{"M/d/y – M/d/y GGGGG"}
-                    d{"M/d/y – M/d/y GGGGG"}
-                    y{"M/d/y – M/d/y GGGGG"}
+                    M{"M/d/y – M/d/y G"}
+                    d{"M/d/y – M/d/y G"}
+                    y{"M/d/y – M/d/y G"}
                 }
             }
         }
@@ -872,23 +884,29 @@ en{
                 Bhm{"h:mm B"}
                 Bhms{"h:mm:ss B"}
                 E{"ccc"}
+                EBh{"E h B"}
                 EBhm{"E h:mm B"}
                 EBhms{"E h:mm:ss B"}
+                EH{"E HH'h'"}
                 EHm{"E HH:mm"}
                 EHms{"E HH:mm:ss"}
                 Ed{"d E"}
+                Eh{"E h a"}
                 Ehm{"E h:mm a"}
                 Ehms{"E h:mm:ss a"}
                 Gy{"y G"}
+                GyM{"M/y G"}
+                GyMEd{"E, M/d/y G"}
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, MMM d, y G"}
                 GyMMMd{"MMM d, y G"}
                 GyMd{"M/d/y G"}
-                H{"HH"}
+                H{"HH'h'"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
                 Hmsv{"HH:mm:ss v"}
                 Hmv{"HH:mm v"}
+                Hv{"HH'h' v"}
                 M{"L"}
                 MEd{"E, M/d"}
                 MMM{"LLL"}
@@ -906,6 +924,7 @@ en{
                 hms{"h:mm:ss a"}
                 hmsv{"h:mm:ss a v"}
                 hmv{"h:mm a v"}
+                hv{"h a v"}
                 ms{"mm:ss"}
                 y{"y"}
                 yM{"M/y"}
@@ -1131,7 +1150,7 @@ en{
                     y{"M/d/y – M/d/y G"}
                 }
                 H{
-                    H{"HH – HH"}
+                    H{"HH – HH'h'"}
                 }
                 Hm{
                     H{"HH:mm – HH:mm"}
@@ -1142,7 +1161,7 @@ en{
                     m{"HH:mm – HH:mm v"}
                 }
                 Hv{
-                    H{"HH – HH v"}
+                    H{"HH – HH'h' v"}
                 }
                 M{
                     M{"M – M"}
@@ -1599,7 +1618,7 @@ en{
                 "EEEE, MMMM d, y G",
                 "MMMM d, y G",
                 "MMM d, y G",
-                "M/d/y GGGGG",
+                "M/d/y G",
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
@@ -1610,10 +1629,12 @@ en{
                 E{"ccc"}
                 Ed{"d E"}
                 Gy{"y G"}
+                GyM{"M/y G"}
+                GyMEd{"E, M/d/y G"}
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, MMM d, y G"}
                 GyMMMd{"MMM d, y G"}
-                GyMd{"M/d/y GGGGG"}
+                GyMd{"M/d/y G"}
                 M{"L"}
                 MEd{"E, M/d"}
                 MMM{"LLL"}
@@ -1624,13 +1645,13 @@ en{
                 d{"d"}
                 y{"y G"}
                 yyyy{"y G"}
-                yyyyM{"M/y GGGGG"}
-                yyyyMEd{"E, M/d/y GGGGG"}
+                yyyyM{"M/y G"}
+                yyyyMEd{"E, M/d/y G"}
                 yyyyMMM{"MMM y G"}
                 yyyyMMMEd{"E, MMM d, y G"}
                 yyyyMMMM{"MMMM y G"}
                 yyyyMMMd{"MMM d, y G"}
-                yyyyMd{"M/d/y GGGGG"}
+                yyyyMd{"M/d/y G"}
                 yyyyQQQ{"QQQ y G"}
                 yyyyQQQQ{"QQQQ y G"}
             }
@@ -1726,19 +1747,24 @@ en{
                 Bhm{"h:mm B"}
                 Bhms{"h:mm:ss B"}
                 E{"ccc"}
+                EBh{"E h B"}
                 EBhm{"E h:mm B"}
                 EBhms{"E h:mm:ss B"}
+                EH{"E HH'h'"}
                 EHm{"E HH:mm"}
                 EHms{"E HH:mm:ss"}
                 Ed{"d, E"}
+                Eh{"E h a"}
                 Ehm{"E h:mm a"}
                 Ehms{"E h:mm:ss a"}
                 Gy{"G y"}
+                GyM{"G y-MM"}
+                GyMEd{"G y-MM-dd, E"}
                 GyMMM{"G y MMM"}
                 GyMMMEd{"G y MMM d, E"}
                 GyMMMd{"G y MMM d"}
                 GyMd{"G y-MM-dd"}
-                H{"HH"}
+                H{"HH'h'"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
                 Hmsv{"HH:mm:ss v"}
@@ -1788,8 +1814,20 @@ en{
                 "MMM d, y G",
                 "M/d/y GGGGG",
                 "{1}, {0}",
+                "{1} 'at' {0}",
+                "{1} 'at' {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+            }
+            DateTimePatterns%atTime{
+                "{1} 'at' {0}",
+                "{1} 'at' {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
+            DateTimePatterns%relative{
+                "{1} 'at' {0}",
+                "{1} 'at' {0}",
                 "{1}, {0}",
                 "{1}, {0}",
             }
@@ -1802,6 +1840,523 @@ en{
                 "GyMMMMd",
                 "GyMMMd",
                 "GGGGGyMd",
+            }
+            availableFormats{
+                E{"ccc"}
+                EEEEd{"EEEE d"}
+                Ed{"d E"}
+                Gy{"y G"}
+                GyM{"M/y GGGGG"}
+                GyMEd{"E, M/d/y GGGGG"}
+                GyMMM{"MMM y G"}
+                GyMMMEEEEd{"EEEE, MMM d, y G"}
+                GyMMMEd{"E, MMM d, y G"}
+                GyMMMd{"MMM d, y G"}
+                GyMd{"M/d/y GGGGG"}
+                M{"L"}
+                MEEEEd{"EEEE, M/d"}
+                MEd{"E, M/d"}
+                MMM{"LLL"}
+                MMMEEEEd{"EEEE, MMM d"}
+                MMMEd{"E, MMM d"}
+                MMMMd{"MMMM d"}
+                MMMd{"MMM d"}
+                Md{"M/d"}
+                d{"d"}
+                y{"y G"}
+                yyyy{"y G"}
+                yyyyM{"M/y GGGGG"}
+                yyyyMEEEEd{"EEEE, MMMM d, y G"}
+                yyyyMEd{"E, M/d/y GGGGG"}
+                yyyyMM{"MM y GGGGG"}
+                yyyyMMM{"MMM y G"}
+                yyyyMMMEEEEd{"EEEE, MMMM d, y G"}
+                yyyyMMMEd{"E, MMM d, y G"}
+                yyyyMMMM{"MMMM y G"}
+                yyyyMMMd{"MMM d, y G"}
+                yyyyMd{"M/d/y GGGGG"}
+                yyyyQQQ{"QQQ y G"}
+                yyyyQQQQ{"QQQQ y G"}
+            }
+            eras{
+                abbreviated{
+                    "Taika",
+                    "Hakuchi",
+                    "Hakuhō",
+                    "Shuchō",
+                    "Taihō",
+                    "Keiun",
+                    "Wadō",
+                    "Reiki",
+                    "Yōrō",
+                    "Jinki",
+                    "Tenpyō",
+                    "Tenpyō-kanpō",
+                    "Tenpyō-shōhō",
+                    "Tenpyō-hōji",
+                    "Tenpyō-jingo",
+                    "Jingo-keiun",
+                    "Hōki",
+                    "Ten’ō",
+                    "Enryaku",
+                    "Daidō",
+                    "Kōnin",
+                    "Tenchō",
+                    "Jōwa",
+                    "Kashō",
+                    "Ninju",
+                    "Saikō",
+                    "Ten’an",
+                    "Jōgan",
+                    "Gangyō",
+                    "Ninna",
+                    "Kanpyō",
+                    "Shōtai",
+                    "Engi",
+                    "Enchō",
+                    "Jōhei",
+                    "Tengyō",
+                    "Tenryaku",
+                    "Tentoku",
+                    "Ōwa",
+                    "Kōhō",
+                    "Anna",
+                    "Tenroku",
+                    "Ten’en",
+                    "Jōgen",
+                    "Tengen",
+                    "Eikan",
+                    "Kanna",
+                    "Eien",
+                    "Eiso",
+                    "Shōryaku",
+                    "Chōtoku",
+                    "Chōhō",
+                    "Kankō",
+                    "Chōwa",
+                    "Kannin",
+                    "Jian",
+                    "Manju",
+                    "Chōgen",
+                    "Chōryaku",
+                    "Chōkyū",
+                    "Kantoku",
+                    "Eishō",
+                    "Tengi",
+                    "Kōhei",
+                    "Jiryaku",
+                    "Enkyū",
+                    "Jōhō",
+                    "Jōryaku",
+                    "Eihō",
+                    "Ōtoku",
+                    "Kanji",
+                    "Kahō",
+                    "Eichō",
+                    "Jōtoku",
+                    "Kōwa",
+                    "Chōji",
+                    "Kajō",
+                    "Tennin",
+                    "Ten’ei",
+                    "Eikyū",
+                    "Gen’ei",
+                    "Hōan",
+                    "Tenji",
+                    "Daiji",
+                    "Tenshō",
+                    "Chōshō",
+                    "Hōen",
+                    "Eiji",
+                    "Kōji",
+                    "Ten’yō",
+                    "Kyūan",
+                    "Ninpei",
+                    "Kyūju",
+                    "Hōgen",
+                    "Heiji",
+                    "Eiryaku",
+                    "Ōhō",
+                    "Chōkan",
+                    "Eiman",
+                    "Nin’an",
+                    "Kaō",
+                    "Jōan",
+                    "Angen",
+                    "Jishō",
+                    "Yōwa",
+                    "Juei",
+                    "Genryaku",
+                    "Bunji",
+                    "Kenkyū",
+                    "Shōji",
+                    "Kennin",
+                    "Genkyū",
+                    "Ken’ei",
+                    "Jōgen",
+                    "Kenryaku",
+                    "Kempo",
+                    "Jōkyū",
+                    "Jōō",
+                    "Gennin",
+                    "Karoku",
+                    "Antei",
+                    "Kangi",
+                    "Jōei",
+                    "Tenpuku",
+                    "Bunryaku",
+                    "Katei",
+                    "Ryakunin",
+                    "En’ō",
+                    "Ninji",
+                    "Kangen",
+                    "Hōji",
+                    "Kenchō",
+                    "Kōgen",
+                    "Shōka",
+                    "Shōgen",
+                    "Bun’ō",
+                    "Kōchō",
+                    "Bun’ei",
+                    "Kenji",
+                    "Kōan",
+                    "Shōō",
+                    "Einin",
+                    "Shōan",
+                    "Kengen",
+                    "Kagen",
+                    "Tokuji",
+                    "Enkyō",
+                    "Ōchō",
+                    "Shōwa",
+                    "Bunpō",
+                    "Gen’ō",
+                    "Genkō",
+                    "Shōchū",
+                    "Karyaku",
+                    "Gentoku",
+                    "Genkō",
+                    "Kenmu",
+                    "Engen",
+                    "Kōkoku",
+                    "Shōhei",
+                    "Kentoku",
+                    "Bunchū",
+                    "Tenju",
+                    "Kōryaku",
+                    "Kōwa",
+                    "Genchū",
+                    "Shitoku",
+                    "Kakei",
+                    "Kōō",
+                    "Meitoku",
+                    "Ōei",
+                    "Shōchō",
+                    "Eikyō",
+                    "Kakitsu",
+                    "Bun’an",
+                    "Hōtoku",
+                    "Kyōtoku",
+                    "Kōshō",
+                    "Chōroku",
+                    "Kanshō",
+                    "Bunshō",
+                    "Ōnin",
+                    "Bunmei",
+                    "Chōkyō",
+                    "Entoku",
+                    "Meiō",
+                    "Bunki",
+                    "Eishō",
+                    "Daiei",
+                    "Kyōroku",
+                    "Tenbun",
+                    "Kōji",
+                    "Eiroku",
+                    "Genki",
+                    "Tenshō",
+                    "Bunroku",
+                    "Keichō",
+                    "Genna",
+                    "Kan’ei",
+                    "Shōhō",
+                    "Keian",
+                    "Jōō",
+                    "Meireki",
+                    "Manji",
+                    "Kanbun",
+                    "Enpō",
+                    "Tenna",
+                    "Jōkyō",
+                    "Genroku",
+                    "Hōei",
+                    "Shōtoku",
+                    "Kyōhō",
+                    "Genbun",
+                    "Kanpō",
+                    "Enkyō",
+                    "Kan’en",
+                    "Hōreki",
+                    "Meiwa",
+                    "An’ei",
+                    "Tenmei",
+                    "Kansei",
+                    "Kyōwa",
+                    "Bunka",
+                    "Bunsei",
+                    "Tenpō",
+                    "Kōka",
+                    "Kaei",
+                    "Ansei",
+                    "Man’en",
+                    "Bunkyū",
+                    "Genji",
+                    "Keiō",
+                    "Meiji",
+                    "Taishō",
+                    "Shōwa",
+                    "Heisei",
+                    "Reiwa",
+                }
+                narrow{
+                    "Taika",
+                    "Hakuchi",
+                    "Hakuhō",
+                    "Shuchō",
+                    "Taihō",
+                    "Keiun",
+                    "Wadō",
+                    "Reiki",
+                    "Yōrō",
+                    "Jinki",
+                    "Tenpyō",
+                    "Tenpyō-kanpō",
+                    "Tenpyō-shōhō",
+                    "Tenpyō-hōji",
+                    "Tenpyō-jingo",
+                    "Jingo-keiun",
+                    "Hōki",
+                    "Ten’ō",
+                    "Enryaku",
+                    "Daidō",
+                    "Kōnin",
+                    "Tenchō",
+                    "Jōwa",
+                    "Kashō",
+                    "Ninju",
+                    "Saikō",
+                    "Ten’an",
+                    "Jōgan",
+                    "Gangyō",
+                    "Ninna",
+                    "Kanpyō",
+                    "Shōtai",
+                    "Engi",
+                    "Enchō",
+                    "Jōhei",
+                    "Tengyō",
+                    "Tenryaku",
+                    "Tentoku",
+                    "Ōwa",
+                    "Kōhō",
+                    "Anna",
+                    "Tenroku",
+                    "Ten’en",
+                    "Jōgen",
+                    "Tengen",
+                    "Eikan",
+                    "Kanna",
+                    "Eien",
+                    "Eiso",
+                    "Shōryaku",
+                    "Chōtoku",
+                    "Chōhō",
+                    "Kankō",
+                    "Chōwa",
+                    "Kannin",
+                    "Jian",
+                    "Manju",
+                    "Chōgen",
+                    "Chōryaku",
+                    "Chōkyū",
+                    "Kantoku",
+                    "Eishō",
+                    "Tengi",
+                    "Kōhei",
+                    "Jiryaku",
+                    "Enkyū",
+                    "Jōhō",
+                    "Jōryaku",
+                    "Eihō",
+                    "Ōtoku",
+                    "Kanji",
+                    "Kahō",
+                    "Eichō",
+                    "Jōtoku",
+                    "Kōwa",
+                    "Chōji",
+                    "Kajō",
+                    "Tennin",
+                    "Ten’ei",
+                    "Eikyū",
+                    "Gen’ei",
+                    "Hōan",
+                    "Tenji",
+                    "Daiji",
+                    "Tenshō",
+                    "Chōshō",
+                    "Hōen",
+                    "Eiji",
+                    "Kōji",
+                    "Ten’yō",
+                    "Kyūan",
+                    "Ninpei",
+                    "Kyūju",
+                    "Hōgen",
+                    "Heiji",
+                    "Eiryaku",
+                    "Ōhō",
+                    "Chōkan",
+                    "Eiman",
+                    "Nin’an",
+                    "Kaō",
+                    "Jōan",
+                    "Angen",
+                    "Jishō",
+                    "Yōwa",
+                    "Juei",
+                    "Genryaku",
+                    "Bunji",
+                    "Kenkyū",
+                    "Shōji",
+                    "Kennin",
+                    "Genkyū",
+                    "Ken’ei",
+                    "Jōgen",
+                    "Kenryaku",
+                    "Kempo",
+                    "Jōkyū",
+                    "Jōō",
+                    "Gennin",
+                    "Karoku",
+                    "Antei",
+                    "Kangi",
+                    "Jōei",
+                    "Tenpuku",
+                    "Bunryaku",
+                    "Katei",
+                    "Ryakunin",
+                    "En’ō",
+                    "Ninji",
+                    "Kangen",
+                    "Hōji",
+                    "Kenchō",
+                    "Kōgen",
+                    "Shōka",
+                    "Shōgen",
+                    "Bun’ō",
+                    "Kōchō",
+                    "Bun’ei",
+                    "Kenji",
+                    "Kōan",
+                    "Shōō",
+                    "Einin",
+                    "Shōan",
+                    "Kengen",
+                    "Kagen",
+                    "Tokuji",
+                    "Enkyō",
+                    "Ōchō",
+                    "Shōwa",
+                    "Bunpō",
+                    "Gen’ō",
+                    "Genkō",
+                    "Shōchū",
+                    "Karyaku",
+                    "Gentoku",
+                    "Genkō",
+                    "Kenmu",
+                    "Engen",
+                    "Kōkoku",
+                    "Shōhei",
+                    "Kentoku",
+                    "Bunchū",
+                    "Tenju",
+                    "Kōryaku",
+                    "Kōwa",
+                    "Genchū",
+                    "Shitoku",
+                    "Kakei",
+                    "Kōō",
+                    "Meitoku",
+                    "Ōei",
+                    "Shōchō",
+                    "Eikyō",
+                    "Kakitsu",
+                    "Bun’an",
+                    "Hōtoku",
+                    "Kyōtoku",
+                    "Kōshō",
+                    "Chōroku",
+                    "Kanshō",
+                    "Bunshō",
+                    "Ōnin",
+                    "Bunmei",
+                    "Chōkyō",
+                    "Entoku",
+                    "Meiō",
+                    "Bunki",
+                    "Eishō",
+                    "Daiei",
+                    "Kyōroku",
+                    "Tenbun",
+                    "Kōji",
+                    "Eiroku",
+                    "Genki",
+                    "Tenshō",
+                    "Bunroku",
+                    "Keichō",
+                    "Genna",
+                    "Kan’ei",
+                    "Shōhō",
+                    "Keian",
+                    "Jōō",
+                    "Meireki",
+                    "Manji",
+                    "Kanbun",
+                    "Enpō",
+                    "Tenna",
+                    "Jōkyō",
+                    "Genroku",
+                    "Hōei",
+                    "Shōtoku",
+                    "Kyōhō",
+                    "Genbun",
+                    "Kanpō",
+                    "Enkyō",
+                    "Kan’en",
+                    "Hōreki",
+                    "Meiwa",
+                    "An’ei",
+                    "Tenmei",
+                    "Kansei",
+                    "Kyōwa",
+                    "Bunka",
+                    "Bunsei",
+                    "Tenpō",
+                    "Kōka",
+                    "Kaei",
+                    "Ansei",
+                    "Man’en",
+                    "Bunkyū",
+                    "Genji",
+                    "Keiō",
+                    "M",
+                    "T",
+                    "S",
+                    "H",
+                    "R",
+                }
             }
         }
         roc{

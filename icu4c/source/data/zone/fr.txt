@@ -1000,6 +1000,11 @@ fr{
         "meta:Truk"{
             ls{"heure de Chuuk"}
         }
+        "meta:Turkey"{
+            ld{"heure avancée de Turquie"}
+            lg{"heure de Turquie"}
+            ls{"heure normale de Turquie"}
+        }
         "meta:Turkmenistan"{
             ld{"heure d’été du Turkménistan"}
             lg{"heure du Turkménistan"}

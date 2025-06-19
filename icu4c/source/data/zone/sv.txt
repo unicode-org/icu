@@ -896,6 +896,11 @@ sv{
         "meta:Truk"{
             ls{"Chuuktid"}
         }
+        "meta:Turkey"{
+            ld{"turkisk sommartid"}
+            lg{"turkisk tid"}
+            ls{"turkisk normaltid"}
+        }
         "meta:Turkmenistan"{
             ld{"turkmensk sommartid"}
             lg{"turkmensk tid"}

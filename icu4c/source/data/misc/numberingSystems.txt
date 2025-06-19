@@ -63,6 +63,11 @@ numberingSystems:table(nofallback){
             desc{"꩐꩑꩒꩓꩔꩕꩖꩗꩘꩙"}
             radix:int{10}
         }
+        chis{
+            algorithmic:int{0}
+            desc{"𖶠𖶡𖶢𖶣𖶤𖶥𖶦𖶧𖶨𖶩"}
+            radix:int{10}
+        }
         cyrl{
             algorithmic:int{1}
             desc{"%cyrillic-lower"}
@@ -466,6 +471,11 @@ numberingSystems:table(nofallback){
         tnsa{
             algorithmic:int{0}
             desc{"𖫀𖫁𖫂𖫃𖫄𖫅𖫆𖫇𖫈𖫉"}
+            radix:int{10}
+        }
+        tols{
+            algorithmic:int{0}
+            desc{"𑷠𑷡𑷢𑷣𑷤𑷥𑷦𑷧𑷨𑷩"}
             radix:int{10}
         }
         vaii{
