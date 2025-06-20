@@ -991,6 +991,7 @@ class LocaleFallbackData {
         t.put("xrm", "Cyrl");
         t.put("xrn", "Cyrl");
         t.put("xsa", "Sarb");
+        t.put("xsd", "Sidt");
         t.put("xsr", "Deva");
         t.put("xtq", "Brah");
         t.put("xub", "Taml");
