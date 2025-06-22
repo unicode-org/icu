@@ -11,8 +11,8 @@
 //   and others. All rights reserved.  
 //
 //---------------------------------------------------------------------------------
-#ifndef RBBIRPT_H
-#define RBBIRPT_H
+#ifndef REGEXCST_H
+#define REGEXCST_H
 
 #include "unicode/utypes.h"
 
