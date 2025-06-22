@@ -13,8 +13,8 @@
 //
 
 
-#ifndef RBBISCAN_H
-#define RBBISCAN_H
+#ifndef REGEXCMP_H
+#define REGEXCMP_H
 
 #include "unicode/utypes.h"
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS

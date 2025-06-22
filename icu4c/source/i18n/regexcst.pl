@@ -214,8 +214,8 @@ print "//   Copyright (C) 2002-2016 International Business Machines Corporation 
 print "//   and others. All rights reserved.  \n";
 print "//\n";
 print "//---------------------------------------------------------------------------------\n";
-print "#ifndef RBBIRPT_H\n";
-print "#define RBBIRPT_H\n";
+print "#ifndef REGEXCST_H\n";
+print "#define REGEXCST_H\n";
 print "\n";
 print "#include \"unicode/utypes.h\"\n";
 print "\n";
