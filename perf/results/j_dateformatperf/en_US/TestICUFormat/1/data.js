@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1750275278984,
+  "lastUpdate": 1750881885505,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -35367,6 +35367,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 250.25809901843712,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "1f33101a8aa68e8c52b5549434f529aced4ae459",
+          "message": "ICU-22789 Add Segmenter API to conveniently wrap BreakIterator in ICU4J\n\nSee #3237",
+          "timestamp": "2025-06-25T12:55:20-07:00",
+          "tree_id": "b6f3e87a868db51ef618f3cfeb9cd808beda533c",
+          "url": "https://github.com/unicode-org/icu/commit/1f33101a8aa68e8c52b5549434f529aced4ae459"
+        },
+        "date": 1750881614673,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 240.67944302665256,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
