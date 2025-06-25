@@ -84,6 +84,7 @@ void IntlTestRBNF::runIndexedTest(int32_t index, UBool exec, const char* &name, 
         TESTCASE(32, TestParseRuleDescriptorOverflow23002);
         TESTCASE(33, TestInfiniteRecursion);
         TESTCASE(34, testOmissionReplacementWithPluralRules);
+        TESTCASE(35, TestNullDereferenceWRITE23149);
 #else
         TESTCASE(0, TestRBNFDisabled);
 #endif
@@ -2751,6 +2752,15 @@ IntlTestRBNF::testOmissionReplacementWithPluralRules() {
             { nullptr, nullptr }
     };
     doTest(&rbnf, enTestFullData, false);
+}
+
+void
+IntlTestRBNF::TestNullDereferenceWRITE23149() {
+   UnicodeString test("x00:><>");
+   UParseError perror;
+   UErrorCode status = U_ZERO_ERROR;
+   // The following call should not crash
+   icu::RuleBasedNumberFormat rbfmt(test, Locale("en"), perror, status);
 }
 
 /* U_HAVE_RBNF */
