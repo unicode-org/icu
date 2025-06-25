@@ -529,7 +529,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
      */
     protected static final void checkOffset(int offset, CharacterIterator text) {
         if (offset < text.getBeginIndex() || offset > text.getEndIndex()) {
-            throw new IndexOutOfBoundsException("offset out of bounds");
+            throw new IndexOutOfBoundsException(offset);
         }
     }
 
