@@ -243,4 +243,4 @@ ICU4J plugin test - Note: This is currently broken
 
 ## Building ICU4J Release Files
 
-See [Release Build](../../../processes/release/tasks/release-build.md)
+See [Release Build](../../../processes/release/tasks/publish/release.md)

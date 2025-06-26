@@ -73,6 +73,13 @@ Here you should use the release tag.
      the promotion to Maven Central.
    * The unified Java documentation, (`icu4j-76.1-fulljavadoc.jar`) \
      **WARNING:** this is also the one to be published (unpacked) for web access
+   * Make sure to set the proper parameters:
+     * **Branch:** the branch prepared for release, for example `maint/maint-77`
+     * **Run the tests:** checked (default)
+     * **Deploy to Maven Central:** check (unchecked by default), if you are ready
+       for a real deployment and not doing just a sanity check
+     * **Release tag to upload to:** should be the GitHub draft release prepared
+       in a previous BRS step.
 
 1. **Release - Create checksums and GPG sign** (`release-check-sign.yml`) \
    THIS SHOULD BE THE LAST ACTION YOU RUN. \
@@ -80,3 +87,21 @@ Here you should use the release tag.
    The action will download all the artifacts from release,
    create checksum files (`SHASUM512.txt` and `*.md5`),
    and digital signature files (`*.asc`)
+
+1. **Login to Sonatype, sanity check, and approve** \
+  The previous step stages the Maven artifacts to Sonatype, but does
+  not automatically push them to Maven Central. \
+  It can be enabled, but we chose no to enable it by default so that a human can do a last sanity check. \
+  So someone must login to Sonatype, check that everything looks fine, and approve. \
+  <span style="color:red"><b>Note:</b> only someone with a Sonatype account
+  that was authorized for `com.ibm.icu` can approve. \
+  You can find the list of people with such access in the team shared folder.</span> \
+  To do that:
+    * log on to the [Sonatype Central Portal -- Namespaces](https://central.sonatype.com/publishing/namespaces).
+    * Select the "Deployments" tab.
+    * Check the files staged there, compare to a previous public release in Maven Central
+    (for example [ICU4J 77.1](https://repo1.maven.org/maven2/com/ibm/icu/icu4j/77.1/)
+    and [ICU4J Charset 77.1](https://repo1.maven.org/maven2/com/ibm/icu/icu4j-charset/77.1/)) \
+    For now sanity check is probably: make sure there are no errors / warnings, make sure the new staged files match the ones in the 2 links above.
+    * Once you confirm the contents, approve it.
+    * <span style="color:red"><b>TODO: update this doc with screenshot(s) once we have a release staged.</b><span>

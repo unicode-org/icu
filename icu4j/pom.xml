@@ -50,9 +50,9 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.release>11</maven.compiler.release>
 
-    <maven-central-repo-url>https://oss.sonatype.org</maven-central-repo-url>
-    <maven-central-releases-repo-url>${maven-central-repo-url}/service/local/staging/deploy/maven2</maven-central-releases-repo-url>
-    <maven-central-snapshots-repo-url>${maven-central-repo-url}/content/repositories/snapshots</maven-central-snapshots-repo-url>
+    <maven-central-repo-url>https://central.sonatype.com</maven-central-repo-url>
+    <maven-central-releases-repo-url>${maven-central-repo-url}</maven-central-releases-repo-url>
+    <maven-central-snapshots-repo-url>${maven-central-repo-url}/repository/maven-snapshots/</maven-central-snapshots-repo-url>
 
     <!-- This is the folder where we gather the files to be posted in the Github Release-->
     <release.directory>${project.build.directory}/release_directory</release.directory>
@@ -178,12 +178,12 @@
 
   <distributionManagement>
     <repository>
-      <id>icu4j-maven-repo</id>
+      <id>central</id>
       <name>ICU4J Central Repository</name>
       <url>${maven-central-releases-repo-url}</url>
     </repository>
     <snapshotRepository>
-      <id>icu4j-maven-repo</id>
+      <id>central</id>
       <name>ICU4J Central Development Repository</name>
       <url>${maven-central-snapshots-repo-url}</url>
     </snapshotRepository>
@@ -234,6 +234,16 @@
           <version>3.1.3</version>
           <configuration>
             <skip>true</skip>
+          </configuration>
+        </plugin>
+        <plugin>
+          <!-- https://central.sonatype.org/publish/publish-portal-maven/ -->
+          <groupId>org.sonatype.central</groupId>
+          <artifactId>central-publishing-maven-plugin</artifactId>
+          <version>0.8.0</version>
+          <extensions>true</extensions>
+          <configuration>
+            <checksums>required</checksums>
           </configuration>
         </plugin>
         <plugin>

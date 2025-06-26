@@ -234,13 +234,13 @@ Look at previous releases for an example.
 
 **Post 76.1 see [Publish - Version 76.1](release.md)**
 
-Follow instructions here: [Building ICU4J Release Files](../release-build.md)
+Follow instructions here: [Building ICU4J Release Files](release.md)
 
 ### C source/binary:
 
 **Post 76.1 see [Publish - Version 76.1](release.md)**
 
-<span style="background:yellow">***WORK IN PROGRESS***</a>
+<span style="background:yellow">***WORK IN PROGRESS***</span>
 
 #### Source and Linux Binaries:
 
