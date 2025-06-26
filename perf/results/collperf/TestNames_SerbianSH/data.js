@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1750882697158,
+  "lastUpdate": 1750906364295,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -68523,6 +68523,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 16389455.6973,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "3aa85e99668fb67b844c708588b824f553d18a6c",
+          "message": "ICU-23149 Return error earlier to avoid Null-dereference WRITE\n\nAlso add more early error return on the same file to avoid similar\nmistake.",
+          "timestamp": "2025-06-25T19:21:45-07:00",
+          "tree_id": "9dd8fdf0fba9e54c826ac75a61d8f01e5e9f49ec",
+          "url": "https://github.com/unicode-org/icu/commit/3aa85e99668fb67b844c708588b824f553d18a6c"
+        },
+        "date": 1750906090108,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 318.352,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 35271597.6047,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 14885219.1021,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 37913014.8119,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 16399323.5115,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
