@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1750906521413,
+  "lastUpdate": 1750974781243,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -75897,6 +75897,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 20.348,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "stevenschlansker@gmail.com",
+            "name": "Steven Schlansker",
+            "username": "stevenschlansker"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "fd27c483fc553caa2708644e8f99dfa9135ccf86",
+          "message": "ICU-23061 Transliterator improve scalability by avoiding monitor contention\n\nCurrent implementation of lower, upper, title, etc synchronizes the whole\noperation, so it is always single-threaded\n\nRemoving the shared state lets us utilize multiple CPU cores",
+          "timestamp": "2025-06-26T14:28:16-07:00",
+          "tree_id": "efe5e441d3beb39374d60691d817592d82b31e21",
+          "url": "https://github.com/unicode-org/icu/commit/fd27c483fc553caa2708644e8f99dfa9135ccf86"
+        },
+        "date": 1750974508150,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 16.1275,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 16.1402,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 17.4938,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 15.6116,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 15.6066,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 20.3309,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
