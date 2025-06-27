@@ -354,6 +354,8 @@ namespace message2 {
         // and a vector of vectors of strings (output)
         void resolvePreferences(MessageContext&, UVector&, UVector&, UErrorCode&) const;
 
+        bool checkSelectOption(const FunctionValue&) const;
+
         // Formatting methods
         [[nodiscard]] InternalValue evalLiteral(const UnicodeString&, const data_model::Literal&, UErrorCode&) const;
         void formatPattern(MessageContext&, Environment&, const data_model::Pattern&, UErrorCode&, UnicodeString&) const;

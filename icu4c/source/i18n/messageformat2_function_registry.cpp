@@ -22,6 +22,7 @@
 #include "charstr.h"
 #include "double-conversion.h"
 #include "messageformat2_allocation.h"
+#include "messageformat2_evaluation.h"
 #include "messageformat2_function_registry_internal.h"
 #include "messageformat2_macros.h"
 #include "hash.h"
@@ -373,10 +374,12 @@ bool isDigitSizeOption(const UnicodeString& s) {
         || s == UnicodeString("maximumSignificantDigits");
 }
 
-/* static */ void StandardFunctions::validateDigitSizeOptions(const FunctionOptions& opts,
+/* static */ void StandardFunctions::validateDigitSizeOptions(const FunctionOptions& /* opts */,
                                                               UErrorCode& status) {
     CHECK_ERROR(status);
 
+    // FIXME
+    /*
     for (int32_t i = 0; i < opts.optionsCount(); i++) {
         const ResolvedFunctionOption& opt = opts.options[i];
         if (isDigitSizeOption(opt.getName()) && !isInteger(opt.getValue())) {
@@ -384,6 +387,7 @@ bool isDigitSizeOption(const UnicodeString& s) {
             return;
         }
     }
+    */
 }
 
 /* static */ StandardFunctions::Number*
@@ -769,6 +773,11 @@ StandardFunctions::NumberValue::NumberValue(const Number& parent,
         }
     }
 
+    // Ignore U_USING_DEFAULT_WARNING
+    if (errorCode == U_USING_DEFAULT_WARNING) {
+        errorCode = U_ZERO_ERROR;
+    }
+
     // Need to set the integer value if invoked as :integer
     if (parent.isInteger) {
         operand = Formattable(integerValue);
@@ -790,16 +799,13 @@ StandardFunctions::NumberValue::~NumberValue() {}
 StandardFunctions::Number::pluralType(const FunctionOptions& opts) {
     const UnicodeString& select = opts.getStringFunctionOption(UnicodeString("select"));
 
-    if (opts.getFunctionOption(options::SELECT, opt)) {
-        UErrorCode localErrorCode = U_ZERO_ERROR;
-        UnicodeString val = opt.getString(localErrorCode);
-        if (U_SUCCESS(localErrorCode)) {
-            if (val == options::ORDINAL) {
-                return PluralType::PLURAL_ORDINAL;
-            }
-            if (val == options::EXACT) {
-                return PluralType::PLURAL_EXACT;
-            }
+    UnicodeString val = opts.getStringFunctionOption(options::SELECT);
+    if (!val.isEmpty()) {
+        if (val == options::ORDINAL) {
+            return PluralType::PLURAL_ORDINAL;
+        }
+        if (val == options::EXACT) {
+            return PluralType::PLURAL_EXACT;
         }
     }
     return PluralType::PLURAL_CARDINAL;
@@ -962,46 +968,6 @@ static DateFormat::EStyle stringToStyle(UnicodeString option, UErrorCode& errorC
     return DateFormat::EStyle::kNone;
 }
 
-UnicodeString StandardFunctions::DateTimeValue::formatToString(UErrorCode& status) const {
-    (void) status;
-
-    return formattedDate;
-}
-
-StandardFunctions::DateTimeValue::DateTimeValue(DateTime::DateTimeType type,
-                                                const FunctionContext& context,
-                                                const FunctionValue& val,
-                                                const FunctionOptions& options,
-                                                UErrorCode& errorCode) {
-    CHECK_ERROR(errorCode);
-    using DateTimeType = DateTime::DateTimeType;
-
-    DateTimeFactory* result = new DateTimeFactory(DateTimeType::Date);
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
-    return result;
-}
-
-/* static */ StandardFunctions::DateTimeFactory* StandardFunctions::DateTimeFactory::time(UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-
-    DateTimeFactory* result = new DateTimeFactory(DateTimeType::Time);
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
-    return result;
-}
-
-Formatter* StandardFunctions::DateTimeFactory::createFormatter(const Locale& locale, UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-
-    Formatter* result = new StandardFunctions::DateTime(locale, type);
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
-    return result;
-}
 
 // DateFormat parsers that are shared across threads
 static DateFormat* dateParser = nullptr;
@@ -1055,187 +1021,48 @@ static void initDateParsersOnce(UErrorCode& errorCode) {
     ucln_i18n_registerCleanup(UCLN_I18N_MF2_DATE_PARSERS, mf2_date_parsers_cleanup);
 }
 
-// Lazily initialize DateFormat objects used for parsing date literals
 static void initDateParsers(UErrorCode& errorCode) {
     CHECK_ERROR(errorCode);
 
     umtx_initOnce(gMF2DateParsersInitOnce, &initDateParsersOnce, errorCode);
 }
 
-// From https://github.com/unicode-org/message-format-wg/blob/main/spec/registry.md#date-and-time-operands :
-// "A date/time literal value is a non-empty string consisting of an ISO 8601 date, or
-// an ISO 8601 datetime optionally followed by a timezone offset."
-UDate StandardFunctions::DateTime::tryPatterns(const UnicodeString& sourceStr,
-                                               UErrorCode& errorCode) const {
-    if (U_FAILURE(errorCode)) {
-        return 0;
-    }
-    // Handle ISO 8601 datetime (tryTimeZonePatterns() handles the case
-    // where a timezone offset follows)
-    if (sourceStr.length() > 10) {
-        return dateTimeParser->parse(sourceStr, errorCode);
-    }
-    // Handle ISO 8601 date
-    return dateParser->parse(sourceStr, errorCode);
+UnicodeString StandardFunctions::DateTimeValue::formatToString(UErrorCode& status) const {
+    (void) status;
+
+    return formattedDate;
 }
 
-// See comment on tryPatterns() for spec reference
-UDate StandardFunctions::DateTime::tryTimeZonePatterns(const UnicodeString& sourceStr,
-                                                       UErrorCode& errorCode) const {
-    if (U_FAILURE(errorCode)) {
-        return 0;
-    }
-    int32_t len = sourceStr.length();
-    if (len > 0 && sourceStr[len] == 'Z') {
-        return dateTimeUTCParser->parse(sourceStr, errorCode);
-    }
-    return dateTimeZoneParser->parse(sourceStr, errorCode);
-}
+extern TimeZone* createTimeZone(const DateInfo&, UErrorCode&);
 
-static TimeZone* createTimeZone(const DateInfo& dateInfo, UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-
-    TimeZone* tz;
-    if (dateInfo.zoneId.isEmpty()) {
-        // Floating time value -- use default time zone
-        tz = TimeZone::createDefault();
-    } else {
-        tz = TimeZone::createTimeZone(dateInfo.zoneId);
-    }
-    if (tz == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
-    return tz;
-}
-
-// Returns true iff `sourceStr` ends in an offset like +03:30 or -06:00
-// (This function is just used to determine whether to call tryPatterns()
-// or tryTimeZonePatterns(); tryTimeZonePatterns() checks fully that the
-// string matches the expected format)
-static bool hasTzOffset(const UnicodeString& sourceStr) {
-    int32_t len = sourceStr.length();
-
-    if (len <= 6) {
-        return false;
-    }
-    return ((sourceStr[len - 6] == PLUS || sourceStr[len - 6] == HYPHEN)
-            && sourceStr[len - 3] == COLON);
-}
-
-// Note: `calendar` option to :datetime not implemented yet;
-// Gregorian calendar is assumed
-DateInfo StandardFunctions::DateTime::createDateInfoFromString(const UnicodeString& sourceStr,
-                                                               UErrorCode& errorCode) const {
-    if (U_FAILURE(errorCode)) {
-        return {};
-    }
-
-    UDate absoluteDate;
-
-    // Check if the string has a time zone part
-    int32_t indexOfZ = sourceStr.indexOf('Z');
-    int32_t indexOfPlus = sourceStr.lastIndexOf('+');
-    int32_t indexOfMinus = sourceStr.lastIndexOf('-');
-    int32_t indexOfSign = indexOfPlus > -1 ? indexOfPlus : indexOfMinus;
-    bool isTzOffset = hasTzOffset(sourceStr);
-    bool isGMT = indexOfZ > 0;
-    UnicodeString offsetPart;
-    bool hasTimeZone = isTzOffset || isGMT;
-
-    if (!hasTimeZone) {
-        // No time zone; parse the date and time
-        absoluteDate = tryPatterns(sourceStr, errorCode);
-        if (U_FAILURE(errorCode)) {
-            return {};
-        }
-    } else {
-        // Try to split into time zone and non-time-zone parts
-        UnicodeString dateTimePart;
-        if (isGMT) {
-            dateTimePart = sourceStr.tempSubString(0, indexOfZ);
-        } else {
-            dateTimePart = sourceStr.tempSubString(0, indexOfSign);
-        }
-        // Parse the date from the date/time part
-        tryPatterns(dateTimePart, errorCode);
-        // Failure -- can't parse this string
-        if (U_FAILURE(errorCode)) {
-            return {};
-        }
-        // Success -- now parse the time zone part
-        if (isGMT) {
-            dateTimePart += UnicodeString("GMT");
-            absoluteDate = tryTimeZonePatterns(dateTimePart, errorCode);
-            if (U_FAILURE(errorCode)) {
-                return {};
-            }
-        } else {
-            // Try to parse time zone in offset format: [+-]nn:nn
-            absoluteDate = tryTimeZonePatterns(sourceStr, errorCode);
-            if (U_FAILURE(errorCode)) {
-                return {};
-            }
-            offsetPart = sourceStr.tempSubString(indexOfSign, sourceStr.length());
-        }
-    }
-
-    // If the time zone was provided, get its canonical ID,
-    // in order to return it in the DateInfo
-    UnicodeString canonicalID;
-    if (hasTimeZone) {
-        UnicodeString tzID("GMT");
-        if (!isGMT) {
-            tzID += offsetPart;
-        }
-        TimeZone::getCanonicalID(tzID, canonicalID, errorCode);
-        if (U_FAILURE(errorCode)) {
-            return {};
-        }
-    }
-
-    return { absoluteDate, canonicalID };
-}
-
-void formatDateWithDefaults(const Locale& locale,
-                            const DateInfo& dateInfo,
-                            UnicodeString& result,
-                            UErrorCode& errorCode) {
+StandardFunctions::DateTimeValue::DateTimeValue(DateTime::DateTimeType type,
+                                                const FunctionContext& context,
+                                                const FunctionValue& arg,
+                                                const FunctionOptions& options,
+                                                UErrorCode& errorCode) {
+    // FIXME
     CHECK_ERROR(errorCode);
+    using DateTimeType = DateTime::DateTimeType;
 
-    LocalPointer<DateFormat> df(defaultDateTimeInstance(locale, errorCode));
-    CHECK_ERROR(errorCode);
-
-    df->adoptTimeZone(createTimeZone(dateInfo, errorCode));
-    CHECK_ERROR(errorCode);
-    df->format(dateInfo.date, result, nullptr, errorCode);
-}
-
-FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& toFormat,
-                                                   FunctionOptions&& opts,
-                                                   UErrorCode& errorCode) const {
-    if (U_FAILURE(errorCode)) {
-        return {};
-    }
-    const Formattable* source = toFormat.getSource(errorCode);
     // Function requires an operand
-    if (U_FAILURE(errorCode)) {
+    if (arg.isNullOperand()) {
         errorCode = U_MF_OPERAND_MISMATCH_ERROR;
         return;
     }
 
     const Locale& locale = context.getLocale();
-    operand = val.getOperand();
-    opts = options.mergeOptions(val.getResolvedOptions(), errorCode);
-    switch(type) {
-        case DateTimeType::kDateTime:
-            functionName = UnicodeString("dateTime");
-            break;
-        case DateTimeType::kDate:
-            functionName = UnicodeString("date");
-            break;
-        case DateTimeType::kTime:
-            functionName = UnicodeString("time");
-            break;
+    opts = options.mergeOptions(arg.getResolvedOptions(), errorCode);
+    operand = arg.getOperand();
+    switch (type) {
+    case DateTimeType::kDate:
+        functionName = functions::DATE;
+        break;
+    case DateTimeType::kTime:
+        functionName = functions::TIME;
+        break;
+    case DateTimeType::kDateTime:
+        functionName = functions::DATETIME;
+        break;
     }
 
     const Formattable* source = &operand;
@@ -1416,52 +1243,23 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
     case UFMT_STRING: {
         // Lazily initialize date parsers used for parsing date literals
         initDateParsers(errorCode);
-        if (U_FAILURE(errorCode)) {
-            return {};
-        }
+        CHECK_ERROR(errorCode);
 
         const UnicodeString& sourceStr = source->getString(errorCode);
         U_ASSERT(U_SUCCESS(errorCode));
 
-        DateInfo dateInfo = createDateInfoFromString(sourceStr, errorCode);
+        DateInfo dateInfo = StandardFunctions::DateTime::createDateInfoFromString(sourceStr, errorCode);
         if (U_FAILURE(errorCode)) {
             errorCode = U_MF_OPERAND_MISMATCH_ERROR;
-            return {};
-        } else {
-            // Parse the date
-            UDate d = dateParser->parse(sourceStr, errorCode);
-            if (U_FAILURE(errorCode)) {
-                // Pattern for ISO 8601 format - date
-                UnicodeString pattern("YYYY-MM-dd");
-                errorCode = U_ZERO_ERROR;
-                dateParser.adoptInstead(new SimpleDateFormat(pattern, errorCode));
-                if (U_FAILURE(errorCode)) {
-                    errorCode = U_MF_FORMATTING_ERROR;
-                } else {
-                    d = dateParser->parse(sourceStr, errorCode);
-                    if (U_FAILURE(errorCode)) {
-                        errorCode = U_MF_OPERAND_MISMATCH_ERROR;
-                    }
-                }
-            }
-            // Use the parsed date as the source value
-            // in the returned FormattedPlaceholder; this is necessary
-            // so the date can be re-formatted
-            operand = message2::Formattable::forDate(d);
-            df->format(d, result, 0, errorCode);
+            return;
         }
         df->adoptTimeZone(createTimeZone(dateInfo, errorCode));
-
-        // Use the parsed date as the source value
-        // in the returned FormattedPlaceholder; this is necessary
-        // so the date can be re-formatted
         df->format(dateInfo.date, result, 0, errorCode);
-        toFormat = FormattedPlaceholder(message2::Formattable(std::move(dateInfo)),
-                                        toFormat.getFallback());
+        operand = message2::Formattable(std::move(dateInfo));
         break;
     }
     case UFMT_DATE: {
-        const DateInfo* dateInfo = source.getDate(errorCode);
+        const DateInfo* dateInfo = source->getDate(errorCode);
         if (U_SUCCESS(errorCode)) {
             // If U_SUCCESS(errorCode), then source.getDate() returned
             // a non-null pointer
@@ -1489,6 +1287,124 @@ FormattedPlaceholder StandardFunctions::DateTime::format(FormattedPlaceholder&& 
         errorCode = U_ZERO_ERROR;
     }
     formattedDate = result;
+}
+
+// From https://github.com/unicode-org/message-format-wg/blob/main/spec/registry.md#date-and-time-operands :
+// "A date/time literal value is a non-empty string consisting of an ISO 8601 date, or
+// an ISO 8601 datetime optionally followed by a timezone offset."
+UDate StandardFunctions::DateTime::tryPatterns(const UnicodeString& sourceStr,
+                                               UErrorCode& errorCode) {
+    if (U_FAILURE(errorCode)) {
+        return 0;
+    }
+    // Handle ISO 8601 datetime (tryTimeZonePatterns() handles the case
+    // where a timezone offset follows)
+    if (sourceStr.length() > 10) {
+        return dateTimeParser->parse(sourceStr, errorCode);
+    }
+    // Handle ISO 8601 date
+    return dateParser->parse(sourceStr, errorCode);
+}
+
+// See comment on tryPatterns() for spec reference
+UDate StandardFunctions::DateTime::tryTimeZonePatterns(const UnicodeString& sourceStr,
+                                                       UErrorCode& errorCode) {
+    if (U_FAILURE(errorCode)) {
+        return 0;
+    }
+    int32_t len = sourceStr.length();
+    if (len > 0 && sourceStr[len] == 'Z') {
+        return dateTimeUTCParser->parse(sourceStr, errorCode);
+    }
+    return dateTimeZoneParser->parse(sourceStr, errorCode);
+}
+
+// Returns true iff `sourceStr` ends in an offset like +03:30 or -06:00
+// (This function is just used to determine whether to call tryPatterns()
+// or tryTimeZonePatterns(); tryTimeZonePatterns() checks fully that the
+// string matches the expected format)
+static bool hasTzOffset(const UnicodeString& sourceStr) {
+    int32_t len = sourceStr.length();
+
+    if (len <= 6) {
+        return false;
+    }
+    return ((sourceStr[len - 6] == PLUS || sourceStr[len - 6] == HYPHEN)
+            && sourceStr[len - 3] == COLON);
+}
+
+// Note: `calendar` option to :datetime not implemented yet;
+// Gregorian calendar is assumed
+DateInfo StandardFunctions::DateTime::createDateInfoFromString(const UnicodeString& sourceStr,
+                                                               UErrorCode& errorCode) {
+    if (U_FAILURE(errorCode)) {
+        return {};
+    }
+
+    UDate absoluteDate;
+
+    // Check if the string has a time zone part
+    int32_t indexOfZ = sourceStr.indexOf('Z');
+    int32_t indexOfPlus = sourceStr.lastIndexOf('+');
+    int32_t indexOfMinus = sourceStr.lastIndexOf('-');
+    int32_t indexOfSign = indexOfPlus > -1 ? indexOfPlus : indexOfMinus;
+    bool isTzOffset = hasTzOffset(sourceStr);
+    bool isGMT = indexOfZ > 0;
+    UnicodeString offsetPart;
+    bool hasTimeZone = isTzOffset || isGMT;
+
+    if (!hasTimeZone) {
+        // No time zone; parse the date and time
+        absoluteDate = tryPatterns(sourceStr, errorCode);
+        if (U_FAILURE(errorCode)) {
+            return {};
+        }
+    } else {
+        // Try to split into time zone and non-time-zone parts
+        UnicodeString dateTimePart;
+        if (isGMT) {
+            dateTimePart = sourceStr.tempSubString(0, indexOfZ);
+        } else {
+            dateTimePart = sourceStr.tempSubString(0, indexOfSign);
+        }
+        // Parse the date from the date/time part
+        tryPatterns(dateTimePart, errorCode);
+        // Failure -- can't parse this string
+        if (U_FAILURE(errorCode)) {
+            return {};
+        }
+        // Success -- now parse the time zone part
+        if (isGMT) {
+            dateTimePart += UnicodeString("GMT");
+            absoluteDate = tryTimeZonePatterns(dateTimePart, errorCode);
+            if (U_FAILURE(errorCode)) {
+                return {};
+            }
+        } else {
+            // Try to parse time zone in offset format: [+-]nn:nn
+            absoluteDate = tryTimeZonePatterns(sourceStr, errorCode);
+            if (U_FAILURE(errorCode)) {
+                return {};
+            }
+            offsetPart = sourceStr.tempSubString(indexOfSign, sourceStr.length());
+        }
+    }
+
+    // If the time zone was provided, get its canonical ID,
+    // in order to return it in the DateInfo
+    UnicodeString canonicalID;
+    if (hasTimeZone) {
+        UnicodeString tzID("GMT");
+        if (!isGMT) {
+            tzID += offsetPart;
+        }
+        TimeZone::getCanonicalID(tzID, canonicalID, errorCode);
+        if (U_FAILURE(errorCode)) {
+            return {};
+        }
+    }
+
+    return { absoluteDate, canonicalID };
 }
 
 StandardFunctions::DateTime::~DateTime() {}
@@ -1749,9 +1665,9 @@ static void setFailsFromFunctionValue(const FunctionValue& optionValue,
         }
     }
 
-    const FunctionValue* decimalPlacesOpt = options.getFunctionOption(UnicodeString("decimalPlaces"), status);
+    const FunctionValue* decimalPlacesOpt = options.getFunctionOption(options::DECIMAL_PLACES, status);
     // 8. If the decimalPlaces option is set, then
-    if (options.getFunctionOption(options::DECIMAL_PLACES, opt)) {
+    if (U_SUCCESS(status)) {
         // 8i. If its value resolves to a numerical integer value 0 or 1
         // or their corresponding string representations '0' or '1', then
         double decimalPlacesInput = formattableToNumber(decimalPlacesOpt->getOperand(), status);
@@ -1760,12 +1676,16 @@ static void setFailsFromFunctionValue(const FunctionValue& optionValue,
                 // 8ia. Set DecimalPlaces to be the numerical value of the option.
                 decimalPlaces = decimalPlacesInput;
             }
-        }
-        // 8ii. Else if its value is not an unresolved value set by option resolution,
-        else {
-            // 8iia. Emit "bad-option" Resolution Error.
+            // 8ii. Else if its value is not an unresolved value set by option resolution,
+            else {
+                // 8iia. Emit "bad-option" Resolution Error.
+                status = U_MF_BAD_OPTION;
+                return;
+                // 8iib. Use a fallback value as the resolved value of the expression.
+            }
+        } else {
             status = U_MF_BAD_OPTION;
-            // 8iib. Use a fallback value as the resolved value of the expression.
+            return;
         }
     } else {
         // Option was not provided -- not an error
@@ -1789,6 +1709,7 @@ StandardFunctions::TestFunctionValue::TestFunctionValue(const TestFunction& pare
                                                         UErrorCode& status) {
     parent.testFunctionParameters(arg, options, decimalPlaces,
                                   failsFormat, failsSelect, input, status);
+    CHECK_ERROR(status);
     opts = options.mergeOptions(arg.getResolvedOptions(), status);
     operand = arg.getOperand();
     canFormat = parent.canFormat;
@@ -1798,9 +1719,7 @@ StandardFunctions::TestFunctionValue::TestFunctionValue(const TestFunction& pare
                                  : canFormat ? "test:format"
                                  : "test:select");
 
-    if (U_FAILURE(status)) {
-        return;
-    }
+    CHECK_ERROR(status);
 
     // If FailsFormat is true, attempting to format the placeholder to any
     // formatting target will fail.

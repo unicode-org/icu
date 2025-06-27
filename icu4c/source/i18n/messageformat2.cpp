@@ -342,6 +342,11 @@ FunctionContext MessageFormatter::makeFunctionContext(const FunctionOptions& opt
         context.getErrors().setFormattingError(functionName, status);
         return env.createFallback(fallbackStr, status);
     }
+    if (status == U_MF_BAD_OPTION) {
+        status = U_ZERO_ERROR;
+        context.getErrors().setBadOption(functionName, status);
+        return env.createFallback(fallbackStr, status);
+    }
     if (U_FAILURE(status)) {
         return env.bogus();
     }
@@ -440,7 +445,16 @@ void MessageFormatter::formatPattern(MessageContext& context,
                   const FunctionValue* val = partVal.getValue(status);
                   // Shouldn't be null or a fallback
                   U_ASSERT(U_SUCCESS(status));
+
+                  // See comment in matchSelectorKeys()
+                  bool badSelectOption = !checkSelectOption(*val);
                   result += val->formatToString(status);
+
+                  if (badSelectOption) {
+                      context.getErrors().setRecoverableBadOption(val->getFunctionName(), status);
+                      CHECK_ERROR(status);
+                  }
+
                   // Handle formatting errors. `formatToString()` can't take a context and thus can't
                   // register an error directly
                   if (status == U_MF_FORMATTING_ERROR) {
@@ -490,6 +504,30 @@ void MessageFormatter::resolveSelectors(MessageContext& context, Environment& en
     }
 }
 
+bool MessageFormatter::checkSelectOption(const FunctionValue& val) const {
+    const UnicodeString& name = val.getFunctionName();
+
+    if (name != UnicodeString("number") && name != UnicodeString("integer")) {
+        return true;
+    }
+
+    // Per the spec, if the "select" option is present, it must have been
+    // set from a literal
+
+    // Returns false if the `select` option is present and it was not set from a literal
+
+    const FunctionOptions& opts = val.getResolvedOptions();
+
+    // OK if the option wasn't present
+    UErrorCode localErrorCode = U_ZERO_ERROR;
+    opts.getFunctionOption(options::SELECT, localErrorCode);
+    if (U_FAILURE(localErrorCode)) {
+        return true;
+    }
+    // Otherwise, return true if the option was set from a literal
+    return opts.wasSetFromLiteral(options::SELECT);
+}
+
 // See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#resolve-preferences
 // `keys` and `matches` are vectors of strings
 void MessageFormatter::matchSelectorKeys(const UVector& keys,
@@ -531,9 +569,26 @@ void MessageFormatter::matchSelectorKeys(const UVector& keys,
     // Call the selector
     // Caller checked for fallback, so it's safe to call getValue()
     const FunctionValue* rvVal = rv.getValue(status);
+
+    // This condition can't be checked in the selector.
+    // Effectively, there are two different kinds of "bad option" errors:
+    // one that can be recovered from (used for select=$var) and one that
+    // can't (used for bad digit size options and other cases).
+    // The checking of the recoverable error has to be done here; otherwise,
+    // the "bad option" signaled by the selector implementation would cause
+    // fallback output to be used when formatting the `*` pattern.
+    bool badSelectOption = !checkSelectOption(*rvVal);
+
     U_ASSERT(U_SUCCESS(status));
     rvVal->selectKeys(adoptedKeys.getAlias(), keysLen, prefsArr, prefsLen,
                       status);
+
+    if (badSelectOption) {
+        context.getErrors().setRecoverableBadOption(rvVal->getFunctionName(), status);
+        CHECK_ERROR(status);
+        // In this case, only the `*` variant should match
+        prefsLen = 0;
+    }
 
     // Update errors
     if (savedStatus != status) {

@@ -95,6 +95,7 @@ static constexpr std::u16string_view YEAR = u"year";
         class DateTime;
         class DateTimeValue;
 
+    #if false
         class DateTimeFactory : public FunctionFactory {
         public:
             Function* createFunction(UErrorCode& status) override;
@@ -117,10 +118,6 @@ static constexpr std::u16string_view YEAR = u"year";
                 : locale(l), type(t) {}
             const LocalPointer<icu::DateFormat> icuFormatter;
 
-            // Methods for parsing date literals
-            UDate tryPatterns(const UnicodeString&, UErrorCode&) const;
-            UDate tryTimeZonePatterns(const UnicodeString&, UErrorCode&) const;
-            DateInfo createDateInfoFromString(const UnicodeString&, UErrorCode&) const;
 
             /*
               Looks up an option by name, first checking `opts`, then the cached options
@@ -145,6 +142,7 @@ static constexpr std::u16string_view YEAR = u"year";
 
             DateTimeFactory(const DateTimeType t) : type(t) {}
         }; // class DateTimeFactory
+#endif
 
         class DateTime : public Function {
         public:
@@ -161,6 +159,11 @@ static constexpr std::u16string_view YEAR = u"year";
         private:
             friend class DateTimeFactory;
             friend class DateTimeValue;
+
+            // Methods for parsing date literals
+            static UDate tryPatterns(const UnicodeString&, UErrorCode&);
+            static UDate tryTimeZonePatterns(const UnicodeString&, UErrorCode&);
+            static DateInfo createDateInfoFromString(const UnicodeString&, UErrorCode&);
 
             typedef enum DateTimeType {
                 kDate,

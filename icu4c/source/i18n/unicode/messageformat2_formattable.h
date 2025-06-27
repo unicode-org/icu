@@ -492,6 +492,7 @@ class U_I18N_API ResolvedFunctionOption : public UObject {
   public:
       const UnicodeString& getName() const { return name; }
       const FunctionValue& getValue() const { return *value; }
+      bool isLiteral() const { return sourceIsLiteral; }
       // Adopts `f`
       ResolvedFunctionOption(const UnicodeString& n, const FunctionValue& f);
       ResolvedFunctionOption() {}
@@ -606,12 +607,12 @@ class U_I18N_API FunctionOptions : public UObject {
     explicit FunctionOptions(UVector&&, UErrorCode&);
 
     const ResolvedFunctionOption* getResolvedFunctionOptions(int32_t& len) const;
-    const FunctionValue* getFunctionOption(const UnicodeString&, UErrorCode&) const;
+    const FunctionValue* getFunctionOption(const std::u16string_view, UErrorCode&) const;
     // Returns empty string if option doesn't exist
-    UnicodeString getStringFunctionOption(const UnicodeString&) const;
-    UBool wasSetFromLiteral(const UnicodeString&) const;
+    UnicodeString getStringFunctionOption(const std::u16string_view) const;
+    UBool wasSetFromLiteral(const std::u16string_view) const;
     // Sets error code if option doesn't exist
-    UnicodeString getStringFunctionOption(const UnicodeString&, UErrorCode&) const;
+    UnicodeString getStringFunctionOption(const std::u16string_view, UErrorCode&) const;
     int32_t optionsCount() const { return functionOptionsLen; }
 
     bool bogus = false; // Used in case a copy fails

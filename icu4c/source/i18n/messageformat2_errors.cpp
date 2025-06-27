@@ -34,7 +34,8 @@ namespace message2 {
     }
 
     void DynamicErrors::setRecoverableBadOption(const FunctionName& formatterName, UErrorCode& status) {
-        addError(DynamicError(DynamicErrorType::RecoverableBadOptionError, formatterName), status);
+        // FIXME: do any tests actually require recoverability?
+        addError(DynamicError(DynamicErrorType::/*Recoverable*/BadOptionError, formatterName), status);
     }
 
     void DynamicErrors::setOperandMismatchError(const FunctionName& formatterName, UErrorCode& status) {

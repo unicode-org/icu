@@ -93,7 +93,7 @@ FunctionOptions::FunctionOptions(UVector&& optionsVector, UErrorCode& status) {
 }
 
 // Returns false if option doesn't exist
-UBool FunctionOptions::wasSetFromLiteral(const UnicodeString& key) const {
+UBool FunctionOptions::wasSetFromLiteral(const std::u16string_view key) const {
     if (options == nullptr) {
         U_ASSERT(functionOptionsLen == 0);
     }
@@ -106,7 +106,8 @@ UBool FunctionOptions::wasSetFromLiteral(const UnicodeString& key) const {
     return false;
 }
 
-FunctionOptions::getFunctionOption(const UnicodeString& key,
+const FunctionValue*
+FunctionOptions::getFunctionOption(std::u16string_view key,
                                    UErrorCode& status) const {
     if (options == nullptr) {
         U_ASSERT(functionOptionsLen == 0);
@@ -121,9 +122,8 @@ FunctionOptions::getFunctionOption(const UnicodeString& key,
     return nullptr;
 }
 
-
 UnicodeString
-FunctionOptions::getStringFunctionOption(const UnicodeString& k, UErrorCode& errorCode) const {
+FunctionOptions::getStringFunctionOption(std::u16string_view k, UErrorCode& errorCode) const {
     const FunctionValue* option = getFunctionOption(k, errorCode);
     if (U_SUCCESS(errorCode)) {
         UnicodeString result = option->formatToString(errorCode);
@@ -134,7 +134,7 @@ FunctionOptions::getStringFunctionOption(const UnicodeString& k, UErrorCode& err
     return {};
 }
 
-UnicodeString FunctionOptions::getStringFunctionOption(const UnicodeString& key) const {
+UnicodeString FunctionOptions::getStringFunctionOption(std::u16string_view key) const {
     UErrorCode localStatus = U_ZERO_ERROR;
 
     UnicodeString result = getStringFunctionOption(key, localStatus);
@@ -488,6 +488,7 @@ PrioritizedVariant::~PrioritizedVariant() {}
     // InternalValue
     // -------------
 
+#if false
     InternalValue::InternalValue(FormattedPlaceholder&& arg) {
         argument = std::move(arg);
         selector = nullptr;
@@ -704,6 +705,7 @@ PrioritizedVariant::~PrioritizedVariant() {}
             argument = nullptr;
         }
     }
+#endif
 
 } // namespace message2
 U_NAMESPACE_END

@@ -172,7 +172,7 @@ namespace message2 {
         return number::NumberFormatter::withLocale(locale).formatDecimal(toFormat, errorCode);
     }
 
-    DateFormat* defaultDateTimeInstance(const Locale& locale, UErrorCode& errorCode) {
+    static DateFormat* defaultDateTimeInstance(const Locale& locale, UErrorCode& errorCode) {
         NULL_ON_ERROR(errorCode);
         LocalPointer<DateFormat> df(DateFormat::createDateTimeInstance(DateFormat::SHORT, DateFormat::SHORT, locale));
         if (!df.isValid()) {
@@ -182,12 +182,34 @@ namespace message2 {
         return df.orphan();
     }
 
-    void formatDateWithDefaults(const Locale& locale, UDate date, UnicodeString& result, UErrorCode& errorCode) {
+    TimeZone* createTimeZone(const DateInfo& dateInfo, UErrorCode& errorCode) {
+        NULL_ON_ERROR(errorCode);
+
+        TimeZone* tz;
+        if (dateInfo.zoneId.isEmpty()) {
+            // Floating time value -- use default time zone
+            tz = TimeZone::createDefault();
+        } else {
+            tz = TimeZone::createTimeZone(dateInfo.zoneId);
+        }
+        if (tz == nullptr) {
+            errorCode = U_MEMORY_ALLOCATION_ERROR;
+        }
+        return tz;
+    }
+
+    void formatDateWithDefaults(const Locale& locale,
+                                const DateInfo& dateInfo,
+                                UnicodeString& result,
+                                UErrorCode& errorCode) {
         CHECK_ERROR(errorCode);
 
         LocalPointer<DateFormat> df(defaultDateTimeInstance(locale, errorCode));
         CHECK_ERROR(errorCode);
-        df->format(date, result, 0, errorCode);
+
+        df->adoptTimeZone(createTimeZone(dateInfo, errorCode));
+        CHECK_ERROR(errorCode);
+        df->format(dateInfo.date, result, nullptr, errorCode);
     }
 
     static UnicodeString& handleBiDi(const Locale& locale,
@@ -245,7 +267,7 @@ namespace message2 {
         case UFMT_DATE: {
             const DateInfo* dateInfo = toFormat.getDate(status);
             U_ASSERT(U_SUCCESS(status));
-            formatDateWithDefaults(locale, d, result, status);
+            formatDateWithDefaults(locale, *dateInfo, result, status);
             break;
         }
         case UFMT_DOUBLE: {
