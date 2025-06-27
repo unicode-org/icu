@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1750974283244,
+  "lastUpdate": 1751061690264,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -43233,6 +43233,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 50.9183,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "88db9958d9db5e4b496dc9106fb8e85910d9d6e2",
+          "message": "ICU-23148 Migrate ICU4J publishing from Legacy OSSRH to Central Portal",
+          "timestamp": "2025-06-27T14:34:58-07:00",
+          "tree_id": "b5a02a144d3be02e5f473756d61d2464e6413fb0",
+          "url": "https://github.com/unicode-org/icu/commit/88db9958d9db5e4b496dc9106fb8e85910d9d6e2"
+        },
+        "date": 1751061416270,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 21.8025,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 50.5211,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
