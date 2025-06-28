@@ -26,6 +26,7 @@ namespace message2 {
 // Constants for option names
 namespace options {
 static constexpr std::u16string_view ALWAYS = u"always";
+static constexpr std::u16string_view AUTO = u"auto";
 static constexpr std::u16string_view COMPACT = u"compact";
 static constexpr std::u16string_view COMPACT_DISPLAY = u"compactDisplay";
 static constexpr std::u16string_view DATE_STYLE = u"dateStyle";
@@ -38,8 +39,10 @@ static constexpr std::u16string_view EXCEPT_ZERO = u"exceptZero";
 static constexpr std::u16string_view FAILS = u"fails";
 static constexpr std::u16string_view FULL_UPPER = u"FULL";
 static constexpr std::u16string_view HOUR = u"hour";
+static constexpr std::u16string_view INHERIT = u"inherit";
 static constexpr std::u16string_view LONG = u"long";
 static constexpr std::u16string_view LONG_UPPER = u"LONG";
+static constexpr std::u16string_view LTR = u"ltr";
 static constexpr std::u16string_view MAXIMUM_FRACTION_DIGITS = u"maximumFractionDigits";
 static constexpr std::u16string_view MAXIMUM_SIGNIFICANT_DIGITS = u"maximumSignificantDigits";
 static constexpr std::u16string_view MEDIUM_UPPER = u"MEDIUM";
@@ -57,6 +60,7 @@ static constexpr std::u16string_view NUMBERING_SYSTEM = u"numberingSystem";
 static constexpr std::u16string_view NUMERIC = u"numeric";
 static constexpr std::u16string_view ORDINAL = u"ordinal";
 static constexpr std::u16string_view PERCENT_STRING = u"percent";
+static constexpr std::u16string_view RTL = u"rtl";
 static constexpr std::u16string_view SCIENTIFIC = u"scientific";
 static constexpr std::u16string_view SECOND = u"second";
 static constexpr std::u16string_view SELECT = u"select";
@@ -66,6 +70,9 @@ static constexpr std::u16string_view SIGN_DISPLAY = u"signDisplay";
 static constexpr std::u16string_view STYLE = u"style";
 static constexpr std::u16string_view TIME_STYLE = u"timeStyle";
 static constexpr std::u16string_view TWO_DIGIT = u"2-digit";
+static constexpr std::u16string_view U_DIR = u"u:dir";
+static constexpr std::u16string_view U_ID = u"u:id";
+static constexpr std::u16string_view U_LOCALE = u"u:locale";
 static constexpr std::u16string_view USE_GROUPING = u"useGrouping";
 static constexpr std::u16string_view WEEKDAY = u"weekday";
 static constexpr std::u16string_view YEAR = u"year";

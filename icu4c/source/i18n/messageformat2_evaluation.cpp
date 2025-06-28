@@ -27,8 +27,8 @@ using namespace data_model;
 // BaseValue
 // ---------
 
-BaseValue::BaseValue(const Locale& loc, const UnicodeString& fb, const Formattable& source)
-    : locale(loc) {
+BaseValue::BaseValue(const Locale& loc, const UnicodeString& fb, const Formattable& source, bool wasCreatedFromLiteral)
+    : locale(loc), fromLiteral(wasCreatedFromLiteral) {
     operand = source;
     fallback += LEFT_CURLY_BRACE;
     fallback += fb;
@@ -38,8 +38,9 @@ BaseValue::BaseValue(const Locale& loc, const UnicodeString& fb, const Formattab
 /* static */ BaseValue* BaseValue::create(const Locale& locale,
                                           const UnicodeString& fallback,
                                           const Formattable& source,
+                                          bool wasCreatedFromLiteral,
                                           UErrorCode& errorCode) {
-    return message2::create<BaseValue>(BaseValue(locale, fallback, source), errorCode);
+    return message2::create<BaseValue>(BaseValue(locale, fallback, source, wasCreatedFromLiteral), errorCode);
 }
 
 extern UnicodeString formattableToString(const Locale&, const UBiDiDirection, const Formattable&, UErrorCode&);
@@ -56,12 +57,37 @@ BaseValue& BaseValue::operator=(BaseValue&& other) noexcept {
     opts = std::move(other.opts);
     locale = other.locale;
     fallback = other.fallback;
+    fromLiteral = other.fromLiteral;
 
     return *this;
 }
 
 BaseValue::BaseValue(BaseValue&& other) {
     *this = std::move(other);
+}
+
+// VariableValue
+// -------------
+
+VariableValue::VariableValue(const FunctionValue* v) : underlyingValue(std::move(v)) {}
+
+/* static */ VariableValue* VariableValue::create(const FunctionValue* v,
+                                                  UErrorCode& errorCode) {
+    return message2::create<VariableValue>(VariableValue(std::move(v)), errorCode);
+}
+
+VariableValue& VariableValue::operator=(VariableValue&& other) noexcept {
+    underlyingValue = other.underlyingValue;
+
+    return *this;
+}
+
+VariableValue::VariableValue(VariableValue&& other) {
+    *this = std::move(other);
+}
+
+VariableValue::~VariableValue() {
+    underlyingValue = nullptr; // not owned
 }
 
 // Functions
@@ -72,7 +98,8 @@ ResolvedFunctionOption::ResolvedFunctionOption(ResolvedFunctionOption&& other) {
 }
 
 ResolvedFunctionOption::ResolvedFunctionOption(const UnicodeString& n,
-                                               const FunctionValue& f) : name(n), value(&f) {}
+                                               const FunctionValue& f,
+                                               bool b) : name(n), value(&f), thisWasMerged(b) {}
 
 ResolvedFunctionOption::~ResolvedFunctionOption() {
     value = nullptr; // value is not owned
@@ -100,7 +127,11 @@ UBool FunctionOptions::wasSetFromLiteral(const std::u16string_view key) const {
     for (int32_t i = 0; i < functionOptionsLen; i++) {
         const ResolvedFunctionOption& opt = options[i];
         if (opt.getName() == key) {
-            return opt.isLiteral();
+            // Require both: - opt's value was created from a literal;
+            // - opt does not originate from merging a previous options map
+            // with this one
+            return opt.getValue().wasCreatedFromLiteral()
+                && (!opt.wasMerged());
         }
     }
     return false;
@@ -203,9 +234,10 @@ FunctionOptions FunctionOptions::mergeOptions(const FunctionOptions& other,
     for (int i = 0; i < other.functionOptionsLen; i++) {
         // Note: this is quadratic in the length of `options`
         if (!containsOption(mergedOptions, other.options[i])) {
-            mergedOptions.adoptElement(create<ResolvedFunctionOption>(other.options[i],
-                                                                      status),
-                                     status);
+            const ResolvedFunctionOption& oldOpt = other.options[i];
+            ResolvedFunctionOption newOpt = ResolvedFunctionOption(oldOpt.name, *oldOpt.value, true);
+            mergedOptions.adoptElement(create<ResolvedFunctionOption>(newOpt, status),
+                                       status);
         }
     }
 

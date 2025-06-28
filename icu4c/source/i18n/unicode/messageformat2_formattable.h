@@ -480,21 +480,21 @@ namespace message2 {
 class FunctionValue;
 class U_I18N_API ResolvedFunctionOption : public UObject {
   private:
+    friend class FunctionOptions;
 
     /* const */ UnicodeString name;
-    // True iff this option was represented in the syntax by a literal value.
-    // This is necessary in order to implement the spec for the `select` option
-    // of `:number` and `:integer`.
-    /* const */ bool sourceIsLiteral;
     // owned by the global environment
     const FunctionValue* value;
+    // True if this option is the product of merging two
+    // option maps together, and this option came from the
+    // first argument (the "older" options map).
+    bool thisWasMerged = false;
 
   public:
       const UnicodeString& getName() const { return name; }
       const FunctionValue& getValue() const { return *value; }
-      bool isLiteral() const { return sourceIsLiteral; }
-      // Adopts `f`
-      ResolvedFunctionOption(const UnicodeString& n, const FunctionValue& f);
+      bool wasMerged() const { return thisWasMerged; }
+      ResolvedFunctionOption(const UnicodeString& n, const FunctionValue& f, bool b);
       ResolvedFunctionOption() {}
       ResolvedFunctionOption(ResolvedFunctionOption&&);
       ResolvedFunctionOption& operator=(ResolvedFunctionOption&& other) = default;

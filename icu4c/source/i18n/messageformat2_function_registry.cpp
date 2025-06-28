@@ -374,20 +374,16 @@ bool isDigitSizeOption(const UnicodeString& s) {
         || s == UnicodeString("maximumSignificantDigits");
 }
 
-/* static */ void StandardFunctions::validateDigitSizeOptions(const FunctionOptions& /* opts */,
+/* static */ void StandardFunctions::validateDigitSizeOptions(const FunctionOptions& opts,
                                                               UErrorCode& status) {
     CHECK_ERROR(status);
-
-    // FIXME
-    /*
     for (int32_t i = 0; i < opts.optionsCount(); i++) {
         const ResolvedFunctionOption& opt = opts.options[i];
-        if (isDigitSizeOption(opt.getName()) && !isInteger(opt.getValue())) {
+        if (isDigitSizeOption(opt.getName()) && !isInteger(opt.getValue().getOperand())) {
             status = U_MF_BAD_OPTION;
             return;
         }
     }
-    */
 }
 
 /* static */ StandardFunctions::Number*

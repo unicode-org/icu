@@ -456,6 +456,21 @@ namespace message2 {
              * @deprecated This API is for technology preview only.
              */
             virtual ~FunctionValue();
+            // FIXME: Can this be made private?
+            // Should only be overridden by BaseValue -- should not be overridden by other classes
+            // True iff this option was represented in the syntax by a literal value.
+            // This is necessary in order to implement the spec for the `select` option
+            // of `:number` and `:integer`.
+            /**
+             * Returns true iff this FunctionValue was created directly or indirectly
+             * from a literal.
+             *
+             * @returns A boolean.
+             *
+             * @internal ICU 78 technology preview
+             * @deprecated This API is for technology preview only.
+             */
+            virtual UBool wasCreatedFromLiteral() const { return false; }
          protected:
             /**
              * Operand used to construct this value.

@@ -69,7 +69,7 @@ static UnicodeString functionFallback(const InternalValue& operand,
                 fallbackToUse += var;
             }
             // If it exists, create a BaseValue (FunctionValue) for it
-            LocalPointer<BaseValue> result(BaseValue::create(locale, fallbackToUse, *val, errorCode));
+            LocalPointer<BaseValue> result(BaseValue::create(locale, fallbackToUse, *val, false, errorCode));
             // Add fallback and return an InternalValue
             if (U_SUCCESS(errorCode)) {
                 return InternalValue(result.orphan(), fallbackToUse);
@@ -112,6 +112,7 @@ static UnicodeString reserialize(const UnicodeString& s) {
     LocalPointer<BaseValue> val(BaseValue::create(locale,
                                                   fallbackToUse,
                                                   Formattable(lit.unquoted()),
+                                                  true,
                                                   errorCode));
     if (U_SUCCESS(errorCode)) {
         return InternalValue(val.orphan(), fallbackToUse);
@@ -156,9 +157,24 @@ static UnicodeString reserialize(const UnicodeString& s) {
                 rhs.update(result.asFallback());
             } else {
                 U_ASSERT(result.isEvaluated());
+
+                // Need to create a new InternalValue such that the inner
+                // FunctionValue does _not_ return true for wasSetFromLiteral()
+                const FunctionValue* inner = result.getValue(status);
+                U_ASSERT(U_SUCCESS(status)); // Already checked that result is evaluated
+                LocalPointer<FunctionValue> variableValue(static_cast<FunctionValue*>(VariableValue::create(inner, status)));
+                if (U_FAILURE(status) || !variableValue.isValid()) {
+                    return result;
+                }
+
+                InternalValue wrappedResult(variableValue.orphan(), result.asFallback());
+                InternalValue& ref = env.createUnnamed(std::move(wrappedResult), status);
+                if (U_FAILURE(status)) {
+                    return result;
+                }
                 // Create an indirection to the result returned
                 // by evalExpression()
-                rhs.update(result);
+                rhs.update(ref);
             }
             return rhs;
         }
@@ -241,7 +257,7 @@ FunctionOptions MessageFormatter::resolveOptions(Environment& env,
         }
 
         // The option is resolved; add it to the vector
-        ResolvedFunctionOption resolvedOpt(k, *optVal);
+        ResolvedFunctionOption resolvedOpt(k, *optVal, false);
         LocalPointer<ResolvedFunctionOption>
             p(create<ResolvedFunctionOption>(std::move(resolvedOpt), status));
         EMPTY_ON_ERROR(status);
@@ -420,6 +436,81 @@ FunctionContext MessageFormatter::makeFunctionContext(const FunctionOptions& opt
     }
 }
 
+// Evaluates `rand` and requires the value to be a string, setting `result` to it
+// if so, and setting a bad option error if not
+bool MessageFormatter::operandToStringWithBadOptionError(MessageContext& context,
+                                                         Environment& globalEnv,
+                                                         const Operand& rand,
+                                                         UnicodeString& result,
+                                                         UErrorCode& status) const {
+    EMPTY_ON_ERROR(status);
+
+    InternalValue& iVal = evalOperand({}, globalEnv, rand, context, status);
+    EMPTY_ON_ERROR(status);
+    const FunctionValue* val = iVal.getValue(status);
+    U_ASSERT(U_SUCCESS(status));
+
+    result = val->getOperand().getString(status);
+    if (U_FAILURE(status)) {
+        status = U_ZERO_ERROR;
+        context.getErrors().setBadOption({}, status);
+        return false;
+    }
+    return true;
+}
+
+bool isValidLocale(const UnicodeString& localeID) {
+    std::string asString;
+    Locale loc(localeID.toUTF8String(asString).c_str());
+    int32_t count = 0;
+    const Locale* availableLocales = Locale::getAvailableLocales(count);
+
+    for (int32_t i = 0; i < count; i++) {
+        if (availableLocales[i] == loc) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// Validates u: options on markup parts -- see
+// https://github.com/unicode-org/message-format-wg/blob/main/spec/u-namespace.md
+void MessageFormatter::validateUOptionsOnMarkup(MessageContext& context,
+                                                Environment& globalEnv,
+                                                const Markup& markupPart,
+                                                UErrorCode& status) const {
+    CHECK_ERROR(status);
+
+    const OptionMap& opts = markupPart.getOptionsInternal();
+    for (int32_t i = 0; i < opts.len; i++) {
+        const Option& opt = opts.options[i];
+        const UnicodeString& optionName = opt.getName();
+        const Operand& optionValue = opt.getValue();
+
+        if (optionName == options::U_ID) {
+            UnicodeString ignore;
+            operandToStringWithBadOptionError(context, globalEnv, optionValue, ignore, status);
+        } else if (optionName == options::U_LOCALE) {
+            UnicodeString asString;
+            if (operandToStringWithBadOptionError(context, globalEnv, optionValue, asString, status)) {
+                if (!isValidLocale(asString)) {
+                    context.getErrors().setBadOption({}, status);
+                }
+            }
+        } else if (optionName == options::U_DIR) {
+            UnicodeString asString;
+            if (operandToStringWithBadOptionError(context, globalEnv, optionValue, asString, status)) {
+                if (!(asString == options::LTR || asString == options::RTL
+                      || asString == options::AUTO || asString == options::INHERIT)) {
+                    context.getErrors().setBadOption({}, status);
+                }
+            }
+        }
+        // Any other options are ignored
+    }
+}
+
+
 // Formats each text and expression part of a pattern, appending the results to `result`
 void MessageFormatter::formatPattern(MessageContext& context,
                                      Environment& globalEnv,
@@ -432,7 +523,7 @@ void MessageFormatter::formatPattern(MessageContext& context,
         if (part.isText()) {
             result += part.asText();
         } else if (part.isMarkup()) {
-            // Markup is ignored
+            validateUOptionsOnMarkup(context, globalEnv, part.asMarkup(), status);
         } else {
 	      // Format the expression
 	      InternalValue& partVal = evalExpression({}, globalEnv, part.contents(), context, status);

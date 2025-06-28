@@ -93,6 +93,7 @@ namespace message2 {
             return **std::get_if<LocalPointer<Closure>>(&val);
         }
         const FunctionValue* getValue(UErrorCode& status) const;
+
         UnicodeString asFallback() const { return fallbackString; }
 
         static LocalPointer<InternalValue> null(UErrorCode& status);
@@ -132,17 +133,19 @@ namespace message2 {
     // in a context that expects a FunctionValue.
     class BaseValue : public FunctionValue {
         public:
-            static BaseValue* create(const Locale&, const UnicodeString&, const Formattable&, UErrorCode&);
+            static BaseValue* create(const Locale&, const UnicodeString&, const Formattable&, bool, UErrorCode&);
             // Apply default formatters to the argument value
             UnicodeString formatToString(UErrorCode&) const override;
             UBool isSelectable() const override { return true; }
+            UBool wasCreatedFromLiteral() const override { return fromLiteral; }
             BaseValue() {}
             BaseValue(BaseValue&&);
             BaseValue& operator=(BaseValue&&) noexcept;
        private:
             Locale locale;
+            bool fromLiteral = false;
 
-            BaseValue(const Locale&, const UnicodeString&, const Formattable&);
+            BaseValue(const Locale&, const UnicodeString&, const Formattable&, bool);
     }; // class BaseValue
 
     // A NullValue represents the absence of an argument.
@@ -150,6 +153,37 @@ namespace message2 {
         public:
             virtual UBool isNullOperand() const { return true; }
     }; // class NullValue
+
+    // A VariableValue wraps another FunctionValue and its sole purpose
+    // is to override the wasCreatedFromLiteral() method to always return false.
+    // This makes it easy to implement .local $foo = {exact}: the RHS returns a BaseValue
+    // such that wasCreatedFromLiteral() is true, but then we can wrap it in a VariableValue,
+    // which will always return false for this method.
+    class VariableValue : public FunctionValue {
+        public:
+            static VariableValue* create(const FunctionValue*, UErrorCode&);
+            UBool wasCreatedFromLiteral() const override { return false; }
+            UnicodeString formatToString(UErrorCode& status) const override { return underlyingValue->formatToString(status); }
+            const Formattable& getOperand() const override { return underlyingValue->getOperand(); }
+            const FunctionOptions& getResolvedOptions() const override { return underlyingValue->getResolvedOptions(); }
+            UBool isSelectable() const override { return underlyingValue->isSelectable(); }
+            UBool isNullOperand() const override { return underlyingValue->isNullOperand(); }
+            void selectKeys(const UnicodeString* keys,
+                            int32_t keysLen,
+                            int32_t* prefs,
+                            int32_t& prefsLen,
+                            UErrorCode& status) const override { return underlyingValue->selectKeys(keys, keysLen, prefs, prefsLen, status); }
+            const UnicodeString& getFunctionName() const override { return underlyingValue->getFunctionName(); }
+            const UnicodeString& getFallback() const { return underlyingValue->getFallback(); }
+            VariableValue() {}
+            virtual ~VariableValue();
+            VariableValue(VariableValue&&);
+            VariableValue& operator=(VariableValue&&) noexcept;
+        private:
+            const FunctionValue* underlyingValue;
+
+            VariableValue(const FunctionValue*);
+    }; // class VariableValue
 
     // PrioritizedVariant
 

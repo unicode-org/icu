@@ -47,7 +47,8 @@
           "kind": "close",
           "name": "tag"
         }
-      ]
+      ],
+      "ignoreCpp": "u:locale option is still in Draft stage"
     },
     {
       "src": "hello {4.2 :number u:locale=fr}",

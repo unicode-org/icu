@@ -365,6 +365,8 @@ namespace message2 {
         [[nodiscard]] InternalValue& evalExpression(const UnicodeString&, Environment&, const data_model::Expression&, MessageContext&, UErrorCode&) const;
         [[nodiscard]] FunctionOptions resolveOptions(Environment& env, const OptionMap&, MessageContext&, UErrorCode&) const;
         [[nodiscard]] InternalValue& evalOperand(const UnicodeString&, Environment&, const data_model::Operand&, MessageContext&, UErrorCode&) const;
+        bool operandToStringWithBadOptionError(MessageContext&, Environment&, const Operand&, UnicodeString&, UErrorCode&) const;
+        void validateUOptionsOnMarkup(MessageContext&, Environment&, const Markup&, UErrorCode&) const;
         [[nodiscard]] InternalValue& evalVariableReference(const UnicodeString&, Environment&, const data_model::VariableName&, MessageContext&, UErrorCode&) const;
         [[nodiscard]] InternalValue evalArgument(const UnicodeString&, const data_model::VariableName&, MessageContext&, UErrorCode&) const;
         void formatSelectors(MessageContext& context, Environment& env, UErrorCode &status, UnicodeString& result) const;
