@@ -44,7 +44,6 @@
       <AssemblerListingLocation>.\x86\Debug/</AssemblerListingLocation>
       <ObjectFileName>.\x86\Debug/</ObjectFileName>
       <ProgramDataBaseFileName>.\x86\Debug/</ProgramDataBaseFileName>
-      <BrowseInformation>true</BrowseInformation>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <CompileAs>Default</CompileAs>
@@ -74,7 +73,6 @@
       <AssemblerListingLocation>.\x64\Debug/</AssemblerListingLocation>
       <ObjectFileName>.\x64\Debug/</ObjectFileName>
       <ProgramDataBaseFileName>.\x64\Debug/</ProgramDataBaseFileName>
-      <BrowseInformation>true</BrowseInformation>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAs>Default</CompileAs>
