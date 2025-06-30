@@ -104,17 +104,19 @@ public:
     bool operator!=(const SinglePassIter &other) const { return !operator==(other); }
 
     // Asymmetric equality & nonequality with a sentinel type.
-    // C++17: Need to define all four combinations of == / != vs. parameter order.
-    // Once we require C++20, we could remove all but the first == because
-    // the compiler would generate the rest.
     friend bool operator==(const SinglePassIter &iter, const Nul &) {
         return iter.atNul();
     }
+#if U_CPLUSPLUS_VERSION < 20
+    // C++17: Need to define all four combinations of == / != vs. parameter order.
+    // Once we require C++20, we could remove all but the first == because
+    // the compiler would generate the rest.
     friend bool operator==(const Nul &, const SinglePassIter &iter) {
         return iter.atNul();
     }
     friend bool operator!=(const SinglePassIter &iter, const Nul &nul) { return !(iter == nul); }
     friend bool operator!=(const Nul &nul, const SinglePassIter &iter) { return !(iter == nul); }
+#endif  // C++17
 
     Unit operator*() const { return *(src->p); }
     SinglePassIter &operator++() {  // pre-increment
@@ -147,17 +149,19 @@ public:
     bool operator!=(const FwdIter &other) const { return !operator==(other); }
 
     // Asymmetric equality & nonequality with a sentinel type.
-    // C++17: Need to define all four combinations of == / != vs. parameter order.
-    // Once we require C++20, we could remove all but the first == because
-    // the compiler would generate the rest.
     friend bool operator==(const FwdIter &iter, const Nul &) {
         return *iter.p == 0;
     }
+#if U_CPLUSPLUS_VERSION < 20
+    // C++17: Need to define all four combinations of == / != vs. parameter order.
+    // Once we require C++20, we could remove all but the first == because
+    // the compiler would generate the rest.
     friend bool operator==(const Nul &, const FwdIter &iter) {
         return *iter.p == 0;
     }
     friend bool operator!=(const FwdIter &iter, const Nul &nul) { return !(iter == nul); }
     friend bool operator!=(const Nul &nul, const FwdIter &iter) { return !(iter == nul); }
+#endif  // C++17
 
     Unit operator*() const { return *p; }
     FwdIter &operator++() {  // pre-increment
