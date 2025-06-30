@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1751316770050,
+  "lastUpdate": 1751324677064,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -75957,6 +75957,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 3.1438,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "andy.heninger@gmail.com",
+            "name": "Andy Heninger",
+            "username": "aheninger"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "197be68a147938c38d227bd832fd3e23bec77283",
+          "message": "ICU-23143 Fix regex bug with unpaired surrogates\n\nFix a regex bug that occured when a pattern contained an unpaired leading\nsurrogate. It could, incorrectly, match half of a valid supplementary char,\nleaving an invalid match position, and leading to subsequent assertion\nfailures.",
+          "timestamp": "2025-06-30T15:29:07-07:00",
+          "tree_id": "62eba199fd7c62a0e5408cc3eb03ea96ae137977",
+          "url": "https://github.com/unicode-org/icu/commit/197be68a147938c38d227bd832fd3e23bec77283"
+        },
+        "date": 1751324400032,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 3.1355,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 3.1094,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 3.1139,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 3.1578,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 3.1422,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 3.1461,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
