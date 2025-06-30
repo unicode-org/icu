@@ -1077,9 +1077,6 @@ public:
     U_FORCE_INLINE bool operator!=(const UTFIterator &other) const { return !operator==(other); }
 
     // Asymmetric equality & nonequality with a sentinel type.
-    // C++17: Need to define all four combinations of == / != vs. parameter order.
-    // Once we require C++20, we could remove all but the first == because
-    // the compiler would generate the rest.
 
     /**
      * @param iter A UTFIterator
@@ -1094,7 +1091,12 @@ public:
     operator==(const UTFIterator &iter, const Sentinel &s) {
         return iter.getLogicalPosition() == s;
     }
+
 #if U_CPLUSPLUS_VERSION < 20
+    // C++17: Need to define all four combinations of == / != vs. parameter order.
+    // Once we require C++20, we could remove all but the first == because
+    // the compiler would generate the rest.
+
     /**
      * @param s A unit iterator sentinel
      * @param iter A UTFIterator
@@ -1130,7 +1132,7 @@ public:
         !std::is_same_v<Sentinel, UTFIterator> && !std::is_same_v<Sentinel, UnitIter>,
         bool>
     operator!=(const Sentinel &s, const UTFIterator &iter) { return !(iter == s); }
-#endif
+#endif  // C++17
 
     /**
      * Decodes the code unit sequence at the current position.
@@ -1329,6 +1331,7 @@ public:
         return !iter.ahead_ && iter.p_ == s;
     }
 
+#if U_CPLUSPLUS_VERSION < 20
     template<typename Sentinel> U_FORCE_INLINE friend
     std::enable_if_t<
         !std::is_same_v<Sentinel, UTFIterator> && !std::is_same_v<Sentinel, UnitIter>,
@@ -1348,6 +1351,7 @@ public:
         !std::is_same_v<Sentinel, UTFIterator> && !std::is_same_v<Sentinel, UnitIter>,
         bool>
     operator!=(const Sentinel &s, const UTFIterator &iter) { return !(iter == s); }
+#endif  // C++17
 
     U_FORCE_INLINE CodeUnits<CP32, UnitIter> operator*() const {
         if (!ahead_) {
@@ -1884,6 +1888,8 @@ public:
     operator==(const UnsafeUTFIterator &iter, const Sentinel &s) {
         return iter.getLogicalPosition() == s;
     }
+
+#if U_CPLUSPLUS_VERSION < 20
     /**
      * @param s A unit iterator sentinel
      * @param iter An UnsafeUTFIterator
@@ -1919,6 +1925,7 @@ public:
         !std::is_same_v<Sentinel, UnsafeUTFIterator> && !std::is_same_v<Sentinel, UnitIter>,
         bool>
     operator!=(const Sentinel &s, const UnsafeUTFIterator &iter) { return !(iter == s); }
+#endif  // C++17
 
     /**
      * Decodes the code unit sequence at the current position.
@@ -2109,6 +2116,7 @@ public:
         return !iter.ahead_ && iter.p_ == s;
     }
 
+#if U_CPLUSPLUS_VERSION < 20
     template<typename Sentinel> U_FORCE_INLINE friend
     std::enable_if_t<
         !std::is_same_v<Sentinel, UnsafeUTFIterator> && !std::is_same_v<Sentinel, UnitIter>,
@@ -2128,6 +2136,7 @@ public:
         !std::is_same_v<Sentinel, UnsafeUTFIterator> && !std::is_same_v<Sentinel, UnitIter>,
         bool>
     operator!=(const Sentinel &s, const UnsafeUTFIterator &iter) { return !(iter == s); }
+#endif  // C++17
 
     U_FORCE_INLINE UnsafeCodeUnits<CP32, UnitIter> operator*() const {
         if (!ahead_) {
