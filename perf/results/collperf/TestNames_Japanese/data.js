@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1751316752961,
+  "lastUpdate": 1751324504712,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -68685,6 +68685,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5447305.8982,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "andy.heninger@gmail.com",
+            "name": "Andy Heninger",
+            "username": "aheninger"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "197be68a147938c38d227bd832fd3e23bec77283",
+          "message": "ICU-23143 Fix regex bug with unpaired surrogates\n\nFix a regex bug that occured when a pattern contained an unpaired leading\nsurrogate. It could, incorrectly, match half of a valid supplementary char,\nleaving an invalid match position, and leading to subsequent assertion\nfailures.",
+          "timestamp": "2025-06-30T15:29:07-07:00",
+          "tree_id": "62eba199fd7c62a0e5408cc3eb03ea96ae137977",
+          "url": "https://github.com/unicode-org/icu/commit/197be68a147938c38d227bd832fd3e23bec77283"
+        },
+        "date": 1751324228852,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 207.2698,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 20813903.238,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5484005.2492,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 19699192.922,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5489190.0595,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
