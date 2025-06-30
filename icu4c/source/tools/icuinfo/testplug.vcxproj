@@ -5,6 +5,7 @@
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType Condition="'$(ENABLE_STATIC)'=='YES'">StaticLibrary</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -45,6 +46,9 @@
     <Link>
       <AdditionalLibraryDirectories>..\..\..\$(IcuLibOutputDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <Lib>
+      <AdditionalLibraryDirectories>..\..\..\$(IcuLibOutputDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <!-- Options that are common to all 'Debug' project configurations -->
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
@@ -59,6 +63,11 @@
       <ImportLibrary>..\..\..\$(IcuLibOutputDir)\testplugd.lib</ImportLibrary>
       <AdditionalDependencies>icuucd.lib;icutud.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <Lib>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>..\..\..\$(IcuLibOutputDir)\stestplugd.pdb</ProgramDatabaseFile>
+      <OutputFile>..\..\..\$(IcuLibOutputDir)\stestplugd.lib</OutputFile>
+    </Lib>
   </ItemDefinitionGroup>
   <!-- Options that are common to all 'Release' project configurations -->
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
@@ -72,6 +81,10 @@
       <ImportLibrary>..\..\..\$(IcuLibOutputDir)\testplug.lib</ImportLibrary>
       <AdditionalDependencies>icuuc.lib;icutu.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <Lib>
+      <ProgramDatabaseFile>..\..\..\$(IcuLibOutputDir)\stestplug.pdb</ProgramDatabaseFile>
+      <OutputFile>..\..\..\$(IcuLibOutputDir)\stestplug.lib</OutputFile>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="testplug.c" />
