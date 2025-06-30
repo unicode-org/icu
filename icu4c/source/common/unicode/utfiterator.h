@@ -1094,6 +1094,7 @@ public:
     operator==(const UTFIterator &iter, const Sentinel &s) {
         return iter.getLogicalPosition() == s;
     }
+#if U_CPLUSPLUS_VERSION < 20
     /**
      * @param s A unit iterator sentinel
      * @param iter A UTFIterator
@@ -1129,6 +1130,7 @@ public:
         !std::is_same_v<Sentinel, UTFIterator> && !std::is_same_v<Sentinel, UnitIter>,
         bool>
     operator!=(const Sentinel &s, const UTFIterator &iter) { return !(iter == s); }
+#endif
 
     /**
      * Decodes the code unit sequence at the current position.
@@ -2355,7 +2357,7 @@ public:
     /**
      * Constructs a C++ "range" object over the code points in the string,
      * keeping a reference to the code unit range.  This overload is used by
-     * utfStringCodePoints in C++17; in C+20, a ref_view is used instead (via
+     * utfStringCodePoints in C++17; in C++20, a ref_view is used instead (via
      * views::all).
      * @param unitRange input range
      * @draft ICU 78
