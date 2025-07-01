@@ -302,6 +302,8 @@ class UnicodeStringAppendable;  // unicode/appendable.h
 class U_COMMON_API UnicodeString : public Replaceable
 {
 public:
+  /** C++ boilerplate @internal */
+  using value_type = char16_t;
 
   /**
    * Constant to be used in the UnicodeString(char *, int32_t, EInvariant) constructor
@@ -2372,6 +2374,16 @@ public:
    */
   UnicodeString& append(UChar32 srcChar);
 
+#ifndef U_HIDE_DRAFT_API
+  /**
+   * Appends the code unit `c` to the UnicodeString object.
+   * Same as append(c) except does not return *this.
+   *
+   * @param c the code unit to append
+   * @draft ICU 78
+   */
+  inline void push_back(char16_t c) { append(c); }
+#endif  // U_HIDE_DRAFT_API
 
   /* Insert operations */
 

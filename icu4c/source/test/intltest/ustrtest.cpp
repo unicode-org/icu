@@ -2674,9 +2674,14 @@ void UnicodeStringTest::TestRange() {
         }
     }
     {
+        UnicodeString t;
+        std::copy(s.begin(), s.end(), std::back_inserter(t));
+        assertEquals("copy code units to UnicodeString", u"süße 🚲 Soße", t);
+    }
+    {
         std::u16string s16;
         std::copy(s.begin(), s.end(), std::back_inserter(s16));
-        assertTrue("copy code units", s16 == u"süße 🚲 Soße");
+        assertTrue("copy code units to u16string", s16 == u"süße 🚲 Soße");
     }
 #if U_CPLUSPLUS_VERSION >= 20
     {
