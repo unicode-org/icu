@@ -6,6 +6,7 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
+#include <algorithm>
 #include <string>
 #include <string_view>
 #include <utility>
@@ -21,6 +22,7 @@
 #include "unicode/ucnv.h"
 #include "unicode/uenum.h"
 #include "unicode/utf16.h"
+#include "unicode/utfiterator.h"
 #include "cmemory.h"
 #include "charstr.h"
 
@@ -30,6 +32,8 @@ using namespace std::string_view_literals;
 
 // Same for u"literal"s std::u16string literals.
 using namespace std::string_literals;
+
+using icu::header::utfStringCodePoints;
 
 #if 0
 #include "unicode/ustream.h"
@@ -80,6 +84,7 @@ void UnicodeStringTest::runIndexedTest( int32_t index, UBool exec, const char* &
     TESTCASE_AUTO(TestLargeMemory);
     TESTCASE_AUTO(TestU16StringView);
     TESTCASE_AUTO(TestWStringView);
+    TESTCASE_AUTO(TestRange);
     TESTCASE_AUTO_END;
 }
 
@@ -2642,4 +2647,49 @@ void UnicodeStringTest::TestWStringView() {
     x = any + str16;
     assertEquals("any + str16", UnicodeString(true, L"anystr16", 8), x);
 #endif
+}
+
+void UnicodeStringTest::TestRange() {
+    IcuTestErrorCode status(*this, "TestRange");
+    UnicodeString s(u"süße 🚲 Soße");
+    {
+        int32_t i = 0;
+        for (char16_t c : s) {
+            assertEquals("code unit range for loop", s[i], c);
+            ++i;
+        }
+    }
+    {
+        auto iter = s.begin();
+        auto limit = s.end();
+        for (int32_t i = 0; iter != limit; ++iter, ++i) {
+            assertEquals("code unit begin/end loop", s[i], *iter);
+        }
+    }
+    {
+        auto iter = s.rbegin();
+        auto start = s.rend();
+        for (int32_t i = s.length(); iter != start; ++iter) {
+            assertEquals("code unit rbegin/rend loop", s[--i], *iter);
+        }
+    }
+    {
+        std::u16string s16;
+        std::copy(s.begin(), s.end(), std::back_inserter(s16));
+        assertTrue("copy code units", s16 == u"süße 🚲 Soße");
+    }
+#if U_CPLUSPLUS_VERSION >= 20
+    {
+        std::u16string s16;
+        std::ranges::copy_if(s, std::back_inserter(s16), [](char16_t c) { return c > 0x7f; });
+        assertTrue("copy non-ASCII code units", s16 == u"üß🚲ß");
+    }
+#endif  // C++20
+    {
+        std::u32string s32;
+        for (auto units : utfStringCodePoints<UChar32, UTF_BEHAVIOR_FFFD>(s)) {
+            s32.push_back(units.codePoint());
+        }
+        assertTrue("code points", s32 == U"süße 🚲 Soße");
+    }
 }

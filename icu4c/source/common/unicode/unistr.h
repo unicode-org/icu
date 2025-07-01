@@ -215,6 +215,10 @@ class UnicodeStringAppendable;  // unicode/appendable.h
  *
  * The UnicodeString equivalent of std::string’s clear() is remove().
  *
+ * Starting with ICU 78, a UnicodeString is a C++ "range" of char16_t code units.
+ * utfStringCodePoints() and unsafeUTFStringCodePoints() can be used to iterate over
+ * the code points.
+ *
  * A UnicodeString may "alias" an external array of characters
  * (that is, point to it, rather than own the array)
  * whose lifetime must then at least match the lifetime of the aliasing object.
@@ -289,6 +293,9 @@ class UnicodeStringAppendable;  // unicode/appendable.h
  * [User Guide Strings chapter](https://unicode-org.github.io/icu/userguide/strings#maximizing-performance-with-the-unicodestring-storage-model).
  *
  * @see utf.h
+ * @see utfiterator.h
+ * @see utfStringCodePoints
+ * @see unsafeUTFStringCodePoints
  * @see CharacterIterator
  * @stable ICU 2.0
  */
@@ -1911,6 +1918,33 @@ public:
    * @stable ICU 2.0
    */
   inline UBool isBogus() const;
+
+#ifndef U_HIDE_DRAFT_API
+  /**
+   * @return an iterator to the first code unit in this string.
+   *     The iterator may be a pointer or a contiguous-iterator object.
+   * @draft ICU 78
+   */
+  auto begin() const { return std::u16string_view(*this).begin(); }
+  /**
+   * @return an iterator to just past the last code unit in this string.
+   *     The iterator may be a pointer or a contiguous-iterator object.
+   * @draft ICU 78
+   */
+  auto end() const { return std::u16string_view(*this).end(); }
+  /**
+   * @return a reverse iterator to the last code unit in this string.
+   *     The iterator may be a pointer or a contiguous-iterator object.
+   * @draft ICU 78
+   */
+  auto rbegin() const { return std::u16string_view(*this).rbegin(); }
+  /**
+   * @return a reverse iterator to just before the first code unit in this string.
+   *     The iterator may be a pointer or a contiguous-iterator object.
+   * @draft ICU 78
+   */
+  auto rend() const { return std::u16string_view(*this).rend(); }
+#endif  // U_HIDE_DRAFT_API
 
   //========================================
   // Write operations
