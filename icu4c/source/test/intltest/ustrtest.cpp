@@ -1959,13 +1959,30 @@ UnicodeStringTest::TestUTF8() {
         errln("UnicodeString::toUTF8(sink) did not sink.Flush().");
     }
     // Initial contents for testing that toUTF8String() appends.
-    std::string result8 = "-->";
-    std::string expected8 = "-->" + std::string(reinterpret_cast<const char*>(expected_utf8), sizeof(expected_utf8));
+    std::string prefix = "-->";
+    std::string result8 = prefix;
+    std::string expected8 =
+        prefix +
+        std::string(reinterpret_cast<const char*>(expected_utf8), sizeof(expected_utf8));
     // Use the return value just for testing.
     std::string &result8r = us.toUTF8String(result8);
     if(result8r != expected8 || &result8r != &result8) {
         errln("UnicodeString::toUTF8String() did not create the expected string.");
     }
+    // Version which requires the template parameter and makes a new string.
+    expected8.erase(0, prefix.length());
+    auto result8v = us.toUTF8String<std::string>();
+    if(result8v != expected8) {
+        errln("UnicodeString::toUTF8String<std::string>() did not create the expected string.");
+    }
+#if U_CPLUSPLUS_VERSION >= 20
+    std::u8string expectedU8 =
+        std::u8string(reinterpret_cast<const char8_t*>(expected_utf8), sizeof(expected_utf8));
+    auto resultU8 = us.toUTF8String<std::u8string>();
+    if(resultU8 != expectedU8) {
+        errln("UnicodeString::toUTF8String<std::u8string>() did not create the expected string.");
+    }
+#endif  // C++20
 }
 
 // Test if this compiler supports Return Value Optimization of unnamed temporary objects.

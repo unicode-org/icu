@@ -1767,7 +1767,7 @@ public:
    * Unpaired surrogates are replaced with U+FFFD.
    * Calls toUTF8().
    *
-   * @param result A standard string (or a compatible object)
+   * @param result A std::string or a std::u8string (or a compatible object)
    *        to which the UTF-8 version of the string is appended.
    * @return The string object.
    * @stable ICU 4.2
@@ -1779,6 +1779,26 @@ public:
     toUTF8(sbs);
     return result;
   }
+
+#ifndef U_HIDE_DRAFT_API
+  /**
+   * Convert the UnicodeString to a UTF-8 string.
+   * Unpaired surrogates are replaced with U+FFFD.
+   * Calls toUTF8().
+   *
+   * @return A std::string or a std::u8string (or a compatible object)
+   *        with the UTF-8 version of the string.
+   * @draft ICU 78
+   * @see toUTF8
+   */
+  template<typename StringClass>
+  StringClass toUTF8String() const {
+    StringClass result;
+    StringByteSink<StringClass> sbs(&result, length());
+    toUTF8(sbs);
+    return result;
+  }
+#endif  // U_HIDE_DRAFT_API
 
   /**
    * Convert the UnicodeString to UTF-32.
