@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1751407929423,
+  "lastUpdate": 1751413105586,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -35547,6 +35547,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 2.7954284273635803,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "05454c68d738adb05d657b0eaf71e75e6e9a5e1b",
+          "message": "ICU-23054 Fix javadoc tags that prevent publishing",
+          "timestamp": "2025-07-01T16:27:58-07:00",
+          "tree_id": "359ca908879468aaed0c17799760653c0ad806c5",
+          "url": "https://github.com/unicode-org/icu/commit/05454c68d738adb05d657b0eaf71e75e6e9a5e1b"
+        },
+        "date": 1751412834312,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 2.721460816034447,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
