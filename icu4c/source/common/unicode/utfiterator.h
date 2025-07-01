@@ -12,6 +12,9 @@
 #if U_SHOW_CPLUSPLUS_API || U_SHOW_CPLUSPLUS_HEADER_API || !defined(UTYPES_H)
 
 #include <iterator>
+#if defined(__cpp_lib_ranges)
+#include <ranges>
+#endif
 #include <string>
 #include <string_view>
 #include <type_traits>
