@@ -121,6 +121,8 @@
 
 /* single-code point definitions -------------------------------------------- */
 
+#ifndef U_HIDE_DRAFT_API
+
 /**
  * Is c a Unicode code point U+0000..U+10FFFF?
  * https://www.unicode.org/glossary/#code_point
@@ -141,6 +143,8 @@
  * @draft ICU 78
  */
 #define U_IS_SCALAR_VALUE(c) ((uint32_t)(c)<0xd800 || (0xe000<=(c) && (c)<=0x10ffff))
+
+#endif  // U_HIDE_DRAFT_API
 
 /**
  * Is this code point a Unicode noncharacter?
