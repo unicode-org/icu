@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1751323837471,
+  "lastUpdate": 1751408405946,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -35367,6 +35367,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 0.4762475702309182,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "cb40bf3afb70b2a67f5bcd6b0aed0e66f7640938",
+          "message": "ICU-23004 utfiterator.h include <range>",
+          "timestamp": "2025-07-01T21:43:54Z",
+          "tree_id": "aba8778349ded73de867ec01dc1d6ba1a97df53a",
+          "url": "https://github.com/unicode-org/icu/commit/cb40bf3afb70b2a67f5bcd6b0aed0e66f7640938"
+        },
+        "date": 1751408130667,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 0.47621431711490575,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
