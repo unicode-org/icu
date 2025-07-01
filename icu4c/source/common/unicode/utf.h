@@ -144,6 +144,8 @@
 
 /**
  * Is this code point a Unicode noncharacter?
+ * https://www.unicode.org/glossary/#noncharacter
+ *
  * @param c 32-bit code point
  * @return true or false
  * @stable ICU 2.4

@@ -79,6 +79,28 @@ public final class UCharacterSurrogateTest extends CoreTestFmwk {
     }
 
     @Test
+    public void TestIsNoncharacter() {
+        assertFalse("-1", UCharacter.isNoncharacter(-1));
+        assertFalse("U+0000", UCharacter.isNoncharacter(0));
+        assertFalse("U+20ac", UCharacter.isNoncharacter(0x20ac));
+        assertFalse("U+d9da", UCharacter.isNoncharacter(0xd9da));
+        assertFalse("U+dfed", UCharacter.isNoncharacter(0xdfed));
+        assertFalse("U+fdcf", UCharacter.isNoncharacter(0xfdcf));
+        assertTrue("U+fdd0", UCharacter.isNoncharacter(0xfdd0));
+        assertTrue("U+fdef", UCharacter.isNoncharacter(0xfdef));
+        assertFalse("U+fdf0", UCharacter.isNoncharacter(0xfdf0));
+        assertFalse("U+fffd", UCharacter.isNoncharacter(0xfffd));
+        assertTrue("U+fffe", UCharacter.isNoncharacter(0xfffe));
+        assertTrue("U+ffff", UCharacter.isNoncharacter(0xffff));
+        assertFalse("U+10000", UCharacter.isNoncharacter(0x10000));
+        assertTrue("U+1fffe", UCharacter.isNoncharacter(0x1fffe));
+        assertTrue("U+1ffff", UCharacter.isNoncharacter(0x1ffff));
+        assertFalse("U+50005", UCharacter.isNoncharacter(0x50005));
+        assertTrue("U+10ffff", UCharacter.isNoncharacter(0x10ffff));
+        assertFalse("0x110000", UCharacter.isNoncharacter(0x110000));
+    }
+
+    @Test
     public void TestIsSupplementaryCodePoint() {
         if (UCharacter.isSupplementaryCodePoint(-1))
             errln("-1");

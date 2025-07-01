@@ -6487,6 +6487,19 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     }
 
     /**
+     * {@icu} Is cp a Unicode noncharacter?
+     * See <a href="https://www.unicode.org/glossary/#noncharacter">Unicode Glossary:
+     * Noncharacter</a>.
+     *
+     * @param cp the code point to check
+     * @return true if cp is a Unicode noncharacter code point
+     * @draft ICU 78
+     */
+    public static final boolean isNoncharacter(int cp) {
+        return cp >= 0xfdd0 && (cp <= 0xfdef || (cp & 0xfffe) == 0xfffe) && cp <= MAX_CODE_POINT;
+    }
+
+    /**
      * Same as {@link Character#charCount}.
      * Returns the number of chars needed to represent the code point (1 or 2).
      * This does not check the code point for validity.
