@@ -100,6 +100,7 @@ static void TestTruncateIfIncomplete(void);
 static void TestAppendChar(void);
 static void TestAppend(void);
 static void TestSurrogates(void);
+static void TestLengthFromLeadByte(void);
 
 void addUTF8Test(TestNode** root);
 
@@ -121,6 +122,7 @@ addUTF8Test(TestNode** root)
     addTest(root, &TestAppendChar,              "utf8tst/TestAppendChar");
     addTest(root, &TestAppend,                  "utf8tst/TestAppend");
     addTest(root, &TestSurrogates,              "utf8tst/TestSurrogates");
+    addTest(root, &TestLengthFromLeadByte,      "utf8tst/TestLengthFromLeadByte");
 }
 
 static void TestCodeUnitValues(void)
@@ -1330,5 +1332,38 @@ TestSurrogates(void) {
         }
 
         i=iu;   /* go back by one UTF-8 sequence */
+    }
+}
+
+static void
+TestLengthFromLeadByte(void) {
+    // for lead bytes C0..F4
+    static const uint8_t expected[] = {
+        1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+        3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+        4, 4, 4, 4, 4
+    };
+
+    for (int b = 0; b <= 0xff; ++b) {
+        if (b == 0xc2) {
+            b = 0xf5;
+        }
+        if (U8_LENGTH_FROM_LEAD_BYTE(b) != 1) {
+            log_err("U8_LENGTH_FROM_LEAD_BYTE(0x%02x) != 1\n", b);
+        }
+        if (b <= 0xf4 && U8_LENGTH_FROM_LEAD_BYTE_UNSAFE(b) != 1) {
+            log_err("U8_LENGTH_FROM_LEAD_BYTE_UNSAFE(0x%02x) != 1\n", b);
+        }
+    }
+
+    for (int b = 0xc2; b <= 0xf4; ++b) {
+        int exp = expected[b - 0xc0];
+        if (U8_LENGTH_FROM_LEAD_BYTE(b) != exp) {
+            log_err("U8_LENGTH_FROM_LEAD_BYTE(0x%02x) != %d\n", b, exp);
+        }
+        if (b <= 0xf4 && U8_LENGTH_FROM_LEAD_BYTE_UNSAFE(b) != exp) {
+            log_err("U8_LENGTH_FROM_LEAD_BYTE_UNSAFE(0x%02x) != %d\n", b, exp);
+        }
     }
 }
