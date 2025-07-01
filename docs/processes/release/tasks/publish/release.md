@@ -98,10 +98,18 @@ Here you should use the release tag.
   You can find the list of people with such access in the team shared folder.</span> \
   To do that:
     * log on to the [Sonatype Central Portal -- Namespaces](https://central.sonatype.com/publishing/namespaces).
-    * Select the "Deployments" tab.
-    * Check the files staged there, compare to a previous public release in Maven Central
+    * Select the **Deployments** tab.
+      ![image](mcp-deployments.png)
+    * Check the files staged there (`icu4j-charset` is similar):
+      ![image](mcp-deployment-files.png)
+    * Compare to a previous public release in Maven Central
     (for example [ICU4J 77.1](https://repo1.maven.org/maven2/com/ibm/icu/icu4j/77.1/)
     and [ICU4J Charset 77.1](https://repo1.maven.org/maven2/com/ibm/icu/icu4j-charset/77.1/)) \
-    For now sanity check is probably: make sure there are no errors / warnings, make sure the new staged files match the ones in the 2 links above.
-    * Once you confirm the contents, approve it.
-    * <span style="color:red"><b>TODO: update this doc with screenshot(s) once we have a release staged.</b><span>
+    And do a sanity check:
+      * make sure there are no errors / warnings
+      * the timestamps look reasonable
+        (close to the time when the ICU4J publish GitHub action finished),
+      * the version is the one you expect to release
+      * the file sizes didn't drastically change from the previous release
+    * Once you confirm that everything looks reasonable, approve the deployment
+      (click **Publish**).
