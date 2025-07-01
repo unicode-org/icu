@@ -6409,6 +6409,8 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     public static final int MIN_CODE_POINT = Character.MIN_CODE_POINT;
 
     /**
+     * Is cp a Unicode code point U+0000..U+10FFFF?
+     * See <a href="https://www.unicode.org/glossary/#code_point">Unicode Glossary: Code Point</a>.
      * Equivalent to {@link Character#isValidCodePoint}.
      *
      * @param cp the code point to check

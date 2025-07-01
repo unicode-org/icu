@@ -122,6 +122,16 @@
 /* single-code point definitions -------------------------------------------- */
 
 /**
+ * Is c a Unicode code point U+0000..U+10FFFF?
+ * https://www.unicode.org/glossary/#code_point
+ *
+ * @param c 32-bit code point
+ * @return true or false
+ * @draft ICU 78
+ */
+#define U_IS_CODE_POINT(c) ((uint32_t)(c)<=0x10ffff)
+
+/**
  * Is this code point a Unicode noncharacter?
  * @param c 32-bit code point
  * @return true or false
