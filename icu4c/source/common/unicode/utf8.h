@@ -170,7 +170,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  * @return true or false
  * @stable ICU 2.4
  */
-#define U8_IS_SINGLE(c) (((c)&0x80)==0)
+#define U8_IS_SINGLE(c) ((int8_t)(c)>=0)
 
 /**
  * Is this code unit (byte) a UTF-8 lead byte? (0xC2..0xF4)
