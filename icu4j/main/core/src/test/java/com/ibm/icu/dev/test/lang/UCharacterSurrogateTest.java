@@ -59,6 +59,26 @@ public final class UCharacterSurrogateTest extends CoreTestFmwk {
     }
 
     @Test
+    public void TestIsScalarValue() {
+        assertTrue("U+0000", UCharacter.isScalarValue(0));
+        assertTrue("U+0061", UCharacter.isScalarValue(0x61));
+        assertTrue("U+20ac", UCharacter.isScalarValue(0x20ac));
+        assertTrue("U+d7ff", UCharacter.isScalarValue(0xd7ff));
+        assertFalse("U+d800", UCharacter.isScalarValue(0xd800));
+        assertFalse("U+d9da", UCharacter.isScalarValue(0xd9da));
+        assertFalse("U+dfed", UCharacter.isScalarValue(0xdfed));
+        assertFalse("U+dfff", UCharacter.isScalarValue(0xdfff));
+        assertTrue("U+e000", UCharacter.isScalarValue(0xe000));
+        assertTrue("U+ffff", UCharacter.isScalarValue(0xffff));
+        assertFalse("-1", UCharacter.isScalarValue(-1));
+        assertTrue("U+10000", UCharacter.isScalarValue(0x10000));
+        assertTrue("U+50005", UCharacter.isScalarValue(0x50005));
+        assertTrue("U+10ffff", UCharacter.isScalarValue(0x10ffff));
+        assertFalse("0x110000", UCharacter.isScalarValue(0x110000));
+        assertFalse("0x7fffffff", UCharacter.isScalarValue(0x7fffffff));
+    }
+
+    @Test
     public void TestIsSupplementaryCodePoint() {
         if (UCharacter.isSupplementaryCodePoint(-1))
             errln("-1");

@@ -132,6 +132,17 @@
 #define U_IS_CODE_POINT(c) ((uint32_t)(c)<=0x10ffff)
 
 /**
+ * Is c a Unicode scalar value, that is, a non-surrogate code point?
+ * Only scalar values can be represented in well-formed UTF-8/16/32.
+ * https://www.unicode.org/glossary/#unicode_scalar_value
+ *
+ * @param c 32-bit code point
+ * @return true or false
+ * @draft ICU 78
+ */
+#define U_IS_SCALAR_VALUE(c) ((uint32_t)(c)<0xd800 || (0xe000<=(c) && (c)<=0x10ffff))
+
+/**
  * Is this code point a Unicode noncharacter?
  * @param c 32-bit code point
  * @return true or false
@@ -160,7 +171,7 @@
  */
 #define U_IS_UNICODE_CHAR(c) \
     ((uint32_t)(c)<0xd800 || \
-        (0xdfff<(c) && (c)<=0x10ffff && !U_IS_UNICODE_NONCHAR(c)))
+        (0xe000<=(c) && (c)<=0x10ffff && !U_IS_UNICODE_NONCHAR(c)))
 
 /**
  * Is this code point a BMP code point (U+0000..U+ffff)?

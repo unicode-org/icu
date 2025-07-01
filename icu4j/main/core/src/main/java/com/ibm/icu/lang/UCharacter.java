@@ -6422,6 +6422,20 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     }
 
     /**
+     * {@icu} Is cp a Unicode scalar value, that is, a non-surrogate code point?
+     * Only scalar values can be represented in well-formed UTF-8/16/32.
+     * See <a href="https://www.unicode.org/glossary/#unicode_scalar_value">Unicode Glossary:
+     * Unicode Scalar Value</a>.
+     *
+     * @param cp the code point to check
+     * @return true if cp is a Unicode scalar value
+     * @draft ICU 78
+     */
+    public static final boolean isScalarValue(int cp) {
+        return (0 <= cp && cp < 0xd800) || (0xe000 <= cp && cp <= MAX_CODE_POINT);
+    }
+
+    /**
      * Same as {@link Character#isSupplementaryCodePoint}.
      *
      * @param cp the code point to check
