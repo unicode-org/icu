@@ -26,7 +26,7 @@ import java.util.stream.Stream;
  *
  * Segments segments = wordSeg.segment("Das 21ste Jahrh. ist das beste.");
  *
- * List<CharSequence> words = segments.subSequences().collect(Collectors.toList());
+ * List&lt;CharSequence&gt; words = segments.subSequences().collect(Collectors.toList());
  * </pre></blockquote>
  *
  * @see Segmenter
