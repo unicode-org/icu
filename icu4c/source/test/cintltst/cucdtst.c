@@ -2915,6 +2915,9 @@ TestAdditionalProperties(void) {
     if( u_getIntPropertyMaxValue(UCHAR_EAST_ASIAN_WIDTH) != (int32_t) (U_EA_COUNT -1)) {
         log_err("error: u_getIntPropertyMaxValue(UCHAR_EAST_ASIAN_WIDTH) wrong\n");
     }
+    if( u_getIntPropertyMaxValue(UCHAR_INDIC_CONJUNCT_BREAK) != (int32_t) (U_INCB_COUNT -1)) {
+        log_err("error: u_getIntPropertyMaxValue(UCHAR_INDIC_CONJUNCT_BREAK) wrong\n");
+    }
 
     /* test u_hasBinaryProperty() and u_getIntPropertyValue() */
     for(i=0; i<UPRV_LENGTHOF(props); ++i) {
