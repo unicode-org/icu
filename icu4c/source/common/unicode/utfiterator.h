@@ -285,6 +285,7 @@ private:
  * Intended for test and builder code.
  *
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t
+ * @draft ICU 78
  * @see U_IS_CODE_POINT
  */
 template<typename CP32>
@@ -315,6 +316,7 @@ public:
  * Intended for test and builder code.
  *
  * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t
+ * @draft ICU 78
  * @see U_IS_SCALAR_VALUE
  */
 template<typename CP32>
