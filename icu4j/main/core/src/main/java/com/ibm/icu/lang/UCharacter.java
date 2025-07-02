@@ -15,6 +15,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.PrimitiveIterator;
+import java.util.stream.IntStream;
 
 import com.ibm.icu.impl.CaseMapImpl;
 import com.ibm.icu.impl.EmojiProps;
@@ -6433,6 +6436,89 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static final boolean isScalarValue(int cp) {
         return (0 <= cp && cp < 0xd800) || (0xe000 <= cp && cp <= MAX_CODE_POINT);
+    }
+
+    private static final class CodePointsIterator implements PrimitiveIterator.OfInt {
+        private int c = 0;
+        private boolean skipSurrogates;
+
+        private CodePointsIterator(boolean skipSurrogates) {
+            this.skipSurrogates = skipSurrogates;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return c <= 0x10ffff;
+        }
+
+        @Override
+        public int nextInt() {
+            if (c > 0x10ffff) {
+                throw new NoSuchElementException();
+            }
+            int result = c;
+            ++c;
+            if (skipSurrogates && c == 0xd800) {
+                c = 0xe000;
+            }
+            return result;
+        }
+    }
+
+    /**
+     * {@icu} Returns an iterator over all Unicode code points U+0000..U+10FFFF.
+     * See <a href="https://www.unicode.org/glossary/#code_point">Unicode Glossary: Code Point</a>.
+     *
+     * <p>Intended for test and builder code.
+     *
+     * @return a PrimitiveIterator.OfInt over all Unicode code points U+0000..U+10FFFF.
+     * @draft ICU 78
+     */
+    public static final PrimitiveIterator.OfInt allCodePoints() {
+        return new CodePointsIterator(false);
+    }
+
+    /**
+     * {@icu} Returns an iterator over all Unicode scalar values U+0000..U+D7FF & U+E000..U+10FFFF.
+     * See <a href="https://www.unicode.org/glossary/#unicode_scalar_value">Unicode Glossary:
+     * Unicode Scalar Value</a>.
+     *
+     * <p>Intended for test and builder code.
+     *
+     * @return a PrimitiveIterator.OfInt over all Unicode scalar values.
+     * @draft ICU 78
+     */
+    public static final PrimitiveIterator.OfInt allScalarValues() {
+        return new CodePointsIterator(true);
+    }
+
+    /**
+     * {@icu} Returns an IntStream over all Unicode code points U+0000..U+10FFFF.
+     * See <a href="https://www.unicode.org/glossary/#code_point">Unicode Glossary: Code Point</a>.
+     *
+     * <p>Intended for test and builder code.
+     *
+     * @return an IntStream over all Unicode code points U+0000..U+10FFFF.
+     * @draft ICU 78
+     */
+    public static final IntStream allCodePointsStream() {
+        return IntStream.rangeClosed(0, 0x10ffff);
+    }
+
+    /**
+     * {@icu} Returns an IntStream over all Unicode scalar values U+0000..U+D7FF & U+E000..U+10FFFF.
+     * See <a href="https://www.unicode.org/glossary/#unicode_scalar_value">Unicode Glossary:
+     * Unicode Scalar Value</a>.
+     *
+     * <p>Intended for test and builder code.
+     *
+     * @return an IntStream over all Unicode scalar values.
+     * @draft ICU 78
+     */
+    public static final IntStream allScalarValuesStream() {
+        return IntStream.concat(
+                IntStream.rangeClosed(0, 0xd7ff),
+                IntStream.rangeClosed(0xe000, 0x10ffff));
     }
 
     /**

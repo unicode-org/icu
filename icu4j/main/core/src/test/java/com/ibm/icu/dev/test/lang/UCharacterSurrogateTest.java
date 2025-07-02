@@ -9,6 +9,8 @@
 
 package com.ibm.icu.dev.test.lang;
 
+import java.util.NoSuchElementException;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -76,6 +78,61 @@ public final class UCharacterSurrogateTest extends CoreTestFmwk {
         assertTrue("U+10ffff", UCharacter.isScalarValue(0x10ffff));
         assertFalse("0x110000", UCharacter.isScalarValue(0x110000));
         assertFalse("0x7fffffff", UCharacter.isScalarValue(0x7fffffff));
+    }
+
+    @Test
+    public void TestAllCodePoints() {
+        int count = 0;
+        int previous = -1;
+        var iter = UCharacter.allCodePoints();
+        while (iter.hasNext()) {
+            int c = iter.nextInt();
+            assertTrue("isValidCodePoint", UCharacter.isValidCodePoint(c));
+            assertEquals("c == previous + 1", previous + 1, c);
+            previous = c;
+            ++count;
+        }
+        try {
+            iter.nextInt();
+            fail("past-the-end nextInt() did not throw");
+        } catch (NoSuchElementException expected) {
+        }
+        assertEquals("count", 0x110000, count);
+
+        assertEquals("stream count", 0x110000, UCharacter.allCodePointsStream().count());
+        assertEquals("filtered stream count",
+                0x110000,
+                UCharacter.allCodePointsStream().filter(UCharacter::isValidCodePoint)
+                        .distinct().count());
+    }
+
+    @Test
+    public void TestAllScalarValues() {
+        int count = 0;
+        int previous = -1;
+        var iter = UCharacter.allScalarValues();
+        while (iter.hasNext()) {
+            int c = iter.nextInt();
+            assertTrue("isScalarValue", UCharacter.isScalarValue(c));
+            if (previous == 0xd7ff) {
+                previous = 0xdfff;
+            }
+            assertEquals("c == previous + 1", previous + 1, c);
+            previous = c;
+            ++count;
+        }
+        try {
+            iter.nextInt();
+            fail("past-the-end nextInt() did not throw");
+        } catch (NoSuchElementException expected) {
+        }
+        assertEquals("count", 0x110000 - 0x800, count);
+
+        assertEquals("stream count", 0x110000 - 0x800, UCharacter.allScalarValuesStream().count());
+        assertEquals("filtered stream count",
+                0x110000 - 0x800,
+                UCharacter.allScalarValuesStream().filter(UCharacter::isScalarValue)
+                        .distinct().count());
     }
 
     @Test
