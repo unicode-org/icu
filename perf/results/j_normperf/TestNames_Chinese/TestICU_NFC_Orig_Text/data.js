@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1751413195143,
+  "lastUpdate": 1751459870077,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -35547,6 +35547,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFC_Orig_Text",
             "value": 4.234431908098196,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "28c04c6d027739b1b856dca57d0715def15c7203",
+          "message": "ICU-23148 Update the documentation for Maven Central publishing",
+          "timestamp": "2025-07-01T16:25:58-07:00",
+          "tree_id": "9df8b41eb688d89817d6593106280261c80fd0ac",
+          "url": "https://github.com/unicode-org/icu/commit/28c04c6d027739b1b856dca57d0715def15c7203"
+        },
+        "date": 1751459597564,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 4.9481721310271105,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
