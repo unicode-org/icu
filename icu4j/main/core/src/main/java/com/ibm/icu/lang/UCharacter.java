@@ -6440,7 +6440,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
 
     private static final class CodePointsIterator implements PrimitiveIterator.OfInt {
         private int c = 0;
-        private boolean skipSurrogates;
+        private final boolean skipSurrogates;
 
         private CodePointsIterator(boolean skipSurrogates) {
             this.skipSurrogates = skipSurrogates;
@@ -6465,31 +6465,47 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         }
     }
 
+    private static final class CodePoints implements IterableOfInt {
+        private static final CodePoints ALL_CODE_POINTS = new CodePoints(false);
+        private static final CodePoints ALL_SCALAR_VALUES = new CodePoints(true);
+
+        private final boolean skipSurrogates;
+
+        private CodePoints(boolean skipSurrogates) {
+            this.skipSurrogates = skipSurrogates;
+        }
+
+        @Override
+        public PrimitiveIterator.OfInt iterator() {
+            return new CodePointsIterator(skipSurrogates);
+        }
+    }
+
     /**
-     * {@icu} Returns an iterator over all Unicode code points U+0000..U+10FFFF.
+     * {@icu} Returns an IterableOfInt over all Unicode code points U+0000..U+10FFFF.
      * See <a href="https://www.unicode.org/glossary/#code_point">Unicode Glossary: Code Point</a>.
      *
      * <p>Intended for test and builder code.
      *
-     * @return a PrimitiveIterator.OfInt over all Unicode code points U+0000..U+10FFFF.
+     * @return an IterableOfInt over all Unicode code points U+0000..U+10FFFF.
      * @draft ICU 78
      */
-    public static final PrimitiveIterator.OfInt allCodePoints() {
-        return new CodePointsIterator(false);
+    public static final IterableOfInt allCodePoints() {
+        return CodePoints.ALL_CODE_POINTS;
     }
 
     /**
-     * {@icu} Returns an iterator over all Unicode scalar values U+0000..U+D7FF & U+E000..U+10FFFF.
+     * {@icu} Returns an IterableOfInt over all Unicode scalar values U+0000..U+D7FF & U+E000..U+10FFFF.
      * See <a href="https://www.unicode.org/glossary/#unicode_scalar_value">Unicode Glossary:
      * Unicode Scalar Value</a>.
      *
      * <p>Intended for test and builder code.
      *
-     * @return a PrimitiveIterator.OfInt over all Unicode scalar values.
+     * @return an IterableOfInt over all Unicode scalar values.
      * @draft ICU 78
      */
-    public static final PrimitiveIterator.OfInt allScalarValues() {
-        return new CodePointsIterator(true);
+    public static final IterableOfInt allScalarValues() {
+        return CodePoints.ALL_SCALAR_VALUES;
     }
 
     /**

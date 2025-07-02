@@ -84,7 +84,7 @@ public final class UCharacterSurrogateTest extends CoreTestFmwk {
     public void TestAllCodePoints() {
         int count = 0;
         int previous = -1;
-        var iter = UCharacter.allCodePoints();
+        var iter = UCharacter.allCodePoints().iterator();
         while (iter.hasNext()) {
             int c = iter.nextInt();
             assertTrue("isValidCodePoint", UCharacter.isValidCodePoint(c));
@@ -110,7 +110,7 @@ public final class UCharacterSurrogateTest extends CoreTestFmwk {
     public void TestAllScalarValues() {
         int count = 0;
         int previous = -1;
-        var iter = UCharacter.allScalarValues();
+        var iter = UCharacter.allScalarValues().iterator();
         while (iter.hasNext()) {
             int c = iter.nextInt();
             assertTrue("isScalarValue", UCharacter.isScalarValue(c));
