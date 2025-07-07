@@ -477,7 +477,7 @@ int32_t daysInYear(int32_t eyear, UErrorCode& status) {
 }
 
 /**
-* Returns the the type of a given year.
+* Returns the type of a given year.
 *  0   "Deficient" year with 353 or 383 days
 *  1   "Normal"    year with 354 or 384 days
 *  2   "Complete"  year with 355 or 385 days

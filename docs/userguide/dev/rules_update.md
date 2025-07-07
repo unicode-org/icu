@@ -57,7 +57,7 @@ Often ICU will implement draft versions of proposed specification updates, to ch
 
 ## ICU4C
 
-The rule updates are done first for ICU4C, and then ported (code changes) or moved (data changes) to ICU4J. This order is easiest because the the break rule source files are part of the ICU4C project, as is the rule builder.
+The rule updates are done first for ICU4C, and then ported (code changes) or moved (data changes) to ICU4J. This order is easiest because the break rule source files are part of the ICU4C project, as is the rule builder.
 
 1.  **Add basic tests**` to icu4c/source/test/testdata/rbbitst.txt`
 

@@ -504,7 +504,7 @@ TestLocaleStructure(void) {
     // This test checks the locale structure against a key file located
     // at source/test/testdata/structLocale.txt. When adding new data to
     // a locale file such as en.txt, the structLocale.txt file must be changed
-    // too to include the the template of the new data. Otherwise this test
+    // too to include the template of the new data. Otherwise this test
     // will fail!
 
     UResourceBundle *root, *currentLocale;

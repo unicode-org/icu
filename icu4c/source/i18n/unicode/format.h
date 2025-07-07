@@ -85,7 +85,7 @@ class CharString;
  * <P>
  * If formatting is unsuccessful, a failing UErrorCode is returned when
  * the Format cannot format the type of object, otherwise if there is
- * something illformed about the the Unicode replacement character
+ * something illformed about the Unicode replacement character
  * 0xFFFD is returned.
  * <P>
  * If there is no match when parsing, a parse failure UErrorCode is

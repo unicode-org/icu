@@ -305,7 +305,7 @@ class RBBIRuleBuilder {
         fForwardTable.buildForwardTable();
         // State table and character category optimization.
         // Merge equivalent rows and columns.
-        // Note that this process alters the the initial set of character categories,
+        // Note that this process alters the initial set of character categories,
         // causing the representation of UnicodeSets in the parse tree to become invalid.
         optimizeTables();
         fForwardTable.buildSafeReverseTable();

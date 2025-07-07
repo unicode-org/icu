@@ -278,7 +278,7 @@ scan-var-body:
     
     
 #
-#  scan-unicode-set   Unicode Sets are parsed by the the UnicodeSet class.
+#  scan-unicode-set   Unicode Sets are parsed by the UnicodeSet class.
 #                     Within the RBBI parser, after finding the first character
 #                     of a Unicode Set, we just hand the rule input at that
 #                     point of to the Unicode Set constructor, then pick

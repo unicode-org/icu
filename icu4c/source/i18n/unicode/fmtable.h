@@ -565,7 +565,7 @@ public:
     void            adoptObject(UObject* objectToAdopt);
 
     /**
-     * Sets the the numeric value from a decimal number string, and changes
+     * Sets the numeric value from a decimal number string, and changes
      * the type to to a numeric type appropriate for the number.
      * The syntax of the number is a "numeric string"
      * as defined in the Decimal Arithmetic Specification, available at

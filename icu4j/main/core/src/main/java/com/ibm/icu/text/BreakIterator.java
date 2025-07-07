@@ -466,7 +466,7 @@ public abstract class BreakIterator implements Cloneable
 
     /**
      * For RuleBasedBreakIterators, get the status (tag) values from the break rule(s)
-     * that determined the the boundary at the current iteration position.
+     * that determined the boundary at the current iteration position.
      * <p>
      * For break iterator types that do not support rule status,
      * no values are returned.
@@ -477,7 +477,7 @@ public abstract class BreakIterator implements Cloneable
      *
      * @param fillInArray an array to be filled in with the status values.
      * @return          The number of rule status values from rules that determined
-     *                  the the boundary at the current iteration position.
+     *                  the boundary at the current iteration position.
      *                  In the event that the array is too small, the return value
      *                  is the total number of status values that were available,
      *                  not the reduced number that were actually returned.
