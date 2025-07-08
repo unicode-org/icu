@@ -146,7 +146,7 @@ public class HolidayTest extends CoreTestFmwk {
         {
             final Calendar c = Calendar.getInstance(TimeZone.GMT_ZONE); // Temporary copy
             c.set(2014, 10, 8); // when this test was hit
-            final Date fStartOfMonth = startOfMonth((Calendar)c.clone());
+            final Date fStartOfMonth = startOfMonth(c.clone());
 
             // Stash away a few useful constants for this calendar and display
             //minDay = c.getMinimum(Calendar.DAY_OF_WEEK);

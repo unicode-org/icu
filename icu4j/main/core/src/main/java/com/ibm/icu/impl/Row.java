@@ -176,11 +176,11 @@ public class Row<C0, C1, C2, C3, C4> implements java.lang.Comparable, Cloneable,
     }
 
     @Override
-    public Object clone() {
+    public Row<C0, C1, C2, C3, C4> clone() {
         if (frozen) return this;
         try {
             Row<C0, C1, C2, C3, C4> result = (Row<C0, C1, C2, C3, C4>) super.clone();
-            items = items.clone();
+            result.items = items.clone();
             return result;
         } catch (CloneNotSupportedException e) {
             return null;

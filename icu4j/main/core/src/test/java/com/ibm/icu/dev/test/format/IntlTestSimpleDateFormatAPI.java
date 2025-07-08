@@ -70,7 +70,7 @@ public class IntlTestSimpleDateFormatAPI extends CoreTestFmwk
 
         logln("Testing clone(), assignment and equality operators");
 
-        Format clone = (Format) def.clone();
+        Format clone = def.clone();
         if( ! clone.equals(def) ) {
             errln("ERROR: Format clone or equals failed");
         }

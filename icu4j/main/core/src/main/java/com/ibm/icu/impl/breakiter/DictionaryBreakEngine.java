@@ -95,7 +95,7 @@ public abstract class DictionaryBreakEngine implements LanguageBreakEngine {
         private int firstIdx = 4;  // or Top of Stack. Index of element + 1.
 
         @Override
-        public Object clone() throws CloneNotSupportedException {
+        public DequeI clone() throws CloneNotSupportedException {
             DequeI result = (DequeI)super.clone();
             result.data = data.clone();
             return result;

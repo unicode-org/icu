@@ -993,12 +993,12 @@ public class CalendarRegressionTest extends CoreTestFmwk {
          * case (although it does work currently with the given test).
          */
         Calendar a = Calendar.getInstance();
-        Calendar b = (Calendar)a.clone();
+        Calendar b = a.clone();
         if (a.hashCode() != b.hashCode()) {
             errln("Calendar hash code unequal for cloned objects");
         }
         TimeZone atz1 = a.getTimeZone();
-        TimeZone atz2 = (TimeZone)atz1.clone();
+        TimeZone atz2 = atz1.clone();
         if(!atz1.equals(atz2)){
             errln("The clone timezones are not equal");
         }
@@ -1038,7 +1038,7 @@ public class CalendarRegressionTest extends CoreTestFmwk {
         b.getTimeZone().setRawOffset(a.getTimeZone().getRawOffset());
 
         GregorianCalendar c = new GregorianCalendar();
-        GregorianCalendar d = (GregorianCalendar)c.clone();
+        GregorianCalendar d = c.clone();
         if (c.hashCode() != d.hashCode()) {
             errln("GregorianCalendar hash code unequal for clones objects");
         }
@@ -1055,7 +1055,7 @@ public class CalendarRegressionTest extends CoreTestFmwk {
     @Test
     public void Test4141665() {
         GregorianCalendar cal = new GregorianCalendar();
-        GregorianCalendar cal2 = (GregorianCalendar)cal.clone();
+        GregorianCalendar cal2 = cal.clone();
         Date cut = cal.getGregorianChange();
         Date cut2 = new Date(cut.getTime() + 100*24*60*60*1000L); // 100 days
                                                                   // later
@@ -1341,7 +1341,7 @@ public class CalendarRegressionTest extends CoreTestFmwk {
                     calendar.setGregorianChange(new Date(Long.MAX_VALUE));
                 }
 
-                format.setCalendar((Calendar)calendar.clone());
+                format.setCalendar(calendar.clone());
 
                 Date dateBefore = calendar.getTime();
 

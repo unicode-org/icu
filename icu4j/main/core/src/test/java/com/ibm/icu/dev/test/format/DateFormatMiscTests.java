@@ -79,7 +79,7 @@ public class DateFormatMiscTests extends CoreTestFmwk {
         {
             DateFormatSymbols symbols = new DateFormatSymbols(Locale.US);
             SimpleDateFormat df = new SimpleDateFormat("E hh:mm", symbols);
-            SimpleDateFormat dfClone = (SimpleDateFormat) df.clone();
+            SimpleDateFormat dfClone = df.clone();
 
             logln(df.toLocalizedPattern());
             String s0 = df.format(d);
@@ -101,7 +101,7 @@ public class DateFormatMiscTests extends CoreTestFmwk {
             DateFormatSymbols symbols = new DateFormatSymbols(Locale.US);
             SimpleDateFormat df = new SimpleDateFormat("E hh:mm");
             df.setDateFormatSymbols(symbols);
-            SimpleDateFormat dfClone = (SimpleDateFormat) df.clone();
+            SimpleDateFormat dfClone = df.clone();
 
             logln(df.toLocalizedPattern());
             String s0 = df.format(d);

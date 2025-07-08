@@ -18,7 +18,7 @@ import com.ibm.icu.text.UCharacterIterator;
  * CharacterIterator protocol
  * @author ram
  */
-public class UCharacterIteratorWrapper implements CharacterIterator{
+public class UCharacterIteratorWrapper implements CharacterIterator, Cloneable {
 
     public UCharacterIteratorWrapper(UCharacterIterator iter){
         this.iterator = iter;
@@ -139,10 +139,10 @@ public class UCharacterIteratorWrapper implements CharacterIterator{
      * @return A copy of this
      */
     @Override
-    public Object clone(){
+    public UCharacterIteratorWrapper clone() {
         try {
             UCharacterIteratorWrapper result = (UCharacterIteratorWrapper) super.clone();
-            result.iterator = (UCharacterIterator)this.iterator.clone();
+            result.iterator = this.iterator.clone();
             return result;
         } catch (CloneNotSupportedException e) {
             return null; // only invoked if bad underlying character iterator

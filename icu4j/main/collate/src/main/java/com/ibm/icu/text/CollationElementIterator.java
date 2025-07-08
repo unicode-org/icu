@@ -536,7 +536,7 @@ public final class CollationElementIterator
         // TODO: do we need to remember the cloned iterator in a field?
         UCharacterIterator src;
         try {
-            src = (UCharacterIterator) source.clone();
+            src = source.clone();
         } catch (CloneNotSupportedException e) {
             // Fall back to ICU 52 behavior of iterating over the text contents
             // of the UCharacterIterator.

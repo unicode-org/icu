@@ -22,7 +22,7 @@ import com.ibm.icu.impl.Grego;
  *
  * @stable ICU 3.8
  */
-public class RuleBasedTimeZone extends BasicTimeZone {
+public class RuleBasedTimeZone extends BasicTimeZone implements Cloneable {
 
     private static final long serialVersionUID = 7580833058949327935L;
 
@@ -478,7 +478,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
      * @stable ICU 3.8
      */
     @Override
-    public Object clone() {
+    public RuleBasedTimeZone clone() {
         if (isFrozen()) {
             return this;
         }
@@ -785,7 +785,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
      * @stable ICU 49
      */
     @Override
-    public TimeZone cloneAsThawed() {
+    public RuleBasedTimeZone cloneAsThawed() {
         RuleBasedTimeZone tz = (RuleBasedTimeZone)super.cloneAsThawed();
         if (historicRules != null) {
             tz.historicRules = new ArrayList<>(historicRules); // rules are immutable

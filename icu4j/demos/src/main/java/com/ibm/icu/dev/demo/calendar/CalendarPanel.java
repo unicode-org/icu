@@ -129,7 +129,7 @@ class CalendarPanel extends Canvas {
         //
         fCalendar[0].setTimeZone(new SimpleTimeZone(0, "UTC"));
 
-        Calendar c = (Calendar)fCalendar[0].clone(); // Temporary copy
+        Calendar c = fCalendar[0].clone(); // Temporary copy
 
         fStartOfMonth = startOfMonth(fStartOfMonth);
 
@@ -282,7 +282,7 @@ class CalendarPanel extends Canvas {
             cell += daysInWeek;
         }
 
-        Calendar c = (Calendar)fCalendar[0].clone();
+        Calendar c = fCalendar[0].clone();
         c.setTime(fStartOfMonth);
         c.add(Calendar.DATE, -cell);
 

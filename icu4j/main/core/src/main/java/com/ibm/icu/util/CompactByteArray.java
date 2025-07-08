@@ -309,7 +309,7 @@ public final class CompactByteArray implements Cloneable {
      */
     @Override
     @Deprecated
-    public Object clone()
+    public CompactByteArray clone()
     {
         try {
             CompactByteArray other = (CompactByteArray) super.clone();

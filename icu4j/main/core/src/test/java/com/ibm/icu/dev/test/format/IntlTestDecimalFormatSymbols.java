@@ -250,7 +250,7 @@ public class IntlTestDecimalFormatSymbols extends CoreTestFmwk
 
         //DecimalFormatSymbols foo = new DecimalFormatSymbols(); //The variable is never used
 
-        en = (DecimalFormatSymbols) fr.clone();
+        en = fr.clone();
 
         if(! en.equals(fr)) {
             errln("ERROR: Clone failed");
@@ -260,7 +260,7 @@ public class IntlTestDecimalFormatSymbols extends CoreTestFmwk
     @Test
     public void testCoverage() {
         DecimalFormatSymbols df = new DecimalFormatSymbols();
-        DecimalFormatSymbols df2 = (DecimalFormatSymbols)df.clone();
+        DecimalFormatSymbols df2 = df.clone();
         if (!df.equals(df2) || df.hashCode() != df2.hashCode()) {
             errln("decimal format symbols clone, equals, or hashCode failed");
         }
@@ -315,7 +315,7 @@ public class IntlTestDecimalFormatSymbols extends CoreTestFmwk
         }
 
         // Check on copy
-        DecimalFormatSymbols copy = (DecimalFormatSymbols) symbols.clone();
+        DecimalFormatSymbols copy = symbols.clone();
         if (!Arrays.equals(copy.getDigitStrings(), osmanyaDigitStrings)) {
             errln("ERROR: Osmanya digits (supplementary) should be set");
         }

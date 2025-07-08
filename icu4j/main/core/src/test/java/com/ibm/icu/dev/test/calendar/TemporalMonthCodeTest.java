@@ -166,7 +166,7 @@ public class TemporalMonthCodeTest extends CoreTestFmwk {
     public void TestChineseCalendarSetTemporalMonthCode() {
         Calendar cc1 = Calendar.getInstance(
             ULocale.ROOT.setKeywordValue("calendar", "chinese"));
-        Calendar cc2 = (Calendar)cc1.clone();
+        Calendar cc2 = cc1.clone();
         GregorianCalendar gc1 = new GregorianCalendar();
         Object[][] cases = {
             // https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/2022.pdf
@@ -263,7 +263,7 @@ public class TemporalMonthCodeTest extends CoreTestFmwk {
     public void TestHebrewCalendarSetTemporalMonthCode() {
         Calendar hc1 = Calendar.getInstance(
             ULocale.ROOT.setKeywordValue("calendar", "hebrew"));
-        Calendar hc2 = (Calendar)hc1.clone();
+        Calendar hc2 = hc1.clone();
         GregorianCalendar gc1 = new GregorianCalendar();
         Object[][] cases = {
             { 2022, Calendar.JANUARY, 11, 5782, HebrewCalendar.SHEVAT, 9, "M05", 4},
@@ -312,7 +312,7 @@ public class TemporalMonthCodeTest extends CoreTestFmwk {
     public void TestCopticCalendarSetTemporalMonthCode() {
         Calendar cc1 = Calendar.getInstance(
             ULocale.ROOT.setKeywordValue("calendar", "coptic"));
-        Calendar cc2 = (Calendar)cc1.clone();
+        Calendar cc2 = cc1.clone();
         GregorianCalendar gc1 = new GregorianCalendar();
         Object[][] cases = {
             { 1900, Calendar.JANUARY, 1, 1616, CopticCalendar.KIAHK, 23, "M04", 3},
@@ -380,7 +380,7 @@ public class TemporalMonthCodeTest extends CoreTestFmwk {
     public void TestEthiopicCalendarSetTemporalMonthCode() {
         Calendar ec1 = Calendar.getInstance(
             ULocale.ROOT.setKeywordValue("calendar", "ethiopic"));
-        Calendar ec2 = (Calendar)ec1.clone();
+        Calendar ec2 = ec1.clone();
         GregorianCalendar gc1 = new GregorianCalendar();
         Object[][] cases = {
             { 1900, Calendar.JANUARY, 1, 1892, EthiopicCalendar.TAHSAS, 23, "M04", 3},

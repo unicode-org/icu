@@ -1956,9 +1956,8 @@ public class FormatHandler
                 // Hmm, this test had tmp backwards, it needs to override a behavior
                 // with certain symbols from b. Fixed in ICU 60.
                 DateFormatSymbols dfsb = ((SimpleDateFormat)dfb).getDateFormatSymbols();
-                DateFormatSymbols tmp = (DateFormatSymbols)((SimpleDateFormat)dfa).getDateFormatSymbols().clone();
-
-                TimeZoneFormat tmptzf = (TimeZoneFormat)((SimpleDateFormat)dfb).getTimeZoneFormat().clone();
+                DateFormatSymbols tmp = ((SimpleDateFormat)dfa).getDateFormatSymbols().clone();
+                TimeZoneFormat tmptzf = ((SimpleDateFormat)dfb).getTimeZoneFormat().clone();
 
                 tmp.setMonths(dfsb.getMonths());
                 tmp.setShortMonths(dfsb.getShortMonths());

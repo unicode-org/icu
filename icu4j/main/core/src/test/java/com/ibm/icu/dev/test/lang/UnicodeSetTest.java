@@ -1238,7 +1238,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
     @Test
     public void TestClone() {
         UnicodeSet s = new UnicodeSet("[abcxyz]");
-        UnicodeSet t = (UnicodeSet) s.clone();
+        UnicodeSet t = s.clone();
         expectContainment(t, "abc", "def");
     }
 
@@ -1566,9 +1566,9 @@ public class UnicodeSetTest extends CoreTestFmwk {
             while (iter.next()) {
                 int c = iter.codepoint;
                 input.clear().add(c);
-                small = (UnicodeSet) input.clone();
+                small = input.clone();
                 small.closeOver(option);
-                large = (UnicodeSet) input.clone();
+                large = input.clone();
                 large.add(LARGE_START, LARGE_END);
                 large.closeOver(option);
                 large.remove(LARGE_START, LARGE_END);
@@ -2014,7 +2014,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
     public void checkModification(UnicodeSet original, boolean isFrozen) {
         main:
             for (int i = 0; ;++i) {
-                UnicodeSet test = (UnicodeSet) (isFrozen ? original.clone() : original.cloneAsThawed());
+                UnicodeSet test = isFrozen ? original.clone() : original.cloneAsThawed();
                 boolean gotException = true;
                 boolean checkEquals = true;
                 try {

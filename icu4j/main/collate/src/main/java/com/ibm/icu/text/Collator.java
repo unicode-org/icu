@@ -481,8 +481,8 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      * @return a clone of this collator.
      */
     @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
+    public Collator clone() throws CloneNotSupportedException {
+        return (Collator) super.clone();
     }
 
     // begin registry stuff

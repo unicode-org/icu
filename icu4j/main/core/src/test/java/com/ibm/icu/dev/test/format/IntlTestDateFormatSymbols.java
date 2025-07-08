@@ -552,7 +552,7 @@ public class IntlTestDateFormatSymbols extends CoreTestFmwk
 
         //DateFormatSymbols foo = new DateFormatSymbols(); //The variable is never used
 
-        en = (DateFormatSymbols) fr.clone();
+        en = fr.clone();
 
         if(! en.equals(fr)) {
             errln("ERROR: Clone failed");

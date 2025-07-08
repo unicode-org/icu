@@ -224,7 +224,7 @@ public class UnicodeSetStringSpan {
         if (Utility.sameObjects(otherStringSpan.spanNotSet, otherStringSpan.spanSet)) {
             spanNotSet = spanSet;
         } else {
-            spanNotSet = (UnicodeSet) otherStringSpan.spanNotSet.clone();
+            spanNotSet = otherStringSpan.spanNotSet.clone();
         }
         offsets = new OffsetList();
 

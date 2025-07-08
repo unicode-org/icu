@@ -1011,11 +1011,11 @@ public class UnicodeSetStringSpanTest extends CoreTestFmwk {
                 // Intermediate set: Test cloning of a frozen set.
                 UnicodeSet fast = new UnicodeSet(sets[SLOW]);
                 fast.freeze();
-                sets[FAST] = (UnicodeSet) fast.clone();
+                sets[FAST] = fast.clone();
                 fast = null;
                 UnicodeSet fastNot = new UnicodeSet(sets[SLOW_NOT]);
                 fastNot.freeze();
-                sets[FAST_NOT] = (UnicodeSet) fastNot.clone();
+                sets[FAST_NOT] = fastNot.clone();
                 fastNot = null;
 
                 for (j = 0; j < SET_COUNT; ++j) {

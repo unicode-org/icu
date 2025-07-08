@@ -389,7 +389,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
             // Marking fIntervalPatterns read-only makes cloning cheaper.
             fIntervalPatternsReadOnly = true;
             // We freeze what goes in the cache without freezing this object.
-            DIICACHE.put(key, ((DateIntervalInfo) clone()).freeze());
+            DIICACHE.put(key, clone().freeze());
         } else {
             initializeFromReadOnlyPatterns(dii);
         }
@@ -936,7 +936,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
      * @stable ICU4.0
      */
     @Override
-    public Object clone()
+    public DateIntervalInfo clone()
     {
         if ( frozen ) {
             return this;
@@ -949,7 +949,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
      * Clone an unfrozen DateIntervalInfo object.
      * @return     a copy of the object
      */
-    private Object cloneUnfrozenDII() //throws IllegalStateException
+    private DateIntervalInfo cloneUnfrozenDII() //throws IllegalStateException
     {
         try {
             DateIntervalInfo other = (DateIntervalInfo) super.clone();

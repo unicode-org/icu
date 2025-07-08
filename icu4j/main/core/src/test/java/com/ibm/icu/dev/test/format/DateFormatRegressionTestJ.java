@@ -267,7 +267,7 @@ public class DateFormatRegressionTestJ extends CoreTestFmwk {
     class DateParseThread extends Thread {
         @Override
         public void run() {
-            SimpleDateFormat sdf = (SimpleDateFormat) sdf_.clone();
+            SimpleDateFormat sdf = sdf_.clone();
             TimeZone defaultTZ = TimeZone.getDefault();
             TimeZone PST = TimeZone.getTimeZone("PST");
             int defaultOffset = defaultTZ.getRawOffset();
@@ -295,7 +295,7 @@ public class DateFormatRegressionTestJ extends CoreTestFmwk {
     class DateFormatThread extends Thread {
         @Override
         public void run() {
-            SimpleDateFormat sdf = (SimpleDateFormat) sdf_.clone();
+            SimpleDateFormat sdf = sdf_.clone();
             TimeZone tz = TimeZone.getTimeZone("PST");
             sdf.setTimeZone(tz);
             int i = 0;
