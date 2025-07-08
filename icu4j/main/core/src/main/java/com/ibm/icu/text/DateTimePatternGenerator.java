@@ -1698,7 +1698,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     @SuppressWarnings("unchecked")
     public DateTimePatternGenerator clone() {
         try {
-            DateTimePatternGenerator result = (DateTimePatternGenerator) (super.clone());
+            DateTimePatternGenerator result = (DateTimePatternGenerator) super.clone();
             result.skeleton2pattern = (TreeMap<DateTimeMatcher, PatternWithSkeletonFlag>) skeleton2pattern.clone();
             result.basePattern_pattern = (TreeMap<String, PatternWithSkeletonFlag>) basePattern_pattern.clone();
             result.dateTimeFormats = dateTimeFormats.clone();
