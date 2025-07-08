@@ -28,7 +28,7 @@ class SegmentsImpl implements Segments {
     // gets cloned allows the iteration state to be separate whenever an Segments API is called.
     // Otherwise, there is a chance that multiple API calls on the same Segments object might
     // mutate the same position/index, if done concurrently.
-    breakIterPrototype = (BreakIterator) breakIter.clone();
+    breakIterPrototype = breakIter.clone();
     // It's okay to perform .setText on the object that we want to clone later because we should
     // then not have to call .setText on the clones.
     breakIterPrototype.setText(source);
@@ -36,7 +36,7 @@ class SegmentsImpl implements Segments {
 
   @Override
   public Segment segmentAt(int i) {
-    BreakIterator breakIter = (BreakIterator) breakIterPrototype.clone();
+    BreakIterator breakIter = breakIterPrototype.clone();
     int start;
     int limit;
 
@@ -63,12 +63,12 @@ class SegmentsImpl implements Segments {
 
   @Override
   public boolean isBoundary(int i) {
-    return ((BreakIterator) breakIterPrototype.clone()).isBoundary(i);
+    return breakIterPrototype.clone().isBoundary(i);
   }
 
   @Override
   public Stream<Segment> segmentsFrom(int i) {
-    BreakIterator breakIter = (BreakIterator) breakIterPrototype.clone();
+    BreakIterator breakIter = breakIterPrototype.clone();
 
     // create a Stream from a Spliterator of an Iterable so that the Stream can be lazy, not eager
     SegmentIterable iterable = new SegmentIterable(breakIter, IterationDirection.FORWARDS, i,
@@ -78,7 +78,7 @@ class SegmentsImpl implements Segments {
 
   @Override
   public Stream<Segment> segmentsBefore(int i) {
-    BreakIterator breakIter = (BreakIterator) breakIterPrototype.clone();
+    BreakIterator breakIter = breakIterPrototype.clone();
 
     // create a Stream from a Spliterator of an Iterable so that the Stream can be lazy, not eager
     SegmentIterable iterable = new SegmentIterable(breakIter, IterationDirection.BACKWARDS, i,
@@ -88,7 +88,7 @@ class SegmentsImpl implements Segments {
 
   @Override
   public IntStream boundariesAfter(int i) {
-    BreakIterator breakIter = (BreakIterator) breakIterPrototype.clone();
+    BreakIterator breakIter = breakIterPrototype.clone();
 
     // create a Stream from a Spliterator of an Iterable so that the Stream can be lazy, not eager
     return StreamSupport.intStream(new BoundarySpliterator(breakIter, source, IterationDirection.FORWARDS,
@@ -97,7 +97,7 @@ class SegmentsImpl implements Segments {
 
   @Override
   public IntStream boundariesBackFrom(int i) {
-    BreakIterator breakIter = (BreakIterator) breakIterPrototype.clone();
+    BreakIterator breakIter = breakIterPrototype.clone();
     // create a Stream from a Spliterator of an Iterable so that the Stream can be lazy, not eager
     return StreamSupport.intStream(new BoundarySpliterator(breakIter, source, IterationDirection.BACKWARDS,
         i), false);
