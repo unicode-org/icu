@@ -197,7 +197,7 @@ abstract class NFSubstitution {
             // that pattern (then set it to use the DecimalFormatSymbols
             // belonging to our formatter)
             this.ruleSet = null;
-            this.numberFormat = (DecimalFormat) ruleSet.owner.getDecimalFormat().clone();
+            this.numberFormat = ruleSet.owner.getDecimalFormat().clone();
             this.numberFormat.applyPattern(description);
         }
         else if (description.charAt(0) == '>') {

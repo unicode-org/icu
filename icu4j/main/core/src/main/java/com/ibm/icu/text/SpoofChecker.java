@@ -555,7 +555,7 @@ public class SpoofChecker {
             SpoofChecker result = new SpoofChecker();
             result.fChecks = this.fChecks;
             result.fSpoofData = this.fSpoofData;
-            result.fAllowedCharsSet = (UnicodeSet) (this.fAllowedCharsSet.clone());
+            result.fAllowedCharsSet = this.fAllowedCharsSet.clone();
             result.fAllowedCharsSet.freeze();
             result.fAllowedLocales = new HashSet<>(this.fAllowedLocales);
             result.fRestrictionLevel = this.fRestrictionLevel;

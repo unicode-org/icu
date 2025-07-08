@@ -1149,8 +1149,8 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
     @Test
     public void TestClone(){
         DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance();
-        DateTimePatternGenerator dtpg2 = (DateTimePatternGenerator) dtpg.clone();
-        dtpg = (DateTimePatternGenerator) dtpg2.clone();
+        DateTimePatternGenerator dtpg2 = dtpg.clone();
+        dtpg = dtpg2.clone();
     }
 
     /* Tests the constructor

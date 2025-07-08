@@ -43,7 +43,7 @@ final class CollatorServiceShim extends Collator.ServiceShim {
                 throw new MissingResourceException("Could not locate Collator data", "", "");
                 ///CLOVER:ON
             }
-            return (Collator) coll.clone();
+            return coll.clone();
         }
         catch (CloneNotSupportedException e) {
         ///CLOVER:OFF

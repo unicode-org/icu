@@ -431,7 +431,7 @@ public class ICUJDKCompare {
         }
 
         MethodRecord copy() {
-            return new MethodRecord((MorC[])overrides.clone());
+            return new MethodRecord(overrides.clone());
         }
 
         int count() {

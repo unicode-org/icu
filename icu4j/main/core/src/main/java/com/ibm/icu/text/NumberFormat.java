@@ -176,7 +176,7 @@ import com.ibm.icu.util.UResourceBundle;
  * @author       Alan Liu
  * @stable ICU 2.0
  */
-public abstract class NumberFormat extends UFormat {
+public abstract class NumberFormat extends UFormat implements Cloneable {
 
     /**
      * {@icu} Constant to specify normal number style of format.
@@ -1171,9 +1171,8 @@ public abstract class NumberFormat extends UFormat {
      * @stable ICU 2.0
      */
     @Override
-    public Object clone() {
-        NumberFormat other = (NumberFormat) super.clone();
-        return other;
+    public NumberFormat clone() {
+        return (NumberFormat) super.clone();
     }
 
     /**

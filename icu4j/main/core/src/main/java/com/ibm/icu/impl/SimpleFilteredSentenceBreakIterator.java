@@ -26,7 +26,7 @@ import com.ibm.icu.util.ULocale;
 /**
  * @author tomzhang
  */
-public class SimpleFilteredSentenceBreakIterator extends BreakIterator {
+public class SimpleFilteredSentenceBreakIterator extends BreakIterator implements Cloneable {
 
     private BreakIterator delegate;
     private UCharacterIterator text; // TODO(Tom): suffice to move into the local scope in next() ?
@@ -198,14 +198,14 @@ public class SimpleFilteredSentenceBreakIterator extends BreakIterator {
     }
 
     @Override
-    public Object clone() {
+    public SimpleFilteredSentenceBreakIterator clone() {
         SimpleFilteredSentenceBreakIterator other = (SimpleFilteredSentenceBreakIterator) super.clone();
         try {
             if (delegate != null) {
-                other.delegate = (BreakIterator) delegate.clone();
+                other.delegate = delegate.clone();
             }
             if (text != null) {
-                other.text = (UCharacterIterator) text.clone();
+                other.text = text.clone();
             }
             if (backwardsTrie != null) {
                 other.backwardsTrie = backwardsTrie.clone();

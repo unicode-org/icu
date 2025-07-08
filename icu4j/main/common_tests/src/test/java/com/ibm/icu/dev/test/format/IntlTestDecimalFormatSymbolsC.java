@@ -114,7 +114,7 @@ public class IntlTestDecimalFormatSymbolsC extends CoreTestFmwk {
 
         //DecimalFormatSymbols foo = new DecimalFormatSymbols(); //The variable is never used
 
-        en = (DecimalFormatSymbols) fr.clone();
+        en = fr.clone();
 
         if (!en.equals(fr)) {
             errln("ERROR: Clone failed");

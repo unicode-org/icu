@@ -34,7 +34,7 @@ public final class CompactArrayTest extends CoreTestFmwk
     if (cba.equals(cba2)) {
         errln("unequal byte arrays compare equal");
     }
-    CompactByteArray cba3 = (CompactByteArray)cba.clone();
+    CompactByteArray cba3 = cba.clone();
 
     logln("equals null: " + cba.equals(null));
     logln("equals self: " + cba.equals(cba));
@@ -72,7 +72,7 @@ public final class CompactArrayTest extends CoreTestFmwk
     logln("different mod equals: " + cba.equals(cba3));
 
     cba.compact();
-    CompactByteArray cba6 = (CompactByteArray)cba.clone();
+    CompactByteArray cba6 = cba.clone();
     logln("cloned compact equals: " + cba.equals(cba6));
 
     cba6.setElementAt((char)0x405, (byte)0xee);
@@ -99,7 +99,7 @@ public final class CompactArrayTest extends CoreTestFmwk
     if (cca.equals(cca2)) {
         errln("unequal char arrays compare equal");
     }
-    CompactCharArray cca3 = (CompactCharArray)cca.clone();
+    CompactCharArray cca3 = cca.clone();
 
     logln("equals null: " + cca.equals(null));
     logln("equals self: " + cca.equals(cca));
@@ -148,7 +148,7 @@ public final class CompactArrayTest extends CoreTestFmwk
 
     // v1.8 fails with extensive compaction, and defaults extensive, so don't compact
     // cca.compact();
-    CompactCharArray cca6 = (CompactCharArray)cca.clone();
+    CompactCharArray cca6 = cca.clone();
     logln("cloned compact equals: " + cca.equals(cca6));
 
     cca6.setElementAt((char)0x405, (char)0xee);

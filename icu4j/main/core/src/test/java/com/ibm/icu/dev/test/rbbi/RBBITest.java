@@ -226,7 +226,7 @@ public class RBBITest extends CoreTestFmwk {
         RuleBasedBreakIterator rbbi = new RuleBasedBreakIterator(".;");
         try {
             rbbi.setText((CharacterIterator) null);
-            if (((RuleBasedBreakIterator) rbbi.clone()).getText() != null)
+            if (rbbi.clone().getText() != null)
                 errln("RuleBasedBreakIterator.clone() was suppose to return "
                         + "the same object because fText is set to null.");
         } catch (Exception e) {
@@ -396,7 +396,7 @@ public class RBBITest extends CoreTestFmwk {
             @Override
             public void run() {
                 try {
-                    RuleBasedBreakIterator localBI = (RuleBasedBreakIterator)bi.clone();
+                    RuleBasedBreakIterator localBI = bi.clone();
                     localBI.setText(dataToBreak);
                     for (int loop=0; loop<100; loop++) {
                         int nextExpectedBreak = 0;
@@ -488,11 +488,11 @@ public class RBBITest extends CoreTestFmwk {
         assertEquals("", ULocale.FRENCH, biFr.getLocale(ULocale.VALID_LOCALE));
         assertEquals("Locales do not participate in BreakIterator equality.", biEn, biFr);
 
-        RuleBasedBreakIterator cloneEn = (RuleBasedBreakIterator)biEn.clone();
+        RuleBasedBreakIterator cloneEn = biEn.clone();
         assertEquals("", biEn, cloneEn);
         assertEquals("", ULocale.ENGLISH, cloneEn.getLocale(ULocale.VALID_LOCALE));
 
-        RuleBasedBreakIterator cloneFr = (RuleBasedBreakIterator)biFr.clone();
+        RuleBasedBreakIterator cloneFr = biFr.clone();
         assertEquals("", biFr, cloneFr);
         assertEquals("", ULocale.FRENCH, cloneFr.getLocale(ULocale.VALID_LOCALE));
     }
@@ -518,7 +518,7 @@ public class RBBITest extends CoreTestFmwk {
         private static final BreakIterator BREAK_ITERATOR_CACHE = BreakIterator.getWordInstance(ULocale.ROOT);
         public static List<Integer> getBoundary(String toParse) {
             List<Integer> retVal = new ArrayList<>();
-            BreakIterator bi = (BreakIterator) BREAK_ITERATOR_CACHE.clone();
+            BreakIterator bi = BREAK_ITERATOR_CACHE.clone();
             bi.setText(toParse);
             for (int boundary=bi.first(); boundary != BreakIterator.DONE; boundary = bi.next()) {
                 retVal.add(boundary);

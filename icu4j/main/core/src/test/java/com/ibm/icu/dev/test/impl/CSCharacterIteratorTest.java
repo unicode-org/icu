@@ -22,8 +22,8 @@ public class CSCharacterIteratorTest extends CoreTestFmwk {
         String text = "Hello, World";
 
         CharSequence cs = text;
-        CharacterIterator csci = new CSCharacterIterator(cs);
-        CharacterIterator sci = new StringCharacterIterator(text);
+        CSCharacterIterator csci = new CSCharacterIterator(cs);
+        StringCharacterIterator sci = new StringCharacterIterator(text);
 
         assertEquals("", sci.setIndex(6), csci.setIndex(6));
         assertEquals("", sci.getIndex(), csci.getIndex());
@@ -37,7 +37,7 @@ public class CSCharacterIteratorTest extends CoreTestFmwk {
 
         csci.setIndex(4);
         sci.setIndex(4);
-        CharacterIterator clci = (CharacterIterator)csci.clone();
+        CharacterIterator clci = csci.clone();
         for (int i=0; i<50; ++i) {
             assertEquals("", sci.next(), clci.next());
         }

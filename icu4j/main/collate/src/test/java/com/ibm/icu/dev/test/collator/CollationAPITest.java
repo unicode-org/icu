@@ -680,8 +680,7 @@ public class CollationAPITest extends TestFmwk {
         for (int index = 0; index < someCollators.length; index ++)
         {
             try {
-                someClonedCollators[index]
-                            = (RuleBasedCollator)someCollators[index].clone();
+                someClonedCollators[index] = someCollators[index].clone();
             } catch (CloneNotSupportedException e) {
                 errln("Error cloning collator");
             }
@@ -1461,7 +1460,7 @@ public class CollationAPITest extends TestFmwk {
         dump("c1", c1);
         try{
             logln("\ninit c2");
-            RuleBasedCollator c2 = (RuleBasedCollator)c1.clone();
+            RuleBasedCollator c2 = c1.clone();
             c2.setUpperCaseFirst(!c2.isUpperCaseFirst());
             dump("c0", c0);
             dump("c1", c1);

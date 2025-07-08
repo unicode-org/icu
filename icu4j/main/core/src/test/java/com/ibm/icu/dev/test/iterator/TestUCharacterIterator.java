@@ -49,7 +49,7 @@ public class TestUCharacterIterator extends CoreTestFmwk{
     public void TestClone() throws CloneNotSupportedException
     {
          UCharacterIterator iterator = UCharacterIterator.getInstance("testing");
-         UCharacterIterator cloned = (UCharacterIterator)iterator.clone();
+         UCharacterIterator cloned = iterator.clone();
          int completed = 0;
          while (completed != UCharacterIterator.DONE) {
             completed = iterator.next();
@@ -297,9 +297,9 @@ public class TestUCharacterIterator extends CoreTestFmwk{
         }
         /* Test clone()  && moveIndex()*/
         try{
-            UCharacterIterator clone1 = (UCharacterIterator)iter1.clone();
-            UCharacterIterator clone2 = (UCharacterIterator)iter2.clone();
-            UCharacterIterator clone3 = (UCharacterIterator)iter3.clone();
+            UCharacterIterator clone1 = iter1.clone();
+            UCharacterIterator clone2 = iter2.clone();
+            UCharacterIterator clone3 = iter3.clone();
             if(clone1.moveIndex(3)!=iter1.moveIndex(3)){
                 errln("moveIndex for iter1 failed");
             }

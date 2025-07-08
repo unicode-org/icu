@@ -831,7 +831,7 @@ public class TimeZoneRegressionTest extends CoreTestFmwk {
             cal.add(Calendar.MINUTE, delta);
             if (cal.get(Calendar.DST_OFFSET) != lastDST) {
                 ++transitions;
-                Calendar t = (Calendar)cal.clone();
+                Calendar t = cal.clone();
                 t.add(Calendar.MINUTE, -delta);
                 logln(t.getTime() + "  " + t.get(Calendar.DST_OFFSET));
                 logln(cal.getTime() + "  " + (lastDST=cal.get(Calendar.DST_OFFSET)));
@@ -1119,7 +1119,7 @@ public class TimeZoneRegressionTest extends CoreTestFmwk {
                 errln("FAIL: Modified zone(" + tz.getID() + ") - useDaylightTime has changed from " + useDst + " to " + newDst);
             }
             // Make sure the offset is preserved in a clone
-            TimeZone tzClone = (TimeZone)tz.clone();
+            TimeZone tzClone = tz.clone();
             int offsetC = tzClone.getRawOffset();
             if (offsetC != newRawOffset) {
                 if (isJdkZone) {

@@ -1378,7 +1378,7 @@ public class IBMCalendarTest extends CalendarTestFmwk {
         assertEquals("Default repeated wall time option", cal.getRepeatedWallTimeOption(), Calendar.WALLTIME_LAST);
         assertEquals("Default skipped wall time option", cal.getSkippedWallTimeOption(), Calendar.WALLTIME_LAST);
 
-        Calendar cal2 = (Calendar)cal.clone();
+        Calendar cal2 = cal.clone();
 
         assertTrue("Equality", cal2.equals(cal));
         assertTrue("Hash code", cal.hashCode() == cal2.hashCode());
@@ -2236,7 +2236,7 @@ public class IBMCalendarTest extends CalendarTestFmwk {
         Calendar base = Calendar.getInstance(TimeZone.GMT_ZONE, new ULocale(locale));
         Date test = Calendar.getInstance().getTime();
 
-        Calendar r = (Calendar)base.clone();
+        Calendar r = base.clone();
         int lastDay = 1;
         String type = base.getType();
         boolean ignoreOrdinaryMonth12Bug = (!quick) && (type.equals("chinese") || type.equals("dangi"));

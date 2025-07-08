@@ -278,7 +278,7 @@ public class CompatibilityTest extends CoreTestFmwk {
         int tzoffset = 123400;
 
         SimpleTimeZone zone = new SimpleTimeZone(tzoffset, tzid);
-        Calendar cal = Calendar.getInstance((SimpleTimeZone)zone.clone());
+        Calendar cal = Calendar.getInstance(zone.clone());
 
         if (!zone.equals(cal.getTimeZone())) errln("FAIL: Calendar.getTimeZone failed");
 
@@ -494,7 +494,7 @@ public class CompatibilityTest extends CoreTestFmwk {
     @Test
     public void TestClonesUnique908() {
         Calendar c = Calendar.getInstance();
-        Calendar d = (Calendar)c.clone();
+        Calendar d = c.clone();
         c.set(Calendar.MILLISECOND, 123);
         d.set(Calendar.MILLISECOND, 456);
         if (c.get(Calendar.MILLISECOND) != 123 ||
@@ -1029,7 +1029,7 @@ public class CompatibilityTest extends CoreTestFmwk {
 
     // Supply a delta which is not a multiple of 7.
     void marchByDelta(Calendar cal, int delta) {
-        Calendar cur = (Calendar)cal.clone();
+        Calendar cur = cal.clone();
         int initialDOW = cur.get(Calendar.DAY_OF_WEEK);
         int DOW, newDOW = initialDOW;
         do {
@@ -1095,7 +1095,7 @@ public class CompatibilityTest extends CoreTestFmwk {
 
         int[] dayValues = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31, 31 };
         for (int i = 0; i < dayValues.length; i++) {
-            Calendar cal2 = (Calendar)cal.clone();
+            Calendar cal2 = cal.clone();
             cal2.roll(Calendar.MONTH, i);
             if (cal2.get(Calendar.DAY_OF_MONTH) != dayValues[i])
                 errln("Rolling the month in 1/31/1997 up by " + i + " should have yielded "
@@ -1114,7 +1114,7 @@ public class CompatibilityTest extends CoreTestFmwk {
         int[] dayValues2 = { 29, 28, 28, 28, 29, 28, 28, 28, 29, 28 };
 
         for (int i = 0; i < dayValues2.length; i++) {
-            Calendar cal2 = (Calendar)cal.clone();
+            Calendar cal2 = cal.clone();
             cal2.roll(Calendar.YEAR, i);
             if (cal2.get(Calendar.DAY_OF_MONTH) != dayValues2[i] || cal2.get(Calendar.MONTH)
                 != monthValues[i])

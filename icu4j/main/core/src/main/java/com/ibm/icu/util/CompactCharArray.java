@@ -333,7 +333,7 @@ public final class CompactCharArray implements Cloneable {
      */
     @Override
     @Deprecated
-    public Object clone()
+    public CompactCharArray clone()
     {
         try {
             CompactCharArray other = (CompactCharArray) super.clone();
