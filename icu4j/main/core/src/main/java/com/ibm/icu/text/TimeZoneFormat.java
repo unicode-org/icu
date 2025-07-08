@@ -798,7 +798,6 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * <li>GMT format pattern (e.g. "GMT {0}" - see {@link #getGMTPattern()})
      * <li>Offset time pattern (e.g. "+HH:mm" - see {@link #getGMTOffsetPattern(GMTOffsetPatternType)})
      * <li>Offset digits (e.g. "0123456789" - see {@link #getGMTOffsetDigits()})
-     * <li>GMT zero format (e.g. "GMT" - see {@link #getGMTZeroFormat()})
      * </ul>
      * This format always uses 2 digit hours and minutes. When the given offset has non-zero
      * seconds, 2 digit seconds field will be appended. For example,
@@ -821,7 +820,6 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * <li>GMT format pattern (e.g. "GMT {0}" - see {@link #getGMTPattern()})
      * <li>Offset time pattern (e.g. "+HH:mm" - see {@link #getGMTOffsetPattern(GMTOffsetPatternType)})
      * <li>Offset digits (e.g. "0123456789" - see {@link #getGMTOffsetDigits()})
-     * <li>GMT zero format (e.g. "GMT" - see {@link #getGMTZeroFormat()})
      * </ul>
      * This format uses the shortest representation of offset. The hours field does not
      * have leading zero and lower fields with zero will be truncated. For example,
@@ -1634,10 +1632,6 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * @return the localized GMT string
      */
     private String formatOffsetLocalizedGMT(int offset, boolean isShort) {
-        if (offset == 0) {
-            return _gmtZeroFormat;
-        }
-
         StringBuilder buf = new StringBuilder();
         boolean positive = true;
         if (offset < 0) {
