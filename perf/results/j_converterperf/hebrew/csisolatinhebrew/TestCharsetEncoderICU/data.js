@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1752011556324,
+  "lastUpdate": 1752014637022,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -35637,6 +35637,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 2.673578423607722,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "9371d14c033858c91081e79f0be940456c729f96",
+          "message": "ICU-23140 Use covariant return types in clone(), cleanup",
+          "timestamp": "2025-07-08T15:30:22-07:00",
+          "tree_id": "efce55ed92cf4f7b236f314f78d23c5711b8e5d8",
+          "url": "https://github.com/unicode-org/icu/commit/9371d14c033858c91081e79f0be940456c729f96"
+        },
+        "date": 1752014357018,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 2.6623581663294327,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
