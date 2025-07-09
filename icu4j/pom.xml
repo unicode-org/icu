@@ -42,6 +42,7 @@
     <module>tools/build</module>
     <module>tools/misc</module>
     <module>tools/taglets</module>
+    <module>tools/pmd</module>
     <module>perf-tests</module>
   </modules>
 
@@ -77,6 +78,8 @@
 
     <!-- Version update! -->
     <icu.major.version>78</icu.major.version>
+
+    <maven-pmd-plugin.version>3.27.0</maven-pmd-plugin.version>
 
     <!-- Variables used to generate the javadoc -->
     <!-- Version update! -->
@@ -177,6 +180,14 @@
   </issueManagement>
 
   <distributionManagement>
+    <site>
+      <!-- We don't deploy here, but without it generating reports fails.
+        If we really try to deploy here (`site:deploy`) it will fail,
+        but `site:stage` works.
+      -->
+      <id>unicode-org.github.io</id>
+      <url>scp://https://unicode-org.github.io/</url>
+    </site>
     <repository>
       <id>central</id>
       <name>ICU4J Central Repository</name>
@@ -473,6 +484,28 @@
           <artifactId>exec-maven-plugin</artifactId>
           <version>3.4.1</version>
         </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-pmd-plugin</artifactId>
+          <version>${maven-pmd-plugin.version}</version>
+          <configuration>
+            <rulesets>
+              <!-- Hand-picked rules -->
+              <ruleset>tools/pmd/src/main/resources/icu4j/pmd-ruleset.xml</ruleset>
+              <!-- Uncomment the block below to enable all known checks.
+                All of these rulesets can be specified in pmd-ruleset.xml instead.
+              -->
+              <!--
+              <ruleset>/category/java/bestpractices.xml</ruleset>
+              <ruleset>/category/java/codestyle.xml</ruleset>
+              <ruleset>/category/java/design.xml</ruleset>
+              <ruleset>/category/java/errorprone.xml</ruleset>
+              <ruleset>/category/java/multithreading.xml</ruleset>
+              <ruleset>/category/java/performance.xml</ruleset>
+              -->
+            </rulesets>
+          </configuration>
+        </plugin>
       </plugins>
     </pluginManagement>
 
@@ -735,6 +768,63 @@
           </plugin>
         </plugins>
       </build>
+    </profile>
+
+    <profile>
+    <!-- This is used to generate a PMD report.
+      PMD is a code checker, similar to errorprone,
+      but there are non-overlapping checks between the two.
+
+      To generate a report run this in the icu4j folder:
+        mvn clean site site:stage -DskipTests -DskipITs -P pmd
+
+      The report can be seen at {icu_root}/icu4j/target/staging/index.html
+      Then Bottom-left => Project Reports => PMD.
+      Or access directly at {icu_root}/icu4j/target/staging/pmd.html
+
+      Generating the report (above) does not result in a build failure.
+      To cause a build failure when issues are found (in CI) run this `verify`
+      command after the report was generated (the previous step):
+        mvn verify -DskipTests -DskipITs -P pmd
+      -->
+      <id>pmd</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-pmd-plugin</artifactId>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>aggregate-pmd-check</goal>
+                </goals>
+              </execution>
+            </executions>
+            <dependencies>
+              <dependency>
+                <groupId>com.ibm.icu</groupId>
+                <artifactId>tools_pmd</artifactId>
+                <version>${project.version}</version>
+              </dependency>
+            </dependencies>
+          </plugin>
+        </plugins>
+      </build>
+      <reporting>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-pmd-plugin</artifactId>
+            <reportSets>
+              <reportSet>
+                <reports>
+                  <report>aggregate-pmd</report>
+                </reports>
+              </reportSet>
+            </reportSets>
+          </plugin>
+        </plugins>
+      </reporting>
     </profile>
 
     <profile>
