@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1752067746474,
+  "lastUpdate": 1752097097844,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -35607,6 +35607,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.5683379593950297,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "6f069854938a87be7562570be99f22ce128d5845",
+          "message": "ICU-23140 Add PMD checking",
+          "timestamp": "2025-07-09T14:28:07-07:00",
+          "tree_id": "2f2991a342b1f3b85005efa7509fb3312b72b7c0",
+          "url": "https://github.com/unicode-org/icu/commit/6f069854938a87be7562570be99f22ce128d5845"
+        },
+        "date": 1752096825478,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.5679996720675018,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
