@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1752064414572,
+  "lastUpdate": 1752066874725,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -35847,6 +35847,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 1994.0264633158333,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "d5bb6d0a266a9fdbdec61a877ab8d76aaa1a515a",
+          "message": "ICU-23140 Use covariant return types in clone() in ICU4J",
+          "timestamp": "2025-07-08T14:27:35-07:00",
+          "tree_id": "e33593dcc7d179a487c5da5540981f7c7193c64b",
+          "url": "https://github.com/unicode-org/icu/commit/d5bb6d0a266a9fdbdec61a877ab8d76aaa1a515a"
+        },
+        "date": 1752066601666,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 1870.0732328388078,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
