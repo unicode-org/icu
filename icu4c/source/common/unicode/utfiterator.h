@@ -2594,8 +2594,11 @@ constexpr UnsafeUTFStringCodePointsAdaptor<CP32> unsafeUTFStringCodePoints;
 #ifndef U_IN_DOXYGEN
 namespace prv {
 
+// This function, and the public wrappers,
+// want to be U_FORCE_INLINE but the gcc-debug-build-and-test CI check failed with
+// error: ‘always_inline’ function might not be inlinable [-Werror=attributes]
 template<typename StringClass, bool validate>
-U_FORCE_INLINE StringClass &appendCodePoint(StringClass &s, uint32_t c) {
+inline StringClass &appendCodePoint(StringClass &s, uint32_t c) {
     using Unit = typename StringClass::value_type;
     if constexpr (sizeof(Unit) == 1) {
         // UTF-8: Similar to U8_APPEND().
@@ -2658,7 +2661,7 @@ U_FORCE_INLINE StringClass &appendCodePoint(StringClass &s, uint32_t c) {
  * @see U_IS_SCALAR_VALUE
  */
 template<typename StringClass>
-U_FORCE_INLINE StringClass &appendCodePointOrFFFD(StringClass &s, UChar32 c) {
+inline StringClass &appendCodePointOrFFFD(StringClass &s, UChar32 c) {
     return prv::appendCodePoint<StringClass, true>(s, c);
 }
 
@@ -2675,7 +2678,7 @@ U_FORCE_INLINE StringClass &appendCodePointOrFFFD(StringClass &s, UChar32 c) {
  * @see U_IS_SCALAR_VALUE
  */
 template<typename StringClass>
-U_FORCE_INLINE StringClass &appendCodePointUnsafe(StringClass &s, UChar32 c) {
+inline StringClass &appendCodePointUnsafe(StringClass &s, UChar32 c) {
     return prv::appendCodePoint<StringClass, false>(s, c);
 }
 
@@ -2691,7 +2694,7 @@ U_FORCE_INLINE StringClass &appendCodePointUnsafe(StringClass &s, UChar32 c) {
  * @see U_IS_SCALAR_VALUE
  */
 template<typename StringClass>
-U_FORCE_INLINE StringClass stringFromCodePointOrFFFD(UChar32 c) {
+inline StringClass stringFromCodePointOrFFFD(UChar32 c) {
     StringClass s;
     prv::appendCodePoint<StringClass, true>(s, c);
     return s;
@@ -2709,7 +2712,7 @@ U_FORCE_INLINE StringClass stringFromCodePointOrFFFD(UChar32 c) {
  * @see U_IS_SCALAR_VALUE
  */
 template<typename StringClass>
-U_FORCE_INLINE StringClass stringFromCodePointUnsafe(UChar32 c) {
+inline StringClass stringFromCodePointUnsafe(UChar32 c) {
     StringClass s;
     prv::appendCodePoint<StringClass, false>(s, c);
     return s;
