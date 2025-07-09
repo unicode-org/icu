@@ -34,14 +34,14 @@
 // https://en.cppreference.com/w/cpp/string/basic_string_view/operator%22%22sv
 using namespace std::string_view_literals;
 
-using U_HEADER_ONLY_NAMESPACE::UTFIterator;
-using U_HEADER_ONLY_NAMESPACE::utfIterator;
-using U_HEADER_ONLY_NAMESPACE::UTFStringCodePoints;
-using U_HEADER_ONLY_NAMESPACE::utfStringCodePoints;
-using U_HEADER_ONLY_NAMESPACE::UnsafeUTFIterator;
-using U_HEADER_ONLY_NAMESPACE::unsafeUTFIterator;
-using U_HEADER_ONLY_NAMESPACE::UnsafeUTFStringCodePoints;
-using U_HEADER_ONLY_NAMESPACE::unsafeUTFStringCodePoints;
+using icu::header::UTFIterator;
+using icu::header::utfIterator;
+using icu::header::UTFStringCodePoints;
+using icu::header::utfStringCodePoints;
+using icu::header::UnsafeUTFIterator;
+using icu::header::unsafeUTFIterator;
+using icu::header::UnsafeUTFStringCodePoints;
+using icu::header::unsafeUTFStringCodePoints;
 
 namespace {
 
@@ -370,6 +370,11 @@ public:
 
         TESTCASE_AUTO(testAllCodePoints);
         TESTCASE_AUTO(testAllScalarValues);
+
+        TESTCASE_AUTO(testAppendCodePointOrFFFD);
+        TESTCASE_AUTO(testAppendCodePointUnsafe);
+        TESTCASE_AUTO(testStringFromCodePointOrFFFD);
+        TESTCASE_AUTO(testStringFromCodePointUnsafe);
 
         TESTCASE_AUTO_END;
     }
@@ -1133,6 +1138,11 @@ public:
     void testAllCodePoints();
     void testAllScalarValues();
 
+    void testAppendCodePointOrFFFD();
+    void testAppendCodePointUnsafe();
+    void testStringFromCodePointOrFFFD();
+    void testStringFromCodePointUnsafe();
+
     ImplTest<char> longGood8;
     ImplTest<char16_t> longGood16;
     ImplTest<char32_t> longGood32;
@@ -1721,4 +1731,202 @@ void UTFIteratorTest::testAllScalarValues() {
         ++count;
     }
     assertEquals("count", 0x110000 - 0x800, count);
+}
+
+#define CHARS(s) reinterpret_cast<const char *>(s)
+
+void UTFIteratorTest::testAppendCodePointOrFFFD() {
+    using icu::header::appendCodePointOrFFFD;
+    {
+        std::string s;
+        s.push_back(u8'_');
+        appendCodePointOrFFFD(s, U'4').push_back(u8'|');
+        appendCodePointOrFFFD(s, U'ç').push_back(u8'|');
+        appendCodePointOrFFFD(s, U'カ').push_back(u8'|');
+        appendCodePointOrFFFD(s, 0xd800).push_back(u8'|');
+        appendCodePointOrFFFD(s, 0xdfff).push_back(u8'|');
+        appendCodePointOrFFFD(s, U'４').push_back(u8'|');
+        appendCodePointOrFFFD(s, U'🚴').push_back(u8'|');
+        appendCodePointOrFFFD(s, 0x110000).push_back(u8'|');
+        appendCodePointOrFFFD(s, -1).push_back(u8'.');
+        assertTrue("string", s == CHARS(u8"_4|ç|カ|\uFFFD|\uFFFD|４|🚴|\uFFFD|\uFFFD."));
+    }
+#if U_CPLUSPLUS_VERSION >= 20
+    {
+        std::u8string s;
+        s.push_back(u8'_');
+        appendCodePointOrFFFD(s, U'4').push_back(u8'|');
+        appendCodePointOrFFFD(s, U'ç').push_back(u8'|');
+        appendCodePointOrFFFD(s, U'カ').push_back(u8'|');
+        appendCodePointOrFFFD(s, 0xd800).push_back(u8'|');
+        appendCodePointOrFFFD(s, 0xdfff).push_back(u8'|');
+        appendCodePointOrFFFD(s, U'４').push_back(u8'|');
+        appendCodePointOrFFFD(s, U'🚴').push_back(u8'|');
+        appendCodePointOrFFFD(s, 0x110000).push_back(u8'|');
+        appendCodePointOrFFFD(s, -1).push_back(u8'.');
+        assertTrue("string", s == u8"_4|ç|カ|\uFFFD|\uFFFD|４|🚴|\uFFFD|\uFFFD.");
+    }
+#endif
+    {
+        std::u16string s;
+        s.push_back(u'_');
+        appendCodePointOrFFFD(s, U'4').push_back(u'|');
+        appendCodePointOrFFFD(s, U'ç').push_back(u'|');
+        appendCodePointOrFFFD(s, U'カ').push_back(u'|');
+        appendCodePointOrFFFD(s, 0xd800).push_back(u'|');
+        appendCodePointOrFFFD(s, 0xdfff).push_back(u'|');
+        appendCodePointOrFFFD(s, U'４').push_back(u'|');
+        appendCodePointOrFFFD(s, U'🚴').push_back(u'|');
+        appendCodePointOrFFFD(s, 0x110000).push_back(u'|');
+        appendCodePointOrFFFD(s, -1).push_back(u'.');
+        assertEquals("u16string", u"_4|ç|カ|\uFFFD|\uFFFD|４|🚴|\uFFFD|\uFFFD.", s);
+    }
+    {
+        std::u32string s;
+        s.push_back(u'_');
+        appendCodePointOrFFFD(s, U'4').push_back(u'|');
+        appendCodePointOrFFFD(s, U'ç').push_back(u'|');
+        appendCodePointOrFFFD(s, U'カ').push_back(u'|');
+        appendCodePointOrFFFD(s, 0xd800).push_back(u'|');
+        appendCodePointOrFFFD(s, 0xdfff).push_back(u'|');
+        appendCodePointOrFFFD(s, U'４').push_back(u'|');
+        appendCodePointOrFFFD(s, U'🚴').push_back(u'|');
+        appendCodePointOrFFFD(s, 0x110000).push_back(u'|');
+        appendCodePointOrFFFD(s, -1).push_back(u'.');
+        assertTrue("u32string", s == U"_4|ç|カ|\uFFFD|\uFFFD|４|🚴|\uFFFD|\uFFFD.");
+    }
+}
+
+void UTFIteratorTest::testAppendCodePointUnsafe() {
+    using icu::header::appendCodePointUnsafe;
+    {
+        std::string s;
+        s.push_back(u8'_');
+        appendCodePointUnsafe(s, U'4').push_back(u8'|');
+        appendCodePointUnsafe(s, U'ç').push_back(u8'|');
+        appendCodePointUnsafe(s, U'カ').push_back(u8'|');
+        appendCodePointUnsafe(s, U'４').push_back(u8'|');
+        appendCodePointUnsafe(s, U'🚴').push_back(u8'.');
+        assertTrue("string", s == CHARS(u8"_4|ç|カ|４|🚴."));
+    }
+#if U_CPLUSPLUS_VERSION >= 20
+    {
+        std::u8string s;
+        s.push_back(u8'_');
+        appendCodePointUnsafe(s, U'4').push_back(u8'|');
+        appendCodePointUnsafe(s, U'ç').push_back(u8'|');
+        appendCodePointUnsafe(s, U'カ').push_back(u8'|');
+        appendCodePointUnsafe(s, U'４').push_back(u8'|');
+        appendCodePointUnsafe(s, U'🚴').push_back(u8'.');
+        assertTrue("string", s == u8"_4|ç|カ|４|🚴.");
+    }
+#endif
+    {
+        std::u16string s;
+        s.push_back(u'_');
+        appendCodePointUnsafe(s, U'4').push_back(u'|');
+        appendCodePointUnsafe(s, U'ç').push_back(u'|');
+        appendCodePointUnsafe(s, U'カ').push_back(u'|');
+        appendCodePointUnsafe(s, U'４').push_back(u'|');
+        appendCodePointUnsafe(s, U'🚴').push_back(u'.');
+        assertEquals("u16string", u"_4|ç|カ|４|🚴.", s);
+    }
+    {
+        std::u32string s;
+        s.push_back(u'_');
+        appendCodePointUnsafe(s, U'4').push_back(u'|');
+        appendCodePointUnsafe(s, U'ç').push_back(u'|');
+        appendCodePointUnsafe(s, U'カ').push_back(u'|');
+        appendCodePointUnsafe(s, U'４').push_back(u'|');
+        appendCodePointUnsafe(s, U'🚴').push_back(u'.');
+        assertTrue("u32string", s == U"_4|ç|カ|４|🚴.");
+    }
+}
+
+void UTFIteratorTest::testStringFromCodePointOrFFFD() {
+    using icu::header::stringFromCodePointOrFFFD;
+    {
+        using std::string;
+        assertTrue("string 4", stringFromCodePointOrFFFD<string>(U'4') == CHARS(u8"4"));
+        assertTrue("string ced", stringFromCodePointOrFFFD<string>(U'ç') == CHARS(u8"ç"));
+        assertTrue("string ka", stringFromCodePointOrFFFD<string>(U'カ') == CHARS(u8"カ"));
+        assertTrue("string D800", stringFromCodePointOrFFFD<string>(0xd800) == CHARS(u8"\uFFFD"));
+        assertTrue("string DFFF", stringFromCodePointOrFFFD<string>(0xdfff) == CHARS(u8"\uFFFD"));
+        assertTrue("string fw4", stringFromCodePointOrFFFD<string>(U'４') == CHARS(u8"４"));
+        assertTrue("string bike", stringFromCodePointOrFFFD<string>(U'🚴') == CHARS(u8"🚴"));
+        assertTrue("string high", stringFromCodePointOrFFFD<string>(0x110000) == CHARS(u8"\uFFFD"));
+        assertTrue("string neg", stringFromCodePointOrFFFD<string>(-1) == CHARS(u8"\uFFFD"));
+    }
+#if U_CPLUSPLUS_VERSION >= 20
+    {
+        using std::u8string;
+        assertTrue("u8string 4", stringFromCodePointOrFFFD<u8string>(U'4') == u8"4");
+        assertTrue("u8string ced", stringFromCodePointOrFFFD<u8string>(U'ç') == u8"ç");
+        assertTrue("u8string ka", stringFromCodePointOrFFFD<u8string>(U'カ') == u8"カ");
+        assertTrue("u8string D800", stringFromCodePointOrFFFD<u8string>(0xd800) == u8"\uFFFD");
+        assertTrue("u8string DFFF", stringFromCodePointOrFFFD<u8string>(0xdfff) == u8"\uFFFD");
+        assertTrue("u8string fw4", stringFromCodePointOrFFFD<u8string>(U'４') == u8"４");
+        assertTrue("u8string bike", stringFromCodePointOrFFFD<u8string>(U'🚴') == u8"🚴");
+        assertTrue("u8string high", stringFromCodePointOrFFFD<u8string>(0x110000) == u8"\uFFFD");
+        assertTrue("u8string neg", stringFromCodePointOrFFFD<u8string>(-1) == u8"\uFFFD");
+    }
+#endif
+    {
+        using std::u16string;
+        assertTrue("u16string 4", stringFromCodePointOrFFFD<u16string>(U'4') == u"4");
+        assertTrue("u16string ced", stringFromCodePointOrFFFD<u16string>(U'ç') == u"ç");
+        assertTrue("u16string ka", stringFromCodePointOrFFFD<u16string>(U'カ') == u"カ");
+        assertTrue("u16string D800", stringFromCodePointOrFFFD<u16string>(0xd800) == u"\uFFFD");
+        assertTrue("u16string DFFF", stringFromCodePointOrFFFD<u16string>(0xdfff) == u"\uFFFD");
+        assertTrue("u16string fw4", stringFromCodePointOrFFFD<u16string>(U'４') == u"４");
+        assertTrue("u16string bike", stringFromCodePointOrFFFD<u16string>(U'🚴') == u"🚴");
+        assertTrue("u16string high", stringFromCodePointOrFFFD<u16string>(0x110000) == u"\uFFFD");
+        assertTrue("u16string neg", stringFromCodePointOrFFFD<u16string>(-1) == u"\uFFFD");
+    }
+    {
+        using std::u32string;
+        assertTrue("u32string 4", stringFromCodePointOrFFFD<u32string>(U'4') == U"4");
+        assertTrue("u32string ced", stringFromCodePointOrFFFD<u32string>(U'ç') == U"ç");
+        assertTrue("u32string ka", stringFromCodePointOrFFFD<u32string>(U'カ') == U"カ");
+        assertTrue("u32string D800", stringFromCodePointOrFFFD<u32string>(0xd800) == U"\uFFFD");
+        assertTrue("u32string DFFF", stringFromCodePointOrFFFD<u32string>(0xdfff) == U"\uFFFD");
+        assertTrue("u32string fw4", stringFromCodePointOrFFFD<u32string>(U'４') == U"４");
+        assertTrue("u32string bike", stringFromCodePointOrFFFD<u32string>(U'🚴') == U"🚴");
+        assertTrue("u32string high", stringFromCodePointOrFFFD<u32string>(0x110000) == U"\uFFFD");
+        assertTrue("u32string neg", stringFromCodePointOrFFFD<u32string>(-1) == U"\uFFFD");
+    }
+}
+
+void UTFIteratorTest::testStringFromCodePointUnsafe() {
+    using icu::header::stringFromCodePointUnsafe;
+    {
+        assertTrue("string 4", stringFromCodePointUnsafe<std::string>(U'4') == CHARS(u8"4"));
+        assertTrue("string ced", stringFromCodePointUnsafe<std::string>(U'ç') == CHARS(u8"ç"));
+        assertTrue("string ka", stringFromCodePointUnsafe<std::string>(U'カ') == CHARS(u8"カ"));
+        assertTrue("string fw4", stringFromCodePointUnsafe<std::string>(U'４') == CHARS(u8"４"));
+        assertTrue("string bike", stringFromCodePointUnsafe<std::string>(U'🚴') == CHARS(u8"🚴"));
+    }
+#if U_CPLUSPLUS_VERSION >= 20
+    {
+        assertTrue("u8string 4", stringFromCodePointUnsafe<std::u8string>(U'4') == u8"4");
+        assertTrue("u8string ced", stringFromCodePointUnsafe<std::u8string>(U'ç') == u8"ç");
+        assertTrue("u8string ka", stringFromCodePointUnsafe<std::u8string>(U'カ') == u8"カ");
+        assertTrue("u8string fw4", stringFromCodePointUnsafe<std::u8string>(U'４') == u8"４");
+        assertTrue("u8string bike", stringFromCodePointUnsafe<std::u8string>(U'🚴') == u8"🚴");
+    }
+#endif
+    {
+        assertTrue("u16string 4", stringFromCodePointUnsafe<std::u16string>(U'4') == u"4");
+        assertTrue("u16string ced", stringFromCodePointUnsafe<std::u16string>(U'ç') == u"ç");
+        assertTrue("u16string ka", stringFromCodePointUnsafe<std::u16string>(U'カ') == u"カ");
+        assertTrue("u16string fw4", stringFromCodePointUnsafe<std::u16string>(U'４') == u"４");
+        assertTrue("u16string bike", stringFromCodePointUnsafe<std::u16string>(U'🚴') == u"🚴");
+    }
+    {
+        assertTrue("u32string 4", stringFromCodePointUnsafe<std::u32string>(U'4') == U"4");
+        assertTrue("u32string ced", stringFromCodePointUnsafe<std::u32string>(U'ç') == U"ç");
+        assertTrue("u32string ka", stringFromCodePointUnsafe<std::u32string>(U'カ') == U"カ");
+        assertTrue("u32string fw4", stringFromCodePointUnsafe<std::u32string>(U'４') == U"４");
+        assertTrue("u32string bike", stringFromCodePointUnsafe<std::u32string>(U'🚴') == U"🚴");
+    }
 }

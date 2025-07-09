@@ -1776,6 +1776,7 @@ public:
    * Unpaired surrogates are replaced with U+FFFD.
    * Calls toUTF8().
    *
+   * @tparam StringClass A std::string or a std::u8string (or a compatible type)
    * @param result A std::string or a std::u8string (or a compatible object)
    *        to which the UTF-8 version of the string is appended.
    * @return The string object.
@@ -1795,6 +1796,7 @@ public:
    * Unpaired surrogates are replaced with U+FFFD.
    * Calls toUTF8().
    *
+   * @tparam StringClass A std::string or a std::u8string (or a compatible type)
    * @return A std::string or a std::u8string (or a compatible object)
    *        with the UTF-8 version of the string.
    * @draft ICU 78
