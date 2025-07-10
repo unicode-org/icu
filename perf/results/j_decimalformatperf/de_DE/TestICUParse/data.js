@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1752167143078,
+  "lastUpdate": 1752177967293,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -35847,6 +35847,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 300.72503151835457,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "e75af84d49415ebfa04547a2ce4cc6687a4096d6",
+          "message": "ICU-23161 Generate pseudo-locale currency names",
+          "timestamp": "2025-07-10T12:58:35-07:00",
+          "tree_id": "6fb196ad2d434742a6542750b58412bd268841ee",
+          "url": "https://github.com/unicode-org/icu/commit/e75af84d49415ebfa04547a2ce4cc6687a4096d6"
+        },
+        "date": 1752177680391,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 309.7066105548,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
