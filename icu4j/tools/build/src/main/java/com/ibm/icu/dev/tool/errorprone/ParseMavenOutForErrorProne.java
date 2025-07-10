@@ -94,13 +94,14 @@ class ParseMavenOutForErrorProne {
             }
         }
         // In case we had an error report in progress, save it.
-        currentError = addErrorToReportAndReset(errorReport, currentError);
+        addErrorToReportAndReset(errorReport, currentError);
         return errorReport;
     }
 
+    // Tab-separated, convenient to import in a spreadsheet
     private static boolean isCustomIcuTag(ErrorProneEntry crtError) {
         String errorType = crtError.type;
-        if (errorType.equals("InvalidBlockTag")) {
+        if (!errorType.equals("InvalidBlockTag")) {
             return false;
         }
         String message = crtError.message;

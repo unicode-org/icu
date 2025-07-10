@@ -11,8 +11,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -20,10 +21,13 @@ import java.util.Map;
 class ErrorProneReport {
     private static final String HTML_REPORT_FILE = "errorprone1.html";
     private static final String HTML_REPORT_FILE2 = "errorprone2.html";
+    private static final String TSV_REPORT_FILE = "errorprone.tsv";
+    private static final String MD_REPORT_FILE = "errorprone.md";
     private static final String SORTTABLE_JS_FILE = "sorttable.js";
     private static final String SORTTABLE_CSS_FILE = "errorprone.css";
     private static final String [] EMBEDDED_FILES =
         { SORTTABLE_JS_FILE, SORTTABLE_CSS_FILE };
+    private static final String MD_CHARS_TO_ESCAPE = "\\*_|#`[]{}()<>+-.!";
 
     public static void genReports(String icuDir, String mavenStdOut, String outDir, String baseUrl)
             throws IOException {
@@ -32,8 +36,10 @@ class ErrorProneReport {
                 ParseMavenOutForErrorProne.parse(icuDir, mavenStdOut);
 
         extractExtraFiles(outDir);
-        genReport1(errors, outDir, baseUrl);
-        genReport2(errors, outDir, baseUrl);
+        genReportHtml1(errors, outDir, baseUrl);
+        genReportHtml2(errors, outDir, baseUrl);
+        genReportTsv(errors, outDir);
+        genReportMd(errors, outDir);
     }
 
     // Extract additional files used by the reports (css, js, etc)
@@ -45,7 +51,7 @@ class ErrorProneReport {
         }
     }
 
-    private static void genReport1(Map<String, List<ErrorProneEntry>> errors,
+    private static void genReportHtml1(Map<String, List<ErrorProneEntry>> errors,
             String outDir, String baseUrl) throws IOException {
 
         Path outFileName = Paths.get(outDir, HTML_REPORT_FILE);
@@ -109,7 +115,7 @@ class ErrorProneReport {
         }
     }
 
-    private static void genReport2(Map<String, List<ErrorProneEntry>> errors,
+    private static void genReportHtml2(Map<String, List<ErrorProneEntry>> errors,
             String outDir, String baseUrl) throws IOException {
         Path outFileName = Paths.get(outDir, HTML_REPORT_FILE2);
         System.out.println("Report generated: " + outFileName);
@@ -140,7 +146,6 @@ class ErrorProneReport {
                     continue;
                 }
                 ErrorProneEntry firstEntry = errorsOfType.get(0);
-                String errorSeverity = e.getKey();
                 // "class", "severity_" + errorSeverity)
                 hu.openTag("h3", Map.of("id", "name_" + errorType))
                         .text("[" + firstEntry.severity + "] ")
@@ -157,10 +162,6 @@ class ErrorProneReport {
                             .closeTag("a");
                 }
                 hu.closeTag("h2");
-
-                Map<String, String> attr = errorType == null
-                        ? Map.of("target", "errWin")
-                        : Map.of("href", errorType, "target", "errWin");
 
                 hu.openTag("table", Map.of("class", "sortable"));
 
@@ -228,8 +229,9 @@ class ErrorProneReport {
     }
 
     private static void outTitle(HtmlUtils hu) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MMMM-dd, HH:mm:ss", Locale.US);
-        String title = "ErrorProne report, " + sdf.format(new Date());
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MMMM-dd, HH:mm:ss ZZZZ", Locale.US);
+        ZoneId defaultTz = ZoneId.systemDefault();
+        String title = "ErrorProne report, " + dtf.format(ZonedDateTime.now(defaultTz));
         hu.openTag("h1").text(title).closeTag("h1");
     }
 
@@ -266,4 +268,107 @@ class ErrorProneReport {
             hu.closeTag("p").nl();
         }
     }
+
+    private static void genReportTsv(Map<String, List<ErrorProneEntry>> errors,
+            String outDir) throws IOException {
+        Path outFileName = Paths.get(outDir, TSV_REPORT_FILE);
+        System.out.println("Report generated: " + outFileName);
+        try (PrintStream wrt = new PrintStream(outFileName.toString(), StandardCharsets.UTF_8)) {
+            wrt.println("Issue type"
+                    + "\tCount"
+                    + "\tSeverity"
+                    + "\tURL"
+            );
+            for (Map.Entry<String, List<ErrorProneEntry>> e : errors.entrySet()) {
+                String errorType = e.getKey();
+                List<ErrorProneEntry> errorsOfType = e.getValue();
+                if (errorsOfType.isEmpty()) {
+                    continue;
+                }
+
+                String tags = ErrorProneUtils.getTags(errorType);
+                if (tags != null) {
+                    errorType += " " + tags;
+                }
+                ErrorProneEntry firstEntry = errorsOfType.get(0);
+                String errorSeverity = firstEntry.severity;
+
+                wrt.println(errorType
+                        + "\t" + errorsOfType.size()
+                        + "\t" + errorSeverity
+                        + "\t" + firstEntry.url
+                );
+            }
+        }
+    }
+
+
+    private static void genReportMd(Map<String, List<ErrorProneEntry>> errors,
+            String outDir) throws IOException {
+        Path outFileName = Paths.get(outDir, MD_REPORT_FILE);
+        System.out.println("Report generated: " + outFileName);
+        try (PrintStream wrt = new PrintStream(outFileName.toString(), StandardCharsets.UTF_8)) {
+            wrt.println("| Issue type | Severity | Location | Message |");
+            wrt.println("| ---------- | -------- | -------- | ------- |");
+            for (Map.Entry<String, List<ErrorProneEntry>> e : errors.entrySet()) {
+                String errorType = e.getKey();
+                List<ErrorProneEntry> errorsOfType = e.getValue();
+                if (errorsOfType.isEmpty()) {
+                    continue;
+                }
+
+                for (ErrorProneEntry error : e.getValue()) {
+                    wrt.print("| ");
+                    wrt.print("[`" + errorType + "`](" + error.url + ")");
+                    String tags = ErrorProneUtils.getTags(errorType);
+                    if (tags != null) {
+                        wrt.print(" " + escapeMd(tags));
+                    }
+
+                    wrt.print(" | " + error.severity);
+
+                    String visiblePath = error.path + ":[" + error.line + "," + error.column + "]";
+                    wrt.print(" | `" + visiblePath + "`");
+
+                    wrt.print(" | ");
+                    outDescriptionMd(wrt, error);
+
+                    wrt.println(" |");
+                }
+            }
+        }
+    }
+
+    private static void outDescriptionMd(PrintStream wrt, ErrorProneEntry error) {
+        wrt.print(escapeMd(error.message));
+        if (error.extra != null) {
+            wrt.print("<hr>");
+            String extra = error.extra;
+            if (extra.startsWith("Did you mean '") && extra.endsWith("'?")) {
+                wrt.print("Did you mean <br> ");
+                extra = extra.substring(14, extra.length() - 2);
+                wrt.print("`" + extra + "`");
+            } else {
+                wrt.print(escapeMd(extra));
+            }
+        }
+    }
+
+    static String escapeMd(String text) {
+        if (text == null) {
+            return null;
+        }
+
+        final StringBuilder result = new StringBuilder(2 * text.length());
+        for (int i = 0; i < text.length(); i++) {
+            char ch = text.charAt(i);
+            if (MD_CHARS_TO_ESCAPE.indexOf(ch) != -1) {
+                result.append('\\');
+            }
+            result.append(ch);
+        }
+
+        return result.toString();
+    }
+
 }
