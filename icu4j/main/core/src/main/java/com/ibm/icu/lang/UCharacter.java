@@ -6419,6 +6419,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @param cp the code point to check
      * @return true if cp is a valid code point
      * @stable ICU 3.0
+     * @see allCodePoints
+     * @see allCodePointsStream
+     * @see isScalarValue
      */
     public static final boolean isValidCodePoint(int cp) {
         return cp >= 0 && cp <= MAX_CODE_POINT;
@@ -6433,6 +6436,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @param cp the code point to check
      * @return true if cp is a Unicode scalar value
      * @draft ICU 78
+     * @see allScalarValues
+     * @see allScalarValuesStream
+     * @see isValidCodePoint
      */
     public static final boolean isScalarValue(int cp) {
         return (0 <= cp && cp < 0xd800) || (0xe000 <= cp && cp <= MAX_CODE_POINT);
@@ -6489,6 +6495,8 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      *
      * @return an IterableOfInt over all Unicode code points U+0000..U+10FFFF.
      * @draft ICU 78
+     * @see isValidCodePoint
+     * @see allScalarValues
      */
     public static final IterableOfInt allCodePoints() {
         return CodePoints.ALL_CODE_POINTS;
@@ -6503,6 +6511,8 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      *
      * @return an IterableOfInt over all Unicode scalar values.
      * @draft ICU 78
+     * @see isScalarValue
+     * @see allCodePoints
      */
     public static final IterableOfInt allScalarValues() {
         return CodePoints.ALL_SCALAR_VALUES;
@@ -6516,6 +6526,8 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      *
      * @return an IntStream over all Unicode code points U+0000..U+10FFFF.
      * @draft ICU 78
+     * @see isValidCodePoint
+     * @see allScalarValuesStream
      */
     public static final IntStream allCodePointsStream() {
         return IntStream.rangeClosed(0, 0x10ffff);
@@ -6530,6 +6542,8 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      *
      * @return an IntStream over all Unicode scalar values.
      * @draft ICU 78
+     * @see isScalarValue
+     * @see allCodePointsStream
      */
     public static final IntStream allScalarValuesStream() {
         return IntStream.concat(

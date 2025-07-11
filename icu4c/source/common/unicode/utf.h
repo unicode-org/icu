@@ -130,6 +130,8 @@
  * @param c 32-bit code point
  * @return true or false
  * @draft ICU 78
+ * @see AllCodePoints
+ * @see U_IS_SCALAR_VALUE
  */
 #define U_IS_CODE_POINT(c) ((uint32_t)(c)<=0x10ffff)
 
@@ -141,6 +143,8 @@
  * @param c 32-bit code point
  * @return true or false
  * @draft ICU 78
+ * @see AllScalarValues
+ * @see U_IS_CODE_POINT
  */
 #define U_IS_SCALAR_VALUE(c) ((uint32_t)(c)<0xd800 || (0xe000<=(c) && (c)<=0x10ffff))
 
