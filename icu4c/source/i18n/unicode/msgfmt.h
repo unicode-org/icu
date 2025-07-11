@@ -685,10 +685,10 @@ public:
      * @stable ICU 2.0
      */
     U_I18N_API static UnicodeString& format(const UnicodeString& pattern,
-                                          const Formattable* arguments,
-                                          int32_t count,
-                                          UnicodeString& appendTo,
-                                          UErrorCode& status);
+                                            const Formattable* arguments,
+                                            int32_t count,
+                                            UnicodeString& appendTo,
+                                            UErrorCode& status);
 
     /**
      * Formats the given array of arguments into a user-readable

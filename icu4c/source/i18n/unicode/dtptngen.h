@@ -82,7 +82,7 @@ public:
      * @internal
      */
     U_I18N_API static DateTimePatternGenerator* createInstanceNoStdPat(const Locale& uLocale,
-                                                                     UErrorCode& status);
+                                                                       UErrorCode& status);
 
 #endif /* U_HIDE_INTERNAL_API */
 
@@ -170,7 +170,7 @@ public:
      * @stable ICU 56
      */
     U_I18N_API static UnicodeString staticGetBaseSkeleton(const UnicodeString& pattern,
-                                                        UErrorCode& status);
+                                                          UErrorCode& status);
 
     /**
      * Utility to return a unique base skeleton from a given pattern. This is

@@ -314,7 +314,7 @@ public:
      * @stable ICU 4.0
      */
     U_I18N_API static DateIntervalFormat* createInstance(const UnicodeString& skeleton,
-                                                       UErrorCode& status);
+                                                         UErrorCode& status);
 
     /**
      * Construct a DateIntervalFormat from skeleton and a given locale.
@@ -346,8 +346,8 @@ public:
      */
 
     U_I18N_API static DateIntervalFormat* createInstance(const UnicodeString& skeleton,
-                                                       const Locale& locale,
-                                                       UErrorCode& status);
+                                                         const Locale& locale,
+                                                         UErrorCode& status);
 
     /**
      * Construct a DateIntervalFormat from skeleton
@@ -365,8 +365,8 @@ public:
      * @stable ICU 4.0
      */
     U_I18N_API static DateIntervalFormat* createInstance(const UnicodeString& skeleton,
-                                                       const DateIntervalInfo& dtitvinf,
-                                                       UErrorCode& status);
+                                                         const DateIntervalInfo& dtitvinf,
+                                                         UErrorCode& status);
 
     /**
      * Construct a DateIntervalFormat from skeleton
@@ -404,9 +404,9 @@ public:
      * @stable ICU 4.0
      */
     U_I18N_API static DateIntervalFormat* createInstance(const UnicodeString& skeleton,
-                                                       const Locale& locale,
-                                                       const DateIntervalInfo& dtitvinf,
-                                                       UErrorCode& status);
+                                                         const Locale& locale,
+                                                         const DateIntervalInfo& dtitvinf,
+                                                         UErrorCode& status);
 
     /**
      * Destructor.
@@ -771,9 +771,9 @@ private:
      * @return          a date time interval formatter which the caller owns.
      */
     U_I18N_API static DateIntervalFormat* create(const Locale& locale,
-                                               DateIntervalInfo* dtitvinf,
-                                               const UnicodeString* skeleton,
-                                               UErrorCode& status);
+                                                 DateIntervalInfo* dtitvinf,
+                                                 const UnicodeString* skeleton,
+                                                 UErrorCode& status);
 
     /**
      *  Below are for generating interval patterns local to the formatter
@@ -909,10 +909,10 @@ private:
      *
      */
     U_I18N_API static void getDateTimeSkeleton(const UnicodeString& skeleton,
-                                             UnicodeString& date,
-                                             UnicodeString& normalizedDate,
-                                             UnicodeString& time,
-                                             UnicodeString& normalizedTime);
+                                               UnicodeString& date,
+                                               UnicodeString& normalizedDate,
+                                               UnicodeString& time,
+                                               UnicodeString& normalizedTime);
 
     /**
      * Generate date or time interval pattern from resource,
@@ -1003,11 +1003,11 @@ private:
      * @param adjustedIntervalPattern  adjusted interval pattern
      */
     U_I18N_API static void adjustFieldWidth(const UnicodeString& inputSkeleton,
-                                          const UnicodeString& bestMatchSkeleton,
-                                          const UnicodeString& bestMatchIntervalPattern,
-                                          int8_t differenceInfo,
-                                          UBool suppressDayPeriodField,
-                                          UnicodeString& adjustedIntervalPattern);
+                                            const UnicodeString& bestMatchSkeleton,
+                                            const UnicodeString& bestMatchIntervalPattern,
+                                            int8_t differenceInfo,
+                                            UBool suppressDayPeriodField,
+                                            UnicodeString& adjustedIntervalPattern);
 
     /**
      * Does the same thing as UnicodeString::findAndReplace(), except that it won't perform
@@ -1017,8 +1017,8 @@ private:
      * @param strToReplaceWith The string to substitute in wherever `stringToReplace` was found.
      */
     U_I18N_API static void findReplaceInPattern(UnicodeString& targetString,
-                                              const UnicodeString& strToReplace,
-                                              const UnicodeString& strToReplaceWith);
+                                                const UnicodeString& strToReplace,
+                                                const UnicodeString& strToReplaceWith);
 
     /**
      * Concat a single date pattern with a time interval pattern,
@@ -1043,7 +1043,7 @@ private:
      * @return           true if field present in a skeleton.
      */
     U_I18N_API static UBool fieldExistsInSkeleton(UCalendarDateFields field,
-                                                const UnicodeString& skeleton);
+                                                  const UnicodeString& skeleton);
 
     /**
      * Split interval patterns into 2 part.
