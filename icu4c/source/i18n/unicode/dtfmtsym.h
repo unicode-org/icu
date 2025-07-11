@@ -439,13 +439,13 @@ public:
      * doesn't specify any time separator, and always recognized when parsing.
      * @internal
      */
-    U_EXPORT static const char16_t DEFAULT_TIME_SEPARATOR = 0x003a;  // ':'
+    U_I18N_API static const char16_t DEFAULT_TIME_SEPARATOR = 0x003a;  // ':'
 
     /**
      * This alternate time separator is always recognized when parsing.
      * @internal
      */
-    U_EXPORT static const char16_t ALTERNATE_TIME_SEPARATOR = 0x002e;  // '.'
+    U_I18N_API static const char16_t ALTERNATE_TIME_SEPARATOR = 0x002e;  // '.'
 
     /**
      * Gets the time separator string. For example: ":".
@@ -587,7 +587,7 @@ public:
      * @return    the non-localized date-time pattern characters
      * @stable ICU 2.0
      */
-    U_EXPORT static const char16_t* getPatternUChars();
+    U_I18N_API static const char16_t* getPatternUChars();
 
     /**
      * Gets localized date-time pattern characters. For example: 'u', 't', etc.
@@ -655,7 +655,7 @@ public:
      *
      * @stable ICU 2.2
      */
-    U_EXPORT static UClassID getStaticClassID();
+    U_I18N_API static UClassID getStaticClassID();
 
 private:
 
@@ -1037,7 +1037,7 @@ public:
      * @return the new DateFormatSymbols which the caller owns.
      * @internal For ICU use only.
      */
-  U_EXPORT static DateFormatSymbols* createForLocale(const Locale& locale, UErrorCode& status);
+  U_I18N_API static DateFormatSymbols* createForLocale(const Locale& locale, UErrorCode& status);
 #endif  /* U_HIDE_INTERNAL_API */
 };
 

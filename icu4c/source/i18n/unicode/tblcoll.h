@@ -463,7 +463,7 @@ public:
      * @return The class ID for all objects of this class.
      * @stable ICU 2.0
      */
-    U_EXPORT static UClassID getStaticClassID();
+    U_I18N_API static UClassID getStaticClassID();
 
 #ifndef U_HIDE_DEPRECATED_API
     /**

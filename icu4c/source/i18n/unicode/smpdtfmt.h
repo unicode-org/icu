@@ -738,7 +738,7 @@ public:
      * @return          The class ID for all objects of this class.
      * @stable ICU 2.0
      */
-    U_EXPORT static UClassID getStaticClassID();
+    U_I18N_API static UClassID getStaticClassID();
 
     /**
      * Returns a unique class ID POLYMORPHICALLY. Pure virtual override. This
@@ -859,7 +859,7 @@ public:
      *                 covered in pattern. false otherwise.
      * @internal ICU 4.0
      */
-    U_EXPORT static UBool isFieldUnitIgnored(const UnicodeString& pattern, UCalendarDateFields field);
+    U_I18N_API static UBool isFieldUnitIgnored(const UnicodeString& pattern, UCalendarDateFields field);
 
     /**
      * This is for ICU internal use only. Please do not use.

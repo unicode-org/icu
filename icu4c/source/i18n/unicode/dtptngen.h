@@ -63,7 +63,7 @@ public:
      *               which must not indicate a failure before the function call.
      * @stable ICU 3.8
      */
-    U_EXPORT static DateTimePatternGenerator* createInstance(UErrorCode& status);
+    U_I18N_API static DateTimePatternGenerator* createInstance(UErrorCode& status);
 
     /**
      * Construct a flexible generator according to data for a given locale.
@@ -72,7 +72,7 @@ public:
      *               which must not indicate a failure before the function call.
      * @stable ICU 3.8
      */
-    U_EXPORT static DateTimePatternGenerator* createInstance(const Locale& uLocale, UErrorCode& status);
+    U_I18N_API static DateTimePatternGenerator* createInstance(const Locale& uLocale, UErrorCode& status);
 
 #ifndef U_HIDE_INTERNAL_API
 
@@ -81,7 +81,7 @@ public:
      *
      * @internal
      */
-    U_EXPORT static DateTimePatternGenerator* createInstanceNoStdPat(const Locale& uLocale,
+    U_I18N_API static DateTimePatternGenerator* createInstanceNoStdPat(const Locale& uLocale,
                                                                      UErrorCode& status);
 
 #endif /* U_HIDE_INTERNAL_API */
@@ -92,7 +92,7 @@ public:
      *               which must not indicate a failure before the function call.
      * @stable ICU 3.8
      */
-    U_EXPORT static DateTimePatternGenerator* createEmptyInstance(UErrorCode& status);
+    U_I18N_API static DateTimePatternGenerator* createEmptyInstance(UErrorCode& status);
 
     /**
      * Destructor.
@@ -135,7 +135,7 @@ public:
      * @return skeleton such as "MMMdd"
      * @stable ICU 56
      */
-    U_EXPORT static UnicodeString staticGetSkeleton(const UnicodeString& pattern, UErrorCode& status);
+    U_I18N_API static UnicodeString staticGetSkeleton(const UnicodeString& pattern, UErrorCode& status);
 
     /**
      * Utility to return a unique skeleton from a given pattern. For example,
@@ -169,7 +169,7 @@ public:
      * @return base skeleton, such as "MMMd"
      * @stable ICU 56
      */
-    U_EXPORT static UnicodeString staticGetBaseSkeleton(const UnicodeString& pattern,
+    U_I18N_API static UnicodeString staticGetBaseSkeleton(const UnicodeString& pattern,
                                                         UErrorCode& status);
 
     /**
@@ -557,7 +557,7 @@ public:
      *
      * @stable ICU 3.8
      */
-    U_EXPORT static UClassID getStaticClassID();
+    U_I18N_API static UClassID getStaticClassID();
 
 private:
     /**

@@ -313,7 +313,7 @@ public:
      * @return          a date time interval formatter which the caller owns.
      * @stable ICU 4.0
      */
-    U_EXPORT static DateIntervalFormat* createInstance(const UnicodeString& skeleton,
+    U_I18N_API static DateIntervalFormat* createInstance(const UnicodeString& skeleton,
                                                        UErrorCode& status);
 
     /**
@@ -345,7 +345,7 @@ public:
      * @stable ICU 4.0
      */
 
-    U_EXPORT static DateIntervalFormat* createInstance(const UnicodeString& skeleton,
+    U_I18N_API static DateIntervalFormat* createInstance(const UnicodeString& skeleton,
                                                        const Locale& locale,
                                                        UErrorCode& status);
 
@@ -364,7 +364,7 @@ public:
      * @return          a date time interval formatter which the caller owns.
      * @stable ICU 4.0
      */
-    U_EXPORT static DateIntervalFormat* createInstance(const UnicodeString& skeleton,
+    U_I18N_API static DateIntervalFormat* createInstance(const UnicodeString& skeleton,
                                                        const DateIntervalInfo& dtitvinf,
                                                        UErrorCode& status);
 
@@ -403,7 +403,7 @@ public:
      * @return          a date time interval formatter which the caller owns.
      * @stable ICU 4.0
      */
-    U_EXPORT static DateIntervalFormat* createInstance(const UnicodeString& skeleton,
+    U_I18N_API static DateIntervalFormat* createInstance(const UnicodeString& skeleton,
                                                        const Locale& locale,
                                                        const DateIntervalInfo& dtitvinf,
                                                        UErrorCode& status);
@@ -666,7 +666,7 @@ public:
      * @return          The class ID for all objects of this class.
      * @stable ICU 4.0
      */
-    U_EXPORT static UClassID getStaticClassID();
+    U_I18N_API static UClassID getStaticClassID();
 
     /**
      * Returns a unique class ID POLYMORPHICALLY. Pure virtual override. This
@@ -770,7 +770,7 @@ private:
      * @param status    Output param set to success/failure code.
      * @return          a date time interval formatter which the caller owns.
      */
-    U_EXPORT static DateIntervalFormat* create(const Locale& locale,
+    U_I18N_API static DateIntervalFormat* create(const Locale& locale,
                                                DateIntervalInfo* dtitvinf,
                                                const UnicodeString* skeleton,
                                                UErrorCode& status);
@@ -908,7 +908,7 @@ private:
      *                                skeleton.
      *
      */
-    U_EXPORT static void getDateTimeSkeleton(const UnicodeString& skeleton,
+    U_I18N_API static void getDateTimeSkeleton(const UnicodeString& skeleton,
                                              UnicodeString& date,
                                              UnicodeString& normalizedDate,
                                              UnicodeString& time,
@@ -1002,7 +1002,7 @@ private:
      * @param suppressDayPeriodField if true, remove the day period field from the pattern, if there is one
      * @param adjustedIntervalPattern  adjusted interval pattern
      */
-    U_EXPORT static void adjustFieldWidth(const UnicodeString& inputSkeleton,
+    U_I18N_API static void adjustFieldWidth(const UnicodeString& inputSkeleton,
                                           const UnicodeString& bestMatchSkeleton,
                                           const UnicodeString& bestMatchIntervalPattern,
                                           int8_t differenceInfo,
@@ -1016,7 +1016,7 @@ private:
      * @param strToReplace The string to search for and replace in the target string.
      * @param strToReplaceWith The string to substitute in wherever `stringToReplace` was found.
      */
-    U_EXPORT static void findReplaceInPattern(UnicodeString& targetString,
+    U_I18N_API static void findReplaceInPattern(UnicodeString& targetString,
                                               const UnicodeString& strToReplace,
                                               const UnicodeString& strToReplaceWith);
 
@@ -1042,7 +1042,7 @@ private:
      * @param skeleton   given skeleton on which to check the calendar field
      * @return           true if field present in a skeleton.
      */
-    U_EXPORT static UBool fieldExistsInSkeleton(UCalendarDateFields field,
+    U_I18N_API static UBool fieldExistsInSkeleton(UCalendarDateFields field,
                                                 const UnicodeString& skeleton);
 
     /**
@@ -1050,7 +1050,7 @@ private:
      * @param intervalPattern  interval pattern
      * @return the index in interval pattern which split the pattern into 2 part
      */
-    U_EXPORT static int32_t splitPatternInto2Part(const UnicodeString& intervalPattern);
+    U_I18N_API static int32_t splitPatternInto2Part(const UnicodeString& intervalPattern);
 
     /**
      * Break interval patterns as 2 part and save them into pattern info.

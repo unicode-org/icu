@@ -684,7 +684,7 @@ public:
      * @return          Reference to 'appendTo' parameter.
      * @stable ICU 2.0
      */
-    U_EXPORT static UnicodeString& format(const UnicodeString& pattern,
+    U_I18N_API static UnicodeString& format(const UnicodeString& pattern,
                                           const Formattable* arguments,
                                           int32_t count,
                                           UnicodeString& appendTo,
@@ -809,7 +809,7 @@ public:
      * @return the standard equivalent of the original pattern
      * @stable ICU 3.4
      */
-    U_EXPORT static UnicodeString autoQuoteApostrophe(const UnicodeString& pattern, UErrorCode& status);
+    U_I18N_API static UnicodeString autoQuoteApostrophe(const UnicodeString& pattern, UErrorCode& status);
 
     /**
      * Returns true if this MessageFormat uses named arguments,
@@ -858,7 +858,7 @@ public:
      * @return          The class ID for all objects of this class.
      * @stable ICU 2.0
      */
-    U_EXPORT static UClassID getStaticClassID();
+    U_I18N_API static UClassID getStaticClassID();
 
 #ifndef U_HIDE_INTERNAL_API
     /**
@@ -871,7 +871,7 @@ public:
      * @return whether the two objects are the same
      * @internal
      */
-    U_EXPORT static UBool equalFormats(const void* left, const void* right);
+    U_I18N_API static UBool equalFormats(const void* left, const void* right);
 #endif  /* U_HIDE_INTERNAL_API */
 
 private:
