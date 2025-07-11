@@ -235,7 +235,7 @@ public:
      * @return last-resort symbols
      * @stable ICU 52
      */
-    U_EXPORT static DecimalFormatSymbols* createWithLastResortData(UErrorCode& status);
+    U_I18N_API static DecimalFormatSymbols* createWithLastResortData(UErrorCode& status);
 
     /**
      * Copy constructor.
@@ -370,7 +370,7 @@ public:
      *
      * @stable ICU 2.2
      */
-    U_EXPORT static UClassID getStaticClassID();
+    U_I18N_API static UClassID getStaticClassID();
 
 private:
     DecimalFormatSymbols();

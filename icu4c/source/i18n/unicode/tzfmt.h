@@ -682,7 +682,7 @@ public:
      * ICU "poor man's RTTI", returns a UClassID for this class.
      * @stable ICU 50
      */
-    U_EXPORT static UClassID getStaticClassID();
+    U_I18N_API static UClassID getStaticClassID();
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.

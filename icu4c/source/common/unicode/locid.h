@@ -195,50 +195,50 @@ class UnicodeString;
 class U_COMMON_API_CLASS Locale : public UObject {
 public:
     /** Useful constant for the Root locale. @stable ICU 4.4 */
-    U_EXPORT static const Locale& getRoot();
+    U_COMMON_API static const Locale& U_EXPORT2 getRoot();
     /** Useful constant for this language. @stable ICU 2.0 */
-    U_EXPORT static const Locale& getEnglish();
+    U_COMMON_API static const Locale& U_EXPORT2 getEnglish();
     /** Useful constant for this language. @stable ICU 2.0 */
-    U_EXPORT static const Locale& getFrench();
+    U_COMMON_API static const Locale& U_EXPORT2 getFrench();
     /** Useful constant for this language. @stable ICU 2.0 */
-    U_EXPORT static const Locale& getGerman();
+    U_COMMON_API static const Locale& U_EXPORT2 getGerman();
     /** Useful constant for this language. @stable ICU 2.0 */
-    U_EXPORT static const Locale& getItalian();
+    U_COMMON_API static const Locale& U_EXPORT2 getItalian();
     /** Useful constant for this language. @stable ICU 2.0 */
-    U_EXPORT static const Locale& getJapanese();
+    U_COMMON_API static const Locale& U_EXPORT2 getJapanese();
     /** Useful constant for this language. @stable ICU 2.0 */
-    U_EXPORT static const Locale& getKorean();
+    U_COMMON_API static const Locale& U_EXPORT2 getKorean();
     /** Useful constant for this language. @stable ICU 2.0 */
-    U_EXPORT static const Locale& getChinese();
+    U_COMMON_API static const Locale& U_EXPORT2 getChinese();
     /** Useful constant for this language. @stable ICU 2.0 */
-    U_EXPORT static const Locale& getSimplifiedChinese();
+    U_COMMON_API static const Locale& U_EXPORT2 getSimplifiedChinese();
     /** Useful constant for this language. @stable ICU 2.0 */
-    U_EXPORT static const Locale& getTraditionalChinese();
+    U_COMMON_API static const Locale& U_EXPORT2 getTraditionalChinese();
 
     /** Useful constant for this country/region. @stable ICU 2.0 */
-    U_EXPORT static const Locale& getFrance();
+    U_COMMON_API static const Locale& U_EXPORT2 getFrance();
     /** Useful constant for this country/region. @stable ICU 2.0 */
-    U_EXPORT static const Locale& getGermany();
+    U_COMMON_API static const Locale& U_EXPORT2 getGermany();
     /** Useful constant for this country/region. @stable ICU 2.0 */
-    U_EXPORT static const Locale& getItaly();
+    U_COMMON_API static const Locale& U_EXPORT2 getItaly();
     /** Useful constant for this country/region. @stable ICU 2.0 */
-    U_EXPORT static const Locale& getJapan();
+    U_COMMON_API static const Locale& U_EXPORT2 getJapan();
     /** Useful constant for this country/region. @stable ICU 2.0 */
-    U_EXPORT static const Locale& getKorea();
+    U_COMMON_API static const Locale& U_EXPORT2 getKorea();
     /** Useful constant for this country/region. @stable ICU 2.0 */
-    U_EXPORT static const Locale& getChina();
+    U_COMMON_API static const Locale& U_EXPORT2 getChina();
     /** Useful constant for this country/region. @stable ICU 2.0 */
-    U_EXPORT static const Locale& getPRC();
+    U_COMMON_API static const Locale& U_EXPORT2 getPRC();
     /** Useful constant for this country/region. @stable ICU 2.0 */
-    U_EXPORT static const Locale& getTaiwan();
+    U_COMMON_API static const Locale& U_EXPORT2 getTaiwan();
     /** Useful constant for this country/region. @stable ICU 2.0 */
-    U_EXPORT static const Locale& getUK();
+    U_COMMON_API static const Locale& U_EXPORT2 getUK();
     /** Useful constant for this country/region. @stable ICU 2.0 */
-    U_EXPORT static const Locale& getUS();
+    U_COMMON_API static const Locale& U_EXPORT2 getUS();
     /** Useful constant for this country/region. @stable ICU 2.0 */
-    U_EXPORT static const Locale& getCanada();
+    U_COMMON_API static const Locale& U_EXPORT2 getCanada();
     /** Useful constant for this country/region. @stable ICU 2.0 */
-    U_EXPORT static const Locale& getCanadaFrench();
+    U_COMMON_API static const Locale& U_EXPORT2 getCanadaFrench();
 
     /**
      * Construct a default locale object, a Locale for the default locale ID.
@@ -369,7 +369,7 @@ public:
      * @system
      * @stable ICU 2.0
      */
-    U_EXPORT static const Locale& getDefault();
+    U_COMMON_API static const Locale& U_EXPORT2 getDefault();
 
     /**
      * Sets the default. Normally set once at the beginning of a process,
@@ -383,7 +383,7 @@ public:
      * @system
      * @stable ICU 2.0
      */
-    U_EXPORT static void setDefault(const Locale& newLocale, UErrorCode& success);
+    U_COMMON_API static void U_EXPORT2 setDefault(const Locale& newLocale, UErrorCode& success);
 #endif  /* U_HIDE_SYSTEM_API */
 
     /**
@@ -407,7 +407,7 @@ public:
      * @return        the Locale for the specified BCP47 language tag.
      * @stable ICU 63
      */
-    U_EXPORT static Locale forLanguageTag(StringPiece tag, UErrorCode& status);
+    U_COMMON_API static Locale U_EXPORT2 forLanguageTag(StringPiece tag, UErrorCode& status);
 
     /**
      * Returns a well-formed language tag for this Locale.
@@ -446,11 +446,11 @@ public:
      * @stable ICU 2.0
      * @see uloc_getName
      */
-    U_EXPORT static Locale createFromName(const char* name);
+    U_COMMON_API static Locale U_EXPORT2 createFromName(const char* name);
 
 #ifndef U_HIDE_INTERNAL_API
     /** @internal */
-    U_EXPORT static Locale createFromName(StringPiece name);
+    U_COMMON_API static Locale U_EXPORT2 createFromName(StringPiece name);
 #endif  /* U_HIDE_INTERNAL_API */
 
     /**
@@ -461,7 +461,7 @@ public:
      * @stable ICU 3.0
      * @see uloc_canonicalize
      */
-    U_EXPORT static Locale createCanonical(const char* name);
+    U_COMMON_API static Locale U_EXPORT2 createCanonical(const char* name);
 
     /**
      * Returns the locale's ISO-639 language code.
@@ -986,7 +986,7 @@ public:
      *              get ownership of this list, and must NOT delete it.
      * @stable ICU 2.0
      */
-    U_EXPORT static const Locale* getAvailableLocales(int32_t& count);
+    U_COMMON_API static const Locale* U_EXPORT2 getAvailableLocales(int32_t& count);
 
     /**
      * Gets a list of all available 2-letter country codes defined in ISO 3166.  This is a
@@ -996,7 +996,7 @@ public:
      * @return a list of all available country codes
      * @stable ICU 2.0
      */
-    U_EXPORT static const char* const* getISOCountries();
+    U_COMMON_API static const char* const* U_EXPORT2 getISOCountries();
 
     /**
      * Returns a list of all unique language codes defined in ISO 639.
@@ -1009,14 +1009,14 @@ public:
      * @return a list of all available language codes
      * @stable ICU 2.0
      */
-    U_EXPORT static const char* const* getISOLanguages();
+    U_COMMON_API static const char* const* U_EXPORT2 getISOLanguages();
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
      * @stable ICU 2.2
      */
-    U_EXPORT static UClassID getStaticClassID();
+    U_COMMON_API static UClassID U_EXPORT2 getStaticClassID();
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
@@ -1127,7 +1127,7 @@ protected: /* only protected for testing purposes. DO NOT USE. */
      * Set this from a single POSIX style locale string.
      * @internal
      */
-    U_EXPORT void setFromPOSIXID(const char* posixID);
+    U_COMMON_API void setFromPOSIXID(const char* posixID);
     /**
      * Minimize the subtags for this Locale, per the algorithm described
      * @param favorScript favor to keep script if true, to keep region if false.
