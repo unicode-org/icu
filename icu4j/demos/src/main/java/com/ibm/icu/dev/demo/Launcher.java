@@ -21,6 +21,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 
 import com.ibm.icu.dev.demo.impl.DemoApplet;
 import com.ibm.icu.dev.demo.impl.DemoUtility;
@@ -41,18 +42,18 @@ public class Launcher extends DemoApplet {
     /**
      * list of classes, relative to the demoBase. all must have a static void main(String[])
      */
-    public static final String demoList[] = { 
+    public static final List<String> demoList = List.of( 
         "calendar.CalendarApp",
         "charsetdet.DetectingViewer",
         "holiday.HolidayCalendarDemo",
         "rbnf.RbnfDemo",
-        "translit.Demo",
-    };
+        "translit.Demo"
+    );
 
     public class LauncherFrame extends Frame implements ActionListener {
         private static final long serialVersionUID = -8054963875776183878L;
         
-        public Button buttonList[] = new Button[demoList.length]; // one button for each demo
+        public Button buttonList[] = new Button[demoList.size()]; // one button for each demo
         public Label statusLabel;
         private DemoApplet applet;
         
@@ -83,7 +84,7 @@ public class Launcher extends DemoApplet {
             topPanel.setLayout(new GridLayout(5,3));
 
             for(int i=0;i<buttonList.length;i++) {
-                String demo = demoList[i];
+                String demo = demoList.get(i);
                 Button b = new Button(demo);
                 b.addActionListener(this);
                 buttonList[i]=b;
@@ -136,7 +137,7 @@ public class Launcher extends DemoApplet {
             // find button
             for(int i=0;i<buttonList.length;i++) {
                 if(e.getSource() == buttonList[i]) {
-                    String demoShort = demoList[i];
+                    String demoShort = demoList.get(i);
                     String demo = demoBase+'.'+demoShort;
                     showStatus(demoShort, "launching");
                     try {
