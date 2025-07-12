@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1752177948502,
+  "lastUpdate": 1752297146795,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -35637,6 +35637,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 366.5929553239012,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "56d4fe47788da7efbc8d6c5f2a23df276fe8e230",
+          "message": "ICU-23054 Fix all 'MutablePublicArray' errorprone issues",
+          "timestamp": "2025-07-11T22:04:13-07:00",
+          "tree_id": "25da366ead40400bf1de4eba01a78af4338fe346",
+          "url": "https://github.com/unicode-org/icu/commit/56d4fe47788da7efbc8d6c5f2a23df276fe8e230"
+        },
+        "date": 1752296861741,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 378.06162713814257,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
