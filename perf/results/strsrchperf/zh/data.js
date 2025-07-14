@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1752297661663,
+  "lastUpdate": 1752519513509,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -43881,6 +43881,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 49.7793,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "8914869ba2e1b0d222ac2c3ce602b4feee5cc472",
+          "message": "ICU-12717 Generate errorprone reports as markup and tab-separated-values",
+          "timestamp": "2025-07-14T18:42:05Z",
+          "tree_id": "6598b9af044f265301d1448b74b81578bbac2306",
+          "url": "https://github.com/unicode-org/icu/commit/8914869ba2e1b0d222ac2c3ce602b4feee5cc472"
+        },
+        "date": 1752519225787,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 23.3847,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 49.7485,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
