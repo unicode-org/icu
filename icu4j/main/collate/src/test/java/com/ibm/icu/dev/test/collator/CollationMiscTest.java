@@ -649,7 +649,7 @@ public class CollationMiscTest extends TestFmwk {
         String[] test = new String[4];
 
         for(int i = 0; i<4; i++) {
-            StringBuffer temp = new StringBuffer();
+            StringBuilder temp = new StringBuilder();
             for (int j = 0; j < 2047; j++) {
                 temp.append('a');
             }
@@ -1283,8 +1283,8 @@ public class CollationMiscTest extends TestFmwk {
             char ccMix[]   = {0x316, 0x321, 0x300};
             int          sLen;
             int          i;
-            StringBuffer strA = new StringBuffer();
-            StringBuffer strB = new StringBuffer();
+            StringBuilder strA = new StringBuilder();
+            StringBuilder strB = new StringBuilder();
 
             coll.setDecomposition(Collator.CANONICAL_DECOMPOSITION);
 

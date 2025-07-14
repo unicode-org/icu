@@ -120,7 +120,7 @@ public class RbnfLenientScannerTest extends TestFmwk {
 
     @Test
     public void TestAllLocales() {
-        StringBuffer errors = null;
+        StringBuilder errors = null;
         ULocale[] locales = ULocale.getAvailableLocales();
         String[] names = {
             " (spellout) ",
@@ -187,7 +187,7 @@ public class RbnfLenientScannerTest extends TestFmwk {
                             String msg = loc.getName() + names[j] + "ERROR:" + pe.getMessage();
                             logln(msg);
                             if (errors == null) {
-                                errors = new StringBuffer();
+                                errors = new StringBuilder();
                             }
                             errors.append("\n" + msg);
                         }

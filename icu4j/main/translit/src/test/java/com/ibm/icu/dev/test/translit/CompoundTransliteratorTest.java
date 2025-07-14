@@ -230,7 +230,7 @@ public class CompoundTransliteratorTest extends TestFmwk {
         // must be the same after we finalize (see below).
         rsource.replace(0, rsource.length(), "");
         Transliterator.Position index = new Transliterator.Position();
-        StringBuffer log = new StringBuffer();
+        StringBuilder log = new StringBuilder();
 
         for (int i=0; i<source.length(); ++i) {
             if (i != 0) {

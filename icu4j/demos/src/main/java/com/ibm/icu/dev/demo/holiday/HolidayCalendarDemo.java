@@ -32,9 +32,9 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.WindowEvent;
 import java.text.DateFormatSymbols;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Vector;
 
 import com.ibm.icu.dev.demo.impl.DemoApplet;
 import com.ibm.icu.dev.demo.impl.DemoTextBox;
@@ -541,7 +541,7 @@ public class HolidayCalendarDemo extends DemoApplet
 
             // Remember which holidays fall on which days in this month,
             // to save the trouble of having to do it later
-            fHolidays.setSize(0);
+            fHolidays.clear();
 
             for (int h = 0; h < fAllHolidays.length; h++)
             {
@@ -553,7 +553,7 @@ public class HolidayCalendarDemo extends DemoApplet
                                 "  #" + h + "/"+fAllHolidays.length+": " + d +" is after end of month " + endOfMonth);
                     }
                     c.setTime(d);
-                    fHolidays.addElement( new HolidayInfo(c.get(Calendar.DATE),
+                    fHolidays.add(new HolidayInfo(c.get(Calendar.DATE),
                                             fAllHolidays[h],
                                             fAllHolidays[h].getDisplayName(fDisplayLocale) ));
 
@@ -668,7 +668,7 @@ public class HolidayCalendarDemo extends DemoApplet
                 int x = (int)((cellPos.x + 1) * cellWidth);
                 int y = (int)(cellPos.y * cellHeight + labelHeight);
 
-                StringBuffer buffer = new StringBuffer();
+                StringBuilder buffer = new StringBuilder();
                 buffer.append(i);
                 String dayNum = buffer.toString();
 
@@ -685,7 +685,7 @@ public class HolidayCalendarDemo extends DemoApplet
                 y = (int)((cellPos.y+1) * cellHeight) + labelHeight;
 
                 while (h < fHolidays.size() &&
-                        (info = (HolidayInfo)fHolidays.elementAt(h)).date <= i)
+                        (info = fHolidays.get(h)).date <= i)
                 {
                     if (info.date == i) {
                         // Draw the holiday here.
@@ -720,7 +720,7 @@ public class HolidayCalendarDemo extends DemoApplet
         private transient int firstDayInMonth;  // Day of week of first day in month
 
         private transient Holiday[] fAllHolidays;
-        private transient Vector    fHolidays = new Vector(5,5);
+        private transient ArrayList<HolidayInfo> fHolidays = new ArrayList<>(5);
 
         private transient boolean dirty = true;
     }

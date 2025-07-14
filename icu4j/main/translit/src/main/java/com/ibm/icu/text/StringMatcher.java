@@ -177,8 +177,8 @@ class StringMatcher implements UnicodeMatcher, UnicodeReplacer {
      */
     @Override
     public String toPattern(boolean escapeUnprintable) {
-        StringBuffer result = new StringBuffer();
-        StringBuffer quoteBuf = new StringBuffer();
+        StringBuilder result = new StringBuilder();
+        StringBuilder quoteBuf = new StringBuilder();
         if (segmentNumber > 0) { // i.e., if this is a segment
             result.append('(');
         }
@@ -267,7 +267,7 @@ class StringMatcher implements UnicodeMatcher, UnicodeReplacer {
     @Override
     public String toReplacerPattern(boolean escapeUnprintable) {
         // assert(segmentNumber > 0);
-        StringBuffer rule = new StringBuffer("$");
+        StringBuilder rule = new StringBuilder("$");
         Utility.appendNumber(rule, segmentNumber, 10, 1);
         return rule.toString();
     }

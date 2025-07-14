@@ -15,8 +15,8 @@ import java.awt.font.TextAttribute;
 import java.awt.font.TextHitInfo;
 import java.awt.im.spi.InputMethodContext;
 import java.text.AttributedCharacterIterator;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
 
@@ -396,7 +396,7 @@ class IndicInputMethodImpl {
         }
 
         public Map getAttributes() {
-            Hashtable result = new Hashtable();
+            HashMap result = new HashMap<>();
             if (index >= committed && committed < text.length) {
                 result.put(TextAttribute.INPUT_METHOD_UNDERLINE, 
                            TextAttribute.UNDERLINE_LOW_ONE_PIXEL);

@@ -52,7 +52,7 @@ class NameUnicodeTransliterator extends Transliterator {
 
         int maxLen = UCharacterName.INSTANCE.getMaxCharNameLength() + 1; // allow for temporary trailing space
 
-        StringBuffer name = new StringBuffer(maxLen);
+        StringBuilder name = new StringBuilder(maxLen);
 
         // Get the legal character set
         UnicodeSet legal = new UnicodeSet();
@@ -143,7 +143,7 @@ class NameUnicodeTransliterator extends Transliterator {
                 }
 
                 if (legal.contains(c)) {
-                    UTF16.append(name, c);
+                    name.appendCodePoint(c);
                     // If we go past the longest possible name then abort.
                     // maxLen includes temporary trailing space, so use '>='.
                     if (name.length() >= maxLen) {

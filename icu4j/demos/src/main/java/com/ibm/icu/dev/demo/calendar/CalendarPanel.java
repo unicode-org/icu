@@ -286,7 +286,7 @@ class CalendarPanel extends Canvas {
         c.setTime(fStartOfMonth);
         c.add(Calendar.DATE, -cell);
 
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
 
         for (int row = 0; row < numWeeks; row++) {
             for (int col = 0; col < daysInWeek; col++) {

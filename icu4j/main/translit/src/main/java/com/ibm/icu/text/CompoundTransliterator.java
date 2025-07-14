@@ -415,10 +415,10 @@ class CompoundTransliterator extends Transliterator {
 
         int delta = 0; // delta in length
 
-        StringBuffer log = null;
+        StringBuilder log = null;
         ///CLOVER:OFF
         if (DEBUG) {
-            log = new StringBuffer("CompoundTransliterator{" + getID() +
+            log = new StringBuilder("CompoundTransliterator{" + getID() +
                                    (incremental ? "}i: IN=" : "}: IN="));
             UtilityExtensions.formatInput(log, text, index);
             System.out.println(Utility.escape(log.toString()));
