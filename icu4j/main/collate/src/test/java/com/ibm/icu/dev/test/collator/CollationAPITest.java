@@ -850,7 +850,7 @@ public class CollationAPITest extends TestFmwk {
         // they are overridden by any subclass that supports their features.
 
         assertEquals("compare(strings as Object)", 0,
-                col1.compare(new StringBuilder("abc"), new StringBuffer("abc")));
+                col1.compare(new StringBuilder("abc"), new StringBuilder("abc")));
 
         col1.setStrength(Collator.SECONDARY);
         assertNotEquals("getStrength()", Collator.PRIMARY, col1.getStrength());

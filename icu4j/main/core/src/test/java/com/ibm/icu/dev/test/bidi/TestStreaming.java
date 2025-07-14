@@ -80,7 +80,7 @@ public class TestStreaming extends BidiFmwk {
         byte level;
         int nTests = testCases.length, nLevels = paraLevels.length;
         boolean mismatch, testOK = true;
-        StringBuffer processedLenStr = new StringBuffer(MAXLOOPS * 5);
+        StringBuilder processedLenStr = new StringBuilder(MAXLOOPS * 5);
 
         logln("\nEntering TestStreaming\n");
 

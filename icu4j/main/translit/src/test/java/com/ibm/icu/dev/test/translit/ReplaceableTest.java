@@ -89,7 +89,7 @@ public class ReplaceableTest extends TestFmwk {
 
         TestReplaceable (String text, String styles) {
             chars = new ReplaceableString(text);
-            StringBuffer s = new StringBuffer();
+            StringBuilder s = new StringBuilder();
             for (int i = 0; i < text.length(); ++i) {
                 if (styles != null && i < styles.length()) {
                     s.append(styles.charAt(i));
@@ -165,7 +165,7 @@ public class ReplaceableTest extends TestFmwk {
                 newStyle = styles.charAt(limit);
             }
             // dumb implementation for now.
-            StringBuffer s = new StringBuffer();
+            StringBuilder s = new StringBuilder();
             for (int i = 0; i < newLen; ++i) {
                 // this doesn't really handle an embedded NO_STYLE_MARK
                 // in the middle of a long run of characters right -- but

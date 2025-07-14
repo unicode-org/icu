@@ -75,7 +75,7 @@ class TransliteratorParser {
      * rule.  segmentStandins.charAt(0) is the standin for "$1" and corresponds
      * to StringMatcher object segmentObjects.elementAt(0), etc.
      */
-    private StringBuffer segmentStandins;
+    private StringBuilder segmentStandins;
 
     /**
      * Vector of StringMatcher objects for segments.  Used during the
@@ -409,7 +409,7 @@ class TransliteratorParser {
         public int parse(String rule, int pos, int limit,
                          TransliteratorParser parser) {
             int start = pos;
-            StringBuffer buf = new StringBuffer();
+            StringBuilder buf = new StringBuilder();
             pos = parseSection(rule, pos, limit, parser, buf, ILLEGAL_TOP, false);
             text = buf.toString();
 
@@ -445,7 +445,7 @@ class TransliteratorParser {
          */
         private int parseSection(String rule, int pos, int limit,
                                  TransliteratorParser parser,
-                                 StringBuffer buf,
+                                 StringBuilder buf,
                                  UnicodeSet illegal,
                                  boolean isSegment) {
             int start = pos;
@@ -500,7 +500,7 @@ class TransliteratorParser {
                     int escaped = Utility.cpFromCodePointAndLength(cpAndLength);
                     pos += Utility.lengthFromCodePointAndLength(cpAndLength);
                     parser.checkVariableRange(escaped, rule, start);
-                    UTF16.append(buf, escaped);
+                    buf.appendCodePoint(escaped);
                     continue;
                 }
                 // Handle quoted matter
@@ -1142,7 +1142,7 @@ class TransliteratorParser {
         char operator = 0;
 
         // Set up segments data
-        segmentStandins = new StringBuffer();
+        segmentStandins = new StringBuilder();
         segmentObjects = new ArrayList<>();
 
         RuleHalf left  = new RuleHalf();
@@ -1535,10 +1535,10 @@ class TransliteratorParser {
 
     /**
      * Append the value of the given variable name to the given
-     * StringBuffer.
+     * StringBuilder.
      * @exception IllegalIcuArgumentException if the name is unknown.
      */
-    private void appendVariableDef(String name, StringBuffer buf) {
+    private void appendVariableDef(String name, StringBuilder buf) {
         char[] ch = variableNames.get(name);
         if (ch == null) {
             // We allow one undefined variable so that variable definition

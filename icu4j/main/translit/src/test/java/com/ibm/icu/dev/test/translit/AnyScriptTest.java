@@ -37,7 +37,7 @@ public class AnyScriptTest extends TestFmwk {
     public void TestScripts(){
         // get a couple of characters of each script for testing
 
-        StringBuffer testBuffer = new StringBuffer();
+        StringBuilder testBuffer = new StringBuilder();
         for (int script = 0; script < UScript.CODE_LIMIT; ++script) {
             UnicodeSet test = new UnicodeSet().applyPropertyAlias("script", UScript.getName(script));
             int count = Math.min(20, test.size());
@@ -162,7 +162,7 @@ public class AnyScriptTest extends TestFmwk {
 
     // might want to add to UnicodeSet
     private String getList(UnicodeSet set) {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         for (UnicodeSetIterator it = new UnicodeSetIterator(set); it.next();) {
             result.append(it.getString());
         }

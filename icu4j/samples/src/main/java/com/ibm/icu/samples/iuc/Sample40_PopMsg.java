@@ -26,6 +26,7 @@ import com.ibm.icu.util.UResourceBundle;
  *
  */
 public class Sample40_PopMsg {
+    @SuppressWarnings("JdkObsolete") // Because of MessageFormat.format(...,StringBuffer,...)
     public static void main(String... args) {
         // setup
         Locale defaultLocaleID = Locale.getDefault();

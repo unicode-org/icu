@@ -464,6 +464,7 @@ public class CompactDecimalFormatTest extends CoreTestFmwk {
     }
 
     @Test
+    @SuppressWarnings("JdkObsolete") // Because of CompactDecimalFormat.format(..., StringBuffer)
     public void TestFieldPosition() {
         CompactDecimalFormat cdf = getCDFInstance(
                 ULocale.forLanguageTag("sw"), CompactStyle.SHORT);

@@ -85,7 +85,7 @@ public class BidiFmwk extends CoreTestFmwk {
     }
 
     protected static String valueOf(int[] array) {
-        StringBuffer result = new StringBuffer(array.length * 4);
+        StringBuilder result = new StringBuilder(array.length * 4);
         for (int i = 0; i < array.length; i++) {
             result.append(' ');
             result.append(array[i]);
@@ -140,7 +140,7 @@ public class BidiFmwk extends CoreTestFmwk {
     }
     public static String optionToString(int option, int mask,
                                         String[] descriptions) {
-        StringBuffer desc = new StringBuffer(50);
+        StringBuilder desc = new StringBuilder(50);
 
         if ((option &= mask) == 0) {
             return "0";

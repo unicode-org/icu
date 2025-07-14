@@ -62,36 +62,36 @@ public class CollationPerformanceTest {
         + "-java                      Run test using java.text.Collator.\n";
     
     //enum {FLAG, NUM, STRING} type;
-    static StringBuffer temp_opt_fName      = new StringBuffer("");
-    static StringBuffer temp_opt_locale     = new StringBuffer("en_US");
-    //static StringBuffer temp_opt_langid     = new StringBuffer("0");         // Defaults to value corresponding to opt_locale.
-    static StringBuffer temp_opt_rules      = new StringBuffer("");
-    static StringBuffer temp_opt_help       = new StringBuffer("");
-    static StringBuffer temp_opt_loopCount  = new StringBuffer("1");
-    static StringBuffer temp_opt_iLoopCount = new StringBuffer("1");
-    static StringBuffer temp_opt_terse      = new StringBuffer("false");
-    static StringBuffer temp_opt_qsort      = new StringBuffer("");
-    static StringBuffer temp_opt_binsearch  = new StringBuffer("");
-    static StringBuffer temp_opt_icu        = new StringBuffer("true");
-    //static StringBuffer opt_win        = new StringBuffer("");      // Run with Windows native functions.
-    //static StringBuffer opt_unix       = new StringBuffer("");      // Run with UNIX strcoll, strxfrm functions.
-    //static StringBuffer opt_uselen     = new StringBuffer("");
-    static StringBuffer temp_opt_usekeys    = new StringBuffer("");
-    static StringBuffer temp_opt_strcmp     = new StringBuffer("");
-    static StringBuffer temp_opt_strcmpCPO  = new StringBuffer("");
-    static StringBuffer temp_opt_norm       = new StringBuffer("");
-    static StringBuffer temp_opt_keygen     = new StringBuffer("");
-    static StringBuffer temp_opt_french     = new StringBuffer("");
-    static StringBuffer temp_opt_frenchoff  = new StringBuffer("");
-    static StringBuffer temp_opt_shifted    = new StringBuffer("");
-    static StringBuffer temp_opt_lower      = new StringBuffer("");
-    static StringBuffer temp_opt_upper      = new StringBuffer("");
-    static StringBuffer temp_opt_case       = new StringBuffer("");
-    static StringBuffer temp_opt_level      = new StringBuffer("0");
-    static StringBuffer temp_opt_keyhist    = new StringBuffer("");
-    static StringBuffer temp_opt_itertest   = new StringBuffer("");
-    static StringBuffer temp_opt_dump       = new StringBuffer("");
-    static StringBuffer temp_opt_java       = new StringBuffer("");
+    static StringBuilder temp_opt_fName      = new StringBuilder("");
+    static StringBuilder temp_opt_locale     = new StringBuilder("en_US");
+    //static StringBuilder temp_opt_langid     = new StringBuilder("0");         // Defaults to value corresponding to opt_locale.
+    static StringBuilder temp_opt_rules      = new StringBuilder("");
+    static StringBuilder temp_opt_help       = new StringBuilder("");
+    static StringBuilder temp_opt_loopCount  = new StringBuilder("1");
+    static StringBuilder temp_opt_iLoopCount = new StringBuilder("1");
+    static StringBuilder temp_opt_terse      = new StringBuilder("false");
+    static StringBuilder temp_opt_qsort      = new StringBuilder("");
+    static StringBuilder temp_opt_binsearch  = new StringBuilder("");
+    static StringBuilder temp_opt_icu        = new StringBuilder("true");
+    //static StringBuilder opt_win        = new StringBuilder("");      // Run with Windows native functions.
+    //static StringBuilder opt_unix       = new StringBuilder("");      // Run with UNIX strcoll, strxfrm functions.
+    //static StringBuilder opt_uselen     = new StringBuilder("");
+    static StringBuilder temp_opt_usekeys    = new StringBuilder("");
+    static StringBuilder temp_opt_strcmp     = new StringBuilder("");
+    static StringBuilder temp_opt_strcmpCPO  = new StringBuilder("");
+    static StringBuilder temp_opt_norm       = new StringBuilder("");
+    static StringBuilder temp_opt_keygen     = new StringBuilder("");
+    static StringBuilder temp_opt_french     = new StringBuilder("");
+    static StringBuilder temp_opt_frenchoff  = new StringBuilder("");
+    static StringBuilder temp_opt_shifted    = new StringBuilder("");
+    static StringBuilder temp_opt_lower      = new StringBuilder("");
+    static StringBuilder temp_opt_upper      = new StringBuilder("");
+    static StringBuilder temp_opt_case       = new StringBuilder("");
+    static StringBuilder temp_opt_level      = new StringBuilder("0");
+    static StringBuilder temp_opt_keyhist    = new StringBuilder("");
+    static StringBuilder temp_opt_itertest   = new StringBuilder("");
+    static StringBuilder temp_opt_dump       = new StringBuilder("");
+    static StringBuilder temp_opt_java       = new StringBuilder("");
     
     
     static String   opt_fName      = "";
@@ -1249,8 +1249,8 @@ public class CollationPerformanceTest {
     static class OptionSpec {
         String name;
         int type;
-        StringBuffer value;
-        public OptionSpec(String name, int type, StringBuffer value) {
+        StringBuilder value;
+        public OptionSpec(String name, int type, StringBuilder value) {
             this.name = name;
             this.type = type;
             this.value = value;

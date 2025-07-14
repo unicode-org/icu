@@ -1648,11 +1648,11 @@ public final class Utility {
      * cleared out by, at the end, calling this method with a literal
      * character (which may be -1).
      */
-    public static void appendToRule(StringBuffer rule,
+    public static void appendToRule(StringBuilder rule,
             int c,
             boolean isLiteral,
             boolean escapeUnprintable,
-            StringBuffer quoteBuf) {
+            StringBuilder quoteBuf) {
         // If we are escaping unprintables, then escape them outside
         // quotes.  \\u and \\U are not recognized within quotes.  The same
         // logic applies to literals, but literals are never escaped.
@@ -1740,11 +1740,11 @@ public final class Utility {
      * Append the given string to the rule.  Calls the single-character
      * version of appendToRule for each character.
      */
-    public static void appendToRule(StringBuffer rule,
+    public static void appendToRule(StringBuilder rule,
             String text,
             boolean isLiteral,
             boolean escapeUnprintable,
-            StringBuffer quoteBuf) {
+            StringBuilder quoteBuf) {
         for (int i=0; i<text.length(); ++i) {
             // Okay to process in 16-bit code units here
             appendToRule(rule, text.charAt(i), isLiteral, escapeUnprintable, quoteBuf);
@@ -1755,10 +1755,10 @@ public final class Utility {
      * Given a matcher reference, which may be null, append its
      * pattern as a literal to the given rule.
      */
-    public static void appendToRule(StringBuffer rule,
+    public static void appendToRule(StringBuilder rule,
             UnicodeMatcher matcher,
             boolean escapeUnprintable,
-            StringBuffer quoteBuf) {
+            StringBuilder quoteBuf) {
         if (matcher != null) {
             appendToRule(rule, matcher.toPattern(escapeUnprintable),
                     true, escapeUnprintable, quoteBuf);

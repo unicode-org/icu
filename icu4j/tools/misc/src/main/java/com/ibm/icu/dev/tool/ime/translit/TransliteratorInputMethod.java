@@ -47,6 +47,7 @@ import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.ReplaceableString;
 import com.ibm.icu.text.Transliterator;
 
+@SuppressWarnings("JdkObsolete") // Because of ReplaceableString(StringBuffer)
 public class TransliteratorInputMethod implements InputMethod {
 
     private static boolean usesAttachedIME() {
@@ -338,7 +339,7 @@ public class TransliteratorInputMethod implements InputMethod {
     // debugging
     private String eventInfo(AWTEvent event) {
         String info = event.toString();
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         int index1 = info.indexOf("[");
         int index2 = info.indexOf(",", index1);
         buf.append(info.substring(index1 + 1, index2));

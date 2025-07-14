@@ -332,7 +332,7 @@ class TransliteratorRegistry {
      * make aliasReturn empty before calling.
      */
     public Transliterator get(String ID,
-                              StringBuffer aliasReturn) {
+                              StringBuilder aliasReturn) {
         Object[] entry = find(ID);
         return (entry == null) ? null
             : instantiateEntry(ID, entry, aliasReturn);
@@ -423,6 +423,7 @@ class TransliteratorRegistry {
      * An internal class that adapts an enumeration over
      * CaseInsensitiveStrings to an enumeration over Strings.
      */
+    @SuppressWarnings("JdkObsolete") // Because it is used to implement public methods returning `Enumeration`
     private static class IDEnumeration implements Enumeration<String> {
         Enumeration<CaseInsensitiveString> en;
 
@@ -854,7 +855,7 @@ class TransliteratorRegistry {
     @SuppressWarnings("rawtypes")
     private Transliterator instantiateEntry(String ID,
                                             Object[] entryWrapper,
-                                            StringBuffer aliasReturn) {
+                                            StringBuilder aliasReturn) {
         // We actually modify the entry object in some cases.  If it
         // is a string, we may partially parse it and turn it into a
         // more processed precursor.  This makes the next
