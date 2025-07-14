@@ -142,13 +142,11 @@ class ErrorProneReport {
             for (Map.Entry<String, List<ErrorProneEntry>> e : errors.entrySet()) {
                 String errorType = e.getKey();
                 List<ErrorProneEntry> errorsOfType = e.getValue();
-                if (errorsOfType.isEmpty()) {
-                    continue;
-                }
-                ErrorProneEntry firstEntry = errorsOfType.get(0);
+
+                String severity = ErrorProneUtils.getErrorLevel(errorType);
                 // "class", "severity_" + errorSeverity)
                 hu.openTag("h3", Map.of("id", "name_" + errorType))
-                        .text("[" + firstEntry.severity + "] ")
+                        .text("[" + severity + "] ")
                         .openTag("span", Map.of("class", "tag")).text(errorType).closeTag("span");
                 String tags = ErrorProneUtils.getTags(errorType);
                 if (tags != null) {
@@ -282,26 +280,22 @@ class ErrorProneReport {
             for (Map.Entry<String, List<ErrorProneEntry>> e : errors.entrySet()) {
                 String errorType = e.getKey();
                 List<ErrorProneEntry> errorsOfType = e.getValue();
-                if (errorsOfType.isEmpty()) {
-                    continue;
-                }
 
+                String errorSeverity = ErrorProneUtils.getErrorLevel(errorType);
+                String errorUrl = ErrorProneUtils.getUrl(errorType);
                 String tags = ErrorProneUtils.getTags(errorType);
                 if (tags != null) {
                     errorType += " " + tags;
                 }
-                ErrorProneEntry firstEntry = errorsOfType.get(0);
-                String errorSeverity = firstEntry.severity;
 
                 wrt.println(errorType
                         + "\t" + errorsOfType.size()
                         + "\t" + errorSeverity
-                        + "\t" + firstEntry.url
+                        + "\t" + errorUrl
                 );
             }
         }
     }
-
 
     private static void genReportMd(Map<String, List<ErrorProneEntry>> errors,
             String outDir) throws IOException {
@@ -313,17 +307,17 @@ class ErrorProneReport {
             for (Map.Entry<String, List<ErrorProneEntry>> e : errors.entrySet()) {
                 String errorType = e.getKey();
                 List<ErrorProneEntry> errorsOfType = e.getValue();
-                if (errorsOfType.isEmpty()) {
-                    continue;
+
+                String errorUrl = ErrorProneUtils.getUrl(errorType);
+                String errTypeWithUrlAndTags = "[`" + errorType + "`](" + errorUrl + ")";
+                String tags = ErrorProneUtils.getTags(errorType);
+                if (tags != null) {
+                    errTypeWithUrlAndTags += " " + escapeMd(tags);
                 }
 
                 for (ErrorProneEntry error : e.getValue()) {
-                    wrt.print("| ");
-                    wrt.print("[`" + errorType + "`](" + error.url + ")");
-                    String tags = ErrorProneUtils.getTags(errorType);
-                    if (tags != null) {
-                        wrt.print(" " + escapeMd(tags));
-                    }
+
+                    wrt.print("| " + errTypeWithUrlAndTags);
 
                     wrt.print(" | " + error.severity);
 
