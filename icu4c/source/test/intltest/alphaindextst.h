@@ -53,6 +53,8 @@ public:
 
     void testHasBuckets();
     void checkHasBuckets(const Locale &locale, UScriptCode script);
+
+    void checkMaxLabelCount();
 };
 
 #endif
