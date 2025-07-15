@@ -3682,6 +3682,32 @@ public class NumberFormatTest extends CoreTestFmwk {
         }
     }
 
+    @Test
+    public void TestDecimalFormatParse7E() {
+        String testdata = "~";
+        DecimalFormat dfmt = new DecimalFormat(testdata);
+        try {
+            dfmt.parse(testdata);
+            errln("parsing ~ should fail with a handled exception");
+        } catch (ParseException e) {
+        }
+
+        // Test basic behavior
+        dfmt = new DecimalFormat("~0");
+        dfmt.setParseStrict(true);
+        try {
+            dfmt.parse("200");
+            errln("parsing 200 should fail");
+        } catch (ParseException e) {
+        }
+        try {
+            Number result = dfmt.parse("≈200");
+            assertEquals("parsing with approximately should succeed", result.longValue(), 200);
+        } catch (ParseException e) {
+            errln(e.toString());
+        }
+    }
+
     /*
      * Testing currency driven max/min fraction digits problem
      * reported by ticket#7282
@@ -6917,7 +6943,7 @@ public class NumberFormatTest extends CoreTestFmwk {
                 parsedStrictValue = ca_strict.getNumber().intValue();
             }
             assertEquals("Strict parse of " + inputString + " using " + patternString,
-                    parsedStrictValue, expectedStrictParse);
+                    expectedStrictParse, parsedStrictValue);
 
             ppos.setIndex(0);
             df.setParseStrict(false);
@@ -6926,7 +6952,7 @@ public class NumberFormatTest extends CoreTestFmwk {
                 parsedLenientValue = ca_lenient.getNumber().intValue();
             }
             assertEquals("Strict parse of " + inputString + " using " + patternString,
-                    parsedLenientValue, expectedLenientParse);
+                    expectedLenientParse, parsedLenientValue);
         }
     }
 
