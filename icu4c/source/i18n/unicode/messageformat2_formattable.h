@@ -72,14 +72,14 @@ namespace message2 {
      * format a date with a time zone. It includes an absolute date and a time zone name,
      * as well as a calendar name. The calendar name is not currently used.
      *
-     * @internal ICU 76 technology preview
+     * @internal ICU 78 technology preview
      * @deprecated This API is for technology preview only.
      */
     struct U_I18N_API DateInfo {
         /**
          * Date in UTC
          *
-         * @internal ICU 76 technology preview
+         * @internal ICU 78 technology preview
          * @deprecated This API is for technology preview only.
          */
         UDate date;
@@ -89,7 +89,7 @@ namespace message2 {
          * (its offset is added to/subtracted from the datestamp in order to
          * produce the formatted date).
          *
-         * @internal ICU 76 technology preview
+         * @internal ICU 78 technology preview
          * @deprecated This API is for technology preview only.
          */
         UnicodeString zoneId;

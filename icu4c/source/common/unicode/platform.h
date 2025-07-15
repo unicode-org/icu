@@ -479,6 +479,10 @@
     /* Otherwise use the predefined value. */
 #elif !defined(__cplusplus)
 #   define U_CPLUSPLUS_VERSION 0
+// The value of _MSVC_LANG for C++23 preview is undocumented, except that it is larger than 202002.
+// As of this writing, it is 202004.
+#elif __cplusplus >= 202302L || (defined(_MSVC_LANG) && _MSVC_LANG > 202002L)
+#   define U_CPLUSPLUS_VERSION 23
 #elif __cplusplus >= 202002L || (defined(_MSVC_LANG) && _MSVC_LANG >= 202002L)
 #   define U_CPLUSPLUS_VERSION 20
 #elif __cplusplus >= 201703L || (defined(_MSVC_LANG) && _MSVC_LANG >= 201703L)

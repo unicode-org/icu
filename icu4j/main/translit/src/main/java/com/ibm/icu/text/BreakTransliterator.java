@@ -19,11 +19,9 @@ import com.ibm.icu.util.ULocale;
  * Inserts the specified characters at word breaks. To restrict it to particular characters, use a filter.
  * TODO: this is an internal class, and only temporary. Remove it once we have \b notation in Transliterator.
  */
-final class BreakTransliterator extends Transliterator {
+final class BreakTransliterator extends Transliterator implements Cloneable {
     private BreakIterator bi;
     private String insertion;
-    private int[] boundaries = new int[50];
-    private int boundaryCount = 0;
 
     public BreakTransliterator(String ID, UnicodeFilter filter, BreakIterator bi, String insertion) {
         super(ID, filter);
@@ -52,8 +50,9 @@ final class BreakTransliterator extends Transliterator {
     public BreakIterator getBreakIterator() {
         // Defer initialization of BreakIterator because it is slow,
         // typically over 2000 ms.
-        if (bi == null) bi = BreakIterator.getWordInstance(new ULocale("th_TH"));
-        return bi;
+        // Using a holder class for safe init without a volatile-read.
+        if (bi == null) bi = WordBreakIteratorHolder.BI;
+        return bi.clone();
     }
 
     ///CLOVER:OFF
@@ -74,10 +73,11 @@ final class BreakTransliterator extends Transliterator {
         | (1<<Character.ENCLOSING_MARK)
         ;
     @Override
-    protected synchronized void handleTransliterate(Replaceable text, Position pos, boolean incremental) {
-        boundaryCount = 0;
+    protected void handleTransliterate(Replaceable text, Position pos, boolean incremental) {
+        int[] boundaries = new int[50];
+        int boundaryCount = 0;
         int boundary = 0;
-        getBreakIterator(); // Lazy-create it if necessary
+        BreakIterator bi = getBreakIterator(); // Lazy-create it if necessary
         bi.setText(new ReplaceableCharacterIterator(text, pos.start, pos.limit, pos.start));
         // TODO: fix clumsy workaround used below.
         /*
@@ -390,12 +390,10 @@ final class BreakTransliterator extends Transliterator {
         * @return A copy of this
         */
         @Override
-        public Object clone()
+        public ReplaceableCharacterIterator clone()
         {
             try {
-                ReplaceableCharacterIterator other
-                = (ReplaceableCharacterIterator) super.clone();
-                return other;
+                return (ReplaceableCharacterIterator) super.clone();
             }
             catch (CloneNotSupportedException e) {
                 throw new ICUCloneNotSupportedException();
@@ -416,4 +414,7 @@ final class BreakTransliterator extends Transliterator {
         }
     }
 
+    private static class WordBreakIteratorHolder {
+        static final BreakIterator BI = BreakIterator.getWordInstance(new ULocale("th_TH"));
+    }
 }

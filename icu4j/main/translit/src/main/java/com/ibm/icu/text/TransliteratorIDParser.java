@@ -266,7 +266,7 @@ class TransliteratorIDParser {
      */
     public static UnicodeSet parseGlobalFilter(String id, int[] pos, int dir,
                                                int[] withParens,
-                                               StringBuffer canonID) {
+                                               StringBuilder canonID) {
         UnicodeSet filter = null;
         int start = pos[0];
 
@@ -342,7 +342,7 @@ class TransliteratorIDParser {
      * id is consumed without syntax error.
      */
     public static boolean parseCompoundID(String id, int dir,
-                                          StringBuffer canonID,
+                                          StringBuilder canonID,
                                           List<SingleID> list,
                                           UnicodeSet[] globalFilter) {
         int[] pos = new int[] { 0 };

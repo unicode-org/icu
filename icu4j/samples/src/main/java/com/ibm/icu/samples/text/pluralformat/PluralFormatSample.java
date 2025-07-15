@@ -21,6 +21,7 @@ public class PluralFormatSample {
       PluralFormatExample();
       }
 
+  @SuppressWarnings("JdkObsolete") // Because of MessageFormat.format(...,StringBuffer,...)
   private static void PluralFormatExample(){
 
       System.out.println("=======================================================================================");

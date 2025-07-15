@@ -139,10 +139,9 @@ public class MacroProps implements Cloneable {
     }
 
     @Override
-    public Object clone() {
-        // TODO: Remove this method?
+    public MacroProps clone() {
         try {
-            return super.clone();
+            return (MacroProps) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new AssertionError(e);
         }

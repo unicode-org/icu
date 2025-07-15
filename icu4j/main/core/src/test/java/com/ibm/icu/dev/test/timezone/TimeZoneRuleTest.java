@@ -125,7 +125,7 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
         if (rbtz1.hasSameRules(rbtz3)) {
             errln("FAIL: rbtz1 and rbtz3 have different rules, but returned true.");
         }
-        RuleBasedTimeZone rbtz1c = (RuleBasedTimeZone)rbtz1.clone();
+        RuleBasedTimeZone rbtz1c = rbtz1.clone();
         if (!rbtz1.hasSameRules(rbtz1c)) {
             errln("FAIL: Cloned RuleBasedTimeZone must have the same rules with the original.");
         }
@@ -290,7 +290,7 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
         if (ny.hasSameRules(rbtz) || rbtz.hasSameRules(ny)) {
             errln("FAIL: hasSameRules must return false");
         }
-        RuleBasedTimeZone rbtzc = (RuleBasedTimeZone)rbtz.clone();
+        RuleBasedTimeZone rbtzc = rbtz.clone();
         if (!rbtz.hasSameRules(rbtzc) || !rbtz.hasEquivalentTransitions(rbtzc, jan1_1950, jan1_2010)) {
             errln("FAIL: hasSameRules/hasEquivalentTransitions must return true for cloned RBTZs");
         }
@@ -420,7 +420,7 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
         }
 
         // Cloned TimeZone
-        TimeZone newyork2 = (TimeZone)newyork.clone();
+        TimeZone newyork2 = newyork.clone();
         if (!((BasicTimeZone)newyork).hasEquivalentTransitions(newyork2, jan1_1971, jan1_2011)) {
             errln("FAIL: Cloned TimeZone must have the same transitions");
         }
@@ -1173,7 +1173,7 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
 
         // setRawOffset
         final int RAW = -10*HOUR;
-        VTimeZone tmpvtz = (VTimeZone)vtz.clone();
+        VTimeZone tmpvtz = vtz.clone();
         tmpvtz.setRawOffset(RAW);
         if (tmpvtz.getRawOffset() != RAW) {
             logln("setRawOffset is implemented");

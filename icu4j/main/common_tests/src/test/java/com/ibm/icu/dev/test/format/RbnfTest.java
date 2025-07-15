@@ -113,7 +113,7 @@ public class RbnfTest extends CoreTestFmwk {
 
         // extra calls to boost coverage numbers
         RuleBasedNumberFormat fmt0 = new RuleBasedNumberFormat(RuleBasedNumberFormat.SPELLOUT);
-        RuleBasedNumberFormat fmt1 = (RuleBasedNumberFormat)fmt0.clone();
+        RuleBasedNumberFormat fmt1 = fmt0.clone();
         RuleBasedNumberFormat fmt2 = new RuleBasedNumberFormat(RuleBasedNumberFormat.SPELLOUT);
         if (!fmt0.equals(fmt0)) {
             errln("self equality fails");
@@ -1679,7 +1679,7 @@ public class RbnfTest extends CoreTestFmwk {
             if (!result.equals(item.expectedResult)) {
                 errln("Error for locale " + item.locale + ", context " + item.context + ", expected " + item.expectedResult + ", got " + result);
             }
-            RuleBasedNumberFormat rbnfClone = (RuleBasedNumberFormat)rbnf.clone();
+            RuleBasedNumberFormat rbnfClone = rbnf.clone();
             if (!rbnfClone.equals(rbnf)) {
                 errln("Error for locale " + item.locale + ", context " + item.context + ", rbnf.clone() != rbnf");
             } else {

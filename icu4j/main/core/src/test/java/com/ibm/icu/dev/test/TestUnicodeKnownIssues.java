@@ -7,7 +7,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
@@ -134,7 +134,7 @@ public class TestUnicodeKnownIssues {
 
     // TODO: remove for JDK 1.8
     static final class MyConsumer implements UnicodeKnownIssues.Consumer<String> {
-        final List<String> l = new LinkedList<>();
+        final List<String> l = new ArrayList<>();
         @Override
         public void accept(String t) {
             l.add(t);

@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.Random;
+import java.util.StringJoiner;
 import java.util.TimeZone;
 
 import org.junit.After;
@@ -229,25 +230,23 @@ abstract public class TestFmwk extends AbstractTestLog {
     // Utility Methods
 
     protected static String hex(char[] s){
-        StringBuffer result = new StringBuffer();
+        StringJoiner result = new StringJoiner(",");
         for (int i = 0; i < s.length; ++i) {
-            if (i != 0) result.append(',');
-            result.append(hex(s[i]));
+            result.add(hex(s[i]));
         }
         return result.toString();
     }
 
     protected static String hex(byte[] s){
-        StringBuffer result = new StringBuffer();
+        StringJoiner result = new StringJoiner(",");
         for (int i = 0; i < s.length; ++i) {
-            if (i != 0) result.append(',');
-            result.append(hex(s[i]));
+            result.add(hex(s[i]));
         }
         return result.toString();
     }
 
     protected static String hex(char ch) {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         String foo = Integer.toString(ch, 16).toUpperCase();
         for (int i = foo.length(); i < 4; ++i) {
             result.append('0');
@@ -256,7 +255,7 @@ abstract public class TestFmwk extends AbstractTestLog {
     }
 
     protected static String hex(int ch) {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         String foo = Integer.toString(ch, 16).toUpperCase();
         for (int i = foo.length(); i < 4; ++i) {
             result.append('0');
@@ -440,7 +439,7 @@ abstract public class TestFmwk extends AbstractTestLog {
             return -1;
         }
         int i = 0;
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         int seenMask = 0;
         for (; i < array.length; ++i) {
             String s = array[i];

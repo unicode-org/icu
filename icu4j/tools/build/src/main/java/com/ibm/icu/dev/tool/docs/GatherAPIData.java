@@ -361,7 +361,7 @@ public class GatherAPIData implements Doclet {
                 info.setAbstract();
             }
 
-            StringBuffer buf = new StringBuffer();
+            StringBuilder buf = new StringBuilder();
             if (JavadocHelper.isKindClass(typeElementc)) {
                 buf.append("extends ");
                 buf.append(typeElementc.getSuperclass().toString());

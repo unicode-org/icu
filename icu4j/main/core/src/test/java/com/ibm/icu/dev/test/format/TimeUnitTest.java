@@ -129,7 +129,7 @@ public class TimeUnitTest extends CoreTestFmwk {
         TimeUnitFormat tuf = new TimeUnitFormat(ULocale.ENGLISH, TimeUnitFormat.ABBREVIATED_NAME);
         NumberFormat nf = NumberFormat.getInstance();
         tuf.setNumberFormat(nf);
-        TimeUnitFormat tufClone = (TimeUnitFormat) tuf.clone();
+        TimeUnitFormat tufClone = tuf.clone();
         tuf.setLocale(Locale.GERMAN);
         assertEquals("", "1 hr", tufClone.format(new TimeUnitAmount(1, TimeUnit.HOUR)));
     }

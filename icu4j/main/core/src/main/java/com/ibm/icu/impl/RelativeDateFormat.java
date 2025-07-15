@@ -306,7 +306,7 @@ public class RelativeDateFormat extends DateFormat {
      * @return the number of days in "until-now"
      */
     private static int dayDifference(Calendar until) {
-        Calendar nowCal = (Calendar)until.clone();
+        Calendar nowCal = until.clone();
         Date nowDate = new Date(System.currentTimeMillis());
         nowCal.clear();
         nowCal.setTime(nowDate);

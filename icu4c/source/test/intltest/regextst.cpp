@@ -28,6 +28,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <iterator>
 
 #include "unicode/localpointer.h"
 #include "unicode/regex.h"
@@ -107,6 +108,7 @@ void RegexTest::runIndexedTest( int32_t index, UBool exec, const char* &name, ch
     TESTCASE_AUTO(TestBug13632);
     TESTCASE_AUTO(TestBug20359);
     TESTCASE_AUTO(TestBug20863);
+    TESTCASE_AUTO(TestBug23143);
     TESTCASE_AUTO_END;
 }
 
@@ -5814,6 +5816,32 @@ void RegexTest::TestBug20359() {
     assertSuccess(WHERE, status);
 }
 
+
+void RegexTest::TestBug23143() {
+    // Test pattern with unpaired surrogate matching against text
+    // with a valid surrogate pair. Originally caused an assertion failure
+    // in the implementation.
+
+    // Note: can't use normal C++ string literals because unpaired surrogates are illegal in them.
+    const char16_t regex_array[] = {u'a', 0xD805, u'.', u'*', u'b'};
+    UnicodeString regex(regex_array, std::size(regex_array));
+
+    const char16_t haystack_array[] = {u'a', 0xD805, 0xDF20};
+    UnicodeString haystack(haystack_array, std::size(haystack_array));
+
+    UErrorCode status = U_ZERO_ERROR;
+    std::unique_ptr<icu::RegexPattern> re(icu::RegexPattern::compile(regex, 0, status));
+    if (!assertSuccess(WHERE, status)) {
+        return;
+    }
+    // re->dumpPattern();
+    std::unique_ptr<icu::RegexMatcher> regex_matcher(re->matcher(haystack, status));
+    if (!assertSuccess(WHERE, status)) {
+        return;
+    }
+    assertFalse(WHERE, regex_matcher->find(0, status));
+    assertSuccess(WHERE, status);
+}
 
 void RegexTest::TestBug20863() {
     // Test that patterns with a large number of named capture groups work correctly.

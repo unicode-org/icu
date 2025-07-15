@@ -216,7 +216,7 @@ public class ArabicShapingSample{
     }
 
     private static void throwUsageError(String message) {
-        StringBuffer buf = new StringBuffer("*** usage error ***\n");
+        StringBuilder buf = new StringBuilder("*** usage error ***\n");
         buf.append(message);
         buf.append("\n");
         buf.append(usage);
@@ -242,7 +242,7 @@ public class ArabicShapingSample{
         "  text can contain unicode escape values in the format '\\uXXXX' only\n";
         
     private static String escapedText(char[] text, int start, int length) {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         for (int i = start, e = start + length; i < e; ++i) {
             char ch = text[i];
             if (ch < 0x20 || ch > 0x7e) {
@@ -266,7 +266,7 @@ public class ArabicShapingSample{
 
     private static String parseText(String text) {
         // process unicode escapes (only)
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         char[] chars = text.toCharArray();
         for (int i = 0; i < chars.length; ++i) {
             char ch = chars[i];

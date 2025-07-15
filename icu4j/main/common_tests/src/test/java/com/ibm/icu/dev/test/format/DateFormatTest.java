@@ -2451,7 +2451,7 @@ public class DateFormatTest extends CoreTestFmwk {
 
         ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME,"de_DE");
         DateFormatSymbols sym = new DateFormatSymbols(rb, Locale.GERMANY);
-        DateFormatSymbols sym2 = (DateFormatSymbols)sym.clone();
+        DateFormatSymbols sym2 = sym.clone();
         if (sym.hashCode() != sym2.hashCode()) {
             errln("fail, date format symbols hashcode not equal");
         }
@@ -3981,7 +3981,7 @@ public class DateFormatTest extends CoreTestFmwk {
     public void TestSimpleDateFormatConstructor_String_String_ULocale() {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("", "", null);
-            sdf = (SimpleDateFormat) sdf.clone();
+            sdf = sdf.clone();
         } catch (Exception e) {
             errln("SimpleDateFormat(String pattern, String override, ULocale loc) "
                     + "was not suppose to return an exception when constructing a new " + "SimpleDateFormat object.");
@@ -4634,7 +4634,7 @@ public class DateFormatTest extends CoreTestFmwk {
 
             // now try context & standard format call
             sdfmt.setContext(item.capitalizationContext);
-            SimpleDateFormat sdfmtClone = (SimpleDateFormat)sdfmt.clone();
+            SimpleDateFormat sdfmtClone = sdfmt.clone();
             if (!sdfmtClone.equals(sdfmt)) {
                 errln("FAIL: for locale " + item.locale +  ", capitalizationContext " + item.capitalizationContext +
                         ", sdfmt.clone() != sdfmt (for SimpleDateFormat)");

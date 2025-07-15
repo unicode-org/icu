@@ -60,7 +60,7 @@ public final class UCharacterTest extends CoreTestFmwk
     /**
      * Expected Unicode version.
      */
-    private final VersionInfo VERSION_ = VersionInfo.getInstance(16, 0);
+    private final VersionInfo VERSION_ = VersionInfo.getInstance(17, 0);
 
     // constructor ===================================================
 
@@ -1972,7 +1972,7 @@ public final class UCharacterTest extends CoreTestFmwk
             { 0x070e, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },
             { 0x0775, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },
             { 0xfbc2, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },
-            { 0xfd90, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },
+            { 0xfd92, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },
             { 0xfefe, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },
 
             { 0x02AF, UProperty.BLOCK, UCharacter.UnicodeBlock.IPA_EXTENSIONS.getID() },
@@ -2437,8 +2437,9 @@ public final class UCharacterTest extends CoreTestFmwk
             { 0x4e07, UCharacter.NumericType.NUMERIC, 10000. },
             { 0x12432, UCharacter.NumericType.NUMERIC, 216000. },
             { 0x12433, UCharacter.NumericType.NUMERIC, 432000. },
-            { 0x5146, UCharacter.NumericType.NUMERIC, 1_000_000. },
+            { 0x16B5E, UCharacter.NumericType.NUMERIC, 1_000_000. },
             { 0x4ebf, UCharacter.NumericType.NUMERIC, 100_000_000. },
+            { 0x16B61, UCharacter.NumericType.NUMERIC, 1_000_000_000_000. },
             { -1, UCharacter.NumericType.NONE, UCharacter.NO_NUMERIC_VALUE },
             { 0x61, UCharacter.NumericType.NONE, UCharacter.NO_NUMERIC_VALUE, 10. },
             { 0x3000, UCharacter.NumericType.NONE, UCharacter.NO_NUMERIC_VALUE },
@@ -3063,9 +3064,10 @@ public final class UCharacterTest extends CoreTestFmwk
         // The following values were obtained by testing all values from
         //      UTF16.CODEPOINT_MIN_VALUE to UTF16.CODEPOINT_MAX_VALUE inclusively
         //      to obtain the value to go through the else statement.
+        // Unicode 17: U+5146 changed primary numeric value, removed from the list.
         int[] valid_values =
             {0xBF2,0xD72,0x137C,0x216E,0x216F,0x217E,0x217F,0x2180,0x2181,0x2182,0x2187,0x2188,0x4E07,
-            0x4EBF,0x4EDF,0x5104,0x5146,0x5343,0x842C,0x9621,0x1011B,0x1011C,0x1011D,0x1011E,
+            0x4EBF,0x4EDF,0x5104,0x5343,0x842C,0x9621,0x1011B,0x1011C,0x1011D,0x1011E,
             0x1011F,0x10120,0x10121,0x10122,0x10123,0x10124,0x10125,0x10126,0x10127,0x10128,0x10129,
             0x1012A,0x1012B,0x1012C,0x1012D,0x1012E,0x1012F,0x10130,0x10131,0x10132,0x10133,0x10145,
             0x10146,0x10147,0x1014C,0x1014D,0x1014E,0x10153,0x10154,0x10155,0x10156,0x1016B,0x1016C,
@@ -3073,7 +3075,7 @@ public final class UCharacterTest extends CoreTestFmwk
 
         int[] results =
             {1000,1000,10000,500,1000,500,1000,1000,5000,10000,50000,100000,
-             10000,100000000,1000,100000000,1000000,1000,10000,1000,300,400,500,
+             10000,100000000,1000,100000000,1000,10000,1000,300,400,500,
              600,700,800,900,1000,2000,3000,4000,5000,6000,7000,8000,9000,
              10000,20000,30000,40000,50000,60000,70000,80000,90000,500,5000,
              50000,500,1000,5000,500,1000,10000,50000,300,500,500,500,500,500,
@@ -4095,14 +4097,16 @@ public final class UCharacterTest extends CoreTestFmwk
         assertEquals("ID_Status(surrogate)=Restricted", IdentifierStatus.RESTRICTED, getIDStatus(0xD800));
         assertEquals("ID_Status(Arabic tail fragment)=Restricted", IdentifierStatus.RESTRICTED, getIDStatus(0xFE73));
         assertEquals("ID_Status(Hentaigana ko-3)=Restricted", IdentifierStatus.RESTRICTED, getIDStatus(0x1B03A));
-        assertEquals("ID_Status(Katakana small ko)=Allowed", IdentifierStatus.ALLOWED, getIDStatus(0x1B155));
-        assertEquals("ID_Status(U+2EE5D)=Allowed", IdentifierStatus.ALLOWED, getIDStatus(0x2EE5D));
+        assertEquals("ID_Status(Katakana ko)=Allowed", IdentifierStatus.ALLOWED, getIDStatus(0x30B3));
+        assertEquals("ID_Status(U+29D98)=Allowed", IdentifierStatus.ALLOWED, getIDStatus(0x29D98));
         assertEquals("ID_Status(U+10FFFF)=Restricted", IdentifierStatus.RESTRICTED, getIDStatus(0x10FFFF));
 
         // Property names work and get the correct sets.
         UnicodeSet idStatus = new UnicodeSet("[:Identifier_Status=Allowed:]");
         // Unicode 15.1: 112778 Allowed characters; normally grows over time
-        assertTrue("Allowed number of characters", idStatus.size() >= 112778);
+        // Unicode 17: Only 33794 Allowed characters after making
+        // most Unified_Ideograph characters Uncommon_Use and revisiting others as well.
+        assertTrue("Allowed number of characters", idStatus.size() >= 33794);
         assertFalse("Allowed.contains(slash)", idStatus.contains(0x2F));
         assertTrue("Allowed.contains(digit 0)", idStatus.contains(0x30));
         assertTrue("Allowed.contains(colon)", idStatus.contains(0x3A));
@@ -4113,8 +4117,8 @@ public final class UCharacterTest extends CoreTestFmwk
         assertFalse("Allowed.contains(surrogate)", idStatus.contains(0xD800));
         assertFalse("Allowed.contains(Arabic tail fragment)", idStatus.contains(0xFE73));
         assertFalse("Allowed.contains(Hentaigana ko-3)", idStatus.contains(0x1B03A));
-        assertTrue("Allowed.contains(Katakana small ko)", idStatus.contains(0x1B155));
-        assertTrue("Allowed.contains(U+2EE5D)", idStatus.contains(0x2EE5D));
+        assertTrue("Allowed.contains(Katakana ko)", idStatus.contains(0x30B3));
+        assertTrue("Allowed.contains(U+29D98)", idStatus.contains(0x29D98));
         assertFalse("Allowed.contains(U+10FFFF)", idStatus.contains(0x10FFFF));
     }
 
@@ -4160,10 +4164,10 @@ public final class UCharacterTest extends CoreTestFmwk
                 EnumSet.of(IdentifierType.EXCLUSION), getIDTypes(0x10000));
         assertEquals("ID_Type(Hentaigana ko-3)",
                 EnumSet.of(IdentifierType.OBSOLETE), getIDTypes(0x1B03A));
-        assertEquals("ID_Type(Katakana small ko)",
-                EnumSet.of(IdentifierType.RECOMMENDED), getIDTypes(0x1B155));
-        assertEquals("ID_Type(U+2EE5D)",
-                EnumSet.of(IdentifierType.RECOMMENDED), getIDTypes(0x2EE5D));
+        assertEquals("ID_Type(Katakana ko)",
+                EnumSet.of(IdentifierType.RECOMMENDED), getIDTypes(0x30B3));
+        assertEquals("ID_Type(U+29D98)",
+                EnumSet.of(IdentifierType.RECOMMENDED), getIDTypes(0x29D98));
         assertEquals("ID_Type(U+10FFFF)",
                 EnumSet.of(IdentifierType.NOT_CHARACTER), getIDTypes(0x10FFFF));
 
@@ -4179,9 +4183,6 @@ public final class UCharacterTest extends CoreTestFmwk
         assertEquals("ID_Type(SYRIAC END OF PARAGRAPH)",
                 EnumSet.of(IdentifierType.NOT_XID, IdentifierType.LIMITED_USE),
                 getIDTypes(0x0700));
-        assertEquals("ID_Type(LATIN SMALL LETTER EZH)=",
-                EnumSet.of(IdentifierType.TECHNICAL, IdentifierType.UNCOMMON_USE),
-                getIDTypes(0x0292));
         assertEquals("ID_Type(MUSICAL SYMBOL KIEVAN C CLEF)",
                 EnumSet.of(IdentifierType.NOT_XID, IdentifierType.TECHNICAL,
                         IdentifierType.UNCOMMON_USE),
@@ -4200,7 +4201,9 @@ public final class UCharacterTest extends CoreTestFmwk
         UnicodeSet uncommon = new UnicodeSet("[:Identifier_Type=Uncommon_Use:]");
         UnicodeSet notChar = new UnicodeSet("[:Identifier_Type=Not_Character:]");
         // Unicode 15.1 set sizes; normally grows over time except Not_Character shrinks
-        assertTrue("Recommended number of characters", rec.size() >= 112761);
+        // Unicode 17: Only 33776 Recommended characters after making
+        // most Unified_Ideograph characters Uncommon_Use and revisiting others as well.
+        assertTrue("Recommended number of characters", rec.size() >= 33776);
         assertTrue("Inclusion number of characters", incl.size() >= 17);
         assertTrue("Limited_Use number of characters", limited.size() >= 5268);
         assertTrue("Uncommon_Use number of characters", uncommon.size() >= 398);
@@ -4209,12 +4212,11 @@ public final class UCharacterTest extends CoreTestFmwk
         assertFalse("Recommended.contains(slash)", rec.contains(0x2F));
         assertTrue("Recommended.contains(digit 0)", rec.contains(0x30));
         assertTrue("Inclusion.contains(colon)", incl.contains(0x3A));
-        assertTrue("Recommended.contains(U+2EE5D)", rec.contains(0x2EE5D));
+        assertTrue("Recommended.contains(U+29D98)", rec.contains(0x29D98));
         assertTrue("Limited_Use.contains(SYRIAC FEMININE DOT)", limited.contains(0x0740));
         assertTrue("Limited_Use.contains(NKO LETTER JONA JA)", limited.contains(0x7E8));
         assertTrue("Not_Character.contains(surrogate)", notChar.contains(0xd800));
         assertTrue("Not_Character.contains(U+10FFFF)", notChar.contains(0x10FFFF));
-        assertTrue("Uncommon_Use.contains(LATIN SMALL LETTER EZH)", uncommon.contains(0x0292));
         assertTrue("Uncommon_Use.contains(MUSICAL SYMBOL KIEVAN C CLEF)", uncommon.contains(0x1D1DE));
 
         // More mutually exclusive types, including some otherwise combinable ones.

@@ -2306,7 +2306,9 @@ DateTimeMatcher::DateTimeMatcher(const DateTimeMatcher& other) {
 }
 
 DateTimeMatcher& DateTimeMatcher::operator=(const DateTimeMatcher& other) {
-    copyFrom(other.skeleton);
+    if (this != &other) {
+        copyFrom(other.skeleton);
+    }
     return *this;
 }
 

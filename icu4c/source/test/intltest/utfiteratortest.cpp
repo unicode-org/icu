@@ -5,6 +5,15 @@
 // created: 2024aug12 Markus W. Scherer
 
 #include <algorithm>
+#include <array>
+#include <iterator>
+#include <forward_list>
+#include <list>
+#if defined(__cpp_lib_ranges)
+#include <ranges>
+#endif
+#include <streambuf>
+#include <sstream>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -36,6 +45,9 @@ using U_HEADER_ONLY_NAMESPACE::unsafeUTFStringCodePoints;
 
 namespace {
 
+// Sentinel for NUL-terminated strings.
+class Nul {};
+
 template<typename Unit>
 class SinglePassIter;
 
@@ -45,7 +57,10 @@ class SinglePassIter;
 template<typename Unit>
 class SinglePassSource {
 public:
-    explicit SinglePassSource(std::basic_string_view<Unit> s) : p(s.data()), limit(s.data() + s.length()) {}
+    explicit SinglePassSource(std::basic_string_view<Unit> s) :
+            p(s.data()), limit(s.data() + s.length()) {}
+    SinglePassSource(const Unit *s, const Nul &) :
+            p(s), limit(nullptr) {}
 
     SinglePassIter<Unit> begin() { return SinglePassIter<Unit>(*this); }
     SinglePassIter<Unit> end() { return SinglePassIter<Unit>(); }
@@ -88,6 +103,21 @@ public:
     }
     bool operator!=(const SinglePassIter &other) const { return !operator==(other); }
 
+    // Asymmetric equality & nonequality with a sentinel type.
+    friend bool operator==(const SinglePassIter &iter, const Nul &) {
+        return iter.atNul();
+    }
+#if U_CPLUSPLUS_VERSION < 20
+    // C++17: Need to define all four combinations of == / != vs. parameter order.
+    // Once we require C++20, we could remove all but the first == because
+    // the compiler would generate the rest.
+    friend bool operator==(const Nul &, const SinglePassIter &iter) {
+        return iter.atNul();
+    }
+    friend bool operator!=(const SinglePassIter &iter, const Nul &nul) { return !(iter == nul); }
+    friend bool operator!=(const Nul &nul, const SinglePassIter &iter) { return !(iter == nul); }
+#endif  // C++17
+
     Unit operator*() const { return *(src->p); }
     SinglePassIter &operator++() {  // pre-increment
         ++(src->p);
@@ -97,6 +127,7 @@ public:
 
 private:
     bool isDone() const { return src == nullptr || src->p == src->limit; }
+    bool atNul() const { return *src->p == 0; }
 
     SinglePassSource<Unit> *src;
 };
@@ -116,6 +147,21 @@ public:
 
     bool operator==(const FwdIter &other) const { return p == other.p; }
     bool operator!=(const FwdIter &other) const { return !operator==(other); }
+
+    // Asymmetric equality & nonequality with a sentinel type.
+    friend bool operator==(const FwdIter &iter, const Nul &) {
+        return *iter.p == 0;
+    }
+#if U_CPLUSPLUS_VERSION < 20
+    // C++17: Need to define all four combinations of == / != vs. parameter order.
+    // Once we require C++20, we could remove all but the first == because
+    // the compiler would generate the rest.
+    friend bool operator==(const Nul &, const FwdIter &iter) {
+        return *iter.p == 0;
+    }
+    friend bool operator!=(const FwdIter &iter, const Nul &nul) { return !(iter == nul); }
+    friend bool operator!=(const Nul &nul, const FwdIter &iter) { return !(iter == nul); }
+#endif  // C++17
 
     Unit operator*() const { return *p; }
     FwdIter &operator++() {  // pre-increment
@@ -213,6 +259,7 @@ public:
         TESTCASE_AUTO(testSafe16SinglePassIterGood);
         TESTCASE_AUTO(testSafe16SinglePassIterNegative);
         TESTCASE_AUTO(testUnsafe16SinglePassIter);
+        TESTCASE_AUTO(testSafe16SinglePassIterNulGood);
 
         TESTCASE_AUTO(testSafe16FwdIter);
         TESTCASE_AUTO(testUnsafe16FwdIter);
@@ -225,9 +272,11 @@ public:
         TESTCASE_AUTO(testSafe8SinglePassIterGood);
         TESTCASE_AUTO(testSafe8SinglePassIterFFFD);
         TESTCASE_AUTO(testUnsafe8SinglePassIter);
+        TESTCASE_AUTO(testUnsafe8SinglePassIterNul);
 
         TESTCASE_AUTO(testSafe8FwdIter);
         TESTCASE_AUTO(testUnsafe8FwdIter);
+        TESTCASE_AUTO(testSafe8FwdIterNul);
 
         TESTCASE_AUTO(testSafe32Good);
         TESTCASE_AUTO(testSafe32Negative);
@@ -241,6 +290,7 @@ public:
 
         TESTCASE_AUTO(testSafe32FwdIter);
         TESTCASE_AUTO(testUnsafe32FwdIter);
+        TESTCASE_AUTO(testUnsafe32FwdIterNul);
 
         TESTCASE_AUTO(testSafe16LongLinearContig);
         TESTCASE_AUTO(testSafe8LongLinearContig);
@@ -298,6 +348,26 @@ public:
         TESTCASE_AUTO(testUnsafe8ZigzagReverse);
         TESTCASE_AUTO(testUnsafe32ZigzagReverse);
 
+        TESTCASE_AUTO(testOwnership);
+
+        // C++20 ranges with all 2021 defect reports.  There is no separate
+        // feature test macro value for https://wg21.link/P2210R2, but 2021'10
+        // gets us https://wg21.link/P2415R2 as well as
+        // https://wg21.link/P2325R3, and in practice implementations that have
+        // both also have P2210R2, see
+        // https://en.cppreference.com/w/cpp/compiler_support.html.
+        // 2021'06, which guarantees P2325R3, is not good enough: GCC 11.3 and
+        // MSVC 19.30 have P2325R3 but not P2210R2 (we need GCC 12 and MSVC
+        // 19.31).
+#if defined(__cpp_lib_ranges) && __cpp_lib_ranges >= 2021'10
+        TESTCASE_AUTO(testUncommonInputRange);
+        TESTCASE_AUTO(testUncommonForwardRange);
+        TESTCASE_AUTO(testUncommonBidirectionalRange);
+        TESTCASE_AUTO(testCommonForwardRange);
+        TESTCASE_AUTO(testCommonBidirectionalRange);
+        TESTCASE_AUTO(testCommonContiguousRange);
+#endif
+
         TESTCASE_AUTO_END;
     }
 
@@ -323,16 +393,24 @@ public:
     template<TestMode mode, typename CP32, UTFIllFormedBehavior behavior, typename StringView>
     void testSinglePassIter(StringView piped);
 
+    template<TestMode mode, typename CP32, UTFIllFormedBehavior behavior, typename StringView>
+    void testSinglePassIterNul(StringView piped);
+
     template<TestMode mode, typename CP32, UTFIllFormedBehavior behavior,
-             typename StringView, typename Iter>
-    void testSinglePassIter(const std::vector<StringView> &parts, Iter &iter, const Iter &rangeLimit);
+             typename StringView, typename Iter, typename Sentinel>
+    void testSinglePassIter(const std::vector<StringView> &parts,
+                            Iter &iter, const Sentinel &rangeLimit);
 
     template<TestMode mode, typename CP32, UTFIllFormedBehavior behavior, typename StringView>
     void testFwdIter(StringView piped);
 
-    template<TestMode mode, typename StringView, typename UnitIter, typename Iter>
-    void testFwdIter(const std::vector<StringView> &parts, UnitIter goodLimit,
-                     Iter iter, Iter rangeLimit);
+    template<TestMode mode, typename CP32, UTFIllFormedBehavior behavior, typename StringView>
+    void testFwdIterNul(StringView piped);
+
+    template<TestMode mode, typename StringView,
+             typename LimitIter, typename Iter, typename Sentinel>
+    void testFwdIter(const std::vector<StringView> &parts, LimitIter goodLimit,
+                     Iter iter, Sentinel rangeLimit);
 
     static constexpr std::u16string_view good16{u"a|b|ç|カ|🚴"};
     static const char *good8Chars;
@@ -378,6 +456,9 @@ public:
     void testUnsafe16SinglePassIter() {
         testSinglePassIter<UNSAFE, UChar32, ANY_B>(good16);
     }
+    void testSafe16SinglePassIterNulGood() {
+        testSinglePassIterNul<WELL_FORMED, UChar32, UTF_BEHAVIOR_NEGATIVE>(good16);
+    }
 
     void testSafe16FwdIter() {
         testFwdIter<SAFE, UChar32, UTF_BEHAVIOR_NEGATIVE>(good16);
@@ -412,12 +493,18 @@ public:
     void testUnsafe8SinglePassIter() {
         testSinglePassIter<UNSAFE, UChar32, ANY_B>(std::string_view{good8Chars});
     }
+    void testUnsafe8SinglePassIterNul() {
+        testSinglePassIterNul<UNSAFE, UChar32, ANY_B>(std::string_view{good8Chars});
+    }
 
     void testSafe8FwdIter() {
         testFwdIter<SAFE, UChar32, UTF_BEHAVIOR_NEGATIVE>(std::string_view{good8Chars});
     }
     void testUnsafe8FwdIter() {
         testFwdIter<UNSAFE, UChar32, ANY_B>(std::string_view{good8Chars});
+    }
+    void testSafe8FwdIterNul() {
+        testFwdIterNul<SAFE, UChar32, UTF_BEHAVIOR_NEGATIVE>(std::string_view{good8Chars});
     }
 
     void testSafe32Good() {
@@ -452,6 +539,283 @@ public:
     void testUnsafe32FwdIter() {
         testFwdIter<UNSAFE, UChar32, ANY_B>(good32);
     }
+    void testUnsafe32FwdIterNul() {
+        testFwdIterNul<UNSAFE, UChar32, ANY_B>(good32);
+    }
+
+#if defined(__cpp_lib_ranges) && __cpp_lib_ranges >= 2021'10 // See above for the value.
+    void testUncommonInputRange() {
+        auto codePoint = [](const auto &codeUnits) { return codeUnits.codePoint(); };
+        constexpr char source[] = "D808 DC2D D808 DEBA D808 DE40 200B D808 DF60 D808 DEA9";
+        // Reads a sequence of space-separated hex code units from a stream.
+        auto streamCodeUnits = [](std::stringstream&& s) {
+            return std::views::istream<uint16_t>(s >> std::hex);
+        };
+        using CodeUnitRange = decltype(streamCodeUnits(std::stringstream(source)));
+        // This range has a sentinel.
+        static_assert(!std::ranges::common_range<CodeUnitRange>);
+        static_assert(std::ranges::input_range<CodeUnitRange>);
+        static_assert(!std::ranges::forward_range<CodeUnitRange>);
+        {
+            using CodePoints =
+                decltype(utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(streamCodeUnits({})));
+            static_assert(!std::ranges::common_range<CodePoints>);
+            static_assert(std::ranges::input_range<CodePoints>);
+            static_assert(!std::ranges::forward_range<CodePoints>);
+            assertTrue("uncommon input streamed range",
+                       std::ranges::equal(utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(
+                                              streamCodeUnits(std::stringstream(source))) |
+                                              std::ranges::views::transform(codePoint),
+                                          std::u32string_view(U"𒀭𒊺𒉀\u200B𒍠𒊩")));
+            assertFalse("uncommon input streamed range: find",
+                        std::ranges::find_if(utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(
+                                                 streamCodeUnits(std::stringstream(source)))
+                                                 .begin(),
+                                             std::default_sentinel, [](auto u) {
+                                                 return u.codePoint() == U'𒊩';
+                                             }) == std::default_sentinel);
+        }
+        {
+            using UnsafeCodePoints = decltype(unsafeUTFStringCodePoints<char32_t>(streamCodeUnits({})));
+            static_assert(!std::ranges::common_range<UnsafeCodePoints>);
+            static_assert(std::ranges::input_range<UnsafeCodePoints>);
+            static_assert(!std::ranges::forward_range<UnsafeCodePoints>);
+            assertTrue("unsafe uncommon input streamed range",
+                       std::ranges::equal(unsafeUTFStringCodePoints<char32_t>(
+                                              streamCodeUnits(std::stringstream(source))) |
+                                              std::ranges::views::transform(codePoint),
+                                          std::u32string_view(U"𒀭𒊺𒉀\u200B𒍠𒊩")));
+            assertFalse("unsafe uncommon input streamed range: find",
+                        std::ranges::find_if(unsafeUTFStringCodePoints<char32_t>(
+                                                 streamCodeUnits(std::stringstream(source)))
+                                                 .begin(),
+                                             std::default_sentinel, [](auto u) {
+                                                 return u.codePoint() == U'𒊩';
+                                             }) == std::default_sentinel);
+        }
+    }
+
+    void testUncommonForwardRange() {
+        auto codePoint = [](const auto &codeUnits) { return codeUnits.codePoint(); };
+        const std::u16string text = u"𒌉 𒂍𒁾𒁀𒀀 𒌓 𒌌𒆷𒀀𒀭 𒈨𒂠 𒉌𒁺𒉈𒂗\n"
+                                        u"𒂍𒁾𒁀𒀀𒂠 𒉌𒁺𒉈𒂗\n"
+                                        u"𒂍𒁾𒁀𒀀 𒀀𒈾𒀀𒀭 𒉌𒀝\n"
+                                        u"𒁾𒈬 𒉌𒋃 𒃻𒅗𒁺𒈬 𒉌𒅥\n";
+        // Code units from the third line in `text`.
+        auto codeUnits = *(text | std::ranges::views::lazy_split(u'\n') | std::views::drop(2)).begin();
+        using CodeUnitRange = decltype(codeUnits);
+        // This range has a sentinel.
+        static_assert(!std::ranges::common_range<CodeUnitRange>);
+        // Even though `source` is contiguous, the lazy split makes this forward-only.
+        static_assert(std::ranges::forward_range<CodeUnitRange>);
+        static_assert(!std::ranges::bidirectional_range<CodeUnitRange>);
+        {
+            using CodePoints = decltype(utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(codeUnits));
+            static_assert(!std::ranges::common_range<CodePoints>);
+            static_assert(std::ranges::forward_range<CodePoints>);
+            static_assert(!std::ranges::bidirectional_range<CodePoints>);
+            assertTrue("uncommon forward lazily split range",
+                       std::ranges::equal(utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(codeUnits) |
+                                              std::ranges::views::transform(codePoint),
+                                          std::u32string_view(U"𒂍𒁾𒁀𒀀 𒀀𒈾𒀀𒀭 𒉌𒀝")));
+        }
+        {
+            using UnsafeCodePoints = decltype(unsafeUTFStringCodePoints<char32_t>(codeUnits));
+            static_assert(!std::ranges::common_range<UnsafeCodePoints>);
+            static_assert(std::ranges::forward_range<UnsafeCodePoints>);
+            static_assert(!std::ranges::bidirectional_range<UnsafeCodePoints>);
+            assertTrue("unsafe uncommon forward lazily split range",
+                       std::ranges::equal(unsafeUTFStringCodePoints<char32_t>(codeUnits) |
+                                              std::ranges::views::transform(codePoint),
+                                          std::u32string_view(U"𒂍𒁾𒁀𒀀 𒀀𒈾𒀀𒀭 𒉌𒀝")));
+        }
+    }
+
+    void testUncommonBidirectionalRange() {
+        auto codePoint = [](const auto &codeUnits) { return codeUnits.codePoint(); };
+        const std::u8string text = u8"𒀭𒊺𒉀 𒍠𒊩  # ᵈnisaba za₃-mim";
+        // Code units before the #.
+        auto codeUnits = text | std::ranges::views::take_while([](char8_t c) { return c != u8'#'; });
+        using CodeUnitRange = decltype(codeUnits);
+        // This range has a sentinel.
+        static_assert(!std::ranges::common_range<CodeUnitRange>);
+        static_assert(std::ranges::contiguous_range<CodeUnitRange>);
+        {
+            using CodePoints = decltype(utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(codeUnits));
+            static_assert(!std::ranges::common_range<CodePoints>);
+            static_assert(std::ranges::bidirectional_range<CodePoints>);
+            static_assert(!std::ranges::random_access_range<CodePoints>);
+            assertTrue("uncommon bidirectional prefix range",
+                       std::ranges::equal(utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(codeUnits) |
+                                              std::ranges::views::transform(codePoint),
+                                          std::u32string_view(U"𒀭𒊺𒉀 𒍠𒊩  ")));
+            assertTrue("reversed uncommon bidirectional prefix range",
+                       std::ranges::equal(utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(codeUnits) |
+                                              std::ranges::views::reverse |
+                                              std::ranges::views::transform(codePoint),
+                                          std::u32string_view(U"  𒊩𒍠 𒉀𒊺𒀭")));
+        }
+        {
+            using UnsafeCodePoints = decltype(unsafeUTFStringCodePoints<char32_t>(codeUnits));
+            static_assert(!std::ranges::common_range<UnsafeCodePoints>);
+            static_assert(std::ranges::bidirectional_range<UnsafeCodePoints>);
+            static_assert(!std::ranges::random_access_range<UnsafeCodePoints>);
+            assertTrue("unsafe uncommon bidirectional prefix range",
+                       std::ranges::equal(unsafeUTFStringCodePoints<char32_t>(codeUnits) |
+                                              std::ranges::views::transform(codePoint),
+                                          std::u32string_view(U"𒀭𒊺𒉀 𒍠𒊩  ")));
+            assertTrue("reversed unsafe uncommon bidirectional prefix range",
+                       std::ranges::equal(unsafeUTFStringCodePoints<char32_t>(codeUnits) |
+                                              std::ranges::views::reverse |
+                                              std::ranges::views::transform(codePoint),
+                                          std::u32string_view(U"  𒊩𒍠 𒉀𒊺𒀭")));
+        }
+    }
+
+    void testCommonForwardRange() {
+        auto codePoint = [](const auto &codeUnits) { return codeUnits.codePoint(); };
+        const std::forward_list<std::u16string_view> words{u"𒌉",
+                                                           u"𒂍𒁾𒁀𒀀",
+                                                           u"𒌓",
+                                                           u"𒌌𒆷𒀀𒀭",
+                                                           u"𒈨𒂠",
+                                                           u"𒉌𒁺𒉈𒂗"};
+        // Code units from the concatenated words.
+        auto codeUnits = words | std::ranges::views::join;
+        using CodeUnitRange = decltype(codeUnits);
+        // This range does not have a sentinel.
+        static_assert(std::ranges::common_range<CodeUnitRange>);
+        // Forward-only because we started from a forward list.
+        static_assert(std::ranges::forward_range<CodeUnitRange>);
+        static_assert(!std::ranges::bidirectional_range<CodeUnitRange>);
+        {
+            using CodePoints = decltype(utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(codeUnits));
+            static_assert(std::ranges::common_range<CodePoints>);
+            static_assert(std::ranges::forward_range<CodePoints>);
+            static_assert(!std::ranges::bidirectional_range<CodePoints>);
+            assertTrue("common forward concatenated range",
+                       std::ranges::equal(utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(codeUnits) |
+                                              std::ranges::views::transform(codePoint),
+                                          std::u32string_view(U"𒌉𒂍𒁾𒁀𒀀𒌓𒌌𒆷𒀀𒀭𒈨𒂠𒉌𒁺𒉈𒂗")));
+        }
+        {
+            using UnsafeCodePoints = decltype(unsafeUTFStringCodePoints<char32_t>(codeUnits));
+            static_assert(std::ranges::common_range<UnsafeCodePoints>);
+            static_assert(std::ranges::forward_range<UnsafeCodePoints>);
+            static_assert(!std::ranges::bidirectional_range<UnsafeCodePoints>);
+            assertTrue("unsafe common forward concatenated range",
+                       std::ranges::equal(unsafeUTFStringCodePoints<char32_t>(codeUnits) |
+                                              std::ranges::views::transform(codePoint),
+                                          std::u32string_view(U"𒌉𒂍𒁾𒁀𒀀𒌓𒌌𒆷𒀀𒀭𒈨𒂠𒉌𒁺𒉈𒂗")));
+        }
+    }
+
+    void testCommonBidirectionalRange() {
+        auto codePoint = [](const auto &codeUnits) { return codeUnits.codePoint(); };
+        const std::u8string card{0xF0, 0x92, 0xFF, 0x89, 0xFF, 0xFF, 0xAD};
+        // Read code units from `card`, skipping any bytes set to FF.
+        auto codeUnits = card | std::ranges::views::filter([](char8_t c) { return c != 0xFF; });
+        using CodeUnitRange = decltype(codeUnits);
+        // This range does not have a sentinel.
+        static_assert(std::ranges::common_range<CodeUnitRange>);
+        // Bidirectional but not contiguous (there are holes where the bytes are FF).
+        static_assert(std::ranges::bidirectional_range<CodeUnitRange>);
+        static_assert(!std::ranges::contiguous_range<CodeUnitRange>);
+        {
+            using CodePoints = decltype(utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(codeUnits));
+            static_assert(std::ranges::common_range<CodePoints>);
+            static_assert(std::ranges::forward_range<CodePoints>);
+            static_assert(std::ranges::bidirectional_range<CodePoints>);
+            assertTrue("common bidirectional filtered range",
+                       std::ranges::equal(utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(codeUnits) |
+                                              std::ranges::views::transform(codePoint),
+                                          std::u32string_view(U"𒉭")));
+            assertTrue("reversed common bidirectional filtered range",
+                       std::ranges::equal(utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(codeUnits) |
+                                              std::ranges::views::reverse |
+                                              std::ranges::views::transform(codePoint),
+                                          std::u32string_view(U"𒉭")));
+#if U_CPLUSPLUS_VERSION >= 23 && __cpp_lib_ranges >= 2022'02
+            assertTrue("reversed common bidirectional filtered range: one big pipeline",
+                       std::ranges::equal(
+                           card
+                           | std::ranges::views::filter([](char8_t c) { return c != 0xFF; })
+                           | utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>
+                           | std::ranges::views::reverse
+                           | std::ranges::views::transform(codePoint),
+                           std::u32string_view(U"𒉭")));
+#endif
+        }
+        {
+            using UnsafeCodePoints = decltype(unsafeUTFStringCodePoints<char32_t>(codeUnits));
+            static_assert(std::ranges::common_range<UnsafeCodePoints>);
+            static_assert(std::ranges::forward_range<UnsafeCodePoints>);
+            static_assert(std::ranges::bidirectional_range<UnsafeCodePoints>);
+            assertTrue("unsafe common bidirectional filtered range",
+                       std::ranges::equal(unsafeUTFStringCodePoints<char32_t>(codeUnits) |
+                                              std::ranges::views::transform(codePoint),
+                                          std::u32string_view(U"𒉭")));
+            assertTrue("reversed unsafe common bidirectional filtered range",
+                       std::ranges::equal(unsafeUTFStringCodePoints<char32_t>(codeUnits) |
+                                              std::ranges::views::reverse |
+                                              std::ranges::views::transform(codePoint),
+                                          std::u32string_view(U"𒉭")));
+#if U_CPLUSPLUS_VERSION >= 23 && __cpp_lib_ranges >= 2022'02
+            assertTrue("reversed unsafe common bidirectional filtered range: one big pipeline",
+                       std::ranges::equal(
+                           card
+                           | std::ranges::views::filter([](char8_t c) { return c != 0xFF; })
+                           | unsafeUTFStringCodePoints<char32_t>
+                           | std::ranges::views::reverse
+                           | std::ranges::views::transform(codePoint),
+                           std::u32string_view(U"𒉭")));
+#endif
+        }
+    }
+
+    void testCommonContiguousRange() {
+        auto codePoint = [](const auto &codeUnits) { return codeUnits.codePoint(); };
+        const std::u16string codeUnits = u"𒀭𒊺𒉀​𒍠𒊩";
+        static_assert(std::ranges::contiguous_range<decltype(codeUnits)>);
+        auto codePoints = utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(codeUnits);
+        static_assert(std::is_same_v<decltype(codePoints),
+                                     UTFStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD,
+                                                         std::ranges::ref_view<const std::u16string>>>);
+        static_assert(std::ranges::common_range<decltype(codePoints)>);
+        static_assert(std::ranges::bidirectional_range<decltype(codePoints)>);
+        static_assert(!std::ranges::random_access_range<decltype(codePoints)>);
+        auto unsafeCodePoints = unsafeUTFStringCodePoints<char32_t>(codeUnits);
+        static_assert(std::is_same_v<
+                      decltype(unsafeCodePoints),
+                      UnsafeUTFStringCodePoints<char32_t, std::ranges::ref_view<const std::u16string>>>);
+        static_assert(std::ranges::common_range<decltype(unsafeCodePoints)>);
+        static_assert(std::ranges::bidirectional_range<decltype(unsafeCodePoints)>);
+        static_assert(!std::ranges::random_access_range<decltype(unsafeCodePoints)>);
+        assertTrue("safe contiguous range by reference",
+                   std::ranges::equal(codePoints | std::ranges::views::transform(codePoint),
+                                      std::u32string_view(U"𒀭𒊺𒉀​𒍠𒊩")));
+        assertTrue("unsafe contiguous range by reference",
+                   std::ranges::equal(unsafeCodePoints | std::ranges::views::transform(codePoint),
+                                      std::u32string_view(U"𒀭𒊺𒉀​𒍠𒊩")));
+        auto ownedCodePoints =
+            utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(std::u16string(u"𒀭𒊺𒉀​𒍠𒊩"));
+        static_assert(std::is_same_v<
+                      decltype(ownedCodePoints),
+                           UTFStringCodePoints<
+                               char32_t, UTF_BEHAVIOR_FFFD, std::ranges::owning_view<std::u16string>>>);
+        auto unsafeOwnedCodePoints =
+            unsafeUTFStringCodePoints<char32_t>(std::u16string(u"𒀭𒊺𒉀​𒍠𒊩"));
+        static_assert(std::is_same_v<
+                      decltype(unsafeOwnedCodePoints),
+                      UnsafeUTFStringCodePoints<char32_t, std::ranges::owning_view<std::u16string>>>);
+        assertTrue("safe owned contiguous range",
+                   std::ranges::equal(ownedCodePoints | std::ranges::views::transform(codePoint),
+                                      std::u32string_view(U"𒀭𒊺𒉀​𒍠𒊩")));
+        assertTrue("unsafe owned contiguous range",
+                   std::ranges::equal(unsafeOwnedCodePoints | std::ranges::views::transform(codePoint),
+                                      std::u32string_view(U"𒀭𒊺𒉀​𒍠𒊩")));
+    }
+#endif
 
     // implementation code coverage ---------------------------------------- ***
 
@@ -731,6 +1095,37 @@ public:
     void testUnsafe32ZigzagReverse() {
         testZigzagReverse<UNSAFE, ANY_B, char32_t>(longGood32);
     }
+    void testOwnership() {
+        class NonCopyableString : public std::u16string {
+          public:
+            NonCopyableString(std::u16string s) : std::u16string(std::move(s)) {}
+            NonCopyableString(NonCopyableString const&) = delete;
+            NonCopyableString &operator=(NonCopyableString const&) = delete;
+            NonCopyableString(NonCopyableString&&) = default;
+            NonCopyableString &operator=(NonCopyableString&&) = default;
+        };
+        const NonCopyableString referenced(u"𒀭𒊺𒉀 𒍠𒊩");
+        {
+            auto referencingRange = utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(referenced);
+            auto owningRange =
+                utfStringCodePoints<char32_t, UTF_BEHAVIOR_FFFD>(NonCopyableString(u"𒀭𒊺𒉀 𒍠𒊩"));
+            auto itr = referencingRange.begin();
+            auto ito = owningRange.begin();
+            for (; itr != referencingRange.end() && ito != owningRange.end(); ++itr, ++ito) {
+                assertEquals("Referenced and owned iteration", itr->codePoint(), ito->codePoint());
+            }
+        }
+        {
+            auto unsafeReferencingRange = unsafeUTFStringCodePoints<char32_t>(referenced);
+            auto unsafeOwningRange = unsafeUTFStringCodePoints<char32_t>(NonCopyableString(u"𒀭𒊺𒉀 𒍠𒊩"));
+            auto itr = unsafeReferencingRange.begin();
+            auto ito = unsafeOwningRange.begin();
+            for (; itr != unsafeReferencingRange.end() && ito != unsafeOwningRange.end(); ++itr, ++ito) {
+                assertEquals("Referenced and owned unsafe iteration", itr->codePoint(),
+                             ito->codePoint());
+            }
+        }
+    }
 
     ImplTest<char> longGood8;
     ImplTest<char16_t> longGood16;
@@ -874,10 +1269,29 @@ void UTFIteratorTest::testSinglePassIter(StringView piped) {
     }
 }
 
+template<TestMode mode, typename CP32, UTFIllFormedBehavior behavior, typename StringView>
+void UTFIteratorTest::testSinglePassIterNul(StringView piped) {
+    using Unit = typename StringView::value_type;
+    auto parts = split(piped);
+    auto joined = join<Unit>(parts);
+    Nul sentinel;
+    SinglePassSource<Unit> good(joined.c_str(), sentinel);
+    // "abçカ🚴"
+    // or
+    // "a?ç?🚴" where the ? sequences are ill-formed
+    if constexpr (mode == UNSAFE) {
+        auto iter = unsafeUTFIterator<CP32>(good.begin());
+        testSinglePassIter<mode, CP32, behavior>(parts, iter, sentinel);
+    } else {
+        auto iter = utfIterator<CP32, behavior>(good.begin(), sentinel);
+        testSinglePassIter<mode, CP32, behavior>(parts, iter, sentinel);
+    }
+}
+
 template<TestMode mode, typename CP32, UTFIllFormedBehavior behavior,
-         typename StringView, typename Iter>
+         typename StringView, typename Iter, typename Sentinel>
 void UTFIteratorTest::testSinglePassIter(
-        const std::vector<StringView> &parts, Iter &iter, const Iter &rangeLimit) {
+        const std::vector<StringView> &parts, Iter &iter, const Sentinel &rangeLimit) {
     constexpr bool isWellFormed = mode != ILL_FORMED;
     assertTrue(
         "input_iterator_tag",
@@ -903,6 +1317,7 @@ void UTFIteratorTest::testSinglePassIter(
     assertEquals("iter[3] -> codePoint", expectedCP, iter->codePoint());
     ++iter;
     // Fetch the current code point twice.
+    assertFalse("iter != endIter", iter == rangeLimit);
     assertEquals("iter[4.0] * codePoint", U'🚴', (*iter).codePoint());
     units = *iter++;
     assertEquals("iter[4] * codePoint", U'🚴', units.codePoint());
@@ -932,9 +1347,27 @@ void UTFIteratorTest::testFwdIter(StringView piped) {
     }
 }
 
-template<TestMode mode, typename StringView, typename UnitIter, typename Iter>
-void UTFIteratorTest::testFwdIter(const std::vector<StringView> &parts, UnitIter goodLimit,
-                                  Iter iter, Iter rangeLimit) {
+template<TestMode mode, typename CP32, UTFIllFormedBehavior behavior, typename StringView>
+void UTFIteratorTest::testFwdIterNul(StringView piped) {
+    using Unit = typename StringView::value_type;
+    auto parts = split(piped);
+    auto joined = join<Unit>(parts);
+    // "abçカ🚴"
+    FwdIter<Unit> goodBegin(joined.data());
+    Nul sentinel;
+    if constexpr (mode == UNSAFE) {
+        auto iter = unsafeUTFIterator<CP32>(goodBegin);
+        testFwdIter<mode, StringView>(parts, sentinel, iter, sentinel);
+    } else {
+        auto iter = utfIterator<CP32, behavior>(goodBegin, sentinel);
+        testFwdIter<mode, StringView>(parts, sentinel, iter, sentinel);
+    }
+}
+
+template<TestMode mode, typename StringView,
+         typename LimitIter, typename Iter, typename Sentinel>
+void UTFIteratorTest::testFwdIter(const std::vector<StringView> &parts, LimitIter goodLimit,
+                                  Iter iter, Sentinel rangeLimit) {
     assertTrue(
         "forward_iterator_tag",
         std::is_same_v<
@@ -959,8 +1392,10 @@ void UTFIteratorTest::testFwdIter(const std::vector<StringView> &parts, UnitIter
     ++iter;
     assertEquals("iter[2] * codePoint", u'ç', (*iter++).codePoint());  // post-increment
     assertEquals("iter[3] -> codePoint", u'カ', iter->codePoint());
+    assertFalse("iter[3] * end() != endIter", units.end() == goodLimit);
     ++iter;
     // Fetch the current code point twice.
+    assertFalse("iter != endIter", iter == rangeLimit);
     assertEquals("iter[4.0] * codePoint", U'🚴', (*iter).codePoint());
     units = *iter++;
     assertEquals("iter[4] * codePoint", U'🚴', units.codePoint());
@@ -1195,3 +1630,50 @@ void UTFIteratorTest::zigzag(const ImplTest<Unit> &test, size_t i,
         }
     }
 }
+
+#if defined(__cpp_lib_concepts) && __cpp_lib_concepts >= 2020'02 // Test against C++20 concepts.
+namespace {
+template <typename Iterator>
+using CodePointIterator = UTFIterator<char32_t, UTF_BEHAVIOR_FFFD, Iterator>;
+template <typename Iterator>
+using UnsafeCodePointIterator = UnsafeUTFIterator<char32_t, Iterator>;
+
+// Check that the iterators satisfy the right concepts.
+namespace input {
+using CodeUnitIterator = std::istreambuf_iterator<char16_t>;
+static_assert(std::input_iterator<CodeUnitIterator>);
+static_assert(!std::forward_iterator<CodeUnitIterator>);
+static_assert(std::input_iterator<CodePointIterator<CodeUnitIterator>>);
+static_assert(!std::forward_iterator<CodePointIterator<CodeUnitIterator>>);
+static_assert(std::input_iterator<UnsafeCodePointIterator<CodeUnitIterator>>);
+static_assert(!std::forward_iterator<UnsafeCodePointIterator<CodeUnitIterator>>);
+} // namespace input
+namespace forward {
+using CodeUnitIterator = std::forward_list<char16_t>::iterator;
+static_assert(std::forward_iterator<CodeUnitIterator>);
+static_assert(!std::bidirectional_iterator<CodeUnitIterator>);
+static_assert(std::forward_iterator<CodePointIterator<CodeUnitIterator>>);
+static_assert(!std::bidirectional_iterator<CodePointIterator<CodeUnitIterator>>);
+static_assert(std::forward_iterator<UnsafeCodePointIterator<CodeUnitIterator>>);
+static_assert(!std::bidirectional_iterator<UnsafeCodePointIterator<CodeUnitIterator>>);
+} // namespace forward
+namespace bidirectional {
+using CodeUnitIterator = std::list<char16_t>::iterator;
+static_assert(std::bidirectional_iterator<CodeUnitIterator>);
+static_assert(!std::random_access_iterator<CodeUnitIterator>);
+static_assert(std::bidirectional_iterator<CodePointIterator<CodeUnitIterator>>);
+static_assert(!std::random_access_iterator<CodePointIterator<CodeUnitIterator>>);
+static_assert(std::bidirectional_iterator<UnsafeCodePointIterator<CodeUnitIterator>>);
+static_assert(!std::random_access_iterator<UnsafeCodePointIterator<CodeUnitIterator>>);
+} // namespace bidirectional
+namespace contiguous {
+using CodeUnitIterator = std::u16string::iterator;
+static_assert(std::contiguous_iterator<CodeUnitIterator>);
+static_assert(std::bidirectional_iterator<CodePointIterator<CodeUnitIterator>>);
+static_assert(!std::random_access_iterator<CodePointIterator<CodeUnitIterator>>);
+static_assert(std::bidirectional_iterator<UnsafeCodePointIterator<CodeUnitIterator>>);
+static_assert(!std::random_access_iterator<UnsafeCodePointIterator<CodeUnitIterator>>);
+} // namespace contiguous
+
+} // namespace
+#endif

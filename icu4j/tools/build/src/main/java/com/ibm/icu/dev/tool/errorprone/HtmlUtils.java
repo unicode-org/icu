@@ -48,7 +48,7 @@ class HtmlUtils {
 
     private static final String INDENT_SPACES = "  ";
 
-    private static PrintStream wrt;
+    private final PrintStream wrt;
 
     int indent = 0;
 

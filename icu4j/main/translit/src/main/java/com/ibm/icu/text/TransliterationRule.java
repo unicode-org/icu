@@ -489,12 +489,12 @@ class TransliterationRule {
     public String toRule(boolean escapeUnprintable) {
        // int i;
 
-        StringBuffer rule = new StringBuffer();
+        StringBuilder rule = new StringBuilder();
 
         // Accumulate special characters (and non-specials following them)
         // into quoteBuf.  Append quoteBuf, within single quotes, when
         // a non-quoted element must be inserted.
-        StringBuffer quoteBuf = new StringBuffer();
+        StringBuilder quoteBuf = new StringBuilder();
 
         // Do not emit the braces '{' '}' around the pattern if there
         // is neither anteContext nor postContext.

@@ -499,7 +499,7 @@ public class HolidayBorderPanel extends Panel {
      * Returns the settings of this HolidayBorderPanel instance as a string.
      */
     public String toString() {
-        StringBuffer str = new StringBuffer("HolidayBorderPanel[");
+        StringBuilder str = new StringBuilder("HolidayBorderPanel[");
 
         // style
         str.append("style=");

@@ -139,7 +139,7 @@ class StringReplacer implements UnicodeReplacer {
              * the integrity of indices into the key and surrounding context while
              * generating the output text.
              */
-            StringBuffer buf = new StringBuffer();
+            StringBuilder buf = new StringBuilder();
             int oOutput; // offset into 'output'
             isComplex = false;
 
@@ -190,7 +190,7 @@ class StringReplacer implements UnicodeReplacer {
                 UnicodeReplacer r = data.lookupReplacer(c);
                 if (r == null) {
                     // Accumulate straight (non-segment) text.
-                    UTF16.append(buf, c);
+                    buf.appendCodePoint(c);
                 } else {
                     isComplex = true;
 
@@ -267,8 +267,8 @@ class StringReplacer implements UnicodeReplacer {
      */
     @Override
     public String toReplacerPattern(boolean escapeUnprintable) {
-        StringBuffer rule = new StringBuffer();
-        StringBuffer quoteBuf = new StringBuffer();
+        StringBuilder rule = new StringBuilder();
+        StringBuilder quoteBuf = new StringBuilder();
 
         int cursor = cursorPos;
 
@@ -290,7 +290,7 @@ class StringReplacer implements UnicodeReplacer {
             if (r == null) {
                 Utility.appendToRule(rule, c, false, escapeUnprintable, quoteBuf);
             } else {
-                StringBuffer buf = new StringBuffer(" ");
+                StringBuilder buf = new StringBuilder(" ");
                 buf.append(r.toReplacerPattern(escapeUnprintable));
                 buf.append(' ');
                 Utility.appendToRule(rule, buf.toString(),

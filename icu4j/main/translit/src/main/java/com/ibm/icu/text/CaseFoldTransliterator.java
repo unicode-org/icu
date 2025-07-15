@@ -39,8 +39,6 @@ class CaseFoldTransliterator extends Transliterator{
     }
 
     private final UCaseProps csp;
-    private ReplaceableContextIterator iter;
-    private StringBuilder result;
 
     /**
      * Constructs a transliterator.
@@ -49,15 +47,13 @@ class CaseFoldTransliterator extends Transliterator{
     public CaseFoldTransliterator() {
         super(_ID, null);
         csp=UCaseProps.INSTANCE;
-        iter=new ReplaceableContextIterator();
-        result = new StringBuilder();
     }
 
     /**
      * Implements {@link Transliterator#handleTransliterate}.
      */
     @Override
-    protected synchronized void handleTransliterate(Replaceable text,
+    protected void handleTransliterate(Replaceable text,
                                        Position offsets, boolean isIncremental) {
         if(csp==null) {
             return;
@@ -67,8 +63,10 @@ class CaseFoldTransliterator extends Transliterator{
             return;
         }
 
+        ReplaceableContextIterator iter = new ReplaceableContextIterator();
+        StringBuilder result = new StringBuilder();
+
         iter.setText(text);
-        result.setLength(0);
         int c, delta;
 
         // Walk through original string

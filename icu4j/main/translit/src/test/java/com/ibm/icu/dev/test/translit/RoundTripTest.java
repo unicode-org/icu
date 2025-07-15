@@ -282,9 +282,9 @@ public class RoundTripTest extends TestFmwk {
         try{
             UnicodeSet exemplars = LocaleData.getExemplarSet(new ULocale("zh"),0);
             // create string with all chars
-            StringBuffer b = new StringBuffer();
+            StringBuilder b = new StringBuilder();
             for (UnicodeSetIterator it = new UnicodeSetIterator(exemplars); it.next();) {
-                UTF16.append(b,it.codepoint);
+                b.appendCodePoint(it.codepoint);
             }
             String source = b.toString();
             // transform with Han translit
@@ -1623,7 +1623,7 @@ public class RoundTripTest extends TestFmwk {
         }
 
         final String info(String s) {
-            StringBuffer result = new StringBuffer();
+            StringBuilder result = new StringBuilder();
             result.append("\u200E").append(s).append("\u200E (").append(TestUtility.hex(s)).append("/");
             if (false) { // append age, as a check
                 int cp = 0;

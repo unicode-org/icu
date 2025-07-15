@@ -260,7 +260,7 @@ public class CollationThreadTest extends TestFmwk {
         for (int i = 0; i < threads.length; ++i) {
             Collator coll;
             try {
-                coll = (Collator)theCollator.clone();
+                coll = theCollator.clone();
             } catch (CloneNotSupportedException e) {
                 // should not happen, if it does we'll get an exception right away
                 errln("could not clone");

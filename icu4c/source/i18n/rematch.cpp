@@ -4420,6 +4420,14 @@ void RegexMatcher::MatchChunkAt(int32_t startIdx, UBool toEnd, UErrorCode &statu
                     }
                 }
 
+                // If the pattern string ends with an unpaired lead surrogate that
+                // matched the lead surrogate of a valid pair in the input text,
+                // this does not count as a match.
+                if (success && U16_IS_LEAD(*(pInp-1)) &&
+                        pInp < pInpLimit && U16_IS_TRAIL(*(pInp))) {
+                    success = false;
+                }
+
                 if (success) {
                     fp->fInputIdx += stringLen;
                 } else {

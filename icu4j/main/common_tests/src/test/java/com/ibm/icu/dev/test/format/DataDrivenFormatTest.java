@@ -158,9 +158,10 @@ public class DataDrivenFormatTest extends CoreTestFmwk {
                 fromSet = new CalendarFieldsSet();
                 fromSet.parseFrom(date);
             }
-            
+
             // run the test
             if(fmt) {
+                @SuppressWarnings("JdkObsolete") // Because of DateFormat.format(...,StringBuffer,...)
                 StringBuffer output = new StringBuffer();
                 cal.clear();
                 FieldPosition pos = new FieldPosition(0);

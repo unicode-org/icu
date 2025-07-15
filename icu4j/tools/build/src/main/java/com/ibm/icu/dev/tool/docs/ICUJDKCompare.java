@@ -431,7 +431,7 @@ public class ICUJDKCompare {
         }
 
         MethodRecord copy() {
-            return new MethodRecord((MorC[])overrides.clone());
+            return new MethodRecord(overrides.clone());
         }
 
         int count() {
@@ -498,7 +498,7 @@ public class ICUJDKCompare {
         }
 
         void debugmsg(MorC t, MorC m, String msg) {
-            StringBuffer buf = new StringBuffer();
+            StringBuilder buf = new StringBuilder();
             buf.append(t.getName());
             buf.append(" ");
             buf.append(msg);
@@ -541,7 +541,7 @@ public class ICUJDKCompare {
             return true;
         }
 
-        public void toString(MorC m, StringBuffer buf) {
+        public void toString(MorC m, StringBuilder buf) {
             int mod = m.getModifiers();
             if (mod != 0) {
                 buf.append(Modifier.toString(mod) + " ");
@@ -561,7 +561,7 @@ public class ICUJDKCompare {
         }
 
         public String toString() {
-            StringBuffer buf = new StringBuffer();
+            StringBuilder buf = new StringBuilder();
             buf.append(overrides[0].getName());
             for (int i = 0; i < overrides.length; ++i) {
                 MorC m = overrides[i];
@@ -758,7 +758,7 @@ public class ICUJDKCompare {
     }
 
     private String toString(Field f) {
-        StringBuffer buf = new StringBuffer(f.getName());
+        StringBuilder buf = new StringBuilder(f.getName());
         int mod = f.getModifiers() & MOD_MASK;
         if (mod != 0) {
             buf.append(" " + Modifier.toString(mod));

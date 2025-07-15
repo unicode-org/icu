@@ -240,7 +240,7 @@ public class CodeMangler {
         TreeMap sort = new TreeMap(String.CASE_INSENSITIVE_ORDER);
         sort.putAll(map);
         Iterator iter = sort.entrySet().iterator();
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         if (!nonames) {
             while (iter.hasNext()) {
                 Map.Entry e = (Map.Entry)iter.next();

@@ -300,7 +300,7 @@ public class DetectingViewer extends JFrame implements ActionListener
         }
         
         try {
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             String encoding = matches[0].getName();
             
             inputStream.reset();

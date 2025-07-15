@@ -253,10 +253,14 @@ public class UnicodeSetTest extends CoreTestFmwk {
         s.clear();
         s.applyPropertyAlias("nv", "0.5");
         s.retainAll(new UnicodeSet("[:age=6.0:]"));  // stabilize this test
-        expectToPattern(s, "[\\u00BD\\u0B73\\u0D74\\u0F2A\\u2CFD\\uA831\\U00010141\\U00010175\\U00010176\\U00010E7B]", null);
+        expectToPattern(s,
+                "[\\u00BD\\u0B73\\u0D74\\u0F2A\\u2CFD\\uA831\\U00010141\\U00010175\\U00010176"
+                        + "\\U00010E7B\\U00012226]",
+                null);
         // Unicode 5.1 adds Malayalam 1/2 (\u0D74)
         // Unicode 5.2 adds U+A831 NORTH INDIC FRACTION ONE HALF and U+10E7B RUMI FRACTION ONE HALF
         // Unicode 6.0 adds U+0B73 ORIYA FRACTION ONE HALF
+        // Unicode 17 adds U+12226 CUNEIFORM SIGN MASH
 
         s.clear();
         s.applyPropertyAlias("gc", "Lu");
@@ -1183,7 +1187,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
                 // Script_Extensions, new in Unicode 6.0
                 "[:scx=Arab:]",
                 "\\u061E\\u061F\\u0620\\u0621\\u063F\\u0640\\u0650\\u065E\\uFDF1\\uFDF2\\uFDF3",
-                "\\u088F\\uFDEF\\uFEFE",
+                "\\uFDEF\\uFEFE",
 
                 // U+FDF2 has Script=Arabic and also Arab in its Script_Extensions,
                 // so scx-sc is missing U+FDF2.
@@ -1238,7 +1242,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
     @Test
     public void TestClone() {
         UnicodeSet s = new UnicodeSet("[abcxyz]");
-        UnicodeSet t = (UnicodeSet) s.clone();
+        UnicodeSet t = s.clone();
         expectContainment(t, "abc", "def");
     }
 
@@ -1566,9 +1570,9 @@ public class UnicodeSetTest extends CoreTestFmwk {
             while (iter.next()) {
                 int c = iter.codepoint;
                 input.clear().add(c);
-                small = (UnicodeSet) input.clone();
+                small = input.clone();
                 small.closeOver(option);
-                large = (UnicodeSet) input.clone();
+                large = input.clone();
                 large.add(LARGE_START, LARGE_END);
                 large.closeOver(option);
                 large.remove(LARGE_START, LARGE_END);
@@ -2014,7 +2018,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
     public void checkModification(UnicodeSet original, boolean isFrozen) {
         main:
             for (int i = 0; ;++i) {
-                UnicodeSet test = (UnicodeSet) (isFrozen ? original.clone() : original.cloneAsThawed());
+                UnicodeSet test = isFrozen ? original.clone() : original.cloneAsThawed();
                 boolean gotException = true;
                 boolean checkEquals = true;
                 try {
@@ -3227,7 +3231,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
         // Strings
         unicodeSet.add("world"); // adds string
         unicodeSet.addAll("one", "two", "three"); // adds strings
-        return (UnicodeSet) unicodeSet.freeze();
+        return unicodeSet.freeze();
     }
 
     @Test

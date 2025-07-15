@@ -548,7 +548,7 @@ public class MeasureFormat extends UFormat {
      * @stable ICU 53
      */
     public NumberFormat getNumberFormat() {
-        return (NumberFormat) numberFormat.clone();
+        return numberFormat.clone();
     }
 
     /**
@@ -628,7 +628,7 @@ public class MeasureFormat extends UFormat {
         if (numberFormat == null) {
             numberFormat = NumberFormat.getInstance(locale);
         } else {
-            numberFormat = (NumberFormat) numberFormat.clone();
+            numberFormat = numberFormat.clone();
         }
         this.numberFormat = numberFormat;
 

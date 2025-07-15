@@ -17,6 +17,7 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -108,10 +109,9 @@ public class WriteCharts {
     }
     
     public static String showScripts(int[] scripts) {
-        StringBuffer results = new StringBuffer();
+        StringJoiner results = new StringJoiner(", ");
         for (int i = 0; i < scripts.length; ++i) {
-            if (i != 0) results.append(", ");
-            results.append(UScript.getName(scripts[i]));
+            results.add(UScript.getName(scripts[i]));
         }
         return results.toString();
     }
@@ -363,15 +363,10 @@ public class WriteCharts {
             out.close();
         }
     }
-    
+
     public static String hex(String s) {
-        int cp;
-        StringBuffer results = new StringBuffer();
-        for (int i = 0; i < s.length(); i += UTF16.getCharCount(cp)) {
-            cp = UTF16.charAt(s, i);
-            if (i != 0) results.append(' ');
-            results.append(Integer.toHexString(cp));
-        }
+        StringJoiner results = new StringJoiner(" ");
+        s.codePoints().mapToObj(Integer::toHexString).forEach(results::add);
         return results.toString().toUpperCase();
     }
     

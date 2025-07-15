@@ -42,7 +42,7 @@ public class TestDeprecatedNormalizerAPI extends CoreTestFmwk
             errln("error in Normalizer(CharacterIterator).next()");
         }
         // test clone(), ==, and hashCode()
-        Normalizer clone=(Normalizer)norm.clone();
+        Normalizer clone=norm.clone();
         if(clone.getBeginIndex()!= norm.getBeginIndex()){
            errln("error in Normalizer.getBeginIndex()");
         }

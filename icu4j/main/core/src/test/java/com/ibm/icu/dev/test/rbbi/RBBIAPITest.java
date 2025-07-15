@@ -60,8 +60,8 @@ public class RBBIAPITest extends CoreTestFmwk {
         if (bi2.equals(biequal) || bi2.equals(bi1) || biequal.equals(bi3))
             errln("ERROR:2 RBBI's == and != operator  failed.");
         logln("Testing clone()");
-        RuleBasedBreakIterator bi1clone = (RuleBasedBreakIterator) bi1.clone();
-        RuleBasedBreakIterator bi2clone = (RuleBasedBreakIterator) bi2.clone();
+        RuleBasedBreakIterator bi1clone = bi1.clone();
+        RuleBasedBreakIterator bi2clone = bi2.clone();
         if (!bi1clone.equals(bi1)
             || !bi1clone.equals(biequal)
             || bi1clone.equals(bi3)
@@ -89,7 +89,7 @@ public class RBBIAPITest extends CoreTestFmwk {
         RuleBasedBreakIterator bi2 = (RuleBasedBreakIterator) BreakIterator.getWordInstance(Locale.getDefault());
         logln("Testing toString()");
         bi1.setText("Hello there");
-        RuleBasedBreakIterator bi3 = (RuleBasedBreakIterator) bi1.clone();
+        RuleBasedBreakIterator bi3 = bi1.clone();
         String temp = bi1.toString();
         String temp2 = bi2.toString();
         String temp3 = bi3.toString();
@@ -109,8 +109,8 @@ public class RBBIAPITest extends CoreTestFmwk {
         bi1.setText("Hash code");
         bi2.setText("Hash code");
         bi3.setText("Hash code");
-        RuleBasedBreakIterator bi1clone = (RuleBasedBreakIterator) bi1.clone();
-        RuleBasedBreakIterator bi2clone = (RuleBasedBreakIterator) bi2.clone();
+        RuleBasedBreakIterator bi1clone = bi1.clone();
+        RuleBasedBreakIterator bi2clone = bi2.clone();
         if (bi1.hashCode() != bi1clone.hashCode()
             || bi1.hashCode() != bi3.hashCode()
             || bi1clone.hashCode() != bi3.hashCode()

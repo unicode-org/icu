@@ -947,7 +947,7 @@ public class TestConversion extends TestFmwk {
                     //are there items that must be in unicodeset but are not?
                     (diffset = mapset).removeAll(unicodeset);
                     if(!diffset.isEmpty()){
-                        StringBuffer s = new StringBuffer(diffset.toPattern(true));
+                        StringBuilder s = new StringBuilder(diffset.toPattern(true));
                         if(s.length()>100){
                             s.replace(0, 0x7fffffff, ellipsis);
                         }
@@ -957,7 +957,7 @@ public class TestConversion extends TestFmwk {
                     //are the items that must not be in unicodeset but are?
                     (diffset=mapnotset).retainAll(unicodeset);
                     if(!diffset.isEmpty()){
-                        StringBuffer s = new StringBuffer(diffset.toPattern(true));
+                        StringBuilder s = new StringBuilder(diffset.toPattern(true));
                         if(s.length()>100){
                             s.replace(0, 0x7fffffff, ellipsis);
                         }

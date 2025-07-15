@@ -656,7 +656,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
     public RuleBasedCollator getCollator() {
         if (collatorExternal == null) {
             try {
-                collatorExternal = (RuleBasedCollator) (collatorOriginal.clone());
+                collatorExternal = collatorOriginal.clone();
             } catch (Exception e) {
                 // should never happen
                 throw new IllegalStateException("Collator cannot be cloned", e);

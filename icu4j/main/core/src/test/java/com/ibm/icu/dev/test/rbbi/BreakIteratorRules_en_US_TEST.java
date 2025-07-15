@@ -46,7 +46,7 @@ public class BreakIteratorRules_en_US_TEST extends ListResourceBundle {
                 // all of which should not influence the algorithm
                 "$_ignore_=[[:Mn:][:Me:][:Cf:]];"
 
-                // lower and upper case Roman letters, apostrophy and dash are
+                // lower and upper case Roman letters, apostrophe and dash are
                 // in the English dictionary
                 +"$_dictionary_=[a-zA-Z\\'\\-];"
 
@@ -64,7 +64,7 @@ public class BreakIteratorRules_en_US_TEST extends ListResourceBundle {
                 +"$mid_word=[[:Pd:]\u00ad\u2027\\\"\\\'];"
 
                 // punctuation that can occur in the middle of a number: currently
-                // apostrophes, qoutation marks, periods, commas, and the Arabic
+                // apostrophes, quotation marks, periods, commas, and the Arabic
                 // decimal point
                 +"$mid_num=[\\\"\\\'\\,\u066b\\.];"
 

@@ -1093,9 +1093,9 @@ public abstract class Transliterator implements StringTransform  {
         // characters (which are ignored) and a subsequent run of
         // unfiltered characters (which are transliterated).
 
-        StringBuffer log = null;
+        StringBuilder log = null;
         if (DEBUG) {
-            log = new StringBuffer();
+            log = new StringBuilder();
         }
 
         for (;;) {
@@ -1594,7 +1594,7 @@ public abstract class Transliterator implements StringTransform  {
      */
     public static Transliterator getInstance(String ID,
                                              int dir) {
-        StringBuffer canonID = new StringBuffer();
+        StringBuilder canonID = new StringBuilder();
         List<SingleID> list = new ArrayList<>();
         UnicodeSet[] globalFilter = new UnicodeSet[1];
         if (!TransliteratorIDParser.parseCompoundID(ID, dir, canonID, list, globalFilter)) {
@@ -1635,7 +1635,7 @@ public abstract class Transliterator implements StringTransform  {
      * invalid.
      */
     static Transliterator getBasicInstance(String id, String canonID) {
-        StringBuffer s = new StringBuffer();
+        StringBuilder s = new StringBuilder();
         Transliterator t = registry.get(id, s);
         if (s.length() != 0) {
             // assert(t==0);
@@ -1748,12 +1748,12 @@ public abstract class Transliterator implements StringTransform  {
         // the correct format.  That is: foo => ::foo
         // KEEP in sync with rbt_pars
         if (escapeUnprintable) {
-            StringBuffer rulesSource = new StringBuffer();
+            StringBuilder rulesSource = new StringBuilder();
             String id = getID();
             for (int i=0; i<id.length();) {
                 int c = UTF16.charAt(id, i);
                 if (!Utility.escapeUnprintable(rulesSource, c)) {
-                    UTF16.append(rulesSource, c);
+                    rulesSource.appendCodePoint(c);
                 }
                 i += UTF16.getCharCount(c);
             }

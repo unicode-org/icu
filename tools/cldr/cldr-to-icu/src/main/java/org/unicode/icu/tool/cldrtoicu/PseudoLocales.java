@@ -202,6 +202,7 @@ public final class PseudoLocales {
                 "dates/calendars/calendar",
                 "dates/fields",
                 "dates/timeZoneNames",
+                "numbers/currencies",
                 "listPatterns",
                 "posix/messages",
                 "characterLabels",

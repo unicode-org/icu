@@ -649,7 +649,7 @@ public class CollationMiscTest extends TestFmwk {
         String[] test = new String[4];
 
         for(int i = 0; i<4; i++) {
-            StringBuffer temp = new StringBuffer();
+            StringBuilder temp = new StringBuilder();
             for (int j = 0; j < 2047; j++) {
                 temp.append('a');
             }
@@ -1283,8 +1283,8 @@ public class CollationMiscTest extends TestFmwk {
             char ccMix[]   = {0x316, 0x321, 0x300};
             int          sLen;
             int          i;
-            StringBuffer strA = new StringBuffer();
-            StringBuffer strB = new StringBuffer();
+            StringBuilder strA = new StringBuilder();
+            StringBuilder strB = new StringBuilder();
 
             coll.setDecomposition(Collator.CANONICAL_DECOMPOSITION);
 
@@ -3486,7 +3486,7 @@ public class CollationMiscTest extends TestFmwk {
             return;
         }
         try {
-            myCollation = (Collator) originalCollation.clone();
+            myCollation = originalCollation.clone();
         } catch (Exception e) {
             warnln("ERROR: in creation of rule based collator");
             return;
@@ -3713,7 +3713,7 @@ public class CollationMiscTest extends TestFmwk {
 
         Collator myClone = null;
         try {
-            myClone = (Collator) myCollation.clone();
+            myClone = myCollation.clone();
         } catch (CloneNotSupportedException e) {
             // should not happen - clone is implemented in Collator
             errln("ERROR: unable to clone collator.");

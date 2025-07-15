@@ -310,8 +310,7 @@ public final class ScientificNumberFormatter {
     private static ScientificNumberFormatter getInstance(
             DecimalFormat decimalFormat, Style style) {
         DecimalFormatSymbols dfs = decimalFormat.getDecimalFormatSymbols();
-        return new ScientificNumberFormatter(
-                (DecimalFormat) decimalFormat.clone(), getPreExponent(dfs), style);
+        return new ScientificNumberFormatter(decimalFormat.clone(), getPreExponent(dfs), style);
     }
      
     private static ScientificNumberFormatter getInstanceForLocale(

@@ -395,7 +395,7 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
         if (isFrozen()) {
             throw new UnsupportedOperationException("Attempt to modify immutable object");
         }
-        this.calendar = (Calendar) calendar.clone(); // clone for safety
+        this.calendar = calendar.clone(); // clone for safety
         return this;
     }
 
@@ -409,7 +409,7 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
         if (calendar == null) {
             return guessCalendar();
         }
-        Calendar temp = (Calendar) calendar.clone(); // clone for safety
+        Calendar temp = calendar.clone(); // clone for safety
         temp.setTimeZone(getTimeZone());
         temp.setTimeInMillis(System.currentTimeMillis());
         return temp;
@@ -426,7 +426,7 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
         if (isFrozen()) {
             throw new UnsupportedOperationException("Attempt to modify immutable object");
         }
-        this.timezone = (TimeZone) timezone.clone(); // clone for safety;
+        this.timezone = timezone.clone(); // clone for safety;
         return this;
     }
 
@@ -455,7 +455,7 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
             return guessCollator();
         }
         try {
-            return (Collator) collator.clone();  // clone for safety
+            return collator.clone();  // clone for safety
         } catch (CloneNotSupportedException e) {
             throw new ICUCloneNotSupportedException("Error in cloning collator", e);
         }
@@ -472,7 +472,7 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
             throw new UnsupportedOperationException("Attempt to modify immutable object");
         }
         try {
-            this.collator = (Collator) collator.clone(); // clone for safety
+            this.collator = collator.clone(); // clone for safety
         } catch (CloneNotSupportedException e) {
                 throw new ICUCloneNotSupportedException("Error in cloning collator", e);
         }
@@ -494,7 +494,7 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
         if (breakIterators == null || breakIterators[type] == null) {
             return guessBreakIterator(type);
         }
-        return (BreakIterator) breakIterators[type].clone(); // clone for safety
+        return breakIterators[type].clone(); // clone for safety
     }
 
     /**
@@ -514,7 +514,7 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
         }
         if (breakIterators == null)
             breakIterators = new BreakIterator[BI_LIMIT];
-        breakIterators[type] = (BreakIterator) iterator.clone(); // clone for safety
+        breakIterators[type] = iterator.clone(); // clone for safety
         return this;
     }
 
@@ -637,7 +637,7 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
         if (dateFormats == null) {
             dateFormats = new DateFormat[DF_LIMIT][DF_LIMIT];
         }
-        dateFormats[dateStyle][timeStyle] = (DateFormat) format.clone(); // for safety
+        dateFormats[dateStyle][timeStyle] = format.clone(); // for safety
         return this;
     }
 
@@ -664,7 +664,7 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
             result = dateFormats[dateStyle][timeStyle];
         }
         if (result != null) {
-            result = (DateFormat) result.clone(); // clone for safety
+            result = result.clone(); // clone for safety
             // Not sure overriding configuration is what we really want...
             result.setTimeZone(getTimeZone());
         } else {
@@ -691,7 +691,7 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
             result = numberFormats[style];
         }
         if (result != null) {
-            result = (NumberFormat) result.clone(); // clone for safety (later optimize)
+            result = result.clone(); // clone for safety (later optimize)
         } else {
             result = guessNumberFormat(style);
         }
@@ -713,7 +713,7 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
         if (numberFormats == null) {
             numberFormats = new NumberFormat[NF_LIMIT];
         }
-        numberFormats[style] = (NumberFormat) format.clone(); // for safety
+        numberFormats[style] = format.clone(); // for safety
         return this;
     }
 
@@ -1457,7 +1457,7 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
     @Override
     public GlobalizationPreferences cloneAsThawed() {
         try {
-            GlobalizationPreferences result = (GlobalizationPreferences) clone();
+            GlobalizationPreferences result = (GlobalizationPreferences) super.clone();
             result.frozen = false;
             return result;
         } catch (CloneNotSupportedException e) {

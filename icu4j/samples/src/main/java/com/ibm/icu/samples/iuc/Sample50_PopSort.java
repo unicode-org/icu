@@ -29,6 +29,7 @@ import com.ibm.icu.util.UResourceBundle;
  *
  */
 public class Sample50_PopSort {
+    @SuppressWarnings("JdkObsolete") // Because of MessageFormat.format(...,StringBuffer,...)
     public static void main(String... args) {
         // setup
         // setup

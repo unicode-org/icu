@@ -1436,7 +1436,7 @@ public class BasicTest extends CoreTestFmwk {
             }
 
             // test clone(), ==, and hashCode()
-            Normalizer clone=(Normalizer)norm.clone();
+            Normalizer clone=norm.clone();
             if(clone.equals(norm)) {
                 errln("error in Normalizer(Normalizer(CharacterIterator)).clone()!=norm");
             }
@@ -2382,7 +2382,7 @@ public class BasicTest extends CoreTestFmwk {
         // We need not look at control codes, Han characters nor Hangul LVT syllables because they
         // do not combine forward. LV syllables are already removed.
         UnicodeSet notInteresting=new UnicodeSet("[[:C:][:Unified_Ideograph:][:HST=LVT:]]");
-        UnicodeSet unsure=((UnicodeSet)(skipSets[C].clone())).removeAll(notInteresting);
+        UnicodeSet unsure=skipSets[C].clone().removeAll(notInteresting);
         // System.out.format("unsure.size()=%d\n", unsure.size());
 
         // For each character about which we are unsure, see if it changes when we add
@@ -2462,18 +2462,18 @@ public class BasicTest extends CoreTestFmwk {
                 s.append("\n\n");
 
                 s.append("skip-expect=");
-                pattern = new StringBuilder(((UnicodeSet)skipSets[i].clone()).removeAll(expectSets[i]).toPattern(true));
+                pattern = new StringBuilder(skipSets[i].clone().removeAll(expectSets[i]).toPattern(true));
                 s.append(pattern);
 
                 pattern.delete(0,pattern.length());
                 s.append("\n\nexpect-skip=");
-                pattern = new StringBuilder(((UnicodeSet)expectSets[i].clone()).removeAll(skipSets[i]).toPattern(true));
+                pattern = new StringBuilder(expectSets[i].clone().removeAll(skipSets[i]).toPattern(true));
                 s.append(pattern);
                 s.append("\n\n");
 
                 pattern.delete(0,pattern.length());
                 s.append("\n\nintersection(expect,skip)=");
-                UnicodeSet intersection  = ((UnicodeSet) expectSets[i].clone()).retainAll(skipSets[i]);
+                UnicodeSet intersection  = expectSets[i].clone().retainAll(skipSets[i]);
                 pattern = new StringBuilder(intersection.toPattern(true));
                 s.append(pattern);
                 // Special: test coverage for append(char).

@@ -22,11 +22,11 @@ public class UtilityExtensions {
      * Append the given string to the rule.  Calls the single-character
      * version of appendToRule for each character.
      */
-    public static void appendToRule(StringBuffer rule,
+    public static void appendToRule(StringBuilder rule,
                                     String text,
                                     boolean isLiteral,
                                     boolean escapeUnprintable,
-                                    StringBuffer quoteBuf) {
+                                    StringBuilder quoteBuf) {
         for (int i=0; i<text.length(); ++i) {
             // Okay to process in 16-bit code units here
             Utility.appendToRule(rule, text.charAt(i), isLiteral, escapeUnprintable, quoteBuf);
@@ -38,10 +38,10 @@ public class UtilityExtensions {
      * Given a matcher reference, which may be null, append its
      * pattern as a literal to the given rule.
      */
-    public static void appendToRule(StringBuffer rule,
+    public static void appendToRule(StringBuilder rule,
                                     UnicodeMatcher matcher,
                                     boolean escapeUnprintable,
-                                    StringBuffer quoteBuf) {
+                                    StringBuilder quoteBuf) {
         if (matcher != null) {
             appendToRule(rule, matcher.toPattern(escapeUnprintable),
                          true, escapeUnprintable, quoteBuf);
@@ -54,7 +54,7 @@ public class UtilityExtensions {
      */
     public static String formatInput(ReplaceableString input,
                                      Transliterator.Position pos) {
-        StringBuffer appendTo = new StringBuffer();
+        StringBuilder appendTo = new StringBuilder();
         formatInput(appendTo, input, pos);
         return com.ibm.icu.impl.Utility.escape(appendTo.toString());
     }
@@ -64,7 +64,7 @@ public class UtilityExtensions {
      * aaa{bbb|ccc|ddd}eee, where the {} indicate the context start
      * and limit, and the || indicate the start and limit.
      */
-    public static StringBuffer formatInput(StringBuffer appendTo,
+    public static StringBuilder formatInput(StringBuilder appendTo,
                                            ReplaceableString input,
                                            Transliterator.Position pos) {
         if (0 <= pos.contextStart &&
@@ -105,7 +105,7 @@ public class UtilityExtensions {
     /**
      * Convenience method.
      */
-    public static StringBuffer formatInput(StringBuffer appendTo,
+    public static StringBuilder formatInput(StringBuilder appendTo,
                                            Replaceable input,
                                            Transliterator.Position pos) {
         return formatInput(appendTo, (ReplaceableString) input, pos);

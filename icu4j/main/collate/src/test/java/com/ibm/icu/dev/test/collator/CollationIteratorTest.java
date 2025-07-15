@@ -463,7 +463,7 @@ public class CollationIteratorTest extends TestFmwk {
         RuleBasedCollator en_us = (RuleBasedCollator)Collator.getInstance(Locale.US);
         CollationElementIterator iter;
         char codepoint;
-        StringBuffer source = new StringBuffer();
+        StringBuilder source = new StringBuilder();
         source.append("\u0e4d\u0e4e\u0e4f");
         // source.append("\u04e8\u04e9");
         iter = en_us.getCollationElementIterator(source.toString());
@@ -517,7 +517,7 @@ public class CollationIteratorTest extends TestFmwk {
             warnln("Error creating Thai collator");
             return;
         }
-        StringBuffer source = new StringBuffer();
+        StringBuilder source = new StringBuilder();
         source.append('\uFDFA');
         CollationElementIterator iter
                         = th_th.getCollationElementIterator(source.toString());

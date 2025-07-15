@@ -34,7 +34,7 @@ public final class Deprecator {
 
         int log = 1;
         boolean help = false;
-        StringBuffer err = new StringBuffer();
+        StringBuilder err = new StringBuilder();
 
         for (int i = 0; i < args.length; ++i) {
             String arg = args[i];
