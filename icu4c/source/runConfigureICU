@@ -454,7 +454,7 @@ export LDFLAGS
 echo "export CPP=$CPP CC=$CC CXX=$CXX CPPFLAGS=$CPPFLAGS CFLAGS=$CFLAGS CXXFLAGS=$CXXFLAGS LDFLAGS=$LDFLAGS MAKE=$MAKE"
 echo "Running ./configure $OPTS $@ for $THE_OS using $THE_COMP compiler"
 echo
-if $configure $OPTS $@
+if $configure $OPTS "$@"
 then
 	echo
 	echo If the result of the above commands looks okay to you, go to the directory
