@@ -113,6 +113,11 @@ class DictionaryBreakEngine : public LanguageBreakEngine {
                                            UBool isPhraseBreaking,
                                            UErrorCode& status) const = 0;
 
+public:
+   /** @returns true if the specified code is suppressed by the specified locale, -u-dx */
+   static UBool suppressScriptBreak(const char *locale, UScriptCode code); 
+   /** @returns true if the specified char is suppressed by the specified locale, -u-dx */
+   static UBool suppressScriptBreak(const char *locale, UChar32 c);
 };
 
 /*******************************************************************

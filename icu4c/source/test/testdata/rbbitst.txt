@@ -1516,6 +1516,31 @@ Bangkok)•</data>
 #
 ####################################################################################
 
+# -u-dx (exclude script)
+#<locale th
+
+
+#<line>
+
+<locale sss@dx=thai>
+<line>
+# Should no longer break at the dictionary points - it's not Thai language
+# Short Test
+<data>•โอํน• อะไป •จู่วาม •โล่น•</data>
+#<data>•โอํน• •อะไป• •จู่วาม• •โล่น• •เปี่ยร• •อะลู่วาง• •แมะ,• •ปาย• •อัน• •แบ็จ• •อะโจํน• •ซา• •เมาะ.• •อัน• •ฮะบืน• •ตะ• •เวี่ยะ• •ตะ• •งี่ยาน,• •อัน• •ฮะบืน• •อีว• •อะปายฮ.•</data>
+#<word>
+# Should no longer break at the dictionary points - it's not the Thai language
+#<data>•โอํน• •อะไป• •จู่วาม• •โล่น• •เปี่ยร• •อะลู่วาง• •แมะ,• •ปาย• •อัน• •แบ็จ• •อะโจํน• •ซา• •เมาะ.• •อัน• •ฮะบืน• •ตะ• •เวี่ยะ• •ตะ• •งี่ยาน,• •อัน• •ฮะบืน• •อีว• •อะปายฮ.•</data>
+
+#<locale sss@dx=zyyy>
+#<line>
+# Should no longer break at the dictionary points - it's not Thai language
+#<data>•โอํน• •อะไป• •จู่วาม• •โล่น• •เปี่ยร• •อะลู่วาง• •แมะ,• •ปาย• •อัน• •แบ็จ• •อะโจํน• •ซา• •เมาะ.• •อัน• •ฮะบืน• •ตะ• •เวี่ยะ• •ตะ• •งี่ยาน,• •อัน• •ฮะบืน• •อีว• •อะปายฮ.•</data>
+#<word>
+# Should no longer break at the dictionary points - it's not the Thai language
+#<data>•โอํน• •อะไป• •จู่วาม• •โล่น• •เปี่ยร• •อะลู่วาง• •แมะ,• •ปาย• •อัน• •แบ็จ• •อะโจํน• •ซา• •เมาะ.• •อัน• •ฮะบืน• •ตะ• •เวี่ยะ• •ตะ• •งี่ยาน,• •อัน• •ฮะบืน• •อีว• •อะปายฮ.•</data>
+
+
 # Japanese line break tailoring test
 
 <locale ja>
