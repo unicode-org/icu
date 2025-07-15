@@ -46,8 +46,10 @@ class UnicodeSet;
  * The fields are public for convenience.
  *
  * It is shared, reference-counted, and auto-deleted; see SharedObject.
+ *
+ * U_I18N_API because genuca & genrb use it.
  */
-struct CollationTailoring : public SharedObject {
+struct U_I18N_API CollationTailoring : public SharedObject {
     CollationTailoring(const CollationSettings *baseSettings);
     virtual ~CollationTailoring();
 
@@ -94,7 +96,8 @@ private:
     CollationTailoring(const CollationTailoring &other) = delete;
 };
 
-struct CollationCacheEntry : public SharedObject {
+// U_I18N_API because gencolusb uses it.
+struct U_I18N_API CollationCacheEntry : public SharedObject {
     CollationCacheEntry(const Locale &loc, const CollationTailoring *t)
             : validLocale(loc), tailoring(t) {
         if(t != nullptr) {

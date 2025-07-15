@@ -1517,9 +1517,10 @@ class U_I18N_API Padder : public UMemory {
     friend class impl::GeneratorHelpers;
 };
 
-// Do not enclose entire MacroProps with #ifndef U_HIDE_INTERNAL_API, needed for a protected field
+// Do not enclose entire MacroProps with #ifndef U_HIDE_INTERNAL_API, needed for a protected field.
+// U_I18N_API because intltest uses it.
 /** @internal */
-struct MacroProps : public UMemory {
+struct U_I18N_API MacroProps : public UMemory {
     /** @internal */
     Notation notation;
 
