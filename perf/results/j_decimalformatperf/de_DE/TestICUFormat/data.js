@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1752528877040,
+  "lastUpdate": 1752586168485,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -35997,6 +35997,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 543.4916118591609,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "8eef5b95cd7db2eb89c005396751a7ac8e541f16",
+          "message": "ICU-12717 Errorprone reports as markup and tsv: small cleanup",
+          "timestamp": "2025-07-14T21:24:19Z",
+          "tree_id": "6c7f0cb089e3b11cf53b6671010ff367e3c8da49",
+          "url": "https://github.com/unicode-org/icu/commit/8eef5b95cd7db2eb89c005396751a7ac8e541f16"
+        },
+        "date": 1752585884967,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 563.103980640905,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
