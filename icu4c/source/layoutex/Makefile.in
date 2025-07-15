@@ -56,16 +56,29 @@ CXXFLAGS += $(LIBCXXFLAGS)
 
 
 ifeq ($(USING_ICULEHB),no)
-# cppflags: load .. so that #include <layout/...> works
-ICULE_CFLAGS=-I$(srcdir)/..
+error("ICULEHB is required, see build instructions")
 else
 ICULE_CFLAGS=$(ICULEHB_CFLAGS)
 endif
 
-CPPFLAGS += -I$(srcdir) -I$(srcdir)/unicode -I$(top_srcdir)/common $(ICULE_CFLAGS) $(LIBCPPFLAGS)
+CPPFLAGS += -I$(srcdir)
+
+ifeq ($(HAVE_OTHER_ICUUC),yes)
+# use other installed ICU
+CPPFLAGS += $(OTHER_ICUUC_CFLAGS) -ULE_USE_CMEMORY
+LIBS += $(OTHER_ICUUC_LIBS)
+DEFS += -DHAVE_OTHER_ICUUC
+# Do not set U_LAYOUTEX_IMPLEMENTATION
+else
+# attempt to use 'this' ICU
+CPPFLAGS += -I$(srcdir)/unicode -I$(top_srcdir)/common $(ICULE_CFLAGS)
 DEFS += -DU_LAYOUTEX_IMPLEMENTATION
+LIBS += $(LIBICUUC) $(DEFAULT_LIBS)
+endif
+
+CPPFLAGS += $(LIBCPPFLAGS) $(ICULE_CFLAGS)
 LDFLAGS += $(LDFLAGSICULX)
-LIBS = $(LIBICUUC) $(LIBICULE) $(DEFAULT_LIBS)
+LIBS += $(ICULEHB_LIBS)
 
 SOURCES = $(shell cat $(srcdir)/sources.txt)
 OBJECTS = $(SOURCES:.cpp=.o)
