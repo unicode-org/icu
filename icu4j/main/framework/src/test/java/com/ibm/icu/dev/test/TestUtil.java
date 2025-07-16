@@ -259,12 +259,12 @@ public final class TestUtil {
         if (verstr != null) {
             String majorVerStr = null;
             if (verstr.startsWith("1.")) {
-                String[] numbers = verstr.split("\\.");
+                String[] numbers = verstr.split("\\.", 3);
                 if (numbers.length > 1) {
                     majorVerStr = numbers[1];
                 }
             } else {
-                String[] numbers = verstr.split("\\.|-");
+                String[] numbers = verstr.split("\\.|-", 2);
                 if (numbers.length > 0) {
                     majorVerStr = numbers[0];
                 }

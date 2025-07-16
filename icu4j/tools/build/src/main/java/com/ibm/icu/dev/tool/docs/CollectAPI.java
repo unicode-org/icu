@@ -206,7 +206,7 @@ public class CollectAPI {
                     return;
                 }
                 i++;
-                String[] types = args[i].split(",");
+                String[] types = args[i].split(",", -1);
                 filter.clear();
                 for (String type : types) {
                     if (type.equalsIgnoreCase(getStatusTypeName(APIInfo.STA_STABLE))) {
