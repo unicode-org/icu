@@ -397,7 +397,7 @@ public class DeprecatedAPIChecker {
         }
 
         if (paramsSegment.length() > 0) {
-            String[] params = paramsSegment.split("\\s*,\\s*");
+            String[] params = paramsSegment.split("\\s*,\\s*", -1);
             for (String p : params) {
                 if (p.endsWith("...")) {
                     // varargs to array
