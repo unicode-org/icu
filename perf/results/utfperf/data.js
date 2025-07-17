@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1752771230949,
+  "lastUpdate": 1752774101209,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -54303,6 +54303,48 @@ window.BENCHMARK_DATA = {
           {
             "name": "FromUTF8",
             "value": 1.9293,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "d08d67c0257d7b52259ff0502bd945971e77a195",
+          "message": "ICU-23054 Ignore file generate by Eclipse from the Benchmark annotation processor",
+          "timestamp": "2025-07-17T17:13:20Z",
+          "tree_id": "29bf25886d338735129966abbddd5e4d87509528",
+          "url": "https://github.com/unicode-org/icu/commit/d08d67c0257d7b52259ff0502bd945971e77a195"
+        },
+        "date": 1752773794857,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Roundtrip",
+            "value": 10.1324,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUnicode",
+            "value": 3.8282,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUTF8",
+            "value": 1.9273,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
