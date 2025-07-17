@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1752728892162,
+  "lastUpdate": 1752771170087,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -43917,6 +43917,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 48.5975,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "f8e39b442cb94bc7a86f2328ffd1705776f4d5a5",
+          "message": "ICU-23054 Fix all 'ReferenceEquality' errorprone issues",
+          "timestamp": "2025-07-17T16:36:15Z",
+          "tree_id": "c46fb48632e2ed2635903e30f4d442466819ed68",
+          "url": "https://github.com/unicode-org/icu/commit/f8e39b442cb94bc7a86f2328ffd1705776f4d5a5"
+        },
+        "date": 1752770870423,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 22.5595,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 48.5836,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
