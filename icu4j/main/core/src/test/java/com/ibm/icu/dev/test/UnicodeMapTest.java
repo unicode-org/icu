@@ -289,6 +289,7 @@ public class UnicodeMapTest extends TestFmwk {
         }
     }
 
+    @SuppressWarnings("ReferenceEquality") // We test that the values are the same, not just equal
     private boolean hasSameValues(UnicodeMap<String> unicodeMap, HashMap<Integer, String> hashMap) {
         for (int i = 0; i < MODIFY_TEST_LIMIT; ++i) {
             String unicodeMapValue = unicodeMap.getValue(i);

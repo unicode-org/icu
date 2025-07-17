@@ -917,11 +917,21 @@ public class TestConversion extends TestFmwk {
 
                     //checking for converter that are not supported at this point
                     try{
-                        if(charset==null ||
-                                charset.name()=="BOCU-1" ||charset.name()== "SCSU"|| charset.name()=="lmbcs1" || charset.name()== "lmbcs2" ||
-                                charset.name()== "lmbcs3" || charset.name()== "lmbcs4" || charset.name()=="lmbcs5" || charset.name()=="lmbcs6" ||
-                                charset.name()== "lmbcs8" || charset.name()=="lmbcs11" || charset.name()=="lmbcs16" || charset.name()=="lmbcs17" ||
-                                charset.name()=="lmbcs18"|| charset.name()=="lmbcs19"){
+                        if(charset==null
+                                || charset.name().equals("BOCU-1")
+                                || charset.name().equals("SCSU")
+                                || charset.name().equals("lmbcs1")
+                                || charset.name().equals("lmbcs2")
+                                || charset.name().equals("lmbcs3")
+                                || charset.name().equals("lmbcs4")
+                                || charset.name().equals("lmbcs5")
+                                || charset.name().equals("lmbcs6")
+                                || charset.name().equals("lmbcs8")
+                                || charset.name().equals("lmbcs11")
+                                || charset.name().equals("lmbcs16")
+                                || charset.name().equals("lmbcs17")
+                                || charset.name().equals("lmbcs18")
+                                || charset.name().equals("lmbcs19")) {
                             logln("Converter not supported at this point :" + cc.charset);
                             return;
                         }

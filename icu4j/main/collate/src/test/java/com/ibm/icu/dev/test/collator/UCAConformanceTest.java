@@ -181,6 +181,7 @@ public class UCAConformanceTest extends TestFmwk {
         return result < 0 ? -1 : result == 0 ? 0 : 1;
     }
 
+    @SuppressWarnings("ReferenceEquality")
     private void conformanceTest(RuleBasedCollator coll) {
         if (in == null || coll == null) {
             return;
@@ -189,7 +190,7 @@ public class UCAConformanceTest extends TestFmwk {
         if (coll.isAlternateHandlingShifted()) {
             skipFlags |= IS_SHIFTED;
         }
-        if (coll == rbUCA) {
+        if (coll.equals(rbUCA)) {
             skipFlags |= FROM_RULES;
         }
 
