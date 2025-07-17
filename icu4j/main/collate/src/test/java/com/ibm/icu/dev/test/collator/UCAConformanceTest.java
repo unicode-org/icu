@@ -95,13 +95,13 @@ public class UCAConformanceTest extends TestFmwk {
         String collationTest = "CollationTest_";
         String ext = ".txt";
         try {
-            in = TestUtil.getDataReader(collationTest + type + "_SHORT" + ext);
+            in = TestUtil.getUtf8DataReader(collationTest + type + "_SHORT" + ext);
         } catch (Exception e) {
             try {
-                in = TestUtil.getDataReader(collationTest + type + ext);
+                in = TestUtil.getUtf8DataReader(collationTest + type + ext);
             } catch (Exception e1) {
                 try {
-                    in = TestUtil.getDataReader(collationTest + type + "_STUB" + ext);
+                    in = TestUtil.getUtf8DataReader(collationTest + type + "_STUB" + ext);
                     logln("INFO: Working with the stub file.\n" + "If you need the full conformance test, please\n"
                             + "download the appropriate data files from:\n"
                             + "http://unicode.org/cldr/trac/browser/trunk/common/uca");

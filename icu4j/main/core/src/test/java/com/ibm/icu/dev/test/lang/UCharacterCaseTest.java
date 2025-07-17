@@ -641,7 +641,7 @@ public final class UCharacterCaseTest extends CoreTestFmwk
         try
         {
             // reading in the SpecialCasing file
-            BufferedReader input = TestUtil.getDataReader(
+            BufferedReader input = TestUtil.getUtf8DataReader(
                                                   "unicode/SpecialCasing.txt");
             while (true)
             {

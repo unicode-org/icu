@@ -19,7 +19,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -72,9 +73,9 @@ public final class APIData {
             InputStream is;
             if (fileName.endsWith(".zip")) {
                 zf = new ZipFile(file);
-                Enumeration entryEnum = zf.entries();
+                Enumeration<? extends ZipEntry> entryEnum = zf.entries();
                 if (entryEnum.hasMoreElements()) {
-                    ZipEntry entry = (ZipEntry)entryEnum.nextElement();
+                    ZipEntry entry = entryEnum.nextElement();
                     is = zf.getInputStream(entry);
                     // we only handle one!!!
                 } else {
@@ -86,8 +87,10 @@ public final class APIData {
                     is = new GZIPInputStream(is);
                 }
             }
-            InputStreamReader isr = new InputStreamReader(is);
-            return read(new BufferedReader(isr), internal);
+            try (InputStreamReader isr = new InputStreamReader(is, StandardCharsets.UTF_8);
+                    BufferedReader br = new BufferedReader(isr)) {
+                return read(br, internal);
+            }
         } catch (IOException e) {
             RuntimeException re = new RuntimeException("error getting info stream: " + fileName);
             re.initCause(e);
@@ -116,7 +119,7 @@ public final class APIData {
         "classes", "fields", "constructors", "methods"
     };
 
-    public void printStats(PrintWriter pw) {
+    public void printStats(PrintStream ps) {
         // classes, methods, fields
         // draft, stable, other
 
@@ -135,18 +138,18 @@ public final class APIData {
 
         int tt = 0;
         for (int cat = 0; cat < catnames.length; ++cat) {
-            pw.println(catnames[cat]);
+            ps.println(catnames[cat]);
             int t = 0;
             for (int sta = 0; sta < stanames.length; ++sta) {
                 int v = stats[cat * stanames.length + sta];
                 t += v;
-                pw.println("   " + stanames[sta] + ": " + v);
+                ps.println("   " + stanames[sta] + ": " + v);
             }
             tt += t;
-            pw.println("total: " + t);
-            pw.println();
+            ps.println("total: " + t);
+            ps.println();
         }
-        pw.println("total apis: " + tt);
+        ps.println("total apis: " + tt);
     }
 
     public Set<APIInfo> getAPIInfoSet() {
@@ -154,7 +157,7 @@ public final class APIData {
     }
 
     public static void main(String[] args) {
-        PrintWriter pw = new PrintWriter(System.out);
+        PrintStream out = System.out;
 
         boolean internal = false;
         String path = "src/com/ibm/icu/dev/tool/docs/";
@@ -174,8 +177,8 @@ public final class APIData {
                 fn = args[++i];
 
                 File f = new File(path, fn);
-                read(f,internal).printStats(pw);
-                pw.flush();
+                read(f,internal).printStats(out);
+                out.flush();
             }
         }
     }

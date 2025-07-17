@@ -3231,14 +3231,14 @@ public class TestCharset extends TestFmwk {
 
         byte[] bytes = test.getBytes(cs_utf7);
         if (!Arrays.equals(bytes, expected_utf7)) {
-            errln("Incorrect UTF-7 conversion. Got " + new String(bytes) + " but expect " +
-                  new String(expected_utf7));
+            errln("Incorrect UTF-7 conversion. Got " + hex(bytes) + " but expect " +
+                  hex(expected_utf7));
         }
 
         bytes = test.getBytes(cs_imap);
         if (!Arrays.equals(bytes, expected_imap)) {
-            errln("Incorrect IMAP-mailbox-name conversion. Got " + new String(bytes) +
-                  " but expect " + new String(expected_imap));
+            errln("Incorrect IMAP-mailbox-name conversion. Got " + hex(bytes) +
+                  " but expect " + hex(expected_imap));
         }
     }
 

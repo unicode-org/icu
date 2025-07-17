@@ -245,7 +245,7 @@ public class IDNAConformanceTest extends CoreTestFmwk {
                 UnsupportedEncodingException {
 
             TreeMap<Integer, Map<String, String>> result = new TreeMap<>();
-            BufferedReader in = TestUtil.getDataReader("IDNATestInput.txt", "utf-8");
+            BufferedReader in = TestUtil.getUtf8DataReader("IDNATestInput.txt");
             try {
                 String tempStr = null;
                 int records = 0;

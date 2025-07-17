@@ -179,8 +179,7 @@ public class TestConversion extends TestFmwk {
         logln("TestFromUnicode[" + caseNr + "] " + cc.charset + " ");
         logln("Unicode:   " + cc.unicode);
         logln("Bytes:    " + printbytes(cc.bytes, cc.bytes.limit()));
-        ByteBuffer c = ByteBuffer.wrap(cc.cbopt.getBytes());
-        logln("Callback: " + printbytes(c, c.limit()) + " (" + cc.cbopt + ")");
+        logln("Callback: " + cc.cbopt);
         logln("...............................................");
 
         // process the retrieved test data case
@@ -470,8 +469,7 @@ public class TestConversion extends TestFmwk {
         logln("TestToUnicode[" + caseNr + "] " + cc.charset + " ");
         logln("Unicode:   " + hex(cc.unicode));
         logln("Bytes:    " + printbytes(cc.bytes, cc.bytes.limit()));
-        ByteBuffer c = ByteBuffer.wrap(cc.cbopt.getBytes());
-        logln("Callback: " + printbytes(c, c.limit()) + " (" + cc.cbopt + ")");
+        logln("Callback: " + cc.cbopt);
         logln("...............................................");
 
         // process the retrieved test data case

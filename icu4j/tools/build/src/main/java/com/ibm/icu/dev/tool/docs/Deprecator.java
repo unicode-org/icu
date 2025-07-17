@@ -11,10 +11,10 @@ package com.ibm.icu.dev.tool.docs;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FilenameFilter;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -112,15 +112,15 @@ public final class Deprecator {
     }
 
     static void usage() {
-        PrintWriter pw = new PrintWriter(System.out);
-        pw.println("Usage: Deprecator -src path -dst path [-help]");
-        pw.println("  -src path : the root of the tree of files to work on");
-        pw.println("  -dst path : the root of the tree to put the resulting files");
-        pw.println("  -help     : print this usage message and exit, doing nothing");
-        pw.println("  -undep    : remove deprecation tags if present (default false)");
-        pw.println();
-        pw.println("  Add or remove warning deprecations for ICU @draft and @internal APIs");
-        pw.flush();
+        PrintStream ps = System.out;
+        ps.println("Usage: Deprecator -src path -dst path [-help]");
+        ps.println("  -src path : the root of the tree of files to work on");
+        ps.println("  -dst path : the root of the tree to put the resulting files");
+        ps.println("  -help     : print this usage message and exit, doing nothing");
+        ps.println("  -undep    : remove deprecation tags if present (default false)");
+        ps.println();
+        ps.println("  Add or remove warning deprecations for ICU @draft and @internal APIs");
+        ps.flush();
     }
 
     static final String stoplist = "!CVS";
@@ -171,8 +171,7 @@ public final class Deprecator {
             System.out.println("process '" + srcFile.getPath() + "'");
         }
 
-        try {
-            BufferedReader r = new BufferedReader(new InputStreamReader(new FileInputStream(srcFile)));
+        try (BufferedReader r = Files.newBufferedReader(srcFile.toPath(), StandardCharsets.UTF_8)) {
             int n = 0;
             String line = null;
             while (null != (line = r.readLine())) {
@@ -184,9 +183,7 @@ public final class Deprecator {
                     }
                 }
             }
-            r.close();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.flush();
             System.err.println("caught exception: " + e);
         }

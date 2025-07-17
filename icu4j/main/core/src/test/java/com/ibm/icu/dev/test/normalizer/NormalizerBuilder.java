@@ -85,7 +85,7 @@ class NormalizerBuilder {
     private static void readExclusionList(BitSet isExcluded) throws java.io.IOException {
         if (DEBUG) System.out.println("Reading Exclusions");
 
-        BufferedReader in = TestUtil.getDataReader("unicode/CompositionExclusions.txt");
+        BufferedReader in = TestUtil.getUtf8DataReader("unicode/CompositionExclusions.txt");
 
         while (true) {
             // read a line, discarding comments and blank lines
@@ -119,7 +119,7 @@ class NormalizerBuilder {
         //BufferedReader in = new BufferedReader(new FileReader(UNICODE_DATA), 64*1024);
         BufferedReader in = null;
         try {
-            in = TestUtil.getDataReader("unicode/UnicodeData.txt");
+            in = TestUtil.getUtf8DataReader("unicode/UnicodeData.txt");
         } catch (Exception e) {
             System.err.println("Failed to read UnicodeData.txt");
             System.exit(1);

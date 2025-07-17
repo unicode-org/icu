@@ -32,7 +32,7 @@ public class BiDiConformanceTest extends CoreTestFmwk {
 
     @Test
     public void TestBidiTest() throws IOException {
-        BufferedReader bidiTestFile = TestUtil.getDataReader("unicode/BidiTest.txt");
+        BufferedReader bidiTestFile = TestUtil.getUtf8DataReader("unicode/BidiTest.txt");
         try {
             Bidi ubidi = new Bidi();
             ubidi.setCustomClassifier(new ConfTestBidiClassifier());
@@ -168,7 +168,7 @@ outerLoop:
     */
     @Test
     public void TestBidiCharacterTest() throws IOException {
-        BufferedReader bidiTestFile = TestUtil.getDataReader("unicode/BidiCharacterTest.txt");
+        BufferedReader bidiTestFile = TestUtil.getUtf8DataReader("unicode/BidiCharacterTest.txt");
         try {
             Bidi ubidi = new Bidi();
             lineNumber = 0;
