@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1752770611364,
+  "lastUpdate": 1752773522263,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -36057,6 +36057,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFC_NFC_Text",
             "value": 3.134661654024736,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "d08d67c0257d7b52259ff0502bd945971e77a195",
+          "message": "ICU-23054 Ignore file generate by Eclipse from the Benchmark annotation processor",
+          "timestamp": "2025-07-17T17:13:20Z",
+          "tree_id": "29bf25886d338735129966abbddd5e4d87509528",
+          "url": "https://github.com/unicode-org/icu/commit/d08d67c0257d7b52259ff0502bd945971e77a195"
+        },
+        "date": 1752773232778,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 3.206705583380844,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
