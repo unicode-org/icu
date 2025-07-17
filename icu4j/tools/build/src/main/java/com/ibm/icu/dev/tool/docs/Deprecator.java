@@ -161,11 +161,9 @@ public final class Deprecator {
         }
     }
 
-    /*
- @ deprecated
- *** @deprecated
- ** ** ** @deprecated
-    */
+    // @ deprecated
+    // *** @deprecated
+    // ** ** ** @deprecated
     static final Pattern pat = Pattern.compile("^[\\s*]*@\\s*deprecated.*");
 
     void processFile(File srcFile, File dstFile) {
