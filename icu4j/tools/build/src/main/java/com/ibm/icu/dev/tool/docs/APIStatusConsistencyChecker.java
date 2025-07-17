@@ -4,6 +4,7 @@ package com.ibm.icu.dev.tool.docs;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -35,7 +36,8 @@ public class APIStatusConsistencyChecker {
 
         // Load the ICU4J API signature file
         Set<APIInfo> apiInfoSet = APIData.read(new File(args[0]), true).getAPIInfoSet();
-        APIStatusConsistencyChecker checker = new APIStatusConsistencyChecker(apiInfoSet, skipClasses, new PrintWriter(System.err, true));
+        APIStatusConsistencyChecker checker = new APIStatusConsistencyChecker(
+                apiInfoSet, skipClasses, new PrintWriter(System.err, true, StandardCharsets.UTF_8));
         checker.checkConsistency();
         System.exit(checker.errCount);
    }

@@ -590,9 +590,8 @@ public class UnitsTest {
             }
         }
 
-        String codePage = "UTF-8";
         ArrayList<TestCase> tests = new ArrayList<>();
-        try (BufferedReader f = TestUtil.getDataReader("cldr/units/unitsTest.txt", codePage)) {
+        try (BufferedReader f = TestUtil.getUtf8DataReader("cldr/units/unitsTest.txt")) {
             while (true) {
                 String line = f.readLine();
                 if (line == null) break;
@@ -713,10 +712,9 @@ public class UnitsTest {
         }
 
         // Read Test data from the unitPreferencesTest
-        String codePage = "UTF-8";
         ArrayList<TestCase> tests = new ArrayList<>();
 
-        try (BufferedReader f = TestUtil.getDataReader("cldr/units/unitPreferencesTest.txt", codePage)) {
+        try (BufferedReader f = TestUtil.getUtf8DataReader("cldr/units/unitPreferencesTest.txt")) {
             while (true) {
                 String line = f.readLine();
                 if (line == null) break;

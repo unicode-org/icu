@@ -159,7 +159,7 @@ public class DataDrivenNumberFormatTestUtility extends CoreTestFmwk {
         char codeUnderTestId = (codeUnderTest == null) ? 0 : codeUnderTest.Id();
         BufferedReader in = null;
         try {
-            in = TestUtil.getDataReader("numberformattestspecification.txt", "UTF-8");
+            in = TestUtil.getUtf8DataReader("numberformattestspecification.txt");
             // read first line and remove BOM if present
             readLine(in);
             if (fileLine != null && fileLine.charAt(0) == '\uFEFF') {

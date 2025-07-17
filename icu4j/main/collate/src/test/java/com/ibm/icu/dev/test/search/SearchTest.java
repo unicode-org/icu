@@ -1944,7 +1944,7 @@ public class SearchTest extends TestFmwk {
             {
                 super(target, breaker);
                 this.pattern = pattern;
-                StringBuffer buffer = new StringBuffer();
+                StringBuilder buffer = new StringBuilder();
                 while (targetText.getIndex() != targetText.getEndIndex()) {
                     buffer.append(targetText.current());
                     targetText.next();
