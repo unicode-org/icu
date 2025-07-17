@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1752770691941,
+  "lastUpdate": 1752773490249,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -35817,6 +35817,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 228.27765275952564,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "d08d67c0257d7b52259ff0502bd945971e77a195",
+          "message": "ICU-23054 Ignore file generate by Eclipse from the Benchmark annotation processor",
+          "timestamp": "2025-07-17T17:13:20Z",
+          "tree_id": "29bf25886d338735129966abbddd5e4d87509528",
+          "url": "https://github.com/unicode-org/icu/commit/d08d67c0257d7b52259ff0502bd945971e77a195"
+        },
+        "date": 1752773199363,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 229.52761412565005,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
