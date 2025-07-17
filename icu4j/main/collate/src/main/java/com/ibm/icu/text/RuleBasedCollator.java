@@ -461,6 +461,7 @@ public final class RuleBasedCollator extends Collator implements Cloneable {
      * @see #setUpperCaseFirst(boolean)
      * @stable ICU 2.8
      */
+    @SuppressWarnings("ReferenceEquality")
     public final void setCaseFirstDefault() {
         checkNotFrozen();
         CollationSettings defaultSettings = getDefaultSettings();
@@ -478,6 +479,7 @@ public final class RuleBasedCollator extends Collator implements Cloneable {
      * @see #isAlternateHandlingShifted()
      * @stable ICU 2.8
      */
+    @SuppressWarnings("ReferenceEquality")
     public void setAlternateHandlingDefault() {
         checkNotFrozen();
         CollationSettings defaultSettings = getDefaultSettings();
@@ -495,6 +497,7 @@ public final class RuleBasedCollator extends Collator implements Cloneable {
      * @see #isCaseLevel
      * @stable ICU 2.8
      */
+    @SuppressWarnings("ReferenceEquality")
     public void setCaseLevelDefault() {
         checkNotFrozen();
         CollationSettings defaultSettings = getDefaultSettings();
@@ -512,6 +515,7 @@ public final class RuleBasedCollator extends Collator implements Cloneable {
      * @see #setDecomposition(int)
      * @stable ICU 2.8
      */
+    @SuppressWarnings("ReferenceEquality")
     public void setDecompositionDefault() {
         checkNotFrozen();
         CollationSettings defaultSettings = getDefaultSettings();
@@ -529,6 +533,7 @@ public final class RuleBasedCollator extends Collator implements Cloneable {
      * @see #setFrenchCollation(boolean)
      * @stable ICU 2.8
      */
+    @SuppressWarnings("ReferenceEquality")
     public void setFrenchCollationDefault() {
         checkNotFrozen();
         CollationSettings defaultSettings = getDefaultSettings();
@@ -546,6 +551,7 @@ public final class RuleBasedCollator extends Collator implements Cloneable {
      * @see #getStrength
      * @stable ICU 2.8
      */
+    @SuppressWarnings("ReferenceEquality")
     public void setStrengthDefault() {
         checkNotFrozen();
         CollationSettings defaultSettings = getDefaultSettings();
@@ -562,6 +568,7 @@ public final class RuleBasedCollator extends Collator implements Cloneable {
      * @see #setNumericCollation
      * @stable ICU 2.8
      */
+    @SuppressWarnings("ReferenceEquality")
     public void setNumericCollationDefault() {
         checkNotFrozen();
         CollationSettings defaultSettings = getDefaultSettings();
@@ -737,6 +744,7 @@ public final class RuleBasedCollator extends Collator implements Cloneable {
      * @stable ICU 53
      */
     @Override
+    @SuppressWarnings("ReferenceEquality")
     public RuleBasedCollator setMaxVariable(int group) {
         // Convert the reorder code into a MaxVariable number, or UCOL_DEFAULT=-1.
         int value;
@@ -917,6 +925,7 @@ public final class RuleBasedCollator extends Collator implements Cloneable {
      * @stable ICU 4.8
      */
     @Override
+    @SuppressWarnings("ReferenceEquality")
     public void setReorderCodes(int... order) {
         checkNotFrozen();
         int length = (order != null) ? order.length : 0;

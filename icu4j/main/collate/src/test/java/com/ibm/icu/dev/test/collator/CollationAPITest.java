@@ -530,8 +530,7 @@ public class CollationAPITest extends TestFmwk {
 
         String colrules = ((RuleBasedCollator)col).getRules();
         String junkrules = ((RuleBasedCollator)junk).getRules();
-        doAssert(colrules == junkrules || colrules.equals(junkrules),
-                   "The default collation should be returned.");
+        assertSame("The default collation should be returned.", colrules, junkrules);
         Collator frCol = null;
         try {
             frCol = Collator.getInstance(Locale.CANADA_FRENCH);
