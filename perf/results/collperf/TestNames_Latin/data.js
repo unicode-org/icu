@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1752774542098,
+  "lastUpdate": 1752784332840,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -69657,6 +69657,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 1324151.3552,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "caolanm@gmail.com",
+            "name": "Caolán McNamara",
+            "username": "caolanm"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "3af1606404add86fbec779017d827655ecf025a9",
+          "message": "ICU-23054 const up struct that gencmn outputs",
+          "timestamp": "2025-07-17T13:01:00-07:00",
+          "tree_id": "c30565fab6c07efb6b35da020aa77d9dcedaa2fb",
+          "url": "https://github.com/unicode-org/icu/commit/3af1606404add86fbec779017d827655ecf025a9"
+        },
+        "date": 1752784034839,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 273.5579,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 3043699.6713,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 1316732.8305,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 2820875.2762,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 1312703.9449,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
