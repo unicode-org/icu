@@ -3501,12 +3501,10 @@ public class CollationMiscTest extends TestFmwk {
         }
     }
 
-    /*
+    /**
      * Utility function to test one collation reordering test case.
-     * @param testcases Array of test cases.
-     * @param n_testcases Size of the array testcases.
-     * @param str_rules Array of rules.  These rules should be specifying the same rule in different formats.
-     * @param n_rules Size of the array str_rules.
+     * @param testCases Array of test cases.
+     * @param reorderTokens Array of reorder tokens.
      */
     private void doTestOneReorderingAPITestCase(OneTestCase testCases[], int reorderTokens[])
     {
