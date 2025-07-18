@@ -243,6 +243,9 @@ COMMON_ICUDATA_ARGUMENTS=$(COMMON_ICUDATA_ARGUMENTS) -u
 !IF "$(CFG)" == "x64\Release" || "$(CFG)" == "x64\Debug"
 COMMON_ICUDATA_ARGUMENTS=$(COMMON_ICUDATA_ARGUMENTS) -a X64
 !ENDIF
+!IF "$(CFG)" == "Release" || "$(CFG)" == "release" || "$(CFG)" == "Debug" || "$(CFG)" == "debug" || "$(CFG)" == "x86\Release" || "$(CFG)" == "x86\Debug"
+COMMON_ICUDATA_ARGUMENTS=$(COMMON_ICUDATA_ARGUMENTS) -a X86
+!ENDIF
 !IF "$(CFG)" == "ARM\Release" || "$(CFG)" == "ARM\Debug"
 COMMON_ICUDATA_ARGUMENTS=$(COMMON_ICUDATA_ARGUMENTS) -a ARM
 !ENDIF
