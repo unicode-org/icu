@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1752854599840,
+  "lastUpdate": 1752868850501,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -36087,6 +36087,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 2.8782117865452572,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "pedberg@unicode.org",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "committer": {
+            "email": "42151464+pedberg-icu@users.noreply.github.com",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "distinct": true,
+          "id": "9685f369b277c3469acb8e1bc23f1d14702da348",
+          "message": "ICU-23150 Deprecate C create/getMilligramPerDeciliter, J MILLIGRAM_PER_DECILITER",
+          "timestamp": "2025-07-18T12:34:21-07:00",
+          "tree_id": "b00af08354f14b067df9f25ae26b2163ddb504bb",
+          "url": "https://github.com/unicode-org/icu/commit/9685f369b277c3469acb8e1bc23f1d14702da348"
+        },
+        "date": 1752868541326,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 2.8928164121033073,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
