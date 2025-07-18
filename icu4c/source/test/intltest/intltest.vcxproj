@@ -225,6 +225,7 @@
     <ClCompile Include="strcase.cpp" />
     <ClCompile Include="ustrtest.cpp" />
     <ClCompile Include="utfiteratortest.cpp" />
+    <ClCompile Include="utfstringtest.cpp" />
     <ClCompile Include="utxttest.cpp" />
     <ClCompile Include="cpdtrtst.cpp" />
     <ClCompile Include="ittrans.cpp" />

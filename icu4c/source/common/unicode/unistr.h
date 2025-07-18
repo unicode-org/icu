@@ -215,6 +215,10 @@ class UnicodeStringAppendable;  // unicode/appendable.h
  *
  * The UnicodeString equivalent of std::string’s clear() is remove().
  *
+ * Starting with ICU 78, a UnicodeString is a C++ "range" of char16_t code units.
+ * utfStringCodePoints() and unsafeUTFStringCodePoints() can be used to iterate over
+ * the code points.
+ *
  * A UnicodeString may "alias" an external array of characters
  * (that is, point to it, rather than own the array)
  * whose lifetime must then at least match the lifetime of the aliasing object.
@@ -289,12 +293,17 @@ class UnicodeStringAppendable;  // unicode/appendable.h
  * [User Guide Strings chapter](https://unicode-org.github.io/icu/userguide/strings#maximizing-performance-with-the-unicodestring-storage-model).
  *
  * @see utf.h
+ * @see utfiterator.h
+ * @see utfStringCodePoints
+ * @see unsafeUTFStringCodePoints
  * @see CharacterIterator
  * @stable ICU 2.0
  */
 class U_COMMON_API UnicodeString : public Replaceable
 {
 public:
+  /** C++ boilerplate @internal */
+  using value_type = char16_t;
 
   /**
    * Constant to be used in the UnicodeString(char *, int32_t, EInvariant) constructor
@@ -1767,7 +1776,8 @@ public:
    * Unpaired surrogates are replaced with U+FFFD.
    * Calls toUTF8().
    *
-   * @param result A standard string (or a compatible object)
+   * @tparam StringClass A std::string or a std::u8string (or a compatible type)
+   * @param result A std::string or a std::u8string (or a compatible object)
    *        to which the UTF-8 version of the string is appended.
    * @return The string object.
    * @stable ICU 4.2
@@ -1779,6 +1789,27 @@ public:
     toUTF8(sbs);
     return result;
   }
+
+#ifndef U_HIDE_DRAFT_API
+  /**
+   * Convert the UnicodeString to a UTF-8 string.
+   * Unpaired surrogates are replaced with U+FFFD.
+   * Calls toUTF8().
+   *
+   * @tparam StringClass A std::string or a std::u8string (or a compatible type)
+   * @return A std::string or a std::u8string (or a compatible object)
+   *        with the UTF-8 version of the string.
+   * @draft ICU 78
+   * @see toUTF8
+   */
+  template<typename StringClass>
+  StringClass toUTF8String() const {
+    StringClass result;
+    StringByteSink<StringClass> sbs(&result, length());
+    toUTF8(sbs);
+    return result;
+  }
+#endif  // U_HIDE_DRAFT_API
 
   /**
    * Convert the UnicodeString to UTF-32.
@@ -1891,6 +1922,33 @@ public:
    * @stable ICU 2.0
    */
   inline UBool isBogus() const;
+
+#ifndef U_HIDE_DRAFT_API
+  /**
+   * @return an iterator to the first code unit in this string.
+   *     The iterator may be a pointer or a contiguous-iterator object.
+   * @draft ICU 78
+   */
+  auto begin() const { return std::u16string_view(*this).begin(); }
+  /**
+   * @return an iterator to just past the last code unit in this string.
+   *     The iterator may be a pointer or a contiguous-iterator object.
+   * @draft ICU 78
+   */
+  auto end() const { return std::u16string_view(*this).end(); }
+  /**
+   * @return a reverse iterator to the last code unit in this string.
+   *     The iterator may be a pointer or a contiguous-iterator object.
+   * @draft ICU 78
+   */
+  auto rbegin() const { return std::u16string_view(*this).rbegin(); }
+  /**
+   * @return a reverse iterator to just before the first code unit in this string.
+   *     The iterator may be a pointer or a contiguous-iterator object.
+   * @draft ICU 78
+   */
+  auto rend() const { return std::u16string_view(*this).rend(); }
+#endif  // U_HIDE_DRAFT_API
 
   //========================================
   // Write operations
@@ -2318,6 +2376,16 @@ public:
    */
   UnicodeString& append(UChar32 srcChar);
 
+#ifndef U_HIDE_DRAFT_API
+  /**
+   * Appends the code unit `c` to the UnicodeString object.
+   * Same as append(c) except does not return *this.
+   *
+   * @param c the code unit to append
+   * @draft ICU 78
+   */
+  inline void push_back(char16_t c) { append(c); }
+#endif  // U_HIDE_DRAFT_API
 
   /* Insert operations */
 
