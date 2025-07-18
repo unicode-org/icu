@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1752802676028,
+  "lastUpdate": 1752854392958,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -36327,6 +36327,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFD_Text",
             "value": 2.737327153992302,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "committer": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "distinct": true,
+          "id": "3e26b1ae8dc73dede57fce90d0437983ce790ec9",
+          "message": "ICU-23038 Missed a BA to BA HH in the new monkeys",
+          "timestamp": "2025-07-18T17:35:37+02:00",
+          "tree_id": "2151db6aa4ade430579cea945ca88d9a75d2110e",
+          "url": "https://github.com/unicode-org/icu/commit/3e26b1ae8dc73dede57fce90d0437983ce790ec9"
+        },
+        "date": 1752854097144,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 2.8948246207368844,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
