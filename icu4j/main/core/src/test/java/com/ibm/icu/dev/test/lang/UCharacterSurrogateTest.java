@@ -9,6 +9,8 @@
 
 package com.ibm.icu.dev.test.lang;
 
+import java.util.NoSuchElementException;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -56,6 +58,103 @@ public final class UCharacterSurrogateTest extends CoreTestFmwk {
             errln("0x10ffff");
         if (UCharacter.isValidCodePoint(UCharacter.MAX_CODE_POINT + 1))
             errln("0x110000");
+    }
+
+    @Test
+    public void TestIsScalarValue() {
+        assertTrue("U+0000", UCharacter.isScalarValue(0));
+        assertTrue("U+0061", UCharacter.isScalarValue(0x61));
+        assertTrue("U+20ac", UCharacter.isScalarValue(0x20ac));
+        assertTrue("U+d7ff", UCharacter.isScalarValue(0xd7ff));
+        assertFalse("U+d800", UCharacter.isScalarValue(0xd800));
+        assertFalse("U+d9da", UCharacter.isScalarValue(0xd9da));
+        assertFalse("U+dfed", UCharacter.isScalarValue(0xdfed));
+        assertFalse("U+dfff", UCharacter.isScalarValue(0xdfff));
+        assertTrue("U+e000", UCharacter.isScalarValue(0xe000));
+        assertTrue("U+ffff", UCharacter.isScalarValue(0xffff));
+        assertFalse("-1", UCharacter.isScalarValue(-1));
+        assertTrue("U+10000", UCharacter.isScalarValue(0x10000));
+        assertTrue("U+50005", UCharacter.isScalarValue(0x50005));
+        assertTrue("U+10ffff", UCharacter.isScalarValue(0x10ffff));
+        assertFalse("0x110000", UCharacter.isScalarValue(0x110000));
+        assertFalse("0x7fffffff", UCharacter.isScalarValue(0x7fffffff));
+    }
+
+    @Test
+    public void TestAllCodePoints() {
+        int count = 0;
+        int previous = -1;
+        var iter = UCharacter.allCodePoints().iterator();
+        while (iter.hasNext()) {
+            int c = iter.nextInt();
+            assertTrue("isValidCodePoint", UCharacter.isValidCodePoint(c));
+            assertEquals("c == previous + 1", previous + 1, c);
+            previous = c;
+            ++count;
+        }
+        try {
+            iter.nextInt();
+            fail("past-the-end nextInt() did not throw");
+        } catch (NoSuchElementException expected) {
+        }
+        assertEquals("count", 0x110000, count);
+
+        assertEquals("stream count", 0x110000, UCharacter.allCodePointsStream().count());
+        assertEquals("filtered stream count",
+                0x110000,
+                UCharacter.allCodePointsStream().filter(UCharacter::isValidCodePoint)
+                        .distinct().count());
+    }
+
+    @Test
+    public void TestAllScalarValues() {
+        int count = 0;
+        int previous = -1;
+        var iter = UCharacter.allScalarValues().iterator();
+        while (iter.hasNext()) {
+            int c = iter.nextInt();
+            assertTrue("isScalarValue", UCharacter.isScalarValue(c));
+            if (previous == 0xd7ff) {
+                previous = 0xdfff;
+            }
+            assertEquals("c == previous + 1", previous + 1, c);
+            previous = c;
+            ++count;
+        }
+        try {
+            iter.nextInt();
+            fail("past-the-end nextInt() did not throw");
+        } catch (NoSuchElementException expected) {
+        }
+        assertEquals("count", 0x110000 - 0x800, count);
+
+        assertEquals("stream count", 0x110000 - 0x800, UCharacter.allScalarValuesStream().count());
+        assertEquals("filtered stream count",
+                0x110000 - 0x800,
+                UCharacter.allScalarValuesStream().filter(UCharacter::isScalarValue)
+                        .distinct().count());
+    }
+
+    @Test
+    public void TestIsNoncharacter() {
+        assertFalse("-1", UCharacter.isNoncharacter(-1));
+        assertFalse("U+0000", UCharacter.isNoncharacter(0));
+        assertFalse("U+20ac", UCharacter.isNoncharacter(0x20ac));
+        assertFalse("U+d9da", UCharacter.isNoncharacter(0xd9da));
+        assertFalse("U+dfed", UCharacter.isNoncharacter(0xdfed));
+        assertFalse("U+fdcf", UCharacter.isNoncharacter(0xfdcf));
+        assertTrue("U+fdd0", UCharacter.isNoncharacter(0xfdd0));
+        assertTrue("U+fdef", UCharacter.isNoncharacter(0xfdef));
+        assertFalse("U+fdf0", UCharacter.isNoncharacter(0xfdf0));
+        assertFalse("U+fffd", UCharacter.isNoncharacter(0xfffd));
+        assertTrue("U+fffe", UCharacter.isNoncharacter(0xfffe));
+        assertTrue("U+ffff", UCharacter.isNoncharacter(0xffff));
+        assertFalse("U+10000", UCharacter.isNoncharacter(0x10000));
+        assertTrue("U+1fffe", UCharacter.isNoncharacter(0x1fffe));
+        assertTrue("U+1ffff", UCharacter.isNoncharacter(0x1ffff));
+        assertFalse("U+50005", UCharacter.isNoncharacter(0x50005));
+        assertTrue("U+10ffff", UCharacter.isNoncharacter(0x10ffff));
+        assertFalse("0x110000", UCharacter.isNoncharacter(0x110000));
     }
 
     @Test

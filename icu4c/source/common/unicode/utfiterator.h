@@ -232,7 +232,111 @@ template<typename Range>
 constexpr bool range = range_type<Range>::value;
 
 #endif
+
+/** @internal */
+template<typename CP32, bool skipSurrogates>
+class CodePointsIterator {
+    static_assert(sizeof(CP32) == 4, "CP32 must be a 32-bit type to hold a code point");
+public:
+    /** C++ iterator boilerplate @internal */
+    using value_type = CP32;
+    /** C++ iterator boilerplate @internal */
+    using reference = value_type;
+    /** C++ iterator boilerplate @internal */
+    using pointer = CP32 *;
+    /** C++ iterator boilerplate @internal */
+    using difference_type = int32_t;
+    /** C++ iterator boilerplate @internal */
+    using iterator_category = std::forward_iterator_tag;
+
+    /** @internal */
+    inline CodePointsIterator(CP32 c) : c_(c) {}
+    /** @internal */
+    inline bool operator==(const CodePointsIterator &other) const { return c_ == other.c_; }
+    /** @internal */
+    inline bool operator!=(const CodePointsIterator &other) const { return !operator==(other); }
+    /** @internal */
+    inline CP32 operator*() const { return c_; }
+    /** @internal */
+    inline CodePointsIterator &operator++() {  // pre-increment
+        ++c_;
+        if (skipSurrogates && c_ == 0xd800) {
+            c_ = 0xe000;
+        }
+        return *this;
+    }
+    /** @internal */
+    inline CodePointsIterator operator++(int) {  // post-increment
+        CodePointsIterator result(*this);
+        ++(*this);
+        return result;
+    }
+
+private:
+    CP32 c_;
+};
+
 }  // namespace prv
+
+/**
+ * A C++ "range" over all Unicode code points U+0000..U+10FFFF.
+ * https://www.unicode.org/glossary/#code_point
+ *
+ * Intended for test and builder code.
+ *
+ * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t
+ * @draft ICU 78
+ * @see U_IS_CODE_POINT
+ */
+template<typename CP32>
+class AllCodePoints {
+    static_assert(sizeof(CP32) == 4, "CP32 must be a 32-bit type to hold a code point");
+public:
+    /** Constructor. @draft ICU 78 */
+    AllCodePoints() {}
+    /**
+     * @return an iterator over all Unicode code points.
+     *     The iterator returns CP32 integers.
+     * @draft ICU 78
+     */
+    auto begin() const { return prv::CodePointsIterator<CP32, false>(0); }
+    /**
+     * @return an exclusive-end iterator over all Unicode code points.
+     * @draft ICU 78
+     */
+    auto end() const { return prv::CodePointsIterator<CP32, false>(0x110000); }
+};
+
+/**
+ * A C++ "range" over all Unicode scalar values U+0000..U+D7FF & U+E000..U+10FFFF.
+ * That is, all code points except surrogates.
+ * Only scalar values can be represented in well-formed UTF-8/16/32.
+ * https://www.unicode.org/glossary/#unicode_scalar_value
+ *
+ * Intended for test and builder code.
+ *
+ * @tparam CP32 Code point type: UChar32 (=int32_t) or char32_t or uint32_t
+ * @draft ICU 78
+ * @see U_IS_SCALAR_VALUE
+ */
+template<typename CP32>
+class AllScalarValues {
+    static_assert(sizeof(CP32) == 4, "CP32 must be a 32-bit type to hold a code point");
+public:
+    /** Constructor. @draft ICU 78 */
+    AllScalarValues() {}
+    /**
+     * @return an iterator over all Unicode scalar values.
+     *     The iterator returns CP32 integers.
+     * @draft ICU 78
+     */
+    auto begin() const { return prv::CodePointsIterator<CP32, true>(0); }
+    /**
+     * @return an exclusive-end iterator over all Unicode scalar values.
+     * @draft ICU 78
+     */
+    auto end() const { return prv::CodePointsIterator<CP32, true>(0x110000); }
+};
 
 /**
  * Result of decoding a code unit sequence for one code point.

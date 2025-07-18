@@ -101,6 +101,7 @@ public:
     void TestLargeAppend();
     void TestU16StringView();
     void TestWStringView();
+    void TestRange();
 };
 
 #endif

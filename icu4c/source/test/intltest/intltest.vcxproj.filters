@@ -493,6 +493,9 @@
     <ClCompile Include="utfiteratortest.cpp">
       <Filter>strings</Filter>
     </ClCompile>
+    <ClCompile Include="utfstringtest.cpp">
+      <Filter>strings</Filter>
+    </ClCompile>
     <ClCompile Include="utxttest.cpp">
       <Filter>strings</Filter>
     </ClCompile>

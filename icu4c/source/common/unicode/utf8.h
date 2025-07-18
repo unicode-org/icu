@@ -170,7 +170,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  * @return true or false
  * @stable ICU 2.4
  */
-#define U8_IS_SINGLE(c) (((c)&0x80)==0)
+#define U8_IS_SINGLE(c) ((int8_t)(c)>=0)
 
 /**
  * Is this code unit (byte) a UTF-8 lead byte? (0xC2..0xF4)
@@ -213,6 +213,32 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  * @stable ICU 2.4
  */
 #define U8_MAX_LENGTH 4
+
+#ifndef U_HIDE_DRAFT_API
+
+/**
+ * Returns the length of a well-formed UTF-8 byte sequence according to its lead byte.
+ * Returns 1 for 0..0xc1 as well as for 0xf5..0xff.
+ * leadByte might be evaluated multiple times.
+ *
+ * @param leadByte The first byte of a UTF-8 sequence. Must be 0..0xff.
+ * @return 1..4
+ * @draft ICU 78
+ */
+#define U8_LENGTH_FROM_LEAD_BYTE(leadByte) (U8_COUNT_TRAIL_BYTES(leadByte) + 1)
+
+/**
+ * Returns the length of a well-formed UTF-8 byte sequence according to its lead byte.
+ * Returns 1 for 0..0xc1. Undefined for 0xf5..0xff.
+ * leadByte might be evaluated multiple times.
+ *
+ * @param leadByte The first byte of a UTF-8 sequence. Must be 0..0xff.
+ * @return 1..4
+ * @draft ICU 78
+ */
+#define U8_LENGTH_FROM_LEAD_BYTE_UNSAFE(leadByte) (U8_COUNT_TRAIL_BYTES_UNSAFE(leadByte) + 1)
+
+#endif  // U_HIDE_DRAFT_API
 
 /**
  * Get a code point from a string at a random-access offset,
