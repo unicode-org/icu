@@ -1,21 +1,17 @@
-// © 2024 and later: Unicode, Inc. and others.
+// © 2025 and later: Unicode, Inc. and others.
 // License & terms of use: https://www.unicode.org/copyright.html
 
-// utfiterator.h
-// created: 2024aug12 Markus W. Scherer
+// utfstring.h
+// created: 2025jul18 Markus W. Scherer
 
-#ifndef __UTFITERATOR_H__
-#define __UTFITERATOR_H__
+#ifndef __UTFSTRING_H__
+#define __UTFSTRING_H__
 
 #include "unicode/utypes.h"
 
 #if U_SHOW_CPLUSPLUS_API || U_SHOW_CPLUSPLUS_HEADER_API || !defined(UTYPES_H)
 
-#include <string>
-#include <string_view>
-#include <type_traits>
 #include "unicode/utf16.h"
-#include "unicode/utf8.h"
 
 /**
  * \file
@@ -162,4 +158,4 @@ inline StringClass encodeUnsafe(UChar32 c) {
 
 #endif  // U_HIDE_DRAFT_API
 #endif  // U_SHOW_CPLUSPLUS_API || U_SHOW_CPLUSPLUS_HEADER_API
-#endif  // __UTFITERATOR_H__
+#endif  // __UTFSTRING_H__

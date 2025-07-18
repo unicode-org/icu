@@ -5,7 +5,6 @@
 // created: 2025jul18 Markus W. Scherer
 
 #include <string>
-#include <string_view>
 
 // Test header-only ICU C++ APIs. Do not use other ICU C++ APIs.
 // Non-default configuration:
@@ -154,54 +153,50 @@ void UTFStringTest::testAppendUnsafe() {
 void UTFStringTest::testEncodeOrFFFD() {
     using icu::header::utfstring::encodeOrFFFD;
     {
-        using std::string;
-        assertTrue("string 4", encodeOrFFFD<string>(U'4') == CHARS(u8"4"));
-        assertTrue("string ced", encodeOrFFFD<string>(U'ç') == CHARS(u8"ç"));
-        assertTrue("string ka", encodeOrFFFD<string>(U'カ') == CHARS(u8"カ"));
-        assertTrue("string D800", encodeOrFFFD<string>(0xd800) == CHARS(u8"\uFFFD"));
-        assertTrue("string DFFF", encodeOrFFFD<string>(0xdfff) == CHARS(u8"\uFFFD"));
-        assertTrue("string fw4", encodeOrFFFD<string>(U'４') == CHARS(u8"４"));
-        assertTrue("string bike", encodeOrFFFD<string>(U'🚴') == CHARS(u8"🚴"));
-        assertTrue("string high", encodeOrFFFD<string>(0x110000) == CHARS(u8"\uFFFD"));
-        assertTrue("string neg", encodeOrFFFD<string>(-1) == CHARS(u8"\uFFFD"));
+        assertTrue("string 4", encodeOrFFFD<std::string>(U'4') == CHARS(u8"4"));
+        assertTrue("string ced", encodeOrFFFD<std::string>(U'ç') == CHARS(u8"ç"));
+        assertTrue("string ka", encodeOrFFFD<std::string>(U'カ') == CHARS(u8"カ"));
+        assertTrue("string D800", encodeOrFFFD<std::string>(0xd800) == CHARS(u8"\uFFFD"));
+        assertTrue("string DFFF", encodeOrFFFD<std::string>(0xdfff) == CHARS(u8"\uFFFD"));
+        assertTrue("string fw4", encodeOrFFFD<std::string>(U'４') == CHARS(u8"４"));
+        assertTrue("string bike", encodeOrFFFD<std::string>(U'🚴') == CHARS(u8"🚴"));
+        assertTrue("string high", encodeOrFFFD<std::string>(0x110000) == CHARS(u8"\uFFFD"));
+        assertTrue("string neg", encodeOrFFFD<std::string>(-1) == CHARS(u8"\uFFFD"));
     }
 #if U_CPLUSPLUS_VERSION >= 20
     {
-        using std::u8string;
-        assertTrue("u8string 4", encodeOrFFFD<u8string>(U'4') == u8"4");
-        assertTrue("u8string ced", encodeOrFFFD<u8string>(U'ç') == u8"ç");
-        assertTrue("u8string ka", encodeOrFFFD<u8string>(U'カ') == u8"カ");
-        assertTrue("u8string D800", encodeOrFFFD<u8string>(0xd800) == u8"\uFFFD");
-        assertTrue("u8string DFFF", encodeOrFFFD<u8string>(0xdfff) == u8"\uFFFD");
-        assertTrue("u8string fw4", encodeOrFFFD<u8string>(U'４') == u8"４");
-        assertTrue("u8string bike", encodeOrFFFD<u8string>(U'🚴') == u8"🚴");
-        assertTrue("u8string high", encodeOrFFFD<u8string>(0x110000) == u8"\uFFFD");
-        assertTrue("u8string neg", encodeOrFFFD<u8string>(-1) == u8"\uFFFD");
+        assertTrue("u8string 4", encodeOrFFFD<std::u8string>(U'4') == u8"4");
+        assertTrue("u8string ced", encodeOrFFFD<std::u8string>(U'ç') == u8"ç");
+        assertTrue("u8string ka", encodeOrFFFD<std::u8string>(U'カ') == u8"カ");
+        assertTrue("u8string D800", encodeOrFFFD<std::u8string>(0xd800) == u8"\uFFFD");
+        assertTrue("u8string DFFF", encodeOrFFFD<std::u8string>(0xdfff) == u8"\uFFFD");
+        assertTrue("u8string fw4", encodeOrFFFD<std::u8string>(U'４') == u8"４");
+        assertTrue("u8string bike", encodeOrFFFD<std::u8string>(U'🚴') == u8"🚴");
+        assertTrue("u8string high", encodeOrFFFD<std::u8string>(0x110000) == u8"\uFFFD");
+        assertTrue("u8string neg", encodeOrFFFD<std::u8string>(-1) == u8"\uFFFD");
     }
 #endif
     {
-        using std::u16string;
-        assertTrue("u16string 4", encodeOrFFFD<u16string>(U'4') == u"4");
-        assertTrue("u16string ced", encodeOrFFFD<u16string>(U'ç') == u"ç");
-        assertTrue("u16string ka", encodeOrFFFD<u16string>(U'カ') == u"カ");
-        assertTrue("u16string D800", encodeOrFFFD<u16string>(0xd800) == u"\uFFFD");
-        assertTrue("u16string DFFF", encodeOrFFFD<u16string>(0xdfff) == u"\uFFFD");
-        assertTrue("u16string fw4", encodeOrFFFD<u16string>(U'４') == u"４");
-        assertTrue("u16string bike", encodeOrFFFD<u16string>(U'🚴') == u"🚴");
-        assertTrue("u16string high", encodeOrFFFD<u16string>(0x110000) == u"\uFFFD");
-        assertTrue("u16string neg", encodeOrFFFD<u16string>(-1) == u"\uFFFD");
+        assertTrue("u16string 4", encodeOrFFFD<std::u16string>(U'4') == u"4");
+        assertTrue("u16string ced", encodeOrFFFD<std::u16string>(U'ç') == u"ç");
+        assertTrue("u16string ka", encodeOrFFFD<std::u16string>(U'カ') == u"カ");
+        assertTrue("u16string D800", encodeOrFFFD<std::u16string>(0xd800) == u"\uFFFD");
+        assertTrue("u16string DFFF", encodeOrFFFD<std::u16string>(0xdfff) == u"\uFFFD");
+        assertTrue("u16string fw4", encodeOrFFFD<std::u16string>(U'４') == u"４");
+        assertTrue("u16string bike", encodeOrFFFD<std::u16string>(U'🚴') == u"🚴");
+        assertTrue("u16string high", encodeOrFFFD<std::u16string>(0x110000) == u"\uFFFD");
+        assertTrue("u16string neg", encodeOrFFFD<std::u16string>(-1) == u"\uFFFD");
     }
     {
-        using std::u32string;
-        assertTrue("u32string 4", encodeOrFFFD<u32string>(U'4') == U"4");
-        assertTrue("u32string ced", encodeOrFFFD<u32string>(U'ç') == U"ç");
-        assertTrue("u32string ka", encodeOrFFFD<u32string>(U'カ') == U"カ");
-        assertTrue("u32string D800", encodeOrFFFD<u32string>(0xd800) == U"\uFFFD");
-        assertTrue("u32string DFFF", encodeOrFFFD<u32string>(0xdfff) == U"\uFFFD");
-        assertTrue("u32string fw4", encodeOrFFFD<u32string>(U'４') == U"４");
-        assertTrue("u32string bike", encodeOrFFFD<u32string>(U'🚴') == U"🚴");
-        assertTrue("u32string high", encodeOrFFFD<u32string>(0x110000) == U"\uFFFD");
-        assertTrue("u32string neg", encodeOrFFFD<u32string>(-1) == U"\uFFFD");
+        assertTrue("u32string 4", encodeOrFFFD<std::u32string>(U'4') == U"4");
+        assertTrue("u32string ced", encodeOrFFFD<std::u32string>(U'ç') == U"ç");
+        assertTrue("u32string ka", encodeOrFFFD<std::u32string>(U'カ') == U"カ");
+        assertTrue("u32string D800", encodeOrFFFD<std::u32string>(0xd800) == U"\uFFFD");
+        assertTrue("u32string DFFF", encodeOrFFFD<std::u32string>(0xdfff) == U"\uFFFD");
+        assertTrue("u32string fw4", encodeOrFFFD<std::u32string>(U'４') == U"４");
+        assertTrue("u32string bike", encodeOrFFFD<std::u32string>(U'🚴') == U"🚴");
+        assertTrue("u32string high", encodeOrFFFD<std::u32string>(0x110000) == U"\uFFFD");
+        assertTrue("u32string neg", encodeOrFFFD<std::u32string>(-1) == U"\uFFFD");
     }
 }
 
