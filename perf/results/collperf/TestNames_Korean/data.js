@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1752854794117,
+  "lastUpdate": 1752869178445,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -69711,6 +69711,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 12505188.7768,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "pedberg@unicode.org",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "committer": {
+            "email": "42151464+pedberg-icu@users.noreply.github.com",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "distinct": true,
+          "id": "9685f369b277c3469acb8e1bc23f1d14702da348",
+          "message": "ICU-23150 Deprecate C create/getMilligramPerDeciliter, J MILLIGRAM_PER_DECILITER",
+          "timestamp": "2025-07-18T12:34:21-07:00",
+          "tree_id": "b00af08354f14b067df9f25ae26b2163ddb504bb",
+          "url": "https://github.com/unicode-org/icu/commit/9685f369b277c3469acb8e1bc23f1d14702da348"
+        },
+        "date": 1752868882497,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 219.8803,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 57166562.6833,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 12237321.915,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 54005713.2984,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 12546147.7072,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
