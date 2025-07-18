@@ -621,7 +621,7 @@ enum URBNFRuleSetTag {
  * @see PluralRules
  * @stable ICU 2.0
  */
-class U_I18N_API RuleBasedNumberFormat : public NumberFormat {
+class U_I18N_API_CLASS RuleBasedNumberFormat : public NumberFormat {
 public:
 
   //-----------------------------------------------------------------------
@@ -638,7 +638,9 @@ public:
      * @param status The status indicating whether the constructor succeeded.
      * @stable ICU 3.2
      */
-    RuleBasedNumberFormat(const UnicodeString& rules, UParseError& perror, UErrorCode& status);
+    U_I18N_API RuleBasedNumberFormat(const UnicodeString& rules,
+                                     UParseError& perror,
+                                     UErrorCode& status);
 
     /**
      * Creates a RuleBasedNumberFormat that behaves according to the description
@@ -663,26 +665,30 @@ public:
      * @param status The status indicating whether the constructor succeeded.
      * @stable ICU 3.2
      */
-    RuleBasedNumberFormat(const UnicodeString& rules, const UnicodeString& localizations,
-                        UParseError& perror, UErrorCode& status);
+    U_I18N_API RuleBasedNumberFormat(const UnicodeString& rules,
+                                     const UnicodeString& localizations,
+                                     UParseError& perror,
+                                     UErrorCode& status);
 
-  /**
-   * Creates a RuleBasedNumberFormat that behaves according to the rules
-   * passed in.  The formatter uses the specified locale to determine the
-   * characters to use when formatting numerals, and to define equivalences
-   * for lenient parsing.
-   * @param rules The formatter rules.
-   * See the class documentation for a complete explanation of the rule
-   * syntax.
-   * @param locale A locale that governs which characters are used for
-   * formatting values in numerals and which characters are equivalent in
-   * lenient parsing.
-   * @param perror The parse error if an error was encountered.
-   * @param status The status indicating whether the constructor succeeded.
-   * @stable ICU 2.0
-   */
-  RuleBasedNumberFormat(const UnicodeString& rules, const Locale& locale,
-                        UParseError& perror, UErrorCode& status);
+    /**
+     * Creates a RuleBasedNumberFormat that behaves according to the rules
+     * passed in.  The formatter uses the specified locale to determine the
+     * characters to use when formatting numerals, and to define equivalences
+     * for lenient parsing.
+     * @param rules The formatter rules.
+     * See the class documentation for a complete explanation of the rule
+     * syntax.
+     * @param locale A locale that governs which characters are used for
+     * formatting values in numerals and which characters are equivalent in
+     * lenient parsing.
+     * @param perror The parse error if an error was encountered.
+     * @param status The status indicating whether the constructor succeeded.
+     * @stable ICU 2.0
+     */
+    U_I18N_API RuleBasedNumberFormat(const UnicodeString& rules,
+                                     const Locale& locale,
+                                     UParseError& perror,
+                                     UErrorCode& status);
 
     /**
      * Creates a RuleBasedNumberFormat that behaves according to the description
@@ -710,8 +716,11 @@ public:
      * @param status The status indicating whether the constructor succeeded.
      * @stable ICU 3.2
      */
-    RuleBasedNumberFormat(const UnicodeString& rules, const UnicodeString& localizations,
-                        const Locale& locale, UParseError& perror, UErrorCode& status);
+    U_I18N_API RuleBasedNumberFormat(const UnicodeString& rules,
+                                     const UnicodeString& localizations,
+                                     const Locale& locale,
+                                     UParseError& perror,
+                                     UErrorCode& status);
 
   /**
    * Creates a RuleBasedNumberFormat from a predefined ruleset.  The selector
@@ -731,7 +740,7 @@ public:
    * @param status The status indicating whether the constructor succeeded.
    * @stable ICU 2.0
    */
-  RuleBasedNumberFormat(URBNFRuleSetTag tag, const Locale& locale, UErrorCode& status);
+  U_I18N_API RuleBasedNumberFormat(URBNFRuleSetTag tag, const Locale& locale, UErrorCode& status);
 
   //-----------------------------------------------------------------------
   // boilerplate
@@ -742,20 +751,20 @@ public:
    * @param rhs    the object to be copied from.
    * @stable ICU 2.6
    */
-  RuleBasedNumberFormat(const RuleBasedNumberFormat& rhs);
+  U_I18N_API RuleBasedNumberFormat(const RuleBasedNumberFormat& rhs);
 
   /**
    * Assignment operator
    * @param rhs    the object to be copied from.
    * @stable ICU 2.6
    */
-  RuleBasedNumberFormat& operator=(const RuleBasedNumberFormat& rhs);
+  U_I18N_API RuleBasedNumberFormat& operator=(const RuleBasedNumberFormat& rhs);
 
   /**
    * Release memory allocated for a RuleBasedNumberFormat when you are finished with it.
    * @stable ICU 2.6
    */
-  virtual ~RuleBasedNumberFormat();
+  U_I18N_API virtual ~RuleBasedNumberFormat();
 
   /**
    * Clone this object polymorphically.  The caller is responsible
@@ -763,7 +772,7 @@ public:
    * @return  A copy of the object.
    * @stable ICU 2.6
    */
-  virtual RuleBasedNumberFormat* clone() const override;
+  U_I18N_API virtual RuleBasedNumberFormat* clone() const override;
 
   /**
    * Return true if the given Format objects are semantically equal.
@@ -772,7 +781,7 @@ public:
    * @return        true if the given Format objects are semantically equal.
    * @stable ICU 2.6
    */
-  virtual bool operator==(const Format& other) const override;
+  U_I18N_API virtual bool operator==(const Format& other) const override;
 
 //-----------------------------------------------------------------------
 // public API functions
@@ -783,14 +792,14 @@ public:
    * @return the result String that was passed in
    * @stable ICU 2.0
    */
-  virtual UnicodeString getRules() const;
+  U_I18N_API virtual UnicodeString getRules() const;
 
   /**
    * Return the number of public rule set names.
    * @return the number of public rule set names.
    * @stable ICU 2.0
    */
-  virtual int32_t getNumberOfRuleSetNames() const;
+  U_I18N_API virtual int32_t getNumberOfRuleSetNames() const;
 
   /**
    * Return the name of the index'th public ruleSet.  If index is not valid,
@@ -799,14 +808,14 @@ public:
    * @return the name of the index'th public ruleSet.
    * @stable ICU 2.0
    */
-  virtual UnicodeString getRuleSetName(int32_t index) const;
+  U_I18N_API virtual UnicodeString getRuleSetName(int32_t index) const;
 
   /**
    * Return the number of locales for which we have localized rule set display names.
    * @return the number of locales for which we have localized rule set display names.
    * @stable ICU 3.2
    */
-  virtual int32_t getNumberOfRuleSetDisplayNameLocales() const;
+  U_I18N_API virtual int32_t getNumberOfRuleSetDisplayNameLocales() const;
 
   /**
    * Return the index'th display name locale.
@@ -816,7 +825,7 @@ public:
    * @see #getNumberOfRuleSetDisplayNameLocales
    * @stable ICU 3.2
    */
-  virtual Locale getRuleSetDisplayNameLocale(int32_t index, UErrorCode& status) const;
+  U_I18N_API virtual Locale getRuleSetDisplayNameLocale(int32_t index, UErrorCode& status) const;
 
     /**
      * Return the rule set display names for the provided locale.  These are in the same order
@@ -831,8 +840,8 @@ public:
      * @see #getRuleSetName
      * @stable ICU 3.2
      */
-  virtual UnicodeString getRuleSetDisplayName(int32_t index,
-                          const Locale& locale = Locale::getDefault());
+    U_I18N_API virtual UnicodeString getRuleSetDisplayName(int32_t index,
+                                                           const Locale& locale = Locale::getDefault());
 
     /**
      * Return the rule set display name for the provided rule set and locale.
@@ -842,8 +851,8 @@ public:
      * @stable ICU 3.2
      * @see #getRuleSetDisplayName
      */
-  virtual UnicodeString getRuleSetDisplayName(const UnicodeString& ruleSetName,
-                          const Locale& locale = Locale::getDefault());
+    U_I18N_API virtual UnicodeString getRuleSetDisplayName(const UnicodeString& ruleSetName,
+                                                           const Locale& locale = Locale::getDefault());
 
 
   using NumberFormat::format;
@@ -856,9 +865,9 @@ public:
    * @return A textual representation of the number.
    * @stable ICU 2.0
    */
-  virtual UnicodeString& format(int32_t number,
-                                UnicodeString& toAppendTo,
-                                FieldPosition& pos) const override;
+  U_I18N_API virtual UnicodeString& format(int32_t number,
+                                           UnicodeString& toAppendTo,
+                                           FieldPosition& pos) const override;
 
   /**
    * Formats the specified 64-bit number using the default ruleset.
@@ -868,9 +877,9 @@ public:
    * @return A textual representation of the number.
    * @stable ICU 2.1
    */
-  virtual UnicodeString& format(int64_t number,
-                                UnicodeString& toAppendTo,
-                                FieldPosition& pos) const override;
+  U_I18N_API virtual UnicodeString& format(int64_t number,
+                                           UnicodeString& toAppendTo,
+                                           FieldPosition& pos) const override;
   /**
    * Formats the specified number using the default ruleset.
    * @param number The number to format.
@@ -879,9 +888,9 @@ public:
    * @return A textual representation of the number.
    * @stable ICU 2.0
    */
-  virtual UnicodeString& format(double number,
-                                UnicodeString& toAppendTo,
-                                FieldPosition& pos) const override;
+  U_I18N_API virtual UnicodeString& format(double number,
+                                           UnicodeString& toAppendTo,
+                                           FieldPosition& pos) const override;
 
   /**
    * Formats the specified number using the named ruleset.
@@ -894,11 +903,11 @@ public:
    * @return A textual representation of the number.
    * @stable ICU 2.0
    */
-  virtual UnicodeString& format(int32_t number,
-                                const UnicodeString& ruleSetName,
-                                UnicodeString& toAppendTo,
-                                FieldPosition& pos,
-                                UErrorCode& status) const;
+  U_I18N_API virtual UnicodeString& format(int32_t number,
+                                           const UnicodeString& ruleSetName,
+                                           UnicodeString& toAppendTo,
+                                           FieldPosition& pos,
+                                           UErrorCode& status) const;
   /**
    * Formats the specified 64-bit number using the named ruleset.
    * @param number The number to format.
@@ -910,11 +919,11 @@ public:
    * @return A textual representation of the number.
    * @stable ICU 2.1
    */
-  virtual UnicodeString& format(int64_t number,
-                                const UnicodeString& ruleSetName,
-                                UnicodeString& toAppendTo,
-                                FieldPosition& pos,
-                                UErrorCode& status) const;
+  U_I18N_API virtual UnicodeString& format(int64_t number,
+                                           const UnicodeString& ruleSetName,
+                                           UnicodeString& toAppendTo,
+                                           FieldPosition& pos,
+                                           UErrorCode& status) const;
   /**
    * Formats the specified number using the named ruleset.
    * @param number The number to format.
@@ -926,11 +935,11 @@ public:
    * @return A textual representation of the number.
    * @stable ICU 2.0
    */
-  virtual UnicodeString& format(double number,
-                                const UnicodeString& ruleSetName,
-                                UnicodeString& toAppendTo,
-                                FieldPosition& pos,
-                                UErrorCode& status) const;
+  U_I18N_API virtual UnicodeString& format(double number,
+                                           const UnicodeString& ruleSetName,
+                                           UnicodeString& toAppendTo,
+                                           FieldPosition& pos,
+                                           UErrorCode& status) const;
 
 protected:
     /**
@@ -972,9 +981,9 @@ public:
    * @see #setLenient
    * @stable ICU 2.0
    */
-  virtual void parse(const UnicodeString& text,
-                     Formattable& result,
-                     ParsePosition& parsePosition) const override;
+  U_I18N_API virtual void parse(const UnicodeString& text,
+                                Formattable& result,
+                                ParsePosition& parsePosition) const override;
 
 #if !UCONFIG_NO_COLLATION
 
@@ -1011,7 +1020,7 @@ public:
    * @see RuleBasedCollator
    * @stable ICU 2.0
    */
-  virtual void setLenient(UBool enabled) override;
+  U_I18N_API virtual void setLenient(UBool enabled) override;
 
   /**
    * Returns true if lenient-parse mode is turned on.  Lenient parsing is off
@@ -1020,7 +1029,7 @@ public:
    * @see #setLenient
    * @stable ICU 2.0
    */
-  virtual inline UBool isLenient() const override;
+  U_I18N_API virtual inline UBool isLenient() const override;
 
 #endif
 
@@ -1032,7 +1041,7 @@ public:
    * @param status set to failure code when a problem occurs.
    * @stable ICU 2.6
    */
-  virtual void setDefaultRuleSet(const UnicodeString& ruleSetName, UErrorCode& status);
+  U_I18N_API virtual void setDefaultRuleSet(const UnicodeString& ruleSetName, UErrorCode& status);
 
   /**
    * Return the name of the current default rule set.  If the current rule set is
@@ -1040,7 +1049,7 @@ public:
    * @return the name of the current default rule set
    * @stable ICU 3.0
    */
-  virtual UnicodeString getDefaultRuleSetName() const;
+  U_I18N_API virtual UnicodeString getDefaultRuleSetName() const;
 
   /**
    * Set a particular UDisplayContext value in the formatter, such as
@@ -1052,21 +1061,21 @@ public:
    *               updated with any new status from the function. 
    * @stable ICU 53
    */
-  virtual void setContext(UDisplayContext value, UErrorCode& status) override;
+  U_I18N_API virtual void setContext(UDisplayContext value, UErrorCode& status) override;
 
     /**
      * Get the rounding mode.
      * @return A rounding mode
      * @stable ICU 60
      */
-    virtual ERoundingMode getRoundingMode() const override;
+    U_I18N_API virtual ERoundingMode getRoundingMode() const override;
 
     /**
      * Set the rounding mode.
      * @param roundingMode A rounding mode
      * @stable ICU 60
      */
-    virtual void setRoundingMode(ERoundingMode roundingMode) override;
+    U_I18N_API virtual void setRoundingMode(ERoundingMode roundingMode) override;
 
 public:
     /**
@@ -1074,14 +1083,14 @@ public:
      *
      * @stable ICU 2.8
      */
-    static UClassID U_EXPORT2 getStaticClassID();
+    U_I18N_API static UClassID getStaticClassID();
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
      * @stable ICU 2.8
      */
-    virtual UClassID getDynamicClassID() const override;
+    U_I18N_API virtual UClassID getDynamicClassID() const override;
 
     /**
      * Sets the decimal format symbols, which is generally not changed
@@ -1091,7 +1100,7 @@ public:
      * @param symbolsToAdopt DecimalFormatSymbols to be adopted.
      * @stable ICU 49
      */
-    virtual void adoptDecimalFormatSymbols(DecimalFormatSymbols* symbolsToAdopt);
+    U_I18N_API virtual void adoptDecimalFormatSymbols(DecimalFormatSymbols* symbolsToAdopt);
 
     /**
      * Sets the decimal format symbols, which is generally not changed
@@ -1102,7 +1111,7 @@ public:
      * @param symbols DecimalFormatSymbols.
      * @stable ICU 49
      */
-    virtual void setDecimalFormatSymbols(const DecimalFormatSymbols& symbols);
+    U_I18N_API virtual void setDecimalFormatSymbols(const DecimalFormatSymbols& symbols);
 
 private:
     RuleBasedNumberFormat() = delete; // default constructor not implemented
