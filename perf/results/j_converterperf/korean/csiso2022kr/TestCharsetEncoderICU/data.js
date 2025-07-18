@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1752783799905,
+  "lastUpdate": 1752802655083,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -36117,6 +36117,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 17.977128817458585,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "a7fa7e9069ae91e5203fbda45002c940d6088b31",
+          "message": "ICU-23054 Fix all 'DefaultCharset' errorprone issues",
+          "timestamp": "2025-07-18T01:29:34Z",
+          "tree_id": "304b5c537543b156c8336b6c8f75afb473abe659",
+          "url": "https://github.com/unicode-org/icu/commit/a7fa7e9069ae91e5203fbda45002c940d6088b31"
+        },
+        "date": 1752802365690,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 18.298083621630152,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
