@@ -264,7 +264,7 @@ There are four ways to create a converter:
 > define the default codepage to something that supports Hindi.
 > The default converter is used in expressions such as: `UnicodeString text("abc");`
 > to convert 'abc', and in the `u_uastrcpy()` C functions.
-> Code operating at the [OS level](../design.md) MAY choose to
+> Code operating at the [OS level](../icu/design.md) MAY choose to
 > change the default converter with `ucnv_setDefaultName()`.
 > However, be aware that this change has inconsistent results if it is done after
 > ICU components are initialized.
@@ -274,7 +274,7 @@ There are four ways to create a converter:
 Closing a converter frees memory occupied by that instance of the converter.
 However it does not release the larger shared data tables the converter might
 use. OS-level code may call `ucnv_flushCache()` to explicitly free memory occupied
-by [unused tables](../design.md).
+by [unused tables](../icu/design.md).
 
 ```c
 ucnv_close(conv)
@@ -283,7 +283,7 @@ ucnv_close(conv)
 ### Converter Life Cycle
 
 Note that a Converter is created with a certain type (for instance, ISO-8859-3)
-which does not change over the life of that [object](../design.md). Converters
+which does not change over the life of that [object](../icu/design.md). Converters
 should be allocated one per thread. They are cheap to create, as the shared data
 doesn't need to be reallocated.
 
