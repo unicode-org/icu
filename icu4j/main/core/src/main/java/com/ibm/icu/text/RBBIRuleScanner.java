@@ -863,7 +863,7 @@ class RBBIRuleScanner {
         // Main loop for the rule parsing state machine.
         //   Runs once per state transition.
         //   Each time through optionally performs, depending on the state table,
-        //      - an advance to the the next input char
+        //      - an advance to the next input char
         //      - an action to be performed.
         //      - pushing or popping a state to/from the local state return stack.
         //

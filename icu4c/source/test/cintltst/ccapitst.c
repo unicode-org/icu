@@ -1212,7 +1212,7 @@ static void TestAlias(void) {
         alias0 = ucnv_getAlias(name, 0, &status);
         for (j=1; j<na; ++j) {
             const char *alias;
-            /* Make sure each alias maps back to the the same list of
+            /* Make sure each alias maps back to the same list of
                aliases.  Assume that if alias 0 is the same, the whole
                list is the same (this should always be true). */
             const char *mapBack;

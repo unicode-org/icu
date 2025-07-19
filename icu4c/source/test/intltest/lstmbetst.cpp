@@ -139,7 +139,7 @@ void LSTMBETest::runTestFromFile(const char* filename, const char* locale) {
                 // then find the break points by calling the engine.
                 std::stringstream ss;
 
-                // Construct the UText which is expected by the the engine as
+                // Construct the UText which is expected by the engine as
                 // input from the UnicodeString.
                 UText ut = UTEXT_INITIALIZER;
                 utext_openConstUnicodeString(&ut, &value, &status);
@@ -279,7 +279,7 @@ void LSTMBETest::runTestWithLargeMemory( const char* model, UScriptCode script) 
         return;
     }
     while (U_SUCCESS(status) && text.length() <= test_threshold) {
-        // Construct the UText which is expected by the the engine as
+        // Construct the UText which is expected by the engine as
         // input from the UnicodeString.
         UText ut = UTEXT_INITIALIZER;
         utext_openConstUnicodeString(&ut, &text, &status);

@@ -146,7 +146,7 @@ Every individual test will have a similar button on level with the test signatur
 
 The output for a test run invocation will appear in the Debug Console tab of the bottom panel.
 
-> :point_right: **Note**: In the Test Results tab, if the the formatting of the output that is provided per test is not formatted correctly, it may be related to formatting in the Maven CLI command's output (ex: allowing ANSI color code escape characters, which some system's Maven installtions enable by default).
+> :point_right: **Note**: In the Test Results tab, if the formatting of the output that is provided per test is not formatted correctly, it may be related to formatting in the Maven CLI command's output (ex: allowing ANSI color code escape characters, which some system's Maven installtions enable by default).
 
 ![](test-class-run-tests-result.png)
 

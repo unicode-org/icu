@@ -44,7 +44,7 @@ public final class RBBIDataWrapper {
         public int     fRowLen;
         /**
          * Char category number of the first dictionary char class,
-         * or the the largest category number + 1 if there are no dictionary categories.
+         * or the largest category number + 1 if there are no dictionary categories.
          */
         public int     fDictCategoriesStart;
         /**

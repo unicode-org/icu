@@ -336,7 +336,7 @@ U_CFUNC uint32_t
 u_getUnicodeProperties(UChar32 c, int32_t column);
 
 /**
- * Get the the maximum values for some enum/int properties.
+ * Get the maximum values for some enum/int properties.
  * Use the same column numbers as for u_getUnicodeProperties().
  * The returned value will contain maximum values stored in the same bit fields
  * as where the enum values are stored in the u_getUnicodeProperties()

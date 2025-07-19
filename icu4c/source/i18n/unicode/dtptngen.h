@@ -340,7 +340,7 @@ public:
      * @param style
      *              one of DateFormat.FULL..DateFormat.SHORT. Error if out of range.
      * @param dateTimeFormat
-     *              the new dateTimeFormat to set for the the specified style
+     *              the new dateTimeFormat to set for the specified style
      * @param status
      *              in/out parameter; if no failure status is already set,
      *              it will be set according to result of the function (e.g.
@@ -360,7 +360,7 @@ public:
      *              it will be set according to result of the function (e.g.
      *              U_ILLEGAL_ARGUMENT_ERROR for style out of range).
      * @return
-     *              the current dateTimeFormat for the the specified style, or
+     *              the current dateTimeFormat for the specified style, or
      *              empty string in case of error. The UnicodeString reference,
      *              or the contents of the string, may no longer be valid if
      *              setDateTimeFormat is called, or the DateTimePatternGenerator

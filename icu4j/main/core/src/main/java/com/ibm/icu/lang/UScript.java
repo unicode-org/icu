@@ -1148,7 +1148,7 @@ public final class UScript {
      * Returns MALAYAM given "Malayam" OR "Mlym".
      * Returns LATIN given "en" OR "en_US"
      * @param locale Locale
-     * @return The script codes array. null if the the code cannot be found.
+     * @return The script codes array. null if the code cannot be found.
      * @stable ICU 2.4
      */
     public static final int[] getCode(Locale locale){
@@ -1159,7 +1159,7 @@ public final class UScript {
      * Returns MALAYAM given "Malayam" OR "Mlym".
      * Returns LATIN given "en" OR "en_US"
      * @param locale ULocale
-     * @return The script codes array. null if the the code cannot be found.
+     * @return The script codes array. null if the code cannot be found.
      * @stable ICU 3.0
      */
     public static final int[] getCode(ULocale locale){
@@ -1175,7 +1175,7 @@ public final class UScript {
      * That does a fast lookup with no access of the locale data.
      *
      * @param nameOrAbbrOrLocale name of the script or ISO 15924 code or locale
-     * @return The script codes array. null if the the code cannot be found.
+     * @return The script codes array. null if the code cannot be found.
      * @stable ICU 2.4
      */
     public static final int[] getCode(String nameOrAbbrOrLocale) {

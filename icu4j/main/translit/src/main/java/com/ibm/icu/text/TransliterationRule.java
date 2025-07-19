@@ -146,7 +146,7 @@ class TransliterationRule {
      * of -3.
      * @param segs array of UnicodeMatcher corresponding to input pattern
      * segments, or null if there are none
-     * @param anchorStart true if the the rule is anchored on the left to
+     * @param anchorStart true if the rule is anchored on the left to
      * the context start
      * @param anchorEnd true if the rule is anchored on the right to the
      * context limit
@@ -562,7 +562,7 @@ class TransliterationRule {
         UnicodeSet temp = new UnicodeSet();
 
         // We need to walk through the pattern.
-        // Iff some of the characters at ALL of the the positions are matched by the filter, then we add temp to toUnionTo
+        // Iff some of the characters at ALL of the positions are matched by the filter, then we add temp to toUnionTo
         for (int i=anteContextLength; i<limit; ) {
             int ch = UTF16.charAt(pattern, i);
             i += UTF16.getCharCount(ch);

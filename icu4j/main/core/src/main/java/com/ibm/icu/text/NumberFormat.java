@@ -1704,7 +1704,7 @@ public abstract class NumberFormat extends UFormat implements Cloneable {
 
 
     /**
-     * True if the the grouping (i.e. thousands) separator is used when
+     * True if the grouping (i.e. thousands) separator is used when
      * formatting and parsing numbers.
      *
      * @serial

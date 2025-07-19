@@ -360,7 +360,7 @@ know how to create a project in your favorite IDE, and so on.
     mvn package -q
     ```
 
-    This will output the following in the the tests' console output
+    This will output the following in the tests' console output
     ```
     Hello John, today is January 28, 2025!
     ```

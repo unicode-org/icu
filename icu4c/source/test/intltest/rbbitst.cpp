@@ -4523,7 +4523,7 @@ void RBBITest::runLSTMTestFromFile(const char* filename, UScriptCode script) {
                 input += value + " suffix";
                 std::stringstream ss;
 
-                // Construct the UText which is expected by the the engine as
+                // Construct the UText which is expected by the engine as
                 // input from the UnicodeString.
                 UText ut = UTEXT_INITIALIZER;
                 utext_openConstUnicodeString(&ut, &input, &status);
