@@ -2353,7 +2353,7 @@ void UnicodeStringTest::TestUnicodeStringInsertAppendToSelf() {
 }
 
 void UnicodeStringTest::TestLargeMemory() {
-#if U_PLATFORM_IS_LINUX_BASED || U_PLATFORM_IS_DARWIN_BASED
+#if (U_PLATFORM_IS_LINUX_BASED || U_PLATFORM_IS_DARWIN_BASED) && (UINTPTR_MAX == 0xFFFFFFFFFFFFFFFF)
     if(quick) { return; }
     IcuTestErrorCode status(*this, "TestLargeMemory");
     constexpr uint32_t len = 2147483643;
