@@ -37,10 +37,12 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C10CF34B-3F79-430E-AD38-5A32DC0589C2}</ProjectGuid>
     <Keyword>DynamicLibrary</Keyword>
+    <Keyword Condition="'$(ENABLE_STATIC)'=='YES'">StaticLibrary</Keyword>
     <DefaultLanguage>en-US</DefaultLanguage>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType Condition="'$(ENABLE_STATIC)'=='YES'">StaticLibrary</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -108,6 +110,17 @@
       <!-- The icudt.lib is for U_ICUDATA_ENTRY_POINT -->
       <AdditionalDependencies>icudt.lib;onecore.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <Lib>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
+      <RandomizedBaseAddress>true</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <TurnOffAssemblyGeneration>true</TurnOffAssemblyGeneration>
+      <IgnoreSpecificDefaultLibraries>vccorlib.lib;msvcrt.lib</IgnoreSpecificDefaultLibraries>
+     <!-- The icudt.lib is for U_ICUDATA_ENTRY_POINT -->
+      <AdditionalDependencies>icudt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
     <!-- Options that are common to all 'Release' configurations -->
@@ -128,6 +141,12 @@
       <ProgramDatabaseFile>.\..\..\$(IcuLibOutputDir)\icuuc.pdb</ProgramDatabaseFile>
       <ImportLibrary>..\..\$(IcuLibOutputDir)\icuuc.lib</ImportLibrary>
     </Link>
+    <Lib>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <AdditionalDependencies>vccorlib.lib;msvcrt.lib;vcruntime.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ProgramDatabaseFile>.\..\..\$(IcuLibOutputDir)\icuuc.pdb</ProgramDatabaseFile>
+      <OutputFile>..\..\$(IcuLibOutputDir)\icuuc.lib</OutputFile>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
     <!-- Options that are common to all 'Debug' configurations -->
@@ -151,6 +170,11 @@
       <ProgramDatabaseFile>.\..\..\$(IcuLibOutputDir)\icuucd.pdb</ProgramDatabaseFile>
       <ImportLibrary>..\..\$(IcuLibOutputDir)\icuucd.lib</ImportLibrary>
     </Link>
+    <Lib>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>.\..\..\$(IcuLibOutputDir)\icuucd.pdb</ProgramDatabaseFile>
+      <OutputFile>..\..\$(IcuLibOutputDir)\icuucd.lib</OutputFile>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Platform)'=='Win32'">
     <!-- Options that are common to all 32-bit configurations -->
@@ -164,6 +188,10 @@
       <!-- This is so that we can use the existing stubdata icudt.lib and not need a UWP version. -->
       <AdditionalLibraryDirectories>.\..\..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <Lib>
+      <!-- This is so that we can use the existing stubdata icudt.lib and not need a UWP version. -->
+      <AdditionalLibraryDirectories>.\..\..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Platform)'=='x64'">
     <!-- Options that are common to all 64-bit configurations -->
@@ -178,6 +206,11 @@
       <!-- This is so that we can use the existing stubdata icudt.lib and not need a UWP version. -->
       <AdditionalLibraryDirectories>.\..\..\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <Lib>
+      <TargetMachine>MachineX64</TargetMachine>
+      <!-- This is so that we can use the existing stubdata icudt.lib and not need a UWP version. -->
+      <AdditionalLibraryDirectories>.\..\..\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Platform)'=='ARM'">
     <!-- Options that are common to all ARM configurations -->
@@ -192,6 +225,11 @@
       <!-- This is so that we can use the existing stubdata icudt.lib and not need a UWP version. -->
       <AdditionalLibraryDirectories>.\..\..\libARM;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <Lib>
+      <TargetMachine>MachineARM</TargetMachine>
+      <!-- This is so that we can use the existing stubdata icudt.lib and not need a UWP version. -->
+      <AdditionalLibraryDirectories>.\..\..\libARM;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Platform)'=='ARM64'">
     <!-- Options that are common to all ARM64 configurations -->
@@ -206,6 +244,11 @@
       <!-- This is so that we can use the existing stubdata icudt.lib and not need a UWP version. -->
       <AdditionalLibraryDirectories>.\..\..\libARM64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <Lib>
+      <TargetMachine>MachineARM64</TargetMachine>
+      <!-- This is so that we can use the existing stubdata icudt.lib and not need a UWP version. -->
+      <AdditionalLibraryDirectories>.\..\..\libARM64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="edits.cpp" />
