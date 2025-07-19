@@ -717,7 +717,7 @@ public final class UCharacterTest extends CoreTestFmwk
 
         BufferedReader input = null;
         try {
-            input = TestUtil.getDataReader("unicode/UnicodeData.txt");
+            input = TestUtil.getUtf8DataReader("unicode/UnicodeData.txt");
             int numErrors = 0;
 
             for (;;) {

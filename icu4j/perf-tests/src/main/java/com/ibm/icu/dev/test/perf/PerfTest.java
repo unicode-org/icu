@@ -16,6 +16,7 @@ import java.io.InputStreamReader;
 import java.io.PushbackInputStream;
 import java.io.Reader;
 import java.lang.reflect.Method;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -902,19 +903,6 @@ public abstract class PerfTest {
 
         /**
          * Creates a new reader, skipping a BOM associated with the given
-         * encoding. Equivalent to BOMFreeReader(in, null).
-         *
-         * @param in
-         *            The input stream.
-         * @throws IOException
-         *             Thrown if reading for a BOM causes an IOException.
-         */
-        public BOMFreeReader(InputStream in) throws IOException {
-            this(in, null);
-        }
-
-        /**
-         * Creates a new reader, skipping a BOM associated with the given
          * encoding. If encoding is null, attempts to detect the encoding by the
          * BOM.
          *
@@ -926,6 +914,12 @@ public abstract class PerfTest {
          *             Thrown if reading for a BOM causes an IOException.
          */
         public BOMFreeReader(InputStream in, String encoding) throws IOException {
+            if (encoding == null) {
+                throw new IllegalArgumentException("The encoding cannot be null");
+            }
+            if (!Charset.isSupported(encoding)) {
+                throw new IllegalArgumentException("Unsupported encoding '" + encoding + "'");
+            }
             PushbackInputStream pushback = new PushbackInputStream(in, MAX_BOM_LENGTH);
             this.encoding = encoding;
 
@@ -937,7 +931,7 @@ public abstract class PerfTest {
             if (amountRead > bomLength)
                 pushback.unread(start, bomLength, amountRead - bomLength);
 
-            reader = (encoding == null) ? new InputStreamReader(pushback) : new InputStreamReader(pushback, encoding);
+            reader = new InputStreamReader(pushback, encoding);
         }
 
         /**

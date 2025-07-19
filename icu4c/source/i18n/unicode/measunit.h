@@ -1173,6 +1173,7 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit getMilligramOfglucosePerDeciliter();
 
+#ifndef U_HIDE_DEPRECATED_API
     /**
      * Returns by pointer, unit of concentr: milligram-per-deciliter.
      * (renamed to milligram-ofglucose-per-deciliter in CLDR 39 / ICU 69).
@@ -1180,7 +1181,7 @@ class U_I18N_API MeasureUnit: public UObject {
      * Also see {@link #createMilligramOfglucosePerDeciliter()}.
      * Also see {@link #getMilligramPerDeciliter()}.
      * @param status ICU error code.
-     * @stable ICU 57
+     * @deprecated ICU 78 use createMilligramOfglucosePerDeciliter(UErrorCode &status)
      */
     static MeasureUnit *createMilligramPerDeciliter(UErrorCode &status);
 
@@ -1189,9 +1190,10 @@ class U_I18N_API MeasureUnit: public UObject {
      * (renamed to milligram-ofglucose-per-deciliter in CLDR 39 / ICU 69).
      * Also see {@link #getMilligramOfglucosePerDeciliter()}.
      * Also see {@link #createMilligramPerDeciliter()}.
-     * @stable ICU 64
+     * @deprecated ICU 78 use getMilligramOfglucosePerDeciliter()
      */
     static MeasureUnit getMilligramPerDeciliter();
+#endif  /* U_HIDE_DEPRECATED_API */
 
     /**
      * Returns by pointer, unit of concentr: millimole-per-liter.

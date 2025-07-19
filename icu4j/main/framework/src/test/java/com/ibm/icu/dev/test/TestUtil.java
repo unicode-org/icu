@@ -14,6 +14,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
 public final class TestUtil {
@@ -45,12 +47,12 @@ public final class TestUtil {
     /**
      * Return a buffered reader on the data file at path 'name' rooted at the data path.
      */
-    public static final BufferedReader getDataReader(String name, String charset) throws IOException {
+    public static final BufferedReader getDataReader(String name, Charset charset) throws IOException {
+        if (charset == null) {
+            throw new IllegalArgumentException("The charset cannot be null");
+        }
         InputStream is = getDataStream(name);
-        InputStreamReader isr =
-            charset == null
-                ? new InputStreamReader(is)
-                : new InputStreamReader(is, charset);
+        InputStreamReader isr = new InputStreamReader(is, charset);
         return new BufferedReader(isr);
     }
 
@@ -58,9 +60,8 @@ public final class TestUtil {
      * Return a buffered reader on the data file at path 'name' rooted at the data path,
      * using the provided encoding.
      */
-    public static final BufferedReader getDataReader(String name)
-        throws IOException {
-        return getDataReader(name, null);
+    public static final BufferedReader getUtf8DataReader(String name) throws IOException {
+        return getDataReader(name, StandardCharsets.UTF_8);
     }
 
     static final char DIGITS[] =
@@ -259,12 +260,12 @@ public final class TestUtil {
         if (verstr != null) {
             String majorVerStr = null;
             if (verstr.startsWith("1.")) {
-                String[] numbers = verstr.split("\\.");
+                String[] numbers = verstr.split("\\.", 3);
                 if (numbers.length > 1) {
                     majorVerStr = numbers[1];
                 }
             } else {
-                String[] numbers = verstr.split("\\.|-");
+                String[] numbers = verstr.split("\\.|-", 2);
                 if (numbers.length > 0) {
                     majorVerStr = numbers[0];
                 }

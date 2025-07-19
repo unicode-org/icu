@@ -10,17 +10,17 @@
 
 package com.ibm.icu.dev.tool.docs;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.PrintStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -70,7 +70,7 @@ public class ICUJDKCompare {
         "util.SimpleTimeZone STANDARD_TIME UTC_TIME WALL_TIME",
     };
 
-    private PrintWriter pw;
+    private PrintStream out;
     private String srcPrefix;
     private String trgPrefix;
     private Class[] classPairs;
@@ -87,14 +87,14 @@ public class ICUJDKCompare {
     // return non-zero if there were some missing APIs
     public static int doMain(String[] args) {
         ICUJDKCompare p = new ICUJDKCompare();
-        p.setOutputWriter(new PrintWriter(System.out));
+        p.setOutput(System.out);
         p.setup(args);
         return p.process();
     }
 
     // setters
-    public ICUJDKCompare setOutputWriter(PrintWriter pw) {
-        this.pw = pw;
+    public ICUJDKCompare setOutput(PrintStream out) {
+        this.out = out;
         return this;
     }
 
@@ -157,31 +157,13 @@ public class ICUJDKCompare {
 
         if (ignorelist != null) {
             if (ignorelist.charAt(0) == '@') { // a file containing ignoreinfo
-                BufferedReader br = null;
                 try {
-                    ArrayList nl = new ArrayList();
                     File f = new File(namelist.substring(1));
-                    FileInputStream fis = new FileInputStream(f);
-                    InputStreamReader isr = new InputStreamReader(fis);
-                    br = new BufferedReader(isr);
-                    String line = null;
-                    while (null != (line = br.readLine())) {
-                        nl.add(line);
-                    }
-                    ignore = (String[])nl.toArray(new String[nl.size()]);
-                }
-                catch (Exception e) {
+                    List<String> nl = Files.readAllLines(f.toPath(), StandardCharsets.UTF_8);
+                    ignore = nl.toArray(new String[nl.size()]);
+                } catch (Exception e) {
                     System.err.println(e);
                     throw new IllegalStateException();
-                }
-                finally {
-                    if (br != null) {
-                        try {
-                            br.close();
-                        } catch (Exception e) {
-                            // ignore
-                        }
-                    }
                 }
             } else { // a list of ignoreinfo separated by semicolons
                 ignore = ignorelist.split("\\s*;\\s*");
@@ -190,40 +172,22 @@ public class ICUJDKCompare {
 
         if (namelist != null) {
             String[] names = null;
-            if (namelist.charAt(0) == '@') { // a file
-                BufferedReader br = null;
+            if (namelist.charAt(0) == '@') { // a file containing names
                 try {
-                    ArrayList nl = new ArrayList();
                     File f = new File(namelist.substring(1));
-                    FileInputStream fis = new FileInputStream(f);
-                    InputStreamReader isr = new InputStreamReader(fis);
-                    br = new BufferedReader(isr);
-                    String line = null;
-                    while (null != (line = br.readLine())) {
-                        nl.add(line);
-                    }
-                    names = (String[])nl.toArray(new String[nl.size()]);
-                }
-                catch (Exception e) {
+                    List<String> nl = Files.readAllLines(f.toPath(), StandardCharsets.UTF_8);
+                    names = nl.toArray(new String[nl.size()]);
+                } catch (Exception e) {
                     System.err.println(e);
                     throw new IllegalStateException();
-                } finally {
-                    if (br != null) {
-                        try {
-                            br.close();
-                        } catch (Exception e) {
-                            // ignore
-                        }
-                    }
                 }
-
             } else { // a list of names separated by semicolons
                 names = namelist.split("\\s*;\\s*");
             }
             processPairInfo(names);
         }
 
-        pw.flush();
+        out.flush();
 
         return this;
     }
@@ -270,11 +234,11 @@ public class ICUJDKCompare {
     }
 
     private void println(String s) {
-        if (pw != null) pw.println(s);
+        if (out != null) out.println(s);
     }
 
     private void flush() {
-        if (pw != null) pw.flush();
+        if (out != null) out.flush();
     }
 
     public int process() {
@@ -385,8 +349,8 @@ public class ICUJDKCompare {
         Set set2 = getFieldSet(fields2);
 
         if (n1.indexOf("DecimalFormatSymbols") != -1) {
-          pw.format("fields in %s: %s%n", n1, set1);
-          pw.format("fields in %s: %s%n", n2, set2);
+          out.format("fields in %s: %s%n", n1, set1);
+          out.format("fields in %s: %s%n", n2, set2);
         }
 
         Map diffConss = diffMethodMaps(cmap2, cmap1);
@@ -398,19 +362,19 @@ public class ICUJDKCompare {
         diffFields = removeIgnored(n2, diffFields);
 
         int result = diffConss.size() + diffMeths.size() + diffFields.size();
-        if (result > 0 && pw != null) {
-            pw.println("Public API in " + n2 + " but not in " + n1);
+        if (result > 0 && out != null) {
+            out.println("Public API in " + n2 + " but not in " + n1);
             if (diffConss.size() > 0) {
-                pw.println("CONSTRUCTORS");
-                dumpMethodMap(diffConss, pw);
+                out.println("CONSTRUCTORS");
+                dumpMethodMap(diffConss);
             }
             if (diffMeths.size() > 0) {
-                pw.println("METHODS");
-                dumpMethodMap(diffMeths, pw);
+                out.println("METHODS");
+                dumpMethodMap(diffMeths);
             }
             if (diffFields.size() > 0) {
-                pw.println("FIELDS");
-                dumpFieldSet(diffFields, pw);
+                out.println("FIELDS");
+                dumpFieldSet(diffFields);
             }
         }
 
@@ -615,16 +579,16 @@ public class ICUJDKCompare {
         return result;
     }
 
-    private void dumpMethodMap(Map m, PrintWriter pw) {
+    private void dumpMethodMap(Map m) {
         Iterator iter = m.entrySet().iterator();
         while (iter.hasNext()) {
             dumpMethodRecord((MethodRecord)((Map.Entry)iter.next()).getValue());
         }
-        pw.flush();
+        out.flush();
     }
 
     private void dumpMethodRecord(MethodRecord mr) {
-        pw.println(mr.toString());
+        out.println(mr.toString());
     }
 
     static Map diffMethodMaps(Map m1, Map m2) {
@@ -784,12 +748,12 @@ public class ICUJDKCompare {
         return result;
     }
 
-    private void dumpFieldSet(Set s, PrintWriter pw) {
+    private void dumpFieldSet(Set s) {
         Iterator iter = s.iterator();
         while (iter.hasNext()) {
-            pw.println(iter.next());
+            out.println(iter.next());
         }
-        pw.flush();
+        out.flush();
     }
 
     // given a target string, if it matches the first of one of our pairs, return the second

@@ -264,11 +264,9 @@ abstract public class TestFmwk extends AbstractTestLog {
     }
 
     protected static String hex(CharSequence s) {
-        StringBuilder result = new StringBuilder();
+        StringJoiner result = new StringJoiner(",");
         for (int i = 0; i < s.length(); ++i) {
-            if (i != 0)
-                result.append(',');
-            result.append(hex(s.charAt(i)));
+            result.add(hex(s.charAt(i)));
         }
         return result.toString();
     }

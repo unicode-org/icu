@@ -19,6 +19,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +36,8 @@ public class DeprecatedAPIChecker {
         // Load the ICU4J API signature file
         Set<APIInfo> apiInfoSet = APIData.read(new File(args[0]), true).getAPIInfoSet();
 
-        DeprecatedAPIChecker checker = new DeprecatedAPIChecker(apiInfoSet, new PrintWriter(System.err, true));
+        DeprecatedAPIChecker checker = new DeprecatedAPIChecker(
+                apiInfoSet, new PrintWriter(System.err, true, StandardCharsets.UTF_8));
         checker.checkDeprecated();
         System.exit(checker.errCount);
     }
@@ -397,7 +399,7 @@ public class DeprecatedAPIChecker {
         }
 
         if (paramsSegment.length() > 0) {
-            String[] params = paramsSegment.split("\\s*,\\s*");
+            String[] params = paramsSegment.split("\\s*,\\s*", -1);
             for (String p : params) {
                 if (p.endsWith("...")) {
                     // varargs to array
