@@ -28,6 +28,9 @@
 #include "ssearch.h"
 #include "xmlparser.h"
 
+#include <iomanip>
+#include <iostream>
+#include <sstream>
 #include <stdio.h>  // for snprintf
 
 char testId[100];
@@ -524,40 +527,48 @@ UBool OrderList::matchesAt(int32_t offset, const OrderList &other) const
     return true;
 }
 
-static char *printOffsets(char *buffer, size_t n, OrderList &list)
+static char* printOffsets(std::string &buffer, OrderList &list)
 {
     int32_t size = list.size();
-    char *s = buffer;
+    buffer.clear();
+    buffer.reserve(size * 10 + 2);
+    std::stringstream s(buffer);
 
     for(int32_t i = 0; i < size; i += 1) {
         const Order *order = list.get(i);
 
         if (i != 0) {
-            s += snprintf(s, n, ", ");
+            s << ", ";
         }
 
-        s += snprintf(s, n, "(%d, %d)", order->lowOffset, order->highOffset);
+        s << "(" << order->lowOffset << ", " << order->highOffset << ")";
     }
 
-    return buffer;
+    return buffer.data();
 }
 
-static char *printOrders(char *buffer, size_t n, OrderList &list)
+static char* printOrders(std::string &buffer, OrderList &list)
 {
     int32_t size = list.size();
-    char *s = buffer;
+    buffer.clear();
+    // 10 chars is enough room for 8 hex digits plus ", "
+    buffer.reserve(size * 10 + 2);
+    std::stringstream s(buffer);
 
     for(int32_t i = 0; i < size; i += 1) {
         const Order *order = list.get(i);
 
         if (i != 0) {
-            s += snprintf(s, n, ", ");
+            s << ", ";
         }
 
-        s += snprintf(s, n, "%8.8X", order->order);
+        s << std::hex
+          << std::uppercase
+          << std::setw(8)
+          << std::setfill('0')
+          << order->order;
     }
-
-    return buffer;
+    return buffer.data();
 }
 
 void SSearchTest::offsetTest()
@@ -631,9 +642,7 @@ void SSearchTest::offsetTest()
         errcheckln(status, "Failed to create collator in offsetTest! - %s", u_errorName(status));
         return;
     }
-    char buffer[4096];  // A bit of a hack... just happens to be long enough for all the test cases...
-                        // We could allocate one that's the right size by (CE_count * 10) + 2
-                        // 10 chars is enough room for 8 hex digits plus ", ". 2 extra chars for "[" and "]"
+    std::string buffer;
 
     col->setAttribute(UCOL_NORMALIZATION_MODE, UCOL_ON, status);
 
@@ -673,20 +682,20 @@ void SSearchTest::offsetTest()
 
         if (forwardList.compare(backwardList)) {
             logln("Works with \"%s\"", test[i]);
-            logln("Forward offsets:  [%s]", printOffsets(buffer, sizeof(buffer), forwardList));
-//          logln("Backward offsets: [%s]", printOffsets(buffer, sizeof(buffer), backwardList));
+            logln("Forward offsets:  [%s]", printOffsets(buffer, forwardList));
+//          logln("Backward offsets: [%s]", printOffsets(buffer, backwardList));
 
-            logln("Forward CEs:  [%s]", printOrders(buffer, sizeof(buffer), forwardList));
-//          logln("Backward CEs: [%s]", printOrders(buffer, sizeof(buffer), backwardList));
+            logln("Forward CEs:  [%s]", printOrders(buffer, forwardList));
+//          logln("Backward CEs: [%s]", printOrders(buffer, backwardList));
 
             logln();
         } else {
             errln("Fails with \"%s\"", test[i]);
-            infoln("Forward offsets:  [%s]", printOffsets(buffer, sizeof(buffer), forwardList));
-            infoln("Backward offsets: [%s]", printOffsets(buffer, sizeof(buffer), backwardList));
+            infoln("Forward offsets:  [%s]", printOffsets(buffer, forwardList));
+            infoln("Backward offsets: [%s]", printOffsets(buffer, backwardList));
 
-            infoln("Forward CEs:  [%s]", printOrders(buffer, sizeof(buffer), forwardList));
-            infoln("Backward CEs: [%s]", printOrders(buffer, sizeof(buffer), backwardList));
+            infoln("Forward CEs:  [%s]", printOrders(buffer, forwardList));
+            infoln("Backward CEs: [%s]", printOrders(buffer, backwardList));
 
             infoln();
         }
