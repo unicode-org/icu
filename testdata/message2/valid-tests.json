@@ -2,7 +2,8 @@
   "scenario": "Valid tests",
   "description": "Additional valid tests",
   "defaultTestProperties": {
-    "locale": "en-US"
+    "locale": "en-US",
+    "bidiIsolation": "none"
   },
   "tests": [
     { "src": "hello {|4.2| :number minimumFractionDigits=2}", "exp": "hello 4.20"},

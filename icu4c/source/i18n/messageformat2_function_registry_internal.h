@@ -26,6 +26,7 @@ namespace message2 {
 // Constants for option names
 namespace options {
 static constexpr std::u16string_view ALWAYS = u"always";
+static constexpr std::u16string_view AUTO = u"auto";
 static constexpr std::u16string_view COMPACT = u"compact";
 static constexpr std::u16string_view COMPACT_DISPLAY = u"compactDisplay";
 static constexpr std::u16string_view DATE_STYLE = u"dateStyle";
@@ -38,8 +39,10 @@ static constexpr std::u16string_view EXCEPT_ZERO = u"exceptZero";
 static constexpr std::u16string_view FAILS = u"fails";
 static constexpr std::u16string_view FULL_UPPER = u"FULL";
 static constexpr std::u16string_view HOUR = u"hour";
+static constexpr std::u16string_view INHERIT = u"inherit";
 static constexpr std::u16string_view LONG = u"long";
 static constexpr std::u16string_view LONG_UPPER = u"LONG";
+static constexpr std::u16string_view LTR = u"ltr";
 static constexpr std::u16string_view MAXIMUM_FRACTION_DIGITS = u"maximumFractionDigits";
 static constexpr std::u16string_view MAXIMUM_SIGNIFICANT_DIGITS = u"maximumSignificantDigits";
 static constexpr std::u16string_view MEDIUM_UPPER = u"MEDIUM";
@@ -57,6 +60,7 @@ static constexpr std::u16string_view NUMBERING_SYSTEM = u"numberingSystem";
 static constexpr std::u16string_view NUMERIC = u"numeric";
 static constexpr std::u16string_view ORDINAL = u"ordinal";
 static constexpr std::u16string_view PERCENT_STRING = u"percent";
+static constexpr std::u16string_view RTL = u"rtl";
 static constexpr std::u16string_view SCIENTIFIC = u"scientific";
 static constexpr std::u16string_view SECOND = u"second";
 static constexpr std::u16string_view SELECT = u"select";
@@ -66,6 +70,9 @@ static constexpr std::u16string_view SIGN_DISPLAY = u"signDisplay";
 static constexpr std::u16string_view STYLE = u"style";
 static constexpr std::u16string_view TIME_STYLE = u"timeStyle";
 static constexpr std::u16string_view TWO_DIGIT = u"2-digit";
+static constexpr std::u16string_view U_DIR = u"u:dir";
+static constexpr std::u16string_view U_ID = u"u:id";
+static constexpr std::u16string_view U_LOCALE = u"u:locale";
 static constexpr std::u16string_view USE_GROUPING = u"useGrouping";
 static constexpr std::u16string_view WEEKDAY = u"weekday";
 static constexpr std::u16string_view YEAR = u"year";
@@ -93,98 +100,69 @@ static constexpr std::u16string_view YEAR = u"year";
                                              UErrorCode& errorCode);
 
         class DateTime;
+        class DateTimeValue;
 
-        class DateTimeFactory : public FormatterFactory {
+        class DateTime : public Function {
         public:
-            Formatter* createFormatter(const Locale& locale, UErrorCode& status) override;
-            static DateTimeFactory* date(UErrorCode&);
-            static DateTimeFactory* time(UErrorCode&);
-            static DateTimeFactory* dateTime(UErrorCode&);
-            DateTimeFactory() = delete;
-            virtual ~DateTimeFactory();
+            static DateTime* date(UErrorCode&);
+            static DateTime* time(UErrorCode&);
+            static DateTime* dateTime(UErrorCode&);
 
-        private:
-            friend class DateTime;
-
-            typedef enum DateTimeType {
-                Date,
-                Time,
-                DateTime
-            } DateTimeType;
-
-            DateTimeType type;
-            DateTimeFactory(DateTimeType t) : type(t) {}
-        };
-
-        class DateTime : public Formatter {
-        public:
-            FormattedPlaceholder format(FormattedPlaceholder&& toFormat, FunctionOptions&& options, UErrorCode& status) const override;
+            LocalPointer<FunctionValue> call(const FunctionContext& context,
+                                             const FunctionValue& operand,
+                                             const FunctionOptions& options,
+                                             UErrorCode& errorCode) override;
             virtual ~DateTime();
 
         private:
-            const Locale& locale;
-            const DateTimeFactory::DateTimeType type;
             friend class DateTimeFactory;
-            DateTime(const Locale& l, DateTimeFactory::DateTimeType t)
-                : locale(l), type(t) {}
-            const LocalPointer<icu::DateFormat> icuFormatter;
+            friend class DateTimeValue;
 
             // Methods for parsing date literals
-            UDate tryPatterns(const UnicodeString&, UErrorCode&) const;
-            UDate tryTimeZonePatterns(const UnicodeString&, UErrorCode&) const;
-            DateInfo createDateInfoFromString(const UnicodeString&, UErrorCode&) const;
+            static UDate tryPatterns(const UnicodeString&, UErrorCode&);
+            static UDate tryTimeZonePatterns(const UnicodeString&, UErrorCode&);
+            static DateInfo createDateInfoFromString(const UnicodeString&, UErrorCode&);
 
-            /*
-              Looks up an option by name, first checking `opts`, then the cached options
-              in `toFormat` if applicable, and finally using a default
+            typedef enum DateTimeType {
+                kDate,
+                kTime,
+                kDateTime
+            } DateTimeType;
 
-              Ignores any options with non-string values
-             */
-            UnicodeString getFunctionOption(const FormattedPlaceholder& toFormat,
-                                            const FunctionOptions& opts,
-                                            std::u16string_view optionName) const;
-            // Version for options that don't have defaults; sets the error
-            // code instead of returning a default value
-            UnicodeString getFunctionOption(const FormattedPlaceholder& toFormat,
-                                            const FunctionOptions& opts,
-                                            std::u16string_view optionName,
-                                            UErrorCode& errorCode) const;
-
+            const DateTimeType type;
+            static DateTime* create(DateTimeType, UErrorCode&);
+            DateTime(DateTimeType t) : type(t) {}
+            const LocalPointer<icu::DateFormat> icuFormatter;
         };
 
-        // Note: IntegerFactory doesn't implement SelectorFactory;
-        // instead, an instance of PluralFactory is registered to the integer
-        // selector
-        // TODO
-        class IntegerFactory : public FormatterFactory {
-        public:
-            Formatter* createFormatter(const Locale& locale, UErrorCode& status) override;
-            virtual ~IntegerFactory();
-        };
+        class NumberValue;
 
-        class NumberFactory : public FormatterFactory {
+        class Number : public Function {
         public:
-            Formatter* createFormatter(const Locale& locale, UErrorCode& status) override;
-            virtual ~NumberFactory();
-        private:
-            friend class IntegerFactory;
-            static NumberFactory integer(const Locale& locale, UErrorCode& status);
-        };
+            static Number* integer(UErrorCode& success);
+            static Number* number( UErrorCode& success);
 
-        class Number : public Formatter {
-        public:
-            FormattedPlaceholder format(FormattedPlaceholder&& toFormat, FunctionOptions&& options, UErrorCode& status) const override;
+            LocalPointer<FunctionValue> call(const FunctionContext& context,
+                                const FunctionValue& operand,
+                                const FunctionOptions& options,
+                                UErrorCode& errorCode) override;
             virtual ~Number();
 
         private:
-            friend class NumberFactory;
+            friend class NumberValue;
             friend class StandardFunctions;
 
-            Number(const Locale& loc) : locale(loc), icuFormatter(number::NumberFormatter::withLocale(loc)) {}
-            Number(const Locale& loc, bool isInt) : locale(loc), isInteger(isInt), icuFormatter(number::NumberFormatter::withLocale(loc)) {}
-            static Number integer(const Locale& loc);
+            typedef enum PluralType {
+                PLURAL_ORDINAL,
+                PLURAL_CARDINAL,
+                PLURAL_EXACT
+            } PluralType;
+
+            static Number* create(bool, UErrorCode&);
+            Number(bool isInt) : isInteger(isInt) /*, icuFormatter(number::NumberFormatter::withLocale(loc))*/ {}
 
         // These options have their own accessor methods, since they have different default values.
+            int32_t digitSizeOption(const FunctionOptions&, const UnicodeString&) const;
             int32_t maximumFractionDigits(const FunctionOptions& options) const;
             int32_t minimumFractionDigits(const FunctionOptions& options) const;
             int32_t minimumSignificantDigits(const FunctionOptions& options) const;
@@ -192,139 +170,145 @@ static constexpr std::u16string_view YEAR = u"year";
             int32_t minimumIntegerDigits(const FunctionOptions& options) const;
 
             bool usePercent(const FunctionOptions& options) const;
-            const Locale& locale;
             const bool isInteger = false;
             const number::LocalizedNumberFormatter icuFormatter;
+
+            static PluralType pluralType(const FunctionOptions& opts);
         };
 
         static number::LocalizedNumberFormatter formatterForOptions(const Number& number,
+                                                                    const Locale& locale,
                                                                     const FunctionOptions& opts,
                                                                     UErrorCode& status);
 
-        class PluralFactory : public SelectorFactory {
+
+        class NumberValue : public FunctionValue {
         public:
-            Selector* createSelector(const Locale& locale, UErrorCode& status) const override;
-            virtual ~PluralFactory();
+            UnicodeString formatToString(UErrorCode&) const override;
+            void selectKeys(const UnicodeString* keys,
+                            int32_t keysLen,
+                            int32_t* prefs,
+                            int32_t& prefsLen,
+                            UErrorCode& status) const override;
+            UBool isSelectable() const override { return true; }
+            NumberValue();
+            const UnicodeString& getFunctionName() const override { return functionName; }
+            virtual ~NumberValue();
+        private:
+            friend class Number;
+
+            number::FormattedNumber formattedNumber;
+            NumberValue(const Number&,
+                        const FunctionContext&,
+                        const FunctionValue&,
+                        const FunctionOptions&,
+                        UErrorCode&);
+        }; // class NumberValue
+
+        class DateTimeValue : public FunctionValue {
+        public:
+            UnicodeString formatToString(UErrorCode&) const override;
+            DateTimeValue();
+            const UnicodeString& getFunctionName() const override { return functionName; }
+            virtual ~DateTimeValue();
+        private:
+            friend class DateTime;
+
+            UnicodeString formattedDate;
+            DateTimeValue(DateTime::DateTimeType type, const FunctionContext& context,
+                          const FunctionValue&, const FunctionOptions&, UErrorCode&);
+        }; // class DateTimeValue
+
+        class String : public Function {
+        public:
+            LocalPointer<FunctionValue> call(const FunctionContext& context,
+                                const FunctionValue& val,
+                                const FunctionOptions& opts,
+                                UErrorCode& errorCode) override;
+            static String* string(UErrorCode& status);
+            virtual ~String();
 
         private:
-            friend class IntegerFactory;
-            friend class MessageFormatter;
+            friend class StringFactory;
 
-            PluralFactory() {}
-            PluralFactory(bool isInt) : isInteger(isInt) {}
-            static PluralFactory integer() { return PluralFactory(true);}
-            const bool isInteger = false;
-        };
-
-        class Plural : public Selector {
-        public:
-            void selectKey(FormattedPlaceholder&& val,
-                           FunctionOptions&& options,
-                           const UnicodeString* keys,
-                           int32_t keysLen,
-                           UnicodeString* prefs,
-                           int32_t& prefsLen,
-                           UErrorCode& status) const override;
-            virtual ~Plural();
-
-        private:
-            friend class IntegerFactory;
-            friend class PluralFactory;
-
-            // Can't use UPluralType for this since we want to include
-            // exact matching as an option
-            typedef enum PluralType {
-                PLURAL_ORDINAL,
-                PLURAL_CARDINAL,
-                PLURAL_EXACT
-            } PluralType;
-            Plural(const Locale& loc, UErrorCode& errorCode);
-            Plural(const Locale& loc, bool isInt, UErrorCode& errorCode);
-            static Plural integer(const Locale& loc, UErrorCode& errorCode) { return Plural(loc, true, errorCode); }
-            PluralType pluralType(const FunctionOptions& opts) const;
-            const Locale& locale;
-            const bool isInteger = false;
-            LocalPointer<StandardFunctions::Number> numberFormatter;
-        };
-
-        class TextFactory : public SelectorFactory {
-        public:
-            Selector* createSelector(const Locale& locale, UErrorCode& status) const override;
-            virtual ~TextFactory();
-        };
-
-        class TextSelector : public Selector {
-        public:
-            void selectKey(FormattedPlaceholder&& val,
-                           FunctionOptions&& options,
-                           const UnicodeString* keys,
-                           int32_t keysLen,
-                           UnicodeString* prefs,
-                           int32_t& prefsLen,
-                           UErrorCode& status) const override;
-            virtual ~TextSelector();
-
-        private:
-            friend class TextFactory;
-
-            // Formatting `value` to a string might require the locale
-            const Locale& locale;
-
-            TextSelector(const Locale& l) : locale(l) {}
+            String() {}
         };
 
         // See https://github.com/unicode-org/message-format-wg/blob/main/test/README.md
-        class TestFormatFactory : public FormatterFactory {
+        class TestFunctionValue;
+
+        class TestFunction : public Function {
         public:
-            Formatter* createFormatter(const Locale& locale, UErrorCode& status) override;
-            TestFormatFactory() {}
-            virtual ~TestFormatFactory();
-        };
+            static TestFunction* testFunction(UErrorCode&);
+            static TestFunction* testFormat(UErrorCode&);
+            static TestFunction* testSelect(UErrorCode&);
 
-        class TestSelect;
-
-        class TestFormat : public Formatter {
-        public:
-            FormattedPlaceholder format(FormattedPlaceholder&& toFormat, FunctionOptions&& options, UErrorCode& status) const override;
-            virtual ~TestFormat();
-
+            LocalPointer<FunctionValue> call(const FunctionContext& context,
+                                             const FunctionValue& operand,
+                                             const FunctionOptions& options,
+                                             UErrorCode& errorCode) override;
+            virtual ~TestFunction();
         private:
-            friend class TestFormatFactory;
-            friend class TestSelect;
-            TestFormat() {}
-            static void testFunctionParameters(const FormattedPlaceholder& arg,
-                                               const FunctionOptions& options,
-                                               int32_t& decimalPlaces,
-                                               bool& failsFormat,
-                                               bool& failsSelect,
-                                               double& input,
-                                               UErrorCode& status);
+            friend class TestFunctionValue;
 
+            TestFunction(bool, bool);
+            void testFunctionParameters(const FunctionValue&,
+                                        const FunctionOptions&,
+                                        int32_t&,
+                                        bool&,
+                                        bool&,
+                                        double&,
+                                        UErrorCode&) const;
+            bool canFormat; // True iff this was invoked as test:function or test:format
+            bool canSelect; // True iff this was involved as test:function or test:select
         };
 
-        // See https://github.com/unicode-org/message-format-wg/blob/main/test/README.md
-        class TestSelectFactory : public SelectorFactory {
+        class TestFunctionValue : public FunctionValue {
         public:
-            Selector* createSelector(const Locale& locale, UErrorCode& status) const override;
-            TestSelectFactory() {}
-            virtual ~TestSelectFactory();
-        };
-
-        class TestSelect : public Selector {
-        public:
-            void selectKey(FormattedPlaceholder&& val,
-                           FunctionOptions&& options,
-                           const UnicodeString* keys,
-                           int32_t keysLen,
-                           UnicodeString* prefs,
-                           int32_t& prefsLen,
-                           UErrorCode& status) const override;
-            virtual ~TestSelect();
-
+            UnicodeString formatToString(UErrorCode&) const override;
+            void selectKeys(const UnicodeString*,
+                            int32_t,
+                            int32_t*,
+                            int32_t&,
+                            UErrorCode&) const override;
+            UBool isSelectable() const override { return canSelect; }
+            TestFunctionValue();
+            const UnicodeString& getFunctionName() const override { return functionName; }
+            virtual ~TestFunctionValue();
         private:
-            friend class TestSelectFactory;
-            TestSelect() {}
+            friend class TestFunction;
+
+            TestFunctionValue(const TestFunction&,
+                              const FunctionContext&,
+                              const FunctionValue&,
+                              const FunctionOptions&,
+                              UErrorCode&);
+
+            UnicodeString formattedString;
+            bool canFormat;
+            bool canSelect;
+            int32_t decimalPlaces;
+            bool failsFormat; // Different from "canFormat" -- derived from "fails" option
+            bool failsSelect; // Different from "canSelect" -- derived from "fails" option
+            double input;
         };
+
+        class StringValue : public FunctionValue {
+        public:
+            UnicodeString formatToString(UErrorCode&) const override;
+            void selectKeys(const UnicodeString* keys,
+                            int32_t keysLen,
+                            int32_t* prefs,
+                            int32_t& prefsLen,
+                            UErrorCode& status) const override;
+            UBool isSelectable() const override { return true; }
+            virtual ~StringValue();
+        private:
+            friend class String;
+
+            UnicodeString formattedString;
+            StringValue(const FunctionContext&, const FunctionValue&, const FunctionOptions&, UErrorCode&);
+        }; // class StringValue
 
     };
 
