@@ -432,6 +432,18 @@ Package::~Package() {
 }
 
 void
+Package::clear() {
+    for(int32_t idx=0; idx<itemCount; ++idx) {
+        if(items[idx].isDataOwned) {
+            uprv_free(items[idx].data);
+        }
+    }
+    memset(items, 0, itemCount*sizeof(Item));
+    itemCount=0;
+    findNextIndex=-1;
+}
+
+void
 Package::setPrefix(const char *p) {
     if(strlen(p)>=sizeof(pkgPrefix)) {
         fprintf(stderr, "icupkg: --toc_prefix %s too long\n", p);
@@ -1204,6 +1216,27 @@ Package::extractItems(const char *filesPath, const Package &listPkg, char outTyp
     for(pItem=listPkg.items, i=0; i<listPkg.itemCount; ++pItem, ++i) {
         extractItems(filesPath, pItem->name, outType);
     }
+}
+
+void
+Package::keepItems(const Package &listPkg) {
+    Package *keepPkg=new Package();
+
+    const Item *pItem;
+    int32_t i;
+    for(pItem=listPkg.items, i=0; i<listPkg.itemCount; ++pItem, ++i) {
+        int32_t idx;
+        findItems(pItem->name);
+        while((idx=findNextItem())>=0) {
+            const Item *item=getItem(idx);
+            keepPkg->addItem(item->name, item->data, item->length, false, item->type);
+        }
+    }
+
+    clear();
+    addItems(*keepPkg);
+
+    delete keepPkg;
 }
 
 int32_t
