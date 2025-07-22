@@ -6159,6 +6159,7 @@ void CalendarTest::Test23101ExtendedYear() {
     } testCases[] = {
         { "gregory", u"2025", u"2025" },
         { "chinese", u"4661", u"4662" },
+        { "dangi", u"4357", u"4358" },
         { "japanese", u"2025", u"2025" },
         { "ethiopic", u"2017", u"2017" },
         { "ethiopic-amete-alem", u"2017", u"2017" },
