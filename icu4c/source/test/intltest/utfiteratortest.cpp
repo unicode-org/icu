@@ -349,6 +349,7 @@ public:
         TESTCASE_AUTO(testUnsafe32ZigzagReverse);
 
         TESTCASE_AUTO(testOwnership);
+        TESTCASE_AUTO(testCPDefaultConstructors);
 
         // C++20 ranges with all 2021 defect reports.  There is no separate
         // feature test macro value for https://wg21.link/P2210R2, but 2021'10
@@ -1126,6 +1127,53 @@ public:
             for (; itr != unsafeReferencingRange.end() && ito != unsafeOwningRange.end(); ++itr, ++ito) {
                 assertEquals("Referenced and owned unsafe iteration", itr->codePoint(),
                              ito->codePoint());
+            }
+        }
+    }
+
+    void testCPDefaultConstructors() {
+        {
+            // validating
+            using CodePoints =
+                UTFStringCodePoints<UChar32, UTF_BEHAVIOR_NEGATIVE, std::u16string_view>;
+            CodePoints cpRange;  // default constructor
+            assertTrue("empty safe range", cpRange.begin() == cpRange.end());
+            {
+                cpRange = utfStringCodePoints<UChar32, UTF_BEHAVIOR_NEGATIVE>(u"abçカ🚴"sv);
+                auto iter = cpRange.begin();
+                ++++iter;
+                assertEquals("safe1[2]", U'ç', iter->codePoint());
+                ++++iter;
+                assertEquals("safe1[4]", U'🚴', iter->codePoint());
+            }
+            {
+                cpRange = utfStringCodePoints<UChar32, UTF_BEHAVIOR_NEGATIVE>(u"Fuß"sv);
+                auto iter = cpRange.begin();
+                assertEquals("safe2[0]", U'F', iter->codePoint());
+                ++++iter;
+                assertEquals("safe2[2]", U'ß', iter->codePoint());
+            }
+        }
+        {
+            // unsafe
+            using CodePoints =
+                UnsafeUTFStringCodePoints<UChar32, std::u16string_view>;
+            CodePoints cpRange;  // default constructor
+            assertTrue("empty unsafe range", cpRange.begin() == cpRange.end());
+            {
+                cpRange = unsafeUTFStringCodePoints<UChar32>(u"abçカ🚴"sv);
+                auto iter = cpRange.begin();
+                ++++iter;
+                assertEquals("unsafe1[2]", U'ç', iter->codePoint());
+                ++++iter;
+                assertEquals("unsafe1[4]", U'🚴', iter->codePoint());
+            }
+            {
+                cpRange = unsafeUTFStringCodePoints<UChar32>(u"Fuß"sv);
+                auto iter = cpRange.begin();
+                assertEquals("unsafe2[0]", U'F', iter->codePoint());
+                ++++iter;
+                assertEquals("unsafe2[2]", U'ß', iter->codePoint());
             }
         }
     }

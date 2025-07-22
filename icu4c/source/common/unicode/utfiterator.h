@@ -1753,6 +1753,12 @@ class UTFStringCodePoints {
     static_assert(sizeof(CP32) == 4, "CP32 must be a 32-bit type to hold a code point");
 public:
     /**
+     * Constructs an empty C++ "range" object.
+     * @draft ICU 78
+     */
+    UTFStringCodePoints() = default;
+
+    /**
      * Constructs a C++ "range" object over the code points in the string.
      * @param unitRange input range
      * @draft ICU 78
@@ -2463,6 +2469,12 @@ template<typename CP32, typename Range>
 class UnsafeUTFStringCodePoints {
     static_assert(sizeof(CP32) == 4, "CP32 must be a 32-bit type to hold a code point");
 public:
+    /**
+     * Constructs an empty C++ "range" object.
+     * @draft ICU 78
+     */
+    UnsafeUTFStringCodePoints() = default;
+
     /**
      * Constructs a C++ "range" object over the code points in the string.
      * @param unitRange input range
