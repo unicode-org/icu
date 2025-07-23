@@ -852,9 +852,8 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
         return result;
     }
 
-    /* Tests the method
-     *        public static DateTimePatternGenerator getInstance()
-     */
+    // Tests the method
+    //    public static DateTimePatternGenerator getInstance()
     @Test
     public void TestGetInstance(){
         try{
@@ -866,9 +865,8 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
         }
     }
 
-    /* Tests the method
-     *        public String getSkeleton(String pattern)
-     */
+    // Tests the method
+    //    public String getSkeleton(String pattern)
     @Test
     public void TestGetSkeleton(){
         DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance();
@@ -884,9 +882,8 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
         }
     }
 
-    /* Tests the method
-     *        public String getCanonicalSkeletonAllowingDuplicates(String pattern)
-     */
+    // Tests the method
+    //    public String getCanonicalSkeletonAllowingDuplicates(String pattern)
     @Test
     public void TestGetCanonicalSkeletonAllowingDuplicates(){
         DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance();
@@ -902,9 +899,8 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
         }
     }
 
-    /* Tests the method
-     *        public String getBaseSkeleton(String pattern)
-     */
+    // Tests the method
+    //    public String getBaseSkeleton(String pattern)
     @Test
     public void TestGetBaseSkeleton(){
         DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance();
@@ -920,9 +916,8 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
         }
     }
 
-    /* Tests the method
-     *        public Map<String, String> getSkeletons(Map<String, String> result)
-     */
+    // Tests the method
+    //    public Map<String, String> getSkeletons(Map<String, String> result)
     @Test
     public void TestGetSkeletons(){
         DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance();
@@ -944,9 +939,8 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
         }
     }
 
-    /* Tests the method
-     *        public Set<String> getBaseSkeletons(Set<String> result)
-     */
+    // Tests the method
+    //    public Set<String> getBaseSkeletons(Set<String> result)
     @Test
     public void TestGetBaseSkeletons(){
         DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance();
@@ -968,9 +962,8 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
         }
     }
 
-    /* Tests the method
-     *        public String getDecimal()
-     */
+    // Tests the method
+    //    public String getDecimal()
     @Test
     public void TestGetDecimal(){
         DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance();
@@ -989,9 +982,8 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
         }
     }
 
-    /* Tests the method
-     *        public Collection<String> getRedundants(Collection<String> output)
-     */
+    // Tests the method
+    //    public Collection<String> getRedundants(Collection<String> output)
     @Test
     public void TestGetRedundants(){
         DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance();
@@ -1014,9 +1006,8 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
         }
     }
 
-    /* Tests the method
-     *        public String setAppendItemFormat(int field)
-     */
+    // Tests the method
+    //    public String setAppendItemFormat(int field)
     @Test
     public void TestSetAppendItemFormat(){
         DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance();
@@ -1031,9 +1022,8 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
         }
     }
 
-    /* Tests the method
-     *        public String getAppendItemFormat(int field)
-     */
+    // Tests the method
+    //    public String getAppendItemFormat(int field)
     @Test
     public void TestGetAppendItemFormat(){
         DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance(ULocale.ENGLISH);
@@ -1048,9 +1038,6 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
         }
     }
 
-    /* Tests the method
-     *    public String getAppendItemName(int field)
-     */
     private final class AppendItemName {
         public int field;
         public String name;
@@ -1060,6 +1047,8 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
         }
     }
 
+    // Tests the method
+    //    public String getAppendItemName(int field)
     @Test
     public void TestGetAppendItemName(){
         final AppendItemName[] appendItemNames = {
@@ -1091,9 +1080,8 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
         }
     }
 
-    /* Tests the method
-     *    public static boolean isSingleField(String skeleton)
-     */
+    // Tests the method
+    //    public static boolean isSingleField(String skeleton)
     @SuppressWarnings("static-access")
     @Test
     public void TestIsSingleField(){
@@ -1109,10 +1097,9 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
         }
     }
 
-    /* Tests the method
-     *    public Object freeze()
-     *    public Object cloneAsThawed()
-     */
+    // Tests the methods
+    //    public Object freeze()
+    //    public Object cloneAsThawed()
     @Test
     public void TestFreezeAndCloneAsThawed(){
         DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance();
@@ -1143,9 +1130,8 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
         }
     }
 
-    /* Tests the method
-     *    public Object clone()
-     */
+    // Tests the method
+    //    public Object clone()
     @Test
     public void TestClone(){
         DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance();
@@ -1177,9 +1163,8 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
         }
     }
 
-    /* Tests the method
-     *    public FormatParser set(String string, boolean strict)
-     */
+    // Tests the method
+    //    public FormatParser set(String string, boolean strict)
     @Test
     public void TestSet(){
         FormatParser fp = new FormatParser();
@@ -1192,9 +1177,8 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
         }
     }
 
-    /* Tests the method
-     *    public String toString()
-     */
+    // Tests the method
+    //    public String toString()
     @Test
     public void TestToString(){
         FormatParser fp = new FormatParser();
@@ -1214,9 +1198,8 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
         }
     }
 
-    /* Tests the method
-     *    public boolean hasDateAndTimeFields()
-     */
+    // Tests the method
+    //    public boolean hasDateAndTimeFields()
     @Test
     public void TestHasDateAndTimeFields(){
         FormatParser fp = new FormatParser();
@@ -1239,10 +1222,9 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
         }
     }
 
-    /* Tests the method
-     *    private void checkFrozen()
-     * from public void setDateTimeFormat(String dateTimeFormat)
-     */
+    // Tests the method
+    //    private void checkFrozen()
+    // from public void setDateTimeFormat(String dateTimeFormat)
     @Test
     public void TestCheckFrozen(){
         // Tests when "if (isFrozen())" is true
@@ -1257,9 +1239,8 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
         dt = dt.cloneAsThawed();
     }
 
-    /* Tests the method
-     *    public String getFields(String pattern)
-     */
+    // Tests the method
+    //    public String getFields(String pattern)
     @Test
     public void TestGetFields(){
         DateTimePatternGenerator dt = DateTimePatternGenerator.getInstance();
@@ -1550,9 +1531,8 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
         assertEquals("German pattern 'yMdHms' - getInstance with Java Locale", patUloc, patLoc);
     }
 
-    /* Tests the method
-     *    public static int getAppendFormatNumber(String string)
-     */
+    // Tests the method
+    //    public static int getAppendFormatNumber(String string)
     @Test
     public void TestGetAppendFormatNumber(){
         int fieldNum;

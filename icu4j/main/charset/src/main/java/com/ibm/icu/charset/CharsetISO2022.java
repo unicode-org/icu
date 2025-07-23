@@ -265,7 +265,7 @@ class CharsetISO2022 extends CharsetICU {
          return returnValue;
     }
 
-    /*
+    /**
      * @param is the output byte
      * @return 1 roundtrip byte  0 no mapping  -1 fallback byte
      */
