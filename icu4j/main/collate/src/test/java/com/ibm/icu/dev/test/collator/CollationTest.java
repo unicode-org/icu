@@ -1674,7 +1674,7 @@ public class CollationTest extends TestFmwk {
         BufferedReader in = null;
 
         try {
-            in = TestUtil.getDataReader("collationtest.txt", "UTF-8");
+            in = TestUtil.getUtf8DataReader("collationtest.txt");
 
             // Read a new line if necessary.
             // Sub-parsers leave the first line set that they do not handle.

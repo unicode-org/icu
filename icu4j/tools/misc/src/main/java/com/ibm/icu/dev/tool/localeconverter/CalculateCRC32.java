@@ -10,24 +10,24 @@
 package com.ibm.icu.dev.tool.localeconverter;
 
 import java.math.BigInteger;
-
-/*
- *  The code is from  http://www.theorem.com/java/CRC32.java
- * Calculates the CRC32 - 32 bit Cyclical Redundancy Check
- * <P> This check is used in numerous systems to verify the integrity
- * of information.  It's also used as a hashing function.  Unlike a regular
- * checksum, it's sensitive to the order of the characters.
- * It produces a 32 bit
- * 
- * @author Michael Lecuyer (mjl@theorem.com)
- * @version 1.1 August 11, 1998
- */
  
 /* ICU is not endian portable, because ICU data generated on big endian machines can be
  * ported to big endian machines but not to little endian machines and vice versa. The 
  * conversion is not portable across platforms with different endianness. 
  */
- 
+
+/**
+ * The code is from http://www.theorem.com/java/CRC32.java
+ * Calculates the CRC32 - 32 bit Cyclical Redundancy Check
+ * <p>
+ * This check is used in numerous systems to verify the integrity
+ * of information.  It's also used as a hashing function.  Unlike a regular
+ * checksum, it's sensitive to the order of the characters.
+ * It produces a 32 bit
+ *
+ * @author Michael Lecuyer (mjl@theorem.com)
+ * @version 1.1 August 11, 1998
+ */
 public class CalculateCRC32 {
     static int CRCTable[];
     static int cachedCRC;

@@ -11,20 +11,19 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
-/* Helper class that converts an array of objects with key named "type"
- * and value `String` to a List<String>.
- * so that the ExpErrors property can be either a boolean or an array
- * of strings objects.
- *
- * Example (json):
- * ```
- * "expErrors": false,
- * "expErrors": true,
- * "expErrors": [],
- * "expErrors": [{ "type": "syntax-error" }, { "type": "unknown-function" }]
- *
- * Used in the TestUtils class.
- */
+// Helper class that converts an array of objects with key named "type"
+// and value `String` to a List<String>.
+// so that the ExpErrors property can be either a boolean or an array
+// of strings objects.
+//
+// Example (json):
+//
+// "expErrors": false,
+// "expErrors": true,
+// "expErrors": [],
+// "expErrors": [{ "type": "syntax-error" }, { "type": "unknown-function" }]
+//
+// Used in the TestUtils class.
 
 // Uses ArrayList instead of List so that when registering, it's possible
 // to get ArrayList<String>.class

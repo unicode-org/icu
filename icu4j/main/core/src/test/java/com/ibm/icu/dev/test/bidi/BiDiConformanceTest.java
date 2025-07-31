@@ -32,7 +32,7 @@ public class BiDiConformanceTest extends CoreTestFmwk {
 
     @Test
     public void TestBidiTest() throws IOException {
-        BufferedReader bidiTestFile = TestUtil.getDataReader("unicode/BidiTest.txt");
+        BufferedReader bidiTestFile = TestUtil.getUtf8DataReader("unicode/BidiTest.txt");
         try {
             Bidi ubidi = new Bidi();
             ubidi.setCustomClassifier(new ConfTestBidiClassifier());
@@ -168,7 +168,7 @@ outerLoop:
     */
     @Test
     public void TestBidiCharacterTest() throws IOException {
-        BufferedReader bidiTestFile = TestUtil.getDataReader("unicode/BidiCharacterTest.txt");
+        BufferedReader bidiTestFile = TestUtil.getUtf8DataReader("unicode/BidiCharacterTest.txt");
         try {
             Bidi ubidi = new Bidi();
             lineNumber = 0;
@@ -189,7 +189,7 @@ outerLoop:
                 if (!skipWhitespace()) {
                     continue; // Skip empty and comment-only lines.
                 }
-                String[] parts = line.split(";");
+                String[] parts = line.split(";", -1);
                 if (parts.length < 4) {
                     errorCount++;
                     errln(" on line " + lineNumber + ": Missing ; separator on line: " + line);
@@ -198,7 +198,7 @@ outerLoop:
                 // Parse the code point string in field 0.
                 try {
                     inputStringBuilder.delete(0, inputStringBuilder.length());
-                    for (String cp : parts[0].trim().split("[ \t]+")) {
+                    for (String cp : parts[0].trim().split("[ \t]+", -1)) {
                         inputStringBuilder.appendCodePoint(Integer.parseInt(cp, 16));
                     }
                     inputString = inputStringBuilder.toString();
@@ -285,7 +285,7 @@ outerLoop:
     private boolean parseLevels(String s) {
         directionBits=0;
         levelsCount=0;
-        String[] levelStrings=s.trim().split("[ \t]+");
+        String[] levelStrings=s.trim().split("[ \t]+", -1);
         for(String levelString: levelStrings) {
             if(levelString.length()==0) { continue; }
             if(levelString.equals("x")) {
@@ -309,7 +309,7 @@ outerLoop:
     }
     private boolean parseOrdering(String s) {
         orderingCount=0;
-        String[] orderingStrings=s.trim().split("[ \t]+");
+        String[] orderingStrings=s.trim().split("[ \t]+", -1);
         for(String orderingString: orderingStrings) {
             if(orderingString.length()==0) { continue; }
             try {

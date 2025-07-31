@@ -373,7 +373,7 @@ class IndicInputMethodImpl {
 
         public int getRunStart(AttributedCharacterIterator.Attribute attribute) {
             return (index >= committed &&
-                attribute == TextAttribute.INPUT_METHOD_UNDERLINE) ? committed : 0;
+                attribute.equals(TextAttribute.INPUT_METHOD_UNDERLINE)) ? committed : 0;
         }
 
         public int getRunStart(Set attributes) {
@@ -387,7 +387,7 @@ class IndicInputMethodImpl {
 
         public int getRunLimit(AttributedCharacterIterator.Attribute attribute) {
             return (index < committed && 
-                    attribute == TextAttribute.INPUT_METHOD_UNDERLINE) ? committed : text.length;
+                    attribute.equals(TextAttribute.INPUT_METHOD_UNDERLINE)) ? committed : text.length;
         }
 
         public int getRunLimit(Set attributes) {
@@ -407,7 +407,7 @@ class IndicInputMethodImpl {
         public Object getAttribute(AttributedCharacterIterator.Attribute attribute) {
             if (index >= committed && 
                 committed < text.length &&
-                attribute == TextAttribute.INPUT_METHOD_UNDERLINE) {
+                attribute.equals(TextAttribute.INPUT_METHOD_UNDERLINE)) {
 
                 return TextAttribute.UNDERLINE_LOW_ONE_PIXEL;
             }

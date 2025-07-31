@@ -2943,7 +2943,7 @@ u_stringHasBinaryProperty(const UChar *s, int32_t length, UProperty which);
  * @return the property as a set
  * @see UProperty
  * @see u_hasBinaryProperty
- * @see Unicode::fromUSet
+ * @see UnicodeSet::fromUSet
  * @stable ICU 63
  */
 U_CAPI const USet * U_EXPORT2

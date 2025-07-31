@@ -265,8 +265,8 @@ class CharsetISO2022 extends CharsetICU {
          return returnValue;
     }
 
-    /*
-     * @param is the the output byte
+    /**
+     * @param is the output byte
      * @return 1 roundtrip byte  0 no mapping  -1 fallback byte
      */
     static int MBCSSingleFromUChar32(UConverterSharedData sharedData, int c, int[] retval, boolean useFallback) {

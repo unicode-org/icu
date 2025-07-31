@@ -1270,6 +1270,9 @@
     <CustomBuild Include="unicode\utfiterator.h">
       <Filter>strings</Filter>
     </CustomBuild>
+    <CustomBuild Include="unicode\utfstring.h">
+      <Filter>strings</Filter>
+    </CustomBuild>
     <CustomBuild Include="unicode\bytestrie.h">
       <Filter>collections</Filter>
     </CustomBuild>

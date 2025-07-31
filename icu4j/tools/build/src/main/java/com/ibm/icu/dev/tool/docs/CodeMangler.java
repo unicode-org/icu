@@ -11,13 +11,12 @@ package com.ibm.icu.dev.tool.docs;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -140,34 +139,20 @@ public class CodeMangler {
                     if (arg.charAt(0) == '@') {
                         File argfile = new File(arg.substring(1));
                         if (argfile.exists() && !argfile.isDirectory()) {
-                            BufferedReader br = null;
-                            try {
-                                br = new BufferedReader(new InputStreamReader(new FileInputStream(argfile)));
-                                ArrayList list = new ArrayList();
-                                for (int x = 0; x < args.length; ++x) {
-                                    list.add(args[x]);
+                            try (BufferedReader br = Files.newBufferedReader(argfile.toPath(), StandardCharsets.UTF_8)) {
+                                ArrayList<String> list = new ArrayList<>();
+                                for (String argument : args) {
+                                    list.add(argument);
                                 }
-                                String line;
-                                while (null != (line = br.readLine())) {
-                                    line = line.trim();
-                                    if (line.length() > 0 && line.charAt(0) != '#') {
-                                        if (verbose) System.out.println("adding argument: " + line);
-                                        list.add(line);
-                                    }
-                                }
-                                args = (String[])list.toArray(new String[list.size()]);
+                                br.lines()
+                                    .map(String::trim)
+                                    .filter(line -> !line.startsWith("#"))
+                                    .peek(line -> { if (verbose) System.out.println("adding argument: " + line); })
+                                    .forEach(list::add);
+                                args = list.toArray(new String[list.size()]);
                             }
                             catch (IOException e) {
                                 System.err.println("error reading arg file: " + e);
-                            }
-                            finally {
-                                if (br != null) {
-                                    try {
-                                        br.close();
-                                    } catch (Exception e){
-                                        // ignore
-                                    }
-                                }
                             }
                         }
                     } else {
@@ -355,11 +340,8 @@ public class CodeMangler {
         
         long outModTime = 0;
 
-        try {
+        try (BufferedReader reader = Files.newBufferedReader(infile.toPath(), StandardCharsets.UTF_8)) {
             PrintStream outstream = null;
-            InputStream instream = new FileInputStream(infile);
-
-            BufferedReader reader = new BufferedReader(new InputStreamReader(instream));
             int lc = 0;
             State state = new State();
             String line;
@@ -574,13 +556,11 @@ public class CodeMangler {
                 if (oldMap != null) {
                     map = oldMap;
                 }
-                reader.close();
                 outstream.close();
                 return false;
             }
                 
             outstream.close();
-            instream.close();
 
             if (backup != null) {
                 if (backup.exists()) {

@@ -994,7 +994,7 @@ public class TransliteratorTest extends TestFmwk {
 
         for (int i=0; DATA[i]!=null; i+=3) {
             String id=DATA[i];
-            int dir = (DATA[i+1]==FORWARD)?
+            int dir = (DATA[i+1].equals(FORWARD))?
                     Transliterator.FORWARD:Transliterator.REVERSE;
             String expID=DATA[i+2];
             Exception e = null;
@@ -1301,7 +1301,7 @@ public class TransliteratorTest extends TestFmwk {
         };
 
         for (int d=0; d < DATA.length; d+=3) {
-            if (DATA[d] == RBT) {
+            if (DATA[d].equals(RBT)) {
                 // Transliterator test
                 Transliterator t = Transliterator.createFromRules("ID",
                         DATA[d+1], Transliterator.FORWARD);

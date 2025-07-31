@@ -34,14 +34,14 @@
 // https://en.cppreference.com/w/cpp/string/basic_string_view/operator%22%22sv
 using namespace std::string_view_literals;
 
-using U_HEADER_ONLY_NAMESPACE::UTFIterator;
-using U_HEADER_ONLY_NAMESPACE::utfIterator;
-using U_HEADER_ONLY_NAMESPACE::UTFStringCodePoints;
-using U_HEADER_ONLY_NAMESPACE::utfStringCodePoints;
-using U_HEADER_ONLY_NAMESPACE::UnsafeUTFIterator;
-using U_HEADER_ONLY_NAMESPACE::unsafeUTFIterator;
-using U_HEADER_ONLY_NAMESPACE::UnsafeUTFStringCodePoints;
-using U_HEADER_ONLY_NAMESPACE::unsafeUTFStringCodePoints;
+using icu::header::UTFIterator;
+using icu::header::utfIterator;
+using icu::header::UTFStringCodePoints;
+using icu::header::utfStringCodePoints;
+using icu::header::UnsafeUTFIterator;
+using icu::header::unsafeUTFIterator;
+using icu::header::UnsafeUTFStringCodePoints;
+using icu::header::unsafeUTFStringCodePoints;
 
 namespace {
 
@@ -349,6 +349,7 @@ public:
         TESTCASE_AUTO(testUnsafe32ZigzagReverse);
 
         TESTCASE_AUTO(testOwnership);
+        TESTCASE_AUTO(testCPDefaultConstructors);
 
         // C++20 ranges with all 2021 defect reports.  There is no separate
         // feature test macro value for https://wg21.link/P2210R2, but 2021'10
@@ -367,6 +368,9 @@ public:
         TESTCASE_AUTO(testCommonBidirectionalRange);
         TESTCASE_AUTO(testCommonContiguousRange);
 #endif
+
+        TESTCASE_AUTO(testAllCodePoints);
+        TESTCASE_AUTO(testAllScalarValues);
 
         TESTCASE_AUTO_END;
     }
@@ -1127,6 +1131,56 @@ public:
         }
     }
 
+    void testCPDefaultConstructors() {
+        {
+            // validating
+            using CodePoints =
+                UTFStringCodePoints<UChar32, UTF_BEHAVIOR_NEGATIVE, std::u16string_view>;
+            CodePoints cpRange;  // default constructor
+            assertTrue("empty safe range", cpRange.begin() == cpRange.end());
+            {
+                cpRange = utfStringCodePoints<UChar32, UTF_BEHAVIOR_NEGATIVE>(u"abçカ🚴"sv);
+                auto iter = cpRange.begin();
+                ++++iter;
+                assertEquals("safe1[2]", U'ç', iter->codePoint());
+                ++++iter;
+                assertEquals("safe1[4]", U'🚴', iter->codePoint());
+            }
+            {
+                cpRange = utfStringCodePoints<UChar32, UTF_BEHAVIOR_NEGATIVE>(u"Fuß"sv);
+                auto iter = cpRange.begin();
+                assertEquals("safe2[0]", U'F', iter->codePoint());
+                ++++iter;
+                assertEquals("safe2[2]", U'ß', iter->codePoint());
+            }
+        }
+        {
+            // unsafe
+            using CodePoints =
+                UnsafeUTFStringCodePoints<UChar32, std::u16string_view>;
+            CodePoints cpRange;  // default constructor
+            assertTrue("empty unsafe range", cpRange.begin() == cpRange.end());
+            {
+                cpRange = unsafeUTFStringCodePoints<UChar32>(u"abçカ🚴"sv);
+                auto iter = cpRange.begin();
+                ++++iter;
+                assertEquals("unsafe1[2]", U'ç', iter->codePoint());
+                ++++iter;
+                assertEquals("unsafe1[4]", U'🚴', iter->codePoint());
+            }
+            {
+                cpRange = unsafeUTFStringCodePoints<UChar32>(u"Fuß"sv);
+                auto iter = cpRange.begin();
+                assertEquals("unsafe2[0]", U'F', iter->codePoint());
+                ++++iter;
+                assertEquals("unsafe2[2]", U'ß', iter->codePoint());
+            }
+        }
+    }
+
+    void testAllCodePoints();
+    void testAllScalarValues();
+
     ImplTest<char> longGood8;
     ImplTest<char16_t> longGood16;
     ImplTest<char32_t> longGood32;
@@ -1677,3 +1731,42 @@ static_assert(!std::random_access_iterator<UnsafeCodePointIterator<CodeUnitItera
 
 } // namespace
 #endif
+
+void UTFIteratorTest::testAllCodePoints() {
+    int32_t count = 0;
+    UChar32 previous = -1;
+    for (UChar32 c : icu::header::AllCodePoints<UChar32>()) {
+        // Not assertTrue() / assertEquals() because they are slow for this many code points.
+        if (!U_IS_CODE_POINT(c)) {
+            errln("!U_IS_CODE_POINT(U+%04lx)", static_cast<long>(c));
+        }
+        if (c != (previous + 1)) {
+            errln("expected U+%04lx = U+%04lx + 1",
+                  static_cast<long>(c), static_cast<long>(previous));
+        }
+        previous = c;
+        ++count;
+    }
+    assertEquals("count", 0x110000, count);
+}
+
+void UTFIteratorTest::testAllScalarValues() {
+    int32_t count = 0;
+    UChar32 previous = -1;
+    for (UChar32 c : icu::header::AllScalarValues<UChar32>()) {
+        // Not assertTrue() / assertEquals() because they are slow for this many code points.
+        if (!U_IS_SCALAR_VALUE(c)) {
+            errln("!U_IS_SCALAR_VALUE(U+%04lx)", static_cast<long>(c));
+        }
+        if (previous == 0xd7ff) {
+            previous = 0xdfff;
+        }
+        if (c != (previous + 1)) {
+            errln("expected U+%04lx = U+%04lx + 1",
+                  static_cast<long>(c), static_cast<long>(previous));
+        }
+        previous = c;
+        ++count;
+    }
+    assertEquals("count", 0x110000 - 0x800, count);
+}

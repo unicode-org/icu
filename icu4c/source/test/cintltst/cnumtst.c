@@ -954,7 +954,7 @@ free(result);
         status = U_ZERO_ERROR;
         u_uastrcpy(dest, numFormatted);   /* Parse the expected output of the formatting test */
         parsePos = 3;                 /*      12,345,678,900,987,654,321.12345679         */
-                                      /* start parsing at the the third char              */
+                                      /* start parsing at the third char              */
         resultSize = unum_parseDecimal(fmt, dest, -1, &parsePos, desta, DESTCAPACITY, &status);
         if (U_FAILURE(status)) {
             log_err("File %s, Line %d, status = %s\n", __FILE__, __LINE__, u_errorName(status));

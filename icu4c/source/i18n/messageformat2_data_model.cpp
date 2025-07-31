@@ -18,6 +18,8 @@ U_NAMESPACE_BEGIN
 
 namespace message2 {
 
+namespace data_model {
+
 // Implementation
 
 //------------------ SelectorKeys
@@ -913,6 +915,8 @@ MFDataModel::Builder::~Builder() {
         delete bindings;
     }
 }
+
+} // namespace data_model
 } // namespace message2
 
 U_NAMESPACE_END

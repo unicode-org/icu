@@ -306,7 +306,7 @@ public class AffixUtils {
      * @param output
      *            The FormattedStringBuilder to mutate with the result.
      * @param position
-     *            The index into the FormattedStringBuilder to insert the the string.
+     *            The index into the FormattedStringBuilder to insert the string.
      * @param provider
      *            An object to generate locale symbols.
      * @return The length of the string added to affixPattern.

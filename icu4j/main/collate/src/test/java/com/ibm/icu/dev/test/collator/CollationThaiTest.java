@@ -138,7 +138,7 @@ public class CollationThaiTest extends TestFmwk {
         BufferedReader in = null;
         try {
             String fileName = "riwords.txt";
-            in = TestUtil.getDataReader(fileName, "UTF-8");
+            in = TestUtil.getUtf8DataReader(fileName);
 
             //
             // Loop through each word in the dictionary and compare it to the previous

@@ -146,7 +146,7 @@ public final class UCaseProps {
         return flagsOffset[flags&((1<<index)-1)];
     }
 
-    /*
+    /**
      * Get the value of an optional-value slot where hasSlot(excWord, index).
      *
      * @param excWord (in) initial exceptions word
@@ -959,39 +959,36 @@ public final class UCaseProps {
         return false; /* not preceded by TYPE_i */
     }
 
-    /*
-     * See Jitterbug 2344:
-     * The condition After_I for Turkic-lowercasing of U+0307 combining dot above
-     * is checked in ICU 2.0, 2.1, 2.6 but was not in 2.2 & 2.4 because
-     * we made those releases compatible with Unicode 3.2 which had not fixed
-     * a related bug in SpecialCasing.txt.
-     *
-     * From the Jitterbug 2344 text:
-     * ... this bug is listed as a Unicode erratum
-     * from 2002-10-31 at http://www.unicode.org/uni2errata/UnicodeErrata.html
-     * <quote>
-     * There are two errors in SpecialCasing.txt.
-     * 1. Missing semicolons on two lines. ... [irrelevant for ICU]
-     * 2. An incorrect context definition. Correct as follows:
-     * < 0307; ; 0307; 0307; tr After_Soft_Dotted; # COMBINING DOT ABOVE
-     * < 0307; ; 0307; 0307; az After_Soft_Dotted; # COMBINING DOT ABOVE
-     * ---
-     * > 0307; ; 0307; 0307; tr After_I; # COMBINING DOT ABOVE
-     * > 0307; ; 0307; 0307; az After_I; # COMBINING DOT ABOVE
-     * where the context After_I is defined as:
-     * The last preceding base character was an uppercase I, and there is no
-     * intervening combining character class 230 (ABOVE).
-     * </quote>
-     *
-     * Note that SpecialCasing.txt even in Unicode 3.2 described the condition as:
-     *
-     * # When lowercasing, remove dot_above in the sequence I + dot_above, which will turn into i.
-     * # This matches the behavior of the canonically equivalent I-dot_above
-     *
-     * See also the description in this place in older versions of uchar.c (revision 1.100).
-     *
-     * Markus W. Scherer 2003-feb-15
-     */
+    // See Jitterbug 2344:
+    // The condition After_I for Turkic-lowercasing of U+0307 combining dot above
+    // is checked in ICU 2.0, 2.1, 2.6 but was not in 2.2 & 2.4 because
+    // we made those releases compatible with Unicode 3.2 which had not fixed
+    // a related bug in SpecialCasing.txt.
+    //
+    // From the Jitterbug 2344 text:
+    // ... this bug is listed as a Unicode erratum
+    // from 2002-10-31 at http://www.unicode.org/uni2errata/UnicodeErrata.html
+    //
+    //     There are two errors in SpecialCasing.txt.
+    //     1. Missing semicolons on two lines. ... [irrelevant for ICU]
+    //     2. An incorrect context definition. Correct as follows:
+    //     < 0307; ; 0307; 0307; tr After_Soft_Dotted; # COMBINING DOT ABOVE
+    //     < 0307; ; 0307; 0307; az After_Soft_Dotted; # COMBINING DOT ABOVE
+    //     ---
+    //     > 0307; ; 0307; 0307; tr After_I; # COMBINING DOT ABOVE
+    //     > 0307; ; 0307; 0307; az After_I; # COMBINING DOT ABOVE
+    //     where the context After_I is defined as:
+    //     The last preceding base character was an uppercase I, and there is no
+    //     intervening combining character class 230 (ABOVE).
+    //
+    // Note that SpecialCasing.txt even in Unicode 3.2 described the condition as:
+    //
+    // # When lowercasing, remove dot_above in the sequence I + dot_above, which will turn into i.
+    // # This matches the behavior of the canonically equivalent I-dot_above
+    //
+    // See also the description in this place in older versions of uchar.c (revision 1.100).
+    //
+    // Markus W. Scherer 2003-feb-15
 
     /* Is preceded by base character 'I' with no intervening cc=230 ? */
     private final boolean isPrecededBy_I(ContextIterator iter) {

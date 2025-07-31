@@ -291,6 +291,7 @@ class IndexRequest(AbstractRequest):
     def __init__(self, **kwargs):
         self.installed_files = []
         self.alias_files = []
+        self.dep_targets = []
         self.txt_file = None
         self.output_file = None
         self.cldr_version = ""
@@ -324,6 +325,7 @@ class IndexRequest(AbstractRequest):
             SingleExecutionRequest(
                 name = "%s_res" % self.name,
                 category = self.category,
+                dep_targets = self.dep_targets,
                 input_files = [self.txt_file],
                 output_files = [self.output_file],
                 tool = IcuTool("genrb"),

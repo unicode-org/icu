@@ -918,27 +918,28 @@ class CharsetMBCS extends CharsetICU {
             }
         }
     }
-     /* EBCDIC swap LF<->NL--------------------------------------------------------------------------------*/
-     /*
-      * This code modifies a standard EBCDIC<->Unicode mappling table for
-      * OS/390 (z/OS) Unix System Services (Open Edition).
-      * The difference is in the mapping of Line Feed and New Line control codes:
-      * Standard EBDIC maps
-      *
-      * <U000A> \x25 |0
-      * <U0085> \x15 |0
-      *
-      * but OS/390 USS EBCDIC swaps the control codes for LF and NL,
-      * mapping
-      *
-      * <U000A> \x15 |0
-      * <U0085> \x25 |0
-      *
-      * This code modifies a loaded standard EBCDIC<->Unicode mapping table
-      * by copying it into allocated memory and swapping the LF and NL values.
-      * It allows to support the same EBCDIC charset in both version without
-      * duplicating the entire installed table.
-      */
+
+    // EBCDIC swap LF<->NL
+    //
+    // This code modifies a standard EBCDIC<->Unicode mappling table for
+    // OS/390 (z/OS) Unix System Services (Open Edition).
+    // The difference is in the mapping of Line Feed and New Line control codes:
+    // Standard EBDIC maps
+    //
+    // <U000A> \x25 |0
+    // <U0085> \x15 |0
+    //
+    // but OS/390 USS EBCDIC swaps the control codes for LF and NL,
+    // mapping
+    //
+    // <U000A> \x15 |0
+    // <U0085> \x25 |0
+    //
+    // This code modifies a loaded standard EBCDIC<->Unicode mapping table
+    // by copying it into allocated memory and swapping the LF and NL values.
+    // It allows to support the same EBCDIC charset in both version without
+    // duplicating the entire installed table.
+
     /* standard EBCDIC codes */
     private static final short EBCDIC_LF = 0x0025;
     private static final short EBCDIC_NL = 0x0015;
@@ -1415,13 +1416,13 @@ class CharsetMBCS extends CharsetICU {
     static final int FROM_U_RESERVED_MASK = 0x60000000;
     private static final int FROM_U_DATA_MASK = 0xffffff;
 
-    /* special value for "no mapping" to <subchar1> (impossible roundtrip to 0 bytes, value 01) */
+    // special value for "no mapping" to <subchar1> (impossible roundtrip to 0 bytes, value 01)
     static final int FROM_U_SUBCHAR1 = 0x80000001;
 
-    /* at most 3 bytes in the lower part of the value */
+    // at most 3 bytes in the lower part of the value
     private static final int FROM_U_MAX_DIRECT_LENGTH = 3;
 
-    /* maximum number of indexed bytes */
+    // maximum number of indexed bytes
     static final int MAX_BYTES = 0x1f;
 
     static boolean FROM_U_IS_PARTIAL(int value) {
@@ -1477,7 +1478,7 @@ class CharsetMBCS extends CharsetICU {
         return indexes.getInt(EXT_COUNT_BYTES) & 0xff;
     }
 
-    /*
+    /**
      * @return index of the UChar, if found; else <0
      */
     static int findFromU(CharBuffer fromUSection, int length, char u) {
@@ -1525,7 +1526,7 @@ class CharsetMBCS extends CharsetICU {
         }
     }
 
-    /*
+    /**
      * @return lookup value for the byte, if found; else 0
      */
     static int findToU(IntBuffer toUSection, int length, short byt) {
@@ -1870,10 +1871,9 @@ class CharsetMBCS extends CharsetICU {
             return cr;
         }
 
-        /*
-         * Input sequence: cnv->toUBytes[0..length[ @return if(U_FAILURE) return the length (toULength, byteIndex) for
-         * the input else return 0 after output has been written to the target
-         */
+        // Input sequence: cnv->toUBytes[0..length[ @return if(U_FAILURE) return the length (toULength, byteIndex) for
+        // the input else return 0 after output has been written to the target
+        //
         private int toU(int length, ByteBuffer source, CharBuffer target, IntBuffer offsets, int sourceIndex,
                 boolean flush, CoderResult[] cr) {
             // ByteBuffer cx;
@@ -3875,7 +3875,7 @@ class CharsetMBCS extends CharsetICU {
             return fromUWriteBytes(this, resultArray, resultArrayIndex, length, target, offsets, srcIndex);
         }
 
-        /*
+        /**
          * @return if(U_FAILURE) return the code point for cnv->fromUChar32 else return 0 after output has been written
          * to the target
          */

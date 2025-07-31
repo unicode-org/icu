@@ -128,7 +128,7 @@ mvn versions:set-property -DgenerateBackupPoms=false -Dproperty=icu4j.version   
 
 ## Build everything
 
-You must also build and install an additional CLDR library in the the local Maven repository.
+You must also build and install an additional CLDR library in the local Maven repository.
 
 Since that depends on ICU4J, you need to build and install that first.
 

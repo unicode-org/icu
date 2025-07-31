@@ -718,10 +718,12 @@
     </profile>
 
     <profile>
-      <!-- mvn clean test -ntp -DskipTests -DskipITs -l /tmp/errorprone.log -P errorprone
+      <!-- Run
+           mvn clean test -ntp -DskipTests -DskipITs -l /tmp/errorprone.log -P errorprone
            mvn exec:java -f tools/build/ -P errorprone_report -DlogFile=/tmp/errorprone.log
-      Then inspect the content of the errorprone.log file.
-      We will have some script to convert that to a more friendly format (likely html) -->
+        On Windows you can use %TEMP%\errorprone.log for the temporary folder.
+        You can then inspect the content of the errorprone.log file, or the reports in
+        the target folder (errorprone*.html, errorprone.md, errorprone.tsv) -->
       <id>errorprone</id>
       <build>
         <plugins>
@@ -741,9 +743,12 @@
                     If we let errors be errors they fail and stop the build, so we don't get a full report.
                     So we force them all to be reported as warning.
                     The drawback is that there are not errors now, they get mixed with the real warnings.
+                    The proper severity level is then restored by the tool generating the reports.
                 -->
                 <arg>-Xplugin:ErrorProne -XepAllErrorsAsWarnings -Xep:UnicodeEscape:OFF</arg>
                 <arg>-Xmaxerrs</arg>
+                <arg>10000</arg>
+                <arg>-Xmaxwarns</arg>
                 <arg>10000</arg>
                 <arg>-J-Dfile.encoding=UTF-8</arg>
                 <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED</arg>

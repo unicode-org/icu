@@ -41,6 +41,8 @@
 
 #if U_SHOW_CPLUSPLUS_API
 
+#include <type_traits>
+
 #include "unicode/uobject.h"
 #include "unicode/std_string.h"
 
@@ -260,11 +262,12 @@ private:
 
 /** 
  * Implementation of ByteSink that writes to a "string".
- * The StringClass is usually instantiated with a std::string.
+ * The StringClass is usually instantiated with a std::string or a std::u8string.
  * @stable ICU 4.2
  */
 template<typename StringClass>
 class StringByteSink : public ByteSink {
+  using Unit = typename StringClass::value_type;
  public:
   /**
    * Constructs a ByteSink that will append bytes to the dest string.
@@ -291,7 +294,13 @@ class StringByteSink : public ByteSink {
    * @param n the number of bytes; must be non-negative
    * @stable ICU 4.2
    */
-  virtual void Append(const char* data, int32_t n) override { dest_->append(data, n); }
+  virtual void Append(const char* data, int32_t n) override {
+    if constexpr (std::is_same_v<Unit, char>) {
+      dest_->append(data, n);
+    } else {
+      dest_->append(reinterpret_cast<const Unit*>(data), n);
+    }
+  }
  private:
   StringClass* dest_;
 

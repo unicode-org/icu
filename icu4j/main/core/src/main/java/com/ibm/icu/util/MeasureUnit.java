@@ -1202,8 +1202,9 @@ public class MeasureUnit implements Serializable {
     /**
      * Constant for unit of concentr: milligram-per-deciliter
      * (renamed to milligram-ofglucose-per-deciliter in CLDR 39 / ICU 69).
-     * @stable ICU 57
+     * @deprecated ICU 78 use MILLIGRAM_OFGLUCOSE_PER_DECILITER
      */
+    @Deprecated
     public static final MeasureUnit MILLIGRAM_PER_DECILITER = MeasureUnit.internalGetInstance("concentr", "milligram-ofglucose-per-deciliter");
 
     /**
@@ -2026,8 +2027,7 @@ public class MeasureUnit implements Serializable {
     /**
      * Constant for unit of mass: metric-ton
      * (renamed to tonne in CLDR 42 / ICU 72).
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @deprecated ICU 78 use TONNE
      */
     @Deprecated
     public static final MeasureUnit METRIC_TON = MeasureUnit.internalGetInstance("mass", "tonne");

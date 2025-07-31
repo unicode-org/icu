@@ -90,7 +90,7 @@ namespace impl {  // icu::number::impl
 
 // Do not enclose entire MacroProps with #ifndef U_HIDE_INTERNAL_API, needed for a protected field
 /** @internal */
-struct U_I18N_API RangeMacroProps : public UMemory {
+struct RangeMacroProps : public UMemory {
     /** @internal */
     UnlocalizedNumberFormatter formatter1; // = NumberFormatter::with();
 

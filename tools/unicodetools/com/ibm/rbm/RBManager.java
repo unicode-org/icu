@@ -596,7 +596,7 @@ public class RBManager {
     /**
      * Remove resource items of the given name from each of the resource bundles that the system
      * knows about. This works by first removing the item from the protected vector of translated
-     * items, if it is there, and then removing it from the the hashtable of all items, and then
+     * items, if it is there, and then removing it from the hashtable of all items, and then
      * removing it from its respective group. 
      */
 	

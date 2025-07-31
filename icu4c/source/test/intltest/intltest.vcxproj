@@ -51,7 +51,6 @@
   <!-- Options that are common to all 'Debug' project configurations -->
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
     <ClCompile>
-      <BrowseInformation>true</BrowseInformation>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -225,6 +224,7 @@
     <ClCompile Include="strcase.cpp" />
     <ClCompile Include="ustrtest.cpp" />
     <ClCompile Include="utfiteratortest.cpp" />
+    <ClCompile Include="utfstringtest.cpp" />
     <ClCompile Include="utxttest.cpp" />
     <ClCompile Include="cpdtrtst.cpp" />
     <ClCompile Include="ittrans.cpp" />

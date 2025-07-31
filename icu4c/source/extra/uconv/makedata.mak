@@ -80,6 +80,12 @@ PATH = $(ICUP)\binARM64;$(PATH)
 
 # If building ARM/ARM, then we need to pass the arch as an argument.
 EXTRA_PKGDATA_ARGUMENTS=
+!IF "$(CFG)" == "x64\Release" || "$(CFG)" == "x64\Debug"
+EXTRA_PKGDATA_ARGUMENTS=-a X64
+!ENDIF
+!IF "$(CFG)" == "Release" || "$(CFG)" == "release" || "$(CFG)" == "Debug" || "$(CFG)" == "debug" || "$(CFG)" == "x86\Release" || "$(CFG)" == "x86\Debug"
+EXTRA_PKGDATA_ARGUMENTS=-a X86
+!ENDIF
 !IF "$(CFG)" == "ARM\Release" || "$(CFG)" == "ARM\Debug"
 EXTRA_PKGDATA_ARGUMENTS=-a ARM
 !ENDIF

@@ -282,6 +282,7 @@ class CalendarFrame extends Frame
      */
     private class CalMenuListener implements ItemListener
     {
+         @SuppressWarnings("ReferenceEquality")
          public void itemStateChanged(ItemEvent e)
          {
             for (int i = 0; i < calMenu.length; i++)
@@ -291,7 +292,6 @@ class CalendarFrame extends Frame
                     // We found the menu that the event happened in.
                     // Figure out which new calendar they selected.
                     Calendar newCal = CALENDARS[ calMenu[i].getSelectedIndex() ].calendar;
-
                     if (newCal != calendars[i])
                     {
                         // If any of the other menus are set to the same new calendar

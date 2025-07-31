@@ -46,7 +46,7 @@ class RBBISetBuilder {
            int                fNum = 0;               // runtime-mapped input value for this range.
            boolean            fIncludesDict = false;  // True if the range includes $dictionary.
            boolean            fFirstInGroup = false;  // True if first range in a group with the same fNum.
-           List<RBBINode>     fIncludesSets;          // vector of the the original
+           List<RBBINode>     fIncludesSets;          // vector of the original
                                                       //   Unicode sets that include this range.
                                                       //    (Contains ptrs to uset nodes)
             RangeDescriptor   fNext;                  // Next RangeDescriptor in the linked list.

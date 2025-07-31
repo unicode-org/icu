@@ -480,6 +480,7 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
 
     // Add backward compatibility header for "milligram-per-deciliter"
     private static void addCXXHForMilligramPerDeciliter(PrintStream out) {
+        out.println("#ifndef U_HIDE_DEPRECATED_API");
         out.println("    /**");
         out.println("     * Returns by pointer, unit of concentr: milligram-per-deciliter.");
         out.println("     * (renamed to milligram-ofglucose-per-deciliter in CLDR 39 / ICU 69).");
@@ -487,7 +488,7 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
         out.println("     * Also see {@link #createMilligramOfglucosePerDeciliter()}.");
         out.println("     * Also see {@link #getMilligramPerDeciliter()}.");
         out.println("     * @param status ICU error code.");
-        out.println("     * @stable ICU 57");
+        out.println("     * @deprecated ICU 78 use createMilligramOfglucosePerDeciliter(UErrorCode &status)");
         out.println("     */");
         out.println("    static MeasureUnit *createMilligramPerDeciliter(UErrorCode &status);");
         out.println("");
@@ -496,9 +497,10 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
         out.println("     * (renamed to milligram-ofglucose-per-deciliter in CLDR 39 / ICU 69).");
         out.println("     * Also see {@link #getMilligramOfglucosePerDeciliter()}.");
         out.println("     * Also see {@link #createMilligramPerDeciliter()}.");
-        out.println("     * @stable ICU 64");
+        out.println("     * @deprecated ICU 78 use getMilligramOfglucosePerDeciliter()");
         out.println("     */");
         out.println("    static MeasureUnit getMilligramPerDeciliter();");
+        out.println("#endif  /* U_HIDE_DEPRECATED_API */");
         out.println("");
     }
 
@@ -966,8 +968,9 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
         out.println("    /**");
         out.println("     * Constant for unit of concentr: milligram-per-deciliter");
         out.println("     * (renamed to milligram-ofglucose-per-deciliter in CLDR 39 / ICU 69).");
-        out.println("     * @stable ICU 57");
+        out.println("     * @deprecated ICU 78 use MILLIGRAM_OFGLUCOSE_PER_DECILITER");
         out.println("     */");
+        out.println("    @Deprecated");
         out.println("    public static final MeasureUnit MILLIGRAM_PER_DECILITER = MeasureUnit.internalGetInstance(\"" +
                             type + "\", \"" + code + "\");");
         out.println("");
@@ -990,8 +993,7 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
         out.println("    /**");
         out.println("     * Constant for unit of mass: metric-ton");
         out.println("     * (renamed to tonne in CLDR 42 / ICU 72).");
-        out.println("     * @internal");
-        out.println("     * @deprecated This API is ICU internal only.");
+        out.println("     * @deprecated ICU 78 use TONNE");
         out.println("     */");
         out.println("    @Deprecated");
         out.println("    public static final MeasureUnit METRIC_TON = MeasureUnit.internalGetInstance(\"" +

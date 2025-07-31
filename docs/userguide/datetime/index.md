@@ -73,7 +73,7 @@ internally, and the same order in which they are returned by
 `TimeZone::getAvailableIDs()`. The reason for this is that ICU locates zones using
 a binary search, and the binary search relies on this sort order.*
 *You might notice that zones such as Etc/GMT+1 appear to have the wrong sign for
-their GMT offset. In fact, their sign is inverted since the the Etc zones follow
+their GMT offset. In fact, their sign is inverted since the Etc zones follow
 the POSIX sign conventions. This is the way the original Olson data is set up,
 and ICU reproduces the Olson data faithfully. See the Olson files for more
 details.*

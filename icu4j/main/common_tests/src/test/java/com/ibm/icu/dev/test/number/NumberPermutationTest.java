@@ -149,8 +149,7 @@ public class NumberPermutationTest extends CoreTestFmwk {
         }
 
         // Compare it to the golden file
-        String codePage = "UTF-8";
-        BufferedReader f = TestUtil.getDataReader("numberpermutationtest.txt", codePage);
+        BufferedReader f = TestUtil.getUtf8DataReader("numberpermutationtest.txt");
         int lineNumber = 1;
         for (String actualLine : resultLines) {
             String expectedLine = f.readLine();

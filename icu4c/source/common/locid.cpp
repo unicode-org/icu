@@ -1073,7 +1073,7 @@ public:
     }
 
     // Check the fields inside locale, if need to replace fields,
-    // place the the replaced locale ID in out and return true.
+    // place the replaced locale ID in out and return true.
     // Otherwise return false for no replacement or error.
     bool replace(
         const Locale& locale, CharString& out, UErrorCode& status);

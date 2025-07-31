@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 class ParseMavenOutForErrorProne {
     // The `(?:[A-F]:)?` in the beginning is for the Windows drive letter (for example D:)
     private static final String RE_ERROR_PRONE_START =
-            "^\\[WARNING\\] ((?:[A-F]:)?[\\\\/a-zA-Z0-9_.\\-]+\\.java):\\[(\\d+),(\\d+)\\]"
+            "^\\[WARNING\\] ((?:[A-F]:)?[\\\\/a-zA-Z0-9_.\\-]+\\.java):\\[([0-9,]+)\\]"
                 + " \\[(\\S+)\\] (.+)";
     private static final Pattern PATTERN = Pattern.compile(RE_ERROR_PRONE_START);
 
@@ -61,14 +61,23 @@ class ParseMavenOutForErrorProne {
                 }
                 // If we already had an error report in progress, save it.
                 addErrorToReportAndReset(errorReport, currentError);
+                String lineColumn = line.substring(m.start(2), m.end(2));
+                int columnNo = 0;
+                // Some entries have a only line info, others have comma separated line,column
+                int commaIndex = lineColumn.indexOf(',');
+                if (commaIndex != -1) {
+                    columnNo = Integer.parseInt(lineColumn.substring(commaIndex + 1));
+                    lineColumn = lineColumn.substring(0, commaIndex);
+                }
+                int lineNo = Integer.parseInt(lineColumn);
                 currentError =
                         new ErrorProneEntry(
-                                path,
-                                Integer.parseInt(line.substring(m.start(2), m.end(2))), // line
-                                Integer.parseInt(line.substring(m.start(3), m.end(3))), // column
-                                line.substring(m.start(4), m.end(4)), // error code
-                                line.substring(m.start(5), m.end(5)) // message
+                                path, lineNo, columnNo,
+                                line.substring(m.start(3), m.end(3)), // error code
+                                line.substring(m.start(4), m.end(4)) // message
                         );
+            } else if (line.trim().isEmpty()) {
+                // Skip empty lines
             } else if (line.startsWith("  Did you mean ")) {
                 if (currentError == null) {
                     error(fileName, currentLine, line, "Parse error: unexpected 'Did you mean' ");
