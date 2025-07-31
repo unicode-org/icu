@@ -828,24 +828,6 @@ fi
 AC_SUBST(U_HAVE_TIMEZONE)
 AC_SUBST(U_TIMEZONE)
 
-AC_CHECK_FUNC(strtod_l)
-if test x$ac_cv_func_strtod_l = xyes
-then
-    U_HAVE_STRTOD_L=1
-    AC_CHECK_HEADER(xlocale.h)
-    if test "$ac_cv_header_xlocale_h" = yes; then
-      U_HAVE_XLOCALE_H=1
-      CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_STRTOD_L=1 -DU_HAVE_XLOCALE_H=1"
-    else
-      U_HAVE_XLOCALE_H=0
-      CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_STRTOD_L=1 -DU_HAVE_XLOCALE_H=0"
-    fi
-else
-    CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_STRTOD_L=0"
-    U_HAVE_STRTOD_L=0
-fi
-AC_SUBST(U_HAVE_STRTOD_L)
-
 # Do various wchar_t related checks
 AC_CHECK_HEADER(wchar.h)
 if test "$ac_cv_header_wchar_h" = no
