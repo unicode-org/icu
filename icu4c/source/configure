@@ -679,7 +679,6 @@ U_HAVE_EXTRAS
 EXTRAS_TRUE
 U_HAVE_WCSCPY
 U_HAVE_WCHAR_H
-U_HAVE_STRTOD_L
 U_TIMEZONE
 U_HAVE_TIMEZONE
 U_TZNAME
@@ -7765,34 +7764,6 @@ printf "%s\n" "$ac_cv_var__timezone" >&6; }
   fi
 fi
 
-
-
-ac_fn_c_check_func "$LINENO" "strtod_l" "ac_cv_func_strtod_l"
-if test "x$ac_cv_func_strtod_l" = xyes
-then :
-
-fi
-
-if test x$ac_cv_func_strtod_l = xyes
-then
-    U_HAVE_STRTOD_L=1
-    ac_fn_c_check_header_compile "$LINENO" "xlocale.h" "ac_cv_header_xlocale_h" "$ac_includes_default"
-if test "x$ac_cv_header_xlocale_h" = xyes
-then :
-
-fi
-
-    if test "$ac_cv_header_xlocale_h" = yes; then
-      U_HAVE_XLOCALE_H=1
-      CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_STRTOD_L=1 -DU_HAVE_XLOCALE_H=1"
-    else
-      U_HAVE_XLOCALE_H=0
-      CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_STRTOD_L=1 -DU_HAVE_XLOCALE_H=0"
-    fi
-else
-    CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_STRTOD_L=0"
-    U_HAVE_STRTOD_L=0
-fi
 
 
 # Do various wchar_t related checks
