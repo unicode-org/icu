@@ -14,19 +14,13 @@
 
 U_NAMESPACE_BEGIN
 
-// Export an explicit template instantiation of LocalMemory used as a data member of EraRules.
-// When building DLLs for Windows this is required even though no direct access leaks out of the i18n library.
-// See digitlst.h, pluralaffix.h, datefmt.h, and others for similar examples.
-#if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
-template class U_I18N_API LocalPointerBase<int32_t>;
-template class U_I18N_API LocalMemory<int32_t>;
-#endif
-
-class U_I18N_API EraRules : public UMemory {
+class U_I18N_API_CLASS EraRules : public UMemory {
 public:
-    ~EraRules();
+    U_I18N_API ~EraRules();
 
-    static EraRules* createInstance(const char *calType, UBool includeTentativeEra, UErrorCode& status);
+    U_I18N_API static EraRules* createInstance(const char* calType,
+                                               UBool includeTentativeEra,
+                                               UErrorCode& status);
 
     /**
      * Gets number of effective eras
@@ -53,7 +47,7 @@ public:
      * @return The first year of an era. When a era has no start date, minimum int32
      *          value is returned.
      */
-    int32_t getStartYear(int32_t eraIdx, UErrorCode& status) const;
+    U_I18N_API int32_t getStartYear(int32_t eraIdx, UErrorCode& status) const;
 
     /**
      * Returns era index for the specified year/month/day.
@@ -63,7 +57,7 @@ public:
      * @param status    Receives status
      * @return  era index (or 0, when the specified date is before the first era)
      */
-    int32_t getEraIndex(int32_t year, int32_t month, int32_t day, UErrorCode& status) const;
+    U_I18N_API int32_t getEraIndex(int32_t year, int32_t month, int32_t day, UErrorCode& status) const;
 
     /**
      * Gets the current era index. This is calculated only once for an instance of
