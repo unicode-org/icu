@@ -30,7 +30,7 @@
 #   input-char           n next-state           ^push-state     action
 #       |                |   |                      |             |
 #       |                |   |                      |             |--- action to be performed by state machine
-#       |                |   |                      |                  See function RBBIRuleScanner::doParseActions()
+#       |                |   |                      |                  See function RegexCompile::doParseActions()
 #       |                |   |                      |
 #       |                |   |                      |--- Push this named state onto the state stack.
 #       |                |   |                           Later, when next state is specified as "pop",
