@@ -87,7 +87,7 @@ jobs:
           --settings $GITHUB_WORKSPACE/settings.xml \
           --errors --fail-at-end -DdeployAtEnd=true \
           -DskipTests -DskipITs \
-          -P with_sources,with_javadoc,with_signature
+          -P with_sources,with_javadoc,with_signature,to_sonatype
       env:
         MAVEN_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
         MAVEN_CENTRAL_TOKEN: ${{ secrets.MAVEN_CENTRAL_TOKEN }}
