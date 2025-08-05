@@ -23,7 +23,7 @@
 U_NAMESPACE_BEGIN
 namespace units {
 
-void U_I18N_API Factor::multiplyBy(const Factor &rhs) {
+void Factor::multiplyBy(const Factor& rhs) {
     factorNum *= rhs.factorNum;
     factorDen *= rhs.factorDen;
     for (int i = 0; i < CONSTANTS_COUNT; i++) {
@@ -36,7 +36,7 @@ void U_I18N_API Factor::multiplyBy(const Factor &rhs) {
     offset = std::max(rhs.offset, offset);
 }
 
-void U_I18N_API Factor::divideBy(const Factor &rhs) {
+void Factor::divideBy(const Factor& rhs) {
     factorNum *= rhs.factorDen;
     factorDen *= rhs.factorNum;
     for (int i = 0; i < CONSTANTS_COUNT; i++) {
@@ -49,9 +49,9 @@ void U_I18N_API Factor::divideBy(const Factor &rhs) {
     offset = std::max(rhs.offset, offset);
 }
 
-void U_I18N_API Factor::divideBy(const uint64_t constant) { factorDen *= constant; }
+void Factor::divideBy(const uint64_t constant) { factorDen *= constant; }
 
-void U_I18N_API Factor::power(int32_t power) {
+void Factor::power(int32_t power) {
     // multiply all the constant by the power.
     for (int i = 0; i < CONSTANTS_COUNT; i++) {
         constantExponents[i] *= power;
@@ -69,7 +69,7 @@ void U_I18N_API Factor::power(int32_t power) {
     }
 }
 
-void U_I18N_API Factor::applyPrefix(UMeasurePrefix unitPrefix) {
+void Factor::applyPrefix(UMeasurePrefix unitPrefix) {
     if (unitPrefix == UMeasurePrefix::UMEASURE_PREFIX_ONE) {
         // No need to do anything
         return;
@@ -85,7 +85,7 @@ void U_I18N_API Factor::applyPrefix(UMeasurePrefix unitPrefix) {
     }
 }
 
-void U_I18N_API Factor::substituteConstants() {
+void Factor::substituteConstants() {
     for (int i = 0; i < CONSTANTS_COUNT; i++) {
         if (this->constantExponents[i] == 0) {
             continue;
@@ -475,9 +475,9 @@ void U_I18N_API addSingleFactorConstant(StringPiece baseStr, int32_t power, Sign
  * Extracts the compound base unit of a compound unit (`source`). For example, if the source unit is
  * `square-mile-per-hour`, the compound base unit will be `square-meter-per-second`
  */
-MeasureUnitImpl U_I18N_API extractCompoundBaseUnit(const MeasureUnitImpl &source,
-                                                   const ConversionRates &conversionRates,
-                                                   UErrorCode &status) {
+MeasureUnitImpl extractCompoundBaseUnit(const MeasureUnitImpl& source,
+                                        const ConversionRates& conversionRates,
+                                        UErrorCode& status) {
 
     MeasureUnitImpl result;
     if (U_FAILURE(status)) return result;

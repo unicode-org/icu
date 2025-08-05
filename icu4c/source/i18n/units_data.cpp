@@ -395,7 +395,7 @@ const ConversionRateInfo *ConversionRates::extractConversionInfo(StringPiece sou
     return nullptr;
 }
 
-U_I18N_API UnitPreferences::UnitPreferences(UErrorCode &status) {
+UnitPreferences::UnitPreferences(UErrorCode& status) {
     LocalUResourceBundlePointer unitsBundle(ures_openDirect(nullptr, "units", &status));
     UnitPreferencesSink sink(&unitPrefs_, &metadata_);
     ures_getAllItemsWithFallback(unitsBundle.getAlias(), "unitPreferenceData", sink, status);
@@ -410,10 +410,10 @@ CharString getKeyWordValue(const Locale &locale, StringPiece kw, UErrorCode &sta
     return result;
 }
 
-MaybeStackVector<UnitPreference>
-    U_I18N_API UnitPreferences::getPreferencesFor(StringPiece category, StringPiece usage,
-                                                  const Locale &locale, UErrorCode &status) const {
-
+MaybeStackVector<UnitPreference> UnitPreferences::getPreferencesFor(StringPiece category,
+                                                                    StringPiece usage,
+                                                                    const Locale& locale,
+                                                                    UErrorCode& status) const {
     MaybeStackVector<UnitPreference> result;
 
     // TODO: remove this once all the categories are allowed.
