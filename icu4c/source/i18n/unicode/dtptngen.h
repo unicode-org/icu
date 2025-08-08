@@ -219,6 +219,19 @@ public:
                                                    UnicodeString& conflictingPattern,
                                                    UErrorCode& status);
 
+#ifndef U_HIDE_INTERNAL_API
+     /**
+      * Like addPattern, but associates the pattern with the given skeleton.
+      *
+      * @internal ICU 78
+      */
+    U_I18N_API UDateTimePatternConflict addPatternWithSkeleton(const UnicodeString& pattern,
+                                                               const UnicodeString& skeletonToUse,
+                                                               UBool override,
+                                                               UnicodeString& conflictingPattern,
+                                                               UErrorCode& status);
+#endif  /* U_HIDE_INTERNAL_API */
+
     /**
      * An AppendItem format is a pattern used to append a field if there is no
      * good match. For example, suppose that the input skeleton is "GyyyyMMMd",
@@ -620,7 +633,7 @@ private:
     void getCalendarTypeToUse(const Locale& locale, CharString& destination, UErrorCode& err);
     void consumeShortTimePattern(const UnicodeString& shortTimePattern, UErrorCode& status);
     void addCLDRData(const Locale& locale, UErrorCode& status);
-    UDateTimePatternConflict addPatternWithSkeleton(const UnicodeString& pattern, const UnicodeString * skeletonToUse, UBool override, UnicodeString& conflictingPattern, UErrorCode& status);
+    UDateTimePatternConflict addPatternWithOptionalSkeleton(const UnicodeString& pattern, const UnicodeString * skeletonToUse, UBool override, UnicodeString& conflictingPattern, UErrorCode& status);
     void initHashtable(UErrorCode& status);
     void setDateTimeFromCalendar(const Locale& locale, UErrorCode& status);
     void setDecimalSymbols(const Locale& locale, UErrorCode& status);

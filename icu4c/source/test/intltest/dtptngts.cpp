@@ -49,6 +49,7 @@ void IntlTestDateTimePatternGeneratorAPI::runIndexedTest( int32_t index, UBool e
         TESTCASE(13, testDateTimePatterns);
         TESTCASE(14, testISO8601);
         TESTCASE(15, testRegionOverride);
+        TESTCASE(16, testAlphabeticSubstitution23114);
         default: name = ""; break;
     }
 }
@@ -1820,6 +1821,30 @@ void IntlTestDateTimePatternGeneratorAPI::doDTPatternTest(DateTimePatternGenerat
                         localeAndResultsPtr->localeID, patStyle, bExpect, bGet);
         }
     }
+}
+
+void IntlTestDateTimePatternGeneratorAPI::testAlphabeticSubstitution23114() {
+    IcuTestErrorCode status(*this, "testAlphabeticSubstitution23114");
+
+    LocalPointer<DateTimePatternGenerator> dtpg(
+        DateTimePatternGenerator::createEmptyInstance(status), status);
+    status.assertSuccess();
+
+    // Set up the DTPG with English data from CLDR 47
+    UnicodeString conflictingPattern;
+    dtpg->addPatternWithSkeleton(u"y G", u"Gy", true, conflictingPattern, status);
+    dtpg->addPatternWithSkeleton(u"M/d/y G", u"GyMd", true, conflictingPattern, status);
+    dtpg->addPatternWithSkeleton(u"MMM y G", u"GyMMM", true, conflictingPattern, status);
+    dtpg->addPatternWithSkeleton(u"MMM d, y G", u"GyMMMd", true, conflictingPattern, status);
+    dtpg->addPatternWithSkeleton(u"EEE, MMM d, y G", u"GyMMMEd", true, conflictingPattern, status);
+    status.assertSuccess();
+
+    // Test the behavior of selecting GyMEd. In ICU 77, this selected the GyMMMEd skeleton,
+    // and replaced the alphabetic month with a numeric month, which is wrong. In ICU 78,
+    // we still select GyMMMEd, but we don't change it to a numeric month.
+    UnicodeString bestPattern = dtpg->getBestPattern(u"GyMEd", status);
+    status.assertSuccess();
+    assertEquals("Should not substitute numeric for alpha", u"EEE, MMM d, y G", bestPattern);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

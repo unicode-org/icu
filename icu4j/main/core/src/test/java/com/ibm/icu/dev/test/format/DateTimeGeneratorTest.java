@@ -2057,4 +2057,23 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
 //            }
         }
     }
+
+    @Test
+    public void testAlphabeticSubstitution23114() {
+        DateTimePatternGenerator dtpg = DateTimePatternGenerator.getEmptyInstance();
+        DateTimePatternGenerator.PatternInfo returnInfo = new DateTimePatternGenerator.PatternInfo();
+
+        // Set up the DTPG with English data from CLDR 47
+        dtpg.addPatternWithSkeleton("y G", "Gy", true, returnInfo);
+        dtpg.addPatternWithSkeleton("M/d/y G", "GyMd", true, returnInfo);
+        dtpg.addPatternWithSkeleton("MMM y G", "GyMMM", true, returnInfo);
+        dtpg.addPatternWithSkeleton("MMM d, y G", "GyMMMd", true, returnInfo);
+        dtpg.addPatternWithSkeleton("EEE, MMM d, y G", "GyMMMEd", true, returnInfo);
+
+        // Test the behavior of selecting GyMEd. In ICU 77, this selected the GyMMMEd skeleton,
+        // and replaced the alphabetic month with a numeric month, which is wrong. In ICU 78,
+        // we still select GyMMMEd, but we don't change it to a numeric month.
+        String bestPattern = dtpg.getBestPattern("GyMEd");
+        assertEquals("Should not substitute numeric for alpha", "EEE, MMM d, y G", bestPattern);
+    }
 }
