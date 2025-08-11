@@ -12,6 +12,7 @@ package com.ibm.icu.text;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
+import java.lang.Integer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -1805,8 +1806,37 @@ public class DateFormatSymbols implements Serializable, Cloneable {
                     String[] dataArray = value.getStringArray();
                     arrays.put(currentPath, dataArray);
                 } else if (value.getType() == ICUResourceBundle.TABLE) {
-                    // We are not on a leaf, recursively process the subtable.
-                    processResource(currentPath, key, value);
+                    // We might have an eras table that is replacing an eras leaf array
+                    if (currentPath.startsWith("eras")) {
+                        // path is one of eras/wide, eras/abbreviated, eras/narrow
+                        UResource.Table rDataTable = value.getTable();
+                        int dataTableSize = rDataTable.getSize();
+                        ArrayList<String> dataList = new ArrayList<>(dataTableSize);
+                        // Expand the ArrayList as necessary to have index from 0 up to the max
+                        // eraCode, and fill in the slots for the eras defined in the resource data
+                        // (other slots get nulls).
+                        for (int dataTableIndex = 0; dataTableIndex < dataTableSize; dataTableIndex++) {
+                            rDataTable.getKeyAndValue(dataTableIndex, key, value);
+                            int listIndex = Integer.parseInt(key.toString());
+                            if (listIndex + 1 > dataList.size()) {
+                                dataList.ensureCapacity(listIndex + 1); // needed only to minimize expansions
+                                // Fill in empty strings for all added slots
+                                while (dataList.size() < listIndex + 1) {
+                                    dataList.add("");
+                                }
+                            }
+                            // Now set the eraName that we just read
+                            String eraName = (value.getType() == ICUResourceBundle.STRING) ? value.getString() : "";
+                            dataList.set(listIndex, eraName);
+                        }
+                        // Now convert to array
+                        String[] dataArray = dataList.toArray(new String[dataList.size()]);
+                        // Save the array
+                        arrays.put(currentPath, dataArray);
+                    } else {
+                        // We are not on a leaf, recursively process the subtable.
+                        processResource(currentPath, key, value);
+                    }
                 }
             }
         }

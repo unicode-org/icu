@@ -252,7 +252,6 @@ final class IcuTextWriter {
     private static final RbPath RB_SEQUENCE = RbPath.of("Sequence");
     private static final RbPath RB_RULES = RbPath.of("rules");
     private static final RbPath RB_LOCALE_SCRIPT = RbPath.of("LocaleScript");
-    private static final RbPath RB_ERAS = RbPath.of("eras");
     private static final RbPath RB_NAMED = RbPath.of("named");
     private static final RbPath RB_CALENDAR_PREFERENCE_DATA = RbPath.of("calendarPreferenceData");
     private static final RbPath RB_METAZONE_INFO = RbPath.of("metazoneInfo");
@@ -270,9 +269,6 @@ final class IcuTextWriter {
                 && rbPath.getSegment(1).startsWith("set");
         }
         return rbPath.equals(RB_LOCALE_SCRIPT)
-            || (rbPath.contains(RB_ERAS)
-                && !rbPath.getSegment(rbPath.length() - 1).endsWith(":alias")
-                && !rbPath.endsWith(RB_NAMED))
             || rbPath.startsWith(RB_CALENDAR_PREFERENCE_DATA)
             || rbPath.startsWith(RB_METAZONE_INFO);
     }

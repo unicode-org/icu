@@ -1782,8 +1782,50 @@ struct CalendarDataSink : public ResourceSink {
                 arraySizes.puti(path, dataArraySize, errorCode);
                 if (U_FAILURE(errorCode)) { return; }
             } else if (value.getType() == URES_TABLE) {
-                // We are not on a leaf, recursively process the subtable.
-                processResource(path, key, value, errorCode);
+                // We might have an eras table that is replacing an eras leaf array
+                if (path.startsWith(u"eras", 4)) {
+                    // path is one of eras/wide, eras/abbreviated, eras/narrow
+                    ResourceTable rDataTable = value.getTable(errorCode);
+                    int32_t dataTableSize = rDataTable.getSize();
+                    UVector dataList(uprv_deleteUObject, uhash_compareUnicodeString, dataTableSize, errorCode);
+                    if (U_FAILURE(errorCode)) { return; }
+                    // Expand the UVector as necessary to have index from 0 up to the max
+                    // eraCode, and fill in the slots for the eras defined in the resource data
+                    // (filling in empty strings for other eras as we expand, since they would
+                    // otherwise not get set to anything in particular such as null).
+                    for (int32_t dataTableIndex = 0; dataTableIndex < dataTableSize; dataTableIndex++) {
+                        rDataTable.getKeyAndValue(dataTableIndex, key, value);
+                        int32_t listIndex = uprv_strtol(key, nullptr, 10);
+                        if (listIndex + 1 > dataList.size()) {
+                            dataList.ensureCapacity(listIndex + 1, errorCode); // needed only to minimize expansions
+                            if (U_FAILURE(errorCode)) { return; }
+                            // Fill in empty strings for all added slots (else they are undefined)
+                            while (dataList.size() < listIndex + 1) {
+                                LocalPointer<UnicodeString> emptyString(new UnicodeString(), errorCode);
+                                dataList.adoptElement(emptyString.orphan(), errorCode);
+                            }
+                        }
+                        // Now set the eraName that we just read
+                        LocalPointer<UnicodeString> eraName((value.getType() == URES_STRING) ?
+                                new UnicodeString(value.getUnicodeString(errorCode)) : new UnicodeString(), errorCode);
+                        if (U_FAILURE(errorCode)) { return; }
+                        dataList.setElementAt(eraName.orphan(), listIndex);
+                    }
+                    // Now convert to array running from era code 0 to the max era we have data for, fill
+                    // in from the UVector
+                    int32_t dataArraySize = dataList.size();
+                    LocalArray<UnicodeString> dataArray(new UnicodeString[dataArraySize], errorCode);
+                    // Fill out dataArray from dataList (dataList.toArray did not seem to work as expected)
+                    for (int32_t dataArrayIndex = 0; dataArrayIndex < dataArraySize; dataArrayIndex++) {
+                        dataArray[dataArrayIndex] = std::move(*(reinterpret_cast<UnicodeString *>(dataList.elementAt(dataArrayIndex))));
+                    }
+                    // Save array...
+                    arrays.put(path, dataArray.orphan(), errorCode);
+                    arraySizes.puti(path, dataArraySize, errorCode);
+                } else {
+                    // We are not on a leaf, recursively process the subtable.
+                    processResource(path, key, value, errorCode);
+                }
                 if (U_FAILURE(errorCode)) { return; }
             }
 

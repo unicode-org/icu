@@ -230,13 +230,13 @@
 //ldml/dates/calendars/calendar[@type="(%A)"]/dayPeriods/dayPeriodContext[@type="(%A)"]/dayPeriodWidth[@type="(%A)"]/dayPeriod[@type="(?!am|pm)(%A)"][@alt="(%A)"]    ; /calendar/$1/dayPeriod/$2/$3/$4%$5
 //ldml/dates/calendars/calendar[@type="(%A)"]/dayPeriods/dayPeriodContext[@type="(%A)"]/dayPeriodWidth[@type="(%A)"]/dayPeriod[@type="(?!am|pm)(%A)"]                 ; /calendar/$1/dayPeriod/$2/$3/$4
 
-//ldml/dates/calendars/calendar[@type="(%A)"]/eras/eraNarrow/era[@type="(%A)"][@alt="(%A)"] ; /calendar/$1/eras/narrow%$3
-//ldml/dates/calendars/calendar[@type="(%A)"]/eras/eraAbbr/era[@type="(%A)"][@alt="(%A)"]   ; /calendar/$1/eras/abbreviated%$3
-//ldml/dates/calendars/calendar[@type="(%A)"]/eras/eraNames/era[@type="(%A)"][@alt="(%A)"]  ; /calendar/$1/eras/wide%$3
+//ldml/dates/calendars/calendar[@type="(%A)"]/eras/eraNarrow/era[@type="(%A)"][@alt="(%A)"] ; /calendar/$1/eras/narrow%$3/$2
+//ldml/dates/calendars/calendar[@type="(%A)"]/eras/eraAbbr/era[@type="(%A)"][@alt="(%A)"]   ; /calendar/$1/eras/abbreviated%$3/$2
+//ldml/dates/calendars/calendar[@type="(%A)"]/eras/eraNames/era[@type="(%A)"][@alt="(%A)"]  ; /calendar/$1/eras/wide%$3/$2
 
-//ldml/dates/calendars/calendar[@type="(%A)"]/eras/eraNarrow/era[@type="(%A)"] ; /calendar/$1/eras/narrow
-//ldml/dates/calendars/calendar[@type="(%A)"]/eras/eraAbbr/era[@type="(%A)"]   ; /calendar/$1/eras/abbreviated
-//ldml/dates/calendars/calendar[@type="(%A)"]/eras/eraNames/era[@type="(%A)"]  ; /calendar/$1/eras/wide
+//ldml/dates/calendars/calendar[@type="(%A)"]/eras/eraNarrow/era[@type="(%A)"] ; /calendar/$1/eras/narrow/$2
+//ldml/dates/calendars/calendar[@type="(%A)"]/eras/eraAbbr/era[@type="(%A)"]   ; /calendar/$1/eras/abbreviated/$2
+//ldml/dates/calendars/calendar[@type="(%A)"]/eras/eraNames/era[@type="(%A)"]  ; /calendar/$1/eras/wide/$2
 
 # Leap year names go after other month names.
 # "yeartype" is an #IMPLIED attribute in the DTD and it should implicitly default to "standard".
