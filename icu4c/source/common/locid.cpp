@@ -50,6 +50,7 @@
 #include "charstrmap.h"
 #include "cmemory.h"
 #include "cstring.h"
+#include "fixedstring.h"
 #include "mutex.h"
 #include "putilimp.h"
 #include "uassert.h"
@@ -281,8 +282,8 @@ struct Locale::Heap : public UMemory {
     char script[ULOC_SCRIPT_CAPACITY];
     char region[ULOC_COUNTRY_CAPACITY];
     int32_t variantBegin;
-    CharString fullName;
-    CharString baseName;
+    FixedString fullName;
+    FixedString baseName;
 
     const char* getLanguage() const { return language; }
     const char* getScript() const { return script; }
@@ -303,11 +304,26 @@ struct Locale::Heap : public UMemory {
 
     Heap(const Heap& other, UErrorCode& status)
         : variantBegin(other.variantBegin),
-          fullName(other.fullName, status),
-          baseName(other.baseName, status) {
-        uprv_memcpy(language, other.language, sizeof language);
-        uprv_memcpy(script, other.script, sizeof script);
-        uprv_memcpy(region, other.region, sizeof region);
+          fullName(),
+          baseName() {
+        if (U_SUCCESS(status)) {
+            uprv_memcpy(language, other.language, sizeof language);
+            uprv_memcpy(script, other.script, sizeof script);
+            uprv_memcpy(region, other.region, sizeof region);
+            if (!other.fullName.isEmpty()) {
+                fullName = other.fullName;
+                if (fullName.isEmpty()) {
+                    status = U_MEMORY_ALLOCATION_ERROR;
+                } else {
+                    if (!other.baseName.isEmpty()) {
+                        baseName = other.baseName;
+                        if (baseName.isEmpty()) {
+                            status = U_MEMORY_ALLOCATION_ERROR;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     // Move should be done on the std::unique_ptr object that owns this.
@@ -1898,19 +1914,14 @@ Locale& Locale::init(StringPiece localeID, UBool canonicalize)
         err = U_ZERO_ERROR;
         length = parse(localeID, fullName, sizeof Nest::baseName, err);
 
-        std::unique_ptr<CharString> fullNameBuffer;
+        FixedString fullNameBuffer;
         if (err == U_BUFFER_OVERFLOW_ERROR || length >= static_cast<int32_t>(sizeof Nest::baseName)) {
             /*Go to heap for the fullName if necessary*/
-            fullNameBuffer = std::make_unique<CharString>();
-            if (!fullNameBuffer) {
+            if (!fullNameBuffer.reserve(length + 1)) {
                 break; // error: out of memory
             }
+            fullName = fullNameBuffer.getAlias();
             err = U_ZERO_ERROR;
-            int32_t capacity;
-            fullName = fullNameBuffer->getAppendBuffer(length + 1, length + 1, capacity, err);
-            if (U_FAILURE(err)) {
-                break; // error: out of memory
-            }
             length = parse(localeID, fullName, length + 1, err);
         }
         if(U_FAILURE(err) || err == U_STRING_NOT_TERMINATED_WARNING) {
@@ -1980,7 +1991,7 @@ Locale& Locale::init(StringPiece localeID, UBool canonicalize)
 
         if (Nest::fits(length, language, script, region)) {
             U_ASSERT(fullName == nest.baseName);
-            U_ASSERT(!fullNameBuffer);
+            U_ASSERT(fullNameBuffer.isEmpty());
             nest.init(language, script, region, variantBegin);
         } else {
             std::unique_ptr<Heap>& heap = payload.emplace<std::unique_ptr<Heap>>(
@@ -1989,19 +2000,17 @@ Locale& Locale::init(StringPiece localeID, UBool canonicalize)
                 break; // error: out of memory
             }
             if (fullName == nest.baseName) {
-                U_ASSERT(!fullNameBuffer);
-                heap->fullName.copyFrom({fullName, length}, err);
+                U_ASSERT(fullNameBuffer.isEmpty());
+                heap->fullName = {fullName, static_cast<std::string_view::size_type>(length)};
+                if (heap->fullName.isEmpty()) {
+                    break; // error: out of memory
+                }
             } else {
-                U_ASSERT(fullNameBuffer);
-                fullNameBuffer->append(fullName, length, err);
-                heap->fullName = std::move(*fullNameBuffer);
-            }
-            if (U_FAILURE(err)) {
-                break;
+                U_ASSERT(!fullNameBuffer.isEmpty());
+                heap->fullName = std::move(fullNameBuffer);
             }
         }
 
-        err = U_ZERO_ERROR;
         initBaseName(err);
         if (U_FAILURE(err)) {
             break;
@@ -2071,8 +2080,11 @@ Locale::initBaseName(UErrorCode &status) {
                 status = U_MEMORY_ALLOCATION_ERROR;
                 return;
             }
-            copy->fullName.copyFrom(fullName, status);
-            if (U_FAILURE(status)) { return; }
+            copy->fullName = fullName;
+            if (copy->fullName.isEmpty()) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                return;
+            }
             heap = &payload.emplace<std::unique_ptr<Heap>>(std::move(copy));
             if (!*heap) {
                 status = U_MEMORY_ALLOCATION_ERROR;
@@ -2088,7 +2100,12 @@ Locale::initBaseName(UErrorCode &status) {
             (*heap)->variantBegin = baseNameLength;
         }
 
-        (*heap)->baseName.copyFrom({fullName, baseNameLength}, status);
+        (*heap)->baseName = {fullName, static_cast<std::string_view::size_type>(baseNameLength)};
+        if ((*heap)->baseName.isEmpty()) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            setToBogus();
+            return;
+        }
     }
 }
 
@@ -2740,7 +2757,12 @@ Locale::setKeywordValue(StringPiece keywordName,
                 nest.init(language, script, region, save->variantBegin);
             } else {
                 (*heap)->baseName.clear();
-                (*heap)->fullName = std::move(localeID);
+                (*heap)->fullName = localeID.toStringPiece();
+                if ((*heap)->fullName.isEmpty()) {
+                    status = U_MEMORY_ALLOCATION_ERROR;
+                    setToBogus();
+                    return;
+                }
             }
         }
     } else {
@@ -2767,7 +2789,12 @@ Locale::setKeywordValue(StringPiece keywordName,
             U_ASSERT(heap != nullptr);
             U_ASSERT(*heap);
         }
-        (*heap)->fullName = std::move(localeID);
+        (*heap)->fullName = localeID.toStringPiece();
+        if ((*heap)->fullName.isEmpty()) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            setToBogus();
+            return;
+        }
 
         if ((*heap)->baseName.isEmpty()) {
             // Has added the first keyword, meaning that the fullName is no longer also the baseName.
