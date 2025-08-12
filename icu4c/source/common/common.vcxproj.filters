@@ -1020,6 +1020,9 @@
     <ClInclude Include="restrace.h">
       <Filter>data &amp; memory</Filter>
     </ClInclude>
+    <ClInclude Include="fixedstring.h">
+      <Filter>strings</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="common.rc">

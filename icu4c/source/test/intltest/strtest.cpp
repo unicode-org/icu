@@ -18,6 +18,8 @@
 #include <cstddef>
 #include <string.h>
 #include <limits>
+#include <type_traits>
+#include <utility>
 
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
@@ -29,6 +31,7 @@
 #include "unicode/utf8.h"
 #include "charstr.h"
 #include "cstr.h"
+#include "fixedstring.h"
 #include "intltest.h"
 #include "strtest.h"
 #include "uinvchar.h"
@@ -253,6 +256,7 @@ void StringTest::runIndexedTest(int32_t index, UBool exec, const char *&name, ch
     TESTCASE_AUTO(TestCStr);
     TESTCASE_AUTO(TestCharStrAppendNumber);
     TESTCASE_AUTO(Testctou);
+    TESTCASE_AUTO(TestFixedString);
     TESTCASE_AUTO_END;
 }
 
@@ -878,4 +882,53 @@ StringTest::Testctou() {
   UnicodeString u = ctou(cs);
   assertEquals("Testing unescape@0", 0x0046, u.charAt(0));
   assertEquals("Testing unescape@2", 295, u.charAt(2));
+}
+
+void
+StringTest::TestFixedString() {
+    static_assert(std::is_default_constructible_v<FixedString>);
+    static_assert(!std::is_copy_constructible_v<FixedString>);
+    static_assert(std::is_copy_assignable_v<FixedString>);
+    static_assert(std::is_assignable_v<FixedString, std::string_view>);
+    static_assert(!std::is_move_constructible_v<FixedString>);
+    static_assert(std::is_move_assignable_v<FixedString>);
+
+    FixedString s;
+    assertTrue("default is empty", s.isEmpty());
+    assertTrue("default alias is nullptr", s.getAlias() == nullptr);
+    assertEquals("default data is empty", "", s.data());
+
+    bool success = s.reserve(1);
+    assertTrue("reserve success", success);
+    assertFalse("reserved is empty", s.isEmpty());
+    assertFalse("reserved alias is nullptr", s.getAlias() == nullptr);
+
+    s.clear();
+    assertTrue("cleared is empty", s.isEmpty());
+    assertTrue("cleared alias is nullptr", s.getAlias() == nullptr);
+    assertEquals("cleared data is empty", "", s.data());
+
+    static constexpr char text[] = "foo";
+
+    s = text;
+    assertFalse("assigned is empty", s.isEmpty());
+    assertFalse("assigned alias is nullptr", s.getAlias() == nullptr);
+    assertEquals("assigned data is text", text, s.data());
+
+    FixedString copied;
+    copied = s;
+    assertFalse("copied is empty", copied.isEmpty());
+    assertFalse("copied alias is nullptr", copied.getAlias() == nullptr);
+    assertFalse("copied alias is same", copied.getAlias() == s.getAlias());
+    assertEquals("copied data is text", text, copied.data());
+
+    FixedString moved;
+    moved = std::move(copied);
+    assertFalse("moved is empty", moved.isEmpty());
+    assertFalse("moved alias is nullptr", moved.getAlias() == nullptr);
+    assertEquals("moved data is text", text, moved.data());
+
+    assertTrue("copied is empty", copied.isEmpty());
+    assertTrue("copied alias is nullptr", copied.getAlias() == nullptr);
+    assertEquals("copied data is empty", "", copied.data());
 }

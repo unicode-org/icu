@@ -527,6 +527,7 @@
     <ClInclude Include="static_unicode_sets.h" />
     <ClInclude Include="capi_helper.h" />
     <ClInclude Include="restrace.h" />
+    <ClInclude Include="fixedstring.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="common.rc" />
