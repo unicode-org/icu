@@ -829,7 +829,7 @@ public class ChineseCalendar extends Calendar {
         MonthInfo info = computeMonthInfo(days, gyear);
 
         // Extended year and cycle year is based on the epoch year
-        int extended_year = gyear - epochYear;
+        int extended_year = gyear - 1;
         int cycle_year = gyear - CHINESE_EPOCH_YEAR;
         if (info.month < 10 ||
             gmonth >= JULY) {
