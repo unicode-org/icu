@@ -2746,5 +2746,34 @@ public class CalendarRegressionTest extends CoreTestFmwk {
             30, actualMaximumBeforeCallingGet);
 
     }
+
+    @Test
+    public void Test23101ExtendedYear() {
+        String[][] testCases = {
+            { "gregory", "2025", "2025" },
+            { "chinese", "4661", "4662" },
+            { "japanese", "2025", "2025" },
+            { "ethiopic", "2017", "2017" },
+            { "ethiopic-amete-alem", "2017", "2017" },
+        };
+
+        long date20250101 = 1735689600000l;
+        long date20250701 = 1751328000000l;
+
+        for (String[] testCase : testCases) {
+            String calendarName = testCase[0];
+            String expectedExtendedYear20250101 = testCase[1];
+            String expectedExtendedYear20250701 = testCase[2];
+
+            ULocale locale = ULocale.forLanguageTag("und-u-ca-" + calendarName);
+            Calendar cal = Calendar.getInstance(TimeZone.GMT_ZONE, locale);
+            SimpleDateFormat formatter = new SimpleDateFormat("u", ULocale.ROOT);
+            formatter.setCalendar(cal);
+            String actual20250101 = formatter.format(date20250101);
+            String actual20250701 = formatter.format(date20250701);
+            assertEquals("2025-01-01 in " + calendarName, expectedExtendedYear20250101, actual20250101);
+            assertEquals("2025-07-01 in " + calendarName, expectedExtendedYear20250701, actual20250701);
+        }
+    }
 }
 //eof
