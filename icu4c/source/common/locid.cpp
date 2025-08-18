@@ -2078,11 +2078,13 @@ Locale::initBaseName(UErrorCode &status) {
                                                                 nest->variantBegin);
             if (!copy) {
                 status = U_MEMORY_ALLOCATION_ERROR;
+                setToBogus();
                 return;
             }
             copy->fullName = fullName;
             if (copy->fullName.isEmpty()) {
                 status = U_MEMORY_ALLOCATION_ERROR;
+                setToBogus();
                 return;
             }
             heap = &payload.emplace<std::unique_ptr<Heap>>(std::move(copy));
@@ -2161,6 +2163,9 @@ Locale::addLikelySubtags(UErrorCode& status) {
     CharString maximizedLocaleID = ulocimp_addLikelySubtags(getName(), status);
 
     if (U_FAILURE(status)) {
+        if (status == U_MEMORY_ALLOCATION_ERROR) {
+            setToBogus();
+        }
         return;
     }
 
@@ -2183,6 +2188,9 @@ Locale::minimizeSubtags(bool favorScript, UErrorCode& status) {
     CharString minimizedLocaleID = ulocimp_minimizeSubtags(getName(), favorScript, status);
 
     if (U_FAILURE(status)) {
+        if (status == U_MEMORY_ALLOCATION_ERROR) {
+            setToBogus();
+        }
         return;
     }
 
@@ -2203,6 +2211,9 @@ Locale::canonicalize(UErrorCode& status) {
     }
     CharString uncanonicalized(getName(), status);
     if (U_FAILURE(status)) {
+        if (status == U_MEMORY_ALLOCATION_ERROR) {
+            setToBogus();
+        }
         return;
     }
     init(uncanonicalized.data(), /*canonicalize=*/true);
@@ -2736,7 +2747,12 @@ Locale::setKeywordValue(StringPiece keywordName,
 
     CharString localeID(getName(), -1, status);
     ulocimp_setKeywordValue(keywordName, keywordValue, localeID, status);
-    if (U_FAILURE(status)) { return; }
+    if (U_FAILURE(status)) {
+        if (status == U_MEMORY_ALLOCATION_ERROR) {
+            setToBogus();
+        }
+        return;
+    }
 
     Nest* nest = std::get_if<Nest>(&payload);
     if (locale_getKeywordsStart(localeID.toStringPiece()) == nullptr) {
@@ -2776,6 +2792,7 @@ Locale::setKeywordValue(StringPiece keywordName,
                                                                 nest->variantBegin);
             if (!copy) {
                 status = U_MEMORY_ALLOCATION_ERROR;
+                setToBogus();
                 return;
             }
             heap = &payload.emplace<std::unique_ptr<Heap>>(std::move(copy));
