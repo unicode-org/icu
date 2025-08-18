@@ -595,6 +595,7 @@ void IntlCalendarTest::TestJapaneseFormat() {
         simpleTest(loc, expect, expectDate, status);
     }
     {
+        // When era for 1776 is deleted, format result will be different
         UnicodeString expect = CharsToUnicodeString("\\u5b89\\u6c385\\u5e747\\u67084\\u65e5\\u6728\\u66dc\\u65e5");
         UDate         expectDate = -6106032422000.0; // 1776-07-04T00:00:00Z-075258
         Locale        loc("ja_JP@calendar=japanese");
@@ -622,6 +623,7 @@ void IntlCalendarTest::TestJapaneseFormat() {
         
     }
     {   // This Feb 29th falls on a leap year by gregorian year, but not by Japanese year.
+        // When era for 1456 is deleted, format result will be different
         UnicodeString expect = CharsToUnicodeString("\\u5EB7\\u6B632\\u5e742\\u670829\\u65e5\\u65e5\\u66dc\\u65e5");
         UDate         expectDate =  -16214400422000.0;  // 1456-03-09T00:00Z-075258
         Locale        loc("ja_JP@calendar=japanese");

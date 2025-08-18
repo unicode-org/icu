@@ -344,10 +344,10 @@ public class JapaneseCalendar extends GregorianCalendar {
     protected void handleComputeFields(int julianDay) {
         super.handleComputeFields(julianDay);
         int year = internalGet(EXTENDED_YEAR);
-        int eraIdx = ERA_RULES.getEraIndex(year, internalGet(MONTH) + 1 /* 1-base */, internalGet(DAY_OF_MONTH));
+        int eraCode = ERA_RULES.getEraCode(year, internalGet(MONTH) + 1 /* 1-base */, internalGet(DAY_OF_MONTH));
 
-        internalSet(ERA, eraIdx);
-        internalSet(YEAR, year - ERA_RULES.getStartYear(eraIdx) + 1);
+        internalSet(ERA, eraCode);
+        internalSet(YEAR, year - ERA_RULES.getStartYear(eraCode) + 1);
     }
 
     //-------------------------------------------------------------------------
@@ -400,7 +400,7 @@ public class JapaneseCalendar extends GregorianCalendar {
         SHOWA = 234;
         HEISEI = 235;
         REIWA = 236;
-        CURRENT_ERA = ERA_RULES.getCurrentEraIndex();
+        CURRENT_ERA = ERA_RULES.getCurrentEraCode();
     }
 
     /**
@@ -417,7 +417,7 @@ public class JapaneseCalendar extends GregorianCalendar {
             if (limitType == MINIMUM || limitType == GREATEST_MINIMUM) {
                 return 0;
             }
-            return ERA_RULES.getNumberOfEras() - 1; // max known era, not always CURRENT_ERA
+            return ERA_RULES.getMaxEraCode(); // max known era, not always CURRENT_ERA
         case YEAR:
         {
             switch (limitType) {
@@ -464,7 +464,7 @@ public class JapaneseCalendar extends GregorianCalendar {
     public int getActualMaximum(int field) {
         if (field == YEAR) {
             int era = get(Calendar.ERA);
-            if (era == ERA_RULES.getNumberOfEras() - 1) {
+            if (era == ERA_RULES.getMaxEraCode()) {
                 // TODO: Investigate what value should be used here - revisit after 4.0.
                 return handleGetLimit(YEAR, MAXIMUM);
             } else {

@@ -79,9 +79,9 @@ void EraRulesTest::testAPIs() {
             errln("Failed to create a Calendar instance.");
             continue;
         }
-        int32_t currentIdx = rules1->getCurrentEraIndex();
+        int32_t currentIdx = rules1->getCurrentEraCode();
         int32_t currentYear = cal->get(UCAL_YEAR, status);
-        int32_t idx = rules1->getEraIndex(
+        int32_t idx = rules1->getEraCode(
                 currentYear, cal->get(UCAL_MONTH, status) + 1,
                 cal->get(UCAL_DATE, status), status);
         if (U_FAILURE(status)) {
@@ -113,8 +113,8 @@ void EraRulesTest::testJapanese() {
         return;
     }
     // Rules should have an era after Heisei
-    int32_t numRules = rules->getNumberOfEras();
-    if (numRules <= HEISEI) {
+    int32_t maxEra = rules->getMaxEraCode();
+    if (maxEra <= HEISEI) {
         errln("Era after Heisei is not available.");
         return;
     }

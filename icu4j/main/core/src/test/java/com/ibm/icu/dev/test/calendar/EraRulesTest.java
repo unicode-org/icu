@@ -41,20 +41,20 @@ public class EraRulesTest extends CoreTestFmwk {
             }
             int numEras2 = rules2.getNumberOfEras();
             if (numEras2 < numEras1) {
-                errln("Number of era including tentative eras is fewer than one without tentative eras in calendar: "
+                errln("Number of eras including tentative eras is fewer than one without tentative eras in calendar: "
                         + calId);
             }
 
             Calendar cal = Calendar.getInstance(TimeZone.GMT_ZONE, new ULocale("en"));
-            int currentIdx = rules1.getCurrentEraIndex();
+            int currentEra = rules1.getCurrentEraCode();
             int currentYear = cal.get(Calendar.YEAR);
-            int idx = rules1.getEraIndex(currentYear, cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DATE));
-            if (idx != currentIdx) {
-                errln("Current era index:" + currentIdx + " is different from era index of now:" + idx
+            int eraCode = rules1.getEraCode(currentYear, cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DATE));
+            if (eraCode != currentEra) {
+                errln("Current era code:" + currentEra + " is different from era code of now:" + eraCode
                         + " in calendar:" + calId);
             }
 
-            int eraStartYear = rules1.getStartYear(currentIdx);
+            int eraStartYear = rules1.getStartYear(currentEra);
             if (currentYear < eraStartYear) {
                 errln("Current era's start year is after the current year in calendar:" + calId);
             }
@@ -65,8 +65,8 @@ public class EraRulesTest extends CoreTestFmwk {
     public void testJapanese() {
         EraRules rules = EraRules.getInstance(CalType.JAPANESE, true);
         // Rules should have an era after Heisei
-        int numRules = rules.getNumberOfEras();
-        if (numRules <= JapaneseCalendar.HEISEI) {
+        int maxEra = rules.getMaxEraCode();
+        if (maxEra <= JapaneseCalendar.HEISEI) {
             errln("Era after Heisei is not available.");
         }
         int postHeiseiStartYear = rules.getStartYear(JapaneseCalendar.HEISEI + 1);

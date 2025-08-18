@@ -1710,6 +1710,7 @@ public class IBMCalendarTest extends CalendarTestFmwk {
 
     @Test
     public void TestAddRollEra0AndEraBounds() {
+        // When era 0 is deleted in some calendars, this test will need to be modified
         final String[] localeIDs = {
             // calendars with non-modern era 0 that goes backwards, max era == 1
             "en@calendar=gregorian",

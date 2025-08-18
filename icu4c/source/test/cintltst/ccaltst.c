@@ -2163,6 +2163,7 @@ static const EraTestItem eraTestItems[] = {
 
 static const UChar zoneGMT[] = { 0x47,0x4D,0x54,0 };
 
+// When era 0 is deleted in some calendars, this test will need to be modified
 void TestAddRollEra0AndEraBounds(void) {
     const EraTestItem * eraTestItemPtr;
     for (eraTestItemPtr = eraTestItems; eraTestItemPtr->locale != NULL; eraTestItemPtr++) {
