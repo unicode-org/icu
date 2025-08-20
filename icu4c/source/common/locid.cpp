@@ -1994,21 +1994,20 @@ Locale& Locale::init(StringPiece localeID, UBool canonicalize)
             U_ASSERT(fullNameBuffer.isEmpty());
             nest.init(language, script, region, variantBegin);
         } else {
+            if (fullName == nest.baseName) {
+                U_ASSERT(fullNameBuffer.isEmpty());
+                fullNameBuffer = {fullName, static_cast<std::string_view::size_type>(length)};
+                if (fullNameBuffer.isEmpty()) {
+                    break; // error: out of memory
+                }
+            }
             std::unique_ptr<Heap>& heap = payload.emplace<std::unique_ptr<Heap>>(
                 std::make_unique<Heap>(language, script, region, variantBegin));
             if (!heap) {
                 break; // error: out of memory
             }
-            if (fullName == nest.baseName) {
-                U_ASSERT(fullNameBuffer.isEmpty());
-                heap->fullName = {fullName, static_cast<std::string_view::size_type>(length)};
-                if (heap->fullName.isEmpty()) {
-                    break; // error: out of memory
-                }
-            } else {
-                U_ASSERT(!fullNameBuffer.isEmpty());
-                heap->fullName = std::move(fullNameBuffer);
-            }
+            U_ASSERT(!fullNameBuffer.isEmpty());
+            heap->fullName = std::move(fullNameBuffer);
         }
 
         initBaseName(err);
