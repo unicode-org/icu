@@ -1957,6 +1957,7 @@ Locale& Locale::init(StringPiece localeID, UBool canonicalize)
         } else {
             fieldLen[fieldIdx - 1] = length - static_cast<int32_t>(field[fieldIdx - 1] - fullName);
         }
+        bool hasKeywords = at != nullptr && uprv_strchr(at + 1, '=') != nullptr;
 
         if (fieldLen[0] >= ULOC_LANG_CAPACITY)
         {
@@ -1987,9 +1988,14 @@ Locale& Locale::init(StringPiece localeID, UBool canonicalize)
         if (fieldLen[variantField] > 0) {
             /* We have a variant */
             variantBegin = static_cast<int32_t>(field[variantField] - fullName);
+        } else if (hasKeywords) {
+            // The original computation of variantBegin leaves it equal to the length
+            // of fullName if there is no variant.  It should instead be
+            // the length of the baseName.
+            variantBegin = static_cast<int32_t>(at - fullName);
         }
 
-        if (Nest::fits(length, language, script, region)) {
+        if (!hasKeywords && Nest::fits(length, language, script, region)) {
             U_ASSERT(fullName == nest.baseName);
             U_ASSERT(fullNameBuffer.isEmpty());
             nest.init(language, script, region, variantBegin);
@@ -2008,11 +2014,14 @@ Locale& Locale::init(StringPiece localeID, UBool canonicalize)
             }
             U_ASSERT(!fullNameBuffer.isEmpty());
             heap->fullName = std::move(fullNameBuffer);
-        }
-
-        initBaseName(err);
-        if (U_FAILURE(err)) {
-            break;
+            if (hasKeywords) {
+                if (std::string_view::size_type baseNameLength = at - fullName; baseNameLength > 0) {
+                    heap->baseName = {heap->fullName.data(), baseNameLength};
+                    if (heap->baseName.isEmpty()) {
+                        break; // error: out of memory
+                    }
+                }
+            }
         }
 
         if (canonicalize) {
@@ -2039,77 +2048,6 @@ Locale& Locale::init(StringPiece localeID, UBool canonicalize)
 
     return *this;
 }
-
-/*
- * Set up the base name.
- * If there are no key words, it's exactly the full name.
- * If key words exist, it's the full name truncated at the '@' character.
- * Need to set up both at init() and after setting a keyword.
- */
-void
-Locale::initBaseName(UErrorCode &status) {
-    if (U_FAILURE(status)) {
-        return;
-    }
-    U_ASSERT(!isBogus());
-
-    std::unique_ptr<Heap>* heap = std::get_if<std::unique_ptr<Heap>>(&payload);
-    if (heap != nullptr && *heap && !(*heap)->baseName.isEmpty()) {
-        return;
-    }
-
-    const char *fullName = getName();
-    const char *atPtr = uprv_strchr(fullName, '@');
-    const char *eqPtr = uprv_strchr(fullName, '=');
-    if (atPtr && eqPtr && atPtr < eqPtr) {
-        // Key words exist.
-        int32_t baseNameLength = static_cast<int32_t>(atPtr - fullName);
-        if (baseNameLength == 0) { return; }
-
-        if (heap == nullptr) {
-            // There are keywords, so the payload needs to be moved from Nest
-            // to Heap so that it can get a baseName.
-            const Nest* nest = std::get_if<Nest>(&payload);
-            U_ASSERT(nest != nullptr);
-            std::unique_ptr<Heap> copy = std::make_unique<Heap>(nest->language,
-                                                                nest->script,
-                                                                nest->region,
-                                                                nest->variantBegin);
-            if (!copy) {
-                status = U_MEMORY_ALLOCATION_ERROR;
-                setToBogus();
-                return;
-            }
-            copy->fullName = fullName;
-            if (copy->fullName.isEmpty()) {
-                status = U_MEMORY_ALLOCATION_ERROR;
-                setToBogus();
-                return;
-            }
-            heap = &payload.emplace<std::unique_ptr<Heap>>(std::move(copy));
-            if (!*heap) {
-                status = U_MEMORY_ALLOCATION_ERROR;
-                setToBogus();
-                return;
-            }
-        }
-
-        // The original computation of variantBegin leaves it equal to the length
-        // of fullName if there is no variant.  It should instead be
-        // the length of the baseName.
-        if ((*heap)->variantBegin > baseNameLength) {
-            (*heap)->variantBegin = baseNameLength;
-        }
-
-        (*heap)->baseName = {fullName, static_cast<std::string_view::size_type>(baseNameLength)};
-        if ((*heap)->baseName.isEmpty()) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            setToBogus();
-            return;
-        }
-    }
-}
-
 
 int32_t
 Locale::hashCode() const
@@ -2753,8 +2691,11 @@ Locale::setKeywordValue(StringPiece keywordName,
         return;
     }
 
+    const char* at = locale_getKeywordsStart(localeID.toStringPiece());
+    bool hasKeywords = at != nullptr && uprv_strchr(at + 1, '=') != nullptr;
+
     Nest* nest = std::get_if<Nest>(&payload);
-    if (locale_getKeywordsStart(localeID.toStringPiece()) == nullptr) {
+    if (!hasKeywords) {
         if (nest == nullptr) {
             // There are no longer any keywords left, so it might now be
             // possible to move the payload from Heap to Nest.
@@ -2814,7 +2755,14 @@ Locale::setKeywordValue(StringPiece keywordName,
 
         if ((*heap)->baseName.isEmpty()) {
             // Has added the first keyword, meaning that the fullName is no longer also the baseName.
-            initBaseName(status);
+            if (std::string_view::size_type baseNameLength = at - localeID.data(); baseNameLength > 0) {
+                (*heap)->baseName = {(*heap)->fullName.data(), baseNameLength};
+                if ((*heap)->baseName.isEmpty()) {
+                    status = U_MEMORY_ALLOCATION_ERROR;
+                    setToBogus();
+                    return;
+                }
+            }
         }
     }
 }
