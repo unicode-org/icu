@@ -1091,6 +1091,8 @@ public final class UScript {
     public static final int TAI_YO = 210; /* Tayo */
     /** @stable ICU 78 */
     public static final int TOLONG_SIKI = 211; /* Tols */
+    /** @stable ICU 78 */
+    public static final int TRADITIONAL_HAN_WITH_LATIN = 212; /* Hntl */
 
     /**
      * One more than the highest normal UScript code.
@@ -1099,7 +1101,7 @@ public final class UScript {
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
     @Deprecated
-    public static final int CODE_LIMIT   = 212;
+    public static final int CODE_LIMIT   = 213;
 
     private static int[] getCodesFromLocale(ULocale locale) {
         // Multi-script languages, equivalent to the LocaleScript data

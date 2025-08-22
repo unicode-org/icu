@@ -526,6 +526,8 @@ typedef enum UScriptCode {
       USCRIPT_TAI_YO                        = 210, /* Tayo */
       /** @stable ICU 78 */
       USCRIPT_TOLONG_SIKI                   = 211, /* Tols */
+      /** @stable ICU 78 */
+      USCRIPT_TRADITIONAL_HAN_WITH_LATIN    = 212, /* Hntl */
 
 #ifndef U_HIDE_DEPRECATED_API
     /**
@@ -534,7 +536,7 @@ typedef enum UScriptCode {
      *
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
-    USCRIPT_CODE_LIMIT    = 212
+    USCRIPT_CODE_LIMIT    = 213
 #endif  // U_HIDE_DEPRECATED_API
 } UScriptCode;
 

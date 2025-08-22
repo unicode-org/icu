@@ -1117,6 +1117,7 @@ value;sc;Hira;Hiragana
 value;sc;Hluw;Anatolian_Hieroglyphs
 value;sc;Hmng;Pahawh_Hmong
 value;sc;Hmnp;Nyiakeng_Puachue_Hmong
+value;sc;Hntl;Hntl
 value;sc;Hrkt;Katakana_Or_Hiragana
 value;sc;Hung;Old_Hungarian
 value;sc;Inds;Inds
