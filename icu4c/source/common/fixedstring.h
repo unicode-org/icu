@@ -5,6 +5,7 @@
 #define FIXEDSTRING_H
 
 #include <string_view>
+#include <utility>
 
 #include "unicode/uobject.h"
 #include "unicode/utypes.h"
@@ -28,7 +29,7 @@ public:
     FixedString() = default;
     ~FixedString() { operator delete[](ptr); }
 
-    FixedString(const FixedString&) = delete;
+    FixedString(const FixedString& other) : FixedString(other.data()) {}
 
     FixedString(std::string_view init) {
         size_t size = init.size();
@@ -57,7 +58,7 @@ public:
         return *this;
     }
 
-    FixedString(FixedString&&) noexcept = delete;
+    FixedString(FixedString&& other) noexcept : ptr(std::exchange(other.ptr, nullptr)) {}
 
     FixedString& operator=(FixedString&& other) noexcept {
         operator delete[](ptr);
