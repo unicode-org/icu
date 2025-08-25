@@ -1386,7 +1386,10 @@ void MeasureUnitImpl::serialize(UErrorCode &status) {
     if (U_FAILURE(status)) {
         return;
     }
-    this->identifier = CharString(result, status);
+    this->identifier = result.toStringPiece();
+    if (this->identifier.isEmpty() != result.isEmpty()) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+    }
 }
 
 MeasureUnit MeasureUnitImpl::build(UErrorCode &status) && {

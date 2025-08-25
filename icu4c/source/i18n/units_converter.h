@@ -8,6 +8,7 @@
 #define __UNITS_CONVERTER_H__
 
 #include "cmemory.h"
+#include "fixedstring.h"
 #include "measunit_impl.h"
 #include "unicode/errorcode.h"
 #include "unicode/stringpiece.h"
@@ -117,8 +118,8 @@ void U_I18N_API addSingleFactorConstant(StringPiece baseStr, int32_t power, Sign
 struct ConversionRate : public UMemory {
     const MeasureUnitImpl source;
     const MeasureUnitImpl target;
-    CharString specialSource;
-    CharString specialTarget;
+    FixedString specialSource;
+    FixedString specialTarget;
     double factorNum = 1;
     double factorDen = 1;
     double sourceOffset = 0;

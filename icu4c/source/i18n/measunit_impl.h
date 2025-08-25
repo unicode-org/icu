@@ -11,6 +11,7 @@
 #include "unicode/measunit.h"
 #include "cmemory.h"
 #include "charstr.h"
+#include "fixedstring.h"
 
 U_NAMESPACE_BEGIN
 
@@ -249,11 +250,14 @@ class U_I18N_API_CLASS MeasureUnitImpl : public UMemory {
     /**
      * Used for currency units.
      */
-    static inline MeasureUnitImpl forCurrencyCode(StringPiece currencyCode) {
+    static inline MeasureUnitImpl forCurrencyCode(StringPiece currencyCode, UErrorCode& status) {
         MeasureUnitImpl result;
-        UErrorCode localStatus = U_ZERO_ERROR;
-        result.identifier.append(currencyCode, localStatus);
-        // localStatus is not expected to fail since currencyCode should be 3 chars long
+        if (U_SUCCESS(status)) {
+            result.identifier = currencyCode;
+            if (result.identifier.isEmpty() != currencyCode.empty()) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+            }
+        }
         return result;
     }
 
@@ -317,7 +321,7 @@ class U_I18N_API_CLASS MeasureUnitImpl : public UMemory {
     /**
      * The full unit identifier.  Owned by the MeasureUnitImpl.  Empty if not computed.
      */
-    CharString identifier;
+    FixedString identifier;
 
     /**
      * Represents the unit constant denominator.

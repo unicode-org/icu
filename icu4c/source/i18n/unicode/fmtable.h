@@ -34,7 +34,7 @@
 
 U_NAMESPACE_BEGIN
 
-class CharString;
+class FixedString;
 
 namespace number::impl {
 class DecimalQuantity;
@@ -665,12 +665,12 @@ public:
     void adoptDecimalQuantity(number::impl::DecimalQuantity *dq);
 
     /**
-     * Internal function to return the CharString pointer.
+     * Internal function to return the FixedString pointer.
      * @param status error code
-     * @return pointer to the CharString - may become invalid if the object is modified
+     * @return pointer to the FixedString - may become invalid if the object is modified
      * @internal
      */
-    CharString *internalGetCharString(UErrorCode &status);
+    FixedString *internalGetFixedString(UErrorCode &status);
 
 #endif  /* U_HIDE_INTERNAL_API */
 
@@ -700,7 +700,7 @@ private:
         }               fArrayAndCount;
     } fValue;
 
-    CharString           *fDecimalStr;
+    FixedString* fDecimalStr;
 
     number::impl::DecimalQuantity *fDecimalQuantity;
 

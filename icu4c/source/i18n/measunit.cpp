@@ -2584,7 +2584,7 @@ MeasureUnit::MeasureUnit(MeasureUnit &&other) noexcept
 
 MeasureUnit::MeasureUnit(MeasureUnitImpl&& impl)
         : fImpl(nullptr), fSubTypeId(-1), fTypeId(-1) {
-    if (!findBySubType(impl.identifier.toStringPiece(), this)) {
+    if (!findBySubType(impl.identifier.data(), this)) {
         fImpl = new MeasureUnitImpl(std::move(impl));
     }
 }
@@ -2772,10 +2772,16 @@ void MeasureUnit::initCurrency(StringPiece isoCurrency) {
     result = binarySearch(
             gSubTypes, gOffsets[fTypeId], gOffsets[fTypeId + 1], isoCurrency);
     if (result == -1) {
-        fImpl = new MeasureUnitImpl(MeasureUnitImpl::forCurrencyCode(isoCurrency));
-        if (fImpl) {
-            fSubTypeId = -1;
-            return;
+        UErrorCode status = U_ZERO_ERROR;
+        fImpl = new MeasureUnitImpl(MeasureUnitImpl::forCurrencyCode(isoCurrency, status));
+        if (fImpl != nullptr) {
+            if (U_SUCCESS(status)) {
+                fSubTypeId = -1;
+                return;
+            } else {
+                delete fImpl;
+                fImpl = nullptr;
+            }
         }
         // malloc error: fall back to the undefined currency
         result = binarySearch(
@@ -2804,7 +2810,11 @@ int32_t MeasureUnit::getOffset() const {
 MeasureUnitImpl MeasureUnitImpl::copy(UErrorCode &status) const {
     MeasureUnitImpl result;
     result.complexity = complexity;
-    result.identifier.append(identifier, status);
+    result.identifier = identifier;
+    if (result.identifier.isEmpty() != identifier.isEmpty()) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return result;
+    }
     result.constantDenominator = constantDenominator;
     for (int32_t i = 0; i < singleUnits.length(); i++) {
         SingleUnitImpl *item = result.singleUnits.emplaceBack(*singleUnits[i]);

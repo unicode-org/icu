@@ -2511,8 +2511,9 @@ Locale::getLocaleCache()
 
 class KeywordEnumeration : public StringEnumeration {
 protected:
-    CharString keywords;
+    FixedString keywords;
 private:
+    int32_t length;
     const char *current;
     static const char fgClassID;
 
@@ -2521,13 +2522,17 @@ public:
     virtual UClassID getDynamicClassID() const override { return getStaticClassID(); }
 public:
     KeywordEnumeration(const char *keys, int32_t keywordLen, int32_t currentIndex, UErrorCode &status)
-        : keywords(), current(keywords.data()) {
+        : keywords(), length(keywordLen), current(nullptr) {
         if(U_SUCCESS(status) && keywordLen != 0) {
             if(keys == nullptr || keywordLen < 0) {
                 status = U_ILLEGAL_ARGUMENT_ERROR;
             } else {
-                keywords.append(keys, keywordLen, status);
-                current = keywords.data() + currentIndex;
+                keywords = {keys, static_cast<std::string_view::size_type>(length)};
+                if (keywords.isEmpty()) {
+                    status = U_MEMORY_ALLOCATION_ERROR;
+                } else {
+                    current = keywords.data() + currentIndex;
+                }
             }
         }
     }
@@ -2538,7 +2543,7 @@ public:
     {
         UErrorCode status = U_ZERO_ERROR;
         return new KeywordEnumeration(
-                keywords.data(), keywords.length(),
+                keywords.data(), length,
                 static_cast<int32_t>(current - keywords.data()), status);
     }
 

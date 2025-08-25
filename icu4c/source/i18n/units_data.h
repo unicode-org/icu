@@ -11,6 +11,7 @@
 
 #include "charstr.h"
 #include "cmemory.h"
+#include "fixedstring.h"
 #include "unicode/stringpiece.h"
 #include "unicode/uobject.h"
 
@@ -31,18 +32,21 @@ class ConversionRateInfo : public UMemory {
     ConversionRateInfo() {}
     ConversionRateInfo(StringPiece sourceUnit, StringPiece baseUnit, StringPiece factor,
                        StringPiece offset, UErrorCode &status)
-        : sourceUnit(), baseUnit(), factor(), offset(), specialMappingName() {
-        this->sourceUnit.append(sourceUnit, status);
-        this->baseUnit.append(baseUnit, status);
-        this->factor.append(factor, status);
-        this->offset.append(offset, status);
+        : sourceUnit(sourceUnit), baseUnit(baseUnit), factor(factor), offset(offset),
+          specialMappingName(), systems() {
+        if (this->sourceUnit.isEmpty() != sourceUnit.empty() ||
+            this->baseUnit.isEmpty() != baseUnit.empty() ||
+            this->factor.isEmpty() != factor.empty() ||
+            this->offset.isEmpty() != offset.empty()) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+        }
     }
-    CharString sourceUnit;
-    CharString baseUnit;
-    CharString factor;
-    CharString offset;
-    CharString specialMappingName; // the name of a special mapping used instead of factor + optional offset.
-    CharString systems;
+    FixedString sourceUnit;
+    FixedString baseUnit;
+    FixedString factor;
+    FixedString offset;
+    FixedString specialMappingName; // the name of a special mapping used instead of factor + optional offset.
+    FixedString systems;
 };
 
 /**
@@ -82,13 +86,12 @@ class ConversionRates {
 struct UnitPreference : public UMemory {
     // Set geq to 1.0 by default
     UnitPreference() : geq(1.0) {}
-    CharString unit;
+    FixedString unit;
     double geq;
     UnicodeString skeleton;
 
     UnitPreference(const UnitPreference &other) {
-        UErrorCode status = U_ZERO_ERROR;
-        this->unit.append(other.unit, status);
+        this->unit = other.unit;
         this->geq = other.geq;
         this->skeleton = other.skeleton;
     }
