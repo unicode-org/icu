@@ -2994,7 +2994,7 @@ void CalendarTest::TestBasicConversionEthiopicAmeteAlem() {
     AsssertCalendarFieldValue(
         cal.getAlias(), test_time, "ethiopic-amete-alem",
         0, 7515, 1, 8, 4, 22, 52, 3, 4, 0, 4, 4, 44, 51,
-        323, 0, 0, 2015, 3, 2015, 2459885, 17091323, 0);
+        323, 0, 0, 7515, 3, 7515, 2459885, 17091323, 0);
 }
 
 

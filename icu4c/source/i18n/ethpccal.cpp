@@ -22,7 +22,7 @@ U_NAMESPACE_BEGIN
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(EthiopicCalendar)
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(EthiopicAmeteAlemCalendar)
 
-//static const int32_t JD_EPOCH_OFFSET_AMETE_ALEM = -285019;
+static const int32_t JD_EPOCH_OFFSET_AMETE_ALEM = -285019;
 static const int32_t JD_EPOCH_OFFSET_AMETE_MIHRET = 1723856;
 static const int32_t AMETE_MIHRET_DELTA = 5500; // 5501 - 1 (Amete Alem 5501 = Amete Mihret 1)
 
@@ -141,13 +141,14 @@ EthiopicAmeteAlemCalendar::handleGetExtendedYear(UErrorCode& status)
     if (newerField(UCAL_EXTENDED_YEAR, UCAL_YEAR) == UCAL_EXTENDED_YEAR) {
         return internalGet(UCAL_EXTENDED_YEAR, 1); // Default to year 1
     }
-    // Default to year 1 of Amelete Mihret
-    int32_t year = internalGet(UCAL_YEAR, 1 + AMETE_MIHRET_DELTA);
-    if (uprv_add32_overflow(year, -AMETE_MIHRET_DELTA, &year)) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
-    }
-    return year;
+    // Default to year 1
+    return internalGet(UCAL_YEAR, 1);
+}
+
+int32_t
+EthiopicAmeteAlemCalendar::getJDEpochOffset() const
+{
+    return JD_EPOCH_OFFSET_AMETE_ALEM;
 }
 
 int32_t EthiopicAmeteAlemCalendar::extendedYearToEra(int32_t /* extendedYear */) const {
@@ -155,7 +156,7 @@ int32_t EthiopicAmeteAlemCalendar::extendedYearToEra(int32_t /* extendedYear */)
 }
 
 int32_t EthiopicAmeteAlemCalendar::extendedYearToYear(int32_t extendedYear) const {
-    return extendedYear + AMETE_MIHRET_DELTA;
+    return extendedYear;
 }
 
 
@@ -168,17 +169,6 @@ EthiopicAmeteAlemCalendar::handleGetLimit(UCalendarDateFields field, ELimitType 
     return EthiopicCalendar::handleGetLimit(field, limitType);
 }
 
-int32_t
-EthiopicAmeteAlemCalendar::defaultCenturyStartYear() const
-{
-    return EthiopicCalendar::defaultCenturyStartYear() + AMETE_MIHRET_DELTA;
-}
-
-
-int32_t EthiopicAmeteAlemCalendar::getRelatedYearDifference() const {
-    constexpr int32_t kEthiopicAmeteAlemCalendarRelatedYearDifference = -5492;
-    return kEthiopicAmeteAlemCalendarRelatedYearDifference;
-}
 U_NAMESPACE_END
 
 #endif

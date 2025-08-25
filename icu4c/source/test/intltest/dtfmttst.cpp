@@ -4896,6 +4896,24 @@ void DateFormatTest::TestCreateInstanceForSkeleton() {
     result.remove();
     fmt->format(date(98, 5-1, 25), result, pos);
     assertEquals("format yMd", "5/25/1998", result);
+
+    UnicodeString result2;
+    fmt.adoptInstead(DateFormat::createInstanceForSkeleton(
+            "yMd", "en-u-ca-ethiopic-amete-alem", status));
+    if (!assertSuccess("Create with pattern yMd", status)) {
+        return;
+    }
+    fmt->format(date(98, 5-1, 25), result2, pos);
+    assertEquals("format yMd", "9/17/7490 ERA0", result2);
+
+    fmt.adoptInstead(DateFormat::createInstanceForSkeleton(
+            "uMd", "en-u-ca-ethiopic-amete-alem", status));
+    if (!assertSuccess("Create with pattern uMd", status)) {
+        return;
+    }
+    result.remove();
+    fmt->format(date(98, 5-1, 25), result, pos);
+    assertEquals("format uMd", result2, result);
 }
 
 void DateFormatTest::TestCreateInstanceForSkeletonDefault() {

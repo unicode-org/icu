@@ -305,11 +305,6 @@ protected:
     //-------------------------------------------------------------------------
 
     /**
-     * @internal
-     */
-    int32_t getRelatedYearDifference() const override;
-
-    /**
      * Return the extended year defined by the current fields.
      * This calendar use only AMETE_ALEM for the era.
      *
@@ -325,11 +320,12 @@ protected:
      * @internal
      */
     virtual int32_t handleGetLimit(UCalendarDateFields field, ELimitType limitType) const override;
+
     /**
-     * Returns the year in which the default century begins
+     * Return the date offset from Julian
      * @internal
      */
-    virtual int32_t defaultCenturyStartYear() const override;
+    int32_t getJDEpochOffset() const override;
 
     /**
      * Compute the era from extended year.

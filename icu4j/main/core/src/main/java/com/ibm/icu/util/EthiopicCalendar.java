@@ -128,7 +128,7 @@ public final class EthiopicCalendar extends CECalendar
     // Julian Days relative to the
     // \u12d3\u1218\u1270\u1361\u121d\u1215\u1228\u1275 epoch
     // Note: we no longer use this constant
-    //private static final int JD_EPOCH_OFFSET_AMETE_ALEM = -285019;
+    private static final int JD_EPOCH_OFFSET_AMETE_ALEM = -285019;
 
     // Julian Days relative to the
     // \u12d3\u1218\u1270\u1361\u12d3\u1208\u121d epoch
@@ -306,8 +306,7 @@ public final class EthiopicCalendar extends CECalendar
         if (newerField(EXTENDED_YEAR, YEAR) == EXTENDED_YEAR) {
             eyear = internalGet(EXTENDED_YEAR, 1); // Default to year 1
         } else if (isAmeteAlemEra()){
-            eyear = internalGet(YEAR, 1 + AMETE_MIHRET_DELTA)
-                    - AMETE_MIHRET_DELTA; // Default to year 1 of Amelete Mihret
+            eyear = internalGet(YEAR, 1); // Default to year 1
         } else {
             // The year defaults to the epoch start, the era to AMETE_MIHRET
             int era = internalGet(ERA, AMETE_MIHRET);
@@ -344,7 +343,7 @@ public final class EthiopicCalendar extends CECalendar
     @Override
     protected int extendedYearToYear(int eyear) {
         if (isAmeteAlemEra()) {
-            return eyear + AMETE_MIHRET_DELTA;
+            return eyear;
         } else {
             return (eyear <= 0) ? eyear + AMETE_MIHRET_DELTA : eyear;
         }
@@ -372,7 +371,7 @@ public final class EthiopicCalendar extends CECalendar
     @Override
     @Deprecated
     protected int getJDEpochOffset() {
-        return JD_EPOCH_OFFSET_AMETE_MIHRET;
+        return isAmeteAlemEra() ? JD_EPOCH_OFFSET_AMETE_ALEM : JD_EPOCH_OFFSET_AMETE_MIHRET;
     }
 
     /**
@@ -393,8 +392,6 @@ public final class EthiopicCalendar extends CECalendar
     }
 
 
-    private static final int ETHIOPIC_AMETE_ALEM_CALENDAR_RELATED_YEAR_DIFFERENCE = -5492;
-
     private static final int ETHIOPIC_CALENDAR_RELATED_YEAR_DIFFERENCE = 8;
 
     /**
@@ -403,9 +400,7 @@ public final class EthiopicCalendar extends CECalendar
      */
     @Deprecated
     protected final int getRelatedYearDifference() {
-        return isAmeteAlemEra() ?
-            ETHIOPIC_AMETE_ALEM_CALENDAR_RELATED_YEAR_DIFFERENCE :
-            ETHIOPIC_CALENDAR_RELATED_YEAR_DIFFERENCE;
+        return ETHIOPIC_CALENDAR_RELATED_YEAR_DIFFERENCE;
     }
 
     /**
