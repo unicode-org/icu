@@ -899,6 +899,11 @@ StringTest::TestFixedString() {
     assertTrue("default alias is nullptr", s.getAlias() == nullptr);
     assertEquals("default data is empty", "", s.data());
 
+    FixedString empty("");
+    assertTrue("empty is empty", empty.isEmpty());
+    assertTrue("empty alias is nullptr", empty.getAlias() == nullptr);
+    assertEquals("empty data is empty", "", empty.data());
+
     bool success = s.reserve(1);
     assertTrue("reserve success", success);
     assertFalse("reserved is empty", s.isEmpty());
