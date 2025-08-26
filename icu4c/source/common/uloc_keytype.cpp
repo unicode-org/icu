@@ -146,14 +146,15 @@ initFromResourceBundle(UErrorCode& sts) {
         // empty value indicates that BCP key is same with the legacy key.
         const char* bcpKeyId = legacyKeyId;
         if (!uBcpKeyId.isEmpty()) {
-            int32_t length = uBcpKeyId.length();
             icu::FixedString* bcpKeyIdBuf = gKeyTypeStringPool->create();
-            if (bcpKeyIdBuf == nullptr || !bcpKeyIdBuf->reserve(length + 1)) {
+            if (bcpKeyIdBuf == nullptr) {
                 sts = U_MEMORY_ALLOCATION_ERROR;
                 break;
             }
-
-            uBcpKeyId.extract(0, length, bcpKeyIdBuf->getAlias(), length + 1, US_INV);
+            copyInvariantChars(uBcpKeyId, *bcpKeyIdBuf, sts);
+            if (U_FAILURE(sts)) {
+                break;
+            }
             bcpKeyId = bcpKeyIdBuf->data();
         }
 
@@ -242,13 +243,15 @@ initFromResourceBundle(UErrorCode& sts) {
                 // empty value indicates that BCP type is same with the legacy type.
                 const char* bcpTypeId = legacyTypeId;
                 if (!uBcpTypeId.isEmpty()) {
-                    int32_t length = uBcpTypeId.length();
                     icu::FixedString* bcpTypeIdBuf = gKeyTypeStringPool->create();
-                    if (bcpTypeIdBuf == nullptr || !bcpTypeIdBuf->reserve(length + 1)) {
+                    if (bcpTypeIdBuf == nullptr) {
                         sts = U_MEMORY_ALLOCATION_ERROR;
                         break;
                     }
-                    uBcpTypeId.extract(0, length, bcpTypeIdBuf->getAlias(), length + 1, US_INV);
+                    copyInvariantChars(uBcpTypeId, *bcpTypeIdBuf, sts);
+                    if (U_FAILURE(sts)) {
+                        break;
+                    }
                     bcpTypeId = bcpTypeIdBuf->data();
                 }
 

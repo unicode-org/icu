@@ -652,6 +652,9 @@
     <ClCompile Include="restrace.cpp">
       <Filter>data &amp; memory</Filter>
     </ClCompile>
+    <ClCompile Include="fixedstring.cpp">
+      <Filter>strings</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ubidi_props.h">

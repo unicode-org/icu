@@ -853,6 +853,7 @@ group: platform
     cmemory.o uobject.o
     cstring.o cwchar.o uinvchar.o
     charstr.o
+    fixedstring.o
     unistr.o  # for CharString::appendInvariantChars(const UnicodeString &s, UErrorCode &errorCode)
     appendable.o stringpiece.o ustrtrns.o  # for unistr.o
     ustring.o  # Other platform files really just need u_strlen

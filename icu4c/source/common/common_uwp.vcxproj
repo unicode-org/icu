@@ -408,6 +408,7 @@
     <ClCompile Include="utf_impl.cpp" />
     <ClCompile Include="static_unicode_sets.cpp" />
     <ClCompile Include="restrace.cpp" />
+    <ClCompile Include="fixedstring.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="localsvc.h" />

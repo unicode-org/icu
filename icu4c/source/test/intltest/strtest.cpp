@@ -257,6 +257,7 @@ void StringTest::runIndexedTest(int32_t index, UBool exec, const char *&name, ch
     TESTCASE_AUTO(TestCharStrAppendNumber);
     TESTCASE_AUTO(Testctou);
     TESTCASE_AUTO(TestFixedString);
+    TESTCASE_AUTO(TestCopyInvariantChars);
     TESTCASE_AUTO_END;
 }
 
@@ -955,4 +956,37 @@ StringTest::TestFixedString() {
     assertTrue("copied is empty after move assign", copied.isEmpty());
     assertTrue("copied alias is nullptr after move assign", copied.getAlias() == nullptr);
     assertEquals("copied data is empty after move assign", "", copied.data());
+}
+
+void
+StringTest::TestCopyInvariantChars() {
+    IcuTestErrorCode status(*this, "TestCopyInvariantChars()");
+
+    static constexpr char text[] = "bar";
+
+    UnicodeString src(text);
+    FixedString dst;
+    copyInvariantChars(src, dst, status);
+
+    status.errIfFailureAndReset();
+    assertFalse("copied is empty", dst.isEmpty());
+    assertFalse("copied alias is nullptr", dst.getAlias() == nullptr);
+    assertEquals("copied data is text", text, dst.data());
+
+    src = "fubar";
+    status.set(U_INTERNAL_PROGRAM_ERROR);
+    copyInvariantChars(src, dst, status);
+
+    status.expectErrorAndReset(U_INTERNAL_PROGRAM_ERROR);
+    assertFalse("copied is empty", dst.isEmpty());
+    assertFalse("copied alias is nullptr", dst.getAlias() == nullptr);
+    assertEquals("copied data is text", text, dst.data());
+
+    src.remove();
+    copyInvariantChars(src, dst, status);
+
+    status.errIfFailureAndReset();
+    assertTrue("copied is empty", dst.isEmpty());
+    assertTrue("copied alias is nullptr", dst.getAlias() == nullptr);
+    assertEquals("copied data is empty", "", dst.data());
 }

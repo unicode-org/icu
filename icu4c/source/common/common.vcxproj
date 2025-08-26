@@ -274,6 +274,7 @@
     <ClCompile Include="utf_impl.cpp" />
     <ClCompile Include="static_unicode_sets.cpp" />
     <ClCompile Include="restrace.cpp" />
+    <ClCompile Include="fixedstring.cpp" />
     <ClInclude Include="localsvc.h" />
     <ClInclude Include="msvcres.h" />
     <ClInclude Include="pluralmap.h" />

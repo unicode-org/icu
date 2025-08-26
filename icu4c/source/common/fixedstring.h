@@ -13,6 +13,8 @@
 
 U_NAMESPACE_BEGIN
 
+class UnicodeString;
+
 /**
  * ICU-internal fixed-length char* string class.
  * This is a complement to CharString to store fixed-length strings efficiently
@@ -94,6 +96,8 @@ public:
 private:
     char* ptr = nullptr;
 };
+
+U_COMMON_API void copyInvariantChars(const UnicodeString& src, FixedString& dst, UErrorCode& status);
 
 U_NAMESPACE_END
 

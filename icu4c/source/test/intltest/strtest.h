@@ -58,6 +58,7 @@ private:
     void TestCharStrAppendNumber();
     void Testctou();
     void TestFixedString();
+    void TestCopyInvariantChars();
 };
 
 #endif
