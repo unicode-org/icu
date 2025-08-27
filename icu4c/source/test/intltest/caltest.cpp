@@ -2929,7 +2929,7 @@ void CalendarTest::TestBasicConversionChinese() {
     AsssertCalendarFieldValue(
         cal.getAlias(), test_time, "chinese",
         78, 39, 9, 40, 2, 8, 274, 3, 2, 0, 4, 4, 44, 51,
-        323, 0, 0, 4659, 3, 4659, 2459885, 17091323, 0);
+        323, 0, 0, 2022, 3, 2022, 2459885, 17091323, 0);
 }
 void CalendarTest::TestBasicConversionDangi() {
     UErrorCode status = U_ZERO_ERROR;
@@ -2942,7 +2942,7 @@ void CalendarTest::TestBasicConversionDangi() {
     AsssertCalendarFieldValue(
         cal.getAlias(), test_time, "dangi",
         78, 39, 9, 40, 2, 8, 274, 3, 2, 0, 4, 4, 44, 51,
-        323, 0, 0, 4355, 3, 4355, 2459885, 17091323, 0);
+        323, 0, 0, 2022, 3, 2022, 2459885, 17091323, 0);
 }
 void CalendarTest::TestBasicConversionIndian() {
     UErrorCode status = U_ZERO_ERROR;
@@ -4503,62 +4503,62 @@ void CalendarTest::TestChineseCalendarSetTemporalMonthCode() {
       int32_t cOrdinalMonth;
     } cases[] = {
       // https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/2022.pdf
-      { 2022, UCAL_DECEMBER, 15, 4659, UCAL_NOVEMBER, 22, "M11", false, 10},
+      { 2022, UCAL_DECEMBER, 15, 2022, UCAL_NOVEMBER, 22, "M11", false, 10},
       // M01L is very hard to find. Cannot find a year has M01L in these several
       // centuries.
       // M02L https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/2004.pdf
-      { 2004, UCAL_MARCH, 20, 4641, UCAL_FEBRUARY, 30, "M02", false, 1},
-      { 2004, UCAL_MARCH, 21, 4641, UCAL_FEBRUARY, 1, "M02L", true, 2},
-      { 2004, UCAL_APRIL, 18, 4641, UCAL_FEBRUARY, 29, "M02L", true, 2},
-      { 2004, UCAL_APRIL, 19, 4641, UCAL_MARCH, 1, "M03", false, 3},
+      { 2004, UCAL_MARCH, 20, 2004, UCAL_FEBRUARY, 30, "M02", false, 1},
+      { 2004, UCAL_MARCH, 21, 2004, UCAL_FEBRUARY, 1, "M02L", true, 2},
+      { 2004, UCAL_APRIL, 18, 2004, UCAL_FEBRUARY, 29, "M02L", true, 2},
+      { 2004, UCAL_APRIL, 19, 2004, UCAL_MARCH, 1, "M03", false, 3},
       // M03L https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/1995.pdf
-      { 1955, UCAL_APRIL, 21, 4592, UCAL_MARCH, 29, "M03", false, 2},
-      { 1955, UCAL_APRIL, 22, 4592, UCAL_MARCH, 1, "M03L", true, 3},
-      { 1955, UCAL_MAY, 21, 4592, UCAL_MARCH, 30, "M03L", true, 3},
-      { 1955, UCAL_MAY, 22, 4592, UCAL_APRIL, 1, "M04", false, 4},
+      { 1955, UCAL_APRIL, 21, 1955, UCAL_MARCH, 29, "M03", false, 2},
+      { 1955, UCAL_APRIL, 22, 1955, UCAL_MARCH, 1, "M03L", true, 3},
+      { 1955, UCAL_MAY, 21, 1955, UCAL_MARCH, 30, "M03L", true, 3},
+      { 1955, UCAL_MAY, 22, 1955, UCAL_APRIL, 1, "M04", false, 4},
       // M12 https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/1996.pdf
-      { 1956, UCAL_FEBRUARY, 11, 4592, UCAL_DECEMBER, 30, "M12", false, 12},
+      { 1956, UCAL_FEBRUARY, 11, 1955, UCAL_DECEMBER, 30, "M12", false, 12},
       // M04L https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/2001.pdf
-      { 2001, UCAL_MAY, 22, 4638, UCAL_APRIL, 30, "M04", false, 3},
-      { 2001, UCAL_MAY, 23, 4638, UCAL_APRIL, 1, "M04L", true, 4},
-      { 2001, UCAL_JUNE, 20, 4638, UCAL_APRIL, 29, "M04L", true, 4},
-      { 2001, UCAL_JUNE, 21, 4638, UCAL_MAY, 1, "M05", false, 5},
+      { 2001, UCAL_MAY, 22, 2001, UCAL_APRIL, 30, "M04", false, 3},
+      { 2001, UCAL_MAY, 23, 2001, UCAL_APRIL, 1, "M04L", true, 4},
+      { 2001, UCAL_JUNE, 20, 2001, UCAL_APRIL, 29, "M04L", true, 4},
+      { 2001, UCAL_JUNE, 21, 2001, UCAL_MAY, 1, "M05", false, 5},
       // M05L https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/2009.pdf
-      { 2009, UCAL_JUNE, 22, 4646, UCAL_MAY, 30, "M05", false, 4},
-      { 2009, UCAL_JUNE, 23, 4646, UCAL_MAY, 1, "M05L", true, 5},
-      { 2009, UCAL_JULY, 21, 4646, UCAL_MAY, 29, "M05L", true, 5},
-      { 2009, UCAL_JULY, 22, 4646, UCAL_JUNE, 1, "M06", false, 6},
+      { 2009, UCAL_JUNE, 22, 2009, UCAL_MAY, 30, "M05", false, 4},
+      { 2009, UCAL_JUNE, 23, 2009, UCAL_MAY, 1, "M05L", true, 5},
+      { 2009, UCAL_JULY, 21, 2009, UCAL_MAY, 29, "M05L", true, 5},
+      { 2009, UCAL_JULY, 22, 2009, UCAL_JUNE, 1, "M06", false, 6},
       // M06L https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/2017.pdf
-      { 2017, UCAL_JULY, 22, 4654, UCAL_JUNE, 29, "M06", false, 5},
-      { 2017, UCAL_JULY, 23, 4654, UCAL_JUNE, 1, "M06L", true, 6},
-      { 2017, UCAL_AUGUST, 21, 4654, UCAL_JUNE, 30, "M06L", true, 6},
-      { 2017, UCAL_AUGUST, 22, 4654, UCAL_JULY, 1, "M07", false, 7},
+      { 2017, UCAL_JULY, 22, 2017, UCAL_JUNE, 29, "M06", false, 5},
+      { 2017, UCAL_JULY, 23, 2017, UCAL_JUNE, 1, "M06L", true, 6},
+      { 2017, UCAL_AUGUST, 21, 2017, UCAL_JUNE, 30, "M06L", true, 6},
+      { 2017, UCAL_AUGUST, 22, 2017, UCAL_JULY, 1, "M07", false, 7},
       // M07L https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/2006.pdf
-      { 2006, UCAL_AUGUST, 23, 4643, UCAL_JULY, 30, "M07", false, 6},
-      { 2006, UCAL_AUGUST, 24, 4643, UCAL_JULY, 1, "M07L", true, 7},
-      { 2006, UCAL_SEPTEMBER, 21, 4643, UCAL_JULY, 29, "M07L", true, 7},
-      { 2006, UCAL_SEPTEMBER, 22, 4643, UCAL_AUGUST, 1, "M08", false, 8},
+      { 2006, UCAL_AUGUST, 23, 2006, UCAL_JULY, 30, "M07", false, 6},
+      { 2006, UCAL_AUGUST, 24, 2006, UCAL_JULY, 1, "M07L", true, 7},
+      { 2006, UCAL_SEPTEMBER, 21, 2006, UCAL_JULY, 29, "M07L", true, 7},
+      { 2006, UCAL_SEPTEMBER, 22, 2006, UCAL_AUGUST, 1, "M08", false, 8},
       // M08L https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/1995.pdf
-      { 1995, UCAL_SEPTEMBER, 24, 4632, UCAL_AUGUST, 30, "M08", false, 7},
-      { 1995, UCAL_SEPTEMBER, 25, 4632, UCAL_AUGUST, 1, "M08L", true, 8},
-      { 1995, UCAL_OCTOBER, 23, 4632, UCAL_AUGUST, 29, "M08L", true, 8},
-      { 1995, UCAL_OCTOBER, 24, 4632, UCAL_SEPTEMBER, 1, "M09", false, 9},
+      { 1995, UCAL_SEPTEMBER, 24, 1995, UCAL_AUGUST, 30, "M08", false, 7},
+      { 1995, UCAL_SEPTEMBER, 25, 1995, UCAL_AUGUST, 1, "M08L", true, 8},
+      { 1995, UCAL_OCTOBER, 23, 1995, UCAL_AUGUST, 29, "M08L", true, 8},
+      { 1995, UCAL_OCTOBER, 24, 1995, UCAL_SEPTEMBER, 1, "M09", false, 9},
       // M09L https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/2014.pdf
-      { 2014, UCAL_OCTOBER, 23, 4651, UCAL_SEPTEMBER, 30, "M09", false, 8},
-      { 2014, UCAL_OCTOBER, 24, 4651, UCAL_SEPTEMBER, 1, "M09L", true, 9},
-      { 2014, UCAL_NOVEMBER, 21, 4651, UCAL_SEPTEMBER, 29, "M09L", true, 9},
-      { 2014, UCAL_NOVEMBER, 22, 4651, UCAL_OCTOBER, 1, "M10", false, 10},
+      { 2014, UCAL_OCTOBER, 23, 2014, UCAL_SEPTEMBER, 30, "M09", false, 8},
+      { 2014, UCAL_OCTOBER, 24, 2014, UCAL_SEPTEMBER, 1, "M09L", true, 9},
+      { 2014, UCAL_NOVEMBER, 21, 2014, UCAL_SEPTEMBER, 29, "M09L", true, 9},
+      { 2014, UCAL_NOVEMBER, 22, 2014, UCAL_OCTOBER, 1, "M10", false, 10},
       // M10L https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/1984.pdf
-      { 1984, UCAL_NOVEMBER, 22, 4621, UCAL_OCTOBER, 30, "M10", false, 9},
-      { 1984, UCAL_NOVEMBER, 23, 4621, UCAL_OCTOBER, 1, "M10L", true, 10},
-      { 1984, UCAL_DECEMBER, 21, 4621, UCAL_OCTOBER, 29, "M10L", true, 10},
-      { 1984, UCAL_DECEMBER, 22, 4621, UCAL_NOVEMBER, 1, "M11", false, 11},
+      { 1984, UCAL_NOVEMBER, 22, 1984, UCAL_OCTOBER, 30, "M10", false, 9},
+      { 1984, UCAL_NOVEMBER, 23, 1984, UCAL_OCTOBER, 1, "M10L", true, 10},
+      { 1984, UCAL_DECEMBER, 21, 1984, UCAL_OCTOBER, 29, "M10L", true, 10},
+      { 1984, UCAL_DECEMBER, 22, 1984, UCAL_NOVEMBER, 1, "M11", false, 11},
       // M11L https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/2033.pdf
       //      https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/2034.pdf
-      { 2033, UCAL_DECEMBER, 21, 4670, UCAL_NOVEMBER, 30, "M11", false, 10},
-      { 2033, UCAL_DECEMBER, 22, 4670, UCAL_NOVEMBER, 1, "M11L", true, 11},
-      { 2034, UCAL_JANUARY, 19, 4670, UCAL_NOVEMBER, 29, "M11L", true, 11},
-      { 2034, UCAL_JANUARY, 20, 4670, UCAL_DECEMBER, 1, "M12", false, 12},
+      { 2033, UCAL_DECEMBER, 21, 2033, UCAL_NOVEMBER, 30, "M11", false, 10},
+      { 2033, UCAL_DECEMBER, 22, 2033, UCAL_NOVEMBER, 1, "M11L", true, 11},
+      { 2034, UCAL_JANUARY, 19, 2033, UCAL_NOVEMBER, 29, "M11L", true, 11},
+      { 2034, UCAL_JANUARY, 20, 2033, UCAL_DECEMBER, 1, "M12", false, 12},
       // M12L is very hard to find. Cannot find a year has M01L in these several
       // centuries.
     };
@@ -4959,8 +4959,8 @@ void CalendarTest::TestChineseCalendarOrdinalMonthSet() {
     LocalPointer<Calendar> cc2(cc1->clone());
     LocalPointer<Calendar> cc3(cc1->clone());
 
-    constexpr int32_t notLeapYear = 4591;
-    constexpr int32_t leapMarchYear = 4592;
+    constexpr int32_t notLeapYear = 1954;
+    constexpr int32_t leapMarchYear = 1955;
 
     cc1->set(UCAL_EXTENDED_YEAR, leapMarchYear);
     cc2->set(UCAL_EXTENDED_YEAR, leapMarchYear);
@@ -4973,12 +4973,12 @@ void CalendarTest::TestChineseCalendarOrdinalMonthSet() {
     cc1->set(UCAL_DATE, 1);
     cc2->set(UCAL_DATE, 1);
     cc3->set(UCAL_DATE, 1);
-    assertTrue("4592 M03L cc2==cc1 set month by UCAL_MONTH and UCAL_UCAL_ORDINAL_MONTH", cc2->equals(*cc1, status));
-    assertTrue("4592 M03L cc2==cc3 set month by UCAL_MONTH and setTemporalMonthCode", cc2->equals(*cc3, status));
+    assertTrue("1955 M03L cc2==cc1 set month by UCAL_MONTH and UCAL_UCAL_ORDINAL_MONTH", cc2->equals(*cc1, status));
+    assertTrue("1955 M03L cc2==cc3 set month by UCAL_MONTH and setTemporalMonthCode", cc2->equals(*cc3, status));
     if (failure(status, "equals failure")) return;
-    VerifyMonth(this, "4592 M03L cc1", cc1.getAlias(), UCAL_MARCH, 3, true, "M03L");
-    VerifyMonth(this, "4592 M03L cc2", cc2.getAlias(), UCAL_MARCH, 3, true, "M03L");
-    VerifyMonth(this, "4592 M03L cc3", cc3.getAlias(), UCAL_MARCH, 3, true, "M03L");
+    VerifyMonth(this, "1955 M03L cc1", cc1.getAlias(), UCAL_MARCH, 3, true, "M03L");
+    VerifyMonth(this, "1955 M03L cc2", cc2.getAlias(), UCAL_MARCH, 3, true, "M03L");
+    VerifyMonth(this, "1955 M03L cc3", cc3.getAlias(), UCAL_MARCH, 3, true, "M03L");
 
     cc1->set(UCAL_EXTENDED_YEAR, notLeapYear);
     cc2->set(UCAL_EXTENDED_YEAR, notLeapYear);
@@ -4987,12 +4987,12 @@ void CalendarTest::TestChineseCalendarOrdinalMonthSet() {
     cc2->setTemporalMonthCode("M06", status);
     if (failure(status, "setTemporalMonthCode failure")) return;
     cc3->set(UCAL_MONTH, UCAL_JUNE); cc3->set(UCAL_IS_LEAP_MONTH, 0);
-    assertTrue("4591 M06 cc2==cc1 set month by UCAL_MONTH and UCAL_UCAL_ORDINAL_MONTH", cc2->equals(*cc1, status));
-    assertTrue("4591 M06 cc2==cc3 set month by UCAL_MONTH and setTemporalMonthCode", cc2->equals(*cc3, status));
+    assertTrue("1954 M06 cc2==cc1 set month by UCAL_MONTH and UCAL_UCAL_ORDINAL_MONTH", cc2->equals(*cc1, status));
+    assertTrue("1954 M06 cc2==cc3 set month by UCAL_MONTH and setTemporalMonthCode", cc2->equals(*cc3, status));
     if (failure(status, "equals failure")) return;
-    VerifyMonth(this, "4591 M06 cc1", cc1.getAlias(), UCAL_JUNE, 5, false, "M06");
-    VerifyMonth(this, "4591 M06 cc2", cc2.getAlias(), UCAL_JUNE, 5, false, "M06");
-    VerifyMonth(this, "4591 M06 cc3", cc3.getAlias(), UCAL_JUNE, 5, false, "M06");
+    VerifyMonth(this, "1954 M06 cc1", cc1.getAlias(), UCAL_JUNE, 5, false, "M06");
+    VerifyMonth(this, "1954 M06 cc2", cc2.getAlias(), UCAL_JUNE, 5, false, "M06");
+    VerifyMonth(this, "1954 M06 cc3", cc3.getAlias(), UCAL_JUNE, 5, false, "M06");
 
     cc1->set(UCAL_EXTENDED_YEAR, leapMarchYear);
     cc2->set(UCAL_EXTENDED_YEAR, leapMarchYear);
@@ -5001,24 +5001,24 @@ void CalendarTest::TestChineseCalendarOrdinalMonthSet() {
     if (failure(status, "setTemporalMonthCode failure")) return;
     cc2->set(UCAL_MONTH, UCAL_APRIL); cc2->set(UCAL_IS_LEAP_MONTH, 0);
     cc3->set(UCAL_ORDINAL_MONTH, 4);
-    assertTrue("4592 M04 cc2==cc1 set month by UCAL_MONTH and UCAL_UCAL_ORDINAL_MONTH", cc2->equals(*cc1, status));
-    assertTrue("4592 M04 cc2==cc3 set month by UCAL_MONTH and setTemporalMonthCode", cc2->equals(*cc3, status));
+    assertTrue("1955 M04 cc2==cc1 set month by UCAL_MONTH and UCAL_UCAL_ORDINAL_MONTH", cc2->equals(*cc1, status));
+    assertTrue("1955 M04 cc2==cc3 set month by UCAL_MONTH and setTemporalMonthCode", cc2->equals(*cc3, status));
     if (failure(status, "equals failure")) return;
     // 4592 has leap March so April is the 5th month in that year.
-    VerifyMonth(this, "4592 M04 cc1", cc1.getAlias(), UCAL_APRIL, 4, false, "M04");
-    VerifyMonth(this, "4592 M04 cc2", cc2.getAlias(), UCAL_APRIL, 4, false, "M04");
-    VerifyMonth(this, "4592 M04 cc3", cc3.getAlias(), UCAL_APRIL, 4, false, "M04");
+    VerifyMonth(this, "1955 M04 cc1", cc1.getAlias(), UCAL_APRIL, 4, false, "M04");
+    VerifyMonth(this, "1955 M04 cc2", cc2.getAlias(), UCAL_APRIL, 4, false, "M04");
+    VerifyMonth(this, "1955 M04 cc3", cc3.getAlias(), UCAL_APRIL, 4, false, "M04");
 
     cc1->set(UCAL_EXTENDED_YEAR, notLeapYear);
     cc2->set(UCAL_EXTENDED_YEAR, notLeapYear);
     cc3->set(UCAL_EXTENDED_YEAR, notLeapYear);
-    assertTrue("4591 M04 no leap month before cc2==cc1 set month by UCAL_MONTH and UCAL_UCAL_ORDINAL_MONTH", cc2->equals(*cc1, status));
-    assertTrue("4591 M04 no leap month before cc2==cc3 set month by UCAL_MONTH and setTemporalMonthCode", cc2->equals(*cc3, status));
+    assertTrue("1954 M04 no leap month before cc2==cc1 set month by UCAL_MONTH and UCAL_UCAL_ORDINAL_MONTH", cc2->equals(*cc1, status));
+    assertTrue("1954 M04 no leap month before cc2==cc3 set month by UCAL_MONTH and setTemporalMonthCode", cc2->equals(*cc3, status));
     if (failure(status, "equals failure")) return;
     // 4592 has no leap month before April so April is the 4th month in that year.
-    VerifyMonth(this, "4591 M04 cc1", cc1.getAlias(), UCAL_APRIL, 3, false, "M04");
-    VerifyMonth(this, "4591 M04 cc2", cc2.getAlias(), UCAL_APRIL, 3, false, "M04");
-    VerifyMonth(this, "4591 M04 cc3", cc3.getAlias(), UCAL_APRIL, 3, false, "M04");
+    VerifyMonth(this, "1954 M04 cc1", cc1.getAlias(), UCAL_APRIL, 3, false, "M04");
+    VerifyMonth(this, "1954 M04 cc2", cc2.getAlias(), UCAL_APRIL, 3, false, "M04");
+    VerifyMonth(this, "1954 M04 cc3", cc3.getAlias(), UCAL_APRIL, 3, false, "M04");
 
     // Out of bound monthCodes should return error.
     // These are not valid for calendar do not have a leap month
@@ -5046,8 +5046,8 @@ void CalendarTest::TestDangiCalendarOrdinalMonthSet() {
     LocalPointer<Calendar> cc2(cc1->clone());
     LocalPointer<Calendar> cc3(cc1->clone());
 
-    constexpr int32_t notLeapYear = 4287;
-    constexpr int32_t leapMarchYear = 4288;
+    constexpr int32_t notLeapYear = 1954;
+    constexpr int32_t leapMarchYear = 1955;
 
     cc1->set(UCAL_EXTENDED_YEAR, leapMarchYear);
     cc2->set(UCAL_EXTENDED_YEAR, leapMarchYear);
@@ -5060,12 +5060,12 @@ void CalendarTest::TestDangiCalendarOrdinalMonthSet() {
     cc1->set(UCAL_DATE, 1);
     cc2->set(UCAL_DATE, 1);
     cc3->set(UCAL_DATE, 1);
-    assertTrue("4288 M03L cc2==cc1 set month by UCAL_MONTH and UCAL_UCAL_ORDINAL_MONTH", cc2->equals(*cc1, status));
-    assertTrue("4288 M03L cc2==cc3 set month by UCAL_MONTH and setTemporalMonthCode", cc2->equals(*cc3, status));
+    assertTrue("1955 M03L cc2==cc1 set month by UCAL_MONTH and UCAL_UCAL_ORDINAL_MONTH", cc2->equals(*cc1, status));
+    assertTrue("1955 M03L cc2==cc3 set month by UCAL_MONTH and setTemporalMonthCode", cc2->equals(*cc3, status));
     if (failure(status, "equals failure")) return;
-    VerifyMonth(this, "4288 M03L cc1", cc1.getAlias(), UCAL_MARCH, 3, true, "M03L");
-    VerifyMonth(this, "4288 M03L cc2", cc2.getAlias(), UCAL_MARCH, 3, true, "M03L");
-    VerifyMonth(this, "4288 M03L cc3", cc3.getAlias(), UCAL_MARCH, 3, true, "M03L");
+    VerifyMonth(this, "1955 M03L cc1", cc1.getAlias(), UCAL_MARCH, 3, true, "M03L");
+    VerifyMonth(this, "1955 M03L cc2", cc2.getAlias(), UCAL_MARCH, 3, true, "M03L");
+    VerifyMonth(this, "1955 M03L cc3", cc3.getAlias(), UCAL_MARCH, 3, true, "M03L");
 
     cc1->set(UCAL_EXTENDED_YEAR, notLeapYear);
     cc2->set(UCAL_EXTENDED_YEAR, notLeapYear);
@@ -5074,12 +5074,12 @@ void CalendarTest::TestDangiCalendarOrdinalMonthSet() {
     cc2->setTemporalMonthCode("M06", status);
     if (failure(status, "setTemporalMonthCode failure")) return;
     cc3->set(UCAL_MONTH, UCAL_JUNE); cc3->set(UCAL_IS_LEAP_MONTH, 0);
-    assertTrue("4287 M06 cc2==cc1 set month by UCAL_MONTH and UCAL_UCAL_ORDINAL_MONTH", cc2->equals(*cc1, status));
-    assertTrue("4287 M06 cc2==cc3 set month by UCAL_MONTH and setTemporalMonthCode", cc2->equals(*cc3, status));
+    assertTrue("1955 M06 cc2==cc1 set month by UCAL_MONTH and UCAL_UCAL_ORDINAL_MONTH", cc2->equals(*cc1, status));
+    assertTrue("1955 M06 cc2==cc3 set month by UCAL_MONTH and setTemporalMonthCode", cc2->equals(*cc3, status));
     if (failure(status, "equals failure")) return;
-    VerifyMonth(this, "4287 M06 cc1", cc1.getAlias(), UCAL_JUNE, 5, false, "M06");
-    VerifyMonth(this, "4287 M06 cc2", cc2.getAlias(), UCAL_JUNE, 5, false, "M06");
-    VerifyMonth(this, "4287 M06 cc3", cc3.getAlias(), UCAL_JUNE, 5, false, "M06");
+    VerifyMonth(this, "1955 M06 cc1", cc1.getAlias(), UCAL_JUNE, 5, false, "M06");
+    VerifyMonth(this, "1955 M06 cc2", cc2.getAlias(), UCAL_JUNE, 5, false, "M06");
+    VerifyMonth(this, "1955 M06 cc3", cc3.getAlias(), UCAL_JUNE, 5, false, "M06");
 
     cc1->set(UCAL_EXTENDED_YEAR, leapMarchYear);
     cc2->set(UCAL_EXTENDED_YEAR, leapMarchYear);
@@ -5088,24 +5088,24 @@ void CalendarTest::TestDangiCalendarOrdinalMonthSet() {
     if (failure(status, "setTemporalMonthCode failure")) return;
     cc2->set(UCAL_MONTH, UCAL_APRIL); cc2->set(UCAL_IS_LEAP_MONTH, 0);
     cc3->set(UCAL_ORDINAL_MONTH, 4);
-    assertTrue("4288 M04 cc2==cc1 set month by UCAL_MONTH and UCAL_UCAL_ORDINAL_MONTH", cc2->equals(*cc1, status));
-    assertTrue("4288 M04 cc2==cc3 set month by UCAL_MONTH and setTemporalMonthCode", cc2->equals(*cc3, status));
+    assertTrue("1955 M04 cc2==cc1 set month by UCAL_MONTH and UCAL_UCAL_ORDINAL_MONTH", cc2->equals(*cc1, status));
+    assertTrue("1955 M04 cc2==cc3 set month by UCAL_MONTH and setTemporalMonthCode", cc2->equals(*cc3, status));
     if (failure(status, "equals failure")) return;
     // 4592 has leap March so April is the 5th month in that year.
-    VerifyMonth(this, "4288 M04 cc1", cc1.getAlias(), UCAL_APRIL, 4, false, "M04");
-    VerifyMonth(this, "4288 M04 cc2", cc2.getAlias(), UCAL_APRIL, 4, false, "M04");
-    VerifyMonth(this, "4288 M04 cc3", cc3.getAlias(), UCAL_APRIL, 4, false, "M04");
+    VerifyMonth(this, "1955 M04 cc1", cc1.getAlias(), UCAL_APRIL, 4, false, "M04");
+    VerifyMonth(this, "1955 M04 cc2", cc2.getAlias(), UCAL_APRIL, 4, false, "M04");
+    VerifyMonth(this, "1955 M04 cc3", cc3.getAlias(), UCAL_APRIL, 4, false, "M04");
 
     cc1->set(UCAL_EXTENDED_YEAR, notLeapYear);
     cc2->set(UCAL_EXTENDED_YEAR, notLeapYear);
     cc3->set(UCAL_EXTENDED_YEAR, notLeapYear);
-    assertTrue("4287 M04 no leap month before cc2==cc1 set month by UCAL_MONTH and UCAL_UCAL_ORDINAL_MONTH", cc2->equals(*cc1, status));
-    assertTrue("4287 M04 no leap month before cc2==cc3 set month by UCAL_MONTH and setTemporalMonthCode", cc2->equals(*cc3, status));
+    assertTrue("1954 M04 no leap month before cc2==cc1 set month by UCAL_MONTH and UCAL_UCAL_ORDINAL_MONTH", cc2->equals(*cc1, status));
+    assertTrue("1954 M04 no leap month before cc2==cc3 set month by UCAL_MONTH and setTemporalMonthCode", cc2->equals(*cc3, status));
     if (failure(status, "equals failure")) return;
     // 4592 has no leap month before April so April is the 4th month in that year.
-    VerifyMonth(this, "4287 M04 cc1", cc1.getAlias(), UCAL_APRIL, 3, false, "M04");
-    VerifyMonth(this, "4287 M04 cc2", cc2.getAlias(), UCAL_APRIL, 3, false, "M04");
-    VerifyMonth(this, "4287 M04 cc3", cc3.getAlias(), UCAL_APRIL, 3, false, "M04");
+    VerifyMonth(this, "1954 M04 cc1", cc1.getAlias(), UCAL_APRIL, 3, false, "M04");
+    VerifyMonth(this, "1954 M04 cc2", cc2.getAlias(), UCAL_APRIL, 3, false, "M04");
+    VerifyMonth(this, "1954 M04 cc3", cc3.getAlias(), UCAL_APRIL, 3, false, "M04");
 
     // Out of bound monthCodes should return error.
     // These are not valid for calendar do not have a leap month
@@ -5895,7 +5895,7 @@ void CalendarTest::TestChineseCalendarComputeMonthStart() {  // ICU-22639
     UErrorCode status = U_ZERO_ERROR;
 
     // An extended year for which hasLeapMonthBetweenWinterSolstices is true.
-    constexpr int32_t eyear = 4643;
+    constexpr int32_t eyear = 2006;
     constexpr int64_t monthStart = 2453764;
 
     LocalPointer<Calendar> calendar(

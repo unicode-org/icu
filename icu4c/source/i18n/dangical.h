@@ -103,11 +103,6 @@ class DangiCalendar : public ChineseCalendar {
  protected:
   virtual Setting getSetting(UErrorCode& status) const override;
 
-  /*
-   * @internal
-   */
-  int32_t getRelatedYearDifference() const override;
-
  private:
  
   DangiCalendar(); // default constructor not implemented

@@ -76,20 +76,20 @@ public class ChineseTest extends CalendarTestFmwk {
         final int[] DATA = {
             // (Note: months are 1-based)
             // Gregorian    Chinese
-            1964,  9,  4,   4601,  7,0, 28,
-            1964,  9,  5,   4601,  7,0, 29,
-            1964,  9,  6,   4601,  8,0,  1,
-            1964,  9,  7,   4601,  8,0,  2,
-            1961, 12, 25,   4598, 11,0, 18,
-            1999,  6,  4,   4636,  4,0, 21,
+            1964,  9,  4,   1964,  7,0, 28,
+            1964,  9,  5,   1964,  7,0, 29,
+            1964,  9,  6,   1964,  8,0,  1,
+            1964,  9,  7,   1964,  8,0,  2,
+            1961, 12, 25,   1961, 11,0, 18,
+            1999,  6,  4,   1999,  4,0, 21,
 
-            1990,  5, 23,   4627,  4,0, 29,
-            1990,  5, 24,   4627,  5,0,  1,
-            1990,  6, 22,   4627,  5,0, 30,
-            1990,  6, 23,   4627,  5,1,  1,
-            1990,  7, 20,   4627,  5,1, 28,
-            1990,  7, 21,   4627,  5,1, 29,
-            1990,  7, 22,   4627,  6,0,  1,
+            1990,  5, 23,   1990,  4,0, 29,
+            1990,  5, 24,   1990,  5,0,  1,
+            1990,  6, 22,   1990,  5,0, 30,
+            1990,  6, 23,   1990,  5,1,  1,
+            1990,  7, 20,   1990,  5,1, 28,
+            1990,  7, 21,   1990,  5,1, 29,
+            1990,  7, 22,   1990,  6,0,  1,
         };
 
         ChineseCalendar cal = new ChineseCalendar();
@@ -303,10 +303,10 @@ public class ChineseTest extends CalendarTestFmwk {
         ChineseCalendar cal = new ChineseCalendar();
         DateFormat fmt = DateFormat.getDateInstance(cal, DateFormat.DEFAULT);
 
-        // May 22 2001 = y4638 m4 d30 doy119
-        // May 23 2001 = y4638 m4* d1 doy120
+        // May 22 2001 = y2001 m4 d30 doy119
+        // May 23 2001 = y2001 m4* d1 doy120
 
-        final int THE_YEAR = 4638;
+        final int THE_YEAR = 2001;
         final int END = -1;
 
         int[] DATA = {
@@ -440,16 +440,16 @@ public class ChineseTest extends CalendarTestFmwk {
             // MONTHS ARE 1-BASED HERE
             // input               add           output
             // year  mon    day    field amount  year  mon    day
-            {  4642,   3,0,  15,   MONTH,   3,   4642,   6,0,  15 }, // normal
-            {  4639,  12,0,  15,   MONTH,   1,   4640,   1,0,  15 }, // across year
-            {  4640,   1,0,  15,   MONTH,  -1,   4639,  12,0,  15 }, // across year
-            {  4638,   3,0,  15,   MONTH,   3,   4638,   5,0,  15 }, // 4=leap
-            {  4638,   3,0,  15,   MONTH,   2,   4638,   4,1,  15 }, // 4=leap
-            {  4638,   4,0,  15,   MONTH,   1,   4638,   4,1,  15 }, // 4=leap
-            {  4638,   4,1,  15,   MONTH,   1,   4638,   5,0,  15 }, // 4=leap
-            {  4638,   4,0,  30,   MONTH,   1,   4638,   4,1,  29 }, // dom should pin
-            {  4638,   4,0,  30,   MONTH,   2,   4638,   5,0,  30 }, // no dom pin
-            {  4638,   4,0,  30,   MONTH,   3,   4638,   6,0,  29 }, // dom should pin
+            {  2005,   3,0,  15,   MONTH,   3,   2005,   6,0,  15 }, // normal
+            {  2002,  12,0,  15,   MONTH,   1,   2003,   1,0,  15 }, // across year
+            {  2003,   1,0,  15,   MONTH,  -1,   2002,  12,0,  15 }, // across year
+            {  2001,   3,0,  15,   MONTH,   3,   2001,   5,0,  15 }, // 4=leap
+            {  2001,   3,0,  15,   MONTH,   2,   2001,   4,1,  15 }, // 4=leap
+            {  2001,   4,0,  15,   MONTH,   1,   2001,   4,1,  15 }, // 4=leap
+            {  2001,   4,1,  15,   MONTH,   1,   2001,   5,0,  15 }, // 4=leap
+            {  2001,   4,0,  30,   MONTH,   1,   2001,   4,1,  29 }, // dom should pin
+            {  2001,   4,0,  30,   MONTH,   2,   2001,   5,0,  30 }, // no dom pin
+            {  2001,   4,0,  30,   MONTH,   3,   2001,   6,0,  29 }, // dom should pin
         };
 
         ChineseCalendar cal = new ChineseCalendar();
@@ -466,22 +466,22 @@ public class ChineseTest extends CalendarTestFmwk {
             // MONTHS ARE 1-BASED HERE
             // input               add           output
             // year  mon    day    field amount  year  mon    day
-            {  4642,   3,0,  15,   MONTH,   3,   4642,   6,0,  15 }, // normal
-            {  4642,   3,0,  15,   MONTH,  11,   4642,   2,0,  15 }, // normal
-            {  4639,  12,0,  15,   MONTH,   1,   4639,   1,0,  15 }, // across year
-            {  4640,   1,0,  15,   MONTH,  -1,   4640,  12,0,  15 }, // across year
-            {  4638,   3,0,  15,   MONTH,   3,   4638,   5,0,  15 }, // 4=leap
-            {  4638,   3,0,  15,   MONTH,  16,   4638,   5,0,  15 }, // 4=leap
-            {  4638,   3,0,  15,   MONTH,   2,   4638,   4,1,  15 }, // 4=leap
-            {  4638,   3,0,  15,   MONTH,  28,   4638,   4,1,  15 }, // 4=leap
-            {  4638,   4,0,  15,   MONTH,   1,   4638,   4,1,  15 }, // 4=leap
-            {  4638,   4,0,  15,   MONTH, -12,   4638,   4,1,  15 }, // 4=leap
-            {  4638,   4,1,  15,   MONTH,   1,   4638,   5,0,  15 }, // 4=leap
-            {  4638,   4,1,  15,   MONTH, -25,   4638,   5,0,  15 }, // 4=leap
-            {  4638,   4,0,  30,   MONTH,   1,   4638,   4,1,  29 }, // dom should pin
-            {  4638,   4,0,  30,   MONTH,  14,   4638,   4,1,  29 }, // dom should pin
-            {  4638,   4,0,  30,   MONTH,  15,   4638,   5,0,  30 }, // no dom pin
-            {  4638,   4,0,  30,   MONTH, -10,   4638,   6,0,  29 }, // dom should pin
+            {  2005,   3,0,  15,   MONTH,   3,   2005,   6,0,  15 }, // normal
+            {  2005,   3,0,  15,   MONTH,  11,   2005,   2,0,  15 }, // normal
+            {  2002,  12,0,  15,   MONTH,   1,   2002,   1,0,  15 }, // across year
+            {  2003,   1,0,  15,   MONTH,  -1,   2003,  12,0,  15 }, // across year
+            {  2001,   3,0,  15,   MONTH,   3,   2001,   5,0,  15 }, // 4=leap
+            {  2001,   3,0,  15,   MONTH,  16,   2001,   5,0,  15 }, // 4=leap
+            {  2001,   3,0,  15,   MONTH,   2,   2001,   4,1,  15 }, // 4=leap
+            {  2001,   3,0,  15,   MONTH,  28,   2001,   4,1,  15 }, // 4=leap
+            {  2001,   4,0,  15,   MONTH,   1,   2001,   4,1,  15 }, // 4=leap
+            {  2001,   4,0,  15,   MONTH, -12,   2001,   4,1,  15 }, // 4=leap
+            {  2001,   4,1,  15,   MONTH,   1,   2001,   5,0,  15 }, // 4=leap
+            {  2001,   4,1,  15,   MONTH, -25,   2001,   5,0,  15 }, // 4=leap
+            {  2001,   4,0,  30,   MONTH,   1,   2001,   4,1,  29 }, // dom should pin
+            {  2001,   4,0,  30,   MONTH,  14,   2001,   4,1,  29 }, // dom should pin
+            {  2001,   4,0,  30,   MONTH,  15,   2001,   5,0,  30 }, // no dom pin
+            {  2001,   4,0,  30,   MONTH, -10,   2001,   6,0,  29 }, // dom should pin
         };
 
         ChineseCalendar cal = new ChineseCalendar();

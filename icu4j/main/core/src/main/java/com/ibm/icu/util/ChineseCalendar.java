@@ -100,11 +100,6 @@ public class ChineseCalendar extends Calendar {
     // usage will be to have one instance of ChineseCalendar at a time.
  
     /**
-     * The start year of this Chinese calendar instance. 
-     */
-    private int epochYear;
-
-    /**
      * The zone used for the astronomical calculation of this Chinese
      * calendar instance.
      */
@@ -141,7 +136,7 @@ public class ChineseCalendar extends Calendar {
      * @stable ICU 2.8
      */
     public ChineseCalendar() {
-        this(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT), CHINESE_EPOCH_YEAR, CHINA_ZONE);
+        this(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT), CHINA_ZONE);
     }
 
     /**
@@ -151,7 +146,7 @@ public class ChineseCalendar extends Calendar {
      * @stable ICU 4.0
      */
     public ChineseCalendar(Date date) {
-        this(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT), CHINESE_EPOCH_YEAR, CHINA_ZONE);
+        this(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT), CHINA_ZONE);
         setTime(date);
     }
 
@@ -194,7 +189,7 @@ public class ChineseCalendar extends Calendar {
     public ChineseCalendar(int year, int month, int isLeapMonth, int date, int hour,
                              int minute, int second)
     {
-        this(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT), CHINESE_EPOCH_YEAR, CHINA_ZONE);
+        this(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT), CHINA_ZONE);
 
         // The current time is set at this point, so ERA field is already
         // set to the current era.
@@ -254,7 +249,7 @@ public class ChineseCalendar extends Calendar {
     public ChineseCalendar(int era, int year, int month, int isLeapMonth, int date, int hour, 
                            int minute, int second) 
     { 
-        this(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT), CHINESE_EPOCH_YEAR, CHINA_ZONE);
+        this(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT), CHINA_ZONE);
 
         // Set 0 to millisecond field 
         this.set(MILLISECOND, 0); 
@@ -277,7 +272,7 @@ public class ChineseCalendar extends Calendar {
      * @stable ICU 4.0
      */
     public ChineseCalendar(Locale aLocale) {
-        this(TimeZone.forLocaleOrDefault(aLocale), ULocale.forLocale(aLocale), CHINESE_EPOCH_YEAR, CHINA_ZONE);
+        this(TimeZone.forLocaleOrDefault(aLocale), ULocale.forLocale(aLocale), CHINA_ZONE);
     }
 
     /**
@@ -288,7 +283,7 @@ public class ChineseCalendar extends Calendar {
      * @stable ICU 4.0
      */
     public ChineseCalendar(TimeZone zone) {
-        this(zone, ULocale.getDefault(Category.FORMAT), CHINESE_EPOCH_YEAR, CHINA_ZONE);
+        this(zone, ULocale.getDefault(Category.FORMAT), CHINA_ZONE);
     }
 
     /**
@@ -299,7 +294,7 @@ public class ChineseCalendar extends Calendar {
      * @stable ICU 2.8
      */
     public ChineseCalendar(TimeZone zone, Locale aLocale) {
-        this(zone, ULocale.forLocale(aLocale), CHINESE_EPOCH_YEAR, CHINA_ZONE);
+        this(zone, ULocale.forLocale(aLocale), CHINA_ZONE);
     }
 
     /**
@@ -310,7 +305,7 @@ public class ChineseCalendar extends Calendar {
      * @stable ICU 4.0
      */
     public ChineseCalendar(ULocale locale) {
-        this(TimeZone.forULocaleOrDefault(locale), locale, CHINESE_EPOCH_YEAR, CHINA_ZONE);
+        this(TimeZone.forULocaleOrDefault(locale), locale, CHINA_ZONE);
     }
 
     /**
@@ -321,7 +316,7 @@ public class ChineseCalendar extends Calendar {
      * @stable ICU 3.2
      */
     public ChineseCalendar(TimeZone zone, ULocale locale) {
-        this(zone, locale, CHINESE_EPOCH_YEAR, CHINA_ZONE);
+        this(zone, locale, CHINA_ZONE);
     }
 
     /**
@@ -332,9 +327,8 @@ public class ChineseCalendar extends Calendar {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
-    protected ChineseCalendar(TimeZone zone, ULocale locale, int epochYear, TimeZone zoneAstroCalc) {
+    protected ChineseCalendar(TimeZone zone, ULocale locale, TimeZone zoneAstroCalc) {
         super(zone, locale);
-        this.epochYear = epochYear;
         this.zoneAstro = zoneAstroCalc;
         setTimeInMillis(System.currentTimeMillis());
     }
@@ -442,7 +436,7 @@ public class ChineseCalendar extends Calendar {
         } else {
             int cycle = internalGet(ERA, 1) - 1; // 0-based cycle
             // adjust to the instance specific epoch
-            year = cycle * 60 + internalGet(YEAR, 1) - (epochYear - CHINESE_EPOCH_YEAR);
+            year = cycle * 60 + internalGet(YEAR, 1) + CYCLE_EPOCH - CHINESE_EPOCH_YEAR;
         }
         return year;
     }
@@ -638,12 +632,17 @@ public class ChineseCalendar extends Calendar {
     //------------------------------------------------------------------
    
     /**
-     * The start year of the Chinese calendar, the 61st year of the reign
-     * of Huang Di.  Some sources use the first year of his reign,
-     * resulting in EXTENDED_YEAR values 60 years greater and ERA (cycle)
-     * values one greater.
+     * The start year of the Chinese calendar, 1CE.
      */
-    private static final int CHINESE_EPOCH_YEAR = -2636; // Gregorian year
+    private static final int CHINESE_EPOCH_YEAR = 1; // Gregorian year
+
+    /**
+     * The start year of the Chinese calendar for the cycle calculation,
+     * the 61st year of the reign
+     * of Huang Di.  Some sources use the first year of his reign,
+     * ERA (cycle) values one greater.
+     */
+    private static final int CYCLE_EPOCH = -2636; // Gregorian year
 
     /**
      * The time zone used for performing astronomical computations.
@@ -829,9 +828,9 @@ public class ChineseCalendar extends Calendar {
         MonthInfo info = computeMonthInfo(days, gyear);
 
         // Extended year and cycle year is based on the epoch year
-        int extended_year = gyear - epochYear;
-        int cycle_year = gyear - CHINESE_EPOCH_YEAR;
-        if (info.month < 10 ||
+        int extended_year = gyear - CHINESE_EPOCH_YEAR;
+        int cycle_year = gyear - CYCLE_EPOCH;
+        if (info.month < 10 ||  // TODO(ICU-23198) < 10 or < 11 ????
             gmonth >= JULY) {
             extended_year++;
             cycle_year++;
@@ -989,7 +988,7 @@ public class ChineseCalendar extends Calendar {
             month = rem[0];
         }
 
-        int gyear = eyear + epochYear - 1; // Gregorian year
+        int gyear = eyear; // Gregorian year
         int newYear = newYear(gyear);
         int newMoon = newMoonNear(newYear + month * 29, true);
         
@@ -1033,7 +1032,6 @@ public class ChineseCalendar extends Calendar {
     private void readObject(ObjectInputStream stream)
         throws IOException, ClassNotFoundException
     {
-        epochYear = CHINESE_EPOCH_YEAR;
         zoneAstro = CHINA_ZONE;
 
         stream.defaultReadObject();
@@ -1170,15 +1168,6 @@ public class ChineseCalendar extends Calendar {
         }
         return super.getActualMaximum(field);
 
-    }
-
-    /**
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    @Deprecated
-    protected final int getRelatedYearDifference() {
-        return epochYear - 1;
     }
 
     /*

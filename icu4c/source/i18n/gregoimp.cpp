@@ -106,7 +106,8 @@ const int8_t Grego::MONTH_LENGTH[24] =
 
 int64_t Grego::fieldsToDay(int32_t year, int32_t month, int32_t dom) {
 
-    int64_t y = year - 1;
+    int64_t y = year;
+    y--;
 
     int64_t julian = 365LL * y +
         ClockMath::floorDivideInt64(y, 4LL) + (JULIAN_1_CE - 3) + // Julian cal

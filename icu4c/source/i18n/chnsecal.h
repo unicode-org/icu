@@ -204,12 +204,6 @@ class U_I18N_API ChineseCalendar : public Calendar {
   virtual void roll(UCalendarDateFields field, int32_t amount, UErrorCode &status) override;
   virtual void roll(EDateFields field, int32_t amount, UErrorCode &status) override;
 
- protected:
-  /**
-   * @internal
-   */
-  int32_t getRelatedYearDifference() const override;
-
   //----------------------------------------------------------------------
   // Internal methods & astronomical calculations
   //----------------------------------------------------------------------
@@ -253,7 +247,6 @@ class U_I18N_API ChineseCalendar : public Calendar {
   virtual int32_t getActualMaximum(UCalendarDateFields field, UErrorCode& status) const override;
 
   struct Setting {
-      int32_t epochYear;
       const TimeZone* zoneAstroCalc;
       CalendarCache** winterSolsticeCache;
       CalendarCache** newYearCache;

@@ -170,62 +170,62 @@ public class TemporalMonthCodeTest extends CoreTestFmwk {
         GregorianCalendar gc1 = new GregorianCalendar();
         Object[][] cases = {
             // https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/2022.pdf
-            { 2022, Calendar.DECEMBER, 15, 4659, Calendar.NOVEMBER, 22, "M11", false, 10},
+            { 2022, Calendar.DECEMBER, 15, 2022, Calendar.NOVEMBER, 22, "M11", false, 10},
             // M01L is very hard to find. Cannot find a year has M01L in these several
             // centuries.
             // M02L https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/2004.pdf
-            { 2004, Calendar.MARCH, 20, 4641, Calendar.FEBRUARY, 30, "M02", false, 1},
-            { 2004, Calendar.MARCH, 21, 4641, Calendar.FEBRUARY, 1, "M02L", true, 2},
-            { 2004, Calendar.APRIL, 18, 4641, Calendar.FEBRUARY, 29, "M02L", true, 2},
-            { 2004, Calendar.APRIL, 19, 4641, Calendar.MARCH, 1, "M03", false, 3},
+            { 2004, Calendar.MARCH, 20, 2004, Calendar.FEBRUARY, 30, "M02", false, 1},
+            { 2004, Calendar.MARCH, 21, 2004, Calendar.FEBRUARY, 1, "M02L", true, 2},
+            { 2004, Calendar.APRIL, 18, 2004, Calendar.FEBRUARY, 29, "M02L", true, 2},
+            { 2004, Calendar.APRIL, 19, 2004, Calendar.MARCH, 1, "M03", false, 3},
             // M03L https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/1995.pdf
-            { 1955, Calendar.APRIL, 21, 4592, Calendar.MARCH, 29, "M03", false, 2},
-            { 1955, Calendar.APRIL, 22, 4592, Calendar.MARCH, 1, "M03L", true, 3},
-            { 1955, Calendar.MAY, 21, 4592, Calendar.MARCH, 30, "M03L", true, 3},
-            { 1955, Calendar.MAY, 22, 4592, Calendar.APRIL, 1, "M04", false, 4},
+            { 1955, Calendar.APRIL, 21, 1955, Calendar.MARCH, 29, "M03", false, 2},
+            { 1955, Calendar.APRIL, 22, 1955, Calendar.MARCH, 1, "M03L", true, 3},
+            { 1955, Calendar.MAY, 21, 1955, Calendar.MARCH, 30, "M03L", true, 3},
+            { 1955, Calendar.MAY, 22, 1955, Calendar.APRIL, 1, "M04", false, 4},
             // M12 https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/1996.pdf
-            { 1956, Calendar.FEBRUARY, 11, 4592, Calendar.DECEMBER, 30, "M12", false, 12},
+            { 1956, Calendar.FEBRUARY, 11, 1955, Calendar.DECEMBER, 30, "M12", false, 12},
             // M04L https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/2001.pdf
-            { 2001, Calendar.MAY, 22, 4638, Calendar.APRIL, 30, "M04", false, 3},
-            { 2001, Calendar.MAY, 23, 4638, Calendar.APRIL, 1, "M04L", true, 4},
-            { 2001, Calendar.JUNE, 20, 4638, Calendar.APRIL, 29, "M04L", true, 4},
-            { 2001, Calendar.JUNE, 21, 4638, Calendar.MAY, 1, "M05", false, 5},
+            { 2001, Calendar.MAY, 22, 2001, Calendar.APRIL, 30, "M04", false, 3},
+            { 2001, Calendar.MAY, 23, 2001, Calendar.APRIL, 1, "M04L", true, 4},
+            { 2001, Calendar.JUNE, 20, 2001, Calendar.APRIL, 29, "M04L", true, 4},
+            { 2001, Calendar.JUNE, 21, 2001, Calendar.MAY, 1, "M05", false, 5},
             // M05L https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/2009.pdf
-            { 2009, Calendar.JUNE, 22, 4646, Calendar.MAY, 30, "M05", false, 4},
-            { 2009, Calendar.JUNE, 23, 4646, Calendar.MAY, 1, "M05L", true, 5},
-            { 2009, Calendar.JULY, 21, 4646, Calendar.MAY, 29, "M05L", true, 5},
-            { 2009, Calendar.JULY, 22, 4646, Calendar.JUNE, 1, "M06", false, 6},
+            { 2009, Calendar.JUNE, 22, 2009, Calendar.MAY, 30, "M05", false, 4},
+            { 2009, Calendar.JUNE, 23, 2009, Calendar.MAY, 1, "M05L", true, 5},
+            { 2009, Calendar.JULY, 21, 2009, Calendar.MAY, 29, "M05L", true, 5},
+            { 2009, Calendar.JULY, 22, 2009, Calendar.JUNE, 1, "M06", false, 6},
             // M06L https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/2017.pdf
-            { 2017, Calendar.JULY, 22, 4654, Calendar.JUNE, 29, "M06", false, 5},
-            { 2017, Calendar.JULY, 23, 4654, Calendar.JUNE, 1, "M06L", true, 6},
-            { 2017, Calendar.AUGUST, 21, 4654, Calendar.JUNE, 30, "M06L", true, 6},
-            { 2017, Calendar.AUGUST, 22, 4654, Calendar.JULY, 1, "M07", false, 7},
+            { 2017, Calendar.JULY, 22, 2017, Calendar.JUNE, 29, "M06", false, 5},
+            { 2017, Calendar.JULY, 23, 2017, Calendar.JUNE, 1, "M06L", true, 6},
+            { 2017, Calendar.AUGUST, 21, 2017, Calendar.JUNE, 30, "M06L", true, 6},
+            { 2017, Calendar.AUGUST, 22, 2017, Calendar.JULY, 1, "M07", false, 7},
             // M07L https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/2006.pdf
-            { 2006, Calendar.AUGUST, 23, 4643, Calendar.JULY, 30, "M07", false, 6},
-            { 2006, Calendar.AUGUST, 24, 4643, Calendar.JULY, 1, "M07L", true, 7},
-            { 2006, Calendar.SEPTEMBER, 21, 4643, Calendar.JULY, 29, "M07L", true, 7},
-            { 2006, Calendar.SEPTEMBER, 22, 4643, Calendar.AUGUST, 1, "M08", false, 8},
+            { 2006, Calendar.AUGUST, 23, 2006, Calendar.JULY, 30, "M07", false, 6},
+            { 2006, Calendar.AUGUST, 24, 2006, Calendar.JULY, 1, "M07L", true, 7},
+            { 2006, Calendar.SEPTEMBER, 21, 2006, Calendar.JULY, 29, "M07L", true, 7},
+            { 2006, Calendar.SEPTEMBER, 22, 2006, Calendar.AUGUST, 1, "M08", false, 8},
             // M08L https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/1995.pdf
-            { 1995, Calendar.SEPTEMBER, 24, 4632, Calendar.AUGUST, 30, "M08", false, 7},
-            { 1995, Calendar.SEPTEMBER, 25, 4632, Calendar.AUGUST, 1, "M08L", true, 8},
-            { 1995, Calendar.OCTOBER, 23, 4632, Calendar.AUGUST, 29, "M08L", true, 8},
-            { 1995, Calendar.OCTOBER, 24, 4632, Calendar.SEPTEMBER, 1, "M09", false, 9},
+            { 1995, Calendar.SEPTEMBER, 24, 1995, Calendar.AUGUST, 30, "M08", false, 7},
+            { 1995, Calendar.SEPTEMBER, 25, 1995, Calendar.AUGUST, 1, "M08L", true, 8},
+            { 1995, Calendar.OCTOBER, 23, 1995, Calendar.AUGUST, 29, "M08L", true, 8},
+            { 1995, Calendar.OCTOBER, 24, 1995, Calendar.SEPTEMBER, 1, "M09", false, 9},
             // M09L https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/2014.pdf
-            { 2014, Calendar.OCTOBER, 23, 4651, Calendar.SEPTEMBER, 30, "M09", false, 8},
-            { 2014, Calendar.OCTOBER, 24, 4651, Calendar.SEPTEMBER, 1, "M09L", true, 9},
-            { 2014, Calendar.NOVEMBER, 21, 4651, Calendar.SEPTEMBER, 29, "M09L", true, 9},
-            { 2014, Calendar.NOVEMBER, 22, 4651, Calendar.OCTOBER, 1, "M10", false, 10},
+            { 2014, Calendar.OCTOBER, 23, 2014, Calendar.SEPTEMBER, 30, "M09", false, 8},
+            { 2014, Calendar.OCTOBER, 24, 2014, Calendar.SEPTEMBER, 1, "M09L", true, 9},
+            { 2014, Calendar.NOVEMBER, 21, 2014, Calendar.SEPTEMBER, 29, "M09L", true, 9},
+            { 2014, Calendar.NOVEMBER, 22, 2014, Calendar.OCTOBER, 1, "M10", false, 10},
             // M10L https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/1984.pdf
-            { 1984, Calendar.NOVEMBER, 22, 4621, Calendar.OCTOBER, 30, "M10", false, 9},
-            { 1984, Calendar.NOVEMBER, 23, 4621, Calendar.OCTOBER, 1, "M10L", true, 10},
-            { 1984, Calendar.DECEMBER, 21, 4621, Calendar.OCTOBER, 29, "M10L", true, 10},
-            { 1984, Calendar.DECEMBER, 22, 4621, Calendar.NOVEMBER, 1, "M11", false, 11},
+            { 1984, Calendar.NOVEMBER, 22, 1984, Calendar.OCTOBER, 30, "M10", false, 9},
+            { 1984, Calendar.NOVEMBER, 23, 1984, Calendar.OCTOBER, 1, "M10L", true, 10},
+            { 1984, Calendar.DECEMBER, 21, 1984, Calendar.OCTOBER, 29, "M10L", true, 10},
+            { 1984, Calendar.DECEMBER, 22, 1984, Calendar.NOVEMBER, 1, "M11", false, 11},
             // M11L https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/2033.pdf
             //      https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/2034.pdf
-            { 2033, Calendar.DECEMBER, 21, 4670, Calendar.NOVEMBER, 30, "M11", false, 10},
-            { 2033, Calendar.DECEMBER, 22, 4670, Calendar.NOVEMBER, 1, "M11L", true, 11},
-            { 2034, Calendar.JANUARY, 19, 4670, Calendar.NOVEMBER, 29, "M11L", true, 11},
-            { 2034, Calendar.JANUARY, 20, 4670, Calendar.DECEMBER, 1, "M12", false, 12},
+            { 2033, Calendar.DECEMBER, 21, 2033, Calendar.NOVEMBER, 30, "M11", false, 10},
+            { 2033, Calendar.DECEMBER, 22, 2033, Calendar.NOVEMBER, 1, "M11L", true, 11},
+            { 2034, Calendar.JANUARY, 19, 2033, Calendar.NOVEMBER, 29, "M11L", true, 11},
+            { 2034, Calendar.JANUARY, 20, 2033, Calendar.DECEMBER, 1, "M12", false, 12},
             // M12L is very hard to find. Cannot find a year has M01L in these several
             // centuries.
         };

@@ -25,12 +25,6 @@ public class DangiCalendar extends ChineseCalendar {
     private static final long serialVersionUID = 8156297445349501985L;
 
     /**
-     * The start year of the Korean traditional calendar (Dan-gi) is the inaugural
-     * year of Dan-gun (BC 2333).
-     */
-    private static final int DANGI_EPOCH_YEAR = -2332;
-
-    /**
      * The time zone used for performing astronomical computations for
      * Dangi calendar. In Korea various timezones have been used historically 
      * (cf. http://www.math.snu.ac.kr/~kye/others/lunar.html): 
@@ -116,7 +110,7 @@ public class DangiCalendar extends ChineseCalendar {
      */
     @Deprecated
     public DangiCalendar(TimeZone zone, ULocale locale) {
-        super(zone, locale, DANGI_EPOCH_YEAR, KOREA_ZONE);
+        super(zone, locale, KOREA_ZONE);
     }
 
     /**

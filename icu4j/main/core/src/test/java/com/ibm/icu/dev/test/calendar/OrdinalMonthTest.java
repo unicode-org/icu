@@ -198,12 +198,12 @@ public class OrdinalMonthTest extends CoreTestFmwk {
 
     @Test
     public void TestChineseCalendarSet() {
-        RunTestChineseCalendarSet("chinese", 4591, 4592);
+        RunTestChineseCalendarSet("chinese", 1954, 1955);
     }
 
     @Test
     public void TestDangiCalendarSet() {
-        RunTestChineseCalendarSet("dangi", 4287, 4288);
+        RunTestChineseCalendarSet("dangi", 1954, 1955);
     }
 
     @Test

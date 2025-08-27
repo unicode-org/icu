@@ -30,20 +30,20 @@ public class DangiTest extends CalendarTestFmwk {
         final int[] DATA = {
             // (Note: months are 1-based)
             // Gregorian    Korean (Dan-gi)
-            1964,  9,  4,   4297,  7,0, 28,
-            1964,  9,  5,   4297,  7,0, 29,
-            1964,  9,  6,   4297,  8,0,  1,
-            1964,  9,  7,   4297,  8,0,  2,
-            1961, 12, 25,   4294, 11,0, 18,
-            1999,  6,  4,   4332,  4,0, 21,
+            1964,  9,  4,   1964,  7,0, 28,
+            1964,  9,  5,   1964,  7,0, 29,
+            1964,  9,  6,   1964,  8,0,  1,
+            1964,  9,  7,   1964,  8,0,  2,
+            1961, 12, 25,   1961, 11,0, 18,
+            1999,  6,  4,   1999,  4,0, 21,
 
-            1990,  5, 23,   4323,  4,0, 29,
-            1990,  5, 24,   4323,  5,0,  1,
-            1990,  6, 22,   4323,  5,0, 30,
-            1990,  6, 23,   4323,  5,1,  1,
-            1990,  7, 20,   4323,  5,1, 28,
-            1990,  7, 21,   4323,  5,1, 29,
-            1990,  7, 22,   4323,  6,0,  1,
+            1990,  5, 23,   1990,  4,0, 29,
+            1990,  5, 24,   1990,  5,0,  1,
+            1990,  6, 22,   1990,  5,0, 30,
+            1990,  6, 23,   1990,  5,1,  1,
+            1990,  7, 20,   1990,  5,1, 28,
+            1990,  7, 21,   1990,  5,1, 29,
+            1990,  7, 22,   1990,  6,0,  1,
 
             // Some tricky dates (where GMT+8 doesn't agree with GMT+9)
             //
@@ -51,25 +51,25 @@ public class DangiTest extends CalendarTestFmwk {
             // However, for some dates disagree with the above reference so KASI's
             // calculation was cross-referenced:
             //  http://astro.kasi.re.kr/Life/ConvertSolarLunarForm.aspx?MenuID=115
-            1880, 11,  3,   4213, 10,0,  1, // astronomer's GMT+8 / KASI disagrees with the kye ref
-            1882, 12, 10,   4215, 11,0,  1,
-            1883,  7, 4,    4216,  6,0,  1,
-            1884,  4, 25,   4217,  4,0,  1,
-            1885,  5, 14,   4218,  4,0,  1,
-            1891,  1, 10,   4223, 12,0,  1,
-            1893,  4, 16,   4226,  3,0,  1,
-            1894,  5,  5,   4227,  4,0,  1,
-            1897,  7, 29,   4230,  7,0,  1, // astronomer's GMT+8 disagrees with all other ref (looks like our astronomer's error, see ad hoc fix at ChineseCalendar::getTimezoneOffset)
-            1903, 10, 20,   4236,  9,0,  1,
-            1904,  1, 17,   4236, 12,0,  1,
-            1904, 11,  7,   4237, 10,0,  1,
-            1905,  5,  4,   4238,  4,0,  1,
-            1907,  7, 10,   4240,  6,0,  1,
-            1908,  4, 30,   4241,  4,0,  1,
-            1908,  9, 25,   4241,  9,0,  1,
-            1909,  9, 14,   4242,  8,0,  1,
-            1911, 12, 20,   4244, 11,0,  1,
-            1976, 11, 22,   4309, 10,0,  1,
+            1880, 11,  3,   1880, 10,0,  1, // astronomer's GMT+8 / KASI disagrees with the kye ref
+            1882, 12, 10,   1882, 11,0,  1,
+            1883,  7, 4,    1883,  6,0,  1,
+            1884,  4, 25,   1884,  4,0,  1,
+            1885,  5, 14,   1885,  4,0,  1,
+            1891,  1, 10,   1890, 12,0,  1,
+            1893,  4, 16,   1893,  3,0,  1,
+            1894,  5,  5,   1894,  4,0,  1,
+            1897,  7, 29,   1897,  7,0,  1, // astronomer's GMT+8 disagrees with all other ref (looks like our astronomer's error, see ad hoc fix at ChineseCalendar::getTimezoneOffset)
+            1903, 10, 20,   1903,  9,0,  1,
+            1904,  1, 17,   1903, 12,0,  1,
+            1904, 11,  7,   1904, 10,0,  1,
+            1905,  5,  4,   1905,  4,0,  1,
+            1907,  7, 10,   1907,  6,0,  1,
+            1908,  4, 30,   1908,  4,0,  1,
+            1908,  9, 25,   1908,  9,0,  1,
+            1909,  9, 14,   1909,  8,0,  1,
+            1911, 12, 20,   1911, 11,0,  1,
+            1976, 11, 22,   1976, 10,0,  1,
         };
 
         Calendar cal = Calendar.getInstance(new ULocale("ko_KR@calendar=dangi"));
@@ -178,10 +178,10 @@ public class DangiTest extends CalendarTestFmwk {
         Calendar cal = Calendar.getInstance(new ULocale("ko_KR@calendar=dangi"));
         DateFormat fmt = DateFormat.getDateInstance(cal, DateFormat.DEFAULT);
 
-        // May 22 4334 = y4334 m4 d30 doy119
-        // May 23 4334 = y4334 m4* d1 doy120
+        // May 22 2001 = y2001 m4 d30 doy119
+        // May 23 2001 = y2001 m4* d1 doy120
 
-        final int THE_YEAR = 4334;
+        final int THE_YEAR = 2001;
         final int END = -1;
 
         int[] DATA = {
@@ -301,16 +301,16 @@ public class DangiTest extends CalendarTestFmwk {
             // MONTHS ARE 1-BASED HERE
             // input               add           output
             // year  mon    day    field amount  year  mon    day
-            {  4338,   3,0,  15,   MONTH,   3,   4338,   6,0,  15 }, // normal
-            {  4335,  12,0,  15,   MONTH,   1,   4336,   1,0,  15 }, // across year
-            {  4336,   1,0,  15,   MONTH,  -1,   4335,  12,0,  15 }, // across year
-            {  4334,   3,0,  15,   MONTH,   3,   4334,   5,0,  15 }, // 4=leap
-            {  4334,   3,0,  15,   MONTH,   2,   4334,   4,1,  15 }, // 4=leap
-            {  4334,   4,0,  15,   MONTH,   1,   4334,   4,1,  15 }, // 4=leap
-            {  4334,   4,1,  15,   MONTH,   1,   4334,   5,0,  15 }, // 4=leap
-            {  4334,   3,0,  30,   MONTH,   2,   4334,   4,1,  29 }, // dom should pin
-            {  4334,   3,0,  30,   MONTH,   3,   4334,   5,0,  30 }, // no dom pin
-            {  4334,   3,0,  30,   MONTH,   4,   4334,   6,0,  29 }, // dom should pin
+            {  2005,   3,0,  15,   MONTH,   3,   2005,   6,0,  15 }, // normal
+            {  2002,  12,0,  15,   MONTH,   1,   2003,   1,0,  15 }, // across year
+            {  2003,   1,0,  15,   MONTH,  -1,   2002,  12,0,  15 }, // across year
+            {  2001,   3,0,  15,   MONTH,   3,   2001,   5,0,  15 }, // 4=leap
+            {  2001,   3,0,  15,   MONTH,   2,   2001,   4,1,  15 }, // 4=leap
+            {  2001,   4,0,  15,   MONTH,   1,   2001,   4,1,  15 }, // 4=leap
+            {  2001,   4,1,  15,   MONTH,   1,   2001,   5,0,  15 }, // 4=leap
+            {  2001,   3,0,  30,   MONTH,   2,   2001,   4,1,  29 }, // dom should pin
+            {  2001,   3,0,  30,   MONTH,   3,   2001,   5,0,  30 }, // no dom pin
+            {  2001,   3,0,  30,   MONTH,   4,   2001,   6,0,  29 }, // dom should pin
         };
 
         Calendar cal = Calendar.getInstance(new ULocale("ko_KR@calendar=dangi"));
@@ -327,22 +327,22 @@ public class DangiTest extends CalendarTestFmwk {
             // MONTHS ARE 1-BASED HERE
             // input               add           output
             // year  mon    day    field amount  year  mon    day
-            {  4338,   3,0,  15,   MONTH,   3,   4338,   6,0,  15 }, // normal
-            {  4338,   3,0,  15,   MONTH,  11,   4338,   2,0,  15 }, // normal
-            {  4335,  12,0,  15,   MONTH,   1,   4335,   1,0,  15 }, // across year
-            {  4336,   1,0,  15,   MONTH,  -1,   4336,  12,0,  15 }, // across year
-            {  4334,   3,0,  15,   MONTH,   3,   4334,   5,0,  15 }, // 4=leap
-            {  4334,   3,0,  15,   MONTH,  16,   4334,   5,0,  15 }, // 4=leap
-            {  4334,   3,0,  15,   MONTH,   2,   4334,   4,1,  15 }, // 4=leap
-            {  4334,   3,0,  15,   MONTH,  28,   4334,   4,1,  15 }, // 4=leap
-            {  4334,   4,0,  15,   MONTH,   1,   4334,   4,1,  15 }, // 4=leap
-            {  4334,   4,0,  15,   MONTH, -12,   4334,   4,1,  15 }, // 4=leap
-            {  4334,   4,1,  15,   MONTH,   1,   4334,   5,0,  15 }, // 4=leap
-            {  4334,   4,1,  15,   MONTH, -25,   4334,   5,0,  15 }, // 4=leap
-            {  4334,   3,0,  30,   MONTH,   2,   4334,   4,1,  29 }, // dom should pin
-            {  4334,   3,0,  30,   MONTH,  15,   4334,   4,1,  29 }, // dom should pin
-            {  4334,   3,0,  30,   MONTH,  16,   4334,   5,0,  30 }, // no dom pin
-            {  4334,   3,0,  30,   MONTH,  -9,   4334,   6,0,  29 }, // dom should pin
+            {  2005,   3,0,  15,   MONTH,   3,   2005,   6,0,  15 }, // normal
+            {  2005,   3,0,  15,   MONTH,  11,   2005,   2,0,  15 }, // normal
+            {  2002,  12,0,  15,   MONTH,   1,   2002,   1,0,  15 }, // across year
+            {  2003,   1,0,  15,   MONTH,  -1,   2003,  12,0,  15 }, // across year
+            {  2001,   3,0,  15,   MONTH,   3,   2001,   5,0,  15 }, // 4=leap
+            {  2001,   3,0,  15,   MONTH,  16,   2001,   5,0,  15 }, // 4=leap
+            {  2001,   3,0,  15,   MONTH,   2,   2001,   4,1,  15 }, // 4=leap
+            {  2001,   3,0,  15,   MONTH,  28,   2001,   4,1,  15 }, // 4=leap
+            {  2001,   4,0,  15,   MONTH,   1,   2001,   4,1,  15 }, // 4=leap
+            {  2001,   4,0,  15,   MONTH, -12,   2001,   4,1,  15 }, // 4=leap
+            {  2001,   4,1,  15,   MONTH,   1,   2001,   5,0,  15 }, // 4=leap
+            {  2001,   4,1,  15,   MONTH, -25,   2001,   5,0,  15 }, // 4=leap
+            {  2001,   3,0,  30,   MONTH,   2,   2001,   4,1,  29 }, // dom should pin
+            {  2001,   3,0,  30,   MONTH,  15,   2001,   4,1,  29 }, // dom should pin
+            {  2001,   3,0,  30,   MONTH,  16,   2001,   5,0,  30 }, // no dom pin
+            {  2001,   3,0,  30,   MONTH,  -9,   2001,   6,0,  29 }, // dom should pin
         };
 
         Calendar cal = Calendar.getInstance(new ULocale("ko_KR@calendar=dangi"));
@@ -416,7 +416,7 @@ public class DangiTest extends CalendarTestFmwk {
         // that shouldn't be for awhile yet...
 
         Calendar cc = Calendar.getInstance(new ULocale("ko_KR@calendar=dangi"));
-        cc.set(Calendar.EXTENDED_YEAR, 4338);
+        cc.set(Calendar.EXTENDED_YEAR, 2005);
         cc.set(Calendar.MONTH, 0);
          // need to set leap month flag off, otherwise, the test case always fails when
          // current time is in a leap month
