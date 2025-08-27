@@ -373,6 +373,69 @@ class FiltrationTest(unittest.TestCase):
             "zh"
         ])
 
+    def test_intersection(self):
+        self._check_filter(Filter.create_from_json({
+            "filterType": "intersection",
+            "intersectionOf": [
+                {
+                    "filterType": "locale",
+                    "includelist": [
+                        "en"
+                    ]
+                },
+                {
+                    "excludelist": [
+                        "en_DE"
+                    ]
+                }
+            ]
+        }, TestIO()), [
+            "en_001",
+            "en_150",
+            # en_DE is excluded (but, its parents are still there)
+            "en_GB",
+            "en_US",
+            "root",
+        ])
+
+    def test_complement(self):
+        self._check_filter(Filter.create_from_json({
+            "filterType": "complement",
+            "complementOf": {
+                "filterType": "locale",
+                "includeScripts": True,
+                "includelist": [
+                    "en",
+                    "sr",
+                    "zh",
+                ]
+            },
+        }, TestIO()), [
+            # Everything *not* a parent or child of en, sr, or zh is included.
+            # Since root is a parent of all languages, it is not in the complement.
+            "af_NA",
+            "af_VARIANT",
+            "af_ZA_VARIANT",
+            "af_ZA",
+            "af",
+            "ar",
+            "ar_SA",
+            "ars",
+            "bs_BA",
+            "bs_Cyrl_BA",
+            "bs_Cyrl",
+            "bs_Latn_BA",
+            "bs_Latn",
+            "bs",
+            "vai_Latn_LR",
+            "vai_Latn",
+            "vai_LR",
+            "vai_Vaii_LR",
+            "vai_Vaii",
+            "vai",
+            "yue",
+        ])
+
     def test_hk_deps_normal(self):
         self._check_filter(Filter.create_from_json({
             "filterType": "locale",

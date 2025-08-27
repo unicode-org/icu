@@ -37,6 +37,10 @@ class Filter(object):
             return ExclusionFilter()
         elif filter_type == "union":
             return UnionFilter(json_data, io)
+        elif filter_type == "intersection":
+            return IntersectionFilter(json_data, io)
+        elif filter_type == "complement":
+            return ComplementFilter(json_data, io)
         elif filter_type == "locale":
             return LocaleFilter(json_data, io)
         else:
@@ -159,6 +163,32 @@ class UnionFilter(Filter):
             if filter.match(file):
                 return True
         return False
+
+
+class IntersectionFilter(Filter):
+    def __init__(self, json_data, io):
+        # Collect the sub-filters.
+        self.sub_filters = []
+        for filter_json in json_data["intersectionOf"]:
+            self.sub_filters.append(Filter.create_from_json(filter_json, io))
+
+    def match(self, file):
+        """Match iff all of the sub-filters match."""
+        for filter in self.sub_filters:
+            if not filter.match(file):
+                return False
+        return True
+
+
+class ComplementFilter(Filter):
+    def __init__(self, json_data, io):
+        # There is only one sub-filter.
+        filter_json = json_data["complementOf"]
+        self.sub_filter = Filter.create_from_json(filter_json, io)
+
+    def match(self, file):
+        """Match iff the sub-filter does not match."""
+        return not self.sub_filter.match(file)
 
 
 LANGUAGE_SCRIPT_REGEX = re.compile(r"^([a-z]{2,3})_[A-Z][a-z]{3}$")
