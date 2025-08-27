@@ -509,6 +509,35 @@
 #   define U_FALLTHROUGH
 #endif
 
+/**
+ * \def U_LIFETIME_BOUND
+ *
+ * Annotate a function parameter or implicit object parameter to indicate that
+ * objects that are referred to by that parameter may also be referred to by the
+ * return value of the annotated function (or, for a parameter of a constructor,
+ * by the value of the constructed object).
+ *
+ * https://clang.llvm.org/docs/AttributeReference.html#lifetimebound
+ * https://learn.microsoft.com/en-us/cpp/code-quality/c26816?view=msvc-170
+ *
+ * @internal
+ */
+#ifndef __cplusplus
+// Not for C.
+#elif defined(U_LIFETIME_BOUND)
+// Use the predefined value.
+#elif  UPRV_HAS_CPP_ATTRIBUTE(clang::lifetimebound)
+#   define U_LIFETIME_BOUND [[clang::lifetimebound]]
+#elif UPRV_HAS_CPP_ATTRIBUTE(msvc::lifetimebound)
+#   define U_LIFETIME_BOUND [[msvc::lifetimebound]]
+#elif UPRV_HAS_ATTRIBUTE(lifetimebound)
+#   define U_LIFETIME_BOUND __attribute__((lifetimebound))
+#endif
+
+#ifndef U_LIFETIME_BOUND
+#   define U_LIFETIME_BOUND
+#endif
+
 /** @} */
 
 /*===========================================================================*/
