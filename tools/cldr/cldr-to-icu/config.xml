@@ -22,7 +22,7 @@
             af, agq, ak, am, ar, ars, as, asa, ast, az, az_AZ, az_Cyrl
 
             // B
-            bas, be, bem, bez, bg, bgc, bho, blo, bm, bn, bo, br, brx, bs, bs_BA, bs_Cyrl
+            ba, bas, be, bem, bez, bg, bgc, bho, blo, bm, bn, bo, br, brx, bs, bs_BA, bs_Cyrl, bua
 
             // C
             ca, ccp, ce, ceb, cgg, chr, ckb, cs, csw, cv, cy
@@ -49,7 +49,7 @@
             ja, jgo, jmc, jv
 
             // K
-            ka, kab, kam, kde, kea, kgp, khq, ki, kk, kkj, kl, kln, km, kn, ko, kok, kok_Latn, ks
+            ka, kab, kam, kde, kea, kgp, khq, ki, kk, kk_Arab, kkj, kl, kln, km, kn, ko, kok, kok_Latn, ks
             ks_Deva, ks_IN, ksb, ksf, ksh, ku, ku_SY, kw, kxv, kxv_Deva, kxv_IN, kxv_Orya, kxv_Telu, ky
 
             // L
@@ -66,7 +66,7 @@
             oc, om, or, os
 
             // P
-            pa, pa_Arab, pa_IN, pa_PK, pcm, pl, prg, ps, pt
+            pa, pa_Arab, pa_IN, pa_PK, pcm, pl, pms, prg, ps, pt
 
             // Q
             qu
@@ -75,12 +75,12 @@
             raj, rm, rn, ro, rof, ru, rw, rwk
 
             // S
-            sa, sah, saq, sat, sat_IN, sbp, sc, sd, sd_Deva, sd_IN, sd_PK, se, seh, ses, sg, sh, sh_BA, sh_CS, sh_YU
-            shi, shi_Latn, shi_MA, si, sk, sl, smn, sn, so, sq, sr, sr_BA, sr_CS, sr_Cyrl_CS, sr_Cyrl_YU, sr_Latn
+            sa, sah, saq, sat, sat_IN, sbp, sc, scn, sd, sd_Deva, sd_IN, sd_PK, se, seh, ses, sg, sh, sh_BA, sh_CS, sh_YU
+            shi, shi_Latn, shi_MA, shn, si, sk, sl, smn, sn, so, sq, sr, sr_BA, sr_CS, sr_Cyrl_CS, sr_Cyrl_YU, sr_Latn
             sr_Latn_CS, sr_Latn_YU, sr_ME, sr_RS, sr_XK, sr_YU, st, su, su_ID, sv, sw, syr, szl
 
             // T
-            ta, te, teo, tg, th, ti, tk, tl, tl_PH, tn, to, tok, tr, tt, twq, tzm
+            ta, te, teo, tg, th, ti, tk, tl, tl_PH, tn, to, tok, tr, tt, twq, tyv, tzm
 
             // U
             ug, uk, ur, uz, uz_AF, uz_Arab, uz_Cyrl, uz_UZ
@@ -151,7 +151,7 @@
                 id_ID, id, ig, in, in_ID, is, it, iw_IL, iw, ja,
 
                 // K-P
-                ka, kk, kl, km, kn, kok, ko, ku, ky, lb, lij, lkt, ln, lo, lt, lv,
+                ka, kk, kk_Arab, kl, km, kn, kok, ko, ku, ky, lb, lij, lkt, ln, lo, lt, lv,
                 mk, ml, mn, mo, mr, ms, mt, my, nb, nb_NO, ne, nl, nn, no, no_NO, nso,
                 om, or, pa_IN, pa, pa_Guru, pl, ps, pt,
 
