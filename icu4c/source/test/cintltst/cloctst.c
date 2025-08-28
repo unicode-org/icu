@@ -1535,10 +1535,10 @@ static void TestISOFunctions(void)
 static void setUpDataTable(void)
 {
     int32_t i,j;
-    dataTable = (UChar***)(calloc(sizeof(UChar**),LOCALE_INFO_SIZE));
+    dataTable = (UChar***)(calloc(LOCALE_INFO_SIZE, sizeof(UChar**)));
 
     for (i = 0; i < LOCALE_INFO_SIZE; i++) {
-        dataTable[i] = (UChar**)(calloc(sizeof(UChar*),LOCALE_SIZE));
+        dataTable[i] = (UChar**)(calloc(LOCALE_SIZE, sizeof(UChar*)));
         for (j = 0; j < LOCALE_SIZE; j++){
             dataTable[i][j] = CharsToUChars(rawData2[i][j]);
         }
