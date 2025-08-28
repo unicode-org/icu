@@ -77,6 +77,7 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
                 {"en-BN",  "Cm",      "h:mm\u202Fb"},
                 {"gu-IN",  "Cm",      "h:mm B"},
                 {"und-IN", "Cm",      "h:mm B"},
+                {"fi",     "Cm",      "H.mm"},
         };
         for (String[] test : tests) {
             DateTimePatternGenerator gen = DateTimePatternGenerator.getInstance(ULocale.forLanguageTag(test[0]));

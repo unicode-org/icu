@@ -423,7 +423,11 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
 
         if (list != null) {
             defaultHourFormatChar = defaultCharFromLocale != null ? defaultCharFromLocale : list[0].charAt(0);
-            allowedHourFormats = Arrays.copyOfRange(list, 1, list.length - 1);
+            if (list.length > 1) {
+                allowedHourFormats = Arrays.copyOfRange(list, 1, list.length);
+            } else {
+                allowedHourFormats = LAST_RESORT_ALLOWED_HOUR_FORMAT;
+            }
         } else {
             allowedHourFormats = LAST_RESORT_ALLOWED_HOUR_FORMAT;
             defaultHourFormatChar = (defaultCharFromLocale != null) ? defaultCharFromLocale : allowedHourFormats[0].charAt(0);

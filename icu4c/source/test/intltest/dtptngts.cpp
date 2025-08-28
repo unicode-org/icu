@@ -1159,7 +1159,8 @@ void IntlTestDateTimePatternGeneratorAPI::testC() {
             {"en",     "CCCCCCm", "hh:mm\\u202Faaaaa"},
             {"en-BN",  "Cm",      "h:mm\\u202Fb"},
             {"gu-IN",  "Cm",      "h:mm B"},
-            {"und-IN", "Cm",      "h:mm B"}
+            {"und-IN", "Cm",      "h:mm B"},
+            {"fi",     "Cm",      "H.mm"}
     };
 
     UErrorCode status = U_ZERO_ERROR;
