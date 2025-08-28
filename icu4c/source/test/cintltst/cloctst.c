@@ -2564,7 +2564,7 @@ static void TestCanonicalizationBuffer(void)
         return;
     }
 
-    if (reslen != len) {
+    if (reslen != (int32_t)len) {
         log_err("FAIL: uloc_canonicalize(%s) => \"%i\", expected \"%u\"\n",
                 name, reslen, len);
         return;
