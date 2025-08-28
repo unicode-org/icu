@@ -36,7 +36,7 @@
 #include "string.h"
 
 static UCollator *myCollation;
-const static UChar testSourceCases[][MAX_TOKEN_LEN] = {
+static const UChar testSourceCases[][MAX_TOKEN_LEN] = {
     {0x0077/*'w'*/, 0x0061/*'a'*/, 0x0074/*'t'*/, 0x0000},
     {0x0076/*'v'*/, 0x0061/*'a'*/, 0x0074/*'t'*/, 0x0000},
     {0x0061/*'a'*/, 0x00FC, 0x0062/*'b'*/, 0x0065/*'e'*/, 0x0063/*'c'*/, 0x006b/*'k'*/, 0x0000},
@@ -44,7 +44,7 @@ const static UChar testSourceCases[][MAX_TOKEN_LEN] = {
     {0x0077/*'w'*/, 0x0061/*'a'*/, 0x0074/*'t'*/, 0x0000}
 };
 
-const static UChar testTargetCases[][MAX_TOKEN_LEN] = {
+static const UChar testTargetCases[][MAX_TOKEN_LEN] = {
     {0x0076/*'v'*/, 0x0061/*'a'*/, 0x0074/*'t'*/, 0x0000},
     {0x0077/*'w'*/, 0x0061/*'a'*/, 0x0079/*'y'*/, 0x0000},
     {0x0061/*'a'*/, 0x0078/*'x'*/, 0x0062/*'b'*/, 0x0065/*'e'*/, 0x0063/*'c'*/, 0x006b/*'k'*/, 0x0000},
@@ -52,7 +52,7 @@ const static UChar testTargetCases[][MAX_TOKEN_LEN] = {
     {0x0076/*'v'*/, 0x0061/*'a'*/, 0x0074/*'t'*/, 0x0000}
 };
 
-const static UCollationResult results[] = {
+static const UCollationResult results[] = {
     UCOL_GREATER,
     UCOL_LESS,
     UCOL_GREATER,

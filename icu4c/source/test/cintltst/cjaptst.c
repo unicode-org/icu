@@ -39,7 +39,7 @@
 #include "string.h"
 
 static UCollator *myCollation;
-const static UChar testSourceCases[][MAX_TOKEN_LEN] = {
+static const UChar testSourceCases[][MAX_TOKEN_LEN] = {
     {0xff9E, 0x0000},
     {0x3042, 0x0000},
     {0x30A2, 0x0000},
@@ -48,7 +48,7 @@ const static UChar testSourceCases[][MAX_TOKEN_LEN] = {
     {0x30A2, 0x30FC, 0x30C8, 0x0000}                               /*  6 */
 };
 
-const static UChar testTargetCases[][MAX_TOKEN_LEN] = {
+static const UChar testTargetCases[][MAX_TOKEN_LEN] = {
     {0xFF9F, 0x0000},
     {0x30A2, 0x0000},
     {0x3042, 0x3042, 0x0000},
@@ -57,7 +57,7 @@ const static UChar testTargetCases[][MAX_TOKEN_LEN] = {
     {0x3042, 0x3042, 0x3068, 0x0000}                              /*  6 */
 };
 
-const static UCollationResult results[] = {
+static const UCollationResult results[] = {
     UCOL_LESS,
     UCOL_EQUAL, /*UCOL_LESS*/   /* Katakanas and Hiraganas are equal on tertiary level(ICU 2.0)*/
     UCOL_LESS,
@@ -66,35 +66,35 @@ const static UCollationResult results[] = {
     UCOL_LESS, /*UCOL_GREATER*/ /* Prolonged sound mark sorts BEFORE equivalent vowel (ICU 2.0)*//*  6 */
 };
 
-const static UChar testBaseCases[][MAX_TOKEN_LEN] = {
+static const UChar testBaseCases[][MAX_TOKEN_LEN] = {
   {0x30AB, 0x0000},
   {0x30AB, 0x30AD, 0x0000},
   {0x30AD, 0x0000},
   {0x30AD, 0x30AD, 0x0000}
 };
 
-const static UChar testPlainDakutenHandakutenCases[][MAX_TOKEN_LEN] = {
+static const UChar testPlainDakutenHandakutenCases[][MAX_TOKEN_LEN] = {
   {0x30CF, 0x30AB, 0x0000},
   {0x30D0, 0x30AB, 0x0000},
   {0x30CF, 0x30AD, 0x0000},
   {0x30D0, 0x30AD, 0x0000}
 };
 
-const static UChar testSmallLargeCases[][MAX_TOKEN_LEN] = {
+static const UChar testSmallLargeCases[][MAX_TOKEN_LEN] = {
   {0x30C3, 0x30CF, 0x0000},
   {0x30C4, 0x30CF, 0x0000},
   {0x30C3, 0x30D0, 0x0000},
   {0x30C4, 0x30D0, 0x0000}
 };
 
-const static UChar testKatakanaHiraganaCases[][MAX_TOKEN_LEN] = {
+static const UChar testKatakanaHiraganaCases[][MAX_TOKEN_LEN] = {
   {0x3042, 0x30C3, 0x0000},
   {0x30A2, 0x30C3, 0x0000},
   {0x3042, 0x30C4, 0x0000},
   {0x30A2, 0x30C4, 0x0000}
 };
 
-const static UChar testChooonKigooCases[][MAX_TOKEN_LEN] = {
+static const UChar testChooonKigooCases[][MAX_TOKEN_LEN] = {
   /*0*/ {0x30AB, 0x30FC, 0x3042, 0x0000},
   /*1*/ {0x30AB, 0x30FC, 0x30A2, 0x0000},
   /*2*/ {0x30AB, 0x30A4, 0x3042, 0x0000},
