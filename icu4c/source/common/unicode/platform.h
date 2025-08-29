@@ -486,12 +486,10 @@
 /**
  * \def U_FALLTHROUGH
  * Annotate intentional fall-through between switch labels.
- * http://clang.llvm.org/docs/AttributeReference.html#fallthrough-clang-fallthrough
+ * https://clang.llvm.org/docs/AttributeReference.html#fallthrough
  * @internal
  */
-#ifndef __cplusplus
-    // Not for C.
-#elif defined(U_FALLTHROUGH)
+#if defined(U_FALLTHROUGH)
     // Use the predefined value.
 #elif defined(__clang__)
     // Test for compiler vs. feature separately.
