@@ -661,8 +661,10 @@ getFromUBytesValue(CnvExtData *extData, UCMTable *table, UCMapping *m) {
         /* 1..3: store the bytes in the value word */
     case 3:
         value=((uint32_t)*bytes++)<<16;
+        U_FALLTHROUGH;
     case 2:
         value|=((uint32_t)*bytes++)<<8;
+        U_FALLTHROUGH;
     case 1:
         value|=*bytes;
         break;

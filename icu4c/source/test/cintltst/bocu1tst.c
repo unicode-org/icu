@@ -615,12 +615,16 @@ writePacked(int32_t packed, uint8_t *p) {
     switch(count) {
     case 4:
         *p++=(uint8_t)(packed>>24);
+        U_FALLTHROUGH;
     case 3:
         *p++=(uint8_t)(packed>>16);
+        U_FALLTHROUGH;
     case 2:
         *p++=(uint8_t)(packed>>8);
+        U_FALLTHROUGH;
     case 1:
         *p++=(uint8_t)packed;
+        U_FALLTHROUGH;
     default:
         break;
     }
@@ -652,10 +656,13 @@ unpackDiff(int32_t initialPrev, int32_t packed) {
     switch(count) {
     case 4:
         decodeBocu1(&rx, (uint8_t)(packed>>24));
+        U_FALLTHROUGH;
     case 3:
         decodeBocu1(&rx, (uint8_t)(packed>>16));
+        U_FALLTHROUGH;
     case 2:
         decodeBocu1(&rx, (uint8_t)(packed>>8));
+        U_FALLTHROUGH;
     case 1:
         /* subtract initial prev */
         return decodeBocu1(&rx, (uint8_t)packed)-initialPrev;
