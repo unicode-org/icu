@@ -35,6 +35,7 @@
 *_debug
 *_release
 bazel-*
+MODULE.bazel.lock
 cygicudata*
 libicu*
 libicutest*
