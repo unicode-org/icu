@@ -494,21 +494,18 @@ void CompactDecimalFormatTest::TestAPIVariants() {
 }
 
 void CompactDecimalFormatTest::TestBug12975() {
-	IcuTestErrorCode status(*this, "TestBug12975");
-    if (logKnownIssue("CLDR-18904", "Compact number formatting in Italian is incorrect")) {
-        return;
-    }		
-    Locale locale("it");
-    LocalPointer<CompactDecimalFormat> cdf(CompactDecimalFormat::createInstance(locale, UNUM_SHORT, status));
-    if (assertSuccess("", status, true, __FILE__, __LINE__)) {
-        UnicodeString resultCdf;
-        cdf->format(12000, resultCdf);
-        LocalPointer<DecimalFormat> df(dynamic_cast<DecimalFormat*>(DecimalFormat::createInstance(locale, status)));
-        UnicodeString resultDefault;
-        df->format(12000, resultDefault);
-        assertEquals("CompactDecimalFormat should use default pattern when compact pattern is unavailable",
-                     resultDefault, resultCdf);
-    }
+    // ** This test is no  longer valid as of CLDR 48, `it` now has full compact currency forms
+	//IcuTestErrorCode status(*this, "TestBug12975");
+    //Locale locale("it");
+    //LocalPointer<CompactDecimalFormat> cdf(CompactDecimalFormat::createInstance(locale, UNUM_SHORT, status));
+    //if (assertSuccess("", status, true, __FILE__, __LINE__)) {
+    //    UnicodeString resultCdf;
+    //    cdf->format(12000, resultCdf);
+    //    LocalPointer<DecimalFormat> df(dynamic_cast<DecimalFormat*>(DecimalFormat::createInstance(locale, status)));
+    //    UnicodeString resultDefault;
+    //    df->format(12000, resultDefault);
+    //    assertEquals("CompactDecimalFormat should use default pattern when compact pattern is unavailable",
+    //                 resultDefault, resultCdf);
 }
 
 

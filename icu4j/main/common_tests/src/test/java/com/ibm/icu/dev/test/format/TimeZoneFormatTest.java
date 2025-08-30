@@ -144,6 +144,14 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
 
         // Run the roundtrip test
         for (int locidx = 0; locidx < LOCALES.length; locidx++) {
+            if (LOCALES[locidx].getBaseName().equals("ku") ||
+                LOCALES[locidx].getBaseName().startsWith("ku_") ||
+                LOCALES[locidx].getBaseName().startsWith("shn") ||
+                LOCALES[locidx].getBaseName().equals("sv") ||
+                LOCALES[locidx].getBaseName().startsWith("sv_")) {
+                logKnownIssue("CLDR-18924", "Timezone round trip issues in ku, shn, sv for various zones");
+                continue;
+            }
             logln("Locale: " + LOCALES[locidx].toString());
 
             String localGMTString = TimeZoneFormat.getInstance(LOCALES[locidx]).formatOffsetLocalizedGMT(0);

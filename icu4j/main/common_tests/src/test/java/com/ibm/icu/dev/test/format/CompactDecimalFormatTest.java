@@ -741,15 +741,12 @@ public class CompactDecimalFormatTest extends CoreTestFmwk {
 
     @Test
     public void TestBug12688() {
-        if (logKnownIssue("CLDR-18904", "Compact number formatting in Italian is incorrect")) {
-            return;
-        }	
         CompactDecimalFormat cdf;
         String result;
 
         cdf = CompactDecimalFormat.getInstance(ULocale.forLanguageTag("it"), CompactStyle.SHORT);
         result = cdf.format(new CurrencyAmount(123000, Currency.getInstance("EUR")));
-        assertEquals("CDF should correctly format 123000 with currency in 'it'", "123.000\u00A0€", result);
+        assertEquals("CDF should correctly format 123000 with currency in 'it'", "123K\u00A0€", result);
     }
 
     @Test
@@ -761,16 +758,14 @@ public class CompactDecimalFormatTest extends CoreTestFmwk {
 
     @Test
     public void TestBug12975() {
-        if (logKnownIssue("CLDR-18904", "Compact number formatting in Italian is incorrect")) {
-            return;
-        }	
-        ULocale locale = new ULocale("it");
-        CompactDecimalFormat cdf = CompactDecimalFormat.getInstance(locale, CompactStyle.SHORT);
-        String resultCdf = cdf.format(12000);
-        DecimalFormat df = (DecimalFormat) DecimalFormat.getInstance(locale);
-        String resultDefault = df.format(12000);
-        assertEquals("CompactDecimalFormat should use default pattern when compact pattern is unavailable",
-                     resultDefault, resultCdf);
+    	// ** This test is no  longer valid as of CLDR 48, `it` now has full compact currency forms
+        //ULocale locale = new ULocale("it");
+        //CompactDecimalFormat cdf = CompactDecimalFormat.getInstance(locale, CompactStyle.SHORT);
+        //String resultCdf = cdf.format(12000);
+        //DecimalFormat df = (DecimalFormat) DecimalFormat.getInstance(locale);
+        //String resultDefault = df.format(12000);
+        //assertEquals("CompactDecimalFormat should use default pattern when compact pattern is unavailable",
+        //             resultDefault, resultCdf);
     }
 
     @Test

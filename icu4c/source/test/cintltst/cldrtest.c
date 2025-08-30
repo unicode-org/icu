@@ -1009,16 +1009,8 @@ static void VerifyTranslation(void) {
                         log_knownIssue("cldrbug:14995", "mai/sd_Deva day names use chars not in exemplars")) {
                     end = 0;
                 }
-                if (uprv_strncmp(currLoc,"ks_Deva",7) == 0 && 
-                        log_knownIssue("cldrbug:15355", "ks_Deva day names use chars not in exemplars")) {
-                    end = 0;
-                }
                 if (uprv_strncmp(currLoc,"kxv",3) == 0 &&  // Unnecessarily also skips kxv_Orya/kxv_Telu, that is ok for now
                         log_knownIssue("CLDR-17203", "Some day names in kxv(_Deva)? use chars not in exemplars")) {
-                    end = 0;
-                }
-                if (uprv_strncmp(currLoc,"ak",2) == 0 &&  
-                        log_knownIssue("CLDR-17852", "Some month names in ax(_GH) use chars not in exemplars")) {
                     end = 0;
                 }
                 if (uprv_strncmp(currLoc,"shn",3) == 0) {
@@ -1058,18 +1050,10 @@ static void VerifyTranslation(void) {
                         log_knownIssue("cldrbug:14995", "sd_Deva month names use chars not in exemplars")) {
                     end = 0;
                 }
-                if (uprv_strncmp(currLoc,"ks_Deva",7) == 0 && 
-                        log_knownIssue("cldrbug:15355", "ks_Deva month names use chars not in exemplars")) {
-                    end = 0;
-                }
                 if (uprv_strncmp(currLoc,"kxv",3) == 0 &&  // Unnecessarily also skips kxv_Orya/kxv_Telu, that is ok for now
                         log_knownIssue("CLDR-17203", "Some month names in kxv(_Deva)? use chars not in exemplars")) {
                     end = 0;
                 }
-                if (uprv_strncmp(currLoc,"ak",2) == 0 &&  
-                        log_knownIssue("CLDR-17852", "Some month names in ax(_GH) use chars not in exemplars")) {
-                    end = 0;
-                }  
                 if (uprv_strncmp(currLoc,"shn",3) == 0) {
                     log_knownIssue("CLDR-18922", "shn: Language autonym, month/day names use chars not in exemplars");
                     end = 0;

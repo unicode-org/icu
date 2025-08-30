@@ -171,6 +171,14 @@ TimeZoneFormatTest::TestTimeZoneRoundTrip() {
 
     // Run the roundtrip test
     for (int32_t locidx = 0; locidx < nLocales; locidx++) {
+        if ((uprv_strcmp(LOCALES[locidx].getBaseName(),"ku") == 0) ||
+            (uprv_strncmp(LOCALES[locidx].getBaseName(),"ku_",3) == 0) ||
+            (uprv_strncmp(LOCALES[locidx].getBaseName(),"shn",3) == 0) ||
+            (uprv_strcmp(LOCALES[locidx].getBaseName(),"sv") == 0) ||
+            (uprv_strncmp(LOCALES[locidx].getBaseName(),"sv_",3) == 0)) {
+            logKnownIssue("CLDR-18924", "Timezone round trip issues in ku, shn, sv for various zones");
+            continue;
+        }
         UnicodeString localGMTString;
         SimpleDateFormat gmtFmt(UnicodeString("ZZZZ"), LOCALES[locidx], status);
         if (U_FAILURE(status)) {
