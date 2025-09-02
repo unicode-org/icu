@@ -20,6 +20,7 @@
 #include "unicode/unistr.h"
 #include "unicode/uobject.h"
 
+#include "charstr.h"
 #include "simplethread.h"
 #include "ucbuf.h"
 #include "uhash.h"
