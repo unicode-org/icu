@@ -31,6 +31,7 @@
 ******************************************************************************
 */
 
+#include <cstddef>
 #include <optional>
 #include <string_view>
 #include <type_traits>
@@ -263,39 +264,34 @@ void Locale::Nest::init(std::string_view language,
     this->variantBegin = variantBegin;
 }
 
-struct Locale::Heap : public UMemory {
-    char language[ULOC_LANG_CAPACITY];
-    char script[ULOC_SCRIPT_CAPACITY];
-    char region[ULOC_COUNTRY_CAPACITY];
-    int32_t variantBegin;
+Locale::Nest::Nest(Heap&& heap, uint8_t variantBegin) {
+    // When moving from Heap to Nest the language field can be left untouched
+    // (as it has the same offset in both) and only the script and region fields
+    // need to be copied to their new locations, which is safe to do because the
+    // new locations come before the old locations in memory and don't overlap.
+    static_assert(offsetof(Nest, region) <= offsetof(Heap, script));
+    static_assert(offsetof(Nest, variantBegin) <= offsetof(Heap, region));
+    U_ASSERT(this == reinterpret_cast<Nest*>(&heap));
+    copyToArray<&Nest::script>(heap.script, this);
+    copyToArray<&Nest::region>(heap.region, this);
+    this->variantBegin = variantBegin;
+    *this->baseName = '\0';
+}
+
+struct Locale::Heap::Alloc : public UMemory {
     FixedString fullName;
     FixedString baseName;
+    int32_t variantBegin;
 
-    const char* getLanguage() const { return language; }
-    const char* getScript() const { return script; }
-    const char* getRegion() const { return region; }
     const char* getVariant() const { return variantBegin == 0 ? "" : getBaseName() + variantBegin; }
     const char* getFullName() const { return fullName.data(); }
     const char* getBaseName() const { return baseName.isEmpty() ? getFullName() : baseName.data(); }
 
-    Heap(std::string_view language,
-         std::string_view script,
-         std::string_view region,
-         int32_t variantBegin)
-        : variantBegin(variantBegin), fullName(), baseName() {
-        copyToArray<&Heap::language>(language, this);
-        copyToArray<&Heap::script>(script, this);
-        copyToArray<&Heap::region>(region, this);
-    }
+    Alloc(int32_t variantBegin) : fullName(), baseName(), variantBegin(variantBegin) {}
 
-    Heap(const Heap& other, UErrorCode& status)
-        : variantBegin(other.variantBegin),
-          fullName(),
-          baseName() {
+    Alloc(const Alloc& other, UErrorCode& status)
+        : fullName(), baseName(), variantBegin(other.variantBegin) {
         if (U_SUCCESS(status)) {
-            uprv_memcpy(language, other.language, sizeof language);
-            uprv_memcpy(script, other.script, sizeof script);
-            uprv_memcpy(region, other.region, sizeof region);
             if (!other.fullName.isEmpty()) {
                 fullName = other.fullName;
                 if (fullName.isEmpty()) {
@@ -313,28 +309,58 @@ struct Locale::Heap : public UMemory {
     }
 
     // Move should be done on the owner of the pointer to this object.
-    Heap(Heap&&) noexcept = delete;
+    Alloc(Alloc&&) noexcept = delete;
 
-    ~Heap() = default;
+    ~Alloc() = default;
 };
 
-Locale::Payload::HeapPtr& Locale::Payload::HeapPtr::operator=(const Heap& other) {
+const char* Locale::Heap::getVariant() const { return ptr->getVariant(); }
+const char* Locale::Heap::getFullName() const { return ptr->getFullName(); }
+const char* Locale::Heap::getBaseName() const { return ptr->getBaseName(); }
+
+Locale::Heap::Heap(std::string_view language,
+                   std::string_view script,
+                   std::string_view region,
+                   int32_t variantBegin) {
+    ptr = new Alloc(variantBegin);
+    if (ptr == nullptr) {
+        type = eBOGUS;
+    } else {
+        type = eHEAP;
+        copyToArray<&Heap::language>(language, this);
+        copyToArray<&Heap::script>(script, this);
+        copyToArray<&Heap::region>(region, this);
+    }
+}
+
+Locale::Heap::~Heap() {
+    U_ASSERT(type == eHEAP);
+    delete ptr;
+}
+
+Locale::Heap& Locale::Heap::operator=(const Heap& other) {
     U_ASSERT(type == eBOGUS);
     UErrorCode status = U_ZERO_ERROR;
-    ptr = new Heap(other, status);
+    ptr = new Alloc(*other.ptr, status);
     if (ptr == nullptr || U_FAILURE(status)) {
         delete ptr;
     } else {
         type = eHEAP;
+        uprv_memcpy(language, other.language, sizeof language);
+        uprv_memcpy(script, other.script, sizeof script);
+        uprv_memcpy(region, other.region, sizeof region);
     }
     return *this;
 }
 
-Locale::Payload::HeapPtr& Locale::Payload::HeapPtr::operator=(HeapPtr&& other) noexcept {
+Locale::Heap& Locale::Heap::operator=(Heap&& other) noexcept {
     U_ASSERT(type == eBOGUS);
     ptr = other.ptr;
     type = eHEAP;
     other.type = eBOGUS;
+    uprv_memcpy(language, other.language, sizeof language);
+    uprv_memcpy(script, other.script, sizeof script);
+    uprv_memcpy(region, other.region, sizeof region);
     return *this;
 }
 
@@ -346,7 +372,7 @@ auto Locale::Payload::visit(BogusFn bogusFn, NestFn nestFn, HeapFn heapFn, Args.
         case eNEST:
             return nestFn(nest, args...);
         case eHEAP:
-            return heapFn(*heap.ptr, args...);
+            return heapFn(heap, args...);
         default:
             UPRV_UNREACHABLE_EXIT;
     };
@@ -361,15 +387,14 @@ void Locale::Payload::copy(const Payload& other) {
 
 void Locale::Payload::move(Payload&& other) noexcept {
     other.visit(
-        [](Payload*, Payload*) {},
-        [](const Nest& nest, Payload* dst, Payload*) { dst->nest = nest; },
-        [](const Heap&, Payload* dst, Payload* src) { dst->heap = std::move(src->heap); },
-        this,
-        &other);
+        [](Payload*) {},
+        [](const Nest& nest, Payload* dst) { dst->nest = nest; },
+        [](const Heap& heap, Payload* dst) { dst->heap = std::move(const_cast<Heap&>(heap)); },
+        this);
 }
 
 Locale::Payload::~Payload() {
-    if (stat.type == eHEAP) { delete heap.ptr; }
+    if (stat.type == eHEAP) { heap.~Heap(); }
 }
 
 Locale::Payload::Payload(const Payload& other) : stat{eBOGUS} { copy(other); }
@@ -396,27 +421,21 @@ void Locale::Payload::setToBogus() {
     stat.type = eBOGUS;
 }
 
-LocalPointer<Locale::Heap> Locale::Payload::release() {
-    U_ASSERT(stat.type == eHEAP);
-    stat.type = eBOGUS;
-    return LocalPointer<Heap>{heap.ptr};
-}
-
-template <> Locale::Nest& Locale::Payload::emplace() {
-    this->~Payload();
-    ::new(&nest) Nest();
-    return nest;
-}
-
 template <typename T, typename... Args> T& Locale::Payload::emplace(Args&&... args) {
-    U_ASSERT(stat.type != eHEAP);
-    heap.ptr = new Heap(std::forward<Args>(args)...);
-    stat.type = heap.ptr == nullptr ? eBOGUS : eHEAP;
-    return heap.ptr;
+    if constexpr (std::is_same_v<T, Nest>) {
+        this->~Payload();
+        ::new (&nest) Nest(std::forward<Args>(args)...);
+        return nest;
+    }
+    if constexpr (std::is_same_v<T, Heap>) {
+        U_ASSERT(stat.type != eHEAP);
+        ::new (&heap) Heap(std::forward<Args>(args)...);
+        return heap;
+    }
 }
 
 template <> Locale::Nest* Locale::Payload::get() { return stat.type == eNEST ? &nest : nullptr; }
-template <> Locale::Heap* Locale::Payload::get() { return stat.type == eHEAP ? heap.ptr : nullptr; }
+template <> Locale::Heap* Locale::Payload::get() { return stat.type == eHEAP ? &heap : nullptr; }
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(Locale)
 
@@ -2058,17 +2077,26 @@ Locale& Locale::init(StringPiece localeID, UBool canonicalize)
                 if (fullNameBuffer.isEmpty()) {
                     break; // error: out of memory
                 }
+                if (!language.empty()) {
+                    language = {fullNameBuffer.data(), language.size()};
+                }
+                if (!script.empty()) {
+                    script = {fullNameBuffer.data() + (script.data() - fullName), script.size()};
+                }
+                if (!region.empty()) {
+                    region = {fullNameBuffer.data() + (region.data() - fullName), region.size()};
+                }
             }
-            Heap* heap = payload.emplace<Heap*>(language, script, region, variantBegin);
-            if (heap == nullptr) {
+            Heap& heap = payload.emplace<Heap>(language, script, region, variantBegin);
+            if (isBogus()) {
                 break; // error: out of memory
             }
             U_ASSERT(!fullNameBuffer.isEmpty());
-            heap->fullName = std::move(fullNameBuffer);
+            heap.ptr->fullName = std::move(fullNameBuffer);
             if (hasKeywords) {
                 if (std::string_view::size_type baseNameLength = at - fullName; baseNameLength > 0) {
-                    heap->baseName = {heap->fullName.data(), baseNameLength};
-                    if (heap->baseName.isEmpty()) {
+                    heap.ptr->baseName = {heap.ptr->fullName.data(), baseNameLength};
+                    if (heap.ptr->baseName.isEmpty()) {
                         break; // error: out of memory
                     }
                 }
@@ -2757,19 +2785,16 @@ Locale::setKeywordValue(StringPiece keywordName,
             // possible to move the payload from Heap to Nest.
             Heap* heap = payload.get<Heap>();
             U_ASSERT(heap != nullptr);
-            std::string_view language = heap->language;
-            std::string_view script = heap->script;
-            std::string_view region = heap->region;
-            if (Nest::fits(localeID.length(), language, script, region)) {
-                LocalPointer<Heap> save = payload.release();
-                U_ASSERT(save.isValid());
-                nest = &payload.emplace<Nest>();
+            if (Nest::fits(localeID.length(), heap->language, heap->script, heap->region)) {
+                int32_t variantBegin = heap->ptr->variantBegin;
+                U_ASSERT(variantBegin >= 0);
+                U_ASSERT(static_cast<size_t>(variantBegin) < sizeof Nest::baseName);
+                nest = &payload.emplace<Nest>(std::move(*heap), static_cast<uint8_t>(variantBegin));
                 localeID.extract(nest->baseName, sizeof Nest::baseName, status);
-                nest->init(language, script, region, save->variantBegin);
             } else {
-                heap->baseName.clear();
-                heap->fullName = localeID.toStringPiece();
-                if (heap->fullName.isEmpty()) {
+                heap->ptr->baseName.clear();
+                heap->ptr->fullName = localeID.toStringPiece();
+                if (heap->ptr->fullName.isEmpty()) {
                     status = U_MEMORY_ALLOCATION_ERROR;
                     setToBogus();
                     return;
@@ -2781,30 +2806,31 @@ Locale::setKeywordValue(StringPiece keywordName,
         if (nest != nullptr) {
             // A keyword has been added, so the payload now needs to be moved
             // from Nest to Heap so that it can get a baseName.
-            heap = payload.emplace<Heap*>(nest->language,
-                                          nest->script,
-                                          nest->region,
-                                          nest->variantBegin);
-            if (heap == nullptr) {
+            Nest copy(*nest);
+            heap = &payload.emplace<Heap>(copy.language,
+                                          copy.script,
+                                          copy.region,
+                                          copy.variantBegin);
+            if (isBogus()) {
                 status = U_MEMORY_ALLOCATION_ERROR;
                 return;
             }
         } else {
             heap = payload.get<Heap>();
-            U_ASSERT(heap != nullptr);
         }
-        heap->fullName = localeID.toStringPiece();
-        if (heap->fullName.isEmpty()) {
+        U_ASSERT(heap != nullptr);
+        heap->ptr->fullName = localeID.toStringPiece();
+        if (heap->ptr->fullName.isEmpty()) {
             status = U_MEMORY_ALLOCATION_ERROR;
             setToBogus();
             return;
         }
 
-        if (heap->baseName.isEmpty()) {
+        if (heap->ptr->baseName.isEmpty()) {
             // Has added the first keyword, meaning that the fullName is no longer also the baseName.
             if (std::string_view::size_type baseNameLength = at - localeID.data(); baseNameLength > 0) {
-                heap->baseName = {heap->fullName.data(), baseNameLength};
-                if (heap->baseName.isEmpty()) {
+                heap->ptr->baseName = {heap->ptr->fullName.data(), baseNameLength};
+                if (heap->ptr->baseName.isEmpty()) {
                     status = U_MEMORY_ALLOCATION_ERROR;
                     setToBogus();
                     return;

@@ -1171,6 +1171,10 @@ private:
      */
     static Locale* getLocaleCache();
 
+    union Payload;
+    struct Nest;
+    struct Heap;
+
     /**
      * Locale data that can be nested directly within the union Payload object.
      * @internal
@@ -1179,16 +1183,16 @@ private:
         static constexpr size_t SIZE = 32;
 
         ELocaleType type = eNEST;
-        char language[4] = {'\0'};
-        char script[5] = {'\0'};
-        char region[4] = {'\0'};
-        uint8_t variantBegin = 0;
+        char language[4];
+        char script[5];
+        char region[4];
+        uint8_t variantBegin;
         char baseName[SIZE -
                       sizeof type -
                       sizeof language -
                       sizeof script -
                       sizeof region -
-                      sizeof variantBegin] = {'\0'};
+                      sizeof variantBegin];
 
         const char* getLanguage() const { return language; }
         const char* getScript() const { return script; }
@@ -1199,6 +1203,8 @@ private:
         // Doesn't inherit from UMemory, shouldn't be heap allocated.
         static void* U_EXPORT2 operator new(size_t) noexcept = delete;
         static void* U_EXPORT2 operator new[](size_t) noexcept = delete;
+
+        Nest() : language{'\0'}, script{'\0'}, region{'\0'}, variantBegin{0}, baseName{'\0'} {}
 
         void init(std::string_view language,
                   std::string_view script,
@@ -1214,6 +1220,10 @@ private:
                    script.size() < sizeof Nest::script &&
                    region.size() < sizeof Nest::region;
         }
+
+      private:
+        friend union Payload;
+        Nest(Heap&& heap, uint8_t variantBegin);
     };
     static_assert(sizeof(Nest) == Nest::SIZE);
 
@@ -1221,7 +1231,36 @@ private:
      * Locale data that needs to be heap allocated in the union Payload object.
      * @internal
      */
-    struct Heap;
+    struct Heap {
+        struct Alloc;
+
+        ELocaleType type;
+        char language[ULOC_LANG_CAPACITY];
+        char script[ULOC_SCRIPT_CAPACITY];
+        char region[ULOC_COUNTRY_CAPACITY];
+        Alloc* ptr;
+
+        const char* getLanguage() const { return language; }
+        const char* getScript() const { return script; }
+        const char* getRegion() const { return region; }
+        const char* getVariant() const;
+        const char* getFullName() const;
+        const char* getBaseName() const;
+
+        // Doesn't inherit from UMemory, shouldn't be heap allocated.
+        static void* U_EXPORT2 operator new(size_t) noexcept = delete;
+        static void* U_EXPORT2 operator new[](size_t) noexcept = delete;
+
+        Heap(std::string_view language,
+             std::string_view script,
+             std::string_view region,
+             int32_t variantBegin);
+        ~Heap();
+
+        Heap& operator=(const Heap& other);
+        Heap& operator=(Heap&& other) noexcept;
+    };
+    static_assert(sizeof(Heap) <= sizeof(Nest));
 
     /**
      * This is kind of std::variant but customized to not waste any space on the
@@ -1231,15 +1270,7 @@ private:
     union Payload {
       private:
         Nest nest;
-
-        struct HeapPtr {
-            ELocaleType type;
-            Heap* ptr;
-
-            HeapPtr& operator=(const Heap& other);
-            HeapPtr& operator=(HeapPtr&& other) noexcept;
-        } heap;
-
+        Heap heap;
         struct { ELocaleType type; } stat;
 
         void copy(const Payload& other);
@@ -1261,8 +1292,6 @@ private:
 
         void setToBogus();
         bool isBogus() const { return stat.type == eBOGUS; }
-
-        LocalPointer<Heap> release();
 
         template <typename T, typename... Args> T& emplace(Args&&... args);
 
