@@ -35,9 +35,8 @@
 
 #if U_SHOW_CPLUSPLUS_API
 
-#include <memory>
+#include <cstdint>
 #include <string_view>
-#include <variant>
 
 #include "unicode/bytestream.h"
 #include "unicode/localpointer.h"
@@ -1160,8 +1159,10 @@ private:
      *   NO side effects.   (Default constructor tries to get
      *   the default locale.)
      */
-    enum ELocaleType {
-        eBOGUS
+    enum ELocaleType : uint8_t {
+        eBOGUS,
+        eNEST,
+        eHEAP,
     };
     Locale(ELocaleType);
 
@@ -1171,17 +1172,23 @@ private:
     static Locale* getLocaleCache();
 
     /**
-     * Locale data that can be nested directly within the std::variant object.
+     * Locale data that can be nested directly within the union Payload object.
      * @internal
      */
     struct Nest {
         static constexpr size_t SIZE = 32;
 
+        const ELocaleType type = eNEST;
         char language[4];
         char script[5];
         char region[4];
         uint8_t variantBegin;
-        char baseName[SIZE - sizeof language - sizeof script - sizeof region - sizeof variantBegin];
+        char baseName[SIZE -
+                      sizeof type -
+                      sizeof language -
+                      sizeof script -
+                      sizeof region -
+                      sizeof variantBegin];
 
         const char* getLanguage() const { return language; }
         const char* getScript() const { return script; }
@@ -1217,12 +1224,59 @@ private:
     static_assert(sizeof(Nest) == Nest::SIZE);
 
     /**
-     * Locale data that needs to be heap allocated in a std::unique_ptr object.
+     * Locale data that needs to be heap allocated in the union Payload object.
      * @internal
      */
     struct Heap;
 
-    std::variant<std::monostate, Nest, std::unique_ptr<Heap>> payload;
+    /**
+     * This is kind of std::variant but customized to not waste any space on the
+     * discriminator or on any padding, and to copy any heap allocated object.
+     * @internal
+     */
+    union Payload {
+      private:
+        Nest nest;
+
+        struct HeapPtr {
+            ELocaleType type;
+            Heap* ptr;
+
+            HeapPtr& operator=(const Heap& other);
+            HeapPtr& operator=(HeapPtr&& other) noexcept;
+        } heap;
+
+        struct { ELocaleType type; } stat;
+
+        void copy(const Payload& other);
+        void move(Payload&& other) noexcept;
+
+      public:
+        // Doesn't inherit from UMemory, shouldn't be heap allocated.
+        static void* U_EXPORT2 operator new(size_t) noexcept = delete;
+        static void* U_EXPORT2 operator new[](size_t) noexcept = delete;
+
+        Payload() : stat{eBOGUS} {}
+        ~Payload();
+
+        Payload(const Payload& other);
+        Payload(Payload&& other) noexcept;
+
+        Payload& operator=(const Payload& other);
+        Payload& operator=(Payload&& other) noexcept;
+
+        void setToBogus();
+        bool isBogus() const { return stat.type == eBOGUS; }
+
+        LocalPointer<Heap> release();
+
+        template <typename T, typename... Args> T& emplace(Args&&... args);
+
+        template <typename T> T* get();
+
+        template <typename BogusFn, typename NestFn, typename HeapFn, typename... Args>
+        auto visit(BogusFn bogusFn, NestFn nestFn, HeapFn heapFn, Args... args) const;
+    } payload;
 
     /**
      * Call a field getter function on either Nest or Heap in payload.
@@ -1325,7 +1379,7 @@ Locale::getUnicodeKeywordValue(StringPiece keywordName, UErrorCode& status) cons
 
 U_COMMON_API inline UBool
 Locale::isBogus() const {
-    return std::holds_alternative<std::monostate>(payload);
+    return payload.isBogus();
 }
 
 U_NAMESPACE_END
