@@ -253,20 +253,6 @@ void copyToArray(std::string_view sv, T* that) {
 
 U_NAMESPACE_BEGIN
 
-Locale::Nest::Nest() : language{'\0'}, script{'\0'}, region{'\0'}, variantBegin{0}, baseName{'\0'} {}
-Locale::Nest::~Nest() = default;
-
-Locale::Nest::Nest(const Nest& other) {
-    uprv_memcpy(this, &other, sizeof *this);
-}
-
-Locale::Nest& Locale::Nest::operator=(const Nest& other) {
-    if (this != &other) {
-        uprv_memcpy(this, &other, sizeof *this);
-    }
-    return *this;
-}
-
 void Locale::Nest::init(std::string_view language,
                         std::string_view script,
                         std::string_view region,

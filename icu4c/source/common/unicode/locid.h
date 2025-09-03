@@ -1178,17 +1178,17 @@ private:
     struct Nest {
         static constexpr size_t SIZE = 32;
 
-        const ELocaleType type = eNEST;
-        char language[4];
-        char script[5];
-        char region[4];
-        uint8_t variantBegin;
+        ELocaleType type = eNEST;
+        char language[4] = {'\0'};
+        char script[5] = {'\0'};
+        char region[4] = {'\0'};
+        uint8_t variantBegin = 0;
         char baseName[SIZE -
                       sizeof type -
                       sizeof language -
                       sizeof script -
                       sizeof region -
-                      sizeof variantBegin];
+                      sizeof variantBegin] = {'\0'};
 
         const char* getLanguage() const { return language; }
         const char* getScript() const { return script; }
@@ -1199,12 +1199,6 @@ private:
         // Doesn't inherit from UMemory, shouldn't be heap allocated.
         static void* U_EXPORT2 operator new(size_t) noexcept = delete;
         static void* U_EXPORT2 operator new[](size_t) noexcept = delete;
-
-        Nest();
-        ~Nest();
-
-        Nest(const Nest& other);
-        Nest& operator=(const Nest& other);
 
         void init(std::string_view language,
                   std::string_view script,
