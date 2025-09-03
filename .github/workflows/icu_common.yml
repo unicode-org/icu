@@ -35,14 +35,14 @@ jobs:
   copyright-scan:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - run: perl tools/scripts/cpysearch/cpyscan.pl
 
   # Check source files for valid UTF-8 and for absence of BOM.
   valid-UTF-8-and-no-BOM-check:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - run: tools/scripts/icu-file-utf8-check.py
 
   # Initialize the Maven artifact cache
@@ -53,13 +53,13 @@ jobs:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - name: Checkout and setup
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Cache local Maven repository
         uses: actions/cache@v4
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
           java-version: '11'
@@ -75,7 +75,7 @@ jobs:
     needs: icu4j-mvn-init-cache
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Restore read-only cache of local Maven repository
         uses: actions/cache/restore@v4
         id: cache

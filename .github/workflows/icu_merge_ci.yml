@@ -39,13 +39,13 @@ jobs:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - name: Checkout and setup
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
       - name: Cache local Maven repository
         uses: actions/cache@v4.2.0
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-      - uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9 # v4.2.1
+      - uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
         with:
           distribution: 'temurin'
           java-version: '11'
@@ -61,7 +61,7 @@ jobs:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - name: Checkout and setup
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
       - name: Lookup read-only cache of local Maven repository
         uses: actions/cache@v4.2.0
         with:
@@ -70,7 +70,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
           lookup-only: true
-      - uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9 # v4.2.1
+      - uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
         with:
           distribution: 'temurin'
           java-version: '11'
@@ -91,7 +91,7 @@ jobs:
     if: github.repository == 'unicode-org/icu' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
 
       - name: Build ICU libraries
         run: |
@@ -132,11 +132,11 @@ jobs:
 
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
       - name: Create directory for lib files
         run: mkdir icu4c/source/perflib
       - name: Get ICU libs
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
         with:
           name: icu-perf-libs
           path: icu4c/source/lib
@@ -206,11 +206,11 @@ jobs:
 
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
       - name: Create directory for lib files
         run: mkdir icu4c/source/perflib
       - name: Get ICU libs
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
         with:
           name: icu-perf-libs
           path: icu4c/source/lib
@@ -271,11 +271,11 @@ jobs:
 
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
       - name: Create directory for lib files
         run: mkdir icu4c/source/perflib
       - name: Get ICU libs
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
         with:
           name: icu-perf-libs
           path: icu4c/source/lib
@@ -321,7 +321,7 @@ jobs:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - name: Checkout and setup
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
       - name: Lookup read-only cache of local Maven repository
         uses: actions/cache@v4.2.0
         with:
@@ -330,7 +330,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
           lookup-only: true
-      - uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9 # v4.2.1
+      - uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
         with:
           distribution: 'temurin'
           java-version: '11'
@@ -375,7 +375,7 @@ jobs:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - name: Checkout and setup
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
       - name: Lookup read-only cache of local Maven repository
         uses: actions/cache@v4.2.0
         with:
@@ -384,7 +384,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
           lookup-only: true
-      - uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9 # v4.2.1
+      - uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
         with:
           distribution: 'temurin'
           java-version: '11'
@@ -431,7 +431,7 @@ jobs:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - name: Checkout and setup
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
       - name: Lookup read-only cache of local Maven repository
         uses: actions/cache@v4.2.0
         with:
@@ -440,7 +440,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
           lookup-only: true
-      - uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9 # v4.2.1
+      - uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
         with:
           distribution: 'temurin'
           java-version: '11'
@@ -492,7 +492,7 @@ jobs:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - name: Checkout and setup
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
       - name: Lookup read-only cache of local Maven repository
         uses: actions/cache@v4.2.0
         with:
@@ -501,7 +501,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
           lookup-only: true
-      - uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9 # v4.2.1
+      - uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
         with:
           distribution: 'temurin'
           java-version: '11'
@@ -623,7 +623,7 @@ jobs:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - name: Checkout and setup
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
       - name: Lookup read-only cache of local Maven repository
         uses: actions/cache@v4.2.0
         with:
@@ -632,7 +632,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
           lookup-only: true
-      - uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9 # v4.2.1
+      - uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
         with:
           distribution: 'temurin'
           java-version: '11'
@@ -698,7 +698,7 @@ jobs:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - name: Checkout and setup
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
       - name: Lookup read-only cache of local Maven repository
         uses: actions/cache@v4.2.0
         with:
@@ -707,7 +707,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
           lookup-only: true
-      - uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9 # v4.2.1
+      - uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
         with:
           distribution: 'temurin'
           java-version: '11'
@@ -753,7 +753,7 @@ jobs:
     needs: [icu4c-performance-tests, icu4c-performance-tests-with-files, icu4c-strsrchperf, icu4j-unicodesetperf, icu4j-ucharacterperf, icu4j-decimalformatperf, icu4j-normperf, icu4j-converterperf, icu4j-dateformatperf]
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
 
       - name: Switch to benchmark data storage branch.
         run: |
@@ -783,7 +783,7 @@ jobs:
           - arch: x64
             platform: x64
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
       - name: Set up MSBuild
         uses: microsoft/setup-msbuild@v2
       - name: Build Solution
@@ -814,7 +814,7 @@ jobs:
       - name: Configure Git to checkout with Unix line endings (LF)
         run: |
           git config --global core.autocrlf input
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
       - name: Restore Cygwin cache
         uses: actions/cache@v4
         with:

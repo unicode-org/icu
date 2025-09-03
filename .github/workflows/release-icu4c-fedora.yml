@@ -36,7 +36,7 @@ jobs:
         dnf install -y gh
 
     - name: Checkout and setup
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
 
     - name: Config and build ICU4C proper
       run: |

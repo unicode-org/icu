@@ -47,7 +47,7 @@ jobs:
   icu4c-docs-build:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
 
       - name: ICU4C doc
         run: |
@@ -70,7 +70,7 @@ jobs:
   gcc-debug-build-and-test:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
 
       - name: ICU4C with gcc
         env:
@@ -97,7 +97,7 @@ jobs:
           - '-std=c++20'
           - '-std=c++23'
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
       - name: Install GCC-14
         run: |
           sudo add-apt-repository ppa:ubuntu-toolchain-r/test
@@ -122,7 +122,7 @@ jobs:
   clang-release-build-and-test:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
 
       - name: Install doxygen
         run: |
@@ -170,7 +170,7 @@ jobs:
          # --disable-shared has a build problem.
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
 
       - name: Build ICU4C with clang
         run: |
@@ -186,7 +186,7 @@ jobs:
   gcc-10-stdlib17:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
 
       - name: ICU4C with gcc 10 and c++17 and extra warnings.
         env:
@@ -207,7 +207,7 @@ jobs:
   clang-asan:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
 
       - name: ICU4C with clang and asan
         run: |
@@ -221,7 +221,7 @@ jobs:
   clang-lsan:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
 
       - name: ICU4C with clang and lsan
         run: |
@@ -236,7 +236,7 @@ jobs:
   clang-ubsan:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
 
       - name: ICU4C with clang and ubsan +alignment
         run: |
@@ -251,7 +251,7 @@ jobs:
   clang-cfi:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
 
       - name: ICU4C with clang using CFI
         run: |
@@ -270,7 +270,7 @@ jobs:
   clang-tsan:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
 
       - name: ICU4C with clang and tsan
         run: |
@@ -292,7 +292,7 @@ jobs:
   clang-datafilter:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
       - name: Extract ICU version
         run: |
           # Extract ICU version from icuver.txt
@@ -314,7 +314,7 @@ jobs:
   clang-cpp17:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
       - name: Build ICU4C with CPP 17
         env:
           CXXFLAGS: -std=c++17 -Winvalid-constexpr
@@ -325,7 +325,7 @@ jobs:
   clang-lang-with-extn-tags:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
       - name: Linux Clang - LANG has extension tags
         env:
           LANG: "en_US@calendar=gregorian;hours=h12"
@@ -356,7 +356,7 @@ jobs:
             - clang-version: '18'
               flags: '-std=c++20 -stdlib=libc++'
       steps:
-        - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
         - name: Install Modern Clang
           env:
             CLANG_VERSION: ${{ matrix.clang-version }}
@@ -377,7 +377,7 @@ jobs:
   macos-clang:
     runs-on: macos-14  # Updated in BRS
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
       - name: ICU4C with clang on MacOS
         env:
           CPPFLAGS: '-Wall -Wextra -Wextra-semi -Wundef -Wnon-virtual-dtor -Wctad-maybe-unsupported -Werror'
@@ -404,7 +404,7 @@ jobs:
           - test_flags: 'x64 Release'
             build_flags: '/p:Configuration=Release /p:Platform=x64'
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
       - name: Set up MSBuild
         uses: microsoft/setup-msbuild@v2
       - name: Build Solution x64
@@ -423,7 +423,7 @@ jobs:
     runs-on: windows-2022  # Updated in BRS
     timeout-minutes: 30
     steps:
-    - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+    - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
     - name: Set ICU_DATA_FILTER_FILE variable
       run: |
         $filterPath = "${{ github.workspace }}\.github\data-filter.json"
@@ -454,7 +454,7 @@ jobs:
             plat: 'ARM64'
             win_ver: 'WinARM64'
     steps:
-    - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+    - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
     - name: Set up MSBuild
       uses: microsoft/setup-msbuild@v2
     - name: Build Solution x64
@@ -514,7 +514,7 @@ jobs:
       run:
         shell: msys2 {0}
     steps:
-    - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+    - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
     - name: Set up MSYS2
       uses: msys2/setup-msys2@v2
       id: msys2
@@ -547,7 +547,7 @@ jobs:
   run-with-stubdata:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
 
       - name: ICU4C tests with stubdata
         run: |
@@ -590,7 +590,7 @@ jobs:
   u-charset-is-utf8-test:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
       - run: |
           cd icu4c/source;
           ./runConfigureICU Linux CPPFLAGS="-DU_CHARSET_IS_UTF8=1";
@@ -600,7 +600,7 @@ jobs:
   u-override-cxx-allocation-is-0-test:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
       - run: |
           cd icu4c/source;
           ./runConfigureICU Linux CPPFLAGS="-DU_OVERRIDE_CXX_ALLOCATION=0";
@@ -611,7 +611,7 @@ jobs:
   lstm-test:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
       - run: |
           cd icu4c/source;
           ICU_DATA_FILTER_FILE=../../.github/lstm_for_th_my.json ./runConfigureICU --enable-debug --disable-release Linux -disable-layoutex;
@@ -622,7 +622,7 @@ jobs:
   adaboost-test:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
       - run: |
           cd icu4c/source;
           ICU_DATA_FILTER_FILE=../../.github/adaboost.json CPPFLAGS=-DUCONFIG_USE_ML_PHRASE_BREAKING=1 ./runConfigureICU --enable-debug --disable-release Linux -disable-layoutex;
@@ -633,7 +633,7 @@ jobs:
   testmap:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
       - run: |
           cd icu4c/source;
           ./runConfigureICU Linux;
@@ -646,21 +646,21 @@ jobs:
   copyright-scan:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
       - run: perl tools/scripts/cpysearch/cpyscan.pl
 
   # Check compilation of internal headers.
   internal-header-compilation:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
       - run: cd icu4c/source; test/hdrtst/testinternalheaders.sh
 
   # Check source files for valid UTF-8 and for absence of BOM.
   valid-UTF-8-and-no-BOM-check:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
       - run: tools/scripts/icu-file-utf8-check.py
 
   # Run unit tests with UCONFIG_NO_XXX variations.
@@ -689,7 +689,7 @@ jobs:
          - "-DUCONFIG_NO_LEGACY_CONVERSION=1 -DUCONFIG_NO_NORMALIZATION=1 -DUCONFIG_NO_BREAK_ITERATION=1 -DUCONFIG_NO_IDNA=1 -DUCONFIG_NO_COLLATION=1 -DUCONFIG_NO_FORMATTING=1 -DUCONFIG_NO_MF2=1 -DUCONFIG_NO_TRANSLITERATION=1 -DUCONFIG_NO_REGULAR_EXPRESSIONS=1 -DUCONFIG_NO_SERVICE=1 -DUCONFIG_NO_FILTERED_BREAK_ITERATION=1"
     steps:
       - name: Checkout
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
       - name: Verify no additional new UCONFIG_NO_xxx added
         run: |
           # Test that we have exactly 13 "#ifndef UCONFIG_NO_" in uconfig.h. If the number changes, we need to also
@@ -736,7 +736,7 @@ jobs:
          - "-DUCONFIG_NO_LEGACY_CONVERSION=1 -DUCONFIG_NO_NORMALIZATION=1 -DUCONFIG_NO_BREAK_ITERATION=1 -DUCONFIG_NO_IDNA=1 -DUCONFIG_NO_COLLATION=1 -DUCONFIG_NO_FORMATTING=1 -DUCONFIG_NO_MF2=1 -DUCONFIG_NO_TRANSLITERATION=1 -DUCONFIG_NO_REGULAR_EXPRESSIONS=1 -DUCONFIG_NO_SERVICE=1 -DUCONFIG_NO_FILTERED_BREAK_ITERATION=1"
     steps:
       - name: Checkout
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
       - name: Verify no additional new UCONFIG_NO_xxx added
         run: |
           # Test that we have exactly 13 "#ifndef UCONFIG_NO_" in uconfig.h. If the number changes, we need to also
@@ -765,7 +765,7 @@ jobs:
   unicode-update-tools:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
-    - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+    - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
     - uses: bazel-contrib/setup-bazel@0.15.0
     - name: Get CI Linux runner VM version
       id: linux-version
@@ -804,7 +804,7 @@ jobs:
   icu4c-test-samples:
       runs-on: ubuntu-22.04  # Updated in BRS
       steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
 
       - name: ICU4C configure and build
         run: |
@@ -829,7 +829,7 @@ jobs:
   icu4c-without-collation-rule-strings:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
       - name: Install hjson dependency
         run: |
           sudo apt-get install python3-pip
@@ -869,7 +869,7 @@ jobs:
   icu4c-uconfig-no-conversion:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
       - name: Set UCONFIG_NO_CONVERSION and configure ICU4C
         env:
           UCONFIG_NO_CONVERSION: 1
@@ -892,7 +892,7 @@ jobs:
       contents: write # So that we can upload to release
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
       - name: Build
         run: |
           cd icu4c/source && ./runConfigureICU Linux && make -j -l4.5
