@@ -21,6 +21,12 @@ on:
       - 'icu4j/**'
       - 'testdata/**'
       - '.github/workflows/**'
+  # run exhaustive texts on PRs that modify resource files
+  pull_request:
+    branches: '**'
+    paths:
+      - 'icu4c/source/data/**'
+      - 'icu4j/**/src/main/resources/com/ibm/icu/impl/data/icudata/**'
   schedule:
     # Runs daily on default branch (main) only.
     # https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#schedule
