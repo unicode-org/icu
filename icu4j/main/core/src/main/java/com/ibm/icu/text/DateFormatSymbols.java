@@ -26,6 +26,7 @@ import java.util.TreeMap;
 
 import com.ibm.icu.impl.CacheBase;
 import com.ibm.icu.impl.CalendarUtil;
+import com.ibm.icu.impl.EraRules;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.SoftCache;
@@ -1806,37 +1807,8 @@ public class DateFormatSymbols implements Serializable, Cloneable {
                     String[] dataArray = value.getStringArray();
                     arrays.put(currentPath, dataArray);
                 } else if (value.getType() == ICUResourceBundle.TABLE) {
-                    // We might have an eras table that is replacing an eras leaf array
-                    if (currentPath.startsWith("eras")) {
-                        // path is one of eras/wide, eras/abbreviated, eras/narrow
-                        UResource.Table rDataTable = value.getTable();
-                        int dataTableSize = rDataTable.getSize();
-                        ArrayList<String> dataList = new ArrayList<>(dataTableSize);
-                        // Expand the ArrayList as necessary to have index from 0 up to the max
-                        // eraCode, and fill in the slots for the eras defined in the resource data
-                        // (other slots get nulls).
-                        for (int dataTableIndex = 0; dataTableIndex < dataTableSize; dataTableIndex++) {
-                            rDataTable.getKeyAndValue(dataTableIndex, key, value);
-                            int listIndex = Integer.parseInt(key.toString());
-                            if (listIndex + 1 > dataList.size()) {
-                                dataList.ensureCapacity(listIndex + 1); // needed only to minimize expansions
-                                // Fill in empty strings for all added slots
-                                while (dataList.size() < listIndex + 1) {
-                                    dataList.add("");
-                                }
-                            }
-                            // Now set the eraName that we just read
-                            String eraName = (value.getType() == ICUResourceBundle.STRING) ? value.getString() : "";
-                            dataList.set(listIndex, eraName);
-                        }
-                        // Now convert to array
-                        String[] dataArray = dataList.toArray(new String[dataList.size()]);
-                        // Save the array
-                        arrays.put(currentPath, dataArray);
-                    } else {
-                        // We are not on a leaf, recursively process the subtable.
-                        processResource(currentPath, key, value);
-                    }
+                    // We are not on a leaf, recursively process the subtable.
+                    processResource(currentPath, key, value);
                 }
             }
         }
@@ -1899,6 +1871,46 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
+     * Convert era names map from CalendarSink to array, filling in missing values from fallback.
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    protected String[] initEras(String erasKey, Map<String, Map<String, String>> maps,
+            ICUResourceBundle calBundle, int maxEra) {
+        Map<String, String> eraNamesTable = maps.get(erasKey);
+        if (eraNamesTable == null) {
+            return null;
+        }
+        ICUResourceBundle calErasWidthBundle = calBundle.findWithFallback(erasKey);
+        String[] eraArray = new String[maxEra + 1];
+        if (eraArray != null) {
+            for (int eraCode = 0; eraCode <= maxEra; eraCode++) {
+                String eraKey = Integer.toString(eraCode);
+                String eraName = eraNamesTable.get(eraKey);
+                if (eraName != null) {
+                    eraArray[eraCode] = eraName;
+                } else {
+                    // For a map, the sink does not seem to fill in parent entries for keys
+                    // that do not exist in the current bundle, that is why we need to explicitly
+                    // fill these in. Also true in ICU4C. Also pre-set to empty string in case
+                    // there is no parent entry.
+                    eraArray[eraCode] = "";
+                    if (calErasWidthBundle != null) {
+                        ICUResourceBundle calErasWidthKeyBundle = calErasWidthBundle.findWithFallback(eraKey);
+                        if (calErasWidthKeyBundle != null) {
+                            eraName = calErasWidthKeyBundle.getString();
+                            if (eraName != null) {
+                                eraArray[eraCode] = eraName;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return eraArray;
+    }
+
+    /**
      * Initializes format symbols for the locale and calendar type
      * @param desiredLocale The locale whose symbols are desired.
      * @param b Resource bundle provided externally
@@ -1916,6 +1928,8 @@ public class DateFormatSymbols implements Serializable, Cloneable {
             b = (ICUResourceBundle) UResourceBundle
                     .getBundleInstance(ICUData.ICU_BASE_NAME, desiredLocale);
         }
+        // Save the calendarType (with fallback) for later use with initEras:
+        String calTypeForEras = ((calendarType!=null)? calendarType : "gregorian");
 
         // Iterate over the resource bundle data following the fallbacks through different calendar types
         while (calendarType != null) {
@@ -1952,9 +1966,23 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         Map<String, String[]> arrays = calendarSink.arrays;
         Map<String, Map<String, String>> maps = calendarSink.maps;
 
-        eras = arrays.get("eras/abbreviated");
-        eraNames = arrays.get("eras/wide");
-        narrowEras = arrays.get("eras/narrow");
+        // Era setup: Get maxEra from EraRules, get the calendar's era bundle:
+        EraRules eraRules = null;
+        try {
+            eraRules = EraRules.getInstance(calTypeForEras, false);
+        } catch (MissingResourceException e) {
+            // call IDs unsupported in supplmental era rules such as
+            // "iso8601" or bogus "unknown"; fix for here and for
+            // calBundle:
+            calTypeForEras = "gregorian";
+            eraRules = EraRules.getInstance(calTypeForEras, false);
+        }
+        int maxEra = (eraRules != null)? eraRules.getMaxEraCode() : 0;
+        ICUResourceBundle calBundle = b.findWithFallback("calendar/" + calTypeForEras);
+
+        eras = initEras("eras/abbreviated", maps, calBundle, maxEra);
+        eraNames = initEras("eras/wide", maps, calBundle, maxEra);
+        narrowEras = initEras("eras/narrow", maps, calBundle, maxEra);
 
         months = arrays.get("monthNames/format/wide");
         shortMonths = arrays.get("monthNames/format/abbreviated");

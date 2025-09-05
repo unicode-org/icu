@@ -343,11 +343,6 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
                 if (GENERATE_TEST_DATA) {
                     logln("new String[] {\"" + testSkeleton + "\", \"" + Utility.escape(formatted) + "\"},");
                 } else if (!formatted.equals(testFormatted)) {
-                    if (uLocale.getName().equals("ja@calendar=japanese") && 
-                        (testSkeleton.equals("yM") || testSkeleton.equals("yMd")) &&
-                        logKnownIssue("ICU-23182", "Japanese calendar formatting") ) {
-                        continue;
-                    }
                     errln(uLocale + "\tformatted string doesn't match test case: " + testSkeleton + "\t generated: " +  pattern + "\t expected: " + testFormatted + "\t got: " + formatted);
                     if (true) { // debug
                         pattern = dtfg.getBestPattern(testSkeleton);

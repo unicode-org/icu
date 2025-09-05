@@ -884,10 +884,6 @@ public class DateIntervalFormatTest extends CoreTestFmwk {
             String expected = data[i++];
             String formatted = dtitvfmt.format(dtitv);
             if ( !formatted.equals(Utility.unescape(expected)) )  {
-                if (locName.equals("ja-u-ca-japanese") &&
-                    logKnownIssue("ICU-23182", "Japanese calendar formatting")) {
-                    continue;
-                }
                 if (locName.equals("de") && 
                     ( oneSkeleton.equals("hv") || oneSkeleton.equals("hz") ) &&
                     logKnownIssue("ICU-23185", "Date time formatting with hz and hv needs revisiting")) {
@@ -2457,10 +2453,6 @@ public class DateIntervalFormatTest extends CoreTestFmwk {
 
     @Test
     public void testTicket21222JapaneseEraDiff() {
-        if (logKnownIssue("ICU-23182", "Japanese calendar formatting")) {
-            return;
-        }
-    
         Calendar cal = Calendar.getInstance(TimeZone.GMT_ZONE);
         DateIntervalFormat japanese = DateIntervalFormat.getInstance(
             "h", new ULocale("ja@calendar=japanese"));

@@ -40,10 +40,14 @@ public class EraRules {
     }
 
     public static EraRules getInstance(CalType calType, boolean includeTentativeEra) {
+        return getInstance(calType.getId(), includeTentativeEra);
+    }
+
+    public static EraRules getInstance(String calId, boolean includeTentativeEra) {
         UResourceBundle supplementalDataRes = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME,
                 "supplementalData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
         UResourceBundle calendarDataRes = supplementalDataRes.get("calendarData");
-        UResourceBundle calendarTypeRes = calendarDataRes.get(calType.getId());
+        UResourceBundle calendarTypeRes = calendarDataRes.get(calId);
         UResourceBundle erasRes = calendarTypeRes.get("eras");
 
         int numEras = erasRes.getSize();
@@ -58,10 +62,10 @@ public class EraRules {
             try {
                 eraIdx = Integer.parseInt(eraIdxStr);
             } catch (NumberFormatException e) {
-                throw new ICUException("Invalid era rule key:" + eraIdxStr + " in era rule data for " + calType.getId());
+                throw new ICUException("Invalid era rule key:" + eraIdxStr + " in era rule data for " + calId);
             }
             if (eraIdx < 0) {
-                throw new ICUException("Era rule key:" + eraIdxStr + " in era rule data for " + calType.getId()
+                throw new ICUException("Era rule key:" + eraIdxStr + " in era rule data for " + calId
                         + " must be >= 0");
             }
             if (eraIdx + 1 > eraStartDates.size()) {
@@ -74,7 +78,7 @@ public class EraRules {
             // Now set the startDate that we just read
             if (isSet(eraStartDates.get(eraIdx).intValue())) {
                 throw new ICUException(
-                        "Duplicated era rule for rule key:" + eraIdxStr + " in era rule data for " + calType.getId());
+                        "Duplicated era rule for rule key:" + eraIdxStr + " in era rule data for " + calId);
             }
 
             boolean hasName = true;
@@ -88,7 +92,7 @@ public class EraRules {
                     if (fields.length != 3 || !isValidRuleStartDate(fields[0], fields[1], fields[2])) {
                         throw new ICUException(
                                 "Invalid era rule date data:" + Arrays.toString(fields) + " in era rule data for "
-                                + calType.getId());
+                                + calId);
                     }
                     eraStartDates.set(eraIdx, encodeDate(fields[0], fields[1], fields[2]));
                 } else if (key.equals("named")) {
@@ -112,7 +116,7 @@ public class EraRules {
                     eraStartDates.set(eraIdx, MIN_ENCODED_START);
                 } else {
                     throw new ICUException("Missing era start/end rule date for key:" + eraIdxStr + " in era rule data for "
-                            + calType.getId());
+                            + calId);
                 }
             }
 
