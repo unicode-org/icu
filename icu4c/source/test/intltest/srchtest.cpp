@@ -170,6 +170,7 @@ void StringSearchTest::runIndexedTest(int32_t index, UBool exec,
         CASE(34, TestSubclass)
         CASE(35, TestCoverage)
         CASE(36, TestDiacriticMatch)
+        CASE(37, TestBug22775)
         default: name = ""; break;
     }
 #else
@@ -2450,6 +2451,26 @@ void StringSearchTest::TestCoverage(){
     if (stub1 != stub2){
         errln("SearchIterator::operator =  assigned object should be equal");
     }
+}
+
+void StringSearchTest::TestBug22775() {
+    IcuTestErrorCode errorCode(*this, "TestBug22775()");
+    // Used to crash in Java due to bad management of the pattern collation element array.
+    UnicodeString pattern(
+        u"Xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        u"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        u"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        u"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa響");
+    LocalPointer<RuleBasedCollator> collator(
+        dynamic_cast<RuleBasedCollator *>(
+            Collator::createInstance(Locale::getUS(), errorCode)),
+        errorCode);
+    // Check that we have a collator before dereferencing.
+    if (errorCode.errDataIfFailureAndReset()) { return; }
+    collator->setAttribute(UCOL_STRENGTH, UCOL_PRIMARY, errorCode);
+    StringCharacterIterator text(u" ");
+    StringSearch stringSearch(pattern, text, collator.getAlias(), nullptr, errorCode);
+    stringSearch.next(errorCode);
 }
 
 #endif /* !UCONFIG_NO_BREAK_ITERATION */

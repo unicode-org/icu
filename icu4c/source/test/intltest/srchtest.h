@@ -91,6 +91,7 @@ private:
     void TestSubclass();
     void TestCoverage();
     void TestDiacriticMatch();
+    void TestBug22775();
 #endif
 };
 

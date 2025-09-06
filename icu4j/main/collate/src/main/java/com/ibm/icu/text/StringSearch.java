@@ -658,9 +658,8 @@ public final class StringSearch extends SearchIterator {
      * @return new destination array, destination if there was no new allocation
      */
     private static int[] addToIntArray(int[] destination, int offset, int value, int increments) {
-        int newlength = destination.length;
-        if (offset + 1 == newlength) {
-            newlength += increments;
+        if (offset >= destination.length) {
+            int newlength = offset + increments;
             int temp[] = new int[newlength];
             System.arraycopy(destination, 0, temp, 0, offset);
             destination = temp;
@@ -681,11 +680,10 @@ public final class StringSearch extends SearchIterator {
      * @param increments incremental size expected
      * @return new destination array, destination if there was no new allocation
      */
-    private static long[] addToLongArray(long[] destination, int offset, int destinationlength,
-            long value, int increments) {
-        int newlength = destinationlength;
-        if (offset + 1 == newlength) {
-            newlength += increments;
+    private static long[] addToLongArray(
+            long[] destination, int offset, long value, int increments) {
+        if (offset >= destination.length) {
+            int newlength = offset + increments;
             long temp[] = new long[newlength];
             System.arraycopy(destination, 0, temp, 0, offset);
             destination = temp;
@@ -722,15 +720,14 @@ public final class StringSearch extends SearchIterator {
         while ((ce = coleiter.next()) != CollationElementIterator.NULLORDER) {
             int newce = getCE(ce);
             if (newce != CollationElementIterator.IGNORABLE /* 0 */) {
-                int[] temp = addToIntArray(cetable, offset, newce,
+                cetable = addToIntArray(cetable, offset, newce,
                         patternlength - coleiter.getOffset() + 1);
                 offset++;
-                cetable = temp;
             }
             result += (coleiter.getMaxExpansion(ce) - 1);
         }
 
-        cetable[offset] = 0;
+        cetable = addToIntArray(cetable, offset, 0, 1);
         pattern_.CE_ = cetable;
         pattern_.CELength_ = offset;
 
@@ -747,7 +744,6 @@ public final class StringSearch extends SearchIterator {
      */
     private int initializePatternPCETable() {
         long[] pcetable = new long[INITIAL_ARRAY_SIZE_];
-        int pcetablesize = pcetable.length;
         int patternlength = pattern_.text_.length();
         CollationElementIterator coleiter = utilIter_;
 
@@ -768,12 +764,11 @@ public final class StringSearch extends SearchIterator {
         // ** (the rest of the code in this file seems to play fast-and-loose with
         // ** whether a CE is signed or unsigned. For example, look at routine above this one.)
         while ((pce = iter.nextProcessed(null)) != CollationPCE.PROCESSED_NULLORDER) {
-            long[] temp = addToLongArray(pcetable, offset, pcetablesize, pce, patternlength - coleiter.getOffset() + 1);
+            pcetable = addToLongArray(pcetable, offset, pce, patternlength - coleiter.getOffset() + 1);
             offset++;
-            pcetable = temp;
         }
 
-        pcetable[offset] = 0;
+        pcetable = addToLongArray(pcetable, offset, 0, 1);
         pattern_.PCE_ = pcetable;
         pattern_.PCELength_ = offset;
 

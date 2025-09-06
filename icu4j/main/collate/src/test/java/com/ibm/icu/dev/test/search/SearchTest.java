@@ -2220,4 +2220,21 @@ public class SearchTest extends TestFmwk {
             errln("Error initializing a new StringSearch object");
         }
     }
+
+    @Test
+    public void TestBug22775() {
+        // Used to crash due to bad management of the pattern collation element array.
+        String pattern = "Xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa響";
+        RuleBasedCollator collator = (RuleBasedCollator) Collator.getInstance(Locale.US);
+        collator.setStrength(Collator.PRIMARY);
+        StringSearch stringSearch = new StringSearch(
+                pattern,
+                new StringCharacterIterator(" "),
+                collator
+        );
+        stringSearch.next();
+    }
 }
