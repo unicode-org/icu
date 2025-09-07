@@ -17,6 +17,8 @@ import java.text.AttributedString;
 import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParsePosition;
+import java.time.DayOfWeek;
+import java.time.Month;
 import java.time.temporal.Temporal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -3920,6 +3922,10 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
             calendar.setTimeInMillis(((Number)obj).longValue());
         } else if (obj instanceof Temporal) {
             cal = JavaTimeConverters.temporalToCalendar((Temporal) obj);
+        } else if (obj instanceof DayOfWeek) {
+            cal = JavaTimeConverters.dayOfWeekToCalendar((DayOfWeek) obj);
+        } else if (obj instanceof Month) {
+            cal = JavaTimeConverters.monthToCalendar((Month) obj);
         } else {
             throw new IllegalArgumentException("Cannot format given Object as a Date");
         }

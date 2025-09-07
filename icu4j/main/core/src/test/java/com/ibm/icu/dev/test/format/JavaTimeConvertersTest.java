@@ -3,6 +3,7 @@
 
 package com.ibm.icu.dev.test.format;
 
+import java.time.DayOfWeek;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -122,6 +123,13 @@ public class JavaTimeConvertersTest extends CoreTestFmwk {
         assertCalendarsEquals(EXPECTED_CALENDAR, calendar, TIME_ONLY_FIELDS);
         assertEquals("", EXPECTED_CALENDAR.getTimeZone().getRawOffset(), calendar.getTimeZone().getRawOffset());
 
+        int[] DATE_OF_WEEK_ONLY_FIELD = { Calendar.DAY_OF_WEEK };
+        calendar = JavaTimeConverters.dayOfWeekToCalendar(DayOfWeek.MONDAY);
+        assertEquals("", Calendar.MONDAY, calendar.get(Calendar.DAY_OF_WEEK));
+
+        int[] MONTH_ONLY_FIELD = { Calendar.MONTH };
+        calendar = JavaTimeConverters.monthToCalendar(Month.SEPTEMBER);
+        assertEquals("", Calendar.SEPTEMBER, calendar.get(Calendar.MONTH));
     }
 
     @Test(expected = IllegalArgumentException.class)

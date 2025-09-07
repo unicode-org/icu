@@ -24,6 +24,8 @@ import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParseException;
 import java.text.ParsePosition;
+import java.time.DayOfWeek;
+import java.time.Month;
 import java.time.temporal.Temporal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -1755,6 +1757,10 @@ public class MessageFormat extends UFormat implements Cloneable {
                     dest.formatAndAppend(getStockDateFormatter(), arg);
                 } else if (arg instanceof Temporal) {
                     // format a Temporal if can
+                    dest.formatAndAppend(getStockDateFormatter(), arg);
+                } else if (arg instanceof DayOfWeek) {
+                    dest.formatAndAppend(getStockDateFormatter(), arg);
+                } else if (arg instanceof Month) {
                     dest.formatAndAppend(getStockDateFormatter(), arg);
                 } else {
                     dest.append(arg.toString());

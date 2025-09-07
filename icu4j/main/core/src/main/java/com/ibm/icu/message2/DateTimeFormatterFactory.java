@@ -3,6 +3,8 @@
 
 package com.ibm.icu.message2;
 
+import java.time.DayOfWeek;
+import java.time.Month;
 import java.time.temporal.Temporal;
 import java.util.Calendar;
 import java.util.Locale;
@@ -362,6 +364,10 @@ class DateTimeFormatterFactory implements FormatterFactory {
                 }
             } else if (toFormat instanceof Temporal) {
                 toFormat = JavaTimeConverters.temporalToCalendar((Temporal) toFormat);
+            } else if (toFormat instanceof DayOfWeek) {
+                toFormat = JavaTimeConverters.dayOfWeekToCalendar((DayOfWeek) toFormat);
+            } else if (toFormat instanceof Month) {
+                toFormat = JavaTimeConverters.monthToCalendar((Month) toFormat);
             }
             // Not an else-if here, because the `Temporal` conditions before make `toFormat` a `Calendar`
             if (toFormat instanceof Calendar) {

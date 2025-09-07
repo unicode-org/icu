@@ -3,6 +3,8 @@
 
 package com.ibm.icu.message2;
 
+import java.time.DayOfWeek;
+import java.time.Month;
 import java.time.temporal.Temporal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -79,6 +81,8 @@ class MFDataModelFormatter {
                         .setDefaultFormatterNameForType(Calendar.class, "datetime")
                         .setDefaultFormatterNameForType(java.util.Calendar.class, "datetime")
                         .setDefaultFormatterNameForType(Temporal.class, "datetime")
+                        .setDefaultFormatterNameForType(DayOfWeek.class, "date")
+                        .setDefaultFormatterNameForType(Month.class, "date")
 
                         // Number formatting
                         .setFormatter("number", new NumberFormatterFactory("number"))

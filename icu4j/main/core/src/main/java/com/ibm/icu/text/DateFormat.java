@@ -14,6 +14,8 @@ import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParseException;
 import java.text.ParsePosition;
+import java.time.DayOfWeek;
+import java.time.Month;
 import java.time.temporal.Temporal;
 import java.util.Arrays;
 import java.util.Date;
@@ -634,6 +636,12 @@ public abstract class DateFormat extends UFormat {
                           toAppendTo, fieldPosition );
         } else if (obj instanceof Temporal) {
             return format( (Temporal)obj, toAppendTo, fieldPosition );
+        } else if (obj instanceof DayOfWeek) {
+            return format(JavaTimeConverters.dayOfWeekToCalendar((DayOfWeek) obj),
+                    toAppendTo, fieldPosition);
+        } else if (obj instanceof Month) {
+            return format(JavaTimeConverters.monthToCalendar((Month) obj),
+                    toAppendTo, fieldPosition);
         } else {
             throw new IllegalArgumentException("Cannot format given Object (" +
                                                obj.getClass().getName() + ") as a Date");

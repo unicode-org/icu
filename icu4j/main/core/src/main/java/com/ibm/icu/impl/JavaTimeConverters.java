@@ -5,10 +5,12 @@ package com.ibm.icu.impl;
 
 import static java.time.temporal.ChronoField.MILLI_OF_SECOND;
 
+import java.time.DayOfWeek;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Month;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.time.ZoneId;
@@ -44,8 +46,10 @@ import com.ibm.icu.util.ULocale;
  */
 @Deprecated
 public class JavaTimeConverters {
+    // Milliseconds per hour
+    private static final long MILLIS_PER_HOUR = 60 * 60 * 1_000;
     // Milliseconds per day
-    private static final long MILLIS_PER_DAY = 24 * 60 * 60 * 1_000;
+    private static final long MILLIS_PER_DAY = 24 * MILLIS_PER_HOUR;
 
     private JavaTimeConverters() {
         // Prevent instantiation, making this an utility class
@@ -253,6 +257,69 @@ public class JavaTimeConverters {
         return new SimpleTimeZone(zoneOffset.getTotalSeconds() * 1_000, zoneOffset.getId());
     }
 
+    /**
+     * Converts a {@link DayOfWeek} to a {@link Calendar}.
+     *
+     * <p>
+     * This method creates a {@link Calendar} instance that represents
+     * a day that is the same day of week as specified by {@link DayOfWeek}.
+     * It is set somewhere close to epoch time.
+     *
+     * <p>
+     * <b>Note:</b> this should only be used to format if using a pattern or skeleton
+     * with a day of week field only.
+     * That means that {@code c}-{@code cccccc} patterns are recommended, {@code E}-{@code EEEEEE}
+     * and {@code e}-{@code eeeeee} are likely wrong (because they are not stand-alone).
+     * Anything else is clearly wrong.
+     * It does not make sense to format a {@code DayOfWeek} as {@code "MMMM d, y"}.
+     * See {@link https://unicode.org/reports/tr35/tr35-dates.html#dfst-weekday}.
+     *
+     * @param dow The {@link DayOfWeek} to convert.
+     * @return A {@link Calendar} instance representing the same day of week
+     *         as the one specified by the input.
+     *
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    @SuppressWarnings("JavaTimeDefaultTimeZone")
+    public static Calendar dayOfWeekToCalendar(DayOfWeek dow) {
+        return millisToCalendar(dayOfWeekToMillis(dow));
+    }
+
+    /**
+     * Converts a {@link Month} to a {@link Calendar}.
+     *
+     * <p>
+     * This method creates a {@link Calendar} instance that represents
+     * the same month as specified by {@link Month}.
+     * It is set somewhere close to epoch time.
+     *
+     * <p>
+     * <b>Note:</b> this should only be used to format if using a pattern or skeleton
+     * with a day of month field only.
+     * That means that {@code L}-{@code LLLLL} patterns are recommended, {@code E}-{@code MMMMM}
+     * is likely wrong (because it is not stand-alone). Anything else is clearly wrong.
+     * It does not make sense to format a {@code Month} as {@code "MMMM d, y"}.
+     * See {@link https://unicode.org/reports/tr35/tr35-dates.html#dfst-month}.
+     *
+     * <p>
+     * <b>Note:</b> only use this method for the Gregorian calendar and related calendars,
+     * given that the {@link Month} documentation, states that the {@link Month} enum
+     * "... may be used by any calendar system that has the month-of-year concept defined
+     * equivalent to the ISO-8601 calendar system".</i>
+     *
+     * @param month The {@link Month} to convert.
+     * @return A {@link Calendar} instance representing the same month
+     *         as the one specified by the input.
+     *
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    @SuppressWarnings("JavaTimeDefaultTimeZone")
+    public static Calendar monthToCalendar(Month month) {
+        return millisToCalendar(monthToMilli(month));
+    }
+
     private static Calendar millisToCalendar(long epochMillis) {
         return millisToCalendar(epochMillis, TimeZone.GMT_ZONE);
     }
@@ -263,5 +330,21 @@ public class JavaTimeConverters {
         calendar.setGregorianChange(new Date(Long.MIN_VALUE));
         calendar.setTimeInMillis(epochMillis);
         return calendar;
+    }
+
+    private static long dayOfWeekToMillis(DayOfWeek dow) {
+        // Epoch time was 1970-01-01 00:00:00, and was a Thursday.
+        // Add 12 hours, so we are in the middle of the day and have no surprises.
+        // Then add 3 days to get a Monday (in fact 4, but DayOfWeek value is 1 based).
+        return MILLIS_PER_HOUR * 12 + (3 + dow.getValue()) * MILLIS_PER_DAY;
+    }
+
+    /* Fails for non-Gregoran calendars. */
+    private static long monthToMilli(Month month) {
+        // Epoch time was 1970-01-01 00:00:00, and was a Thursday.
+        // Add 12 hours, so we are in the middle of the day and have no surprises.
+        // Then add 31 for each month. 31 days is safe, even if some months are shorter.
+        // We start from Jan 1, Feb 1, Mar 4, Apr 4, May 5, ..., Dec 8.
+        return MILLIS_PER_HOUR * 12 + (month.getValue() - 1) * MILLIS_PER_DAY * 31;
     }
 }
