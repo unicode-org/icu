@@ -618,12 +618,6 @@ void TimeZoneFormatTest::RunTimeRoundTripTests(int32_t threadNumber) {
                 }
             }
 
-            if ((*tzid == "Pacific/Apia" || *tzid == "Pacific/Midway" || *tzid == "Pacific/Pago_Pago")
-                    && uprv_strcmp(PATTERNS[patidx], "vvvv") == 0
-                    && logKnownIssue("11052", "Ambiguous zone name - Samoa Time")) {
-                continue;
-            }
-
             BasicTimeZone *tz = dynamic_cast<BasicTimeZone*>(TimeZone::createTimeZone(*tzid));
             sdf->setTimeZone(*tz);
 
