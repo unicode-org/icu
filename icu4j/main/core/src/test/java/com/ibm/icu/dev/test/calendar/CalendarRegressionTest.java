@@ -2746,5 +2746,39 @@ public class CalendarRegressionTest extends CoreTestFmwk {
             30, actualMaximumBeforeCallingGet);
 
     }
+
+    @Test
+    public void Test23101ExtendedYear() {
+        String[][] testCases = {
+            { "gregory", "2025", "2025", "2025" },
+            { "chinese", "2024", "2025", "2025" },
+            { "dangi", "2024", "2025", "2025" },
+            { "japanese", "2025", "2025", "2025" },
+            { "ethiopic", "2017", "2017", "2018" },
+            { "ethiopic-amete-alem", "2017", "2017", "2018" },
+        };
+
+        long date20250101 = 1735689600000l;
+        long date20250701 = 1751328000000l;
+        long date20251231 = 1767139200000l;
+
+        for (String[] testCase : testCases) {
+            String calendarName = testCase[0];
+            String expectedExtendedYear20250101 = testCase[1];
+            String expectedExtendedYear20250701 = testCase[2];
+            String expectedExtendedYear20251231 = testCase[3];
+
+            ULocale locale = ULocale.forLanguageTag("und-u-ca-" + calendarName);
+            Calendar cal = Calendar.getInstance(TimeZone.GMT_ZONE, locale);
+            SimpleDateFormat formatter = new SimpleDateFormat("u", ULocale.ROOT);
+            formatter.setCalendar(cal);
+            String actual20250101 = formatter.format(date20250101);
+            String actual20250701 = formatter.format(date20250701);
+            String actual20251231 = formatter.format(date20251231);
+            assertEquals("2025-01-01 in " + calendarName, expectedExtendedYear20250101, actual20250101);
+            assertEquals("2025-07-01 in " + calendarName, expectedExtendedYear20250701, actual20250701);
+            assertEquals("2025-12-31 in " + calendarName, expectedExtendedYear20251231, actual20251231);
+        }
+    }
 }
 //eof
