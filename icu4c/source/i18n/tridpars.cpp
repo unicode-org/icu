@@ -136,6 +136,7 @@ TransliteratorIDParser::parseSingleID(const UnicodeString& id, int32_t& pos,
                 specsB = parseFilterID(id, pos, true);
                 // Must close with a ')'
                 if (specsB == nullptr || !ICU_Utility::parseChar(id, pos, CLOSE_REV)) {
+                    delete specsB;
                     delete specsA;
                     pos = start;
                     return nullptr;

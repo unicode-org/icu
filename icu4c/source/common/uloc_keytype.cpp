@@ -160,7 +160,7 @@ initFromResourceBundle(UErrorCode& sts) {
 
         bool isTZ = uprv_strcmp(legacyKeyId, "timezone") == 0;
 
-        UHashtable* typeDataMap = uhash_open(uhash_hashIStringView, uhash_compareIStringView, nullptr, &sts);
+        LocalUHashtablePointer typeDataMap(uhash_open(uhash_hashIStringView, uhash_compareIStringView, nullptr, &sts));
         if (U_FAILURE(sts)) {
             break;
         }
@@ -267,10 +267,10 @@ initFromResourceBundle(UErrorCode& sts) {
                 t->bcpId = bcpTypeId;
                 t->legacyId = legacyTypeId;
 
-                uhash_put(typeDataMap, &t->legacyId, t, &sts);
+                uhash_put(typeDataMap.getAlias(), &t->legacyId, t, &sts);
                 if (bcpTypeId != legacyTypeId) {
                     // different type value
-                    uhash_put(typeDataMap, &t->bcpId, t, &sts);
+                    uhash_put(typeDataMap.getAlias(), &t->bcpId, t, &sts);
                 }
                 if (U_FAILURE(sts)) {
                     break;
@@ -314,7 +314,7 @@ initFromResourceBundle(UErrorCode& sts) {
                                     alias->from = {fromBuf->data(), fromView.length()};
                                 }
                             }
-                            uhash_put(typeDataMap, &alias->from, t, &sts);
+                            uhash_put(typeDataMap.getAlias(), &alias->from, t, &sts);
                         }
                     }
                     if (U_FAILURE(sts)) {
@@ -342,7 +342,7 @@ initFromResourceBundle(UErrorCode& sts) {
                                 toLen) == 0) {
                             const char* from = ures_getKey(bcpTypeAliasDataEntry.getAlias());
                             TypeAlias* alias = gTypeAliasEntries->create(TypeAlias{{}, from});
-                            uhash_put(typeDataMap, &alias->from, t, &sts);
+                            uhash_put(typeDataMap.getAlias(), &alias->from, t, &sts);
                         }
                     }
                     if (U_FAILURE(sts)) {
@@ -363,7 +363,7 @@ initFromResourceBundle(UErrorCode& sts) {
         keyData->bcpId = bcpKeyId;
         keyData->legacyId = legacyKeyId;
         keyData->specialTypes = specialTypes;
-        keyData->typeMap.adoptInstead(typeDataMap);
+        keyData->typeMap = std::move(typeDataMap);
 
         uhash_put(gLocExtKeyMap, &keyData->legacyId, keyData, &sts);
         if (legacyKeyId != bcpKeyId) {
