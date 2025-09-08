@@ -616,6 +616,13 @@ void TimeZoneFormatTest::RunTimeRoundTripTests(int32_t threadNumber) {
                 continue;
             }
 
+            if (*tzid == "Pacific/Honolulu"
+                    && uprv_strcmp(gLocaleData->locales[locidx].getName(), "sv") == 0
+                    && uprv_strcmp(PATTERNS[patidx], "vvvv") == 0
+                    && logKnownIssue("18924", "Ambiguous zone name - Honolulutid")) {
+                continue;
+            }
+
             BasicTimeZone *tz = dynamic_cast<BasicTimeZone*>(TimeZone::createTimeZone(*tzid));
             sdf->setTimeZone(*tz);
 
