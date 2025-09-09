@@ -2077,4 +2077,15 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
         String bestPattern = dtpg.getBestPattern("GyMEd");
         assertEquals("Should not substitute numeric for alpha", "EEE, MMM d, y G", bestPattern);
     }
+
+    @Test
+    public void testTimePatternSelection18881() {
+        DateTimePatternGenerator dtpg0 = DateTimePatternGenerator.getInstance(ULocale.forLanguageTag("th"));
+        String bestPattern = dtpg0.getBestPattern("MMMMdjmsO");
+        assertEquals("getInstance", "d MMMM เวลา H นาฬิกา mm นาที ss วินาที O", bestPattern);
+
+        DateTimePatternGenerator dtpg1 = DateTimePatternGenerator.getInstanceNoStdPat(ULocale.forLanguageTag("th"));
+        bestPattern = dtpg1.getBestPattern("MMMMdjmsO");
+        assertEquals("getInstanceNoStdPat", "d MMMM HH:mm:ss O", bestPattern);
+    }
 }
