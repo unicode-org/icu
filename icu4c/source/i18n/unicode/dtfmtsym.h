@@ -406,9 +406,9 @@ public:
      * Sets quarter strings by width and context. For example: "1st Quarter", "2nd Quarter", etc.
      *
      * @param quarters  The new quarter strings. (not adopted; caller retains ownership)
-     * @param count   Filled in with length of the array.
+     * @param count   The number of strings in the array.
      * @param context The formatting context, either FORMAT or STANDALONE
-     * @param width   The width of returned strings, either WIDE, ABBREVIATED, or NARROW.
+     * @param width   The width of set strings, either WIDE, ABBREVIATED, or NARROW.
      * @stable ICU 3.6
      */
     U_I18N_API void setQuarters(const UnicodeString* quarters,
@@ -418,19 +418,46 @@ public:
 
     /**
      * Gets AM/PM strings. For example: "AM" and "PM".
-     * @param count        Filled in with length of the array.
-     * @return             the weekday strings. (DateFormatSymbols retains ownership.)
+     * @param count    Filled in with length of the array.
+     * @return         The AM/PM strings. (DateFormatSymbols retains ownership.)
      * @stable ICU 2.0
      */
     U_I18N_API const UnicodeString* getAmPmStrings(int32_t& count) const;
 
     /**
      * Sets ampm strings. For example: "AM" and "PM".
-     * @param ampms        the new ampm strings. (not adopted; caller retains ownership)
-     * @param count        Filled in with length of the array.
+     * @param ampms   The new ampm strings. (not adopted; caller retains ownership)
+     * @param count   The number of strings in the array.
      * @stable ICU 2.0
      */
     U_I18N_API void setAmPmStrings(const UnicodeString* ampms, int32_t count);
+
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * Gets AM/PM strings with the specified width. For example: "A" and "P".
+     * @param count    Filled in with length of the array.
+     * @param context  The usage context. Currently ignored; FORMAT names always returned.
+     * @param width    The width of returned strings, either WIDE, ABBREVIATED, or NARROW.
+     * @return         The AM/PM strings. (DateFormatSymbols retains ownership.)
+     * @draft ICU 78
+     */
+    U_I18N_API const UnicodeString* getAmPmStrings(int32_t& count,
+                                                   DtContextType context,
+                                                   DtWidthType width) const;
+
+    /**
+     * Sets AM/PM strings with the specified width. For example: "A" and "P".
+     * @param ampms   The new AM/PM strings. (not adopted; caller retains ownership)
+     * @param count   The number of strings in the array.
+     * @param context The usage context. Currently ignored; always sets FORMAT names.
+     * @param width   The width of set strings, either WIDE, ABBREVIATED, or NARROW.
+     * @draft ICU 78
+     */
+    U_I18N_API void setAmPmStrings(const UnicodeString* ampms,
+                                   int32_t count,
+                                   DtContextType context,
+                                   DtWidthType width);
+#endif  /* U_HIDE_DRAFT_API */
 
 #ifndef U_HIDE_INTERNAL_API
     /**
@@ -768,6 +795,13 @@ private:
      */
     UnicodeString*  fAmPms;
     int32_t         fAmPmsCount;
+
+    /**
+     * Wide Ampm strings. For example: "ante meridiem" and "post meridiem".
+     * These strings are uncommon but exist in a handful of locales.
+     */
+    UnicodeString*  fWideAmPms;
+    int32_t         fWideAmPmsCount;
 
     /**
      * Narrow Ampm strings. For example: "a" and "p".

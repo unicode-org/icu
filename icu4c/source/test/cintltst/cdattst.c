@@ -592,7 +592,7 @@ static void TestRelativeDateFormat(void)
 /*Testing udat_getSymbols() and udat_setSymbols() and udat_countSymbols()*/
 static void TestSymbols(void)
 {
-    UDateFormat *def, *fr, *zhChiCal, *esMX;
+    UDateFormat *def, *fr, *zhChiCal, *esMX, *th;
     UErrorCode status = U_ZERO_ERROR;
     UChar *value=NULL;
     UChar *result = NULL;
@@ -637,6 +637,15 @@ static void TestSymbols(void)
     if(U_FAILURE(status))
     {
         log_data_err("error in creating the dateformat using no date, short time, locale es_MX -> %s (Are you missing data?)\n",
+            myErrorName(status) );
+        return;
+    }
+    /*creating a dateformat with th locale */
+    log_verbose("\ncreating a date format with th locale\n");
+    th = udat_open(UDAT_SHORT, UDAT_NONE, "th", NULL, 0, NULL, 0, &status);
+    if(U_FAILURE(status))
+    {
+        log_data_err("error in creating the dateformat using no date, short time, locale th -> %s (Are you missing data?)\n",
             myErrorName(status) );
         return;
     }
@@ -710,6 +719,10 @@ static void TestSymbols(void)
     VerifygetSymbols(zhChiCal, UDAT_CYCLIC_YEARS_NARROW, 59, "\\u7678\\u4EA5");
     VerifygetSymbols(zhChiCal, UDAT_ZODIAC_NAMES_ABBREVIATED, 0, "\\u9F20");
     VerifygetSymbols(zhChiCal, UDAT_ZODIAC_NAMES_WIDE, 11, "\\u732A");
+    VerifygetSymbols(def, UDAT_AM_PMS_NARROW, 0, "a");
+    VerifygetSymbols(def, UDAT_AM_PMS_NARROW, 1, "p");
+    VerifygetSymbols(th, UDAT_AM_PMS_WIDE, 0, "\\u0E01\\u0E48\\u0E2D\\u0E19\\u0E40\\u0E17\\u0E35\\u0E48\\u0E22\\u0E07");
+    VerifygetSymbols(th, UDAT_AM_PMS_WIDE, 1, "\\u0E2B\\u0E25\\u0E31\\u0E07\\u0E40\\u0E17\\u0E35\\u0E48\\u0E22\\u0E07");
 #if UDAT_HAS_PATTERN_CHAR_FOR_TIME_SEPARATOR
     VerifygetSymbols(def,UDAT_LOCALIZED_CHARS, 0, "GyMdkHmsSEDFwWahKzYeugAZvcLQqVUOXxrbB:");
 #else
@@ -853,6 +866,7 @@ free(pattern);
     udat_close(def);
     udat_close(zhChiCal);
     udat_close(esMX);
+    udat_close(th);
     if(result != NULL) {
         free(result);
         result = NULL;

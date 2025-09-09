@@ -273,6 +273,7 @@ public:
     void TestBogusLocale();
     void TestLongLocale();
     void TestChineseCalendar23043();
+    void TestAmPmLengths23114();
 
 private:
     UBool showParse(DateFormat &format, const UnicodeString &formattedString);

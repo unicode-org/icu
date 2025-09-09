@@ -30,6 +30,7 @@
 #include "unicode/ustring.h"
 #include "unicode/localpointer.h"
 #include "unicode/dtfmtsym.h"
+#include "unicode/errorcode.h"
 #include "unicode/smpdtfmt.h"
 #include "unicode/msgfmt.h"
 #include "unicode/numsys.h"
@@ -421,6 +422,7 @@ DateFormatSymbols::copyData(const DateFormatSymbols& other) {
     assignArray(fStandaloneShorterWeekdays, fStandaloneShorterWeekdaysCount, other.fStandaloneShorterWeekdays, other.fStandaloneShorterWeekdaysCount);
     assignArray(fStandaloneNarrowWeekdays, fStandaloneNarrowWeekdaysCount, other.fStandaloneNarrowWeekdays, other.fStandaloneNarrowWeekdaysCount);
     assignArray(fAmPms, fAmPmsCount, other.fAmPms, other.fAmPmsCount);
+    assignArray(fWideAmPms, fWideAmPmsCount, other.fWideAmPms, other.fWideAmPmsCount );
     assignArray(fNarrowAmPms, fNarrowAmPmsCount, other.fNarrowAmPms, other.fNarrowAmPmsCount );
     fTimeSeparator.fastCopyFrom(other.fTimeSeparator);  // fastCopyFrom() - see assignArray comments
     assignArray(fQuarters, fQuartersCount, other.fQuarters, other.fQuartersCount);
@@ -517,6 +519,7 @@ void DateFormatSymbols::dispose()
     delete[] fStandaloneShorterWeekdays;
     delete[] fStandaloneNarrowWeekdays;
     delete[] fAmPms;
+    delete[] fWideAmPms;
     delete[] fNarrowAmPms;
     delete[] fQuarters;
     delete[] fShortQuarters;
@@ -599,6 +602,7 @@ DateFormatSymbols::operator==(const DateFormatSymbols& other) const
         fStandaloneShorterWeekdaysCount == other.fStandaloneShorterWeekdaysCount &&
         fStandaloneNarrowWeekdaysCount == other.fStandaloneNarrowWeekdaysCount &&
         fAmPmsCount == other.fAmPmsCount &&
+        fWideAmPmsCount == other.fWideAmPmsCount &&
         fNarrowAmPmsCount == other.fNarrowAmPmsCount &&
         fQuartersCount == other.fQuartersCount &&
         fShortQuartersCount == other.fShortQuartersCount &&
@@ -636,6 +640,7 @@ DateFormatSymbols::operator==(const DateFormatSymbols& other) const
             arrayCompare(fStandaloneShorterWeekdays, other.fStandaloneShorterWeekdays, fStandaloneShorterWeekdaysCount) &&
             arrayCompare(fStandaloneNarrowWeekdays, other.fStandaloneNarrowWeekdays, fStandaloneNarrowWeekdaysCount) &&
             arrayCompare(fAmPms, other.fAmPms, fAmPmsCount) &&
+            arrayCompare(fWideAmPms, other.fWideAmPms, fWideAmPmsCount) &&
             arrayCompare(fNarrowAmPms, other.fNarrowAmPms, fNarrowAmPmsCount) &&
             fTimeSeparator == other.fTimeSeparator &&
             arrayCompare(fQuarters, other.fQuarters, fQuartersCount) &&
@@ -894,8 +899,32 @@ DateFormatSymbols::getTimeSeparatorString(UnicodeString& result) const
 const UnicodeString*
 DateFormatSymbols::getAmPmStrings(int32_t &count) const
 {
-    count = fAmPmsCount;
-    return fAmPms;
+    return getAmPmStrings(count, FORMAT, ABBREVIATED);
+}
+
+const UnicodeString*
+DateFormatSymbols::getAmPmStrings(int32_t &count, DtContextType /*ignored*/, DtWidthType width) const
+{
+    UnicodeString* const* srcArray;
+    int32_t const* srcCount;
+    switch (width) {
+    case WIDE:
+        srcArray = &fWideAmPms;
+        srcCount = &fWideAmPmsCount;
+        break;
+    case NARROW:
+        srcArray = &fNarrowAmPms;
+        srcCount = &fNarrowAmPmsCount;
+        break;
+    case ABBREVIATED:
+    default:
+        srcArray = &fAmPms;
+        srcCount = &fAmPmsCount;
+        break;
+    }
+
+    count = *srcCount;
+    return *srcArray;
 }
 
 const UnicodeString*
@@ -1235,14 +1264,38 @@ DateFormatSymbols::setQuarters(const UnicodeString* quartersArray, int32_t count
 void
 DateFormatSymbols::setAmPmStrings(const UnicodeString* amPmsArray, int32_t count)
 {
+    setAmPmStrings(amPmsArray, count, FORMAT, ABBREVIATED);
+}
+
+void
+DateFormatSymbols::setAmPmStrings(const UnicodeString* amPmsArray, int32_t count, DtContextType /*ignored*/, DtWidthType width)
+{
+    UnicodeString** targetArray;
+    int32_t* targetCount;
+    switch (width) {
+    case WIDE:
+        targetArray = &fWideAmPms;
+        targetCount = &fWideAmPmsCount;
+        break;
+    case NARROW:
+        targetArray = &fNarrowAmPms;
+        targetCount = &fNarrowAmPmsCount;
+        break;
+    case ABBREVIATED:
+    default:
+        targetArray = &fAmPms;
+        targetCount = &fAmPmsCount;
+        break;
+    }
+
     // delete the old list if we own it
-    delete[] fAmPms;
+    delete[] *targetArray;
 
     // we always own the new list, which we create here (we duplicate rather
     // than adopting the list passed in)
-    fAmPms = newUnicodeStringArray(count);
-    uprv_arrayCopy(amPmsArray,fAmPms,count);
-    fAmPmsCount = count;
+    *targetArray = newUnicodeStringArray(count);
+    uprv_arrayCopy(amPmsArray,*targetArray,count);
+    *targetCount = count;
 }
 
 void
@@ -2098,6 +2151,8 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
     fStandaloneNarrowWeekdaysCount=0;
     fAmPms = nullptr;
     fAmPmsCount=0;
+    fWideAmPms = nullptr;
+    fWideAmPmsCount=0;
     fNarrowAmPms = nullptr;
     fNarrowAmPmsCount=0;
     fTimeSeparator.setToBogus();
@@ -2413,25 +2468,28 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
         assignArray(fStandaloneNarrowMonths, fStandaloneNarrowMonthsCount, fShortMonths, fShortMonthsCount);
     }
 
-    // Load AM/PM markers; if wide or narrow not available, use short
-    UErrorCode ampmStatus = U_ZERO_ERROR;
+    // Load AM/PM markers.
+    ErrorCode ampmStatus;
     initField(&fAmPms, fAmPmsCount, calendarSink,
-              buildResourcePath(path, gAmPmMarkersTag, ampmStatus), ampmStatus);
-    if (U_FAILURE(ampmStatus)) {
-        initField(&fAmPms, fAmPmsCount, calendarSink,
-                  buildResourcePath(path, gAmPmMarkersAbbrTag, status), status);
+              buildResourcePath(path, gAmPmMarkersAbbrTag, ampmStatus), ampmStatus);
+    if (ampmStatus.isFailure()) {
+        // No-op: fall back to last-resort names, which are pre-populated
     }
-    ampmStatus = U_ZERO_ERROR;
+    ampmStatus.reset();
     initField(&fNarrowAmPms, fNarrowAmPmsCount, calendarSink,
               buildResourcePath(path, gAmPmMarkersNarrowTag, ampmStatus), ampmStatus);
-    if (U_FAILURE(ampmStatus)) {
-        initField(&fNarrowAmPms, fNarrowAmPmsCount, calendarSink,
-                  buildResourcePath(path, gAmPmMarkersAbbrTag, status), status);
-    }
-    if(status == U_MISSING_RESOURCE_ERROR) {
-        status = U_ZERO_ERROR;
+    if (ampmStatus.isFailure()) {
+        // Narrow falls back to Abbreviated
         assignArray(fNarrowAmPms, fNarrowAmPmsCount, fAmPms, fAmPmsCount);
     }
+    ampmStatus.reset();
+    initField(&fWideAmPms, fWideAmPmsCount, calendarSink,
+              buildResourcePath(path, gAmPmMarkersTag, ampmStatus), ampmStatus);
+    if (ampmStatus.isFailure()) {
+        // Wide falls back to Abbreviated
+        assignArray(fWideAmPms, fWideAmPmsCount, fAmPms, fAmPmsCount);
+    }
+    ampmStatus.reset();
 
     // Load quarters
     initField(&fQuarters, fQuartersCount, calendarSink,

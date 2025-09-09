@@ -30,6 +30,7 @@ import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.text.DateFormat;
+import com.ibm.icu.text.DateFormatSymbols;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.ULocale;
 
@@ -277,6 +278,56 @@ public class IntlTestDateFormat extends CoreTestFmwk {
                 }
             }
         }
+    }
+
+    @Test
+    public void TestAmPmLengths23114() {
+        ULocale locale = ULocale.forLanguageTag("th");
+
+        SimpleDateFormat sdf = new SimpleDateFormat("h:mm:ss a", locale);
+        Date sampleDate = new Date(99, 9, 13, 23, 58, 59);
+        String formatResult = sdf.format(sampleDate);
+
+        assertEquals("SimpleDateFormat abbreviated", "11:58:59 PM", formatResult);
+
+        sdf = new SimpleDateFormat("h:mm:ss aaaa", locale);
+        formatResult = sdf.format(sampleDate);
+
+        assertEquals("SimpleDateFormat wide", "11:58:59 หลังเที่ยง", formatResult);
+
+        sdf = new SimpleDateFormat("h:mm:ss aaaaa", locale);
+        formatResult = sdf.format(sampleDate);
+
+        assertEquals("SimpleDateFormat narrow", "11:58:59 p", formatResult);
+
+        DateFormatSymbols dfs = new DateFormatSymbols(locale);
+        String[] amPm = dfs.getAmPmStrings();
+
+        assertEquals("DateFormatSymbols default", "AM", amPm[0]);
+
+        String[] customAmPmStrings = { "am!", "pm!" };
+
+        int ignoredContext = DateFormatSymbols.FORMAT;
+        amPm = dfs.getAmPmStrings(ignoredContext, DateFormatSymbols.ABBREVIATED);
+        assertEquals("DateFormatSymbols abbreviated", "AM", amPm[0]);
+
+        dfs.setAmPmStrings(customAmPmStrings, ignoredContext, DateFormatSymbols.ABBREVIATED);
+        amPm = dfs.getAmPmStrings(ignoredContext, DateFormatSymbols.ABBREVIATED);
+        assertEquals("DateFormatSymbols abbreviated after set", "am!", amPm[0]);
+
+        amPm = dfs.getAmPmStrings(ignoredContext, DateFormatSymbols.WIDE);
+        assertEquals("DateFormatSymbols wide", "ก่อนเที่ยง", amPm[0]);
+
+        dfs.setAmPmStrings(customAmPmStrings, ignoredContext, DateFormatSymbols.WIDE);
+        amPm = dfs.getAmPmStrings(ignoredContext, DateFormatSymbols.WIDE);
+        assertEquals("DateFormatSymbols wide after set", "am!", amPm[0]);
+
+        amPm = dfs.getAmPmStrings(ignoredContext, DateFormatSymbols.NARROW);
+        assertEquals("DateFormatSymbols narrow", "a", amPm[0]);
+
+        dfs.setAmPmStrings(customAmPmStrings, ignoredContext, DateFormatSymbols.NARROW);
+        amPm = dfs.getAmPmStrings(ignoredContext, DateFormatSymbols.NARROW);
+        assertEquals("DateFormatSymbols narrow after set", "am!", amPm[0]);
     }
 }
 

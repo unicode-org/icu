@@ -1418,10 +1418,12 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
             break;
         case 14: // 'a' - AM_PM
             // formatData.ampmsNarrow may be null when deserializing DateFormatSymbolsfrom old version
-            if (count < 5 || formatData.ampmsNarrow == null) {
-                safeAppend(formatData.ampms, value, buf);
-            } else {
+            if (count == 4 && formatData.ampmsWide != null) {
+                safeAppend(formatData.ampmsWide, value, buf);
+            } else if (count == 5 && formatData.ampmsNarrow != null) {
                 safeAppend(formatData.ampmsNarrow, value, buf);
+            } else {
+                safeAppend(formatData.ampms, value, buf);
             }
             break;
         case 15: // 'h' - HOUR (1..12)
