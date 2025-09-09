@@ -184,7 +184,7 @@ public class MFParser {
         return result;
     }
 
-    private MFDataModel.Function getFunction(boolean whitespaceRequired) throws MFParseException {
+    private MFDataModel.FunctionRef getFunction(boolean whitespaceRequired) throws MFParseException {
         int position = input.getPosition();
 
         // Handle absent function first (before parsing mandatory whitespace)
@@ -214,7 +214,7 @@ public class MFParser {
                 String identifier = getIdentifier();
                 checkCondition(identifier != null, "Function name missing");
                 Map<String, MFDataModel.Option> options = getOptions();
-                return new MFDataModel.Function(identifier, options);
+                return new MFDataModel.FunctionRef(identifier, options);
             default:
                 // OK to continue and return null, it is an error.
         }
@@ -222,7 +222,7 @@ public class MFParser {
         return null;
     }
 
-    private MFDataModel.Function getMarkupFunction() throws MFParseException {
+    private MFDataModel.FunctionRef getMarkupFunction() throws MFParseException {
         skipOptionalWhitespaces();
 
         int cp = input.peekChar();
@@ -237,7 +237,7 @@ public class MFParser {
                 String identifier = getIdentifier();
                 checkCondition(identifier != null, "Function name missing");
                 Map<String, MFDataModel.Option> options = getOptions();
-                return new MFDataModel.Function(identifier, options);
+                return new MFDataModel.FunctionRef(identifier, options);
             default:
                 // function or something else,
                 return null;
@@ -249,7 +249,7 @@ public class MFParser {
         MFDataModel.Literal literal = getLiteral(false);
         checkCondition(literal != null, "Literal expression expected.");
 
-        MFDataModel.Function function = null;
+        MFDataModel.FunctionRef function = null;
         boolean hasWhitespace = StringUtils.isWhitespace(input.peekChar());
         if (hasWhitespace) { // we might have an function
             function = getFunction(true);
@@ -273,7 +273,7 @@ public class MFParser {
     // abnf: variable-expression = "{" o variable [s function] *(s attribute) o "}"
     private MFDataModel.VariableExpression getVariableExpression() throws MFParseException {
         MFDataModel.VariableRef variableRef = getVariableRef();
-        MFDataModel.Function function = getFunction(true);
+        MFDataModel.FunctionRef function = getFunction(true);
         List<MFDataModel.Attribute> attributes = getAttributes();
         // Variable without a function, for example {$foo}
         return new MFDataModel.VariableExpression(variableRef, function, attributes);
@@ -281,12 +281,12 @@ public class MFParser {
 
     // abnf: function-expression = "{" o function *(s attribute) o "}"
     private MFDataModel.Expression getFunctionExpression() throws MFParseException {
-        MFDataModel.Function function = getFunction(false);
+        MFDataModel.FunctionRef function = getFunction(false);
         List<MFDataModel.Attribute> attributes = getAttributes();
 
-        if (function instanceof MFDataModel.Function) {
+        if (function instanceof MFDataModel.FunctionRef) {
             return new MFDataModel.FunctionExpression(
-                    (MFDataModel.Function) function, attributes);
+                    (MFDataModel.FunctionRef) function, attributes);
         } else {
             error("Unexpected function : " + function);
         }
@@ -302,7 +302,7 @@ public class MFParser {
         MFDataModel.Markup.Kind kind =
                 cp == '/' ? MFDataModel.Markup.Kind.CLOSE : MFDataModel.Markup.Kind.OPEN;
 
-        MFDataModel.Function function = getMarkupFunction();
+        MFDataModel.FunctionRef function = getMarkupFunction();
         List<MFDataModel.Attribute> attributes = getAttributes();
 
         // Parse optional whitespace after attribute list
@@ -314,8 +314,8 @@ public class MFParser {
             input.readCodePoint();
         }
 
-        if (function instanceof MFDataModel.Function) {
-            MFDataModel.Function fa = (MFDataModel.Function) function;
+        if (function instanceof MFDataModel.FunctionRef) {
+            MFDataModel.FunctionRef fa = (MFDataModel.FunctionRef) function;
             return new MFDataModel.Markup(kind, fa.name, fa.options, attributes);
         }
 

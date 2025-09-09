@@ -12,31 +12,31 @@ import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.message2.FormattedPlaceholder;
-import com.ibm.icu.message2.Formatter;
-import com.ibm.icu.message2.FormatterFactory;
+import com.ibm.icu.message2.Function;
+import com.ibm.icu.message2.FunctionFactory;
 import com.ibm.icu.message2.MFFunctionRegistry;
 import com.ibm.icu.message2.MessageFormatter;
 import com.ibm.icu.message2.PlainStringFormattedValue;
 
 /**
- * Showing a custom formatter that can handle grammatical cases.
+ * Showing a custom function that can handle grammatical cases.
  */
 @RunWith(JUnit4.class)
 @SuppressWarnings({"static-method", "javadoc"})
-public class CustomFormatterGrammarCaseTest extends CoreTestFmwk {
+public class CustomFunctionGrammarCaseTest extends CoreTestFmwk {
 
-    static class GrammarCasesFormatterFactory implements FormatterFactory {
+    static class GrammarCasesFunctionFactory implements FunctionFactory {
 
         @Override
-        public Formatter createFormatter(Locale locale, Map<String, Object> fixedOptions) {
+        public Function create(Locale locale, Map<String, Object> fixedOptions) {
             Object grammarCase = fixedOptions.get("case");
-            return new GrammarCasesFormatterImpl(grammarCase == null ? "" : grammarCase.toString());
+            return new GrammarCasesFunctionImpl(grammarCase == null ? "" : grammarCase.toString());
         }
 
-        static class GrammarCasesFormatterImpl implements Formatter {
+        static class GrammarCasesFunctionImpl implements Function {
             final String grammarCase;
 
-            GrammarCasesFormatterImpl(String grammarCase) {
+            GrammarCasesFunctionImpl(String grammarCase) {
                 this.grammarCase = grammarCase;
             }
 
@@ -87,7 +87,7 @@ public class CustomFormatterGrammarCaseTest extends CoreTestFmwk {
     }
 
     static final MFFunctionRegistry REGISTRY = MFFunctionRegistry.builder()
-            .setFormatter("grammarBB", new GrammarCasesFormatterFactory())
+            .setFunction("grammarBB", new GrammarCasesFunctionFactory())
             .build();
 
     @Test

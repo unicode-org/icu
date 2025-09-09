@@ -40,11 +40,9 @@ public class TestUtils {
         .create();
 
     private static final MFFunctionRegistry TEST_REGISTRY = MFFunctionRegistry.builder()
-            .setFormatter("test:function", new TestFunctionFactory("function"))
-            .setFormatter("test:format", new TestFunctionFactory("format"))
-            .setFormatter("test:select", new TestFunctionFactory("select"))
-            .setSelector("test:function", new TestFunctionFactory("function"))
-            .setSelector("test:select", new TestFunctionFactory("select"))
+            .setFunction("test:function", new TestFunctionFactory("function"))
+            .setFunction("test:format", new TestFunctionFactory("format"))
+            .setFunction("test:select", new TestFunctionFactory("select"))
             .build();
 
     // ======= Legacy TestCase utilities, no json-compatible ========

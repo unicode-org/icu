@@ -13,17 +13,17 @@ import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.message2.FormattedPlaceholder;
-import com.ibm.icu.message2.Formatter;
-import com.ibm.icu.message2.FormatterFactory;
+import com.ibm.icu.message2.Function;
+import com.ibm.icu.message2.FunctionFactory;
 import com.ibm.icu.message2.MFFunctionRegistry;
 import com.ibm.icu.message2.PlainStringFormattedValue;
 
 /**
- * Showing a custom formatter for a user defined class.
+ * Showing a custom function for a user defined class.
  */
 @RunWith(JUnit4.class)
 @SuppressWarnings({"static-method", "javadoc"})
-public class CustomFormatterPersonTest extends CoreTestFmwk {
+public class CustomFunctionPersonTest extends CoreTestFmwk {
 
     public static class Person {
         final String title;
@@ -42,17 +42,17 @@ public class CustomFormatterPersonTest extends CoreTestFmwk {
         }
     }
 
-    private static class PersonNameFormatterFactory implements FormatterFactory {
+    private static class PersonNameFunctionFactory implements FunctionFactory {
         @Override
-        public Formatter createFormatter(Locale locale, Map<String, Object> fixedOptions) {
-            return new PersonNameFormatterImpl(fixedOptions.get("formality"), fixedOptions.get("length"));
+        public Function create(Locale locale, Map<String, Object> fixedOptions) {
+            return new PersonNameFunctionImpl(fixedOptions.get("formality"), fixedOptions.get("length"));
         }
 
-        static class PersonNameFormatterImpl implements Formatter {
+        static class PersonNameFunctionImpl implements Function {
             boolean useFormal = false;
             final String length;
 
-            public PersonNameFormatterImpl(Object level, Object length) {
+            public PersonNameFunctionImpl(Object level, Object length) {
                 this.useFormal = "formal".equals(level);
                 this.length = Objects.toString(length);
             }
@@ -93,8 +93,8 @@ public class CustomFormatterPersonTest extends CoreTestFmwk {
     }
 
     private static final MFFunctionRegistry CUSTOM_FUNCTION_REGISTRY = MFFunctionRegistry.builder()
-            .setFormatter("person", new PersonNameFormatterFactory())
-            .setDefaultFormatterNameForType(Person.class, "person")
+            .setFunction("person", new PersonNameFunctionFactory())
+            .setDefaultFunctionNameForType(Person.class, "person")
             .build();
 
     @Test

@@ -11,7 +11,7 @@ import com.ibm.icu.message2.MFDataModel.Attribute;
 import com.ibm.icu.message2.MFDataModel.CatchallKey;
 import com.ibm.icu.message2.MFDataModel.Declaration;
 import com.ibm.icu.message2.MFDataModel.Expression;
-import com.ibm.icu.message2.MFDataModel.Function;
+import com.ibm.icu.message2.MFDataModel.FunctionRef;
 import com.ibm.icu.message2.MFDataModel.FunctionExpression;
 import com.ibm.icu.message2.MFDataModel.InputDeclaration;
 import com.ibm.icu.message2.MFDataModel.Literal;
@@ -179,15 +179,15 @@ public class MFSerializer {
         }
     }
 
-    private void functionToString(Function function) {
+    private void functionToString(FunctionRef function) {
         if (function == null) {
             return;
         }
-        if (function instanceof Function) {
+        if (function instanceof FunctionRef) {
             addSpaceIfNeeded();
             result.append(":");
-            result.append(((Function) function).name);
-            optionsToString(((Function) function).options);
+            result.append(((FunctionRef) function).name);
+            optionsToString(((FunctionRef) function).options);
         } else {
             errorType("Function", function);
         }

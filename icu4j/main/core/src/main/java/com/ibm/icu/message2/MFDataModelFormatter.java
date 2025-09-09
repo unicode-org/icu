@@ -16,7 +16,7 @@ import java.util.Map;
 import com.ibm.icu.message2.MFDataModel.CatchallKey;
 import com.ibm.icu.message2.MFDataModel.Declaration;
 import com.ibm.icu.message2.MFDataModel.Expression;
-import com.ibm.icu.message2.MFDataModel.Function;
+import com.ibm.icu.message2.MFDataModel.FunctionRef;
 import com.ibm.icu.message2.MFDataModel.FunctionExpression;
 import com.ibm.icu.message2.MFDataModel.InputDeclaration;
 import com.ibm.icu.message2.MFDataModel.Literal;
@@ -73,38 +73,34 @@ class MFDataModelFormatter {
 
         standardFunctions =
                 MFFunctionRegistry.builder()
-                        // Date/time formatting
-                        .setFormatter("datetime", new DateTimeFormatterFactory("datetime"))
-                        .setFormatter("date", new DateTimeFormatterFactory("date"))
-                        .setFormatter("time", new DateTimeFormatterFactory("time"))
-                        .setDefaultFormatterNameForType(Date.class, "datetime")
-                        .setDefaultFormatterNameForType(Calendar.class, "datetime")
-                        .setDefaultFormatterNameForType(java.util.Calendar.class, "datetime")
-                        .setDefaultFormatterNameForType(Temporal.class, "datetime")
-                        .setDefaultFormatterNameForType(DayOfWeek.class, "date")
-                        .setDefaultFormatterNameForType(Month.class, "date")
+                        // Date/time formatting. No selection.
+                        .setFunction("datetime", new DateTimeFunctionFactory("datetime"))
+                        .setFunction("date", new DateTimeFunctionFactory("date"))
+                        .setFunction("time", new DateTimeFunctionFactory("time"))
+                        .setDefaultFunctionNameForType(Date.class, "datetime")
+                        .setDefaultFunctionNameForType(Calendar.class, "datetime")
+                        .setDefaultFunctionNameForType(java.util.Calendar.class, "datetime")
+                        .setDefaultFunctionNameForType(Temporal.class, "datetime")
+                        .setDefaultFunctionNameForType(DayOfWeek.class, "date")
+                        .setDefaultFunctionNameForType(Month.class, "date")
 
-                        // Number formatting
-                        .setFormatter("number", new NumberFormatterFactory("number"))
-                        .setFormatter("integer", new NumberFormatterFactory("integer"))
-                        .setFormatter("currency", new NumberFormatterFactory("currency"))
-                        .setFormatter("math", new NumberFormatterFactory("math"))
-                        .setDefaultFormatterNameForType(Integer.class, "number")
-                        .setDefaultFormatterNameForType(Double.class, "number")
-                        .setDefaultFormatterNameForType(Number.class, "number")
-                        .setDefaultFormatterNameForType(CurrencyAmount.class, "currency")
+                        // Number formatting and selection
+                        .setFunction("number", new NumberFunctionFactory("number"))
+                        .setFunction("integer", new NumberFunctionFactory("integer"))
+                        .setFunction("currency", new NumberFunctionFactory("currency"))
+                        .setFunction("math", new NumberFunctionFactory("math"))
+                        .setDefaultFunctionNameForType(Integer.class, "number")
+                        .setDefaultFunctionNameForType(Double.class, "number")
+                        .setDefaultFunctionNameForType(Number.class, "number")
+                        .setDefaultFunctionNameForType(CurrencyAmount.class, "currency")
 
-                        // Format that returns "to string"
-                        .setFormatter("string", new IdentityFormatterFactory())
-                        .setDefaultFormatterNameForType(String.class, "string")
-                        .setDefaultFormatterNameForType(CharSequence.class, "string")
+                        // Function that returns "to string" and selects on string equality
+                        .setFunction("string", new TextFunctionFactory())
+                        .setDefaultFunctionNameForType(String.class, "string")
+                        .setDefaultFunctionNameForType(CharSequence.class, "string")
 
-                        // Register the standard selectors
-                        .setSelector("number", new NumberFormatterFactory("number"))
-                        .setSelector("integer", new NumberFormatterFactory("integer"))
-                        .setSelector("math", new NumberFormatterFactory("math"))
-                        .setSelector("string", new TextSelectorFactory())
-                        .setSelector("icu:gender", new TextSelectorFactory())
+                        // Register some custom selector
+                        .setFunction("icu:gender", new TextFunctionFactory())
                         .build();
     }
 
@@ -204,23 +200,23 @@ class MFDataModelFormatter {
             } else if (fph.getInput() instanceof MFDataModel.VariableExpression) {
                 MFDataModel.VariableExpression ve = (MFDataModel.VariableExpression) fph.getInput();
                 argument = resolveLiteralOrVariable(ve.arg, variables, arguments);
-                if (ve.function instanceof Function) {
-                    functionName = ((Function) ve.function).name;
+                if (ve.function instanceof FunctionRef) {
+                    functionName = ((FunctionRef) ve.function).name;
                 }
             } else if (fph.getInput() instanceof LiteralExpression) {
                 LiteralExpression le = (LiteralExpression) fph.getInput();
                 argument = le.arg;
-                if (le.function instanceof Function) {
-                    functionName = ((Function) le.function).name;
+                if (le.function instanceof FunctionRef) {
+                    functionName = ((FunctionRef) le.function).name;
                 }
             }
-            SelectorFactory funcFactory = standardFunctions.getSelector(functionName);
+            FunctionFactory funcFactory = standardFunctions.getFunction(functionName);
             if (funcFactory == null) {
-                funcFactory = customFunctions.getSelector(functionName);
+                funcFactory = customFunctions.getFunction(functionName);
             }
             // spec: If selection is supported for `rv`:
             if (funcFactory != null) {
-                Selector selectorFunction = funcFactory.createSelector(locale, options.getMap());
+                Function selectorFunction = funcFactory.create(locale, options.getMap());
                 ResolvedSelector rs = new ResolvedSelector(argument, options, selectorFunction);
                 // spec: Append `rv` as the last element of the list `res`.
                 res.add(rs);
@@ -433,10 +429,10 @@ class MFDataModelFormatter {
     private static class ResolvedSelector {
         final Object argument;
         final MapWithNfcKeys options;
-        final Selector selectorFunction;
+        final Function selectorFunction;
 
         public ResolvedSelector(
-                Object argument, MapWithNfcKeys options, Selector selectorFunction) {
+                Object argument, MapWithNfcKeys options, Function selectorFunction) {
             this.argument = argument;
             this.options = new MapWithNfcKeys(options);
             this.selectorFunction = selectorFunction;
@@ -447,7 +443,7 @@ class MFDataModelFormatter {
         throw new IllegalArgumentException(message);
     }
 
-    private FormatterFactory getFormattingFunctionFactoryByName(
+    private FunctionFactory getFormattingFunctionFactoryByName(
             Object toFormat, String functionName) {
         // Get a function name from the type of the object to format
         if (functionName == null || functionName.isEmpty()) {
@@ -456,9 +452,9 @@ class MFDataModelFormatter {
                 return null;
             }
             Class<?> clazz = toFormat.getClass();
-            functionName = standardFunctions.getDefaultFormatterNameForType(clazz);
+            functionName = standardFunctions.getDefaultFunctionNameForType(clazz);
             if (functionName == null) {
-                functionName = customFunctions.getDefaultFormatterNameForType(clazz);
+                functionName = customFunctions.getDefaultFunctionNameForType(clazz);
             }
             if (functionName == null) {
                 fatalFormattingError(
@@ -467,9 +463,9 @@ class MFDataModelFormatter {
             }
         }
 
-        FormatterFactory func = standardFunctions.getFormatter(functionName);
+        FunctionFactory func = standardFunctions.getFunction(functionName);
         if (func == null) {
-            func = customFunctions.getFormatter(functionName);
+            func = customFunctions.getFunction(functionName);
         }
         return func;
     }
@@ -518,7 +514,7 @@ class MFDataModelFormatter {
     private FormattedPlaceholder formatExpression(
             Expression expression, MapWithNfcKeys variables, MapWithNfcKeys arguments) {
 
-        Function function = null; // function name
+        FunctionRef function = null; // function name
         String functionName = null;
         Object toFormat = null;
         Map<String, Object> options = new HashMap<>();
@@ -564,14 +560,14 @@ class MFDataModelFormatter {
             }
         }
 
-        if (function instanceof Function) {
-            Function fa = (Function) function;
+        if (function instanceof FunctionRef) {
+            FunctionRef fa = (FunctionRef) function;
             functionName = fa.name;
             MapWithNfcKeys newOptions = convertOptions(fa.options, variables, arguments);
             options.putAll(newOptions.getMap());
         }
 
-        FormatterFactory funcFactory = getFormattingFunctionFactoryByName(toFormat, functionName);
+        FunctionFactory funcFactory = getFormattingFunctionFactoryByName(toFormat, functionName);
         if (funcFactory == null) {
             if (errorHandlingBehavior == ErrorHandlingBehavior.STRICT) {
                 fatalFormattingError("unable to find function at " + fallbackString);
@@ -579,11 +575,11 @@ class MFDataModelFormatter {
             return new FormattedPlaceholder(expression, new PlainStringFormattedValue(fallbackString));
         }
         // TODO 78: hack.
-        // How do we pass the error handling policy to formatters?
+        // How do we pass the error handling policy to formatter / selector functions?
         // I am afraid a clean solution for this would require some changes in the public APIs
         // And it is too late for that.
         options.put("icu:impl:errorPolicy", this.errorHandlingBehavior.name());
-        Formatter ff = funcFactory.createFormatter(locale, options);
+        Function ff = funcFactory.create(locale, options);
         FormattedPlaceholder resultToWrap = ff.format(toFormat, arguments.getMap());
         String res = resultToWrap == null ? null : resultToWrap.toString();
         if (res == null) {

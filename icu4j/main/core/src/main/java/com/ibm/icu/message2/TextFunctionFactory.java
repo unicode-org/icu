@@ -12,20 +12,44 @@ import java.util.Objects;
 import com.ibm.icu.message2.MFDataModel.CatchallKey;
 
 /**
- * Creates a {@link Selector} doing literal selection, similar to <code>{exp, select}</code>
+ * Creates a {@link Function} doing literal selection, similar to <code>{exp, select}</code>
  * in {@link com.ibm.icu.text.MessageFormat}.
+ * TODO: TZU
  */
-class TextSelectorFactory implements SelectorFactory {
-
+class TextFunctionFactory implements FunctionFactory {
     /**
      * {@inheritDoc}
      */
     @Override
-    public Selector createSelector(Locale locale, Map<String, Object> fixedOptions) {
-        return new TextSelector();
+    public Function create(Locale locale, Map<String, Object> fixedOptions) {
+        return new TextFunctionImpl(OptUtils.getDirectionality(fixedOptions));
     }
 
-    private static class TextSelector implements Selector {
+    private static class TextFunctionImpl implements Function {
+        private final Directionality directionality;
+
+        public TextFunctionImpl(Directionality directionality) {
+            this.directionality = directionality == null ? Directionality.INHERIT : directionality;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String formatToString(Object toFormat, Map<String, Object> variableOptions) {
+            return format(toFormat, variableOptions).toString();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public FormattedPlaceholder format(Object toFormat, Map<String, Object> variableOptions) {
+            return new FormattedPlaceholder(
+                    toFormat, new PlainStringFormattedValue(Objects.toString(toFormat)),
+                    directionality, true);
+        }
+
         /**
          * {@inheritDoc}
          */

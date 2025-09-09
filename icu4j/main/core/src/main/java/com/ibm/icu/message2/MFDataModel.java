@@ -228,7 +228,7 @@ public class MFDataModel {
     @Deprecated
     public static class LiteralExpression implements Expression {
         public final Literal arg;
-        public final Function function;
+        public final FunctionRef function;
         public final List<Attribute> attributes;
 
         /**
@@ -236,7 +236,7 @@ public class MFDataModel {
          * @deprecated This API is for technology preview only.
          */
         @Deprecated
-        public LiteralExpression(Literal arg, Function function, List<Attribute> attributes) {
+        public LiteralExpression(Literal arg, FunctionRef function, List<Attribute> attributes) {
             this.arg = arg;
             this.function = function;
             this.attributes = attributes;
@@ -250,7 +250,7 @@ public class MFDataModel {
     @Deprecated
     public static class VariableExpression implements Expression {
         public final VariableRef arg;
-        public final Function function;
+        public final FunctionRef function;
         public final List<Attribute> attributes;
 
         /**
@@ -259,7 +259,7 @@ public class MFDataModel {
          */
         @Deprecated
         public VariableExpression(
-                VariableRef arg, Function function, List<Attribute> attributes) {
+                VariableRef arg, FunctionRef function, List<Attribute> attributes) {
             this.arg = arg;
             this.function = function;
             this.attributes = attributes;
@@ -271,7 +271,7 @@ public class MFDataModel {
      * @deprecated This API is for technology preview only.
      */
     @Deprecated
-    public static class Function {
+    public static class FunctionRef {
         public final String name;
         public final Map<String, Option> options;
 
@@ -280,7 +280,7 @@ public class MFDataModel {
          * @deprecated This API is for technology preview only.
          */
         @Deprecated
-        public Function(String name, Map<String, Option> options) {
+        public FunctionRef(String name, Map<String, Option> options) {
             this.name = name;
             this.options = options;
         }
@@ -292,7 +292,7 @@ public class MFDataModel {
      */
     @Deprecated
     public static class FunctionExpression implements Expression {
-        public final Function function;
+        public final FunctionRef function;
         public final List<Attribute> attributes;
 
         /**
@@ -300,7 +300,7 @@ public class MFDataModel {
          * @deprecated This API is for technology preview only.
          */
         @Deprecated
-        public FunctionExpression(Function function, List<Attribute> attributes) {
+        public FunctionExpression(FunctionRef function, List<Attribute> attributes) {
             this.function = function;
             this.attributes = attributes;
         }

@@ -30,13 +30,15 @@ import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.CurrencyAmount;
 
 /**
- * Creates a {@link Formatter} doing numeric formatting, similar to <code>{exp, number}</code>
+ * Creates a {@link Function} doing numeric formatting, similar to <code>{exp, number}</code>
+ * in {@link com.ibm.icu.text.MessageFormat}, and plural selection,
+ * similar to <code>{exp, plural}</code> and to <code>{exp, selectordinal}</code>
  * in {@link com.ibm.icu.text.MessageFormat}.
  */
-class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
+class NumberFunctionFactory implements FunctionFactory {
     private final String kind;
 
-    public NumberFormatterFactory(String kind) {
+    public NumberFunctionFactory(String kind) {
         switch (kind) {
             case "number": // $FALL-THROUGH$
             case "integer":
@@ -54,15 +56,7 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
      * {@inheritDoc}
      */
     @Override
-    public Formatter createFormatter(Locale locale, Map<String, Object> fixedOptions) {
-        return new NumberFormatterImpl(locale, fixedOptions, kind);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Selector createSelector(Locale locale, Map<String, Object> fixedOptions) {
+    public Function create(Locale locale, Map<String, Object> fixedOptions) {
         String type = OptUtils.getString(fixedOptions, "select", "");
         PluralType pluralType;
         switch (type) {
@@ -75,22 +69,27 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
         }
 
         PluralRules rules = PluralRules.forLocale(locale, pluralType);
-        return new PluralSelectorImpl(locale, rules, fixedOptions, kind);
+        return new NumberFunctionImpl(locale, rules, fixedOptions, kind);
     }
 
-    static class NumberFormatterImpl implements Formatter {
+    static class NumberFunctionImpl implements Function {
+        private static final String NO_MATCH = "\uFFFDNO_MATCH\uFFFE"; // Unlikely to show in a key
         private final Locale locale;
         private final Map<String, Object> fixedOptions;
         private final LocalizedNumberFormatter icuFormatter;
         private final String kind;
+        private final PluralRules rules;
 
-        NumberFormatterImpl(Locale locale, Map<String, Object> fixedOptions, String kind) {
+        NumberFunctionImpl(
+                Locale locale, PluralRules rules, Map<String, Object> fixedOptions, String kind) {
             this.locale = OptUtils.getBestLocale(fixedOptions, locale);
             this.fixedOptions = new HashMap<>(fixedOptions);
             String skeleton = OptUtils.getString(fixedOptions, "icu:skeleton");
             boolean fancy = skeleton != null;
-            this.icuFormatter = formatterForOptions(this.locale, fixedOptions, kind);
+            this.icuFormatter = functionForOptions(this.locale, fixedOptions, kind);
             this.kind = kind;
+
+            this.rules = rules;
         }
 
         LocalizedNumberFormatter getIcuFormatter() {
@@ -120,7 +119,7 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
                 // This is really wasteful, as we don't use the existing
                 // formatter if even one option is variable.
                 // We can optimize, but for now will have to do.
-                realFormatter = formatterForOptions(locale, mergedOptions, kind);
+                realFormatter = functionForOptions(locale, mergedOptions, kind);
             }
 
             Integer offset = OptUtils.getInteger(variableOptions, reportErrors, "icu:offset");
@@ -207,22 +206,7 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
             Directionality dir = OptUtils.getBestDirectionality(variableOptions, locale);
             return new FormattedPlaceholder(toFormat, result, dir, false);
         }
-    }
-
-    private static class PluralSelectorImpl implements Selector {
-        private static final String NO_MATCH = "\uFFFDNO_MATCH\uFFFE"; // Unlikely to show in a key
-        private final PluralRules rules;
-        private final Map<String, Object> fixedOptions;
-        private final LocalizedNumberFormatter icuFormatter;
-        private final String kind;
-
-        private PluralSelectorImpl(
-                Locale locale, PluralRules rules, Map<String, Object> fixedOptions, String kind) {
-            this.rules = rules;
-            this.fixedOptions = fixedOptions;
-            this.icuFormatter = formatterForOptions(locale, fixedOptions, kind);
-            this.kind = kind;
-        }
+        
 
         /**
          * {@inheritDoc}
@@ -230,6 +214,10 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
         @Override
         public List<String> matches(
                 Object value, List<String> keys, Map<String, Object> variableOptions) {
+            if (kind.equals("currency")) {
+                // Can't do selection on `currency`
+                return null;
+            }
             List<String> result = new ArrayList<>();
             if (value == null) {
                 return result;
@@ -242,7 +230,7 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
                 }
             }
 
-            result.sort(PluralSelectorImpl::pluralComparator);
+            result.sort(NumberFunctionImpl::pluralComparator);
             return result;
         }
 
@@ -328,7 +316,7 @@ class NumberFormatterFactory implements FormatterFactory, SelectorFactory {
     private final static Pattern CURRENCY_ISO_CODE =
             Pattern.compile("^[A-Z][A-Z][A-Z]$", Pattern.CASE_INSENSITIVE);
 
-    private static LocalizedNumberFormatter formatterForOptions(
+    private static LocalizedNumberFormatter functionForOptions(
             Locale locale, Map<String, Object> fixedOptions, String kind) {
         boolean reportErrors = OptUtils.reportErrors(fixedOptions);
 

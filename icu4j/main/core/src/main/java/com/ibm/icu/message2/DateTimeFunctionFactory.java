@@ -17,14 +17,16 @@ import com.ibm.icu.impl.JavaTimeConverters;
 import com.ibm.icu.text.DateFormat;
 
 /**
- * Creates a {@link Formatter} doing formatting of date / time, similar to
+ * Creates a {@link Function} doing formatting of date / time, similar to
  * <code>{exp, date}</code> and <code>{exp, time}</code> in {@link com.ibm.icu.text.MessageFormat}.
+ *
+ * It does not do selection.
  */
-class DateTimeFormatterFactory implements FormatterFactory {
+class DateTimeFunctionFactory implements FunctionFactory {
     private final String kind;
 
     // "datetime", "date", "time"
-    DateTimeFormatterFactory(String kind) {
+    DateTimeFunctionFactory(String kind) {
         switch (kind) {
             case "date":
                 break;
@@ -60,7 +62,7 @@ class DateTimeFormatterFactory implements FormatterFactory {
      *         (for example conflicting options, invalid option values, etc.)
      */
     @Override
-    public Formatter createFormatter(Locale locale, Map<String, Object> fixedOptions) {
+    public Function create(Locale locale, Map<String, Object> fixedOptions) {
         locale = OptUtils.getBestLocale(fixedOptions, locale);
         Directionality dir = OptUtils.getBestDirectionality(fixedOptions, locale);
 
@@ -104,7 +106,7 @@ class DateTimeFormatterFactory implements FormatterFactory {
             }
             if (!skeleton.isEmpty()) {
                 DateFormat df = DateFormat.getInstanceForSkeleton(skeleton, locale);
-                return new DateTimeFormatter(locale, df, reportErrors);
+                return new DateTimeFunctionImpl(locale, df, reportErrors);
             }
 
             // No skeletons, custom or otherwise, match fallback to short / short as per spec.
@@ -125,7 +127,7 @@ class DateTimeFormatterFactory implements FormatterFactory {
         }
 
         DateFormat df = DateFormat.getDateTimeInstance(dateStyle, timeStyle, locale);
-        return new DateTimeFormatter(locale, df, reportErrors);
+        return new DateTimeFunctionImpl(locale, df, reportErrors);
     }
 
     private static int getDateTimeStyle(Map<String, Object> options, String key) {
@@ -332,12 +334,12 @@ class DateTimeFormatterFactory implements FormatterFactory {
         return skeleton.toString();
     }
 
-    private static class DateTimeFormatter implements Formatter {
+    private static class DateTimeFunctionImpl implements Function {
         private final DateFormat icuFormatter;
         private final Locale locale;
         private final boolean reportErrors;
 
-        private DateTimeFormatter(Locale locale, DateFormat df, boolean reportErrors) {
+        private DateTimeFunctionImpl(Locale locale, DateFormat df, boolean reportErrors) {
             this.locale = locale;
             this.icuFormatter = df;
             this.reportErrors = reportErrors;

@@ -14,34 +14,34 @@ import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.message2.FormattedPlaceholder;
-import com.ibm.icu.message2.Formatter;
-import com.ibm.icu.message2.FormatterFactory;
+import com.ibm.icu.message2.Function;
+import com.ibm.icu.message2.FunctionFactory;
 import com.ibm.icu.message2.MFFunctionRegistry;
 import com.ibm.icu.message2.MessageFormatter;
 import com.ibm.icu.message2.PlainStringFormattedValue;
 
 /**
- * Showing a custom formatter that can implement message references.
+ * Showing a custom function that can implement message references.
  *
  * <p>Supporting this functionality was strongly requested as a part of the core specification.
  * But this shows that it can be easily implemented as a custom function.</p>
  */
 @RunWith(JUnit4.class)
 @SuppressWarnings({"static-method", "javadoc"})
-public class CustomFormatterMessageRefTest extends CoreTestFmwk {
+public class CustomFunctionMessageRefTest extends CoreTestFmwk {
 
-    static class ResourceManagerFactory implements FormatterFactory {
+    static class ResourceManagerFactory implements FunctionFactory {
 
         @Override
-        public Formatter createFormatter(Locale locale, Map<String, Object> fixedOptions) {
-            return new ResourceManagerFactoryImpl(locale, fixedOptions);
+        public Function create(Locale locale, Map<String, Object> fixedOptions) {
+            return new ResourceManagerFunctionImpl(locale, fixedOptions);
         }
 
-        static class ResourceManagerFactoryImpl implements Formatter {
+        static class ResourceManagerFunctionImpl implements Function {
             final Map<String, Object> options;
 
             @SuppressWarnings("unused")
-            ResourceManagerFactoryImpl(Locale locale, Map<String, Object> options) {
+            ResourceManagerFunctionImpl(Locale locale, Map<String, Object> options) {
                 this.options = options;
             }
 
@@ -72,7 +72,7 @@ public class CustomFormatterMessageRefTest extends CoreTestFmwk {
     }
 
     static final MFFunctionRegistry REGISTRY = MFFunctionRegistry.builder()
-            .setFormatter("msgRef", new ResourceManagerFactory())
+            .setFunction("msgRef", new ResourceManagerFactory())
             .build();
 
     static final Properties PROPERTIES = new Properties();

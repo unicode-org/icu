@@ -3,17 +3,18 @@
 
 package com.ibm.icu.message2;
 
+import java.util.List;
 import java.util.Map;
 
 /**
- * The interface that must be implemented by all formatters
+ * The interface that must be implemented by all functions
  * that can be used from {@link MessageFormatter}.
  *
  * @internal ICU 72 technology preview
  * @deprecated This API is for technology preview only.
  */
 @Deprecated
-public interface Formatter {
+public interface Function {
     /**
      * A method that takes the object to format and returns
      * the i18n-aware string representation.
@@ -41,4 +42,28 @@ public interface Formatter {
      */
     @Deprecated
     FormattedPlaceholder format(Object toFormat, Map<String, Object> variableOptions);
+
+    /**
+     * A method that is invoked for the object to match on each key.
+     *
+     * <p>For example, an English plural {@code matches} would return {@code true}
+     * for {@code matches(1, "1")}, {@code matches(1, "one")}, and {@code matches(1, "*")}.</p>
+     *
+     * @param value the value to select on.
+     * @param keys the key to test for matching.
+     * @param variableOptions options that are not know at build time.
+     * @return the formatted string.
+     *
+     * @internal ICU 72 technology preview
+     * @deprecated This API is for technology preview only.
+     */
+    @Deprecated
+    default List<String> matches(Object value, List<String> keys, Map<String, Object> variableOptions) {
+        // TODO(ICU-23202): TBD if this should:
+        // - return null (which will end up selecting `*`),
+        // - throw (not something that ICU usually does)
+        // - or remove the default and force each class implementing this interface to also implement this method
+        // Each has pros and cons, will do this when I get to refactor the error handling.
+        return null;
+    }
 }

@@ -21,7 +21,7 @@ import java.util.Map;
  * MessageFormat needs a successor”</a> document.</p>
  *
  * <p>MessageFormat 2.0 will be more modular and easier to port and backport.
- * It will also provide extension points via interfaces to allow users to supply new formatters and selectors without having to modify the specification.
+ * It will also provide extension points via interfaces to allow users to supply new functions without having to modify the specification.
  * ICU will eventually include support for new formatters, such as intervals, relative time, lists, measurement units, personal names, and more,
  * as well as the ability for users to supply their own custom implementations.
  * These will potentially support use cases like grammatical gender, inflection, markup regimes (such as those require for text-to-speech),
@@ -122,7 +122,7 @@ import java.util.Map;
  *
  * <h4>Built-in formatter functions</h4>
  *
- * <p>The tech preview implementation comes with formatters for numbers ({@code :number}),
+ * <p>The tech preview implementation comes with formatter functions for numbers ({@code :number}),
  * date / time ({@code :datetime}, {@code :date}, {@code :time}),
  * plural selectors ({@code :number} with options for {@code plural} and {@code ordinal} selection),
  * and general selector ({@code :string}),
@@ -130,7 +130,7 @@ import java.util.Map;
  *
  * <p>The <a target="github" href="https://github.com/unicode-org/icu/tree/main/icu4j/main/core/src/test/java/com/ibm/icu/dev/test/message2">ICU test code</a>
  * covers most features, and has examples of how to make custom placeholder formatters;
- * you can look for classes that implement {@code com.ibm.icu.message2.FormatterFactory}
+ * you can look for classes that implement {@code com.ibm.icu.message2.FunctionFactory}
  * (they are named {@code Custom*Test.java}).</p>
  *
  * <p>The complete list of valid options for each function, and how they infulence the results, can be found at

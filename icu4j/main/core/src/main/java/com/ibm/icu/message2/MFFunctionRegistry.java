@@ -14,33 +14,31 @@ import java.util.Set;
  * <p>For example to add formatting for a {@code Person} object one would need to:</p>
  * <ul>
  *   <li>write a function (class, lambda, etc.) that does the formatting proper
- *     (implementing {@link Formatter})</li>
+ *     (implementing {@link Function})</li>
  *   <li>write a factory that creates such a function
- *     (implementing {@link FormatterFactory})</li>
+ *     (implementing {@link FunctionFactory})</li>
  *  <li>add a mapping from the function name as used in the syntax
  *    (for example {@code "person"}) to the factory</li>
  *  <li>optionally add a mapping from the class to format ({@code ...Person.class}) to
- *     the formatter name ({@code "person"}), so that one can use a placeholder in the message
+ *     the function name ({@code "person"}), so that one can use a placeholder in the message
  *     without specifying a function (for example {@code "... {$me} ..."} instead of
  *     {@code "... {$me :person} ..."}, if the class of {@code $me} is an {@code instanceof Person}).
  *     </li>
  * </ul>
  *
- * <p><b>NOTE:</b> all function and selector names are normalized to NFC.
+ * <p><b>NOTE:</b> all function names are normalized to NFC.
  *
  * @internal ICU 72 technology preview
  * @deprecated This API is for technology preview only.
  */
 @Deprecated
 public class MFFunctionRegistry {
-    private final Map<String, FormatterFactory> formattersMap;
-    private final Map<String, SelectorFactory> selectorsMap;
-    private final Map<Class<?>, String> classToFormatter;
+    private final Map<String, FunctionFactory> functionMap;
+    private final Map<Class<?>, String> classToFunction;
 
     private MFFunctionRegistry(Builder builder) {
-        this.formattersMap = new HashMap<>(builder.formattersMap);
-        this.selectorsMap = new HashMap<>(builder.selectorsMap);
-        this.classToFormatter = new HashMap<>(builder.classToFormatter);
+        this.functionMap = new HashMap<>(builder.functionMap);
+        this.classToFunction = new HashMap<>(builder.classToFunction);
     }
 
     /**
@@ -57,63 +55,62 @@ public class MFFunctionRegistry {
     }
 
     /**
-     * Returns the formatter factory used to create the formatter for function
-     * named {@code name}.
+     * Returns the function factory used to create the function named {@code name}.
      *
      * <p>Note: function name here means the name used to refer to the function in the
      * MessageFormat 2 syntax, for example {@code "... {$exp :datetime} ..."}<br>
      * The function name here is {@code "datetime"}, and does not have to correspond to the
      * name of the methods / classes used to implement the functionality.</p>
      *
-     * <p>For example one might write a {@code PersonFormatterFactory} returning a {@code PersonFormatter},
+     * <p>For example one might write a {@code PersonFunctionFactory} returning a {@code PersonFunction},
      * and map that to the MessageFormat function named {@code "person"}.<br>
      * The only name visible to the users of MessageFormat syntax will be {@code "person"}.</p>
      *
-     * @param formatterName the function name.
-     * @return the factory creating formatters for {@code name}. Returns {@code null} if none is registered.
+     * @param functionName the function name.
+     * @return the factory creating function for {@code name}. Returns {@code null} if none is registered.
      *
      * @internal ICU 72 technology preview
      * @deprecated This API is for technology preview only.
      */
     @Deprecated
-    public FormatterFactory getFormatter(String formatterName) {
-        return formattersMap.get(StringUtils.toNfc(formatterName));
+    public FunctionFactory getFunction(String functionName) {
+        return functionMap.get(StringUtils.toNfc(functionName));
     }
 
     /**
-     * Get all know names that have a mappings from name to {@link FormatterFactory}.
+     * Get all know names that have a mappings from name to {@link FunctionFactory}.
      *
-     * @return a set of all the known formatter names.
+     * @return a set of all the known function names.
      *
      * @internal ICU 72 technology preview
      * @deprecated This API is for technology preview only.
      */
     @Deprecated
-    public Set<String> getFormatterNames() {
-        return formattersMap.keySet();
+    public Set<String> getFunctionNames() {
+        return functionMap.keySet();
     }
 
     /**
-     * Returns the name of the formatter used to format an object of type {@code clazz}.
+     * Returns the name of the function used to format an object of type {@code clazz}.
      *
      * @param clazz the class of the object to format.
-     * @return the name of the formatter class, if registered. Returns {@code null} otherwise.
+     * @return the name of the function class, if registered. Returns {@code null} otherwise.
      *
      * @internal ICU 72 technology preview
      * @deprecated This API is for technology preview only.
      */
     @Deprecated
-    public String getDefaultFormatterNameForType(Class<?> clazz) {
+    public String getDefaultFunctionNameForType(Class<?> clazz) {
         // Search for the class "as is", to save time.
         // If we don't find it then we iterate the registered classes and check
         // if the class is an instanceof the ones registered.
         // For example a BuddhistCalendar when we only registered Calendar
-        String result = classToFormatter.get(clazz);
+        String result = classToFunction.get(clazz);
         if (result != null) {
             return result;
         }
         // We didn't find the class registered explicitly "as is"
-        for (Map.Entry<Class<?>, String> e : classToFormatter.entrySet()) {
+        for (Map.Entry<Class<?>, String> e : classToFunction.entrySet()) {
             if (e.getKey().isAssignableFrom(clazz)) {
                 return e.getValue();
             }
@@ -130,39 +127,8 @@ public class MFFunctionRegistry {
      * @deprecated This API is for technology preview only.
      */
     @Deprecated
-    public Set<Class<?>> getDefaultFormatterTypes() {
-        return classToFormatter.keySet();
-    }
-
-    /**
-     * Returns the selector factory used to create the selector for function
-     * named {@code name}.
-     *
-     * <p>Note: the same comments about naming as the ones on {@code getFormatter} apply.</p>
-     *
-     * @param selectorName the selector name.
-     * @return the factory creating selectors for {@code name}. Returns {@code null} if none is registered.
-     * @see #getFormatter(String)
-     *
-     * @internal ICU 72 technology preview
-     * @deprecated This API is for technology preview only.
-     */
-    @Deprecated
-    public SelectorFactory getSelector(String selectorName) {
-        return selectorsMap.get(StringUtils.toNfc(selectorName));
-    }
-
-    /**
-     * Get all know names that have a mappings from name to {@link SelectorFactory}.
-     *
-     * @return a set of all the known selector names.
-     *
-     * @internal ICU 72 technology preview
-     * @deprecated This API is for technology preview only.
-     */
-    @Deprecated
-    public Set<String> getSelectorNames() {
-        return selectorsMap.keySet();
+    public Set<Class<?>> getDefaultFunctionTypes() {
+        return classToFunction.keySet();
     }
 
     /**
@@ -173,9 +139,8 @@ public class MFFunctionRegistry {
      */
     @Deprecated
     public static class Builder {
-        private final Map<String, FormatterFactory> formattersMap = new HashMap<>();
-        private final Map<String, SelectorFactory> selectorsMap = new HashMap<>();
-        private final Map<Class<?>, String> classToFormatter = new HashMap<>();
+        private final Map<String, FunctionFactory> functionMap = new HashMap<>();
+        private final Map<Class<?>, String> classToFunction = new HashMap<>();
 
         // Prevent direct creation
         private Builder() {}
@@ -191,45 +156,44 @@ public class MFFunctionRegistry {
          */
         @Deprecated
         public Builder addAll(MFFunctionRegistry functionRegistry) {
-            formattersMap.putAll(functionRegistry.formattersMap);
-            selectorsMap.putAll(functionRegistry.selectorsMap);
-            classToFormatter.putAll(functionRegistry.classToFormatter);
+            functionMap.putAll(functionRegistry.functionMap);
+            classToFunction.putAll(functionRegistry.classToFunction);
             return this;
         }
 
         /**
-         * Adds a mapping from a formatter name to a {@link FormatterFactory}.
+         * Adds a mapping from a function name to a {@link FunctionFactory}.
          *
-         * @param formatterName the function name (as used in the MessageFormat 2 syntax).
-         * @param formatterFactory the factory that handles the name.
+         * @param functionName the function name (as used in the MessageFormat 2 syntax).
+         * @param functionFactory the factory that handles the name.
          * @return the builder, for fluent use.
          *
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
         @Deprecated
-        public Builder setFormatter(String formatterName, FormatterFactory formatterFactory) {
-            formattersMap.put(StringUtils.toNfc(formatterName), formatterFactory);
+        public Builder setFunction(String functionName, FunctionFactory functionFactory) {
+            functionMap.put(StringUtils.toNfc(functionName), functionFactory);
             return this;
         }
 
         /**
-         * Remove the formatter associated with the name.
+         * Remove the function associated with the name.
          *
-         * @param formatterName the name of the formatter to remove.
+         * @param functionName the name of the function to remove.
          * @return the builder, for fluent use.
          *
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
         @Deprecated
-        public Builder removeFormatter(String formatterName) {
-            formattersMap.remove(StringUtils.toNfc(formatterName));
+        public Builder removeFunction(String functionName) {
+            functionMap.remove(StringUtils.toNfc(functionName));
             return this;
         }
 
         /**
-         * Remove all the formatter mappings.
+         * Remove all the function mappings.
          *
          * @return the builder, for fluent use.
          *
@@ -237,24 +201,24 @@ public class MFFunctionRegistry {
          * @deprecated This API is for technology preview only.
          */
         @Deprecated
-        public Builder clearFormatters() {
-            formattersMap.clear();
+        public Builder clearFunctions() {
+            functionMap.clear();
             return this;
         }
 
         /**
-         * Adds a mapping from a type to format to a {@link FormatterFactory} formatter name.
+         * Adds a mapping from a type to format to a {@link FunctionFactory} function name.
          *
          * @param clazz the class of the type to format.
-         * @param formatterName the formatter name (as used in the MessageFormat 2 syntax).
+         * @param functionName the unction name (as used in the MessageFormat 2 syntax).
          * @return the builder, for fluent use.
          *
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
         @Deprecated
-        public Builder setDefaultFormatterNameForType(Class<?> clazz, String formatterName) {
-            classToFormatter.put(clazz, StringUtils.toNfc(formatterName));
+        public Builder setDefaultFunctionNameForType(Class<?> clazz, String functionName) {
+            classToFunction.put(clazz, StringUtils.toNfc(functionName));
             return this;
         }
 
@@ -268,13 +232,13 @@ public class MFFunctionRegistry {
          * @deprecated This API is for technology preview only.
          */
         @Deprecated
-        public Builder removeDefaultFormatterNameForType(Class<?> clazz) {
-            classToFormatter.remove(clazz);
+        public Builder removeDefaultFunctionNameForType(Class<?> clazz) {
+            classToFunction.remove(clazz);
             return this;
         }
 
         /**
-         * Remove all the class to formatter-names mappings.
+         * Remove all the class to function-names mappings.
          *
          * @return the builder, for fluent use.
          *
@@ -282,53 +246,8 @@ public class MFFunctionRegistry {
          * @deprecated This API is for technology preview only.
          */
         @Deprecated
-        public Builder clearDefaultFormatterNames() {
-            classToFormatter.clear();
-            return this;
-        }
-
-        /**
-         * Adds a mapping from a selector name to a {@link SelectorFactory}.
-         *
-         * @param selectorName the function name (as used in the MessageFormat 2 syntax).
-         * @param selectorFactory the factory that handles the name.
-         * @return the builder, for fluent use.
-         *
-         * @internal ICU 72 technology preview
-         * @deprecated This API is for technology preview only.
-         */
-        @Deprecated
-        public Builder setSelector(String selectorName, SelectorFactory selectorFactory) {
-            selectorsMap.put(StringUtils.toNfc(selectorName), selectorFactory);
-            return this;
-        }
-
-        /**
-         * Remove the selector associated with the name.
-         *
-         * @param selectorName the name of the selector to remove.
-         * @return the builder, for fluent use.
-         *
-         * @internal ICU 72 technology preview
-         * @deprecated This API is for technology preview only.
-         */
-        @Deprecated
-        public Builder removeSelector(String selectorName) {
-            selectorsMap.remove(StringUtils.toNfc(selectorName));
-            return this;
-        }
-
-        /**
-         * Remove all the selector mappings.
-         *
-         * @return the builder, for fluent use.
-         *
-         * @internal ICU 72 technology preview
-         * @deprecated This API is for technology preview only.
-         */
-        @Deprecated
-        public Builder clearSelectors() {
-            selectorsMap.clear();
+        public Builder clearDefaultFunctionNames() {
+            classToFunction.clear();
             return this;
         }
 

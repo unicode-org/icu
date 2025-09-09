@@ -15,8 +15,8 @@ import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.message2.FormattedPlaceholder;
-import com.ibm.icu.message2.Formatter;
-import com.ibm.icu.message2.FormatterFactory;
+import com.ibm.icu.message2.Function;
+import com.ibm.icu.message2.FunctionFactory;
 import com.ibm.icu.message2.MFFunctionRegistry;
 import com.ibm.icu.message2.MessageFormatter;
 import com.ibm.icu.number.FormattedNumber;
@@ -185,14 +185,14 @@ public class MessageFormat2Test extends CoreTestFmwk {
                 mf2.formatToString(Args.of("place", 15)));
     }
 
-    static class TemperatureFormatterFactory implements FormatterFactory {
+    static class TemperatureFunctionFactory implements FunctionFactory {
         int constructCount = 0;
         int formatCount = 0;
         int fFormatterCount = 0;
         int cFormatterCount = 0;
 
         @Override
-        public Formatter createFormatter(Locale locale, Map<String, Object> fixedOptions) {
+        public Function create(Locale locale, Map<String, Object> fixedOptions) {
             // Check that the formatter can only see the fixed options
             Assert.assertTrue(fixedOptions.containsKey("icu:skeleton"));
             Assert.assertFalse(fixedOptions.containsKey("icu:unit"));
@@ -202,19 +202,19 @@ public class MessageFormat2Test extends CoreTestFmwk {
                     ? NumberFormatter.forSkeleton(valSkeleton.toString()).locale(locale)
                     : NumberFormatter.withLocale(locale);
 
-            return new TemperatureFormatterImpl(nf, this);
+            return new TemperatureFunctionImpl(nf, this);
         }
 
-        private static class TemperatureFormatterImpl implements Formatter {
-            private final TemperatureFormatterFactory formatterFactory;
+        private static class TemperatureFunctionImpl implements Function {
+            private final TemperatureFunctionFactory functionFactory;
             private final LocalizedNumberFormatter nf;
-            private final Map<String, LocalizedNumberFormatter> cachedFormatters =
+            private final Map<String, LocalizedNumberFormatter> cachedFunctions =
                     new HashMap<>();
 
-            TemperatureFormatterImpl(LocalizedNumberFormatter nf, TemperatureFormatterFactory formatterFactory) {
+            TemperatureFunctionImpl(LocalizedNumberFormatter nf, TemperatureFunctionFactory functionFactory) {
                 this.nf = nf;
-                this.formatterFactory = formatterFactory;
-                this.formatterFactory.constructCount++;
+                this.functionFactory = functionFactory;
+                this.functionFactory.constructCount++;
             }
 
             @Override
@@ -227,25 +227,25 @@ public class MessageFormat2Test extends CoreTestFmwk {
                 // Check that the formatter can only see the variable options
                 Assert.assertFalse(variableOptions.containsKey("skeleton"));
                 Assert.assertTrue(variableOptions.containsKey("unit"));
-                this.formatterFactory.formatCount++;
+                this.functionFactory.formatCount++;
 
                 String unit = variableOptions.get("unit").toString();
-                LocalizedNumberFormatter realNf = cachedFormatters.get(unit);
+                LocalizedNumberFormatter realNf = cachedFunctions.get(unit);
                 if (realNf == null) {
                     switch (variableOptions.get("unit").toString()) {
                         case "C":
-                            formatterFactory.cFormatterCount++;
+                            functionFactory.cFormatterCount++;
                             realNf = nf.unit(MeasureUnit.CELSIUS);
                             break;
                         case "F":
-                            formatterFactory.fFormatterCount++;
+                            functionFactory.fFormatterCount++;
                             realNf = nf.unit(MeasureUnit.FAHRENHEIT);
                             break;
                         default:
                             realNf = nf;
                             break;
                     }
-                    cachedFormatters.put(unit, realNf);
+                    cachedFunctions.put(unit, realNf);
                 }
 
                 FormattedNumber result;
@@ -267,12 +267,12 @@ public class MessageFormat2Test extends CoreTestFmwk {
 
     @Test
     // Due to the many changes in how the variable resolution is done,
-    // it is now not possible to caching the formatters.
+    // it is now not possible to cache the formatters.
     // Might be able to bring it back, but for now it is off.
     public void testFormatterIsCreatedOnce() {
-        TemperatureFormatterFactory counter = new TemperatureFormatterFactory();
+        TemperatureFunctionFactory counter = new TemperatureFunctionFactory();
         MFFunctionRegistry registry = MFFunctionRegistry.builder()
-                .setFormatter("temp", counter)
+                .setFunction("temp", counter)
                 .build();
         String message = "Testing {$count :temp unit=$unit icu:skeleton=|.00/w|}.";
         MessageFormatter mf2 = MessageFormatter.builder()
@@ -586,7 +586,7 @@ public class MessageFormat2Test extends CoreTestFmwk {
         String result;
         Map<String, Object> messageArguments = new HashMap<>();
 
-        // Check that constructing the formatter fails
+        // Check that constructing the function fails
         // if there's a syntax error
         String pattern = "{{}";
         MessageFormatter.Builder mfBuilder = MessageFormatter.builder();

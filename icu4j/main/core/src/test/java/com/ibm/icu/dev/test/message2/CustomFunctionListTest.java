@@ -14,8 +14,8 @@ import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.message2.FormattedPlaceholder;
-import com.ibm.icu.message2.Formatter;
-import com.ibm.icu.message2.FormatterFactory;
+import com.ibm.icu.message2.Function;
+import com.ibm.icu.message2.FunctionFactory;
 import com.ibm.icu.message2.MFFunctionRegistry;
 import com.ibm.icu.message2.PlainStringFormattedValue;
 import com.ibm.icu.text.ListFormatter;
@@ -23,23 +23,23 @@ import com.ibm.icu.text.ListFormatter.Type;
 import com.ibm.icu.text.ListFormatter.Width;
 
 /**
- * Showing a custom formatter for a list, using the existing ICU {@link ListFormatter}.
+ * Showing a custom function for a list, using the existing ICU {@link ListFormatter}.
  */
 @RunWith(JUnit4.class)
 @SuppressWarnings({"static-method", "javadoc"})
-public class CustomFormatterListTest extends CoreTestFmwk {
+public class CustomFunctionListTest extends CoreTestFmwk {
 
-    static class ListFormatterFactory implements FormatterFactory {
+    static class ListFunctionFactory implements FunctionFactory {
 
         @Override
-        public Formatter createFormatter(Locale locale, Map<String, Object> fixedOptions) {
-            return new ListFormatterImpl(locale, fixedOptions);
+        public Function create(Locale locale, Map<String, Object> fixedOptions) {
+            return new ListFunctionImpl(locale, fixedOptions);
         }
 
-        static class ListFormatterImpl implements Formatter {
+        static class ListFunctionImpl implements Function {
             private final ListFormatter lf;
 
-            ListFormatterImpl(Locale locale, Map<String, Object> fixedOptions) {
+            ListFunctionImpl(Locale locale, Map<String, Object> fixedOptions) {
                 Object oType = fixedOptions.get("type");
                 Type type = oType == null
                         ? ListFormatter.Type.AND
@@ -72,7 +72,7 @@ public class CustomFormatterListTest extends CoreTestFmwk {
     }
 
     static final MFFunctionRegistry REGISTRY = MFFunctionRegistry.builder()
-            .setFormatter("listformat", new ListFormatterFactory())
+            .setFunction("listformat", new ListFunctionFactory())
             .build();
 
     @Test
