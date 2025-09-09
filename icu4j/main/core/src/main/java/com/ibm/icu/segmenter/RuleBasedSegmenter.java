@@ -6,8 +6,6 @@ package com.ibm.icu.segmenter;
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.RuleBasedBreakIterator;
 import java.io.InputStream;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 /**
  * Performs segmentation according to the provided rule string. The rule string must follow the

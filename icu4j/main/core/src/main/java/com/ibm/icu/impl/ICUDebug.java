@@ -30,10 +30,29 @@ public final class ICUDebug {
         return debug;
     }
 
-    public static boolean enabled(String arg) {
+    /**
+     * Returns true if a certain named debug flag is enabled.
+     *
+     * <p>
+     * To enable debugging when running maven one must define {@code ICUDebug}.
+     * For example this runs all the tests in {@code LocaleMatcherTest} without debugging:
+     * <blockquote><pre>
+     *     mvn package -f main/core/ -Dtest=LocaleMatcherTest
+     * </pre></blockquote>
+     * And this runs the same tests, but with debugging enabled:
+     * <blockquote><pre>
+     *     mvn package -f main/core/ -Dtest=LocaleMatcherTest -DICUDebug=localematchertest
+     * </pre></blockquote>
+     * You must check what name is used for the debugging flag by inspecting the code,
+     * it is not always the lowercase class name.
+     * 
+     * @param name the name if the debug flag to enable
+     * @return true if the debugging should be enabled for that flag
+     */
+    public static boolean enabled(String name) {
         if (debug) {
-            boolean result = params.indexOf(arg) != -1;
-            if (help) System.out.println("\nICUDebug.enabled(" + arg + ") = " + result);
+            boolean result = params.indexOf(name) != -1;
+            if (help) System.out.println("\nICUDebug.enabled(" + name + ") = " + result);
             return result;
         }
         return false;

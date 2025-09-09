@@ -33,14 +33,11 @@ import com.ibm.icu.impl.number.DecimalFormatProperties;
 import com.ibm.icu.impl.number.PatternStringParser;
 import com.ibm.icu.text.CompactDecimalFormat;
 import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
-import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.DecimalFormat.PropertySetter;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
-
-import java.util.stream.IntStream;
 
 @RunWith(JUnit4.class)
 public class CompactDecimalFormatTest extends CoreTestFmwk {

@@ -69,7 +69,6 @@ import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Currency.CurrencyUsage;
 import com.ibm.icu.util.CurrencyAmount;
-import com.ibm.icu.util.LocaleData;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.ULocale;
 

@@ -36,6 +36,7 @@ import org.junit.runners.JUnit4;
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.serializable.FormatHandler;
 import com.ibm.icu.dev.test.serializable.SerializableTestUtility;
+import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.units.MeasureUnitImpl;
 import com.ibm.icu.math.BigDecimal;
@@ -57,6 +58,7 @@ import com.ibm.icu.util.ULocale;
  */
 @RunWith(JUnit4.class)
 public class MeasureUnitTest extends CoreTestFmwk {
+    private static final boolean DEBUG = ICUDebug.enabled("measureunittest");
 
     @Test
     public void TestExamplesInDocs() {
@@ -1598,7 +1600,9 @@ public class MeasureUnitTest extends CoreTestFmwk {
     @Test
     public void TestParseBuiltIns() {
         for (MeasureUnit unit : MeasureUnit.getAvailable()) {
-            System.out.println("unit ident: " + unit.getIdentifier() + ", type: " + unit.getType());
+            if (DEBUG) {
+                System.out.println("unit ident: " + unit.getIdentifier() + ", type: " + unit.getType());
+            }
             if (unit.getType() == "currency") {
                 continue;
             }
