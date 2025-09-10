@@ -2082,7 +2082,7 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
     public void testTimePatternSelection18881() {
         DateTimePatternGenerator dtpg0 = DateTimePatternGenerator.getInstance(ULocale.forLanguageTag("th"));
         String bestPattern = dtpg0.getBestPattern("MMMMdjmsO");
-        assertEquals("getInstance", "d MMMM เวลา H นาฬิกา mm นาที ss วินาที O", bestPattern);
+        assertEquals("getInstance", "d MMMM เวลา HH:mm:ss O", bestPattern);
 
         DateTimePatternGenerator dtpg1 = DateTimePatternGenerator.getInstanceNoStdPat(ULocale.forLanguageTag("th"));
         bestPattern = dtpg1.getBestPattern("MMMMdjmsO");
