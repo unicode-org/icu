@@ -1102,7 +1102,6 @@ public:
      */
     UChar32 charAt(int32_t index) const;
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns a C++ "range" for iterating over the code points of this set.
      *
@@ -1114,7 +1113,7 @@ public:
      * \endcode
      *
      * @return a "range" object for iterating over the code points of this set.
-     * @draft ICU 76
+     * @stable ICU 76
      * @see ranges
      * @see strings
      * @see begin
@@ -1140,7 +1139,7 @@ public:
      * \endcode
      *
      * @return a "range" object for iterating over the code point ranges of this set.
-     * @draft ICU 76
+     * @stable ICU 76
      * @see codePoints
      * @see strings
      * @see begin
@@ -1164,7 +1163,7 @@ public:
      * \endcode
      *
      * @return a "range" object for iterating over the strings of this set.
-     * @draft ICU 76
+     * @stable ICU 76
      * @see codePoints
      * @see ranges
      * @see begin
@@ -1173,7 +1172,6 @@ public:
     inline U_HEADER_NESTED_NAMESPACE::USetStrings strings() const {
         return U_HEADER_NESTED_NAMESPACE::USetStrings(toUSet());
     }
-#endif  // U_HIDE_DRAFT_API
 
 #ifndef U_HIDE_DRAFT_API
     /**

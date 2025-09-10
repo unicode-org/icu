@@ -1530,8 +1530,6 @@ ucol_openBinary(const uint8_t *bin, int32_t length,
 
 namespace U_HEADER_ONLY_NAMESPACE {
 
-#ifndef U_HIDE_DRAFT_API
-
 namespace collator {
 
 namespace internal {
@@ -1620,48 +1618,46 @@ class Predicate {
 /**
  * Function object for performing comparisons using this collator.
  * Like <code>std::equal_to</code> but uses the collator instead of <code>operator==</code>.
- * @draft ICU 76
+ * @stable ICU 76
  */
 using equal_to = internal::Predicate<std::equal_to, UCOL_EQUAL>;
 
 /**
  * Function object for performing comparisons using this collator.
  * Like <code>std::greater</code> but uses the collator instead of <code>operator&gt;</code>.
- * @draft ICU 76
+ * @stable ICU 76
  */
 using greater = internal::Predicate<std::equal_to, UCOL_GREATER>;
 
 /**
  * Function object for performing comparisons using this collator.
  * Like <code>std::less</code> but uses the collator instead of <code>operator&lt;</code>.
- * @draft ICU 76
+ * @stable ICU 76
  */
 using less = internal::Predicate<std::equal_to, UCOL_LESS>;
 
 /**
  * Function object for performing comparisons using this collator.
  * Like <code>std::not_equal_to</code> but uses the collator instead of <code>operator!=</code>.
- * @draft ICU 76
+ * @stable ICU 76
  */
 using not_equal_to = internal::Predicate<std::not_equal_to, UCOL_EQUAL>;
 
 /**
  * Function object for performing comparisons using this collator.
  * Like <code>std::greater_equal</code> but uses the collator instead of <code>operator&gt;=</code>.
- * @draft ICU 76
+ * @stable ICU 76
  */
 using greater_equal = internal::Predicate<std::not_equal_to, UCOL_LESS>;
 
 /**
  * Function object for performing comparisons using this collator.
  * Like <code>std::less_equal</code> but uses the collator instead of <code>operator&lt;=</code>.
- * @draft ICU 76
+ * @stable ICU 76
  */
 using less_equal = internal::Predicate<std::not_equal_to, UCOL_GREATER>;
 
 }  // namespace collator
-
-#endif  // U_HIDE_DRAFT_API
 
 }  // namespace U_HEADER_ONLY_NAMESPACE
 

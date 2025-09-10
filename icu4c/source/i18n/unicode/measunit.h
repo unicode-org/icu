@@ -1801,23 +1801,21 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit getNanosecond();
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by pointer, unit of duration: night.
      * Caller owns returned value and must free it.
      * Also see {@link #getNight()}.
      * @param status ICU error code.
-     * @draft ICU 76
+     * @stable ICU 76
      */
     static MeasureUnit *createNight(UErrorCode &status);
 
     /**
      * Returns by value, unit of duration: night.
      * Also see {@link #createNight()}.
-     * @draft ICU 76
+     * @stable ICU 76
      */
     static MeasureUnit getNight();
-#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of duration: quarter.
@@ -3791,23 +3789,21 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit getKnot();
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by pointer, unit of speed: light-speed.
      * Caller owns returned value and must free it.
      * Also see {@link #getLightSpeed()}.
      * @param status ICU error code.
-     * @draft ICU 76
+     * @stable ICU 76
      */
     static MeasureUnit *createLightSpeed(UErrorCode &status);
 
     /**
      * Returns by value, unit of speed: light-speed.
      * Also see {@link #createLightSpeed()}.
-     * @draft ICU 76
+     * @stable ICU 76
      */
     static MeasureUnit getLightSpeed();
-#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of speed: meter-per-second.
