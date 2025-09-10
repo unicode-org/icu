@@ -1889,7 +1889,7 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
                                            "d MMM y, HH:mm",
                                            "dd/MM/y HH:mm" } ),
             new DTPLocaleAndResults( "ha", new String[]{
-                                           "EEEE d MMMM, y 'da' HH:mm",
+                                           "y MMMM d, EEEE 'da' HH:mm",
                                            "d MMMM, y 'da' HH:mm",
                                            "d MMM, y, HH:mm",
                                            "y-MM-dd, HH:mm" } ),
