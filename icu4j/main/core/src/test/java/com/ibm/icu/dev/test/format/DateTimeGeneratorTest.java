@@ -1350,7 +1350,7 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
                 new TestOptionsItem( "da", "Hmm",  "HH.mm",        DateTimePatternGenerator.MATCH_NO_OPTIONS        ),
                 new TestOptionsItem( "da", "HHmm", "HH.mm",        DateTimePatternGenerator.MATCH_NO_OPTIONS        ),
                 new TestOptionsItem( "da", "hhmm", "h.mm\u202Fa",  DateTimePatternGenerator.MATCH_NO_OPTIONS        ),
-                new TestOptionsItem( "da", "Hmm",  "H.mm",         DateTimePatternGenerator.MATCH_HOUR_FIELD_LENGTH ),
+                new TestOptionsItem( "da", "Hmm",  "HH.mm",        DateTimePatternGenerator.MATCH_HOUR_FIELD_LENGTH ),
                 new TestOptionsItem( "da", "HHmm", "HH.mm",        DateTimePatternGenerator.MATCH_HOUR_FIELD_LENGTH ),
                 new TestOptionsItem( "da", "hhmm", "hh.mm\u202Fa", DateTimePatternGenerator.MATCH_HOUR_FIELD_LENGTH ),
                 //
