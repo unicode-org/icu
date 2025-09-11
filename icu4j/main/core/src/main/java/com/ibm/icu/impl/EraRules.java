@@ -2,7 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl;
 
-import java.lang.Integer;
 import java.util.ArrayList;
 import java.util.Arrays;
 
