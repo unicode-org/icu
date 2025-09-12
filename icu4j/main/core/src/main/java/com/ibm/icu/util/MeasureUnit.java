@@ -1432,7 +1432,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of duration: night
-     * @draft ICU 76
+     * @stable ICU 76
      */
     public static final MeasureUnit NIGHT = MeasureUnit.internalGetInstance("duration", "night");
 
@@ -2160,7 +2160,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of speed: light-speed
-     * @draft ICU 76
+     * @stable ICU 76
      */
     public static final MeasureUnit LIGHT_SPEED = MeasureUnit.internalGetInstance("speed", "light-speed");
 

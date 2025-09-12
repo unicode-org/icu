@@ -998,7 +998,7 @@ public class DateIntervalFormat extends UFormat implements Cloneable {
      * @return                  Reference to 'appendTo' parameter.
      * @throws    IllegalArgumentException  if the two calendars are not equivalent.
      *
-     * @draft ICU 76
+     * @stable ICU 76
      */
     public final StringBuffer format(Temporal fromTemporal,
             Temporal toTemporal,
@@ -1046,7 +1046,7 @@ public class DateIntervalFormat extends UFormat implements Cloneable {
      *                          to be formatted into a string
      * @return                  A FormattedDateInterval containing the format result.
      *
-     * @draft ICU 76
+     * @stable ICU 76
      */
     public FormattedDateInterval formatToValue(Temporal fromTemporal, Temporal toTemporal) {
         Calendar fromCalendar = JavaTimeConverters.temporalToCalendar(fromTemporal);

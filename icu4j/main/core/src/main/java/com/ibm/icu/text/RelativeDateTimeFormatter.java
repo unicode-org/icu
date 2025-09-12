@@ -161,49 +161,49 @@ public final class RelativeDateTimeFormatter {
 
         /**
          * Quarters
-         * @draft ICU 76
+         * @stable ICU 76
          */
         QUARTERS,
 
         /**
          * Sundays
-         * @draft ICU 76
+         * @stable ICU 76
          */
         SUNDAYS,
 
         /**
          * Mondays
-         * @draft ICU 76
+         * @stable ICU 76
          */
         MONDAYS,
 
         /**
          * Tuesdays
-         * @draft ICU 76
+         * @stable ICU 76
          */
         TUESDAYS,
 
         /**
          * Wednesdays
-         * @draft ICU 76
+         * @stable ICU 76
          */
         WEDNESDAYS,
 
         /**
          * Thursdays
-         * @draft ICU 76
+         * @stable ICU 76
          */
         THURSDAYS,
 
         /**
          * Fridays
-         * @draft ICU 76
+         * @stable ICU 76
          */
         FRIDAYS,
 
         /**
          * Saturdays
-         * @draft ICU 76
+         * @stable ICU 76
          */
         SATURDAYS,
     }

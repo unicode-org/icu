@@ -739,7 +739,7 @@ public abstract class DateFormat extends UFormat {
      *
      * @return the formatted date/time string.
      *
-     * @draft ICU 76
+     * @stable ICU 76
      */
     public StringBuffer format(Temporal date, StringBuffer toAppendTo,
             FieldPosition fieldPosition) {
@@ -752,7 +752,7 @@ public abstract class DateFormat extends UFormat {
      * @param date the time value to be formatted into a time string.
      * @return the formatted time string.
      *
-     * @draft ICU 76
+     * @stable ICU 76
      */
     public final String format(Temporal date)
     {

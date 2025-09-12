@@ -645,7 +645,7 @@ public interface UProperty
      * Binary property Modifier_Combining_Mark.
      * <p>Used by the AMTRA algorithm in UAX #53.
      *
-     * @draft ICU 76
+     * @stable ICU 76
      */
     public static final int MODIFIER_COMBINING_MARK = 75;
 
@@ -863,14 +863,14 @@ public interface UProperty
      * Enumerated property Identifier_Status.
      * Used for UTS #39 General Security Profile for Identifiers
      * (https://www.unicode.org/reports/tr39/#General_Security_Profile).
-     * @draft ICU 75
+     * @stable ICU 75
      */
     public static final int IDENTIFIER_STATUS = 0x1019;
 
     /**
      * Enumerated property Indic_Conjunct_Break.
      * Used in the grapheme cluster break algorithm in UAX #29.
-     * @draft ICU 76
+     * @stable ICU 76
      */
     public static final int INDIC_CONJUNCT_BREAK = 0x101A;
 
@@ -1065,7 +1065,7 @@ public interface UProperty
      *
      * @see UCharacter#hasIdentifierType(int, UCharacter.IdentifierType)
      * @see UCharacter#getIdentifierTypes(int, java.util.EnumSet)
-     * @draft ICU 75
+     * @stable ICU 75
      */
     public static final int IDENTIFIER_TYPE = 0x7001;
     /**
