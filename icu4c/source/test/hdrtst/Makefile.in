@@ -47,13 +47,14 @@ all:
 check: dtest ctest cpptest drafttest deprtest internaltest obsoletetest cppguardtest
 
 headertest:
-	@FAIL=0;stub=ht_stub_$(NAME.headers).$(SUFFIX.headers); for file in "$(prefix)/include/unicode"/*.h ; do \
+	@FAIL=0; for file in "$(prefix)/include/unicode"/*.h ; do \
 		incfile=`basename $$file` ; \
 		echo "$(NAME.headers) unicode/$$incfile" ; \
-		echo "#include <unicode/$$incfile>" > $$stub ; \
-		echo 'void junk(){}' >> $$stub ; \
-		$(COMPILE.headers) $(cppflags) $(FLAGS.headers) $(UCONFIG_NO) $$stub || FAIL=1 ; \
-		rm -f $$stub; \
+		testfile=ht_stub_$(NAME.headers)_$$incfile.$(SUFFIX.headers); \
+		echo "#include <unicode/$$incfile>" > $$testfile ; \
+		echo 'void junk(){}' >> $$testfile ; \
+		$(COMPILE.headers) $(cppflags) $(FLAGS.headers) $(UCONFIG_NO) $$testfile || FAIL=1 ; \
+		rm -f $$testfile; \
 	done ; \
 	exit $$FAIL
 
