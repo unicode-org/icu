@@ -9,6 +9,8 @@ import java.util.Locale;
 
 /**
  * Performs segmentation according to the rules defined for the locale.
+ *
+ * @draft ICU 78
  */
 public class LocalizedSegmenter implements Segmenter {
 
@@ -62,9 +64,25 @@ public class LocalizedSegmenter implements Segmenter {
    * @draft ICU 78
    */
   public enum SegmentationType {
+
+    /**
+     * @draft ICU 78
+     */
     GRAPHEME_CLUSTER,
+
+    /**
+     * @draft ICU 78
+     */
     WORD,
+
+    /**
+     * @draft ICU 78
+     */
     LINE,
+
+    /**
+     * @draft ICU 78
+     */
     SENTENCE,
   }
 

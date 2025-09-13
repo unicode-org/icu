@@ -11,9 +11,22 @@ package com.ibm.icu.segmenter;
  * @draft ICU 78
  */
 public class Segment {
+
+  /**
+   * @draft ICU 78
+   */
   public final int start;
+
+  /**
+   * @draft ICU 78
+   */
   public final int limit;
+
+  /**
+   * @draft ICU 78
+   */
   public final int ruleStatus = 0;
+
   private final CharSequence source;
 
   Segment(int start, int limit, CharSequence source) {

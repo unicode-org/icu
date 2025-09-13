@@ -158,8 +158,19 @@ public interface Segments {
   // Inner enums/classes in common for other inner classes
   //
 
+  /**
+   * @draft ICU 78
+   */
   enum IterationDirection {
+
+    /**
+     * @draft ICU 78
+     */
     FORWARDS,
+
+    /**
+     * @draft ICU 78
+     */
     BACKWARDS,
   }
 }
