@@ -297,17 +297,8 @@ ant copy-cldr-testdata
 5d. NOP
 (This step has been subsumed into 5c above)
 
-5e. For now, manually re-add the `lstm` entries in `data/brkitr/root.txt`
-```sh
-open $ICU4C_DIR/source/data/brkitr/root.txt
-```
-Paste the following block after the dictionaries block and before the final closing '}':
-```
-    lstm{
-        Thai{"Thai_graphclust_model4_heavy.res"}
-        Mymr{"Burmese_graphclust_model5_heavy.res"}
-    }
-```
+5e. NOP
+(This step is no longer necessary, see [ICU-23215](https://unicode-org.atlassian.net/browse/ICU-23215) for details.)
 
 5f. Update hard-coded lists in ICU
 
@@ -499,7 +490,7 @@ rebuilding of other kinds of data and/or code. For example:
 
 If you see a failure such as
 ```
-MeasureUnitTest	testCLDRUnitAvailability	Failure	(MeasureUnitTest.java:3410) : Unit present in CLDR but not available via constant in MeasureUnit: speed-beaufort 
+MeasureUnitTest	testCLDRUnitAvailability	Failure	(MeasureUnitTest.java:3410) : Unit present in CLDR but not available via constant in MeasureUnit: speed-beaufort
 ```
 then you will need to update the C and J library and test code for new measurement
 units, see the procedure at

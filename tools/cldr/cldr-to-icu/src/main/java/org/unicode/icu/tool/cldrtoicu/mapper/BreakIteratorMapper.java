@@ -110,7 +110,7 @@ public final class BreakIteratorMapper {
 
     private void addLstmdata(CldrValue v) {
         //System.out.println("addLstmdata: " + v.toString()); // debug
-        addDependency(
+        addLstmDependency(
             getDependencyName(v),
             LSTMDATA_TYPE.valueFrom(v),
             LSTMDATA_DEP.optionalValueFrom(v));
@@ -121,6 +121,15 @@ public final class BreakIteratorMapper {
         icuData.add(
             RbPath.of(name, type + ":process(dependency)"),
             dependency.orElseThrow(() -> new IllegalArgumentException("missing dependency")));
+    }
+
+    private void addLstmDependency(String name, String type, Optional<String> dependency) {
+        // this should be :process(dependency) but that's not what ICU expects
+        // BUILDRULES.py hard codes the inclusion of the .res files, see the TODO ticket.
+        System.out.println("addLstmDependency: name " + name + ", type " + type + ", dependency " + dependency + " - see ICU-23215");
+        icuData.add(
+            RbPath.of(name, type /* + ":process(dependency)") */), // TODO ICU-23215
+            dependency.orElseThrow(() -> new IllegalArgumentException("missing lstm dependency")));
     }
 
     // Must match the BOUNDARIES or DICTIONARY path.

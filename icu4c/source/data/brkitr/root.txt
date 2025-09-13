@@ -23,7 +23,7 @@ root{
         Thai:process(dependency){"thaidict.dict"}
     }
     lstm{
-        Thai{"Thai_graphclust_model4_heavy.res"}
         Mymr{"Burmese_graphclust_model5_heavy.res"}
+        Thai{"Thai_graphclust_model4_heavy.res"}
     }
 }

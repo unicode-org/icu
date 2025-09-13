@@ -44,7 +44,7 @@ def generate_rb(config, io, common_vars):
         "testaliases",
         "testempty",
         "testtypes",
-        # LSTM models
+        # LSTM models - TODO ICU-23215 this should be dynamic
         "Thai_graphclust_model4_heavy",
         "Thai_codepoints_exclusive_model5_heavy",
         "Burmese_graphclust_model5_heavy"
