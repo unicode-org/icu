@@ -49,8 +49,6 @@ public class PersonNameConsistencyTest extends CoreTestFmwk {
     private static Map<String, String> makeKnownIssuesList() {
         return Map.of(
                 "bal_Latn.txt", "CLDR-17874",
-                // Khmer person name tests: adjust for Unicode 17 GCB changesx
-                "km.txt", "CLDR-18815",
                 "kk_Arab.txt", "ICU-23187",
                 "shn.txt", "ICU-23187");
     }
