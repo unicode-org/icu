@@ -71,7 +71,7 @@ compatibility](https://unicode-org.github.io/icu/userguide/icu/design#icu-api-co
 
 On ICU4J, run
 [com.ibm.icu.dev.tool.docs.CheckTags](https://github.com/unicode-org/icu/blob/main/icu4j/tools/build/src/com/ibm/icu/dev/tool/docs/CheckTags.java)
-(see file for instructions). This requires a JDK with javadoc available, i.e, JDK8. The
+(see file for instructions). This requires a JDK with javadoc available, i.e, JDK11. The
 tool will need to change to reflect the release number to search for.
 
 To check the API status changes, run the script `releases_tools/api_reports.sh` to generate the
@@ -162,9 +162,9 @@ This work is done in the root of icu4c:
 
 This work is done in the root of icu4j:
 
-1.  Make sure JAVA_HOME is set to JDK 8. This report creation fails with JDK 11.
+1.  Make sure JAVA_HOME is set to JDK 11.
     For example, in Linux:
-    *   `export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64`
+    *   `export JAVA_HOME=/usr/lib/jvm/jdk-11.0.24+8`
 2.  Now in `<icu4j_root>`, create a change report:
     *   `mvn clean`
     *   `releases_tools/api_reports.sh`
