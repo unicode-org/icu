@@ -20,12 +20,20 @@ public class MFParseException extends ParseException {
      *
      * @param message the message
      * @param errorOffset the position where the error is found while parsing.
+     * @internal ICU 75 technology preview
+     * @deprecated This API is for technology preview only.
      */
+    @Deprecated
     public MFParseException(String message, int errorOffset) {
         super(message, errorOffset);
     }
 
+    /**
+     * @internal ICU 75 technology preview
+     * @deprecated This API is for technology preview only.
+     */
     @Override
+    @Deprecated
     public String getMessage() {
         return super.getMessage();
     }

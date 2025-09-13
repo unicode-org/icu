@@ -44,6 +44,13 @@ public class MFSerializer {
     private final StringBuilder result = new StringBuilder();
 
     /**
+     * @internal ICU 75 technology preview
+     * @deprecated This API is for technology preview only.
+     */
+    @Deprecated
+    public MFSerializer() {}
+
+    /**
      * Method converting the {@link MFDataModel.Message} to a string in MessageFormat 2 syntax.
      *
      * <p>The result is not necessarily identical with the original string parsed to generate
