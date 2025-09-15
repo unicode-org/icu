@@ -62,7 +62,7 @@ de_CH{
             }
             symbols{
                 decimal{"."}
-                group{"’"}
+                group{"'"}
             }
         }
     }

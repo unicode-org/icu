@@ -286,11 +286,9 @@ ro{
         coptic{
             eras{
                 abbreviated{
-                    0{"î.A.M."}
                     1{"A.M."}
                 }
                 wide{
-                    0{"înainte de Anno Martyrum"}
                     1{"după Anno Martyrum"}
                 }
             }

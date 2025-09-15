@@ -225,7 +225,6 @@ en_GB{
             availableFormats{
                 GyMEd{"E, d/M/y G"}
                 GyMMMEEEEd{"EEEE, d MMM y G"}
-                GyMd{"dd/MM/y G"}
                 MEd{"E dd/MM"}
                 MMMEEEEd{"EEEE d MMM"}
                 MMMEd{"E d MMM"}
@@ -275,10 +274,7 @@ en_GB{
         }
         islamic{
             availableFormats{
-                Ed{"E d"}
                 GyMEd{"E, d/M/y G"}
-                M{"LL"}
-                yyyyM{"MM/y GGGGG"}
             }
         }
         japanese{

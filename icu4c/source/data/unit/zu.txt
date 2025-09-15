@@ -389,7 +389,7 @@ zu{
                 other{"{0}c"}
             }
             day{
-                one{"{0}"}
+                one{"{0} usuku"}
                 other{"{0} suku"}
             }
             decade{

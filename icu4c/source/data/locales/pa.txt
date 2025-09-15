@@ -327,7 +327,6 @@ pa{
         coptic{
             eras{
                 abbreviated{
-                    0{"ਕਾਲ0"}
                     1{"ਕਾਲ1"}
                 }
             }

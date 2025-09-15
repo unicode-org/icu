@@ -769,6 +769,7 @@ void NumberRangeFormatterTest::testFieldPositions() {
                     .unit(METER)
                     .notation(Notation::compactShort()))
                 .locale("en-us"),
+            UnicodeString("en-us"),
             3000,
             5000,
             expectedString);
@@ -795,6 +796,7 @@ void NumberRangeFormatterTest::testFieldPositions() {
         FormattedNumberRange result = assertFormattedRangeEquals(
             message,
             NumberRangeFormatter::withLocale("en-us"),
+            UnicodeString("en-us"),
             87654321,
             98765432,
             expectedString);
@@ -822,6 +824,7 @@ void NumberRangeFormatterTest::testFieldPositions() {
         FormattedNumberRange result = assertFormattedRangeEquals(
             message,
             NumberRangeFormatter::withLocale("en-us"),
+            UnicodeString("en-us"),
             -100,
             -100,
             expectedString);
@@ -1001,11 +1004,11 @@ void NumberRangeFormatterTest::test21358_SignPosition() {
         u"CHF≈5.00",
         u"CHF 0.00–3.00",
         u"CHF≈0.00",
-        u"CHF 3.00–3’000.00",
-        u"CHF 3’000.00–5’000.00",
-        u"CHF 4’999.00–5’001.00",
-        u"CHF≈5’000.00",
-        u"CHF 5’000.00–5’000’000.00");
+        u"CHF 3.00–3'000.00",
+        u"CHF 3'000.00–5'000.00",
+        u"CHF 4'999.00–5'001.00",
+        u"CHF≈5'000.00",
+        u"CHF 5'000.00–5'000'000.00");
 
     // TODO(ICU-21420): Move the sign to the inside of the number
     assertFormatRange(
@@ -1216,26 +1219,28 @@ void  NumberRangeFormatterTest::assertFormatRange(
       const char16_t* expected_50K_50K,
       const char16_t* expected_50K_50M) {
     LocalizedNumberRangeFormatter l = f.locale(locale);
-    assertFormattedRangeEquals(message, l, 1, 5, expected_10_50);
-    assertFormattedRangeEquals(message, l, 4.9999999, 5.0000001, expected_49_51);
-    assertFormattedRangeEquals(message, l, 5, 5, expected_50_50);
-    assertFormattedRangeEquals(message, l, 0, 3, expected_00_30);
-    assertFormattedRangeEquals(message, l, 0, 0, expected_00_00);
-    assertFormattedRangeEquals(message, l, 3, 3000, expected_30_3K);
-    assertFormattedRangeEquals(message, l, 3000, 5000, expected_30K_50K);
-    assertFormattedRangeEquals(message, l, 4999, 5001, expected_49K_51K);
-    assertFormattedRangeEquals(message, l, 5000, 5000, expected_50K_50K);
-    assertFormattedRangeEquals(message, l, 5e3, 5e6, expected_50K_50M);
+    assertFormattedRangeEquals(message, l, locale.getName(), 1, 5, expected_10_50);
+    assertFormattedRangeEquals(message, l, locale.getName(), 4.9999999, 5.0000001, expected_49_51);
+    assertFormattedRangeEquals(message, l, locale.getName(), 5, 5, expected_50_50);
+    assertFormattedRangeEquals(message, l, locale.getName(), 0, 3, expected_00_30);
+    assertFormattedRangeEquals(message, l, locale.getName(), 0, 0, expected_00_00);
+    assertFormattedRangeEquals(message, l, locale.getName(), 3, 3000, expected_30_3K);
+    assertFormattedRangeEquals(message, l, locale.getName(), 3000, 5000, expected_30K_50K);
+    assertFormattedRangeEquals(message, l, locale.getName(), 4999, 5001, expected_49K_51K);
+    assertFormattedRangeEquals(message, l, locale.getName(), 5000, 5000, expected_50K_50K);
+    assertFormattedRangeEquals(message, l, locale.getName(), 5e3, 5e6, expected_50K_50M);
 }
 
 FormattedNumberRange NumberRangeFormatterTest::assertFormattedRangeEquals(
       const char16_t* message,
       const LocalizedNumberRangeFormatter& l,
+      UnicodeString locale,
       double first,
       double second,
       const char16_t* expected) {
     IcuTestErrorCode status(*this, "assertFormattedRangeEquals");
-    UnicodeString fullMessage = UnicodeString(message) + u": " + DoubleToUnicodeString(first) + u", " + DoubleToUnicodeString(second);
+    UnicodeString fullMessage = locale + ":" + UnicodeString(message) + u": " +
+                                DoubleToUnicodeString(first) + u", " + DoubleToUnicodeString(second);
     status.setScope(fullMessage);
     FormattedNumberRange fnr = l.formatFormattableRange(first, second, status);
     UnicodeString actual = fnr.toString(status);

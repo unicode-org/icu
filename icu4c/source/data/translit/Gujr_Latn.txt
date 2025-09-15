@@ -6,7 +6,7 @@
 # Generated from CLDR
 #
 
-::[।-॥\u0A81-ઃઅ-ઍએ-ઑઓ-નપ-રલ-ળવ-હ\u0ABC-\u0AC5\u0AC7-ૉો-\u0ACDૐૠૡ૦-૯];
+::[।-॥\u0A81-ઃઅ-ઍએ-ઑઓ-નપ-રલ-ળવ-હ\u0ABC-\u0AC5\u0AC7-ૉો-\u0ACDૐૠૡ૦-૯૰];
 ::NFD;
 ::Gujarati-InterIndic;
 ::InterIndic-Latin;

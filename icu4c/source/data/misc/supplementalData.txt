@@ -29,13 +29,6 @@ supplementalData:table(nofallback){
         }
         coptic{
             eras{
-                0{
-                    end:intvector{
-                        284,
-                        8,
-                        28,
-                    }
-                }
                 1{
                     start:intvector{
                         284,
@@ -7956,6 +7949,7 @@ supplementalData:table(nofallback){
                 "Hluw",
                 "Hmng",
                 "Hmnp",
+                "Hntl",
                 "Hrkt",
                 "Hung",
                 "Ital",

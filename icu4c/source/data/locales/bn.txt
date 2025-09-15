@@ -270,7 +270,6 @@ bn{
         coptic{
             eras{
                 abbreviated{
-                    0{"যুগ ০"}
                     1{"যুগ ১"}
                 }
             }

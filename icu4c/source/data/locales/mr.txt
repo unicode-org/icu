@@ -274,7 +274,6 @@ mr{
         coptic{
             eras{
                 abbreviated{
-                    0{"युग0"}
                     1{"युग1"}
                 }
             }

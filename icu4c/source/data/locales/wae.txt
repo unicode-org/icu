@@ -10,7 +10,7 @@ wae{
         latn{
             symbols{
                 decimal{","}
-                group{"’"}
+                group{"'"}
             }
         }
     }

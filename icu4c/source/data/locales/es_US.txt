@@ -266,7 +266,7 @@ es_US{
                 "{surname} {surname2}, {given} {given2}",
             }
             sorting-long-referring-informal{
-                "{surname} {surname2}, {given-informal}",
+                "{surname}, {given-informal}",
                 "{surname} {surname2}, {given} {given2}",
             }
             sorting-medium-referring-formal{

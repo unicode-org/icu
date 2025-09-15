@@ -200,15 +200,12 @@ da{
         coptic{
             eras{
                 abbreviated{
-                    0{"0. tidsr."}
                     1{"1. tidsr."}
                 }
                 narrow{
-                    0{"0. t."}
                     1{"1. t."}
                 }
                 wide{
-                    0{"0. tidsregning"}
                     1{"1. tidsregning"}
                 }
             }

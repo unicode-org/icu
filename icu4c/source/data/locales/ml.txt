@@ -223,7 +223,6 @@ ml{
         coptic{
             eras{
                 abbreviated{
-                    0{"കാലഘട്ടം0"}
                     1{"കാലഘട്ടം1"}
                 }
             }

@@ -168,7 +168,7 @@ gsw{
                 }
             }
             symbols{
-                group{"’"}
+                group{"'"}
                 minusSign{"−"}
             }
         }

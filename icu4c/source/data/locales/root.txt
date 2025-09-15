@@ -1681,8 +1681,7 @@ root{
             dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
             eras{
                 abbreviated{
-                    0{"ERA0"}
-                    1{"ERA1"}
+                    1{"AM"}
                 }
                 narrow:alias{"/LOCALE/calendar/coptic/eras/abbreviated"}
                 wide:alias{"/LOCALE/calendar/coptic/eras/abbreviated"}

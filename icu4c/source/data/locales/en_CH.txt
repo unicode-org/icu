@@ -12,7 +12,7 @@ en_CH{
                 currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤-#,##0.00"}
             }
             symbols{
-                group{"’"}
+                group{"'"}
                 superscriptingExponent{"·"}
             }
         }

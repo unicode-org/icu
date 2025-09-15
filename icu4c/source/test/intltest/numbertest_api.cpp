@@ -4522,7 +4522,7 @@ void NumberFormatterApiTest::symbols() {
             NumberFormatter::with().symbols(SWISS_SYMBOLS),
             Locale::getEnglish(),
             12345.67,
-            u"12’345.67");
+            u"12'345.67");
 
     assertFormatSingle(
             u"Myanmar Symbols (used in documentation)",
@@ -4599,7 +4599,7 @@ void NumberFormatterApiTest::symbols() {
             f,
             Locale::getEnglish(),
             12345.67,
-            u"12’345.67");
+            u"12'345.67");
 
     assertFormatSingle(
             u"The last symbols setter wins",
@@ -4858,7 +4858,7 @@ void NumberFormatterApiTest::sign() {
             Locale::getEnglish(),
             444444,
             u"$444,444.00");
-        
+
     assertFormatSingle(
             u"Sign Accounting-Negative Negative",
             u"currency/USD sign-accounting-negative",
@@ -6072,7 +6072,7 @@ void NumberFormatterApiTest::formatUnitsAliases() {
         {MeasureUnit::getPartPerMillion(), u"2 parts per million"},
         {MeasureUnit::forIdentifier("permillion", status), u"2 parts per million"},
         {MeasureUnit::getMillimeterOfMercury(), u"2 millimeters of mercury"},
- 
+
         // Some replacements
         {MeasureUnit::getMilligramOfglucosePerDeciliter(), u"2 milligrams per deciliter"},
         {MeasureUnit::getLiterPer100Kilometers(), u"2 liters per 100 kilometers"},
@@ -6401,11 +6401,11 @@ NumberFormatterApiTest::assertFormatSingle(
     status.setScope(message);
     FormattedNumber result1 = l1.formatDouble(input, status);
     UnicodeString actual1 = result1.toString(status);
-    assertSuccess(message + u": Unsafe Path", status);
-    assertEquals(message + u": Unsafe Path", expected, actual1);
+    assertSuccess(message + u": Unsafe Path " + locale.getName(), status);
+    assertEquals(message + u": Unsafe Path " + locale.getName(), expected, actual1);
     UnicodeString actual2 = l2.formatDouble(input, status).toString(status);
-    assertSuccess(message + u": Safe Path", status);
-    assertEquals(message + u": Safe Path", expected, actual2);
+    assertSuccess(message + u": Safe Path " + locale.getName(), status);
+    assertEquals(message + u": Safe Path " + locale.getName(), expected, actual2);
     if (uskeleton != nullptr) { // if null, skeleton is declared as undefined.
         UnicodeString skeleton(true, uskeleton, -1);
         // Only compare normalized skeletons: the tests need not provide the normalized forms.

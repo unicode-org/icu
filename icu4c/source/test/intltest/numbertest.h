@@ -363,10 +363,11 @@ class NumberRangeFormatterTest : public IntlTestWithFieldPosition {
       const char16_t* expected_49K_51K,
       const char16_t* expected_50K_50K,
       const char16_t* expected_50K_50M);
-    
+
     FormattedNumberRange assertFormattedRangeEquals(
       const char16_t* message,
       const LocalizedNumberRangeFormatter& l,
+      UnicodeString locale,
       double first,
       double second,
       const char16_t* expected);

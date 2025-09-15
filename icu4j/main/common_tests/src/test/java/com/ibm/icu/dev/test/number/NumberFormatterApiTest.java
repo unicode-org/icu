@@ -4746,7 +4746,7 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
                 NumberFormatter.with().symbols(DecimalFormatSymbols.getInstance(new ULocale("de-CH"))),
                 ULocale.ENGLISH,
                 12345.67,
-                "12’345.67");
+                "12'345.67");
 
         assertFormatSingle(
                 "Myanmar Symbols (used in documentation)",
@@ -4822,7 +4822,7 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
                 f,
                 ULocale.ENGLISH,
                 12345.67,
-                "12’345.67");
+                "12'345.67");
 
         assertFormatSingle(
                 "The last symbols setter wins",

@@ -2,14 +2,14 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/
 shn{
-    AuxExemplarCharacters{"[ꩡ ꩦ ꩧ ꩨ ꩩ ꩮ]"}
+    AuxExemplarCharacters{"[၀႐ ၁႑ ၂႒ ၃႓ ၄႔ ၅႕ ၆႖ ၇႗ ၈႘ ၉႙ ၚ ၐ ၑ ၥ ၒ ၓ ၔ ၕ ဨ ဳ ၖ ၗ ၘ ၙ ဴ]"}
     ExemplarCharacters{
-        "[\u200Bး ႞ ႟ ၵ ၶ ၷ င ၸ ၺ ꧣ တ ထ ၻ ၼ ပ ၽ ၾ ၿ ꧤ မ ယ ျ ရ ြ လ ဝ ွ ႂ ႀ သ ႁ ဢ ႃ ိ ီ"
-        " ု ူ ေ ႄ ꧥ ် ႇ ႈ ႉ ႊ]"
+        "[ꧤ ံ း ႞ ႟ ၵ ၶ ၷ ꧠ င ၸ ꩡ ၺ ꩦ ꩧ ꩨ ꩩ ꧣ တ ထ ၻ ꩪ ၼ ပ ၽ ၾ ၿ မ ယ ျ ရ ြ လ ဝ ွ ႂ ႀ သ"
+        " ႁ ꩮ ဢ ႃ ိ ီ ု ူ ေ ႄ ဵ ႅ ႆ ၢ ꧥ ် ႇ ႈ ႉ ႊ]"
     }
-    ExemplarCharactersIndex{"[ၵ ၶ ၷ ꧠ င ၸ ꩡ ꧡ ꧢ ၺ ꩦ ꩧ ꩨ ꩩ တ ထ ၻ ၼ ပ ၽ ၾ ၿ ꧤ မ ယ ရ လ ဝ ႀ သ ႁ ꩮ ဢ]"}
-    ExemplarCharactersNumbers{"[႐ ႑ ႒ ႓ ႔ ႕ ႖ ႗ ႘ ႙]"}
-    ExemplarCharactersPunctuation{"[၊ ။ ‘’ “”]"}
+    ExemplarCharactersIndex{"[႞ ႟ ၵ ၶ ၷ ꧠ င ၸ ꩡ ၺ ꧣ တ ထ ၻ ꩪ ၼ ပ ၽ ၾ ၿ မ ယ ရ လ ဝ ႀ သ ႁ ꩮ ဢ]"}
+    ExemplarCharactersNumbers{"[\\- ‑ , . % ‰ + 0၀႐ 1၁႑ 2၂႒ 3၃႓ 4၄႔ 5၅႕ 6၆႖ 7၇႗ 8၈႘ 9၉႙]"}
+    ExemplarCharactersPunctuation{"[\\- ‐‑ – — … ၊ ။ ‘’ “” ( ) \\[ \\] \\{ \\} @ * / #]"}
     NumberElements{
         latn{
             patternsLong{
@@ -306,15 +306,12 @@ shn{
             }
             eras{
                 abbreviated{
-                    0{"ပၢၼ်0"}
                     1{"ပၢၼ်1"}
                 }
                 narrow{
-                    0{"ပၢၼ်0"}
                     1{"ပၢၼ်1"}
                 }
                 wide{
-                    0{"ပၢၼ်0"}
                     1{"ပၢၼ်1"}
                 }
             }

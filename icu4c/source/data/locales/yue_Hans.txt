@@ -7,11 +7,6 @@ yue_Hans{
         "[乍 仂 伏 佐 侣 僳 兆 兑 券 勋 卑 卞 咀 嘅 堤 墎 壤 孜 屿 峇 巽 斜 昙 昼 栗 楔 浑 涅 湘 澎 灿 狄 琳 瑚 甫 碑 礁 绰"
         " 芒 苗 茨 茵 蓬 蚩 蛰 蜀 裘 谬 赣 酋 闽 陇 霜]"
     }
-    Ellipsis{
-        word-final{"{0}…"}
-        word-initial{"…{0}"}
-        word-medial{"{0}…{1}"}
-    }
     ExemplarCharacters{
         "[一 丁 七 万 丈 三 上 下 丌 不 与 丑 专 且 世 丘 丙 业 东 丝 丢 两 严 个 中 丰 串 临 丸 丹 为 主 丽 举 乃 久 么 义"
         " 之 乌 乎 乏 乐 乔 乖 乘 乙 九 也 习 乡 书 买 乱 了 予 争 事 二 于 亏 云 互 五 井 亚 些 亡 交 亥 亦 产 亨 享 京 亮"
@@ -79,7 +74,7 @@ yue_Hans{
     }
     MoreInformation{"？"}
     NumberElements{
-        finance{"hansfin"}
+        finance{"hantfin"}
         latn{
             miscPatterns{
                 atLeast{"{0}+"}
@@ -94,7 +89,7 @@ yue_Hans{
             patternsShort{
                 currencyFormat{
                     1000{
-                        other{"0"}
+                        other{"¤0千"}
                     }
                     10000{
                         other{"¤0万"}
@@ -131,6 +126,9 @@ yue_Hans{
                     }
                 }
                 currencyFormat%alphaNextToNumber{
+                    1000{
+                        other{"¤ 0千"}
+                    }
                     10000{
                         other{"¤ 0万"}
                     }
@@ -167,7 +165,7 @@ yue_Hans{
                 }
                 decimalFormat{
                     1000{
-                        other{"0"}
+                        other{"0千"}
                     }
                     10000{
                         other{"0万"}
@@ -217,50 +215,41 @@ yue_Hans{
             }
         }
         native{"hanidec"}
-        traditional{"hans"}
+        traditional{"hant"}
     }
     calendar{
         buddhist{
             DateTimePatterns{
-                "zzzz HH:mm:ss",
-                "z HH:mm:ss",
+                "HH:mm:ss [zzzz]",
+                "HH:mm:ss [z]",
                 "HH:mm:ss",
                 "HH:mm",
                 "Gy年M月d日EEEE",
                 "Gy年M月d日",
                 "Gy年M月d日",
-                "Gy-M-d",
+                "Gy/M/d",
+                "{1} {0}",
+                "{1}{0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMEEEEd",
-                "GyMMMd",
-                "GyMMMd",
-                "GyMd",
             }
             availableFormats{
                 Ed{"d日（E）"}
+                Gy{"Gy年"}
                 GyMMM{"Gy年M月"}
                 GyMMMEd{"Gy年M月d日E"}
                 GyMMMd{"Gy年M月d日"}
-                M{"M月"}
-                MEd{"M-dE"}
-                MMM{"LLL"}
-                Md{"M-d"}
-                yyyyM{"Gy-M"}
-                yyyyMEd{"Gy-M-d（E）"}
+                MMMEd{"M月d日E"}
+                y{"Gy年"}
+                yyyy{"Gy年"}
+                yyyyM{"Gy/M"}
+                yyyyMEd{"Gy/M/d（E）"}
                 yyyyMMM{"Gy年M月"}
                 yyyyMMMEd{"Gy年M月d日E"}
+                yyyyMMMM{"Gy年M月"}
                 yyyyMMMd{"Gy年M月d日"}
-                yyyyMd{"Gy-M-d"}
+                yyyyMd{"Gy/M/d"}
                 yyyyQQQ{"Gy年QQQ"}
                 yyyyQQQQ{"Gy年QQQQ"}
             }
@@ -272,16 +261,16 @@ yue_Hans{
         }
         chinese{
             DateTimePatterns{
-                "zzzz HH:mm:ss",
-                "z HH:mm:ss",
+                "HH:mm:ss [zzzz]",
+                "HH:mm:ss [z]",
                 "HH:mm:ss",
                 "HH:mm",
                 {
-                    "rU年MMMdEEEE",
+                    "U (r) 年MMMdEEEE",
                     "d=hanidays",
                 }
                 {
-                    "rU年MMMd",
+                    "U (r) 年MMMd",
                     "d=hanidays",
                 }
                 {
@@ -296,16 +285,16 @@ yue_Hans{
                 "{1} {0}",
             }
             DateTimeSkeletons{
-                "HHmmsszzzz",
+                "HHmmssz",
                 "HHmmssz",
                 "HHmmss",
                 "HHmm",
                 {
-                    "rMMMEEEEd",
+                    "UMMMEEEEd",
                     "d=hanidays",
                 }
                 {
-                    "rMMMd",
+                    "UMMMd",
                     "d=hanidays",
                 }
                 "rMMMd",
@@ -318,11 +307,11 @@ yue_Hans{
                 GyMMMEd{"rU年MMMdE"}
                 GyMMMd{"r年MMMd"}
                 M{"MMM"}
-                MEd{"M-dE"}
+                MEd{"M/dE"}
                 MMMEd{"MMMd日E"}
                 MMMMd{"MMMMd日"}
                 MMMd{"MMMd日"}
-                Md{"M-d"}
+                Md{"M/d"}
                 UM{"U年MMM"}
                 UMMM{"U年MMM"}
                 UMMMd{"U年MMMd"}
@@ -477,15 +466,18 @@ yue_Hans{
             }
             intervalFormats{
                 Hmv{
-                    H{"HH:mm至HH:mm v"}
-                    m{"HH:mm至HH:mm v"}
+                    H{"HH:mm–HH:mm [v]"}
+                    m{"HH:mm–HH:mm [v]"}
+                }
+                Hv{
+                    H{"HH–HH [v]"}
                 }
                 M{
-                    M{"L至L"}
+                    M{"MMM至MMM"}
                 }
                 MEd{
-                    M{"M-dE至M-dE"}
-                    d{"M-dE至M-dE"}
+                    M{"M/dE至M/dE"}
+                    d{"M/dE至M/dE"}
                 }
                 MMM{
                     M{"LLL至LLL"}
@@ -502,16 +494,16 @@ yue_Hans{
                     d{"MMMd日至d日"}
                 }
                 Md{
-                    M{"M-d至M-d"}
-                    d{"M-d至M-d"}
+                    M{"M/d至M/d"}
+                    d{"M/d至M/d"}
                 }
                 d{
                     d{"d日至d日"}
                 }
-                fallback{"{0}–{1}"}
+                fallback{"{0}至{1}"}
                 h{
-                    a{"ah至ah时"}
-                    h{"ah至h时"}
+                    a{"ah时至ah时"}
+                    h{"ah时至h时"}
                 }
                 hm{
                     a{"ah:mm至ah:mm"}
@@ -519,25 +511,25 @@ yue_Hans{
                     m{"ah:mm至h:mm"}
                 }
                 hmv{
-                    a{"vah:mm至ah:mm"}
-                    h{"vah:mm至h:mm"}
-                    m{"vah:mm至h:mm"}
+                    a{"ah:mm至ah:mm [v]"}
+                    h{"ah:mm至h:mm [v]"}
+                    m{"ah:mm至h:mm [v]"}
                 }
                 hv{
-                    a{"vah至ah时"}
-                    h{"vah至h时"}
+                    a{"ah时至ah时 [v]"}
+                    h{"ah时至h时 [v]"}
                 }
                 y{
                     y{"rU至rU"}
                 }
                 yM{
-                    M{"r-M至r-M"}
-                    y{"r-M至r-M"}
+                    M{"r/M至r/M"}
+                    y{"r/M至r/M"}
                 }
                 yMEd{
-                    M{"r-M-dE至r-M-dE"}
-                    d{"r-M-dE至r-M-dE"}
-                    y{"r-M-dE至r-M-dE"}
+                    M{"r/M/dE至r/M/dE"}
+                    d{"r/M/dE至r/M/dE"}
+                    y{"r/M/dE至r/M/dE"}
                 }
                 yMMM{
                     M{"rU年MMM至MMM"}
@@ -558,9 +550,9 @@ yue_Hans{
                     y{"r年MMMd至r年MMMd"}
                 }
                 yMd{
-                    M{"r-M-d至r-M-d"}
-                    d{"r-M-d至r-M-d"}
-                    y{"r-M-d至r-M-d"}
+                    M{"r/M/d至r/M/d"}
+                    d{"r/M/d至r/M/d"}
+                    y{"r/M/d至r/M/d"}
                 }
             }
             monthNames{
@@ -638,8 +630,8 @@ yue_Hans{
         }
         dangi{
             DateTimePatterns{
-                "zzzz HH:mm:ss",
-                "z HH:mm:ss",
+                "HH:mm:ss [zzzz]",
+                "HH:mm:ss [z]",
                 "HH:mm:ss",
                 "HH:mm",
                 "U年MMMd日EEEE",
@@ -653,12 +645,18 @@ yue_Hans{
                 "{1} {0}",
             }
             DateTimeSkeletons{
-                "HHmmsszzzz",
+                "HHmmssz",
                 "HHmmssz",
                 "HHmmss",
                 "HHmm",
-                "UMMMEEEEd",
-                "UMMMd",
+                {
+                    "UMMMEEEEd",
+                    "d=hanidays",
+                }
+                {
+                    "UMMMd",
+                    "d=hanidays",
+                }
                 "UMMMd",
                 "UMd",
             }
@@ -776,28 +774,34 @@ yue_Hans{
         }
         generic{
             DateTimePatterns{
-                "zzzz HH:mm:ss",
-                "z HH:mm:ss",
+                "HH:mm:ss [zzzz]",
+                "HH:mm:ss [z]",
                 "HH:mm:ss",
                 "HH:mm",
-                "Gy年MM月d日EEEE",
-                "Gy年MM月d日",
-                "Gy年MM月d日",
-                "Gy/M/d",
+                "G y年M月d日 EEEE",
+                "G y年M月d日",
+                "G y年M月d日",
+                "G y/M/d",
                 "{1} {0}",
-                "{1} {0}",
+                "{1}{0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
             }
             DateTimePatterns%atTime{
-                "{1} {0}",
+                "{1}{0}",
                 "{1}{0}",
                 "{1}{0}",
                 "{1} {0}",
             }
+            DateTimePatterns%relative{
+                "{1}{0}",
+                "{1}{0}",
+                "{1}{0}",
+                "{1}{0}",
+            }
             DateTimeSkeletons{
-                "HHmmsszzzz",
+                "HHmmssz",
                 "HHmmssz",
                 "HHmmss",
                 "HHmm",
@@ -810,35 +814,48 @@ yue_Hans{
                 Bh{"Bh时"}
                 Bhm{"Bh:mm"}
                 Bhms{"Bh:mm:ss"}
-                Ed{"d日E"}
-                Ehm{"ah:mmE"}
-                Ehms{"ah:mm:ssE"}
-                Gy{"Gy年"}
-                GyMMM{"Gy年MM月"}
-                GyMMMEd{"Gy年MM月d日E"}
-                GyMMMd{"Gy年MM月d日"}
-                H{"H时"}
-                MEd{"M/dE"}
-                MMM{"LL"}
-                MMMEd{"M月d日E"}
+                EBh{"EBh点"}
+                EBhm{"EBh:mm"}
+                EBhms{"EBh:mm:ss"}
+                EHm{"EHH:mm"}
+                EHms{"EHH:mm:ss"}
+                Ed{"d E"}
+                Eh{"Eah点"}
+                Ehm{"Eah:mm"}
+                Ehms{"Eah:mm:ss"}
+                Gy{"G y年"}
+                GyM{"G M/y"}
+                GyMEd{"G d/M/y (E)"}
+                GyMMM{"G y年M月"}
+                GyMMMEd{"G y年M月d日 E"}
+                GyMMMd{"G y年M月d日"}
+                GyMd{"G d/M/y"}
+                H{"H点"}
+                Hm{"H:mm"}
+                Hms{"H:mm:ss"}
+                Hv{"HH点 (v)"}
+                M{"M月"}
+                MEd{"M/d（E）"}
+                MMMEd{"M月d日 E"}
                 MMMMd{"M月d日"}
                 MMMd{"M月d日"}
                 Md{"M/d"}
                 d{"d日"}
-                h{"ah时"}
+                h{"ah点"}
                 hm{"ah:mm"}
                 hms{"ah:mm:ss"}
-                y{"Gy年"}
-                yyyy{"Gy年"}
-                yyyyM{"Gy年M月"}
-                yyyyMEd{"G y/M/dE"}
-                yyyyMMM{"Gy年MM月"}
-                yyyyMMMEd{"Gy年MM月d日E"}
-                yyyyMMMM{"Gy年M月"}
-                yyyyMMMd{"Gy年MM月d日"}
+                hv{"ah 点 (v)"}
+                y{"G y年"}
+                yyyy{"G y年"}
+                yyyyM{"G y/M"}
+                yyyyMEd{"G y/M/d（E）"}
+                yyyyMMM{"G y年M月"}
+                yyyyMMMEd{"G y年M月d日 E"}
+                yyyyMMMM{"G y年M月"}
+                yyyyMMMd{"G y年M月d日"}
                 yyyyMd{"G y/M/d"}
-                yyyyQQQ{"Gy年第Q季度"}
-                yyyyQQQQ{"Gy年第Q季度"}
+                yyyyQQQ{"G y年QQQ"}
+                yyyyQQQQ{"G y年QQQQ"}
             }
             intervalFormats{
                 Bh{
@@ -889,18 +906,21 @@ yue_Hans{
                     y{"G y/M/d至y/M/d"}
                 }
                 Hmv{
-                    H{"v HH:mm – HH:mm"}
-                    m{"v HH:mm – HH:mm"}
+                    H{"HH:mm–HH:mm [v]"}
+                    m{"HH:mm–HH:mm [v]"}
+                }
+                Hv{
+                    H{"HH–HH [v]"}
                 }
                 M{
-                    M{"M–M月"}
+                    M{"M月至M月"}
                 }
                 MEd{
-                    M{"M/dE至M/dE"}
-                    d{"M/dE至M/dE"}
+                    M{"d/M (E) 至 d/M (E)"}
+                    d{"d/M (E) 至 d/M (E)"}
                 }
                 MMM{
-                    M{"MMM – MMM"}
+                    M{"LLL至LLL"}
                 }
                 MMMEd{
                     M{"M月d日E至M月d日E"}
@@ -914,13 +934,13 @@ yue_Hans{
                     d{"M月d日至d日"}
                 }
                 Md{
-                    M{"M/d – M/d"}
-                    d{"M/d – M/d"}
+                    M{"M/d至M/d"}
+                    d{"M/d至M/d"}
                 }
                 d{
-                    d{"d至d日"}
+                    d{"d日至d日"}
                 }
-                fallback{"{0} – {1}"}
+                fallback{"{0}至{1}"}
                 h{
                     a{"ah时至ah时"}
                     h{"ah时至h时"}
@@ -931,62 +951,70 @@ yue_Hans{
                     m{"ah:mm至h:mm"}
                 }
                 hmv{
-                    a{"vah:mm至ah:mm"}
-                    h{"vah:mm至h:mm"}
-                    m{"vah:mm至h:mm"}
+                    a{"ah:mm至ah:mm [v]"}
+                    h{"ah:mm至h:mm [v]"}
+                    m{"ah:mm至h:mm [v]"}
                 }
                 hv{
-                    a{"vah时至ah时"}
-                    h{"vah时至h时"}
+                    a{"ah时至ah时 [v]"}
+                    h{"ah时至h时 [v]"}
                 }
                 y{
-                    y{"Gy–y年"}
+                    y{"G y至y"}
                 }
                 yM{
-                    M{"Gy年M月至M月"}
-                    y{"Gy年M月至y年M月"}
+                    M{"G y/M至y/M"}
+                    y{"G y/M至y/M"}
                 }
                 yMEd{
-                    M{"Gy/M/dE至y/M/dE"}
-                    d{"Gy/M/dE至y/M/dE"}
-                    y{"Gy/M/dE至y/M/dE"}
+                    M{"G y/M/dE至y/M/dE"}
+                    d{"G y/M/dE至y/M/dE"}
+                    y{"G y/M/dE至y/M/dE"}
                 }
                 yMMM{
-                    M{"Gy年M月至M月"}
-                    y{"Gy年M月至y年M月"}
+                    M{"G y年M月至M月"}
+                    y{"G y年M月至y年M月"}
                 }
                 yMMMEd{
-                    M{"Gy年M月d日E至M月d日E"}
-                    d{"Gy年M月d日E至d日E"}
-                    y{"Gy年M月d日E至y年M月d日E"}
+                    M{"G y年M月d日E至M月d日E"}
+                    d{"G y年M月d日E至d日E"}
+                    y{"G y年M月d日E至y年M月d日E"}
                 }
                 yMMMM{
-                    M{"Gy年M月至M月"}
-                    y{"Gy年M月至y年M月"}
+                    M{"G y年M月至M月"}
+                    y{"G y年M月至y年M月"}
                 }
                 yMMMd{
-                    M{"Gy年M月d日至M月d日"}
-                    d{"Gy年M月d日至d日"}
-                    y{"Gy年M月d日至y年M月d日"}
+                    M{"G y年M月d日至M月d日"}
+                    d{"G y年M月d日至d日"}
+                    y{"G y年M月d日至y年M月d日"}
                 }
                 yMd{
-                    M{"Gy/M/d – y/M/d"}
-                    d{"Gy/M/d – y/M/d"}
-                    y{"Gy/M/d – y/M/d"}
+                    M{"G y/M/d至y/M/d"}
+                    d{"G y/M/d至y/M/d"}
+                    y{"G y/M/d至y/M/d"}
                 }
             }
         }
         gregorian{
+            AmPmMarkers{
+                "上昼",
+                "下昼",
+            }
             AmPmMarkersAbbr{
-                "上午",
-                "下午",
+                "上昼",
+                "下昼",
+            }
+            AmPmMarkersNarrow{
+                "上昼",
+                "下昼",
             }
             DateTimePatterns{
-                "zzzz HH:mm:ss",
-                "z HH:mm:ss",
+                "HH:mm:ss [zzzz]",
+                "HH:mm:ss [z]",
                 "HH:mm:ss",
                 "HH:mm",
-                "y年M月d日EEEE",
+                "y年M月d日 EEEE",
                 "y年M月d日",
                 "y年M月d日",
                 "y/M/d",
@@ -1002,8 +1030,14 @@ yue_Hans{
                 "{1}{0}",
                 "{1} {0}",
             }
+            DateTimePatterns%relative{
+                "{1}{0}",
+                "{1}{0}",
+                "{1}{0}",
+                "{1}{0}",
+            }
             DateTimeSkeletons{
-                "HHmmsszzzz",
+                "HHmmssz",
                 "HHmmssz",
                 "HHmmss",
                 "HHmm",
@@ -1012,30 +1046,31 @@ yue_Hans{
                 "yMMMd",
                 "yMd",
             }
-            appendItems{
-                Timezone{"{1}{0}"}
-            }
             availableFormats{
-                Bh{"Bh时"}
+                Bh{"Bh点"}
                 Bhm{"Bh:mm"}
                 Bhms{"Bh:mm:ss"}
+                EBh{"EBh点"}
                 EBhm{"E Bh:mm"}
                 EBhms{"E Bh:mm:ss"}
-                EHm{"EHH:mm"}
-                EHms{"EHH:mm:ss"}
-                Ed{"d日E"}
-                Ehm{"Eah:mm"}
-                Ehms{"Eah:mm:ss"}
+                Ed{"d E"}
+                Eh{"Eah 点"}
+                Ehm{"E ah:mm"}
+                Ehms{"E ah:mm:ss"}
                 Gy{"Gy年"}
+                GyM{"GM/y"}
+                GyMEd{"Gd/M/y (E)"}
                 GyMMM{"Gy年M月"}
-                GyMMMEd{"Gy年M月d日E"}
+                GyMMMEd{"Gy年M月d日 E"}
                 GyMMMd{"Gy年M月d日"}
-                H{"H时"}
-                Hmsv{"v HH:mm:ss"}
-                Hmv{"v HH:mm"}
+                GyMd{"Gd/M/y"}
+                H{"H点"}
+                Hmsv{"HH:mm:ss [v]"}
+                Hmv{"HH:mm [v]"}
+                Hv{"HH点 (v)"}
                 M{"M月"}
-                MEd{"M/dE"}
-                MMMEd{"M月d日E"}
+                MEd{"M/d（E）"}
+                MMMEd{"M月d日 E"}
                 MMMMW{
                     other{"M月第W个星期"}
                 }
@@ -1047,14 +1082,15 @@ yue_Hans{
                 h{"ah时"}
                 hm{"ah:mm"}
                 hms{"ah:mm:ss"}
-                hmsv{"v ah:mm:ss"}
-                hmv{"v ah:mm"}
+                hmsv{"ah:mm:ss [v]"}
+                hmv{"ah:mm [v]"}
+                hv{"ah点 (v)"}
                 y{"y年"}
-                yM{"y年M月"}
-                yMEd{"y/M/dE"}
-                yMM{"y年M月"}
+                yM{"y/M"}
+                yMEd{"y/M/d（E）"}
+                yMM{"y/MM"}
                 yMMM{"y年M月"}
-                yMMMEd{"y年M月d日E"}
+                yMMMEd{"y年M月d日 E"}
                 yMMMM{"y年M月"}
                 yMMMd{"y年M月d日"}
                 yMd{"y/M/d"}
@@ -1066,14 +1102,14 @@ yue_Hans{
             }
             dayNames{
                 format{
-                    abbreviated{
-                        "周日",
-                        "周一",
-                        "周二",
-                        "周三",
-                        "周四",
-                        "周五",
-                        "周六",
+                    short{
+                        "日",
+                        "一",
+                        "二",
+                        "三",
+                        "四",
+                        "五",
+                        "六",
                     }
                     wide{
                         "星期日",
@@ -1107,6 +1143,16 @@ yue_Hans{
                         morning1{"清晨"}
                         morning2{"朝早"}
                         night1{"凌晨"}
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        am{"上昼"}
+                        pm{"下昼"}
+                    }
+                    narrow{
+                        am{"上昼"}
+                        pm{"下昼"}
                     }
                 }
             }
@@ -1168,22 +1214,25 @@ yue_Hans{
                     d{"GGGGGy年M月dd日至y年M月dd日"}
                     y{"GGGGGy年M月dd日至y年M月dd日"}
                 }
+                Hm{
+                    m{"HH:mm至HH:mm"}
+                }
                 Hmv{
-                    H{"v HH:mm–HH:mm"}
-                    m{"v HH:mm–HH:mm"}
+                    H{"HH:mm–HH:mm [v]"}
+                    m{"HH:mm–HH:mm [v]"}
                 }
                 Hv{
-                    H{"v HH–HH"}
+                    H{"HH–HH [v]"}
                 }
                 M{
-                    M{"M–M月"}
+                    M{"M月至M月"}
                 }
                 MEd{
-                    M{"M/dE至M/dE"}
-                    d{"M/dE至M/dE"}
+                    M{"d/M (E) 至 d/M (E)"}
+                    d{"d/M (E) 至 d/M (E)"}
                 }
                 MMM{
-                    M{"MMM – MMM"}
+                    M{"LLL至LLL"}
                 }
                 MMMEd{
                     M{"M月d日E至M月d日E"}
@@ -1197,13 +1246,13 @@ yue_Hans{
                     d{"M月d日至d日"}
                 }
                 Md{
-                    M{"M/d – M/d"}
-                    d{"M/d – M/d"}
+                    M{"M/d至M/d"}
+                    d{"M/d至M/d"}
                 }
                 d{
-                    d{"d–d日"}
+                    d{"d日至d日"}
                 }
-                fallback{"{0} – {1}"}
+                fallback{"{0}至{1}"}
                 h{
                     a{"ah时至ah时"}
                     h{"ah时至h时"}
@@ -1214,25 +1263,25 @@ yue_Hans{
                     m{"ah:mm至h:mm"}
                 }
                 hmv{
-                    a{"vah:mm至ah:mm"}
-                    h{"vah:mm至h:mm"}
-                    m{"vah:mm至h:mm"}
+                    a{"ah:mm至ah:mm [v]"}
+                    h{"ah:mm至h:mm [v]"}
+                    m{"ah:mm至h:mm [v]"}
                 }
                 hv{
-                    a{"vah时至ah时"}
-                    h{"vah时至h时"}
+                    a{"ah时至ah时 [v]"}
+                    h{"ah时至h时 [v]"}
                 }
                 y{
-                    y{"y–y年"}
+                    y{"y至y"}
                 }
                 yM{
-                    M{"y年M月至M月"}
-                    y{"y年M月至y年M月"}
+                    M{"y/M至y/M"}
+                    y{"y/M至y/M"}
                 }
                 yMEd{
-                    M{"y/M/dE至y/M/dE"}
-                    d{"y/M/dE至y/M/dE"}
-                    y{"y/M/dE至y/M/dE"}
+                    M{"d/M/y (E) 至 d/M/y (E)"}
+                    d{"d/M/y (E) 至 d/M/y (E)"}
+                    y{"d/M/y (E) 至 d/M/y (E)"}
                 }
                 yMMM{
                     M{"y年M月至M月"}
@@ -1253,14 +1302,14 @@ yue_Hans{
                     y{"y年M月d日至y年M月d日"}
                 }
                 yMd{
-                    M{"y/M/d – y/M/d"}
-                    d{"y/M/d – y/M/d"}
-                    y{"y/M/d – y/M/d"}
+                    M{"y/M/d至y/M/d"}
+                    d{"y/M/d至y/M/d"}
+                    y{"y/M/d至y/M/d"}
                 }
             }
             monthNames{
                 format{
-                    abbreviated{
+                    wide{
                         "1月",
                         "2月",
                         "3月",
@@ -1273,20 +1322,6 @@ yue_Hans{
                         "10月",
                         "11月",
                         "12月",
-                    }
-                    wide{
-                        "一月",
-                        "二月",
-                        "三月",
-                        "四月",
-                        "五月",
-                        "六月",
-                        "七月",
-                        "八月",
-                        "九月",
-                        "十月",
-                        "十一月",
-                        "十二月",
                     }
                 }
             }
@@ -1303,29 +1338,19 @@ yue_Hans{
         }
         hebrew{
             DateTimePatterns{
-                "zzzz HH:mm:ss",
-                "z HH:mm:ss",
+                "HH:mm:ss [zzzz]",
+                "HH:mm:ss [z]",
                 "HH:mm:ss",
                 "HH:mm",
                 "Gy年M月d日EEEE",
                 "Gy年M月d日",
                 "Gy年M月d日",
-                "Gy-M-d",
+                "Gy/M/d",
+                "{1} {0}",
+                "{1}{0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMEEEEd",
-                "GyMMMd",
-                "GyMMMd",
-                "GyMd",
             }
             eras{
                 abbreviated{
@@ -1380,8 +1405,8 @@ yue_Hans{
         }
         islamic{
             DateTimePatterns{
-                "zzzz HH:mm:ss",
-                "z HH:mm:ss",
+                "HH:mm:ss [zzzz]",
+                "HH:mm:ss [z]",
                 "HH:mm:ss",
                 "HH:mm",
                 "Gy年M月d日EEEE",
@@ -1389,34 +1414,25 @@ yue_Hans{
                 "Gy年M月d日",
                 "Gy/M/d",
                 "{1} {0}",
+                "{1}{0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
-                "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMEEEEd",
-                "GyMMMd",
-                "GyMMMd",
-                "GyMd",
             }
             availableFormats{
                 Ed{"d日（E）"}
+                Gy{"Gy年"}
                 GyMMM{"Gy年M月"}
                 GyMMMEd{"Gy年M月d日E"}
                 GyMMMd{"Gy年M月d日"}
-                M{"M月"}
-                MEd{"M-dE"}
-                MMM{"LLL"}
-                Md{"M-d"}
+                MMMEd{"M月d日E"}
+                y{"Gy年"}
+                yyyy{"Gy年"}
                 yyyyM{"Gy/M"}
                 yyyyMEd{"Gy/M/d（E）"}
                 yyyyMMM{"Gy年M月"}
                 yyyyMMMEd{"Gy年M月d日E"}
+                yyyyMMMM{"Gy年M月"}
                 yyyyMMMd{"Gy年M月d日"}
                 yyyyMd{"Gy/M/d"}
                 yyyyQQQ{"Gy年QQQ"}
@@ -1462,44 +1478,40 @@ yue_Hans{
         }
         japanese{
             DateTimePatterns{
-                "zzzz HH:mm:ss",
-                "z HH:mm:ss",
+                "HH:mm:ss [zzzz]",
+                "HH:mm:ss [z]",
                 "HH:mm:ss",
                 "HH:mm",
                 "Gy年M月d日EEEE",
                 "Gy年M月d日",
                 "Gy年M月d日",
-                "Gyy-MM-dd",
+                "Gy/M/d",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMEEEEd",
-                "GyMMMd",
-                "GyMMMd",
-                "GyyMMdd",
             }
             availableFormats{
+                Ed{"d日（E）"}
+                Gy{"Gy年"}
                 GyMMM{"Gy年M月"}
                 GyMMMEd{"Gy年M月d日E"}
                 GyMMMd{"Gy年M月d日"}
-                M{"M月"}
-                MEd{"M-dE"}
-                MMM{"LLL"}
-                Md{"M-d"}
-                yyyyM{"Gy-MM"}
-                yyyyMEd{"Gy-M-d（E）"}
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+                MMMEd{"M月d日E"}
+                MMMMd{"MMMM d"}
+                MMMd{"MMM d"}
+                y{"Gy年"}
+                yyyy{"Gy年"}
+                yyyyM{"Gy/M"}
+                yyyyMEd{"Gy/M/d（E）"}
                 yyyyMMM{"Gy年M月"}
                 yyyyMMMEd{"Gy年M月d日E"}
+                yyyyMMMM{"Gy年M月"}
                 yyyyMMMd{"Gy年M月d日"}
-                yyyyMd{"Gy-MM-dd"}
+                yyyyMd{"Gy/M/d"}
                 yyyyQQQ{"Gy年QQQ"}
                 yyyyQQQQ{"Gy年QQQQ"}
             }
@@ -1772,39 +1784,34 @@ yue_Hans{
         }
         roc{
             DateTimePatterns{
-                "zzzz HH:mm:ss",
-                "z HH:mm:ss",
+                "HH:mm:ss [zzzz]",
+                "HH:mm:ss [z]",
                 "HH:mm:ss",
                 "HH:mm",
-                "Gy年M月d日EEEE",
+                "Gy年M月d日 EEEE",
                 "Gy年M月d日",
                 "Gy年M月d日",
-                "Gyy/M/d",
+                "Gy/M/d",
+                "{1} {0}",
+                "{1}{0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMEEEEd",
-                "GyMMMd",
-                "GyMMMd",
-                "GyyMd",
             }
             availableFormats{
+                Ed{"d日（E）"}
+                Gy{"Gy年"}
                 GyMMM{"Gy年M月"}
                 GyMMMEd{"Gy年M月d日E"}
                 GyMMMd{"Gy年M月d日"}
-                M{"M月"}
-                MMM{"LLL"}
-                yyyyMEd{"Gy/M/dE"}
+                MMMEd{"M月d日E"}
+                y{"Gy年"}
+                yyyy{"Gy年"}
+                yyyyM{"Gy/M"}
+                yyyyMEd{"Gy/M/d（E）"}
                 yyyyMMM{"Gy年M月"}
                 yyyyMMMEd{"Gy年M月d日E"}
+                yyyyMMMM{"Gy年M月"}
                 yyyyMMMd{"Gy年M月d日"}
                 yyyyMd{"Gy/M/d"}
                 yyyyQQQ{"Gy年QQQ"}
@@ -1889,7 +1896,7 @@ yue_Hans{
         sign_standard_symbols{"标记/标准符号"}
         small_form_variant{"小写变体"}
         smiley{"表情符号"}
-        smileys_people{"表情符号与人"}
+        smileys_people{"表情符号同人"}
         south_asian_scripts{"南亚字体"}
         southeast_asian_scripts{"东南亚字体"}
         spacing{"空位"}
@@ -1898,13 +1905,19 @@ yue_Hans{
         technical_symbols{"技术符号"}
         tone_marks{"声调符号"}
         travel{"旅游"}
-        travel_places{"旅游和地点"}
+        travel_places{"旅游同地点"}
         upwards_arrows{"向上箭咀"}
         variant_forms{"变化型"}
         vocalic_jamo{"元音字母"}
         weather{"天气"}
         western_asian_scripts{"西亚字体"}
         whitespace{"空白"}
+    }
+    delimiters{
+        alternateQuotationEnd{"』"}
+        alternateQuotationStart{"『"}
+        quotationEnd{"」"}
+        quotationStart{"「"}
     }
     fields{
         day{
@@ -2198,38 +2211,53 @@ yue_Hans{
         metric{"公制"}
     }
     personNames{
+        foreignSpaceReplacement{"·"}
         initialPattern{
             initial{"{0}"}
         }
         namePattern{
             givenFirst-long-addressing-formal{"{surname}{title}"}
             givenFirst-long-addressing-informal{"{given-informal}"}
+            givenFirst-long-monogram-formal{
+                "{given2-monogram-allCaps}{surname-monogram-allCaps}{given-monogram-a"
+                "llCaps}"
+            }
+            givenFirst-long-monogram-informal{"{given-informal-monogram-allCaps}"}
+            givenFirst-long-referring-formal{"{title} {given} {given2} {surname} {generation}，{credentials}"}
+            givenFirst-long-referring-informal{"{given-informal}"}
             givenFirst-medium-addressing-formal{"{surname}{title}"}
             givenFirst-medium-addressing-informal{"{given-informal}"}
+            givenFirst-medium-monogram-formal{"{surname-monogram-allCaps}"}
+            givenFirst-medium-monogram-informal{"{given-informal-monogram-allCaps}"}
+            givenFirst-medium-referring-formal{"{given} {credentials}，{generation} {given2-initial}"}
+            givenFirst-medium-referring-informal{"{given-informal}"}
             givenFirst-short-addressing-formal{"{surname}{title}"}
             givenFirst-short-addressing-informal{"{given-informal}"}
-            sorting-long-referring-formal{"{surname} {given} {credentials} {given2}"}
+            givenFirst-short-monogram-formal{"{surname-monogram-allCaps}"}
+            givenFirst-short-monogram-informal{"{given-informal-monogram-allCaps}"}
+            givenFirst-short-referring-formal{"{given-initial} {given2-initial} {surname}"}
+            givenFirst-short-referring-informal{"{given-informal}"}
+            sorting-long-referring-formal{"{surname-core} {given} {given2}"}
             sorting-long-referring-informal{"{surname} {given-informal}"}
-            sorting-medium-referring-formal{"{surname} {given} {credentials} {given2-initial}"}
             sorting-medium-referring-informal{"{surname} {given-informal}"}
-            sorting-short-referring-formal{"{surname} {given} {given2-initial}"}
+            sorting-short-referring-formal{"{surname-core} {given-initial} {given2-initial}"}
             sorting-short-referring-informal{"{surname} {given-informal}"}
             surnameFirst-long-addressing-formal{"{surname}{title}"}
             surnameFirst-long-addressing-informal{"{given-informal}"}
-            surnameFirst-long-monogram-informal{"{surname-monogram-allCaps}{given-monogram-allCaps}"}
-            surnameFirst-long-referring-formal{"{surname} {given} {credentials} {given2}"}
+            surnameFirst-long-monogram-informal{"{surname-monogram-allCaps}{given-informal-monogram-allCaps}"}
+            surnameFirst-long-referring-formal{"{surname} {given} {title}，{generation} {given2} {credentials}"}
             surnameFirst-long-referring-informal{"{surname} {given-informal}"}
             surnameFirst-medium-addressing-formal{"{surname}{title}"}
             surnameFirst-medium-addressing-informal{"{given-informal}"}
-            surnameFirst-medium-monogram-formal{"{surname-monogram}"}
-            surnameFirst-medium-monogram-informal{"{given-informal-monogram}"}
-            surnameFirst-medium-referring-formal{"{surname} {given} {credentials} {given2-initial}"}
+            surnameFirst-medium-monogram-formal{"{surname-monogram-allCaps}"}
+            surnameFirst-medium-monogram-informal{"{given-informal-monogram-allCaps}"}
+            surnameFirst-medium-referring-formal{"{surname} {given} {credentials}，{generation} {given2-initial}"}
             surnameFirst-medium-referring-informal{"{surname} {given-informal}"}
             surnameFirst-short-addressing-formal{"{surname}{title}"}
             surnameFirst-short-addressing-informal{"{given-informal}"}
             surnameFirst-short-monogram-formal{"{surname-monogram-allCaps}"}
             surnameFirst-short-monogram-informal{"{given-informal-monogram-allCaps}"}
-            surnameFirst-short-referring-formal{"{surname} {given} {given2-initial}"}
+            surnameFirst-short-referring-formal{"{surname} {given}，{given2-initial}"}
             surnameFirst-short-referring-informal{"{surname} {given}"}
         }
         nativeSpaceReplacement{""}

@@ -479,11 +479,9 @@ sc{
             }
             eras{
                 abbreviated{
-                    0{"a.D."}
                     1{"a.M."}
                 }
                 wide{
-                    0{"in antis de Diocletzianu"}
                     1{"annu de sos màrtires"}
                 }
             }

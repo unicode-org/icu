@@ -391,6 +391,10 @@ yo_BJ{
             "EC$",
             "Dɔ́là Ilà Oòrùn Karíbíà",
         }
+        XCG{
+            "Cg.",
+            "Owó ìlú Kùrásɔ̀ àti Saint Mátìnì",
+        }
         XOF{
             "F CFA",
             "Faransì ìwɔ̀-oorùn Afíríkà",
@@ -664,6 +668,9 @@ yo_BJ{
         }
         XCD{
             other{"àwɔn dɔ́là Ilà Oòrùn Karíbíà"}
+        }
+        XCG{
+            other{"Owó ìlú Kùrásɔ̀ àti Saint Mátìnì"}
         }
         XOF{
             other{"àwɔn faransì ìwɔ̀-oorùn Afíríkà"}

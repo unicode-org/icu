@@ -95,14 +95,14 @@ scn{
                 "{1} {0}",
             }
             DateTimePatterns%atTime{
-                "{1} 'a' 'l''''uri' {0}",
-                "{1} 'a' 'l''''uri' {0}",
+                "{1} 'a l’uri' {0}",
+                "{1} 'a l’uri' {0}",
                 "{1} {0}",
                 "{1} {0}",
             }
             DateTimePatterns%relative{
-                "{1} 'a' 'l''uri''' {0}",
-                "{1} 'a' 'l''uri' {0}",
+                "{1} 'a l’uri' {0}",
+                "{1} 'a l’uri' {0}",
                 "{1} {0}",
                 "{1} {0}",
             }
@@ -248,15 +248,15 @@ scn{
                 "{1} {0}",
             }
             DateTimePatterns%atTime{
-                "{1} 'a' 'l''uri' {0}",
-                "{1} 'a' 'l''uri' {0}",
-                "{1} 'a' 'l''uri' {0}",
+                "{1} 'a l’uri' {0}",
+                "{1} 'a l’uri' {0}",
+                "{1} 'a l’uri' {0}",
                 "{1} 'ê' {0}",
             }
             DateTimePatterns%relative{
-                "{1} 'a' 'l''uri' {0}",
-                "{1} 'a' 'l''uri' {0}",
-                "{1} 'a' 'l''uri' {0}",
+                "{1} 'a l’uri' {0}",
+                "{1} 'a l’uri' {0}",
+                "{1} 'a l’uri' {0}",
                 "{1} 'ê' {0}",
             }
             availableFormats{

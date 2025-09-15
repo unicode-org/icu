@@ -15,10 +15,13 @@ sr_Latn{
         colStrength{"sortiranje prema jačini"}
         collation{"redosled sortiranja"}
         currency{"valuta"}
+        em{"prezentacija emodžija"}
         hc{"prikazivanje vremena (12- ili 24-časovno)"}
         lb{"stil preloma reda"}
+        lw{"prelomi redova unutar reči"}
         ms{"sistem mernih jedinica"}
         numbers{"brojevi"}
+        ss{"Prelom rečenice posle skraćenice"}
         timezone{"Vremenska zona"}
         va{"Varijanta lokaliteta"}
         x{"Privatna upotreba"}
@@ -161,7 +164,9 @@ sr_Latn{
         enm{"srednjeengleski"}
         eo{"esperanto"}
         es{"španski"}
-        es_ES{"španski (Evropa)"}
+        es_419{"latinoamerički španski"}
+        es_ES{"evropski španski"}
+        es_MX{"meksički španski"}
         et{"estonski"}
         eu{"baskijski"}
         ewo{"evondo"}
@@ -176,6 +181,8 @@ sr_Latn{
         fo{"farski"}
         fon{"fon"}
         fr{"francuski"}
+        fr_CA{"kanadski francuski"}
+        fr_CH{"švajcarski francuski"}
         frc{"kajunski francuski"}
         frm{"srednjefrancuski"}
         fro{"starofrancuski"}
@@ -422,7 +429,8 @@ sr_Latn{
         pro{"starooksitanski"}
         ps{"paštunski"}
         pt{"portugalski"}
-        pt_PT{"portugalski (Portugal)"}
+        pt_BR{"brazilski portugalski"}
+        pt_PT{"evropski portugalski"}
         qu{"kečua"}
         quc{"kiče"}
         raj{"radžastanski"}
@@ -581,6 +589,12 @@ sr_Latn{
         zun{"zuni"}
         zxx{"bez lingvističkog sadržaja"}
         zza{"zaza"}
+    }
+    Languages%core{
+        ku{"kurdski"}
+    }
+    Languages%extension{
+        ku{"kurmandži"}
     }
     Languages%long{
         zh_Hans{"pojednostavljeni mandarinski kineski"}
@@ -764,9 +778,30 @@ sr_Latn{
             persian{"persijski kalendar"}
             roc{"kalendar Republike Kine"}
         }
+        calendar%core{
+            buddhist{"budistički"}
+            chinese{"kineski"}
+            coptic{"koptski"}
+            dangi{"dangi"}
+            ethiopic{"etiopski"}
+            ethiopic-amete-alem{"etiopski amet alem"}
+            gregorian{"gregorijanski"}
+            hebrew{"hebrejski"}
+            islamic{"islamski"}
+            islamic-civil{"islamski civilni"}
+            islamic-tbla{"islamski astronomski"}
+            islamic-umalqura{"islamski (Umm al-Qura)"}
+            japanese{"japanski"}
+            persian{"persijski"}
+            roc{"minguo"}
+        }
         cf{
             account{"računovodstveni format valute"}
             standard{"standardni format valute"}
+        }
+        cf%core{
+            account{"računovodstvo"}
+            standard{"standardno"}
         }
         colAlternate{
             non-ignorable{"Sortiraj simbole"}
@@ -816,10 +851,29 @@ sr_Latn{
             unihan{"redosled sortiranja radikalnih poteza"}
             zhuyin{"žujin"}
         }
+        collation%core{
+            compat{"kompatibilnost"}
+            dictionary{"rečnik"}
+            ducet{"podrazumevani Unicode"}
+            phonebook{"telefonski imenik"}
+            phonetic{"fonetski"}
+            pinyin{"pinjin"}
+            search{"pretraga"}
+            standard{"standardni"}
+            stroke{"potezi"}
+            traditional{"tradicionalno"}
+            unihan{"radikalni potezi"}
+            zhuyin{"žujin"}
+        }
         d0{
             fwidth{"puna širina"}
             hwidth{"pola širine"}
             npinyin{"Numerička"}
+        }
+        em%core{
+            default{"podrazumevano"}
+            emoji{"emodži"}
+            text{"tekst"}
         }
         hc{
             h11{"12-časovni sistem (0-11)"}
@@ -827,19 +881,41 @@ sr_Latn{
             h23{"24-časovni sistem (0-23)"}
             h24{"24-časovni sistem (1-24)"}
         }
+        hc%core{
+            h11{"12 (0–11)"}
+            h12{"12 (1–12)"}
+            h23{"24 (0–23)"}
+            h24{"24 (1–24)"}
+        }
         lb{
             loose{"razmaknuti stil preloma reda"}
             normal{"normalni stil preloma reda"}
             strict{"strogi stil preloma reda"}
+        }
+        lb%core{
+            loose{"razmaknuti"}
+            normal{"normalni"}
+            strict{"strogi"}
+        }
+        lw%core{
+            breakall{"prelom svega"}
+            keepall{"zadrži sve"}
+            normal{"normalno"}
+            phrase{"zadrži u frazama"}
         }
         m0{
             bgn{"BGN (BGN)"}
             ungegn{"UNGEGN (BGN)"}
         }
         ms{
-            metric{"metrički"}
+            metric{"metrički sistem"}
             uksystem{"imperijalni"}
-            ussystem{"američki"}
+            ussystem{"američki sistem"}
+        }
+        ms%core{
+            metric{"metrički"}
+            uksystem{"UK"}
+            ussystem{"SAD"}
         }
         numbers{
             arab{"arapsko-indijske cifre"}
@@ -886,6 +962,10 @@ sr_Latn{
             tibt{"tibetanske cifre"}
             traditional{"Tradicionalni brojevi"}
             vaii{"vai cifre"}
+        }
+        ss%core{
+            none{"Uključeno"}
+            standard{"Isključeno"}
         }
     }
     Variants{

@@ -271,6 +271,9 @@ yue_Hans{
         "America:Costa_Rica"{
             ec{"哥斯大黎加"}
         }
+        "America:Coyhaique"{
+            ec{"科伊艾克"}
+        }
         "America:Creston"{
             ec{"克雷斯顿"}
         }
@@ -1906,5 +1909,7 @@ yue_Hans{
             ls{"育空时间"}
         }
         regionFormat{"{0}时间"}
+        regionFormatDaylight{"{0}夏令时间"}
+        regionFormatStandard{"{0}标准时间"}
     }
 }

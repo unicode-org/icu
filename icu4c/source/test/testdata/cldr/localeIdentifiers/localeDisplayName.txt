@@ -2836,8 +2836,8 @@ zh-Hans-fonipa; kineski (pojednostavljeno kinesko pismo, IPA fonetika)
 
 en-MM; engleski (Mijanmar [Burma])
 es; španski
-es-419; španski (Latinska Amerika)
-es-Cyrl-MX; španski (ćirilica, Meksiko)
+es-419; latinoamerički španski
+es-Cyrl-MX; meksički španski (ćirilica)
 hi-Latn; hindi (latinica)
 nl-BE; flamanski
 nl-Latn-BE; flamanski (latinica)

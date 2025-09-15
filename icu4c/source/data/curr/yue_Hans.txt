@@ -269,7 +269,7 @@ yue_Hans{
             "人民币 (离岸)",
         }
         CNY{
-            "￥",
+            "CN¥",
             "人民币",
         }
         COP{
@@ -529,7 +529,7 @@ yue_Hans{
             "约旦第纳尔",
         }
         JPY{
-            "JP¥",
+            "¥",
             "日圆",
         }
         KES{
@@ -1046,7 +1046,7 @@ yue_Hans{
         }
         VEF{
             "VEF",
-            "委内瑞拉玻利瓦 (2008–2018)",
+            "委内瑞拉玻利瓦 (VEF)",
         }
         VES{
             "VES",
@@ -1099,6 +1099,10 @@ yue_Hans{
         XCD{
             "EC$",
             "格瑞那达元",
+        }
+        XCG{
+            "Cg.",
+            "加勒比盾",
         }
         XDR{
             "XDR",
@@ -1204,6 +1208,10 @@ yue_Hans{
             "ZWD",
             "辛巴威元 (1980–2008)",
         }
+        ZWG{
+            "ZWG",
+            "辛巴威金",
+        }
         ZWL{
             "ZWL",
             "辛巴威元 (2009)",
@@ -1218,8 +1226,14 @@ yue_Hans{
         RUR{"р."}
     }
     CurrencyPlurals{
+        XCG{
+            other{"加勒比盾"}
+        }
         XXX{
             other{"(未知货币)"}
+        }
+        ZWG{
+            other{"辛巴威金"}
         }
     }
     CurrencyUnitPatterns{

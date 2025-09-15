@@ -42,7 +42,7 @@ void SimpleNumberFormatterTest::testBasic() {
     checkFormattedValue(
         u"testBasic",
         result,
-        u"-1’000’007",
+        u"-1'000'007",
         UFIELD_CATEGORY_NUMBER,
         expectedFieldPositions,
         UPRV_LENGTHOF(expectedFieldPositions));
@@ -359,7 +359,7 @@ void SimpleNumberFormatterTest::testCAPI() {
     usnum_setToInt64(unumber.getAlias(), 2222, status);
     usnumf_format(uformatter.getAlias(), unumber.getAlias(), uresult.getAlias(), status);
     assertEquals("",
-        u"2’222",
+        u"2'222",
         ufmtval_getString(unumf_resultAsValue(uresult.getAlias(), status), nullptr, status));
 
     {

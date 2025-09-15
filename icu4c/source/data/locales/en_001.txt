@@ -122,6 +122,7 @@ en_001{
             }
             availableFormats{
                 Ed{"E d"}
+                GyMEd{"E, dd/MM/y G"}
                 GyMMMEd{"E, d MMM y G"}
                 GyMMMd{"d MMM y G"}
                 GyMd{"dd/MM/y GGGGG"}
@@ -252,9 +253,10 @@ en_001{
             }
             availableFormats{
                 Ed{"E d"}
+                GyMEd{"E, dd/MM/y G"}
                 GyMMMEd{"E, d MMM y G"}
                 GyMMMd{"d MMM y G"}
-                GyMd{"d/M/y G"}
+                GyMd{"dd/MM/y G"}
                 MEd{"E, dd/MM"}
                 MMMEd{"E, d MMM"}
                 MMMMd{"d MMMM"}
@@ -430,14 +432,18 @@ en_001{
                 "{1}, {0}",
             }
             availableFormats{
+                Ed{"E d"}
+                GyMEd{"E, dd/MM/y G"}
                 GyMMMEd{"E, d MMM y G"}
                 GyMMMd{"d MMM y G"}
                 GyMd{"dd/MM/y GGGGG"}
+                M{"LL"}
                 MEd{"E dd/MM"}
                 MMMEd{"E d MMM"}
                 MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
                 Md{"dd/MM"}
+                yyyyM{"MM/y GGGGG"}
                 yyyyMEd{"E, dd/MM/y GGGGG"}
                 yyyyMMMEd{"E, d MMM y G"}
                 yyyyMMMd{"d MMM y G"}

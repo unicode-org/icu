@@ -3142,6 +3142,7 @@ CLDR data files are interpreted according to the LDML specification (http://unic
     <!--@METADATA-->
 
 <!ELEMENT rbnfRules ( #PCDATA ) >
+    <!--@CDATA-->
 <!ATTLIST rbnfRules alt NMTOKENS #IMPLIED >
     <!--@MATCH:literal/variant-->
 <!ATTLIST rbnfRules draft (approved | contributed | provisional | unconfirmed | true | false) #IMPLIED >

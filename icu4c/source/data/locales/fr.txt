@@ -311,11 +311,9 @@ fr{
         coptic{
             eras{
                 abbreviated{
-                    0{"av. D."}
                     1{"ap. D."}
                 }
                 wide{
-                    0{"avant Dioclétien"}
                     1{"après Dioclétien"}
                 }
             }

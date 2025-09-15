@@ -204,31 +204,7 @@ en_AU{
         }
         islamic{
             availableFormats{
-                Ed{"E d"}
-                M{"LL"}
                 MMMEd{"E, d MMM"}
-                yyyyM{"MM/y GGGGG"}
-            }
-        }
-        japanese{
-            DateTimePatterns{
-                "h:mm:ss a zzzz",
-                "h:mm:ss a z",
-                "h:mm:ss a",
-                "h:mm a",
-                "EEEE, d MMMM, y G",
-                "d MMMM, y G",
-                "d MMM, y G",
-                "dd/MM/y GGGGG",
-                "{1}, {0}",
-                "{1} 'at' {0}",
-                "{1} 'at' {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-            }
-            availableFormats{
-                GyMEd{"E, dd/MM/y GGGGG"}
-                yyyyMEEEEd{"EEEE, d MMMM, y G"}
             }
         }
     }

@@ -272,7 +272,6 @@ ur{
         coptic{
             eras{
                 abbreviated{
-                    0{"دور0"}
                     1{"دور1"}
                 }
             }

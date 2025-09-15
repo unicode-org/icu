@@ -6,11 +6,15 @@ yo_BJ{
         calendar{"Kàlɛ́ńdà"}
         cf{"Ònà Ìgbekalɛ̀ owó"}
         collation{"Ètò Ɛlɛ́sɛɛsɛ"}
+        em{"Ìgbékalɛ̀ Ɛ̀mójì"}
+        lw{"Àwɔn Ìdá Ìlà Láàárín Àwɔn Ɔ̀rɔ̀"}
         ms{"Èto Ìdiwɔ̀n"}
         numbers{"Àwɔn nɔ́ńbà"}
+        ss{"Ìdá Gbólóhùn Lɛ́yìn Ìgékúrú"}
     }
     Languages{
         agq{"Èdè Ágɛ̀ɛ̀mù"}
+        bal{"Èdè Belúshì"}
         bez{"Èdè Bɛ́nà"}
         chr{"Èdè Shɛ́rókiì"}
         cu{"Èdè Síláfííkì Ilé Ìjɔ́sìn"}
@@ -83,6 +87,9 @@ yo_BJ{
         zh_Hant{"Èdè Sháínà Ìbílɛ̀"}
         zu{"Èdè Shulu"}
     }
+    Languages%core{
+        ku{"Èdè Kɔ́dìshì"}
+    }
     Languages%long{
         zh_Hans{"Èdè Mandárínì Sháínà Onírɔ̀rùn"}
         zh_Hant{"Èdè Mandárínì Sháínà Ìbílɛ̀"}
@@ -133,18 +140,49 @@ yo_BJ{
             persian{"Kàlɛ́ńdà Pásíànù"}
             roc{"Kàlɛ́ńdà Minguo"}
         }
+        calendar%core{
+            chinese{"Ti Sháínà"}
+            coptic{"Kɔ́pítíìkì"}
+            ethiopic-amete-alem{"Kàlɛ́ńdà Etiópíà"}
+            islamic-civil{"Híjìrí (kàlɛ́ńdà oní-àtòkɔ ti arà-ìlú)"}
+            persian{"Ti Páshíà"}
+            roc{"Kàlɛ́ńdà Sháínà"}
+        }
         cf{
             account{"Ìgúnrégé Ìshirò Owó Kɔ́rɛ́ńsì"}
             standard{"Ònà ìgbekalɛ̀ owó tó jɛ́ àjùmɔ̀lò"}
+        }
+        cf%core{
+            account{"Ìshirò owó"}
+            standard{"Àjùmɔ̀lò"}
         }
         collation{
             ducet{"Ètò Ɛlɛ́sɛɛsɛ Àkùàyàn Unicode"}
             search{"Ìshàwárí Ète-Gbogbogbò"}
         }
+        collation%core{
+            search{"Shàwárí"}
+            standard{"Àjùmɔ̀lò"}
+        }
+        em%core{
+            emoji{"Ɛ̀mójì"}
+            text{"àtɛ̀jíshɛ́"}
+        }
+        lb%core{
+            loose{"Tó dɛ̀"}
+        }
+        lw%core{
+            breakall{"Fɔ́ gbogbo ɛ̀"}
+            keepall{"Pa gbogbo ɛ̀ mɔ́"}
+            phrase{"Fi sílɛ̀ ní àpólà"}
+        }
         ms{
             metric{"Èto Mɛ́tíríìkì"}
             uksystem{"Èto Ìdiwɔ̀n Ɔba"}
             ussystem{"Èto Ìdiwɔ̀n US"}
+        }
+        ms%core{
+            metric{"Mɛ́tíríìkì"}
         }
         numbers{
             arab{"àwɔn díjítì Làrubáwá-Índíà"}

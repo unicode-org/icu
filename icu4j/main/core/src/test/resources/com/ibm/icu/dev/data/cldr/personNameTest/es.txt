@@ -120,6 +120,7 @@ name ; locale; es_AQ
 expectedResult; Pérez, Lucía
 
 parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
 parameters; sorting; medium; referring; formal
 parameters; sorting; medium; referring; informal
 parameters; sorting; short; referring; informal
@@ -137,7 +138,6 @@ parameters; surnameFirst; long; referring; formal
 parameters; surnameFirst; long; referring; informal
 parameters; surnameFirst; medium; referring; formal
 parameters; surnameFirst; medium; referring; informal
-parameters; sorting; long; referring; informal
 
 expectedResult; Pérez, L.
 
@@ -244,6 +244,7 @@ parameters; surnameFirst; short; referring; formal
 
 expectedResult; Ruiz, Rosa
 
+parameters; sorting; long; referring; informal
 parameters; sorting; medium; referring; informal
 parameters; sorting; short; referring; informal
 
@@ -256,7 +257,6 @@ expectedResult; Ruiz Rosa
 
 parameters; surnameFirst; long; referring; informal
 parameters; surnameFirst; medium; referring; informal
-parameters; sorting; long; referring; informal
 
 expectedResult; Rosa R.
 
@@ -498,6 +498,7 @@ name ; locale; ko_AQ
 expectedResult; Sodersen, Martine
 
 parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
 parameters; sorting; medium; referring; formal
 parameters; sorting; medium; referring; informal
 parameters; sorting; short; referring; informal
@@ -515,7 +516,6 @@ parameters; surnameFirst; long; referring; formal
 parameters; surnameFirst; long; referring; informal
 parameters; surnameFirst; medium; referring; formal
 parameters; surnameFirst; medium; referring; informal
-parameters; sorting; long; referring; informal
 
 expectedResult; Sodersen, M.
 
@@ -610,6 +610,7 @@ parameters; surnameFirst; medium; referring; formal
 
 expectedResult; Jacobsen, Christopher
 
+parameters; sorting; long; referring; informal
 parameters; sorting; medium; referring; informal
 parameters; sorting; short; referring; informal
 
@@ -622,7 +623,6 @@ expectedResult; Jacobsen Christopher
 
 parameters; surnameFirst; long; referring; informal
 parameters; surnameFirst; medium; referring; informal
-parameters; sorting; long; referring; informal
 
 expectedResult; Jacobsen, C. H.
 

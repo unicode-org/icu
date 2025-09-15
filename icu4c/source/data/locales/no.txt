@@ -921,15 +921,12 @@ no{
         coptic{
             eras{
                 abbreviated{
-                    0{"0. t.a."}
                     1{"1. t.a."}
                 }
                 narrow{
-                    0{"TA0"}
                     1{"TA1"}
                 }
                 wide{
-                    0{"0. tidsalder"}
                     1{"1. tidsalder"}
                 }
             }

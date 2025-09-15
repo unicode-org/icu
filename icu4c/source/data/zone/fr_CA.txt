@@ -171,6 +171,9 @@ fr_CA{
             ld{"heure avancée de l’Atlantique"}
             lg{"heure de l’Atlantique"}
             ls{"heure normale de l’Atlantique"}
+            sd{"HAA"}
+            sg{"HA"}
+            ss{"HNA"}
         }
         "meta:Australia_Central"{
             ld{"heure avancée du centre de l’Australie"}
@@ -444,6 +447,9 @@ fr_CA{
             ld{"heure avancée de Saint-Pierre-et-Miquelon"}
             lg{"heure de Saint-Pierre-et-Miquelon"}
             ls{"heure normale de Saint-Pierre-et-Miquelon"}
+            sd{"HAPM"}
+            sg{"HPM"}
+            ss{"HNPM"}
         }
         "meta:Reunion"{
             ls{"heure de la Réunion"}

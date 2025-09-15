@@ -3631,7 +3631,7 @@ static void Test22088_Ethiopic(void) {
         snprintf(errorMessage, 200, "Creation of number formatter for %s failed", testCases[i].localeID);
         if (assertSuccess(errorMessage, &err)) {
             UChar result[200];
-            
+
             unum_formatDouble(nf, 123, result, 200, NULL, &err);
             snprintf(errorMessage, 200, "Formatting of number for %s failed", testCases[i].localeID);
             if (assertSuccess(errorMessage, &err)) {
@@ -3658,13 +3658,13 @@ static void TestChangingRuleset(void) {
         { "am_ET",               u"%ethiopic",    u"፻፳፫" },
         { "am_ET@numbers=ethi",  NULL,            u"፻፳፫" },
     };
-    
+
     for (int32_t i = 0; i < UPRV_LENGTHOF(testCases); i++) {
         char errorMessage[200];
         const char* rulesetNameString = (testCases[i].rulesetName != NULL) ? austrdup(testCases[i].rulesetName) : "NULL";
         UErrorCode err = U_ZERO_ERROR;
         UNumberFormat* nf = unum_open(UNUM_NUMBERING_SYSTEM, NULL, 0, testCases[i].localeID, NULL, &err);
-        
+
         snprintf(errorMessage, 200, "Creating of number formatter for %s failed", testCases[i].localeID);
         if (assertSuccess(errorMessage, &err)) {
             if (testCases[i].rulesetName != NULL) {
@@ -3672,10 +3672,10 @@ static void TestChangingRuleset(void) {
                 snprintf(errorMessage, 200, "Changing formatter for %s's default ruleset to %s failed", testCases[i].localeID, rulesetNameString);
                 assertSuccess(errorMessage, &err);
             }
-            
+
             if (U_SUCCESS(err)) {
                 UChar result[200];
-                
+
                 unum_formatDouble(nf, 123, result, 200, NULL, &err);
                 snprintf(errorMessage, 200, "Formatting of number with %s/%s failed", testCases[i].localeID, rulesetNameString);
                 if (assertSuccess(errorMessage, &err)) {
@@ -3837,13 +3837,13 @@ static void TestDuration(void) {
     // when https://unicode-org.atlassian.net/browse/ICU-22487 is fixed.
     double values[] = { 34, 34.5, 1234, 1234.2, 1234.7, 1235, 8434, 8434.5 };
     const UChar* expectedResults[] = { u"34 sec.", u"34 sec.", u"20:34", u"20:34", u"20:35", u"20:35", u"2:20:34", u"2:20:34" };
-    
+
     UErrorCode err = U_ZERO_ERROR;
     UNumberFormat* nf = unum_open(UNUM_DURATION, NULL, 0, "en_US", NULL, &err);
-    
+
     if (assertSuccess("Failed to create duration formatter", &err)) {
         UChar actualResult[200];
-        
+
         for (int32_t i = 0; i < UPRV_LENGTHOF(values); i++) {
             unum_formatDouble(nf, values[i], actualResult, 200, NULL, &err);
             if (assertSuccess("Error formatting duration", &err)) {
@@ -3881,19 +3881,22 @@ static void TestStrictParse(void) {
     UErrorCode status = U_ZERO_ERROR;
     double result;
     for (int idxLocale = 0; idxLocale < LOCALE_COUNT; idxLocale++) {
+        char msg[256];
         status = U_ZERO_ERROR;
         UNumberFormat* nf = unum_open(UNUM_DEFAULT, NULL, -1, locales[idxLocale], NULL, &status);
 
         unum_setAttribute(nf, UNUM_LENIENT_PARSE, true);
+        snprintf(msg, 256, "%s: %s", locales[idxLocale], "Lenient Parsing");
         for (int i = 0; i < TESTS_COUNT; i++) {
             result = unum_parseDouble(nf, toParse[i], -1, 0, &status);
-            assertDoubleEquals("Lenient parsing", expectedLenient[idxLocale][i], result);
+            assertDoubleEquals(msg, expectedLenient[idxLocale][i], result);
         }
 
         unum_setAttribute(nf, UNUM_LENIENT_PARSE, false);
+        snprintf(msg, 256, "%s: %s", locales[idxLocale], "Strict Parsing");
         for (int i = 0; i < TESTS_COUNT; i++) {
             result = unum_parseDouble(nf, toParse[i], -1, 0, &status);
-            assertDoubleEquals("Strict parsing", expectedStrict[idxLocale][i], result);
+            assertDoubleEquals(msg, expectedStrict[idxLocale][i], result);
         }
 
         unum_close(nf);

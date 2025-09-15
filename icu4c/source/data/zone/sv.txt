@@ -537,9 +537,9 @@ sv{
             ls{"Honolulu, normaltid"}
         }
         "meta:Hawaii_Aleutian"{
-            ld{"Honolulu, sommartid"}
-            lg{"Honolulutid"}
-            ls{"Honolulu, normaltid"}
+            ld{"aleutisk sommartid"}
+            lg{"aleutisk tid"}
+            ls{"aleutisk normaltid"}
         }
         "meta:Hong_Kong"{
             ld{"Hongkong, sommartid"}

@@ -15,10 +15,13 @@ yue_Hans{
         colStrength{"排序强度"}
         collation{"排序"}
         currency{"货币"}
+        em{"Emoji 显示方式"}
         hc{"时间周期（12 小时制与 24 小时制）"}
         lb{"换行样式"}
+        lw{"单字强制换行"}
         ms{"度量单位系统"}
         numbers{"数字"}
+        ss{"缩写后断句"}
         timezone{"时区"}
         va{"区域变异"}
         x{"专用区"}
@@ -154,7 +157,7 @@ yue_Hans{
         dar{"达尔格瓦文"}
         dav{"台塔文"}
         de{"德文"}
-        de_CH{"高地德文（瑞士）"}
+        de_CH{"高地德文 (瑞士)"}
         del{"德拉瓦文"}
         den{"斯拉夫"}
         dgr{"多格里布文"}
@@ -217,7 +220,7 @@ yue_Hans{
         gd{"苏格兰盖尔文"}
         gez{"吉兹文"}
         gil{"吉尔伯特群岛文"}
-        gl{"加利西亚文"}
+        gl{"加里西亚文"}
         glk{"吉拉基文"}
         gmh{"中古高地德文"}
         gn{"瓜拉尼文"}
@@ -252,7 +255,7 @@ yue_Hans{
         ht{"海地文"}
         hu{"匈牙利文"}
         hup{"胡帕文"}
-        hur{"哈尔科梅勒姆文"}
+        hur{"哈尔魁梅林语"}
         hy{"亚美尼亚文"}
         hz{"赫雷罗文"}
         ia{"国际文"}
@@ -268,7 +271,7 @@ yue_Hans{
         inh{"印古什文"}
         io{"伊多文"}
         is{"冰岛文"}
-        it{"意大利文"}
+        it{"义大利文"}
         iu{"因纽特文"}
         izh{"英格里亚文"}
         ja{"日文"}
@@ -325,7 +328,7 @@ yue_Hans{
         ksb{"尚巴拉文"}
         ksf{"巴菲亚文"}
         ksh{"科隆文"}
-        ku{"库尔德文"}
+        ku{"库德文"}
         kum{"库密克文"}
         kut{"库特奈文"}
         kv{"科米文"}
@@ -666,6 +669,12 @@ yue_Hans{
         zxx{"无语言内容"}
         zza{"扎扎文"}
     }
+    Languages%core{
+        ku{"库德文"}
+    }
+    Languages%extension{
+        ku{"北库德文"}
+    }
     Languages%long{
         zh_Hans{"简体中文 (普通话)"}
         zh_Hant{"繁体中文 (普通话)"}
@@ -856,15 +865,31 @@ yue_Hans{
             chinese{"农历"}
             coptic{"科普特历"}
             dangi{"檀纪历"}
-            ethiopic{"衣索比亚历"}
-            ethiopic-amete-alem{"衣索比亚历 (Amete Alem)"}
+            ethiopic{"埃塞俄比亚历"}
+            ethiopic-amete-alem{"埃塞俄比亚阿美德阿莱姆历"}
             gregorian{"公历"}
             hebrew{"希伯来历"}
             indian{"印度国历"}
             islamic{"伊斯兰历"}
-            islamic-civil{"伊斯兰民用历"}
-            islamic-umalqura{"乌姆库拉历"}
-            iso8601{"国际标准 ISO 8601"}
+            islamic-civil{"伊斯兰民用历 (表格式)"}
+            islamic-umalqura{"伊斯兰历 (乌姆库拉)"}
+            iso8601{"公历 (元年)"}
+            japanese{"日本历"}
+            persian{"波斯历"}
+            roc{"民国历"}
+        }
+        calendar%core{
+            buddhist{"佛历"}
+            chinese{"农历"}
+            coptic{"科普特历"}
+            dangi{"檀纪历"}
+            ethiopic{"埃塞俄比亚历"}
+            ethiopic-amete-alem{"埃塞俄比亚阿美德阿莱姆"}
+            gregorian{"公历"}
+            hebrew{"希伯来历"}
+            islamic{"伊斯兰历"}
+            islamic-civil{"伊斯兰民用历 (表格式)"}
+            islamic-umalqura{"伊斯兰历 (乌姆库拉)"}
             japanese{"日本历"}
             persian{"波斯历"}
             roc{"民国历"}
@@ -872,6 +897,10 @@ yue_Hans{
         cf{
             account{"会计货币格式"}
             standard{"标准货币格式"}
+        }
+        cf%core{
+            account{"会计"}
+            standard{"标准"}
         }
         colAlternate{
             non-ignorable{"排序符号"}
@@ -920,10 +949,20 @@ yue_Hans{
             unihan{"部首笔画排序"}
             zhuyin{"注音排序"}
         }
+        collation%core{
+            ducet{"预设 Unicode"}
+            search{"搜寻"}
+            standard{"标准"}
+        }
         d0{
             fwidth{"全形"}
             hwidth{"半形"}
             npinyin{"数值"}
+        }
+        em%core{
+            default{"预设"}
+            emoji{"Emoji"}
+            text{"文字"}
         }
         hc{
             h11{"12 小时制 (0–11)"}
@@ -931,10 +970,27 @@ yue_Hans{
             h23{"24 小时制 (0–23)"}
             h24{"24 小时制 (1–24)"}
         }
+        hc%core{
+            h11{"12 (0–11)"}
+            h12{"12 (1–12)"}
+            h23{"24 (0–23)"}
+            h24{"24 (1–24)"}
+        }
         lb{
             loose{"宽松换行样式"}
             normal{"一般换行样式"}
             strict{"强制换行样式"}
+        }
+        lb%core{
+            loose{"宽松"}
+            normal{"一般"}
+            strict{"强制"}
+        }
+        lw%core{
+            breakall{"任意换行"}
+            keepall{"全部保留"}
+            normal{"一般"}
+            phrase{"唔拆开词组"}
         }
         m0{
             bgn{"美国地名委员会"}
@@ -944,6 +1000,11 @@ yue_Hans{
             metric{"公制"}
             uksystem{"英制度量单位系统"}
             ussystem{"美制度量单位系统"}
+        }
+        ms%core{
+            metric{"公制"}
+            uksystem{"英制"}
+            ussystem{"美制"}
         }
         numbers{
             arab{"阿拉伯-印度数字"}
@@ -1007,6 +1068,10 @@ yue_Hans{
             tibt{"西藏数字"}
             traditional{"传统数字"}
             vaii{"瓦伊文数字"}
+        }
+        ss%core{
+            none{"闩"}
+            standard{"开"}
         }
     }
     Variants{

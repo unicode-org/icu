@@ -243,11 +243,9 @@ lv{
         coptic{
             eras{
                 abbreviated{
-                    0{"pirms Diokl."}
                     1{"pēc Diokl."}
                 }
                 wide{
-                    0{"pirms Diokletiāna"}
                     1{"pēc Diokletiāna"}
                 }
             }

@@ -153,6 +153,9 @@ sr_Latn{
                 one{"{0} obrtaj"}
                 other{"{0} obrtaja"}
             }
+            steradian{
+                dnam{"steradiansi"}
+            }
         }
         area{
             acre{
@@ -378,6 +381,12 @@ sr_Latn{
                 one{"{0} karat"}
                 other{"{0} karata"}
             }
+            katal{
+                dnam{"katali"}
+                few{"{0} katala"}
+                one{"{0} katal"}
+                other{"{0} katala"}
+            }
             milligram-ofglucose-per-deciliter{
                 case{
                     genitive{
@@ -435,6 +444,18 @@ sr_Latn{
                 one{"{0} mol"}
                 other{"{0} mola"}
             }
+            ofglucose{
+                dnam{"glukoze"}
+                few{"{0} glukoze"}
+                one{"{0} glukoze"}
+                other{"{0} glukoze"}
+            }
+            part{
+                dnam{"delovi"}
+                few{"{0} dela"}
+                one{"{0} deo"}
+                other{"{0} delova"}
+            }
             part-per-1e6{
                 case{
                     accusative{
@@ -461,11 +482,6 @@ sr_Latn{
             }
             part-per-1e9{
                 case{
-                    accusative{
-                        few{"{0} dela na milijardu"}
-                        one{"{0} deo na milijardu"}
-                        other{"{0} delova na milijardu"}
-                    }
                     genitive{
                         few{"{0} dela na milijardu"}
                         one{"{0} dela na milijardu"}
@@ -577,10 +593,6 @@ sr_Latn{
         }
         coordinate{
             dnam{"strana sveta"}
-            east{"{0} E"}
-            north{"{0} N"}
-            south{"{0} S"}
-            west{"{0} W"}
         }
         digital{
             bit{
@@ -983,11 +995,6 @@ sr_Latn{
             }
             night{
                 case{
-                    accusative{
-                        few{"{0} noći"}
-                        one{"{0} noć"}
-                        other{"{0} noći"}
-                    }
                     genitive{
                         few{"{0} noći"}
                         one{"{0} noći"}
@@ -999,12 +1006,7 @@ sr_Latn{
                         other{"{0} noći"}
                     }
                 }
-                dnam{"noć"}
-                few{"{0} noći"}
                 gender{"feminine"}
-                one{"{0} noć"}
-                other{"{0} noći"}
-                per{"{0}/noć"}
             }
             quarter{
                 case{
@@ -1121,6 +1123,24 @@ sr_Latn{
                 one{"{0} amper"}
                 other{"{0} ampera"}
             }
+            coulomb{
+                dnam{"kuloni"}
+                few{"{0} kulona"}
+                one{"{0} kulon"}
+                other{"{0} kulona"}
+            }
+            farad{
+                dnam{"faradi"}
+                few{"{0} farada"}
+                one{"{0} farad"}
+                other{"{0} farada"}
+            }
+            henry{
+                dnam{"henriji"}
+                few{"{0} henrija"}
+                one{"{0} henri"}
+                other{"{0} henrija"}
+            }
             milliampere{
                 case{
                     genitive{
@@ -1159,6 +1179,12 @@ sr_Latn{
                 one{"{0} om"}
                 other{"{0} oma"}
             }
+            siemens{
+                dnam{"simensi"}
+                few{"{0} simensa"}
+                one{"{0} simens"}
+                other{"{0} simensa"}
+            }
             volt{
                 case{
                     genitive{
@@ -1180,6 +1206,12 @@ sr_Latn{
             }
         }
         energy{
+            becquerel{
+                dnam{"bekereli"}
+                few{"{0} bekerela"}
+                one{"{0} bekerel"}
+                other{"{0} bekerela"}
+            }
             british-thermal-unit{
                 dnam{"Britanska termalna jedinica"}
             }
@@ -1207,6 +1239,12 @@ sr_Latn{
                 one{"{0} kalorija"}
                 other{"{0} kalorija"}
             }
+            calorie-it{
+                dnam{"kalorije [IT]"}
+                few{"{0} kalorije [IT]"}
+                one{"{0} kalorija [IT]"}
+                other{"{0} kalorija [IT]"}
+            }
             electronvolt{
                 dnam{"elektronvolti"}
                 few{"{0} elektronvolta"}
@@ -1218,6 +1256,12 @@ sr_Latn{
                 few{"{0} kalorije"}
                 one{"{0} kalorija"}
                 other{"{0} kalorija"}
+            }
+            gray{
+                dnam{"greji"}
+                few{"{0} greja"}
+                one{"{0} grej"}
+                other{"{0} grejeva"}
             }
             joule{
                 case{
@@ -1300,18 +1344,25 @@ sr_Latn{
                 one{"{0} kilovat-sat"}
                 other{"{0} kilovat-sati"}
             }
+            sievert{
+                dnam{"siverti"}
+                few{"{0} siverta"}
+                one{"{0} sivert"}
+                other{"{0} siverta"}
+            }
             therm-us{
                 dnam{"US therms"}
             }
         }
         force{
+            kilogram-force{
+                dnam{"kilopond"}
+                few{"{0} kiloponda"}
+                one{"{0} kilopond"}
+                other{"{0} kiloponda"}
+            }
             kilowatt-hour-per-100-kilometer{
                 case{
-                    accusative{
-                        few{"{0} kilovat-sata na 100 kilometara"}
-                        one{"{0} kilovat-sat na 100 kilometara"}
-                        other{"{0} kilovat-sati na 100 kilometara"}
-                    }
                     genitive{
                         few{"{0} kilovat-sata na 100 kilometara"}
                         one{"{0} kilovat-sata na 100 kilometara"}
@@ -1761,7 +1812,6 @@ sr_Latn{
                         other{"{0} tipografskih tačaka"}
                     }
                 }
-                dnam{"tipografske tačke"}
                 few{"{0} tipografske tačke"}
                 gender{"feminine"}
                 one{"{0} tipografska tačka"}
@@ -1841,6 +1891,20 @@ sr_Latn{
                 gender{"inanimate"}
                 one{"{0} luks"}
                 other{"{0} luksa"}
+            }
+        }
+        magnetic{
+            tesla{
+                dnam{"tesle"}
+                few{"{0} tesle"}
+                one{"{0} tesla"}
+                other{"{0} tesla"}
+            }
+            weber{
+                dnam{"veberi"}
+                few{"{0} vebera"}
+                one{"{0} veber"}
+                other{"{0} vebera"}
             }
         }
         mass{
@@ -2277,6 +2341,12 @@ sr_Latn{
                 one{"{0} milimetar živinog stuba"}
                 other{"{0} milimetara živinog stuba"}
             }
+            ofhg{
+                dnam{"žive"}
+                few{"{0} žive"}
+                one{"{0} žive"}
+                other{"{0} žive"}
+            }
             pascal{
                 case{
                     genitive{
@@ -2337,11 +2407,6 @@ sr_Latn{
             }
             light-speed{
                 case{
-                    accusative{
-                        few{"{0} svetla"}
-                        one{"{0} svetlo"}
-                        other{"{0} svetala"}
-                    }
                     genitive{
                         few{"{0} svetla"}
                         one{"{0} svetla"}
@@ -2353,11 +2418,7 @@ sr_Latn{
                         other{"{0} svetala"}
                     }
                 }
-                dnam{"svetlo"}
-                few{"{0} svetla"}
                 gender{"neuter"}
-                one{"{0} svetlo"}
-                other{"{0} svetala"}
             }
             meter-per-second{
                 case{
@@ -2654,6 +2715,12 @@ sr_Latn{
                 one{"{0} imperijska unca tečnosti"}
                 other{"{0} imperijskih unci tečnosti"}
             }
+            fluid-ounce-metric{
+                dnam{"tečne unce"}
+                few{"{0} tečne unce"}
+                one{"{0} tečna unca"}
+                other{"{0} tečnih unci"}
+            }
             gallon{
                 dnam{"galoni"}
                 few{"{0} galona"}
@@ -2802,6 +2869,15 @@ sr_Latn{
     }
     unitsNarrow{
         concentr{
+            ofglucose{
+                dnam{"Glc"}
+            }
+            part{
+                dnam{"deo"}
+                few{"{0} dela"}
+                one{"{0} deo"}
+                other{"{0} delova"}
+            }
             percent{
                 dnam{"%"}
             }
@@ -2850,13 +2926,6 @@ sr_Latn{
                 one{"{0} m"}
                 other{"{0} m"}
             }
-            night{
-                dnam{"noć"}
-                few{"{0} noći"}
-                one{"{0} noć"}
-                other{"{0} noći"}
-                per{"{0}/noć"}
-            }
             quarter{
                 few{"{0} k"}
                 one{"{0} k"}
@@ -2882,6 +2951,9 @@ sr_Latn{
             }
         }
         energy{
+            calorie-it{
+                dnam{"cal [IT]"}
+            }
             electronvolt{
                 dnam{"eV"}
             }
@@ -2931,11 +3003,10 @@ sr_Latn{
             }
         }
         speed{
-            light-speed{
-                dnam{"svetlo"}
-                few{"{0} svetla"}
-                one{"{0} svetlo"}
-                other{"{0} svetala"}
+            beaufort{
+                few{"B {0}"}
+                one{"B {0}"}
+                other{"B {0}"}
             }
         }
         volume{
@@ -3018,6 +3089,15 @@ sr_Latn{
                 few{"{0} stavke"}
                 one{"{0} stavka"}
                 other{"{0} stavki"}
+            }
+            ofglucose{
+                dnam{"Glc"}
+            }
+            part{
+                dnam{"deo"}
+                few{"{0} dela"}
+                one{"{0} deo"}
+                other{"{0} delova"}
             }
             part-per-1e9{
                 dnam{"delovi/milijarda"}
@@ -3153,6 +3233,9 @@ sr_Latn{
             }
         }
         energy{
+            calorie-it{
+                dnam{"cal [IT]"}
+            }
             electronvolt{
                 dnam{"elektronvolt"}
             }

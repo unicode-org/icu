@@ -271,6 +271,9 @@ sr_Latn{
         "America:Costa_Rica"{
             ec{"Kostarika"}
         }
+        "America:Coyhaique"{
+            ec{"Kojajke"}
+        }
         "America:Creston"{
             ec{"Kreston"}
         }

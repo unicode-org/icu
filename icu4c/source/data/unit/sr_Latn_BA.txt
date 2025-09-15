@@ -233,9 +233,6 @@ sr_Latn_BA{
         speed{
             beaufort{
                 dnam{"Bft"}
-                few{"B {0}"}
-                one{"B {0}"}
-                other{"B {0}"}
             }
             light-speed{
                 dnam{"svjetlo"}
@@ -297,11 +294,6 @@ sr_Latn_BA{
             }
         }
         speed{
-            beaufort{
-                few{"B {0}"}
-                one{"B {0}"}
-                other{"B {0}"}
-            }
             light-speed{
                 dnam{"svjetlo"}
                 few{"{0} svjetla"}

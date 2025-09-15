@@ -277,7 +277,6 @@ gu{
         coptic{
             eras{
                 abbreviated{
-                    0{"એરા0"}
                     1{"એરા1"}
                 }
             }

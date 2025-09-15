@@ -14,7 +14,7 @@ it_CH{
             }
             symbols{
                 decimal{"."}
-                group{"’"}
+                group{"'"}
             }
         }
     }

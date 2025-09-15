@@ -832,7 +832,7 @@ public class NumberRangeFormatterTest extends CoreTestFmwk {
             .identityFallback(RangeIdentityFallback.RANGE)
             .locale(ULocale.forLanguageTag("ar-EG"))
             .withoutLocale();
-    
+
         FormattedNumberRange res1 = unf1.locale(ULocale.forLanguageTag("bn")).formatRange(5, 5);
         assertEquals("res1", "\u09EB\u2013\u09EB", res1.toString());
         FormattedNumberRange res2 = unf2.locale(ULocale.forLanguageTag("ja-JP")).formatRange(5, 5);
@@ -928,11 +928,11 @@ public class NumberRangeFormatterTest extends CoreTestFmwk {
             "CHF≈5.00",
             "CHF 0.00–3.00",
             "CHF≈0.00",
-            "CHF 3.00–3’000.00",
-            "CHF 3’000.00–5’000.00",
-            "CHF 4’999.00–5’001.00",
-            "CHF≈5’000.00",
-            "CHF 5’000.00–5’000’000.00");
+            "CHF 3.00–3'000.00",
+            "CHF 3'000.00–5'000.00",
+            "CHF 4'999.00–5'001.00",
+            "CHF≈5'000.00",
+            "CHF 5'000.00–5'000'000.00");
 
         // TODO(ICU-21420): Move the sign to the inside of the number
         assertFormatRange(
