@@ -132,9 +132,6 @@ public class TestFunctionFactory implements FunctionFactory {
             reportErrors= "STRICT".equals(option);
 
             option = getStringOption(options, "fails", "never");
-            if (option == null) {
-                System.out.println("WTF?");
-            }
             switch (option) {
                 case "never":
                     // both options are already set to false, all good

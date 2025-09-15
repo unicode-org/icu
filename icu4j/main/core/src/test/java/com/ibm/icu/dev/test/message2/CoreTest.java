@@ -22,7 +22,6 @@ public class CoreTest extends CoreTestFmwk {
             "icu-test-functions.json",
             "icu-test-previous-release.json",
             "icu-test-selectors.json",
-            "invalid-number-literals-diagnostics.json",
             "invalid-options.json",
             "markup.json",
             "matches-whitespace.json",

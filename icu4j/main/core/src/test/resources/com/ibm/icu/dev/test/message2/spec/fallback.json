@@ -1,52 +1,62 @@
 {
-  "$schema": "https://raw.githubusercontent.com/unicode-org/message-format-wg/main/test/schemas/v0/tests.schema.json",
+  "$schema": "../schemas/v0/tests.schema.json",
   "scenario": "Fallback",
   "description": "Test cases for fallback behaviour.",
   "defaultTestProperties": {
     "bidiIsolation": "none",
-    "locale": "en-US",
-    "expErrors": true
+    "locale": "en-US"
   },
   "tests": [
     {
       "description": "function with unquoted literal operand",
       "src": "{42 :test:function fails=format}",
-      "exp": "{|42|}"
+      "exp": "{|42|}",
+      "expParts": [{ "type": "fallback", "source": "|42|" }],
+      "expErrors": [{ "type": "bad-option" }]
     },
     {
       "description": "function with quoted literal operand",
       "src": "{|C:\\\\| :test:function fails=format}",
-      "exp": "{|C:\\\\|}"
+      "exp": "{|C:\\\\|}",
+      "expErrors": [{ "type": "bad-operand" }]
     },
     {
       "description": "unannotated implicit input variable",
       "src": "{$var}",
-      "exp": "{$var}"
+      "exp": "{$var}",
+      "expErrors": [{ "type": "unresolved-variable" }]
     },
     {
       "description": "annotated implicit input variable",
       "src": "{$var :number}",
-      "exp": "{$var}"
+      "exp": "{$var}",
+      "expParts": [{ "type": "fallback", "source": "$var" }],
+      "expErrors": [{ "type": "unresolved-variable" }, { "type": "bad-operand" }]
     },
     {
       "description": "local variable with unknown function in declaration",
       "src": ".local $var = {|val| :test:undefined} {{{$var}}}",
-      "exp": "{$var}"
+      "exp": "{$var}",
+      "expErrors": [{ "type": "unknown-function" }]
     },
     {
       "description": "function with local variable operand with unknown function in declaration",
       "src": ".local $var = {|val| :test:undefined} {{{$var :test:function}}}",
-      "exp": "{$var}"
+      "exp": "{$var}",
+      "expErrors": [{ "type": "unknown-function" }, { "type": "bad-operand" }]
     },
     {
       "description": "local variable with unknown function in placeholder",
       "src": ".local $var = {|val|} {{{$var :test:undefined}}}",
-      "exp": "{$var}"
+      "exp": "{$var}",
+      "expErrors": [{ "type": "unknown-function" }]
     },
     {
       "description": "function with no operand",
       "src": "{:test:undefined}",
-      "exp": "{:test:undefined}"
+      "exp": "{:test:undefined}",
+      "expParts": [{ "type": "fallback", "source": ":test:undefined" }],
+      "expErrors": [{ "type": "unknown-function" }]
     }
   ]
 }

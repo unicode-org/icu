@@ -1,5 +1,5 @@
 {
-  "$schema": "https://raw.githubusercontent.com/unicode-org/message-format-wg/main/test/schemas/v0/tests.schema.json",
+  "$schema": "../../schemas/v0/tests.schema.json",
   "scenario": "Number function",
   "description": "The built-in formatter for numbers.",
   "defaultTestProperties": {
@@ -16,8 +16,111 @@
       "exp": "hello -4.2"
     },
     {
-      "src": "hello {0.42e+1 :number}",
+      "src": "hello {0.42 :number}",
+      "exp": "hello 0.42"
+    },
+    {
+      "src": "hello {|0.42e+1| :number}",
       "exp": "hello 4.2"
+    },
+    {
+      "src": "hello {00 :number}",
+      "exp": "hello {|00|}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ]
+    },
+    {
+      "src": "hello {042 :number}",
+      "exp": "hello {|042|}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ]
+    },
+    {
+      "src": "hello {1. :number}",
+      "exp": "hello {|1.|}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ]
+    },
+    {
+      "src": "hello {1e :number}",
+      "exp": "hello {|1e|}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ]
+    },
+    {
+      "src": "hello {1E :number}",
+      "exp": "hello {|1E|}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ]
+    },
+    {
+      "src": "hello {1.e :number}",
+      "exp": "hello {|1.e|}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ]
+    },
+    {
+      "src": "hello {1.2e :number}",
+      "exp": "hello {|1.2e|}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ]
+    },
+    {
+      "src": "hello {1.e3 :number}",
+      "exp": "hello {|1.e3|}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ]
+    },
+    {
+      "src": "hello {1e+ :number}",
+      "exp": "hello {|1e+|}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ]
+    },
+    {
+      "src": "hello {1e- :number}",
+      "exp": "hello {|1e-|}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ]
+    },
+    {
+      "src": "hello {1.0e2.0 :number}",
+      "exp": "hello {|1.0e2.0|}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ]
     },
     {
       "src": "hello {foo :number}",
@@ -182,18 +285,22 @@
       ]
     },
     {
+      "description": "formatting with select=literal has no effect",
+      "src": "literal select {1 :number select=exact}",
+      "exp": "literal select 1"
+    },
+    {
+      "description": "select=literal works",
+      "src": ".local $sel = {1 :number select=exact} .match $sel 1 {{literal select {$sel}}} * {{OTHER}}",
+      "exp": "literal select 1"
+    },
+    {
       "src": "{42 :number @foo @bar=13}",
       "exp": "42",
       "expParts": [
         {
           "type": "number",
-          "source": "|42|",
-          "parts": [
-            {
-              "type": "integer",
-              "value": "42"
-            }
-          ]
+          "parts": [{ "type": "integer", "value": "42" }]
         }
       ]
     }

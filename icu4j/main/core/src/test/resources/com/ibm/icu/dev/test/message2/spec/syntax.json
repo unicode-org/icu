@@ -1,5 +1,5 @@
 {
-  "$schema": "https://raw.githubusercontent.com/unicode-org/message-format-wg/main/test/schemas/v0/tests.schema.json",
+  "$schema": "../schemas/v0/tests.schema.json",
   "scenario": "Syntax",
   "description": "Test cases that do not depend on any registry definitions.",
   "defaultTestProperties": {
@@ -412,83 +412,112 @@
       "description": "... attribute -> \"@\" identifier s \"=\" s quoted-literal ...",
       "src": "{42 @foo=|bar|}",
       "exp": "42",
-      "expParts": [
-        {
-          "type": "string",
-          "source": "|42|",
-          "value": "42"
-        }
-      ]
+      "expParts": [{ "type": "string", "value": "42" }]
     },
     {
-      "description": "... literal -> quoted-literal -> \"|\" \"|\" ...",
+      "description": "... quoted-literal",
       "src": "{||}",
       "exp": ""
     },
     {
-      "description": "... quoted-literal -> \"|\" quoted-char \"|\"",
+      "description": "... quoted-literal",
       "src": "{|a|}",
       "exp": "a"
     },
     {
-      "description": "... quoted-literal -> \"|\" escaped-char \"|\"",
+      "description": "... quoted-literal",
       "src": "{|\\\\|}",
       "exp": "\\"
     },
     {
-      "description": "... quoted-literal -> \"|\" quoted-char 1*escaped-char \"|\"",
+      "description": "... quoted-literal",
       "src": "{|a\\\\\\{\\|\\}|}",
       "exp": "a\\{|}"
     },
     {
-      "description": "... unquoted-literal -> number-literal -> %x30",
+      "description": "... unquoted-literal",
       "src": "{0}",
       "exp": "0"
     },
     {
-      "description": "... unquoted-literal -> number-literal -> \"-\" %x30",
+      "description": "... unquoted-literal",
       "src": "{-0}",
       "exp": "-0"
     },
     {
-      "description": "... unquoted-literal -> number-literal -> (%x31-39 *DIGIT) -> %x31",
+      "description": "... unquoted-literal",
       "src": "{1}",
       "exp": "1"
     },
     {
-      "description": "... unquoted-literal -> number-literal -> (%x31-39 *DIGIT) -> %x31 DIGIT -> 11",
+      "description": "... unquoted-literal",
       "src": "{11}",
       "exp": "11"
     },
     {
-      "description": "... unquoted-literal -> number-literal -> %x30 \".\" 1*DIGIT -> 0 \".\" 1",
+      "description": "... unquoted-literal",
       "src": "{0.1}",
       "exp": "0.1"
     },
     {
-      "description": "... unquoted-literal -> number-literal -> %x30 \".\" 1*DIGIT -> %x30 \".\" DIGIT DIGIT -> 0 \".\" 1 2",
+      "description": "... unquoted-literal",
       "src": "{0.12}",
       "exp": "0.12"
     },
     {
-      "description": "... unquoted-literal -> number-literal -> %x30 %i\"e\" 1*DIGIT -> %x30 \"e\" DIGIT",
+      "description": "... unquoted-literal",
       "src": "{0e1}",
       "exp": "0e1"
     },
     {
-      "description": "... unquoted-literal -> number-literal -> %x30 %i\"e\" 1*DIGIT -> %x30 \"E\" DIGIT",
+      "description": "... unquoted-literal",
       "src": "{0E1}",
       "exp": "0E1"
     },
     {
-      "description": "... unquoted-literal -> number-literal -> %x30 %i\"e\" \"-\" 1*DIGIT ...",
+      "description": "... unquoted-literal",
       "src": "{0E-1}",
       "exp": "0E-1"
     },
     {
-      "description": "... unquoted-literal -> number-literal -> %x30 %i\"e\" \"+\" 1*DIGIT ...",
+      "description": "... unquoted-literal",
       "src": "{0E-1}",
       "exp": "0E-1"
+    },
+    {
+      "description": "+ as unquoted-literal",
+      "src": "{+}",
+      "exp": "+"
+    },
+    {
+      "description": "- as unquoted-literal",
+      "src": "{-}",
+      "exp": "-"
+    },
+    {
+      "description": ". as unquoted-literal",
+      "src": "{·}",
+      "exp": "·"
+    },
+    {
+      "description": "emoji as unquoted-literal",
+      "src": "{🥔}",
+      "exp": "🥔"
+    },
+    {
+      "description": "emoji above U+FFFF as unquoted-literal, ",
+      "src": "{🀄️}",
+      "exp": "🀄️"
+    },
+    {
+      "description": "multi-code-point emoji as unquoted-literal",
+      "src": "{🏳️‍🌈}",
+      "exp": "🏳️‍🌈"
+    },
+    {
+      "description": "various characters as unquoted-literal",
+      "src": "{\u00a1\u061d\u1681\u200b\u2010\u2030\u2060\u206a\u3001\ue000\ufdf0}",
+      "exp": "\u00a1\u061d\u1681\u200b\u2010\u2030\u2060\u206a\u3001\ue000\ufdf0"
     },
     {
       "src": "hello { world\t\n}",
@@ -609,7 +638,7 @@
           "name": "tag"
         },
         {
-          "type": "literal",
+          "type": "text",
           "value": "content"
         }
       ]
@@ -624,7 +653,7 @@
           "name": "ns:tag"
         },
         {
-          "type": "literal",
+          "type": "text",
           "value": "content"
         },
         {
@@ -644,7 +673,7 @@
           "name": "tag"
         },
         {
-          "type": "literal",
+          "type": "text",
           "value": "content"
         }
       ]
@@ -687,13 +716,7 @@
     {
       "src": "{42 @foo @bar=13}",
       "exp": "42",
-      "expParts": [
-        {
-          "type": "string",
-          "source": "|42|",
-          "value": "42"
-        }
-      ]
+      "expParts": [{ "type": "string", "value": "42" }]
     },
     {
       "src": "{{trailing whitespace}} \n",

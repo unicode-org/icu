@@ -1,0 +1,435 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/unicode-org/message-format-wg/main/test/schemas/v0/tests.schema.json",
+  "title": "Unicode MessageFormat data-driven tests",
+  "description": "The main schema for Unicode MessageFormat test data.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "tests"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Identifier for the test file JSON schema."
+    },
+    "scenario": {
+      "type": "string",
+      "description": "Identifier for the tests in the file."
+    },
+    "description": {
+      "type": "string",
+      "description": "Information about the test scenario."
+    },
+    "defaultTestProperties": {
+      "$ref": "#/$defs/defaultTestProperties"
+    },
+    "tests": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/test"
+      },
+      "minItems": 1
+    }
+  },
+  "$comment": "This allOf specifies required test properties that allow a default. A value will be required in 'defaultTestProperties' if one is not provided for every individual test.",
+  "allOf": [
+    {
+      "anyOf": [
+        {
+          "properties": {
+            "defaultTestProperties": {
+              "type": "object",
+              "required": [
+                "locale"
+              ]
+            }
+          }
+        },
+        {
+          "properties": {
+            "tests": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "locale"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "anyOf": [
+        {
+          "properties": {
+            "defaultTestProperties": {
+              "type": "object",
+              "required": [
+                "src"
+              ]
+            }
+          }
+        },
+        {
+          "properties": {
+            "tests": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "src"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "$comment": "Only one assertion is required. It doesn't matter which type.",
+      "anyOf": [
+        {
+          "properties": {
+            "defaultTestProperties": {
+              "$ref": "#/$defs/anyExp"
+            }
+          }
+        },
+        {
+          "properties": {
+            "tests": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/anyExp"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "$defs": {
+    "defaultTestProperties": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "locale": {
+          "$ref": "#/$defs/locale"
+        },
+        "src": {
+          "$ref": "#/$defs/src"
+        },
+        "bidiIsolation": {
+          "$ref": "#/$defs/bidiIsolation"
+        },
+        "params": {
+          "$ref": "#/$defs/params"
+        },
+        "tags": {
+          "$ref": "#/$defs/tags"
+        },
+        "exp": {
+          "$ref": "#/$defs/exp"
+        },
+        "expParts": {
+          "$ref": "#/$defs/expParts"
+        },
+        "expErrors": {
+          "$ref": "#/$defs/expErrors"
+        }
+      }
+    },
+    "test": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "Information about the test."
+        },
+        "locale": {
+          "$ref": "#/$defs/locale"
+        },
+        "src": {
+          "$ref": "#/$defs/src"
+        },
+        "bidiIsolation": {
+          "$ref": "#/$defs/bidiIsolation"
+        },
+        "params": {
+          "$ref": "#/$defs/params"
+        },
+        "tags": {
+          "$ref": "#/$defs/tags"
+        },
+        "exp": {
+          "$ref": "#/$defs/exp"
+        },
+        "expParts": {
+          "$ref": "#/$defs/expParts"
+        },
+        "expErrors": {
+          "$ref": "#/$defs/expErrors"
+        },
+        "only": {
+          "type": "boolean",
+          "description": "Normally not set. A flag to use during development to only run one or more specific tests."
+        }
+      }
+    },
+    "locale": {
+      "description": "The locale to use for formatting.",
+      "type": "string"
+    },
+    "src": {
+      "description": "The message source in the Unicode MessageFormat syntax.",
+      "type": "string"
+    },
+    "bidiIsolation": {
+      "description": "The bidi isolation strategy.",
+      "enum": ["default", "none"]
+    },
+    "params": {
+      "description": "Parameters to pass in to the formatter for resolving external variables.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/var"
+      }
+    },
+    "tags": {
+      "description": "List of features that the test relies on.",
+      "type": "array",
+      "items": {
+        "enum": [
+          ":percent",
+          "u:dir",
+          "u:id",
+          "u:locale"
+        ]
+      }
+    },
+    "var": {
+      "type": "object",
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "required": [
+            "name",
+            "value"
+          ],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "value": {}
+          }
+        },
+        {
+          "additionalProperties": false,
+          "required": [
+            "name",
+            "type",
+            "value"
+          ],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "type": {
+              "const": "datetime"
+            },
+            "value": {
+              "$comment": "Should be converted to a datetime.",
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "exp": {
+      "description": "The expected result of formatting the message to a string.",
+      "type": "string"
+    },
+    "expParts": {
+      "description": "The expected result of formatting the message to parts.",
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "description": "Message text part.",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "type",
+              "value"
+            ],
+            "properties": {
+              "type": {
+                "const": "text"
+              },
+              "value": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "description": "Bidi isolation part.",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "type",
+              "value"
+            ],
+            "properties": {
+              "type": {
+                "const": "bidiIsolation"
+              },
+              "value": {
+                "enum": ["\u2066", "\u2067", "\u2068", "\u2069"]
+              }
+            }
+          },
+          {
+            "description": "Message markup part.",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "type",
+              "kind",
+              "name"
+            ],
+            "properties": {
+              "type": {
+                "const": "markup"
+              },
+              "kind": {
+                "enum": [
+                  "open",
+                  "standalone",
+                  "close"
+                ]
+              },
+              "name": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              },
+              "options": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "description": "Message expression part.",
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "enum": [
+                  "datetime",
+                  "number",
+                  "string",
+                  "test"
+                ]
+              },
+              "locale": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              },
+              "parts": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                }
+              },
+              "value": {}
+            }
+          },
+          {
+            "description": "Fallback part.",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "type",
+              "source"
+            ],
+            "properties": {
+              "type": {
+                "const": "fallback"
+              },
+              "source": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "expErrors": {
+      "description": "The runtime errors expected to be emitted when formatting the message. If expErrors is either absent or empty, the message must be formatted without errors.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "enum": [
+              "syntax-error",
+              "variant-key-mismatch",
+              "missing-fallback-variant",
+              "missing-selector-annotation",
+              "duplicate-declaration",
+              "duplicate-option-name",
+              "duplicate-variant",
+              "unresolved-variable",
+              "unknown-function",
+              "bad-selector",
+              "bad-operand",
+              "bad-option",
+              "bad-variant-key"
+            ]
+          }
+        }
+      }
+    },
+    "anyExp": {
+      "type": "object",
+      "anyOf": [
+        {
+          "required": [
+            "exp"
+          ]
+        },
+        {
+          "required": [
+            "expParts"
+          ]
+        },
+        {
+          "required": [
+            "expErrors"
+          ]
+        }
+      ]
+    }
+  }
+}
