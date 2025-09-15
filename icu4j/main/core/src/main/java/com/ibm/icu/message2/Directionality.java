@@ -3,6 +3,8 @@
 
 package com.ibm.icu.message2;
 
+import java.util.Locale;
+
 import com.ibm.icu.util.ULocale;
 
 /**
@@ -50,15 +52,15 @@ public enum Directionality {
     /**
      * Determines the directionality appropriate for a given locale.
      *
-     * @param ulocale the locale to determine the directionality from.
+     * @param locale the locale to determine the directionality from.
      * @return the appropriate directionality for the locale given.
      *
      * @draft ICU 78
      */
-    public static Directionality of(ULocale ulocale) {
-        if (ulocale == null ) {
+    public static Directionality of(Locale locale) {
+        if (locale == null) {
             return Directionality.INHERIT;
         }
-        return ulocale.isRightToLeft() ? Directionality.RTL : Directionality.LTR;
+        return ULocale.forLocale(locale).isRightToLeft() ? Directionality.RTL : Directionality.LTR;
     }
 }

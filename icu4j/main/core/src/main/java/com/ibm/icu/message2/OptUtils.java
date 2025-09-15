@@ -8,8 +8,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.ibm.icu.util.ULocale;
-
 class OptUtils {
     // This matches JSON number (https://www.rfc-editor.org/rfc/rfc8259#section-6)
     //
@@ -118,7 +116,7 @@ class OptUtils {
 
     static Directionality getBestDirectionality(Map<String, Object> options, Locale locale) {
         Directionality result = getDirectionality(options);
-        return result == Directionality.UNKNOWN ? Directionality.of(ULocale.forLocale(locale)) : result;
+        return result == Directionality.UNKNOWN ? Directionality.of(locale) : result;
     }
 
     static Directionality getDirectionality(Map<String, Object> options) {
