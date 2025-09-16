@@ -118,6 +118,7 @@ abstract public class TestFmwk extends AbstractTestLog {
     public final static void testClassTeardown() {
         getParams().knownIssues.printKnownIssues(new UnicodeKnownIssues.Consumer<String>() {
             // TODO: make this a Lambda once JDK 1.8 ships
+            @Override
             public void accept(String t) {
                 System.out.println(t);
             }

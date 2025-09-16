@@ -58,7 +58,7 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence, V>> {
         static public <K extends CharSequence, V> Builder<V> with(Style style, Map<K, V> keyValuePairs) {
             return with(style, Option.SMALL, keyValuePairs);
         }
-        
+
         static public <K extends CharSequence, V> Builder<V> with(Style style, Option option, Map<K, V> keyValuePairs) {
             Builder<V> result = style == Style.BYTES ? new BytesTrieMap.BytesBuilder<V>()
                     : new CharsTrieMap.CharsBuilder<V>();
@@ -89,6 +89,7 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence, V>> {
     /**
      * Warning: the entry contents are only valid until the next next() call!!
      */
+    @Override
     abstract public Iterator<Entry<CharSequence, V>> iterator();
 
     abstract public Matcher<V> getMatcher();
@@ -120,6 +121,7 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence, V>> {
             this.bytesTrie = bytesTrie;
         }
 
+        @Override
         public V get(CharSequence test) {
             int length = test.length();
             bytesTrie.reset();
@@ -157,6 +159,7 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence, V>> {
             // return result.hasValue() ? intToValue[bytesTrie.getValue()] : null;
         }
 
+        @Override
         public String toString() {
             return toString(bytesTrie, " : ", "\n");
         }
@@ -164,11 +167,13 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence, V>> {
         /**
          * Warning: the entry contents are only valid until the next next() call!!
          */
+        @Override
         public Iterator<Entry<CharSequence, V>> iterator() {
             // TODO Auto-generated method stub
             return new BytesIterator();
         }
 
+        @Override
         public TrieMap.Matcher<V> getMatcher() {
             return new BytesMatcher();
         }
@@ -177,15 +182,18 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence, V>> {
             BytesTrie.Iterator iterator = bytesTrie.iterator();
             BytesEntry entry = new BytesEntry();
 
+            @Override
             public boolean hasNext() {
                 return iterator.hasNext();
             }
 
+            @Override
             public Entry<CharSequence, V> next() {
                 entry.bytesEntry = iterator.next();
                 return entry;
             }
 
+            @Override
             public void remove() {
                 throw new UnsupportedOperationException();
             }
@@ -195,16 +203,19 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence, V>> {
             public BytesTrie.Entry bytesEntry;
             StringBuilder buffer = new StringBuilder();
 
+            @Override
             public CharSequence getKey() {
                 buffer.setLength(0);
                 ByteConverter.getChars(bytesEntry, buffer);
                 return buffer;
             }
 
+            @Override
             public V getValue() {
                 return intToValue[bytesEntry.value];
             }
 
+            @Override
             public V setValue(V value) {
                 throw new UnsupportedOperationException();
             }
@@ -214,16 +225,19 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence, V>> {
             private byte[] bytes = new byte[3];
             private V value = null;
 
+            @Override
             public void set(CharSequence text, int start) {
                 this.text = text;
                 this.start = start;
                 this.current = start;
             }
 
+            @Override
             public int getStart() {
                 return start;
             }
 
+            @Override
             public int getEnd() {
                 return current;
             }
@@ -231,9 +245,10 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence, V>> {
             /**
              * Finds the next match. Returns false when there are no possible further matches from the current start
              * point. Once that happens, call nextStart(); Call getValue to get the current value.
-             * 
+             *
              * @return false when done. There may be a value, however.
              */
+            @Override
             public boolean next() {
                 while (current < text.length()) {
                     char c = text.charAt(current++);
@@ -256,6 +271,7 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence, V>> {
                 return false;
             }
 
+            @Override
             public boolean nextStart() {
                 if (start >= text.length()) {
                     return false;
@@ -266,6 +282,7 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence, V>> {
                 return true;
             }
 
+            @Override
             public V getValue() {
                 return value;
             }
@@ -277,6 +294,7 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence, V>> {
         byte[] bytes = new byte[200];
         List<String> debugBytes = DEBUG ? new ArrayList<String>() : null;
 
+        @Override
         public BytesBuilder<V> add(CharSequence key, V value) {
             // traverse the values, and get a mapping of a byte string to list of
             // integers, and a mapping from those integers to a set of values
@@ -314,6 +332,7 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence, V>> {
             }
         }
 
+        @Override
         public <K extends CharSequence> BytesBuilder<V> addAll(Map<K, V> keyValuePairs) {
             for (Entry<K, V> entry : keyValuePairs.entrySet()) {
                 add(entry.getKey(), entry.getValue());
@@ -321,6 +340,7 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence, V>> {
             return this;
         }
 
+        @Override
         public TrieMap<V> build() {
             int size = builder.buildByteBuffer(option).remaining();
             BytesTrie bytesTrie = builder.build(option);
@@ -338,11 +358,13 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence, V>> {
             this.charsTrie = charsTrie;
         }
 
+        @Override
         public V get(CharSequence test) {
             Result result = charsTrie.reset().next(test, 0, test.length());
             return result.hasValue() ? intToValue[charsTrie.getValue()] : null;
         }
 
+        @Override
         public String toString() {
             return toString(charsTrie, " : ", "\n");
         }
@@ -350,11 +372,13 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence, V>> {
         /**
          * Warning: the entry contents are only valid until the next next() call!!
          */
+        @Override
         public Iterator<Entry<CharSequence, V>> iterator() {
             // TODO Auto-generated method stub
             return new CharsIterator();
         }
 
+        @Override
         public TrieMap.Matcher<V> getMatcher() {
             return new CharsMatcher();
         }
@@ -363,15 +387,18 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence, V>> {
             CharsTrie.Iterator iterator = charsTrie.iterator();
             CharsEntry entry = new CharsEntry();
 
+            @Override
             public boolean hasNext() {
                 return iterator.hasNext();
             }
 
+            @Override
             public Entry<CharSequence, V> next() {
                 entry.charsEntry = iterator.next();
                 return entry;
             }
 
+            @Override
             public void remove() {
                 throw new UnsupportedOperationException();
             }
@@ -381,14 +408,17 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence, V>> {
         private class CharsEntry implements Entry<CharSequence, V> {
             public CharsTrie.Entry charsEntry;
 
+            @Override
             public CharSequence getKey() {
                 return charsEntry.chars;
             }
 
+            @Override
             public V getValue() {
                 return intToValue[charsEntry.value];
             }
 
+            @Override
             public V setValue(V value) {
                 throw new UnsupportedOperationException();
             }
@@ -397,16 +427,19 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence, V>> {
         public class CharsMatcher extends Matcher<V> {
             private V value = null;
 
+            @Override
             public void set(CharSequence text, int start) {
                 this.text = text;
                 this.start = start;
                 this.current = start;
             }
 
+            @Override
             public int getStart() {
                 return start;
             }
 
+            @Override
             public int getEnd() {
                 return current;
             }
@@ -414,9 +447,10 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence, V>> {
             /**
              * Finds the next match. Returns false when there are no possible further matches from the current start
              * point. Once that happens, call nextStart(); Call getValue to get the current value.
-             * 
+             *
              * @return false when done. There may be a value, however.
              */
+            @Override
             public boolean next() {
                 while (current < text.length()) {
                     char c = text.charAt(current++);
@@ -434,6 +468,7 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence, V>> {
                 return false;
             }
 
+            @Override
             public boolean nextStart() {
                 if (start >= text.length()) {
                     return false;
@@ -444,6 +479,7 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence, V>> {
                 return true;
             }
 
+            @Override
             public V getValue() {
                 return value;
             }
@@ -453,6 +489,7 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence, V>> {
     public static class CharsBuilder<V> extends Builder<V> {
         CharsTrieBuilder builder = new CharsTrieBuilder();
 
+        @Override
         public CharsBuilder<V> add(CharSequence key, V value) {
             // traverse the values, and get a mapping of a byte string to list of
             // integers, and a mapping from those integers to a set of values
@@ -476,6 +513,7 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence, V>> {
             }
         }
 
+        @Override
         public <K extends CharSequence> CharsBuilder<V> addAll(Map<K, V> keyValuePairs) {
             for (Entry<K, V> entry : keyValuePairs.entrySet()) {
                 add(entry.getKey(), entry.getValue());
@@ -483,6 +521,7 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence, V>> {
             return this;
         }
 
+        @Override
         public TrieMap<V> build() {
             CharSequence buildCharSequence = builder.buildCharSequence(option);
             int size = 2 * buildCharSequence.length();
@@ -498,7 +537,7 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence, V>> {
      * Supports the following format for encoding chars (Unicode 16-bit code units). The format is slightly simpler and
      * more compact than UTF8, but also maintains ordering. It is not, however self-synchronizing, and is not intended
      * for general usage
-     * 
+     *
      * <pre>
      * 0000..007F - 0xxx xxxx
      * 0000..7EFF - 1yyy yyyy xxxx xxxx

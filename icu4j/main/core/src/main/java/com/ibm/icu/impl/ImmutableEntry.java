@@ -23,14 +23,18 @@ public class ImmutableEntry<K,V> implements Map.Entry<K,V> {
         v = value;
     }
 
+    @Override
     public K getKey()   {return k;}
 
+    @Override
     public V getValue() {return v;}
 
+    @Override
     public V setValue(V value) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public boolean equals(Object o) {
         try {
             Map.Entry e = (Map.Entry)o;
@@ -40,10 +44,12 @@ public class ImmutableEntry<K,V> implements Map.Entry<K,V> {
         }
     }
 
+    @Override
     public int hashCode() {
         return ((k==null ? 0 : k.hashCode()) ^ (v==null ? 0 : v.hashCode()));
     }
 
+    @Override
     public String toString() {
         return k+"="+v;
     }

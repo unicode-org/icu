@@ -35,6 +35,7 @@ class Quantifier implements UnicodeMatcher {
     /**
      * Implement UnicodeMatcher API.
      */
+    @Override
     public int matches(Replaceable text,
                        int[] offset,
                        int limit,
@@ -70,6 +71,7 @@ class Quantifier implements UnicodeMatcher {
     /**
      * Implement UnicodeMatcher API
      */
+    @Override
     public String toPattern(boolean escapeUnprintable) {
         StringBuilder result = new StringBuilder();
         result.append(matcher.toPattern(escapeUnprintable));
@@ -96,6 +98,7 @@ class Quantifier implements UnicodeMatcher {
     /**
      * Implement UnicodeMatcher API
      */
+    @Override
     public boolean matchesIndexValue(int v) {
         return (minCount == 0) || matcher.matchesIndexValue(v);
     }
@@ -107,6 +110,7 @@ class Quantifier implements UnicodeMatcher {
      * @param toUnionTo the set into which to union the source characters
      * @returns a reference to toUnionTo
      */
+    @Override
     public void addMatchSetTo(UnicodeSet toUnionTo) {
         if (maxCount > 0) {
             matcher.addMatchSetTo(toUnionTo);

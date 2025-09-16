@@ -10,13 +10,14 @@ package com.ibm.icu.dev.data.resources;
 
 import java.util.ListResourceBundle;
 
-public class TestDataElements_te extends ListResourceBundle {    
-    private static Object[][] data = new Object[][] { 
+public class TestDataElements_te extends ListResourceBundle {
+    private static Object[][] data = new Object[][] {
         {
             "from_te",
             "In root should be overridden"
         }
     };
+    @Override
     protected Object[][] getContents() {
         return data;
     }

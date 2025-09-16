@@ -26,6 +26,7 @@ import com.ibm.icu.util.ULocale;
 
 class NumberFormatServiceShim extends NumberFormat.NumberFormatShim {
 
+    @Override
     Locale[] getAvailableLocales() {
         if (service.isDefault()) {
             return ICUResourceBundle.getAvailableLocales();
@@ -33,6 +34,7 @@ class NumberFormatServiceShim extends NumberFormat.NumberFormatShim {
         return service.getAvailableLocales();
     }
 
+    @Override
     ULocale[] getAvailableULocales() {
         if (service.isDefault()) {
             return ICUResourceBundle.getAvailableULocales();
@@ -49,11 +51,12 @@ class NumberFormatServiceShim extends NumberFormat.NumberFormatShim {
             this.delegate = delegate;
         }
 
+        @Override
         public Object create(Key key, ICUService srvc) {
             if (!handlesKey(key) || !(key instanceof LocaleKey)) {
                 return null;
             }
-            
+
             LocaleKey lkey = (LocaleKey)key;
             Object result = delegate.createFormat(lkey.canonicalLocale(), lkey.kind());
             if (result == null) {
@@ -62,19 +65,23 @@ class NumberFormatServiceShim extends NumberFormat.NumberFormatShim {
             return result;
         }
 
+        @Override
         protected Set<String> getSupportedIDs() {
             return delegate.getSupportedLocaleNames();
         }
     }
 
+    @Override
     Object registerFactory(NumberFormatFactory factory) {
         return service.registerFactory(new NFFactory(factory));
     }
 
+    @Override
     boolean unregister(Object registryKey) {
         return service.unregisterFactory((Factory)registryKey);
     }
 
+    @Override
     NumberFormat createInstance(ULocale desiredLocale, int choice) {
 
     // use service cache
@@ -91,7 +98,7 @@ class NumberFormatServiceShim extends NumberFormat.NumberFormatShim {
         fmt = fmt.clone();
 
         // If we are creating a currency type formatter, then we may have to set the currency
-        // explicitly, since the actualLoc may be different than the desiredLocale        
+        // explicitly, since the actualLoc may be different than the desiredLocale
         if ( choice == NumberFormat.CURRENCYSTYLE ||
              choice == NumberFormat.ISOCURRENCYSTYLE ||
              choice == NumberFormat.PLURALCURRENCYSTYLE ||
@@ -111,11 +118,12 @@ class NumberFormatServiceShim extends NumberFormat.NumberFormatShim {
             super("NumberFormat");
 
             class RBNumberFormatFactory extends ICUResourceBundleFactory {
+                @Override
                 protected Object handleCreate(ULocale loc, int kind, ICUService srvc) {
                     return NumberFormat.createInstance(loc, kind);
                 }
             }
-                
+
             this.registerFactory(new RBNumberFormatFactory());
             markDefault();
         }

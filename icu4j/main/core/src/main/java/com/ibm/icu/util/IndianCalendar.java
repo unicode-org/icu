@@ -17,12 +17,12 @@ import com.ibm.icu.util.ULocale.Category;
 /**
  * <code>IndianCalendar</code> is a subclass of <code>GregorianCalendar</code>
  * that numbers years since the birth of the Buddha.  This is the civil calendar
- * which is accepted by government of India as Indian National Calendar. 
- * The two calendars most widely used in India today are the Vikrama calendar 
- * followed in North India and the Shalivahana or Saka calendar which is followed 
+ * which is accepted by government of India as Indian National Calendar.
+ * The two calendars most widely used in India today are the Vikrama calendar
+ * followed in North India and the Shalivahana or Saka calendar which is followed
  * in South India and Maharashtra.
 
- * A variant of the Shalivahana Calendar was reformed and standardized as the 
+ * A variant of the Shalivahana Calendar was reformed and standardized as the
  * Indian National calendar in 1957.
  * <p>
  * Some details of Indian National Calendar (to be implemented) :
@@ -43,12 +43,12 @@ import com.ibm.icu.util.ULocale.Category;
  * 12 Phalguna    30             February 20
 
  * In leap years, Chaitra has 31 days and starts on March 21 instead.
- * The leap years of Gregorian calendar and Indian National Calendar are in synchornization. 
+ * The leap years of Gregorian calendar and Indian National Calendar are in synchornization.
  * So When its a leap year in Gregorian calendar then Chaitra has 31 days.
  *
  * The Years
  * Years are counted in the Saka Era, which starts its year 0 in 78AD (by gregorian calendar).
- * So for eg. 9th June 2006 by Gregorian Calendar, is same as 19th of Jyaistha in 1928 of Saka 
+ * So for eg. 9th June 2006 by Gregorian Calendar, is same as 19th of Jyaistha in 1928 of Saka
  * era by Indian National Calendar.
  * <p>
  * The Indian Calendar has only one allowable era: <code>Saka Era</code>.  If the
@@ -57,10 +57,10 @@ import com.ibm.icu.util.ULocale.Category;
  * <p>
  * This class should not be subclassed.</p>
  * <p>
- * IndianCalendar usually should be instantiated using 
+ * IndianCalendar usually should be instantiated using
  * {@link com.ibm.icu.util.Calendar#getInstance(ULocale)} passing in a <code>ULocale</code>
  * with the tag <code>"@calendar=Indian"</code>.</p>
- * 
+ *
  * @see com.ibm.icu.util.Calendar
  * @see com.ibm.icu.util.GregorianCalendar
  *
@@ -70,78 +70,78 @@ public class IndianCalendar extends Calendar {
     // jdk1.4.2 serialver
     private static final long serialVersionUID = 3617859668165014834L;
 
-    /** 
-     * Constant for Chaitra, the 1st month of the Indian year. 
+    /**
+     * Constant for Chaitra, the 1st month of the Indian year.
      * @stable ICU 3.8
      */
     public static final int CHAITRA = 0;
 
-    /** 
-     * Constant for Vaisakha, the 2nd month of the Indian year. 
+    /**
+     * Constant for Vaisakha, the 2nd month of the Indian year.
      * @stable ICU 3.8
      */
     public static final int VAISAKHA = 1;
 
-    /** 
-     * Constant for Jyaistha, the 3rd month of the Indian year. 
+    /**
+     * Constant for Jyaistha, the 3rd month of the Indian year.
      * @stable ICU 3.8
      */
     public static final int JYAISTHA = 2;
 
-    /** 
-     * Constant for Asadha, the 4th month of the Indian year. 
+    /**
+     * Constant for Asadha, the 4th month of the Indian year.
      * @stable ICU 3.8
      */
-    public static final int ASADHA = 3; 
+    public static final int ASADHA = 3;
 
-    /** 
-     * Constant for Sravana, the 5th month of the Indian year. 
+    /**
+     * Constant for Sravana, the 5th month of the Indian year.
      * @stable ICU 3.8
      */
     public static final int SRAVANA = 4 ;
 
-    /** 
-     * Constant for Bhadra, the 6th month of the Indian year. 
+    /**
+     * Constant for Bhadra, the 6th month of the Indian year.
      * @stable ICU 3.8
      */
     public static final int BHADRA = 5 ;
 
-    /** 
-     * Constant for Asvina, the 7th month of the Indian year. 
+    /**
+     * Constant for Asvina, the 7th month of the Indian year.
      * @stable ICU 3.8
      */
     public static final int ASVINA = 6 ;
 
-    /** 
-     * Constant for Kartika, the 8th month of the Indian year. 
+    /**
+     * Constant for Kartika, the 8th month of the Indian year.
      * @stable ICU 3.8
      */
     public static final int KARTIKA = 7 ;
 
-    /** 
-     * Constant for Agrahayana, the 9th month of the Indian year. 
+    /**
+     * Constant for Agrahayana, the 9th month of the Indian year.
      * @stable ICU 3.8
      */
     public static final int AGRAHAYANA = 8 ;
 
-    /** 
-     * Constant for Pausa, the 10th month of the Indian year. 
+    /**
+     * Constant for Pausa, the 10th month of the Indian year.
      * @stable ICU 3.8
      */
     public static final int PAUSA = 9 ;
 
-    /** 
-     * Constant for Magha, the 11th month of the Indian year. 
+    /**
+     * Constant for Magha, the 11th month of the Indian year.
      * @stable ICU 3.8
      */
     public static final int MAGHA = 10;
 
-    /** 
-     * Constant for Phalguna, the 12th month of the Indian year. 
+    /**
+     * Constant for Phalguna, the 12th month of the Indian year.
      * @stable ICU 3.8
      */
     public static final int PHALGUNA = 11;
-    
+
     //-------------------------------------------------------------------------
     // Constructors...
     //-------------------------------------------------------------------------
@@ -154,7 +154,7 @@ public class IndianCalendar extends Calendar {
      * @stable ICU 3.8
      */
     public static final int IE = 0;
-    
+
     /**
      * Constructs a <code>IndianCalendar</code> using the current time
      * in the default time zone with the default <code>FORMAT</code> locale.
@@ -298,10 +298,10 @@ public class IndianCalendar extends Calendar {
     // are numbered since the Saka Era.  A couple of overrides will
     // take care of that....
     //-------------------------------------------------------------------------
-    
-    // Starts in 78 AD, 
+
+    // Starts in 78 AD,
     private static final int INDIAN_ERA_START = 78;
-    
+
     // The Indian year starts 80 days later than the Gregorian year.
     private static final int INDIAN_YEAR_START = 80;
 
@@ -309,16 +309,17 @@ public class IndianCalendar extends Calendar {
      * {@inheritDoc}
      * @stable ICU 3.8
      */
+    @Override
     protected int handleGetExtendedYear() {
         int year;
-        
+
         if (newerField(EXTENDED_YEAR, YEAR) == EXTENDED_YEAR) {
             year = internalGet(EXTENDED_YEAR, 1);
         } else {
             // Ignore the era, as there is only one
             year = internalGet(YEAR, 1);
         }
-        
+
         return year;
     }
 
@@ -326,6 +327,7 @@ public class IndianCalendar extends Calendar {
      * {@inheritDoc}
      * @stable ICU 3.8
      */
+    @Override
     protected int handleGetYearLength(int extendedYear) {
        return super.handleGetYearLength(extendedYear);
     }
@@ -334,6 +336,7 @@ public class IndianCalendar extends Calendar {
      * {@inheritDoc}
      * @stable ICU 3.8
      */
+    @Override
     protected int handleGetMonthLength(int extendedYear, int month) {
         if (month < 0 || month > 11) {
             int[] remainder = new int[1];
@@ -356,6 +359,7 @@ public class IndianCalendar extends Calendar {
      * {@inheritDoc}
      * @stable ICU 3.8
      */
+    @Override
     protected void handleComputeFields(int julianDay){
         double jdAtStartOfGregYear;
         int leapMonth, IndianYear, yday, IndianMonth, IndianDayOfMonth, mday;
@@ -433,6 +437,7 @@ public class IndianCalendar extends Calendar {
      * {@inheritDoc}
      * @stable ICU 3.8
      */
+    @Override
     protected int handleGetLimit(int field, int limitType) {
        return LIMITS[field][limitType];
     }
@@ -441,31 +446,32 @@ public class IndianCalendar extends Calendar {
      * {@inheritDoc}
      * @stable ICU 3.8
      */
+    @Override
     protected int handleComputeMonthStart(int year, int month, boolean useMonth) {
 
-       //month is 0 based; converting it to 1-based 
+       //month is 0 based; converting it to 1-based
        int imonth;
-       
+
        // If the month is out of range, adjust it into range, and adjust the extended year accordingly
        if (month < 0 || month > 11) {
            year += month / 12;
            month %= 12;
        }
-       
-       imonth = month + 1;  
-       
+
+       imonth = month + 1;
+
        double jd = IndianToJD(year ,imonth, 1);
-       
+
        return (int)jd;
     }
 
 
-   
+
     /*
      * This routine converts an Indian date to the corresponding Julian date"
      * @param year   The year in Saka Era according to Indian calendar.
      * @param month  The month according to Indian calendar (between 1 to 12)
-     * @param date   The date in month 
+     * @param date   The date in month
      */
     private double IndianToJD(int year, int month, int date) {
        int leapMonth, gyear, m;
@@ -505,6 +511,7 @@ public class IndianCalendar extends Calendar {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Override
     @Deprecated
     protected final int getRelatedYearDifference() {
         return INDIAN_CALENDAR_RELATED_YEAR_DIFFERENCE;
@@ -515,7 +522,7 @@ public class IndianCalendar extends Calendar {
      * This routine converts a gregorian date to the corresponding Julian date"
      * @param year   The year in standard Gregorian calendar (AD/BC) .
      * @param month  The month according to Gregorian calendar (between 0 to 11)
-     * @param date   The date in month 
+     * @param date   The date in month
      */
     private double gregorianToJD(int year, int month, int date) {
        return computeGregorianMonthStart(year, month) + date - 0.5;
@@ -525,6 +532,7 @@ public class IndianCalendar extends Calendar {
      * {@inheritDoc}
      * @stable ICU 3.8
      */
+    @Override
     public String getType() {
         return "indian";
     }

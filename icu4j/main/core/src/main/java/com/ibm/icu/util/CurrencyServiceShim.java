@@ -20,10 +20,11 @@ import com.ibm.icu.impl.ICUService.Factory;
  * This is a package-access implementation of registration for
  * currency.  The shim is instantiated by reflection in Currency, all
  * dependencies on ICUService are located in this file. This structure
- * is to allow ICU4J to be built without service registration support.  
+ * is to allow ICU4J to be built without service registration support.
  */
 final class CurrencyServiceShim extends Currency.ServiceShim {
-    
+
+    @Override
     Locale[] getAvailableLocales() {
         if (service.isDefault()) {
             return ICUResourceBundle.getAvailableLocales();
@@ -31,6 +32,7 @@ final class CurrencyServiceShim extends Currency.ServiceShim {
         return service.getAvailableLocales();
     }
 
+    @Override
     ULocale[] getAvailableULocales() {
         if (service.isDefault()) {
             return ICUResourceBundle.getAvailableULocales();
@@ -38,6 +40,7 @@ final class CurrencyServiceShim extends Currency.ServiceShim {
         return service.getAvailableULocales();
     }
 
+    @Override
     Currency createInstance(ULocale loc) {
         // TODO: convert to ULocale when service switches over
 
@@ -48,10 +51,12 @@ final class CurrencyServiceShim extends Currency.ServiceShim {
         return curr;
     }
 
+    @Override
     Object registerInstance(Currency currency, ULocale locale) {
         return service.registerObject(currency, locale);
     }
-    
+
+    @Override
     boolean unregister(Object registryKey) {
         return service.unregisterFactory((Factory)registryKey);
     }
@@ -61,11 +66,12 @@ final class CurrencyServiceShim extends Currency.ServiceShim {
             super("Currency");
 
             class CurrencyFactory extends ICUResourceBundleFactory {
+                @Override
                 protected Object handleCreate(ULocale loc, int kind, ICUService srvc) {
                     return Currency.createCurrency(loc);
                 }
             }
-            
+
             registerFactory(new CurrencyFactory());
             markDefault();
         }

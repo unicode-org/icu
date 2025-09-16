@@ -128,6 +128,7 @@ public class MixedUnitLongNameHandler
      * Does not call parent.processQuantity, so cannot get a MicroProps instance
      * that way. Instead, the instance is passed in as a parameter.
      */
+    @Override
     public MicroProps processQuantityWithMicros(DecimalQuantity quantity, MicroProps micros) {
         assert (fMixedUnitData.size() > 1);
         micros.modOuter = getMixedUnitModifier(quantity, micros);

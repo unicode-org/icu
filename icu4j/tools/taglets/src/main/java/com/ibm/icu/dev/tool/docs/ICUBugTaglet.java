@@ -15,6 +15,7 @@ public class ICUBugTaglet extends ICUTaglet {
         super(NAME, false);
     }
 
+    @Override
     public String toStringDocTree(DocTree tag, Element element) {
         return null;
     }

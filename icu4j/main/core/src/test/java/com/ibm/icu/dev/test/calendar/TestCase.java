@@ -59,6 +59,7 @@ public class TestCase {
     /**
      * Return a String representation of this test case's time.
      */
+    @Override
     public String toString() {
         return dowToString(get(Calendar.DAY_OF_WEEK)) + " " +
             get(Calendar.YEAR) + "/" + (get(Calendar.MONTH)+1) + "/" +
@@ -94,7 +95,7 @@ public class TestCase {
                     int hour, int min, int sec)
     {
         setTime(new Date(JULIAN_EPOCH + (long)(ONE_DAY * julian)));
-        
+
         set(Calendar.ERA, era);
         set(Calendar.YEAR, year);
         set(Calendar.MONTH, month - 1);
@@ -131,7 +132,7 @@ public class TestCase {
         greg.clear();
         greg.set(gregYear, gregMonth-1, gregDay);
         setTime(greg.getTime());
-        
+
         set(Calendar.ERA, era);
         set(Calendar.YEAR, year);
         set(Calendar.MONTH, month - 1);
@@ -141,7 +142,7 @@ public class TestCase {
         set(Calendar.MINUTE, min);
         set(Calendar.SECOND, sec);
     }
-    
+
     /**
      * For subclasses.
      */
@@ -161,7 +162,7 @@ public class TestCase {
             }
         }
     }
-    
+
     /**
      * Apply this test case's time in milliseconds to another calendar
      * by calling its setTime method.  This is useful in combination
@@ -186,7 +187,7 @@ public class TestCase {
      *        // Error!
      *    }
      * </pre>
-     * 
+     *
      * @see #applyTime
      */
     public boolean fieldsEqual(Calendar c, TestLog log) {
@@ -211,10 +212,10 @@ public class TestCase {
                 return false;
             }
         }
-        
+
         return true;
     }
-    
+
     /**
      * Determine whether time in milliseconds of this calendar
      * is the same as that of the other calendar.  This method is useful
@@ -228,13 +229,14 @@ public class TestCase {
      *        // Error!
      *    }
      * </pre>
-     * 
+     *
      * @see #applyFields
      */
+    @Override
     public boolean equals(Object obj) {
         return time == ((Calendar)obj).getTime().getTime();
     }
-    
+
     protected static final int  ONE_SECOND = 1000;
     protected static final int  ONE_MINUTE = 60*ONE_SECOND;
     protected static final int  ONE_HOUR   = 60*ONE_MINUTE;

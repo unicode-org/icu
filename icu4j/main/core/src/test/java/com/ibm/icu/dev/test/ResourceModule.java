@@ -16,25 +16,24 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.NoSuchElementException;
 
-import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.UResourceBundleIterator;
 import com.ibm.icu.util.UResourceTypeMismatchException;
 
 /**
- * Represents a collection of test data described in a UResourceBoundle file. 
- * 
- * The root of the UResourceBoundle file is a table resource, and it has one 
+ * Represents a collection of test data described in a UResourceBoundle file.
+ *
+ * The root of the UResourceBoundle file is a table resource, and it has one
  * Info and one TestData sub-resources. The Info describes the data module
- * itself. The TestData, which is a table resource, has a collection of test 
+ * itself. The TestData, which is a table resource, has a collection of test
  * data.
- * 
+ *
  * The test data is a named table resource which has Info, Settings, Headers,
- * and Cases sub-resources. 
- * 
+ * and Cases sub-resources.
+ *
  * <pre>
- * DataModule:table(nofallback){ 
- *   Info:table {} 
+ * DataModule:table(nofallback){
+ *   Info:table {}
  *   TestData:table {
  *     entry_name:table{
  *       Info:table{}
@@ -42,11 +41,11 @@ import com.ibm.icu.util.UResourceTypeMismatchException;
  *       Headers:array{}
  *       Cases:array{}
  *     }
- *   } 
+ *   }
  * }
  * </pre>
- * 
- * The test data is expected to be fed to test code by following sequence 
+ *
+ * The test data is expected to be fed to test code by following sequence
  *
  *   for each setting in Setting{
  *       prepare the setting
@@ -54,11 +53,11 @@ import com.ibm.icu.util.UResourceTypeMismatchException;
  *       perform the test
  *     }
  *   }
- * 
- * For detail of the specification, please refer to the code. The code is 
+ *
+ * For detail of the specification, please refer to the code. The code is
  * initially ported from "icu4c/source/tools/ctestfw/unicode/tstdtmod.h"
  * and should be maintained parallelly.
- * 
+ *
  * @author Raymond Yang
  */
 class ResourceModule implements TestDataModule {
@@ -70,15 +69,15 @@ class ResourceModule implements TestDataModule {
     private static final String HEADER = "Headers";
     private static final String DATA = "Cases";
 
-    
+
     UResourceBundle res;
     UResourceBundle info;
     UResourceBundle defaultHeader;
     UResourceBundle testData;
-    
+
     ResourceModule(String baseName, String localeName) throws DataModuleFormatError{
 
-        res = (UResourceBundle) UResourceBundle.getBundleInstance(baseName, localeName,
+        res = UResourceBundle.getBundleInstance(baseName, localeName,
                 getClass().getClassLoader());
         info = getFromTable(res, INFO, UResourceBundle.TABLE);
         testData = getFromTable(res, TEST_DATA, UResourceBundle.TABLE);
@@ -91,20 +90,25 @@ class ResourceModule implements TestDataModule {
         }
     }
 
+    @Override
     public String getName() {
         return res.getKey();
     }
 
+    @Override
     public DataMap getInfo() {
         return new UTableResource(info);
     }
 
+    @Override
     public TestData getTestData(String testName) throws DataModuleFormatError {
         return new UResourceTestData(defaultHeader, testData.get(testName));
     }
 
+    @Override
     public Iterator<TestData> getTestDataIterator() {
         return new IteratorAdapter<TestData>(testData){
+            @Override
             protected TestData prepareNext(UResourceBundle nextRes) throws DataModuleFormatError {
                 return new UResourceTestData(defaultHeader, nextRes);
             }
@@ -114,7 +118,7 @@ class ResourceModule implements TestDataModule {
     /**
      * To make UResourceBundleIterator works like Iterator
      * and return various data-driven test object for next() call
-     * 
+     *
      * @author Raymond Yang
      * @param <T>
      */
@@ -122,10 +126,10 @@ class ResourceModule implements TestDataModule {
         private UResourceBundle res;
         private UResourceBundleIterator itr;
         private T preparedNextElement = null;
-        // fix a strange behavior for UResourceBundleIterator for 
-        // UResourceBundle.STRING. It support hasNext(), but does 
-        // not support next() now. 
-        // 
+        // fix a strange behavior for UResourceBundleIterator for
+        // UResourceBundle.STRING. It support hasNext(), but does
+        // not support next() now.
+        //
         // Use the iterated resource itself as the result from next() call
         private boolean isStrRes = false;
         private boolean isStrResPrepared = false; // for STRING resource, we only prepare once
@@ -133,10 +137,11 @@ class ResourceModule implements TestDataModule {
         IteratorAdapter(UResourceBundle theRes) {
             assert_not (theRes == null);
             res = theRes;
-            itr = ((ICUResourceBundle)res).getIterator();
+            itr = res.getIterator();
             isStrRes = res.getType() == UResourceBundle.STRING;
         }
-        
+
+        @Override
         public void remove() {
             // do nothing
         }
@@ -147,7 +152,7 @@ class ResourceModule implements TestDataModule {
             if (isStrResPrepared && preparedNextElement != null) return true;
             if (isStrResPrepared && preparedNextElement == null) return false; // only prepare once
             assert_is (!isStrResPrepared && preparedNextElement == null);
-            
+
             try {
                 preparedNextElement = prepareNext(res);
                 assert_not (preparedNextElement == null, "prepareNext() should not return null");
@@ -155,11 +160,12 @@ class ResourceModule implements TestDataModule {
                 return true;
             } catch (DataModuleFormatError e) {
                 throw new RuntimeException(e.getMessage(),e);
-            }            
+            }
         }
+        @Override
         public boolean hasNext() {
             if (isStrRes) return hasNextForStrRes();
-            
+
             if (preparedNextElement != null) return true;
             UResourceBundle t = null;
             if (itr.hasNext()) {
@@ -179,6 +185,7 @@ class ResourceModule implements TestDataModule {
             }
         }
 
+        @Override
         public T next(){
             if (hasNext()) {
                 T t = preparedNextElement;
@@ -193,10 +200,10 @@ class ResourceModule implements TestDataModule {
          */
         abstract protected T prepareNext(UResourceBundle nextRes) throws DataModuleFormatError;
     }
-    
-    
+
+
     /**
-     * Avoid use Java 1.4 language new assert keyword 
+     * Avoid use Java 1.4 language new assert keyword
      */
     static void assert_is(boolean eq, String msg){
         if (!eq) throw new Error("test code itself has error: " + msg);
@@ -210,32 +217,32 @@ class ResourceModule implements TestDataModule {
     static void assert_not(boolean eq){
         assert_is(!eq);
     }
-            
+
     /**
-     * Internal helper function to get resource with following add-on 
-     * 
+     * Internal helper function to get resource with following add-on
+     *
      * 1. Assert the returned resource is never null.
-     * 2. Check the type of resource. 
-     * 
-     * The UResourceTypeMismatchException for various get() method is a 
-     * RuntimeException which can be silently bypassed. This behavior is a 
-     * trouble. One purpose of the class is to enforce format checking for 
-     * resource file. We don't want to the exceptions are silently bypassed 
-     * and spreaded to our customer's code. 
-     * 
+     * 2. Check the type of resource.
+     *
+     * The UResourceTypeMismatchException for various get() method is a
+     * RuntimeException which can be silently bypassed. This behavior is a
+     * trouble. One purpose of the class is to enforce format checking for
+     * resource file. We don't want to the exceptions are silently bypassed
+     * and spreaded to our customer's code.
+     *
      * Notice, the MissingResourceException for get() method is also a
      * RuntimeException. The caller functions should avoid spreading the exception
-     * silently also. The behavior is modified because some resource are 
+     * silently also. The behavior is modified because some resource are
      * optional and can be missed.
      */
     static UResourceBundle getFromTable(UResourceBundle res, String key, int expResType) throws DataModuleFormatError{
         return getFromTable(res, key, new int[]{expResType});
     }
-    
+
     static UResourceBundle getFromTable(UResourceBundle res, String key, int[] expResTypes) throws DataModuleFormatError{
         assert_is (res != null && key != null && res.getType() == UResourceBundle.TABLE);
-        UResourceBundle t = res.get(key); 
-      
+        UResourceBundle t = res.get(key);
+
         assert_not (t ==null);
         int type = t.getType();
         Arrays.sort(expResTypes);
@@ -246,10 +253,10 @@ class ResourceModule implements TestDataModule {
                     + " != expected types " + Arrays.toString(expResTypes) + "."));
         }
     }
-    
+
     /**
      * Unfortunately, UResourceBundle is unable to treat one string as string array.
-     * This function return a String[] from UResourceBundle, regardless it is an array or a string 
+     * This function return a String[] from UResourceBundle, regardless it is an array or a string
      */
     static String[] getStringArrayHelper(UResourceBundle res, String key) throws DataModuleFormatError{
         UResourceBundle t = getFromTable(res, key, new int[]{UResourceBundle.ARRAY, UResourceBundle.STRING});
@@ -271,7 +278,7 @@ class ResourceModule implements TestDataModule {
             throw new DataModuleFormatError(e);
         }
     }
-    
+
     public static void main(String[] args){
         try {
             TestDataModule m = new ResourceModule("com/ibm/icu/dev/data/testdata/","DataDrivenCollationTest");
@@ -288,19 +295,19 @@ class ResourceModule implements TestDataModule {
     private static class UResourceTestData implements TestData{
         private UResourceBundle res;
         private UResourceBundle info;
-        private UResourceBundle settings; 
+        private UResourceBundle settings;
         private UResourceBundle header;
         private UResourceBundle data;
 
         UResourceTestData(UResourceBundle defaultHeader, UResourceBundle theRes) throws DataModuleFormatError{
-            
+
             assert_is (theRes != null && theRes.getType() == UResourceBundle.TABLE);
             res = theRes;
             // unfortunately, actually, data can be either ARRAY or STRING
             data = getFromTable(res, DATA, new int[]{UResourceBundle.ARRAY, UResourceBundle.STRING});
-       
 
-            
+
+
             try {
                 // unfortunately, actually, data can be either ARRAY or STRING
                 header = getFromTable(res, HEADER, new int[]{UResourceBundle.ARRAY, UResourceBundle.STRING});
@@ -319,42 +326,49 @@ class ResourceModule implements TestDataModule {
                 settings = data;
             }
         }
-        
+
+        @Override
         public String getName() {
             return res.getKey();
         }
 
+        @Override
         public DataMap getInfo() {
             return info == null ? null : new UTableResource(info);
         }
 
+        @Override
         public Iterator<DataMap> getSettingsIterator() {
             assert_is (settings.getType() == UResourceBundle.ARRAY);
             return new IteratorAdapter<DataMap>(settings){
+                @Override
                 protected DataMap prepareNext(UResourceBundle nextRes) throws DataModuleFormatError {
                     return new UTableResource(nextRes);
                 }
             };
         }
 
+        @Override
         public Iterator<DataMap> getDataIterator() {
             // unfortunately,
-            assert_is (data.getType() == UResourceBundle.ARRAY 
+            assert_is (data.getType() == UResourceBundle.ARRAY
                  || data.getType() == UResourceBundle.STRING);
             return new IteratorAdapter<DataMap>(data){
+                @Override
                 protected DataMap prepareNext(UResourceBundle nextRes) throws DataModuleFormatError {
                     return new UArrayResource(header, nextRes);
                 }
             };
         }
     }
-        
+
     private static class UTableResource implements DataMap{
         private UResourceBundle res;
 
         UTableResource(UResourceBundle theRes){
             res = theRes;
         }
+        @Override
         public String getString(String key) {
             String t;
             try{
@@ -364,20 +378,21 @@ class ResourceModule implements TestDataModule {
             }
             return t;
         }
-         public Object getObject(String key) {
-            
+         @Override
+        public Object getObject(String key) {
+
             return res.get(key);
         }
     }
-    
+
     private static class UArrayResource implements DataMap{
-        private Map<String, Object> theMap; 
+        private Map<String, Object> theMap;
         UArrayResource(UResourceBundle theHeader, UResourceBundle theData) throws DataModuleFormatError{
             assert_is (theHeader != null && theData != null);
             String[] header;
-         
+
             header = getStringArrayHelper(theHeader);
-            if (theData.getSize() != header.length) 
+            if (theData.getSize() != header.length)
                 throw new DataModuleFormatError("The count of Header and Data is mismatch.");
             theMap = new HashMap<>();
             for (int i = 0; i < header.length; i++) {
@@ -386,12 +401,13 @@ class ResourceModule implements TestDataModule {
                 }else if(theData.getType()==UResourceBundle.STRING){
                     theMap.put(header[i], theData.getString());
                 }else{
-                    throw new DataModuleFormatError("Did not get the expected data!");                   
+                    throw new DataModuleFormatError("Did not get the expected data!");
                 }
             }
-            
+
         }
-        
+
+        @Override
         public String getString(String key) {
             Object o = theMap.get(key);
             UResourceBundle rb;
@@ -402,6 +418,7 @@ class ResourceModule implements TestDataModule {
             }
             return (String)o;
         }
+        @Override
         public Object getObject(String key) {
             return theMap.get(key);
         }

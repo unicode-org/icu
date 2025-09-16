@@ -64,6 +64,7 @@ public final class Timer {
         return pf;
     }
 
+    @Override
     public String toString() {
         return nf.format(getDuration()) + "\tns";
     }
@@ -80,7 +81,7 @@ public final class Timer {
 
     private DecimalFormat nf = (DecimalFormat) NumberFormat.getNumberInstance(Locale.ENGLISH);
     private DecimalFormat pf = (DecimalFormat) NumberFormat.getPercentInstance(Locale.ENGLISH);
-    
+
     {
         pf.setMaximumFractionDigits(1);
         pf.setPositivePrefix("+");

@@ -31,7 +31,7 @@ import com.ibm.icu.impl.UCaseProps;
 class ReplaceableContextIterator implements UCaseProps.ContextIterator {
     /**
      * Constructor.
-     * @param rep Replaceable to iterate over. 
+     * @param rep Replaceable to iterate over.
      */
     ReplaceableContextIterator() {
         this.rep=null;
@@ -153,6 +153,7 @@ class ReplaceableContextIterator implements UCaseProps.ContextIterator {
     }
 
     // implement UCaseProps.ContextIterator
+    @Override
     public void reset(int direction) {
         if(direction>0) {
             /* reset for forward iteration */
@@ -170,6 +171,7 @@ class ReplaceableContextIterator implements UCaseProps.ContextIterator {
         reachedLimit=false;
     }
 
+    @Override
     public int next() {
         int c;
 

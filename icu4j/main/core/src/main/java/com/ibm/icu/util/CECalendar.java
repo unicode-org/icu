@@ -213,6 +213,7 @@ abstract class CECalendar extends Calendar {
     /**
      * Return JD of start of given month/extended year
      */
+    @Override
     protected int handleComputeMonthStart(int eyear,
                                           int emonth,
                                           boolean useMonth) {
@@ -222,6 +223,7 @@ abstract class CECalendar extends Calendar {
     /**
      * Calculate the limit for a specified type of limit and field
      */
+    @Override
     protected int handleGetLimit(int field, int limitType) {
         return LIMITS[field][limitType];
     }
@@ -235,14 +237,15 @@ abstract class CECalendar extends Calendar {
      * method if they can provide a more correct or more efficient
      * implementation than the default implementation in Calendar.
      */
+    @Override
     protected int handleGetMonthLength(int extendedYear, int month)
     {
 
-        // The Ethiopian and Coptic calendars have 13 months, 12 of 30 days each and 
-        // an intercalary month at the end of the year of 5 or 6 days, depending whether 
-        // the year is a leap year or not. The Leap Year follows the same rules as the 
-        // Julian Calendar so that the extra month always has six days in the year before 
-        // a Julian Leap Year.        
+        // The Ethiopian and Coptic calendars have 13 months, 12 of 30 days each and
+        // an intercalary month at the end of the year of 5 or 6 days, depending whether
+        // the year is a leap year or not. The Leap Year follows the same rules as the
+        // Julian Calendar so that the extra month always has six days in the year before
+        // a Julian Leap Year.
         if ((month + 1) % 13 != 0)
         {
             // not intercalary month
@@ -326,6 +329,7 @@ abstract class CECalendar extends Calendar {
      * @return       One of 13 possible strings in {"M01".. "M12", "M13"}.
      * @stable ICU 74
      */
+    @Override
     public String getTemporalMonthCode() {
         if (get(MONTH) == 12) return "M13";
         return super.getTemporalMonthCode();
@@ -340,6 +344,7 @@ abstract class CECalendar extends Calendar {
      * @param temporalMonth One of 13 possible strings in {"M01".. "M12", "M13"}.
      * @stable ICU 74
      */
+    @Override
     public void setTemporalMonthCode( String temporalMonth ) {
         if (temporalMonth.equals("M13")) {
             set(MONTH, 12);

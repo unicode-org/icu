@@ -10,9 +10,9 @@ package com.ibm.icu.dev.data.resources;
 
 import java.util.ListResourceBundle;
 
-public class TestDataElements extends ListResourceBundle {    
-    private static Object[][] data = new Object[][] { 
-        {    
+public class TestDataElements extends ListResourceBundle {
+    private static Object[][] data = new Object[][] {
+        {
             "from_root",
             "This data comes from root"
         },
@@ -20,7 +20,7 @@ public class TestDataElements extends ListResourceBundle {
             "from_en",
             "In root should be overridden"
         },
-        { 
+        {
             "from_en_Latn",
             "In root should be overridden"
         },
@@ -28,8 +28,9 @@ public class TestDataElements extends ListResourceBundle {
             "from_en_Latn_US",
             "In root should be overridden"
         }
-        
+
     };
+    @Override
     protected Object[][] getContents() {
         return data;
     }

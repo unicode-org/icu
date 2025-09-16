@@ -18,6 +18,7 @@ import com.google.gson.stream.JsonWriter;
 // Uses ArrayList instead of List so that when registering, it's possible
 // to get ArrayList<String>.class
 public class StringToListAdapter extends TypeAdapter<Sources> {
+    @Override
     public Sources read(JsonReader reader) throws IOException {
         if (reader.peek() == JsonToken.NULL) {
             reader.nextNull();
@@ -41,6 +42,7 @@ public class StringToListAdapter extends TypeAdapter<Sources> {
         throw new IOException();
     }
 
+    @Override
     public void write(JsonWriter writer, Sources value) throws IOException {
         writer.beginArray();
         for (String s : value.sources) {

@@ -28,6 +28,7 @@ import com.google.gson.stream.JsonWriter;
 // Uses ArrayList instead of List so that when registering, it's possible
 // to get ArrayList<String>.class
 public class ExpectedErrorAdapter extends TypeAdapter<ExpErrors> {
+    @Override
     public ExpErrors read(JsonReader reader) throws IOException {
         if (reader.peek() == JsonToken.NULL) {
             reader.nextNull();
@@ -53,6 +54,7 @@ public class ExpectedErrorAdapter extends TypeAdapter<ExpErrors> {
         throw new IOException();
     }
 
+    @Override
     public void write(JsonWriter writer, ExpErrors value) throws IOException {
         writer.beginArray();
         for (String s : value.errors) {

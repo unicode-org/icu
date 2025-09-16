@@ -21,6 +21,7 @@ public class BreakIteratorRules_en_US_TEST extends ListResourceBundle {
 
     // calling code will handle case where dictionary does not exist
 
+    @Override
     public Object[][] getContents() {
         return new Object[][] {
             // names of classes to instantiate for the different kinds of break
@@ -214,7 +215,7 @@ public class BreakIteratorRules_en_US_TEST extends ListResourceBundle {
             // plus a few other words thrown in to show more interesting cases).
             // { "WordBreakDictionary", "com\\ibm\\text\\resources\\english.dict" },
             // { "LineBreakDictionary", "com\\ibm\\text\\resources\\english.dict" }
-            {   "WordBreakDictionary", DATA_NAME }, 
+            {   "WordBreakDictionary", DATA_NAME },
             {   "LineBreakDictionary", DATA_NAME }
         };
     }

@@ -920,6 +920,7 @@ public class HebrewCalendar extends Calendar {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Override
     @Deprecated
     protected final int getRelatedYearDifference() {
         return HEBREW_CALENDAR_RELATED_YEAR_DIFFERENCE;
@@ -932,6 +933,7 @@ public class HebrewCalendar extends Calendar {
      * {@inheritDoc}
      * @stable ICU 74
      */
+    @Override
     public boolean inTemporalLeapYear() {
         return isLeapYear(get(EXTENDED_YEAR));
     }
@@ -953,6 +955,7 @@ public class HebrewCalendar extends Calendar {
      * @return       One of 13 possible strings in {"M01".. "M05", "M05L", "M06" .. "M12"}.
      * @stable ICU 74
      */
+    @Override
     public String getTemporalMonthCode() {
         return gTemporalMonthCodesForHebrew[get(MONTH)];
     }
@@ -968,6 +971,7 @@ public class HebrewCalendar extends Calendar {
      * @param temporalMonth The value to be set for temporal monthCode.
      * @stable ICU 74
      */
+    @Override
     public void setTemporalMonthCode( String temporalMonth ) {
         if (temporalMonth.length() == 3 || temporalMonth.length() == 4) {
             for (int m = 0; m < gTemporalMonthCodesForHebrew.length; m++) {
@@ -989,6 +993,7 @@ public class HebrewCalendar extends Calendar {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Override
     @Deprecated
     protected int internalGetMonth()
     {

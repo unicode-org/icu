@@ -15,7 +15,7 @@ import com.ibm.icu.util.ULocale.Category;
 /**
  * <code>DangiCalendar</code> is a concrete subclass of {@link Calendar}
  * that implements a traditional Korean calendar.
- * 
+ *
  * @internal
  * @deprecated This API is ICU internal only.
  */
@@ -26,31 +26,31 @@ public class DangiCalendar extends ChineseCalendar {
 
     /**
      * The time zone used for performing astronomical computations for
-     * Dangi calendar. In Korea various timezones have been used historically 
-     * (cf. http://www.math.snu.ac.kr/~kye/others/lunar.html): 
-     *  
-     *            - 1908/04/01: GMT+8 
-     * 1908/04/01 - 1911/12/31: GMT+8.5 
-     * 1912/01/01 - 1954/03/20: GMT+9 
-     * 1954/03/21 - 1961/08/09: GMT+8.5 
-     * 1961/08/10 -           : GMT+9 
-     *  
-     * Note that, in 1908-1911, the government did not apply the timezone change 
-     * but used GMT+8. In addition, 1954-1961's timezone change does not affect 
-     * the lunar date calculation. Therefore, the following simpler rule works: 
-     *   
-     * -1911: GMT+8 
-     * 1912-: GMT+9 
-     *  
-     * Unfortunately, our astronomer's approximation doesn't agree with the 
-     * references (http://www.math.snu.ac.kr/~kye/others/lunar.html and 
-     * http://astro.kasi.re.kr/Life/ConvertSolarLunarForm.aspx?MenuID=115) 
-     * in 1897/7/30. So the following ad hoc fix is used here: 
-     *  
-     *     -1896: GMT+8 
-     *      1897: GMT+7 
-     * 1898-1911: GMT+8 
-     * 1912-    : GMT+9 
+     * Dangi calendar. In Korea various timezones have been used historically
+     * (cf. http://www.math.snu.ac.kr/~kye/others/lunar.html):
+     *
+     *            - 1908/04/01: GMT+8
+     * 1908/04/01 - 1911/12/31: GMT+8.5
+     * 1912/01/01 - 1954/03/20: GMT+9
+     * 1954/03/21 - 1961/08/09: GMT+8.5
+     * 1961/08/10 -           : GMT+9
+     *
+     * Note that, in 1908-1911, the government did not apply the timezone change
+     * but used GMT+8. In addition, 1954-1961's timezone change does not affect
+     * the lunar date calculation. Therefore, the following simpler rule works:
+     *
+     * -1911: GMT+8
+     * 1912-: GMT+9
+     *
+     * Unfortunately, our astronomer's approximation doesn't agree with the
+     * references (http://www.math.snu.ac.kr/~kye/others/lunar.html and
+     * http://astro.kasi.re.kr/Life/ConvertSolarLunarForm.aspx?MenuID=115)
+     * in 1897/7/30. So the following ad hoc fix is used here:
+     *
+     *     -1896: GMT+8
+     *      1897: GMT+7
+     * 1898-1911: GMT+8
+     * 1912-    : GMT+9
      */
     private static final TimeZone KOREA_ZONE;
 
@@ -76,7 +76,7 @@ public class DangiCalendar extends ChineseCalendar {
 
     /**
      * Construct a <code>DangiCalendar</code> with the default time zone and locale.
-     * 
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -89,7 +89,7 @@ public class DangiCalendar extends ChineseCalendar {
      * Construct a <code>DangiCalendar</code> with the give date set in the default time zone
      * with the default locale.
      * @param date The date to which the new calendar is set.
-     * 
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -104,7 +104,7 @@ public class DangiCalendar extends ChineseCalendar {
      * with the given time zone with the given locale.
      * @param zone the given time zone
      * @param locale the given locale
-     * 
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -115,10 +115,11 @@ public class DangiCalendar extends ChineseCalendar {
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Override
     @Deprecated
     public String getType() {
         return "dangi";

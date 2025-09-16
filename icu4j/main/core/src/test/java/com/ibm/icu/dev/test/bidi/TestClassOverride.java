@@ -67,6 +67,7 @@ public class TestClassOverride extends BidiFmwk {
         public CustomClassifier(Object context) {
           super(context);
         }
+        @Override
         public int classify(int c) {
             // some (meaningless) action - just for testing purposes
             return (this.context != null ? ((Integer)context).intValue()

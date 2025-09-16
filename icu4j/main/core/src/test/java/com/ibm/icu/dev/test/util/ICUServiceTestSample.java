@@ -51,8 +51,9 @@ public class ICUServiceTestSample {
          * up notification, but right now it doesn't.  Instead, all
          * notifications are delivered on the notification thread.
          * Since that's a daemon thread, a notification might not
-         * complete before main terminates.  
+         * complete before main terminates.
          */
+        @Override
         public void helloServiceChanged() {
             display();
         }
@@ -88,6 +89,7 @@ public class ICUServiceTestSample {
             { "TongZhi! MaoZeDong SiXiang Wan Sui!", "zh_CN" },
             { "Bier? Ja!", "de" },
         };
+        @Override
         public void run() {
             for (int i = 0; i < updates.length; ++i) {
                 try {
@@ -107,22 +109,23 @@ public class ICUServiceTestSample {
     static final class HelloService {
         private static ICUService registry;
         private String name;
-    
-        private HelloService(String name) { 
-            this.name = name; 
+
+        private HelloService(String name) {
+            this.name = name;
         }
-    
+
         /**
          * The hello service...
          */
-        public String hello() { 
-            return name; 
+        public String hello() {
+            return name;
         }
-        
-        public String toString() { 
-            return super.toString() + ": " + name; 
+
+        @Override
+        public String toString() {
+            return super.toString() + ": " + name;
         }
-    
+
         /**
          * Deferred init.
          */
@@ -132,24 +135,26 @@ public class ICUServiceTestSample {
             }
             return registry;
         }
-    
+
         private static void initRegistry() {
             registry = new ICULocaleService() {
+                    @Override
                     protected boolean acceptsListener(EventListener l) {
                         return true; // we already verify in our wrapper APIs
                     }
+                    @Override
                     protected void notifyListener(EventListener l) {
                         ((HelloServiceListener)l).helloServiceChanged();
                     }
                 };
-    
+
             // initialize
             doRegister("Hello", "en");
             doRegister("Bonjour", "fr");
             doRegister("Ni Hao", "zh_CN");
             doRegister("Guten Tag", "de");
         }
-    
+
         /**
          * A custom listener for changes to this service.  We don't need to
          * point to the service since it is defined by this class and not
@@ -158,36 +163,36 @@ public class ICUServiceTestSample {
         public static interface HelloServiceListener extends EventListener {
             public void helloServiceChanged();
         }
-    
+
         /**
          * Type-safe notification for this service.
          */
         public static void addListener(HelloServiceListener l) {
             registry().addListener(l);
         }
-    
+
         /**
          * Type-safe notification for this service.
          */
         public static void removeListener(HelloServiceListener l) {
             registry().removeListener(l);
         }
-    
+
         /**
          * Type-safe access to the service.
          */
         public static HelloService get(String id) {
             return (HelloService)registry().get(id);
         }
-    
+
         public static Set<String> getVisibleIDs() {
             return registry().getVisibleIDs();
         }
-    
+
         public static Map<String, String> getDisplayNames(ULocale locale) {
             return getDisplayNames(registry(), locale);
         }
-    
+
         /**
          * Register a new hello string for this locale.
          */
@@ -197,7 +202,7 @@ public class ICUServiceTestSample {
             }
             doRegister(helloString, locale.toString());
         }
-    
+
         private static void doRegister(String hello, String id) {
             registry().registerObject(new HelloService(hello), id);
         }
