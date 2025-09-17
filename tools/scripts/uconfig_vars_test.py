@@ -4,7 +4,7 @@
 """Executes uconfig variations check.
 
 See
-http://site.icu-project.org/processes/release/tasks/healthy-code#TOC-Test-uconfig.h-variations
+https://unicode-org.github.io/icu/processes/release/tasks/healthy-code.html#test-uconfigh-variations
 for more information.
 """
 

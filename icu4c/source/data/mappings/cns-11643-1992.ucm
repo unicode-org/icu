@@ -33,7 +33,7 @@
 # This change keeps the converter available while significantly reducing
 # the size of the conversion table.
 # The previous version is available from the ICU charset repository.
-# See http://site.icu-project.org/charts/charset
+# See https://icu.unicode.org/charts/charset
 #
 <code_set_name>       "CNS-11643-1992"
 <char_name_mask>      "AXXXX"

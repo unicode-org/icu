@@ -1284,7 +1284,7 @@ def WritePreparsedUCD(out_file):
   for h in _h1: AddBoundary(h[0])
   for h in _h2: AddBoundary(h[0])
   # Write the preparsed data. ppucd.txt = preparsed UCD
-  # Syntax: http://site.icu-project.org/design/props/ppucd
+  # Syntax: https://unicode-org.github.io/icu/design/props/ppucd
   WriteFieldsRangeProps(["defaults"], 0, 0x10ffff, _defaults, out_file)
   i_blocks = 0
   i_alg = 0
