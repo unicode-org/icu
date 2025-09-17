@@ -266,6 +266,16 @@ ant proddata 2>&1 | tee $NOTES/cldr-newData-proddataLog.txt
    production data, see
    [BRS: Run tests on production data](https://cldr.unicode.org/development/cldr-big-red-switch/brs-run-tests-on-production-data)
 
+> Note, also for CLDR development, periodically at this point the CompareResolved
+  tool should be run to compare the fully-resolved data generated from `$CLDR_DIR/common/main`
+  with the fully-resolved data generated from the just-updated production data
+  `$CLDR_DATA_DIR/common/main`; any discrepancies should be investigated. The tool
+  can be run for example as follows:
+```sh
+cd $CLDR_DIR
+java -DCLDR_DIR=$(pwd) -jar tools/cldr-code/target/cldr-code.jar CompareResolved -s $CLDR_DIR/common/main -c $CLDR_DATA_DIR/common/main > $NOTES/CompareResolved-result.txt
+```
+
 5b. Build the new ICU4C data files.
 
 These include .txt files and .py files. These new files will replace whatever was
