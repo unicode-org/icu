@@ -335,20 +335,21 @@ def get_jira_issues(jira_query, **kwargs):
     Yields an ICUIssue for each issue in the user-specified query.
     """
     jira_url, jira = get_jira_instance(**kwargs)
-    # Jira limits us to query the API using a limited batch size.
-    start = 0
-    batch_size = 100 # https://jira.atlassian.com/browse/JRACLOUD-67570
+    nextPageToken=None
+    start=0
     while True:
-        issues = jira.search_issues(jira_query, startAt=start, maxResults=batch_size)
+        issues = jira.enhanced_search_issues(jira_query, nextPageToken=nextPageToken, maxResults=False)
         if len(issues) > 0:
             print("Loaded issues %d-%d\t of %d" % (start + 1, start + len(issues), issues.total), file=sys.stderr)
         else:
             print(":warning: No issues matched the query.") # leave this as a warning
         for jira_issue in issues:
             yield make_icu_issue(jira_issue)
-        if len(issues) < batch_size:
+        if "nextPageToken" in issues:
+            nextPageToken = issues["nextPageToken"]
+        else:
             break
-        start += batch_size
+        start += len(issues)
 
 jira_issue_map = dict() # loaded in main()
 commit_metadata = None

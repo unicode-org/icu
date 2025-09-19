@@ -12,7 +12,7 @@ python_version = "3"
 
 [packages]
 gitpython = "*"
-jira = "3.5.0"
+jira = "3.10.5"
 
 [dev-packages]
 pytest = "*"
