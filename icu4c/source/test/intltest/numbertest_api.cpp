@@ -6059,30 +6059,40 @@ void NumberFormatterApiTest::microPropsInternals() {
 void NumberFormatterApiTest::formatUnitsAliases() {
     IcuTestErrorCode status(*this, "formatUnitsAliases");
 
-    if (logKnownIssue("ICU-23105", "With CLDR 48m1, C++ NumberFormatterApiTest::formatUnitsAliases fails (J passes)")) {
-        return;
-    }
     struct TestCase {
-        const MeasureUnit measureUnit;
+        std::unique_ptr<MeasureUnit> measureUnit;
+        const char * measureUnitString; // Only used if measureUnit is nullptr
         const UnicodeString expectedFormat;
     } testCases[]{
         // Aliases
-        {MeasureUnit::getMilligramPerDeciliter(), u"2 milligrams per deciliter"},
-        {MeasureUnit::getLiterPer100Kilometers(), u"2 liters per 100 kilometers"},
-        {MeasureUnit::getPartPerMillion(), u"2 parts per million"},
-        {MeasureUnit::forIdentifier("permillion", status), u"2 parts per million"},
-        {MeasureUnit::getMillimeterOfMercury(), u"2 millimeters of mercury"},
+        {std::make_unique<MeasureUnit>(MeasureUnit::getMilligramOfglucosePerDeciliter()), nullptr, u"2 milligrams per deciliter"},
+        {std::make_unique<MeasureUnit>(MeasureUnit::getMilligramPerDeciliter()), nullptr, u"2 milligrams per deciliter"},
+        {std::make_unique<MeasureUnit>(MeasureUnit::getLiterPer100Kilometers()), nullptr,u"2 liters per 100 kilometers"},
+        {std::make_unique<MeasureUnit>(MeasureUnit::getPartPerMillion()), nullptr, u"2 parts per million"},
+        {std::make_unique<MeasureUnit>(MeasureUnit::getMillimeterOfMercury()), nullptr, u"2 millimeters of mercury"},
 
         // Some replacements
-        {MeasureUnit::getMilligramOfglucosePerDeciliter(), u"2 milligrams per deciliter"},
-        {MeasureUnit::getLiterPer100Kilometers(), u"2 liters per 100 kilometers"},
-        {MeasureUnit::getPartPer1E6(), u"2 parts per million"},
-        {MeasureUnit::forIdentifier("millimeter-ofhg", status), u"2 millimeters of mercury"},
+        {nullptr, "millimeter-ofhg", u"2 millimeters of mercury"},
+        {nullptr, "liter-per-100-kilometer", u"2 liters per 100 kilometers"},
+        {nullptr, "permillion", u"2 parts per million"},
+        {nullptr, "part-per-million", u"2 parts per million"},
+        {nullptr, "part-per-1e6", u"2 parts per million"},
     };
 
     for (const auto &testCase : testCases) {
+        if (testCase.measureUnitString != nullptr && 
+            (uprv_strcmp("permillion", testCase.measureUnitString) == 0 ||
+             uprv_strcmp("part-per-million", testCase.measureUnitString) == 0)) {
+            logKnownIssue("ICU-23222", "Ensure unit aliases work correctly to avoid breaking callers");
+            continue;
+        }
+
+        MeasureUnit unit = testCase.measureUnit ? *testCase.measureUnit : MeasureUnit::forIdentifier(testCase.measureUnitString, status);
+        if (status.errIfFailureAndReset()) {
+                continue;
+        }
         UnicodeString actualFormat = NumberFormatter::withLocale(icu::Locale::getEnglish())
-                                         .unit(testCase.measureUnit)
+                                         .unit(unit)
                                          .unitWidth(UNumberUnitWidth::UNUM_UNIT_WIDTH_FULL_NAME)
                                          .formatDouble(2.0, status)
                                          .toString(status);

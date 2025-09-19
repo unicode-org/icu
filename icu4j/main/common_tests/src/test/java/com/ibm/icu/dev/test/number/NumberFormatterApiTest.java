@@ -5995,32 +5995,49 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
 
         class TestCase {
             final MeasureUnit measureUnit;
+            final String measureUnitString; // Only used if measureUnit is nullptr
             final String expectedFormat;
 
             TestCase(MeasureUnit measureUnit, String expectedFormat) {
                 this.measureUnit = measureUnit;
+                this.measureUnitString = null;
+                this.expectedFormat = expectedFormat;
+            }
+
+            TestCase(String measureUnitString, String expectedFormat) {
+                this.measureUnit = null;
+                this.measureUnitString = measureUnitString;
                 this.expectedFormat = expectedFormat;
             }
         }
 
         TestCase[] testCases = {
                 // Aliases
+                new TestCase(MeasureUnit.MILLIGRAM_OFGLUCOSE_PER_DECILITER, "2 milligrams per deciliter"),
                 new TestCase(MeasureUnit.MILLIGRAM_PER_DECILITER, "2 milligrams per deciliter"),
                 new TestCase(MeasureUnit.LITER_PER_100KILOMETERS, "2 liters per 100 kilometers"),
                 new TestCase(MeasureUnit.PART_PER_MILLION, "2 parts per million"),
                 new TestCase(MeasureUnit.MILLIMETER_OF_MERCURY, "2 millimeters of mercury"),
 
                 // Replacements
-                new TestCase(MeasureUnit.MILLIGRAM_OFGLUCOSE_PER_DECILITER, "2 milligrams per deciliter"),
-                new TestCase(MeasureUnit.forIdentifier("millimeter-ofhg"), "2 millimeters of mercury"),
-                new TestCase(MeasureUnit.forIdentifier("liter-per-100-kilometer"), "2 liters per 100 kilometers"),
-                new TestCase(MeasureUnit.forIdentifier("part-per-1e6"), "2 parts per million"),
+                new TestCase("millimeter-ofhg", "2 millimeters of mercury"),
+                new TestCase("liter-per-100-kilometer", "2 liters per 100 kilometers"),
+                new TestCase("permillion", "2 parts per million"),
+                new TestCase("part-per-million", "2 parts per million"),
+                new TestCase("part-per-1e6", "2 parts per million"),
         };
 
         for (TestCase testCase : testCases) {
+            if ("permillion".equals(testCase.measureUnitString) ||
+                "part-per-million".equals(testCase.measureUnitString)) {
+                logKnownIssue("ICU-23222", "Ensure unit aliases work correctly to avoid breaking callers");
+                continue;
+            }
+
+            MeasureUnit measureUnit = testCase.measureUnitString != null ? MeasureUnit.forIdentifier(testCase.measureUnitString) : testCase.measureUnit;
             String actualFormat = NumberFormatter
                     .withLocale(ULocale.ENGLISH)
-                    .unit(testCase.measureUnit)
+                    .unit(measureUnit)
                     .unitWidth(UnitWidth.FULL_NAME)
                     .format(2.0)
                     .toString();
