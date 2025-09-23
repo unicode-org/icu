@@ -181,14 +181,6 @@ TimeZoneFormatTest::TestTimeZoneRoundTrip() {
             )) {
             continue;
         }
-        UnicodeString localGMTString;
-        SimpleDateFormat gmtFmt(UnicodeString("ZZZZ"), LOCALES[locidx], status);
-        if (U_FAILURE(status)) {
-            dataerrln("Error creating SimpleDateFormat - %s", u_errorName(status));
-            continue;
-        }
-        gmtFmt.setTimeZone(*TimeZone::getGMT());
-        gmtFmt.format(0.0, localGMTString);
 
         for (int32_t patidx = 0; patidx < UPRV_LENGTHOF(PATTERNS); patidx++) {
             SimpleDateFormat* sdf = new SimpleDateFormat(UnicodeString(PATTERNS[patidx]), LOCALES[locidx], status);
@@ -331,7 +323,7 @@ TimeZoneFormatTest::TestTimeZoneRoundTrip() {
                             }
                             isOffsetFormat = (numDigits > 0);
                         }
-                        if (isOffsetFormat || tzstr == localGMTString) {
+                        if (isOffsetFormat) {
                             // Localized GMT or ISO: total offset (raw + dst) must be preserved.
                             int32_t inOffset = inRaw + inDst;
                             int32_t outOffset = outRaw + outDst;

@@ -149,7 +149,7 @@ format:table(nofallback) {
                     "GMT",
                     "DATE=RELATIVE_FULL,TIME=LONG",
                     "ERA=1,YEAR=2012,MONTH=OCTOBER,DATE=8,HOUR_OF_DAY=23,MINUTE=59,SECOND=0",
-                    "segunda-feira, 8 de outubro de 2012 23:59:00 GMT"
+                    "segunda-feira, 8 de outubro de 2012 23:59:00 GMT+0"
                },
                // vi combined formats have time first
                {

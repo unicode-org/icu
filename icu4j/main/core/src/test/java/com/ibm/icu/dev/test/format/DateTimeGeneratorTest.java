@@ -204,7 +204,7 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
                 {"EyyyyMMMddhhmmss", "Thu, Oct 14, 1999, 6:58:59\u202FAM"}, // (fixed expected result per ticket 6872<-7180)
                 {"hmm", "6:58\u202FAM"},
                 {"hhmm", "6:58\u202FAM"}, // (fixed expected result per ticket 6872<-7180)
-                {"hhmmVVVV", "6:58\u202FAM GMT"}, // (fixed expected result per ticket 6872<-7180)
+                {"hhmmVVVV", "6:58\u202FAM GMT+00:00"}, // (fixed expected result per ticket 6872<-7180)
         };
         for (int i = 0; i < tests.length; ++i) {
             final String testSkeleton = tests[i][0];

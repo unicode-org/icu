@@ -1634,10 +1634,6 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * @return the localized GMT string
      */
     private String formatOffsetLocalizedGMT(int offset, boolean isShort) {
-        if (offset == 0) {
-            return _gmtZeroFormat;
-        }
-
         StringBuilder buf = new StringBuilder();
         boolean positive = true;
         if (offset < 0) {

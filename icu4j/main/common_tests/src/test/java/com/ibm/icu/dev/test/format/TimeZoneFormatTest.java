@@ -156,8 +156,6 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
             }
             logln("Locale: " + LOCALES[locidx].toString());
 
-            String localGMTString = TimeZoneFormat.getInstance(LOCALES[locidx]).formatOffsetLocalizedGMT(0);
-
             for (int patidx = 0; patidx < PATTERNS.length; patidx++) {
                 logln("    pattern: " + PATTERNS[patidx]);
                 SimpleDateFormat sdf = new SimpleDateFormat(PATTERNS[patidx], LOCALES[locidx]);
@@ -268,7 +266,7 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
                                 isOffsetFormat = (numDigits > 0);
                             }
 
-                            if (isOffsetFormat || tzstr.equals(localGMTString)) {
+                            if (isOffsetFormat) {
                                 // Localized GMT or ISO: total offset (raw + dst) must be preserved.
                                 int inOffset = inOffsets[0] + inOffsets[1];
                                 int outOffset = outOffsets[0] + outOffsets[1];
