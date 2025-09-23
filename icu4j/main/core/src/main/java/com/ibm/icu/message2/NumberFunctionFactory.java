@@ -312,11 +312,11 @@ class NumberFunctionFactory implements FunctionFactory {
                 if (isPercent) toFormatAdjusted *= 100;
                 return toFormatAdjusted;
             } else if (toFormat instanceof Long) {
-                double toFormatAdjusted = (long) toFormat - offset + offsetOperand;
+                long toFormatAdjusted = (long) toFormat - offset + offsetOperand;
                 if (isPercent) toFormatAdjusted *= 100;
                 return toFormatAdjusted;
             } else if (toFormat instanceof Integer) {
-                double toFormatAdjusted = (int) toFormat - offset + offsetOperand;
+                int toFormatAdjusted = (int) toFormat - offset + offsetOperand;
                 if (isPercent) toFormatAdjusted *= 100;
                 return toFormatAdjusted;
             } else if (toFormat instanceof BigDecimal) {
