@@ -121,8 +121,8 @@ class NumberFunctionFactory implements FunctionFactory {
          */
         @Override
         public FormattedPlaceholder format(Object toFormat, Map<String, Object> variableOptions) {
-            boolean reportErrors = OptUtils.reportErrors(fixedOptions) || OptUtils.reportErrors(variableOptions);
             LocalizedNumberFormatter realFormatter;
+
             Map<String, Object> mergedOptions = new HashMap<>(fixedOptions);
             if (variableOptions.isEmpty()) {
                 realFormatter = this.icuFormatter;
@@ -134,78 +134,33 @@ class NumberFunctionFactory implements FunctionFactory {
                 realFormatter = functionForOptions(locale, mergedOptions, kind);
             }
 
-            Integer offset = OptUtils.getInteger(variableOptions, reportErrors, "icu:offset");
-            if (offset == null && fixedOptions != null) {
-                offset = OptUtils.getInteger(fixedOptions, reportErrors, "icu:offset");
-            }
-            if (offset == null) {
-                offset = 0;
-            }
-
-            int offsetOperand = 0;
-            if ("offset".equals(kind)) {
-                ResolvedOffsetOptions resolvedOffsetOptions = ResolvedOffsetOptions.of(fixedOptions);
-                offsetOperand = resolvedOffsetOptions.operand;
-            }
-
-            if (kind.equals("currency")) {
-                String currencyCode = getCurrency(mergedOptions);
-                if (currencyCode == null && !(toFormat instanceof CurrencyAmount)) {
-                    // Error, we need a currency code, either from the message,
-                    // with the {... :currency currency=<iso_code>}, or from the thing to format
-                    throw new IllegalArgumentException(
-                            "bad-option: the `currency` must be an ISO 4217 code.");
-                }
-            }
-
-            boolean isPercent = kind.equals("percent");
-            boolean isInt = kind.equals("integer");
-            FormattedValue result = null;
             if (toFormat == null) {
                 // This is also what MessageFormat does.
                 throw new NullPointerException("Argument to format can't be null");
-            } else if (toFormat instanceof Double) {
-                if (isInt) toFormat = Math.floor((double) toFormat);
-                double toFormatAdjusted =(double) toFormat - offset + offsetOperand;
-                if (isPercent) toFormatAdjusted *= 100;
-                result = realFormatter.format(toFormatAdjusted);
-            } else if (toFormat instanceof Long) {
-                double toFormatAdjusted = (long) toFormat - offset + offsetOperand;
-                if (isPercent) toFormatAdjusted *= 100;
-                result = realFormatter.format(toFormatAdjusted);
-            } else if (toFormat instanceof Integer) {
-                double toFormatAdjusted = (int) toFormat - offset + offsetOperand;
-                if (isPercent) toFormatAdjusted *= 100;
-                result = realFormatter.format(toFormatAdjusted);
-            } else if (toFormat instanceof BigDecimal) {
-                BigDecimal toFormatAdjusted = (BigDecimal) toFormat;
-                if (isPercent) toFormatAdjusted = toFormatAdjusted.multiply(BigDecimal.valueOf(100));
-                if (isInt) toFormat = toFormatAdjusted.longValue();
-                toFormatAdjusted = toFormatAdjusted.subtract(BigDecimal.valueOf(offset));
-                if (offsetOperand != 0) {
-                    toFormatAdjusted = toFormatAdjusted.add(BigDecimal.valueOf(offsetOperand));
-                }
-                result = realFormatter.format(toFormatAdjusted);
-            } else if (toFormat instanceof Number) {
-                if (isInt) toFormat = Math.floor(((Number) toFormat).doubleValue());
-                double toFormatAdjusted = ((Number) toFormat).doubleValue() - offset + offsetOperand;
-                if (isPercent) toFormatAdjusted *= 100;
-                result = realFormatter.format(toFormatAdjusted);
-            } else if (toFormat instanceof CurrencyAmount) {
+            }
+
+            FormattedValue result;
+            if (toFormat instanceof CurrencyAmount) {
                 result = realFormatter.format((CurrencyAmount) toFormat);
             } else {
-                // The behavior is not in the spec, will be in the registry.
-                // We can return "NaN", or try to parse the string as a number
-                String strValue = Objects.toString(toFormat);
-                Number nrValue = OptUtils.asNumber(reportErrors, "argument", strValue);
-                if (nrValue != null) {
-                    double toFormatAdjusted = isInt ? nrValue.intValue() : nrValue.doubleValue() - offset + offsetOperand;
-                    if (isPercent) toFormatAdjusted *= 100;
-                    result = realFormatter.format(toFormatAdjusted);
-                } else {
+                boolean isInt = kind.equals("integer");
+                if (isInt) {
+                    if (toFormat instanceof CharSequence) {
+                        toFormat = OptUtils.asNumber(toFormat);
+                    }
+                    if (toFormat instanceof Number) {
+                        toFormat = ((Number) toFormat).longValue();
+                    }
+                }
+                Number toFormatAdjusted = resolveValue(toFormat, variableOptions);
+                if (toFormatAdjusted == null) {
+                    String strValue = Objects.toString(toFormat);
                     result = new PlainStringFormattedValue("{|" + strValue + "|}");
+                } else {
+                    result = realFormatter.format(toFormatAdjusted);
                 }
             }
+
             Directionality dir = OptUtils.getBestDirectionality(variableOptions, locale);
             return new FormattedPlaceholder(toFormat, result, dir, false);
         }
@@ -276,13 +231,6 @@ class NumberFunctionFactory implements FunctionFactory {
             }
 
             boolean reportErrors = OptUtils.reportErrors(fixedOptions);
-            Integer offset = OptUtils.getInteger(variableOptions, reportErrors, "icu:offset");
-            if (offset == null && fixedOptions != null) {
-                offset = OptUtils.getInteger(fixedOptions, reportErrors, "icu:offset");
-            }
-            if (offset == null) {
-                offset = 0;
-            }
 
             Number valToCheck = Double.MIN_VALUE;
             if (value instanceof FormattedPlaceholder) {
@@ -290,10 +238,11 @@ class NumberFunctionFactory implements FunctionFactory {
                 value = fph.getInput();
             }
 
-            if (value instanceof Number) {
-                valToCheck = ((Number) value).doubleValue();
-            } else if (value instanceof CharSequence) {
-                return value.equals(key);
+            if (value instanceof Number || value instanceof CharSequence) {
+                valToCheck = resolveValue(value, variableOptions);
+                if (valToCheck == null) {
+                    return false;
+                }
             } else {
                 return false;
             }
@@ -307,7 +256,7 @@ class NumberFunctionFactory implements FunctionFactory {
                 return true;
             }
 
-            FormattedNumber formatted = icuFormatter.format(valToCheck.doubleValue() - offset);
+            FormattedNumber formatted = icuFormatter.format(valToCheck.doubleValue());
             String match;
             if (rules != null) {
                 match = rules.select(formatted);
@@ -318,6 +267,87 @@ class NumberFunctionFactory implements FunctionFactory {
                 match = CatchallKey.AS_KEY_STRING;
             }
             return match.equals(key);
+        }
+
+        private Number resolveValue(Object toFormat, Map<String, Object> variableOptions) {
+            Map<String, Object> mergedOptions = new HashMap<>(fixedOptions);
+            if (!variableOptions.isEmpty()) {
+                mergedOptions.putAll(variableOptions);
+            }
+            boolean reportErrors = OptUtils.reportErrors(mergedOptions);
+
+            Integer offset = OptUtils.getInteger(mergedOptions, reportErrors, "icu:offset");
+            if (offset == null && fixedOptions != null) {
+                offset = OptUtils.getInteger(fixedOptions, reportErrors, "icu:offset");
+            }
+            if (offset == null) {
+                offset = 0;
+            }
+
+            int offsetOperand = 0;
+            if ("offset".equals(kind)) {
+                ResolvedOffsetOptions resolvedOffsetOptions = ResolvedOffsetOptions.of(mergedOptions);
+                offsetOperand = resolvedOffsetOptions.operand;
+            }
+
+            if (kind.equals("currency")) {
+                String currencyCode = getCurrency(mergedOptions);
+                if (currencyCode == null && !(toFormat instanceof CurrencyAmount)) {
+                    // Error, we need a currency code, either from the message,
+                    // with the {... :currency currency=<iso_code>}, or from the thing to format
+                    throw new IllegalArgumentException(
+                            "bad-option: the `currency` must be an ISO 4217 code.");
+                }
+            }
+
+            boolean isPercent = kind.equals("percent");
+            boolean isInt = kind.equals("integer");
+
+            if (toFormat == null) {
+                // This is also what MessageFormat does.
+                throw new NullPointerException("Argument to format can't be null");
+            } else if (toFormat instanceof Double) {
+                if (isInt) toFormat = Math.floor((double) toFormat);
+                double toFormatAdjusted = (double) toFormat - offset + offsetOperand;
+                if (isPercent) toFormatAdjusted *= 100;
+                return toFormatAdjusted;
+            } else if (toFormat instanceof Long) {
+                double toFormatAdjusted = (long) toFormat - offset + offsetOperand;
+                if (isPercent) toFormatAdjusted *= 100;
+                return toFormatAdjusted;
+            } else if (toFormat instanceof Integer) {
+                double toFormatAdjusted = (int) toFormat - offset + offsetOperand;
+                if (isPercent) toFormatAdjusted *= 100;
+                return toFormatAdjusted;
+            } else if (toFormat instanceof BigDecimal) {
+                BigDecimal toFormatAdjusted = (BigDecimal) toFormat;
+                if (isPercent) toFormatAdjusted = toFormatAdjusted.multiply(BigDecimal.valueOf(100));
+                if (isInt) toFormat = toFormatAdjusted.longValue();
+                toFormatAdjusted = toFormatAdjusted.subtract(BigDecimal.valueOf(offset));
+                if (offsetOperand != 0) {
+                    toFormatAdjusted = toFormatAdjusted.add(BigDecimal.valueOf(offsetOperand));
+                }
+                return toFormatAdjusted;
+            } else if (toFormat instanceof Number) {
+                if (isInt) toFormat = Math.floor(((Number) toFormat).doubleValue());
+                double toFormatAdjusted = ((Number) toFormat).doubleValue() - offset + offsetOperand;
+                if (isPercent) toFormatAdjusted *= 100;
+                return toFormatAdjusted;
+            } else if (toFormat instanceof CurrencyAmount) {
+                return ((CurrencyAmount) toFormat).getNumber();
+            } else {
+                // The behavior is not in the spec, will be in the registry.
+                // We can return "NaN", or try to parse the string as a number
+                String strValue = Objects.toString(toFormat);
+                Number nrValue = OptUtils.asNumber(reportErrors, "argument", strValue);
+                if (nrValue != null) {
+                    double toFormatAdjusted = isInt ? nrValue.intValue() : nrValue.doubleValue() - offset + offsetOperand;
+                    if (isPercent) toFormatAdjusted *= 100;
+                    return toFormatAdjusted;
+                }
+            }
+
+            return null;
         }
     }
 
@@ -515,8 +545,8 @@ class NumberFunctionFactory implements FunctionFactory {
             boolean reportErrors = OptUtils.reportErrors(options);
 
             int operand = 0;
-            String addOption = OptUtils.getString(options, "add", null);
-            String subtractOption = OptUtils.getString(options, "subtract");
+            Integer addOption = OptUtils.getInteger(options, reportErrors, "add");
+            Integer subtractOption = OptUtils.getInteger(options, reportErrors, "subtract");
 
             if (addOption == null) {
                 if (subtractOption == null) { // both null

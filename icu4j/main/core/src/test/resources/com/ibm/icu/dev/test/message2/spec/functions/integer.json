@@ -35,7 +35,6 @@
     },
     {
       "src": ".local $x = {1.25 :integer} .local $y = {$x :number} {{{$y}}}",
-      "ignoreJava": "TODO:78.1",
       "exp": "1"
     },
     {
@@ -44,14 +43,16 @@
     },
     {
       "src": ".local $bad = {exact} {{variable select {1 :integer select=$bad}}}",
-      "exp": "variable select 1"//TODO 78:,
-      //TODO 78:"expErrors": [{ "type": "bad-option" }]
+      "ignoreJava": "ICU-23225: Big refactoring. When it gets to the formatter `bad` is already resolved to a number",
+      "exp": "variable select 1",
+      "expErrors": [{ "type": "bad-option" }]
     },
     {
       "src": "variable select {1 :integer select=$bad}",
       "params": [{ "name": "bad", "value": "exact" }],
-      "exp": "variable select 1"//TODO 78:,
-      //TODO 78:"expErrors": [{ "type": "bad-option" }]
+      "ignoreJava": "ICU-23225: Big refactoring. When it gets to the formatter `bad` is already resolved to a number",
+      "exp": "variable select 1",
+      "expErrors": [{ "type": "bad-option" }]
     },
     {
       "src": ".local $sel = {1 :integer select=exact} .match $sel 1 {{literal select {$sel}}} * {{OTHER}}",
@@ -59,16 +60,16 @@
     },
     {
       "src": ".local $sel = {1 :integer select=exact} .local $bad = {$sel :integer} .match $bad 1 {{ONE}} * {{operand select {$bad}}}",
-      "exp": "ONE"
-      //TODO 78:"exp": "operand select 1",
-      //TODO 78:"expErrors": [{ "type": "bad-option" }, { "type": "bad-selector" }]
+      "ignoreJava": "ICU-23225: Big refactoring. When it gets to the formatter `bad` is already resolved to a number",
+      "exp": "operand select 1",
+      "expErrors": [{ "type": "bad-option" }, { "type": "bad-selector" }]
     },
     {
       "src": ".local $sel = {1 :integer select=$bad} .match $sel 1 {{ONE}} * {{variable select {$sel}}}",
       "params": [{ "name": "bad", "value": "exact" }],
-      "exp": "ONE"
-      //TODO 78:"exp": "variable select 1",
-      //TODO 78:"expErrors": [{ "type": "bad-option" }, { "type": "bad-selector" }]
+      "ignoreJava": "ICU-23225: Big refactoring. When it gets to the formatter `bad` is already resolved to a number",
+      "exp": "variable select 1",
+      "expErrors": [{ "type": "bad-option" }, { "type": "bad-selector" }]
     }
   ]
 }

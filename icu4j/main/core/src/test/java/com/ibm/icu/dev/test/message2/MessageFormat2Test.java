@@ -334,12 +334,13 @@ public class MessageFormat2Test extends CoreTestFmwk {
     @Test
     public void testPluralWithOffset() {
         String message = ""
-                + ".input {$count :number icu:offset=2}\n"
-                + ".match $count\n"
-                + " 1   {{Anna}}\n"
-                + " 2   {{Anna and Bob}}\n"
-                + " one {{Anna, Bob, and {$count :number icu:offset=2} other guest}}\n"
-                + " *   {{Anna, Bob, and {$count :number icu:offset=2} other guests}}";
+                + ".input {$count :number}\n"
+                + ".local $offsetCount = {$count :offset subtract=2}\n"
+                + ".match $count $offsetCount\n"
+                + " 1 *  {{Anna}}\n"
+                + " 2 *  {{Anna and Bob}}\n"
+                + " * one {{Anna, Bob, and {$offsetCount} other guest}}\n"
+                + " * *   {{Anna, Bob, and {$offsetCount} other guests}}";
         MessageFormatter mf2 = MessageFormatter.builder()
                 .setPattern(message)
                 .build();
@@ -363,12 +364,13 @@ public class MessageFormat2Test extends CoreTestFmwk {
     @Test
     public void testPluralWithOffsetAndLocalVar() {
         String message = ""
-                + ".local $foo = {$count :number icu:offset=2}"
-                + ".match $foo\n" // should "inherit" the offset
-                + " 1   {{Anna}}\n"
-                + " 2   {{Anna and Bob}}\n"
-                + " one {{Anna, Bob, and {$foo} other guest}}\n"
-                + " *   {{Anna, Bob, and {$foo} other guests}}";
+                + ".input {$count :number}"
+                + ".local $foo = {$count :offset subtract=2}"
+                + ".match $count $foo\n"
+                + " 1 *   {{Anna}}\n"
+                + " 2 *  {{Anna and Bob}}\n"
+                + " * one {{Anna, Bob, and {$foo} other guest}}\n"
+                + " * *   {{Anna, Bob, and {$foo} other guests}}";
         MessageFormatter mf2 = MessageFormatter.builder()
                 .setPattern(message)
                 .build();
@@ -450,12 +452,13 @@ public class MessageFormat2Test extends CoreTestFmwk {
     @Test
     public void testVariableOptionsInSelector() {
         String messageVar = ""
-                + ".input {$count :number icu:offset=$delta}\n"
-                + ".match $count\n"
-                + " 1   {{A}}\n"
-                + " 2   {{A and B}}\n"
-                + " one {{A, B, and {$count :number icu:offset=$delta} more character}}\n"
-                + " *   {{A, B, and {$count :number icu:offset=$delta} more characters}}";
+                + ".input {$count :number}\n"
+                + ".local $offsetCount = {$count :offset subtract=$delta}\n"
+                + ".match $count $offsetCount\n"
+                + " 1 *  {{A}}\n"
+                + " 2 *  {{A and B}}\n"
+                + " * one {{A, B, and {$offsetCount} more character}}\n"
+                + " * *   {{A, B, and {$offsetCount} more characters}}";
         MessageFormatter mfVar = MessageFormatter.builder()
                 .setPattern(messageVar)
                 .build();
@@ -469,11 +472,12 @@ public class MessageFormat2Test extends CoreTestFmwk {
                 mfVar.formatToString(Args.of("count", 7, "delta", 2)));
 
         String messageVar2 = ""
-                + ".input {$count :number icu:offset=$delta}\n"
-                + ".match $count\n"
-                + " 1 {{Exactly 1}}\n"
-                + " 2 {{Exactly 2}}\n"
-                + " * {{Count = {$count :number icu:offset=$delta} and delta={$delta}.}}";
+                + ".input {$count :number}\n"
+                + ".local $offsetCount = {$count :offset subtract=$delta}\n"
+                + ".match $count $offsetCount\n"
+                + " 1 * {{Exactly 1}}\n"
+                + " 2 * {{Exactly 2}}\n"
+                + " * * {{Count = {$count :number icu:offset=$delta} and delta={$delta}.}}";
         MessageFormatter mfVar2 = MessageFormatter.builder()
                 .setPattern(messageVar2)
                 .build();
@@ -509,12 +513,13 @@ public class MessageFormat2Test extends CoreTestFmwk {
     @Test
     public void testVariableOptionsInSelectorWithLocalVar() {
         String messageFix = ""
-                + ".local $offCount = {$count :number icu:offset=2}"
-                + ".match $offCount\n"
-                + " 1   {{A}}\n"
-                + " 2   {{A and B}}\n"
-                + " one {{A, B, and {$offCount} more character}}\n"
-                + " *   {{A, B, and {$offCount} more characters}}";
+                + ".input {$count :integer}"
+                + ".local $offCount = {$count :offset subtract=2}"
+                + ".match $count $offCount\n"
+                + " 1 *  {{A}}\n"
+                + " 2 *  {{A and B}}\n"
+                + " * one {{A, B, and {$offCount} more character}}\n"
+                + " * *   {{A, B, and {$offCount} more characters}}";
         MessageFormatter mfFix = MessageFormatter.builder()
                 .setPattern(messageFix)
                 .build();
@@ -524,12 +529,13 @@ public class MessageFormat2Test extends CoreTestFmwk {
         assertEquals("test local vars loop", "A, B, and 5 more characters", mfFix.formatToString(Args.of("count", 7)));
 
         String messageVar = ""
-                + ".local $offCount = {$count :number icu:offset=$delta}"
-                + ".match $offCount\n"
-                + " 1   {{A}}\n"
-                + " 2   {{A and B}}\n"
-                + " one {{A, B, and {$offCount} more character}}\n"
-                + " *   {{A, B, and {$offCount} more characters}}";
+                + ".input {$count :number}"
+                + ".local $offCount = {$count :offset subtract=$delta}"
+                + ".match $count $offCount\n"
+                + " 1 *  {{A}}\n"
+                + " 2 *  {{A and B}}\n"
+                + " * one {{A, B, and {$offCount} more character}}\n"
+                + " * *   {{A, B, and {$offCount} more characters}}";
         MessageFormatter mfVar = MessageFormatter.builder()
                 .setPattern(messageVar)
                 .build();
@@ -543,11 +549,12 @@ public class MessageFormat2Test extends CoreTestFmwk {
                 mfVar.formatToString(Args.of("count", 7, "delta", 2)));
 
         String messageVar2 = ""
-                + ".local $offCount = {$count :number icu:offset=$delta}"
-                + ".match $offCount\n"
-                + " 1 {{Exactly 1}}\n"
-                + " 2 {{Exactly 2}}\n"
-                + " * {{Count = {$count}, OffCount = {$offCount}, and delta={$delta}.}}";
+                + ".input {$count :number}"
+                + ".local $offCount = {$count :offset subtract=$delta}"
+                + ".match $count $offCount\n"
+                + " 1 * {{Exactly 1}}\n"
+                + " 2 * {{Exactly 2}}\n"
+                + " * * {{Count = {$count}, OffCount = {$offCount}, and delta={$delta}.}}";
         MessageFormatter mfVar2 = MessageFormatter.builder()
                 .setPattern(messageVar2)
                 .build();

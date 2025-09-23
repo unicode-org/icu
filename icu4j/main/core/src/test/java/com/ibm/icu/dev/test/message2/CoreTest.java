@@ -40,7 +40,7 @@ public class CoreTest extends CoreTestFmwk {
             "spec/functions/date.json",
             "spec/functions/datetime.json",
             "spec/functions/integer.json",
-            "spec/functions/offset.json", // FAILS 2 / 16, chaining to select
+            "spec/functions/offset.json",
             "spec/functions/number.json",
             "spec/functions/percent.json",
             "spec/functions/string.json",

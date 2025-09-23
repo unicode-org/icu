@@ -34,13 +34,11 @@
     {
       "src": ".input {$n :percent} .match $n one {{one}} * {{other}}",
       "params": [{ "name": "n", "value": 0.01 }],
-      "ignoreJava": "TODO:78.1",
       "exp": "one"
     },
     {
       "src": ".input {$n :percent} .match $n one {{one}} * {{other}}",
       "params": [{ "name": "n", "value": 1 }],
-      "ignoreJava": "TODO:78.1",
       "exp": "other"
     }
   ]
