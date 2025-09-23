@@ -28,6 +28,7 @@ import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.text.PluralRules.PluralType;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.CurrencyAmount;
+import com.ibm.icu.util.NoUnit;
 
 /**
  * Creates a {@link Function} doing numeric formatting, similar to <code>{exp, number}</code>
@@ -43,7 +44,8 @@ class NumberFunctionFactory implements FunctionFactory {
             case "number": // $FALL-THROUGH$
             case "integer":
             case "currency":
-            case "math":
+            case "percent":
+            case "offset":
                 break;
             default:
                 // Default to number
@@ -57,18 +59,29 @@ class NumberFunctionFactory implements FunctionFactory {
      */
     @Override
     public Function create(Locale locale, Map<String, Object> fixedOptions) {
+        boolean reportErrors = OptUtils.reportErrors(fixedOptions);
         String type = OptUtils.getString(fixedOptions, "select", "");
         PluralType pluralType;
         switch (type) {
+            case "exact":
+                pluralType = null;
+                break;
             case "ordinal":
                 pluralType = PluralType.ORDINAL;
                 break;
-            case "cardinal": // $FALL-THROUGH$
+            case "": // $FALL-THROUGH$
+            case "cardinal":
+                pluralType = PluralType.CARDINAL;
+                break;
             default:
+                if (reportErrors) {
+                    throw new IllegalArgumentException(
+                            "bad-option: invalid value `" + type + "` for `select`.");
+                }
                 pluralType = PluralType.CARDINAL;
         }
 
-        PluralRules rules = PluralRules.forLocale(locale, pluralType);
+        PluralRules rules = pluralType == null ? null : PluralRules.forLocale(locale, pluralType);
         return new NumberFunctionImpl(locale, rules, fixedOptions, kind);
     }
 
@@ -88,7 +101,6 @@ class NumberFunctionFactory implements FunctionFactory {
             boolean fancy = skeleton != null;
             this.icuFormatter = functionForOptions(this.locale, fixedOptions, kind);
             this.kind = kind;
-
             this.rules = rules;
         }
 
@@ -130,10 +142,10 @@ class NumberFunctionFactory implements FunctionFactory {
                 offset = 0;
             }
 
-            Double mathOperand = null;
-            if ("math".equals(kind)) {
-                ResolvedMathOptions resolvedMathOptions = ResolvedMathOptions.of(fixedOptions);
-                mathOperand = resolvedMathOptions.operand;
+            int offsetOperand = 0;
+            if ("offset".equals(kind)) {
+                ResolvedOffsetOptions resolvedOffsetOptions = ResolvedOffsetOptions.of(fixedOptions);
+                offsetOperand = resolvedOffsetOptions.operand;
             }
 
             if (kind.equals("currency")) {
@@ -146,6 +158,7 @@ class NumberFunctionFactory implements FunctionFactory {
                 }
             }
 
+            boolean isPercent = kind.equals("percent");
             boolean isInt = kind.equals("integer");
             FormattedValue result = null;
             if (toFormat == null) {
@@ -153,37 +166,30 @@ class NumberFunctionFactory implements FunctionFactory {
                 throw new NullPointerException("Argument to format can't be null");
             } else if (toFormat instanceof Double) {
                 if (isInt) toFormat = Math.floor((double) toFormat);
-                double toFormatAdjusted =(double) toFormat - offset;
-                if (mathOperand != null) {
-                    toFormatAdjusted += mathOperand;
-                }
+                double toFormatAdjusted =(double) toFormat - offset + offsetOperand;
+                if (isPercent) toFormatAdjusted *= 100;
                 result = realFormatter.format(toFormatAdjusted);
             } else if (toFormat instanceof Long) {
-                if (mathOperand != null) {
-                    result = realFormatter.format((long) toFormat - offset + mathOperand);
-                } else {
-                    result = realFormatter.format((long) toFormat - offset);
-                }
+                double toFormatAdjusted = (long) toFormat - offset + offsetOperand;
+                if (isPercent) toFormatAdjusted *= 100;
+                result = realFormatter.format(toFormatAdjusted);
             } else if (toFormat instanceof Integer) {
-                if (mathOperand != null) {
-                    result = realFormatter.format((int) toFormat - offset + mathOperand);
-                } else {
-                    result = realFormatter.format((int) toFormat - offset);
-                }
+                double toFormatAdjusted = (int) toFormat - offset + offsetOperand;
+                if (isPercent) toFormatAdjusted *= 100;
+                result = realFormatter.format(toFormatAdjusted);
             } else if (toFormat instanceof BigDecimal) {
-                BigDecimal bd = (BigDecimal) toFormat;
-                if (isInt) toFormat = bd.longValue();
-                bd = bd.subtract(BigDecimal.valueOf(offset));
-                if (mathOperand != null) {
-                    bd = bd.add(BigDecimal.valueOf(mathOperand));
+                BigDecimal toFormatAdjusted = (BigDecimal) toFormat;
+                if (isPercent) toFormatAdjusted = toFormatAdjusted.multiply(BigDecimal.valueOf(100));
+                if (isInt) toFormat = toFormatAdjusted.longValue();
+                toFormatAdjusted = toFormatAdjusted.subtract(BigDecimal.valueOf(offset));
+                if (offsetOperand != 0) {
+                    toFormatAdjusted = toFormatAdjusted.add(BigDecimal.valueOf(offsetOperand));
                 }
-                result = realFormatter.format(bd);
+                result = realFormatter.format(toFormatAdjusted);
             } else if (toFormat instanceof Number) {
                 if (isInt) toFormat = Math.floor(((Number) toFormat).doubleValue());
-                double toFormatAdjusted = ((Number) toFormat).doubleValue() - offset;
-                if (mathOperand != null) {
-                    toFormatAdjusted += mathOperand;
-                }
+                double toFormatAdjusted = ((Number) toFormat).doubleValue() - offset + offsetOperand;
+                if (isPercent) toFormatAdjusted *= 100;
                 result = realFormatter.format(toFormatAdjusted);
             } else if (toFormat instanceof CurrencyAmount) {
                 result = realFormatter.format((CurrencyAmount) toFormat);
@@ -193,11 +199,8 @@ class NumberFunctionFactory implements FunctionFactory {
                 String strValue = Objects.toString(toFormat);
                 Number nrValue = OptUtils.asNumber(reportErrors, "argument", strValue);
                 if (nrValue != null) {
-                    if (isInt) toFormat = Math.floor(nrValue.doubleValue());
-                    double toFormatAdjusted = nrValue.doubleValue() - offset;
-                    if (mathOperand != null) {
-                        toFormatAdjusted += mathOperand;
-                    }
+                    double toFormatAdjusted = isInt ? nrValue.intValue() : nrValue.doubleValue() - offset + offsetOperand;
+                    if (isPercent) toFormatAdjusted *= 100;
                     result = realFormatter.format(toFormatAdjusted);
                 } else {
                     result = new PlainStringFormattedValue("{|" + strValue + "|}");
@@ -294,6 +297,7 @@ class NumberFunctionFactory implements FunctionFactory {
             } else {
                 return false;
             }
+
             if ("integer".equals(kind)) {
                 valToCheck = valToCheck.longValue();
             }
@@ -304,7 +308,12 @@ class NumberFunctionFactory implements FunctionFactory {
             }
 
             FormattedNumber formatted = icuFormatter.format(valToCheck.doubleValue() - offset);
-            String match = rules.select(formatted);
+            String match;
+            if (rules != null) {
+                match = rules.select(formatted);
+            } else {
+                match = key.equals(formatted.toString()) ? key : "other";
+            }
             if (match.equals("other")) {
                 match = CatchallKey.AS_KEY_STRING;
             }
@@ -471,6 +480,9 @@ class NumberFunctionFactory implements FunctionFactory {
             }
             nf = nf.unitWidth(width);
         }
+        if (kind.equals("percent")) {
+            nf = nf.unit(NoUnit.PERCENT);
+        }
 
         return nf.locale(locale);
     }
@@ -490,39 +502,39 @@ class NumberFunctionFactory implements FunctionFactory {
         return null;
     }
 
-    private static class ResolvedMathOptions {
-        final Double operand;
+    private static class ResolvedOffsetOptions {
+        final int operand;
         final boolean reportErrors;
 
-        ResolvedMathOptions(Double operand, boolean reportErrors) {
+        ResolvedOffsetOptions(int operand, boolean reportErrors) {
             this.operand = operand;
             this.reportErrors = reportErrors;
         }
 
-        static ResolvedMathOptions of(Map<String, Object> options) {
+        static ResolvedOffsetOptions of(Map<String, Object> options) {
             boolean reportErrors = OptUtils.reportErrors(options);
 
-            Double operand = null;
+            int operand = 0;
             String addOption = OptUtils.getString(options, "add", null);
             String subtractOption = OptUtils.getString(options, "subtract");
 
             if (addOption == null) {
                 if (subtractOption == null) { // both null
                     throw new IllegalArgumentException(
-                            "bad-option: :math function needs an `add` or `subtract` option.");
+                            "bad-option: :offset function needs an `add` or `subtract` option.");
                 } else {
-                    operand = -OptUtils.asNumber(reportErrors, "subtract", subtractOption).doubleValue();
+                    operand = -OptUtils.asNumber(reportErrors, "subtract", subtractOption).intValue();
                 }
             } else {
                 if (subtractOption == null) {
-                    operand = OptUtils.asNumber(reportErrors, "add", addOption).doubleValue();
+                    operand = OptUtils.asNumber(reportErrors, "add", addOption).intValue();
                 } else { // both set
                     throw new IllegalArgumentException(
-                            "bad-option: :math function can't have both `add` and `subtract` options.");
+                            "bad-option: :offset function can't have both `add` and `subtract` options.");
                 }
             }
 
-            return new ResolvedMathOptions(operand, reportErrors);
+            return new ResolvedOffsetOptions(operand, reportErrors);
         }
     }
 

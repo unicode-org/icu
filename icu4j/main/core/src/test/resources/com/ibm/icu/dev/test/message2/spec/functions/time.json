@@ -30,13 +30,13 @@
       "src": "{|2006-01-02T15:04:06| :time}"
     },
     {
-      "src": "{|2006-01-02T15:04:06| :time style=medium}"
+      "src": "{|2006-01-02T15:04:06| :time precision=second}"
     },
     {
-      "src": ".local $t = {|2006-01-02T15:04:06| :time style=medium} {{{$t}}}"
+      "src": ".local $t = {|2006-01-02T15:04:06| :time precision=second} {{{$t}}}"
     },
     {
-      "src": ".local $t = {|2006-01-02T15:04:06| :datetime dateStyle=long timeStyle=long} {{{$t :time}}}"
+      "src": ".local $t = {|2006-01-02T15:04:06| :datetime dateLength=long timePrecision=second} {{{$t :time}}}"
     }
   ]
 }
