@@ -26,7 +26,7 @@ PATH_VAR=LD_LIBRARY_PATH
 -include Makefile.local
 
 GEN_FILE=$(SOURCE_ROOT)/i18n/collunsafe.h
-BUILD_OPTS=-I$(SOURCE_ROOT)/common -I$(SOURCE_ROOT)/i18n -L$(BUILD_ROOT)/lib -licuuc -licui18n -licudata
+BUILD_OPTS+=-I$(SOURCE_ROOT)/common -I$(SOURCE_ROOT)/i18n -L$(BUILD_ROOT)/lib -licuuc -licui18n -licudata
 RUN_OPTS=env $(PATH_VAR)=$(BUILD_ROOT)/lib
 
 reset-icu:
@@ -37,8 +37,10 @@ gen-file: reset-icu
 	mkdir -p $(BUILD_HERE)
 	$(CXX) -o $(BUILD_HERE)/$(TOOL) $(srcdir)/$(TOOL).cpp  $(BUILD_OPTS)
 	$(RUN_OPTS) $(BUILD_HERE)/$(TOOL) > $(GEN_FILE) || exit 1
+	echo
 	$(CXX) -o $(BUILD_HERE)/$(TEST) $(srcdir)/$(TEST).cpp $(BUILD_OPTS)
 	$(RUN_OPTS) $(BUILD_HERE)/$(TEST) || exit 1
+	echo
 	$(MAKE) -C $(BUILD_ROOT)/i18n
 	$(RUN_OPTS) $(BUILD_HERE)/$(TEST) || exit 1
 

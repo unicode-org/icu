@@ -47,6 +47,12 @@ and see the change logs below.
 
 ---------------------------------------------------------------------------- ***
 
+TODO: Run gencolusb for Unicode updates.
+- https://github.com/markusicu/icu/blob/main/icu4c/source/tools/gencolusb/README.md
+- until ICU-12062 is done
+
+---------------------------------------------------------------------------- ***
+
 Unicode 17.0 update for ICU 78
 
 https://www.unicode.org/versions/Unicode17.0.0/
