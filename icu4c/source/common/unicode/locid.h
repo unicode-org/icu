@@ -1151,7 +1151,6 @@ private:
      * @param canonicalize whether to call uloc_canonicalize on cLocaleID
      */
     Locale& init(const char* localeID, UBool canonicalize);
-    /** @internal */
     Locale& init(StringPiece localeID, UBool canonicalize);
 
     /*
@@ -1177,7 +1176,6 @@ private:
 
     /**
      * Locale data that can be nested directly within the union Payload object.
-     * @internal
      */
     struct Nest {
         static constexpr size_t SIZE = 32;
@@ -1229,7 +1227,6 @@ private:
 
     /**
      * Locale data that needs to be heap allocated in the union Payload object.
-     * @internal
      */
     struct Heap {
         struct Alloc;
@@ -1265,7 +1262,6 @@ private:
     /**
      * This is kind of std::variant but customized to not waste any space on the
      * discriminator or on any padding, and to copy any heap allocated object.
-     * @internal
      */
     union Payload {
       private:
@@ -1308,7 +1304,6 @@ private:
      * @tparam NEST Pointer to the Nest getter function.
      * @tparam HEAP Pointer to the Heap getter function.
      * @return the result from the getter, or the empty string if isBogus().
-     * @internal
      */
     template <const char* (Nest::*const NEST)() const,
               const char* (Heap::*const HEAP)() const>
@@ -1318,12 +1313,10 @@ private:
 
     /**
      * A friend to allow the default locale to be set by either the C or C++ API.
-     * @internal (private)
      */
     friend Locale *locale_set_default_internal(const char *, UErrorCode& status);
 
     /**
-     * @internal (private)
      */
     friend void U_CALLCONV locale_available_init();
 };

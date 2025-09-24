@@ -515,9 +515,6 @@ public:
     U_I18N_API virtual UClassID getDynamicClassID() const override;
 
 private:
-     /**
-      * @internal (private)
-      */
     class PluralSelector : public UMemory {
       public:
         virtual ~PluralSelector();
@@ -528,7 +525,6 @@ private:
          * @param number The number to be plural-formatted.
          * @param ec Error code.
          * @return The selected PluralFormat keyword.
-         * @internal (private)
          */
         virtual UnicodeString select(void *context, double number, UErrorCode& ec) const = 0;
     };

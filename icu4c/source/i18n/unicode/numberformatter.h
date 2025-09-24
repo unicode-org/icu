@@ -1256,7 +1256,6 @@ class U_I18N_API StringProp : public UMemory {
     StringProp() : fValue(nullptr), fLength(0), fError(U_ZERO_ERROR) {
     }
 
-    /** @internal (private) */
     UBool copyErrorTo(UErrorCode &status) const {
         if (U_FAILURE(fError)) {
             status = fError;

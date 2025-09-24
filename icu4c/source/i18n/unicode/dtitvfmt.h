@@ -732,7 +732,6 @@ private:
 
     /**
      * default constructor
-     * @internal (private)
      */
     DateIntervalFormat();
 
@@ -808,7 +807,6 @@ private:
      * @param fphandler         See formatImpl for more information.
      * @param status            output param set to success/failure code on exit
      * @return                  Reference to 'appendTo' parameter.
-     * @internal (private)
      */
     UnicodeString& fallbackFormat(Calendar& fromCalendar,
                                   Calendar& toCalendar,
@@ -1109,7 +1107,6 @@ private:
      *                          Caller needs to make sure it is SUCCESS
      *                          at the function entrance
      * @return                  Reference to 'appendTo' parameter.
-     * @internal (private)
      */
     UnicodeString& formatImpl(Calendar& fromCalendar,
                               Calendar& toCalendar,

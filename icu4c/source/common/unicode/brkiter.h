@@ -647,7 +647,6 @@ protected:
 
 private:
 
-    /** @internal (private) */
     Locale actualLocale;
     Locale validLocale;
     Locale requestLocale;
