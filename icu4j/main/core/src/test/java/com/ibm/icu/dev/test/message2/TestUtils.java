@@ -118,7 +118,7 @@ public class TestUtils {
                 @SuppressWarnings("unchecked")
                 Map<String, Object> innerMap = (Map<String, Object>) pair.value;
                 if (innerMap.size() == 1 && innerMap.containsKey("decimal")
-                    && innerMap.get("decimal") instanceof String) {
+                        && innerMap.get("decimal") instanceof String) {
                     String decimalValue = (String) innerMap.get("decimal");
                     params[i] = new Param(pair.name, new com.ibm.icu.math.BigDecimal(decimalValue));
                 }

@@ -53,7 +53,7 @@ public class CustomFunctionPersonTest extends CoreTestFmwk {
             final String length;
 
             public PersonNameFunctionImpl(Object level, Object length) {
-                this.useFormal = "formal".equals(level);
+                this.useFormal = Objects.equals(level, "formal");
                 this.length = Objects.toString(length);
             }
 

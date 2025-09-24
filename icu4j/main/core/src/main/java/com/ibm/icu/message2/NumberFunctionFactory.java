@@ -247,7 +247,7 @@ class NumberFunctionFactory implements FunctionFactory {
                 return false;
             }
 
-            if ("integer".equals(kind)) {
+            if (Objects.equals(kind, "integer")) {
                 valToCheck = valToCheck.longValue();
             }
 
@@ -285,7 +285,7 @@ class NumberFunctionFactory implements FunctionFactory {
             }
 
             int offsetOperand = 0;
-            if ("offset".equals(kind)) {
+            if (Objects.equals(kind, "offset")) {
                 ResolvedOffsetOptions resolvedOffsetOptions = ResolvedOffsetOptions.of(mergedOptions);
                 offsetOperand = resolvedOffsetOptions.operand;
             }
@@ -307,31 +307,47 @@ class NumberFunctionFactory implements FunctionFactory {
                 // This is also what MessageFormat does.
                 throw new NullPointerException("Argument to format can't be null");
             } else if (toFormat instanceof Double) {
-                if (isInt) toFormat = Math.floor((double) toFormat);
+                if (isInt) {
+                    toFormat = Math.floor((double) toFormat);
+                }
                 double toFormatAdjusted = (double) toFormat - offset + offsetOperand;
-                if (isPercent) toFormatAdjusted *= 100;
+                if (isPercent) {
+                    toFormatAdjusted *= 100;
+                }
                 return toFormatAdjusted;
             } else if (toFormat instanceof Long) {
                 long toFormatAdjusted = (long) toFormat - offset + offsetOperand;
-                if (isPercent) toFormatAdjusted *= 100;
+                if (isPercent) {
+                    toFormatAdjusted *= 100;
+                }
                 return toFormatAdjusted;
             } else if (toFormat instanceof Integer) {
                 int toFormatAdjusted = (int) toFormat - offset + offsetOperand;
-                if (isPercent) toFormatAdjusted *= 100;
+                if (isPercent) {
+                    toFormatAdjusted *= 100;
+                }
                 return toFormatAdjusted;
             } else if (toFormat instanceof BigDecimal) {
                 BigDecimal toFormatAdjusted = (BigDecimal) toFormat;
-                if (isPercent) toFormatAdjusted = toFormatAdjusted.multiply(BigDecimal.valueOf(100));
-                if (isInt) toFormat = toFormatAdjusted.longValue();
+                if (isPercent) {
+                    toFormatAdjusted = toFormatAdjusted.multiply(BigDecimal.valueOf(100));
+                }
+                if (isInt) {
+                    toFormat = toFormatAdjusted.longValue();
+                }
                 toFormatAdjusted = toFormatAdjusted.subtract(BigDecimal.valueOf(offset));
                 if (offsetOperand != 0) {
                     toFormatAdjusted = toFormatAdjusted.add(BigDecimal.valueOf(offsetOperand));
                 }
                 return toFormatAdjusted;
             } else if (toFormat instanceof Number) {
-                if (isInt) toFormat = Math.floor(((Number) toFormat).doubleValue());
+                if (isInt) {
+                    toFormat = Math.floor(((Number) toFormat).doubleValue());
+                }
                 double toFormatAdjusted = ((Number) toFormat).doubleValue() - offset + offsetOperand;
-                if (isPercent) toFormatAdjusted *= 100;
+                if (isPercent) {
+                    toFormatAdjusted *= 100;
+                }
                 return toFormatAdjusted;
             } else if (toFormat instanceof CurrencyAmount) {
                 return ((CurrencyAmount) toFormat).getNumber();
@@ -342,7 +358,9 @@ class NumberFunctionFactory implements FunctionFactory {
                 Number nrValue = OptUtils.asNumber(reportErrors, "argument", strValue);
                 if (nrValue != null) {
                     double toFormatAdjusted = isInt ? nrValue.intValue() : nrValue.doubleValue() - offset + offsetOperand;
-                    if (isPercent) toFormatAdjusted *= 100;
+                    if (isPercent) {
+                        toFormatAdjusted *= 100;
+                    }
                     return toFormatAdjusted;
                 }
             }
@@ -370,7 +388,7 @@ class NumberFunctionFactory implements FunctionFactory {
         nf = NumberFormatter.with();
 
         // These options don't apply to `:integer`
-        if ("number".equals(kind)) {
+        if (Objects.equals(kind, "number")) {
             Notation notation;
             switch (OptUtils.getString(fixedOptions, "notation", "standard")) {
                 case "scientific":

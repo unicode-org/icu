@@ -362,36 +362,6 @@ public class MessageFormat2Test extends CoreTestFmwk {
     }
 
     @Test
-    public void testPluralWithOffsetAndLocalVar() {
-        String message = ""
-                + ".input {$count :number}"
-                + ".local $foo = {$count :offset subtract=2}"
-                + ".match $count $foo\n"
-                + " 1 *   {{Anna}}\n"
-                + " 2 *  {{Anna and Bob}}\n"
-                + " * one {{Anna, Bob, and {$foo} other guest}}\n"
-                + " * *   {{Anna, Bob, and {$foo} other guests}}";
-        MessageFormatter mf2 = MessageFormatter.builder()
-                .setPattern(message)
-                .build();
-        assertEquals("plural with offset",
-                "Anna",
-                mf2.formatToString(Args.of("count", 1)));
-        assertEquals("plural with offset",
-                "Anna and Bob",
-                mf2.formatToString(Args.of("count", 2)));
-        assertEquals("plural with offset",
-                "Anna, Bob, and 1 other guest",
-                mf2.formatToString(Args.of("count", 3)));
-        assertEquals("plural with offset",
-                "Anna, Bob, and 2 other guests",
-                mf2.formatToString(Args.of("count", 4)));
-        assertEquals("plural with offset",
-                "Anna, Bob, and 10 other guests",
-                mf2.formatToString(Args.of("count", 12)));
-    }
-
-    @Test
     public void testPluralWithOffsetAndLocalVar2() {
         String message = ""
                 + ".local $foo = {$amount :number icu:skeleton=|.00/w|}\n"
