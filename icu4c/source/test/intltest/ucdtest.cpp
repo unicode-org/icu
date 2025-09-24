@@ -21,6 +21,7 @@
 #include "testutil.h"
 #include "uparse.h"
 #include "ucdtest.h"
+#include "uprops.h"
 #include "usettest.h"
 
 #include <iostream>
@@ -88,6 +89,7 @@ void UnicodeTest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
     TESTCASE_AUTO(TestPropertiesUsingPpucd);
     TESTCASE_AUTO(TestIDStatus);
     TESTCASE_AUTO(TestIDType);
+    TESTCASE_AUTO(TestScriptExtensionsCodePoints);
     TESTCASE_AUTO_END;
 }
 
@@ -1316,4 +1318,48 @@ void UnicodeTest::TestIDType() {
                 rec.size() + incl.size() + limited.size() + excl.size() +
                     notNFKC.size() + di.size() + dep.size() + notChar.size(),
                 allExclusive.size());
+}
+
+namespace {
+
+void U_CALLCONV
+set_add(USet *set, UChar32 c) {
+    UnicodeSet::fromUSet(set)->add(c);
+}
+
+void U_CALLCONV
+set_addRange(USet *set, UChar32 start, UChar32 end) {
+    UnicodeSet::fromUSet(set)->add(start, end);
+}
+
+}
+
+void UnicodeTest::TestScriptExtensionsCodePoints() {
+    IcuTestErrorCode errorCode(*this, "TestScriptExtensionsCodePoints()");
+    UnicodeSet scxCPs;
+    USetAdder sa = {
+        scxCPs.toUSet(),
+        set_add,
+        set_addRange,
+        nullptr, // don't need addString,
+        nullptr, // don't need remove()
+        nullptr // don't need removeRange()
+    };
+    uprv_addScriptExtensionsCodePoints(&sa, errorCode);
+    assertSuccess("uprv_addScriptExtensionsCodePoints", errorCode);
+
+    UnicodeSet mostAssigned(u"[[^[:C:][:Unified_Ideograph:]][:Cf:]]", errorCode);
+    assertSuccess("mostAssigned", errorCode);
+
+    UnicodeSet expected;
+    UScriptCode scripts[100];
+    for (auto c : mostAssigned.codePoints()) {
+        int32_t length = uscript_getScriptExtensions(c, scripts, UPRV_LENGTHOF(scripts), errorCode);
+        if (length != 1 || uscript_getScript(c, errorCode) != scripts[0]) {
+            expected.add(c);
+        }
+    }
+    assertSuccess("collect expected", errorCode);
+
+    assertTrue("scxCPs == expected", scxCPs == expected);
 }

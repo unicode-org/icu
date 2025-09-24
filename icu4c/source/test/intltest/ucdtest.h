@@ -55,6 +55,7 @@ public:
     void TestPropertiesUsingPpucd();
     void TestIDStatus();
     void TestIDType();
+    void TestScriptExtensionsCodePoints();
 
 private:
 
