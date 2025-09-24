@@ -114,7 +114,7 @@ and then reapply branch protection. Create a new branch named something like
 "pre63-new-main" to allow users to easily switch between the two heads.
 
 Send an email to icu-support explaining the change and how to deal with it. You
-can use [this email](https://sourceforge.net/p/icu/mailman/message/36426642/) as
+can use [this email](https://groups.google.com/a/unicode.org/g/icu-support/c/DC_pX9kPEoc) as
 a model.
 
 ---

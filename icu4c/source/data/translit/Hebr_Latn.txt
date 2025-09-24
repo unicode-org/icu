@@ -24,7 +24,7 @@
 # Paste in hebrew text in Input, and hit Transliterate.
 #
 # For more information, see:
-#   http://icu.sourceforge.net/userguide/Transform.html
+#   https://unicode-org.github.io/icu/userguide/transforms/general/
 :: [[־׳״][:Hebrew:] [:^ccc=0:] [\u05B0-\u05B9\u05BB-\u05BC\u05C1-\u05C2ℵ-ℸ\u0304\u05BF] - [\u05BD]] ;
 :: nfkd (nfc) ;
 ׳ ↔ '′';

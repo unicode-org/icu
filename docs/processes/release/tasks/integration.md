@@ -365,7 +365,7 @@ Instructions for verifying the XLIFF conversion tools.
     code changes, and explicit resource types (e.g. "ra {" vs. "ra:table
     {").</span>
 *   Go through the steps given in
-    <http://icu.sourceforge.net/docs/papers/localize_with_XLIFF_and_ICU.pdf>
+    <https://icu-project.org/docs/papers/localize_with_XLIFF_and_ICU.pdf>
 
 ---
 

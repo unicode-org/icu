@@ -147,24 +147,24 @@
   <mailingLists>
     <mailingList>
       <name>icu-support</name>
-      <subscribe>https://lists.sourceforge.net/lists/listinfo/icu-support</subscribe>
-      <unsubscribe>https://lists.sourceforge.net/lists/listinfo/icu-support</unsubscribe>
-      <post>icu-support@lists.sourceforge.net</post>
-      <archive>http://sourceforge.net/mailarchive/forum.php?forum_name=icu-support</archive>
+      <subscribe>https://groups.google.com/a/unicode.org/g/icu-support</subscribe>
+      <unsubscribe>https://groups.google.com/a/unicode.org/g/icu-support</unsubscribe>
+      <post>icu-support@unicode.org</post>
+      <archive>https://groups.google.com/a/unicode.org/g/icu-support</archive>
     </mailingList>
     <mailingList>
       <name>icu-announce</name>
-      <subscribe>https://lists.sourceforge.net/lists/listinfo/icu-announce</subscribe>
-      <unsubscribe>https://lists.sourceforge.net/lists/listinfo/icu-announce</unsubscribe>
-      <post>icu-announce@lists.sourceforge.net</post>
-      <archive>http://sourceforge.net/mailarchive/forum.php?forum_name=icu-announce</archive>
+      <subscribe>https://groups.google.com/a/unicode.org/g/icu-announce</subscribe>
+      <unsubscribe>https://groups.google.com/a/unicode.org/g/icu-announce</unsubscribe>
+      <post>icu-announce@unicode.org</post>
+      <archive>https://groups.google.com/a/unicode.org/g/icu-announce</archive>
     </mailingList>
     <mailingList>
       <name>icu-design</name>
-      <subscribe>https://lists.sourceforge.net/lists/listinfo/icu-design</subscribe>
-      <unsubscribe>https://lists.sourceforge.net/lists/listinfo/icu-design</unsubscribe>
-      <post>icu-design@lists.sourceforge.net</post>
-      <archive>http://sourceforge.net/mailarchive/forum.php?forum_name=icu-design</archive>
+      <subscribe>https://groups.google.com/a/unicode.org/g/icu-design</subscribe>
+      <unsubscribe>https://groups.google.com/a/unicode.org/g/icu-design</unsubscribe>
+      <post>icu-design@unicode.org</post>
+      <archive>https://groups.google.com/a/unicode.org/g/icu-design</archive>
     </mailingList>
   </mailingLists>
 

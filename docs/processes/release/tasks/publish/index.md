@@ -338,7 +338,7 @@ That new flow overlaps with _"Using the output from the build bots"_ below.
     *   ~~That last step will create a directory in **/tmp/icu** - zip that up
         to make the release.~~
     *   ~~In case /tmp happens to be full, see the [mailing list
-        archive](https://sourceforge.net/p/icu/mailman/message/36275940/) for
+        archive](https://groups.google.com/a/unicode.org/g/icu-team/c/H1mHAC9YDtc/m/Bv_dZC2WAgAJ) for
         advice.~~
 
 #### Output of icuexportdata:
