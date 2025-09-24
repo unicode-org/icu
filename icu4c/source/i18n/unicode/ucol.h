@@ -426,8 +426,10 @@ ucol_open(const char *loc, UErrorCode *status);
  *             UCOL_OFF     (expect the text to not need normalization),
  *             UCOL_ON      (normalize), or
  *             UCOL_DEFAULT (set the mode according to the rules)
- * @param strength The default collation strength; one of UCOL_PRIMARY, UCOL_SECONDARY,
- * UCOL_TERTIARY, UCOL_IDENTICAL,UCOL_DEFAULT_STRENGTH - can be also set in the rules.
+ * @param strength The collation strength; one of UCOL_PRIMARY, UCOL_SECONDARY,
+ *                 UCOL_TERTIARY, UCOL_QUATERNARY, UCOL_IDENTICAL, UCOL_DEFAULT_STRENGTH.
+ *                 If you want to set the strength via the rules,
+ *                 then use UCOL_DEFAULT to not override that.
  * @param parseError  A pointer to UParseError to receive information about errors
  *                    occurred during parsing. This argument can currently be set
  *                    to NULL, but at users own risk. Please provide a real structure.
