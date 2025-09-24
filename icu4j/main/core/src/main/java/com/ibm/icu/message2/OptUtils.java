@@ -5,6 +5,7 @@ package com.ibm.icu.message2;
 
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -85,7 +86,7 @@ class OptUtils {
 
     static boolean reportErrors(Map<String, Object> options) {
         String reportErrors = getString(options, "icu:impl:errorPolicy");
-        return "STRICT".equals(reportErrors);
+        return Objects.equals(reportErrors, "STRICT");
     }
 
     static boolean reportErrors(Map<String, Object> fixedOptions, Map<String, Object> variableOptions) {

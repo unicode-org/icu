@@ -20,7 +20,7 @@
       "exp": "hello 0"
     },
     {
-      "src": "hello {0.42e+1 :integer}",
+      "src": "hello {|0.42e+1| :integer}",
       "exp": "hello 4"
     },
     {
@@ -40,6 +40,36 @@
     {
       "src": "literal select {1 :integer select=exact}",
       "exp": "literal select 1"
+    },
+    {
+      "src": ".local $bad = {exact} {{variable select {1 :integer select=$bad}}}",
+      "ignoreJava": "ICU-23225: Big refactoring. When it gets to the formatter `bad` is already resolved to a number",
+      "exp": "variable select 1",
+      "expErrors": [{ "type": "bad-option" }]
+    },
+    {
+      "src": "variable select {1 :integer select=$bad}",
+      "params": [{ "name": "bad", "value": "exact" }],
+      "ignoreJava": "ICU-23225: Big refactoring. When it gets to the formatter `bad` is already resolved to a number",
+      "exp": "variable select 1",
+      "expErrors": [{ "type": "bad-option" }]
+    },
+    {
+      "src": ".local $sel = {1 :integer select=exact} .match $sel 1 {{literal select {$sel}}} * {{OTHER}}",
+      "exp": "literal select 1"
+    },
+    {
+      "src": ".local $sel = {1 :integer select=exact} .local $bad = {$sel :integer} .match $bad 1 {{ONE}} * {{operand select {$bad}}}",
+      "ignoreJava": "ICU-23225: Big refactoring. When it gets to the formatter `bad` is already resolved to a number",
+      "exp": "operand select 1",
+      "expErrors": [{ "type": "bad-option" }, { "type": "bad-selector" }]
+    },
+    {
+      "src": ".local $sel = {1 :integer select=$bad} .match $sel 1 {{ONE}} * {{variable select {$sel}}}",
+      "params": [{ "name": "bad", "value": "exact" }],
+      "ignoreJava": "ICU-23225: Big refactoring. When it gets to the formatter `bad` is already resolved to a number",
+      "exp": "variable select 1",
+      "expErrors": [{ "type": "bad-option" }, { "type": "bad-selector" }]
     }
   ]
 }

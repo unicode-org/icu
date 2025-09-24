@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 import com.ibm.icu.message2.FormattedPlaceholder;
 import com.ibm.icu.message2.Function;
@@ -45,7 +46,7 @@ public class TestFunctionFactory implements FunctionFactory {
 
         @Override
         public String formatToString(Object toFormat, Map<String, Object> variableOptions) {
-            if (!"select".equals(kind) && parsedOptions.failsFormat) {
+            if (!Objects.equals(kind, "select") && parsedOptions.failsFormat) {
                 throw new InvalidParameterException("ALWAYS FAIL");
             }
             return format(toFormat, variableOptions).toString();
@@ -59,7 +60,7 @@ public class TestFunctionFactory implements FunctionFactory {
         @Override
         public List<String> matches(Object value, List<String> keys, Map<String, Object> variableOptions) {
 //            ParsedOptions parsedOptions = ParsedOptions.of(variableOptions);
-            if (kind.equals("format")) {
+            if (Objects.equals(kind, "format")) {
                 // Can't do selection on the `format` only function
                 return null;
             }
@@ -93,10 +94,10 @@ public class TestFunctionFactory implements FunctionFactory {
                 return -1;
             }
             // * sorts last
-            if ("*".equals(o1)) {
+            if (Objects.equals(o1, "*")) {
                 return 1;
             }
-            if ("*".equals(o2)) {
+            if (Objects.equals(o2, "*")) {
                 return -1;
             }
             // At this point they are both strings
@@ -129,7 +130,7 @@ public class TestFunctionFactory implements FunctionFactory {
             }
 
             String option = getStringOption(options, "icu:impl:errorPolicy", null);
-            reportErrors= "STRICT".equals(option);
+            reportErrors = Objects.equals(option, "STRICT");
 
             option = getStringOption(options, "fails", "never");
             switch (option) {

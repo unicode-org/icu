@@ -399,8 +399,9 @@ class DateTimeFunctionFactory implements FunctionFactory {
             "^(([0-9]{4})-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])){1}(T([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])(\\.[0-9]{1,3})?(Z|[+-]((0[0-9]|1[0-3]):[0-5][0-9]|14:00))?)?$");
 
     private static Integer safeParse(String str) {
-        if (str == null || str.isEmpty())
+        if (str == null || str.isEmpty()) {
             return null;
+        }
         return Integer.parseInt(str);
     }
 

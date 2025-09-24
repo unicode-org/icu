@@ -290,9 +290,39 @@
       "exp": "literal select 1"
     },
     {
+      "description": "select=$var with local literal value causes error but no fallback",
+      "src": ".local $bad = {exact} {{variable select {1 :number select=$bad}}}",
+      "ignoreJava": "ICU-23225: Big refactoring. When it gets to the formatter `bad` is already resolved to a number",
+      "exp": "variable select 1",
+      "expErrors": [{ "type": "bad-option" }]
+    },
+    {
+      "description": "select=$var with external string value is not allowed",
+      "src": "variable select {1 :number select=$bad}",
+      "ignoreJava": "ICU-23225: Big refactoring. When it gets to the formatter `bad` is already resolved to a number",
+      "params": [{ "name": "bad", "value": "exact" }],
+      "exp": "variable select 1",
+      "expErrors": [{ "type": "bad-option" }]
+    },
+    {
       "description": "select=literal works",
       "src": ".local $sel = {1 :number select=exact} .match $sel 1 {{literal select {$sel}}} * {{OTHER}}",
       "exp": "literal select 1"
+    },
+    {
+      "description": "having select=literal as a selector operand is not allowed",
+      "src": ".local $sel = {1 :number select=exact} .local $bad = {$sel :number} .match $bad 1 {{ONE}} * {{operand select {$bad}}}",
+      "ignoreJava": "ICU-23225: Big refactoring. When it gets to the formatter `bad` is already resolved to a number",
+      "exp": "operand select 1",
+      "expErrors": [{ "type": "bad-option" }, { "type": "bad-selector" }]
+    },
+    {
+      "description": "with select=$var, * is always selected but its formatting is unaffected",
+      "src": ".local $sel = {1 :number select=$bad} .match $sel 1 {{ONE}} * {{variable select {$sel}}}",
+      "params": [{ "name": "bad", "value": "exact" }],
+      "ignoreJava": "ICU-23225: Big refactoring. When it gets to the formatter `bad` is already resolved to a number",
+      "exp": "variable select 1",
+      "expErrors": [{ "type": "bad-option" }, { "type": "bad-selector" }]
     },
     {
       "src": "{42 :number @foo @bar=13}",

@@ -88,7 +88,8 @@ class MFDataModelFormatter {
                         .setFunction("number", new NumberFunctionFactory("number"))
                         .setFunction("integer", new NumberFunctionFactory("integer"))
                         .setFunction("currency", new NumberFunctionFactory("currency"))
-                        .setFunction("math", new NumberFunctionFactory("math"))
+                        .setFunction("percent", new NumberFunctionFactory("percent"))
+                        .setFunction("offset", new NumberFunctionFactory("offset"))
                         .setDefaultFunctionNameForType(Integer.class, "number")
                         .setDefaultFunctionNameForType(Double.class, "number")
                         .setDefaultFunctionNameForType(Number.class, "number")
@@ -188,7 +189,16 @@ class MFDataModelFormatter {
         // spec: For each _selector_ `sel`, in source order,
         for (Expression sel : selectors) {
             // spec: Let `rv` be the resolved value of `sel`.
-            FormattedPlaceholder fph = formatExpression(sel, variables, arguments);
+            FormattedPlaceholder fph = null;
+            if (sel instanceof MFDataModel.VariableExpression) {
+                // If it is a `VariableExpression` then it is already resolved and in `variables`
+                String key = ((MFDataModel.VariableExpression) sel).arg.name;
+                fph = (FormattedPlaceholder) variables.get(key);
+            }
+            // Was not a `VariableExpression` or in `variables`
+            if (fph == null) {
+                fph = formatExpression(sel, variables, arguments);
+            }
             String functionName = null;
             Object argument = null;
             MapWithNfcKeys options = new MapWithNfcKeys();
