@@ -57,35 +57,10 @@ public class MessageFormat2Test extends CoreTestFmwk {
                 mf2.formatToString(Args.of("exp", expiration)));
 
         mf2 = MessageFormatter.builder()
-                .setPattern("Your card expires on {$exp :datetime year=numeric month=short day=numeric weekday=short}!")
+                .setPattern("Your card expires on {$exp :date fields=year-month-day-weekday length=medium}!")
                 .build();
         assertEquals("date format",
                 "Your card expires on Thu, Oct 27, 2022!",
-                mf2.formatToString(Args.of("exp", expiration)));
-
-        mf2 = MessageFormatter.builder()
-                .setPattern("Your card expires on {$exp :datetime dateStyle=full}!")
-                .build();
-        assertEquals("date format",
-                "Your card expires on Thursday, October 27, 2022!",
-                mf2.formatToString(Args.of("exp", expiration)));
-        mf2 = MessageFormatter.builder()
-                .setPattern("Your card expires on {$exp :datetime dateStyle=long}!")
-                .build();
-        assertEquals("date format",
-                "Your card expires on October 27, 2022!",
-                mf2.formatToString(Args.of("exp", expiration)));
-        mf2 = MessageFormatter.builder()
-                .setPattern("Your card expires on {$exp :date style=medium}!")
-                .build();
-        assertEquals("date format",
-                "Your card expires on Oct 27, 2022!",
-                mf2.formatToString(Args.of("exp", expiration)));
-        mf2 = MessageFormatter.builder()
-                .setPattern("Your card expires on {$exp :datetime dateStyle=short}!")
-                .build();
-        assertEquals("date format",
-                "Your card expires on 10/27/22!",
                 mf2.formatToString(Args.of("exp", expiration)));
 
         Calendar cal = new GregorianCalendar(2022, Calendar.OCTOBER, 27);
@@ -101,10 +76,10 @@ public class MessageFormat2Test extends CoreTestFmwk {
                 .setPattern("Your card expires on {$exp}!")
                 .build();
         assertEquals("date format",
-                "Your card expires on 10/27/22, 12:00\u202FAM!",
+                "Your card expires on Thu, Oct 27, 2022, 12:00\u202FAM!",
                 mf2.formatToString(Args.of("exp", expiration)));
         assertEquals("date format",
-                "Your card expires on 10/27/22, 12:00\u202FAM!",
+                "Your card expires on Thu, Oct 27, 2022, 12:00\u202FAM!",
                 mf2.formatToString(Args.of("exp", cal)));
 
         // Implied function based on type of the object to format
@@ -124,6 +99,68 @@ public class MessageFormat2Test extends CoreTestFmwk {
         assertEquals("date format",
                 "Your card expires on Wed, Oct 27, 1479!",
                 mf2.formatToString(Args.of("exp", calNotRegistered)));
+        
+        // Test the overrides
+        cal = new GregorianCalendar(2025, Calendar.SEPTEMBER, 23, 19, 42, 51);
+
+        mf2 = MessageFormatter.builder()
+                .setPattern("Date time: {$exp :datetime"
+                        + " dateFields=year-month-day-weekday dateLength=medium"
+                        + " timePrecision=minute}")
+                .setLocale(Locale.US)
+                .build();
+        assertEquals("date format",
+                "Date time: Tue, Sep 23, 2025, 7:42\u202FPM",
+                mf2.formatToString(Args.of("exp", cal)));
+        // Force 24h clock
+        mf2 = MessageFormatter.builder()
+                .setPattern("Date time: {$exp :datetime"
+                        + " dateFields=year-month-day-weekday dateLength=medium"
+                        + " timePrecision=minute hour12=false}")
+                .setLocale(Locale.US)
+                .build();
+        assertEquals("date format",
+                "Date time: Tue, Sep 23, 2025, 19:42",
+                mf2.formatToString(Args.of("exp", cal)));
+        // Force 12h clock
+        mf2 = MessageFormatter.builder()
+                .setPattern("Date time: {$exp :datetime"
+                        + " dateFields=year-month-day-weekday dateLength=medium"
+                        + " timePrecision=minute hour12=true}")
+                .setLocale(Locale.FRANCE)
+                .build();
+        assertEquals("date format",
+                "Date time: mar. 23 sept. 2025, 7:42\u202FPM",
+                mf2.formatToString(Args.of("exp", cal)));
+        // Force timezone
+        mf2 = MessageFormatter.builder()
+                .setPattern("Date time: {$exp :datetime"
+                        + " dateFields=year-month-day-weekday dateLength=medium"
+                        + " timePrecision=minute timeZoneStyle=long timeZone=|America/New_York|}")
+                .setLocale(Locale.US)
+                .build();
+        assertEquals("date format",
+                "Date time: Tue, Sep 23, 2025, 10:42\u202fPM Eastern Daylight Time",
+                mf2.formatToString(Args.of("exp", cal.getTime())));
+        mf2 = MessageFormatter.builder()
+                .setPattern("Date time: {$exp :datetime"
+                        + " dateFields=year-month-day-weekday dateLength=medium"
+                        + " timePrecision=minute timeZoneStyle=short timeZone=|Pacific/Honolulu|}")
+                .setLocale(Locale.US)
+                .build();
+        assertEquals("date format",
+                "Date time: Tue, Sep 23, 2025, 4:42\u202fPM HST",
+                mf2.formatToString(Args.of("exp", cal.getTime())));
+        // Force calendar
+        mf2 = MessageFormatter.builder()
+                .setPattern("Date time: {$exp :datetime"
+                        + " dateFields=year-month-day dateLength=medium"
+                        + " timePrecision=minute calendar=islamic}")
+                .setLocale(Locale.US)
+                .build();
+        assertEquals("date format",
+                "Date time: Rab. II 2, 1447 AH, 7:42\u202FPM",
+                mf2.formatToString(Args.of("exp", cal)));
     }
 
     @Test

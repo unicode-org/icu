@@ -40,21 +40,6 @@ class DateTimeFunctionFactory implements FunctionFactory {
         this.kind = kind;
     }
 
-    private static int stringToStyle(String option) {
-        switch (option) {
-            case "full":
-                return DateFormat.FULL;
-            case "long":
-                return DateFormat.LONG;
-            case "medium":
-                return DateFormat.MEDIUM;
-            case "short":
-                return DateFormat.SHORT;
-            default:
-                throw new IllegalArgumentException("Invalid datetime style: " + option);
-        }
-    }
-
     /**
      * {@inheritDoc}
      *
@@ -67,78 +52,105 @@ class DateTimeFunctionFactory implements FunctionFactory {
         Directionality dir = OptUtils.getBestDirectionality(fixedOptions, locale);
 
         boolean reportErrors = OptUtils.reportErrors(fixedOptions);
-        int dateStyle = DateFormat.NONE;
-        int timeStyle = DateFormat.NONE;
+
+        // TODO: how to handle conflicts. What if we have both skeleton and style, or pattern?
+        String skeleton = "";
         switch (kind) {
             case "date":
-                dateStyle = getDateTimeStyle(fixedOptions, "style");
+                skeleton = getDateFieldOptions(fixedOptions, "fields", "length");
                 break;
             case "time":
-                timeStyle = getDateTimeStyle(fixedOptions, "style");
+                skeleton = getTimeFieldOptions(fixedOptions, "precision");
                 break;
             case "datetime": // $FALL-THROUGH$
             default:
-                dateStyle = getDateTimeStyle(fixedOptions, "dateStyle");
-                timeStyle = getDateTimeStyle(fixedOptions, "timeStyle");
+                skeleton = getDateFieldOptions(fixedOptions, "dateFields", "dateLength");
+                skeleton += getTimeFieldOptions(fixedOptions, "timePrecision");
                 break;
         }
 
-        // TODO: how to handle conflicts. What if we have both skeleton and style, or pattern?
-        if (dateStyle == DateFormat.NONE && timeStyle == DateFormat.NONE) {
-            String skeleton = "";
-            switch (kind) {
-                case "date":
-                    skeleton = getDateFieldOptions(fixedOptions);
-                    break;
-                case "time":
-                    skeleton = getTimeFieldOptions(fixedOptions);
-                    break;
-                case "datetime": // $FALL-THROUGH$
-                default:
-                    skeleton = getDateFieldOptions(fixedOptions);
-                    skeleton += getTimeFieldOptions(fixedOptions);
-                    break;
-            }
+        if (skeleton.isEmpty()) {
+            // Custom option, icu namespace
+            skeleton = OptUtils.getString(fixedOptions, "icu:skeleton", "");
+        }
 
-            if (skeleton.isEmpty()) {
-                // Custom option, icu namespace
-                skeleton = OptUtils.getString(fixedOptions, "icu:skeleton", "");
-            }
-            if (!skeleton.isEmpty()) {
-                DateFormat df = DateFormat.getInstanceForSkeleton(skeleton, locale);
-                return new DateTimeFunctionImpl(locale, df, reportErrors);
-            }
-
+        if (skeleton.isEmpty()) {
+            // No MF2 standard options and no icu:skeleton, use defaults
+            skeleton = "";
             // No skeletons, custom or otherwise, match fallback to short / short as per spec.
             switch (kind) {
-                case "date":
-                    dateStyle = DateFormat.SHORT;
-                    timeStyle = DateFormat.NONE;
+                case "date": // {$d :date fields=year-month-day length=medium}
+                    skeleton = DATE_STYLES_TO_SKELETON.get("year-month-day-weekday::medium");
                     break;
-                case "time":
-                    dateStyle = DateFormat.NONE;
-                    timeStyle = DateFormat.SHORT;
+                case "time": // {$t :time precision=minute}
+                    skeleton = TIME_STYLES_TO_SKELETON.get("minute::");
                     break;
                 case "datetime": // $FALL-THROUGH$
-                default:
-                    dateStyle = DateFormat.SHORT;
-                    timeStyle = DateFormat.SHORT;
+                default: // {$d :datetime dateFields=year-month-day timePrecision=minute}
+                    skeleton = DATE_STYLES_TO_SKELETON.get("year-month-day-weekday::medium")
+                            + TIME_STYLES_TO_SKELETON.get("minute::");
             }
         }
 
-        DateFormat df = DateFormat.getDateTimeInstance(dateStyle, timeStyle, locale);
+        com.ibm.icu.util.TimeZone tz = com.ibm.icu.util.TimeZone.getDefault();
+        String timeZoneOverride = OptUtils.getString(fixedOptions, "timeZone", "");
+        if (!timeZoneOverride.isEmpty()) {
+            tz = com.ibm.icu.util.TimeZone.getTimeZone(timeZoneOverride);
+        }
+
+        String calendarOverride = OptUtils.getString(fixedOptions, "calendar", "");
+        if (!calendarOverride.isEmpty()) {
+            locale = new Locale.Builder()
+                    .setLocale(locale)
+                    .setUnicodeLocaleKeyword("ca", calendarOverride)
+                    .build();
+        }
+
+        DateFormat df = DateFormat.getInstanceForSkeleton(skeleton, locale);
+        if (!tz.equals(com.ibm.icu.util.TimeZone.UNKNOWN_ZONE)) {
+            df.setTimeZone(tz);
+        }
+
         return new DateTimeFunctionImpl(locale, df, reportErrors);
     }
 
-    private static int getDateTimeStyle(Map<String, Object> options, String key) {
-        String opt = OptUtils.getString(options, key);
-        if (opt != null) {
-            return stringToStyle(opt);
-        }
-        return DateFormat.NONE;
-    }
+    private static Map<String, String> DATE_STYLES_TO_SKELETON = Map.ofEntries(
+            // dateFields + dateLength
+            Map.entry("weekday::long", "EEEE"),
+            Map.entry("weekday::medium", "E"),
+            Map.entry("weekday::short", "EEEEEE"),
+            Map.entry("day-weekday::long", "dEEEE"),
+            Map.entry("day-weekday::medium", "dE"),
+            Map.entry("day-weekday::short", "dEEEEEE"),
+            Map.entry("month-day::long", "MMMMd"),
+            Map.entry("month-day::medium", "MMMd"),
+            Map.entry("month-day::short", "Md"),
+            Map.entry("month-day-weekday::long", "MMMMdEEEE"),
+            Map.entry("month-day-weekday::medium", "MMMdE"),
+            Map.entry("month-day-weekday::short", "MdEEEEEE"),
+            Map.entry("year-month-day::long", "yMMMMd"),
+            Map.entry("year-month-day::medium", "yMMMd"),
+            Map.entry("year-month-day::short", "yMd"),
+            Map.entry("year-month-day-weekday::long", "yMMMMdEEEE"),
+            Map.entry("year-month-day-weekday::medium", "yMMMdE"),
+            Map.entry("year-month-day-weekday::short", "yMdEEEEEE")
+    );
 
-    private static String getDateFieldOptions(Map<String, Object> options) {
+    private static Map<String, String> TIME_STYLES_TO_SKELETON = Map.ofEntries(
+            // timePrecision + hour12
+            Map.entry("hour::", "j"),
+            Map.entry("hour::true", "h"),
+            Map.entry("hour::false", "H"),
+            Map.entry("minute::", "jm"),
+            Map.entry("minute::true", "hm"),
+            Map.entry("minute::false", "Hm"),
+            Map.entry("second::", "jms"),
+            Map.entry("second::true", "hms"),
+            Map.entry("second::false", "Hms")
+    );
+
+    private static String getDateFieldOptions(Map<String, Object> options,
+            String fieldName, String lengthName) {
         StringBuilder skeleton = new StringBuilder();
         String opt;
 
@@ -146,84 +158,19 @@ class DateTimeFunctionFactory implements FunctionFactory {
         // Would be nice to report (log?), but ICU does not have a clear policy on how to do that.
         // But we don't want to throw, that is too drastic.
 
-        opt = OptUtils.getString(options, "weekday", "");
-        switch (opt) {
-            case "long":
-                skeleton.append("EEEE");
-                break;
-            case "short":
-                skeleton.append("E");
-                break;
-            case "narrow":
-                skeleton.append("EEEEEE");
-                break;
-            default:
-                // invalid value, we just ignore it.
+        opt = OptUtils.getString(options, fieldName, "")
+                + "::"
+                + OptUtils.getString(options, lengthName, "");
+        opt = DATE_STYLES_TO_SKELETON.get(opt);
+        if (opt != null) {
+            skeleton.append(opt);
         }
 
-        opt = OptUtils.getString(options, "era", "");
-        switch (opt) {
-            case "long":
-                skeleton.append("GGGG");
-                break;
-            case "short":
-                skeleton.append("G");
-                break;
-            case "narrow":
-                skeleton.append("GGGGG");
-                break;
-            default:
-                // invalid value, we just ignore it.
-        }
-
-        opt = OptUtils.getString(options, "year", "");
-        switch (opt) {
-            case "numeric":
-                skeleton.append("y");
-                break;
-            case "2-digit":
-                skeleton.append("yy");
-                break;
-            default:
-                // invalid value, we just ignore it.
-        }
-
-        opt = OptUtils.getString(options, "month", "");
-        switch (opt) {
-            case "numeric":
-                skeleton.append("M");
-                break;
-            case "2-digit":
-                skeleton.append("MM");
-                break;
-            case "long":
-                skeleton.append("MMMM");
-                break;
-            case "short":
-                skeleton.append("MMM");
-                break;
-            case "narrow":
-                skeleton.append("MMMMM");
-                break;
-            default:
-                // invalid value, we just ignore it.
-        }
-
-        opt = OptUtils.getString(options, "day", "");
-        switch (opt) {
-            case "numeric":
-                skeleton.append("d");
-                break;
-            case "2-digit":
-                skeleton.append("dd");
-                break;
-            default:
-                // invalid value, we just ignore it.
-        }
         return skeleton.toString();
     }
 
-    private static String getTimeFieldOptions(Map<String, Object> options) {
+    private static String getTimeFieldOptions(Map<String, Object> options,
+            String precisionName) {
         StringBuilder skeleton = new StringBuilder();
         String opt;
 
@@ -231,104 +178,24 @@ class DateTimeFunctionFactory implements FunctionFactory {
         // Would be nice to report (log?), but ICU does not have a clear policy on how to do that.
         // But we don't want to throw, that is too drastic.
 
-        int showHour = 0;
-        opt = OptUtils.getString(options, "hour", "");
-        switch (opt) {
-            case "numeric":
-                showHour = 1;
-                break;
-            case "2-digit":
-                showHour = 2;
-                break;
-            default:
-                // invalid value, we just ignore it.
-        }
-        if (showHour > 0) {
-            String hourCycle = "";
-            opt = OptUtils.getString(options, "hourCycle", "");
-            switch (opt) {
-                case "h11":
-                    hourCycle = "K";
-                    break;
-                case "h12":
-                    hourCycle = "h";
-                    break;
-                case "h23":
-                    hourCycle = "H";
-                    break;
-                case "h24":
-                    hourCycle = "k";
-                    break;
-                default:
-                    hourCycle = "j"; // default for the locale
-            }
-            skeleton.append(hourCycle);
-            if (showHour == 2) {
-                skeleton.append(hourCycle);
-            }
+        opt = OptUtils.getString(options, precisionName, "")
+                + "::"
+                + OptUtils.getString(options, "hour12", "");
+        opt = TIME_STYLES_TO_SKELETON.get(opt);
+        if (opt != null) {
+            skeleton.append(opt);
         }
 
-        opt = OptUtils.getString(options, "minute", "");
-        switch (opt) {
-            case "numeric":
-                skeleton.append("m");
-                break;
-            case "2-digit":
-                skeleton.append("mm");
-                break;
-            default:
-                // invalid value, we just ignore it.
-        }
-
-        opt = OptUtils.getString(options, "second", "");
-        switch (opt) {
-            case "numeric":
-                skeleton.append("s");
-                break;
-            case "2-digit":
-                skeleton.append("ss");
-                break;
-            default:
-                // invalid value, we just ignore it.
-        }
-
-        opt = OptUtils.getString(options, "fractionalSecondDigits", "");
-        switch (opt) {
-            case "1":
-                skeleton.append("S");
-                break;
-            case "2":
-                skeleton.append("SS");
-                break;
-            case "3":
-                skeleton.append("SSS");
-                break;
-            default:
-                // invalid value, we just ignore it.
-        }
-
-        opt = OptUtils.getString(options, "timeZoneName", "");
+        opt = OptUtils.getString(options, "timeZoneStyle", "");
         switch (opt) {
             case "long":
-                skeleton.append("z");
-                break;
-            case "short":
                 skeleton.append("zzzz");
                 break;
-            case "shortOffset":
-                skeleton.append("O");
-                break;
-            case "longOffset":
-                skeleton.append("OOOO");
-                break;
-            case "shortGeneric":
-                skeleton.append("v");
-                break;
-            case "longGeneric":
-                skeleton.append("vvvv");
+            case "short":
+                skeleton.append("z");
                 break;
             default:
-                // invalid value, we just ignore it.
+                break;
         }
 
         return skeleton.toString();
