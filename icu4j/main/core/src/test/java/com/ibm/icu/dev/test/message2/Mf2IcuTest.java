@@ -44,7 +44,7 @@ public class Mf2IcuTest extends CoreTestFmwk {
 
         assertEquals("format", "At 12:20:00\u202FPM on Aug 8, 1997, there was a disturbance in the Force on planet 7.",
                 MessageFormatter.builder()
-                .setPattern("At {$when :datetime timeStyle=medium} on {$when :datetime dateStyle=medium}, "
+                .setPattern("At {$when :time precision=second} on {$when :date fields=year-month-day length=medium}, "
                         + "there was {$what} on planet {$planet :number kind=integer}.")
                 .build()
                 .formatToString(arguments));
@@ -123,15 +123,16 @@ public class Mf2IcuTest extends CoreTestFmwk {
     public void testMessageFormatDateTimeOptions() {
         Date date = new GregorianCalendar(2021, Calendar.NOVEMBER, 23, 16, 42, 55).getTime();
 
-        doTheRealDateTimeSkeletonTesting(date, "{$when :date month=long day=numeric}",
+        doTheRealDateTimeSkeletonTesting(date, "{$when :date fields=month-day length=long}",
                 Locale.forLanguageTag("en"), "November 23");
-        doTheRealDateTimeSkeletonTesting(date, "{$when :datetime year=numeric month=long day=numeric hour=numeric minute=numeric}",
+        doTheRealDateTimeSkeletonTesting(date, "{$when :datetime dateFields=year-month-day dateLength=long timePrecision=minute}",
                 Locale.forLanguageTag("en"), "November 23, 2021 at 4:42\u202FPM");
-        doTheRealDateTimeSkeletonTesting(date, "{$when :date year=numeric month=short day=numeric}",
+        doTheRealDateTimeSkeletonTesting(date, "{$when :date fields=year-month-day length=medium}",
                 Locale.forLanguageTag("en"), "Nov 23, 2021");
-        doTheRealDateTimeSkeletonTesting(date, "{$when :datetime year=numeric month=long day=numeric}",
+        doTheRealDateTimeSkeletonTesting(date, "{$when :datetime dateFields=year-month-day dateLength=long}",
                 Locale.forLanguageTag("fr"), "23 novembre 2021");
-        doTheRealDateTimeSkeletonTesting(date, "Expiration: {$when :datetime year=numeric month=short}!",
+        // The spec does not have `year-month`, so we are forced to use skeleton
+        doTheRealDateTimeSkeletonTesting(date, "Expiration: {$when :datetime icu:skeleton=yMMM}!",
                 Locale.forLanguageTag("en"), "Expiration: Nov 2021!");
     }
 
@@ -146,7 +147,7 @@ public class Mf2IcuTest extends CoreTestFmwk {
         assertEquals("old icu test", "Hello John, today is December 23, 2022.", mf1.format(goodArg));
 
         MessageFormatter mf2 = MessageFormatter.builder()
-                .setPattern("Hello {$user}, today is {$today :datetime dateStyle=long}.")
+                .setPattern("Hello {$user}, today is {$today :datetime dateFields=year-month-day dateLength=long}.")
                 .build();
         assertEquals("old icu test", "Hello {$user}, today is {$today}.", mf2.formatToString(badArg));
         assertEquals("old icu test", "Hello John, today is December 23, 2022.", mf2.formatToString(goodArg));

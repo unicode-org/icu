@@ -26,39 +26,9 @@
     {
       "src": [".local $dateStr = {$date :datetime}\n",
                "{{Testing date formatting: {$dateStr :datetime}.}}"],
-      "exp": "Testing date formatting: 23.11.2022, 19:42.",
+      "exp": "Testing date formatting: mie., 23 nov. 2022, 19:42.",
       "locale": "ro",
       "params": [{ "name": "date", "value": { "date": 1669261357000 }}]
-    },
-    {
-      "src": "Testing date formatting: {$date :date style=long}.",
-      "exp": "Testing date formatting: November 23, 2022.",
-      "params": [{ "name": "date", "value": { "date": 1669261357000 } }]
-    },
-    {
-      "src": "Testing date formatting: {$date :date style=medium}.",
-      "exp": "Testing date formatting: Nov 23, 2022.",
-      "params": [{ "name": "date", "value": { "date": 1669261357000 } }]
-    },
-    {
-      "src": "Testing date formatting: {$date :date style=short}.",
-      "exp": "Testing date formatting: 11/23/22.",
-      "params": [{ "name": "date", "value": { "date": 1669261357000 } }]
-    },
-    {
-      "src": "Testing date formatting: {$date :time style=long}.",
-      "exp": "Testing date formatting: 7:42:37\u202FPM PST.",
-      "params": [{ "name": "date", "value": { "date": 1669261357000 } }]
-    },
-    {
-      "src": "Testing date formatting: {$date :time style=medium}.",
-      "exp": "Testing date formatting: 7:42:37\u202FPM.",
-      "params": [{ "name": "date", "value": { "date": 1669261357000 } }]
-    },
-    {
-      "src": "Testing date formatting: {$date :time style=short}.",
-      "exp": "Testing date formatting: 7:42\u202FPM.",
-      "params": [{ "name": "date", "value": { "date": 1669261357000 } }]
     },
     {
       "src": [".local $num = {|42| :number}\n",

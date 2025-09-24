@@ -246,12 +246,12 @@ public class JavaTimeFormatTest extends CoreTestFmwk {
                 .setLocale(locale);
 
         MessageFormatter mf2 = mf2Builder.setPattern("(mf2) Your card expires on {$expDate}").build();
-        assertEquals("", "(mf2) Your card expires on 27/09/2013 19:43", mf2.formatToString(arguments));
+        assertEquals("", "(mf2) Your card expires on ven. 27 sept. 2013, 19:43", mf2.formatToString(arguments));
 
         mf2 = mf2Builder.setPattern("(mf2) Your card expires on {$expDate :date}").build();
-        assertEquals("", "(mf2) Your card expires on 27/09/2013", mf2.formatToString(arguments));
+        assertEquals("", "(mf2) Your card expires on ven. 27 sept. 2013", mf2.formatToString(arguments));
 
-        mf2 = mf2Builder.setPattern("(mf2) Your card expires on {$expDate :datetime dateStyle=long}").build();
+        mf2 = mf2Builder.setPattern("(mf2) Your card expires on {$expDate :date fields=year-month-day length=long}").build();
         assertEquals("", "(mf2) Your card expires on 27 septembre 2013", mf2.formatToString(arguments));
 
         mf2 = mf2Builder.setPattern("(mf2) Your card expires on {$expDate :date icu:skeleton=EEEyMMMd}").build();
