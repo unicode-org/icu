@@ -331,6 +331,7 @@ public class LongNameHandler
         }
     }
 
+    // TODO(ICU-23226): Refactor LongNameHandler to use UnitAliases.java instead of local AliasSink class
     private static final class AliasSink extends UResource.Sink {
         String replacement;
 

@@ -438,6 +438,7 @@ void getMeasureData(const Locale &locale,
     subKey.append(unit.getType(), status);
     subKey.append("/", status);
 
+    // TODO(ICU-23226): Refactor LongNameHandler to use gUnitAliases and gUnitReplacements measunit_extra.cpp instead of local reasource bundle.
     // Check if unitSubType is an alias or not.
     LocalUResourceBundlePointer aliasBundle(ures_open(U_ICUDATA_ALIAS, "metadata", &status));
 

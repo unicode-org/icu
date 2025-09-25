@@ -6063,27 +6063,85 @@ void NumberFormatterApiTest::formatUnitsAliases() {
         std::unique_ptr<MeasureUnit> measureUnit;
         const char * measureUnitString; // Only used if measureUnit is nullptr
         const UnicodeString expectedFormat;
-    } testCases[]{
-        // Aliases
-        {std::make_unique<MeasureUnit>(MeasureUnit::getMilligramOfglucosePerDeciliter()), nullptr, u"2 milligrams per deciliter"},
-        {std::make_unique<MeasureUnit>(MeasureUnit::getMilligramPerDeciliter()), nullptr, u"2 milligrams per deciliter"},
-        {std::make_unique<MeasureUnit>(MeasureUnit::getLiterPer100Kilometers()), nullptr,u"2 liters per 100 kilometers"},
-        {std::make_unique<MeasureUnit>(MeasureUnit::getPartPerMillion()), nullptr, u"2 parts per million"},
-        {std::make_unique<MeasureUnit>(MeasureUnit::getMillimeterOfMercury()), nullptr, u"2 millimeters of mercury"},
 
-        // Some replacements
-        {nullptr, "millimeter-ofhg", u"2 millimeters of mercury"},
-        {nullptr, "liter-per-100-kilometer", u"2 liters per 100 kilometers"},
-        {nullptr, "permillion", u"2 parts per million"},
-        {nullptr, "part-per-million", u"2 parts per million"},
-        {nullptr, "part-per-1e6", u"2 parts per million"},
+        TestCase(std::unique_ptr<MeasureUnit> mu, const UnicodeString &expected)
+            : measureUnit(std::move(mu)), measureUnitString(nullptr), expectedFormat(expected) {}
+        TestCase(const char *muStr, const UnicodeString &expected)
+            : measureUnit(nullptr), measureUnitString(muStr), expectedFormat(expected) {}
+    } testCases[]{
+        // permillion
+        TestCase("permillion", u"2 parts per million"),
+        TestCase("part-per-million", u"2 parts per million"),
+        TestCase("portion-per-million", u"2 parts per million"),
+        TestCase("portion-per-1e6", u"2 parts per million"),
+        TestCase("part-per-1e6", u"2 parts per million"),
+        TestCase(std::make_unique<MeasureUnit>(MeasureUnit::getPartPer1E6()), u"2 parts per million"),
+
+        // part-per-billion
+        TestCase("portion-per-1e9", u"2 parts per billion"),
+        TestCase("part-per-1e9", u"2 parts per billion"),
+        TestCase(std::make_unique<MeasureUnit>(MeasureUnit::getPartPer1E9()), u"2 parts per billion"),
+
+        // pound-foot
+        TestCase("pound-foot", u"2 pound-force-feet"),
+        TestCase("pound-force-foot", u"2 pound-force-feet"),
+        TestCase(std::make_unique<MeasureUnit>(MeasureUnit::getPoundFoot()), u"2 pound-force-feet"),
+
+        // pound-force
+        TestCase(std::make_unique<MeasureUnit>(MeasureUnit::getPoundForce()), u"2 pounds of force"),
+        TestCase("pound-force", u"2 pounds of force"),
+
+        // pound-per-square-inch
+        TestCase("pound-per-square-inch", u"2 pounds-force per square inch"),
+        TestCase("pound-force-per-square-inch", u"2 pounds-force per square inch"),
+        TestCase(std::make_unique<MeasureUnit>(MeasureUnit::getPoundPerSquareInch()), u"2 pounds-force per square inch"),
+
+        // millimeter-of-mercury
+        TestCase("millimeter-of-mercury", u"2 millimeters of mercury"),
+        TestCase("millimeter-ofhg", u"2 millimeters of mercury"),
+        TestCase(std::make_unique<MeasureUnit>(MeasureUnit::getMillimeterOfMercury()), u"2 millimeters of mercury"),
+
+        // inch-hg
+        TestCase("inch-hg", u"2 inches of mercury"),
+        TestCase("inch-ofhg", u"2 inches of mercury"),
+        TestCase(std::make_unique<MeasureUnit>(MeasureUnit::getInchHg()), u"2 inches of mercury"),
+
+        // liter-per-100kilometers
+        TestCase("liter-per-100kilometers", u"2 liters per 100 kilometers"),
+        TestCase("liter-per-100-kilometer", u"2 liters per 100 kilometers"),
+        TestCase(std::make_unique<MeasureUnit>(MeasureUnit::getLiterPer100Kilometers()), u"2 liters per 100 kilometers"),
+        // meter-per-second-squared
+        TestCase("meter-per-second-squared", u"2 meters per second squared"),
+        TestCase("meter-per-square-second", u"2 meters per second squared"),
+        TestCase(std::make_unique<MeasureUnit>(MeasureUnit::getMeterPerSecondSquared()), u"2 meters per second squared"),
+
+        // metric-ton
+        TestCase("metric-ton", u"2 metric tons"),
+        TestCase("tonne", u"2 metric tons"),
+        TestCase(std::make_unique<MeasureUnit>(MeasureUnit::getMetricTon()), u"2 metric tons"),
+        TestCase(std::make_unique<MeasureUnit>(MeasureUnit::getTonne()), u"2 metric tons"),
+
+        // milligram-per-deciliter
+        TestCase("milligram-per-deciliter", u"2 milligrams per deciliter"),
+        TestCase("milligram-ofglucose-per-deciliter", u"2 milligrams per deciliter"),
+        TestCase(std::make_unique<MeasureUnit>(MeasureUnit::getMilligramPerDeciliter()), u"2 milligrams per deciliter"),
+        TestCase(std::make_unique<MeasureUnit>(MeasureUnit::getMilligramOfglucosePerDeciliter()), u"2 milligrams per deciliter"),
+
+        // Arbitrary
+        TestCase("meter-permillion", u"2 meter-parts per 1000000"),
+        TestCase("permillion-meter", u"2 parts per 1000000-meter"),
+        TestCase("tonne-per-second", u"2 metric tons per second"),
+        TestCase("part-per-1e6-per-100", u"expect exception"),
+        TestCase("permillion-per-100", u"expect exception"),
     };
 
     for (const auto &testCase : testCases) {
-        if (testCase.measureUnitString != nullptr && 
-            (uprv_strcmp("permillion", testCase.measureUnitString) == 0 ||
-             uprv_strcmp("part-per-million", testCase.measureUnitString) == 0)) {
-            logKnownIssue("ICU-23222", "Ensure unit aliases work correctly to avoid breaking callers");
+        if (testCase.expectedFormat == UnicodeString("expect exception")) {
+            UErrorCode exStatus = U_ZERO_ERROR;
+            MeasureUnit::forIdentifier(testCase.measureUnitString, exStatus);
+            if (U_SUCCESS(exStatus)) {
+                errln("exception expected");
+            }
             continue;
         }
 

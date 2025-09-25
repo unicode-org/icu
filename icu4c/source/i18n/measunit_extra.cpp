@@ -100,6 +100,9 @@ enum PowerPart {
 // "fluid-ounce-imperial".
 constexpr int32_t kSimpleUnitOffset = 512;
 
+// Trie value offset for aliases, e.g. "portion" replaced by "part"
+constexpr int32_t kAliasOffset = 51200; // This will give a very big space for the units ids.
+
 const struct UnitPrefixStrings {
     const char* const string;
     UMeasurePrefix value;
@@ -255,6 +258,58 @@ class SimpleUnitIdentifiersSink : public icu::ResourceSink {
     int32_t outIndex;
 };
 
+class UnitAliasesSink : public icu::ResourceSink {
+  public:
+    /**
+     * Constructor.
+     * @param unitAliases The output vector of unit alias identifiers (CharString).
+     * @param unitReplacements The output vector of replacements for the unit aliases (CharString).
+     */
+    explicit UnitAliasesSink(MaybeStackVector<CharString> &unitAliases,
+                             MaybeStackVector<CharString> &unitReplacements)
+        : unitAliases(unitAliases), unitReplacements(unitReplacements) {}
+
+    /**
+     * Adds the unit alias key and its replacement to the unitAliases and unitReplacements vectors.
+     * @param key The unit alias identifier (e.g., "meter-and-liter").
+     * @param value Should be a ResourceTable value containing the replacement,
+     *     when ures_getAllChildrenWithFallback() is called correctly for this sink.
+     * @param noFallback Ignored.
+     * @param status The standard ICU error code output parameter.
+     */
+    void put(const char *key, ResourceValue &value, UBool /*noFallback*/,
+             UErrorCode &status) override {
+        if (U_FAILURE(status)) return;
+
+        // Add the unit alias key to the unitAliases vector
+        int32_t keyLen = static_cast<int32_t>(uprv_strlen(key));
+        unitAliases.emplaceBackAndCheckErrorCode(status)->append(key, keyLen, status);
+        if (U_FAILURE(status)) {
+            return;
+        }
+
+        // Find the replacement for this unit alias from the alias table resource.
+        ResourceTable aliasTable = value.getTable(status);
+        if (U_FAILURE(status)) {
+            return;
+        }
+
+        if (!aliasTable.findValue("replacement", value)) {
+            status = U_MISSING_RESOURCE_ERROR;
+            return;
+        }
+
+        int32_t len;
+        const char16_t *uReplacement = value.getString(len, status);
+        unitReplacements.emplaceBackAndCheckErrorCode(status)->appendInvariantChars(uReplacement,
+                                                                                    len, status);
+    }
+
+  private:
+    MaybeStackVector<CharString> &unitAliases;
+    MaybeStackVector<CharString> &unitReplacements;
+};
+
 /**
  * A ResourceSink that collects information from `unitQuantities` in the `units`
  * resource to provide key->value lookups from base unit to category, as well as
@@ -320,6 +375,11 @@ class CategoriesSink : public icu::ResourceSink {
 };
 
 icu::UInitOnce gUnitExtrasInitOnce {};
+
+// Array of unit aliases.
+MaybeStackVector<icu::CharString> gUnitAliases;
+// Array of replacements for the unit aliases.
+MaybeStackVector<icu::CharString> gUnitReplacements;
 
 // Array of simple unit IDs.
 //
@@ -453,6 +513,24 @@ void U_CALLCONV initUnitExtras(UErrorCode& status) {
                                              simpleUnitsCount, b, kSimpleUnitOffset);
     ures_getAllItemsWithFallback(unitsBundle.getAlias(), "convertUnits", identifierSink, status);
 
+    // Populate gUnitAliases and gUnitReplacements.
+    LocalUResourceBundlePointer aliasBundle(ures_open(U_ICUDATA_ALIAS, "metadata", &status));
+    if (U_FAILURE(status)) {
+        return;
+    }
+    UnitAliasesSink aliasSink(gUnitAliases, gUnitReplacements);
+    ures_getAllChildrenWithFallback(aliasBundle.getAlias(), "alias/unit", aliasSink, status);
+    if (U_FAILURE(status)) {
+        return;
+    }
+
+    for (int32_t i = 0; i < gUnitAliases.length(); i++) {
+        b.add(gUnitAliases[i]->data(), i + kAliasOffset, status);
+        if (U_FAILURE(status)) {
+            return;
+        }
+    }
+
     // Build the CharsTrie
     // TODO: Use SLOW or FAST here?
     StringPiece result = b.buildStringPiece(USTRINGTRIE_BUILD_FAST, status);
@@ -479,8 +557,10 @@ public:
           this->fType = TYPE_INITIAL_COMPOUND_PART;
       } else if (fMatch < kSimpleUnitOffset) {
           this->fType = TYPE_POWER_PART;
-      } else {
+      } else if (fMatch < kAliasOffset) {
           this->fType = TYPE_SIMPLE_UNIT;
+      } else {
+          this->fType = TYPE_ALIAS;
       }
   }
 
@@ -505,6 +585,7 @@ public:
       TYPE_POWER_PART,
       TYPE_SIMPLE_UNIT,
       TYPE_CONSTANT_DENOMINATOR,
+      TYPE_ALIAS,
   };
 
   // Calling getType() is invalid, resulting in an assertion failure, if Token
@@ -549,6 +630,11 @@ public:
     int32_t getSimpleUnitIndex() const {
         U_ASSERT(getType() == TYPE_SIMPLE_UNIT);
         return fMatch - kSimpleUnitOffset;
+    }
+
+    int32_t getAliasIndex() const {
+        U_ASSERT(getType() == TYPE_ALIAS);
+        return static_cast<int32_t>(fMatch - kAliasOffset);
     }
 
     // TODO: Consider moving this to a separate utility class.
@@ -673,6 +759,10 @@ public:
             }
 
             if (singleUnitOrConstant.isConstantDenominator()) {
+                if (result.constantDenominator > 0) {
+                    status = kUnitIdentifierSyntaxError;
+                    return result;
+                }
                 result.constantDenominator = singleUnitOrConstant.getConstantDenominator();
                 result.complexity = UMEASURE_UNIT_COMPOUND;
                 continue;
@@ -727,6 +817,9 @@ private:
     // references to that string.
     StringPiece fSource;
     BytesTrie fTrie;
+
+    // Storage for modified source string when aliases are expanded
+    CharString fModifiedSource;
 
     // Set to true when we've seen a "-per-" or a "per-", after which all units
     // are in the denominator. Until we find an "-and-", at which point the
@@ -830,6 +923,19 @@ private:
             return {};
         }
 
+        // Handles the case where the alias replacement begins with "per-".
+        // For example:
+        //    if the alias is "permeter" and the replacement is "per-meter".
+        // NOTE: This case does not currently exist in CLDR, but this code anticipates possible future
+        // additions.
+        if (token.getType() == Token::TYPE_ALIAS) {
+            processAlias(token, status);
+            token = nextToken(status);
+            if (U_FAILURE(status)) {
+                return {};
+            }
+        }
+
         fJustSawPer = false;
 
         if (atStart) {
@@ -923,6 +1029,10 @@ private:
                 singleUnitResult.index = token.getSimpleUnitIndex();
                 break;
 
+            case Token::TYPE_ALIAS:
+                processAlias(token, status);
+                break;
+
             default:
                 status = kUnitIdentifierSyntaxError;
                 return {};
@@ -944,6 +1054,48 @@ private:
         }
 
         return SingleUnitOrConstant::singleUnitValue(singleUnitResult);
+    }
+
+  private:
+    /**
+     * Helper function to process alias replacement.
+     *
+     * @param token The token of TYPE_ALIAS to process
+     * @param status ICU error code
+     */
+    void processAlias(const Token &token, UErrorCode &status) {
+        if (U_FAILURE(status)) {
+            return;
+        }
+
+        auto aliasIndex = token.getAliasIndex();
+        if (aliasIndex < 0 || aliasIndex >= gUnitAliases.length() ||
+            aliasIndex >= gUnitReplacements.length()) {
+            status = kUnitIdentifierSyntaxError;
+            return;
+        }
+
+        auto replacement = gUnitReplacements[aliasIndex];
+
+        // Create new source string: replacement + remaining unparsed portion
+        fModifiedSource.clear();
+        fModifiedSource.append(replacement->data(), replacement->length(), status);
+
+        // Add the remaining unparsed portion of fSource which starts from fIndex
+        if (fIndex < fSource.length()) {
+            StringPiece remaining = fSource.substr(fIndex);
+            fModifiedSource.append(remaining.data(), remaining.length(), status);
+        }
+
+        if (U_FAILURE(status)) {
+            return;
+        }
+
+        // Update parser state with new source and reset index
+        fSource = StringPiece(fModifiedSource.data(), fModifiedSource.length());
+        fIndex = 0;
+
+        return;
     }
 };
 

@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 import com.ibm.icu.util.BytesTrie;
 import com.ibm.icu.util.CharsTrie;
@@ -505,7 +506,10 @@ public class MeasureUnitImpl {
 
         // This trie used in the parsing operation.
         private final CharsTrie trie;
-        private final String fSource;
+
+        // The fSource string can be modified if the parser encounters an alias.
+        private String fSource;
+
         // Tracks parser progress: the offset into fSource.
         private int fIndex = 0;
         // Set to true when we've seen a "-per-" or a "per-", after which all units
@@ -575,6 +579,13 @@ public class MeasureUnitImpl {
 
             }
 
+            // Add aliases
+            List<UnitAliases.Alias> aliases = UnitsData.getAliases();
+            for (int i = 0; i < aliases.size(); i++) {
+                UnitAliases.Alias alias = aliases.get(i);
+                trieBuilder.add(alias.alias, i + UnitsData.Constants.kAliasOffset);
+            }
+
             // TODO: Use SLOW or FAST here?
             UnitsParser.savedTrie = trieBuilder.build(StringTrieBuilder.Option.FAST);
         }
@@ -617,6 +628,9 @@ public class MeasureUnitImpl {
                 SingleUnitOrConstant nextSingleUnitPair = nextSingleUnit();
 
                 if (nextSingleUnitPair.singleUnit == null) {
+                    if (result.getConstantDenominator() != 0) {
+                        throw new IllegalArgumentException("Can't have multiple unit constants");
+                    }
                     result.setConstantDenominator(nextSingleUnitPair.constant);
                     result.setComplexity(MeasureUnit.Complexity.COMPOUND);
                     continue;
@@ -687,6 +701,16 @@ public class MeasureUnitImpl {
             Token token = nextToken();
             fJustAfterPer = false;
 
+            // Handles the case where the alias replacement begins with "per-".
+            // For example:
+            //      if the alias is "permeter" and the replacement is "per-meter".
+            // NOTE: This case does not currently exist in CLDR, but this code anticipates
+            // possible future additions.
+            if (token.getType() == Token.Type.TYPE_ALIAS) {
+                processAlias(token);
+                token = nextToken();
+            }
+
             if (atStart) {
                 if (token.getType() == Token.Type.TYPE_UNIT_CONSTANT) {
                     throw new IllegalArgumentException("Unit constant cannot be the first token");
@@ -739,7 +763,7 @@ public class MeasureUnitImpl {
                 token = nextToken();
             }
 
-            // Treat unit constant
+            // Handle unit constant
             if (token.getType() == Token.Type.TYPE_UNIT_CONSTANT) {
                 if (!fJustAfterPer) {
                     throw new IllegalArgumentException("Unit constant cannot be the first token");
@@ -772,6 +796,10 @@ public class MeasureUnitImpl {
                     case TYPE_SIMPLE_UNIT:
                         result.setSimpleUnit(token.getSimpleUnitIndex(), UnitsData.getSimpleUnits());
                         return new SingleUnitOrConstant(result, null);
+                    
+                    case TYPE_ALIAS:
+                        processAlias(token);
+                        break;
 
                     default:
                         throw new IllegalArgumentException();
@@ -896,6 +924,11 @@ public class MeasureUnitImpl {
                 return matchIndex;
             }
 
+            public int getAliasIndex() {
+                assert this.type == Type.TYPE_ALIAS;
+                return (int) this.fMatch - UnitsData.Constants.kAliasOffset;
+            }
+
             // Even if there is only one InitialCompoundPart value, we have this
             // function for the simplicity of code consistency.
             public InitialCompoundPart getInitialCompoundPart() {
@@ -937,8 +970,11 @@ public class MeasureUnitImpl {
                 if (fMatch < UnitsData.Constants.kSimpleUnitOffset) {
                     return Type.TYPE_POWER_PART;
                 }
+                if (fMatch < UnitsData.Constants.kAliasOffset) {
+                    return Type.TYPE_SIMPLE_UNIT;
+                }
 
-                return Type.TYPE_SIMPLE_UNIT;
+                return Type.TYPE_ALIAS;
             }
 
             enum Type {
@@ -951,7 +987,19 @@ public class MeasureUnitImpl {
                 TYPE_POWER_PART,
                 TYPE_SIMPLE_UNIT,
                 TYPE_UNIT_CONSTANT,
+                TYPE_ALIAS,
             }
+        }
+
+        /**
+         * Helper function to process alias replacement.
+         * 
+         * @param token The token of TYPE_ALIAS to process
+         */
+        private void processAlias(Token token) {
+            this.fSource = UnitsData.getReplacementFromAliasIndex(token.getAliasIndex())
+                    + this.fSource.substring(fIndex);
+            this.fIndex = 0;
         }
     }
 

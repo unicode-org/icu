@@ -5992,10 +5992,9 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
 
     @Test
     public void formatUnitsAliases() {
-
         class TestCase {
             final MeasureUnit measureUnit;
-            final String measureUnitString; // Only used if measureUnit is nullptr
+            final String measureUnitString; // Only used if measureUnit is null
             final String expectedFormat;
 
             TestCase(MeasureUnit measureUnit, String expectedFormat) {
@@ -6012,37 +6011,95 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
         }
 
         TestCase[] testCases = {
-                // Aliases
-                new TestCase(MeasureUnit.MILLIGRAM_OFGLUCOSE_PER_DECILITER, "2 milligrams per deciliter"),
-                new TestCase(MeasureUnit.MILLIGRAM_PER_DECILITER, "2 milligrams per deciliter"),
-                new TestCase(MeasureUnit.LITER_PER_100KILOMETERS, "2 liters per 100 kilometers"),
-                new TestCase(MeasureUnit.PART_PER_MILLION, "2 parts per million"),
-                new TestCase(MeasureUnit.MILLIMETER_OF_MERCURY, "2 millimeters of mercury"),
-
-                // Replacements
-                new TestCase("millimeter-ofhg", "2 millimeters of mercury"),
-                new TestCase("liter-per-100-kilometer", "2 liters per 100 kilometers"),
+                // permillion
                 new TestCase("permillion", "2 parts per million"),
                 new TestCase("part-per-million", "2 parts per million"),
+                // new TestCase("portion-per-million", "2 parts per million"),
+                // new TestCase("portion-per-1e6", "2 parts per million"),
                 new TestCase("part-per-1e6", "2 parts per million"),
+                new TestCase(MeasureUnit.PART_PER_1E6, "2 parts per million"),
+
+                 // part-per-billion
+                new TestCase("portion-per-1e9", "2 parts per billion"),
+                new TestCase("part-per-1e9", "2 parts per billion"),
+                new TestCase(MeasureUnit.PART_PER_1E9, "2 parts per billion"),
+
+                // pound-foot
+                new TestCase("pound-foot", "2 pound-force-feet"),
+                new TestCase("pound-force-foot", "2 pound-force-feet"),
+                new TestCase(MeasureUnit.POUND_FOOT, "2 pound-force-feet"),
+
+                // pound-force
+                new TestCase(MeasureUnit.POUND_FORCE, "2 pounds of force"),
+                new TestCase("pound-force", "2 pounds of force"),
+
+                // pound-per-square-inch
+                new TestCase("pound-per-square-inch", "2 pounds-force per square inch"),
+                new TestCase("pound-force-per-square-inch", "2 pounds-force per square inch"),
+                new TestCase(MeasureUnit.POUND_PER_SQUARE_INCH,  "2 pounds-force per square inch"),
+                
+                // millimeter-of-mercury
+                new TestCase("millimeter-of-mercury", "2 millimeters of mercury"),
+                new TestCase("millimeter-ofhg", "2 millimeters of mercury"),
+                new TestCase(MeasureUnit.MILLIMETER_OF_MERCURY,  "2 millimeters of mercury"),
+
+                // inch-hg
+                new TestCase("inch-hg", "2 inches of mercury"),
+                new TestCase("inch-ofhg", "2 inches of mercury"),
+                new TestCase(MeasureUnit.INCH_HG,  "2 inches of mercury"),
+
+                // liter-per-100kilometers
+                new TestCase("liter-per-100kilometers", "2 liters per 100 kilometers"),
+                new TestCase("liter-per-100-kilometer", "2 liters per 100 kilometers"),
+                new TestCase(MeasureUnit.LITER_PER_100KILOMETERS,  "2 liters per 100 kilometers"),
+
+                // meter-per-second-squared
+                new TestCase("meter-per-second-squared", "2 meters per second squared"),
+                new TestCase("meter-per-square-second", "2 meters per second squared"),
+                new TestCase(MeasureUnit.METER_PER_SECOND_SQUARED,  "2 meters per second squared"),
+
+                // metric-ton
+                new TestCase("metric-ton", "2 metric tons"),
+                new TestCase("tonne", "2 metric tons"),
+                new TestCase(MeasureUnit.METRIC_TON,  "2 metric tons"),
+                new TestCase(MeasureUnit.TONNE,  "2 metric tons"),
+
+                // milligram-per-deciliter
+                new TestCase("milligram-per-deciliter", "2 milligrams per deciliter"),
+                new TestCase("milligram-ofglucose-per-deciliter", "2 milligrams per deciliter"),
+                new TestCase(MeasureUnit.MILLIGRAM_PER_DECILITER, "2 milligrams per deciliter"),
+                new TestCase(MeasureUnit.MILLIGRAM_OFGLUCOSE_PER_DECILITER, "2 milligrams per deciliter"),
+
+                // Arbitrary
+                new TestCase("meter-permillion", "2 meter-parts per 1000000"),
+                new TestCase("permillion-meter", "2 parts per 1000000-meter"),
+                new TestCase("tonne-per-second", "2 metric tons per second"),
+                new TestCase("part-per-1e6-per-100", "expect exception"),
+                new TestCase("permillion-per-100", "expect exception"),
+
         };
 
         for (TestCase testCase : testCases) {
-            if ("permillion".equals(testCase.measureUnitString) ||
-                "part-per-million".equals(testCase.measureUnitString)) {
-                logKnownIssue("ICU-23222", "Ensure unit aliases work correctly to avoid breaking callers");
-                continue;
-            }
+                if ("expect exception".equals(testCase.expectedFormat)) {
+                        try {
+                                MeasureUnit.forIdentifier(testCase.measureUnitString);
+                                fail("exception expected");
+                        } catch (Exception e) {
+                                // Pass
+                        }
+                        continue;
+                }
 
-            MeasureUnit measureUnit = testCase.measureUnitString != null ? MeasureUnit.forIdentifier(testCase.measureUnitString) : testCase.measureUnit;
-            String actualFormat = NumberFormatter
-                    .withLocale(ULocale.ENGLISH)
-                    .unit(measureUnit)
-                    .unitWidth(UnitWidth.FULL_NAME)
-                    .format(2.0)
-                    .toString();
+                MeasureUnit measureUnit = testCase.measureUnit != null ? testCase.measureUnit
+                                : MeasureUnit.forIdentifier(testCase.measureUnitString);
+                String actualFormat = NumberFormatter
+                                .withLocale(ULocale.ENGLISH)
+                                .unit(measureUnit)
+                                .unitWidth(UnitWidth.FULL_NAME)
+                                .format(2.0)
+                                .toString();
 
-            assertEquals("test unit aliases", testCase.expectedFormat, actualFormat);
+                assertEquals("test unit aliases", testCase.expectedFormat, actualFormat);
         }
     }
 
