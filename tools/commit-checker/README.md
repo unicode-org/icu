@@ -38,7 +38,7 @@ Run the tool and save the result into REPORT.md; set fixVersion to the upcoming 
 
     $ pipenv run python3 check.py \
         --jira-query "project=ICU AND fixVersion=64.1" \
-        --rev-range "release-63-1..upstream/maint/maint-64"
+        --rev-range "release-63-1..upstream/maint/maint-64" \
         > REPORT.md
 
 If the maintenance branch hasn't been cut yet, use upstream/main as the tip:

@@ -66,9 +66,10 @@ R_NOTREPRO              = "10024"
 R_FIXED_NON_REPO        = "10025"
 R_FIX_SURVEY_TOOL       = "10022"
 R_OBSOLETE              = "10023"
+R_DONE                  = "10026"
 
 # so we don't miss any
-all_resolutions = [ R_NEEDS_MOREINFO, R_FIXED, R_NO_TIME_TO_DO_THIS, R_DUPLICATE, R_OUTOFSCOPE, R_ASDESIGNED, R_WONTFIX, R_FIXED_BY_OTHER_TICKET, R_NOTREPRO, R_FIX_SURVEY_TOOL, R_OBSOLETE, R_FIXED_NON_REPO, R_INVALID ]
+all_resolutions = [ R_NEEDS_MOREINFO, R_FIXED, R_NO_TIME_TO_DO_THIS, R_DUPLICATE, R_OUTOFSCOPE, R_ASDESIGNED, R_WONTFIX, R_FIXED_BY_OTHER_TICKET, R_NOTREPRO, R_FIX_SURVEY_TOOL, R_OBSOLETE, R_FIXED_NON_REPO, R_INVALID, R_DONE ]
 
 # constants for jira_issue.fields.issuetype.id
 # <https://unicode-org.atlassian.net/rest/api/2/issuetype>
