@@ -1747,16 +1747,14 @@ public class MessageFormat extends UFormat implements Cloneable {
                 // ArgType.NONE, or
                 // any argument which got reset to null via setFormat() or its siblings.
                 if (arg instanceof Number) {
-                    // format number if can
                     dest.formatAndAppend(getStockNumberFormatter(), arg);
                 } else if (arg instanceof Date) {
-                    // format a Date if can
                     dest.formatAndAppend(getStockDateFormatter(), arg);
                 } else if (arg instanceof Calendar) {
-                    // format a Calendar if can
+                    dest.formatAndAppend(getStockDateFormatter(), arg);
+                } else if (arg instanceof java.util.Calendar) {
                     dest.formatAndAppend(getStockDateFormatter(), arg);
                 } else if (arg instanceof Temporal) {
-                    // format a Temporal if can
                     dest.formatAndAppend(getStockDateFormatter(), arg);
                 } else if (arg instanceof DayOfWeek) {
                     dest.formatAndAppend(getStockDateFormatter(), arg);

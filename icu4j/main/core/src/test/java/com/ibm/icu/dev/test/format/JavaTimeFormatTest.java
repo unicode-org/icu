@@ -278,10 +278,7 @@ public class JavaTimeFormatTest extends CoreTestFmwk {
 
         // Test that both JDK and ICU Calendar are recognized as types.
         arguments.put("expDate", new java.util.GregorianCalendar(2013, 8, 27));
-        // We don't test MessageFormat (MF1) with a java.util.Calendar
-        // because it throws. The ICU DateFormat does not support it.
-        // I filed https://unicode-org.atlassian.net/browse/ICU-22852
-        // MF2 converts the JDK Calendar to an ICU Calendar, so it works.
+        assertEquals("", expectedMf1Result, mf.format(arguments));
         assertEquals("", expectedMf2Result, mf2.formatToString(arguments));
 
         // Make sure that Instant and Clock are not formatted

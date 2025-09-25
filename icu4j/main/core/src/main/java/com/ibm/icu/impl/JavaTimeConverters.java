@@ -21,8 +21,10 @@ import java.time.chrono.ChronoLocalDateTime;
 import java.time.temporal.Temporal;
 import java.util.Date;
 
+import com.ibm.icu.util.BuddhistCalendar;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.GregorianCalendar;
+import com.ibm.icu.util.JapaneseCalendar;
 import com.ibm.icu.util.SimpleTimeZone;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
@@ -347,4 +349,37 @@ public class JavaTimeConverters {
         // We start from Jan 1, Feb 1, Mar 4, Apr 4, May 5, ..., Dec 8.
         return MILLIS_PER_HOUR * 12 + (month.getValue() - 1) * MILLIS_PER_DAY * 31;
     }
+
+    public static com.ibm.icu.util.Calendar convertCalendar(java.util.Calendar calIn) {
+
+        java.util.TimeZone tz = calIn.getTimeZone();
+        TimeZone zone = TimeZone.getTimeZone(tz.getID());
+
+        Calendar result;
+        switch (calIn.getCalendarType()) {
+            case "iso8601":
+                result = new GregorianCalendar(zone);
+                // make gcal a proleptic Gregorian
+                ((GregorianCalendar) result).setGregorianChange(new Date(Long.MIN_VALUE));
+                break;
+            case "buddhist":
+                result = new BuddhistCalendar(zone);
+                break;
+            case "japanese":
+                result = new JapaneseCalendar(zone);
+                break;
+            case "gregory": // Fallthrough
+            default:
+                // Fallback to Gregorian
+                result = new GregorianCalendar(zone);
+        }
+
+        result.setLenient(calIn.isLenient());
+        result.setFirstDayOfWeek(calIn.getFirstDayOfWeek());
+        result.setMinimalDaysInFirstWeek(calIn.getMinimalDaysInFirstWeek());
+        result.setTimeInMillis(calIn.getTimeInMillis());
+
+        return result;
+    }
+
 }
