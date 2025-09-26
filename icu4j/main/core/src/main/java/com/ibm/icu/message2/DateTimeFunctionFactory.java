@@ -6,10 +6,8 @@ package com.ibm.icu.message2;
 import java.time.DayOfWeek;
 import java.time.Month;
 import java.time.temporal.Temporal;
-import java.util.Calendar;
 import java.util.Locale;
 import java.util.Map;
-import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -239,14 +237,8 @@ class DateTimeFunctionFactory implements FunctionFactory {
                 toFormat = JavaTimeConverters.monthToCalendar((Month) toFormat);
             }
             // Not an else-if here, because the `Temporal` conditions before make `toFormat` a `Calendar`
-            if (toFormat instanceof Calendar) {
-                TimeZone tz = ((Calendar) toFormat).getTimeZone();
-                long milis = ((Calendar) toFormat).getTimeInMillis();
-                com.ibm.icu.util.TimeZone icuTz = com.ibm.icu.util.TimeZone.getTimeZone(tz.getID());
-                com.ibm.icu.util.Calendar calendar =
-                        com.ibm.icu.util.Calendar.getInstance(icuTz, locale);
-                calendar.setTimeInMillis(milis);
-                toFormat = calendar;
+            if (toFormat instanceof java.util.Calendar) {
+                toFormat = JavaTimeConverters.convertCalendar((java.util.Calendar) toFormat);
             }
             String result = icuFormatter.format(toFormat);
             return new FormattedPlaceholder(toFormat, new PlainStringFormattedValue(result));

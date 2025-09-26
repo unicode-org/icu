@@ -5739,4 +5739,49 @@ public class DateFormatTest extends CoreTestFmwk {
             assertEquals("Wrong result for " + locale, testCase[1], actualResult);
         }
     }
+
+    static private void oneCalendarTest(Locale locale, String expect1, String expect2) {
+        String skeleton = "EyMMMMdjmz";
+        long millis = 1758854856581L; // 2025/09/25 19:47:36
+
+        DateFormat df = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.SHORT, locale);
+        DateFormat sdf = SimpleDateFormat.getInstanceForSkeleton(skeleton, locale);
+        java.util.Calendar cal = java.util.Calendar.getInstance(locale);
+        cal.setTimeInMillis(millis);
+        assertEquals("", expect1, df.format(cal));
+        assertEquals("", expect2, sdf.format(cal));
+    }
+
+    @Test
+    public void TestJdkCalendarFormatting() {
+        long millis = 1758854856581L; // 2025/09/25 19:47:36
+        String skeleton = "EyMMMMdjmz";
+
+        oneCalendarTest(Locale.US,
+                "September 25, 2025 at 7:47\u202FPM",
+                "Thu, September 25, 2025 at 7:47\u202FPM PDT");
+
+        /*
+         * The JDK does not expose the non-Gregorian calendars,
+         * so we can't create them explicitly.
+         * The only way we can get them is by using the special
+         * locales `ja_JP_JP` and `th_TH_TH`, and by using `-u-ca`
+         */
+
+        // Japanese calendar
+        oneCalendarTest(new Locale("ja", "JP", "JP"),
+                "令和7年9月25日 19:47",
+                "令和7年9月25日(木) 19:47 GMT-7");
+        oneCalendarTest(Locale.forLanguageTag("en-US-u-ca-japanese"),
+                "September 25, 7 Reiwa at 7:47\u202FPM",
+                "Thu, September 25, 7 Reiwa at 7:47\u202FPM PDT");
+
+        // Buddhist calendar
+        oneCalendarTest(new Locale("th", "TH", "TH"),
+                "๒๕ กันยายน ๒๕๖๘ เวลา ๑๙:๔๗",
+                "พฤหัส ๒๕ กันยายน ๒๕๖๘ เวลา ๑๙:๔๗ GMT-๗");
+        oneCalendarTest(Locale.forLanguageTag("en-US-u-ca-buddhist"),
+                "September 25, 2568 BE at 7:47\u202FPM",
+                "Thu, September 25, 2568 BE at 7:47\u202FPM PDT");
+    }
 }

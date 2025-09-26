@@ -3918,6 +3918,8 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
         Calendar cal = calendar;
         if (obj instanceof Calendar) {
             cal = (Calendar)obj;
+        } else if (obj instanceof java.util.Calendar) {
+            calendar = JavaTimeConverters.convertCalendar((java.util.Calendar)obj);
         } else if (obj instanceof Date) {
             calendar.setTime((Date)obj);
         } else if (obj instanceof Number) {

@@ -629,6 +629,9 @@ public abstract class DateFormat extends UFormat {
     {
         if (obj instanceof Calendar) {
             return format( (Calendar)obj, toAppendTo, fieldPosition );
+        } else if (obj instanceof java.util.Calendar) {
+            return format(JavaTimeConverters.convertCalendar((java.util.Calendar)obj),
+                    toAppendTo, fieldPosition );
         } else if (obj instanceof Date) {
             return format( (Date)obj, toAppendTo, fieldPosition );
         } else if (obj instanceof Number) {

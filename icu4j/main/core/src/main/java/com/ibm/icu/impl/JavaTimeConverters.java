@@ -21,8 +21,10 @@ import java.time.chrono.ChronoLocalDateTime;
 import java.time.temporal.Temporal;
 import java.util.Date;
 
+import com.ibm.icu.util.BuddhistCalendar;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.GregorianCalendar;
+import com.ibm.icu.util.JapaneseCalendar;
 import com.ibm.icu.util.SimpleTimeZone;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
@@ -42,6 +44,7 @@ import com.ibm.icu.util.ULocale;
  * Additionally, it provides methods to convert between {@link ZoneId} and {@link TimeZone}, and
  * {@link ZoneOffset} and {@link TimeZone}.
  *
+ * @internal
  * @deprecated This API is ICU internal only.
  */
 @Deprecated
@@ -68,6 +71,7 @@ public class JavaTimeConverters {
      *         the specified {@link ZonedDateTime}, with the time zone set
      *         accordingly.
      *
+     * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
@@ -92,6 +96,7 @@ public class JavaTimeConverters {
      *         specified {@link OffsetTime}, with the time zone set accordingly and
      *         date components set to the current date in that time zone.
      *
+     * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
@@ -113,6 +118,7 @@ public class JavaTimeConverters {
      *         the specified {@link OffsetDateTime}, with the time zone set
      *         accordingly.
      *
+     * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
@@ -155,6 +161,7 @@ public class JavaTimeConverters {
      *         specified {@link LocalTime}, with date components set to the current
      *         date in the default time zone.
      *
+     * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
@@ -175,6 +182,7 @@ public class JavaTimeConverters {
      * @return A {@link Calendar} instance representing the same date and time as
      *         the specified {@link ChronoLocalDateTime}.
      *
+     * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
@@ -191,6 +199,7 @@ public class JavaTimeConverters {
      * @return A {@link Calendar} instance representing the same date and time as
      *         the specified {@link Temporal}.
      *
+     * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
@@ -232,6 +241,7 @@ public class JavaTimeConverters {
      * @return A {@link TimeZone} representing the time zone rules associated with
      *         the given {@link ZoneId}.
      *
+     * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
@@ -250,6 +260,7 @@ public class JavaTimeConverters {
      * @return A {@link TimeZone} that has a fixed offset from UTC, represented by
      *         the given {@link ZoneOffset}.
      *
+     * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
@@ -278,6 +289,7 @@ public class JavaTimeConverters {
      * @return A {@link Calendar} instance representing the same day of week
      *         as the one specified by the input.
      *
+     * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
@@ -312,6 +324,7 @@ public class JavaTimeConverters {
      * @return A {@link Calendar} instance representing the same month
      *         as the one specified by the input.
      *
+     * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
@@ -347,4 +360,58 @@ public class JavaTimeConverters {
         // We start from Jan 1, Feb 1, Mar 4, Apr 4, May 5, ..., Dec 8.
         return MILLIS_PER_HOUR * 12 + (month.getValue() - 1) * MILLIS_PER_DAY * 31;
     }
+
+    /**
+     * Converts a {@link java.util.Calendar} to a {@link com.ibm.icu.util.Calendar}.
+     *
+     * @param inputCalendar The JDK Calendar to convert.
+     * @return An ICU Calendar that has the same properties as the Java one.
+     *
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public static com.ibm.icu.util.Calendar convertCalendar(java.util.Calendar inputCalendar) {
+
+        java.util.TimeZone tz = inputCalendar.getTimeZone();
+        TimeZone zone = TimeZone.getTimeZone(tz.getID());
+
+        /*
+         * It would be even better to create these calendars with TimeZone and Locale.
+         * But although the java.util.Calendar can be constructed with a Locale
+         * or uses getDefaultLocale(), it stores it into a private field and there is no getter.
+         * The documentation says (and the code seems to confirm) that the locale is used for
+         * 2 things: "Calendar defines a locale-specific seven day week using two parameters:
+         * the first day of the week and the minimal days in first week (from 1 to 7). These
+         * numbers are taken from the locale resource data when a Calendar is constructed".
+         *
+         * So after we create the calendar we will copy this info from the original calendar.
+         */
+        Calendar result;
+        switch (inputCalendar.getCalendarType()) {
+            case "iso8601":
+                result = new GregorianCalendar(zone);
+                // make gcal a proleptic Gregorian
+                ((GregorianCalendar) result).setGregorianChange(new Date(Long.MIN_VALUE));
+                break;
+            case "buddhist":
+                result = new BuddhistCalendar(zone);
+                break;
+            case "japanese":
+                result = new JapaneseCalendar(zone);
+                break;
+            case "gregory": // Fallthrough
+            default:
+                // Fallback to Gregorian
+                result = new GregorianCalendar(zone);
+        }
+
+        result.setLenient(inputCalendar.isLenient());
+        result.setFirstDayOfWeek(inputCalendar.getFirstDayOfWeek());
+        result.setMinimalDaysInFirstWeek(inputCalendar.getMinimalDaysInFirstWeek());
+        result.setTimeInMillis(inputCalendar.getTimeInMillis());
+
+        return result;
+    }
+
 }
