@@ -59,6 +59,11 @@ public interface Function {
      */
     @Deprecated
     default List<String> matches(Object value, List<String> keys, Map<String, Object> variableOptions) {
+        /* Options considered:
+         * - return null (which will end up selecting `*`) => current solution
+         * - throw (not something that ICU usually does)
+         * - remove the `default` and force each class implementing this interface to also implement this method
+         */
         return null;
     }
 }
