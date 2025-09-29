@@ -6233,10 +6233,6 @@ void NumberFormatterApiTest::TestPortionFormat() {
     };
 
     for (auto testCase : testCases) {
-        //if (uprv_strcmp(testCase.unitIdentifier, "portion-per-1e9") != 0) {
-        //    logKnownIssue("CLDR-18274", "The data for portion-per-XYZ is not determined yet.");
-        //    continue;
-        //}
         MeasureUnit unit = MeasureUnit::forIdentifier(testCase.unitIdentifier, status);
         LocalizedNumberFormatter lnf =
             NumberFormatter::withLocale(Locale::forLanguageTag(testCase.locale, status))

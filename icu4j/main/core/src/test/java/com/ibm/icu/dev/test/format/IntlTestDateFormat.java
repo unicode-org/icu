@@ -268,10 +268,6 @@ public class IntlTestDateFormat extends CoreTestFmwk {
         long count = locales.length;
         if (locales != null  &&  count != 0) {
             for (int i=0; i<count; ++i) {
-                if (locales[i].getBaseName().startsWith("scn")) {
-                    logKnownIssue("CLDR-18923", "Quoting in scn atTime/relative dateTimeFormats causes format/parse issues");
-                    continue;
-                }
                 String name = locales[i].getDisplayName();
                 logln("Testing " + name + "...");
                 try {

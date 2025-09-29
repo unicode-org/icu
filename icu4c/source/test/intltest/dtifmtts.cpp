@@ -2467,10 +2467,6 @@ void DateIntervalFormatTest::testTicket20710_IntervalIdentity() {
 
     for (int32_t i = 0; i < count; i++) {
         const Locale locale = locales[i];
-        if (uprv_strncmp(locale.getBaseName(),"scn",3) == 0) {
-            logKnownIssue("CLDR-18923", "Quoting in scn atTime/relative dateTimeFormats causes format/parse issues");
-            continue;
-        }
         LocalPointer<DateTimePatternGenerator> gen(DateTimePatternGenerator::createInstance(locale, status));
         LocalPointer<Calendar> calendar(Calendar::createInstance(TimeZone::createTimeZone(timeZone), status));
         calendar->setTime(static_cast<UDate>(1563235200000), status);

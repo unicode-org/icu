@@ -7195,10 +7195,6 @@ public class NumberFormatTest extends CoreTestFmwk {
         };
 
         for (TestCase testCase : testCases) {
-            //if (testCase.unitIdentifier.compareTo("portion-per-1e9") != 0) {
-            //    logKnownIssue("CLDR-18274", "The data for portion-per-XYZ is not determined yet.");
-            //    continue;
-            //}
             MeasureUnit unit = MeasureUnit.forIdentifier(testCase.unitIdentifier);
             LocalizedNumberFormatter formatter = NumberFormatter.withLocale(ULocale.forLanguageTag(testCase.locale))
                     .unit(unit)

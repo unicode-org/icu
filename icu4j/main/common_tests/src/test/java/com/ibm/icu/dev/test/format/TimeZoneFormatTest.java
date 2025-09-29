@@ -144,16 +144,6 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
 
         // Run the roundtrip test
         for (int locidx = 0; locidx < LOCALES.length; locidx++) {
-            if (logKnownIssue("CLDR-18924", "Timezone round trip issues in ku, shn, sv for various zones") &&
-            	(
-            	    LOCALES[locidx].getBaseName().equals("ku") ||
-                    LOCALES[locidx].getBaseName().startsWith("ku_") ||
-                    LOCALES[locidx].getBaseName().startsWith("shn") ||
-                    LOCALES[locidx].getBaseName().equals("sv") ||
-                    LOCALES[locidx].getBaseName().startsWith("sv_")
-                )) {
-                continue;
-            }
             logln("Locale: " + LOCALES[locidx].toString());
 
             for (int patidx = 0; patidx < PATTERNS.length; patidx++) {
@@ -410,14 +400,6 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
                 }
 
                 for (String id : ids) {
-                	if (logKnownIssue("CLDR-18924", "Time round trip issues for Pacific/Apia in various locales and Pacific/Honolulu in Swedish") &&
-                		(
-                		    id.equals("Pacific/Apia") ||
-                		    (id.equals("Pacific/Honolulu") && LOCALES[locidx].getLanguage().equals("sv"))
-                		)) {
-                		continue;
-                	}
-
                 	if (PATTERNS[patidx].equals("V")) {
                         // Some zones do not have short ID assigned, such as Asia/Riyadh87.
                         // The time roundtrip will fail for such zones with pattern "V" (short zone ID).
@@ -433,12 +415,6 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
                         if (id.indexOf('/') < 0 || LOC_EXCLUSION_PATTERN.matcher(id).matches()) {
                             continue;
                         }
-                    }
-
-                    if ((id.equals("Pacific/Apia") || id.equals("Pacific/Midway") || id.equals("Pacific/Pago_Pago"))
-                            && PATTERNS[patidx].equals("vvvv")
-                            && logKnownIssue("11052", "Ambiguous zone name - Samoa Time")) {
-                        continue;
                     }
 
                     BasicTimeZone btz = (BasicTimeZone)TimeZone.getTimeZone(id, TimeZone.TIMEZONE_ICU);

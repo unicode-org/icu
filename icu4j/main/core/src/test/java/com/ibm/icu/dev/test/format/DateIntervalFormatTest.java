@@ -2581,10 +2581,6 @@ public class DateIntervalFormatTest extends CoreTestFmwk {
 
         for (int i = 0; i < locales.length; i++) {
             ULocale locale = locales[i];
-            if (locale.getBaseName().startsWith("scn")) {
-                logKnownIssue("CLDR-18923", "Quoting in scn atTime/relative dateTimeFormats causes format/parse issues");
-                continue;
-            }
             DateTimePatternGenerator gen = DateTimePatternGenerator.getInstance(locale);
             Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
             calendar.setTimeInMillis(1563235200000l);

@@ -289,10 +289,6 @@ void IntlTestDateFormat::monsterTest(/*char *par*/)
         }
         for (int32_t i=0; i<count; ++i)
         {
-            if (uprv_strncmp(locales[i].getBaseName(),"scn",3) == 0) {
-                logKnownIssue("CLDR-18923", "Quoting in scn atTime/relative dateTimeFormats causes format/parse issues");
-                continue;
-            }
             UnicodeString name = UnicodeString(locales[i].getName(), "");
             logln(UnicodeString("Testing ") + name + "...");
             testLocale(/*par, */locales[i], name);
