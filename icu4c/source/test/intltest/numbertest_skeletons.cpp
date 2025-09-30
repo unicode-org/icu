@@ -448,7 +448,8 @@ void NumberSkeletonTest::perUnitInArabic() {
 
             status.setScope(skeleton);
             if (u_strcmp(cas1.type, u"volume")==0 || u_strcmp(cas2.type, u"volume")==0) {
-                logKnownIssue("ICU-23104", "Strange handling of part-per-1e9 & volumes in skeletons");
+                logKnownIssue("ICU-23229", " Handling of volume units in Arabic locale are causing "
+                                           "status failure in NumberFormatter");
                 continue;
             }
             UnicodeString actual = NumberFormatter::forSkeleton(skeleton, status).locale("ar")
