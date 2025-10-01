@@ -5429,7 +5429,7 @@ void MeasureFormatTest::TestFormatPeriodEn() {
             {t_2y_5M_3w_4d, UPRV_LENGTHOF(t_2y_5M_3w_4d), "2 J, 5 M, 3 W und 4 T"},
             {t_0h_0m_17s, UPRV_LENGTHOF(t_0h_0m_17s), "0:00:17"},
             {t_6h_56_92m, UPRV_LENGTHOF(t_6h_56_92m), "6:56,92"},
-            {t_3h_5h, UPRV_LENGTHOF(t_3h_5h), "3 Std., 5 Std."}};
+            {t_3h_5h, UPRV_LENGTHOF(t_3h_5h), "3h, 5h"}};
 
     ExpectedResult numericDataBn[] = {
             {t_1m_59_9996s, UPRV_LENGTHOF(t_1m_59_9996s), "\\u09E7:\\u09EB\\u09EF.\\u09EF\\u09EF\\u09EF\\u09EC"},
@@ -5526,9 +5526,7 @@ void MeasureFormatTest::TestFormatPeriodEn() {
     if (!assertSuccess("Error creating measure format de NUMERIC", status)) {
         return;
     }
-    if (!logKnownIssue("CLDR-18905", "German narrow change needs revisiting")) {
-        verifyFormat("de NUMERIC", mf, numericDataDe, UPRV_LENGTHOF(numericDataDe));
-    }
+	verifyFormat("de NUMERIC", mf, numericDataDe, UPRV_LENGTHOF(numericDataDe));
 
     Locale bengali("bn");
     nf.adoptInstead(NumberFormat::createInstance(bengali, status));
@@ -5953,9 +5951,7 @@ void MeasureFormatTest::TestManyLocaleDurations() {
     }
     helperTestManyLocaleDurations("da", UMEASFMT_WIDTH_NARROW,  measures, UPRV_LENGTHOF(measures), "5 t og 37 m");
     helperTestManyLocaleDurations("da", UMEASFMT_WIDTH_NUMERIC, measures, UPRV_LENGTHOF(measures), "5.37");
-    if (!logKnownIssue("CLDR-18905", "German narrow change needs revisiting")) {
-        helperTestManyLocaleDurations("de", UMEASFMT_WIDTH_NARROW,  measures, UPRV_LENGTHOF(measures), "5 Std., 37 Min.");
-    }
+	helperTestManyLocaleDurations("de", UMEASFMT_WIDTH_NARROW,  measures, UPRV_LENGTHOF(measures), "5h, 37 Min.");
     helperTestManyLocaleDurations("de", UMEASFMT_WIDTH_NUMERIC, measures, UPRV_LENGTHOF(measures), "5:37");
     helperTestManyLocaleDurations("en", UMEASFMT_WIDTH_NARROW,  measures, UPRV_LENGTHOF(measures), "5h 37m");
     helperTestManyLocaleDurations("en", UMEASFMT_WIDTH_NUMERIC, measures, UPRV_LENGTHOF(measures), "5:37");

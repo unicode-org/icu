@@ -448,7 +448,7 @@ public class DateIntervalFormatTest extends CoreTestFmwk {
 
                 "zh", "CE 2007 10 10 10:10:10", "CE 2007 11 10 10:10:10", "EEEEdMMMM", "10\\u670810\\u65e5\\u661f\\u671f\\u4e09\\u81f311\\u670810\\u65e5\\u661f\\u671f\\u516d",
 
-                "zh", "CE 2007 10 10 10:10:10", "CE 2007 11 10 10:10:10", "hmv", "2007/10/10 \\u6D1B\\u6749\\u77F6\\u65F6\\u95F4 \\u4E0A\\u534810:10 \\u2013 2007/11/10 \\u6D1B\\u6749\\u77F6\\u65F6\\u95F4 \\u4E0A\\u534810:10",
+                "zh", "CE 2007 10 10 10:10:10", "CE 2007 11 10 10:10:10", "hmv", "2007/10/10 \\u6D1B\\u6749\\u77F6\\u65F6\\u95F4\\u4E0A\\u534810:10 \\u2013 2007/11/10 \\u6D1B\\u6749\\u77F6\\u65F6\\u95F4\\u4E0A\\u534810:10",
 
                 "zh", "CE 2007 11 10 10:10:10", "CE 2007 11 20 10:10:10", "EEEEdMMMMy", "2007\\u5E74\\u5341\\u4E00\\u670810\\u65E5\\u661F\\u671F\\u516D\\u2009\\u2013\\u2009\\u5341\\u4E00\\u670820\\u65E5\\u661F\\u671F\\u4E8C",
 
@@ -481,7 +481,7 @@ public class DateIntervalFormatTest extends CoreTestFmwk {
 
                 "zh", "CE 2007 11 10 10:10:10", "CE 2007 11 20 10:10:10", "MMMM", "\\u5341\\u4E00\\u6708", // (fixed expected result per ticket 6872<-6626 and others)
 
-                "zh", "CE 2007 11 10 10:10:10", "CE 2007 11 20 10:10:10", "hmz", "2007/11/10 GMT-8 \\u4e0a\\u534810:10 \\u2013 2007/11/20 GMT-8 \\u4e0a\\u534810:10",
+                "zh", "CE 2007 11 10 10:10:10", "CE 2007 11 20 10:10:10", "hmz", "2007/11/10 GMT-8\\u4e0a\\u534810:10 \\u2013 2007/11/20 GMT-8\\u4e0a\\u534810:10",
 
                 "zh", "CE 2007 11 10 10:10:10", "CE 2007 11 20 10:10:10", "h", "2007/11/10 \\u4e0a\\u534810\\u65f6 \\u2013 2007/11/20 \\u4e0a\\u534810\\u65f6",
 
@@ -632,9 +632,9 @@ public class DateIntervalFormatTest extends CoreTestFmwk {
 
                 "de", "CE 2007 01 10 10:00:10", "CE 2007 01 10 10:20:10", "h", "10\\u202FAM",
 
-                "de", "CE 2007 01 10 10:00:10", "CE 2007 01 10 10:20:10", "hv", "10 AM Los Angeles (Ortszeit)",
+                "de", "CE 2007 01 10 10:00:10", "CE 2007 01 10 10:20:10", "hv", "10\\u202FAM Los Angeles (Ortszeit)",
 
-                "de", "CE 2007 01 10 10:00:10", "CE 2007 01 10 10:20:10", "hz", "10 AM GMT-8",
+                "de", "CE 2007 01 10 10:00:10", "CE 2007 01 10 10:20:10", "hz", "10\\u202FAM GMT-8",
 
                 "de", "CE 2007 01 10 10:10:10", "CE 2007 01 10 10:10:20", "EEEEdMMMy", "Mittwoch, 10. Jan. 2007",
 
@@ -652,9 +652,9 @@ public class DateIntervalFormatTest extends CoreTestFmwk {
 
                 "de", "CE 2007 01 10 10:10:10", "CE 2007 01 10 10:10:20", "h", "10\\u202FAM",
 
-                "de", "CE 2007 01 10 10:10:10", "CE 2007 01 10 10:10:20", "hv", "10 Uhr AM Los Angeles (Ortszeit)",
+                "de", "CE 2007 01 10 10:10:10", "CE 2007 01 10 10:10:20", "hv", "10\\u202FAM Los Angeles (Ortszeit)",
 
-                "de", "CE 2007 01 10 10:10:10", "CE 2007 01 10 10:10:20", "hz", "10 Uhr AM GMT-8",
+                "de", "CE 2007 01 10 10:10:10", "CE 2007 01 10 10:10:20", "hz", "10\\u202FAM GMT-8",
 
                 // Thai (default calendar buddhist)
 
@@ -890,17 +890,6 @@ public class DateIntervalFormatTest extends CoreTestFmwk {
             String expected = data[i++];
             String formatted = dtitvfmt.format(dtitv);
             if ( !formatted.equals(Utility.unescape(expected)) )  {
-                if (locName.equals("de") &&
-                    ( oneSkeleton.equals("hv") || oneSkeleton.equals("hz") ) &&
-                    logKnownIssue("ICU-23185", "Date time formatting with hz and hv needs revisiting")) {
-                    continue;
-                }
-                if (locName.equals("zh") &&
-                    ( oneSkeleton.equals("hmv") || oneSkeleton.equals("hmz") ) &&
-                    logKnownIssue("ICU-23185", "Date time formatting with hz and hv needs revisiting")) {
-                    continue;
-                }
-                // errln("\"" + locName + "\\" + oneSkeleton + "\\" + datestr + "\\" + datestr_2 + "\"\t expected: " + expected +"\tgot: " + formatted + "\n");
                 allErrs.add(new AssertionError("\"" + locName + "\\" + oneSkeleton + "\\" + datestr + "\\" + datestr_2 + "\"\t expected: " + expected +"\tgot: " + formatted + "\n"));
             }
         }

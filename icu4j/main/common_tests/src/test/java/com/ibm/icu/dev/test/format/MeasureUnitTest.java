@@ -488,7 +488,7 @@ public class MeasureUnitTest extends CoreTestFmwk {
         Object[][] data = new Object[][] {
             { ulocDanish,       FormatWidth.NARROW,  "5 t og 37 m" },
             { ulocDanish,       FormatWidth.NUMERIC, "5.37" },
-            { ULocale.GERMAN,   FormatWidth.NARROW,  "5 Std., 37 Min." },
+            { ULocale.GERMAN,   FormatWidth.NARROW,  "5h, 37 Min." },
             { ULocale.GERMAN,   FormatWidth.NUMERIC, "5:37" },
             { ULocale.ENGLISH,  FormatWidth.NARROW,  "5h 37m" },
             { ULocale.ENGLISH,  FormatWidth.NUMERIC, "5:37" },
@@ -524,12 +524,6 @@ public class MeasureUnitTest extends CoreTestFmwk {
             }
             String result = mf.formatMeasures(hours, minutes);
             if (!result.equals(row[2])) {
-                if (((ULocale)row[0]).equals(ULocale.GERMAN) &&
-                    ((FormatWidth)row[1]).equals(FormatWidth.NARROW) &&
-                    logKnownIssue("CLDR-18905", "German narrow change needs revisiting")
-                    ) {
-                    continue;
-                }
                 errln("MeasureFormat.formatMeasures for locale " + row[0] + ", width " +
                         row[1] + ", expected \"" + (String)row[2] + "\", got \"" + result + "\"" );
             }
