@@ -29,13 +29,13 @@ Removed from ICU 77
 | messageformat2_data_model.h | Builder&amp; icu::message2::MFDataModel::Builder::addBinding(Binding&amp;&amp;, UErrorCode&amp;) |  InternalICU 75 | (missing)
 | messageformat2_data_model.h | Builder&amp; icu::message2::MFDataModel::Builder::addSelector(VariableName&amp;&amp;, UErrorCode&amp;) |  InternalICU 75 | (missing)
 | messageformat2_data_model.h | Builder&amp; icu::message2::MFDataModel::Builder::addVariant(SelectorKeys&amp;&amp;, Pattern&amp;&amp;, UErrorCode&amp;) |  InternalICU 75 | (missing)
-| messageformat2_data_model.h | Builder&amp; icu::message2::MFDataModel::Builder::operator=(Builder&amp;&amp;)=delete |   _untagged _  | (missing)
-| messageformat2_data_model.h | Builder&amp; icu::message2::MFDataModel::Builder::operator=(const Builder&amp;)=delete |   _untagged _  | (missing)
+| messageformat2_data_model.h | Builder&amp; icu::message2::MFDataModel::Builder::operator=(Builder&amp;&amp;)=delete |   *untagged*  | (missing)
+| messageformat2_data_model.h | Builder&amp; icu::message2::MFDataModel::Builder::operator=(const Builder&amp;)=delete |   *untagged*  | (missing)
 | messageformat2_data_model.h | Builder&amp; icu::message2::MFDataModel::Builder::setPattern(Pattern&amp;&amp;) |  InternalICU 75 | (missing)
 | messageformat2_data_model.h | MFDataModel icu::message2::MFDataModel::Builder::build(UErrorCode&amp;) const |  InternalICU 75 | (missing)
-| messageformat2_data_model.h | icu::message2::MFDataModel::Builder::Builder(Builder&amp;&amp;)=delete |   _untagged _  | (missing)
+| messageformat2_data_model.h | icu::message2::MFDataModel::Builder::Builder(Builder&amp;&amp;)=delete |   *untagged*  | (missing)
 | messageformat2_data_model.h | icu::message2::MFDataModel::Builder::Builder(UErrorCode&amp;) |  InternalICU 75 | (missing)
-| messageformat2_data_model.h | icu::message2::MFDataModel::Builder::Builder(const Builder&amp;)=delete |   _untagged _  | (missing)
+| messageformat2_data_model.h | icu::message2::MFDataModel::Builder::Builder(const Builder&amp;)=delete |   *untagged*  | (missing)
 | messageformat2_data_model.h | icu::message2::MFDataModel::Builder::~Builder() |  InternalICU 75 | (missing)
 | messageformat2_formattable.h | UDate icu::message2::Formattable::getDate(UErrorCode&amp;) const |  InternalICU 75 | (missing)
 | messageformat2_formattable.h | <tt>static</tt> Formattable icu::message2::Formattable::forDate(UDate) |  InternalICU 75 | (missing)
@@ -219,9 +219,7 @@ Added in ICU 78
 | dtfmtsym.h | void icu::DateFormatSymbols::setAmPmStrings(const UnicodeString*, int32_t, DtContextType, DtWidthType) |  (missing) | DraftICU 78
 | dtptngen.h | UDateTimePatternConflict icu::DateTimePatternGenerator::addPatternWithSkeleton(const UnicodeString&amp;, const UnicodeString&amp;, bool, UnicodeString&amp;, UErrorCode&amp;) |  (missing) | InternalICU 78
 | fmtable.h | FixedString* icu::Formattable::internalGetFixedString(UErrorCode&amp;) |  (missing) | Internal
-| localpointer.h | <tt>static</tt> void* icu::LocalPointerBase&lt; T &gt;::operator new(size_t, void*)=delete |  (missing) | 
-                        	*(untagged)*
-                        
+| localpointer.h | <tt>static</tt> void* icu::LocalPointerBase&lt; T &gt;::operator new(size_t, void*)=delete |  (missing) | *untagged*                        
 | measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getBecquerel() |  (missing) | DraftICU 78
 | measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getBritishThermalUnitIt() |  (missing) | DraftICU 78
 | measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getBuJp() |  (missing) | DraftICU 78
@@ -316,12 +314,8 @@ Added in ICU 78
 | messageformat2_data_model.h | Builder&amp; icu::message2::data_model::MFDataModel::Builder::addBinding(Binding&amp;&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75
 | messageformat2_data_model.h | Builder&amp; icu::message2::data_model::MFDataModel::Builder::addSelector(VariableName&amp;&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75
 | messageformat2_data_model.h | Builder&amp; icu::message2::data_model::MFDataModel::Builder::addVariant(SelectorKeys&amp;&amp;, Pattern&amp;&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75
-| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::MFDataModel::Builder::operator=(Builder&amp;&amp;)=delete |  (missing) | 
-                        	*(untagged)*
-                        
-| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::MFDataModel::Builder::operator=(const Builder&amp;)=delete |  (missing) | 
-                        	*(untagged)*
-                        
+| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::MFDataModel::Builder::operator=(Builder&amp;&amp;)=delete |  (missing) | *untagged*
+| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::MFDataModel::Builder::operator=(const Builder&amp;)=delete |  (missing) | *untagged*
 | messageformat2_data_model.h | Builder&amp; icu::message2::data_model::MFDataModel::Builder::setPattern(Pattern&amp;&amp;) |  (missing) | InternalICU 75
 | messageformat2_data_model.h | Iterator icu::message2::data_model::Pattern::begin() const |  (missing) | InternalICU 75
 | messageformat2_data_model.h | Iterator icu::message2::data_model::Pattern::end() const |  (missing) | InternalICU 75
@@ -333,9 +327,7 @@ Added in ICU 78
 | messageformat2_data_model.h | Pattern&amp; icu::message2::data_model::Pattern::operator=(Pattern) |  (missing) | InternalICU 75
 | messageformat2_data_model.h | SelectorKeys&amp; icu::message2::data_model::SelectorKeys::operator=(SelectorKeys) |  (missing) | InternalICU 75
 | messageformat2_data_model.h | Variant&amp; icu::message2::data_model::Variant::operator=(Variant) |  (missing) | InternalICU 75
-| messageformat2_data_model.h | bool icu::message2::data_model::Binding::isLocal() const |  (missing) | 
-                        	*(untagged)*
-                        
+| messageformat2_data_model.h | bool icu::message2::data_model::Binding::isLocal() const |  (missing) | *untagged*
 | messageformat2_data_model.h | bool icu::message2::data_model::Key::isWildcard() const |  (missing) | InternalICU 75
 | messageformat2_data_model.h | bool icu::message2::data_model::Key::operator&lt;(const Key&amp;) const |  (missing) | InternalICU 75
 | messageformat2_data_model.h | bool icu::message2::data_model::Key::operator==(const Key&amp;) const |  (missing) | InternalICU 75
@@ -360,13 +352,9 @@ Added in ICU 78
 | messageformat2_data_model.h | icu::message2::data_model::Key::Key(const Key&amp;) |  (missing) | InternalICU 75
 | messageformat2_data_model.h | icu::message2::data_model::Key::Key(const Literal&amp;) |  (missing) | InternalICU 75
 | messageformat2_data_model.h | icu::message2::data_model::Key::~Key() |  (missing) | InternalICU 75
-| messageformat2_data_model.h | icu::message2::data_model::MFDataModel::Builder::Builder(Builder&amp;&amp;)=delete |  (missing) | 
-                        	*(untagged)*
-                        
+| messageformat2_data_model.h | icu::message2::data_model::MFDataModel::Builder::Builder(Builder&amp;&amp;)=delete |  (missing) | *untagged*
 | messageformat2_data_model.h | icu::message2::data_model::MFDataModel::Builder::Builder(UErrorCode&amp;) |  (missing) | InternalICU 75
-| messageformat2_data_model.h | icu::message2::data_model::MFDataModel::Builder::Builder(const Builder&amp;)=delete |  (missing) | 
-                        	*(untagged)*
-                        
+| messageformat2_data_model.h | icu::message2::data_model::MFDataModel::Builder::Builder(const Builder&amp;)=delete |  (missing) | *untagged*
 | messageformat2_data_model.h | icu::message2::data_model::MFDataModel::Builder::~Builder() |  (missing) | InternalICU 75
 | messageformat2_data_model.h | icu::message2::data_model::MFDataModel::MFDataModel() |  (missing) | InternalICU 75
 | messageformat2_data_model.h | icu::message2::data_model::MFDataModel::MFDataModel(const MFDataModel&amp;) |  (missing) | InternalICU 75

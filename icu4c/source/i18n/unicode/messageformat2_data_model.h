@@ -1935,6 +1935,8 @@ namespace message2 {
              *
              * @return True if this binding represents a variable and expression;
              *         false if it represents a variable plus an annotation.
+             * @internal ICU 78 technology preview
+             * @deprecated This API is for technology preview only.
              */
             UBool isLocal() const { return local; }
             /**
