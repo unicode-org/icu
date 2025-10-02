@@ -41,6 +41,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{ !contains(github.ref, 'maint/') && github.ref != 'main' }}
 
+env:
+  SHARED_MVN_ARGS: '--show-version --no-transfer-progress'
+
 jobs:
   # Runs exhaustive tests for ICU4J on Linux
   icu4j-linux:
@@ -50,7 +53,7 @@ jobs:
       - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
       - name: Build and Exhaustive Tests
         run: |
-          echo "Building ICU4J" && cd icu4j && mvn install -DICU.exhaustive=10
+          echo "Building ICU4J" && cd icu4j && mvn ${SHARED_MVN_ARGS} install -DICU.exhaustive=10
         env:
           BUILD: ICU4J
       - name: List failures (if any)
