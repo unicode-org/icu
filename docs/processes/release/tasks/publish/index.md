@@ -102,7 +102,7 @@ Use the GitHub GUI to create both the "release" and the "tag" at the same time:
 
 <https://github.com/unicode-org/icu/releases/new>
 
-1. Fill in the tag name, such as `release-63-1rc` or `release-63-1`, and make the
+1. Fill in the tag name, such as `release-63.1rc` or `release-63.1`, and make the
 target the "maint/maint-xx" branch (such as `maint/maint-63`).
 1. Set the title to `ICU 63 RC` or `ICU 63.1`.
 1. Fill in the description using the
@@ -127,8 +127,12 @@ repository, they might have something different for the "latest" tag).
 A possible future alternative might be a sym-link folder, or HTTP redirect that
 points to the latest release.
 
-We no longer need to add the note about Git LFS files, as GitHub now includes
+Note: We no longer need to add the note about Git LFS files, as GitHub now includes
 them in the auto-generated .zip downloads.
+
+Note: The release tag name convention changed with ICU 78.
+Prior, the convention was like `release-63-rc` or `release-63-1`.
+Afterwards, the convention is like `release-63.1rc` or `release-63.1`.
 
 #### Maintenance release
 
