@@ -70,7 +70,7 @@ def create_test_files(base_directory):
          'output_file': 'icu4j/TODOs.txt'},
         {'subdir': 'icu4c/source',
          'match_string': 'logKnownIssue',
-         'output_file': 'icu/source/logKnownIssue.txt'},
+         'output_file': 'icu4c/source/logKnownIssue.txt'},
         {'subdir': 'icu4c/source',
          'match_string': 'TODO',
          'output_file': 'icu4c/source/TODOs.txt'},
@@ -93,7 +93,7 @@ def create_test_files(base_directory):
         result_lines = result.stdout.splitlines()
 
         # This may include None items
-        issue_details = [extract_issue_detail(str(line)) for line in result_lines]
+        issue_details = [extract_issue_detail(base_directory, str(line)) for line in result_lines]
 
         all_results.append([item['output_file'], issue_details])
 
@@ -104,7 +104,7 @@ check_issue_re = re.compile(r'(logKnownIssue|TODO)\(([^\)]+)')
 # Get the file name if it's a match
 file_linenum_re = re.compile(r'^([^:]+):(\d+)')
 
-def extract_issue_detail(line):
+def extract_issue_detail(base_directory, line):
     code_file = None
     code_line = -1
     issue_detail = None
@@ -121,6 +121,7 @@ def extract_issue_detail(line):
         return None
 
     issue_type = None
+    short_file_path = ''
     if ki_search:
         issue_type = ki_search.group(1)
         issue_id = ki_search.group(2)
@@ -128,14 +129,12 @@ def extract_issue_detail(line):
         comma_pos = issue_id.find(',')
         if comma_pos >= 0:
             issue_id = issue_id[0:comma_pos]
-        try:
-            short_file_path = code_file[code_file.find('/icu/'):]
-        except BaseException as err:
-            short_file_path = code_file
-            pass
 
-        if comma_pos >= 0:
-            issue_id = issue_id[0:comma_pos]
+        # Use a shorter path name
+        short_file_path = code_file.replace(base_directory, '')
+
+        if short_file_path == '':
+            print('--- WHY??? %s' % line)
 
         if code_file:
             issue_detail = [issue_id, issue_type, short_file_path, code_line]
@@ -202,18 +201,29 @@ def check_jira_status_for_all_issues(issue_dict, settings):
         if not status:
             # TODO: check if the issue id can be fixed
             try:
-                int_id = int(issue)
-                try_id = 'ICU-' + issue
+                int_id = int(issue.replace('#', ''))
+                try_id = 'ICU-%d' % int_id
                 status = check_jira_issue(try_id)
 
                 if not status:
                     # Try CLDR
-                    try_id = 'CLDR-' + issue
+                    try_id = 'CLDR-%d' % int_id
                     status = check_jira_issue(try_id)
+
             except BaseException as error:
                 # Not a simple number. Try other replacements
                 try_id = issue.replace('cldrbug:', 'CLDR-')
                 if try_id != issue:
+                    status = check_jira_issue(try_id)
+
+                if not status:
+                    # Some items have 'Jira ' in the issue name
+                    try_id = issue.replace('Jira ', '')
+                    status = check_jira_issue(try_id)
+
+                if not status:
+                    # Some items have 'cldrbug:' in the issue name
+                    try_id = issue.replace('cldrbug: ', 'CLDR-')
                     status = check_jira_issue(try_id)
 
         if not status:
@@ -282,27 +292,19 @@ def main(args):
     # Next, look at the status of all of these in JIRA
     closed_issue_ids, problem_ids, unresolved_ids = check_jira_status_for_all_issues(issue_dict, settings)
 
-    # Check on all the problem ids
-    logger.info('----------------------------------------------------------------')
-    logger.info('%d Closed ids: %s',
-                len(closed_issue_ids), (closed_issue_ids))
-    for id in sorted(closed_issue_ids):
-        lines_from_grep = issue_dict[id]
-        for line in lines_from_grep:
-            logger.info('       %s',  line)
-
-
+    logger.info('')
     logger.info('----------------------------------------------------------------')
     logger.info('PROBLEM IDS: %d not found in JIRA' % (len(problem_ids)))
     for id in sorted(problem_ids):
         issues = issue_dict[id]
-        logger.warning('Not in JIRA : "%s" (%d instances)', id, len(issues))
+        logger.warning('Not in JIRA : missing id = "%s" (%d instances)', id, len(issues))
         if settings.detail_level != 'summary':
             show_detail(issue_dict, id)
 
         for issue in issues:
             logger.debug('       %s', issue)
 
+    logger.info('')
     logger.info('----------------------------------------------------------------')
     logger.info('Unresolved IDS: %d still not "Done" in Jira' % (len(unresolved_ids)))
     for id in sorted(unresolved_ids):
@@ -310,6 +312,16 @@ def main(args):
         issue_key = id[0]
         if settings.detail_level != 'summary':
             show_detail(issue_dict, issue_key)
+
+    # Check on all the problem ids
+    logger.info('')
+    logger.info('----------------------------------------------------------------')
+    logger.info('%d Closed ids: %s',
+                len(closed_issue_ids), (closed_issue_ids))
+    for id in sorted(closed_issue_ids):
+        lines_from_grep = issue_dict[id]
+        for line in lines_from_grep:
+            logger.info('       %s',  line)
 
     # Try to fix the comment in the file(s) for each resolved ID.
 
