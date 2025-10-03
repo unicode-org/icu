@@ -139,9 +139,18 @@ a model.
 
 ## Scrub closed issues in code
 
-ICU and CLDR issues are tracked with the [Unicode JIRA tool](https://unicode-org.atlassian.net/jira/dashboards/last-visited). Each open issue should be indicated in code with either "TODO" or "knownIssue" as a comment that includes the JIRA identifier.
+ICU and CLDR issues are tracked with the [Unicode JIRA
+tool](https://unicode-org.atlassian.net/jira/dashboards/last-visited). Each open
+issue should be indicated in code with either "TODO" or "knownIssue" as a
+comment that includes the JIRA identifier.
 
-Sometimes an issue has been marked as "done" without updating the "TODO" or "knownIssue" item in the code or test routines. This step is used to synchronize the issue database and the code.
+A "TODO" or "knownIssue" usually prevents a test from executing, often with
+specific conditions. Instead, the output will include a message indicating that
+the issue is present but that it does not prevent the test suite from passing.
+
+Note that sometimes an issue has been marked as "done" without updating the
+"TODO" or "knownIssue" item in the code or test routines. This step is used to
+synchronize the issue database and the code.
 
 The idea is simple:
 
@@ -150,11 +159,27 @@ The idea is simple:
 (2) Do the same for logKnownIssue. (the data related logKnownIssues are often
 addressed during CLDR data integration)
 
-(3) For each TODO or logKnownIssue that is marked as "done", check the status:
-* If the problem is fixed,remove the TODO/logKnownIssue.
-* If the problem is not fixed, either reopen the issue or create a new issue
-and update the reference in the code.
-* Communicate problems with the Unicode tech team.
+(3) For each TODO or logKnownIssue that is marked as "done", check the status in
+JIRA. Check if the problem is actually fixed by removing the TODO/logKnownIssue
+protection from the code so the test will be executed.
+
+(4) Verify that the test now passes. First run local tests, i.e., in icu4c or
+icu4j.
+
+If any test does not pass, either reopen the issue or create a new issue and
+update the reference in the code. Then communicate the problems with the Unicode
+tech team.
+
+(5) If all tests have passed so far, run the exhaustive tests with the update.
+[See Exhaustive Tests](https://unicode-org.github.io/icu/userguide/dev/ci.html#:~:text=Exhaustive%20tests%20run%20tests%20on,and%20click%20'Run%20workflow') for details.
+
+If any test does not pass, the JIRA status is incorrect. Raise this problem with
+the Unicode tech team as noted above.
+
+If the exhaustive tests all pass, the TODO or knownIssue can be
+scrubbed. Createa pull request and request a review. Submit when approved and
+all conditions pass.
+
 
 > [!NOTE]
 > New in ICU78: Finding issues is automated with a python script in
