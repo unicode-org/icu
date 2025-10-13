@@ -285,7 +285,14 @@ struct Locale::Heap::Alloc : public UMemory {
 
     const char* getVariant() const { return variantBegin == 0 ? "" : getBaseName() + variantBegin; }
     const char* getFullName() const { return fullName.data(); }
-    const char* getBaseName() const { return baseName.isEmpty() ? getFullName() : baseName.data(); }
+    const char* getBaseName() const {
+        if (baseName.isEmpty()) {
+            if (const char* name = fullName.data(); *name != '@') {
+                return name;
+            }
+        }
+        return baseName.data();
+    }
 
     Alloc(int32_t variantBegin) : fullName(), baseName(), variantBegin(variantBegin) {}
 

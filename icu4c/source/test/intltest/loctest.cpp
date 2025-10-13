@@ -7254,14 +7254,51 @@ void LocaleTest::TestPayload() {
     {
         // One each of language, script, region, variant and an extension.
         constexpr char tag[] = "aaa_Adlm_001_POSIX@a=b";
-        Locale nest(tag);
-        assertEquals("[8] language", "aaa", nest.getLanguage());
-        assertEquals("[8] script", "Adlm", nest.getScript());
-        assertEquals("[8] region", "001", nest.getCountry());
-        assertEquals("[8] variant", "POSIX", nest.getVariant());
-        assertEquals("[8] name", tag, nest.getName());
-        assertEquals("[8] base name", "aaa_Adlm_001_POSIX", nest.getBaseName());
-        assertFalse("[8] name == base name", nest.getName() == nest.getBaseName());
-        assertFalse("[8] is struct Nest", nest.getLanguage() + baseNameNestOffset == nest.getBaseName());
+        Locale l(tag);
+        assertEquals("[8] language", "aaa", l.getLanguage());
+        assertEquals("[8] script", "Adlm", l.getScript());
+        assertEquals("[8] region", "001", l.getCountry());
+        assertEquals("[8] variant", "POSIX", l.getVariant());
+        assertEquals("[8] name", tag, l.getName());
+        assertEquals("[8] base name", "aaa_Adlm_001_POSIX", l.getBaseName());
+        assertFalse("[8] name == base name", l.getName() == l.getBaseName());
+        assertFalse("[8] is struct Nest", l.getLanguage() + baseNameNestOffset == l.getBaseName());
+    }
+    {
+        // The empty string is a valid locale.
+        constexpr char empty[] = "";
+        Locale l(empty);
+        assertEquals("[9] language", empty, l.getLanguage());
+        assertEquals("[9] script", empty, l.getScript());
+        assertEquals("[9] region", empty, l.getCountry());
+        assertEquals("[9] variant", empty, l.getVariant());
+        assertEquals("[9] name", empty, l.getName());
+        assertEquals("[9] base name", empty, l.getBaseName());
+        assertTrue("[9] name == base name", l.getName() == l.getBaseName());
+        assertTrue("[9] is struct Nest", l.getLanguage() + baseNameNestOffset == l.getBaseName());
+
+        // Setting an extension moves the data into struct Heap.
+        l.setKeywordValue("a", "b", status);
+        status.errIfFailureAndReset("setKeywordValue()");
+        assertEquals("[10] language", empty, l.getLanguage());
+        assertEquals("[10] script", empty, l.getScript());
+        assertEquals("[10] region", empty, l.getCountry());
+        assertEquals("[10] variant", "", l.getVariant());
+        assertEquals("[10] name", "@a=b", l.getName());
+        assertEquals("[10] base name", empty, l.getBaseName());
+        assertFalse("[10] name == base name", l.getName() == l.getBaseName());
+        assertFalse("[10] is struct Nest", l.getLanguage() + baseNameNestOffset == l.getBaseName());
+
+        // Removing the extension moves the data into struct Nest.
+        l.setKeywordValue("a", "", status);
+        status.errIfFailureAndReset("setKeywordValue()");
+        assertEquals("[11] language", empty, l.getLanguage());
+        assertEquals("[11] script", empty, l.getScript());
+        assertEquals("[11] region", empty, l.getCountry());
+        assertEquals("[11] variant", empty, l.getVariant());
+        assertEquals("[11] name", empty, l.getName());
+        assertEquals("[11] base name", empty, l.getBaseName());
+        assertTrue("[11] name == base name", l.getName() == l.getBaseName());
+        assertTrue("[11] is struct Nest", l.getLanguage() + baseNameNestOffset == l.getBaseName());
     }
 }
