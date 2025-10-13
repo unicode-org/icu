@@ -260,14 +260,36 @@ private:
   CheckedArrayByteSink &operator=(const CheckedArrayByteSink &) = delete;
 };
 
+namespace prv {
+/** @internal */
+template<typename StringClass, typename = void>
+struct value_type_or_char {
+  /** @internal */
+  using type = char;
+};
+/** @internal */
+template<typename StringClass>
+struct value_type_or_char<StringClass, std::void_t<typename StringClass::value_type>> {
+  /** @internal */
+  using type = typename StringClass::value_type;
+};
+/** @internal */
+template<typename StringClass>
+using value_type_or_char_t = typename value_type_or_char<StringClass>::type;
+}
+
 /** 
  * Implementation of ByteSink that writes to a "string".
  * The StringClass is usually instantiated with a std::string or a std::u8string.
+ * StringClass must have public member functions reserve(integer type), capacity(), length(), and
+ * append(value type, integer type) with the same semantics as those of std::basic_string, and must
+ * have an 8-bit value type.  If the value type is not char, it must be a public member type
+ * StringClass::value_type.
  * @stable ICU 4.2
  */
 template<typename StringClass>
 class StringByteSink : public ByteSink {
-  using Unit = typename StringClass::value_type;
+  using Unit = prv::value_type_or_char_t<StringClass>;
  public:
   /**
    * Constructs a ByteSink that will append bytes to the dest string.
