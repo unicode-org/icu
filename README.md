@@ -18,7 +18,7 @@ GitHub Actions (ICU4C) | [![GHA ICU4C](https://github.com/unicode-org/icu/workfl
 GitHub Actions (ICU4J) | [![GHA ICU4J](https://github.com/unicode-org/icu/workflows/GHA%20ICU4J/badge.svg)](https://github.com/unicode-org/icu/actions?query=workflow%3A%22GHA+ICU4J%22+branch%3Amain)
 GitHub Actions (Valgrind) | [![GHA CI Valgrind](https://github.com/unicode-org/icu/workflows/GHA%20CI%20Valgrind/badge.svg)](https://github.com/unicode-org/icu/actions/workflows/icu_valgrind.yml?query=workflow%3A%22GHA+CI%22+branch%3Amain)
 Exhaustive Tests | [![Exhaustive Tests for ICU](https://github.com/unicode-org/icu/actions/workflows/icu_exhaustive_tests.yml/badge.svg?branch=main)](https://github.com/unicode-org/icu/actions/workflows/icu_exhaustive_tests.yml?query=branch%3Amain)
-Fuzzing | [![Fuzzing Status](https://oss-fuzz-build-logs.storage.googleapis.com/badges/icu.svg)](https://bugs.chromium.org/p/oss-fuzz/issues/list?sort=-opened&can=1&q=proj:icu)
+Fuzzing | [![Fuzzing Status](https://oss-fuzz-build-logs.storage.googleapis.com/badges/icu.svg)](https://issues.oss-fuzz.com/issues?q=status:open%20componentid:1638179%20%22icu:%22)
 OpenSSF Scorecard | [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/unicode-org/icu/badge)](https://securityscorecards.dev/viewer/?uri=github.com/unicode-org/icu)
 
 
