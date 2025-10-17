@@ -51,7 +51,7 @@ $(DISTY_DOC_ZIP):  $(DOCZIP) $(DISTY_FILE_DIR)
 	cp $(DOCZIP) $(DISTY_DOC_ZIP)
 	ln -sf $(shell basename $(DISTY_DOC_ZIP)) $(DISTY_FILE_DIR)/icu4c-$(DISTY_VER)-$(GITVER)-docs.zip
 	ln -f  $(DISTY_DOC_ZIP) $(DISTY_FILE_DIR)/icu4c-$(DISTY_VER)-docs.zip
-  ls -l  $(DISTY_FILE_DIR)
+	ls -l  $(DISTY_FILE_DIR)
 
 $(DISTY_DAT):
 	echo Missing $@
@@ -67,9 +67,9 @@ $(DISTY_FILE_TGZ) $(DISTY_FILE_ZIP) $(DISTY_DATA_ZIP):  $(DISTY_DAT) $(DISTY_TMP
 	-$(RMV) $(DISTY_FILE) $(DISTY_TMP)
 	$(MKINSTALLDIRS) $(DISTY_TMP)
 	( cd $(ICU4CTOP)/.. && git archive --format=tar --prefix=icu/ HEAD:icu4c/ ) | ( cd "$(DISTY_TMP)" && tar xf - )
-    # special handling for LICENSE file. The symlinks will be included as files by tar and zip.
+	# special handling for LICENSE file. The symlinks will be included as files by tar and zip.
 	cp -fv $(ICU4CTOP)/LICENSE "$(DISTY_TMP)/LICENSE"
-    # Copy top-level testdata directory so it's a sibling of the source/ directory
+	# Copy top-level testdata directory so it's a sibling of the source/ directory
 	cp -R $(ICU4CTOP)/../testdata $(DISTY_TMP)/icu
 	( cd $(DISTY_TMP)/icu/source ; zip -rlq $(DISTY_DATA_ZIP) data )
 	$(MKINSTALLDIRS) $(DISTY_IN)
@@ -86,7 +86,7 @@ $(DISTY_FILE_TGZ) $(DISTY_FILE_ZIP) $(DISTY_DATA_ZIP):  $(DISTY_DAT) $(DISTY_TMP
 	ln -f  $(DISTY_FILE_ZIP) $(DISTY_FILE_DIR)/icu4c-$(DISTY_VER)-sources.zip
 	ln -f  $(DISTY_FILE_TGZ) $(DISTY_FILE_DIR)/icu4c-$(DISTY_VER)-sources.tgz
 	ln -f  $(DISTY_DATA_ZIP) $(DISTY_FILE_DIR)/icu4c-$(DISTY_VER)-data.zip
-  ls -l  $(DISTY_FILE_DIR)
+	ls -l  $(DISTY_FILE_DIR)
 
 dist-local: $(DISTY_FILES)
 	VERSION=$(VERSION) PACKAGE_VERSION=$(PACKAGE_VERSION) $(SHELL) $(top_srcdir)/config/dist-data.sh
