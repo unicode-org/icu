@@ -46,9 +46,9 @@ jobs:
         source icu4j/releases_tools/shared.sh
         pushd ${RELEASE_FOLDER}
         sha512sum -b icu4c*              > SHASUM512.txt
-        md5sum -b *.jar                  > icu4j-${artifact_version}.md5
-        md5sum -b icu4c-*-data-bin-*.zip > icu4c-${artifact_version}-binary.md5
-        md5sum -b icu4c-*-src.*          > icu4c-${artifact_version}-sources.md5
+        md5sum -b *.jar                  > icu4j-${github_rel_version}.md5
+        md5sum -b icu4c-*-data-bin-*.zip > icu4c-${github_rel_version}-binary.md5
+        md5sum -b icu4c-*-sources.*      > icu4c-${github_rel_version}-sources.md5
         find . -type f -name 'icu4c*' -exec gpg --no-tty --batch --pinentry-mode loopback --passphrase=$MAVEN_GPG_PASSPHRASE -a --output {}.asc --detach-sig {} \;
         gpg --no-tty --batch --pinentry-mode loopback --passphrase=$MAVEN_GPG_PASSPHRASE -a --output SHASUM512.txt.asc --detach-sig SHASUM512.txt
         popd

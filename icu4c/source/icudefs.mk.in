@@ -40,8 +40,9 @@ cross_buildroot = @cross_buildroot@
 # Package information
 
 PACKAGE_ICU_DESCRIPTION = "International Components for Unicode"
-PACKAGE_ICU_URL = "http://icu-project.org"
+PACKAGE_ICU_URL = "https://icu.unicode.org"
 PACKAGE = @PACKAGE@
+PACKAGE_VERSION = @PACKAGE_VERSION@
 VERSION = @VERSION@
 UNICODE_VERSION = @UNICODE_VERSION@
 SO_TARGET_VERSION = @LIB_VERSION@

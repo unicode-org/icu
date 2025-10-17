@@ -471,19 +471,10 @@ jobs:
     - name: Extract ICU version and rename zip file
       id: set-zip-name
       run: |
-        # Extract ICU version from icuver.txt
-        $icuverContent = Get-Content icu4c\source\data\misc\icuver.txt
-        $icuVersion = ($icuverContent -match 'ICUVersion{"(\d+\.\d+\.\d+\.\d+)"}')[0]
-        $icuVersion -match '\{"(.*?)"\}' | Out-Null
-        $icuVersion = $matches[1]
-        $majorVersion = $icuVersion.Split('.')[0]
-        $minorVersion = $icuVersion.Split('.')[1]
+        # Extract ICU version from the release tag
+        $releaseTag = '${{ inputs.gitReleaseTag }}'.replace('release-','')
         # Determine the new file name based on the version
-        if ($minorVersion -eq "0") {
-          $newZipName = "icu4c-${majorVersion}.1rc-${{ matrix.win_ver }}-MSVC2022"
-        } else {
-          $newZipName = "icu4c-${majorVersion}.${minorVersion}-${{ matrix.win_ver }}-MSVC2022"
-        }
+        $newZipName = "icu4c-${releaseTag}-${{ matrix.win_ver }}-MSVC2022"
         # Debugging: Print the new zip name
         Write-Host "New Zip Name: $newZipName"
         # Rename the existing zip file
@@ -950,23 +941,23 @@ jobs:
       - name: Zip
         run: |
           cd icu4c/source/icuexportdata
-          zip -r ../../../icu4x-exportdata_${{ inputs.gitReleaseFilename }}.zip .
+          zip -r ../../../icu4x-icuexportdata_${{ inputs.gitReleaseFilename }}.zip .
       - name: Publish Artifact
         uses: actions/upload-artifact@v4
         with:
           name: icuexportdata_output
-          path: icu4x-exportdata_*.zip
+          path: icu4x-icuexportdata_*.zip
       - name: Upload to release tag
         if: ${{ inputs.gitReleaseTag && startsWith(inputs.gitReleaseTag, 'release-') }}
         run: |
           zipVer=$(echo ${{ inputs.gitReleaseTag }} | sed 's/^release-//')
-          mv icu4x-exportdata_*.zip icu4x-exportdata-${zipVer}.zip
-          gh release upload ${{ inputs.gitReleaseTag }} icu4x-exportdata-*.zip --clobber
+          mv icu4x-icuexportdata_*.zip icu4x-icuexportdata-${zipVer}.zip
+          gh release upload ${{ inputs.gitReleaseTag }} icu4x-icuexportdata-*.zip --clobber
         env:
           GH_TOKEN: ${{ github.token }}
       - name: Upload to icu4x tag
         if: ${{ inputs.gitReleaseTag && startsWith(inputs.gitReleaseTag, 'icu4x/') }}
         run: |
-          gh release upload ${{ inputs.gitReleaseTag }} icu4x-exportdata_*.zip --clobber
+          gh release upload ${{ inputs.gitReleaseTag }} icu4x-icuexportdata_*.zip --clobber
         env:
           GH_TOKEN: ${{ github.token }}

@@ -62,10 +62,10 @@ jobs:
       run: |
         # Get the OS version in VERSION_ID
         source /etc/os-release
-        # Get the ICU version in artifact_version
+        # Get the ICU version in github_rel_version
         source icu4j/releases_tools/shared.sh
         pushd ${RELEASE_FOLDER}
-        tar -czf icu4c-${artifact_version}-Fedora_Linux${VERSION_ID}-x64.tgz icu
+        tar -czf icu4c-${github_rel_version}-Fedora_Linux${VERSION_ID}-x64.tgz icu
         rm -fr icu
         popd
 

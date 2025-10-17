@@ -27,13 +27,13 @@ DOCZIP=icu-docs.zip
 
 ICU4CTOP=$(top_srcdir)/..
 GITVER=$(shell (cd $(ICU4CTOP) && (git describe --tags --exact-match 2>/dev/null || git rev-parse --short HEAD)) || echo 'unknown')
-DISTY_VER=$(shell echo $(VERSION) | tr '.' '_' )
+DISTY_VER=$(PACKAGE_VERSION)
 DISTY_PREFIX=icu4c
 DISTY_FILE_DIR=$(shell pwd)/$(DISTY_DIR)
-DISTY_FILE_TGZ=$(DISTY_FILE_DIR)/$(DISTY_PREFIX)-$(DISTY_VER)-$(GITVER)-src.tgz
-DISTY_FILE_ZIP=$(DISTY_FILE_DIR)/$(DISTY_PREFIX)-$(DISTY_VER)-$(GITVER)-src.zip
-DISTY_DOC_ZIP=$(DISTY_FILE_DIR)/$(DISTY_PREFIX)-$(DISTY_VER)-$(GITVER)-docs.zip
-DISTY_DATA_ZIP=$(DISTY_FILE_DIR)/$(DISTY_PREFIX)-$(DISTY_VER)-$(GITVER)-data.zip
+DISTY_FILE_TGZ=$(DISTY_FILE_DIR)/$(DISTY_PREFIX)-sources.tgz
+DISTY_FILE_ZIP=$(DISTY_FILE_DIR)/$(DISTY_PREFIX)-sources.zip
+DISTY_DOC_ZIP=$(DISTY_FILE_DIR)/$(DISTY_PREFIX)-docs.zip
+DISTY_DATA_ZIP=$(DISTY_FILE_DIR)/$(DISTY_PREFIX)-data.zip
 DISTY_DAT:=$(firstword $(wildcard data/out/tmp/icudt$(SO_TARGET_VERSION_MAJOR)*.dat))
 
 DISTY_FILES_SRC=$(DISTY_FILE_TGZ) $(DISTY_FILE_ZIP)
@@ -49,8 +49,9 @@ $(DISTY_TMP):
 
 $(DISTY_DOC_ZIP):  $(DOCZIP) $(DISTY_FILE_DIR)
 	cp $(DOCZIP) $(DISTY_DOC_ZIP)
-	ln -sf $(shell basename $(DISTY_DOC_ZIP)) $(DISTY_FILE_DIR)/icu4c-docs.zip
-	ln -f $(DISTY_DOC_ZIP) $(DISTY_FILE_DIR)/icu4c-$(DISTY_VER)-docs.zip
+	ln -sf $(shell basename $(DISTY_DOC_ZIP)) $(DISTY_FILE_DIR)/icu4c-$(DISTY_VER)-$(GITVER)-docs.zip
+	ln -f  $(DISTY_DOC_ZIP) $(DISTY_FILE_DIR)/icu4c-$(DISTY_VER)-docs.zip
+	ls -l  $(DISTY_FILE_DIR)
 
 $(DISTY_DAT):
 	echo Missing $@
@@ -66,9 +67,9 @@ $(DISTY_FILE_TGZ) $(DISTY_FILE_ZIP) $(DISTY_DATA_ZIP):  $(DISTY_DAT) $(DISTY_TMP
 	-$(RMV) $(DISTY_FILE) $(DISTY_TMP)
 	$(MKINSTALLDIRS) $(DISTY_TMP)
 	( cd $(ICU4CTOP)/.. && git archive --format=tar --prefix=icu/ HEAD:icu4c/ ) | ( cd "$(DISTY_TMP)" && tar xf - )
-    # special handling for LICENSE file. The symlinks will be included as files by tar and zip.
+	# special handling for LICENSE file. The symlinks will be included as files by tar and zip.
 	cp -fv $(ICU4CTOP)/LICENSE "$(DISTY_TMP)/LICENSE"
-    # Copy top-level testdata directory so it's a sibling of the source/ directory
+	# Copy top-level testdata directory so it's a sibling of the source/ directory
 	cp -R $(ICU4CTOP)/../testdata $(DISTY_TMP)/icu
 	( cd $(DISTY_TMP)/icu/source ; zip -rlq $(DISTY_DATA_ZIP) data )
 	$(MKINSTALLDIRS) $(DISTY_IN)
@@ -79,16 +80,16 @@ $(DISTY_FILE_TGZ) $(DISTY_FILE_ZIP) $(DISTY_DATA_ZIP):  $(DISTY_DAT) $(DISTY_TMP
 	( cd $(DISTY_TMP) ; tar cfpzh $(DISTY_FILE_TGZ) icu )
 	( cd $(DISTY_TMP) ; zip -rlq $(DISTY_FILE_ZIP) icu )
 	$(RMV) $(DISTY_TMP)
-	ln -sf $(shell basename $(DISTY_FILE_ZIP)) $(DISTY_FILE_DIR)/icu4c-src.zip
-	ln -sf $(shell basename $(DISTY_FILE_TGZ)) $(DISTY_FILE_DIR)/icu4c-src.tgz
-	ln -sf $(shell basename $(DISTY_DATA_ZIP)) $(DISTY_FILE_DIR)/icu4c-data.zip
-	ln -f $(DISTY_FILE_ZIP) $(DISTY_FILE_DIR)/icu4c-$(DISTY_VER)-src.zip
-	ln -f $(DISTY_FILE_TGZ) $(DISTY_FILE_DIR)/icu4c-$(DISTY_VER)-src.tgz
-	ln -f $(DISTY_DATA_ZIP) $(DISTY_FILE_DIR)/icu4c-$(DISTY_VER)-data.zip
-	ls -l $(DISTY_FILE_TGZ) $(DISTY_FILE_ZIP) $(DISTY_DATA_ZIP)
+	ln -sf $(shell basename $(DISTY_FILE_ZIP)) $(DISTY_FILE_DIR)/icu4c-$(DISTY_VER)-$(GITVER)-sources.zip
+	ln -sf $(shell basename $(DISTY_FILE_TGZ)) $(DISTY_FILE_DIR)/icu4c-$(DISTY_VER)-$(GITVER)-sources.tgz
+	ln -sf $(shell basename $(DISTY_DATA_ZIP)) $(DISTY_FILE_DIR)/icu4c-$(DISTY_VER)-$(GITVER)-data.zip
+	ln -f  $(DISTY_FILE_ZIP) $(DISTY_FILE_DIR)/icu4c-$(DISTY_VER)-sources.zip
+	ln -f  $(DISTY_FILE_TGZ) $(DISTY_FILE_DIR)/icu4c-$(DISTY_VER)-sources.tgz
+	ln -f  $(DISTY_DATA_ZIP) $(DISTY_FILE_DIR)/icu4c-$(DISTY_VER)-data.zip
+	ls -l  $(DISTY_FILE_DIR)
 
 dist-local: $(DISTY_FILES)
-	VERSION=$(VERSION) $(SHELL) $(top_srcdir)/config/dist-data.sh
+	VERSION=$(VERSION) PACKAGE_VERSION=$(PACKAGE_VERSION) $(SHELL) $(top_srcdir)/config/dist-data.sh
 
 distcheck: distcheck-tgz
 

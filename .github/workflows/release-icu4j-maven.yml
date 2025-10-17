@@ -98,20 +98,31 @@ jobs:
     - name: Prepare release folder
       run: |
         pushd icu4j
-        ICU_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+        # Get the ICU release version in github_rel_version
+        source releases_tools/shared.sh
         # Copy the artifacts (with sources and javdoc .jar files) to the release folder
         mvn dependency:copy \
           ${SHARED_MVN_ARGS} \
           -DskipTests -DskipITs \
           -Drelease.directory=${RELEASE_FOLDER} \
+          -Dmdep.stripVersion=true \
           -P release_files
+
+        # Rename the artifacts if needed
+        mv ${RELEASE_FOLDER}/icu4j.jar                 ${RELEASE_FOLDER}/icu4j-${github_rel_version}.jar
+        mv ${RELEASE_FOLDER}/icu4j-javadoc.jar         ${RELEASE_FOLDER}/icu4j-${github_rel_version}-javadoc.jar
+        mv ${RELEASE_FOLDER}/icu4j-sources.jar         ${RELEASE_FOLDER}/icu4j-${github_rel_version}-sources.jar
+        mv ${RELEASE_FOLDER}/icu4j-charset.jar         ${RELEASE_FOLDER}/icu4j-charset-${github_rel_version}.jar
+        mv ${RELEASE_FOLDER}/icu4j-charset-javadoc.jar ${RELEASE_FOLDER}/icu4j-charset-${github_rel_version}-javadoc.jar
+        mv ${RELEASE_FOLDER}/icu4j-charset-sources.jar ${RELEASE_FOLDER}/icu4j-charset-${github_rel_version}-sources.jar
+
         # Build the full javadoc to be posted on the public site
         mvn site \
           ${SHARED_MVN_ARGS} \
           -DskipITs -DskipTests \
           -P with_full_javadoc
         # Archive the full doc in a jar. Should also be posted to the web as official doc.
-        jar -Mcf ${RELEASE_FOLDER}/icu4j-${ICU_VERSION}-fulljavadoc.jar \
+        jar -Mcf ${RELEASE_FOLDER}/icu4j-${github_rel_version}-fulljavadoc.jar \
           -C target/site/apidocs/ .
         popd # out of icu4j
 
