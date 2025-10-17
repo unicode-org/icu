@@ -33,7 +33,7 @@ VERS=$(echo ${DATFILE} | tr -d a-z/.)
 # Version number, i.e. 70.1
 VERSION=${VERSION-unknown}
 # Version number for files, i.e. 70_1
-VERSION_FILE=$(echo ${VERSION} | tr . _)
+VERSION_FILE=${PACKAGE_VERSION}
 
 if [[ "${VERSION}" = "unknown" ]];
 then
