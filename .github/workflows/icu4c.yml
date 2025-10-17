@@ -941,23 +941,23 @@ jobs:
       - name: Zip
         run: |
           cd icu4c/source/icuexportdata
-          zip -r ../../../icu4x-exportdata_${{ inputs.gitReleaseFilename }}.zip .
+          zip -r ../../../icu4x-icuexportdata_${{ inputs.gitReleaseFilename }}.zip .
       - name: Publish Artifact
         uses: actions/upload-artifact@v4
         with:
           name: icuexportdata_output
-          path: icu4x-exportdata_*.zip
+          path: icu4x-icuexportdata_*.zip
       - name: Upload to release tag
         if: ${{ inputs.gitReleaseTag && startsWith(inputs.gitReleaseTag, 'release-') }}
         run: |
           zipVer=$(echo ${{ inputs.gitReleaseTag }} | sed 's/^release-//')
-          mv icu4x-exportdata_*.zip icu4x-exportdata-${zipVer}.zip
-          gh release upload ${{ inputs.gitReleaseTag }} icu4x-exportdata-*.zip --clobber
+          mv icu4x-icuexportdata_*.zip icu4x-icuexportdata-${zipVer}.zip
+          gh release upload ${{ inputs.gitReleaseTag }} icu4x-icuexportdata-*.zip --clobber
         env:
           GH_TOKEN: ${{ github.token }}
       - name: Upload to icu4x tag
         if: ${{ inputs.gitReleaseTag && startsWith(inputs.gitReleaseTag, 'icu4x/') }}
         run: |
-          gh release upload ${{ inputs.gitReleaseTag }} icu4x-exportdata_*.zip --clobber
+          gh release upload ${{ inputs.gitReleaseTag }} icu4x-icuexportdata_*.zip --clobber
         env:
           GH_TOKEN: ${{ github.token }}
