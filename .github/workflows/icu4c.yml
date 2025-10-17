@@ -472,8 +472,7 @@ jobs:
       id: set-zip-name
       run: |
         # Extract ICU version from the release tag
-        $releaseTag = ${{ inputs.gitReleaseTag }}
-        $releaseTag = $releaseTag.replace('release-','')
+        $releaseTag = '${{ inputs.gitReleaseTag }}'.replace('release-','')
         # Determine the new file name based on the version
         $newZipName = "icu4c-${releaseTag}-${{ matrix.win_ver }}-MSVC2022"
         # Debugging: Print the new zip name
