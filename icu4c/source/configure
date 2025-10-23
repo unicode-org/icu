@@ -606,7 +606,7 @@ MAKEFLAGS=
 # Identity of this package.
 PACKAGE_NAME='ICU'
 PACKAGE_TARNAME='icu4c'
-PACKAGE_VERSION='78.1rc'
+PACKAGE_VERSION='78.1'
 PACKAGE_STRING='ICU 78.1'
 PACKAGE_BUGREPORT='https://icu.unicode.org/bugs'
 PACKAGE_URL='https://icu.unicode.org/'
