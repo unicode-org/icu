@@ -324,7 +324,7 @@ inline constexpr uint32_t UPROPS_MAX_BLOCK = 0x3ff;
  * Gets the main properties value for a code point.
  * Implemented in uchar.c for uprops.cpp.
  */
-U_CFUNC uint32_t
+U_CAPI uint32_t
 u_getMainProperties(UChar32 c);
 
 /**
