@@ -545,6 +545,10 @@ void U_CALLCONV initUnitExtras(UErrorCode& status) {
     }
     gUnitReplacementStrings = (const char*)uprv_malloc(unitReplacementStringLength * sizeof(char));
     gUnitReplacements = (const char**)uprv_malloc(unitReplacements.length() * sizeof(const char**));
+    if (gUnitReplacementStrings == nullptr || gUnitReplacements == nullptr) {
+		status = U_MEMORY_ALLOCATION_ERROR;
+		return;
+    }
     gNumUnitReplacements = unitReplacements.length();
     char* p = const_cast<char*>(gUnitReplacementStrings);
     for (int32_t i = 0; i < unitReplacements.length(); i++) {
