@@ -266,7 +266,7 @@ public class StableAPI {
             System.out.println("--" + whichVer + "dir not set.");
             printUsage(); /* exits */
         } else if (!dir.exists() || !dir.isDirectory()) {
-            System.out.println("--" + whichVer + "dir=" + dir.getName() + " does not exist or is not a directory.");
+            System.out.println("--" + whichVer + "dir=" + dir + " does not exist or is not a directory.");
             printUsage(); /* exits */
         }
         String result = null;
