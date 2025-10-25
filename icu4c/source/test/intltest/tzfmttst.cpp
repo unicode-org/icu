@@ -583,6 +583,13 @@ void TimeZoneFormatTest::RunTimeRoundTripTests(int32_t threadNumber) {
         timer = Calendar::getNow();
 
         while ((tzid = tzids->snext(status))) {
+        	// NOTE: This test only fails in the exhaustive tests.  If you take out this check,
+        	// make sure you run the exhaustive tests!
+            if (logKnownIssue("CLDR-18924", "Time round trip issues for Pacific/Apia in various locales" ) &&
+                (tzid->compare(u"Pacific/Apia", -1) == 0)) {
+                continue;
+            }
+
             if (uprv_strcmp(PATTERNS[patidx], "V") == 0) {
                 // Some zones do not have short ID assigned, such as Asia/Riyadh87.
                 // The time roundtrip will fail for such zones with pattern "V" (short zone ID).
