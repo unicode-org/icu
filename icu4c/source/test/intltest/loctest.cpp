@@ -266,6 +266,7 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
     TESTCASE_AUTO(TestBug13554);
     TESTCASE_AUTO(TestBug20410);
     TESTCASE_AUTO(TestBug20900);
+    TESTCASE_AUTO(TestChromiumBug451657601);
     TESTCASE_AUTO(TestLocaleCanonicalizationFromFile);
     TESTCASE_AUTO(TestKnownCanonicalizedListCorrect);
     TESTCASE_AUTO(TestConstructorAcceptsBCP47);
@@ -5847,6 +5848,12 @@ void LocaleTest::TestBug20900() {
                     testCases[i].localeID, tag);
         assertEquals("createCanonical", testCases[i].canonicalID, tag);
     }
+}
+
+void LocaleTest::TestChromiumBug451657601() {
+    // This used to cause a crash in _LIBCPP_HARDENING_MODE.
+    Locale l = Locale("@x=@; ");
+    assertEquals("canonicalized", "@x=@", l.getName());
 }
 
 U_DEFINE_LOCAL_OPEN_POINTER(LocalStdioFilePointer, FILE, fclose);

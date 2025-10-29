@@ -126,6 +126,7 @@ public:
     void TestBug13554();
     void TestBug20410();
     void TestBug20900();
+    void TestChromiumBug451657601();
     void TestLocaleCanonicalizationFromFile();
     void TestKnownCanonicalizedListCorrect();
     void TestConstructorAcceptsBCP47();

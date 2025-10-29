@@ -627,7 +627,7 @@ ulocimp_getKeywords(std::string_view localeID,
         do {
             bool duplicate = false;
             /* skip leading spaces */
-            while (localeID.front() == ' ') {
+            while (!localeID.empty() && localeID.front() == ' ') {
                 localeID.remove_prefix(1);
             }
             if (localeID.empty()) { /* handle trailing "; " */
