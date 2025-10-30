@@ -46,7 +46,7 @@ including new characters and scripts, emoji, collation & IDNA changes, and corre
 
 It also updates to
 [CLDR 48](https://cldr.unicode.org/downloads/cldr-48)
-([beta blog](https://blog.unicode.org/2025/10/unicode-cldr-48-beta-available-for.html))
+([blog](https://blog.unicode.org/2025/10/unicode-cldr-48-available.html))
 locale data with new locales, and various additions and corrections.
 
 In Java, there is a new Segmenter API which is easier and safer to use than BreakIterator.\
