@@ -177,8 +177,15 @@ Adjust the navbar data at the top: Title, and nav_order one fewer than last time
 Adjust the new page as needed: Adjust the title to "ICU 77" (with the right version number...),
 remove contents specific to the previous release, update all version numbers, update all links.
 
-Put a big, **bold+italics** warning at the top like "This version has not been
-released yet. Use it for testing but do not use it in production!"
+Put a warning at the top (before the Release Overview) like
+"This version has not been released yet. Use it for testing but do not use it in production!"
+
+Another example:
+```
+## Release Candidate
+
+**This is a release candidate. Please use it for testing, but do not use it in production.**
+```
 
 Compare with the one-year-ago release page and adjust for whether we have a major release,
 a new Unicode version, etc.
@@ -194,6 +201,23 @@ like a Migration Issues section etc.
 Ask everyone on the team to add stuff & details.
 
 Once the page has been created and merged, consider editing online on GitHub.
+
+#### Release candidate download pages
+
+On release candidate day, update the download page: Version numbers, dates, tags, links.
+
+Also update:
+- The [main download page](https://unicode-org.github.io/icu/download/): Insert a “Release Candidate” section before the “Latest Release”.
+- The [main docs page](https://unicode-org.github.io/icu/): same
+
+#### Release day download pages
+
+On release day, update the download page: Version numbers, dates, tags, links.
+
+Also update:
+- The [main download page](https://unicode-org.github.io/icu/download/)
+- The [main docs page](https://unicode-org.github.io/icu/)
+- The [ICU Sites page](https://icu.unicode.org/)
 
 ### Maintenance release
 
