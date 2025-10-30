@@ -13,3 +13,23 @@ updates:
       github-actions:
         patterns:
           - "*"
+
+  - package-ecosystem: bundler
+    directory: /docs
+    schedule:
+      interval: daily
+
+  - package-ecosystem: maven
+    directory: /icu4j
+    schedule:
+      interval: daily
+
+  - package-ecosystem: maven
+    directory: /tools/cldr/cldr-to-icu
+    schedule:
+      interval: daily
+
+  - package-ecosystem: maven
+    directory: /tools/release/java
+    schedule:
+      interval: daily

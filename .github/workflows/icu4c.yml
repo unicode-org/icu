@@ -404,7 +404,7 @@ jobs:
     steps:
       - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
       - name: Set up MSBuild
-        uses: microsoft/setup-msbuild@v2
+        uses: microsoft/setup-msbuild@6fb02220983dee41ce7ae257b6f4d8f9bf5ed4ce # v2.0.0
       - name: Build Solution x64
         if: contains(matrix.test_flags, 'arm Release')
         run: msbuild icu4c/source/allinone/allinone.sln /p:Configuration=Release /p:Platform=x64 /p:SkipUWP=true
@@ -428,7 +428,7 @@ jobs:
         echo "ICU_DATA_FILTER_FILE=$filterPath" >> $GITHUB_ENV
       shell: pwsh
     - name: Set up MSBuild
-      uses: microsoft/setup-msbuild@v2
+      uses: microsoft/setup-msbuild@6fb02220983dee41ce7ae257b6f4d8f9bf5ed4ce # v2.0.0
     - name: Build Solution with Data Filter
       run: msbuild icu4c/source/allinone/allinone.sln /p:Configuration=Release /p:Platform=x64 /p:SkipUWP=true
 
@@ -454,7 +454,7 @@ jobs:
     steps:
     - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
     - name: Set up MSBuild
-      uses: microsoft/setup-msbuild@v2
+      uses: microsoft/setup-msbuild@6fb02220983dee41ce7ae257b6f4d8f9bf5ed4ce # v2.0.0
     - name: Build Solution x64
       if: contains(matrix.win_ver, 'ARM64')
       run: msbuild icu4c/source/allinone/allinone.sln /p:Configuration=Release /p:Platform=x64 /p:SkipUWP=true
@@ -493,7 +493,7 @@ jobs:
         ls -l .
         echo "newZipName=$newZipName" | Out-File -FilePath $env:GITHUB_ENV -Append
     - name: Upload artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
       with:
         name: icu4c.${{ matrix.win_ver }}.run_#${{ github.run_number }}
         path: icu4c/source/dist/${{ env.newZipName }}.zip
@@ -514,7 +514,7 @@ jobs:
     steps:
     - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
     - name: Set up MSYS2
-      uses: msys2/setup-msys2@v2
+      uses: msys2/setup-msys2@fb197b72ce45fb24f17bf3f807a388985654d1f2 # v2.29.0
       id: msys2
       with:
         update: true
@@ -764,13 +764,13 @@ jobs:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
     - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v4.1.1
-    - uses: bazel-contrib/setup-bazel@0.15.0
+    - uses: bazel-contrib/setup-bazel@4fd964a13a440a8aeb0be47350db2fc640f19ca8 # 0.15.0
     - name: Get CI Linux runner VM version
       id: linux-version
       run: |
         echo "LINUX_VERSION=$(grep -F VERSION_ID /etc/os-release | cut -d'"' -f2)" >> $GITHUB_OUTPUT
     - name: Mount bazel cache
-      uses: actions/cache@v4.2.0
+      uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
       with:
         path: "~/.cache/bazel"
         key: bazel-${{ runner.os }}-${{ steps.linux-version.outputs.LINUX_VERSION }}
@@ -952,7 +952,7 @@ jobs:
           cd icu4c/source/icuexportdata
           zip -r ../../../icu4x-exportdata_${{ inputs.gitReleaseFilename }}.zip .
       - name: Publish Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: icuexportdata_output
           path: icu4x-exportdata_*.zip

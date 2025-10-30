@@ -44,6 +44,9 @@ concurrency:
 env:
   SHARED_MVN_ARGS: '--show-version --no-transfer-progress'
 
+permissions:
+  contents: read
+
 jobs:
   # Runs exhaustive tests for ICU4J on Linux
   icu4j-linux:
