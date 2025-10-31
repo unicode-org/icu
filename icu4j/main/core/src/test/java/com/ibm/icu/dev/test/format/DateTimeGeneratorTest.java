@@ -1350,7 +1350,7 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
                 new TestOptionsItem( "da", "Hmm",  "HH.mm",        DateTimePatternGenerator.MATCH_NO_OPTIONS        ),
                 new TestOptionsItem( "da", "HHmm", "HH.mm",        DateTimePatternGenerator.MATCH_NO_OPTIONS        ),
                 new TestOptionsItem( "da", "hhmm", "h.mm\u202Fa",  DateTimePatternGenerator.MATCH_NO_OPTIONS        ),
-                new TestOptionsItem( "da", "Hmm",  "H.mm",         DateTimePatternGenerator.MATCH_HOUR_FIELD_LENGTH ),
+                new TestOptionsItem( "da", "Hmm",  "HH.mm",        DateTimePatternGenerator.MATCH_HOUR_FIELD_LENGTH ),
                 new TestOptionsItem( "da", "HHmm", "HH.mm",        DateTimePatternGenerator.MATCH_HOUR_FIELD_LENGTH ),
                 new TestOptionsItem( "da", "hhmm", "hh.mm\u202Fa", DateTimePatternGenerator.MATCH_HOUR_FIELD_LENGTH ),
                 //
@@ -1889,7 +1889,7 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
                                            "d MMM y, HH:mm",
                                            "dd/MM/y HH:mm" } ),
             new DTPLocaleAndResults( "ha", new String[]{
-                                           "EEEE d MMMM, y 'da' HH:mm",
+                                           "y MMMM d, EEEE 'da' HH:mm",
                                            "d MMMM, y 'da' HH:mm",
                                            "d MMM, y, HH:mm",
                                            "y-MM-dd, HH:mm" } ),
@@ -2076,5 +2076,16 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
         // we still select GyMMMEd, but we don't change it to a numeric month.
         String bestPattern = dtpg.getBestPattern("GyMEd");
         assertEquals("Should not substitute numeric for alpha", "EEE, MMM d, y G", bestPattern);
+    }
+
+    @Test
+    public void testTimePatternSelection18881() {
+        DateTimePatternGenerator dtpg0 = DateTimePatternGenerator.getInstance(ULocale.forLanguageTag("th"));
+        String bestPattern = dtpg0.getBestPattern("MMMMdjmsO");
+        assertEquals("getInstance", "d MMMM เวลา HH:mm:ss O", bestPattern);
+
+        DateTimePatternGenerator dtpg1 = DateTimePatternGenerator.getInstanceNoStdPat(ULocale.forLanguageTag("th"));
+        bestPattern = dtpg1.getBestPattern("MMMMdjmsO");
+        assertEquals("getInstanceNoStdPat", "d MMMM HH:mm:ss O", bestPattern);
     }
 }

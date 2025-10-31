@@ -156,10 +156,10 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         PatternInfo returnInfo = new PatternInfo();
 
         addCanonicalItems();
-        if (!skipStdPatterns) { // skip to prevent circular dependency when used by Calendar
+        addCLDRData(returnInfo, uLocale);
+        if (!skipStdPatterns && cldrAvailableFormatKeys.isEmpty()) { // skip to prevent circular dependency when used by Calendar
             addICUPatterns(returnInfo, uLocale);
         }
-        addCLDRData(returnInfo, uLocale);
         if (!skipStdPatterns) { // also skip to prevent circular dependency from Calendar
             setDateTimeFromCalendar(uLocale);
         } else {
