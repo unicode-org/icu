@@ -8,6 +8,10 @@
  */
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.TestUtil;
+import com.ibm.icu.impl.Utility;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -15,26 +19,17 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ibm.icu.dev.test.CoreTestFmwk;
-import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.dev.test.TestUtil;
-import com.ibm.icu.impl.Utility;
-
-/**
- * A collection of methods to run the data driven number format test suite.
- */
+/** A collection of methods to run the data driven number format test suite. */
 public class DataDrivenNumberFormatTestUtility extends CoreTestFmwk {
 
-    /**
-     * Base class for code under test.
-     */
-    public static abstract class CodeUnderTest {
+    /** Base class for code under test. */
+    public abstract static class CodeUnderTest {
 
         /**
-         * Returns the ID of the code under test. This ID is used to identify
-         * tests that are known to fail for this particular code under test.
-         * This implementation returns null which means that by default all
-         * tests should work with this code under test.
+         * Returns the ID of the code under test. This ID is used to identify tests that are known
+         * to fail for this particular code under test. This implementation returns null which means
+         * that by default all tests should work with this code under test.
+         *
          * @return 'J' means ICU4J, 'K' means JDK
          */
         public Character Id() {
@@ -42,10 +37,10 @@ public class DataDrivenNumberFormatTestUtility extends CoreTestFmwk {
         }
 
         /**
-         *  Runs a single formatting test. On success, returns null.
-         *  On failure, returns the error. This implementation just returns null.
-         *  Subclasses should override.
-         *  @param tuple contains the parameters of the format test.
+         * Runs a single formatting test. On success, returns null. On failure, returns the error.
+         * This implementation just returns null. Subclasses should override.
+         *
+         * @param tuple contains the parameters of the format test.
          */
         public String format(DataDrivenNumberFormatTestData tuple) {
             if (tuple.output != null && tuple.output.equals("fail")) return "fail";
@@ -53,10 +48,10 @@ public class DataDrivenNumberFormatTestUtility extends CoreTestFmwk {
         }
 
         /**
-         *  Runs a single toPattern test. On success, returns null.
-         *  On failure, returns the error. This implementation just returns null.
-         *  Subclasses should override.
-         *  @param tuple contains the parameters of the format test.
+         * Runs a single toPattern test. On success, returns null. On failure, returns the error.
+         * This implementation just returns null. Subclasses should override.
+         *
+         * @param tuple contains the parameters of the format test.
          */
         public String toPattern(DataDrivenNumberFormatTestData tuple) {
             if (tuple.output != null && tuple.output.equals("fail")) return "fail";
@@ -64,10 +59,10 @@ public class DataDrivenNumberFormatTestUtility extends CoreTestFmwk {
         }
 
         /**
-         *  Runs a single parse test. On success, returns null.
-         *  On failure, returns the error. This implementation just returns null.
-         *  Subclasses should override.
-         *  @param tuple contains the parameters of the format test.
+         * Runs a single parse test. On success, returns null. On failure, returns the error. This
+         * implementation just returns null. Subclasses should override.
+         *
+         * @param tuple contains the parameters of the format test.
          */
         public String parse(DataDrivenNumberFormatTestData tuple) {
             if (tuple.output != null && tuple.output.equals("fail")) return "fail";
@@ -75,10 +70,10 @@ public class DataDrivenNumberFormatTestUtility extends CoreTestFmwk {
         }
 
         /**
-         *  Runs a single parse currency test. On success, returns null.
-         *  On failure, returns the error. This implementation just returns null.
-         *  Subclasses should override.
-         *  @param tuple contains the parameters of the format test.
+         * Runs a single parse currency test. On success, returns null. On failure, returns the
+         * error. This implementation just returns null. Subclasses should override.
+         *
+         * @param tuple contains the parameters of the format test.
          */
         public String parseCurrency(DataDrivenNumberFormatTestData tuple) {
             if (tuple.output != null && tuple.output.equals("fail")) return "fail";
@@ -86,9 +81,9 @@ public class DataDrivenNumberFormatTestUtility extends CoreTestFmwk {
         }
 
         /**
-         * Runs a single select test. On success, returns null.
-         *  On failure, returns the error. This implementation just returns null.
-         *  Subclasses should override.
+         * Runs a single select test. On success, returns null. On failure, returns the error. This
+         * implementation just returns null. Subclasses should override.
+         *
          * @param tuple contains the parameters of the format test.
          */
         public String select(DataDrivenNumberFormatTestData tuple) {
@@ -112,24 +107,22 @@ public class DataDrivenNumberFormatTestUtility extends CoreTestFmwk {
 
     /**
      * Runs all the tests in the data driven test suite against codeUnderTest.
-     * @param fileName The name of the test file. A relative file name under
-     *   com/ibm/icu/dev/data such as "data.txt"
+     *
+     * @param fileName The name of the test file. A relative file name under com/ibm/icu/dev/data
+     *     such as "data.txt"
      * @param codeUnderTest the code under test
      */
-
-    public static void runSuite(
-            String fileName, CodeUnderTest codeUnderTest) {
+    public static void runSuite(String fileName, CodeUnderTest codeUnderTest) {
         new DataDrivenNumberFormatTestUtility(codeUnderTest)
                 .run(fileName, RunMode.SKIP_KNOWN_FAILURES);
     }
 
     /**
-     * Runs every format test in data driven test suite including those
-     * that are known to fail.  If a test is supposed to fail but actually
-     * passes, an error is printed.
+     * Runs every format test in data driven test suite including those that are known to fail. If a
+     * test is supposed to fail but actually passes, an error is printed.
      *
-     * @param fileName The name of the test file. A relative file name under
-     *   com/ibm/icu/dev/data such as "data.txt"
+     * @param fileName The name of the test file. A relative file name under com/ibm/icu/dev/data
+     *     such as "data.txt"
      * @param codeUnderTest the code under test
      */
     public static void runFormatSuiteIncludingKnownFailures(
@@ -138,11 +131,10 @@ public class DataDrivenNumberFormatTestUtility extends CoreTestFmwk {
                 .run(fileName, RunMode.INCLUDE_KNOWN_FAILURES);
     }
 
-    /**
-     * Checks the data file for no unknown IDs in "breaks" columns.
-     */
+    /** Checks the data file for no unknown IDs in "breaks" columns. */
     public static void checkNoUnknownIDs(String fileName, String allowedIDs) {
-        new DataDrivenNumberFormatTestUtility(allowedIDs).run(fileName, RunMode.CHECK_FOR_UNKNOWN_IDS);
+        new DataDrivenNumberFormatTestUtility(allowedIDs)
+                .run(fileName, RunMode.CHECK_FOR_UNKNOWN_IDS);
     }
 
     private DataDrivenNumberFormatTestUtility(CodeUnderTest codeUnderTest) {
@@ -191,13 +183,13 @@ public class DataDrivenNumberFormatTestUtility extends CoreTestFmwk {
                         if (!setTupleField()) {
                             return;
                         }
-                    } else if(fileLine.startsWith("begin")) {
+                    } else if (fileLine.startsWith("begin")) {
                         state = 1;
                     } else {
                         showError("Unrecognized verb.");
                         return;
                     }
-                // column specification
+                    // column specification
                 } else if (state == 1) {
                     columnNames = splitBy((char) 0x09);
                     state = 2;
@@ -206,7 +198,7 @@ public class DataDrivenNumberFormatTestUtility extends CoreTestFmwk {
                             && columnNames.indexOf("breaks") != columnNames.size() - 1) {
                         showError("'breaks' column must be last!");
                     }
-                // run the tests
+                    // run the tests
                 } else {
                     int columnNamesSize = columnNames.size();
                     columnValues = splitBy(columnNamesSize, (char) 0x09);
@@ -227,7 +219,7 @@ public class DataDrivenNumberFormatTestUtility extends CoreTestFmwk {
                             // Make sure there are no IDs in actualIDs that are not in allowedIDs.
                             // As a bonus, check that actualIDs are in alphabetical order.
                             char prevID = 0;
-                            for (int i=0; i<actualIDs.length(); i++) {
+                            for (int i = 0; i < actualIDs.length(); i++) {
                                 char currID = actualIDs.charAt(i);
                                 if (allowedIDs.indexOf(currID) == -1) {
                                     showError("Unknown ID: " + currID);
@@ -238,12 +230,14 @@ public class DataDrivenNumberFormatTestUtility extends CoreTestFmwk {
                                 prevID = currID;
                             }
                         }
-                    } else if (runMode == RunMode.INCLUDE_KNOWN_FAILURES || !breaks(codeUnderTestId)) {
+                    } else if (runMode == RunMode.INCLUDE_KNOWN_FAILURES
+                            || !breaks(codeUnderTestId)) {
                         String errorMessage;
                         Exception err = null;
-                        boolean shouldFail = (tuple.output != null && tuple.output.equals("fail"))
-                                ? !breaks(codeUnderTestId)
-                                : breaks(codeUnderTestId);
+                        boolean shouldFail =
+                                (tuple.output != null && tuple.output.equals("fail"))
+                                        ? !breaks(codeUnderTestId)
+                                        : breaks(codeUnderTestId);
                         try {
                             errorMessage = isPass(tuple);
                         } catch (Exception e) {
@@ -258,7 +252,10 @@ public class DataDrivenNumberFormatTestUtility extends CoreTestFmwk {
                                 PrintStream ps = new PrintStream(os);
                                 err.printStackTrace(ps);
                                 String stackTrace = os.toString();
-                                showError(errorMessage + "     Stack trace: " + stackTrace.substring(0, 500));
+                                showError(
+                                        errorMessage
+                                                + "     Stack trace: "
+                                                + stackTrace.substring(0, 500));
                             } else {
                                 showError(errorMessage);
                             }
@@ -272,13 +269,17 @@ public class DataDrivenNumberFormatTestUtility extends CoreTestFmwk {
             PrintStream ps = new PrintStream(os);
             e.printStackTrace(ps);
             String stackTrace = os.toString();
-            showError("MAJOR ERROR: " + e.toString() + "     Stack trace: " + stackTrace.substring(0,500));
+            showError(
+                    "MAJOR ERROR: "
+                            + e.toString()
+                            + "     Stack trace: "
+                            + stackTrace.substring(0, 500));
         }
     }
 
     private boolean breaks(char code) {
-       String breaks = tuple.breaks == null ? "" : tuple.breaks;
-       return (breaks.toUpperCase().indexOf(code) != -1);
+        String breaks = tuple.breaks == null ? "" : tuple.breaks;
+        return (breaks.toUpperCase().indexOf(code) != -1);
     }
 
     private static boolean isSpace(char c) {
@@ -296,7 +297,7 @@ public class DataDrivenNumberFormatTestUtility extends CoreTestFmwk {
 
     private boolean setField(String name, String value) {
         try {
-            tuple.setField(name,  Utility.unescape(value));
+            tuple.setField(name, Utility.unescape(value));
             return true;
         } catch (Exception e) {
             showError("No such field: " + name + ", or bad value: " + value + ": " + e);
@@ -315,7 +316,10 @@ public class DataDrivenNumberFormatTestUtility extends CoreTestFmwk {
     }
 
     private void showError(String message) {
-        TestFmwk.errln(String.format("line %d: %s\n%s\n%s", fileLineNumber, Utility.escape(message), fileTestName,fileLine));
+        TestFmwk.errln(
+                String.format(
+                        "line %d: %s\n%s\n%s",
+                        fileLineNumber, Utility.escape(message), fileTestName, fileLine));
     }
 
     private List<String> splitBy(char delimiter) {
@@ -330,8 +334,7 @@ public class DataDrivenNumberFormatTestUtility extends CoreTestFmwk {
         for (int idx = 0; colIdx < max - 1 && idx < len; ++idx) {
             char ch = fileLine.charAt(idx);
             if (ch == delimiter) {
-                result.add(
-                        fileLine.substring(colStart, idx));
+                result.add(fileLine.substring(colStart, idx));
                 ++colIdx;
                 colStart = idx + 1;
             }
@@ -350,7 +353,7 @@ public class DataDrivenNumberFormatTestUtility extends CoreTestFmwk {
         // Strip trailing comments and spaces
         int idx = line.length();
         for (; idx > 0; idx--) {
-            if (!isSpace(line.charAt(idx -1))) {
+            if (!isSpace(line.charAt(idx - 1))) {
                 break;
             }
         }

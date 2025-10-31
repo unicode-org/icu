@@ -12,18 +12,16 @@
  */
 
 package com.ibm.icu.impl;
-import java.util.Date;
 
 import com.ibm.icu.util.TimeZone;
+import java.util.Date;
 
 /**
- * <code>TimeZoneAdapter</code> wraps a com.ibm.icu.util.TimeZone
- * subclass and inherits from java.util.TimeZone.
- * Without this class, we would need to 'port' java.util.Date to
- * com.ibm.icu.util as well, so that Date could interoperate properly
- * with the com.ibm.icu.util TimeZone and Calendar classes.  With this
- * class, we can use java.util.Date together with com.ibm.icu.util
- * classes.
+ * <code>TimeZoneAdapter</code> wraps a com.ibm.icu.util.TimeZone subclass and inherits from
+ * java.util.TimeZone. Without this class, we would need to 'port' java.util.Date to
+ * com.ibm.icu.util as well, so that Date could interoperate properly with the com.ibm.icu.util
+ * TimeZone and Calendar classes. With this class, we can use java.util.Date together with
+ * com.ibm.icu.util classes.
  *
  * @see com.ibm.icu.util.TimeZone#setDefault
  * @author Alan Liu
@@ -35,112 +33,87 @@ public class TimeZoneAdapter extends java.util.TimeZone implements Cloneable {
     static final long serialVersionUID = -2040072218820018557L;
 
     /**
-     * The contained com.ibm.icu.util.TimeZone object.  Must not be null.
-     * We delegate all methods to this object.
+     * The contained com.ibm.icu.util.TimeZone object. Must not be null. We delegate all methods to
+     * this object.
      */
     private TimeZone zone;
 
     /**
-     * Given a java.util.TimeZone, wrap it in the appropriate adapter
-     * subclass of com.ibm.icu.util.TimeZone and return the adapter.
+     * Given a java.util.TimeZone, wrap it in the appropriate adapter subclass of
+     * com.ibm.icu.util.TimeZone and return the adapter.
      */
     public static java.util.TimeZone wrap(com.ibm.icu.util.TimeZone tz) {
         return new TimeZoneAdapter(tz);
     }
 
-    /**
-     * Return the java.util.TimeZone wrapped by this object.
-     */
+    /** Return the java.util.TimeZone wrapped by this object. */
     public com.ibm.icu.util.TimeZone unwrap() {
         return zone;
     }
 
-    /**
-     * Constructs an adapter for a com.ibm.icu.util.TimeZone object.
-     */
+    /** Constructs an adapter for a com.ibm.icu.util.TimeZone object. */
     public TimeZoneAdapter(TimeZone zone) {
         this.zone = zone;
         super.setID(zone.getID());
     }
 
-    /**
-     * TimeZone API; calls through to wrapped time zone.
-     */
+    /** TimeZone API; calls through to wrapped time zone. */
     @Override
     public void setID(String ID) {
         super.setID(ID);
         zone.setID(ID);
     }
 
-    /**
-     * TimeZone API; calls through to wrapped time zone.
-     */
+    /** TimeZone API; calls through to wrapped time zone. */
     @Override
     public boolean hasSameRules(java.util.TimeZone other) {
-        return other instanceof TimeZoneAdapter &&
-            zone.hasSameRules(((TimeZoneAdapter)other).zone);
+        return other instanceof TimeZoneAdapter
+                && zone.hasSameRules(((TimeZoneAdapter) other).zone);
     }
 
-    /**
-     * TimeZone API; calls through to wrapped time zone.
-     */
+    /** TimeZone API; calls through to wrapped time zone. */
     @Override
-    public int getOffset(int era, int year, int month, int day, int dayOfWeek,
-                         int millis) {
+    public int getOffset(int era, int year, int month, int day, int dayOfWeek, int millis) {
         return zone.getOffset(era, year, month, day, dayOfWeek, millis);
     }
 
-    /**
-     * TimeZone API; calls through to wrapped time zone.
-     */
+    /** TimeZone API; calls through to wrapped time zone. */
     @Override
     public int getRawOffset() {
         return zone.getRawOffset();
     }
 
-    /**
-     * TimeZone API; calls through to wrapped time zone.
-     */
+    /** TimeZone API; calls through to wrapped time zone. */
     @Override
     public void setRawOffset(int offsetMillis) {
         zone.setRawOffset(offsetMillis);
     }
 
-    /**
-     * TimeZone API; calls through to wrapped time zone.
-     */
+    /** TimeZone API; calls through to wrapped time zone. */
     @Override
     public boolean useDaylightTime() {
         return zone.useDaylightTime();
     }
 
-    /**
-     * TimeZone API; calls through to wrapped time zone.
-     */
+    /** TimeZone API; calls through to wrapped time zone. */
     @Override
     public boolean inDaylightTime(Date date) {
         return zone.inDaylightTime(date);
     }
 
-    /**
-     * Boilerplate API; calls through to wrapped object.
-     */
+    /** Boilerplate API; calls through to wrapped object. */
     @Override
     public TimeZoneAdapter clone() {
         return new TimeZoneAdapter(zone.clone());
     }
 
-    /**
-     * Boilerplate API; calls through to wrapped object.
-     */
+    /** Boilerplate API; calls through to wrapped object. */
     @Override
     public synchronized int hashCode() {
         return zone.hashCode();
     }
 
-    /**
-     * Boilerplate API; calls through to wrapped object.
-     */
+    /** Boilerplate API; calls through to wrapped object. */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -155,7 +128,8 @@ public class TimeZoneAdapter extends java.util.TimeZone implements Cloneable {
 
     /**
      * Returns a string representation of this object.
-     * @return  a string representation of this object.
+     *
+     * @return a string representation of this object.
      */
     @Override
     public String toString() {

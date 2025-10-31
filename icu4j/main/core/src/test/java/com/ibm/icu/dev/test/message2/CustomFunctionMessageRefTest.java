@@ -3,15 +3,6 @@
 
 package com.ibm.icu.dev.test.message2;
 
-import java.util.Locale;
-import java.util.Map;
-import java.util.Properties;
-
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.message2.FormattedPlaceholder;
 import com.ibm.icu.message2.Function;
@@ -19,12 +10,19 @@ import com.ibm.icu.message2.FunctionFactory;
 import com.ibm.icu.message2.MFFunctionRegistry;
 import com.ibm.icu.message2.MessageFormatter;
 import com.ibm.icu.message2.PlainStringFormattedValue;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Properties;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 /**
  * Showing a custom function that can implement message references.
  *
- * <p>Supporting this functionality was strongly requested as a part of the core specification.
- * But this shows that it can be easily implemented as a custom function.</p>
+ * <p>Supporting this functionality was strongly requested as a part of the core specification. But
+ * this shows that it can be easily implemented as a custom function.
  */
 @RunWith(JUnit4.class)
 @SuppressWarnings({"static-method", "javadoc"})
@@ -46,7 +44,8 @@ public class CustomFunctionMessageRefTest extends CoreTestFmwk {
             }
 
             @Override
-            public FormattedPlaceholder format(Object toFormat, Map<String, Object> variableOptions) {
+            public FormattedPlaceholder format(
+                    Object toFormat, Map<String, Object> variableOptions) {
                 String result = null;
                 Object oProps = options.get("resbundle");
                 // If it was not in the fixed options, try in the variable ones
@@ -56,9 +55,8 @@ public class CustomFunctionMessageRefTest extends CoreTestFmwk {
                 if (oProps != null && oProps instanceof Properties) {
                     Properties props = (Properties) oProps;
                     Object msg = props.get(toFormat.toString());
-                    MessageFormatter mf = MessageFormatter.builder()
-                            .setPattern(msg.toString())
-                            .build();
+                    MessageFormatter mf =
+                            MessageFormatter.builder().setPattern(msg.toString()).build();
                     result = mf.formatToString(options);
                 }
                 return new FormattedPlaceholder(toFormat, new PlainStringFormattedValue(result));
@@ -71,30 +69,34 @@ public class CustomFunctionMessageRefTest extends CoreTestFmwk {
         }
     }
 
-    static final MFFunctionRegistry REGISTRY = MFFunctionRegistry.builder()
-            .setFunction("msgRef", new ResourceManagerFactory())
-            .build();
+    static final MFFunctionRegistry REGISTRY =
+            MFFunctionRegistry.builder()
+                    .setFunction("msgRef", new ResourceManagerFactory())
+                    .build();
 
     static final Properties PROPERTIES = new Properties();
 
     @BeforeClass
     public static void beforeClass() {
-        PROPERTIES.put("firefox", ".input {$gcase :string} .match $gcase genitive {{Firefoxin}} * {{Firefox}}");
-        PROPERTIES.put("chrome", ".input {$gcase :string} .match $gcase genitive {{Chromen}} * {{Chrome}}");
-        PROPERTIES.put("safari", ".input {$gcase :string} .match $gcase genitive {{Safarin}} * {{Safari}}");
+        PROPERTIES.put(
+                "firefox",
+                ".input {$gcase :string} .match $gcase genitive {{Firefoxin}} * {{Firefox}}");
+        PROPERTIES.put(
+                "chrome",
+                ".input {$gcase :string} .match $gcase genitive {{Chromen}} * {{Chrome}}");
+        PROPERTIES.put(
+                "safari",
+                ".input {$gcase :string} .match $gcase genitive {{Safarin}} * {{Safari}}");
     }
 
     @Test
     public void testSimpleGrammarSelection() {
-        MessageFormatter mf = MessageFormatter.builder()
-                .setPattern(PROPERTIES.getProperty("firefox"))
-                .build();
+        MessageFormatter mf =
+                MessageFormatter.builder().setPattern(PROPERTIES.getProperty("firefox")).build();
         assertEquals("cust-grammar", "Firefox", mf.formatToString(Args.of("gcase", "whatever")));
         assertEquals("cust-grammar", "Firefoxin", mf.formatToString(Args.of("gcase", "genitive")));
 
-        mf = MessageFormatter.builder()
-                .setPattern(PROPERTIES.getProperty("chrome"))
-                .build();
+        mf = MessageFormatter.builder().setPattern(PROPERTIES.getProperty("chrome")).build();
         assertEquals("cust-grammar", "Chrome", mf.formatToString(Args.of("gcase", "whatever")));
         assertEquals("cust-grammar", "Chromen", mf.formatToString(Args.of("gcase", "genitive")));
     }
@@ -102,18 +104,21 @@ public class CustomFunctionMessageRefTest extends CoreTestFmwk {
     @Test
     public void test() {
         StringBuffer browser = new StringBuffer();
-        Map<String, Object> arguments = Args.of(
-                "browser", browser,
-                "res", PROPERTIES);
+        Map<String, Object> arguments =
+                Args.of(
+                        "browser", browser,
+                        "res", PROPERTIES);
 
-        MessageFormatter mf1 = MessageFormatter.builder()
-                .setFunctionRegistry(REGISTRY)
-                .setPattern("Please start {$browser :msgRef gcase=genitive resbundle=$res}")
-                .build();
-        MessageFormatter mf2 = MessageFormatter.builder()
-                .setFunctionRegistry(REGISTRY)
-                .setPattern("Please start {$browser :msgRef resbundle=$res}")
-                .build();
+        MessageFormatter mf1 =
+                MessageFormatter.builder()
+                        .setFunctionRegistry(REGISTRY)
+                        .setPattern("Please start {$browser :msgRef gcase=genitive resbundle=$res}")
+                        .build();
+        MessageFormatter mf2 =
+                MessageFormatter.builder()
+                        .setFunctionRegistry(REGISTRY)
+                        .setPattern("Please start {$browser :msgRef resbundle=$res}")
+                        .build();
 
         browser.replace(0, browser.length(), "firefox");
         assertEquals("cust-grammar", "Please start Firefoxin", mf1.formatToString(arguments));

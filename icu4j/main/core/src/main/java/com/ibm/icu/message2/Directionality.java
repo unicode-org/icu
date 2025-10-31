@@ -3,14 +3,13 @@
 
 package com.ibm.icu.message2;
 
-import java.util.Locale;
-
 import com.ibm.icu.util.ULocale;
+import java.util.Locale;
 
 /**
  * Encodes info about the direction of the message.
  *
- * <p>It is used to implement the @code u:dir} functionality.</p>
+ * <p>It is used to implement the @code u:dir} functionality.
  *
  * @draft ICU 78
  */
@@ -42,8 +41,8 @@ public enum Directionality {
      */
     AUTO,
     /**
-     * Directionality inherited from the <i>message</i> or from the <i>resolved value</i>
-     * of the <i>operand</i> without requiring isolation of the <i>expression</i> value.
+     * Directionality inherited from the <i>message</i> or from the <i>resolved value</i> of the
+     * <i>operand</i> without requiring isolation of the <i>expression</i> value.
      *
      * @draft ICU 78
      */
@@ -54,7 +53,6 @@ public enum Directionality {
      *
      * @param locale the locale to determine the directionality from.
      * @return the appropriate directionality for the locale given.
-     *
      * @draft ICU 78
      */
     public static Directionality of(Locale locale) {

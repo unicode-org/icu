@@ -9,19 +9,6 @@
 
 package com.ibm.icu.dev.test.format;
 
-import java.text.FieldPosition;
-import java.text.ParsePosition;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.number.DecimalQuantity;
@@ -34,10 +21,20 @@ import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.text.PluralRules.PluralType;
 import com.ibm.icu.text.PluralRules.SampleType;
 import com.ibm.icu.util.ULocale;
+import java.text.FieldPosition;
+import java.text.ParsePosition;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 /**
  * @author tschumann (Tim Schumann)
- *
  */
 @RunWith(JUnit4.class)
 public class PluralFormatUnitTest extends CoreTestFmwk {
@@ -55,9 +52,7 @@ public class PluralFormatUnitTest extends CoreTestFmwk {
         plFmts[4].applyPattern("other{#}");
         plFmts[5] = new PluralFormat(ULocale.getDefault(), PluralRules.DEFAULT);
         plFmts[5].applyPattern("other{#}");
-        plFmts[6] = new PluralFormat(ULocale.getDefault(),
-                PluralRules.DEFAULT,
-                "other{#}");
+        plFmts[6] = new PluralFormat(ULocale.getDefault(), PluralRules.DEFAULT, "other{#}");
         plFmts[7] = new PluralFormat(ULocale.getDefault(), "other{#}");
 
         // Constructors with Java Locale
@@ -72,8 +67,8 @@ public class PluralFormatUnitTest extends CoreTestFmwk {
         for (int n = 1; n < 13; n++) {
             String result = numberFmt.format(n);
             for (int k = 0; k < plFmts.length; ++k) {
-                TestFmwk.assertEquals("PluralFormat's output is not as expected",
-                        result, plFmts[k].format(n));
+                TestFmwk.assertEquals(
+                        "PluralFormat's output is not as expected", result, plFmts[k].format(n));
             }
         }
         // Test some bigger numbers.
@@ -81,10 +76,10 @@ public class PluralFormatUnitTest extends CoreTestFmwk {
         StringBuffer sb = new StringBuffer();
         FieldPosition ignore = new FieldPosition(-1);
         for (int n = 100; n < 113; n++) {
-            String result = numberFmt.format(n*n);
+            String result = numberFmt.format(n * n);
             for (int k = 0; k < plFmts.length; ++k) {
                 sb.delete(0, sb.length());
-                String pfResult = plFmts[k].format((long)(n*n), sb, ignore).toString();
+                String pfResult = plFmts[k].format((long) (n * n), sb, ignore).toString();
                 TestFmwk.assertEquals("PluralFormat's output is not as expected", result, pfResult);
             }
         }
@@ -106,7 +101,7 @@ public class PluralFormatUnitTest extends CoreTestFmwk {
     @Test
     public void TestApplyPatternAndFormat() {
         // Create rules for testing.
-        PluralRules oddAndEven =  PluralRules.createRules("odd: n mod 2 is 1");
+        PluralRules oddAndEven = PluralRules.createRules("odd: n mod 2 is 1");
         {
             // Test full specified case for testing RuleSet
             PluralFormat plfOddAndEven = new PluralFormat(oddAndEven);
@@ -116,25 +111,27 @@ public class PluralFormatUnitTest extends CoreTestFmwk {
             PluralFormat plfOddOrEven = new PluralFormat(oddAndEven);
             plfOddOrEven.applyPattern("other{# is odd or even.}");
 
-            NumberFormat numberFormat =
-                    NumberFormat.getInstance(ULocale.getDefault());
+            NumberFormat numberFormat = NumberFormat.getInstance(ULocale.getDefault());
             for (int i = 0; i < 22; ++i) {
-                assertEquals("Fallback to other gave wrong results",
+                assertEquals(
+                        "Fallback to other gave wrong results",
                         numberFormat.format(i) + " is odd or even.",
                         plfOddOrEven.format(i));
-                assertEquals("Fully specified PluralFormat gave wrong results",
-                        numberFormat.format(i) + ((i%2 == 1) ?  " is odd."
-                                :  " is even."),
-                                plfOddAndEven.format(i));
+                assertEquals(
+                        "Fully specified PluralFormat gave wrong results",
+                        numberFormat.format(i) + ((i % 2 == 1) ? " is odd." : " is even."),
+                        plfOddAndEven.format(i));
             }
 
             // ICU 4.8 does not check for duplicate keywords any more.
-            PluralFormat pf = new PluralFormat(ULocale.ENGLISH, oddAndEven,
-                    "odd{foo} odd{bar} other{foobar}");
+            PluralFormat pf =
+                    new PluralFormat(
+                            ULocale.ENGLISH, oddAndEven, "odd{foo} odd{bar} other{foobar}");
             assertEquals("should use first occurrence of the 'odd' keyword", "foo", pf.format(1));
             pf.applyPattern("odd{foo} other{bar} other{foobar}");
             assertEquals("should use first occurrence of the 'other' keyword", "bar", pf.format(2));
-            // This sees the first "other" before calling the PluralSelector which then selects "other".
+            // This sees the first "other" before calling the PluralSelector which then selects
+            // "other".
             pf.applyPattern("other{foo} odd{bar} other{foobar}");
             assertEquals("should use first occurrence of the 'other' keyword", "foo", pf.format(2));
         }
@@ -142,9 +139,9 @@ public class PluralFormatUnitTest extends CoreTestFmwk {
         try {
             PluralFormat plFmt = new PluralFormat(oddAndEven);
             plFmt.applyPattern("odd{foo}");
-            errln("Not defining plural case other should result in an " +
-                    "exception but did not.");
-        }catch (IllegalArgumentException e){}
+            errln("Not defining plural case other should result in an " + "exception but did not.");
+        } catch (IllegalArgumentException e) {
+        }
 
         // ICU 4.8 does not check for unknown keywords any more.
         {
@@ -156,9 +153,11 @@ public class PluralFormatUnitTest extends CoreTestFmwk {
         try {
             PluralFormat plFmt = new PluralFormat(oddAndEven);
             plFmt.applyPattern("*odd{foo} other{bar}");
-            errln("Defining a message for an invalid keyword should result in " +
-                    "an exception but did not.");
-        }catch (IllegalArgumentException e){}
+            errln(
+                    "Defining a message for an invalid keyword should result in "
+                            + "an exception but did not.");
+        } catch (IllegalArgumentException e) {
+        }
 
         // Test invalid syntax
         //   -- comma between keyword{message} clauses
@@ -167,55 +166,61 @@ public class PluralFormatUnitTest extends CoreTestFmwk {
         try {
             PluralFormat plFmt = new PluralFormat(oddAndEven);
             plFmt.applyPattern("odd{foo},other{bar}");
-            errln("Separating keyword{message} items with other characters " +
-                    "than space should provoke an exception but did not.");
-        }catch (IllegalArgumentException e){}
+            errln(
+                    "Separating keyword{message} items with other characters "
+                            + "than space should provoke an exception but did not.");
+        } catch (IllegalArgumentException e) {
+        }
         try {
             PluralFormat plFmt = new PluralFormat(oddAndEven);
             plFmt.applyPattern("od d{foo} other{bar}");
-            errln("Spaces inside keywords should provoke an exception but " +
-                    "did not.");
-        }catch (IllegalArgumentException e){}
+            errln("Spaces inside keywords should provoke an exception but " + "did not.");
+        } catch (IllegalArgumentException e) {
+        }
         try {
             PluralFormat plFmt = new PluralFormat(oddAndEven);
             plFmt.applyPattern("odd{foo}{foobar}other{foo}");
-            errln("Defining multiple messages after a keyword should provoke " +
-                    "an exception but did not.");
-        }catch (IllegalArgumentException e){}
+            errln(
+                    "Defining multiple messages after a keyword should provoke "
+                            + "an exception but did not.");
+        } catch (IllegalArgumentException e) {
+        }
 
         // Check that nested format is preserved.
         {
             PluralFormat plFmt = new PluralFormat(oddAndEven);
-            plFmt.applyPattern("odd{The number {0, number, #.#0} is odd.}" +
-                    "other{The number {0, number, #.#0} is even.}");
+            plFmt.applyPattern(
+                    "odd{The number {0, number, #.#0} is odd.}"
+                            + "other{The number {0, number, #.#0} is even.}");
             for (int i = 1; i < 3; ++i) {
-                assertEquals("format did not preserve a nested format string.",
-                        ((i % 2 == 1) ?
-                                "The number {0, number, #.#0} is odd."
+                assertEquals(
+                        "format did not preserve a nested format string.",
+                        ((i % 2 == 1)
+                                ? "The number {0, number, #.#0} is odd."
                                 : "The number {0, number, #.#0} is even."),
-                                plFmt.format(i));
+                        plFmt.format(i));
             }
-
         }
         // Check that a pound sign in curly braces is preserved.
         {
             PluralFormat plFmt = new PluralFormat(oddAndEven);
-            plFmt.applyPattern("odd{The number {1,number,#} is odd.}" +
-                    "other{The number {2,number,#} is even.}");
+            plFmt.applyPattern(
+                    "odd{The number {1,number,#} is odd.}"
+                            + "other{The number {2,number,#} is even.}");
             for (int i = 1; i < 3; ++i) {
-                assertEquals("format did not preserve # inside curly braces.",
-                        ((i % 2 == 1) ? "The number {1,number,#} is odd."
+                assertEquals(
+                        "format did not preserve # inside curly braces.",
+                        ((i % 2 == 1)
+                                ? "The number {1,number,#} is odd."
                                 : "The number {2,number,#} is even."),
-                                plFmt.format(i));
+                        plFmt.format(i));
             }
-
         }
     }
 
-
     @Test
     public void TestSamples() {
-        Map<ULocale,Set<ULocale>> same = new LinkedHashMap<>();
+        Map<ULocale, Set<ULocale>> same = new LinkedHashMap<>();
         for (ULocale locale : PluralRules.getAvailableULocales()) {
             ULocale otherLocale = PluralRules.getFunctionalEquivalent(locale, null);
             Set<ULocale> others = same.get(otherLocale);
@@ -256,9 +261,8 @@ public class PluralFormatUnitTest extends CoreTestFmwk {
 
         // Check that pattern gets deleted.
         NumberFormat nrFmt = NumberFormat.getInstance(ULocale.ENGLISH);
-        assertEquals("pattern was not resetted by setLocale() call.",
-                nrFmt.format(5),
-                plFmt.format(5));
+        assertEquals(
+                "pattern was not resetted by setLocale() call.", nrFmt.format(5), plFmt.format(5));
 
         // Check that rules got updated.
         plFmt.applyPattern("odd__{odd} other{even}");
@@ -266,8 +270,9 @@ public class PluralFormatUnitTest extends CoreTestFmwk {
 
         plFmt.applyPattern("one{one} other{not one}");
         for (int i = 0; i < 20; ++i) {
-            assertEquals("Wrong ruleset loaded by setLocale()",
-                    ((i==1) ? "one" : "not one"),
+            assertEquals(
+                    "Wrong ruleset loaded by setLocale()",
+                    ((i == 1) ? "one" : "not one"),
                     plFmt.format(i));
         }
     }
@@ -277,23 +282,21 @@ public class PluralFormatUnitTest extends CoreTestFmwk {
         PluralFormat plFmt = new PluralFormat("other{test}");
         try {
             plFmt.parse("test", new ParsePosition(0));
-            errln("parse() should throw an UnsupportedOperationException but " +
-                    "did not");
+            errln("parse() should throw an UnsupportedOperationException but " + "did not");
         } catch (UnsupportedOperationException e) {
         }
 
         plFmt = new PluralFormat("other{test}");
         try {
             plFmt.parseObject("test", new ParsePosition(0));
-            errln("parse() should throw an UnsupportedOperationException but " +
-                    "did not");
+            errln("parse() should throw an UnsupportedOperationException but " + "did not");
         } catch (UnsupportedOperationException e) {
         }
     }
 
     @Test
     public void TestPattern() {
-        Object[] args = { "acme", null };
+        Object[] args = {"acme", null};
 
         {
             // ICU 4.8 PluralFormat does not trim() its pattern any more.
@@ -303,7 +306,9 @@ public class PluralFormatUnitTest extends CoreTestFmwk {
             assertEquals("should not trim() the pattern", pat, pf.toPattern());
         }
 
-        MessageFormat pfmt = new MessageFormat("The disk ''{0}'' contains {1, plural,  one {one ''''{1, number, #.0}'''' widget} other {# widgets}}.");
+        MessageFormat pfmt =
+                new MessageFormat(
+                        "The disk ''{0}'' contains {1, plural,  one {one ''''{1, number, #.0}'''' widget} other {# widgets}}.");
         logln("");
         for (int i = 0; i < 3; ++i) {
             args[1] = i;
@@ -322,14 +327,14 @@ public class PluralFormatUnitTest extends CoreTestFmwk {
     @Test
     public void TestExtendedPluralFormat() {
         String[] targets = {
-                "There are no widgets.",
-                "There is one widget.",
-                "There is a bling widget and one other widget.",
-                "There is a bling widget and 2 other widgets.",
-                "There is a bling widget and 3 other widgets.",
-                "Widgets, five (5-1=4) there be.",
-                "There is a bling widget and 5 other widgets.",
-                "There is a bling widget and 6 other widgets.",
+            "There are no widgets.",
+            "There is one widget.",
+            "There is a bling widget and one other widget.",
+            "There is a bling widget and 2 other widgets.",
+            "There is a bling widget and 3 other widgets.",
+            "Widgets, five (5-1=4) there be.",
+            "There is a bling widget and 5 other widgets.",
+            "There is a bling widget and 6 other widgets.",
         };
         String pluralStyle =
                 "offset:1.0 "
@@ -357,11 +362,11 @@ public class PluralFormatUnitTest extends CoreTestFmwk {
     @Test
     public void TestExtendedPluralFormatParsing() {
         String[] failures = {
-                "offset:1..0 =0 {Foo}",
-                "offset:1.0 {Foo}",
-                "=0= {Foo}",
-                "=0 {Foo} =0.0 {Bar}",
-                " = {Foo}",
+            "offset:1..0 =0 {Foo}",
+            "offset:1.0 {Foo}",
+            "=0= {Foo}",
+            "=0 {Foo} =0.0 {Bar}",
+            " = {Foo}",
         };
         for (String fmt : failures) {
             try {
@@ -400,8 +405,9 @@ public class PluralFormatUnitTest extends CoreTestFmwk {
         PluralFormat pf = new PluralFormat(ULocale.ENGLISH, "one{one meter}other{# meters}");
         assertEquals("simple format(1)", "one meter", pf.format(1));
         assertEquals("simple format(1.5)", "1.5 meters", pf.format(1.5));
-        PluralFormat pf2 = new PluralFormat(ULocale.ENGLISH,
-                "offset:1 one{another meter}other{another # meters}");
+        PluralFormat pf2 =
+                new PluralFormat(
+                        ULocale.ENGLISH, "offset:1 one{another meter}other{another # meters}");
         pf2.setNumberFormat(new DecimalFormat("0.0", new DecimalFormatSymbols(ULocale.ENGLISH)));
         assertEquals("offset-decimals format(1)", "another 0.0 meters", pf2.format(1));
         assertEquals("offset-decimals format(2)", "another 1.0 meters", pf2.format(2));

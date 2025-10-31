@@ -2,8 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.number;
 
-import java.util.MissingResourceException;
-
 import com.ibm.icu.impl.FormattedStringBuilder;
 import com.ibm.icu.impl.FormattedValueStringBuilderImpl;
 import com.ibm.icu.impl.ICUData;
@@ -26,10 +24,9 @@ import com.ibm.icu.number.NumberRangeFormatter.RangeIdentityResult;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
+import java.util.MissingResourceException;
 
-/**
- * Business logic behind NumberRangeFormatter.
- */
+/** Business logic behind NumberRangeFormatter. */
 class NumberRangeFormatterImpl {
 
     final NumberFormatterImpl formatterImpl1;
@@ -48,10 +45,10 @@ class NumberRangeFormatterImpl {
 
     ////////////////////
 
-     // Helper function for 2-dimensional switch statement
-     int identity2d(RangeIdentityFallback a, RangeIdentityResult b) {
-         return a.ordinal() | (b.ordinal() << 4);
-     }
+    // Helper function for 2-dimensional switch statement
+    int identity2d(RangeIdentityFallback a, RangeIdentityResult b) {
+        return a.ordinal() | (b.ordinal() << 4);
+    }
 
     private static final class NumberRangeDataSink extends UResource.Sink {
 
@@ -72,7 +69,8 @@ class NumberRangeFormatterImpl {
             for (int i = 0; miscTable.getKeyAndValue(i, key, value); ++i) {
                 if (key.contentEquals("range") && !hasRangeData()) {
                     String pattern = value.getString();
-                    rangePattern = SimpleFormatterImpl.compileToStringMinMaxArguments(pattern, sb, 2, 2);
+                    rangePattern =
+                            SimpleFormatterImpl.compileToStringMinMaxArguments(pattern, sb, 2, 2);
                 }
                 /*
                 // Note: approximatelyPattern is unused since ICU 69.
@@ -101,7 +99,8 @@ class NumberRangeFormatterImpl {
 
         public void fillInDefaults() {
             if (!hasRangeData()) {
-                rangePattern = SimpleFormatterImpl.compileToStringMinMaxArguments("{0}–{1}", sb, 2, 2);
+                rangePattern =
+                        SimpleFormatterImpl.compileToStringMinMaxArguments("{0}–{1}", sb, 2, 2);
             }
             /*
             if (!hasApproxData()) {
@@ -112,13 +111,13 @@ class NumberRangeFormatterImpl {
     }
 
     private static void getNumberRangeData(
-            ULocale locale,
-            String nsName,
-            NumberRangeFormatterImpl out) {
+            ULocale locale, String nsName, NumberRangeFormatterImpl out) {
         StringBuilder sb = new StringBuilder();
         NumberRangeDataSink sink = new NumberRangeDataSink(sb);
         ICUResourceBundle resource;
-        resource = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, locale);
+        resource =
+                (ICUResourceBundle)
+                        UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, locale);
         sb.append("NumberElements/");
         sb.append(nsName);
         sb.append("/miscPatterns");
@@ -143,32 +142,39 @@ class NumberRangeFormatterImpl {
     ////////////////////
 
     public NumberRangeFormatterImpl(RangeMacroProps macros) {
-        LocalizedNumberFormatter formatter1 = macros.formatter1 != null
-            ? macros.formatter1.locale(macros.loc)
-            : NumberFormatter.withLocale(macros.loc);
-        LocalizedNumberFormatter formatter2 = macros.formatter2 != null
-            ? macros.formatter2.locale(macros.loc)
-            : NumberFormatter.withLocale(macros.loc);
+        LocalizedNumberFormatter formatter1 =
+                macros.formatter1 != null
+                        ? macros.formatter1.locale(macros.loc)
+                        : NumberFormatter.withLocale(macros.loc);
+        LocalizedNumberFormatter formatter2 =
+                macros.formatter2 != null
+                        ? macros.formatter2.locale(macros.loc)
+                        : NumberFormatter.withLocale(macros.loc);
         formatterImpl1 = new NumberFormatterImpl(formatter1.resolve());
         formatterImpl2 = new NumberFormatterImpl(formatter2.resolve());
         fSameFormatters = macros.sameFormatters != 0;
-        fCollapse = macros.collapse != null ? macros.collapse : NumberRangeFormatter.RangeCollapse.AUTO;
-        fIdentityFallback = macros.identityFallback != null ? macros.identityFallback
-                : NumberRangeFormatter.RangeIdentityFallback.APPROXIMATELY;
+        fCollapse =
+                macros.collapse != null ? macros.collapse : NumberRangeFormatter.RangeCollapse.AUTO;
+        fIdentityFallback =
+                macros.identityFallback != null
+                        ? macros.identityFallback
+                        : NumberRangeFormatter.RangeIdentityFallback.APPROXIMATELY;
 
         String nsName = formatterImpl1.getRawMicroProps().nsName;
-        if (nsName == null || (!fSameFormatters && !nsName.equals(formatterImpl2.getRawMicroProps().nsName))) {
+        if (nsName == null
+                || (!fSameFormatters && !nsName.equals(formatterImpl2.getRawMicroProps().nsName))) {
             throw new IllegalArgumentException("Both formatters must have same numbering system");
         }
         getNumberRangeData(macros.loc, nsName, this);
 
-        if (fSameFormatters && (
-                fIdentityFallback == RangeIdentityFallback.APPROXIMATELY ||
-                fIdentityFallback == RangeIdentityFallback.APPROXIMATELY_OR_SINGLE_VALUE)) {
+        if (fSameFormatters
+                && (fIdentityFallback == RangeIdentityFallback.APPROXIMATELY
+                        || fIdentityFallback
+                                == RangeIdentityFallback.APPROXIMATELY_OR_SINGLE_VALUE)) {
             MacroProps approximatelyMacros = new MacroProps();
             approximatelyMacros.approximately = true;
-            fApproximatelyFormatter = new NumberFormatterImpl(
-                formatter1.macros(approximatelyMacros).resolve());
+            fApproximatelyFormatter =
+                    new NumberFormatterImpl(formatter1.macros(approximatelyMacros).resolve());
         } else {
             fApproximatelyFormatter = null;
         }
@@ -177,7 +183,8 @@ class NumberRangeFormatterImpl {
         fPluralRanges = StandardPluralRanges.forLocale(macros.loc);
     }
 
-    public FormattedNumberRange format(DecimalQuantity quantity1, DecimalQuantity quantity2, boolean equalBeforeRounding) {
+    public FormattedNumberRange format(
+            DecimalQuantity quantity1, DecimalQuantity quantity2, boolean equalBeforeRounding) {
         DecimalQuantity quantityBackup = quantity1.createCopy();
 
         FormattedStringBuilder string = new FormattedStringBuilder();
@@ -198,7 +205,8 @@ class NumberRangeFormatterImpl {
                 || !micros1.modMiddle.semanticallyEquivalent(micros2.modMiddle)
                 || !micros1.modOuter.semanticallyEquivalent(micros2.modOuter)) {
             formatRange(quantity1, quantity2, string, micros1, micros2);
-            return new FormattedNumberRange(string, quantity1, quantity2, RangeIdentityResult.NOT_EQUAL);
+            return new FormattedNumberRange(
+                    string, quantity1, quantity2, RangeIdentityResult.NOT_EQUAL);
         }
 
         // Check for identity
@@ -214,48 +222,56 @@ class NumberRangeFormatterImpl {
         // Java does not let us use a constexpr like C++;
         // we need to expand identity2d calls.
         switch (identity2d(fIdentityFallback, identityResult)) {
-        case (3 | (2 << 4)): // RANGE, NOT_EQUAL
-        case (3 | (1 << 4)): // RANGE, EQUAL_AFTER_ROUNDING
-        case (3 | (0 << 4)): // RANGE, EQUAL_BEFORE_ROUNDING
-        case (2 | (2 << 4)): // APPROXIMATELY, NOT_EQUAL
-        case (1 | (2 << 4)): // APPROXIMATE_OR_SINGLE_VALUE, NOT_EQUAL
-        case (0 | (2 << 4)): // SINGLE_VALUE, NOT_EQUAL
-            formatRange(quantity1, quantity2, string, micros1, micros2);
-            break;
+            case (3 | (2 << 4)): // RANGE, NOT_EQUAL
+            case (3 | (1 << 4)): // RANGE, EQUAL_AFTER_ROUNDING
+            case (3 | (0 << 4)): // RANGE, EQUAL_BEFORE_ROUNDING
+            case (2 | (2 << 4)): // APPROXIMATELY, NOT_EQUAL
+            case (1 | (2 << 4)): // APPROXIMATE_OR_SINGLE_VALUE, NOT_EQUAL
+            case (0 | (2 << 4)): // SINGLE_VALUE, NOT_EQUAL
+                formatRange(quantity1, quantity2, string, micros1, micros2);
+                break;
 
-        case (2 | (1 << 4)): // APPROXIMATELY, EQUAL_AFTER_ROUNDING
-        case (2 | (0 << 4)): // APPROXIMATELY, EQUAL_BEFORE_ROUNDING
-        case (1 | (1 << 4)): // APPROXIMATE_OR_SINGLE_VALUE, EQUAL_AFTER_ROUNDING
-            formatApproximately(quantityBackup, quantity1, quantity2, string, micros1, micros2);
-            break;
+            case (2 | (1 << 4)): // APPROXIMATELY, EQUAL_AFTER_ROUNDING
+            case (2 | (0 << 4)): // APPROXIMATELY, EQUAL_BEFORE_ROUNDING
+            case (1 | (1 << 4)): // APPROXIMATE_OR_SINGLE_VALUE, EQUAL_AFTER_ROUNDING
+                formatApproximately(quantityBackup, quantity1, quantity2, string, micros1, micros2);
+                break;
 
-        case (1 | (0 << 4)): // APPROXIMATE_OR_SINGLE_VALUE, EQUAL_BEFORE_ROUNDING
-        case (0 | (1 << 4)): // SINGLE_VALUE, EQUAL_AFTER_ROUNDING
-        case (0 | (0 << 4)): // SINGLE_VALUE, EQUAL_BEFORE_ROUNDING
-            formatSingleValue(quantity1, quantity2, string, micros1, micros2);
-            break;
+            case (1 | (0 << 4)): // APPROXIMATE_OR_SINGLE_VALUE, EQUAL_BEFORE_ROUNDING
+            case (0 | (1 << 4)): // SINGLE_VALUE, EQUAL_AFTER_ROUNDING
+            case (0 | (0 << 4)): // SINGLE_VALUE, EQUAL_BEFORE_ROUNDING
+                formatSingleValue(quantity1, quantity2, string, micros1, micros2);
+                break;
 
-        default:
-            assert false;
-            break;
+            default:
+                assert false;
+                break;
         }
 
         return new FormattedNumberRange(string, quantity1, quantity2, identityResult);
     }
 
-    private void formatSingleValue(DecimalQuantity quantity1, DecimalQuantity quantity2, FormattedStringBuilder string,
-            MicroProps micros1, MicroProps micros2) {
+    private void formatSingleValue(
+            DecimalQuantity quantity1,
+            DecimalQuantity quantity2,
+            FormattedStringBuilder string,
+            MicroProps micros1,
+            MicroProps micros2) {
         if (fSameFormatters) {
             int length = NumberFormatterImpl.writeNumber(micros1, quantity1, string, 0);
             NumberFormatterImpl.writeAffixes(micros1, string, 0, length);
         } else {
             formatRange(quantity1, quantity2, string, micros1, micros2);
         }
-
     }
 
-    private void formatApproximately(DecimalQuantity quantityBackup, DecimalQuantity quantity1, DecimalQuantity quantity2, FormattedStringBuilder string,
-            MicroProps micros1, MicroProps micros2) {
+    private void formatApproximately(
+            DecimalQuantity quantityBackup,
+            DecimalQuantity quantity1,
+            DecimalQuantity quantity2,
+            FormattedStringBuilder string,
+            MicroProps micros1,
+            MicroProps micros2) {
         if (fSameFormatters) {
             // Re-format using the approximately formatter:
             MicroProps microsAppx = fApproximatelyFormatter.preProcess(quantityBackup);
@@ -269,8 +285,12 @@ class NumberRangeFormatterImpl {
         }
     }
 
-    private void formatRange(DecimalQuantity quantity1, DecimalQuantity quantity2, FormattedStringBuilder string,
-            MicroProps micros1, MicroProps micros2) {
+    private void formatRange(
+            DecimalQuantity quantity1,
+            DecimalQuantity quantity2,
+            FormattedStringBuilder string,
+            MicroProps micros1,
+            MicroProps micros2) {
         // modInner is always notation (scientific); collapsable in ALL.
         // modOuter is always units; collapsable in ALL, AUTO, and UNIT.
         // modMiddle could be either; collapsable in ALL and sometimes AUTO and UNIT.
@@ -280,55 +300,58 @@ class NumberRangeFormatterImpl {
             case ALL:
             case AUTO:
             case UNIT:
-            {
-                // OUTER MODIFIER
-                collapseOuter = micros1.modOuter.semanticallyEquivalent(micros2.modOuter);
+                {
+                    // OUTER MODIFIER
+                    collapseOuter = micros1.modOuter.semanticallyEquivalent(micros2.modOuter);
 
-                if (!collapseOuter) {
-                    // Never collapse inner mods if outer mods are not collapsable
-                    collapseMiddle = false;
-                    collapseInner = false;
-                    break;
-                }
-
-                // MIDDLE MODIFIER
-                collapseMiddle = micros1.modMiddle.semanticallyEquivalent(micros2.modMiddle);
-
-                if (!collapseMiddle) {
-                    // Never collapse inner mods if outer mods are not collapsable
-                    collapseInner = false;
-                    break;
-                }
-
-                // MIDDLE MODIFIER HEURISTICS
-                // (could disable collapsing of the middle modifier)
-                // The modifiers are equal by this point, so we can look at just one of them.
-                Modifier mm = micros1.modMiddle;
-                if (fCollapse == RangeCollapse.UNIT) {
-                    // Only collapse if the modifier is a unit.
-                    // TODO: Make a better way to check for a unit?
-                    // TODO: Handle case where the modifier has both notation and unit (compact currency)?
-                    if (!mm.containsField(NumberFormat.Field.CURRENCY) && !mm.containsField(NumberFormat.Field.PERCENT)) {
+                    if (!collapseOuter) {
+                        // Never collapse inner mods if outer mods are not collapsable
                         collapseMiddle = false;
+                        collapseInner = false;
+                        break;
                     }
-                } else if (fCollapse == RangeCollapse.AUTO) {
-                    // Heuristic as of ICU 63: collapse only if the modifier is more than one code point.
-                    if (mm.getCodePointCount() <= 1) {
-                        collapseMiddle = false;
-                    }
-                }
 
-                if (!collapseMiddle || fCollapse != RangeCollapse.ALL) {
-                    collapseInner = false;
+                    // MIDDLE MODIFIER
+                    collapseMiddle = micros1.modMiddle.semanticallyEquivalent(micros2.modMiddle);
+
+                    if (!collapseMiddle) {
+                        // Never collapse inner mods if outer mods are not collapsable
+                        collapseInner = false;
+                        break;
+                    }
+
+                    // MIDDLE MODIFIER HEURISTICS
+                    // (could disable collapsing of the middle modifier)
+                    // The modifiers are equal by this point, so we can look at just one of them.
+                    Modifier mm = micros1.modMiddle;
+                    if (fCollapse == RangeCollapse.UNIT) {
+                        // Only collapse if the modifier is a unit.
+                        // TODO: Make a better way to check for a unit?
+                        // TODO: Handle case where the modifier has both notation and unit (compact
+                        // currency)?
+                        if (!mm.containsField(NumberFormat.Field.CURRENCY)
+                                && !mm.containsField(NumberFormat.Field.PERCENT)) {
+                            collapseMiddle = false;
+                        }
+                    } else if (fCollapse == RangeCollapse.AUTO) {
+                        // Heuristic as of ICU 63: collapse only if the modifier is more than one
+                        // code point.
+                        if (mm.getCodePointCount() <= 1) {
+                            collapseMiddle = false;
+                        }
+                    }
+
+                    if (!collapseMiddle || fCollapse != RangeCollapse.ALL) {
+                        collapseInner = false;
+                        break;
+                    }
+
+                    // INNER MODIFIER
+                    collapseInner = micros1.modInner.semanticallyEquivalent(micros2.modInner);
+
+                    // All done checking for collapsibility.
                     break;
                 }
-
-                // INNER MODIFIER
-                collapseInner = micros1.modInner.semanticallyEquivalent(micros2.modInner);
-
-                // All done checking for collapsibility.
-                break;
-            }
 
             default:
                 collapseOuter = false;
@@ -348,7 +371,8 @@ class NumberRangeFormatterImpl {
         // Add spacing unless all modifiers are collapsed.
         // TODO: add API to control this?
         // TODO: Use a data-driven heuristic like currency spacing?
-        // TODO: Use Unicode [:whitespace:] instead of PatternProps whitespace? (consider speed implications)
+        // TODO: Use Unicode [:whitespace:] instead of PatternProps whitespace? (consider speed
+        // implications)
         {
             boolean repeatInner = !collapseInner && micros1.modInner.getCodePointCount() > 0;
             boolean repeatMiddle = !collapseMiddle && micros1.modMiddle.getCodePointCount() > 0;
@@ -404,17 +428,17 @@ class NumberRangeFormatterImpl {
 
         // Now that all pieces are added, save the span info.
         FormattedValueStringBuilderImpl.applySpanRange(
-            string,
-            NumberRangeFormatter.SpanField.NUMBER_RANGE_SPAN,
-            0,
-            h.index0(),
-            h.index1());
+                string,
+                NumberRangeFormatter.SpanField.NUMBER_RANGE_SPAN,
+                0,
+                h.index0(),
+                h.index1());
         FormattedValueStringBuilderImpl.applySpanRange(
-            string,
-            NumberRangeFormatter.SpanField.NUMBER_RANGE_SPAN,
-            1,
-            h.index2(),
-            h.index3());
+                string,
+                NumberRangeFormatter.SpanField.NUMBER_RANGE_SPAN,
+                1,
+                h.index2(),
+                h.index3());
     }
 
     Modifier resolveModifierPlurals(Modifier first, Modifier second) {
@@ -431,7 +455,8 @@ class NumberRangeFormatterImpl {
         }
 
         // Get the required plural form from data
-        StandardPlural resultPlural = fPluralRanges.resolve(firstParameters.plural, secondParameters.plural);
+        StandardPlural resultPlural =
+                fPluralRanges.resolve(firstParameters.plural, secondParameters.plural);
 
         // Get and return the new Modifier
         Modifier mod = firstParameters.obj.getModifier(firstParameters.signum, resultPlural);

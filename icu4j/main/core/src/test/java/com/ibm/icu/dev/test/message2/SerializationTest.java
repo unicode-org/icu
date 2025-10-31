@@ -3,14 +3,13 @@
 
 package com.ibm.icu.dev.test.message2;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.message2.MFDataModel.Message;
 import com.ibm.icu.message2.MFParser;
 import com.ibm.icu.message2.MFSerializer;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 @SuppressWarnings({"static-method", "javadoc"})

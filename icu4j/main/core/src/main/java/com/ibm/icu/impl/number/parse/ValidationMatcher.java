@@ -4,9 +4,7 @@ package com.ibm.icu.impl.number.parse;
 
 import com.ibm.icu.impl.StringSegment;
 
-/**
- * A Matcher used only for post-process validation, not for consuming characters at runtime.
- */
+/** A Matcher used only for post-process validation, not for consuming characters at runtime. */
 public abstract class ValidationMatcher implements NumberParseMatcher {
 
     @Override
@@ -18,5 +16,4 @@ public abstract class ValidationMatcher implements NumberParseMatcher {
     public boolean smokeTest(StringSegment segment) {
         return false;
     }
-
 }

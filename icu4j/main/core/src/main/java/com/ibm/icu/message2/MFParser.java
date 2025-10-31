@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 /**
  * This class parses a {@code MessageFormat 2} syntax into a data model {@link MFDataModel.Message}.
  *
- * <p>It is used by {@link MessageFormatter}, but it might be handy for various tools.</p>
+ * <p>It is used by {@link MessageFormatter}, but it might be handy for various tools.
  *
  * @internal ICU 75 technology preview
  * @deprecated This API is for technology preview only.
@@ -30,11 +30,11 @@ public class MFParser {
     /**
      * Parses a {@code MessageFormat 2} syntax into a {@link MFDataModel.Message}.
      *
-     * <p>It is used by {@link MessageFormatter}, but it might be handy for various tools.</p>
+     * <p>It is used by {@link MessageFormatter}, but it might be handy for various tools.
+     *
      * @param input the text to parse
      * @return the parsed {@code MFDataModel.Message}
      * @throws MFParseException if errors are detected
-     *
      * @internal ICU 75 technology preview
      * @deprecated This API is for technology preview only.
      */
@@ -157,7 +157,8 @@ public class MFParser {
     // abnf: literal-expression = "{" o literal [s function] *(s attribute) o "}"
     // abnf: variable-expression = "{" o variable [s function] *(s attribute) o "}"
     // abnf: function-expression = "{" o function *(s attribute) o "}"
-    // abnf: markup = "{" o "#" identifier *(s option) *(s attribute) o ["/"] "}"  ; open and standalone
+    // abnf: markup = "{" o "#" identifier *(s option) *(s attribute) o ["/"] "}"  ; open and
+    // standalone
     // abnf:        / "{" o "/" identifier *(s option) *(s attribute) o "}"  ; close
     private MFDataModel.Expression getPlaceholder() throws MFParseException {
         int cp = input.peekChar();
@@ -186,7 +187,8 @@ public class MFParser {
         return result;
     }
 
-    private MFDataModel.FunctionRef getFunction(boolean whitespaceRequired) throws MFParseException {
+    private MFDataModel.FunctionRef getFunction(boolean whitespaceRequired)
+            throws MFParseException {
         int position = input.getPosition();
 
         // Handle absent function first (before parsing mandatory whitespace)
@@ -204,12 +206,13 @@ public class MFParser {
 
         cp = input.peekChar();
         switch (cp) {
-            case '}': {
-                // No function -- push the whitespace back,
-                // in case it's the required whitespace before an attribute
-                input.backup(whitespaceCount);
-                return null;
-            }
+            case '}':
+                {
+                    // No function -- push the whitespace back,
+                    // in case it's the required whitespace before an attribute
+                    input.backup(whitespaceCount);
+                    return null;
+                }
             case ':': // function
                 // abnf: function = ":" identifier *(s option)
                 input.readCodePoint(); // Consume the sigil
@@ -233,7 +236,8 @@ public class MFParser {
                 return null;
             case '#':
             case '/':
-                // abnf: markup = "{" o "#" identifier *(s option) *(s attribute) o ["/"] "}"  ; open and standalone
+                // abnf: markup = "{" o "#" identifier *(s option) *(s attribute) o ["/"] "}"  ;
+                // open and standalone
                 // abnf:        / "{" o "/" identifier *(s option) *(s attribute) o "}"  ; close
                 input.readCodePoint(); // Consume the sigil
                 String identifier = getIdentifier();
@@ -258,7 +262,7 @@ public class MFParser {
             if (function == null) {
                 // We had some spaces, but no function.
                 // So we put (some) back for the possible attributes.
-             //   input.backup(1);
+                //   input.backup(1);
             }
         }
 
@@ -295,7 +299,8 @@ public class MFParser {
         return null;
     }
 
-    // abnf: markup = "{" o "#" identifier *(s option) *(s attribute) o ["/"] "}"  ; open and standalone
+    // abnf: markup = "{" o "#" identifier *(s option) *(s attribute) o ["/"] "}"  ; open and
+    // standalone
     // abnf:        / "{" o "/" identifier *(s option) *(s attribute) o "}"  ; close
     private MFDataModel.Markup getMarkup() throws MFParseException {
         int cp = input.peekChar(); // consume the '{'
@@ -392,8 +397,8 @@ public class MFParser {
             if (option == null) {
                 break;
             }
-            checkCondition(first || skipCount != 0,
-                           "Expected whitespace before option " + option.name);
+            checkCondition(
+                    first || skipCount != 0, "Expected whitespace before option " + option.name);
             first = false;
             if (options.containsKey(option.name)) {
                 error("Duplicated option '" + option.name + "'");
@@ -512,7 +517,8 @@ public class MFParser {
                 break;
             }
         }
-        return new MFDataModel.Literal(normalize ? StringUtils.toNfc(result.toString()) : result.toString());
+        return new MFDataModel.Literal(
+                normalize ? StringUtils.toNfc(result.toString()) : result.toString());
     }
 
     /*
@@ -696,7 +702,8 @@ public class MFParser {
             return new MFDataModel.CatchallKey();
         }
         if (cp == EOF) {
-            // Restore whitespace, in order to detect the error case of whitespace at the end of a message
+            // Restore whitespace, in order to detect the error case of whitespace at the end of a
+            // message
             input.backup(skipCount);
             return null;
         }
@@ -729,11 +736,12 @@ public class MFParser {
                 skipOptionalWhitespaces();
                 expression = getPlaceholder();
                 String inputVarName = null;
-                checkCondition(expression instanceof MFDataModel.VariableExpression,
-                               "Variable expression required in .input declaration");
+                checkCondition(
+                        expression instanceof MFDataModel.VariableExpression,
+                        "Variable expression required in .input declaration");
                 inputVarName = ((MFDataModel.VariableExpression) expression).arg.name;
-                return new MFDataModel.InputDeclaration(inputVarName,
-                                                        (MFDataModel.VariableExpression) expression);
+                return new MFDataModel.InputDeclaration(
+                        inputVarName, (MFDataModel.VariableExpression) expression);
             case "local":
                 // abnf: local = %s".local"
                 // abnf: local-declaration = local s variable o "=" o expression
@@ -752,7 +760,7 @@ public class MFParser {
             case "match":
                 return new MatchDeclaration();
             default:
-               // OK to continue and return null, it is an error.
+                // OK to continue and return null, it is an error.
         }
         return null;
     }

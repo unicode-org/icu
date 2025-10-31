@@ -9,7 +9,6 @@
 
 package com.ibm.icu.impl.locale;
 
-
 public final class BaseLocale {
 
     private static final boolean JDKIMPL = false;
@@ -46,7 +45,8 @@ public final class BaseLocale {
         }
     }
 
-    public static BaseLocale getInstance(String language, String script, String region, String variant) {
+    public static BaseLocale getInstance(
+            String language, String script, String region, String variant) {
         if (JDKIMPL) {
             // JDK uses deprecated ISO639.1 language codes for he, yi and id
             if (AsciiUtil.caseIgnoreMatch(language, "he")) {
@@ -86,7 +86,7 @@ public final class BaseLocale {
         if (!(obj instanceof BaseLocale)) {
             return false;
         }
-        BaseLocale other = (BaseLocale)obj;
+        BaseLocale other = (BaseLocale) obj;
         return hashCode() == other.hashCode()
                 && _language.equals(other._language)
                 && _script.equals(other._script)
@@ -131,16 +131,16 @@ public final class BaseLocale {
         if (h == 0) {
             // Generating a hash value from language, script, region and variant
             for (int i = 0; i < _language.length(); i++) {
-                h = 31*h + _language.charAt(i);
+                h = 31 * h + _language.charAt(i);
             }
             for (int i = 0; i < _script.length(); i++) {
-                h = 31*h + _script.charAt(i);
+                h = 31 * h + _script.charAt(i);
             }
             for (int i = 0; i < _region.length(); i++) {
-                h = 31*h + _region.charAt(i);
+                h = 31 * h + _region.charAt(i);
             }
             for (int i = 0; i < _variant.length(); i++) {
-                h = 31*h + _variant.charAt(i);
+                h = 31 * h + _variant.charAt(i);
             }
             _hash = h;
         }
@@ -173,19 +173,20 @@ public final class BaseLocale {
         @Override
         public boolean equals(Object obj) {
             if (JDKIMPL) {
-                return (this == obj) ||
-                        (obj instanceof Key)
-                        && AsciiUtil.caseIgnoreMatch(((Key)obj)._lang, this._lang)
-                        && AsciiUtil.caseIgnoreMatch(((Key)obj)._scrt, this._scrt)
-                        && AsciiUtil.caseIgnoreMatch(((Key)obj)._regn, this._regn)
-                        && ((Key)obj)._vart.equals(_vart); // variant is case sensitive in JDK!
+                return (this == obj)
+                        || (obj instanceof Key)
+                                && AsciiUtil.caseIgnoreMatch(((Key) obj)._lang, this._lang)
+                                && AsciiUtil.caseIgnoreMatch(((Key) obj)._scrt, this._scrt)
+                                && AsciiUtil.caseIgnoreMatch(((Key) obj)._regn, this._regn)
+                                && ((Key) obj)
+                                        ._vart.equals(_vart); // variant is case sensitive in JDK!
             }
-            return (this == obj) ||
-                    (obj instanceof Key)
-                    && AsciiUtil.caseIgnoreMatch(((Key)obj)._lang, this._lang)
-                    && AsciiUtil.caseIgnoreMatch(((Key)obj)._scrt, this._scrt)
-                    && AsciiUtil.caseIgnoreMatch(((Key)obj)._regn, this._regn)
-                    && AsciiUtil.caseIgnoreMatch(((Key)obj)._vart, this._vart);
+            return (this == obj)
+                    || (obj instanceof Key)
+                            && AsciiUtil.caseIgnoreMatch(((Key) obj)._lang, this._lang)
+                            && AsciiUtil.caseIgnoreMatch(((Key) obj)._scrt, this._scrt)
+                            && AsciiUtil.caseIgnoreMatch(((Key) obj)._regn, this._regn)
+                            && AsciiUtil.caseIgnoreMatch(((Key) obj)._vart, this._vart);
         }
 
         @Override
@@ -213,19 +214,19 @@ public final class BaseLocale {
             if (h == 0) {
                 // Generating a hash value from language, script, region and variant
                 for (int i = 0; i < _lang.length(); i++) {
-                    h = 31*h + AsciiUtil.toLower(_lang.charAt(i));
+                    h = 31 * h + AsciiUtil.toLower(_lang.charAt(i));
                 }
                 for (int i = 0; i < _scrt.length(); i++) {
-                    h = 31*h + AsciiUtil.toLower(_scrt.charAt(i));
+                    h = 31 * h + AsciiUtil.toLower(_scrt.charAt(i));
                 }
                 for (int i = 0; i < _regn.length(); i++) {
-                    h = 31*h + AsciiUtil.toLower(_regn.charAt(i));
+                    h = 31 * h + AsciiUtil.toLower(_regn.charAt(i));
                 }
                 for (int i = 0; i < _vart.length(); i++) {
                     if (JDKIMPL) {
-                        h = 31*h + _vart.charAt(i);
+                        h = 31 * h + _vart.charAt(i);
                     } else {
-                        h = 31*h + AsciiUtil.toLower(_vart.charAt(i));
+                        h = 31 * h + AsciiUtil.toLower(_vart.charAt(i));
                     }
                 }
                 _hash = h;
@@ -250,8 +251,7 @@ public final class BaseLocale {
 
     private static class Cache extends LocaleObjectCache<Key, BaseLocale> {
 
-        public Cache() {
-        }
+        public Cache() {}
 
         @Override
         protected Key normalizeKey(Key key) {
@@ -262,6 +262,5 @@ public final class BaseLocale {
         protected BaseLocale createObject(Key key) {
             return new BaseLocale(key._lang, key._scrt, key._regn, key._vart);
         }
-
     }
 }

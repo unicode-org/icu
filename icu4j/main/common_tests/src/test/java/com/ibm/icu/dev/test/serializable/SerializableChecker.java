@@ -10,6 +10,7 @@
 
 package com.ibm.icu.dev.test.serializable;
 
+import com.ibm.icu.impl.URLHandler;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -23,26 +24,20 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import com.ibm.icu.impl.URLHandler;
-
 /**
- * This class examines all the classes in a Jar file or a directory
- * and lists all those classes that implement <code>Serializable</code>. It also checks
- * to make sure that those classes have the <code>serialVersionUID</code>
- * field define.
- *
+ * This class examines all the classes in a Jar file or a directory and lists all those classes that
+ * implement <code>Serializable</code>. It also checks to make sure that those classes have the
+ * <code>serialVersionUID</code> field define.
  */
-public class SerializableChecker implements URLHandler.URLVisitor
-{
+public class SerializableChecker implements URLHandler.URLVisitor {
     private static Class<?> serializable;
-    //private static Class throwable;
+    // private static Class throwable;
 
     private String path = null;
 
-    //private boolean write;
+    // private boolean write;
 
-    public SerializableChecker(String path)
-    {
+    public SerializableChecker(String path) {
         this.path = path;
 
         if (path != null) {
@@ -57,15 +52,14 @@ public class SerializableChecker implements URLHandler.URLVisitor
     static {
         try {
             serializable = Class.forName("java.io.Serializable");
-            //throwable    = Class.forName("java.lang.Throwable");
+            // throwable    = Class.forName("java.lang.Throwable");
         } catch (Exception e) {
             // we're in deep trouble...
             System.out.println("Woops! Can't get class info for Serializable and Throwable.");
         }
     }
 
-    private void writeFile(String className, byte bytes[])
-    {
+    private void writeFile(String className, byte bytes[]) {
         File file = new File(path + File.separator + className + ".dat");
 
         try (FileOutputStream stream = new FileOutputStream(file)) {
@@ -77,8 +71,7 @@ public class SerializableChecker implements URLHandler.URLVisitor
     }
 
     @Override
-    public void visit(String str)
-    {
+    public void visit(String str) {
         int ix = str.lastIndexOf(".class");
 
         if (ix >= 0) {
@@ -91,25 +84,25 @@ public class SerializableChecker implements URLHandler.URLVisitor
 
             try {
                 Class<?> c = Class.forName(className);
-                int   m = c.getModifiers();
+                int m = c.getModifiers();
 
                 if (serializable.isAssignableFrom(c) /*&&
                     (! throwable.isAssignableFrom(c) || c.getDeclaredFields().length > 0)*/) {
-                    //Field uid;
+                    // Field uid;
 
                     System.out.print(className + " (" + Modifier.toString(m) + ") - ");
 
-                    if(!Modifier.isInterface(m)){
+                    if (!Modifier.isInterface(m)) {
                         try {
-                            /* uid = */
-                            c.getDeclaredField("serialVersionUID");
+                            /* uid= */ c.getDeclaredField("serialVersionUID");
                         } catch (Exception e) {
                             System.out.print("no serialVersionUID - ");
                         }
                     }
 
                     if (Modifier.isPublic(m)) {
-                        SerializableTestUtility.Handler handler = SerializableTestUtility.getHandler(className);
+                        SerializableTestUtility.Handler handler =
+                                SerializableTestUtility.getHandler(className);
 
                         if (!Modifier.isInterface(m) && handler != null) {
                             Object objectsOut[] = handler.getTestObjects();
@@ -132,7 +125,8 @@ public class SerializableChecker implements URLHandler.URLVisitor
                                 writeFile(className, byteOut.toByteArray());
                             }
 
-                            ByteArrayInputStream byteIn = new ByteArrayInputStream(byteOut.toByteArray());
+                            ByteArrayInputStream byteIn =
+                                    new ByteArrayInputStream(byteOut.toByteArray());
                             ObjectInputStream in = new ObjectInputStream(byteIn);
 
                             try {
@@ -144,8 +138,8 @@ public class SerializableChecker implements URLHandler.URLVisitor
                                 return;
                             }
 
-                            for(int i = 0; i < objectsIn.length; i += 1) {
-                                if (! handler.hasSameBehavior(objectsIn[i], objectsOut[i])) {
+                            for (int i = 0; i < objectsIn.length; i += 1) {
+                                if (!handler.hasSameBehavior(objectsIn[i], objectsOut[i])) {
                                     passed = false;
                                     System.out.println("Object " + i + " failed behavior test.");
                                 }
@@ -156,7 +150,7 @@ public class SerializableChecker implements URLHandler.URLVisitor
                             }
                         } else {
                             // it's OK to not have tests for abstract classes...
-                            if (! Modifier.isAbstract(m)) {
+                            if (!Modifier.isAbstract(m)) {
                                 System.out.print("no test.");
                             }
                         }
@@ -164,18 +158,17 @@ public class SerializableChecker implements URLHandler.URLVisitor
 
                     System.out.println();
                 }
-           } catch (Exception e) {
+            } catch (Exception e) {
                 System.out.println("Error processing " + className + ": " + e.toString());
             }
         }
     }
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         List<String> argList = Arrays.asList(args);
         String path = null;
 
-        for (Iterator<String> it = argList.iterator(); it.hasNext(); /*anything?*/) {
+        for (Iterator<String> it = argList.iterator(); it.hasNext(); /*anything?*/ ) {
             String arg = (String) it.next();
 
             if (arg.equals("-w")) {
@@ -186,12 +179,13 @@ public class SerializableChecker implements URLHandler.URLVisitor
                 }
             } else {
 
-
                 try {
-                    //URL jarURL  = new URL("jar:file:/dev/eclipse/workspace/icu4j/icu4j.jar!/com/ibm/icu");
-                    //URL fileURL = new URL("file:/dev/eclipse/workspace/icu4j/classes/com/ibm/icu");
+                    // URL jarURL  = new
+                    // URL("jar:file:/dev/eclipse/workspace/icu4j/icu4j.jar!/com/ibm/icu");
+                    // URL fileURL = new
+                    // URL("file:/dev/eclipse/workspace/icu4j/classes/com/ibm/icu");
                     URL url = new URL(arg);
-                    URLHandler handler  = URLHandler.get(url);
+                    URLHandler handler = URLHandler.get(url);
                     SerializableChecker checker = new SerializableChecker(path);
 
                     System.out.println("Checking classes from " + arg + ":");

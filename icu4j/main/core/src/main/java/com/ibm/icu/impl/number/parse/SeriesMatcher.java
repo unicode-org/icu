@@ -2,14 +2,13 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.number.parse;
 
+import com.ibm.icu.impl.StringSegment;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ibm.icu.impl.StringSegment;
-
 /**
- * Composes a number of matchers, running one after another. Matches the input string only if all of the
- * matchers in the series succeed. Performs greedy matches within the context of the series.
+ * Composes a number of matchers, running one after another. Matches the input string only if all of
+ * the matchers in the series succeed. Performs greedy matches within the context of the series.
  *
  * @author sffc
  */
@@ -47,7 +46,7 @@ public class SeriesMatcher implements NumberParseMatcher {
 
         int initialOffset = segment.getOffset();
         boolean maybeMore = true;
-        for (int i = 0; i < matchers.size();) {
+        for (int i = 0; i < matchers.size(); ) {
             NumberParseMatcher matcher = matchers.get(i);
             int matcherOffset = segment.getOffset();
             if (segment.length() != 0) {
@@ -64,9 +63,12 @@ public class SeriesMatcher implements NumberParseMatcher {
             } else if (success) {
                 // Match succeeded, and this is NOT a flexible matcher. Proceed to the next matcher.
                 i++;
-                // Small hack: if there is another matcher coming, do not accept trailing weak chars.
+                // Small hack: if there is another matcher coming, do not accept trailing weak
+                // chars.
                 // Needed for proper handling of currency spacing.
-                if (i < matchers.size() && segment.getOffset() != result.charEnd && result.charEnd > matcherOffset) {
+                if (i < matchers.size()
+                        && segment.getOffset() != result.charEnd
+                        && result.charEnd > matcherOffset) {
                     segment.setOffset(result.charEnd);
                 }
             } else if (isFlexible) {
@@ -113,5 +115,4 @@ public class SeriesMatcher implements NumberParseMatcher {
     public String toString() {
         return "<SeriesMatcher " + matchers + ">";
     }
-
 }

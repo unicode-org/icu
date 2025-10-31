@@ -10,8 +10,6 @@
 
 package com.ibm.icu.dev.test.serializable;
 
-import java.util.Locale;
-
 import com.ibm.icu.util.BuddhistCalendar;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.ChineseCalendar;
@@ -27,16 +25,14 @@ import com.ibm.icu.util.PersianCalendar;
 import com.ibm.icu.util.TaiwanCalendar;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
+import java.util.Locale;
 
 /**
  * @author emader
- *
  */
-public abstract class CalendarHandler implements SerializableTestUtility.Handler
-{
+public abstract class CalendarHandler implements SerializableTestUtility.Handler {
     @Override
-    public boolean hasSameBehavior(Object a, Object b)
-    {
+    public boolean hasSameBehavior(Object a, Object b) {
         Calendar cal_a = (Calendar) a;
         Calendar cal_b = (Calendar) b;
 
@@ -64,11 +60,9 @@ public abstract class CalendarHandler implements SerializableTestUtility.Handler
         return cal_a.getTime().equals(cal_b.getTime());
     }
 
-    static class BasicCalendarHandler extends CalendarHandler
-    {
+    static class BasicCalendarHandler extends CalendarHandler {
         @Override
-        public Object[] getTestObjects()
-        {
+        public Object[] getTestObjects() {
             Locale locales[] = SerializableTestUtility.getLocales();
             TimeZone pst = TimeZone.getTimeZone("America/Los_Angeles");
             Calendar calendars[] = new Calendar[locales.length];
@@ -81,11 +75,9 @@ public abstract class CalendarHandler implements SerializableTestUtility.Handler
         }
     }
 
-    static class BuddhistCalendarHandler extends CalendarHandler
-    {
+    static class BuddhistCalendarHandler extends CalendarHandler {
         @Override
-        public Object[] getTestObjects()
-        {
+        public Object[] getTestObjects() {
             Locale locales[] = SerializableTestUtility.getLocales();
             TimeZone tst = TimeZone.getTimeZone("Asia/Bangkok");
             BuddhistCalendar calendars[] = new BuddhistCalendar[locales.length];
@@ -98,11 +90,9 @@ public abstract class CalendarHandler implements SerializableTestUtility.Handler
         }
     }
 
-    static class ChineseCalendarHandler extends CalendarHandler
-    {
+    static class ChineseCalendarHandler extends CalendarHandler {
         @Override
-        public Object[] getTestObjects()
-        {
+        public Object[] getTestObjects() {
             Locale locales[] = SerializableTestUtility.getLocales();
             TimeZone cst = TimeZone.getTimeZone("Asia/Shanghai");
             ChineseCalendar calendars[] = new ChineseCalendar[locales.length];
@@ -115,11 +105,9 @@ public abstract class CalendarHandler implements SerializableTestUtility.Handler
         }
     }
 
-    static class CopticCalendarHandler extends CalendarHandler
-    {
+    static class CopticCalendarHandler extends CalendarHandler {
         @Override
-        public Object[] getTestObjects()
-        {
+        public Object[] getTestObjects() {
             Locale locales[] = SerializableTestUtility.getLocales();
             TimeZone ast = TimeZone.getTimeZone("Europe/Athens");
             CopticCalendar calendars[] = new CopticCalendar[locales.length];
@@ -132,11 +120,9 @@ public abstract class CalendarHandler implements SerializableTestUtility.Handler
         }
     }
 
-    static class DangiCalendarHandler extends CalendarHandler
-    {
+    static class DangiCalendarHandler extends CalendarHandler {
         @Override
-        public Object[] getTestObjects()
-        {
+        public Object[] getTestObjects() {
             Locale locales[] = SerializableTestUtility.getLocales();
             TimeZone kst = TimeZone.getTimeZone("Asia/Seoul");
             DangiCalendar calendars[] = new DangiCalendar[locales.length];
@@ -149,11 +135,9 @@ public abstract class CalendarHandler implements SerializableTestUtility.Handler
         }
     }
 
-    static class EthiopicCalendarHandler extends CalendarHandler
-    {
+    static class EthiopicCalendarHandler extends CalendarHandler {
         @Override
-        public Object[] getTestObjects()
-        {
+        public Object[] getTestObjects() {
             Locale locales[] = SerializableTestUtility.getLocales();
             TimeZone ast = TimeZone.getTimeZone("Africa/Addis_Ababa");
             EthiopicCalendar calendars[] = new EthiopicCalendar[locales.length];
@@ -166,11 +150,9 @@ public abstract class CalendarHandler implements SerializableTestUtility.Handler
         }
     }
 
-    static class GregorianCalendarHandler extends CalendarHandler
-    {
+    static class GregorianCalendarHandler extends CalendarHandler {
         @Override
-        public Object[] getTestObjects()
-        {
+        public Object[] getTestObjects() {
             Locale locales[] = SerializableTestUtility.getLocales();
             TimeZone pst = TimeZone.getTimeZone("America/Los_Angeles");
             GregorianCalendar calendars[] = new GregorianCalendar[locales.length];
@@ -183,11 +165,9 @@ public abstract class CalendarHandler implements SerializableTestUtility.Handler
         }
     }
 
-    static class HebrewCalendarHandler extends CalendarHandler
-    {
+    static class HebrewCalendarHandler extends CalendarHandler {
         @Override
-        public Object[] getTestObjects()
-        {
+        public Object[] getTestObjects() {
             Locale locales[] = SerializableTestUtility.getLocales();
             TimeZone jst = TimeZone.getTimeZone("Asia/Jerusalem");
             HebrewCalendar calendars[] = new HebrewCalendar[locales.length];
@@ -200,11 +180,9 @@ public abstract class CalendarHandler implements SerializableTestUtility.Handler
         }
     }
 
-    static class IndianCalendarHandler extends CalendarHandler
-    {
+    static class IndianCalendarHandler extends CalendarHandler {
         @Override
-        public Object[] getTestObjects()
-        {
+        public Object[] getTestObjects() {
             Locale locales[] = SerializableTestUtility.getLocales();
             TimeZone jst = TimeZone.getTimeZone("Asia/Calcutta");
             IndianCalendar calendars[] = new IndianCalendar[locales.length];
@@ -217,8 +195,7 @@ public abstract class CalendarHandler implements SerializableTestUtility.Handler
         }
     }
 
-    static class IslamicCalendarHandler extends CalendarHandler
-    {
+    static class IslamicCalendarHandler extends CalendarHandler {
         @Override
         public Object[] getTestObjects() {
             Locale locales[] = SerializableTestUtility.getLocales();
@@ -233,11 +210,9 @@ public abstract class CalendarHandler implements SerializableTestUtility.Handler
         }
     }
 
-    static class JapaneseCalendarHandler extends CalendarHandler
-    {
+    static class JapaneseCalendarHandler extends CalendarHandler {
         @Override
-        public Object[] getTestObjects()
-        {
+        public Object[] getTestObjects() {
             Locale locales[] = SerializableTestUtility.getLocales();
             TimeZone jst = TimeZone.getTimeZone("Asia/Tokyo");
             JapaneseCalendar calendars[] = new JapaneseCalendar[locales.length];
@@ -250,11 +225,9 @@ public abstract class CalendarHandler implements SerializableTestUtility.Handler
         }
     }
 
-    static class PersianCalendarHandler extends CalendarHandler
-    {
+    static class PersianCalendarHandler extends CalendarHandler {
         @Override
-        public Object[] getTestObjects()
-        {
+        public Object[] getTestObjects() {
             Locale locales[] = SerializableTestUtility.getLocales();
             TimeZone kst = TimeZone.getTimeZone("Asia/Tehran");
             PersianCalendar calendars[] = new PersianCalendar[locales.length];

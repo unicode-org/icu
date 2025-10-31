@@ -8,24 +8,21 @@
  */
 package com.ibm.icu.text;
 
-import java.util.List;
-
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.UtilityExtensions;
+import java.util.List;
 
 /**
- * A transliterator that is composed of two or more other
- * transliterator objects linked together.  For example, if one
- * transliterator transliterates from script A to script B, and
- * another transliterates from script B to script C, the two may be
- * combined to form a new transliterator from A to C.
+ * A transliterator that is composed of two or more other transliterator objects linked together.
+ * For example, if one transliterator transliterates from script A to script B, and another
+ * transliterates from script B to script C, the two may be combined to form a new transliterator
+ * from A to C.
  *
- * <p>Composed transliterators may not behave as expected.  For
- * example, inverses may not combine to form the identity
- * transliterator.  See the class documentation for {@link
- * Transliterator} for details.
+ * <p>Composed transliterators may not behave as expected. For example, inverses may not combine to
+ * form the identity transliterator. See the class documentation for {@link Transliterator} for
+ * details.
  *
- * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
+ * <p>Copyright &copy; IBM Corporation 1999. All rights reserved.
  *
  * @author Alan Liu
  */
@@ -36,16 +33,14 @@ class CompoundTransliterator extends Transliterator {
     private int numAnonymousRBTs = 0;
 
     /**
-     * Constructs a new compound transliterator given an array of
-     * transliterators.  The array of transliterators may be of any
-     * length, including zero or one, however, useful compound
+     * Constructs a new compound transliterator given an array of transliterators. The array of
+     * transliterators may be of any length, including zero or one, however, useful compound
      * transliterators have at least two components.
-     * @param transliterators array of <code>Transliterator</code>
-     * objects
-     * @param filter the filter.  Any character for which
-     * {@code filter.contains()} returns {@code false} will not be
-     * altered by this transliterator.  If {@code filter} is
-     * {@code null} then no filtering is applied.
+     *
+     * @param transliterators array of <code>Transliterator</code> objects
+     * @param filter the filter. Any character for which {@code filter.contains()} returns {@code
+     *     false} will not be altered by this transliterator. If {@code filter} is {@code null} then
+     *     no filtering is applied.
      */
     /*public CompoundTransliterator(Transliterator[] transliterators,
                                   UnicodeFilter filter) {
@@ -56,12 +51,11 @@ class CompoundTransliterator extends Transliterator {
     }*/
 
     /**
-     * Constructs a new compound transliterator given an array of
-     * transliterators.  The array of transliterators may be of any
-     * length, including zero or one, however, useful compound
+     * Constructs a new compound transliterator given an array of transliterators. The array of
+     * transliterators may be of any length, including zero or one, however, useful compound
      * transliterators have at least two components.
-     * @param transliterators array of <code>Transliterator</code>
-     * objects
+     *
+     * @param transliterators array of <code>Transliterator</code> objects
      */
     /*public CompoundTransliterator(Transliterator[] transliterators) {
         this(transliterators, null);
@@ -69,10 +63,10 @@ class CompoundTransliterator extends Transliterator {
 
     /**
      * Constructs a new compound transliterator.
+     *
      * @param ID compound ID
      * @param direction either Transliterator.FORWARD or Transliterator.REVERSE
-     * @param filter a global filter for this compound transliterator
-     * or null
+     * @param filter a global filter for this compound transliterator or null
      */
     /*public CompoundTransliterator(String ID, int direction,
                                   UnicodeFilter filter) {
@@ -82,6 +76,7 @@ class CompoundTransliterator extends Transliterator {
 
     /**
      * Constructs a new compound transliterator with no filter.
+     *
      * @param ID compound ID
      * @param direction either Transliterator.FORWARD or Transliterator.REVERSE
      */
@@ -91,6 +86,7 @@ class CompoundTransliterator extends Transliterator {
 
     /**
      * Constructs a new forward compound transliterator with no filter.
+     *
      * @param ID compound ID
      */
     /*public CompoundTransliterator(String ID) {
@@ -98,9 +94,8 @@ class CompoundTransliterator extends Transliterator {
     }*/
 
     /**
-     * Package private constructor for Transliterator from a vector of
-     * transliterators.  The caller is responsible for fixing up the
-     * ID.
+     * Package private constructor for Transliterator from a vector of transliterators. The caller
+     * is responsible for fixing up the ID.
      */
     CompoundTransliterator(List<Transliterator> list) {
         this(list, 0);
@@ -116,31 +111,32 @@ class CompoundTransliterator extends Transliterator {
 
     /**
      * Internal method for safeClone...
+     *
      * @param id
      * @param filter2
      * @param trans2
      * @param numAnonymousRBTs2
      */
-    CompoundTransliterator(String id, UnicodeFilter filter2, Transliterator[] trans2, int numAnonymousRBTs2) {
+    CompoundTransliterator(
+            String id, UnicodeFilter filter2, Transliterator[] trans2, int numAnonymousRBTs2) {
         super(id, filter2);
         trans = trans2;
         numAnonymousRBTs = numAnonymousRBTs2;
     }
 
     /**
-     * Finish constructing a transliterator: only to be called by
-     * constructors.  Before calling init(), set trans and filter to NULL.
+     * Finish constructing a transliterator: only to be called by constructors. Before calling
+     * init(), set trans and filter to NULL.
+     *
      * @param id the id containing ';'-separated entries
      * @param direction either FORWARD or REVERSE
-     * @param idSplitPoint the index into id at which the
-     * splitTrans should be inserted, if there is one, or
-     * -1 if there is none.
-     * @param splitTrans a transliterator to be inserted
-     * before the entry at offset idSplitPoint in the id string.  May be
-     * NULL to insert no entry.
-     * @param fixReverseID if true, then reconstruct the ID of reverse
-     * entries by calling getID() of component entries.  Some constructors
-     * do not require this because they apply a facade ID anyway.
+     * @param idSplitPoint the index into id at which the splitTrans should be inserted, if there is
+     *     one, or -1 if there is none.
+     * @param splitTrans a transliterator to be inserted before the entry at offset idSplitPoint in
+     *     the id string. May be NULL to insert no entry.
+     * @param fixReverseID if true, then reconstruct the ID of reverse entries by calling getID() of
+     *     component entries. Some constructors do not require this because they apply a facade ID
+     *     anyway.
      */
     /*private void init(String id,
                       int direction,
@@ -164,22 +160,19 @@ class CompoundTransliterator extends Transliterator {
         }
     }*/
 
-
     /**
-     * Finish constructing a transliterator: only to be called by
-     * constructors.  Before calling init(), set trans and filter to NULL.
-     * @param list a vector of transliterator objects to be adopted.  It
-     * should NOT be empty.  The list should be in declared order.  That
-     * is, it should be in the FORWARD order; if direction is REVERSE then
-     * the list order will be reversed.
+     * Finish constructing a transliterator: only to be called by constructors. Before calling
+     * init(), set trans and filter to NULL.
+     *
+     * @param list a vector of transliterator objects to be adopted. It should NOT be empty. The
+     *     list should be in declared order. That is, it should be in the FORWARD order; if
+     *     direction is REVERSE then the list order will be reversed.
      * @param direction either FORWARD or REVERSE
-     * @param fixReverseID if true, then reconstruct the ID of reverse
-     * entries by calling getID() of component entries.  Some constructors
-     * do not require this because they apply a facade ID anyway.
+     * @param fixReverseID if true, then reconstruct the ID of reverse entries by calling getID() of
+     *     component entries. Some constructors do not require this because they apply a facade ID
+     *     anyway.
      */
-    private void init(List<Transliterator> list,
-                      int direction,
-                      boolean fixReverseID) {
+    private void init(List<Transliterator> list, int direction, boolean fixReverseID) {
         // assert(trans == 0);
 
         // Allocate array
@@ -189,7 +182,7 @@ class CompoundTransliterator extends Transliterator {
         // Move the transliterators from the vector into an array.
         // Reverse the order if necessary.
         int i;
-        for (i=0; i<count; ++i) {
+        for (i = 0; i < count; ++i) {
             int j = (direction == FORWARD) ? i : count - 1 - i;
             trans[i] = list.get(j);
         }
@@ -198,7 +191,7 @@ class CompoundTransliterator extends Transliterator {
         // ID.
         if (direction == REVERSE && fixReverseID) {
             StringBuilder newID = new StringBuilder();
-            for (i=0; i<count; ++i) {
+            for (i = 0; i < count; ++i) {
                 if (i > 0) {
                     newID.append(ID_DELIM);
                 }
@@ -211,9 +204,8 @@ class CompoundTransliterator extends Transliterator {
     }
 
     /**
-     * Return the IDs of the given list of transliterators, concatenated
-     * with ';' delimiting them.  Equivalent to the perlish expression
-     * join(';', map($_.getID(), transliterators).
+     * Return the IDs of the given list of transliterators, concatenated with ';' delimiting them.
+     * Equivalent to the perlish expression join(';', map($_.getID(), transliterators).
      */
     /*private static String joinIDs(Transliterator[] transliterators) {
         StringBuffer id = new StringBuffer();
@@ -228,6 +220,7 @@ class CompoundTransliterator extends Transliterator {
 
     /**
      * Returns the number of transliterators in this chain.
+     *
      * @return number of transliterators in this chain.
      */
     public int getCount() {
@@ -236,6 +229,7 @@ class CompoundTransliterator extends Transliterator {
 
     /**
      * Returns the transliterator at the given index in this chain.
+     *
      * @param index index into chain, from 0 to <code>getCount() - 1</code>
      * @return transliterator at the given index
      */
@@ -243,24 +237,20 @@ class CompoundTransliterator extends Transliterator {
         return trans[index];
     }
 
-    /**
-     * Append c to buf, unless buf is empty or buf already ends in c.
-     */
+    /** Append c to buf, unless buf is empty or buf already ends in c. */
     private static void _smartAppend(StringBuilder buf, char c) {
-        if (buf.length() != 0 &&
-            buf.charAt(buf.length() - 1) != c) {
+        if (buf.length() != 0 && buf.charAt(buf.length() - 1) != c) {
             buf.append(c);
         }
     }
 
     /**
-     * Override Transliterator:
-     * Create a rule string that can be passed to createFromRules()
-     * to recreate this transliterator.
-     * @param escapeUnprintable if true then convert unprintable
-     * character to their hex escape representations, \\uxxxx or
-     * \\Uxxxxxxxx.  Unprintable characters are those other than
-     * U+000A, U+0020..U+007E.
+     * Override Transliterator: Create a rule string that can be passed to createFromRules() to
+     * recreate this transliterator.
+     *
+     * @param escapeUnprintable if true then convert unprintable character to their hex escape
+     *     representations, \\uxxxx or \\Uxxxxxxxx. Unprintable characters are those other than
+     *     U+000A, U+0020..U+007E.
      * @return the rule string
      */
     @Override
@@ -275,9 +265,12 @@ class CompoundTransliterator extends Transliterator {
         if (numAnonymousRBTs >= 1 && getFilter() != null) {
             // If we are a compound RBT and if we have a global
             // filter, then emit it at the top.
-            rulesSource.append("::").append(getFilter().toPattern(escapeUnprintable)).append(ID_DELIM);
+            rulesSource
+                    .append("::")
+                    .append(getFilter().toPattern(escapeUnprintable))
+                    .append(ID_DELIM);
         }
-        for (int i=0; i<trans.length; ++i) {
+        for (int i = 0; i < trans.length; ++i) {
             String rule;
 
             // Anonymous RuleBasedTransliterators (inline rules and
@@ -289,14 +282,14 @@ class CompoundTransliterator extends Transliterator {
                 if (numAnonymousRBTs > 1 && i > 0 && trans[i - 1].getID().startsWith("%Pass"))
                     rule = "::Null;" + rule;
 
-            // we also use toRules() on CompoundTransliterators (which we
-            // check for by looking for a semicolon in the ID)-- this gets
-            // the list of their child transliterators output in the right
-            // format
+                // we also use toRules() on CompoundTransliterators (which we
+                // check for by looking for a semicolon in the ID)-- this gets
+                // the list of their child transliterators output in the right
+                // format
             } else if (trans[i].getID().indexOf(';') >= 0) {
                 rule = trans[i].toRules(escapeUnprintable);
 
-            // for everything else, use baseToRules()
+                // for everything else, use baseToRules()
             } else {
                 rule = trans[i].baseToRules(escapeUnprintable);
             }
@@ -314,8 +307,9 @@ class CompoundTransliterator extends Transliterator {
     public void addSourceTargetSet(UnicodeSet filter, UnicodeSet sourceSet, UnicodeSet targetSet) {
         UnicodeSet myFilter = new UnicodeSet(getFilterAsUnicodeSet(filter));
         UnicodeSet tempTargetSet = new UnicodeSet();
-        for (int i=0; i<trans.length; ++i) {
-            // each time we produce targets, those can be used by subsequent items, despite the filter.
+        for (int i = 0; i < trans.length; ++i) {
+            // each time we produce targets, those can be used by subsequent items, despite the
+            // filter.
             // so we get just those items, and add them to the filter each time.
             tempTargetSet.clear();
             trans[i].addSourceTargetSet(myFilter, sourceSet, tempTargetSet);
@@ -324,25 +318,22 @@ class CompoundTransliterator extends Transliterator {
         }
     }
 
-//    /**
-//     * Returns the set of all characters that may be generated as
-//     * replacement text by this transliterator.
-//     */
-//    public UnicodeSet getTargetSet() {
-//        UnicodeSet set = new UnicodeSet();
-//        for (int i=0; i<trans.length; ++i) {
-//            // This is a heuristic, and not 100% reliable.
-//            set.addAll(trans[i].getTargetSet());
-//        }
-//        return set;
-//    }
+    //    /**
+    //     * Returns the set of all characters that may be generated as
+    //     * replacement text by this transliterator.
+    //     */
+    //    public UnicodeSet getTargetSet() {
+    //        UnicodeSet set = new UnicodeSet();
+    //        for (int i=0; i<trans.length; ++i) {
+    //            // This is a heuristic, and not 100% reliable.
+    //            set.addAll(trans[i].getTargetSet());
+    //        }
+    //        return set;
+    //    }
 
-    /**
-     * Implements {@link Transliterator#handleTransliterate}.
-     */
+    /** Implements {@link Transliterator#handleTransliterate}. */
     @Override
-    protected void handleTransliterate(Replaceable text,
-                                       Position index, boolean incremental) {
+    protected void handleTransliterate(Replaceable text, Position index, boolean incremental) {
         /* Call each transliterator with the same start value and
          * initial cursor index, but with the limit index as modified
          * by preceding transliterators.  The cursor index must be
@@ -368,36 +359,22 @@ class CompoundTransliterator extends Transliterator {
          */
 
         /**
-         * Example: 3 transliterators.  This example illustrates the
-         * mechanics we need to implement.  C, S, and L are the contextStart,
-         * start, and limit.  gl is the globalLimit.  contextLimit is
-         * equal to limit throughout.
+         * Example: 3 transliterators. This example illustrates the mechanics we need to implement.
+         * C, S, and L are the contextStart, start, and limit. gl is the globalLimit. contextLimit
+         * is equal to limit throughout.
          *
-         * 1. h-u, changes hex to Unicode
+         * <p>1. h-u, changes hex to Unicode
          *
-         *    4  7  a  d  0      4  7  a
-         *    abc/u0061/u    =>  abca/u
-         *    C  S       L       C   S L   gl=f->a
+         * <p>4 7 a d 0 4 7 a abc/u0061/u => abca/u C S L C S L gl=f->a
          *
-         * 2. upup, changes "x" to "XX"
+         * <p>2. upup, changes "x" to "XX"
          *
-         *    4  7  a       4  7  a
-         *    abca/u    =>  abcAA/u
-         *    C  SL         C    S
-         *                       L    gl=a->b
-         * 3. u-h, changes Unicode to hex
+         * <p>4 7 a 4 7 a abca/u => abcAA/u C SL C S L gl=a->b 3. u-h, changes Unicode to hex
          *
-         *    4  7  a        4  7  a  d  0  3
-         *    abcAA/u    =>  abc/u0041/u0041/u
-         *    C  S L         C              S
-         *                                  L   gl=b->15
-         * 4. return
+         * <p>4 7 a 4 7 a d 0 3 abcAA/u => abc/u0041/u0041/u C S L C S L gl=b->15 4. return
          *
-         *    4  7  a  d  0  3
-         *    abc/u0041/u0041/u
-         *    C S L
+         * <p>4 7 a d 0 3 abc/u0041/u0041/u C S L
          */
-
         if (trans.length < 1) {
             index.start = index.limit;
             return; // Short circuit for empty compound transliterators
@@ -416,44 +393,53 @@ class CompoundTransliterator extends Transliterator {
         int delta = 0; // delta in length
 
         StringBuilder log = null;
-        ///CLOVER:OFF
+        /// CLOVER:OFF
         if (DEBUG) {
-            log = new StringBuilder("CompoundTransliterator{" + getID() +
-                                   (incremental ? "}i: IN=" : "}: IN="));
+            log =
+                    new StringBuilder(
+                            "CompoundTransliterator{"
+                                    + getID()
+                                    + (incremental ? "}i: IN=" : "}: IN="));
             UtilityExtensions.formatInput(log, text, index);
             System.out.println(Utility.escape(log.toString()));
         }
-        ///CLOVER:ON
+        /// CLOVER:ON
 
         // Give each transliterator a crack at the run of characters.
         // See comments at the top of the method for more detail.
-        for (int i=0; i<trans.length; ++i) {
+        for (int i = 0; i < trans.length; ++i) {
             index.start = compoundStart; // Reset start
             int limit = index.limit;
 
             if (index.start == index.limit) {
                 // Short circuit for empty range
-                ///CLOVER:OFF
+                /// CLOVER:OFF
                 if (DEBUG) {
-                    System.out.println("CompoundTransliterator[" + i +
-                                       ".." + (trans.length-1) +
-                                       (incremental ? "]i: " : "]: ") +
-                                       UtilityExtensions.formatInput(text, index) +
-                                       " (NOTHING TO DO)");
+                    System.out.println(
+                            "CompoundTransliterator["
+                                    + i
+                                    + ".."
+                                    + (trans.length - 1)
+                                    + (incremental ? "]i: " : "]: ")
+                                    + UtilityExtensions.formatInput(text, index)
+                                    + " (NOTHING TO DO)");
                 }
-                ///CLOVER:ON
+                /// CLOVER:ON
                 break;
             }
 
-            ///CLOVER:OFF
+            /// CLOVER:OFF
             if (DEBUG) {
                 log.setLength(0);
-                log.append("CompoundTransliterator[" + i + "=" +
-                           trans[i].getID() +
-                           (incremental ? "]i: " : "]: "));
+                log.append(
+                        "CompoundTransliterator["
+                                + i
+                                + "="
+                                + trans[i].getID()
+                                + (incremental ? "]i: " : "]: "));
                 UtilityExtensions.formatInput(log, text, index);
             }
-            ///CLOVER:ON
+            /// CLOVER:ON
 
             trans[i].filteredTransliterate(text, index, incremental);
 
@@ -465,16 +451,17 @@ class CompoundTransliterator extends Transliterator {
             // isn't transliterating all the way to the end, and it should
             // in non-incremental mode.)
             if (!incremental && index.start != index.limit) {
-                throw new RuntimeException("ERROR: Incomplete non-incremental transliteration by " + trans[i].getID());
+                throw new RuntimeException(
+                        "ERROR: Incomplete non-incremental transliteration by " + trans[i].getID());
             }
 
-            ///CLOVER:OFF
+            /// CLOVER:OFF
             if (DEBUG) {
                 log.append(" => ");
                 UtilityExtensions.formatInput(log, text, index);
                 System.out.println(Utility.escape(log.toString()));
             }
-            ///CLOVER:ON
+            /// CLOVER:ON
 
             // Cumulative delta for insertions/deletions
             delta += index.limit - limit;
@@ -496,24 +483,24 @@ class CompoundTransliterator extends Transliterator {
         // adjustments for deletions/insertions.
         index.limit = compoundLimit;
 
-        ///CLOVER:OFF
+        /// CLOVER:OFF
         if (DEBUG) {
             log.setLength(0);
-            log.append("CompoundTransliterator{" + getID() +
-                       (incremental ? "}i: OUT=" : "}: OUT="));
+            log.append(
+                    "CompoundTransliterator{" + getID() + (incremental ? "}i: OUT=" : "}: OUT="));
             UtilityExtensions.formatInput(log, text, index);
             System.out.println(Utility.escape(log.toString()));
         }
-        ///CLOVER:ON
+        /// CLOVER:ON
     }
 
     /**
-     * Compute and set the length of the longest context required by this transliterator.
-     * This is <em>preceding</em> context.
+     * Compute and set the length of the longest context required by this transliterator. This is
+     * <em>preceding</em> context.
      */
     private void computeMaximumContextLength() {
         int max = 0;
-        for (int i=0; i<trans.length; ++i) {
+        for (int i = 0; i < trans.length; ++i) {
             int len = trans[i].getMaximumContextLength();
             if (len > max) {
                 max = len;
@@ -522,13 +509,11 @@ class CompoundTransliterator extends Transliterator {
         setMaximumContextLength(max);
     }
 
-    /**
-     * Temporary hack for registry problem. Needs to be replaced by better architecture.
-     */
+    /** Temporary hack for registry problem. Needs to be replaced by better architecture. */
     public Transliterator safeClone() {
         UnicodeFilter filter = getFilter();
         if (filter != null && filter instanceof UnicodeSet) {
-            filter = new UnicodeSet((UnicodeSet)filter);
+            filter = new UnicodeSet((UnicodeSet) filter);
         }
         return new CompoundTransliterator(getID(), filter, trans, numAnonymousRBTs);
     }

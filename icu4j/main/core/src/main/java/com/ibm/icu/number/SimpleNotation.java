@@ -3,16 +3,15 @@
 package com.ibm.icu.number;
 
 /**
- * A class that defines the simple notation style to be used when formatting numbers in NumberFormatter.
+ * A class that defines the simple notation style to be used when formatting numbers in
+ * NumberFormatter.
  *
- * <p>
- * This class exposes no public functionality. To create a SimpleNotation, use one of the factory methods
- * in {@link Notation}.
+ * <p>This class exposes no public functionality. To create a SimpleNotation, use one of the factory
+ * methods in {@link Notation}.
  *
  * @stable ICU 60
  * @see NumberFormatter
  */
 public class SimpleNotation extends Notation {
-    /* package-private */ SimpleNotation() {
-    }
+    /* package-private */ SimpleNotation() {}
 }

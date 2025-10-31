@@ -8,44 +8,47 @@
  */
 package com.ibm.icu.text;
 
+import com.ibm.icu.impl.Norm2AllModes;
+import com.ibm.icu.impl.Normalizer2Impl;
+import com.ibm.icu.impl.Utility;
+import com.ibm.icu.lang.UCharacter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import com.ibm.icu.impl.Norm2AllModes;
-import com.ibm.icu.impl.Normalizer2Impl;
-import com.ibm.icu.impl.Utility;
-import com.ibm.icu.lang.UCharacter;
-
 /**
- * This class allows one to iterate through all the strings that are canonically equivalent to a given
- * string. For example, here are some sample results:
- * Results for: {A WITH RING ABOVE}{d}{DOT ABOVE}{CEDILLA}
+ * This class allows one to iterate through all the strings that are canonically equivalent to a
+ * given string. For example, here are some sample results: Results for: {A WITH RING ABOVE}{d}{DOT
+ * ABOVE}{CEDILLA}
+ *
  * <pre>
- 1: {A}{RING ABOVE}{d}{DOT ABOVE}{CEDILLA}
- 2: {A}{RING ABOVE}{d}{CEDILLA}{DOT ABOVE}
- 3: {A}{RING ABOVE}{d WITH DOT ABOVE}{CEDILLA}
- 4: {A}{RING ABOVE}{d WITH CEDILLA}{DOT ABOVE}
- 5: {A WITH RING ABOVE}{d}{DOT ABOVE}{CEDILLA}
- 6: {A WITH RING ABOVE}{d}{CEDILLA}{DOT ABOVE}
- 7: {A WITH RING ABOVE}{d WITH DOT ABOVE}{CEDILLA}
- 8: {A WITH RING ABOVE}{d WITH CEDILLA}{DOT ABOVE}
- 9: {ANGSTROM SIGN}{d}{DOT ABOVE}{CEDILLA}
-10: {ANGSTROM SIGN}{d}{CEDILLA}{DOT ABOVE}
-11: {ANGSTROM SIGN}{d WITH DOT ABOVE}{CEDILLA}
-12: {ANGSTROM SIGN}{d WITH CEDILLA}{DOT ABOVE}
- *</pre>
- *<br>Note: the code is intended for use with small strings, and is not suitable for larger ones,
- * since it has not been optimized for that situation.
+ * 1: {A}{RING ABOVE}{d}{DOT ABOVE}{CEDILLA}
+ * 2: {A}{RING ABOVE}{d}{CEDILLA}{DOT ABOVE}
+ * 3: {A}{RING ABOVE}{d WITH DOT ABOVE}{CEDILLA}
+ * 4: {A}{RING ABOVE}{d WITH CEDILLA}{DOT ABOVE}
+ * 5: {A WITH RING ABOVE}{d}{DOT ABOVE}{CEDILLA}
+ * 6: {A WITH RING ABOVE}{d}{CEDILLA}{DOT ABOVE}
+ * 7: {A WITH RING ABOVE}{d WITH DOT ABOVE}{CEDILLA}
+ * 8: {A WITH RING ABOVE}{d WITH CEDILLA}{DOT ABOVE}
+ * 9: {ANGSTROM SIGN}{d}{DOT ABOVE}{CEDILLA}
+ * 10: {ANGSTROM SIGN}{d}{CEDILLA}{DOT ABOVE}
+ * 11: {ANGSTROM SIGN}{d WITH DOT ABOVE}{CEDILLA}
+ * 12: {ANGSTROM SIGN}{d WITH CEDILLA}{DOT ABOVE}
+ * </pre>
+ *
+ * <br>
+ * Note: the code is intended for use with small strings, and is not suitable for larger ones, since
+ * it has not been optimized for that situation.
+ *
  * @author M. Davis
  * @stable ICU 2.4
  */
-
 public final class CanonicalIterator {
     /**
      * Construct a CanonicalIterator object
+     *
      * @param source string to get results for
      * @stable ICU 2.4
      */
@@ -58,15 +61,17 @@ public final class CanonicalIterator {
 
     /**
      * Gets the NFD form of the current source we are iterating over.
+     *
      * @return gets the source: NOTE: it is the NFD form of the source originally passed in
      * @stable ICU 2.4
      */
     public String getSource() {
-      return source;
+        return source;
     }
 
     /**
      * Resets the iterator so that one can start again from the beginning.
+     *
      * @stable ICU 2.4
      */
     public void reset() {
@@ -77,10 +82,11 @@ public final class CanonicalIterator {
     }
 
     /**
-     * Get the next canonically equivalent string.
-     * <br><b>Warning: The strings are not guaranteed to be in any particular order.</b>
-     * @return the next string that is canonically equivalent. The value null is returned when
-     * the iteration is done.
+     * Get the next canonically equivalent string. <br>
+     * <b>Warning: The strings are not guaranteed to be in any particular order.</b>
+     *
+     * @return the next string that is canonically equivalent. The value null is returned when the
+     *     iteration is done.
      * @stable ICU 2.4
      */
     public String next() {
@@ -110,8 +116,9 @@ public final class CanonicalIterator {
 
     /**
      * Set a new source for this iterator. Allows object reuse.
-     * @param newSource the source string to iterate against. This allows the same iterator to be used
-     * while changing the source string, saving object creation.
+     *
+     * @param newSource the source string to iterate against. This allows the same iterator to be
+     *     used while changing the source string, saving object creation.
      * @stable ICU 2.4
      */
     public void setSource(String newSource) {
@@ -122,7 +129,7 @@ public final class CanonicalIterator {
         if (newSource.length() == 0) {
             pieces = new String[1][];
             current = new int[1];
-            pieces[0] = new String[]{""};
+            pieces[0] = new String[] {""};
             return;
         }
 
@@ -159,8 +166,9 @@ public final class CanonicalIterator {
     // We know in some unit test we need at least 4. Set to 8 just in case some
     // unforseen use cases.
     /**
-     * Simple implementation of permutation.
-     * <br><b>Warning: The strings are not guaranteed to be in any particular order.</b>
+     * Simple implementation of permutation. <br>
+     * <b>Warning: The strings are not guaranteed to be in any particular order.</b>
+     *
      * @param source the string to find permutations for
      * @param skipZeros set to true to skip characters with canonical combining class zero
      * @param output the set to add the results to
@@ -173,9 +181,11 @@ public final class CanonicalIterator {
     }
 
     private static final int PERMUTE_DEPTH_LIMIT = 8;
+
     /**
-     * Simple implementation of permutation.
-     * <br><b>Warning: The strings are not guaranteed to be in any particular order.</b>
+     * Simple implementation of permutation. <br>
+     * <b>Warning: The strings are not guaranteed to be in any particular order.</b>
+     *
      * @param source the string to find permutations for
      * @param skipZeros set to true to skip characters with canonical combining class zero
      * @param output the set to add the results to
@@ -186,7 +196,7 @@ public final class CanonicalIterator {
     @Deprecated
     private static void permute(String source, boolean skipZeros, Set<String> output, int depth) {
         // TODO: optimize
-        //if (PROGRESS) System.out.println("Permute: " + source);
+        // if (PROGRESS) System.out.println("Permute: " + source);
         if (depth > PERMUTE_DEPTH_LIMIT) {
             throw new UnsupportedOperationException("Stack too deep:" + depth);
         }
@@ -208,20 +218,23 @@ public final class CanonicalIterator {
             // if the character is canonical combining class zero,
             // don't permute it
             if (skipZeros && i != 0 && UCharacter.getCombiningClass(cp) == 0) {
-                //System.out.println("Skipping " + Utility.hex(UTF16.valueOf(source, i)));
+                // System.out.println("Skipping " + Utility.hex(UTF16.valueOf(source, i)));
                 continue;
             }
 
             // see what the permutations of the characters before and after this one are
             subpermute.clear();
-            permute(source.substring(0,i)
-                + source.substring(i + UTF16.getCharCount(cp)), skipZeros, subpermute, depth+1);
+            permute(
+                    source.substring(0, i) + source.substring(i + UTF16.getCharCount(cp)),
+                    skipZeros,
+                    subpermute,
+                    depth + 1);
 
             // prefix this character to all of them
             String chStr = UTF16.valueOf(source, i);
             for (String s : subpermute) {
                 String piece = chStr + s;
-                //if (PROGRESS) System.out.println("  Piece: " + piece);
+                // if (PROGRESS) System.out.println("  Piece: " + piece);
                 output.add(piece);
             }
         }
@@ -250,7 +263,7 @@ public final class CanonicalIterator {
 
     // debug
     private static boolean PROGRESS = false; // debug progress
-    //private static Transliterator NAME = PROGRESS ? Transliterator.getInstance("name") : null;
+    // private static Transliterator NAME = PROGRESS ? Transliterator.getInstance("name") : null;
     private static boolean SKIP_ZEROS = true;
 
     // fields
@@ -266,7 +279,6 @@ public final class CanonicalIterator {
 
     // transient fields
     private transient StringBuilder buffer = new StringBuilder();
-
 
     // we have a segment, in NFD. Find all the strings that are canonically equivalent to it.
     private String[] getEquivalents(String segment) {
@@ -286,17 +298,19 @@ public final class CanonicalIterator {
             while (it2.hasNext()) {
                 String possible = it2.next();
 
-/*
-                String attempt = Normalizer.normalize(possible, Normalizer.DECOMP, 0);
-                if (attempt.equals(segment)) {
-*/
-                if (Normalizer.compare(possible, segment,0)==0) {
+                /*
+                                String attempt = Normalizer.normalize(possible, Normalizer.DECOMP, 0);
+                                if (attempt.equals(segment)) {
+                */
+                if (Normalizer.compare(possible, segment, 0) == 0) {
 
-                    if (PROGRESS) System.out.println("Adding Permutation: " + Utility.hex(possible));
+                    if (PROGRESS)
+                        System.out.println("Adding Permutation: " + Utility.hex(possible));
                     result.add(possible);
 
                 } else {
-                    if (PROGRESS) System.out.println("-Skipping Permutation: " + Utility.hex(possible));
+                    if (PROGRESS)
+                        System.out.println("-Skipping Permutation: " + Utility.hex(possible));
                 }
             }
         }
@@ -307,8 +321,8 @@ public final class CanonicalIterator {
         return finalResult;
     }
 
+    private static final int RESULT_LIMIT = 4096;
 
-    static private final int RESULT_LIMIT = 4096;
     private Set<String> getEquivalents2(String segment) {
 
         Set<String> result = new HashSet<String>();
@@ -326,10 +340,10 @@ public final class CanonicalIterator {
             // see if any character is at the start of some decomposition
             cp = segment.codePointAt(i);
             if (!nfcImpl.getCanonStartSet(cp, starts)) {
-              continue;
+                continue;
             }
             // if so, see which decompositions match
-            for(UnicodeSetIterator iter = new UnicodeSetIterator(starts); iter.next();) {
+            for (UnicodeSetIterator iter = new UnicodeSetIterator(starts); iter.next(); ) {
                 int cp2 = iter.codepoint;
                 Set<String> remainder = extract(cp2, segment, i, workingBuffer);
                 if (remainder == null) {
@@ -337,7 +351,7 @@ public final class CanonicalIterator {
                 }
 
                 // there were some matches, so add all the possibilities to the set.
-                String prefix= segment.substring(0,i);
+                String prefix = segment.substring(0, i);
                 prefix += UTF16.valueOf(cp2);
                 for (String item : remainder) {
                     result.add(prefix + item);
@@ -390,13 +404,16 @@ public final class CanonicalIterator {
     }
 
     /**
-     * See if the decomposition of cp2 is at segment starting at segmentPos
-     * (with canonical rearrangment!)
-     * If so, take the remainder, and return the equivalents
+     * See if the decomposition of cp2 is at segment starting at segmentPos (with canonical
+     * rearrangment!) If so, take the remainder, and return the equivalents
      */
     private Set<String> extract(int comp, String segment, int segmentPos, StringBuffer buf) {
-        if (PROGRESS) System.out.println(" extract: " + Utility.hex(UTF16.valueOf(comp))
-            + ", " + Utility.hex(segment.substring(segmentPos)));
+        if (PROGRESS)
+            System.out.println(
+                    " extract: "
+                            + Utility.hex(UTF16.valueOf(comp))
+                            + ", "
+                            + Utility.hex(segment.substring(segmentPos)));
 
         String decomp = nfcImpl.getDecomposition(comp);
         if (decomp == null) {
@@ -407,9 +424,9 @@ public final class CanonicalIterator {
         boolean ok = false;
         int cp;
         int decompPos = 0;
-        int decompCp = UTF16.charAt(decomp,0);
+        int decompCp = UTF16.charAt(decomp, 0);
         decompPos += UTF16.getCharCount(decompCp); // adjust position to skip first char
-        //int decompClass = getClass(decompCp);
+        // int decompClass = getClass(decompCp);
         buf.setLength(0); // initialize working buffer, shared among callees
 
         for (int i = segmentPos; i < segment.length(); i += UTF16.getCharCount(cp)) {
@@ -417,13 +434,15 @@ public final class CanonicalIterator {
             if (cp == decompCp) { // if equal, eat another cp from decomp
                 if (PROGRESS) System.out.println("  matches: " + Utility.hex(UTF16.valueOf(cp)));
                 if (decompPos == decomp.length()) { // done, have all decomp characters!
-                    buf.append(segment.substring(i + UTF16.getCharCount(cp))); // add remaining segment chars
+                    buf.append(
+                            segment.substring(
+                                    i + UTF16.getCharCount(cp))); // add remaining segment chars
                     ok = true;
                     break;
                 }
                 decompCp = UTF16.charAt(decomp, decompPos);
                 decompPos += UTF16.getCharCount(decompCp);
-                //decompClass = getClass(decompCp);
+                // decompClass = getClass(decompCp);
             } else {
                 if (PROGRESS) System.out.println("  buffer: " + Utility.hex(UTF16.valueOf(cp)));
                 // brute force approach
@@ -453,7 +472,10 @@ public final class CanonicalIterator {
         if (!segment.regionMatches(segmentPos, trial, 0, segment.length() - segmentPos)) return null;
         */
 
-        if (0!=Normalizer.compare(UTF16.valueOf(comp) + remainder, segment.substring(segmentPos), 0)) return null;
+        if (0
+                != Normalizer.compare(
+                        UTF16.valueOf(comp) + remainder, segment.substring(segmentPos), 0))
+            return null;
 
         // get the remaining combinations
         return getEquivalents2(remainder);
@@ -467,21 +489,23 @@ public final class CanonicalIterator {
     }
     */
 
-   // ================= BUILDER =========================
+    // ================= BUILDER =========================
     // TODO: Flatten this data so it doesn't have to be reconstructed each time!
 
-    //private static final UnicodeSet EMPTY = new UnicodeSet(); // constant, don't change
-    private static final Set<String> SET_WITH_NULL_STRING = new HashSet<String>(); // constant, don't change
+    // private static final UnicodeSet EMPTY = new UnicodeSet(); // constant, don't change
+    private static final Set<String> SET_WITH_NULL_STRING =
+            new HashSet<String>(); // constant, don't change
+
     static {
         SET_WITH_NULL_STRING.add("");
     }
 
-  //  private static UnicodeSet SAFE_START = new UnicodeSet();
-  //  private static CharMap AT_START = new CharMap();
+    //  private static UnicodeSet SAFE_START = new UnicodeSet();
+    //  private static CharMap AT_START = new CharMap();
 
-        // TODO: WARNING, NORMALIZER doesn't have supplementaries yet !!;
-        // Change FFFF to 10FFFF in C, and in Java when normalizer is upgraded.
-  //  private static int LAST_UNICODE = 0x10FFFF;
+    // TODO: WARNING, NORMALIZER doesn't have supplementaries yet !!;
+    // Change FFFF to 10FFFF in C, and in Java when normalizer is upgraded.
+    //  private static int LAST_UNICODE = 0x10FFFF;
     /*
     static {
         buildData();

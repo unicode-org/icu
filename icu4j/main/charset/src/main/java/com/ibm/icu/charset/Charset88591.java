@@ -1,21 +1,18 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /**
- *******************************************************************************
- * Copyright (C) 2006-2011, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
- *******************************************************************************
+ * ****************************************************************************** Copyright (C)
+ * 2006-2011, International Business Machines Corporation and * others. All Rights Reserved. *
+ * ******************************************************************************
  */
-
 package com.ibm.icu.charset;
 
+import com.ibm.icu.text.UnicodeSet;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
-
-import com.ibm.icu.text.UnicodeSet;
 
 class Charset88591 extends CharsetASCII {
     public Charset88591(String icuCanonicalName, String javaCanonicalName, String[] aliases) {
@@ -28,8 +25,14 @@ class Charset88591 extends CharsetASCII {
         }
 
         @Override
-        protected CoderResult decodeLoopCoreOptimized(ByteBuffer source, CharBuffer target,
-                byte[] sourceArray, char[] targetArray, int oldSource, int offset, int limit) {
+        protected CoderResult decodeLoopCoreOptimized(
+                ByteBuffer source,
+                CharBuffer target,
+                byte[] sourceArray,
+                char[] targetArray,
+                int oldSource,
+                int offset,
+                int limit) {
 
             /*
              * perform 88591 conversion from the source array to the target array. no range check is
@@ -67,8 +70,14 @@ class Charset88591 extends CharsetASCII {
         }
 
         @Override
-        protected final CoderResult encodeLoopCoreOptimized(CharBuffer source, ByteBuffer target,
-                char[] sourceArray, byte[] targetArray, int oldSource, int offset, int limit,
+        protected final CoderResult encodeLoopCoreOptimized(
+                CharBuffer source,
+                ByteBuffer target,
+                char[] sourceArray,
+                byte[] targetArray,
+                int oldSource,
+                int offset,
+                int limit,
                 boolean flush) {
             int i, ch = 0;
 
@@ -94,12 +103,12 @@ class Charset88591 extends CharsetASCII {
                 source.position((i + 1) - source.arrayOffset());
                 target.position(i + offset);
                 return encodeMalformedOrUnmappable(source, ch, flush);
-            } else
-                return null;
+            } else return null;
         }
 
         @Override
-        protected final CoderResult encodeLoopCoreUnoptimized(CharBuffer source, ByteBuffer target, boolean flush) {
+        protected final CoderResult encodeLoopCoreUnoptimized(
+                CharBuffer source, ByteBuffer target, boolean flush) {
             int ch;
 
             /*
@@ -126,7 +135,6 @@ class Charset88591 extends CharsetASCII {
 
             return CoderResult.UNDERFLOW;
         }
-
     }
 
     @Override
@@ -140,7 +148,7 @@ class Charset88591 extends CharsetASCII {
     }
 
     @Override
-    void getUnicodeSetImpl( UnicodeSet setFillIn, int which){
-        setFillIn.add(0,0xff);
-     }
+    void getUnicodeSetImpl(UnicodeSet setFillIn, int which) {
+        setFillIn.add(0, 0xff);
+    }
 }

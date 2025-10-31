@@ -33,8 +33,8 @@ import com.ibm.icu.text.UnicodeSet;
  * </tr>
  * </table>
  *
- * To manually iterate over tokens in a literal string, use the following pattern, which is designed to
- * be efficient.
+ * To manually iterate over tokens in a literal string, use the following pattern, which is designed
+ * to be efficient.
  *
  * <pre>
  * long tag = 0L;
@@ -118,77 +118,75 @@ public class AffixUtils {
     }
 
     /**
-     * Estimates the number of code points present in an unescaped version of the affix pattern string
-     * (one that would be returned by {@link #unescape}), assuming that all interpolated symbols consume
-     * one code point and that currencies consume as many code points as their symbol width. Used for
-     * computing padding width.
+     * Estimates the number of code points present in an unescaped version of the affix pattern
+     * string (one that would be returned by {@link #unescape}), assuming that all interpolated
+     * symbols consume one code point and that currencies consume as many code points as their
+     * symbol width. Used for computing padding width.
      *
-     * @param patternString
-     *            The original string whose width will be estimated.
+     * @param patternString The original string whose width will be estimated.
      * @return The length of the unescaped string.
      */
     public static int estimateLength(CharSequence patternString) {
-        if (patternString == null)
-            return 0;
+        if (patternString == null) return 0;
         int state = STATE_BASE;
         int offset = 0;
         int length = 0;
-        for (; offset < patternString.length();) {
+        for (; offset < patternString.length(); ) {
             int cp = Character.codePointAt(patternString, offset);
 
             switch (state) {
-            case STATE_BASE:
-                if (cp == '\'') {
-                    // First quote
-                    state = STATE_FIRST_QUOTE;
-                } else {
-                    // Unquoted symbol
-                    length++;
-                }
-                break;
-            case STATE_FIRST_QUOTE:
-                if (cp == '\'') {
-                    // Repeated quote
-                    length++;
-                    state = STATE_BASE;
-                } else {
-                    // Quoted code point
-                    length++;
-                    state = STATE_INSIDE_QUOTE;
-                }
-                break;
-            case STATE_INSIDE_QUOTE:
-                if (cp == '\'') {
-                    // End of quoted sequence
-                    state = STATE_AFTER_QUOTE;
-                } else {
-                    // Quoted code point
-                    length++;
-                }
-                break;
-            case STATE_AFTER_QUOTE:
-                if (cp == '\'') {
-                    // Double quote inside of quoted sequence
-                    length++;
-                    state = STATE_INSIDE_QUOTE;
-                } else {
-                    // Unquoted symbol
-                    length++;
-                }
-                break;
-            default:
-                throw new AssertionError();
+                case STATE_BASE:
+                    if (cp == '\'') {
+                        // First quote
+                        state = STATE_FIRST_QUOTE;
+                    } else {
+                        // Unquoted symbol
+                        length++;
+                    }
+                    break;
+                case STATE_FIRST_QUOTE:
+                    if (cp == '\'') {
+                        // Repeated quote
+                        length++;
+                        state = STATE_BASE;
+                    } else {
+                        // Quoted code point
+                        length++;
+                        state = STATE_INSIDE_QUOTE;
+                    }
+                    break;
+                case STATE_INSIDE_QUOTE:
+                    if (cp == '\'') {
+                        // End of quoted sequence
+                        state = STATE_AFTER_QUOTE;
+                    } else {
+                        // Quoted code point
+                        length++;
+                    }
+                    break;
+                case STATE_AFTER_QUOTE:
+                    if (cp == '\'') {
+                        // Double quote inside of quoted sequence
+                        length++;
+                        state = STATE_INSIDE_QUOTE;
+                    } else {
+                        // Unquoted symbol
+                        length++;
+                    }
+                    break;
+                default:
+                    throw new AssertionError();
             }
 
             offset += Character.charCount(cp);
         }
 
         switch (state) {
-        case STATE_FIRST_QUOTE:
-        case STATE_INSIDE_QUOTE:
-            throw new IllegalArgumentException("Unterminated quote: \"" + patternString + "\"");
-        default:
-            break;
+            case STATE_FIRST_QUOTE:
+            case STATE_INSIDE_QUOTE:
+                throw new IllegalArgumentException("Unterminated quote: \"" + patternString + "\"");
+            default:
+                break;
         }
 
         return length;
@@ -198,52 +196,48 @@ public class AffixUtils {
      * Takes a string and escapes (quotes) characters that have special meaning in the affix pattern
      * syntax. This function does not reverse-lookup symbols.
      *
-     * <p>
-     * Example input: "-$x"; example output: "'-'$x"
+     * <p>Example input: "-$x"; example output: "'-'$x"
      *
-     * @param input
-     *            The string to be escaped.
-     * @param output
-     *            The string builder to which to append the escaped string.
+     * @param input The string to be escaped.
+     * @param output The string builder to which to append the escaped string.
      * @return The number of chars (UTF-16 code units) appended to the output.
      */
     public static int escape(CharSequence input, StringBuilder output) {
-        if (input == null)
-            return 0;
+        if (input == null) return 0;
         int state = STATE_BASE;
         int offset = 0;
         int startLength = output.length();
-        for (; offset < input.length();) {
+        for (; offset < input.length(); ) {
             int cp = Character.codePointAt(input, offset);
 
             switch (cp) {
-            case '\'':
-                output.append("''");
-                break;
+                case '\'':
+                    output.append("''");
+                    break;
 
-            case '-':
-            case '+':
-            case '%':
-            case '‰':
-            case '¤':
-                if (state == STATE_BASE) {
-                    output.append('\'');
-                    output.appendCodePoint(cp);
-                    state = STATE_INSIDE_QUOTE;
-                } else {
-                    output.appendCodePoint(cp);
-                }
-                break;
+                case '-':
+                case '+':
+                case '%':
+                case '‰':
+                case '¤':
+                    if (state == STATE_BASE) {
+                        output.append('\'');
+                        output.appendCodePoint(cp);
+                        state = STATE_INSIDE_QUOTE;
+                    } else {
+                        output.appendCodePoint(cp);
+                    }
+                    break;
 
-            default:
-                if (state == STATE_INSIDE_QUOTE) {
-                    output.append('\'');
-                    output.appendCodePoint(cp);
-                    state = STATE_BASE;
-                } else {
-                    output.appendCodePoint(cp);
-                }
-                break;
+                default:
+                    if (state == STATE_INSIDE_QUOTE) {
+                        output.append('\'');
+                        output.appendCodePoint(cp);
+                        state = STATE_BASE;
+                    } else {
+                        output.appendCodePoint(cp);
+                    }
+                    break;
             }
             offset += Character.charCount(cp);
         }
@@ -257,8 +251,7 @@ public class AffixUtils {
 
     /** Version of {@link #escape} that returns a String, or null if input is null. */
     public static String escape(CharSequence input) {
-        if (input == null)
-            return null;
+        if (input == null) return null;
         StringBuilder sb = new StringBuilder();
         escape(input, sb);
         return sb.toString();
@@ -266,49 +259,44 @@ public class AffixUtils {
 
     public static final NumberFormat.Field getFieldForType(int type) {
         switch (type) {
-        case TYPE_MINUS_SIGN:
-            return NumberFormat.Field.SIGN;
-        case TYPE_PLUS_SIGN:
-            return NumberFormat.Field.SIGN;
-        case TYPE_APPROXIMATELY_SIGN:
-            return NumberFormat.Field.APPROXIMATELY_SIGN;
-        case TYPE_PERCENT:
-            return NumberFormat.Field.PERCENT;
-        case TYPE_PERMILLE:
-            return NumberFormat.Field.PERMILLE;
-        case TYPE_CURRENCY_SINGLE:
-            return NumberFormat.Field.CURRENCY;
-        case TYPE_CURRENCY_DOUBLE:
-            return NumberFormat.Field.CURRENCY;
-        case TYPE_CURRENCY_TRIPLE:
-            return NumberFormat.Field.CURRENCY;
-        case TYPE_CURRENCY_QUAD:
-            return NumberFormat.Field.CURRENCY;
-        case TYPE_CURRENCY_QUINT:
-            return NumberFormat.Field.CURRENCY;
-        case TYPE_CURRENCY_OVERFLOW:
-            return NumberFormat.Field.CURRENCY;
-        default:
-            throw new AssertionError();
+            case TYPE_MINUS_SIGN:
+                return NumberFormat.Field.SIGN;
+            case TYPE_PLUS_SIGN:
+                return NumberFormat.Field.SIGN;
+            case TYPE_APPROXIMATELY_SIGN:
+                return NumberFormat.Field.APPROXIMATELY_SIGN;
+            case TYPE_PERCENT:
+                return NumberFormat.Field.PERCENT;
+            case TYPE_PERMILLE:
+                return NumberFormat.Field.PERMILLE;
+            case TYPE_CURRENCY_SINGLE:
+                return NumberFormat.Field.CURRENCY;
+            case TYPE_CURRENCY_DOUBLE:
+                return NumberFormat.Field.CURRENCY;
+            case TYPE_CURRENCY_TRIPLE:
+                return NumberFormat.Field.CURRENCY;
+            case TYPE_CURRENCY_QUAD:
+                return NumberFormat.Field.CURRENCY;
+            case TYPE_CURRENCY_QUINT:
+                return NumberFormat.Field.CURRENCY;
+            case TYPE_CURRENCY_OVERFLOW:
+                return NumberFormat.Field.CURRENCY;
+            default:
+                throw new AssertionError();
         }
     }
 
     /**
-     * Executes the unescape state machine. Replaces the unquoted characters "-", "+", "%", "‰", and "¤"
-     * with the corresponding symbols provided by the {@link SymbolProvider}, and inserts the result into
-     * the FormattedStringBuilder at the requested location.
+     * Executes the unescape state machine. Replaces the unquoted characters "-", "+", "%", "‰", and
+     * "¤" with the corresponding symbols provided by the {@link SymbolProvider}, and inserts the
+     * result into the FormattedStringBuilder at the requested location.
      *
-     * <p>
-     * Example input: "'-'¤x"; example output: "-$x"
+     * <p>Example input: "'-'¤x"; example output: "-$x"
      *
-     * @param affixPattern
-     *            The original string to be unescaped.
-     * @param output
-     *            The FormattedStringBuilder to mutate with the result.
-     * @param position
-     *            The index into the FormattedStringBuilder to insert the string.
-     * @param provider
-     *            An object to generate locale symbols.
+     * @param affixPattern The original string to be unescaped.
+     * @param output The FormattedStringBuilder to mutate with the result.
+     * @param position The index into the FormattedStringBuilder to insert the string.
+     * @param provider An object to generate locale symbols.
      * @return The length of the string added to affixPattern.
      */
     public static int unescape(
@@ -325,11 +313,15 @@ public class AffixUtils {
             int typeOrCp = getTypeOrCp(tag);
             if (typeOrCp == TYPE_CURRENCY_OVERFLOW) {
                 // Don't go to the provider for this special case
-                length += output.insertCodePoint(position + length, 0xFFFD, NumberFormat.Field.CURRENCY);
+                length +=
+                        output.insertCodePoint(
+                                position + length, 0xFFFD, NumberFormat.Field.CURRENCY);
             } else if (typeOrCp < 0) {
-                length += output.insert(position + length,
-                        provider.getSymbol(typeOrCp),
-                        getFieldForType(typeOrCp));
+                length +=
+                        output.insert(
+                                position + length,
+                                provider.getSymbol(typeOrCp),
+                                getFieldForType(typeOrCp));
             } else {
                 length += output.insertCodePoint(position + length, typeOrCp, field);
             }
@@ -338,21 +330,16 @@ public class AffixUtils {
     }
 
     /**
-     * Sames as {@link #unescape}, but only calculates the length or code point count. More efficient
-     * than {@link #unescape} if you only need the length but not the string itself.
+     * Sames as {@link #unescape}, but only calculates the length or code point count. More
+     * efficient than {@link #unescape} if you only need the length but not the string itself.
      *
-     * @param affixPattern
-     *            The original string to be unescaped.
-     * @param lengthOrCount
-     *            true to count length (UTF-16 code units); false to count code points
-     * @param provider
-     *            An object to generate locale symbols.
+     * @param affixPattern The original string to be unescaped.
+     * @param lengthOrCount true to count length (UTF-16 code units); false to count code points
+     * @param provider An object to generate locale symbols.
      * @return The number of code points in the unescaped string.
      */
     public static int unescapedCount(
-            CharSequence affixPattern,
-            boolean lengthOrCount,
-            SymbolProvider provider) {
+            CharSequence affixPattern, boolean lengthOrCount, SymbolProvider provider) {
         int length = 0;
         long tag = 0L;
         while (hasNext(tag, affixPattern)) {
@@ -363,8 +350,10 @@ public class AffixUtils {
                 length += 1;
             } else if (typeOrCp < 0) {
                 CharSequence symbol = provider.getSymbol(typeOrCp);
-                length += lengthOrCount ? symbol.length()
-                        : Character.codePointCount(symbol, 0, symbol.length());
+                length +=
+                        lengthOrCount
+                                ? symbol.length()
+                                : Character.codePointCount(symbol, 0, symbol.length());
             } else {
                 length += lengthOrCount ? Character.charCount(typeOrCp) : 1;
             }
@@ -373,13 +362,11 @@ public class AffixUtils {
     }
 
     /**
-     * Checks whether the given affix pattern contains at least one token of the given type, which is one
-     * of the constants "TYPE_" in {@link AffixUtils}.
+     * Checks whether the given affix pattern contains at least one token of the given type, which
+     * is one of the constants "TYPE_" in {@link AffixUtils}.
      *
-     * @param affixPattern
-     *            The affix pattern to check.
-     * @param type
-     *            The token type.
+     * @param affixPattern The affix pattern to check.
+     * @param type The token type.
      * @return true if the affix pattern contains the given token type; false otherwise.
      */
     public static boolean containsType(CharSequence affixPattern, int type) {
@@ -399,13 +386,11 @@ public class AffixUtils {
     /**
      * Checks whether the specified affix pattern has any unquoted currency symbols ("¤").
      *
-     * @param affixPattern
-     *            The string to check for currency symbols.
+     * @param affixPattern The string to check for currency symbols.
      * @return true if the literal has at least one unquoted currency symbol; false otherwise.
      */
     public static boolean hasCurrencySymbols(CharSequence affixPattern) {
-        if (affixPattern == null || affixPattern.length() == 0)
-            return false;
+        if (affixPattern == null || affixPattern.length() == 0) return false;
         long tag = 0L;
         while (hasNext(tag, affixPattern)) {
             tag = nextToken(tag, affixPattern);
@@ -420,17 +405,13 @@ public class AffixUtils {
     /**
      * Replaces all occurrences of tokens with the given type with the given replacement char.
      *
-     * @param affixPattern
-     *            The source affix pattern (does not get modified).
-     * @param type
-     *            The token type.
-     * @param replacementChar
-     *            The char to substitute in place of chars of the given token type.
+     * @param affixPattern The source affix pattern (does not get modified).
+     * @param type The token type.
+     * @param replacementChar The char to substitute in place of chars of the given token type.
      * @return A string containing the new affix pattern.
      */
     public static String replaceType(CharSequence affixPattern, int type, char replacementChar) {
-        if (affixPattern == null || affixPattern.length() == 0)
-            return "";
+        if (affixPattern == null || affixPattern.length() == 0) return "";
         char[] chars = affixPattern.toString().toCharArray();
         long tag = 0L;
         while (hasNext(tag, affixPattern)) {
@@ -444,12 +425,11 @@ public class AffixUtils {
     }
 
     /**
-     * Returns whether the given affix pattern contains only symbols and ignorables as defined by the
-     * given ignorables set.
+     * Returns whether the given affix pattern contains only symbols and ignorables as defined by
+     * the given ignorables set.
      */
     public static boolean containsOnlySymbolsAndIgnorables(
-            CharSequence affixPattern,
-            UnicodeSet ignorables) {
+            CharSequence affixPattern, UnicodeSet ignorables) {
         if (affixPattern == null) {
             return true;
         }
@@ -464,9 +444,7 @@ public class AffixUtils {
         return true;
     }
 
-    /**
-     * Iterates over the affix pattern, calling the TokenConsumer for each token.
-     */
+    /** Iterates over the affix pattern, calling the TokenConsumer for each token. */
     public static void iterateWithConsumer(CharSequence affixPattern, TokenConsumer consumer) {
         assert affixPattern != null;
         long tag = 0L;
@@ -480,156 +458,154 @@ public class AffixUtils {
     /**
      * Returns the next token from the affix pattern.
      *
-     * @param tag
-     *            A bitmask used for keeping track of state from token to token. The initial value should
-     *            be 0L.
-     * @param patternString
-     *            The affix pattern.
-     * @return The bitmask tag to pass to the next call of this method to retrieve the following token
-     *         (never negative), or -1 if there were no more tokens in the affix pattern.
+     * @param tag A bitmask used for keeping track of state from token to token. The initial value
+     *     should be 0L.
+     * @param patternString The affix pattern.
+     * @return The bitmask tag to pass to the next call of this method to retrieve the following
+     *     token (never negative), or -1 if there were no more tokens in the affix pattern.
      * @see #hasNext
      */
     private static long nextToken(long tag, CharSequence patternString) {
         int offset = getOffset(tag);
         int state = getState(tag);
-        for (; offset < patternString.length();) {
+        for (; offset < patternString.length(); ) {
             int cp = Character.codePointAt(patternString, offset);
             int count = Character.charCount(cp);
 
             switch (state) {
-            case STATE_BASE:
-                switch (cp) {
-                case '\'':
-                    state = STATE_FIRST_QUOTE;
-                    offset += count;
-                    // continue to the next code point
+                case STATE_BASE:
+                    switch (cp) {
+                        case '\'':
+                            state = STATE_FIRST_QUOTE;
+                            offset += count;
+                            // continue to the next code point
+                            break;
+                        case '-':
+                            return makeTag(offset + count, TYPE_MINUS_SIGN, STATE_BASE, 0);
+                        case '+':
+                            return makeTag(offset + count, TYPE_PLUS_SIGN, STATE_BASE, 0);
+                        case '~':
+                            return makeTag(offset + count, TYPE_APPROXIMATELY_SIGN, STATE_BASE, 0);
+                        case '%':
+                            return makeTag(offset + count, TYPE_PERCENT, STATE_BASE, 0);
+                        case '‰':
+                            return makeTag(offset + count, TYPE_PERMILLE, STATE_BASE, 0);
+                        case '¤':
+                            state = STATE_FIRST_CURR;
+                            offset += count;
+                            // continue to the next code point
+                            break;
+                        default:
+                            return makeTag(offset + count, TYPE_CODEPOINT, STATE_BASE, cp);
+                    }
                     break;
-                case '-':
-                    return makeTag(offset + count, TYPE_MINUS_SIGN, STATE_BASE, 0);
-                case '+':
-                    return makeTag(offset + count, TYPE_PLUS_SIGN, STATE_BASE, 0);
-                case '~':
-                    return makeTag(offset + count, TYPE_APPROXIMATELY_SIGN, STATE_BASE, 0);
-                case '%':
-                    return makeTag(offset + count, TYPE_PERCENT, STATE_BASE, 0);
-                case '‰':
-                    return makeTag(offset + count, TYPE_PERMILLE, STATE_BASE, 0);
-                case '¤':
-                    state = STATE_FIRST_CURR;
-                    offset += count;
-                    // continue to the next code point
-                    break;
+                case STATE_FIRST_QUOTE:
+                    if (cp == '\'') {
+                        return makeTag(offset + count, TYPE_CODEPOINT, STATE_BASE, cp);
+                    } else {
+                        return makeTag(offset + count, TYPE_CODEPOINT, STATE_INSIDE_QUOTE, cp);
+                    }
+                case STATE_INSIDE_QUOTE:
+                    if (cp == '\'') {
+                        state = STATE_AFTER_QUOTE;
+                        offset += count;
+                        // continue to the next code point
+                        break;
+                    } else {
+                        return makeTag(offset + count, TYPE_CODEPOINT, STATE_INSIDE_QUOTE, cp);
+                    }
+                case STATE_AFTER_QUOTE:
+                    if (cp == '\'') {
+                        return makeTag(offset + count, TYPE_CODEPOINT, STATE_INSIDE_QUOTE, cp);
+                    } else {
+                        state = STATE_BASE;
+                        // re-evaluate this code point
+                        break;
+                    }
+                case STATE_FIRST_CURR:
+                    if (cp == '¤') {
+                        state = STATE_SECOND_CURR;
+                        offset += count;
+                        // continue to the next code point
+                        break;
+                    } else {
+                        return makeTag(offset, TYPE_CURRENCY_SINGLE, STATE_BASE, 0);
+                    }
+                case STATE_SECOND_CURR:
+                    if (cp == '¤') {
+                        state = STATE_THIRD_CURR;
+                        offset += count;
+                        // continue to the next code point
+                        break;
+                    } else {
+                        return makeTag(offset, TYPE_CURRENCY_DOUBLE, STATE_BASE, 0);
+                    }
+                case STATE_THIRD_CURR:
+                    if (cp == '¤') {
+                        state = STATE_FOURTH_CURR;
+                        offset += count;
+                        // continue to the next code point
+                        break;
+                    } else {
+                        return makeTag(offset, TYPE_CURRENCY_TRIPLE, STATE_BASE, 0);
+                    }
+                case STATE_FOURTH_CURR:
+                    if (cp == '¤') {
+                        state = STATE_FIFTH_CURR;
+                        offset += count;
+                        // continue to the next code point
+                        break;
+                    } else {
+                        return makeTag(offset, TYPE_CURRENCY_QUAD, STATE_BASE, 0);
+                    }
+                case STATE_FIFTH_CURR:
+                    if (cp == '¤') {
+                        state = STATE_OVERFLOW_CURR;
+                        offset += count;
+                        // continue to the next code point
+                        break;
+                    } else {
+                        return makeTag(offset, TYPE_CURRENCY_QUINT, STATE_BASE, 0);
+                    }
+                case STATE_OVERFLOW_CURR:
+                    if (cp == '¤') {
+                        offset += count;
+                        // continue to the next code point and loop back to this state
+                        break;
+                    } else {
+                        return makeTag(offset, TYPE_CURRENCY_OVERFLOW, STATE_BASE, 0);
+                    }
                 default:
-                    return makeTag(offset + count, TYPE_CODEPOINT, STATE_BASE, cp);
-                }
-                break;
-            case STATE_FIRST_QUOTE:
-                if (cp == '\'') {
-                    return makeTag(offset + count, TYPE_CODEPOINT, STATE_BASE, cp);
-                } else {
-                    return makeTag(offset + count, TYPE_CODEPOINT, STATE_INSIDE_QUOTE, cp);
-                }
-            case STATE_INSIDE_QUOTE:
-                if (cp == '\'') {
-                    state = STATE_AFTER_QUOTE;
-                    offset += count;
-                    // continue to the next code point
-                    break;
-                } else {
-                    return makeTag(offset + count, TYPE_CODEPOINT, STATE_INSIDE_QUOTE, cp);
-                }
-            case STATE_AFTER_QUOTE:
-                if (cp == '\'') {
-                    return makeTag(offset + count, TYPE_CODEPOINT, STATE_INSIDE_QUOTE, cp);
-                } else {
-                    state = STATE_BASE;
-                    // re-evaluate this code point
-                    break;
-                }
-            case STATE_FIRST_CURR:
-                if (cp == '¤') {
-                    state = STATE_SECOND_CURR;
-                    offset += count;
-                    // continue to the next code point
-                    break;
-                } else {
-                    return makeTag(offset, TYPE_CURRENCY_SINGLE, STATE_BASE, 0);
-                }
-            case STATE_SECOND_CURR:
-                if (cp == '¤') {
-                    state = STATE_THIRD_CURR;
-                    offset += count;
-                    // continue to the next code point
-                    break;
-                } else {
-                    return makeTag(offset, TYPE_CURRENCY_DOUBLE, STATE_BASE, 0);
-                }
-            case STATE_THIRD_CURR:
-                if (cp == '¤') {
-                    state = STATE_FOURTH_CURR;
-                    offset += count;
-                    // continue to the next code point
-                    break;
-                } else {
-                    return makeTag(offset, TYPE_CURRENCY_TRIPLE, STATE_BASE, 0);
-                }
-            case STATE_FOURTH_CURR:
-                if (cp == '¤') {
-                    state = STATE_FIFTH_CURR;
-                    offset += count;
-                    // continue to the next code point
-                    break;
-                } else {
-                    return makeTag(offset, TYPE_CURRENCY_QUAD, STATE_BASE, 0);
-                }
-            case STATE_FIFTH_CURR:
-                if (cp == '¤') {
-                    state = STATE_OVERFLOW_CURR;
-                    offset += count;
-                    // continue to the next code point
-                    break;
-                } else {
-                    return makeTag(offset, TYPE_CURRENCY_QUINT, STATE_BASE, 0);
-                }
-            case STATE_OVERFLOW_CURR:
-                if (cp == '¤') {
-                    offset += count;
-                    // continue to the next code point and loop back to this state
-                    break;
-                } else {
-                    return makeTag(offset, TYPE_CURRENCY_OVERFLOW, STATE_BASE, 0);
-                }
-            default:
-                throw new AssertionError();
+                    throw new AssertionError();
             }
         }
         // End of string
         switch (state) {
-        case STATE_BASE:
-            // No more tokens in string.
-            return -1L;
-        case STATE_FIRST_QUOTE:
-        case STATE_INSIDE_QUOTE:
-            // For consistent behavior with the JDK and ICU 58, throw an exception here.
-            throw new IllegalArgumentException(
-                    "Unterminated quote in pattern affix: \"" + patternString + "\"");
-        case STATE_AFTER_QUOTE:
-            // No more tokens in string.
-            return -1L;
-        case STATE_FIRST_CURR:
-            return makeTag(offset, TYPE_CURRENCY_SINGLE, STATE_BASE, 0);
-        case STATE_SECOND_CURR:
-            return makeTag(offset, TYPE_CURRENCY_DOUBLE, STATE_BASE, 0);
-        case STATE_THIRD_CURR:
-            return makeTag(offset, TYPE_CURRENCY_TRIPLE, STATE_BASE, 0);
-        case STATE_FOURTH_CURR:
-            return makeTag(offset, TYPE_CURRENCY_QUAD, STATE_BASE, 0);
-        case STATE_FIFTH_CURR:
-            return makeTag(offset, TYPE_CURRENCY_QUINT, STATE_BASE, 0);
-        case STATE_OVERFLOW_CURR:
-            return makeTag(offset, TYPE_CURRENCY_OVERFLOW, STATE_BASE, 0);
-        default:
-            throw new AssertionError();
+            case STATE_BASE:
+                // No more tokens in string.
+                return -1L;
+            case STATE_FIRST_QUOTE:
+            case STATE_INSIDE_QUOTE:
+                // For consistent behavior with the JDK and ICU 58, throw an exception here.
+                throw new IllegalArgumentException(
+                        "Unterminated quote in pattern affix: \"" + patternString + "\"");
+            case STATE_AFTER_QUOTE:
+                // No more tokens in string.
+                return -1L;
+            case STATE_FIRST_CURR:
+                return makeTag(offset, TYPE_CURRENCY_SINGLE, STATE_BASE, 0);
+            case STATE_SECOND_CURR:
+                return makeTag(offset, TYPE_CURRENCY_DOUBLE, STATE_BASE, 0);
+            case STATE_THIRD_CURR:
+                return makeTag(offset, TYPE_CURRENCY_TRIPLE, STATE_BASE, 0);
+            case STATE_FOURTH_CURR:
+                return makeTag(offset, TYPE_CURRENCY_QUAD, STATE_BASE, 0);
+            case STATE_FIFTH_CURR:
+                return makeTag(offset, TYPE_CURRENCY_QUINT, STATE_BASE, 0);
+            case STATE_OVERFLOW_CURR:
+                return makeTag(offset, TYPE_CURRENCY_OVERFLOW, STATE_BASE, 0);
+            default:
+                throw new AssertionError();
         }
     }
 
@@ -637,10 +613,8 @@ public class AffixUtils {
      * Returns whether the affix pattern string has any more tokens to be retrieved from a call to
      * {@link #nextToken}.
      *
-     * @param tag
-     *            The bitmask tag of the previous token, as returned by {@link #nextToken}.
-     * @param string
-     *            The affix pattern.
+     * @param tag The bitmask tag of the previous token, as returned by {@link #nextToken}.
+     * @param string The affix pattern.
      * @return true if there are more tokens to consume; false otherwise.
      */
     private static boolean hasNext(long tag, CharSequence string) {
@@ -660,14 +634,14 @@ public class AffixUtils {
     }
 
     /**
-     * This function helps determine the identity of the token consumed by {@link #nextToken}. Converts
-     * from a bitmask tag, based on a call to {@link #nextToken}, to its corresponding symbol type or
-     * code point.
+     * This function helps determine the identity of the token consumed by {@link #nextToken}.
+     * Converts from a bitmask tag, based on a call to {@link #nextToken}, to its corresponding
+     * symbol type or code point.
      *
-     * @param tag
-     *            The bitmask tag of the current token, as returned by {@link #nextToken}.
-     * @return If less than zero, a symbol type corresponding to one of the <code>TYPE_</code> constants,
-     *         such as {@link #TYPE_MINUS_SIGN}. If greater than or equal to zero, a literal code point.
+     * @param tag The bitmask tag of the current token, as returned by {@link #nextToken}.
+     * @return If less than zero, a symbol type corresponding to one of the <code>TYPE_</code>
+     *     constants, such as {@link #TYPE_MINUS_SIGN}. If greater than or equal to zero, a literal
+     *     code point.
      */
     private static int getTypeOrCp(long tag) {
         assert tag >= 0;
@@ -679,11 +653,11 @@ public class AffixUtils {
      * Encodes the given values into a 64-bit tag.
      *
      * <ul>
-     * <li>Bits 0-31 => offset (int32)
-     * <li>Bits 32-35 => type (uint4)
-     * <li>Bits 36-39 => state (uint4)
-     * <li>Bits 40-60 => code point (uint21)
-     * <li>Bits 61-63 => unused
+     *   <li>Bits 0-31 => offset (int32)
+     *   <li>Bits 32-35 => type (uint4)
+     *   <li>Bits 36-39 => state (uint4)
+     *   <li>Bits 40-60 => code point (uint21)
+     *   <li>Bits 61-63 => unused
      * </ul>
      */
     private static long makeTag(int offset, int type, int state, int cp) {

@@ -2,18 +2,16 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.number;
 
+import com.ibm.icu.impl.number.DecimalQuantity;
+import com.ibm.icu.impl.number.RoundingUtils;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
 
-import com.ibm.icu.impl.number.DecimalQuantity;
-import com.ibm.icu.impl.number.RoundingUtils;
-
 /**
  * A class that defines a quantity by which a number should be multiplied when formatting.
  *
- * <p>
- * To create a Multiplier, use one of the factory methods.
+ * <p>To create a Multiplier, use one of the factory methods.
  *
  * @stable ICU 62
  * @see NumberFormatter
@@ -41,9 +39,9 @@ public class Scale {
             // Attempt to convert the BigDecimal to a magnitude multiplier.
             // ICU-20000: JDKs have inconsistent behavior on stripTrailingZeros() for Zero.
             arbitrary =
-                arbitrary.compareTo(BigDecimal.ZERO) == 0
-                    ? BigDecimal.ZERO
-                    : arbitrary.stripTrailingZeros();
+                    arbitrary.compareTo(BigDecimal.ZERO) == 0
+                            ? BigDecimal.ZERO
+                            : arbitrary.stripTrailingZeros();
             if (arbitrary.precision() == 1 && arbitrary.unscaledValue().equals(BigInteger.ONE)) {
                 // Success!
                 magnitude -= arbitrary.scale();
@@ -99,8 +97,8 @@ public class Scale {
 
     /**
      * Multiply numbers by an arbitrary value before formatting. Useful for unit conversions.
-     * <p>
-     * This method takes a BigDecimal; also see the version that takes a double.
+     *
+     * <p>This method takes a BigDecimal; also see the version that takes a double.
      *
      * @return A Multiplier for passing to the setter in NumberFormatter.
      * @stable ICU 62
@@ -120,8 +118,8 @@ public class Scale {
 
     /**
      * Multiply numbers by an arbitrary value before formatting. Useful for unit conversions.
-     * <p>
-     * This method takes a double; also see the version that takes a BigDecimal.
+     *
+     * <p>This method takes a double; also see the version that takes a BigDecimal.
      *
      * @return A Multiplier for passing to the setter in NumberFormatter.
      * @stable ICU 62
@@ -150,9 +148,7 @@ public class Scale {
         return new Scale(power, BigDecimal.valueOf(multiplicand));
     }
 
-    /**
-     * Returns whether the multiplier will change the number.
-     */
+    /** Returns whether the multiplier will change the number. */
     boolean isValid() {
         return magnitude != 0 || arbitrary != null;
     }
@@ -194,5 +190,4 @@ public class Scale {
             quantity.roundToMagnitude(quantity.getMagnitude() - mc.getPrecision(), mc);
         }
     }
-
 }

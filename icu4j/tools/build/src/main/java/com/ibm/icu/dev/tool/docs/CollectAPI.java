@@ -17,16 +17,13 @@ import java.util.BitSet;
 import java.util.Date;
 import java.util.TreeSet;
 
-
 /**
  * @author yumaoka
- *
  */
 public class CollectAPI {
     private static final int MAXSTATE = APIInfo.STA_INTERNAL;
 
     private APIData _apidata;
-
 
     CollectAPI(String file) {
         _apidata = APIData.read(file, true);
@@ -66,7 +63,7 @@ public class CollectAPI {
 
                 boolean firstInState = true;
                 String pack = "";
-                String clas = "***";  // hack - we just need a class name never used 
+                String clas = "***"; // hack - we just need a class name never used
                 boolean inList = false;
 
                 for (APIInfo info : _apidata.set) {
@@ -189,7 +186,7 @@ public class CollectAPI {
     }
 
     public static void main(String[] args) {
-        String apifile = null; 
+        String apifile = null;
         String outfile = null;
         BitSet filter = new BitSet(MAXSTATE + 1);
         boolean isTSV = false;
@@ -269,28 +266,28 @@ public class CollectAPI {
     private static String getStatusTypeName(int status) {
         String name = null;
         switch (status) {
-        case APIInfo.STA_STABLE:
-            name = "Stable";
-            break;
+            case APIInfo.STA_STABLE:
+                name = "Stable";
+                break;
 
-        case APIInfo.STA_DRAFT:
-            name = "Draft";
-            break;
+            case APIInfo.STA_DRAFT:
+                name = "Draft";
+                break;
 
-        case APIInfo.STA_DEPRECATED:
-            name = "Deprecated";
-            break;
+            case APIInfo.STA_DEPRECATED:
+                name = "Deprecated";
+                break;
 
-        case APIInfo.STA_OBSOLETE:
-            name = "Obsolete";
-            break;
+            case APIInfo.STA_OBSOLETE:
+                name = "Obsolete";
+                break;
 
-        case APIInfo.STA_INTERNAL:
-            name = "Internal";
-            break;
+            case APIInfo.STA_INTERNAL:
+                name = "Internal";
+                break;
 
-        default:
-            throw new IllegalArgumentException("Bad API status type " + status);
+            default:
+                throw new IllegalArgumentException("Bad API status type " + status);
         }
 
         return name;

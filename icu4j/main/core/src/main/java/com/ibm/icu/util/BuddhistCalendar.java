@@ -13,29 +13,26 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * <code>BuddhistCalendar</code> is a subclass of <code>GregorianCalendar</code>
- * that numbers years since the birth of the Buddha.  This is the civil calendar
- * in some predominantly Buddhist countries such as Thailand, and it is used for
- * religious purposes elsewhere.
- * <p>
- * The Buddhist calendar is identical to the Gregorian calendar in all respects
- * except for the year and era.  Years are numbered since the birth of the
- * Buddha in 543 BC (Gregorian), so that 1 AD (Gregorian) is equivalent to 544
- * BE (Buddhist Era) and 1998 AD is 2541 BE.
- * <p>
- * The Buddhist Calendar has only one allowable era: <code>BE</code>.  If the
- * calendar is not in lenient mode (see <code>setLenient</code>), dates before
- * 1/1/1 BE are rejected with an <code>IllegalArgumentException</code>.
- * <p>
- * This class should not be subclassed.</p>
- * <p>
- * BuddhistCalendar usually should be instantiated using
- * {@link com.ibm.icu.util.Calendar#getInstance(ULocale)} passing in a <code>ULocale</code>
- * with the tag <code>"@calendar=buddhist"</code>.</p>
+ * <code>BuddhistCalendar</code> is a subclass of <code>GregorianCalendar</code> that numbers years
+ * since the birth of the Buddha. This is the civil calendar in some predominantly Buddhist
+ * countries such as Thailand, and it is used for religious purposes elsewhere.
+ *
+ * <p>The Buddhist calendar is identical to the Gregorian calendar in all respects except for the
+ * year and era. Years are numbered since the birth of the Buddha in 543 BC (Gregorian), so that 1
+ * AD (Gregorian) is equivalent to 544 BE (Buddhist Era) and 1998 AD is 2541 BE.
+ *
+ * <p>The Buddhist Calendar has only one allowable era: <code>BE</code>. If the calendar is not in
+ * lenient mode (see <code>setLenient</code>), dates before 1/1/1 BE are rejected with an <code>
+ * IllegalArgumentException</code>.
+ *
+ * <p>This class should not be subclassed.
+ *
+ * <p>BuddhistCalendar usually should be instantiated using {@link
+ * com.ibm.icu.util.Calendar#getInstance(ULocale)} passing in a <code>ULocale</code> with the tag
+ * <code>"@calendar=buddhist"</code>.
  *
  * @see com.ibm.icu.util.Calendar
  * @see com.ibm.icu.util.GregorianCalendar
- *
  * @author Laura Werner
  * @author Alan Liu
  * @stable ICU 2.8
@@ -44,13 +41,13 @@ public class BuddhistCalendar extends GregorianCalendar {
     // jdk1.4.2 serialver
     private static final long serialVersionUID = 2583005278132380631L;
 
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     // Constructors...
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
 
     /**
-     * Constant for the Buddhist Era.  This is the only allowable <code>ERA</code>
-     * value for the Buddhist calendar.
+     * Constant for the Buddhist Era. This is the only allowable <code>ERA</code> value for the
+     * Buddhist calendar.
      *
      * @see com.ibm.icu.util.Calendar#ERA
      * @stable ICU 2.8
@@ -58,8 +55,9 @@ public class BuddhistCalendar extends GregorianCalendar {
     public static final int BE = 0;
 
     /**
-     * Constructs a <code>BuddhistCalendar</code> using the current time
-     * in the default time zone with the default locale.
+     * Constructs a <code>BuddhistCalendar</code> using the current time in the default time zone
+     * with the default locale.
+     *
      * @stable ICU 2.8
      */
     public BuddhistCalendar() {
@@ -67,8 +65,8 @@ public class BuddhistCalendar extends GregorianCalendar {
     }
 
     /**
-     * Constructs a <code>BuddhistCalendar</code> based on the current time
-     * in the given time zone with the default locale.
+     * Constructs a <code>BuddhistCalendar</code> based on the current time in the given time zone
+     * with the default locale.
      *
      * @param zone the given time zone.
      * @stable ICU 2.8
@@ -78,8 +76,8 @@ public class BuddhistCalendar extends GregorianCalendar {
     }
 
     /**
-     * Constructs a <code>BuddhistCalendar</code> based on the current time
-     * in the default time zone with the given locale.
+     * Constructs a <code>BuddhistCalendar</code> based on the current time in the default time zone
+     * with the given locale.
      *
      * @param aLocale the given locale.
      * @stable ICU 2.8
@@ -89,8 +87,8 @@ public class BuddhistCalendar extends GregorianCalendar {
     }
 
     /**
-     * Constructs a <code>BuddhistCalendar</code> based on the current time
-     * in the default time zone with the given locale.
+     * Constructs a <code>BuddhistCalendar</code> based on the current time in the default time zone
+     * with the given locale.
      *
      * @param locale the given ulocale.
      * @stable ICU 3.2
@@ -100,11 +98,10 @@ public class BuddhistCalendar extends GregorianCalendar {
     }
 
     /**
-     * Constructs a <code>BuddhistCalendar</code> based on the current time
-     * in the given time zone with the given locale.
+     * Constructs a <code>BuddhistCalendar</code> based on the current time in the given time zone
+     * with the given locale.
      *
      * @param zone the given time zone.
-     *
      * @param aLocale the given locale.
      * @stable ICU 2.8
      */
@@ -113,11 +110,10 @@ public class BuddhistCalendar extends GregorianCalendar {
     }
 
     /**
-     * Constructs a <code>BuddhistCalendar</code> based on the current time
-     * in the given time zone with the given locale.
+     * Constructs a <code>BuddhistCalendar</code> based on the current time in the given time zone
+     * with the given locale.
      *
      * @param zone the given time zone.
-     *
      * @param locale the given ulocale.
      * @stable ICU 3.2
      */
@@ -126,10 +122,10 @@ public class BuddhistCalendar extends GregorianCalendar {
     }
 
     /**
-     * Constructs a <code>BuddhistCalendar</code> with the given date set
-     * in the default time zone with the default locale.
+     * Constructs a <code>BuddhistCalendar</code> with the given date set in the default time zone
+     * with the default locale.
      *
-     * @param date      The date to which the new calendar is set.
+     * @param date The date to which the new calendar is set.
      * @stable ICU 2.8
      */
     public BuddhistCalendar(Date date) {
@@ -138,15 +134,13 @@ public class BuddhistCalendar extends GregorianCalendar {
     }
 
     /**
-     * Constructs a <code>BuddhistCalendar</code> with the given date set
-     * in the default time zone with the default locale.
+     * Constructs a <code>BuddhistCalendar</code> with the given date set in the default time zone
+     * with the default locale.
      *
-     * @param year      The value used to set the calendar's {@link #YEAR YEAR} time field.
-     *
-     * @param month     The value used to set the calendar's {@link #MONTH MONTH} time field.
-     *                  The value is 0-based. e.g., 0 for January.
-     *
-     * @param date      The value used to set the calendar's {@link #DATE DATE} time field.
+     * @param year The value used to set the calendar's {@link #YEAR YEAR} time field.
+     * @param month The value used to set the calendar's {@link #MONTH MONTH} time field. The value
+     *     is 0-based. e.g., 0 for January.
+     * @param date The value used to set the calendar's {@link #DATE DATE} time field.
      * @stable ICU 2.8
      */
     public BuddhistCalendar(int year, int month, int date) {
@@ -154,35 +148,27 @@ public class BuddhistCalendar extends GregorianCalendar {
     }
 
     /**
-     * Constructs a BuddhistCalendar with the given date
-     * and time set for the default time zone with the default locale.
+     * Constructs a BuddhistCalendar with the given date and time set for the default time zone with
+     * the default locale.
      *
-     * @param year      The value used to set the calendar's {@link #YEAR YEAR} time field.
-     *
-     * @param month     The value used to set the calendar's {@link #MONTH MONTH} time field.
-     *                  The value is 0-based. e.g., 0 for January.
-     *
-     * @param date      The value used to set the calendar's {@link #DATE DATE} time field.
-     *
-     * @param hour      The value used to set the calendar's {@link #HOUR_OF_DAY HOUR_OF_DAY} time field.
-     *
-     * @param minute    The value used to set the calendar's {@link #MINUTE MINUTE} time field.
-     *
-     * @param second    The value used to set the calendar's {@link #SECOND SECOND} time field.
+     * @param year The value used to set the calendar's {@link #YEAR YEAR} time field.
+     * @param month The value used to set the calendar's {@link #MONTH MONTH} time field. The value
+     *     is 0-based. e.g., 0 for January.
+     * @param date The value used to set the calendar's {@link #DATE DATE} time field.
+     * @param hour The value used to set the calendar's {@link #HOUR_OF_DAY HOUR_OF_DAY} time field.
+     * @param minute The value used to set the calendar's {@link #MINUTE MINUTE} time field.
+     * @param second The value used to set the calendar's {@link #SECOND SECOND} time field.
      * @stable ICU 2.8
      */
-    public BuddhistCalendar(int year, int month, int date, int hour,
-                             int minute, int second)
-    {
+    public BuddhistCalendar(int year, int month, int date, int hour, int minute, int second) {
         super(year, month, date, hour, minute, second);
     }
 
-
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     // The only practical difference from a Gregorian calendar is that years
     // are numbered since the birth of the Buddha.  A couple of overrides will
     // take care of that....
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
 
     // Starts in -543 AD, ie 544 BC
     private static final int BUDDHIST_ERA_START = -543;
@@ -201,8 +187,7 @@ public class BuddhistCalendar extends GregorianCalendar {
         if (newerField(EXTENDED_YEAR, YEAR) == EXTENDED_YEAR) {
             year = internalGet(EXTENDED_YEAR, GREGORIAN_EPOCH);
         } else {
-            year = internalGet(YEAR, GREGORIAN_EPOCH - BUDDHIST_ERA_START)
-                    + BUDDHIST_ERA_START;
+            year = internalGet(YEAR, GREGORIAN_EPOCH - BUDDHIST_ERA_START) + BUDDHIST_ERA_START;
         }
         return year;
     }
@@ -228,9 +213,10 @@ public class BuddhistCalendar extends GregorianCalendar {
     }
 
     /**
-     * Override GregorianCalendar.  There is only one Buddhist ERA.  We
-     * should really handle YEAR, YEAR_WOY, and EXTENDED_YEAR here too to
-     * implement the 1..5000000 range, but it's not critical.
+     * Override GregorianCalendar. There is only one Buddhist ERA. We should really handle YEAR,
+     * YEAR_WOY, and EXTENDED_YEAR here too to implement the 1..5000000 range, but it's not
+     * critical.
+     *
      * @stable ICU 2.8
      */
     @Override
@@ -243,6 +229,7 @@ public class BuddhistCalendar extends GregorianCalendar {
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 3.8
      */
     @Override
@@ -252,6 +239,7 @@ public class BuddhistCalendar extends GregorianCalendar {
 
     /**
      * {@inheritDoc}
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */

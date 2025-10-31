@@ -7,9 +7,9 @@
  */
 
 /**
- * Port From:   JDK 1.4b1 : java.text.Format.IntlTestDateFormat
- * Source File: java/text/format/IntlTestDateFormat.java
- **/
+ * Port From: JDK 1.4b1 : java.text.Format.IntlTestDateFormat Source File:
+ * java/text/format/IntlTestDateFormat.java
+ */
 
 /*
     @test 1.4 98/03/06
@@ -18,21 +18,19 @@
 
 package com.ibm.icu.dev.test.format;
 
-import java.text.FieldPosition;
-import java.text.ParseException;
-import java.util.Date;
-import java.util.Random;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DateFormatSymbols;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.ULocale;
+import java.text.FieldPosition;
+import java.text.ParseException;
+import java.util.Date;
+import java.util.Random;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public class IntlTestDateFormat extends CoreTestFmwk {
@@ -41,21 +39,22 @@ public class IntlTestDateFormat extends CoreTestFmwk {
     private static final long ONEMINUTE = 60 * ONESECOND;
     private static final long ONEHOUR = 60 * ONEMINUTE;
     private static final long ONEDAY = 24 * ONEHOUR;
-    //private static final double ONEYEAR = 365.25 * ONEDAY; // Approximate //The variable is never used
+    // private static final double ONEYEAR = 365.25 * ONEDAY; // Approximate //The variable is never
+    // used
 
     // EModes
-    //private static final byte GENERIC = 0;
-    //private static final byte TIME = GENERIC + 1; //The variable is never used
-    //private static final byte DATE = TIME + 1; //The variable is never used
-    //private static final byte DATE_TIME = DATE + 1; //The variable is never used
+    // private static final byte GENERIC = 0;
+    // private static final byte TIME = GENERIC + 1; //The variable is never used
+    // private static final byte DATE = TIME + 1; //The variable is never used
+    // private static final byte DATE_TIME = DATE + 1; //The variable is never used
 
-    private  DateFormat fFormat = null;
+    private DateFormat fFormat = null;
     private static String fTestName = new String("getInstance");
     private static int fLimit = 3; // How many iterations it should take to reach convergence
     private Random random; // initialized in randDouble
 
     public IntlTestDateFormat() {
-        //Constructure
+        // Constructure
     }
 
     @Before
@@ -77,12 +76,11 @@ public class IntlTestDateFormat extends CoreTestFmwk {
         // is determined.  For other patterns, 2 iterations should suffice.
         fLimit = 3;
 
-        for(timeStyle = 0; timeStyle < 4; timeStyle++) {
+        for (timeStyle = 0; timeStyle < 4; timeStyle++) {
             fTestName = "Time test " + timeStyle + " (" + localeName + ")";
             try {
                 fFormat = DateFormat.getTimeInstance(timeStyle, locale);
-            }
-            catch(StringIndexOutOfBoundsException e) {
+            } catch (StringIndexOutOfBoundsException e) {
                 errln("FAIL: localeTest time getTimeInstance exception");
                 throw e;
             }
@@ -91,25 +89,24 @@ public class IntlTestDateFormat extends CoreTestFmwk {
 
         fLimit = 2;
 
-        for(dateStyle = 0; dateStyle < 4; dateStyle++) {
+        for (dateStyle = 0; dateStyle < 4; dateStyle++) {
             fTestName = "Date test " + dateStyle + " (" + localeName + ")";
             try {
                 fFormat = DateFormat.getDateInstance(dateStyle, locale);
-            }
-            catch(StringIndexOutOfBoundsException e) {
+            } catch (StringIndexOutOfBoundsException e) {
                 errln("FAIL: localeTest date getTimeInstance exception");
                 throw e;
             }
             testDates();
         }
 
-        for(dateStyle = 0; dateStyle < 4; dateStyle++) {
-            for(timeStyle = 0; timeStyle < 4; timeStyle++) {
-                fTestName = "DateTime test " + dateStyle + "/" + timeStyle + " (" + localeName + ")";
+        for (dateStyle = 0; dateStyle < 4; dateStyle++) {
+            for (timeStyle = 0; timeStyle < 4; timeStyle++) {
+                fTestName =
+                        "DateTime test " + dateStyle + "/" + timeStyle + " (" + localeName + ")";
                 try {
                     fFormat = DateFormat.getDateTimeInstance(dateStyle, timeStyle, locale);
-                }
-                catch(StringIndexOutOfBoundsException e) {
+                } catch (StringIndexOutOfBoundsException e) {
                     errln("FAIL: localeTest date/time getDateTimeInstance exception");
                     throw e;
                 }
@@ -130,10 +127,10 @@ public class IntlTestDateFormat extends CoreTestFmwk {
         tryDate(now);
         // Shift 6 months into the future, AT THE SAME TIME OF DAY.
         // This will test the DST handling.
-        tryDate(new Date(now.getTime() + 6*30*ONEDAY));
+        tryDate(new Date(now.getTime() + 6 * 30 * ONEDAY));
 
         Date limit = new Date(now.getTime() * 10); // Arbitrary limit
-        for (int i=0; i<2; ++i)
+        for (int i = 0; i < 2; ++i)
             //            tryDate(new Date(floor(randDouble() * limit)));
             tryDate(new Date((long) (randDouble() * limit.getTime())));
     }
@@ -158,16 +155,19 @@ public class IntlTestDateFormat extends CoreTestFmwk {
         int stringMatch = 0;
         boolean dump = false;
         int i;
-        for (i=0; i<DEPTH; ++i) string[i] = new StringBuffer();
-        for (i=0; i<DEPTH; ++i) {
+        for (i = 0; i < DEPTH; ++i) string[i] = new StringBuffer();
+        for (i = 0; i < DEPTH; ++i) {
             if (i == 0) date[i] = theDate;
             else {
                 try {
-                    date[i] = fFormat.parse(string[i-1].toString());
-                }
-                catch (ParseException e) {
+                    date[i] = fFormat.parse(string[i - 1].toString());
+                } catch (ParseException e) {
                     describeTest();
-                    errln("********** FAIL: Parse of " + string[i-1] + " failed for locale: "+fFormat.getLocale(ULocale.ACTUAL_LOCALE));
+                    errln(
+                            "********** FAIL: Parse of "
+                                    + string[i - 1]
+                                    + " failed for locale: "
+                                    + fFormat.getLocale(ULocale.ACTUAL_LOCALE));
                     dump = true;
                     break;
                 }
@@ -175,15 +175,15 @@ public class IntlTestDateFormat extends CoreTestFmwk {
             FieldPosition position = new FieldPosition(0);
             fFormat.format(date[i], string[i], position);
             if (i > 0) {
-                if (dateMatch == 0 && date[i] == date[i-1]) dateMatch = i;
-                else if (dateMatch > 0 && date[i] != date[i-1]) {
+                if (dateMatch == 0 && date[i] == date[i - 1]) dateMatch = i;
+                else if (dateMatch > 0 && date[i] != date[i - 1]) {
                     describeTest();
                     errln("********** FAIL: Date mismatch after match.");
                     dump = true;
                     break;
                 }
-                if (stringMatch == 0 && string[i] == string[i-1]) stringMatch = i;
-                else if (stringMatch > 0 && string[i] != string[i-1]) {
+                if (stringMatch == 0 && string[i] == string[i - 1]) stringMatch = i;
+                else if (stringMatch > 0 && string[i] != string[i - 1]) {
                     describeTest();
                     errln("********** FAIL: String mismatch after match.");
                     dump = true;
@@ -201,7 +201,7 @@ public class IntlTestDateFormat extends CoreTestFmwk {
         }
 
         if (dump) {
-            for (int k=0; k<=i; ++k) {
+            for (int k = 0; k <= i; ++k) {
                 logln("" + k + ": " + date[k] + " F> " + string[k] + " P> ");
             }
         }
@@ -209,9 +209,9 @@ public class IntlTestDateFormat extends CoreTestFmwk {
 
     // Return a random double from 0.01 to 1, inclusive
     private double randDouble() {
-    if (random == null) {
-        random = createRandom();
-    }
+        if (random == null) {
+            random = createRandom();
+        }
         // Assume 8-bit (or larger) rand values.  Also assume
         // that the system rand() function is very poor, which it always is.
         //        double d;
@@ -240,40 +240,39 @@ public class IntlTestDateFormat extends CoreTestFmwk {
         final ULocale[] locales = DateFormat.getAvailableULocales();
         long count = locales.length;
         logln("" + count + " available locales");
-        if (locales != null  &&  count != 0) {
+        if (locales != null && count != 0) {
             StringBuffer all = new StringBuffer();
-            for (int i=0; i<count; ++i) {
-                if (i!=0) all.append(", ");
+            for (int i = 0; i < count; ++i) {
+                if (i != 0) all.append(", ");
                 all.append(locales[i].getDisplayName());
             }
             logln(all.toString());
-        }
-        else errln("********** FAIL: Zero available locales or null array pointer");
+        } else errln("********** FAIL: Zero available locales or null array pointer");
     }
 
     @Test
     public void TestRoundtrip() {
         ULocale[] locales;
         if (isQuick()) {
-            locales = new ULocale[] {
-                    new ULocale("bg_BG"),
-                    new ULocale("fr_CA"),
-                    new ULocale("zh_TW"),
-                    new ULocale("ccp"),     // decimal digits are not in BMP
-                    new ULocale("cv"),      // parse issue, one month is prefix of another
-            };
+            locales =
+                    new ULocale[] {
+                        new ULocale("bg_BG"),
+                        new ULocale("fr_CA"),
+                        new ULocale("zh_TW"),
+                        new ULocale("ccp"), // decimal digits are not in BMP
+                        new ULocale("cv"), // parse issue, one month is prefix of another
+                    };
         } else {
             locales = DateFormat.getAvailableULocales();
         }
         long count = locales.length;
-        if (locales != null  &&  count != 0) {
-            for (int i=0; i<count; ++i) {
+        if (locales != null && count != 0) {
+            for (int i = 0; i < count; ++i) {
                 String name = locales[i].getDisplayName();
                 logln("Testing " + name + "...");
                 try {
                     localeTest(locales[i], name);
-                }
-                catch(Exception e) {
+                } catch (Exception e) {
                     errln("FAIL: TestMonster localeTest exception" + e);
                 }
             }
@@ -305,7 +304,7 @@ public class IntlTestDateFormat extends CoreTestFmwk {
 
         assertEquals("DateFormatSymbols default", "AM", amPm[0]);
 
-        String[] customAmPmStrings = { "am!", "pm!" };
+        String[] customAmPmStrings = {"am!", "pm!"};
 
         int ignoredContext = DateFormatSymbols.FORMAT;
         amPm = dfs.getAmPmStrings(ignoredContext, DateFormatSymbols.ABBREVIATED);
@@ -331,4 +330,4 @@ public class IntlTestDateFormat extends CoreTestFmwk {
     }
 }
 
-//eof
+// eof

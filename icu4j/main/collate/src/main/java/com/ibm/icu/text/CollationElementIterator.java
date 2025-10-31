@@ -1,16 +1,11 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /**
-*******************************************************************************
-* Copyright (C) 1996-2016, International Business Machines Corporation and
-* others. All Rights Reserved.
-*******************************************************************************
-*/
+ * ****************************************************************************** Copyright (C)
+ * 1996-2016, International Business Machines Corporation and others. All Rights Reserved.
+ * ******************************************************************************
+ */
 package com.ibm.icu.text;
-
-import java.text.CharacterIterator;
-import java.util.HashMap;
-import java.util.Map;
 
 import com.ibm.icu.impl.CharacterIteratorWrapper;
 import com.ibm.icu.impl.coll.Collation;
@@ -22,25 +17,33 @@ import com.ibm.icu.impl.coll.FCDUTF16CollationIterator;
 import com.ibm.icu.impl.coll.IterCollationIterator;
 import com.ibm.icu.impl.coll.UTF16CollationIterator;
 import com.ibm.icu.impl.coll.UVector32;
+import java.text.CharacterIterator;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * <code>CollationElementIterator</code> is an iterator created by
- * a RuleBasedCollator to walk through a string. The return result of
- * each iteration is a 32-bit collation element (CE) that defines the
- * ordering priority of the next character or sequence of characters
- * in the source string.
+ * <code>CollationElementIterator</code> is an iterator created by a RuleBasedCollator to walk
+ * through a string. The return result of each iteration is a 32-bit collation element (CE) that
+ * defines the ordering priority of the next character or sequence of characters in the source
+ * string.
  *
  * <p>For illustration, consider the following in Slovak and in traditional Spanish collation:
+ *
  * <blockquote>
+ *
  * <pre>
  * "ca" -&gt; the first collation element is CE('c') and the second
  *         collation element is CE('a').
  * "cha" -&gt; the first collation element is CE('ch') and the second
  *          collation element is CE('a').
  * </pre>
+ *
  * </blockquote>
+ *
  * And in German phonebook collation,
+ *
  * <blockquote>
+ *
  * <pre>
  * Since the character '&#230;' is a composed character of 'a' and 'e', the
  * iterator returns two collation elements for the single character '&#230;'
@@ -49,23 +52,23 @@ import com.ibm.icu.impl.coll.UVector32;
  *              second collation element is collation_element('e'), and the
  *              third collation element is collation_element('b').
  * </pre>
+ *
  * </blockquote>
  *
- * <p>For collation ordering comparison, the collation element results
- * can not be compared simply by using basic arithmetic operators,
- * e.g. &lt;, == or &gt;, further processing has to be done. Details
- * can be found in the ICU
- * <a href="https://unicode-org.github.io/icu/userguide/collation/architecture">
- * User Guide</a>. An example of using the CollationElementIterator
- * for collation ordering comparison is the class
+ * <p>For collation ordering comparison, the collation element results can not be compared simply by
+ * using basic arithmetic operators, e.g. &lt;, == or &gt;, further processing has to be done.
+ * Details can be found in the ICU <a
+ * href="https://unicode-org.github.io/icu/userguide/collation/architecture">User Guide</a>. An
+ * example of using the CollationElementIterator for collation ordering comparison is the class
  * {@link com.ibm.icu.text.StringSearch}.
  *
- * <p>To construct a CollationElementIterator object, users
- * call the method getCollationElementIterator() on a
- * RuleBasedCollator that defines the desired sorting order.
+ * <p>To construct a CollationElementIterator object, users call the method
+ * getCollationElementIterator() on a RuleBasedCollator that defines the desired sorting order.
  *
- * <p> Example:
+ * <p>Example:
+ *
  * <blockquote>
+ *
  * <pre>
  *  String testString = "This is a test";
  *  RuleBasedCollator rbc = new RuleBasedCollator("&amp;a&lt;b");
@@ -83,111 +86,114 @@ import com.ibm.icu.impl.coll.UVector32;
  *      }
  *  }
  * </pre>
+ *
  * </blockquote>
- * <p>
- * The method next() returns the collation order of the next character based on
- * the comparison level of the collator. The method previous() returns the
- * collation order of the previous character based on the comparison level of
- * the collator. The Collation Element Iterator moves only in one direction
- * between calls to reset(), setOffset(), or setText(). That is, next() and
- * previous() can not be inter-used. Whenever previous() is to be called after
- * next() or vice versa, reset(), setOffset() or setText() has to be called first
- * to reset the status, shifting current position to either the end or the start of
- * the string (reset() or setText()), or the specified position (setOffset()).
- * Hence at the next call of next() or previous(), the first or last collation order,
- * or collation order at the specified position will be returned. If a change of
+ *
+ * <p>The method next() returns the collation order of the next character based on the comparison
+ * level of the collator. The method previous() returns the collation order of the previous
+ * character based on the comparison level of the collator. The Collation Element Iterator moves
+ * only in one direction between calls to reset(), setOffset(), or setText(). That is, next() and
+ * previous() can not be inter-used. Whenever previous() is to be called after next() or vice versa,
+ * reset(), setOffset() or setText() has to be called first to reset the status, shifting current
+ * position to either the end or the start of the string (reset() or setText()), or the specified
+ * position (setOffset()). Hence at the next call of next() or previous(), the first or last
+ * collation order, or collation order at the specified position will be returned. If a change of
  * direction is done without one of these calls, the result is undefined.
- * <p>
- * This class is not subclassable.
+ *
+ * <p>This class is not subclassable.
+ *
  * @see Collator
  * @see RuleBasedCollator
  * @see StringSearch
  * @author Syn Wee Quek
  * @stable ICU 2.8
  */
-public final class CollationElementIterator
-{
-    private CollationIterator iter_;  // owned
-    private RuleBasedCollator rbc_;  // aliased
+public final class CollationElementIterator {
+    private CollationIterator iter_; // owned
+    private RuleBasedCollator rbc_; // aliased
     private int otherHalf_;
+
     /**
-     * &lt;0: backwards; 0: just after reset() (previous() begins from end);
-     * 1: just after setOffset(); >1: forward
+     * &lt;0: backwards; 0: just after reset() (previous() begins from end); 1: just after
+     * setOffset(); >1: forward
      */
     private byte dir_;
+
     /**
-     * Stores offsets from expansions and from unsafe-backwards iteration,
-     * so that getOffset() returns intermediate offsets for the CEs
-     * that are consistent with forward iteration.
+     * Stores offsets from expansions and from unsafe-backwards iteration, so that getOffset()
+     * returns intermediate offsets for the CEs that are consistent with forward iteration.
      */
     private UVector32 offsets_;
 
-    private String string_;  // TODO: needed in Java? if so, then add a UCharacterIterator field too?
-
-
-    /**
-     * This constant is returned by the iterator in the methods
-     * next() and previous() when the end or the beginning of the
-     * source string has been reached, and there are no more valid
-     * collation elements to return.
-     *
-     * <p>See class documentation for an example of use.
-     * @stable ICU 2.8
-     * @see #next
-     * @see #previous */
-    public final static int NULLORDER = 0xffffffff;
+    private String string_; // TODO: needed in Java? if so, then add a UCharacterIterator field too?
 
     /**
-     * This constant is returned by the iterator in the methods
-     * next() and previous() when a collation element result is to be
-     * ignored.
+     * This constant is returned by the iterator in the methods next() and previous() when the end
+     * or the beginning of the source string has been reached, and there are no more valid collation
+     * elements to return.
      *
      * <p>See class documentation for an example of use.
+     *
      * @stable ICU 2.8
      * @see #next
-     * @see #previous */
+     * @see #previous
+     */
+    public static final int NULLORDER = 0xffffffff;
+
+    /**
+     * This constant is returned by the iterator in the methods next() and previous() when a
+     * collation element result is to be ignored.
+     *
+     * <p>See class documentation for an example of use.
+     *
+     * @stable ICU 2.8
+     * @see #next
+     * @see #previous
+     */
     public static final int IGNORABLE = 0;
 
     /**
-     * Return the primary order of the specified collation element,
-     * i.e. the first 16 bits.  This value is unsigned.
+     * Return the primary order of the specified collation element, i.e. the first 16 bits. This
+     * value is unsigned.
+     *
      * @param ce the collation element
      * @return the element's 16 bits primary order.
      * @stable ICU 2.8
      */
-    public final static int primaryOrder(int ce) {
+    public static final int primaryOrder(int ce) {
         return (ce >>> 16) & 0xffff;
     }
 
     /**
-     * Return the secondary order of the specified collation element,
-     * i.e. the 16th to 23th bits, inclusive.  This value is unsigned.
+     * Return the secondary order of the specified collation element, i.e. the 16th to 23th bits,
+     * inclusive. This value is unsigned.
+     *
      * @param ce the collation element
      * @return the element's 8 bits secondary order
      * @stable ICU 2.8
      */
-    public final static int secondaryOrder(int ce) {
+    public static final int secondaryOrder(int ce) {
         return (ce >>> 8) & 0xff;
     }
 
     /**
-     * Return the tertiary order of the specified collation element, i.e. the last
-     * 8 bits.  This value is unsigned.
+     * Return the tertiary order of the specified collation element, i.e. the last 8 bits. This
+     * value is unsigned.
+     *
      * @param ce the collation element
      * @return the element's 8 bits tertiary order
      * @stable ICU 2.8
      */
-    public final static int tertiaryOrder(int ce) {
+    public static final int tertiaryOrder(int ce) {
         return ce & 0xff;
     }
 
-
     private static final int getFirstHalf(long p, int lower32) {
-        return ((int)p & 0xffff0000) | ((lower32 >> 16) & 0xff00) | ((lower32 >> 8) & 0xff);
+        return ((int) p & 0xffff0000) | ((lower32 >> 16) & 0xff00) | ((lower32 >> 8) & 0xff);
     }
 
     private static final int getSecondHalf(long p, int lower32) {
-        return ((int)p << 16) | ((lower32 >> 8) & 0xff00) | (lower32 & 0x3f);
+        return ((int) p << 16) | ((lower32 >> 8) & 0xff00) | (lower32 & 0x3f);
     }
 
     private static final boolean ceNeedsTwoParts(long ce) {
@@ -203,11 +209,9 @@ public final class CollationElementIterator
     }
 
     /**
-     * CollationElementIterator constructor. This takes a source
-     * string and a RuleBasedCollator. The iterator will walk through
-     * the source string based on the rules defined by the
-     * collator. If the source string is empty, NULLORDER will be
-     * returned on the first call to next().
+     * CollationElementIterator constructor. This takes a source string and a RuleBasedCollator. The
+     * iterator will walk through the source string based on the rules defined by the collator. If
+     * the source string is empty, NULLORDER will be returned on the first call to next().
      *
      * @param source the source string.
      * @param collator the RuleBasedCollator
@@ -217,6 +221,7 @@ public final class CollationElementIterator
         this(collator);
         setText(source);
     }
+
     // Note: The constructors should take settings & tailoring, not a collator,
     // to avoid circular dependencies.
     // However, for equals() we would need to be able to compare tailoring data for equality
@@ -227,11 +232,10 @@ public final class CollationElementIterator
     // but only contain the part of RBC.equals() related to data and rules.
 
     /**
-     * CollationElementIterator constructor. This takes a source
-     * character iterator and a RuleBasedCollator. The iterator will
-     * walk through the source string based on the rules defined by
-     * the collator. If the source string is empty, NULLORDER will be
-     * returned on the first call to next().
+     * CollationElementIterator constructor. This takes a source character iterator and a
+     * RuleBasedCollator. The iterator will walk through the source string based on the rules
+     * defined by the collator. If the source string is empty, NULLORDER will be returned on the
+     * first call to next().
      *
      * @param source the source string iterator.
      * @param collator the RuleBasedCollator
@@ -243,11 +247,10 @@ public final class CollationElementIterator
     }
 
     /**
-     * CollationElementIterator constructor. This takes a source
-     * character iterator and a RuleBasedCollator. The iterator will
-     * walk through the source string based on the rules defined by
-     * the collator. If the source string is empty, NULLORDER will be
-     * returned on the first call to next().
+     * CollationElementIterator constructor. This takes a source character iterator and a
+     * RuleBasedCollator. The iterator will walk through the source string based on the rules
+     * defined by the collator. If the source string is empty, NULLORDER will be returned on the
+     * first call to next().
      *
      * @param source the source string iterator.
      * @param collator the RuleBasedCollator
@@ -259,30 +262,25 @@ public final class CollationElementIterator
     }
 
     /**
-     * Returns the character offset in the source string
-     * corresponding to the next collation element. I.e., getOffset()
-     * returns the position in the source string corresponding to the
-     * collation element that will be returned by the next call to
-     * next() or previous(). This value could be any of:
-     * <ul>
-     * <li> The index of the <b>first</b> character corresponding to
-     * the next collation element. (This means that if
-     * <code>setOffset(offset)</code> sets the index in the middle of
-     * a contraction, <code>getOffset()</code> returns the index of
-     * the first character in the contraction, which may not be equal
-     * to the original offset that was set. Hence calling getOffset()
-     * immediately after setOffset(offset) does not guarantee that the
-     * original offset set will be returned.)
-     * <li> If normalization is on, the index of the <b>immediate</b>
-     * subsequent character, or composite character with the first
-     * character, having a combining class of 0.
-     * <li> The length of the source string, if iteration has reached
-     * the end.
-     *</ul>
+     * Returns the character offset in the source string corresponding to the next collation
+     * element. I.e., getOffset() returns the position in the source string corresponding to the
+     * collation element that will be returned by the next call to next() or previous(). This value
+     * could be any of:
      *
-     * @return The character offset in the source string corresponding to the
-     *         collation element that will be returned by the next call to
-     *         next() or previous().
+     * <ul>
+     *   <li>The index of the <b>first</b> character corresponding to the next collation element.
+     *       (This means that if <code>setOffset(offset)</code> sets the index in the middle of a
+     *       contraction, <code>getOffset()</code> returns the index of the first character in the
+     *       contraction, which may not be equal to the original offset that was set. Hence calling
+     *       getOffset() immediately after setOffset(offset) does not guarantee that the original
+     *       offset set will be returned.)
+     *   <li>If normalization is on, the index of the <b>immediate</b> subsequent character, or
+     *       composite character with the first character, having a combining class of 0.
+     *   <li>The length of the source string, if iteration has reached the end.
+     * </ul>
+     *
+     * @return The character offset in the source string corresponding to the collation element that
+     *     will be returned by the next call to next() or previous().
      * @stable ICU 2.8
      */
     public int getOffset() {
@@ -303,19 +301,15 @@ public final class CollationElementIterator
     /**
      * Get the next collation element in the source string.
      *
-     * <p>This iterator iterates over a sequence of collation elements
-     * that were built from the string. Because there isn't
-     * necessarily a one-to-one mapping from characters to collation
-     * elements, this doesn't mean the same thing as "return the
-     * collation element [or ordering priority] of the next character
-     * in the string".
+     * <p>This iterator iterates over a sequence of collation elements that were built from the
+     * string. Because there isn't necessarily a one-to-one mapping from characters to collation
+     * elements, this doesn't mean the same thing as "return the collation element [or ordering
+     * priority] of the next character in the string".
      *
-     * <p>This function returns the collation element that the
-     * iterator is currently pointing to, and then updates the
-     * internal pointer to point to the next element.
+     * <p>This function returns the collation element that the iterator is currently pointing to,
+     * and then updates the internal pointer to point to the next element.
      *
-     * @return the next collation element or NULLORDER if the end of the
-     *         iteration has been reached.
+     * @return the next collation element or NULLORDER if the end of the iteration has been reached.
      * @stable ICU 2.8
      */
     public int next() {
@@ -332,7 +326,7 @@ public final class CollationElementIterator
         } else if (dir_ == 0) {
             // The iter_ is already reset to the start of the text.
             dir_ = 2;
-        } else /* dir_ < 0 */{
+        } else /* dir_ < 0 */ {
             // illegal change of direction
             throw new IllegalStateException("Illegal change of direction");
             // Java porting note: ICU4C sets U_INVALID_STATE_ERROR to the return status.
@@ -357,20 +351,17 @@ public final class CollationElementIterator
     /**
      * Get the previous collation element in the source string.
      *
-     * <p>This iterator iterates over a sequence of collation elements
-     * that were built from the string. Because there isn't
-     * necessarily a one-to-one mapping from characters to collation
-     * elements, this doesn't mean the same thing as "return the
-     * collation element [or ordering priority] of the previous
-     * character in the string".
+     * <p>This iterator iterates over a sequence of collation elements that were built from the
+     * string. Because there isn't necessarily a one-to-one mapping from characters to collation
+     * elements, this doesn't mean the same thing as "return the collation element [or ordering
+     * priority] of the previous character in the string".
      *
-     * <p>This function updates the iterator's internal pointer to
-     * point to the collation element preceding the one it's currently
-     * pointing to and then returns that element, while next() returns
-     * the current element and then updates the pointer.
+     * <p>This function updates the iterator's internal pointer to point to the collation element
+     * preceding the one it's currently pointing to and then returns that element, while next()
+     * returns the current element and then updates the pointer.
      *
-     * @return the previous collation element, or NULLORDER when the start of
-     *             the iteration has been reached.
+     * @return the previous collation element, or NULLORDER when the start of the iteration has been
+     *     reached.
      * @stable ICU 2.8
      */
     public int previous() {
@@ -387,7 +378,7 @@ public final class CollationElementIterator
         } else if (dir_ == 1) {
             // previous() after setOffset()
             dir_ = -1;
-        } else /* dir_ > 1 */{
+        } else /* dir_ > 1 */ {
             // illegal change of direction
             throw new IllegalStateException("Illegal change of direction");
             // Java porting note: ICU4C sets U_INVALID_STATE_ERROR to the return status.
@@ -423,42 +414,35 @@ public final class CollationElementIterator
     }
 
     /**
-     * Resets the cursor to the beginning of the string. The next
-     * call to next() or previous() will return the first and last
-     * collation element in the string, respectively.
+     * Resets the cursor to the beginning of the string. The next call to next() or previous() will
+     * return the first and last collation element in the string, respectively.
      *
-     * <p>If the RuleBasedCollator used by this iterator has had its
-     * attributes changed, calling reset() will reinitialize the
-     * iterator to use the new attributes.
+     * <p>If the RuleBasedCollator used by this iterator has had its attributes changed, calling
+     * reset() will reinitialize the iterator to use the new attributes.
      *
      * @stable ICU 2.8
      */
     public void reset() {
-        iter_ .resetToOffset(0);
+        iter_.resetToOffset(0);
         otherHalf_ = 0;
         dir_ = 0;
     }
 
     /**
-     * Sets the iterator to point to the collation element
-     * corresponding to the character at the specified offset. The
-     * value returned by the next call to next() will be the collation
-     * element corresponding to the characters at offset.
+     * Sets the iterator to point to the collation element corresponding to the character at the
+     * specified offset. The value returned by the next call to next() will be the collation element
+     * corresponding to the characters at offset.
      *
-     * <p>If offset is in the middle of a contracting character
-     * sequence, the iterator is adjusted to the start of the
-     * contracting sequence. This means that getOffset() is not
-     * guaranteed to return the same value set by this method.
+     * <p>If offset is in the middle of a contracting character sequence, the iterator is adjusted
+     * to the start of the contracting sequence. This means that getOffset() is not guaranteed to
+     * return the same value set by this method.
      *
-     * <p>If the decomposition mode is on, and offset is in the middle
-     * of a decomposible range of source text, the iterator may not
-     * return a correct result for the next forwards or backwards
-     * iteration.  The user must ensure that the offset is not in the
-     * middle of a decomposible range.
+     * <p>If the decomposition mode is on, and offset is in the middle of a decomposible range of
+     * source text, the iterator may not return a correct result for the next forwards or backwards
+     * iteration. The user must ensure that the offset is not in the middle of a decomposible range.
      *
-     * @param newOffset the character offset into the original source string to
-     *        set. Note that this is not an offset into the corresponding
-     *        sequence of collation elements.
+     * @param newOffset the character offset into the original source string to set. Note that this
+     *     is not an offset into the corresponding sequence of collation elements.
      * @stable ICU 2.8
      */
     public void setOffset(int newOffset) {
@@ -466,8 +450,9 @@ public final class CollationElementIterator
             int offset = newOffset;
             do {
                 char c = string_.charAt(offset);
-                if (!rbc_.isUnsafe(c) ||
-                        (Character.isHighSurrogate(c) && !rbc_.isUnsafe(string_.codePointAt(offset)))) {
+                if (!rbc_.isUnsafe(c)
+                        || (Character.isHighSurrogate(c)
+                                && !rbc_.isUnsafe(string_.codePointAt(offset)))) {
                     break;
                 }
                 // Back up to before this unsafe character.
@@ -498,8 +483,7 @@ public final class CollationElementIterator
     }
 
     /**
-     * Set a new source string for iteration, and reset the offset
-     * to the beginning of the text.
+     * Set a new source string for iteration, and reset the offset to the beginning of the text.
      *
      * @param source the new source string for iteration.
      * @stable ICU 2.8
@@ -519,11 +503,12 @@ public final class CollationElementIterator
     }
 
     /**
-     * Set a new source string iterator for iteration, and reset the
-     * offset to the beginning of the text.
+     * Set a new source string iterator for iteration, and reset the offset to the beginning of the
+     * text.
      *
-     * <p>The source iterator's integrity will be preserved since a new copy
-     * will be created for use.
+     * <p>The source iterator's integrity will be preserved since a new copy will be created for
+     * use.
+     *
      * @param source the new source string iterator for iteration.
      * @stable ICU 2.8
      */
@@ -557,8 +542,8 @@ public final class CollationElementIterator
     }
 
     /**
-     * Set a new source string iterator for iteration, and reset the
-     * offset to the beginning of the text.
+     * Set a new source string iterator for iteration, and reset the offset to the beginning of the
+     * text.
      *
      * @param source the new source string iterator for iteration.
      * @stable ICU 2.8
@@ -590,8 +575,7 @@ public final class CollationElementIterator
         }
 
         @Override
-        public void handleCE(long ce) {
-        }
+        public void handleCE(long ce) {}
 
         @Override
         public void handleExpansion(long ces[], int start, int length) {
@@ -631,13 +615,12 @@ public final class CollationElementIterator
     }
 
     /**
-     * Returns the maximum length of any expansion sequence that ends with
-     * the specified collation element. If there is no expansion with this
-     * collation element as the last element, returns 1.
+     * Returns the maximum length of any expansion sequence that ends with the specified collation
+     * element. If there is no expansion with this collation element as the last element, returns 1.
      *
      * @param ce a collation element returned by previous() or next().
-     * @return the maximum length of any expansion sequence ending
-     *         with the specified collation element.
+     * @return the maximum length of any expansion sequence ending with the specified collation
+     *     element.
      * @stable ICU 2.8
      */
     public int getMaxExpansion(int ce) {
@@ -666,11 +649,11 @@ public final class CollationElementIterator
     }
 
     /**
-     * Tests that argument object is equals to this CollationElementIterator.
-     * Iterators are equal if the objects uses the same RuleBasedCollator,
-     * the same source text and have the same current position in iteration.
-     * @param that object to test if it is equals to this
-     *             CollationElementIterator
+     * Tests that argument object is equals to this CollationElementIterator. Iterators are equal if
+     * the objects uses the same RuleBasedCollator, the same source text and have the same current
+     * position in iteration.
+     *
+     * @param that object to test if it is equals to this CollationElementIterator
      * @stable ICU 2.8
      */
     @Override
@@ -690,8 +673,9 @@ public final class CollationElementIterator
     }
 
     /**
-     * Mock implementation of hashCode(). This implementation always returns a constant
-     * value. When Java assertion is enabled, this method triggers an assertion failure.
+     * Mock implementation of hashCode(). This implementation always returns a constant value. When
+     * Java assertion is enabled, this method triggers an assertion failure.
+     *
      * @stable ICU 2.8
      */
     @Override

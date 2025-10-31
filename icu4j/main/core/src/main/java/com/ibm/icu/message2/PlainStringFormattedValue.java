@@ -3,16 +3,14 @@
 
 package com.ibm.icu.message2;
 
+import com.ibm.icu.text.ConstrainedFieldPosition;
+import com.ibm.icu.text.FormattedValue;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.text.AttributedCharacterIterator;
 
-import com.ibm.icu.text.ConstrainedFieldPosition;
-import com.ibm.icu.text.FormattedValue;
-
 /**
- * Very-very rough implementation of FormattedValue, packaging a string.
- * Expect it to change.
+ * Very-very rough implementation of FormattedValue, packaging a string. Expect it to change.
  *
  * @draft ICU 78
  */
@@ -23,7 +21,6 @@ public class PlainStringFormattedValue implements FormattedValue {
      * Constructor, taking the string to store.
      *
      * @param value the string value to store
-     *
      * @draft ICU 78
      */
     public PlainStringFormattedValue(String value) {
@@ -81,7 +78,7 @@ public class PlainStringFormattedValue implements FormattedValue {
     /**
      * Not yet implemented.
      *
-     * {@inheritDoc}
+     * <p>{@inheritDoc}
      *
      * @draft ICU 78
      */
@@ -93,7 +90,7 @@ public class PlainStringFormattedValue implements FormattedValue {
     /**
      * Not yet implemented.
      *
-     * {@inheritDoc}
+     * <p>{@inheritDoc}
      *
      * @draft ICU 78
      */

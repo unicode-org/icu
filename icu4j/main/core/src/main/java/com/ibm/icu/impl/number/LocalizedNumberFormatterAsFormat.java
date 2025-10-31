@@ -2,6 +2,12 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.number;
 
+import com.ibm.icu.impl.FormattedStringBuilder;
+import com.ibm.icu.impl.FormattedValueStringBuilderImpl;
+import com.ibm.icu.impl.Utility;
+import com.ibm.icu.number.LocalizedNumberFormatter;
+import com.ibm.icu.number.NumberFormatter;
+import com.ibm.icu.util.ULocale;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -11,13 +17,6 @@ import java.text.AttributedCharacterIterator;
 import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParsePosition;
-
-import com.ibm.icu.impl.FormattedStringBuilder;
-import com.ibm.icu.impl.FormattedValueStringBuilderImpl;
-import com.ibm.icu.impl.Utility;
-import com.ibm.icu.number.LocalizedNumberFormatter;
-import com.ibm.icu.number.NumberFormatter;
-import com.ibm.icu.util.ULocale;
 
 /**
  * A wrapper around LocalizedNumberFormatter implementing the Format interface, enabling improved
@@ -29,8 +28,10 @@ public class LocalizedNumberFormatterAsFormat extends Format {
 
     private final transient LocalizedNumberFormatter formatter;
 
-    // Even though the locale is inside the LocalizedNumberFormatter, we have to keep it here, too, because
-    // LocalizedNumberFormatter doesn't have a getLocale() method, and ICU-TC didn't want to add one.
+    // Even though the locale is inside the LocalizedNumberFormatter, we have to keep it here, too,
+    // because
+    // LocalizedNumberFormatter doesn't have a getLocale() method, and ICU-TC didn't want to add
+    // one.
     private final transient ULocale locale;
 
     public LocalizedNumberFormatterAsFormat(LocalizedNumberFormatter formatter, ULocale locale) {
@@ -39,9 +40,10 @@ public class LocalizedNumberFormatterAsFormat extends Format {
     }
 
     /**
-     * Formats a Number using the wrapped LocalizedNumberFormatter. The provided object must be a Number.
+     * Formats a Number using the wrapped LocalizedNumberFormatter. The provided object must be a
+     * Number.
      *
-     * {@inheritDoc}
+     * <p>{@inheritDoc}
      */
     @Override
     public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
@@ -64,9 +66,10 @@ public class LocalizedNumberFormatterAsFormat extends Format {
     }
 
     /**
-     * Formats a Number using the wrapped LocalizedNumberFormatter. The provided object must be a Number.
+     * Formats a Number using the wrapped LocalizedNumberFormatter. The provided object must be a
+     * Number.
      *
-     * {@inheritDoc}
+     * <p>{@inheritDoc}
      */
     @Override
     public AttributedCharacterIterator formatToCharacterIterator(Object obj) {
@@ -76,9 +79,7 @@ public class LocalizedNumberFormatterAsFormat extends Format {
         return formatter.format((Number) obj).toCharacterIterator();
     }
 
-    /**
-     * Not supported. This method will throw UnsupportedOperationException.
-     */
+    /** Not supported. This method will throw UnsupportedOperationException. */
     @Override
     public Object parseObject(String source, ParsePosition pos) {
         throw new UnsupportedOperationException();
@@ -126,8 +127,7 @@ public class LocalizedNumberFormatterAsFormat extends Format {
         String skeleton;
 
         // Must have public constructor, to enable Externalizable
-        public Proxy() {
-        }
+        public Proxy() {}
 
         @Override
         public void writeExternal(ObjectOutput out) throws IOException {

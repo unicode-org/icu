@@ -8,11 +8,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * This maps closely to the official specification.
- * Since it is not final, we will not add javadoc everywhere.
+ * This maps closely to the official specification. Since it is not final, we will not add javadoc
+ * everywhere.
  *
- * <p>See <a target="github" href="https://github.com/unicode-org/message-format-wg/blob/main/spec/data-model/README.md">the
- * latest description</a>.</p>
+ * <p>See <a target="github"
+ * href="https://github.com/unicode-org/message-format-wg/blob/main/spec/data-model/README.md">the
+ * latest description</a>.
  *
  * @internal ICU 72 technology preview
  * @deprecated This API is for technology preview only.
@@ -46,14 +47,13 @@ public class MFDataModel {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
-        @Deprecated
-        public final List<Declaration> declarations;
+        @Deprecated public final List<Declaration> declarations;
+
         /**
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
-        @Deprecated
-        public final Pattern pattern;
+        @Deprecated public final Pattern pattern;
 
         /**
          * @internal ICU 72 technology preview
@@ -76,20 +76,19 @@ public class MFDataModel {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
-        @Deprecated
-        public final List<Declaration> declarations;
+        @Deprecated public final List<Declaration> declarations;
+
         /**
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
-        @Deprecated
-        public final List<Expression> selectors;
+        @Deprecated public final List<Expression> selectors;
+
         /**
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
-        @Deprecated
-        public final List<Variant> variants;
+        @Deprecated public final List<Variant> variants;
 
         /**
          * @internal ICU 72 technology preview
@@ -125,14 +124,13 @@ public class MFDataModel {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
-        @Deprecated
-        public final String name;
+        @Deprecated public final String name;
+
         /**
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
-        @Deprecated
-        public final VariableExpression value;
+        @Deprecated public final VariableExpression value;
 
         /**
          * @internal ICU 72 technology preview
@@ -155,14 +153,13 @@ public class MFDataModel {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
-        @Deprecated
-        public final String name;
+        @Deprecated public final String name;
+
         /**
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
-        @Deprecated
-        public final Expression value;
+        @Deprecated public final Expression value;
 
         /**
          * @internal ICU 72 technology preview
@@ -194,14 +191,13 @@ public class MFDataModel {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
-        @Deprecated
-        public final List<LiteralOrCatchallKey> keys;
+        @Deprecated public final List<LiteralOrCatchallKey> keys;
+
         /**
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
-        @Deprecated
-        public final Pattern value;
+        @Deprecated public final Pattern value;
 
         /**
          * @internal ICU 72 technology preview
@@ -220,7 +216,8 @@ public class MFDataModel {
      */
     @Deprecated
     public static class CatchallKey implements LiteralOrCatchallKey {
-        final static String AS_KEY_STRING = "<<::CatchallKey::>>";
+        static final String AS_KEY_STRING = "<<::CatchallKey::>>";
+
         // String value; // Always '*' in MF2
 
         /**
@@ -231,6 +228,7 @@ public class MFDataModel {
         public static boolean isCatchAll(String key) {
             return AS_KEY_STRING.equals(key);
         }
+
         /**
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
@@ -252,8 +250,7 @@ public class MFDataModel {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
-        @Deprecated
-        public final List<PatternPart> parts;
+        @Deprecated public final List<PatternPart> parts;
 
         Pattern() {
             this.parts = new ArrayList<>();
@@ -279,8 +276,7 @@ public class MFDataModel {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
-        @Deprecated
-        public final String value;
+        @Deprecated public final String value;
 
         StringPart(String value) {
             this.value = value;
@@ -307,20 +303,19 @@ public class MFDataModel {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
-        @Deprecated
-        public final Literal arg;
+        @Deprecated public final Literal arg;
+
         /**
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
-        @Deprecated
-        public final FunctionRef function;
+        @Deprecated public final FunctionRef function;
+
         /**
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
-        @Deprecated
-        public final List<Attribute> attributes;
+        @Deprecated public final List<Attribute> attributes;
 
         /**
          * @internal ICU 72 technology preview
@@ -344,20 +339,19 @@ public class MFDataModel {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
-        @Deprecated
-        public final VariableRef arg;
+        @Deprecated public final VariableRef arg;
+
         /**
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
-        @Deprecated
-        public final FunctionRef function;
+        @Deprecated public final FunctionRef function;
+
         /**
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
-        @Deprecated
-        public final List<Attribute> attributes;
+        @Deprecated public final List<Attribute> attributes;
 
         /**
          * @internal ICU 72 technology preview
@@ -382,14 +376,13 @@ public class MFDataModel {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
-        @Deprecated
-        public final String name;
+        @Deprecated public final String name;
+
         /**
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
-        @Deprecated
-        public final Map<String, Option> options;
+        @Deprecated public final Map<String, Option> options;
 
         /**
          * @internal ICU 72 technology preview
@@ -412,14 +405,13 @@ public class MFDataModel {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
-        @Deprecated
-        public final FunctionRef function;
+        @Deprecated public final FunctionRef function;
+
         /**
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
-        @Deprecated
-        public final List<Attribute> attributes;
+        @Deprecated public final List<Attribute> attributes;
 
         /**
          * @internal ICU 72 technology preview
@@ -442,14 +434,13 @@ public class MFDataModel {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
-        @Deprecated
-        public final String name;
+        @Deprecated public final String name;
+
         /**
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
-        @Deprecated
-        public final LiteralOrVariableRef value;
+        @Deprecated public final LiteralOrVariableRef value;
 
         /**
          * @internal ICU 72 technology preview
@@ -485,8 +476,7 @@ public class MFDataModel {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
-        @Deprecated
-        public final String value;
+        @Deprecated public final String value;
 
         /**
          * @internal ICU 72 technology preview
@@ -508,8 +498,7 @@ public class MFDataModel {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
-        @Deprecated
-        public final String name;
+        @Deprecated public final String name;
 
         /**
          * @internal ICU 72 technology preview
@@ -531,14 +520,13 @@ public class MFDataModel {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
-        @Deprecated
-        public final String name;
+        @Deprecated public final String name;
+
         /**
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
-        @Deprecated
-        public final LiteralOrVariableRef value;
+        @Deprecated public final LiteralOrVariableRef value;
 
         /**
          * @internal ICU 72 technology preview
@@ -569,26 +557,25 @@ public class MFDataModel {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
-        @Deprecated
-        public final Kind kind;
+        @Deprecated public final Kind kind;
+
         /**
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
-        @Deprecated
-        public final String name;
+        @Deprecated public final String name;
+
         /**
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
-        @Deprecated
-        public final Map<String, Option> options;
+        @Deprecated public final Map<String, Option> options;
+
         /**
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
-        @Deprecated
-        public final List<Attribute> attributes;
+        @Deprecated public final List<Attribute> attributes;
 
         /**
          * @internal ICU 72 technology preview

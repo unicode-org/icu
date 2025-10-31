@@ -7,24 +7,25 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.text.FieldPosition;
-
-import org.junit.Test;
-
 import com.ibm.icu.impl.FormattedStringBuilder;
 import com.ibm.icu.impl.FormattedValueStringBuilderImpl;
 import com.ibm.icu.text.NumberFormat;
+import java.text.FieldPosition;
+import org.junit.Test;
 
-/** @author sffc */
+/**
+ * @author sffc
+ */
 public class FormattedStringBuilderTest {
     private static final String[] EXAMPLE_STRINGS = {
-            "",
-            "xyz",
-            "The quick brown fox jumps over the lazy dog",
-            "😁",
-            "mixed 😇 and ASCII",
-            "with combining characters like 🇦🇧🇨🇩",
-            "A very very very very very very very very very very long string to force heap" };
+        "",
+        "xyz",
+        "The quick brown fox jumps over the lazy dog",
+        "😁",
+        "mixed 😇 and ASCII",
+        "with combining characters like 🇦🇧🇨🇩",
+        "A very very very very very very very very very very long string to force heap"
+    };
 
     @Test
     public void testInsertAppendCharSequence() {
@@ -71,15 +72,16 @@ public class FormattedStringBuilderTest {
     @Test
     public void testSplice() {
         Object[][] cases = {
-                { "", 0, 0 },
-                { "abc", 0, 0 },
-                { "abc", 1, 1 },
-                { "abc", 1, 2 },
-                { "abc", 0, 2 },
-                { "abc", 0, 3 },
-                { "lorem ipsum dolor sit amet", 8, 8 },
-                { "lorem ipsum dolor sit amet", 8, 11 }, // 3 chars, equal to replacement "xyz"
-                { "lorem ipsum dolor sit amet", 8, 18 } }; // 10 chars, larger than several replacements
+            {"", 0, 0},
+            {"abc", 0, 0},
+            {"abc", 1, 1},
+            {"abc", 1, 2},
+            {"abc", 0, 2},
+            {"abc", 0, 3},
+            {"lorem ipsum dolor sit amet", 8, 8},
+            {"lorem ipsum dolor sit amet", 8, 11}, // 3 chars, equal to replacement "xyz"
+            {"lorem ipsum dolor sit amet", 8, 18}
+        }; // 10 chars, larger than several replacements
 
         StringBuilder sb1 = new StringBuilder();
         FormattedStringBuilder sb2 = new FormattedStringBuilder();
@@ -114,7 +116,7 @@ public class FormattedStringBuilderTest {
 
     @Test
     public void testInsertAppendCodePoint() {
-        int[] cases = { 0, 1, 60, 127, 128, 0x7fff, 0x8000, 0xffff, 0x10000, 0x1f000, 0x10ffff };
+        int[] cases = {0, 1, 60, 127, 128, 0x7fff, 0x8000, 0xffff, 0x10000, 0x1f000, 0x10ffff};
 
         StringBuilder sb1 = new StringBuilder();
         FormattedStringBuilder sb2 = new FormattedStringBuilder();
@@ -275,7 +277,8 @@ public class FormattedStringBuilderTest {
             assertCharSequenceEquals(msg, a.subSequence(start, end), b.subSequence(start, end));
             if (b instanceof FormattedStringBuilder) {
                 FormattedStringBuilder bnsb = (FormattedStringBuilder) b;
-                assertCharSequenceEquals(msg, a.subSequence(start, end), bnsb.subString(start, end));
+                assertCharSequenceEquals(
+                        msg, a.subSequence(start, end), bnsb.subString(start, end));
             }
         }
     }

@@ -8,10 +8,6 @@
  */
 package com.ibm.icu.dev.test.translit;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.Transliterator;
@@ -19,29 +15,33 @@ import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSetIterator;
 import com.ibm.icu.util.ULocale;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 /**
  * @author markdavis
- *
  */
 @RunWith(JUnit4.class)
 public class AnyScriptTest extends TestFmwk {
     @Test
     public void TestContext() {
-        Transliterator t = Transliterator.createFromRules("foo", "::[bc]; a{b}d > B;", Transliterator.FORWARD);
+        Transliterator t =
+                Transliterator.createFromRules("foo", "::[bc]; a{b}d > B;", Transliterator.FORWARD);
         String sample = "abd abc b";
         assertEquals("context works", "aBd abc b", t.transform(sample));
     }
 
     @Test
-    public void TestScripts(){
+    public void TestScripts() {
         // get a couple of characters of each script for testing
 
         StringBuilder testBuffer = new StringBuilder();
         for (int script = 0; script < UScript.CODE_LIMIT; ++script) {
-            UnicodeSet test = new UnicodeSet().applyPropertyAlias("script", UScript.getName(script));
+            UnicodeSet test =
+                    new UnicodeSet().applyPropertyAlias("script", UScript.getName(script));
             int count = Math.min(20, test.size());
-            for (int i = 0; i < count; ++i){
+            for (int i = 0; i < count; ++i) {
                 testBuffer.append(UTF16.valueOf(test.charAt(i)));
             }
         }
@@ -57,18 +57,19 @@ public class AnyScriptTest extends TestFmwk {
             }
             // if the inclusion rate is not 10, skip all but a small number of items.
             // Make sure, however, that we test at least one unavailable script
-            if (inclusion < 10 && script != UScript.LATIN
+            if (inclusion < 10
+                    && script != UScript.LATIN
                     && script != UScript.HAN
                     && script != UScript.HIRAGANA
-                    && testedUnavailableScript
-                    ) {
+                    && testedUnavailableScript) {
                 continue;
             }
 
-            String scriptName = UScript.getName(script);  // long name
+            String scriptName = UScript.getName(script); // long name
             ULocale locale = new ULocale(scriptName);
             if (locale.getLanguage().equals("new") || locale.getLanguage().equals("pau")) {
-                if (logKnownIssue("11171",
+                if (logKnownIssue(
+                        "11171",
                         "long script name loosely looks like a locale ID with a known likely script")) {
                     continue;
                 }
@@ -85,22 +86,24 @@ public class AnyScriptTest extends TestFmwk {
             if (t != null) {
                 t.transform(test); // just verify we don't crash
             }
-            String shortScriptName = UScript.getShortName(script);  // 4-letter script code
+            String shortScriptName = UScript.getShortName(script); // 4-letter script code
             try {
                 t = Transliterator.getInstance("any-" + shortScriptName);
             } catch (Exception e) {
-                errln("Transliterator.getInstance() worked for \"any-" + scriptName +
-                        "\" but not for \"any-" + shortScriptName + '\"');
+                errln(
+                        "Transliterator.getInstance() worked for \"any-"
+                                + scriptName
+                                + "\" but not for \"any-"
+                                + shortScriptName
+                                + '\"');
             }
             t.transform(test); // just verify we don't crash
         }
     }
 
-    /**
-     * Check to make sure that wide characters are converted when going to narrow scripts.
-     */
+    /** Check to make sure that wide characters are converted when going to narrow scripts. */
     @Test
-    public void TestForWidth(){
+    public void TestForWidth() {
         Transliterator widen = Transliterator.getInstance("halfwidth-fullwidth");
         Transliterator narrow = Transliterator.getInstance("fullwidth-halfwidth");
         UnicodeSet ASCII = new UnicodeSet("[:ascii:]");
@@ -126,10 +129,9 @@ public class AnyScriptTest extends TestFmwk {
         assertEquals("Should be ascii", punctOnly, back);
 
         // Han-Latin is now forward-only per CLDR ticket #5630
-        //Transliterator t2 = Transliterator.getInstance("any-Han");
-        //back = t2.transform(widePunctOnly);
-        //assertEquals("Should be same", widePunctOnly, back);
-
+        // Transliterator t2 = Transliterator.getInstance("any-Han");
+        // back = t2.transform(widePunctOnly);
+        // assertEquals("Should be same", widePunctOnly, back);
 
     }
 
@@ -144,7 +146,8 @@ public class AnyScriptTest extends TestFmwk {
         String arabicDigits = getList(arabicDigitSet);
 
         String fromArabic = latin.transform(arabicDigits);
-        assertContainsAll("Any-Latin transforms Arabic digits", westernDigitSetAndMarks, fromArabic);
+        assertContainsAll(
+                "Any-Latin transforms Arabic digits", westernDigitSetAndMarks, fromArabic);
         if (false) { // we don't require conversion to Arabic digits
             String fromLatin = arabic.transform(westernDigits);
             assertContainsAll("Any-Arabic transforms Western digits", arabicDigitSet, fromLatin);
@@ -163,7 +166,7 @@ public class AnyScriptTest extends TestFmwk {
     // might want to add to UnicodeSet
     private String getList(UnicodeSet set) {
         StringBuilder result = new StringBuilder();
-        for (UnicodeSetIterator it = new UnicodeSetIterator(set); it.next();) {
+        for (UnicodeSetIterator it = new UnicodeSetIterator(set); it.next(); ) {
             result.append(it.getString());
         }
         return result.toString();

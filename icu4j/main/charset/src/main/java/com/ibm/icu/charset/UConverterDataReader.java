@@ -9,120 +9,83 @@
 
 package com.ibm.icu.charset;
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-import java.nio.IntBuffer;
-
 import com.ibm.icu.charset.CharsetMBCS.MBCSHeader;
 import com.ibm.icu.charset.CharsetMBCS.MBCSToUFallback;
 import com.ibm.icu.charset.CharsetMBCS.UConverterMBCSTable;
 import com.ibm.icu.impl.ICUBinary;
 import com.ibm.icu.impl.InvalidFormatException;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.IntBuffer;
 
 /**
  * ucnvmbcs.h
  *
- * ICU conversion (.cnv) data file structure, following the usual UDataInfo
- * header.
+ * <p>ICU conversion (.cnv) data file structure, following the usual UDataInfo header.
  *
- * Format version: 6.2
+ * <p>Format version: 6.2
  *
- * struct UConverterStaticData -- struct containing the converter name, IBM CCSID,
- *                                min/max bytes per character, etc.
- *                                see ucnv_bld.h
+ * <p>struct UConverterStaticData -- struct containing the converter name, IBM CCSID, min/max bytes
+ * per character, etc. see ucnv_bld.h
  *
- * --------------------
+ * <p>--------------------
  *
- * The static data is followed by conversionType-specific data structures.
- * At the moment, there are only variations of MBCS converters. They all have
- * the same toUnicode structures, while the fromUnicode structures for SBCS
- * differ from those for other MBCS-style converters.
+ * <p>The static data is followed by conversionType-specific data structures. At the moment, there
+ * are only variations of MBCS converters. They all have the same toUnicode structures, while the
+ * fromUnicode structures for SBCS differ from those for other MBCS-style converters.
  *
- * _MBCSHeader.version 4.2 adds an optional conversion extension data structure.
- * If it is present, then an ICU version reading header versions 4.0 or 4.1
- * will be able to use the base table and ignore the extension.
+ * <p>_MBCSHeader.version 4.2 adds an optional conversion extension data structure. If it is
+ * present, then an ICU version reading header versions 4.0 or 4.1 will be able to use the base
+ * table and ignore the extension.
  *
- * The unicodeMask in the static data is part of the base table data structure.
- * Especially, the UCNV_HAS_SUPPLEMENTARY flag determines the length of the
- * fromUnicode stage 1 array.
- * The static data unicodeMask refers only to the base table's properties if
- * a base table is included.
- * In an extension-only file, the static data unicodeMask is 0.
- * The extension data indexes have a separate field with the unicodeMask flags.
+ * <p>The unicodeMask in the static data is part of the base table data structure. Especially, the
+ * UCNV_HAS_SUPPLEMENTARY flag determines the length of the fromUnicode stage 1 array. The static
+ * data unicodeMask refers only to the base table's properties if a base table is included. In an
+ * extension-only file, the static data unicodeMask is 0. The extension data indexes have a separate
+ * field with the unicodeMask flags.
  *
- * MBCS-style data structure following the static data.
- * Offsets are counted in bytes from the beginning of the MBCS header structure.
- * Details about usage in comments in ucnvmbcs.c.
+ * <p>MBCS-style data structure following the static data. Offsets are counted in bytes from the
+ * beginning of the MBCS header structure. Details about usage in comments in ucnvmbcs.c.
  *
- * struct _MBCSHeader (see the definition in this header file below)
- * contains 32-bit fields as follows:
- * 8 values:
- *  0   uint8_t[4]  MBCS version in UVersionInfo format (currently 4.2.0.0)
- *  1   uint32_t    countStates
- *  2   uint32_t    countToUFallbacks
- *  3   uint32_t    offsetToUCodeUnits
- *  4   uint32_t    offsetFromUTable
- *  5   uint32_t    offsetFromUBytes
- *  6   uint32_t    flags, bits:
- *                      31.. 8 offsetExtension -- _MBCSHeader.version 4.2 (ICU 2.8) and higher
- *                                                0 for older versions and if
- *                                                there is not extension structure
- *                       7.. 0 outputType
- *  7   uint32_t    fromUBytesLength -- _MBCSHeader.version 4.1 (ICU 2.4) and higher
- *                  counts bytes in fromUBytes[]
+ * <p>struct _MBCSHeader (see the definition in this header file below) contains 32-bit fields as
+ * follows: 8 values: 0 uint8_t[4] MBCS version in UVersionInfo format (currently 4.2.0.0) 1
+ * uint32_t countStates 2 uint32_t countToUFallbacks 3 uint32_t offsetToUCodeUnits 4 uint32_t
+ * offsetFromUTable 5 uint32_t offsetFromUBytes 6 uint32_t flags, bits: 31.. 8 offsetExtension --
+ * _MBCSHeader.version 4.2 (ICU 2.8) and higher 0 for older versions and if there is not extension
+ * structure 7.. 0 outputType 7 uint32_t fromUBytesLength -- _MBCSHeader.version 4.1 (ICU 2.4) and
+ * higher counts bytes in fromUBytes[]
  *
- * if(outputType==MBCS_OUTPUT_EXT_ONLY) {
- *     -- base table name for extension-only table
- *     char baseTableName[variable]; -- with NUL plus padding for 4-alignment
+ * <p>if(outputType==MBCS_OUTPUT_EXT_ONLY) { -- base table name for extension-only table char
+ * baseTableName[variable]; -- with NUL plus padding for 4-alignment
  *
- *     -- all _MBCSHeader fields except for version and flags are 0
- * } else {
- *     -- normal base table with optional extension
+ * <p>-- all _MBCSHeader fields except for version and flags are 0 } else { -- normal base table
+ * with optional extension
  *
- *     int32_t stateTable[countStates][256];
+ * <p>int32_t stateTable[countStates][256];
  *
- *     struct _MBCSToUFallback { (fallbacks are sorted by offset)
- *         uint32_t offset;
- *         UChar32 codePoint;
- *     } toUFallbacks[countToUFallbacks];
+ * <p>struct _MBCSToUFallback { (fallbacks are sorted by offset) uint32_t offset; UChar32 codePoint;
+ * } toUFallbacks[countToUFallbacks];
  *
- *     uint16_t unicodeCodeUnits[(offsetFromUTable-offsetToUCodeUnits)/2];
- *                  (padded to an even number of units)
+ * <p>uint16_t unicodeCodeUnits[(offsetFromUTable-offsetToUCodeUnits)/2]; (padded to an even number
+ * of units)
  *
- *     -- stage 1 tables
- *     if(staticData.unicodeMask&UCNV_HAS_SUPPLEMENTARY) {
- *         -- stage 1 table for all of Unicode
- *         uint16_t fromUTable[0x440]; (32-bit-aligned)
- *     } else {
- *         -- BMP-only tables have a smaller stage 1 table
- *         uint16_t fromUTable[0x40]; (32-bit-aligned)
- *     }
+ * <p>-- stage 1 tables if(staticData.unicodeMask&UCNV_HAS_SUPPLEMENTARY) { -- stage 1 table for all
+ * of Unicode uint16_t fromUTable[0x440]; (32-bit-aligned) } else { -- BMP-only tables have a
+ * smaller stage 1 table uint16_t fromUTable[0x40]; (32-bit-aligned) }
  *
- *     -- stage 2 tables
- *        length determined by top of stage 1 and bottom of stage 3 tables
- *     if(outputType==MBCS_OUTPUT_1) {
- *         -- SBCS: pure indexes
- *         uint16_t stage 2 indexes[?];
- *     } else {
- *         -- DBCS, MBCS, EBCDIC_STATEFUL, ...: roundtrip flags and indexes
- *         uint32_t stage 2 flags and indexes[?];
- *     }
+ * <p>-- stage 2 tables length determined by top of stage 1 and bottom of stage 3 tables
+ * if(outputType==MBCS_OUTPUT_1) { -- SBCS: pure indexes uint16_t stage 2 indexes[?]; } else { --
+ * DBCS, MBCS, EBCDIC_STATEFUL, ...: roundtrip flags and indexes uint32_t stage 2 flags and
+ * indexes[?]; }
  *
- *     -- stage 3 tables with byte results
- *     if(outputType==MBCS_OUTPUT_1) {
- *         -- SBCS: each 16-bit result contains flags and the result byte, see ucnvmbcs.c
- *         uint16_t fromUBytes[fromUBytesLength/2];
- *     } else {
- *         -- DBCS, MBCS, EBCDIC_STATEFUL, ... 2/3/4 bytes result, see ucnvmbcs.c
- *         uint8_t fromUBytes[fromUBytesLength]; or
- *         uint16_t fromUBytes[fromUBytesLength/2]; or
- *         uint32_t fromUBytes[fromUBytesLength/4];
- *     }
- * }
+ * <p>-- stage 3 tables with byte results if(outputType==MBCS_OUTPUT_1) { -- SBCS: each 16-bit
+ * result contains flags and the result byte, see ucnvmbcs.c uint16_t
+ * fromUBytes[fromUBytesLength/2]; } else { -- DBCS, MBCS, EBCDIC_STATEFUL, ... 2/3/4 bytes result,
+ * see ucnvmbcs.c uint8_t fromUBytes[fromUBytesLength]; or uint16_t fromUBytes[fromUBytesLength/2];
+ * or uint32_t fromUBytes[fromUBytesLength/4]; } }
  *
- * -- extension table, details see ucnv_ext.h
- * int32_t indexes[>=32]; ...
+ * <p>-- extension table, details see ucnv_ext.h int32_t indexes[>=32]; ...
  */
 /*
  * ucnv_ext.h
@@ -404,7 +367,7 @@ import com.ibm.icu.impl.InvalidFormatException;
  */
 
 final class UConverterDataReader {
-    //private final static boolean debug = ICUDebug.enabled("UConverterDataReader");
+    // private final static boolean debug = ICUDebug.enabled("UConverterDataReader");
 
     private static final class IsAcceptable implements ICUBinary.Authenticate {
         @Override
@@ -412,37 +375,37 @@ final class UConverterDataReader {
             return formatVersion[0] == 6;
         }
     }
+
     private static final IsAcceptable IS_ACCEPTABLE = new IsAcceptable();
 
     /*
-     *  UConverterDataReader(UConverterDataReader r)
-        {
-            byteBuffer = ICUBinary.getByteBufferFromInputStreamAndCloseStream(r.byteBuffer);
-            unicodeVersion = r.unicodeVersion;
-        }
-        */
+    *  UConverterDataReader(UConverterDataReader r)
+       {
+           byteBuffer = ICUBinary.getByteBufferFromInputStreamAndCloseStream(r.byteBuffer);
+           unicodeVersion = r.unicodeVersion;
+       }
+       */
     /** The buffer position after the static data. */
     private int posAfterStaticData;
 
-   /**
-    * <p>Protected constructor.</p>
-    * @param bytes ICU conversion data file
-    * @exception IOException throw if data file fails authentication
-    */
-    protected UConverterDataReader(ByteBuffer bytes)
-                                        throws IOException{
-        //if(debug) System.out.println("Bytes in buffer " + bytes.remaining());
+    /**
+     * Protected constructor.
+     *
+     * @param bytes ICU conversion data file
+     * @exception IOException throw if data file fails authentication
+     */
+    protected UConverterDataReader(ByteBuffer bytes) throws IOException {
+        // if(debug) System.out.println("Bytes in buffer " + bytes.remaining());
 
         byteBuffer = bytes;
-        /*unicodeVersion = */ICUBinary.readHeader(byteBuffer, DATA_FORMAT_ID, IS_ACCEPTABLE);
+        /* unicodeVersion= */ ICUBinary.readHeader(byteBuffer, DATA_FORMAT_ID, IS_ACCEPTABLE);
 
-        //if(debug) System.out.println("Bytes left in byteBuffer " + byteBuffer.remaining());
+        // if(debug) System.out.println("Bytes left in byteBuffer " + byteBuffer.remaining());
     }
 
     // protected methods -------------------------------------------------
 
-    protected void readStaticData(UConverterStaticData sd) throws IOException
-    {
+    protected void readStaticData(UConverterStaticData sd) throws IOException {
         sd.structSize = byteBuffer.getInt();
         byte[] name = new byte[UConverterConstants.MAX_CONVERTER_NAME_LENGTH];
         byteBuffer.get(name);
@@ -456,7 +419,7 @@ final class UConverterDataReader {
         sd.subCharLen = byteBuffer.get();
         sd.hasToUnicodeFallback = byteBuffer.get();
         sd.hasFromUnicodeFallback = byteBuffer.get();
-        sd.unicodeMask = (short)(byteBuffer.get() & 0xff);
+        sd.unicodeMask = (short) (byteBuffer.get() & 0xff);
         sd.subChar1 = byteBuffer.get();
         byteBuffer.get(sd.reserved);
         posAfterStaticData = byteBuffer.position();
@@ -466,8 +429,7 @@ final class UConverterDataReader {
         return byteBuffer.position() - posAfterStaticData;
     }
 
-    protected void readMBCSHeader(CharsetMBCS.MBCSHeader h) throws IOException
-    {
+    protected void readMBCSHeader(CharsetMBCS.MBCSHeader h) throws IOException {
         byteBuffer.get(h.version);
         h.countStates = byteBuffer.getInt();
         h.countToUFallbacks = byteBuffer.getInt();
@@ -484,19 +446,19 @@ final class UConverterDataReader {
         }
     }
 
-    protected void readMBCSTable(MBCSHeader header, UConverterMBCSTable mbcsTable) throws IOException
-    {
+    protected void readMBCSTable(MBCSHeader header, UConverterMBCSTable mbcsTable)
+            throws IOException {
         IntBuffer intBuffer = byteBuffer.asIntBuffer();
         mbcsTable.countStates = (byte) header.countStates;
         mbcsTable.stateTable = new int[header.countStates][256];
         int i;
-        for(i = 0; i < header.countStates; ++i) {
+        for (i = 0; i < header.countStates; ++i) {
             intBuffer.get(mbcsTable.stateTable[i]);
         }
 
         mbcsTable.countToUFallbacks = header.countToUFallbacks;
         mbcsTable.toUFallbacks = new MBCSToUFallback[header.countToUFallbacks];
-        for(i = 0; i < header.countToUFallbacks; ++i) {
+        for (i = 0; i < header.countToUFallbacks; ++i) {
             int offset = intBuffer.get();
             int codePoint = intBuffer.get();
             mbcsTable.toUFallbacks[i] = new MBCSToUFallback(offset, codePoint);
@@ -548,25 +510,25 @@ final class UConverterDataReader {
         boolean noFromU = ((header.options & CharsetMBCS.MBCS_OPT_NO_FROM_U) != 0);
         if (!noFromU) {
             switch (mbcsTable.outputType) {
-            case CharsetMBCS.MBCS_OUTPUT_1:
-            case CharsetMBCS.MBCS_OUTPUT_2:
-            case CharsetMBCS.MBCS_OUTPUT_2_SISO:
-            case CharsetMBCS.MBCS_OUTPUT_3_EUC:
-                mbcsTable.fromUnicodeChars = ICUBinary.getChars(
-                        byteBuffer, header.fromUBytesLength / 2, 0);
-                break;
-            case CharsetMBCS.MBCS_OUTPUT_3:
-            case CharsetMBCS.MBCS_OUTPUT_4_EUC:
-                mbcsTable.fromUnicodeBytes = new byte[header.fromUBytesLength];
-                byteBuffer.get(mbcsTable.fromUnicodeBytes);
-                break;
-            case CharsetMBCS.MBCS_OUTPUT_4:
-                mbcsTable.fromUnicodeInts = ICUBinary.getInts(
-                        byteBuffer, header.fromUBytesLength / 4, 0);
-                break;
-            default:
-                // Cannot occur, caller checked already.
-                assert false;
+                case CharsetMBCS.MBCS_OUTPUT_1:
+                case CharsetMBCS.MBCS_OUTPUT_2:
+                case CharsetMBCS.MBCS_OUTPUT_2_SISO:
+                case CharsetMBCS.MBCS_OUTPUT_3_EUC:
+                    mbcsTable.fromUnicodeChars =
+                            ICUBinary.getChars(byteBuffer, header.fromUBytesLength / 2, 0);
+                    break;
+                case CharsetMBCS.MBCS_OUTPUT_3:
+                case CharsetMBCS.MBCS_OUTPUT_4_EUC:
+                    mbcsTable.fromUnicodeBytes = new byte[header.fromUBytesLength];
+                    byteBuffer.get(mbcsTable.fromUnicodeBytes);
+                    break;
+                case CharsetMBCS.MBCS_OUTPUT_4:
+                    mbcsTable.fromUnicodeInts =
+                            ICUBinary.getInts(byteBuffer, header.fromUBytesLength / 4, 0);
+                    break;
+                default:
+                    // Cannot occur, caller checked already.
+                    assert false;
             }
         } else {
             // Optional utf8Friendly mbcsIndex -- _MBCSHeader.version 4.3 (ICU 3.8) and higher.
@@ -575,19 +537,17 @@ final class UConverterDataReader {
         }
     }
 
-    protected String readBaseTableName() throws IOException
-    {
+    protected String readBaseTableName() throws IOException {
         char c;
         StringBuilder name = new StringBuilder();
-        while((c = (char)byteBuffer.get()) !=  0){
+        while ((c = (char) byteBuffer.get()) != 0) {
             name.append(c);
         }
         return name.toString();
     }
 
-    //protected int[] readExtIndexes(int skip) throws IOException
-    protected ByteBuffer readExtIndexes(int skip) throws IOException, InvalidFormatException
-    {
+    // protected int[] readExtIndexes(int skip) throws IOException
+    protected ByteBuffer readExtIndexes(int skip) throws IOException, InvalidFormatException {
         ICUBinary.skipBytes(byteBuffer, skip);
         ByteBuffer b = ICUBinary.sliceWithOrder(byteBuffer);
         int lengthOfIndexes = b.getInt(0);
@@ -600,9 +560,7 @@ final class UConverterDataReader {
         return b;
     }
 
-    /**
-     * Data formatVersion 6.1 and higher has a unicodeMask.
-     */
+    /** Data formatVersion 6.1 and higher has a unicodeMask. */
     boolean dataFormatHasUnicodeMask() {
         int formatVersion0 = byteBuffer.get(16) & 0xff;
         return formatVersion0 > 6 || (formatVersion0 == 6 && byteBuffer.get(17) != 0);
@@ -610,18 +568,15 @@ final class UConverterDataReader {
 
     // private data members -------------------------------------------------
 
-    /**
-    * ICU data file input stream
-    */
+    /** ICU data file input stream */
     private ByteBuffer byteBuffer;
 
-//    private VersionInfo unicodeVersion;
+    //    private VersionInfo unicodeVersion;
 
     /**
-    * File format version that this class understands.
-    * No guarantees are made if a older version is used
-    * see store.c of gennorm for more information and values
-    */
+     * File format version that this class understands. No guarantees are made if a older version is
+     * used see store.c of gennorm for more information and values
+     */
     // DATA_FORMAT_ID_ values taken from icu4c isCnvAcceptable (ucnv_bld.c)
     private static final int DATA_FORMAT_ID = 0x636e7674; // dataFormat="cnvt"
 }

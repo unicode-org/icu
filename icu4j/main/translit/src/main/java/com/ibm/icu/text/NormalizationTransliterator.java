@@ -11,11 +11,11 @@
  */
 
 package com.ibm.icu.text;
-import java.util.HashMap;
-import java.util.Map;
 
 import com.ibm.icu.impl.Norm2AllModes;
 import com.ibm.icu.impl.Normalizer2Impl;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Alan Liu, Markus Scherer
@@ -23,70 +23,79 @@ import com.ibm.icu.impl.Normalizer2Impl;
 final class NormalizationTransliterator extends Transliterator {
     private final Normalizer2 norm2;
 
-    /**
-     * System registration hook.
-     */
+    /** System registration hook. */
     static void register() {
-        Transliterator.registerFactory("Any-NFC", new Transliterator.Factory() {
-            @Override
-            public Transliterator getInstance(String ID) {
-                return new NormalizationTransliterator("NFC", Normalizer2.getNFCInstance());
-            }
-        });
-        Transliterator.registerFactory("Any-NFD", new Transliterator.Factory() {
-            @Override
-            public Transliterator getInstance(String ID) {
-                return new NormalizationTransliterator("NFD", Normalizer2.getNFDInstance());
-            }
-        });
-        Transliterator.registerFactory("Any-NFKC", new Transliterator.Factory() {
-            @Override
-            public Transliterator getInstance(String ID) {
-                return new NormalizationTransliterator("NFKC", Normalizer2.getNFKCInstance());
-            }
-        });
-        Transliterator.registerFactory("Any-NFKD", new Transliterator.Factory() {
-            @Override
-            public Transliterator getInstance(String ID) {
-                return new NormalizationTransliterator("NFKD", Normalizer2.getNFKDInstance());
-            }
-        });
-        Transliterator.registerFactory("Any-FCD", new Transliterator.Factory() {
-            @Override
-            public Transliterator getInstance(String ID) {
-                return new NormalizationTransliterator("FCD", Norm2AllModes.getFCDNormalizer2());
-            }
-        });
-        Transliterator.registerFactory("Any-FCC", new Transliterator.Factory() {
-            @Override
-            public Transliterator getInstance(String ID) {
-                return new NormalizationTransliterator("FCC", Norm2AllModes.getNFCInstance().fcc);
-            }
-        });
+        Transliterator.registerFactory(
+                "Any-NFC",
+                new Transliterator.Factory() {
+                    @Override
+                    public Transliterator getInstance(String ID) {
+                        return new NormalizationTransliterator("NFC", Normalizer2.getNFCInstance());
+                    }
+                });
+        Transliterator.registerFactory(
+                "Any-NFD",
+                new Transliterator.Factory() {
+                    @Override
+                    public Transliterator getInstance(String ID) {
+                        return new NormalizationTransliterator("NFD", Normalizer2.getNFDInstance());
+                    }
+                });
+        Transliterator.registerFactory(
+                "Any-NFKC",
+                new Transliterator.Factory() {
+                    @Override
+                    public Transliterator getInstance(String ID) {
+                        return new NormalizationTransliterator(
+                                "NFKC", Normalizer2.getNFKCInstance());
+                    }
+                });
+        Transliterator.registerFactory(
+                "Any-NFKD",
+                new Transliterator.Factory() {
+                    @Override
+                    public Transliterator getInstance(String ID) {
+                        return new NormalizationTransliterator(
+                                "NFKD", Normalizer2.getNFKDInstance());
+                    }
+                });
+        Transliterator.registerFactory(
+                "Any-FCD",
+                new Transliterator.Factory() {
+                    @Override
+                    public Transliterator getInstance(String ID) {
+                        return new NormalizationTransliterator(
+                                "FCD", Norm2AllModes.getFCDNormalizer2());
+                    }
+                });
+        Transliterator.registerFactory(
+                "Any-FCC",
+                new Transliterator.Factory() {
+                    @Override
+                    public Transliterator getInstance(String ID) {
+                        return new NormalizationTransliterator(
+                                "FCC", Norm2AllModes.getNFCInstance().fcc);
+                    }
+                });
         Transliterator.registerSpecialInverse("NFC", "NFD", true);
         Transliterator.registerSpecialInverse("NFKC", "NFKD", true);
         Transliterator.registerSpecialInverse("FCC", "NFD", false);
         Transliterator.registerSpecialInverse("FCD", "FCD", false);
     }
 
-    /**
-     * Constructs a transliterator.
-     */
+    /** Constructs a transliterator. */
     private NormalizationTransliterator(String id, Normalizer2 n2) {
         super(id, null);
         norm2 = n2;
     }
 
-    /**
-     * Implements {@link Transliterator#handleTransliterate}.
-     */
+    /** Implements {@link Transliterator#handleTransliterate}. */
     @Override
-    protected void handleTransliterate(Replaceable text,
-            Position offsets, boolean isIncremental) {
+    protected void handleTransliterate(Replaceable text, Position offsets, boolean isIncremental) {
         // start and limit of the input range
         int start = offsets.start;
         int limit = offsets.limit;
-        if(start >= limit) {
+        if (start >= limit) {
             return;
         }
 
@@ -111,16 +120,16 @@ final class NormalizationTransliterator extends Transliterator {
             do {
                 segment.appendCodePoint(c);
                 start += Character.charCount(c);
-            } while(start < limit && !norm2.hasBoundaryBefore(c = text.char32At(start)));
-            if(start == limit && isIncremental && !norm2.hasBoundaryAfter(c)) {
+            } while (start < limit && !norm2.hasBoundaryBefore(c = text.char32At(start)));
+            if (start == limit && isIncremental && !norm2.hasBoundaryAfter(c)) {
                 // stop in incremental mode when we reach the input limit
                 // in case there are additional characters that could change the
                 // normalization result
-                start=prev;
+                start = prev;
                 break;
             }
             norm2.normalize(segment, normalized);
-            if(!Normalizer2Impl.UTF16Plus.equal(segment, normalized)) {
+            if (!Normalizer2Impl.UTF16Plus.equal(segment, normalized)) {
                 // replace the input chunk with its normalized form
                 text.replace(prev, start, normalized.toString());
 
@@ -129,21 +138,24 @@ final class NormalizationTransliterator extends Transliterator {
                 start += delta;
                 limit += delta;
             }
-        } while(start < limit);
+        } while (start < limit);
 
         offsets.start = start;
         offsets.contextLimit += limit - offsets.limit;
         offsets.limit = limit;
     }
 
-    static final Map<Normalizer2, SourceTargetUtility> SOURCE_CACHE = new HashMap<Normalizer2, SourceTargetUtility>();
+    static final Map<Normalizer2, SourceTargetUtility> SOURCE_CACHE =
+            new HashMap<Normalizer2, SourceTargetUtility>();
 
     // TODO Get rid of this if Normalizer2 becomes a Transform
-    static class NormalizingTransform implements Transform<String,String> {
+    static class NormalizingTransform implements Transform<String, String> {
         final Normalizer2 norm2;
+
         public NormalizingTransform(Normalizer2 norm2) {
             this.norm2 = norm2;
         }
+
         @Override
         public String transform(String source) {
             return norm2.normalize(source);
@@ -154,10 +166,11 @@ final class NormalizationTransliterator extends Transliterator {
      * @see com.ibm.icu.text.Transliterator#addSourceTargetSet(com.ibm.icu.text.UnicodeSet, com.ibm.icu.text.UnicodeSet, com.ibm.icu.text.UnicodeSet)
      */
     @Override
-    public void addSourceTargetSet(UnicodeSet inputFilter, UnicodeSet sourceSet, UnicodeSet targetSet) {
+    public void addSourceTargetSet(
+            UnicodeSet inputFilter, UnicodeSet sourceSet, UnicodeSet targetSet) {
         SourceTargetUtility cache;
         synchronized (SOURCE_CACHE) {
-            //String id = getID();
+            // String id = getID();
             cache = SOURCE_CACHE.get(norm2);
             if (cache == null) {
                 cache = new SourceTargetUtility(new NormalizingTransform(norm2), norm2);

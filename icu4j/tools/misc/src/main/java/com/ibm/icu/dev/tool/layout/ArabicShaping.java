@@ -20,10 +20,10 @@ public class ArabicShaping {
     // arabic   shaping type code
 
     // shaping bit masks
-    static final int MASK_SHAPE_RIGHT   = 1; // if this bit set, shapes to right
-    static final int MASK_SHAPE_LEFT = 2;   // if this bit set, shapes to left
-    static final int MASK_TRANSPARENT   = 4; // if this bit set, is transparent (ignore other bits)
-    static final int MASK_NOSHAPE   = 8; // if this bit set, don't shape this char, i.e. tatweel
+    static final int MASK_SHAPE_RIGHT = 1; // if this bit set, shapes to right
+    static final int MASK_SHAPE_LEFT = 2; // if this bit set, shapes to left
+    static final int MASK_TRANSPARENT = 4; // if this bit set, is transparent (ignore other bits)
+    static final int MASK_NOSHAPE = 8; // if this bit set, don't shape this char, i.e. tatweel
 
     // shaping values
     public static final int VALUE_NONE = 0;
@@ -34,29 +34,28 @@ public class ArabicShaping {
     public static final int VALUE_NOSHAPE_DUAL = MASK_NOSHAPE | VALUE_DUAL;
     public static final int VALUE_NOSHAPE_NONE = MASK_NOSHAPE;
 
-    public static int getShapeType(char ch)
-    {
+    public static int getShapeType(char ch) {
         int tt = UCharacter.getIntPropertyValue(ch, UProperty.JOINING_TYPE);
-        
-        switch(tt) {
+
+        switch (tt) {
             case UCharacter.JoiningType.JOIN_CAUSING:
                 return VALUE_NOSHAPE_DUAL;
-                
+
             case UCharacter.JoiningType.LEFT_JOINING:
                 return VALUE_LEFT;
-            
+
             case UCharacter.JoiningType.RIGHT_JOINING:
                 return VALUE_RIGHT;
-            
+
             case UCharacter.JoiningType.DUAL_JOINING:
                 return VALUE_DUAL;
-            
+
             case UCharacter.JoiningType.TRANSPARENT:
                 return VALUE_TRANSPARENT;
-                
+
             case UCharacter.JoiningType.NON_JOINING:
             default:
-                return VALUE_NOSHAPE_NONE;                
+                return VALUE_NOSHAPE_NONE;
         }
     }
 

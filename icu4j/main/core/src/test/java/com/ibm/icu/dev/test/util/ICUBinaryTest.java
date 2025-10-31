@@ -9,53 +9,48 @@
 
 package com.ibm.icu.dev.test.util;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
+import com.ibm.icu.impl.ICUBinary;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.CoreTestFmwk;
-import com.ibm.icu.impl.ICUBinary;
-
 /**
-* Testing class for Trie. Tests here will be simple, since both CharTrie and
-* IntTrie are very similar and are heavily used in other parts of ICU4J.
-* Codes using Tries are expected to have detailed tests.
-* @author Syn Wee Quek
-* @since release 2.1 Jan 01 2002
-*/
+ * Testing class for Trie. Tests here will be simple, since both CharTrie and IntTrie are very
+ * similar and are heavily used in other parts of ICU4J. Codes using Tries are expected to have
+ * detailed tests.
+ *
+ * @author Syn Wee Quek
+ * @since release 2.1 Jan 01 2002
+ */
 @RunWith(JUnit4.class)
-public final class ICUBinaryTest extends CoreTestFmwk
-{
+public final class ICUBinaryTest extends CoreTestFmwk {
     // constructor ---------------------------------------------------
 
-    /**
-    * Constructor
-    */
-    public ICUBinaryTest()
-    {
-    }
+    /** Constructor */
+    public ICUBinaryTest() {}
 
     // public methods -----------------------------------------------
 
-    /**
-     * Testing the constructors of the Tries
-     */
+    /** Testing the constructors of the Tries */
     @Test
-    public void TestReadHeader()
-    {
+    public void TestReadHeader() {
         int formatid = 0x01020304;
         byte array[] = {
             // header size
-            0, 0x18,
+            0,
+            0x18,
             // magic numbers
-            (byte)0xda, 0x27,
+            (byte) 0xda,
+            0x27,
             // size
-            0, 0x14,
+            0,
+            0x14,
             // reserved word
-            0, 0,
+            0,
+            0,
             // bigendian
             1,
             // charset
@@ -65,18 +60,26 @@ public final class ICUBinaryTest extends CoreTestFmwk
             // reserved byte
             0,
             // data format id
-            1, 2, 3, 4,
+            1,
+            2,
+            3,
+            4,
             // dataVersion
-            1, 2, 3, 4,
+            1,
+            2,
+            3,
+            4,
             // unicodeVersion
-            3, 2, 0, 0
+            3,
+            2,
+            0,
+            0
         };
         ByteBuffer bytes = ByteBuffer.wrap(array);
-        ICUBinary.Authenticate authenticate
-                = new ICUBinary.Authenticate() {
+        ICUBinary.Authenticate authenticate =
+                new ICUBinary.Authenticate() {
                     @Override
-                    public boolean isDataVersionAcceptable(byte version[])
-                    {
+                    public boolean isDataVersionAcceptable(byte version[]) {
                         return version[0] == 1;
                     }
                 };

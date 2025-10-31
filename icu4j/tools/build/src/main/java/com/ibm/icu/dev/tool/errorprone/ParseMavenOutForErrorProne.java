@@ -19,29 +19,41 @@ class ParseMavenOutForErrorProne {
     // The `(?:[A-F]:)?` in the beginning is for the Windows drive letter (for example D:)
     private static final String RE_ERROR_PRONE_START =
             "^\\[WARNING\\] ((?:[A-F]:)?[\\\\/a-zA-Z0-9_.\\-]+\\.java):\\[([0-9,]+)\\]"
-                + " \\[(\\S+)\\] (.+)";
+                    + " \\[(\\S+)\\] (.+)";
     private static final Pattern PATTERN = Pattern.compile(RE_ERROR_PRONE_START);
 
     // These are ICU custom tags, but errorprone does not allow us to exclude them.
     // So we will filter them out in our code.
-    private static final Set<String> CUSTOM_ICU_TAGS = Set.of(
-            "bug", "category", "discouraged", "draft", "icuenhanced", "internal", "icu",
-            "icunote", "obsolete", "provisional", "stable", "summary", "test");
+    private static final Set<String> CUSTOM_ICU_TAGS =
+            Set.of(
+                    "bug",
+                    "category",
+                    "discouraged",
+                    "draft",
+                    "icuenhanced",
+                    "internal",
+                    "icu",
+                    "icunote",
+                    "obsolete",
+                    "provisional",
+                    "stable",
+                    "summary",
+                    "test");
 
     /**
      * The result contains the issues reported by errorprone.
      *
-     * <p>The key is the issue type (for example `MissingOverride` or `InvalidThrows`).
-     * The value is a list with all the issues of that type, in the order in which they
-     * were reported.</p>
+     * <p>The key is the issue type (for example `MissingOverride` or `InvalidThrows`). The value is
+     * a list with all the issues of that type, in the order in which they were reported.
      *
      * @param baseDir the "prefix" to remove from the file paths (usually the root of icu)
      * @param fileName the name of the maven stdout log file to parse
-     * @return the summary, a map where the key is the issue type,
-     *         and the value a list of all issues of that type
+     * @return the summary, a map where the key is the issue type, and the value a list of all
+     *     issues of that type
      * @throws IOException for any kind of file system problems.
      */
-    static Map<String, List<ErrorProneEntry>> parse(String baseDir, String fileName) throws IOException {
+    static Map<String, List<ErrorProneEntry>> parse(String baseDir, String fileName)
+            throws IOException {
         Map<String, List<ErrorProneEntry>> errorReport = new TreeMap<>();
         ErrorProneEntry currentError = null;
 
@@ -72,10 +84,12 @@ class ParseMavenOutForErrorProne {
                 int lineNo = Integer.parseInt(lineColumn);
                 currentError =
                         new ErrorProneEntry(
-                                path, lineNo, columnNo,
+                                path,
+                                lineNo,
+                                columnNo,
                                 line.substring(m.start(3), m.end(3)), // error code
                                 line.substring(m.start(4), m.end(4)) // message
-                        );
+                                );
             } else if (line.trim().isEmpty()) {
                 // Skip empty lines
             } else if (line.startsWith("  Did you mean ")) {
@@ -93,7 +107,7 @@ class ParseMavenOutForErrorProne {
                 }
             } else if (line.equals(
                     "[WARNING] Unable to autodetect 'javac' path, using 'javac' from the"
-                        + " environment.")) {
+                            + " environment.")) {
                 currentError = addErrorToReportAndReset(errorReport, currentError);
             } else if (line.startsWith("[INFO]")) {
                 currentError = addErrorToReportAndReset(errorReport, currentError);
@@ -115,9 +129,11 @@ class ParseMavenOutForErrorProne {
         }
         String message = crtError.message;
         // We will filter out the custom ICU tags.
-        // There is no programatic way to find the name of the tag, we must extract it from the error message.
+        // There is no programatic way to find the name of the tag, we must extract it from the
+        // error message.
         // Message text 1:
-        // "Tag name `stable` is unknown. If this is a commonly-used custom tag, please click 'not useful' and file a bug."
+        // "Tag name `stable` is unknown. If this is a commonly-used custom tag, please click 'not
+        // useful' and file a bug."
         int firstBackTick = message.indexOf('`');
         if (firstBackTick >= 0) {
             int secondBackTick = message.indexOf('`', firstBackTick + 1);
@@ -142,8 +158,8 @@ class ParseMavenOutForErrorProne {
         return false;
     }
 
-    static ErrorProneEntry addErrorToReportAndReset(Map<String, List<ErrorProneEntry>> errorReport,
-            ErrorProneEntry crtError) {
+    static ErrorProneEntry addErrorToReportAndReset(
+            Map<String, List<ErrorProneEntry>> errorReport, ErrorProneEntry crtError) {
         // We want to reset the currentError after we record it.
         // One errorprone issue can take several lines in the log.
         // The parsing creates currentError when the start of an issue is detected.
@@ -152,7 +168,8 @@ class ParseMavenOutForErrorProne {
         // log, we add currentError to the report, and then we set it to null.
         // By returning null here the call in the main loop can be one single line:
         //   currentError = addErrorToReport(errorReport, currentError); => report AND reset
-        // If we return nothing (void method) we would need to do this in the caller (several times):
+        // If we return nothing (void method) we would need to do this in the caller (several
+        // times):
         //   addErrorToReport(errorReport, currentError); => report
         //   currentError = null; => reset
         if (crtError == null) {
@@ -164,8 +181,8 @@ class ParseMavenOutForErrorProne {
         // Fix the severity from parsing, which is never error, to the proper errorprone one
         String errorType = crtError.type;
         crtError.severity = ErrorProneUtils.getErrorLevel(errorType);
-        List<ErrorProneEntry> list = errorReport.computeIfAbsent(
-                errorType, e -> new ArrayList<ErrorProneEntry>());
+        List<ErrorProneEntry> list =
+                errorReport.computeIfAbsent(errorType, e -> new ArrayList<ErrorProneEntry>());
         list.add(crtError);
         return null;
     }
@@ -173,5 +190,4 @@ class ParseMavenOutForErrorProne {
     private static void error(String fileName, int lineNo, String line, String msg) {
         System.out.printf("\033[91m%s[%s] %s %n   '%s'\033[m%n", fileName, lineNo, msg, line);
     }
-
 }

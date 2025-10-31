@@ -8,6 +8,11 @@
  */
 package com.ibm.icu.charset;
 
+import com.ibm.icu.charset.CharsetMBCS.CharsetDecoderMBCS;
+import com.ibm.icu.charset.CharsetMBCS.CharsetEncoderMBCS;
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeSet;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.IntBuffer;
@@ -15,23 +20,17 @@ import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
 
-import com.ibm.icu.charset.CharsetMBCS.CharsetDecoderMBCS;
-import com.ibm.icu.charset.CharsetMBCS.CharsetEncoderMBCS;
-import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.text.UTF16;
-import com.ibm.icu.text.UnicodeSet;
-
 class CharsetCompoundText extends CharsetICU {
-    private static final byte[] fromUSubstitution = new byte[] { (byte) 0x3F };
+    private static final byte[] fromUSubstitution = new byte[] {(byte) 0x3F};
     private CharsetMBCS myConverterArray[];
     private byte state;
 
-    private final static byte INVALID = -2;
-    private final static byte DO_SEARCH = -1;
-    private final static byte COMPOUND_TEXT_SINGLE_0 = 0;
-    private final static byte COMPOUND_TEXT_SINGLE_1 = 1;
-    private final static byte COMPOUND_TEXT_SINGLE_2 = 2;
-    private final static byte COMPOUND_TEXT_SINGLE_3 = 3;
+    private static final byte INVALID = -2;
+    private static final byte DO_SEARCH = -1;
+    private static final byte COMPOUND_TEXT_SINGLE_0 = 0;
+    private static final byte COMPOUND_TEXT_SINGLE_1 = 1;
+    private static final byte COMPOUND_TEXT_SINGLE_2 = 2;
+    private static final byte COMPOUND_TEXT_SINGLE_3 = 3;
 
     /*private final static byte COMPOUND_TEXT_DOUBLE_1 = 4;
     private final static byte COMPOUND_TEXT_DOUBLE_2 = 5;
@@ -43,61 +42,64 @@ class CharsetCompoundText extends CharsetICU {
 
     private final static byte COMPOUND_TEXT_TRIPLE_DOUBLE = 11;*/
 
-    private final static byte IBM_915 = 12;
-    private final static byte IBM_916 = 13;
-    private final static byte IBM_914 = 14;
-    private final static byte IBM_874 = 15;
-    private final static byte IBM_912 = 16;
-    private final static byte IBM_913 = 17;
-    private final static byte ISO_8859_14 = 18;
-    private final static byte IBM_923 = 19;
+    private static final byte IBM_915 = 12;
+    private static final byte IBM_916 = 13;
+    private static final byte IBM_914 = 14;
+    private static final byte IBM_874 = 15;
+    private static final byte IBM_912 = 16;
+    private static final byte IBM_913 = 17;
+    private static final byte ISO_8859_14 = 18;
+    private static final byte IBM_923 = 19;
 
-    private final static byte NUM_OF_CONVERTERS = 20;
+    private static final byte NUM_OF_CONVERTERS = 20;
 
-    private final static byte SEARCH_LENGTH = 12;
+    private static final byte SEARCH_LENGTH = 12;
 
-    private final static byte[][] escSeqCompoundText = {
+    private static final byte[][] escSeqCompoundText = {
         /* Single */
-        { 0x1B, 0x2D, 0x41 },
-        { 0x1B, 0x2D, 0x4D },
-        { 0x1B, 0x2D, 0x46 },
-        { 0x1B, 0x2D, 0x47 },
+        {0x1B, 0x2D, 0x41},
+        {0x1B, 0x2D, 0x4D},
+        {0x1B, 0x2D, 0x46},
+        {0x1B, 0x2D, 0x47},
 
         /* Double */
-        { 0x1B, 0x24, 0x29, 0x41 },
-        { 0x1B, 0x24, 0x29, 0x42 },
-        { 0x1B, 0x24, 0x29, 0x43 },
-        { 0x1B, 0x24, 0x29, 0x44 },
-        { 0x1B, 0x24, 0x29, 0x47 },
-        { 0x1B, 0x24, 0x29, 0x48 },
-        { 0x1B, 0x24, 0x29, 0x49 },
+        {0x1B, 0x24, 0x29, 0x41},
+        {0x1B, 0x24, 0x29, 0x42},
+        {0x1B, 0x24, 0x29, 0x43},
+        {0x1B, 0x24, 0x29, 0x44},
+        {0x1B, 0x24, 0x29, 0x47},
+        {0x1B, 0x24, 0x29, 0x48},
+        {0x1B, 0x24, 0x29, 0x49},
 
         /* Triple/Double */
-        { 0x1B, 0x25, 0x47 },
+        {0x1B, 0x25, 0x47},
 
         /*IBM-915*/
-        { 0x1B, 0x2D, 0x4C },
+        {0x1B, 0x2D, 0x4C},
         /*IBM-916*/
-        { 0x1B, 0x2D, 0x48 },
+        {0x1B, 0x2D, 0x48},
         /*IBM-914*/
-        { 0x1B, 0x2D, 0x44 },
+        {0x1B, 0x2D, 0x44},
         /*IBM-874*/
-        { 0x1B, 0x2D, 0x54 },
+        {0x1B, 0x2D, 0x54},
         /*IBM-912*/
-        { 0x1B, 0x2D, 0x42 },
+        {0x1B, 0x2D, 0x42},
         /* IBM-913 */
-        { 0x1B, 0x2D, 0x43 },
+        {0x1B, 0x2D, 0x43},
         /* ISO-8859_14 */
-        { 0x1B, 0x2D, 0x5F },
+        {0x1B, 0x2D, 0x5F},
         /* IBM-923 */
-        { 0x1B, 0x2D, 0x62 },
+        {0x1B, 0x2D, 0x62},
     };
 
-    private final static byte ESC_START = 0x1B;
+    private static final byte ESC_START = 0x1B;
 
     private static boolean isASCIIRange(int codepoint) {
-        if ((codepoint == 0x0000) || (codepoint == 0x0009) || (codepoint == 0x000A) ||
-                (codepoint >= 0x0020 && codepoint <= 0x007f) || (codepoint >= 0x00A0 && codepoint <= 0x00FF)) {
+        if ((codepoint == 0x0000)
+                || (codepoint == 0x0009)
+                || (codepoint == 0x000A)
+                || (codepoint >= 0x0020 && codepoint <= 0x007f)
+                || (codepoint >= 0x00A0 && codepoint <= 0x00FF)) {
             return true;
         }
         return false;
@@ -111,87 +113,162 @@ class CharsetCompoundText extends CharsetICU {
     }
 
     private static boolean isIBM916(int codepoint) {
-        if ((codepoint >= 0x05D0 && codepoint <= 0x05EA) || (codepoint == 0x2017) || (codepoint == 0x203E)) {
+        if ((codepoint >= 0x05D0 && codepoint <= 0x05EA)
+                || (codepoint == 0x2017)
+                || (codepoint == 0x203E)) {
             return true;
         }
         return false;
     }
 
     private static boolean isCompoundS3(int codepoint) {
-        if ((codepoint == 0x060C) || (codepoint == 0x061B) || (codepoint == 0x061F) || (codepoint >= 0x0621 && codepoint <= 0x063A) ||
-                (codepoint >= 0x0640 && codepoint <= 0x0652) || (codepoint >= 0x0660 && codepoint <= 0x066D) || (codepoint == 0x200B) ||
-                (codepoint >= 0x0FE70 && codepoint <= 0x0FE72) || (codepoint == 0x0FE74) || (codepoint >= 0x0FE76 && codepoint <= 0x0FEBE)) {
+        if ((codepoint == 0x060C)
+                || (codepoint == 0x061B)
+                || (codepoint == 0x061F)
+                || (codepoint >= 0x0621 && codepoint <= 0x063A)
+                || (codepoint >= 0x0640 && codepoint <= 0x0652)
+                || (codepoint >= 0x0660 && codepoint <= 0x066D)
+                || (codepoint == 0x200B)
+                || (codepoint >= 0x0FE70 && codepoint <= 0x0FE72)
+                || (codepoint == 0x0FE74)
+                || (codepoint >= 0x0FE76 && codepoint <= 0x0FEBE)) {
             return true;
         }
         return false;
     }
 
     private static boolean isCompoundS2(int codepoint) {
-        if ((codepoint == 0x02BC) || (codepoint == 0x02BD) || (codepoint >= 0x0384 && codepoint <= 0x03CE) || (codepoint == 0x2015)) {
+        if ((codepoint == 0x02BC)
+                || (codepoint == 0x02BD)
+                || (codepoint >= 0x0384 && codepoint <= 0x03CE)
+                || (codepoint == 0x2015)) {
             return true;
         }
         return false;
     }
 
     private static boolean isIBM914(int codepoint) {
-        if ((codepoint == 0x0100) || (codepoint == 0x0101) || (codepoint == 0x0112) || (codepoint == 0x0113) || (codepoint == 0x0116) || (codepoint == 0x0117) ||
-                (codepoint == 0x0122) || (codepoint == 0x0123) || (codepoint >= 0x0128 && codepoint <= 0x012B) || (codepoint == 0x012E) || (codepoint == 0x012F) ||
-                (codepoint >= 0x0136 && codepoint <= 0x0138) || (codepoint == 0x013B) || (codepoint == 0x013C) || (codepoint == 0x0145) || (codepoint ==  0x0146) ||
-                (codepoint >= 0x014A && codepoint <= 0x014D) || (codepoint == 0x0156) || (codepoint == 0x0157) || (codepoint >= 0x0166 && codepoint <= 0x016B) ||
-                (codepoint == 0x0172) || (codepoint == 0x0173)) {
+        if ((codepoint == 0x0100)
+                || (codepoint == 0x0101)
+                || (codepoint == 0x0112)
+                || (codepoint == 0x0113)
+                || (codepoint == 0x0116)
+                || (codepoint == 0x0117)
+                || (codepoint == 0x0122)
+                || (codepoint == 0x0123)
+                || (codepoint >= 0x0128 && codepoint <= 0x012B)
+                || (codepoint == 0x012E)
+                || (codepoint == 0x012F)
+                || (codepoint >= 0x0136 && codepoint <= 0x0138)
+                || (codepoint == 0x013B)
+                || (codepoint == 0x013C)
+                || (codepoint == 0x0145)
+                || (codepoint == 0x0146)
+                || (codepoint >= 0x014A && codepoint <= 0x014D)
+                || (codepoint == 0x0156)
+                || (codepoint == 0x0157)
+                || (codepoint >= 0x0166 && codepoint <= 0x016B)
+                || (codepoint == 0x0172)
+                || (codepoint == 0x0173)) {
             return true;
         }
         return false;
     }
 
     private static boolean isIBM874(int codepoint) {
-        if ((codepoint >= 0x0E01 && codepoint <= 0x0E3A) || (codepoint >= 0x0E3F && codepoint <= 0x0E5B)) {
+        if ((codepoint >= 0x0E01 && codepoint <= 0x0E3A)
+                || (codepoint >= 0x0E3F && codepoint <= 0x0E5B)) {
             return true;
         }
         return false;
     }
 
     private static boolean isIBM912(int codepoint) {
-        return ((codepoint >= 0x0102  && codepoint <= 0x0107)  || (codepoint >= 0x010C && codepoint <= 0x0111)    || (codepoint >= 0x0118 && codepoint <= 0x011B) ||
-                (codepoint == 0x0139) || (codepoint == 0x013A) || (codepoint == 0x013D) || (codepoint == 0x013E)  || (codepoint >= 0x0141 && codepoint <= 0x0144) ||
-                (codepoint == 0x0147) || (codepoint == 0x0150) || (codepoint == 0x0151) || (codepoint == 0x0154)  || (codepoint == 0x0155)                        ||
-                (codepoint >= 0x0158  && codepoint <= 0x015B)  || (codepoint == 0x015E) || (codepoint == 0x015F)  || (codepoint >= 0x0160 && codepoint <= 0x0165) ||
-                (codepoint == 0x016E) || (codepoint == 0x016F) || (codepoint == 0x0170) || (codepoint ==  0x0171) || (codepoint >= 0x0179 && codepoint <= 0x017E) ||
-                (codepoint == 0x02C7) || (codepoint == 0x02D8) || (codepoint == 0x02D9) || (codepoint == 0x02DB)  || (codepoint == 0x02DD));
+        return ((codepoint >= 0x0102 && codepoint <= 0x0107)
+                || (codepoint >= 0x010C && codepoint <= 0x0111)
+                || (codepoint >= 0x0118 && codepoint <= 0x011B)
+                || (codepoint == 0x0139)
+                || (codepoint == 0x013A)
+                || (codepoint == 0x013D)
+                || (codepoint == 0x013E)
+                || (codepoint >= 0x0141 && codepoint <= 0x0144)
+                || (codepoint == 0x0147)
+                || (codepoint == 0x0150)
+                || (codepoint == 0x0151)
+                || (codepoint == 0x0154)
+                || (codepoint == 0x0155)
+                || (codepoint >= 0x0158 && codepoint <= 0x015B)
+                || (codepoint == 0x015E)
+                || (codepoint == 0x015F)
+                || (codepoint >= 0x0160 && codepoint <= 0x0165)
+                || (codepoint == 0x016E)
+                || (codepoint == 0x016F)
+                || (codepoint == 0x0170)
+                || (codepoint == 0x0171)
+                || (codepoint >= 0x0179 && codepoint <= 0x017E)
+                || (codepoint == 0x02C7)
+                || (codepoint == 0x02D8)
+                || (codepoint == 0x02D9)
+                || (codepoint == 0x02DB)
+                || (codepoint == 0x02DD));
     }
 
     private static boolean isIBM913(int codepoint) {
-        if ((codepoint >= 0x0108 && codepoint <= 0x010B) || (codepoint == 0x011C) ||
-                (codepoint == 0x011D) || (codepoint == 0x0120) || (codepoint == 0x0121) ||
-                (codepoint >= 0x0124 && codepoint <= 0x0127) || (codepoint == 0x0134) || (codepoint == 0x0135) ||
-                (codepoint == 0x015C) || (codepoint == 0x015D) || (codepoint == 0x016C) || (codepoint ==  0x016D)) {
+        if ((codepoint >= 0x0108 && codepoint <= 0x010B)
+                || (codepoint == 0x011C)
+                || (codepoint == 0x011D)
+                || (codepoint == 0x0120)
+                || (codepoint == 0x0121)
+                || (codepoint >= 0x0124 && codepoint <= 0x0127)
+                || (codepoint == 0x0134)
+                || (codepoint == 0x0135)
+                || (codepoint == 0x015C)
+                || (codepoint == 0x015D)
+                || (codepoint == 0x016C)
+                || (codepoint == 0x016D)) {
             return true;
         }
         return false;
     }
 
     private static boolean isCompoundS1(int codepoint) {
-        if ((codepoint == 0x011E) || (codepoint == 0x011F) || (codepoint == 0x0130) ||
-                (codepoint == 0x0131) || (codepoint >= 0x0218 && codepoint <= 0x021B)) {
+        if ((codepoint == 0x011E)
+                || (codepoint == 0x011F)
+                || (codepoint == 0x0130)
+                || (codepoint == 0x0131)
+                || (codepoint >= 0x0218 && codepoint <= 0x021B)) {
             return true;
         }
         return false;
     }
 
     private static boolean isISO8859_14(int codepoint) {
-        if ((codepoint >= 0x0174 && codepoint <= 0x0177) || (codepoint == 0x1E0A) ||
-                (codepoint == 0x1E0B) || (codepoint == 0x1E1E) || (codepoint == 0x1E1F) ||
-                (codepoint == 0x1E40) || (codepoint == 0x1E41) || (codepoint == 0x1E56) ||
-                (codepoint == 0x1E57) || (codepoint == 0x1E60) || (codepoint == 0x1E61) ||
-                (codepoint == 0x1E6A) || (codepoint == 0x1E6B) || (codepoint == 0x1EF2) ||
-                (codepoint == 0x1EF3) || (codepoint >= 0x1E80 && codepoint <= 0x1E85)) {
+        if ((codepoint >= 0x0174 && codepoint <= 0x0177)
+                || (codepoint == 0x1E0A)
+                || (codepoint == 0x1E0B)
+                || (codepoint == 0x1E1E)
+                || (codepoint == 0x1E1F)
+                || (codepoint == 0x1E40)
+                || (codepoint == 0x1E41)
+                || (codepoint == 0x1E56)
+                || (codepoint == 0x1E57)
+                || (codepoint == 0x1E60)
+                || (codepoint == 0x1E61)
+                || (codepoint == 0x1E6A)
+                || (codepoint == 0x1E6B)
+                || (codepoint == 0x1EF2)
+                || (codepoint == 0x1EF3)
+                || (codepoint >= 0x1E80 && codepoint <= 0x1E85)) {
             return true;
         }
         return false;
     }
 
     private static boolean isIBM923(int codepoint) {
-        if ((codepoint == 0x0152) || (codepoint == 0x0153) || (codepoint == 0x0178) || (codepoint == 0x20AC)) {
+        if ((codepoint == 0x0152)
+                || (codepoint == 0x0153)
+                || (codepoint == 0x0178)
+                || (codepoint == 0x20AC)) {
             return true;
         }
         return false;
@@ -214,7 +291,7 @@ class CharsetCompoundText extends CharsetICU {
             state = COMPOUND_TEXT_SINGLE_0;
         } else if (isIBM912(codepoint)) {
             state = IBM_912;
-        }else if (isIBM913(codepoint)) {
+        } else if (isIBM913(codepoint)) {
             state = IBM_913;
         } else if (isISO8859_14(codepoint)) {
             state = ISO_8859_14;
@@ -239,7 +316,8 @@ class CharsetCompoundText extends CharsetICU {
         return state;
     }
 
-    private static byte findStateFromEscSeq(ByteBuffer source, byte[] toUBytes, int toUBytesLength) {
+    private static byte findStateFromEscSeq(
+            ByteBuffer source, byte[] toUBytes, int toUBytesLength) {
         byte state = INVALID;
         int sourceIndex = source.position();
         boolean matchFound = false;
@@ -275,7 +353,8 @@ class CharsetCompoundText extends CharsetICU {
         return state;
     }
 
-    public CharsetCompoundText(String icuCanonicalName, String javaCanonicalName, String[] aliases) {
+    public CharsetCompoundText(
+            String icuCanonicalName, String javaCanonicalName, String[] aliases) {
         super(icuCanonicalName, javaCanonicalName, aliases);
 
         LoadConverters();
@@ -300,17 +379,17 @@ class CharsetCompoundText extends CharsetICU {
                 name = name + "t";
             }
 
-            myConverterArray[i] = (CharsetMBCS)CharsetICU.forNameICU(name);
+            myConverterArray[i] = (CharsetMBCS) CharsetICU.forNameICU(name);
         }
 
-        myConverterArray[IBM_915] = (CharsetMBCS)CharsetICU.forNameICU("ibm-915_P100-1995");
-        myConverterArray[IBM_916] = (CharsetMBCS)CharsetICU.forNameICU("ibm-916_P100-1995");
-        myConverterArray[IBM_914] = (CharsetMBCS)CharsetICU.forNameICU("ibm-914_P100-1995");
-        myConverterArray[IBM_874] = (CharsetMBCS)CharsetICU.forNameICU("ibm-874_P100-1995");
-        myConverterArray[IBM_912] = (CharsetMBCS)CharsetICU.forNameICU("ibm-912_P100-1995");
-        myConverterArray[IBM_913] = (CharsetMBCS)CharsetICU.forNameICU("ibm-913_P100-2000");
-        myConverterArray[ISO_8859_14] = (CharsetMBCS)CharsetICU.forNameICU("iso-8859_14-1998");
-        myConverterArray[IBM_923] = (CharsetMBCS)CharsetICU.forNameICU("ibm-923_P100-1998");
+        myConverterArray[IBM_915] = (CharsetMBCS) CharsetICU.forNameICU("ibm-915_P100-1995");
+        myConverterArray[IBM_916] = (CharsetMBCS) CharsetICU.forNameICU("ibm-916_P100-1995");
+        myConverterArray[IBM_914] = (CharsetMBCS) CharsetICU.forNameICU("ibm-914_P100-1995");
+        myConverterArray[IBM_874] = (CharsetMBCS) CharsetICU.forNameICU("ibm-874_P100-1995");
+        myConverterArray[IBM_912] = (CharsetMBCS) CharsetICU.forNameICU("ibm-912_P100-1995");
+        myConverterArray[IBM_913] = (CharsetMBCS) CharsetICU.forNameICU("ibm-913_P100-2000");
+        myConverterArray[ISO_8859_14] = (CharsetMBCS) CharsetICU.forNameICU("iso-8859_14-1998");
+        myConverterArray[IBM_923] = (CharsetMBCS) CharsetICU.forNameICU("ibm-923_P100-1998");
     }
 
     class CharsetEncoderCompoundText extends CharsetEncoderICU {
@@ -325,7 +404,7 @@ class CharsetCompoundText extends CharsetICU {
                 if (i == 0) {
                     gbEncoder[i] = null;
                 } else {
-                    gbEncoder[i] = (CharsetEncoderMBCS)myConverterArray[i].newEncoder();
+                    gbEncoder[i] = (CharsetEncoderMBCS) myConverterArray[i].newEncoder();
                 }
             }
         }
@@ -341,10 +420,11 @@ class CharsetCompoundText extends CharsetICU {
         }
 
         @Override
-        protected CoderResult encodeLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush) {
+        protected CoderResult encodeLoop(
+                CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush) {
             CoderResult err = CoderResult.UNDERFLOW;
             int sourceChar;
-            char []sourceCharArray = { 0x0000 };
+            char[] sourceCharArray = {0x0000};
             ByteBuffer tmpTargetBuffer = ByteBuffer.allocate(3);
             byte[] targetBytes = new byte[10];
             int targetLength = 0;
@@ -353,10 +433,8 @@ class CharsetCompoundText extends CharsetICU {
             int i = 0;
             boolean gotoGetTrail = false;
 
-            if (!source.hasRemaining())
-                return CoderResult.UNDERFLOW;
-            else if (!target.hasRemaining())
-                return CoderResult.OVERFLOW;
+            if (!source.hasRemaining()) return CoderResult.UNDERFLOW;
+            else if (!target.hasRemaining()) return CoderResult.OVERFLOW;
 
             /* check if the last codepoint of previous buffer was a lead surrogate */
             if ((sourceChar = fromUChar32) != 0 && target.hasRemaining()) {
@@ -377,15 +455,15 @@ class CharsetCompoundText extends CharsetICU {
                     /* check if the char is a First surrogate */
                     if (UTF16.isSurrogate(sourceChar) || gotoGetTrail) {
                         if (UTF16.isLeadSurrogate(sourceChar) || gotoGetTrail) {
-// getTrail label
+                            // getTrail label
                             /* reset gotoGetTrail flag*/
-                             gotoGetTrail = false;
+                            gotoGetTrail = false;
 
                             /* look ahead to find the trail surrogate */
                             if (source.hasRemaining()) {
                                 /* test the following code unit */
                                 char trail = source.get();
-                                source.position(source.position()-1);
+                                source.position(source.position() - 1);
                                 if (UTF16.isTrailSurrogate(trail)) {
                                     source.get();
                                     sourceChar = UCharacter.getCodePoint(sourceChar, trail);
@@ -415,24 +493,34 @@ class CharsetCompoundText extends CharsetICU {
 
                     tmpState = getState(sourceChar);
 
-                    sourceCharArray[0] = (char)sourceChar;
+                    sourceCharArray[0] = (char) sourceChar;
 
                     if (tmpState < 0) {
                         /* Test all available converters */
                         for (i = 1; i < SEARCH_LENGTH; i++) {
-                            err = gbEncoder[i].cnvMBCSFromUnicodeWithOffsets(CharBuffer.wrap(sourceCharArray), tmpTargetBuffer, offsets, true);
+                            err =
+                                    gbEncoder[i].cnvMBCSFromUnicodeWithOffsets(
+                                            CharBuffer.wrap(sourceCharArray),
+                                            tmpTargetBuffer,
+                                            offsets,
+                                            true);
                             if (!err.isError()) {
-                                tmpState = (byte)i;
+                                tmpState = (byte) i;
                                 tmpTargetBuffer.limit(tmpTargetBuffer.position());
                                 implReset();
                                 break;
                             }
                         }
                     } else if (tmpState == COMPOUND_TEXT_SINGLE_0) {
-                        tmpTargetBuffer.put(0, (byte)sourceChar);
+                        tmpTargetBuffer.put(0, (byte) sourceChar);
                         tmpTargetBuffer.limit(1);
                     } else {
-                        err = gbEncoder[tmpState].cnvMBCSFromUnicodeWithOffsets(CharBuffer.wrap(sourceCharArray), tmpTargetBuffer, offsets, true);
+                        err =
+                                gbEncoder[tmpState].cnvMBCSFromUnicodeWithOffsets(
+                                        CharBuffer.wrap(sourceCharArray),
+                                        tmpTargetBuffer,
+                                        offsets,
+                                        true);
                         if (!err.isError()) {
                             tmpTargetBuffer.limit(tmpTargetBuffer.position());
                         }
@@ -452,7 +540,7 @@ class CharsetCompoundText extends CharsetICU {
                     }
 
                     for (i = 0; i < tmpTargetBuffer.limit(); i++) {
-                        targetBytes[i+targetLength] = tmpTargetBuffer.get(i);
+                        targetBytes[i + targetLength] = tmpTargetBuffer.get(i);
                     }
                     targetLength += i;
 
@@ -494,7 +582,7 @@ class CharsetCompoundText extends CharsetICU {
                 if (i == 0) {
                     gbDecoder[i] = null;
                 } else {
-                    gbDecoder[i] = (CharsetDecoderMBCS)myConverterArray[i].newDecoder();
+                    gbDecoder[i] = (CharsetDecoderMBCS) myConverterArray[i].newDecoder();
                 }
             }
         }
@@ -510,18 +598,18 @@ class CharsetCompoundText extends CharsetICU {
         }
 
         @Override
-        protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush) {
+        protected CoderResult decodeLoop(
+                ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush) {
             CoderResult err = CoderResult.UNDERFLOW;
-            byte[] sourceChar = { 0x00 };
+            byte[] sourceChar = {0x00};
             byte currentState = state;
             byte tmpState = currentState;
             CharsetDecoderMBCS decoder;
-            int sourceLimit = source.limit();;
+            int sourceLimit = source.limit();
+            ;
 
-            if (!source.hasRemaining())
-                return CoderResult.UNDERFLOW;
-            else if (!target.hasRemaining())
-                return CoderResult.OVERFLOW;
+            if (!source.hasRemaining()) return CoderResult.UNDERFLOW;
+            else if (!target.hasRemaining()) return CoderResult.OVERFLOW;
 
             while (source.hasRemaining()) {
                 if (target.hasRemaining()) {
@@ -564,7 +652,10 @@ class CharsetCompoundText extends CharsetICU {
                                 break;
                             }
                             if (target.hasRemaining()) {
-                                target.put((char)(UConverterConstants.UNSIGNED_BYTE_MASK&source.get()));
+                                target.put(
+                                        (char)
+                                                (UConverterConstants.UNSIGNED_BYTE_MASK
+                                                        & source.get()));
                             }
                         }
                     } else if (source.hasRemaining()) {
@@ -618,9 +709,13 @@ class CharsetCompoundText extends CharsetICU {
     }
 
     @Override
-    void getUnicodeSetImpl( UnicodeSet setFillIn, int which){
+    void getUnicodeSetImpl(UnicodeSet setFillIn, int which) {
         for (int i = 1; i < NUM_OF_CONVERTERS; i++) {
-            myConverterArray[i].MBCSGetFilteredUnicodeSetForUnicode(myConverterArray[i].sharedData, setFillIn, which, CharsetMBCS.UCNV_SET_FILTER_NONE);
+            myConverterArray[i].MBCSGetFilteredUnicodeSetForUnicode(
+                    myConverterArray[i].sharedData,
+                    setFillIn,
+                    which,
+                    CharsetMBCS.UCNV_SET_FILTER_NONE);
         }
         setFillIn.add(0x0000);
         setFillIn.add(0x0009);

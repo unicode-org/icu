@@ -3,15 +3,6 @@
 
 package com.ibm.icu.dev.test.message2;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Locale;
-import java.util.Map;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.message2.FormattedPlaceholder;
 import com.ibm.icu.message2.Function;
@@ -21,10 +12,15 @@ import com.ibm.icu.message2.PlainStringFormattedValue;
 import com.ibm.icu.text.ListFormatter;
 import com.ibm.icu.text.ListFormatter.Type;
 import com.ibm.icu.text.ListFormatter.Width;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Locale;
+import java.util.Map;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
-/**
- * Showing a custom function for a list, using the existing ICU {@link ListFormatter}.
- */
+/** Showing a custom function for a list, using the existing ICU {@link ListFormatter}. */
 @RunWith(JUnit4.class)
 @SuppressWarnings({"static-method", "javadoc"})
 public class CustomFunctionListTest extends CoreTestFmwk {
@@ -41,12 +37,14 @@ public class CustomFunctionListTest extends CoreTestFmwk {
 
             ListFunctionImpl(Locale locale, Map<String, Object> fixedOptions) {
                 Object oType = fixedOptions.get("type");
-                Type type = oType == null
-                        ? ListFormatter.Type.AND
+                Type type =
+                        oType == null
+                                ? ListFormatter.Type.AND
                                 : ListFormatter.Type.valueOf(oType.toString());
                 Object oWidth = fixedOptions.get("width");
-                Width width = oWidth == null
-                        ? ListFormatter.Width.WIDE
+                Width width =
+                        oWidth == null
+                                ? ListFormatter.Width.WIDE
                                 : ListFormatter.Width.valueOf(oWidth.toString());
                 lf = ListFormatter.getInstance(locale, type, width);
             }
@@ -57,7 +55,8 @@ public class CustomFunctionListTest extends CoreTestFmwk {
             }
 
             @Override
-            public FormattedPlaceholder format(Object toFormat, Map<String, Object> variableOptions) {
+            public FormattedPlaceholder format(
+                    Object toFormat, Map<String, Object> variableOptions) {
                 String result;
                 if (toFormat instanceof Object[]) {
                     result = lf.format((Object[]) toFormat);
@@ -71,24 +70,29 @@ public class CustomFunctionListTest extends CoreTestFmwk {
         }
     }
 
-    static final MFFunctionRegistry REGISTRY = MFFunctionRegistry.builder()
-            .setFunction("listformat", new ListFunctionFactory())
-            .build();
+    static final MFFunctionRegistry REGISTRY =
+            MFFunctionRegistry.builder()
+                    .setFunction("listformat", new ListFunctionFactory())
+                    .build();
 
     @Test
     public void test() {
         String[] progLanguages = {"C/C++", "Java", "Python"};
 
-        TestUtils.runTestCase(REGISTRY, new TestCase.Builder()
-                .pattern("I know {$languages :listformat type=AND}!")
-                .arguments(Args.of("languages", progLanguages))
-                .expected("I know C/C++, Java, and Python!")
-                .build());
+        TestUtils.runTestCase(
+                REGISTRY,
+                new TestCase.Builder()
+                        .pattern("I know {$languages :listformat type=AND}!")
+                        .arguments(Args.of("languages", progLanguages))
+                        .expected("I know C/C++, Java, and Python!")
+                        .build());
 
-        TestUtils.runTestCase(REGISTRY, new TestCase.Builder()
-                .pattern("You are allowed to use {$languages :listformat type=OR}!")
-                .arguments(Args.of("languages", Arrays.asList(progLanguages)))
-                .expected("You are allowed to use C/C++, Java, or Python!")
-                .build());
+        TestUtils.runTestCase(
+                REGISTRY,
+                new TestCase.Builder()
+                        .pattern("You are allowed to use {$languages :listformat type=OR}!")
+                        .arguments(Args.of("languages", Arrays.asList(progLanguages)))
+                        .expected("You are allowed to use C/C++, Java, or Python!")
+                        .build());
     }
 }

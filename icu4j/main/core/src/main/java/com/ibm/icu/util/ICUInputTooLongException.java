@@ -3,9 +3,8 @@
 package com.ibm.icu.util;
 
 /**
- * The input is impractically long for an operation.
- * It is rejected because it may lead to problems such as excessive
- * processing time, stack depth, or heap memory requirements.
+ * The input is impractically long for an operation. It is rejected because it may lead to problems
+ * such as excessive processing time, stack depth, or heap memory requirements.
  *
  * @stable ICU 68
  */
@@ -17,8 +16,7 @@ public class ICUInputTooLongException extends ICUException {
      *
      * @stable ICU 68
      */
-    public ICUInputTooLongException() {
-    }
+    public ICUInputTooLongException() {}
 
     /**
      * Constructor.

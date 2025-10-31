@@ -5,11 +5,12 @@
  * others. All Rights Reserved.
  */
 package com.ibm.icu.text;
+
 import com.ibm.icu.lang.UCharacter;
 
 /**
- * A transliterator that performs character to name mapping.
- * It generates the Perl syntax \N{name}.
+ * A transliterator that performs character to name mapping. It generates the Perl syntax \N{name}.
+ *
  * @author Alan Liu
  */
 class UnicodeNameTransliterator extends Transliterator {
@@ -20,31 +21,26 @@ class UnicodeNameTransliterator extends Transliterator {
     static final char CLOSE_DELIM = '}';
     static final int OPEN_DELIM_LEN = 3;
 
-    /**
-     * System registration hook.
-     */
+    /** System registration hook. */
     static void register() {
-        Transliterator.registerFactory(_ID, new Transliterator.Factory() {
-            @Override
-            public Transliterator getInstance(String ID) {
-                return new UnicodeNameTransliterator(null);
-            }
-        });
+        Transliterator.registerFactory(
+                _ID,
+                new Transliterator.Factory() {
+                    @Override
+                    public Transliterator getInstance(String ID) {
+                        return new UnicodeNameTransliterator(null);
+                    }
+                });
     }
 
-    /**
-     * Constructs a transliterator.
-     */
+    /** Constructs a transliterator. */
     public UnicodeNameTransliterator(UnicodeFilter filter) {
         super(_ID, filter);
     }
 
-    /**
-     * Implements {@link Transliterator#handleTransliterate}.
-     */
+    /** Implements {@link Transliterator#handleTransliterate}. */
     @Override
-    protected void handleTransliterate(Replaceable text,
-                                       Position offsets, boolean isIncremental) {
+    protected void handleTransliterate(Replaceable text, Position offsets, boolean isIncremental) {
         int cursor = offsets.start;
         int limit = offsets.limit;
 
@@ -55,16 +51,16 @@ class UnicodeNameTransliterator extends Transliterator {
 
         while (cursor < limit) {
             int c = text.char32At(cursor);
-            if ((name=UCharacter.getExtendedName(c)) != null) {
+            if ((name = UCharacter.getExtendedName(c)) != null) {
 
                 str.setLength(OPEN_DELIM_LEN);
                 str.append(name).append(CLOSE_DELIM);
 
                 int clen = UTF16.getCharCount(c);
-                text.replace(cursor, cursor+clen, str.toString());
+                text.replace(cursor, cursor + clen, str.toString());
                 len = str.length();
                 cursor += len; // advance cursor by 1 and adjust for new text
-                limit += len-clen; // change in length
+                limit += len - clen; // change in length
             } else {
                 ++cursor;
             }
@@ -79,19 +75,23 @@ class UnicodeNameTransliterator extends Transliterator {
      * @see com.ibm.icu.text.Transliterator#addSourceTargetSet(com.ibm.icu.text.UnicodeSet, com.ibm.icu.text.UnicodeSet, com.ibm.icu.text.UnicodeSet)
      */
     @Override
-    public void addSourceTargetSet(UnicodeSet inputFilter, UnicodeSet sourceSet, UnicodeSet targetSet) {
+    public void addSourceTargetSet(
+            UnicodeSet inputFilter, UnicodeSet sourceSet, UnicodeSet targetSet) {
         UnicodeSet myFilter = getFilterAsUnicodeSet(inputFilter);
         if (myFilter.size() > 0) {
             sourceSet.addAll(myFilter);
-            targetSet.addAll('0', '9')
-            .addAll('A', 'Z')
-            .add('-')
-            .add(' ')
-            .addAll(OPEN_DELIM)
-            .add(CLOSE_DELIM)
-            .addAll('a', 'z') // for controls
-            .add('<').add('>') // for controls
-            .add('(').add(')') // for controls
+            targetSet
+                    .addAll('0', '9')
+                    .addAll('A', 'Z')
+                    .add('-')
+                    .add(' ')
+                    .addAll(OPEN_DELIM)
+                    .add(CLOSE_DELIM)
+                    .addAll('a', 'z') // for controls
+                    .add('<')
+                    .add('>') // for controls
+                    .add('(')
+                    .add(')') // for controls
             ;
         }
     }

@@ -2,16 +2,15 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.dev.test.calendar;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.HebrewCalendar;
 import com.ibm.icu.util.ULocale;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public class InTemporalLeapYearTest extends CoreTestFmwk {
@@ -21,8 +20,10 @@ public class InTemporalLeapYearTest extends CoreTestFmwk {
         GregorianCalendar gc = new GregorianCalendar();
         for (int year = 1900; year < 2400; ++year) {
             gc.set(year, Calendar.MARCH, 7);
-            assertEquals("Calendar::inTemporalLeapYear",
-                     gc.isLeapYear(year), gc.inTemporalLeapYear() == true);
+            assertEquals(
+                    "Calendar::inTemporalLeapYear",
+                    gc.isLeapYear(year),
+                    gc.inTemporalLeapYear() == true);
         }
     }
 
@@ -43,8 +44,8 @@ public class InTemporalLeapYearTest extends CoreTestFmwk {
         int yearForHasLeapMonth = -1;
         boolean hasLeapMonth = false;
         for (gc.set(startYear, Calendar.JANUARY, 1);
-             gc.get(Calendar.YEAR) <= stopYear;
-             gc.add(Calendar.DATE, incrementDays)) {
+                gc.get(Calendar.YEAR) <= stopYear;
+                gc.add(Calendar.DATE, incrementDays)) {
             cal.setTime(gc.getTime());
             int cal_year = cal.get(Calendar.EXTENDED_YEAR);
             if (yearForHasLeapMonth != cal_year) {
@@ -54,24 +55,33 @@ public class InTemporalLeapYearTest extends CoreTestFmwk {
                 // seek any leap month
                 // check any leap month in the next 12 months.
                 for (hasLeapMonth = false;
-                     (!hasLeapMonth) && cal_year == leapTest.get(Calendar.EXTENDED_YEAR);
-                     leapTest.add(Calendar.MONTH, 1)) {
+                        (!hasLeapMonth) && cal_year == leapTest.get(Calendar.EXTENDED_YEAR);
+                        leapTest.add(Calendar.MONTH, 1)) {
                     hasLeapMonth = leapTest.get(Calendar.IS_LEAP_MONTH) != 0;
                 }
                 yearForHasLeapMonth = cal_year;
             }
 
-            boolean actualInLeap =  cal.inTemporalLeapYear();
+            boolean actualInLeap = cal.inTemporalLeapYear();
             if (hasLeapMonth != actualInLeap) {
-                logln("Gregorian y=" + gc.get(Calendar.YEAR) +
-                    " m=" + gc.get(Calendar.MONTH) +
-                    " d=" + gc.get(Calendar.DATE) +
-                    " => cal y=" + cal.get(Calendar.EXTENDED_YEAR) +
-                    " m=" + (cal.get(Calendar.IS_LEAP_MONTH) == 1 ? "L" : "") +
-                    cal.get(Calendar.MONTH) +
-                    " d=" + cal.get(Calendar.DAY_OF_MONTH) +
-                    " expected:" + (hasLeapMonth ? "true" : "false") +
-                    " actual:" + (actualInLeap ? "true" : "false"));
+                logln(
+                        "Gregorian y="
+                                + gc.get(Calendar.YEAR)
+                                + " m="
+                                + gc.get(Calendar.MONTH)
+                                + " d="
+                                + gc.get(Calendar.DATE)
+                                + " => cal y="
+                                + cal.get(Calendar.EXTENDED_YEAR)
+                                + " m="
+                                + (cal.get(Calendar.IS_LEAP_MONTH) == 1 ? "L" : "")
+                                + cal.get(Calendar.MONTH)
+                                + " d="
+                                + cal.get(Calendar.DAY_OF_MONTH)
+                                + " expected:"
+                                + (hasLeapMonth ? "true" : "false")
+                                + " actual:"
+                                + (actualInLeap ? "true" : "false"));
             }
             assertEquals("inTemporalLeapYear", hasLeapMonth, actualInLeap);
         }
@@ -107,8 +117,8 @@ public class InTemporalLeapYearTest extends CoreTestFmwk {
         int yearForHasLeapMonth = -1;
         boolean hasLeapMonth = false;
         for (gc.set(startYear, Calendar.JANUARY, 1);
-             gc.get(Calendar.YEAR) <= stopYear;
-             gc.add(Calendar.DATE, incrementDays)) {
+                gc.get(Calendar.YEAR) <= stopYear;
+                gc.add(Calendar.DATE, incrementDays)) {
             cal.setTime(gc.getTime());
             int cal_year = cal.get(Calendar.EXTENDED_YEAR);
             if (yearForHasLeapMonth != cal_year) {
@@ -119,17 +129,26 @@ public class InTemporalLeapYearTest extends CoreTestFmwk {
                 hasLeapMonth = leapTest.get(Calendar.MONTH) == HebrewCalendar.TAMUZ;
                 yearForHasLeapMonth = cal_year;
             }
-            boolean actualInLeap =  cal.inTemporalLeapYear();
+            boolean actualInLeap = cal.inTemporalLeapYear();
             if (hasLeapMonth != actualInLeap) {
-                logln("Gregorian y=" + gc.get(Calendar.YEAR) +
-                    " m=" + gc.get(Calendar.MONTH) +
-                    " d=" + gc.get(Calendar.DATE) +
-                    " => cal y=" + cal.get(Calendar.EXTENDED_YEAR) +
-                    " m=" + (cal.get(Calendar.IS_LEAP_MONTH) == 1 ? "L" : "") +
-                    cal.get(Calendar.MONTH) +
-                    " d=" + cal.get(Calendar.DAY_OF_MONTH) +
-                    " expected:" + (hasLeapMonth ? "true" : "false") +
-                    " actual:" + (actualInLeap ? "true" : "false"));
+                logln(
+                        "Gregorian y="
+                                + gc.get(Calendar.YEAR)
+                                + " m="
+                                + gc.get(Calendar.MONTH)
+                                + " d="
+                                + gc.get(Calendar.DATE)
+                                + " => cal y="
+                                + cal.get(Calendar.EXTENDED_YEAR)
+                                + " m="
+                                + (cal.get(Calendar.IS_LEAP_MONTH) == 1 ? "L" : "")
+                                + cal.get(Calendar.MONTH)
+                                + " d="
+                                + cal.get(Calendar.DAY_OF_MONTH)
+                                + " expected:"
+                                + (hasLeapMonth ? "true" : "false")
+                                + " actual:"
+                                + (actualInLeap ? "true" : "false"));
             }
             assertEquals("inTemporalLeapYear", hasLeapMonth, actualInLeap);
         }
@@ -151,7 +170,8 @@ public class InTemporalLeapYearTest extends CoreTestFmwk {
 
     @Test
     public void TestIslamicUmalqura() {
-        RunIslamic(Calendar.getInstance(ULocale.ROOT.setKeywordValue("calendar", "islamic-umalqura")));
+        RunIslamic(
+                Calendar.getInstance(ULocale.ROOT.setKeywordValue("calendar", "islamic-umalqura")));
     }
 
     @Test
@@ -181,8 +201,8 @@ public class InTemporalLeapYearTest extends CoreTestFmwk {
         int yearForHasLeapMonth = -1;
         boolean hasLeapMonth = false;
         for (gc.set(startYear, Calendar.JANUARY, 1);
-             gc.get(Calendar.YEAR) <= stopYear;
-             gc.add(Calendar.DATE, incrementDays)) {
+                gc.get(Calendar.YEAR) <= stopYear;
+                gc.add(Calendar.DATE, incrementDays)) {
             cal.setTime(gc.getTime());
             int cal_year = cal.get(Calendar.EXTENDED_YEAR);
             if (yearForHasLeapMonth != cal_year) {
@@ -191,17 +211,26 @@ public class InTemporalLeapYearTest extends CoreTestFmwk {
                 yearForHasLeapMonth = cal_year;
             }
 
-            boolean actualInLeap =  cal.inTemporalLeapYear();
+            boolean actualInLeap = cal.inTemporalLeapYear();
             if (hasLeapMonth != actualInLeap) {
-                logln("Gregorian y=" + gc.get(Calendar.YEAR) +
-                    " m=" + gc.get(Calendar.MONTH) +
-                    " d=" + gc.get(Calendar.DATE) +
-                    " => cal y=" + cal.get(Calendar.EXTENDED_YEAR) +
-                    " m=" + (cal.get(Calendar.IS_LEAP_MONTH) == 1 ? "L" : "") +
-                    cal.get(Calendar.MONTH) +
-                    " d=" + cal.get(Calendar.DAY_OF_MONTH) +
-                    " expected:" + (hasLeapMonth ? "true" : "false") +
-                    " actual:" + (actualInLeap ? "true" : "false"));
+                logln(
+                        "Gregorian y="
+                                + gc.get(Calendar.YEAR)
+                                + " m="
+                                + gc.get(Calendar.MONTH)
+                                + " d="
+                                + gc.get(Calendar.DATE)
+                                + " => cal y="
+                                + cal.get(Calendar.EXTENDED_YEAR)
+                                + " m="
+                                + (cal.get(Calendar.IS_LEAP_MONTH) == 1 ? "L" : "")
+                                + cal.get(Calendar.MONTH)
+                                + " d="
+                                + cal.get(Calendar.DAY_OF_MONTH)
+                                + " expected:"
+                                + (hasLeapMonth ? "true" : "false")
+                                + " actual:"
+                                + (actualInLeap ? "true" : "false"));
             }
             assertEquals("inTemporalLeapYear", hasLeapMonth, actualInLeap);
         }
@@ -214,36 +243,45 @@ public class InTemporalLeapYearTest extends CoreTestFmwk {
 
     @Test
     public void TestJapanese() {
-        RunXDaysIsLeap(Calendar.getInstance(ULocale.ROOT.setKeywordValue("calendar", "japanese")), 366);
+        RunXDaysIsLeap(
+                Calendar.getInstance(ULocale.ROOT.setKeywordValue("calendar", "japanese")), 366);
     }
 
     @Test
     public void TestBuddhist() {
-        RunXDaysIsLeap(Calendar.getInstance(ULocale.ROOT.setKeywordValue("calendar", "buddhist")), 366);
+        RunXDaysIsLeap(
+                Calendar.getInstance(ULocale.ROOT.setKeywordValue("calendar", "buddhist")), 366);
     }
 
     @Test
     public void TestPersian() {
-        RunXDaysIsLeap(Calendar.getInstance(ULocale.ROOT.setKeywordValue("calendar", "persian")), 366);
+        RunXDaysIsLeap(
+                Calendar.getInstance(ULocale.ROOT.setKeywordValue("calendar", "persian")), 366);
     }
 
     @Test
     public void TestIndian() {
-        RunXDaysIsLeap(Calendar.getInstance(ULocale.ROOT.setKeywordValue("calendar", "indian")), 366);
+        RunXDaysIsLeap(
+                Calendar.getInstance(ULocale.ROOT.setKeywordValue("calendar", "indian")), 366);
     }
 
     @Test
     public void TestCoptic() {
-        RunXDaysIsLeap(Calendar.getInstance(ULocale.ROOT.setKeywordValue("calendar", "coptic")), 366);
+        RunXDaysIsLeap(
+                Calendar.getInstance(ULocale.ROOT.setKeywordValue("calendar", "coptic")), 366);
     }
 
     @Test
     public void TestEthiopic() {
-        RunXDaysIsLeap(Calendar.getInstance(ULocale.ROOT.setKeywordValue("calendar", "ethiopic")), 366);
+        RunXDaysIsLeap(
+                Calendar.getInstance(ULocale.ROOT.setKeywordValue("calendar", "ethiopic")), 366);
     }
 
     @Test
     public void TestEthiopicAmeteAlem() {
-        RunXDaysIsLeap(Calendar.getInstance(ULocale.ROOT.setKeywordValue("calendar", "ethiopic-amete-alem")), 366);
+        RunXDaysIsLeap(
+                Calendar.getInstance(
+                        ULocale.ROOT.setKeywordValue("calendar", "ethiopic-amete-alem")),
+                366);
     }
 }

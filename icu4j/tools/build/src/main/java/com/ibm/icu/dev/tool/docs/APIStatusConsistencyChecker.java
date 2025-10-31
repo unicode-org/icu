@@ -36,18 +36,22 @@ public class APIStatusConsistencyChecker {
 
         // Load the ICU4J API signature file
         Set<APIInfo> apiInfoSet = APIData.read(new File(args[0]), true).getAPIInfoSet();
-        APIStatusConsistencyChecker checker = new APIStatusConsistencyChecker(
-                apiInfoSet, skipClasses, new PrintWriter(System.err, true, StandardCharsets.UTF_8));
+        APIStatusConsistencyChecker checker =
+                new APIStatusConsistencyChecker(
+                        apiInfoSet,
+                        skipClasses,
+                        new PrintWriter(System.err, true, StandardCharsets.UTF_8));
         checker.checkConsistency();
         System.exit(checker.errCount);
-   }
+    }
 
     private int errCount = 0;
     private Set<APIInfo> apiInfoSet;
     private PrintWriter pw;
     private List<String> skipClasses;
 
-    public APIStatusConsistencyChecker(Set<APIInfo> apiInfoSet, List<String> skipClasses, PrintWriter pw) {
+    public APIStatusConsistencyChecker(
+            Set<APIInfo> apiInfoSet, List<String> skipClasses, PrintWriter pw) {
         this.apiInfoSet = apiInfoSet;
         this.skipClasses = skipClasses;
         this.pw = pw;
@@ -59,11 +63,11 @@ public class APIStatusConsistencyChecker {
 
     // Methods that should have same API status with a containing class
     static final String[][] METHODS = {
-          //{"<method name>",   "<method signature in APIInfo data>"},
-            {"equals",      "boolean(java.lang.Object)"},
-            {"hashCode",    "int()"},
-            {"toString",    "java.lang.String()"},
-            {"clone",       "java.lang.Object()"},
+        // {"<method name>",   "<method signature in APIInfo data>"},
+        {"equals", "boolean(java.lang.Object)"},
+        {"hashCode", "int()"},
+        {"toString", "java.lang.String()"},
+        {"clone", "java.lang.Object()"},
     };
 
     // Exceptions - API status of these methods are different from the parent
@@ -72,10 +76,10 @@ public class APIStatusConsistencyChecker {
     // TODO: We should revisit this and see if we want to continue
     // to handle these as exceptions, or update our policy.
     static final String[][] CONSISTENCY_EXCEPTIONS = {
-          //{"<class>", "<method>"},
-            {"com.ibm.icu.text.Normalizer", "clone"},
-            {"com.ibm.icu.text.PersonNameFormatter", "toString"},
-            {"com.ibm.icu.text.SimplePersonName", "toString"},
+        // {"<class>", "<method>"},
+        {"com.ibm.icu.text.Normalizer", "clone"},
+        {"com.ibm.icu.text.PersonNameFormatter", "toString"},
+        {"com.ibm.icu.text.SimplePersonName", "toString"},
     };
 
     public void checkConsistency() {
@@ -132,13 +136,19 @@ public class APIStatusConsistencyChecker {
             if (methodStatus != classStatus || !Objects.equals(methodVer, classVer)) {
                 boolean isExcepted = false;
                 for (String[] exceptMethod : CONSISTENCY_EXCEPTIONS) {
-                    if (exceptMethod[0].equals(fullClassName) && exceptMethod[1].equals(methodName)) {
+                    if (exceptMethod[0].equals(fullClassName)
+                            && exceptMethod[1].equals(methodName)) {
                         isExcepted = true;
                         break;
                     }
                 }
                 if (isExcepted) {
-                    pw.println("## Info ## " + methodName + " in " + fullClassName + " (included in the exception list)");
+                    pw.println(
+                            "## Info ## "
+                                    + methodName
+                                    + " in "
+                                    + fullClassName
+                                    + " (included in the exception list)");
                 } else {
                     pw.println("## Error ## " + methodName + " in " + fullClassName);
                     errCount++;

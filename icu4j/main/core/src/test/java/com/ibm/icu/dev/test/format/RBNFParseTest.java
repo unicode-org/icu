@@ -8,17 +8,15 @@
  */
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
+import com.ibm.icu.text.RuleBasedNumberFormat;
+import com.ibm.icu.util.ULocale;
 import java.text.ParseException;
 import java.util.Locale;
-
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
-import com.ibm.icu.dev.test.CoreTestFmwk;
-import com.ibm.icu.text.RuleBasedNumberFormat;
-import com.ibm.icu.util.ULocale;
 
 @RunWith(JUnit4.class)
 public class RBNFParseTest extends CoreTestFmwk {
@@ -74,8 +72,7 @@ public class RBNFParseTest extends CoreTestFmwk {
         };
 
         String[][] allrules = {
-            okrules,
-            exceptrules,
+            okrules, exceptrules,
         };
 
         for (int j = 0; j < allrules.length; ++j) {
@@ -91,8 +88,7 @@ public class RBNFParseTest extends CoreTestFmwk {
                     logln("-123: " + fmt.format(-123));
                     logln(".123: " + fmt.format(.123));
                     logln(" 123: " + fmt.format(123));
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     if (!except) {
                         errln("Unexpected exception: " + e.getMessage());
                     } else {
@@ -111,12 +107,13 @@ public class RBNFParseTest extends CoreTestFmwk {
             Number n = rbnf.parse(s);
             String t = rbnf.format(n);
             assertEquals(rbnf.getLocale(ULocale.ACTUAL_LOCALE) + ": " + s + " : " + n, target, t);
-        } catch (java.text.ParseException e){
+        } catch (java.text.ParseException e) {
             fail("exception:" + e);
         }
     }
 
-    private void parseList(RuleBasedNumberFormat rbnf_en, RuleBasedNumberFormat rbnf_fr, String[][] lists) {
+    private void parseList(
+            RuleBasedNumberFormat rbnf_en, RuleBasedNumberFormat rbnf_fr, String[][] lists) {
         for (int i = 0; i < lists.length; ++i) {
             String[] list = lists[i];
             String s = list[0];
@@ -144,12 +141,12 @@ public class RBNFParseTest extends CoreTestFmwk {
         logln(n.toString());
 
         String[][] lists = {
-            { "1,2", "one", "un virgule deux" },
-            { "1,2 million", "one", "un virgule deux" },
-            { "1,2 millions", "one", "un million deux cent mille" },
-            { "1.2", "one point two", "un" },
-            { "1.2 million", "one million two hundred thousand", "un" },
-            { "1.2 millions", "one million two hundred thousand", "un" },
+            {"1,2", "one", "un virgule deux"},
+            {"1,2 million", "one", "un virgule deux"},
+            {"1,2 millions", "one", "un million deux cent mille"},
+            {"1.2", "one point two", "un"},
+            {"1.2 million", "one million two hundred thousand", "un"},
+            {"1.2 millions", "one million two hundred thousand", "un"},
         };
 
         Locale.setDefault(Locale.FRANCE);
@@ -169,31 +166,32 @@ public class RBNFParseTest extends CoreTestFmwk {
     public void TestParseRuleDescriptorOverflow23002() {
         try {
             RuleBasedNumberFormat rbnf =
-                new RuleBasedNumberFormat(
-                    "0110110/300113001103000113001103000110i/3013033:",
-                    new Locale("as"));
+                    new RuleBasedNumberFormat(
+                            "0110110/300113001103000113001103000110i/3013033:", new Locale("as"));
         } catch (IllegalArgumentException e) {
             return;
         }
         errln("expected exception but didn't get one!");
     }
+
     @Test
     public void TestBadParse() {
-        RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat(Locale.JAPAN, RuleBasedNumberFormat.SPELLOUT);
+        RuleBasedNumberFormat rbnf =
+                new RuleBasedNumberFormat(Locale.JAPAN, RuleBasedNumberFormat.SPELLOUT);
         String[] testData = {
-                "・・・・・・・・・・・・・・・・・・・・・・・・",
+            "・・・・・・・・・・・・・・・・・・・・・・・・",
         };
 
         for (String testString : testData) {
             try {
                 rbnf.parse(testString);
                 errln("Unexpected success: " + testString);
-            }
-            catch (ParseException e) {
+            } catch (ParseException e) {
                 // success!
             }
         }
     }
+
     @Test
     public void Test23184EmptyRuleSet() {
         try {
@@ -209,6 +207,7 @@ public class RBNFParseTest extends CoreTestFmwk {
             // success!
         }
     }
+
     @Test
     public void TestNullRuleSet() {
         try {

@@ -8,12 +8,11 @@
  */
 package com.ibm.icu.text;
 
+import com.ibm.icu.util.ICUException;
+import com.ibm.icu.util.ULocale;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import java.util.Locale;
-
-import com.ibm.icu.util.ICUException;
-import com.ibm.icu.util.ULocale;
 
 // Java porting note:
 //
@@ -33,22 +32,17 @@ import com.ibm.icu.util.ULocale;
 //      preserves the code, but we should clean this up later.
 
 /**
- *
- * {@code StringSearch} is a {@link SearchIterator} that provides
- * language-sensitive text searching based on the comparison rules defined
- * in a {@link RuleBasedCollator} object.
- * StringSearch ensures that language eccentricity can be
- * handled, e.g. for the German collator, characters &szlig; and SS will be matched
- * if case is chosen to be ignored.
- * See the <a href="https://htmlpreview.github.io/?https://github.com/unicode-org/icu-docs/blob/main/design/collation/ICU_collation_design.htm">
+ * {@code StringSearch} is a {@link SearchIterator} that provides language-sensitive text searching
+ * based on the comparison rules defined in a {@link RuleBasedCollator} object. StringSearch ensures
+ * that language eccentricity can be handled, e.g. for the German collator, characters &szlig; and
+ * SS will be matched if case is chosen to be ignored. See the <a
+ * href="https://htmlpreview.github.io/?https://github.com/unicode-org/icu-docs/blob/main/design/collation/ICU_collation_design.htm">
  * "ICU Collation Design Document"</a> for more information.
- * <p>
- * There are 2 match options for selection:<br>
- * Let S' be the sub-string of a text string S between the offsets start and
- * end [start, end].
- * <br>
- * A pattern string P matches a text string S at the offsets [start, end]
- * if
+ *
+ * <p>There are 2 match options for selection:<br>
+ * Let S' be the sub-string of a text string S between the offsets start and end [start, end]. <br>
+ * A pattern string P matches a text string S at the offsets [start, end] if
+ *
  * <pre>
  * option 1. Some canonical equivalent of P matches some canonical equivalent
  *           of S'
@@ -56,72 +50,63 @@ import com.ibm.icu.util.ULocale;
  *           there exists no non-ignorable combining mark before or after S?
  *           in S respectively.
  * </pre>
+ *
  * Option 2. is the default.
- * <p>
- * This search has APIs similar to that of other text iteration mechanisms
- * such as the break iterators in {@link BreakIterator}. Using these
- * APIs, it is easy to scan through text looking for all occurrences of
- * a given pattern. This search iterator allows changing of direction by
- * calling a {@link #reset} followed by a {@link #next} or {@link #previous}.
- * Though a direction change can occur without calling {@link #reset} first,
- * this operation comes with some speed penalty.
- * Match results in the forward direction will match the result matches in
- * the backwards direction in the reverse order
- * <p>
- * {@link SearchIterator} provides APIs to specify the starting position
- * within the text string to be searched, e.g. {@link SearchIterator#setIndex setIndex},
- * {@link SearchIterator#preceding preceding} and {@link SearchIterator#following following}.
- * Since the starting position will be set as it is specified, please take note that
- * there are some danger points at which the search may render incorrect
- * results:
+ *
+ * <p>This search has APIs similar to that of other text iteration mechanisms such as the break
+ * iterators in {@link BreakIterator}. Using these APIs, it is easy to scan through text looking for
+ * all occurrences of a given pattern. This search iterator allows changing of direction by calling
+ * a {@link #reset} followed by a {@link #next} or {@link #previous}. Though a direction change can
+ * occur without calling {@link #reset} first, this operation comes with some speed penalty. Match
+ * results in the forward direction will match the result matches in the backwards direction in the
+ * reverse order
+ *
+ * <p>{@link SearchIterator} provides APIs to specify the starting position within the text string
+ * to be searched, e.g. {@link SearchIterator#setIndex setIndex}, {@link SearchIterator#preceding
+ * preceding} and {@link SearchIterator#following following}. Since the starting position will be
+ * set as it is specified, please take note that there are some danger points at which the search
+ * may render incorrect results:
+ *
  * <ul>
- * <li> In the midst of a substring that requires normalization.
- * <li> If the following match is to be found, the position should not be the
- *      second character which requires swapping with the preceding
- *      character. Vice versa, if the preceding match is to be found, the
- *      position to search from should not be the first character which
- *      requires swapping with the next character. E.g certain Thai and
- *      Lao characters require swapping.
- * <li> If a following pattern match is to be found, any position within a
- *      contracting sequence except the first will fail. Vice versa if a
- *      preceding pattern match is to be found, an invalid starting point
- *      would be any character within a contracting sequence except the last.
+ *   <li>In the midst of a substring that requires normalization.
+ *   <li>If the following match is to be found, the position should not be the second character
+ *       which requires swapping with the preceding character. Vice versa, if the preceding match is
+ *       to be found, the position to search from should not be the first character which requires
+ *       swapping with the next character. E.g certain Thai and Lao characters require swapping.
+ *   <li>If a following pattern match is to be found, any position within a contracting sequence
+ *       except the first will fail. Vice versa if a preceding pattern match is to be found, an
+ *       invalid starting point would be any character within a contracting sequence except the
+ *       last.
  * </ul>
- * <p>
- * A {@link BreakIterator} can be used if only matches at logical breaks are desired.
- * Using a {@link BreakIterator} will only give you results that exactly matches the
- * boundaries given by the {@link BreakIterator}. For instance the pattern "e" will
- * not be found in the string "\u00e9" if a character break iterator is used.
- * <p>
- * Options are provided to handle overlapping matches.
- * E.g. In English, overlapping matches produces the result 0 and 2
- * for the pattern "abab" in the text "ababab", where mutually
- * exclusive matches only produces the result of 0.
- * <p>
- * Options are also provided to implement "asymmetric search" as described in
- * <a href="http://www.unicode.org/reports/tr10/#Asymmetric_Search">
- * UTS #10 Unicode Collation Algorithm</a>, specifically the ElementComparisonType
- * values.
- * <p>
- * Though collator attributes will be taken into consideration while
- * performing matches, there are no APIs here for setting and getting the
- * attributes. These attributes can be set by getting the collator
- * from {@link #getCollator} and using the APIs in {@link RuleBasedCollator}.
- * Lastly to update {@code StringSearch} to the new collator attributes,
- * {@link #reset} has to be called.
- * <p>
- * Restriction: <br>
- * Currently there are no composite characters that consists of a
- * character with combining class &gt; 0 before a character with combining
- * class == 0. However, if such a character exists in the future,
- * {@code StringSearch} does not guarantee the results for option 1.
- * <p>
- * Consult the {@link SearchIterator} documentation for information on
- * and examples of how to use instances of this class to implement text
- * searching.
- * <p>
- * Note, {@code StringSearch} is not to be subclassed.
- * </p>
+ *
+ * <p>A {@link BreakIterator} can be used if only matches at logical breaks are desired. Using a
+ * {@link BreakIterator} will only give you results that exactly matches the boundaries given by the
+ * {@link BreakIterator}. For instance the pattern "e" will not be found in the string "\u00e9" if a
+ * character break iterator is used.
+ *
+ * <p>Options are provided to handle overlapping matches. E.g. In English, overlapping matches
+ * produces the result 0 and 2 for the pattern "abab" in the text "ababab", where mutually exclusive
+ * matches only produces the result of 0.
+ *
+ * <p>Options are also provided to implement "asymmetric search" as described in <a
+ * href="http://www.unicode.org/reports/tr10/#Asymmetric_Search">UTS #10 Unicode Collation
+ * Algorithm</a>, specifically the ElementComparisonType values.
+ *
+ * <p>Though collator attributes will be taken into consideration while performing matches, there
+ * are no APIs here for setting and getting the attributes. These attributes can be set by getting
+ * the collator from {@link #getCollator} and using the APIs in {@link RuleBasedCollator}. Lastly to
+ * update {@code StringSearch} to the new collator attributes, {@link #reset} has to be called.
+ *
+ * <p>Restriction: <br>
+ * Currently there are no composite characters that consists of a character with combining class
+ * &gt; 0 before a character with combining class == 0. However, if such a character exists in the
+ * future, {@code StringSearch} does not guarantee the results for option 1.
+ *
+ * <p>Consult the {@link SearchIterator} documentation for information on and examples of how to use
+ * instances of this class to implement text searching.
+ *
+ * <p>Note, {@code StringSearch} is not to be subclassed.
+ *
  * @see SearchIterator
  * @see RuleBasedCollator
  * @author Laura Werner, synwee
@@ -157,23 +142,25 @@ public final class StringSearch extends SearchIterator {
     // private char[] canonicalSuffixAccents_;
 
     /**
-     * Initializes the iterator to use the language-specific rules defined in
-     * the argument collator to search for argument pattern in the argument
-     * target text. The argument <code>breakiter</code> is used to define logical matches.
-     * See super class documentation for more details on the use of the target
-     * text and {@link BreakIterator}.
+     * Initializes the iterator to use the language-specific rules defined in the argument collator
+     * to search for argument pattern in the argument target text. The argument <code>breakiter
+     * </code> is used to define logical matches. See super class documentation for more details on
+     * the use of the target text and {@link BreakIterator}.
+     *
      * @param pattern text to look for.
      * @param target target text to search for pattern.
      * @param collator {@link RuleBasedCollator} that defines the language rules
-     * @param breakiter A {@link BreakIterator} that is used to determine the
-     *                boundaries of a logical match. This argument can be null.
-     * @throws IllegalArgumentException thrown when argument target is null,
-     *            or of length 0
+     * @param breakiter A {@link BreakIterator} that is used to determine the boundaries of a
+     *     logical match. This argument can be null.
+     * @throws IllegalArgumentException thrown when argument target is null, or of length 0
      * @see BreakIterator
      * @see RuleBasedCollator
      * @stable ICU 2.0
      */
-    public StringSearch(String pattern, CharacterIterator target, RuleBasedCollator collator,
+    public StringSearch(
+            String pattern,
+            CharacterIterator target,
+            RuleBasedCollator collator,
             BreakIterator breakiter) {
 
         // This implementation is ported from ICU4C usearch_open()
@@ -182,7 +169,8 @@ public final class StringSearch extends SearchIterator {
 
         // string search does not really work when numeric collation is turned on
         if (collator.getNumericCollation()) {
-            throw new UnsupportedOperationException("Numeric collation is not supported by StringSearch");
+            throw new UnsupportedOperationException(
+                    "Numeric collation is not supported by StringSearch");
         }
 
         collator_ = collator;
@@ -212,21 +200,23 @@ public final class StringSearch extends SearchIterator {
         search_.reset_ = true;
          */
         ULocale collLocale = collator.getLocale(ULocale.VALID_LOCALE);
-        search_.internalBreakIter_ = BreakIterator.getCharacterInstance(collLocale == null ? ULocale.ROOT : collLocale);
-        search_.internalBreakIter_.setText((CharacterIterator)target.clone());  // We need to create a clone
+        search_.internalBreakIter_ =
+                BreakIterator.getCharacterInstance(collLocale == null ? ULocale.ROOT : collLocale);
+        search_.internalBreakIter_.setText(
+                (CharacterIterator) target.clone()); // We need to create a clone
 
         initialize();
     }
 
     /**
-     * Initializes the iterator to use the language-specific rules defined in
-     * the argument collator to search for argument pattern in the argument
-     * target text. No {@link BreakIterator}s are set to test for logical matches.
+     * Initializes the iterator to use the language-specific rules defined in the argument collator
+     * to search for argument pattern in the argument target text. No {@link BreakIterator}s are set
+     * to test for logical matches.
+     *
      * @param pattern text to look for.
      * @param target target text to search for pattern.
      * @param collator {@link RuleBasedCollator} that defines the language rules
-     * @throws IllegalArgumentException thrown when argument target is null,
-     *            or of length 0
+     * @throws IllegalArgumentException thrown when argument target is null, or of length 0
      * @see RuleBasedCollator
      * @stable ICU 2.0
      */
@@ -235,15 +225,15 @@ public final class StringSearch extends SearchIterator {
     }
 
     /**
-     * Initializes the iterator to use the language-specific rules and
-     * break iterator rules defined in the argument locale to search for
-     * argument pattern in the argument target text.
+     * Initializes the iterator to use the language-specific rules and break iterator rules defined
+     * in the argument locale to search for argument pattern in the argument target text.
+     *
      * @param pattern text to look for.
      * @param target target text to search for pattern.
      * @param locale locale to use for language and break iterator rules
-     * @throws IllegalArgumentException thrown when argument target is null,
-     *            or of length 0. ClassCastException thrown if the collator for
-     *            the specified locale is not a RuleBasedCollator.
+     * @throws IllegalArgumentException thrown when argument target is null, or of length 0.
+     *     ClassCastException thrown if the collator for the specified locale is not a
+     *     RuleBasedCollator.
      * @stable ICU 2.0
      */
     public StringSearch(String pattern, CharacterIterator target, Locale locale) {
@@ -251,17 +241,16 @@ public final class StringSearch extends SearchIterator {
     }
 
     /**
-     * Initializes the iterator to use the language-specific rules and
-     * break iterator rules defined in the argument locale to search for
-     * argument pattern in the argument target text.
-     * See super class documentation for more details on the use of the target
-     * text and {@link BreakIterator}.
+     * Initializes the iterator to use the language-specific rules and break iterator rules defined
+     * in the argument locale to search for argument pattern in the argument target text. See super
+     * class documentation for more details on the use of the target text and {@link BreakIterator}.
+     *
      * @param pattern text to look for.
      * @param target target text to search for pattern.
      * @param locale locale to use for language and break iterator rules
-     * @throws IllegalArgumentException thrown when argument target is null,
-     *            or of length 0. ClassCastException thrown if the collator for
-     *            the specified locale is not a RuleBasedCollator.
+     * @throws IllegalArgumentException thrown when argument target is null, or of length 0.
+     *     ClassCastException thrown if the collator for the specified locale is not a
+     *     RuleBasedCollator.
      * @see BreakIterator
      * @see RuleBasedCollator
      * @see SearchIterator
@@ -272,29 +261,31 @@ public final class StringSearch extends SearchIterator {
     }
 
     /**
-     * Initializes the iterator to use the language-specific rules and
-     * break iterator rules defined in the default locale to search for
-     * argument pattern in the argument target text.
+     * Initializes the iterator to use the language-specific rules and break iterator rules defined
+     * in the default locale to search for argument pattern in the argument target text.
+     *
      * @param pattern text to look for.
      * @param target target text to search for pattern.
-     * @throws IllegalArgumentException thrown when argument target is null,
-     *            or of length 0. ClassCastException thrown if the collator for
-     *            the default locale is not a RuleBasedCollator.
+     * @throws IllegalArgumentException thrown when argument target is null, or of length 0.
+     *     ClassCastException thrown if the collator for the default locale is not a
+     *     RuleBasedCollator.
      * @stable ICU 2.0
      */
     public StringSearch(String pattern, String target) {
-        this(pattern, new StringCharacterIterator(target),
-                (RuleBasedCollator) Collator.getInstance(), null);
+        this(
+                pattern,
+                new StringCharacterIterator(target),
+                (RuleBasedCollator) Collator.getInstance(),
+                null);
     }
 
     /**
      * Gets the {@link RuleBasedCollator} used for the language rules.
-     * <p>
-     * Since {@code StringSearch} depends on the returned {@link RuleBasedCollator}, any
-     * changes to the {@link RuleBasedCollator} result should follow with a call to
-     * either {@link #reset()} or {@link #setCollator(RuleBasedCollator)} to ensure the correct
-     * search behavior.
-     * </p>
+     *
+     * <p>Since {@code StringSearch} depends on the returned {@link RuleBasedCollator}, any changes
+     * to the {@link RuleBasedCollator} result should follow with a call to either {@link #reset()}
+     * or {@link #setCollator(RuleBasedCollator)} to ensure the correct search behavior.
+     *
      * @return {@link RuleBasedCollator} used by this {@code StringSearch}
      * @see RuleBasedCollator
      * @see #setCollator
@@ -306,8 +297,9 @@ public final class StringSearch extends SearchIterator {
 
     /**
      * Sets the {@link RuleBasedCollator} to be used for language-specific searching.
-     * <p>
-     * The iterator's position will not be changed by this method.
+     *
+     * <p>The iterator's position will not be changed by this method.
+     *
      * @param collator to use for this {@code StringSearch}
      * @throws IllegalArgumentException thrown when collator is null
      * @see #getCollator
@@ -321,8 +313,10 @@ public final class StringSearch extends SearchIterator {
         ceMask_ = getMask(collator_.getStrength());
 
         ULocale collLocale = collator.getLocale(ULocale.VALID_LOCALE);
-        search_.internalBreakIter_ = BreakIterator.getCharacterInstance(collLocale == null ? ULocale.ROOT : collLocale);
-        search_.internalBreakIter_.setText((CharacterIterator)search_.text().clone());  // We need to create a clone
+        search_.internalBreakIter_ =
+                BreakIterator.getCharacterInstance(collLocale == null ? ULocale.ROOT : collLocale);
+        search_.internalBreakIter_.setText(
+                (CharacterIterator) search_.text().clone()); // We need to create a clone
 
         toShift_ = collator.isAlternateHandlingShifted();
         variableTop_ = collator.getVariableTop();
@@ -335,6 +329,7 @@ public final class StringSearch extends SearchIterator {
 
     /**
      * Returns the pattern for which {@code StringSearch} is searching for.
+     *
      * @return the pattern searched for
      * @stable ICU 2.0
      */
@@ -343,12 +338,11 @@ public final class StringSearch extends SearchIterator {
     }
 
     /**
-     * Set the pattern to search for.
-     * The iterator's position will not be changed by this method.
+     * Set the pattern to search for. The iterator's position will not be changed by this method.
+     *
      * @param pattern for searching
      * @see #getPattern
-     * @exception IllegalArgumentException thrown if pattern is null or of
-     *               length 0
+     * @exception IllegalArgumentException thrown if pattern is null or of length 0
      * @stable ICU 2.0
      */
     public void setPattern(String pattern) {
@@ -361,32 +355,34 @@ public final class StringSearch extends SearchIterator {
     }
 
     /**
-     * Determines whether canonical matches (option 1, as described in the
-     * class documentation) is set.
-     * See setCanonical(boolean) for more information.
+     * Determines whether canonical matches (option 1, as described in the class documentation) is
+     * set. See setCanonical(boolean) for more information.
+     *
      * @see #setCanonical
      * @return true if canonical matches is set, false otherwise
      * @stable ICU 2.8
      */
-    //TODO: hoist this to SearchIterator
+    // TODO: hoist this to SearchIterator
     public boolean isCanonical() {
         return search_.isCanonicalMatch_;
     }
 
     /**
-     * Set the canonical match mode. See class documentation for details.
-     * The default setting for this property is false.
+     * Set the canonical match mode. See class documentation for details. The default setting for
+     * this property is false.
+     *
      * @param allowCanonical flag indicator if canonical matches are allowed
      * @see #isCanonical
      * @stable ICU 2.8
      */
-    //TODO: hoist this to SearchIterator
+    // TODO: hoist this to SearchIterator
     public void setCanonical(boolean allowCanonical) {
         search_.isCanonicalMatch_ = allowCanonical;
     }
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 2.8
      */
     @Override
@@ -397,6 +393,7 @@ public final class StringSearch extends SearchIterator {
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 2.8
      */
     @Override
@@ -410,6 +407,7 @@ public final class StringSearch extends SearchIterator {
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 2.8
      */
     @Override
@@ -424,6 +422,7 @@ public final class StringSearch extends SearchIterator {
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 2.8
      */
     @Override
@@ -480,13 +479,14 @@ public final class StringSearch extends SearchIterator {
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 2.8
      */
     @Override
     protected int handleNext(int position) {
         if (pattern_.CELength_ == 0) {
-            search_.matchedIndex_ = search_.matchedIndex_ == DONE ?
-                                    getIndex() : search_.matchedIndex_ + 1;
+            search_.matchedIndex_ =
+                    search_.matchedIndex_ == DONE ? getIndex() : search_.matchedIndex_ + 1;
             search_.setMatchedLength(0);
             textIter_.setOffset(search_.matchedIndex_);
             if (search_.matchedIndex_ == search_.endIndex()) {
@@ -530,6 +530,7 @@ public final class StringSearch extends SearchIterator {
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 2.8
      */
     @Override
@@ -573,20 +574,20 @@ public final class StringSearch extends SearchIterator {
 
     /**
      * Getting the mask for collation strength
+     *
      * @param strength collation strength
      * @return collation element mask
      */
     private static int getMask(int strength) {
         switch (strength) {
-        case Collator.PRIMARY:
-            return PRIMARYORDERMASK;
-        case Collator.SECONDARY:
-            return SECONDARYORDERMASK | PRIMARYORDERMASK;
-        default:
-            return TERTIARYORDERMASK | SECONDARYORDERMASK | PRIMARYORDERMASK;
+            case Collator.PRIMARY:
+                return PRIMARYORDERMASK;
+            case Collator.SECONDARY:
+                return SECONDARYORDERMASK | PRIMARYORDERMASK;
+            default:
+                return TERTIARYORDERMASK | SECONDARYORDERMASK | PRIMARYORDERMASK;
         }
     }
-
 
     // *** Boyer-Moore ***
     /*
@@ -613,8 +614,7 @@ public final class StringSearch extends SearchIterator {
     */
 
     /**
-     * Getting the modified collation elements taking into account the collation
-     * attributes.
+     * Getting the modified collation elements taking into account the collation attributes.
      *
      * @param sourcece
      * @return the modified collation element
@@ -638,7 +638,8 @@ public final class StringSearch extends SearchIterator {
                     sourcece = CollationElementIterator.IGNORABLE;
                 }
             }
-        } else if (strength_ >= Collator.QUATERNARY && sourcece == CollationElementIterator.IGNORABLE) {
+        } else if (strength_ >= Collator.QUATERNARY
+                && sourcece == CollationElementIterator.IGNORABLE) {
             sourcece = 0xFFFF;
         }
 
@@ -646,10 +647,9 @@ public final class StringSearch extends SearchIterator {
     }
 
     /**
-     * Direct port of ICU4C static int32_t * addTouint32_tArray(...) in usearch.cpp
-     * (except not taking destination buffer size and status param).
-     * This is used for appending a PCE to Pattern.PCE_ buffer. We probably should
-     * implement this in Pattern class.
+     * Direct port of ICU4C static int32_t * addTouint32_tArray(...) in usearch.cpp (except not
+     * taking destination buffer size and status param). This is used for appending a PCE to
+     * Pattern.PCE_ buffer. We probably should implement this in Pattern class.
      *
      * @param destination target array
      * @param offset destination offset to add value
@@ -669,9 +669,9 @@ public final class StringSearch extends SearchIterator {
     }
 
     /**
-     * Direct port of ICU4C static int64_t * addTouint64_tArray(...) in usearch.cpp.
-     * This is used for appending a PCE to Pattern.PCE_ buffer. We probably should
-     * implement this in Pattern class.
+     * Direct port of ICU4C static int64_t * addTouint64_tArray(...) in usearch.cpp. This is used
+     * for appending a PCE to Pattern.PCE_ buffer. We probably should implement this in Pattern
+     * class.
      *
      * @param destination target array
      * @param offset destination offset to add value
@@ -693,11 +693,10 @@ public final class StringSearch extends SearchIterator {
     }
 
     /**
-     * Initializing the ce table for a pattern.
-     * Stores non-ignorable collation keys.
-     * Table size will be estimated by the size of the pattern text. Table
-     * expansion will be perform as we go along. Adding 1 to ensure that the table
-     * size definitely increases.
+     * Initializing the ce table for a pattern. Stores non-ignorable collation keys. Table size will
+     * be estimated by the size of the pattern text. Table expansion will be perform as we go along.
+     * Adding 1 to ensure that the table size definitely increases.
+     *
      * @return total number of expansions
      */
     // TODO: We probably do not need Pattern CE table.
@@ -720,8 +719,9 @@ public final class StringSearch extends SearchIterator {
         while ((ce = coleiter.next()) != CollationElementIterator.NULLORDER) {
             int newce = getCE(ce);
             if (newce != CollationElementIterator.IGNORABLE /* 0 */) {
-                cetable = addToIntArray(cetable, offset, newce,
-                        patternlength - coleiter.getOffset() + 1);
+                cetable =
+                        addToIntArray(
+                                cetable, offset, newce, patternlength - coleiter.getOffset() + 1);
                 offset++;
             }
             result += (coleiter.getMaxExpansion(ce) - 1);
@@ -735,11 +735,10 @@ public final class StringSearch extends SearchIterator {
     }
 
     /**
-     * Initializing the pce table for a pattern.
-     * Stores non-ignorable collation keys.
-     * Table size will be estimated by the size of the pattern text. Table
-     * expansion will be perform as we go along. Adding 1 to ensure that the table
-     * size definitely increases.
+     * Initializing the pce table for a pattern. Stores non-ignorable collation keys. Table size
+     * will be estimated by the size of the pattern text. Table expansion will be perform as we go
+     * along. Adding 1 to ensure that the table size definitely increases.
+     *
      * @return total number of expansions
      */
     private int initializePatternPCETable() {
@@ -764,7 +763,8 @@ public final class StringSearch extends SearchIterator {
         // ** (the rest of the code in this file seems to play fast-and-loose with
         // ** whether a CE is signed or unsigned. For example, look at routine above this one.)
         while ((pce = iter.nextProcessed(null)) != CollationPCE.PROCESSED_NULLORDER) {
-            pcetable = addToLongArray(pcetable, offset, pce, patternlength - coleiter.getOffset() + 1);
+            pcetable =
+                    addToLongArray(pcetable, offset, pce, patternlength - coleiter.getOffset() + 1);
             offset++;
         }
 
@@ -799,15 +799,15 @@ public final class StringSearch extends SearchIterator {
 
     // *** Boyer-Moore ***
     /*
-     private final void setShiftTable(char shift[],
-                                         char backshift[],
-                                         int cetable[], int cesize,
-                                         int expansionsize,
-                                         int defaultforward,
-                                         int defaultbackward) {
-         // No implementation
-     }
-     */
+    private final void setShiftTable(char shift[],
+                                        char backshift[],
+                                        int cetable[], int cesize,
+                                        int expansionsize,
+                                        int defaultforward,
+                                        int defaultbackward) {
+        // No implementation
+    }
+    */
 
     // TODO: This method only triggers initializePattern(), which is probably no
     //      longer needed.
@@ -848,6 +848,7 @@ public final class StringSearch extends SearchIterator {
 
     /**
      * Checks if the offset runs out of the text string range
+     *
      * @param textstart offset of the first character in the range
      * @param textlimit limit offset of the text string range
      * @param offset to test
@@ -859,6 +860,7 @@ public final class StringSearch extends SearchIterator {
 
     /**
      * Checks for identical match
+     *
      * @param start offset of possible match
      * @param end offset of possible match
      * @return true if identical match is found
@@ -923,7 +925,6 @@ public final class StringSearch extends SearchIterator {
         return (breakiterator != null && breakiterator.isBoundary(index));
     }
 
-
     // Java porting note: Followings are corresponding to UCompareCEsResult enum
     private static final int CE_MATCH = -1;
     private static final int CE_NO_MATCH = 0;
@@ -946,51 +947,50 @@ public final class StringSearch extends SearchIterator {
         long mask;
 
         mask = 0xFFFF0000L;
-        int targLev1 = (int)(targCEshifted & mask);
-        int patLev1 = (int)(patCEshifted & mask);
+        int targLev1 = (int) (targCEshifted & mask);
+        int patLev1 = (int) (patCEshifted & mask);
         if (targLev1 != patLev1) {
             if (targLev1 == 0) {
                 return CE_SKIP_TARG;
             }
-            if (patLev1 == 0
-                    && compareType == ElementComparisonType.ANY_BASE_WEIGHT_IS_WILDCARD) {
+            if (patLev1 == 0 && compareType == ElementComparisonType.ANY_BASE_WEIGHT_IS_WILDCARD) {
                 return CE_SKIP_PATN;
             }
             return CE_NO_MATCH;
         }
 
         mask = 0x0000FFFFL;
-        int targLev2 = (int)(targCEshifted & mask);
-        int patLev2 = (int)(patCEshifted & mask);
+        int targLev2 = (int) (targCEshifted & mask);
+        int patLev2 = (int) (patCEshifted & mask);
         if (targLev2 != patLev2) {
             if (targLev2 == 0) {
                 return CE_SKIP_TARG;
             }
-            if (patLev2 == 0
-                    && compareType == ElementComparisonType.ANY_BASE_WEIGHT_IS_WILDCARD) {
+            if (patLev2 == 0 && compareType == ElementComparisonType.ANY_BASE_WEIGHT_IS_WILDCARD) {
                 return CE_SKIP_PATN;
             }
-            return (patLev2 == CE_LEVEL2_BASE ||
-                    (compareType == ElementComparisonType.ANY_BASE_WEIGHT_IS_WILDCARD &&
-                        targLev2 == CE_LEVEL2_BASE)) ? CE_MATCH : CE_NO_MATCH;
+            return (patLev2 == CE_LEVEL2_BASE
+                            || (compareType == ElementComparisonType.ANY_BASE_WEIGHT_IS_WILDCARD
+                                    && targLev2 == CE_LEVEL2_BASE))
+                    ? CE_MATCH
+                    : CE_NO_MATCH;
         }
 
         mask = 0xFFFF0000L;
-        int targLev3 = (int)(targCE & mask);
-        int patLev3 = (int)(patCE & mask);
+        int targLev3 = (int) (targCE & mask);
+        int patLev3 = (int) (patCE & mask);
         if (targLev3 != patLev3) {
-            return (patLev3 == CE_LEVEL3_BASE ||
-                    (compareType == ElementComparisonType.ANY_BASE_WEIGHT_IS_WILDCARD &&
-                        targLev3 == CE_LEVEL3_BASE) )? CE_MATCH: CE_NO_MATCH;
+            return (patLev3 == CE_LEVEL3_BASE
+                            || (compareType == ElementComparisonType.ANY_BASE_WEIGHT_IS_WILDCARD
+                                    && targLev3 == CE_LEVEL3_BASE))
+                    ? CE_MATCH
+                    : CE_NO_MATCH;
         }
 
         return CE_MATCH;
     }
 
-    /**
-     * An object used for receiving matched index in search() and
-     * searchBackwards().
-     */
+    /** An object used for receiving matched index in search() and searchBackwards(). */
     private static class Match {
         int start_ = -1;
         int limit_ = -1;
@@ -1001,8 +1001,13 @@ public final class StringSearch extends SearchIterator {
         if (pattern_.CELength_ == 0
                 || startIdx < search_.beginIndex()
                 || startIdx > search_.endIndex()) {
-            throw new IllegalArgumentException("search(" + startIdx + ", m) - expected position to be between " +
-                    search_.beginIndex() + " and " + search_.endIndex());
+            throw new IllegalArgumentException(
+                    "search("
+                            + startIdx
+                            + ", m) - expected position to be between "
+                            + search_.beginIndex()
+                            + " and "
+                            + search_.endIndex());
         }
 
         if (pattern_.PCE_ == null) {
@@ -1025,16 +1030,24 @@ public final class StringSearch extends SearchIterator {
         // Outer loop moves over match starting positions in the
         //      target CE space.
         // Here we see the target as a sequence of collation elements, resulting from the following:
-        // 1. Target characters were decomposed, and (if appropriate) other compressions and expansions are applied
+        // 1. Target characters were decomposed, and (if appropriate) other compressions and
+        // expansions are applied
         //    (for example, digraphs such as IJ may be broken into two characters).
-        // 2. An int64_t CE weight is determined for each resulting unit (high 16 bits are primary strength, next
-        //    16 bits are secondary, next 16 (the high 16 bits of the low 32-bit half) are tertiary. Any of these
-        //    fields that are for strengths below that of the collator are set to 0. If this makes the int64_t
-        //    CE weight 0 (as for a combining diacritic with secondary weight when the collator strength is primary),
+        // 2. An int64_t CE weight is determined for each resulting unit (high 16 bits are primary
+        // strength, next
+        //    16 bits are secondary, next 16 (the high 16 bits of the low 32-bit half) are tertiary.
+        // Any of these
+        //    fields that are for strengths below that of the collator are set to 0. If this makes
+        // the int64_t
+        //    CE weight 0 (as for a combining diacritic with secondary weight when the collator
+        // strength is primary),
         //    then the CE is deleted, so the following code sees only CEs that are relevant.
-        // For each CE, the lowIndex and highIndex correspond to where this CE begins and ends in the original text.
-        // If lowIndex==highIndex, either the CE resulted from an expansion/decomposition of one of the original text
-        // characters, or the CE marks the limit of the target text (in which case the CE weight is UCOL_PROCESSED_NULLORDER).
+        // For each CE, the lowIndex and highIndex correspond to where this CE begins and ends in
+        // the original text.
+        // If lowIndex==highIndex, either the CE resulted from an expansion/decomposition of one of
+        // the original text
+        // characters, or the CE marks the limit of the target text (in which case the CE weight is
+        // UCOL_PROCESSED_NULLORDER).
         for (targetIx = 0; ; targetIx++) {
             found = true;
             // Inner loop checks for a match beginning at each
@@ -1053,7 +1066,8 @@ public final class StringSearch extends SearchIterator {
                 patCE = pattern_.PCE_[patIx];
                 targetCEI = ceb.get(targetIx + patIx + targetIxOffset);
                 // Compare CE from target string with CE from the pattern.
-                // Note that the target CE will be UCOL_PROCESSED_NULLORDER if we reach the end of input,
+                // Note that the target CE will be UCOL_PROCESSED_NULLORDER if we reach the end of
+                // input,
                 // which will fail the compare, below.
                 int ceMatch = compareCE64s(targetCEI.ce_, patCE, search_.elementComparisonType_);
                 if (ceMatch == CE_NO_MATCH) {
@@ -1070,9 +1084,13 @@ public final class StringSearch extends SearchIterator {
                     }
                 }
             }
-            targetIxOffset += pattern_.PCELength_; // this is now the offset in target CE space to end of the match so far
+            targetIxOffset +=
+                    pattern_.PCELength_; // this is now the offset in target CE space to end of the
+            // match so far
 
-            if (!found && ((targetCEI == null) || (targetCEI.ce_ != CollationPCE.PROCESSED_NULLORDER))) {
+            if (!found
+                    && ((targetCEI == null)
+                            || (targetCEI.ce_ != CollationPCE.PROCESSED_NULLORDER))) {
                 // No match at this targetIx.  Try again at the next.
                 continue;
             }
@@ -1087,7 +1105,7 @@ public final class StringSearch extends SearchIterator {
             // There still is a chance of match failure if the CE range not correspond to
             // an acceptable character range.
             //
-            CEI lastCEI = ceb.get(targetIx + targetIxOffset -1);
+            CEI lastCEI = ceb.get(targetIx + targetIxOffset - 1);
 
             mStart = firstCEI.lowIndex_;
             minLimit = lastCEI.lowIndex_;
@@ -1101,14 +1119,16 @@ public final class StringSearch extends SearchIterator {
             //    2. The last CE that was part of the match is in an expansion that extends
             //       to the first CE after the match. In this case, we reject the match.
             CEI nextCEI = null;
-            if (search_.elementComparisonType_ == ElementComparisonType.STANDARD_ELEMENT_COMPARISON) {
+            if (search_.elementComparisonType_
+                    == ElementComparisonType.STANDARD_ELEMENT_COMPARISON) {
                 nextCEI = ceb.get(targetIx + targetIxOffset);
                 maxLimit = nextCEI.lowIndex_;
-                if (nextCEI.lowIndex_ == nextCEI.highIndex_ && nextCEI.ce_ != CollationPCE.PROCESSED_NULLORDER) {
+                if (nextCEI.lowIndex_ == nextCEI.highIndex_
+                        && nextCEI.ce_ != CollationPCE.PROCESSED_NULLORDER) {
                     found = false;
                 }
             } else {
-                for (;; ++targetIxOffset) {
+                for (; ; ++targetIxOffset) {
                     nextCEI = ceb.get(targetIx + targetIxOffset);
                     maxLimit = nextCEI.lowIndex_;
                     // If we are at the end of the target too, match succeeds
@@ -1119,17 +1139,20 @@ public final class StringSearch extends SearchIterator {
                     // it is part of the last target element matched by the pattern;
                     // make sure it can be part of a match with the last patCE
                     if ((((nextCEI.ce_) >>> 32) & 0xFFFF0000L) == 0) {
-                        int ceMatch = compareCE64s(nextCEI.ce_, patCE, search_.elementComparisonType_);
-                        if (ceMatch == CE_NO_MATCH || ceMatch == CE_SKIP_PATN ) {
+                        int ceMatch =
+                                compareCE64s(nextCEI.ce_, patCE, search_.elementComparisonType_);
+                        if (ceMatch == CE_NO_MATCH || ceMatch == CE_SKIP_PATN) {
                             found = false;
                             break;
                         }
-                    // If lowIndex == highIndex, this target CE is part of an expansion of the last matched
-                    // target element, but it has non-zero primary weight => match fails
-                    } else if ( nextCEI.lowIndex_ == nextCEI.highIndex_ ) {
+                        // If lowIndex == highIndex, this target CE is part of an expansion of the
+                        // last matched
+                        // target element, but it has non-zero primary weight => match fails
+                    } else if (nextCEI.lowIndex_ == nextCEI.highIndex_) {
                         found = false;
                         break;
-                    // Else the target CE is not part of an expansion of the last matched element, match succeeds
+                        // Else the target CE is not part of an expansion of the last matched
+                        // element, match succeeds
                     } else {
                         break;
                     }
@@ -1168,18 +1191,21 @@ public final class StringSearch extends SearchIterator {
             //   tests in any case)
             // * the match limit is a normalization boundary
             boolean allowMidclusterMatch =
-                            breakIterator == null &&
-                            (((nextCEI.ce_) >>> 32) & 0xFFFF0000L) != 0 &&
-                            maxLimit >= lastCEI.highIndex_ && nextCEI.highIndex_ > maxLimit &&
-                            (nfd_.hasBoundaryBefore(codePointAt(targetText, maxLimit)) ||
-                                    nfd_.hasBoundaryAfter(codePointBefore(targetText, maxLimit)));
+                    breakIterator == null
+                            && (((nextCEI.ce_) >>> 32) & 0xFFFF0000L) != 0
+                            && maxLimit >= lastCEI.highIndex_
+                            && nextCEI.highIndex_ > maxLimit
+                            && (nfd_.hasBoundaryBefore(codePointAt(targetText, maxLimit))
+                                    || nfd_.hasBoundaryAfter(
+                                            codePointBefore(targetText, maxLimit)));
 
             // If those conditions are met, then:
             // * do NOT advance the candidate match limit (mLimit) to a break boundary; however
             //   the match limit may be backed off to a previous break boundary. This handles
             //   cases in which mLimit includes target characters that are ignorable with current
             //   settings (such as space) and which extend beyond the pattern match.
-            // * do NOT require that end of the combining sequence not extend beyond the match in CE space
+            // * do NOT require that end of the combining sequence not extend beyond the match in CE
+            // space
             // * do NOT require that match limit be on a breakIter boundary
 
             // Advance the match end position to the first acceptable match boundary.
@@ -1251,7 +1277,7 @@ public final class StringSearch extends SearchIterator {
                 cp = Character.toCodePoint(codeUnit, nextUnit);
             }
         }
-        iter.setIndex(currentIterIndex);  // restore iter position
+        iter.setIndex(currentIterIndex); // restore iter position
         return cp;
     }
 
@@ -1266,19 +1292,24 @@ public final class StringSearch extends SearchIterator {
                 cp = Character.toCodePoint(prevUnit, codeUnit);
             }
         }
-        iter.setIndex(currentIterIndex);  // restore iter position
+        iter.setIndex(currentIterIndex); // restore iter position
         return cp;
     }
 
     private boolean searchBackwards(int startIdx, Match m) {
-        //ICU4C_TODO comment:  reject search patterns beginning with a combining char.
+        // ICU4C_TODO comment:  reject search patterns beginning with a combining char.
 
         // Input parameter sanity check.
         if (pattern_.CELength_ == 0
                 || startIdx < search_.beginIndex()
                 || startIdx > search_.endIndex()) {
-            throw new IllegalArgumentException("searchBackwards(" + startIdx + ", m) - expected position to be between " +
-                    search_.beginIndex() + " and " + search_.endIndex());
+            throw new IllegalArgumentException(
+                    "searchBackwards("
+                            + startIdx
+                            + ", m) - expected position to be between "
+                            + search_.beginIndex()
+                            + " and "
+                            + search_.endIndex());
         }
 
         if (pattern_.PCE_ == null) {
@@ -1324,15 +1355,19 @@ public final class StringSearch extends SearchIterator {
 
         // Outer loop moves over match starting positions in the
         //      target CE space.
-        // Here, targetIx values increase toward the beginning of the base text (i.e. we get the text CEs in reverse order).
+        // Here, targetIx values increase toward the beginning of the base text (i.e. we get the
+        // text CEs in reverse order).
         // But  patIx is 0 at the beginning of the pattern and increases toward the end.
-        // So this loop performs a comparison starting with the end of pattern, and prcessd toward the beginning of the pattern
+        // So this loop performs a comparison starting with the end of pattern, and prcessd toward
+        // the beginning of the pattern
         // and the beginning of the base text.
         for (targetIx = limitIx; ; targetIx++) {
             found = true;
-            // For targetIx > limitIx, this ceb.getPrevious gets a CE that is as far back in the ring buffer
+            // For targetIx > limitIx, this ceb.getPrevious gets a CE that is as far back in the
+            // ring buffer
             // (compared to the last CE fetched for the previous targetIx value) as we need to go
-            // for this targetIx value, so if it is non-NULL then other ceb.getPrevious calls should be OK.
+            // for this targetIx value, so if it is non-NULL then other ceb.getPrevious calls should
+            // be OK.
             CEI lastCEI = ceb.getPrevious(targetIx);
             if (lastCEI == null) {
                 throw new ICUException("CEBuffer.getPrevious(" + targetIx + ") returned null.");
@@ -1343,7 +1378,9 @@ public final class StringSearch extends SearchIterator {
             for (patIx = pattern_.PCELength_ - 1; patIx >= 0; patIx--) {
                 long patCE = pattern_.PCE_[patIx];
 
-                targetCEI = ceb.getPrevious(targetIx + pattern_.PCELength_ - 1 - patIx + targetIxOffset);
+                targetCEI =
+                        ceb.getPrevious(
+                                targetIx + pattern_.PCELength_ - 1 - patIx + targetIxOffset);
                 // Compare CE from target string with CE from the pattern.
                 // Note that the target CE will be UCOL_NULLORDER if we reach the end of input,
                 // which will fail the compare, below.
@@ -1363,7 +1400,9 @@ public final class StringSearch extends SearchIterator {
                 }
             }
 
-            if (!found && ((targetCEI == null) || (targetCEI.ce_ != CollationPCE.PROCESSED_NULLORDER))) {
+            if (!found
+                    && ((targetCEI == null)
+                            || (targetCEI.ce_ != CollationPCE.PROCESSED_NULLORDER))) {
                 // No match at this targetIx.  Try again at the next.
                 continue;
             }
@@ -1408,9 +1447,10 @@ public final class StringSearch extends SearchIterator {
                 //    1. The match extended to the last CE from the target text, which is OK, or
                 //    2. The last CE that was part of the match is in an expansion that extends
                 //       to the first CE after the match. In this case, we reject the match.
-                CEI nextCEI  = ceb.getPrevious(targetIx - 1);
+                CEI nextCEI = ceb.getPrevious(targetIx - 1);
 
-                if (nextCEI.lowIndex_ == nextCEI.highIndex_ && nextCEI.ce_ != CollationPCE.PROCESSED_NULLORDER) {
+                if (nextCEI.lowIndex_ == nextCEI.highIndex_
+                        && nextCEI.ce_ != CollationPCE.PROCESSED_NULLORDER) {
                     found = false;
                 }
 
@@ -1422,24 +1462,30 @@ public final class StringSearch extends SearchIterator {
                 // * the default breakIter is being used
                 // * the next collation element after this combining sequence
                 //   - has non-zero primary weight
-                //   - corresponds to a separate character following the one at end of the current match
+                //   - corresponds to a separate character following the one at end of the current
+                // match
                 //   (the second of these conditions, and perhaps both, may be redundant given the
-                //   subsequent check for normalization boundary; however they are likely much faster
+                //   subsequent check for normalization boundary; however they are likely much
+                // faster
                 //   tests in any case)
                 // * the match limit is a normalization boundary
                 boolean allowMidclusterMatch =
-                                breakIterator == null &&
-                                (((nextCEI.ce_) >>> 32) & 0xFFFF0000L) != 0 &&
-                                maxLimit >= lastCEI.highIndex_ && nextCEI.highIndex_ > maxLimit &&
-                                (nfd_.hasBoundaryBefore(codePointAt(targetText, maxLimit)) ||
-                                        nfd_.hasBoundaryAfter(codePointBefore(targetText, maxLimit)));
+                        breakIterator == null
+                                && (((nextCEI.ce_) >>> 32) & 0xFFFF0000L) != 0
+                                && maxLimit >= lastCEI.highIndex_
+                                && nextCEI.highIndex_ > maxLimit
+                                && (nfd_.hasBoundaryBefore(codePointAt(targetText, maxLimit))
+                                        || nfd_.hasBoundaryAfter(
+                                                codePointBefore(targetText, maxLimit)));
 
                 // If those conditions are met, then:
                 // * do NOT advance the candidate match limit (mLimit) to a break boundary; however
                 //   the match limit may be backed off to a previous break boundary. This handles
-                //   cases in which mLimit includes target characters that are ignorable with current
+                //   cases in which mLimit includes target characters that are ignorable with
+                // current
                 //   settings (such as space) and which extend beyond the pattern match.
-                // * do NOT require that end of the combining sequence not extend beyond the match in CE space
+                // * do NOT require that end of the combining sequence not extend beyond the match
+                // in CE space
                 // * do NOT require that match limit be on a breakIter boundary
 
                 // Advance the match end position to the first acceptable match boundary.
@@ -1580,7 +1626,7 @@ public final class StringSearch extends SearchIterator {
     /**
      * Gets a substring out of a CharacterIterator
      *
-     * Java porting note: Not available in ICU4C
+     * <p>Java porting note: Not available in ICU4C
      *
      * @param text CharacterIterator
      * @param start start offset
@@ -1599,9 +1645,7 @@ public final class StringSearch extends SearchIterator {
         return result.toString();
     }
 
-    /**
-     * Java port of ICU4C struct UPattern (usrchimp.h)
-     */
+    /** Java port of ICU4C struct UPattern (usrchimp.h) */
     private static final class Pattern {
         /** Pattern string */
         String text_;
@@ -1612,6 +1656,7 @@ public final class StringSearch extends SearchIterator {
         // TODO: We probably do not need CE_ / CELength_
         @SuppressWarnings("unused")
         int[] CE_;
+
         int CELength_ = 0;
 
         // *** Boyer-Moore ***
@@ -1626,9 +1671,7 @@ public final class StringSearch extends SearchIterator {
         }
     }
 
-    /**
-     * Java port of ICU4C UCollationPCE (usrchimp.h)
-     */
+    /** Java port of ICU4C UCollationPCE (usrchimp.h) */
     private static class CollationPCE {
         public static final long PROCESSED_NULLORDER = -1;
 
@@ -1670,16 +1713,16 @@ public final class StringSearch extends SearchIterator {
             // We could apply the mask to ce and then
             // just get all three orders...
             switch (strength_) {
-            default:
-                tertiary = CollationElementIterator.tertiaryOrder(ce);
-                /* note fall-through */
+                default:
+                    tertiary = CollationElementIterator.tertiaryOrder(ce);
+                    /* note fall-through */
 
-            case Collator.SECONDARY:
-                secondary = CollationElementIterator.secondaryOrder(ce);
-                /* note fall-through */
+                case Collator.SECONDARY:
+                    secondary = CollationElementIterator.secondaryOrder(ce);
+                    /* note fall-through */
 
-            case Collator.PRIMARY:
-                primary = CollationElementIterator.primaryOrder(ce);
+                case Collator.PRIMARY:
+                    primary = CollationElementIterator.primaryOrder(ce);
             }
 
             // **** This should probably handle continuations too. ****
@@ -1714,15 +1757,15 @@ public final class StringSearch extends SearchIterator {
         }
 
         /**
-         * Get the processed ordering priority of the next collation element in the text.
-         * A single character may contain more than one collation element.
+         * Get the processed ordering priority of the next collation element in the text. A single
+         * character may contain more than one collation element.
          *
-         * Note: This is equivalent to
-         * UCollationPCE::nextProcessed(int32_t *ixLow, int32_t *ixHigh, UErrorCode *status);
+         * <p>Note: This is equivalent to UCollationPCE::nextProcessed(int32_t *ixLow, int32_t
+         * *ixHigh, UErrorCode *status);
          *
          * @param range receiving the iterator index before/after fetching the CE.
-         * @return The next collation elements ordering, otherwise returns PROCESSED_NULLORDER
-         *         if an error has occurred or if the end of string has been reached
+         * @return The next collation elements ordering, otherwise returns PROCESSED_NULLORDER if an
+         *     error has occurred or if the end of string has been reached
          */
         public long nextProcessed(Range range) {
             long result = CollationElementIterator.IGNORABLE;
@@ -1736,8 +1779,8 @@ public final class StringSearch extends SearchIterator {
                 high = cei_.getOffset();
 
                 if (ce == CollationElementIterator.NULLORDER) {
-                     result = PROCESSED_NULLORDER;
-                     break;
+                    result = PROCESSED_NULLORDER;
+                    break;
                 }
 
                 result = processCE(ce);
@@ -1752,16 +1795,15 @@ public final class StringSearch extends SearchIterator {
         }
 
         /**
-         * Get the processed ordering priority of the previous collation element in the text.
-         * A single character may contain more than one collation element.
+         * Get the processed ordering priority of the previous collation element in the text. A
+         * single character may contain more than one collation element.
          *
-         * Note: This is equivalent to
-         * UCollationPCE::previousProcessed(int32_t *ixLow, int32_t *ixHigh, UErrorCode *status);
+         * <p>Note: This is equivalent to UCollationPCE::previousProcessed(int32_t *ixLow, int32_t
+         * *ixHigh, UErrorCode *status);
          *
          * @param range receiving the iterator index before/after fetching the CE.
-         * @return The previous collation elements ordering, otherwise returns
-         *         PROCESSED_NULLORDER if an error has occurred or if the start of
-         *         string has been reached.
+         * @return The previous collation elements ordering, otherwise returns PROCESSED_NULLORDER
+         *     if an error has occurred or if the start of string has been reached.
          */
         public long previousProcessed(Range range) {
             long result = CollationElementIterator.IGNORABLE;
@@ -1857,8 +1899,7 @@ public final class StringSearch extends SearchIterator {
                 return bufferIndex_ <= 0;
             }
 
-            void put(long ce, int ixLow, int ixHigh)
-            {
+            void put(long ce, int ixLow, int ixHigh) {
                 if (bufferIndex_ >= buffer_.length) {
                     PCEI[] newBuffer = new PCEI[buffer_.length + BUFFER_GROW];
                     System.arraycopy(buffer_, 0, newBuffer, 0, buffer_.length);
@@ -1921,8 +1962,7 @@ public final class StringSearch extends SearchIterator {
     /**
      * Java port of ICU4C CEI (usearch.cpp)
      *
-     * CEI  Collation Element + source text index.
-     *      These structs are kept in the circular buffer.
+     * <p>CEI Collation Element + source text index. These structs are kept in the circular buffer.
      */
     private static class CEI {
         long ce_;
@@ -1930,9 +1970,7 @@ public final class StringSearch extends SearchIterator {
         int highIndex_;
     }
 
-    /**
-     * CEBuffer A circular buffer of CEs from the text being searched
-     */
+    /** CEBuffer A circular buffer of CEs from the text being searched */
     private static class CEBuffer {
         // Java porting note: ICU4C uses the size for stack buffer
         // static final int DEFAULT_CEBUFFER_SIZE = 96;
@@ -1954,7 +1992,8 @@ public final class StringSearch extends SearchIterator {
         CEBuffer(StringSearch ss) {
             strSearch_ = ss;
             bufSize_ = ss.pattern_.PCELength_ + CEBUFFER_EXTRA;
-            if (ss.search_.elementComparisonType_ != ElementComparisonType.STANDARD_ELEMENT_COMPARISON) {
+            if (ss.search_.elementComparisonType_
+                    != ElementComparisonType.STANDARD_ELEMENT_COMPARISON) {
                 String patText = ss.pattern_.text_;
                 if (patText != null) {
                     for (int i = 0; i < patText.length(); i++) {
@@ -1962,7 +2001,8 @@ public final class StringSearch extends SearchIterator {
                         if (MIGHT_BE_JAMO_L(c)) {
                             bufSize_ += MAX_TARGET_IGNORABLES_PER_PAT_JAMO_L;
                         } else {
-                            // No check for surrogates, we might allocate slightly more buffer than necessary.
+                            // No check for surrogates, we might allocate slightly more buffer than
+                            // necessary.
                             bufSize_ += MAX_TARGET_IGNORABLES_PER_PAT_OTHER;
                         }
                     }
@@ -1985,7 +2025,8 @@ public final class StringSearch extends SearchIterator {
         // Get the CE with the specified index.
         //   Index must be in the range
         //             n-history_size < index < n+1
-        //   where n is the largest index to have been fetched by some previous call to this function.
+        //   where n is the largest index to have been fetched by some previous call to this
+        // function.
         //   The CE value will be UCOL__PROCESSED_NULLORDER at end of input.
         //
         CEI get(int index) {
@@ -2001,7 +2042,7 @@ public final class StringSearch extends SearchIterator {
             // Verify that it is the next one in sequence, which is all
             // that is allowed.
             if (index != limitIx_) {
-                assert(false);
+                assert (false);
                 return null;
             }
 
@@ -2027,7 +2068,8 @@ public final class StringSearch extends SearchIterator {
         // Get the CE with the specified index.
         //   Index must be in the range
         //             n-history_size < index < n+1
-        //   where n is the largest index to have been fetched by some previous call to this function.
+        //   where n is the largest index to have been fetched by some previous call to this
+        // function.
         //   The CE value will be UCOL__PROCESSED_NULLORDER at end of input.
         //
         CEI getPrevious(int index) {
@@ -2043,7 +2085,7 @@ public final class StringSearch extends SearchIterator {
             // Verify that it is the next one in sequence, which is all
             // that is allowed.
             if (index != limitIx_) {
-                assert(false);
+                assert (false);
                 return null;
             }
 

@@ -67,7 +67,7 @@ public class UnicodeLocaleExtension extends Extension {
                     sb.append(LanguageTag.SEP).append(value);
                 }
             }
-            _value = sb.substring(1);   // skip leading '-'
+            _value = sb.substring(1); // skip leading '-'
         }
     }
 
@@ -94,8 +94,9 @@ public class UnicodeLocaleExtension extends Extension {
 
     public static boolean isKey(String s) {
         // key = alphanum alpha ;
-        return (s.length() == 2) && AsciiUtil.isAlphaNumeric(s.charAt(0)) &&
-            AsciiUtil.isAlpha(s.charAt(1));
+        return (s.length() == 2)
+                && AsciiUtil.isAlphaNumeric(s.charAt(0))
+                && AsciiUtil.isAlpha(s.charAt(1));
     }
 
     public static boolean isTypeSubtag(String s) {

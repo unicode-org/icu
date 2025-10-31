@@ -11,55 +11,44 @@ package com.ibm.icu.text;
 import com.ibm.icu.impl.UCaseProps;
 import com.ibm.icu.lang.UCharacter;
 
-/**
- * A transliterator that performs locale-sensitive toLower()
- * case mapping.
- */
-class CaseFoldTransliterator extends Transliterator{
+/** A transliterator that performs locale-sensitive toLower() case mapping. */
+class CaseFoldTransliterator extends Transliterator {
 
-    /**
-     * Package accessible ID.
-     */
+    /** Package accessible ID. */
     static final String _ID = "Any-CaseFold";
 
     // TODO: Add variants for tr, az, lt, default = default locale
 
-    /**
-     * System registration hook.
-     */
+    /** System registration hook. */
     static void register() {
-        Transliterator.registerFactory(_ID, new Transliterator.Factory() {
-            @Override
-            public Transliterator getInstance(String ID) {
-                return new CaseFoldTransliterator();
-            }
-        });
+        Transliterator.registerFactory(
+                _ID,
+                new Transliterator.Factory() {
+                    @Override
+                    public Transliterator getInstance(String ID) {
+                        return new CaseFoldTransliterator();
+                    }
+                });
 
         Transliterator.registerSpecialInverse("CaseFold", "Upper", false);
     }
 
     private final UCaseProps csp;
 
-    /**
-     * Constructs a transliterator.
-     */
-
+    /** Constructs a transliterator. */
     public CaseFoldTransliterator() {
         super(_ID, null);
-        csp=UCaseProps.INSTANCE;
+        csp = UCaseProps.INSTANCE;
     }
 
-    /**
-     * Implements {@link Transliterator#handleTransliterate}.
-     */
+    /** Implements {@link Transliterator#handleTransliterate}. */
     @Override
-    protected void handleTransliterate(Replaceable text,
-                                       Position offsets, boolean isIncremental) {
-        if(csp==null) {
+    protected void handleTransliterate(Replaceable text, Position offsets, boolean isIncremental) {
+        if (csp == null) {
             return;
         }
 
-        if(offsets.start >= offsets.limit) {
+        if (offsets.start >= offsets.limit) {
             return;
         }
 
@@ -75,30 +64,32 @@ class CaseFoldTransliterator extends Transliterator{
         iter.setIndex(offsets.start);
         iter.setLimit(offsets.limit);
         iter.setContextLimits(offsets.contextStart, offsets.contextLimit);
-        while((c=iter.nextCaseMapCP())>=0) {
-            c=csp.toFullFolding(c, result, 0); // toFullFolding(int c, StringBuffer out, int options)
+        while ((c = iter.nextCaseMapCP()) >= 0) {
+            c =
+                    csp.toFullFolding(
+                            c, result, 0); // toFullFolding(int c, StringBuffer out, int options)
 
-            if(iter.didReachLimit() && isIncremental) {
+            if (iter.didReachLimit() && isIncremental) {
                 // the case mapping function tried to look beyond the context limit
                 // wait for more input
-                offsets.start=iter.getCaseMapCPStart();
+                offsets.start = iter.getCaseMapCPStart();
                 return;
             }
 
             /* decode the result */
-            if(c<0) {
+            if (c < 0) {
                 /* c mapped to itself, no change */
                 continue;
-            } else if(c<=UCaseProps.MAX_STRING_LENGTH) {
+            } else if (c <= UCaseProps.MAX_STRING_LENGTH) {
                 /* replace by the mapping string */
-                delta=iter.replace(result.toString());
+                delta = iter.replace(result.toString());
                 result.setLength(0);
             } else {
                 /* replace by single-code point mapping */
-                delta=iter.replace(UTF16.valueOf(c));
+                delta = iter.replace(UTF16.valueOf(c));
             }
 
-            if(delta!=0) {
+            if (delta != 0) {
                 offsets.limit += delta;
                 offsets.contextLimit += delta;
             }
@@ -112,15 +103,18 @@ class CaseFoldTransliterator extends Transliterator{
      * @see com.ibm.icu.text.Transliterator#addSourceTargetSet(com.ibm.icu.text.UnicodeSet, com.ibm.icu.text.UnicodeSet, com.ibm.icu.text.UnicodeSet)
      */
     @Override
-    public void addSourceTargetSet(UnicodeSet inputFilter, UnicodeSet sourceSet, UnicodeSet targetSet) {
+    public void addSourceTargetSet(
+            UnicodeSet inputFilter, UnicodeSet sourceSet, UnicodeSet targetSet) {
         synchronized (UppercaseTransliterator.class) {
             if (sourceTargetUtility == null) {
-                sourceTargetUtility = new SourceTargetUtility(new Transform<String,String>() {
-                    @Override
-                    public String transform(String source) {
-                        return UCharacter.foldCase(source, true);
-                    }
-                });
+                sourceTargetUtility =
+                        new SourceTargetUtility(
+                                new Transform<String, String>() {
+                                    @Override
+                                    public String transform(String source) {
+                                        return UCharacter.foldCase(source, true);
+                                    }
+                                });
             }
         }
         sourceTargetUtility.addSourceTargetSet(this, inputFilter, sourceSet, targetSet);

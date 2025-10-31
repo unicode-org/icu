@@ -36,8 +36,9 @@ public class DeprecatedAPIChecker {
         // Load the ICU4J API signature file
         Set<APIInfo> apiInfoSet = APIData.read(new File(args[0]), true).getAPIInfoSet();
 
-        DeprecatedAPIChecker checker = new DeprecatedAPIChecker(
-                apiInfoSet, new PrintWriter(System.err, true, StandardCharsets.UTF_8));
+        DeprecatedAPIChecker checker =
+                new DeprecatedAPIChecker(
+                        apiInfoSet, new PrintWriter(System.err, true, StandardCharsets.UTF_8));
         checker.checkDeprecated();
         System.exit(checker.errCount);
     }
@@ -71,7 +72,8 @@ public class DeprecatedAPIChecker {
 
             // Replacing separator for nested class/enum (replacing '.' with
             // '$'), so we can use the name for Class.forName(String)
-            String classNamePath = className.contains(".") ? className.replace('.', '$') : className;
+            String classNamePath =
+                    className.contains(".") ? className.replace('.', '$') : className;
 
             apiClassNameMap.put(packageName + "." + classNamePath, packageName + "." + className);
         }
@@ -109,7 +111,12 @@ public class DeprecatedAPIChecker {
         }
 
         // check class
-        compareDeprecated(isAPIDeprecated(api), cls.isAnnotationPresent(Deprecated.class), clsName, null, "Class");
+        compareDeprecated(
+                isAPIDeprecated(api),
+                cls.isAnnotationPresent(Deprecated.class),
+                clsName,
+                null,
+                "Class");
 
         // check fields
         for (Field f : cls.getDeclaredFields()) {
@@ -120,12 +127,22 @@ public class DeprecatedAPIChecker {
             String fName = f.getName();
             api = findFieldInfo(apiInfoSet, clsName, fName);
             if (api == null) {
-                pw.println("## Error ## Field " + clsName + "." + fName + " is not found in the API signature data.");
+                pw.println(
+                        "## Error ## Field "
+                                + clsName
+                                + "."
+                                + fName
+                                + " is not found in the API signature data.");
                 errCount++;
                 continue;
             }
 
-            compareDeprecated(isAPIDeprecated(api), f.isAnnotationPresent(Deprecated.class), clsName, fName, "Field");
+            compareDeprecated(
+                    isAPIDeprecated(api),
+                    f.isAnnotationPresent(Deprecated.class),
+                    clsName,
+                    fName,
+                    "Field");
         }
 
         // check constructors
@@ -150,14 +167,21 @@ public class DeprecatedAPIChecker {
             api = findConstructorInfo(apiInfoSet, clsName, paramNames);
 
             if (api == null) {
-                pw.println("## Error ## Constructor " + clsName + formatParams(paramNames)
-                        + " is not found in the API signature data.");
+                pw.println(
+                        "## Error ## Constructor "
+                                + clsName
+                                + formatParams(paramNames)
+                                + " is not found in the API signature data.");
                 errCount++;
                 continue;
             }
 
-            compareDeprecated(isAPIDeprecated(api), ctor.isAnnotationPresent(Deprecated.class), clsName,
-                    api.getClassName() + formatParams(paramNames), "Constructor");
+            compareDeprecated(
+                    isAPIDeprecated(api),
+                    ctor.isAnnotationPresent(Deprecated.class),
+                    clsName,
+                    api.getClassName() + formatParams(paramNames),
+                    "Constructor");
         }
 
         // check methods
@@ -172,15 +196,23 @@ public class DeprecatedAPIChecker {
             api = findMethodInfo(apiInfoSet, clsName, mtdName, paramNames);
 
             if (api == null) {
-                pw.println("## Error ## Method " + clsName + "#" + mtdName + formatParams(paramNames)
-                        + " is not found in the API signature data.");
+                pw.println(
+                        "## Error ## Method "
+                                + clsName
+                                + "#"
+                                + mtdName
+                                + formatParams(paramNames)
+                                + " is not found in the API signature data.");
                 errCount++;
                 continue;
             }
 
-            compareDeprecated(isAPIDeprecated(api), mtd.isAnnotationPresent(Deprecated.class), clsName, mtdName
-                    + formatParams(paramNames), "Method");
-
+            compareDeprecated(
+                    isAPIDeprecated(api),
+                    mtd.isAnnotationPresent(Deprecated.class),
+                    clsName,
+                    mtdName + formatParams(paramNames),
+                    "Method");
         }
     }
 
@@ -200,7 +232,12 @@ public class DeprecatedAPIChecker {
         }
 
         // check enum
-        compareDeprecated(isAPIDeprecated(api), cls.isAnnotationPresent(Deprecated.class), enumName, null, "Enum");
+        compareDeprecated(
+                isAPIDeprecated(api),
+                cls.isAnnotationPresent(Deprecated.class),
+                enumName,
+                null,
+                "Enum");
 
         // check enum constants
         for (Field ec : cls.getDeclaredFields()) {
@@ -210,13 +247,21 @@ public class DeprecatedAPIChecker {
             String ecName = ec.getName();
             api = findEnumConstantInfo(apiInfoSet, enumName, ecName);
             if (api == null) {
-                pw.println("## Error ## Enum constant " + enumName + "." + ecName
-                        + " is not found in the API signature data.");
+                pw.println(
+                        "## Error ## Enum constant "
+                                + enumName
+                                + "."
+                                + ecName
+                                + " is not found in the API signature data.");
                 errCount++;
                 continue;
             }
 
-            compareDeprecated(isAPIDeprecated(api), ec.isAnnotationPresent(Deprecated.class), enumName, ecName,
+            compareDeprecated(
+                    isAPIDeprecated(api),
+                    ec.isAnnotationPresent(Deprecated.class),
+                    enumName,
+                    ecName,
                     "Enum Constant");
         }
 
@@ -232,19 +277,28 @@ public class DeprecatedAPIChecker {
             api = findMethodInfo(apiInfoSet, enumName, mtdName, paramNames);
 
             if (api == null) {
-                pw.println("## Error ## Method " + enumName + "#" + mtdName + formatParams(paramNames)
-                        + " is not found in the API signature data.");
+                pw.println(
+                        "## Error ## Method "
+                                + enumName
+                                + "#"
+                                + mtdName
+                                + formatParams(paramNames)
+                                + " is not found in the API signature data.");
                 errCount++;
                 continue;
             }
 
-            compareDeprecated(isAPIDeprecated(api), mtd.isAnnotationPresent(Deprecated.class), enumName, mtdName
-                    + formatParams(paramNames), "Method");
-
+            compareDeprecated(
+                    isAPIDeprecated(api),
+                    mtd.isAnnotationPresent(Deprecated.class),
+                    enumName,
+                    mtdName + formatParams(paramNames),
+                    "Method");
         }
     }
 
-    private void compareDeprecated(boolean depTag, boolean depAnt, String cls, String name, String type) {
+    private void compareDeprecated(
+            boolean depTag, boolean depAnt, String cls, String name, String type) {
         if (depTag != depAnt) {
             String apiName = cls;
             if (name != null) {
@@ -317,7 +371,8 @@ public class DeprecatedAPIChecker {
         return null;
     }
 
-    private static APIInfo findMethodInfo(Set<APIInfo> apis, String cls, String method, List<String> params) {
+    private static APIInfo findMethodInfo(
+            Set<APIInfo> apis, String cls, String method, List<String> params) {
         for (APIInfo api : apis) {
             String clsName = api.getPackageName() + "." + api.getClassName();
             if (api.isMethod() && clsName.equals(cls) && api.getName().equals(method)) {
@@ -362,7 +417,8 @@ public class DeprecatedAPIChecker {
 
     private static List<String> getParamNames(APIInfo api) {
         if (!api.isMethod() && !api.isConstructor()) {
-            throw new IllegalArgumentException(api.toString() + " is not a constructor or a method.");
+            throw new IllegalArgumentException(
+                    api.toString() + " is not a constructor or a method.");
         }
 
         List<String> nameList = new ArrayList<>();
@@ -420,8 +476,10 @@ public class DeprecatedAPIChecker {
         return toTypeNameList(method.getGenericParameterTypes());
     }
 
-    private static final String[] PRIMITIVES = { "byte", "short", "int", "long", "float", "double", "boolean", "char" };
-    private static char[] PRIMITIVE_SIGNATURES = { 'B', 'S', 'I', 'J', 'F', 'D', 'Z', 'C' };
+    private static final String[] PRIMITIVES = {
+        "byte", "short", "int", "long", "float", "double", "boolean", "char"
+    };
+    private static char[] PRIMITIVE_SIGNATURES = {'B', 'S', 'I', 'J', 'F', 'D', 'Z', 'C'};
 
     private static List<String> toTypeNameList(Type[] types) {
         List<String> nameList = new ArrayList<>();

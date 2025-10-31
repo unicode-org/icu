@@ -20,7 +20,11 @@ class Param {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("Param { name:'").append(name).append("' value:'").append(value).append("' }");
+        builder.append("Param { name:'")
+                .append(name)
+                .append("' value:'")
+                .append(value)
+                .append("' }");
         return builder.toString();
     }
 }

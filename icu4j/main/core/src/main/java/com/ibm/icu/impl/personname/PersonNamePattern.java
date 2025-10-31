@@ -2,6 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.personname;
 
+import com.ibm.icu.text.PersonName;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -12,16 +13,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import com.ibm.icu.text.PersonName;
-
-/**
- * A single name formatting pattern, corresponding to a single namePattern element in CLDR.
- */
+/** A single name formatting pattern, corresponding to a single namePattern element in CLDR. */
 class PersonNamePattern {
     private String patternText; // for debugging
     private Element[] patternElements;
 
-    public static PersonNamePattern[] makePatterns(String[] patternText, PersonNameFormatterImpl formatterImpl) {
+    public static PersonNamePattern[] makePatterns(
+            String[] patternText, PersonNameFormatterImpl formatterImpl) {
         PersonNamePattern[] result = new PersonNamePattern[patternText.length];
         for (int i = 0; i < patternText.length; i++) {
             result[i] = new PersonNamePattern(patternText[i], formatterImpl);
@@ -60,20 +58,23 @@ class PersonNamePattern {
                             }
                             inField = true;
                         } else {
-                            throw new IllegalArgumentException("Nested braces are not allowed in name patterns");
+                            throw new IllegalArgumentException(
+                                    "Nested braces are not allowed in name patterns");
                         }
                         break;
                     case '}':
                         if (inField) {
                             if (workingString.length() > 0) {
-                                elements.add(new NameFieldImpl(workingString.toString(), formatterImpl));
+                                elements.add(
+                                        new NameFieldImpl(workingString.toString(), formatterImpl));
                                 workingString = new StringBuilder();
                             } else {
                                 throw new IllegalArgumentException("No field name inside braces");
                             }
                             inField = false;
                         } else {
-                            throw new IllegalArgumentException("Unmatched closing brace in literal text");
+                            throw new IllegalArgumentException(
+                                    "Unmatched closing brace in literal text");
                         }
                         break;
                     default:
@@ -101,13 +102,17 @@ class PersonNamePattern {
         name = hackNameForEmptyFields(name);
 
         // the logic below attempts to implement the following algorithm:
-        // - If one or more fields at the beginning of the name are empty, also skip all literal text
+        // - If one or more fields at the beginning of the name are empty, also skip all literal
+        // text
         //   from the beginning of the name up to the first populated field.
         // - If one or more fields at the end of the name are empty, also skip all literal text from
         //   the last populated field to the end of the name.
-        // - If one or more contiguous fields in the middle of the name are empty, skip the literal text
-        //   between them, omit characters from the literal text on either side of the empty fields up to
-        //   the first space on either side, and make sure that the resulting literal text doesn't end up
+        // - If one or more contiguous fields in the middle of the name are empty, skip the literal
+        // text
+        //   between them, omit characters from the literal text on either side of the empty fields
+        // up to
+        //   the first space on either side, and make sure that the resulting literal text doesn't
+        // end up
         //   with two spaces in a row.
         for (Element element : patternElements) {
             if (element.isLiteral()) {
@@ -169,6 +174,7 @@ class PersonNamePattern {
      * Stitches together the literal text on either side of an omitted field by deleting any
      * non-whitespace characters immediately neighboring the omitted field and coalescing any
      * adjacent spaces at the join point down to one.
+     *
      * @param s1 The literal text before the omitted field.
      * @param s2 The literal text after the omitted field.
      */
@@ -208,9 +214,7 @@ class PersonNamePattern {
         return result;
     }
 
-    /**
-     * Returns true if s1 ends with s2.
-     */
+    /** Returns true if s1 ends with s2. */
     private boolean endsWith(StringBuilder s1, StringBuilder s2) {
         int p1 = s1.length() - 1;
         int p2 = s2.length() - 1;
@@ -223,19 +227,26 @@ class PersonNamePattern {
     }
 
     private PersonName hackNameForEmptyFields(PersonName originalName) {
-        // this is a hack to deal with mononyms (name objects that don't have both a given name and a surname)--
-        // if the name object has a given-name field but not a surname field and the pattern either doesn't
-        // have a given-name field or only has "{given-initial}", we return a PersonName object that will
-        // return the value of the given-name field when asked for the value of the surname field and that
-        // will return null when asked for the value of the given-name field (all other field values and
+        // this is a hack to deal with mononyms (name objects that don't have both a given name and
+        // a surname)--
+        // if the name object has a given-name field but not a surname field and the pattern either
+        // doesn't
+        // have a given-name field or only has "{given-initial}", we return a PersonName object that
+        // will
+        // return the value of the given-name field when asked for the value of the surname field
+        // and that
+        // will return null when asked for the value of the given-name field (all other field values
+        // and
         // properties of the underlying object are returned unchanged)
         PersonName result = originalName;
-        if (originalName.getFieldValue(PersonName.NameField.SURNAME, Collections.emptySet()) == null) {
+        if (originalName.getFieldValue(PersonName.NameField.SURNAME, Collections.emptySet())
+                == null) {
             boolean patternHasNonInitialGivenName = false;
             for (PersonNamePattern.Element element : patternElements) {
                 if (!element.isLiteral()
-                        && ((NameFieldImpl)element).fieldID == PersonName.NameField.GIVEN
-                        && !((NameFieldImpl)element).modifiers.containsKey(PersonName.FieldModifier.INITIAL)) {
+                        && ((NameFieldImpl) element).fieldID == PersonName.NameField.GIVEN
+                        && !((NameFieldImpl) element)
+                                .modifiers.containsKey(PersonName.FieldModifier.INITIAL)) {
                     patternHasNonInitialGivenName = true;
                     break;
                 }
@@ -248,17 +259,17 @@ class PersonNamePattern {
     }
 
     /**
-     * A single element in a NamePattern.  This is either a name field or a range of literal text.
+     * A single element in a NamePattern. This is either a name field or a range of literal text.
      */
     private interface Element {
         boolean isLiteral();
+
         String format(PersonName name);
+
         boolean isPopulated(PersonName name);
     }
 
-    /**
-     * Literal text from a name pattern.
-     */
+    /** Literal text from a name pattern. */
     private static class LiteralText implements Element {
         private String text;
 
@@ -288,9 +299,9 @@ class PersonNamePattern {
     }
 
     /**
-     * An actual name field in a NamePattern (i.e., the stuff represented in the pattern by text
-     * in braces).  This class actually handles fetching the value for the field out of a
-     * PersonName object and applying any modifiers to it.
+     * An actual name field in a NamePattern (i.e., the stuff represented in the pattern by text in
+     * braces). This class actually handles fetching the value for the field out of a PersonName
+     * object and applying any modifiers to it.
      */
     private static class NameFieldImpl implements Element {
         private PersonName.NameField fieldID;
@@ -304,19 +315,22 @@ class PersonNamePattern {
             while (tok.hasMoreTokens()) {
                 modifierIDs.add(PersonName.FieldModifier.forString(tok.nextToken()));
             }
-            if (this.fieldID == PersonName.NameField.SURNAME && formatterImpl.shouldCapitalizeSurname()) {
+            if (this.fieldID == PersonName.NameField.SURNAME
+                    && formatterImpl.shouldCapitalizeSurname()) {
                 modifierIDs.add(PersonName.FieldModifier.ALL_CAPS);
             }
 
             this.modifiers = new HashMap<>();
             for (PersonName.FieldModifier modifierID : modifierIDs) {
-                this.modifiers.put(modifierID, FieldModifierImpl.forName(modifierID, formatterImpl));
+                this.modifiers.put(
+                        modifierID, FieldModifierImpl.forName(modifierID, formatterImpl));
             }
 
             if (this.modifiers.containsKey(PersonName.FieldModifier.RETAIN)
                     && this.modifiers.containsKey(PersonName.FieldModifier.INITIAL)) {
-                FieldModifierImpl.InitialModifier initialModifier
-                        = (FieldModifierImpl.InitialModifier) this.modifiers.get(PersonName.FieldModifier.INITIAL);
+                FieldModifierImpl.InitialModifier initialModifier =
+                        (FieldModifierImpl.InitialModifier)
+                                this.modifiers.get(PersonName.FieldModifier.INITIAL);
                 initialModifier.setRetainPunctuation(true);
             }
         }
@@ -354,16 +368,15 @@ class PersonNamePattern {
         @Override
         public boolean isPopulated(PersonName name) {
             String result = this.format(name);
-            return result != null && ! result.isEmpty();
+            return result != null && !result.isEmpty();
         }
     }
 
     /**
-     * Internal class used when formatting a mononym (a PersonName object that only has
-     * a given-name field).  If the name doesn't have a surname field and the pattern
-     * doesn't have a given-name field (or only has one that produces an initial), we
-     * use this class to behave as though the value supplied in the given-name field
-     * had instead been supplied in the surname field.
+     * Internal class used when formatting a mononym (a PersonName object that only has a given-name
+     * field). If the name doesn't have a surname field and the pattern doesn't have a given-name
+     * field (or only has one that produces an initial), we use this class to behave as though the
+     * value supplied in the given-name field had instead been supplied in the surname field.
      */
     private static class GivenToSurnamePersonName implements PersonName {
         private PersonName underlyingPersonName;
@@ -376,6 +389,7 @@ class PersonNamePattern {
         public String toString() {
             return "Inverted version of " + underlyingPersonName.toString();
         }
+
         @Override
         public Locale getNameLocale() {
             return underlyingPersonName.getNameLocale();

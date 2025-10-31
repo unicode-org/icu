@@ -6,7 +6,7 @@ package com.ibm.icu.message2;
 import com.ibm.icu.text.Normalizer2;
 
 class StringUtils {
-    
+
     // abnf: simple-start-char = %x01-08 ; omit NULL (%x00), HTAB (%x09) and LF (%x0A)
     // abnf:   / %x0B-0C ; omit CR (%x0D)
     // abnf:   / %x0E-1F ; omit SP (%x20)
@@ -28,16 +28,15 @@ class StringUtils {
                 || (cp >= 0x3001 && cp <= 0x10FFFF);
     }
 
-    
     // abnf: text-char = %x01-5B ; omit NULL (%x00) and \ (%x5C)
     // abnf:         / %x5D-7A ; omit { (%x7B)
     // abnf:         / %x7C ; omit } (%x7D)
     // abnf:         / %x7E-10FFFF
     static boolean isTextChar(int cp) {
         return (cp >= 0x01 && cp <= 0x5B)
-            || (cp >= 0x5D && cp <= 0x7A)
-            || cp == 0x7C
-            || (cp >= 0x7E && cp <= 0x10FFFF);
+                || (cp >= 0x5D && cp <= 0x7A)
+                || cp == 0x7C
+                || (cp >= 0x7E && cp <= 0x10FFFF);
     }
 
     // abnf: backslash = %x5C ; U+005C REVERSE SOLIDUS "\"
@@ -126,17 +125,13 @@ class StringUtils {
                 || (cp >= 0xE0000 && cp <= 0xEFFFD)
                 || (cp >= 0xF0000 && cp <= 0xFFFFD)
                 || (cp >= 0x100000 && cp <= 0x10FFFD);
-        
     }
 
     /*
      * abnf: name-char = name-start / DIGIT / "-" / "."
      */
     static boolean isNameChar(int cp) {
-        return isNameStart(cp)
-                || isDigit(cp)
-                || cp == '-'
-                || cp == '.';
+        return isNameStart(cp) || isDigit(cp) || cp == '-' || cp == '.';
     }
 
     // abnf: quoted-char = %x01-5B ; omit NULL (%x00) and \ (%x5C)
@@ -165,7 +160,7 @@ class StringUtils {
         return cp == ':';
     }
 
-    final private static Normalizer2 NFC_NORMALIZER = Normalizer2.getNFCInstance();
+    private static final Normalizer2 NFC_NORMALIZER = Normalizer2.getNFCInstance();
 
     static String toNfc(CharSequence value) {
         return value == null ? null : NFC_NORMALIZER.normalize(value);

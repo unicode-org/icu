@@ -8,21 +8,21 @@
  */
 package com.ibm.icu.text;
 
-import java.text.CharacterIterator;
-
 import com.ibm.icu.impl.CharacterIteratorWrapper;
 import com.ibm.icu.impl.ReplaceableUCharacterIterator;
 import com.ibm.icu.impl.UCharArrayIterator;
 import com.ibm.icu.impl.UCharacterIteratorWrapper;
+import java.text.CharacterIterator;
 
 /**
- * Abstract class that defines an API for iteration on text objects.This is an interface for forward and backward
- * iteration and random access into a text object. Forward iteration is done with post-increment and backward iteration
- * is done with pre-decrement semantics, while the <code>java.text.CharacterIterator</code> interface methods provided
- * forward iteration with "pre-increment" and backward iteration with pre-decrement semantics. This API is more
- * efficient for forward iteration over code points. The other major difference is that this API can do both code unit
- * and code point iteration, <code>java.text.CharacterIterator</code> can only iterate over code units and is limited to
- * BMP (0 - 0xFFFF)
+ * Abstract class that defines an API for iteration on text objects.This is an interface for forward
+ * and backward iteration and random access into a text object. Forward iteration is done with
+ * post-increment and backward iteration is done with pre-decrement semantics, while the <code>
+ * java.text.CharacterIterator</code> interface methods provided forward iteration with
+ * "pre-increment" and backward iteration with pre-decrement semantics. This API is more efficient
+ * for forward iteration over code points. The other major difference is that this API can do both
+ * code unit and code point iteration, <code>java.text.CharacterIterator</code> can only iterate
+ * over code units and is limited to BMP (0 - 0xFFFF)
  *
  * @author Ram
  * @stable ICU 2.4
@@ -34,19 +34,16 @@ public abstract class UCharacterIterator implements Cloneable, UForwardCharacter
      *
      * @stable ICU 2.4
      */
-    protected UCharacterIterator() {
-    }
+    protected UCharacterIterator() {}
 
     // static final methods ----------------------------------------------------
 
     /**
      * Returns a <code>UCharacterIterator</code> object given a <code>Replaceable</code> object.
      *
-     * @param source
-     *            a valid source as a <code>Replaceable</code> object
+     * @param source a valid source as a <code>Replaceable</code> object
      * @return UCharacterIterator object
-     * @exception IllegalArgumentException
-     *                if the argument is null
+     * @exception IllegalArgumentException if the argument is null
      * @stable ICU 2.4
      */
     public static final UCharacterIterator getInstance(Replaceable source) {
@@ -56,11 +53,9 @@ public abstract class UCharacterIterator implements Cloneable, UForwardCharacter
     /**
      * Returns a <code>UCharacterIterator</code> object given a source string.
      *
-     * @param source
-     *            a string
+     * @param source a string
      * @return UCharacterIterator object
-     * @exception IllegalArgumentException
-     *                if the argument is null
+     * @exception IllegalArgumentException if the argument is null
      * @stable ICU 2.4
      */
     public static final UCharacterIterator getInstance(String source) {
@@ -70,11 +65,9 @@ public abstract class UCharacterIterator implements Cloneable, UForwardCharacter
     /**
      * Returns a <code>UCharacterIterator</code> object given a source character array.
      *
-     * @param source
-     *            an array of UTF-16 code units
+     * @param source an array of UTF-16 code units
      * @return UCharacterIterator object
-     * @exception IllegalArgumentException
-     *                if the argument is null
+     * @exception IllegalArgumentException if the argument is null
      * @stable ICU 2.4
      */
     public static final UCharacterIterator getInstance(char[] source) {
@@ -84,11 +77,9 @@ public abstract class UCharacterIterator implements Cloneable, UForwardCharacter
     /**
      * Returns a <code>UCharacterIterator</code> object given a source character array.
      *
-     * @param source
-     *            an array of UTF-16 code units
+     * @param source an array of UTF-16 code units
      * @return UCharacterIterator object
-     * @exception IllegalArgumentException
-     *                if the argument is null
+     * @exception IllegalArgumentException if the argument is null
      * @stable ICU 2.4
      */
     public static final UCharacterIterator getInstance(char[] source, int start, int limit) {
@@ -98,11 +89,9 @@ public abstract class UCharacterIterator implements Cloneable, UForwardCharacter
     /**
      * Returns a <code>UCharacterIterator</code> object given a source StringBuffer.
      *
-     * @param source
-     *            an string buffer of UTF-16 code units
+     * @param source an string buffer of UTF-16 code units
      * @return UCharacterIterator object
-     * @exception IllegalArgumentException
-     *                if the argument is null
+     * @exception IllegalArgumentException if the argument is null
      * @stable ICU 2.4
      */
     public static final UCharacterIterator getInstance(StringBuffer source) {
@@ -112,11 +101,9 @@ public abstract class UCharacterIterator implements Cloneable, UForwardCharacter
     /**
      * Returns a <code>UCharacterIterator</code> object given a CharacterIterator.
      *
-     * @param source
-     *            a valid CharacterIterator object.
+     * @param source a valid CharacterIterator object.
      * @return UCharacterIterator object
-     * @exception IllegalArgumentException
-     *                if the argument is null
+     * @exception IllegalArgumentException if the argument is null
      * @stable ICU 2.4
      */
     public static final UCharacterIterator getInstance(CharacterIterator source) {
@@ -125,8 +112,8 @@ public abstract class UCharacterIterator implements Cloneable, UForwardCharacter
 
     // public methods ----------------------------------------------------------
     /**
-     * Returns a <code>java.text.CharacterIterator</code> object for the underlying text of this iterator. The returned
-     * iterator is independent of this iterator.
+     * Returns a <code>java.text.CharacterIterator</code> object for the underlying text of this
+     * iterator. The returned iterator is independent of this iterator.
      *
      * @return java.text.CharacterIterator object
      * @stable ICU 2.4
@@ -136,7 +123,8 @@ public abstract class UCharacterIterator implements Cloneable, UForwardCharacter
     }
 
     /**
-     * Returns the code unit at the current index. If index is out of range, returns DONE. Index is not changed.
+     * Returns the code unit at the current index. If index is out of range, returns DONE. Index is
+     * not changed.
      *
      * @return current code unit
      * @stable ICU 2.4
@@ -144,9 +132,10 @@ public abstract class UCharacterIterator implements Cloneable, UForwardCharacter
     public abstract int current();
 
     /**
-     * Returns the codepoint at the current index. If the current index is invalid, DONE is returned. If the current
-     * index points to a lead surrogate, and there is a following trail surrogate, then the code point is returned.
-     * Otherwise, the code unit at index is returned. Index is not changed.
+     * Returns the codepoint at the current index. If the current index is invalid, DONE is
+     * returned. If the current index points to a lead surrogate, and there is a following trail
+     * surrogate, then the code point is returned. Otherwise, the code unit at index is returned.
+     * Index is not changed.
      *
      * @return current codepoint
      * @stable ICU 2.4
@@ -191,8 +180,9 @@ public abstract class UCharacterIterator implements Cloneable, UForwardCharacter
     public abstract int getIndex();
 
     /**
-     * Returns the UTF16 code unit at index, and increments to the next code unit (post-increment semantics). If index
-     * is out of range, DONE is returned, and the iterator is reset to the limit of the text.
+     * Returns the UTF16 code unit at index, and increments to the next code unit (post-increment
+     * semantics). If index is out of range, DONE is returned, and the iterator is reset to the
+     * limit of the text.
      *
      * @return the next UTF16 code unit, or DONE if the index is at the limit of the text.
      * @stable ICU 2.4
@@ -201,9 +191,10 @@ public abstract class UCharacterIterator implements Cloneable, UForwardCharacter
     public abstract int next();
 
     /**
-     * Returns the code point at index, and increments to the next code point (post-increment semantics). If index does
-     * not point to a valid surrogate pair, the behavior is the same as <code>next()</code>. Otherwise the iterator is
-     * incremented past the surrogate pair, and the code point represented by the pair is returned.
+     * Returns the code point at index, and increments to the next code point (post-increment
+     * semantics). If index does not point to a valid surrogate pair, the behavior is the same as
+     * <code>next()</code>. Otherwise the iterator is incremented past the surrogate pair, and the
+     * code point represented by the pair is returned.
      *
      * @return the next codepoint in text, or DONE if the index is at the limit of the text.
      * @stable ICU 2.4
@@ -224,21 +215,24 @@ public abstract class UCharacterIterator implements Cloneable, UForwardCharacter
     }
 
     /**
-     * Decrement to the position of the previous code unit in the text, and return it (pre-decrement semantics). If the
-     * resulting index is less than 0, the index is reset to 0 and DONE is returned.
+     * Decrement to the position of the previous code unit in the text, and return it (pre-decrement
+     * semantics). If the resulting index is less than 0, the index is reset to 0 and DONE is
+     * returned.
      *
-     * @return the previous code unit in the text, or DONE if the new index is before the start of the text.
+     * @return the previous code unit in the text, or DONE if the new index is before the start of
+     *     the text.
      * @stable ICU 2.4
      */
     public abstract int previous();
 
     /**
-     * Retreat to the start of the previous code point in the text, and return it (pre-decrement semantics). If the
-     * index is not preceded by a valid surrogate pair, the behavior is the same as <code>previous()</code>. Otherwise
-     * the iterator is decremented to the start of the surrogate pair, and the code point represented by the pair is
-     * returned.
+     * Retreat to the start of the previous code point in the text, and return it (pre-decrement
+     * semantics). If the index is not preceded by a valid surrogate pair, the behavior is the same
+     * as <code>previous()</code>. Otherwise the iterator is decremented to the start of the
+     * surrogate pair, and the code point represented by the pair is returned.
      *
-     * @return the previous code point in the text, or DONE if the new index is before the start of the text.
+     * @return the previous code point in the text, or DONE if the new index is before the start of
+     *     the text.
      * @stable ICU 2.4
      */
     public int previousCodePoint() {
@@ -258,10 +252,8 @@ public abstract class UCharacterIterator implements Cloneable, UForwardCharacter
     /**
      * Sets the index to the specified index in the text.
      *
-     * @param index
-     *            the index within the text.
-     * @exception IndexOutOfBoundsException
-     *                is thrown if an invalid index is supplied
+     * @param index the index within the text.
+     * @exception IndexOutOfBoundsException is thrown if an invalid index is supplied
      * @stable ICU 2.4
      */
     public abstract void setIndex(int index);
@@ -285,9 +277,10 @@ public abstract class UCharacterIterator implements Cloneable, UForwardCharacter
     }
 
     /**
-     * Fills the buffer with the underlying text storage of the iterator If the buffer capacity is not enough a
-     * exception is thrown. The capacity of the fill in buffer should at least be equal to length of text in the
-     * iterator obtained by calling <code>getLength()</code>). <b>Usage:</b>
+     * Fills the buffer with the underlying text storage of the iterator If the buffer capacity is
+     * not enough a exception is thrown. The capacity of the fill in buffer should at least be equal
+     * to length of text in the iterator obtained by calling <code>getLength()</code>).
+     * <b>Usage:</b>
      *
      * <pre>
      *         UChacterIterator iter = new UCharacterIterator.getInstance(text);
@@ -307,13 +300,11 @@ public abstract class UCharacterIterator implements Cloneable, UForwardCharacter
      *         }
      * </pre>
      *
-     * @param fillIn
-     *            an array of chars to fill with the underlying UTF-16 code units.
-     * @param offset
-     *            the position within the array to start putting the data.
+     * @param fillIn an array of chars to fill with the underlying UTF-16 code units.
+     * @param offset the position within the array to start putting the data.
      * @return the number of code units added to fillIn, as a convenience
-     * @exception IndexOutOfBoundsException
-     *                exception if there is not enough room after offset in the array, or if offset &lt; 0.
+     * @exception IndexOutOfBoundsException exception if there is not enough room after offset in
+     *     the array, or if offset &lt; 0.
      * @stable ICU 2.4
      */
     public abstract int getText(char[] fillIn, int offset);
@@ -321,11 +312,9 @@ public abstract class UCharacterIterator implements Cloneable, UForwardCharacter
     /**
      * Convenience override for <code>getText(char[], int)</code> that provides an offset of 0.
      *
-     * @param fillIn
-     *            an array of chars to fill with the underlying UTF-16 code units.
+     * @param fillIn an array of chars to fill with the underlying UTF-16 code units.
      * @return the number of code units added to fillIn, as a convenience
-     * @exception IndexOutOfBoundsException
-     *                exception if there is not enough room in the array.
+     * @exception IndexOutOfBoundsException exception if there is not enough room in the array.
      * @stable ICU 2.4
      */
     public final int getText(char[] fillIn) {
@@ -345,17 +334,15 @@ public abstract class UCharacterIterator implements Cloneable, UForwardCharacter
     }
 
     /**
-     * Moves the current position by the number of code units specified, either forward or backward depending on the
-     * sign of delta (positive or negative respectively). If the resulting index would be less than zero, the index is
-     * set to zero, and if the resulting index would be greater than limit, the index is set to limit.
+     * Moves the current position by the number of code units specified, either forward or backward
+     * depending on the sign of delta (positive or negative respectively). If the resulting index
+     * would be less than zero, the index is set to zero, and if the resulting index would be
+     * greater than limit, the index is set to limit.
      *
-     * @param delta
-     *            the number of code units to move the current index.
+     * @param delta the number of code units to move the current index.
      * @return the new index.
-     * @exception IndexOutOfBoundsException
-     *                is thrown if an invalid index is supplied
+     * @exception IndexOutOfBoundsException is thrown if an invalid index is supplied
      * @stable ICU 2.4
-     *
      */
     public int moveIndex(int delta) {
         int x = Math.max(0, Math.min(getIndex() + delta, getLength()));
@@ -364,17 +351,15 @@ public abstract class UCharacterIterator implements Cloneable, UForwardCharacter
     }
 
     /**
-     * Moves the current position by the number of code points specified, either forward or backward depending on the
-     * sign of delta (positive or negative respectively). If the current index is at a trail surrogate then the first
-     * adjustment is by code unit, and the remaining adjustments are by code points. If the resulting index would be
-     * less than zero, the index is set to zero, and if the resulting index would be greater than limit, the index is
-     * set to limit.
+     * Moves the current position by the number of code points specified, either forward or backward
+     * depending on the sign of delta (positive or negative respectively). If the current index is
+     * at a trail surrogate then the first adjustment is by code unit, and the remaining adjustments
+     * are by code points. If the resulting index would be less than zero, the index is set to zero,
+     * and if the resulting index would be greater than limit, the index is set to limit.
      *
-     * @param delta
-     *            the number of code units to move the current index.
+     * @param delta the number of code units to move the current index.
      * @return the new index
-     * @exception IndexOutOfBoundsException
-     *                is thrown if an invalid delta is supplied
+     * @exception IndexOutOfBoundsException is thrown if an invalid delta is supplied
      * @stable ICU 2.4
      */
     public int moveCodePointIndex(int delta) {
@@ -395,8 +380,8 @@ public abstract class UCharacterIterator implements Cloneable, UForwardCharacter
     }
 
     /**
-     * Creates a copy of this iterator, independent from other iterators. If it is not possible to clone the iterator,
-     * returns null.
+     * Creates a copy of this iterator, independent from other iterators. If it is not possible to
+     * clone the iterator, returns null.
      *
      * @return copy of this iterator
      * @stable ICU 2.4
@@ -405,5 +390,4 @@ public abstract class UCharacterIterator implements Cloneable, UForwardCharacter
     public UCharacterIterator clone() throws CloneNotSupportedException {
         return (UCharacterIterator) super.clone();
     }
-
 }

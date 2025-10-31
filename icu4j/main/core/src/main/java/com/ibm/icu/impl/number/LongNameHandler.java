@@ -2,12 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.number;
 
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.Map;
-import java.util.MissingResourceException;
-import java.util.Set;
-
 import com.ibm.icu.impl.CurrencyData;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
@@ -29,12 +23,20 @@ import com.ibm.icu.util.MeasureUnit.Complexity;
 import com.ibm.icu.util.MeasureUnit.MeasurePrefix;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.Set;
 
 /**
- * Takes care of formatting currency and measurement unit names, as well as populating the gender of measure units.
+ * Takes care of formatting currency and measurement unit names, as well as populating the gender of
+ * measure units.
  */
 public class LongNameHandler
-    implements MicroPropsGenerator, ModifierStore, LongNameMultiplexer.ParentlessMicroPropsGenerator {
+        implements MicroPropsGenerator,
+                ModifierStore,
+                LongNameMultiplexer.ParentlessMicroPropsGenerator {
 
     private static int i = 0;
     private static final int DNAM_INDEX = StandardPlural.COUNT + i++;
@@ -69,7 +71,12 @@ public class LongNameHandler
         return result;
     }
 
-    private enum PlaceholderPosition { NONE, BEGINNING, MIDDLE, END }
+    private enum PlaceholderPosition {
+        NONE,
+        BEGINNING,
+        MIDDLE,
+        END
+    }
 
     private static class ExtractCorePatternResult {
         String coreUnit;
@@ -81,13 +88,11 @@ public class LongNameHandler
      * Returns three outputs extracted from pattern.
      *
      * @param coreUnit is extracted as per Extract(...) in the spec:
-     *   https://unicode.org/reports/tr35/tr35-general.html#compound-units
-     * @param PlaceholderPosition indicates where in the string the placeholder
-     *   was found.
-     * @param joinerChar Iff the placeholder was at the beginning or end,
-     *   joinerChar contains the space character (if any) that separated the
-     *   placeholder from the rest of the pattern. Otherwise, joinerChar is set
-     *   to NUL. Only one space character is considered.
+     *     https://unicode.org/reports/tr35/tr35-general.html#compound-units
+     * @param PlaceholderPosition indicates where in the string the placeholder was found.
+     * @param joinerChar Iff the placeholder was at the beginning or end, joinerChar contains the
+     *     space character (if any) that separated the placeholder from the rest of the pattern.
+     *     Otherwise, joinerChar is set to NUL. Only one space character is considered.
      */
     private static ExtractCorePatternResult extractCorePattern(String pattern) {
         ExtractCorePatternResult result = new ExtractCorePatternResult();
@@ -126,7 +131,9 @@ public class LongNameHandler
     // Gets the gender of a built-in unit: unit must be a built-in. Returns an empty
     // string both in case of unknown gender and in case of unknown unit.
     private static String getGenderForBuiltin(ULocale locale, MeasureUnit builtinUnit) {
-        ICUResourceBundle unitsBundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_UNIT_BASE_NAME, locale);
+        ICUResourceBundle unitsBundle =
+                (ICUResourceBundle)
+                        UResourceBundle.getBundleInstance(ICUData.ICU_UNIT_BASE_NAME, locale);
 
         StringBuilder key = new StringBuilder();
         key.append("units/");
@@ -227,8 +234,8 @@ public class LongNameHandler
         // if found, returning the data in `value`. The returned data will be for
         // the configured case if found, falling back to "nominative" and no-case if
         // not.
-        private boolean
-        loadForGender(UResource.Table genderTable, String genderVal, UResource.Value value) {
+        private boolean loadForGender(
+                UResource.Table genderTable, String genderVal, UResource.Value value) {
             if (!genderTable.findValue(genderVal, value)) {
                 return false;
             }
@@ -251,7 +258,8 @@ public class LongNameHandler
 
         // Tries to load data for the given case from `caseTable`. Returns null
         // if not found.
-        private boolean loadForCase(UResource.Table caseTable, String caseValue, UResource.Value value) {
+        private boolean loadForCase(
+                UResource.Table caseTable, String caseValue, UResource.Value value) {
             if (!caseTable.findValue(caseValue, value)) {
                 return false;
             }
@@ -268,15 +276,17 @@ public class LongNameHandler
     //
     // Data is loaded for the appropriate unit width, with missing data filled
     // in from unitsShort.
-    static void getInflectedMeasureData(String subKey,
-                                        ULocale locale,
-                                        UnitWidth width,
-                                        String gender,
-                                        String caseVariant,
-                                        String[] outArray) {
+    static void getInflectedMeasureData(
+            String subKey,
+            ULocale locale,
+            UnitWidth width,
+            String gender,
+            String caseVariant,
+            String[] outArray) {
         InflectedPluralSink sink = new InflectedPluralSink(gender, caseVariant, outArray);
         ICUResourceBundle unitsBundle =
-            (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUData.ICU_UNIT_BASE_NAME, locale);
+                (ICUResourceBundle)
+                        UResourceBundle.getBundleInstance(ICUData.ICU_UNIT_BASE_NAME, locale);
 
         StringBuilder key = new StringBuilder();
         key.append("units");
@@ -331,7 +341,8 @@ public class LongNameHandler
         }
     }
 
-    // TODO(ICU-23226): Refactor LongNameHandler to use UnitAliases.java instead of local AliasSink class
+    // TODO(ICU-23226): Refactor LongNameHandler to use UnitAliases.java instead of local AliasSink
+    // class
     private static final class AliasSink extends UResource.Sink {
         String replacement;
 
@@ -356,8 +367,9 @@ public class LongNameHandler
             String[] outArray) {
         PluralTableSink sink = new PluralTableSink(outArray);
         ICUResourceBundle resource;
-        resource = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_UNIT_BASE_NAME,
-                locale);
+        resource =
+                (ICUResourceBundle)
+                        UResourceBundle.getBundleInstance(ICUData.ICU_UNIT_BASE_NAME, locale);
 
         StringBuilder subKey = new StringBuilder();
         subKey.append("/");
@@ -366,14 +378,15 @@ public class LongNameHandler
 
         // If the unit is an alias, replace it is identifier with the replacement.
         String unitSubType = unit.getSubtype();
-        ICUResourceBundle metadataResource = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "metadata");
+        ICUResourceBundle metadataResource =
+                (ICUResourceBundle)
+                        UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "metadata");
         AliasSink aliasSink = new AliasSink();
 
         metadataResource.getAllItemsWithFallbackNoFail("alias/unit/" + unitSubType, aliasSink);
         if (aliasSink.replacement != null) {
             unitSubType = aliasSink.replacement;
         }
-
 
         // Map duration-year-person, duration-week-person, etc. to duration-year, duration-week, ...
         // TODO(ICU-20400): Get duration-*-person data properly with aliases.
@@ -408,9 +421,7 @@ public class LongNameHandler
         // in the gaps.
         //
         // TODO(icu-units#138): check that fallback is spec-compliant
-        if (width == UnitWidth.FULL_NAME
-                        && unitDisplayCase != null
-                        && !unitDisplayCase.isEmpty()) {
+        if (width == UnitWidth.FULL_NAME && unitDisplayCase != null && !unitDisplayCase.isEmpty()) {
             StringBuilder caseKey = new StringBuilder();
             caseKey.append(key);
             caseKey.append("/case/");
@@ -439,35 +450,41 @@ public class LongNameHandler
         }
     }
 
-    private static void getCurrencyLongNameData(ULocale locale, Currency currency, String[] outArray) {
+    private static void getCurrencyLongNameData(
+            ULocale locale, Currency currency, String[] outArray) {
         // In ICU4J, this method gets a CurrencyData from CurrencyData.provider.
         // TODO(ICU4J): Implement this without going through CurrencyData, like in ICU4C?
-        Map<String, String> data = CurrencyData.provider.getInstance(locale, true).getUnitPatterns();
-    	// Entries in the data map are filled in with any CurrencyUnitPatterns data for locale,
-    	// or if there is no CurrencyUnitPatterns data for locale since the patterns all inherited
-    	// from the "other" pattern in root (which is true for many locales in CLDR 46), then only
-    	// the "other" entry has a currency pattern. So now what we do is: For all valid plural keywords
-    	// for the locale, if the corresponding outArray[] entry is bogus, fill it in from the "other"
-    	// entry. 
+        Map<String, String> data =
+                CurrencyData.provider.getInstance(locale, true).getUnitPatterns();
+        // Entries in the data map are filled in with any CurrencyUnitPatterns data for locale,
+        // or if there is no CurrencyUnitPatterns data for locale since the patterns all inherited
+        // from the "other" pattern in root (which is true for many locales in CLDR 46), then only
+        // the "other" entry has a currency pattern. So now what we do is: For all valid plural
+        // keywords
+        // for the locale, if the corresponding outArray[] entry is bogus, fill it in from the
+        // "other"
+        // entry.
         PluralRules prules = PluralRules.forLocale(locale);
         Set<String> keywords = prules.getKeywords();
         String otherPattern = data.get("other");
-        if (keywords != null && otherPattern!= null) {
-            for (String keyword: keywords) {
+        if (keywords != null && otherPattern != null) {
+            for (String keyword : keywords) {
                 if (!keyword.equals("other") && !data.containsKey(keyword)) {
                     data.put(keyword, otherPattern);
                 }
             }
-        } 
+        }
         for (Map.Entry<String, String> e : data.entrySet()) {
             String pluralKeyword = e.getKey();
             int index = getIndex(pluralKeyword);
-            String longName = currency.getName(locale, Currency.PLURAL_LONG_NAME, pluralKeyword, null);
+            String longName =
+                    currency.getName(locale, Currency.PLURAL_LONG_NAME, pluralKeyword, null);
             String simpleFormat = e.getValue();
             // Example pattern from data: "{0} {1}"
             // Example output after find-and-replace: "{0} US dollars"
             simpleFormat = simpleFormat.replace("{1}", longName);
-            // String compiled = SimpleFormatterImpl.compileToStringMinMaxArguments(simpleFormat, sb, 1,
+            // String compiled = SimpleFormatterImpl.compileToStringMinMaxArguments(simpleFormat,
+            // sb, 1,
             // 1);
             // SimpleModifier mod = new SimpleModifier(compiled, Field.CURRENCY, false);
             outArray[index] = simpleFormat;
@@ -476,8 +493,9 @@ public class LongNameHandler
 
     private static String getCompoundValue(String compoundKey, ULocale locale, UnitWidth width) {
         ICUResourceBundle resource;
-        resource = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_UNIT_BASE_NAME,
-                locale);
+        resource =
+                (ICUResourceBundle)
+                        UResourceBundle.getBundleInstance(ICUData.ICU_UNIT_BASE_NAME, locale);
         StringBuilder key = new StringBuilder();
         key.append("units");
         if (width == UnitWidth.NARROW) {
@@ -503,48 +521,49 @@ public class LongNameHandler
     }
 
     /**
-     * Loads and applies deriveComponent rules from CLDR's
-     * grammaticalFeatures.xml.
-     * <p>
-     * Consider a deriveComponent rule that looks like this:
+     * Loads and applies deriveComponent rules from CLDR's grammaticalFeatures.xml.
+     *
+     * <p>Consider a deriveComponent rule that looks like this:
+     *
      * <pre>
      *   &lt;deriveComponent feature="case" structure="per" value0="compound" value1="nominative"/&gt;
      * </pre>
+     *
      * Instantiating an instance as follows:
+     *
      * <pre>
      *   DerivedComponents d(loc, "case", "per");
      * </pre>
-     * <p>
-     * Applying the rule in the XML element above, <code>d.value0("foo")</code>
-     * will be "foo", and <code>d.value1("foo")</code> will be "nominative".
-     * <p>
-     * In case of any kind of failure, value0() and value1() will simply return
-     * "".
+     *
+     * <p>Applying the rule in the XML element above, <code>d.value0("foo")</code> will be "foo",
+     * and <code>d.value1("foo")</code> will be "nominative".
+     *
+     * <p>In case of any kind of failure, value0() and value1() will simply return "".
      */
     private static class DerivedComponents {
-        /**
-         * Constructor.
-         */
+        /** Constructor. */
         DerivedComponents(ULocale locale, String feature, String structure) {
             try {
                 ICUResourceBundle derivationsBundle =
-                    (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME,
-                                                                         "grammaticalFeatures");
-                derivationsBundle = (ICUResourceBundle)derivationsBundle.get("grammaticalData");
-                derivationsBundle = (ICUResourceBundle)derivationsBundle.get("derivations");
+                        (ICUResourceBundle)
+                                UResourceBundle.getBundleInstance(
+                                        ICUData.ICU_BASE_NAME, "grammaticalFeatures");
+                derivationsBundle = (ICUResourceBundle) derivationsBundle.get("grammaticalData");
+                derivationsBundle = (ICUResourceBundle) derivationsBundle.get("derivations");
 
                 ICUResourceBundle stackBundle;
                 try {
-                    // TODO: use standard normal locale resolution algorithms rather than just grabbing
+                    // TODO: use standard normal locale resolution algorithms rather than just
+                    // grabbing
                     // language:
-                    stackBundle = (ICUResourceBundle)derivationsBundle.get(locale.getLanguage());
+                    stackBundle = (ICUResourceBundle) derivationsBundle.get(locale.getLanguage());
                 } catch (MissingResourceException e) {
-                    stackBundle = (ICUResourceBundle)derivationsBundle.get("root");
+                    stackBundle = (ICUResourceBundle) derivationsBundle.get("root");
                 }
 
-                stackBundle = (ICUResourceBundle)stackBundle.get("component");
-                stackBundle = (ICUResourceBundle)stackBundle.get(feature);
-                stackBundle = (ICUResourceBundle)stackBundle.get(structure);
+                stackBundle = (ICUResourceBundle) stackBundle.get("component");
+                stackBundle = (ICUResourceBundle) stackBundle.get(feature);
+                stackBundle = (ICUResourceBundle) stackBundle.get(structure);
 
                 String value = stackBundle.getString(0);
                 if (value.compareTo("compound") == 0) {
@@ -580,25 +599,27 @@ public class LongNameHandler
     /**
      * Loads and returns the value in rules that look like these:
      *
-     * <deriveCompound feature="gender" structure="per" value="0"/>
-     * <deriveCompound feature="gender" structure="times" value="1"/>
+     * <p><deriveCompound feature="gender" structure="per" value="0"/> <deriveCompound
+     * feature="gender" structure="times" value="1"/>
      *
-     * Currently a fake example, but spec compliant:
-     * <deriveCompound feature="gender" structure="power" value="feminine"/>
+     * <p>Currently a fake example, but spec compliant: <deriveCompound feature="gender"
+     * structure="power" value="feminine"/>
      *
-     * NOTE: If U_FAILURE(status), returns an empty string.
+     * <p>NOTE: If U_FAILURE(status), returns an empty string.
      */
     private static String getDeriveCompoundRule(ULocale locale, String feature, String structure) {
         ICUResourceBundle derivationsBundle =
-                (ICUResourceBundle) UResourceBundle
-                        .getBundleInstance(ICUData.ICU_BASE_NAME, "grammaticalFeatures");
+                (ICUResourceBundle)
+                        UResourceBundle.getBundleInstance(
+                                ICUData.ICU_BASE_NAME, "grammaticalFeatures");
 
         derivationsBundle = (ICUResourceBundle) derivationsBundle.get("grammaticalData");
         derivationsBundle = (ICUResourceBundle) derivationsBundle.get("derivations");
 
         ICUResourceBundle stackBundle;
         try {
-            // TODO: use standard normal locale resolution algorithms rather than just grabbing language:
+            // TODO: use standard normal locale resolution algorithms rather than just grabbing
+            // language:
             stackBundle = (ICUResourceBundle) derivationsBundle.get(locale.getLanguage());
         } catch (MissingResourceException e) {
             stackBundle = (ICUResourceBundle) derivationsBundle.get("root");
@@ -623,18 +644,18 @@ public class LongNameHandler
     //
     // Pass a null to data1 if the structure has no concept of value="1" (e.g.
     // "prefix" doesn't).
-    private static String
-    getDerivedGender(ULocale locale, String structure, String[] data0, String[] data1) {
+    private static String getDerivedGender(
+            ULocale locale, String structure, String[] data0, String[] data1) {
         String val = getDeriveCompoundRule(locale, "gender", structure);
         if (val.length() == 1) {
             switch (val.charAt(0)) {
-            case '0':
-                return data0[GENDER_INDEX];
-            case '1':
-                if (data1 == null) {
-                    return null;
-                }
-                return data1[GENDER_INDEX];
+                case '0':
+                    return data0[GENDER_INDEX];
+                case '1':
+                    if (data1 == null) {
+                        return null;
+                    }
+                    return data1[GENDER_INDEX];
             }
         }
         return val;
@@ -645,34 +666,27 @@ public class LongNameHandler
     ////////////////////////
 
     /**
-     * Calculates the gender of an arbitrary unit: this is the *second*
-     * implementation of an algorithm to do this:
+     * Calculates the gender of an arbitrary unit: this is the *second* implementation of an
+     * algorithm to do this:
      *
-     * Gender is also calculated in "processPatternTimes": that code path is
-     * "bottom up", loading the gender for every component of a compound unit
-     * (at the same time as loading the Long Names formatting patterns), even if
-     * the gender is unneeded, then combining the single units' genders into the
-     * compound unit's gender, according to the rules. This algorithm does a
-     * lazier "top-down" evaluation, starting with the compound unit,
-     * calculating which single unit's gender is needed by breaking it down
-     * according to the rules, and then loading only the gender of the one
-     * single unit who's gender is needed.
+     * <p>Gender is also calculated in "processPatternTimes": that code path is "bottom up", loading
+     * the gender for every component of a compound unit (at the same time as loading the Long Names
+     * formatting patterns), even if the gender is unneeded, then combining the single units'
+     * genders into the compound unit's gender, according to the rules. This algorithm does a lazier
+     * "top-down" evaluation, starting with the compound unit, calculating which single unit's
+     * gender is needed by breaking it down according to the rules, and then loading only the gender
+     * of the one single unit who's gender is needed.
      *
-     * For future refactorings:
-     * 1. we could drop processPatternTimes' gender calculation and just call
-     *    this function: for UNUM_UNIT_WIDTH_FULL_NAME, the unit gender is in
-     *    the very same table as the formatting patterns, so loading it then may
-     *    be efficient. For other unit widths however, it needs to be explicitly
-     *    looked up anyway.
-     * 2. alternatively, if CLDR is providing all the genders we need such that
-     *    we don't need to calculate them in ICU anymore, we could drop this
-     *    function and keep only processPatternTimes' calculation. (And optimise
-     *    it a bit?)
+     * <p>For future refactorings: 1. we could drop processPatternTimes' gender calculation and just
+     * call this function: for UNUM_UNIT_WIDTH_FULL_NAME, the unit gender is in the very same table
+     * as the formatting patterns, so loading it then may be efficient. For other unit widths
+     * however, it needs to be explicitly looked up anyway. 2. alternatively, if CLDR is providing
+     * all the genders we need such that we don't need to calculate them in ICU anymore, we could
+     * drop this function and keep only processPatternTimes' calculation. (And optimise it a bit?)
      *
      * @param locale The desired locale.
      * @param unit The measure unit to calculate the gender for.
-     * @return The gender string for the unit, or an empty string if unknown or
-     *     ungendered.
+     * @return The gender string for the unit, or an empty string if unknown or ungendered.
      */
     private static String calculateGenderForUnit(ULocale locale, MeasureUnit unit) {
         MeasureUnitImpl mui = unit.getCopyOfMeasureUnitImpl();
@@ -789,15 +803,11 @@ public class LongNameHandler
     }
 
     public static LongNameHandler forCurrencyLongNames(
-            ULocale locale,
-            Currency currency,
-            PluralRules rules,
-            MicroPropsGenerator parent) {
+            ULocale locale, Currency currency, PluralRules rules, MicroPropsGenerator parent) {
         String[] simpleFormats = new String[ARRAY_LENGTH];
         getCurrencyLongNameData(locale, currency, simpleFormats);
         // TODO(ICU4J): Reduce the number of object creations here?
-        Map<StandardPlural, SimpleModifier> modifiers = new EnumMap<>(
-                StandardPlural.class);
+        Map<StandardPlural, SimpleModifier> modifiers = new EnumMap<>(StandardPlural.class);
         LongNameHandler result = new LongNameHandler(modifiers, rules, parent);
         result.simpleFormatsToModifiers(simpleFormats, NumberFormat.Field.CURRENCY);
         // TODO(icu-units#28): currency gender?
@@ -806,14 +816,14 @@ public class LongNameHandler
 
     /**
      * Construct a localized LongNameHandler for the specified MeasureUnit.
-     * <p>
-     * Mixed units are not supported, use MixedUnitLongNameHandler.forMeasureUnit.
+     *
+     * <p>Mixed units are not supported, use MixedUnitLongNameHandler.forMeasureUnit.
      *
      * @param locale The desired locale.
      * @param unit The measure unit to construct a LongNameHandler for.
      * @param width Specifies the desired unit rendering.
-     * @param unitDisplayCase Specifies the desired grammatical case. If the
-     *     specified case is not found, we fall back to nominative or no-case.
+     * @param unitDisplayCase Specifies the desired grammatical case. If the specified case is not
+     *     found, we fall back to nominative or no-case.
      * @param rules Plural rules.
      * @param parent Plural rules.
      */
@@ -843,17 +853,18 @@ public class LongNameHandler
             return result;
         } else {
             assert unit.getComplexity() != Complexity.MIXED
-                : "Mixed units not supported by LongNameHandler: use MixedUnitLongNameHandler";
+                    : "Mixed units not supported by LongNameHandler: use MixedUnitLongNameHandler";
             return forArbitraryUnit(locale, unit, width, unitDisplayCase, rules, parent);
         }
     }
 
-    private static LongNameHandler forArbitraryUnit(ULocale loc,
-                                                    MeasureUnit unit,
-                                                    UnitWidth width,
-                                                    String unitDisplayCase,
-                                                    PluralRules rules,
-                                                    MicroPropsGenerator parent) {
+    private static LongNameHandler forArbitraryUnit(
+            ULocale loc,
+            MeasureUnit unit,
+            UnitWidth width,
+            String unitDisplayCase,
+            PluralRules rules,
+            MicroPropsGenerator parent) {
         // Numbered list items are from the algorithms at
         // https://unicode.org/reports/tr35/tr35-general.html#compound-units:
         //
@@ -900,13 +911,17 @@ public class LongNameHandler
 
         // 6. numeratorUnitString
         String[] numeratorUnitData = new String[ARRAY_LENGTH];
-        processPatternTimes(unitImpl, loc, width, derivedPerCases.value0(unitDisplayCase),
-                            numeratorUnitData);
+        processPatternTimes(
+                unitImpl, loc, width, derivedPerCases.value0(unitDisplayCase), numeratorUnitData);
 
         // 7. denominatorUnitString
         String[] denominatorUnitData = new String[ARRAY_LENGTH];
-        processPatternTimes(perUnitImpl, loc, width, derivedPerCases.value1(unitDisplayCase),
-                            denominatorUnitData);
+        processPatternTimes(
+                perUnitImpl,
+                loc,
+                width,
+                derivedPerCases.value1(unitDisplayCase),
+                denominatorUnitData);
 
         // TODO(icu-units#139):
         // - implement DerivedComponents for "plural/times" and "plural/power":
@@ -931,19 +946,22 @@ public class LongNameHandler
 
             // 8. Set perPattern to be getValue([per], locale, length)
             String rawPerUnitFormat = getCompoundValue("per", loc, width);
-            // rawPerUnitFormat is something like "{0} per {1}"; we need to substitute in the secondary
+            // rawPerUnitFormat is something like "{0} per {1}"; we need to substitute in the
+            // secondary
             // unit.
             String perPatternFormatter =
-                SimpleFormatterImpl.compileToStringMinMaxArguments(rawPerUnitFormat, sb, 2, 2);
+                    SimpleFormatterImpl.compileToStringMinMaxArguments(rawPerUnitFormat, sb, 2, 2);
             // Plural and placeholder handling for 7. denominatorUnitString:
             // TODO(icu-units#139): hardcoded:
             // <deriveComponent feature="plural" structure="per" value0="compound" value1="one"/>
             String rawDenominatorFormat = getWithPlural(denominatorUnitData, StandardPlural.ONE);
             // Some "one" pattern may not contain "{0}". For example in "ar" or "ne" locale.
             String denominatorFormatter =
-                SimpleFormatterImpl.compileToStringMinMaxArguments(rawDenominatorFormat, sb, 0, 1);
-            String denominatorString = PatternProps.trimSpaceChar(
-                SimpleFormatterImpl.getTextWithNoArguments(denominatorFormatter));
+                    SimpleFormatterImpl.compileToStringMinMaxArguments(
+                            rawDenominatorFormat, sb, 0, 1);
+            String denominatorString =
+                    PatternProps.trimSpaceChar(
+                            SimpleFormatterImpl.getTextWithNoArguments(denominatorFormatter));
 
             // 9. If the denominatorString is empty, set result to
             //    [numeratorString], otherwise set result to format(perPattern,
@@ -952,16 +970,16 @@ public class LongNameHandler
             // TODO(icu-units#28): Why does UnicodeString need to be explicit in the
             // following line?
             perUnitPattern =
-                SimpleFormatterImpl.formatCompiledPattern(perPatternFormatter, "{0}", denominatorString);
+                    SimpleFormatterImpl.formatCompiledPattern(
+                            perPatternFormatter, "{0}", denominatorString);
         }
-        Map<StandardPlural, SimpleModifier> modifiers = new EnumMap<>(
-                StandardPlural.class);
+        Map<StandardPlural, SimpleModifier> modifiers = new EnumMap<>(StandardPlural.class);
         LongNameHandler result = new LongNameHandler(modifiers, rules, parent);
         if (perUnitPattern.length() == 0) {
             result.simpleFormatsToModifiers(numeratorUnitData, NumberFormat.Field.MEASURE_UNIT);
         } else {
-            result.multiSimpleFormatsToModifiers(numeratorUnitData, perUnitPattern,
-                                                 NumberFormat.Field.MEASURE_UNIT);
+            result.multiSimpleFormatsToModifiers(
+                    numeratorUnitData, perUnitPattern, NumberFormat.Field.MEASURE_UNIT);
         }
 
         // Gender
@@ -970,7 +988,8 @@ public class LongNameHandler
         // value - e.g. what's the gender of "per-second"? Mentioned in CLDR-14253.
         //
         // gender/per deriveCompound rules don't say:
-        // <deriveCompound feature="gender" structure="per" value="0"/> <!-- gender(gram-per-meter) ←
+        // <deriveCompound feature="gender" structure="per" value="0"/> <!-- gender(gram-per-meter)
+        // ←
         // gender(gram) -->
         result.gender = getDerivedGender(loc, "per", numeratorUnitData, denominatorUnitData);
         return result;
@@ -980,12 +999,14 @@ public class LongNameHandler
      * Roughly corresponds to patternTimes(...) in the spec:
      * https://unicode.org/reports/tr35/tr35-general.html#compound-units
      */
-    private static void processPatternTimes(MeasureUnitImpl productUnit,
-                                            ULocale loc,
-                                            UnitWidth width,
-                                            String caseVariant,
-                                            String[] outArray) {
-        assert outArray[StandardPlural.OTHER.ordinal()] == null : "outArray must have only null values!";
+    private static void processPatternTimes(
+            MeasureUnitImpl productUnit,
+            ULocale loc,
+            UnitWidth width,
+            String caseVariant,
+            String[] outArray) {
+        assert outArray[StandardPlural.OTHER.ordinal()] == null
+                : "outArray must have only null values!";
         assert outArray[PER_INDEX] == null : "outArray must have only null values!";
 
         if (productUnit == null) {
@@ -1025,7 +1046,8 @@ public class LongNameHandler
         // 2. Set timesPattern to be getValue(times, locale, length)
         String timesPattern = getCompoundValue("times", loc, width);
         StringBuilder sb = new StringBuilder();
-        String timesPatternFormatter = SimpleFormatterImpl.compileToStringMinMaxArguments(timesPattern, sb, 2, 2);
+        String timesPatternFormatter =
+                SimpleFormatterImpl.compileToStringMinMaxArguments(timesPattern, sb, 2, 2);
 
         PlaceholderPosition[] globalPlaceholder = new PlaceholderPosition[ARRAY_LENGTH];
         char globalJoinerChar = 0;
@@ -1080,8 +1102,8 @@ public class LongNameHandler
                 // not a built-in unit and does not have formatting data in CLDR 39.
                 //
                 // TODO(icu-units#28): test (desirable) invariants in unit tests.
-                throw new UnsupportedOperationException("Unsupported sinlgeUnit: " +
-                                                        singleUnit.getSimpleUnitID());
+                throw new UnsupportedOperationException(
+                        "Unsupported sinlgeUnit: " + singleUnit.getSimpleUnitID());
             }
             String gender = getGenderForBuiltin(loc, simpleUnit);
 
@@ -1096,16 +1118,21 @@ public class LongNameHandler
                 StringBuilder dimensionalityKey = new StringBuilder("compound/power");
                 dimensionalityKey.append(dimensionality);
                 try {
-                    getInflectedMeasureData(dimensionalityKey.toString(), loc, width, gender,
-                                            singleCaseVariant, dimensionalityPrefixPatterns);
+                    getInflectedMeasureData(
+                            dimensionalityKey.toString(),
+                            loc,
+                            width,
+                            gender,
+                            singleCaseVariant,
+                            dimensionalityPrefixPatterns);
                 } catch (MissingResourceException e) {
                     // At the time of writing, only pow2 and pow3 are supported.
                     // Attempting to format other powers results in a
                     // U_RESOURCE_TYPE_MISMATCH. We convert the error if we
                     // understand it:
                     if (dimensionality > 3) {
-                        throw new UnsupportedOperationException("powerN not supported for N > 3: " +
-                                                                productUnit.getIdentifier());
+                        throw new UnsupportedOperationException(
+                                "powerN not supported for N > 3: " + productUnit.getIdentifier());
                     } else {
                         throw e;
                     }
@@ -1137,7 +1164,8 @@ public class LongNameHandler
                 // 4.4.2. set singlePluralCategory to be prefix0(singlePluralCategory)
                 //
                 // TODO(icu-units#139): that refers to these rules:
-                // <deriveComponent feature="plural" structure="prefix" value0="one" value1="compound"/>
+                // <deriveComponent feature="plural" structure="prefix" value0="one"
+                // value1="compound"/>
                 // though I'm not sure what other value they might end up having.
                 //
                 // 4.4.3. set singleCaseVariant to be prefix0(singleCaseVariant)
@@ -1156,9 +1184,10 @@ public class LongNameHandler
             String[] singleUnitArray = new String[ARRAY_LENGTH];
             // At this point we are left with a Simple Unit:
             assert singleUnit.build().getIdentifier().equals(singleUnit.getSimpleUnitID())
-                : "Should be equal: singleUnit.build().getIdentifier() produced " +
-                singleUnit.build().getIdentifier() + ", singleUnit.getSimpleUnitID() produced " +
-                singleUnit.getSimpleUnitID();
+                    : "Should be equal: singleUnit.build().getIdentifier() produced "
+                            + singleUnit.build().getIdentifier()
+                            + ", singleUnit.getSimpleUnitID() produced "
+                            + singleUnit.getSimpleUnitID();
             getMeasureData(loc, singleUnit.build(), width, singleCaseVariant, singleUnitArray);
 
             // Calculate output gender
@@ -1167,28 +1196,28 @@ public class LongNameHandler
 
                 if (prefix != MeasurePrefix.ONE) {
                     singleUnitArray[GENDER_INDEX] =
-                        getDerivedGender(loc, "prefix", singleUnitArray, null);
+                            getDerivedGender(loc, "prefix", singleUnitArray, null);
                 }
 
                 if (dimensionality != 1) {
                     singleUnitArray[GENDER_INDEX] =
-                        getDerivedGender(loc, "power", singleUnitArray, null);
+                            getDerivedGender(loc, "power", singleUnitArray, null);
                 }
 
                 String timesGenderRule = getDeriveCompoundRule(loc, "gender", "times");
                 if (timesGenderRule.length() == 1) {
                     switch (timesGenderRule.charAt(0)) {
-                    case '0':
-                        if (singleUnitIndex == 0) {
-                            assert outArray[GENDER_INDEX] == null;
-                            outArray[GENDER_INDEX] = singleUnitArray[GENDER_INDEX];
-                        }
-                        break;
-                    case '1':
-                        if (singleUnitIndex == singleUnits.size() - 1) {
-                            assert outArray[GENDER_INDEX] == null;
-                            outArray[GENDER_INDEX] = singleUnitArray[GENDER_INDEX];
-                        }
+                        case '0':
+                            if (singleUnitIndex == 0) {
+                                assert outArray[GENDER_INDEX] == null;
+                                outArray[GENDER_INDEX] = singleUnitArray[GENDER_INDEX];
+                            }
+                            break;
+                        case '1':
+                            if (singleUnitIndex == singleUnits.size() - 1) {
+                                assert outArray[GENDER_INDEX] == null;
+                                outArray[GENDER_INDEX] = singleUnitArray[GENDER_INDEX];
+                            }
                     }
                 } else {
                     if (outArray[GENDER_INDEX] == null) {
@@ -1222,7 +1251,8 @@ public class LongNameHandler
 
                 // 4.6. Extract(corePattern, coreUnit, placeholder, placeholderPosition) from that
                 // pattern.
-                ExtractCorePatternResult r = extractCorePattern(getWithPlural(singleUnitArray, plural));
+                ExtractCorePatternResult r =
+                        extractCorePattern(getWithPlural(singleUnitArray, plural));
 
                 // 4.7 If the position is middle, then fail
                 if (r.placeholderPosition == PlaceholderPosition.MIDDLE) {
@@ -1245,7 +1275,8 @@ public class LongNameHandler
                 // 4.9. If siPrefixPattern is not empty
                 if (prefix != MeasurePrefix.ONE) {
                     String prefixCompiled =
-                        SimpleFormatterImpl.compileToStringMinMaxArguments(prefixPattern, sb, 1, 1);
+                            SimpleFormatterImpl.compileToStringMinMaxArguments(
+                                    prefixPattern, sb, 1, 1);
 
                     // 4.9.1. Set coreUnit to be the combineLowercasing(locale, length,
                     // siPrefixPattern,
@@ -1258,13 +1289,15 @@ public class LongNameHandler
                     if (width == UnitWidth.FULL_NAME) {
                         r.coreUnit = UCharacter.toLowerCase(loc, r.coreUnit);
                     }
-                    r.coreUnit = SimpleFormatterImpl.formatCompiledPattern(prefixCompiled, r.coreUnit);
+                    r.coreUnit =
+                            SimpleFormatterImpl.formatCompiledPattern(prefixCompiled, r.coreUnit);
                 }
 
                 // 4.10. If dimensionalityPrefixPattern is not empty
                 if (dimensionality != 1) {
-                    String dimensionalityCompiled = SimpleFormatterImpl.compileToStringMinMaxArguments(
-                        getWithPlural(dimensionalityPrefixPatterns, plural), sb, 1, 1);
+                    String dimensionalityCompiled =
+                            SimpleFormatterImpl.compileToStringMinMaxArguments(
+                                    getWithPlural(dimensionalityPrefixPatterns, plural), sb, 1, 1);
 
                     // 4.10.1. Set coreUnit to be the combineLowercasing(locale, length,
                     // dimensionalityPrefixPattern, coreUnit)
@@ -1277,7 +1310,8 @@ public class LongNameHandler
                         r.coreUnit = UCharacter.toLowerCase(loc, r.coreUnit);
                     }
                     r.coreUnit =
-                        SimpleFormatterImpl.formatCompiledPattern(dimensionalityCompiled, r.coreUnit);
+                            SimpleFormatterImpl.formatCompiledPattern(
+                                    dimensionalityCompiled, r.coreUnit);
                 }
 
                 if (outArray[pluralIndex].length() == 0) {
@@ -1285,15 +1319,17 @@ public class LongNameHandler
                     outArray[pluralIndex] = r.coreUnit;
                 } else {
                     // 4.12. Otherwise set result to be format(timesPattern, result, coreUnit)
-                    outArray[pluralIndex] = SimpleFormatterImpl.formatCompiledPattern(
-                        timesPatternFormatter, outArray[pluralIndex], r.coreUnit);
+                    outArray[pluralIndex] =
+                            SimpleFormatterImpl.formatCompiledPattern(
+                                    timesPatternFormatter, outArray[pluralIndex], r.coreUnit);
                 }
             }
         }
 
         // 5. Handling constant denominator if it exists.
         if (productUnit.getConstantDenominator() != 0) {
-            outArray[CONSTANT_DENOMINATOR_INDEX] = String.valueOf(productUnit.getConstantDenominator());
+            outArray[CONSTANT_DENOMINATOR_INDEX] =
+                    String.valueOf(productUnit.getConstantDenominator());
             Integer pluralIndex = null;
             for (StandardPlural plural_ : StandardPlural.values()) {
                 if (outArray[plural_.ordinal()] != null) {
@@ -1317,10 +1353,12 @@ public class LongNameHandler
             if (outArray[pluralIndex].length() == 0) {
                 outArray[pluralIndex] = outArray[CONSTANT_DENOMINATOR_INDEX];
             } else {
-                outArray[pluralIndex] = SimpleFormatterImpl.formatCompiledPattern(
-                        timesPatternFormatter, outArray[CONSTANT_DENOMINATOR_INDEX], outArray[pluralIndex]);
+                outArray[pluralIndex] =
+                        SimpleFormatterImpl.formatCompiledPattern(
+                                timesPatternFormatter,
+                                outArray[CONSTANT_DENOMINATOR_INDEX],
+                                outArray[pluralIndex]);
             }
-
         }
 
         for (StandardPlural plural : StandardPlural.values()) {
@@ -1343,45 +1381,43 @@ public class LongNameHandler
     }
 
     /** Sets modifiers to use the patterns from simpleFormats. */
-    private void simpleFormatsToModifiers(
-            String[] simpleFormats,
-            NumberFormat.Field field) {
+    private void simpleFormatsToModifiers(String[] simpleFormats, NumberFormat.Field field) {
         StringBuilder sb = new StringBuilder();
         for (StandardPlural plural : StandardPlural.VALUES) {
             String simpleFormat = getWithPlural(simpleFormats, plural);
-            String compiled = SimpleFormatterImpl.compileToStringMinMaxArguments(simpleFormat, sb, 0, 1);
+            String compiled =
+                    SimpleFormatterImpl.compileToStringMinMaxArguments(simpleFormat, sb, 0, 1);
             Modifier.Parameters parameters = new Modifier.Parameters();
             parameters.obj = this;
-            parameters.signum = null;// Signum ignored
+            parameters.signum = null; // Signum ignored
             parameters.plural = plural;
             modifiers.put(plural, new SimpleModifier(compiled, field, false, parameters));
         }
     }
 
     /**
-     * Sets modifiers to a combination of {@code leadFormats} (one per plural form)
-     * and {@code trailFormat} appended to each.
+     * Sets modifiers to a combination of {@code leadFormats} (one per plural form) and {@code
+     * trailFormat} appended to each.
      *
-     * With a leadFormat of "{0}m" and a trailFormat of "{0}/s", it produces a
-     * pattern of "{0}m/s" by inserting each leadFormat pattern into
-     * trailFormat.
+     * <p>With a leadFormat of "{0}m" and a trailFormat of "{0}/s", it produces a pattern of
+     * "{0}m/s" by inserting each leadFormat pattern into trailFormat.
      */
     private void multiSimpleFormatsToModifiers(
-            String[] leadFormats,
-            String trailFormat,
-            NumberFormat.Field field) {
+            String[] leadFormats, String trailFormat, NumberFormat.Field field) {
         StringBuilder sb = new StringBuilder();
-        String trailCompiled = SimpleFormatterImpl.compileToStringMinMaxArguments(trailFormat, sb, 1, 1);
+        String trailCompiled =
+                SimpleFormatterImpl.compileToStringMinMaxArguments(trailFormat, sb, 1, 1);
         for (StandardPlural plural : StandardPlural.VALUES) {
             String leadFormat = getWithPlural(leadFormats, plural);
             String compoundFormat;
             if (leadFormat.length() == 0) {
                 compoundFormat = trailFormat;
             } else {
-                compoundFormat = SimpleFormatterImpl.formatCompiledPattern(trailCompiled, leadFormat);
+                compoundFormat =
+                        SimpleFormatterImpl.formatCompiledPattern(trailCompiled, leadFormat);
             }
             String compoundCompiled =
-                SimpleFormatterImpl.compileToStringMinMaxArguments(compoundFormat, sb, 0, 1);
+                    SimpleFormatterImpl.compileToStringMinMaxArguments(compoundFormat, sb, 0, 1);
             Modifier.Parameters parameters = new Modifier.Parameters();
             parameters.obj = this;
             parameters.signum = null; // Signum ignored
@@ -1400,12 +1436,12 @@ public class LongNameHandler
     }
 
     /**
-     * Produces a plural-appropriate Modifier for a unit: {@code quantity} is taken as
-     * the final smallest unit, while the larger unit values must be provided
-     * via {@code micros.mixedMeasures}.
+     * Produces a plural-appropriate Modifier for a unit: {@code quantity} is taken as the final
+     * smallest unit, while the larger unit values must be provided via {@code
+     * micros.mixedMeasures}.
      *
-     * Does not call parent.processQuantity, so cannot get a MicroProps instance
-     * that way. Instead, the instance is passed in as a parameter.
+     * <p>Does not call parent.processQuantity, so cannot get a MicroProps instance that way.
+     * Instead, the instance is passed in as a parameter.
      */
     @Override
     public MicroProps processQuantityWithMicros(DecimalQuantity quantity, MicroProps micros) {

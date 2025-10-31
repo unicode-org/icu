@@ -1,36 +1,32 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /*
-***************************************************************************
-*   Copyright (C) 2002-2009 International Business Machines Corporation   *
-*   and others. All rights reserved.                                      *
-***************************************************************************
-*/
+ ***************************************************************************
+ *   Copyright (C) 2002-2009 International Business Machines Corporation   *
+ *   and others. All rights reserved.                                      *
+ ***************************************************************************
+ */
 package com.ibm.icu.text;
 
+import com.ibm.icu.lang.UCharacter;
 import java.text.ParsePosition;
 import java.util.HashMap;
 
-import com.ibm.icu.lang.UCharacter;
-
-class RBBISymbolTable implements SymbolTable{
+class RBBISymbolTable implements SymbolTable {
 
     HashMap<String, RBBISymbolTableEntry> fHashTable;
-    RBBIRuleScanner      fRuleScanner;
+    RBBIRuleScanner fRuleScanner;
 
     // These next two fields are part of the mechanism for passing references to
     //   already-constructed UnicodeSets back to the UnicodeSet constructor
     //   when the pattern includes $variable references.
-    String               ffffString;
-    UnicodeSet           fCachedSetLookup;
+    String ffffString;
+    UnicodeSet fCachedSetLookup;
 
-
-
-    static class RBBISymbolTableEntry  {
-        String          key;
-        RBBINode        val;
+    static class RBBISymbolTableEntry {
+        String key;
+        RBBINode val;
     }
-
 
     RBBISymbolTable(RBBIRuleScanner rs) {
         fRuleScanner = rs;
@@ -173,10 +169,10 @@ class RBBISymbolTable implements SymbolTable{
     //
     //  RBBISymbolTable::print    Debugging function, dump out the symbol table contents.
     //
-    ///CLOVER:OFF
+    /// CLOVER:OFF
     void rbbiSymtablePrint() {
-        System.out
-                .print("Variable Definitions\n"
+        System.out.print(
+                "Variable Definitions\n"
                         + "Name               Node Val     String Val\n"
                         + "----------------------------------------------------------------------\n");
 
@@ -199,6 +195,6 @@ class RBBISymbolTable implements SymbolTable{
             System.out.print("\n");
         }
     }
-    ///CLOVER:ON
+    /// CLOVER:ON
 
 }

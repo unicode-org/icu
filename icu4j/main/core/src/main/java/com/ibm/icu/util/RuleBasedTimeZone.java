@@ -7,19 +7,18 @@
  *******************************************************************************
  */
 package com.ibm.icu.util;
+
+import com.ibm.icu.impl.Grego;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Date;
 import java.util.List;
 
-import com.ibm.icu.impl.Grego;
-
 /**
- * <code>RuleBasedTimeZone</code> is a concrete subclass of <code>TimeZone</code> that allows users to define
- * custom historic time transition rules.
+ * <code>RuleBasedTimeZone</code> is a concrete subclass of <code>TimeZone</code> that allows users
+ * to define custom historic time transition rules.
  *
  * @see com.ibm.icu.util.TimeZoneRule
- *
  * @stable ICU 3.8
  */
 public class RuleBasedTimeZone extends BasicTimeZone implements Cloneable {
@@ -34,12 +33,11 @@ public class RuleBasedTimeZone extends BasicTimeZone implements Cloneable {
     private transient boolean upToDate;
 
     /**
-     * Constructs a <code>RuleBasedTimeZone</code> object with the ID and the
-     * <code>InitialTimeZoneRule</code>
+     * Constructs a <code>RuleBasedTimeZone</code> object with the ID and the <code>
+     * InitialTimeZoneRule</code>
      *
-     * @param id                The time zone ID.
-     * @param initialRule       The initial time zone rule.
-     *
+     * @param id The time zone ID.
+     * @param initialRule The initial time zone rule.
      * @stable ICU 3.8
      */
     public RuleBasedTimeZone(String id, InitialTimeZoneRule initialRule) {
@@ -48,30 +46,30 @@ public class RuleBasedTimeZone extends BasicTimeZone implements Cloneable {
     }
 
     /**
-     * Adds the <code>TimeZoneRule</code> which represents time transitions.
-     * The <code>TimeZoneRule</code> must have start times, that is, the result
-     * of {@link com.ibm.icu.util.TimeZoneRule#isTransitionRule()} must be true.
-     * Otherwise, <code>IllegalArgumentException</code> is thrown.
+     * Adds the <code>TimeZoneRule</code> which represents time transitions. The <code>TimeZoneRule
+     * </code> must have start times, that is, the result of {@link
+     * com.ibm.icu.util.TimeZoneRule#isTransitionRule()} must be true. Otherwise, <code>
+     * IllegalArgumentException</code> is thrown.
      *
      * @param rule The <code>TimeZoneRule</code>.
-     *
      * @stable ICU 3.8
      */
     public void addTransitionRule(TimeZoneRule rule) {
         if (isFrozen()) {
-            throw new UnsupportedOperationException("Attempt to modify a frozen RuleBasedTimeZone instance.");
+            throw new UnsupportedOperationException(
+                    "Attempt to modify a frozen RuleBasedTimeZone instance.");
         }
         if (!rule.isTransitionRule()) {
             throw new IllegalArgumentException("Rule must be a transition rule");
         }
         if (rule instanceof AnnualTimeZoneRule
-                && ((AnnualTimeZoneRule)rule).getEndYear() == AnnualTimeZoneRule.MAX_YEAR) {
+                && ((AnnualTimeZoneRule) rule).getEndYear() == AnnualTimeZoneRule.MAX_YEAR) {
             // One of the final rules applicable in future forever
             if (finalRules == null) {
                 finalRules = new AnnualTimeZoneRule[2];
-                finalRules[0] = (AnnualTimeZoneRule)rule;
+                finalRules[0] = (AnnualTimeZoneRule) rule;
             } else if (finalRules[1] == null) {
-                finalRules[1] = (AnnualTimeZoneRule)rule;
+                finalRules[1] = (AnnualTimeZoneRule) rule;
             } else {
                 // Only a pair of AnnualTimeZoneRule is allowed.
                 throw new IllegalStateException("Too many final rules");
@@ -94,8 +92,7 @@ public class RuleBasedTimeZone extends BasicTimeZone implements Cloneable {
      * @stable ICU 3.8
      */
     @Override
-    public int getOffset(int era, int year, int month, int day, int dayOfWeek,
-            int milliseconds) {
+    public int getOffset(int era, int year, int month, int day, int dayOfWeek, int milliseconds) {
         if (era == GregorianCalendar.BC) {
             // Convert to extended year
             year = 1 - year;
@@ -118,11 +115,15 @@ public class RuleBasedTimeZone extends BasicTimeZone implements Cloneable {
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 69
      */
     @Override
-    public void getOffsetFromLocal(long date,
-            LocalOption nonExistingTimeOpt, LocalOption duplicatedTimeOpt, int[] offsets) {
+    public void getOffsetFromLocal(
+            long date,
+            LocalOption nonExistingTimeOpt,
+            LocalOption duplicatedTimeOpt,
+            int[] offsets) {
         int nonExistingTimeOptVal = getLocalOptionValue(nonExistingTimeOpt);
         int duplicatedTimeOptVal = getLocalOptionValue(duplicatedTimeOpt);
         getOffset(date, true, nonExistingTimeOptVal, duplicatedTimeOptVal, offsets);
@@ -161,12 +162,14 @@ public class RuleBasedTimeZone extends BasicTimeZone implements Cloneable {
      * @stable ICU 3.8
      */
     @Override
-    ///CLOVER:OFF
+    /// CLOVER:OFF
     public void setRawOffset(int offsetMillis) {
         // TODO: Do nothing for now..
-        throw new UnsupportedOperationException("setRawOffset in RuleBasedTimeZone is not supported.");
+        throw new UnsupportedOperationException(
+                "setRawOffset in RuleBasedTimeZone is not supported.");
     }
-    ///CLOVER:ON
+
+    /// CLOVER:ON
 
     /**
      * {@inheritDoc}
@@ -194,6 +197,7 @@ public class RuleBasedTimeZone extends BasicTimeZone implements Cloneable {
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 49
      */
     @Override
@@ -251,7 +255,7 @@ public class RuleBasedTimeZone extends BasicTimeZone implements Cloneable {
             // We cannot reasonably compare rules in different types
             return false;
         }
-        RuleBasedTimeZone otherRBTZ = (RuleBasedTimeZone)other;
+        RuleBasedTimeZone otherRBTZ = (RuleBasedTimeZone) other;
 
         // initial rule
         if (!initialRule.isEquivalentTo(otherRBTZ.initialRule)) {
@@ -264,10 +268,10 @@ public class RuleBasedTimeZone extends BasicTimeZone implements Cloneable {
                 if (finalRules[i] == null && otherRBTZ.finalRules[i] == null) {
                     continue;
                 }
-                if (finalRules[i] != null && otherRBTZ.finalRules[i] != null
+                if (finalRules[i] != null
+                        && otherRBTZ.finalRules[i] != null
                         && finalRules[i].isEquivalentTo(otherRBTZ.finalRules[i])) {
                     continue;
-
                 }
                 return false;
             }
@@ -363,15 +367,27 @@ public class RuleBasedTimeZone extends BasicTimeZone implements Cloneable {
             } else if (tt <= base) {
                 if (finalRules != null) {
                     // Find a transion time with finalRules
-                    Date start0 = finalRules[0].getNextStart(base,
-                            finalRules[1].getRawOffset(), finalRules[1].getDSTSavings(), inclusive);
-                    Date start1 = finalRules[1].getNextStart(base,
-                            finalRules[0].getRawOffset(), finalRules[0].getDSTSavings(), inclusive);
+                    Date start0 =
+                            finalRules[0].getNextStart(
+                                    base,
+                                    finalRules[1].getRawOffset(),
+                                    finalRules[1].getDSTSavings(),
+                                    inclusive);
+                    Date start1 =
+                            finalRules[1].getNextStart(
+                                    base,
+                                    finalRules[0].getRawOffset(),
+                                    finalRules[0].getDSTSavings(),
+                                    inclusive);
 
                     if (start1.after(start0)) {
-                        tzt = new TimeZoneTransition(start0.getTime(), finalRules[1], finalRules[0]);
+                        tzt =
+                                new TimeZoneTransition(
+                                        start0.getTime(), finalRules[1], finalRules[0]);
                     } else {
-                        tzt = new TimeZoneTransition(start1.getTime(), finalRules[0], finalRules[1]);
+                        tzt =
+                                new TimeZoneTransition(
+                                        start1.getTime(), finalRules[0], finalRules[1]);
                     }
                     result = tzt;
                     isFinal = true;
@@ -436,15 +452,27 @@ public class RuleBasedTimeZone extends BasicTimeZone implements Cloneable {
             } else if (tt < base) {
                 if (finalRules != null) {
                     // Find a transion time with finalRules
-                    Date start0 = finalRules[0].getPreviousStart(base,
-                            finalRules[1].getRawOffset(), finalRules[1].getDSTSavings(), inclusive);
-                    Date start1 = finalRules[1].getPreviousStart(base,
-                            finalRules[0].getRawOffset(), finalRules[0].getDSTSavings(), inclusive);
+                    Date start0 =
+                            finalRules[0].getPreviousStart(
+                                    base,
+                                    finalRules[1].getRawOffset(),
+                                    finalRules[1].getDSTSavings(),
+                                    inclusive);
+                    Date start1 =
+                            finalRules[1].getPreviousStart(
+                                    base,
+                                    finalRules[0].getRawOffset(),
+                                    finalRules[0].getDSTSavings(),
+                                    inclusive);
 
                     if (start1.before(start0)) {
-                        tzt = new TimeZoneTransition(start0.getTime(), finalRules[1], finalRules[0]);
+                        tzt =
+                                new TimeZoneTransition(
+                                        start0.getTime(), finalRules[1], finalRules[0]);
                     } else {
-                        tzt = new TimeZoneTransition(start1.getTime(), finalRules[0], finalRules[1]);
+                        tzt =
+                                new TimeZoneTransition(
+                                        start1.getTime(), finalRules[0], finalRules[1]);
                     }
                 }
                 result = tzt;
@@ -475,6 +503,7 @@ public class RuleBasedTimeZone extends BasicTimeZone implements Cloneable {
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 3.8
      */
     @Override
@@ -511,7 +540,8 @@ public class RuleBasedTimeZone extends BasicTimeZone implements Cloneable {
             // Build the transition array which represents historical time zone
             // transitions.
             if (historicRules != null) {
-                BitSet done = new BitSet(historicRules.size()); // for skipping rules already processed
+                BitSet done =
+                        new BitSet(historicRules.size()); // for skipping rules already processed
 
                 while (true) {
                     int curStdOffset = curRule.getRawOffset();
@@ -531,8 +561,8 @@ public class RuleBasedTimeZone extends BasicTimeZone implements Cloneable {
                             // No more transitions from this rule - skip this rule next time
                             done.set(i);
                         } else {
-                            if (r == curRule ||
-                                    (r.getName().equals(curRule.getName())
+                            if (r == curRule
+                                    || (r.getName().equals(curRule.getName())
                                             && r.getRawOffset() == curRule.getRawOffset()
                                             && r.getDSTSavings() == curRule.getDSTSavings())) {
                                 continue;
@@ -545,7 +575,7 @@ public class RuleBasedTimeZone extends BasicTimeZone implements Cloneable {
                         }
                     }
 
-                    if (nextRule ==  null) {
+                    if (nextRule == null) {
                         // Check if all historic rules are done
                         boolean bDoneAll = true;
                         for (int j = 0; j < historicRules.size(); j++) {
@@ -565,7 +595,9 @@ public class RuleBasedTimeZone extends BasicTimeZone implements Cloneable {
                             if (finalRules[i] == curRule) {
                                 continue;
                             }
-                            d = finalRules[i].getNextStart(lastTransitionTime, curStdOffset, curDstSavings, false);
+                            d =
+                                    finalRules[i].getNextStart(
+                                            lastTransitionTime, curStdOffset, curDstSavings, false);
                             if (d != null) {
                                 tt = d.getTime();
                                 if (tt < nextTransitionTime) {
@@ -584,7 +616,8 @@ public class RuleBasedTimeZone extends BasicTimeZone implements Cloneable {
                     if (historicTransitions == null) {
                         historicTransitions = new ArrayList<>();
                     }
-                    historicTransitions.add(new TimeZoneTransition(nextTransitionTime, curRule, nextRule));
+                    historicTransitions.add(
+                            new TimeZoneTransition(nextTransitionTime, curRule, nextRule));
                     lastTransitionTime = nextTransitionTime;
                     curRule = nextRule;
                 }
@@ -594,16 +627,40 @@ public class RuleBasedTimeZone extends BasicTimeZone implements Cloneable {
                     historicTransitions = new ArrayList<>();
                 }
                 // Append the first transition for each
-                Date d0 = finalRules[0].getNextStart(lastTransitionTime, curRule.getRawOffset(), curRule.getDSTSavings(), false);
-                Date d1 = finalRules[1].getNextStart(lastTransitionTime, curRule.getRawOffset(), curRule.getDSTSavings(), false);
+                Date d0 =
+                        finalRules[0].getNextStart(
+                                lastTransitionTime,
+                                curRule.getRawOffset(),
+                                curRule.getDSTSavings(),
+                                false);
+                Date d1 =
+                        finalRules[1].getNextStart(
+                                lastTransitionTime,
+                                curRule.getRawOffset(),
+                                curRule.getDSTSavings(),
+                                false);
                 if (d1.after(d0)) {
-                    historicTransitions.add(new TimeZoneTransition(d0.getTime(), curRule, finalRules[0]));
-                    d1 = finalRules[1].getNextStart(d0.getTime(), finalRules[0].getRawOffset(), finalRules[0].getDSTSavings(), false);
-                    historicTransitions.add(new TimeZoneTransition(d1.getTime(), finalRules[0], finalRules[1]));
+                    historicTransitions.add(
+                            new TimeZoneTransition(d0.getTime(), curRule, finalRules[0]));
+                    d1 =
+                            finalRules[1].getNextStart(
+                                    d0.getTime(),
+                                    finalRules[0].getRawOffset(),
+                                    finalRules[0].getDSTSavings(),
+                                    false);
+                    historicTransitions.add(
+                            new TimeZoneTransition(d1.getTime(), finalRules[0], finalRules[1]));
                 } else {
-                    historicTransitions.add(new TimeZoneTransition(d1.getTime(), curRule, finalRules[1]));
-                    d0 = finalRules[0].getNextStart(d1.getTime(), finalRules[1].getRawOffset(), finalRules[1].getDSTSavings(), false);
-                    historicTransitions.add(new TimeZoneTransition(d0.getTime(), finalRules[1], finalRules[0]));
+                    historicTransitions.add(
+                            new TimeZoneTransition(d1.getTime(), curRule, finalRules[1]));
+                    d0 =
+                            finalRules[0].getNextStart(
+                                    d1.getTime(),
+                                    finalRules[1].getRawOffset(),
+                                    finalRules[1].getDSTSavings(),
+                                    false);
+                    historicTransitions.add(
+                            new TimeZoneTransition(d0.getTime(), finalRules[1], finalRules[0]));
                 }
             }
         }
@@ -613,20 +670,33 @@ public class RuleBasedTimeZone extends BasicTimeZone implements Cloneable {
     /*
      * getOffset internal implementation
      */
-    private void getOffset(long time, boolean local, int NonExistingTimeOpt, int DuplicatedTimeOpt, int[] offsets) {
+    private void getOffset(
+            long time,
+            boolean local,
+            int NonExistingTimeOpt,
+            int DuplicatedTimeOpt,
+            int[] offsets) {
         complete();
         TimeZoneRule rule = null;
         if (historicTransitions == null) {
             rule = initialRule;
         } else {
-            long tstart = getTransitionTime(historicTransitions.get(0),
-                    local, NonExistingTimeOpt, DuplicatedTimeOpt);
+            long tstart =
+                    getTransitionTime(
+                            historicTransitions.get(0),
+                            local,
+                            NonExistingTimeOpt,
+                            DuplicatedTimeOpt);
             if (time < tstart) {
                 rule = initialRule;
             } else {
                 int idx = historicTransitions.size() - 1;
-                long tend = getTransitionTime(historicTransitions.get(idx),
-                        local, NonExistingTimeOpt, DuplicatedTimeOpt);
+                long tend =
+                        getTransitionTime(
+                                historicTransitions.get(idx),
+                                local,
+                                NonExistingTimeOpt,
+                                DuplicatedTimeOpt);
                 if (time > tend) {
                     if (finalRules != null) {
                         rule = findRuleInFinal(time, local, NonExistingTimeOpt, DuplicatedTimeOpt);
@@ -639,8 +709,12 @@ public class RuleBasedTimeZone extends BasicTimeZone implements Cloneable {
                 } else {
                     // Find a historical transition
                     while (idx >= 0) {
-                        if (time >= getTransitionTime(historicTransitions.get(idx),
-                                local, NonExistingTimeOpt, DuplicatedTimeOpt)) {
+                        if (time
+                                >= getTransitionTime(
+                                        historicTransitions.get(idx),
+                                        local,
+                                        NonExistingTimeOpt,
+                                        DuplicatedTimeOpt)) {
                             break;
                         }
                         idx--;
@@ -656,8 +730,12 @@ public class RuleBasedTimeZone extends BasicTimeZone implements Cloneable {
     /*
      * Find a time zone rule applicable to the specified time
      */
-    private TimeZoneRule findRuleInFinal(long time, boolean local, int NonExistingTimeOpt, int DuplicatedTimeOpt) {
-        if (finalRules == null || finalRules.length != 2 || finalRules[0] == null || finalRules[1] == null) {
+    private TimeZoneRule findRuleInFinal(
+            long time, boolean local, int NonExistingTimeOpt, int DuplicatedTimeOpt) {
+        if (finalRules == null
+                || finalRules.length != 2
+                || finalRules[0] == null
+                || finalRules[1] == null) {
             return null;
         }
 
@@ -667,21 +745,35 @@ public class RuleBasedTimeZone extends BasicTimeZone implements Cloneable {
 
         base = time;
         if (local) {
-            localDelta = getLocalDelta(finalRules[1].getRawOffset(), finalRules[1].getDSTSavings(),
-                    finalRules[0].getRawOffset(), finalRules[0].getDSTSavings(),
-                    NonExistingTimeOpt, DuplicatedTimeOpt);
+            localDelta =
+                    getLocalDelta(
+                            finalRules[1].getRawOffset(),
+                            finalRules[1].getDSTSavings(),
+                            finalRules[0].getRawOffset(),
+                            finalRules[0].getDSTSavings(),
+                            NonExistingTimeOpt,
+                            DuplicatedTimeOpt);
             base -= localDelta;
         }
-        start0 = finalRules[0].getPreviousStart(base, finalRules[1].getRawOffset(), finalRules[1].getDSTSavings(), true);
+        start0 =
+                finalRules[0].getPreviousStart(
+                        base, finalRules[1].getRawOffset(), finalRules[1].getDSTSavings(), true);
 
         base = time;
         if (local) {
-            localDelta = getLocalDelta(finalRules[0].getRawOffset(), finalRules[0].getDSTSavings(),
-                    finalRules[1].getRawOffset(), finalRules[1].getDSTSavings(),
-                    NonExistingTimeOpt, DuplicatedTimeOpt);
+            localDelta =
+                    getLocalDelta(
+                            finalRules[0].getRawOffset(),
+                            finalRules[0].getDSTSavings(),
+                            finalRules[1].getRawOffset(),
+                            finalRules[1].getDSTSavings(),
+                            NonExistingTimeOpt,
+                            DuplicatedTimeOpt);
             base -= localDelta;
         }
-        start1 = finalRules[1].getPreviousStart(base, finalRules[0].getRawOffset(), finalRules[0].getDSTSavings(), true);
+        start1 =
+                finalRules[1].getPreviousStart(
+                        base, finalRules[0].getRawOffset(), finalRules[0].getDSTSavings(), true);
 
         if (start0 == null || start1 == null) {
             if (start0 != null) {
@@ -699,13 +791,18 @@ public class RuleBasedTimeZone extends BasicTimeZone implements Cloneable {
     /*
      * Get the transition time in local wall clock
      */
-    private static long getTransitionTime(TimeZoneTransition tzt, boolean local,
-            int NonExistingTimeOpt, int DuplicatedTimeOpt) {
+    private static long getTransitionTime(
+            TimeZoneTransition tzt, boolean local, int NonExistingTimeOpt, int DuplicatedTimeOpt) {
         long time = tzt.getTime();
         if (local) {
-            time += getLocalDelta(tzt.getFrom().getRawOffset(), tzt.getFrom().getDSTSavings(),
-                                tzt.getTo().getRawOffset(), tzt.getTo().getDSTSavings(),
-                                NonExistingTimeOpt, DuplicatedTimeOpt);
+            time +=
+                    getLocalDelta(
+                            tzt.getFrom().getRawOffset(),
+                            tzt.getFrom().getDSTSavings(),
+                            tzt.getTo().getRawOffset(),
+                            tzt.getTo().getDSTSavings(),
+                            NonExistingTimeOpt,
+                            DuplicatedTimeOpt);
         }
         return time;
     }
@@ -713,8 +810,13 @@ public class RuleBasedTimeZone extends BasicTimeZone implements Cloneable {
     /*
      * Returns amount of local time adjustment used for checking rule transitions
      */
-    private static int getLocalDelta(int rawBefore, int dstBefore, int rawAfter, int dstAfter,
-            int NonExistingTimeOpt, int DuplicatedTimeOpt) {
+    private static int getLocalDelta(
+            int rawBefore,
+            int dstBefore,
+            int rawAfter,
+            int dstAfter,
+            int NonExistingTimeOpt,
+            int DuplicatedTimeOpt) {
         int delta = 0;
 
         int offsetBefore = rawBefore + dstBefore;
@@ -758,10 +860,11 @@ public class RuleBasedTimeZone extends BasicTimeZone implements Cloneable {
     }
 
     // Freezable stuffs
-    private volatile transient boolean isFrozen = false;
+    private transient volatile boolean isFrozen = false;
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 49
      */
     @Override
@@ -771,6 +874,7 @@ public class RuleBasedTimeZone extends BasicTimeZone implements Cloneable {
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 49
      */
     @Override
@@ -782,11 +886,12 @@ public class RuleBasedTimeZone extends BasicTimeZone implements Cloneable {
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 49
      */
     @Override
     public RuleBasedTimeZone cloneAsThawed() {
-        RuleBasedTimeZone tz = (RuleBasedTimeZone)super.cloneAsThawed();
+        RuleBasedTimeZone tz = (RuleBasedTimeZone) super.cloneAsThawed();
         if (historicRules != null) {
             tz.historicRules = new ArrayList<>(historicRules); // rules are immutable
         }

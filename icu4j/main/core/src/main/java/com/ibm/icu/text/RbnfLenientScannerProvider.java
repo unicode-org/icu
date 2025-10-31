@@ -19,8 +19,8 @@ import com.ibm.icu.util.ULocale;
 @Deprecated
 public interface RbnfLenientScannerProvider {
     /**
-     * Returns a scanner appropriate for the given locale, with optional extra data.
-     * in the form of collation rules.
+     * Returns a scanner appropriate for the given locale, with optional extra data. in the form of
+     * collation rules.
      *
      * @param locale the locale to provide the default lenient rules.
      * @param extras extra collation rules

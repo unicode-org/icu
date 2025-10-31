@@ -2,9 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.number;
 
-import java.math.BigDecimal;
-import java.text.AttributedCharacterIterator;
-
 import com.ibm.icu.impl.FormattedStringBuilder;
 import com.ibm.icu.impl.FormattedValueStringBuilderImpl;
 import com.ibm.icu.impl.Utility;
@@ -14,12 +11,14 @@ import com.ibm.icu.text.DisplayOptions;
 import com.ibm.icu.text.FormattedValue;
 import com.ibm.icu.text.PluralRules.IFixedDecimal;
 import com.ibm.icu.util.MeasureUnit;
+import java.math.BigDecimal;
+import java.text.AttributedCharacterIterator;
 
 /**
- * The result of a number formatting operation. This class allows the result to be exported in several
- * data types, including a String, an AttributedCharacterIterator, and a BigDecimal.
+ * The result of a number formatting operation. This class allows the result to be exported in
+ * several data types, including a String, an AttributedCharacterIterator, and a BigDecimal.
  *
- * Instances of this class are immutable and thread-safe.
+ * <p>Instances of this class are immutable and thread-safe.
  *
  * @stable ICU 60
  * @see NumberFormatter
@@ -32,7 +31,8 @@ public class FormattedNumber implements FormattedValue {
     // Grammatical gender of the formatted result.
     final String gender;
 
-    FormattedNumber(FormattedStringBuilder nsb, DecimalQuantity fq, MeasureUnit outputUnit, String gender) {
+    FormattedNumber(
+            FormattedStringBuilder nsb, DecimalQuantity fq, MeasureUnit outputUnit, String gender) {
         this.string = nsb;
         this.fq = fq;
         this.outputUnit = outputUnit;
@@ -124,11 +124,11 @@ public class FormattedNumber implements FormattedValue {
 
     /**
      * Gets the resolved output unit.
-     * <p>
-     * The output unit is dependent upon the localized preferences for the usage
-     * specified via NumberFormatterSettings.usage(), and may be a unit with
-     * MeasureUnit.Complexity.MIXED unit complexity (MeasureUnit.getComplexity()), such
-     * as "foot-and-inch" or "hour-and-minute-and-second".
+     *
+     * <p>The output unit is dependent upon the localized preferences for the usage specified via
+     * NumberFormatterSettings.usage(), and may be a unit with MeasureUnit.Complexity.MIXED unit
+     * complexity (MeasureUnit.getComplexity()), such as "foot-and-inch" or
+     * "hour-and-minute-and-second".
      *
      * @return {@code MeasureUnit}.
      * @stable ICU 68
@@ -138,8 +138,8 @@ public class FormattedNumber implements FormattedValue {
     }
 
     /**
-     * Gets the noun class of the formatted output. Returns {@code UNDEFINED} when the noun class is not
-     * supported yet.
+     * Gets the noun class of the formatted output. Returns {@code UNDEFINED} when the noun class is
+     * not supported yet.
      *
      * @return NounClass
      * @stable ICU 72

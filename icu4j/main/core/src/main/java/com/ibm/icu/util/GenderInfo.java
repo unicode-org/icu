@@ -5,9 +5,13 @@
  * Copyright (C) 2003-2016, Google, International Business Machines Corporation
  * and others. All Rights Reserved.
  ********************************************************************************
-*/
+ */
 package com.ibm.icu.util;
 
+import com.ibm.icu.impl.ICUCache;
+import com.ibm.icu.impl.ICUData;
+import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.SimpleCache;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -15,13 +19,10 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 
-import com.ibm.icu.impl.ICUCache;
-import com.ibm.icu.impl.ICUData;
-import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.impl.SimpleCache;
-
 /**
- * Provide information about gender in locales based on data in CLDR. Currently supplies gender of lists.
+ * Provide information about gender in locales based on data in CLDR. Currently supplies gender of
+ * lists.
+ *
  * @author markdavis
  * @internal
  * @deprecated This API is ICU internal only.
@@ -32,7 +33,9 @@ public class GenderInfo {
     private final ListGenderStyle style; // set based on locale
 
     /**
-     * Gender: OTHER means either the information is unavailable, or the person has declined to state MALE or FEMALE.
+     * Gender: OTHER means either the information is unavailable, or the person has declined to
+     * state MALE or FEMALE.
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -60,6 +63,7 @@ public class GenderInfo {
 
     /**
      * Create GenderInfo from a ULocale.
+     *
      * @param uLocale desired locale
      * @internal
      * @deprecated This API is ICU internal only.
@@ -71,6 +75,7 @@ public class GenderInfo {
 
     /**
      * Create GenderInfo from a Locale.
+     *
      * @param locale desired locale
      * @internal
      * @deprecated This API is ICU internal only.
@@ -81,38 +86,39 @@ public class GenderInfo {
     }
 
     /**
-     * Enum only meant for use in CLDR and in testing. Indicates the category for the locale.
-     * This only affects gender for lists more than one. For lists of 1 item, the gender
-     * of the list always equals the gender of that sole item.
+     * Enum only meant for use in CLDR and in testing. Indicates the category for the locale. This
+     * only affects gender for lists more than one. For lists of 1 item, the gender of the list
+     * always equals the gender of that sole item.
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
     public enum ListGenderStyle {
         /**
-         * For an empty list, returns OTHER;
-         * For a single item, returns its gender;
-         * Otherwise always OTHER.
+         * For an empty list, returns OTHER; For a single item, returns its gender; Otherwise always
+         * OTHER.
+         *
          * @internal
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
         NEUTRAL,
         /**
-         * For an empty list, returns OTHER;
-         * For a single item, returns its gender;
-         * Otherwise gender(all male) = male, gender(all female) = female, otherwise gender(list) = other.
-         * So any 'other' value makes the overall gender be 'other'.
+         * For an empty list, returns OTHER; For a single item, returns its gender; Otherwise
+         * gender(all male) = male, gender(all female) = female, otherwise gender(list) = other. So
+         * any 'other' value makes the overall gender be 'other'.
+         *
          * @internal
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
         MIXED_NEUTRAL,
         /**
-         * For an empty list, returns OTHER;
-         * For a single item, returns its gender;
-         * Otherwise, gender(all female) = female, otherwise gender(list) = male.
-         * So for more than one item, any 'other' value makes the overall gender be 'male'.
+         * For an empty list, returns OTHER; For a single item, returns its gender; Otherwise,
+         * gender(all female) = female, otherwise gender(list) = male. So for more than one item,
+         * any 'other' value makes the overall gender be 'male'.
+         *
          * @internal
          * @deprecated This API is ICU internal only.
          */
@@ -120,7 +126,7 @@ public class GenderInfo {
         MALE_TAINTS;
 
         private static Map<String, ListGenderStyle> fromNameMap =
-            new HashMap<String, ListGenderStyle>(3);
+                new HashMap<String, ListGenderStyle>(3);
 
         static {
             fromNameMap.put("neutral", NEUTRAL);
@@ -144,6 +150,7 @@ public class GenderInfo {
 
     /**
      * Get the gender of a list, based on locale usage.
+     *
      * @param genders a list of genders.
      * @return the gender of the list.
      * @internal
@@ -156,6 +163,7 @@ public class GenderInfo {
 
     /**
      * Get the gender of a list, based on locale usage.
+     *
      * @param genders a list of genders.
      * @return the gender of the list.
      * @internal
@@ -169,46 +177,47 @@ public class GenderInfo {
         if (genders.size() == 1) {
             return genders.get(0); // degenerate case
         }
-        switch(style) {
-        case NEUTRAL:
-            return Gender.OTHER;
-        case MIXED_NEUTRAL:
-            boolean hasFemale = false;
-            boolean hasMale = false;
-            for (Gender gender : genders) {
-                switch (gender) {
-                case FEMALE:
-                    if (hasMale) {
-                        return Gender.OTHER;
+        switch (style) {
+            case NEUTRAL:
+                return Gender.OTHER;
+            case MIXED_NEUTRAL:
+                boolean hasFemale = false;
+                boolean hasMale = false;
+                for (Gender gender : genders) {
+                    switch (gender) {
+                        case FEMALE:
+                            if (hasMale) {
+                                return Gender.OTHER;
+                            }
+                            hasFemale = true;
+                            break;
+                        case MALE:
+                            if (hasFemale) {
+                                return Gender.OTHER;
+                            }
+                            hasMale = true;
+                            break;
+                        case OTHER:
+                            return Gender.OTHER;
                     }
-                    hasFemale = true;
-                    break;
-                case MALE:
-                    if (hasFemale) {
-                        return Gender.OTHER;
+                }
+                return hasMale ? Gender.MALE : Gender.FEMALE;
+                // Note: any OTHER would have caused a return in the loop, which always happens.
+            case MALE_TAINTS:
+                for (Gender gender : genders) {
+                    if (gender != Gender.FEMALE) {
+                        return Gender.MALE;
                     }
-                    hasMale = true;
-                    break;
-                case OTHER:
-                    return Gender.OTHER;
                 }
-            }
-            return hasMale ? Gender.MALE : Gender.FEMALE;
-            // Note: any OTHER would have caused a return in the loop, which always happens.
-        case MALE_TAINTS:
-            for (Gender gender : genders) {
-                if (gender != Gender.FEMALE) {
-                    return Gender.MALE;
-                }
-            }
-            return Gender.FEMALE;
-        default:
-            return Gender.OTHER;
+                return Gender.FEMALE;
+            default:
+                return Gender.OTHER;
         }
     }
 
     /**
      * Only for testing and use with CLDR.
+     *
      * @param genderStyle gender style
      * @internal
      * @deprecated This API is ICU internal only.
@@ -221,8 +230,7 @@ public class GenderInfo {
     private static GenderInfo neutral = new GenderInfo(ListGenderStyle.NEUTRAL);
 
     private static class Cache {
-        private final ICUCache<ULocale, GenderInfo> cache =
-            new SimpleCache<ULocale, GenderInfo>();
+        private final ICUCache<ULocale, GenderInfo> cache = new SimpleCache<ULocale, GenderInfo>();
 
         public GenderInfo get(ULocale locale) {
             GenderInfo result = cache.get(locale);
@@ -242,10 +250,12 @@ public class GenderInfo {
         }
 
         private static GenderInfo load(ULocale ulocale) {
-            UResourceBundle rb = UResourceBundle.getBundleInstance(
-                    ICUData.ICU_BASE_NAME,
-                    "genderList",
-                    ICUResourceBundle.ICU_DATA_CLASS_LOADER, true);
+            UResourceBundle rb =
+                    UResourceBundle.getBundleInstance(
+                            ICUData.ICU_BASE_NAME,
+                            "genderList",
+                            ICUResourceBundle.ICU_DATA_CLASS_LOADER,
+                            true);
             UResourceBundle genderList = rb.get("genderList");
             try {
                 return new GenderInfo(

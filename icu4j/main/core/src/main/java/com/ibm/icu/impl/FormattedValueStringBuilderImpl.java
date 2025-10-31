@@ -2,33 +2,32 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl;
 
-import java.text.AttributedCharacterIterator;
-import java.text.AttributedString;
-import java.text.FieldPosition;
-import java.text.Format.Field;
-
 import com.ibm.icu.text.ConstrainedFieldPosition;
 import com.ibm.icu.text.ListFormatter;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.UFormat;
 import com.ibm.icu.text.UnicodeSet;
+import java.text.AttributedCharacterIterator;
+import java.text.AttributedString;
+import java.text.FieldPosition;
+import java.text.Format.Field;
 
 /**
  * Implementation of FormattedValue based on FormattedStringBuilder.
  *
- * The implementation currently revolves around numbers and number fields.
- * However, it can be generalized in the future when there is a need.
+ * <p>The implementation currently revolves around numbers and number fields. However, it can be
+ * generalized in the future when there is a need.
  *
- * In C++, this implements FormattedValue. In Java, it is a stateless
- * collection of static functions to avoid having to use nested objects.
+ * <p>In C++, this implements FormattedValue. In Java, it is a stateless collection of static
+ * functions to avoid having to use nested objects.
  *
  * @author sffc (Shane Carr)
  */
 public class FormattedValueStringBuilderImpl {
 
     /**
-     * Placeholder field used for calculating spans.
-     * Does not currently support nested fields beyond one level.
+     * Placeholder field used for calculating spans. Does not currently support nested fields beyond
+     * one level.
      */
     public static class SpanFieldPlaceholder implements FormattedStringBuilder.FieldWrapper {
         public UFormat.SpanField spanField;
@@ -64,7 +63,7 @@ public class FormattedValueStringBuilderImpl {
     /**
      * Upgrade a range of a string to a span field.
      *
-     * Similar to appendSpanInfo in ICU4C.
+     * <p>Similar to appendSpanInfo in ICU4C.
      */
     public static void applySpanRange(
             FormattedStringBuilder self,
@@ -119,7 +118,8 @@ public class FormattedValueStringBuilderImpl {
             boolean inside = false;
             int i = self.zero;
             for (; i < self.zero + self.length; i++) {
-                if (isIntOrGroup(self.fields[i]) || self.fields[i] == NumberFormat.Field.DECIMAL_SEPARATOR) {
+                if (isIntOrGroup(self.fields[i])
+                        || self.fields[i] == NumberFormat.Field.DECIMAL_SEPARATOR) {
                     inside = true;
                 } else if (inside) {
                     break;
@@ -132,7 +132,8 @@ public class FormattedValueStringBuilderImpl {
         return false;
     }
 
-    public static AttributedCharacterIterator toCharacterIterator(FormattedStringBuilder self, Field numericField) {
+    public static AttributedCharacterIterator toCharacterIterator(
+            FormattedStringBuilder self, Field numericField) {
         ConstrainedFieldPosition cfpos = new ConstrainedFieldPosition();
         AttributedString as = new AttributedString(self.toString());
         while (nextPosition(self, cfpos, numericField)) {
@@ -149,6 +150,7 @@ public class FormattedValueStringBuilderImpl {
     static class NullField extends Field {
         private static final long serialVersionUID = 1L;
         static final NullField END = new NullField("end");
+
         private NullField(String name) {
             super(name);
         }
@@ -157,19 +159,20 @@ public class FormattedValueStringBuilderImpl {
     /**
      * Implementation of nextPosition consistent with the contract of FormattedValue.
      *
-     * @param cfpos
-     *            The argument passed to the public API.
-     * @param numericField
-     *            Optional. If non-null, apply this field to the entire numeric portion of the string.
+     * @param cfpos The argument passed to the public API.
+     * @param numericField Optional. If non-null, apply this field to the entire numeric portion of
+     *     the string.
      * @return See FormattedValue#nextPosition.
      */
-    public static boolean nextPosition(FormattedStringBuilder self, ConstrainedFieldPosition cfpos, Field numericField) {
+    public static boolean nextPosition(
+            FormattedStringBuilder self, ConstrainedFieldPosition cfpos, Field numericField) {
         int fieldStart = -1;
         Object currField = null;
         boolean prevIsSpan = false;
         if (cfpos.getLimit() > 0) {
-            prevIsSpan = cfpos.getField() instanceof UFormat.SpanField
-                && cfpos.getStart() < cfpos.getLimit();
+            prevIsSpan =
+                    cfpos.getField() instanceof UFormat.SpanField
+                            && cfpos.getStart() < cfpos.getLimit();
         }
         boolean prevIsNumeric = false;
         if (numericField != null) {
@@ -191,7 +194,7 @@ public class FormattedValueStringBuilderImpl {
                         // Entire field position is ignorable; skip.
                         fieldStart = -1;
                         currField = null;
-                        i--;  // look at this index again
+                        i--; // look at this index again
                         continue;
                     }
                     int start = fieldStart;
@@ -205,8 +208,8 @@ public class FormattedValueStringBuilderImpl {
             }
             // Special case: emit normalField if we are pointing at the end of spanField.
             if (i > self.zero && prevIsSpan) {
-                assert self.fields[i-1] instanceof SpanFieldPlaceholder;
-                SpanFieldPlaceholder ph = (SpanFieldPlaceholder) self.fields[i-1];
+                assert self.fields[i - 1] instanceof SpanFieldPlaceholder;
+                SpanFieldPlaceholder ph = (SpanFieldPlaceholder) self.fields[i - 1];
                 if (ph.normalField == ListFormatter.Field.ELEMENT) {
                     // Special handling for ULISTFMT_ELEMENT_FIELD
                     if (cfpos.matchesField(ListFormatter.Field.ELEMENT, null)) {
@@ -294,17 +297,14 @@ public class FormattedValueStringBuilderImpl {
 
         assert currField == null;
         // Always set the position to the end so that we don't revisit previous sections
-        cfpos.setState(
-            cfpos.getField(),
-            cfpos.getFieldValue(),
-            self.length,
-            self.length);
+        cfpos.setState(cfpos.getField(), cfpos.getFieldValue(), self.length, self.length);
         return false;
     }
 
     private static boolean isIntOrGroup(Object field) {
         field = FormattedStringBuilder.unwrapField(field);
-        return field == NumberFormat.Field.INTEGER || field == NumberFormat.Field.GROUPING_SEPARATOR;
+        return field == NumberFormat.Field.INTEGER
+                || field == NumberFormat.Field.GROUPING_SEPARATOR;
     }
 
     private static boolean isNumericField(Object field) {

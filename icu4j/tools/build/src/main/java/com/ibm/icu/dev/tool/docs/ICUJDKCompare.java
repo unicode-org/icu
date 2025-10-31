@@ -29,10 +29,9 @@ import java.util.TreeSet;
 /**
  * Compare ICU4J and JDK APIS.
  *
- * TODO: compare protected APIs.  Reflection on Class allows you
- * to either get all inherited methods with public access, or get methods
- * on the particular class with any access, but no way to get all
- * inherited methods with any access.  Go figure.
+ * <p>TODO: compare protected APIs. Reflection on Class allows you to either get all inherited
+ * methods with public access, or get methods on the particular class with any access, but no way to
+ * get all inherited methods with any access. Go figure.
  */
 public class ICUJDKCompare {
     static final boolean DEBUG = false;
@@ -62,13 +61,14 @@ public class ICUJDKCompare {
         "util.ResourceBundle/UResourceBundle",
     };
 
-    private static final String[] kIgnore = new String[] {
-        "lang.Character <init> charValue compareTo MAX_VALUE MIN_VALUE TYPE",
-        "lang.Character$UnicodeBlock SURROGATES_AREA",
-        "util.Calendar FIELD_COUNT",
-        "util.GregorianCalendar FIELD_COUNT",
-        "util.SimpleTimeZone STANDARD_TIME UTC_TIME WALL_TIME",
-    };
+    private static final String[] kIgnore =
+            new String[] {
+                "lang.Character <init> charValue compareTo MAX_VALUE MIN_VALUE TYPE",
+                "lang.Character$UnicodeBlock SURROGATES_AREA",
+                "util.Calendar FIELD_COUNT",
+                "util.GregorianCalendar FIELD_COUNT",
+                "util.SimpleTimeZone STANDARD_TIME UTC_TIME WALL_TIME",
+            };
 
     private PrintStream out;
     private String srcPrefix;
@@ -77,7 +77,8 @@ public class ICUJDKCompare {
     private String[] namePairs;
     private String[] ignore;
     private boolean swap;
-    //private boolean signature;
+
+    // private boolean signature;
 
     // call System.exit with non-zero if there were some missing APIs
     public static void main(String[] args) {
@@ -206,15 +207,15 @@ public class ICUJDKCompare {
                 trgName += name;
             } else {
                 String srcSuffix = name.substring(0, n).trim();
-                String trgSuffix = name.substring(n+1).trim();
-                int jx = srcSuffix.length()+1;
-                int ix = trgSuffix.length()+1;
+                String trgSuffix = name.substring(n + 1).trim();
+                int jx = srcSuffix.length() + 1;
+                int ix = trgSuffix.length() + 1;
                 while (ix != -1) {
-                    jx = srcSuffix.lastIndexOf('.', jx-1);
-                    ix = trgSuffix.lastIndexOf('.', ix-1);
+                    jx = srcSuffix.lastIndexOf('.', jx - 1);
+                    ix = trgSuffix.lastIndexOf('.', ix - 1);
                 }
                 srcName += srcSuffix;
-                trgName += srcSuffix.substring(0, jx+1) + trgSuffix;
+                trgName += srcSuffix.substring(0, jx + 1) + trgSuffix;
             }
 
             try {
@@ -224,13 +225,12 @@ public class ICUJDKCompare {
                 cl.add(jc);
                 nl.add(ic.getName());
                 nl.add(jc.getName());
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 if (DEBUG) System.err.println("can't load class: " + e.getMessage());
             }
         }
-        classPairs = (Class[])cl.toArray(new Class[cl.size()]);
-        namePairs = (String[])nl.toArray(new String[nl.size()]);
+        classPairs = (Class[]) cl.toArray(new Class[cl.size()]);
+        namePairs = (String[]) nl.toArray(new String[nl.size()]);
     }
 
     private void println(String s) {
@@ -265,8 +265,7 @@ public class ICUJDKCompare {
             Class cls = Class.forName("com.ibm.icu.util.VersionInfo");
             Field fld = cls.getField("ICU_VERSION");
             ICU_VERSION = fld.get(null).toString();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             if (DEBUG) System.err.println("can't get VersionInfo: " + e.getMessage());
         }
         println("ICU Version " + ICU_VERSION);
@@ -276,14 +275,13 @@ public class ICUJDKCompare {
         for (int i = 0; i < classPairs.length; i += 2) {
             try {
                 if (swap) {
-                    errorCount += compare(classPairs[i+1], classPairs[i]);
+                    errorCount += compare(classPairs[i + 1], classPairs[i]);
                 } else {
-                    errorCount += compare(classPairs[i], classPairs[i+1]);
+                    errorCount += compare(classPairs[i], classPairs[i + 1]);
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 System.err.println("exception: " + e);
-                System.err.println("between " + namePairs[i] + " and " + namePairs[i+1]);
+                System.err.println("between " + namePairs[i] + " and " + namePairs[i + 1]);
                 e.printStackTrace();
                 errorCount += 1;
             }
@@ -349,8 +347,8 @@ public class ICUJDKCompare {
         Set set2 = getFieldSet(fields2);
 
         if (n1.indexOf("DecimalFormatSymbols") != -1) {
-          out.format("fields in %s: %s%n", n1, set1);
-          out.format("fields in %s: %s%n", n2, set2);
+            out.format("fields in %s: %s%n", n1, set1);
+            out.format("fields in %s: %s%n", n2, set2);
         }
 
         Map diffConss = diffMethodMaps(cmap2, cmap1);
@@ -387,7 +385,7 @@ public class ICUJDKCompare {
         MorC[] overrides;
 
         MethodRecord(MorC m) {
-            overrides = new MorC[] { m };
+            overrides = new MorC[] {m};
         }
 
         MethodRecord(MorC[] ms) {
@@ -418,8 +416,8 @@ public class ICUJDKCompare {
 
         void remove(int index) {
             int i = index;
-            while (overrides[i] != null && i < overrides.length-1) {
-                overrides[i] = overrides[i+1];
+            while (overrides[i] != null && i < overrides.length - 1) {
+                overrides[i] = overrides[i + 1];
                 ++i;
             }
             overrides[i] = null;
@@ -497,8 +495,16 @@ public class ICUJDKCompare {
                 Class tc = pairClassEquivalent(tts[i]);
                 Class mc = pairClassEquivalent(mts[i]);
                 if (!assignableFrom(tc, mc)) { // m param must be same or narrower than t
-                    if (DEBUG) debugmsg(t, m, "parameter " + i + " mismatch, " +
-                                   tts[i].getName() + " not assignable from " + mts[i].getName());
+                    if (DEBUG)
+                        debugmsg(
+                                t,
+                                m,
+                                "parameter "
+                                        + i
+                                        + " mismatch, "
+                                        + tts[i].getName()
+                                        + " not assignable from "
+                                        + mts[i].getName());
                     return false;
                 }
             }
@@ -549,7 +555,7 @@ public class ICUJDKCompare {
 
     static MorC[] getMorCArray(Constructor[] cons) {
         MorC[] result = new MorC[cons.length];
-        for (int i = 0 ; i < cons.length; ++i) {
+        for (int i = 0; i < cons.length; ++i) {
             result[i] = new MorC(cons[i]);
         }
         return result;
@@ -557,7 +563,7 @@ public class ICUJDKCompare {
 
     static MorC[] getMorCArray(Method[] meths) {
         MorC[] result = new MorC[meths.length];
-        for (int i = 0 ; i < meths.length; ++i) {
+        for (int i = 0; i < meths.length; ++i) {
             result[i] = new MorC(meths[i]);
         }
         return result;
@@ -568,7 +574,7 @@ public class ICUJDKCompare {
         for (int i = 0; i < meths.length; ++i) {
             MorC m = meths[i];
             String key = m.getName();
-            MethodRecord mr = (MethodRecord)result.get(key);
+            MethodRecord mr = (MethodRecord) result.get(key);
             if (mr == null) {
                 mr = new MethodRecord(m);
                 result.put(key, mr);
@@ -582,7 +588,7 @@ public class ICUJDKCompare {
     private void dumpMethodMap(Map m) {
         Iterator iter = m.entrySet().iterator();
         while (iter.hasNext()) {
-            dumpMethodRecord((MethodRecord)((Map.Entry)iter.next()).getValue());
+            dumpMethodRecord((MethodRecord) ((Map.Entry) iter.next()).getValue());
         }
         out.flush();
     }
@@ -593,7 +599,7 @@ public class ICUJDKCompare {
 
     static Map diffMethodMaps(Map m1, Map m2) {
         // get all the methods in m1 that aren't mentioned in m2 at all
-        Map result = (Map)((TreeMap)m1).clone();
+        Map result = (Map) ((TreeMap) m1).clone();
         result.keySet().removeAll(m2.keySet());
         return result;
     }
@@ -622,14 +628,15 @@ public class ICUJDKCompare {
             return m1;
         }
 
-        Map result = new TreeMap(((TreeMap)m1).comparator());
+        Map result = new TreeMap(((TreeMap) m1).comparator());
         result.putAll(m1);
         Iterator iter = result.entrySet().iterator();
-        loop: while (iter.hasNext()) {
-            Map.Entry e = (Map.Entry)iter.next();
-            String key = (String)e.getKey();
+        loop:
+        while (iter.hasNext()) {
+            Map.Entry e = (Map.Entry) iter.next();
+            String key = (String) e.getKey();
             for (int i = 0; i < il.size(); ++i) {
-                String ig = (String)il.get(i);
+                String ig = (String) il.get(i);
                 if (ig.indexOf(" " + key) != 0) {
                     iter.remove();
                     continue loop;
@@ -663,13 +670,14 @@ public class ICUJDKCompare {
             return s1;
         }
 
-        Set result = (Set)((TreeSet)s1).clone();
+        Set result = (Set) ((TreeSet) s1).clone();
         Iterator iter = result.iterator();
-        loop: while (iter.hasNext()) {
-            String key = (String)iter.next();
+        loop:
+        while (iter.hasNext()) {
+            String key = (String) iter.next();
             String fieldname = key.substring(0, key.indexOf(' '));
             for (int i = 0; i < il.size(); ++i) {
-                String ig = (String)il.get(i);
+                String ig = (String) il.get(i);
                 if (ig.indexOf(" " + fieldname) != 0) {
                     iter.remove();
                     continue loop;
@@ -681,20 +689,27 @@ public class ICUJDKCompare {
 
     static final boolean[][] assignmentMap = {
         // bool   char   byte  short    int   long  float double   void
-        {  true, false, false, false, false, false, false, false, false }, // boolean
-        { false,  true,  true,  true, false, false, false, false, false }, // char
-        { false, false,  true, false, false, false, false, false, false }, // byte
-        { false, false,  true,  true, false, false, false, false, false }, // short
-        { false,  true,  true,  true,  true, false, false, false, false }, // int
-        { false,  true,  true,  true,  true,  true, false, false, false }, // long
-        { false,  true,  true,  true,  true, false,  true, false, false }, // float
-        { false,  true,  true,  true,  true, false,  true,  true, false }, // double
-        { false, false, false, false, false, false, false, false,  true }, // void
+        {true, false, false, false, false, false, false, false, false}, // boolean
+        {false, true, true, true, false, false, false, false, false}, // char
+        {false, false, true, false, false, false, false, false, false}, // byte
+        {false, false, true, true, false, false, false, false, false}, // short
+        {false, true, true, true, true, false, false, false, false}, // int
+        {false, true, true, true, true, true, false, false, false}, // long
+        {false, true, true, true, true, false, true, false, false}, // float
+        {false, true, true, true, true, false, true, true, false}, // double
+        {false, false, false, false, false, false, false, false, true}, // void
     };
 
     static final Class[] prims = {
-        boolean.class, char.class, byte.class, short.class,
-        int.class, long.class, float.class, double.class, void.class
+        boolean.class,
+        char.class,
+        byte.class,
+        short.class,
+        int.class,
+        long.class,
+        float.class,
+        double.class,
+        void.class
     };
 
     static int primIndex(Class cls) {
@@ -743,7 +758,7 @@ public class ICUJDKCompare {
     }
 
     static Set diffFieldSets(Set s1, Set s2) {
-        Set result = (Set)((TreeSet)s1).clone();
+        Set result = (Set) ((TreeSet) s1).clone();
         result.removeAll(s2);
         return result;
     }
@@ -761,12 +776,12 @@ public class ICUJDKCompare {
     private String pairEquivalent(String target) {
         for (int i = 0; i < namePairs.length; i += 2) {
             if (swap) {
-                if (target.equals(namePairs[i+1])) {
+                if (target.equals(namePairs[i + 1])) {
                     return namePairs[i];
                 }
             } else {
                 if (target.equals(namePairs[i])) {
-                    return namePairs[i+1];
+                    return namePairs[i + 1];
                 }
             }
         }
@@ -776,12 +791,16 @@ public class ICUJDKCompare {
     private Class pairClassEquivalent(Class target) {
         for (int i = 0; i < classPairs.length; i += 2) {
             if (target.equals(classPairs[i])) {
-                return classPairs[i+1];
+                return classPairs[i + 1];
             }
         }
         return target;
     }
 
-    static final int MOD_MASK = ~(Modifier.FINAL|Modifier.SYNCHRONIZED|
-                                  Modifier.VOLATILE|Modifier.TRANSIENT|Modifier.NATIVE);
+    static final int MOD_MASK =
+            ~(Modifier.FINAL
+                    | Modifier.SYNCHRONIZED
+                    | Modifier.VOLATILE
+                    | Modifier.TRANSIENT
+                    | Modifier.NATIVE);
 }

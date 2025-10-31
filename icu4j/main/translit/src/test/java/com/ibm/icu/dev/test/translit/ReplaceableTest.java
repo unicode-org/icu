@@ -1,22 +1,20 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /**
- *******************************************************************************
- * Copyright (C) 2001-2010, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
- *******************************************************************************
+ * ****************************************************************************** Copyright (C)
+ * 2001-2010, International Business Machines Corporation and * others. All Rights Reserved. *
+ * ******************************************************************************
  */
 package com.ibm.icu.dev.test.translit;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.Replaceable;
 import com.ibm.icu.text.ReplaceableString;
 import com.ibm.icu.text.Transliterator;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 /**
  * @test
@@ -48,32 +46,36 @@ public class ReplaceableTest extends TestFmwk {
         Transliterator t;
         if (transliteratorName.startsWith("*")) {
             transliteratorName = transliteratorName.substring(1);
-            t = Transliterator.createFromRules("test", transliteratorName,
-                                               Transliterator.FORWARD);
+            t = Transliterator.createFromRules("test", transliteratorName, Transliterator.FORWARD);
         } else {
             t = Transliterator.getInstance(transliteratorName);
         }
         t.transliterate(tr);
         String newStyles = tr.getStyles();
         if (!newStyles.equals(shouldProduceStyles)) {
-            errln("FAIL Styles: " + transliteratorName + " ( "
-                + original + " ) => " + tr.toString() + "; should be {" + shouldProduceStyles + "}!");
+            errln(
+                    "FAIL Styles: "
+                            + transliteratorName
+                            + " ( "
+                            + original
+                            + " ) => "
+                            + tr.toString()
+                            + "; should be {"
+                            + shouldProduceStyles
+                            + "}!");
         } else {
             logln("OK: " + transliteratorName + " ( " + original + " ) => " + tr.toString());
         }
 
-        if (!tr.hasMetaData() || tr.chars.hasMetaData()
-            || tr.styles.hasMetaData()) {
+        if (!tr.hasMetaData() || tr.chars.hasMetaData() || tr.styles.hasMetaData()) {
             errln("Fail hasMetaData()");
         }
     }
 
-
     /**
-     * This is a test class that simulates styled text.
-     * It associates a style number (0..65535) with each character,
-     * and maintains that style in the normal fashion:
-     * When setting text from raw string or characters,<br>
+     * This is a test class that simulates styled text. It associates a style number (0..65535) with
+     * each character, and maintains that style in the normal fashion: When setting text from raw
+     * string or characters,<br>
      * Set the styles to the style of the first character replaced.<br>
      * If no characters are replaced, use the style of the previous character.<br>
      * If at start, use the following character<br>
@@ -87,7 +89,7 @@ public class ReplaceableTest extends TestFmwk {
 
         static final char NO_STYLE_MARK = 0xFFFF;
 
-        TestReplaceable (String text, String styles) {
+        TestReplaceable(String text, String styles) {
             chars = new ReplaceableString(text);
             StringBuilder s = new StringBuilder();
             for (int i = 0; i < text.length(); ++i) {
@@ -139,18 +141,28 @@ public class ReplaceableTest extends TestFmwk {
 
         @Override
         public void replace(int start, int limit, String text) {
-            if (substring(start,limit).equals(text)) return; // NO ACTION!
-            if (DEBUG) System.out.print(Utility.escape(toString() + " -> replace(" + start +
-                                            "," + limit + "," + text) + ") -> ");
+            if (substring(start, limit).equals(text)) return; // NO ACTION!
+            if (DEBUG)
+                System.out.print(
+                        Utility.escape(
+                                        toString()
+                                                + " -> replace("
+                                                + start
+                                                + ","
+                                                + limit
+                                                + ","
+                                                + text)
+                                + ") -> ");
             chars.replace(start, limit, text);
             fixStyles(start, limit, text.length());
             if (DEBUG) System.out.println(Utility.escape(toString()));
         }
 
         @Override
-        public void replace(int start, int limit, char[] charArray,
-                            int charsStart, int charsLen) {
-            if (substring(start,limit).equals(new String(charArray, charsStart, charsLen-charsStart))) return; // NO ACTION!
+        public void replace(int start, int limit, char[] charArray, int charsStart, int charsLen) {
+            if (substring(start, limit)
+                    .equals(new String(charArray, charsStart, charsLen - charsStart)))
+                return; // NO ACTION!
             this.chars.replace(start, limit, charArray, charsStart, charsLen);
             fixStyles(start, limit, charsLen);
         }
@@ -159,8 +171,8 @@ public class ReplaceableTest extends TestFmwk {
             char newStyle = NO_STYLE;
             if (start != limit && styles.charAt(start) != NO_STYLE) {
                 newStyle = styles.charAt(start);
-            } else if (start > 0 && charAt(start-1) != NO_STYLE_MARK) {
-                newStyle = styles.charAt(start-1);
+            } else if (start > 0 && charAt(start - 1) != NO_STYLE_MARK) {
+                newStyle = styles.charAt(start - 1);
             } else if (limit < styles.length()) {
                 newStyle = styles.charAt(limit);
             }
@@ -170,7 +182,7 @@ public class ReplaceableTest extends TestFmwk {
                 // this doesn't really handle an embedded NO_STYLE_MARK
                 // in the middle of a long run of characters right -- but
                 // that case shouldn't happen anyway
-                if (charAt(start+i) == NO_STYLE_MARK) {
+                if (charAt(start + i) == NO_STYLE_MARK) {
                     s.append(NO_STYLE);
                 } else {
                     s.append(newStyle);
@@ -196,10 +208,10 @@ public class ReplaceableTest extends TestFmwk {
     @org.junit.Test
     public void Test5789() {
         String rules =
-            "IETR > IET | \\' R; # (1) do split ietr between t and r\r\n" +
-            "I[EH] > I; # (2) friedrich";
+                "IETR > IET | \\' R; # (1) do split ietr between t and r\r\n"
+                        + "I[EH] > I; # (2) friedrich";
         Transliterator trans = Transliterator.createFromRules("foo", rules, Transliterator.FORWARD);
-        String result =  trans.transliterate("BLENKDIETRICH");
+        String result = trans.transliterate("BLENKDIETRICH");
         assertEquals("Rule breakage", "BLENKDIET'RICH", result);
     }
 }

@@ -9,34 +9,29 @@
 
 package com.ibm.icu.impl;
 
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.lang.UCharacterCategory;
+import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeSet;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Locale;
 import java.util.MissingResourceException;
 
-import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.lang.UCharacterCategory;
-import com.ibm.icu.text.UTF16;
-import com.ibm.icu.text.UnicodeSet;
-
 /**
-* Internal class to manage character names.
-* Since data for names are stored
-* in an array of char, by default indexes used in this class is referring to
-* a 2 byte count, unless otherwise stated. Cases where the index is referring
-* to a byte count, the index is halved and depending on whether the index is
-* even or odd, the MSB or LSB of the result char at the halved index is
-* returned. For indexes to an array of int, the index is multiplied by 2,
-* result char at the multiplied index and its following char is returned as an
-* int.
-* <a href=../lang/UCharacter.html>UCharacter</a> acts as a public facade for this class
-* Note : 0 - 0x1F are control characters without names in Unicode 3.0
-* @author Syn Wee Quek
-* @since nov0700
-*/
-
-public final class UCharacterName
-{
+ * Internal class to manage character names. Since data for names are stored in an array of char, by
+ * default indexes used in this class is referring to a 2 byte count, unless otherwise stated. Cases
+ * where the index is referring to a byte count, the index is halved and depending on whether the
+ * index is even or odd, the MSB or LSB of the result char at the halved index is returned. For
+ * indexes to an array of int, the index is multiplied by 2, result char at the multiplied index and
+ * its following char is returned as an int. <a href=../lang/UCharacter.html>UCharacter</a> acts as
+ * a public facade for this class Note : 0 - 0x1F are control characters without names in Unicode
+ * 3.0
+ *
+ * @author Syn Wee Quek
+ * @since nov0700
+ */
+public final class UCharacterName {
     // public data members ----------------------------------------------
 
     /*
@@ -48,40 +43,34 @@ public final class UCharacterName
         try {
             INSTANCE = new UCharacterName();
         } catch (IOException e) {
-            ///CLOVER:OFF
-            throw new MissingResourceException("Could not construct UCharacterName. Missing unames.icu","","");
-            ///CLOVER:ON
+            /// CLOVER:OFF
+            throw new MissingResourceException(
+                    "Could not construct UCharacterName. Missing unames.icu", "", "");
+            /// CLOVER:ON
         }
     }
 
-    /**
-    * Number of lines per group
-    * 1 << GROUP_SHIFT_
-    */
+    /** Number of lines per group 1 << GROUP_SHIFT_ */
     public static final int LINES_PER_GROUP_ = 1 << 5;
-    /**
-     * Maximum number of groups
-     */
+
+    /** Maximum number of groups */
     public int m_groupcount_ = 0;
 
     // public methods ---------------------------------------------------
 
     /**
-    * Retrieve the name of a Unicode code point.
-    * Depending on <code>choice</code>, the character name written into the
-    * buffer is the "modern" name or the name that was defined in Unicode
-    * version 1.0.
-    * The name contains only "invariant" characters
-    * like A-Z, 0-9, space, and '-'.
-    *
-    * @param ch the code point for which to get the name.
-    * @param choice Selector for which name to get.
-    * @return if code point is above 0x1fff, null is returned
-    */
-    public String getName(int ch, int choice)
-    {
-        if (ch < UCharacter.MIN_VALUE || ch > UCharacter.MAX_VALUE ||
-            choice > UCharacterNameChoice.CHAR_NAME_CHOICE_COUNT) {
+     * Retrieve the name of a Unicode code point. Depending on <code>choice</code>, the character
+     * name written into the buffer is the "modern" name or the name that was defined in Unicode
+     * version 1.0. The name contains only "invariant" characters like A-Z, 0-9, space, and '-'.
+     *
+     * @param ch the code point for which to get the name.
+     * @param choice Selector for which name to get.
+     * @return if code point is above 0x1fff, null is returned
+     */
+    public String getName(int ch, int choice) {
+        if (ch < UCharacter.MIN_VALUE
+                || ch > UCharacter.MAX_VALUE
+                || choice > UCharacterNameChoice.CHAR_NAME_CHOICE_COUNT) {
             return null;
         }
 
@@ -102,17 +91,18 @@ public final class UCharacterName
     }
 
     /**
-    * Find a character by its name and return its code point value
-    * @param choice selector to indicate if argument name is a Unicode 1.0
-    *        or the most current version
-    * @param name the name to search for
-    * @return code point
-    */
-    public int getCharFromName(int choice, String name)
-    {
+     * Find a character by its name and return its code point value
+     *
+     * @param choice selector to indicate if argument name is a Unicode 1.0 or the most current
+     *     version
+     * @param name the name to search for
+     * @return code point
+     */
+    public int getCharFromName(int choice, String name) {
         // checks for illegal arguments
-        if (choice >= UCharacterNameChoice.CHAR_NAME_CHOICE_COUNT ||
-            name == null || name.length() == 0) {
+        if (choice >= UCharacterNameChoice.CHAR_NAME_CHOICE_COUNT
+                || name == null
+                || name.length() == 0) {
             return -1;
         }
 
@@ -126,14 +116,13 @@ public final class UCharacterName
         // try algorithmic names first, if fails then try group names
         // int result = getAlgorithmChar(choice, uppercasename);
 
-        if (choice == UCharacterNameChoice.UNICODE_CHAR_NAME ||
-            choice == UCharacterNameChoice.EXTENDED_CHAR_NAME
-        ) {
+        if (choice == UCharacterNameChoice.UNICODE_CHAR_NAME
+                || choice == UCharacterNameChoice.EXTENDED_CHAR_NAME) {
             int count = 0;
             if (m_algorithm_ != null) {
                 count = m_algorithm_.length;
             }
-            for (count --; count >= 0; count --) {
+            for (count--; count >= 0; count--) {
                 result = m_algorithm_[count].getChar(upperCaseName);
                 if (result >= 0) {
                     return result;
@@ -142,14 +131,11 @@ public final class UCharacterName
         }
 
         if (choice == UCharacterNameChoice.EXTENDED_CHAR_NAME) {
-            result = getGroupChar(upperCaseName,
-                                  UCharacterNameChoice.UNICODE_CHAR_NAME);
+            result = getGroupChar(upperCaseName, UCharacterNameChoice.UNICODE_CHAR_NAME);
             if (result == -1) {
-                result = getGroupChar(upperCaseName,
-                                      UCharacterNameChoice.CHAR_NAME_ALIAS);
+                result = getGroupChar(upperCaseName, UCharacterNameChoice.CHAR_NAME_ALIAS);
             }
-        }
-        else {
+        } else {
             result = getGroupChar(upperCaseName, choice);
         }
         return result;
@@ -158,60 +144,54 @@ public final class UCharacterName
     // these are all UCharacterNameIterator use methods -------------------
 
     /**
-    * Reads a block of compressed lengths of 32 strings and expands them into
-    * offsets and lengths for each string. Lengths are stored with a
-    * variable-width encoding in consecutive nibbles:
-    * If a nibble<0xc, then it is the length itself (0 = empty string).
-    * If a nibble>=0xc, then it forms a length value with the following
-    * nibble.
-    * The offsets and lengths arrays must be at least 33 (one more) long
-    * because there is no check here at the end if the last nibble is still
-    * used.
-    * @param index of group string object in array
-    * @param offsets array to store the value of the string offsets
-    * @param lengths array to store the value of the string length
-    * @return next index of the data string immediately after the lengths
-    *         in terms of byte address
-    */
-    public int getGroupLengths(int index, char offsets[], char lengths[])
-    {
+     * Reads a block of compressed lengths of 32 strings and expands them into offsets and lengths
+     * for each string. Lengths are stored with a variable-width encoding in consecutive nibbles: If
+     * a nibble<0xc, then it is the length itself (0 = empty string). If a nibble>=0xc, then it
+     * forms a length value with the following nibble. The offsets and lengths arrays must be at
+     * least 33 (one more) long because there is no check here at the end if the last nibble is
+     * still used.
+     *
+     * @param index of group string object in array
+     * @param offsets array to store the value of the string offsets
+     * @param lengths array to store the value of the string length
+     * @return next index of the data string immediately after the lengths in terms of byte address
+     */
+    public int getGroupLengths(int index, char offsets[], char lengths[]) {
         char length = 0xffff;
-        byte b = 0,
-            n = 0;
+        byte b = 0, n = 0;
         int shift;
         index = index * m_groupsize_; // byte count offsets of group strings
-        int stringoffset = UCharacterUtility.toInt(
-                                 m_groupinfo_[index + OFFSET_HIGH_OFFSET_],
-                                 m_groupinfo_[index + OFFSET_LOW_OFFSET_]);
+        int stringoffset =
+                UCharacterUtility.toInt(
+                        m_groupinfo_[index + OFFSET_HIGH_OFFSET_],
+                        m_groupinfo_[index + OFFSET_LOW_OFFSET_]);
 
         offsets[0] = 0;
 
         // all 32 lengths must be read to get the offset of the first group
         // string
-        for (int i = 0; i < LINES_PER_GROUP_; stringoffset ++) {
+        for (int i = 0; i < LINES_PER_GROUP_; stringoffset++) {
             b = m_groupstring_[stringoffset];
             shift = 4;
 
             while (shift >= 0) {
                 // getting nibble
-                n = (byte)((b >> shift) & 0x0F);
+                n = (byte) ((b >> shift) & 0x0F);
                 if (length == 0xffff && n > SINGLE_NIBBLE_MAX_) {
-                    length = (char)((n - 12) << 4);
-                }
-                else {
+                    length = (char) ((n - 12) << 4);
+                } else {
                     if (length != 0xffff) {
-                       lengths[i] = (char)((length | n) + 12);
-                    }
-                    else {
-                       lengths[i] = (char)n;
+                        lengths[i] = (char) ((length | n) + 12);
+                    } else {
+                        lengths[i] = (char) n;
                     }
 
                     if (i < LINES_PER_GROUP_) {
-                       offsets[i + 1] = (char)(offsets[i] + lengths[i]);
+                        offsets[i + 1] = (char) (offsets[i] + lengths[i]);
                     }
 
                     length = 0xffff;
-                    i ++;
+                    i++;
                 }
 
                 shift -= 4;
@@ -221,38 +201,35 @@ public final class UCharacterName
     }
 
     /**
-    * Gets the name of the argument group index.
-    * UnicodeData.txt uses ';' as a field separator, so no field can contain
-    * ';' as part of its contents. In unames.icu, it is marked as
-    * token[';'] == -1 only if the semicolon is used in the data file - which
-    * is iff we have Unicode 1.0 names or ISO comments or aliases.
-    * So, it will be token[';'] == -1 if we store U1.0 names/ISO comments/aliases
-    * although we know that it will never be part of a name.
-    * Equivalent to ICU4C's expandName.
-    * @param index of the group name string in byte count
-    * @param length of the group name string
-    * @param choice of Unicode 1.0 name or the most current name
-    * @return name of the group
-    */
-    public String getGroupName(int index, int length, int choice)
-    {
-        if (choice != UCharacterNameChoice.UNICODE_CHAR_NAME &&
-            choice != UCharacterNameChoice.EXTENDED_CHAR_NAME
-        ) {
+     * Gets the name of the argument group index. UnicodeData.txt uses ';' as a field separator, so
+     * no field can contain ';' as part of its contents. In unames.icu, it is marked as token[';']
+     * == -1 only if the semicolon is used in the data file - which is iff we have Unicode 1.0 names
+     * or ISO comments or aliases. So, it will be token[';'] == -1 if we store U1.0 names/ISO
+     * comments/aliases although we know that it will never be part of a name. Equivalent to ICU4C's
+     * expandName.
+     *
+     * @param index of the group name string in byte count
+     * @param length of the group name string
+     * @param choice of Unicode 1.0 name or the most current name
+     * @return name of the group
+     */
+    public String getGroupName(int index, int length, int choice) {
+        if (choice != UCharacterNameChoice.UNICODE_CHAR_NAME
+                && choice != UCharacterNameChoice.EXTENDED_CHAR_NAME) {
             if (';' >= m_tokentable_.length || m_tokentable_[';'] == 0xFFFF) {
                 /*
                  * skip the modern name if it is not requested _and_
                  * if the semicolon byte value is a character, not a token number
                  */
-                int fieldIndex= choice==UCharacterNameChoice.ISO_COMMENT_ ? 2 : choice;
+                int fieldIndex = choice == UCharacterNameChoice.ISO_COMMENT_ ? 2 : choice;
                 do {
                     int oldindex = index;
-                    index += UCharacterUtility.skipByteSubString(m_groupstring_,
-                                                       index, length, (byte)';');
+                    index +=
+                            UCharacterUtility.skipByteSubString(
+                                    m_groupstring_, index, length, (byte) ';');
                     length -= (index - oldindex);
-                } while(--fieldIndex>0);
-            }
-            else {
+                } while (--fieldIndex > 0);
+            } else {
                 // the semicolon byte is a token number, therefore only modern
                 // names are stored in unames.dat and there is no such
                 // requested alternate name here
@@ -264,39 +241,36 @@ public final class UCharacterName
             m_utilStringBuffer_.setLength(0);
             byte b;
             char token;
-            for (int i = 0; i < length;) {
+            for (int i = 0; i < length; ) {
                 b = m_groupstring_[index + i];
-                i ++;
+                i++;
 
                 if (b >= m_tokentable_.length) {
                     if (b == ';') {
                         break;
                     }
                     m_utilStringBuffer_.append(b); // implicit letter
-                }
-                else {
+                } else {
                     token = m_tokentable_[b & 0x00ff];
                     if (token == 0xFFFE) {
                         // this is a lead byte for a double-byte token
-                        token = m_tokentable_[b << 8 |
-                                          (m_groupstring_[index + i] & 0x00ff)];
-                        i ++;
+                        token = m_tokentable_[b << 8 | (m_groupstring_[index + i] & 0x00ff)];
+                        i++;
                     }
                     if (token == 0xFFFF) {
                         if (b == ';') {
                             // skip the semicolon if we are seeking extended
                             // names and there was no 2.0 name but there
                             // is a 1.0 name.
-                            if (m_utilStringBuffer_.length() == 0 && choice ==
-                                   UCharacterNameChoice.EXTENDED_CHAR_NAME) {
+                            if (m_utilStringBuffer_.length() == 0
+                                    && choice == UCharacterNameChoice.EXTENDED_CHAR_NAME) {
                                 continue;
                             }
                             break;
                         }
                         // explicit letter
-                        m_utilStringBuffer_.append((char)(b & 0x00ff));
-                    }
-                    else { // write token word
+                        m_utilStringBuffer_.append((char) (b & 0x00ff));
+                    } else { // write token word
                         UCharacterUtility.getNullTermByteSubString(
                                 m_utilStringBuffer_, m_tokenstring_, token);
                     }
@@ -310,11 +284,8 @@ public final class UCharacterName
         return null;
     }
 
-    /**
-    * Retrieves the extended name
-    */
-    public String getExtendedName(int ch)
-    {
+    /** Retrieves the extended name */
+    public String getExtendedName(int ch) {
         String result = getName(ch, UCharacterNameChoice.UNICODE_CHAR_NAME);
         if (result == null) {
             // TODO: Return Name_Alias/control names for control codes 0..1F & 7F..9F.
@@ -325,14 +296,14 @@ public final class UCharacterName
 
     /**
      * Gets the group index for the codepoint, or the group before it.
+     *
      * @param codepoint The codepoint index.
      * @return group index containing codepoint or the group before it.
      */
-    public int getGroup(int codepoint)
-    {
+    public int getGroup(int codepoint) {
         int endGroup = m_groupcount_;
-        int msb      = getCodepointMSB(codepoint);
-        int result   = 0;
+        int msb = getCodepointMSB(codepoint);
+        int result = 0;
         // binary search for the group of names that contains the one for
         // code
         // find the group that contains codepoint, or the highest before it
@@ -340,8 +311,7 @@ public final class UCharacterName
             int gindex = (result + endGroup) >> 1;
             if (msb < getGroupMSB(gindex)) {
                 endGroup = gindex;
-            }
-            else {
+            } else {
                 result = gindex;
             }
         }
@@ -349,13 +319,12 @@ public final class UCharacterName
     }
 
     /**
-     * Gets the extended and 1.0 name when the most current unicode names
-     * fail
+     * Gets the extended and 1.0 name when the most current unicode names fail
+     *
      * @param ch codepoint
      * @return name of codepoint extended or 1.0
      */
-    public String getExtendedOr10Name(int ch)
-    {
+    public String getExtendedOr10Name(int ch) {
         String result = null;
         // TODO: Return Name_Alias/control names for control codes 0..1F & 7F..9F.
         if (result == null) {
@@ -364,8 +333,7 @@ public final class UCharacterName
             // date.
             if (type >= TYPE_NAMES_.length) {
                 result = UNKNOWN_TYPE_NAME_;
-            }
-            else {
+            } else {
                 result = TYPE_NAMES_[type];
             }
             synchronized (m_utilStringBuffer_) {
@@ -377,7 +345,7 @@ public final class UCharacterName
                 int zeros = 4 - chStr.length();
                 while (zeros > 0) {
                     m_utilStringBuffer_.append('0');
-                    zeros --;
+                    zeros--;
                 }
                 m_utilStringBuffer_.append(chStr);
                 m_utilStringBuffer_.append('>');
@@ -389,11 +357,11 @@ public final class UCharacterName
 
     /**
      * Gets the MSB from the group index
+     *
      * @param gindex group index
      * @return the MSB of the group if gindex is valid, -1 otherwise
      */
-    public int getGroupMSB(int gindex)
-    {
+    public int getGroupMSB(int gindex) {
         if (gindex >= m_groupcount_) {
             return -1;
         }
@@ -402,93 +370,94 @@ public final class UCharacterName
 
     /**
      * Gets the MSB of the codepoint
+     *
      * @param codepoint The codepoint value.
      * @return the MSB of the codepoint
      */
-    public static int getCodepointMSB(int codepoint)
-    {
+    public static int getCodepointMSB(int codepoint) {
         return codepoint >> GROUP_SHIFT_;
     }
 
     /**
      * Gets the maximum codepoint + 1 of the group
+     *
      * @param msb most significant byte of the group
      * @return limit codepoint of the group
      */
-    public static int getGroupLimit(int msb)
-    {
+    public static int getGroupLimit(int msb) {
         return (msb << GROUP_SHIFT_) + LINES_PER_GROUP_;
     }
 
     /**
      * Gets the minimum codepoint of the group
+     *
      * @param msb most significant byte of the group
      * @return minimum codepoint of the group
      */
-    public static int getGroupMin(int msb)
-    {
+    public static int getGroupMin(int msb) {
         return msb << GROUP_SHIFT_;
     }
 
     /**
      * Gets the offset to a group
+     *
      * @param codepoint The codepoint value.
      * @return offset to a group
      */
-    public static int getGroupOffset(int codepoint)
-    {
+    public static int getGroupOffset(int codepoint) {
         return codepoint & GROUP_MASK_;
     }
 
     /**
      * Gets the minimum codepoint of a group
+     *
      * @param codepoint The codepoint value.
      * @return minimum codepoint in the group which codepoint belongs to
      */
-    ///CLOVER:OFF
-    public static int getGroupMinFromCodepoint(int codepoint)
-    {
+    /// CLOVER:OFF
+    public static int getGroupMinFromCodepoint(int codepoint) {
         return codepoint & ~GROUP_MASK_;
     }
-    ///CLOVER:ON
+
+    /// CLOVER:ON
 
     /**
      * Get the Algorithm range length
+     *
      * @return Algorithm range length
      */
-    public int getAlgorithmLength()
-    {
+    public int getAlgorithmLength() {
         return m_algorithm_.length;
     }
 
     /**
      * Gets the start of the range
+     *
      * @param index algorithm index
      * @return algorithm range start
      */
-    public int getAlgorithmStart(int index)
-    {
+    public int getAlgorithmStart(int index) {
         return m_algorithm_[index].m_rangestart_;
     }
 
     /**
      * Gets the end of the range
+     *
      * @param index algorithm index
      * @return algorithm range end
      */
-    public int getAlgorithmEnd(int index)
-    {
+    public int getAlgorithmEnd(int index) {
         return m_algorithm_[index].m_rangeend_;
     }
 
     /**
      * Gets the Algorithmic name of the codepoint
+     *
      * @param index algorithmic range index
      * @param codepoint The codepoint value.
      * @return algorithmic name of codepoint
      */
-    public String getAlgorithmName(int index, int codepoint)
-    {
+    public String getAlgorithmName(int index, int codepoint) {
         String result = null;
         synchronized (m_utilStringBuffer_) {
             m_utilStringBuffer_.setLength(0);
@@ -499,23 +468,21 @@ public final class UCharacterName
     }
 
     /**
-    * Gets the group name of the character
-    * @param ch character to get the group name
-    * @param choice name choice selector to choose a unicode 1.0 or newer name
-    */
-    public synchronized String getGroupName(int ch, int choice)
-    {
+     * Gets the group name of the character
+     *
+     * @param ch character to get the group name
+     * @param choice name choice selector to choose a unicode 1.0 or newer name
+     */
+    public synchronized String getGroupName(int ch, int choice) {
         // gets the msb
-        int msb   = getCodepointMSB(ch);
+        int msb = getCodepointMSB(ch);
         int group = getGroup(ch);
 
         // return this if it is an exact match
         if (msb == m_groupinfo_[group * m_groupsize_]) {
-            int index = getGroupLengths(group, m_groupoffsets_,
-                                        m_grouplengths_);
+            int index = getGroupLengths(group, m_groupoffsets_, m_grouplengths_);
             int offset = ch & GROUP_MASK_;
-            return getGroupName(index + m_groupoffsets_[offset],
-                                m_grouplengths_[offset], choice);
+            return getGroupName(index + m_groupoffsets_[offset], m_grouplengths_[offset], choice);
         }
 
         return null;
@@ -524,100 +491,90 @@ public final class UCharacterName
     // these are transliterator use methods ---------------------------------
 
     /**
-     * Gets the maximum length of any codepoint name.
-     * Equivalent to uprv_getMaxCharNameLength.
+     * Gets the maximum length of any codepoint name. Equivalent to uprv_getMaxCharNameLength.
+     *
      * @return the maximum length of any codepoint name
      */
-    public int getMaxCharNameLength()
-    {
+    public int getMaxCharNameLength() {
         if (initNameSetsLengths()) {
             return m_maxNameLength_;
-        }
-        else {
+        } else {
             return 0;
         }
     }
 
     /**
-     * Gets the maximum length of any iso comments.
-     * Equivalent to uprv_getMaxISOCommentLength.
+     * Gets the maximum length of any iso comments. Equivalent to uprv_getMaxISOCommentLength.
+     *
      * @return the maximum length of any codepoint name
      */
-    ///CLOVER:OFF
-    public int getMaxISOCommentLength()
-    {
+    /// CLOVER:OFF
+    public int getMaxISOCommentLength() {
         if (initNameSetsLengths()) {
             return m_maxISOCommentLength_;
-        }
-        else {
+        } else {
             return 0;
         }
     }
-    ///CLOVER:ON
+
+    /// CLOVER:ON
 
     /**
-     * Fills set with characters that are used in Unicode character names.
-     * Equivalent to uprv_getCharNameCharacters.
+     * Fills set with characters that are used in Unicode character names. Equivalent to
+     * uprv_getCharNameCharacters.
+     *
      * @param set USet to receive characters. Existing contents are deleted.
      */
-    public void getCharNameCharacters(UnicodeSet set)
-    {
+    public void getCharNameCharacters(UnicodeSet set) {
         convert(m_nameSet_, set);
     }
 
     /**
-     * Fills set with characters that are used in Unicode character names.
-     * Equivalent to uprv_getISOCommentCharacters.
+     * Fills set with characters that are used in Unicode character names. Equivalent to
+     * uprv_getISOCommentCharacters.
+     *
      * @param set USet to receive characters. Existing contents are deleted.
      */
-    ///CLOVER:OFF
-    public void getISOCommentCharacters(UnicodeSet set)
-    {
+    /// CLOVER:OFF
+    public void getISOCommentCharacters(UnicodeSet set) {
         convert(m_ISOCommentSet_, set);
     }
-    ///CLOVER:ON
+
+    /// CLOVER:ON
 
     // package private inner class --------------------------------------
 
-    /**
-    * Algorithmic name class
-    */
-    static final class AlgorithmName
-    {
+    /** Algorithmic name class */
+    static final class AlgorithmName {
         // package private data members ----------------------------------
 
-        /**
-        * Constant type value of the different AlgorithmName
-        */
+        /** Constant type value of the different AlgorithmName */
         static final int TYPE_0_ = 0;
+
         static final int TYPE_1_ = 1;
 
         // package private constructors ----------------------------------
 
-        /**
-        * Constructor
-        */
-        AlgorithmName()
-        {
-        }
+        /** Constructor */
+        AlgorithmName() {}
 
         // package private methods ---------------------------------------
 
         /**
-        * Sets the information for accessing the algorithmic names
-        * @param rangestart starting code point that lies within this name group
-        * @param rangeend end code point that lies within this name group
-        * @param type algorithm type. There's 2 kinds of algorithmic type. First
-        *        which uses code point as part of its name and the other uses
-        *        variant postfix strings
-        * @param variant algorithmic variant
-        * @return true if values are valid
-        */
-        boolean setInfo(int rangestart, int rangeend, byte type, byte variant)
-        {
-            if (rangestart >= UCharacter.MIN_VALUE && rangestart <= rangeend
-                && rangeend <= UCharacter.MAX_VALUE &&
-                (type == TYPE_0_ || type == TYPE_1_)) {
+         * Sets the information for accessing the algorithmic names
+         *
+         * @param rangestart starting code point that lies within this name group
+         * @param rangeend end code point that lies within this name group
+         * @param type algorithm type. There's 2 kinds of algorithmic type. First which uses code
+         *     point as part of its name and the other uses variant postfix strings
+         * @param variant algorithmic variant
+         * @return true if values are valid
+         */
+        boolean setInfo(int rangestart, int rangeend, byte type, byte variant) {
+            if (rangestart >= UCharacter.MIN_VALUE
+                    && rangestart <= rangeend
+                    && rangeend <= UCharacter.MAX_VALUE
+                    && (type == TYPE_0_ || type == TYPE_1_)) {
                 m_rangestart_ = rangestart;
                 m_rangeend_ = rangeend;
                 m_type_ = type;
@@ -628,12 +585,12 @@ public final class UCharacterName
         }
 
         /**
-        * Sets the factor data
-        * @param factor Array of factor
-        * @return true if factors are valid
-        */
-        boolean setFactor(char factor[])
-        {
+         * Sets the factor data
+         *
+         * @param factor Array of factor
+         * @return true if factors are valid
+         */
+        boolean setFactor(char factor[]) {
             if (factor.length == m_variant_) {
                 m_factor_ = factor;
                 return true;
@@ -642,12 +599,12 @@ public final class UCharacterName
         }
 
         /**
-        * Sets the name prefix
-        * @param prefix
-        * @return true if prefix is set
-        */
-        boolean setPrefix(String prefix)
-        {
+         * Sets the name prefix
+         *
+         * @param prefix
+         * @return true if prefix is set
+         */
+        boolean setPrefix(String prefix) {
             if (prefix != null && prefix.length() > 0) {
                 m_prefix_ = prefix;
                 return true;
@@ -656,12 +613,12 @@ public final class UCharacterName
         }
 
         /**
-        * Sets the variant factorized name data
-        * @param string variant factorized name data
-        * @return true if values are set
-        */
-        boolean setFactorString(byte string[])
-        {
+         * Sets the variant factorized name data
+         *
+         * @param string variant factorized name data
+         * @return true if values are set
+         */
+        boolean setFactorString(byte string[]) {
             // factor and variant string can be empty for things like
             // hanggul code points
             m_factorstring_ = string;
@@ -669,29 +626,28 @@ public final class UCharacterName
         }
 
         /**
-        * Checks if code point lies in Algorithm object at index
-        * @param ch code point
-        */
-        boolean contains(int ch)
-        {
+         * Checks if code point lies in Algorithm object at index
+         *
+         * @param ch code point
+         */
+        boolean contains(int ch) {
             return m_rangestart_ <= ch && ch <= m_rangeend_;
         }
 
         /**
-        * Appends algorithm name of code point into StringBuffer.
-        * Note this method does not check for validity of code point in Algorithm,
-        * result is undefined if code point does not belong in Algorithm.
-        * @param ch code point
-        * @param str StringBuffer to append to
-        */
-        void appendName(int ch, StringBuffer str)
-        {
+         * Appends algorithm name of code point into StringBuffer. Note this method does not check
+         * for validity of code point in Algorithm, result is undefined if code point does not
+         * belong in Algorithm.
+         *
+         * @param ch code point
+         * @param str StringBuffer to append to
+         */
+        void appendName(int ch, StringBuffer str) {
             str.append(m_prefix_);
-            switch (m_type_)
-            {
+            switch (m_type_) {
                 case TYPE_0_:
                     // prefix followed by hex digits indicating variants
-                str.append(Utility.hex(ch,m_variant_));
+                    str.append(Utility.hex(ch, m_variant_));
                     break;
                 case TYPE_1_:
                     // prefix followed by factorized-elements
@@ -703,8 +659,7 @@ public final class UCharacterName
                     // the factorized elements are determined by modulo
                     // arithmetic
                     synchronized (m_utilIntBuffer_) {
-                        for (int i = m_variant_ - 1; i > 0; i --)
-                        {
+                        for (int i = m_variant_ - 1; i > 0; i--) {
                             factor = m_factor_[i] & 0x00FF;
                             indexes[i] = offset % factor;
                             offset /= factor;
@@ -723,39 +678,32 @@ public final class UCharacterName
         }
 
         /**
-        * Gets the character for the argument algorithmic name
-        * @return the algorithmic char or -1 otherwise.
-        */
-        int getChar(String name)
-        {
+         * Gets the character for the argument algorithmic name
+         *
+         * @return the algorithmic char or -1 otherwise.
+         */
+        int getChar(String name) {
             int prefixlen = m_prefix_.length();
-            if (name.length() < prefixlen ||
-                !m_prefix_.equals(name.substring(0, prefixlen))) {
+            if (name.length() < prefixlen || !m_prefix_.equals(name.substring(0, prefixlen))) {
                 return -1;
             }
 
-            switch (m_type_)
-            {
-                case TYPE_0_ :
-                try
-                {
-                    int result = Integer.parseInt(name.substring(prefixlen),
-                                                  16);
-                    // does it fit into the range?
-                    if (m_rangestart_ <= result && result <= m_rangeend_) {
-                        return result;
+            switch (m_type_) {
+                case TYPE_0_:
+                    try {
+                        int result = Integer.parseInt(name.substring(prefixlen), 16);
+                        // does it fit into the range?
+                        if (m_rangestart_ <= result && result <= m_rangeend_) {
+                            return result;
+                        }
+                    } catch (NumberFormatException e) {
+                        return -1;
                     }
-                }
-                catch (NumberFormatException e)
-                {
-                    return -1;
-                }
-                break;
-                case TYPE_1_ :
+                    break;
+                case TYPE_1_:
                     // repetitative suffix name comparison done here
                     // offset is the character code - start
-                    for (int ch = m_rangestart_; ch <= m_rangeend_; ch ++)
-                    {
+                    for (int ch = m_rangestart_; ch <= m_rangeend_; ch++) {
                         int offset = ch - m_rangestart_;
                         int indexes[] = m_utilIntBuffer_;
                         int factor;
@@ -764,8 +712,7 @@ public final class UCharacterName
                         // the factorized elements are determined by modulo
                         // arithmetic
                         synchronized (m_utilIntBuffer_) {
-                            for (int i = m_variant_ - 1; i > 0; i --)
-                            {
+                            for (int i = m_variant_ - 1; i > 0; i--) {
                                 factor = m_factor_[i] & 0x00FF;
                                 indexes[i] = offset % factor;
                                 offset /= factor;
@@ -777,8 +724,7 @@ public final class UCharacterName
                             indexes[0] = offset;
 
                             // joining up the factorized strings
-                            if (compareFactorString(indexes, m_variant_, name,
-                                                    prefixlen)) {
+                            if (compareFactorString(indexes, m_variant_, name, prefixlen)) {
                                 return ch;
                             }
                         }
@@ -789,54 +735,51 @@ public final class UCharacterName
         }
 
         /**
-         * Adds all chars in the set of algorithmic names into the set.
-         * Equivalent to part of calcAlgNameSetsLengths.
+         * Adds all chars in the set of algorithmic names into the set. Equivalent to part of
+         * calcAlgNameSetsLengths.
+         *
          * @param set int set to add the chars of the algorithm names into
          * @param maxlength maximum length to compare to
-         * @return the length that is either maxlength of the length of this
-         *         algorithm name if it is longer than maxlength
+         * @return the length that is either maxlength of the length of this algorithm name if it is
+         *     longer than maxlength
          */
-        int add(int set[], int maxlength)
-        {
+        int add(int set[], int maxlength) {
             // prefix length
             int length = UCharacterName.add(set, m_prefix_);
             switch (m_type_) {
-                case TYPE_0_ : {
-                    // name = prefix + (range->variant times) hex-digits
-                    // prefix
-                    length += m_variant_;
-                    /* synwee to check
-                     * addString(set, (const char *)(range + 1))
-                                       + range->variant;*/
-                    break;
-                }
-                case TYPE_1_ : {
-                    // name = prefix factorized-elements
-                    // get the set and maximum factor suffix length for each
-                    // factor
-                    for (int i = m_variant_ - 1; i > 0; i --)
+                case TYPE_0_:
                     {
-                        int maxfactorlength = 0;
-                        int count = 0;
-                        for (int factor = m_factor_[i]; factor > 0; -- factor) {
-                            synchronized (m_utilStringBuffer_) {
-                                m_utilStringBuffer_.setLength(0);
-                                count
-                                  = UCharacterUtility.getNullTermByteSubString(
-                                                m_utilStringBuffer_,
-                                                m_factorstring_, count);
-                                UCharacterName.add(set, m_utilStringBuffer_);
-                                if (m_utilStringBuffer_.length()
-                                                            > maxfactorlength)
-                                {
-                                    maxfactorlength
-                                                = m_utilStringBuffer_.length();
+                        // name = prefix + (range->variant times) hex-digits
+                        // prefix
+                        length += m_variant_;
+                        /* synwee to check
+                        * addString(set, (const char *)(range + 1))
+                                          + range->variant;*/
+                        break;
+                    }
+                case TYPE_1_:
+                    {
+                        // name = prefix factorized-elements
+                        // get the set and maximum factor suffix length for each
+                        // factor
+                        for (int i = m_variant_ - 1; i > 0; i--) {
+                            int maxfactorlength = 0;
+                            int count = 0;
+                            for (int factor = m_factor_[i]; factor > 0; --factor) {
+                                synchronized (m_utilStringBuffer_) {
+                                    m_utilStringBuffer_.setLength(0);
+                                    count =
+                                            UCharacterUtility.getNullTermByteSubString(
+                                                    m_utilStringBuffer_, m_factorstring_, count);
+                                    UCharacterName.add(set, m_utilStringBuffer_);
+                                    if (m_utilStringBuffer_.length() > maxfactorlength) {
+                                        maxfactorlength = m_utilStringBuffer_.length();
+                                    }
                                 }
                             }
+                            length += maxfactorlength;
                         }
-                        length += maxfactorlength;
                     }
-                }
             }
             if (length > maxlength) {
                 return length;
@@ -846,36 +789,32 @@ public final class UCharacterName
 
         // private data members ------------------------------------------
 
-        /**
-        * Algorithmic data information
-        */
+        /** Algorithmic data information */
         private int m_rangestart_;
+
         private int m_rangeend_;
         private byte m_type_;
         private byte m_variant_;
         private char m_factor_[];
         private String m_prefix_;
         private byte m_factorstring_[];
-        /**
-         * Utility StringBuffer
-         */
+
+        /** Utility StringBuffer */
         private StringBuffer m_utilStringBuffer_ = new StringBuffer();
-        /**
-         * Utility int buffer
-         */
+
+        /** Utility int buffer */
         private int m_utilIntBuffer_[] = new int[256];
 
         // private methods -----------------------------------------------
 
         /**
-        * Gets the indexth string in each of the argument factor block
-        * @param index array with each index corresponding to each factor block
-        * @param length length of the array index
-        * @return the combined string of the array of indexth factor string in
-        *         factor block
-        */
-        private String getFactorString(int index[], int length)
-        {
+         * Gets the indexth string in each of the argument factor block
+         *
+         * @param index array with each index corresponding to each factor block
+         * @param length length of the array index
+         * @return the combined string of the array of indexth factor string in factor block
+         */
+        private String getFactorString(int index[], int length) {
             int size = m_factor_.length;
             if (index == null || length != size) {
                 return null;
@@ -885,18 +824,19 @@ public final class UCharacterName
                 m_utilStringBuffer_.setLength(0);
                 int count = 0;
                 int factor;
-                size --;
-                for (int i = 0; i <= size; i ++) {
+                size--;
+                for (int i = 0; i <= size; i++) {
                     factor = m_factor_[i];
-                    count = UCharacterUtility.skipNullTermByteSubString(
-                                             m_factorstring_, count, index[i]);
-                    count = UCharacterUtility.getNullTermByteSubString(
-                                          m_utilStringBuffer_, m_factorstring_,
-                                          count);
+                    count =
+                            UCharacterUtility.skipNullTermByteSubString(
+                                    m_factorstring_, count, index[i]);
+                    count =
+                            UCharacterUtility.getNullTermByteSubString(
+                                    m_utilStringBuffer_, m_factorstring_, count);
                     if (i != size) {
-                        count = UCharacterUtility.skipNullTermByteSubString(
-                                                       m_factorstring_, count,
-                                                       factor - index[i] - 1);
+                        count =
+                                UCharacterUtility.skipNullTermByteSubString(
+                                        m_factorstring_, count, factor - index[i] - 1);
                     }
                 }
                 return m_utilStringBuffer_.toString();
@@ -904,39 +844,38 @@ public final class UCharacterName
         }
 
         /**
-        * Compares the indexth string in each of the argument factor block with
-        * the argument string
-        * @param index array with each index corresponding to each factor block
-        * @param length index array length
-        * @param str string to compare with
-        * @param offset of str to start comparison
-        * @return true if string matches
-        */
-        private boolean compareFactorString(int index[], int length, String str,
-                                            int offset)
-        {
+         * Compares the indexth string in each of the argument factor block with the argument string
+         *
+         * @param index array with each index corresponding to each factor block
+         * @param length index array length
+         * @param str string to compare with
+         * @param offset of str to start comparison
+         * @return true if string matches
+         */
+        private boolean compareFactorString(int index[], int length, String str, int offset) {
             int size = m_factor_.length;
-            if (index == null || length != size)
-                return false;
+            if (index == null || length != size) return false;
 
             int count = 0;
             int strcount = offset;
             int factor;
-            size --;
-            for (int i = 0; i <= size; i ++)
-            {
+            size--;
+            for (int i = 0; i <= size; i++) {
                 factor = m_factor_[i];
-                count = UCharacterUtility.skipNullTermByteSubString(
-                                          m_factorstring_, count, index[i]);
-                strcount = UCharacterUtility.compareNullTermByteSubString(str,
-                                          m_factorstring_, strcount, count);
+                count =
+                        UCharacterUtility.skipNullTermByteSubString(
+                                m_factorstring_, count, index[i]);
+                strcount =
+                        UCharacterUtility.compareNullTermByteSubString(
+                                str, m_factorstring_, strcount, count);
                 if (strcount < 0) {
                     return false;
                 }
 
                 if (i != size) {
-                    count = UCharacterUtility.skipNullTermByteSubString(
-                                  m_factorstring_, count, factor - index[i]);
+                    count =
+                            UCharacterUtility.skipNullTermByteSubString(
+                                    m_factorstring_, count, factor - index[i]);
                 }
             }
             if (strcount != str.length()) {
@@ -948,23 +887,20 @@ public final class UCharacterName
 
     // package private data members --------------------------------------
 
-    /**
-     * Size of each groups
-     */
+    /** Size of each groups */
     int m_groupsize_ = 0;
 
     // package private methods --------------------------------------------
 
     /**
-    * Sets the token data
-    * @param token array of tokens
-    * @param tokenstring array of string values of the tokens
-    * @return false if there is a data error
-    */
-    boolean setToken(char token[], byte tokenstring[])
-    {
-        if (token != null && tokenstring != null && token.length > 0 &&
-            tokenstring.length > 0) {
+     * Sets the token data
+     *
+     * @param token array of tokens
+     * @param tokenstring array of string values of the tokens
+     * @return false if there is a data error
+     */
+    boolean setToken(char token[], byte tokenstring[]) {
+        if (token != null && tokenstring != null && token.length > 0 && tokenstring.length > 0) {
             m_tokentable_ = token;
             m_tokenstring_ = tokenstring;
             return true;
@@ -973,12 +909,12 @@ public final class UCharacterName
     }
 
     /**
-    * Set the algorithm name information array
-    * @param alg Algorithm information array
-    * @return true if the group string offset has been set correctly
-    */
-    boolean setAlgorithm(AlgorithmName alg[])
-    {
+     * Set the algorithm name information array
+     *
+     * @param alg Algorithm information array
+     * @return true if the group string offset has been set correctly
+     */
+    boolean setAlgorithm(AlgorithmName alg[]) {
         if (alg != null && alg.length != 0) {
             m_algorithm_ = alg;
             return true;
@@ -987,13 +923,13 @@ public final class UCharacterName
     }
 
     /**
-    * Sets the number of group and size of each group in number of char
-    * @param count number of groups
-    * @param size size of group in char
-    * @return true if group size is set correctly
-    */
-    boolean setGroupCountSize(int count, int size)
-    {
+     * Sets the number of group and size of each group in number of char
+     *
+     * @param count number of groups
+     * @param size size of group in char
+     * @return true if group size is set correctly
+     */
+    boolean setGroupCountSize(int count, int size) {
         if (count <= 0 || size <= 0) {
             return false;
         }
@@ -1003,15 +939,14 @@ public final class UCharacterName
     }
 
     /**
-    * Sets the group name data
-    * @param group index information array
-    * @param groupstring name information array
-    * @return false if there is a data error
-    */
-    boolean setGroup(char group[], byte groupstring[])
-    {
-        if (group != null && groupstring != null && group.length > 0 &&
-            groupstring.length > 0) {
+     * Sets the group name data
+     *
+     * @param group index information array
+     * @param groupstring name information array
+     * @return false if there is a data error
+     */
+    boolean setGroup(char group[], byte groupstring[]) {
+        if (group != null && groupstring != null && group.length > 0 && groupstring.length > 0) {
             m_groupinfo_ = group;
             m_groupstring_ = groupstring;
             return true;
@@ -1021,153 +956,133 @@ public final class UCharacterName
 
     // private data members ----------------------------------------------
 
-    /**
-    * Data used in unames.icu
-    */
+    /** Data used in unames.icu */
     private char m_tokentable_[];
+
     private byte m_tokenstring_[];
     private char m_groupinfo_[];
     private byte m_groupstring_[];
     private AlgorithmName m_algorithm_[];
 
-    /**
-    * Group use.  Note - access must be synchronized.
-    */
+    /** Group use. Note - access must be synchronized. */
     private char m_groupoffsets_[] = new char[LINES_PER_GROUP_ + 1];
+
     private char m_grouplengths_[] = new char[LINES_PER_GROUP_ + 1];
 
-    /**
-    * Default name of the name datafile
-    */
+    /** Default name of the name datafile */
     private static final String FILE_NAME_ = "unames.icu";
-    /**
-    * Shift count to retrieve group information
-    */
+
+    /** Shift count to retrieve group information */
     private static final int GROUP_SHIFT_ = 5;
-    /**
-    * Mask to retrieve the offset for a particular character within a group
-    */
+
+    /** Mask to retrieve the offset for a particular character within a group */
     private static final int GROUP_MASK_ = LINES_PER_GROUP_ - 1;
 
-    /**
-    * Position of offsethigh in group information array
-    */
+    /** Position of offsethigh in group information array */
     private static final int OFFSET_HIGH_OFFSET_ = 1;
 
-    /**
-    * Position of offsetlow in group information array
-    */
+    /** Position of offsetlow in group information array */
     private static final int OFFSET_LOW_OFFSET_ = 2;
+
     /**
-    * Double nibble indicator, any nibble > this number has to be combined
-    * with its following nibble
-    */
+     * Double nibble indicator, any nibble > this number has to be combined with its following
+     * nibble
+     */
     private static final int SINGLE_NIBBLE_MAX_ = 11;
 
     /*
      * Maximum length of character names (regular & 1.0).
      */
-    //private static int MAX_NAME_LENGTH_ = 0;
+    // private static int MAX_NAME_LENGTH_ = 0;
     /*
      * Maximum length of ISO comments.
      */
-    //private static int MAX_ISO_COMMENT_LENGTH_ = 0;
+    // private static int MAX_ISO_COMMENT_LENGTH_ = 0;
 
     /**
-     * Set of chars used in character names (regular & 1.0).
-     * Chars are platform-dependent (can be EBCDIC).
+     * Set of chars used in character names (regular & 1.0). Chars are platform-dependent (can be
+     * EBCDIC).
      */
     private int m_nameSet_[] = new int[8];
+
     /**
-     * Set of chars used in ISO comments. (regular & 1.0).
-     * Chars are platform-dependent (can be EBCDIC).
+     * Set of chars used in ISO comments. (regular & 1.0). Chars are platform-dependent (can be
+     * EBCDIC).
      */
     private int m_ISOCommentSet_[] = new int[8];
-    /**
-     * Utility StringBuffer
-     */
+
+    /** Utility StringBuffer */
     private StringBuffer m_utilStringBuffer_ = new StringBuffer();
-    /**
-     * Utility int buffer
-     */
+
+    /** Utility int buffer */
     private int m_utilIntBuffer_[] = new int[2];
-    /**
-     * Maximum ISO comment length
-     */
+
+    /** Maximum ISO comment length */
     private int m_maxISOCommentLength_;
-    /**
-     * Maximum name length
-     */
+
+    /** Maximum name length */
     private int m_maxNameLength_;
-    /**
-     * Type names used for extended names
-     */
-    private static final String TYPE_NAMES_[] = {"unassigned",
-                                                 "uppercase letter",
-                                                 "lowercase letter",
-                                                 "titlecase letter",
-                                                 "modifier letter",
-                                                 "other letter",
-                                                 "non spacing mark",
-                                                 "enclosing mark",
-                                                 "combining spacing mark",
-                                                 "decimal digit number",
-                                                 "letter number",
-                                                 "other number",
-                                                 "space separator",
-                                                 "line separator",
-                                                 "paragraph separator",
-                                                 "control",
-                                                 "format",
-                                                 "private use area",
-                                                 "surrogate",
-                                                 "dash punctuation",
-                                                 "start punctuation",
-                                                 "end punctuation",
-                                                 "connector punctuation",
-                                                 "other punctuation",
-                                                 "math symbol",
-                                                 "currency symbol",
-                                                 "modifier symbol",
-                                                 "other symbol",
-                                                 "initial punctuation",
-                                                 "final punctuation",
-                                                 "noncharacter",
-                                                 "lead surrogate",
-                                                 "trail surrogate"};
-    /**
-     * Unknown type name
-     */
+
+    /** Type names used for extended names */
+    private static final String TYPE_NAMES_[] = {
+        "unassigned",
+        "uppercase letter",
+        "lowercase letter",
+        "titlecase letter",
+        "modifier letter",
+        "other letter",
+        "non spacing mark",
+        "enclosing mark",
+        "combining spacing mark",
+        "decimal digit number",
+        "letter number",
+        "other number",
+        "space separator",
+        "line separator",
+        "paragraph separator",
+        "control",
+        "format",
+        "private use area",
+        "surrogate",
+        "dash punctuation",
+        "start punctuation",
+        "end punctuation",
+        "connector punctuation",
+        "other punctuation",
+        "math symbol",
+        "currency symbol",
+        "modifier symbol",
+        "other symbol",
+        "initial punctuation",
+        "final punctuation",
+        "noncharacter",
+        "lead surrogate",
+        "trail surrogate"
+    };
+
+    /** Unknown type name */
     private static final String UNKNOWN_TYPE_NAME_ = "unknown";
-    /**
-     * Not a character type
-     */
-    private static final int NON_CHARACTER_
-                                    = UCharacterCategory.CHAR_CATEGORY_COUNT;
-    /**
-    * Lead surrogate type
-    */
-    private static final int LEAD_SURROGATE_
-                                  = UCharacterCategory.CHAR_CATEGORY_COUNT + 1;
-    /**
-    * Trail surrogate type
-    */
-    private static final int TRAIL_SURROGATE_
-                                  = UCharacterCategory.CHAR_CATEGORY_COUNT + 2;
-    /**
-    * Extended category count
-    */
-    static final int EXTENDED_CATEGORY_
-                                  = UCharacterCategory.CHAR_CATEGORY_COUNT + 3;
+
+    /** Not a character type */
+    private static final int NON_CHARACTER_ = UCharacterCategory.CHAR_CATEGORY_COUNT;
+
+    /** Lead surrogate type */
+    private static final int LEAD_SURROGATE_ = UCharacterCategory.CHAR_CATEGORY_COUNT + 1;
+
+    /** Trail surrogate type */
+    private static final int TRAIL_SURROGATE_ = UCharacterCategory.CHAR_CATEGORY_COUNT + 2;
+
+    /** Extended category count */
+    static final int EXTENDED_CATEGORY_ = UCharacterCategory.CHAR_CATEGORY_COUNT + 3;
 
     // private constructor ------------------------------------------------
 
     /**
-    * <p>Protected constructor for use in UCharacter.</p>
-    * @exception IOException thrown when data reading fails
-    */
-    private UCharacterName() throws IOException
-    {
+     * Protected constructor for use in UCharacter.
+     *
+     * @exception IOException thrown when data reading fails
+     */
+    private UCharacterName() throws IOException {
         ByteBuffer b = ICUBinary.getRequiredData(FILE_NAME_);
         UCharacterNameReader reader = new UCharacterNameReader(b);
         reader.read(this);
@@ -1176,27 +1091,25 @@ public final class UCharacterName
     // private methods ---------------------------------------------------
 
     /**
-    * Gets the algorithmic name for the argument character
-    * @param ch character to determine name for
-    * @param choice name choice
-    * @return the algorithmic name or null if not found
-    */
-    private String getAlgName(int ch, int choice)
-    {
+     * Gets the algorithmic name for the argument character
+     *
+     * @param ch character to determine name for
+     * @param choice name choice
+     * @return the algorithmic name or null if not found
+     */
+    private String getAlgName(int ch, int choice) {
         /* Only the normative character name can be algorithmic. */
-        if (choice == UCharacterNameChoice.UNICODE_CHAR_NAME ||
-            choice == UCharacterNameChoice.EXTENDED_CHAR_NAME
-        ) {
+        if (choice == UCharacterNameChoice.UNICODE_CHAR_NAME
+                || choice == UCharacterNameChoice.EXTENDED_CHAR_NAME) {
             // index in terms integer index
             synchronized (m_utilStringBuffer_) {
                 m_utilStringBuffer_.setLength(0);
 
-                for (int index = m_algorithm_.length - 1; index >= 0; index --)
-                {
-                   if (m_algorithm_[index].contains(ch)) {
-                      m_algorithm_[index].appendName(ch, m_utilStringBuffer_);
-                      return m_utilStringBuffer_.toString();
-                   }
+                for (int index = m_algorithm_.length - 1; index >= 0; index--) {
+                    if (m_algorithm_[index].contains(ch)) {
+                        m_algorithm_[index].appendName(ch, m_utilStringBuffer_);
+                        return m_utilStringBuffer_.toString();
+                    }
                 }
             }
         }
@@ -1204,43 +1117,37 @@ public final class UCharacterName
     }
 
     /**
-    * Getting the character with the tokenized argument name
-    * @param name of the character
-    * @return character with the tokenized argument name or -1 if character
-    *         is not found
-    */
-    private synchronized int getGroupChar(String name, int choice)
-    {
-        for (int i = 0; i < m_groupcount_; i ++) {
+     * Getting the character with the tokenized argument name
+     *
+     * @param name of the character
+     * @return character with the tokenized argument name or -1 if character is not found
+     */
+    private synchronized int getGroupChar(String name, int choice) {
+        for (int i = 0; i < m_groupcount_; i++) {
             // populating the data set of grouptable
 
-            int startgpstrindex = getGroupLengths(i, m_groupoffsets_,
-                                                  m_grouplengths_);
+            int startgpstrindex = getGroupLengths(i, m_groupoffsets_, m_grouplengths_);
 
             // shift out to function
-            int result = getGroupChar(startgpstrindex, m_grouplengths_, name,
-                                      choice);
+            int result = getGroupChar(startgpstrindex, m_grouplengths_, name, choice);
             if (result != -1) {
-                return (m_groupinfo_[i * m_groupsize_] << GROUP_SHIFT_)
-                         | result;
+                return (m_groupinfo_[i * m_groupsize_] << GROUP_SHIFT_) | result;
             }
         }
         return -1;
     }
 
     /**
-    * Compares and retrieve character if name is found within the argument
-    * group
-    * @param index index where the set of names reside in the group block
-    * @param length list of lengths of the strings
-    * @param name character name to search for
-    * @param choice of either 1.0 or the most current unicode name
-    * @return relative character in the group which matches name, otherwise if
-    *         not found, -1 will be returned
-    */
-    private int getGroupChar(int index, char length[], String name,
-                             int choice)
-    {
+     * Compares and retrieve character if name is found within the argument group
+     *
+     * @param index index where the set of names reside in the group block
+     * @param length list of lengths of the strings
+     * @param name character name to search for
+     * @param choice of either 1.0 or the most current unicode name
+     * @return relative character in the group which matches name, otherwise if not found, -1 will
+     *     be returned
+     */
+    private int getGroupChar(int index, char length[], String name, int choice) {
         byte b = 0;
         char token;
         int len;
@@ -1248,61 +1155,57 @@ public final class UCharacterName
         int nindex;
         int count;
 
-        for (int result = 0; result <= LINES_PER_GROUP_; result ++) {
+        for (int result = 0; result <= LINES_PER_GROUP_; result++) {
             nindex = 0;
             len = length[result];
 
-            if (choice != UCharacterNameChoice.UNICODE_CHAR_NAME &&
-                choice != UCharacterNameChoice.EXTENDED_CHAR_NAME
-            ) {
+            if (choice != UCharacterNameChoice.UNICODE_CHAR_NAME
+                    && choice != UCharacterNameChoice.EXTENDED_CHAR_NAME) {
                 /*
                  * skip the modern name if it is not requested _and_
                  * if the semicolon byte value is a character, not a token number
                  */
-                int fieldIndex= choice==UCharacterNameChoice.ISO_COMMENT_ ? 2 : choice;
+                int fieldIndex = choice == UCharacterNameChoice.ISO_COMMENT_ ? 2 : choice;
                 do {
                     int oldindex = index;
-                    index += UCharacterUtility.skipByteSubString(m_groupstring_,
-                                                         index, len, (byte)';');
+                    index +=
+                            UCharacterUtility.skipByteSubString(
+                                    m_groupstring_, index, len, (byte) ';');
                     len -= (index - oldindex);
-                } while(--fieldIndex>0);
+                } while (--fieldIndex > 0);
             }
 
             // number of tokens is > the length of the name
             // write each letter directly, and write a token word per token
-            for (count = 0; count < len && nindex != -1 && nindex < namelen;
-                ) {
+            for (count = 0; count < len && nindex != -1 && nindex < namelen; ) {
                 b = m_groupstring_[index + count];
-                count ++;
+                count++;
 
                 if (b >= m_tokentable_.length) {
-                    if (name.charAt(nindex ++) != (b & 0xFF)) {
+                    if (name.charAt(nindex++) != (b & 0xFF)) {
                         nindex = -1;
                     }
-                }
-                else {
+                } else {
                     token = m_tokentable_[b & 0xFF];
                     if (token == 0xFFFE) {
                         // this is a lead byte for a double-byte token
-                        token = m_tokentable_[b << 8 |
-                                   (m_groupstring_[index + count] & 0x00ff)];
-                        count ++;
+                        token = m_tokentable_[b << 8 | (m_groupstring_[index + count] & 0x00ff)];
+                        count++;
                     }
                     if (token == 0xFFFF) {
-                        if (name.charAt(nindex ++) != (b & 0xFF)) {
+                        if (name.charAt(nindex++) != (b & 0xFF)) {
                             nindex = -1;
                         }
-                    }
-                    else {
+                    } else {
                         // compare token with name
-                        nindex = UCharacterUtility.compareNullTermByteSubString(
+                        nindex =
+                                UCharacterUtility.compareNullTermByteSubString(
                                         name, m_tokenstring_, nindex, token);
                     }
                 }
             }
 
-            if (namelen == nindex &&
-                (count == len || m_groupstring_[index + count] == ';')) {
+            if (namelen == nindex && (count == len || m_groupstring_[index + count] == ';')) {
                 return result;
             }
 
@@ -1312,12 +1215,12 @@ public final class UCharacterName
     }
 
     /**
-    * Gets the character extended type
-    * @param ch character to be tested
-    * @return extended type it is associated with
-    */
-    private static int getType(int ch)
-    {
+     * Gets the character extended type
+     *
+     * @param ch character to be tested
+     * @return extended type it is associated with
+     */
+    private static int getType(int ch) {
         if (UCharacterUtility.isNonCharacter(ch)) {
             // not a character we return a invalid category count
             return NON_CHARACTER_;
@@ -1326,8 +1229,7 @@ public final class UCharacterName
         if (result == UCharacterCategory.SURROGATE) {
             if (ch <= UTF16.LEAD_SURROGATE_MAX_VALUE) {
                 result = LEAD_SURROGATE_;
-            }
-            else {
+            } else {
                 result = TRAIL_SURROGATE_;
             }
         }
@@ -1335,21 +1237,21 @@ public final class UCharacterName
     }
 
     /**
-    * Getting the character with extended name of the form <....>.
-    * @param name of the character to be found
-    * @param choice name choice
-    * @return character associated with the name, -1 if such character is not
-    *                   found and -2 if we should continue with the search.
-    */
-    private static int getExtendedChar(String name, int choice)
-    {
+     * Getting the character with extended name of the form <....>.
+     *
+     * @param name of the character to be found
+     * @param choice name choice
+     * @return character associated with the name, -1 if such character is not found and -2 if we
+     *     should continue with the search.
+     */
+    private static int getExtendedChar(String name, int choice) {
         if (name.charAt(0) == '<') {
             if (choice == UCharacterNameChoice.EXTENDED_CHAR_NAME) {
                 int endIndex = name.length() - 1;
                 if (name.charAt(endIndex) == '>') {
                     int startIndex = name.lastIndexOf('-');
                     if (startIndex >= 0) { // We've got a category.
-                        startIndex ++;
+                        startIndex++;
 
                         // There should be 1 to 8 hex digits.
                         int hexLength = endIndex - startIndex;
@@ -1358,11 +1260,8 @@ public final class UCharacterName
                         }
                         int result = -1;
                         try {
-                            result = Integer.parseInt(
-                                        name.substring(startIndex, endIndex),
-                                        16);
-                        }
-                        catch (NumberFormatException e) {
+                            result = Integer.parseInt(name.substring(startIndex, endIndex), 16);
+                        } catch (NumberFormatException e) {
                             return -1;
                         }
                         if (result < 0 || 0x10ffff < result) {
@@ -1373,7 +1272,7 @@ public final class UCharacterName
                         int charType = getType(result);
                         String type = name.substring(1, startIndex - 1);
                         int length = TYPE_NAMES_.length;
-                        for (int i = 0; i < length; ++ i) {
+                        for (int i = 0; i < length; ++i) {
                             if (type.compareTo(TYPE_NAMES_[i]) == 0) {
                                 if (charType == i) {
                                     return result;
@@ -1392,71 +1291,68 @@ public final class UCharacterName
     // sets of name characters, maximum name lengths -----------------------
 
     /**
-     * Adds a codepoint into a set of ints.
-     * Equivalent to SET_ADD.
+     * Adds a codepoint into a set of ints. Equivalent to SET_ADD.
+     *
      * @param set set to add to
      * @param ch 16 bit char to add
      */
-    private static void add(int set[], char ch)
-    {
+    private static void add(int set[], char ch) {
         set[ch >>> 5] |= 1 << (ch & 0x1f);
     }
 
     /**
-     * Checks if a codepoint is a part of a set of ints.
-     * Equivalent to SET_CONTAINS.
+     * Checks if a codepoint is a part of a set of ints. Equivalent to SET_CONTAINS.
+     *
      * @param set set to check in
      * @param ch 16 bit char to check
      * @return true if codepoint is part of the set, false otherwise
      */
-    private static boolean contains(int set[], char ch)
-    {
+    private static boolean contains(int set[], char ch) {
         return (set[ch >>> 5] & (1 << (ch & 0x1f))) != 0;
     }
 
     /**
-     * Adds all characters of the argument str and gets the length
-     * Equivalent to calcStringSetLength.
+     * Adds all characters of the argument str and gets the length Equivalent to
+     * calcStringSetLength.
+     *
      * @param set set to add all chars of str to
      * @param str string to add
      */
-    private static int add(int set[], String str)
-    {
+    private static int add(int set[], String str) {
         int result = str.length();
 
-        for (int i = result - 1; i >= 0; i --) {
+        for (int i = result - 1; i >= 0; i--) {
             add(set, str.charAt(i));
         }
         return result;
     }
 
     /**
-     * Adds all characters of the argument str and gets the length
-     * Equivalent to calcStringSetLength.
+     * Adds all characters of the argument str and gets the length Equivalent to
+     * calcStringSetLength.
+     *
      * @param set set to add all chars of str to
      * @param str string to add
      */
-    private static int add(int set[], StringBuffer str)
-    {
+    private static int add(int set[], StringBuffer str) {
         int result = str.length();
 
-        for (int i = result - 1; i >= 0; i --) {
+        for (int i = result - 1; i >= 0; i--) {
             add(set, str.charAt(i));
         }
         return result;
     }
 
     /**
-     * Adds all algorithmic names into the name set.
-     * Equivalent to part of calcAlgNameSetsLengths.
+     * Adds all algorithmic names into the name set. Equivalent to part of calcAlgNameSetsLengths.
+     *
      * @param maxlength length to compare to
-     * @return the maximum length of any possible algorithmic name if it is >
-     *         maxlength, otherwise maxlength is returned.
+     * @return the maximum length of any possible algorithmic name if it is > maxlength, otherwise
+     *     maxlength is returned.
      */
-    private int addAlgorithmName(int maxlength)
-    {
+    private int addAlgorithmName(int maxlength) {
         int result = 0;
-        for (int i = m_algorithm_.length - 1; i >= 0; i --) {
+        for (int i = m_algorithm_.length - 1; i >= 0; i--) {
             result = m_algorithm_[i].add(m_nameSet_, maxlength);
             if (result > maxlength) {
                 maxlength = result;
@@ -1466,14 +1362,13 @@ public final class UCharacterName
     }
 
     /**
-     * Adds all extended names into the name set.
-     * Equivalent to part of calcExtNameSetsLengths.
+     * Adds all extended names into the name set. Equivalent to part of calcExtNameSetsLengths.
+     *
      * @param maxlength length to compare to
      * @return the maxlength of any possible extended name.
      */
-    private int addExtendedName(int maxlength)
-    {
-        for (int i = TYPE_NAMES_.length - 1; i >= 0; i --) {
+    private int addExtendedName(int maxlength) {
+        for (int i = TYPE_NAMES_.length - 1; i >= 0; i--) {
             // for each category, count the length of the category name
             // plus 9 =
             // 2 for <>
@@ -1488,45 +1383,39 @@ public final class UCharacterName
     }
 
     /**
-     * Adds names of a group to the argument set.
-     * Equivalent to calcNameSetLength.
+     * Adds names of a group to the argument set. Equivalent to calcNameSetLength.
+     *
      * @param offset of the group name string in byte count
      * @param length of the group name string
      * @param tokenlength array to store the length of each token
      * @param set to add to
-     * @return the length of the name string and the length of the group
-     *         string parsed
+     * @return the length of the name string and the length of the group string parsed
      */
-    private int[] addGroupName(int offset, int length, byte tokenlength[],
-                               int set[])
-    {
+    private int[] addGroupName(int offset, int length, byte tokenlength[], int set[]) {
         int resultnlength = 0;
         int resultplength = 0;
         while (resultplength < length) {
-            char b = (char)(m_groupstring_[offset + resultplength] & 0xff);
-            resultplength ++;
+            char b = (char) (m_groupstring_[offset + resultplength] & 0xff);
+            resultplength++;
             if (b == ';') {
                 break;
             }
 
             if (b >= m_tokentable_.length) {
                 add(set, b); // implicit letter
-                resultnlength ++;
-            }
-            else {
+                resultnlength++;
+            } else {
                 char token = m_tokentable_[b & 0x00ff];
                 if (token == 0xFFFE) {
                     // this is a lead byte for a double-byte token
-                    b = (char)(b << 8 | (m_groupstring_[offset + resultplength]
-                                         & 0x00ff));
+                    b = (char) (b << 8 | (m_groupstring_[offset + resultplength] & 0x00ff));
                     token = m_tokentable_[b];
-                    resultplength ++;
+                    resultplength++;
                 }
                 if (token == 0xFFFF) {
                     add(set, b);
-                    resultnlength ++;
-                }
-                else {
+                    resultnlength++;
+                } else {
                     // count token word
                     // use cached token length
                     byte tlength = tokenlength[b];
@@ -1534,9 +1423,8 @@ public final class UCharacterName
                         synchronized (m_utilStringBuffer_) {
                             m_utilStringBuffer_.setLength(0);
                             UCharacterUtility.getNullTermByteSubString(
-                                           m_utilStringBuffer_, m_tokenstring_,
-                                           token);
-                            tlength = (byte)add(set, m_utilStringBuffer_);
+                                    m_utilStringBuffer_, m_tokenstring_, token);
+                            tlength = (byte) add(set, m_utilStringBuffer_);
                         }
                         tokenlength[b] = tlength;
                     }
@@ -1550,14 +1438,12 @@ public final class UCharacterName
     }
 
     /**
-     * Adds names of all group to the argument set.
-     * Sets the data member m_max*Length_.
-     * Method called only once.
-     * Equivalent to calcGroupNameSetsLength.
+     * Adds names of all group to the argument set. Sets the data member m_max*Length_. Method
+     * called only once. Equivalent to calcGroupNameSetsLength.
+     *
      * @param maxlength length to compare to
      */
-    private void addGroupName(int maxlength)
-    {
+    private void addGroupName(int maxlength) {
         int maxisolength = 0;
         char offsets[] = new char[LINES_PER_GROUP_ + 2];
         char lengths[] = new char[LINES_PER_GROUP_ + 2];
@@ -1565,13 +1451,12 @@ public final class UCharacterName
 
         // enumerate all groups
         // for (int i = m_groupcount_ - 1; i >= 0; i --) {
-        for (int i = 0; i < m_groupcount_ ; i ++) {
+        for (int i = 0; i < m_groupcount_; i++) {
             int offset = getGroupLengths(i, offsets, lengths);
             // enumerate all lines in each group
             // for (int linenumber = LINES_PER_GROUP_ - 1; linenumber >= 0;
             //    linenumber --) {
-            for (int linenumber = 0; linenumber < LINES_PER_GROUP_;
-                linenumber ++) {
+            for (int linenumber = 0; linenumber < LINES_PER_GROUP_; linenumber++) {
                 int lineoffset = offset + offsets[linenumber];
                 int length = lengths[linenumber];
                 if (length == 0) {
@@ -1579,8 +1464,7 @@ public final class UCharacterName
                 }
 
                 // read regular name
-                int parsed[] = addGroupName(lineoffset, length, tokenlengths,
-                                            m_nameSet_);
+                int parsed[] = addGroupName(lineoffset, length, tokenlengths, m_nameSet_);
                 if (parsed[0] > maxlength) {
                     // 0 for name length
                     maxlength = parsed[0];
@@ -1592,8 +1476,7 @@ public final class UCharacterName
                 }
                 length -= parsed[1];
                 // read Unicode 1.0 name
-                parsed = addGroupName(lineoffset, length, tokenlengths,
-                                      m_nameSet_);
+                parsed = addGroupName(lineoffset, length, tokenlengths, m_nameSet_);
                 if (parsed[0] > maxlength) {
                     // 0 for name length
                     maxlength = parsed[0];
@@ -1605,8 +1488,7 @@ public final class UCharacterName
                 }
                 length -= parsed[1];
                 // read ISO comment
-                parsed = addGroupName(lineoffset, length, tokenlengths,
-                                      m_ISOCommentSet_);
+                parsed = addGroupName(lineoffset, length, tokenlengths, m_ISOCommentSet_);
                 if (parsed[1] > maxisolength) {
                     maxisolength = length;
                 }
@@ -1619,11 +1501,10 @@ public final class UCharacterName
     }
 
     /**
-     * Sets up the name sets and the calculation of the maximum lengths.
-     * Equivalent to calcNameSetsLengths.
+     * Sets up the name sets and the calculation of the maximum lengths. Equivalent to
+     * calcNameSetsLengths.
      */
-    private boolean initNameSetsLengths()
-    {
+    private boolean initNameSetsLengths() {
         if (m_maxNameLength_ > 0) {
             return true;
         }
@@ -1631,7 +1512,7 @@ public final class UCharacterName
         String extra = "0123456789ABCDEF<>-";
         // set hex digits, used in various names, and <>-, used in extended
         // names
-        for (int i = extra.length() - 1; i >= 0; i --) {
+        for (int i = extra.length() - 1; i >= 0; i--) {
             add(m_nameSet_, extra.charAt(i));
         }
 
@@ -1645,20 +1526,19 @@ public final class UCharacterName
     }
 
     /**
-     * Converts the char set cset into a Unicode set uset.
-     * Equivalent to charSetToUSet.
+     * Converts the char set cset into a Unicode set uset. Equivalent to charSetToUSet.
+     *
      * @param set Set of 256 bit flags corresponding to a set of chars.
      * @param uset USet to receive characters. Existing contents are deleted.
      */
-    private void convert(int set[], UnicodeSet uset)
-    {
+    private void convert(int set[], UnicodeSet uset) {
         uset.clear();
         if (!initNameSetsLengths()) {
             return;
         }
 
         // build a char string with all chars that are used in character names
-        for (char c = 255; c > 0; c --) {
+        for (char c = 255; c > 0; c--) {
             if (contains(set, c)) {
                 uset.add(c);
             }

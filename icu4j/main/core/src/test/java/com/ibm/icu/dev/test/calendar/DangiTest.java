@@ -7,11 +7,6 @@
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.calendar;
-import java.util.Date;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.util.Calendar;
@@ -19,31 +14,32 @@ import com.ibm.icu.util.DangiCalendar;
 import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
+import java.util.Date;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public class DangiTest extends CalendarTestFmwk {
-    /**
-     * Test basic mapping to and from Gregorian.
-     */
+    /** Test basic mapping to and from Gregorian. */
     @Test
     public void TestMapping() {
         final int[] DATA = {
             // (Note: months are 1-based)
             // Gregorian    Korean (Dan-gi)
-            1964,  9,  4,   1964,  7,0, 28,
-            1964,  9,  5,   1964,  7,0, 29,
-            1964,  9,  6,   1964,  8,0,  1,
-            1964,  9,  7,   1964,  8,0,  2,
-            1961, 12, 25,   1961, 11,0, 18,
-            1999,  6,  4,   1999,  4,0, 21,
-
-            1990,  5, 23,   1990,  4,0, 29,
-            1990,  5, 24,   1990,  5,0,  1,
-            1990,  6, 22,   1990,  5,0, 30,
-            1990,  6, 23,   1990,  5,1,  1,
-            1990,  7, 20,   1990,  5,1, 28,
-            1990,  7, 21,   1990,  5,1, 29,
-            1990,  7, 22,   1990,  6,0,  1,
+            1964, 9, 4, 1964, 7, 0, 28,
+            1964, 9, 5, 1964, 7, 0, 29,
+            1964, 9, 6, 1964, 8, 0, 1,
+            1964, 9, 7, 1964, 8, 0, 2,
+            1961, 12, 25, 1961, 11, 0, 18,
+            1999, 6, 4, 1999, 4, 0, 21,
+            1990, 5, 23, 1990, 4, 0, 29,
+            1990, 5, 24, 1990, 5, 0, 1,
+            1990, 6, 22, 1990, 5, 0, 30,
+            1990, 6, 23, 1990, 5, 1, 1,
+            1990, 7, 20, 1990, 5, 1, 28,
+            1990, 7, 21, 1990, 5, 1, 29,
+            1990, 7, 22, 1990, 6, 0, 1,
 
             // Some tricky dates (where GMT+8 doesn't agree with GMT+9)
             //
@@ -51,25 +47,27 @@ public class DangiTest extends CalendarTestFmwk {
             // However, for some dates disagree with the above reference so KASI's
             // calculation was cross-referenced:
             //  http://astro.kasi.re.kr/Life/ConvertSolarLunarForm.aspx?MenuID=115
-            1880, 11,  3,   1880, 10,0,  1, // astronomer's GMT+8 / KASI disagrees with the kye ref
-            1882, 12, 10,   1882, 11,0,  1,
-            1883,  7, 4,    1883,  6,0,  1,
-            1884,  4, 25,   1884,  4,0,  1,
-            1885,  5, 14,   1885,  4,0,  1,
-            1891,  1, 10,   1890, 12,0,  1,
-            1893,  4, 16,   1893,  3,0,  1,
-            1894,  5,  5,   1894,  4,0,  1,
-            1897,  7, 29,   1897,  7,0,  1, // astronomer's GMT+8 disagrees with all other ref (looks like our astronomer's error, see ad hoc fix at ChineseCalendar::getTimezoneOffset)
-            1903, 10, 20,   1903,  9,0,  1,
-            1904,  1, 17,   1903, 12,0,  1,
-            1904, 11,  7,   1904, 10,0,  1,
-            1905,  5,  4,   1905,  4,0,  1,
-            1907,  7, 10,   1907,  6,0,  1,
-            1908,  4, 30,   1908,  4,0,  1,
-            1908,  9, 25,   1908,  9,0,  1,
-            1909,  9, 14,   1909,  8,0,  1,
-            1911, 12, 20,   1911, 11,0,  1,
-            1976, 11, 22,   1976, 10,0,  1,
+            1880, 11, 3, 1880, 10, 0, 1, // astronomer's GMT+8 / KASI disagrees with the kye ref
+            1882, 12, 10, 1882, 11, 0, 1,
+            1883, 7, 4, 1883, 6, 0, 1,
+            1884, 4, 25, 1884, 4, 0, 1,
+            1885, 5, 14, 1885, 4, 0, 1,
+            1891, 1, 10, 1890, 12, 0, 1,
+            1893, 4, 16, 1893, 3, 0, 1,
+            1894, 5, 5, 1894, 4, 0, 1,
+            1897, 7, 29, 1897, 7, 0,
+                    1, // astronomer's GMT+8 disagrees with all other ref (looks like our
+            // astronomer's error, see ad hoc fix at ChineseCalendar::getTimezoneOffset)
+            1903, 10, 20, 1903, 9, 0, 1,
+            1904, 1, 17, 1903, 12, 0, 1,
+            1904, 11, 7, 1904, 10, 0, 1,
+            1905, 5, 4, 1905, 4, 0, 1,
+            1907, 7, 10, 1907, 6, 0, 1,
+            1908, 4, 30, 1908, 4, 0, 1,
+            1908, 9, 25, 1908, 9, 0, 1,
+            1909, 9, 14, 1909, 8, 0, 1,
+            1911, 12, 20, 1911, 11, 0, 1,
+            1976, 11, 22, 1976, 10, 0, 1,
         };
 
         Calendar cal = Calendar.getInstance(new ULocale("ko_KR@calendar=dangi"));
@@ -79,7 +77,7 @@ public class DangiTest extends CalendarTestFmwk {
 
         Calendar grego = Calendar.getInstance();
         grego.clear();
-        for (int i = 0; i < DATA.length;) {
+        for (int i = 0; i < DATA.length; ) {
             grego.set(DATA[i++], DATA[i++] - 1, DATA[i++]);
             Date date = grego.getTime();
             cal.setTime(date);
@@ -97,12 +95,21 @@ public class DangiTest extends CalendarTestFmwk {
             if (y == yE && m == mE && L == LE && d == dE) {
                 logln("OK: " + buf.toString());
             } else {
-                errln("Fail: " + buf.toString() + ", expected " + yE + "/" + mE + (LE == 1 ? "(leap)" : "") + "/" + dE);
+                errln(
+                        "Fail: "
+                                + buf.toString()
+                                + ", expected "
+                                + yE
+                                + "/"
+                                + mE
+                                + (LE == 1 ? "(leap)" : "")
+                                + "/"
+                                + dE);
             }
         }
 
         logln("Korean Lunar (Dangi) -> Gregorian");
-        for (int i = 0; i < DATA.length;) {
+        for (int i = 0; i < DATA.length; ) {
             grego.set(DATA[i++], DATA[i++] - 1, DATA[i++]);
             Date dexp = grego.getTime();
             int cyear = DATA[i++];
@@ -116,7 +123,8 @@ public class DangiTest extends CalendarTestFmwk {
             cal.set(Calendar.DAY_OF_MONTH, cdayofmonth);
             Date date = cal.getTime();
             buf.setLength(0);
-            buf.append(cyear + "/" + cmonth + (cisleapmonth == 1 ? "(leap)" : "") + "/" + cdayofmonth);
+            buf.append(
+                    cyear + "/" + cmonth + (cisleapmonth == 1 ? "(leap)" : "") + "/" + cdayofmonth);
             buf.append(" -> " + date);
             if (date.equals(dexp)) {
                 logln("OK: " + buf.toString());
@@ -127,32 +135,34 @@ public class DangiTest extends CalendarTestFmwk {
     }
 
     /**
-     * Make sure no Gregorian dates map to Chinese 1-based day of
-     * month zero.  This was a problem with some of the astronomical
-     * new moon determinations.
+     * Make sure no Gregorian dates map to Chinese 1-based day of month zero. This was a problem
+     * with some of the astronomical new moon determinations.
      */
     @Test
     public void TestZeroDOM() {
         Calendar cal = Calendar.getInstance(new ULocale("ko_KR@calendar=dangi"));
         GregorianCalendar greg = new GregorianCalendar(1989, Calendar.SEPTEMBER, 1);
         logln("Start: " + greg.getTime());
-        for (int i=0; i<1000; ++i) {
+        for (int i = 0; i < 1000; ++i) {
             cal.setTimeInMillis(greg.getTimeInMillis());
             if (cal.get(Calendar.DAY_OF_MONTH) == 0) {
-                errln("Fail: " + greg.getTime() + " -> " +
-                      cal.get(Calendar.YEAR) + "/" +
-                      cal.get(Calendar.MONTH) +
-                      (cal.get(Calendar.IS_LEAP_MONTH)==1?"(leap)":"") +
-                      "/" + cal.get(Calendar.DAY_OF_MONTH));
+                errln(
+                        "Fail: "
+                                + greg.getTime()
+                                + " -> "
+                                + cal.get(Calendar.YEAR)
+                                + "/"
+                                + cal.get(Calendar.MONTH)
+                                + (cal.get(Calendar.IS_LEAP_MONTH) == 1 ? "(leap)" : "")
+                                + "/"
+                                + cal.get(Calendar.DAY_OF_MONTH));
             }
             greg.add(Calendar.DAY_OF_YEAR, 1);
         }
         logln("End: " + greg.getTime());
     }
 
-    /**
-     * Test minimum and maximum functions.
-     */
+    /** Test minimum and maximum functions. */
     @Test
     public void TestLimits() {
         // The number of days and the start date can be adjusted
@@ -170,9 +180,7 @@ public class DangiTest extends CalendarTestFmwk {
         doTheoreticalLimitsTest(dangi, true);
     }
 
-    /**
-     * Make sure IS_LEAP_MONTH participates in field resolution.
-     */
+    /** Make sure IS_LEAP_MONTH participates in field resolution. */
     @Test
     public void TestResolution() {
         Calendar cal = Calendar.getInstance(new ULocale("ko_KR@calendar=dangi"));
@@ -190,53 +198,72 @@ public class DangiTest extends CalendarTestFmwk {
             // Note: exp.month is ONE-BASED
 
             // If we set DAY_OF_YEAR only, that should be used
-            Calendar.DAY_OF_YEAR, 1,
+            Calendar.DAY_OF_YEAR,
+            1,
             END,
-            1,0,1, // Expect 1-1
+            1,
+            0,
+            1, // Expect 1-1
 
             // If we set MONTH only, that should be used
-            Calendar.IS_LEAP_MONTH, 1,
-            Calendar.DAY_OF_MONTH, 1,
-            Calendar.MONTH, 3,
+            Calendar.IS_LEAP_MONTH,
+            1,
+            Calendar.DAY_OF_MONTH,
+            1,
+            Calendar.MONTH,
+            3,
             END,
-            4,1,1, // Expect 4*-1
+            4,
+            1,
+            1, // Expect 4*-1
 
             // If we set the DOY last, that should take precedence
-            Calendar.MONTH, 1, // Should ignore
-            Calendar.IS_LEAP_MONTH, 1, // Should ignore
-            Calendar.DAY_OF_MONTH, 1, // Should ignore
-            Calendar.DAY_OF_YEAR, 121,
+            Calendar.MONTH,
+            1, // Should ignore
+            Calendar.IS_LEAP_MONTH,
+            1, // Should ignore
+            Calendar.DAY_OF_MONTH,
+            1, // Should ignore
+            Calendar.DAY_OF_YEAR,
+            121,
             END,
-            4,1,2, // Expect 4*-2
+            4,
+            1,
+            2, // Expect 4*-2
 
             // If we set IS_LEAP_MONTH last, that should take precedence
-            Calendar.MONTH, 3,
-            Calendar.DAY_OF_MONTH, 1,
-            Calendar.DAY_OF_YEAR, 5, // Should ignore
-            Calendar.IS_LEAP_MONTH, 1,
+            Calendar.MONTH,
+            3,
+            Calendar.DAY_OF_MONTH,
+            1,
+            Calendar.DAY_OF_YEAR,
+            5, // Should ignore
+            Calendar.IS_LEAP_MONTH,
+            1,
             END,
-            4,1,1, // Expect 4*-1
+            4,
+            1,
+            1, // Expect 4*-1
         };
 
         StringBuilder buf = new StringBuilder();
-        for (int i=0; i<DATA.length; ) {
+        for (int i = 0; i < DATA.length; ) {
             cal.clear();
             cal.set(Calendar.EXTENDED_YEAR, THE_YEAR);
             buf.setLength(0);
             buf.append("EXTENDED_YEAR=" + THE_YEAR);
             while (DATA[i] != END) {
                 cal.set(DATA[i++], DATA[i++]);
-                buf.append(" " + fieldName(DATA[i-2]) + "=" + DATA[i-1]);
+                buf.append(" " + fieldName(DATA[i - 2]) + "=" + DATA[i - 1]);
             }
             ++i; // Skip over END mark
-            int expMonth = DATA[i++]-1;
+            int expMonth = DATA[i++] - 1;
             int expIsLeapMonth = DATA[i++];
             int expDOM = DATA[i++];
             int month = cal.get(Calendar.MONTH);
             int isLeapMonth = cal.get(Calendar.IS_LEAP_MONTH);
             int dom = cal.get(Calendar.DAY_OF_MONTH);
-            if (expMonth == month && expIsLeapMonth == isLeapMonth &&
-                dom == expDOM) {
+            if (expMonth == month && expIsLeapMonth == isLeapMonth && dom == expDOM) {
                 logln("OK: " + buf + " => " + fmt.format(cal.getTime()));
             } else {
                 String s = fmt.format(cal.getTime());
@@ -245,30 +272,44 @@ public class DangiTest extends CalendarTestFmwk {
                 cal.set(Calendar.MONTH, expMonth);
                 cal.set(Calendar.IS_LEAP_MONTH, expIsLeapMonth);
                 cal.set(Calendar.DAY_OF_MONTH, expDOM);
-                errln("Fail: " + buf + " => " + s +
-                      "=" + (month+1) + "," + isLeapMonth + "," + dom +
-                      ", expected " + fmt.format(cal.getTime()) +
-                      "=" + (expMonth+1) + "," + expIsLeapMonth + "," + expDOM);
+                errln(
+                        "Fail: "
+                                + buf
+                                + " => "
+                                + s
+                                + "="
+                                + (month + 1)
+                                + ","
+                                + isLeapMonth
+                                + ","
+                                + dom
+                                + ", expected "
+                                + fmt.format(cal.getTime())
+                                + "="
+                                + (expMonth + 1)
+                                + ","
+                                + expIsLeapMonth
+                                + ","
+                                + expDOM);
             }
         }
     }
 
-    /**
-     * Test the behavior of fields that are out of range.
-     */
+    /** Test the behavior of fields that are out of range. */
     @Test
     public void TestOutOfRange() {
-        int[] DATA = new int[] {
-            // Input       Output
-            4334, 13,  1,   4335,  1,  1,
-            4334, 18,  1,   4335,  6,  1,
-            4335,  0,  1,   4334, 12,  1,
-            4335, -6,  1,   4334,  6,  1,
-            4334,  1, 32,   4334,  2,  2, // 1-4334 has 30 days
-            4334,  2, -1,   4334,  1, 29,
-        };
+        int[] DATA =
+                new int[] {
+                    // Input       Output
+                    4334, 13, 1, 4335, 1, 1,
+                    4334, 18, 1, 4335, 6, 1,
+                    4335, 0, 1, 4334, 12, 1,
+                    4335, -6, 1, 4334, 6, 1,
+                    4334, 1, 32, 4334, 2, 2, // 1-4334 has 30 days
+                    4334, 2, -1, 4334, 1, 29,
+                };
         Calendar cal = Calendar.getInstance(new ULocale("ko_KR@calendar=dangi"));
-        for (int i = 0; i < DATA.length;) {
+        for (int i = 0; i < DATA.length; ) {
             int y1 = DATA[i++];
             int m1 = DATA[i++] - 1;
             int d1 = DATA[i++];
@@ -283,67 +324,98 @@ public class DangiTest extends CalendarTestFmwk {
             int m = cal.get(MONTH);
             int d = cal.get(DATE);
             if (y != y2 || m != m2 || d != d2) {
-                errln("Fail: " + y1 + "/" + (m1 + 1) + "/" + d1 + " resolves to " + y + "/" + (m + 1) + "/" + d
-                        + ", expected " + y2 + "/" + (m2 + 1) + "/" + d2);
+                errln(
+                        "Fail: "
+                                + y1
+                                + "/"
+                                + (m1 + 1)
+                                + "/"
+                                + d1
+                                + " resolves to "
+                                + y
+                                + "/"
+                                + (m + 1)
+                                + "/"
+                                + d
+                                + ", expected "
+                                + y2
+                                + "/"
+                                + (m2 + 1)
+                                + "/"
+                                + d2);
             } else if (isVerbose()) {
-                logln("OK: " + y1 + "/" + (m1 + 1) + "/" + d1 + " resolves to " + y + "/" + (m + 1) + "/" + d);
+                logln(
+                        "OK: "
+                                + y1
+                                + "/"
+                                + (m1 + 1)
+                                + "/"
+                                + d1
+                                + " resolves to "
+                                + y
+                                + "/"
+                                + (m + 1)
+                                + "/"
+                                + d);
             }
         }
     }
 
     /**
-     * Test the behavior of KoreanLunarCalendar.add().  The only real
-     * nastiness with roll is the MONTH field around leap months.
+     * Test the behavior of KoreanLunarCalendar.add(). The only real nastiness with roll is the
+     * MONTH field around leap months.
      */
     @Test
     public void TestAdd() {
-        int[][] tests = new int[][] {
-            // MONTHS ARE 1-BASED HERE
-            // input               add           output
-            // year  mon    day    field amount  year  mon    day
-            {  2005,   3,0,  15,   MONTH,   3,   2005,   6,0,  15 }, // normal
-            {  2002,  12,0,  15,   MONTH,   1,   2003,   1,0,  15 }, // across year
-            {  2003,   1,0,  15,   MONTH,  -1,   2002,  12,0,  15 }, // across year
-            {  2001,   3,0,  15,   MONTH,   3,   2001,   5,0,  15 }, // 4=leap
-            {  2001,   3,0,  15,   MONTH,   2,   2001,   4,1,  15 }, // 4=leap
-            {  2001,   4,0,  15,   MONTH,   1,   2001,   4,1,  15 }, // 4=leap
-            {  2001,   4,1,  15,   MONTH,   1,   2001,   5,0,  15 }, // 4=leap
-            {  2001,   3,0,  30,   MONTH,   2,   2001,   4,1,  29 }, // dom should pin
-            {  2001,   3,0,  30,   MONTH,   3,   2001,   5,0,  30 }, // no dom pin
-            {  2001,   3,0,  30,   MONTH,   4,   2001,   6,0,  29 }, // dom should pin
-        };
+        int[][] tests =
+                new int[][] {
+                    // MONTHS ARE 1-BASED HERE
+                    // input               add           output
+                    // year  mon    day    field amount  year  mon    day
+                    {2005, 3, 0, 15, MONTH, 3, 2005, 6, 0, 15}, // normal
+                    {2002, 12, 0, 15, MONTH, 1, 2003, 1, 0, 15}, // across year
+                    {2003, 1, 0, 15, MONTH, -1, 2002, 12, 0, 15}, // across year
+                    {2001, 3, 0, 15, MONTH, 3, 2001, 5, 0, 15}, // 4=leap
+                    {2001, 3, 0, 15, MONTH, 2, 2001, 4, 1, 15}, // 4=leap
+                    {2001, 4, 0, 15, MONTH, 1, 2001, 4, 1, 15}, // 4=leap
+                    {2001, 4, 1, 15, MONTH, 1, 2001, 5, 0, 15}, // 4=leap
+                    {2001, 3, 0, 30, MONTH, 2, 2001, 4, 1, 29}, // dom should pin
+                    {2001, 3, 0, 30, MONTH, 3, 2001, 5, 0, 30}, // no dom pin
+                    {2001, 3, 0, 30, MONTH, 4, 2001, 6, 0, 29}, // dom should pin
+                };
 
         Calendar cal = Calendar.getInstance(new ULocale("ko_KR@calendar=dangi"));
         doRollAddDangi(ADD, cal, tests);
     }
 
     /**
-     * Test the behavior of KoreanLunarCalendar.roll().  The only real
-     * nastiness with roll is the MONTH field around leap months.
+     * Test the behavior of KoreanLunarCalendar.roll(). The only real nastiness with roll is the
+     * MONTH field around leap months.
      */
     @Test
     public void TestRoll() {
-        int[][] tests = new int[][] {
-            // MONTHS ARE 1-BASED HERE
-            // input               add           output
-            // year  mon    day    field amount  year  mon    day
-            {  2005,   3,0,  15,   MONTH,   3,   2005,   6,0,  15 }, // normal
-            {  2005,   3,0,  15,   MONTH,  11,   2005,   2,0,  15 }, // normal
-            {  2002,  12,0,  15,   MONTH,   1,   2002,   1,0,  15 }, // across year
-            {  2003,   1,0,  15,   MONTH,  -1,   2003,  12,0,  15 }, // across year
-            {  2001,   3,0,  15,   MONTH,   3,   2001,   5,0,  15 }, // 4=leap
-            {  2001,   3,0,  15,   MONTH,  16,   2001,   5,0,  15 }, // 4=leap
-            {  2001,   3,0,  15,   MONTH,   2,   2001,   4,1,  15 }, // 4=leap
-            {  2001,   3,0,  15,   MONTH,  28,   2001,   4,1,  15 }, // 4=leap
-            {  2001,   4,0,  15,   MONTH,   1,   2001,   4,1,  15 }, // 4=leap
-            {  2001,   4,0,  15,   MONTH, -12,   2001,   4,1,  15 }, // 4=leap
-            {  2001,   4,1,  15,   MONTH,   1,   2001,   5,0,  15 }, // 4=leap
-            {  2001,   4,1,  15,   MONTH, -25,   2001,   5,0,  15 }, // 4=leap
-            {  2001,   3,0,  30,   MONTH,   2,   2001,   4,1,  29 }, // dom should pin
-            {  2001,   3,0,  30,   MONTH,  15,   2001,   4,1,  29 }, // dom should pin
-            {  2001,   3,0,  30,   MONTH,  16,   2001,   5,0,  30 }, // no dom pin
-            {  2001,   3,0,  30,   MONTH,  -9,   2001,   6,0,  29 }, // dom should pin
-        };
+        int[][] tests =
+                new int[][] {
+                    // MONTHS ARE 1-BASED HERE
+                    // input               add           output
+                    // year  mon    day    field amount  year  mon    day
+                    {2005, 3, 0, 15, MONTH, 3, 2005, 6, 0, 15}, // normal
+                    {2005, 3, 0, 15, MONTH, 11, 2005, 2, 0, 15}, // normal
+                    {2002, 12, 0, 15, MONTH, 1, 2002, 1, 0, 15}, // across year
+                    {2003, 1, 0, 15, MONTH, -1, 2003, 12, 0, 15}, // across year
+                    {2001, 3, 0, 15, MONTH, 3, 2001, 5, 0, 15}, // 4=leap
+                    {2001, 3, 0, 15, MONTH, 16, 2001, 5, 0, 15}, // 4=leap
+                    {2001, 3, 0, 15, MONTH, 2, 2001, 4, 1, 15}, // 4=leap
+                    {2001, 3, 0, 15, MONTH, 28, 2001, 4, 1, 15}, // 4=leap
+                    {2001, 4, 0, 15, MONTH, 1, 2001, 4, 1, 15}, // 4=leap
+                    {2001, 4, 0, 15, MONTH, -12, 2001, 4, 1, 15}, // 4=leap
+                    {2001, 4, 1, 15, MONTH, 1, 2001, 5, 0, 15}, // 4=leap
+                    {2001, 4, 1, 15, MONTH, -25, 2001, 5, 0, 15}, // 4=leap
+                    {2001, 3, 0, 30, MONTH, 2, 2001, 4, 1, 29}, // dom should pin
+                    {2001, 3, 0, 30, MONTH, 15, 2001, 4, 1, 29}, // dom should pin
+                    {2001, 3, 0, 30, MONTH, 16, 2001, 5, 0, 30}, // no dom pin
+                    {2001, 3, 0, 30, MONTH, -9, 2001, 6, 0, 29}, // dom should pin
+                };
 
         Calendar cal = Calendar.getInstance(new ULocale("ko_KR@calendar=dangi"));
         doRollAddDangi(ROLL, cal, tests);
@@ -365,23 +437,44 @@ public class DangiTest extends CalendarTestFmwk {
             } else {
                 cal.add(test[4], test[5]);
             }
-            if (cal.get(Calendar.EXTENDED_YEAR) != test[6] || cal.get(MONTH) != (test[7] - 1)
-                    || cal.get(Calendar.IS_LEAP_MONTH) != test[8] || cal.get(DATE) != test[9]) {
-                errln("Fail: " + name + " " + ymdToString(test[0], test[1] - 1, test[2], test[3]) + " "
-                        + fieldName(test[4]) + " by " + test[5] + ": expected "
-                        + ymdToString(test[6], test[7] - 1, test[8], test[9]) + ", got " + ymdToString(cal));
+            if (cal.get(Calendar.EXTENDED_YEAR) != test[6]
+                    || cal.get(MONTH) != (test[7] - 1)
+                    || cal.get(Calendar.IS_LEAP_MONTH) != test[8]
+                    || cal.get(DATE) != test[9]) {
+                errln(
+                        "Fail: "
+                                + name
+                                + " "
+                                + ymdToString(test[0], test[1] - 1, test[2], test[3])
+                                + " "
+                                + fieldName(test[4])
+                                + " by "
+                                + test[5]
+                                + ": expected "
+                                + ymdToString(test[6], test[7] - 1, test[8], test[9])
+                                + ", got "
+                                + ymdToString(cal));
             } else if (isVerbose()) {
-                logln("OK: " + name + " " + ymdToString(test[0], test[1] - 1, test[2], test[3]) + " "
-                        + fieldName(test[4]) + " by " + test[5] + ": got " + ymdToString(cal));
+                logln(
+                        "OK: "
+                                + name
+                                + " "
+                                + ymdToString(test[0], test[1] - 1, test[2], test[3])
+                                + " "
+                                + fieldName(test[4])
+                                + " by "
+                                + test[5]
+                                + ": got "
+                                + ymdToString(cal));
             }
         }
     }
 
     /**
-     * Convert year,month,day values to the form "year/month/day".
-     * On input the month value is zero-based, but in the result string it is one-based.
+     * Convert year,month,day values to the form "year/month/day". On input the month value is
+     * zero-based, but in the result string it is one-based.
      */
-    static public String ymdToString(int year, int month, int isLeapMonth, int day) {
+    public static String ymdToString(int year, int month, int isLeapMonth, int day) {
         return "" + year + "/" + (month + 1) + ((isLeapMonth != 0) ? "(leap)" : "") + "/" + day;
     }
 
@@ -418,8 +511,8 @@ public class DangiTest extends CalendarTestFmwk {
         Calendar cc = Calendar.getInstance(new ULocale("ko_KR@calendar=dangi"));
         cc.set(Calendar.EXTENDED_YEAR, 2005);
         cc.set(Calendar.MONTH, 0);
-         // need to set leap month flag off, otherwise, the test case always fails when
-         // current time is in a leap month
+        // need to set leap month flag off, otherwise, the test case always fails when
+        // current time is in a leap month
         cc.set(Calendar.IS_LEAP_MONTH, 0);
         cc.set(Calendar.DATE, 19);
         cc.set(Calendar.HOUR_OF_DAY, 0);

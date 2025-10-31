@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.impl;
 
+import com.ibm.icu.util.TimeZone;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.lang.reflect.InvocationTargetException;
@@ -15,17 +16,14 @@ import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.TreeSet;
 
-import com.ibm.icu.util.TimeZone;
-
 /**
- * JavaTimeZone inherits com.ibm.icu.util.TimeZone and wraps java.util.TimeZone.
- * We used to have JDKTimeZone which wrapped Java TimeZone and used it as primary
- * TimeZone implementation until ICU4J 3.4.1.  This class works exactly like
- * JDKTimeZone and allows ICU users who use ICU4J and JDK date/time/calendar
- * services in mix to maintain only JDK timezone rules.
+ * JavaTimeZone inherits com.ibm.icu.util.TimeZone and wraps java.util.TimeZone. We used to have
+ * JDKTimeZone which wrapped Java TimeZone and used it as primary TimeZone implementation until
+ * ICU4J 3.4.1. This class works exactly like JDKTimeZone and allows ICU users who use ICU4J and JDK
+ * date/time/calendar services in mix to maintain only JDK timezone rules.
  *
- * This TimeZone subclass is returned by the TimeZone factory method getTimeZone(String)
- * when the default timezone type in TimeZone class is TimeZone.TIMEZONE_JDK.
+ * <p>This TimeZone subclass is returned by the TimeZone factory method getTimeZone(String) when the
+ * default timezone type in TimeZone class is TimeZone.TIMEZONE_JDK.
  */
 public class JavaTimeZone extends TimeZone implements Cloneable {
 
@@ -45,7 +43,8 @@ public class JavaTimeZone extends TimeZone implements Cloneable {
         }
 
         try {
-            mObservesDaylightTime = java.util.TimeZone.class.getMethod("observesDaylightTime", (Class[]) null);
+            mObservesDaylightTime =
+                    java.util.TimeZone.class.getMethod("observesDaylightTime", (Class[]) null);
         } catch (NoSuchMethodException e) {
             // Android API level 21..23
         } catch (SecurityException e) {
@@ -53,18 +52,17 @@ public class JavaTimeZone extends TimeZone implements Cloneable {
         }
     }
 
-    /**
-     * Constructs a JavaTimeZone with the default Java TimeZone
-     */
+    /** Constructs a JavaTimeZone with the default Java TimeZone */
     public JavaTimeZone() {
         this(java.util.TimeZone.getDefault(), null);
     }
 
     /**
      * Constructs a JavaTimeZone with the specified Java TimeZone and ID.
+     *
      * @param jtz the Java TimeZone
-     * @param id the ID of the zone. if null, the zone ID is initialized
-     * by the given Java TimeZone's ID.
+     * @param id the ID of the zone. if null, the zone ID is initialized by the given Java
+     *     TimeZone's ID.
      */
     public JavaTimeZone(java.util.TimeZone jtz, String id) {
         if (id == null) {
@@ -77,9 +75,10 @@ public class JavaTimeZone extends TimeZone implements Cloneable {
 
     /**
      * Creates an instance of JavaTimeZone with the given timezone ID.
+     *
      * @param id A timezone ID, either a system ID or a custom ID.
-     * @return An instance of JavaTimeZone for the given ID, or null
-     * when the ID cannot be understood.
+     * @return An instance of JavaTimeZone for the given ID, or null when the ID cannot be
+     *     understood.
      */
     public static JavaTimeZone createTimeZone(String id) {
         java.util.TimeZone jtz = null;
@@ -140,15 +139,24 @@ public class JavaTimeZone extends TimeZone implements Cloneable {
                 sec1 = javacal.get(java.util.Calendar.SECOND);
                 mil1 = javacal.get(java.util.Calendar.MILLISECOND);
 
-                if (fields[4] != doy1 || hour != hour1 || min != min1 || sec != sec1 || mil != mil1) {
+                if (fields[4] != doy1
+                        || hour != hour1
+                        || min != min1
+                        || sec != sec1
+                        || mil != mil1) {
                     // Calendar field(s) were changed due to the adjustment for non-existing time
-                    // Note: This code does not support non-existing local time at year boundary properly.
+                    // Note: This code does not support non-existing local time at year boundary
+                    // properly.
                     // But, it should work fine for real timezones.
                     int dayDelta = Math.abs(doy1 - fields[4]) > 1 ? 1 : doy1 - fields[4];
-                    int delta = ((((dayDelta * 24) + hour1 - hour) * 60 + min1 - min) * 60 + sec1 - sec) * 1000 + mil1 - mil;
+                    int delta =
+                            ((((dayDelta * 24) + hour1 - hour) * 60 + min1 - min) * 60 + sec1 - sec)
+                                            * 1000
+                                    + mil1
+                                    - mil;
 
                     // In this case, we use the offsets before the transition
-                   javacal.setTimeInMillis(javacal.getTimeInMillis() - delta - 1);
+                    javacal.setTimeInMillis(javacal.getTimeInMillis() - delta - 1);
                 }
             } else {
                 javacal.setTimeInMillis(date);
@@ -180,7 +188,8 @@ public class JavaTimeZone extends TimeZone implements Cloneable {
     @Override
     public void setRawOffset(int offsetMillis) {
         if (isFrozen()) {
-            throw new UnsupportedOperationException("Attempt to modify a frozen JavaTimeZone instance.");
+            throw new UnsupportedOperationException(
+                    "Attempt to modify a frozen JavaTimeZone instance.");
         }
         javatz.setRawOffset(offsetMillis);
     }
@@ -202,7 +211,7 @@ public class JavaTimeZone extends TimeZone implements Cloneable {
             // Java 7+, Android API level 24+
             // https://developer.android.com/reference/java/util/TimeZone
             try {
-                return (Boolean)mObservesDaylightTime.invoke(javatz, (Object[]) null);
+                return (Boolean) mObservesDaylightTime.invoke(javatz, (Object[]) null);
             } catch (IllegalAccessException e) {
             } catch (IllegalArgumentException e) {
             } catch (InvocationTargetException e) {
@@ -272,11 +281,11 @@ public class JavaTimeZone extends TimeZone implements Cloneable {
      */
     @Override
     public JavaTimeZone cloneAsThawed() {
-        JavaTimeZone tz = (JavaTimeZone)super.cloneAsThawed();
-        tz.javatz = (java.util.TimeZone)javatz.clone();
-        tz.javacal = new java.util.GregorianCalendar(javatz);  // easier than synchronized javacal.clone()
+        JavaTimeZone tz = (JavaTimeZone) super.cloneAsThawed();
+        tz.javatz = (java.util.TimeZone) javatz.clone();
+        tz.javacal =
+                new java.util.GregorianCalendar(javatz); // easier than synchronized javacal.clone()
         tz.isFrozen = false;
         return tz;
     }
-
 }

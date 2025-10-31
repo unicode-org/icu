@@ -7,9 +7,9 @@
  **/
 
 /**
- * Port From:   JDK 1.4b1 : java.text.Format.IntlTestDecimalFormatAPI
- * Source File: java/text/format/IntlTestDecimalFormatAPI.java
- **/
+ * Port From: JDK 1.4b1 : java.text.Format.IntlTestDecimalFormatAPI Source File:
+ * java/text/format/IntlTestDecimalFormatAPI.java
+ */
 
 /*
     @test 1.4 98/03/06
@@ -18,44 +18,36 @@
 
 package com.ibm.icu.dev.test.format;
 
-import java.text.FieldPosition;
-import java.text.Format;
-import java.text.ParseException;
-import java.text.ParsePosition;
-import java.util.Locale;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.math.MathContext;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.NumberFormat;
+import java.text.FieldPosition;
+import java.text.Format;
+import java.text.ParseException;
+import java.text.ParsePosition;
+import java.util.Locale;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
-public class IntlTestDecimalFormatAPI extends CoreTestFmwk
-{
+public class IntlTestDecimalFormatAPI extends CoreTestFmwk {
     /**
-     * Problem 1: simply running
-     * decF4.setRoundingMode(java.math.BigDecimal.ROUND_HALF_UP) does not work
-     * as decF4.setRoundingIncrement(.0001) must also be run.
-     * Problem 2: decF4.format(8.88885) does not return 8.8889 as expected.
-     * You must run decF4.format(new BigDecimal(Double.valueOf(8.88885))) in
-     * order for this to work as expected.
-     * Problem 3: There seems to be no way to set half up to be the default
-     * rounding mode.
-     * We solved the problem with the code at the bottom of this page however
-     * this is not quite general purpose enough to include in icu4j. A static
-     * setDefaultRoundingMode function would solve the problem nicely. Also
-     * decimal places past 20 are not handled properly. A small amount of work
-     * would bring this up to snuff.
+     * Problem 1: simply running decF4.setRoundingMode(java.math.BigDecimal.ROUND_HALF_UP) does not
+     * work as decF4.setRoundingIncrement(.0001) must also be run. Problem 2: decF4.format(8.88885)
+     * does not return 8.8889 as expected. You must run decF4.format(new
+     * BigDecimal(Double.valueOf(8.88885))) in order for this to work as expected. Problem 3: There
+     * seems to be no way to set half up to be the default rounding mode. We solved the problem with
+     * the code at the bottom of this page however this is not quite general purpose enough to
+     * include in icu4j. A static setDefaultRoundingMode function would solve the problem nicely.
+     * Also decimal places past 20 are not handled properly. A small amount of work would bring this
+     * up to snuff.
      */
     @Test
-    public void testJB1871()
-    {
+    public void testJB1871() {
         // problem 2
         double number = 8.88885;
         String expected = "8.8889";
@@ -66,8 +58,16 @@ public class IntlTestDecimalFormatAPI extends CoreTestFmwk
         dec.setRoundingIncrement(new java.math.BigDecimal("0.0001"));
         String str = dec.format(number);
         if (!str.equals(expected)) {
-            errln("Fail: " + number + " x \"" + pat + "\" = \"" +
-                  str + "\", expected \"" + expected + "\"");
+            errln(
+                    "Fail: "
+                            + number
+                            + " x \""
+                            + pat
+                            + "\" = \""
+                            + str
+                            + "\", expected \""
+                            + expected
+                            + "\"");
         }
 
         pat = ",##0.0001";
@@ -75,8 +75,16 @@ public class IntlTestDecimalFormatAPI extends CoreTestFmwk
         dec.setRoundingMode(BigDecimal.ROUND_HALF_UP);
         str = dec.format(number);
         if (!str.equals(expected)) {
-            errln("Fail: " + number + " x \"" + pat + "\" = \"" +
-                  str + "\", expected \"" + expected + "\"");
+            errln(
+                    "Fail: "
+                            + number
+                            + " x \""
+                            + pat
+                            + "\" = \""
+                            + str
+                            + "\", expected \""
+                            + expected
+                            + "\"");
         }
 
         // testing 20 decimal places
@@ -88,22 +96,28 @@ public class IntlTestDecimalFormatAPI extends CoreTestFmwk
         dec.setRoundingMode(BigDecimal.ROUND_HALF_UP);
         str = dec.format(bignumber);
         if (!str.equals(expected)) {
-            errln("Fail: " + bignumber + " x \"" + pat + "\" = \"" +
-                  str + "\", expected \"" + expected + "\"");
+            errln(
+                    "Fail: "
+                            + bignumber
+                            + " x \""
+                            + pat
+                            + "\" = \""
+                            + str
+                            + "\", expected \""
+                            + expected
+                            + "\"");
         }
-
     }
 
     /**
-     * This test checks various generic API methods in DecimalFormat to achieve
-     * 100% API coverage.
+     * This test checks various generic API methods in DecimalFormat to achieve 100% API coverage.
      */
     @Test
-    public void TestAPI()
-    {
+    public void TestAPI() {
         Locale startLocale = Locale.getDefault();
 
-        logln("DecimalFormat API test---"); logln("");
+        logln("DecimalFormat API test---");
+        logln("");
         Locale.setDefault(Locale.ENGLISH);
 
         // ======= Test constructors
@@ -116,8 +130,7 @@ public class IntlTestDecimalFormatAPI extends CoreTestFmwk
         DecimalFormat pat = null;
         try {
             pat = new DecimalFormat(pattern);
-        }
-        catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             errln("ERROR: Could not create DecimalFormat (pattern)");
         }
 
@@ -130,7 +143,7 @@ public class IntlTestDecimalFormatAPI extends CoreTestFmwk
         logln("Testing clone() and equality operators");
 
         Format clone = def.clone();
-        if( ! def.equals(clone)) {
+        if (!def.equals(clone)) {
             errln("ERROR: Clone() failed");
         }
 
@@ -138,8 +151,8 @@ public class IntlTestDecimalFormatAPI extends CoreTestFmwk
 
         logln("Testing various format() methods");
 
-//        final double d = -10456.0037; // this appears as -10456.003700000001 on NT
-//        final double d = -1.04560037e-4; // this appears as -1.0456003700000002E-4 on NT
+        //        final double d = -10456.0037; // this appears as -10456.003700000001 on NT
+        //        final double d = -1.04560037e-4; // this appears as -1.0456003700000002E-4 on NT
         final double d = -10456.00370000000000; // this works!
         final long l = 100000000;
         logln("" + d + " is the double value");
@@ -174,7 +187,7 @@ public class IntlTestDecimalFormatAPI extends CoreTestFmwk
         String patt = new String("#,##0.#");
         pat.applyPattern(patt);
         double d2 = pat.parse(text, pos).doubleValue();
-        if(d2 != d) {
+        if (d2 != d) {
             errln("ERROR: Roundtrip failed (via parse(" + d2 + " != " + d + ")) for " + text);
         }
         logln(text + " parsed into " + (long) d2);
@@ -185,7 +198,7 @@ public class IntlTestDecimalFormatAPI extends CoreTestFmwk
 
         final DecimalFormatSymbols syms = pat.getDecimalFormatSymbols();
         def.setDecimalFormatSymbols(syms);
-        if( ! pat.getDecimalFormatSymbols().equals(def.getDecimalFormatSymbols())) {
+        if (!pat.getDecimalFormatSymbols().equals(def.getDecimalFormatSymbols())) {
             errln("ERROR: set DecimalFormatSymbols() failed");
         }
 
@@ -217,7 +230,7 @@ public class IntlTestDecimalFormatAPI extends CoreTestFmwk
         pat.setMultiplier(8);
         multiplier = pat.getMultiplier();
         logln("Multiplier (should be 8): " + multiplier);
-        if(multiplier != 8) {
+        if (multiplier != 8) {
             errln("ERROR: setMultiplier() failed");
         }
 
@@ -225,14 +238,14 @@ public class IntlTestDecimalFormatAPI extends CoreTestFmwk
         pat.setGroupingSize(2);
         groupingSize = pat.getGroupingSize();
         logln("Grouping size (should be 2): " + (long) groupingSize);
-        if(groupingSize != 2) {
+        if (groupingSize != 2) {
             errln("ERROR: setGroupingSize() failed");
         }
 
         pat.setDecimalSeparatorAlwaysShown(true);
         boolean tf = pat.isDecimalSeparatorAlwaysShown();
-        logln("DecimalSeparatorIsAlwaysShown (should be true) is " +  (tf ? "true" : "false"));
-        if(tf != true) {
+        logln("DecimalSeparatorIsAlwaysShown (should be true) is " + (tf ? "true" : "false"));
+        if (tf != true) {
             errln("ERROR: setDecimalSeparatorAlwaysShown() failed");
         }
 
@@ -254,7 +267,7 @@ public class IntlTestDecimalFormatAPI extends CoreTestFmwk
         String s2;
         s2 = pat.toPattern();
         logln("Extracted pattern is " + s2);
-        if( ! s2.equals(p1) ) {
+        if (!s2.equals(p1)) {
             errln("ERROR: toPattern() result did not match pattern applied");
         }
 
@@ -264,7 +277,7 @@ public class IntlTestDecimalFormatAPI extends CoreTestFmwk
         String s3;
         s3 = pat.toLocalizedPattern();
         logln("Extracted pattern is " + s3);
-        if( ! s3.equals(p2) ) {
+        if (!s3.equals(p2)) {
             errln("ERROR: toLocalizedPattern() result did not match pattern applied");
         }
 
@@ -272,8 +285,7 @@ public class IntlTestDecimalFormatAPI extends CoreTestFmwk
     }
 
     @Test
-    public void testJB6134()
-    {
+    public void testJB6134() {
         DecimalFormat decfmt = new DecimalFormat();
         StringBuffer buf = new StringBuffer();
 
@@ -284,40 +296,47 @@ public class IntlTestDecimalFormatAPI extends CoreTestFmwk
         FieldPosition fposByField = new FieldPosition(NumberFormat.Field.INTEGER);
         decfmt.format(123, buf, fposByField);
 
-        if (fposByInt.getEndIndex() != fposByField.getEndIndex())
-        {
-            errln("ERROR: End index for integer field - fposByInt:" + fposByInt.getEndIndex() +
-                " / fposByField: " + fposByField.getEndIndex());
+        if (fposByInt.getEndIndex() != fposByField.getEndIndex()) {
+            errln(
+                    "ERROR: End index for integer field - fposByInt:"
+                            + fposByInt.getEndIndex()
+                            + " / fposByField: "
+                            + fposByField.getEndIndex());
         }
     }
 
     @Test
-    public void testJB4971()
-    {
+    public void testJB4971() {
         DecimalFormat decfmt = new DecimalFormat();
         MathContext resultICU;
 
-        MathContext comp1 = new MathContext(0, MathContext.PLAIN, false, MathContext.ROUND_HALF_EVEN);
+        MathContext comp1 =
+                new MathContext(0, MathContext.PLAIN, false, MathContext.ROUND_HALF_EVEN);
         resultICU = decfmt.getMathContextICU();
-        if ((comp1.getDigits() != resultICU.getDigits()) ||
-            (comp1.getForm() != resultICU.getForm()) ||
-            (comp1.getLostDigits() != resultICU.getLostDigits()) ||
-            (comp1.getRoundingMode() != resultICU.getRoundingMode()))
-        {
-            errln("ERROR: Math context 1 not equal - result: " + resultICU.toString() +
-                " / expected: " + comp1.toString());
+        if ((comp1.getDigits() != resultICU.getDigits())
+                || (comp1.getForm() != resultICU.getForm())
+                || (comp1.getLostDigits() != resultICU.getLostDigits())
+                || (comp1.getRoundingMode() != resultICU.getRoundingMode())) {
+            errln(
+                    "ERROR: Math context 1 not equal - result: "
+                            + resultICU.toString()
+                            + " / expected: "
+                            + comp1.toString());
         }
 
-        MathContext comp2 = new MathContext(5, MathContext.ENGINEERING, false, MathContext.ROUND_HALF_EVEN);
+        MathContext comp2 =
+                new MathContext(5, MathContext.ENGINEERING, false, MathContext.ROUND_HALF_EVEN);
         decfmt.setMathContextICU(comp2);
         resultICU = decfmt.getMathContextICU();
-        if ((comp2.getDigits() != resultICU.getDigits()) ||
-            (comp2.getForm() != resultICU.getForm()) ||
-            (comp2.getLostDigits() != resultICU.getLostDigits()) ||
-            (comp2.getRoundingMode() != resultICU.getRoundingMode()))
-        {
-            errln("ERROR: Math context 2 not equal - result: " + resultICU.toString() +
-                " / expected: " + comp2.toString());
+        if ((comp2.getDigits() != resultICU.getDigits())
+                || (comp2.getForm() != resultICU.getForm())
+                || (comp2.getLostDigits() != resultICU.getLostDigits())
+                || (comp2.getRoundingMode() != resultICU.getRoundingMode())) {
+            errln(
+                    "ERROR: Math context 2 not equal - result: "
+                            + resultICU.toString()
+                            + " / expected: "
+                            + comp2.toString());
         }
 
         java.math.MathContext result;
@@ -325,18 +344,18 @@ public class IntlTestDecimalFormatAPI extends CoreTestFmwk
         java.math.MathContext comp3 = new java.math.MathContext(3, java.math.RoundingMode.DOWN);
         decfmt.setMathContext(comp3);
         result = decfmt.getMathContext();
-        if ((comp3.getPrecision() != result.getPrecision()) ||
-            (comp3.getRoundingMode() != result.getRoundingMode()))
-        {
-            errln("ERROR: Math context 3 not equal - result: " + result.toString() +
-                " / expected: " + comp3.toString());
+        if ((comp3.getPrecision() != result.getPrecision())
+                || (comp3.getRoundingMode() != result.getRoundingMode())) {
+            errln(
+                    "ERROR: Math context 3 not equal - result: "
+                            + result.toString()
+                            + " / expected: "
+                            + comp3.toString());
         }
-
     }
 
     @Test
-    public void testJB6354()
-    {
+    public void testJB6354() {
         DecimalFormat pat = new DecimalFormat("#,##0.00");
         java.math.BigDecimal r1, r2;
 
@@ -349,33 +368,23 @@ public class IntlTestDecimalFormatAPI extends CoreTestFmwk
         r2 = pat.getRoundingIncrement();
 
         // check for different values
-        if ((r1 != null) && (r2 != null))
-        {
-            if (r1.compareTo(r2) == 0)
-            {
+        if ((r1 != null) && (r2 != null)) {
+            if (r1.compareTo(r2) == 0) {
                 errln("ERROR: Rounding increment did not change");
             }
         }
     }
 
     @Test
-    public void testJB6648()
-    {
+    public void testJB6648() {
         DecimalFormat df = new DecimalFormat();
         df.setParseStrict(true);
 
         String numstr = new String();
 
-        String[] patterns = {
-            "0",
-            "00",
-            "000",
-            "0,000",
-            "0.0",
-            "#000.0"
-        };
+        String[] patterns = {"0", "00", "000", "0,000", "0.0", "#000.0"};
 
-        for(int i=0; i < patterns.length; i++) {
+        for (int i = 0; i < patterns.length; i++) {
             df.applyPattern(patterns[i]);
             numstr = df.format(5);
             try {
@@ -390,10 +399,13 @@ public class IntlTestDecimalFormatAPI extends CoreTestFmwk
         numstr = "005";
         try {
             Number n = df.parse(numstr);
-            logln("INFO: Successful parse for " + numstr + " with strict parse enabled. Number is " + n);
+            logln(
+                    "INFO: Successful parse for "
+                            + numstr
+                            + " with strict parse enabled. Number is "
+                            + n);
         } catch (ParseException pe) {
             errln("ERROR: Parse Exception encountered in strict mode: numstr -> " + numstr);
         }
-
     }
 }

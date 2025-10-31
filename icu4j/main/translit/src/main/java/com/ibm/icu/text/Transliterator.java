@@ -8,6 +8,16 @@
  */
 package com.ibm.icu.text;
 
+import com.ibm.icu.impl.ICUData;
+import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.Utility;
+import com.ibm.icu.impl.UtilityExtensions;
+import com.ibm.icu.text.RuleBasedTransliterator.Data;
+import com.ibm.icu.text.TransliteratorIDParser.SingleID;
+import com.ibm.icu.util.CaseInsensitiveString;
+import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.ULocale.Category;
+import com.ibm.icu.util.UResourceBundle;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,142 +30,146 @@ import java.util.MissingResourceException;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-import com.ibm.icu.impl.ICUData;
-import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.impl.Utility;
-import com.ibm.icu.impl.UtilityExtensions;
-import com.ibm.icu.text.RuleBasedTransliterator.Data;
-import com.ibm.icu.text.TransliteratorIDParser.SingleID;
-import com.ibm.icu.util.CaseInsensitiveString;
-import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.ULocale.Category;
-import com.ibm.icu.util.UResourceBundle;
-
 /**
- * <code>Transliterator</code> is an abstract class that transliterates text from one format to another. The most common
- * kind of transliterator is a script, or alphabet, transliterator. For example, a Russian to Latin transliterator
- * changes Russian text written in Cyrillic characters to phonetically equivalent Latin characters. It does not
- * <em>translate</em> Russian to English! Transliteration, unlike translation, operates on characters, without reference
- * to the meanings of words and sentences.
+ * <code>Transliterator</code> is an abstract class that transliterates text from one format to
+ * another. The most common kind of transliterator is a script, or alphabet, transliterator. For
+ * example, a Russian to Latin transliterator changes Russian text written in Cyrillic characters to
+ * phonetically equivalent Latin characters. It does not <em>translate</em> Russian to English!
+ * Transliteration, unlike translation, operates on characters, without reference to the meanings of
+ * words and sentences.
  *
- * <p>
- * Although script conversion is its most common use, a transliterator can actually perform a more general class of
- * tasks. In fact, <code>Transliterator</code> defines a very general API which specifies only that a segment of the
- * input text is replaced by new text. The particulars of this conversion are determined entirely by subclasses of
- * <code>Transliterator</code>.
+ * <p>Although script conversion is its most common use, a transliterator can actually perform a
+ * more general class of tasks. In fact, <code>Transliterator</code> defines a very general API
+ * which specifies only that a segment of the input text is replaced by new text. The particulars of
+ * this conversion are determined entirely by subclasses of <code>Transliterator</code>.
  *
- * <p>
- * <b>Transliterators are stateless</b>
+ * <p><b>Transliterators are stateless</b>
  *
- * <p>
- * <code>Transliterator</code> objects are <em>stateless</em>; they retain no information between calls to
- * <code>transliterate()</code>. As a result, threads may share transliterators without synchronizing them. This might
- * seem to limit the complexity of the transliteration operation. In practice, subclasses perform complex
- * transliterations by delaying the replacement of text until it is known that no other replacements are possible. In
- * other words, although the <code>Transliterator</code> objects are stateless, the source text itself embodies all the
- * needed information, and delayed operation allows arbitrary complexity.
+ * <p><code>Transliterator</code> objects are <em>stateless</em>; they retain no information between
+ * calls to <code>transliterate()</code>. As a result, threads may share transliterators without
+ * synchronizing them. This might seem to limit the complexity of the transliteration operation. In
+ * practice, subclasses perform complex transliterations by delaying the replacement of text until
+ * it is known that no other replacements are possible. In other words, although the <code>
+ * Transliterator</code> objects are stateless, the source text itself embodies all the needed
+ * information, and delayed operation allows arbitrary complexity.
  *
- * <p>
- * <b>Batch transliteration</b>
+ * <p><b>Batch transliteration</b>
  *
- * <p>
- * The simplest way to perform transliteration is all at once, on a string of existing text. This is referred to as
- * <em>batch</em> transliteration. For example, given a string <code>input</code> and a transliterator <code>t</code>,
- * the call
+ * <p>The simplest way to perform transliteration is all at once, on a string of existing text. This
+ * is referred to as <em>batch</em> transliteration. For example, given a string <code>input</code>
+ * and a transliterator <code>t</code>, the call
  *
- * <blockquote><code>String result = t.transliterate(input);
- * </code></blockquote>
+ * <blockquote>
  *
- * will transliterate it and return the result. Other methods allow the client to specify a substring to be
- * transliterated and to use {@link Replaceable} objects instead of strings, in order to preserve out-of-band
- * information (such as text styles).
+ * <code>String result = t.transliterate(input);
+ * </code>
  *
- * <p>
- * <b>Keyboard transliteration</b>
+ * </blockquote>
  *
- * <p>
- * Somewhat more involved is <em>keyboard</em>, or incremental transliteration. This is the transliteration of text that
- * is arriving from some source (typically the user's keyboard) one character at a time, or in some other piecemeal
- * fashion.
+ * will transliterate it and return the result. Other methods allow the client to specify a
+ * substring to be transliterated and to use {@link Replaceable} objects instead of strings, in
+ * order to preserve out-of-band information (such as text styles).
  *
- * <p>
- * In keyboard transliteration, a <code>Replaceable</code> buffer stores the text. As text is inserted, as much as
- * possible is transliterated on the fly. This means a GUI that displays the contents of the buffer may show text being
- * modified as each new character arrives.
+ * <p><b>Keyboard transliteration</b>
  *
- * <p>
- * Consider the simple rule-based Transliterator:
+ * <p>Somewhat more involved is <em>keyboard</em>, or incremental transliteration. This is the
+ * transliteration of text that is arriving from some source (typically the user's keyboard) one
+ * character at a time, or in some other piecemeal fashion.
  *
- * <blockquote><code>
+ * <p>In keyboard transliteration, a <code>Replaceable</code> buffer stores the text. As text is
+ * inserted, as much as possible is transliterated on the fly. This means a GUI that displays the
+ * contents of the buffer may show text being modified as each new character arrives.
+ *
+ * <p>Consider the simple rule-based Transliterator:
+ *
+ * <blockquote>
+ *
+ * <code>
  * th&gt;{theta}<br>
  * t&gt;{tau}
- * </code></blockquote>
+ * </code>
  *
- * When the user types 't', nothing will happen, since the transliterator is waiting to see if the next character is
- * 'h'. To remedy this, we introduce the notion of a cursor, marked by a '|' in the output string:
+ * </blockquote>
  *
- * <blockquote><code>
+ * When the user types 't', nothing will happen, since the transliterator is waiting to see if the
+ * next character is 'h'. To remedy this, we introduce the notion of a cursor, marked by a '|' in
+ * the output string:
+ *
+ * <blockquote>
+ *
+ * <code>
  * t&gt;|{tau}<br>
  * {tau}h&gt;{theta}
- * </code></blockquote>
+ * </code>
  *
- * Now when the user types 't', tau appears, and if the next character is 'h', the tau changes to a theta. This is
- * accomplished by maintaining a cursor position (independent of the insertion point, and invisible in the GUI) across
- * calls to <code>transliterate()</code>. Typically, the cursor will be coincident with the insertion point, but in a
- * case like the one above, it will precede the insertion point.
+ * </blockquote>
  *
- * <p>
- * Keyboard transliteration methods maintain a set of three indices that are updated with each call to
- * <code>transliterate()</code>, including the cursor, start, and limit. These indices are changed by the method, and
- * they are passed in and out via a Position object. The <code>start</code> index marks the beginning of the substring
- * that the transliterator will look at. It is advanced as text becomes committed (but it is not the committed index;
- * that's the <code>cursor</code>). The <code>cursor</code> index, described above, marks the point at which the
- * transliterator last stopped, either because it reached the end, or because it required more characters to
- * disambiguate between possible inputs. The <code>cursor</code> can also be explicitly set by rules.
- * Any characters before the <code>cursor</code> index are frozen; future keyboard
- * transliteration calls within this input sequence will not change them. New text is inserted at the <code>limit</code>
- * index, which marks the end of the substring that the transliterator looks at.
+ * Now when the user types 't', tau appears, and if the next character is 'h', the tau changes to a
+ * theta. This is accomplished by maintaining a cursor position (independent of the insertion point,
+ * and invisible in the GUI) across calls to <code>transliterate()</code>. Typically, the cursor
+ * will be coincident with the insertion point, but in a case like the one above, it will precede
+ * the insertion point.
  *
- * <p>
- * Because keyboard transliteration assumes that more characters are to arrive, it is conservative in its operation. It
- * only transliterates when it can do so unambiguously. Otherwise it waits for more characters to arrive. When the
- * client code knows that no more characters are forthcoming, perhaps because the user has performed some input
- * termination operation, then it should call <code>finishTransliteration()</code> to complete any pending
- * transliterations.
+ * <p>Keyboard transliteration methods maintain a set of three indices that are updated with each
+ * call to <code>transliterate()</code>, including the cursor, start, and limit. These indices are
+ * changed by the method, and they are passed in and out via a Position object. The <code>start
+ * </code> index marks the beginning of the substring that the transliterator will look at. It is
+ * advanced as text becomes committed (but it is not the committed index; that's the <code>cursor
+ * </code>). The <code>cursor</code> index, described above, marks the point at which the
+ * transliterator last stopped, either because it reached the end, or because it required more
+ * characters to disambiguate between possible inputs. The <code>cursor</code> can also be
+ * explicitly set by rules. Any characters before the <code>cursor</code> index are frozen; future
+ * keyboard transliteration calls within this input sequence will not change them. New text is
+ * inserted at the <code>limit</code> index, which marks the end of the substring that the
+ * transliterator looks at.
  *
- * <p>
- * <b>Inverses</b>
+ * <p>Because keyboard transliteration assumes that more characters are to arrive, it is
+ * conservative in its operation. It only transliterates when it can do so unambiguously. Otherwise
+ * it waits for more characters to arrive. When the client code knows that no more characters are
+ * forthcoming, perhaps because the user has performed some input termination operation, then it
+ * should call <code>finishTransliteration()</code> to complete any pending transliterations.
  *
- * <p>
- * Pairs of transliterators may be inverses of one another. For example, if transliterator <b>A</b> transliterates
- * characters by incrementing their Unicode value (so "abc" -&gt; "def"), and transliterator <b>B</b> decrements character
- * values, then <b>A</b> is an inverse of <b>B</b> and vice versa. If we compose <b>A</b> with <b>B</b> in a compound
- * transliterator, the result is the identity transliterator, that is, a transliterator that does not change its input
- * text.
+ * <p><b>Inverses</b>
  *
- * The <code>Transliterator</code> method <code>getInverse()</code> returns a transliterator's inverse, if one exists,
- * or <code>null</code> otherwise. However, the result of <code>getInverse()</code> usually will <em>not</em> be a true
- * mathematical inverse. This is because true inverse transliterators are difficult to formulate. For example, consider
- * two transliterators: <b>AB</b>, which transliterates the character 'A' to 'B', and <b>BA</b>, which transliterates
- * 'B' to 'A'. It might seem that these are exact inverses, since
+ * <p>Pairs of transliterators may be inverses of one another. For example, if transliterator
+ * <b>A</b> transliterates characters by incrementing their Unicode value (so "abc" -&gt; "def"),
+ * and transliterator <b>B</b> decrements character values, then <b>A</b> is an inverse of <b>B</b>
+ * and vice versa. If we compose <b>A</b> with <b>B</b> in a compound transliterator, the result is
+ * the identity transliterator, that is, a transliterator that does not change its input text.
  *
- * <blockquote>"A" x <b>AB</b> -&gt; "B"<br>
- * "B" x <b>BA</b> -&gt; "A"</blockquote>
+ * <p>The <code>Transliterator</code> method <code>getInverse()</code> returns a transliterator's
+ * inverse, if one exists, or <code>null</code> otherwise. However, the result of <code>getInverse()
+ * </code> usually will <em>not</em> be a true mathematical inverse. This is because true inverse
+ * transliterators are difficult to formulate. For example, consider two transliterators: <b>AB</b>,
+ * which transliterates the character 'A' to 'B', and <b>BA</b>, which transliterates 'B' to 'A'. It
+ * might seem that these are exact inverses, since
+ *
+ * <blockquote>
+ *
+ * "A" x <b>AB</b> -&gt; "B"<br>
+ * "B" x <b>BA</b> -&gt; "A"
+ *
+ * </blockquote>
  *
  * where 'x' represents transliteration. However,
  *
- * <blockquote>"ABCD" x <b>AB</b> -&gt; "BBCD"<br>
- * "BBCD" x <b>BA</b> -&gt; "AACD"</blockquote>
+ * <blockquote>
  *
- * so <b>AB</b> composed with <b>BA</b> is not the identity. Nonetheless, <b>BA</b> may be usefully considered to be
- * <b>AB</b>'s inverse, and it is on this basis that <b>AB</b><code>.getInverse()</code> could legitimately return
- * <b>BA</b>.
+ * "ABCD" x <b>AB</b> -&gt; "BBCD"<br>
+ * "BBCD" x <b>BA</b> -&gt; "AACD"
  *
- * <p>
- * <b>Filtering</b>
- * <p>Each transliterator has a filter, which restricts changes to those characters selected by the filter. The
- * filter affects just the characters that are changed -- the characters outside of the filter are still part of the
- * context for the filter. For example, in the following even though 'x' is filtered out, and doesn't convert to y, it does affect the conversion of 'a'.
+ * </blockquote>
+ *
+ * so <b>AB</b> composed with <b>BA</b> is not the identity. Nonetheless, <b>BA</b> may be usefully
+ * considered to be <b>AB</b>'s inverse, and it is on this basis that <b>AB</b><code>.getInverse()
+ * </code> could legitimately return <b>BA</b>.
+ *
+ * <p><b>Filtering</b>
+ *
+ * <p>Each transliterator has a filter, which restricts changes to those characters selected by the
+ * filter. The filter affects just the characters that are changed -- the characters outside of the
+ * filter are still part of the context for the filter. For example, in the following even though
+ * 'x' is filtered out, and doesn't convert to y, it does affect the conversion of 'a'.
  *
  * <pre>
  * String rules = &quot;x &gt; y; x{a} &gt; b; &quot;;
@@ -163,150 +177,127 @@ import com.ibm.icu.util.UResourceBundle;
  * tempTrans.setFilter(new UnicodeSet(&quot;[a]&quot;));
  * String tempResult = tempTrans.transform(&quot;xa&quot;);
  * // results in &quot;xb&quot;
- *</pre>
- * <p>
- * <b>IDs and display names</b>
+ * </pre>
  *
- * <p>
- * A transliterator is designated by a short identifier string or <em>ID</em>. IDs follow the format
- * <em>source-destination</em>, where <em>source</em> describes the entity being replaced, and <em>destination</em>
- * describes the entity replacing <em>source</em>. The entities may be the names of scripts, particular sequences of
- * characters, or whatever else it is that the transliterator converts to or from. For example, a transliterator from
- * Russian to Latin might be named "Russian-Latin". A transliterator from keyboard escape sequences to Latin-1
- * characters might be named "KeyboardEscape-Latin1". By convention, system entity names are in English, with the
- * initial letters of words capitalized; user entity names may follow any format so long as they do not contain dashes.
+ * <p><b>IDs and display names</b>
  *
- * <p>
- * In addition to programmatic IDs, transliterator objects have display names for presentation in user interfaces,
- * returned by {@link #getDisplayName}.
+ * <p>A transliterator is designated by a short identifier string or <em>ID</em>. IDs follow the
+ * format <em>source-destination</em>, where <em>source</em> describes the entity being replaced,
+ * and <em>destination</em> describes the entity replacing <em>source</em>. The entities may be the
+ * names of scripts, particular sequences of characters, or whatever else it is that the
+ * transliterator converts to or from. For example, a transliterator from Russian to Latin might be
+ * named "Russian-Latin". A transliterator from keyboard escape sequences to Latin-1 characters
+ * might be named "KeyboardEscape-Latin1". By convention, system entity names are in English, with
+ * the initial letters of words capitalized; user entity names may follow any format so long as they
+ * do not contain dashes.
  *
- * <p>
- * <b>Factory methods and registration</b>
+ * <p>In addition to programmatic IDs, transliterator objects have display names for presentation in
+ * user interfaces, returned by {@link #getDisplayName}.
  *
- * <p>
- * In general, client code should use the factory method <code>getInstance()</code> to obtain an instance of a
- * transliterator given its ID. Valid IDs may be enumerated using <code>getAvailableIDs()</code>. Since transliterators
- * are stateless, multiple calls to <code>getInstance()</code> with the same ID will return the same object.
+ * <p><b>Factory methods and registration</b>
  *
- * <p>
- * In addition to the system transliterators registered at startup, user transliterators may be registered by calling
- * <code>registerInstance()</code> at run time. To register a transliterator subclass without instantiating it (until it
- * is needed), users may call <code>registerClass()</code>.
+ * <p>In general, client code should use the factory method <code>getInstance()</code> to obtain an
+ * instance of a transliterator given its ID. Valid IDs may be enumerated using <code>
+ * getAvailableIDs()</code>. Since transliterators are stateless, multiple calls to <code>
+ * getInstance()</code> with the same ID will return the same object.
  *
- * <p>
- * <b>Composed transliterators</b>
+ * <p>In addition to the system transliterators registered at startup, user transliterators may be
+ * registered by calling <code>registerInstance()</code> at run time. To register a transliterator
+ * subclass without instantiating it (until it is needed), users may call <code>registerClass()
+ * </code>.
  *
- * <p>
- * In addition to built-in system transliterators like "Latin-Greek", there are also built-in <em>composed</em>
- * transliterators. These are implemented by composing two or more component transliterators. For example, if we have
- * scripts "A", "B", "C", and "D", and we want to transliterate between all pairs of them, then we need to write 12
- * transliterators: "A-B", "A-C", "A-D", "B-A",..., "D-A", "D-B", "D-C". If it is possible to convert all scripts to an
- * intermediate script "M", then instead of writing 12 rule sets, we only need to write 8: "A~M", "B~M", "C~M", "D~M",
- * "M~A", "M~B", "M~C", "M~D". (This might not seem like a big win, but it's really 2<em>n</em> vs. <em>n</em>
- * <sup>2</sup> - <em>n</em>, so as <em>n</em> gets larger the gain becomes significant. With 9 scripts, it's 18 vs. 72
- * rule sets, a big difference.) Note the use of "~" rather than "-" for the script separator here; this indicates that
- * the given transliterator is intended to be composed with others, rather than be used as is.
+ * <p><b>Composed transliterators</b>
  *
- * <p>
- * Composed transliterators can be instantiated as usual. For example, the system transliterator "Devanagari-Gujarati"
- * is a composed transliterator built internally as "Devanagari~InterIndic;InterIndic~Gujarati". When this
- * transliterator is instantiated, it appears externally to be a standard transliterator (e.g., getID() returns
- * "Devanagari-Gujarati").
+ * <p>In addition to built-in system transliterators like "Latin-Greek", there are also built-in
+ * <em>composed</em> transliterators. These are implemented by composing two or more component
+ * transliterators. For example, if we have scripts "A", "B", "C", and "D", and we want to
+ * transliterate between all pairs of them, then we need to write 12 transliterators: "A-B", "A-C",
+ * "A-D", "B-A",..., "D-A", "D-B", "D-C". If it is possible to convert all scripts to an
+ * intermediate script "M", then instead of writing 12 rule sets, we only need to write 8: "A~M",
+ * "B~M", "C~M", "D~M", "M~A", "M~B", "M~C", "M~D". (This might not seem like a big win, but it's
+ * really 2<em>n</em> vs. <em>n</em> <sup>2</sup> - <em>n</em>, so as <em>n</em> gets larger the
+ * gain becomes significant. With 9 scripts, it's 18 vs. 72 rule sets, a big difference.) Note the
+ * use of "~" rather than "-" for the script separator here; this indicates that the given
+ * transliterator is intended to be composed with others, rather than be used as is.
  *
- * <p>
- * <b>Subclassing</b>
+ * <p>Composed transliterators can be instantiated as usual. For example, the system transliterator
+ * "Devanagari-Gujarati" is a composed transliterator built internally as
+ * "Devanagari~InterIndic;InterIndic~Gujarati". When this transliterator is instantiated, it appears
+ * externally to be a standard transliterator (e.g., getID() returns "Devanagari-Gujarati").
  *
- * <p>
- * Subclasses must implement the abstract method <code>handleTransliterate()</code>.
- * <p>
- * Subclasses should override the <code>transliterate()</code> method taking a <code>Replaceable</code> and the
- * <code>transliterate()</code> method taking a <code>String</code> and <code>StringBuffer</code> if the performance of
- * these methods can be improved over the performance obtained by the default implementations in this class.
+ * <p><b>Subclassing</b>
+ *
+ * <p>Subclasses must implement the abstract method <code>handleTransliterate()</code>.
+ *
+ * <p>Subclasses should override the <code>transliterate()</code> method taking a <code>Replaceable
+ * </code> and the <code>transliterate()</code> method taking a <code>String</code> and <code>
+ * StringBuffer</code> if the performance of these methods can be improved over the performance
+ * obtained by the default implementations in this class.
  *
  * <p><b>Rule syntax</b>
  *
- * <p>A set of rules determines how to perform translations.
- * Rules within a rule set are separated by semicolons (';').
- * To include a literal semicolon, prefix it with a backslash ('\').
- * Unicode Pattern_White_Space is ignored.
- * If the first non-blank character on a line is '#',
- * the entire line is ignored as a comment.
+ * <p>A set of rules determines how to perform translations. Rules within a rule set are separated
+ * by semicolons (';'). To include a literal semicolon, prefix it with a backslash ('\'). Unicode
+ * Pattern_White_Space is ignored. If the first non-blank character on a line is '#', the entire
+ * line is ignored as a comment.
  *
- * <p>Each set of rules consists of two groups, one forward, and one
- * reverse. This is a convention that is not enforced; rules for one
- * direction may be omitted, with the result that translations in
- * that direction will not modify the source text. In addition,
- * bidirectional forward-reverse rules may be specified for
- * symmetrical transformations.
+ * <p>Each set of rules consists of two groups, one forward, and one reverse. This is a convention
+ * that is not enforced; rules for one direction may be omitted, with the result that translations
+ * in that direction will not modify the source text. In addition, bidirectional forward-reverse
+ * rules may be specified for symmetrical transformations.
  *
- * <p>Note: Another description of the Transliterator rule syntax is available in
- * <a href="https://www.unicode.org/reports/tr35/tr35-general.html#Transform_Rules_Syntax">section
- * Transform Rules Syntax of UTS #35: Unicode LDML</a>.
- * The rules are shown there using arrow symbols ← and → and ↔.
- * ICU supports both those and the equivalent ASCII symbols &lt; and &gt; and &lt;&gt;.
+ * <p>Note: Another description of the Transliterator rule syntax is available in <a
+ * href="https://www.unicode.org/reports/tr35/tr35-general.html#Transform_Rules_Syntax">section
+ * Transform Rules Syntax of UTS #35: Unicode LDML</a>. The rules are shown there using arrow
+ * symbols ← and → and ↔. ICU supports both those and the equivalent ASCII symbols &lt; and &gt; and
+ * &lt;&gt;.
  *
  * <p>Rule statements take one of the following forms:
  *
  * <dl>
- *     <dt><code>$alefmadda=\\u0622;</code></dt>
- *     <dd><strong>Variable definition.</strong> The name on the
- *         left is assigned the text on the right. In this example,
- *         after this statement, instances of the left hand name,
- *         &quot;<code>$alefmadda</code>&quot;, will be replaced by
- *         the Unicode character U+0622. Variable names must begin
- *         with a letter and consist only of letters, digits, and
- *         underscores. Case is significant. Duplicate names cause
- *         an exception to be thrown, that is, variables cannot be
- *         redefined. The right hand side may contain well-formed
- *         text of any length, including no text at all (&quot;<code>$empty=;</code>&quot;).
- *         The right hand side may contain embedded <code>UnicodeSet</code>
- *         patterns, for example, &quot;<code>$softvowel=[eiyEIY]</code>&quot;.</dd>
- *     <dt><code>ai&gt;$alefmadda;</code></dt>
- *     <dd><strong>Forward translation rule.</strong> This rule
- *         states that the string on the left will be changed to the
- *         string on the right when performing forward
- *         transliteration.</dd>
- *     <dt><code>ai&lt;$alefmadda;</code></dt>
- *     <dd><strong>Reverse translation rule.</strong> This rule
- *         states that the string on the right will be changed to
- *         the string on the left when performing reverse
- *         transliteration.</dd>
+ *   <dt><code>$alefmadda=\\u0622;</code>
+ *   <dd><strong>Variable definition.</strong> The name on the left is assigned the text on the
+ *       right. In this example, after this statement, instances of the left hand name, &quot;<code>
+ *       $alefmadda</code>&quot;, will be replaced by the Unicode character U+0622. Variable names
+ *       must begin with a letter and consist only of letters, digits, and underscores. Case is
+ *       significant. Duplicate names cause an exception to be thrown, that is, variables cannot be
+ *       redefined. The right hand side may contain well-formed text of any length, including no
+ *       text at all (&quot;<code>$empty=;</code>&quot;). The right hand side may contain embedded
+ *       <code>UnicodeSet</code> patterns, for example, &quot;<code>$softvowel=[eiyEIY]</code>
+ *       &quot;.
+ *   <dt><code>ai&gt;$alefmadda;</code>
+ *   <dd><strong>Forward translation rule.</strong> This rule states that the string on the left
+ *       will be changed to the string on the right when performing forward transliteration.
+ *   <dt><code>ai&lt;$alefmadda;</code>
+ *   <dd><strong>Reverse translation rule.</strong> This rule states that the string on the right
+ *       will be changed to the string on the left when performing reverse transliteration.
  * </dl>
  *
  * <dl>
- *     <dt><code>ai&lt;&gt;$alefmadda;</code></dt>
- *     <dd><strong>Bidirectional translation rule.</strong> This
- *         rule states that the string on the right will be changed
- *         to the string on the left when performing forward
- *         transliteration, and vice versa when performing reverse
- *         transliteration.</dd>
+ *   <dt><code>ai&lt;&gt;$alefmadda;</code>
+ *   <dd><strong>Bidirectional translation rule.</strong> This rule states that the string on the
+ *       right will be changed to the string on the left when performing forward transliteration,
+ *       and vice versa when performing reverse transliteration.
  * </dl>
  *
- * <p>Translation rules consist of a <em>match pattern</em> and an <em>output
- * string</em>. The match pattern consists of literal characters,
- * optionally preceded by context, and optionally followed by
- * context. Context characters, like literal pattern characters,
- * must be matched in the text being transliterated. However, unlike
- * literal pattern characters, they are not replaced by the output
- * text. For example, the pattern &quot;<code>abc{def}</code>&quot;
- * indicates the characters &quot;<code>def</code>&quot; must be
- * preceded by &quot;<code>abc</code>&quot; for a successful match.
- * If there is a successful match, &quot;<code>def</code>&quot; will
- * be replaced, but not &quot;<code>abc</code>&quot;. The final '<code>}</code>'
- * is optional, so &quot;<code>abc{def</code>&quot; is equivalent to
- * &quot;<code>abc{def}</code>&quot;. Another example is &quot;<code>{123}456</code>&quot;
- * (or &quot;<code>123}456</code>&quot;) in which the literal
- * pattern &quot;<code>123</code>&quot; must be followed by &quot;<code>456</code>&quot;.
+ * <p>Translation rules consist of a <em>match pattern</em> and an <em>output string</em>. The match
+ * pattern consists of literal characters, optionally preceded by context, and optionally followed
+ * by context. Context characters, like literal pattern characters, must be matched in the text
+ * being transliterated. However, unlike literal pattern characters, they are not replaced by the
+ * output text. For example, the pattern &quot;<code>abc{def}</code>&quot; indicates the characters
+ * &quot;<code>def</code>&quot; must be preceded by &quot;<code>abc</code>&quot; for a successful
+ * match. If there is a successful match, &quot;<code>def</code>&quot; will be replaced, but not
+ * &quot;<code>abc</code>&quot;. The final '<code>}</code>' is optional, so &quot;<code>abc{def
+ * </code>&quot; is equivalent to &quot;<code>abc{def}</code>&quot;. Another example is &quot;<code>
+ * {123}456</code>&quot; (or &quot;<code>123}456</code>&quot;) in which the literal pattern &quot;
+ * <code>123</code>&quot; must be followed by &quot;<code>456</code>&quot;.
  *
- * <p>The output string of a forward or reverse rule consists of
- * characters to replace the literal pattern characters. If the
- * output string contains the character '<code>|</code>', this is
- * taken to indicate the location of the <em>cursor</em> after
- * replacement. The cursor is the point in the text at which the
- * next replacement, if any, will be applied. The cursor is usually
- * placed within the replacement text; however, it can actually be
- * placed into the precending or following context by using the
- * special character '@'. Examples:
+ * <p>The output string of a forward or reverse rule consists of characters to replace the literal
+ * pattern characters. If the output string contains the character '<code>|</code>', this is taken
+ * to indicate the location of the <em>cursor</em> after replacement. The cursor is the point in the
+ * text at which the next replacement, if any, will be applied. The cursor is usually placed within
+ * the replacement text; however, it can actually be placed into the precending or following context
+ * by using the special character '@'. Examples:
  *
  * <pre>
  *     a {foo} z &gt; | @ bar; # foo -&gt; bar, move cursor before a
@@ -315,14 +306,13 @@ import com.ibm.icu.util.UResourceBundle;
  *
  * <p><b>UnicodeSet</b>
  *
- * <p><code>UnicodeSet</code> patterns may appear anywhere that
- * makes sense. They may appear in variable definitions.
- * Contrariwise, <code>UnicodeSet</code> patterns may themselves
- * contain variable references, such as &quot;<code>$a=[a-z];$not_a=[^$a]</code>&quot;,
- * or &quot;<code>$range=a-z;$ll=[$range]</code>&quot;.
+ * <p><code>UnicodeSet</code> patterns may appear anywhere that makes sense. They may appear in
+ * variable definitions. Contrariwise, <code>UnicodeSet</code> patterns may themselves contain
+ * variable references, such as &quot;<code>$a=[a-z];$not_a=[^$a]</code>&quot;, or &quot;<code>
+ * $range=a-z;$ll=[$range]</code>&quot;.
  *
- * <p><code>UnicodeSet</code> patterns may also be embedded directly
- * into rule strings. Thus, the following two rules are equivalent:
+ * <p><code>UnicodeSet</code> patterns may also be embedded directly into rule strings. Thus, the
+ * following two rules are equivalent:
  *
  * <pre>
  *     $vowel=[aeiou]; $vowel&gt;'*'; # One way to do this
@@ -333,21 +323,18 @@ import com.ibm.icu.util.UResourceBundle;
  *
  * <p><b>Segments</b>
  *
- * <p>Segments of the input string can be matched and copied to the
- * output string. This makes certain sets of rules simpler and more
- * general, and makes reordering possible. For example:
+ * <p>Segments of the input string can be matched and copied to the output string. This makes
+ * certain sets of rules simpler and more general, and makes reordering possible. For example:
  *
  * <pre>
  *     ([a-z]) &gt; $1 $1; # double lowercase letters
  *     ([:Lu:]) ([:Ll:]) &gt; $2 $1; # reverse order of Lu-Ll pairs
  * </pre>
  *
- * <p>The segment of the input string to be copied is delimited by
- * &quot;<code>(</code>&quot; and &quot;<code>)</code>&quot;. Up to
- * nine segments may be defined. Segments may not overlap. In the
- * output string, &quot;<code>$1</code>&quot; through &quot;<code>$9</code>&quot;
- * represent the input string segments, in left-to-right order of
- * definition.
+ * <p>The segment of the input string to be copied is delimited by &quot;<code>(</code>&quot; and
+ * &quot;<code>)</code>&quot;. Up to nine segments may be defined. Segments may not overlap. In the
+ * output string, &quot;<code>$1</code>&quot; through &quot;<code>$9</code>&quot; represent the
+ * input string segments, in left-to-right order of definition.
  *
  * <p><b>Anchors</b>
  *
@@ -361,11 +348,10 @@ import com.ibm.icu.util.UResourceBundle;
  *   &nbsp; z&nbsp;&nbsp; &gt; 'Z';&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # match other instances of 'z'
  * </pre>
  *
- * <p>It is also possible to match the beginning or the end of the text using a <code>UnicodeSet</code>.
- * This is done by including a virtual anchor character '<code>$</code>' at the end of the
- * set pattern. Although this is usually the match character for the end anchor, the set will
- * match either the beginning or the end of the text, depending on its placement. For
- * example:
+ * <p>It is also possible to match the beginning or the end of the text using a <code>UnicodeSet
+ * </code>. This is done by including a virtual anchor character '<code>$</code>' at the end of the
+ * set pattern. Although this is usually the match character for the end anchor, the set will match
+ * either the beginning or the end of the text, depending on its placement. For example:
  *
  * <pre>
  *   $x = [a-z$]; &nbsp;&nbsp;# match 'a' through 'z' OR anchor
@@ -375,8 +361,7 @@ import com.ibm.icu.util.UResourceBundle;
  *
  * <p><b>Example</b>
  *
- * <p>The following example rules illustrate many of the features of
- * the rule language.
+ * <p>The following example rules illustrate many of the features of the rule language.
  *
  * <table style="border:none;padding:4px;">
  *     <tr>
@@ -393,8 +378,8 @@ import com.ibm.icu.util.UResourceBundle;
  *     </tr>
  * </table>
  *
- * <p>Applying these rules to the string &quot;<code>adefabcdefz</code>&quot;
- * yields the following results:
+ * <p>Applying these rules to the string &quot;<code>adefabcdefz</code>&quot; yields the following
+ * results:
  *
  * <table style="border:none;padding:4px;">
  *     <tr>
@@ -449,115 +434,109 @@ import com.ibm.icu.util.UResourceBundle;
  *     </tr>
  * </table>
  *
- * <p>The order of rules is significant. If multiple rules may match
- * at some point, the first matching rule is applied.
+ * <p>The order of rules is significant. If multiple rules may match at some point, the first
+ * matching rule is applied.
  *
- * <p>Forward and reverse rules may have an empty output string.
- * Otherwise, an empty left or right hand side of any statement is a
- * syntax error.
+ * <p>Forward and reverse rules may have an empty output string. Otherwise, an empty left or right
+ * hand side of any statement is a syntax error.
  *
- * <p>Single quotes are used to quote any character other than a
- * digit or letter. To specify a single quote itself, inside or
- * outside of quotes, use two single quotes in a row. For example,
- * the rule &quot;<code>'&gt;'&gt;o''clock</code>&quot; changes the
- * string &quot;<code>&gt;</code>&quot; to the string &quot;<code>o'clock</code>&quot;.
+ * <p>Single quotes are used to quote any character other than a digit or letter. To specify a
+ * single quote itself, inside or outside of quotes, use two single quotes in a row. For example,
+ * the rule &quot;<code>'&gt;'&gt;o''clock</code>&quot; changes the string &quot;<code>&gt;</code>
+ * &quot; to the string &quot;<code>o'clock</code>&quot;.
  *
  * <p><b>Notes</b>
  *
- * <p>While a Transliterator is being built from rules, it checks that
- * the rules are added in proper order. For example, if the rule
- * &quot;a&gt;x&quot; is followed by the rule &quot;ab&gt;y&quot;,
- * then the second rule will throw an exception. The reason is that
- * the second rule can never be triggered, since the first rule
- * always matches anything it matches. In other words, the first
+ * <p>While a Transliterator is being built from rules, it checks that the rules are added in proper
+ * order. For example, if the rule &quot;a&gt;x&quot; is followed by the rule &quot;ab&gt;y&quot;,
+ * then the second rule will throw an exception. The reason is that the second rule can never be
+ * triggered, since the first rule always matches anything it matches. In other words, the first
  * rule <em>masks</em> the second rule.
  *
  * @author Alan Liu
  * @stable ICU 2.0
  */
-public abstract class Transliterator implements StringTransform  {
+public abstract class Transliterator implements StringTransform {
     /**
-     * Direction constant indicating the forward direction in a transliterator,
-     * e.g., the forward rules of a rule-based Transliterator.  An "A-B"
-     * transliterator transliterates A to B when operating in the forward
-     * direction, and B to A when operating in the reverse direction.
+     * Direction constant indicating the forward direction in a transliterator, e.g., the forward
+     * rules of a rule-based Transliterator. An "A-B" transliterator transliterates A to B when
+     * operating in the forward direction, and B to A when operating in the reverse direction.
+     *
      * @stable ICU 2.0
      */
     public static final int FORWARD = 0;
 
     /**
-     * Direction constant indicating the reverse direction in a transliterator,
-     * e.g., the reverse rules of a rule-based Transliterator.  An "A-B"
-     * transliterator transliterates A to B when operating in the forward
-     * direction, and B to A when operating in the reverse direction.
+     * Direction constant indicating the reverse direction in a transliterator, e.g., the reverse
+     * rules of a rule-based Transliterator. An "A-B" transliterator transliterates A to B when
+     * operating in the forward direction, and B to A when operating in the reverse direction.
+     *
      * @stable ICU 2.0
      */
     public static final int REVERSE = 1;
 
     /**
-     * Position structure for incremental transliteration.  This data
-     * structure defines two substrings of the text being
-     * transliterated.  The first region, [contextStart,
-     * contextLimit), defines what characters the transliterator will
-     * read as context.  The second region, [start, limit), defines
-     * what characters will actually be transliterated.  The second
-     * region should be a subset of the first.
+     * Position structure for incremental transliteration. This data structure defines two
+     * substrings of the text being transliterated. The first region, [contextStart, contextLimit),
+     * defines what characters the transliterator will read as context. The second region, [start,
+     * limit), defines what characters will actually be transliterated. The second region should be
+     * a subset of the first.
      *
-     * <p>After a transliteration operation, some of the indices in this
-     * structure will be modified.  See the field descriptions for
-     * details.
+     * <p>After a transliteration operation, some of the indices in this structure will be modified.
+     * See the field descriptions for details.
      *
      * <p>contextStart &lt;= start &lt;= limit &lt;= contextLimit
      *
-     * <p>Note: All index values in this structure must be at code point
-     * boundaries.  That is, none of them may occur between two code units
-     * of a surrogate pair.  If any index does split a surrogate pair,
-     * results are unspecified.
+     * <p>Note: All index values in this structure must be at code point boundaries. That is, none
+     * of them may occur between two code units of a surrogate pair. If any index does split a
+     * surrogate pair, results are unspecified.
+     *
      * @stable ICU 2.0
      */
     public static class Position {
 
         /**
-         * Beginning index, inclusive, of the context to be considered for
-         * a transliteration operation.  The transliterator will ignore
-         * anything before this index.  INPUT/OUTPUT parameter: This parameter
-         * is updated by a transliteration operation to reflect the maximum
-         * amount of antecontext needed by a transliterator.
+         * Beginning index, inclusive, of the context to be considered for a transliteration
+         * operation. The transliterator will ignore anything before this index. INPUT/OUTPUT
+         * parameter: This parameter is updated by a transliteration operation to reflect the
+         * maximum amount of antecontext needed by a transliterator.
+         *
          * @stable ICU 2.0
          */
         public int contextStart;
 
         /**
-         * Ending index, exclusive, of the context to be considered for a
-         * transliteration operation.  The transliterator will ignore
-         * anything at or after this index.  INPUT/OUTPUT parameter: This
-         * parameter is updated to reflect changes in the length of the
-         * text, but points to the same logical position in the text.
+         * Ending index, exclusive, of the context to be considered for a transliteration operation.
+         * The transliterator will ignore anything at or after this index. INPUT/OUTPUT parameter:
+         * This parameter is updated to reflect changes in the length of the text, but points to the
+         * same logical position in the text.
+         *
          * @stable ICU 2.0
          */
         public int contextLimit;
 
         /**
-         * Beginning index, inclusive, of the text to be transliteratd.
-         * INPUT/OUTPUT parameter: This parameter is advanced past
-         * characters that have already been transliterated by a
+         * Beginning index, inclusive, of the text to be transliteratd. INPUT/OUTPUT parameter: This
+         * parameter is advanced past characters that have already been transliterated by a
          * transliteration operation.
+         *
          * @stable ICU 2.0
          */
         public int start;
 
         /**
-         * Ending index, exclusive, of the text to be transliteratd.
-         * INPUT/OUTPUT parameter: This parameter is updated to reflect
-         * changes in the length of the text, but points to the same
+         * Ending index, exclusive, of the text to be transliteratd. INPUT/OUTPUT parameter: This
+         * parameter is updated to reflect changes in the length of the text, but points to the same
          * logical position in the text.
+         *
          * @stable ICU 2.0
          */
         public int limit;
 
         /**
-         * Constructs a Position object with start, limit,
-         * contextStart, and contextLimit all equal to zero.
+         * Constructs a Position object with start, limit, contextStart, and contextLimit all equal
+         * to zero.
+         *
          * @stable ICU 2.0
          */
         public Position() {
@@ -565,9 +544,9 @@ public abstract class Transliterator implements StringTransform  {
         }
 
         /**
-         * Constructs a Position object with the given start,
-         * contextStart, and contextLimit.  The limit is set to the
-         * contextLimit.
+         * Constructs a Position object with the given start, contextStart, and contextLimit. The
+         * limit is set to the contextLimit.
+         *
          * @stable ICU 2.0
          */
         public Position(int contextStart, int contextLimit, int start) {
@@ -575,12 +554,11 @@ public abstract class Transliterator implements StringTransform  {
         }
 
         /**
-         * Constructs a Position object with the given start, limit,
-         * contextStart, and contextLimit.
+         * Constructs a Position object with the given start, limit, contextStart, and contextLimit.
+         *
          * @stable ICU 2.0
          */
-        public Position(int contextStart, int contextLimit,
-                        int start, int limit) {
+        public Position(int contextStart, int contextLimit, int start, int limit) {
             this.contextStart = contextStart;
             this.contextLimit = contextLimit;
             this.start = start;
@@ -589,6 +567,7 @@ public abstract class Transliterator implements StringTransform  {
 
         /**
          * Constructs a Position object that is a copy of another.
+         *
          * @stable ICU 2.6
          */
         public Position(Position pos) {
@@ -597,6 +576,7 @@ public abstract class Transliterator implements StringTransform  {
 
         /**
          * Copies the indices of this position from another.
+         *
          * @stable ICU 2.6
          */
         public void set(Position pos) {
@@ -608,22 +588,24 @@ public abstract class Transliterator implements StringTransform  {
 
         /**
          * Returns true if this Position is equal to the given object.
+         *
          * @stable ICU 2.0
          */
         @Override
         public boolean equals(Object obj) {
             if (obj instanceof Position) {
                 Position pos = (Position) obj;
-                return contextStart == pos.contextStart &&
-                    contextLimit == pos.contextLimit &&
-                    start == pos.start &&
-                    limit == pos.limit;
+                return contextStart == pos.contextStart
+                        && contextLimit == pos.contextLimit
+                        && start == pos.start
+                        && limit == pos.limit;
             }
             return false;
         }
 
         /**
          * {@inheritDoc}
+         *
          * @stable ICU 2.0
          */
         @Override
@@ -633,119 +615,114 @@ public abstract class Transliterator implements StringTransform  {
 
         /**
          * Returns a string representation of this Position.
+         *
          * @return a string representation of the object.
          * @stable ICU 2.0
          */
         @Override
         public String toString() {
-            return "[cs=" + contextStart
-                + ", s=" + start
-                + ", l=" + limit
-                + ", cl=" + contextLimit
-                + "]";
+            return "[cs="
+                    + contextStart
+                    + ", s="
+                    + start
+                    + ", l="
+                    + limit
+                    + ", cl="
+                    + contextLimit
+                    + "]";
         }
 
         /**
-         * Check all bounds.  If they are invalid, throw an exception.
+         * Check all bounds. If they are invalid, throw an exception.
+         *
          * @param length the length of the string this object applies to
-         * @exception IllegalArgumentException if any indices are out
-         * of bounds
+         * @exception IllegalArgumentException if any indices are out of bounds
          * @stable ICU 2.0
          */
         public final void validate(int length) {
-            if (contextStart < 0 ||
-                start < contextStart ||
-                limit < start ||
-                contextLimit < limit ||
-                length < contextLimit) {
-                throw new IllegalArgumentException("Invalid Position {cs=" +
-                                                   contextStart + ", s=" +
-                                                   start + ", l=" +
-                                                   limit + ", cl=" +
-                                                   contextLimit + "}, len=" +
-                                                   length);
+            if (contextStart < 0
+                    || start < contextStart
+                    || limit < start
+                    || contextLimit < limit
+                    || length < contextLimit) {
+                throw new IllegalArgumentException(
+                        "Invalid Position {cs="
+                                + contextStart
+                                + ", s="
+                                + start
+                                + ", l="
+                                + limit
+                                + ", cl="
+                                + contextLimit
+                                + "}, len="
+                                + length);
             }
         }
     }
 
-    /**
-     * Programmatic name, e.g., "Latin-Arabic".
-     */
+    /** Programmatic name, e.g., "Latin-Arabic". */
     private String ID;
 
     /**
-     * This transliterator's filter.  Any character for which
-     * {@code filter.contains()} returns {@code false} will not be
-     * altered by this transliterator.  If {@code filter} is
-     * {@code null} then no filtering is applied.
+     * This transliterator's filter. Any character for which {@code filter.contains()} returns
+     * {@code false} will not be altered by this transliterator. If {@code filter} is {@code null}
+     * then no filtering is applied.
      */
     private UnicodeSet filter;
 
     private int maximumContextLength = 0;
 
-    /**
-     * System transliterator registry.
-     */
+    /** System transliterator registry. */
     private static TransliteratorRegistry registry;
 
     private static Map<CaseInsensitiveString, String> displayNameCache;
 
     /**
-     * Prefix for resource bundle key for the display name for a
-     * transliterator.  The ID is appended to this to form the key.
-     * The resource bundle value should be a String.
+     * Prefix for resource bundle key for the display name for a transliterator. The ID is appended
+     * to this to form the key. The resource bundle value should be a String.
      */
     private static final String RB_DISPLAY_NAME_PREFIX = "%Translit%%";
 
     /**
-     * Prefix for resource bundle key for the display name for a
-     * transliterator SCRIPT.  The ID is appended to this to form the key.
-     * The resource bundle value should be a String.
+     * Prefix for resource bundle key for the display name for a transliterator SCRIPT. The ID is
+     * appended to this to form the key. The resource bundle value should be a String.
      */
     private static final String RB_SCRIPT_DISPLAY_NAME_PREFIX = "%Translit%";
 
     /**
-     * Resource bundle key for display name pattern.
-     * The resource bundle value should be a String forming a
-     * MessageFormat pattern, e.g.:
-     * "{0,choice,0#|1#{1} Transliterator|2#{1} to {2} Transliterator}".
+     * Resource bundle key for display name pattern. The resource bundle value should be a String
+     * forming a MessageFormat pattern, e.g.: "{0,choice,0#|1#{1} Transliterator|2#{1} to {2}
+     * Transliterator}".
      */
     private static final String RB_DISPLAY_NAME_PATTERN = "TransliteratorNamePattern";
 
-    /**
-     * Delimiter between elements in a compound ID.
-     */
+    /** Delimiter between elements in a compound ID. */
     static final char ID_DELIM = ';';
 
-    /**
-     * Delimiter before target in an ID.
-     */
+    /** Delimiter before target in an ID. */
     static final char ID_SEP = '-';
 
-    /**
-     * Delimiter before variant in an ID.
-     */
+    /** Delimiter before variant in an ID. */
     static final char VARIANT_SEP = '/';
 
     /**
-     * To enable debugging output in the Transliterator component, set
-     * DEBUG to true.
+     * To enable debugging output in the Transliterator component, set DEBUG to true.
      *
-     * N.B. Make sure to recompile all of the com.ibm.icu.text package
-     * after changing this.  Easiest way to do this is 'ant clean
-     * core' ('ant' will NOT pick up the dependency automatically).
+     * <p>N.B. Make sure to recompile all of the com.ibm.icu.text package after changing this.
+     * Easiest way to do this is 'ant clean core' ('ant' will NOT pick up the dependency
+     * automatically).
      *
-     * <<This generates a lot of output.>>
+     * <p><<This generates a lot of output.>>
      */
     static final boolean DEBUG = false;
 
     /**
      * Default constructor.
+     *
      * @param ID the string identifier for this transliterator
-     * @param filter the filter.  Any character for which
-     * {@code filter.contains()} returns {@code false} will not be
-     * altered by this transliterator.  If {@code filter} is
-     * {@code null} then no filtering is applied.
+     * @param filter the filter. Any character for which {@code filter.contains()} returns {@code
+     *     false} will not be altered by this transliterator. If {@code filter} is {@code null} then
+     *     no filtering is applied.
      * @stable ICU 2.0
      */
     protected Transliterator(String ID, UnicodeFilter filter) {
@@ -764,17 +741,15 @@ public abstract class Transliterator implements StringTransform  {
      * &lt;= limit</code>.
      * @param limit the ending index, exclusive; <code>start &lt;= limit
      * &lt;= text.length()</code>.
-     * @return The new limit index.  The text previously occupying <code>[start,
-     * limit)</code> has been transliterated, possibly to a string of a different
-     * length, at <code>[start, </code><em>new-limit</em><code>)</code>, where
-     * <em>new-limit</em> is the return value. If the input offsets are out of bounds,
-     * the returned value is -1 and the input string remains unchanged.
+     * @return The new limit index. The text previously occupying <code>[start,
+     * limit)</code> has been transliterated, possibly to a string of a different length, at <code>
+     *     [start, </code><em>new-limit</em><code>)</code>, where <em>new-limit</em> is the return
+     *     value. If the input offsets are out of bounds, the returned value is -1 and the input
+     *     string remains unchanged.
      * @stable ICU 2.0
      */
     public final int transliterate(Replaceable text, int start, int limit) {
-        if (start < 0 ||
-            limit < start ||
-            text.length() < limit) {
+        if (start < 0 || limit < start || text.length() < limit) {
             return -1;
         }
 
@@ -785,6 +760,7 @@ public abstract class Transliterator implements StringTransform  {
 
     /**
      * Transliterates an entire string in place. Convenience method.
+     *
      * @param text the string to be transliterated
      * @stable ICU 2.0
      */
@@ -806,66 +782,51 @@ public abstract class Transliterator implements StringTransform  {
     }
 
     /**
-     * Transliterates the portion of the text buffer that can be
-     * transliterated unambiguosly after new text has been inserted,
-     * typically as a result of a keyboard event.  The new text in
-     * <code>insertion</code> will be inserted into <code>text</code>
-     * at <code>index.contextLimit</code>, advancing
-     * <code>index.contextLimit</code> by <code>insertion.length()</code>.
-     * Then the transliterator will try to transliterate characters of
-     * <code>text</code> between <code>index.start</code> and
-     * <code>index.contextLimit</code>.  Characters before
-     * <code>index.start</code> will not be changed.
+     * Transliterates the portion of the text buffer that can be transliterated unambiguosly after
+     * new text has been inserted, typically as a result of a keyboard event. The new text in <code>
+     * insertion</code> will be inserted into <code>text</code> at <code>index.contextLimit</code>,
+     * advancing <code>index.contextLimit</code> by <code>insertion.length()</code>. Then the
+     * transliterator will try to transliterate characters of <code>text</code> between <code>
+     * index.start</code> and <code>index.contextLimit</code>. Characters before <code>index.start
+     * </code> will not be changed.
      *
-     * <p>Upon return, values in <code>index</code> will be updated.
-     * <code>index.contextStart</code> will be advanced to the first
-     * character that future calls to this method will read.
-     * <code>index.start</code> and <code>index.contextLimit</code> will
-     * be adjusted to delimit the range of text that future calls to
-     * this method may change.
+     * <p>Upon return, values in <code>index</code> will be updated. <code>index.contextStart</code>
+     * will be advanced to the first character that future calls to this method will read. <code>
+     * index.start</code> and <code>index.contextLimit</code> will be adjusted to delimit the range
+     * of text that future calls to this method may change.
      *
-     * <p>Typical usage of this method begins with an initial call
-     * with <code>index.contextStart</code> and <code>index.contextLimit</code>
-     * set to indicate the portion of <code>text</code> to be
-     * transliterated, and <code>index.start == index.contextStart</code>.
-     * Thereafter, <code>index</code> can be used without
-     * modification in future calls, provided that all changes to
+     * <p>Typical usage of this method begins with an initial call with <code>index.contextStart
+     * </code> and <code>index.contextLimit</code> set to indicate the portion of <code>text</code>
+     * to be transliterated, and <code>index.start == index.contextStart</code>. Thereafter, <code>
+     * index</code> can be used without modification in future calls, provided that all changes to
      * <code>text</code> are made via this method.
      *
-     * <p>This method assumes that future calls may be made that will
-     * insert new text into the buffer.  As a result, it only performs
-     * unambiguous transliterations.  After the last call to this
-     * method, there may be untransliterated text that is waiting for
-     * more input to resolve an ambiguity.  In order to perform these
-     * pending transliterations, clients should call {@link
-     * #finishTransliteration} after the last call to this
-     * method has been made.
+     * <p>This method assumes that future calls may be made that will insert new text into the
+     * buffer. As a result, it only performs unambiguous transliterations. After the last call to
+     * this method, there may be untransliterated text that is waiting for more input to resolve an
+     * ambiguity. In order to perform these pending transliterations, clients should call {@link
+     * #finishTransliteration} after the last call to this method has been made.
      *
      * @param text the buffer holding transliterated and untransliterated text
-     * @param index the start and limit of the text, the position
-     * of the cursor, and the start and limit of transliteration.
-     * @param insertion text to be inserted and possibly
-     * transliterated into the translation buffer at
-     * <code>index.contextLimit</code>.  If <code>null</code> then no text
-     * is inserted.
+     * @param index the start and limit of the text, the position of the cursor, and the start and
+     *     limit of transliteration.
+     * @param insertion text to be inserted and possibly transliterated into the translation buffer
+     *     at <code>index.contextLimit</code>. If <code>null</code> then no text is inserted.
      * @see #handleTransliterate
-     * @exception IllegalArgumentException if <code>index</code>
-     * is invalid
+     * @exception IllegalArgumentException if <code>index</code> is invalid
      * @stable ICU 2.0
      */
-    public final void transliterate(Replaceable text, Position index,
-                                    String insertion) {
+    public final void transliterate(Replaceable text, Position index, String insertion) {
         index.validate(text.length());
 
-//        int originalStart = index.contextStart;
+        //        int originalStart = index.contextStart;
         if (insertion != null) {
             text.replace(index.limit, index.limit, insertion);
             index.limit += insertion.length();
             index.contextLimit += insertion.length();
         }
 
-        if (index.limit > 0 &&
-            UTF16.isLeadSurrogate(text.charAt(index.limit - 1))) {
+        if (index.limit > 0 && UTF16.isLeadSurrogate(text.charAt(index.limit - 1))) {
             // Oops, there is a dangling lead surrogate in the buffer.
             // This will break most transliterators, since they will
             // assume it is part of a pair.  Don't transliterate until
@@ -875,44 +836,40 @@ public abstract class Transliterator implements StringTransform  {
 
         filteredTransliterate(text, index, true, true);
 
-// TODO
-// This doesn't work once we add quantifier support.  Need to rewrite
-// this code to support quantifiers and 'use maximum backup <n>;'.
-//
-//        index.contextStart = Math.max(index.start - getMaximumContextLength(),
-//                                      originalStart);
+        // TODO
+        // This doesn't work once we add quantifier support.  Need to rewrite
+        // this code to support quantifiers and 'use maximum backup <n>;'.
+        //
+        //        index.contextStart = Math.max(index.start - getMaximumContextLength(),
+        //                                      originalStart);
     }
 
     /**
-     * Transliterates the portion of the text buffer that can be
-     * transliterated unambiguosly after a new character has been
-     * inserted, typically as a result of a keyboard event.  This is a
-     * convenience method; see {@link #transliterate(Replaceable,
-     * Transliterator.Position, String)} for details.
-     * @param text the buffer holding transliterated and
-     * untransliterated text
-     * @param index the start and limit of the text, the position
-     * of the cursor, and the start and limit of transliteration.
-     * @param insertion text to be inserted and possibly
-     * transliterated into the translation buffer at
-     * <code>index.contextLimit</code>.
+     * Transliterates the portion of the text buffer that can be transliterated unambiguosly after a
+     * new character has been inserted, typically as a result of a keyboard event. This is a
+     * convenience method; see {@link #transliterate(Replaceable, Transliterator.Position, String)}
+     * for details.
+     *
+     * @param text the buffer holding transliterated and untransliterated text
+     * @param index the start and limit of the text, the position of the cursor, and the start and
+     *     limit of transliteration.
+     * @param insertion text to be inserted and possibly transliterated into the translation buffer
+     *     at <code>index.contextLimit</code>.
      * @see #transliterate(Replaceable, Transliterator.Position, String)
      * @stable ICU 2.0
      */
-    public final void transliterate(Replaceable text, Position index,
-                                    int insertion) {
+    public final void transliterate(Replaceable text, Position index, int insertion) {
         transliterate(text, index, UTF16.valueOf(insertion));
     }
 
     /**
-     * Transliterates the portion of the text buffer that can be
-     * transliterated unambiguosly.  This is a convenience method; see
-     * {@link #transliterate(Replaceable, Transliterator.Position,
+     * Transliterates the portion of the text buffer that can be transliterated unambiguosly. This
+     * is a convenience method; see {@link #transliterate(Replaceable, Transliterator.Position,
      * String)} for details.
-     * @param text the buffer holding transliterated and
-     * untransliterated text
-     * @param index the start and limit of the text, the position
-     * of the cursor, and the start and limit of transliteration.
+     *
+     * @param text the buffer holding transliterated and untransliterated text
+     * @param index the start and limit of the text, the position of the cursor, and the start and
+     *     limit of transliteration.
      * @see #transliterate(Replaceable, Transliterator.Position, String)
      * @stable ICU 2.0
      */
@@ -921,135 +878,101 @@ public abstract class Transliterator implements StringTransform  {
     }
 
     /**
-     * Finishes any pending transliterations that were waiting for
-     * more characters.  Clients should call this method as the last
-     * call after a sequence of one or more calls to
-     * <code>transliterate()</code>.
-     * @param text the buffer holding transliterated and
-     * untransliterated text.
-     * @param index the array of indices previously passed to {@link
-     * #transliterate}
+     * Finishes any pending transliterations that were waiting for more characters. Clients should
+     * call this method as the last call after a sequence of one or more calls to <code>
+     * transliterate()</code>.
+     *
+     * @param text the buffer holding transliterated and untransliterated text.
+     * @param index the array of indices previously passed to {@link #transliterate}
      * @stable ICU 2.0
      */
-    public final void finishTransliteration(Replaceable text,
-                                            Position index) {
+    public final void finishTransliteration(Replaceable text, Position index) {
         index.validate(text.length());
         filteredTransliterate(text, index, false, true);
     }
 
     /**
-     * Abstract method that concrete subclasses define to implement
-     * their transliteration algorithm.  This method handles both
-     * incremental and non-incremental transliteration.  Let
-     * <code>originalStart</code> refer to the value of
-     * <code>pos.start</code> upon entry.
+     * Abstract method that concrete subclasses define to implement their transliteration algorithm.
+     * This method handles both incremental and non-incremental transliteration. Let <code>
+     * originalStart</code> refer to the value of <code>pos.start</code> upon entry.
      *
      * <ul>
-     *  <li>If <code>incremental</code> is false, then this method
-     *  should transliterate all characters between
-     *  <code>pos.start</code> and <code>pos.limit</code>. Upon return
-     *  <code>pos.start</code> must == <code> pos.limit</code>.</li>
-     *
-     *  <li>If <code>incremental</code> is true, then this method
-     *  should transliterate all characters between
-     *  <code>pos.start</code> and <code>pos.limit</code> that can be
-     *  unambiguously transliterated, regardless of future insertions
-     *  of text at <code>pos.limit</code>.  Upon return,
-     *  <code>pos.start</code> should be in the range
-     *  [<code>originalStart</code>, <code>pos.limit</code>).
-     *  <code>pos.start</code> should be positioned such that
-     *  characters [<code>originalStart</code>, <code>
-     *  pos.start</code>) will not be changed in the future by this
-     *  transliterator and characters [<code>pos.start</code>,
-     *  <code>pos.limit</code>) are unchanged.</li>
+     *   <li>If <code>incremental</code> is false, then this method should transliterate all
+     *       characters between <code>pos.start</code> and <code>pos.limit</code>. Upon return
+     *       <code>pos.start</code> must == <code> pos.limit</code>.
+     *   <li>If <code>incremental</code> is true, then this method should transliterate all
+     *       characters between <code>pos.start</code> and <code>pos.limit</code> that can be
+     *       unambiguously transliterated, regardless of future insertions of text at <code>
+     *       pos.limit</code>. Upon return, <code>pos.start</code> should be in the range [<code>
+     *       originalStart</code>, <code>pos.limit</code>). <code>pos.start</code> should be
+     *       positioned such that characters [<code>originalStart</code>, <code>
+     *  pos.start</code>) will not be changed in the future by this transliterator and characters [
+     *       <code>pos.start</code>, <code>pos.limit</code>) are unchanged.
      * </ul>
      *
-     * <p>Implementations of this method should also obey the
-     * following invariants:</p>
+     * <p>Implementations of this method should also obey the following invariants:
      *
      * <ul>
-     *  <li> <code>pos.limit</code> and <code>pos.contextLimit</code>
-     *  should be updated to reflect changes in length of the text
-     *  between <code>pos.start</code> and <code>pos.limit</code>. The
-     *  difference <code> pos.contextLimit - pos.limit</code> should
-     *  not change.</li>
-     *
-     *  <li><code>pos.contextStart</code> should not change.</li>
-     *
-     *  <li>Upon return, neither <code>pos.start</code> nor
-     *  <code>pos.limit</code> should be less than
-     *  <code>originalStart</code>.</li>
-     *
-     *  <li>Text before <code>originalStart</code> and text after
-     *  <code>pos.limit</code> should not change.</li>
-     *
-     *  <li>Text before <code>pos.contextStart</code> and text after
-     *  <code> pos.contextLimit</code> should be ignored.</li>
+     *   <li><code>pos.limit</code> and <code>pos.contextLimit</code> should be updated to reflect
+     *       changes in length of the text between <code>pos.start</code> and <code>pos.limit</code>
+     *       . The difference <code> pos.contextLimit - pos.limit</code> should not change.
+     *   <li><code>pos.contextStart</code> should not change.
+     *   <li>Upon return, neither <code>pos.start</code> nor <code>pos.limit</code> should be less
+     *       than <code>originalStart</code>.
+     *   <li>Text before <code>originalStart</code> and text after <code>pos.limit</code> should not
+     *       change.
+     *   <li>Text before <code>pos.contextStart</code> and text after <code> pos.contextLimit</code>
+     *       should be ignored.
      * </ul>
      *
-     * <p>Subclasses may safely assume that all characters in
-     * [<code>pos.start</code>, <code>pos.limit</code>) are filtered.
-     * In other words, the filter has already been applied by the time
-     * this method is called.  See
-     * <code>filteredTransliterate()</code>.
+     * <p>Subclasses may safely assume that all characters in [<code>pos.start</code>, <code>
+     * pos.limit</code>) are filtered. In other words, the filter has already been applied by the
+     * time this method is called. See <code>filteredTransliterate()</code>.
      *
-     * <p>This method is <b>not</b> for public consumption.  Calling
-     * this method directly will transliterate
-     * [<code>pos.start</code>, <code>pos.limit</code>) without
-     * applying the filter. End user code should call <code>
-     * transliterate()</code> instead of this method. Subclass code
-     * should call <code>filteredTransliterate()</code> instead of
-     * this method.<p>
+     * <p>This method is <b>not</b> for public consumption. Calling this method directly will
+     * transliterate [<code>pos.start</code>, <code>pos.limit</code>) without applying the filter.
+     * End user code should call <code>
+     * transliterate()</code> instead of this method. Subclass code should call <code>
+     * filteredTransliterate()</code> instead of this method.
      *
-     * @param text the buffer holding transliterated and
-     * untransliterated text
+     * <p>
      *
-     * @param pos the indices indicating the start, limit, context
-     * start, and context limit of the text.
-     *
-     * @param incremental if true, assume more text may be inserted at
-     * <code>pos.limit</code> and act accordingly.  Otherwise,
-     * transliterate all text between <code>pos.start</code> and
-     * <code>pos.limit</code> and move <code>pos.start</code> up to
-     * <code>pos.limit</code>.
-     *
+     * @param text the buffer holding transliterated and untransliterated text
+     * @param pos the indices indicating the start, limit, context start, and context limit of the
+     *     text.
+     * @param incremental if true, assume more text may be inserted at <code>pos.limit</code> and
+     *     act accordingly. Otherwise, transliterate all text between <code>pos.start</code> and
+     *     <code>pos.limit</code> and move <code>pos.start</code> up to <code>pos.limit</code>.
      * @see #transliterate
      * @stable ICU 2.0
      */
-    protected abstract void handleTransliterate(Replaceable text,
-                                                Position pos, boolean incremental);
+    protected abstract void handleTransliterate(
+            Replaceable text, Position pos, boolean incremental);
 
     /**
-     * Top-level transliteration method, handling filtering, incremental and
-     * non-incremental transliteration, and rollback.  All transliteration
-     * public API methods eventually call this method with a rollback argument
-     * of true.  Other entities may call this method but rollback should be
-     * false.
+     * Top-level transliteration method, handling filtering, incremental and non-incremental
+     * transliteration, and rollback. All transliteration public API methods eventually call this
+     * method with a rollback argument of true. Other entities may call this method but rollback
+     * should be false.
      *
-     * <p>If this transliterator has a filter, break up the input text into runs
-     * of unfiltered characters.  Pass each run to
-     * <subclass>.handleTransliterate().
+     * <p>If this transliterator has a filter, break up the input text into runs of unfiltered
+     * characters. Pass each run to <subclass>.handleTransliterate().
      *
-     * <p>In incremental mode, if rollback is true, perform a special
-     * incremental procedure in which several passes are made over the input
-     * text, adding one character at a time, and committing successful
-     * transliterations as they occur.  Unsuccessful transliterations are rolled
-     * back and retried with additional characters to give correct results.
+     * <p>In incremental mode, if rollback is true, perform a special incremental procedure in which
+     * several passes are made over the input text, adding one character at a time, and committing
+     * successful transliterations as they occur. Unsuccessful transliterations are rolled back and
+     * retried with additional characters to give correct results.
      *
      * @param text the text to be transliterated
      * @param index the position indices
-     * @param incremental if true, then assume more characters may be inserted
-     * at index.limit, and postpone processing to accommodate future incoming
-     * characters
-     * @param rollback if true and if incremental is true, then perform special
-     * incremental processing, as described above, and undo partial
-     * transliterations where necessary.  If incremental is false then this
-     * parameter is ignored.
+     * @param incremental if true, then assume more characters may be inserted at index.limit, and
+     *     postpone processing to accommodate future incoming characters
+     * @param rollback if true and if incremental is true, then perform special incremental
+     *     processing, as described above, and undo partial transliterations where necessary. If
+     *     incremental is false then this parameter is ignored.
      */
-    private void filteredTransliterate(Replaceable text,
-                                       Position index,
-                                       boolean incremental,
-                                       boolean rollback) {
+    private void filteredTransliterate(
+            Replaceable text, Position index, boolean incremental, boolean rollback) {
         // Short circuit path for transliterators with no filter in
         // non-incremental mode.
         if (filter == null && !rollback) {
@@ -1057,7 +980,7 @@ public abstract class Transliterator implements StringTransform  {
             return;
         }
 
-        //----------------------------------------------------------------------
+        // ----------------------------------------------------------------------
         // This method processes text in two groupings:
         //
         // RUNS -- A run is a contiguous group of characters which are contained
@@ -1073,7 +996,7 @@ public abstract class Transliterator implements StringTransform  {
         // and does not transliterate completely, then this method rolls back
         // the changes made during the pass, extends the pass by one code point,
         // and tries again.
-        //----------------------------------------------------------------------
+        // ----------------------------------------------------------------------
 
         // globalLimit is the limit value for the entire operation.  We
         // set index.limit to the end of each unfiltered run before
@@ -1098,7 +1021,7 @@ public abstract class Transliterator implements StringTransform  {
             log = new StringBuilder();
         }
 
-        for (;;) {
+        for (; ; ) {
 
             if (filter != null) {
                 // Narrow the range to be transliterated to the first run
@@ -1106,15 +1029,15 @@ public abstract class Transliterator implements StringTransform  {
 
                 // Advance past filtered chars
                 int c;
-                while (index.start < globalLimit &&
-                       !filter.contains(c=text.char32At(index.start))) {
+                while (index.start < globalLimit
+                        && !filter.contains(c = text.char32At(index.start))) {
                     index.start += UTF16.getCharCount(c);
                 }
 
                 // Find the end of this run of unfiltered chars
                 index.limit = index.start;
-                while (index.limit < globalLimit &&
-                       filter.contains(c=text.char32At(index.limit))) {
+                while (index.limit < globalLimit
+                        && filter.contains(c = text.char32At(index.limit))) {
                     index.limit += UTF16.getCharCount(c);
                 }
             }
@@ -1130,8 +1053,7 @@ public abstract class Transliterator implements StringTransform  {
             // filtered text (if limit < globalLimit) then we pass in
             // an incremental value of false to force the subclass to
             // complete the transliteration for this run.
-            boolean isIncrementalRun =
-                (index.limit < globalLimit ? false : incremental);
+            boolean isIncrementalRun = (index.limit < globalLimit ? false : incremental);
 
             int delta;
 
@@ -1167,13 +1089,16 @@ public abstract class Transliterator implements StringTransform  {
 
                 if (DEBUG) {
                     log.setLength(0);
-                    System.out.println("filteredTransliterate{"+getID()+"}i: IN=" +
-                                       UtilityExtensions.formatInput(text, index));
+                    System.out.println(
+                            "filteredTransliterate{"
+                                    + getID()
+                                    + "}i: IN="
+                                    + UtilityExtensions.formatInput(text, index));
                 }
 
                 int runStart = index.start;
                 int runLimit = index.limit;
-                int runLength =  runLimit - runStart;
+                int runLength = runLimit - runStart;
 
                 // Make a rollback copy at the end of the string
                 int rollbackOrigin = text.length();
@@ -1201,10 +1126,9 @@ public abstract class Transliterator implements StringTransform  {
                 // PASS MAIN LOOP -- Start with a single character, and extend
                 // the text by one character at a time.  Roll back partial
                 // transliterations and commit complete transliterations.
-                for (;;) {
+                for (; ; ) {
                     // Length of additional code point, either one or two
-                    int charLength =
-                        UTF16.getCharCount(text.char32At(passLimit));
+                    int charLength = UTF16.getCharCount(text.char32At(passLimit));
                     passLimit += charLength;
                     if (passLimit > runLimit) {
                         break;
@@ -1215,7 +1139,7 @@ public abstract class Transliterator implements StringTransform  {
 
                     if (DEBUG) {
                         log.setLength(0);
-                        log.append("filteredTransliterate{"+getID()+"}i: ");
+                        log.append("filteredTransliterate{" + getID() + "}i: ");
                         UtilityExtensions.formatInput(log, text, index);
                     }
 
@@ -1291,13 +1215,11 @@ public abstract class Transliterator implements StringTransform  {
 
                 // Move start past committed text
                 index.start = passStart;
-            }
-
-            else {
+            } else {
                 // Delegate to subclass for actual transliteration.
                 if (DEBUG) {
                     log.setLength(0);
-                    log.append("filteredTransliterate{"+getID()+"}: ");
+                    log.append("filteredTransliterate{" + getID() + "}: ");
                     UtilityExtensions.formatInput(log, text, index);
                 }
 
@@ -1318,7 +1240,8 @@ public abstract class Transliterator implements StringTransform  {
                 // isn't transliterating all the way to the end, and it should
                 // in non-incremental mode.)
                 if (!isIncrementalRun && index.start != index.limit) {
-                    throw new RuntimeException("ERROR: Incomplete non-incremental transliteration by " + getID());
+                    throw new RuntimeException(
+                            "ERROR: Incomplete non-incremental transliteration by " + getID());
                 }
 
                 // Adjust overall limit for insertions/deletions.  Don't need
@@ -1344,38 +1267,37 @@ public abstract class Transliterator implements StringTransform  {
         index.limit = globalLimit;
 
         if (DEBUG) {
-            System.out.println("filteredTransliterate{"+getID()+"}: OUT=" +
-                               UtilityExtensions.formatInput(text, index));
+            System.out.println(
+                    "filteredTransliterate{"
+                            + getID()
+                            + "}: OUT="
+                            + UtilityExtensions.formatInput(text, index));
         }
     }
 
     /**
-     * Transliterate a substring of text, as specified by index, taking filters
-     * into account.  This method is for subclasses that need to delegate to
-     * another transliterator.
+     * Transliterate a substring of text, as specified by index, taking filters into account. This
+     * method is for subclasses that need to delegate to another transliterator.
+     *
      * @param text the text to be transliterated
      * @param index the position indices
-     * @param incremental if true, then assume more characters may be inserted
-     * at index.limit, and postpone processing to accommodate future incoming
-     * characters
+     * @param incremental if true, then assume more characters may be inserted at index.limit, and
+     *     postpone processing to accommodate future incoming characters
      * @stable ICU 2.0
      */
-    public void filteredTransliterate(Replaceable text,
-                                         Position index,
-                                         boolean incremental) {
+    public void filteredTransliterate(Replaceable text, Position index, boolean incremental) {
         filteredTransliterate(text, index, incremental, false);
     }
 
     /**
-     * Returns the length of the longest context required by this transliterator.
-     * This is <em>preceding</em> context.  The default value is zero, but
-     * subclasses can change this by calling <code>setMaximumContextLength()</code>.
-     * For example, if a transliterator translates "ddd" (where
-     * d is any digit) to "555" when preceded by "(ddd)", then the preceding
-     * context length is 5, the length of "(ddd)".
+     * Returns the length of the longest context required by this transliterator. This is
+     * <em>preceding</em> context. The default value is zero, but subclasses can change this by
+     * calling <code>setMaximumContextLength()</code>. For example, if a transliterator translates
+     * "ddd" (where d is any digit) to "555" when preceded by "(ddd)", then the preceding context
+     * length is 5, the length of "(ddd)".
      *
-     * @return The maximum number of preceding context characters this
-     * transliterator needs to examine
+     * @return The maximum number of preceding context characters this transliterator needs to
+     *     examine
      * @stable ICU 2.0
      */
     public final int getMaximumContextLength() {
@@ -1384,6 +1306,7 @@ public abstract class Transliterator implements StringTransform  {
 
     /**
      * Method for subclasses to use to set the maximum context length.
+     *
      * @see #getMaximumContextLength
      * @stable ICU 2.0
      */
@@ -1395,9 +1318,9 @@ public abstract class Transliterator implements StringTransform  {
     }
 
     /**
-     * Returns a programmatic identifier for this transliterator.
-     * If this identifier is passed to <code>getInstance()</code>, it
-     * will return this object, if it has been registered.
+     * Returns a programmatic identifier for this transliterator. If this identifier is passed to
+     * <code>getInstance()</code>, it will return this object, if it has been registered.
+     *
      * @see #registerClass
      * @see #getAvailableIDs
      * @stable ICU 2.0
@@ -1407,8 +1330,8 @@ public abstract class Transliterator implements StringTransform  {
     }
 
     /**
-     * Set the programmatic identifier for this transliterator.  Only
-     * for use by subclasses.
+     * Set the programmatic identifier for this transliterator. Only for use by subclasses.
+     *
      * @stable ICU 2.0
      */
     protected final void setID(String id) {
@@ -1416,32 +1339,28 @@ public abstract class Transliterator implements StringTransform  {
     }
 
     /**
-     * Returns a name for this transliterator that is appropriate for
-     * display to the user in the default <code>DISPLAY</code> locale.  See {@link
-     * #getDisplayName(String,Locale)} for details.
+     * Returns a name for this transliterator that is appropriate for display to the user in the
+     * default <code>DISPLAY</code> locale. See {@link #getDisplayName(String,Locale)} for details.
+     *
      * @see com.ibm.icu.util.ULocale.Category#DISPLAY
      * @stable ICU 2.0
      */
-    public final static String getDisplayName(String ID) {
+    public static final String getDisplayName(String ID) {
         return getDisplayName(ID, ULocale.getDefault(Category.DISPLAY));
     }
 
     /**
-     * Returns a name for this transliterator that is appropriate for
-     * display to the user in the given locale.  This name is taken
-     * from the locale resource data in the standard manner of the
+     * Returns a name for this transliterator that is appropriate for display to the user in the
+     * given locale. This name is taken from the locale resource data in the standard manner of the
      * <code>java.text</code> package.
      *
-     * <p>If no localized names exist in the system resource bundles,
-     * a name is synthesized using a localized
-     * <code>MessageFormat</code> pattern from the resource data.  The
-     * arguments to this pattern are an integer followed by one or two
-     * strings.  The integer is the number of strings, either 1 or 2.
-     * The strings are formed by splitting the ID for this
-     * transliterator at the first '-'.  If there is no '-', then the
-     * entire ID forms the only string.
-     * @param inLocale the Locale in which the display name should be
-     * localized.
+     * <p>If no localized names exist in the system resource bundles, a name is synthesized using a
+     * localized <code>MessageFormat</code> pattern from the resource data. The arguments to this
+     * pattern are an integer followed by one or two strings. The integer is the number of strings,
+     * either 1 or 2. The strings are formed by splitting the ID for this transliterator at the
+     * first '-'. If there is no '-', then the entire ID forms the only string.
+     *
+     * @param inLocale the Locale in which the display name should be localized.
      * @see java.text.MessageFormat
      * @stable ICU 2.0
      */
@@ -1450,21 +1369,17 @@ public abstract class Transliterator implements StringTransform  {
     }
 
     /**
-     * Returns a name for this transliterator that is appropriate for
-     * display to the user in the given locale.  This name is taken
-     * from the locale resource data in the standard manner of the
+     * Returns a name for this transliterator that is appropriate for display to the user in the
+     * given locale. This name is taken from the locale resource data in the standard manner of the
      * <code>java.text</code> package.
      *
-     * <p>If no localized names exist in the system resource bundles,
-     * a name is synthesized using a localized
-     * <code>MessageFormat</code> pattern from the resource data.  The
-     * arguments to this pattern are an integer followed by one or two
-     * strings.  The integer is the number of strings, either 1 or 2.
-     * The strings are formed by splitting the ID for this
-     * transliterator at the first '-'.  If there is no '-', then the
-     * entire ID forms the only string.
-     * @param inLocale the ULocale in which the display name should be
-     * localized.
+     * <p>If no localized names exist in the system resource bundles, a name is synthesized using a
+     * localized <code>MessageFormat</code> pattern from the resource data. The arguments to this
+     * pattern are an integer followed by one or two strings. The integer is the number of strings,
+     * either 1 or 2. The strings are formed by splitting the ID for this transliterator at the
+     * first '-'. If there is no '-', then the entire ID forms the only string.
+     *
+     * @param inLocale the ULocale in which the display name should be localized.
      * @see java.text.MessageFormat
      * @stable ICU 3.2
      */
@@ -1473,11 +1388,12 @@ public abstract class Transliterator implements StringTransform  {
         // Resource bundle containing display name keys and the
         // RB_RULE_BASED_IDS array.
         //
-        //If we ever integrate this with the Sun JDK, the resource bundle
+        // If we ever integrate this with the Sun JDK, the resource bundle
         // root will change to sun.text.resources.LocaleElements
 
-        ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.
-            getBundleInstance(ICUData.ICU_TRANSLIT_BASE_NAME, inLocale);
+        ICUResourceBundle bundle =
+                (ICUResourceBundle)
+                        UResourceBundle.getBundleInstance(ICUData.ICU_TRANSLIT_BASE_NAME, inLocale);
 
         // Normalize the ID
         String stv[] = TransliteratorIDParser.IDtoSTV(id);
@@ -1500,29 +1416,30 @@ public abstract class Transliterator implements StringTransform  {
         // exists.
         try {
             return bundle.getString(RB_DISPLAY_NAME_PREFIX + ID);
-        } catch (MissingResourceException e) {}
+        } catch (MissingResourceException e) {
+        }
 
         try {
             // Construct the formatter first; if getString() fails
             // we'll exit the try block
-            MessageFormat format = new MessageFormat(
-                    bundle.getString(RB_DISPLAY_NAME_PATTERN));
+            MessageFormat format = new MessageFormat(bundle.getString(RB_DISPLAY_NAME_PATTERN));
             // Construct the argument array
-            Object[] args = new Object[] { 2, stv[0], stv[1] };
+            Object[] args = new Object[] {2, stv[0], stv[1]};
 
             // Use display names for the scripts, if they exist
-            for (int j=1; j<=2; ++j) {
+            for (int j = 1; j <= 2; ++j) {
                 try {
-                    args[j] = bundle.getString(RB_SCRIPT_DISPLAY_NAME_PREFIX +
-                                               (String) args[j]);
-                } catch (MissingResourceException e) {}
+                    args[j] = bundle.getString(RB_SCRIPT_DISPLAY_NAME_PREFIX + (String) args[j]);
+                } catch (MissingResourceException e) {
+                }
             }
 
             // Format it using the pattern in the resource
-            return (stv[2].length() > 0) ?
-                (format.format(args) + '/' + stv[2]) :
-                format.format(args);
-        } catch (MissingResourceException e2) {}
+            return (stv[2].length() > 0)
+                    ? (format.format(args) + '/' + stv[2])
+                    : format.format(args);
+        } catch (MissingResourceException e2) {
+        }
 
         // We should not reach this point unless there is something
         // wrong with the build or the RB_DISPLAY_NAME_PATTERN has
@@ -1531,8 +1448,9 @@ public abstract class Transliterator implements StringTransform  {
     }
 
     /**
-     * Returns the filter used by this transliterator, or {@code null}
-     * if this transliterator uses no filter.
+     * Returns the filter used by this transliterator, or {@code null} if this transliterator uses
+     * no filter.
+     *
      * @stable ICU 2.0
      */
     public final UnicodeFilter getFilter() {
@@ -1540,12 +1458,12 @@ public abstract class Transliterator implements StringTransform  {
     }
 
     /**
-     * Changes the filter used by this transliterator.  If the filter
-     * is set to {@code null} then no filtering will occur.
+     * Changes the filter used by this transliterator. If the filter is set to {@code null} then no
+     * filtering will occur.
      *
-     * <p>Callers must take care if a transliterator is in use by
-     * multiple threads.  The filter should not be changed by one
-     * thread while another thread may be transliterating.
+     * <p>Callers must take care if a transliterator is in use by multiple threads. The filter
+     * should not be changed by one thread while another thread may be transliterating.
+     *
      * @stable ICU 2.0
      */
     public void setFilter(UnicodeFilter filter) {
@@ -1554,7 +1472,7 @@ public abstract class Transliterator implements StringTransform  {
         } else {
             try {
                 // fast high-runner case
-                this.filter = new UnicodeSet((UnicodeSet)filter).freeze();
+                this.filter = new UnicodeSet((UnicodeSet) filter).freeze();
             } catch (Exception e) {
                 this.filter = new UnicodeSet();
                 filter.addMatchSetTo(this.filter);
@@ -1564,9 +1482,8 @@ public abstract class Transliterator implements StringTransform  {
     }
 
     /**
-     * Returns a <code>Transliterator</code> object given its ID.
-     * The ID must be either a system transliterator ID or a ID registered
-     * using <code>registerClass()</code>.
+     * Returns a <code>Transliterator</code> object given its ID. The ID must be either a system
+     * transliterator ID or a ID registered using <code>registerClass()</code>.
      *
      * @param ID a valid ID, as enumerated by <code>getAvailableIDs()</code>
      * @return A <code>Transliterator</code> object with the given ID
@@ -1578,13 +1495,12 @@ public abstract class Transliterator implements StringTransform  {
     }
 
     /**
-     * Returns a <code>Transliterator</code> object given its ID.
-     * The ID must be either a system transliterator ID or a ID registered
-     * using <code>registerClass()</code>.
+     * Returns a <code>Transliterator</code> object given its ID. The ID must be either a system
+     * transliterator ID or a ID registered using <code>registerClass()</code>.
      *
      * @param ID a valid ID, as enumerated by <code>getAvailableIDs()</code>
-     * @param dir either FORWARD or REVERSE.  If REVERSE then the
-     * inverse of the given ID is instantiated.
+     * @param dir either FORWARD or REVERSE. If REVERSE then the inverse of the given ID is
+     *     instantiated.
      * @return A <code>Transliterator</code> object with the given ID
      * @exception IllegalArgumentException if the given ID is invalid.
      * @see #registerClass
@@ -1592,8 +1508,7 @@ public abstract class Transliterator implements StringTransform  {
      * @see #getID
      * @stable ICU 2.0
      */
-    public static Transliterator getInstance(String ID,
-                                             int dir) {
+    public static Transliterator getInstance(String ID, int dir) {
         StringBuilder canonID = new StringBuilder();
         List<SingleID> list = new ArrayList<>();
         UnicodeSet[] globalFilter = new UnicodeSet[1];
@@ -1612,8 +1527,7 @@ public abstract class Transliterator implements StringTransform  {
             // instantiate "(Lower);Latin-Greek;", we want the rules to come out as "::Latin-Greek;"
             // even though the ID is "(Lower);Latin-Greek;".
             t = new CompoundTransliterator(translits);
-        }
-        else {
+        } else {
             t = translits.get(0);
         }
 
@@ -1625,14 +1539,12 @@ public abstract class Transliterator implements StringTransform  {
     }
 
     /**
-     * Create a transliterator from a basic ID.  This is an ID
-     * containing only the forward direction source, target, and
-     * variant.
+     * Create a transliterator from a basic ID. This is an ID containing only the forward direction
+     * source, target, and variant.
+     *
      * @param id a basic ID of the form S-T or S-T/V.
-     * @param canonID canonical ID to apply to the result, or
-     * null to leave the ID unchanged
-     * @return a newly created Transliterator or null if the ID is
-     * invalid.
+     * @param canonID canonical ID to apply to the result, or null to leave the ID unchanged
+     * @return a newly created Transliterator or null if the ID is invalid.
      */
     static Transliterator getBasicInstance(String id, String canonID) {
         StringBuilder s = new StringBuilder();
@@ -1649,12 +1561,10 @@ public abstract class Transliterator implements StringTransform  {
     }
 
     /**
-     * Returns a <code>Transliterator</code> object constructed from
-     * the given rule string.  This will be a rule-based Transliterator,
-     * if the rule string contains only rules, or a
-     * compound Transliterator, if it contains ID blocks, or a
-     * null Transliterator, if it contains ID blocks which parse as
-     * empty for the given direction.
+     * Returns a <code>Transliterator</code> object constructed from the given rule string. This
+     * will be a rule-based Transliterator, if the rule string contains only rules, or a compound
+     * Transliterator, if it contains ID blocks, or a null Transliterator, if it contains ID blocks
+     * which parse as empty for the given direction.
      *
      * @param ID the id for the transliterator.
      * @param rules rules, separated by ';'
@@ -1672,18 +1582,19 @@ public abstract class Transliterator implements StringTransform  {
         // NOTE: The logic here matches that in TransliteratorRegistry.
         if (parser.idBlockVector.size() == 0 && parser.dataVector.size() == 0) {
             t = new NullTransliterator();
-        }
-        else if (parser.idBlockVector.size() == 0 && parser.dataVector.size() == 1) {
+        } else if (parser.idBlockVector.size() == 0 && parser.dataVector.size() == 1) {
             t = new RuleBasedTransliterator(ID, parser.dataVector.get(0), parser.compoundFilter);
-        }
-        else if (parser.idBlockVector.size() == 1 && parser.dataVector.size() == 0) {
+        } else if (parser.idBlockVector.size() == 1 && parser.dataVector.size() == 0) {
             // idBlock, no data -- this is an alias.  The ID has
             // been munged from reverse into forward mode, if
             // necessary, so instantiate the ID in the forward
             // direction.
             if (parser.compoundFilter != null) {
-                t = getInstance(parser.compoundFilter.toPattern(false) + ";"
-                        + parser.idBlockVector.get(0));
+                t =
+                        getInstance(
+                                parser.compoundFilter.toPattern(false)
+                                        + ";"
+                                        + parser.idBlockVector.get(0));
             } else {
                 t = getInstance(parser.idBlockVector.get(0));
             }
@@ -1691,8 +1602,7 @@ public abstract class Transliterator implements StringTransform  {
             if (t != null) {
                 t.setID(ID);
             }
-        }
-        else {
+        } else {
             List<Transliterator> transliterators = new ArrayList<>();
             int passNumber = 1;
 
@@ -1708,7 +1618,8 @@ public abstract class Transliterator implements StringTransform  {
                 }
                 if (i < parser.dataVector.size()) {
                     Data data = parser.dataVector.get(i);
-                    transliterators.add(new RuleBasedTransliterator("%Pass" + passNumber++, data, null));
+                    transliterators.add(
+                            new RuleBasedTransliterator("%Pass" + passNumber++, data, null));
                 }
             }
 
@@ -1724,9 +1635,9 @@ public abstract class Transliterator implements StringTransform  {
 
     /**
      * Returns a rule string for this transliterator.
-     * @param escapeUnprintable if true, then unprintable characters
-     * will be converted to escape form backslash-'u' or
-     * backslash-'U'.
+     *
+     * @param escapeUnprintable if true, then unprintable characters will be converted to escape
+     *     form backslash-'u' or backslash-'U'.
      * @stable ICU 2.0
      */
     public String toRules(boolean escapeUnprintable) {
@@ -1734,13 +1645,12 @@ public abstract class Transliterator implements StringTransform  {
     }
 
     /**
-     * Returns a rule string for this transliterator.  This is
-     * a non-overrideable base class implementation that subclasses
-     * may call.  It simply munges the ID into the correct format,
+     * Returns a rule string for this transliterator. This is a non-overrideable base class
+     * implementation that subclasses may call. It simply munges the ID into the correct format,
      * that is, "foo" =&gt; "::foo".
-     * @param escapeUnprintable if true, then unprintable characters
-     * will be converted to escape form backslash-'u' or
-     * backslash-'U'.
+     *
+     * @param escapeUnprintable if true, then unprintable characters will be converted to escape
+     *     form backslash-'u' or backslash-'U'.
      * @stable ICU 2.0
      */
     protected final String baseToRules(boolean escapeUnprintable) {
@@ -1750,7 +1660,7 @@ public abstract class Transliterator implements StringTransform  {
         if (escapeUnprintable) {
             StringBuilder rulesSource = new StringBuilder();
             String id = getID();
-            for (int i=0; i<id.length();) {
+            for (int i = 0; i < id.length(); ) {
                 int c = UTF16.charAt(id, i);
                 if (!Utility.escapeUnprintable(rulesSource, c)) {
                     rulesSource.appendCodePoint(c);
@@ -1765,17 +1675,15 @@ public abstract class Transliterator implements StringTransform  {
     }
 
     /**
-     * Return the elements that make up this transliterator.  For
-     * example, if the transliterator "NFD;Jamo-Latin;Latin-Greek"
-     * were created, the return value of this method would be an array
-     * of the three transliterator objects that make up that
-     * transliterator: [NFD, Jamo-Latin, Latin-Greek].
+     * Return the elements that make up this transliterator. For example, if the transliterator
+     * "NFD;Jamo-Latin;Latin-Greek" were created, the return value of this method would be an array
+     * of the three transliterator objects that make up that transliterator: [NFD, Jamo-Latin,
+     * Latin-Greek].
      *
-     * <p>If this transliterator is not composed of other
-     * transliterators, then this method will return an array of
-     * length one containing a reference to this transliterator.
-     * @return an array of one or more transliterators that make up
-     * this transliterator
+     * <p>If this transliterator is not composed of other transliterators, then this method will
+     * return an array of length one containing a reference to this transliterator.
+     *
+     * @return an array of one or more transliterators that make up this transliterator
      * @stable ICU 3.0
      */
     public Transliterator[] getElements() {
@@ -1783,43 +1691,42 @@ public abstract class Transliterator implements StringTransform  {
         if (this instanceof CompoundTransliterator) {
             CompoundTransliterator cpd = (CompoundTransliterator) this;
             result = new Transliterator[cpd.getCount()];
-            for (int i=0; i<result.length; ++i) {
+            for (int i = 0; i < result.length; ++i) {
                 result[i] = cpd.getTransliterator(i);
             }
         } else {
-            result = new Transliterator[] { this };
+            result = new Transliterator[] {this};
         }
         return result;
     }
 
     /**
-     * Returns the set of all characters that may be modified in the
-     * input text by this Transliterator.  This incorporates this
-     * object's current filter; if the filter is changed, the return
-     * value of this function will change.  The default implementation
-     * returns an empty set.  Some subclasses may override {@link
-     * #handleGetSourceSet} to return a more precise result.  The
-     * return result is approximate in any case and is intended for
-     * use by tests, tools, or utilities.
+     * Returns the set of all characters that may be modified in the input text by this
+     * Transliterator. This incorporates this object's current filter; if the filter is changed, the
+     * return value of this function will change. The default implementation returns an empty set.
+     * Some subclasses may override {@link #handleGetSourceSet} to return a more precise result. The
+     * return result is approximate in any case and is intended for use by tests, tools, or
+     * utilities.
+     *
      * @see #getTargetSet
      * @see #handleGetSourceSet
      * @stable ICU 2.2
      */
     public final UnicodeSet getSourceSet() {
         UnicodeSet result = new UnicodeSet();
-        addSourceTargetSet(getFilterAsUnicodeSet(UnicodeSet.ALL_CODE_POINTS), result, new UnicodeSet());
+        addSourceTargetSet(
+                getFilterAsUnicodeSet(UnicodeSet.ALL_CODE_POINTS), result, new UnicodeSet());
         return result;
     }
 
     /**
-     * Framework method that returns the set of all characters that
-     * may be modified in the input text by this Transliterator,
-     * ignoring the effect of this object's filter.  The base class
-     * implementation returns the empty set.  Subclasses that wish to
-     * implement this should override this method.
-     * @return the set of characters that this transliterator may
-     * modify.  The set may be modified, so subclasses should return a
-     * newly-created object.
+     * Framework method that returns the set of all characters that may be modified in the input
+     * text by this Transliterator, ignoring the effect of this object's filter. The base class
+     * implementation returns the empty set. Subclasses that wish to implement this should override
+     * this method.
+     *
+     * @return the set of characters that this transliterator may modify. The set may be modified,
+     *     so subclasses should return a newly-created object.
      * @see #getSourceSet
      * @see #getTargetSet
      * @stable ICU 2.2
@@ -1829,41 +1736,47 @@ public abstract class Transliterator implements StringTransform  {
     }
 
     /**
-     * Returns the set of all characters that may be generated as
-     * replacement text by this transliterator.  The default
-     * implementation returns the empty set.  Some subclasses may
-     * override this method to return a more precise result.  The
-     * return result is approximate in any case and is intended for
-     * use by tests, tools, or utilities requiring such
-     * meta-information.
-     * <p>Warning. You might expect an empty filter to always produce an empty target.
-     * However, consider the following:
+     * Returns the set of all characters that may be generated as replacement text by this
+     * transliterator. The default implementation returns the empty set. Some subclasses may
+     * override this method to return a more precise result. The return result is approximate in any
+     * case and is intended for use by tests, tools, or utilities requiring such meta-information.
+     *
+     * <p>Warning. You might expect an empty filter to always produce an empty target. However,
+     * consider the following:
+     *
      * <pre>
      * [Pp]{}[\u03A3\u03C2\u03C3\u03F7\u03F8\u03FA\u03FB] &gt; \';
      * </pre>
-     * With a filter of [], you still get some elements in the target set, because this rule will still match. It could
-     * be recast to the following if it were important.
+     *
+     * With a filter of [], you still get some elements in the target set, because this rule will
+     * still match. It could be recast to the following if it were important.
+     *
      * <pre>
      * [Pp]{([\u03A3\u03C2\u03C3\u03F7\u03F8\u03FA\u03FB])} &gt; \' | $1;
      * </pre>
+     *
      * @see #getTargetSet
      * @stable ICU 2.2
      */
     public UnicodeSet getTargetSet() {
         UnicodeSet result = new UnicodeSet();
-        addSourceTargetSet(getFilterAsUnicodeSet(UnicodeSet.ALL_CODE_POINTS), new UnicodeSet(), result);
+        addSourceTargetSet(
+                getFilterAsUnicodeSet(UnicodeSet.ALL_CODE_POINTS), new UnicodeSet(), result);
         return result;
     }
 
     /**
-     * Returns the set of all characters that may be generated as
-     * replacement text by this transliterator, filtered by BOTH the input filter, and the current getFilter().
-     * <p>SHOULD BE OVERRIDDEN BY SUBCLASSES.
-     * It is probably an error for any transliterator to NOT override this, but we can't force them to
-     * for backwards compatibility.
+     * Returns the set of all characters that may be generated as replacement text by this
+     * transliterator, filtered by BOTH the input filter, and the current getFilter().
+     *
+     * <p>SHOULD BE OVERRIDDEN BY SUBCLASSES. It is probably an error for any transliterator to NOT
+     * override this, but we can't force them to for backwards compatibility.
+     *
      * <p>Other methods vector through this.
-     * <p>When gathering the information on source and target, the compound transliterator makes things complicated.
-     * For example, suppose we have:
+     *
+     * <p>When gathering the information on source and target, the compound transliterator makes
+     * things complicated. For example, suppose we have:
+     *
      * <pre>
      * Global FILTER = [ax]
      * a &gt; b;
@@ -1871,25 +1784,32 @@ public abstract class Transliterator implements StringTransform  {
      * b &gt; c;
      * x &gt; d;
      * </pre>
-     * While the filter just allows a and x, b is an intermediate result, which could produce c. So the source and target sets
-     * cannot be gathered independently. What we have to do is filter the sources for the first transliterator according to
-     * the global filter, intersect that transliterator's filter. Based on that we get the target.
-     * The next transliterator gets as a global filter (global + last target). And so on.
+     *
+     * While the filter just allows a and x, b is an intermediate result, which could produce c. So
+     * the source and target sets cannot be gathered independently. What we have to do is filter the
+     * sources for the first transliterator according to the global filter, intersect that
+     * transliterator's filter. Based on that we get the target. The next transliterator gets as a
+     * global filter (global + last target). And so on.
+     *
      * <p>There is another complication:
+     *
      * <pre>
      * Global FILTER = [ax]
      * a &gt;|b;
      * b &gt;c;
      * </pre>
-     * Even though b would be filtered from the input, whenever we have a backup, it could be part of the input. So ideally we will
-     * change the global filter as we go.
+     *
+     * Even though b would be filtered from the input, whenever we have a backup, it could be part
+     * of the input. So ideally we will change the global filter as we go.
+     *
      * @param targetSet TODO
      * @see #getTargetSet
      * @internal
-     * @deprecated  This API is ICU internal only.
+     * @deprecated This API is ICU internal only.
      */
     @Deprecated
-    public void addSourceTargetSet(UnicodeSet inputFilter, UnicodeSet sourceSet, UnicodeSet targetSet) {
+    public void addSourceTargetSet(
+            UnicodeSet inputFilter, UnicodeSet sourceSet, UnicodeSet targetSet) {
         UnicodeSet myFilter = getFilterAsUnicodeSet(inputFilter);
         UnicodeSet temp = new UnicodeSet(handleGetSourceSet()).retainAll(myFilter);
         // use old method, if we don't have anything better
@@ -1904,14 +1824,15 @@ public abstract class Transliterator implements StringTransform  {
     }
 
     /**
-     * Returns the intersectionof this instance's filter intersected with an external filter.
-     * The externalFilter must be frozen (it is frozen if not).
-     * The result may be frozen, so don't attempt to modify.
+     * Returns the intersectionof this instance's filter intersected with an external filter. The
+     * externalFilter must be frozen (it is frozen if not). The result may be frozen, so don't
+     * attempt to modify.
+     *
      * @internal
-     * @deprecated  This API is ICU internal only.
+     * @deprecated This API is ICU internal only.
      */
     @Deprecated
-   // TODO change to getMergedFilter
+    // TODO change to getMergedFilter
     public UnicodeSet getFilterAsUnicodeSet(UnicodeSet externalFilter) {
         if (filter == null) {
             return externalFilter;
@@ -1929,20 +1850,16 @@ public abstract class Transliterator implements StringTransform  {
     }
 
     /**
-     * Returns this transliterator's inverse.  See the class
-     * documentation for details.  This implementation simply inverts
-     * the two entities in the ID and attempts to retrieve the
-     * resulting transliterator.  That is, if <code>getID()</code>
-     * returns "A-B", then this method will return the result of
-     * <code>getInstance("B-A")</code>, or <code>null</code> if that
-     * call fails.
+     * Returns this transliterator's inverse. See the class documentation for details. This
+     * implementation simply inverts the two entities in the ID and attempts to retrieve the
+     * resulting transliterator. That is, if <code>getID()</code> returns "A-B", then this method
+     * will return the result of <code>getInstance("B-A")</code>, or <code>null</code> if that call
+     * fails.
      *
-     * <p>Subclasses with knowledge of their inverse may wish to
-     * override this method.
+     * <p>Subclasses with knowledge of their inverse may wish to override this method.
      *
-     * @return a transliterator that is an inverse, not necessarily
-     * exact, of this transliterator, or <code>null</code> if no such
-     * transliterator is registered.
+     * @return a transliterator that is an inverse, not necessarily exact, of this transliterator,
+     *     or <code>null</code> if no such transliterator is registered.
      * @see #registerClass
      * @stable ICU 2.0
      */
@@ -1951,19 +1868,18 @@ public abstract class Transliterator implements StringTransform  {
     }
 
     /**
-     * Registers a subclass of <code>Transliterator</code> with the
-     * system.  This subclass must have a public constructor taking no
-     * arguments.  When that constructor is called, the resulting
-     * object must return the <code>ID</code> passed to this method if
-     * its <code>getID()</code> method is called.
+     * Registers a subclass of <code>Transliterator</code> with the system. This subclass must have
+     * a public constructor taking no arguments. When that constructor is called, the resulting
+     * object must return the <code>ID</code> passed to this method if its <code>getID()</code>
+     * method is called.
      *
-     * @param ID the result of <code>getID()</code> for this
-     * transliterator
+     * @param ID the result of <code>getID()</code> for this transliterator
      * @param transClass a subclass of <code>Transliterator</code>
      * @see #unregister
      * @stable ICU 2.0
      */
-    public static void registerClass(String ID, Class<? extends Transliterator> transClass, String displayName) {
+    public static void registerClass(
+            String ID, Class<? extends Transliterator> transClass, String displayName) {
         registry.put(ID, transClass, true);
         if (displayName != null) {
             displayNameCache.put(new CaseInsensitiveString(ID), displayName);
@@ -1971,12 +1887,12 @@ public abstract class Transliterator implements StringTransform  {
     }
 
     /**
-     * Register a factory object with the given ID.  The factory
-     * method should return a new instance of the given transliterator.
+     * Register a factory object with the given ID. The factory method should return a new instance
+     * of the given transliterator.
      *
-     * <p>Because ICU may choose to cache Transliterator objects internally, this must
-     * be called at application startup, prior to any calls to
-     * Transliterator.getInstance to avoid undefined behavior.
+     * <p>Because ICU may choose to cache Transliterator objects internally, this must be called at
+     * application startup, prior to any calls to Transliterator.getInstance to avoid undefined
+     * behavior.
      *
      * @param ID the ID of this transliterator
      * @param factory the factory object
@@ -1989,9 +1905,9 @@ public abstract class Transliterator implements StringTransform  {
     /**
      * Register a Transliterator object with the given ID.
      *
-     * <p>Because ICU may choose to cache Transliterator objects internally, this must
-     * be called at application startup, prior to any calls to
-     * Transliterator.getInstance to avoid undefined behavior.
+     * <p>Because ICU may choose to cache Transliterator objects internally, this must be called at
+     * application startup, prior to any calls to Transliterator.getInstance to avoid undefined
+     * behavior.
      *
      * @param trans the Transliterator object
      * @stable ICU 2.2
@@ -2003,9 +1919,9 @@ public abstract class Transliterator implements StringTransform  {
     /**
      * Register a Transliterator object.
      *
-     * <p>Because ICU may choose to cache Transliterator objects internally, this must
-     * be called at application startup, prior to any calls to
-     * Transliterator.getInstance to avoid undefined behavior.
+     * <p>Because ICU may choose to cache Transliterator objects internally, this must be called at
+     * application startup, prior to any calls to Transliterator.getInstance to avoid undefined
+     * behavior.
      *
      * @param trans the Transliterator object
      */
@@ -2014,13 +1930,13 @@ public abstract class Transliterator implements StringTransform  {
     }
 
     /**
-     * Register an ID as an alias of another ID.  Instantiating
-     * alias ID produces the same result as instantiating the original ID.
-     * This is generally used to create short aliases of compound IDs.
+     * Register an ID as an alias of another ID. Instantiating alias ID produces the same result as
+     * instantiating the original ID. This is generally used to create short aliases of compound
+     * IDs.
      *
-     * <p>Because ICU may choose to cache Transliterator objects internally, this must
-     * be called at application startup, prior to any calls to
-     * Transliterator.getInstance to avoid undefined behavior.
+     * <p>Because ICU may choose to cache Transliterator objects internally, this must be called at
+     * application startup, prior to any calls to Transliterator.getInstance to avoid undefined
+     * behavior.
      *
      * @param aliasID The new ID being registered.
      * @param realID The existing ID that the new ID should be an alias of.
@@ -2031,46 +1947,40 @@ public abstract class Transliterator implements StringTransform  {
     }
 
     /**
-     * Register two targets as being inverses of one another.  For
-     * example, calling registerSpecialInverse("NFC", "NFD", true) causes
-     * Transliterator to form the following inverse relationships:
+     * Register two targets as being inverses of one another. For example, calling
+     * registerSpecialInverse("NFC", "NFD", true) causes Transliterator to form the following
+     * inverse relationships:
      *
      * <pre>NFC =&gt; NFD
      * Any-NFC =&gt; Any-NFD
      * NFD =&gt; NFC
      * Any-NFD =&gt; Any-NFC</pre>
      *
-     * (Without the special inverse registration, the inverse of NFC
-     * would be NFC-Any.)  Note that NFD is shorthand for Any-NFD, but
-     * that the presence or absence of "Any-" is preserved.
+     * (Without the special inverse registration, the inverse of NFC would be NFC-Any.) Note that
+     * NFD is shorthand for Any-NFD, but that the presence or absence of "Any-" is preserved.
      *
-     * <p>The relationship is symmetrical; registering (a, b) is
-     * equivalent to registering (b, a).
+     * <p>The relationship is symmetrical; registering (a, b) is equivalent to registering (b, a).
      *
-     * <p>The relevant IDs must still be registered separately as
-     * factories or classes.
+     * <p>The relevant IDs must still be registered separately as factories or classes.
      *
-     * <p>Only the targets are specified.  Special inverses always
-     * have the form Any-Target1 &lt;=&gt; Any-Target2.  The target should
-     * have canonical casing (the casing desired to be produced when
-     * an inverse is formed) and should contain no whitespace or other
-     * extraneous characters.
+     * <p>Only the targets are specified. Special inverses always have the form Any-Target1
+     * &lt;=&gt; Any-Target2. The target should have canonical casing (the casing desired to be
+     * produced when an inverse is formed) and should contain no whitespace or other extraneous
+     * characters.
      *
      * @param target the target against which to register the inverse
-     * @param inverseTarget the inverse of target, that is
-     * Any-target.getInverse() =&gt; Any-inverseTarget
-     * @param bidirectional if true, register the reverse relation
-     * as well, that is, Any-inverseTarget.getInverse() =&gt; Any-target
+     * @param inverseTarget the inverse of target, that is Any-target.getInverse() =&gt;
+     *     Any-inverseTarget
+     * @param bidirectional if true, register the reverse relation as well, that is,
+     *     Any-inverseTarget.getInverse() =&gt; Any-target
      */
-    static void registerSpecialInverse(String target,
-                                       String inverseTarget,
-                                       boolean bidirectional) {
+    static void registerSpecialInverse(String target, String inverseTarget, boolean bidirectional) {
         TransliteratorIDParser.registerSpecialInverse(target, inverseTarget, bidirectional);
     }
 
     /**
-     * Unregisters a transliterator or class.  This may be either
-     * a system transliterator or a user transliterator or class.
+     * Unregisters a transliterator or class. This may be either a system transliterator or a user
+     * transliterator or class.
      *
      * @param ID the ID of the transliterator or class
      * @see #registerClass
@@ -2082,11 +1992,10 @@ public abstract class Transliterator implements StringTransform  {
     }
 
     /**
-     * Returns an enumeration over the programmatic names of registered
-     * <code>Transliterator</code> objects.  This includes both system
-     * transliterators and user transliterators registered using
-     * <code>registerClass()</code>.  The enumerated names may be
-     * passed to <code>getInstance()</code>.
+     * Returns an enumeration over the programmatic names of registered <code>Transliterator</code>
+     * objects. This includes both system transliterators and user transliterators registered using
+     * <code>registerClass()</code>. The enumerated names may be passed to <code>getInstance()
+     * </code>.
      *
      * @return An <code>Enumeration</code> over <code>String</code> objects
      * @see #getInstance
@@ -2098,10 +2007,9 @@ public abstract class Transliterator implements StringTransform  {
     }
 
     /**
-     * Returns an enumeration over the source names of registered
-     * transliterators.  Source names may be passed to
-     * getAvailableTargets() to obtain available targets for each
-     * source.
+     * Returns an enumeration over the source names of registered transliterators. Source names may
+     * be passed to getAvailableTargets() to obtain available targets for each source.
+     *
      * @stable ICU 2.0
      */
     public static final Enumeration<String> getAvailableSources() {
@@ -2109,10 +2017,10 @@ public abstract class Transliterator implements StringTransform  {
     }
 
     /**
-     * Returns an enumeration over the target names of registered
-     * transliterators having a given source name.  Target names may
-     * be passed to getAvailableVariants() to obtain available
+     * Returns an enumeration over the target names of registered transliterators having a given
+     * source name. Target names may be passed to getAvailableVariants() to obtain available
      * variants for each source and target pair.
+     *
      * @stable ICU 2.0
      */
     public static final Enumeration<String> getAvailableTargets(String source) {
@@ -2120,21 +2028,23 @@ public abstract class Transliterator implements StringTransform  {
     }
 
     /**
-     * Returns an enumeration over the variant names of registered
-     * transliterators having a given source name and target name.
+     * Returns an enumeration over the variant names of registered transliterators having a given
+     * source name and target name.
+     *
      * @stable ICU 2.0
      */
-    public static final Enumeration<String> getAvailableVariants(String source,
-                                                         String target) {
+    public static final Enumeration<String> getAvailableVariants(String source, String target) {
         return registry.getAvailableVariants(source, target);
     }
-    private static final String ROOT = "root",
-                                RB_RULE_BASED_IDS ="RuleBasedTransliteratorIDs";
+
+    private static final String ROOT = "root", RB_RULE_BASED_IDS = "RuleBasedTransliteratorIDs";
+
     static {
         registry = new TransliteratorRegistry();
 
         // The display name cache starts out empty
-        displayNameCache = Collections.synchronizedMap(new HashMap<CaseInsensitiveString, String>());
+        displayNameCache =
+                Collections.synchronizedMap(new HashMap<CaseInsensitiveString, String>());
         /* The following code parses the index table located in
          * icu/data/translit/root.txt.  The index is an n x 4 table
          * that follows this format:
@@ -2187,33 +2097,36 @@ public abstract class Transliterator implements StringTransform  {
                 // Rest of line is <resource>:<encoding>:<direction>
                 //                pos       colon      c2
                 int rowIndex = row;
-                Supplier<String> resSupplier = () -> {
-                    // Capture the row Id instead of the UResourceBundle object
-                    // due to the memory cost.
-                    UResourceBundle rootBund = UResourceBundle.getBundleInstance(
-                            ICUData.ICU_TRANSLIT_BASE_NAME, ROOT);
-                    UResourceBundle transIDsBund = rootBund.get(RB_RULE_BASED_IDS);
-                    UResourceBundle thisBund = transIDsBund.get(rowIndex).get(0);
-                    return thisBund.getString("resource");
-                };
+                Supplier<String> resSupplier =
+                        () -> {
+                            // Capture the row Id instead of the UResourceBundle object
+                            // due to the memory cost.
+                            UResourceBundle rootBund =
+                                    UResourceBundle.getBundleInstance(
+                                            ICUData.ICU_TRANSLIT_BASE_NAME, ROOT);
+                            UResourceBundle transIDsBund = rootBund.get(RB_RULE_BASED_IDS);
+                            UResourceBundle thisBund = transIDsBund.get(rowIndex).get(0);
+                            return thisBund.getString("resource");
+                        };
                 int dir;
                 String direction = res.getString("direction");
                 switch (direction.charAt(0)) {
-                case 'F':
-                    dir = FORWARD;
-                    break;
-                case 'R':
-                    dir = REVERSE;
-                    break;
-                default:
-                    throw new RuntimeException("Can't parse direction: " + direction);
+                    case 'F':
+                        dir = FORWARD;
+                        break;
+                    case 'R':
+                        dir = REVERSE;
+                        break;
+                    default:
+                        throw new RuntimeException("Can't parse direction: " + direction);
                 }
-                registry.put(ID,
-                             resSupplier, // resource
-                             dir,
-                             !type.equals("internal"));
+                registry.put(
+                        ID,
+                        resSupplier, // resource
+                        dir,
+                        !type.equals("internal"));
             } else if (type.equals("alias")) {
-                //'alias'; row[2]=createInstance argument
+                // 'alias'; row[2]=createInstance argument
                 String resString = res.getString();
                 registry.put(ID, resString, true);
             } else {
@@ -2225,8 +2138,7 @@ public abstract class Transliterator implements StringTransform  {
         registerSpecialInverse(NullTransliterator.SHORT_ID, NullTransliterator.SHORT_ID, false);
 
         // Register non-rule-based transliterators
-        registerClass(NullTransliterator._ID,
-                      NullTransliterator.class, null);
+        registerClass(NullTransliterator._ID, NullTransliterator.class, null);
         RemoveTransliterator.register();
         EscapeTransliterator.register();
         UnescapeTransliterator.register();
@@ -2243,6 +2155,7 @@ public abstract class Transliterator implements StringTransform  {
 
     /**
      * Register the script-based "Any" transliterators: Any-Latin, Any-Greek
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -2252,18 +2165,18 @@ public abstract class Transliterator implements StringTransform  {
     }
 
     /**
-     * The factory interface for transliterators.  Transliterator
-     * subclasses can register factory objects for IDs using the
-     * registerFactory() method of Transliterator.  When invoked, the
-     * factory object will be passed the ID being instantiated.  This
-     * makes it possible to register one factory method to more than
-     * one ID, or for a factory method to parameterize its result
+     * The factory interface for transliterators. Transliterator subclasses can register factory
+     * objects for IDs using the registerFactory() method of Transliterator. When invoked, the
+     * factory object will be passed the ID being instantiated. This makes it possible to register
+     * one factory method to more than one ID, or for a factory method to parameterize its result
      * based on the variant.
+     *
      * @stable ICU 2.0
      */
     public static interface Factory {
         /**
          * Return a transliterator for the given ID.
+         *
          * @stable ICU 2.0
          */
         Transliterator getInstance(String ID);
@@ -2271,6 +2184,7 @@ public abstract class Transliterator implements StringTransform  {
 
     /**
      * Implements StringTransform via this method.
+     *
      * @param source text to be transformed (eg lowercased)
      * @return result
      * @stable ICU 3.8

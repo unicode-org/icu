@@ -4,9 +4,7 @@ package com.ibm.icu.impl.number;
 
 import com.ibm.icu.number.Scale;
 
-/**
- * Wraps a {@link Scale} for use in the number formatting pipeline.
- */
+/** Wraps a {@link Scale} for use in the number formatting pipeline. */
 public class MultiplierFormatHandler implements MicroPropsGenerator {
     final Scale multiplier;
     final MicroPropsGenerator parent;

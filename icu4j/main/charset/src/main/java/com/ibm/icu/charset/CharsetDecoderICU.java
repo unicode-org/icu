@@ -1,16 +1,15 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /**
-*******************************************************************************
-* Copyright (C) 2006-2014, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
-*******************************************************************************
-*
-*******************************************************************************
-*/
-
+ * ****************************************************************************** Copyright (C)
+ * 2006-2014, International Business Machines Corporation and * others. All Rights Reserved. *
+ * ******************************************************************************
+ *
+ * <p>******************************************************************************
+ */
 package com.ibm.icu.charset;
 
+import com.ibm.icu.impl.Assert;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.IntBuffer;
@@ -18,58 +17,65 @@ import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CoderResult;
 import java.nio.charset.CodingErrorAction;
 
-import com.ibm.icu.impl.Assert;
-
 /**
- * An abstract class that provides framework methods of decoding operations for concrete
- * subclasses.
+ * An abstract class that provides framework methods of decoding operations for concrete subclasses.
  * In the future this class will contain API that will implement converter semantics of ICU4C.
+ *
  * @stable ICU 3.6
  */
-public abstract class CharsetDecoderICU extends CharsetDecoder{
+public abstract class CharsetDecoderICU extends CharsetDecoder {
 
-    int    toUnicodeStatus;
+    int toUnicodeStatus;
     byte[] toUBytesArray = new byte[128];
-    int    toUBytesBegin = 0;
-    int    toULength;
+    int toUBytesBegin = 0;
+    int toULength;
     char[] charErrorBufferArray = new char[128];
-    int    charErrorBufferLength;
-    int    charErrorBufferBegin;
+    int charErrorBufferLength;
+    int charErrorBufferBegin;
     char[] invalidCharBuffer = new char[128];
-    int    invalidCharLength;
+    int invalidCharLength;
 
     /**
      * Maximum number of indexed bytes
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    @Deprecated
-    protected static final int EXT_MAX_BYTES = 0x1f;
+    @Deprecated protected static final int EXT_MAX_BYTES = 0x1f;
 
     /* store previous UChars/chars to continue partial matches */
     byte[] preToUArray = new byte[EXT_MAX_BYTES];
-    int    preToUBegin;
-    int    preToULength;       /* negative: replay */
-    int    preToUFirstLength;  /* length of first character */
+    int preToUBegin;
+    int preToULength; /* negative: replay */
+    int preToUFirstLength; /* length of first character */
     int mode;
 
     Object toUContext = null;
     private CharsetCallback.Decoder onUnmappableCharacter = CharsetCallback.TO_U_CALLBACK_STOP;
     private CharsetCallback.Decoder onMalformedInput = CharsetCallback.TO_U_CALLBACK_STOP;
-    CharsetCallback.Decoder toCharErrorBehaviour = new CharsetCallback.Decoder() {
-        @Override
-        public CoderResult call(CharsetDecoderICU decoder, Object context, ByteBuffer source,
-                CharBuffer target, IntBuffer offsets, char[] buffer, int length, CoderResult cr) {
-            if (cr.isUnmappable()) {
-                return onUnmappableCharacter.call(decoder, context, source, target, offsets, buffer,
-                        length, cr);
-            } else /* if (cr.isMalformed()) */ {
-                return onMalformedInput.call(decoder, context, source, target, offsets, buffer,
-                        length, cr);
-            }
-            // return CharsetCallback.TO_U_CALLBACK_STOP.call(decoder, context, source, target, offsets, buffer, length, cr);
-        }
-    };
+    CharsetCallback.Decoder toCharErrorBehaviour =
+            new CharsetCallback.Decoder() {
+                @Override
+                public CoderResult call(
+                        CharsetDecoderICU decoder,
+                        Object context,
+                        ByteBuffer source,
+                        CharBuffer target,
+                        IntBuffer offsets,
+                        char[] buffer,
+                        int length,
+                        CoderResult cr) {
+                    if (cr.isUnmappable()) {
+                        return onUnmappableCharacter.call(
+                                decoder, context, source, target, offsets, buffer, length, cr);
+                    } else /* if (cr.isMalformed()) */ {
+                        return onMalformedInput.call(
+                                decoder, context, source, target, offsets, buffer, length, cr);
+                    }
+                    // return CharsetCallback.TO_U_CALLBACK_STOP.call(decoder, context, source,
+                    // target, offsets, buffer, length, cr);
+                }
+            };
 
     // exist to keep implOnMalformedInput and implOnUnmappableInput from being too recursive
     private boolean malformedInputCalled = false;
@@ -81,7 +87,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
      * @param cs The CharsetICU object containing information about how to charset to decode.
      */
     CharsetDecoderICU(CharsetICU cs) {
-        super(cs, (1/cs.maxCharsPerByte), cs.maxCharsPerByte);
+        super(cs, (1 / cs.maxCharsPerByte), cs.maxCharsPerByte);
     }
 
     /*
@@ -95,16 +101,12 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
         return true;
     }
 
-    /**
-     * Fallback is currently always used by icu4j decoders.
-     */
+    /** Fallback is currently always used by icu4j decoders. */
     static final boolean isToUUseFallback() {
         return isToUUseFallback(true);
     }
 
-    /**
-     * Fallback is currently always used by icu4j decoders.
-     */
+    /** Fallback is currently always used by icu4j decoders. */
     static final boolean isToUUseFallback(boolean iUseFallback) {
         return true;
     }
@@ -119,8 +121,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
     @Override
     protected final void implOnMalformedInput(CodingErrorAction newAction) {
         // don't run infinitely
-        if (malformedInputCalled)
-            return;
+        if (malformedInputCalled) return;
 
         // if we get a replace, do not let the nio replace
         if (newAction == CodingErrorAction.REPLACE) {
@@ -142,8 +143,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
     @Override
     protected final void implOnUnmappableCharacter(CodingErrorAction newAction) {
         // don't run infinitely
-        if (unmappableCharacterCalled)
-            return;
+        if (unmappableCharacterCalled) return;
 
         // if we get a replace, do not let the nio replace
         if (newAction == CodingErrorAction.REPLACE) {
@@ -156,16 +156,18 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
     }
 
     /**
-     * Sets the callback encoder method and context to be used if an illegal sequence is encountered.
-     * You would normally call this twice to set both the malform and unmappable error. In this case,
-     * newContext should remain the same since using a different newContext each time will negate the last
-     * one used.
+     * Sets the callback encoder method and context to be used if an illegal sequence is
+     * encountered. You would normally call this twice to set both the malform and unmappable error.
+     * In this case, newContext should remain the same since using a different newContext each time
+     * will negate the last one used.
+     *
      * @param err CoderResult
      * @param newCallback CharsetCallback.Encoder
      * @param newContext Object
      * @stable ICU 4.0
      */
-    public final void setToUCallback(CoderResult err, CharsetCallback.Decoder newCallback, Object newContext) {
+    public final void setToUCallback(
+            CoderResult err, CharsetCallback.Decoder newCallback, Object newContext) {
         if (err.isMalformed()) {
             onMalformedInput = newCallback;
         } else if (err.isUnmappable()) {
@@ -179,22 +181,24 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
         }
     }
 
-    private static CharsetCallback.Decoder getCallback(CodingErrorAction action){
-        if(action==CodingErrorAction.REPLACE){
+    private static CharsetCallback.Decoder getCallback(CodingErrorAction action) {
+        if (action == CodingErrorAction.REPLACE) {
             return CharsetCallback.TO_U_CALLBACK_SUBSTITUTE;
-        }else if(action==CodingErrorAction.IGNORE){
+        } else if (action == CodingErrorAction.IGNORE) {
             return CharsetCallback.TO_U_CALLBACK_SKIP;
-        }else /* if(action==CodingErrorAction.REPORT) */ {
+        } else /* if(action==CodingErrorAction.REPORT) */ {
             return CharsetCallback.TO_U_CALLBACK_STOP;
         }
     }
+
     private final ByteBuffer EMPTY = ByteBuffer.allocate(0);
+
     /**
-     * Flushes any characters saved in the converter's internal buffer and
-     * resets the converter.
+     * Flushes any characters saved in the converter's internal buffer and resets the converter.
+     *
      * @param out action to be taken
-     * @return result of flushing action and completes the decoding all input.
-     *         Returns CoderResult.UNDERFLOW if the action succeeds.
+     * @return result of flushing action and completes the decoding all input. Returns
+     *     CoderResult.UNDERFLOW if the action succeeds.
      * @stable ICU 3.6
      */
     @Override
@@ -204,49 +208,48 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
 
     /**
      * Resets the to Unicode mode of converter
+     *
      * @stable ICU 3.6
      */
     @Override
     protected void implReset() {
-        toUnicodeStatus = 0 ;
+        toUnicodeStatus = 0;
         toULength = 0;
         charErrorBufferLength = 0;
         charErrorBufferBegin = 0;
 
         /* store previous UChars/chars to continue partial matches */
         preToUBegin = 0;
-        preToULength = 0;       /* negative: replay */
+        preToULength = 0; /* negative: replay */
         preToUFirstLength = 0;
 
         mode = 0;
     }
 
     /**
-     * Decodes one or more bytes. The default behaviour of the converter
-     * is stop and report if an error in input stream is encountered.
-     * To set different behaviour use @see CharsetDecoder.onMalformedInput()
-     * This  method allows a buffer by buffer conversion of a data stream.
-     * The state of the conversion is saved between calls to convert.
-     * Among other things, this means multibyte input sequences can be
-     * split between calls. If a call to convert results in an Error, the
-     * conversion may be continued by calling convert again with suitably
-     * modified parameters.All conversions should be finished with a call to
-     * the flush method.
+     * Decodes one or more bytes. The default behaviour of the converter is stop and report if an
+     * error in input stream is encountered. To set different behaviour use @see
+     * CharsetDecoder.onMalformedInput() This method allows a buffer by buffer conversion of a data
+     * stream. The state of the conversion is saved between calls to convert. Among other things,
+     * this means multibyte input sequences can be split between calls. If a call to convert results
+     * in an Error, the conversion may be continued by calling convert again with suitably modified
+     * parameters.All conversions should be finished with a call to the flush method.
+     *
      * @param in buffer to decode
      * @param out buffer to populate with decoded result
-     * @return Result of decoding action. Returns CoderResult.UNDERFLOW if the decoding
-     *         action succeeds or more input is needed for completing the decoding action.
+     * @return Result of decoding action. Returns CoderResult.UNDERFLOW if the decoding action
+     *     succeeds or more input is needed for completing the decoding action.
      * @stable ICU 3.6
      */
     @Override
-    protected CoderResult decodeLoop(ByteBuffer in,CharBuffer out){
-        if(in.remaining() < toUCountPending()){
+    protected CoderResult decodeLoop(ByteBuffer in, CharBuffer out) {
+        if (in.remaining() < toUCountPending()) {
             return CoderResult.UNDERFLOW;
         }
-//        if (!in.hasRemaining()) {
-//            toULength = 0;
-//            return CoderResult.UNDERFLOW;
-//        }
+        //        if (!in.hasRemaining()) {
+        //            toULength = 0;
+        //            return CoderResult.UNDERFLOW;
+        //        }
 
         in.position(in.position() + toUCountPending());
 
@@ -267,7 +270,8 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
      * @return Result of decoding action. Returns CoderResult.UNDERFLOW if the decoding
      *         action succeeds or more input is needed for completing the decoding action.
      */
-    abstract CoderResult decodeLoop(ByteBuffer in, CharBuffer out, IntBuffer offsets, boolean flush);
+    abstract CoderResult decodeLoop(
+            ByteBuffer in, CharBuffer out, IntBuffer offsets, boolean flush);
 
     /*
      * Implements the ICU semantic for decode operation
@@ -279,7 +283,8 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
      * @return Result of decoding action. Returns CoderResult.UNDERFLOW if the decoding
      *         action succeeds or more input is needed for completing the decoding action.
      */
-    final CoderResult decode(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush) {
+    final CoderResult decode(
+            ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush) {
 
         /* check parameters */
         if (target == null || source == null) {
@@ -298,7 +303,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
          * consumed or the target filled (unless an error occurs).
          * An adjustment would be sourceLimit=t+0x7fffffff; for example.
          */
-            /*agljport:fix
+        /*agljport:fix
         if(
             ((size_t)(sourceLimit-s)>(size_t)0x7fffffff && sourceLimit>s) ||
             ((size_t)(targetLimit-t)>(size_t)0x3fffffff && targetLimit>t)
@@ -353,68 +358,69 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
 
     /* Currently, we are not using offsets in ICU4J. */
     /* private void updateOffsets(IntBuffer offsets,int length, int sourceIndex, int errorInputLength) {
-        int limit;
-        int delta, offset;
+    int limit;
+    int delta, offset;
 
-        if(sourceIndex>=0) {
-            /*
-             * adjust each offset by adding the previous sourceIndex
-             * minus the length of the input sequence that caused an
-             * error, if any
-             */
-       /*     delta=sourceIndex-errorInputLength;
-        } else {
-            /*
-             * set each offset to -1 because this conversion function
-             * does not handle offsets
-             */
-        /*    delta=-1;
-        }
-        limit=offsets.position()+length;
-        if(delta==0) {
-            /* most common case, nothing to do */
-        /* } else if(delta>0) {
-            /* add the delta to each offset (but not if the offset is <0) */
-        /*    while(offsets.position()<limit) {
-                offset=offsets.get(offsets.position());
-                if(offset>=0) {
-                    offsets.put(offset+delta);
-                }
-                //FIXME: ++offsets;
+    if(sourceIndex>=0) {
+        /*
+         * adjust each offset by adding the previous sourceIndex
+         * minus the length of the input sequence that caused an
+         * error, if any
+         */
+    /*     delta=sourceIndex-errorInputLength;
+    } else {
+        /*
+         * set each offset to -1 because this conversion function
+         * does not handle offsets
+         */
+    /*    delta=-1;
+    }
+    limit=offsets.position()+length;
+    if(delta==0) {
+        /* most common case, nothing to do */
+    /* } else if(delta>0) {
+    /* add the delta to each offset (but not if the offset is <0) */
+    /*    while(offsets.position()<limit) {
+            offset=offsets.get(offsets.position());
+            if(offset>=0) {
+                offsets.put(offset+delta);
             }
-        } else /* delta<0 */ /* {
-            /*
-             * set each offset to -1 because this conversion function
-             * does not handle offsets
-             * or the error input sequence started in a previous buffer
-             */
-        /*    while(offsets.position()<limit) {
+            //FIXME: ++offsets;
+        }
+    } else /* delta<0 */
+    /* {
+    /*
+     * set each offset to -1 because this conversion function
+     * does not handle offsets
+     * or the error input sequence started in a previous buffer
+     */
+    /*    while(offsets.position()<limit) {
                 offsets.put(-1);
             }
         }
     } */
-    final CoderResult toUnicodeWithCallback(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush){
+    final CoderResult toUnicodeWithCallback(
+            ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush) {
 
         int sourceIndex;
         int errorInputLength;
         boolean converterSawEndOfInput, calledCallback;
-        //int t=target.position();
-        int s=source.position();
+        // int t=target.position();
+        int s = source.position();
         /* variables for m:n conversion */
         ByteBuffer replayArray = ByteBuffer.allocate(EXT_MAX_BYTES);
         int replayArrayIndex = 0;
 
-        ByteBuffer realSource=null;
-        boolean realFlush=false;
-        int realSourceIndex=0;
-
+        ByteBuffer realSource = null;
+        boolean realFlush = false;
+        int realSourceIndex = 0;
 
         CoderResult cr = CoderResult.UNDERFLOW;
 
         /* get the converter implementation function */
-        sourceIndex=0;
+        sourceIndex = 0;
 
-        if(preToULength>=0) {
+        if (preToULength >= 0) {
             /* normal mode */
         } else {
             /*
@@ -422,17 +428,18 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
              * and failed to consume all of them.
              * We need to "replay" them from a temporary buffer and convert them first.
              */
-            realSource=source;
-            realFlush=flush;
-            realSourceIndex=sourceIndex;
-            //UConverterUtility.uprv_memcpy(replayArray, replayBegin, preToUArray, preToUBegin, -preToULength);
-            replayArray.put(preToUArray,0, -preToULength);
-            source=replayArray;
+            realSource = source;
+            realFlush = flush;
+            realSourceIndex = sourceIndex;
+            // UConverterUtility.uprv_memcpy(replayArray, replayBegin, preToUArray, preToUBegin,
+            // -preToULength);
+            replayArray.put(preToUArray, 0, -preToULength);
+            source = replayArray;
             source.position(0);
-            source.limit(replayArrayIndex-preToULength);
-            flush=false;
-            sourceIndex=-1;
-            preToULength=0;
+            source.limit(replayArrayIndex - preToULength);
+            flush = false;
+            sourceIndex = -1;
+            preToULength = 0;
         }
 
         /*
@@ -447,7 +454,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
          *   }
          * }
          */
-        for(;;) {
+        for (; ; ) {
 
             /* convert */
             cr = decodeLoop(source, target, offsets, flush);
@@ -459,13 +466,14 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
              * need not check cnv->preToULength==0 because a replay (<0) will cause
              * s<sourceLimit before converterSawEndOfInput is checked
              */
-            converterSawEndOfInput= (cr.isUnderflow() && flush && source.remaining()==0 && toULength == 0);
+            converterSawEndOfInput =
+                    (cr.isUnderflow() && flush && source.remaining() == 0 && toULength == 0);
 
             /* no callback called yet for this iteration */
-            calledCallback=false;
+            calledCallback = false;
 
             /* no sourceIndex adjustment for conversion, only for callback output */
-            errorInputLength=0;
+            errorInputLength = 0;
 
             /*
              * loop for offsets and error handling
@@ -475,25 +483,25 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
              * 2. after the callback
              * 3. after the callback again if there was truncated input
              */
-            for(;;) {
+            for (; ; ) {
                 /* update offsets if we write any */
                 /* Currently offsets are not being used in ICU4J */
                 /* if(offsets!=null) {
 
-                    int length=(target.position()-t);
-                    if(length>0) {
-                        updateOffsets(offsets, length, sourceIndex, errorInputLength);
+                int length=(target.position()-t);
+                if(length>0) {
+                    updateOffsets(offsets, length, sourceIndex, errorInputLength);
 
 
-                        /*
-                         * if a converter handles offsets and updates the offsets
-                         * pointer at the end, then pArgs->offset should not change
-                         * here;
-                         * however, some converters do not handle offsets at all
-                         * (sourceIndex<0) or may not update the offsets pointer
-                         */
-                        //TODO: pArgs->offsets=offsets+=length;
-                  /*  }
+                    /*
+                     * if a converter handles offsets and updates the offsets
+                     * pointer at the end, then pArgs->offset should not change
+                     * here;
+                     * however, some converters do not handle offsets at all
+                     * (sourceIndex<0) or may not update the offsets pointer
+                     */
+                // TODO: pArgs->offsets=offsets+=length;
+                /*  }
 
                     if(sourceIndex>=0) {
                         sourceIndex+=(source.position()-s);
@@ -501,57 +509,56 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
 
                 } */
 
-                if(preToULength<0) {
+                if (preToULength < 0) {
                     /*
                      * switch the source to new replay units (cannot occur while replaying)
                      * after offset handling and before end-of-input and callback handling
                      */
-                    if(realSource==null)
-                                    {
-                        realSource=source;
-                        realFlush=flush;
-                        realSourceIndex=sourceIndex;
+                    if (realSource == null) {
+                        realSource = source;
+                        realFlush = flush;
+                        realSourceIndex = sourceIndex;
 
-                        //UConverterUtility.uprv_memcpy(replayArray, replayBegin, preToUArray, preToUBegin, -preToULength);
-                        replayArray.put(preToUArray,0, -preToULength);
+                        // UConverterUtility.uprv_memcpy(replayArray, replayBegin, preToUArray,
+                        // preToUBegin, -preToULength);
+                        replayArray.put(preToUArray, 0, -preToULength);
                         // reset position
                         replayArray.position(0);
 
-                        source=replayArray;
-                        source.limit(replayArrayIndex-preToULength);
-                        flush=false;
-                        if((sourceIndex+=preToULength)<0) {
-                            sourceIndex=-1;
+                        source = replayArray;
+                        source.limit(replayArrayIndex - preToULength);
+                        flush = false;
+                        if ((sourceIndex += preToULength) < 0) {
+                            sourceIndex = -1;
                         }
 
-                        preToULength=0;
+                        preToULength = 0;
                     } else {
                         /* see implementation note before _fromUnicodeWithCallback() */
-                        //agljport:todo U_ASSERT(realSource==NULL);
-                       Assert.assrt(realSource==null);
+                        // agljport:todo U_ASSERT(realSource==NULL);
+                        Assert.assrt(realSource == null);
                     }
                 }
 
                 /* update pointers */
-                s=source.position();
-                //t=target.position();
+                s = source.position();
+                // t=target.position();
 
-                if(cr.isUnderflow()) {
-                    if(s<source.limit())
-                                    {
+                if (cr.isUnderflow()) {
+                    if (s < source.limit()) {
                         /*
                          * continue with the conversion loop while there is still input left
                          * (continue converting by breaking out of only the inner loop)
                          */
                         break;
-                    } else if(realSource!=null) {
+                    } else if (realSource != null) {
                         /* switch back from replaying to the real source and continue */
                         source = realSource;
-                        flush=realFlush;
-                        sourceIndex=realSourceIndex;
-                        realSource=null;
+                        flush = realFlush;
+                        sourceIndex = realSourceIndex;
+                        realSource = null;
                         break;
-                    } else if(flush && toULength>0) {
+                    } else if (flush && toULength > 0) {
                         /*
                          * the entire input stream is consumed
                          * and there is a partial, truncated input sequence left
@@ -559,10 +566,10 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
 
                         /* inject an error and continue with callback handling */
                         cr = CoderResult.malformedForLength(toULength);
-                        calledCallback=false; /* new error condition */
+                        calledCallback = false; /* new error condition */
                     } else {
                         /* input consumed */
-                        if(flush) {
+                        if (flush) {
                             /*
                              * return to the conversion loop once more if the flush
                              * flag is set and the conversion function has not
@@ -570,7 +577,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
                              *
                              * (continue converting by breaking out of only the inner loop)
                              */
-                            if(!converterSawEndOfInput) {
+                            if (!converterSawEndOfInput) {
                                 break;
                             }
 
@@ -585,10 +592,9 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
 
                 /* U_FAILURE(*err) */
                 {
-
-                    if( calledCallback || cr.isOverflow() ||
-                        (cr.isMalformed() && cr.isUnmappable())
-                      ) {
+                    if (calledCallback
+                            || cr.isOverflow()
+                            || (cr.isMalformed() && cr.isUnmappable())) {
                         /*
                          * the callback did not or cannot resolve the error:
                          * set output pointers and return
@@ -601,14 +607,15 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
                          * copied back into the UConverter
                          * and the real arguments must be restored
                          */
-                        if(realSource!=null) {
+                        if (realSource != null) {
                             int length;
-                            Assert.assrt(preToULength==0);
+                            Assert.assrt(preToULength == 0);
                             length = source.limit() - source.position();
-                            if(length>0) {
-                                //UConverterUtility.uprv_memcpy(preToUArray, preToUBegin, pArgs.sourceArray, pArgs.sourceBegin, length);
+                            if (length > 0) {
+                                // UConverterUtility.uprv_memcpy(preToUArray, preToUBegin,
+                                // pArgs.sourceArray, pArgs.sourceBegin, length);
                                 source.get(preToUArray, preToUBegin, length);
-                                preToULength=(byte)-length;
+                                preToULength = (byte) -length;
                             }
                         }
                         return cr;
@@ -616,16 +623,25 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
                 }
 
                 /* copy toUBytes[] to invalidCharBuffer[] */
-                errorInputLength=invalidCharLength=toULength;
-                if(errorInputLength>0) {
+                errorInputLength = invalidCharLength = toULength;
+                if (errorInputLength > 0) {
                     copy(toUBytesArray, 0, invalidCharBuffer, 0, errorInputLength);
                 }
 
                 /* set the converter state to deal with the next character */
-                toULength=0;
+                toULength = 0;
 
                 /* call the callback function */
-                cr = toCharErrorBehaviour.call(this, toUContext, source, target, offsets, invalidCharBuffer, errorInputLength, cr);
+                cr =
+                        toCharErrorBehaviour.call(
+                                this,
+                                toUContext,
+                                source,
+                                target,
+                                offsets,
+                                invalidCharBuffer,
+                                errorInputLength,
+                                cr);
                 /*
                  * loop back to the offset handling
                  *
@@ -633,7 +649,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
                  * that a callback was called;
                  * if the callback did not resolve the error, then we return
                  */
-                calledCallback=true;
+                calledCallback = true;
             }
         }
     }
@@ -645,61 +661,67 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
      * and this information is not needed for normal conversion.
      * @return The number of chars in the state. -1 if an error is encountered.
      */
-    /*public*/ int toUCountPending()    {
-        if(preToULength > 0){
-            return preToULength ;
-        } else if(preToULength < 0){
+    /*public*/ int toUCountPending() {
+        if (preToULength > 0) {
+            return preToULength;
+        } else if (preToULength < 0) {
             return -preToULength;
-        } else if(toULength > 0){
+        } else if (toULength > 0) {
             return toULength;
         } else {
             return 0;
         }
     }
 
-
     private void copy(byte[] src, int srcOffset, char[] dst, int dstOffset, int length) {
-        for(int i=srcOffset; i<length; i++){
-            dst[dstOffset++]=(char)(src[srcOffset++] & UConverterConstants.UNSIGNED_BYTE_MASK);
+        for (int i = srcOffset; i < length; i++) {
+            dst[dstOffset++] = (char) (src[srcOffset++] & UConverterConstants.UNSIGNED_BYTE_MASK);
         }
     }
+
     /*
      * ONLY used by ToU callback functions.
      * This function will write out the specified characters to the target
      * character buffer.
      * @return A CoderResult object that contains the error result when an error occurs.
      */
-    static final CoderResult toUWriteUChars( CharsetDecoderICU cnv,
-                                                char[] ucharsArray, int ucharsBegin, int length,
-                                                CharBuffer target, IntBuffer offsets, int sourceIndex) {
+    static final CoderResult toUWriteUChars(
+            CharsetDecoderICU cnv,
+            char[] ucharsArray,
+            int ucharsBegin,
+            int length,
+            CharBuffer target,
+            IntBuffer offsets,
+            int sourceIndex) {
 
         CoderResult cr = CoderResult.UNDERFLOW;
 
         /* write UChars */
-        if(offsets==null) {
-            while(length>0 && target.hasRemaining()) {
+        if (offsets == null) {
+            while (length > 0 && target.hasRemaining()) {
                 target.put(ucharsArray[ucharsBegin++]);
                 --length;
             }
 
         } else {
             /* output with offsets */
-            while(length>0 && target.hasRemaining()) {
+            while (length > 0 && target.hasRemaining()) {
                 target.put(ucharsArray[ucharsBegin++]);
                 offsets.put(sourceIndex);
                 --length;
             }
         }
         /* write overflow */
-        if(length>0) {
-            cnv.charErrorBufferLength= 0;
+        if (length > 0) {
+            cnv.charErrorBufferLength = 0;
             cr = CoderResult.OVERFLOW;
             do {
-                cnv.charErrorBufferArray[cnv.charErrorBufferLength++]=ucharsArray[ucharsBegin++];
-            } while(--length>0);
+                cnv.charErrorBufferArray[cnv.charErrorBufferLength++] = ucharsArray[ucharsBegin++];
+            } while (--length > 0);
         }
         return cr;
     }
+
     /*
      * This function will write out the Unicode substitution character to the
      * target character buffer.
@@ -713,7 +735,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
     /* Note: Currently, this method is not being used because the callback method calls toUWriteUChars with
      * the substitution characters. Will leave in here for the time being. To be removed later. (4.0)
      */
-     /*CoderResult cbToUWriteSub(CharsetDecoderICU decoder,
+    /*CoderResult cbToUWriteSub(CharsetDecoderICU decoder,
                                         ByteBuffer source, CharBuffer target,
                                         IntBuffer offsets){
         String sub = decoder.replacement();
@@ -731,10 +753,11 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
 
     /**
      * Returns the maxBytesPerChar value for the Charset that created this decoder.
+     *
      * @return maxBytesPerChar
      * @stable ICU 4.8
      */
     public final float maxBytesPerChar() {
-        return ((CharsetICU)(this.charset())).maxBytesPerChar;
+        return ((CharsetICU) (this.charset())).maxBytesPerChar;
     }
 }

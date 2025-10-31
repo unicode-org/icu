@@ -13,7 +13,7 @@ class OptUtils {
     // This matches JSON number (https://www.rfc-editor.org/rfc/rfc8259#section-6)
     //
     // WARNING: this is not in the MF2 spec/message.abnf anymore.
-    // Any concept of "number literal" was removed from there. 
+    // Any concept of "number literal" was removed from there.
     //
     // This is used to validate options and arguments, for example `maxDigits=|1.|`,
     // or `{|01| :number}` and by the time it gets to the checking the string literal was extracted
@@ -89,7 +89,8 @@ class OptUtils {
         return Objects.equals(reportErrors, "STRICT");
     }
 
-    static boolean reportErrors(Map<String, Object> fixedOptions, Map<String, Object> variableOptions) {
+    static boolean reportErrors(
+            Map<String, Object> fixedOptions, Map<String, Object> variableOptions) {
         return reportErrors(fixedOptions) || reportErrors(variableOptions);
     }
 
@@ -101,7 +102,8 @@ class OptUtils {
                 result = Locale.forLanguageTag(localeOverride.replace('_', '-'));
             } catch (Exception e) {
                 if (reportErrors(options)) {
-                    throw new IllegalArgumentException("bad-operand: u:locale must be a valid BCP 47 language tag");
+                    throw new IllegalArgumentException(
+                            "bad-operand: u:locale must be a valid BCP 47 language tag");
                 }
             }
         }

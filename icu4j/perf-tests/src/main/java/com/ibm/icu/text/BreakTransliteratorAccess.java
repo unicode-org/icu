@@ -14,9 +14,8 @@ public class BreakTransliteratorAccess {
     /**
      * The private constructor.
      *
-     * <p>
-     * The internal} and deprecated tags prevent the otherwise public default constuctor
-     * from being collected for the various API reports and checks.
+     * <p>The internal} and deprecated tags prevent the otherwise public default constuctor from
+     * being collected for the various API reports and checks.
      *
      * @internal
      * @deprecated This API is ICU internal only.

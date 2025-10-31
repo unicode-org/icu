@@ -13,41 +13,37 @@
  **/
 
 /**
- * Port From:   JDK 1.4b1 : java.text.Format.IntlTestSimpleDateFormatAPI
- * Source File: java/text/format/IntlTestSimpleDateFormatAPI.java
- **/
-
+ * Port From: JDK 1.4b1 : java.text.Format.IntlTestSimpleDateFormatAPI Source File:
+ * java/text/format/IntlTestSimpleDateFormatAPI.java
+ */
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
+import com.ibm.icu.text.DateFormatSymbols;
+import com.ibm.icu.text.SimpleDateFormat;
 import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Date;
 import java.util.Locale;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.CoreTestFmwk;
-import com.ibm.icu.text.DateFormatSymbols;
-import com.ibm.icu.text.SimpleDateFormat;
-
 /**
-* @test 1.4 98/03/06
-* @summary test International Simple Date Format API
-*/
+ * @test 1.4 98/03/06
+ * @summary test International Simple Date Format API
+ */
 @RunWith(JUnit4.class)
-public class IntlTestSimpleDateFormatAPI extends CoreTestFmwk
-{
+public class IntlTestSimpleDateFormatAPI extends CoreTestFmwk {
     // This test checks various generic API methods in DecimalFormat to achieve 100% API coverage.
     @Test
-    public void TestAPI()
-    {
+    public void TestAPI() {
         Locale startLocale = Locale.getDefault();
 
-        logln("SimpleDateFormat API test---"); logln("");
+        logln("SimpleDateFormat API test---");
+        logln("");
 
         Locale.setDefault(Locale.ENGLISH);
 
@@ -71,7 +67,7 @@ public class IntlTestSimpleDateFormatAPI extends CoreTestFmwk
         logln("Testing clone(), assignment and equality operators");
 
         Format clone = def.clone();
-        if( ! clone.equals(def) ) {
+        if (!clone.equals(def)) {
             errln("ERROR: Format clone or equals failed");
         }
 
@@ -79,7 +75,7 @@ public class IntlTestSimpleDateFormatAPI extends CoreTestFmwk
 
         logln("Testing various format() methods");
 
-        Date d = new Date((long)837039928046.0);
+        Date d = new Date((long) 837039928046.0);
 
         StringBuffer res1 = new StringBuffer();
         StringBuffer res2 = new StringBuffer();
@@ -87,7 +83,7 @@ public class IntlTestSimpleDateFormatAPI extends CoreTestFmwk
         FieldPosition pos2 = new FieldPosition(0);
 
         res1 = def.format(d, res1, pos1);
-        logln( "" + d.getTime() + " formatted to " + res1);
+        logln("" + d.getTime() + " formatted to " + res1);
 
         res2 = cust1.format(d, res2, pos2);
         logln("" + d.getTime() + " formatted to " + res2);
@@ -99,14 +95,13 @@ public class IntlTestSimpleDateFormatAPI extends CoreTestFmwk
         String text = new String("02/03/76, 2:50 AM, CST");
         Date result1 = new Date();
         Date result2 = new Date();
-        ParsePosition pos= new ParsePosition(0);
+        ParsePosition pos = new ParsePosition(0);
         result1 = def.parse(text, pos);
         logln(text + " parsed into " + result1);
 
         try {
             result2 = def.parse(text);
-        }
-        catch (ParseException e) {
+        } catch (ParseException e) {
             errln("ERROR: parse() failed");
         }
         logln(text + " parsed into " + result2);
@@ -118,26 +113,26 @@ public class IntlTestSimpleDateFormatAPI extends CoreTestFmwk
         final DateFormatSymbols syms = pat.getDateFormatSymbols();
         def.setDateFormatSymbols(syms);
         pat_fr.setDateFormatSymbols(syms);
-        if( ! pat.getDateFormatSymbols().equals(def.getDateFormatSymbols()) ) {
+        if (!pat.getDateFormatSymbols().equals(def.getDateFormatSymbols())) {
             errln("ERROR: set DateFormatSymbols() failed");
         }
 
         /*
-        DateFormatSymbols has not the method getTwoDigitStartDate();
-        //Date startDate = null; //The variable is never used
-        try {
-//            startDate = pat.getTwoDigitStartDate();
-        }
-        catch (Exception e) {
-            errln("ERROR: getTwoDigitStartDate() failed");
-        }
+                DateFormatSymbols has not the method getTwoDigitStartDate();
+                //Date startDate = null; //The variable is never used
+                try {
+        //            startDate = pat.getTwoDigitStartDate();
+                }
+                catch (Exception e) {
+                    errln("ERROR: getTwoDigitStartDate() failed");
+                }
 
-        try {
-//            pat_fr.setTwoDigitStartDate(startDate);
-        }
-        catch (Exception e) {
-            errln("ERROR: setTwoDigitStartDate() failed");
-        }*/
+                try {
+        //            pat_fr.setTwoDigitStartDate(startDate);
+                }
+                catch (Exception e) {
+                    errln("ERROR: setTwoDigitStartDate() failed");
+                }*/
 
         // ======= Test applyPattern()
 
@@ -149,7 +144,7 @@ public class IntlTestSimpleDateFormatAPI extends CoreTestFmwk
 
         String s2 = pat.toPattern();
         logln("Extracted pattern is " + s2);
-        if( ! s2.equals(p1) ) {
+        if (!s2.equals(p1)) {
             errln("ERROR: toPattern() result did not match pattern applied");
         }
 
@@ -157,7 +152,7 @@ public class IntlTestSimpleDateFormatAPI extends CoreTestFmwk
         pat.applyLocalizedPattern(p1);
         String s3 = pat.toLocalizedPattern();
         logln("Extracted pattern is " + s3);
-        if( ! s3.equals(p1) ) {
+        if (!s3.equals(p1)) {
             errln("ERROR: toLocalizedPattern() result did not match pattern applied");
         }
 
@@ -172,36 +167,33 @@ public class IntlTestSimpleDateFormatAPI extends CoreTestFmwk
             errln("ERROR: Parsing failed using 'Y' and 'e'");
         }
 
-
         // ======= Test getStaticClassID()
 
-//        logln("Testing instanceof");
+        //        logln("Testing instanceof");
 
-//        try {
-//            DateFormat test = new SimpleDateFormat();
+        //        try {
+        //            DateFormat test = new SimpleDateFormat();
 
-//            if (! (test instanceof SimpleDateFormat)) {
-//                errln("ERROR: instanceof failed");
-//            }
-//        }
-//        catch (Exception e) {
-//            errln("ERROR: Couldn't create a SimpleDateFormat");
-//        }
+        //            if (! (test instanceof SimpleDateFormat)) {
+        //                errln("ERROR: instanceof failed");
+        //            }
+        //        }
+        //        catch (Exception e) {
+        //            errln("ERROR: Couldn't create a SimpleDateFormat");
+        //        }
 
         Locale.setDefault(startLocale);
     }
 
     // Jitterbug 4451, for coverage
     @Test
-    public void TestCoverage(){
-        class StubDateFormat extends SimpleDateFormat{
-            /**
-             * For serialization
-             */
+    public void TestCoverage() {
+        class StubDateFormat extends SimpleDateFormat {
+            /** For serialization */
             private static final long serialVersionUID = 8460897119491427934L;
 
-            public void run(){
-                if (!zeroPaddingNumber(12, 4, 6).equals("0012")){
+            public void run() {
+                if (!zeroPaddingNumber(12, 4, 6).equals("0012")) {
                     errln("SimpleDateFormat(zeroPaddingNumber(long , int , int )");
                 }
             }

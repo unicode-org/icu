@@ -3,23 +3,19 @@
 
 package com.ibm.icu.message2;
 
+import com.ibm.icu.message2.MFDataModel.CatchallKey;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
-import com.ibm.icu.message2.MFDataModel.CatchallKey;
-
 /**
- * Creates a {@link Function} doing literal selection, similar to <code>{exp, select}</code>
- * in {@link com.ibm.icu.text.MessageFormat}.
- * TODO: TZU
+ * Creates a {@link Function} doing literal selection, similar to <code>{exp, select}</code> in
+ * {@link com.ibm.icu.text.MessageFormat}. TODO: TZU
  */
 class TextFunctionFactory implements FunctionFactory {
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public Function create(Locale locale, Map<String, Object> fixedOptions) {
         return new TextFunctionImpl(OptUtils.getDirectionality(fixedOptions));
@@ -32,34 +28,31 @@ class TextFunctionFactory implements FunctionFactory {
             this.directionality = directionality == null ? Directionality.INHERIT : directionality;
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        /** {@inheritDoc} */
         @Override
         public String formatToString(Object toFormat, Map<String, Object> variableOptions) {
             return format(toFormat, variableOptions).toString();
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        /** {@inheritDoc} */
         @Override
         public FormattedPlaceholder format(Object toFormat, Map<String, Object> variableOptions) {
             return new FormattedPlaceholder(
-                    toFormat, new PlainStringFormattedValue(Objects.toString(toFormat)),
-                    directionality, true);
+                    toFormat,
+                    new PlainStringFormattedValue(Objects.toString(toFormat)),
+                    directionality,
+                    true);
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        /** {@inheritDoc} */
         @Override
         public List<String> matches(
                 Object value, List<String> keys, Map<String, Object> variableOptions) {
             List<String> result = new ArrayList<>();
             if (value == null) {
                 if (OptUtils.reportErrors(variableOptions)) {
-                    throw new IllegalArgumentException("unresolved-variable: argument to match on can't be null");
+                    throw new IllegalArgumentException(
+                            "unresolved-variable: argument to match on can't be null");
                 }
                 return result;
             }

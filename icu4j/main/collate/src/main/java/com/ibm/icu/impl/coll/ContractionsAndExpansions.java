@@ -1,24 +1,23 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /*
-*******************************************************************************
-* Copyright (C) 2013-2014, International Business Machines
-* Corporation and others.  All Rights Reserved.
-*******************************************************************************
-* ContractionsAndExpansions.java, ported from collationsets.h/.cpp
-*
-* C++ version created on: 2013feb09
-* created by: Markus W. Scherer
-*/
+ *******************************************************************************
+ * Copyright (C) 2013-2014, International Business Machines
+ * Corporation and others.  All Rights Reserved.
+ *******************************************************************************
+ * ContractionsAndExpansions.java, ported from collationsets.h/.cpp
+ *
+ * C++ version created on: 2013feb09
+ * created by: Markus W. Scherer
+ */
 
 package com.ibm.icu.impl.coll;
-
-import java.util.Iterator;
 
 import com.ibm.icu.impl.Trie2;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.CharsTrie;
 import com.ibm.icu.util.CharsTrie.Entry;
+import java.util.Iterator;
 
 public final class ContractionsAndExpansions {
     // C++: The following fields are @internal, only public for access by callback.
@@ -27,7 +26,7 @@ public final class ContractionsAndExpansions {
     private UnicodeSet expansions;
     private CESink sink;
     private boolean addPrefixes;
-    private int checkTailored = 0;  // -1: collected tailored  +1: exclude tailored
+    private int checkTailored = 0; // -1: collected tailored  +1: exclude tailored
     private UnicodeSet tailored = new UnicodeSet();
     private UnicodeSet ranges;
     private StringBuilder unreversedPrefix = new StringBuilder();
@@ -36,6 +35,7 @@ public final class ContractionsAndExpansions {
 
     public static interface CESink {
         void handleCE(long ce);
+
         void handleExpansion(long ces[], int start, int length);
     }
 
@@ -110,7 +110,7 @@ public final class ContractionsAndExpansions {
     }
 
     private void handleCE32(int start, int end, int ce32) {
-        for (;;) {
+        for (; ; ) {
             if ((ce32 & 0xff) < Collation.SPECIAL_CE32_LOW_BYTE) {
                 // !isSpecialCE32()
                 if (sink != null) {
@@ -119,107 +119,108 @@ public final class ContractionsAndExpansions {
                 return;
             }
             switch (Collation.tagFromCE32(ce32)) {
-            case Collation.FALLBACK_TAG:
-                return;
-            case Collation.RESERVED_TAG_3:
-            case Collation.BUILDER_DATA_TAG:
-            case Collation.LEAD_SURROGATE_TAG:
-                // Java porting note: U_INTERNAL_PROGRAM_ERROR is set to errorCode in ICU4C.
-                throw new AssertionError(
-                        String.format("Unexpected CE32 tag type %d for ce32=0x%08x",
-                                Collation.tagFromCE32(ce32), ce32));
-            case Collation.LONG_PRIMARY_TAG:
-                if (sink != null) {
-                    sink.handleCE(Collation.ceFromLongPrimaryCE32(ce32));
-                }
-                return;
-            case Collation.LONG_SECONDARY_TAG:
-                if (sink != null) {
-                    sink.handleCE(Collation.ceFromLongSecondaryCE32(ce32));
-                }
-                return;
-            case Collation.LATIN_EXPANSION_TAG:
-                if (sink != null) {
-                    ces[0] = Collation.latinCE0FromCE32(ce32);
-                    ces[1] = Collation.latinCE1FromCE32(ce32);
-                    sink.handleExpansion(ces, 0, 2);
-                }
-                // Optimization: If we have a prefix,
-                // then the relevant strings have been added already.
-                if (unreversedPrefix.length() == 0) {
-                    addExpansions(start, end);
-                }
-                return;
-            case Collation.EXPANSION32_TAG:
-                if (sink != null) {
-                    int idx = Collation.indexFromCE32(ce32);
-                    int length = Collation.lengthFromCE32(ce32);
-                    for (int i = 0; i < length; ++i) {
-                        ces[i] = Collation.ceFromCE32(data.ce32s[idx + i]);
+                case Collation.FALLBACK_TAG:
+                    return;
+                case Collation.RESERVED_TAG_3:
+                case Collation.BUILDER_DATA_TAG:
+                case Collation.LEAD_SURROGATE_TAG:
+                    // Java porting note: U_INTERNAL_PROGRAM_ERROR is set to errorCode in ICU4C.
+                    throw new AssertionError(
+                            String.format(
+                                    "Unexpected CE32 tag type %d for ce32=0x%08x",
+                                    Collation.tagFromCE32(ce32), ce32));
+                case Collation.LONG_PRIMARY_TAG:
+                    if (sink != null) {
+                        sink.handleCE(Collation.ceFromLongPrimaryCE32(ce32));
                     }
-                    sink.handleExpansion(ces, 0, length);
-                }
-                // Optimization: If we have a prefix,
-                // then the relevant strings have been added already.
-                if (unreversedPrefix.length() == 0) {
-                    addExpansions(start, end);
-                }
-                return;
-            case Collation.EXPANSION_TAG:
-                if (sink != null) {
-                    int idx = Collation.indexFromCE32(ce32);
-                    int length = Collation.lengthFromCE32(ce32);
-                    sink.handleExpansion(data.ces, idx, length);
-                }
-                // Optimization: If we have a prefix,
-                // then the relevant strings have been added already.
-                if (unreversedPrefix.length() == 0) {
-                    addExpansions(start, end);
-                }
-                return;
-            case Collation.PREFIX_TAG:
-                handlePrefixes(start, end, ce32);
-                return;
-            case Collation.CONTRACTION_TAG:
-                handleContractions(start, end, ce32);
-                return;
-            case Collation.DIGIT_TAG:
-                // Fetch the non-numeric-collation CE32 and continue.
-                ce32 = data.ce32s[Collation.indexFromCE32(ce32)];
-                break;
-            case Collation.U0000_TAG:
-                assert (start == 0 && end == 0);
-                // Fetch the normal ce32 for U+0000 and continue.
-                ce32 = data.ce32s[0];
-                break;
-            case Collation.HANGUL_TAG:
-                if (sink != null) {
-                    // TODO: This should be optimized,
-                    // especially if [start..end] is the complete Hangul range. (assert that)
-                    UTF16CollationIterator iter = new UTF16CollationIterator(data);
-                    StringBuilder hangul = new StringBuilder(1);
-                    for (int c = start; c <= end; ++c) {
-                        hangul.setLength(0);
-                        hangul.appendCodePoint(c);
-                        iter.setText(false, hangul, 0);
-                        int length = iter.fetchCEs();
-                        // Ignore the terminating non-CE.
-                        assert (length >= 2 && iter.getCE(length - 1) == Collation.NO_CE);
-                        sink.handleExpansion(iter.getCEs(), 0, length - 1);
+                    return;
+                case Collation.LONG_SECONDARY_TAG:
+                    if (sink != null) {
+                        sink.handleCE(Collation.ceFromLongSecondaryCE32(ce32));
                     }
-                }
-                // Optimization: If we have a prefix,
-                // then the relevant strings have been added already.
-                if (unreversedPrefix.length() == 0) {
-                    addExpansions(start, end);
-                }
-                return;
-            case Collation.OFFSET_TAG:
-                // Currently no need to send offset CEs to the sink.
-                return;
-            case Collation.IMPLICIT_TAG:
-                // Currently no need to send implicit CEs to the sink.
-                return;
+                    return;
+                case Collation.LATIN_EXPANSION_TAG:
+                    if (sink != null) {
+                        ces[0] = Collation.latinCE0FromCE32(ce32);
+                        ces[1] = Collation.latinCE1FromCE32(ce32);
+                        sink.handleExpansion(ces, 0, 2);
+                    }
+                    // Optimization: If we have a prefix,
+                    // then the relevant strings have been added already.
+                    if (unreversedPrefix.length() == 0) {
+                        addExpansions(start, end);
+                    }
+                    return;
+                case Collation.EXPANSION32_TAG:
+                    if (sink != null) {
+                        int idx = Collation.indexFromCE32(ce32);
+                        int length = Collation.lengthFromCE32(ce32);
+                        for (int i = 0; i < length; ++i) {
+                            ces[i] = Collation.ceFromCE32(data.ce32s[idx + i]);
+                        }
+                        sink.handleExpansion(ces, 0, length);
+                    }
+                    // Optimization: If we have a prefix,
+                    // then the relevant strings have been added already.
+                    if (unreversedPrefix.length() == 0) {
+                        addExpansions(start, end);
+                    }
+                    return;
+                case Collation.EXPANSION_TAG:
+                    if (sink != null) {
+                        int idx = Collation.indexFromCE32(ce32);
+                        int length = Collation.lengthFromCE32(ce32);
+                        sink.handleExpansion(data.ces, idx, length);
+                    }
+                    // Optimization: If we have a prefix,
+                    // then the relevant strings have been added already.
+                    if (unreversedPrefix.length() == 0) {
+                        addExpansions(start, end);
+                    }
+                    return;
+                case Collation.PREFIX_TAG:
+                    handlePrefixes(start, end, ce32);
+                    return;
+                case Collation.CONTRACTION_TAG:
+                    handleContractions(start, end, ce32);
+                    return;
+                case Collation.DIGIT_TAG:
+                    // Fetch the non-numeric-collation CE32 and continue.
+                    ce32 = data.ce32s[Collation.indexFromCE32(ce32)];
+                    break;
+                case Collation.U0000_TAG:
+                    assert (start == 0 && end == 0);
+                    // Fetch the normal ce32 for U+0000 and continue.
+                    ce32 = data.ce32s[0];
+                    break;
+                case Collation.HANGUL_TAG:
+                    if (sink != null) {
+                        // TODO: This should be optimized,
+                        // especially if [start..end] is the complete Hangul range. (assert that)
+                        UTF16CollationIterator iter = new UTF16CollationIterator(data);
+                        StringBuilder hangul = new StringBuilder(1);
+                        for (int c = start; c <= end; ++c) {
+                            hangul.setLength(0);
+                            hangul.appendCodePoint(c);
+                            iter.setText(false, hangul, 0);
+                            int length = iter.fetchCEs();
+                            // Ignore the terminating non-CE.
+                            assert (length >= 2 && iter.getCE(length - 1) == Collation.NO_CE);
+                            sink.handleExpansion(iter.getCEs(), 0, length - 1);
+                        }
+                    }
+                    // Optimization: If we have a prefix,
+                    // then the relevant strings have been added already.
+                    if (unreversedPrefix.length() == 0) {
+                        addExpansions(start, end);
+                    }
+                    return;
+                case Collation.OFFSET_TAG:
+                    // Currently no need to send offset CEs to the sink.
+                    return;
+                case Collation.IMPLICIT_TAG:
+                    // Currently no need to send implicit CEs to the sink.
+                    return;
             }
         }
     }

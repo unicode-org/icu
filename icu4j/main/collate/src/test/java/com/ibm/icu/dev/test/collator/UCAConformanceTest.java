@@ -6,20 +6,10 @@
  ********************************************************************/
 
 /**
- * UCAConformanceTest performs conformance tests defined in the data
- * files. ICU ships with stub data files, as the whole test are too
- * long. To do the whole test, download the test files.
+ * UCAConformanceTest performs conformance tests defined in the data files. ICU ships with stub data
+ * files, as the whole test are too long. To do the whole test, download the test files.
  */
-
 package com.ibm.icu.dev.test.collator;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
@@ -30,23 +20,30 @@ import com.ibm.icu.text.RuleBasedCollator;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.VersionInfo;
+import java.io.BufferedReader;
+import java.io.IOException;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public class UCAConformanceTest extends TestFmwk {
 
-    public UCAConformanceTest() {
-    }
+    public UCAConformanceTest() {}
 
     @Before
     public void init() throws Exception {
         UCA = (RuleBasedCollator) Collator.getInstance(ULocale.ROOT);
-        comparer = new UTF16.StringComparator(true, false, UTF16.StringComparator.FOLD_CASE_DEFAULT);
+        comparer =
+                new UTF16.StringComparator(true, false, UTF16.StringComparator.FOLD_CASE_DEFAULT);
     }
 
     private RuleBasedCollator UCA;
     private RuleBasedCollator rbUCA;
     private UTF16.StringComparator comparer;
-    private boolean isAtLeastUCA62 = UCharacter.getUnicodeVersion().compareTo(VersionInfo.UNICODE_6_2) >= 0;
+    private boolean isAtLeastUCA62 =
+            UCharacter.getUnicodeVersion().compareTo(VersionInfo.UNICODE_6_2) >= 0;
 
     @Test
     public void TestTableNonIgnorable() {
@@ -79,8 +76,9 @@ public class UCAConformanceTest extends TestFmwk {
 
     @Test
     public void TestRulesShifted() {
-        logln("This test is currently disabled, as it is impossible to "
-                + "wholly represent fractional UCA using tailoring rules.");
+        logln(
+                "This test is currently disabled, as it is impossible to "
+                        + "wholly represent fractional UCA using tailoring rules.");
         return;
         /*
          * initRbUCA(); if(rbUCA == null) { return; }
@@ -102,9 +100,11 @@ public class UCAConformanceTest extends TestFmwk {
             } catch (Exception e1) {
                 try {
                     in = TestUtil.getUtf8DataReader(collationTest + type + "_STUB" + ext);
-                    logln("INFO: Working with the stub file.\n" + "If you need the full conformance test, please\n"
-                            + "download the appropriate data files from:\n"
-                            + "http://unicode.org/cldr/trac/browser/trunk/common/uca");
+                    logln(
+                            "INFO: Working with the stub file.\n"
+                                    + "If you need the full conformance test, please\n"
+                                    + "download the appropriate data files from:\n"
+                                    + "http://unicode.org/cldr/trac/browser/trunk/common/uca");
                 } catch (Exception e11) {
                     errln("ERROR: Could not find any of the test files");
                 }
@@ -147,7 +147,7 @@ public class UCAConformanceTest extends TestFmwk {
         int i = 0, value;
         StringBuilder result = new StringBuilder(), buffer = new StringBuilder();
 
-        for (;;) {
+        for (; ; ) {
             while (i < line.length() && Character.isWhitespace(line.charAt(i))) {
                 i++;
             }
@@ -165,7 +165,6 @@ public class UCAConformanceTest extends TestFmwk {
             buffer.setLength(0);
             result.appendCodePoint(value);
         }
-
     }
 
     private static final int IS_SHIFTED = 1;
@@ -226,18 +225,24 @@ public class UCAConformanceTest extends TestFmwk {
                     int cmpres2 = coll.compare(buffer, oldB);
 
                     if (cmpres != -cmpres2) {
-                        errln(String.format(
-                                "Compare result not symmetrical on line %d: "
-                                        + "previous vs. current (%d) / current vs. previous (%d)",
-                                lineNo, cmpres, cmpres2));
+                        errln(
+                                String.format(
+                                        "Compare result not symmetrical on line %d: "
+                                                + "previous vs. current (%d) / current vs. previous (%d)",
+                                        lineNo, cmpres, cmpres2));
                         ok = false;
                     }
 
                     // TODO: Compare with normalization turned off if the input passes the FCD test.
 
                     if (withSortKeys && cmpres != normalizeResult(skres)) {
-                        errln("Difference between coll.compare (" + cmpres + ") and sortkey compare (" + skres
-                                + ") on line " + lineNo);
+                        errln(
+                                "Difference between coll.compare ("
+                                        + cmpres
+                                        + ") and sortkey compare ("
+                                        + skres
+                                        + ") on line "
+                                        + lineNo);
                         ok = false;
                     }
 
@@ -246,7 +251,8 @@ public class UCAConformanceTest extends TestFmwk {
                         // Up to UCA 6.1, the collation test files use a custom tie-breaker,
                         // comparing the raw input strings.
                         res = comparer.compare(oldB, buffer);
-                        // Starting with UCA 6.2, the collation test files use the standard UCA tie-breaker,
+                        // Starting with UCA 6.2, the collation test files use the standard UCA
+                        // tie-breaker,
                         // comparing the NFD versions of the input strings,
                         // which we do via setting strength=identical.
                     }

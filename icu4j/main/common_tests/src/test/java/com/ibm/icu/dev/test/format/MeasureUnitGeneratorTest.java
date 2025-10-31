@@ -8,6 +8,11 @@
  */
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
+import com.ibm.icu.impl.Pair;
+import com.ibm.icu.util.MeasureUnit;
+import com.ibm.icu.util.NoUnit;
+import com.ibm.icu.util.VersionInfo;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -22,36 +27,31 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.CoreTestFmwk;
-import com.ibm.icu.impl.Pair;
-import com.ibm.icu.util.MeasureUnit;
-import com.ibm.icu.util.NoUnit;
-import com.ibm.icu.util.VersionInfo;
-
 /**
- * This is not a real test class. It is only used to
- * generate updated unit tests code based on new CLDR data.
- * Do not add any other tests here.
+ * This is not a real test class. It is only used to generate updated unit tests code based on new
+ * CLDR data. Do not add any other tests here.
  *
- * See https://unicode-org.github.io/icu/processes/release/tasks/updating-measure-unit.html
- * for information on how to update with each new release.
+ * <p>See https://unicode-org.github.io/icu/processes/release/tasks/updating-measure-unit.html for
+ * information on how to update with each new release.
+ *
  * @author markdavis
  */
 @RunWith(JUnit4.class)
 public class MeasureUnitGeneratorTest extends CoreTestFmwk {
 
-    private static class OrderedPair<F extends Comparable<F>, S extends Comparable<S>> extends Pair<F, S> implements Comparable<OrderedPair<F, S>> {
+    private static class OrderedPair<F extends Comparable<F>, S extends Comparable<S>>
+            extends Pair<F, S> implements Comparable<OrderedPair<F, S>> {
 
         private OrderedPair(F first, S second) {
             super(first, second);
         }
 
-        private static <F extends Comparable<F>, S extends Comparable<S>> OrderedPair<F, S> of(F first, S second) {
+        private static <F extends Comparable<F>, S extends Comparable<S>> OrderedPair<F, S> of(
+                F first, S second) {
             if (first == null || second == null) {
                 throw new IllegalArgumentException("OrderedPair.of requires non null values.");
             }
@@ -71,7 +71,7 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
     private static final Set<String> DRAFT_VERSION_SET = Set.of("76", "77", "78");
 
     private static final Set<String> TIME_CODES =
-        Set.of("year", "month", "week", "day", "hour", "minute", "second");
+            Set.of("year", "month", "week", "day", "hour", "minute", "second");
 
     private static final String[][] JAVA_VERSIONS = {
         {"G_FORCE", "53"},
@@ -318,7 +318,7 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
 
     // modify certain CLDR unit names before generating functions
     // that create/get the corresponding MeasureUnit objects
-    private static final Map<String,String> CLDR_NAME_REMAP = new HashMap<>();
+    private static final Map<String, String> CLDR_NAME_REMAP = new HashMap<>();
 
     static {
         for (String[] funcNameAndVersion : JAVA_VERSIONS) {
@@ -328,16 +328,16 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
         // CLDR_NAME_REMAP entries
         // The first two fix overly-generic CLDR unit names
         CLDR_NAME_REMAP.put("revolution", "revolution-angle");
-        CLDR_NAME_REMAP.put("generic",    "generic-temperature");
+        CLDR_NAME_REMAP.put("generic", "generic-temperature");
         // The next seven map updated CLDR 37 names back to their
         // old form in order to preserve the old function names
-        CLDR_NAME_REMAP.put("meter-per-square-second",     "meter-per-second-squared");
-        CLDR_NAME_REMAP.put("permillion",                  "part-per-million");
-        CLDR_NAME_REMAP.put("liter-per-100-kilometer",     "liter-per-100kilometers");
-        CLDR_NAME_REMAP.put("inch-ofhg",                   "inch-hg");
-        CLDR_NAME_REMAP.put("millimeter-ofhg",             "millimeter-of-mercury");
+        CLDR_NAME_REMAP.put("meter-per-square-second", "meter-per-second-squared");
+        CLDR_NAME_REMAP.put("permillion", "part-per-million");
+        CLDR_NAME_REMAP.put("liter-per-100-kilometer", "liter-per-100kilometers");
+        CLDR_NAME_REMAP.put("inch-ofhg", "inch-hg");
+        CLDR_NAME_REMAP.put("millimeter-ofhg", "millimeter-of-mercury");
         CLDR_NAME_REMAP.put("pound-force-per-square-inch", "pound-per-square-inch");
-        CLDR_NAME_REMAP.put("pound-force-foot",            "pound-foot");
+        CLDR_NAME_REMAP.put("pound-force-foot", "pound-foot");
     }
 
     private static final String ICU_ROOT = findIcuRoot();
@@ -361,7 +361,8 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
         if (System.getProperty("generateMeasureUnitUpdate") != null) {
             final String icuVersion = Integer.toString(VersionInfo.ICU_VERSION.getMajor());
             System.out.println();
-            System.out.println("WARNING: open the pairs of files listed below and copy code fragments, not full files!");
+            System.out.println(
+                    "WARNING: open the pairs of files listed below and copy code fragments, not full files!");
             System.out.println("Some kind of diff tool / editor would work best.");
 
             generateConstants(icuVersion); // update generated MeasureUnit constants
@@ -375,8 +376,7 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
 
     private static Map<MeasureUnit, Pair<MeasureUnit, MeasureUnit>> getUnitsToPerParts() {
         TreeMap<String, List<MeasureUnit>> allUnits = getAllUnits();
-        Map<MeasureUnit, Pair<String, String>> unitsToPerStrings =
-                new HashMap<>();
+        Map<MeasureUnit, Pair<String, String>> unitsToPerStrings = new HashMap<>();
         Map<String, MeasureUnit> namesToUnits = new HashMap<>();
         for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
             String type = entry.getKey();
@@ -394,8 +394,7 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
                 }
             }
         }
-        Map<MeasureUnit, Pair<MeasureUnit, MeasureUnit>> unitsToPerUnits =
-                new HashMap<>();
+        Map<MeasureUnit, Pair<MeasureUnit, MeasureUnit>> unitsToPerUnits = new HashMap<>();
         for (Map.Entry<MeasureUnit, Pair<String, String>> entry : unitsToPerStrings.entrySet()) {
             Pair<String, String> perStrings = entry.getValue();
             MeasureUnit unit = namesToUnits.get(perStrings.first);
@@ -488,7 +487,8 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
         out.println("     * Also see {@link #createMilligramOfglucosePerDeciliter()}.");
         out.println("     * Also see {@link #getMilligramPerDeciliter()}.");
         out.println("     * @param status ICU error code.");
-        out.println("     * @deprecated ICU 78 use createMilligramOfglucosePerDeciliter(UErrorCode &status)");
+        out.println(
+                "     * @deprecated ICU 78 use createMilligramOfglucosePerDeciliter(UErrorCode &status)");
         out.println("     */");
         out.println("    static MeasureUnit *createMilligramPerDeciliter(UErrorCode &status);");
         out.println("");
@@ -552,8 +552,7 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
         out.println("");
     }
 
-    private static void checkForDup(
-            Map<String, MeasureUnit> seen, String name, MeasureUnit unit) {
+    private static void checkForDup(Map<String, MeasureUnit> seen, String name, MeasureUnit unit) {
         if (seen.containsKey(name)) {
             throw new RuntimeException("\nCollision!!" + unit + ", " + seen.get(name));
         } else {
@@ -562,7 +561,8 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
     }
 
     private static void updateJAVAVersions(String thisVersion) throws IOException {
-        String fullOutputPath = "${icuroot}/icu4j/main/common_tests/src/test/java/com/ibm/icu/dev/test/format/MeasureUnitGeneratorTest.java";
+        String fullOutputPath =
+                "${icuroot}/icu4j/main/common_tests/src/test/java/com/ibm/icu/dev/test/format/MeasureUnitGeneratorTest.java";
         try (PrintStream out = createAndStartOutputFile(fullOutputPath)) {
             out.println();
             Map<String, MeasureUnit> seen = new HashMap<>();
@@ -582,7 +582,6 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
             }
         }
     }
-
 
     private static TreeMap<String, List<MeasureUnit>> getAllUnits() {
         final Comparator<MeasureUnit> measureUnitComparator =
@@ -647,8 +646,7 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
             int offset = 0;
             int typeIdx = 0;
             Map<MeasureUnit, Integer> measureUnitToOffset = new HashMap<>();
-            Map<MeasureUnit, Pair<Integer, Integer>> measureUnitToTypeSubType =
-                    new HashMap<>();
+            Map<MeasureUnit, Pair<Integer, Integer>> measureUnitToTypeSubType = new HashMap<>();
             for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
                 int subTypeIdx = 0;
                 for (MeasureUnit unit : entry.getValue()) {
@@ -679,10 +677,10 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
 
             // Build unit per unit offsets to corresponding type sub types sorted by
             // unit first and then per unit.
-            TreeMap<OrderedPair<Integer, Integer>, Pair<Integer, Integer>> unitPerUnitOffsetsToTypeSubType
-                    = new TreeMap<>();
-            for (Map.Entry<MeasureUnit, Pair<MeasureUnit, MeasureUnit>> entry
-                    : getUnitsToPerParts().entrySet()) {
+            TreeMap<OrderedPair<Integer, Integer>, Pair<Integer, Integer>>
+                    unitPerUnitOffsetsToTypeSubType = new TreeMap<>();
+            for (Map.Entry<MeasureUnit, Pair<MeasureUnit, MeasureUnit>> entry :
+                    getUnitsToPerParts().entrySet()) {
                 Pair<MeasureUnit, MeasureUnit> unitPerUnit = entry.getValue();
                 unitPerUnitOffsetsToTypeSubType.put(
                         OrderedPair.of(
@@ -692,7 +690,8 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
             }
 
             // Print out the fast-path for the default constructor
-            out.println("// Shortcuts to the base unit in order to make the default constructor fast");
+            out.println(
+                    "// Shortcuts to the base unit in order to make the default constructor fast");
             out.println("static const int32_t kBaseTypeIdx = " + baseTypeIdx + ";");
             out.println("static const int32_t kBaseSubTypeIdx = " + baseSubTypeIdx + ";");
             out.println();
@@ -712,19 +711,22 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
                     }
                     checkForDup(seen, name, unit);
                     out.printf("MeasureUnit *MeasureUnit::create%s(UErrorCode &status) {\n", name);
-                    out.printf("    return MeasureUnit::create(%d, %d, status);\n",
+                    out.printf(
+                            "    return MeasureUnit::create(%d, %d, status);\n",
                             typeSubType.first, typeSubType.second);
                     out.println("}");
                     out.println();
                     out.printf("MeasureUnit MeasureUnit::get%s() {\n", name);
-                    out.printf("    return MeasureUnit(%d, %d);\n",
+                    out.printf(
+                            "    return MeasureUnit(%d, %d);\n",
                             typeSubType.first, typeSubType.second);
                     out.println("}");
                     out.println();
                     // Add entry for corresponding backward-compatibility API if there is one
                     switch (name) {
                         case "MilligramOfglucosePerDeciliter":
-                            addCXXForBackwardCompatibility(out, "MilligramPerDeciliter", typeSubType);
+                            addCXXForBackwardCompatibility(
+                                    out, "MilligramPerDeciliter", typeSubType);
                             break;
                         case "PartPer1E6":
                             addCXXForBackwardCompatibility(out, "PartPerMillion", typeSubType);
@@ -743,15 +745,16 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
 
     // Add the API skeletons for "metric-ton"
     // The tool won't create them any more
-    private static void addCXXForBackwardCompatibility(PrintStream out, String name, Pair<Integer, Integer> typeSubType) {
+    private static void addCXXForBackwardCompatibility(
+            PrintStream out, String name, Pair<Integer, Integer> typeSubType) {
         out.printf("MeasureUnit *MeasureUnit::create%s(UErrorCode &status) {\n", name);
-        out.printf("    return MeasureUnit::create(%d, %d, status);\n",
-                        typeSubType.first, typeSubType.second);
+        out.printf(
+                "    return MeasureUnit::create(%d, %d, status);\n",
+                typeSubType.first, typeSubType.second);
         out.println("}");
         out.println();
         out.printf("MeasureUnit MeasureUnit::get%s() {\n", name);
-        out.printf("    return MeasureUnit(%d, %d);\n",
-                        typeSubType.first, typeSubType.second);
+        out.printf("    return MeasureUnit(%d, %d);\n", typeSubType.first, typeSubType.second);
         out.println("}");
         out.println();
     }
@@ -789,7 +792,8 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
     }
 
     private static void generateBackwardCompatibilityTest(String version) throws IOException {
-        String fullOutputPath = "${icuroot}/icu4j/main/common_tests/src/test/java/com/ibm/icu/dev/test/format/MeasureUnitCompatibilityTest.java";
+        String fullOutputPath =
+                "${icuroot}/icu4j/main/common_tests/src/test/java/com/ibm/icu/dev/test/format/MeasureUnitCompatibilityTest.java";
         try (PrintStream out = createAndStartOutputFile(fullOutputPath)) {
             Map<String, MeasureUnit> seen = new HashMap<>();
             out.println();
@@ -853,7 +857,9 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
                 for (MeasureUnit unit : entry.getValue()) {
                     String camelCase = toCamelCase(unit);
                     checkForDup(seen, camelCase, unit);
-                    out.printf("    measureUnit.adoptInstead(MeasureUnit::create%s(status));\n", camelCase);
+                    out.printf(
+                            "    measureUnit.adoptInstead(MeasureUnit::create%s(status));\n",
+                            camelCase);
                     out.printf("    measureUnitValue = MeasureUnit::get%s();\n", camelCase);
                     // Add corresponding backward-compatibility API if there is one
                     switch (camelCase) {
@@ -877,8 +883,12 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
     }
 
     private static void addCXXBackwardCompatibilityEntry(PrintStream out, String name) {
-        out.printf("    measureUnit.adoptInstead(MeasureUnit::create%s(status)); // backward compatibility API\n", name);
-        out.printf("    measureUnitValue = MeasureUnit::get%s(); // backward compatibility API\n", name);
+        out.printf(
+                "    measureUnit.adoptInstead(MeasureUnit::create%s(status)); // backward compatibility API\n",
+                name);
+        out.printf(
+                "    measureUnitValue = MeasureUnit::get%s(); // backward compatibility API\n",
+                name);
     }
 
     private static String toJAVAName(MeasureUnit unit) {
@@ -886,7 +896,7 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
         String type = unit.getType();
 
         String replacement = CLDR_NAME_REMAP.get(code);
-         if (replacement != null) {
+        if (replacement != null) {
             code = replacement;
         }
 
@@ -900,7 +910,8 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
     }
 
     private static void generateConstants(String thisVersion) throws IOException {
-        String fullOutputPath = "${icuroot}/icu4j/main/core/src/main/java/com/ibm/icu/util/MeasureUnit.java";
+        String fullOutputPath =
+                "${icuroot}/icu4j/main/core/src/main/java/com/ibm/icu/util/MeasureUnit.java";
         try (PrintStream out = createAndStartOutputFile(fullOutputPath)) {
             out.println("    // Start generated MeasureUnit constants");
             out.println();
@@ -916,31 +927,34 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
                     String code = unit.getSubtype();
                     checkForDup(seen, name, unit);
                     out.println("    /**");
-                    out.println("     * Constant for unit of " + type +
-                            ": " +
-                            code);
+                    out.println("     * Constant for unit of " + type + ": " + code);
                     // Special case JAVA had old constants for time from before.
                     if ("duration".equals(type) && TIME_CODES.contains(code)) {
                         out.println("     * @stable ICU 4.0");
-                    }
-                    else if (isDraft(name)) {
+                    } else if (isDraft(name)) {
                         out.println("     * @draft ICU " + getVersion(name, thisVersion));
                     } else {
                         out.println("     * @stable ICU " + getVersion(name, thisVersion));
                     }
                     out.println("     */");
                     if ("duration".equals(type) && TIME_CODES.contains(code)) {
-                        out.println("    public static final TimeUnit " + name + " = (TimeUnit) MeasureUnit.internalGetInstance(\"" +
-                                type +
-                                "\", \"" +
-                                code +
-                                "\");");
+                        out.println(
+                                "    public static final TimeUnit "
+                                        + name
+                                        + " = (TimeUnit) MeasureUnit.internalGetInstance(\""
+                                        + type
+                                        + "\", \""
+                                        + code
+                                        + "\");");
                     } else {
-                        out.println("    public static final MeasureUnit " + name + " = MeasureUnit.internalGetInstance(\"" +
-                                type +
-                                "\", \"" +
-                                code +
-                                "\");");
+                        out.println(
+                                "    public static final MeasureUnit "
+                                        + name
+                                        + " = MeasureUnit.internalGetInstance(\""
+                                        + type
+                                        + "\", \""
+                                        + code
+                                        + "\");");
                     }
                     out.println();
                     // Add corresponding backward-compatibility API if there is one
@@ -971,8 +985,12 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
         out.println("     * @deprecated ICU 78 use MILLIGRAM_OFGLUCOSE_PER_DECILITER");
         out.println("     */");
         out.println("    @Deprecated");
-        out.println("    public static final MeasureUnit MILLIGRAM_PER_DECILITER = MeasureUnit.internalGetInstance(\"" +
-                            type + "\", \"" + code + "\");");
+        out.println(
+                "    public static final MeasureUnit MILLIGRAM_PER_DECILITER = MeasureUnit.internalGetInstance(\""
+                        + type
+                        + "\", \""
+                        + code
+                        + "\");");
         out.println("");
     }
 
@@ -983,8 +1001,12 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
         out.println("     * (renamed to part-per-1e6 in CLDR 48 / ICU 78).");
         out.println("     * @stable ICU 57");
         out.println("     */");
-        out.println("    public static final MeasureUnit PART_PER_MILLION = MeasureUnit.internalGetInstance(\"" +
-                            type + "\", \"" + code + "\");");
+        out.println(
+                "    public static final MeasureUnit PART_PER_MILLION = MeasureUnit.internalGetInstance(\""
+                        + type
+                        + "\", \""
+                        + code
+                        + "\");");
         out.println("");
     }
 
@@ -996,8 +1018,12 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
         out.println("     * @deprecated ICU 78 use TONNE");
         out.println("     */");
         out.println("    @Deprecated");
-        out.println("    public static final MeasureUnit METRIC_TON = MeasureUnit.internalGetInstance(\"" +
-                            type + "\", \"" + code + "\");");
+        out.println(
+                "    public static final MeasureUnit METRIC_TON = MeasureUnit.internalGetInstance(\""
+                        + type
+                        + "\", \""
+                        + code
+                        + "\");");
         out.println("");
     }
 
@@ -1017,12 +1043,14 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
         return DRAFT_VERSION_SET.contains(version);
     }
 
-    private static PrintStream createAndStartOutputFile(String fullOutputFileName) throws IOException {
+    private static PrintStream createAndStartOutputFile(String fullOutputFileName)
+            throws IOException {
         if (fullOutputFileName.startsWith("${icuroot}")) {
             fullOutputFileName = fullOutputFileName.replace("${icuroot}", ICU_ROOT);
         }
         File outputFile = new File("target", new File(fullOutputFileName).getName());
-        System.out.printf("%nCopy the generated code fragments from / to\n    %s \\\n    %s%n",
+        System.out.printf(
+                "%nCopy the generated code fragments from / to\n    %s \\\n    %s%n",
                 outputFile.getAbsoluteFile(), fullOutputFileName);
 
         return new PrintStream(outputFile, "utf-8");

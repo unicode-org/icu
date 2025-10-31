@@ -1,35 +1,32 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /*
-*******************************************************************************
-*   Copyright (C) 2010-2016, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-*******************************************************************************
-*/
+ *******************************************************************************
+ *   Copyright (C) 2010-2016, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ *******************************************************************************
+ */
 package com.ibm.icu.impl;
 
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Generic, thread-safe cache implementation, usually storing cached instances
- * in {@link java.lang.ref.Reference}s via {@link CacheValue}s.
- * To use, instantiate a subclass which implements the createInstance() method,
- * and call get() with the key and the data. The get() call will use the data
- * only if it needs to call createInstance(), otherwise the data is ignored.
+ * Generic, thread-safe cache implementation, usually storing cached instances in {@link
+ * java.lang.ref.Reference}s via {@link CacheValue}s. To use, instantiate a subclass which
+ * implements the createInstance() method, and call get() with the key and the data. The get() call
+ * will use the data only if it needs to call createInstance(), otherwise the data is ignored.
  *
- * <p>When caching instances while the CacheValue "strength" is {@code SOFT},
- * the Java runtime can later release these instances once they are not used any more at all.
- * If such an instance is then requested again,
- * the getInstance() method will call createInstance() again and reset the CacheValue.
- * The cache holds on to its map of keys to CacheValues forever.
+ * <p>When caching instances while the CacheValue "strength" is {@code SOFT}, the Java runtime can
+ * later release these instances once they are not used any more at all. If such an instance is then
+ * requested again, the getInstance() method will call createInstance() again and reset the
+ * CacheValue. The cache holds on to its map of keys to CacheValues forever.
  *
- * <p>A value can be null if createInstance() returns null.
- * In this case, it must do so consistently for the same key and data.
+ * <p>A value can be null if createInstance() returns null. In this case, it must do so consistently
+ * for the same key and data.
  *
  * @param <K> Cache lookup key type
  * @param <V> Cache instance value type (must not be a CacheValue)
  * @param <D> Data type for creating a new instance value
- *
  * @author Markus Scherer, Mark Davis
  */
 public abstract class SoftCache<K, V, D> extends CacheBase<K, V, D> {
@@ -47,17 +44,17 @@ public abstract class SoftCache<K, V, D> extends CacheBase<K, V, D> {
         // a simple Reference we would not be able to reset its value after it has been cleared.
         // (And ConcurrentHashMap.put() always replaces the value, which we don't want either.)
         Object mapValue = map.get(key);
-        if(mapValue != null) {
-            if(!(mapValue instanceof CacheValue)) {
+        if (mapValue != null) {
+            if (!(mapValue instanceof CacheValue)) {
                 // The value was stored directly.
-                return (V)mapValue;
+                return (V) mapValue;
             }
-            CacheValue<V> cv = (CacheValue<V>)mapValue;
-            if(cv.isNull()) {
+            CacheValue<V> cv = (CacheValue<V>) mapValue;
+            if (cv.isNull()) {
                 return null;
             }
             V value = cv.get();
-            if(value != null) {
+            if (value != null) {
                 return value;
             }
             // The instance has been evicted, its Reference cleared.
@@ -67,21 +64,23 @@ public abstract class SoftCache<K, V, D> extends CacheBase<K, V, D> {
         } else /* valueRef == null */ {
             // We had never cached an instance for this key.
             V value = createInstance(key, data);
-            mapValue = (value != null && CacheValue.futureInstancesWillBeStrong()) ?
-                    value : CacheValue.getInstance(value);
+            mapValue =
+                    (value != null && CacheValue.futureInstancesWillBeStrong())
+                            ? value
+                            : CacheValue.getInstance(value);
             mapValue = map.putIfAbsent(key, mapValue);
-            if(mapValue == null) {
+            if (mapValue == null) {
                 // Normal "put": Our new value is now cached.
                 return value;
             }
             // Race condition: Another thread beat us to putting a CacheValue
             // into the map. Return its value, but just in case the garbage collector
             // was aggressive, we also offer our new instance for caching.
-            if(!(mapValue instanceof CacheValue)) {
+            if (!(mapValue instanceof CacheValue)) {
                 // The value was stored directly.
-                return (V)mapValue;
+                return (V) mapValue;
             }
-            CacheValue<V> cv = (CacheValue<V>)mapValue;
+            CacheValue<V> cv = (CacheValue<V>) mapValue;
             return cv.resetIfCleared(value);
         }
     }

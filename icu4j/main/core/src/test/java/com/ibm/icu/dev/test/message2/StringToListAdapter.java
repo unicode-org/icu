@@ -3,13 +3,12 @@
 
 package com.ibm.icu.dev.test.message2;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 
 // Helper class that converts a single String to a List<String>
 // so that the `src` property can be either a single string or an array of strings.
@@ -51,4 +50,3 @@ public class StringToListAdapter extends TypeAdapter<Sources> {
         writer.endArray();
     }
 }
-

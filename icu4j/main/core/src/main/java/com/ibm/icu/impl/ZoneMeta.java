@@ -1,17 +1,22 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /*
-**********************************************************************
-* Copyright (c) 2003-2016 International Business Machines
-* Corporation and others.  All Rights Reserved.
-**********************************************************************
-* Author: Alan Liu
-* Created: September 4 2003
-* Since: ICU 2.8
-**********************************************************************
-*/
+ **********************************************************************
+ * Copyright (c) 2003-2016 International Business Machines
+ * Corporation and others.  All Rights Reserved.
+ **********************************************************************
+ * Author: Alan Liu
+ * Created: September 4 2003
+ * Since: ICU 2.8
+ **********************************************************************
+ */
 package com.ibm.icu.impl;
 
+import com.ibm.icu.util.Output;
+import com.ibm.icu.util.SimpleTimeZone;
+import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.util.TimeZone.SystemTimeZoneType;
+import com.ibm.icu.util.UResourceBundle;
 import java.lang.ref.SoftReference;
 import java.util.Collections;
 import java.util.Locale;
@@ -19,22 +24,13 @@ import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.TreeSet;
 
-import com.ibm.icu.util.Output;
-import com.ibm.icu.util.SimpleTimeZone;
-import com.ibm.icu.util.TimeZone;
-import com.ibm.icu.util.TimeZone.SystemTimeZoneType;
-import com.ibm.icu.util.UResourceBundle;
-
 /**
- * This class, not to be instantiated, implements the meta-data
- * missing from the underlying core JDK implementation of time zones.
- * There are two missing features: Obtaining a list of available zones
- * for a given country (as defined by the Olson database), and
- * obtaining a list of equivalent zones for a given zone (as defined
- * by Olson links).
+ * This class, not to be instantiated, implements the meta-data missing from the underlying core JDK
+ * implementation of time zones. There are two missing features: Obtaining a list of available zones
+ * for a given country (as defined by the Olson database), and obtaining a list of equivalent zones
+ * for a given zone (as defined by Olson links).
  *
- * This class uses a data class, ZoneMetaData, which is created by the
- * tool tz2icu.
+ * <p>This class uses a data class, ZoneMetaData, which is created by the tool tz2icu.
  *
  * @author Alan Liu
  * @since ICU 2.8
@@ -43,11 +39,11 @@ public final class ZoneMeta {
     private static final boolean ASSERT = false;
 
     private static final String ZONEINFORESNAME = "zoneinfo64";
-    private static final String kREGIONS  = "Regions";
-    private static final String kZONES    = "Zones";
-    private static final String kNAMES    = "Names";
+    private static final String kREGIONS = "Regions";
+    private static final String kZONES = "Zones";
+    private static final String kNAMES = "Names";
 
-    private static final String kGMT_ID   = "GMT";
+    private static final String kGMT_ID = "GMT";
     private static final String kCUSTOM_TZ_PREFIX = "GMT";
 
     private static final String kWorld = "001";
@@ -57,8 +53,8 @@ public final class ZoneMeta {
     private static SoftReference<Set<String>> REF_CANONICAL_SYSTEM_LOCATION_ZONES;
 
     /**
-     * Returns an immutable set of system time zone IDs.
-     * Etc/Unknown is excluded.
+     * Returns an immutable set of system time zone IDs. Etc/Unknown is excluded.
+     *
      * @return An immutable set of system time zone IDs.
      */
     private static synchronized Set<String> getSystemZIDs() {
@@ -83,9 +79,9 @@ public final class ZoneMeta {
     }
 
     /**
-     * Returns an immutable set of canonical system time zone IDs.
-     * The result set is a subset of {@link #getSystemZIDs()}, but not
-     * including aliases, such as "US/Eastern".
+     * Returns an immutable set of canonical system time zone IDs. The result set is a subset of
+     * {@link #getSystemZIDs()}, but not including aliases, such as "US/Eastern".
+     *
      * @return An immutable set of canonical system time zone IDs.
      */
     private static synchronized Set<String> getCanonicalSystemZIDs() {
@@ -113,12 +109,12 @@ public final class ZoneMeta {
     }
 
     /**
-     * Returns an immutable set of canonical system time zone IDs that
-     * are associated with actual locations.
-     * The result set is a subset of {@link #getCanonicalSystemZIDs()}, but not
-     * including IDs, such as "Etc/GTM+5".
-     * @return An immutable set of canonical system time zone IDs that
-     * are associated with actual locations.
+     * Returns an immutable set of canonical system time zone IDs that are associated with actual
+     * locations. The result set is a subset of {@link #getCanonicalSystemZIDs()}, but not including
+     * IDs, such as "Etc/GTM+5".
+     *
+     * @return An immutable set of canonical system time zone IDs that are associated with actual
+     *     locations.
      */
     private static synchronized Set<String> getCanonicalSystemLocationZIDs() {
         Set<String> canonicalSystemLocationZones = null;
@@ -149,26 +145,28 @@ public final class ZoneMeta {
 
     /**
      * Returns an immutable set of system IDs for the given conditions.
-     * @param type      a system time zone type.
-     * @param region    a region, or null.
+     *
+     * @param type a system time zone type.
+     * @param region a region, or null.
      * @param rawOffset a zone raw offset or null.
      * @return An immutable set of system IDs for the given conditions.
      */
-    public static Set<String> getAvailableIDs(SystemTimeZoneType type, String region, Integer rawOffset) {
+    public static Set<String> getAvailableIDs(
+            SystemTimeZoneType type, String region, Integer rawOffset) {
         Set<String> baseSet = null;
         switch (type) {
-        case ANY:
-            baseSet = getSystemZIDs();
-            break;
-        case CANONICAL:
-            baseSet = getCanonicalSystemZIDs();
-            break;
-        case CANONICAL_LOCATION:
-            baseSet = getCanonicalSystemLocationZIDs();
-            break;
-        default:
-            // never occur
-            throw new IllegalArgumentException("Unknown SystemTimeZoneType");
+            case ANY:
+                baseSet = getSystemZIDs();
+                break;
+            case CANONICAL:
+                baseSet = getCanonicalSystemZIDs();
+                break;
+            case CANONICAL_LOCATION:
+                baseSet = getCanonicalSystemLocationZIDs();
+                break;
+            default:
+                // never occur
+                throw new IllegalArgumentException("Unknown SystemTimeZoneType");
         }
 
         if (region == null && rawOffset == null) {
@@ -205,16 +203,15 @@ public final class ZoneMeta {
     }
 
     /**
-     * Returns the number of IDs in the equivalency group that
-     * includes the given ID.  An equivalency group contains zones
-     * that behave identically to the given zone.
+     * Returns the number of IDs in the equivalency group that includes the given ID. An equivalency
+     * group contains zones that behave identically to the given zone.
      *
-     * <p>If there are no equivalent zones, then this method returns
-     * 0.  This means either the given ID is not a valid zone, or it
-     * is and there are no other equivalent zones.
+     * <p>If there are no equivalent zones, then this method returns 0. This means either the given
+     * ID is not a valid zone, or it is and there are no other equivalent zones.
+     *
      * @param id a system time zone ID
-     * @return the number of zones in the equivalency group containing
-     * 'id', or zero if there are no equivalent zones.
+     * @return the number of zones in the equivalency group containing 'id', or zero if there are no
+     *     equivalent zones.
      * @see #getEquivalentID
      */
     public static synchronized int countEquivalentIDs(String id) {
@@ -233,21 +230,19 @@ public final class ZoneMeta {
     }
 
     /**
-     * Returns an ID in the equivalency group that includes the given
-     * ID.  An equivalency group contains zones that behave
-     * identically to the given zone.
+     * Returns an ID in the equivalency group that includes the given ID. An equivalency group
+     * contains zones that behave identically to the given zone.
      *
-     * <p>The given index must be in the range 0..n-1, where n is the
-     * value returned by <code>countEquivalentIDs(id)</code>.  For
-     * some value of 'index', the returned value will be equal to the
-     * given id.  If the given id is not a valid system time zone, or
-     * if 'index' is out of range, then returns an empty string.
+     * <p>The given index must be in the range 0..n-1, where n is the value returned by <code>
+     * countEquivalentIDs(id)</code>. For some value of 'index', the returned value will be equal to
+     * the given id. If the given id is not a valid system time zone, or if 'index' is out of range,
+     * then returns an empty string.
+     *
      * @param id a system time zone ID
-     * @param index a value from 0 to n-1, where n is the value
-     * returned by <code>countEquivalentIDs(id)</code>
-     * @return the ID of the index-th zone in the equivalency group
-     * containing 'id', or an empty string if 'id' is not a valid
-     * system ID or 'index' is out of range
+     * @param index a value from 0 to n-1, where n is the value returned by <code>
+     *     countEquivalentIDs(id)</code>
+     * @return the ID of the index-th zone in the equivalency group containing 'id', or an empty
+     *     string if 'id' is not a valid system ID or 'index' is out of range
      * @see #countEquivalentIDs
      */
     public static synchronized String getEquivalentID(String id, int index) {
@@ -284,8 +279,11 @@ public final class ZoneMeta {
     private static synchronized String[] getZoneIDs() {
         if (ZONEIDS == null) {
             try {
-                UResourceBundle top = UResourceBundle.getBundleInstance(
-                        ICUData.ICU_BASE_NAME, ZONEINFORESNAME, ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+                UResourceBundle top =
+                        UResourceBundle.getBundleInstance(
+                                ICUData.ICU_BASE_NAME,
+                                ZONEINFORESNAME,
+                                ICUResourceBundle.ICU_DATA_CLASS_LOADER);
                 ZONEIDS = top.getStringArray(kNAMES);
             } catch (MissingResourceException ex) {
                 // throw away..
@@ -316,17 +314,18 @@ public final class ZoneMeta {
             int limit = all.length;
 
             int lastMid = Integer.MAX_VALUE;
-            for (;;) {
+            for (; ; ) {
                 int mid = (start + limit) / 2;
-                if (lastMid == mid) {   /* Have we moved? */
-                    break;  /* We haven't moved, and it wasn't found. */
+                if (lastMid == mid) {
+                    /* Have we moved? */
+                    break; /* We haven't moved, and it wasn't found. */
                 }
                 lastMid = mid;
                 int r = zid.compareTo(all[mid]);
                 if (r == 0) {
                     zoneIdx = mid;
                     break;
-                } else if(r < 0) {
+                } else if (r < 0) {
                     limit = mid;
                 } else {
                     start = mid;
@@ -343,17 +342,17 @@ public final class ZoneMeta {
 
     public static String getCanonicalCLDRID(TimeZone tz) {
         if (tz instanceof OlsonTimeZone) {
-            return ((OlsonTimeZone)tz).getCanonicalID();
+            return ((OlsonTimeZone) tz).getCanonicalID();
         }
         return getCanonicalCLDRID(tz.getID());
     }
 
     /**
-     * Return the canonical id for this tzid defined by CLDR, which might be
-     * the id itself. If the given tzid is not known, return null.
+     * Return the canonical id for this tzid defined by CLDR, which might be the id itself. If the
+     * given tzid is not known, return null.
      *
-     * Note: This internal API supports all known system IDs and "Etc/Unknown" (which is
-     * NOT a system ID).
+     * <p>Note: This internal API supports all known system IDs and "Etc/Unknown" (which is NOT a
+     * system ID).
      */
     public static String getCanonicalCLDRID(String tzid) {
         String canonical = CANONICAL_ID_CACHE.get(tzid);
@@ -364,8 +363,11 @@ public final class ZoneMeta {
                 try {
                     int zoneIdx = getZoneIndex(tzid);
                     if (zoneIdx >= 0) {
-                        UResourceBundle top = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME,
-                                ZONEINFORESNAME, ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+                        UResourceBundle top =
+                                UResourceBundle.getBundleInstance(
+                                        ICUData.ICU_BASE_NAME,
+                                        ZONEINFORESNAME,
+                                        ICUResourceBundle.ICU_DATA_CLASS_LOADER);
                         UResourceBundle zones = top.get(kZONES);
                         UResourceBundle zone = zones.get(zoneIdx);
                         if (zone.getType() == UResourceBundle.INT) {
@@ -394,8 +396,11 @@ public final class ZoneMeta {
 
         try {
             // First, try check if the given ID is canonical
-            UResourceBundle keyTypeData = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME,
-                    "keyTypeData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+            UResourceBundle keyTypeData =
+                    UResourceBundle.getBundleInstance(
+                            ICUData.ICU_BASE_NAME,
+                            "keyTypeData",
+                            ICUResourceBundle.ICU_DATA_CLASS_LOADER);
             UResourceBundle typeMap = keyTypeData.get("typeMap");
             UResourceBundle typeKeys = typeMap.get("timezone");
             try {
@@ -418,11 +423,11 @@ public final class ZoneMeta {
     }
 
     /**
-     * Returns primary IANA zone ID for the input zone ID. When input zone ID
-     * is not known, this method returns null.
+     * Returns primary IANA zone ID for the input zone ID. When input zone ID is not known, this
+     * method returns null.
      *
-     * @param tzid  An input zone ID.
-     * @return  A primary IANA zone ID equivalent to the input zone ID.
+     * @param tzid An input zone ID.
+     * @return A primary IANA zone ID equivalent to the input zone ID.
      */
     public static String getIanaID(String tzid) {
         // First, get CLDR canonical ID
@@ -431,8 +436,11 @@ public final class ZoneMeta {
             return null;
         }
         // Find IANA mapping if any.
-        UResourceBundle keyTypeData = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME,
-                "keyTypeData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+        UResourceBundle keyTypeData =
+                UResourceBundle.getBundleInstance(
+                        ICUData.ICU_BASE_NAME,
+                        "keyTypeData",
+                        ICUResourceBundle.ICU_DATA_CLASS_LOADER);
         UResourceBundle ianaMap = keyTypeData.get("ianaMap");
         UResourceBundle ianaTzMap = ianaMap.get("timezone");
         try {
@@ -445,8 +453,8 @@ public final class ZoneMeta {
     }
 
     /**
-     * Return the region code for this tzid.
-     * If tzid is not a system zone ID, this method returns null.
+     * Return the region code for this tzid. If tzid is not a system zone ID, this method returns
+     * null.
      */
     public static String getRegion(String tzid) {
         String region = REGION_CACHE.get(tzid);
@@ -454,8 +462,11 @@ public final class ZoneMeta {
             int zoneIdx = getZoneIndex(tzid);
             if (zoneIdx >= 0) {
                 try {
-                    UResourceBundle top = UResourceBundle.getBundleInstance(
-                            ICUData.ICU_BASE_NAME, ZONEINFORESNAME, ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+                    UResourceBundle top =
+                            UResourceBundle.getBundleInstance(
+                                    ICUData.ICU_BASE_NAME,
+                                    ZONEINFORESNAME,
+                                    ICUResourceBundle.ICU_DATA_CLASS_LOADER);
                     UResourceBundle regions = top.get(kREGIONS);
                     if (zoneIdx < regions.getSize()) {
                         region = regions.getString(zoneIdx);
@@ -472,8 +483,8 @@ public final class ZoneMeta {
     }
 
     /**
-     * Return the canonical country code for this tzid.  If we have none, or if the time zone
-     * is not associated with a country or unknown, return null.
+     * Return the canonical country code for this tzid. If we have none, or if the time zone is not
+     * associated with a country or unknown, return null.
      */
     public static String getCanonicalCountry(String tzid) {
         String country = getRegion(tzid);
@@ -484,9 +495,9 @@ public final class ZoneMeta {
     }
 
     /**
-     * Return the canonical country code for this tzid.  If we have none, or if the time zone
-     * is not associated with a country or unknown, return null. When the given zone is the
-     * primary zone of the country, true is set to isPrimary.
+     * Return the canonical country code for this tzid. If we have none, or if the time zone is not
+     * associated with a country or unknown, return null. When the given zone is the primary zone of
+     * the country, true is set to isPrimary.
      */
     public static String getCanonicalCountry(String tzid, Output<Boolean> isPrimary) {
         isPrimary.value = Boolean.FALSE;
@@ -499,8 +510,9 @@ public final class ZoneMeta {
         // Check the cache
         Boolean singleZone = SINGLE_COUNTRY_CACHE.get(tzid);
         if (singleZone == null) {
-            Set<String> ids = TimeZone.getAvailableIDs(SystemTimeZoneType.CANONICAL_LOCATION, country, null);
-            assert(ids.size() >= 1);
+            Set<String> ids =
+                    TimeZone.getAvailableIDs(SystemTimeZoneType.CANONICAL_LOCATION, country, null);
+            assert (ids.size() >= 1);
             singleZone = ids.size() <= 1;
             SINGLE_COUNTRY_CACHE.put(tzid, singleZone);
         }
@@ -513,7 +525,8 @@ public final class ZoneMeta {
             // Even a country has multiple zones, one of them might be
             // dominant and treated as a primary zone.
             try {
-                UResourceBundle bundle = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "metaZones");
+                UResourceBundle bundle =
+                        UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "metaZones");
                 UResourceBundle primaryZones = bundle.get("primaryZones");
                 String primaryZone = primaryZones.getString(country);
                 if (tzid.equals(primaryZone)) {
@@ -534,22 +547,24 @@ public final class ZoneMeta {
     }
 
     /**
-     * Given an ID and the top-level resource of the zoneinfo resource,
-     * open the appropriate resource for the given time zone.
-     * Dereference links if necessary.
+     * Given an ID and the top-level resource of the zoneinfo resource, open the appropriate
+     * resource for the given time zone. Dereference links if necessary.
+     *
      * @param top the top level resource of the zoneinfo resource or null.
      * @param id zone id
      * @return the corresponding zone resource or null if not found
      */
-    public static UResourceBundle openOlsonResource(UResourceBundle top, String id)
-    {
+    public static UResourceBundle openOlsonResource(UResourceBundle top, String id) {
         UResourceBundle res = null;
         int zoneIdx = getZoneIndex(id);
         if (zoneIdx >= 0) {
             try {
                 if (top == null) {
-                    top = UResourceBundle.getBundleInstance(
-                            ICUData.ICU_BASE_NAME, ZONEINFORESNAME, ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+                    top =
+                            UResourceBundle.getBundleInstance(
+                                    ICUData.ICU_BASE_NAME,
+                                    ZONEINFORESNAME,
+                                    ICUResourceBundle.ICU_DATA_CLASS_LOADER);
                 }
                 UResourceBundle zones = top.get(kZONES);
                 UResourceBundle zone = zones.get(zoneIdx);
@@ -565,10 +580,7 @@ public final class ZoneMeta {
         return res;
     }
 
-
-    /**
-     * System time zone object cache
-     */
+    /** System time zone object cache */
     private static class SystemTimeZoneCache extends SoftCache<String, OlsonTimeZone, String> {
 
         /* (non-Javadoc)
@@ -578,8 +590,11 @@ public final class ZoneMeta {
         protected OlsonTimeZone createInstance(String key, String data) {
             OlsonTimeZone tz = null;
             try {
-                UResourceBundle top = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME,
-                        ZONEINFORESNAME, ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+                UResourceBundle top =
+                        UResourceBundle.getBundleInstance(
+                                ICUData.ICU_BASE_NAME,
+                                ZONEINFORESNAME,
+                                ICUResourceBundle.ICU_DATA_CLASS_LOADER);
                 UResourceBundle res = openOlsonResource(top, data);
                 if (res != null) {
                     tz = new OlsonTimeZone(top, res, data);
@@ -595,8 +610,8 @@ public final class ZoneMeta {
     private static final SystemTimeZoneCache SYSTEM_ZONE_CACHE = new SystemTimeZoneCache();
 
     /**
-     * Returns a frozen OlsonTimeZone instance for the given ID.
-     * This method returns null when the given ID is unknown.
+     * Returns a frozen OlsonTimeZone instance for the given ID. This method returns null when the
+     * given ID is unknown.
      */
     public static OlsonTimeZone getSystemTimeZone(String id) {
         return SYSTEM_ZONE_CACHE.getInstance(id, id);
@@ -607,9 +622,7 @@ public final class ZoneMeta {
     private static final int kMAX_CUSTOM_MIN = 59;
     private static final int kMAX_CUSTOM_SEC = 59;
 
-    /**
-     * Custom time zone object cache
-     */
+    /** Custom time zone object cache */
     private static class CustomTimeZoneCache extends SoftCache<Integer, SimpleTimeZone, int[]> {
 
         /* (non-Javadoc)
@@ -634,12 +647,12 @@ public final class ZoneMeta {
 
     /**
      * Parse a custom time zone identifier and return a corresponding zone.
-     * @param id a string of the form GMT[+-]hh:mm, GMT[+-]hhmm, or
-     * GMT[+-]hh.
-     * @return a frozen SimpleTimeZone with the given offset and
-     * no Daylight Savings Time, or null if the id cannot be parsed.
-    */
-    public static SimpleTimeZone getCustomTimeZone(String id){
+     *
+     * @param id a string of the form GMT[+-]hh:mm, GMT[+-]hhmm, or GMT[+-]hh.
+     * @return a frozen SimpleTimeZone with the given offset and no Daylight Savings Time, or null
+     *     if the id cannot be parsed.
+     */
+    public static SimpleTimeZone getCustomTimeZone(String id) {
         int[] fields = new int[4];
         if (parseCustomID(id, fields)) {
             // fields[0] - sign
@@ -653,12 +666,12 @@ public final class ZoneMeta {
     }
 
     /**
-     * Parse a custom time zone identifier and return the normalized
-     * custom time zone identifier for the given custom id string.
-     * @param id a string of the form GMT[+-]hh:mm, GMT[+-]hhmm, or
-     * GMT[+-]hh.
+     * Parse a custom time zone identifier and return the normalized custom time zone identifier for
+     * the given custom id string.
+     *
+     * @param id a string of the form GMT[+-]hh:mm, GMT[+-]hhmm, or GMT[+-]hh.
      * @return The normalized custom id string.
-    */
+     */
     public static String getCustomID(String id) {
         int[] fields = new int[4];
         if (parseCustomID(id, fields)) {
@@ -678,8 +691,9 @@ public final class ZoneMeta {
      * @return Returns true when the given custom id is valid.
      */
     static boolean parseCustomID(String id, int[] fields) {
-        if (id != null && id.length() > kGMT_ID.length() &&
-                id.substring(0, 3).equalsIgnoreCase(kGMT_ID)) {
+        if (id != null
+                && id.length() > kGMT_ID.length()
+                && id.substring(0, 3).equalsIgnoreCase(kGMT_ID)) {
             int sign = 1;
             int hour = 0;
             int min = 0;
@@ -720,7 +734,7 @@ public final class ZoneMeta {
                     case 5: // Hmmss
                     case 6: // HHmmss
                         sec = hour % 100;
-                        min = (hour/100) % 100;
+                        min = (hour / 100) % 100;
                         hour /= 10000;
                         break;
                     default:
@@ -733,7 +747,9 @@ public final class ZoneMeta {
                 // H:mm:ss
                 // HH:mm
                 // H:mm
-                if (pos[0] - start < 1 || pos[0] - start > 2 || id.charAt(pos[0]) != 0x003A /*':'*/) {
+                if (pos[0] - start < 1
+                        || pos[0] - start > 2
+                        || id.charAt(pos[0]) != 0x003A /*':'*/) {
                     return false;
                 }
                 pos[0]++; // skip : after H
@@ -781,6 +797,7 @@ public final class ZoneMeta {
 
     /**
      * Creates a custom zone for the offset
+     *
      * @param offset GMT offset in milliseconds
      * @return A custom TimeZone for the offset with normalized time zone id
      */
@@ -816,7 +833,7 @@ public final class ZoneMeta {
         // Create normalized time zone ID - GMT[+|-]hh:mm[:ss]
         StringBuilder zid = new StringBuilder(kCUSTOM_TZ_PREFIX);
         if (hour != 0 || min != 0) {
-            if(negative) {
+            if (negative) {
                 zid.append('-');
             } else {
                 zid.append('+');
@@ -845,8 +862,9 @@ public final class ZoneMeta {
     }
 
     /**
-     * Returns the time zone's short ID for the zone.
-     * For example, "uslax" for zone "America/Los_Angeles".
+     * Returns the time zone's short ID for the zone. For example, "uslax" for zone
+     * "America/Los_Angeles".
+     *
      * @param tz the time zone
      * @return the short ID of the time zone, or null if the short ID is not available.
      */
@@ -854,9 +872,8 @@ public final class ZoneMeta {
         String canonicalID = null;
 
         if (tz instanceof OlsonTimeZone) {
-            canonicalID = ((OlsonTimeZone)tz).getCanonicalID();
-        }
-        else {
+            canonicalID = ((OlsonTimeZone) tz).getCanonicalID();
+        } else {
             canonicalID = getCanonicalCLDRID(tz.getID());
         }
         if (canonicalID == null) {
@@ -866,8 +883,9 @@ public final class ZoneMeta {
     }
 
     /**
-     * Returns the time zone's short ID for the zone ID.
-     * For example, "uslax" for zone ID "America/Los_Angeles".
+     * Returns the time zone's short ID for the zone ID. For example, "uslax" for zone ID
+     * "America/Los_Angeles".
+     *
      * @param id the time zone ID
      * @return the short ID of the time zone ID, or null if the short ID is not available.
      */
@@ -885,8 +903,11 @@ public final class ZoneMeta {
 
         try {
             // First, try check if the given ID is canonical
-            UResourceBundle keyTypeData = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME,
-                    "keyTypeData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+            UResourceBundle keyTypeData =
+                    UResourceBundle.getBundleInstance(
+                            ICUData.ICU_BASE_NAME,
+                            "keyTypeData",
+                            ICUResourceBundle.ICU_DATA_CLASS_LOADER);
             UResourceBundle typeMap = keyTypeData.get("typeMap");
             UResourceBundle typeKeys = typeMap.get("timezone");
             shortID = typeKeys.getString(tzidKey);
@@ -896,5 +917,4 @@ public final class ZoneMeta {
 
         return shortID;
     }
-
 }

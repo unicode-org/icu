@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.util;
 
+import com.ibm.icu.impl.Grego;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.Reader;
@@ -19,19 +20,16 @@ import java.util.List;
 import java.util.MissingResourceException;
 import java.util.StringTokenizer;
 
-import com.ibm.icu.impl.Grego;
-
 /**
- * <code>VTimeZone</code> is a class implementing RFC2445 VTIMEZONE.  You can create a
- * <code>VTimeZone</code> instance from a time zone ID supported by <code>TimeZone</code>.
- * With the <code>VTimeZone</code> instance created from the ID, you can write out the rule
- * in RFC2445 VTIMEZONE format.  Also, you can create a <code>VTimeZone</code> instance
- * from RFC2445 VTIMEZONE data stream, which allows you to calculate time
- * zone offset by the rules defined by the data.<br><br>
- *
- * Note: The consumer of this class reading or writing VTIMEZONE data is responsible to
- * decode or encode Non-ASCII text.  Methods reading/writing VTIMEZONE data in this class
- * do nothing with MIME encoding.
+ * <code>VTimeZone</code> is a class implementing RFC2445 VTIMEZONE. You can create a <code>
+ * VTimeZone</code> instance from a time zone ID supported by <code>TimeZone</code>. With the <code>
+ * VTimeZone</code> instance created from the ID, you can write out the rule in RFC2445 VTIMEZONE
+ * format. Also, you can create a <code>VTimeZone</code> instance from RFC2445 VTIMEZONE data
+ * stream, which allows you to calculate time zone offset by the rules defined by the data.<br>
+ * <br>
+ * Note: The consumer of this class reading or writing VTIMEZONE data is responsible to decode or
+ * encode Non-ASCII text. Methods reading/writing VTIMEZONE data in this class do nothing with MIME
+ * encoding.
  *
  * @stable ICU 3.8
  */
@@ -43,9 +41,8 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
      * Create a <code>VTimeZone</code> instance by the time zone ID.
      *
      * @param tzid The time zone ID, such as America/New_York
-     * @return A <code>VTimeZone</code> initialized by the time zone ID, or null
-     * when the ID is unknown.
-     *
+     * @return A <code>VTimeZone</code> initialized by the time zone ID, or null when the ID is
+     *     unknown.
      * @stable ICU 3.8
      */
     public static VTimeZone create(String tzid) {
@@ -64,9 +61,8 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
      * Create a <code>VTimeZone</code> instance by RFC2445 VTIMEZONE data.
      *
      * @param reader The Reader for VTIMEZONE data input stream
-     * @return A <code>VTimeZone</code> initialized by the VTIMEZONE data or
-     * null if failed to load the rule from the VTIMEZONE data.
-     *
+     * @return A <code>VTimeZone</code> initialized by the VTIMEZONE data or null if failed to load
+     *     the rule from the VTIMEZONE data.
      * @stable ICU 3.8
      */
     public static VTimeZone create(Reader reader) {
@@ -79,16 +75,17 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 3.8
      */
     @Override
-    public int getOffset(int era, int year, int month, int day, int dayOfWeek,
-            int milliseconds) {
+    public int getOffset(int era, int year, int month, int day, int dayOfWeek, int milliseconds) {
         return tz.getOffset(era, year, month, day, dayOfWeek, milliseconds);
     }
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 3.8
      */
     @Override
@@ -98,16 +95,21 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 69
      */
     @Override
-    public void getOffsetFromLocal(long date,
-            LocalOption nonExistingTimeOpt, LocalOption duplicatedTimeOpt, int[] offsets) {
+    public void getOffsetFromLocal(
+            long date,
+            LocalOption nonExistingTimeOpt,
+            LocalOption duplicatedTimeOpt,
+            int[] offsets) {
         tz.getOffsetFromLocal(date, nonExistingTimeOpt, duplicatedTimeOpt, offsets);
     }
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 3.8
      */
     @Override
@@ -117,6 +119,7 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 3.8
      */
     @Override
@@ -126,18 +129,21 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 3.8
      */
     @Override
     public void setRawOffset(int offsetMillis) {
         if (isFrozen()) {
-            throw new UnsupportedOperationException("Attempt to modify a frozen VTimeZone instance.");
+            throw new UnsupportedOperationException(
+                    "Attempt to modify a frozen VTimeZone instance.");
         }
         tz.setRawOffset(offsetMillis);
     }
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 3.8
      */
     @Override
@@ -147,6 +153,7 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 49
      */
     @Override
@@ -156,6 +163,7 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 3.8
      */
     @Override
@@ -164,18 +172,17 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
             return true;
         }
         if (other instanceof VTimeZone) {
-            return tz.hasSameRules(((VTimeZone)other).tz);
+            return tz.hasSameRules(((VTimeZone) other).tz);
         }
         return tz.hasSameRules(other);
     }
 
     /**
-     * Gets the RFC2445 TZURL property value.  When a <code>VTimeZone</code> instance was created from
-     * VTIMEZONE data, the value is set by the TZURL property value in the data.  Otherwise,
-     * the initial value is null.
+     * Gets the RFC2445 TZURL property value. When a <code>VTimeZone</code> instance was created
+     * from VTIMEZONE data, the value is set by the TZURL property value in the data. Otherwise, the
+     * initial value is null.
      *
      * @return The RFC2445 TZURL property value
-     *
      * @stable ICU 3.8
      */
     public String getTZURL() {
@@ -186,23 +193,22 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
      * Sets the RFC2445 TZURL property value.
      *
      * @param url The TZURL property value.
-     *
      * @stable ICU 3.8
      */
     public void setTZURL(String url) {
         if (isFrozen()) {
-            throw new UnsupportedOperationException("Attempt to modify a frozen VTimeZone instance.");
+            throw new UnsupportedOperationException(
+                    "Attempt to modify a frozen VTimeZone instance.");
         }
         tzurl = url;
     }
 
     /**
-     * Gets the RFC2445 LAST-MODIFIED property value.  When a <code>VTimeZone</code> instance was created
-     * from VTIMEZONE data, the value is set by the LAST-MODIFIED property value in the data.
-     * Otherwise, the initial value is null.
+     * Gets the RFC2445 LAST-MODIFIED property value. When a <code>VTimeZone</code> instance was
+     * created from VTIMEZONE data, the value is set by the LAST-MODIFIED property value in the
+     * data. Otherwise, the initial value is null.
      *
      * @return The Date represents the RFC2445 LAST-MODIFIED date.
-     *
      * @stable ICU 3.8
      */
     public Date getLastModified() {
@@ -212,13 +218,14 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
     /**
      * Sets the date used for RFC2445 LAST-MODIFIED property value.
      *
-     * @param date The <code>Date</code> object represents the date for RFC2445 LAST-MODIFIED property value.
-     *
+     * @param date The <code>Date</code> object represents the date for RFC2445 LAST-MODIFIED
+     *     property value.
      * @stable ICU 3.8
      */
     public void setLastModified(Date date) {
         if (isFrozen()) {
-            throw new UnsupportedOperationException("Attempt to modify a frozen VTimeZone instance.");
+            throw new UnsupportedOperationException(
+                    "Attempt to modify a frozen VTimeZone instance.");
         }
         lastmod = date;
     }
@@ -228,7 +235,6 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
      *
      * @param writer A <code>Writer</code> used for the output
      * @throws IOException If there were problems creating a buffered writer or writing to it.
-     *
      * @stable ICU 3.8
      */
     public void write(Writer writer) throws IOException {
@@ -259,21 +265,19 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
             String[] customProperties = null;
             if (olsonzid != null && ICU_TZVERSION != null) {
                 customProperties = new String[1];
-                customProperties[0] = ICU_TZINFO_PROP + COLON + olsonzid + "[" + ICU_TZVERSION + "]";
+                customProperties[0] =
+                        ICU_TZINFO_PROP + COLON + olsonzid + "[" + ICU_TZVERSION + "]";
             }
             writeZone(writer, tz, customProperties);
         }
     }
 
     /**
-     * Writes RFC2445 VTIMEZONE data applicable for dates after
-     * the specified start time.
+     * Writes RFC2445 VTIMEZONE data applicable for dates after the specified start time.
      *
-     * @param writer    The <code>Writer</code> used for the output
-     * @param start     The start time
-     *
+     * @param writer The <code>Writer</code> used for the output
+     * @param start The start time
      * @throws IOException If there were problems reading and writing to the writer.
-     *
      * @stable ICU 3.8
      */
     public void write(Writer writer, long start) throws IOException {
@@ -281,33 +285,36 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
         TimeZoneRule[] rules = tz.getTimeZoneRules(start);
 
         // Create a RuleBasedTimeZone with the subset rule
-        RuleBasedTimeZone rbtz = new RuleBasedTimeZone(tz.getID(), (InitialTimeZoneRule)rules[0]);
+        RuleBasedTimeZone rbtz = new RuleBasedTimeZone(tz.getID(), (InitialTimeZoneRule) rules[0]);
         for (int i = 1; i < rules.length; i++) {
             rbtz.addTransitionRule(rules[i]);
         }
         String[] customProperties = null;
         if (olsonzid != null && ICU_TZVERSION != null) {
             customProperties = new String[1];
-            customProperties[0] = ICU_TZINFO_PROP + COLON + olsonzid + "[" + ICU_TZVERSION +
-                "/Partial@" + start + "]";
+            customProperties[0] =
+                    ICU_TZINFO_PROP
+                            + COLON
+                            + olsonzid
+                            + "["
+                            + ICU_TZVERSION
+                            + "/Partial@"
+                            + start
+                            + "]";
         }
         writeZone(writer, rbtz, customProperties);
     }
 
     /**
-     * Writes RFC2445 VTIMEZONE data applicable near the specified date.
-     * Some common iCalendar implementations can only handle a single time
-     * zone property or a pair of standard and daylight time properties using
-     * BYDAY rule with day of week (such as BYDAY=1SUN).  This method produce
-     * the VTIMEZONE data which can be handled these implementations.  The rules
-     * produced by this method can be used only for calculating time zone offset
-     * around the specified date.
+     * Writes RFC2445 VTIMEZONE data applicable near the specified date. Some common iCalendar
+     * implementations can only handle a single time zone property or a pair of standard and
+     * daylight time properties using BYDAY rule with day of week (such as BYDAY=1SUN). This method
+     * produce the VTIMEZONE data which can be handled these implementations. The rules produced by
+     * this method can be used only for calculating time zone offset around the specified date.
      *
-     * @param writer    The <code>Writer</code> used for the output
-     * @param time      The date
-     *
+     * @param writer The <code>Writer</code> used for the output
+     * @param time The date
      * @throws IOException If there were problems reading or writing to the writer.
-     *
      * @stable ICU 3.8
      */
     public void writeSimple(Writer writer, long time) throws IOException {
@@ -315,15 +322,22 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
         TimeZoneRule[] rules = tz.getSimpleTimeZoneRulesNear(time);
 
         // Create a RuleBasedTimeZone with the subset rule
-        RuleBasedTimeZone rbtz = new RuleBasedTimeZone(tz.getID(), (InitialTimeZoneRule)rules[0]);
+        RuleBasedTimeZone rbtz = new RuleBasedTimeZone(tz.getID(), (InitialTimeZoneRule) rules[0]);
         for (int i = 1; i < rules.length; i++) {
             rbtz.addTransitionRule(rules[i]);
         }
         String[] customProperties = null;
         if (olsonzid != null && ICU_TZVERSION != null) {
             customProperties = new String[1];
-            customProperties[0] = ICU_TZINFO_PROP + COLON + olsonzid + "[" + ICU_TZVERSION +
-                "/Simple@" + time + "]";
+            customProperties[0] =
+                    ICU_TZINFO_PROP
+                            + COLON
+                            + olsonzid
+                            + "["
+                            + ICU_TZVERSION
+                            + "/Simple@"
+                            + time
+                            + "]";
         }
         writeZone(writer, rbtz, customProperties);
     }
@@ -332,6 +346,7 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 3.8
      */
     @Override
@@ -341,6 +356,7 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 3.8
      */
     @Override
@@ -350,6 +366,7 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 3.8
      */
     @Override
@@ -362,6 +379,7 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 3.8
      */
     @Override
@@ -371,6 +389,7 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 3.8
      */
     @Override
@@ -380,6 +399,7 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 3.8
      */
     @Override
@@ -402,7 +422,7 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
     private static final String ICU_TZINFO_PROP = "X-TZINFO";
 
     // Default DST savings
-    private static final int DEF_DSTSAVINGS = 60*60*1000; // 1 hour
+    private static final int DEF_DSTSAVINGS = 60 * 60 * 1000; // 1 hour
 
     // Default time start
     private static final long DEF_TZSTARTTIME = 0;
@@ -416,7 +436,7 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
     private static final String SEMICOLON = ";";
     private static final String EQUALS_SIGN = "=";
     private static final String COMMA = ",";
-    private static final String NEWLINE = "\r\n";   // CRLF
+    private static final String NEWLINE = "\r\n"; // CRLF
 
     // RFC2445 VTIMEZONE tokens
     private static final String ICAL_BEGIN_VTIMEZONE = "BEGIN:VTIMEZONE";
@@ -443,8 +463,7 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
     private static final String ICAL_BYDAY = "BYDAY";
     private static final String ICAL_BYMONTHDAY = "BYMONTHDAY";
 
-    private static final String[] ICAL_DOW_NAMES =
-    {"SU", "MO", "TU", "WE", "TH", "FR", "SA"};
+    private static final String[] ICAL_DOW_NAMES = {"SU", "MO", "TU", "WE", "TH", "FR", "SA"};
 
     // Month length in regular year
     private static final int[] MONTHLENGTH = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
@@ -454,15 +473,14 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
         try {
             ICU_TZVERSION = TimeZone.getTZDataVersion();
         } catch (MissingResourceException e) {
-            ///CLOVER:OFF
+            /// CLOVER:OFF
             ICU_TZVERSION = null;
-            ///CLOVER:ON
+            /// CLOVER:ON
         }
     }
 
     /* Hide the constructor */
-    private VTimeZone() {
-    }
+    private VTimeZone() {}
 
     private VTimeZone(String tzid) {
         super(tzid);
@@ -511,7 +529,7 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
                         }
                         line.setLength(0);
                         if (ch != 0x0A) {
-                            line.append((char)ch);
+                            line.append((char) ch);
                         }
                     }
                     eol = false;
@@ -534,7 +552,7 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
                             }
                         }
                     } else {
-                        line.append((char)ch);
+                        line.append((char) ch);
                     }
                 }
             }
@@ -542,43 +560,43 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
                 return false;
             }
         } catch (IOException ioe) {
-            ///CLOVER:OFF
+            /// CLOVER:OFF
             return false;
-            ///CLOVER:ON
+            /// CLOVER:ON
         }
         return parse();
     }
 
     // parser state
-    private static final int INI = 0;   // Initial state
-    private static final int VTZ = 1;   // In VTIMEZONE
-    private static final int TZI = 2;   // In STANDARD or DAYLIGHT
-    private static final int ERR = 3;   // Error state
+    private static final int INI = 0; // Initial state
+    private static final int VTZ = 1; // In VTIMEZONE
+    private static final int TZI = 2; // In STANDARD or DAYLIGHT
+    private static final int ERR = 3; // Error state
 
     /*
      * Parse VTIMEZONE data and create a RuleBasedTimeZone
      */
     private boolean parse() {
-        ///CLOVER:OFF
+        /// CLOVER:OFF
         if (vtzlines == null || vtzlines.size() == 0) {
             return false;
         }
-        ///CLOVER:ON
+        /// CLOVER:ON
 
         // timezone ID
         String tzid = null;
 
         int state = INI;
-        boolean dst = false;    // current zone type
-        String from = null;     // current zone from offset
-        String to = null;       // current zone offset
-        String tzname = null;   // current zone name
-        String dtstart = null;  // current zone starts
-        boolean isRRULE = false;    // true if the rule is described by RRULE
-        List<String> dates = null;  // list of RDATE or RRULE strings
-        List<TimeZoneRule> rules = new ArrayList<>();   // rule list
-        int initialRawOffset = 0;  // initial offset
-        int initialDSTSavings = 0;  // initial offset
+        boolean dst = false; // current zone type
+        String from = null; // current zone from offset
+        String to = null; // current zone offset
+        String tzname = null; // current zone name
+        String dtstart = null; // current zone starts
+        boolean isRRULE = false; // true if the rule is described by RRULE
+        List<String> dates = null; // list of RDATE or RRULE strings
+        List<TimeZoneRule> rules = new ArrayList<>(); // rule list
+        int initialRawOffset = 0; // initial offset
+        int initialDSTSavings = 0; // initial offset
         long firstStart = MAX_TIME; // the earliest rule start time
 
         for (String line : vtzlines) {
@@ -590,164 +608,178 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
             String value = line.substring(valueSep + 1);
 
             switch (state) {
-            case INI:
-                if (name.equals(ICAL_BEGIN) && value.equals(ICAL_VTIMEZONE)) {
-                    state = VTZ;
-                }
-                break;
-            case VTZ:
-                if (name.equals(ICAL_TZID)) {
-                    tzid = value;
-                } else if (name.equals(ICAL_TZURL)) {
-                    tzurl = value;
-                } else if (name.equals(ICAL_LASTMOD)) {
-                    // Always in 'Z' format, so the offset argument for the parse method
-                    // can be any value.
-                    lastmod = new Date(parseDateTimeString(value, 0));
-                } else if (name.equals(ICAL_BEGIN)) {
-                    boolean isDST = value.equals(ICAL_DAYLIGHT);
-                    if (value.equals(ICAL_STANDARD) || isDST) {
-                        // tzid must be ready at this point
-                        if (tzid == null) {
+                case INI:
+                    if (name.equals(ICAL_BEGIN) && value.equals(ICAL_VTIMEZONE)) {
+                        state = VTZ;
+                    }
+                    break;
+                case VTZ:
+                    if (name.equals(ICAL_TZID)) {
+                        tzid = value;
+                    } else if (name.equals(ICAL_TZURL)) {
+                        tzurl = value;
+                    } else if (name.equals(ICAL_LASTMOD)) {
+                        // Always in 'Z' format, so the offset argument for the parse method
+                        // can be any value.
+                        lastmod = new Date(parseDateTimeString(value, 0));
+                    } else if (name.equals(ICAL_BEGIN)) {
+                        boolean isDST = value.equals(ICAL_DAYLIGHT);
+                        if (value.equals(ICAL_STANDARD) || isDST) {
+                            // tzid must be ready at this point
+                            if (tzid == null) {
+                                state = ERR;
+                                break;
+                            }
+                            // initialize current zone properties
+                            dates = null;
+                            isRRULE = false;
+                            from = null;
+                            to = null;
+                            tzname = null;
+                            dst = isDST;
+                            state = TZI;
+                        } else {
+                            // BEGIN property other than STANDARD/DAYLIGHT
+                            // must not be there.
                             state = ERR;
                             break;
                         }
-                        // initialize current zone properties
-                        dates = null;
-                        isRRULE = false;
-                        from = null;
-                        to = null;
-                        tzname = null;
-                        dst = isDST;
-                        state = TZI;
-                    } else {
-                        // BEGIN property other than STANDARD/DAYLIGHT
-                        // must not be there.
-                        state = ERR;
+                    } else if (name.equals(ICAL_END) /* && value.equals(ICAL_VTIMEZONE) */) {
                         break;
                     }
-                } else if (name.equals(ICAL_END) /* && value.equals(ICAL_VTIMEZONE) */) {
                     break;
-                }
-                break;
 
-            case TZI:
-                if (name.equals(ICAL_DTSTART)) {
-                    dtstart = value;
-                } else if (name.equals(ICAL_TZNAME)) {
-                    tzname = value;
-                } else if (name.equals(ICAL_TZOFFSETFROM)) {
-                    from = value;
-                } else if (name.equals(ICAL_TZOFFSETTO)) {
-                    to = value;
-                } else if (name.equals(ICAL_RDATE)) {
-                    // RDATE mixed with RRULE is not supported
-                    if (isRRULE) {
-                        state = ERR;
-                        break;
-                    }
-                    if (dates == null) {
-                        dates = new LinkedList<>();
-                    }
-                    // RDATE value may contain multiple date delimited
-                    // by comma
-                    StringTokenizer st = new StringTokenizer(value, COMMA);
-                    while (st.hasMoreTokens()) {
-                        String date = st.nextToken();
-                        dates.add(date);
-                    }
-                } else if (name.equals(ICAL_RRULE)) {
-                    // RRULE mixed with RDATE is not supported
-                    if (!isRRULE && dates != null) {
-                        state = ERR;
-                        break;
-                    } else if (dates == null) {
-                        dates = new LinkedList<>();
-                    }
-                    isRRULE = true;
-                    dates.add(value);
-                } else if (name.equals(ICAL_END)) {
-                    // Mandatory properties
-                    if (dtstart == null || from == null || to == null) {
-                        state = ERR;
-                        break;
-                    }
-                    // if tzname is not available, create one from tzid
-                    if (tzname == null) {
-                        tzname = getDefaultTZName(tzid, dst);
-                    }
-
-                    // create a time zone rule
-                    TimeZoneRule rule = null;
-                    int fromOffset = 0;
-                    int toOffset = 0;
-                    int rawOffset = 0;
-                    int dstSavings = 0;
-                    long start = 0;
-                    try {
-                        // Parse TZOFFSETFROM/TZOFFSETTO
-                        fromOffset = offsetStrToMillis(from);
-                        toOffset = offsetStrToMillis(to);
-
-                        if (dst) {
-                            // If daylight, use the previous offset as rawoffset if positive
-                            if (toOffset - fromOffset > 0) {
-                                rawOffset = fromOffset;
-                                dstSavings = toOffset - fromOffset;
-                            } else {
-                                // This is rare case..  just use 1 hour DST savings
-                                rawOffset = toOffset - DEF_DSTSAVINGS;
-                                dstSavings = DEF_DSTSAVINGS;
-                            }
-                        } else {
-                            rawOffset = toOffset;
-                            dstSavings = 0;
-                        }
-
-                        // start time
-                        start = parseDateTimeString(dtstart, fromOffset);
-
-                        // Create the rule
-                        Date actualStart = null;
+                case TZI:
+                    if (name.equals(ICAL_DTSTART)) {
+                        dtstart = value;
+                    } else if (name.equals(ICAL_TZNAME)) {
+                        tzname = value;
+                    } else if (name.equals(ICAL_TZOFFSETFROM)) {
+                        from = value;
+                    } else if (name.equals(ICAL_TZOFFSETTO)) {
+                        to = value;
+                    } else if (name.equals(ICAL_RDATE)) {
+                        // RDATE mixed with RRULE is not supported
                         if (isRRULE) {
-                            rule = createRuleByRRULE(tzname, rawOffset, dstSavings, start, dates, fromOffset);
-                        } else {
-                            rule = createRuleByRDATE(tzname, rawOffset, dstSavings, start, dates, fromOffset);
+                            state = ERR;
+                            break;
                         }
-                        if (rule != null) {
-                            actualStart = rule.getFirstStart(fromOffset, 0);
-                            if (actualStart.getTime() < firstStart) {
-                                // save from offset information for the earliest rule
-                                firstStart = actualStart.getTime();
-                                // If this is STD, assume the time before this transition
-                                // is DST when the difference is 1 hour.  This might not be
-                                // accurate, but VTIMEZONE data does not have such info.
-                                if (dstSavings > 0) {
-                                    initialRawOffset = fromOffset;
-                                    initialDSTSavings = 0;
+                        if (dates == null) {
+                            dates = new LinkedList<>();
+                        }
+                        // RDATE value may contain multiple date delimited
+                        // by comma
+                        StringTokenizer st = new StringTokenizer(value, COMMA);
+                        while (st.hasMoreTokens()) {
+                            String date = st.nextToken();
+                            dates.add(date);
+                        }
+                    } else if (name.equals(ICAL_RRULE)) {
+                        // RRULE mixed with RDATE is not supported
+                        if (!isRRULE && dates != null) {
+                            state = ERR;
+                            break;
+                        } else if (dates == null) {
+                            dates = new LinkedList<>();
+                        }
+                        isRRULE = true;
+                        dates.add(value);
+                    } else if (name.equals(ICAL_END)) {
+                        // Mandatory properties
+                        if (dtstart == null || from == null || to == null) {
+                            state = ERR;
+                            break;
+                        }
+                        // if tzname is not available, create one from tzid
+                        if (tzname == null) {
+                            tzname = getDefaultTZName(tzid, dst);
+                        }
+
+                        // create a time zone rule
+                        TimeZoneRule rule = null;
+                        int fromOffset = 0;
+                        int toOffset = 0;
+                        int rawOffset = 0;
+                        int dstSavings = 0;
+                        long start = 0;
+                        try {
+                            // Parse TZOFFSETFROM/TZOFFSETTO
+                            fromOffset = offsetStrToMillis(from);
+                            toOffset = offsetStrToMillis(to);
+
+                            if (dst) {
+                                // If daylight, use the previous offset as rawoffset if positive
+                                if (toOffset - fromOffset > 0) {
+                                    rawOffset = fromOffset;
+                                    dstSavings = toOffset - fromOffset;
                                 } else {
-                                    if (fromOffset - toOffset == DEF_DSTSAVINGS) {
-                                        initialRawOffset = fromOffset - DEF_DSTSAVINGS;
-                                        initialDSTSavings = DEF_DSTSAVINGS;
-                                    } else {
+                                    // This is rare case..  just use 1 hour DST savings
+                                    rawOffset = toOffset - DEF_DSTSAVINGS;
+                                    dstSavings = DEF_DSTSAVINGS;
+                                }
+                            } else {
+                                rawOffset = toOffset;
+                                dstSavings = 0;
+                            }
+
+                            // start time
+                            start = parseDateTimeString(dtstart, fromOffset);
+
+                            // Create the rule
+                            Date actualStart = null;
+                            if (isRRULE) {
+                                rule =
+                                        createRuleByRRULE(
+                                                tzname,
+                                                rawOffset,
+                                                dstSavings,
+                                                start,
+                                                dates,
+                                                fromOffset);
+                            } else {
+                                rule =
+                                        createRuleByRDATE(
+                                                tzname,
+                                                rawOffset,
+                                                dstSavings,
+                                                start,
+                                                dates,
+                                                fromOffset);
+                            }
+                            if (rule != null) {
+                                actualStart = rule.getFirstStart(fromOffset, 0);
+                                if (actualStart.getTime() < firstStart) {
+                                    // save from offset information for the earliest rule
+                                    firstStart = actualStart.getTime();
+                                    // If this is STD, assume the time before this transition
+                                    // is DST when the difference is 1 hour.  This might not be
+                                    // accurate, but VTIMEZONE data does not have such info.
+                                    if (dstSavings > 0) {
                                         initialRawOffset = fromOffset;
                                         initialDSTSavings = 0;
+                                    } else {
+                                        if (fromOffset - toOffset == DEF_DSTSAVINGS) {
+                                            initialRawOffset = fromOffset - DEF_DSTSAVINGS;
+                                            initialDSTSavings = DEF_DSTSAVINGS;
+                                        } else {
+                                            initialRawOffset = fromOffset;
+                                            initialDSTSavings = 0;
+                                        }
                                     }
                                 }
                             }
+                        } catch (IllegalArgumentException iae) {
+                            // bad format - rule == null..
                         }
-                    } catch (IllegalArgumentException iae) {
-                        // bad format - rule == null..
-                    }
 
-                    if (rule == null) {
-                        state = ERR;
-                        break;
+                        if (rule == null) {
+                            state = ERR;
+                            break;
+                        }
+                        rules.add(rule);
+                        state = VTZ;
                     }
-                    rules.add(rule);
-                    state = VTZ;
-                }
-                break;
+                    break;
             }
 
             if (state == ERR) {
@@ -762,8 +794,9 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
         }
 
         // Create a initial rule
-        InitialTimeZoneRule initialRule = new InitialTimeZoneRule(getDefaultTZName(tzid, false),
-                initialRawOffset, initialDSTSavings);
+        InitialTimeZoneRule initialRule =
+                new InitialTimeZoneRule(
+                        getDefaultTZName(tzid, false), initialRawOffset, initialDSTSavings);
 
         // Finally, create the RuleBasedTimeZone
         RuleBasedTimeZone rbtz = new RuleBasedTimeZone(tzid, initialRule);
@@ -773,7 +806,7 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
         for (int i = 0; i < rules.size(); i++) {
             TimeZoneRule r = rules.get(i);
             if (r instanceof AnnualTimeZoneRule) {
-                if (((AnnualTimeZoneRule)r).getEndYear() == AnnualTimeZoneRule.MAX_YEAR) {
+                if (((AnnualTimeZoneRule) r).getEndYear() == AnnualTimeZoneRule.MAX_YEAR) {
                     finalRuleCount++;
                     finalRuleIdx = i;
                 }
@@ -792,7 +825,7 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
                 rules.clear();
             } else {
                 // Normalize the final rule
-                AnnualTimeZoneRule finalRule = (AnnualTimeZoneRule)rules.get(finalRuleIdx);
+                AnnualTimeZoneRule finalRule = (AnnualTimeZoneRule) rules.get(finalRuleIdx);
                 int tmpRaw = finalRule.getRawOffset();
                 int tmpDST = finalRule.getDSTSavings();
 
@@ -806,30 +839,34 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
                     TimeZoneRule r = rules.get(i);
                     Date lastStart = r.getFinalStart(tmpRaw, tmpDST);
                     if (lastStart.after(start)) {
-                        start = finalRule.getNextStart(lastStart.getTime(),
-                                r.getRawOffset(),
-                                r.getDSTSavings(),
-                                false);
+                        start =
+                                finalRule.getNextStart(
+                                        lastStart.getTime(),
+                                        r.getRawOffset(),
+                                        r.getDSTSavings(),
+                                        false);
                     }
                 }
                 TimeZoneRule newRule;
                 if (start == finalStart) {
                     // Transform this into a single transition
-                    newRule = new TimeArrayTimeZoneRule(
-                            finalRule.getName(),
-                            finalRule.getRawOffset(),
-                            finalRule.getDSTSavings(),
-                            new long[] {finalStart.getTime()},
-                            DateTimeRule.UTC_TIME);
+                    newRule =
+                            new TimeArrayTimeZoneRule(
+                                    finalRule.getName(),
+                                    finalRule.getRawOffset(),
+                                    finalRule.getDSTSavings(),
+                                    new long[] {finalStart.getTime()},
+                                    DateTimeRule.UTC_TIME);
                 } else {
                     // Update the end year
-                    newRule = new AnnualTimeZoneRule(
-                            finalRule.getName(),
-                            finalRule.getRawOffset(),
-                            finalRule.getDSTSavings(),
-                            finalRule.getRule(),
-                            finalRule.getStartYear(),
-                            Grego.timeToYear(start.getTime()));
+                    newRule =
+                            new AnnualTimeZoneRule(
+                                    finalRule.getName(),
+                                    finalRule.getRawOffset(),
+                                    finalRule.getDSTSavings(),
+                                    finalRule.getRule(),
+                                    finalRule.getStartYear(),
+                                    Grego.timeToYear(start.getTime()));
                 }
                 rules.set(finalRuleIdx, newRule);
             }
@@ -857,8 +894,13 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
     /*
      * Create a TimeZoneRule by the RRULE definition
      */
-    private static TimeZoneRule createRuleByRRULE(String tzname,
-            int rawOffset, int dstSavings, long start, List<String> dates, int fromOffset) {
+    private static TimeZoneRule createRuleByRRULE(
+            String tzname,
+            int rawOffset,
+            int dstSavings,
+            long start,
+            List<String> dates,
+            int fromOffset) {
         if (dates == null || dates.size() == 0) {
             return null;
         }
@@ -1032,11 +1074,15 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
             adtr = new DateTimeRule(month, dayOfMonth, timeInDay, DateTimeRule.WALL_TIME);
         } else if (dayOfWeek != 0 && nthDayOfWeek != 0 && dayOfMonth == 0) {
             // Nth day of week rule, for example, last Sunday
-            adtr = new DateTimeRule(month, nthDayOfWeek, dayOfWeek, timeInDay, DateTimeRule.WALL_TIME);
+            adtr =
+                    new DateTimeRule(
+                            month, nthDayOfWeek, dayOfWeek, timeInDay, DateTimeRule.WALL_TIME);
         } else if (dayOfWeek != 0 && nthDayOfWeek == 0 && dayOfMonth != 0) {
             // First day of week after day of month rule, for example,
             // first Sunday after 15th day in the month
-            adtr = new DateTimeRule(month, dayOfMonth, dayOfWeek, true, timeInDay, DateTimeRule.WALL_TIME);
+            adtr =
+                    new DateTimeRule(
+                            month, dayOfMonth, dayOfWeek, true, timeInDay, DateTimeRule.WALL_TIME);
         } else {
             // RRULE attributes are insufficient
             return null;
@@ -1071,7 +1117,7 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
         long untilTime = MIN_TIME;
         boolean yearly = false;
         boolean parseError = false;
-        StringTokenizer st= new StringTokenizer(rrule, SEMICOLON);
+        StringTokenizer st = new StringTokenizer(rrule, SEMICOLON);
 
         while (st.hasMoreTokens()) {
             String attr, value;
@@ -1119,11 +1165,14 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
                     break;
                 }
             } else if (attr.equals(ICAL_BYDAY)) {
-                // Note: BYDAY may contain multiple day of week separated by comma.  It is unlikely used for
+                // Note: BYDAY may contain multiple day of week separated by comma.  It is unlikely
+                // used for
                 // VTIMEZONE property.  We do not support the case.
 
-                // 2-letter format is used just for representing a day of week, for example, "SU" for Sunday
-                // 3 or 4-letter format is used for represeinging Nth day of week, for example, "-1SA" for last Saturday
+                // 2-letter format is used just for representing a day of week, for example, "SU"
+                // for Sunday
+                // 3 or 4-letter format is used for represeinging Nth day of week, for example,
+                // "-1SA" for last Saturday
                 int length = value.length();
                 if (length < 2 || length > 4) {
                     parseError = true;
@@ -1147,7 +1196,7 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
                             break;
                         }
                         nthDayOfWeek = n * sign;
-                    } catch(NumberFormatException nfe) {
+                    } catch (NumberFormatException nfe) {
                         parseError = true;
                         break;
                     }
@@ -1175,7 +1224,7 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
                 int count = days.countTokens();
                 dayOfMonth = new int[count];
                 int index = 0;
-                while(days.hasMoreTokens()) {
+                while (days.hasMoreTokens()) {
                     try {
                         dayOfMonth[index++] = Integer.parseInt(days.nextToken());
                     } catch (NumberFormatException nfe) {
@@ -1215,8 +1264,13 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
     /*
      * Create a TimeZoneRule by the RDATE definition
      */
-    private static TimeZoneRule createRuleByRDATE(String tzname,
-            int rawOffset, int dstSavings, long start, List<String> dates, int fromOffset) {
+    private static TimeZoneRule createRuleByRDATE(
+            String tzname,
+            int rawOffset,
+            int dstSavings,
+            long start,
+            List<String> dates,
+            int fromOffset) {
         // Create an array of transition times
         long[] times;
         if (dates == null || dates.size() == 0) {
@@ -1235,13 +1289,15 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
                 return null;
             }
         }
-        return new TimeArrayTimeZoneRule(tzname, rawOffset, dstSavings, times, DateTimeRule.UTC_TIME);
+        return new TimeArrayTimeZoneRule(
+                tzname, rawOffset, dstSavings, times, DateTimeRule.UTC_TIME);
     }
 
     /*
      * Write the time zone rules in RFC2445 VTIMEZONE format
      */
-    private void writeZone(Writer w, BasicTimeZone basictz, String[] customProperties) throws IOException {
+    private void writeZone(Writer w, BasicTimeZone basictz, String[] customProperties)
+            throws IOException {
         // Write the header
         writeHeader(w);
 
@@ -1287,7 +1343,7 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
         boolean hasTransitions = false;
 
         // Going through all transitions
-        while(true) {
+        while (true) {
             TimeZoneTransition tzt = basictz.getNextTransition(t, false);
             if (tzt == null) {
                 break;
@@ -1305,8 +1361,9 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
             boolean sameRule = false;
             if (isDst) {
                 if (finalDstRule == null && tzt.getTo() instanceof AnnualTimeZoneRule) {
-                    if (((AnnualTimeZoneRule)tzt.getTo()).getEndYear() == AnnualTimeZoneRule.MAX_YEAR) {
-                        finalDstRule = (AnnualTimeZoneRule)tzt.getTo();
+                    if (((AnnualTimeZoneRule) tzt.getTo()).getEndYear()
+                            == AnnualTimeZoneRule.MAX_YEAR) {
+                        finalDstRule = (AnnualTimeZoneRule) tzt.getTo();
                     }
                 }
                 if (dstCount > 0) {
@@ -1325,11 +1382,26 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
                     }
                     if (!sameRule) {
                         if (dstCount == 1) {
-                            writeZonePropsByTime(w, true, dstName, dstFromOffset, dstToOffset,
-                                    dstStartTime, true);
+                            writeZonePropsByTime(
+                                    w,
+                                    true,
+                                    dstName,
+                                    dstFromOffset,
+                                    dstToOffset,
+                                    dstStartTime,
+                                    true);
                         } else {
-                            writeZonePropsByDOW(w, true, dstName, dstFromOffset, dstToOffset,
-                                    dstMonth, dstWeekInMonth, dstDayOfWeek, dstStartTime, dstUntilTime);
+                            writeZonePropsByDOW(
+                                    w,
+                                    true,
+                                    dstName,
+                                    dstFromOffset,
+                                    dstToOffset,
+                                    dstMonth,
+                                    dstWeekInMonth,
+                                    dstDayOfWeek,
+                                    dstStartTime,
+                                    dstUntilTime);
                         }
                     }
                 }
@@ -1352,8 +1424,9 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
                 }
             } else {
                 if (finalStdRule == null && tzt.getTo() instanceof AnnualTimeZoneRule) {
-                    if (((AnnualTimeZoneRule)tzt.getTo()).getEndYear() == AnnualTimeZoneRule.MAX_YEAR) {
-                        finalStdRule = (AnnualTimeZoneRule)tzt.getTo();
+                    if (((AnnualTimeZoneRule) tzt.getTo()).getEndYear()
+                            == AnnualTimeZoneRule.MAX_YEAR) {
+                        finalStdRule = (AnnualTimeZoneRule) tzt.getTo();
                     }
                 }
                 if (stdCount > 0) {
@@ -1372,11 +1445,26 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
                     }
                     if (!sameRule) {
                         if (stdCount == 1) {
-                            writeZonePropsByTime(w, false, stdName, stdFromOffset, stdToOffset,
-                                    stdStartTime, true);
+                            writeZonePropsByTime(
+                                    w,
+                                    false,
+                                    stdName,
+                                    stdFromOffset,
+                                    stdToOffset,
+                                    stdStartTime,
+                                    true);
                         } else {
-                            writeZonePropsByDOW(w, false, stdName, stdFromOffset, stdToOffset,
-                                    stdMonth, stdWeekInMonth, stdDayOfWeek, stdStartTime, stdUntilTime);
+                            writeZonePropsByDOW(
+                                    w,
+                                    false,
+                                    stdName,
+                                    stdFromOffset,
+                                    stdToOffset,
+                                    stdMonth,
+                                    stdWeekInMonth,
+                                    stdDayOfWeek,
+                                    stdStartTime,
+                                    stdUntilTime);
                         }
                     }
                 }
@@ -1403,39 +1491,87 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
             // No transition - put a single non transition RDATE
             int offset = basictz.getOffset(0 /* any time */);
             boolean isDst = (offset != basictz.getRawOffset());
-            writeZonePropsByTime(w, isDst, getDefaultTZName(basictz.getID(), isDst),
-                    offset, offset, DEF_TZSTARTTIME - offset, false);
+            writeZonePropsByTime(
+                    w,
+                    isDst,
+                    getDefaultTZName(basictz.getID(), isDst),
+                    offset,
+                    offset,
+                    DEF_TZSTARTTIME - offset,
+                    false);
         } else {
             if (dstCount > 0) {
                 if (finalDstRule == null) {
                     if (dstCount == 1) {
-                        writeZonePropsByTime(w, true, dstName, dstFromOffset, dstToOffset,
-                                dstStartTime, true);
+                        writeZonePropsByTime(
+                                w, true, dstName, dstFromOffset, dstToOffset, dstStartTime, true);
                     } else {
-                        writeZonePropsByDOW(w, true, dstName, dstFromOffset, dstToOffset,
-                                dstMonth, dstWeekInMonth, dstDayOfWeek, dstStartTime, dstUntilTime);
+                        writeZonePropsByDOW(
+                                w,
+                                true,
+                                dstName,
+                                dstFromOffset,
+                                dstToOffset,
+                                dstMonth,
+                                dstWeekInMonth,
+                                dstDayOfWeek,
+                                dstStartTime,
+                                dstUntilTime);
                     }
                 } else {
                     if (dstCount == 1) {
-                        writeFinalRule(w, true, finalDstRule,
-                                dstFromOffset - dstFromDSTSavings, dstFromDSTSavings, dstStartTime);
+                        writeFinalRule(
+                                w,
+                                true,
+                                finalDstRule,
+                                dstFromOffset - dstFromDSTSavings,
+                                dstFromDSTSavings,
+                                dstStartTime);
                     } else {
                         // Use a single rule if possible
-                        if (isEquivalentDateRule(dstMonth, dstWeekInMonth, dstDayOfWeek, finalDstRule.getRule())) {
-                            writeZonePropsByDOW(w, true, dstName, dstFromOffset, dstToOffset,
-                                    dstMonth, dstWeekInMonth, dstDayOfWeek, dstStartTime, MAX_TIME);
+                        if (isEquivalentDateRule(
+                                dstMonth, dstWeekInMonth, dstDayOfWeek, finalDstRule.getRule())) {
+                            writeZonePropsByDOW(
+                                    w,
+                                    true,
+                                    dstName,
+                                    dstFromOffset,
+                                    dstToOffset,
+                                    dstMonth,
+                                    dstWeekInMonth,
+                                    dstDayOfWeek,
+                                    dstStartTime,
+                                    MAX_TIME);
                         } else {
                             // Not equivalent rule - write out two different rules
-                            writeZonePropsByDOW(w, true, dstName, dstFromOffset, dstToOffset,
-                                    dstMonth, dstWeekInMonth, dstDayOfWeek, dstStartTime, dstUntilTime);
+                            writeZonePropsByDOW(
+                                    w,
+                                    true,
+                                    dstName,
+                                    dstFromOffset,
+                                    dstToOffset,
+                                    dstMonth,
+                                    dstWeekInMonth,
+                                    dstDayOfWeek,
+                                    dstStartTime,
+                                    dstUntilTime);
 
-                            Date nextStart = finalDstRule.getNextStart(dstUntilTime,
-                                    dstFromOffset - dstFromDSTSavings, dstFromDSTSavings, false);
+                            Date nextStart =
+                                    finalDstRule.getNextStart(
+                                            dstUntilTime,
+                                            dstFromOffset - dstFromDSTSavings,
+                                            dstFromDSTSavings,
+                                            false);
 
                             assert nextStart != null;
                             if (nextStart != null) {
-                                writeFinalRule(w, true, finalDstRule,
-                                        dstFromOffset - dstFromDSTSavings, dstFromDSTSavings, nextStart.getTime());
+                                writeFinalRule(
+                                        w,
+                                        true,
+                                        finalDstRule,
+                                        dstFromOffset - dstFromDSTSavings,
+                                        dstFromDSTSavings,
+                                        nextStart.getTime());
                             }
                         }
                     }
@@ -1444,34 +1580,75 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
             if (stdCount > 0) {
                 if (finalStdRule == null) {
                     if (stdCount == 1) {
-                        writeZonePropsByTime(w, false, stdName, stdFromOffset, stdToOffset,
-                                stdStartTime, true);
+                        writeZonePropsByTime(
+                                w, false, stdName, stdFromOffset, stdToOffset, stdStartTime, true);
                     } else {
-                        writeZonePropsByDOW(w, false, stdName, stdFromOffset, stdToOffset,
-                                stdMonth, stdWeekInMonth, stdDayOfWeek, stdStartTime, stdUntilTime);
+                        writeZonePropsByDOW(
+                                w,
+                                false,
+                                stdName,
+                                stdFromOffset,
+                                stdToOffset,
+                                stdMonth,
+                                stdWeekInMonth,
+                                stdDayOfWeek,
+                                stdStartTime,
+                                stdUntilTime);
                     }
                 } else {
                     if (stdCount == 1) {
-                        writeFinalRule(w, false, finalStdRule,
-                                stdFromOffset - stdFromDSTSavings, stdFromDSTSavings, stdStartTime);
+                        writeFinalRule(
+                                w,
+                                false,
+                                finalStdRule,
+                                stdFromOffset - stdFromDSTSavings,
+                                stdFromDSTSavings,
+                                stdStartTime);
                     } else {
                         // Use a single rule if possible
-                        if (isEquivalentDateRule(stdMonth, stdWeekInMonth, stdDayOfWeek, finalStdRule.getRule())) {
-                            writeZonePropsByDOW(w, false, stdName, stdFromOffset, stdToOffset,
-                                    stdMonth, stdWeekInMonth, stdDayOfWeek, stdStartTime, MAX_TIME);
+                        if (isEquivalentDateRule(
+                                stdMonth, stdWeekInMonth, stdDayOfWeek, finalStdRule.getRule())) {
+                            writeZonePropsByDOW(
+                                    w,
+                                    false,
+                                    stdName,
+                                    stdFromOffset,
+                                    stdToOffset,
+                                    stdMonth,
+                                    stdWeekInMonth,
+                                    stdDayOfWeek,
+                                    stdStartTime,
+                                    MAX_TIME);
                         } else {
                             // Not equivalent rule - write out two different rules
-                            writeZonePropsByDOW(w, false, stdName, stdFromOffset, stdToOffset,
-                                    stdMonth, stdWeekInMonth, stdDayOfWeek, stdStartTime, stdUntilTime);
+                            writeZonePropsByDOW(
+                                    w,
+                                    false,
+                                    stdName,
+                                    stdFromOffset,
+                                    stdToOffset,
+                                    stdMonth,
+                                    stdWeekInMonth,
+                                    stdDayOfWeek,
+                                    stdStartTime,
+                                    stdUntilTime);
 
-                            Date nextStart = finalStdRule.getNextStart(stdUntilTime,
-                                    stdFromOffset - stdFromDSTSavings, stdFromDSTSavings, false);
+                            Date nextStart =
+                                    finalStdRule.getNextStart(
+                                            stdUntilTime,
+                                            stdFromOffset - stdFromDSTSavings,
+                                            stdFromDSTSavings,
+                                            false);
 
                             assert nextStart != null;
                             if (nextStart != null) {
-                                writeFinalRule(w, false, finalStdRule,
-                                        stdFromOffset - stdFromDSTSavings, stdFromDSTSavings, nextStart.getTime());
-
+                                writeFinalRule(
+                                        w,
+                                        false,
+                                        finalStdRule,
+                                        stdFromOffset - stdFromDSTSavings,
+                                        stdFromDSTSavings,
+                                        nextStart.getTime());
                             }
                         }
                     }
@@ -1485,7 +1662,8 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
      * Check if the DOW rule specified by month, weekInMonth and dayOfWeek is equivalent
      * to the DateTimerule.
      */
-    private static boolean isEquivalentDateRule(int month, int weekInMonth, int dayOfWeek, DateTimeRule dtrule) {
+    private static boolean isEquivalentDateRule(
+            int month, int weekInMonth, int dayOfWeek, DateTimeRule dtrule) {
         if (month != dtrule.getRuleMonth() || dayOfWeek != dtrule.getRuleDayOfWeek()) {
             return false;
         }
@@ -1499,20 +1677,22 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
         }
         int ruleDOM = dtrule.getRuleDayOfMonth();
         if (dtrule.getDateRuleType() == DateTimeRule.DOW_GEQ_DOM) {
-            if (ruleDOM%7 == 1 && (ruleDOM + 6)/7 == weekInMonth) {
+            if (ruleDOM % 7 == 1 && (ruleDOM + 6) / 7 == weekInMonth) {
                 return true;
             }
-            if (month != Calendar.FEBRUARY && (MONTHLENGTH[month] - ruleDOM)%7 == 6
-                    && weekInMonth == -1*((MONTHLENGTH[month]-ruleDOM+1)/7)) {
+            if (month != Calendar.FEBRUARY
+                    && (MONTHLENGTH[month] - ruleDOM) % 7 == 6
+                    && weekInMonth == -1 * ((MONTHLENGTH[month] - ruleDOM + 1) / 7)) {
                 return true;
             }
         }
         if (dtrule.getDateRuleType() == DateTimeRule.DOW_LEQ_DOM) {
-            if (ruleDOM%7 == 0 && ruleDOM/7 == weekInMonth) {
+            if (ruleDOM % 7 == 0 && ruleDOM / 7 == weekInMonth) {
                 return true;
             }
-            if (month != Calendar.FEBRUARY && (MONTHLENGTH[month] - ruleDOM)%7 == 0
-                    && weekInMonth == -1*((MONTHLENGTH[month] - ruleDOM)/7 + 1)) {
+            if (month != Calendar.FEBRUARY
+                    && (MONTHLENGTH[month] - ruleDOM) % 7 == 0
+                    && weekInMonth == -1 * ((MONTHLENGTH[month] - ruleDOM) / 7 + 1)) {
                 return true;
             }
         }
@@ -1522,8 +1702,15 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
     /*
      * Write a single start time
      */
-    private static void writeZonePropsByTime(Writer writer, boolean isDst, String tzname,
-            int fromOffset, int toOffset, long time, boolean withRDATE) throws IOException {
+    private static void writeZonePropsByTime(
+            Writer writer,
+            boolean isDst,
+            String tzname,
+            int fromOffset,
+            int toOffset,
+            long time,
+            boolean withRDATE)
+            throws IOException {
         beginZoneProps(writer, isDst, tzname, fromOffset, toOffset, time);
         if (withRDATE) {
             writer.write(ICAL_RDATE);
@@ -1537,8 +1724,17 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
     /*
      * Write start times defined by a DOM rule using VTIMEZONE RRULE
      */
-    private static void writeZonePropsByDOM(Writer writer, boolean isDst, String tzname, int fromOffset, int toOffset,
-            int month, int dayOfMonth, long startTime, long untilTime) throws IOException {
+    private static void writeZonePropsByDOM(
+            Writer writer,
+            boolean isDst,
+            String tzname,
+            int fromOffset,
+            int toOffset,
+            int month,
+            int dayOfMonth,
+            long startTime,
+            long untilTime)
+            throws IOException {
         beginZoneProps(writer, isDst, tzname, fromOffset, toOffset, startTime);
 
         beginRRULE(writer, month);
@@ -1557,15 +1753,25 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
     /*
      * Write start times defined by a DOW rule using VTIMEZONE RRULE
      */
-    private static void writeZonePropsByDOW(Writer writer, boolean isDst, String tzname, int fromOffset, int toOffset,
-            int month, int weekInMonth, int dayOfWeek, long startTime, long untilTime) throws IOException {
+    private static void writeZonePropsByDOW(
+            Writer writer,
+            boolean isDst,
+            String tzname,
+            int fromOffset,
+            int toOffset,
+            int month,
+            int weekInMonth,
+            int dayOfWeek,
+            long startTime,
+            long untilTime)
+            throws IOException {
         beginZoneProps(writer, isDst, tzname, fromOffset, toOffset, startTime);
 
         beginRRULE(writer, month);
         writer.write(ICAL_BYDAY);
         writer.write(EQUALS_SIGN);
-        writer.write(Integer.toString(weekInMonth));    // -4, -3, -2, -1, 1, 2, 3, 4
-        writer.write(ICAL_DOW_NAMES[dayOfWeek - 1]);    // SU, MO, TU...
+        writer.write(Integer.toString(weekInMonth)); // -4, -3, -2, -1, 1, 2, 3, 4
+        writer.write(ICAL_DOW_NAMES[dayOfWeek - 1]); // SU, MO, TU...
 
         if (untilTime != MAX_TIME) {
             appendUNTIL(writer, getDateTimeString(untilTime + fromOffset));
@@ -1578,17 +1784,45 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
     /*
      * Write start times defined by a DOW_GEQ_DOM rule using VTIMEZONE RRULE
      */
-    private static void writeZonePropsByDOW_GEQ_DOM(Writer writer, boolean isDst, String tzname, int fromOffset, int toOffset,
-            int month, int dayOfMonth, int dayOfWeek, long startTime, long untilTime) throws IOException {
+    private static void writeZonePropsByDOW_GEQ_DOM(
+            Writer writer,
+            boolean isDst,
+            String tzname,
+            int fromOffset,
+            int toOffset,
+            int month,
+            int dayOfMonth,
+            int dayOfWeek,
+            long startTime,
+            long untilTime)
+            throws IOException {
         // Check if this rule can be converted to DOW rule
-        if (dayOfMonth%7 == 1) {
+        if (dayOfMonth % 7 == 1) {
             // Can be represented by DOW rule
-            writeZonePropsByDOW(writer, isDst, tzname, fromOffset, toOffset,
-                    month, (dayOfMonth + 6)/7, dayOfWeek, startTime, untilTime);
-        } else if (month != Calendar.FEBRUARY && (MONTHLENGTH[month] - dayOfMonth)%7 == 6) {
+            writeZonePropsByDOW(
+                    writer,
+                    isDst,
+                    tzname,
+                    fromOffset,
+                    toOffset,
+                    month,
+                    (dayOfMonth + 6) / 7,
+                    dayOfWeek,
+                    startTime,
+                    untilTime);
+        } else if (month != Calendar.FEBRUARY && (MONTHLENGTH[month] - dayOfMonth) % 7 == 6) {
             // Can be represented by DOW rule with negative week number
-            writeZonePropsByDOW(writer, isDst, tzname, fromOffset, toOffset,
-                    month, -1*((MONTHLENGTH[month] - dayOfMonth + 1)/7), dayOfWeek, startTime, untilTime);
+            writeZonePropsByDOW(
+                    writer,
+                    isDst,
+                    tzname,
+                    fromOffset,
+                    toOffset,
+                    month,
+                    -1 * ((MONTHLENGTH[month] - dayOfMonth + 1) / 7),
+                    dayOfWeek,
+                    startTime,
+                    untilTime);
         } else {
             // Otherwise, use BYMONTHDAY to include all possible dates
             beginZoneProps(writer, isDst, tzname, fromOffset, toOffset, startTime);
@@ -1605,23 +1839,40 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
                 int prevMonth = (month - 1) < 0 ? 11 : month - 1;
 
                 // Note: When a rule is separated into two, UNTIL attribute needs to be
-                // calculated for each of them.  For now, we skip this, because we basically use this method
+                // calculated for each of them.  For now, we skip this, because we basically use
+                // this method
                 // only for final rules, which does not have the UNTIL attribute
-                writeZonePropsByDOW_GEQ_DOM_sub(writer, prevMonth, -prevMonthDays, dayOfWeek, prevMonthDays, MAX_TIME /* Do not use UNTIL */, fromOffset);
+                writeZonePropsByDOW_GEQ_DOM_sub(
+                        writer,
+                        prevMonth,
+                        -prevMonthDays,
+                        dayOfWeek,
+                        prevMonthDays,
+                        MAX_TIME /* Do not use UNTIL */,
+                        fromOffset);
 
                 // Start from 1 for the rest
                 startDay = 1;
             } else if (dayOfMonth + 6 > MONTHLENGTH[month]) {
-                // Note: This code does not actually work well in February.  For now, days in month in
+                // Note: This code does not actually work well in February.  For now, days in month
+                // in
                 // non-leap year.
                 int nextMonthDays = dayOfMonth + 6 - MONTHLENGTH[month];
                 currentMonthDays -= nextMonthDays;
 
                 int nextMonth = (month + 1) > 11 ? 0 : month + 1;
 
-                writeZonePropsByDOW_GEQ_DOM_sub(writer, nextMonth, 1, dayOfWeek, nextMonthDays, MAX_TIME /* Do not use UNTIL */, fromOffset);
+                writeZonePropsByDOW_GEQ_DOM_sub(
+                        writer,
+                        nextMonth,
+                        1,
+                        dayOfWeek,
+                        nextMonthDays,
+                        MAX_TIME /* Do not use UNTIL */,
+                        fromOffset);
             }
-            writeZonePropsByDOW_GEQ_DOM_sub(writer, month, startDay, dayOfWeek, currentMonthDays, untilTime, fromOffset);
+            writeZonePropsByDOW_GEQ_DOM_sub(
+                    writer, month, startDay, dayOfWeek, currentMonthDays, untilTime, fromOffset);
             endZoneProps(writer, isDst);
         }
     }
@@ -1629,8 +1880,15 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
     /*
      * Called from writeZonePropsByDOW_GEQ_DOM
      */
-    private static void writeZonePropsByDOW_GEQ_DOM_sub(Writer writer, int month,
-            int dayOfMonth, int dayOfWeek, int numDays, long untilTime, int fromOffset) throws IOException {
+    private static void writeZonePropsByDOW_GEQ_DOM_sub(
+            Writer writer,
+            int month,
+            int dayOfMonth,
+            int dayOfWeek,
+            int numDays,
+            long untilTime,
+            int fromOffset)
+            throws IOException {
 
         int startDayNum = dayOfMonth;
         boolean isFeb = (month == Calendar.FEBRUARY);
@@ -1641,7 +1899,7 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
         beginRRULE(writer, month);
         writer.write(ICAL_BYDAY);
         writer.write(EQUALS_SIGN);
-        writer.write(ICAL_DOW_NAMES[dayOfWeek - 1]);    // SU, MO, TU...
+        writer.write(ICAL_DOW_NAMES[dayOfWeek - 1]); // SU, MO, TU...
         writer.write(SEMICOLON);
         writer.write(ICAL_BYMONTHDAY);
         writer.write(EQUALS_SIGN);
@@ -1661,33 +1919,85 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
     /*
      * Write start times defined by a DOW_LEQ_DOM rule using VTIMEZONE RRULE
      */
-    private static void writeZonePropsByDOW_LEQ_DOM(Writer writer, boolean isDst, String tzname, int fromOffset, int toOffset,
-            int month, int dayOfMonth, int dayOfWeek, long startTime, long untilTime) throws IOException {
+    private static void writeZonePropsByDOW_LEQ_DOM(
+            Writer writer,
+            boolean isDst,
+            String tzname,
+            int fromOffset,
+            int toOffset,
+            int month,
+            int dayOfMonth,
+            int dayOfWeek,
+            long startTime,
+            long untilTime)
+            throws IOException {
         // Check if this rule can be converted to DOW rule
-        if (dayOfMonth%7 == 0) {
+        if (dayOfMonth % 7 == 0) {
             // Can be represented by DOW rule
-            writeZonePropsByDOW(writer, isDst, tzname, fromOffset, toOffset,
-                    month, dayOfMonth/7, dayOfWeek, startTime, untilTime);
-        } else if (month != Calendar.FEBRUARY && (MONTHLENGTH[month] - dayOfMonth)%7 == 0){
+            writeZonePropsByDOW(
+                    writer,
+                    isDst,
+                    tzname,
+                    fromOffset,
+                    toOffset,
+                    month,
+                    dayOfMonth / 7,
+                    dayOfWeek,
+                    startTime,
+                    untilTime);
+        } else if (month != Calendar.FEBRUARY && (MONTHLENGTH[month] - dayOfMonth) % 7 == 0) {
             // Can be represented by DOW rule with negative week number
-            writeZonePropsByDOW(writer, isDst, tzname, fromOffset, toOffset,
-                    month, -1*((MONTHLENGTH[month] - dayOfMonth)/7 + 1), dayOfWeek, startTime, untilTime);
+            writeZonePropsByDOW(
+                    writer,
+                    isDst,
+                    tzname,
+                    fromOffset,
+                    toOffset,
+                    month,
+                    -1 * ((MONTHLENGTH[month] - dayOfMonth) / 7 + 1),
+                    dayOfWeek,
+                    startTime,
+                    untilTime);
         } else if (month == Calendar.FEBRUARY && dayOfMonth == 29) {
             // Special case for February
-            writeZonePropsByDOW(writer, isDst, tzname, fromOffset, toOffset,
-                    Calendar.FEBRUARY, -1, dayOfWeek, startTime, untilTime);
+            writeZonePropsByDOW(
+                    writer,
+                    isDst,
+                    tzname,
+                    fromOffset,
+                    toOffset,
+                    Calendar.FEBRUARY,
+                    -1,
+                    dayOfWeek,
+                    startTime,
+                    untilTime);
         } else {
             // Otherwise, convert this to DOW_GEQ_DOM rule
-            writeZonePropsByDOW_GEQ_DOM(writer, isDst, tzname, fromOffset, toOffset,
-                    month, dayOfMonth - 6, dayOfWeek, startTime, untilTime);
+            writeZonePropsByDOW_GEQ_DOM(
+                    writer,
+                    isDst,
+                    tzname,
+                    fromOffset,
+                    toOffset,
+                    month,
+                    dayOfMonth - 6,
+                    dayOfWeek,
+                    startTime,
+                    untilTime);
         }
     }
 
     /*
      * Write the final time zone rule using RRULE, with no UNTIL attribute
      */
-    private static void writeFinalRule(Writer writer, boolean isDst, AnnualTimeZoneRule rule,
-            int fromRawOffset, int fromDSTSavings, long startTime) throws IOException{
+    private static void writeFinalRule(
+            Writer writer,
+            boolean isDst,
+            AnnualTimeZoneRule rule,
+            int fromRawOffset,
+            int fromDSTSavings,
+            long startTime)
+            throws IOException {
         DateTimeRule dtrule = toWallTimeRule(rule.getRule(), fromRawOffset, fromDSTSavings);
 
         // If the rule's mills in a day is out of range, adjust start time.
@@ -1703,22 +2013,57 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
 
         int toOffset = rule.getRawOffset() + rule.getDSTSavings();
         switch (dtrule.getDateRuleType()) {
-        case DateTimeRule.DOM:
-            writeZonePropsByDOM(writer, isDst, rule.getName(), fromRawOffset + fromDSTSavings, toOffset,
-                    dtrule.getRuleMonth(), dtrule.getRuleDayOfMonth(), startTime, MAX_TIME);
-            break;
-        case DateTimeRule.DOW:
-            writeZonePropsByDOW(writer, isDst, rule.getName(), fromRawOffset + fromDSTSavings, toOffset,
-                    dtrule.getRuleMonth(), dtrule.getRuleWeekInMonth(), dtrule.getRuleDayOfWeek(), startTime, MAX_TIME);
-            break;
-        case DateTimeRule.DOW_GEQ_DOM:
-            writeZonePropsByDOW_GEQ_DOM(writer, isDst, rule.getName(), fromRawOffset + fromDSTSavings, toOffset,
-                    dtrule.getRuleMonth(), dtrule.getRuleDayOfMonth(), dtrule.getRuleDayOfWeek(), startTime, MAX_TIME);
-            break;
-        case DateTimeRule.DOW_LEQ_DOM:
-            writeZonePropsByDOW_LEQ_DOM(writer, isDst, rule.getName(), fromRawOffset + fromDSTSavings, toOffset,
-                    dtrule.getRuleMonth(), dtrule.getRuleDayOfMonth(), dtrule.getRuleDayOfWeek(), startTime, MAX_TIME);
-            break;
+            case DateTimeRule.DOM:
+                writeZonePropsByDOM(
+                        writer,
+                        isDst,
+                        rule.getName(),
+                        fromRawOffset + fromDSTSavings,
+                        toOffset,
+                        dtrule.getRuleMonth(),
+                        dtrule.getRuleDayOfMonth(),
+                        startTime,
+                        MAX_TIME);
+                break;
+            case DateTimeRule.DOW:
+                writeZonePropsByDOW(
+                        writer,
+                        isDst,
+                        rule.getName(),
+                        fromRawOffset + fromDSTSavings,
+                        toOffset,
+                        dtrule.getRuleMonth(),
+                        dtrule.getRuleWeekInMonth(),
+                        dtrule.getRuleDayOfWeek(),
+                        startTime,
+                        MAX_TIME);
+                break;
+            case DateTimeRule.DOW_GEQ_DOM:
+                writeZonePropsByDOW_GEQ_DOM(
+                        writer,
+                        isDst,
+                        rule.getName(),
+                        fromRawOffset + fromDSTSavings,
+                        toOffset,
+                        dtrule.getRuleMonth(),
+                        dtrule.getRuleDayOfMonth(),
+                        dtrule.getRuleDayOfWeek(),
+                        startTime,
+                        MAX_TIME);
+                break;
+            case DateTimeRule.DOW_LEQ_DOM:
+                writeZonePropsByDOW_LEQ_DOM(
+                        writer,
+                        isDst,
+                        rule.getName(),
+                        fromRawOffset + fromDSTSavings,
+                        toOffset,
+                        dtrule.getRuleMonth(),
+                        dtrule.getRuleDayOfMonth(),
+                        dtrule.getRuleDayOfWeek(),
+                        startTime,
+                        MAX_TIME);
+                break;
         }
     }
 
@@ -1762,7 +2107,6 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
                     dtype = DateTimeRule.DOW_LEQ_DOM;
                     dom = MONTHLENGTH[month] + 7 * (wim + 1);
                 }
-
             }
             // Shift one day before or after
             dom += dshift;
@@ -1790,8 +2134,14 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
         if (dtype == DateTimeRule.DOM) {
             modifiedRule = new DateTimeRule(month, dom, wallt, DateTimeRule.WALL_TIME);
         } else {
-            modifiedRule = new DateTimeRule(month, dom, dow,
-                    (dtype == DateTimeRule.DOW_GEQ_DOM), wallt, DateTimeRule.WALL_TIME);
+            modifiedRule =
+                    new DateTimeRule(
+                            month,
+                            dom,
+                            dow,
+                            (dtype == DateTimeRule.DOW_GEQ_DOM),
+                            wallt,
+                            DateTimeRule.WALL_TIME);
         }
         return modifiedRule;
     }
@@ -1799,7 +2149,14 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
     /*
      * Write the opening section of zone properties
      */
-    private static void beginZoneProps(Writer writer, boolean isDst, String tzname, int fromOffset, int toOffset, long startTime) throws IOException {
+    private static void beginZoneProps(
+            Writer writer,
+            boolean isDst,
+            String tzname,
+            int fromOffset,
+            int toOffset,
+            long startTime)
+            throws IOException {
         writer.write(ICAL_BEGIN);
         writer.write(COLON);
         if (isDst) {
@@ -1837,7 +2194,7 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
     /*
      * Writes the closing section of zone properties
      */
-    private static void endZoneProps(Writer writer, boolean isDst) throws IOException{
+    private static void endZoneProps(Writer writer, boolean isDst) throws IOException {
         // END:STANDARD or END:DAYLIGHT
         writer.write(ICAL_END);
         writer.write(COLON);
@@ -1880,7 +2237,7 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
     /*
      * Write the opening section of the VTIMEZONE block
      */
-    private void writeHeader(Writer writer)throws IOException {
+    private void writeHeader(Writer writer) throws IOException {
         writer.write(ICAL_BEGIN);
         writer.write(COLON);
         writer.write(ICAL_VTIMEZONE);
@@ -1977,7 +2334,7 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
 
             try {
                 year = Integer.parseInt(str.substring(0, 4));
-                month = Integer.parseInt(str.substring(4, 6)) - 1;  // 0-based
+                month = Integer.parseInt(str.substring(4, 6)) - 1; // 0-based
                 day = Integer.parseInt(str.substring(6, 8));
                 hour = Integer.parseInt(str.substring(9, 11));
                 min = Integer.parseInt(str.substring(11, 13));
@@ -1988,20 +2345,32 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
 
             // check valid range
             int maxDayOfMonth = Grego.monthLength(year, month);
-            if (year < 0 || month < 0 || month > 11 || day < 1 || day > maxDayOfMonth ||
-                    hour < 0 || hour >= 24 || min < 0 || min >= 60 || sec < 0 || sec >= 60) {
+            if (year < 0
+                    || month < 0
+                    || month > 11
+                    || day < 1
+                    || day > maxDayOfMonth
+                    || hour < 0
+                    || hour >= 24
+                    || min < 0
+                    || min >= 60
+                    || sec < 0
+                    || sec >= 60) {
                 break;
             }
 
             isValid = true;
-        } while(false);
+        } while (false);
 
         if (!isValid) {
             throw new IllegalArgumentException("Invalid date time string format");
         }
         // Calculate the time
         long time = Grego.fieldsToDay(year, month, day) * Grego.MILLIS_PER_DAY;
-        time += (hour*Grego.MILLIS_PER_HOUR + min*Grego.MILLIS_PER_MINUTE + sec*Grego.MILLIS_PER_SECOND);
+        time +=
+                (hour * Grego.MILLIS_PER_HOUR
+                        + min * Grego.MILLIS_PER_MINUTE
+                        + sec * Grego.MILLIS_PER_SECOND);
         if (!isUTC) {
             time -= offset;
         }
@@ -2045,7 +2414,7 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
                 break;
             }
             isValid = true;
-        } while(false);
+        } while (false);
 
         if (!isValid) {
             throw new IllegalArgumentException("Bad offset string");
@@ -2098,10 +2467,11 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
     }
 
     // Freezable stuffs
-    private volatile transient boolean isFrozen = false;
+    private transient volatile boolean isFrozen = false;
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 49
      */
     @Override
@@ -2111,6 +2481,7 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 49
      */
     @Override
@@ -2121,12 +2492,13 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 49
      */
     @Override
     public VTimeZone cloneAsThawed() {
-        VTimeZone vtz = (VTimeZone)super.cloneAsThawed();
-        vtz.tz = (BasicTimeZone)tz.cloneAsThawed();
+        VTimeZone vtz = (VTimeZone) super.cloneAsThawed();
+        vtz.tz = (BasicTimeZone) tz.cloneAsThawed();
         vtz.isFrozen = false;
         return vtz;
     }

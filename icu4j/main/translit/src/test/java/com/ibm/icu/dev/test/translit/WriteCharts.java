@@ -6,8 +6,16 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
- 
+
 package com.ibm.icu.dev.test.translit;
+
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.lang.UScript;
+import com.ibm.icu.text.Normalizer;
+import com.ibm.icu.text.Transliterator;
+import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.text.UnicodeSetIterator;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -21,23 +29,16 @@ import java.util.StringJoiner;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.lang.UScript;
-import com.ibm.icu.text.Normalizer;
-import com.ibm.icu.text.Transliterator;
-import com.ibm.icu.text.UTF16;
-import com.ibm.icu.text.UnicodeSet;
-import com.ibm.icu.text.UnicodeSetIterator;
-
 public class WriteCharts {
     public static void main(String[] args) throws IOException {
         if (false) {
-            printSet("[[\u0000-\u007E \u30A1-\u30FC \uFF61-\uFF9F\u3001\u3002][:Katakana:][:Mark:]]");
+            printSet(
+                    "[[\u0000-\u007E \u30A1-\u30FC \uFF61-\uFF9F\u3001\u3002][:Katakana:][:Mark:]]");
         }
         String testSet = "";
         if (args.length == 0) args = getAllScripts();
         for (int i = 0; i < args.length; ++i) {
-    // Enumeration enum = Transliterator.getAvailableIDs();
+            // Enumeration enum = Transliterator.getAvailableIDs();
             if (args[i].startsWith("[")) {
                 testSet = args[i];
             } else {
@@ -46,7 +47,7 @@ public class WriteCharts {
             }
         }
     }
-    
+
     public static void printSet(String source) {
         UnicodeSet s = new UnicodeSet(source);
         System.out.println("Printout for '" + source + "'");
@@ -54,15 +55,15 @@ public class WriteCharts {
         for (int i = 0; i < count; ++i) {
             int start = s.getRangeStart(i);
             int end = s.getRangeEnd(i);
-            System.out.println(Integer.toString(start,16) + ".." + Integer.toString(end,16));
+            System.out.println(Integer.toString(start, 16) + ".." + Integer.toString(end, 16));
         }
     }
-    
+
     public static String[] getAllScripts() {
         Set<String> set = new TreeSet<>();
         int scripts[];
         Enumeration<String> sources = Transliterator.getAvailableSources();
-        while(sources.hasMoreElements()) {
+        while (sources.hasMoreElements()) {
             String source = sources.nextElement();
             scripts = UScript.getCode(source);
             if (scripts == null) {
@@ -72,24 +73,24 @@ public class WriteCharts {
             int sourceScript = scripts[0];
             System.out.println("Source: " + source + ";\tScripts: " + showScripts(scripts));
             Enumeration<String> targets = Transliterator.getAvailableTargets(source);
-            while(targets.hasMoreElements()) {
+            while (targets.hasMoreElements()) {
                 String target = targets.nextElement();
                 scripts = UScript.getCode(target);
-                if (scripts == null
-                        || priority(scripts[0]) < priority(sourceScript)) {
+                if (scripts == null || priority(scripts[0]) < priority(sourceScript)) {
                     // skip doing both directions
                     System.out.println("[Skipping '" + source + "-" + target + "']");
                     continue;
                 }
                 System.out.println("\tTarget: " + target + ";\tScripts: " + showScripts(scripts));
                 Enumeration<String> variants = Transliterator.getAvailableVariants(source, target);
-                while(variants.hasMoreElements()) {
+                while (variants.hasMoreElements()) {
                     String variant = variants.nextElement();
                     String id = source + "-" + target;
                     if (variant.length() != 0) {
                         id += "/" + variant;
                         if (false) {
-                            System.out.println("SKIPPING VARIANT, SINCE IT CURRENTLY BREAKS!\t" + id);
+                            System.out.println(
+                                    "SKIPPING VARIANT, SINCE IT CURRENTLY BREAKS!\t" + id);
                             continue;
                         }
                     }
@@ -102,12 +103,12 @@ public class WriteCharts {
         set.toArray(results);
         return results;
     }
-    
-    static public int priority(int script) {
+
+    public static int priority(int script) {
         if (script == UScript.LATIN) return -2;
         return script;
     }
-    
+
     public static String showScripts(int[] scripts) {
         StringJoiner results = new StringJoiner(", ");
         for (int i = 0; i < scripts.length; ++i) {
@@ -115,26 +116,27 @@ public class WriteCharts {
         }
         return results.toString();
     }
-    
+
     public static void print(String testSet, String rawId) throws IOException {
         System.out.println("Processing " + rawId);
         Transliterator t = Transliterator.getInstance(rawId);
         String id = t.getID();
-        
+
         // clean up IDs. Ought to be API for getting source, target, variant
         int minusPos = id.indexOf('-');
-        String source = id.substring(0,minusPos);
-        String target = id.substring(minusPos+1);
+        String source = id.substring(0, minusPos);
+        String target = id.substring(minusPos + 1);
         int slashPos = target.indexOf('/');
-        if (slashPos >= 0) target = target.substring(0,slashPos);
-        
+        if (slashPos >= 0) target = target.substring(0, slashPos);
+
         // check that the source is a script
         if (testSet.equals("")) {
             int[] scripts = UScript.getCode(source);
             if (scripts == null) {
-                System.out.println("FAILED: " 
-                    + Transliterator.getDisplayName(id)
-                    + " does not have a script as the source");
+                System.out.println(
+                        "FAILED: "
+                                + Transliterator.getDisplayName(id)
+                                + " does not have a script as the source");
                 return;
             } else {
                 testSet = "[:" + source + ":]";
@@ -153,154 +155,186 @@ public class WriteCharts {
         } else {
             target = "[:" + target + ":]";
         }
-        UnicodeSet targetSet = new UnicodeSet(target);        
-        
+        UnicodeSet targetSet = new UnicodeSet(target);
+
         Transliterator inverse = t.getInverse();
-        
-        //Transliterator hex = Transliterator.getInstance("Any-Hex");
-        
-                
+
+        // Transliterator hex = Transliterator.getInstance("Any-Hex");
+
         // iterate through script
-        System.out.println("Transliterating " + sourceSet.toPattern(true) 
-            + " with " + Transliterator.getDisplayName(id));
-                
+        System.out.println(
+                "Transliterating "
+                        + sourceSet.toPattern(true)
+                        + " with "
+                        + Transliterator.getDisplayName(id));
+
         UnicodeSet leftOverSet = new UnicodeSet(targetSet);
         UnicodeSet privateUse = new UnicodeSet("[:private use:]");
-            
+
         Map<String, String> map = new TreeMap<>();
-        
+
         UnicodeSet targetSetPlusAnyways = new UnicodeSet(targetSet);
         targetSetPlusAnyways.addAll(okAnyway);
-        
+
         UnicodeSet sourceSetPlusAnyways = new UnicodeSet(sourceSet);
         sourceSetPlusAnyways.addAll(okAnyway);
-        
+
         UnicodeSetIterator usi = new UnicodeSetIterator(sourceSet);
-        
+
         while (usi.next()) {
             int j = usi.codepoint;
             /*
-        int count = sourceSet.getRangeCount();
-        for (int i = 0; i < count; ++i) {
-            int end = sourceSet.getRangeEnd(i);
-            for (int j = sourceSet.getRangeStart(i); j <= end; ++j) {
-            */
-               // String flag = "";
-                String ss = UTF16.valueOf(j);
-                String ts = t.transliterate(ss);
-                char group = 0;
-                if (!targetSetPlusAnyways.containsAll(ts)) {
-                    group |= 1;
-                }
-                if (UTF16.countCodePoint(ts) == 1) {
-                    leftOverSet.remove(UTF16.charAt(ts,0));
-                }
-                String rt = inverse.transliterate(ts);
-                if (!sourceSetPlusAnyways.containsAll(rt)) {
-                    group |= 2;
-                } else if (!ss.equals(rt)) {
-                    group |= 4;
-                }
-                
-                if (!privateUse.containsNone(ts) || !privateUse.containsNone(rt)) {
-                    group |= 16;
-                }
-                    
-                map.put(group + UCharacter.toLowerCase(Normalizer.normalize(ss, Normalizer.NFKD))
-                        + "\u0000" + ss, 
-                    "<td class='s'>" + ss + "<br>{@code " + hex(ss)
-                        + "</tt></td><td class='t'>" + ts + "<br>{@code " + hex(ts)
-                        + "</tt></td><td class='r'>" + rt + "<br>{@code " + hex(rt) + "</tt></td>" );
-                
-                // Check Duals
-                /*
-                int maxDual = 200;
-              dual:
-                for (int i2 = 0; i2 < count; ++i2) {
-                    int end2 = sourceSet.getRangeEnd(i2);
-                    for (int j2 = sourceSet.getRangeStart(i2); j2 <= end; ++j2) {
-                        String ss2 = UTF16.valueOf(j2);
-                        String ts2 = t.transliterate(ss2);
-                        String rt2 = inverse.transliterate(ts2);
-                        
-                        String ss12 = ss + ss2;
-                        String ts12 = t.transliterate(ss + ss12);
-                        String rt12 = inverse.transliterate(ts12);
-                        if (ts12.equals(ts + ts2) && rt12.equals(rt + rt2)) continue;   
-                        if (--maxDual < 0) break dual;
-                        
-                        // transliteration of whole differs from that of parts
-                        group = 0x100;
-                        map.put(group + UCharacter.toLowerCase(Normalizer.normalize(ss12, Normalizer.DECOMP_COMPAT, 0))
-                                + "\u0000" + ss12, 
-                            "<td class='s'>" + ss12 + "<br>{@code " + hex(ss12)
-                                + "</tt></td><td class='t'>" + ts12 + "<br>{@code " + hex(ts12)
-                                + "</tt></td><td class='r'>" + rt12 + "<br>{@code " + hex(rt12) + "</tt></td>" );
-                    }
-                }
+            int count = sourceSet.getRangeCount();
+            for (int i = 0; i < count; ++i) {
+                int end = sourceSet.getRangeEnd(i);
+                for (int j = sourceSet.getRangeStart(i); j <= end; ++j) {
                 */
-            //}
+            // String flag = "";
+            String ss = UTF16.valueOf(j);
+            String ts = t.transliterate(ss);
+            char group = 0;
+            if (!targetSetPlusAnyways.containsAll(ts)) {
+                group |= 1;
+            }
+            if (UTF16.countCodePoint(ts) == 1) {
+                leftOverSet.remove(UTF16.charAt(ts, 0));
+            }
+            String rt = inverse.transliterate(ts);
+            if (!sourceSetPlusAnyways.containsAll(rt)) {
+                group |= 2;
+            } else if (!ss.equals(rt)) {
+                group |= 4;
+            }
+
+            if (!privateUse.containsNone(ts) || !privateUse.containsNone(rt)) {
+                group |= 16;
+            }
+
+            map.put(
+                    group
+                            + UCharacter.toLowerCase(Normalizer.normalize(ss, Normalizer.NFKD))
+                            + "\u0000"
+                            + ss,
+                    "<td class='s'>"
+                            + ss
+                            + "<br>{@code "
+                            + hex(ss)
+                            + "</tt></td><td class='t'>"
+                            + ts
+                            + "<br>{@code "
+                            + hex(ts)
+                            + "</tt></td><td class='r'>"
+                            + rt
+                            + "<br>{@code "
+                            + hex(rt)
+                            + "</tt></td>");
+
+            // Check Duals
+            /*
+              int maxDual = 200;
+            dual:
+              for (int i2 = 0; i2 < count; ++i2) {
+                  int end2 = sourceSet.getRangeEnd(i2);
+                  for (int j2 = sourceSet.getRangeStart(i2); j2 <= end; ++j2) {
+                      String ss2 = UTF16.valueOf(j2);
+                      String ts2 = t.transliterate(ss2);
+                      String rt2 = inverse.transliterate(ts2);
+
+                      String ss12 = ss + ss2;
+                      String ts12 = t.transliterate(ss + ss12);
+                      String rt12 = inverse.transliterate(ts12);
+                      if (ts12.equals(ts + ts2) && rt12.equals(rt + rt2)) continue;
+                      if (--maxDual < 0) break dual;
+
+                      // transliteration of whole differs from that of parts
+                      group = 0x100;
+                      map.put(group + UCharacter.toLowerCase(Normalizer.normalize(ss12, Normalizer.DECOMP_COMPAT, 0))
+                              + "\u0000" + ss12,
+                          "<td class='s'>" + ss12 + "<br>{@code " + hex(ss12)
+                              + "</tt></td><td class='t'>" + ts12 + "<br>{@code " + hex(ts12)
+                              + "</tt></td><td class='r'>" + rt12 + "<br>{@code " + hex(rt12) + "</tt></td>" );
+                  }
+              }
+              */
+            // }
         }
-        
-        
-        leftOverSet.remove(0x0100,0x02FF); // remove extended & IPA
-        
+
+        leftOverSet.remove(0x0100, 0x02FF); // remove extended & IPA
+
         /*int count = leftOverSet.getRangeCount();
         for (int i = 0; i < count; ++i) {
             int end = leftOverSet.getRangeEnd(i);
             for (int j = leftOverSet.getRangeStart(i); j <= end; ++j) {
             */
-            
+
         usi.reset(leftOverSet);
         while (usi.next()) {
             int j = usi.codepoint;
-            
-                String ts = UTF16.valueOf(j);
-                // String decomp = Normalizer.normalize(ts, Normalizer.DECOMP_COMPAT, 0);
-                // if (!decomp.equals(ts)) continue;
-                
-                String rt = inverse.transliterate(ts);
-                // String flag = "";
-                char group = 0x80;
-                    
-                if (!sourceSetPlusAnyways.containsAll(rt)) {
-                    group |= 8;
-                }
-                if (!privateUse.containsNone(rt)) {
-                    group |= 16;
-                }
-                    
-                map.put(group + UCharacter.toLowerCase(Normalizer.normalize(ts, Normalizer.NFKD)) + ts, 
-                    "<td class='s'>-</td><td class='t'>" + ts + "<br>{@code " + hex(ts)
-                    + "</tt></td><td class='r'>"
-                    + rt + "<br><tt>" + hex(rt) + "</tt></td>");
-            //}
+
+            String ts = UTF16.valueOf(j);
+            // String decomp = Normalizer.normalize(ts, Normalizer.DECOMP_COMPAT, 0);
+            // if (!decomp.equals(ts)) continue;
+
+            String rt = inverse.transliterate(ts);
+            // String flag = "";
+            char group = 0x80;
+
+            if (!sourceSetPlusAnyways.containsAll(rt)) {
+                group |= 8;
+            }
+            if (!privateUse.containsNone(rt)) {
+                group |= 16;
+            }
+
+            map.put(
+                    group + UCharacter.toLowerCase(Normalizer.normalize(ts, Normalizer.NFKD)) + ts,
+                    "<td class='s'>-</td><td class='t'>"
+                            + ts
+                            + "<br>{@code "
+                            + hex(ts)
+                            + "</tt></td><td class='r'>"
+                            + rt
+                            + "<br><tt>"
+                            + hex(rt)
+                            + "</tt></td>");
+            // }
         }
 
         // make file name and open
         File f = new File("transliteration/chart_" + id.replace('/', '_') + ".html");
         String filename = f.getCanonicalFile().toString();
-        PrintWriter out = new PrintWriter(
-            new OutputStreamWriter(
-                new FileOutputStream(filename), "UTF-8"));
-        //out.print('\uFEFF'); // BOM
-        
+        PrintWriter out =
+                new PrintWriter(new OutputStreamWriter(new FileOutputStream(filename), "UTF-8"));
+        // out.print('\uFEFF'); // BOM
+
         System.out.println("Writing " + filename);
-        
+
         try {
             out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">");
             out.println("<HTML><HEAD>");
-            out.println("<META content=\"text/html; charset=utf-8\" http-equiv=Content-Type></HEAD>");
-            out.println("<link rel='stylesheet' href='http://www.unicode.org/charts/uca/charts.css' type='text/css'>");
-            
+            out.println(
+                    "<META content=\"text/html; charset=utf-8\" http-equiv=Content-Type></HEAD>");
+            out.println(
+                    "<link rel='stylesheet' href='http://www.unicode.org/charts/uca/charts.css' type='text/css'>");
+
             out.println("<BODY>");
-            out.println("<h1>Transliteration Samples for '" + Transliterator.getDisplayName(id) + "'</h1>");
-            out.println("<p>This file illustrates the transliterations of " + Transliterator.getDisplayName(id) + ".");
-            out.println("The samples are mechanically generated, and only include single characters");
-            out.println("from the source set. Thus it will <i>not</i> contain examples where the transliteration");
-            out.println("depends on the context around the character. For a more detailed -- and interactive -- example, see the");
-            out.println("<a href='https://icu4c-demos.unicode.org/icu-bin/translit'>Transliteration Demo</a></p><hr>");
-            
+            out.println(
+                    "<h1>Transliteration Samples for '"
+                            + Transliterator.getDisplayName(id)
+                            + "'</h1>");
+            out.println(
+                    "<p>This file illustrates the transliterations of "
+                            + Transliterator.getDisplayName(id)
+                            + ".");
+            out.println(
+                    "The samples are mechanically generated, and only include single characters");
+            out.println(
+                    "from the source set. Thus it will <i>not</i> contain examples where the transliteration");
+            out.println(
+                    "depends on the context around the character. For a more detailed -- and interactive -- example, see the");
+            out.println(
+                    "<a href='https://icu4c-demos.unicode.org/icu-bin/translit'>Transliteration Demo</a></p><hr>");
+
             // set up the headers
             int columnCount = 3;
             String headerBase = "<th>Source</th><th>Target</th><th>Return</th>";
@@ -309,12 +343,12 @@ public class WriteCharts {
                 if (i != columnCount - 1) headers += "<th>&nbsp;</th>";
                 headers += headerBase;
             }
-            
+
             String tableHeader = "<p><table border='1'><tr>" + headers + "</tr>";
             String tableFooter = "</table></p>";
             out.println("<h2>Round Trip</h2>");
             out.println(tableHeader);
-            
+
             Iterator<String> it = map.keySet().iterator();
             char lastGroup = 0;
             int count = 0;
@@ -330,17 +364,20 @@ public class WriteCharts {
                         column = 0;
                     }
                     out.println(tableFooter);
-                    
+
                     // String title = "";
                     if ((group & 0x100) != 0) out.println("<hr><h2>Duals</h2>");
                     else if ((group & 0x80) != 0) out.println("<hr><h2>Completeness</h2>");
                     else out.println("<hr><h2>Round Trip</h2>");
-                    if ((group & 16) != 0) out.println("<h3>Errors: Contains Private Use Characters</h3>");
-                    if ((group & 8) != 0) out.println("<h3>Possible Errors: Return not in Source Set</h3>");
-                    if ((group & 4) != 0) out.println("<h3>One-Way Mapping: Return not equal to Source</h3>");
+                    if ((group & 16) != 0)
+                        out.println("<h3>Errors: Contains Private Use Characters</h3>");
+                    if ((group & 8) != 0)
+                        out.println("<h3>Possible Errors: Return not in Source Set</h3>");
+                    if ((group & 4) != 0)
+                        out.println("<h3>One-Way Mapping: Return not equal to Source</h3>");
                     if ((group & 2) != 0) out.println("<h3>Errors: Return not in Source Set</h3>");
                     if ((group & 1) != 0) out.println("<h3>Errors: Target not in Target Set</h3>");
-                                        
+
                     out.println(tableHeader);
                     column = 0;
                 }
@@ -358,7 +395,7 @@ public class WriteCharts {
                 column = 0;
             }
             out.println(tableFooter + "</BODY></HTML>");
-            
+
         } finally {
             out.close();
         }
@@ -369,9 +406,9 @@ public class WriteCharts {
         s.codePoints().mapToObj(Integer::toHexString).forEach(results::add);
         return results.toString().toUpperCase();
     }
-    
+
     static final UnicodeSet okAnyway = new UnicodeSet("[^[:Letter:]]");
-    
+
     /*
     // tests whether a string is in a set. Also checks for Common and Inherited
     public static boolean isIn(String s, UnicodeSet set) {
@@ -385,6 +422,5 @@ public class WriteCharts {
         return true;
     }
     */
-    
+
 }
-  

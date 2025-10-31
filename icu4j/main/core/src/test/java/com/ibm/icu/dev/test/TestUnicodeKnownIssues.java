@@ -9,14 +9,11 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-/**
- * Test for {@link UnicodeKnownIssues}
- */
+/** Test for {@link UnicodeKnownIssues} */
 @RunWith(JUnit4.class)
 public class TestUnicodeKnownIssues {
     @Test
@@ -112,7 +109,6 @@ public class TestUnicodeKnownIssues {
         assertTrue(l.get(2) + "#2 says a/b/c", l.get(2).contains("a/b/c"));
     }
 
-
     @Test
     public void TestNoProblem() {
         UnicodeKnownIssues uki = new UnicodeKnownIssues(true);
@@ -135,6 +131,7 @@ public class TestUnicodeKnownIssues {
     // TODO: remove for JDK 1.8
     static final class MyConsumer implements UnicodeKnownIssues.Consumer<String> {
         final List<String> l = new ArrayList<>();
+
         @Override
         public void accept(String t) {
             l.add(t);

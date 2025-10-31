@@ -2,11 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.number;
 
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.text.AttributedCharacterIterator;
-import java.util.Arrays;
-
 import com.ibm.icu.impl.FormattedStringBuilder;
 import com.ibm.icu.impl.FormattedValueStringBuilderImpl;
 import com.ibm.icu.impl.number.DecimalQuantity;
@@ -15,12 +10,16 @@ import com.ibm.icu.text.ConstrainedFieldPosition;
 import com.ibm.icu.text.FormattedValue;
 import com.ibm.icu.text.PluralRules.IFixedDecimal;
 import com.ibm.icu.util.ICUUncheckedIOException;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.text.AttributedCharacterIterator;
+import java.util.Arrays;
 
 /**
- * The result of a number range formatting operation. This class allows the result to be exported in several data types,
- * including a String, an AttributedCharacterIterator, and a BigDecimal.
+ * The result of a number range formatting operation. This class allows the result to be exported in
+ * several data types, including a String, an AttributedCharacterIterator, and a BigDecimal.
  *
- * Instances of this class are immutable and thread-safe.
+ * <p>Instances of this class are immutable and thread-safe.
  *
  * @author sffc
  * @stable ICU 63
@@ -32,7 +31,10 @@ public class FormattedNumberRange implements FormattedValue {
     final DecimalQuantity quantity2;
     final RangeIdentityResult identityResult;
 
-    FormattedNumberRange(FormattedStringBuilder string, DecimalQuantity quantity1, DecimalQuantity quantity2,
+    FormattedNumberRange(
+            FormattedStringBuilder string,
+            DecimalQuantity quantity1,
+            DecimalQuantity quantity2,
             RangeIdentityResult identityResult) {
         this.string = string;
         this.quantity1 = quantity1;
@@ -117,8 +119,9 @@ public class FormattedNumberRange implements FormattedValue {
     }
 
     /**
-     * Export the first formatted number as a BigDecimal. This endpoint is useful for obtaining the exact number being
-     * printed after scaling and rounding have been applied by the number range formatting pipeline.
+     * Export the first formatted number as a BigDecimal. This endpoint is useful for obtaining the
+     * exact number being printed after scaling and rounding have been applied by the number range
+     * formatting pipeline.
      *
      * @return A BigDecimal representation of the first formatted number.
      * @stable ICU 63
@@ -130,8 +133,9 @@ public class FormattedNumberRange implements FormattedValue {
     }
 
     /**
-     * Export the second formatted number as a BigDecimal. This endpoint is useful for obtaining the exact number being
-     * printed after scaling and rounding have been applied by the number range formatting pipeline.
+     * Export the second formatted number as a BigDecimal. This endpoint is useful for obtaining the
+     * exact number being printed after scaling and rounding have been applied by the number range
+     * formatting pipeline.
      *
      * @return A BigDecimal representation of the second formatted number.
      * @stable ICU 63
@@ -143,11 +147,12 @@ public class FormattedNumberRange implements FormattedValue {
     }
 
     /**
-     * Returns whether the pair of numbers was successfully formatted as a range or whether an identity fallback was
-     * used. For example, if the first and second number were the same either before or after rounding occurred, an
-     * identity fallback was used.
+     * Returns whether the pair of numbers was successfully formatted as a range or whether an
+     * identity fallback was used. For example, if the first and second number were the same either
+     * before or after rounding occurred, an identity fallback was used.
      *
-     * @return A RangeIdentityType indicating the resulting identity situation in the formatted number range.
+     * @return A RangeIdentityType indicating the resulting identity situation in the formatted
+     *     number range.
      * @stable ICU 63
      * @see NumberRangeFormatter
      * @see NumberRangeFormatter.RangeIdentityFallback
@@ -165,8 +170,10 @@ public class FormattedNumberRange implements FormattedValue {
     public int hashCode() {
         // FormattedStringBuilder and BigDecimal are mutable, so we can't call
         // #equals() or #hashCode() on them directly.
-        return Arrays.hashCode(string.toCharArray()) ^ Arrays.hashCode(string.toFieldArray())
-                ^ quantity1.toBigDecimal().hashCode() ^ quantity2.toBigDecimal().hashCode();
+        return Arrays.hashCode(string.toCharArray())
+                ^ Arrays.hashCode(string.toFieldArray())
+                ^ quantity1.toBigDecimal().hashCode()
+                ^ quantity2.toBigDecimal().hashCode();
     }
 
     /**
@@ -176,12 +183,9 @@ public class FormattedNumberRange implements FormattedValue {
      */
     @Override
     public boolean equals(Object other) {
-        if (this == other)
-            return true;
-        if (other == null)
-            return false;
-        if (!(other instanceof FormattedNumberRange))
-            return false;
+        if (this == other) return true;
+        if (other == null) return false;
+        if (!(other instanceof FormattedNumberRange)) return false;
         // FormattedStringBuilder and BigDecimal are mutable, so we can't call
         // #equals() or #hashCode() on them directly.
         FormattedNumberRange _other = (FormattedNumberRange) other;

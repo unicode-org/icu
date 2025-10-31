@@ -7,6 +7,7 @@
  *******************************************************************************
  */
 package com.ibm.icu.dev.demo.impl;
+
 import java.applet.Applet;
 import java.applet.AppletContext;
 import java.applet.AppletStub;
@@ -39,17 +40,15 @@ import java.util.Iterator;
  */
 public class AppletFrame extends Frame implements AppletStub, AppletContext {
 
-    /**
-     * For serialization
-     */
+    /** For serialization */
     private static final long serialVersionUID = 818828281190757725L;
+
     Applet applet;
 
     /**
-     * Construct a Frame running the given Applet with the default size
-     * of 640 by 480.
-     * When the Frame is closed, the applet's stop() method is called,
-     * the Frame is dispose()d of, and System.exit(0) is called.
+     * Construct a Frame running the given Applet with the default size of 640 by 480. When the
+     * Frame is closed, the applet's stop() method is called, the Frame is dispose()d of, and
+     * System.exit(0) is called.
      *
      * @param name the Frame title
      * @param applet the applet to be run
@@ -59,9 +58,8 @@ public class AppletFrame extends Frame implements AppletStub, AppletContext {
     }
 
     /**
-     * Construct a Frame running the given Applet with the given size.
-     * When the Frame is closed, the applet's stop() method is called,
-     * the Frame is dispose()d of, and System.exit(0) is called.
+     * Construct a Frame running the given Applet with the given size. When the Frame is closed, the
+     * applet's stop() method is called, the Frame is dispose()d of, and System.exit(0) is called.
      *
      * @param name the Frame title
      * @param applet the applet to be run
@@ -76,13 +74,14 @@ public class AppletFrame extends Frame implements AppletStub, AppletContext {
         setSize(width, height);
         add("Center", applet);
         show();
-        addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                AppletFrame.this.applet.stop();
-                dispose();
-                System.exit(0);
-            }
-        });
+        addWindowListener(
+                new WindowAdapter() {
+                    public void windowClosing(WindowEvent e) {
+                        AppletFrame.this.applet.stop();
+                        dispose();
+                        System.exit(0);
+                    }
+                });
 
         applet.init();
         applet.start();
@@ -104,7 +103,7 @@ public class AppletFrame extends Frame implements AppletStub, AppletContext {
     public URL getDocumentBase() {
         return null;
     }
-    
+
     public String getParameter(String name) {
         return "PARAMETER";
     }
@@ -112,8 +111,7 @@ public class AppletFrame extends Frame implements AppletStub, AppletContext {
     public boolean isActive() {
         return true;
     }
-    
-    
+
     // AppletContext API
     public Applet getApplet(String name) {
         return applet;
@@ -132,19 +130,19 @@ public class AppletFrame extends Frame implements AppletStub, AppletContext {
     }
 
     public void showDocument(URL url) {}
+
     public void showDocument(URL url, String target) {}
 
     public void showStatus(String status) {
         System.out.println(status);
     }
-    
-    public void setStream(String key, InputStream stream) throws IOException {
-    }
-    
+
+    public void setStream(String key, InputStream stream) throws IOException {}
+
     public InputStream getStream(String key) {
         return null;
     }
-    
+
     public Iterator getStreamKeys() {
         return null;
     }

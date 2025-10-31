@@ -1,30 +1,28 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /*
-**********************************************************************
-* Copyright (c) 2004-2014, International Business Machines
-* Corporation and others.  All Rights Reserved.
-**********************************************************************
-* Author: Alan Liu
-* Created: April 20, 2004
-* Since: ICU 3.0
-**********************************************************************
-*/
+ **********************************************************************
+ * Copyright (c) 2004-2014, International Business Machines
+ * Corporation and others.  All Rights Reserved.
+ **********************************************************************
+ * Author: Alan Liu
+ * Created: April 20, 2004
+ * Since: ICU 3.0
+ **********************************************************************
+ */
 package com.ibm.icu.text;
-
-import java.io.ObjectStreamException;
-import java.text.FieldPosition;
-import java.text.ParsePosition;
 
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
+import java.io.ObjectStreamException;
+import java.text.FieldPosition;
+import java.text.ParsePosition;
 
 /**
  * Temporary internal concrete subclass of MeasureFormat implementing parsing and formatting of
  * CurrencyAmount objects. This class is likely to be redesigned and rewritten in the near future.
  *
- * <p>
- * This class currently delegates to DecimalFormat for parsing and formatting.
+ * <p>This class currently delegates to DecimalFormat for parsing and formatting.
  *
  * @see com.ibm.icu.text.UFormat
  * @see com.ibm.icu.text.DecimalFormat
@@ -41,7 +39,8 @@ class CurrencyFormat extends MeasureFormat {
     /**
      * Override Format.format().
      *
-     * @see java.text.Format#format(java.lang.Object, java.lang.StringBuffer, java.text.FieldPosition)
+     * @see java.text.Format#format(java.lang.Object, java.lang.StringBuffer,
+     *     java.text.FieldPosition)
      */
     @Override
     public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {

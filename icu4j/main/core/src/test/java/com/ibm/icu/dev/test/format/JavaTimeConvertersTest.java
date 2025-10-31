@@ -3,6 +3,11 @@
 
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
+import com.ibm.icu.impl.JavaTimeConverters;
+import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.GregorianCalendar;
+import com.ibm.icu.util.TimeZone;
 import java.time.DayOfWeek;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -19,16 +24,9 @@ import java.time.chrono.JapaneseDate;
 import java.time.chrono.JapaneseEra;
 import java.time.chrono.MinguoDate;
 import java.time.chrono.ThaiBuddhistDate;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
-import com.ibm.icu.dev.test.CoreTestFmwk;
-import com.ibm.icu.impl.JavaTimeConverters;
-import com.ibm.icu.util.Calendar;
-import com.ibm.icu.util.GregorianCalendar;
-import com.ibm.icu.util.TimeZone;
 
 /* This class tests the raw conversion, java.time classes to an ICU Calendar. */
 @RunWith(JUnit4.class)
@@ -44,28 +42,40 @@ public class JavaTimeConvertersTest extends CoreTestFmwk {
      * Think of this field list as a "mask" we use when we compare a calendar
      * from conversion with the expected Calendar.
      */
-    private final static int[] DATE_ONLY_FIELDS = {
-            Calendar.DAY_OF_MONTH, Calendar.MONTH, Calendar.YEAR,
-            Calendar.DAY_OF_WEEK, Calendar.DAY_OF_YEAR, Calendar.ERA,
-            Calendar.DAY_OF_WEEK_IN_MONTH, Calendar.DOW_LOCAL,
-            Calendar.WEEK_OF_MONTH, Calendar.WEEK_OF_YEAR, Calendar.EXTENDED_YEAR
+    private static final int[] DATE_ONLY_FIELDS = {
+        Calendar.DAY_OF_MONTH,
+        Calendar.MONTH,
+        Calendar.YEAR,
+        Calendar.DAY_OF_WEEK,
+        Calendar.DAY_OF_YEAR,
+        Calendar.ERA,
+        Calendar.DAY_OF_WEEK_IN_MONTH,
+        Calendar.DOW_LOCAL,
+        Calendar.WEEK_OF_MONTH,
+        Calendar.WEEK_OF_YEAR,
+        Calendar.EXTENDED_YEAR
     };
 
     // Fields that we expect in the calendar when formatting time
-    private final static int[] TIME_ONLY_FIELDS = {
-            Calendar.HOUR_OF_DAY, Calendar.MINUTE, Calendar.SECOND, Calendar.MILLISECOND,
-            Calendar.AM_PM, Calendar.MILLISECONDS_IN_DAY
+    private static final int[] TIME_ONLY_FIELDS = {
+        Calendar.HOUR_OF_DAY,
+        Calendar.MINUTE,
+        Calendar.SECOND,
+        Calendar.MILLISECOND,
+        Calendar.AM_PM,
+        Calendar.MILLISECONDS_IN_DAY
     };
 
     // Make it easier to build all kind of temporal objects
-    final static LocalDateTime LOCAL_DATE_TIME = LocalDateTime.of(2018, Month.SEPTEMBER, 23,
-        19, 42, 57, /*nanoseconds*/ 123_000_000);
+    static final LocalDateTime LOCAL_DATE_TIME =
+            LocalDateTime.of(2018, Month.SEPTEMBER, 23, 19, 42, 57, /*nanoseconds*/ 123_000_000);
 
-    final static String TIME_ZONE_ID = "Europe/Paris";
+    static final String TIME_ZONE_ID = "Europe/Paris";
 
     // Match the fields in the LOCAL_DATE_TIME above
-    final static Calendar EXPECTED_CALENDAR = new GregorianCalendar(2018, Calendar.SEPTEMBER,
-            23, 19, 42, 57);
+    static final Calendar EXPECTED_CALENDAR =
+            new GregorianCalendar(2018, Calendar.SEPTEMBER, 23, 19, 42, 57);
+
     static {
         EXPECTED_CALENDAR.setTimeZone(TimeZone.getTimeZone(TIME_ZONE_ID));
         EXPECTED_CALENDAR.setTimeInMillis(EXPECTED_CALENDAR.getTimeInMillis() + 123);
@@ -111,23 +121,29 @@ public class JavaTimeConvertersTest extends CoreTestFmwk {
         assertCalendarsEquals(EXPECTED_CALENDAR, calendar, DATE_ONLY_FIELDS);
         assertCalendarsEquals(EXPECTED_CALENDAR, calendar, TIME_ONLY_FIELDS);
 
-        ZonedDateTime zdt = ZonedDateTime.of(LOCAL_DATE_TIME, ZoneId.of(TIME_ZONE_ID)); // Date + Time + TimeZone
+        ZonedDateTime zdt =
+                ZonedDateTime.of(
+                        LOCAL_DATE_TIME, ZoneId.of(TIME_ZONE_ID)); // Date + Time + TimeZone
         calendar = JavaTimeConverters.temporalToCalendar(zdt);
         assertCalendarsEquals(EXPECTED_CALENDAR, calendar, DATE_ONLY_FIELDS);
         assertCalendarsEquals(EXPECTED_CALENDAR, calendar, TIME_ONLY_FIELDS);
         assertEquals("", EXPECTED_CALENDAR.getTimeZone().getID(), calendar.getTimeZone().getID());
 
-        OffsetDateTime odt = OffsetDateTime.of(LOCAL_DATE_TIME, ZoneOffset.ofHours(1)); // Date + Time + TimeZone
+        OffsetDateTime odt =
+                OffsetDateTime.of(LOCAL_DATE_TIME, ZoneOffset.ofHours(1)); // Date + Time + TimeZone
         calendar = JavaTimeConverters.temporalToCalendar(odt);
         assertCalendarsEquals(EXPECTED_CALENDAR, calendar, DATE_ONLY_FIELDS);
         assertCalendarsEquals(EXPECTED_CALENDAR, calendar, TIME_ONLY_FIELDS);
-        assertEquals("", EXPECTED_CALENDAR.getTimeZone().getRawOffset(), calendar.getTimeZone().getRawOffset());
+        assertEquals(
+                "",
+                EXPECTED_CALENDAR.getTimeZone().getRawOffset(),
+                calendar.getTimeZone().getRawOffset());
 
-        int[] DATE_OF_WEEK_ONLY_FIELD = { Calendar.DAY_OF_WEEK };
+        int[] DATE_OF_WEEK_ONLY_FIELD = {Calendar.DAY_OF_WEEK};
         calendar = JavaTimeConverters.dayOfWeekToCalendar(DayOfWeek.MONDAY);
         assertEquals("", Calendar.MONDAY, calendar.get(Calendar.DAY_OF_WEEK));
 
-        int[] MONTH_ONLY_FIELD = { Calendar.MONTH };
+        int[] MONTH_ONLY_FIELD = {Calendar.MONTH};
         calendar = JavaTimeConverters.monthToCalendar(Month.SEPTEMBER);
         assertEquals("", Calendar.SEPTEMBER, calendar.get(Calendar.MONTH));
     }
@@ -139,7 +155,8 @@ public class JavaTimeConvertersTest extends CoreTestFmwk {
     }
 
     // Compare the expected / actual calendar, but using an allowlist
-    private static void assertCalendarsEquals(Calendar exected, Calendar actual, int[] fieldsToCheck) {
+    private static void assertCalendarsEquals(
+            Calendar exected, Calendar actual, int[] fieldsToCheck) {
         for (int field : fieldsToCheck) {
             assertEquals("Bad conversion", exected.get(field), actual.get(field));
         }

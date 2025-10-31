@@ -8,7 +8,6 @@ import com.ibm.icu.text.DecimalFormatSymbols;
 
 /**
  * @author sffc
- *
  */
 public class PercentMatcher extends SymbolMatcher {
 

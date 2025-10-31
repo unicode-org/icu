@@ -5,17 +5,17 @@ package com.ibm.icu.impl;
 import java.text.CharacterIterator;
 
 /**
- * Implement the Java CharacterIterator interface on a CharSequence.
- * Intended for internal use by ICU only.
+ * Implement the Java CharacterIterator interface on a CharSequence. Intended for internal use by
+ * ICU only.
  */
 public class CSCharacterIterator implements CharacterIterator, Cloneable {
 
     private int index;
     private CharSequence seq;
 
-
     /**
      * Constructor.
+     *
      * @param text The CharSequence to iterate over.
      */
     public CSCharacterIterator(CharSequence text) {
@@ -26,21 +26,27 @@ public class CSCharacterIterator implements CharacterIterator, Cloneable {
         index = 0;
     }
 
-    /** @{inheritDoc} */
+    /**
+     * @{inheritDoc}
+     */
     @Override
     public char first() {
         index = 0;
         return current();
     }
 
-    /** @{inheritDoc} */
+    /**
+     * @{inheritDoc}
+     */
     @Override
     public char last() {
         index = seq.length();
         return previous();
     }
 
-    /** @{inheritDoc} */
+    /**
+     * @{inheritDoc}
+     */
     @Override
     public char current() {
         if (index == seq.length()) {
@@ -49,7 +55,9 @@ public class CSCharacterIterator implements CharacterIterator, Cloneable {
         return seq.charAt(index);
     }
 
-    /** @{inheritDoc} */
+    /**
+     * @{inheritDoc}
+     */
     @Override
     public char next() {
         if (index < seq.length()) {
@@ -58,7 +66,9 @@ public class CSCharacterIterator implements CharacterIterator, Cloneable {
         return current();
     }
 
-    /** @{inheritDoc} */
+    /**
+     * @{inheritDoc}
+     */
     @Override
     public char previous() {
         if (index == 0) {
@@ -68,7 +78,9 @@ public class CSCharacterIterator implements CharacterIterator, Cloneable {
         return current();
     }
 
-    /** @{inheritDoc} */
+    /**
+     * @{inheritDoc}
+     */
     @Override
     public char setIndex(int position) {
         if (position < 0 || position > seq.length()) {
@@ -78,25 +90,33 @@ public class CSCharacterIterator implements CharacterIterator, Cloneable {
         return current();
     }
 
-    /** @{inheritDoc} */
+    /**
+     * @{inheritDoc}
+     */
     @Override
     public int getBeginIndex() {
         return 0;
     }
 
-    /** @{inheritDoc} */
+    /**
+     * @{inheritDoc}
+     */
     @Override
     public int getEndIndex() {
         return seq.length();
     }
 
-    /** @{inheritDoc} */
+    /**
+     * @{inheritDoc}
+     */
     @Override
     public int getIndex() {
         return index;
     }
 
-    /** @{inheritDoc} */
+    /**
+     * @{inheritDoc}
+     */
     @Override
     public CSCharacterIterator clone() {
         CSCharacterIterator copy = new CSCharacterIterator(seq);

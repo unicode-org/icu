@@ -6,18 +6,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *******************************************************************************
- * Copyright (C) 2002-2010, International Business Machines Corporation and    *
- * Unicode, Inc. All Rights Reserved.                                          *
- *******************************************************************************
+ * ****************************************************************************** Copyright (C)
+ * 2002-2010, International Business Machines Corporation and * Unicode, Inc. All Rights Reserved. *
+ * ******************************************************************************
  *
- * Hashtable storing ints addressed by longs. Used
- * for storing of composition data.
+ * <p>Hashtable storing ints addressed by longs. Used for storing of composition data.
+ *
  * @author Vladimir Weinstein
  */
 public class LongHashtable {
 
-    public LongHashtable (int defaultValue) {
+    public LongHashtable(int defaultValue) {
         this.defaultValue = defaultValue;
     }
 
@@ -37,5 +36,4 @@ public class LongHashtable {
 
     private int defaultValue;
     private Map<Long, Integer> table = new HashMap<Long, Integer>();
-
 }

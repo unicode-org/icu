@@ -9,13 +9,11 @@
 package com.ibm.icu.util;
 
 /**
- * Unchecked version of {@link java.io.IOException}.
- * Some ICU APIs do not throw the standard exception but instead wrap it
- * into this unchecked version.
+ * Unchecked version of {@link java.io.IOException}. Some ICU APIs do not throw the standard
+ * exception but instead wrap it into this unchecked version.
  *
- * <p>This currently extends {@link RuntimeException},
- * but when ICU can rely on Java 8 this class should be changed to extend
- * java.io.UncheckedIOException instead.
+ * <p>This currently extends {@link RuntimeException}, but when ICU can rely on Java 8 this class
+ * should be changed to extend java.io.UncheckedIOException instead.
  *
  * @stable ICU 53
  */
@@ -27,8 +25,7 @@ public class ICUUncheckedIOException extends RuntimeException {
      *
      * @stable ICU 53
      */
-    public ICUUncheckedIOException() {
-    }
+    public ICUUncheckedIOException() {}
 
     /**
      * Constructor.

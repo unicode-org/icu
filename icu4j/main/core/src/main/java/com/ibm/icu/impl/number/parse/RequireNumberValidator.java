@@ -4,7 +4,6 @@ package com.ibm.icu.impl.number.parse;
 
 /**
  * @author sffc
- *
  */
 public class RequireNumberValidator extends ValidationMatcher {
 
@@ -20,5 +19,4 @@ public class RequireNumberValidator extends ValidationMatcher {
     public String toString() {
         return "<RequireNumber>";
     }
-
 }

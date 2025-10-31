@@ -2,17 +2,15 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import com.ibm.icu.util.ICUException;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.UResourceBundleIterator;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
- * <code>EraRules</code> represents calendar era rules specified
- * in supplementalData/calendarData.
+ * <code>EraRules</code> represents calendar era rules specified in supplementalData/calendarData.
  *
  * @author Yoshito Umaoka
  */
@@ -27,8 +25,9 @@ public class EraRules {
     private static final int DAY_MASK = 0x000000FF;
 
     private int[] startDates;
-    private int minEra;  // minimum valid era code, for first entry in startDates[]
-    private int numEras; // number of valid era codes (not necessarily the same as startDates.length)
+    private int minEra; // minimum valid era code, for first entry in startDates[]
+    private int
+            numEras; // number of valid era codes (not necessarily the same as startDates.length)
     private int currentEra;
 
     private EraRules(int[] startDates, int minEra, int numEras) {
@@ -43,8 +42,11 @@ public class EraRules {
     }
 
     public static EraRules getInstance(String calId, boolean includeTentativeEra) {
-        UResourceBundle supplementalDataRes = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME,
-                "supplementalData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+        UResourceBundle supplementalDataRes =
+                UResourceBundle.getBundleInstance(
+                        ICUData.ICU_BASE_NAME,
+                        "supplementalData",
+                        ICUResourceBundle.ICU_DATA_CLASS_LOADER);
         UResourceBundle calendarDataRes = supplementalDataRes.get("calendarData");
         UResourceBundle calendarTypeRes = calendarDataRes.get(calId);
         UResourceBundle erasRes = calendarTypeRes.get("eras");
@@ -61,11 +63,16 @@ public class EraRules {
             try {
                 eraIdx = Integer.parseInt(eraIdxStr);
             } catch (NumberFormatException e) {
-                throw new ICUException("Invalid era rule key:" + eraIdxStr + " in era rule data for " + calId);
+                throw new ICUException(
+                        "Invalid era rule key:" + eraIdxStr + " in era rule data for " + calId);
             }
             if (eraIdx < 0) {
-                throw new ICUException("Era rule key:" + eraIdxStr + " in era rule data for " + calId
-                        + " must be >= 0");
+                throw new ICUException(
+                        "Era rule key:"
+                                + eraIdxStr
+                                + " in era rule data for "
+                                + calId
+                                + " must be >= 0");
             }
             if (eraIdx + 1 > eraStartDates.size()) {
                 eraStartDates.ensureCapacity(eraIdx + 1); // needed only to minimize expansions
@@ -77,7 +84,10 @@ public class EraRules {
             // Now set the startDate that we just read
             if (isSet(eraStartDates.get(eraIdx).intValue())) {
                 throw new ICUException(
-                        "Duplicated era rule for rule key:" + eraIdxStr + " in era rule data for " + calId);
+                        "Duplicated era rule for rule key:"
+                                + eraIdxStr
+                                + " in era rule data for "
+                                + calId);
             }
 
             boolean hasName = true;
@@ -88,10 +98,13 @@ public class EraRules {
                 String key = res.getKey();
                 if (key.equals("start")) {
                     int[] fields = res.getIntVector();
-                    if (fields.length != 3 || !isValidRuleStartDate(fields[0], fields[1], fields[2])) {
+                    if (fields.length != 3
+                            || !isValidRuleStartDate(fields[0], fields[1], fields[2])) {
                         throw new ICUException(
-                                "Invalid era rule date data:" + Arrays.toString(fields) + " in era rule data for "
-                                + calId);
+                                "Invalid era rule date data:"
+                                        + Arrays.toString(fields)
+                                        + " in era rule data for "
+                                        + calId);
                     }
                     eraStartDates.set(eraIdx, encodeDate(fields[0], fields[1], fields[2]));
                 } else if (key.equals("named")) {
@@ -114,15 +127,20 @@ public class EraRules {
                     // second (and final) entry; basically they are in reverse order.
                     eraStartDates.set(eraIdx, MIN_ENCODED_START);
                 } else {
-                    throw new ICUException("Missing era start/end rule date for key:" + eraIdxStr + " in era rule data for "
-                            + calId);
+                    throw new ICUException(
+                            "Missing era start/end rule date for key:"
+                                    + eraIdxStr
+                                    + " in era rule data for "
+                                    + calId);
                 }
             }
 
             if (hasName) {
                 if (eraIdx >= firstTentativeIdx) {
                     throw new ICUException(
-                            "Non-tentative era(" + eraIdx + ") must be placed before the first tentative era");
+                            "Non-tentative era("
+                                    + eraIdx
+                                    + ") must be placed before the first tentative era");
                 }
             } else {
                 if (eraIdx < firstTentativeIdx) {
@@ -136,14 +154,18 @@ public class EraRules {
         if (!includeTentativeEra) {
             while (firstTentativeIdx < eraStartDates.size()) {
                 int lastEraIdx = eraStartDates.size() - 1;
-                if (isSet(eraStartDates.get(lastEraIdx))) { // If there are multiple tentativeEras, some may be unset
+                if (isSet(
+                        eraStartDates.get(
+                                lastEraIdx))) { // If there are multiple tentativeEras, some may be
+                    // unset
                     numEras--;
                 }
                 eraStartDates.remove(lastEraIdx);
             }
             // Remove any remaining trailing unSet entries
             // (can only have these if tentativeEras have been removed)
-            while (eraStartDates.size() > 0 && !isSet(eraStartDates.get(eraStartDates.size() - 1))) {
+            while (eraStartDates.size() > 0
+                    && !isSet(eraStartDates.get(eraStartDates.size() - 1))) {
                 eraStartDates.remove(eraStartDates.size() - 1);
             }
         }
@@ -160,13 +182,15 @@ public class EraRules {
         int[] startDates = new int[eraStartDates.size()];
         for (int eraIdx = 0; eraIdx < eraStartDates.size(); eraIdx++) {
             startDates[eraIdx] = eraStartDates.get(eraIdx).intValue();
-        };
+        }
+        ;
         return new EraRules(startDates, minEra, numEras);
     }
 
     /**
      * Gets number of effective eras
-     * @return  number of effective eras (not the same as max era code)
+     *
+     * @return number of effective eras (not the same as max era code)
      */
     public int getNumberOfEras() {
         return numEras;
@@ -174,7 +198,8 @@ public class EraRules {
 
     /**
      * Gets maximum defined era code for the current calendar
-     * @return  maximum defined era code
+     *
+     * @return maximum defined era code
      */
     public int getMaxEraCode() {
         return minEra + startDates.length - 1;
@@ -182,12 +207,12 @@ public class EraRules {
 
     /**
      * Gets start date of an era
-     * @param eraCode   Era code
-     * @param fillIn    Receives date fields if supplied. If null, or size of array
-     *                  is less than 3, then a new int[] will be newly allocated.
-     * @return  An int array including values of year, month, day of month in this order.
-     *          When an era has no start date, the result will be January 1st in year
-     *          whose value is minimum integer.
+     *
+     * @param eraCode Era code
+     * @param fillIn Receives date fields if supplied. If null, or size of array is less than 3,
+     *     then a new int[] will be newly allocated.
+     * @return An int array including values of year, month, day of month in this order. When an era
+     *     has no start date, the result will be January 1st in year whose value is minimum integer.
      */
     public int[] getStartDate(int eraCode, int[] fillIn) {
         int startDate = 0;
@@ -206,9 +231,10 @@ public class EraRules {
 
     /**
      * Gets start year of an era
-     * @param eraCode    Era code
-     * @return  The first year of an era. When a era has no start date, minimum integer
-     *          value is returned.
+     *
+     * @param eraCode Era code
+     * @return The first year of an era. When a era has no start date, minimum integer value is
+     *     returned.
      */
     public int getStartYear(int eraCode) {
         int startDate = 0;
@@ -228,16 +254,18 @@ public class EraRules {
 
     /**
      * Returns era code for the specified year/month/day.
-     * @param year  Year
+     *
+     * @param year Year
      * @param month Month (1-base)
-     * @param day   Day of month
-     * @return  era code (or code of earliest era when date is before that era)
+     * @param day Day of month
+     * @return era code (or code of earliest era when date is before that era)
      */
     public int getEraCode(int year, int month, int day) {
         if (month < 1 || month > 12 || day < 1 || day > 31) {
-            throw new IllegalArgumentException("Illegal date - year:" + year + "month:" + month + "day:" + day);
+            throw new IllegalArgumentException(
+                    "Illegal date - year:" + year + "month:" + month + "day:" + day);
         }
-        if (numEras > 1 && startDates[startDates.length-1] == MIN_ENCODED_START) {
+        if (numEras > 1 && startDates[startDates.length - 1] == MIN_ENCODED_START) {
             // Multiple eras in reverse order, linear search from beginning.
             // Currently only for islamic.
             for (int startIdx = 0; startIdx < startDates.length; startIdx++) {
@@ -255,7 +283,7 @@ public class EraRules {
         // this used binary search which would only be better for those early Japanese eras,
         // but now that is much more difficult since there may be holes in the sorted list.
         // Note with this change, this no longer uses or depends on currentEra.
-        for (int startIdx = startDates.length; startIdx > 0;) {
+        for (int startIdx = startDates.length; startIdx > 0; ) {
             if (!isSet(startDates[--startIdx])) {
                 continue;
             }
@@ -267,11 +295,11 @@ public class EraRules {
     }
 
     /**
-     * Gets the current era code. This is calculated only once for an instance of
-     * EraRules. The current era calculation is based on the default time zone at
-     * the time of instantiation.
+     * Gets the current era code. This is calculated only once for an instance of EraRules. The
+     * current era calculation is based on the default time zone at the time of instantiation.
      *
-     * @return era index of current era (or era code of earliest era when current date is before any era)
+     * @return era index of current era (or era code of earliest era when current date is before any
+     *     era)
      */
     public int getCurrentEraCode() {
         return currentEra;
@@ -296,19 +324,22 @@ public class EraRules {
     }
 
     private static boolean isValidRuleStartDate(int year, int month, int day) {
-        return year >= MIN_ENCODED_START_YEAR && year <= MAX_ENCODED_START_YEAR
-                && month >= 1 && month <= 12 && day >= 1 && day <= 31;
+        return year >= MIN_ENCODED_START_YEAR
+                && year <= MAX_ENCODED_START_YEAR
+                && month >= 1
+                && month <= 12
+                && day >= 1
+                && day <= 31;
     }
 
     /**
-     * Encode year/month/date to a single integer.
-     * year is high 16 bits (-32768 to 32767), month is
+     * Encode year/month/date to a single integer. year is high 16 bits (-32768 to 32767), month is
      * next 8 bits and day of month is last 8 bits.
      *
-     * @param year  year
+     * @param year year
      * @param month month (1-base)
-     * @param day   day of month
-     * @return  an encoded date.
+     * @param day day of month
+     * @return an encoded date.
      */
     private static int encodeDate(int year, int month, int day) {
         return year << 16 | month << 8 | day;
@@ -339,12 +370,13 @@ public class EraRules {
 
     /**
      * Compare an encoded date with another date specified by year/month/day.
-     * @param encoded   An encoded date
-     * @param year      Year of another date
-     * @param month     Month of another date
-     * @param day       Day of another date
-     * @return -1 when encoded date is earlier, 0 when two dates are same,
-     *          and 1 when encoded date is later.
+     *
+     * @param encoded An encoded date
+     * @param year Year of another date
+     * @param month Month of another date
+     * @param day Day of another date
+     * @return -1 when encoded date is earlier, 0 when two dates are same, and 1 when encoded date
+     *     is later.
      */
     private static int compareEncodedDateWithYMD(int encoded, int year, int month, int day) {
         if (year < MIN_ENCODED_START_YEAR) {

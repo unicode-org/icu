@@ -8,13 +8,6 @@
  */
 package com.ibm.icu.text;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Locale;
-import java.util.MissingResourceException;
-
 import com.ibm.icu.impl.CacheBase;
 import com.ibm.icu.impl.CurrencyData;
 import com.ibm.icu.impl.CurrencyData.CurrencyDisplayInfo;
@@ -29,26 +22,32 @@ import com.ibm.icu.util.ICUCloneNotSupportedException;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
 import com.ibm.icu.util.UResourceBundle;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Locale;
+import java.util.MissingResourceException;
 
 /**
  * {@icuenhanced java.text.DecimalFormatSymbols}.{@icu _usage_}
  *
- * This class represents the set of symbols (such as the decimal separator, the grouping
- * separator, and so on) needed by <code>DecimalFormat</code> to format
- * numbers. <code>DecimalFormat</code> creates for itself an instance of
- * <code>DecimalFormatSymbols</code> from its locale data.  If you need to change any of
- * these symbols, you can get the <code>DecimalFormatSymbols</code> object from your
- * <code>DecimalFormat</code> and modify it.
+ * <p>This class represents the set of symbols (such as the decimal separator, the grouping
+ * separator, and so on) needed by <code>DecimalFormat</code> to format numbers. <code>DecimalFormat
+ * </code> creates for itself an instance of <code>DecimalFormatSymbols</code> from its locale data.
+ * If you need to change any of these symbols, you can get the <code>DecimalFormatSymbols</code>
+ * object from your <code>DecimalFormat</code> and modify it.
  *
- * @see          java.util.Locale
- * @see          DecimalFormat
- * @author       Mark Davis
- * @author       Alan Liu
+ * @see java.util.Locale
+ * @see DecimalFormat
+ * @author Mark Davis
+ * @author Alan Liu
  * @stable ICU 2.0
  */
 public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
      * Creates a DecimalFormatSymbols object for the default <code>FORMAT</code> locale.
+     *
      * @see Category#FORMAT
      * @stable ICU 2.0
      */
@@ -58,6 +57,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * Creates a DecimalFormatSymbols object for the given locale.
+     *
      * @param locale the locale
      * @stable ICU 2.0
      */
@@ -67,6 +67,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * {@icu} Creates a DecimalFormatSymbols object for the given locale.
+     *
      * @param locale the locale
      * @stable ICU 3.2
      */
@@ -85,10 +86,10 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
      * Returns a DecimalFormatSymbols instance for the default locale.
      *
-     * <p><strong>Note:</strong> Unlike
-     * <code>java.text.DecimalFormatSymbols#getInstance</code>, this method simply returns
-     * <code>new com.ibm.icu.text.DecimalFormatSymbols()</code>.  ICU currently does not
-     * support <code>DecimalFormatSymbolsProvider</code>, which was introduced in Java 6.
+     * <p><strong>Note:</strong> Unlike <code>java.text.DecimalFormatSymbols#getInstance</code>,
+     * this method simply returns <code>new com.ibm.icu.text.DecimalFormatSymbols()</code>. ICU
+     * currently does not support <code>DecimalFormatSymbolsProvider</code>, which was introduced in
+     * Java 6.
      *
      * @return A DecimalFormatSymbols instance.
      * @stable ICU 3.8
@@ -100,11 +101,10 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
      * Returns a DecimalFormatSymbols instance for the given locale.
      *
-     * <p><strong>Note:</strong> Unlike
-     * <code>java.text.DecimalFormatSymbols#getInstance</code>, this method simply returns
-     * <code>new com.ibm.icu.text.DecimalFormatSymbols(locale)</code>.  ICU currently does
-     * not support <code>DecimalFormatSymbolsProvider</code>, which was introduced in Java
-     * 6.
+     * <p><strong>Note:</strong> Unlike <code>java.text.DecimalFormatSymbols#getInstance</code>,
+     * this method simply returns <code>new com.ibm.icu.text.DecimalFormatSymbols(locale)</code>.
+     * ICU currently does not support <code>DecimalFormatSymbolsProvider</code>, which was
+     * introduced in Java 6.
      *
      * @param locale the locale.
      * @return A DecimalFormatSymbols instance.
@@ -117,11 +117,10 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
      * Returns a DecimalFormatSymbols instance for the given locale.
      *
-     * <p><strong>Note:</strong> Unlike
-     * <code>java.text.DecimalFormatSymbols#getInstance</code>, this method simply returns
-     * <code>new com.ibm.icu.text.DecimalFormatSymbols(locale)</code>.  ICU currently does
-     * not support <code>DecimalFormatSymbolsProvider</code>, which was introduced in Java
-     * 6.
+     * <p><strong>Note:</strong> Unlike <code>java.text.DecimalFormatSymbols#getInstance</code>,
+     * this method simply returns <code>new com.ibm.icu.text.DecimalFormatSymbols(locale)</code>.
+     * ICU currently does not support <code>DecimalFormatSymbolsProvider</code>, which was
+     * introduced in Java 6.
      *
      * @param locale the locale.
      * @return A DecimalFormatSymbols instance.
@@ -170,17 +169,16 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
-     * Returns an array of all locales for which the <code>getInstance</code> methods of
-     * this class can return localized instances.
+     * Returns an array of all locales for which the <code>getInstance</code> methods of this class
+     * can return localized instances.
      *
-     * <p><strong>Note:</strong> Unlike
-     * <code>java.text.DecimalFormatSymbols#getAvailableLocales</code>, this method simply
-     * returns the array of <code>Locale</code>s available for this class.  ICU currently
-     * does not support <code>DecimalFormatSymbolsProvider</code>, which was introduced in
-     * Java 6.
+     * <p><strong>Note:</strong> Unlike <code>java.text.DecimalFormatSymbols#getAvailableLocales
+     * </code>, this method simply returns the array of <code>Locale</code>s available for this
+     * class. ICU currently does not support <code>DecimalFormatSymbolsProvider</code>, which was
+     * introduced in Java 6.
      *
-     * @return An array of <code>Locale</code>s for which localized
-     * <code>DecimalFormatSymbols</code> instances are available.
+     * @return An array of <code>Locale</code>s for which localized <code>DecimalFormatSymbols
+     *     </code> instances are available.
      * @stable ICU 3.8
      */
     public static Locale[] getAvailableLocales() {
@@ -188,26 +186,25 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
-     * {@icu} Returns an array of all locales for which the <code>getInstance</code>
-     * methods of this class can return localized instances.
+     * {@icu} Returns an array of all locales for which the <code>getInstance</code> methods of this
+     * class can return localized instances.
      *
-     * <p><strong>Note:</strong> Unlike
-     * <code>java.text.DecimalFormatSymbols#getAvailableLocales</code>, this method simply
-     * returns the array of <code>ULocale</code>s available in this class.  ICU currently
-     * does not support <code>DecimalFormatSymbolsProvider</code>, which was introduced in
-     * Java 6.
+     * <p><strong>Note:</strong> Unlike <code>java.text.DecimalFormatSymbols#getAvailableLocales
+     * </code>, this method simply returns the array of <code>ULocale</code>s available in this
+     * class. ICU currently does not support <code>DecimalFormatSymbolsProvider</code>, which was
+     * introduced in Java 6.
      *
-     * @return An array of <code>ULocale</code>s for which localized
-     * <code>DecimalFormatSymbols</code> instances are available.
+     * @return An array of <code>ULocale</code>s for which localized <code>DecimalFormatSymbols
+     *     </code> instances are available.
      * @stable ICU 3.8 (retain)
      */
     public static ULocale[] getAvailableULocales() {
         return ICUResourceBundle.getAvailableULocales();
     }
 
-
     /**
      * Returns the character used for zero. Different for Arabic, etc.
+     *
      * @return the character
      * @stable ICU 2.0
      * @discouraged ICU 58 use {@link #getDigitStrings()} instead.
@@ -218,6 +215,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * Returns the array of characters used as digits, in order from 0 through 9
+     *
      * @return The array
      * @stable ICU 4.6
      * @see #getDigitStrings()
@@ -229,9 +227,9 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * Sets the character used for zero.
-     * <p>
-     * <b>Note:</b> This method propagates digit 1 to
-     * digit 9 by incrementing code point one by one.
+     *
+     * <p><b>Note:</b> This method propagates digit 1 to digit 9 by incrementing code point one by
+     * one.
      *
      * @param zeroDigit the zero character.
      * @stable ICU 2.0
@@ -251,7 +249,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
         // Always propagate to digits 1-9 for JDK and ICU4C consistency.
         for (int i = 1; i < 10; i++) {
-            char d = (char)(zeroDigit + i);
+            char d = (char) (zeroDigit + i);
             digitStrings[i] = String.valueOf(d);
             digits[i] = d;
         }
@@ -261,21 +259,22 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
-    * {@icu} Returns the array of strings used as digits, in order from 0 through 9
-    * @return The array of ten digit strings
-    * @see #setDigitStrings(String[])
-    * @stable ICU 58
-    */
+     * {@icu} Returns the array of strings used as digits, in order from 0 through 9
+     *
+     * @return The array of ten digit strings
+     * @see #setDigitStrings(String[])
+     * @stable ICU 58
+     */
     public String[] getDigitStrings() {
         return digitStrings.clone();
     }
 
     /**
-     * Returns the array of strings used as digits, in order from 0 through 9
-     * Package private method - doesn't create a defensively copy.
+     * Returns the array of strings used as digits, in order from 0 through 9 Package private method
+     * - doesn't create a defensively copy.
      *
-     * <p><strong>WARNING:</strong> Mutating the returned array will cause undefined behavior.
-     * If you need to change the value of the array, use {@link #getDigitStrings} and {@link
+     * <p><strong>WARNING:</strong> Mutating the returned array will cause undefined behavior. If
+     * you need to change the value of the array, use {@link #getDigitStrings} and {@link
      * #setDigitStrings} instead.
      *
      * @return the array of digit strings
@@ -301,21 +300,20 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
-    * {@icu} Sets the array of strings used as digits, in order from 0 through 9
-    * <p>
-    * <b>Note:</b>
-    * <p>
-    * When the input array of digit strings contains any strings
-    * represented by multiple Java chars, then {@link #getDigits()} will return
-    * the default digits ('0' - '9') and {@link #getZeroDigit()} will return the
-    * default zero digit ('0').
-    *
-    * @param digitStrings The array of digit strings. The length of the array must be exactly 10.
-    * @throws NullPointerException if the <code>digitStrings</code> is null.
-    * @throws IllegalArgumentException if the length of the array is not 10.
-    * @see #getDigitStrings()
-    * @stable ICU 58
-    */
+     * {@icu} Sets the array of strings used as digits, in order from 0 through 9
+     *
+     * <p><b>Note:</b>
+     *
+     * <p>When the input array of digit strings contains any strings represented by multiple Java
+     * chars, then {@link #getDigits()} will return the default digits ('0' - '9') and {@link
+     * #getZeroDigit()} will return the default zero digit ('0').
+     *
+     * @param digitStrings The array of digit strings. The length of the array must be exactly 10.
+     * @throws NullPointerException if the <code>digitStrings</code> is null.
+     * @throws IllegalArgumentException if the length of the array is not 10.
+     * @see #getDigitStrings()
+     * @stable ICU 58
+     */
     public void setDigitStrings(String[] digitStrings) {
         if (digitStrings == null) {
             throw new NullPointerException("The input digit string array is null");
@@ -332,7 +330,8 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
         for (int i = 0; i < 10; i++) {
             String digitStr = digitStrings[i];
             if (digitStr == null) {
-                throw new IllegalArgumentException("The input digit string array contains a null element");
+                throw new IllegalArgumentException(
+                        "The input digit string array contains a null element");
             }
             tmpDigitStrings[i] = digitStr;
             int cp, cc;
@@ -380,6 +379,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * Returns the character used to represent a significant digit in a pattern.
+     *
      * @return the significant digit pattern character
      * @stable ICU 3.0
      */
@@ -389,6 +389,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * Sets the character used to represent a significant digit in a pattern.
+     *
      * @param sigDigit the significant digit pattern character
      * @stable ICU 3.0
      */
@@ -398,6 +399,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * Returns the character used for grouping separator. Different for French, etc.
+     *
      * @return the thousands character
      * @stable ICU 2.0
      * @discouraged ICU 58 use {@link #getGroupingSeparatorString()} instead.
@@ -408,6 +410,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * Sets the character used for grouping separator. Different for French, etc.
+     *
      * @param groupingSeparator the thousands character
      * @stable ICU 2.0
      * @see #setGroupingSeparatorString(String)
@@ -419,6 +422,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * {@icu} Returns the string used for grouping separator. Different for French, etc.
+     *
      * @return the grouping separator string
      * @see #setGroupingSeparatorString(String)
      * @stable ICU 58
@@ -429,10 +433,10 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * {@icu} Sets the string used for grouping separator.
-     * <p>
-     * <b>Note:</b> When the input grouping separator String is represented
-     * by multiple Java chars, then {@link #getGroupingSeparator()} will
-     * return the default grouping separator character (',').
+     *
+     * <p><b>Note:</b> When the input grouping separator String is represented by multiple Java
+     * chars, then {@link #getGroupingSeparator()} will return the default grouping separator
+     * character (',').
      *
      * @param groupingSeparatorString the grouping separator string
      * @throws NullPointerException if <code>groupingSeparatorString</code> is null.
@@ -454,6 +458,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * Returns the character used for decimal sign. Different for French, etc.
+     *
      * @return the decimal character
      * @stable ICU 2.0
      * @discouraged ICU 58 use {@link #getDecimalSeparatorString()} instead.
@@ -464,6 +469,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * Sets the character used for decimal sign. Different for French, etc.
+     *
      * @param decimalSeparator the decimal character
      * @stable ICU 2.0
      */
@@ -474,6 +480,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * {@icu} Returns the string used for decimal sign.
+     *
      * @return the decimal sign string
      * @see #setDecimalSeparatorString(String)
      * @stable ICU 58
@@ -484,10 +491,10 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * {@icu} Sets the string used for decimal sign.
-     * <p>
-     * <b>Note:</b> When the input decimal separator String is represented
-     * by multiple Java chars, then {@link #getDecimalSeparator()} will
-     * return the default decimal separator character ('.').
+     *
+     * <p><b>Note:</b> When the input decimal separator String is represented by multiple Java
+     * chars, then {@link #getDecimalSeparator()} will return the default decimal separator
+     * character ('.').
      *
      * @param decimalSeparatorString the decimal sign string
      * @throws NullPointerException if <code>decimalSeparatorString</code> is null.
@@ -509,6 +516,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * Returns the character used for mille percent sign. Different for Arabic, etc.
+     *
      * @return the mille percent character
      * @stable ICU 2.0
      * @discouraged ICU 58 use {@link #getPerMillString()} instead.
@@ -519,6 +527,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * Sets the character used for mille percent sign. Different for Arabic, etc.
+     *
      * @param perMill the mille percent character
      * @stable ICU 2.0
      */
@@ -529,6 +538,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * {@icu} Returns the string used for permille sign.
+     *
      * @return the permille string
      * @see #setPerMillString(String)
      * @stable ICU 58
@@ -538,11 +548,10 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
-    * {@icu} Sets the string used for permille sign.
-     * <p>
-     * <b>Note:</b> When the input permille String is represented
-     * by multiple Java chars, then {@link #getPerMill()} will
-     * return the default permille character ('&#x2030;').
+     * {@icu} Sets the string used for permille sign.
+     *
+     * <p><b>Note:</b> When the input permille String is represented by multiple Java chars, then
+     * {@link #getPerMill()} will return the default permille character ('&#x2030;').
      *
      * @param perMillString the permille string
      * @throws NullPointerException if <code>perMillString</code> is null.
@@ -564,6 +573,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * Returns the character used for percent sign. Different for Arabic, etc.
+     *
      * @return the percent character
      * @stable ICU 2.0
      * @discouraged ICU 58 use {@link #getPercentString()} instead.
@@ -574,6 +584,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * Sets the character used for percent sign. Different for Arabic, etc.
+     *
      * @param percent the percent character
      * @stable ICU 2.0
      */
@@ -584,6 +595,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * {@icu} Returns the string used for percent sign.
+     *
      * @return the percent string
      * @see #setPercentString(String)
      * @stable ICU 58
@@ -594,10 +606,9 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * {@icu} Sets the string used for percent sign.
-     * <p>
-     * <b>Note:</b> When the input grouping separator String is represented
-     * by multiple Java chars, then {@link #getPercent()} will
-     * return the default percent sign character ('%').
+     *
+     * <p><b>Note:</b> When the input grouping separator String is represented by multiple Java
+     * chars, then {@link #getPercent()} will return the default percent sign character ('%').
      *
      * @param percentString the percent string
      * @throws NullPointerException if <code>percentString</code> is null.
@@ -619,6 +630,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * Returns the character used for a digit in a pattern.
+     *
      * @return the digit pattern character
      * @stable ICU 2.0
      */
@@ -628,6 +640,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * Sets the character used for a digit in a pattern.
+     *
      * @param digit the digit pattern character
      * @stable ICU 2.0
      */
@@ -636,8 +649,8 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
-     * Returns the character used to separate positive and negative subpatterns
-     * in a pattern.
+     * Returns the character used to separate positive and negative subpatterns in a pattern.
+     *
      * @return the pattern separator character
      * @stable ICU 2.0
      */
@@ -646,8 +659,8 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
-     * Sets the character used to separate positive and negative subpatterns
-     * in a pattern.
+     * Sets the character used to separate positive and negative subpatterns in a pattern.
+     *
      * @param patternSeparator the pattern separator character
      * @stable ICU 2.0
      */
@@ -656,20 +669,20 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
-     * Returns the String used to represent infinity. Almost always left
-     * unchanged.
+     * Returns the String used to represent infinity. Almost always left unchanged.
+     *
      * @return the Infinity string
      * @stable ICU 2.0
      */
-     //Bug 4194173 [Richard/GCL]
+    // Bug 4194173 [Richard/GCL]
 
     public String getInfinity() {
         return infinity;
     }
 
     /**
-     * Sets the String used to represent infinity. Almost always left
-     * unchanged.
+     * Sets the String used to represent infinity. Almost always left unchanged.
+     *
      * @param infinity the Infinity String
      * @stable ICU 2.0
      */
@@ -678,19 +691,19 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
-     * Returns the String used to represent NaN. Almost always left
-     * unchanged.
+     * Returns the String used to represent NaN. Almost always left unchanged.
+     *
      * @return the NaN String
      * @stable ICU 2.0
      */
-     //Bug 4194173 [Richard/GCL]
+    // Bug 4194173 [Richard/GCL]
     public String getNaN() {
         return NaN;
     }
 
     /**
-     * Sets the String used to represent NaN. Almost always left
-     * unchanged.
+     * Sets the String used to represent NaN. Almost always left unchanged.
+     *
      * @param NaN the NaN String
      * @stable ICU 2.0
      */
@@ -699,9 +712,9 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
-     * Returns the character used to represent minus sign. If no explicit
-     * negative format is specified, one is formed by prefixing
-     * minusSign to the positive format.
+     * Returns the character used to represent minus sign. If no explicit negative format is
+     * specified, one is formed by prefixing minusSign to the positive format.
+     *
      * @return the minus sign character
      * @stable ICU 2.0
      * @discouraged ICU 58 use {@link #getMinusSignString()} instead.
@@ -711,9 +724,9 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
-     * Sets the character used to represent minus sign. If no explicit
-     * negative format is specified, one is formed by prefixing
-     * minusSign to the positive format.
+     * Sets the character used to represent minus sign. If no explicit negative format is specified,
+     * one is formed by prefixing minusSign to the positive format.
+     *
      * @param minusSign the minus sign character
      * @stable ICU 2.0
      */
@@ -724,6 +737,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * {@icu} Returns the string used to represent minus sign.
+     *
      * @return the minus sign string
      * @see #setMinusSignString(String)
      * @stable ICU 58
@@ -734,10 +748,9 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * {@icu} Sets the string used to represent minus sign.
-     * <p>
-     * <b>Note:</b> When the input minus sign String is represented
-     * by multiple Java chars, then {@link #getMinusSign()} will
-     * return the default minus sign character ('-').
+     *
+     * <p><b>Note:</b> When the input minus sign String is represented by multiple Java chars, then
+     * {@link #getMinusSign()} will return the default minus sign character ('-').
      *
      * @param minusSignString the minus sign string
      * @throws NullPointerException if <code>minusSignString</code> is null.
@@ -759,8 +772,8 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * {@icu} Returns the localized plus sign.
-     * @return the plus sign, used in localized patterns and formatted
-     * strings
+     *
+     * @return the plus sign, used in localized patterns and formatted strings
      * @see #setPlusSign
      * @see #setMinusSign
      * @see #getMinusSign
@@ -773,8 +786,8 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * {@icu} Sets the localized plus sign.
-     * @param plus the plus sign, used in localized patterns and formatted
-     * strings
+     *
+     * @param plus the plus sign, used in localized patterns and formatted strings
      * @see #getPlusSign
      * @see #setMinusSign
      * @see #getMinusSign
@@ -787,6 +800,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * {@icu} Returns the string used to represent plus sign.
+     *
      * @return the plus sign string
      * @stable ICU 58
      */
@@ -796,13 +810,11 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * {@icu} Sets the localized plus sign string.
-     * <p>
-     * <b>Note:</b> When the input plus sign String is represented
-     * by multiple Java chars, then {@link #getPlusSign()} will
-     * return the default plus sign character ('+').
      *
-     * @param plusSignString the plus sign string, used in localized patterns and formatted
-     * strings
+     * <p><b>Note:</b> When the input plus sign String is represented by multiple Java chars, then
+     * {@link #getPlusSign()} will return the default plus sign character ('+').
+     *
+     * @param plusSignString the plus sign string, used in localized patterns and formatted strings
      * @throws NullPointerException if <code>plusSignString</code> is null.
      * @see #getPlusSignString()
      * @stable ICU 58
@@ -843,6 +855,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * Returns the string denoting the local currency.
+     *
      * @return the local currency String.
      * @stable ICU 2.0
      */
@@ -852,6 +865,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * Sets the string denoting the local currency.
+     *
      * @param currency the local currency String.
      * @stable ICU 2.0
      */
@@ -861,6 +875,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * Returns the international string denoting the local currency.
+     *
      * @return the international string denoting the local currency
      * @stable ICU 2.0
      */
@@ -870,6 +885,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * Sets the international string denoting the local currency.
+     *
      * @param currency the international string denoting the local currency.
      * @stable ICU 2.0
      */
@@ -878,8 +894,9 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
-     * Returns the currency symbol, for {@link DecimalFormatSymbols#getCurrency()} API
-     * compatibility only. ICU clients should use the Currency API directly.
+     * Returns the currency symbol, for {@link DecimalFormatSymbols#getCurrency()} API compatibility
+     * only. ICU clients should use the Currency API directly.
+     *
      * @return the currency used, or null
      * @stable ICU 3.4
      */
@@ -890,18 +907,17 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
      * Sets the currency.
      *
-     * <p><strong>Note:</strong> ICU does not use the DecimalFormatSymbols for the currency
-     * any more.  This API is present for API compatibility only.
+     * <p><strong>Note:</strong> ICU does not use the DecimalFormatSymbols for the currency any
+     * more. This API is present for API compatibility only.
      *
-     * <p>This also sets the currency symbol attribute to the currency's symbol
-     * in the DecimalFormatSymbols' locale, and the international currency
-     * symbol attribute to the currency's ISO 4217 currency code.
+     * <p>This also sets the currency symbol attribute to the currency's symbol in the
+     * DecimalFormatSymbols' locale, and the international currency symbol attribute to the
+     * currency's ISO 4217 currency code.
      *
      * @param currency the new currency to be used
      * @throws NullPointerException if <code>currency</code> is null
      * @see #setCurrencySymbol
      * @see #setInternationalCurrencySymbol
-     *
      * @stable ICU 3.4
      */
     public void setCurrency(Currency currency) {
@@ -938,6 +954,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * Returns the monetary decimal separator.
+     *
      * @return the monetary decimal separator character
      * @stable ICU 2.0
      * @discouraged ICU 58 use {@link #getMonetaryDecimalSeparatorString()} instead.
@@ -948,6 +965,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * Sets the monetary decimal separator.
+     *
      * @param sep the monetary decimal separator character
      * @stable ICU 2.0
      */
@@ -958,6 +976,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * {@icu} Returns the monetary decimal separator string.
+     *
      * @return the monetary decimal separator string
      * @see #setMonetaryDecimalSeparatorString(String)
      * @stable ICU 58
@@ -968,10 +987,10 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * {@icu} Sets the monetary decimal separator string.
-     * <p>
-     * <b>Note:</b> When the input monetary decimal separator String is represented
-     * by multiple Java chars, then {@link #getMonetaryDecimalSeparatorString()} will
-     * return the default monetary decimal separator character ('.').
+     *
+     * <p><b>Note:</b> When the input monetary decimal separator String is represented by multiple
+     * Java chars, then {@link #getMonetaryDecimalSeparatorString()} will return the default
+     * monetary decimal separator character ('.').
      *
      * @param sep the monetary decimal separator string
      * @throws NullPointerException if <code>sep</code> is null.
@@ -993,6 +1012,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * {@icu} Returns the monetary grouping separator.
+     *
      * @return the monetary grouping separator character
      * @stable ICU 3.6
      * @discouraged ICU 58 use {@link #getMonetaryGroupingSeparatorString()} instead.
@@ -1003,6 +1023,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * {@icu} Sets the monetary grouping separator.
+     *
      * @param sep the monetary grouping separator character
      * @stable ICU 3.6
      */
@@ -1013,6 +1034,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * {@icu} Returns the monetary grouping separator.
+     *
      * @return the monetary grouping separator string
      * @see #setMonetaryGroupingSeparatorString(String)
      * @stable ICU 58
@@ -1023,10 +1045,10 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * {@icu} Sets the monetary grouping separator string.
-     * <p>
-     * <b>Note:</b> When the input grouping separator String is represented
-     * by multiple Java chars, then {@link #getMonetaryGroupingSeparator()} will
-     * return the default monetary grouping separator character (',').
+     *
+     * <p><b>Note:</b> When the input grouping separator String is represented by multiple Java
+     * chars, then {@link #getMonetaryGroupingSeparator()} will return the default monetary grouping
+     * separator character (',').
      *
      * @param sep the monetary grouping separator string
      * @throws NullPointerException if <code>sep</code> is null.
@@ -1048,6 +1070,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * Internal API for NumberFormat
+     *
      * @return String currency pattern string
      * @deprecated This API is for ICU internal use only
      */
@@ -1057,26 +1080,28 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
-    * Returns the multiplication sign
-    * @stable ICU 54
-    */
+     * Returns the multiplication sign
+     *
+     * @stable ICU 54
+     */
     public String getExponentMultiplicationSign() {
         return exponentMultiplicationSign;
     }
 
     /**
-    * Sets the multiplication sign
-    * @stable ICU 54
-    */
+     * Sets the multiplication sign
+     *
+     * @stable ICU 54
+     */
     public void setExponentMultiplicationSign(String exponentMultiplicationSign) {
         this.exponentMultiplicationSign = exponentMultiplicationSign;
     }
 
     /**
-     * {@icu} Returns the string used to separate the mantissa from the exponent.
-     * Examples: "x10^" for 1.23x10^4, "E" for 1.23E4.
-     * @return the localized exponent symbol, used in localized patterns
-     * and formatted strings
+     * {@icu} Returns the string used to separate the mantissa from the exponent. Examples: "x10^"
+     * for 1.23x10^4, "E" for 1.23E4.
+     *
+     * @return the localized exponent symbol, used in localized patterns and formatted strings
      * @see #setExponentSeparator
      * @stable ICU 2.0
      */
@@ -1085,10 +1110,10 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
-     * {@icu} Sets the string used to separate the mantissa from the exponent.
-     * Examples: "x10^" for 1.23x10^4, "E" for 1.23E4.
-     * @param exp the localized exponent symbol, used in localized patterns
-     * and formatted strings
+     * {@icu} Sets the string used to separate the mantissa from the exponent. Examples: "x10^" for
+     * 1.23x10^4, "E" for 1.23E4.
+     *
+     * @param exp the localized exponent symbol, used in localized patterns and formatted strings
      * @see #getExponentSeparator
      * @stable ICU 2.0
      */
@@ -1097,10 +1122,10 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
-     * {@icu} Returns the character used to pad numbers out to a specified width.  This is
-     * not the pad character itself; rather, it is the special pattern character
-     * <em>preceding</em> the pad character.  In the pattern "*_#,##0", '*' is the pad
-     * escape, and '_' is the pad character.
+     * {@icu} Returns the character used to pad numbers out to a specified width. This is not the
+     * pad character itself; rather, it is the special pattern character <em>preceding</em> the pad
+     * character. In the pattern "*_#,##0", '*' is the pad escape, and '_' is the pad character.
+     *
      * @return the character
      * @see #setPadEscape
      * @see DecimalFormat#getFormatWidth
@@ -1113,10 +1138,10 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
-     * {@icu} Sets the character used to pad numbers out to a specified width.  This is not
-     * the pad character itself; rather, it is the special pattern character
-     * <em>preceding</em> the pad character.  In the pattern "*_#,##0", '*' is the pad
-     * escape, and '_' is the pad character.
+     * {@icu} Sets the character used to pad numbers out to a specified width. This is not the pad
+     * character itself; rather, it is the special pattern character <em>preceding</em> the pad
+     * character. In the pattern "*_#,##0", '*' is the pad escape, and '_' is the pad character.
+     *
      * @see #getPadEscape
      * @see DecimalFormat#setFormatWidth
      * @see DecimalFormat#setPadPosition
@@ -1129,19 +1154,21 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * {@icu} Indicates the currency match pattern used in {@link #getPatternForCurrencySpacing}.
+     *
      * @stable ICU 4.2
      */
     public static final int CURRENCY_SPC_CURRENCY_MATCH = 0;
 
     /**
-     * {@icu} Indicates the surrounding match pattern used in {@link
-     * #getPatternForCurrencySpacing}.
+     * {@icu} Indicates the surrounding match pattern used in {@link #getPatternForCurrencySpacing}.
+     *
      * @stable ICU 4.2
      */
     public static final int CURRENCY_SPC_SURROUNDING_MATCH = 1;
 
     /**
      * {@icu} Indicates the insertion value used in {@link #getPatternForCurrencySpacing}.
+     *
      * @stable ICU 4.4
      */
     public static final int CURRENCY_SPC_INSERT = 2;
@@ -1150,25 +1177,24 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     private String[] currencySpcAfterSym;
 
     /**
-     * {@icu} Returns the desired currency spacing value. Original values come from ICU's
-     * CLDR data based on the locale provided during construction, and can be null.  These
-     * values govern what and when text is inserted between a currency code/name/symbol
-     * and the currency amount when formatting money.
+     * {@icu} Returns the desired currency spacing value. Original values come from ICU's CLDR data
+     * based on the locale provided during construction, and can be null. These values govern what
+     * and when text is inserted between a currency code/name/symbol and the currency amount when
+     * formatting money.
      *
      * <p>For more information, see <a href="http://www.unicode.org/reports/tr35/#Currencies"
      * >UTS#35 section 5.10.2</a>.
      *
-     * @param itemType one of CURRENCY_SPC_CURRENCY_MATCH, CURRENCY_SPC_SURROUNDING_MATCH
-     * or CURRENCY_SPC_INSERT
-     * @param beforeCurrency true to get the <code>beforeCurrency</code> values, false
-     * to get the <code>afterCurrency</code> values.
+     * @param itemType one of CURRENCY_SPC_CURRENCY_MATCH, CURRENCY_SPC_SURROUNDING_MATCH or
+     *     CURRENCY_SPC_INSERT
+     * @param beforeCurrency true to get the <code>beforeCurrency</code> values, false to get the
+     *     <code>afterCurrency</code> values.
      * @return the value, or null.
      * @see #setPatternForCurrencySpacing(int, boolean, String)
      * @stable ICU 4.2
      */
-    public String getPatternForCurrencySpacing(int itemType, boolean beforeCurrency)  {
-        if (itemType < CURRENCY_SPC_CURRENCY_MATCH ||
-            itemType > CURRENCY_SPC_INSERT ) {
+    public String getPatternForCurrencySpacing(int itemType, boolean beforeCurrency) {
+        if (itemType < CURRENCY_SPC_CURRENCY_MATCH || itemType > CURRENCY_SPC_INSERT) {
             throw new IllegalArgumentException("unknown currency spacing: " + itemType);
         }
         if (beforeCurrency) {
@@ -1186,17 +1212,16 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      *
      * <p><strong>Note:</strong> ICU4J does not currently use this information.
      *
-     * @param itemType one of CURRENCY_SPC_CURRENCY_MATCH, CURRENCY_SPC_SURROUNDING_MATCH
-     * or CURRENCY_SPC_INSERT
-     * @param beforeCurrency true if the pattern is for before the currency symbol.
-     * false if the pattern is for after it.
-     * @param  pattern string to override current setting; can be null.
+     * @param itemType one of CURRENCY_SPC_CURRENCY_MATCH, CURRENCY_SPC_SURROUNDING_MATCH or
+     *     CURRENCY_SPC_INSERT
+     * @param beforeCurrency true if the pattern is for before the currency symbol. false if the
+     *     pattern is for after it.
+     * @param pattern string to override current setting; can be null.
      * @see #getPatternForCurrencySpacing(int, boolean)
      * @stable ICU 4.2
      */
     public void setPatternForCurrencySpacing(int itemType, boolean beforeCurrency, String pattern) {
-        if (itemType < CURRENCY_SPC_CURRENCY_MATCH ||
-            itemType > CURRENCY_SPC_INSERT ) {
+        if (itemType < CURRENCY_SPC_CURRENCY_MATCH || itemType > CURRENCY_SPC_INSERT) {
             throw new IllegalArgumentException("unknown currency spacing: " + itemType);
         }
         if (beforeCurrency) {
@@ -1210,6 +1235,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * Returns the locale for which this object was constructed.
+     *
      * @return the locale for which this object was constructed
      * @stable ICU 2.0
      */
@@ -1219,6 +1245,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * Returns the locale for which this object was constructed.
+     *
      * @return the locale for which this object was constructed
      * @stable ICU 3.2
      */
@@ -1228,6 +1255,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 2.0
      */
     @Override
@@ -1242,6 +1270,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 2.0
      */
     @Override
@@ -1262,80 +1291,81 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
             }
         }
 
-        if ( other.digits == null ) {
-            for (int i = 0 ; i < 10 ; i++) {
+        if (other.digits == null) {
+            for (int i = 0; i < 10; i++) {
                 if (digits[i] != other.zeroDigit + i) {
                     return false;
                 }
             }
-        } else if (!Arrays.equals(digits,other.digits)) {
-                    return false;
+        } else if (!Arrays.equals(digits, other.digits)) {
+            return false;
         }
 
-        return (
-        groupingSeparator == other.groupingSeparator &&
-        decimalSeparator == other.decimalSeparator &&
-        percent == other.percent &&
-        perMill == other.perMill &&
-        digit == other.digit &&
-        minusSign == other.minusSign &&
-        minusString.equals(other.minusString) &&
-        patternSeparator == other.patternSeparator &&
-        infinity.equals(other.infinity) &&
-        NaN.equals(other.NaN) &&
-        currencySymbol.equals(other.currencySymbol) &&
-        intlCurrencySymbol.equals(other.intlCurrencySymbol) &&
-        padEscape == other.padEscape &&
-        plusSign == other.plusSign &&
-        plusString.equals(other.plusString) &&
-        approximatelyString.equals(other.approximatelyString) &&
-        exponentSeparator.equals(other.exponentSeparator) &&
-        monetarySeparator == other.monetarySeparator &&
-        monetaryGroupingSeparator == other.monetaryGroupingSeparator &&
-        exponentMultiplicationSign.equals(other.exponentMultiplicationSign));
+        return (groupingSeparator == other.groupingSeparator
+                && decimalSeparator == other.decimalSeparator
+                && percent == other.percent
+                && perMill == other.perMill
+                && digit == other.digit
+                && minusSign == other.minusSign
+                && minusString.equals(other.minusString)
+                && patternSeparator == other.patternSeparator
+                && infinity.equals(other.infinity)
+                && NaN.equals(other.NaN)
+                && currencySymbol.equals(other.currencySymbol)
+                && intlCurrencySymbol.equals(other.intlCurrencySymbol)
+                && padEscape == other.padEscape
+                && plusSign == other.plusSign
+                && plusString.equals(other.plusString)
+                && approximatelyString.equals(other.approximatelyString)
+                && exponentSeparator.equals(other.exponentSeparator)
+                && monetarySeparator == other.monetarySeparator
+                && monetaryGroupingSeparator == other.monetaryGroupingSeparator
+                && exponentMultiplicationSign.equals(other.exponentMultiplicationSign));
     }
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 2.0
      */
     @Override
     public int hashCode() {
-            int result = digits[0];
-            result = result * 37 + groupingSeparator;
-            result = result * 37 + decimalSeparator;
-            return result;
+        int result = digits[0];
+        result = result * 37 + groupingSeparator;
+        result = result * 37 + decimalSeparator;
+        return result;
     }
 
     /**
-     * List of field names to be loaded from the data files.
-     * The indices of each name into the array correspond to the position of that item in the
-     * numberElements array.
+     * List of field names to be loaded from the data files. The indices of each name into the array
+     * correspond to the position of that item in the numberElements array.
      */
     private static final String[] SYMBOL_KEYS = {
-            "decimal",
-            "group",
-            "percentSign",
-            "minusSign",
-            "plusSign",
-            "exponential",
-            "perMille",
-            "infinity",
-            "nan",
-            "currencyDecimal",
-            "currencyGroup",
-            "superscriptingExponent",
-            "approximatelySign",
+        "decimal",
+        "group",
+        "percentSign",
+        "minusSign",
+        "plusSign",
+        "exponential",
+        "perMille",
+        "infinity",
+        "nan",
+        "currencyDecimal",
+        "currencyGroup",
+        "superscriptingExponent",
+        "approximatelySign",
     };
 
     /*
      * Default digits
      */
-    private static final String[] DEF_DIGIT_STRINGS_ARRAY =
-        {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
+    private static final String[] DEF_DIGIT_STRINGS_ARRAY = {
+        "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"
+    };
 
-    private static final char[] DEF_DIGIT_CHARS_ARRAY =
-        {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+    private static final char[] DEF_DIGIT_CHARS_ARRAY = {
+        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
+    };
 
     /*
      *  Default symbol characters, used for fallbacks.
@@ -1347,38 +1377,36 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     private static final char DEF_PLUS_SIGN = '+';
     private static final char DEF_PERMILL = '\u2030';
 
-    /**
-     * List of default values for the symbols.
-     */
-    private static final String[] SYMBOL_DEFAULTS = new String[] {
-            String.valueOf(DEF_DECIMAL_SEPARATOR),  // decimal
-            String.valueOf(DEF_GROUPING_SEPARATOR), // group
-            String.valueOf(DEF_PERCENT),    // percentSign
-            String.valueOf(DEF_MINUS_SIGN), // minusSign
-            String.valueOf(DEF_PLUS_SIGN),  // plusSign
-            "E", // exponential
-            String.valueOf(DEF_PERMILL),    // perMille
-            "\u221e", // infinity
-            "NaN", // NaN
-            null, // currency decimal
-            null, // currency group
-            "\u00D7", // superscripting exponent
-            "~", // // approximately sign
-        };
+    /** List of default values for the symbols. */
+    private static final String[] SYMBOL_DEFAULTS =
+            new String[] {
+                String.valueOf(DEF_DECIMAL_SEPARATOR), // decimal
+                String.valueOf(DEF_GROUPING_SEPARATOR), // group
+                String.valueOf(DEF_PERCENT), // percentSign
+                String.valueOf(DEF_MINUS_SIGN), // minusSign
+                String.valueOf(DEF_PLUS_SIGN), // plusSign
+                "E", // exponential
+                String.valueOf(DEF_PERMILL), // perMille
+                "\u221e", // infinity
+                "NaN", // NaN
+                null, // currency decimal
+                null, // currency group
+                "\u00D7", // superscripting exponent
+                "~", // // approximately sign
+            };
 
-    /**
-     * Constants for path names in the data bundles.
-     */
+    /** Constants for path names in the data bundles. */
     private static final String LATIN_NUMBERING_SYSTEM = "latn";
+
     private static final String NUMBER_ELEMENTS = "NumberElements";
     private static final String SYMBOLS = "symbols";
 
     /**
-     * Sink for enumerating all of the decimal format symbols (more specifically, anything
-     * under the "NumberElements.symbols" tree).
+     * Sink for enumerating all of the decimal format symbols (more specifically, anything under the
+     * "NumberElements.symbols" tree).
      *
-     * More specific bundles (en_GB) are enumerated before their parents (en_001, en, root):
-     * Only store a value if it is still missing, that is, it has not been overridden.
+     * <p>More specific bundles (en_GB) are enumerated before their parents (en_001, en, root): Only
+     * store a value if it is still missing, that is, it has not been overridden.
      */
     private static final class DecFmtDataSink extends UResource.Sink {
 
@@ -1404,9 +1432,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
         }
     }
 
-    /**
-     * Initializes the symbols from the locale data.
-     */
+    /** Initializes the symbols from the locale data. */
     private void initialize(ULocale locale, NumberingSystem ns) {
         this.requestedLocale = locale.toLocale();
         this.ulocale = locale;
@@ -1438,9 +1464,9 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
         setExponentMultiplicationSign(numberElements[11]);
         setApproximatelySignString(numberElements[12]);
 
-        digit = '#';  // Localized pattern character no longer in CLDR
+        digit = '#'; // Localized pattern character no longer in CLDR
         padEscape = '*';
-        sigDigit  = '@';
+        sigDigit = '@';
 
         CurrencyDisplayInfo displayInfo = CurrencyData.provider.getInstance(ulocale, true);
         initSpacingInfo(displayInfo.getSpacingInfo());
@@ -1453,8 +1479,10 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
         // Attempt to set the decimal digits based on the numbering system for the requested locale.
         NumberingSystem ns = NumberingSystem.getInstance(locale);
         String[] digits = new String[10];
-        if (ns != null && ns.getRadix() == 10 && !ns.isAlgorithmic() &&
-                NumberingSystem.isValidDigitString(ns.getDescription())) {
+        if (ns != null
+                && ns.getRadix() == 10
+                && !ns.isAlgorithmic()
+                && NumberingSystem.isValidDigitString(ns.getDescription())) {
             String digitString = ns.getDescription();
 
             for (int i = 0, offset = 0; i < 10; i++) {
@@ -1472,8 +1500,9 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
         // Open the resource bundle and get the locale IDs.
         // TODO: Is there a better way to get the locale than making an ICUResourceBundle instance?
-        ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.
-                getBundleInstance(ICUData.ICU_BASE_NAME, locale);
+        ICUResourceBundle rb =
+                (ICUResourceBundle)
+                        UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, locale);
         // TODO: Determine actual and valid locale correctly.
         ULocale validLocale = rb.getULocale();
 
@@ -1497,7 +1526,8 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
             }
         }
         if (hasNull && !nsName.equals(LATIN_NUMBERING_SYSTEM)) {
-            rb.getAllItemsWithFallback(NUMBER_ELEMENTS + "/" + LATIN_NUMBERING_SYSTEM + "/" + SYMBOLS, sink);
+            rb.getAllItemsWithFallback(
+                    NUMBER_ELEMENTS + "/" + LATIN_NUMBERING_SYSTEM + "/" + SYMBOLS, sink);
         }
 
         // Fill in any remaining missing values
@@ -1525,21 +1555,19 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
-     * Reads the default serializable fields, then if <code>serialVersionOnStream</code>
-     * is less than 1, initialize <code>monetarySeparator</code> to be
-     * the same as <code>decimalSeparator</code> and <code>exponential</code>
-     * to be 'E'.
-     * Finally, sets serialVersionOnStream back to the maximum allowed value so that
-     * default serialization will work properly if this object is streamed out again.
+     * Reads the default serializable fields, then if <code>serialVersionOnStream</code> is less
+     * than 1, initialize <code>monetarySeparator</code> to be the same as <code>decimalSeparator
+     * </code> and <code>exponential</code> to be 'E'. Finally, sets serialVersionOnStream back to
+     * the maximum allowed value so that default serialization will work properly if this object is
+     * streamed out again.
      */
-    private void readObject(ObjectInputStream stream)
-        throws IOException, ClassNotFoundException {
+    private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
 
         // TODO: it looks to me {dlf} that the serialization code was never updated
         // to handle the actual/valid ulocale fields.
 
         stream.defaultReadObject();
-        ///CLOVER:OFF
+        /// CLOVER:OFF
         // we don't have data for these old serialized forms any more
         if (serialVersionOnStream < 1) {
             // Didn't have monetarySeparator or exponential field;
@@ -1556,7 +1584,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
             // notation isn't supported by the old classes, even though the
             // symbol is there.
         }
-        ///CLOVER:ON
+        /// CLOVER:ON
         if (serialVersionOnStream < 3) {
             // Resurrected objects from old streams will have no
             // locale.  There is no 100% fix for this.  A
@@ -1576,10 +1604,10 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
         if (serialVersionOnStream < 6) {
             // Set null to CurrencySpacing related fields.
             if (currencySpcBeforeSym == null) {
-                currencySpcBeforeSym = new String[CURRENCY_SPC_INSERT+1];
+                currencySpcBeforeSym = new String[CURRENCY_SPC_INSERT + 1];
             }
             if (currencySpcAfterSym == null) {
-                currencySpcAfterSym = new String[CURRENCY_SPC_INSERT+1];
+                currencySpcAfterSym = new String[CURRENCY_SPC_INSERT + 1];
             }
             initSpacingInfo(CurrencyData.CurrencySpacingInfo.DEFAULT);
         }
@@ -1654,21 +1682,20 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
-     * Character used for zero.  This remains only for backward compatibility
-     * purposes.  The digits array below is now used to actively store the digits.
+     * Character used for zero. This remains only for backward compatibility purposes. The digits
+     * array below is now used to actively store the digits.
      *
      * @serial
      * @see #getZeroDigit
      */
-    private  char    zeroDigit;
+    private char zeroDigit;
 
-    /**
-     * Array of characters used for the digits 0-9 in order.
-     */
-    private  char    digits[];
+    /** Array of characters used for the digits 0-9 in order. */
+    private char digits[];
 
     /**
      * Array of Strings used for the digits 0-9 in order.
+     *
      * @serial
      */
     private String digitStrings[];
@@ -1695,10 +1722,11 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * @serial
      * @see #getGroupingSeparator
      */
-    private  char    groupingSeparator;
+    private char groupingSeparator;
 
     /**
      * String used for thousands separator.
+     *
      * @serial
      */
     private String groupingSeparatorString;
@@ -1709,10 +1737,11 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * @serial
      * @see #getDecimalSeparator
      */
-    private  char    decimalSeparator;
+    private char decimalSeparator;
 
     /**
      * String used for decimal sign.
+     *
      * @serial
      */
     private String decimalSeparatorString;
@@ -1723,23 +1752,26 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * @serial
      * @see #getPerMill
      */
-    private  char    perMill;
+    private char perMill;
 
     /**
      * String used for mille percent sign.
+     *
      * @serial
      */
     private String perMillString;
 
     /**
      * Character used for percent sign.
+     *
      * @serial
      * @see #getPercent
      */
-    private  char    percent;
+    private char percent;
 
     /**
      * String used for percent sign.
+     *
      * @serial
      */
     private String percentString;
@@ -1750,7 +1782,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * @serial
      * @see #getDigit
      */
-    private  char    digit;
+    private char digit;
 
     /**
      * Character used for a significant digit in a pattern.
@@ -1758,40 +1790,43 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * @serial
      * @see #getSignificantDigit
      */
-    private  char    sigDigit;
+    private char sigDigit;
 
     /**
-     * Character used to separate positive and negative subpatterns
-     * in a pattern.
+     * Character used to separate positive and negative subpatterns in a pattern.
      *
      * @serial
      * @see #getPatternSeparator
      */
-    private  char    patternSeparator;
+    private char patternSeparator;
 
     /**
      * Character used to represent infinity.
+     *
      * @serial
      * @see #getInfinity
      */
-    private  String  infinity;
+    private String infinity;
 
     /**
      * Character used to represent NaN.
+     *
      * @serial
      * @see #getNaN
      */
-    private  String  NaN;
+    private String NaN;
 
     /**
      * Character used to represent minus sign.
+     *
      * @serial
      * @see #getMinusSign
      */
-    private  char    minusSign;
+    private char minusSign;
 
     /**
      * String versions of minus sign.
+     *
      * @serial
      * @since ICU 52
      */
@@ -1799,6 +1834,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * The character used to indicate a plus sign.
+     *
      * @serial
      * @since AlphaWorks
      */
@@ -1806,6 +1842,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * String versions of plus sign.
+     *
      * @serial
      * @since ICU 52
      */
@@ -1813,6 +1850,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * The string used to indicate an approximately sign.
+     *
      * @serial
      * @since ICU 69
      */
@@ -1820,60 +1858,66 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * String denoting the local currency, e.g. "$".
+     *
      * @serial
      * @see #getCurrencySymbol
      */
-    private  String  currencySymbol;
+    private String currencySymbol;
 
     /**
      * International string denoting the local currency, e.g. "USD".
+     *
      * @serial
      * @see #getInternationalCurrencySymbol
      */
-    private  String  intlCurrencySymbol;
+    private String intlCurrencySymbol;
 
     /**
      * The decimal separator character used when formatting currency values.
+     *
      * @serial
      * @see #getMonetaryDecimalSeparator
      */
-    private  char    monetarySeparator; // Field new in JDK 1.1.6
+    private char monetarySeparator; // Field new in JDK 1.1.6
 
     /**
      * The decimal separator string used when formatting currency values.
+     *
      * @serial
      */
     private String monetarySeparatorString;
 
     /**
      * The grouping separator character used when formatting currency values.
+     *
      * @serial
      * @see #getMonetaryGroupingSeparator
      */
-    private  char    monetaryGroupingSeparator; // Field new in JDK 1.1.6
+    private char monetaryGroupingSeparator; // Field new in JDK 1.1.6
 
     /**
      * The grouping separator string used when formatting currency values.
+     *
      * @serial
      */
     private String monetaryGroupingSeparatorString;
 
     /**
-     * The character used to distinguish the exponent in a number formatted
-     * in exponential notation, e.g. 'E' for a number such as "1.23E45".
-     * <p>
-     * Note that this field has been superseded by <code>exponentSeparator</code>.
-     * It is retained for backward compatibility.
+     * The character used to distinguish the exponent in a number formatted in exponential notation,
+     * e.g. 'E' for a number such as "1.23E45".
+     *
+     * <p>Note that this field has been superseded by <code>exponentSeparator</code>. It is retained
+     * for backward compatibility.
      *
      * @serial
      */
-    private  char    exponential;       // Field new in JDK 1.1.6
+    private char exponential; // Field new in JDK 1.1.6
 
     /**
-     * The string used to separate the mantissa from the exponent.
-     * Examples: "x10^" for 1.23x10^4, "E" for 1.23E4.
-     * <p>
-     * Note that this supersedes the <code>exponential</code> field.
+     * The string used to separate the mantissa from the exponent. Examples: "x10^" for 1.23x10^4,
+     * "E" for 1.23E4.
+     *
+     * <p>Note that this supersedes the <code>exponential</code> field.
      *
      * @serial
      * @since AlphaWorks
@@ -1881,28 +1925,32 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     private String exponentSeparator;
 
     /**
-     * The character used to indicate a padding character in a format,
-     * e.g., '*' in a pattern such as "$*_#,##0.00".
+     * The character used to indicate a padding character in a format, e.g., '*' in a pattern such
+     * as "$*_#,##0.00".
+     *
      * @serial
      * @since AlphaWorks
      */
     private char padEscape;
 
     /**
-     * The locale for which this object was constructed.  Set to the
-     * default locale for objects resurrected from old streams.
+     * The locale for which this object was constructed. Set to the default locale for objects
+     * resurrected from old streams.
+     *
      * @since ICU 2.2
      */
     private Locale requestedLocale;
 
     /**
-     * The requested ULocale.  We keep the old locale for serialization compatibility.
+     * The requested ULocale. We keep the old locale for serialization compatibility.
+     *
      * @since ICU 3.2
      */
     private ULocale ulocale;
 
     /**
      * Exponent multiplication sign. e.g "x"
+     *
      * @serial
      * @since ICU 54
      */
@@ -1928,86 +1976,74 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     private static final int currentSerialVersion = 10;
 
     /**
-     * Describes the version of <code>DecimalFormatSymbols</code> present on the stream.
-     * Possible values are:
-     * <ul>
-     * <li><b>0</b> (or uninitialized): versions prior to JDK 1.1.6.
+     * Describes the version of <code>DecimalFormatSymbols</code> present on the stream. Possible
+     * values are:
      *
-     * <li><b>1</b>: Versions written by JDK 1.1.6 or later, which includes
-     *      two new fields: <code>monetarySeparator</code> and <code>exponential</code>.
-     * <li><b>2</b>: Version for AlphaWorks.  Adds padEscape, exponentSeparator,
-     *      and plusSign.
-     * <li><b>3</b>: Version for ICU 2.2, which adds locale.
-     * <li><b>4</b>: Version for ICU 3.2, which adds ulocale.
-     * <li><b>5</b>: Version for ICU 3.6, which adds monetaryGroupingSeparator.
-     * <li><b>6</b>: Version for ICU 4.2, which adds currencySpcBeforeSym and
-     *      currencySpcAfterSym.
-     * <li><b>7</b>: Version for ICU 52, which adds minusString and plusString.
+     * <ul>
+     *   <li><b>0</b> (or uninitialized): versions prior to JDK 1.1.6.
+     *   <li><b>1</b>: Versions written by JDK 1.1.6 or later, which includes two new fields: <code>
+     *       monetarySeparator</code> and <code>exponential</code>.
+     *   <li><b>2</b>: Version for AlphaWorks. Adds padEscape, exponentSeparator, and plusSign.
+     *   <li><b>3</b>: Version for ICU 2.2, which adds locale.
+     *   <li><b>4</b>: Version for ICU 3.2, which adds ulocale.
+     *   <li><b>5</b>: Version for ICU 3.6, which adds monetaryGroupingSeparator.
+     *   <li><b>6</b>: Version for ICU 4.2, which adds currencySpcBeforeSym and currencySpcAfterSym.
+     *   <li><b>7</b>: Version for ICU 52, which adds minusString and plusString.
      * </ul>
-     * When streaming out a <code>DecimalFormatSymbols</code>, the most recent format
-     * (corresponding to the highest allowable <code>serialVersionOnStream</code>)
-     * is always written.
+     *
+     * When streaming out a <code>DecimalFormatSymbols</code>, the most recent format (corresponding
+     * to the highest allowable <code>serialVersionOnStream</code>) is always written.
      *
      * @serial
      */
     private int serialVersionOnStream = currentSerialVersion;
 
-    /**
-     * cache to hold the NumberElements of a Locale.
-     */
+    /** cache to hold the NumberElements of a Locale. */
     private static final CacheBase<ULocale, CacheData, Void> cachedLocaleData =
-        new SoftCache<ULocale, CacheData, Void>() {
-            @Override
-            protected CacheData createInstance(ULocale locale, Void unused) {
-                return DecimalFormatSymbols.loadData(locale);
-            }
-        };
+            new SoftCache<ULocale, CacheData, Void>() {
+                @Override
+                protected CacheData createInstance(ULocale locale, Void unused) {
+                    return DecimalFormatSymbols.loadData(locale);
+                }
+            };
 
-    /**
-     *
-     */
-    private String  currencyPattern = null;
+    /** */
+    private String currencyPattern = null;
 
     // -------- BEGIN ULocale boilerplate --------
 
     /**
-     * {@icu} Returns the locale that was used to create this object, or null.
-     * This may may differ from the locale requested at the time of
-     * this object's creation.  For example, if an object is created
-     * for locale {@code en_US_CALIFORNIA}, the actual data may be
-     * drawn from {@code en} (the <i>actual</i> locale), and
-     * {@code en_US} may be the most specific locale that exists (the
-     * <i>valid</i> locale).
+     * {@icu} Returns the locale that was used to create this object, or null. This may may differ
+     * from the locale requested at the time of this object's creation. For example, if an object is
+     * created for locale {@code en_US_CALIFORNIA}, the actual data may be drawn from {@code en}
+     * (the <i>actual</i> locale), and {@code en_US} may be the most specific locale that exists
+     * (the <i>valid</i> locale).
      *
-     * <p>Note: The <i>actual</i> locale is returned correctly, but the <i>valid</i>
-     * locale is not, in most cases.
+     * <p>Note: The <i>actual</i> locale is returned correctly, but the <i>valid</i> locale is not,
+     * in most cases.
+     *
      * @param type type of information requested, either {@link
-     * com.ibm.icu.util.ULocale#VALID_LOCALE} or {@link
-     * com.ibm.icu.util.ULocale#ACTUAL_LOCALE}.
-     * @return the information specified by <i>type</i>, or null if
-     * this object was not constructed from locale data.
+     *     com.ibm.icu.util.ULocale#VALID_LOCALE} or {@link com.ibm.icu.util.ULocale#ACTUAL_LOCALE}.
+     * @return the information specified by <i>type</i>, or null if this object was not constructed
+     *     from locale data.
      * @see com.ibm.icu.util.ULocale
      * @see com.ibm.icu.util.ULocale#VALID_LOCALE
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
      * @draft ICU 2.8 (retain)
      */
     public final ULocale getLocale(ULocale.Type type) {
-        return type == ULocale.ACTUAL_LOCALE ?
-            this.actualLocale : this.validLocale;
+        return type == ULocale.ACTUAL_LOCALE ? this.actualLocale : this.validLocale;
     }
 
     /**
-     * {@icu} Sets information about the locales that were used to create this
-     * object.  If the object was not constructed from locale data,
-     * both arguments should be set to null.  Otherwise, neither
-     * should be null.  The actual locale must be at the same level or
-     * less specific than the valid locale.  This method is intended
-     * for use by factories or other entities that create objects of
-     * this class.
-     * @param valid the most specific locale containing any resource
-     * data, or null
-     * @param actual the locale containing data used to construct this
-     * object, or null
+     * {@icu} Sets information about the locales that were used to create this object. If the object
+     * was not constructed from locale data, both arguments should be set to null. Otherwise,
+     * neither should be null. The actual locale must be at the same level or less specific than the
+     * valid locale. This method is intended for use by factories or other entities that create
+     * objects of this class.
+     *
+     * @param valid the most specific locale containing any resource data, or null
+     * @param actual the locale containing data used to construct this object, or null
      * @see com.ibm.icu.util.ULocale
      * @see com.ibm.icu.util.ULocale#VALID_LOCALE
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
@@ -2015,9 +2051,9 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     final void setLocale(ULocale valid, ULocale actual) {
         // Change the following to an assertion later
         if ((valid == null) != (actual == null)) {
-            ///CLOVER:OFF
+            /// CLOVER:OFF
             throw new IllegalArgumentException();
-            ///CLOVER:ON
+            /// CLOVER:ON
         }
         // Another check we could do is that the actual locale is at
         // the same level or less specific than the valid locale.
@@ -2027,13 +2063,14 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * The most specific locale containing any resource data, or null.
+     *
      * @see com.ibm.icu.util.ULocale
      */
     private ULocale validLocale;
 
     /**
-     * The locale containing data used to construct this object, or
-     * null.
+     * The locale containing data used to construct this object, or null.
+     *
      * @see com.ibm.icu.util.ULocale
      */
     private ULocale actualLocale;

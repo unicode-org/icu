@@ -8,18 +8,9 @@
 
 package com.ibm.icu.dev.test.util;
 
-import java.io.ByteArrayOutputStream;
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
 import com.ibm.icu.dev.test.CoreTestFmwk;
-import com.ibm.icu.impl.Normalizer2Impl.UTF16Plus;
 import com.ibm.icu.impl.ICUDebug;
+import com.ibm.icu.impl.Normalizer2Impl.UTF16Plus;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
@@ -28,6 +19,13 @@ import com.ibm.icu.util.CodePointMap;
 import com.ibm.icu.util.CodePointTrie;
 import com.ibm.icu.util.MutableCodePointTrie;
 import com.ibm.icu.util.VersionInfo;
+import java.io.ByteArrayOutputStream;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public final class CodePointTrieTest extends CoreTestFmwk {
@@ -88,22 +86,22 @@ public final class CodePointTrieTest extends CoreTestFmwk {
 
     private static int skipSpecialValues(CheckRange checkRanges[]) {
         int i;
-        for(i=0; i<checkRanges.length && checkRanges[i].limit<=0; ++i) {}
+        for (i = 0; i < checkRanges.length && checkRanges[i].limit <= 0; ++i) {}
         return i;
     }
 
     private static SpecialValues getSpecialValues(CheckRange checkRanges[]) {
-        int i=0;
+        int i = 0;
         int initialValue, errorValue;
-        if(i<checkRanges.length && checkRanges[i].limit<0) {
-            errorValue=checkRanges[i++].value;
+        if (i < checkRanges.length && checkRanges[i].limit < 0) {
+            errorValue = checkRanges[i++].value;
         } else {
-            errorValue=0xad;
+            errorValue = 0xad;
         }
-        if(i<checkRanges.length && checkRanges[i].limit==0) {
-            initialValue=checkRanges[i++].value;
+        if (i < checkRanges.length && checkRanges[i].limit == 0) {
+            initialValue = checkRanges[i++].value;
         } else {
-            initialValue=0;
+            initialValue = 0;
         }
         return new SpecialValues(i, initialValue, errorValue);
     }
@@ -115,32 +113,46 @@ public final class CodePointTrieTest extends CoreTestFmwk {
             return value ^ 0x5555;
         }
     }
+
     private static final TestValueFilter testFilter = new TestValueFilter();
 
-    private boolean
-    doCheckRange(String name, String variant,
-                 int start, boolean getRangeResult, CodePointMap.Range range,
-                 int expEnd, int expValue) {
+    private boolean doCheckRange(
+            String name,
+            String variant,
+            int start,
+            boolean getRangeResult,
+            CodePointMap.Range range,
+            int expEnd,
+            int expValue) {
         if (!getRangeResult) {
             if (expEnd >= 0) {
-                fail(String.format(  // log_err(
-                        "error: %s getRanges (%s) fails to deliver range [U+%04x..U+%04x].0x%x\n",
-                        name, variant, start, expEnd, expValue));
+                fail(
+                        String.format( // log_err(
+                                "error: %s getRanges (%s) fails to deliver range [U+%04x..U+%04x].0x%x\n",
+                                name, variant, start, expEnd, expValue));
             }
             return false;
         }
         if (expEnd < 0) {
-            fail(String.format(
-                    "error: %s getRanges (%s) delivers unexpected range [U+%04x..U+%04x].0x%x\n",
-                    name, variant, range.getStart(), range.getEnd(), range.getValue()));
+            fail(
+                    String.format(
+                            "error: %s getRanges (%s) delivers unexpected range [U+%04x..U+%04x].0x%x\n",
+                            name, variant, range.getStart(), range.getEnd(), range.getValue()));
             return false;
         }
         if (range.getStart() != start || range.getEnd() != expEnd || range.getValue() != expValue) {
-            fail(String.format(
-                    "error: %s getRanges (%s) delivers wrong range [U+%04x..U+%04x].0x%x " +
-                    "instead of [U+%04x..U+%04x].0x%x\n",
-                    name, variant, range.getStart(), range.getEnd(), range.getValue(),
-                    start, expEnd, expValue));
+            fail(
+                    String.format(
+                            "error: %s getRanges (%s) delivers wrong range [U+%04x..U+%04x].0x%x "
+                                    + "instead of [U+%04x..U+%04x].0x%x\n",
+                            name,
+                            variant,
+                            range.getStart(),
+                            range.getEnd(),
+                            range.getValue(),
+                            start,
+                            expEnd,
+                            expValue));
             return false;
         }
         return true;
@@ -150,15 +162,16 @@ public final class CodePointTrieTest extends CoreTestFmwk {
     // Also test starting partway through lead & trail surrogates for fixed-surrogate-value options,
     // and partway through supplementary code points.
     private static int iterStarts[] = {
-        0, 0x7f, 0x80, 0x7ff, 0x800, 0xfff, 0x1000,
-        0xd7ff, 0xd800, 0xd888, 0xdddd, 0xdfff, 0xe000,
+        0, 0x7f, 0x80, 0x7ff, 0x800, 0xfff, 0x1000, 0xd7ff, 0xd800, 0xd888, 0xdddd, 0xdfff, 0xe000,
         0xffff, 0x10000, 0x12345, 0x10ffff, 0x110000
     };
 
-    private void
-    testTrieGetRanges(String testName, CodePointMap trie,
-                      CodePointMap.RangeOption option, int surrValue,
-                      CheckRange checkRanges[]) {
+    private void testTrieGetRanges(
+            String testName,
+            CodePointMap trie,
+            CodePointMap.RangeOption option,
+            int surrValue,
+            CheckRange checkRanges[]) {
         String typeName = trie instanceof MutableCodePointTrie ? "mutableTrie" : "trie";
         CodePointMap.Range range = new CodePointMap.Range();
         for (int s = 0; s < iterStarts.length; ++s) {
@@ -176,7 +189,7 @@ public final class CodePointTrieTest extends CoreTestFmwk {
             for (i = 0; i < checkRanges.length && checkRanges[i].limit <= start; ++i) {}
             i0 = i;
             // without value handler
-            for (innerLoopCount = 0;; ++i, start = range.getEnd() + 1) {
+            for (innerLoopCount = 0; ; ++i, start = range.getEnd() + 1) {
                 if (i < checkRanges.length) {
                     expEnd = checkRanges[i].limit - 1;
                     expValue = checkRanges[i].value;
@@ -184,17 +197,27 @@ public final class CodePointTrieTest extends CoreTestFmwk {
                     expEnd = -1;
                     expValue = 0x5005;
                 }
-                getRangeResult = option != CodePointMap.RangeOption.NORMAL ?
-                        trie.getRange(start, option, surrValue, null, range) :
-                        trie.getRange(start, null, range);
-                if (!doCheckRange(name, "without value handler",
-                        start, getRangeResult, range, expEnd, expValue)) {
+                getRangeResult =
+                        option != CodePointMap.RangeOption.NORMAL
+                                ? trie.getRange(start, option, surrValue, null, range)
+                                : trie.getRange(start, null, range);
+                if (!doCheckRange(
+                        name,
+                        "without value handler",
+                        start,
+                        getRangeResult,
+                        range,
+                        expEnd,
+                        expValue)) {
                     break;
                 }
-                if (s != 0 && ++innerLoopCount == 5) { break; }
+                if (s != 0 && ++innerLoopCount == 5) {
+                    break;
+                }
             }
             // with value handler
-            for (i = i0, start = iterStarts[s], innerLoopCount = 0;;
+            for (i = i0, start = iterStarts[s], innerLoopCount = 0;
+                    ;
                     ++i, start = range.getEnd() + 1) {
                 if (i < checkRanges.length) {
                     expEnd = checkRanges[i].limit - 1;
@@ -203,12 +226,21 @@ public final class CodePointTrieTest extends CoreTestFmwk {
                     expEnd = -1;
                     expValue = 0x5005;
                 }
-                getRangeResult = trie.getRange(start, option, surrValue ^ 0x5555, testFilter, range);
-                if (!doCheckRange(name, "with value handler",
-                        start, getRangeResult, range, expEnd, expValue)) {
+                getRangeResult =
+                        trie.getRange(start, option, surrValue ^ 0x5555, testFilter, range);
+                if (!doCheckRange(
+                        name,
+                        "with value handler",
+                        start,
+                        getRangeResult,
+                        range,
+                        expEnd,
+                        expValue)) {
                     break;
                 }
-                if (s != 0 && ++innerLoopCount == 5) { break; }
+                if (s != 0 && ++innerLoopCount == 5) {
+                    break;
+                }
             }
             // C also tests without value (with a NULL value pointer),
             // but that does not apply to Java.
@@ -217,64 +249,70 @@ public final class CodePointTrieTest extends CoreTestFmwk {
 
     // Note: There is much less to do here in polymorphic Java than in C
     // where we have many specialized macros in addition to generic functions.
-    private void
-    testTrieGetters(String testName, CodePointTrie trie,
-                    CodePointTrie.Type type, CodePointTrie.ValueWidth valueWidth,
-                    CheckRange checkRanges[]) {
+    private void testTrieGetters(
+            String testName,
+            CodePointTrie trie,
+            CodePointTrie.Type type,
+            CodePointTrie.ValueWidth valueWidth,
+            CheckRange checkRanges[]) {
         int value, value2;
         int start, limit;
         int i;
-        int countErrors=0;
+        int countErrors = 0;
 
         CodePointTrie.Fast fastTrie =
-                type == CodePointTrie.Type.FAST ? (CodePointTrie.Fast)trie : null;
-        String  typeName = "trie";
+                type == CodePointTrie.Type.FAST ? (CodePointTrie.Fast) trie : null;
+        String typeName = "trie";
 
         SpecialValues specials = getSpecialValues(checkRanges);
 
-        start=0;
-        for(i=specials.i; i<checkRanges.length; ++i) {
-            limit=checkRanges[i].limit;
-            value=checkRanges[i].value;
+        start = 0;
+        for (i = specials.i; i < checkRanges.length; ++i) {
+            limit = checkRanges[i].limit;
+            value = checkRanges[i].value;
 
-            while(start<limit) {
+            while (start < limit) {
                 if (start <= 0x7f) {
                     value2 = trie.asciiGet(start);
                     if (value != value2) {
-                        fail(String.format(
-                                "error: %s(%s).fromASCII(U+%04x)==0x%x instead of 0x%x\n",
-                                typeName, testName, start, value2, value));
+                        fail(
+                                String.format(
+                                        "error: %s(%s).fromASCII(U+%04x)==0x%x instead of 0x%x\n",
+                                        typeName, testName, start, value2, value));
                         ++countErrors;
                     }
                 }
                 if (fastTrie != null) {
-                    if(start<=0xffff) {
+                    if (start <= 0xffff) {
                         value2 = fastTrie.bmpGet(start);
-                        if(value!=value2) {
-                            fail(String.format(
-                                    "error: %s(%s).fromBMP(U+%04x)==0x%x instead of 0x%x\n",
-                                    typeName, testName, start, value2, value));
+                        if (value != value2) {
+                            fail(
+                                    String.format(
+                                            "error: %s(%s).fromBMP(U+%04x)==0x%x instead of 0x%x\n",
+                                            typeName, testName, start, value2, value));
                             ++countErrors;
                         }
                     } else {
                         value2 = fastTrie.suppGet(start);
-                        if(value!=value2) {
-                            fail(String.format(
-                                    "error: %s(%s).fromSupp(U+%04x)==0x%x instead of 0x%x\n",
-                                    typeName, testName, start, value2, value));
+                        if (value != value2) {
+                            fail(
+                                    String.format(
+                                            "error: %s(%s).fromSupp(U+%04x)==0x%x instead of 0x%x\n",
+                                            typeName, testName, start, value2, value));
                             ++countErrors;
                         }
                     }
                 }
                 value2 = trie.get(start);
-                if(value!=value2) {
-                    fail(String.format(
-                            "error: %s(%s).get(U+%04x)==0x%x instead of 0x%x\n",
-                            typeName, testName, start, value2, value));
+                if (value != value2) {
+                    fail(
+                            String.format(
+                                    "error: %s(%s).get(U+%04x)==0x%x instead of 0x%x\n",
+                                    typeName, testName, start, value2, value));
                     ++countErrors;
                 }
                 ++start;
-                if(countErrors>10) {
+                if (countErrors > 10) {
                     return;
                 }
             }
@@ -283,64 +321,66 @@ public final class CodePointTrieTest extends CoreTestFmwk {
         /* test errorValue */
         value = trie.get(-1);
         value2 = trie.get(0x110000);
-        if(value!=specials.errorValue || value2!=specials.errorValue) {
-            fail(String.format(
-                    "error: %s(%s).get(out of range) != errorValue\n",
-                    typeName, testName));
+        if (value != specials.errorValue || value2 != specials.errorValue) {
+            fail(
+                    String.format(
+                            "error: %s(%s).get(out of range) != errorValue\n", typeName, testName));
         }
     }
 
-    private void
-    testBuilderGetters(String testName, MutableCodePointTrie mutableTrie, CheckRange checkRanges[]) {
+    private void testBuilderGetters(
+            String testName, MutableCodePointTrie mutableTrie, CheckRange checkRanges[]) {
         int value, value2;
         int start, limit;
         int i;
-        int countErrors=0;
+        int countErrors = 0;
 
-        String  typeName = "mutableTrie";
+        String typeName = "mutableTrie";
 
-        SpecialValues specials=getSpecialValues(checkRanges);
+        SpecialValues specials = getSpecialValues(checkRanges);
 
-        start=0;
-        for(i=specials.i; i<checkRanges.length; ++i) {
-            limit=checkRanges[i].limit;
-            value=checkRanges[i].value;
+        start = 0;
+        for (i = specials.i; i < checkRanges.length; ++i) {
+            limit = checkRanges[i].limit;
+            value = checkRanges[i].value;
 
-            while(start<limit) {
-                value2=mutableTrie.get(start);
-                if(value!=value2) {
-                    fail(String.format(
-                            "error: %s(%s).get(U+%04x)==0x%x instead of 0x%x\n",
-                            typeName, testName, start, value2, value));
+            while (start < limit) {
+                value2 = mutableTrie.get(start);
+                if (value != value2) {
+                    fail(
+                            String.format(
+                                    "error: %s(%s).get(U+%04x)==0x%x instead of 0x%x\n",
+                                    typeName, testName, start, value2, value));
                     ++countErrors;
                 }
                 ++start;
-                if(countErrors>10) {
+                if (countErrors > 10) {
                     return;
                 }
             }
         }
 
         /* test errorValue */
-        value=mutableTrie.get(-1);
-        value2=mutableTrie.get(0x110000);
-        if(value!=specials.errorValue || value2!=specials.errorValue) {
-            fail(String.format(
-                    "error: %s(%s).get(out of range) != errorValue\n",
-                    typeName, testName));
+        value = mutableTrie.get(-1);
+        value2 = mutableTrie.get(0x110000);
+        if (value != specials.errorValue || value2 != specials.errorValue) {
+            fail(
+                    String.format(
+                            "error: %s(%s).get(out of range) != errorValue\n", typeName, testName));
         }
     }
 
     private static boolean ACCIDENTAL_SURROGATE_PAIR(CharSequence s, int cp) {
-        return s.length() > 0 &&
-                Character.isHighSurrogate(s.charAt(s.length() - 1)) &&
-                UTF16Plus.isTrailSurrogate(cp);
+        return s.length() > 0
+                && Character.isHighSurrogate(s.charAt(s.length() - 1))
+                && UTF16Plus.isTrailSurrogate(cp);
     }
 
-    private void
-    testTrieUTF16(String testName,
-                  CodePointTrie trie, CodePointTrie.ValueWidth valueWidth,
-                  CheckRange checkRanges[]) {
+    private void testTrieUTF16(
+            String testName,
+            CodePointTrie trie,
+            CodePointTrie.ValueWidth valueWidth,
+            CheckRange checkRanges[]) {
         StringBuilder s = new StringBuilder();
         int[] values = new int[16000];
 
@@ -350,33 +390,33 @@ public final class CodePointTrieTest extends CoreTestFmwk {
         int i, sIndex, countValues;
 
         /* write a string */
-        prevCP=0;
-        countValues=0;
-        for(i=skipSpecialValues(checkRanges); i<checkRanges.length; ++i) {
-            value=checkRanges[i].value;
+        prevCP = 0;
+        countValues = 0;
+        for (i = skipSpecialValues(checkRanges); i < checkRanges.length; ++i) {
+            value = checkRanges[i].value;
             /* write three code points */
-            if(!ACCIDENTAL_SURROGATE_PAIR(s, prevCP)) {
-                s.appendCodePoint(prevCP);   /* start of the range */
-                values[countValues++]=value;
+            if (!ACCIDENTAL_SURROGATE_PAIR(s, prevCP)) {
+                s.appendCodePoint(prevCP); /* start of the range */
+                values[countValues++] = value;
             }
-            c=checkRanges[i].limit;
-            prevCP=(prevCP+c)/2;                    /* middle of the range */
-            if(!ACCIDENTAL_SURROGATE_PAIR(s, prevCP)) {
+            c = checkRanges[i].limit;
+            prevCP = (prevCP + c) / 2; /* middle of the range */
+            if (!ACCIDENTAL_SURROGATE_PAIR(s, prevCP)) {
                 s.appendCodePoint(prevCP);
-                values[countValues++]=value;
+                values[countValues++] = value;
             }
-            prevCP=c;
-            --c;                                    /* end of the range */
-            if(!ACCIDENTAL_SURROGATE_PAIR(s, c)) {
+            prevCP = c;
+            --c; /* end of the range */
+            if (!ACCIDENTAL_SURROGATE_PAIR(s, c)) {
                 s.appendCodePoint(c);
-                values[countValues++]=value;
+                values[countValues++] = value;
             }
         }
         CodePointMap.StringIterator si = trie.stringIterator(s, 0);
 
         /* try forward */
         sIndex = 0;
-        i=0;
+        i = 0;
         while (sIndex < s.length()) {
             c2 = s.codePointAt(sIndex);
             sIndex += Character.charCount(c2);
@@ -384,15 +424,17 @@ public final class CodePointTrieTest extends CoreTestFmwk {
             c = si.getCodePoint();
             value = si.getValue();
             expected = UTF16Plus.isSurrogate(c) ? errorValue : values[i];
-            if(value!=expected) {
-                fail(String.format(
-                        "error: wrong value from UCPTRIE_NEXT(%s)(U+%04x): 0x%x instead of 0x%x\n",
-                        testName, c, value, expected));
+            if (value != expected) {
+                fail(
+                        String.format(
+                                "error: wrong value from UCPTRIE_NEXT(%s)(U+%04x): 0x%x instead of 0x%x\n",
+                                testName, c, value, expected));
             }
-            if(c!=c2) {
-                fail(String.format(
-                        "error: wrong code point from UCPTRIE_NEXT(%s): U+%04x != U+%04x\n",
-                        testName, c, c2));
+            if (c != c2) {
+                fail(
+                        String.format(
+                                "error: wrong code point from UCPTRIE_NEXT(%s): U+%04x != U+%04x\n",
+                                testName, c, c2));
                 continue;
             }
             ++i;
@@ -401,7 +443,7 @@ public final class CodePointTrieTest extends CoreTestFmwk {
 
         /* try backward */
         sIndex = s.length();
-        i=countValues;
+        i = countValues;
         while (sIndex > 0) {
             --i;
             c2 = s.codePointBefore(sIndex);
@@ -410,24 +452,28 @@ public final class CodePointTrieTest extends CoreTestFmwk {
             c = si.getCodePoint();
             value = si.getValue();
             expected = UTF16Plus.isSurrogate(c) ? errorValue : values[i];
-            if(value!=expected) {
-                fail(String.format(
-                        "error: wrong value from UCPTRIE_PREV(%s)(U+%04x): 0x%x instead of 0x%x\n",
-                        testName, c, value, expected));
+            if (value != expected) {
+                fail(
+                        String.format(
+                                "error: wrong value from UCPTRIE_PREV(%s)(U+%04x): 0x%x instead of 0x%x\n",
+                                testName, c, value, expected));
             }
-            if(c!=c2) {
-                fail(String.format(
-                        "error: wrong code point from UCPTRIE_PREV(%s): U+%04x != U+%04x\n",
-                        testName, c, c2));
+            if (c != c2) {
+                fail(
+                        String.format(
+                                "error: wrong code point from UCPTRIE_PREV(%s): U+%04x != U+%04x\n",
+                                testName, c, c2));
             }
         }
         assertFalse("previous() at the start", si.previous());
     }
 
-    private void
-    testTrie(String testName, CodePointTrie trie,
-             CodePointTrie.Type type, CodePointTrie.ValueWidth valueWidth,
-             CheckRange checkRanges[]) {
+    private void testTrie(
+            String testName,
+            CodePointTrie trie,
+            CodePointTrie.Type type,
+            CodePointTrie.ValueWidth valueWidth,
+            CheckRange checkRanges[]) {
         testTrieGetters(testName, trie, type, valueWidth, checkRanges);
         testTrieGetRanges(testName, trie, CodePointMap.RangeOption.NORMAL, 0, checkRanges);
         if (type == CodePointTrie.Type.FAST) {
@@ -436,16 +482,19 @@ public final class CodePointTrieTest extends CoreTestFmwk {
         }
     }
 
-    private void
-    testBuilder(String testName, MutableCodePointTrie mutableTrie, CheckRange checkRanges[]) {
+    private void testBuilder(
+            String testName, MutableCodePointTrie mutableTrie, CheckRange checkRanges[]) {
         testBuilderGetters(testName, mutableTrie, checkRanges);
         testTrieGetRanges(testName, mutableTrie, CodePointMap.RangeOption.NORMAL, 0, checkRanges);
     }
 
-    private void
-    testTrieSerialize(String testName, MutableCodePointTrie mutableTrie,
-                      CodePointTrie.Type type, CodePointTrie.ValueWidth valueWidth, boolean withSwap,
-                      CheckRange checkRanges[]) {
+    private void testTrieSerialize(
+            String testName,
+            MutableCodePointTrie mutableTrie,
+            CodePointTrie.Type type,
+            CodePointTrie.ValueWidth valueWidth,
+            boolean withSwap,
+            CheckRange checkRanges[]) {
         CodePointTrie trie;
         int length1;
 
@@ -459,32 +508,38 @@ public final class CodePointTrieTest extends CoreTestFmwk {
         do {
             trie = mutableTrie.buildImmutable(type, valueWidth);
             ByteArrayOutputStream os = new ByteArrayOutputStream();
-            length1=trie.toBinary(os);
+            length1 = trie.toBinary(os);
             assertEquals(testName + ".toBinary() length", os.size(), length1);
             ByteBuffer storage = ByteBuffer.wrap(os.toByteArray());
             // Java: no preflighting
 
             testTrie(testName, trie, type, valueWidth, checkRanges);
-            trie=null;
+            trie = null;
 
             // Java: There is no code for "swapping" the endianness of data.
             // withSwap is unused.
 
             trie = CodePointTrie.fromBinary(type, valueWidth, storage);
-            if(type != trie.getType()) {
-                fail(String.format(
-                        "error: trie serialization (%s) did not preserve trie type\n", testName));
+            if (type != trie.getType()) {
+                fail(
+                        String.format(
+                                "error: trie serialization (%s) did not preserve trie type\n",
+                                testName));
                 break;
             }
-            if(valueWidth != trie.getValueWidth()) {
-                fail(String.format(
-                        "error: trie serialization (%s) did not preserve data value width\n", testName));
+            if (valueWidth != trie.getValueWidth()) {
+                fail(
+                        String.format(
+                                "error: trie serialization (%s) did not preserve data value width\n",
+                                testName));
                 break;
             }
-            if(os.size()!=storage.position()) {
-                fail(String.format(
-                        "error: trie serialization (%s) lengths different: " +
-                        "serialize vs. unserialize\n", testName));
+            if (os.size() != storage.position()) {
+                fail(
+                        String.format(
+                                "error: trie serialization (%s) lengths different: "
+                                        + "serialize vs. unserialize\n",
+                                testName));
                 break;
             }
 
@@ -492,14 +547,16 @@ public final class CodePointTrieTest extends CoreTestFmwk {
                 storage.rewind();
                 CodePointTrie any = CodePointTrie.fromBinary(null, null, storage);
                 if (type != any.getType()) {
-                    fail(String.format(
-                            "error: ucptrie_openFromBinary(" +
-                            "UCPTRIE_TYPE_ANY, UCPTRIE_VALUE_BITS_ANY).getType() wrong\n"));
+                    fail(
+                            String.format(
+                                    "error: ucptrie_openFromBinary("
+                                            + "UCPTRIE_TYPE_ANY, UCPTRIE_VALUE_BITS_ANY).getType() wrong\n"));
                 }
                 if (valueWidth != any.getValueWidth()) {
-                    fail(String.format(
-                            "error: ucptrie_openFromBinary(" +
-                            "UCPTRIE_TYPE_ANY, UCPTRIE_VALUE_BITS_ANY).getValueWidth() wrong\n"));
+                    fail(
+                            String.format(
+                                    "error: ucptrie_openFromBinary("
+                                            + "UCPTRIE_TYPE_ANY, UCPTRIE_VALUE_BITS_ANY).getValueWidth() wrong\n"));
                 }
             }
 
@@ -509,24 +566,26 @@ public final class CodePointTrieTest extends CoreTestFmwk {
                 int value, value2;
                 MutableCodePointTrie mutable2 = MutableCodePointTrie.fromCodePointMap(trie);
 
-                value=mutable2.get(0xa1);
+                value = mutable2.get(0xa1);
                 mutable2.set(0xa1, 789);
-                value2=mutable2.get(0xa1);
+                value2 = mutable2.get(0xa1);
                 mutable2.set(0xa1, value);
-                if(value2!=789) {
-                    fail(String.format(
-                            "error: modifying a mutableTrie-from-UCPTrie (%s) failed\n",
-                            testName));
+                if (value2 != 789) {
+                    fail(
+                            String.format(
+                                    "error: modifying a mutableTrie-from-UCPTrie (%s) failed\n",
+                                    testName));
                 }
                 testBuilder(testName, mutable2, checkRanges);
             }
-        } while(false);
+        } while (false);
     }
 
-    private MutableCodePointTrie
-    testTrieSerializeAllValueWidth(String testName,
-                                   MutableCodePointTrie mutableTrie, boolean withClone,
-                                   CheckRange checkRanges[]) {
+    private MutableCodePointTrie testTrieSerializeAllValueWidth(
+            String testName,
+            MutableCodePointTrie mutableTrie,
+            boolean withClone,
+            CheckRange checkRanges[]) {
         int oredValues = 0;
         int i;
         for (i = 0; i < checkRanges.length; ++i) {
@@ -537,36 +596,51 @@ public final class CodePointTrieTest extends CoreTestFmwk {
 
         if (oredValues <= 0xffff) {
             String name = testName + ".16";
-            testTrieSerialize(name, mutableTrie,
-                              CodePointTrie.Type.FAST, CodePointTrie.ValueWidth.BITS_16, withClone,
-                              checkRanges);
+            testTrieSerialize(
+                    name,
+                    mutableTrie,
+                    CodePointTrie.Type.FAST,
+                    CodePointTrie.ValueWidth.BITS_16,
+                    withClone,
+                    checkRanges);
         }
 
         String name = testName + ".32";
-        testTrieSerialize(name, mutableTrie,
-                          CodePointTrie.Type.FAST, CodePointTrie.ValueWidth.BITS_32, withClone,
-                          checkRanges);
+        testTrieSerialize(
+                name,
+                mutableTrie,
+                CodePointTrie.Type.FAST,
+                CodePointTrie.ValueWidth.BITS_32,
+                withClone,
+                checkRanges);
 
         if (oredValues <= 0xff) {
             name = testName + ".8";
-            testTrieSerialize(name, mutableTrie,
-                              CodePointTrie.Type.FAST, CodePointTrie.ValueWidth.BITS_8, withClone,
-                              checkRanges);
+            testTrieSerialize(
+                    name,
+                    mutableTrie,
+                    CodePointTrie.Type.FAST,
+                    CodePointTrie.ValueWidth.BITS_8,
+                    withClone,
+                    checkRanges);
         }
 
         if (oredValues <= 0xffff) {
             name = testName + ".small16";
-            testTrieSerialize(name, mutableTrie,
-                              CodePointTrie.Type.SMALL, CodePointTrie.ValueWidth.BITS_16, withClone,
-                              checkRanges);
+            testTrieSerialize(
+                    name,
+                    mutableTrie,
+                    CodePointTrie.Type.SMALL,
+                    CodePointTrie.ValueWidth.BITS_16,
+                    withClone,
+                    checkRanges);
         }
 
         return mutableTrie;
     }
 
-    private MutableCodePointTrie
-    makeTrieWithRanges(String testName, boolean withClone,
-            SetRange setRanges[], CheckRange checkRanges[]) {
+    private MutableCodePointTrie makeTrieWithRanges(
+            String testName, boolean withClone, SetRange setRanges[], CheckRange checkRanges[]) {
         MutableCodePointTrie mutableTrie;
         int value;
         int start, limit;
@@ -579,164 +653,153 @@ public final class CodePointTrieTest extends CoreTestFmwk {
         mutableTrie = new MutableCodePointTrie(specials.initialValue, specials.errorValue);
 
         /* set values from setRanges[] */
-        for(i=0; i<setRanges.length; ++i) {
-            if(withClone && i==setRanges.length/2) {
+        for (i = 0; i < setRanges.length; ++i) {
+            if (withClone && i == setRanges.length / 2) {
                 /* switch to a clone in the middle of setting values */
                 MutableCodePointTrie clone = mutableTrie.clone();
                 mutableTrie = clone;
             }
-            start=setRanges[i].start;
-            limit=setRanges[i].limit;
-            value=setRanges[i].value;
+            start = setRanges[i].start;
+            limit = setRanges[i].limit;
+            value = setRanges[i].value;
             if ((limit - start) == 1) {
                 mutableTrie.set(start, value);
             } else {
-                mutableTrie.setRange(start, limit-1, value);
+                mutableTrie.setRange(start, limit - 1, value);
             }
         }
 
         return mutableTrie;
     }
 
-    private void
-    testTrieRanges(String testName, boolean withClone, SetRange setRanges[], CheckRange checkRanges[]) {
-        MutableCodePointTrie mutableTrie = makeTrieWithRanges(
-            testName, withClone, setRanges, checkRanges);
+    private void testTrieRanges(
+            String testName, boolean withClone, SetRange setRanges[], CheckRange checkRanges[]) {
+        MutableCodePointTrie mutableTrie =
+                makeTrieWithRanges(testName, withClone, setRanges, checkRanges);
         if (mutableTrie != null) {
-            mutableTrie = testTrieSerializeAllValueWidth(testName, mutableTrie, withClone, checkRanges);
+            mutableTrie =
+                    testTrieSerializeAllValueWidth(testName, mutableTrie, withClone, checkRanges);
         }
     }
 
     /* test data ----------------------------------------------------------------*/
 
     /* set consecutive ranges, even with value 0 */
-    private static final SetRange
-    setRanges1[]={
-        new SetRange(0,        0x40,     0   ),
-        new SetRange(0x40,     0xe7,     0x34),
-        new SetRange(0xe7,     0x3400,   0   ),
-        new SetRange(0x3400,   0x9fa6,   0x61),
-        new SetRange(0x9fa6,   0xda9e,   0x31),
-        new SetRange(0xdada,   0xeeee,   0xff),
-        new SetRange(0xeeee,   0x11111,  1   ),
-        new SetRange(0x11111,  0x44444,  0x61),
-        new SetRange(0x44444,  0x60003,  0   ),
-        new SetRange(0xf0003,  0xf0004,  0xf ),
-        new SetRange(0xf0004,  0xf0006,  0x10),
-        new SetRange(0xf0006,  0xf0007,  0x11),
-        new SetRange(0xf0007,  0xf0040,  0x12),
-        new SetRange(0xf0040,  0x110000, 0   )
+    private static final SetRange setRanges1[] = {
+        new SetRange(0, 0x40, 0),
+        new SetRange(0x40, 0xe7, 0x34),
+        new SetRange(0xe7, 0x3400, 0),
+        new SetRange(0x3400, 0x9fa6, 0x61),
+        new SetRange(0x9fa6, 0xda9e, 0x31),
+        new SetRange(0xdada, 0xeeee, 0xff),
+        new SetRange(0xeeee, 0x11111, 1),
+        new SetRange(0x11111, 0x44444, 0x61),
+        new SetRange(0x44444, 0x60003, 0),
+        new SetRange(0xf0003, 0xf0004, 0xf),
+        new SetRange(0xf0004, 0xf0006, 0x10),
+        new SetRange(0xf0006, 0xf0007, 0x11),
+        new SetRange(0xf0007, 0xf0040, 0x12),
+        new SetRange(0xf0040, 0x110000, 0)
     };
 
-    private static final CheckRange
-    checkRanges1[]={
-        new CheckRange(0,        0),
-        new CheckRange(0x40,     0),
-        new CheckRange(0xe7,     0x34),
-        new CheckRange(0x3400,   0),
-        new CheckRange(0x9fa6,   0x61),
-        new CheckRange(0xda9e,   0x31),
-        new CheckRange(0xdada,   0),
-        new CheckRange(0xeeee,   0xff),
-        new CheckRange(0x11111,  1),
-        new CheckRange(0x44444,  0x61),
-        new CheckRange(0xf0003,  0),
-        new CheckRange(0xf0004,  0xf),
-        new CheckRange(0xf0006,  0x10),
-        new CheckRange(0xf0007,  0x11),
-        new CheckRange(0xf0040,  0x12),
+    private static final CheckRange checkRanges1[] = {
+        new CheckRange(0, 0),
+        new CheckRange(0x40, 0),
+        new CheckRange(0xe7, 0x34),
+        new CheckRange(0x3400, 0),
+        new CheckRange(0x9fa6, 0x61),
+        new CheckRange(0xda9e, 0x31),
+        new CheckRange(0xdada, 0),
+        new CheckRange(0xeeee, 0xff),
+        new CheckRange(0x11111, 1),
+        new CheckRange(0x44444, 0x61),
+        new CheckRange(0xf0003, 0),
+        new CheckRange(0xf0004, 0xf),
+        new CheckRange(0xf0006, 0x10),
+        new CheckRange(0xf0007, 0x11),
+        new CheckRange(0xf0040, 0x12),
         new CheckRange(0x110000, 0)
     };
 
     /* set some interesting overlapping ranges */
-    private static final SetRange
-    setRanges2[]={
-        new SetRange(0x21,     0x7f,     0x5555),
-        new SetRange(0x2f800,  0x2fedc,  0x7a  ),
-        new SetRange(0x72,     0xdd,     3     ),
-        new SetRange(0xdd,     0xde,     4     ),
-        new SetRange(0x201,    0x240,    6     ),  /* 3 consecutive blocks with the same pattern but */
-        new SetRange(0x241,    0x280,    6     ),  /* discontiguous value ranges, testing iteration */
-        new SetRange(0x281,    0x2c0,    6     ),
-        new SetRange(0x2f987,  0x2fa98,  5     ),
-        new SetRange(0x2f777,  0x2f883,  0     ),
-        new SetRange(0x2fedc,  0x2ffaa,  1     ),
-        new SetRange(0x2ffaa,  0x2ffab,  2     ),
-        new SetRange(0x2ffbb,  0x2ffc0,  7     )
+    private static final SetRange setRanges2[] = {
+        new SetRange(0x21, 0x7f, 0x5555),
+        new SetRange(0x2f800, 0x2fedc, 0x7a),
+        new SetRange(0x72, 0xdd, 3),
+        new SetRange(0xdd, 0xde, 4),
+        new SetRange(0x201, 0x240, 6), /* 3 consecutive blocks with the same pattern but */
+        new SetRange(0x241, 0x280, 6), /* discontiguous value ranges, testing iteration */
+        new SetRange(0x281, 0x2c0, 6),
+        new SetRange(0x2f987, 0x2fa98, 5),
+        new SetRange(0x2f777, 0x2f883, 0),
+        new SetRange(0x2fedc, 0x2ffaa, 1),
+        new SetRange(0x2ffaa, 0x2ffab, 2),
+        new SetRange(0x2ffbb, 0x2ffc0, 7)
     };
 
-    private static final CheckRange
-    checkRanges2[]={
-        new CheckRange(0,        0),
-        new CheckRange(0x21,     0),
-        new CheckRange(0x72,     0x5555),
-        new CheckRange(0xdd,     3),
-        new CheckRange(0xde,     4),
-        new CheckRange(0x201,    0),
-        new CheckRange(0x240,    6),
-        new CheckRange(0x241,    0),
-        new CheckRange(0x280,    6),
-        new CheckRange(0x281,    0),
-        new CheckRange(0x2c0,    6),
-        new CheckRange(0x2f883,  0),
-        new CheckRange(0x2f987,  0x7a),
-        new CheckRange(0x2fa98,  5),
-        new CheckRange(0x2fedc,  0x7a),
-        new CheckRange(0x2ffaa,  1),
-        new CheckRange(0x2ffab,  2),
-        new CheckRange(0x2ffbb,  0),
-        new CheckRange(0x2ffc0,  7),
+    private static final CheckRange checkRanges2[] = {
+        new CheckRange(0, 0),
+        new CheckRange(0x21, 0),
+        new CheckRange(0x72, 0x5555),
+        new CheckRange(0xdd, 3),
+        new CheckRange(0xde, 4),
+        new CheckRange(0x201, 0),
+        new CheckRange(0x240, 6),
+        new CheckRange(0x241, 0),
+        new CheckRange(0x280, 6),
+        new CheckRange(0x281, 0),
+        new CheckRange(0x2c0, 6),
+        new CheckRange(0x2f883, 0),
+        new CheckRange(0x2f987, 0x7a),
+        new CheckRange(0x2fa98, 5),
+        new CheckRange(0x2fedc, 0x7a),
+        new CheckRange(0x2ffaa, 1),
+        new CheckRange(0x2ffab, 2),
+        new CheckRange(0x2ffbb, 0),
+        new CheckRange(0x2ffc0, 7),
         new CheckRange(0x110000, 0)
     };
 
     /* use a non-zero initial value */
-    private static final SetRange
-    setRanges3[]={
-        new SetRange(0x31,     0xa4,     1),
-        new SetRange(0x3400,   0x6789,   2),
-        new SetRange(0x8000,   0x89ab,   9),
-        new SetRange(0x9000,   0xa000,   4),
-        new SetRange(0xabcd,   0xbcde,   3),
-        new SetRange(0x55555,  0x110000, 6),  /* highStart<U+ffff with non-initialValue */
-        new SetRange(0xcccc,   0x55555,  6)
+    private static final SetRange setRanges3[] = {
+        new SetRange(0x31, 0xa4, 1),
+        new SetRange(0x3400, 0x6789, 2),
+        new SetRange(0x8000, 0x89ab, 9),
+        new SetRange(0x9000, 0xa000, 4),
+        new SetRange(0xabcd, 0xbcde, 3),
+        new SetRange(0x55555, 0x110000, 6), /* highStart<U+ffff with non-initialValue */
+        new SetRange(0xcccc, 0x55555, 6)
     };
 
-    private static final CheckRange
-    checkRanges3[]={
-        new CheckRange(0,        9),  /* non-zero initialValue */
-        new CheckRange(0x31,     9),
-        new CheckRange(0xa4,     1),
-        new CheckRange(0x3400,   9),
-        new CheckRange(0x6789,   2),
-        new CheckRange(0x9000,   9),
-        new CheckRange(0xa000,   4),
-        new CheckRange(0xabcd,   9),
-        new CheckRange(0xbcde,   3),
-        new CheckRange(0xcccc,   9),
+    private static final CheckRange checkRanges3[] = {
+        new CheckRange(0, 9), /* non-zero initialValue */
+        new CheckRange(0x31, 9),
+        new CheckRange(0xa4, 1),
+        new CheckRange(0x3400, 9),
+        new CheckRange(0x6789, 2),
+        new CheckRange(0x9000, 9),
+        new CheckRange(0xa000, 4),
+        new CheckRange(0xabcd, 9),
+        new CheckRange(0xbcde, 3),
+        new CheckRange(0xcccc, 9),
         new CheckRange(0x110000, 6)
     };
 
     /* empty or single-value tries, testing highStart==0 */
-    private static final SetRange
-    setRangesEmpty[]={
+    private static final SetRange setRangesEmpty[] = {
         // new SetRange(0,        0,        0),  /* need some values for it to compile */
     };
 
-    private static final CheckRange
-    checkRangesEmpty[]={
-        new CheckRange(0,        3),
-        new CheckRange(0x110000, 3)
+    private static final CheckRange checkRangesEmpty[] = {
+        new CheckRange(0, 3), new CheckRange(0x110000, 3)
     };
 
-    private static final SetRange
-    setRangesSingleValue[]={
-        new SetRange(0,        0x110000, 5),
+    private static final SetRange setRangesSingleValue[] = {
+        new SetRange(0, 0x110000, 5),
     };
 
-    private static final CheckRange
-    checkRangesSingleValue[]={
-        new CheckRange(0,        3),
-        new CheckRange(0x110000, 5)
+    private static final CheckRange checkRangesSingleValue[] = {
+        new CheckRange(0, 3), new CheckRange(0x110000, 5)
     };
 
     @Test
@@ -773,70 +836,69 @@ public final class CodePointTrieTest extends CoreTestFmwk {
 
     @Test
     public void FreeBlocksTest() {
-        final CheckRange
-        checkRanges[]={
-            new CheckRange(0,        1),
-            new CheckRange(0x740,    1),
-            new CheckRange(0x780,    2),
-            new CheckRange(0x880,    3),
+        final CheckRange checkRanges[] = {
+            new CheckRange(0, 1),
+            new CheckRange(0x740, 1),
+            new CheckRange(0x780, 2),
+            new CheckRange(0x880, 3),
             new CheckRange(0x110000, 1)
         };
-        String  testName="free-blocks";
+        String testName = "free-blocks";
 
         MutableCodePointTrie mutableTrie;
         int i;
 
-        mutableTrie=new MutableCodePointTrie(1, 0xad);
+        mutableTrie = new MutableCodePointTrie(1, 0xad);
 
         /*
          * Repeatedly set overlapping same-value ranges to stress the free-data-block management.
          * If it fails, it will overflow the data array.
          */
-        for(i=0; i<(0x120000>>4)/2; ++i) {  // 4=UCPTRIE_SHIFT_3
-            mutableTrie.setRange(0x740, 0x840-1, 1);
-            mutableTrie.setRange(0x780, 0x880-1, 1);
-            mutableTrie.setRange(0x740, 0x840-1, 2);
-            mutableTrie.setRange(0x780, 0x880-1, 3);
+        for (i = 0; i < (0x120000 >> 4) / 2; ++i) { // 4=UCPTRIE_SHIFT_3
+            mutableTrie.setRange(0x740, 0x840 - 1, 1);
+            mutableTrie.setRange(0x780, 0x880 - 1, 1);
+            mutableTrie.setRange(0x740, 0x840 - 1, 2);
+            mutableTrie.setRange(0x780, 0x880 - 1, 3);
         }
         /* make blocks that will be free during compaction */
-        mutableTrie.setRange(0x1000, 0x3000-1, 2);
-        mutableTrie.setRange(0x2000, 0x4000-1, 3);
-        mutableTrie.setRange(0x1000, 0x4000-1, 1);
+        mutableTrie.setRange(0x1000, 0x3000 - 1, 2);
+        mutableTrie.setRange(0x2000, 0x4000 - 1, 3);
+        mutableTrie.setRange(0x1000, 0x4000 - 1, 1);
 
         mutableTrie = testTrieSerializeAllValueWidth(testName, mutableTrie, false, checkRanges);
     }
 
     @Test
     public void GrowDataArrayTest() {
-        final CheckRange
-        checkRanges[]={
-            new CheckRange(0,        1),
-            new CheckRange(0x720,    2),
-            new CheckRange(0x7a0,    3),
-            new CheckRange(0x8a0,    4),
+        final CheckRange checkRanges[] = {
+            new CheckRange(0, 1),
+            new CheckRange(0x720, 2),
+            new CheckRange(0x7a0, 3),
+            new CheckRange(0x8a0, 4),
             new CheckRange(0x110000, 5)
         };
-        String  testName="grow-data";
+        String testName = "grow-data";
 
         MutableCodePointTrie mutableTrie;
         int i;
 
-        mutableTrie=new MutableCodePointTrie(1, 0xad);
+        mutableTrie = new MutableCodePointTrie(1, 0xad);
 
         /*
          * Use umutablecptrie_set() not umutablecptrie_setRange() to write non-initialValue-data.
          * Should grow/reallocate the data array to a sufficient length.
          */
-        for(i=0; i<0x1000; ++i) {
+        for (i = 0; i < 0x1000; ++i) {
             mutableTrie.set(i, 2);
         }
-        for(i=0x720; i<0x1100; ++i) { /* some overlap */
+        for (i = 0x720; i < 0x1100; ++i) {
+            /* some overlap */
             mutableTrie.set(i, 3);
         }
-        for(i=0x7a0; i<0x900; ++i) {
+        for (i = 0x7a0; i < 0x900; ++i) {
             mutableTrie.set(i, 4);
         }
-        for(i=0x8a0; i<0x110000; ++i) {
+        for (i = 0x8a0; i < 0x110000; ++i) {
             mutableTrie.set(i, 5);
         }
 
@@ -845,14 +907,14 @@ public final class CodePointTrieTest extends CoreTestFmwk {
 
     @Test
     public void ManyAllSameBlocksTest() {
-        String testName="many-all-same";
+        String testName = "many-all-same";
 
         MutableCodePointTrie mutableTrie;
         int i;
         CheckRange[] checkRanges = new CheckRange[(0x110000 >> 12) + 1];
 
         mutableTrie = new MutableCodePointTrie(0xff33, 0xad);
-        checkRanges[0] = new CheckRange(0, 0xff33);  // initialValue
+        checkRanges[0] = new CheckRange(0, 0xff33); // initialValue
 
         // Many all-same-value blocks.
         for (i = 0; i < 0x110000; i += 0x1000) {
@@ -865,8 +927,7 @@ public final class CodePointTrieTest extends CoreTestFmwk {
             int v0 = mutableTrie.get(i);
             int vfff = mutableTrie.get(i + 0xfff);
             if (v0 != expected || vfff != expected) {
-                fail(String.format(
-                        "error: MutableCodePointTrie U+%04x unexpected value\n", i));
+                fail(String.format("error: MutableCodePointTrie U+%04x unexpected value\n", i));
             }
         }
 
@@ -875,14 +936,14 @@ public final class CodePointTrieTest extends CoreTestFmwk {
 
     @Test
     public void MuchDataTest() {
-        String testName="much-data";
+        String testName = "much-data";
 
         MutableCodePointTrie mutableTrie;
         int r, c;
         CheckRange[] checkRanges = new CheckRange[(0x10000 >> 6) + (0x10240 >> 4) + 10];
 
         mutableTrie = new MutableCodePointTrie(0xff33, 0xad);
-        checkRanges[0] = new CheckRange(0, 0xff33);  // initialValue
+        checkRanges[0] = new CheckRange(0, 0xff33); // initialValue
         r = 1;
 
         // Add much data that does not compact well,
@@ -907,13 +968,20 @@ public final class CodePointTrieTest extends CoreTestFmwk {
 
         checkRanges = Arrays.copyOf(checkRanges, r);
         testBuilder(testName, mutableTrie, checkRanges);
-        testTrieSerialize("much-data.16", mutableTrie,
-                          CodePointTrie.Type.FAST, CodePointTrie.ValueWidth.BITS_16, false,
-                          checkRanges);
+        testTrieSerialize(
+                "much-data.16",
+                mutableTrie,
+                CodePointTrie.Type.FAST,
+                CodePointTrie.ValueWidth.BITS_16,
+                false,
+                checkRanges);
     }
 
-    private void testGetRangesFixedSurr(String testName, MutableCodePointTrie mutableTrie,
-             CodePointMap.RangeOption option, CheckRange checkRanges[]) {
+    private void testGetRangesFixedSurr(
+            String testName,
+            MutableCodePointTrie mutableTrie,
+            CodePointMap.RangeOption option,
+            CheckRange checkRanges[]) {
         testTrieGetRanges(testName, mutableTrie, option, 5, checkRanges);
         MutableCodePointTrie clone = mutableTrie.clone();
         CodePointTrie trie =
@@ -923,16 +991,14 @@ public final class CodePointTrieTest extends CoreTestFmwk {
 
     @Test
     public void TrieTestGetRangesFixedSurr() {
-        final SetRange
-        setRangesFixedSurr[]={
+        final SetRange setRangesFixedSurr[] = {
             new SetRange(0xd000, 0xd7ff, 5),
             new SetRange(0xd7ff, 0xe001, 3),
             new SetRange(0xe001, 0xf900, 5),
         };
 
-        final CheckRange
-        checkRangesFixedLeadSurr1[]={
-            new CheckRange(0,      0),
+        final CheckRange checkRangesFixedLeadSurr1[] = {
+            new CheckRange(0, 0),
             new CheckRange(0xd000, 0),
             new CheckRange(0xd7ff, 5),
             new CheckRange(0xd800, 3),
@@ -942,9 +1008,8 @@ public final class CodePointTrieTest extends CoreTestFmwk {
             new CheckRange(0x110000, 0)
         };
 
-        final CheckRange
-        checkRangesFixedAllSurr1[]={
-            new CheckRange(0,      0),
+        final CheckRange checkRangesFixedAllSurr1[] = {
+            new CheckRange(0, 0),
             new CheckRange(0xd000, 0),
             new CheckRange(0xd7ff, 5),
             new CheckRange(0xd800, 3),
@@ -954,9 +1019,8 @@ public final class CodePointTrieTest extends CoreTestFmwk {
             new CheckRange(0x110000, 0)
         };
 
-        final CheckRange
-        checkRangesFixedLeadSurr3[]={
-            new CheckRange(0,      0),
+        final CheckRange checkRangesFixedLeadSurr3[] = {
+            new CheckRange(0, 0),
             new CheckRange(0xd000, 0),
             new CheckRange(0xdc00, 5),
             new CheckRange(0xe001, 3),
@@ -964,9 +1028,8 @@ public final class CodePointTrieTest extends CoreTestFmwk {
             new CheckRange(0x110000, 0)
         };
 
-        final CheckRange
-        checkRangesFixedAllSurr3[]={
-            new CheckRange(0,      0),
+        final CheckRange checkRangesFixedAllSurr3[] = {
+            new CheckRange(0, 0),
             new CheckRange(0xd000, 0),
             new CheckRange(0xe000, 5),
             new CheckRange(0xe001, 3),
@@ -974,34 +1037,52 @@ public final class CodePointTrieTest extends CoreTestFmwk {
             new CheckRange(0x110000, 0)
         };
 
-        final CheckRange
-        checkRangesFixedSurr4[]={
-            new CheckRange(0,      0),
+        final CheckRange checkRangesFixedSurr4[] = {
+            new CheckRange(0, 0),
             new CheckRange(0xd000, 0),
             new CheckRange(0xf900, 5),
             new CheckRange(0x110000, 0)
         };
 
-        MutableCodePointTrie mutableTrie = makeTrieWithRanges(
-            "fixedSurr", false, setRangesFixedSurr, checkRangesFixedLeadSurr1);
-        testGetRangesFixedSurr("fixedLeadSurr1", mutableTrie,
-                CodePointMap.RangeOption.FIXED_LEAD_SURROGATES, checkRangesFixedLeadSurr1);
-        testGetRangesFixedSurr("fixedAllSurr1", mutableTrie,
-                CodePointMap.RangeOption.FIXED_ALL_SURROGATES, checkRangesFixedAllSurr1);
+        MutableCodePointTrie mutableTrie =
+                makeTrieWithRanges(
+                        "fixedSurr", false, setRangesFixedSurr, checkRangesFixedLeadSurr1);
+        testGetRangesFixedSurr(
+                "fixedLeadSurr1",
+                mutableTrie,
+                CodePointMap.RangeOption.FIXED_LEAD_SURROGATES,
+                checkRangesFixedLeadSurr1);
+        testGetRangesFixedSurr(
+                "fixedAllSurr1",
+                mutableTrie,
+                CodePointMap.RangeOption.FIXED_ALL_SURROGATES,
+                checkRangesFixedAllSurr1);
         // Setting a range in the middle of lead surrogates makes no difference.
         mutableTrie.setRange(0xd844, 0xd899, 5);
-        testGetRangesFixedSurr("fixedLeadSurr2", mutableTrie,
-                CodePointMap.RangeOption.FIXED_LEAD_SURROGATES, checkRangesFixedLeadSurr1);
+        testGetRangesFixedSurr(
+                "fixedLeadSurr2",
+                mutableTrie,
+                CodePointMap.RangeOption.FIXED_LEAD_SURROGATES,
+                checkRangesFixedLeadSurr1);
         // Bridge the gap before the lead surrogates.
         mutableTrie.set(0xd7ff, 5);
-        testGetRangesFixedSurr("fixedLeadSurr3", mutableTrie,
-                CodePointMap.RangeOption.FIXED_LEAD_SURROGATES, checkRangesFixedLeadSurr3);
-        testGetRangesFixedSurr("fixedAllSurr3", mutableTrie,
-                CodePointMap.RangeOption.FIXED_ALL_SURROGATES, checkRangesFixedAllSurr3);
+        testGetRangesFixedSurr(
+                "fixedLeadSurr3",
+                mutableTrie,
+                CodePointMap.RangeOption.FIXED_LEAD_SURROGATES,
+                checkRangesFixedLeadSurr3);
+        testGetRangesFixedSurr(
+                "fixedAllSurr3",
+                mutableTrie,
+                CodePointMap.RangeOption.FIXED_ALL_SURROGATES,
+                checkRangesFixedAllSurr3);
         // Bridge the gap after the trail surrogates.
         mutableTrie.set(0xe000, 5);
-        testGetRangesFixedSurr("fixedSurr4", mutableTrie,
-                CodePointMap.RangeOption.FIXED_ALL_SURROGATES, checkRangesFixedSurr4);
+        testGetRangesFixedSurr(
+                "fixedSurr4",
+                mutableTrie,
+                CodePointMap.RangeOption.FIXED_ALL_SURROGATES,
+                checkRangesFixedSurr4);
     }
 
     @Test
@@ -1053,8 +1134,8 @@ public final class CodePointTrieTest extends CoreTestFmwk {
         }
         checkRanges[0x100] = new CheckRange(0x110000, 0);
 
-        mutableTrie = testTrieSerializeAllValueWidth(
-                "short-all-same", mutableTrie, false, checkRanges);
+        mutableTrie =
+                testTrieSerializeAllValueWidth("short-all-same", mutableTrie, false, checkRanges);
     }
 
     private void testIntProperty(String testName, String baseSetPattern, int property) {
@@ -1105,7 +1186,10 @@ public final class CodePointTrieTest extends CoreTestFmwk {
         if (limit < 0x110000) {
             checkRanges.add(new CheckRange(0x110000, 0));
         }
-        testTrieSerializeAllValueWidth(testName, mutableTrie, false,
+        testTrieSerializeAllValueWidth(
+                testName,
+                mutableTrie,
+                false,
                 checkRanges.toArray(new CheckRange[checkRanges.size()]));
     }
 

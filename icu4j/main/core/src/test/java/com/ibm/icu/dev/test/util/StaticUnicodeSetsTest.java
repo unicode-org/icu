@@ -5,9 +5,8 @@ package com.ibm.icu.dev.test.util;
 import static com.ibm.icu.impl.StaticUnicodeSets.get;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.Test;
-
 import com.ibm.icu.impl.StaticUnicodeSets.Key;
+import org.junit.Test;
 
 /**
  * NOTE: The test testSetCoverage can be found in ExhaustiveNumberTest.java

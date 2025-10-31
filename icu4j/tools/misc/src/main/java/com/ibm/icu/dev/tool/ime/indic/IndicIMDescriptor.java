@@ -20,29 +20,30 @@ public abstract class IndicIMDescriptor implements InputMethodDescriptor {
     private final String name;
 
     protected IndicIMDescriptor(Locale locale, String name) {
-    this.locale = locale;
-    this.name = name;
+        this.locale = locale;
+        this.name = name;
     }
 
     protected abstract IndicInputMethodImpl getImpl();
 
     public Locale[] getAvailableLocales() {
-        return new Locale[] { locale };
+        return new Locale[] {locale};
     }
 
     public boolean hasDynamicLocaleList() {
         return false;
     }
 
-    public synchronized String getInputMethodDisplayName(Locale inputLocale, Locale displayLanguage) {
-    try {
-        ResourceBundle rb = ResourceBundle.getBundle("com.ibm.icu.dev.tool.ime.indic.DisplayNames", 
-                             displayLanguage);
-        return rb.getString("DisplayName." + name);
-    }
-    catch (Throwable t) {
-        return name;
-    }
+    public synchronized String getInputMethodDisplayName(
+            Locale inputLocale, Locale displayLanguage) {
+        try {
+            ResourceBundle rb =
+                    ResourceBundle.getBundle(
+                            "com.ibm.icu.dev.tool.ime.indic.DisplayNames", displayLanguage);
+            return rb.getString("DisplayName." + name);
+        } catch (Throwable t) {
+            return name;
+        }
     }
 
     public Image getInputMethodIcon(Locale inputLocale) {
@@ -54,6 +55,6 @@ public abstract class IndicIMDescriptor implements InputMethodDescriptor {
     }
 
     public String toString() {
-    return name;
+        return name;
     }
 }

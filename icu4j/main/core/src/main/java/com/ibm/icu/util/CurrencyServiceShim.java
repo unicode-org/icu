@@ -1,25 +1,21 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /**
- *******************************************************************************
- * Copyright (C) 2001-2011, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
- *******************************************************************************
+ * ****************************************************************************** Copyright (C)
+ * 2001-2011, International Business Machines Corporation and * others. All Rights Reserved. *
+ * ******************************************************************************
  */
-
 package com.ibm.icu.util;
-
-import java.util.Locale;
 
 import com.ibm.icu.impl.ICULocaleService;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.ICUService;
 import com.ibm.icu.impl.ICUService.Factory;
+import java.util.Locale;
 
 /**
- * This is a package-access implementation of registration for
- * currency.  The shim is instantiated by reflection in Currency, all
- * dependencies on ICUService are located in this file. This structure
+ * This is a package-access implementation of registration for currency. The shim is instantiated by
+ * reflection in Currency, all dependencies on ICUService are located in this file. This structure
  * is to allow ICU4J to be built without service registration support.
  */
 final class CurrencyServiceShim extends Currency.ServiceShim {
@@ -47,7 +43,7 @@ final class CurrencyServiceShim extends Currency.ServiceShim {
         if (service.isDefault()) {
             return Currency.createCurrency(loc);
         }
-        Currency curr = (Currency)service.get(loc);
+        Currency curr = (Currency) service.get(loc);
         return curr;
     }
 
@@ -58,7 +54,7 @@ final class CurrencyServiceShim extends Currency.ServiceShim {
 
     @Override
     boolean unregister(Object registryKey) {
-        return service.unregisterFactory((Factory)registryKey);
+        return service.unregisterFactory((Factory) registryKey);
     }
 
     private static class CFService extends ICULocaleService {
@@ -76,5 +72,6 @@ final class CurrencyServiceShim extends Currency.ServiceShim {
             markDefault();
         }
     }
+
     static final ICULocaleService service = new CFService();
 }

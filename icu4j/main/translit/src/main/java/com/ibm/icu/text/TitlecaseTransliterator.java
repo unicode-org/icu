@@ -12,27 +12,28 @@ import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.util.ULocale;
 
 /**
- * A transliterator that converts all letters (as defined by
- * <code>UCharacter.isLetter()</code>) to lower case, except for those
- * letters preceded by non-letters.  The latter are converted to title
+ * A transliterator that converts all letters (as defined by <code>UCharacter.isLetter()</code>) to
+ * lower case, except for those letters preceded by non-letters. The latter are converted to title
  * case using <code>UCharacter.toTitleCase()</code>.
+ *
  * @author Alan Liu
  */
 class TitlecaseTransliterator extends Transliterator {
 
     static final String _ID = "Any-Title";
+
     // TODO: Add variants for tr/az, lt, default = default locale: ICU ticket #12720
 
-    /**
-     * System registration hook.
-     */
+    /** System registration hook. */
     static void register() {
-        Transliterator.registerFactory(_ID, new Transliterator.Factory() {
-            @Override
-            public Transliterator getInstance(String ID) {
-                return new TitlecaseTransliterator(ULocale.US);
-            }
-        });
+        Transliterator.registerFactory(
+                _ID,
+                new Transliterator.Factory() {
+                    @Override
+                    public Transliterator getInstance(String ID) {
+                        return new TitlecaseTransliterator(ULocale.US);
+                    }
+                });
 
         registerSpecialInverse("Title", "Lower", false);
     }
@@ -42,24 +43,19 @@ class TitlecaseTransliterator extends Transliterator {
     private final UCaseProps csp;
     private int caseLocale;
 
-   /**
-     * Constructs a transliterator.
-     */
+    /** Constructs a transliterator. */
     public TitlecaseTransliterator(ULocale loc) {
         super(_ID, null);
         locale = loc;
         // Need to look back 2 characters in the case of "can't"
         setMaximumContextLength(2);
-        csp=UCaseProps.INSTANCE;
+        csp = UCaseProps.INSTANCE;
         caseLocale = UCaseProps.getCaseLocale(locale);
     }
 
-    /**
-     * Implements {@link Transliterator#handleTransliterate}.
-     */
+    /** Implements {@link Transliterator#handleTransliterate}. */
     @Override
-    protected void handleTransliterate(Replaceable text,
-                                       Position offsets, boolean isIncremental) {
+    protected void handleTransliterate(Replaceable text, Position offsets, boolean isIncremental) {
         // TODO reimplement, see ustrcase.c
         // using a real word break iterator
         //   instead of just looking for a transition between cased and uncased characters
@@ -86,13 +82,15 @@ class TitlecaseTransliterator extends Transliterator {
         // prior context is anything else (including empty) then start
         // in toTitle mode.
         int c, start;
-        for (start = offsets.start - 1; start >= offsets.contextStart; start -= UTF16.getCharCount(c)) {
+        for (start = offsets.start - 1;
+                start >= offsets.contextStart;
+                start -= UTF16.getCharCount(c)) {
             c = text.char32At(start);
-            type=csp.getTypeOrIgnorable(c);
-            if(type>0) { // cased
-                doTitle=false;
+            type = csp.getTypeOrIgnorable(c);
+            if (type > 0) { // cased
+                doTitle = false;
                 break;
-            } else if(type==0) { // uncased but not ignorable
+            } else if (type == 0) { // uncased but not ignorable
                 break;
             }
             // else (type<0) case-ignorable: continue
@@ -111,37 +109,37 @@ class TitlecaseTransliterator extends Transliterator {
         // If there is a case change, modify corresponding position in replaceable
         int delta;
 
-        while((c=iter.nextCaseMapCP())>=0) {
-            type=csp.getTypeOrIgnorable(c);
-            if(type>=0) { // not case-ignorable
-                if(doTitle) {
-                    c=csp.toFullTitle(c, iter, result, caseLocale);
+        while ((c = iter.nextCaseMapCP()) >= 0) {
+            type = csp.getTypeOrIgnorable(c);
+            if (type >= 0) { // not case-ignorable
+                if (doTitle) {
+                    c = csp.toFullTitle(c, iter, result, caseLocale);
                 } else {
-                    c=csp.toFullLower(c, iter, result, caseLocale);
+                    c = csp.toFullLower(c, iter, result, caseLocale);
                 }
-                doTitle = type==0; // doTitle=isUncased
+                doTitle = type == 0; // doTitle=isUncased
 
-                if(iter.didReachLimit() && isIncremental) {
+                if (iter.didReachLimit() && isIncremental) {
                     // the case mapping function tried to look beyond the context limit
                     // wait for more input
-                    offsets.start=iter.getCaseMapCPStart();
+                    offsets.start = iter.getCaseMapCPStart();
                     return;
                 }
 
                 /* decode the result */
-                if(c<0) {
+                if (c < 0) {
                     /* c mapped to itself, no change */
                     continue;
-                } else if(c<=UCaseProps.MAX_STRING_LENGTH) {
+                } else if (c <= UCaseProps.MAX_STRING_LENGTH) {
                     /* replace by the mapping string */
-                    delta=iter.replace(result.toString());
+                    delta = iter.replace(result.toString());
                     result.setLength(0);
                 } else {
                     /* replace by single-code point mapping */
-                    delta=iter.replace(UTF16.valueOf(c));
+                    delta = iter.replace(UTF16.valueOf(c));
                 }
 
-                if(delta!=0) {
+                if (delta != 0) {
                     offsets.limit += delta;
                     offsets.contextLimit += delta;
                 }
@@ -157,15 +155,18 @@ class TitlecaseTransliterator extends Transliterator {
      * @see com.ibm.icu.text.Transliterator#addSourceTargetSet(com.ibm.icu.text.UnicodeSet, com.ibm.icu.text.UnicodeSet, com.ibm.icu.text.UnicodeSet)
      */
     @Override
-    public void addSourceTargetSet(UnicodeSet inputFilter, UnicodeSet sourceSet, UnicodeSet targetSet) {
+    public void addSourceTargetSet(
+            UnicodeSet inputFilter, UnicodeSet sourceSet, UnicodeSet targetSet) {
         synchronized (this) {
             if (sourceTargetUtility == null) {
-                sourceTargetUtility = new SourceTargetUtility(new Transform<String,String>() {
-                    @Override
-                    public String transform(String source) {
-                        return UCharacter.toTitleCase(locale, source, null);
-                    }
-                });
+                sourceTargetUtility =
+                        new SourceTargetUtility(
+                                new Transform<String, String>() {
+                                    @Override
+                                    public String transform(String source) {
+                                        return UCharacter.toTitleCase(locale, source, null);
+                                    }
+                                });
             }
         }
         sourceTargetUtility.addSourceTargetSet(this, inputFilter, sourceSet, targetSet);

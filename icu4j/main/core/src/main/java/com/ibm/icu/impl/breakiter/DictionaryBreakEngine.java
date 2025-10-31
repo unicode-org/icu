@@ -8,10 +8,9 @@
  */
 package com.ibm.icu.impl.breakiter;
 
-import java.text.CharacterIterator;
-
 import com.ibm.icu.impl.CharacterIteration;
 import com.ibm.icu.text.UnicodeSet;
+import java.text.CharacterIterator;
 
 public abstract class DictionaryBreakEngine implements LanguageBreakEngine {
 
@@ -21,19 +20,20 @@ public abstract class DictionaryBreakEngine implements LanguageBreakEngine {
     static class PossibleWord {
         // List size, limited by the maximum number of words in the dictionary
         // that form a nested sequence.
-        private final static int POSSIBLE_WORD_LIST_MAX = 20;
-        //list of word candidate lengths, in increasing length order
+        private static final int POSSIBLE_WORD_LIST_MAX = 20;
+        // list of word candidate lengths, in increasing length order
         private int lengths[];
-        private int count[];    // Count of candidates
-        private int prefix;     // The longest match with a dictionary word
-        private int offset;     // Offset in the text of these candidates
-        private int mark;       // The preferred candidate's offset
-        private int current;    // The candidate we're currently looking at
+        private int count[]; // Count of candidates
+        private int prefix; // The longest match with a dictionary word
+        private int offset; // Offset in the text of these candidates
+        private int mark; // The preferred candidate's offset
+        private int current; // The candidate we're currently looking at
 
         // Default constructor
         public PossibleWord() {
             lengths = new int[POSSIBLE_WORD_LIST_MAX];
-            count = new int[1]; // count needs to be an array of 1 so that it can be pass as reference
+            count = new int[1]; // count needs to be an array of 1 so that it can be pass as
+            // reference
             offset = -1;
         }
 
@@ -49,7 +49,7 @@ public abstract class DictionaryBreakEngine implements LanguageBreakEngine {
                 }
             }
             if (count[0] > 0) {
-                fIter.setIndex(start + lengths[count[0]-1]);
+                fIter.setIndex(start + lengths[count[0] - 1]);
             }
             current = count[0] - 1;
             mark = current;
@@ -84,19 +84,19 @@ public abstract class DictionaryBreakEngine implements LanguageBreakEngine {
     }
 
     /**
-     *  A deque-like structure holding raw ints.
-     *  Partial, limited implementation, only what is needed by the dictionary implementation.
-     *  For internal use only.
+     * A deque-like structure holding raw ints. Partial, limited implementation, only what is needed
+     * by the dictionary implementation. For internal use only.
+     *
      * @internal
      */
     public static class DequeI implements Cloneable {
         private int[] data = new int[50];
-        private int lastIdx = 4;   // or base of stack. Index of element.
-        private int firstIdx = 4;  // or Top of Stack. Index of element + 1.
+        private int lastIdx = 4; // or base of stack. Index of element.
+        private int firstIdx = 4; // or Top of Stack. Index of element + 1.
 
         @Override
         public DequeI clone() throws CloneNotSupportedException {
-            DequeI result = (DequeI)super.clone();
+            DequeI result = (DequeI) super.clone();
             result.data = data.clone();
             return result;
         }
@@ -111,7 +111,7 @@ public abstract class DictionaryBreakEngine implements LanguageBreakEngine {
 
         private void grow() {
             int[] newData = new int[data.length * 2];
-            System.arraycopy(data,  0,  newData,  0, data.length);
+            System.arraycopy(data, 0, newData, 0, data.length);
             data = newData;
         }
 
@@ -150,7 +150,7 @@ public abstract class DictionaryBreakEngine implements LanguageBreakEngine {
         }
 
         boolean contains(int v) {
-            for (int i=lastIdx; i< firstIdx; i++) {
+            for (int i = lastIdx; i < firstIdx; i++) {
                 if (data[i] == v) {
                     return true;
                 }
@@ -170,25 +170,26 @@ public abstract class DictionaryBreakEngine implements LanguageBreakEngine {
 
     UnicodeSet fSet = new UnicodeSet();
 
-    /**
-     *  Constructor
-     */
-    public DictionaryBreakEngine() {
-    }
+    /** Constructor */
+    public DictionaryBreakEngine() {}
 
     @Override
     public boolean handles(int c) {
-        return fSet.contains(c);        // we recognize the character
+        return fSet.contains(c); // we recognize the character
     }
 
     @Override
-    public int findBreaks(CharacterIterator text, int startPos, int endPos,
-            DequeI foundBreaks, boolean isPhraseBreaking) {
+    public int findBreaks(
+            CharacterIterator text,
+            int startPos,
+            int endPos,
+            DequeI foundBreaks,
+            boolean isPhraseBreaking) {
         int result = 0;
 
-         // Find the span of characters included in the set.
-         //   The span to break begins at the current position int the text, and
-         //   extends towards the start or end of the text, depending on 'reverse'.
+        // Find the span of characters included in the set.
+        //   The span to break begins at the current position int the text, and
+        //   extends towards the start or end of the text, depending on 'reverse'.
 
         int start = text.getIndex();
         int current;
@@ -214,18 +215,19 @@ public abstract class DictionaryBreakEngine implements LanguageBreakEngine {
     }
 
     /**
-     * <p>Divide up a range of known dictionary characters handled by this break engine.</p>
+     * Divide up a range of known dictionary characters handled by this break engine.
      *
      * @param text A UText representing the text
      * @param rangeStart The start of the range of dictionary characters
      * @param rangeEnd The end of the range of dictionary characters
-     * @param foundBreaks Output of break positions. Positions are pushed.
-     *                    Pre-existing contents of the output stack are unaltered.
+     * @param foundBreaks Output of break positions. Positions are pushed. Pre-existing contents of
+     *     the output stack are unaltered.
      * @return The number of breaks found
      */
-     abstract int divideUpDictionaryRange(CharacterIterator text,
-                                          int               rangeStart,
-                                          int               rangeEnd,
-                                          DequeI            foundBreaks,
-                                          boolean isPhraseBreaking);
+    abstract int divideUpDictionaryRange(
+            CharacterIterator text,
+            int rangeStart,
+            int rangeEnd,
+            DequeI foundBreaks,
+            boolean isPhraseBreaking);
 }

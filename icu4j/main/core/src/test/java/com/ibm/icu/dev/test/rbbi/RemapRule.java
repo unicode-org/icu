@@ -9,10 +9,9 @@ import java.util.regex.Pattern;
 /**
  * A segmentation rule expressed as in UAXes #14 and #29.
  *
- * The application of a remap rule is a normal regex replacement on the remapped
- * string.  This replacement may use capturing groups.  Any positions in the
- * original string that correspond to positions within the replaced text are
- * resolved to NO_BREAK by this rule.
+ * <p>The application of a remap rule is a normal regex replacement on the remapped string. This
+ * replacement may use capturing groups. Any positions in the original string that correspond to
+ * positions within the replaced text are resolved to NO_BREAK by this rule.
  */
 public class RemapRule extends SegmentationRule {
     RemapRule(String name, String pattern, String replacement) {
@@ -53,17 +52,17 @@ public class RemapRule extends SegmentationRule {
         // the remapped string.
         final Matcher matcher = pattern_.matcher(remapped);
         while (matcher.find()) {
-            for (;; ++i) {
+            for (; ; ++i) {
                 if (resolved[i].indexInRemapped == null) {
                     continue;
                 }
-                if (resolved[i].indexInRemapped != null &&
-                        resolved[i].indexInRemapped > matcher.start()) {
+                if (resolved[i].indexInRemapped != null
+                        && resolved[i].indexInRemapped > matcher.start()) {
                     break;
                 }
                 resolved[i].indexInRemapped += offset;
             }
-            for (;; ++i) {
+            for (; ; ++i) {
                 if (resolved[i].indexInRemapped == null) {
                     continue;
                 }
@@ -82,16 +81,16 @@ public class RemapRule extends SegmentationRule {
                 // Where for the application of rule 2, the match ends at
                 // position 2 in remapped, which does not correspond to a
                 // position in the original string.
-                if (resolved[i].indexInRemapped != null &&
-                        resolved[i].indexInRemapped >= matcher.end()) {
+                if (resolved[i].indexInRemapped != null
+                        && resolved[i].indexInRemapped >= matcher.end()) {
                     break;
                 }
-                if (resolved[i].appliedRule != null &&
-                        resolved[i].appliedRule.resolution() == Resolution.BREAK) {
+                if (resolved[i].appliedRule != null
+                        && resolved[i].appliedRule.resolution() == Resolution.BREAK) {
                     throw new IllegalArgumentException(
-                            "Replacement rule at remapped indices " +
-                                    matcher.start() +
-                                    " sqq. spans a break");
+                            "Replacement rule at remapped indices "
+                                    + matcher.start()
+                                    + " sqq. spans a break");
                 }
                 resolved[i].appliedRule = this;
                 resolved[i].indexInRemapped = null;
@@ -108,20 +107,22 @@ public class RemapRule extends SegmentationRule {
             // same behaviour in line breaking (lb=SG and lb=XX are both treated
             // as lb=AL).
             Integer trailingLead = null;
-            if (result.length() > 0 && Character.isHighSurrogate(result.charAt(result.length() - 1))) {
+            if (result.length() > 0
+                    && Character.isHighSurrogate(result.charAt(result.length() - 1))) {
                 trailingLead = result.length() - 1;
             }
 
             matcher.appendReplacement(result, replacement_);
 
-            if (trailingLead != null && trailingLead + 1 < result.length() &&
-                    Character.isLowSurrogate(result.charAt(trailingLead + 1))) {
+            if (trailingLead != null
+                    && trailingLead + 1 < result.length()
+                    && Character.isLowSurrogate(result.charAt(trailingLead + 1))) {
                 result.setCharAt(trailingLead, '\uFFFF');
             }
 
-            if (matcher.start() + offset > 0 &&
-                    Character.isHighSurrogate(result.charAt(matcher.start() + offset - 1)) &&
-                    Character.isLowSurrogate(result.charAt(matcher.start() + offset))) {
+            if (matcher.start() + offset > 0
+                    && Character.isHighSurrogate(result.charAt(matcher.start() + offset - 1))
+                    && Character.isLowSurrogate(result.charAt(matcher.start() + offset))) {
                 result.setCharAt(matcher.start() + offset, '\uFFFF');
             }
             offset = result.length() - resolved[i].indexInRemapped;
@@ -138,8 +139,9 @@ public class RemapRule extends SegmentationRule {
             trailingLead = result.length() - 1;
         }
         matcher.appendTail(result);
-        if (trailingLead != null && trailingLead + 1 < result.length() &&
-                Character.isLowSurrogate(result.charAt(trailingLead + 1))) {
+        if (trailingLead != null
+                && trailingLead + 1 < result.length()
+                && Character.isLowSurrogate(result.charAt(trailingLead + 1))) {
             result.setCharAt(trailingLead, '\uFFFF');
         }
 
@@ -149,8 +151,11 @@ public class RemapRule extends SegmentationRule {
                 indices.append(r.indexInRemapped == null ? "null" : r.indexInRemapped.toString());
                 indices.append(",");
             }
-            throw new IllegalArgumentException("Inconsistent indexInRemapped " + indices + " for new remapped string " +
-                    result);
+            throw new IllegalArgumentException(
+                    "Inconsistent indexInRemapped "
+                            + indices
+                            + " for new remapped string "
+                            + result);
         }
         remapped.setLength(0);
         remapped.append(result);

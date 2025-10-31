@@ -1,20 +1,19 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /*
-******************************************************************************
-* Copyright (C) 2007-2010, International Business Machines Corporation and   *
-* others. All Rights Reserved.                                               *
-******************************************************************************
-*/
+ ******************************************************************************
+ * Copyright (C) 2007-2010, International Business Machines Corporation and   *
+ * others. All Rights Reserved.                                               *
+ ******************************************************************************
+ */
 
 package com.ibm.icu.impl.duration.impl;
 
+import com.ibm.icu.lang.UCharacter;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.ibm.icu.lang.UCharacter;
 
 public class XMLRecordReader implements RecordReader {
     private Reader r;
@@ -124,7 +123,8 @@ public class XMLRecordReader implements RecordReader {
         String[] sa = stringArray(name);
         if (sa != null) {
             byte[] result = new byte[sa.length];
-            loop: for (int i = 0; i < sa.length; ++i) {
+            loop:
+            for (int i = 0; i < sa.length; ++i) {
                 String s = sa[i];
                 for (int j = 0; j < names.length; ++j) {
                     if (names[j].equals(s)) {
@@ -231,8 +231,7 @@ public class XMLRecordReader implements RecordReader {
                         int num = Integer.parseInt(numBuf.toString(), radix);
                         c = (char) num;
                     } catch (NumberFormatException ex) {
-                        System.err.println("numbuf: " + numBuf.toString()
-                                + " radix: " + radix);
+                        System.err.println("numbuf: " + numBuf.toString() + " radix: " + radix);
                         throw ex;
                     }
                 } else {
@@ -253,8 +252,7 @@ public class XMLRecordReader implements RecordReader {
                     } else if (charName.equals("amp")) {
                         c = '&';
                     } else {
-                        System.err.println("unrecognized character entity: '"
-                                + charName + "'");
+                        System.err.println("unrecognized character entity: '" + charName + "'");
                         continue;
                     }
                 }
@@ -271,7 +269,7 @@ public class XMLRecordReader implements RecordReader {
             }
             sb.append((char) c);
         }
-        //System.err.println("read data: '" + sb.toString() + "'");
+        // System.err.println("read data: '" + sb.toString() + "'");
         return sb.toString();
     }
 
@@ -286,8 +284,7 @@ public class XMLRecordReader implements RecordReader {
                 break;
             }
             if (!UCharacter.isWhitespace(c)) {
-                System.err.println("Unexpected non-whitespace character "
-                        + Integer.toHexString(c));
+                System.err.println("Unexpected non-whitespace character " + Integer.toHexString(c));
                 break;
             }
         }

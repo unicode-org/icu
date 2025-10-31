@@ -12,8 +12,8 @@ import java.util.Comparator;
 import java.util.Iterator;
 
 /**
- * TODO: Move to com.ibm.icu.dev.somewhere.
- * 2015-sep-03: Not used in ICU but used in CLDR and in UnicodeTools.
+ * TODO: Move to com.ibm.icu.dev.somewhere. 2015-sep-03: Not used in ICU but used in CLDR and in
+ * UnicodeTools.
  */
 public class IterableComparator<T> implements Comparator<Iterable<T>> {
     private final Comparator<T> comparator;
@@ -51,7 +51,10 @@ public class IterableComparator<T> implements Comparator<Iterable<T>> {
             T aItem = ai.next();
             T bItem = bi.next();
             @SuppressWarnings("unchecked")
-            int result = comparator != null ? comparator.compare(aItem, bItem) : ((Comparable<T>)aItem).compareTo(bItem);
+            int result =
+                    comparator != null
+                            ? comparator.compare(aItem, bItem)
+                            : ((Comparable<T>) aItem).compareTo(bItem);
             if (result != 0) {
                 return result;
             }

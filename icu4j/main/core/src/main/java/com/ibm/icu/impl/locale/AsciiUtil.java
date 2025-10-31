@@ -38,7 +38,6 @@ public final class AsciiUtil {
         return AsciiUtil.toLowerString(s1).compareTo(AsciiUtil.toLowerString(s2));
     }
 
-
     public static char toUpper(char c) {
         if (c >= 'a' && c <= 'z') {
             c -= 0x20;
@@ -176,7 +175,7 @@ public final class AsciiUtil {
                 return true;
             }
             if (o instanceof CaseInsensitiveKey) {
-                return AsciiUtil.caseIgnoreMatch(_key, ((CaseInsensitiveKey)o)._key);
+                return AsciiUtil.caseIgnoreMatch(_key, ((CaseInsensitiveKey) o)._key);
             }
             return false;
         }

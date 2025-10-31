@@ -3,6 +3,13 @@
 
 package com.ibm.icu.dev.test.rbbi;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
+import com.ibm.icu.impl.UCharacterName;
+import com.ibm.icu.impl.UCharacterNameChoice;
+import com.ibm.icu.text.BreakIterator;
+import com.ibm.icu.text.RuleBasedBreakIterator;
+import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.util.ULocale;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -14,59 +21,50 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.CoreTestFmwk;
-import com.ibm.icu.impl.UCharacterName;
-import com.ibm.icu.impl.UCharacterNameChoice;
-import com.ibm.icu.text.BreakIterator;
-import com.ibm.icu.text.RuleBasedBreakIterator;
-import com.ibm.icu.text.UnicodeSet;
-import com.ibm.icu.util.ULocale;
-
 /**
- * RBBI Monkey Test. Ported from ICU4C test/intltest/rbbimonkeytest.cpp.
- * This is the newer, data driven monkey test. It is completely separate from the
- * older class RBBITestMonkey.
+ * RBBI Monkey Test. Ported from ICU4C test/intltest/rbbimonkeytest.cpp. This is the newer, data
+ * driven monkey test. It is completely separate from the older class RBBITestMonkey.
  */
-
 @RunWith(JUnit4.class)
 public class RBBIMonkeyTest extends CoreTestFmwk {
 
-
     //  class CharClass    Represents a single character class from the source break rules.
-    //                     Inherits from UObject because instances are adopted by UHashtable, which ultimately
+    //                     Inherits from UObject because instances are adopted by UHashtable, which
+    // ultimately
     //                     deletes them using hash's object deleter function.
 
-    static class CharClass  {
-        String         fName;
-        String         fOriginalDef;    // set definition as it appeared in user supplied rules.
-        String         fExpandedDef;    // set definition with any embedded named sets replaced by their defs, recursively.
-        UnicodeSet     fSet;
+    static class CharClass {
+        String fName;
+        String fOriginalDef; // set definition as it appeared in user supplied rules.
+        String fExpandedDef; // set definition with any embedded named sets replaced by their defs,
+        // recursively.
+        UnicodeSet fSet;
+
         CharClass(String name, String originalDef, String expandedDef, UnicodeSet set) {
             fName = name;
             fOriginalDef = originalDef;
             fExpandedDef = expandedDef;
             fSet = set;
-        };
+        }
+        ;
     }
-
 
     // class BreakRule    Struct-like class represents a single rule from a set of break rules.
     //                    Each rule has the set definitions expanded, and
     //                    is compiled to a regular expression.
 
     static class BreakRule {
-        String    fName;                      // Name of the rule.
-        String    fRule;                      // Rule expression, excluding the name, as written in user source.
-        String    fExpandedRule;              // Rule expression after expanding the set definitions.
-        Matcher   fRuleMatcher;               // Regular expression that matches the rule.
-        boolean   fInitialMatchOnly = false;  // True if rule begins with '^', meaning no chaining.
-    };
-
+        String fName; // Name of the rule.
+        String fRule; // Rule expression, excluding the name, as written in user source.
+        String fExpandedRule; // Rule expression after expanding the set definitions.
+        Matcher fRuleMatcher; // Regular expression that matches the rule.
+        boolean fInitialMatchOnly = false; // True if rule begins with '^', meaning no chaining.
+    }
+    ;
 
     // class BreakRules    represents a complete set of break rules, possibly tailored,
     //                     compiled from testdata break rules.
@@ -82,54 +80,74 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
 
             // Match an alpha-numeric identifier in a rule. Will be a set name.
             // Use negative look-behind to exclude non-identifiers, mostly property names or values.
-            fSetRefsMatcher = Pattern.compile(
-                    "(?<!\\{[ \\t]{0,4})" +
-                    "(?<!=[ \\t]{0,4})" +
-                    "(?<!\\[:[ \\t]{0,4})" +
-                    "(?<!\\\\)" +
-                    "(?<![A-Za-z0-9_])" +
-                    "([A-Za-z_][A-Za-z0-9_]*)").     // The char class name
-                    matcher("");
+            fSetRefsMatcher =
+                    Pattern.compile(
+                                    "(?<!\\{[ \\t]{0,4})"
+                                            + "(?<!=[ \\t]{0,4})"
+                                            + "(?<!\\[:[ \\t]{0,4})"
+                                            + "(?<!\\\\)"
+                                            + "(?<![A-Za-z0-9_])"
+                                            + "([A-Za-z_][A-Za-z0-9_]*)")
+                            . // The char class name
+                            matcher("");
 
-            // Match comments and blank lines. Matches will be replaced with "", stripping the comments from the rules.
-            fCommentsMatcher = Pattern.compile("" +
-                    "(^|(?<=;))"   +                // Start either at start of line, or just after a ';' (look-behind for ';')
-                    "[ \\t]*+"     +                //   Match white space.
-                    "(#.*)?+"      +                //   Optional # plus whatever follows
-                    "$").                           //   new-line at end of line.
-                    matcher("");
+            // Match comments and blank lines. Matches will be replaced with "", stripping the
+            // comments from the rules.
+            fCommentsMatcher =
+                    Pattern.compile(
+                                    ""
+                                            + "(^|(?<=;))"
+                                            + // Start either at start of line, or just after a ';'
+                                            // (look-behind for ';')
+                                            "[ \\t]*+"
+                                            + //   Match white space.
+                                            "(#.*)?+"
+                                            + //   Optional # plus whatever follows
+                                            "$")
+                            . //   new-line at end of line.
+                            matcher("");
 
             // Match (initial parse) of a character class definition line.
-            fClassDefMatcher = Pattern.compile("" +
-                    "[ \\t]*"           +                    // leading white space
-                    "([A-Za-z_][A-Za-z0-9_]*)" +             // The char class name
-                    "[ \\t]*=[ \\t]*"   +                    //   =
-                    "(.*?)"  +                               // The char class UnicodeSet expression
-                    "[ \\t]*;$").                            // ; <end of line>
-                    matcher("");
+            fClassDefMatcher =
+                    Pattern.compile(
+                                    ""
+                                            + "[ \\t]*"
+                                            + // leading white space
+                                            "([A-Za-z_][A-Za-z0-9_]*)"
+                                            + // The char class name
+                                            "[ \\t]*=[ \\t]*"
+                                            + //   =
+                                            "(.*?)"
+                                            + // The char class UnicodeSet expression
+                                            "[ \\t]*;$")
+                            . // ; <end of line>
+                            matcher("");
 
             // Match (initial parse) of a break rule line.
-            fRuleDefMatcher = Pattern.compile("" +
-                    "[ \\t]*"           +                     // leading white space
-                    "([A-Za-z_][A-Za-z0-9_.]*)" +             // The rule name
-                    "[ \\t]*:[ \\t]*"   +                     //   :
-                    "(.*?)"   +                               // The rule definition
-                    "[ \\t]*;$").                             // ; <end of line>
-                    matcher("");
+            fRuleDefMatcher =
+                    Pattern.compile(
+                                    ""
+                                            + "[ \\t]*"
+                                            + // leading white space
+                                            "([A-Za-z_][A-Za-z0-9_.]*)"
+                                            + // The rule name
+                                            "[ \\t]*:[ \\t]*"
+                                            + //   :
+                                            "(.*?)"
+                                            + // The rule definition
+                                            "[ \\t]*;$")
+                            . // ; <end of line>
+                            matcher("");
 
             // Match a property expression, either [:xxx:] or \p{...}
-            fPropertyMatcher = Pattern.compile("" +
-                    "\\[:.*?:]|\\\\(?:p|P)\\{.*?\\}").
-                    matcher("");
-
-
+            fPropertyMatcher = Pattern.compile("" + "\\[:.*?:]|\\\\(?:p|P)\\{.*?\\}").matcher("");
         }
 
         /**
-         * Create the expanded definition for this char class,
-         * replacing any set references with the corresponding definition.
+         * Create the expanded definition for this char class, replacing any set references with the
+         * corresponding definition.
          */
-        CharClass  addCharClass(String name, String definition) {
+        CharClass addCharClass(String name, String definition) {
             StringBuffer expandedDef = new StringBuffer();
             fSetRefsMatcher.reset(definition);
             while (fSetRefsMatcher.find()) {
@@ -155,12 +173,15 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
             try {
                 s = new UnicodeSet(expandedDefString, UnicodeSet.IGNORE_SPACE);
             } catch (java.lang.IllegalArgumentException e) {
-                System.err.printf("%s: error %s creating UnicodeSet %s", fMonkeyImpl.fRuleFileName, e.toString(), name);
+                System.err.printf(
+                        "%s: error %s creating UnicodeSet %s",
+                        fMonkeyImpl.fRuleFileName, e.toString(), name);
                 throw e;
             }
 
             // Get an expanded equivalent pattern from the UnicodeSet.
-            // This removes set difference operators, which would fail if passed through to Java regex.
+            // This removes set difference operators, which would fail if passed through to Java
+            // regex.
 
             StringBuffer expandedPattern = new StringBuffer();
             s._generatePattern(expandedPattern, true);
@@ -181,12 +202,11 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
                 // throw new IllegalArgumentException(msg);
             }
             return cclass;
+        }
+        ;
 
-        };
-
-
-        void addRule(String  name, String  definition) {
-            BreakRule  thisRule = new BreakRule();
+        void addRule(String name, String definition) {
+            BreakRule thisRule = new BreakRule();
             StringBuffer expandedDefsRule = new StringBuffer();
             thisRule.fName = name;
             thisRule.fRule = definition;
@@ -197,7 +217,8 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
                 String sname = fSetRefsMatcher.group(/*"ClassName"*/ 1);
                 CharClass nameClass = fCharClasses.get(sname);
                 if (nameClass == null) {
-                    System.err.printf("char class \"%s\" unrecognized in rule \"%s\"\n", sname, definition);
+                    System.err.printf(
+                            "char class \"%s\" unrecognized in rule \"%s\"\n", sname, definition);
                 }
                 String expansionForName = nameClass != null ? nameClass.fExpandedDef : sname;
                 fSetRefsMatcher.appendReplacement(expandedDefsRule, "");
@@ -236,19 +257,22 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
 
             StringBuffer ruleWithFlattenedSets = new StringBuffer();
             int idx = 0;
-            while (idx<expandedRule.length()) {
+            while (idx < expandedRule.length()) {
                 int setOpenPos = expandedRule.indexOf("[^", idx);
                 if (setOpenPos < 0) {
                     break;
                 }
                 if (setOpenPos > idx) {
-                    // Move anything from the source rule preceding the [^ into the processed rule, unchanged.
-                    ruleWithFlattenedSets.append(expandedRule.substring(idx,  setOpenPos));
+                    // Move anything from the source rule preceding the [^ into the processed rule,
+                    // unchanged.
+                    ruleWithFlattenedSets.append(expandedRule.substring(idx, setOpenPos));
                 }
                 int nestingLevel = 1;
                 boolean haveNesting = false;
                 int setClosePos;
-                for (setClosePos = setOpenPos + 2; nestingLevel > 0 && setClosePos<expandedRule.length(); ++setClosePos) {
+                for (setClosePos = setOpenPos + 2;
+                        nestingLevel > 0 && setClosePos < expandedRule.length();
+                        ++setClosePos) {
                     char c = expandedRule.charAt(setClosePos);
                     if (c == '\\') {
                         ++setClosePos;
@@ -263,7 +287,8 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
                     // Found one, a negated set that includes interior nested sets.
                     // Create an ICU UnicodeSet from the source pattern, and obtain an
                     // equivalent flattened pattern from that.
-                    UnicodeSet uset = new UnicodeSet(expandedRule.substring(setOpenPos, setClosePos), true);
+                    UnicodeSet uset =
+                            new UnicodeSet(expandedRule.substring(setOpenPos, setClosePos), true);
                     uset._generatePattern(ruleWithFlattenedSets, true);
                 } else {
                     // The [^ set definition did not include any nested sets.
@@ -286,18 +311,23 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
             thisRule.fExpandedRule = ruleWithFlattenedSets.toString();
 
             // Replace the divide sign (\u00f7) with a regular expression named capture.
-            // When running the rules, a match that includes this group means we found a break position.
+            // When running the rules, a match that includes this group means we found a break
+            // position.
 
             // thisRule.fExpandedRule = thisRule.fExpandedRule.replace("÷", "(?<BreakPosition>)");
             thisRule.fExpandedRule = thisRule.fExpandedRule.replace("÷", "()");
             if (thisRule.fExpandedRule.indexOf("÷") != -1) {
-                String msg = String.format("%s Rule %s contains multiple ÷ signs", fMonkeyImpl.fRuleFileName, name);
+                String msg =
+                        String.format(
+                                "%s Rule %s contains multiple ÷ signs",
+                                fMonkeyImpl.fRuleFileName, name);
                 System.err.println(msg);
                 throw new IllegalArgumentException(msg);
             }
 
             // UAX break rule set definitions can be empty, just [].
-            // Regular expression set expressions don't accept this. Substitute with [a&&[^a]], which
+            // Regular expression set expressions don't accept this. Substitute with [a&&[^a]],
+            // which
             // also matches nothing.
 
             thisRule.fExpandedRule = thisRule.fExpandedRule.replace("[]", "[a&&[^a]]");
@@ -306,10 +336,13 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
             //    \udddd     => \x{dddd}
             //    \U00hhhhhh => \x{hhhhhh}
 
-             thisRule.fExpandedRule = thisRule.fExpandedRule.replaceAll("\\\\u([0-9A-Fa-f]{4})", "\\\\x{$1}");
-             thisRule.fExpandedRule = thisRule.fExpandedRule.replaceAll("\\\\U00([0-9A-Fa-f]{6})", "\\\\x{$1}");
+            thisRule.fExpandedRule =
+                    thisRule.fExpandedRule.replaceAll("\\\\u([0-9A-Fa-f]{4})", "\\\\x{$1}");
+            thisRule.fExpandedRule =
+                    thisRule.fExpandedRule.replaceAll("\\\\U00([0-9A-Fa-f]{6})", "\\\\x{$1}");
 
-            // Escape any literal '#' in the rule expression. Without escaping, these introduce a comment.
+            // Escape any literal '#' in the rule expression. Without escaping, these introduce a
+            // comment.
             // UnicodeSet._generatePattern() inserts un-escaped "#"s
 
             thisRule.fExpandedRule = thisRule.fExpandedRule.replace("#", "\\#");
@@ -320,9 +353,12 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
             // Compile a regular expression for this rule.
 
             try {
-                thisRule.fRuleMatcher = Pattern.compile(thisRule.fExpandedRule, Pattern.COMMENTS | Pattern.DOTALL).matcher("");
+                thisRule.fRuleMatcher =
+                        Pattern.compile(thisRule.fExpandedRule, Pattern.COMMENTS | Pattern.DOTALL)
+                                .matcher("");
             } catch (PatternSyntaxException e) {
-                System.err.printf("%s: Error creating regular expression for rule %s. Expansion is \n\"%s\"",
+                System.err.printf(
+                        "%s: Error creating regular expression for rule %s. Expansion is \n\"%s\"",
                         fMonkeyImpl.fRuleFileName, name, thisRule.fExpandedRule);
                 throw e;
             }
@@ -330,14 +366,14 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
             // Put this new rule into the vector of all Rules.
 
             fBreakRules.add(thisRule);
-        };
+        }
+        ;
 
         @SuppressWarnings("unused")
         private static String hexToCodePoint(String hex) {
             int cp = Integer.parseInt(hex, 16);
             return new StringBuilder().appendCodePoint(cp).toString();
         }
-
 
         boolean setKeywordParameter(String keyword, String value) {
             if (keyword.equals("locale")) {
@@ -354,7 +390,10 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
                 } else if (value.equals("sentence")) {
                     fType = BreakIterator.KIND_SENTENCE;
                 } else {
-                    String msg = String.format("%s: Unrecognized break type %s", fMonkeyImpl.fRuleFileName, value);
+                    String msg =
+                            String.format(
+                                    "%s: Unrecognized break type %s",
+                                    fMonkeyImpl.fRuleFileName, value);
                     System.err.println(msg);
                     throw new IllegalArgumentException(msg);
                 }
@@ -363,10 +402,9 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
             return false;
         }
 
-
         RuleBasedBreakIterator createICUBreakIterator() {
             BreakIterator bi;
-            switch(fType) {
+            switch (fType) {
                 case BreakIterator.KIND_CHARACTER:
                     bi = (BreakIterator.getCharacterInstance(fLocale));
                     break;
@@ -380,19 +418,20 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
                     bi = (BreakIterator.getSentenceInstance(fLocale));
                     break;
                 default:
-                    String msg = String.format("%s: Bad break iterator type of %d", fMonkeyImpl.fRuleFileName, fType);
+                    String msg =
+                            String.format(
+                                    "%s: Bad break iterator type of %d",
+                                    fMonkeyImpl.fRuleFileName, fType);
                     System.err.println(msg);
                     throw new IllegalArgumentException(msg);
             }
-            return (RuleBasedBreakIterator)bi;
-
-        };
-
-
+            return (RuleBasedBreakIterator) bi;
+        }
+        ;
 
         void compileRules(String rules) {
             int lineNumber = 0;
-            for (String line: rules.split("\\r?\\n")) {
+            for (String line : rules.split("\\r?\\n")) {
                 ++lineNumber;
                 // Strip comment lines.
                 fCommentsMatcher.reset(line);
@@ -405,7 +444,7 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
                 fClassDefMatcher.reset(line);
                 if (fClassDefMatcher.matches()) {
                     String className = fClassDefMatcher.group(/*"ClassName"*/ 1);
-                    String classDef  = fClassDefMatcher.group(/*"ClassDef"*/ 2);
+                    String classDef = fClassDefMatcher.group(/*"ClassDef"*/ 2);
                     if (fMonkeyImpl.fDumpExpansions) {
                         System.out.printf("scanned class: %s = %s\n", className, classDef);
                     }
@@ -422,7 +461,7 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
                 fRuleDefMatcher.reset(line);
                 if (fRuleDefMatcher.matches()) {
                     String ruleName = fRuleDefMatcher.group(/*"RuleName"*/ 1);
-                    String ruleDef  = fRuleDefMatcher.group(/*"RuleDef"*/ 2);
+                    String ruleDef = fRuleDefMatcher.group(/*"RuleDef"*/ 2);
                     if (fMonkeyImpl.fDumpExpansions) {
                         System.out.printf("scanned rule: %s : %s\n", ruleName, ruleDef);
                     }
@@ -430,8 +469,10 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
                     continue;
                 }
 
-                String msg = String.format("Unrecognized line in rule file %s:%d \"%s\"",
-                        fMonkeyImpl.fRuleFileName, lineNumber, line);
+                String msg =
+                        String.format(
+                                "Unrecognized line in rule file %s:%d \"%s\"",
+                                fMonkeyImpl.fRuleFileName, lineNumber, line);
                 System.err.println(msg);
                 throw new IllegalArgumentException(msg);
             }
@@ -444,14 +485,15 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
 
             UnicodeSet otherSet = new UnicodeSet(0, 0x10ffff);
 
-            for (Map.Entry<String, CharClass> el: fCharClasses.entrySet()) {
+            for (Map.Entry<String, CharClass> el : fCharClasses.entrySet()) {
                 String ccName = el.getKey();
                 CharClass cclass = el.getValue();
 
                 // System.out.printf("    Adding %s\n", ccName);
                 if (!ccName.equals(cclass.fName)) {
                     throw new IllegalArgumentException(
-                            String.format("%s: internal error, set names (%s, %s) inconsistent.\n",
+                            String.format(
+                                    "%s: internal error, set names (%s, %s) inconsistent.\n",
                                     fMonkeyImpl.fRuleFileName, ccName, cclass.fName));
                 }
                 otherSet.removeAll(cclass.fSet);
@@ -467,60 +509,57 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
                 CharClass cclass = addCharClass("__Others", otherSet.toPattern(true));
                 fCharClassList.add(cclass);
             }
-
-        };
+        }
+        ;
 
         CharClass getClassForChar(int c) {
-            for (CharClass cc: fCharClassList) {
+            for (CharClass cc : fCharClassList) {
                 if (cc.fSet.contains(c)) {
                     return cc;
                 }
             }
             return null;
-        };
+        }
+        ;
 
+        RBBIMonkeyImpl fMonkeyImpl; // Pointer back to the owning MonkeyImpl instance.
+        List<BreakRule> fBreakRules; // Contents are of type (BreakRule *).
 
-        RBBIMonkeyImpl          fMonkeyImpl;        // Pointer back to the owning MonkeyImpl instance.
-        List<BreakRule>         fBreakRules;        // Contents are of type (BreakRule *).
-
-        Map<String, CharClass>  fCharClasses;       // Key is the set name.
+        Map<String, CharClass> fCharClasses; // Key is the set name.
         //                                          // Value is the corresponding CharClass
-        List<CharClass>         fCharClassList;     // Char Classes, same contents as fCharClasses values,
+        List<CharClass> fCharClassList; // Char Classes, same contents as fCharClasses values,
 
-        UnicodeSet              fDictionarySet;     // Dictionary set, empty if none is defined.
-        ULocale                 fLocale;
-        int                     fType;              // BreakItererator.KIND_WORD, etc.
-
+        UnicodeSet fDictionarySet; // Dictionary set, empty if none is defined.
+        ULocale fLocale;
+        int fType; // BreakItererator.KIND_WORD, etc.
 
         Matcher fSetRefsMatcher;
         Matcher fCommentsMatcher;
         Matcher fClassDefMatcher;
         Matcher fRuleDefMatcher;
         Matcher fPropertyMatcher;
-    };
-
-
-
+    }
+    ;
 
     // class MonkeyTestData    represents a randomly synthesized test data string together
     //                         with the expected break positions obtained by applying
     //                         the test break rules.
 
-    static class MonkeyTestData{
+    static class MonkeyTestData {
 
         void set(BreakRules rules, ICU_Rand rand) {
-            int dataLength = 1000;   // length of test data to generate, in code points.
+            int dataLength = 1000; // length of test data to generate, in code points.
 
             // Fill the test string with random characters.
             // First randomly pick a char class, then randomly pick a character from that class.
             // Exclude any characters from the dictionary set.
 
             // System.out.println("Populating Test Data");
-            fRandomSeed = rand.getSeed();         // Save initial seed for use in error messages,
-                                                  // allowing recreation of failing data.
+            fRandomSeed = rand.getSeed(); // Save initial seed for use in error messages,
+            // allowing recreation of failing data.
             fBkRules = rules;
             StringBuilder newString = new StringBuilder();
-            for (int n=0; n<dataLength;) {
+            for (int n = 0; n < dataLength; ) {
                 int charClassIndex = rand.next() % rules.fCharClassList.size();
                 CharClass cclass = rules.fCharClassList.get(charClassIndex);
                 if (cclass.fSet.size() == 0) {
@@ -529,10 +568,15 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
                 }
                 int charIndex = rand.next() % cclass.fSet.size();
                 int c = cclass.fSet.charAt(charIndex);
-                if (/*Character.isBmpCodePoint(c)*/ c<=0x0ffff && Character.isLowSurrogate((char)c) &&
-                        newString.length() > 0 && Character.isHighSurrogate(newString.charAt(newString.length()-1))) {
-                    // Character classes may contain unpaired surrogates, e.g. Grapheme_Cluster_Break = Control.
-                    // Don't let random unpaired surrogates combine in the test data because they might
+                if (
+                /*Character.isBmpCodePoint(c)*/ c <= 0x0ffff
+                        && Character.isLowSurrogate((char) c)
+                        && newString.length() > 0
+                        && Character.isHighSurrogate(newString.charAt(newString.length() - 1))) {
+                    // Character classes may contain unpaired surrogates, e.g.
+                    // Grapheme_Cluster_Break = Control.
+                    // Don't let random unpaired surrogates combine in the test data because they
+                    // might
                     // produce an unwanted dictionary character.
                     continue;
                 }
@@ -548,20 +592,21 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
             // Expected and Actual breaks are one longer than the input string; a true value
             // will indicate a boundary preceding that position.
 
-            fActualBreaks    = new boolean[fString.length()+1];
-            fExpectedBreaks  = new boolean[fString.length()+1];
-            fRuleForPosition = new int[fString.length()+1];
-            f2ndRuleForPos   = new int[fString.length()+1];
+            fActualBreaks = new boolean[fString.length() + 1];
+            fExpectedBreaks = new boolean[fString.length() + 1];
+            fRuleForPosition = new int[fString.length() + 1];
+            f2ndRuleForPos = new int[fString.length() + 1];
 
             int expectedBreakCount = 0;
 
             // Apply reference rules to find the expected breaks.
 
-            fExpectedBreaks[0] = true;       // Force an expected break before the start of the text.
-                                             // ICU always reports a break there.
-                                             // The reference rules do not have a means to do so.
+            fExpectedBreaks[0] = true; // Force an expected break before the start of the text.
+            // ICU always reports a break there.
+            // The reference rules do not have a means to do so.
             int strIdx = 0;
-            boolean initialMatch = true;     // True at start of text, and immediately after each boundary,
+            boolean initialMatch =
+                    true; // True at start of text, and immediately after each boundary,
             //                               // for control over rule chaining.
 
             while (strIdx < fString.length()) {
@@ -570,7 +615,7 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
                 int ruleNum = 0;
                 int matchStart = 0;
                 int matchEnd = 0;
-                for (ruleNum=0; ruleNum<rules.fBreakRules.size(); ruleNum++) {
+                for (ruleNum = 0; ruleNum < rules.fBreakRules.size(); ruleNum++) {
                     BreakRule rule = rules.fBreakRules.get(ruleNum);
                     if (rule.fInitialMatchOnly && !initialMatch) {
                         // Skip checking this '^' rule. (No rule chaining)
@@ -578,30 +623,38 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
                     }
                     rule.fRuleMatcher.reset(fString.substring(strIdx));
                     if (rule.fRuleMatcher.lookingAt()) {
-                        // A candidate rule match, check further to see if we take it or continue to check other rules.
-                        // Matches of zero or one code point count only if they also specify a break.
+                        // A candidate rule match, check further to see if we take it or continue to
+                        // check other rules.
+                        // Matches of zero or one code point count only if they also specify a
+                        // break.
                         matchStart = strIdx;
                         matchEnd = strIdx + rule.fRuleMatcher.end();
                         hasBreak = BreakGroupStart(rule.fRuleMatcher) >= 0;
-                        if (hasBreak ||
-                                (matchStart < fString.length() && fString.offsetByCodePoints(matchStart, 1) < matchEnd)) {
+                        if (hasBreak
+                                || (matchStart < fString.length()
+                                        && fString.offsetByCodePoints(matchStart, 1) < matchEnd)) {
                             matchingRule = rule;
                             break;
                         }
                     }
                 }
                 if (matchingRule == null) {
-                    // No reference rule matched. This is an error in the rules that should never happen.
-                    String msg = String.format("%s: No reference rules matched at position %d. ",
-                            rules.fMonkeyImpl.fRuleFileName, strIdx);
+                    // No reference rule matched. This is an error in the rules that should never
+                    // happen.
+                    String msg =
+                            String.format(
+                                    "%s: No reference rules matched at position %d. ",
+                                    rules.fMonkeyImpl.fRuleFileName, strIdx);
                     System.err.println(msg);
                     dump(strIdx);
                     throw new IllegalArgumentException(msg);
                 }
                 if (matchingRule.fRuleMatcher.group().length() == 0) {
                     // Zero length rule match. This is also an error in the rule expressions.
-                    String msg = String.format("%s:%s: Zero length rule match at %d.",
-                            rules.fMonkeyImpl.fRuleFileName, matchingRule.fName, strIdx);
+                    String msg =
+                            String.format(
+                                    "%s:%s: Zero length rule match at %d.",
+                                    rules.fMonkeyImpl.fRuleFileName, matchingRule.fName, strIdx);
                     System.err.println(msg);
                     dump(strIdx);
                     throw new IllegalArgumentException(msg);
@@ -616,7 +669,8 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
                     }
                 }
 
-                // Break positions appear in rules as a matching named capture of zero length at the break position,
+                // Break positions appear in rules as a matching named capture of zero length at the
+                // break position,
                 //   the adjusted pattern contains (?<BreakPosition>)
                 if (hasBreak) {
                     int breakPos = strIdx + BreakGroupStart(matchingRule.fRuleMatcher);
@@ -635,20 +689,26 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
                     if (updatedStrIdx == matchStart) {
                         // Match was only one code point, no progress if we continue.
                         // Shouldn't get here, case is filtered out at top of loop.
-                        throw new IllegalArgumentException(String.format("%s: Rule %s internal error.",
-                                rules.fMonkeyImpl.fRuleFileName, matchingRule.fName));
+                        throw new IllegalArgumentException(
+                                String.format(
+                                        "%s: Rule %s internal error.",
+                                        rules.fMonkeyImpl.fRuleFileName, matchingRule.fName));
                     }
                     strIdx = updatedStrIdx;
                     initialMatch = false;
                 }
             }
             if (expectedBreakCount >= fString.length()) {
-                throw new IllegalArgumentException(String.format("expectedBreakCount (%d) should be less than the test string length (%d).",
-                        expectedBreakCount, fString.length()));
+                throw new IllegalArgumentException(
+                        String.format(
+                                "expectedBreakCount (%d) should be less than the test string length (%d).",
+                                expectedBreakCount, fString.length()));
             }
-        };
+        }
+        ;
 
-        // Helper function to find the starting index of a match of the "BreakPosition" named capture group.
+        // Helper function to find the starting index of a match of the "BreakPosition" named
+        // capture group.
         // @param m: a Java regex Matcher that has completed a matching operation.
         // @return m.start("BreakPosition),
         //         or -1 if there is no such group, or the group did not participate in the match.
@@ -658,7 +718,7 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
         //       a reference rule expression is the "BreakPosition" that corresponds to a "÷".
 
         static int BreakGroupStart(Matcher m) {
-            for (int groupNum=1; groupNum <= m.groupCount(); ++groupNum) {
+            for (int groupNum = 1; groupNum <= m.groupCount(); ++groupNum) {
                 String group = m.group(groupNum);
                 if (group == null) {
                     continue;
@@ -672,10 +732,11 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
         }
 
         void dump(int around) {
-            System.out.print("\n"
-                    +        "         char                        break  Rule                     Character\n"
-                    +        "   pos   code   class                 R I   name                     name\n"
-                    +        "---------------------------------------------------------------------------------------------\n");
+            System.out.print(
+                    "\n"
+                            + "         char                        break  Rule                     Character\n"
+                            + "   pos   code   class                 R I   name                     name\n"
+                            + "---------------------------------------------------------------------------------------------\n");
 
             int start;
             int end;
@@ -697,7 +758,9 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
                 }
             }
 
-            for (int charIdx = start; charIdx < end; charIdx=fString.offsetByCodePoints(charIdx, 1)) {
+            for (int charIdx = start;
+                    charIdx < end;
+                    charIdx = fString.offsetByCodePoints(charIdx, 1)) {
                 int c = fString.codePointAt(charIdx);
                 CharClass cc = fBkRules.getClassForChar(c);
 
@@ -706,37 +769,41 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
                 if (f2ndRuleForPos[charIdx] > 0) {
                     secondRuleName = fBkRules.fBreakRules.get(f2ndRuleForPos[charIdx]).fName;
                 }
-                String cName = UCharacterName.INSTANCE.getName(c, UCharacterNameChoice.EXTENDED_CHAR_NAME);
+                String cName =
+                        UCharacterName.INSTANCE.getName(c, UCharacterNameChoice.EXTENDED_CHAR_NAME);
 
-                System.out.printf("  %4d %6x   %-20s  %c %c   %-10s %-10s    %s\n",
-                        charIdx, c, cc.fName,
+                System.out.printf(
+                        "  %4d %6x   %-20s  %c %c   %-10s %-10s    %s\n",
+                        charIdx,
+                        c,
+                        cc.fName,
                         fExpectedBreaks[charIdx] ? '*' : '.',
                         fActualBreaks[charIdx] ? '*' : '.',
-                        rule.fName, secondRuleName, cName
-                        );
-                }
-
-        };
+                        rule.fName,
+                        secondRuleName,
+                        cName);
+            }
+        }
+        ;
 
         void clearActualBreaks() {
             Arrays.fill(fActualBreaks, false);
         }
 
-
-        int               fRandomSeed;        // The initial seed value from the random number generator.
-        BreakRules        fBkRules;           // The break rules used to generate this data.
-        String            fString;            // The text.
-        boolean           fExpectedBreaks[];  // Breaks as found by the reference rules.
-                                              //     Parallel to fString. true if break preceding.
-        boolean           fActualBreaks[];    // Breaks as found by ICU break iterator.
-        int               fRuleForPosition[]; // Index into BreakRules.fBreakRules of rule that applied at each position.
-                                              // Also parallel to fString.
-        int               f2ndRuleForPos[];   // As above. A 2nd rule applies when the preceding rule
-                                              //   didn't cause a break, and a subsequent rule match starts
-                                              //   on the last code point of the preceding match.
+        int fRandomSeed; // The initial seed value from the random number generator.
+        BreakRules fBkRules; // The break rules used to generate this data.
+        String fString; // The text.
+        boolean fExpectedBreaks[]; // Breaks as found by the reference rules.
+        //     Parallel to fString. true if break preceding.
+        boolean fActualBreaks[]; // Breaks as found by ICU break iterator.
+        int fRuleForPosition[]; // Index into BreakRules.fBreakRules of rule that applied at each
+        // position.
+        // Also parallel to fString.
+        int f2ndRuleForPos[]; // As above. A 2nd rule applies when the preceding rule
+        //   didn't cause a break, and a subsequent rule match starts
+        //   on the last code point of the preceding match.
 
     }
-
 
     // class RBBIMonkeyImpl     holds (some indirectly) everything associated with running a monkey
     //                          test for one set of break rules.
@@ -751,7 +818,8 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
             fRuleSet.compileRules(fRuleCharBuffer);
             fBI = fRuleSet.createICUBreakIterator();
             fTestData = new MonkeyTestData();
-        };
+        }
+        ;
 
         void openBreakRules(String fileName) {
             StringBuilder testFileBuf = new StringBuilder();
@@ -767,7 +835,7 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
                 try {
                     int c;
                     int count = 0;
-                    for (;;) {
+                    for (; ; ) {
                         c = isr.read();
                         if (c < 0) {
                             break;
@@ -777,24 +845,25 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
                             // BOM in the test data file. Discard it.
                             continue;
                         }
-                       testFileBuf.appendCodePoint(c);
+                        testFileBuf.appendCodePoint(c);
                     }
                 } finally {
                     isr.close();
                 }
-                } catch (IOException e) {
+            } catch (IOException e) {
                 try {
                     is.close();
                 } catch (IOException ignored) {
                 }
                 errln(e.toString());
             }
-            fRuleCharBuffer =  testFileBuf.toString();  /* the file as a String */
+            fRuleCharBuffer = testFileBuf.toString(); /* the file as a String */
         }
 
-        class MonkeyException extends RuntimeException  {
+        class MonkeyException extends RuntimeException {
             private static final long serialVersionUID = 1L;
-            public int fPosition;    // Position of the failure in the test data.
+            public int fPosition; // Position of the failure in the test data.
+
             MonkeyException(String description, int pos) {
                 super(description);
                 fPosition = pos;
@@ -818,9 +887,13 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
                     testPreceding();
                     testIsBoundary();
                 } catch (MonkeyException e) {
-                    String formattedMsg = String.format(
-                            "%s at index %d. VM Arguments to reproduce: -Drules=%s -Dseed=%d -Dloop=1 -Dverbose=1 \"\n",
-                            e.getMessage(), e.fPosition, fRuleFileName, fTestData.fRandomSeed);
+                    String formattedMsg =
+                            String.format(
+                                    "%s at index %d. VM Arguments to reproduce: -Drules=%s -Dseed=%d -Dloop=1 -Dverbose=1 \"\n",
+                                    e.getMessage(),
+                                    e.fPosition,
+                                    fRuleFileName,
+                                    fTestData.fRandomSeed);
                     System.err.print(formattedMsg);
                     if (fVerbose) {
                         fTestData.dump(e.fPosition);
@@ -845,7 +918,7 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
             fTestData.clearActualBreaks();
             fBI.setText(fTestData.fString);
             int previousBreak = -2;
-            for (int bk=fBI.first(); bk != BreakIterator.DONE; bk=fBI.next()) {
+            for (int bk = fBI.first(); bk != BreakIterator.DONE; bk = fBI.next()) {
                 if (bk <= previousBreak) {
                     throw new MonkeyException("Break Iterator Stall", bk);
                 }
@@ -855,40 +928,40 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
                 fTestData.fActualBreaks[bk] = true;
             }
             checkResults("testForwards", CheckDirection.FORWARD);
-        };
+        }
+        ;
 
-
-       void testFollowing() {
-           fTestData.clearActualBreaks();
-           fBI.setText(fTestData.fString);
-           int nextBreak = -1;
-           for (int i=-1 ; i<fTestData.fString.length(); ++i) {
-               int bk = fBI.following(i);
-               if (bk == BreakIterator.DONE && i == fTestData.fString.length()) {
-                   continue;
-               }
-               if (bk == nextBreak && bk > i) {
-                   // i is in the gap between two breaks.
-                   continue;
-               }
-               if (i == nextBreak && bk > nextBreak) {
-                   fTestData.fActualBreaks[bk] = true;
-                   nextBreak = bk;
-                   continue;
-               }
-               throw new MonkeyException("following(i)", i);
-           }
-           checkResults("testFollowing", CheckDirection.FORWARD);
-        };
-
+        void testFollowing() {
+            fTestData.clearActualBreaks();
+            fBI.setText(fTestData.fString);
+            int nextBreak = -1;
+            for (int i = -1; i < fTestData.fString.length(); ++i) {
+                int bk = fBI.following(i);
+                if (bk == BreakIterator.DONE && i == fTestData.fString.length()) {
+                    continue;
+                }
+                if (bk == nextBreak && bk > i) {
+                    // i is in the gap between two breaks.
+                    continue;
+                }
+                if (i == nextBreak && bk > nextBreak) {
+                    fTestData.fActualBreaks[bk] = true;
+                    nextBreak = bk;
+                    continue;
+                }
+                throw new MonkeyException("following(i)", i);
+            }
+            checkResults("testFollowing", CheckDirection.FORWARD);
+        }
+        ;
 
         void testPrevious() {
             fTestData.clearActualBreaks();
             fBI.setText(fTestData.fString);
             int previousBreak = Integer.MAX_VALUE;
-            for (int bk=fBI.last(); bk != BreakIterator.DONE; bk=fBI.previous()) {
-                 if (bk >= previousBreak) {
-                     throw new MonkeyException("Break Iterator Stall", bk);
+            for (int bk = fBI.last(); bk != BreakIterator.DONE; bk = fBI.previous()) {
+                if (bk >= previousBreak) {
+                    throw new MonkeyException("Break Iterator Stall", bk);
                 }
                 if (bk < 0 || bk > fTestData.fString.length()) {
                     throw new MonkeyException("Boundary out of bounds", bk);
@@ -896,32 +969,35 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
                 fTestData.fActualBreaks[bk] = true;
             }
             checkResults("testPrevius", CheckDirection.REVERSE);
-        };
-
+        }
+        ;
 
         /**
          * Given an index into a string, if it refers to the trail surrogate of a surrogate pair,
          * adjust it to point to the lead surrogate, which is the start of the code point.
+         *
          * @param s the String.
          * @param i the initial index
          * @return the adjusted index
          */
         private int getChar32Start(String s, int i) {
-            if (i > 0 && i < s.length() &&
-                    Character.isLowSurrogate(s.charAt(i)) && Character.isHighSurrogate(s.charAt(i-1))) {
+            if (i > 0
+                    && i < s.length()
+                    && Character.isLowSurrogate(s.charAt(i))
+                    && Character.isHighSurrogate(s.charAt(i - 1))) {
                 --i;
             }
             return i;
         }
 
-
         void testPreceding() {
             fTestData.clearActualBreaks();
             fBI.setText(fTestData.fString);
-            int nextBreak = fTestData.fString.length()+1;
-            for (int i=fTestData.fString.length()+1 ; i>=0; --i) {
+            int nextBreak = fTestData.fString.length() + 1;
+            for (int i = fTestData.fString.length() + 1; i >= 0; --i) {
                 int bk = fBI.preceding(i);
-                // System.err.printf("testPreceding() i:%d  bk:%d  nextBreak:%d\n", i, bk, nextBreak);
+                // System.err.printf("testPreceding() i:%d  bk:%d  nextBreak:%d\n", i, bk,
+                // nextBreak);
                 if (bk == BreakIterator.DONE && i == 0) {
                     continue;
                 }
@@ -929,9 +1005,10 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
                     // i is in the gap between two breaks.
                     continue;
                 }
-                if (i<fTestData.fString.length() && getChar32Start(fTestData.fString, i) < i) {
+                if (i < fTestData.fString.length() && getChar32Start(fTestData.fString, i) < i) {
                     // i indexes to a trailing surrogate.
-                    // Break Iterators treat an index to either half as referring to the supplemental code point,
+                    // Break Iterators treat an index to either half as referring to the
+                    // supplemental code point,
                     // with preceding going to some preceding code point.
                     if (fBI.preceding(i) != fBI.preceding(getChar32Start(fTestData.fString, i))) {
                         throw new MonkeyException("preceding of trailing surrogate error", i);
@@ -946,52 +1023,50 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
                 throw new MonkeyException("preceding(i)", i);
             }
             checkResults("testPreceding", CheckDirection.REVERSE);
-
-        };
-
+        }
+        ;
 
         void testIsBoundary() {
             fTestData.clearActualBreaks();
             fBI.setText(fTestData.fString);
-            for (int i=fTestData.fString.length(); i>=0; --i) {
+            for (int i = fTestData.fString.length(); i >= 0; --i) {
                 if (fBI.isBoundary(i)) {
                     fTestData.fActualBreaks[i] = true;
                 }
             }
             checkResults("testForwards", CheckDirection.FORWARD);
-        };
-
+        }
+        ;
 
         void checkResults(String msg, CheckDirection direction) {
             if (direction == CheckDirection.FORWARD) {
-                for (int i=0; i<=fTestData.fString.length(); ++i) {
+                for (int i = 0; i <= fTestData.fString.length(); ++i) {
                     if (fTestData.fExpectedBreaks[i] != fTestData.fActualBreaks[i]) {
                         throw new MonkeyException(msg, i);
                     }
                 }
             } else {
-                for (int i=fTestData.fString.length(); i>=0; i--) {
+                for (int i = fTestData.fString.length(); i >= 0; i--) {
                     if (fTestData.fExpectedBreaks[i] != fTestData.fActualBreaks[i]) {
                         throw new MonkeyException(msg, i);
                     }
                 }
             }
+        }
+        ;
 
-        };
-
-        String                 fRuleCharBuffer;         // source file contents of the reference rules.
-        BreakRules             fRuleSet;
+        String fRuleCharBuffer; // source file contents of the reference rules.
+        BreakRules fRuleSet;
         RuleBasedBreakIterator fBI;
-        MonkeyTestData         fTestData;
-        ICU_Rand               fRandomGenerator;
-        String                 fRuleFileName;
-        boolean                fVerbose;                 // True to do long dump of failing data.
-        int                    fLoopCount;
-        int                    fErrorCount;
+        MonkeyTestData fTestData;
+        ICU_Rand fRandomGenerator;
+        String fRuleFileName;
+        boolean fVerbose; // True to do long dump of failing data.
+        int fLoopCount;
+        int fErrorCount;
 
-        boolean                fDumpExpansions;          // Debug flag to output expanded form of rules and sets.
-        StringBuilder          fErrorMsgs = new StringBuilder();
-
+        boolean fDumpExpansions; // Debug flag to output expanded form of rules and sets.
+        StringBuilder fErrorMsgs = new StringBuilder();
     }
 
     //  Test parameters, specified via Java properties.
@@ -1012,8 +1087,17 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
     //
     @Test
     public void TestMonkey() {
-        String tests[] = {"grapheme.txt", "word.txt", "line.txt", "line_cj.txt", "sentence.txt", "line_normal.txt",
-                "line_normal_cj.txt", "line_loose.txt", "line_loose_cj.txt", "word_POSIX.txt"
+        String tests[] = {
+            "grapheme.txt",
+            "word.txt",
+            "line.txt",
+            "line_cj.txt",
+            "sentence.txt",
+            "line_normal.txt",
+            "line_normal_cj.txt",
+            "line_loose.txt",
+            "line_loose_cj.txt",
+            "word_POSIX.txt"
         };
 
         String testNameFromParams = getProperty("rules");
@@ -1023,7 +1107,7 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
         }
 
         int loopCount = getIntProperty("loop", isQuick() ? 100 : 5000);
-        boolean dumpExpansions =  getBooleanProperty("expansions", false);
+        boolean dumpExpansions = getBooleanProperty("expansions", false);
         boolean verbose = getBooleanProperty("verbose", false);
         int seed = getIntProperty("seed", 1);
 
@@ -1033,7 +1117,7 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
         // Each set of break rules to be tested is run in a separate thread.
         // Each thread/set of rules gets a separate RBBIMonkeyImpl object.
 
-        for (String testName: tests) {
+        for (String testName : tests) {
             logln(String.format("beginning testing of %s", testName));
 
             RBBIMonkeyImpl test = new RBBIMonkeyImpl();
@@ -1049,7 +1133,7 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
         }
 
         StringBuilder errors = new StringBuilder();
-        for (RBBIMonkeyImpl test: startedTests) {
+        for (RBBIMonkeyImpl test : startedTests) {
             try {
                 test.join();
                 errors.append(test.fErrorMsgs);
@@ -1059,8 +1143,5 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
         }
         String errorMsgs = errors.toString();
         assertEquals(errorMsgs, "", errorMsgs);
-
     }
-
-
 }

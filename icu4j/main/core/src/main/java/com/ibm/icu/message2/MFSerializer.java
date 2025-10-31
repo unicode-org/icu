@@ -3,15 +3,12 @@
 
 package com.ibm.icu.message2;
 
-import java.util.List;
-import java.util.Map;
-
 import com.ibm.icu.message2.MFDataModel.Attribute;
 import com.ibm.icu.message2.MFDataModel.CatchallKey;
 import com.ibm.icu.message2.MFDataModel.Declaration;
 import com.ibm.icu.message2.MFDataModel.Expression;
-import com.ibm.icu.message2.MFDataModel.FunctionRef;
 import com.ibm.icu.message2.MFDataModel.FunctionExpression;
+import com.ibm.icu.message2.MFDataModel.FunctionRef;
 import com.ibm.icu.message2.MFDataModel.InputDeclaration;
 import com.ibm.icu.message2.MFDataModel.Literal;
 import com.ibm.icu.message2.MFDataModel.LiteralExpression;
@@ -28,10 +25,12 @@ import com.ibm.icu.message2.MFDataModel.StringPart;
 import com.ibm.icu.message2.MFDataModel.VariableExpression;
 import com.ibm.icu.message2.MFDataModel.VariableRef;
 import com.ibm.icu.message2.MFDataModel.Variant;
+import java.util.List;
+import java.util.Map;
 
 /**
- * This class serializes a MessageFormat 2 data model {@link MFDataModel.Message} to a string,
- * with the proper MessageFormat 2 syntax.
+ * This class serializes a MessageFormat 2 data model {@link MFDataModel.Message} to a string, with
+ * the proper MessageFormat 2 syntax.
  *
  * @internal ICU 75 technology preview
  * @deprecated This API is for technology preview only.
@@ -52,12 +51,11 @@ public class MFSerializer {
     /**
      * Method converting the {@link MFDataModel.Message} to a string in MessageFormat 2 syntax.
      *
-     * <p>The result is not necessarily identical with the original string parsed to generate
-     * the data model. But is is functionally equivalent.</p>
+     * <p>The result is not necessarily identical with the original string parsed to generate the
+     * data model. But is is functionally equivalent.
      *
      * @param message the data model message to serialize
      * @return the serialized message, in MessageFormat 2 syntax
-     *
      * @internal ICU 75 technology preview
      * @deprecated This API is for technology preview only.
      */

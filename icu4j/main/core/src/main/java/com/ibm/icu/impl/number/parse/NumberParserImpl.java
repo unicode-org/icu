@@ -2,11 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.number.parse;
 
-import java.text.ParsePosition;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import com.ibm.icu.impl.StringSegment;
 import com.ibm.icu.impl.number.AffixPatternProvider;
 import com.ibm.icu.impl.number.AffixUtils;
@@ -24,19 +19,21 @@ import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
+import java.text.ParsePosition;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Primary number parsing implementation class.
  *
  * @author sffc
- *
  */
 public class NumberParserImpl {
 
-    /**
-     * Creates a parser with most default options. Used for testing, not production.
-     */
-    public static NumberParserImpl createSimpleParser(ULocale locale, String pattern, int parseFlags) {
+    /** Creates a parser with most default options. Used for testing, not production. */
+    public static NumberParserImpl createSimpleParser(
+            ULocale locale, String pattern, int parseFlags) {
 
         NumberParserImpl parser = new NumberParserImpl(parseFlags);
         Currency currency = Currency.getInstance("USD");
@@ -53,7 +50,8 @@ public class NumberParserImpl {
         ParsedPatternInfo patternInfo = PatternStringParser.parseToPatternInfo(pattern);
         AffixMatcher.createMatchers(patternInfo, parser, factory, ignorables, parseFlags);
 
-        Grouper grouper = Grouper.forStrategy(GroupingStrategy.AUTO).withLocaleData(locale, patternInfo);
+        Grouper grouper =
+                Grouper.forStrategy(GroupingStrategy.AUTO).withLocaleData(locale, patternInfo);
 
         parser.addMatcher(ignorables);
         parser.addMatcher(DecimalMatcher.getInstance(symbols, grouper, parseFlags));
@@ -73,9 +71,7 @@ public class NumberParserImpl {
         return parser;
     }
 
-    /**
-     * Parses the string without returning a NumberParserImpl. Used for testing, not production.
-     */
+    /** Parses the string without returning a NumberParserImpl. Used for testing, not production. */
     public static Number parseStatic(
             String input,
             ParsePosition ppos,
@@ -93,9 +89,7 @@ public class NumberParserImpl {
         }
     }
 
-    /**
-     * Parses the string without returning a NumberParserImpl. Used for testing, not production.
-     */
+    /** Parses the string without returning a NumberParserImpl. Used for testing, not production. */
     public static CurrencyAmount parseStaticCurrency(
             String input,
             ParsePosition ppos,
@@ -107,7 +101,8 @@ public class NumberParserImpl {
         if (result.success()) {
             ppos.setIndex(result.charEnd);
             assert result.currencyCode != null;
-            return new CurrencyAmount(result.getNumber(), Currency.getInstance(result.currencyCode));
+            return new CurrencyAmount(
+                    result.getNumber(), Currency.getInstance(result.currencyCode));
         } else {
             ppos.setErrorIndex(result.charEnd);
             return null;
@@ -124,12 +119,10 @@ public class NumberParserImpl {
      * Creates a parser from the given DecimalFormatProperties. This is the endpoint used by
      * DecimalFormat in production code.
      *
-     * @param properties
-     *            The property bag.
-     * @param symbols
-     *            The locale's symbols.
-     * @param parseCurrency
-     *            True to force a currency match and use monetary separators; false otherwise.
+     * @param properties The property bag.
+     * @param symbols The locale's symbols.
+     * @param parseCurrency True to force a currency match and use monetary separators; false
+     *     otherwise.
      * @return An immutable parser object.
      */
     public static NumberParserImpl createParserFromProperties(
@@ -138,7 +131,8 @@ public class NumberParserImpl {
             boolean parseCurrency) {
 
         ULocale locale = symbols.getULocale();
-        AffixPatternProvider affixProvider = PropertiesAffixPatternProvider.forProperties(properties);
+        AffixPatternProvider affixProvider =
+                PropertiesAffixPatternProvider.forProperties(properties);
         Currency currency = CustomSymbolCurrency.resolve(properties.getCurrency(), locale, symbols);
         ParseMode parseMode = properties.getParseMode();
         if (parseMode == null) {
@@ -213,10 +207,12 @@ public class NumberParserImpl {
 
         // ICU-TC meeting, April 11, 2018: accept percent/permille only if it is in the pattern,
         // and to maintain regressive behavior, divide by 100 even if no percent sign is present.
-        if (parseMode == ParseMode.LENIENT && affixProvider.containsSymbolType(AffixUtils.TYPE_PERCENT)) {
+        if (parseMode == ParseMode.LENIENT
+                && affixProvider.containsSymbolType(AffixUtils.TYPE_PERCENT)) {
             parser.addMatcher(PercentMatcher.getInstance(symbols));
         }
-        if (parseMode == ParseMode.LENIENT && affixProvider.containsSymbolType(AffixUtils.TYPE_PERMILLE)) {
+        if (parseMode == ParseMode.LENIENT
+                && affixProvider.containsSymbolType(AffixUtils.TYPE_PERMILLE)) {
             parser.addMatcher(PermilleMatcher.getInstance(symbols));
         }
 
@@ -237,7 +233,8 @@ public class NumberParserImpl {
         }
         parser.addMatcher(ignorables);
         parser.addMatcher(DecimalMatcher.getInstance(symbols, grouper, parseFlags));
-        // NOTE: parseNoExponent doesn't disable scientific parsing if we have a scientific formatter
+        // NOTE: parseNoExponent doesn't disable scientific parsing if we have a scientific
+        // formatter
         if (!properties.getParseNoExponent() || properties.getMinimumExponentDigits() > 0) {
             parser.addMatcher(ScientificMatcher.getInstance(symbols, grouper));
         }
@@ -254,9 +251,11 @@ public class NumberParserImpl {
             parser.addMatcher(new RequireCurrencyValidator());
         }
         if (properties.getDecimalPatternMatchRequired()) {
-            boolean patternHasDecimalSeparator = properties.getDecimalSeparatorAlwaysShown()
-                    || properties.getMaximumFractionDigits() != 0;
-            parser.addMatcher(RequireDecimalSeparatorValidator.getInstance(patternHasDecimalSeparator));
+            boolean patternHasDecimalSeparator =
+                    properties.getDecimalSeparatorAlwaysShown()
+                            || properties.getMaximumFractionDigits() != 0;
+            parser.addMatcher(
+                    RequireDecimalSeparatorValidator.getInstance(patternHasDecimalSeparator));
         }
         // The multiplier takes care of scaling percentages.
         Scale multiplier = RoundingUtils.scaleFromProperties(properties);
@@ -275,8 +274,7 @@ public class NumberParserImpl {
     /**
      * Creates a new, empty parser.
      *
-     * @param parseFlags
-     *            The parser settings defined in the PARSE_FLAG_* fields.
+     * @param parseFlags The parser settings defined in the PARSE_FLAG_* fields.
      */
     public NumberParserImpl(int parseFlags) {
         matchers = new ArrayList<>();
@@ -309,21 +307,17 @@ public class NumberParserImpl {
     /**
      * Primary entrypoint to parsing code path.
      *
-     * @param input
-     *            The string to parse. This is a String, not CharSequence, to enforce assumptions about
-     *            immutability (CharSequences are not guaranteed to be immutable).
-     * @param start
-     *            The index into the string at which to start parsing.
-     * @param greedy
-     *            Whether to use the faster but potentially less accurate greedy code path.
-     * @param result
-     *            Output variable to store results.
+     * @param input The string to parse. This is a String, not CharSequence, to enforce assumptions
+     *     about immutability (CharSequences are not guaranteed to be immutable).
+     * @param start The index into the string at which to start parsing.
+     * @param greedy Whether to use the faster but potentially less accurate greedy code path.
+     * @param result Output variable to store results.
      */
     public void parse(String input, int start, boolean greedy, ParsedNumber result) {
         assert frozen;
         assert start >= 0 && start < input.length();
-        StringSegment segment = new StringSegment(input,
-                0 != (parseFlags & ParsingUtils.PARSE_FLAG_IGNORE_CASE));
+        StringSegment segment =
+                new StringSegment(input, 0 != (parseFlags & ParsingUtils.PARSE_FLAG_IGNORE_CASE));
         segment.adjustOffset(start);
         if (greedy) {
             parseGreedy(segment, result);
@@ -342,7 +336,7 @@ public class NumberParserImpl {
 
     private void parseGreedy(StringSegment segment, ParsedNumber result) {
         // Note: this method is not recursive in order to avoid stack overflow.
-        for (int i = 0; i < matchers.size();) {
+        for (int i = 0; i < matchers.size(); ) {
             // Base Case
             if (segment.length() == 0) {
                 return;
@@ -369,7 +363,8 @@ public class NumberParserImpl {
         // NOTE: If we get here, the greedy parse completed without consuming the entire string.
     }
 
-    private void parseLongestRecursive(StringSegment segment, ParsedNumber result, int recursionLevels) {
+    private void parseLongestRecursive(
+            StringSegment segment, ParsedNumber result, int recursionLevels) {
         // Base Case
         if (segment.length() == 0) {
             return;
@@ -393,7 +388,7 @@ public class NumberParserImpl {
             }
 
             // In a non-greedy parse, we attempt all possible matches and pick the best.
-            for (int charsToConsume = 0; charsToConsume < segment.length();) {
+            for (int charsToConsume = 0; charsToConsume < segment.length(); ) {
                 charsToConsume += Character.charCount(segment.codePointAt(charsToConsume));
 
                 // Run the matcher on a segment of the current length.

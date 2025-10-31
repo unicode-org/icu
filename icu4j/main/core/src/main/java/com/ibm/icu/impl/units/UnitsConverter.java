@@ -4,16 +4,16 @@ package com.ibm.icu.impl.units;
 
 import static java.math.MathContext.DECIMAL128;
 
+import com.ibm.icu.impl.IllegalIcuArgumentException;
+import com.ibm.icu.util.MeasureUnit;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
-import com.ibm.icu.impl.IllegalIcuArgumentException;
-import com.ibm.icu.util.MeasureUnit;
-
-// TODO ICU-22683: Consider splitting handling of special mappings into separate (possibly internal) class
+// TODO ICU-22683: Consider splitting handling of special mappings into separate (possibly internal)
+// class
 public class UnitsConverter {
     private BigDecimal conversionRate;
     private boolean reciprocal;
@@ -22,13 +22,10 @@ public class UnitsConverter {
     private String specialTarget;
 
     /**
-     * Constructor of <code>UnitsConverter</code>.
-     * NOTE:
-     * - source and target must be under the same category
-     * - e.g. meter to mile --> both of them are length units.
-     * <p>
-     * NOTE:
-     * This constructor creates an instance of <code>UnitsConverter</code> internally.
+     * Constructor of <code>UnitsConverter</code>. NOTE: - source and target must be under the same
+     * category - e.g. meter to mile --> both of them are length units.
+     *
+     * <p>NOTE: This constructor creates an instance of <code>UnitsConverter</code> internally.
      *
      * @param sourceIdentifier represents the source unit identifier.
      * @param targetIdentifier represents the target unit identifier.
@@ -37,24 +34,23 @@ public class UnitsConverter {
         this(
                 MeasureUnitImpl.forIdentifier(sourceIdentifier),
                 MeasureUnitImpl.forIdentifier(targetIdentifier),
-                new ConversionRates()
-        );
+                new ConversionRates());
     }
 
     /**
-     * Constructor of <code>UnitsConverter</code>.
-     * NOTE:
-     * - source and target must be under the same category
-     * - e.g. meter to mile --> both of them are length units.
-     * This converts from source to base to target (one of those may be a no-op).
+     * Constructor of <code>UnitsConverter</code>. NOTE: - source and target must be under the same
+     * category - e.g. meter to mile --> both of them are length units. This converts from source to
+     * base to target (one of those may be a no-op).
      *
-     * @param source          represents the source unit.
-     * @param target          represents the target unit.
+     * @param source represents the source unit.
+     * @param target represents the target unit.
      * @param conversionRates contains all the needed conversion rates.
      */
-    public UnitsConverter(MeasureUnitImpl source, MeasureUnitImpl target, ConversionRates conversionRates) {
+    public UnitsConverter(
+            MeasureUnitImpl source, MeasureUnitImpl target, ConversionRates conversionRates) {
         Convertibility convertibility = extractConvertibility(source, target, conversionRates);
-        if (convertibility != Convertibility.CONVERTIBLE && convertibility != Convertibility.RECIPROCAL) {
+        if (convertibility != Convertibility.CONVERTIBLE
+                && convertibility != Convertibility.RECIPROCAL) {
             throw new IllegalIcuArgumentException("input units must be convertible or reciprocal");
         }
 
@@ -74,7 +70,9 @@ public class UnitsConverter {
             this.reciprocal = convertibility == Convertibility.RECIPROCAL;
 
             // calculate the offset
-            this.offset = conversionRates.getOffset(source, target, sourceToBase, targetToBase, convertibility);
+            this.offset =
+                    conversionRates.getOffset(
+                            source, target, sourceToBase, targetToBase, convertibility);
             // We should see no offsets for reciprocal conversions - they don't make sense:
             assert convertibility != Convertibility.RECIPROCAL || this.offset == BigDecimal.ZERO;
         } else {
@@ -92,7 +90,8 @@ public class UnitsConverter {
         }
     }
 
-    static public Convertibility extractConvertibility(MeasureUnitImpl source, MeasureUnitImpl target, ConversionRates conversionRates) {
+    public static Convertibility extractConvertibility(
+            MeasureUnitImpl source, MeasureUnitImpl target, ConversionRates conversionRates) {
         ArrayList<SingleUnitImpl> sourceSingleUnits = conversionRates.extractBaseUnits(source);
         ArrayList<SingleUnitImpl> targetSingleUnits = conversionRates.extractBaseUnits(target);
 
@@ -109,23 +108,26 @@ public class UnitsConverter {
         return Convertibility.UNCONVERTIBLE;
     }
 
-    /**
-     * Helpers
-     */
-    private static void insertInMap(HashMap<String, Integer> dimensionMap, ArrayList<SingleUnitImpl> singleUnits, int multiplier) {
-        for (SingleUnitImpl singleUnit :
-                singleUnits) {
+    /** Helpers */
+    private static void insertInMap(
+            HashMap<String, Integer> dimensionMap,
+            ArrayList<SingleUnitImpl> singleUnits,
+            int multiplier) {
+        for (SingleUnitImpl singleUnit : singleUnits) {
             if (dimensionMap.containsKey(singleUnit.getSimpleUnitID())) {
-                dimensionMap.put(singleUnit.getSimpleUnitID(), dimensionMap.get(singleUnit.getSimpleUnitID()) + singleUnit.getDimensionality() * multiplier);
+                dimensionMap.put(
+                        singleUnit.getSimpleUnitID(),
+                        dimensionMap.get(singleUnit.getSimpleUnitID())
+                                + singleUnit.getDimensionality() * multiplier);
             } else {
-                dimensionMap.put(singleUnit.getSimpleUnitID(), singleUnit.getDimensionality() * multiplier);
+                dimensionMap.put(
+                        singleUnit.getSimpleUnitID(), singleUnit.getDimensionality() * multiplier);
             }
         }
     }
 
     private static boolean areDimensionsZeroes(HashMap<String, Integer> dimensionMap) {
-        for (Integer value :
-                dimensionMap.values()) {
+        for (Integer value : dimensionMap.values()) {
             if (!value.equals(0)) return false;
         }
 
@@ -141,8 +143,10 @@ public class UnitsConverter {
             if (this.specialSource != null) {
                 // We  have a special mapping from source to base (not using factor, offset).
                 // Currently the only supported mapping is a scale-based mapping for beaufort.
-                base = (this.specialSource.equals("beaufort"))?
-                    scaleToBase(inputValue, minMetersPerSecForBeaufort): inputValue;
+                base =
+                        (this.specialSource.equals("beaufort"))
+                                ? scaleToBase(inputValue, minMetersPerSecForBeaufort)
+                                : inputValue;
             } else {
                 // Standard mapping (using factor, offset) from source to base.
                 base = inputValue.multiply(this.conversionRate);
@@ -151,8 +155,10 @@ public class UnitsConverter {
             if (this.specialTarget != null) {
                 // We  have a special mapping from base to target (not using factor, offset).
                 // Currently the only supported mapping is a scale-based mapping for beaufort.
-                result = (this.specialTarget.equals("beaufort"))?
-                    baseToScale(base, minMetersPerSecForBeaufort): base;
+                result =
+                        (this.specialTarget.equals("beaufort"))
+                                ? baseToScale(base, minMetersPerSecForBeaufort)
+                                : base;
             } else {
                 // Standard mapping (using factor, offset) from base to target.
                 result = base.divide(this.conversionRate, DECIMAL128);
@@ -181,8 +187,10 @@ public class UnitsConverter {
             if (this.specialTarget != null) {
                 // We  have a special mapping from target to base (not using factor, offset).
                 // Currently the only supported mapping is a scale-based mapping for beaufort.
-                base = (this.specialTarget.equals("beaufort"))?
-                    scaleToBase(inputValue, minMetersPerSecForBeaufort): inputValue;
+                base =
+                        (this.specialTarget.equals("beaufort"))
+                                ? scaleToBase(inputValue, minMetersPerSecForBeaufort)
+                                : inputValue;
             } else {
                 // Standard mapping (using factor, offset) from target to base.
                 base = inputValue.multiply(this.conversionRate);
@@ -191,8 +199,10 @@ public class UnitsConverter {
             if (this.specialSource != null) {
                 // We  have a special mapping from base to source (not using factor, offset).
                 // Currently the only supported mapping is a scale-based mapping for beaufort.
-                result = (this.specialSource.equals("beaufort"))?
-                    baseToScale(base, minMetersPerSecForBeaufort): base;
+                result =
+                        (this.specialSource.equals("beaufort"))
+                                ? baseToScale(base, minMetersPerSecForBeaufort)
+                                : base;
             } else {
                 // Standard mapping (using factor, offset) from base to source.
                 result = base.divide(this.conversionRate, DECIMAL128);
@@ -240,22 +250,31 @@ public class UnitsConverter {
     };
 
     // Convert from what should be discrete scale values for a particular unit like beaufort
-    // to a corresponding value in the base unit (which can have any decimal value, like meters/sec).
-    // First we round the scale value to the nearest integer (in case it is specified with a fractional value),
+    // to a corresponding value in the base unit (which can have any decimal value, like
+    // meters/sec).
+    // First we round the scale value to the nearest integer (in case it is specified with a
+    // fractional value),
     // then we map that to a value in middle of the range of corresponding base values.
     // This can handle different scales, specified by minBaseForScaleValues[].
     private BigDecimal scaleToBase(BigDecimal scaleValue, BigDecimal[] minBaseForScaleValues) {
         BigDecimal pointFive = BigDecimal.valueOf(0.5);
         BigDecimal scaleAdjust = scaleValue.abs().add(pointFive); // adjust up for later truncation
-        BigDecimal scaleAdjustCapped = scaleAdjust.min(BigDecimal.valueOf(minBaseForScaleValues.length - 2));
+        BigDecimal scaleAdjustCapped =
+                scaleAdjust.min(BigDecimal.valueOf(minBaseForScaleValues.length - 2));
         int scaleIndex = scaleAdjustCapped.intValue();
-        // Return midpont of range (the final range uses an articial end to produce reasonable midpoint)
-        return minBaseForScaleValues[scaleIndex].add(minBaseForScaleValues[scaleIndex + 1]).multiply(pointFive);
+        // Return midpont of range (the final range uses an articial end to produce reasonable
+        // midpoint)
+        return minBaseForScaleValues[scaleIndex]
+                .add(minBaseForScaleValues[scaleIndex + 1])
+                .multiply(pointFive);
     }
 
-    // Convert from a value in the base unit (which can have any decimal value, like meters/sec) to a corresponding
-    // discrete value in a scale (like beaufort), where each scale value represents a range of base values.
-    // We binary-search the ranges to find the one that contains the specified base value, and return its index.
+    // Convert from a value in the base unit (which can have any decimal value, like meters/sec) to
+    // a corresponding
+    // discrete value in a scale (like beaufort), where each scale value represents a range of base
+    // values.
+    // We binary-search the ranges to find the one that contains the specified base value, and
+    // return its index.
     // This can handle different scales, specified by minBaseForScaleValues[].
     private BigDecimal baseToScale(BigDecimal baseValue, BigDecimal[] minBaseForScaleValues) {
         int scaleIndex = Arrays.binarySearch(minBaseForScaleValues, baseValue.abs());
@@ -291,11 +310,7 @@ public class UnitsConverter {
         public boolean reciprocal;
     }
 
-    /**
-     * Responsible for all the Factor operation
-     * NOTE:
-     * This class is immutable
-     */
+    /** Responsible for all the Factor operation NOTE: This class is immutable */
     static class Factor {
         private BigDecimal factorNum;
         private BigDecimal factorDen;
@@ -304,38 +319,50 @@ public class UnitsConverter {
 
         /** Exponent for the ft_to_m constant */
         private int exponentFtToM = 0;
+
         /** Exponent for PI */
         private int exponentPi = 0;
+
         /** Exponent for gravity (gravity-of-earth, "g") */
         private int exponentGravity = 0;
+
         /** Exponent for Newtonian constant of gravitation "G". */
         private int exponentG = 0;
+
         /** Exponent for the imperial-gallon to cubic-meter conversion rate constant */
         private int exponentGalImpToM3 = 0;
+
         /** Exponent for the pound to kilogram conversion rate constant */
         private int exponentLbToKg = 0;
+
         /** Exponent for the glucose molar mass conversion rate constant */
         private int exponentGlucoseMolarMass = 0;
+
         /** Exponent for the item per mole conversion rate constant */
         private int exponentItemPerMole = 0;
+
         /** Exponent for the meters per AU conversion rate constant */
         private int exponentMetersPerAU = 0;
+
         /** Exponent for the sec per julian year conversion rate constant */
         private int exponentSecPerJulianYear = 0;
+
         /** Exponent for the speed of light meters per second" conversion rate constant */
         private int exponentSpeedOfLightMetersPerSecond = 0;
+
         /** Exponent for https://en.wikipedia.org/wiki/Japanese_units_of_measurement */
         private int exponentShoToM3 = 0;
+
         /** Exponent for https://en.wikipedia.org/wiki/Japanese_units_of_measurement */
         private int exponentTsuboToM2 = 0;
+
         /** Exponent for https://en.wikipedia.org/wiki/Japanese_units_of_measurement */
         private int exponentShakuToM = 0;
+
         /** Exponent for Atomic Mass Unit */
         private int exponentAMU = 0;
 
-        /**
-         * Creates Empty Factor
-         */
+        /** Creates Empty Factor */
         public Factor() {
             this.factorNum = BigDecimal.valueOf(1);
             this.factorDen = BigDecimal.valueOf(1);
@@ -361,17 +388,14 @@ public class UnitsConverter {
 
         private static Factor processFactorWithoutDivision(String factorWithoutDivision) {
             Factor result = new Factor();
-            for (String poweredEntity :
-                    factorWithoutDivision.split(Pattern.quote("*"))) {
+            for (String poweredEntity : factorWithoutDivision.split(Pattern.quote("*"))) {
                 result.addPoweredEntity(poweredEntity);
             }
 
             return result;
         }
 
-        /**
-         * Copy this <code>Factor</code>.
-         */
+        /** Copy this <code>Factor</code>. */
         protected Factor copy() {
             Factor result = new Factor();
             result.factorNum = this.factorNum;
@@ -397,9 +421,10 @@ public class UnitsConverter {
         }
 
         /**
-         * Returns a single {@code BigDecimal} that represent the conversion rate after substituting all the constants.
+         * Returns a single {@code BigDecimal} that represent the conversion rate after substituting
+         * all the constants.
          *
-         * In ICU4C, see Factor::substituteConstants().
+         * <p>In ICU4C, see Factor::substituteConstants().
          */
         public BigDecimal getConversionRate() {
             // TODO: this copies all the exponents then doesn't use them at all.
@@ -412,7 +437,9 @@ public class UnitsConverter {
             // In ICU4C, these constants live in constantsValues[].
             resultCollector.multiply(new BigDecimal("0.3048"), this.exponentFtToM);
             // TODO: this recalculates this division every time this is called.
-            resultCollector.multiply(new BigDecimal("411557987.0").divide(new BigDecimal("131002976.0"), DECIMAL128), this.exponentPi);
+            resultCollector.multiply(
+                    new BigDecimal("411557987.0").divide(new BigDecimal("131002976.0"), DECIMAL128),
+                    this.exponentPi);
             resultCollector.multiply(new BigDecimal("9.80665"), this.exponentGravity);
             resultCollector.multiply(new BigDecimal("6.67408E-11"), this.exponentG);
             resultCollector.multiply(new BigDecimal("0.00454609"), this.exponentGalImpToM3);
@@ -421,10 +448,15 @@ public class UnitsConverter {
             resultCollector.multiply(new BigDecimal("6.02214076E+23"), this.exponentItemPerMole);
             resultCollector.multiply(new BigDecimal("149597870700"), this.exponentMetersPerAU);
             resultCollector.multiply(new BigDecimal("31557600"), this.exponentSecPerJulianYear);
-            resultCollector.multiply(new BigDecimal("299792458"), this.exponentSpeedOfLightMetersPerSecond);
-            resultCollector.multiply(new BigDecimal("0.001803906836964688204"), this.exponentShoToM3);   // 2401/(1331*1000)
-            resultCollector.multiply(new BigDecimal("3.305785123966942"), this.exponentTsuboToM2);    // 400/121
-            resultCollector.multiply(new BigDecimal("0.033057851239669"), this.exponentShakuToM);     // 4/121
+            resultCollector.multiply(
+                    new BigDecimal("299792458"), this.exponentSpeedOfLightMetersPerSecond);
+            resultCollector.multiply(
+                    new BigDecimal("0.001803906836964688204"),
+                    this.exponentShoToM3); // 2401/(1331*1000)
+            resultCollector.multiply(
+                    new BigDecimal("3.305785123966942"), this.exponentTsuboToM2); // 400/121
+            resultCollector.multiply(
+                    new BigDecimal("0.033057851239669"), this.exponentShakuToM); // 4/121
             resultCollector.multiply(new BigDecimal("1.66053878283E-27"), this.exponentAMU);
 
             return resultCollector.factorNum.divide(resultCollector.factorDen, DECIMAL128);
@@ -451,8 +483,7 @@ public class UnitsConverter {
 
             int base = unitPrefix.getBase();
             int power = unitPrefix.getPower();
-            BigDecimal absFactor =
-                BigDecimal.valueOf(base).pow(Math.abs(power), DECIMAL128);
+            BigDecimal absFactor = BigDecimal.valueOf(base).pow(Math.abs(power), DECIMAL128);
 
             if (power < 0) {
                 result.factorDen = this.factorDen.multiply(absFactor);
@@ -485,7 +516,7 @@ public class UnitsConverter {
             result.exponentMetersPerAU = this.exponentMetersPerAU * power;
             result.exponentSecPerJulianYear = this.exponentSecPerJulianYear * power;
             result.exponentSpeedOfLightMetersPerSecond =
-                this.exponentSpeedOfLightMetersPerSecond * power;
+                    this.exponentSpeedOfLightMetersPerSecond * power;
             result.exponentShoToM3 = this.exponentShoToM3 * power;
             result.exponentTsuboToM2 = this.exponentTsuboToM2 * power;
             result.exponentShakuToM = this.exponentShakuToM * power;
@@ -506,12 +537,14 @@ public class UnitsConverter {
             result.exponentGalImpToM3 = this.exponentGalImpToM3 - other.exponentGalImpToM3;
             result.exponentLbToKg = this.exponentLbToKg - other.exponentLbToKg;
             result.exponentGlucoseMolarMass =
-                this.exponentGlucoseMolarMass - other.exponentGlucoseMolarMass;
+                    this.exponentGlucoseMolarMass - other.exponentGlucoseMolarMass;
             result.exponentItemPerMole = this.exponentItemPerMole - other.exponentItemPerMole;
             result.exponentMetersPerAU = this.exponentMetersPerAU - other.exponentMetersPerAU;
-            result.exponentSecPerJulianYear = this.exponentSecPerJulianYear - other.exponentSecPerJulianYear;
+            result.exponentSecPerJulianYear =
+                    this.exponentSecPerJulianYear - other.exponentSecPerJulianYear;
             result.exponentSpeedOfLightMetersPerSecond =
-                this.exponentSpeedOfLightMetersPerSecond - other.exponentSpeedOfLightMetersPerSecond;
+                    this.exponentSpeedOfLightMetersPerSecond
+                            - other.exponentSpeedOfLightMetersPerSecond;
             result.exponentShoToM3 = this.exponentShoToM3 - other.exponentShoToM3;
             result.exponentTsuboToM2 = this.exponentTsuboToM2 - other.exponentTsuboToM2;
             result.exponentShakuToM = this.exponentShakuToM - other.exponentShakuToM;
@@ -532,16 +565,18 @@ public class UnitsConverter {
             result.exponentGalImpToM3 = this.exponentGalImpToM3 + other.exponentGalImpToM3;
             result.exponentLbToKg = this.exponentLbToKg + other.exponentLbToKg;
             result.exponentGlucoseMolarMass =
-                this.exponentGlucoseMolarMass + other.exponentGlucoseMolarMass;
+                    this.exponentGlucoseMolarMass + other.exponentGlucoseMolarMass;
             result.exponentItemPerMole = this.exponentItemPerMole + other.exponentItemPerMole;
             result.exponentMetersPerAU = this.exponentMetersPerAU + other.exponentMetersPerAU;
-            result.exponentSecPerJulianYear = this.exponentSecPerJulianYear + other.exponentSecPerJulianYear;
+            result.exponentSecPerJulianYear =
+                    this.exponentSecPerJulianYear + other.exponentSecPerJulianYear;
             result.exponentSpeedOfLightMetersPerSecond =
-                this.exponentSpeedOfLightMetersPerSecond + other.exponentSpeedOfLightMetersPerSecond;
+                    this.exponentSpeedOfLightMetersPerSecond
+                            + other.exponentSpeedOfLightMetersPerSecond;
             result.exponentShoToM3 = this.exponentShoToM3 + other.exponentShoToM3;
             result.exponentTsuboToM2 = this.exponentTsuboToM2 + other.exponentTsuboToM2;
-            result.exponentShakuToM = this.exponentShakuToM  + other.exponentShakuToM;
-            result.exponentAMU = this.exponentAMU  + other.exponentAMU;
+            result.exponentShakuToM = this.exponentShakuToM + other.exponentShakuToM;
+            result.exponentAMU = this.exponentAMU + other.exponentAMU;
 
             return result;
         }

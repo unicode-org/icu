@@ -7,9 +7,9 @@
  **/
 
 /**
- * Port From:   JDK 1.4b1 : java.text.Format.IntlTestDateFormatAPI
- * Source File: java/text/format/IntlTestDateFormatAPI.java
- **/
+ * Port From: JDK 1.4b1 : java.text.Format.IntlTestDateFormatAPI Source File:
+ * java/text/format/IntlTestDateFormatAPI.java
+ */
 
 /*
     @test 1.4 98/03/06
@@ -18,29 +18,25 @@
 
 package com.ibm.icu.dev.test.format;
 
-import java.text.FieldPosition;
-import java.text.ParseException;
-import java.text.ParsePosition;
-import java.util.Date;
-import java.util.Locale;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.TimeZone;
+import java.text.FieldPosition;
+import java.text.ParseException;
+import java.text.ParsePosition;
+import java.util.Date;
+import java.util.Locale;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
-public class IntlTestDateFormatAPI extends CoreTestFmwk
-{
+public class IntlTestDateFormatAPI extends CoreTestFmwk {
     // Test that the equals method works correctly.
     @Test
-    public void TestEquals()
-    {
+    public void TestEquals() {
         // Create two objects at different system times
         DateFormat a = DateFormat.getInstance();
         Date start = Calendar.getInstance().getTime();
@@ -56,29 +52,29 @@ public class IntlTestDateFormatAPI extends CoreTestFmwk
             errln("FAIL: DateFormat objects created at different times are unequal.");
 
         // Why has this test been disabled??? - aliu
-//        if (b instanceof SimpleDateFormat)
-//        {
-//            //double ONE_YEAR = 365*24*60*60*1000.0; //The variable is never used
-//            try {
-//                ((SimpleDateFormat)b).setTwoDigitStartDate(start.getTime() + 50*ONE_YEAR);
-//                if (a.equals(b))
-//                    errln("FAIL: DateFormat objects with different two digit start dates are equal.");
-//            }
-//            catch (Exception e) {
-//                errln("FAIL: setTwoDigitStartDate failed.");
-//            }
-//        }
+        //        if (b instanceof SimpleDateFormat)
+        //        {
+        //            //double ONE_YEAR = 365*24*60*60*1000.0; //The variable is never used
+        //            try {
+        //                ((SimpleDateFormat)b).setTwoDigitStartDate(start.getTime() + 50*ONE_YEAR);
+        //                if (a.equals(b))
+        //                    errln("FAIL: DateFormat objects with different two digit start dates
+        // are equal.");
+        //            }
+        //            catch (Exception e) {
+        //                errln("FAIL: setTwoDigitStartDate failed.");
+        //            }
+        //        }
     }
 
     // This test checks various generic API methods in DateFormat to achieve 100% API coverage.
     @Test
-    public void TestAPI()
-    {
+    public void TestAPI() {
         Locale startLocale = Locale.getDefault();
 
-        logln("DateFormat API test---"); logln("");
+        logln("DateFormat API test---");
+        logln("");
         Locale.setDefault(Locale.ENGLISH);
-
 
         // ======= Test constructors
 
@@ -87,13 +83,14 @@ public class IntlTestDateFormatAPI extends CoreTestFmwk
         DateFormat def = DateFormat.getInstance();
         DateFormat fr = DateFormat.getTimeInstance(DateFormat.FULL, Locale.FRENCH);
         DateFormat it = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.ITALIAN);
-        DateFormat de = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, Locale.GERMAN);
+        DateFormat de =
+                DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, Locale.GERMAN);
 
         // ======= Test equality
 
         logln("Testing equality operator");
 
-        if( fr.equals(it) ) {
+        if (fr.equals(it)) {
             errln("ERROR: equals failed");
         }
 
@@ -101,7 +98,7 @@ public class IntlTestDateFormatAPI extends CoreTestFmwk
 
         logln("Testing various format() methods");
 
-        Date d = new Date((long)837039928046.0);
+        Date d = new Date((long) 837039928046.0);
 
         StringBuffer res1 = new StringBuffer();
         StringBuffer res2 = new StringBuffer();
@@ -133,12 +130,11 @@ public class IntlTestDateFormatAPI extends CoreTestFmwk
         if (result1 == null) {
             errln("ERROR: parseObject() failed for " + text);
         }
-        logln(text + " parsed into " + ((Date)result1).getTime());
+        logln(text + " parsed into " + ((Date) result1).getTime());
 
         try {
             result2 = def.parse(text);
-        }
-        catch (ParseException e) {
+        } catch (ParseException e) {
             errln("ERROR: parse() failed");
         }
         logln(text + " parsed into " + result2.getTime());
@@ -149,14 +145,13 @@ public class IntlTestDateFormatAPI extends CoreTestFmwk
         }
         logln(text + " parsed into " + result3.getTime());
 
-
         // ======= Test getters and setters
 
         logln("Testing getters and setters");
 
         final Locale[] locales = DateFormat.getAvailableLocales();
         long count = locales.length;
-        logln("Got " + count + " locales" );
+        logln("Got " + count + " locales");
 
         // These test cases used to check Locales without a script tag.
         // Java 6 Locale did not support script tags, such as zh_CN and zh_TW.
@@ -164,13 +159,13 @@ public class IntlTestDateFormatAPI extends CoreTestFmwk
         // Locales below were updated with ones with script tags.
         // See ticket #6280, #8078 and #11674 for the history.
         final Locale[] samples = {
-                Locale.forLanguageTag("zh-Hans-CN"),
-                Locale.forLanguageTag("zh-Hant-TW"),
-                Locale.forLanguageTag("zh-Hant-HK"),
-                Locale.forLanguageTag("sr-Cyrl-RS"),
+            Locale.forLanguageTag("zh-Hans-CN"),
+            Locale.forLanguageTag("zh-Hant-TW"),
+            Locale.forLanguageTag("zh-Hant-HK"),
+            Locale.forLanguageTag("sr-Cyrl-RS"),
         };
         boolean[] available = new boolean[samples.length];
-        for(int i = 0; i < count; i++) {
+        for (int i = 0; i < count; i++) {
             String name;
             name = locales[i].getDisplayName();
             logln(name);
@@ -188,7 +183,7 @@ public class IntlTestDateFormatAPI extends CoreTestFmwk
         }
 
         fr.setLenient(it.isLenient());
-        if(fr.isLenient() != it.isLenient()) {
+        if (fr.isLenient() != it.isLenient()) {
             errln("ERROR: setLenient() failed");
         }
 
@@ -196,7 +191,7 @@ public class IntlTestDateFormatAPI extends CoreTestFmwk
         Calendar newCal = cal.clone();
         de.setCalendar(newCal);
         it.setCalendar(newCal);
-        if( ! de.getCalendar().equals(it.getCalendar())) {
+        if (!de.getCalendar().equals(it.getCalendar())) {
             errln("ERROR: set Calendar() failed");
         }
 
@@ -204,7 +199,7 @@ public class IntlTestDateFormatAPI extends CoreTestFmwk
         NumberFormat newNf = nf.clone();
         de.setNumberFormat(newNf);
         it.setNumberFormat(newNf);
-        if( ! de.getNumberFormat().equals(it.getNumberFormat())) {
+        if (!de.getNumberFormat().equals(it.getNumberFormat())) {
             errln("ERROR: set NumberFormat() failed");
         }
 
@@ -212,24 +207,24 @@ public class IntlTestDateFormatAPI extends CoreTestFmwk
         TimeZone newTz = tz.clone();
         de.setTimeZone(newTz);
         it.setTimeZone(newTz);
-        if( ! de.getTimeZone().equals(it.getTimeZone())) {
+        if (!de.getTimeZone().equals(it.getTimeZone())) {
             errln("ERROR: set TimeZone() failed");
         }
 
         // ======= Test getStaticClassID()
 
-//        logln("Testing instanceof()");
+        //        logln("Testing instanceof()");
 
-//        try {
-//            DateFormat test = new SimpleDateFormat();
+        //        try {
+        //            DateFormat test = new SimpleDateFormat();
 
-//            if (! (test instanceof SimpleDateFormat)) {
-//                errln("ERROR: instanceof failed");
-//            }
-//        }
-//        catch (Exception e) {
-//            errln("ERROR: Couldn't create a DateFormat");
-//        }
+        //            if (! (test instanceof SimpleDateFormat)) {
+        //                errln("ERROR: instanceof failed");
+        //            }
+        //        }
+        //        catch (Exception e) {
+        //            errln("ERROR: Couldn't create a DateFormat");
+        //        }
 
         Locale.setDefault(startLocale);
     }

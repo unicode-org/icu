@@ -4,7 +4,6 @@ package com.ibm.icu.impl.number.parse;
 
 /**
  * @author sffc
- *
  */
 public class RequireAffixValidator extends ValidationMatcher {
 
@@ -20,5 +19,4 @@ public class RequireAffixValidator extends ValidationMatcher {
     public String toString() {
         return "<RequireAffix>";
     }
-
 }

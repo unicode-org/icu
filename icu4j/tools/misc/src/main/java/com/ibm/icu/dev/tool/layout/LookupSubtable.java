@@ -12,7 +12,6 @@
  */
 package com.ibm.icu.dev.tool.layout;
 
-public interface LookupSubtable
-{
+public interface LookupSubtable {
     void writeLookupSubtable(OpenTypeTableWriter writer);
 }

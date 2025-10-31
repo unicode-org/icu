@@ -1,78 +1,189 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /*
-*******************************************************************************
-*   Copyright (C) 2007-2013, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-*******************************************************************************
-*/
+ *******************************************************************************
+ *   Copyright (C) 2007-2013, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ *******************************************************************************
+ */
 
 package com.ibm.icu.dev.test.bidi;
 
-import org.junit.Test;
-
 import com.ibm.icu.text.Bidi;
 import com.ibm.icu.text.BidiClassifier;
+import org.junit.Test;
 
 /**
  * Regression test for Bidi class override.
  *
  * @author Lina Kemmel, Matitiahu Allouche
  */
-
 public class TestClassOverride extends BidiFmwk {
 
     private static final int DEF = TestData.DEF;
-    private static final int L   = TestData.L;
-    private static final int R   = TestData.R;
-    private static final int AL  = TestData.AL;
-    private static final int AN  = TestData.AN;
-    private static final int EN  = TestData.EN;
+    private static final int L = TestData.L;
+    private static final int R = TestData.R;
+    private static final int AL = TestData.AL;
+    private static final int AN = TestData.AN;
+    private static final int EN = TestData.EN;
     private static final int LRE = TestData.LRE;
     private static final int RLE = TestData.RLE;
     private static final int LRO = TestData.LRO;
     private static final int RLO = TestData.RLO;
     private static final int PDF = TestData.PDF;
     private static final int NSM = TestData.NSM;
-    private static final int B   = TestData.B;
-    private static final int S   = TestData.S;
-    private static final int BN  = TestData.BN;
+    private static final int B = TestData.B;
+    private static final int S = TestData.S;
+    private static final int BN = TestData.BN;
 
     private static final int[] customClasses = {
-    /*  0/8    1/9    2/A    3/B    4/C    5/D    6/E    7/F  */
-        DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF, //00-07
-        DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF, //08-0F
-        DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF, //10-17
-        DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF, //18-1F
-        DEF,   DEF,   DEF,   DEF,   DEF,   DEF,     R,   DEF, //20-27
-        DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF, //28-2F
-         EN,    EN,    EN,    EN,    EN,    EN,    AN,    AN, //30-37
-         AN,    AN,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF, //38-3F
-          L,    AL,    AL,    AL,    AL,    AL,    AL,     R, //40-47
-          R,     R,     R,     R,     R,     R,     R,     R, //48-4F
-          R,     R,     R,     R,     R,     R,     R,     R, //50-57
-          R,     R,     R,   LRE,   DEF,   RLE,   PDF,     S, //58-5F
-        NSM,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF, //60-67
-        DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF, //68-6F
-        DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF, //70-77
-        DEF,   DEF,   DEF,   LRO,     B,   RLO,    BN,   DEF  //78-7F
+        /*  0/8    1/9    2/A    3/B    4/C    5/D    6/E    7/F  */
+        DEF,
+        DEF,
+        DEF,
+        DEF,
+        DEF,
+        DEF,
+        DEF,
+        DEF, // 00-07
+        DEF,
+        DEF,
+        DEF,
+        DEF,
+        DEF,
+        DEF,
+        DEF,
+        DEF, // 08-0F
+        DEF,
+        DEF,
+        DEF,
+        DEF,
+        DEF,
+        DEF,
+        DEF,
+        DEF, // 10-17
+        DEF,
+        DEF,
+        DEF,
+        DEF,
+        DEF,
+        DEF,
+        DEF,
+        DEF, // 18-1F
+        DEF,
+        DEF,
+        DEF,
+        DEF,
+        DEF,
+        DEF,
+        R,
+        DEF, // 20-27
+        DEF,
+        DEF,
+        DEF,
+        DEF,
+        DEF,
+        DEF,
+        DEF,
+        DEF, // 28-2F
+        EN,
+        EN,
+        EN,
+        EN,
+        EN,
+        EN,
+        AN,
+        AN, // 30-37
+        AN,
+        AN,
+        DEF,
+        DEF,
+        DEF,
+        DEF,
+        DEF,
+        DEF, // 38-3F
+        L,
+        AL,
+        AL,
+        AL,
+        AL,
+        AL,
+        AL,
+        R, // 40-47
+        R,
+        R,
+        R,
+        R,
+        R,
+        R,
+        R,
+        R, // 48-4F
+        R,
+        R,
+        R,
+        R,
+        R,
+        R,
+        R,
+        R, // 50-57
+        R,
+        R,
+        R,
+        LRE,
+        DEF,
+        RLE,
+        PDF,
+        S, // 58-5F
+        NSM,
+        DEF,
+        DEF,
+        DEF,
+        DEF,
+        DEF,
+        DEF,
+        DEF, // 60-67
+        DEF,
+        DEF,
+        DEF,
+        DEF,
+        DEF,
+        DEF,
+        DEF,
+        DEF, // 68-6F
+        DEF,
+        DEF,
+        DEF,
+        DEF,
+        DEF,
+        DEF,
+        DEF,
+        DEF, // 70-77
+        DEF,
+        DEF,
+        DEF,
+        LRO,
+        B,
+        RLO,
+        BN,
+        DEF // 78-7F
     };
     static final int nEntries = customClasses.length;
 
-    static final String textIn  = "JIH.>12->a \u05d0\u05d1 6 ABC78";
+    static final String textIn = "JIH.>12->a \u05d0\u05d1 6 ABC78";
     static final String textOut = "12<.HIJ->a 78CBA 6 \u05d1\u05d0";
 
     protected static class CustomClassifier extends BidiClassifier {
 
         public CustomClassifier(Object context) {
-          super(context);
+            super(context);
         }
+
         @Override
         public int classify(int c) {
             // some (meaningless) action - just for testing purposes
-            return (this.context != null ? ((Integer)context).intValue()
-                            : c >= nEntries ? super.classify(c)
-                            : customClasses[c]);
+            return (this.context != null
+                    ? ((Integer) context).intValue()
+                    : c >= nEntries ? super.classify(c) : customClasses[c]);
         }
     }
 
@@ -96,17 +207,22 @@ public class TestClassOverride extends BidiFmwk {
                         errln("Unexpected context, should be null");
                     }
                 } else {
-                    assertEquals("Unexpected classifier context", context,
-                                 actualClassifier.getContext());
-                    assertEquals("Unexpected context's content",
-                                 ((Integer)context).intValue(),
-                                 bidi.getCustomizedClass('a'));
+                    assertEquals(
+                            "Unexpected classifier context",
+                            context,
+                            actualClassifier.getContext());
+                    assertEquals(
+                            "Unexpected context's content",
+                            ((Integer) context).intValue(),
+                            bidi.getCustomizedClass('a'));
                 }
             } else {
-                errln("Bidi object reports classifier is an instance of " +
-                      actualClassifier.getClass().getName() +
-                      ",\nwhile the expected classifier should be an " +
-                      "instance of " + expectedClass);
+                errln(
+                        "Bidi object reports classifier is an instance of "
+                                + actualClassifier.getClass().getName()
+                                + ",\nwhile the expected classifier should be an "
+                                + "instance of "
+                                + expectedClass);
             }
         }
     }
@@ -114,8 +230,7 @@ public class TestClassOverride extends BidiFmwk {
     CustomClassifier classifier = null;
 
     @Test
-    public void testClassOverride()
-    {
+    public void testClassOverride() {
         Bidi bidi;
 
         logln("\nEntering TestClassOverride\n");

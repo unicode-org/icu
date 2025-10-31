@@ -8,6 +8,11 @@
  */
 package com.ibm.icu.impl.locale;
 
+import com.ibm.icu.impl.ICUData;
+import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.util.Output;
+import com.ibm.icu.util.UResourceBundle;
+import com.ibm.icu.util.UResourceBundleIterator;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -19,22 +24,20 @@ import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import com.ibm.icu.impl.ICUData;
-import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.util.Output;
-import com.ibm.icu.util.UResourceBundle;
-import com.ibm.icu.util.UResourceBundleIterator;
-
-/**
- */
+/** */
 public class KeyTypeData {
 
     public enum ValueType {
-        single, multiple, incremental, any
+        single,
+        multiple,
+        incremental,
+        any
     }
 
-    private static abstract class SpecialTypeHandler {
-        abstract boolean isWellFormed(String value); // doesn't test validity, just whether it is well formed.
+    private abstract static class SpecialTypeHandler {
+        abstract boolean isWellFormed(
+                String value); // doesn't test validity, just whether it is well formed.
+
         String canonicalize(String value) {
             return AsciiUtil.toLowerString(value);
         }
@@ -42,6 +45,7 @@ public class KeyTypeData {
 
     private static class CodepointsTypeHandler extends SpecialTypeHandler {
         private static final Pattern pat = Pattern.compile("[0-9a-fA-F]{4,6}(-[0-9a-fA-F]{4,6})*");
+
         @Override
         boolean isWellFormed(String value) {
             return pat.matcher(value).matches();
@@ -50,6 +54,7 @@ public class KeyTypeData {
 
     private static class ReorderCodeTypeHandler extends SpecialTypeHandler {
         private static final Pattern pat = Pattern.compile("[a-zA-Z]{3,8}(-[a-zA-Z]{3,8})*");
+
         @Override
         boolean isWellFormed(String value) {
             return pat.matcher(value).matches();
@@ -58,6 +63,7 @@ public class KeyTypeData {
 
     private static class RgKeyValueTypeHandler extends SpecialTypeHandler {
         private static final Pattern pat = Pattern.compile("([a-zA-Z]{2}|[0-9]{3})[zZ]{4}");
+
         @Override
         boolean isWellFormed(String value) {
             return pat.matcher(value).matches();
@@ -66,6 +72,7 @@ public class KeyTypeData {
 
     private static class ScriptCodeTypeHandler extends SpecialTypeHandler {
         private static final Pattern pat = Pattern.compile("[a-zA-Z]{4}(-[a-zA-Z]{4})*");
+
         @Override
         boolean isWellFormed(String value) {
             return pat.matcher(value).matches();
@@ -74,6 +81,7 @@ public class KeyTypeData {
 
     private static class SubdivisionKeyValueTypeHandler extends SpecialTypeHandler {
         private static final Pattern pat = Pattern.compile("([a-zA-Z]{2}|[0-9]{3})");
+
         @Override
         boolean isWellFormed(String value) {
             return pat.matcher(value).matches();
@@ -82,6 +90,7 @@ public class KeyTypeData {
 
     private static class PrivateUseKeyValueTypeHandler extends SpecialTypeHandler {
         private static final Pattern pat = Pattern.compile("[a-zA-Z0-9]{3,8}(-[a-zA-Z0-9]{3,8})*");
+
         @Override
         boolean isWellFormed(String value) {
             return pat.matcher(value).matches();
@@ -97,6 +106,7 @@ public class KeyTypeData {
         PRIVATE_USE(new PrivateUseKeyValueTypeHandler()),
         ;
         SpecialTypeHandler handler;
+
         SpecialType(SpecialTypeHandler handler) {
             this.handler = handler;
         }
@@ -108,7 +118,10 @@ public class KeyTypeData {
         Map<String, Type> typeMap;
         EnumSet<SpecialType> specialTypes;
 
-        KeyData(String legacyId, String bcpId, Map<String, Type> typeMap,
+        KeyData(
+                String legacyId,
+                String bcpId,
+                Map<String, Type> typeMap,
                 EnumSet<SpecialType> specialTypes) {
             this.legacyId = legacyId;
             this.bcpId = bcpId;
@@ -145,8 +158,8 @@ public class KeyTypeData {
         return null;
     }
 
-    public static String toBcpType(String key, String type,
-            Output<Boolean> isKnownKey, Output<Boolean> isSpecialType) {
+    public static String toBcpType(
+            String key, String type, Output<Boolean> isKnownKey, Output<Boolean> isSpecialType) {
 
         if (isKnownKey != null) {
             isKnownKey.value = false;
@@ -181,9 +194,8 @@ public class KeyTypeData {
         return null;
     }
 
-
-    public static String toLegacyType(String key, String type,
-            Output<Boolean> isKnownKey, Output<Boolean> isSpecialType) {
+    public static String toLegacyType(
+            String key, String type, Output<Boolean> isKnownKey, Output<Boolean> isSpecialType) {
 
         if (isKnownKey != null) {
             isKnownKey.value = false;
@@ -219,11 +231,12 @@ public class KeyTypeData {
     }
 
     private static void initFromResourceBundle() {
-        UResourceBundle keyTypeDataRes = ICUResourceBundle.getBundleInstance(
-                ICUData.ICU_BASE_NAME,
-                "keyTypeData",
-                ICUResourceBundle.ICU_DATA_CLASS_LOADER,
-                ICUResourceBundle.OpenType.DIRECT);
+        UResourceBundle keyTypeDataRes =
+                ICUResourceBundle.getBundleInstance(
+                        ICUData.ICU_BASE_NAME,
+                        "keyTypeData",
+                        ICUResourceBundle.ICU_DATA_CLASS_LOADER,
+                        ICUResourceBundle.OpenType.DIRECT);
 
         getKeyInfo(keyTypeDataRes.get("keyInfo"));
         getTypeInfo(keyTypeDataRes.get("typeInfo"));
@@ -249,7 +262,7 @@ public class KeyTypeData {
 
         // iterate through keyMap resource
         UResourceBundleIterator keyMapItr = keyMapRes.getIterator();
-        Map<String,Set<String>> _Bcp47Keys = new LinkedHashMap<String,Set<String>>();
+        Map<String, Set<String>> _Bcp47Keys = new LinkedHashMap<String, Set<String>>();
 
         while (keyMapItr.hasNext()) {
             UResourceBundle keyMapEntry = keyMapItr.next();
@@ -342,7 +355,8 @@ public class KeyTypeData {
 
                     // special types
                     final char first = legacyTypeId.charAt(0);
-                    final boolean isSpecialType = '9' < first && first < 'a' && bcpTypeId.length() == 0;
+                    final boolean isSpecialType =
+                            '9' < first && first < 'a' && bcpTypeId.length() == 0;
                     if (isSpecialType) {
                         if (specialTypeSet == null) {
                             specialTypeSet = EnumSet.noneOf(SpecialType.class);
@@ -408,44 +422,41 @@ public class KeyTypeData {
 
     static Set<String> DEPRECATED_KEYS = Collections.emptySet(); // default for no resources
     static Map<String, ValueType> VALUE_TYPES = Collections.emptyMap(); // default for no resources
-    static Map<String, Set<String>> DEPRECATED_KEY_TYPES = Collections.emptyMap(); // default for no resources
+    static Map<String, Set<String>> DEPRECATED_KEY_TYPES =
+            Collections.emptyMap(); // default for no resources
 
-    private enum KeyInfoType {deprecated, valueType}
-    private enum TypeInfoType {deprecated}
+    private enum KeyInfoType {
+        deprecated,
+        valueType
+    }
 
-    /** Reads
-keyInfo{
-    deprecated{
-        kh{"true"}
-        vt{"true"}
+    private enum TypeInfoType {
+        deprecated
     }
-    valueType{
-        ca{"incremental"}
-        h0{"single"}
-        kr{"multiple"}
-        vt{"multiple"}
-        x0{"any"}
-    }
-}
+
+    /**
+     * Reads keyInfo{ deprecated{ kh{"true"} vt{"true"} } valueType{ ca{"incremental"} h0{"single"}
+     * kr{"multiple"} vt{"multiple"} x0{"any"} } }
      */
     private static void getKeyInfo(UResourceBundle keyInfoRes) {
         Set<String> _deprecatedKeys = new LinkedHashSet<String>();
         Map<String, ValueType> _valueTypes = new LinkedHashMap<String, ValueType>();
-        for (UResourceBundleIterator keyInfoIt = keyInfoRes.getIterator(); keyInfoIt.hasNext();) {
+        for (UResourceBundleIterator keyInfoIt = keyInfoRes.getIterator(); keyInfoIt.hasNext(); ) {
             UResourceBundle keyInfoEntry = keyInfoIt.next();
             String key = keyInfoEntry.getKey();
             KeyInfoType keyInfo = KeyInfoType.valueOf(key);
-            for (UResourceBundleIterator keyInfoIt2 = keyInfoEntry.getIterator(); keyInfoIt2.hasNext();) {
+            for (UResourceBundleIterator keyInfoIt2 = keyInfoEntry.getIterator();
+                    keyInfoIt2.hasNext(); ) {
                 UResourceBundle keyInfoEntry2 = keyInfoIt2.next();
                 String key2 = keyInfoEntry2.getKey();
                 String value2 = keyInfoEntry2.getString();
                 switch (keyInfo) {
-                case deprecated:
-                    _deprecatedKeys.add(key2);
-                    break;
-                case valueType:
-                    _valueTypes.put(key2, ValueType.valueOf(value2));
-                    break;
+                    case deprecated:
+                        _deprecatedKeys.add(key2);
+                        break;
+                    case valueType:
+                        _valueTypes.put(key2, ValueType.valueOf(value2));
+                        break;
                 }
             }
         }
@@ -453,35 +464,26 @@ keyInfo{
         VALUE_TYPES = Collections.unmodifiableMap(_valueTypes);
     }
 
-    /** Reads:
-typeInfo{
-    deprecated{
-        co{
-            direct{"true"}
-        }
-        tz{
-            camtr{"true"}
-        }
-    }
-}
-     */
+    /** Reads: typeInfo{ deprecated{ co{ direct{"true"} } tz{ camtr{"true"} } } } */
     private static void getTypeInfo(UResourceBundle typeInfoRes) {
-        Map<String,Set<String>> _deprecatedKeyTypes = new LinkedHashMap<String,Set<String>>();
-        for (UResourceBundleIterator keyInfoIt = typeInfoRes.getIterator(); keyInfoIt.hasNext();) {
+        Map<String, Set<String>> _deprecatedKeyTypes = new LinkedHashMap<String, Set<String>>();
+        for (UResourceBundleIterator keyInfoIt = typeInfoRes.getIterator(); keyInfoIt.hasNext(); ) {
             UResourceBundle keyInfoEntry = keyInfoIt.next();
             String key = keyInfoEntry.getKey();
             TypeInfoType typeInfo = TypeInfoType.valueOf(key);
-            for (UResourceBundleIterator keyInfoIt2 = keyInfoEntry.getIterator(); keyInfoIt2.hasNext();) {
+            for (UResourceBundleIterator keyInfoIt2 = keyInfoEntry.getIterator();
+                    keyInfoIt2.hasNext(); ) {
                 UResourceBundle keyInfoEntry2 = keyInfoIt2.next();
                 String key2 = keyInfoEntry2.getKey();
                 Set<String> _deprecatedTypes = new LinkedHashSet<String>();
-                for (UResourceBundleIterator keyInfoIt3 = keyInfoEntry2.getIterator(); keyInfoIt3.hasNext();) {
+                for (UResourceBundleIterator keyInfoIt3 = keyInfoEntry2.getIterator();
+                        keyInfoIt3.hasNext(); ) {
                     UResourceBundle keyInfoEntry3 = keyInfoIt3.next();
                     String key3 = keyInfoEntry3.getKey();
                     switch (typeInfo) { // allow for expansion
-                    case deprecated:
-                        _deprecatedTypes.add(key3);
-                        break;
+                        case deprecated:
+                            _deprecatedTypes.add(key3);
+                            break;
                     }
                 }
                 _deprecatedKeyTypes.put(key2, Collections.unmodifiableSet(_deprecatedTypes));
@@ -549,11 +551,11 @@ typeInfo{
     @SuppressWarnings("unused")
     private static void initFromTables() {
         for (Object[] keyDataEntry : KEY_DATA) {
-            String legacyKeyId = (String)keyDataEntry[0];
-            String bcpKeyId = (String)keyDataEntry[1];
-            String[][] typeData = (String[][])keyDataEntry[2];
-            String[][] typeAliasData = (String[][])keyDataEntry[3];
-            String[][] bcpTypeAliasData = (String[][])keyDataEntry[4];
+            String legacyKeyId = (String) keyDataEntry[0];
+            String bcpKeyId = (String) keyDataEntry[1];
+            String[][] typeData = (String[][]) keyDataEntry[2];
+            String[][] typeAliasData = (String[][]) keyDataEntry[3];
+            String[][] bcpTypeAliasData = (String[][]) keyDataEntry[4];
 
             boolean hasSameKey = false;
             if (bcpKeyId == null) {
@@ -673,11 +675,13 @@ typeInfo{
 
     public static Set<String> getBcp47Keys() {
         return BCP47_KEYS.keySet();
-    };
+    }
+    ;
 
     public static Set<String> getBcp47KeyTypes(String key) {
         return BCP47_KEYS.get(key);
-    };
+    }
+    ;
 
     public static boolean isDeprecated(String key) {
         return DEPRECATED_KEYS.contains(key);

@@ -9,11 +9,6 @@
 
 package com.ibm.icu.dev.test.calendar;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.DateFormat;
@@ -22,69 +17,89 @@ import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.ChineseCalendar;
 import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.SimpleTimeZone;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 /**
- * A base class for classes that test individual Calendar subclasses.
- * Defines various useful utility methods and constants
+ * A base class for classes that test individual Calendar subclasses. Defines various useful utility
+ * methods and constants
  */
 public class CalendarTestFmwk extends CoreTestFmwk {
 
     // Constants for use by subclasses, solely to save typing
-    public final static int SUN = Calendar.SUNDAY;
-    public final static int MON = Calendar.MONDAY;
-    public final static int TUE = Calendar.TUESDAY;
-    public final static int WED = Calendar.WEDNESDAY;
-    public final static int THU = Calendar.THURSDAY;
-    public final static int FRI = Calendar.FRIDAY;
-    public final static int SAT = Calendar.SATURDAY;
+    public static final int SUN = Calendar.SUNDAY;
+    public static final int MON = Calendar.MONDAY;
+    public static final int TUE = Calendar.TUESDAY;
+    public static final int WED = Calendar.WEDNESDAY;
+    public static final int THU = Calendar.THURSDAY;
+    public static final int FRI = Calendar.FRIDAY;
+    public static final int SAT = Calendar.SATURDAY;
 
-    public final static int ERA     = Calendar.ERA;
-    public final static int YEAR    = Calendar.YEAR;
-    public final static int MONTH   = Calendar.MONTH;
-    public final static int DATE    = Calendar.DATE;
-    public final static int HOUR    = Calendar.HOUR;
-    public final static int MINUTE  = Calendar.MINUTE;
-    public final static int SECOND  = Calendar.SECOND;
-    public final static int DOY     = Calendar.DAY_OF_YEAR;
-    public final static int WOY     = Calendar.WEEK_OF_YEAR;
-    public final static int WOM     = Calendar.WEEK_OF_MONTH;
-    public final static int DOW     = Calendar.DAY_OF_WEEK;
-    public final static int DOWM    = Calendar.DAY_OF_WEEK_IN_MONTH;
+    public static final int ERA = Calendar.ERA;
+    public static final int YEAR = Calendar.YEAR;
+    public static final int MONTH = Calendar.MONTH;
+    public static final int DATE = Calendar.DATE;
+    public static final int HOUR = Calendar.HOUR;
+    public static final int MINUTE = Calendar.MINUTE;
+    public static final int SECOND = Calendar.SECOND;
+    public static final int DOY = Calendar.DAY_OF_YEAR;
+    public static final int WOY = Calendar.WEEK_OF_YEAR;
+    public static final int WOM = Calendar.WEEK_OF_MONTH;
+    public static final int DOW = Calendar.DAY_OF_WEEK;
+    public static final int DOWM = Calendar.DAY_OF_WEEK_IN_MONTH;
 
-    public final static SimpleTimeZone UTC = new SimpleTimeZone(0, "GMT");
+    public static final SimpleTimeZone UTC = new SimpleTimeZone(0, "GMT");
 
     private static final String[] FIELD_NAME = {
-        "ERA", "YEAR", "MONTH", "WEEK_OF_YEAR", "WEEK_OF_MONTH",
-        "DAY_OF_MONTH", "DAY_OF_YEAR", "DAY_OF_WEEK",
-        "DAY_OF_WEEK_IN_MONTH", "AM_PM", "HOUR", "HOUR_OF_DAY",
-        "MINUTE", "SECOND", "MILLISECOND", "ZONE_OFFSET",
-        "DST_OFFSET", "YEAR_WOY", "DOW_LOCAL", "EXTENDED_YEAR",
-        "JULIAN_DAY", "MILLISECONDS_IN_DAY",
+        "ERA",
+        "YEAR",
+        "MONTH",
+        "WEEK_OF_YEAR",
+        "WEEK_OF_MONTH",
+        "DAY_OF_MONTH",
+        "DAY_OF_YEAR",
+        "DAY_OF_WEEK",
+        "DAY_OF_WEEK_IN_MONTH",
+        "AM_PM",
+        "HOUR",
+        "HOUR_OF_DAY",
+        "MINUTE",
+        "SECOND",
+        "MILLISECOND",
+        "ZONE_OFFSET",
+        "DST_OFFSET",
+        "YEAR_WOY",
+        "DOW_LOCAL",
+        "EXTENDED_YEAR",
+        "JULIAN_DAY",
+        "MILLISECONDS_IN_DAY",
         "IS_LEAP_MONTH" // (ChineseCalendar only)
     };
 
     public static final String fieldName(int f) {
-        return (f>=0 && f<FIELD_NAME.length) ?
-            FIELD_NAME[f] : ("<Field " + f + ">");
+        return (f >= 0 && f < FIELD_NAME.length) ? FIELD_NAME[f] : ("<Field " + f + ">");
     }
 
     /**
-     * Iterates through a list of calendar <code>TestCase</code> objects and
-     * makes sure that the time-to-fields and fields-to-time calculations work
-     * correnctly for the values in each test case.
+     * Iterates through a list of calendar <code>TestCase</code> objects and makes sure that the
+     * time-to-fields and fields-to-time calculations work correnctly for the values in each test
+     * case.
      */
-    protected void doTestCases(TestCase[] cases, Calendar cal)
-    {
+    protected void doTestCases(TestCase[] cases, Calendar cal) {
         cal.setTimeZone(UTC);
 
         // Get a format to use for printing dates in the calendar system we're testing
-        DateFormat format = DateFormat.getDateTimeInstance(cal, DateFormat.SHORT, -1, Locale.getDefault());
+        DateFormat format =
+                DateFormat.getDateTimeInstance(cal, DateFormat.SHORT, -1, Locale.getDefault());
 
-        final String pattern = (cal instanceof ChineseCalendar) ?
-            "E MMl/dd/y G HH:mm:ss.S z" :
-            "E, MM/dd/yyyy G HH:mm:ss.S z";
+        final String pattern =
+                (cal instanceof ChineseCalendar)
+                        ? "E MMl/dd/y G HH:mm:ss.S z"
+                        : "E, MM/dd/yyyy G HH:mm:ss.S z";
 
-        ((SimpleDateFormat)format).applyPattern(pattern);
+        ((SimpleDateFormat) format).applyPattern(pattern);
 
         // This format is used for printing Gregorian dates.
         DateFormat gregFormat = new SimpleDateFormat(pattern);
@@ -96,8 +111,7 @@ public class CalendarTestFmwk extends CoreTestFmwk {
         pureGregFmt.setCalendar(pureGreg);
 
         // Now iterate through the test cases and see what happens
-        for (int i = 0; i < cases.length; i++)
-        {
+        for (int i = 0; i < cases.length; i++) {
             logln("\ntest case: " + i);
             TestCase test = cases[i];
 
@@ -109,10 +123,13 @@ public class CalendarTestFmwk extends CoreTestFmwk {
             //
             test.applyTime(cal);
             if (!test.fieldsEqual(cal, this)) {
-                errln("Fail: (millis=>fields) " +
-                      gregFormat.format(test.getTime()) + " => " +
-                      format.format(cal.getTime()) +
-                      ", expected " + test);
+                errln(
+                        "Fail: (millis=>fields) "
+                                + gregFormat.format(test.getTime())
+                                + " => "
+                                + format.format(cal.getTime())
+                                + ", expected "
+                                + test);
             }
 
             //
@@ -123,15 +140,19 @@ public class CalendarTestFmwk extends CoreTestFmwk {
             cal.clear();
             test.applyFields(cal);
             if (!test.equals(cal)) {
-                errln("Fail: (fields=>millis) " + test + " => " +
-                      pureGregFmt.format(cal.getTime()) +
-                      ", expected " + pureGregFmt.format(test.getTime()));
+                errln(
+                        "Fail: (fields=>millis) "
+                                + test
+                                + " => "
+                                + pureGregFmt.format(cal.getTime())
+                                + ", expected "
+                                + pureGregFmt.format(test.getTime()));
             }
         }
     }
 
-    static public final boolean ROLL = true;
-    static public final boolean ADD = false;
+    public static final boolean ROLL = true;
+    public static final boolean ADD = false;
 
     /**
      * Process test cases for <code>add</code> and <code>roll</code> methods.
@@ -156,8 +177,7 @@ public class CalendarTestFmwk extends CoreTestFmwk {
      * @param roll  <code>true</code> or <code>ROLL</code> to test the <code>roll</code> method;
      *              <code>false</code> or <code>ADD</code> to test the <code>add</code method
      */
-    protected void doRollAdd(boolean roll, Calendar cal, int[][] tests)
-    {
+    protected void doRollAdd(boolean roll, Calendar cal, int[][] tests) {
         String name = roll ? "rolling" : "adding";
 
         for (int i = 0; i < tests.length; i++) {
@@ -177,66 +197,86 @@ public class CalendarTestFmwk extends CoreTestFmwk {
             } else {
                 cal.add(test[3], test[4]);
             }
-            int y = cal.get(cal instanceof ChineseCalendar ?
-                            Calendar.EXTENDED_YEAR : YEAR);
-            if (y != test[5] || cal.get(MONTH) != test[6]
-                    || cal.get(DATE) != test[7])
-            {
-                errln("Fail: " + name + " "+ ymdToString(test[0], test[1], test[2])
-                    + " (" + day0 + ")"
-                    + " " + FIELD_NAME[test[3]] + " by " + test[4]
-                    + ": expected " + ymdToString(test[5], test[6], test[7])
-                    + ", got " + ymdToString(cal));
+            int y = cal.get(cal instanceof ChineseCalendar ? Calendar.EXTENDED_YEAR : YEAR);
+            if (y != test[5] || cal.get(MONTH) != test[6] || cal.get(DATE) != test[7]) {
+                errln(
+                        "Fail: "
+                                + name
+                                + " "
+                                + ymdToString(test[0], test[1], test[2])
+                                + " ("
+                                + day0
+                                + ")"
+                                + " "
+                                + FIELD_NAME[test[3]]
+                                + " by "
+                                + test[4]
+                                + ": expected "
+                                + ymdToString(test[5], test[6], test[7])
+                                + ", got "
+                                + ymdToString(cal));
             } else if (isVerbose()) {
-                logln("OK: " + name + " "+ ymdToString(test[0], test[1], test[2])
-                    + " (" + day0 + ")"
-                    + " " + FIELD_NAME[test[3]] + " by " + test[4]
-                    + ": got " + ymdToString(cal));
+                logln(
+                        "OK: "
+                                + name
+                                + " "
+                                + ymdToString(test[0], test[1], test[2])
+                                + " ("
+                                + day0
+                                + ")"
+                                + " "
+                                + FIELD_NAME[test[3]]
+                                + " by "
+                                + test[4]
+                                + ": got "
+                                + ymdToString(cal));
             }
         }
     }
 
     /**
-     * Test the functions getXxxMinimum() and getXxxMaximum() by marching a
-     * test calendar 'cal' through 'numberOfDays' sequential days starting
-     * with 'startDate'.  For each date, read a field value along with its
-     * reported actual minimum and actual maximum.  These values are
-     * checked against one another as well as against getMinimum(),
-     * getGreatestMinimum(), getLeastMaximum(), and getMaximum().  We
-     * expect to see:
+     * Test the functions getXxxMinimum() and getXxxMaximum() by marching a test calendar 'cal'
+     * through 'numberOfDays' sequential days starting with 'startDate'. For each date, read a field
+     * value along with its reported actual minimum and actual maximum. These values are checked
+     * against one another as well as against getMinimum(), getGreatestMinimum(), getLeastMaximum(),
+     * and getMaximum(). We expect to see:
      *
-     * 1. minimum <= actualMinimum <= greatestMinimum <=
-     *    leastMaximum <= actualMaximum <= maximum
+     * <p>1. minimum <= actualMinimum <= greatestMinimum <= leastMaximum <= actualMaximum <= maximum
      *
-     * 2. actualMinimum <= value <= actualMaximum
+     * <p>2. actualMinimum <= value <= actualMaximum
      *
-     * Note: In addition to outright failures, this test reports some
-     * results as warnings.  These are not generally of concern, but they
-     * should be evaluated by a human.  To see these, run this test in
-     * verbose mode.
+     * <p>Note: In addition to outright failures, this test reports some results as warnings. These
+     * are not generally of concern, but they should be evaluated by a human. To see these, run this
+     * test in verbose mode.
+     *
      * @param cal the calendar to be tested
-     * @param fieldsToTest an array of field values to be tested, e.g., new
-     * int[] { Calendar.MONTH, Calendar.DAY_OF_MONTH }.  It only makes
-     * sense to test the day fields; the time fields are not tested by this
-     * method.  If null, then test all standard fields.
+     * @param fieldsToTest an array of field values to be tested, e.g., new int[] { Calendar.MONTH,
+     *     Calendar.DAY_OF_MONTH }. It only makes sense to test the day fields; the time fields are
+     *     not tested by this method. If null, then test all standard fields.
      * @param startDate the first date to test
-     * @param testDuration if positive, the number of days to be tested.
-     * If negative, the number of seconds to run the test.
+     * @param testDuration if positive, the number of days to be tested. If negative, the number of
+     *     seconds to run the test.
      */
-    protected void doLimitsTest(Calendar cal, int[] fieldsToTest,
-                                Date startDate, int testDuration) {
+    protected void doLimitsTest(
+            Calendar cal, int[] fieldsToTest, Date startDate, int testDuration) {
         GregorianCalendar greg = new GregorianCalendar();
         greg.setTime(startDate);
         logln("Start: " + startDate);
 
         if (fieldsToTest == null) {
-            fieldsToTest = new int[] {
-                Calendar.ERA, Calendar.YEAR, Calendar.MONTH,
-                Calendar.WEEK_OF_YEAR, Calendar.WEEK_OF_MONTH,
-                Calendar.DAY_OF_MONTH, Calendar.DAY_OF_YEAR,
-                Calendar.DAY_OF_WEEK_IN_MONTH, Calendar.YEAR_WOY,
-                Calendar.EXTENDED_YEAR
-            };
+            fieldsToTest =
+                    new int[] {
+                        Calendar.ERA,
+                        Calendar.YEAR,
+                        Calendar.MONTH,
+                        Calendar.WEEK_OF_YEAR,
+                        Calendar.WEEK_OF_MONTH,
+                        Calendar.DAY_OF_MONTH,
+                        Calendar.DAY_OF_YEAR,
+                        Calendar.DAY_OF_WEEK_IN_MONTH,
+                        Calendar.YEAR_WOY,
+                        Calendar.EXTENDED_YEAR
+                    };
         }
 
         // Keep a record of minima and maxima that we actually see.
@@ -249,18 +289,19 @@ public class CalendarTestFmwk extends CoreTestFmwk {
         long mark = millis + 5000; // 5 sec
         millis -= testDuration * 1000; // stop time if testDuration<0
 
-        for (int i=0;
-             testDuration>0 ? i<testDuration
-                            : System.currentTimeMillis()<millis;
-             ++i) {
+        for (int i = 0;
+                testDuration > 0 ? i < testDuration : System.currentTimeMillis() < millis;
+                ++i) {
             if (System.currentTimeMillis() >= mark) {
                 logln("(" + i + " days)");
                 mark += 5000; // 5 sec
             }
             cal.setTimeInMillis(greg.getTimeInMillis());
-            for (int j=0; j<fieldsToTest.length; ++j) {
+            for (int j = 0; j < fieldsToTest.length; ++j) {
                 int f = fieldsToTest[j];
-                if (cal.getType().equals("hebrew") && greg.get(Calendar.YEAR)>2500 && logKnownIssue("ICU-22441", "Hebrew calendar illegal year length")) {
+                if (cal.getType().equals("hebrew")
+                        && greg.get(Calendar.YEAR) > 2500
+                        && logKnownIssue("ICU-22441", "Hebrew calendar illegal year length")) {
                     break;
                 }
                 int v = cal.get(f);
@@ -282,23 +323,58 @@ public class CalendarTestFmwk extends CoreTestFmwk {
                 h[1].put(maxActual, nub);
 
                 if (minActual < minLow || minActual > minHigh) {
-                    errln("Fail: " + ymdToString(cal) +
-                          " Range for min of " + FIELD_NAME[f] + "(" + f +
-                          ")=" + minLow + ".." + minHigh +
-                          ", actual_min=" + minActual);
+                    errln(
+                            "Fail: "
+                                    + ymdToString(cal)
+                                    + " Range for min of "
+                                    + FIELD_NAME[f]
+                                    + "("
+                                    + f
+                                    + ")="
+                                    + minLow
+                                    + ".."
+                                    + minHigh
+                                    + ", actual_min="
+                                    + minActual);
                 }
                 if (maxActual < maxLow || maxActual > maxHigh) {
-                    errln("Fail: " + ymdToString(cal) +
-                          " Range for max of " + FIELD_NAME[f] + "(" + f +
-                          ")=" + maxLow + ".." + maxHigh +
-                          ", actual_max=" + maxActual);
+                    errln(
+                            "Fail: "
+                                    + ymdToString(cal)
+                                    + " Range for max of "
+                                    + FIELD_NAME[f]
+                                    + "("
+                                    + f
+                                    + ")="
+                                    + maxLow
+                                    + ".."
+                                    + maxHigh
+                                    + ", actual_max="
+                                    + maxActual);
                 }
                 if (v < minActual || v > maxActual) {
-                    errln("Fail: " + ymdToString(cal) +
-                          " " + FIELD_NAME[f] + "(" + f + ")=" + v +
-                          ", actual range=" + minActual + ".." + maxActual +
-                          ", allowed=(" + minLow + ".." + minHigh + ")..(" +
-                          maxLow + ".." + maxHigh + ")");
+                    errln(
+                            "Fail: "
+                                    + ymdToString(cal)
+                                    + " "
+                                    + FIELD_NAME[f]
+                                    + "("
+                                    + f
+                                    + ")="
+                                    + v
+                                    + ", actual range="
+                                    + minActual
+                                    + ".."
+                                    + maxActual
+                                    + ", allowed=("
+                                    + minLow
+                                    + ".."
+                                    + minHigh
+                                    + ")..("
+                                    + maxLow
+                                    + ".."
+                                    + maxHigh
+                                    + ")");
                 }
             }
             greg.add(Calendar.DAY_OF_YEAR, 1);
@@ -307,24 +383,21 @@ public class CalendarTestFmwk extends CoreTestFmwk {
         // Check actual maxima and minima seen against ranges returned
         // by API.
         StringBuffer buf = new StringBuffer();
-        for (int j=0; j<fieldsToTest.length; ++j) {
+        for (int j = 0; j < fieldsToTest.length; ++j) {
             int f = fieldsToTest[j];
             buf.setLength(0);
             buf.append(FIELD_NAME[f]);
             Map<Integer, Object>[] h = limits[j];
             boolean fullRangeSeen = true;
-            for (int k=0; k<2; ++k) {
-                int rangeLow = (k==0) ?
-                    cal.getMinimum(f) : cal.getLeastMaximum(f);
-                int rangeHigh = (k==0) ?
-                    cal.getGreatestMinimum(f) : cal.getMaximum(f);
+            for (int k = 0; k < 2; ++k) {
+                int rangeLow = (k == 0) ? cal.getMinimum(f) : cal.getLeastMaximum(f);
+                int rangeHigh = (k == 0) ? cal.getGreatestMinimum(f) : cal.getMaximum(f);
                 // If either the top of the range or the bottom was never
                 // seen, then there may be a problem.
-                if (h[k].get(rangeLow) == null ||
-                    h[k].get(rangeHigh) == null) {
+                if (h[k].get(rangeLow) == null || h[k].get(rangeHigh) == null) {
                     fullRangeSeen = false;
                 }
-                buf.append(k==0 ? " minima seen=(" : "; maxima seen=(");
+                buf.append(k == 0 ? " minima seen=(" : "; maxima seen=(");
                 for (Object v : h[k].keySet()) {
                     buf.append(" " + v);
                 }
@@ -343,17 +416,16 @@ public class CalendarTestFmwk extends CoreTestFmwk {
         logln("End: " + greg.getTime());
     }
 
-    /**
-     * doLimitsTest with default test duration
-     */
+    /** doLimitsTest with default test duration */
     protected void doLimitsTest(Calendar cal, int[] fieldsToTest, Date startDate) {
         int testTime = TestFmwk.getExhaustiveness() <= 5 ? -3 : -120; // in seconds
         doLimitsTest(cal, fieldsToTest, startDate, testTime);
     }
 
     /**
-     * Test the functions getMaximum/getGeratestMinimum logically correct.
-     * This method assumes day of week cycle is consistent.
+     * Test the functions getMaximum/getGeratestMinimum logically correct. This method assumes day
+     * of week cycle is consistent.
+     *
      * @param cal The calendar instance to be tested.
      * @param leapMonth true if the calendar system has leap months
      */
@@ -376,75 +448,116 @@ public class CalendarTestFmwk extends CoreTestFmwk {
         // Day of year
         int expected;
         if (!leapMonth) {
-            expected = maxM*maxDOM;
+            expected = maxM * maxDOM;
             if (maxDOY > expected) {
-                errln("FAIL: Maximum value of DAY_OF_YEAR is too big: " + maxDOY + "/expected: <=" + expected);
+                errln(
+                        "FAIL: Maximum value of DAY_OF_YEAR is too big: "
+                                + maxDOY
+                                + "/expected: <="
+                                + expected);
             }
-            expected = lmaxM*lmaxDOM;
+            expected = lmaxM * lmaxDOM;
             if (lmaxDOW < expected) {
-                errln("FAIL: Least maximum value of DAY_OF_YEAR is too small: " + lmaxDOW + "/expected: >=" + expected);
+                errln(
+                        "FAIL: Least maximum value of DAY_OF_YEAR is too small: "
+                                + lmaxDOW
+                                + "/expected: >="
+                                + expected);
             }
         }
 
         // Week of year
-        expected = maxDOY/nDOW + 1;
+        expected = maxDOY / nDOW + 1;
         if (maxWOY > expected) {
-            errln("FAIL: Maximum value of WEEK_OF_YEAR is too big: " + maxWOY + "/expected: <=" + expected);
+            errln(
+                    "FAIL: Maximum value of WEEK_OF_YEAR is too big: "
+                            + maxWOY
+                            + "/expected: <="
+                            + expected);
         }
-        expected = lmaxDOW/nDOW;
+        expected = lmaxDOW / nDOW;
         if (lmaxWOY < expected) {
-            errln("FAIL: Least maximum value of WEEK_OF_YEAR is too small: " + lmaxWOY + "/expected >=" + expected);
+            errln(
+                    "FAIL: Least maximum value of WEEK_OF_YEAR is too small: "
+                            + lmaxWOY
+                            + "/expected >="
+                            + expected);
         }
 
         // Day of week in month
-        expected = (maxDOM + nDOW - 1)/nDOW;
+        expected = (maxDOM + nDOW - 1) / nDOW;
         if (maxDOWIM != expected) {
-            errln("FAIL: Maximum value of DAY_OF_WEEK_IN_MONTH is incorrect: " + maxDOWIM + "/expected: " + expected);
+            errln(
+                    "FAIL: Maximum value of DAY_OF_WEEK_IN_MONTH is incorrect: "
+                            + maxDOWIM
+                            + "/expected: "
+                            + expected);
         }
-        expected = (lmaxDOM + nDOW - 1)/nDOW;
+        expected = (lmaxDOM + nDOW - 1) / nDOW;
         if (lmaxDOWIM != expected) {
-            errln("FAIL: Least maximum value of DAY_OF_WEEK_IN_MONTH is incorrect: " + lmaxDOWIM + "/expected: " + expected);
+            errln(
+                    "FAIL: Least maximum value of DAY_OF_WEEK_IN_MONTH is incorrect: "
+                            + lmaxDOWIM
+                            + "/expected: "
+                            + expected);
         }
 
         // Week of month
         expected = (maxDOM + (nDOW - 1) + (nDOW - minDaysInFirstWeek)) / nDOW;
         if (maxWOM != expected) {
-            errln("FAIL: Maximum value of WEEK_OF_MONTH is incorrect: " + maxWOM + "/expected: " + expected);
+            errln(
+                    "FAIL: Maximum value of WEEK_OF_MONTH is incorrect: "
+                            + maxWOM
+                            + "/expected: "
+                            + expected);
         }
         expected = (lmaxDOM + (nDOW - minDaysInFirstWeek)) / nDOW;
         if (lmaxWOM != expected) {
-            errln("FAIL: Least maximum value of WEEK_OF_MONTH is incorrect: " + lmaxWOM + "/expected: " + expected);
+            errln(
+                    "FAIL: Least maximum value of WEEK_OF_MONTH is incorrect: "
+                            + lmaxWOM
+                            + "/expected: "
+                            + expected);
         }
     }
 
     /**
-     * Convert year,month,day values to the form "year/month/day".
-     * On input the month value is zero-based, but in the result string it is one-based.
+     * Convert year,month,day values to the form "year/month/day". On input the month value is
+     * zero-based, but in the result string it is one-based.
      */
-    static public String ymdToString(int year, int month, int day) {
-        return "" + year + "/" + (month+1) + "/" + day;
+    public static String ymdToString(int year, int month, int day) {
+        return "" + year + "/" + (month + 1) + "/" + day;
     }
 
-    /**
-     * Convert year,month,day values to the form "year/month/day".
-     */
-    static public String ymdToString(Calendar cal) {
+    /** Convert year,month,day values to the form "year/month/day". */
+    public static String ymdToString(Calendar cal) {
         double day = getJulianDay(cal);
         if (cal instanceof ChineseCalendar) {
-            return "" + cal.get(Calendar.EXTENDED_YEAR) + "/" +
-                (cal.get(Calendar.MONTH)+1) +
-                (cal.get(Calendar.IS_LEAP_MONTH)==1?"(leap)":"") + "/" +
-                cal.get(Calendar.DATE) + " (" + day + ", time=" + cal.getTimeInMillis() + ")";
+            return ""
+                    + cal.get(Calendar.EXTENDED_YEAR)
+                    + "/"
+                    + (cal.get(Calendar.MONTH) + 1)
+                    + (cal.get(Calendar.IS_LEAP_MONTH) == 1 ? "(leap)" : "")
+                    + "/"
+                    + cal.get(Calendar.DATE)
+                    + " ("
+                    + day
+                    + ", time="
+                    + cal.getTimeInMillis()
+                    + ")";
         }
-        return ymdToString(cal.get(Calendar.EXTENDED_YEAR),
-                            cal.get(MONTH), cal.get(DATE)) +
-                            " (" + day + ", time=" + cal.getTimeInMillis() + ")";
+        return ymdToString(cal.get(Calendar.EXTENDED_YEAR), cal.get(MONTH), cal.get(DATE))
+                + " ("
+                + day
+                + ", time="
+                + cal.getTimeInMillis()
+                + ")";
     }
 
     static double getJulianDay(Calendar cal) {
         return (cal.getTime().getTime() - JULIAN_EPOCH) / DAY_MS;
     }
 
-    static final double DAY_MS = 24*60*60*1000.0;
-    static final long JULIAN_EPOCH = -210866760000000L;   // 1/1/4713 BC 12:00
+    static final double DAY_MS = 24 * 60 * 60 * 1000.0;
+    static final long JULIAN_EPOCH = -210866760000000L; // 1/1/4713 BC 12:00
 }

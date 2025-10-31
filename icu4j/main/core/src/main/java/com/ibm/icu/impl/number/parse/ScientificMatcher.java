@@ -11,7 +11,6 @@ import com.ibm.icu.text.UnicodeSet;
 
 /**
  * @author sffc
- *
  */
 public class ScientificMatcher implements NumberParseMatcher {
 
@@ -28,10 +27,14 @@ public class ScientificMatcher implements NumberParseMatcher {
 
     private ScientificMatcher(DecimalFormatSymbols symbols, Grouper grouper) {
         exponentSeparatorString = symbols.getExponentSeparator();
-        exponentMatcher = DecimalMatcher.getInstance(symbols,
-                grouper,
-                ParsingUtils.PARSE_FLAG_INTEGER_ONLY | ParsingUtils.PARSE_FLAG_GROUPING_DISABLED);
-        ignorablesMatcher = IgnorablesMatcher.getInstance(ParsingUtils.PARSE_FLAG_STRICT_IGNORABLES);
+        exponentMatcher =
+                DecimalMatcher.getInstance(
+                        symbols,
+                        grouper,
+                        ParsingUtils.PARSE_FLAG_INTEGER_ONLY
+                                | ParsingUtils.PARSE_FLAG_GROUPING_DISABLED);
+        ignorablesMatcher =
+                IgnorablesMatcher.getInstance(ParsingUtils.PARSE_FLAG_STRICT_IGNORABLES);
 
         String minusSign = symbols.getMinusSignString();
         customMinusSign = minusSignSet().contains(minusSign) ? null : minusSign;
@@ -60,7 +63,8 @@ public class ScientificMatcher implements NumberParseMatcher {
         }
 
         // First match the scientific separator, and then match another number after it.
-        // NOTE: This is guarded by the smoke test; no need to check exponentSeparatorString length again.
+        // NOTE: This is guarded by the smoke test; no need to check exponentSeparatorString length
+        // again.
         int initialOffset = segment.getOffset();
         int overlap = segment.getCommonPrefixLength(exponentSeparatorString);
         if (overlap == exponentSeparatorString.length()) {
@@ -120,7 +124,8 @@ public class ScientificMatcher implements NumberParseMatcher {
                 return true;
             }
 
-            // We are supposed to accept E0 after NaN, so we need to make sure result.quantity is available.
+            // We are supposed to accept E0 after NaN, so we need to make sure result.quantity is
+            // available.
             boolean wasNull = (result.quantity == null);
             if (wasNull) {
                 result.quantity = new DecimalQuantity_DualStorageBCD();

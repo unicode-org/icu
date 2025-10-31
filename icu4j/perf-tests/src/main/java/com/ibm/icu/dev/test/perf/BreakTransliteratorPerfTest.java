@@ -2,10 +2,9 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.dev.test.perf;
 
-import java.util.concurrent.TimeUnit;
-
 import com.ibm.icu.text.BreakTransliteratorAccess;
 import com.ibm.icu.text.Transliterator;
+import java.util.concurrent.TimeUnit;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Mode;
@@ -26,5 +25,4 @@ public class BreakTransliteratorPerfTest {
     public String testSentence() {
         return TITLE.transliterate("The Quick Brown Fox jumped over the Lazy Dog");
     }
-
 }

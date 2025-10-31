@@ -19,12 +19,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.XMLConstants;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -34,10 +32,9 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /**
- * A tool used for scanning JaCoCo report.xml and detect methods not covered by the
- * ICU4J unit tests. This tool is called from ICU4J ant target: coverageJaCoCo, and
- * signals failure if there are any methods with no test coverage (and not included
- * in 'coverage-exclusion.txt').
+ * A tool used for scanning JaCoCo report.xml and detect methods not covered by the ICU4J unit
+ * tests. This tool is called from ICU4J ant target: coverageJaCoCo, and signals failure if there
+ * are any methods with no test coverage (and not included in 'coverage-exclusion.txt').
  */
 public class JacocoReportCheck {
     public static void main(String... args) {
@@ -61,7 +58,8 @@ public class JacocoReportCheck {
         Set<String> excludedSet = new HashSet<String>();
         if (args.length > 1) {
             File exclusionTxt = new File(args[1]);
-            try (BufferedReader reader = Files.newBufferedReader(exclusionTxt.toPath(), StandardCharsets.UTF_8)) {
+            try (BufferedReader reader =
+                    Files.newBufferedReader(exclusionTxt.toPath(), StandardCharsets.UTF_8)) {
                 while (true) {
                     String line = reader.readLine();
                     if (line == null) {
@@ -81,7 +79,6 @@ public class JacocoReportCheck {
                 e.printStackTrace();
             }
         }
-
 
         Set<String> noCoverageSet = new TreeSet<String>();
         Set<String> coveredButExcludedSet = new TreeSet<String>();
@@ -105,7 +102,8 @@ public class JacocoReportCheck {
 
         if (noCoverageSet.size() > 0) {
             System.out.println("//");
-            System.out.println("// Methods with no test coverage, not included in the exclusion set");
+            System.out.println(
+                    "// Methods with no test coverage, not included in the exclusion set");
             System.out.println("//");
             for (String key : noCoverageSet) {
                 System.out.println(key);
@@ -138,16 +136,18 @@ public class JacocoReportCheck {
             docFactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
             docFactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
             docFactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-            docFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            docFactory.setFeature(
+                    "http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
             docFactory.setNamespaceAware(true);
 
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-            docBuilder.setEntityResolver(new EntityResolver() {
-                // Ignores JaCoCo report DTD
-                public InputSource resolveEntity(String publicId, String systemId) {
-                    return new InputSource(new StringReader(""));
-                }
-            });
+            docBuilder.setEntityResolver(
+                    new EntityResolver() {
+                        // Ignores JaCoCo report DTD
+                        public InputSource resolveEntity(String publicId, String systemId) {
+                            return new InputSource(new StringReader(""));
+                        }
+                    });
             Document doc = docBuilder.parse(reportXmlFile);
             NodeList nodes = doc.getElementsByTagName("report");
             for (int idx = 0; idx < nodes.getLength(); idx++) {
@@ -155,14 +155,14 @@ public class JacocoReportCheck {
                 if (node.getNodeType() != Node.ELEMENT_NODE) {
                     continue;
                 }
-                Element reportElement = (Element)node;
+                Element reportElement = (Element) node;
                 NodeList packages = reportElement.getElementsByTagName("package");
-                for (int pidx = 0 ; pidx < packages.getLength(); pidx++) {
+                for (int pidx = 0; pidx < packages.getLength(); pidx++) {
                     Node pkgNode = packages.item(pidx);
                     if (pkgNode.getNodeType() != Node.ELEMENT_NODE) {
                         continue;
                     }
-                    Element pkgElement = (Element)pkgNode;
+                    Element pkgElement = (Element) pkgNode;
                     NodeList classes = pkgElement.getChildNodes();
                     if (classes == null) {
                         continue;
@@ -171,10 +171,11 @@ public class JacocoReportCheck {
                     // Iterate through classes
                     for (int cidx = 0; cidx < classes.getLength(); cidx++) {
                         Node clsNode = classes.item(cidx);
-                        if (clsNode.getNodeType() != Node.ELEMENT_NODE || !"class".equals(clsNode.getNodeName())) {
+                        if (clsNode.getNodeType() != Node.ELEMENT_NODE
+                                || !"class".equals(clsNode.getNodeName())) {
                             continue;
                         }
-                        Element clsElement = (Element)clsNode;
+                        Element clsElement = (Element) clsNode;
                         String cls = clsElement.getAttribute("name");
 
                         NodeList methods = clsNode.getChildNodes();
@@ -185,10 +186,11 @@ public class JacocoReportCheck {
                         // Iterate through method elements
                         for (int midx = 0; midx < methods.getLength(); midx++) {
                             Node mtdNode = methods.item(midx);
-                            if (mtdNode.getNodeType() != Node.ELEMENT_NODE || !"method".equals(mtdNode.getNodeName())) {
+                            if (mtdNode.getNodeType() != Node.ELEMENT_NODE
+                                    || !"method".equals(mtdNode.getNodeName())) {
                                 continue;
                             }
-                            Element mtdElement = (Element)mtdNode;
+                            Element mtdElement = (Element) mtdNode;
                             String mtdName = mtdElement.getAttribute("name");
                             String mtdDesc = mtdElement.getAttribute("desc");
                             String mtdLineStr = mtdElement.getAttribute("line");
@@ -198,7 +200,7 @@ public class JacocoReportCheck {
 
                             int mtdLine = -1;
                             try {
-                                 mtdLine = Integer.parseInt(mtdLineStr);
+                                mtdLine = Integer.parseInt(mtdLineStr);
                             } catch (NumberFormatException e) {
                                 // Ignore line # parse failure
                                 e.printStackTrace();
@@ -221,7 +223,7 @@ public class JacocoReportCheck {
                                 if (cntNode.getNodeType() != Node.ELEMENT_NODE) {
                                     continue;
                                 }
-                                Element cntElement = (Element)cntNode;
+                                Element cntElement = (Element) cntNode;
                                 String type = cntElement.getAttribute("type");
                                 String missedStr = cntElement.getAttribute("missed");
                                 String coveredStr = cntElement.getAttribute("covered");
@@ -260,8 +262,16 @@ public class JacocoReportCheck {
                                 }
                             }
                             // Add the entry
-                            Method method = new Method(mtdName, mtdDesc, mtdLine,
-                                    instructionCnt, branchCnt, lineCnt, complexityCnt, methodCnt);
+                            Method method =
+                                    new Method(
+                                            mtdName,
+                                            mtdDesc,
+                                            mtdLine,
+                                            instructionCnt,
+                                            branchCnt,
+                                            lineCnt,
+                                            complexityCnt,
+                                            methodCnt);
 
                             ReportEntry entry = new ReportEntry(cls, method);
                             ReportEntry prev = entries.put(entry.key(), entry);
@@ -314,9 +324,15 @@ public class JacocoReportCheck {
         final Counter complexityCnt;
         final Counter methodCnt;
 
-        Method(String name, String desc, int line,
-                Counter instructionCnt, Counter branchCnt, Counter lineCnt,
-                Counter complexityCnt, Counter methodCnt) {
+        Method(
+                String name,
+                String desc,
+                int line,
+                Counter instructionCnt,
+                Counter branchCnt,
+                Counter lineCnt,
+                Counter complexityCnt,
+                Counter methodCnt) {
             this.name = name;
             this.desc = desc;
             this.line = line;
@@ -383,5 +399,4 @@ public class JacocoReportCheck {
             return method;
         }
     }
-
 }

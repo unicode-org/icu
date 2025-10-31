@@ -20,8 +20,7 @@ public class PVecToTrieCompactHandler implements CompactHandler {
     public int initialValue;
 
     @Override
-    public void setRowIndexForErrorValue(int rowIndex) {
-    }
+    public void setRowIndexForErrorValue(int rowIndex) {}
 
     @Override
     public void setRowIndexForInitialValue(int rowIndex) {
@@ -39,8 +38,7 @@ public class PVecToTrieCompactHandler implements CompactHandler {
             // too many rows for a 16-bit trie
             throw new IndexOutOfBoundsException();
         } else {
-            builder = new IntTrieBuilder(null, 100000, initialValue,
-                    initialValue, false);
+            builder = new IntTrieBuilder(null, 100000, initialValue, initialValue, false);
         }
     }
 }

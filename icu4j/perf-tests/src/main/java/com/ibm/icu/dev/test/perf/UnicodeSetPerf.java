@@ -1,16 +1,16 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /*
-**********************************************************************
-* Copyright (c) 2002-2007, International Business Machines
-* Corporation and others.  All Rights Reserved.
-**********************************************************************
-*/
+ **********************************************************************
+ * Copyright (c) 2002-2007, International Business Machines
+ * Corporation and others.  All Rights Reserved.
+ **********************************************************************
+ */
 package com.ibm.icu.dev.test.perf;
-import java.util.HashSet;
 
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSetIterator;
+import java.util.HashSet;
 
 /**
  * A class for testing UnicodeSet performance.
@@ -48,7 +48,7 @@ public class UnicodeSetPerf extends PerfTest {
             public void call() {
                 us.clear();
                 it.reset();
-                int n=0;
+                int n = 0;
                 while (it.nextRange()) {
                     for (int cp = it.codepoint; cp <= it.codepointEnd; ++cp) {
                         us.add(cp);
@@ -68,7 +68,7 @@ public class UnicodeSetPerf extends PerfTest {
             public void call() {
                 hs.clear();
                 it.reset();
-                int n=0;
+                int n = 0;
                 while (it.nextRange()) {
                     for (int cp = it.codepoint; cp <= it.codepointEnd; ++cp) {
                         hs.add(cp);
@@ -86,7 +86,7 @@ public class UnicodeSetPerf extends PerfTest {
     PerfTest.Function testUnicodeSetContains() {
         us.clear();
         us.set(testChars);
-        
+
         return new PerfTest.Function() {
             public void call() {
                 int temp = 0;

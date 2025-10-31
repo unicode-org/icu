@@ -8,20 +8,18 @@
  */
 package com.ibm.icu.dev.test.format;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.ULocale;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 /**
  * @author rocketman
- *
  */
 @RunWith(JUnit4.class)
 public class NumberFormatSpecificationTest extends CoreTestFmwk {
@@ -45,7 +43,6 @@ public class NumberFormatSpecificationTest extends CoreTestFmwk {
         nf.setMinimumIntegerDigits(4);
         assertEquals("", "34 567,89", format(1234567.89, nf));
         assertEquals("", "0 034,56", format(34.56, nf));
-
     }
 
     @Test
@@ -162,6 +159,4 @@ public class NumberFormatSpecificationTest extends CoreTestFmwk {
     private static String format(double d, NumberFormat nf) {
         return nf.format(d).replace('\u00a0', ' ');
     }
-
-
 }

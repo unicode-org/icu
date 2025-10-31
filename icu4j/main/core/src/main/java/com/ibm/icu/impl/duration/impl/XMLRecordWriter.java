@@ -9,12 +9,11 @@
 
 package com.ibm.icu.impl.duration.impl;
 
+import com.ibm.icu.lang.UCharacter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.ibm.icu.lang.UCharacter;
 
 public class XMLRecordWriter implements RecordWriter {
     private Writer w;

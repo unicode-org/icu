@@ -8,22 +8,20 @@
  */
 package com.ibm.icu.text;
 
-import java.text.FieldPosition;
-
 import com.ibm.icu.impl.SimpleFormatterImpl;
 import com.ibm.icu.impl.StandardPlural;
+import java.text.FieldPosition;
 
 /**
- * QuantityFormatter represents an unknown quantity of something and formats a known quantity
- * in terms of that something. For example, a QuantityFormatter that represents X apples may
- * format 1 as "1 apple" and 3 as "3 apples"
- * <p>
- * QuanitityFormatter appears here instead of in com.ibm.icu.impl because it depends on
+ * QuantityFormatter represents an unknown quantity of something and formats a known quantity in
+ * terms of that something. For example, a QuantityFormatter that represents X apples may format 1
+ * as "1 apple" and 3 as "3 apples"
+ *
+ * <p>QuanitityFormatter appears here instead of in com.ibm.icu.impl because it depends on
  * PluralRules and DecimalFormat. It is package-protected as it is not meant for public use.
  */
 class QuantityFormatter {
-    private final SimpleFormatter[] templates =
-            new SimpleFormatter[StandardPlural.COUNT];
+    private final SimpleFormatter[] templates = new SimpleFormatter[StandardPlural.COUNT];
 
     public QuantityFormatter() {}
 
@@ -31,11 +29,11 @@ class QuantityFormatter {
      * Adds a template if there is none yet for the plural form.
      *
      * @param variant the plural variant, e.g "zero", "one", "two", "few", "many", "other"
-     * @param template the text for that plural variant with "{0}" as the quantity. For
-     * example, in English, the template for the "one" variant may be "{0} apple" while the
-     * template for the "other" variant may be "{0} apples"
-     * @throws IllegalArgumentException if variant is not recognized or
-     *  if template has more than just the {0} placeholder.
+     * @param template the text for that plural variant with "{0}" as the quantity. For example, in
+     *     English, the template for the "one" variant may be "{0} apple" while the template for the
+     *     "other" variant may be "{0} apples"
+     * @throws IllegalArgumentException if variant is not recognized or if template has more than
+     *     just the {0} placeholder.
      */
     public void addIfAbsent(CharSequence variant, String template) {
         int idx = StandardPlural.indexFromString(variant);
@@ -54,10 +52,11 @@ class QuantityFormatter {
 
     /**
      * Format formats a number with this object.
+     *
      * @param number the number to be formatted
      * @param numberFormat used to actually format the number.
-     * @param pluralRules uses the number and the numberFormat to determine what plural
-     *  variant to use for fetching the formatting template.
+     * @param pluralRules uses the number and the numberFormat to determine what plural variant to
+     *     use for fetching the formatting template.
      * @return the formatted string e.g '3 apples'
      */
     public String format(double number, NumberFormat numberFormat, PluralRules pluralRules) {
@@ -73,6 +72,7 @@ class QuantityFormatter {
 
     /**
      * Gets the SimpleFormatter for a particular variant.
+     *
      * @param variant "zero", "one", "two", "few", "many", "other"
      * @return the SimpleFormatter
      */
@@ -80,17 +80,18 @@ class QuantityFormatter {
         assert isValid();
         int idx = StandardPlural.indexOrOtherIndexFromString(variant);
         SimpleFormatter template = templates[idx];
-        return (template == null && idx != StandardPlural.OTHER_INDEX) ?
-                templates[StandardPlural.OTHER_INDEX] : template;
+        return (template == null && idx != StandardPlural.OTHER_INDEX)
+                ? templates[StandardPlural.OTHER_INDEX]
+                : template;
     }
 
-    // The following methods live here so that class PluralRules does not depend on number formatting,
+    // The following methods live here so that class PluralRules does not depend on number
+    // formatting,
     // and the SimpleFormatter does not depend on FieldPosition.
 
-    /**
-     * Selects the standard plural form for the number/formatter/rules.
-     */
-    public static StandardPlural selectPlural(double number, NumberFormat numberFormat, PluralRules rules) {
+    /** Selects the standard plural form for the number/formatter/rules. */
+    public static StandardPlural selectPlural(
+            double number, NumberFormat numberFormat, PluralRules rules) {
         String pluralKeyword;
         if (numberFormat instanceof DecimalFormat) {
             pluralKeyword = rules.select(((DecimalFormat) numberFormat).getFixedDecimal(number));
@@ -100,11 +101,9 @@ class QuantityFormatter {
         return StandardPlural.orOtherFromString(pluralKeyword);
     }
 
-    /**
-     * Formats the pattern with the value and adjusts the FieldPosition.
-     */
-    public static StringBuilder format(String compiledPattern, CharSequence value,
-            StringBuilder appendTo, FieldPosition pos) {
+    /** Formats the pattern with the value and adjusts the FieldPosition. */
+    public static StringBuilder format(
+            String compiledPattern, CharSequence value, StringBuilder appendTo, FieldPosition pos) {
         int[] offsets = new int[1];
         SimpleFormatterImpl.formatAndAppend(compiledPattern, appendTo, offsets, value);
         if (pos.getBeginIndex() != 0 || pos.getEndIndex() != 0) {

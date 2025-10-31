@@ -1,28 +1,11 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /**
- *******************************************************************************
- * Copyright (C) 2000-2016, International Business Machines Corporation and
- * others. All Rights Reserved.
- *******************************************************************************
+ * ****************************************************************************** Copyright (C)
+ * 2000-2016, International Business Machines Corporation and others. All Rights Reserved.
+ * ******************************************************************************
  */
-
 package com.ibm.icu.dev.test.timezone;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.TestFmwk;
@@ -45,6 +28,19 @@ import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.VTimeZone;
 import com.ibm.icu.util.VersionInfo;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 /**
  * @test 1.22 99/09/21
@@ -53,8 +49,7 @@ import com.ibm.icu.util.VersionInfo;
  * @build TimeZoneTest
  */
 @RunWith(JUnit4.class)
-public class TimeZoneTest extends CoreTestFmwk
-{
+public class TimeZoneTest extends CoreTestFmwk {
     static final int millisPerHour = 3600000;
 
     // Some test case data is current date/tzdata version sensitive and producing errors
@@ -67,64 +62,47 @@ public class TimeZoneTest extends CoreTestFmwk
     static final boolean isDevelopmentBuild = (VersionInfo.ICU_VERSION.getMinor() == 0);
 
     /**
-     * NOTE: As of ICU 2.8, the mapping of 3-letter legacy aliases
-     * to `real' Olson IDs is under control of the underlying JDK.
-     * This test may fail on one JDK and pass on another; don't be
-     * too concerned.  Alan
+     * NOTE: As of ICU 2.8, the mapping of 3-letter legacy aliases to `real' Olson IDs is under
+     * control of the underlying JDK. This test may fail on one JDK and pass on another; don't be
+     * too concerned. Alan
      *
-     * Bug 4130885
-     * Certain short zone IDs, used since 1.1.x, are incorrect.
+     * <p>Bug 4130885 Certain short zone IDs, used since 1.1.x, are incorrect.
      *
-     * The worst of these is:
+     * <p>The worst of these is:
      *
-     * "CAT" (Central African Time) should be GMT+2:00, but instead returns a
-     * zone at GMT-1:00. The zone at GMT-1:00 should be called EGT, CVT, EGST,
-     * or AZOST, depending on which zone is meant, but in no case is it CAT.
+     * <p>"CAT" (Central African Time) should be GMT+2:00, but instead returns a zone at GMT-1:00.
+     * The zone at GMT-1:00 should be called EGT, CVT, EGST, or AZOST, depending on which zone is
+     * meant, but in no case is it CAT.
      *
-     * Other wrong zone IDs:
+     * <p>Other wrong zone IDs:
      *
-     * ECT (European Central Time) GMT+1:00: ECT is Ecuador Time,
-     * GMT-5:00. European Central time is abbreviated CEST.
+     * <p>ECT (European Central Time) GMT+1:00: ECT is Ecuador Time, GMT-5:00. European Central time
+     * is abbreviated CEST.
      *
-     * SST (Solomon Island Time) GMT+11:00. SST is actually Samoa Standard Time,
-     * GMT-11:00. Solomon Island time is SBT.
+     * <p>SST (Solomon Island Time) GMT+11:00. SST is actually Samoa Standard Time, GMT-11:00.
+     * Solomon Island time is SBT.
      *
-     * NST (New Zealand Time) GMT+12:00. NST is the abbreviation for
-     * Newfoundland Standard Time, GMT-3:30. New Zealanders use NZST.
+     * <p>NST (New Zealand Time) GMT+12:00. NST is the abbreviation for Newfoundland Standard Time,
+     * GMT-3:30. New Zealanders use NZST.
      *
-     * AST (Alaska Standard Time) GMT-9:00. [This has already been noted in
-     * another bug.] It should be "AKST". AST is Atlantic Standard Time,
-     * GMT-4:00.
+     * <p>AST (Alaska Standard Time) GMT-9:00. [This has already been noted in another bug.] It
+     * should be "AKST". AST is Atlantic Standard Time, GMT-4:00.
      *
-     * PNT (Phoenix Time) GMT-7:00. PNT usually means Pitcairn Time,
-     * GMT-8:30. There is no standard abbreviation for Phoenix time, as distinct
-     * from MST with daylight savings.
+     * <p>PNT (Phoenix Time) GMT-7:00. PNT usually means Pitcairn Time, GMT-8:30. There is no
+     * standard abbreviation for Phoenix time, as distinct from MST with daylight savings.
      *
-     * In addition to these problems, a number of zones are FAKE. That is, they
-     * don't match what people use in the real world.
+     * <p>In addition to these problems, a number of zones are FAKE. That is, they don't match what
+     * people use in the real world.
      *
-     * FAKE zones:
+     * <p>FAKE zones:
      *
-     * EET (should be EEST)
-     * ART (should be EEST)
-     * MET (should be IRST)
-     * NET (should be AMST)
-     * PLT (should be PKT)
-     * BST (should be BDT)
-     * VST (should be ICT)
-     * CTT (should be CST) +
-     * ACT (should be CST) +
-     * AET (should be EST) +
-     * MIT (should be WST) +
-     * IET (should be EST) +
-     * PRT (should be AST) +
-     * CNT (should be NST)
-     * AGT (should be ARST)
-     * BET (should be EST) +
+     * <p>EET (should be EEST) ART (should be EEST) MET (should be IRST) NET (should be AMST) PLT
+     * (should be PKT) BST (should be BDT) VST (should be ICT) CTT (should be CST) + ACT (should be
+     * CST) + AET (should be EST) + MIT (should be WST) + IET (should be EST) + PRT (should be AST)
+     * + CNT (should be NST) AGT (should be ARST) BET (should be EST) +
      *
-     * + A zone with the correct name already exists and means something
-     * else. E.g., EST usually indicates the US Eastern zone, so it cannot be
-     * used for Brazil (BET).
+     * <p>+ A zone with the correct name already exists and means something else. E.g., EST usually
+     * indicates the US Eastern zone, so it cannot be used for Brazil (BET).
      */
     @Test
     public void TestShortZoneIDs() throws Exception {
@@ -141,42 +119,40 @@ public class TimeZoneTest extends CoreTestFmwk
 
         ZoneDescriptor[] REFERENCE_LIST = {
             new ZoneDescriptor("HST", -600, false), // Olson northamerica -10:00
-            new ZoneDescriptor("AST", -540, true),  // ICU Link - America/Anchorage
-            new ZoneDescriptor("PST", -480, true),  // ICU Link - America/Los_Angeles
+            new ZoneDescriptor("AST", -540, true), // ICU Link - America/Anchorage
+            new ZoneDescriptor("PST", -480, true), // ICU Link - America/Los_Angeles
             new ZoneDescriptor("PNT", -420, false), // ICU Link - America/Phoenix
             new ZoneDescriptor("MST", -420, false), // updated Aug 2003 aliu
-            new ZoneDescriptor("CST", -360, true),  // Olson northamerica -7:00
-            new ZoneDescriptor("IET", -300, true),  // ICU Link - America/Indiana/Indianapolis
+            new ZoneDescriptor("CST", -360, true), // Olson northamerica -7:00
+            new ZoneDescriptor("IET", -300, true), // ICU Link - America/Indiana/Indianapolis
             new ZoneDescriptor("EST", -300, false), // Olson northamerica -5:00
             new ZoneDescriptor("PRT", -240, false), // ICU Link - America/Puerto_Rico
-            new ZoneDescriptor("CNT", -210, true),  // ICU Link - America/St_Johns
+            new ZoneDescriptor("CNT", -210, true), // ICU Link - America/St_Johns
             new ZoneDescriptor("AGT", -180, false), // ICU Link - America/Argentina/Buenos_Aires
             // Per https://mm.icann.org/pipermail/tz-announce/2019-July/000056.html
             // Brazil has canceled DST and will stay on standard time indefinitely.
-            new ZoneDescriptor("BET", -180, false),  // ICU Link - America/Sao_Paulo
-            new ZoneDescriptor("GMT", 0, false),    // Olson etcetera Link - Etc/GMT
-            new ZoneDescriptor("UTC", 0, false),    // Olson etcetera 0
-            new ZoneDescriptor("ECT", 60, true),    // ICU Link - Europe/Paris
-            new ZoneDescriptor("MET", 60, true),    // Olson europe 1:00 C-Eur
-            new ZoneDescriptor("CAT", 120, false),  // ICU Link - Africa/Harare
-            new ZoneDescriptor("ART", 120, false),  // ICU Link - Africa/Cairo
-            new ZoneDescriptor("EET", 120, true),   // Olson europe 2:00 EU
-            new ZoneDescriptor("EAT", 180, false),  // ICU Link - Africa/Addis_Ababa
-            new ZoneDescriptor("NET", 240, false),  // ICU Link - Asia/Yerevan
-            new ZoneDescriptor("PLT", 300, false),  // ICU Link - Asia/Karachi
-            new ZoneDescriptor("IST", 330, false),  // ICU Link - Asia/Kolkata
-            new ZoneDescriptor("BST", 360, false),  // ICU Link - Asia/Dhaka
-            new ZoneDescriptor("VST", 420, false),  // ICU Link - Asia/Ho_Chi_Minh
-            new ZoneDescriptor("CTT", 480, false),  // ICU Link - Asia/Shanghai
-            new ZoneDescriptor("JST", 540, false),  // ICU Link - Asia/Tokyo
-            new ZoneDescriptor("ACT", 570, false),  // ICU Link - Australia/Darwin
-            new ZoneDescriptor("AET", 600, true),   // ICU Link - Australia/Sydney
-            new ZoneDescriptor("SST", 660, false),  // ICU Link - Pacific/Guadalcanal
-            new ZoneDescriptor("NST", 720, true),   // ICU Link - Pacific/Auckland
-            new ZoneDescriptor("MIT", 780, false),  // ICU Link - Pacific/Apia
-
-            new ZoneDescriptor("Etc/Unknown", 0, false),    // CLDR
-
+            new ZoneDescriptor("BET", -180, false), // ICU Link - America/Sao_Paulo
+            new ZoneDescriptor("GMT", 0, false), // Olson etcetera Link - Etc/GMT
+            new ZoneDescriptor("UTC", 0, false), // Olson etcetera 0
+            new ZoneDescriptor("ECT", 60, true), // ICU Link - Europe/Paris
+            new ZoneDescriptor("MET", 60, true), // Olson europe 1:00 C-Eur
+            new ZoneDescriptor("CAT", 120, false), // ICU Link - Africa/Harare
+            new ZoneDescriptor("ART", 120, false), // ICU Link - Africa/Cairo
+            new ZoneDescriptor("EET", 120, true), // Olson europe 2:00 EU
+            new ZoneDescriptor("EAT", 180, false), // ICU Link - Africa/Addis_Ababa
+            new ZoneDescriptor("NET", 240, false), // ICU Link - Asia/Yerevan
+            new ZoneDescriptor("PLT", 300, false), // ICU Link - Asia/Karachi
+            new ZoneDescriptor("IST", 330, false), // ICU Link - Asia/Kolkata
+            new ZoneDescriptor("BST", 360, false), // ICU Link - Asia/Dhaka
+            new ZoneDescriptor("VST", 420, false), // ICU Link - Asia/Ho_Chi_Minh
+            new ZoneDescriptor("CTT", 480, false), // ICU Link - Asia/Shanghai
+            new ZoneDescriptor("JST", 540, false), // ICU Link - Asia/Tokyo
+            new ZoneDescriptor("ACT", 570, false), // ICU Link - Australia/Darwin
+            new ZoneDescriptor("AET", 600, true), // ICU Link - Australia/Sydney
+            new ZoneDescriptor("SST", 660, false), // ICU Link - Pacific/Guadalcanal
+            new ZoneDescriptor("NST", 720, true), // ICU Link - Pacific/Auckland
+            new ZoneDescriptor("MIT", 780, false), // ICU Link - Pacific/Apia
+            new ZoneDescriptor("Etc/Unknown", 0, false), // CLDR
             new ZoneDescriptor("SystemV/AST4ADT", -240, true),
             new ZoneDescriptor("SystemV/EST5EDT", -300, true),
             new ZoneDescriptor("SystemV/CST6CDT", -360, true),
@@ -192,27 +168,24 @@ public class TimeZoneTest extends CoreTestFmwk
             new ZoneDescriptor("SystemV/HST10", -600, false),
         };
 
-        for (int i=0; i<REFERENCE_LIST.length; ++i) {
+        for (int i = 0; i < REFERENCE_LIST.length; ++i) {
             ZoneDescriptor referenceZone = REFERENCE_LIST[i];
-            ZoneDescriptor currentZone = new ZoneDescriptor(TimeZone.getTimeZone(referenceZone.getID()));
+            ZoneDescriptor currentZone =
+                    new ZoneDescriptor(TimeZone.getTimeZone(referenceZone.getID()));
             if (referenceZone.equals(currentZone)) {
                 logln("ok " + referenceZone);
-            }
-            else {
+            } else {
                 if (!isDevelopmentBuild || isJDKTimeZone) {
-                    logln("Warning: Expected " + referenceZone +
-                            "; got " + currentZone);
-                } else if (!(referenceZone.getID().equals("ART") && logKnownIssue("ICU-22436", "Wrong DST status for time zone ART"))) {
-                    errln("Fail: Expected " + referenceZone +
-                            "; got " + currentZone);
+                    logln("Warning: Expected " + referenceZone + "; got " + currentZone);
+                } else if (!(referenceZone.getID().equals("ART")
+                        && logKnownIssue("ICU-22436", "Wrong DST status for time zone ART"))) {
+                    errln("Fail: Expected " + referenceZone + "; got " + currentZone);
                 }
             }
         }
     }
 
-    /**
-     * A descriptor for a zone; used to regress the short zone IDs.
-     */
+    /** A descriptor for a zone; used to regress the short zone IDs. */
     static class ZoneDescriptor {
         String id;
         int offset; // In minutes
@@ -230,31 +203,44 @@ public class TimeZoneTest extends CoreTestFmwk
             this.daylight = daylight;
         }
 
-        public String getID() { return id; }
+        public String getID() {
+            return id;
+        }
 
         @Override
         public boolean equals(Object o) {
-            ZoneDescriptor that = (ZoneDescriptor)o;
-            return that != null &&
-                id.equals(that.id) &&
-                offset == that.offset &&
-                daylight == that.daylight;
+            ZoneDescriptor that = (ZoneDescriptor) o;
+            return that != null
+                    && id.equals(that.id)
+                    && offset == that.offset
+                    && daylight == that.daylight;
         }
 
         @Override
         public String toString() {
             int min = offset;
             char sign = '+';
-            if (min < 0) { sign = '-'; min = -min; }
+            if (min < 0) {
+                sign = '-';
+                min = -min;
+            }
 
-            return "Zone[\"" + id + "\", GMT" + sign + (min/60) + ':' +
-                (min%60<10?"0":"") + (min%60) + ", " +
-                (daylight ? "Daylight" : "Standard") + "]";
+            return "Zone[\""
+                    + id
+                    + "\", GMT"
+                    + sign
+                    + (min / 60)
+                    + ':'
+                    + (min % 60 < 10 ? "0" : "")
+                    + (min % 60)
+                    + ", "
+                    + (daylight ? "Daylight" : "Standard")
+                    + "]";
         }
 
         public static int compare(Object o1, Object o2) {
-            ZoneDescriptor i1 = (ZoneDescriptor)o1;
-            ZoneDescriptor i2 = (ZoneDescriptor)o2;
+            ZoneDescriptor i1 = (ZoneDescriptor) o1;
+            ZoneDescriptor i2 = (ZoneDescriptor) o2;
             if (i1.offset > i2.offset) return 1;
             if (i1.offset < i2.offset) return -1;
             if (i1.daylight && !i2.daylight) return 1;
@@ -264,80 +250,91 @@ public class TimeZoneTest extends CoreTestFmwk
     }
 
     /**
-     * As part of the VM fix (see CCC approved RFE 4028006, bug
-     * 4044013), TimeZone.getTimeZone() has been modified to recognize
-     * generic IDs of the form GMT[+-]hh:mm, GMT[+-]hhmm, and
-     * GMT[+-]hh.  Test this behavior here.
+     * As part of the VM fix (see CCC approved RFE 4028006, bug 4044013), TimeZone.getTimeZone() has
+     * been modified to recognize generic IDs of the form GMT[+-]hh:mm, GMT[+-]hhmm, and GMT[+-]hh.
+     * Test this behavior here.
      *
-     * Bug 4044013
+     * <p>Bug 4044013
      */
     @Test
     public void TestCustomParse() {
         String[] DATA = {
             // ID               offset(sec)     output ID
-            "GMT",              "0",            "GMT",      // system ID
-            "GMT-YOUR.AD.HERE", "0",            TimeZone.UNKNOWN_ZONE_ID,
-            "GMT0",             "0",            "GMT0",     // system ID
-            "GMT+0",            "0",            "GMT+0",    // system ID
-            "GMT+1",            "3600",         "GMT+01:00",
-            "GMT-0030",         "-1800",        "GMT-00:30",
-            "GMT+15:99",        "0",            TimeZone.UNKNOWN_ZONE_ID,
-            "GMT+",             "0",            TimeZone.UNKNOWN_ZONE_ID,
-            "GMT-",             "0",            TimeZone.UNKNOWN_ZONE_ID,
-            "GMT+0:",           "0",            TimeZone.UNKNOWN_ZONE_ID,
-            "GMT-:",            "0",            TimeZone.UNKNOWN_ZONE_ID,
-            "GMT+0010",         "600",          "GMT+00:10",
-            "GMT-10",           "-36000",       "GMT-10:00",
-            "GMT+30",           "0",            TimeZone.UNKNOWN_ZONE_ID,
-            "GMT-3:30",         "-12600",       "GMT-03:30",
-            "GMT-230",          "-9000",        "GMT-02:30",
-            "GMT+05:13:05",     "18785",        "GMT+05:13:05",
-            "GMT-71023",        "-25823",       "GMT-07:10:23",
-            "GMT+01:23:45:67",  "0",            TimeZone.UNKNOWN_ZONE_ID,
-            "GMT+01:234",       "0",            TimeZone.UNKNOWN_ZONE_ID,
-            "GMT-2:31:123",     "0",            TimeZone.UNKNOWN_ZONE_ID,
-            "GMT+3:75",         "0",            TimeZone.UNKNOWN_ZONE_ID,
-            "GMT-01010101",     "0",            TimeZone.UNKNOWN_ZONE_ID,
-            "GMT-4E58",         "0",            TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
-            "GMT-4e58",         "0",            TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
-            "GMT-1E01",         "0",            TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
-            "GMT-2E01",         "0",            TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
-            "GMT-2e01",         "0",            TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
-            "GMT-9e02",         "0",            TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
-            "GMT-1e03",         "0",            TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
-            "GMT-2e03",         "0",            TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
-            "GMT-500M",         "0",            TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
-            "GMT-500T",         "0",            TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
-            "GMT-9E00",         "0",            TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
-            "GMT-0X0F",         "0",            TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
-            "GMT-0x0F",         "0",            TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
-            "GMT-0x12",         "0",            TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
-            "GMT-B111",         "0",            TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
-            "GMT-b111",         "0",            TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
-            "GMT-0b11",         "0",            TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
-            "GMT-๑๒",           "-43200",       "GMT-12:00", // ICU-22637
-            "GMT-๑๒:๓๔",        "-45240",       "GMT-12:34", // ICU-22637
-            "GMT+๑๒:๓๔:๕๖",     "45296",        "GMT+12:34:56", // ICU-22637
+            "GMT", "0", "GMT", // system ID
+            "GMT-YOUR.AD.HERE", "0", TimeZone.UNKNOWN_ZONE_ID,
+            "GMT0", "0", "GMT0", // system ID
+            "GMT+0", "0", "GMT+0", // system ID
+            "GMT+1", "3600", "GMT+01:00",
+            "GMT-0030", "-1800", "GMT-00:30",
+            "GMT+15:99", "0", TimeZone.UNKNOWN_ZONE_ID,
+            "GMT+", "0", TimeZone.UNKNOWN_ZONE_ID,
+            "GMT-", "0", TimeZone.UNKNOWN_ZONE_ID,
+            "GMT+0:", "0", TimeZone.UNKNOWN_ZONE_ID,
+            "GMT-:", "0", TimeZone.UNKNOWN_ZONE_ID,
+            "GMT+0010", "600", "GMT+00:10",
+            "GMT-10", "-36000", "GMT-10:00",
+            "GMT+30", "0", TimeZone.UNKNOWN_ZONE_ID,
+            "GMT-3:30", "-12600", "GMT-03:30",
+            "GMT-230", "-9000", "GMT-02:30",
+            "GMT+05:13:05", "18785", "GMT+05:13:05",
+            "GMT-71023", "-25823", "GMT-07:10:23",
+            "GMT+01:23:45:67", "0", TimeZone.UNKNOWN_ZONE_ID,
+            "GMT+01:234", "0", TimeZone.UNKNOWN_ZONE_ID,
+            "GMT-2:31:123", "0", TimeZone.UNKNOWN_ZONE_ID,
+            "GMT+3:75", "0", TimeZone.UNKNOWN_ZONE_ID,
+            "GMT-01010101", "0", TimeZone.UNKNOWN_ZONE_ID,
+            "GMT-4E58", "0", TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
+            "GMT-4e58", "0", TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
+            "GMT-1E01", "0", TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
+            "GMT-2E01", "0", TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
+            "GMT-2e01", "0", TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
+            "GMT-9e02", "0", TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
+            "GMT-1e03", "0", TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
+            "GMT-2e03", "0", TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
+            "GMT-500M", "0", TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
+            "GMT-500T", "0", TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
+            "GMT-9E00", "0", TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
+            "GMT-0X0F", "0", TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
+            "GMT-0x0F", "0", TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
+            "GMT-0x12", "0", TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
+            "GMT-B111", "0", TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
+            "GMT-b111", "0", TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
+            "GMT-0b11", "0", TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
+            "GMT-๑๒", "-43200", "GMT-12:00", // ICU-22637
+            "GMT-๑๒:๓๔", "-45240", "GMT-12:34", // ICU-22637
+            "GMT+๑๒:๓๔:๕๖", "45296", "GMT+12:34:56", // ICU-22637
         };
         for (int i = 0; i < DATA.length; i += 3) {
             String id = DATA[i];
-            int offset = Integer.parseInt(DATA[i+1]);
-            String expId = DATA[i+2];
+            int offset = Integer.parseInt(DATA[i + 1]);
+            String expId = DATA[i + 2];
 
             TimeZone zone = TimeZone.getTimeZone(id);
             String gotID = zone.getID();
-            int gotOffset = zone.getRawOffset()/1000;
+            int gotOffset = zone.getRawOffset() / 1000;
 
             logln(id + " -> " + gotID + " " + gotOffset);
 
             if (offset != gotOffset) {
-                errln("FAIL: Unexpected offset for " + id + " - returned:" + gotOffset + " expected:" + offset);
+                errln(
+                        "FAIL: Unexpected offset for "
+                                + id
+                                + " - returned:"
+                                + gotOffset
+                                + " expected:"
+                                + offset);
             }
             if (!expId.equals(gotID)) {
                 if (TimeZone.getDefaultTimeZoneType() != TimeZone.TIMEZONE_ICU) {
                     logln("ID for " + id + " - returned:" + gotID + " expected:" + expId);
                 } else {
-                    errln("FAIL: Unexpected ID for " + id + " - returned:" + gotID + " expected:" + expId);
+                    errln(
+                            "FAIL: Unexpected ID for "
+                                    + id
+                                    + " - returned:"
+                                    + gotID
+                                    + " expected:"
+                                    + expId);
                 }
             }
         }
@@ -346,13 +343,11 @@ public class TimeZoneTest extends CoreTestFmwk
     /**
      * Test the basic functionality of the getDisplayName() API.
      *
-     * Bug 4112869
-     * Bug 4028006
+     * <p>Bug 4112869 Bug 4028006
      *
-     * See also API change request A41.
+     * <p>See also API change request A41.
      *
-     * 4/21/98 - make smarter, so the test works if the ext resources
-     * are present or not.
+     * <p>4/21/98 - make smarter, so the test works if the ext resources are present or not.
      */
     @Test
     public void TestDisplayName() {
@@ -362,14 +357,13 @@ public class TimeZoneTest extends CoreTestFmwk
 
         // dlf - we now (3.4.1) return generic time
         if (!name.equals("Pacific Time"))
-            errln("Fail: Expected \"Pacific Time\", got " + name +
-                  " for " + zone);
+            errln("Fail: Expected \"Pacific Time\", got " + name + " for " + zone);
 
-        //*****************************************************************
+        // *****************************************************************
         // THE FOLLOWING LINES MUST BE UPDATED IF THE LOCALE DATA CHANGES
         // THE FOLLOWING LINES MUST BE UPDATED IF THE LOCALE DATA CHANGES
         // THE FOLLOWING LINES MUST BE UPDATED IF THE LOCALE DATA CHANGES
-        //*****************************************************************
+        // *****************************************************************
 
         // Test to allow the user to choose to get all the forms
         // (z, zzzz, Z, ZZZZ, v, vvvv)
@@ -377,32 +371,33 @@ public class TimeZoneTest extends CoreTestFmwk
         Object[] DATA = {
             // z and zzzz
             Boolean.FALSE, TimeZone.SHORT, "PST",
-            Boolean.TRUE,  TimeZone.SHORT, "PDT",
-            Boolean.FALSE, TimeZone.LONG,  "Pacific Standard Time",
-            Boolean.TRUE,  TimeZone.LONG,  "Pacific Daylight Time",
+            Boolean.TRUE, TimeZone.SHORT, "PDT",
+            Boolean.FALSE, TimeZone.LONG, "Pacific Standard Time",
+            Boolean.TRUE, TimeZone.LONG, "Pacific Daylight Time",
             // v and vvvv
             Boolean.FALSE, TimeZone.SHORT_GENERIC, "PT",
-            Boolean.TRUE,  TimeZone.SHORT_GENERIC, "PT",
-            Boolean.FALSE, TimeZone.LONG_GENERIC,  "Pacific Time",
-            Boolean.TRUE,  TimeZone.LONG_GENERIC,  "Pacific Time",
+            Boolean.TRUE, TimeZone.SHORT_GENERIC, "PT",
+            Boolean.FALSE, TimeZone.LONG_GENERIC, "Pacific Time",
+            Boolean.TRUE, TimeZone.LONG_GENERIC, "Pacific Time",
             // z and ZZZZ
             Boolean.FALSE, TimeZone.SHORT_GMT, "-0800",
-            Boolean.TRUE,  TimeZone.SHORT_GMT, "-0700",
-            Boolean.FALSE, TimeZone.LONG_GMT,  "GMT-08:00",
-            Boolean.TRUE,  TimeZone.LONG_GMT,  "GMT-07:00",
+            Boolean.TRUE, TimeZone.SHORT_GMT, "-0700",
+            Boolean.FALSE, TimeZone.LONG_GMT, "GMT-08:00",
+            Boolean.TRUE, TimeZone.LONG_GMT, "GMT-07:00",
             // V and VVVV
             Boolean.FALSE, TimeZone.SHORT_COMMONLY_USED, "PST",
-            Boolean.TRUE,  TimeZone.SHORT_COMMONLY_USED, "PDT",
-            Boolean.FALSE, TimeZone.GENERIC_LOCATION,  "Los Angeles Time",
-            Boolean.TRUE,  TimeZone.GENERIC_LOCATION,  "Los Angeles Time",
+            Boolean.TRUE, TimeZone.SHORT_COMMONLY_USED, "PDT",
+            Boolean.FALSE, TimeZone.GENERIC_LOCATION, "Los Angeles Time",
+            Boolean.TRUE, TimeZone.GENERIC_LOCATION, "Los Angeles Time",
         };
 
-        for (int i=0; i<DATA.length; i+=3) {
-            name = zone.getDisplayName(((Boolean)DATA[i]).booleanValue(),
-                                       ((Integer)DATA[i+1]).intValue(),
-                                       Locale.ENGLISH);
-            if (!name.equals(DATA[i+2]))
-                errln("Fail: Expected " + DATA[i+2] + "; got " + name);
+        for (int i = 0; i < DATA.length; i += 3) {
+            name =
+                    zone.getDisplayName(
+                            ((Boolean) DATA[i]).booleanValue(),
+                            ((Integer) DATA[i + 1]).intValue(),
+                            Locale.ENGLISH);
+            if (!name.equals(DATA[i + 2])) errln("Fail: Expected " + DATA[i + 2] + "; got " + name);
         }
 
         // Make sure that we don't display the DST name by constructing a fake
@@ -415,26 +410,26 @@ public class TimeZoneTest extends CoreTestFmwk
         logln("Modified PST inDaylightTime->" + zone2.inDaylightTime(new Date()));
         name = zone2.getDisplayName(Locale.ENGLISH);
         logln("Modified PST->" + name);
-        if (!name.equals("Pacific Time"))
-            errln("Fail: Expected \"Pacific Time\"");
+        if (!name.equals("Pacific Time")) errln("Fail: Expected \"Pacific Time\"");
 
         // Make sure we get the default display format for Locales
         // with no display name data.
         Locale mt_MT = new Locale("mt", "MT");
         name = zone.getDisplayName(mt_MT);
-        //*****************************************************************
+        // *****************************************************************
         // THE FOLLOWING LINE MUST BE UPDATED IF THE LOCALE DATA CHANGES
         // THE FOLLOWING LINE MUST BE UPDATED IF THE LOCALE DATA CHANGES
         // THE FOLLOWING LINE MUST BE UPDATED IF THE LOCALE DATA CHANGES
-        //*****************************************************************
+        // *****************************************************************
         logln("PST(mt_MT)->" + name);
 
         // Now be smart -- check to see if zh resource is even present.
         // If not, we expect the en fallback behavior.
 
         // in icu4j 2.1 we know we have the zh_CN locale data, though it's incomplete
-//    /"DateFormatZoneData",
-        UResourceBundle enRB = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME,Locale.ENGLISH);
+        //    /"DateFormatZoneData",
+        UResourceBundle enRB =
+                UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, Locale.ENGLISH);
         UResourceBundle mtRB = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, mt_MT);
         boolean noZH = enRB == mtRB;
 
@@ -445,49 +440,50 @@ public class TimeZoneTest extends CoreTestFmwk
         }
         // dlf - we will use generic time, or if unavailable, GMT for standard time in the zone
         //     - we now (3.4.1) have localizations for this zone, so change test string
-        else if(!name.equals("\u0126in ta\u2019 Los Angeles") &&
-            !name.equals("GMT-08:00") &&
-            !name.equals("GMT-8:00") &&
-            !name.equals("GMT-0800") &&
-            !name.equals("GMT-800")) {
+        else if (!name.equals("\u0126in ta\u2019 Los Angeles")
+                && !name.equals("GMT-08:00")
+                && !name.equals("GMT-8:00")
+                && !name.equals("GMT-0800")
+                && !name.equals("GMT-800")) {
 
-            errln("Fail: got '" + name + "', expected GMT-08:00 or something similar\n" +
-                  "************************************************************\n" +
-                  "THE ABOVE FAILURE MAY JUST MEAN THE LOCALE DATA HAS CHANGED\n" +
-                  "************************************************************");
+            errln(
+                    "Fail: got '"
+                            + name
+                            + "', expected GMT-08:00 or something similar\n"
+                            + "************************************************************\n"
+                            + "THE ABOVE FAILURE MAY JUST MEAN THE LOCALE DATA HAS CHANGED\n"
+                            + "************************************************************");
         }
 
         // Now try a non-existent zone
-        zone2 = new SimpleTimeZone(90*60*1000, "xyzzy");
+        zone2 = new SimpleTimeZone(90 * 60 * 1000, "xyzzy");
         name = zone2.getDisplayName(Locale.ENGLISH);
         logln("GMT+90min->" + name);
-        if (!name.equals("GMT+01:30") &&
-            !name.equals("GMT+1:30") &&
-            !name.equals("GMT+0130") &&
-            !name.equals("GMT+130"))
-            errln("Fail: Expected GMT+01:30 or something similar");
+        if (!name.equals("GMT+01:30")
+                && !name.equals("GMT+1:30")
+                && !name.equals("GMT+0130")
+                && !name.equals("GMT+130")) errln("Fail: Expected GMT+01:30 or something similar");
 
         // cover getDisplayName() - null arg
         ULocale save = ULocale.getDefault();
         ULocale.setDefault(ULocale.US);
         name = zone2.getDisplayName();
         logln("GMT+90min->" + name + "for default display locale");
-        if (!name.equals("GMT+01:30") &&
-            !name.equals("GMT+1:30") &&
-            !name.equals("GMT+0130") &&
-            !name.equals("GMT+130"))
-            errln("Fail: Expected GMT+01:30 or something similar");
+        if (!name.equals("GMT+01:30")
+                && !name.equals("GMT+1:30")
+                && !name.equals("GMT+0130")
+                && !name.equals("GMT+130")) errln("Fail: Expected GMT+01:30 or something similar");
         ULocale.setDefault(save);
-
     }
-
 
     @Test
     public void TestDisplayName2() {
         Date now = new Date();
 
-        String[] timezones = {"America/Chicago", "Europe/Moscow", "Europe/Rome", "Asia/Shanghai", "WET" };
-        String[] locales = {"en", "fr", "de", "ja", "zh_TW", "zh_Hans" };
+        String[] timezones = {
+            "America/Chicago", "Europe/Moscow", "Europe/Rome", "Asia/Shanghai", "WET"
+        };
+        String[] locales = {"en", "fr", "de", "ja", "zh_TW", "zh_Hans"};
         for (int j = 0; j < locales.length; ++j) {
             ULocale locale = new ULocale(locales[j]);
             for (int i = 0; i < timezones.length; ++i) {
@@ -495,7 +491,8 @@ public class TimeZoneTest extends CoreTestFmwk
                 String displayName0 = tz.getDisplayName(locale);
                 SimpleDateFormat dt = new SimpleDateFormat("vvvv", locale);
                 dt.setTimeZone(tz);
-                String displayName1 = dt.format(now);  // date value _does_ matter if we fallback to GMT
+                String displayName1 =
+                        dt.format(now); // date value _does_ matter if we fallback to GMT
                 logln(locale.getDisplayName() + ", " + tz.getID() + ": " + displayName0);
                 if (!displayName1.equals(displayName0)) {
                     // This could happen when the date used is in DST,
@@ -507,8 +504,14 @@ public class TimeZoneTest extends CoreTestFmwk
                         displayName0 = tz.getDisplayName(true, TimeZone.LONG_GENERIC, locale);
                     }
                     if (!displayName1.equals(displayName0)) {
-                        errln(locale.getDisplayName() + ", " + tz.getID() +
-                                ": expected " + displayName1 + " but got: " + displayName0);
+                        errln(
+                                locale.getDisplayName()
+                                        + ", "
+                                        + tz.getID()
+                                        + ": expected "
+                                        + displayName1
+                                        + " but got: "
+                                        + displayName0);
                     }
                 }
             }
@@ -568,10 +571,9 @@ public class TimeZoneTest extends CoreTestFmwk
 
         TimeZone.setDefault(saveDefault);
 
-
-
         String tzver = TimeZone.getTZDataVersion();
-        if (tzver != null && (tzver.length() == 5 || tzver.length() == 6) /* 4 digits + 1 or 2 letters */ ) {
+        if (tzver != null
+                && (tzver.length() == 5 || tzver.length() == 6) /* 4 digits + 1 or 2 letters */) {
             logln("PASS: tzdata version: " + tzver);
         } else {
             errln("FAIL: getTZDataVersion returned " + tzver);
@@ -579,11 +581,10 @@ public class TimeZoneTest extends CoreTestFmwk
     }
 
     @Test
-    public void TestRuleAPI()
-    {
+    public void TestRuleAPI() {
         // ErrorCode status = ZERO_ERROR;
 
-        int offset = (int)(60*60*1000*1.75); // Pick a weird offset
+        int offset = (int) (60 * 60 * 1000 * 1.75); // Pick a weird offset
         SimpleTimeZone zone = new SimpleTimeZone(offset, "TestZone");
         if (zone.useDaylightTime()) errln("FAIL: useDaylightTime should return false");
 
@@ -598,11 +599,11 @@ public class TimeZoneTest extends CoreTestFmwk
         long julyOneStd = gc.getTime().getTime(); // Local Std time midnight
 
         // Starting and ending hours, WALL TIME
-        int startHour = (int)(2.25 * 3600000);
-        int endHour   = (int)(3.5  * 3600000);
+        int startHour = (int) (2.25 * 3600000);
+        int endHour = (int) (3.5 * 3600000);
 
         zone.setStartRule(Calendar.MARCH, 1, 0, startHour);
-        zone.setEndRule  (Calendar.JULY,  1, 0, endHour);
+        zone.setEndRule(Calendar.JULY, 1, 0, endHour);
 
         gc = new GregorianCalendar(zone);
         // if (failure(status, "new GregorianCalendar")) return;
@@ -611,53 +612,45 @@ public class TimeZoneTest extends CoreTestFmwk
         long julyOne = julyOneStd + endHour - 3600000; // Adjust from wall to Std time
 
         long expMarchOne = 636251400000L;
-        if (marchOne != expMarchOne)
-        {
-            errln("FAIL: Expected start computed as " + marchOne +
-                  " = " + new Date(marchOne));
-            logln("      Should be                  " + expMarchOne +
-                  " = " + new Date(expMarchOne));
+        if (marchOne != expMarchOne) {
+            errln("FAIL: Expected start computed as " + marchOne + " = " + new Date(marchOne));
+            logln(
+                    "      Should be                  "
+                            + expMarchOne
+                            + " = "
+                            + new Date(expMarchOne));
         }
 
         long expJulyOne = 646793100000L;
-        if (julyOne != expJulyOne)
-        {
-            errln("FAIL: Expected start computed as " + julyOne +
-                  " = " + new Date(julyOne));
-            logln("      Should be                  " + expJulyOne +
-                  " = " + new Date(expJulyOne));
+        if (julyOne != expJulyOne) {
+            errln("FAIL: Expected start computed as " + julyOne + " = " + new Date(julyOne));
+            logln("      Should be                  " + expJulyOne + " = " + new Date(expJulyOne));
         }
 
         Calendar cal1 = Calendar.getInstance();
         cal1.set(1990, Calendar.JANUARY, 1);
         Calendar cal2 = Calendar.getInstance();
         cal2.set(1990, Calendar.JUNE, 1);
-        _testUsingBinarySearch(zone, cal1.getTimeInMillis(),
-                               cal2.getTimeInMillis(), marchOne);
+        _testUsingBinarySearch(zone, cal1.getTimeInMillis(), cal2.getTimeInMillis(), marchOne);
         cal1.set(1990, Calendar.JUNE, 1);
         cal2.set(1990, Calendar.DECEMBER, 31);
-        _testUsingBinarySearch(zone, cal1.getTimeInMillis(),
-                               cal2.getTimeInMillis(), julyOne);
+        _testUsingBinarySearch(zone, cal1.getTimeInMillis(), cal2.getTimeInMillis(), julyOne);
 
-        if (zone.inDaylightTime(new Date(marchOne - 1000)) ||
-            !zone.inDaylightTime(new Date(marchOne)))
-            errln("FAIL: Start rule broken");
-        if (!zone.inDaylightTime(new Date(julyOne - 1000)) ||
-            zone.inDaylightTime(new Date(julyOne)))
-            errln("FAIL: End rule broken");
+        if (zone.inDaylightTime(new Date(marchOne - 1000))
+                || !zone.inDaylightTime(new Date(marchOne))) errln("FAIL: Start rule broken");
+        if (!zone.inDaylightTime(new Date(julyOne - 1000))
+                || zone.inDaylightTime(new Date(julyOne))) errln("FAIL: End rule broken");
 
         zone.setStartYear(1991);
-        if (zone.inDaylightTime(new Date(marchOne)) ||
-            zone.inDaylightTime(new Date(julyOne - 1000)))
-            errln("FAIL: Start year broken");
+        if (zone.inDaylightTime(new Date(marchOne))
+                || zone.inDaylightTime(new Date(julyOne - 1000))) errln("FAIL: Start year broken");
 
         // failure(status, "TestRuleAPI");
         // delete gc;
         // delete zone;
     }
 
-    void _testUsingBinarySearch(SimpleTimeZone tz, long min, long max, long expectedBoundary)
-    {
+    void _testUsingBinarySearch(SimpleTimeZone tz, long min, long max, long expectedBoundary) {
         // ErrorCode status = ZERO_ERROR;
         boolean startsInDST = tz.inDaylightTime(new Date(min));
         // if (failure(status, "SimpleTimeZone::inDaylightTime")) return;
@@ -670,8 +663,7 @@ public class TimeZoneTest extends CoreTestFmwk
             long mid = (min + max) / 2;
             if (tz.inDaylightTime(new Date(mid)) == startsInDST) {
                 min = mid;
-            }
-            else {
+            } else {
                 max = mid;
             }
             // if (failure(status, "SimpleTimeZone::inDaylightTime")) return;
@@ -680,10 +672,7 @@ public class TimeZoneTest extends CoreTestFmwk
         logln("Binary Search After:  " + max + " = " + new Date(max));
         long mindelta = expectedBoundary - min;
         // not used long maxdelta = max - expectedBoundary;
-        if (mindelta >= 0 &&
-            mindelta <= INTERVAL &&
-            mindelta >= 0 &&
-            mindelta <= INTERVAL)
+        if (mindelta >= 0 && mindelta <= INTERVAL && mindelta >= 0 && mindelta <= INTERVAL)
             logln("PASS: Expected bdry:  " + expectedBoundary + " = " + new Date(expectedBoundary));
         else
             errln("FAIL: Expected bdry:  " + expectedBoundary + " = " + new Date(expectedBoundary));
@@ -693,24 +682,21 @@ public class TimeZoneTest extends CoreTestFmwk
 
     // Bug 006; verify the offset for a specific zone.
     @Test
-    public void TestPRTOffset()
-    {
-        TimeZone tz = TimeZone.getTimeZone( "PRT" );
-        if( tz == null ) {
-            errln( "FAIL: TimeZone(PRT) is null" );
+    public void TestPRTOffset() {
+        TimeZone tz = TimeZone.getTimeZone("PRT");
+        if (tz == null) {
+            errln("FAIL: TimeZone(PRT) is null");
+        } else {
+            if (tz.getRawOffset() != (-4 * millisPerHour))
+                warnln(
+                        "FAIL: Offset for PRT should be -4, got "
+                                + tz.getRawOffset() / (double) millisPerHour);
         }
-        else{
-            if (tz.getRawOffset() != (-4*millisPerHour))
-                warnln("FAIL: Offset for PRT should be -4, got " +
-                      tz.getRawOffset() / (double)millisPerHour);
-        }
-
     }
 
     // Test various calls
     @Test
-    public void TestVariousAPI518()
-    {
+    public void TestVariousAPI518() {
         TimeZone time_zone = TimeZone.getTimeZone("PST");
         Calendar cal = Calendar.getInstance();
         cal.set(1997, Calendar.APRIL, 30);
@@ -718,32 +704,31 @@ public class TimeZoneTest extends CoreTestFmwk
 
         logln("The timezone is " + time_zone.getID());
 
-        if (time_zone.inDaylightTime(d) != true)
-            errln("FAIL: inDaylightTime returned false");
+        if (time_zone.inDaylightTime(d) != true) errln("FAIL: inDaylightTime returned false");
 
-        if (time_zone.useDaylightTime() != true)
-            errln("FAIL: useDaylightTime returned false");
+        if (time_zone.useDaylightTime() != true) errln("FAIL: useDaylightTime returned false");
 
-        if (time_zone.getRawOffset() != -8*millisPerHour)
-            errln( "FAIL: getRawOffset returned wrong value");
+        if (time_zone.getRawOffset() != -8 * millisPerHour)
+            errln("FAIL: getRawOffset returned wrong value");
 
         GregorianCalendar gc = new GregorianCalendar();
         gc.setTime(d);
-        if (time_zone.getOffset(GregorianCalendar.AD, gc.get(GregorianCalendar.YEAR), gc.get(GregorianCalendar.MONTH),
-                                gc.get(GregorianCalendar.DAY_OF_MONTH),
-                                gc.get(GregorianCalendar.DAY_OF_WEEK), 0)
-            != -7*millisPerHour)
-            errln("FAIL: getOffset returned wrong value");
+        if (time_zone.getOffset(
+                        GregorianCalendar.AD,
+                        gc.get(GregorianCalendar.YEAR),
+                        gc.get(GregorianCalendar.MONTH),
+                        gc.get(GregorianCalendar.DAY_OF_MONTH),
+                        gc.get(GregorianCalendar.DAY_OF_WEEK),
+                        0)
+                != -7 * millisPerHour) errln("FAIL: getOffset returned wrong value");
     }
 
     // Test getAvailableID API
     @Test
-    public void TestGetAvailableIDs913()
-    {
+    public void TestGetAvailableIDs913() {
         StringBuffer buf = new StringBuffer("TimeZone.getAvailableIDs() = { ");
         String[] s = TimeZone.getAvailableIDs();
-        for (int i=0; i<s.length; ++i)
-        {
+        for (int i = 0; i < s.length; ++i) {
             if (i > 0) buf.append(", ");
             buf.append(s[i]);
         }
@@ -753,8 +738,7 @@ public class TimeZoneTest extends CoreTestFmwk
         buf.setLength(0);
         buf.append("TimeZone.getAvailableIDs(GMT+02:00) = { ");
         s = TimeZone.getAvailableIDs(+2 * 60 * 60 * 1000);
-        for (int i=0; i<s.length; ++i)
-        {
+        for (int i = 0; i < s.length; ++i) {
             if (i > 0) buf.append(", ");
             buf.append(s[i]);
         }
@@ -762,21 +746,16 @@ public class TimeZoneTest extends CoreTestFmwk
         logln(buf.toString());
 
         TimeZone tz = TimeZone.getTimeZone("PST");
-        if (tz != null)
-            logln("getTimeZone(PST) = " + tz.getID());
-        else
-            errln("FAIL: getTimeZone(PST) = null");
+        if (tz != null) logln("getTimeZone(PST) = " + tz.getID());
+        else errln("FAIL: getTimeZone(PST) = null");
 
         tz = TimeZone.getTimeZone("America/Los_Angeles");
-        if (tz != null)
-            logln("getTimeZone(America/Los_Angeles) = " + tz.getID());
-        else
-            errln("FAIL: getTimeZone(PST) = null");
+        if (tz != null) logln("getTimeZone(America/Los_Angeles) = " + tz.getID());
+        else errln("FAIL: getTimeZone(PST) = null");
 
         // Bug 4096694
         tz = TimeZone.getTimeZone("NON_EXISTENT");
-        if (tz == null)
-            errln("FAIL: getTimeZone(NON_EXISTENT) = null");
+        if (tz == null) errln("FAIL: getTimeZone(NON_EXISTENT) = null");
         else if (!tz.getID().equals(TimeZone.UNKNOWN_ZONE_ID))
             errln("FAIL: getTimeZone(NON_EXISTENT) = " + tz.getID());
     }
@@ -785,14 +764,17 @@ public class TimeZoneTest extends CoreTestFmwk
     public void TestGetAvailableIDsNew() {
         Set<String> any = TimeZone.getAvailableIDs(SystemTimeZoneType.ANY, null, null);
         Set<String> canonical = TimeZone.getAvailableIDs(SystemTimeZoneType.CANONICAL, null, null);
-        Set<String> canonicalLoc = TimeZone.getAvailableIDs(SystemTimeZoneType.CANONICAL_LOCATION, null, null);
+        Set<String> canonicalLoc =
+                TimeZone.getAvailableIDs(SystemTimeZoneType.CANONICAL_LOCATION, null, null);
 
         checkContainsAll(any, "ANY", canonical, "CANONICAL");
         checkContainsAll(canonical, "CANONICAL", canonicalLoc, "CANONICALLOC");
 
         Set<String> any_US = TimeZone.getAvailableIDs(SystemTimeZoneType.ANY, "US", null);
-        Set<String> canonical_US = TimeZone.getAvailableIDs(SystemTimeZoneType.CANONICAL, "US", null);
-        Set<String> canonicalLoc_US = TimeZone.getAvailableIDs(SystemTimeZoneType.CANONICAL_LOCATION, "US", null);
+        Set<String> canonical_US =
+                TimeZone.getAvailableIDs(SystemTimeZoneType.CANONICAL, "US", null);
+        Set<String> canonicalLoc_US =
+                TimeZone.getAvailableIDs(SystemTimeZoneType.CANONICAL_LOCATION, "US", null);
 
         checkContainsAll(any, "ANY", any_US, "ANY_US");
         checkContainsAll(canonical, "CANONICAL", canonical_US, "CANONICAL_US");
@@ -801,7 +783,7 @@ public class TimeZoneTest extends CoreTestFmwk
         checkContainsAll(any_US, "ANY_US", canonical_US, "CANONICAL_US");
         checkContainsAll(canonical_US, "CANONICAL_US", canonicalLoc_US, "CANONICALLOC_US");
 
-        final int HOUR = 60*60*1000;
+        final int HOUR = 60 * 60 * 1000;
         Set<String> any_W5 = TimeZone.getAvailableIDs(SystemTimeZoneType.ANY, null, -5 * HOUR);
         Set<String> any_CA_W5 = TimeZone.getAvailableIDs(SystemTimeZoneType.ANY, "CA", -5 * HOUR);
 
@@ -884,60 +866,108 @@ public class TimeZoneTest extends CoreTestFmwk
                     buf.append(s);
                 }
             }
-            errln("FAIL: " + name1 + " does not contain all of " + name2 + " - missing: {" + buf + "}");
+            errln(
+                    "FAIL: "
+                            + name1
+                            + " does not contain all of "
+                            + name2
+                            + " - missing: {"
+                            + buf
+                            + "}");
         }
     }
 
-    /**
-     * Bug 4107276
-     */
+    /** Bug 4107276 */
     @Test
     public void TestDSTSavings() {
         // It might be better to find a way to integrate this test into the main TimeZone
         // tests above, but I don't have time to figure out how to do this (or if it's
         // even really a good idea).  Let's consider that a future.  --rtg 1/27/98
-        SimpleTimeZone tz = new SimpleTimeZone(-5 * millisPerHour, "dstSavingsTest",
-                                               Calendar.MARCH, 1, 0, 0, Calendar.SEPTEMBER, 1, 0, 0,
-                                               (int)(0.5 * millisPerHour));
+        SimpleTimeZone tz =
+                new SimpleTimeZone(
+                        -5 * millisPerHour,
+                        "dstSavingsTest",
+                        Calendar.MARCH,
+                        1,
+                        0,
+                        0,
+                        Calendar.SEPTEMBER,
+                        1,
+                        0,
+                        0,
+                        (int) (0.5 * millisPerHour));
 
         if (tz.getRawOffset() != -5 * millisPerHour)
-            errln("Got back a raw offset of " + (tz.getRawOffset() / millisPerHour) +
-                  " hours instead of -5 hours.");
-        if (!tz.useDaylightTime())
-            errln("Test time zone should use DST but claims it doesn't.");
+            errln(
+                    "Got back a raw offset of "
+                            + (tz.getRawOffset() / millisPerHour)
+                            + " hours instead of -5 hours.");
+        if (!tz.useDaylightTime()) errln("Test time zone should use DST but claims it doesn't.");
         if (tz.getDSTSavings() != 0.5 * millisPerHour)
-            errln("Set DST offset to 0.5 hour, but got back " + (tz.getDSTSavings() /
-                                                                 millisPerHour) + " hours instead.");
+            errln(
+                    "Set DST offset to 0.5 hour, but got back "
+                            + (tz.getDSTSavings() / millisPerHour)
+                            + " hours instead.");
 
-        int offset = tz.getOffset(GregorianCalendar.AD, 1998, Calendar.JANUARY, 1,
-                                  Calendar.THURSDAY, 10 * millisPerHour);
+        int offset =
+                tz.getOffset(
+                        GregorianCalendar.AD,
+                        1998,
+                        Calendar.JANUARY,
+                        1,
+                        Calendar.THURSDAY,
+                        10 * millisPerHour);
         if (offset != -5 * millisPerHour)
-            errln("The offset for 10 AM, 1/1/98 should have been -5 hours, but we got "
-                  + (offset / millisPerHour) + " hours.");
+            errln(
+                    "The offset for 10 AM, 1/1/98 should have been -5 hours, but we got "
+                            + (offset / millisPerHour)
+                            + " hours.");
 
-        offset = tz.getOffset(GregorianCalendar.AD, 1998, Calendar.JUNE, 1, Calendar.MONDAY,
-                              10 * millisPerHour);
+        offset =
+                tz.getOffset(
+                        GregorianCalendar.AD,
+                        1998,
+                        Calendar.JUNE,
+                        1,
+                        Calendar.MONDAY,
+                        10 * millisPerHour);
         if (offset != -4.5 * millisPerHour)
-            errln("The offset for 10 AM, 6/1/98 should have been -4.5 hours, but we got "
-                  + (offset / millisPerHour) + " hours.");
+            errln(
+                    "The offset for 10 AM, 6/1/98 should have been -4.5 hours, but we got "
+                            + (offset / millisPerHour)
+                            + " hours.");
 
         tz.setDSTSavings(millisPerHour);
-        offset = tz.getOffset(GregorianCalendar.AD, 1998, Calendar.JANUARY, 1,
-                              Calendar.THURSDAY, 10 * millisPerHour);
+        offset =
+                tz.getOffset(
+                        GregorianCalendar.AD,
+                        1998,
+                        Calendar.JANUARY,
+                        1,
+                        Calendar.THURSDAY,
+                        10 * millisPerHour);
         if (offset != -5 * millisPerHour)
-            errln("The offset for 10 AM, 1/1/98 should have been -5 hours, but we got "
-                  + (offset / millisPerHour) + " hours.");
+            errln(
+                    "The offset for 10 AM, 1/1/98 should have been -5 hours, but we got "
+                            + (offset / millisPerHour)
+                            + " hours.");
 
-        offset = tz.getOffset(GregorianCalendar.AD, 1998, Calendar.JUNE, 1, Calendar.MONDAY,
-                              10 * millisPerHour);
+        offset =
+                tz.getOffset(
+                        GregorianCalendar.AD,
+                        1998,
+                        Calendar.JUNE,
+                        1,
+                        Calendar.MONDAY,
+                        10 * millisPerHour);
         if (offset != -4 * millisPerHour)
-            errln("The offset for 10 AM, 6/1/98 (with a 1-hour DST offset) should have been -4 hours, but we got "
-                  + (offset / millisPerHour) + " hours.");
+            errln(
+                    "The offset for 10 AM, 6/1/98 (with a 1-hour DST offset) should have been -4 hours, but we got "
+                            + (offset / millisPerHour)
+                            + " hours.");
     }
 
-    /**
-     * Bug 4107570
-     */
+    /** Bug 4107570 */
     @Test
     public void TestAlternateRules() {
         // Like TestDSTSavings, this test should probably be integrated somehow with the main
@@ -950,57 +980,121 @@ public class TimeZoneTest extends CoreTestFmwk
         tz.setStartRule(Calendar.MARCH, 10, 12 * millisPerHour);
         tz.setEndRule(Calendar.OCTOBER, 20, 12 * millisPerHour);
 
-        int offset = tz.getOffset(GregorianCalendar.AD, 1998, Calendar.MARCH, 5,
-                                  Calendar.THURSDAY, 10 * millisPerHour);
+        int offset =
+                tz.getOffset(
+                        GregorianCalendar.AD,
+                        1998,
+                        Calendar.MARCH,
+                        5,
+                        Calendar.THURSDAY,
+                        10 * millisPerHour);
         if (offset != -5 * millisPerHour)
-            errln("The offset for 10AM, 3/5/98 should have been -5 hours, but we got "
-                  + (offset / millisPerHour) + " hours.");
+            errln(
+                    "The offset for 10AM, 3/5/98 should have been -5 hours, but we got "
+                            + (offset / millisPerHour)
+                            + " hours.");
 
-        offset = tz.getOffset(GregorianCalendar.AD, 1998, Calendar.MARCH, 15,
-                              Calendar.SUNDAY, 10 * millisPerHour);
+        offset =
+                tz.getOffset(
+                        GregorianCalendar.AD,
+                        1998,
+                        Calendar.MARCH,
+                        15,
+                        Calendar.SUNDAY,
+                        10 * millisPerHour);
         if (offset != -4 * millisPerHour)
-            errln("The offset for 10AM, 3/15/98 should have been -4 hours, but we got "
-                  + (offset / millisPerHour) + " hours.");
+            errln(
+                    "The offset for 10AM, 3/15/98 should have been -4 hours, but we got "
+                            + (offset / millisPerHour)
+                            + " hours.");
 
-        offset = tz.getOffset(GregorianCalendar.AD, 1998, Calendar.OCTOBER, 15,
-                              Calendar.THURSDAY, 10 * millisPerHour);
+        offset =
+                tz.getOffset(
+                        GregorianCalendar.AD,
+                        1998,
+                        Calendar.OCTOBER,
+                        15,
+                        Calendar.THURSDAY,
+                        10 * millisPerHour);
         if (offset != -4 * millisPerHour)
-            errln("The offset for 10AM, 10/15/98 should have been -4 hours, but we got "
-                  + (offset / millisPerHour) + " hours.");
+            errln(
+                    "The offset for 10AM, 10/15/98 should have been -4 hours, but we got "
+                            + (offset / millisPerHour)
+                            + " hours.");
 
-        offset = tz.getOffset(GregorianCalendar.AD, 1998, Calendar.OCTOBER, 25,
-                              Calendar.SUNDAY, 10 * millisPerHour);
+        offset =
+                tz.getOffset(
+                        GregorianCalendar.AD,
+                        1998,
+                        Calendar.OCTOBER,
+                        25,
+                        Calendar.SUNDAY,
+                        10 * millisPerHour);
         if (offset != -5 * millisPerHour)
-            errln("The offset for 10AM, 10/25/98 should have been -5 hours, but we got "
-                  + (offset / millisPerHour) + " hours.");
+            errln(
+                    "The offset for 10AM, 10/25/98 should have been -5 hours, but we got "
+                            + (offset / millisPerHour)
+                            + " hours.");
 
         // test the day-of-week-after-day-in-month API
         tz.setStartRule(Calendar.MARCH, 10, Calendar.FRIDAY, 12 * millisPerHour, true);
         tz.setEndRule(Calendar.OCTOBER, 20, Calendar.FRIDAY, 12 * millisPerHour, false);
 
-        offset = tz.getOffset(GregorianCalendar.AD, 1998, Calendar.MARCH, 11,
-                              Calendar.WEDNESDAY, 10 * millisPerHour);
+        offset =
+                tz.getOffset(
+                        GregorianCalendar.AD,
+                        1998,
+                        Calendar.MARCH,
+                        11,
+                        Calendar.WEDNESDAY,
+                        10 * millisPerHour);
         if (offset != -5 * millisPerHour)
-            errln("The offset for 10AM, 3/11/98 should have been -5 hours, but we got "
-                  + (offset / millisPerHour) + " hours.");
+            errln(
+                    "The offset for 10AM, 3/11/98 should have been -5 hours, but we got "
+                            + (offset / millisPerHour)
+                            + " hours.");
 
-        offset = tz.getOffset(GregorianCalendar.AD, 1998, Calendar.MARCH, 14,
-                              Calendar.SATURDAY, 10 * millisPerHour);
+        offset =
+                tz.getOffset(
+                        GregorianCalendar.AD,
+                        1998,
+                        Calendar.MARCH,
+                        14,
+                        Calendar.SATURDAY,
+                        10 * millisPerHour);
         if (offset != -4 * millisPerHour)
-            errln("The offset for 10AM, 3/14/98 should have been -4 hours, but we got "
-                  + (offset / millisPerHour) + " hours.");
+            errln(
+                    "The offset for 10AM, 3/14/98 should have been -4 hours, but we got "
+                            + (offset / millisPerHour)
+                            + " hours.");
 
-        offset = tz.getOffset(GregorianCalendar.AD, 1998, Calendar.OCTOBER, 15,
-                              Calendar.THURSDAY, 10 * millisPerHour);
+        offset =
+                tz.getOffset(
+                        GregorianCalendar.AD,
+                        1998,
+                        Calendar.OCTOBER,
+                        15,
+                        Calendar.THURSDAY,
+                        10 * millisPerHour);
         if (offset != -4 * millisPerHour)
-            errln("The offset for 10AM, 10/15/98 should have been -4 hours, but we got "
-                  + (offset / millisPerHour) + " hours.");
+            errln(
+                    "The offset for 10AM, 10/15/98 should have been -4 hours, but we got "
+                            + (offset / millisPerHour)
+                            + " hours.");
 
-        offset = tz.getOffset(GregorianCalendar.AD, 1998, Calendar.OCTOBER, 17,
-                              Calendar.SATURDAY, 10 * millisPerHour);
+        offset =
+                tz.getOffset(
+                        GregorianCalendar.AD,
+                        1998,
+                        Calendar.OCTOBER,
+                        17,
+                        Calendar.SATURDAY,
+                        10 * millisPerHour);
         if (offset != -5 * millisPerHour)
-            errln("The offset for 10AM, 10/17/98 should have been -5 hours, but we got "
-                  + (offset / millisPerHour) + " hours.");
+            errln(
+                    "The offset for 10AM, 10/17/98 should have been -5 hours, but we got "
+                            + (offset / millisPerHour)
+                            + " hours.");
     }
 
     @Test
@@ -1008,14 +1102,19 @@ public class TimeZoneTest extends CoreTestFmwk
         String id = "America/Los_Angeles";
         int n = TimeZone.countEquivalentIDs(id);
         if (n < 2) {
-            errln("FAIL: countEquivalentIDs(" + id + ") returned " + n +
-                  ", expected >= 2");
+            errln("FAIL: countEquivalentIDs(" + id + ") returned " + n + ", expected >= 2");
         }
-        for (int i=0; i<n; ++i) {
+        for (int i = 0; i < n; ++i) {
             String s = TimeZone.getEquivalentID(id, i);
             if (s.length() == 0) {
-                errln("FAIL: getEquivalentID(" + id + ", " + i +
-                      ") returned \"" + s + "\", expected valid ID");
+                errln(
+                        "FAIL: getEquivalentID("
+                                + id
+                                + ", "
+                                + i
+                                + ") returned \""
+                                + s
+                                + "\", expected valid ID");
             } else {
                 logln("" + i + ":" + s);
             }
@@ -1029,15 +1128,27 @@ public class TimeZoneTest extends CoreTestFmwk
             for (int j = 0; j < nEquiv; j++) {
                 String equivID = TimeZone.getEquivalentID(ids[i], j);
                 if (equivID.length() == 0) {
-                    errln("FAIL: getEquivalentID(" + ids[i] + ", " + i +
-                            ") returned \"" + equivID + "\", expected valid ID");
+                    errln(
+                            "FAIL: getEquivalentID("
+                                    + ids[i]
+                                    + ", "
+                                    + i
+                                    + ") returned \""
+                                    + equivID
+                                    + "\", expected valid ID");
                 }
             }
             // equivalent ID out of range must be empty
             String outOfRangeID = TimeZone.getEquivalentID(ids[i], nEquiv);
             if (outOfRangeID.length() != 0) {
-                errln("FAIL: getEquivalentID(" + ids[i] + ", " + i +
-                        ") returned \"" + outOfRangeID + "\", expected empty string");
+                errln(
+                        "FAIL: getEquivalentID("
+                                + ids[i]
+                                + ", "
+                                + i
+                                + ") returned \""
+                                + outOfRangeID
+                                + "\", expected empty string");
             }
         }
 
@@ -1046,13 +1157,21 @@ public class TimeZoneTest extends CoreTestFmwk
         for (String invld : invaldIDs) {
             int nEquiv = TimeZone.countEquivalentIDs(invld);
             if (nEquiv != 0) {
-                errln("FAIL: countEquivalentIDs(" + invld + ") returned: " + nEquiv
-                        + ", expected: 0");
+                errln(
+                        "FAIL: countEquivalentIDs("
+                                + invld
+                                + ") returned: "
+                                + nEquiv
+                                + ", expected: 0");
             }
             String sEquiv0 = TimeZone.getEquivalentID(invld, 0);
             if (sEquiv0.length() > 0) {
-                errln("FAIL: getEquivalentID(" + invld + ", 0) returned \"" + sEquiv0
-                        + "\", expected empty string");
+                errln(
+                        "FAIL: getEquivalentID("
+                                + invld
+                                + ", 0) returned \""
+                                + sEquiv0
+                                + "\", expected empty string");
             }
         }
     }
@@ -1066,7 +1185,7 @@ public class TimeZoneTest extends CoreTestFmwk
         boolean la = false, tokyo = false;
         String laZone = "America/Los_Angeles", tokyoZone = "Asia/Tokyo";
 
-        for (int i=0; i<s.length; ++i) {
+        for (int i = 0; i < s.length; ++i) {
             if (s[i].equals(laZone)) {
                 la = true;
             }
@@ -1074,16 +1193,17 @@ public class TimeZoneTest extends CoreTestFmwk
                 tokyo = true;
             }
         }
-        if (!la ) {
+        if (!la) {
             errln("FAIL: " + laZone + " in US = " + la);
         }
         if (tokyo) {
             errln("FAIL: " + tokyoZone + " in US = " + tokyo);
         }
         s = TimeZone.getAvailableIDs("JP");
-        la = false; tokyo = false;
+        la = false;
+        tokyo = false;
 
-        for (int i=0; i<s.length; ++i) {
+        for (int i = 0; i < s.length; ++i) {
             if (s[i].equals(laZone)) {
                 la = true;
             }
@@ -1109,11 +1229,19 @@ public class TimeZoneTest extends CoreTestFmwk
         int dst_icu = tz_icu.getDSTSavings();
 
         if (dst_java != dst_icu) {
-            warnln("java reports dst savings of " + dst_java +
-              " but icu reports " + dst_icu +
-              " for tz " + tz_icu.getID());
+            warnln(
+                    "java reports dst savings of "
+                            + dst_java
+                            + " but icu reports "
+                            + dst_icu
+                            + " for tz "
+                            + tz_icu.getID());
         } else {
-            logln("both java and icu report dst savings of " + dst_java + " for tz " + tz_icu.getID());
+            logln(
+                    "both java and icu report dst savings of "
+                            + dst_java
+                            + " for tz "
+                            + tz_icu.getID());
         }
     }
 
@@ -1123,24 +1251,23 @@ public class TimeZoneTest extends CoreTestFmwk
         cal.set(1997, Calendar.JANUARY, 30);
         long date = cal.getTimeInMillis();
 
-    TimeZone tz_icu = TimeZone.getTimeZone("America/Los_Angeles");
-    int offset = tz_icu.getOffset(date);
-    if (offset != -28800000) {
-        errln("expected offset -28800000, got: " + offset);
-    }
+        TimeZone tz_icu = TimeZone.getTimeZone("America/Los_Angeles");
+        int offset = tz_icu.getOffset(date);
+        if (offset != -28800000) {
+            errln("expected offset -28800000, got: " + offset);
+        }
 
-    cal.set(1997, Calendar.JULY, 30);
-    date = cal.getTimeInMillis();
-    offset = tz_icu.getOffset(date);
-    if (offset != -25200000) {
-        errln("expected offset -25200000, got: " + offset);
-    }
+        cal.set(1997, Calendar.JULY, 30);
+        date = cal.getTimeInMillis();
+        offset = tz_icu.getOffset(date);
+        if (offset != -25200000) {
+            errln("expected offset -25200000, got: " + offset);
+        }
     }
 
     // jb4484
     @Test
-    public void TestSimpleTimeZoneSerialization()
-    {
+    public void TestSimpleTimeZoneSerialization() {
         SimpleTimeZone stz0 = new SimpleTimeZone(32400000, "MyTimeZone");
         SimpleTimeZone stz1 = new SimpleTimeZone(32400000, "Asia/Tokyo");
         SimpleTimeZone stz2 = new SimpleTimeZone(32400000, "Asia/Tokyo");
@@ -1156,7 +1283,9 @@ public class TimeZoneTest extends CoreTestFmwk
         stz5.setStartRule(2, 3, 4, 360000);
         stz5.setEndRule(6, 3, 4, 360000);
 
-        SimpleTimeZone[] stzs = { stz0, stz1, stz2, stz3, stz4, stz5, };
+        SimpleTimeZone[] stzs = {
+            stz0, stz1, stz2, stz3, stz4, stz5,
+        };
 
         for (int i = 0; i < stzs.length; ++i) {
             SimpleTimeZone stz = stzs[i];
@@ -1171,19 +1300,16 @@ public class TimeZoneTest extends CoreTestFmwk
                 ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
                 ObjectInputStream ois = new ObjectInputStream(bais);
 
-                SimpleTimeZone stzDeserialized = (SimpleTimeZone)ois.readObject();
+                SimpleTimeZone stzDeserialized = (SimpleTimeZone) ois.readObject();
                 ois.close();
 
                 assertEquals("time zones", stz, stzDeserialized);
-            }
-            catch (ClassCastException cce) {
+            } catch (ClassCastException cce) {
                 cce.printStackTrace();
                 errln("could not deserialize SimpleTimeZone");
-            }
-            catch (IOException ioe) {
+            } catch (IOException ioe) {
                 errln(ioe.getMessage());
-            }
-            catch (ClassNotFoundException cnfe) {
+            } catch (ClassNotFoundException cnfe) {
                 errln(cnfe.getMessage());
             }
         }
@@ -1327,7 +1453,7 @@ public class TimeZoneTest extends CoreTestFmwk
     public void TestOddTimeZoneNames() {
         for (int i = 0; i < timeZoneTestNames.length; i += 2) {
             String funkyName = timeZoneTestNames[i];
-            String correctName = timeZoneTestNames[i+1];
+            String correctName = timeZoneTestNames[i + 1];
 
             TimeZone ftz = TimeZone.getTimeZone(funkyName);
             TimeZone ctz = TimeZone.getTimeZone(correctName);
@@ -1343,13 +1469,45 @@ public class TimeZoneTest extends CoreTestFmwk
             boolean cdy = ctz.useDaylightTime();
 
             if (!fdn.equals(cdn)) {
-                logln("display name (" + funkyName + ", " + correctName + ") expected: " + cdn + " but got: " + fdn);
+                logln(
+                        "display name ("
+                                + funkyName
+                                + ", "
+                                + correctName
+                                + ") expected: "
+                                + cdn
+                                + " but got: "
+                                + fdn);
             } else if (fro != cro) {
-                logln("offset (" + funkyName + ", " + correctName + ") expected: " + cro + " but got: " + fro);
+                logln(
+                        "offset ("
+                                + funkyName
+                                + ", "
+                                + correctName
+                                + ") expected: "
+                                + cro
+                                + " but got: "
+                                + fro);
             } else if (fds != cds) {
-                logln("daylight (" + funkyName + ", " + correctName + ") expected: " + cds + " but got: " + fds);
+                logln(
+                        "daylight ("
+                                + funkyName
+                                + ", "
+                                + correctName
+                                + ") expected: "
+                                + cds
+                                + " but got: "
+                                + fds);
             } else if (fdy != cdy) {
-                logln("uses daylight (" + funkyName + ", " + correctName + ") expected: " + cdy + " but got: " + fdy);
+                logln(
+                        "uses daylight ("
+                                + funkyName
+                                + ", "
+                                + correctName
+                                + ") expected: "
+                                + cdy
+                                + " but got: "
+                                + fdy);
             } else {
                 // no error, assume we're referencing the same internal java object
             }
@@ -1357,45 +1515,62 @@ public class TimeZoneTest extends CoreTestFmwk
     }
 
     @Test
-    public void TestCoverage(){
+    public void TestCoverage() {
         class StubTimeZone extends TimeZone implements Cloneable {
-            /**
-             * For serialization
-             */
+            /** For serialization */
             private static final long serialVersionUID = 8658654217433379343L;
+
             @Override
-            public int getOffset(int era, int year, int month, int day, int dayOfWeek, int milliseconds) {return 0;}
+            public int getOffset(
+                    int era, int year, int month, int day, int dayOfWeek, int milliseconds) {
+                return 0;
+            }
+
             @Override
             public void setRawOffset(int offsetMillis) {}
+
             @Override
-            public int getRawOffset() {return 0;}
+            public int getRawOffset() {
+                return 0;
+            }
+
             @Override
-            public boolean useDaylightTime() {return false;}
+            public boolean useDaylightTime() {
+                return false;
+            }
+
             @Override
-            public boolean inDaylightTime(Date date) {return false;}
+            public boolean inDaylightTime(Date date) {
+                return false;
+            }
+
             @Override
-            public StubTimeZone clone() {return (StubTimeZone) super.clone();}
+            public StubTimeZone clone() {
+                return (StubTimeZone) super.clone();
+            }
         }
         StubTimeZone stub = new StubTimeZone();
         StubTimeZone stub2 = stub.clone();
-        if (stub.getDSTSavings() != 0){
+        if (stub.getDSTSavings() != 0) {
             errln("TimeZone.getDSTSavings() should return 0");
         }
-        if (!stub.hasSameRules(stub2)){
+        if (!stub.hasSameRules(stub2)) {
             errln("TimeZone.clone() object should hasSameRules");
         }
     }
+
     @Test
-    public void TestMark(){
+    public void TestMark() {
         String tzid = "America/Argentina/ComodRivadavia";
         TimeZone tz = TimeZone.getTimeZone(tzid);
         int offset = tz.getOffset(new Date().getTime());
         logln(tzid + ":\t" + offset);
         List<String> list = Arrays.asList(TimeZone.getAvailableIDs());
-        if(!list.contains(tzid)){
+        if (!list.contains(tzid)) {
             errln("Could create the time zone but it is not in getAvailableIDs");
         }
     }
+
     @Test
     public void TestZoneMeta() {
         java.util.TimeZone save = java.util.TimeZone.getDefault();
@@ -1406,10 +1581,10 @@ public class TimeZoneTest extends CoreTestFmwk
             java.util.TimeZone.setDefault(newZone);
             SimpleTimeZone zone = new SimpleTimeZone(0, "GMT");
             com.ibm.icu.util.TimeZone defaultZone = com.ibm.icu.util.TimeZone.getDefault();
-            if(defaultZone==null){
+            if (defaultZone == null) {
                 errln("TimeZone.getDefault() failed for GMT-08:00");
             }
-            if(zone==null){
+            if (zone == null) {
                 errln("SimpleTimeZone(0, GMT-08:00) failed for GMT-08:00");
             }
         } finally {
@@ -1420,7 +1595,7 @@ public class TimeZoneTest extends CoreTestFmwk
     }
 
     // Copied from the protected constant in TimeZone.
-    private static final int MILLIS_PER_HOUR = 60*60*1000;
+    private static final int MILLIS_PER_HOUR = 60 * 60 * 1000;
 
     //  Test that a transition at the end of February is handled correctly.
     @Test
@@ -1431,24 +1606,34 @@ public class TimeZoneTest extends CoreTestFmwk
         //
         // Note: In tzdata2007h, the rule had changed, so no actual zones uses
         // lastSun in Feb anymore.
-        SimpleTimeZone tz1 = new SimpleTimeZone(
-                           -3 * MILLIS_PER_HOUR,                    // raw offset: 3h before (west of) GMT
-                           "nov-feb",
-                           Calendar.NOVEMBER, 1, Calendar.SUNDAY,   // start: November, first, Sunday
-                           0,                                       //        midnight wall time
-                           Calendar.FEBRUARY, -1, Calendar.SUNDAY,  // end:   February, last, Sunday
-                           0);                                      //        midnight wall time
+        SimpleTimeZone tz1 =
+                new SimpleTimeZone(
+                        -3 * MILLIS_PER_HOUR, // raw offset: 3h before (west of) GMT
+                        "nov-feb",
+                        Calendar.NOVEMBER,
+                        1,
+                        Calendar.SUNDAY, // start: November, first, Sunday
+                        0, //        midnight wall time
+                        Calendar.FEBRUARY,
+                        -1,
+                        Calendar.SUNDAY, // end:   February, last, Sunday
+                        0); //        midnight wall time
 
         // Now hardcode the same rules as for Brazil in tzdata 2006n, so that
         // we cover the intended code even when in the future zoneinfo hardcodes
         // these transition dates.
-        SimpleTimeZone tz2= new SimpleTimeZone(
-                           -3 * MILLIS_PER_HOUR,                    // raw offset: 3h before (west of) GMT
-                           "nov-feb2",
-                           Calendar.NOVEMBER, 1, -Calendar.SUNDAY,  // start: November, 1 or after, Sunday
-                           0,                                       //        midnight wall time
-                           Calendar.FEBRUARY, -29, -Calendar.SUNDAY,// end:   February, 29 or before, Sunday
-                           0);                                      //        midnight wall time
+        SimpleTimeZone tz2 =
+                new SimpleTimeZone(
+                        -3 * MILLIS_PER_HOUR, // raw offset: 3h before (west of) GMT
+                        "nov-feb2",
+                        Calendar.NOVEMBER,
+                        1,
+                        -Calendar.SUNDAY, // start: November, 1 or after, Sunday
+                        0, //        midnight wall time
+                        Calendar.FEBRUARY,
+                        -29,
+                        -Calendar.SUNDAY, // end:   February, 29 or before, Sunday
+                        0); //        midnight wall time
 
         // Gregorian calendar with the UTC time zone for getting sample test date/times.
         GregorianCalendar gc = new GregorianCalendar(TimeZone.getTimeZone("Etc/GMT"));
@@ -1458,28 +1643,25 @@ public class TimeZoneTest extends CoreTestFmwk
             // UTC time (6 fields) followed by
             // expected time zone offset in hours after GMT (negative=before GMT).
             // int year, month, day, hour, minute, second, offsetHours
-            2006, Calendar.NOVEMBER,  5, 02, 59, 59, -3,
-            2006, Calendar.NOVEMBER,  5, 03, 00, 00, -2,
+            2006, Calendar.NOVEMBER, 5, 02, 59, 59, -3,
+            2006, Calendar.NOVEMBER, 5, 03, 00, 00, -2,
             2007, Calendar.FEBRUARY, 25, 01, 59, 59, -2,
             2007, Calendar.FEBRUARY, 25, 02, 00, 00, -3,
-
-            2007, Calendar.NOVEMBER,  4, 02, 59, 59, -3,
-            2007, Calendar.NOVEMBER,  4, 03, 00, 00, -2,
+            2007, Calendar.NOVEMBER, 4, 02, 59, 59, -3,
+            2007, Calendar.NOVEMBER, 4, 03, 00, 00, -2,
             2008, Calendar.FEBRUARY, 24, 01, 59, 59, -2,
             2008, Calendar.FEBRUARY, 24, 02, 00, 00, -3,
-
-            2008, Calendar.NOVEMBER,  2, 02, 59, 59, -3,
-            2008, Calendar.NOVEMBER,  2, 03, 00, 00, -2,
+            2008, Calendar.NOVEMBER, 2, 02, 59, 59, -3,
+            2008, Calendar.NOVEMBER, 2, 03, 00, 00, -2,
             2009, Calendar.FEBRUARY, 22, 01, 59, 59, -2,
             2009, Calendar.FEBRUARY, 22, 02, 00, 00, -3,
-
-            2009, Calendar.NOVEMBER,  1, 02, 59, 59, -3,
-            2009, Calendar.NOVEMBER,  1, 03, 00, 00, -2,
+            2009, Calendar.NOVEMBER, 1, 02, 59, 59, -3,
+            2009, Calendar.NOVEMBER, 1, 03, 00, 00, -2,
             2010, Calendar.FEBRUARY, 28, 01, 59, 59, -2,
             2010, Calendar.FEBRUARY, 28, 02, 00, 00, -3
         };
 
-        TimeZone timezones[] = { tz1, tz2 };
+        TimeZone timezones[] = {tz1, tz2};
 
         TimeZone tz;
         Date dt;
@@ -1487,18 +1669,37 @@ public class TimeZoneTest extends CoreTestFmwk
         int[] offsets = new int[2]; // raw = offsets[0], dst = offsets[1]
         for (t = 0; t < timezones.length; ++t) {
             tz = timezones[t];
-            for (i = 0; i < data.length; i+=7) {
-                gc.set(data[i], data[i+1], data[i+2],
-                       data[i+3], data[i+4], data[i+5]);
+            for (i = 0; i < data.length; i += 7) {
+                gc.set(data[i], data[i + 1], data[i + 2], data[i + 3], data[i + 4], data[i + 5]);
                 dt = gc.getTime();
                 tz.getOffset(dt.getTime(), false, offsets);
                 raw = offsets[0];
                 dst = offsets[1];
-                if ((raw + dst) != data[i+6] * MILLIS_PER_HOUR) {
-                    errln("test case " + t + "." + (i/7) + ": " +
-                          "tz.getOffset(" + data[i] + "-" + (data[i+1] + 1) + "-" + data[i+2] + " " +
-                          data[i+3] + ":" + data[i+4] + ":" + data[i+5] +
-                          ") returns " + raw + "+" + dst + " != " + data[i+6] * MILLIS_PER_HOUR);
+                if ((raw + dst) != data[i + 6] * MILLIS_PER_HOUR) {
+                    errln(
+                            "test case "
+                                    + t
+                                    + "."
+                                    + (i / 7)
+                                    + ": "
+                                    + "tz.getOffset("
+                                    + data[i]
+                                    + "-"
+                                    + (data[i + 1] + 1)
+                                    + "-"
+                                    + data[i + 2]
+                                    + " "
+                                    + data[i + 3]
+                                    + ":"
+                                    + data[i + 4]
+                                    + ":"
+                                    + data[i + 5]
+                                    + ") returns "
+                                    + raw
+                                    + "+"
+                                    + dst
+                                    + " != "
+                                    + data[i + 6] * MILLIS_PER_HOUR);
                 }
             }
         }
@@ -1517,131 +1718,131 @@ public class TimeZoneTest extends CoreTestFmwk
         // with zone rules.
         final String[][] excluded1 = {
             //  {"<link-from>", "<link-to> (A zone ID with "Zone" rule)"},
-                {"Africa/Accra", "Africa/Abidjan"},
-                {"Africa/Addis_Ababa", "Africa/Nairobi"},
-                {"Africa/Asmera", "Africa/Nairobi"},
-                {"Africa/Bamako", "Africa/Abidjan"},
-                {"Africa/Bangui", "Africa/Lagos"},
-                {"Africa/Banjul", "Africa/Abidjan"},
-                {"Africa/Blantyre", "Africa/Maputo"},
-                {"Africa/Brazzaville", "Africa/Lagos"},
-                {"Africa/Bujumbura", "Africa/Maputo"},
-                {"Africa/Conakry", "Africa/Abidjan"},
-                {"Africa/Dakar", "Africa/Abidjan"},
-                {"Africa/Dar_es_Salaam", "Africa/Nairobi"},
-                {"Africa/Djibouti", "Africa/Nairobi"},
-                {"Africa/Douala", "Africa/Lagos"},
-                {"Africa/Freetown", "Africa/Abidjan"},
-                {"Africa/Gaborone", "Africa/Maputo"},
-                {"Africa/Harare", "Africa/Maputo"},
-                {"Africa/Kampala", "Africa/Nairobi"},
-                {"Africa/Khartoum", "Africa/Juba"},
-                {"Africa/Kigali", "Africa/Maputo"},
-                {"Africa/Kinshasa", "Africa/Lagos"},
-                {"Africa/Libreville", "Africa/Lagos"},
-                {"Africa/Lome", "Africa/Abidjan"},
-                {"Africa/Luanda", "Africa/Lagos"},
-                {"Africa/Lubumbashi", "Africa/Maputo"},
-                {"Africa/Lusaka", "Africa/Maputo"},
-                {"Africa/Maseru", "Africa/Johannesburg"},
-                {"Africa/Malabo", "Africa/Lagos"},
-                {"Africa/Mbabane", "Africa/Johannesburg"},
-                {"Africa/Mogadishu", "Africa/Nairobi"},
-                {"Africa/Niamey", "Africa/Lagos"},
-                {"Africa/Nouakchott", "Africa/Abidjan"},
-                {"Africa/Ouagadougou", "Africa/Abidjan"},
-                {"Africa/Porto-Novo", "Africa/Lagos"},
-                {"Africa/Sao_Tome", "Africa/Abidjan"},
-                {"America/Antigua", "America/Puerto_Rico"},
-                {"America/Anguilla", "America/Puerto_Rico"},
-                {"America/Aruba", "America/Puerto_Rico"},
-                {"America/Atikokan", "America/Panama"},
-                {"America/Blanc-Sablon", "America/Puerto_Rico"},
-                {"America/Cayman", "America/Panama"},
-                {"America/Coral_Harbour", "America/Panama"},
-                {"America/Creston", "America/Phoenix"},
-                {"America/Curacao", "America/Puerto_Rico"},
-                {"America/Dominica", "America/Puerto_Rico"},
-                {"America/Grenada", "America/Puerto_Rico"},
-                {"America/Guadeloupe", "America/Puerto_Rico"},
-                {"America/Kralendijk", "America/Puerto_Rico"},
-                {"America/Lower_Princes", "America/Puerto_Rico"},
-                {"America/Marigot", "America/Puerto_Rico"},
-                {"America/Montreal", "America/Toronto"},
-                {"America/Montserrat", "America/Puerto_Rico"},
-                {"America/Nassau", "America/Toronto"},
-                {"America/Nipigon", "America/Toronto"},
-                {"America/Pangnirtung", "America/Iqaluit"},
-                {"America/Port_of_Spain", "America/Puerto_Rico"},
-                {"America/Rainy_River", "America/Winnipeg"},
-                {"America/Santa_Isabel", "America/Tijuana"},
-                {"America/Shiprock", "America/Denver"},
-                {"America/St_Barthelemy", "America/Puerto_Rico"},
-                {"America/St_Kitts", "America/Puerto_Rico"},
-                {"America/St_Lucia", "America/Puerto_Rico"},
-                {"America/St_Thomas", "America/Puerto_Rico"},
-                {"America/St_Vincent", "America/Puerto_Rico"},
-                {"America/Thunder_Bay", "America/Toronto"},
-                {"America/Tortola", "America/Puerto_Rico"},
-                {"America/Virgin", "America/Puerto_Rico"},
-                {"America/Yellowknife", "America/Edmonton"},
-                {"Antarctica/DumontDUrville", "Pacific/Port_Moresby"},
-                {"Antarctica/South_Pole", "Antarctica/McMurdo"},
-                {"Antarctica/Syowa", "Asia/Riyadh"},
-                {"Arctic/Longyearbyen", "Europe/Berlin"},
-                {"Asia/Aden", "Asia/Riyadh"},
-                {"Asia/Brunei", "Asia/Kuching"},
-                {"Asia/Kuala_Lumpur", "Asia/Singapore"},
-                {"Asia/Kuwait", "Asia/Riyadh"},
-                {"Asia/Muscat", "Asia/Dubai"},
-                {"Asia/Phnom_Penh", "Asia/Bangkok"},
-                {"Asia/Qatar", "Asia/Bahrain"},
-                {"Asia/Vientiane", "Asia/Bangkok"},
-                {"Atlantic/Jan_Mayen", "Europe/Berlin"},
-                {"Atlantic/Reykjavik", "Africa/Abidjan"},
-                {"Atlantic/St_Helena", "Africa/Abidjan"},
-                {"Australia/Currie", "Australia/Hobart"},
-                {"Australia/Tasmania", "Australia/Hobart"},
-                {"Europe/Bratislava", "Europe/Prague"},
-                {"Europe/Brussels", "Europe/Amsterdam"},
-                {"Europe/Busingen", "Europe/Zurich"},
-                {"Europe/Copenhagen", "Europe/Berlin"},
-                {"Europe/Guernsey", "Europe/London"},
-                {"Europe/Isle_of_Man", "Europe/London"},
-                {"Europe/Jersey", "Europe/London"},
-                {"Europe/Ljubljana", "Europe/Belgrade"},
-                {"Europe/Luxembourg", "Europe/Amsterdam"},
-                {"Europe/Mariehamn", "Europe/Helsinki"},
-                {"Europe/Monaco", "Europe/Paris"},
-                {"Europe/Oslo", "Europe/Berlin"},
-                {"Europe/Podgorica", "Europe/Belgrade"},
-                {"Europe/San_Marino", "Europe/Rome"},
-                {"Europe/Sarajevo", "Europe/Belgrade"},
-                {"Europe/Skopje", "Europe/Belgrade"},
-                {"Europe/Stockholm", "Europe/Berlin"},
-                {"Europe/Uzhgorod", "Europe/Kiev"},
-                {"Europe/Vaduz", "Europe/Zurich"},
-                {"Europe/Vatican", "Europe/Rome"},
-                {"Europe/Zagreb", "Europe/Belgrade"},
-                {"Europe/Zaporozhye", "Europe/Kiev"},
-                {"Indian/Antananarivo", "Africa/Nairobi"},
-                {"Indian/Christmas", "Asia/Bangkok"},
-                {"Indian/Cocos", "Asia/Rangoon"},
-                {"Indian/Comoro", "Africa/Nairobi"},
-                {"Indian/Mahe", "Asia/Dubai"},
-                {"Indian/Maldives", "Indian/Kerguelen"},
-                {"Indian/Mayotte", "Africa/Nairobi"},
-                {"Indian/Reunion", "Asia/Dubai"},
-                {"Pacific/Auckland", "Antarctica/McMurdo"},
-                {"Pacific/Johnston", "Pacific/Honolulu"},
-                {"Pacific/Majuro", "Pacific/Funafuti"},
-                {"Pacific/Midway", "Pacific/Pago_Pago"},
-                {"Pacific/Ponape", "Pacific/Guadalcanal"},
-                {"Pacific/Saipan", "Pacific/Guam"},
-                {"Pacific/Tarawa", "Pacific/Funafuti"},
-                {"Pacific/Truk", "Pacific/Port_Moresby"},
-                {"Pacific/Wake", "Pacific/Funafuti"},
-                {"Pacific/Wallis", "Pacific/Funafuti"},
+            {"Africa/Accra", "Africa/Abidjan"},
+            {"Africa/Addis_Ababa", "Africa/Nairobi"},
+            {"Africa/Asmera", "Africa/Nairobi"},
+            {"Africa/Bamako", "Africa/Abidjan"},
+            {"Africa/Bangui", "Africa/Lagos"},
+            {"Africa/Banjul", "Africa/Abidjan"},
+            {"Africa/Blantyre", "Africa/Maputo"},
+            {"Africa/Brazzaville", "Africa/Lagos"},
+            {"Africa/Bujumbura", "Africa/Maputo"},
+            {"Africa/Conakry", "Africa/Abidjan"},
+            {"Africa/Dakar", "Africa/Abidjan"},
+            {"Africa/Dar_es_Salaam", "Africa/Nairobi"},
+            {"Africa/Djibouti", "Africa/Nairobi"},
+            {"Africa/Douala", "Africa/Lagos"},
+            {"Africa/Freetown", "Africa/Abidjan"},
+            {"Africa/Gaborone", "Africa/Maputo"},
+            {"Africa/Harare", "Africa/Maputo"},
+            {"Africa/Kampala", "Africa/Nairobi"},
+            {"Africa/Khartoum", "Africa/Juba"},
+            {"Africa/Kigali", "Africa/Maputo"},
+            {"Africa/Kinshasa", "Africa/Lagos"},
+            {"Africa/Libreville", "Africa/Lagos"},
+            {"Africa/Lome", "Africa/Abidjan"},
+            {"Africa/Luanda", "Africa/Lagos"},
+            {"Africa/Lubumbashi", "Africa/Maputo"},
+            {"Africa/Lusaka", "Africa/Maputo"},
+            {"Africa/Maseru", "Africa/Johannesburg"},
+            {"Africa/Malabo", "Africa/Lagos"},
+            {"Africa/Mbabane", "Africa/Johannesburg"},
+            {"Africa/Mogadishu", "Africa/Nairobi"},
+            {"Africa/Niamey", "Africa/Lagos"},
+            {"Africa/Nouakchott", "Africa/Abidjan"},
+            {"Africa/Ouagadougou", "Africa/Abidjan"},
+            {"Africa/Porto-Novo", "Africa/Lagos"},
+            {"Africa/Sao_Tome", "Africa/Abidjan"},
+            {"America/Antigua", "America/Puerto_Rico"},
+            {"America/Anguilla", "America/Puerto_Rico"},
+            {"America/Aruba", "America/Puerto_Rico"},
+            {"America/Atikokan", "America/Panama"},
+            {"America/Blanc-Sablon", "America/Puerto_Rico"},
+            {"America/Cayman", "America/Panama"},
+            {"America/Coral_Harbour", "America/Panama"},
+            {"America/Creston", "America/Phoenix"},
+            {"America/Curacao", "America/Puerto_Rico"},
+            {"America/Dominica", "America/Puerto_Rico"},
+            {"America/Grenada", "America/Puerto_Rico"},
+            {"America/Guadeloupe", "America/Puerto_Rico"},
+            {"America/Kralendijk", "America/Puerto_Rico"},
+            {"America/Lower_Princes", "America/Puerto_Rico"},
+            {"America/Marigot", "America/Puerto_Rico"},
+            {"America/Montreal", "America/Toronto"},
+            {"America/Montserrat", "America/Puerto_Rico"},
+            {"America/Nassau", "America/Toronto"},
+            {"America/Nipigon", "America/Toronto"},
+            {"America/Pangnirtung", "America/Iqaluit"},
+            {"America/Port_of_Spain", "America/Puerto_Rico"},
+            {"America/Rainy_River", "America/Winnipeg"},
+            {"America/Santa_Isabel", "America/Tijuana"},
+            {"America/Shiprock", "America/Denver"},
+            {"America/St_Barthelemy", "America/Puerto_Rico"},
+            {"America/St_Kitts", "America/Puerto_Rico"},
+            {"America/St_Lucia", "America/Puerto_Rico"},
+            {"America/St_Thomas", "America/Puerto_Rico"},
+            {"America/St_Vincent", "America/Puerto_Rico"},
+            {"America/Thunder_Bay", "America/Toronto"},
+            {"America/Tortola", "America/Puerto_Rico"},
+            {"America/Virgin", "America/Puerto_Rico"},
+            {"America/Yellowknife", "America/Edmonton"},
+            {"Antarctica/DumontDUrville", "Pacific/Port_Moresby"},
+            {"Antarctica/South_Pole", "Antarctica/McMurdo"},
+            {"Antarctica/Syowa", "Asia/Riyadh"},
+            {"Arctic/Longyearbyen", "Europe/Berlin"},
+            {"Asia/Aden", "Asia/Riyadh"},
+            {"Asia/Brunei", "Asia/Kuching"},
+            {"Asia/Kuala_Lumpur", "Asia/Singapore"},
+            {"Asia/Kuwait", "Asia/Riyadh"},
+            {"Asia/Muscat", "Asia/Dubai"},
+            {"Asia/Phnom_Penh", "Asia/Bangkok"},
+            {"Asia/Qatar", "Asia/Bahrain"},
+            {"Asia/Vientiane", "Asia/Bangkok"},
+            {"Atlantic/Jan_Mayen", "Europe/Berlin"},
+            {"Atlantic/Reykjavik", "Africa/Abidjan"},
+            {"Atlantic/St_Helena", "Africa/Abidjan"},
+            {"Australia/Currie", "Australia/Hobart"},
+            {"Australia/Tasmania", "Australia/Hobart"},
+            {"Europe/Bratislava", "Europe/Prague"},
+            {"Europe/Brussels", "Europe/Amsterdam"},
+            {"Europe/Busingen", "Europe/Zurich"},
+            {"Europe/Copenhagen", "Europe/Berlin"},
+            {"Europe/Guernsey", "Europe/London"},
+            {"Europe/Isle_of_Man", "Europe/London"},
+            {"Europe/Jersey", "Europe/London"},
+            {"Europe/Ljubljana", "Europe/Belgrade"},
+            {"Europe/Luxembourg", "Europe/Amsterdam"},
+            {"Europe/Mariehamn", "Europe/Helsinki"},
+            {"Europe/Monaco", "Europe/Paris"},
+            {"Europe/Oslo", "Europe/Berlin"},
+            {"Europe/Podgorica", "Europe/Belgrade"},
+            {"Europe/San_Marino", "Europe/Rome"},
+            {"Europe/Sarajevo", "Europe/Belgrade"},
+            {"Europe/Skopje", "Europe/Belgrade"},
+            {"Europe/Stockholm", "Europe/Berlin"},
+            {"Europe/Uzhgorod", "Europe/Kiev"},
+            {"Europe/Vaduz", "Europe/Zurich"},
+            {"Europe/Vatican", "Europe/Rome"},
+            {"Europe/Zagreb", "Europe/Belgrade"},
+            {"Europe/Zaporozhye", "Europe/Kiev"},
+            {"Indian/Antananarivo", "Africa/Nairobi"},
+            {"Indian/Christmas", "Asia/Bangkok"},
+            {"Indian/Cocos", "Asia/Rangoon"},
+            {"Indian/Comoro", "Africa/Nairobi"},
+            {"Indian/Mahe", "Asia/Dubai"},
+            {"Indian/Maldives", "Indian/Kerguelen"},
+            {"Indian/Mayotte", "Africa/Nairobi"},
+            {"Indian/Reunion", "Asia/Dubai"},
+            {"Pacific/Auckland", "Antarctica/McMurdo"},
+            {"Pacific/Johnston", "Pacific/Honolulu"},
+            {"Pacific/Majuro", "Pacific/Funafuti"},
+            {"Pacific/Midway", "Pacific/Pago_Pago"},
+            {"Pacific/Ponape", "Pacific/Guadalcanal"},
+            {"Pacific/Saipan", "Pacific/Guam"},
+            {"Pacific/Tarawa", "Pacific/Funafuti"},
+            {"Pacific/Truk", "Pacific/Port_Moresby"},
+            {"Pacific/Wake", "Pacific/Funafuti"},
+            {"Pacific/Wallis", "Pacific/Funafuti"},
         };
 
         // Following IDs are aliases of Etc/GMT in CLDR,
@@ -1651,10 +1852,10 @@ public class TimeZoneTest extends CoreTestFmwk
         // in zoneinfo.res, we exclude them in the test
         // below.
         final String[] excluded2 = {
-                "Etc/UCT", "UCT",
-                "Etc/UTC", "UTC",
-                "Etc/Universal", "Universal",
-                "Etc/Zulu", "Zulu",
+            "Etc/UCT", "UCT",
+            "Etc/UTC", "UTC",
+            "Etc/Universal", "Universal",
+            "Etc/Zulu", "Zulu",
         };
 
         // Walk through equivalency groups
@@ -1687,7 +1888,13 @@ public class TimeZoneTest extends CoreTestFmwk
                 if (j == 0) {
                     canonicalID = tmpCanonical;
                 } else if (!canonicalID.equals(tmpCanonical)) {
-                    errln("FAIL: getCanonicalID(\"" + tmp + "\") returned " + tmpCanonical + " expected:" + canonicalID);
+                    errln(
+                            "FAIL: getCanonicalID(\""
+                                    + tmp
+                                    + "\") returned "
+                                    + tmpCanonical
+                                    + " expected:"
+                                    + canonicalID);
                 }
 
                 if (canonicalID.equals(tmp)) {
@@ -1714,32 +1921,43 @@ public class TimeZoneTest extends CoreTestFmwk
         }
         // Testing some special cases
         final String[][] data = {
-                {"GMT-03", "GMT-03:00", null},
-                {"GMT+4", "GMT+04:00", null},
-                {"GMT-055", "GMT-00:55", null},
-                {"GMT+430", "GMT+04:30", null},
-                {"GMT-12:15", "GMT-12:15", null},
-                {"GMT-091015", "GMT-09:10:15", null},
-                {"GMT+1:90", null, null},
-                {"America/Argentina/Buenos_Aires", "America/Buenos_Aires", "true"},
-                {"Etc/Unknown", "Etc/Unknown", null},
-                {"bogus", null, null},
-                {"", null, null},
-                {"America/Marigot", "America/Marigot", "true"},     // Olson link, but CLDR canonical (#8953)
-                {"Europe/Bratislava", "Europe/Bratislava", "true"}, // Same as above
-                {null, null, null},
+            {"GMT-03", "GMT-03:00", null},
+            {"GMT+4", "GMT+04:00", null},
+            {"GMT-055", "GMT-00:55", null},
+            {"GMT+430", "GMT+04:30", null},
+            {"GMT-12:15", "GMT-12:15", null},
+            {"GMT-091015", "GMT-09:10:15", null},
+            {"GMT+1:90", null, null},
+            {"America/Argentina/Buenos_Aires", "America/Buenos_Aires", "true"},
+            {"Etc/Unknown", "Etc/Unknown", null},
+            {"bogus", null, null},
+            {"", null, null},
+            {
+                "America/Marigot", "America/Marigot", "true"
+            }, // Olson link, but CLDR canonical (#8953)
+            {"Europe/Bratislava", "Europe/Bratislava", "true"}, // Same as above
+            {null, null, null},
         };
         boolean[] isSystemID = new boolean[1];
         for (int i = 0; i < data.length; i++) {
             String canonical = TimeZone.getCanonicalID(data[i][0], isSystemID);
             if (canonical != null && !canonical.equals(data[i][1])
                     || canonical == null && data[i][1] != null) {
-                errln("FAIL: getCanonicalID(\"" + data[i][0] + "\") returned " + canonical
-                        + " - expected: " + data[i][1]);
+                errln(
+                        "FAIL: getCanonicalID(\""
+                                + data[i][0]
+                                + "\") returned "
+                                + canonical
+                                + " - expected: "
+                                + data[i][1]);
             }
             if ("true".equalsIgnoreCase(data[i][2]) != isSystemID[0]) {
-                errln("FAIL: getCanonicalID(\"" + data[i][0] + "\") set " + isSystemID[0]
-                        + " to isSystemID");
+                errln(
+                        "FAIL: getCanonicalID(\""
+                                + data[i][0]
+                                + "\") set "
+                                + isSystemID[0]
+                                + " to isSystemID");
             }
         }
     }
@@ -1768,7 +1986,8 @@ public class TimeZoneTest extends CoreTestFmwk
         int dstSavings = jdkCal.get(java.util.Calendar.DST_OFFSET);
 
         int[] offsets = new int[2];
-        icuCaracas.getOffset(jdkCal.getTime().getTime()/*jdkCal.getTimeInMillis()*/, false, offsets);
+        icuCaracas.getOffset(
+                jdkCal.getTime().getTime() /*jdkCal.getTimeInMillis()*/, false, offsets);
 
         boolean isTimeZoneSynchronized = true;
 
@@ -1794,8 +2013,16 @@ public class TimeZoneTest extends CoreTestFmwk
             dstSavings = jdkCal.get(java.util.Calendar.DST_OFFSET);
 
             if (rawOffset != offsets[0] || dstSavings != offsets[1]) {
-                errln("ERROR: Got offset [raw:" + rawOffset + "/dst:" + dstSavings
-                          + "] Expected [raw:" + offsets[0] + "/dst:" + offsets[1] + "]");
+                errln(
+                        "ERROR: Got offset [raw:"
+                                + rawOffset
+                                + "/dst:"
+                                + dstSavings
+                                + "] Expected [raw:"
+                                + offsets[0]
+                                + "/dst:"
+                                + offsets[1]
+                                + "]");
             }
         }
 
@@ -1815,77 +2042,98 @@ public class TimeZoneTest extends CoreTestFmwk
 
         final Object[][] zoneDisplayTestData = {
             //  zone id             locale  summer          format      expected display name
-            {"Europe/London",       "en",   Boolean.FALSE,  TZSHORT,    "GMT"},
-            {"Europe/London",       "en",   Boolean.FALSE,  TZLONG,     "Greenwich Mean Time"},
-            {"Europe/London",       "en",   Boolean.TRUE,   TZSHORT,    "GMT+1" /*"BST"*/},
-            {"Europe/London",       "en",   Boolean.TRUE,   TZLONG,     "British Summer Time"},
-
-            {"America/Anchorage",   "en",   Boolean.FALSE,  TZSHORT,    "AKST"},
-            {"America/Anchorage",   "en",   Boolean.FALSE,  TZLONG,     "Alaska Standard Time"},
-            {"America/Anchorage",   "en",   Boolean.TRUE,   TZSHORT,    "AKDT"},
-            {"America/Anchorage",   "en",   Boolean.TRUE,   TZLONG,     "Alaska Daylight Time"},
+            {"Europe/London", "en", Boolean.FALSE, TZSHORT, "GMT"},
+            {"Europe/London", "en", Boolean.FALSE, TZLONG, "Greenwich Mean Time"},
+            {"Europe/London", "en", Boolean.TRUE, TZSHORT, "GMT+1" /*"BST"*/},
+            {"Europe/London", "en", Boolean.TRUE, TZLONG, "British Summer Time"},
+            {"America/Anchorage", "en", Boolean.FALSE, TZSHORT, "AKST"},
+            {"America/Anchorage", "en", Boolean.FALSE, TZLONG, "Alaska Standard Time"},
+            {"America/Anchorage", "en", Boolean.TRUE, TZSHORT, "AKDT"},
+            {"America/Anchorage", "en", Boolean.TRUE, TZLONG, "Alaska Daylight Time"},
 
             // Southern Hemisphere, all data from meta:Australia_Western
-            {"Australia/Perth",     "en",   Boolean.FALSE,  TZSHORT,    "GMT+8"/*"AWST"*/},
-            {"Australia/Perth",     "en",   Boolean.FALSE,  TZLONG,     "Australian Western Standard Time"},
+            {"Australia/Perth", "en", Boolean.FALSE, TZSHORT, "GMT+8" /*"AWST"*/},
+            {"Australia/Perth", "en", Boolean.FALSE, TZLONG, "Australian Western Standard Time"},
             // Note: Perth does not observe DST currently. When display name is missing,
             // the localized GMT format with the current offset is used even daylight name was
             // requested. See #9350.
-            {"Australia/Perth",     "en",   Boolean.TRUE,   TZSHORT,    "GMT+8"/*"AWDT"*/},
-            {"Australia/Perth",     "en",   Boolean.TRUE,   TZLONG,     "Australian Western Daylight Time"},
-
-            {"America/Sao_Paulo",   "en",   Boolean.FALSE,  TZSHORT,    "GMT-3"/*"BRT"*/},
-            {"America/Sao_Paulo",   "en",   Boolean.FALSE,  TZLONG,     "Brasilia Standard Time"},
+            {"Australia/Perth", "en", Boolean.TRUE, TZSHORT, "GMT+8" /*"AWDT"*/},
+            {"Australia/Perth", "en", Boolean.TRUE, TZLONG, "Australian Western Daylight Time"},
+            {"America/Sao_Paulo", "en", Boolean.FALSE, TZSHORT, "GMT-3" /*"BRT"*/},
+            {"America/Sao_Paulo", "en", Boolean.FALSE, TZLONG, "Brasilia Standard Time"},
             // Per https://mm.icann.org/pipermail/tz-announce/2019-July/000056.html
             // Brazil has canceled DST and will stay on standard time indefinitely.
             // {"America/Sao_Paulo",   "en",   Boolean.TRUE,   TZSHORT,    "GMT-2"/*"BRST"*/},
             // {"America/Sao_Paulo",   "en",   Boolean.TRUE,   TZLONG,     "Brasilia Summer Time"},
 
             // No Summer Time, but had it before 1983.
-            {"Pacific/Honolulu",    "en",   Boolean.FALSE,  TZSHORT,    "HST"},
-            {"Pacific/Honolulu",    "en",   Boolean.FALSE,  TZLONG,     "Hawaii-Aleutian Standard Time"},
-            {"Pacific/Honolulu",    "en",   Boolean.TRUE,   TZSHORT,    "GMT-10"},
-            {"Pacific/Honolulu",    "en",   Boolean.TRUE,   TZLONG,     "GMT-10:00"},
+            {"Pacific/Honolulu", "en", Boolean.FALSE, TZSHORT, "HST"},
+            {"Pacific/Honolulu", "en", Boolean.FALSE, TZLONG, "Hawaii-Aleutian Standard Time"},
+            {"Pacific/Honolulu", "en", Boolean.TRUE, TZSHORT, "GMT-10"},
+            {"Pacific/Honolulu", "en", Boolean.TRUE, TZLONG, "GMT-10:00"},
 
             // Northern, has Summer, not commonly used.
-            {"Europe/Helsinki",     "en",   Boolean.FALSE,  TZSHORT,    "GMT+2"/*"EET"*/},
-            {"Europe/Helsinki",     "en",   Boolean.FALSE,  TZLONG,     "Eastern European Standard Time"},
-            {"Europe/Helsinki",     "en",   Boolean.TRUE,   TZSHORT,    "GMT+3"/*"EEST"*/},
-            {"Europe/Helsinki",     "en",   Boolean.TRUE,   TZLONG,     "Eastern European Summer Time"},
+            {"Europe/Helsinki", "en", Boolean.FALSE, TZSHORT, "GMT+2" /*"EET"*/},
+            {"Europe/Helsinki", "en", Boolean.FALSE, TZLONG, "Eastern European Standard Time"},
+            {"Europe/Helsinki", "en", Boolean.TRUE, TZSHORT, "GMT+3" /*"EEST"*/},
+            {"Europe/Helsinki", "en", Boolean.TRUE, TZLONG, "Eastern European Summer Time"},
 
             // Repeating the test data for DST.  The test data below trigger the problem reported
             // by Ticket#6644
-            {"Europe/London",       "en",   Boolean.TRUE,   TZSHORT,    "GMT+1" /*"BST"*/},
-            {"Europe/London",       "en",   Boolean.TRUE,   TZLONG,     "British Summer Time"},
+            {"Europe/London", "en", Boolean.TRUE, TZSHORT, "GMT+1" /*"BST"*/},
+            {"Europe/London", "en", Boolean.TRUE, TZLONG, "British Summer Time"},
         };
 
         boolean isICUTimeZone = (TimeZone.getDefaultTimeZoneType() == TimeZone.TIMEZONE_ICU);
 
         boolean sawAnError = false;
         for (int testNum = 0; testNum < zoneDisplayTestData.length; testNum++) {
-            ULocale locale = new ULocale((String)zoneDisplayTestData[testNum][1]);
-            TimeZone zone = TimeZone.getTimeZone((String)zoneDisplayTestData[testNum][0]);
-            String displayName = zone.getDisplayName(((Boolean)zoneDisplayTestData[testNum][2]).booleanValue(),
-                    ((Integer)zoneDisplayTestData[testNum][3]).intValue());
+            ULocale locale = new ULocale((String) zoneDisplayTestData[testNum][1]);
+            TimeZone zone = TimeZone.getTimeZone((String) zoneDisplayTestData[testNum][0]);
+            String displayName =
+                    zone.getDisplayName(
+                            ((Boolean) zoneDisplayTestData[testNum][2]).booleanValue(),
+                            ((Integer) zoneDisplayTestData[testNum][3]).intValue());
             if (!displayName.equals(zoneDisplayTestData[testNum][4])) {
                 if (isDevelopmentBuild
-                        && (isICUTimeZone || !((Boolean)zoneDisplayTestData[testNum][2]).booleanValue())) {
+                        && (isICUTimeZone
+                                || !((Boolean) zoneDisplayTestData[testNum][2]).booleanValue())) {
                     sawAnError = true;
-                    errln("Incorrect time zone display name.  zone = "
-                            + zoneDisplayTestData[testNum][0] + ",\n"
-                            + "   locale = " + locale
-                            + ",   style = " + (zoneDisplayTestData[testNum][3] == TZSHORT ? "SHORT" : "LONG")
-                            + ",   Summertime = " + zoneDisplayTestData[testNum][2] + "\n"
-                            + "   Expected " + zoneDisplayTestData[testNum][4]
-                            + ",   Got " + displayName);
+                    errln(
+                            "Incorrect time zone display name.  zone = "
+                                    + zoneDisplayTestData[testNum][0]
+                                    + ",\n"
+                                    + "   locale = "
+                                    + locale
+                                    + ",   style = "
+                                    + (zoneDisplayTestData[testNum][3] == TZSHORT
+                                            ? "SHORT"
+                                            : "LONG")
+                                    + ",   Summertime = "
+                                    + zoneDisplayTestData[testNum][2]
+                                    + "\n"
+                                    + "   Expected "
+                                    + zoneDisplayTestData[testNum][4]
+                                    + ",   Got "
+                                    + displayName);
                 } else {
-                    logln("Incorrect time zone display name.  zone = "
-                            + zoneDisplayTestData[testNum][0] + ",\n"
-                            + "   locale = " + locale
-                            + ",   style = " + (zoneDisplayTestData[testNum][3] == TZSHORT ? "SHORT" : "LONG")
-                            + ",   Summertime = " + zoneDisplayTestData[testNum][2] + "\n"
-                            + "   Expected " + zoneDisplayTestData[testNum][4]
-                            + ",   Got " + displayName);
+                    logln(
+                            "Incorrect time zone display name.  zone = "
+                                    + zoneDisplayTestData[testNum][0]
+                                    + ",\n"
+                                    + "   locale = "
+                                    + locale
+                                    + ",   style = "
+                                    + (zoneDisplayTestData[testNum][3] == TZSHORT
+                                            ? "SHORT"
+                                            : "LONG")
+                                    + ",   Summertime = "
+                                    + zoneDisplayTestData[testNum][2]
+                                    + "\n"
+                                    + "   Expected "
+                                    + zoneDisplayTestData[testNum][4]
+                                    + ",   Got "
+                                    + displayName);
                 }
             }
         }
@@ -1901,7 +2149,7 @@ public class TimeZoneTest extends CoreTestFmwk
     public void TestHashCode() {
         String[] ids = TimeZone.getAvailableIDs();
 
-        for (String id: ids) {
+        for (String id : ids) {
             TimeZone tz1 = TimeZone.getTimeZone(id);
             TimeZone tz2 = TimeZone.getTimeZone(id);
 
@@ -1911,7 +2159,10 @@ public class TimeZoneTest extends CoreTestFmwk
             }
             // string representation should be also same
             if (!tz1.toString().equals(tz2.toString())) {
-                errln("Fail: Two time zone instances for " + id + " have different toString() values.");
+                errln(
+                        "Fail: Two time zone instances for "
+                                + id
+                                + " have different toString() values.");
             }
         }
     }
@@ -1922,23 +2173,24 @@ public class TimeZoneTest extends CoreTestFmwk
     @Test
     public void TestGetRegion() {
         final String[][] TEST_DATA = {
-            {"America/Los_Angeles",             "US"},
-            {"America/Indianapolis",            "US"},  // CLDR canonical, Olson backward
-            {"America/Indiana/Indianapolis",    "US"},  // CLDR alias
-            {"Mexico/General",                  "MX"},  // Link America/Mexico_City, Olson backward
-            {"Etc/UTC",                         "001"},
-            {"EST5EDT",                         "US"},
-            {"PST",                             "US"},  // Link America/Los_Angeles
-            {"Europe/Helsinki",                 "FI"},
-            {"Europe/Mariehamn",                "AX"},  // Link Europe/Helsinki, but in zone.tab
-            {"Asia/Riyadh",                     "SA"},
+            {"America/Los_Angeles", "US"},
+            {"America/Indianapolis", "US"}, // CLDR canonical, Olson backward
+            {"America/Indiana/Indianapolis", "US"}, // CLDR alias
+            {"Mexico/General", "MX"}, // Link America/Mexico_City, Olson backward
+            {"Etc/UTC", "001"},
+            {"EST5EDT", "US"},
+            {"PST", "US"}, // Link America/Los_Angeles
+            {"Europe/Helsinki", "FI"},
+            {"Europe/Mariehamn", "AX"}, // Link Europe/Helsinki, but in zone.tab
+            {"Asia/Riyadh", "SA"},
             // tz file solar87 was removed from tzdata2013i
-            // {"Asia/Riyadh87",                   "001"}, // this should be "SA" actually, but not in zone.tab
-            {"Atlantic/Jan_Mayen",              "SJ"},
-            {"Pacific/Truk",                    "FM"},
-            {"Etc/Unknown",                     null},  // CLDR canonical, but not a sysmte zone ID
-            {"bogus",                           null},  // bogus
-            {"GMT+08:00",                       null},  // a custom ID, not a system zone ID
+            // {"Asia/Riyadh87",                   "001"}, // this should be "SA" actually, but not
+            // in zone.tab
+            {"Atlantic/Jan_Mayen", "SJ"},
+            {"Pacific/Truk", "FM"},
+            {"Etc/Unknown", null}, // CLDR canonical, but not a sysmte zone ID
+            {"bogus", null}, // bogus
+            {"GMT+08:00", null}, // a custom ID, not a system zone ID
         };
 
         for (String[] test : TEST_DATA) {
@@ -1946,17 +2198,31 @@ public class TimeZoneTest extends CoreTestFmwk
                 String region = TimeZone.getRegion(test[0]);
                 if (!region.equals(test[1])) {
                     if (test[1] == null) {
-                        errln("Fail: getRegion(\"" + test[0] + "\") returns "
-                                + region + " [expected: IllegalArgumentException]");
+                        errln(
+                                "Fail: getRegion(\""
+                                        + test[0]
+                                        + "\") returns "
+                                        + region
+                                        + " [expected: IllegalArgumentException]");
                     } else {
-                        errln("Fail: getRegion(\"" + test[0] + "\") returns "
-                                + region + " [expected: " + test[1] + "]");
+                        errln(
+                                "Fail: getRegion(\""
+                                        + test[0]
+                                        + "\") returns "
+                                        + region
+                                        + " [expected: "
+                                        + test[1]
+                                        + "]");
                     }
                 }
             } catch (IllegalArgumentException e) {
                 if (test[1] != null) {
-                    errln("Fail: getRegion(\"" + test[0]
-                                + "\") throws IllegalArgumentException [expected: " + test[1] + "]");
+                    errln(
+                            "Fail: getRegion(\""
+                                    + test[0]
+                                    + "\") throws IllegalArgumentException [expected: "
+                                    + test[1]
+                                    + "]");
                 }
             }
         }
@@ -2001,7 +2267,8 @@ public class TimeZoneTest extends CoreTestFmwk
             TimeZone.UNKNOWN_ZONE,
             TimeZone.getFrozenTimeZone("America/Los_Angeles"),
             new SimpleTimeZone(3600000, "frz_stz").freeze(),
-            new RuleBasedTimeZone("frz_rbtz", new InitialTimeZoneRule("frz_rbtz0", 3600000, 0)).freeze(),
+            new RuleBasedTimeZone("frz_rbtz", new InitialTimeZoneRule("frz_rbtz0", 3600000, 0))
+                    .freeze(),
             VTimeZone.create("Asia/Tokyo").freeze(),
         };
 
@@ -2012,7 +2279,6 @@ public class TimeZoneTest extends CoreTestFmwk
             ZA2_thawed[i] = ZA2[i].cloneAsThawed();
         }
         checkThawed(ZA2_thawed, "ZA2(thawed)");
-
     }
 
     private void checkThawed(TimeZone[] thawedZones, String zaName) {
@@ -2038,85 +2304,165 @@ public class TimeZoneTest extends CoreTestFmwk
                 String newID = "foo";
                 thawedZones[i].setID(newID);
                 if (!thawedZones[i].getID().equals(newID)) {
-                    errln("Fail: " + zaName + "[" + i + "] - setID(\"" + newID + "\") does not work.");
+                    errln(
+                            "Fail: "
+                                    + zaName
+                                    + "["
+                                    + i
+                                    + "] - setID(\""
+                                    + newID
+                                    + "\") does not work.");
                 }
             } catch (UnsupportedOperationException e) {
-                errln("Fail: " + zaName + "[" + i + "] - setID throws UnsupportedOperationException.");
+                errln(
+                        "Fail: "
+                                + zaName
+                                + "["
+                                + i
+                                + "] - setID throws UnsupportedOperationException.");
             }
 
             // setRawOffset
-            if (!(thawedZones[i] instanceof RuleBasedTimeZone)) {    // RuleBasedTimeZone does not support setRawOffset
+            if (!(thawedZones[i]
+                    instanceof
+                    RuleBasedTimeZone)) { // RuleBasedTimeZone does not support setRawOffset
                 try {
                     int newOffset = -3600000;
                     thawedZones[i].setRawOffset(newOffset);
                     if (thawedZones[i].getRawOffset() != newOffset) {
-                        errln("Fail: " + zaName + "[" + i + "] - setRawOffset(" + newOffset + ") does not work.");
+                        errln(
+                                "Fail: "
+                                        + zaName
+                                        + "["
+                                        + i
+                                        + "] - setRawOffset("
+                                        + newOffset
+                                        + ") does not work.");
                     }
                 } catch (UnsupportedOperationException e) {
-                    errln("Fail: " + zaName + "[" + i + "] - setRawOffset throws UnsupportedOperationException.");
+                    errln(
+                            "Fail: "
+                                    + zaName
+                                    + "["
+                                    + i
+                                    + "] - setRawOffset throws UnsupportedOperationException.");
                 }
             }
 
             if (thawedZones[i] instanceof SimpleTimeZone) {
-                SimpleTimeZone stz = (SimpleTimeZone)thawedZones[i];
+                SimpleTimeZone stz = (SimpleTimeZone) thawedZones[i];
                 // setDSTSavings
                 try {
                     int newDSTSavings = 1800000;
                     stz.setDSTSavings(newDSTSavings);
                     if (stz.getDSTSavings() != newDSTSavings) {
-                        errln("Fail: (SimpleTimeZone)" + zaName + "[" + i + "] - setDSTSavings(" + newDSTSavings + ") does not work.");
+                        errln(
+                                "Fail: (SimpleTimeZone)"
+                                        + zaName
+                                        + "["
+                                        + i
+                                        + "] - setDSTSavings("
+                                        + newDSTSavings
+                                        + ") does not work.");
                     }
                 } catch (UnsupportedOperationException e) {
-                    errln("Fail: (SimpleTimeZone)" + zaName + "[" + i + "] - setDSTSavings throws UnsupportedOperationException.");
+                    errln(
+                            "Fail: (SimpleTimeZone)"
+                                    + zaName
+                                    + "["
+                                    + i
+                                    + "] - setDSTSavings throws UnsupportedOperationException.");
                 }
                 // setStartRule
                 try {
                     stz.setStartRule(Calendar.JANUARY, -1, Calendar.SUNDAY, 0);
                 } catch (UnsupportedOperationException e) {
-                    errln("Fail: (SimpleTimeZone)" + zaName + "[" + i + "] - setStartRule throws UnsupportedOperationException.");
+                    errln(
+                            "Fail: (SimpleTimeZone)"
+                                    + zaName
+                                    + "["
+                                    + i
+                                    + "] - setStartRule throws UnsupportedOperationException.");
                 }
                 // setEndRule
                 try {
                     stz.setEndRule(Calendar.DECEMBER, 1, Calendar.SUNDAY, 0);
                 } catch (UnsupportedOperationException e) {
-                    errln("Fail: (SimpleTimeZone)" + zaName + "[" + i + "] - setEndRule throws UnsupportedOperationException.");
+                    errln(
+                            "Fail: (SimpleTimeZone)"
+                                    + zaName
+                                    + "["
+                                    + i
+                                    + "] - setEndRule throws UnsupportedOperationException.");
                 }
                 // setStartYear
                 try {
                     stz.setStartYear(2000);
                 } catch (UnsupportedOperationException e) {
-                    errln("Fail: (SimpleTimeZone)" + zaName + "[" + i + "] - setStartYear throws UnsupportedOperationException.");
+                    errln(
+                            "Fail: (SimpleTimeZone)"
+                                    + zaName
+                                    + "["
+                                    + i
+                                    + "] - setStartYear throws UnsupportedOperationException.");
                 }
             } else if (thawedZones[i] instanceof RuleBasedTimeZone) {
-                RuleBasedTimeZone rbtz = (RuleBasedTimeZone)thawedZones[i];
+                RuleBasedTimeZone rbtz = (RuleBasedTimeZone) thawedZones[i];
                 // addTransitionRule
                 try {
-                    TimeArrayTimeZoneRule tr1 = new TimeArrayTimeZoneRule("tr1", 7200000, 0, new long[] {0}, DateTimeRule.UTC_TIME);
+                    TimeArrayTimeZoneRule tr1 =
+                            new TimeArrayTimeZoneRule(
+                                    "tr1", 7200000, 0, new long[] {0}, DateTimeRule.UTC_TIME);
                     rbtz.addTransitionRule(tr1);
                 } catch (UnsupportedOperationException e) {
-                    errln("Fail: (RuleBasedTimeZone)" + zaName + "[" + i + "] - addTransitionRule throws UnsupportedOperationException.");
+                    errln(
+                            "Fail: (RuleBasedTimeZone)"
+                                    + zaName
+                                    + "["
+                                    + i
+                                    + "] - addTransitionRule throws UnsupportedOperationException.");
                 }
             } else if (thawedZones[i] instanceof VTimeZone) {
-                VTimeZone vtz = (VTimeZone)thawedZones[i];
+                VTimeZone vtz = (VTimeZone) thawedZones[i];
                 // setTZURL
                 try {
                     String tzUrl = "http://icu-project.org/timezone";
                     vtz.setTZURL(tzUrl);
                     if (!vtz.getTZURL().equals(tzUrl)) {
-                        errln("Fail: (VTimeZone)" + zaName + "[" + i + "] - setTZURL does not work.");
+                        errln(
+                                "Fail: (VTimeZone)"
+                                        + zaName
+                                        + "["
+                                        + i
+                                        + "] - setTZURL does not work.");
                     }
                 } catch (UnsupportedOperationException e) {
-                    errln("Fail: (VTimeZone)" + zaName + "[" + i + "] - setTZURL throws UnsupportedOperationException.");
+                    errln(
+                            "Fail: (VTimeZone)"
+                                    + zaName
+                                    + "["
+                                    + i
+                                    + "] - setTZURL throws UnsupportedOperationException.");
                 }
                 // setLastModified
                 try {
                     Date d = new Date();
                     vtz.setLastModified(d);
                     if (!vtz.getLastModified().equals(d)) {
-                        errln("Fail: (VTimeZone)" + zaName + "[" + i + "] - setLastModified does not work.");
+                        errln(
+                                "Fail: (VTimeZone)"
+                                        + zaName
+                                        + "["
+                                        + i
+                                        + "] - setLastModified does not work.");
                     }
                 } catch (UnsupportedOperationException e) {
-                    errln("Fail: (VTimeZone)" + zaName + "[" + i + "] - setLastModified throws UnsupportedOperationException.");
+                    errln(
+                            "Fail: (VTimeZone)"
+                                    + zaName
+                                    + "["
+                                    + i
+                                    + "] - setLastModified throws UnsupportedOperationException.");
                 }
             }
         }
@@ -2144,70 +2490,114 @@ public class TimeZoneTest extends CoreTestFmwk
             try {
                 String newID = "foo";
                 frozenZones[i].setID(newID);
-                errln("Fail: " + zaName + "[" + i + "] - setID must throw UnsupportedOperationException.");
+                errln(
+                        "Fail: "
+                                + zaName
+                                + "["
+                                + i
+                                + "] - setID must throw UnsupportedOperationException.");
             } catch (UnsupportedOperationException e) {
                 // OK
             }
 
             // setRawOffset
-            if (!(frozenZones[i] instanceof RuleBasedTimeZone)) {    // RuleBasedTimeZone does not support setRawOffset
+            if (!(frozenZones[i]
+                    instanceof
+                    RuleBasedTimeZone)) { // RuleBasedTimeZone does not support setRawOffset
                 try {
                     int newOffset = -3600000;
                     frozenZones[i].setRawOffset(newOffset);
-                    errln("Fail: " + zaName + "[" + i + "] - setRawOffset must throw UnsupportedOperationException.");
+                    errln(
+                            "Fail: "
+                                    + zaName
+                                    + "["
+                                    + i
+                                    + "] - setRawOffset must throw UnsupportedOperationException.");
                 } catch (UnsupportedOperationException e) {
                     // OK
                 }
             }
 
             if (frozenZones[i] instanceof SimpleTimeZone) {
-                SimpleTimeZone stz = (SimpleTimeZone)frozenZones[i];
+                SimpleTimeZone stz = (SimpleTimeZone) frozenZones[i];
                 // setDSTSavings
                 try {
                     int newDSTSavings = 1800000;
                     stz.setDSTSavings(newDSTSavings);
-                    errln("Fail: (SimpleTimeZone)" + zaName + "[" + i + "] - setDSTSavings must throw UnsupportedOperationException.");
+                    errln(
+                            "Fail: (SimpleTimeZone)"
+                                    + zaName
+                                    + "["
+                                    + i
+                                    + "] - setDSTSavings must throw UnsupportedOperationException.");
                 } catch (UnsupportedOperationException e) {
                     // OK
                 }
                 // setStartRule
                 try {
                     stz.setStartRule(Calendar.JANUARY, -1, Calendar.SUNDAY, 0);
-                    errln("Fail: (SimpleTimeZone)" + zaName + "[" + i + "] - setStartRule must throw UnsupportedOperationException.");
+                    errln(
+                            "Fail: (SimpleTimeZone)"
+                                    + zaName
+                                    + "["
+                                    + i
+                                    + "] - setStartRule must throw UnsupportedOperationException.");
                 } catch (UnsupportedOperationException e) {
                     // OK
                 }
                 // setEndRule
                 try {
                     stz.setEndRule(Calendar.DECEMBER, 1, Calendar.SUNDAY, 0);
-                    errln("Fail: (SimpleTimeZone)" + zaName + "[" + i + "] - setEndRule must throw UnsupportedOperationException.");
+                    errln(
+                            "Fail: (SimpleTimeZone)"
+                                    + zaName
+                                    + "["
+                                    + i
+                                    + "] - setEndRule must throw UnsupportedOperationException.");
                 } catch (UnsupportedOperationException e) {
                     // OK
                 }
                 // setStartYear
                 try {
                     stz.setStartYear(2000);
-                    errln("Fail: (SimpleTimeZone)" + zaName + "[" + i + "] - setStartYear must throw UnsupportedOperationException.");
+                    errln(
+                            "Fail: (SimpleTimeZone)"
+                                    + zaName
+                                    + "["
+                                    + i
+                                    + "] - setStartYear must throw UnsupportedOperationException.");
                 } catch (UnsupportedOperationException e) {
                     // OK
                 }
             } else if (frozenZones[i] instanceof RuleBasedTimeZone) {
-                RuleBasedTimeZone rbtz = (RuleBasedTimeZone)frozenZones[i];
+                RuleBasedTimeZone rbtz = (RuleBasedTimeZone) frozenZones[i];
                 // addTransitionRule
                 try {
-                    TimeArrayTimeZoneRule tr1 = new TimeArrayTimeZoneRule("tr1", 7200000, 0, new long[] {0}, DateTimeRule.UTC_TIME);
+                    TimeArrayTimeZoneRule tr1 =
+                            new TimeArrayTimeZoneRule(
+                                    "tr1", 7200000, 0, new long[] {0}, DateTimeRule.UTC_TIME);
                     rbtz.addTransitionRule(tr1);
-                    errln("Fail: (RuleBasedTimeZone)" + zaName + "[" + i + "] - addTransitionRule must throw UnsupportedOperationException.");
+                    errln(
+                            "Fail: (RuleBasedTimeZone)"
+                                    + zaName
+                                    + "["
+                                    + i
+                                    + "] - addTransitionRule must throw UnsupportedOperationException.");
                 } catch (UnsupportedOperationException e) {
                     // OK
                 }
             } else if (frozenZones[i] instanceof VTimeZone) {
-                VTimeZone vtz = (VTimeZone)frozenZones[i];
+                VTimeZone vtz = (VTimeZone) frozenZones[i];
                 // setTZURL
                 try {
                     String tzUrl = "http://icu-project.org/timezone";
                     vtz.setTZURL(tzUrl);
-                    errln("Fail: (VTimeZone)" + zaName + "[" + i + "] - setTZURL must throw UnsupportedOperationException.");
+                    errln(
+                            "Fail: (VTimeZone)"
+                                    + zaName
+                                    + "["
+                                    + i
+                                    + "] - setTZURL must throw UnsupportedOperationException.");
                 } catch (UnsupportedOperationException e) {
                     // OK
                 }
@@ -2215,7 +2605,12 @@ public class TimeZoneTest extends CoreTestFmwk
                 try {
                     Date d = new Date();
                     vtz.setLastModified(d);
-                    errln("Fail: (VTimeZone)" + zaName + "[" + i + "] - setLastModified must throw UnsupportedOperationException.");
+                    errln(
+                            "Fail: (VTimeZone)"
+                                    + zaName
+                                    + "["
+                                    + i
+                                    + "] - setLastModified must throw UnsupportedOperationException.");
                 } catch (UnsupportedOperationException e) {
                     // OK
                 }
@@ -2234,43 +2629,77 @@ public class TimeZoneTest extends CoreTestFmwk
             TimeZone tz = TimeZone.getTimeZone(tzid, TimeZone.TIMEZONE_ICU);
             observesDaylight = tz.observesDaylightTime();
             if (observesDaylight != isDaylightTimeAvailable(tz, current)) {
-                errln("Fail: [OlsonTimeZone] observesDaylightTime() returned " + observesDaylight + " for " + tzid);
+                errln(
+                        "Fail: [OlsonTimeZone] observesDaylightTime() returned "
+                                + observesDaylight
+                                + " for "
+                                + tzid);
             }
 
             // RuleBasedTimeZone
-            RuleBasedTimeZone rbtz = createRBTZ((BasicTimeZone)tz, current);
+            RuleBasedTimeZone rbtz = createRBTZ((BasicTimeZone) tz, current);
             boolean observesDaylightRBTZ = rbtz.observesDaylightTime();
             if (observesDaylightRBTZ != isDaylightTimeAvailable(rbtz, current)) {
-                errln("Fail: [RuleBasedTimeZone] observesDaylightTime() returned " + observesDaylightRBTZ + " for " + rbtz.getID());
+                errln(
+                        "Fail: [RuleBasedTimeZone] observesDaylightTime() returned "
+                                + observesDaylightRBTZ
+                                + " for "
+                                + rbtz.getID());
             } else if (observesDaylight != observesDaylightRBTZ) {
-                errln("Fail: RuleBasedTimeZone " + rbtz.getID() + " returns " + observesDaylightRBTZ + ", but different from match OlsonTimeZone");
+                errln(
+                        "Fail: RuleBasedTimeZone "
+                                + rbtz.getID()
+                                + " returns "
+                                + observesDaylightRBTZ
+                                + ", but different from match OlsonTimeZone");
             }
 
             // JavaTimeZone
             tz = TimeZone.getTimeZone(tzid, TimeZone.TIMEZONE_JDK);
             observesDaylight = tz.observesDaylightTime();
             if (observesDaylight != isDaylightTimeAvailable(tz, current)) {
-                errln("Fail: [JavaTimeZone] observesDaylightTime() returned " + observesDaylight + " for " + tzid);
+                errln(
+                        "Fail: [JavaTimeZone] observesDaylightTime() returned "
+                                + observesDaylight
+                                + " for "
+                                + tzid);
             }
 
             // VTimeZone
             tz = VTimeZone.getTimeZone(tzid);
             observesDaylight = tz.observesDaylightTime();
             if (observesDaylight != isDaylightTimeAvailable(tz, current)) {
-                errln("Fail: [VTimeZone] observesDaylightTime() returned " + observesDaylight + " for " + tzid);
+                errln(
+                        "Fail: [VTimeZone] observesDaylightTime() returned "
+                                + observesDaylight
+                                + " for "
+                                + tzid);
             }
         }
 
         // SimpleTimeZone
         SimpleTimeZone[] stzs = {
             new SimpleTimeZone(0, "STZ0"),
-            new SimpleTimeZone(-5*60*60*1000, "STZ-5D", Calendar.MARCH, 2, Calendar.SUNDAY, 2*60*60*1000,
-                    Calendar.NOVEMBER, 1, Calendar.SUNDAY, 2*60*60*1000),
+            new SimpleTimeZone(
+                    -5 * 60 * 60 * 1000,
+                    "STZ-5D",
+                    Calendar.MARCH,
+                    2,
+                    Calendar.SUNDAY,
+                    2 * 60 * 60 * 1000,
+                    Calendar.NOVEMBER,
+                    1,
+                    Calendar.SUNDAY,
+                    2 * 60 * 60 * 1000),
         };
         for (SimpleTimeZone stz : stzs) {
             observesDaylight = stz.observesDaylightTime();
             if (observesDaylight != isDaylightTimeAvailable(stz, current)) {
-                errln("Fail: [SimpleTimeZone] observesDaylightTime() returned " + observesDaylight + " for " + stz.getID());
+                errln(
+                        "Fail: [SimpleTimeZone] observesDaylightTime() returned "
+                                + observesDaylight
+                                + " for "
+                                + stz.getID());
             }
         }
     }
@@ -2288,7 +2717,7 @@ public class TimeZoneTest extends CoreTestFmwk
 
         long date;
         if (tz instanceof BasicTimeZone) {
-            BasicTimeZone btz = (BasicTimeZone)tz;
+            BasicTimeZone btz = (BasicTimeZone) tz;
             // check future transitions, up to 100
             date = start;
             for (int i = 0; i < 100; i++) {
@@ -2319,27 +2748,28 @@ public class TimeZoneTest extends CoreTestFmwk
 
     private static RuleBasedTimeZone createRBTZ(BasicTimeZone btz, long start) {
         TimeZoneRule[] rules = btz.getTimeZoneRules(start);
-        RuleBasedTimeZone rbtz = new RuleBasedTimeZone("RBTZ:btz.getID()", (InitialTimeZoneRule)rules[0]);
+        RuleBasedTimeZone rbtz =
+                new RuleBasedTimeZone("RBTZ:btz.getID()", (InitialTimeZoneRule) rules[0]);
         for (int i = 1; i < rules.length; i++) {
             rbtz.addTransitionRule(rules[i]);
         }
         return rbtz;
-     }
+    }
 
     @Test
     public void TestGetWindowsID() {
         String[][] TESTDATA = {
-            {"America/New_York",        "Eastern Standard Time"},
-            {"America/Montreal",        "Eastern Standard Time"},
-            {"America/Los_Angeles",     "Pacific Standard Time"},
-            {"America/Vancouver",       "Pacific Standard Time"},
-            {"Asia/Shanghai",           "China Standard Time"},
-            {"Asia/Chongqing",          "China Standard Time"},
-            {"America/Indianapolis",    "US Eastern Standard Time"},            // CLDR canonical name
-            {"America/Indiana/Indianapolis",    "US Eastern Standard Time"},    // tzdb canonical name
-            {"Asia/Khandyga",           "Yakutsk Standard Time"},
-            {"Australia/Eucla",         "Aus Central W. Standard Time"}, // Now Windows does have a mapping
-            {"Bogus",                   null},
+            {"America/New_York", "Eastern Standard Time"},
+            {"America/Montreal", "Eastern Standard Time"},
+            {"America/Los_Angeles", "Pacific Standard Time"},
+            {"America/Vancouver", "Pacific Standard Time"},
+            {"Asia/Shanghai", "China Standard Time"},
+            {"Asia/Chongqing", "China Standard Time"},
+            {"America/Indianapolis", "US Eastern Standard Time"}, // CLDR canonical name
+            {"America/Indiana/Indianapolis", "US Eastern Standard Time"}, // tzdb canonical name
+            {"Asia/Khandyga", "Yakutsk Standard Time"},
+            {"Australia/Eucla", "Aus Central W. Standard Time"}, // Now Windows does have a mapping
+            {"Bogus", null},
         };
 
         for (String[] data : TESTDATA) {
@@ -2351,21 +2781,20 @@ public class TimeZoneTest extends CoreTestFmwk
     @Test
     public void TestGetIDForWindowsID() {
         final String[][] TESTDATA = {
-            {"Eastern Standard Time",   null,   "America/New_York"},
-            {"Eastern Standard Time",   "US",   "America/New_York"},
-            {"Eastern Standard Time",   "CA",   "America/Toronto"},
-            {"Eastern Standard Time",   "CN",   "America/New_York"},
-            {"China Standard Time",     null,   "Asia/Shanghai"},
-            {"China Standard Time",     "CN",   "Asia/Shanghai"},
-            {"China Standard Time",     "HK",   "Asia/Hong_Kong"},
-            {"Mid-Atlantic Standard Time",  null,   null}, // No tz database mapping
-            {"Bogus",                   null,   null},
+            {"Eastern Standard Time", null, "America/New_York"},
+            {"Eastern Standard Time", "US", "America/New_York"},
+            {"Eastern Standard Time", "CA", "America/Toronto"},
+            {"Eastern Standard Time", "CN", "America/New_York"},
+            {"China Standard Time", null, "Asia/Shanghai"},
+            {"China Standard Time", "CN", "Asia/Shanghai"},
+            {"China Standard Time", "HK", "Asia/Hong_Kong"},
+            {"Mid-Atlantic Standard Time", null, null}, // No tz database mapping
+            {"Bogus", null, null},
         };
 
         for (String[] data : TESTDATA) {
             String id = TimeZone.getIDForWindowsID(data[0], data[1]);
-            assertEquals("Fail: Windows ID=" + data[0] + ", Region=" + data[1],
-                    data[2], id);
+            assertEquals("Fail: Windows ID=" + data[0] + ", Region=" + data[1], data[2], id);
         }
     }
 
@@ -2388,15 +2817,23 @@ public class TimeZoneTest extends CoreTestFmwk
         TimeZone zone = TimeZone.getTimeZone(id);
         String standardName = zone.getDisplayName(false, TimeZone.LONG, Locale.ENGLISH);
         String summerName = zone.getDisplayName(true, TimeZone.LONG, Locale.ENGLISH);
-        assertEquals("TimeZone name for Africa/Casablanca should not contain '+02' since it is located in UTC, but got "
-                     + standardName, -1, standardName.indexOf("+02"));
-        assertEquals("TimeZone name for Africa/Casablanca should not contain '+02' since it is located in UTC, but got "
-                     + summerName, -1, summerName.indexOf("+02"));
+        assertEquals(
+                "TimeZone name for Africa/Casablanca should not contain '+02' since it is located in UTC, but got "
+                        + standardName,
+                -1,
+                standardName.indexOf("+02"));
+        assertEquals(
+                "TimeZone name for Africa/Casablanca should not contain '+02' since it is located in UTC, but got "
+                        + summerName,
+                -1,
+                summerName.indexOf("+02"));
         int[] offsets = new int[2]; // raw = offsets[0], dst = offsets[1]
         zone.getOffset((new Date()).getTime(), false, offsets);
         int raw = offsets[0];
-        assertEquals("getRawOffset() and the raw from getOffset(now, false, offset) should not be different but got",
-                     zone.getRawOffset(), raw);
+        assertEquals(
+                "getRawOffset() and the raw from getOffset(now, false, offset) should not be different but got",
+                zone.getRawOffset(),
+                raw);
     }
 
     @Test
@@ -2407,8 +2844,10 @@ public class TimeZoneTest extends CoreTestFmwk
             TimeZone zone = TimeZone.getTimeZone(id);
             zone.getOffset((new Date()).getTime(), false, offsets);
             int raw = offsets[0];
-            assertEquals("getRawOffset() and the raw from getOffset(now, false, offset) should not be different but got",
-                         zone.getRawOffset(), raw);
+            assertEquals(
+                    "getRawOffset() and the raw from getOffset(now, false, offset) should not be different but got",
+                    zone.getRawOffset(),
+                    raw);
         }
     }
 
@@ -2417,17 +2856,17 @@ public class TimeZoneTest extends CoreTestFmwk
         final String UNKNOWN = TimeZone.UNKNOWN_ZONE_ID;
 
         final String[][] TESTDATA = {
-                {"",                    UNKNOWN},
-                {null,                  UNKNOWN},
-                {UNKNOWN,               UNKNOWN},
-                {"America/New_York",    "America/New_York"},
-                {"Asia/Calcutta",       "Asia/Kolkata"},
-                {"Europe/Kiev",         "Europe/Kyiv"},
-                {"Europe/Zaporozhye",   "Europe/Kyiv"},
-                {"Etc/GMT-1",           "Etc/GMT-1"},
-                {"Etc/GMT+20",          UNKNOWN},
-                {"PST8PDT",             "America/Los_Angeles"},
-                {"GMT-08:00",           UNKNOWN},
+            {"", UNKNOWN},
+            {null, UNKNOWN},
+            {UNKNOWN, UNKNOWN},
+            {"America/New_York", "America/New_York"},
+            {"Asia/Calcutta", "Asia/Kolkata"},
+            {"Europe/Kiev", "Europe/Kyiv"},
+            {"Europe/Zaporozhye", "Europe/Kyiv"},
+            {"Etc/GMT-1", "Etc/GMT-1"},
+            {"Etc/GMT+20", UNKNOWN},
+            {"PST8PDT", "America/Los_Angeles"},
+            {"GMT-08:00", UNKNOWN},
         };
 
         for (String[] test : TESTDATA) {
@@ -2440,6 +2879,7 @@ public class TimeZoneTest extends CoreTestFmwk
             }
         }
     }
+
     @Test
     public void TestGMTMinus24ICU22526() {
         TimeZone tz = TimeZone.getTimeZone("GMT-23:59");
@@ -2449,4 +2889,4 @@ public class TimeZoneTest extends CoreTestFmwk
     }
 }
 
-//eof
+// eof

@@ -1,11 +1,11 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /*
-*******************************************************************************
-*   Copyright (C) 2001-2009, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-*******************************************************************************
-*/
+ *******************************************************************************
+ *   Copyright (C) 2001-2009, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ *******************************************************************************
+ */
 
 package com.ibm.icu.samples.shaping;
 
@@ -13,10 +13,10 @@ import com.ibm.icu.text.ArabicShaping;
 import com.ibm.icu.text.ArabicShapingException;
 
 /**
- * Interactive test for Arabic shaping.
- * Invoke from a command line passing args and strings.  Use '-help' to see description of arguments.
+ * Interactive test for Arabic shaping. Invoke from a command line passing args and strings. Use
+ * '-help' to see description of arguments.
  */
-public class ArabicShapingSample{
+public class ArabicShapingSample {
     private static final int COPY = 0;
     private static final int INPLACE = 1;
     private static final int STRING = 2;
@@ -40,7 +40,7 @@ public class ArabicShapingSample{
                     opt = opt.substring(0, Math.min(index, 3));
                     val = arg.substring(index + 1);
                 }
-                
+
                 if (opt.equalsIgnoreCase("len")) {
                     options &= ~ArabicShaping.LENGTH_MASK;
                     if (val.equalsIgnoreCase("gs")) {
@@ -103,29 +103,25 @@ public class ArabicShapingSample{
                 } else if (opt.equalsIgnoreCase("dst")) {
                     try {
                         ds = Integer.parseInt(val);
-                    }
-                    catch (Exception e) {
+                    } catch (Exception e) {
                         throwValError(opt, val);
                     }
                 } else if (opt.equalsIgnoreCase("dln")) {
                     try {
                         dl = Integer.parseInt(val);
-                    }
-                    catch (Exception e) {
+                    } catch (Exception e) {
                         throwValError(opt, val);
                     }
                 } else if (opt.equalsIgnoreCase("sst")) {
                     try {
                         ss = Integer.parseInt(val);
-                    }
-                    catch (Exception e) {
+                    } catch (Exception e) {
                         throwValError(opt, val);
                     }
                 } else if (opt.equalsIgnoreCase("sln")) {
                     try {
                         sl = Integer.parseInt(val);
-                    }
-                    catch (Exception e) {
+                    } catch (Exception e) {
                         throwValError(opt, val);
                     }
                 } else if (opt.equalsIgnoreCase("tes")) {
@@ -172,23 +168,23 @@ public class ArabicShapingSample{
 
         try {
             switch (testtype) {
-            case COPY:
-                dest = new char[ds + dl];
-                result = shaper.shape(src, ss, sl, dest, ds, dl);
-                break;
+                case COPY:
+                    dest = new char[ds + dl];
+                    result = shaper.shape(src, ss, sl, dest, ds, dl);
+                    break;
 
-            case INPLACE:
-                shaper.shape(src, ss, sl);
-                ds = ss;
-                result = sl;
-                dest = src;
-                break;
+                case INPLACE:
+                    shaper.shape(src, ss, sl);
+                    ds = ss;
+                    result = sl;
+                    dest = src;
+                    break;
 
-            case STRING:
-                dest = shaper.shape(text).toCharArray();
-                ds = 0;
-                result = dest.length;
-                break;
+                case STRING:
+                    dest = shaper.shape(text).toCharArray();
+                    ds = 0;
+                    result = dest.length;
+                    break;
             }
 
             System.out.println("output: '" + escapedText(dest, ds, result) + "'");
@@ -196,12 +192,10 @@ public class ArabicShapingSample{
             if (ds != 0 || result != dest.length) {
                 System.out.println("full output: '" + escapedText(dest, 0, dest.length) + "'");
             }
-        }
-        catch (ArabicShapingException e) {
+        } catch (ArabicShapingException e) {
             System.out.println("Caught ArabicShapingException");
             System.out.println(e);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Caught Exception");
             System.out.println(e);
         }
@@ -223,24 +217,25 @@ public class ArabicShapingSample{
         throw new Error(buf.toString());
     }
 
-    private static final String usage = 
-        "Usage: [option]* [text]\n" +
-        "  where option is in the format '-opt[:val]'\n" +
-        "  options are:\n" +
-        "    -len:[gs|sn|se|sb]    (length: grow/shrink, spaces near, spaces end, spaces beginning)\n" +
-        "    -dir:[log|vis]        (direction: logical, visual)\n" +
-        "    -let:[no|sh|un|ta]    (letters: noop, shape, unshape, tashkeel)\n" +
-        // "    -let:[no|sh|un]       (letters: noop, shape, unshape)\n" +
-        "    -dig:[no|ea|ae|lr|al] (digits: noop, en2an, an2en, en2an_lr, en2an_al)\n" +
-        "    -typ:[an|ex]          (digit type: arabic, arabic extended)\n" +
-        "    -dst:#                (dest start: [integer])\n" +
-        "    -dln:#                (dest length (max size): [integer])\n" +
-        "    -sst:#                (source start: [integer])\n" +
-        "    -sln:#                (source length: [integer])\n" +
-        "    -tes:[cp|ip|st]       (test type: copy, in place, string)\n" +
-        "    -help                 (print this help message)\n" +
-        "  text can contain unicode escape values in the format '\\uXXXX' only\n";
-        
+    private static final String usage =
+            "Usage: [option]* [text]\n"
+                    + "  where option is in the format '-opt[:val]'\n"
+                    + "  options are:\n"
+                    + "    -len:[gs|sn|se|sb]    (length: grow/shrink, spaces near, spaces end, spaces beginning)\n"
+                    + "    -dir:[log|vis]        (direction: logical, visual)\n"
+                    + "    -let:[no|sh|un|ta]    (letters: noop, shape, unshape, tashkeel)\n"
+                    +
+                    // "    -let:[no|sh|un]       (letters: noop, shape, unshape)\n" +
+                    "    -dig:[no|ea|ae|lr|al] (digits: noop, en2an, an2en, en2an_lr, en2an_al)\n"
+                    + "    -typ:[an|ex]          (digit type: arabic, arabic extended)\n"
+                    + "    -dst:#                (dest start: [integer])\n"
+                    + "    -dln:#                (dest length (max size): [integer])\n"
+                    + "    -sst:#                (source start: [integer])\n"
+                    + "    -sln:#                (source length: [integer])\n"
+                    + "    -tes:[cp|ip|st]       (test type: copy, in place, string)\n"
+                    + "    -help                 (print this help message)\n"
+                    + "  text can contain unicode escape values in the format '\\uXXXX' only\n";
+
     private static String escapedText(char[] text, int start, int length) {
         StringBuilder buf = new StringBuilder();
         for (int i = start, e = start + length; i < e; ++i) {
@@ -271,10 +266,9 @@ public class ArabicShapingSample{
         for (int i = 0; i < chars.length; ++i) {
             char ch = chars[i];
             if (ch == '\\') {
-                if ((i < chars.length - 1) &&
-                    (chars[i+1] == 'u')) {
-                    int val = Integer.parseInt(text.substring(i+2, i+6), 16);
-                    buf.append((char)val);
+                if ((i < chars.length - 1) && (chars[i + 1] == 'u')) {
+                    int val = Integer.parseInt(text.substring(i + 2, i + 6), 16);
+                    buf.append((char) val);
                     i += 5;
                 } else {
                     buf.append('\\');

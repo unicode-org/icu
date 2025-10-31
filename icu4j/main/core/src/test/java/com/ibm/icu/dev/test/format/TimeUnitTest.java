@@ -8,14 +8,6 @@
  */
 package com.ibm.icu.dev.test.format;
 
-import java.text.ParseException;
-import java.text.ParsePosition;
-import java.util.Locale;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.text.MeasureFormat;
@@ -26,10 +18,15 @@ import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.TimeUnit;
 import com.ibm.icu.util.TimeUnitAmount;
 import com.ibm.icu.util.ULocale;
+import java.text.ParseException;
+import java.text.ParsePosition;
+import java.util.Locale;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 /**
  * @author markdavis
- *
  */
 @RunWith(JUnit4.class)
 public class TimeUnitTest extends CoreTestFmwk {
@@ -42,7 +39,10 @@ public class TimeUnitTest extends CoreTestFmwk {
             nf.setRoundingMode(BigDecimal.ROUND_DOWN);
             nf.setMaximumFractionDigits(i);
             tuf.setNumberFormat(nf);
-            assertEquals("Test10219", expected[i], tuf.format(new TimeUnitAmount(1.588, TimeUnit.MINUTE)));
+            assertEquals(
+                    "Test10219",
+                    expected[i],
+                    tuf.format(new TimeUnitAmount(1.588, TimeUnit.MINUTE)));
         }
     }
 
@@ -62,16 +62,18 @@ public class TimeUnitTest extends CoreTestFmwk {
     @Test
     public void TestBasic() {
         String[] locales = {"en", "sl", "fr", "zh", "ar", "ru", "zh_Hant"};
-        for ( int locIndex = 0; locIndex < locales.length; ++locIndex ) {
-            //System.out.println("locale: " + locales[locIndex]);
-            TimeUnitFormat[] formats = new TimeUnitFormat[] {
-                new TimeUnitFormat(new ULocale(locales[locIndex]), TimeUnitFormat.FULL_NAME),
-                new TimeUnitFormat(new ULocale(locales[locIndex]), TimeUnitFormat.ABBREVIATED_NAME),
-
-            };
+        for (int locIndex = 0; locIndex < locales.length; ++locIndex) {
+            // System.out.println("locale: " + locales[locIndex]);
+            TimeUnitFormat[] formats =
+                    new TimeUnitFormat[] {
+                        new TimeUnitFormat(
+                                new ULocale(locales[locIndex]), TimeUnitFormat.FULL_NAME),
+                        new TimeUnitFormat(
+                                new ULocale(locales[locIndex]), TimeUnitFormat.ABBREVIATED_NAME),
+                    };
             for (int style = TimeUnitFormat.FULL_NAME;
-                 style <= TimeUnitFormat.ABBREVIATED_NAME;
-                 ++style) {
+                    style <= TimeUnitFormat.ABBREVIATED_NAME;
+                    ++style) {
                 final TimeUnit[] values = TimeUnit.values();
                 for (int j = 0; j < values.length; ++j) {
                     final TimeUnit timeUnit = values[j];
@@ -79,14 +81,23 @@ public class TimeUnitTest extends CoreTestFmwk {
                     for (int i = 0; i < tests.length; ++i) {
                         TimeUnitAmount source = new TimeUnitAmount(tests[i], timeUnit);
                         String formatted = formats[style].format(source);
-                        //System.out.println(formatted);
+                        // System.out.println(formatted);
                         logln(tests[i] + " => " + formatted);
                         try {
                             // Style should not matter when parsing.
-                            for (int parseStyle = TimeUnitFormat.FULL_NAME; parseStyle <= TimeUnitFormat.ABBREVIATED_NAME; parseStyle++) {
-                                TimeUnitAmount result = (TimeUnitAmount) formats[parseStyle].parseObject(formatted);
+                            for (int parseStyle = TimeUnitFormat.FULL_NAME;
+                                    parseStyle <= TimeUnitFormat.ABBREVIATED_NAME;
+                                    parseStyle++) {
+                                TimeUnitAmount result =
+                                        (TimeUnitAmount) formats[parseStyle].parseObject(formatted);
                                 if (result == null || !source.equals(result)) {
-                                    errln("No round trip: " + source + " => " + formatted + " => " + result);
+                                    errln(
+                                            "No round trip: "
+                                                    + source
+                                                    + " => "
+                                                    + formatted
+                                                    + " => "
+                                                    + result);
                                 }
                             }
                         } catch (ParseException e) {
@@ -160,103 +171,113 @@ public class TimeUnitTest extends CoreTestFmwk {
     @Test
     public void TestGreek() {
         String[] locales = {"el_GR", "el"};
-        final TimeUnit[] units = new TimeUnit[]{
-                TimeUnit.SECOND,
-                TimeUnit.MINUTE,
-                TimeUnit.HOUR,
-                TimeUnit.DAY,
-                TimeUnit.WEEK,
-                TimeUnit.MONTH,
-                TimeUnit.YEAR};
+        final TimeUnit[] units =
+                new TimeUnit[] {
+                    TimeUnit.SECOND,
+                    TimeUnit.MINUTE,
+                    TimeUnit.HOUR,
+                    TimeUnit.DAY,
+                    TimeUnit.WEEK,
+                    TimeUnit.MONTH,
+                    TimeUnit.YEAR
+                };
         int[] styles = new int[] {TimeUnitFormat.FULL_NAME, TimeUnitFormat.ABBREVIATED_NAME};
         int[] numbers = new int[] {1, 7};
 
         String[] expected = {
-                // "el_GR" 1 wide
-                "1 δευτερόλεπτο",
-                "1 λεπτό",
-                "1 ώρα",
-                "1 ημέρα",
-                "1 εβδομάδα",
-                "1 μήνας",
-                "1 έτος",
-                // "el_GR" 1 short
-                "1 δευτ.",
-                "1 λ.",
-                "1 ώ.",
-                "1 ημέρα",
-                "1 εβδ.",
-                "1 μήν.",
-                "1 έτ.",	        // year (one)
-                // "el_GR" 7 wide
-                "7 δευτερόλεπτα",
-                "7 λεπτά",
-                "7 ώρες",
-                "7 ημέρες",
-                "7 εβδομάδες",
-                "7 μήνες",
-                "7 έτη",
-                // "el_GR" 7 short
-                "7 δευτ.",
-                "7 λ.",
-                "7 ώ.",		        // hour (other)
-                "7 ημέρες",
-                "7 εβδ.",
-                "7 μήν.",
-                "7 έτ.",            // year (other)
-                // "el" 1 wide
-                "1 δευτερόλεπτο",
-                "1 λεπτό",
-                "1 ώρα",
-                "1 ημέρα",
-                "1 εβδομάδα",
-                "1 μήνας",
-                "1 έτος",
-                // "el" 1 short
-                "1 δευτ.",
-                "1 λ.",
-                "1 ώ.",
-                "1 ημέρα",
-                "1 εβδ.",
-                "1 μήν.",
-                "1 έτ.",	        // year (one)
-                // "el" 7 wide
-                "7 δευτερόλεπτα",
-                "7 λεπτά",
-                "7 ώρες",
-                "7 ημέρες",
-                "7 εβδομάδες",
-                "7 μήνες",
-                "7 έτη",
-                // "el" 7 short
-                "7 δευτ.",
-                "7 λ.",
-                "7 ώ.",		        // hour (other)
-                "7 ημέρες",
-                "7 εβδ.",
-                "7 μήν.",
-                "7 έτ."};           // year (other
+            // "el_GR" 1 wide
+            "1 δευτερόλεπτο",
+            "1 λεπτό",
+            "1 ώρα",
+            "1 ημέρα",
+            "1 εβδομάδα",
+            "1 μήνας",
+            "1 έτος",
+            // "el_GR" 1 short
+            "1 δευτ.",
+            "1 λ.",
+            "1 ώ.",
+            "1 ημέρα",
+            "1 εβδ.",
+            "1 μήν.",
+            "1 έτ.", // year (one)
+            // "el_GR" 7 wide
+            "7 δευτερόλεπτα",
+            "7 λεπτά",
+            "7 ώρες",
+            "7 ημέρες",
+            "7 εβδομάδες",
+            "7 μήνες",
+            "7 έτη",
+            // "el_GR" 7 short
+            "7 δευτ.",
+            "7 λ.",
+            "7 ώ.", // hour (other)
+            "7 ημέρες",
+            "7 εβδ.",
+            "7 μήν.",
+            "7 έτ.", // year (other)
+            // "el" 1 wide
+            "1 δευτερόλεπτο",
+            "1 λεπτό",
+            "1 ώρα",
+            "1 ημέρα",
+            "1 εβδομάδα",
+            "1 μήνας",
+            "1 έτος",
+            // "el" 1 short
+            "1 δευτ.",
+            "1 λ.",
+            "1 ώ.",
+            "1 ημέρα",
+            "1 εβδ.",
+            "1 μήν.",
+            "1 έτ.", // year (one)
+            // "el" 7 wide
+            "7 δευτερόλεπτα",
+            "7 λεπτά",
+            "7 ώρες",
+            "7 ημέρες",
+            "7 εβδομάδες",
+            "7 μήνες",
+            "7 έτη",
+            // "el" 7 short
+            "7 δευτ.",
+            "7 λ.",
+            "7 ώ.", // hour (other)
+            "7 ημέρες",
+            "7 εβδ.",
+            "7 μήν.",
+            "7 έτ."
+        }; // year (other
 
         int counter = 0;
         TimeUnitFormat timeUnitFormat;
         TimeUnitAmount timeUnitAmount;
         String formatted;
 
-        for ( int locIndex = 0; locIndex < locales.length; ++locIndex ) {
-            for( int numIndex = 0; numIndex < numbers.length; ++numIndex ) {
-                for ( int styleIndex = 0; styleIndex < styles.length; ++styleIndex ) {
-                    for ( int unitIndex = 0; unitIndex < units.length; ++unitIndex ) {
+        for (int locIndex = 0; locIndex < locales.length; ++locIndex) {
+            for (int numIndex = 0; numIndex < numbers.length; ++numIndex) {
+                for (int styleIndex = 0; styleIndex < styles.length; ++styleIndex) {
+                    for (int unitIndex = 0; unitIndex < units.length; ++unitIndex) {
 
                         timeUnitAmount = new TimeUnitAmount(numbers[numIndex], units[unitIndex]);
-                        timeUnitFormat = new TimeUnitFormat(new ULocale(locales[locIndex]), styles[styleIndex]);
+                        timeUnitFormat =
+                                new TimeUnitFormat(
+                                        new ULocale(locales[locIndex]), styles[styleIndex]);
                         formatted = timeUnitFormat.format(timeUnitAmount);
 
                         assertEquals(
-                                "locale: " + locales[locIndex]
-                                        + ", style: " + styles[styleIndex]
-                                                + ", units: " + units[unitIndex]
-                                                        + ", value: " + numbers[numIndex],
-                                                expected[counter], formatted);
+                                "locale: "
+                                        + locales[locIndex]
+                                        + ", style: "
+                                        + styles[styleIndex]
+                                        + ", units: "
+                                        + units[unitIndex]
+                                        + ", value: "
+                                        + numbers[numIndex],
+                                expected[counter],
+                                formatted);
                         ++counter;
                     }
                 }
@@ -265,14 +286,11 @@ public class TimeUnitTest extends CoreTestFmwk {
     }
 
     /**
-     * @bug9042
-     * Performs tests for Greek.
-     * This tests that if the plural count listed in time unit format does not
-     * match those in the plural rules for the locale, those plural count in
-     * time unit format will be ignored and subsequently, fall back will kick in
-     * which is tested above.
-     * Without data sanitization, setNumberFormat() would crash.
-     * As of CLDR shipped in ICU4.8, Greek is one such language.
+     * @bug9042 Performs tests for Greek. This tests that if the plural count listed in time unit
+     *     format does not match those in the plural rules for the locale, those plural count in
+     *     time unit format will be ignored and subsequently, fall back will kick in which is tested
+     *     above. Without data sanitization, setNumberFormat() would crash. As of CLDR shipped in
+     *     ICU4.8, Greek is one such language.
      */
     @Test
     public void TestGreekWithSanitization() {
@@ -310,7 +328,7 @@ public class TimeUnitTest extends CoreTestFmwk {
             for (int i = 0; i < tests.length; ++i) {
                 TimeUnitAmount source = new TimeUnitAmount(tests[i], timeUnit);
                 String formatted = format.format(source);
-                //System.out.println(formatted);
+                // System.out.println(formatted);
                 logln(tests[i] + " => " + formatted);
                 try {
                     TimeUnitAmount result = (TimeUnitAmount) format.parseObject(formatted);
@@ -332,20 +350,26 @@ public class TimeUnitTest extends CoreTestFmwk {
     public void TestTimeUnitFormat() {
         // Tests when "if (style < FULL_NAME || style >= TOTAL_STYLES)" is true
         // TOTAL_STYLES is 2
-        int[] cases = { TimeUnitFormat.FULL_NAME - 1, TimeUnitFormat.FULL_NAME - 2, 3 };
+        int[] cases = {TimeUnitFormat.FULL_NAME - 1, TimeUnitFormat.FULL_NAME - 2, 3};
         for (int i = 0; i < cases.length; i++) {
             try {
                 TimeUnitFormat tuf = new TimeUnitFormat(new ULocale("en_US"), cases[i]);
-                errln("TimeUnitFormat(ULocale,int) was suppose to return an " + "exception for a style value of "
-                        + cases[i] + "passed into the constructor.");
+                errln(
+                        "TimeUnitFormat(ULocale,int) was suppose to return an "
+                                + "exception for a style value of "
+                                + cases[i]
+                                + "passed into the constructor.");
             } catch (Exception e) {
             }
         }
         for (int i = 0; i < cases.length; i++) {
             try {
                 TimeUnitFormat tuf = new TimeUnitFormat(new Locale("en", "US"), cases[i]);
-                errln("TimeUnitFormat(ULocale,int) was suppose to return an " + "exception for a style value of "
-                        + cases[i] + "passed into the constructor.");
+                errln(
+                        "TimeUnitFormat(ULocale,int) was suppose to return an "
+                                + "exception for a style value of "
+                                + cases[i]
+                                + "passed into the constructor.");
             } catch (Exception e) {
             }
         }
@@ -358,9 +382,12 @@ public class TimeUnitTest extends CoreTestFmwk {
     public void TestSetLocale() {
         // Tests when "if ( locale != this.locale )" is false
         TimeUnitFormat tuf = new TimeUnitFormat(new ULocale("en_US"));
-        if (!tuf.setLocale(new ULocale("en_US")).equals(tuf) && !tuf.setLocale(new Locale("en", "US")).equals(tuf)) {
-            errln("TimeUnitFormat.setLocale(ULocale) was suppose to "
-                    + "return the same TimeUnitFormat object if the same " + "ULocale is entered as a parameter.");
+        if (!tuf.setLocale(new ULocale("en_US")).equals(tuf)
+                && !tuf.setLocale(new Locale("en", "US")).equals(tuf)) {
+            errln(
+                    "TimeUnitFormat.setLocale(ULocale) was suppose to "
+                            + "return the same TimeUnitFormat object if the same "
+                            + "ULocale is entered as a parameter.");
         }
     }
 
@@ -377,15 +404,17 @@ public class TimeUnitTest extends CoreTestFmwk {
 
         // Tests when "if (format == this.format)" is true
         if (!tuf.setNumberFormat(NumberFormat.getInstance()).equals(tuf)) {
-            errln("TimeUnitFormat.setNumberFormat(NumberFormat) was suppose to "
-                    + "return the same object when the same NumberFormat is passed.");
+            errln(
+                    "TimeUnitFormat.setNumberFormat(NumberFormat) was suppose to "
+                            + "return the same object when the same NumberFormat is passed.");
         }
 
         // Tests when "if ( format == null )" is true
         // Tests when "if ( locale == null )" is true
         if (!tuf.setNumberFormat(null).equals(tuf)) {
-            errln("TimeUnitFormat.setNumberFormat(NumberFormat) was suppose to "
-                    + "return the same object when null is passed.");
+            errln(
+                    "TimeUnitFormat.setNumberFormat(NumberFormat) was suppose to "
+                            + "return the same object when null is passed.");
         }
 
         TimeUnitFormat tuf1 = new TimeUnitFormat(new ULocale("en_US"));
@@ -403,9 +432,10 @@ public class TimeUnitTest extends CoreTestFmwk {
         TimeUnitFormat tuf = new TimeUnitFormat();
         try {
             tuf.format(Integer.parseInt("1"), null, null);
-            errln("TimeUnitFormat.format(Object,StringBuffer,FieldPosition) "
-                    + "was suppose to return an exception because the Object "
-                    + "parameter was not of type TimeUnitAmount.");
+            errln(
+                    "TimeUnitFormat.format(Object,StringBuffer,FieldPosition) "
+                            + "was suppose to return an exception because the Object "
+                            + "parameter was not of type TimeUnitAmount.");
         } catch (Exception e) {
         }
     }
@@ -415,7 +445,7 @@ public class TimeUnitTest extends CoreTestFmwk {
      *
      */
     @Test
-    public void TestSetup(){
+    public void TestSetup() {
         TimeUnitFormat tuf = new TimeUnitFormat();
         tuf.parseObject("", new ParsePosition(0));
 
@@ -434,10 +464,12 @@ public class TimeUnitTest extends CoreTestFmwk {
                 "70 pieds et 5,3\u00A0pouces",
                 "70 pieds et 5,3\u00A0pouces",
                 tuf.formatMeasures(
-                        new Measure(70, MeasureUnit.FOOT),
-                        new Measure(5.3, MeasureUnit.INCH)));
+                        new Measure(70, MeasureUnit.FOOT), new Measure(5.3, MeasureUnit.INCH)));
         assertEquals("getLocale", ULocale.FRENCH, tuf.getLocale());
-        assertEquals("getNumberFormat", ULocale.FRENCH, tuf.getNumberFormat().getLocale(ULocale.VALID_LOCALE));
+        assertEquals(
+                "getNumberFormat",
+                ULocale.FRENCH,
+                tuf.getNumberFormat().getLocale(ULocale.VALID_LOCALE));
         assertEquals("getWidth", MeasureFormat.FormatWidth.WIDE, tuf.getWidth());
     }
 

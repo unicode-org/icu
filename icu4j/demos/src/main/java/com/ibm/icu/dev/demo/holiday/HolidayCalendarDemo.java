@@ -9,6 +9,13 @@
 
 package com.ibm.icu.dev.demo.holiday;
 
+import com.ibm.icu.dev.demo.impl.DemoApplet;
+import com.ibm.icu.dev.demo.impl.DemoTextBox;
+import com.ibm.icu.dev.demo.impl.DemoUtility;
+import com.ibm.icu.text.DateTimePatternGenerator;
+import com.ibm.icu.text.SimpleDateFormat;
+import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.Holiday;
 import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Canvas;
@@ -36,27 +43,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-import com.ibm.icu.dev.demo.impl.DemoApplet;
-import com.ibm.icu.dev.demo.impl.DemoTextBox;
-import com.ibm.icu.dev.demo.impl.DemoUtility;
-import com.ibm.icu.text.DateTimePatternGenerator;
-import com.ibm.icu.text.SimpleDateFormat;
-import com.ibm.icu.util.Calendar;
-import com.ibm.icu.util.Holiday;
-
-/**
- * CalendarDemo demonstrates how Calendar works.
- */
-public class HolidayCalendarDemo extends DemoApplet 
-{
-    /**
-     * For serialization
-     */
+/** CalendarDemo demonstrates how Calendar works. */
+public class HolidayCalendarDemo extends DemoApplet {
+    /** For serialization */
     private static final long serialVersionUID = 4546085430817359372L;
 
     /**
-     * The main function which defines the behavior of the CalendarDemo
-     * applet when an applet is started.
+     * The main function which defines the behavior of the CalendarDemo applet when an applet is
+     * started.
      */
     public static void main(String argv[]) {
 
@@ -69,33 +63,28 @@ public class HolidayCalendarDemo extends DemoApplet
     }
 
     /**
-    * A Frame is a top-level window with a title. The default layout for a frame
-    * is BorderLayout.  The CalendarFrame class defines the window layout of
-    * CalendarDemo.
-    */
-    private static class CalendarFrame extends Frame implements ActionListener,
-                                                                ItemListener
-    {
-        /**
-         * For serialization
-         */
+     * A Frame is a top-level window with a title. The default layout for a frame is BorderLayout.
+     * The CalendarFrame class defines the window layout of CalendarDemo.
+     */
+    private static class CalendarFrame extends Frame implements ActionListener, ItemListener {
+        /** For serialization */
         private static final long serialVersionUID = -7023296782393042761L;
 
         private static final boolean DEBUG = false;
 
-        //private Locale curLocale = Locale.US; // unused
+        // private Locale curLocale = Locale.US; // unused
 
         private DemoApplet applet;
 
         private static final Locale[] calendars = {
-            //new Locale("de","AT"),
+            // new Locale("de","AT"),
             Locale.CANADA,
             Locale.CANADA_FRENCH,
             Locale.FRANCE,
             Locale.GERMANY,
-            new Locale("iw","IL"),
-            new Locale("el","GR"),
-            //new Locale("es","MX"),
+            new Locale("iw", "IL"),
+            new Locale("el", "GR"),
+            // new Locale("es","MX"),
             Locale.UK,
             Locale.US,
         };
@@ -105,18 +94,15 @@ public class HolidayCalendarDemo extends DemoApplet
             Locale.US,
             Locale.FRANCE,
             Locale.CANADA_FRENCH,
-            //new Locale("de","AT"),
+            // new Locale("de","AT"),
             Locale.GERMAN,
-            new Locale("el","GR"),
-            //new Locale("iw","IL"),
-            new Locale("es","MX"),
+            new Locale("el", "GR"),
+            // new Locale("iw","IL"),
+            new Locale("es", "MX"),
         };
 
-        /**
-        * Constructs a new CalendarFrame that is initially invisible.
-        */
-        public CalendarFrame(DemoApplet applet)
-        {
+        /** Constructs a new CalendarFrame that is initially invisible. */
+        public CalendarFrame(DemoApplet applet) {
             super("Calendar Demo");
             this.applet = applet;
             init();
@@ -125,11 +111,10 @@ public class HolidayCalendarDemo extends DemoApplet
         }
 
         /**
-        * Initializes the applet. You never need to call this directly, it
-        * is called automatically by the system once the applet is created.
-        */
-        public void init()
-        {
+         * Initializes the applet. You never need to call this directly, it is called automatically
+         * by the system once the applet is created.
+         */
+        public void init() {
             // Get G7 locales only for demo purpose. To get all the locales
             // supported, switch to calling Calendar.getAvailableLocales().
             // commented
@@ -138,49 +123,45 @@ public class HolidayCalendarDemo extends DemoApplet
             buildGUI();
         }
 
-        //------------------------------------------------------------
+        // ------------------------------------------------------------
         // package private
-        //------------------------------------------------------------
+        // ------------------------------------------------------------
         void addWithFont(Container container, Component foo, Font font) {
-            if (font != null)
-                foo.setFont(font);
+            if (font != null) foo.setFont(font);
             container.add(foo);
         }
 
         /**
-        * Called to start the applet. You never need to call this method
-        * directly, it is called when the applet's document is visited.
-        */
-        public void start()
-        {
+         * Called to start the applet. You never need to call this method directly, it is called
+         * when the applet's document is visited.
+         */
+        public void start() {
             // do nothing
         }
 
-        private Choice          localeMenu;
-        private Choice          displayMenu;
-        private Locale[]        locales;
+        private Choice localeMenu;
+        private Choice displayMenu;
+        private Locale[] locales;
 
-        private Label           monthLabel;
-        private Button          prevYear;
-        private Button          prevMonth;
-        private Button          gotoToday;
-        private Button          nextMonth;
-        private Button          nextYear;
-        private CalendarPanel   calendarPanel;
+        private Label monthLabel;
+        private Button prevYear;
+        private Button prevMonth;
+        private Button gotoToday;
+        private Button nextMonth;
+        private Button nextYear;
+        private CalendarPanel calendarPanel;
 
         private static final Locale kFirstLocale = Locale.US;
 
-        private static void add(Container container, Component component,
-                                GridBagLayout g, GridBagConstraints c)
-        {
+        private static void add(
+                Container container, Component component, GridBagLayout g, GridBagConstraints c) {
             g.setConstraints(component, c);
             container.add(component);
         }
 
-        public void buildGUI()
-        {
+        public void buildGUI() {
             setBackground(DemoUtility.bgColor);
-            setLayout(new BorderLayout(10,10));
+            setLayout(new BorderLayout(10, 10));
 
             // Label for the demo's title
             Label titleLabel = new Label("Calendar Demo", Label.CENTER);
@@ -188,55 +169,58 @@ public class HolidayCalendarDemo extends DemoApplet
 
             // Label for the current month name
             monthLabel = new Label("", Label.LEFT);
-            monthLabel.setFont(new Font(DemoUtility.titleFont.getName(),
-                                        DemoUtility.titleFont.getStyle(),
-                                        (DemoUtility.titleFont.getSize() * 3)/2));
+            monthLabel.setFont(
+                    new Font(
+                            DemoUtility.titleFont.getName(),
+                            DemoUtility.titleFont.getStyle(),
+                            (DemoUtility.titleFont.getSize() * 3) / 2));
 
             // Make the locale popup menus
-            localeMenu= new Choice();
+            localeMenu = new Choice();
             localeMenu.addItemListener(this);
             int selectMe = 0;
-            
+
             for (int i = 0; i < calendars.length; i++) {
-                if (i > 0 &&
-                        calendars[i].getCountry().equals(calendars[i-1].getCountry()) ||
-                    i < calendars.length - 1 &&
-                        calendars[i].getCountry().equals(calendars[i+1].getCountry()))
-                {
-                    localeMenu.addItem(calendars[i].getDisplayCountry() + " (" +
-                                    calendars[i].getDisplayLanguage() + ")");
+                if (i > 0 && calendars[i].getCountry().equals(calendars[i - 1].getCountry())
+                        || i < calendars.length - 1
+                                && calendars[i]
+                                        .getCountry()
+                                        .equals(calendars[i + 1].getCountry())) {
+                    localeMenu.addItem(
+                            calendars[i].getDisplayCountry()
+                                    + " ("
+                                    + calendars[i].getDisplayLanguage()
+                                    + ")");
                 } else {
-                    localeMenu.addItem( calendars[i].getDisplayCountry() );
+                    localeMenu.addItem(calendars[i].getDisplayCountry());
                 }
-                
+
                 if (calendars[i].equals(kFirstLocale)) {
                     selectMe = i;
                 }
             }
-            
+
             localeMenu.setBackground(DemoUtility.choiceColor);
             localeMenu.select(selectMe);
 
             displayMenu = new Choice();
             displayMenu.addItemListener(this);
-            
+
             selectMe = 0;
             for (int i = 0; i < locales.length; i++) {
-                if (i > 0 &&
-                        locales[i].getLanguage().equals(locales[i-1].getLanguage()) ||
-                    i < locales.length - 1 &&
-                        locales[i].getLanguage().equals(locales[i+1].getLanguage()))
-                {
-                    displayMenu.addItem( locales[i].getDisplayName() );
+                if (i > 0 && locales[i].getLanguage().equals(locales[i - 1].getLanguage())
+                        || i < locales.length - 1
+                                && locales[i].getLanguage().equals(locales[i + 1].getLanguage())) {
+                    displayMenu.addItem(locales[i].getDisplayName());
                 } else {
-                    displayMenu.addItem( locales[i].getDisplayLanguage());
+                    displayMenu.addItem(locales[i].getDisplayLanguage());
                 }
-                
+
                 if (locales[i].equals(kFirstLocale)) {
                     selectMe = i;
                 }
             }
-            
+
             displayMenu.setBackground(DemoUtility.choiceColor);
             displayMenu.select(selectMe);
 
@@ -310,7 +294,7 @@ public class HolidayCalendarDemo extends DemoApplet
             {
                 topPanel.setLayout(new BorderLayout());
 
-                //topPanel.add("North", titleLabel);
+                // topPanel.add("North", titleLabel);
                 topPanel.add("Center", monthPanel);
                 topPanel.add("East", menuPanel);
             }
@@ -322,84 +306,65 @@ public class HolidayCalendarDemo extends DemoApplet
             add("South", copyright);
 
             // Now create the big calendar panel and stick it in the middle
-            calendarPanel = new CalendarPanel( kFirstLocale );
+            calendarPanel = new CalendarPanel(kFirstLocale);
             add("Center", calendarPanel);
 
             updateMonthName();
         }
 
-        private void updateMonthName()
-        {
+        private void updateMonthName() {
             final Locale displayLocale = calendarPanel.getDisplayLocale();
-            final String pattern = DateTimePatternGenerator.
-                    getInstance(displayLocale).getBestPattern("MMMMy");
-            SimpleDateFormat f = new SimpleDateFormat(pattern,
-                                                        displayLocale);
+            final String pattern =
+                    DateTimePatternGenerator.getInstance(displayLocale).getBestPattern("MMMMy");
+            SimpleDateFormat f = new SimpleDateFormat(pattern, displayLocale);
             f.setCalendar(calendarPanel.getCalendar());
-            monthLabel.setText( f.format( calendarPanel.firstOfMonth() ));
+            monthLabel.setText(f.format(calendarPanel.firstOfMonth()));
         }
-        
+
         /**
-        * Handles the event. Returns true if the event is handled and should not
-        * be passed to the parent of this component. The default event handler
-        * calls some helper methods to make life easier on the programmer.
-        */
-        public void actionPerformed(ActionEvent e)
-        {
+         * Handles the event. Returns true if the event is handled and should not be passed to the
+         * parent of this component. The default event handler calls some helper methods to make
+         * life easier on the programmer.
+         */
+        public void actionPerformed(ActionEvent e) {
             Object obj = e.getSource();
-            
+
             // *** Button events are handled here.
             if (obj instanceof Button) {
                 if (obj == nextMonth) {
                     calendarPanel.add(Calendar.MONTH, +1);
-                }
-                else
-                if (obj == prevMonth) {
+                } else if (obj == prevMonth) {
                     calendarPanel.add(Calendar.MONTH, -1);
-                }
-                else
-                if (obj == prevYear) {
+                } else if (obj == prevYear) {
                     calendarPanel.add(Calendar.YEAR, -1);
-                }
-                else
-                if (obj == nextYear) {
+                } else if (obj == nextYear) {
                     calendarPanel.add(Calendar.YEAR, +1);
-                }
-                else
-                if (obj == gotoToday) {
-                    calendarPanel.set( new Date() );
+                } else if (obj == gotoToday) {
+                    calendarPanel.set(new Date());
                 }
                 updateMonthName();
             }
         }
-        
-        public void itemStateChanged(ItemEvent e)
-        {
+
+        public void itemStateChanged(ItemEvent e) {
             Object obj = e.getSource();
             if (obj == localeMenu) {
                 calendarPanel.setCalendarLocale(calendars[localeMenu.getSelectedIndex()]);
                 updateMonthName();
+            } else if (obj == displayMenu) {
+                calendarPanel.setDisplayLocale(locales[displayMenu.getSelectedIndex()]);
+                updateMonthName();
             }
-            else 
-                if (obj == displayMenu) {
-                    calendarPanel.setDisplayLocale(locales[displayMenu.getSelectedIndex()]);
-                    updateMonthName();
-                }
         }
-        
-        /**
-        * Print out the error message while debugging this program.
-        */
-        public void errorText(String s)
-        {
-            if (DEBUG)
-            {
+
+        /** Print out the error message while debugging this program. */
+        public void errorText(String s) {
+            if (DEBUG) {
                 System.out.println(s);
             }
         }
-        
-        protected void processWindowEvent(WindowEvent e)
-        {
+
+        protected void processWindowEvent(WindowEvent e) {
             System.out.println("event " + e);
             if (e.getID() == WindowEvent.WINDOW_CLOSING) {
                 this.hide();
@@ -414,15 +379,12 @@ public class HolidayCalendarDemo extends DemoApplet
         }
     }
 
-
     private static class CalendarPanel extends Canvas {
 
-        /**
-         * For serialization
-         */
+        /** For serialization */
         private static final long serialVersionUID = 1521099412250120821L;
 
-        public CalendarPanel( Locale locale ) {
+        public CalendarPanel(Locale locale) {
             set(locale, locale, new Date());
         }
 
@@ -438,8 +400,7 @@ public class HolidayCalendarDemo extends DemoApplet
             set(fCalendarLocale, fDisplayLocale, date);
         }
 
-        public void set(Locale loc, Locale display, Date date)
-        {
+        public void set(Locale loc, Locale display, Date date) {
             if (fCalendarLocale == null || !loc.equals(fCalendarLocale)) {
                 fCalendarLocale = loc;
                 fCalendar = Calendar.getInstance(fCalendarLocale);
@@ -456,9 +417,8 @@ public class HolidayCalendarDemo extends DemoApplet
             repaint();
         }
 
-        public void add(int field, int delta)
-        {
-            synchronized(fCalendar) {
+        public void add(int field, int delta) {
+            synchronized (fCalendar) {
                 fCalendar.setTime(fStartOfMonth);
                 fCalendar.add(field, delta);
                 fStartOfMonth = fCalendar.getTime();
@@ -479,15 +439,13 @@ public class HolidayCalendarDemo extends DemoApplet
             return fDisplayLocale;
         }
 
-
         public Date firstOfMonth() {
             return fStartOfMonth;
         }
 
-        private Date startOfMonth(Date dateInMonth)
-        {
-            synchronized(fCalendar) {
-                fCalendar.setTime(dateInMonth);             // TODO: synchronization
+        private Date startOfMonth(Date dateInMonth) {
+            synchronized (fCalendar) {
+                fCalendar.setTime(dateInMonth); // TODO: synchronization
 
                 int era = fCalendar.get(Calendar.ERA);
                 int year = fCalendar.get(Calendar.YEAR);
@@ -503,8 +461,7 @@ public class HolidayCalendarDemo extends DemoApplet
             }
         }
 
-        private void calculate()
-        {
+        private void calculate() {
             Calendar c = fCalendar.clone(); // Temporary copy
 
             fStartOfMonth = startOfMonth(fStartOfMonth);
@@ -528,7 +485,7 @@ public class HolidayCalendarDemo extends DemoApplet
             // Finally, find the end of the month, i.e. the start of the next one
             c.roll(Calendar.DATE, true);
             c.add(Calendar.MONTH, 1);
-            c.getTime();        // JDK 1.1.2 bug workaround
+            c.getTime(); // JDK 1.1.2 bug workaround
             c.add(Calendar.SECOND, -1);
             Date endOfMonth = c.getTime();
 
@@ -543,21 +500,30 @@ public class HolidayCalendarDemo extends DemoApplet
             // to save the trouble of having to do it later
             fHolidays.clear();
 
-            for (int h = 0; h < fAllHolidays.length; h++)
-            {
+            for (int h = 0; h < fAllHolidays.length; h++) {
                 Date d = fStartOfMonth;
-                while ( (d = fAllHolidays[h].firstBetween(d, endOfMonth) ) != null)
-                {
-                    if(d.after(endOfMonth)) {
-                        throw new InternalError("Error: for " + fAllHolidays[h].getDisplayName()+
-                                "  #" + h + "/"+fAllHolidays.length+": " + d +" is after end of month " + endOfMonth);
+                while ((d = fAllHolidays[h].firstBetween(d, endOfMonth)) != null) {
+                    if (d.after(endOfMonth)) {
+                        throw new InternalError(
+                                "Error: for "
+                                        + fAllHolidays[h].getDisplayName()
+                                        + "  #"
+                                        + h
+                                        + "/"
+                                        + fAllHolidays.length
+                                        + ": "
+                                        + d
+                                        + " is after end of month "
+                                        + endOfMonth);
                     }
                     c.setTime(d);
-                    fHolidays.add(new HolidayInfo(c.get(Calendar.DATE),
-                                            fAllHolidays[h],
-                                            fAllHolidays[h].getDisplayName(fDisplayLocale) ));
+                    fHolidays.add(
+                            new HolidayInfo(
+                                    c.get(Calendar.DATE),
+                                    fAllHolidays[h],
+                                    fAllHolidays[h].getDisplayName(fDisplayLocale)));
 
-                    d.setTime( d.getTime() + 1000 );    // "d++"
+                    d.setTime(d.getTime() + 1000); // "d++"
                 }
             }
             dirty = false;
@@ -566,11 +532,10 @@ public class HolidayCalendarDemo extends DemoApplet
         static final int INSET = 2;
 
         /*
-        * Convert from the day number within a month (1-based)
-        * to the cell coordinates on the calendar (0-based)
-        */
-        private void dateToCell(int date, Point pos)
-        {
+         * Convert from the day number within a month (1-based)
+         * to the cell coordinates on the calendar (0-based)
+         */
+        private void dateToCell(int date, Point pos) {
             int cell = (date + firstDayInMonth - firstDayOfWeek - minDay);
             if (firstDayInMonth < firstDayOfWeek) {
                 cell += daysInWeek;
@@ -579,8 +544,9 @@ public class HolidayCalendarDemo extends DemoApplet
             pos.x = cell % daysInWeek;
             pos.y = cell / daysInWeek;
         }
+
         private Point dateToCell(int date) {
-            Point p = new Point(0,0);
+            Point p = new Point(0, 0);
             dateToCell(date, p);
             return p;
         }
@@ -591,11 +557,11 @@ public class HolidayCalendarDemo extends DemoApplet
                 calculate();
             }
 
-            Point cellPos = new Point(0,0);     // Temporary variable
+            Point cellPos = new Point(0, 0); // Temporary variable
             Dimension d = getSize();
 
             g.setColor(DemoUtility.bgColor);
-            g.fillRect(0,0,d.width,d.height);
+            g.fillRect(0, 0, d.width, d.height);
 
             // Draw the day names at the top
             g.setColor(Color.black);
@@ -615,7 +581,7 @@ public class HolidayCalendarDemo extends DemoApplet
             }
 
             double cellHeight = (d.height - labelHeight - 1) / numWeeks;
-            double cellWidth = (double)(d.width - 1) / daysInWeek;
+            double cellWidth = (double) (d.width - 1) / daysInWeek;
 
             // Draw a white background in the part of the calendar
             // that displays this month.
@@ -623,37 +589,41 @@ public class HolidayCalendarDemo extends DemoApplet
             {
                 g.setColor(Color.white);
                 dateToCell(1, cellPos);
-                int width = (int)(cellPos.x*cellWidth);  // Width of unshaded area
+                int width = (int) (cellPos.x * cellWidth); // Width of unshaded area
 
-                g.fillRect((int)(width), labelHeight ,
-                        (int)(d.width - width), (int)cellHeight);
+                g.fillRect((int) (width), labelHeight, (int) (d.width - width), (int) cellHeight);
 
                 // All of the intermediate weeks get shaded completely
-                g.fillRect(0, (int)(labelHeight + cellHeight),
-                            d.width, (int)(cellHeight * (numWeeks - 2)));
+                g.fillRect(
+                        0,
+                        (int) (labelHeight + cellHeight),
+                        d.width,
+                        (int) (cellHeight * (numWeeks - 2)));
 
                 // Now figure out the last week.
                 dateToCell(daysInMonth, cellPos);
-                width = (int)((cellPos.x+1)*cellWidth);  // Width of shaded area
+                width = (int) ((cellPos.x + 1) * cellWidth); // Width of shaded area
 
-                g.fillRect(0, (int)(labelHeight + (numWeeks-1) * cellHeight),
-                            width, (int)(cellHeight));
-
+                g.fillRect(
+                        0,
+                        (int) (labelHeight + (numWeeks - 1) * cellHeight),
+                        width,
+                        (int) (cellHeight));
             }
             // Draw the X/Y grid lines
             g.setColor(Color.black);
             for (int i = 0; i <= numWeeks; i++) {
-                int y = (int)(labelHeight + i * cellHeight);
+                int y = (int) (labelHeight + i * cellHeight);
                 g.drawLine(0, y, d.width - 1, y);
             }
             for (int i = 0; i <= daysInWeek; i++) {
-                int x = (int)(i * cellWidth);
+                int x = (int) (i * cellWidth);
                 g.drawLine(x, labelHeight, x, d.height - 1);
             }
 
             // Now loop through all of the days in the month, figure out where
             // they go in the grid, and draw the day # for each one
-            Font numberFont = new Font("Helvetica",Font.PLAIN,12);
+            Font numberFont = new Font("Helvetica", Font.PLAIN, 12);
             // not used Font holidayFont = DemoUtility.creditFont;
 
             Calendar c = fCalendar.clone();
@@ -665,8 +635,8 @@ public class HolidayCalendarDemo extends DemoApplet
                 fm = g.getFontMetrics();
 
                 dateToCell(i, cellPos);
-                int x = (int)((cellPos.x + 1) * cellWidth);
-                int y = (int)(cellPos.y * cellHeight + labelHeight);
+                int x = (int) ((cellPos.x + 1) * cellWidth);
+                int y = (int) (cellPos.y * cellHeight + labelHeight);
 
                 StringBuilder buffer = new StringBuilder();
                 buffer.append(i);
@@ -681,18 +651,16 @@ public class HolidayCalendarDemo extends DemoApplet
                 HolidayInfo info = null;
 
                 // Coordinates of lower-left corner of cell.
-                x = (int)((cellPos.x) * cellWidth);
-                y = (int)((cellPos.y+1) * cellHeight) + labelHeight;
+                x = (int) ((cellPos.x) * cellWidth);
+                y = (int) ((cellPos.y + 1) * cellHeight) + labelHeight;
 
-                while (h < fHolidays.size() &&
-                        (info = fHolidays.get(h)).date <= i)
-                {
+                while (h < fHolidays.size() && (info = fHolidays.get(h)).date <= i) {
                     if (info.date == i) {
                         // Draw the holiday here.
                         g.setFont(numberFont);
                         g.setColor(Color.red);
 
-                        DemoTextBox box = new DemoTextBox(g, info.name, (int)(cellWidth - INSET));
+                        DemoTextBox box = new DemoTextBox(g, info.name, (int) (cellWidth - INSET));
                         box.draw(g, x + INSET, y - INSET - box.getHeight());
 
                         y -= (box.getHeight() + INSET);
@@ -703,21 +671,21 @@ public class HolidayCalendarDemo extends DemoApplet
         }
 
         // Important state variables
-        private Locale              fCalendarLocale;    // Whose calendar
-        private Calendar            fCalendar;          // Calendar for calculations
+        private Locale fCalendarLocale; // Whose calendar
+        private Calendar fCalendar; // Calendar for calculations
 
-        private Locale              fDisplayLocale;     // How to display it
-        private DateFormatSymbols   fSymbols;           // Symbols for drawing
+        private Locale fDisplayLocale; // How to display it
+        private DateFormatSymbols fSymbols; // Symbols for drawing
 
-        private Date                fStartOfMonth;      // 00:00:00 on first day of month
+        private Date fStartOfMonth; // 00:00:00 on first day of month
 
         // Cached calculations to make drawing faster.
-        private transient int minDay;           // Minimum legal day #
-        private transient int daysInWeek;       // # of days in a week
-        private transient int firstDayOfWeek;   // First day to display in week
-        private transient int numWeeks;         // # full or partial weeks in month
-        private transient int daysInMonth;      // # days in this month
-        private transient int firstDayInMonth;  // Day of week of first day in month
+        private transient int minDay; // Minimum legal day #
+        private transient int daysInWeek; // # of days in a week
+        private transient int firstDayOfWeek; // First day to display in week
+        private transient int numWeeks; // # full or partial weeks in month
+        private transient int daysInMonth; // # days in this month
+        private transient int firstDayInMonth; // Day of week of first day in month
 
         private transient Holiday[] fAllHolidays;
         private transient ArrayList<HolidayInfo> fHolidays = new ArrayList<>(5);
@@ -737,4 +705,3 @@ public class HolidayCalendarDemo extends DemoApplet
         public String name;
     }
 }
-

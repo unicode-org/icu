@@ -8,6 +8,15 @@
  */
 package com.ibm.icu.text;
 
+import com.ibm.icu.impl.ICUData;
+import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.UResource;
+import com.ibm.icu.number.LocalizedNumberFormatter;
+import com.ibm.icu.util.TimeUnit;
+import com.ibm.icu.util.TimeUnitAmount;
+import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.ULocale.Category;
+import com.ibm.icu.util.UResourceBundle;
 import java.io.ObjectStreamException;
 import java.text.ParseException;
 import java.text.ParsePosition;
@@ -19,22 +28,11 @@ import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.TreeMap;
 
-import com.ibm.icu.impl.ICUData;
-import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.impl.UResource;
-import com.ibm.icu.number.LocalizedNumberFormatter;
-import com.ibm.icu.util.TimeUnit;
-import com.ibm.icu.util.TimeUnitAmount;
-import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.ULocale.Category;
-import com.ibm.icu.util.UResourceBundle;
-
-
 /**
  * Format or parse a TimeUnitAmount, using plural rules for the units where available.
  *
- * <P>
- * Code Sample:
+ * <p>Code Sample:
+ *
  * <pre>
  *   // create a time unit instance.
  *   // only SECOND, MINUTE, HOUR, DAY, WEEK, MONTH, and YEAR are supported
@@ -56,7 +54,8 @@ import com.ibm.icu.util.UResourceBundle;
  *   }
  * </pre>
  *
- * <P>
+ * <p>
+ *
  * @see TimeUnitAmount
  * @see MeasureFormat
  * @author markdavis
@@ -66,26 +65,28 @@ import com.ibm.icu.util.UResourceBundle;
 public class TimeUnitFormat extends MeasureFormat implements Cloneable {
 
     /**
-     * Constant for full name style format.
-     * For example, the full name for "hour" in English is "hour" or "hours".
+     * Constant for full name style format. For example, the full name for "hour" in English is
+     * "hour" or "hours".
+     *
      * @deprecated ICU 53 see {@link MeasureFormat.FormatWidth}
      */
-    @Deprecated
-    public static final int FULL_NAME = 0;
+    @Deprecated public static final int FULL_NAME = 0;
+
     /**
-     * Constant for abbreviated name style format.
-     * For example, the abbreviated name for "hour" in English is "hr" or "hrs".
+     * Constant for abbreviated name style format. For example, the abbreviated name for "hour" in
+     * English is "hr" or "hrs".
+     *
      * @deprecated ICU 53 see {@link MeasureFormat.FormatWidth}
      */
-    @Deprecated
-    public static final int ABBREVIATED_NAME = 1;
+    @Deprecated public static final int ABBREVIATED_NAME = 1;
 
     private static final int TOTAL_STYLES = 2;
 
     private static final long serialVersionUID = -3707773153184971529L;
 
     // Unlike MeasureFormat, this class is mutable and allows a new NumberFormat to be set after
-    // initialization. Keep a second copy of NumberFormat and use it instead of the one from the parent.
+    // initialization. Keep a second copy of NumberFormat and use it instead of the one from the
+    // parent.
     private NumberFormat format;
     private ULocale locale;
     private int style;
@@ -103,8 +104,9 @@ public class TimeUnitFormat extends MeasureFormat implements Cloneable {
     private static final String DEFAULT_PATTERN_FOR_YEAR = "{0} y";
 
     /**
-     * Create empty format using full name style, for example, "hours".
-     * Use setLocale and/or setFormat to modify.
+     * Create empty format using full name style, for example, "hours". Use setLocale and/or
+     * setFormat to modify.
+     *
      * @deprecated ICU 53 use {@link MeasureFormat} instead.
      */
     @Deprecated
@@ -114,7 +116,8 @@ public class TimeUnitFormat extends MeasureFormat implements Cloneable {
 
     /**
      * Create TimeUnitFormat given a ULocale, and using full name style.
-     * @param locale   locale of this time unit formatter.
+     *
+     * @param locale locale of this time unit formatter.
      * @deprecated ICU 53 use {@link MeasureFormat} instead.
      */
     @Deprecated
@@ -124,7 +127,8 @@ public class TimeUnitFormat extends MeasureFormat implements Cloneable {
 
     /**
      * Create TimeUnitFormat given a Locale, and using full name style.
-     * @param locale   locale of this time unit formatter.
+     *
+     * @param locale locale of this time unit formatter.
      * @deprecated ICU 53 use {@link MeasureFormat} instead.
      */
     @Deprecated
@@ -134,10 +138,10 @@ public class TimeUnitFormat extends MeasureFormat implements Cloneable {
 
     /**
      * Create TimeUnitFormat given a ULocale and a formatting style.
-     * @param locale   locale of this time unit formatter.
-     * @param style    format style, either FULL_NAME or ABBREVIATED_NAME style.
-     * @throws IllegalArgumentException if the style is not FULL_NAME or
-     *                                  ABBREVIATED_NAME style.
+     *
+     * @param locale locale of this time unit formatter.
+     * @param style format style, either FULL_NAME or ABBREVIATED_NAME style.
+     * @throws IllegalArgumentException if the style is not FULL_NAME or ABBREVIATED_NAME style.
      * @deprecated ICU 53 use {@link MeasureFormat} instead.
      */
     @Deprecated
@@ -145,7 +149,8 @@ public class TimeUnitFormat extends MeasureFormat implements Cloneable {
         super(locale, style == FULL_NAME ? FormatWidth.WIDE : FormatWidth.SHORT);
         format = super.getNumberFormatInternal();
         if (style < FULL_NAME || style >= TOTAL_STYLES) {
-            throw new IllegalArgumentException("style should be either FULL_NAME or ABBREVIATED_NAME style");
+            throw new IllegalArgumentException(
+                    "style should be either FULL_NAME or ABBREVIATED_NAME style");
         }
         this.style = style;
         isReady = false;
@@ -160,16 +165,18 @@ public class TimeUnitFormat extends MeasureFormat implements Cloneable {
 
     /**
      * Create TimeUnitFormat given a Locale and a formatting style.
+     *
      * @deprecated ICU 53 use {@link MeasureFormat} instead.
      */
     @Deprecated
     public TimeUnitFormat(Locale locale, int style) {
-        this(ULocale.forLocale(locale),  style);
+        this(ULocale.forLocale(locale), style);
     }
 
     /**
      * Set the locale used for formatting or parsing.
-     * @param locale   locale of this time unit formatter.
+     *
+     * @param locale locale of this time unit formatter.
      * @return this, for chaining.
      * @deprecated ICU 53 see {@link MeasureFormat}.
      */
@@ -182,7 +189,8 @@ public class TimeUnitFormat extends MeasureFormat implements Cloneable {
 
     /**
      * Set the locale used for formatting or parsing.
-     * @param locale   locale of this time unit formatter.
+     *
+     * @param locale locale of this time unit formatter.
      * @return this, for chaining.
      * @deprecated ICU 53 see {@link MeasureFormat}.
      */
@@ -192,9 +200,10 @@ public class TimeUnitFormat extends MeasureFormat implements Cloneable {
     }
 
     /**
-     * Set the format used for formatting or parsing. Passing null is equivalent to passing
-     * {@link NumberFormat#getNumberInstance(ULocale)}.
-     * @param format   the number formatter.
+     * Set the format used for formatting or parsing. Passing null is equivalent to passing {@link
+     * NumberFormat#getNumberInstance(ULocale)}.
+     *
+     * @param format the number formatter.
      * @return this, for chaining.
      * @deprecated ICU 53 see {@link MeasureFormat}.
      */
@@ -218,6 +227,7 @@ public class TimeUnitFormat extends MeasureFormat implements Cloneable {
 
     /**
      * {@inheritDoc}
+     *
      * @deprecated ICU 53 see {@link MeasureFormat}.
      */
     @Override
@@ -233,11 +243,12 @@ public class TimeUnitFormat extends MeasureFormat implements Cloneable {
 
     @Override
     LocalizedNumberFormatter getNumberFormatter() {
-        return ((DecimalFormat)format).toNumberFormatter();
+        return ((DecimalFormat) format).toNumberFormatter();
     }
 
     /**
      * Parse a TimeUnitAmount.
+     *
      * @see java.text.Format#parseObject(java.lang.String, java.text.ParsePosition)
      * @deprecated ICU 53 see {@link MeasureFormat}.
      */
@@ -253,7 +264,8 @@ public class TimeUnitFormat extends MeasureFormat implements Cloneable {
         int newPos = -1;
         int longestParseDistance = 0;
         String countOfLongestMatch = null;
-        // we don't worry too much about speed on parsing, but this can be optimized later if needed.
+        // we don't worry too much about speed on parsing, but this can be optimized later if
+        // needed.
         // Parse by iterating through all available patterns
         // and looking for the longest match.
         for (TimeUnit timeUnit : timeUnitToCountToPatterns.keySet()) {
@@ -279,9 +291,11 @@ public class TimeUnitFormat extends MeasureFormat implements Cloneable {
                         if (tempObj instanceof Number) {
                             temp = (Number) tempObj;
                         } else {
-                            // Since we now format the number ourselves, parseObject will likely give us back a String
+                            // Since we now format the number ourselves, parseObject will likely
+                            // give us back a String
                             // for
-                            // the number. When this happens we must parse the formatted number ourselves.
+                            // the number. When this happens we must parse the formatted number
+                            // ourselves.
                             try {
                                 temp = format.parse(tempObj.toString());
                             } catch (ParseException e) {
@@ -357,8 +371,11 @@ public class TimeUnitFormat extends MeasureFormat implements Cloneable {
         ULocale locale;
         boolean beenHere;
 
-        TimeUnitFormatSetupSink(Map<TimeUnit, Map<String, Object[]>> timeUnitToCountToPatterns,
-                int style, Set<String> pluralKeywords, ULocale locale) {
+        TimeUnitFormatSetupSink(
+                Map<TimeUnit, Map<String, Object[]>> timeUnitToCountToPatterns,
+                int style,
+                Set<String> pluralKeywords,
+                ULocale locale) {
             this.timeUnitToCountToPatterns = timeUnitToCountToPatterns;
             this.style = style;
             this.pluralKeywords = pluralKeywords;
@@ -407,8 +424,7 @@ public class TimeUnitFormat extends MeasureFormat implements Cloneable {
                 UResource.Table countsToPatternTable = value.getTable();
                 for (int j = 0; countsToPatternTable.getKeyAndValue(j, key, value); ++j) {
                     String pluralCount = key.toString();
-                    if (!pluralKeywords.contains(pluralCount))
-                        continue;
+                    if (!pluralKeywords.contains(pluralCount)) continue;
                     // save both full name and abbreviated name in one table
                     // is good space-wise, but it degrades performance,
                     // since it needs to check whether the needed space
@@ -428,16 +444,21 @@ public class TimeUnitFormat extends MeasureFormat implements Cloneable {
         }
     }
 
-    private void setup(String resourceKey, Map<TimeUnit, Map<String, Object[]>> timeUnitToCountToPatterns, int style,
+    private void setup(
+            String resourceKey,
+            Map<TimeUnit, Map<String, Object[]>> timeUnitToCountToPatterns,
+            int style,
             Set<String> pluralKeywords) {
         // fill timeUnitToCountToPatterns from resource file
         try {
 
-            ICUResourceBundle resource = (ICUResourceBundle) UResourceBundle.getBundleInstance(
-                    ICUData.ICU_UNIT_BASE_NAME, locale);
+            ICUResourceBundle resource =
+                    (ICUResourceBundle)
+                            UResourceBundle.getBundleInstance(ICUData.ICU_UNIT_BASE_NAME, locale);
 
-            TimeUnitFormatSetupSink sink = new TimeUnitFormatSetupSink(
-                    timeUnitToCountToPatterns, style, pluralKeywords, locale);
+            TimeUnitFormatSetupSink sink =
+                    new TimeUnitFormatSetupSink(
+                            timeUnitToCountToPatterns, style, pluralKeywords, locale);
             resource.getAllItemsWithFallback(resourceKey, sink);
         } catch (MissingResourceException e) {
         }
@@ -471,9 +492,16 @@ public class TimeUnitFormat extends MeasureFormat implements Cloneable {
                 timeUnitToCountToPatterns.put(timeUnit, countToPatterns);
             }
             for (String pluralCount : keywords) {
-                if (countToPatterns.get(pluralCount) == null || countToPatterns.get(pluralCount)[style] == null) {
+                if (countToPatterns.get(pluralCount) == null
+                        || countToPatterns.get(pluralCount)[style] == null) {
                     // look through parents
-                    searchInTree(resourceKey, style, timeUnit, pluralCount, pluralCount, countToPatterns);
+                    searchInTree(
+                            resourceKey,
+                            style,
+                            timeUnit,
+                            pluralCount,
+                            pluralCount,
+                            countToPatterns);
                 }
             }
         }
@@ -487,15 +515,22 @@ public class TimeUnitFormat extends MeasureFormat implements Cloneable {
     // if the pattern is not found even in root, fallback to
     // using patterns of plural count "other",
     // then, "other" is the searchPluralCount.
-    private void searchInTree(String resourceKey, int styl, TimeUnit timeUnit, String srcPluralCount,
-            String searchPluralCount, Map<String, Object[]> countToPatterns) {
+    private void searchInTree(
+            String resourceKey,
+            int styl,
+            TimeUnit timeUnit,
+            String srcPluralCount,
+            String searchPluralCount,
+            Map<String, Object[]> countToPatterns) {
         ULocale parentLocale = locale;
         String srcTimeUnitName = timeUnit.toString();
         while (parentLocale != null) {
             try {
                 // look for pattern for srcPluralCount in locale tree
-                ICUResourceBundle unitsRes = (ICUResourceBundle) UResourceBundle.getBundleInstance(
-                        ICUData.ICU_UNIT_BASE_NAME, parentLocale);
+                ICUResourceBundle unitsRes =
+                        (ICUResourceBundle)
+                                UResourceBundle.getBundleInstance(
+                                        ICUData.ICU_UNIT_BASE_NAME, parentLocale);
                 unitsRes = unitsRes.getWithFallback(resourceKey);
                 ICUResourceBundle oneUnitRes = unitsRes.getWithFallback(srcTimeUnitName);
                 String pattern = oneUnitRes.getStringWithFallback(searchPluralCount);
@@ -514,7 +549,8 @@ public class TimeUnitFormat extends MeasureFormat implements Cloneable {
         // if no unitsShort resource was found even after fallback to root locale
         // then search the units resource fallback from the current level to root
         if (parentLocale == null && resourceKey.equals("unitsShort")) {
-            searchInTree("units", styl, timeUnit, srcPluralCount, searchPluralCount, countToPatterns);
+            searchInTree(
+                    "units", styl, timeUnit, srcPluralCount, searchPluralCount, countToPatterns);
             if (countToPatterns.get(srcPluralCount) != null
                     && countToPatterns.get(srcPluralCount)[styl] != null) {
                 return;
@@ -565,6 +601,7 @@ public class TimeUnitFormat extends MeasureFormat implements Cloneable {
         result.format = format.clone();
         return result;
     }
+
     // End boilerplate.
 
     // Serialization

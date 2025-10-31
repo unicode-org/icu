@@ -2,6 +2,19 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.dev.tool.locale;
 
+import com.ibm.icu.impl.ICUData;
+import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.UResource;
+import com.ibm.icu.impl.locale.LSR;
+import com.ibm.icu.impl.locale.LikelySubtags;
+import com.ibm.icu.impl.locale.LocaleDistance;
+import com.ibm.icu.impl.locale.XCldrStub.Multimap;
+import com.ibm.icu.impl.locale.XCldrStub.Predicate;
+import com.ibm.icu.impl.locale.XCldrStub.Splitter;
+import com.ibm.icu.impl.locale.XCldrStub.TreeMultimap;
+import com.ibm.icu.util.BytesTrieBuilder;
+import com.ibm.icu.util.Output;
+import com.ibm.icu.util.ULocale;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -22,20 +35,6 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import com.ibm.icu.impl.ICUData;
-import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.impl.UResource;
-import com.ibm.icu.impl.locale.LSR;
-import com.ibm.icu.impl.locale.LikelySubtags;
-import com.ibm.icu.impl.locale.LocaleDistance;
-import com.ibm.icu.impl.locale.XCldrStub.Multimap;
-import com.ibm.icu.impl.locale.XCldrStub.Predicate;
-import com.ibm.icu.impl.locale.XCldrStub.Splitter;
-import com.ibm.icu.impl.locale.XCldrStub.TreeMultimap;
-import com.ibm.icu.util.BytesTrieBuilder;
-import com.ibm.icu.util.Output;
-import com.ibm.icu.util.ULocale;
-
 public final class LocaleDistanceBuilder {
     private static final String ANY = "�"; // matches any character. Uses value above any subtag.
 
@@ -47,17 +46,22 @@ public final class LocaleDistanceBuilder {
 
     private static ICUResourceBundle getSupplementalDataBundle(String name) {
         return ICUResourceBundle.getBundleInstance(
-            ICUData.ICU_BASE_NAME, name,
-            ICUResourceBundle.ICU_DATA_CLASS_LOADER, ICUResourceBundle.OpenType.DIRECT);
+                ICUData.ICU_BASE_NAME,
+                name,
+                ICUResourceBundle.ICU_DATA_CLASS_LOADER,
+                ICUResourceBundle.OpenType.DIRECT);
     }
 
     private static final class TerritoryContainment {
         /** Directed, acyclic containment graph. Maps each container to its direct contents. */
         final Multimap<String, String> graph = TreeMultimap.create();
+
         /** Maps each container to all of its contents, direct and indirect. */
         final Multimap<String, String> resolved = TreeMultimap.create();
+
         /** Maps each container only to its leaf contents. */
         final Multimap<String, String> toLeavesOnly = TreeMultimap.create();
+
         /** The leaves of the graph. */
         final Set<String> leaves;
 
@@ -70,7 +74,7 @@ public final class LocaleDistanceBuilder {
             for (Map.Entry<String, Set<String>> entry : resolved.asMap().entrySet()) {
                 String container = entry.getKey();
                 for (String contained : entry.getValue()) {
-                    if (resolved.get(contained) == null) {  // a leaf node (usually a country)
+                    if (resolved.get(contained) == null) { // a leaf node (usually a country)
                         toLeavesOnly.put(container, contained);
                     }
                 }
@@ -88,7 +92,7 @@ public final class LocaleDistanceBuilder {
                         graph.put(container, s);
                     }
                 } else {
-                    addContainments(key, value);  // containedGroupings etc.
+                    addContainments(key, value); // containedGroupings etc.
                 }
             }
         }
@@ -147,7 +151,7 @@ public final class LocaleDistanceBuilder {
             assert !s.isEmpty();
             assert !s.equals(ANY);
             int end = s.length() - 1;
-            for (int i = 0;; ++i) {
+            for (int i = 0; ; ++i) {
                 char c = s.charAt(i);
                 assert c <= 0x7f;
                 if (i < end) {
@@ -177,7 +181,7 @@ public final class LocaleDistanceBuilder {
     }
 
     private static final class DistanceTable {
-        int nodeDistance;  // distance for the lookup so far
+        int nodeDistance; // distance for the lookup so far
         final Map<String, Map<String, DistanceTable>> subtables;
 
         DistanceTable(int distance) {
@@ -188,33 +192,37 @@ public final class LocaleDistanceBuilder {
         @Override
         public boolean equals(Object obj) {
             DistanceTable other;
-            return this == obj ||
-                    (obj != null
-                    && obj.getClass() == this.getClass()
-                    && nodeDistance == (other = (DistanceTable) obj).nodeDistance
-                    && subtables.equals(other.subtables));
+            return this == obj
+                    || (obj != null
+                            && obj.getClass() == this.getClass()
+                            && nodeDistance == (other = (DistanceTable) obj).nodeDistance
+                            && subtables.equals(other.subtables));
         }
+
         @Override
         public int hashCode() {
             return nodeDistance ^ subtables.hashCode();
         }
 
-        private int getDistance(String desired, String supported,
-                Output<DistanceTable> distanceTable, boolean starEquals) {
+        private int getDistance(
+                String desired,
+                String supported,
+                Output<DistanceTable> distanceTable,
+                boolean starEquals) {
             boolean star = false;
             Map<String, DistanceTable> sub2 = subtables.get(desired);
             if (sub2 == null) {
                 sub2 = subtables.get(ANY); // <*, supported>
                 star = true;
             }
-            DistanceTable value = sub2.get(supported);   // <*/desired, supported>
+            DistanceTable value = sub2.get(supported); // <*/desired, supported>
             if (value == null) {
-                value = sub2.get(ANY);  // <*/desired, *>
+                value = sub2.get(ANY); // <*/desired, *>
                 if (value == null && !star) {
-                    sub2 = subtables.get(ANY);   // <*, supported>
+                    sub2 = subtables.get(ANY); // <*, supported>
                     value = sub2.get(supported);
                     if (value == null) {
-                        value = sub2.get(ANY);   // <*, *>
+                        value = sub2.get(ANY); // <*, *>
                     }
                 }
                 star = true;
@@ -254,9 +262,7 @@ public final class LocaleDistanceBuilder {
             return newNode;
         }
 
-        /**
-         * Return null if value doesn't exist
-         */
+        /** Return null if value doesn't exist */
         private DistanceTable getNode(String desired, String supported) {
             Map<String, DistanceTable> sub2 = subtables.get(desired);
             if (sub2 == null) {
@@ -265,12 +271,8 @@ public final class LocaleDistanceBuilder {
             return sub2.get(supported);
         }
 
-
-        /** add table for each subitem that matches and doesn't have a table already
-         */
-        void addSubtables(
-                String desired, String supported,
-                Predicate<DistanceTable> action) {
+        /** add table for each subitem that matches and doesn't have a table already */
+        void addSubtables(String desired, String supported, Predicate<DistanceTable> action) {
             DistanceTable node = getNode(desired, supported);
             if (node == null) {
                 // get the distance it would have
@@ -286,8 +288,11 @@ public final class LocaleDistanceBuilder {
             action.test(node);
         }
 
-        void addSubtables(String desiredLang, String supportedLang,
-                String desiredScript, String supportedScript,
+        void addSubtables(
+                String desiredLang,
+                String supportedLang,
+                String desiredScript,
+                String supportedScript,
                 int percentage) {
 
             // add to all the values that have the matching desiredLang and supportedLang
@@ -315,9 +320,13 @@ public final class LocaleDistanceBuilder {
             addSubtables(desiredLang, supportedLang, r);
         }
 
-        void addSubtables(String desiredLang, String supportedLang,
-                String desiredScript, String supportedScript,
-                String desiredRegion, String supportedRegion,
+        void addSubtables(
+                String desiredLang,
+                String supportedLang,
+                String desiredScript,
+                String supportedScript,
+                String desiredRegion,
+                String supportedRegion,
                 int percentage) {
 
             // add to all the values that have the matching desiredLang and supportedLang
@@ -333,7 +342,12 @@ public final class LocaleDistanceBuilder {
                         haveKeys |= (desiredIsKey && supportedIsKey);
                         if (supportedIsKey || supportedLang.equals(ANY)) {
                             DistanceTable value = e2.getValue();
-                            value.addSubtables(desiredScript, supportedScript, desiredRegion, supportedRegion, percentage);
+                            value.addSubtables(
+                                    desiredScript,
+                                    supportedScript,
+                                    desiredRegion,
+                                    supportedRegion,
+                                    percentage);
                         }
                     }
                 }
@@ -343,7 +357,7 @@ public final class LocaleDistanceBuilder {
             DistanceTable dt = new DistanceTable(-1);
             dt.addSubtable(desiredRegion, supportedRegion, percentage);
             AddSub r = new AddSub(desiredScript, supportedScript, dt);
-            addSubtables(desiredLang,  supportedLang,  r);
+            addSubtables(desiredLang, supportedLang, r);
         }
 
         void prune(int level, int[] distances) {
@@ -390,9 +404,9 @@ public final class LocaleDistanceBuilder {
                     DistanceTable value = e2.getValue();
                     buffer.append(indent3).append(e2.getKey());
                     buffer.append('\t').append(value.nodeDistance);
-                    value.toString(indent+"\t\t\t", buffer);
+                    value.toString(indent + "\t\t\t", buffer);
                     buffer.append('\n');
-                    indent3 = indent+'\t';
+                    indent3 = indent + '\t';
                 }
                 indent2 = indent;
             }
@@ -433,9 +447,11 @@ public final class LocaleDistanceBuilder {
 
     private static final class CopyIfEmpty implements Predicate<DistanceTable> {
         private final DistanceTable toCopy;
+
         CopyIfEmpty(DistanceTable resetIfNotNull) {
             this.toCopy = resetIfNotNull;
         }
+
         @Override
         public boolean test(DistanceTable node) {
             if (node.subtables.isEmpty()) {
@@ -455,6 +471,7 @@ public final class LocaleDistanceBuilder {
             this.desiredSub = desiredSub;
             this.supportedSub = supportedSub;
         }
+
         @Override
         public boolean test(DistanceTable node) {
             if (node == null) {
@@ -483,10 +500,12 @@ public final class LocaleDistanceBuilder {
         // From CLDR supplementalData/languageMatching/languageMatches type="written_new"/
         //   and then paradigmLocales, matchVariable, and the last languageMatch items.
         ICUResourceBundle supplementalData = getSupplementalDataBundle("supplementalData");
-        String[] paradigms = supplementalData.getValueWithFallback(
-                "languageMatchingInfo/written/paradigmLocales").getStringArray();
+        String[] paradigms =
+                supplementalData
+                        .getValueWithFallback("languageMatchingInfo/written/paradigmLocales")
+                        .getStringArray();
         // LinkedHashSet for stable order; otherwise a unit test is flaky.
-        Set<LSR> paradigmLSRs = new LinkedHashSet<>();  // could be TreeSet if LSR were Comparable
+        Set<LSR> paradigmLSRs = new LinkedHashSet<>(); // could be TreeSet if LSR were Comparable
         for (String paradigm : paradigms) {
             ULocale pl = new ULocale(paradigm);
             LSR max = LikelySubtags.INSTANCE.makeMaximizedLsrFrom(pl, false);
@@ -498,8 +517,8 @@ public final class LocaleDistanceBuilder {
         TerritoryContainment tc = new TerritoryContainment(supplementalData);
 
         RegionMapperBuilder rmb = new RegionMapperBuilder(tc);
-        UResource.Value value = supplementalData.getValueWithFallback(
-                "languageMatchingInfo/written/matchVariable");
+        UResource.Value value =
+                supplementalData.getValueWithFallback("languageMatchingInfo/written/matchVariable");
         UResource.Table variables = value.getTable();
         UResource.Key key = new UResource.Key();
         for (int i = 0; variables.getKeyAndValue(i, key, value); ++i) {
@@ -553,10 +572,9 @@ public final class LocaleDistanceBuilder {
         rmb.build();
 
         /**
-         * Used for processing rules. At the start we have a variable setting like $A1=US+CA+MX.
-         * We generate a mapping from $A1 to a set of partitions {P1, P2}
-         * When we hit a rule that contains a variable,
-         * we replace that rule by multiple rules for the partitions.
+         * Used for processing rules. At the start we have a variable setting like $A1=US+CA+MX. We
+         * generate a mapping from $A1 to a set of partitions {P1, P2} When we hit a rule that
+         * contains a variable, we replace that rule by multiple rules for the partitions.
          */
         final Multimap<String, String> variableToPartition = rmb.variableToPartitions;
 
@@ -576,8 +594,10 @@ public final class LocaleDistanceBuilder {
                 if (rule.distance < minRegionDistance) {
                     minRegionDistance = rule.distance;
                 }
-                Collection<String> desiredRegions = getIdsFromVariable(variableToPartition, desired.get(2));
-                Collection<String> supportedRegions = getIdsFromVariable(variableToPartition, supported.get(2));
+                Collection<String> desiredRegions =
+                        getIdsFromVariable(variableToPartition, desired.get(2));
+                Collection<String> supportedRegions =
+                        getIdsFromVariable(variableToPartition, supported.get(2));
                 for (String desiredRegion2 : desiredRegions) {
                     desired.set(2, desiredRegion2.toString()); // fix later
                     for (String supportedRegion2 : supportedRegions) {
@@ -608,26 +628,31 @@ public final class LocaleDistanceBuilder {
         defaultDistanceTable.toTrie(trieBuilder);
         byte[] trie = trieBuilder.build();
         return new LocaleDistance.Data(
-                trie, rmb.regionToPartitionsIndex, rmb.partitionArrays,
-                paradigmLSRs, distances);
+                trie, rmb.regionToPartitionsIndex, rmb.partitionArrays, paradigmLSRs, distances);
     }
 
     private static int checkStars(String desired, String supported, boolean allStars) {
         int stars = (desired.equals("*") ? 1 : 0) + (supported.equals("*") ? 1 : 0);
         if (stars == 1) {
-            throw new IllegalArgumentException("either both or neither rule subtags must be *: " +
-                    desired + ", " + supported);
+            throw new IllegalArgumentException(
+                    "either both or neither rule subtags must be *: " + desired + ", " + supported);
         }
         if (allStars && stars != 2) {
-            throw new IllegalArgumentException("both language subtags are * --> " +
-                    "both rule subtags on all levels must be *: " +
-                    desired + ", " + supported);
+            throw new IllegalArgumentException(
+                    "both language subtags are * --> "
+                            + "both rule subtags on all levels must be *: "
+                            + desired
+                            + ", "
+                            + supported);
         }
         return stars;
     }
 
-    private static void add(DistanceTable languageDesired2Supported,
-            List<String> desired, List<String> supported, int percentage) {
+    private static void add(
+            DistanceTable languageDesired2Supported,
+            List<String> desired,
+            List<String> supported,
+            int percentage) {
         int size = desired.size();
         if (size != supported.size() || size < 1 || size > 3) {
             throw new IllegalArgumentException();
@@ -640,19 +665,27 @@ public final class LocaleDistanceBuilder {
             final String desiredScript = fixAny(desired.get(1));
             final String supportedScript = fixAny(supported.get(1));
             if (size == 2) {
-                languageDesired2Supported.addSubtables(desiredLang, supportedLang, desiredScript, supportedScript, percentage);
+                languageDesired2Supported.addSubtables(
+                        desiredLang, supportedLang, desiredScript, supportedScript, percentage);
             } else {
                 final String desiredRegion = fixAny(desired.get(2));
                 final String supportedRegion = fixAny(supported.get(2));
-                languageDesired2Supported.addSubtables(desiredLang, supportedLang, desiredScript, supportedScript, desiredRegion, supportedRegion, percentage);
+                languageDesired2Supported.addSubtables(
+                        desiredLang,
+                        supportedLang,
+                        desiredScript,
+                        supportedScript,
+                        desiredRegion,
+                        supportedRegion,
+                        percentage);
             }
         }
     }
 
     private static final class RegionMapperBuilder {
         private final Set<String> variables = new HashSet<>();
-        final private Multimap<String, String> regionToRawPartition = TreeMultimap.create();
-        final private RegionSet regionSet;
+        private final Multimap<String, String> regionToRawPartition = TreeMultimap.create();
+        private final RegionSet regionSet;
         private final TerritoryContainment tc;
 
         // build() output
@@ -694,7 +727,7 @@ public final class LocaleDistanceBuilder {
         void ensureRegionIsVariable(List<String> lsrList) {
             String region = lsrList.get(2);
             if (!isKnownVariable(region)) {
-                assert LSR.indexForRegion(region) > 0;  // well-formed region subtag
+                assert LSR.indexForRegion(region) > 0; // well-formed region subtag
                 String variable = "$" + region;
                 add(variable, region);
                 lsrList.set(2, variable);
@@ -727,7 +760,8 @@ public final class LocaleDistanceBuilder {
                 // Single-character string.
                 // Must be an ASCII character and must not be '*'.
                 // Used to start with α.
-                char partitionChar = (char) ('0' + makeUniqueIndex(partitionVariables, rawPartition));
+                char partitionChar =
+                        (char) ('0' + makeUniqueIndex(partitionVariables, rawPartition));
                 assert partitionChar <= 0x7f;
                 String partition = String.valueOf(partitionChar);
                 int pIndex = makeUniqueIndex(partitionStrings, Collections.singleton(partition));
@@ -745,7 +779,7 @@ public final class LocaleDistanceBuilder {
 
             // We get a mapping of each macro to the partitions it intersects with.
             // Example: "419" -> {"1", "5"}
-            Multimap<String,String> macroToPartitions = TreeMultimap.create();
+            Multimap<String, String> macroToPartitions = TreeMultimap.create();
             for (Map.Entry<String, Set<String>> e : tc.resolved.asMap().entrySet()) {
                 String macro = e.getKey();
                 for (Map.Entry<String, Set<String>> e2 : partitionToRegions.asMap().entrySet()) {
@@ -791,17 +825,23 @@ public final class LocaleDistanceBuilder {
     }
 
     /**
-     * Parses a string of regions like "US+005-BR" and produces a set of resolved regions.
-     * All macroregions are fully resolved to sets of non-macro regions.
-     * <br>Syntax is simple for now:
+     * Parses a string of regions like "US+005-BR" and produces a set of resolved regions. All
+     * macroregions are fully resolved to sets of non-macro regions. <br>
+     * Syntax is simple for now:
+     *
      * <pre>regionSet := region ([-+] region)*</pre>
+     *
      * No precedence, so "x+y-y+z" is (((x+y)-y)+z) NOT (x+y)-(y+z)
      */
     private static final class RegionSet {
-        private enum Operation {add, remove}
+        private enum Operation {
+            add,
+            remove
+        }
+
         private final TerritoryContainment tc;
         // temporaries used in processing
-        final private Set<String> tempRegions = new TreeSet<>();
+        private final Set<String> tempRegions = new TreeSet<>();
         private Operation operation = null;
 
         RegionSet(TerritoryContainment tc) {
@@ -815,17 +855,17 @@ public final class LocaleDistanceBuilder {
             int i = 0;
             for (; i < barString.length(); ++i) {
                 char c = barString.charAt(i); // UTF16 is ok, since syntax is only ascii
-                switch(c) {
-                case '+':
-                    add(barString, last, i);
-                    last = i+1;
-                    operation = Operation.add;
-                    break;
-                case '-':
-                    add(barString, last, i);
-                    last = i+1;
-                    operation = Operation.remove;
-                    break;
+                switch (c) {
+                    case '+':
+                        add(barString, last, i);
+                        last = i + 1;
+                        operation = Operation.add;
+                        break;
+                    case '-':
+                        add(barString, last, i);
+                        last = i + 1;
+                        operation = Operation.remove;
+                        break;
                 }
             }
             add(barString, last, i);
@@ -840,7 +880,7 @@ public final class LocaleDistanceBuilder {
 
         private void add(String barString, int last, int i) {
             if (i > last) {
-                String region = barString.substring(last,i);
+                String region = barString.substring(last, i);
                 changeSet(operation, region);
             }
         }
@@ -868,13 +908,13 @@ public final class LocaleDistanceBuilder {
     private static PrintWriter openWriter() throws IOException {
         File file = new File(TXT_PATH, TXT_FILE_NAME);
         return new PrintWriter(
-            new BufferedWriter(
-                new OutputStreamWriter(
-                    new FileOutputStream(file), StandardCharsets.UTF_8), 4096));
+                new BufferedWriter(
+                        new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8),
+                        4096));
     }
 
     private static void printManyHexBytes(PrintWriter out, byte[] bytes) {
-        for (int i = 0;; ++i) {
+        for (int i = 0; ; ++i) {
             if (i == bytes.length) {
                 out.println();
                 break;
@@ -891,10 +931,12 @@ public final class LocaleDistanceBuilder {
         LocaleDistance.Data distanceData = build();
         System.out.println("Writing LocaleDistance.Data to " + TXT_PATH + '/' + TXT_FILE_NAME);
         try (PrintWriter out = openWriter()) {
-            out.println("﻿// © 2019 and later: Unicode, Inc. and others.\n" +
-                    "// License & terms of use: http://www.unicode.org/copyright.html\n" +
-                    "// Generated by ICU4J LocaleDistanceBuilder.\n" +
-                    TXT_FILE_BASE_NAME + ":table(nofallback){");
+            out.println(
+                    "﻿// © 2019 and later: Unicode, Inc. and others.\n"
+                            + "// License & terms of use: http://www.unicode.org/copyright.html\n"
+                            + "// Generated by ICU4J LocaleDistanceBuilder.\n"
+                            + TXT_FILE_BASE_NAME
+                            + ":table(nofallback){");
             out.println("    likely{");
             out.println("        languageAliases{  // " + likelyData.languageAliases.size());
             for (Map.Entry<String, String> entry :
@@ -916,8 +958,14 @@ public final class LocaleDistanceBuilder {
 
             out.println("        lsrs{  // " + likelyData.lsrs.length);
             for (LSR lsr : likelyData.lsrs) {
-                out.println("            \"" + lsr.language + "\",\"" +
-                        lsr.script + "\",\"" + lsr.region + "\",");
+                out.println(
+                        "            \""
+                                + lsr.language
+                                + "\",\""
+                                + lsr.script
+                                + "\",\""
+                                + lsr.region
+                                + "\",");
             }
             out.println("        }  // lsrs");
             out.println("    }  // likely");
@@ -927,8 +975,10 @@ public final class LocaleDistanceBuilder {
             printManyHexBytes(out, distanceData.trie);
             out.println("        }  // trie");
 
-            out.println("        regionToPartitions:bin{  // " +
-                    distanceData.regionToPartitionsIndex.length + " bytes");
+            out.println(
+                    "        regionToPartitions:bin{  // "
+                            + distanceData.regionToPartitionsIndex.length
+                            + " bytes");
             printManyHexBytes(out, distanceData.regionToPartitionsIndex);
             out.println("        }  // regionToPartitions");
 
@@ -947,8 +997,14 @@ public final class LocaleDistanceBuilder {
 
             out.println("        paradigms{");
             for (LSR lsr : distanceData.paradigmLSRs) {
-                out.println("            \"" + lsr.language + "\",\"" +
-                        lsr.script + "\",\"" + lsr.region + "\",");
+                out.println(
+                        "            \""
+                                + lsr.language
+                                + "\",\""
+                                + lsr.script
+                                + "\",\""
+                                + lsr.region
+                                + "\",");
             }
             out.println("        }");
 

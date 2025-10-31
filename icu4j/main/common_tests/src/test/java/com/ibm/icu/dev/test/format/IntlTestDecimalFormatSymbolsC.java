@@ -8,31 +8,24 @@
  */
 
 /**
- * Port From:   ICU4C v1.8.1 : format : IntlTestDecimalFormatSymbols
- * Source File: $ICU4CRoot/source/test/intltest/tsdcfmsy.cpp
- **/
-
+ * Port From: ICU4C v1.8.1 : format : IntlTestDecimalFormatSymbols Source File:
+ * $ICU4CRoot/source/test/intltest/tsdcfmsy.cpp
+ */
 package com.ibm.icu.dev.test.format;
-
-import java.text.FieldPosition;
-import java.util.Locale;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.DecimalFormatSymbols;
+import java.text.FieldPosition;
+import java.util.Locale;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
-/**
- * Tests for DecimalFormatSymbols
- **/
+/** Tests for DecimalFormatSymbols */
 @RunWith(JUnit4.class)
 public class IntlTestDecimalFormatSymbolsC extends CoreTestFmwk {
-    /**
-     * Test the API of DecimalFormatSymbols; primarily a simple get/set set.
-     */
+    /** Test the API of DecimalFormatSymbols; primarily a simple get/set set. */
     @Test
     public void TestSymbols() {
         DecimalFormatSymbols fr = new DecimalFormatSymbols(Locale.FRENCH);
@@ -112,7 +105,7 @@ public class IntlTestDecimalFormatSymbolsC extends CoreTestFmwk {
         //            errln("ERROR: get/set Exponential failed");
         //        }
 
-        //DecimalFormatSymbols foo = new DecimalFormatSymbols(); //The variable is never used
+        // DecimalFormatSymbols foo = new DecimalFormatSymbols(); //The variable is never used
 
         en = fr.clone();
 
@@ -133,15 +126,18 @@ public class IntlTestDecimalFormatSymbolsC extends CoreTestFmwk {
         verify(3456.5, "0,000.##", sym, "3|456S5");
     }
 
-    /** helper functions**/
+    /** helper functions* */
     public void verify(double value, String pattern, DecimalFormatSymbols sym, String expected) {
         DecimalFormat df = new DecimalFormat(pattern, sym);
         StringBuffer buffer = new StringBuffer("");
         FieldPosition pos = new FieldPosition(-1);
         buffer = df.format(value, buffer, pos);
-        if(!buffer.toString().equals(expected)){
-            errln("ERROR: format failed after setSymbols()\n Expected" +
-                expected + ", Got " + buffer);
+        if (!buffer.toString().equals(expected)) {
+            errln(
+                    "ERROR: format failed after setSymbols()\n Expected"
+                            + expected
+                            + ", Got "
+                            + buffer);
         }
     }
 }

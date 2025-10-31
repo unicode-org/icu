@@ -19,7 +19,8 @@ public final class Timer {
     private long duration;
     private boolean timing = false;
     private int iterations;
-    private long timingPeriod = 5*SECONDS;
+    private long timingPeriod = 5 * SECONDS;
+
     {
         start();
     }
@@ -68,15 +69,20 @@ public final class Timer {
     public String toString() {
         return nf.format(getDuration()) + "\tns";
     }
+
     public String toString(Timer other) {
         return toString(1L, other.getDuration());
     }
+
     public String toString(long iterations) {
-        return nf.format(getDuration()/iterations) + "\tns";
+        return nf.format(getDuration() / iterations) + "\tns";
     }
 
     public String toString(long iterations, long other) {
-        return nf.format(getDuration()/iterations) + "\tns\t" + pf.format((double)getDuration()/other - 1D) + "";
+        return nf.format(getDuration() / iterations)
+                + "\tns\t"
+                + pf.format((double) getDuration() / other - 1D)
+                + "";
     }
 
     private DecimalFormat nf = (DecimalFormat) NumberFormat.getNumberInstance(Locale.ENGLISH);
@@ -89,14 +95,18 @@ public final class Timer {
 
     public abstract static class Loop {
         public void init(Object... params) {}
-        abstract public void time(int repeat);
+
+        public abstract void time(int repeat);
     }
 
     public long timeIterations(Loop loop, Object... params) {
-        // Timing on Java is very tricky, especially when you count in garbage collection. This is a simple strategy for now, we might improve later.
-        // The current strategy is to warm up once, then time it until we reach the timingPeriod (eg 5 seconds), increasing the iterations each time
+        // Timing on Java is very tricky, especially when you count in garbage collection. This is a
+        // simple strategy for now, we might improve later.
+        // The current strategy is to warm up once, then time it until we reach the timingPeriod (eg
+        // 5 seconds), increasing the iterations each time
         // At first, we double the iterations.
-        // Once we get to within 1/4 of the timingPeriod, we change to adding 33%, plus 1. We also remember the shortest duration from this point on.
+        // Once we get to within 1/4 of the timingPeriod, we change to adding 33%, plus 1. We also
+        // remember the shortest duration from this point on.
         // We return the shortest of the durations.
         loop.init(params);
         System.gc();

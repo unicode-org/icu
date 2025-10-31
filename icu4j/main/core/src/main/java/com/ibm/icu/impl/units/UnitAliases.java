@@ -2,26 +2,20 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.units;
 
+import com.ibm.icu.impl.ICUData;
+import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.IllegalIcuArgumentException;
+import com.ibm.icu.impl.UResource;
+import com.ibm.icu.util.UResourceBundle;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.ibm.icu.impl.ICUData;
-import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.impl.IllegalIcuArgumentException;
-import com.ibm.icu.impl.UResource;
-import com.ibm.icu.util.UResourceBundle;
-
-/**
- * UnitAliases is a class that holds all the aliases and their replacements for
- * units.
- */
+/** UnitAliases is a class that holds all the aliases and their replacements for units. */
 public class UnitAliases {
-    /**
-     * A class to hold the alias and replacement.
-     */
+    /** A class to hold the alias and replacement. */
     public static class Alias {
         public final String alias;
         public final String replacement;
@@ -39,7 +33,7 @@ public class UnitAliases {
         public void put(UResource.Key key, UResource.Value value, boolean noFallback) {
             String alias = key.toString();
             UResource.Table aliasEntryTable = value.getTable();
-            
+
             if (aliasEntryTable.findValue("replacement", value)) {
                 String replacement = value.toString();
                 this.mapAliasToReplacement.put(alias, replacement);
@@ -57,8 +51,9 @@ public class UnitAliases {
 
     public UnitAliases() {
         // Read unit aliases
-        ICUResourceBundle metadataResource = (ICUResourceBundle) UResourceBundle
-                .getBundleInstance(ICUData.ICU_BASE_NAME, "metadata");
+        ICUResourceBundle metadataResource =
+                (ICUResourceBundle)
+                        UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "metadata");
         AllAliasSink aliasSink = new AllAliasSink();
         metadataResource.getAllChildrenWithFallback("alias/unit", aliasSink);
         this.mapAliasToReplacement = aliasSink.getAliasMap();
@@ -66,7 +61,7 @@ public class UnitAliases {
 
     /**
      * Returns a list of all the aliases.
-     * 
+     *
      * @return an unmodifiable list of aliases
      */
     public List<Alias> getAliases() {
@@ -79,7 +74,7 @@ public class UnitAliases {
 
     /**
      * Returns the replacement unit for a given alias, or null if no alias exists.
-     * 
+     *
      * @param alias the alias unit to look up
      * @return the replacement unit, or null if not found
      */

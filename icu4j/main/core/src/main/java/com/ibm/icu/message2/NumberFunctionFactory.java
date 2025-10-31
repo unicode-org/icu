@@ -3,14 +3,6 @@
 
 package com.ibm.icu.message2;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Objects;
-import java.util.regex.Pattern;
-
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.message2.MFDataModel.CatchallKey;
 import com.ibm.icu.number.FormattedNumber;
@@ -29,12 +21,18 @@ import com.ibm.icu.text.PluralRules.PluralType;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.NoUnit;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+import java.util.regex.Pattern;
 
 /**
- * Creates a {@link Function} doing numeric formatting, similar to <code>{exp, number}</code>
- * in {@link com.ibm.icu.text.MessageFormat}, and plural selection,
- * similar to <code>{exp, plural}</code> and to <code>{exp, selectordinal}</code>
- * in {@link com.ibm.icu.text.MessageFormat}.
+ * Creates a {@link Function} doing numeric formatting, similar to <code>{exp, number}</code> in
+ * {@link com.ibm.icu.text.MessageFormat}, and plural selection, similar to <code>{exp, plural}
+ * </code> and to <code>{exp, selectordinal}</code> in {@link com.ibm.icu.text.MessageFormat}.
  */
 class NumberFunctionFactory implements FunctionFactory {
     private final String kind;
@@ -54,9 +52,7 @@ class NumberFunctionFactory implements FunctionFactory {
         this.kind = kind;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public Function create(Locale locale, Map<String, Object> fixedOptions) {
         boolean reportErrors = OptUtils.reportErrors(fixedOptions);
@@ -108,17 +104,13 @@ class NumberFunctionFactory implements FunctionFactory {
             return icuFormatter;
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        /** {@inheritDoc} */
         @Override
         public String formatToString(Object toFormat, Map<String, Object> variableOptions) {
             return format(toFormat, variableOptions).toString();
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        /** {@inheritDoc} */
         @Override
         public FormattedPlaceholder format(Object toFormat, Map<String, Object> variableOptions) {
             LocalizedNumberFormatter realFormatter;
@@ -164,11 +156,8 @@ class NumberFunctionFactory implements FunctionFactory {
             Directionality dir = OptUtils.getBestDirectionality(variableOptions, locale);
             return new FormattedPlaceholder(toFormat, result, dir, false);
         }
-        
 
-        /**
-         * {@inheritDoc}
-         */
+        /** {@inheritDoc} */
         @Override
         public List<String> matches(
                 Object value, List<String> keys, Map<String, Object> variableOptions) {
@@ -286,7 +275,8 @@ class NumberFunctionFactory implements FunctionFactory {
 
             int offsetOperand = 0;
             if (Objects.equals(kind, "offset")) {
-                ResolvedOffsetOptions resolvedOffsetOptions = ResolvedOffsetOptions.of(mergedOptions);
+                ResolvedOffsetOptions resolvedOffsetOptions =
+                        ResolvedOffsetOptions.of(mergedOptions);
                 offsetOperand = resolvedOffsetOptions.operand;
             }
 
@@ -344,7 +334,8 @@ class NumberFunctionFactory implements FunctionFactory {
                 if (isInt) {
                     toFormat = Math.floor(((Number) toFormat).doubleValue());
                 }
-                double toFormatAdjusted = ((Number) toFormat).doubleValue() - offset + offsetOperand;
+                double toFormatAdjusted =
+                        ((Number) toFormat).doubleValue() - offset + offsetOperand;
                 if (isPercent) {
                     toFormatAdjusted *= 100;
                 }
@@ -357,7 +348,10 @@ class NumberFunctionFactory implements FunctionFactory {
                 String strValue = Objects.toString(toFormat);
                 Number nrValue = OptUtils.asNumber(reportErrors, "argument", strValue);
                 if (nrValue != null) {
-                    double toFormatAdjusted = isInt ? nrValue.intValue() : nrValue.doubleValue() - offset + offsetOperand;
+                    double toFormatAdjusted =
+                            isInt
+                                    ? nrValue.intValue()
+                                    : nrValue.doubleValue() - offset + offsetOperand;
                     if (isPercent) {
                         toFormatAdjusted *= 100;
                     }
@@ -370,7 +364,7 @@ class NumberFunctionFactory implements FunctionFactory {
     }
 
     // Currency ISO code
-    private final static Pattern CURRENCY_ISO_CODE =
+    private static final Pattern CURRENCY_ISO_CODE =
             Pattern.compile("^[A-Z][A-Z][A-Z]$", Pattern.CASE_INSENSITIVE);
 
     private static LocalizedNumberFormatter functionForOptions(
@@ -571,7 +565,8 @@ class NumberFunctionFactory implements FunctionFactory {
                     throw new IllegalArgumentException(
                             "bad-option: :offset function needs an `add` or `subtract` option.");
                 } else {
-                    operand = -OptUtils.asNumber(reportErrors, "subtract", subtractOption).intValue();
+                    operand =
+                            -OptUtils.asNumber(reportErrors, "subtract", subtractOption).intValue();
                 }
             } else {
                 if (subtractOption == null) {
@@ -585,5 +580,4 @@ class NumberFunctionFactory implements FunctionFactory {
             return new ResolvedOffsetOptions(operand, reportErrors);
         }
     }
-
 }

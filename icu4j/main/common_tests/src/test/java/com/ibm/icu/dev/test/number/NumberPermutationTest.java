@@ -2,21 +2,18 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.dev.test.number;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.util.ArrayList;
-
-import org.junit.Test;
-
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.number.LocalizedNumberFormatter;
 import com.ibm.icu.number.NumberFormatter;
 import com.ibm.icu.util.ULocale;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import org.junit.Test;
 
 /**
  * @author sffc
- *
  */
 public class NumberPermutationTest extends CoreTestFmwk {
 
@@ -66,16 +63,13 @@ public class NumberPermutationTest extends CoreTestFmwk {
     static final double[] kNumbersToTest = {0, 91827.3645, -0.22222};
 
     static final ULocale[] kLocales = {
-            new ULocale("es-MX"),
-            new ULocale("zh-TW"),
-            new ULocale("bn-BD")
+        new ULocale("es-MX"), new ULocale("zh-TW"), new ULocale("bn-BD")
     };
 
     /**
-     * Test permutations of 3 orthogonal skeleton parts from the list above.
-     * Compare the results against the golden data file:
-     *     numberpermutationtest.txt
-     * To regenerate that file, run C++ intltest with the -G option.
+     * Test permutations of 3 orthogonal skeleton parts from the list above. Compare the results
+     * against the golden data file: numberpermutationtest.txt To regenerate that file, run C++
+     * intltest with the -G option.
      */
     @Test
     public void testPermutations() throws IOException {
@@ -116,11 +110,11 @@ public class NumberPermutationTest extends CoreTestFmwk {
                                 // Compute the skeleton
                                 StringBuilder skeletonBuilder = new StringBuilder();
                                 skeletonBuilder
-                                    .append(skel1)  //
-                                    .append(' ')   //
-                                    .append(skel2)  //
-                                    .append(' ')   //
-                                    .append(skel3);
+                                        .append(skel1) //
+                                        .append(' ') //
+                                        .append(skel2) //
+                                        .append(' ') //
+                                        .append(skel3);
                                 String skeleton = skeletonBuilder.toString();
                                 resultLines.add(skeleton);
 
@@ -157,8 +151,10 @@ public class NumberPermutationTest extends CoreTestFmwk {
                 errln("More lines generated than are in the data file!");
                 break;
             }
-            assertEquals("Line #" + lineNumber + " differs",  //
-                expectedLine, actualLine);
+            assertEquals(
+                    "Line #" + lineNumber + " differs", //
+                    expectedLine,
+                    actualLine);
             lineNumber++;
         }
         // Quick mode: test all fields at least once but stop early.

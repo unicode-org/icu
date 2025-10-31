@@ -9,6 +9,10 @@
 
 package com.ibm.icu.dev.tool.ime.translit;
 
+import com.ibm.icu.impl.Utility;
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.text.ReplaceableString;
+import com.ibm.icu.text.Transliterator;
 import java.awt.AWTEvent;
 import java.awt.Color;
 import java.awt.Component;
@@ -36,16 +40,10 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.TreeSet;
-
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
-
-import com.ibm.icu.impl.Utility;
-import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.text.ReplaceableString;
-import com.ibm.icu.text.Transliterator;
 
 @SuppressWarnings("JdkObsolete") // Because of ReplaceableString(StringBuffer)
 public class TransliteratorInputMethod implements InputMethod {
@@ -101,8 +99,7 @@ public class TransliteratorInputMethod implements InputMethod {
     private static boolean TRACE_BUFFER = false;
 
     public TransliteratorInputMethod() {
-        if (TRACE_MESSAGES)
-            dumpStatus("<constructor>");
+        if (TRACE_MESSAGES) dumpStatus("<constructor>");
 
         buffer = new StringBuffer();
         replaceableText = new ReplaceableString(buffer);
@@ -124,8 +121,9 @@ public class TransliteratorInputMethod implements InputMethod {
         if (statusWindow == null) {
             String title;
             try {
-                ResourceBundle rb = ResourceBundle
-                        .getBundle("com.ibm.icu.dev.tool.ime.translit.Transliterator");
+                ResourceBundle rb =
+                        ResourceBundle.getBundle(
+                                "com.ibm.icu.dev.tool.ime.translit.Transliterator");
                 title = rb.getString("title");
             } catch (MissingResourceException m) {
                 System.out.println("Transliterator resources missing: " + m);
@@ -155,13 +153,14 @@ public class TransliteratorInputMethod implements InputMethod {
             choices.setRenderer(new NameRenderer());
             choices.setActionCommand("transliterator");
 
-            choices.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    if (statusWindowOwner != null) {
-                        statusWindowOwner.statusWindowAction(e);
-                    }
-                }
-            });
+            choices.addActionListener(
+                    new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                            if (statusWindowOwner != null) {
+                                statusWindowOwner.statusWindowAction(e);
+                            }
+                        }
+                    });
 
             sw.add(choices);
             sw.pack();
@@ -169,8 +168,7 @@ public class TransliteratorInputMethod implements InputMethod {
             Dimension sd = Toolkit.getDefaultToolkit().getScreenSize();
             Dimension wd = sw.getSize();
             if (attachedStatusWindow) {
-                attachedLimits = new Rectangle(0, 0, sd.width - wd.width,
-                        sd.height - wd.height);
+                attachedLimits = new Rectangle(0, 0, sd.width - wd.width, sd.height - wd.height);
             } else {
                 sw.setLocation(sd.width - wd.width, sd.height - wd.height - 25);
             }
@@ -184,14 +182,12 @@ public class TransliteratorInputMethod implements InputMethod {
     }
 
     private void statusWindowAction(ActionEvent e) {
-        if (TRACE_MESSAGES)
-            dumpStatus(">>status window action");
+        if (TRACE_MESSAGES) dumpStatus(">>status window action");
         JComboBox cb = (JComboBox) e.getSource();
         int si = cb.getSelectedIndex();
         if (si != selectedIndex) { // otherwise, we don't need to change
             if (TRACE_MESSAGES)
-                dumpStatus("status window action oldIndex: " + selectedIndex
-                        + " newIndex: " + si);
+                dumpStatus("status window action oldIndex: " + selectedIndex + " newIndex: " + si);
 
             selectedIndex = si;
 
@@ -206,8 +202,7 @@ public class TransliteratorInputMethod implements InputMethod {
 
             reset();
         }
-        if (TRACE_MESSAGES)
-            dumpStatus("<<status window action");
+        if (TRACE_MESSAGES) dumpStatus("<<status window action");
     }
 
     // java has no pin to rectangle function?
@@ -225,28 +220,24 @@ public class TransliteratorInputMethod implements InputMethod {
     }
 
     public void notifyClientWindowChange(Rectangle location) {
-        if (TRACE_MESSAGES)
-            dumpStatus(">>notify client window change: " + location);
+        if (TRACE_MESSAGES) dumpStatus(">>notify client window change: " + location);
         synchronized (TransliteratorInputMethod.class) {
             if (statusWindowOwner == this) {
                 if (location == null) {
                     statusWindow.setVisible(false);
                 } else {
-                    attachedLocation = new Point(location.x, location.y
-                            + location.height);
+                    attachedLocation = new Point(location.x, location.y + location.height);
                     pin(attachedLocation, attachedLimits);
                     statusWindow.setLocation(attachedLocation);
                     statusWindow.setVisible(true);
                 }
             }
         }
-        if (TRACE_MESSAGES)
-            dumpStatus("<<notify client window change: " + location);
+        if (TRACE_MESSAGES) dumpStatus("<<notify client window change: " + location);
     }
 
     public void activate() {
-        if (TRACE_MESSAGES)
-            dumpStatus(">>activate");
+        if (TRACE_MESSAGES) dumpStatus(">>activate");
 
         synchronized (TransliteratorInputMethod.class) {
             if (statusWindowOwner != this) {
@@ -258,61 +249,53 @@ public class TransliteratorInputMethod implements InputMethod {
                 if (attachedStatusWindow && attachedLocation != null) {
                     statusWindow.setLocation(attachedLocation);
                 }
-                choices.setSelectedIndex(selectedIndex == -1 ? choices
-                        .getSelectedIndex() : selectedIndex);
+                choices.setSelectedIndex(
+                        selectedIndex == -1 ? choices.getSelectedIndex() : selectedIndex);
             }
 
             choices.setForeground(Color.BLACK);
             statusWindow.setVisible(true);
         }
-        if (TRACE_MESSAGES)
-            dumpStatus("<<activate");
+        if (TRACE_MESSAGES) dumpStatus("<<activate");
     }
-    
+
     public void deactivate(boolean isTemporary) {
-        if (TRACE_MESSAGES)
-            dumpStatus(">>deactivate" + (isTemporary ? " (temporary)" : ""));
+        if (TRACE_MESSAGES) dumpStatus(">>deactivate" + (isTemporary ? " (temporary)" : ""));
         if (!isTemporary) {
             synchronized (TransliteratorInputMethod.class) {
                 choices.setForeground(Color.LIGHT_GRAY);
             }
         }
-        if (TRACE_MESSAGES)
-            dumpStatus("<<deactivate" + (isTemporary ? " (temporary)" : ""));
+        if (TRACE_MESSAGES) dumpStatus("<<deactivate" + (isTemporary ? " (temporary)" : ""));
     }
-    
+
     public void hideWindows() {
-        if (TRACE_MESSAGES)
-            dumpStatus(">>hideWindows");
+        if (TRACE_MESSAGES) dumpStatus(">>hideWindows");
         synchronized (TransliteratorInputMethod.class) {
             if (statusWindowOwner == this) {
-                if (TRACE_MESSAGES)
-                    dumpStatus("hiding");
+                if (TRACE_MESSAGES) dumpStatus("hiding");
                 statusWindow.setVisible(false);
             }
         }
-        if (TRACE_MESSAGES)
-            dumpStatus("<<hideWindows");
+        if (TRACE_MESSAGES) dumpStatus("<<hideWindows");
     }
-    
+
     public boolean setLocale(Locale locale) {
         return false;
     }
-    
+
     public Locale getLocale() {
         return Locale.getDefault();
     }
-    
-    public void setCharacterSubsets(Character.Subset[] subsets) {
-    }
+
+    public void setCharacterSubsets(Character.Subset[] subsets) {}
 
     public void reconvert() {
         throw new UnsupportedOperationException();
     }
 
     public void removeNotify() {
-        if (TRACE_MESSAGES)
-            dumpStatus("**removeNotify");
+        if (TRACE_MESSAGES) dumpStatus("**removeNotify");
     }
 
     public void endComposition() {
@@ -320,14 +303,13 @@ public class TransliteratorInputMethod implements InputMethod {
     }
 
     public void dispose() {
-        if (TRACE_MESSAGES)
-            dumpStatus("**dispose");
+        if (TRACE_MESSAGES) dumpStatus("**dispose");
     }
-    
+
     public Object getControlObject() {
         return null;
     }
-    
+
     public void setCompositionEnabled(boolean enable) {
         enabled = enable;
     }
@@ -358,55 +340,61 @@ public class TransliteratorInputMethod implements InputMethod {
     }
 
     public void dispatchEvent(AWTEvent event) {
-        final int MODIFIERS = 
-            InputEvent.CTRL_MASK | 
-            InputEvent.META_MASK | 
-            InputEvent.ALT_MASK | 
-            InputEvent.ALT_GRAPH_MASK;
-    
+        final int MODIFIERS =
+                InputEvent.CTRL_MASK
+                        | InputEvent.META_MASK
+                        | InputEvent.ALT_MASK
+                        | InputEvent.ALT_GRAPH_MASK;
+
         switch (event.getID()) {
-        case MouseEvent.MOUSE_PRESSED:
-            if (enabled) {
-                if (TRACE_EVENT) System.out.println("TIM: " + eventInfo(event));
-                // we'll get this even if the user is scrolling, can we rely on the component?
-                // commitAll(); // don't allow even clicks within our own edit area
-            }
-            break;
-    
-        case KeyEvent.KEY_TYPED: {
-            if (enabled) {
-                KeyEvent ke = (KeyEvent)event;
-                if (TRACE_EVENT) System.out.println("TIM: " + eventInfo(ke));
-                if ((ke.getModifiers() & MODIFIERS) != 0) {
-                    commitAll(); // assume a command, let it go through
-                } else {
-                    if (handleTyped(ke.getKeyChar())) {
-                        ke.consume();
+            case MouseEvent.MOUSE_PRESSED:
+                if (enabled) {
+                    if (TRACE_EVENT) System.out.println("TIM: " + eventInfo(event));
+                    // we'll get this even if the user is scrolling, can we rely on the component?
+                    // commitAll(); // don't allow even clicks within our own edit area
+                }
+                break;
+
+            case KeyEvent.KEY_TYPED:
+                {
+                    if (enabled) {
+                        KeyEvent ke = (KeyEvent) event;
+                        if (TRACE_EVENT) System.out.println("TIM: " + eventInfo(ke));
+                        if ((ke.getModifiers() & MODIFIERS) != 0) {
+                            commitAll(); // assume a command, let it go through
+                        } else {
+                            if (handleTyped(ke.getKeyChar())) {
+                                ke.consume();
+                            }
+                        }
                     }
                 }
-            }
-        } break;
-    
-        case KeyEvent.KEY_PRESSED: {
-            if (enabled) {
-            KeyEvent ke = (KeyEvent)event;
-            if (TRACE_EVENT) System.out.println("TIM: " + eventInfo(ke));
-                if (handlePressed(ke.getKeyCode())) {
-                    ke.consume();
+                break;
+
+            case KeyEvent.KEY_PRESSED:
+                {
+                    if (enabled) {
+                        KeyEvent ke = (KeyEvent) event;
+                        if (TRACE_EVENT) System.out.println("TIM: " + eventInfo(ke));
+                        if (handlePressed(ke.getKeyCode())) {
+                            ke.consume();
+                        }
+                    }
                 }
-            }
-        } break;
-    
-        case KeyEvent.KEY_RELEASED: {
-            // this won't autorepeat, which is better for toggle actions
-            KeyEvent ke = (KeyEvent)event;
-            if (ke.getKeyCode() == KeyEvent.VK_SPACE && ke.isControlDown()) {
-                setCompositionEnabled(!enabled);
-            }
-        } break;
-    
-        default:
-            break;
+                break;
+
+            case KeyEvent.KEY_RELEASED:
+                {
+                    // this won't autorepeat, which is better for toggle actions
+                    KeyEvent ke = (KeyEvent) event;
+                    if (ke.getKeyCode() == KeyEvent.VK_SPACE && ke.isControlDown()) {
+                        setCompositionEnabled(!enabled);
+                    }
+                }
+                break;
+
+            default:
+                break;
         }
     }
 
@@ -422,11 +410,18 @@ public class TransliteratorInputMethod implements InputMethod {
 
     private void traceBuffer(String msg, int cc, int off) {
         if (TRACE_BUFFER)
-            System.out.println(Utility.escape(msg + ": '"
-                    + buffer.substring(0, cc) + '}'
-                    + buffer.substring(cc, index.start) + '-'
-                    + buffer.substring(index.start, index.contextLimit) + '|'
-                    + buffer.substring(index.contextLimit) + '\''));
+            System.out.println(
+                    Utility.escape(
+                            msg
+                                    + ": '"
+                                    + buffer.substring(0, cc)
+                                    + '}'
+                                    + buffer.substring(cc, index.start)
+                                    + '-'
+                                    + buffer.substring(index.start, index.contextLimit)
+                                    + '|'
+                                    + buffer.substring(index.contextLimit)
+                                    + '\''));
     }
 
     private void update(boolean flush) {
@@ -439,20 +434,24 @@ public class TransliteratorInputMethod implements InputMethod {
             off = index.contextLimit - len; // will be negative
             cc = index.start = index.limit = index.contextLimit = len;
         } else {
-            cc = index.start > desiredContext ? index.start - desiredContext
-                    : 0;
+            cc = index.start > desiredContext ? index.start - desiredContext : 0;
             off = index.contextLimit - cc;
         }
 
         if (index.start < len) {
-            as.addAttribute(TextAttribute.INPUT_METHOD_HIGHLIGHT,
+            as.addAttribute(
+                    TextAttribute.INPUT_METHOD_HIGHLIGHT,
                     InputMethodHighlight.SELECTED_RAW_TEXT_HIGHLIGHT,
-                    index.start, len);
+                    index.start,
+                    len);
         }
 
         imc.dispatchInputMethodEvent(
-                InputMethodEvent.INPUT_METHOD_TEXT_CHANGED, as.getIterator(),
-                cc, TextHitInfo.leading(off), null);
+                InputMethodEvent.INPUT_METHOD_TEXT_CHANGED,
+                as.getIterator(),
+                cc,
+                TextHitInfo.leading(off),
+                null);
 
         traceBuffer("update", cc, off);
 
@@ -465,11 +464,15 @@ public class TransliteratorInputMethod implements InputMethod {
     }
 
     private void updateCaret() {
-        imc.dispatchInputMethodEvent(InputMethodEvent.CARET_POSITION_CHANGED,
-                null, 0, TextHitInfo.leading(index.contextLimit), null);
+        imc.dispatchInputMethodEvent(
+                InputMethodEvent.CARET_POSITION_CHANGED,
+                null,
+                0,
+                TextHitInfo.leading(index.contextLimit),
+                null);
         traceBuffer("updateCaret", 0, index.contextLimit);
     }
-    
+
     private void caretToStart() {
         if (index.contextLimit > index.start) {
             index.contextLimit = index.limit = index.start;
@@ -525,7 +528,8 @@ public class TransliteratorInputMethod implements InputMethod {
         if (bufpos > 0) {
             int limit = bufpos;
             --bufpos;
-            if (bufpos > 0 && UCharacter.isLowSurrogate(buffer.charAt(bufpos))
+            if (bufpos > 0
+                    && UCharacter.isLowSurrogate(buffer.charAt(bufpos))
                     && UCharacter.isHighSurrogate(buffer.charAt(bufpos - 1))) {
                 --bufpos;
             }
@@ -599,99 +603,107 @@ public class TransliteratorInputMethod implements InputMethod {
     }
 
     /**
-     * The big problem is that from release to release swing changes how it
-     * handles some characters like tab and backspace.  Sometimes it handles
-     * them as keyTyped events, and sometimes it handles them as keyPressed
-     * events.  If you want to allow the event to go through so swing handles
-     * it, you have to allow one or the other to go through.  If you don't want
-     * the event to go through so you can handle it, you have to stop the
-     * event both places.
+     * The big problem is that from release to release swing changes how it handles some characters
+     * like tab and backspace. Sometimes it handles them as keyTyped events, and sometimes it
+     * handles them as keyPressed events. If you want to allow the event to go through so swing
+     * handles it, you have to allow one or the other to go through. If you don't want the event to
+     * go through so you can handle it, you have to stop the event both places.
+     *
      * @return whether the character was handled
      */
     private boolean handleTyped(char ch) {
         if (enabled) {
             switch (ch) {
-            case '\b': if (editing()) return backspace(); break;
-            case '\t': if (editing()) { return commitAll(); } break;
-            case '\u001b': if (editing()) { clearAll(); return true; } break;
-            case '\u007f': if (editing()) return delete(); break;
-            default: return insert(ch);
+                case '\b':
+                    if (editing()) return backspace();
+                    break;
+                case '\t':
+                    if (editing()) {
+                        return commitAll();
+                    }
+                    break;
+                case '\u001b':
+                    if (editing()) {
+                        clearAll();
+                        return true;
+                    }
+                    break;
+                case '\u007f':
+                    if (editing()) return delete();
+                    break;
+                default:
+                    return insert(ch);
             }
         }
         return false;
     }
 
-    /**
-     * Handle keyPressed events.
-     */
+    /** Handle keyPressed events. */
     private boolean handlePressed(int code) {
         if (enabled && editing()) {
             switch (code) {
-            case KeyEvent.VK_PAGE_UP:
-            case KeyEvent.VK_UP:
-            case KeyEvent.VK_KP_UP:
-            case KeyEvent.VK_HOME:
-            caretToStart(); return true;
-            case KeyEvent.VK_PAGE_DOWN:
-            case KeyEvent.VK_DOWN:
-            case KeyEvent.VK_KP_DOWN:
-            case KeyEvent.VK_END:
-            caretToLimit(); return true;
-            case KeyEvent.VK_LEFT:
-            case KeyEvent.VK_KP_LEFT:
-            return caretTowardsStart();
-            case KeyEvent.VK_RIGHT:
-            case KeyEvent.VK_KP_RIGHT:
-            return caretTowardsLimit();
-            case KeyEvent.VK_BACK_SPACE: 
-            return canBackspace(); // unfortunately, in 1.5 swing handles this in keyPressed instead of keyTyped
-            case KeyEvent.VK_DELETE: 
-            return canDelete(); // this too?
-            case KeyEvent.VK_TAB:
-            case KeyEvent.VK_ENTER:
-            return commitAll(); // so we'll never handle VK_TAB in keyTyped
-            
-            case KeyEvent.VK_SHIFT:
-            case KeyEvent.VK_CONTROL:
-            case KeyEvent.VK_ALT:
-            return false; // ignore these unless a key typed event gets generated
-            default: 
-            // by default, let editor handle it, and we'll assume that it will tell us
-            // to endComposition if it does anything funky with, e.g., function keys.
-            return false;
+                case KeyEvent.VK_PAGE_UP:
+                case KeyEvent.VK_UP:
+                case KeyEvent.VK_KP_UP:
+                case KeyEvent.VK_HOME:
+                    caretToStart();
+                    return true;
+                case KeyEvent.VK_PAGE_DOWN:
+                case KeyEvent.VK_DOWN:
+                case KeyEvent.VK_KP_DOWN:
+                case KeyEvent.VK_END:
+                    caretToLimit();
+                    return true;
+                case KeyEvent.VK_LEFT:
+                case KeyEvent.VK_KP_LEFT:
+                    return caretTowardsStart();
+                case KeyEvent.VK_RIGHT:
+                case KeyEvent.VK_KP_RIGHT:
+                    return caretTowardsLimit();
+                case KeyEvent.VK_BACK_SPACE:
+                    return canBackspace(); // unfortunately, in 1.5 swing handles this in keyPressed
+                    // instead of keyTyped
+                case KeyEvent.VK_DELETE:
+                    return canDelete(); // this too?
+                case KeyEvent.VK_TAB:
+                case KeyEvent.VK_ENTER:
+                    return commitAll(); // so we'll never handle VK_TAB in keyTyped
+
+                case KeyEvent.VK_SHIFT:
+                case KeyEvent.VK_CONTROL:
+                case KeyEvent.VK_ALT:
+                    return false; // ignore these unless a key typed event gets generated
+                default:
+                    // by default, let editor handle it, and we'll assume that it will tell us
+                    // to endComposition if it does anything funky with, e.g., function keys.
+                    return false;
             }
         }
         return false;
     }
 
     public String toString() {
-        final String[] names = { 
-            "alice", "bill", "carrie", "doug", "elena", "frank", "gertie", "howie", "ingrid", "john" 
+        final String[] names = {
+            "alice", "bill", "carrie", "doug", "elena", "frank", "gertie", "howie", "ingrid", "john"
         };
-    
+
         if (id < names.length) {
             return names[id];
         } else {
-            return names[id] + "-" + (id/names.length);
+            return names[id] + "-" + (id / names.length);
         }
     }
 }
 
 class NameRenderer extends JLabel implements ListCellRenderer {
 
-    /**
-     * For serialization
-     */
+    /** For serialization */
     private static final long serialVersionUID = -210152863798631747L;
 
     public Component getListCellRendererComponent(
-        JList list,
-        Object value,
-        int index,
-        boolean isSelected,
-        boolean cellHasFocus) {
+            JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
 
-        String s = ((JLabel)value).getText();
+        String s = ((JLabel) value).getText();
         setText(s);
 
         if (isSelected) {
@@ -712,7 +724,7 @@ class NameRenderer extends JLabel implements ListCellRenderer {
 class LabelComparator implements Comparator {
     public int compare(Object obj1, Object obj2) {
         Collator collator = Collator.getInstance();
-        return collator.compare(((JLabel)obj1).getText(), ((JLabel)obj2).getText());
+        return collator.compare(((JLabel) obj1).getText(), ((JLabel) obj2).getText());
     }
 
     public boolean equals(Object obj1) {

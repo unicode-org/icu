@@ -8,19 +8,6 @@
  */
 package com.ibm.icu.dev.test.timezone;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.util.Date;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.util.AnnualTimeZoneRule;
@@ -38,10 +25,19 @@ import com.ibm.icu.util.TimeZoneRule;
 import com.ibm.icu.util.TimeZoneTransition;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.VTimeZone;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.Date;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
-/**
- * Test cases for TimeZoneRule and RuleBasedTimeZone
- */
+/** Test cases for TimeZoneRule and RuleBasedTimeZone */
 @RunWith(JUnit4.class)
 public class TimeZoneRuleTest extends CoreTestFmwk {
 
@@ -52,56 +48,128 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
      */
     @Test
     public void TestSimpleRuleBasedTimeZone() {
-        SimpleTimeZone stz = new SimpleTimeZone(-1*HOUR, "TestSTZ",
-                Calendar.SEPTEMBER, -30, -Calendar.SATURDAY, 1*HOUR, SimpleTimeZone.WALL_TIME,
-                Calendar.FEBRUARY, 2, Calendar.SUNDAY, 1*HOUR, SimpleTimeZone.WALL_TIME,
-                1*HOUR);
-
+        SimpleTimeZone stz =
+                new SimpleTimeZone(
+                        -1 * HOUR,
+                        "TestSTZ",
+                        Calendar.SEPTEMBER,
+                        -30,
+                        -Calendar.SATURDAY,
+                        1 * HOUR,
+                        SimpleTimeZone.WALL_TIME,
+                        Calendar.FEBRUARY,
+                        2,
+                        Calendar.SUNDAY,
+                        1 * HOUR,
+                        SimpleTimeZone.WALL_TIME,
+                        1 * HOUR);
 
         DateTimeRule dtr;
         AnnualTimeZoneRule atzr;
         final int STARTYEAR = 2000;
 
-        InitialTimeZoneRule ir = new InitialTimeZoneRule(
-                "RBTZ_Initial", // Initial time Name
-                -1*HOUR,        // Raw offset
-                1*HOUR);        // DST saving amount
+        InitialTimeZoneRule ir =
+                new InitialTimeZoneRule(
+                        "RBTZ_Initial", // Initial time Name
+                        -1 * HOUR, // Raw offset
+                        1 * HOUR); // DST saving amount
 
         // RBTZ
         RuleBasedTimeZone rbtz1 = new RuleBasedTimeZone("RBTZ1", ir);
-        dtr = new DateTimeRule(Calendar.SEPTEMBER, 30, Calendar.SATURDAY, false,
-                1*HOUR, DateTimeRule.WALL_TIME); // SUN<=30 in September, at 1AM wall time
-        atzr = new AnnualTimeZoneRule("RBTZ_DST1",
-                -1*HOUR /* rawOffset */, 1*HOUR /* dstSavings */, dtr,
-                STARTYEAR, AnnualTimeZoneRule.MAX_YEAR);
+        dtr =
+                new DateTimeRule(
+                        Calendar.SEPTEMBER,
+                        30,
+                        Calendar.SATURDAY,
+                        false,
+                        1 * HOUR,
+                        DateTimeRule.WALL_TIME); // SUN<=30 in September, at 1AM wall time
+        atzr =
+                new AnnualTimeZoneRule(
+                        "RBTZ_DST1",
+                        -1 * HOUR /* rawOffset */,
+                        1 * HOUR /* dstSavings */,
+                        dtr,
+                        STARTYEAR,
+                        AnnualTimeZoneRule.MAX_YEAR);
         rbtz1.addTransitionRule(atzr);
-        dtr = new DateTimeRule(Calendar.FEBRUARY, 2, Calendar.SUNDAY,
-                1*HOUR, DateTimeRule.WALL_TIME); // 2nd Sunday in February, at 1AM wall time
-        atzr = new AnnualTimeZoneRule("RBTZ_STD1",
-                -1*HOUR /* rawOffset */, 0 /* dstSavings */, dtr,
-                STARTYEAR, AnnualTimeZoneRule.MAX_YEAR);
+        dtr =
+                new DateTimeRule(
+                        Calendar.FEBRUARY,
+                        2,
+                        Calendar.SUNDAY,
+                        1 * HOUR,
+                        DateTimeRule.WALL_TIME); // 2nd Sunday in February, at 1AM wall time
+        atzr =
+                new AnnualTimeZoneRule(
+                        "RBTZ_STD1",
+                        -1 * HOUR /* rawOffset */,
+                        0 /* dstSavings */,
+                        dtr,
+                        STARTYEAR,
+                        AnnualTimeZoneRule.MAX_YEAR);
         rbtz1.addTransitionRule(atzr);
 
         // Equivalent, but different date rule type
         RuleBasedTimeZone rbtz2 = new RuleBasedTimeZone("RBTZ2", ir);
-        dtr = new DateTimeRule(Calendar.SEPTEMBER, -1, Calendar.SATURDAY,
-                1*HOUR, DateTimeRule.WALL_TIME); // Last Sunday in September at 1AM wall time
-        atzr = new AnnualTimeZoneRule("RBTZ_DST2", -1*HOUR, 1*HOUR, dtr, STARTYEAR, AnnualTimeZoneRule.MAX_YEAR);
+        dtr =
+                new DateTimeRule(
+                        Calendar.SEPTEMBER,
+                        -1,
+                        Calendar.SATURDAY,
+                        1 * HOUR,
+                        DateTimeRule.WALL_TIME); // Last Sunday in September at 1AM wall time
+        atzr =
+                new AnnualTimeZoneRule(
+                        "RBTZ_DST2",
+                        -1 * HOUR,
+                        1 * HOUR,
+                        dtr,
+                        STARTYEAR,
+                        AnnualTimeZoneRule.MAX_YEAR);
         rbtz2.addTransitionRule(atzr);
-        dtr = new DateTimeRule(Calendar.FEBRUARY, 8, Calendar.SUNDAY, true,
-                1*HOUR, DateTimeRule.WALL_TIME); // SUN>=8 in February, at 1AM wall time
-        atzr = new AnnualTimeZoneRule("RBTZ_STD2", -1*HOUR, 0, dtr, STARTYEAR, AnnualTimeZoneRule.MAX_YEAR);
+        dtr =
+                new DateTimeRule(
+                        Calendar.FEBRUARY,
+                        8,
+                        Calendar.SUNDAY,
+                        true,
+                        1 * HOUR,
+                        DateTimeRule.WALL_TIME); // SUN>=8 in February, at 1AM wall time
+        atzr =
+                new AnnualTimeZoneRule(
+                        "RBTZ_STD2", -1 * HOUR, 0, dtr, STARTYEAR, AnnualTimeZoneRule.MAX_YEAR);
         rbtz2.addTransitionRule(atzr);
 
         // Equivalent, but different time rule type
         RuleBasedTimeZone rbtz3 = new RuleBasedTimeZone("RBTZ3", ir);
-        dtr = new DateTimeRule(Calendar.SEPTEMBER, 30, Calendar.SATURDAY, false,
-                2*HOUR, DateTimeRule.UTC_TIME);
-        atzr = new AnnualTimeZoneRule("RBTZ_DST3", -1*HOUR, 1*HOUR, dtr, STARTYEAR, AnnualTimeZoneRule.MAX_YEAR);
+        dtr =
+                new DateTimeRule(
+                        Calendar.SEPTEMBER,
+                        30,
+                        Calendar.SATURDAY,
+                        false,
+                        2 * HOUR,
+                        DateTimeRule.UTC_TIME);
+        atzr =
+                new AnnualTimeZoneRule(
+                        "RBTZ_DST3",
+                        -1 * HOUR,
+                        1 * HOUR,
+                        dtr,
+                        STARTYEAR,
+                        AnnualTimeZoneRule.MAX_YEAR);
         rbtz3.addTransitionRule(atzr);
-        dtr = new DateTimeRule(Calendar.FEBRUARY, 2, Calendar.SUNDAY,
-                0*HOUR, DateTimeRule.STANDARD_TIME);
-        atzr = new AnnualTimeZoneRule("RBTZ_STD3", -1*HOUR, 0, dtr, STARTYEAR, AnnualTimeZoneRule.MAX_YEAR);
+        dtr =
+                new DateTimeRule(
+                        Calendar.FEBRUARY,
+                        2,
+                        Calendar.SUNDAY,
+                        0 * HOUR,
+                        DateTimeRule.STANDARD_TIME);
+        atzr =
+                new AnnualTimeZoneRule(
+                        "RBTZ_STD3", -1 * HOUR, 0, dtr, STARTYEAR, AnnualTimeZoneRule.MAX_YEAR);
         rbtz3.addTransitionRule(atzr);
 
         // Check equivalency for 10 years
@@ -143,8 +211,14 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
         cal.set(Calendar.ERA, GregorianCalendar.BC);
         cal.set(1000, Calendar.JANUARY, 1);
 
-        offset = rbtz1.getOffset(cal.get(Calendar.ERA), cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
-                cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.DAY_OF_WEEK), cal.get(Calendar.MILLISECONDS_IN_DAY));
+        offset =
+                rbtz1.getOffset(
+                        cal.get(Calendar.ERA),
+                        cal.get(Calendar.YEAR),
+                        cal.get(Calendar.MONTH),
+                        cal.get(Calendar.DAY_OF_MONTH),
+                        cal.get(Calendar.DAY_OF_WEEK),
+                        cal.get(Calendar.MILLISECONDS_IN_DAY));
         if (offset != 0) {
             errln("FAIL: Invalid time zone offset: " + offset + " /expected: 0");
         }
@@ -164,8 +238,14 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
         cal.set(Calendar.ERA, GregorianCalendar.AD);
         cal.set(2000, Calendar.JULY, 1);
 
-        offset = rbtz1.getOffset(cal.get(Calendar.ERA), cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
-                cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.DAY_OF_WEEK), cal.get(Calendar.MILLISECONDS_IN_DAY));
+        offset =
+                rbtz1.getOffset(
+                        cal.get(Calendar.ERA),
+                        cal.get(Calendar.YEAR),
+                        cal.get(Calendar.MONTH),
+                        cal.get(Calendar.DAY_OF_MONTH),
+                        cal.get(Calendar.DAY_OF_WEEK),
+                        cal.get(Calendar.MILLISECONDS_IN_DAY));
         if (offset != -3600000) {
             errln("FAIL: Invalid time zone offset: " + offset + " /expected: -3600000");
         }
@@ -184,8 +264,15 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
         // July 1, 2000, AD
 
         // Try to add 3rd final rule
-        dtr = new DateTimeRule(Calendar.OCTOBER, 15, 1*HOUR, DateTimeRule.WALL_TIME);
-        atzr = new AnnualTimeZoneRule("3RD_ATZ", -1*HOUR, 2*HOUR, dtr, STARTYEAR, AnnualTimeZoneRule.MAX_YEAR);
+        dtr = new DateTimeRule(Calendar.OCTOBER, 15, 1 * HOUR, DateTimeRule.WALL_TIME);
+        atzr =
+                new AnnualTimeZoneRule(
+                        "3RD_ATZ",
+                        -1 * HOUR,
+                        2 * HOUR,
+                        dtr,
+                        STARTYEAR,
+                        AnnualTimeZoneRule.MAX_YEAR);
         boolean bException = false;
         try {
             rbtz1.addTransitionRule(atzr);
@@ -199,7 +286,7 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
         // Try to add an initial rule
         bException = false;
         try {
-            rbtz1.addTransitionRule(new InitialTimeZoneRule("Test Initial", 2*HOUR, 0));
+            rbtz1.addTransitionRule(new InitialTimeZoneRule("Test Initial", 2 * HOUR, 0));
         } catch (IllegalArgumentException iae) {
             bException = true;
         }
@@ -217,53 +304,98 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
         // Compare to America/New_York with equivalent RBTZ
         TimeZone ny = TimeZone.getTimeZone("America/New_York", TimeZone.TIMEZONE_ICU);
 
-        //RBTZ
-        InitialTimeZoneRule ir = new InitialTimeZoneRule("EST", -5*HOUR, 0);
+        // RBTZ
+        InitialTimeZoneRule ir = new InitialTimeZoneRule("EST", -5 * HOUR, 0);
         RuleBasedTimeZone rbtz = new RuleBasedTimeZone("EST5EDT", ir);
 
         DateTimeRule dtr;
         AnnualTimeZoneRule tzr;
 
         // Standard time
-        dtr = new DateTimeRule(Calendar.OCTOBER, -1, Calendar.SUNDAY,
-                2*HOUR, DateTimeRule.WALL_TIME);    // Last Sunday in October, at 2AM wall time
-        tzr = new AnnualTimeZoneRule("EST", -5*HOUR /* rawOffset */, 0 /* dstSavings */, dtr, 1967, 2006);
+        dtr =
+                new DateTimeRule(
+                        Calendar.OCTOBER,
+                        -1,
+                        Calendar.SUNDAY,
+                        2 * HOUR,
+                        DateTimeRule.WALL_TIME); // Last Sunday in October, at 2AM wall time
+        tzr =
+                new AnnualTimeZoneRule(
+                        "EST", -5 * HOUR /* rawOffset */, 0 /* dstSavings */, dtr, 1967, 2006);
         rbtz.addTransitionRule(tzr);
 
-        dtr = new DateTimeRule(Calendar.NOVEMBER, 1, Calendar.SUNDAY,
-                true, 2*HOUR, DateTimeRule.WALL_TIME);  // SUN>=1 in November, at 2AM wall time
-        tzr = new AnnualTimeZoneRule("EST", -5*HOUR, 0, dtr, 2007, AnnualTimeZoneRule.MAX_YEAR);
+        dtr =
+                new DateTimeRule(
+                        Calendar.NOVEMBER,
+                        1,
+                        Calendar.SUNDAY,
+                        true,
+                        2 * HOUR,
+                        DateTimeRule.WALL_TIME); // SUN>=1 in November, at 2AM wall time
+        tzr = new AnnualTimeZoneRule("EST", -5 * HOUR, 0, dtr, 2007, AnnualTimeZoneRule.MAX_YEAR);
         rbtz.addTransitionRule(tzr);
 
         // Daylight saving time
-        dtr = new DateTimeRule(Calendar.APRIL, -1, Calendar.SUNDAY,
-                2*HOUR, DateTimeRule.WALL_TIME);    // Last Sunday in April, at 2AM wall time
-        tzr = new AnnualTimeZoneRule("EDT", -5*HOUR, 1*HOUR, dtr, 1967, 1973);
+        dtr =
+                new DateTimeRule(
+                        Calendar.APRIL,
+                        -1,
+                        Calendar.SUNDAY,
+                        2 * HOUR,
+                        DateTimeRule.WALL_TIME); // Last Sunday in April, at 2AM wall time
+        tzr = new AnnualTimeZoneRule("EDT", -5 * HOUR, 1 * HOUR, dtr, 1967, 1973);
         rbtz.addTransitionRule(tzr);
 
-        dtr = new DateTimeRule(Calendar.JANUARY, 6,
-                2*HOUR, DateTimeRule.WALL_TIME);    // January 6, at 2AM wall time
-        tzr = new AnnualTimeZoneRule("EDT", -5*HOUR, 1*HOUR, dtr, 1974, 1974);
+        dtr =
+                new DateTimeRule(
+                        Calendar.JANUARY,
+                        6,
+                        2 * HOUR,
+                        DateTimeRule.WALL_TIME); // January 6, at 2AM wall time
+        tzr = new AnnualTimeZoneRule("EDT", -5 * HOUR, 1 * HOUR, dtr, 1974, 1974);
         rbtz.addTransitionRule(tzr);
 
-        dtr = new DateTimeRule(Calendar.FEBRUARY, 23,
-                2*HOUR, DateTimeRule.WALL_TIME);    // February 23, at 2AM wall time
-        tzr = new AnnualTimeZoneRule("EDT", -5*HOUR, 1*HOUR, dtr, 1975, 1975);
+        dtr =
+                new DateTimeRule(
+                        Calendar.FEBRUARY,
+                        23,
+                        2 * HOUR,
+                        DateTimeRule.WALL_TIME); // February 23, at 2AM wall time
+        tzr = new AnnualTimeZoneRule("EDT", -5 * HOUR, 1 * HOUR, dtr, 1975, 1975);
         rbtz.addTransitionRule(tzr);
 
-        dtr = new DateTimeRule(Calendar.APRIL, -1, Calendar.SUNDAY,
-                2*HOUR, DateTimeRule.WALL_TIME);    // Last Sunday in April, at 2AM wall time
-        tzr = new AnnualTimeZoneRule("EDT", -5*HOUR, 1*HOUR, dtr, 1976, 1986);
+        dtr =
+                new DateTimeRule(
+                        Calendar.APRIL,
+                        -1,
+                        Calendar.SUNDAY,
+                        2 * HOUR,
+                        DateTimeRule.WALL_TIME); // Last Sunday in April, at 2AM wall time
+        tzr = new AnnualTimeZoneRule("EDT", -5 * HOUR, 1 * HOUR, dtr, 1976, 1986);
         rbtz.addTransitionRule(tzr);
 
-        dtr = new DateTimeRule(Calendar.APRIL, 1, Calendar.SUNDAY,
-                true, 2*HOUR, DateTimeRule.WALL_TIME);  // SUN>=1 in April, at 2AM wall time
-        tzr = new AnnualTimeZoneRule("EDT", -5*HOUR, 1*HOUR, dtr, 1987, 2006);
+        dtr =
+                new DateTimeRule(
+                        Calendar.APRIL,
+                        1,
+                        Calendar.SUNDAY,
+                        true,
+                        2 * HOUR,
+                        DateTimeRule.WALL_TIME); // SUN>=1 in April, at 2AM wall time
+        tzr = new AnnualTimeZoneRule("EDT", -5 * HOUR, 1 * HOUR, dtr, 1987, 2006);
         rbtz.addTransitionRule(tzr);
 
-        dtr = new DateTimeRule(Calendar.MARCH, 8, Calendar.SUNDAY,
-                true, 2*HOUR, DateTimeRule.WALL_TIME);  // SUN>=8 in March, at 2AM wall time
-        tzr = new AnnualTimeZoneRule("EDT", -5*HOUR, 1*HOUR, dtr, 2007, AnnualTimeZoneRule.MAX_YEAR);
+        dtr =
+                new DateTimeRule(
+                        Calendar.MARCH,
+                        8,
+                        Calendar.SUNDAY,
+                        true,
+                        2 * HOUR,
+                        DateTimeRule.WALL_TIME); // SUN>=8 in March, at 2AM wall time
+        tzr =
+                new AnnualTimeZoneRule(
+                        "EDT", -5 * HOUR, 1 * HOUR, dtr, 2007, AnnualTimeZoneRule.MAX_YEAR);
         rbtz.addTransitionRule(tzr);
 
         // hasEquivalentTransitions
@@ -271,11 +403,12 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
         long jan1_1967 = getUTCMillis(1971, Calendar.JANUARY, 1);
         long jan1_2010 = getUTCMillis(2010, Calendar.JANUARY, 1);
 
-        if (!(((BasicTimeZone)ny).hasEquivalentTransitions(rbtz, jan1_1967, jan1_2010))) {
+        if (!(((BasicTimeZone) ny).hasEquivalentTransitions(rbtz, jan1_1967, jan1_2010))) {
             errln("FAIL: The RBTZ must be equivalent to America/New_York between 1967 and 2010");
         }
-        if (((BasicTimeZone)ny).hasEquivalentTransitions(rbtz, jan1_1950, jan1_2010)) {
-            errln("FAIL: The RBTZ must not be equivalent to America/New_York between 1950 and 2010");
+        if (((BasicTimeZone) ny).hasEquivalentTransitions(rbtz, jan1_1950, jan1_2010)) {
+            errln(
+                    "FAIL: The RBTZ must not be equivalent to America/New_York between 1950 and 2010");
         }
 
         // Same with above, but calling RBTZ#hasEquivalentTransitions against OlsonTimeZone
@@ -283,7 +416,8 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
             errln("FAIL: The RBTZ must be equivalent to America/New_York between 1967 and 2010");
         }
         if (rbtz.hasEquivalentTransitions(ny, jan1_1950, jan1_2010)) {
-            errln("FAIL: The RBTZ must not be equivalent to America/New_York between 1950 and 2010");
+            errln(
+                    "FAIL: The RBTZ must not be equivalent to America/New_York between 1950 and 2010");
         }
 
         // TimeZone APIs
@@ -291,17 +425,18 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
             errln("FAIL: hasSameRules must return false");
         }
         RuleBasedTimeZone rbtzc = rbtz.clone();
-        if (!rbtz.hasSameRules(rbtzc) || !rbtz.hasEquivalentTransitions(rbtzc, jan1_1950, jan1_2010)) {
+        if (!rbtz.hasSameRules(rbtzc)
+                || !rbtz.hasEquivalentTransitions(rbtzc, jan1_1950, jan1_2010)) {
             errln("FAIL: hasSameRules/hasEquivalentTransitions must return true for cloned RBTZs");
         }
 
         long times[] = {
-           getUTCMillis(2006, Calendar.MARCH, 15),
-           getUTCMillis(2006, Calendar.NOVEMBER, 1),
-           getUTCMillis(2007, Calendar.MARCH, 15),
-           getUTCMillis(2007, Calendar.NOVEMBER, 1),
-           getUTCMillis(2008, Calendar.MARCH, 15),
-           getUTCMillis(2008, Calendar.NOVEMBER, 1)
+            getUTCMillis(2006, Calendar.MARCH, 15),
+            getUTCMillis(2006, Calendar.NOVEMBER, 1),
+            getUTCMillis(2007, Calendar.MARCH, 15),
+            getUTCMillis(2007, Calendar.NOVEMBER, 1),
+            getUTCMillis(2008, Calendar.MARCH, 15),
+            getUTCMillis(2008, Calendar.NOVEMBER, 1)
         };
         int[] offsets1 = new int[2];
         int[] offsets2 = new int[2];
@@ -350,12 +485,7 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
      */
     @Test
     public void TestRBTZTransition() {
-        int[] STARTYEARS = {
-            1950,
-            1975,
-            2000,
-            2010
-        };
+        int[] STARTYEARS = {1950, 1975, 2000, 2010};
 
         String[] zids = getTestZIDs();
         for (int i = 0; i < zids.length; i++) {
@@ -365,14 +495,16 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
             }
             for (int j = 0; j < STARTYEARS.length; j++) {
                 long startTime = getUTCMillis(STARTYEARS[j], Calendar.JANUARY, 1);
-                TimeZoneRule[] rules = ((BasicTimeZone)tz).getTimeZoneRules(startTime);
-                RuleBasedTimeZone rbtz = new RuleBasedTimeZone(tz.getID() + "(RBTZ)",
-                        (InitialTimeZoneRule)rules[0]);
+                TimeZoneRule[] rules = ((BasicTimeZone) tz).getTimeZoneRules(startTime);
+                RuleBasedTimeZone rbtz =
+                        new RuleBasedTimeZone(
+                                tz.getID() + "(RBTZ)", (InitialTimeZoneRule) rules[0]);
                 for (int k = 1; k < rules.length; k++) {
                     rbtz.addTransitionRule(rules[k]);
                 }
 
-                // Compare the original OlsonTimeZone with the RBTZ starting the startTime for 20 years
+                // Compare the original OlsonTimeZone with the RBTZ starting the startTime for 20
+                // years
                 long until = getUTCMillis(STARTYEARS[j] + 20, Calendar.JANUARY, 1);
 
                 // Ascending
@@ -384,7 +516,6 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
                 // Descending/inclusive
                 compareTransitionsDescending(tz, rbtz, startTime + 1, until, true);
             }
-
         }
     }
 
@@ -396,7 +527,8 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
         // America/New_York and America/Indiana/Indianapolis are equivalent
         // since 2006
         TimeZone newyork = TimeZone.getTimeZone("America/New_York", TimeZone.TIMEZONE_ICU);
-        TimeZone indianapolis = TimeZone.getTimeZone("America/Indiana/Indianapolis", TimeZone.TIMEZONE_ICU);
+        TimeZone indianapolis =
+                TimeZone.getTimeZone("America/Indiana/Indianapolis", TimeZone.TIMEZONE_ICU);
         TimeZone gmt_5 = TimeZone.getTimeZone("Etc/GMT+5", TimeZone.TIMEZONE_ICU);
 
         long jan1_1971 = getUTCMillis(1971, Calendar.JANUARY, 1);
@@ -405,33 +537,41 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
         long jan1_2007 = getUTCMillis(2007, Calendar.JANUARY, 1);
         long jan1_2011 = getUTCMillis(2010, Calendar.JANUARY, 1);
 
-        if (((BasicTimeZone)newyork).hasEquivalentTransitions(indianapolis, jan1_2005, jan1_2011)) {
-            errln("FAIL: New_York is not equivalent to Indianapolis between 2005 and 2010, but returned true");
+        if (((BasicTimeZone) newyork)
+                .hasEquivalentTransitions(indianapolis, jan1_2005, jan1_2011)) {
+            errln(
+                    "FAIL: New_York is not equivalent to Indianapolis between 2005 and 2010, but returned true");
         }
-        if (!((BasicTimeZone)newyork).hasEquivalentTransitions(indianapolis, jan1_2006, jan1_2011)) {
-            errln("FAIL: New_York is equivalent to Indianapolis between 2006 and 2010, but returned false");
+        if (!((BasicTimeZone) newyork)
+                .hasEquivalentTransitions(indianapolis, jan1_2006, jan1_2011)) {
+            errln(
+                    "FAIL: New_York is equivalent to Indianapolis between 2006 and 2010, but returned false");
         }
 
-        if (!((BasicTimeZone)indianapolis).hasEquivalentTransitions(gmt_5, jan1_1971, jan1_2006)) {
-            errln("FAIL: Indianapolis is equivalent to GMT+5 between 1971 and 2005, but returned false");
+        if (!((BasicTimeZone) indianapolis).hasEquivalentTransitions(gmt_5, jan1_1971, jan1_2006)) {
+            errln(
+                    "FAIL: Indianapolis is equivalent to GMT+5 between 1971 and 2005, but returned false");
         }
-        if (((BasicTimeZone)indianapolis).hasEquivalentTransitions(gmt_5, jan1_1971, jan1_2007)) {
-            errln("FAIL: Indianapolis is not equivalent to GMT+5 between 1971 and 2006, but returned true");
+        if (((BasicTimeZone) indianapolis).hasEquivalentTransitions(gmt_5, jan1_1971, jan1_2007)) {
+            errln(
+                    "FAIL: Indianapolis is not equivalent to GMT+5 between 1971 and 2006, but returned true");
         }
 
         // Cloned TimeZone
         TimeZone newyork2 = newyork.clone();
-        if (!((BasicTimeZone)newyork).hasEquivalentTransitions(newyork2, jan1_1971, jan1_2011)) {
+        if (!((BasicTimeZone) newyork).hasEquivalentTransitions(newyork2, jan1_1971, jan1_2011)) {
             errln("FAIL: Cloned TimeZone must have the same transitions");
         }
-        if (!((BasicTimeZone)newyork).hasEquivalentTransitions(newyork2, jan1_1971, jan1_2011, true /*ignoreDstAmount*/)) {
+        if (!((BasicTimeZone) newyork)
+                .hasEquivalentTransitions(
+                        newyork2, jan1_1971, jan1_2011, true /*ignoreDstAmount*/)) {
             errln("FAIL: Cloned TimeZone must have the same transitions");
         }
 
         // America/New_York and America/Los_Angeles has same DST start rules, but
         // raw offsets are different
         TimeZone losangeles = TimeZone.getTimeZone("America/Los_Angeles", TimeZone.TIMEZONE_ICU);
-        if (((BasicTimeZone)newyork).hasEquivalentTransitions(losangeles, jan1_2006, jan1_2011)) {
+        if (((BasicTimeZone) newyork).hasEquivalentTransitions(losangeles, jan1_2006, jan1_2011)) {
             errln("FAIL: New_York is not equivalent to Los Angeles, but returned true");
         }
     }
@@ -447,7 +587,8 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
 
         String[] tzids = getTestZIDs();
         for (int i = 0; i < tzids.length; i++) {
-            BasicTimeZone olsontz = (BasicTimeZone)TimeZone.getTimeZone(tzids[i], TimeZone.TIMEZONE_ICU);
+            BasicTimeZone olsontz =
+                    (BasicTimeZone) TimeZone.getTimeZone(tzids[i], TimeZone.TIMEZONE_ICU);
             VTimeZone vtz_org = VTimeZone.create(tzids[i]);
             vtz_org.setTZURL("http://source.icu-project.org/timezone");
             vtz_org.setLastModified(new Date());
@@ -490,21 +631,35 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
             // because there is no good way to represent the initial time with
             // VTIMEZONE.
             if (vtz_new.getOffset(startTime) != olsontz.getOffset(startTime)) {
-                errln("FAIL: VTimeZone for " + tzids[i]
-                         + " is not equivalent to its OlsonTimeZone corresponding at " + startTime);
+                errln(
+                        "FAIL: VTimeZone for "
+                                + tzids[i]
+                                + " is not equivalent to its OlsonTimeZone corresponding at "
+                                + startTime);
             }
             TimeZoneTransition tzt = olsontz.getNextTransition(startTime, false);
             if (tzt != null) {
                 if (!vtz_new.hasEquivalentTransitions(olsontz, tzt.getTime(), endTime, true)) {
                     int maxDelta = 1000;
-                    if (!hasEquivalentTransitions(vtz_new, olsontz, tzt.getTime() + maxDelta, endTime, true, maxDelta)) {
-                        errln("FAIL: VTimeZone for " + tzids[i] + " is not equivalent to its OlsonTimeZone corresponding.");
+                    if (!hasEquivalentTransitions(
+                            vtz_new, olsontz, tzt.getTime() + maxDelta, endTime, true, maxDelta)) {
+                        errln(
+                                "FAIL: VTimeZone for "
+                                        + tzids[i]
+                                        + " is not equivalent to its OlsonTimeZone corresponding.");
                     } else {
-                        logln("VTimeZone for " + tzids[i] + " differs from its OlsonTimeZone corresponding with maximum transition time delta - " + maxDelta);
+                        logln(
+                                "VTimeZone for "
+                                        + tzids[i]
+                                        + " differs from its OlsonTimeZone corresponding with maximum transition time delta - "
+                                        + maxDelta);
                     }
                 }
                 if (!vtz_new.hasEquivalentTransitions(olsontz, tzt.getTime(), endTime, false)) {
-                    logln("VTimeZone for " + tzids[i] + " is not equivalent to its OlsonTimeZone corresponding in strict comparison mode.");
+                    logln(
+                            "VTimeZone for "
+                                    + tzids[i]
+                                    + " is not equivalent to its OlsonTimeZone corresponding in strict comparison mode.");
                 }
             }
         }
@@ -516,18 +671,20 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
      */
     @Test
     public void TestVTimeZoneRoundTripPartial() {
-        long[] startTimes = new long[] {
-            getUTCMillis(1900, Calendar.JANUARY, 1),
-            getUTCMillis(1950, Calendar.JANUARY, 1),
-            getUTCMillis(2020, Calendar.JANUARY, 1)
-        };
+        long[] startTimes =
+                new long[] {
+                    getUTCMillis(1900, Calendar.JANUARY, 1),
+                    getUTCMillis(1950, Calendar.JANUARY, 1),
+                    getUTCMillis(2020, Calendar.JANUARY, 1)
+                };
         long endTime = getUTCMillis(2050, Calendar.JANUARY, 1);
 
         String[] tzids = getTestZIDs();
         for (int n = 0; n < startTimes.length; n++) {
             long startTime = startTimes[n];
             for (int i = 0; i < tzids.length; i++) {
-                BasicTimeZone olsontz = (BasicTimeZone)TimeZone.getTimeZone(tzids[i], TimeZone.TIMEZONE_ICU);
+                BasicTimeZone olsontz =
+                        (BasicTimeZone) TimeZone.getTimeZone(tzids[i], TimeZone.TIMEZONE_ICU);
                 VTimeZone vtz_org = VTimeZone.create(tzids[i]);
                 VTimeZone vtz_new = null;
                 try {
@@ -551,17 +708,37 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
                 // because there is no good way to represent the initial time with
                 // VTIMEZONE.
                 if (vtz_new.getOffset(startTime) != olsontz.getOffset(startTime)) {
-                    errln("FAIL: VTimeZone for " + tzids[i]
-                             + " is not equivalent to its OlsonTimeZone corresponding at " + startTime);
+                    errln(
+                            "FAIL: VTimeZone for "
+                                    + tzids[i]
+                                    + " is not equivalent to its OlsonTimeZone corresponding at "
+                                    + startTime);
                 }
                 TimeZoneTransition tzt = olsontz.getNextTransition(startTime, false);
                 if (tzt != null) {
                     if (!vtz_new.hasEquivalentTransitions(olsontz, tzt.getTime(), endTime, true)) {
                         int maxDelta = 1000;
-                        if (!hasEquivalentTransitions(vtz_new, olsontz, tzt.getTime() + maxDelta, endTime, true, maxDelta)) {
-                            errln("FAIL: VTimeZone for " + tzids[i] + "(>=" + startTime + ") is not equivalent to its OlsonTimeZone corresponding.");
+                        if (!hasEquivalentTransitions(
+                                vtz_new,
+                                olsontz,
+                                tzt.getTime() + maxDelta,
+                                endTime,
+                                true,
+                                maxDelta)) {
+                            errln(
+                                    "FAIL: VTimeZone for "
+                                            + tzids[i]
+                                            + "(>="
+                                            + startTime
+                                            + ") is not equivalent to its OlsonTimeZone corresponding.");
                         } else {
-                            logln("VTimeZone for " + tzids[i] + "(>=" + startTime + ")  differs from its OlsonTimeZone corresponding with maximum transition time delta - " + maxDelta);
+                            logln(
+                                    "VTimeZone for "
+                                            + tzids[i]
+                                            + "(>="
+                                            + startTime
+                                            + ")  differs from its OlsonTimeZone corresponding with maximum transition time delta - "
+                                            + maxDelta);
                         }
                     }
                 }
@@ -576,16 +753,17 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
      */
     @Test
     public void TestVTimeZoneSimpleWrite() {
-        long[] testTimes = new long[] {
-                getUTCMillis(2006, Calendar.JANUARY, 1),
-                getUTCMillis(2006, Calendar.MARCH, 15),
-                getUTCMillis(2006, Calendar.MARCH, 31),
-                getUTCMillis(2006, Calendar.APRIL, 5),
-                getUTCMillis(2006, Calendar.OCTOBER, 25),
-                getUTCMillis(2006, Calendar.NOVEMBER, 1),
-                getUTCMillis(2006, Calendar.NOVEMBER, 5),
-                getUTCMillis(2007, Calendar.JANUARY, 1)
-        };
+        long[] testTimes =
+                new long[] {
+                    getUTCMillis(2006, Calendar.JANUARY, 1),
+                    getUTCMillis(2006, Calendar.MARCH, 15),
+                    getUTCMillis(2006, Calendar.MARCH, 31),
+                    getUTCMillis(2006, Calendar.APRIL, 5),
+                    getUTCMillis(2006, Calendar.OCTOBER, 25),
+                    getUTCMillis(2006, Calendar.NOVEMBER, 1),
+                    getUTCMillis(2006, Calendar.NOVEMBER, 5),
+                    getUTCMillis(2007, Calendar.JANUARY, 1)
+                };
 
         String[] tzids = getTestZIDs();
         for (int n = 0; n < testTimes.length; n++) {
@@ -617,7 +795,12 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
                 vtz_org.getOffset(time, false, offsets1);
                 vtz_new.getOffset(time, false, offsets2);
                 if (offsets1[0] != offsets2[0] || offsets1[1] != offsets2[1]) {
-                    errln("FAIL: VTimeZone writeSimple for " + tzids[i] + " at time " + time + " failed to the round trip.");
+                    errln(
+                            "FAIL: VTimeZone writeSimple for "
+                                    + tzids[i]
+                                    + " at time "
+                                    + time
+                                    + " failed to the round trip.");
                 }
             }
         }
@@ -654,12 +837,18 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
 
             // Check if TZURL and LAST-MODIFIED headers are preserved
             if (!(tzurl.equals(newvtz1.getTZURL()))) {
-                errln("FAIL: TZURL property is not preserved during the roundtrip conversion.  Before:"
-                        + tzurl + "/After:" + newvtz1.getTZURL());
+                errln(
+                        "FAIL: TZURL property is not preserved during the roundtrip conversion.  Before:"
+                                + tzurl
+                                + "/After:"
+                                + newvtz1.getTZURL());
             }
             if (!(lastmod.equals(newvtz1.getLastModified()))) {
-                errln("FAIL: LAST-MODIFIED property is not preserved during the roundtrip conversion.  Before:"
-                        + lastmod.getTime() + "/After:" + newvtz1.getLastModified().getTime());
+                errln(
+                        "FAIL: LAST-MODIFIED property is not preserved during the roundtrip conversion.  Before:"
+                                + lastmod.getTime()
+                                + "/After:"
+                                + newvtz1.getLastModified().getTime());
             }
         } catch (IOException ioe) {
             errln("FAIL: IO error while writing/reading VTIMEZONE data");
@@ -685,17 +874,22 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
 
             // Check if TZURL and LAST-MODIFIED headers are preserved
             if (!(newtzurl.equals(newvtz2.getTZURL()))) {
-                errln("FAIL: TZURL property is not preserved during the second roundtrip conversion.  Before:"
-                        + newtzurl + "/After:" + newvtz2.getTZURL());
+                errln(
+                        "FAIL: TZURL property is not preserved during the second roundtrip conversion.  Before:"
+                                + newtzurl
+                                + "/After:"
+                                + newvtz2.getTZURL());
             }
             if (!(lastmod.equals(newvtz2.getLastModified()))) {
-                errln("FAIL: LAST-MODIFIED property is not preserved during the second roundtrip conversion.  Before:"
-                        + lastmod.getTime() + "/After:" + newvtz2.getLastModified().getTime());
+                errln(
+                        "FAIL: LAST-MODIFIED property is not preserved during the second roundtrip conversion.  Before:"
+                                + lastmod.getTime()
+                                + "/After:"
+                                + newvtz2.getLastModified().getTime());
             }
         } catch (IOException ioe) {
             errln("FAIL: IO error while writing/reading VTIMEZONE data");
         }
-
     }
 
     /*
@@ -704,43 +898,69 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
      */
     @Test
     public void TestGetSimpleRules() {
-        long[] testTimes = new long[] {
-                getUTCMillis(1970, Calendar.JANUARY, 1),
-                getUTCMillis(2000, Calendar.MARCH, 31),
-                getUTCMillis(2005, Calendar.JULY, 1),
-                getUTCMillis(2010, Calendar.NOVEMBER, 1),
-            };
+        long[] testTimes =
+                new long[] {
+                    getUTCMillis(1970, Calendar.JANUARY, 1),
+                    getUTCMillis(2000, Calendar.MARCH, 31),
+                    getUTCMillis(2005, Calendar.JULY, 1),
+                    getUTCMillis(2010, Calendar.NOVEMBER, 1),
+                };
 
         String[] tzids = getTestZIDs();
         for (int n = 0; n < testTimes.length; n++) {
             long time = testTimes[n];
             for (int i = 0; i < tzids.length; i++) {
-                BasicTimeZone tz = (BasicTimeZone)TimeZone.getTimeZone(tzids[i], TimeZone.TIMEZONE_ICU);
+                BasicTimeZone tz =
+                        (BasicTimeZone) TimeZone.getTimeZone(tzids[i], TimeZone.TIMEZONE_ICU);
                 TimeZoneRule[] rules = tz.getSimpleTimeZoneRulesNear(time);
                 if (rules == null) {
                     errln("FAIL: Failed to extract simple rules for " + tzids[i] + " at " + time);
                 } else {
                     if (rules.length == 1) {
                         if (!(rules[0] instanceof InitialTimeZoneRule)) {
-                            errln("FAIL: Unexpected rule object type is returned for " + tzids[i] + " at " + time);
+                            errln(
+                                    "FAIL: Unexpected rule object type is returned for "
+                                            + tzids[i]
+                                            + " at "
+                                            + time);
                         }
                     } else if (rules.length == 3) {
                         if (!(rules[0] instanceof InitialTimeZoneRule)
                                 || !(rules[1] instanceof AnnualTimeZoneRule)
                                 || !(rules[2] instanceof AnnualTimeZoneRule)) {
-                            errln("FAIL: Unexpected rule object type is returned for " + tzids[i] + " at " + time);
+                            errln(
+                                    "FAIL: Unexpected rule object type is returned for "
+                                            + tzids[i]
+                                            + " at "
+                                            + time);
                         }
                         for (int idx = 1; idx <= 2; idx++) {
-                            DateTimeRule dtr = ((AnnualTimeZoneRule)rules[idx]).getRule();
+                            DateTimeRule dtr = ((AnnualTimeZoneRule) rules[idx]).getRule();
                             if (dtr.getTimeRuleType() != DateTimeRule.WALL_TIME) {
-                                errln("FAIL: WALL_TIME is not used as the time rule in the time zone rule(" + idx + ") for " + tzids[i] + " at " + time);
+                                errln(
+                                        "FAIL: WALL_TIME is not used as the time rule in the time zone rule("
+                                                + idx
+                                                + ") for "
+                                                + tzids[i]
+                                                + " at "
+                                                + time);
                             }
                             if (dtr.getDateRuleType() != DateTimeRule.DOW) {
-                                errln("FAIL: DOW is not used as the date rule in the time zone rule(" + idx + ") for " + tzids[i] + " at " + time);
+                                errln(
+                                        "FAIL: DOW is not used as the date rule in the time zone rule("
+                                                + idx
+                                                + ") for "
+                                                + tzids[i]
+                                                + " at "
+                                                + time);
                             }
                         }
                     } else {
-                        errln("FAIL: Unexpected number of rules returned for " + tzids[i] + " at " + time);
+                        errln(
+                                "FAIL: Unexpected number of rules returned for "
+                                        + tzids[i]
+                                        + " at "
+                                        + time);
                     }
                 }
             }
@@ -756,25 +976,49 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
         long time2 = getUTCMillis(2015, Calendar.JULY, 4);
         long time3 = getUTCMillis(1950, Calendar.JULY, 4);
 
-        DateTimeRule dtr1 = new DateTimeRule(Calendar.FEBRUARY, 29, Calendar.SUNDAY, false,
-                3*HOUR, DateTimeRule.WALL_TIME); // Last Sunday on or before Feb 29, at 3 AM, wall time
-        DateTimeRule dtr2 = new DateTimeRule(Calendar.MARCH, 11, 2*HOUR,
-                DateTimeRule.STANDARD_TIME); // Mar 11, at 2 AM, standard time
-        DateTimeRule dtr3 = new DateTimeRule(Calendar.OCTOBER, -1, Calendar.SATURDAY,
-                6*HOUR, DateTimeRule.UTC_TIME); //Last Saturday in Oct, at 6 AM, UTC
-        DateTimeRule dtr4 = new DateTimeRule(Calendar.MARCH, 8, Calendar.SUNDAY, true,
-                2*HOUR, DateTimeRule.WALL_TIME); // First Sunday on or after Mar 8, at 2 AM, wall time
+        DateTimeRule dtr1 =
+                new DateTimeRule(
+                        Calendar.FEBRUARY,
+                        29,
+                        Calendar.SUNDAY,
+                        false,
+                        3 * HOUR,
+                        DateTimeRule
+                                .WALL_TIME); // Last Sunday on or before Feb 29, at 3 AM, wall time
+        DateTimeRule dtr2 =
+                new DateTimeRule(
+                        Calendar.MARCH,
+                        11,
+                        2 * HOUR,
+                        DateTimeRule.STANDARD_TIME); // Mar 11, at 2 AM, standard time
+        DateTimeRule dtr3 =
+                new DateTimeRule(
+                        Calendar.OCTOBER,
+                        -1,
+                        Calendar.SATURDAY,
+                        6 * HOUR,
+                        DateTimeRule.UTC_TIME); // Last Saturday in Oct, at 6 AM, UTC
+        DateTimeRule dtr4 =
+                new DateTimeRule(
+                        Calendar.MARCH,
+                        8,
+                        Calendar.SUNDAY,
+                        true,
+                        2 * HOUR,
+                        DateTimeRule
+                                .WALL_TIME); // First Sunday on or after Mar 8, at 2 AM, wall time
 
-        AnnualTimeZoneRule a1 = new AnnualTimeZoneRule("a1", -3*HOUR, 1*HOUR, dtr1,
-                2000, AnnualTimeZoneRule.MAX_YEAR);
-        AnnualTimeZoneRule a2 = new AnnualTimeZoneRule("a2", -3*HOUR, 1*HOUR, dtr1,
-                2000, AnnualTimeZoneRule.MAX_YEAR);
-        AnnualTimeZoneRule a3 = new AnnualTimeZoneRule("a3", -3*HOUR, 1*HOUR, dtr1,
-                2000, 2010);
+        AnnualTimeZoneRule a1 =
+                new AnnualTimeZoneRule(
+                        "a1", -3 * HOUR, 1 * HOUR, dtr1, 2000, AnnualTimeZoneRule.MAX_YEAR);
+        AnnualTimeZoneRule a2 =
+                new AnnualTimeZoneRule(
+                        "a2", -3 * HOUR, 1 * HOUR, dtr1, 2000, AnnualTimeZoneRule.MAX_YEAR);
+        AnnualTimeZoneRule a3 = new AnnualTimeZoneRule("a3", -3 * HOUR, 1 * HOUR, dtr1, 2000, 2010);
 
-        InitialTimeZoneRule i1 = new InitialTimeZoneRule("i1", -3*HOUR, 0);
-        InitialTimeZoneRule i2 = new InitialTimeZoneRule("i2", -3*HOUR, 0);
-        InitialTimeZoneRule i3 = new InitialTimeZoneRule("i3", -3*HOUR, 1*HOUR);
+        InitialTimeZoneRule i1 = new InitialTimeZoneRule("i1", -3 * HOUR, 0);
+        InitialTimeZoneRule i2 = new InitialTimeZoneRule("i2", -3 * HOUR, 0);
+        InitialTimeZoneRule i3 = new InitialTimeZoneRule("i3", -3 * HOUR, 1 * HOUR);
 
         long[] emptytimes = {};
         long[] trtimes1 = {0};
@@ -783,33 +1027,41 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
         TimeArrayTimeZoneRule t0 = null;
         try {
             // Try to construct TimeArrayTimeZoneRule with null transition times
-            t0 = new TimeArrayTimeZoneRule("nulltimes", -3*HOUR, 0,
-                    null, DateTimeRule.UTC_TIME);
+            t0 = new TimeArrayTimeZoneRule("nulltimes", -3 * HOUR, 0, null, DateTimeRule.UTC_TIME);
         } catch (IllegalArgumentException iae) {
             logln("TimeArrayTimeZoneRule constructor throws IllegalArgumentException as expected.");
             t0 = null;
         }
         if (t0 != null) {
-            errln("FAIL: TimeArrayTimeZoneRule constructor did not throw IllegalArgumentException for null times");
+            errln(
+                    "FAIL: TimeArrayTimeZoneRule constructor did not throw IllegalArgumentException for null times");
         }
 
         try {
             // Try to construct TimeArrayTimeZoneRule with empty transition times
-            t0 = new TimeArrayTimeZoneRule("nulltimes", -3*HOUR, 0,
-                    emptytimes, DateTimeRule.UTC_TIME);
+            t0 =
+                    new TimeArrayTimeZoneRule(
+                            "nulltimes", -3 * HOUR, 0, emptytimes, DateTimeRule.UTC_TIME);
         } catch (IllegalArgumentException iae) {
             logln("TimeArrayTimeZoneRule constructor throws IllegalArgumentException as expected.");
             t0 = null;
         }
         if (t0 != null) {
-            errln("FAIL: TimeArrayTimeZoneRule constructor did not throw IllegalArgumentException for empty times");
+            errln(
+                    "FAIL: TimeArrayTimeZoneRule constructor did not throw IllegalArgumentException for empty times");
         }
 
-        TimeArrayTimeZoneRule t1 = new TimeArrayTimeZoneRule("t1", -3*HOUR, 0, trtimes1, DateTimeRule.UTC_TIME);
-        TimeArrayTimeZoneRule t2 = new TimeArrayTimeZoneRule("t2", -3*HOUR, 0, trtimes1, DateTimeRule.UTC_TIME);
-        TimeArrayTimeZoneRule t3 = new TimeArrayTimeZoneRule("t3", -3*HOUR, 0, trtimes2, DateTimeRule.UTC_TIME);
-        TimeArrayTimeZoneRule t4 = new TimeArrayTimeZoneRule("t4", -3*HOUR, 0, trtimes1, DateTimeRule.STANDARD_TIME);
-        TimeArrayTimeZoneRule t5 = new TimeArrayTimeZoneRule("t5", -4*HOUR, 1*HOUR, trtimes1, DateTimeRule.WALL_TIME);
+        TimeArrayTimeZoneRule t1 =
+                new TimeArrayTimeZoneRule("t1", -3 * HOUR, 0, trtimes1, DateTimeRule.UTC_TIME);
+        TimeArrayTimeZoneRule t2 =
+                new TimeArrayTimeZoneRule("t2", -3 * HOUR, 0, trtimes1, DateTimeRule.UTC_TIME);
+        TimeArrayTimeZoneRule t3 =
+                new TimeArrayTimeZoneRule("t3", -3 * HOUR, 0, trtimes2, DateTimeRule.UTC_TIME);
+        TimeArrayTimeZoneRule t4 =
+                new TimeArrayTimeZoneRule("t4", -3 * HOUR, 0, trtimes1, DateTimeRule.STANDARD_TIME);
+        TimeArrayTimeZoneRule t5 =
+                new TimeArrayTimeZoneRule(
+                        "t5", -4 * HOUR, 1 * HOUR, trtimes1, DateTimeRule.WALL_TIME);
 
         // AnnualTimeZoneRule#getRule
         if (!a1.getRule().equals(a2.getRule())) {
@@ -819,64 +1071,72 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
         // AnnualTimeZoneRule#getStartYear
         int startYear = a1.getStartYear();
         if (startYear != 2000) {
-            errln("FAIL: The start year of AnnualTimeZoneRule a1 must be 2000 - returned: " + startYear);
+            errln(
+                    "FAIL: The start year of AnnualTimeZoneRule a1 must be 2000 - returned: "
+                            + startYear);
         }
 
         // AnnualTimeZoneRule#getEndYear
         int endYear = a1.getEndYear();
         if (endYear != AnnualTimeZoneRule.MAX_YEAR) {
-            errln("FAIL: The start year of AnnualTimeZoneRule a1 must be MAX_YEAR - returned: " + endYear);
+            errln(
+                    "FAIL: The start year of AnnualTimeZoneRule a1 must be MAX_YEAR - returned: "
+                            + endYear);
         }
         endYear = a3.getEndYear();
         if (endYear != 2010) {
-            errln("FAIL: The start year of AnnualTimeZoneRule a3 must be 2010 - returned: " + endYear);
+            errln(
+                    "FAIL: The start year of AnnualTimeZoneRule a3 must be 2010 - returned: "
+                            + endYear);
         }
 
         // AnnualTimeZone#getStartInYear
-        Date d1 = a1.getStartInYear(2005, -3*HOUR, 0);
-        Date d2 = a3.getStartInYear(2005, -3*HOUR, 0);
+        Date d1 = a1.getStartInYear(2005, -3 * HOUR, 0);
+        Date d2 = a3.getStartInYear(2005, -3 * HOUR, 0);
         if (d1 == null || d2 == null || !d1.equals(d2)) {
             errln("FAIL: AnnualTimeZoneRule#getStartInYear did not work as expected");
         }
-        d2 = a3.getStartInYear(2015, -3*HOUR, 0);
+        d2 = a3.getStartInYear(2015, -3 * HOUR, 0);
         if (d2 != null) {
-            errln("FAIL: AnnualTimeZoneRule#getSTartInYear returned non-null date for 2015 which is out of rule range");
+            errln(
+                    "FAIL: AnnualTimeZoneRule#getSTartInYear returned non-null date for 2015 which is out of rule range");
         }
 
         // AnnualTimeZone#getFirstStart
-        d1 = a1.getFirstStart(-3*HOUR, 0);
-        d2 = a1.getFirstStart(-4*HOUR, 1*HOUR);
+        d1 = a1.getFirstStart(-3 * HOUR, 0);
+        d2 = a1.getFirstStart(-4 * HOUR, 1 * HOUR);
         if (d1 == null || d2 == null || !d1.equals(d2)) {
             errln("FAIL: The same start time should be returned by getFirstStart");
         }
 
         // AnnualTimeZone#getFinalStart
-        d1 = a1.getFinalStart(-3*HOUR, 0);
+        d1 = a1.getFinalStart(-3 * HOUR, 0);
         if (d1 != null) {
             errln("FAIL: Non-null Date is returned by getFinalStart for a1");
         }
-        d1 = a1.getStartInYear(2010, -3*HOUR, 0);
-        d2 = a3.getFinalStart(-3*HOUR, 0);
+        d1 = a1.getStartInYear(2010, -3 * HOUR, 0);
+        d2 = a3.getFinalStart(-3 * HOUR, 0);
         if (d1 == null || d2 == null || !d1.equals(d2)) {
             errln("FAIL: Bad date is returned by getFinalStart");
         }
 
         // AnnualTimeZone#getNextStart / getPreviousStart
-        d1 = a1.getNextStart(time1, -3*HOUR, 0, false);
+        d1 = a1.getNextStart(time1, -3 * HOUR, 0, false);
         if (d1 == null) {
             errln("FAIL: Null Date is returned by getNextStart");
         } else {
-            d2 = a1.getPreviousStart(d1.getTime(), -3*HOUR, 0, true);
+            d2 = a1.getPreviousStart(d1.getTime(), -3 * HOUR, 0, true);
             if (d2 == null || !d1.equals(d2)) {
                 errln("FAIL: Bad Date is returned by getPreviousStart");
             }
         }
-        d1 = a3.getNextStart(time2, -3*HOUR, 0, false);
+        d1 = a3.getNextStart(time2, -3 * HOUR, 0, false);
         if (d1 != null) {
-            errln("FAIL: getNextStart must return null when no start time is available after the base time");
+            errln(
+                    "FAIL: getNextStart must return null when no start time is available after the base time");
         }
-        d1 = a3.getFinalStart(-3*HOUR, 0);
-        d2 = a3.getPreviousStart(time2, -3*HOUR, 0, false);
+        d1 = a3.getFinalStart(-3 * HOUR, 0);
+        d2 = a3.getPreviousStart(time2, -3 * HOUR, 0, false);
         if (d1 == null || d2 == null || !d1.equals(d2)) {
             errln("FAIL: getPreviousStart does not match with getFinalStart after the end year");
         }
@@ -892,7 +1152,8 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
             errln("FAIL: AnnualTimeZoneRule a1 is equivalent to itself, but returned false");
         }
         if (a1.isEquivalentTo(t1)) {
-            errln("FAIL: AnnualTimeZoneRule is not equivalent to TimeArrayTimeZoneRule, but returned true");
+            errln(
+                    "FAIL: AnnualTimeZoneRule is not equivalent to TimeArrayTimeZoneRule, but returned true");
         }
 
         // AnnualTimeZone#isTransitionRule
@@ -922,7 +1183,8 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
             errln("FAIL: InitialTimeZoneRule i1 is not equivalent to i3, but returned true");
         }
         if (i1.isEquivalentTo(a1)) {
-            errln("FAIL: An InitialTimeZoneRule is not equivalent to an AnnualTimeZoneRule, but returned true");
+            errln(
+                    "FAIL: An InitialTimeZoneRule is not equivalent to an AnnualTimeZoneRule, but returned true");
         }
 
         // InitialTimeZoneRule#getFirstStart/getFinalStart/getNextStart/getPreviousStart
@@ -956,7 +1218,6 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
             logln("InitialTimeZoneRule i1 : " + str);
         }
 
-
         // TimeArrayTimeZoneRule#getStartTimes
         long[] times = t1.getStartTimes();
         if (times == null || times.length == 0 || times[0] != 0) {
@@ -968,7 +1229,8 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
             errln("FAIL: TimeArrayTimeZoneRule t1 uses UTC_TIME, but different type is returned");
         }
         if (t4.getTimeType() != DateTimeRule.STANDARD_TIME) {
-            errln("FAIL: TimeArrayTimeZoneRule t4 uses STANDARD_TIME, but different type is returned");
+            errln(
+                    "FAIL: TimeArrayTimeZoneRule t4 uses STANDARD_TIME, but different type is returned");
         }
         if (t5.getTimeType() != DateTimeRule.WALL_TIME) {
             errln("FAIL: TimeArrayTimeZoneRule t5 uses WALL_TIME, but different type is returned");
@@ -983,30 +1245,33 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
         if (d1 == null || d1.getTime() != trtimes1[0]) {
             errln("FAIL: Bad final start time returned from TimeArrayTimeZoneRule t1");
         }
-        d1 = t4.getFirstStart(-4*HOUR, 1*HOUR);
-        if (d1 == null || (d1.getTime() != trtimes1[0] + 4*HOUR)) {
+        d1 = t4.getFirstStart(-4 * HOUR, 1 * HOUR);
+        if (d1 == null || (d1.getTime() != trtimes1[0] + 4 * HOUR)) {
             errln("FAIL: Bad first start time returned from TimeArrayTimeZoneRule t4");
         }
-        d1 = t5.getFirstStart(-4*HOUR, 1*HOUR);
-        if (d1 == null || (d1.getTime() != trtimes1[0] + 3*HOUR)) {
+        d1 = t5.getFirstStart(-4 * HOUR, 1 * HOUR);
+        if (d1 == null || (d1.getTime() != trtimes1[0] + 3 * HOUR)) {
             errln("FAIL: Bad first start time returned from TimeArrayTimeZoneRule t5");
         }
 
         // TimeArrayTimeZoneRule#getNextStart/getPreviousStart
-        d1 = t3.getNextStart(time1, -3*HOUR, 1*HOUR, false);
+        d1 = t3.getNextStart(time1, -3 * HOUR, 1 * HOUR, false);
         if (d1 != null) {
-            errln("FAIL: Non-null Date is returned by getNextStart after the final transition for t3");
+            errln(
+                    "FAIL: Non-null Date is returned by getNextStart after the final transition for t3");
         }
-        d1 = t3.getPreviousStart(time1, -3*HOUR, 1*HOUR, false);
+        d1 = t3.getPreviousStart(time1, -3 * HOUR, 1 * HOUR, false);
         if (d1 == null || d1.getTime() != trtimes2[1]) {
             errln("FAIL: Bad start time returned by getPreviousStart for t3");
         } else {
-            d2 = t3.getPreviousStart(d1.getTime(), -3*HOUR, 1*HOUR, false);
+            d2 = t3.getPreviousStart(d1.getTime(), -3 * HOUR, 1 * HOUR, false);
             if (d2 == null || d2.getTime() != trtimes2[0]) {
                 errln("FAIL: Bad start time returned by getPreviousStart for t3");
             }
         }
-        d1 = t3.getPreviousStart(time3, -3*HOUR, 1*HOUR, false); //time3 - year 1950, no result expected
+        d1 =
+                t3.getPreviousStart(
+                        time3, -3 * HOUR, 1 * HOUR, false); // time3 - year 1950, no result expected
         if (d1 != null) {
             errln("FAIL: Non-null Date is returned by getPrevoousStart for t3");
         }
@@ -1022,7 +1287,8 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
             errln("FAIL: TimeArrayTimeZoneRule t1 is not equivalent to t4, but returned true");
         }
         if (t1.isEquivalentTo(a1)) {
-            errln("FAIL: TimeArrayTimeZoneRule is not equivalent to AnnualTimeZoneRule, but returned true");
+            errln(
+                    "FAIL: TimeArrayTimeZoneRule is not equivalent to AnnualTimeZoneRule, but returned true");
         }
 
         // TimeArrayTimeZoneRule#isTransitionRule
@@ -1077,15 +1343,17 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
         TimeZoneTransition tzt1, tzt2;
 
         // BasicTimeZone API implementation in SimpleTimeZone
-        SimpleTimeZone stz1 = new SimpleTimeZone(-5*HOUR, "GMT-5");
+        SimpleTimeZone stz1 = new SimpleTimeZone(-5 * HOUR, "GMT-5");
 
         tzt1 = stz1.getNextTransition(time1, false);
         if (tzt1 != null) {
-            errln("FAIL: No transition must be returned by getNextTransition for SimpleTimeZone with no DST rule");
+            errln(
+                    "FAIL: No transition must be returned by getNextTransition for SimpleTimeZone with no DST rule");
         }
         tzt1 = stz1.getPreviousTransition(time1, false);
         if (tzt1 != null) {
-            errln("FAIL: No transition must be returned by getPreviousTransition  for SimpleTimeZone with no DST rule");
+            errln(
+                    "FAIL: No transition must be returned by getPreviousTransition  for SimpleTimeZone with no DST rule");
         }
         TimeZoneRule[] tzrules = stz1.getTimeZoneRules();
         if (tzrules.length != 1 || !(tzrules[0] instanceof InitialTimeZoneRule)) {
@@ -1093,11 +1361,13 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
         }
 
         // Set DST rule
-        stz1.setStartRule(Calendar.MARCH, 11, 2*HOUR); // March 11
-        stz1.setEndRule(Calendar.NOVEMBER, 1, Calendar.SUNDAY, 2*HOUR); // First Sunday in November
+        stz1.setStartRule(Calendar.MARCH, 11, 2 * HOUR); // March 11
+        stz1.setEndRule(
+                Calendar.NOVEMBER, 1, Calendar.SUNDAY, 2 * HOUR); // First Sunday in November
         tzt1 = stz1.getNextTransition(time1, false);
         if (tzt1 == null) {
-            errln("FAIL: Non-null transition must be returned by getNextTransition for SimpleTimeZone with a DST rule");
+            errln(
+                    "FAIL: Non-null transition must be returned by getNextTransition for SimpleTimeZone with a DST rule");
         } else {
             String str = tzt1.toString();
             if (str == null || str.length() == 0) {
@@ -1108,13 +1378,16 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
         }
         tzt1 = stz1.getPreviousTransition(time1, false);
         if (tzt1 == null) {
-            errln("FAIL: Non-null transition must be returned by getPreviousTransition  for SimpleTimeZone with a DST rule");
+            errln(
+                    "FAIL: Non-null transition must be returned by getPreviousTransition  for SimpleTimeZone with a DST rule");
         }
         tzrules = stz1.getTimeZoneRules();
-        if (tzrules.length != 3 || !(tzrules[0] instanceof InitialTimeZoneRule)
+        if (tzrules.length != 3
+                || !(tzrules[0] instanceof InitialTimeZoneRule)
                 || !(tzrules[1] instanceof AnnualTimeZoneRule)
                 || !(tzrules[2] instanceof AnnualTimeZoneRule)) {
-            errln("FAIL: Invalid results returned by SimpleTimeZone#getTimeZoneRules for a SimpleTimeZone with DST");
+            errln(
+                    "FAIL: Invalid results returned by SimpleTimeZone#getTimeZoneRules for a SimpleTimeZone with DST");
         }
         // Set DST start year
         stz1.setStartYear(2007);
@@ -1135,14 +1408,17 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
     @Test
     public void TestVTimeZoneCoverage() {
         final String TZID = "Europe/Moscow";
-        BasicTimeZone otz = (BasicTimeZone)TimeZone.getTimeZone(TZID, TimeZone.TIMEZONE_ICU);
+        BasicTimeZone otz = (BasicTimeZone) TimeZone.getTimeZone(TZID, TimeZone.TIMEZONE_ICU);
         VTimeZone vtz = VTimeZone.create(TZID);
 
         // getOffset(era, year, month, day, dayOfWeek, milliseconds)
-        int offset1 = otz.getOffset(GregorianCalendar.AD, 2007, Calendar.JULY, 1, Calendar.SUNDAY, 0);
-        int offset2 = vtz.getOffset(GregorianCalendar.AD, 2007, Calendar.JULY, 1, Calendar.SUNDAY, 0);
+        int offset1 =
+                otz.getOffset(GregorianCalendar.AD, 2007, Calendar.JULY, 1, Calendar.SUNDAY, 0);
+        int offset2 =
+                vtz.getOffset(GregorianCalendar.AD, 2007, Calendar.JULY, 1, Calendar.SUNDAY, 0);
         if (offset1 != offset2) {
-            errln("FAIL: getOffset(int,int,int,int,int,int) returned different results in VTimeZone and OlsonTimeZone");
+            errln(
+                    "FAIL: getOffset(int,int,int,int,int,int) returned different results in VTimeZone and OlsonTimeZone");
         }
 
         // getOffset(date, local, offsets)
@@ -1152,7 +1428,8 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
         otz.getOffset(t, false, offsets1);
         vtz.getOffset(t, false, offsets2);
         if (offsets1[0] != offsets2[0] || offsets1[1] != offsets2[1]) {
-            errln("FAIL: getOffset(long,boolean,int[]) returned different results in VTimeZone and OlsonTimeZone");
+            errln(
+                    "FAIL: getOffset(long,boolean,int[]) returned different results in VTimeZone and OlsonTimeZone");
         }
 
         // getRawOffset
@@ -1168,11 +1445,12 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
 
         // useDaylightTime
         if (otz.useDaylightTime() != vtz.useDaylightTime()) {
-            errln("FAIL: useDaylightTime returned different results in VTimeZone and OlsonTimeZone");
+            errln(
+                    "FAIL: useDaylightTime returned different results in VTimeZone and OlsonTimeZone");
         }
 
         // setRawOffset
-        final int RAW = -10*HOUR;
+        final int RAW = -10 * HOUR;
         VTimeZone tmpvtz = vtz.clone();
         tmpvtz.setRawOffset(RAW);
         if (tmpvtz.getRawOffset() != RAW) {
@@ -1181,7 +1459,9 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
 
         // hasSameRules
         boolean bSame = otz.hasSameRules(vtz);
-        logln("OlsonTimeZone#hasSameRules(VTimeZone) should return false always for now - actual: " + bSame);
+        logln(
+                "OlsonTimeZone#hasSameRules(VTimeZone) should return false always for now - actual: "
+                        + bSame);
 
         // getTZURL/setTZURL
         final String TZURL = "http://icu-project.org/timezone";
@@ -1204,7 +1484,8 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
         vtz.setLastModified(newdate);
         lastmod = vtz.getLastModified();
         if (!newdate.equals(lastmod)) {
-            errln("FAIL: Date returned by getLastModified does not match the one set by setLastModified");
+            errln(
+                    "FAIL: Date returned by getLastModified does not match the one set by setLastModified");
         }
 
         // getNextTransition/getPreviousTransition
@@ -1212,12 +1493,14 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
         TimeZoneTransition tzt1 = otz.getNextTransition(base, true);
         TimeZoneTransition tzt2 = vtz.getNextTransition(base, true);
         if (tzt1.equals(tzt2)) {
-            errln("FAIL: getNextTransition returned different results in VTimeZone and OlsonTimeZone");
+            errln(
+                    "FAIL: getNextTransition returned different results in VTimeZone and OlsonTimeZone");
         }
         tzt1 = otz.getPreviousTransition(base, false);
         tzt2 = vtz.getPreviousTransition(base, false);
         if (tzt1.equals(tzt2)) {
-            errln("FAIL: getPreviousTransition returned different results in VTimeZone and OlsonTimeZone");
+            errln(
+                    "FAIL: getPreviousTransition returned different results in VTimeZone and OlsonTimeZone");
         }
 
         // hasEquivalentTransitions
@@ -1237,7 +1520,11 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
 
         int[] offsets_vtzc = new int[2];
         VTimeZone vtzc = VTimeZone.create("PST");
-        vtzc.getOffsetFromLocal(Calendar.getInstance(vtzc).getTimeInMillis(), LocalOption.STANDARD_FORMER, LocalOption.STANDARD_LATTER, offsets_vtzc);
+        vtzc.getOffsetFromLocal(
+                Calendar.getInstance(vtzc).getTimeInMillis(),
+                LocalOption.STANDARD_FORMER,
+                LocalOption.STANDARD_LATTER,
+                offsets_vtzc);
         if (offsets_vtzc[0] > offsets_vtzc[1]) {
             errln("Error getOffsetFromLocal()");
         }
@@ -1254,17 +1541,17 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
 
         // Create VTimeZone for Asia/Tokyo
         String asiaTokyo =
-                "BEGIN:VTIMEZONE\r\n" +
-                "TZID:Asia\r\n" +
-                "\t/Tokyo\r\n" +
-                "BEGIN:STANDARD\r\n" +
-                "TZOFFSETFROM:+0900\r\n" +
-                "TZOFFSETTO:+0900\r\n" +
-                "TZNAME:JST\r\n" +
-                "DTSTART:19700101\r\n" +
-                " T000000\r\n" +
-                "END:STANDARD\r\n" +
-                "END:VTIMEZONE";
+                "BEGIN:VTIMEZONE\r\n"
+                        + "TZID:Asia\r\n"
+                        + "\t/Tokyo\r\n"
+                        + "BEGIN:STANDARD\r\n"
+                        + "TZOFFSETFROM:+0900\r\n"
+                        + "TZOFFSETTO:+0900\r\n"
+                        + "TZNAME:JST\r\n"
+                        + "DTSTART:19700101\r\n"
+                        + " T000000\r\n"
+                        + "END:STANDARD\r\n"
+                        + "END:VTIMEZONE";
         r = new StringReader(asiaTokyo);
         VTimeZone tokyo = VTimeZone.create(r);
         if (tokyo == null) {
@@ -1273,32 +1560,32 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
             // Make sure offsets are correct
             int[] offsets = new int[2];
             tokyo.getOffset(System.currentTimeMillis(), false, offsets);
-            if (offsets[0] != 9*HOUR || offsets[1] != 0) {
+            if (offsets[0] != 9 * HOUR || offsets[1] != 0) {
                 errln("FAIL: Bad offsets returned by a VTimeZone created for Tokyo");
             }
         }
 
         // Create VTimeZone from VTIMEZONE data
         String fooData =
-            "BEGIN:VCALENDAR\r\n" +
-            "BEGIN:VTIMEZONE\r\n" +
-            "TZID:FOO\r\n" +
-            "BEGIN:STANDARD\r\n" +
-            "TZOFFSETFROM:-0700\r\n" +
-            "TZOFFSETTO:-0800\r\n" +
-            "TZNAME:FST\r\n" +
-            "DTSTART:20071010T010000\r\n" +
-            "RRULE:FREQ=YEARLY;BYDAY=WE;BYMONTHDAY=10,11,12,13,14,15,16;BYMONTH=10\r\n" +
-            "END:STANDARD\r\n" +
-            "BEGIN:DAYLIGHT\r\n" +
-            "TZOFFSETFROM:-0800\r\n" +
-            "TZOFFSETTO:-0700\r\n" +
-            "TZNAME:FDT\r\n" +
-            "DTSTART:20070415T010000\r\n" +
-            "RRULE:FREQ=YEARLY;BYMONTHDAY=15;BYMONTH=4\r\n" +
-            "END:DAYLIGHT\r\n" +
-            "END:VTIMEZONE\r\n" +
-            "END:VCALENDAR";
+                "BEGIN:VCALENDAR\r\n"
+                        + "BEGIN:VTIMEZONE\r\n"
+                        + "TZID:FOO\r\n"
+                        + "BEGIN:STANDARD\r\n"
+                        + "TZOFFSETFROM:-0700\r\n"
+                        + "TZOFFSETTO:-0800\r\n"
+                        + "TZNAME:FST\r\n"
+                        + "DTSTART:20071010T010000\r\n"
+                        + "RRULE:FREQ=YEARLY;BYDAY=WE;BYMONTHDAY=10,11,12,13,14,15,16;BYMONTH=10\r\n"
+                        + "END:STANDARD\r\n"
+                        + "BEGIN:DAYLIGHT\r\n"
+                        + "TZOFFSETFROM:-0800\r\n"
+                        + "TZOFFSETTO:-0700\r\n"
+                        + "TZNAME:FDT\r\n"
+                        + "DTSTART:20070415T010000\r\n"
+                        + "RRULE:FREQ=YEARLY;BYMONTHDAY=15;BYMONTH=4\r\n"
+                        + "END:DAYLIGHT\r\n"
+                        + "END:VTIMEZONE\r\n"
+                        + "END:VCALENDAR";
 
         r = new StringReader(fooData);
         VTimeZone foo = VTimeZone.create(r);
@@ -1320,94 +1607,92 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
     public void TestT6216() {
         // Test case in #6216
         String tokyoTZ =
-            "BEGIN:VCALENDAR\r\n" +
-            "VERSION:2.0\r\n" +
-            "PRODID:-//PYVOBJECT//NONSGML Version 1//EN\r\n" +
-            "BEGIN:VTIMEZONE\r\n" +
-            "TZID:Asia/Tokyo\r\n" +
-            "BEGIN:STANDARD\r\n" +
-            "DTSTART:20000101T000000\r\n" +
-            "RRULE:FREQ=YEARLY;BYMONTH=1\r\n" +
-            "TZNAME:Asia/Tokyo\r\n" +
-            "TZOFFSETFROM:+0900\r\n" +
-            "TZOFFSETTO:+0900\r\n" +
-            "END:STANDARD\r\n" +
-            "END:VTIMEZONE\r\n" +
-            "END:VCALENDAR";
+                "BEGIN:VCALENDAR\r\n"
+                        + "VERSION:2.0\r\n"
+                        + "PRODID:-//PYVOBJECT//NONSGML Version 1//EN\r\n"
+                        + "BEGIN:VTIMEZONE\r\n"
+                        + "TZID:Asia/Tokyo\r\n"
+                        + "BEGIN:STANDARD\r\n"
+                        + "DTSTART:20000101T000000\r\n"
+                        + "RRULE:FREQ=YEARLY;BYMONTH=1\r\n"
+                        + "TZNAME:Asia/Tokyo\r\n"
+                        + "TZOFFSETFROM:+0900\r\n"
+                        + "TZOFFSETTO:+0900\r\n"
+                        + "END:STANDARD\r\n"
+                        + "END:VTIMEZONE\r\n"
+                        + "END:VCALENDAR";
 
         // Single final rule, overlapping with another
         String finalOverlap =
-            "BEGIN:VCALENDAR\r\n" +
-            "BEGIN:VTIMEZONE\r\n" +
-            "TZID:FinalOverlap\r\n" +
-            "BEGIN:STANDARD\r\n" +
-            "TZOFFSETFROM:-0200\r\n" +
-            "TZOFFSETTO:-0300\r\n" +
-            "TZNAME:STD\r\n" +
-            "DTSTART:20001029T020000\r\n" +
-            "RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10\r\n" +
-            "END:STANDARD\r\n" +
-            "BEGIN:DAYLIGHT\r\n" +
-            "TZOFFSETFROM:-0300\r\n" +
-            "TZOFFSETTO:-0200\r\n" +
-            "TZNAME:DST\r\n" +
-            "DTSTART:19990404T020000\r\n" +
-            "RRULE:FREQ=YEARLY;BYDAY=1SU;BYMONTH=4;UNTIL=20050403T040000Z\r\n" +
-            "END:DAYLIGHT\r\n" +
-            "END:VTIMEZONE\r\n" +
-            "END:VCALENDAR";
+                "BEGIN:VCALENDAR\r\n"
+                        + "BEGIN:VTIMEZONE\r\n"
+                        + "TZID:FinalOverlap\r\n"
+                        + "BEGIN:STANDARD\r\n"
+                        + "TZOFFSETFROM:-0200\r\n"
+                        + "TZOFFSETTO:-0300\r\n"
+                        + "TZNAME:STD\r\n"
+                        + "DTSTART:20001029T020000\r\n"
+                        + "RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10\r\n"
+                        + "END:STANDARD\r\n"
+                        + "BEGIN:DAYLIGHT\r\n"
+                        + "TZOFFSETFROM:-0300\r\n"
+                        + "TZOFFSETTO:-0200\r\n"
+                        + "TZNAME:DST\r\n"
+                        + "DTSTART:19990404T020000\r\n"
+                        + "RRULE:FREQ=YEARLY;BYDAY=1SU;BYMONTH=4;UNTIL=20050403T040000Z\r\n"
+                        + "END:DAYLIGHT\r\n"
+                        + "END:VTIMEZONE\r\n"
+                        + "END:VCALENDAR";
 
         // Single final rule, no overlapping with another
         String finalNonOverlap =
-            "BEGIN:VCALENDAR\r\n" +
-            "BEGIN:VTIMEZONE\r\n" +
-            "TZID:FinalNonOverlap\r\n" +
-            "BEGIN:STANDARD\r\n" +
-            "TZOFFSETFROM:-0200\r\n" +
-            "TZOFFSETTO:-0300\r\n" +
-            "TZNAME:STD\r\n" +
-            "DTSTART:20001029T020000\r\n" +
-            "RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10;UNTIL=20041031T040000Z\r\n" +
-            "END:STANDARD\r\n" +
-            "BEGIN:DAYLIGHT\r\n" +
-            "TZOFFSETFROM:-0300\r\n" +
-            "TZOFFSETTO:-0200\r\n" +
-            "TZNAME:DST\r\n" +
-            "DTSTART:19990404T020000\r\n" +
-            "RRULE:FREQ=YEARLY;BYDAY=1SU;BYMONTH=4;UNTIL=20050403T040000Z\r\n" +
-            "END:DAYLIGHT\r\n" +
-            "BEGIN:STANDARD\r\n" +
-            "TZOFFSETFROM:-0200\r\n" +
-            "TZOFFSETTO:-0300\r\n" +
-            "TZNAME:STDFINAL\r\n" +
-            "DTSTART:20071028T020000\r\n" +
-            "RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10\r\n" +
-            "END:STANDARD\r\n" +
-            "END:VTIMEZONE\r\n" +
-            "END:VCALENDAR";
+                "BEGIN:VCALENDAR\r\n"
+                        + "BEGIN:VTIMEZONE\r\n"
+                        + "TZID:FinalNonOverlap\r\n"
+                        + "BEGIN:STANDARD\r\n"
+                        + "TZOFFSETFROM:-0200\r\n"
+                        + "TZOFFSETTO:-0300\r\n"
+                        + "TZNAME:STD\r\n"
+                        + "DTSTART:20001029T020000\r\n"
+                        + "RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10;UNTIL=20041031T040000Z\r\n"
+                        + "END:STANDARD\r\n"
+                        + "BEGIN:DAYLIGHT\r\n"
+                        + "TZOFFSETFROM:-0300\r\n"
+                        + "TZOFFSETTO:-0200\r\n"
+                        + "TZNAME:DST\r\n"
+                        + "DTSTART:19990404T020000\r\n"
+                        + "RRULE:FREQ=YEARLY;BYDAY=1SU;BYMONTH=4;UNTIL=20050403T040000Z\r\n"
+                        + "END:DAYLIGHT\r\n"
+                        + "BEGIN:STANDARD\r\n"
+                        + "TZOFFSETFROM:-0200\r\n"
+                        + "TZOFFSETTO:-0300\r\n"
+                        + "TZNAME:STDFINAL\r\n"
+                        + "DTSTART:20071028T020000\r\n"
+                        + "RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10\r\n"
+                        + "END:STANDARD\r\n"
+                        + "END:VTIMEZONE\r\n"
+                        + "END:VCALENDAR";
 
         int[][] TestDates = {
-                {1995, Calendar.JANUARY, 1},
-                {1995, Calendar.JULY, 1},
-                {2000, Calendar.JANUARY, 1},
-                {2000, Calendar.JULY, 1},
-                {2005, Calendar.JANUARY, 1},
-                {2005, Calendar.JULY, 1},
-                {2010, Calendar.JANUARY, 1},
-                {2010, Calendar.JULY, 1},
+            {1995, Calendar.JANUARY, 1},
+            {1995, Calendar.JULY, 1},
+            {2000, Calendar.JANUARY, 1},
+            {2000, Calendar.JULY, 1},
+            {2005, Calendar.JANUARY, 1},
+            {2005, Calendar.JULY, 1},
+            {2010, Calendar.JANUARY, 1},
+            {2010, Calendar.JULY, 1},
         };
 
         String[] TestZones = {
-            tokyoTZ,
-            finalOverlap,
-            finalNonOverlap,
+            tokyoTZ, finalOverlap, finalNonOverlap,
         };
 
         int[][] Expected = {
-          //  JAN90      JUL90      JAN00      JUL00      JAN05      JUL05      JAN10      JUL10
-            { 32400000,  32400000,  32400000,  32400000,  32400000,  32400000,  32400000,  32400000},
-            {-10800000, -10800000,  -7200000,  -7200000, -10800000,  -7200000, -10800000, -10800000},
-            {-10800000, -10800000,  -7200000,  -7200000, -10800000,  -7200000, -10800000, -10800000},
+            //  JAN90      JUL90      JAN00      JUL00      JAN05      JUL05      JAN10      JUL10
+            {32400000, 32400000, 32400000, 32400000, 32400000, 32400000, 32400000, 32400000},
+            {-10800000, -10800000, -7200000, -7200000, -10800000, -7200000, -10800000, -10800000},
+            {-10800000, -10800000, -7200000, -7200000, -10800000, -7200000, -10800000, -10800000},
         };
 
         // Get test times
@@ -1425,7 +1710,13 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
                 for (int j = 0; j < times.length; j++) {
                     int offset = vtz.getOffset(times[j]);
                     if (offset != Expected[i][j]) {
-                        errln("FAIL: Invalid offset at time(" + times[j] + "):" + offset + " Expected:" + Expected[i][j]);
+                        errln(
+                                "FAIL: Invalid offset at time("
+                                        + times[j]
+                                        + "):"
+                                        + offset
+                                        + " Expected:"
+                                        + Expected[i][j]);
                     }
                 }
             } catch (Exception e) {
@@ -1439,28 +1730,43 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
         // getNext/PreviousTransition implementation in SimpleTimeZone
         // used to use a bad condition for detecting if DST is enabled or not.
 
-        SimpleTimeZone stz = new SimpleTimeZone(0, "CustomID",
-                Calendar.JANUARY, 1, Calendar.SUNDAY, 0,
-                Calendar.JULY, 1, Calendar.SUNDAY, 0);
+        SimpleTimeZone stz =
+                new SimpleTimeZone(
+                        0,
+                        "CustomID",
+                        Calendar.JANUARY,
+                        1,
+                        Calendar.SUNDAY,
+                        0,
+                        Calendar.JULY,
+                        1,
+                        Calendar.SUNDAY,
+                        0);
 
-        long t = 1230681600000L; //2008-12-31T00:00:00
-        long expectedNext = 1231027200000L; //2009-01-04T00:00:00
-        long expectedPrev = 1215298800000L; //2008-07-06T00:00:00
+        long t = 1230681600000L; // 2008-12-31T00:00:00
+        long expectedNext = 1231027200000L; // 2009-01-04T00:00:00
+        long expectedPrev = 1215298800000L; // 2008-07-06T00:00:00
 
         TimeZoneTransition tzt = stz.getNextTransition(t, false);
         if (tzt == null) {
             errln("FAIL: No transition returned by getNextTransition.");
-        } else if (tzt.getTime() != expectedNext){
-            errln("FAIL: Wrong transition time returned by getNextTransition - "
-                    + tzt.getTime() + " Expected: " + expectedNext);
+        } else if (tzt.getTime() != expectedNext) {
+            errln(
+                    "FAIL: Wrong transition time returned by getNextTransition - "
+                            + tzt.getTime()
+                            + " Expected: "
+                            + expectedNext);
         }
 
         tzt = stz.getPreviousTransition(t, true);
         if (tzt == null) {
             errln("FAIL: No transition returned by getPreviousTransition.");
-        } else if (tzt.getTime() != expectedPrev){
-            errln("FAIL: Wrong transition time returned by getPreviousTransition - "
-                    + tzt.getTime() + " Expected: " + expectedPrev);
+        } else if (tzt.getTime() != expectedPrev) {
+            errln(
+                    "FAIL: Wrong transition time returned by getPreviousTransition - "
+                            + tzt.getTime()
+                            + " Expected: "
+                            + expectedPrev);
         }
     }
 
@@ -1468,10 +1774,14 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
     public void TestBasicTimeZoneCoverage() {
         TimeZone tz = TimeZone.getTimeZone("PST");
         if (tz instanceof BasicTimeZone) {
-            BasicTimeZone btz = (BasicTimeZone)tz;
-            int []offsets = new int[2];
+            BasicTimeZone btz = (BasicTimeZone) tz;
+            int[] offsets = new int[2];
 
-            btz.getOffsetFromLocal(Calendar.getInstance().getTimeInMillis(), LocalOption.STANDARD_FORMER, LocalOption.STANDARD_LATTER, offsets);
+            btz.getOffsetFromLocal(
+                    Calendar.getInstance().getTimeInMillis(),
+                    LocalOption.STANDARD_FORMER,
+                    LocalOption.STANDARD_LATTER,
+                    offsets);
             if (offsets[0] > offsets[1]) {
                 errln("Error calling getOffsetFromLocal().");
             }
@@ -1487,7 +1797,7 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
      * getPreviousTransition in the specified time range
      */
     private void verifyTransitions(TimeZone tz, long start, long end) {
-        BasicTimeZone icutz = (BasicTimeZone)tz;
+        BasicTimeZone icutz = (BasicTimeZone) tz;
         long time;
         int[] before = new int[2];
         int[] after = new int[2];
@@ -1496,7 +1806,7 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
         // Ascending
         tzt0 = null;
         time = start;
-        while(true) {
+        while (true) {
             TimeZoneTransition tzt = icutz.getNextTransition(time, false);
 
             if (tzt == null) {
@@ -1510,13 +1820,20 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
             icutz.getOffset(time - 1, false, before);
 
             if (after[0] == before[0] && after[1] == before[1]) {
-                errln("FAIL: False transition returned by getNextTransition for " + icutz.getID() + " at " + time);
+                errln(
+                        "FAIL: False transition returned by getNextTransition for "
+                                + icutz.getID()
+                                + " at "
+                                + time);
             }
-            if (tzt0 != null &&
-                    (tzt0.getTo().getRawOffset() != tzt.getFrom().getRawOffset()
-                    || tzt0.getTo().getDSTSavings() != tzt.getFrom().getDSTSavings())) {
-                errln("FAIL: TO rule of the previous transition does not match FROM rule of this transition at "
-                        + time + " for " + icutz.getID());
+            if (tzt0 != null
+                    && (tzt0.getTo().getRawOffset() != tzt.getFrom().getRawOffset()
+                            || tzt0.getTo().getDSTSavings() != tzt.getFrom().getDSTSavings())) {
+                errln(
+                        "FAIL: TO rule of the previous transition does not match FROM rule of this transition at "
+                                + time
+                                + " for "
+                                + icutz.getID());
             }
             tzt0 = tzt;
         }
@@ -1524,7 +1841,7 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
         // Descending
         tzt0 = null;
         time = end;
-        while(true) {
+        while (true) {
             TimeZoneTransition tzt = icutz.getPreviousTransition(time, false);
             if (tzt == null) {
                 break;
@@ -1537,14 +1854,21 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
             icutz.getOffset(time - 1, false, before);
 
             if (after[0] == before[0] && after[1] == before[1]) {
-                errln("FAIL: False transition returned by getPreviousTransition for " + icutz.getID() + " at " + time);
+                errln(
+                        "FAIL: False transition returned by getPreviousTransition for "
+                                + icutz.getID()
+                                + " at "
+                                + time);
             }
 
-            if (tzt0 != null &&
-                    (tzt0.getFrom().getRawOffset() != tzt.getTo().getRawOffset()
-                    || tzt0.getFrom().getDSTSavings() != tzt.getTo().getDSTSavings())) {
-                errln("FAIL: TO rule of the next transition does not match FROM rule in this transition at "
-                        + time + " for " + icutz.getID());
+            if (tzt0 != null
+                    && (tzt0.getFrom().getRawOffset() != tzt.getTo().getRawOffset()
+                            || tzt0.getFrom().getDSTSavings() != tzt.getTo().getDSTSavings())) {
+                errln(
+                        "FAIL: TO rule of the next transition does not match FROM rule in this transition at "
+                                + time
+                                + " for "
+                                + icutz.getID());
             }
             tzt0 = tzt;
         }
@@ -1553,14 +1877,15 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
     /*
      * Compare all time transitions in 2 time zones in the specified time range in ascending order
      */
-    private void compareTransitionsAscending(TimeZone tz1, TimeZone tz2, long start, long end, boolean inclusive) {
-        BasicTimeZone z1 = (BasicTimeZone)tz1;
-        BasicTimeZone z2 = (BasicTimeZone)tz2;
+    private void compareTransitionsAscending(
+            TimeZone tz1, TimeZone tz2, long start, long end, boolean inclusive) {
+        BasicTimeZone z1 = (BasicTimeZone) tz1;
+        BasicTimeZone z2 = (BasicTimeZone) tz2;
         String zid1 = tz1.getID();
         String zid2 = tz2.getID();
 
         long time = start;
-        while(true) {
+        while (true) {
             TimeZoneTransition tzt1 = z1.getNextTransition(time, inclusive);
             TimeZoneTransition tzt2 = z2.getNextTransition(time, inclusive);
             boolean inRange1 = false;
@@ -1580,17 +1905,38 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
                 break;
             }
             if (!inRange1) {
-                errln("FAIL: " + zid1 + " does not have any transitions after " + time + " before " + end);
+                errln(
+                        "FAIL: "
+                                + zid1
+                                + " does not have any transitions after "
+                                + time
+                                + " before "
+                                + end);
                 break;
             }
             if (!inRange2) {
-                errln("FAIL: " + zid2 + " does not have any transitions after " + time + " before " + end);
+                errln(
+                        "FAIL: "
+                                + zid2
+                                + " does not have any transitions after "
+                                + time
+                                + " before "
+                                + end);
                 break;
             }
             if (tzt1.getTime() != tzt2.getTime()) {
-                errln("FAIL: First transition after " + time + " "
-                        + zid1 + "[" + tzt1.getTime() + "] "
-                        + zid2 + "[" + tzt2.getTime() + "]");
+                errln(
+                        "FAIL: First transition after "
+                                + time
+                                + " "
+                                + zid1
+                                + "["
+                                + tzt1.getTime()
+                                + "] "
+                                + zid2
+                                + "["
+                                + tzt2.getTime()
+                                + "]");
                 break;
             }
             time = tzt1.getTime();
@@ -1603,13 +1949,14 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
     /*
      * Compare all time transitions in 2 time zones in the specified time range in descending order
      */
-    private void compareTransitionsDescending(TimeZone tz1, TimeZone tz2, long start, long end, boolean inclusive) {
-        BasicTimeZone z1 = (BasicTimeZone)tz1;
-        BasicTimeZone z2 = (BasicTimeZone)tz2;
+    private void compareTransitionsDescending(
+            TimeZone tz1, TimeZone tz2, long start, long end, boolean inclusive) {
+        BasicTimeZone z1 = (BasicTimeZone) tz1;
+        BasicTimeZone z2 = (BasicTimeZone) tz2;
         String zid1 = tz1.getID();
         String zid2 = tz2.getID();
         long time = end;
-        while(true) {
+        while (true) {
             TimeZoneTransition tzt1 = z1.getPreviousTransition(time, inclusive);
             TimeZoneTransition tzt2 = z2.getPreviousTransition(time, inclusive);
             boolean inRange1 = false;
@@ -1629,17 +1976,38 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
                 break;
             }
             if (!inRange1) {
-                errln("FAIL: " + zid1 + " does not have any transitions before " + time + " after " + start);
+                errln(
+                        "FAIL: "
+                                + zid1
+                                + " does not have any transitions before "
+                                + time
+                                + " after "
+                                + start);
                 break;
             }
             if (!inRange2) {
-                errln("FAIL: " + zid2 + " does not have any transitions before " + time + " after " + start);
+                errln(
+                        "FAIL: "
+                                + zid2
+                                + " does not have any transitions before "
+                                + time
+                                + " after "
+                                + start);
                 break;
             }
             if (tzt1.getTime() != tzt2.getTime()) {
-                errln("FAIL: Last transition before " + time + " "
-                        + zid1 + "[" + tzt1.getTime() + "] "
-                        + zid2 + "[" + tzt2.getTime() + "]");
+                errln(
+                        "FAIL: Last transition before "
+                                + time
+                                + " "
+                                + zid1
+                                + "["
+                                + tzt1.getTime()
+                                + "] "
+                                + zid2
+                                + "["
+                                + tzt2.getTime()
+                                + "]");
                 break;
             }
             time = tzt1.getTime();
@@ -1676,7 +2044,7 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
     private static final int[][] TESTYEARS = {
         {1895, 1905}, // including int32 minimum second
         {1965, 1975}, // including the epoch
-        {1995, 2015}  // practical year range
+        {1995, 2015} // practical year range
     };
 
     private long[] getTestTimeRange(int idx) {
@@ -1714,9 +2082,13 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
      * This version returns true if transition time delta is within the given
      * delta range.
      */
-    private static boolean hasEquivalentTransitions(BasicTimeZone tz1, BasicTimeZone tz2,
-                                            long start, long end,
-                                            boolean ignoreDstAmount, int maxTransitionTimeDelta) {
+    private static boolean hasEquivalentTransitions(
+            BasicTimeZone tz1,
+            BasicTimeZone tz2,
+            long start,
+            long end,
+            boolean ignoreDstAmount,
+            int maxTransitionTimeDelta) {
         if (tz1.hasSameRules(tz2)) {
             return true;
         }
@@ -1730,8 +2102,8 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
 
         if (ignoreDstAmount) {
             if ((offsets1[0] + offsets1[1] != offsets2[0] + offsets2[1])
-                || (offsets1[1] != 0 && offsets2[1] == 0)
-                || (offsets1[1] == 0 && offsets2[1] != 0)) {
+                    || (offsets1[1] != 0 && offsets2[1] == 0)
+                    || (offsets1[1] == 0 && offsets2[1] != 0)) {
                 return false;
             }
         } else {
@@ -1753,7 +2125,8 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
                             && tr1.getTime() <= end
                             && (tr1.getFrom().getRawOffset() + tr1.getFrom().getDSTSavings()
                                     == tr1.getTo().getRawOffset() + tr1.getTo().getDSTSavings())
-                            && (tr1.getFrom().getDSTSavings() != 0 && tr1.getTo().getDSTSavings() != 0)) {
+                            && (tr1.getFrom().getDSTSavings() != 0
+                                    && tr1.getTo().getDSTSavings() != 0)) {
                         tr1 = tz1.getNextTransition(tr1.getTime(), false);
                     } else {
                         break;
@@ -1764,12 +2137,14 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
                             && tr2.getTime() <= end
                             && (tr2.getFrom().getRawOffset() + tr2.getFrom().getDSTSavings()
                                     == tr2.getTo().getRawOffset() + tr2.getTo().getDSTSavings())
-                            && (tr2.getFrom().getDSTSavings() != 0 && tr2.getTo().getDSTSavings() != 0)) {
+                            && (tr2.getFrom().getDSTSavings() != 0
+                                    && tr2.getTo().getDSTSavings() != 0)) {
                         tr2 = tz2.getNextTransition(tr2.getTime(), false);
                     } else {
                         break;
                     }
-                }            }
+                }
+            }
 
             boolean inRange1 = false;
             boolean inRange2 = false;
@@ -1795,14 +2170,14 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
             }
             if (ignoreDstAmount) {
                 if (tr1.getTo().getRawOffset() + tr1.getTo().getDSTSavings()
-                            != tr2.getTo().getRawOffset() + tr2.getTo().getDSTSavings()
-                        || tr1.getTo().getDSTSavings() != 0 &&  tr2.getTo().getDSTSavings() == 0
-                        || tr1.getTo().getDSTSavings() == 0 &&  tr2.getTo().getDSTSavings() != 0) {
+                                != tr2.getTo().getRawOffset() + tr2.getTo().getDSTSavings()
+                        || tr1.getTo().getDSTSavings() != 0 && tr2.getTo().getDSTSavings() == 0
+                        || tr1.getTo().getDSTSavings() == 0 && tr2.getTo().getDSTSavings() != 0) {
                     return false;
                 }
             } else {
-                if (tr1.getTo().getRawOffset() != tr2.getTo().getRawOffset() ||
-                    tr1.getTo().getDSTSavings() != tr2.getTo().getDSTSavings()) {
+                if (tr1.getTo().getRawOffset() != tr2.getTo().getRawOffset()
+                        || tr1.getTo().getDSTSavings() != tr2.getTo().getDSTSavings()) {
                     return false;
                 }
             }
@@ -1822,20 +2197,29 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
         InitialTimeZoneRule initialRule = new InitialTimeZoneRule(stdName, 18000000, 0);
         RuleBasedTimeZone rbtz = new RuleBasedTimeZone(id, initialRule);
 
-        DateTimeRule dtRule = new DateTimeRule(Calendar.OCTOBER, -1, Calendar.SUNDAY, 10800000, DateTimeRule.WALL_TIME);
-        AnnualTimeZoneRule atzRule = new AnnualTimeZoneRule(stdName, 18000000, 0, dtRule, 2000, 2010);
+        DateTimeRule dtRule =
+                new DateTimeRule(
+                        Calendar.OCTOBER, -1, Calendar.SUNDAY, 10800000, DateTimeRule.WALL_TIME);
+        AnnualTimeZoneRule atzRule =
+                new AnnualTimeZoneRule(stdName, 18000000, 0, dtRule, 2000, 2010);
         rbtz.addTransitionRule(atzRule);
 
-        dtRule = new DateTimeRule(Calendar.MARCH, -1, Calendar.SUNDAY, 7200000, DateTimeRule.WALL_TIME);
+        dtRule =
+                new DateTimeRule(
+                        Calendar.MARCH, -1, Calendar.SUNDAY, 7200000, DateTimeRule.WALL_TIME);
         atzRule = new AnnualTimeZoneRule(dstName, 18000000, 3600000, dtRule, 2000, 2010);
         rbtz.addTransitionRule(atzRule);
 
         dtRule = new DateTimeRule(Calendar.JANUARY, 1, 0, DateTimeRule.WALL_TIME);
-        atzRule = new AnnualTimeZoneRule(stdName, 21600000, 0, dtRule, 2011, AnnualTimeZoneRule.MAX_YEAR);
+        atzRule =
+                new AnnualTimeZoneRule(
+                        stdName, 21600000, 0, dtRule, 2011, AnnualTimeZoneRule.MAX_YEAR);
         rbtz.addTransitionRule(atzRule);
 
         dtRule = new DateTimeRule(Calendar.JANUARY, 1, 1, DateTimeRule.WALL_TIME);
-        atzRule = new AnnualTimeZoneRule(dstName, 21600000, 0, dtRule, 2011, AnnualTimeZoneRule.MAX_YEAR);
+        atzRule =
+                new AnnualTimeZoneRule(
+                        dstName, 21600000, 0, dtRule, 2011, AnnualTimeZoneRule.MAX_YEAR);
         rbtz.addTransitionRule(atzRule);
 
         int[] expected = {21600000, 0};
@@ -1843,7 +2227,15 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
         try {
             rbtz.getOffset(1293822000000L /* 2010-12-31 19:00:00 UTC */, false, offsets);
             if (offsets[0] != expected[0] || offsets[1] != expected[1]) {
-                errln("Fail: Wrong offsets: " + offsets[0] + "/" + offsets[1] + " Expected: " + expected[0] + "/" + expected[1]);
+                errln(
+                        "Fail: Wrong offsets: "
+                                + offsets[0]
+                                + "/"
+                                + offsets[1]
+                                + " Expected: "
+                                + expected[0]
+                                + "/"
+                                + expected[1]);
             }
         } catch (Exception e) {
             errln("Fail: Exception thrown - " + e.getMessage());

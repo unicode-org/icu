@@ -8,12 +8,6 @@
  */
 package com.ibm.icu.dev.test.format;
 
-import java.util.Arrays;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.SimpleFormatterImpl;
 import com.ibm.icu.impl.StandardPlural;
@@ -27,24 +21,27 @@ import com.ibm.icu.text.MeasureFormat.FormatWidth;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.ULocale;
+import java.util.Arrays;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 /**
  * @author markdavis
- *
  */
 @RunWith(JUnit4.class)
 public class PluralRangesTest extends CoreTestFmwk {
     @Test
     public void TestLocaleData() {
         String[][] tests = {
-                {"de", "other", "one", "one"},
-                {"xxx", "other", "other", "other" },
-                {"de", "one", "other", "other"},
-                {"de", "other", "one", "one"},
-                {"de", "other", "other", "other"},
-                {"ro", "one", "few", "few"},
-                {"ro", "one", "other", "other"},
-                {"ro", "few", "one", "few"},
+            {"de", "other", "one", "one"},
+            {"xxx", "other", "other", "other"},
+            {"de", "one", "other", "other"},
+            {"de", "other", "one", "one"},
+            {"de", "other", "other", "other"},
+            {"ro", "one", "few", "few"},
+            {"ro", "one", "other", "other"},
+            {"ro", "few", "one", "few"},
         };
         for (String[] test : tests) {
             final ULocale locale = new ULocale(test[0]);
@@ -61,8 +58,8 @@ public class PluralRangesTest extends CoreTestFmwk {
     @Test
     public void TestRangePattern() {
         String[][] tests = {
-                {"de", "SHORT", "{0}–{1}"},
-                {"ja", "NARROW", "{0}～{1}"},
+            {"de", "SHORT", "{0}–{1}"},
+            {"ja", "NARROW", "{0}～{1}"},
         };
         for (String[] test : tests) {
             ULocale ulocale = new ULocale(test[0]);
@@ -77,25 +74,113 @@ public class PluralRangesTest extends CoreTestFmwk {
     @Test
     public void TestFormatting() {
         Object[][] tests = {
-                {0.0, 1.0, ULocale.FRANCE, UnitWidth.FULL_NAME, MeasureUnit.FAHRENHEIT, "0–1\u00A0degré Fahrenheit"},
-                {1.0, 2.0, ULocale.FRANCE, UnitWidth.FULL_NAME, MeasureUnit.FAHRENHEIT, "1–2\u00A0degrés Fahrenheit"},
-                {3.1, 4.25, ULocale.FRANCE, UnitWidth.SHORT, MeasureUnit.FAHRENHEIT, "3,1–4,25\u202F°F"},
-                {3.1, 4.25, ULocale.ENGLISH, UnitWidth.SHORT, MeasureUnit.FAHRENHEIT, "3.1–4.25°F"},
-                {3.1, 4.25, ULocale.CHINESE, UnitWidth.FULL_NAME, MeasureUnit.INCH, "3.1-4.25英寸"},
-                {0.0, 1.0, ULocale.ENGLISH, UnitWidth.FULL_NAME, MeasureUnit.INCH, "0–1 inches"},
-
-                {0.0, 1.0, ULocale.ENGLISH, UnitWidth.NARROW, Currency.getInstance("EUR"), "€0.00 – €1.00"},
-                {0.0, 1.0, ULocale.FRENCH, UnitWidth.NARROW, Currency.getInstance("EUR"), "0,00–1,00 €"},
-                {0.0, 100.0, ULocale.FRENCH, UnitWidth.NARROW, Currency.getInstance("JPY"), "0–100\u00a0¥"},
-
-                {0.0, 1.0, ULocale.ENGLISH, UnitWidth.SHORT, Currency.getInstance("EUR"), "€0.00 – €1.00"},
-                {0.0, 1.0, ULocale.FRENCH, UnitWidth.SHORT, Currency.getInstance("EUR"), "0,00–1,00\u00a0€"},
-                {0.0, 100.0, ULocale.FRENCH, UnitWidth.SHORT, Currency.getInstance("JPY"), "0–100\u00a0JPY"},
-
-                {0.0, 1.0, ULocale.ENGLISH, UnitWidth.FULL_NAME, Currency.getInstance("EUR"), "0.00–1.00 euros"},
-                {0.0, 1.0, ULocale.FRENCH, UnitWidth.FULL_NAME, Currency.getInstance("EUR"), "0,00–1,00 euro"},
-                {0.0, 2.0, ULocale.FRENCH, UnitWidth.FULL_NAME, Currency.getInstance("EUR"), "0,00–2,00 euros"},
-                {0.0, 100.0, ULocale.FRENCH, UnitWidth.FULL_NAME, Currency.getInstance("JPY"), "0–100 yens japonais"},
+            {
+                0.0,
+                1.0,
+                ULocale.FRANCE,
+                UnitWidth.FULL_NAME,
+                MeasureUnit.FAHRENHEIT,
+                "0–1\u00A0degré Fahrenheit"
+            },
+            {
+                1.0,
+                2.0,
+                ULocale.FRANCE,
+                UnitWidth.FULL_NAME,
+                MeasureUnit.FAHRENHEIT,
+                "1–2\u00A0degrés Fahrenheit"
+            },
+            {
+                3.1,
+                4.25,
+                ULocale.FRANCE,
+                UnitWidth.SHORT,
+                MeasureUnit.FAHRENHEIT,
+                "3,1–4,25\u202F°F"
+            },
+            {3.1, 4.25, ULocale.ENGLISH, UnitWidth.SHORT, MeasureUnit.FAHRENHEIT, "3.1–4.25°F"},
+            {3.1, 4.25, ULocale.CHINESE, UnitWidth.FULL_NAME, MeasureUnit.INCH, "3.1-4.25英寸"},
+            {0.0, 1.0, ULocale.ENGLISH, UnitWidth.FULL_NAME, MeasureUnit.INCH, "0–1 inches"},
+            {
+                0.0,
+                1.0,
+                ULocale.ENGLISH,
+                UnitWidth.NARROW,
+                Currency.getInstance("EUR"),
+                "€0.00 – €1.00"
+            },
+            {
+                0.0,
+                1.0,
+                ULocale.FRENCH,
+                UnitWidth.NARROW,
+                Currency.getInstance("EUR"),
+                "0,00–1,00 €"
+            },
+            {
+                0.0,
+                100.0,
+                ULocale.FRENCH,
+                UnitWidth.NARROW,
+                Currency.getInstance("JPY"),
+                "0–100\u00a0¥"
+            },
+            {
+                0.0,
+                1.0,
+                ULocale.ENGLISH,
+                UnitWidth.SHORT,
+                Currency.getInstance("EUR"),
+                "€0.00 – €1.00"
+            },
+            {
+                0.0,
+                1.0,
+                ULocale.FRENCH,
+                UnitWidth.SHORT,
+                Currency.getInstance("EUR"),
+                "0,00–1,00\u00a0€"
+            },
+            {
+                0.0,
+                100.0,
+                ULocale.FRENCH,
+                UnitWidth.SHORT,
+                Currency.getInstance("JPY"),
+                "0–100\u00a0JPY"
+            },
+            {
+                0.0,
+                1.0,
+                ULocale.ENGLISH,
+                UnitWidth.FULL_NAME,
+                Currency.getInstance("EUR"),
+                "0.00–1.00 euros"
+            },
+            {
+                0.0,
+                1.0,
+                ULocale.FRENCH,
+                UnitWidth.FULL_NAME,
+                Currency.getInstance("EUR"),
+                "0,00–1,00 euro"
+            },
+            {
+                0.0,
+                2.0,
+                ULocale.FRENCH,
+                UnitWidth.FULL_NAME,
+                Currency.getInstance("EUR"),
+                "0,00–2,00 euros"
+            },
+            {
+                0.0,
+                100.0,
+                ULocale.FRENCH,
+                UnitWidth.FULL_NAME,
+                Currency.getInstance("JPY"),
+                "0–100 yens japonais"
+            },
         };
         int i = 0;
         for (Object[] test : tests) {
@@ -107,10 +192,12 @@ public class PluralRangesTest extends CoreTestFmwk {
             final MeasureUnit unit = (MeasureUnit) test[4];
             final String expected = (String) test[5];
 
-            FormattedNumberRange actual = NumberRangeFormatter.with()
-                .numberFormatterBoth(NumberFormatter.with().unit(unit).unitWidth(unitWidth))
-                .locale(locale)
-                .formatRange(low, high);
+            FormattedNumberRange actual =
+                    NumberRangeFormatter.with()
+                            .numberFormatterBoth(
+                                    NumberFormatter.with().unit(unit).unitWidth(unitWidth))
+                            .locale(locale)
+                            .formatRange(low, high);
             assertEquals(i + " Formatting unit", expected, actual.toString());
         }
     }

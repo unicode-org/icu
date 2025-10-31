@@ -9,19 +9,6 @@
 
 package com.ibm.icu.dev.test.charset;
 
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetDecoder;
-import java.nio.charset.CharsetEncoder;
-import java.nio.charset.CoderResult;
-import java.nio.charset.CodingErrorAction;
-import java.util.Iterator;
-import java.util.List;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
 import com.ibm.icu.charset.CharsetCallback;
 import com.ibm.icu.charset.CharsetDecoderICU;
 import com.ibm.icu.charset.CharsetEncoderICU;
@@ -34,37 +21,43 @@ import com.ibm.icu.dev.test.TestDataModule.TestData;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.text.UnicodeSet;
-
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CharsetEncoder;
+import java.nio.charset.CoderResult;
+import java.nio.charset.CodingErrorAction;
+import java.util.Iterator;
+import java.util.List;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
-/**
- * This maps to convtest.c which tests the test file for data-driven conversion tests.
- *
- */
+/** This maps to convtest.c which tests the test file for data-driven conversion tests. */
 @RunWith(JUnitParamsRunner.class)
 public class TestConversion extends TestFmwk {
     /**
-     * This maps to the C struct of conversion case in convtest.h that stores the
-     * data for a conversion test
-     *
+     * This maps to the C struct of conversion case in convtest.h that stores the data for a
+     * conversion test
      */
     private class ConversionCase {
-        int caseNr;                                             // testcase index
-        String option = null;                                   // callback options
-        CodingErrorAction cbErrorAction = null;                 // callback action type
+        int caseNr; // testcase index
+        String option = null; // callback options
+        CodingErrorAction cbErrorAction = null; // callback action type
         CharBuffer toUnicodeResult = null;
         ByteBuffer fromUnicodeResult = null;
 
         // data retrieved from a test case conversion.txt
-        String charset;                                         // charset
-        String unicode;                                         // unicode string
-        ByteBuffer bytes;                                       // byte
-        int[] offsets;                                          // offsets
-        boolean finalFlush;                                     // flush
-        boolean fallbacks;                                      // fallback
-        String outErrorCode;                                    // errorCode
-        String cbopt;                                           // callback
+        String charset; // charset
+        String unicode; // unicode string
+        ByteBuffer bytes; // byte
+        int[] offsets; // offsets
+        boolean finalFlush; // flush
+        boolean fallbacks; // fallback
+        String outErrorCode; // errorCode
+        String cbopt; // callback
 
         // TestGetUnicodeSet variables
         String map;
@@ -87,8 +80,7 @@ public class TestConversion extends TestFmwk {
 
     // public methods --------------------------------------------------------
 
-    public TestConversion() {
-    }
+    public TestConversion() {}
 
     @SuppressWarnings("unused")
     private List<TestDataPair> getTestData() throws Exception {
@@ -100,17 +92,17 @@ public class TestConversion extends TestFmwk {
      * type of conversion.
      */
     @Test
-    @Parameters(method="getTestData")
+    @Parameters(method = "getTestData")
     public void conversionTest(TestDataPair pair) {
         TestData td = pair.td;
-        //DataMap settings = pair.dm;
+        // DataMap settings = pair.dm;
 
         int testFromUnicode = 0;
         int testToUnicode = 0;
         String testName = td.getName().toString();
 
         // Iterate through and get each of the test case to process
-        for (Iterator<DataMap> iter = td.getDataIterator(); iter.hasNext();) {
+        for (Iterator<DataMap> iter = td.getDataIterator(); iter.hasNext(); ) {
             DataMap testcase = iter.next();
 
             if (testName.equalsIgnoreCase("toUnicode")) {
@@ -130,7 +122,6 @@ public class TestConversion extends TestFmwk {
     }
 
     // private methods -------------------------------------------------------
-
 
     // fromUnicode test worker functions ---------------------------------------
     private void TestFromUnicode(DataMap testcase, int caseNr) {
@@ -162,9 +153,7 @@ public class TestConversion extends TestFmwk {
          * This feature is not in ICU4J.
          * See #9601
          */
-        String [] testsToSkip = {
-                "*test2"
-        };
+        String[] testsToSkip = {"*test2"};
         for (int i = 0; i < testsToSkip.length; i++) {
             if (cc.charset.equals(testsToSkip[i])) {
                 logln("");
@@ -186,9 +175,14 @@ public class TestConversion extends TestFmwk {
         if (cc.offsets.length == 0) {
             cc.offsets = null;
         } else if (cc.offsets.length != cc.bytes.limit()) {
-            errln("fromUnicode[" + cc.caseNr + "] bytes[" + cc.bytes
-                    + "] and offsets[" + cc.offsets.length
-                    + "] must have the same length");
+            errln(
+                    "fromUnicode["
+                            + cc.caseNr
+                            + "] bytes["
+                            + cc.bytes
+                            + "] and offsets["
+                            + cc.offsets.length
+                            + "] must have the same length");
             return;
         }
 
@@ -196,34 +190,32 @@ public class TestConversion extends TestFmwk {
         if (cc.cbopt.length() > 0) {
 
             switch ((cc.cbopt).charAt(0)) {
-            case '?':
-                cc.cbErrorAction = CodingErrorAction.REPLACE;
-                break;
-            case '0':
-                cc.cbErrorAction = CodingErrorAction.IGNORE;
-                break;
-            case '.':
-                cc.cbErrorAction = CodingErrorAction.REPORT;
-                break;
-            case '&':
-                cc.cbErrorAction = CodingErrorAction.REPLACE;
-                cc.cbEncoder = CharsetCallback.FROM_U_CALLBACK_ESCAPE;
-                break;
-            default:
-                cc.cbErrorAction = null;
-                break;
+                case '?':
+                    cc.cbErrorAction = CodingErrorAction.REPLACE;
+                    break;
+                case '0':
+                    cc.cbErrorAction = CodingErrorAction.IGNORE;
+                    break;
+                case '.':
+                    cc.cbErrorAction = CodingErrorAction.REPORT;
+                    break;
+                case '&':
+                    cc.cbErrorAction = CodingErrorAction.REPLACE;
+                    cc.cbEncoder = CharsetCallback.FROM_U_CALLBACK_ESCAPE;
+                    break;
+                default:
+                    cc.cbErrorAction = null;
+                    break;
             }
 
             // check for any options for the callback value --
-            cc.option = cc.cbErrorAction == null ? cc.cbopt : cc.cbopt
-                    .substring(1);
+            cc.option = cc.cbErrorAction == null ? cc.cbopt : cc.cbopt.substring(1);
             if (cc.option == null) {
                 cc.option = null;
             }
         }
         FromUnicodeCase(cc);
     }
-
 
     private void FromUnicodeCase(ConversionCase cc) {
         // create charset encoder for conversion test
@@ -232,17 +224,21 @@ public class TestConversion extends TestFmwk {
         Charset charset = null;
         try {
             // if cc.charset starts with '*', obtain it from com/ibm/icu/dev/data/testdata
-            charset = (cc.charset != null && cc.charset.length() > 0 && cc.charset.charAt(0) == '*')
-                    ? (Charset) provider.charsetForName(cc.charset.substring(1),
-                        "com/ibm/icu/dev/data/testdata", this.getClass().getClassLoader())
-                    : (Charset) provider.charsetForName(cc.charset);
+            charset =
+                    (cc.charset != null && cc.charset.length() > 0 && cc.charset.charAt(0) == '*')
+                            ? (Charset)
+                                    provider.charsetForName(
+                                            cc.charset.substring(1),
+                                            "com/ibm/icu/dev/data/testdata",
+                                            this.getClass().getClassLoader())
+                            : (Charset) provider.charsetForName(cc.charset);
             if (charset != null) {
                 encoder = charset.newEncoder();
                 encoder.onMalformedInput(CodingErrorAction.REPLACE);
                 encoder.onUnmappableCharacter(CodingErrorAction.REPLACE);
                 if (encoder instanceof CharsetEncoderICU) {
-                    ((CharsetEncoderICU)encoder).setFallbackUsed(cc.fallbacks);
-                    if (((CharsetEncoderICU)encoder).isFallbackUsed() != cc.fallbacks) {
+                    ((CharsetEncoderICU) encoder).setFallbackUsed(cc.fallbacks);
+                    if (((CharsetEncoderICU) encoder).isFallbackUsed() != cc.fallbacks) {
                         errln("Fallback could not be set for " + cc.charset);
                     }
                 }
@@ -252,7 +248,10 @@ public class TestConversion extends TestFmwk {
         }
         if (encoder == null) {
             if (cc.charset.charAt(0) == UNSUPPORTED_CHARSET_SYMBOL) {
-                logln("Skipping test:(" + cc.charset.substring(1) + ") due to ICU Charset not supported at this time");
+                logln(
+                        "Skipping test:("
+                                + cc.charset.substring(1)
+                                + ") due to ICU Charset not supported at this time");
             } else {
                 errln(cc.charset + " was not found");
             }
@@ -262,8 +261,12 @@ public class TestConversion extends TestFmwk {
         // set the callback for the encoder
         if (cc.cbErrorAction != null) {
             if (cc.cbEncoder != null) {
-                ((CharsetEncoderICU)encoder).setFromUCallback(CoderResult.malformedForLength(1), cc.cbEncoder, cc.option);
-                ((CharsetEncoderICU)encoder).setFromUCallback(CoderResult.unmappableForLength(1), cc.cbEncoder, cc.option);
+                ((CharsetEncoderICU) encoder)
+                        .setFromUCallback(
+                                CoderResult.malformedForLength(1), cc.cbEncoder, cc.option);
+                ((CharsetEncoderICU) encoder)
+                        .setFromUCallback(
+                                CoderResult.unmappableForLength(1), cc.cbEncoder, cc.option);
             } else {
                 encoder.onUnmappableCharacter(cc.cbErrorAction);
                 encoder.onMalformedInput(cc.cbErrorAction);
@@ -282,7 +285,8 @@ public class TestConversion extends TestFmwk {
             if (cc.cbErrorAction.equals(CodingErrorAction.REPLACE)) {
                 if (cc.cbopt.length() > 1) {
                     if (cc.cbopt.length() > 1 && cc.cbopt.charAt(1) == '=') {
-                        logln("Skipping test due to limitation in Java API - substitution string not supported");
+                        logln(
+                                "Skipping test due to limitation in Java API - substitution string not supported");
                         return;
                     } else {
                         // // read NUL-separated subchar first, if any
@@ -294,7 +298,8 @@ public class TestConversion extends TestFmwk {
                             try {
                                 encoder.replaceWith(toByteArray(cc.cbopt));
                             } catch (Exception e) {
-                                logln("Skipping test due to limitation in Java API - substitution character sequence size error");
+                                logln(
+                                        "Skipping test due to limitation in Java API - substitution character sequence size error");
                                 return;
                             }
                         }
@@ -308,8 +313,12 @@ public class TestConversion extends TestFmwk {
         // testing by steps using charset.encoder(in,out,flush)
         int resultLength;
         boolean ok;
-        String steps[][] = { { "0", "bulk" }, // must be first for offsets to be checked
-                { "1", "step=1" }, { "3", "step=3" }, { "7", "step=7" } };
+        String steps[][] = {
+            {"0", "bulk"}, // must be first for offsets to be checked
+            {"1", "step=1"},
+            {"3", "step=3"},
+            {"7", "step=7"}
+        };
         int i, step;
 
         ok = true;
@@ -322,11 +331,17 @@ public class TestConversion extends TestFmwk {
                 resultLength = stepFromUnicode(cc, encoder, step);
                 ok = checkFromUnicode(cc, resultLength);
             } catch (Exception ex) {
-                errln("Test failed: " + ex.getClass().getName() + " thrown: " + cc.charset+ " [" + cc.caseNr + "]");
+                errln(
+                        "Test failed: "
+                                + ex.getClass().getName()
+                                + " thrown: "
+                                + cc.charset
+                                + " ["
+                                + cc.caseNr
+                                + "]");
                 ex.printStackTrace(System.out);
                 return;
             }
-
         }
         // testing by whole buffer using out = charset.encoder(in)
         while (ok && cc.finalFlush) {
@@ -355,7 +370,7 @@ public class TestConversion extends TestFmwk {
                     break;
                 }
             } catch (Exception e) {
-                //check the error code to see if it matches cc.errorCode
+                // check the error code to see if it matches cc.errorCode
                 logln("Encoder returned an error code");
                 logln("ErrorCode expected is: " + cc.outErrorCode);
                 logln("Error Result is: " + e.toString());
@@ -371,7 +386,8 @@ public class TestConversion extends TestFmwk {
         }
 
         int sourceLen = cc.unicode.length();
-        int targetLen = cc.bytes.capacity() + 20;  // for BOM, and to let failures produce excess output
+        int targetLen =
+                cc.bytes.capacity() + 20; // for BOM, and to let failures produce excess output
         CharBuffer source = CharBuffer.wrap(cc.unicode.toCharArray());
         ByteBuffer target = ByteBuffer.allocate(targetLen);
         cc.fromUnicodeResult = null;
@@ -389,7 +405,7 @@ public class TestConversion extends TestFmwk {
 
         CoderResult cr = null;
 
-        for (;;) {
+        for (; ; ) {
             source.limit(currentSourceLimit);
             target.limit(currentTargetLimit);
 
@@ -403,7 +419,7 @@ public class TestConversion extends TestFmwk {
                     }
                     // Do a final flush for cleanup, then break out
                     // Encode loop, exits with cr==underflow in normal operation.
-                    //target.limit(targetLen);
+                    // target.limit(targetLen);
                     target.limit(targetLen);
                     cr = encoder.flush(target);
                     if (cr.isUnderflow()) {
@@ -411,8 +427,11 @@ public class TestConversion extends TestFmwk {
                     } else if (cr.isOverflow()) {
                         errln(cc.caseNrAsString() + " Flush is producing excessive output");
                     } else {
-                        errln(cc.caseNrAsString() + " Flush operation failed.  CoderResult = \""
-                                + cr.toString() + "\"");
+                        errln(
+                                cc.caseNrAsString()
+                                        + " Flush operation failed.  CoderResult = \""
+                                        + cr.toString()
+                                        + "\"");
                     }
                     break;
                 }
@@ -430,7 +449,6 @@ public class TestConversion extends TestFmwk {
                 logln("Error Result is: " + cr.toString());
                 break;
             }
-
         }
 
         cc.fromUnicodeResult = target;
@@ -476,31 +494,36 @@ public class TestConversion extends TestFmwk {
         if (cc.offsets.length == 0) {
             cc.offsets = null;
         } else if (cc.offsets.length != cc.unicode.length()) {
-            errln("Skipping test: toUnicode[" + cc.caseNr + "] unicode["
-                    + cc.unicode.length() + "] and offsets["
-                    + cc.offsets.length + "] must have the same length");
+            errln(
+                    "Skipping test: toUnicode["
+                            + cc.caseNr
+                            + "] unicode["
+                            + cc.unicode.length()
+                            + "] and offsets["
+                            + cc.offsets.length
+                            + "] must have the same length");
             return;
         }
         // check for the callback replacement value for unmappable
         // characters or malformed errors
         if (cc.cbopt.length() > 0) {
             switch ((cc.cbopt).charAt(0)) {
-            case '?': // CALLBACK_SUBSTITUTE
-                cc.cbErrorAction = CodingErrorAction.REPLACE;
-                break;
-            case '0': // CALLBACK_SKIP
-                cc.cbErrorAction = CodingErrorAction.IGNORE;
-                break;
-            case '.': // CALLBACK_STOP
-                cc.cbErrorAction = CodingErrorAction.REPORT;
-                break;
-            case '&': // CALLBACK_ESCAPE
-                cc.cbErrorAction = CodingErrorAction.REPORT;
-                cc.cbDecoder = CharsetCallback.TO_U_CALLBACK_ESCAPE;
-                break;
-            default:
-                cc.cbErrorAction = null;
-                break;
+                case '?': // CALLBACK_SUBSTITUTE
+                    cc.cbErrorAction = CodingErrorAction.REPLACE;
+                    break;
+                case '0': // CALLBACK_SKIP
+                    cc.cbErrorAction = CodingErrorAction.IGNORE;
+                    break;
+                case '.': // CALLBACK_STOP
+                    cc.cbErrorAction = CodingErrorAction.REPORT;
+                    break;
+                case '&': // CALLBACK_ESCAPE
+                    cc.cbErrorAction = CodingErrorAction.REPORT;
+                    cc.cbDecoder = CharsetCallback.TO_U_CALLBACK_ESCAPE;
+                    break;
+                default:
+                    cc.cbErrorAction = null;
+                    break;
             }
         }
         // check for any options for the callback value
@@ -510,7 +533,6 @@ public class TestConversion extends TestFmwk {
         }
 
         ToUnicodeCase(cc);
-
     }
 
     private void ToUnicodeCase(ConversionCase cc) {
@@ -522,10 +544,14 @@ public class TestConversion extends TestFmwk {
 
         try {
             // if cc.charset starts with '*', obtain it from com/ibm/icu/dev/data/testdata
-            charset = (cc.charset != null && cc.charset.length() > 0 && cc.charset.charAt(0) == '*')
-                    ? (Charset) provider.charsetForName(cc.charset.substring(1),
-                        "com/ibm/icu/dev/data/testdata", this.getClass().getClassLoader())
-                    : (Charset) provider.charsetForName(cc.charset);
+            charset =
+                    (cc.charset != null && cc.charset.length() > 0 && cc.charset.charAt(0) == '*')
+                            ? (Charset)
+                                    provider.charsetForName(
+                                            cc.charset.substring(1),
+                                            "com/ibm/icu/dev/data/testdata",
+                                            this.getClass().getClassLoader())
+                            : (Charset) provider.charsetForName(cc.charset);
             if (charset != null) {
                 decoder = charset.newDecoder();
                 decoder.onMalformedInput(CodingErrorAction.REPLACE);
@@ -537,7 +563,10 @@ public class TestConversion extends TestFmwk {
         }
         if (decoder == null) {
             if (cc.charset.charAt(0) == UNSUPPORTED_CHARSET_SYMBOL) {
-                logln("Skipping test:(" + cc.charset.substring(1) + ") due to ICU Charset not supported at this time");
+                logln(
+                        "Skipping test:("
+                                + cc.charset.substring(1)
+                                + ") due to ICU Charset not supported at this time");
             } else {
                 errln(cc.charset + " was not found");
             }
@@ -547,8 +576,11 @@ public class TestConversion extends TestFmwk {
         // set the callback for the decoder
         if (cc.cbErrorAction != null) {
             if (cc.cbDecoder != null) {
-                ((CharsetDecoderICU)decoder).setToUCallback(CoderResult.malformedForLength(1), cc.cbDecoder, cc.option);
-                ((CharsetDecoderICU)decoder).setToUCallback(CoderResult.unmappableForLength(1), cc.cbDecoder, cc.option);
+                ((CharsetDecoderICU) decoder)
+                        .setToUCallback(CoderResult.malformedForLength(1), cc.cbDecoder, cc.option);
+                ((CharsetDecoderICU) decoder)
+                        .setToUCallback(
+                                CoderResult.unmappableForLength(1), cc.cbDecoder, cc.option);
             } else {
                 decoder.onMalformedInput(cc.cbErrorAction);
                 decoder.onUnmappableCharacter(cc.cbErrorAction);
@@ -566,7 +598,8 @@ public class TestConversion extends TestFmwk {
             if (cc.cbErrorAction.equals(CodingErrorAction.REPLACE)) {
                 if (cc.cbopt.length() > 1) {
                     if (cc.cbopt.charAt(1) == '=') {
-                        logln("Skipping test due to limitation in Java API - substitution string not supported");
+                        logln(
+                                "Skipping test due to limitation in Java API - substitution string not supported");
 
                     } else {
                         // // read NUL-separated subchar first, if any
@@ -578,7 +611,8 @@ public class TestConversion extends TestFmwk {
                             try {
                                 decoder.replaceWith(cc.cbopt);
                             } catch (Exception e) {
-                                logln("Skipping test due to limitation in Java API - substitution character sequence size error");
+                                logln(
+                                        "Skipping test due to limitation in Java API - substitution character sequence size error");
                             }
                         }
                     }
@@ -590,16 +624,20 @@ public class TestConversion extends TestFmwk {
         boolean ok;
         int resultLength;
 
-        String steps[][] = { { "0", "bulk" }, // must be first for offsets to be checked
-                { "1", "step=1" }, { "3", "step=3" }, { "7", "step=7" } };
+        String steps[][] = {
+            {"0", "bulk"}, // must be first for offsets to be checked
+            {"1", "step=1"},
+            {"3", "step=3"},
+            {"7", "step=7"}
+        };
         /* TODO: currently not supported test steps, getNext API is not supported for now
-         { "-1", "getNext" },
-         { "-2", "toU(bulk)+getNext" },
-         { "-3", "getNext+toU(bulk)" },
-         { "-4", "toU(1)+getNext" },
-         { "-5", "getNext+toU(1)" },
-         { "-12", "toU(5)+getNext" },
-         { "-13", "getNext+toU(5)" }};*/
+        { "-1", "getNext" },
+        { "-2", "toU(bulk)+getNext" },
+        { "-3", "getNext+toU(bulk)" },
+        { "-4", "toU(1)+getNext" },
+        { "-5", "getNext+toU(1)" },
+        { "-12", "toU(5)+getNext" },
+        { "-13", "getNext+toU(5)" }};*/
 
         ok = true;
         int step;
@@ -616,13 +654,20 @@ public class TestConversion extends TestFmwk {
                 resultLength = stepToUnicode(cc, decoder, step);
                 ok = checkToUnicode(cc, resultLength);
             } catch (Exception ex) {
-                errln("Test failed: " + ex.getClass().getName() + " thrown: " + cc.charset+ " [" + cc.caseNr + "]");
+                errln(
+                        "Test failed: "
+                                + ex.getClass().getName()
+                                + " thrown: "
+                                + cc.charset
+                                + " ["
+                                + cc.caseNr
+                                + "]");
                 ex.printStackTrace(System.out);
                 return;
             }
         }
 
-        //testing the java's out = charset.decoder(in) api
+        // testing the java's out = charset.decoder(in) api
         while (ok && cc.finalFlush) {
             logln("Testing java charset.decoder(in):");
             cc.toUnicodeResult = null;
@@ -651,7 +696,7 @@ public class TestConversion extends TestFmwk {
                     break;
                 }
             } catch (Exception e) {
-                //check the error code to see if it matches cc.errorCode
+                // check the error code to see if it matches cc.errorCode
                 logln("Decoder returned an error code");
                 logln("ErrorCode expected is: " + cc.outErrorCode);
                 logln("Error Result is: " + e.toString());
@@ -662,13 +707,8 @@ public class TestConversion extends TestFmwk {
         return;
     }
 
+    private int stepToUnicode(ConversionCase cc, CharsetDecoder decoder, int step) {
 
-
-
-    private int stepToUnicode(ConversionCase cc, CharsetDecoder decoder,
-            int step)
-
-    {
         ByteBuffer source;
         CharBuffer target;
         boolean flush = false;
@@ -686,16 +726,15 @@ public class TestConversion extends TestFmwk {
             int iStep = step;
             int oStep = step;
 
-            for (;;) {
+            for (; ; ) {
 
                 if (step != 0) {
                     source.limit((iStep <= sourceLen) ? iStep : sourceLen);
-                    target.limit((oStep <= target.capacity()) ? oStep : target
-                            .capacity());
+                    target.limit((oStep <= target.capacity()) ? oStep : target.capacity());
                     flush = (cc.finalFlush && source.limit() == sourceLen);
 
                 } else {
-                    //bulk mode
+                    // bulk mode
                     source.limit(sourceLen);
                     target.limit(target.capacity());
                     flush = cc.finalFlush;
@@ -709,17 +748,17 @@ public class TestConversion extends TestFmwk {
                     if (cr.isOverflow()) {
                         // the partial target is filled, set a new limit,
                         oStep = (target.position() + step);
-                        target.limit((oStep < target.capacity()) ? oStep
-                                : target.capacity());
+                        target.limit((oStep < target.capacity()) ? oStep : target.capacity());
                         if (target.limit() > target.capacity()) {
-                            //target has reached its limit, an error occurred or test case has an error code
-                            //check error code
+                            // target has reached its limit, an error occurred or test case has an
+                            // error code
+                            // check error code
                             logln("UnExpected error: Target Buffer is larger than capacity");
                             break;
                         }
 
                     } else if (cr.isError()) {
-                        //check the error code to see if it matches cc.errorCode
+                        // check the error code to see if it matches cc.errorCode
                         logln("Decoder returned an error code");
                         logln("ErrorCode expected is: " + cc.outErrorCode);
                         logln("Error Result is: " + cr.toString());
@@ -731,7 +770,8 @@ public class TestConversion extends TestFmwk {
 
                         cr = decoder.decode(source, target, true);
 
-                        //due to limitation of the API we need to check for target limit for expected
+                        // due to limitation of the API we need to check for target limit for
+                        // expected
                         if (target.position() != cc.unicode.length()) {
                             if (target.limit() != cc.unicode.length()) {
                                 target.limit(cc.unicode.length());
@@ -745,13 +785,12 @@ public class TestConversion extends TestFmwk {
                     }
                 }
                 iStep += step;
-
             }
 
-        }// if(step ==0)
+        } // if(step ==0)
 
-        //--------------------------------------------------------------------------
-        else /* step<0 */{
+        // --------------------------------------------------------------------------
+        else /* step<0 */ {
             /*
              * step==-1: call only ucnv_getNextUChar()
              * otherwise alternate between ucnv_toUnicode() and ucnv_getNextUChar()
@@ -759,22 +798,23 @@ public class TestConversion extends TestFmwk {
              *   else give it at most (-step-2)/2 bytes
              */
 
-            for (;;) {
+            for (; ; ) {
                 // convert
                 if ((step & 1) != 0 /* odd: -1, -3, -5, ... */) {
 
-                    target.limit(target.position() < target.capacity() ? target
-                            .position() + 1 : target.capacity());
+                    target.limit(
+                            target.position() < target.capacity()
+                                    ? target.position() + 1
+                                    : target.capacity());
 
                     // decode behavior is return to output target 1 character
                     CoderResult cr = null;
 
-                    //similar to getNextUChar() , input is the whole string, while outputs only 1 character
+                    // similar to getNextUChar() , input is the whole string, while outputs only 1
+                    // character
                     source.limit(sourceLen);
-                    while (target.position() != target.limit()
-                            && source.hasRemaining()) {
-                        cr = decoder.decode(source, target,
-                                source.limit() == sourceLen);
+                    while (target.position() != target.limit() && source.hasRemaining()) {
+                        cr = decoder.decode(source, target, source.limit() == sourceLen);
 
                         if (cr.isOverflow()) {
 
@@ -783,7 +823,7 @@ public class TestConversion extends TestFmwk {
                                 logln("UnExpected error: Target Buffer is larger than capacity");
                                 break;
                             } else {
-                                //1 character has been consumed
+                                // 1 character has been consumed
                                 target.limit(target.position() + 1);
                                 break;
                             }
@@ -794,16 +834,13 @@ public class TestConversion extends TestFmwk {
 
                             cc.toUnicodeResult = target;
                             return target.position();
-                        }
-
-                        else {
+                        } else {
                             // one character has been consumed
                             if (target.limit() == target.position()) {
                                 target.limit(target.position() + 1);
                                 break;
                             }
                         }
-
                     }
                     if (source.position() == sourceLen) {
 
@@ -824,11 +861,14 @@ public class TestConversion extends TestFmwk {
                     if (step < -1) {
                         ++step;
                     }
-                } else {/* step is even */
+                } else {
+                    /* step is even */
                     // allow only one UChar output
 
-                    target.limit(target.position() < target.capacity() ? target
-                            .position() + 1 : target.capacity());
+                    target.limit(
+                            target.position() < target.capacity()
+                                    ? target.position() + 1
+                                    : target.capacity());
                     if (step == -2) {
                         source.limit(sourceLen);
                     } else {
@@ -837,8 +877,7 @@ public class TestConversion extends TestFmwk {
                             source.limit(sourceLen);
                         }
                     }
-                    CoderResult cr = decoder.decode(source, target, source
-                            .limit() == sourceLen);
+                    CoderResult cr = decoder.decode(source, target, source.limit() == sourceLen);
                     // check pointers and errors
                     if (cr.isOverflow()) {
                         // one character has been consumed
@@ -859,18 +898,15 @@ public class TestConversion extends TestFmwk {
             }
         }
 
-        //--------------------------------------------------------------------------
+        // --------------------------------------------------------------------------
 
         cc.toUnicodeResult = target;
         return target.position();
     }
 
-
-
     private boolean checkToUnicode(ConversionCase cc, int resultLength) {
         return checkResultsToUnicode(cc, cc.unicode, cc.toUnicodeResult);
     }
-
 
     private void TestGetUnicodeSet(DataMap testcase) {
         /*
@@ -881,96 +917,107 @@ public class TestConversion extends TestFmwk {
          * "charset", "map", "mapnot", "which" }
          */
 
-
         // retrieve test case data
         ConversionCase cc = new ConversionCase();
         CharsetProviderICU provider = new CharsetProviderICU();
-        CharsetICU charset  ;
-
+        CharsetICU charset;
 
         UnicodeSet mapset = new UnicodeSet();
         UnicodeSet mapnotset = new UnicodeSet();
         UnicodeSet unicodeset = new UnicodeSet();
         String ellipsis = "0x2e";
-        cc.charset = ((ICUResourceBundle) testcase.getObject("charset"))
-                .getString();
+        cc.charset = ((ICUResourceBundle) testcase.getObject("charset")).getString();
         cc.map = ((ICUResourceBundle) testcase.getObject("map")).getString();
-        cc.mapnot = ((ICUResourceBundle) testcase.getObject("mapnot"))
-                .getString();
+        cc.mapnot = ((ICUResourceBundle) testcase.getObject("mapnot")).getString();
 
-
-        cc.which = ((ICUResourceBundle) testcase.getObject("which")).getInt(); // only checking for ROUNDTRIP_SET
+        cc.which =
+                ((ICUResourceBundle) testcase.getObject("which"))
+                        .getInt(); // only checking for ROUNDTRIP_SET
 
         // ----for debugging only
         logln("");
         logln("TestGetUnicodeSet[" + cc.charset + "] ");
         logln("...............................................");
 
-        try{
+        try {
             // if cc.charset starts with '*', obtain it from com/ibm/icu/dev/data/testdata
-            charset = (cc.charset != null && cc.charset.length() > 0 && cc.charset.charAt(0) == '*')
-                    ? (CharsetICU) provider.charsetForName(cc.charset.substring(1),
-                            "com/ibm/icu/dev/data/testdata", this.getClass().getClassLoader())
+            charset =
+                    (cc.charset != null && cc.charset.length() > 0 && cc.charset.charAt(0) == '*')
+                            ? (CharsetICU)
+                                    provider.charsetForName(
+                                            cc.charset.substring(1),
+                                            "com/ibm/icu/dev/data/testdata",
+                                            this.getClass().getClassLoader())
                             : (CharsetICU) provider.charsetForName(cc.charset);
 
-                    //checking for converter that are not supported at this point
-                    try{
-                        if(charset==null
-                                || charset.name().equals("BOCU-1")
-                                || charset.name().equals("SCSU")
-                                || charset.name().equals("lmbcs1")
-                                || charset.name().equals("lmbcs2")
-                                || charset.name().equals("lmbcs3")
-                                || charset.name().equals("lmbcs4")
-                                || charset.name().equals("lmbcs5")
-                                || charset.name().equals("lmbcs6")
-                                || charset.name().equals("lmbcs8")
-                                || charset.name().equals("lmbcs11")
-                                || charset.name().equals("lmbcs16")
-                                || charset.name().equals("lmbcs17")
-                                || charset.name().equals("lmbcs18")
-                                || charset.name().equals("lmbcs19")) {
-                            logln("Converter not supported at this point :" + cc.charset);
-                            return;
-                        }
+            // checking for converter that are not supported at this point
+            try {
+                if (charset == null
+                        || charset.name().equals("BOCU-1")
+                        || charset.name().equals("SCSU")
+                        || charset.name().equals("lmbcs1")
+                        || charset.name().equals("lmbcs2")
+                        || charset.name().equals("lmbcs3")
+                        || charset.name().equals("lmbcs4")
+                        || charset.name().equals("lmbcs5")
+                        || charset.name().equals("lmbcs6")
+                        || charset.name().equals("lmbcs8")
+                        || charset.name().equals("lmbcs11")
+                        || charset.name().equals("lmbcs16")
+                        || charset.name().equals("lmbcs17")
+                        || charset.name().equals("lmbcs18")
+                        || charset.name().equals("lmbcs19")) {
+                    logln("Converter not supported at this point :" + cc.charset);
+                    return;
+                }
 
-                        if(cc.which==1){
-                            logln("Fallback set not supported at this point for converter : "+charset.displayName());
-                            return;
-                        }
+                if (cc.which == 1) {
+                    logln(
+                            "Fallback set not supported at this point for converter : "
+                                    + charset.displayName());
+                    return;
+                }
 
-                    }catch(Exception e){
-                        return;
-                    }
+            } catch (Exception e) {
+                return;
+            }
 
-                    mapset.clear();
-                    mapnotset.clear();
+            mapset.clear();
+            mapnotset.clear();
 
-                    mapset.applyPattern(cc.map,false);
-                    mapnotset.applyPattern(cc.mapnot,false);
+            mapset.applyPattern(cc.map, false);
+            mapnotset.applyPattern(cc.mapnot, false);
 
-                    charset.getUnicodeSet(unicodeset, cc.which);
-                    UnicodeSet diffset = new UnicodeSet();
+            charset.getUnicodeSet(unicodeset, cc.which);
+            UnicodeSet diffset = new UnicodeSet();
 
-                    //are there items that must be in unicodeset but are not?
-                    (diffset = mapset).removeAll(unicodeset);
-                    if(!diffset.isEmpty()){
-                        StringBuilder s = new StringBuilder(diffset.toPattern(true));
-                        if(s.length()>100){
-                            s.replace(0, 0x7fffffff, ellipsis);
-                        }
-                        errln("error in missing items - conversion/getUnicodeSet test case "+cc.charset + "\n" + s.toString());
-                    }
+            // are there items that must be in unicodeset but are not?
+            (diffset = mapset).removeAll(unicodeset);
+            if (!diffset.isEmpty()) {
+                StringBuilder s = new StringBuilder(diffset.toPattern(true));
+                if (s.length() > 100) {
+                    s.replace(0, 0x7fffffff, ellipsis);
+                }
+                errln(
+                        "error in missing items - conversion/getUnicodeSet test case "
+                                + cc.charset
+                                + "\n"
+                                + s.toString());
+            }
 
-                    //are the items that must not be in unicodeset but are?
-                    (diffset=mapnotset).retainAll(unicodeset);
-                    if(!diffset.isEmpty()){
-                        StringBuilder s = new StringBuilder(diffset.toPattern(true));
-                        if(s.length()>100){
-                            s.replace(0, 0x7fffffff, ellipsis);
-                        }
-                        errln("contains unexpected items - conversion/getUnicodeSet test case "+cc.charset + "\n" + s.toString());
-                    }
+            // are the items that must not be in unicodeset but are?
+            (diffset = mapnotset).retainAll(unicodeset);
+            if (!diffset.isEmpty()) {
+                StringBuilder s = new StringBuilder(diffset.toPattern(true));
+                if (s.length() > 100) {
+                    s.replace(0, 0x7fffffff, ellipsis);
+                }
+                errln(
+                        "contains unexpected items - conversion/getUnicodeSet test case "
+                                + cc.charset
+                                + "\n"
+                                + s.toString());
+            }
         } catch (Exception e) {
             errln("getUnicodeSet returned an error code");
             errln("ErrorCode expected is: " + cc.outErrorCode);
@@ -980,16 +1027,13 @@ public class TestConversion extends TestFmwk {
     }
 
     /**
-     * This follows ucnv.c method ucnv_detectUnicodeSignature() to detect the
-     * start of the stream for example U+FEFF (the Unicode BOM/signature
-     * character) that can be ignored.
+     * This follows ucnv.c method ucnv_detectUnicodeSignature() to detect the start of the stream
+     * for example U+FEFF (the Unicode BOM/signature character) that can be ignored.
      *
-     * Detects Unicode signature byte sequences at the start of the byte stream
-     * and returns number of bytes of the BOM of the indicated Unicode charset.
-     * 0 is returned when no Unicode signature is recognized.
-     *
+     * <p>Detects Unicode signature byte sequences at the start of the byte stream and returns
+     * number of bytes of the BOM of the indicated Unicode charset. 0 is returned when no Unicode
+     * signature is recognized.
      */
-
     private String detectUnicodeSignature(ByteBuffer source) {
         int signatureLength = 0; // number of bytes of the signature
         final int SIG_MAX_LEN = 5;
@@ -1000,8 +1044,7 @@ public class TestConversion extends TestFmwk {
          * initial 0xa5 bytes: make sure that if we read <SIG_MAX_LEN bytes we
          * don't misdetect something
          */
-        byte start[] = { (byte) 0xa5, (byte) 0xa5, (byte) 0xa5, (byte) 0xa5,
-                (byte) 0xa5 };
+        byte start[] = {(byte) 0xa5, (byte) 0xa5, (byte) 0xa5, (byte) 0xa5, (byte) 0xa5};
 
         while (i < source.limit() && i < SIG_MAX_LEN) {
             start[i] = source.get(i);
@@ -1025,47 +1068,49 @@ public class TestConversion extends TestFmwk {
                 source.position(signatureLength);
                 return sigUniCharset;
             }
-        } else if (start[0] == (byte) 0xEF && start[1] == (byte) 0xBB
-                && start[2] == (byte) 0xBF) {
+        } else if (start[0] == (byte) 0xEF && start[1] == (byte) 0xBB && start[2] == (byte) 0xBF) {
             signatureLength = 3;
             sigUniCharset = "UTF-8";
             source.position(signatureLength);
             return sigUniCharset;
-        } else if (start[0] == (byte) 0x00 && start[1] == (byte) 0x00
-                && start[2] == (byte) 0xFE && start[3] == (byte) 0xFF) {
+        } else if (start[0] == (byte) 0x00
+                && start[1] == (byte) 0x00
+                && start[2] == (byte) 0xFE
+                && start[3] == (byte) 0xFF) {
             signatureLength = 4;
             sigUniCharset = "UTF-32BE";
             source.position(signatureLength);
             return sigUniCharset;
-        } else if (start[0] == (byte) 0x0E && start[1] == (byte) 0xFE
-                && start[2] == (byte) 0xFF) {
+        } else if (start[0] == (byte) 0x0E && start[1] == (byte) 0xFE && start[2] == (byte) 0xFF) {
             signatureLength = 3;
             sigUniCharset = "SCSU";
             source.position(signatureLength);
             return sigUniCharset;
-        } else if (start[0] == (byte) 0xFB && start[1] == (byte) 0xEE
-                && start[2] == (byte) 0x28) {
+        } else if (start[0] == (byte) 0xFB && start[1] == (byte) 0xEE && start[2] == (byte) 0x28) {
             signatureLength = 3;
             sigUniCharset = "BOCU-1";
             source.position(signatureLength);
             return sigUniCharset;
-        } else if (start[0] == (byte) 0x2B && start[1] == (byte) 0x2F
-                && start[2] == (byte) 0x76) {
+        } else if (start[0] == (byte) 0x2B && start[1] == (byte) 0x2F && start[2] == (byte) 0x76) {
 
             if (start[3] == (byte) 0x38 && start[4] == (byte) 0x2D) {
                 signatureLength = 5;
                 sigUniCharset = "UTF-7";
                 source.position(signatureLength);
                 return sigUniCharset;
-            } else if (start[3] == (byte) 0x38 || start[3] == (byte) 0x39
-                    || start[3] == (byte) 0x2B || start[3] == (byte) 0x2F) {
+            } else if (start[3] == (byte) 0x38
+                    || start[3] == (byte) 0x39
+                    || start[3] == (byte) 0x2B
+                    || start[3] == (byte) 0x2F) {
                 signatureLength = 4;
                 sigUniCharset = "UTF-7";
                 source.position(signatureLength);
                 return sigUniCharset;
             }
-        } else if (start[0] == (byte) 0xDD && start[2] == (byte) 0x73
-                && start[2] == (byte) 0x66 && start[3] == (byte) 0x73) {
+        } else if (start[0] == (byte) 0xDD
+                && start[2] == (byte) 0x73
+                && start[2] == (byte) 0x66
+                && start[3] == (byte) 0x73) {
             signatureLength = 4;
             sigUniCharset = "UTF-EBCDIC";
             source.position(signatureLength);
@@ -1096,8 +1141,8 @@ public class TestConversion extends TestFmwk {
         return res + "]";
     }
 
-    private boolean checkResultsFromUnicode(ConversionCase cc, ByteBuffer expected,
-            ByteBuffer output) {
+    private boolean checkResultsFromUnicode(
+            ConversionCase cc, ByteBuffer expected, ByteBuffer output) {
 
         boolean res = true;
         expected.rewind();
@@ -1111,14 +1156,22 @@ public class TestConversion extends TestFmwk {
         }
 
         if (output.limit() != expected.limit()) {
-            errln("Test failed: output length does not match expected for charset: " + cc.charset
-                    + " [" + cc.caseNr + "]");
+            errln(
+                    "Test failed: output length does not match expected for charset: "
+                            + cc.charset
+                            + " ["
+                            + cc.caseNr
+                            + "]");
             res = false;
         } else {
             while (output.hasRemaining()) {
                 if (output.get() != expected.get()) {
-                    errln("Test failed: output does not match expected for charset: " + cc.charset
-                            + " [" + cc.caseNr + "]");
+                    errln(
+                            "Test failed: output does not match expected for charset: "
+                                    + cc.charset
+                                    + " ["
+                                    + cc.caseNr
+                                    + "]");
                     res = false;
                     break;
                 }
@@ -1131,8 +1184,7 @@ public class TestConversion extends TestFmwk {
             logln("Output:      " + printbytes(output, output.limit()));
             logln("Expected:    " + printbytes(expected, expected.limit()));
             logln("Passed");
-        }
-        else {
+        } else {
             errln("[" + cc.caseNr + "]:" + cc.charset);
             errln("Input:       " + printchars(CharBuffer.wrap(cc.unicode), cc.unicode.length()));
             errln("Output:      " + printbytes(output, output.limit()));
@@ -1150,13 +1202,22 @@ public class TestConversion extends TestFmwk {
 
         // test to see if the conversion matches actual results
         if (output.limit() != expected.length()) {
-            errln("Test failed: output length does not match expected for charset: "+cc.charset+ " [" + cc.caseNr + "]");
+            errln(
+                    "Test failed: output length does not match expected for charset: "
+                            + cc.charset
+                            + " ["
+                            + cc.caseNr
+                            + "]");
             res = false;
         } else {
             for (int i = 0; i < expected.length(); i++) {
                 if (output.get(i) != expected.charAt(i)) {
-                    errln("Test failed: output does not match expected for charset: " + cc.charset
-                            + " [" + cc.caseNr + "]");
+                    errln(
+                            "Test failed: output does not match expected for charset: "
+                                    + cc.charset
+                                    + " ["
+                                    + cc.caseNr
+                                    + "]");
                     res = false;
                     break;
                 }

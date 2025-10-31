@@ -8,16 +8,6 @@
  */
 package com.ibm.icu.text;
 
-import java.io.InvalidObjectException;
-import java.text.AttributedCharacterIterator;
-import java.text.Format;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.regex.Pattern;
-
 import com.ibm.icu.impl.FormattedStringBuilder;
 import com.ibm.icu.impl.FormattedValueStringBuilderImpl;
 import com.ibm.icu.impl.FormattedValueStringBuilderImpl.SpanFieldPlaceholder;
@@ -30,15 +20,24 @@ import com.ibm.icu.impl.SimpleFormatterImpl.IterInternal;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
+import java.io.InvalidObjectException;
+import java.text.AttributedCharacterIterator;
+import java.text.Format;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.regex.Pattern;
 
 /**
- * Immutable class for formatting a list, using data from CLDR (or supplied
- * separately). The class is not subclassable.
+ * Immutable class for formatting a list, using data from CLDR (or supplied separately). The class
+ * is not subclassable.
  *
  * @author Mark Davis
  * @stable ICU 50
  */
-final public class ListFormatter {
+public final class ListFormatter {
     // Compiled SimpleFormatter patterns.
     private final String start;
     private final String middle;
@@ -46,8 +45,10 @@ final public class ListFormatter {
 
     private interface PatternHandler {
         public String getTwoPattern(String text);
+
         public String getEndPattern(String text);
     }
+
     private final PatternHandler patternHandler;
 
     /**
@@ -64,8 +65,8 @@ final public class ListFormatter {
         AND,
 
         /**
-         * Disjunction (or alternative, or simply one of) formatting, e.g.
-         * "Alice, Bob, Charlie, or Delta".
+         * Disjunction (or alternative, or simply one of) formatting, e.g. "Alice, Bob, Charlie, or
+         * Delta".
          *
          * @stable ICU 67
          */
@@ -118,8 +119,8 @@ final public class ListFormatter {
         /**
          * The concrete field used for spans in FormattedList.
          *
-         * Instances of LIST_SPAN should have an associated value, the index
-         * within the input list that is represented by the span.
+         * <p>Instances of LIST_SPAN should have an associated value, the index within the input
+         * list that is represented by the span.
          *
          * @stable ICU 67
          */
@@ -130,16 +131,15 @@ final public class ListFormatter {
         }
 
         /**
-         * serialization method resolve instances to the constant
-         * ListFormatter.SpanField values
+         * serialization method resolve instances to the constant ListFormatter.SpanField values
+         *
          * @internal
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
         @Override
         protected Object readResolve() throws InvalidObjectException {
-            if (this.getName().equals(LIST_SPAN.getName()))
-                return LIST_SPAN;
+            if (this.getName().equals(LIST_SPAN.getName())) return LIST_SPAN;
 
             throw new InvalidObjectException("An invalid object.");
         }
@@ -147,6 +147,7 @@ final public class ListFormatter {
 
     /**
      * Field selectors for format fields defined by ListFormatter.
+     *
      * @stable ICU 67
      */
     public static final class Field extends Format.Field {
@@ -154,12 +155,14 @@ final public class ListFormatter {
 
         /**
          * The literal text in the result which came from the resources.
+         *
          * @stable ICU 67
          */
         public static Field LITERAL = new Field("literal");
 
         /**
          * The element text in the result which came from the input strings.
+         *
          * @stable ICU 67
          */
         public static Field ELEMENT = new Field("element");
@@ -177,10 +180,8 @@ final public class ListFormatter {
         @Deprecated
         @Override
         protected Object readResolve() throws InvalidObjectException {
-            if (this.getName().equals(LITERAL.getName()))
-                return LITERAL;
-            if (this.getName().equals(ELEMENT.getName()))
-                return ELEMENT;
+            if (this.getName().equals(LITERAL.getName())) return LITERAL;
+            if (this.getName().equals(ELEMENT.getName())) return ELEMENT;
 
             throw new InvalidObjectException("An invalid object.");
         }
@@ -189,9 +190,9 @@ final public class ListFormatter {
     /**
      * An immutable class containing the result of a list formatting operation.
      *
-     * Instances of this class are immutable and thread-safe.
+     * <p>Instances of this class are immutable and thread-safe.
      *
-     * Not intended for public subclassing.
+     * <p>Not intended for public subclassing.
      *
      * @stable ICU 67
      */
@@ -204,6 +205,7 @@ final public class ListFormatter {
 
         /**
          * {@inheritDoc}
+         *
          * @stable ICU 67
          */
         @Override
@@ -213,6 +215,7 @@ final public class ListFormatter {
 
         /**
          * {@inheritDoc}
+         *
          * @stable ICU 67
          */
         @Override
@@ -222,6 +225,7 @@ final public class ListFormatter {
 
         /**
          * {@inheritDoc}
+         *
          * @stable ICU 67
          */
         @Override
@@ -231,6 +235,7 @@ final public class ListFormatter {
 
         /**
          * {@inheritDoc}
+         *
          * @stable ICU 67
          */
         @Override
@@ -240,6 +245,7 @@ final public class ListFormatter {
 
         /**
          * {@inheritDoc}
+         *
          * @stable ICU 67
          */
         @Override
@@ -249,6 +255,7 @@ final public class ListFormatter {
 
         /**
          * {@inheritDoc}
+         *
          * @stable ICU 67
          */
         @Override
@@ -258,6 +265,7 @@ final public class ListFormatter {
 
         /**
          * {@inheritDoc}
+         *
          * @stable ICU 67
          */
         @Override
@@ -267,21 +275,15 @@ final public class ListFormatter {
     }
 
     /**
-     * <b>Internal:</b> Create a ListFormatter from component strings,
-     * with definitions as in LDML.
+     * <b>Internal:</b> Create a ListFormatter from component strings, with definitions as in LDML.
      *
-     * @param two
-     *            string for two items, containing {0} for the first, and {1}
-     *            for the second.
-     * @param start
-     *            string for the start of a list items, containing {0} for the
-     *            first, and {1} for the rest.
-     * @param middle
-     *            string for the start of a list items, containing {0} for the
-     *            first part of the list, and {1} for the rest of the list.
-     * @param end
-     *            string for the end of a list items, containing {0} for the
-     *            first part of the list, and {1} for the last item.
+     * @param two string for two items, containing {0} for the first, and {1} for the second.
+     * @param start string for the start of a list items, containing {0} for the first, and {1} for
+     *     the rest.
+     * @param middle string for the start of a list items, containing {0} for the first part of the
+     *     list, and {1} for the rest of the list.
+     * @param end string for the end of a list items, containing {0} for the first part of the list,
+     *     and {1} for the last item.
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -309,8 +311,7 @@ final public class ListFormatter {
     /**
      * Create a list formatter that is appropriate for a locale.
      *
-     * @param locale
-     *            the locale in question.
+     * @param locale the locale in question.
      * @return ListFormatter
      * @stable ICU 67
      */
@@ -325,8 +326,7 @@ final public class ListFormatter {
     /**
      * Create a list formatter that is appropriate for a locale.
      *
-     * @param locale
-     *            the locale in question.
+     * @param locale the locale in question.
      * @return ListFormatter
      * @stable ICU 67
      */
@@ -337,20 +337,18 @@ final public class ListFormatter {
     /**
      * Create a list formatter that is appropriate for a locale.
      *
-     * @param locale
-     *            the locale in question.
+     * @param locale the locale in question.
      * @return ListFormatter
      * @stable ICU 50
      */
     public static ListFormatter getInstance(ULocale locale) {
-      return getInstance(locale, Type.AND, Width.WIDE);
+        return getInstance(locale, Type.AND, Width.WIDE);
     }
 
     /**
      * Create a list formatter that is appropriate for a locale.
      *
-     * @param locale
-     *            the locale in question.
+     * @param locale the locale in question.
      * @return ListFormatter
      * @stable ICU 50
      */
@@ -371,8 +369,7 @@ final public class ListFormatter {
     /**
      * Format a list of objects.
      *
-     * @param items
-     *            items to format. The toString() method is called on each.
+     * @param items items to format. The toString() method is called on each.
      * @return items formatted into a string
      * @stable ICU 50
      */
@@ -383,8 +380,7 @@ final public class ListFormatter {
     /**
      * Format a collection of objects. The toString() method is called on each.
      *
-     * @param items
-     *            items to format. The toString() method is called on each.
+     * @param items items to format. The toString() method is called on each.
      * @return items formatted into a string
      * @stable ICU 50
      */
@@ -393,11 +389,10 @@ final public class ListFormatter {
     }
 
     /**
-     * Format a list of objects to a FormattedList. You can access the offsets
-     * of each element from the FormattedList.
+     * Format a list of objects to a FormattedList. You can access the offsets of each element from
+     * the FormattedList.
      *
-     * @param items
-     *            items to format. The toString() method is called on each.
+     * @param items items to format. The toString() method is called on each.
      * @return items formatted into a FormattedList
      * @stable ICU 67
      */
@@ -405,13 +400,11 @@ final public class ListFormatter {
         return formatToValue(Arrays.asList(items));
     }
 
-
     /**
-     * Format a collection of objects to a FormattedList. You can access the offsets
-     * of each element from the FormattedList.
+     * Format a collection of objects to a FormattedList. You can access the offsets of each element
+     * from the FormattedList.
      *
-     * @param items
-     *            items to format. The toString() method is called on each.
+     * @param items items to format. The toString() method is called on each.
      * @return items formatted into a FormattedList
      * @stable ICU 67
      */
@@ -427,15 +420,15 @@ final public class ListFormatter {
         Iterator<?> it = items.iterator();
         int count = items.size();
         switch (count) {
-        case 0:
-            return new FormattedListBuilder("", needsFields);
-        case 1:
-            return new FormattedListBuilder(it.next(), needsFields);
-        case 2:
-            Object first = it.next();
-            Object second = it.next();
-            return new FormattedListBuilder(first, needsFields)
-                .append(patternHandler.getTwoPattern(String.valueOf(second)), second, 1);
+            case 0:
+                return new FormattedListBuilder("", needsFields);
+            case 1:
+                return new FormattedListBuilder(it.next(), needsFields);
+            case 2:
+                Object first = it.next();
+                Object second = it.next();
+                return new FormattedListBuilder(first, needsFields)
+                        .append(patternHandler.getTwoPattern(String.valueOf(second)), second, 1);
         }
         FormattedListBuilder builder = new FormattedListBuilder(it.next(), needsFields);
         builder.append(start, it.next(), 1);
@@ -454,18 +447,24 @@ final public class ListFormatter {
         }
 
         @Override
-        public String getTwoPattern(String text) { return twoPattern; }
+        public String getTwoPattern(String text) {
+            return twoPattern;
+        }
 
         @Override
-        public String getEndPattern(String text) { return endPattern; }
+        public String getEndPattern(String text) {
+            return endPattern;
+        }
 
         private final String twoPattern;
         private final String endPattern;
     }
 
-    // A contextual handler returns one of the two patterns depending on whether the text matched the regexp.
+    // A contextual handler returns one of the two patterns depending on whether the text matched
+    // the regexp.
     private static final class ContextualHandler implements PatternHandler {
-        ContextualHandler(Pattern regexp, String thenTwo, String elseTwo, String thenEnd, String elseEnd) {
+        ContextualHandler(
+                Pattern regexp, String thenTwo, String elseTwo, String thenEnd, String elseEnd) {
             this.regexp = regexp;
             thenTwoPattern = thenTwo;
             elseTwoPattern = elseTwo;
@@ -475,7 +474,7 @@ final public class ListFormatter {
 
         @Override
         public String getTwoPattern(String text) {
-            if(regexp.matcher(text).matches()) {
+            if (regexp.matcher(text).matches()) {
                 return thenTwoPattern;
             } else {
                 return elseTwoPattern;
@@ -484,7 +483,7 @@ final public class ListFormatter {
 
         @Override
         public String getEndPattern(String text) {
-            if(regexp.matcher(text).matches()) {
+            if (regexp.matcher(text).matches()) {
                 return thenEndPattern;
             } else {
                 return elseEndPattern;
@@ -496,7 +495,6 @@ final public class ListFormatter {
         private final String elseTwoPattern;
         private final String thenEndPattern;
         private final String elseEndPattern;
-
     }
 
     // Pattern in the ICU Data which might be replaced y by e.
@@ -513,17 +511,20 @@ final public class ListFormatter {
 
     // Condition to change to e.
     // Starts with "hi" or "i" but not with "hie" nor "hia"a
-    private static final Pattern changeToE = Pattern.compile("(i.*|hi|hi[^ae].*)", Pattern.CASE_INSENSITIVE);
+    private static final Pattern changeToE =
+            Pattern.compile("(i.*|hi|hi[^ae].*)", Pattern.CASE_INSENSITIVE);
 
     // Condition to change to u.
     // Starts with "o", "ho", and "8". Also "11" by itself.
-    private static final Pattern changeToU = Pattern.compile("((o|ho|8).*|11)", Pattern.CASE_INSENSITIVE);
+    private static final Pattern changeToU =
+            Pattern.compile("((o|ho|8).*|11)", Pattern.CASE_INSENSITIVE);
 
     // Pattern in the ICU Data which might need to add a DASH after VAV.
     private static final String compiledVav = compilePattern("{0} \u05D5{1}", new StringBuilder());
 
     // Pattern to add a DASH after VAV.
-    private static final String compiledVavDash = compilePattern("{0} \u05D5-{1}", new StringBuilder());
+    private static final String compiledVavDash =
+            compilePattern("{0} \u05D5-{1}", new StringBuilder());
 
     // Condition to change to VAV follow by a dash.
     // Starts with non Hebrew letter.
@@ -539,20 +540,32 @@ final public class ListFormatter {
                 boolean endIsY = end.equals(compiledY);
                 if (twoIsY || endIsY) {
                     return new ContextualHandler(
-                        changeToE, twoIsY ? compiledE : two, two, endIsY ? compiledE : end, end);
+                            changeToE,
+                            twoIsY ? compiledE : two,
+                            two,
+                            endIsY ? compiledE : end,
+                            end);
                 }
                 boolean twoIsO = two.equals(compiledO);
                 boolean endIsO = end.equals(compiledO);
                 if (twoIsO || endIsO) {
                     return new ContextualHandler(
-                        changeToU, twoIsO ? compiledU : two, two, endIsO ? compiledU : end, end);
+                            changeToU,
+                            twoIsO ? compiledU : two,
+                            two,
+                            endIsO ? compiledU : end,
+                            end);
                 }
             } else if (language.equals("he") || language.equals("iw")) {
                 boolean twoIsVav = two.equals(compiledVav);
                 boolean endIsVav = end.equals(compiledVav);
                 if (twoIsVav || endIsVav) {
-                    return new ContextualHandler(changeToVavDash,
-                        twoIsVav ? compiledVavDash : two, two, endIsVav ? compiledVavDash : end, end);
+                    return new ContextualHandler(
+                            changeToVavDash,
+                            twoIsVav ? compiledVavDash : two,
+                            two,
+                            endIsVav ? compiledVavDash : end,
+                            end);
                 }
             }
         }
@@ -561,9 +574,10 @@ final public class ListFormatter {
 
     /**
      * Returns the pattern to use for a particular item count.
+     *
      * @param count the item count.
-     * @return the pattern with {0}, {1}, {2}, etc. For English,
-     * getPatternForNumItems(3) == "{0}, {1}, and {2}"
+     * @return the pattern with {0}, {1}, {2}, etc. For English, getPatternForNumItems(3) == "{0},
+     *     {1}, and {2}"
      * @throws IllegalArgumentException when count is 0 or negative.
      * @stable ICU 52
      */
@@ -580,6 +594,7 @@ final public class ListFormatter {
 
     /**
      * Returns the locale of this object.
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -659,8 +674,7 @@ final public class ListFormatter {
     }
 
     private static class Cache {
-        private final ICUCache<String, ListFormatter> cache =
-            new SimpleCache<>();
+        private final ICUCache<String, ListFormatter> cache = new SimpleCache<>();
 
         public ListFormatter get(ULocale locale, String style) {
             String key = String.format("%s:%s", locale.toString(), style);
@@ -673,15 +687,20 @@ final public class ListFormatter {
         }
 
         private static ListFormatter load(ULocale ulocale, String style) {
-            ICUResourceBundle r = (ICUResourceBundle)UResourceBundle.
-                    getBundleInstance(ICUData.ICU_BASE_NAME, ulocale);
+            ICUResourceBundle r =
+                    (ICUResourceBundle)
+                            UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, ulocale);
             StringBuilder sb = new StringBuilder();
             return new ListFormatter(
-                compilePattern(r.getWithFallback("listPattern/" + style + "/2").getString(), sb),
-                compilePattern(r.getWithFallback("listPattern/" + style + "/start").getString(), sb),
-                compilePattern(r.getWithFallback("listPattern/" + style + "/middle").getString(), sb),
-                compilePattern(r.getWithFallback("listPattern/" + style + "/end").getString(), sb),
-                ulocale);
+                    compilePattern(
+                            r.getWithFallback("listPattern/" + style + "/2").getString(), sb),
+                    compilePattern(
+                            r.getWithFallback("listPattern/" + style + "/start").getString(), sb),
+                    compilePattern(
+                            r.getWithFallback("listPattern/" + style + "/middle").getString(), sb),
+                    compilePattern(
+                            r.getWithFallback("listPattern/" + style + "/end").getString(), sb),
+                    ulocale);
         }
     }
 

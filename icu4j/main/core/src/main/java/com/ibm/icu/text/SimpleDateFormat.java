@@ -9,25 +9,6 @@
 
 package com.ibm.icu.text;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.text.AttributedCharacterIterator;
-import java.text.AttributedString;
-import java.text.FieldPosition;
-import java.text.Format;
-import java.text.ParsePosition;
-import java.time.DayOfWeek;
-import java.time.Month;
-import java.time.temporal.Temporal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.MissingResourceException;
-import java.util.UUID;
-
 import com.ibm.icu.impl.DateNumberFormat;
 import com.ibm.icu.impl.DayPeriodRules;
 import com.ibm.icu.impl.ICUCache;
@@ -50,40 +31,54 @@ import com.ibm.icu.util.TimeZoneTransition;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
 import com.ibm.icu.util.UResourceBundle;
-
-
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.text.AttributedCharacterIterator;
+import java.text.AttributedString;
+import java.text.FieldPosition;
+import java.text.Format;
+import java.text.ParsePosition;
+import java.time.DayOfWeek;
+import java.time.Month;
+import java.time.temporal.Temporal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.UUID;
 
 /**
  * {@icuenhanced java.text.SimpleDateFormat}.{@icu _usage_}
  *
- * <p><code>SimpleDateFormat</code> is a concrete class for formatting and
- * parsing dates in a locale-sensitive manner. It allows for formatting
- * (date -&gt; text), parsing (text -&gt; date), and normalization.
+ * <p><code>SimpleDateFormat</code> is a concrete class for formatting and parsing dates in a
+ * locale-sensitive manner. It allows for formatting (date -&gt; text), parsing (text -&gt; date),
+ * and normalization.
  *
- * <p>
- * Clients are encouraged to create a date-time formatter using
- * <code>DateFormat.getDateInstance()</code>, <code>DateFormat.getDateInstance()</code>,
- * or <code>DateFormat.getDateTimeInstance()</code> rather than
- * explicitly constructing an instance of <code>SimpleDateFormat</code>.  This way, the client
- * is guaranteed to get an appropriate formatting pattern for whatever locale the
- * program is running in.  If the client needs more control, they should consider using
- * <code>DateFormat.getInstanceForSkeleton()</code>.
- * However, if the client needs something more unusual than
- * the default patterns in the locales, he can construct a <code>SimpleDateFormat</code> directly
- * and give it an appropriate pattern (or use one of the factory methods on DateFormat
- * and modify the pattern after the fact with <code>toPattern()</code> and <code>applyPattern()</code>.
- * For more information on using these methods, see
- * {@link DateFormat}.
+ * <p>Clients are encouraged to create a date-time formatter using <code>
+ * DateFormat.getDateInstance()</code>, <code>DateFormat.getDateInstance()</code>, or <code>
+ * DateFormat.getDateTimeInstance()</code> rather than explicitly constructing an instance of <code>
+ * SimpleDateFormat</code>. This way, the client is guaranteed to get an appropriate formatting
+ * pattern for whatever locale the program is running in. If the client needs more control, they
+ * should consider using <code>DateFormat.getInstanceForSkeleton()</code>. However, if the client
+ * needs something more unusual than the default patterns in the locales, he can construct a <code>
+ * SimpleDateFormat</code> directly and give it an appropriate pattern (or use one of the factory
+ * methods on DateFormat and modify the pattern after the fact with <code>toPattern()</code> and
+ * <code>applyPattern()</code>. For more information on using these methods, see {@link DateFormat}.
  *
- * <p><strong>Date and Time Patterns:</strong></p>
+ * <p><strong>Date and Time Patterns:</strong>
  *
- * <p>Date and time formats are specified by <em>date and time pattern</em> strings.
- * The full syntax for date and time patterns can be found at
- * <a href="https://unicode.org/reports/tr35/tr35-dates.html#Date_Format_Patterns">https://unicode.org/reports/tr35/tr35-dates.html#Date_Format_Patterns</a>.</p>
+ * <p>Date and time formats are specified by <em>date and time pattern</em> strings. The full syntax
+ * for date and time patterns can be found at <a
+ * href="https://unicode.org/reports/tr35/tr35-dates.html#Date_Format_Patterns">https://unicode.org/reports/tr35/tr35-dates.html#Date_Format_Patterns</a>.
  *
- * <p>Within date and time pattern strings, all unquoted ASCII letters [A-Za-z] are reserved
- * as pattern letters representing calendar fields. Some of the most commonly used pattern letters are:</p>
+ * <p>Within date and time pattern strings, all unquoted ASCII letters [A-Za-z] are reserved as
+ * pattern letters representing calendar fields. Some of the most commonly used pattern letters are:
+ *
  * <blockquote>
+ *
  * <table border="1">
  *     <tr>
  *         <th style="text-align: center">Sym.</th>
@@ -284,18 +279,18 @@ import com.ibm.icu.util.UResourceBundle;
  * </table>
  *
  * </blockquote>
- * <p>
- * Any characters in the pattern that are not in the ranges of ['a'..'z']
- * and ['A'..'Z'] will be treated as quoted text. For instance, characters
- * like ':', '.', ' ', '#' and '@' will appear in the resulting time text
- * even they are not embraced within single quotes.
- * <p>
- * A pattern containing any invalid pattern letter will result in a thrown
- * exception during formatting or parsing.
  *
- * <p>
- * <strong>Examples Using the US Locale:</strong>
+ * <p>Any characters in the pattern that are not in the ranges of ['a'..'z'] and ['A'..'Z'] will be
+ * treated as quoted text. For instance, characters like ':', '.', ' ', '#' and '@' will appear in
+ * the resulting time text even they are not embraced within single quotes.
+ *
+ * <p>A pattern containing any invalid pattern letter will result in a thrown exception during
+ * formatting or parsing.
+ *
+ * <p><strong>Examples Using the US Locale:</strong>
+ *
  * <blockquote>
+ *
  * <pre>
  * Format Pattern                         Result
  * --------------                         -------
@@ -306,9 +301,13 @@ import com.ibm.icu.util.UResourceBundle;
  * "K:mm a, vvv"                     -&gt;&gt;  0:00 PM, PT
  * "yyyyy.MMMMM.dd GGG hh:mm aaa"    -&gt;&gt;  01996.July.10 AD 12:08 PM
  * </pre>
+ *
  * </blockquote>
+ *
  * <strong>Code Sample:</strong>
+ *
  * <blockquote>
+ *
  * <pre>
  * SimpleTimeZone pdt = new SimpleTimeZone(-8 * 60 * 60 * 1000, "PST");
  * pdt.setStartRule(Calendar.APRIL, 1, Calendar.SUNDAY, 2*60*60*1000);
@@ -324,66 +323,59 @@ import com.ibm.icu.util.UResourceBundle;
  * ParsePosition pos = new ParsePosition(0);
  * Date currentTime_2 = formatter.parse(dateString, pos);
  * </pre>
+ *
  * </blockquote>
- * In the example, the time value <code>currentTime_2</code> obtained from
- * parsing will be equal to <code>currentTime_1</code>. However, they may not be
- * equal if the am/pm marker 'a' is left out from the format pattern while
- * the "hour in am/pm" pattern symbol is used. This information loss can
- * happen when formatting the time in PM.
  *
- * <p>When parsing a date string using the abbreviated year pattern ("yy"),
- * SimpleDateFormat must interpret the abbreviated year
- * relative to some century.  It does this by adjusting dates to be
- * within 80 years before and 20 years after the time the SimpleDateFormat
- * instance is created. For example, using a pattern of "MM/dd/yy" and a
- * SimpleDateFormat instance created on Jan 1, 1997,  the string
- * "01/11/12" would be interpreted as Jan 11, 2012 while the string "05/04/64"
- * would be interpreted as May 4, 1964.
- * During parsing, only strings consisting of exactly two digits, as defined by
- * {@link com.ibm.icu.lang.UCharacter#isDigit(int)}, will be parsed into the default
- * century.
- * Any other numeric string, such as a one digit string, a three or more digit
- * string, or a two digit string that isn't all digits (for example, "-1"), is
- * interpreted literally.  So "01/02/3" or "01/02/003" are parsed, using the
- * same pattern, as Jan 2, 3 AD.  Likewise, "01/02/-3" is parsed as Jan 2, 4 BC.
+ * In the example, the time value <code>currentTime_2</code> obtained from parsing will be equal to
+ * <code>currentTime_1</code>. However, they may not be equal if the am/pm marker 'a' is left out
+ * from the format pattern while the "hour in am/pm" pattern symbol is used. This information loss
+ * can happen when formatting the time in PM.
  *
- * <p>If the year pattern does not have exactly two 'y' characters, the year is
- * interpreted literally, regardless of the number of digits.  So using the
- * pattern "MM/dd/yyyy", "01/11/12" parses to Jan 11, 12 A.D.
+ * <p>When parsing a date string using the abbreviated year pattern ("yy"), SimpleDateFormat must
+ * interpret the abbreviated year relative to some century. It does this by adjusting dates to be
+ * within 80 years before and 20 years after the time the SimpleDateFormat instance is created. For
+ * example, using a pattern of "MM/dd/yy" and a SimpleDateFormat instance created on Jan 1, 1997,
+ * the string "01/11/12" would be interpreted as Jan 11, 2012 while the string "05/04/64" would be
+ * interpreted as May 4, 1964. During parsing, only strings consisting of exactly two digits, as
+ * defined by {@link com.ibm.icu.lang.UCharacter#isDigit(int)}, will be parsed into the default
+ * century. Any other numeric string, such as a one digit string, a three or more digit string, or a
+ * two digit string that isn't all digits (for example, "-1"), is interpreted literally. So
+ * "01/02/3" or "01/02/003" are parsed, using the same pattern, as Jan 2, 3 AD. Likewise, "01/02/-3"
+ * is parsed as Jan 2, 4 BC.
  *
- * <p>When numeric fields abut one another directly, with no intervening delimiter
- * characters, they constitute a run of abutting numeric fields.  Such runs are
- * parsed specially.  For example, the format "HHmmss" parses the input text
- * "123456" to 12:34:56, parses the input text "12345" to 1:23:45, and fails to
- * parse "1234".  In other words, the leftmost field of the run is flexible,
- * while the others keep a fixed width.  If the parse fails anywhere in the run,
- * then the leftmost field is shortened by one character, and the entire run is
- * parsed again. This is repeated until either the parse succeeds or the
- * leftmost field is one character in length.  If the parse still fails at that
- * point, the parse of the run fails.
+ * <p>If the year pattern does not have exactly two 'y' characters, the year is interpreted
+ * literally, regardless of the number of digits. So using the pattern "MM/dd/yyyy", "01/11/12"
+ * parses to Jan 11, 12 A.D.
  *
- * <p>For time zones that have no names, use strings GMT+hours:minutes or
- * GMT-hours:minutes.
+ * <p>When numeric fields abut one another directly, with no intervening delimiter characters, they
+ * constitute a run of abutting numeric fields. Such runs are parsed specially. For example, the
+ * format "HHmmss" parses the input text "123456" to 12:34:56, parses the input text "12345" to
+ * 1:23:45, and fails to parse "1234". In other words, the leftmost field of the run is flexible,
+ * while the others keep a fixed width. If the parse fails anywhere in the run, then the leftmost
+ * field is shortened by one character, and the entire run is parsed again. This is repeated until
+ * either the parse succeeds or the leftmost field is one character in length. If the parse still
+ * fails at that point, the parse of the run fails.
  *
- * <p>The calendar defines what is the first day of the week, the first week
- * of the year, whether hours are zero based or not (0 vs 12 or 24), and the
- * time zone. There is one common decimal format to handle all the numbers;
- * the digit count is handled programmatically according to the pattern.
+ * <p>For time zones that have no names, use strings GMT+hours:minutes or GMT-hours:minutes.
+ *
+ * <p>The calendar defines what is the first day of the week, the first week of the year, whether
+ * hours are zero based or not (0 vs 12 or 24), and the time zone. There is one common decimal
+ * format to handle all the numbers; the digit count is handled programmatically according to the
+ * pattern.
  *
  * <h3>Synchronization</h3>
  *
- * Date formats are not synchronized. It is recommended to create separate
- * format instances for each thread. If multiple threads access a format
- * concurrently, it must be synchronized externally.
+ * Date formats are not synchronized. It is recommended to create separate format instances for each
+ * thread. If multiple threads access a format concurrently, it must be synchronized externally.
  *
- * @see          com.ibm.icu.util.Calendar
- * @see          com.ibm.icu.util.GregorianCalendar
- * @see          com.ibm.icu.util.TimeZone
- * @see          DateFormat
- * @see          DateFormatSymbols
- * @see          DecimalFormat
- * @see          TimeZoneFormat
- * @author       Mark Davis, Chen-Lieh Huang, Alan Liu
+ * @see com.ibm.icu.util.Calendar
+ * @see com.ibm.icu.util.GregorianCalendar
+ * @see com.ibm.icu.util.TimeZone
+ * @see DateFormat
+ * @see DateFormatSymbols
+ * @see DecimalFormat
+ * @see TimeZoneFormat
+ * @author Mark Davis, Chen-Lieh Huang, Alan Liu
  * @stable ICU 2.0
  */
 public class SimpleDateFormat extends DateFormat implements Cloneable {
@@ -408,16 +400,31 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
      * YEAR --> 10, MONTH -->20, DATE --> 30;
      * AM_PM -->40, HOUR --> 50, MINUTE -->60
      */
-    private static final int[] CALENDAR_FIELD_TO_LEVEL =
-    {
-        /*GyM*/ 0, 10, 20,
-        /*wW*/ 20, 30,
-        /*dDEF*/ 30, 20, 30, 30,
-        /*ahHm*/ 40, 50, 50, 60,
-        /*sS*/ 70, 80,
-        /*z?Y*/ 0, 0, 10,
-        /*eug*/ 30, 10, 0,
-        /*A?*/ 40, 0, 0
+    private static final int[] CALENDAR_FIELD_TO_LEVEL = {
+        /*GyM*/ 0,
+        10,
+        20,
+        /*wW*/ 20,
+        30,
+        /*dDEF*/ 30,
+        20,
+        30,
+        30,
+        /*ahHm*/ 40,
+        50,
+        50,
+        60,
+        /*sS*/ 70,
+        80,
+        /*z?Y*/ 0,
+        0,
+        10,
+        /*eug*/ 30,
+        10,
+        0,
+        /*A?*/ 40,
+        0,
+        0
     };
 
     /*
@@ -427,71 +434,177 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
      * year >  month > date > am-pm > hour >  minute
      * 'y' --> 10, 'M' -->20, 'd' --> 30; 'a' -->40, 'h' --> 50, 'm' -->60
      */
-    private static final int[] PATTERN_CHAR_TO_LEVEL =
-    {
+    private static final int[] PATTERN_CHAR_TO_LEVEL = {
         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-    //
+        //
         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-    //       !   "   #   $   %   &   '   (   )   *   +   ,   -   .   /
+        //       !   "   #   $   %   &   '   (   )   *   +   ,   -   .   /
         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-    //   0   1   2   3   4   5   6   7   8   9   :   ;   <   =   >   ?
+        //   0   1   2   3   4   5   6   7   8   9   :   ;   <   =   >   ?
         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-    //   @   A   B   C   D   E   F   G   H   I   J   K   L   M   N   O
-        -1, 40, -1, -1, 20, 30, 30,  0, 50, -1, -1, 50, 20, 20, -1,  0,
-    //   P   Q   R   S   T   U   V   W   X   Y   Z   [   \   ]   ^   _
-        -1, 20, -1, 80, -1, 10,  0, 30,  0, 10,  0, -1, -1, -1, -1, -1,
-    //   `   a   b   c   d   e   f   g   h   i   j   k   l   m   n   o
-        -1, 40, -1, 30, 30, 30, -1,  0, 50, -1, -1, 50, -1, 60, -1, -1,
-    //   p   q   r   s   t   u   v   w   x   y   z   {   |   }   ~
-        -1, 20, 10, 70, -1, 10,  0, 20,  0, 10,  0, -1, -1, -1, -1, -1,
+        //   @   A   B   C   D   E   F   G   H   I   J   K   L   M   N   O
+        -1, 40, -1, -1, 20, 30, 30, 0, 50, -1, -1, 50, 20, 20, -1, 0,
+        //   P   Q   R   S   T   U   V   W   X   Y   Z   [   \   ]   ^   _
+        -1, 20, -1, 80, -1, 10, 0, 30, 0, 10, 0, -1, -1, -1, -1, -1,
+        //   `   a   b   c   d   e   f   g   h   i   j   k   l   m   n   o
+        -1, 40, -1, 30, 30, 30, -1, 0, 50, -1, -1, 50, -1, 60, -1, -1,
+        //   p   q   r   s   t   u   v   w   x   y   z   {   |   }   ~
+        -1, 20, 10, 70, -1, 10, 0, 20, 0, 10, 0, -1, -1, -1, -1, -1,
     };
 
-    /**
-     * Map calendar field letter into calendar field level.
-     */
+    /** Map calendar field letter into calendar field level. */
     private static int getLevelFromChar(char ch) {
         return ch < PATTERN_CHAR_TO_LEVEL.length ? PATTERN_CHAR_TO_LEVEL[ch & 0xff] : -1;
     }
 
-    private static final boolean[] PATTERN_CHAR_IS_SYNTAX =
-    {
+    private static final boolean[] PATTERN_CHAR_IS_SYNTAX = {
         //
-        false, false, false, false, false, false, false, false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
         //
-        false, false, false, false, false, false, false, false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
         //
-        false, false, false, false, false, false, false, false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
         //
-        false, false, false, false, false, false, false, false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
         //         !      "      #      $      %      &      '
-        false, false, false, false, false, false, false, false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
         //  (      )      *      +      ,      -      .      /
-        false, false, false, false, false, false, false, false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
         //  0      1      2      3      4      5      6      7
-        false, false, false, false, false, false, false, false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
         //  8      9      :      ;      <      =      >      ?
-        false, false, false, false, false, false, false, false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
         //  @      A      B      C      D      E      F      G
-        false,  true,  true,  true,  true,  true,  true,  true,
+        false,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
         //  H      I      J      K      L      M      N      O
-         true,  true,  true,  true,  true,  true,  true,  true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
         //  P      Q      R      S      T      U      V      W
-         true,  true,  true,  true,  true,  true,  true,  true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
         //  X      Y      Z      [      \      ]      ^      _
-         true,  true,  true, false, false, false, false, false,
+        true,
+        true,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
         //  `      a      b      c      d      e      f      g
-        false,  true,  true,  true,  true,  true,  true,  true,
+        false,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
         //  h      i      j      k      l      m      n      o
-         true,  true,  true,  true,  true,  true,  true,  true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
         //  p      q      r      s      t      u      v      w
-         true,  true,  true,  true,  true,  true,  true,  true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
         //  x      y      z      {      |      }      ~
-         true,  true,  true, false, false, false, false, false,
+        true,
+        true,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
     };
 
-    /**
-     * Tell if a character can be used to define a field in a format string.
-     */
+    /** Tell if a character can be used to define a field in a format string. */
     private static boolean isSyntaxChar(char ch) {
         return ch < PATTERN_CHAR_IS_SYNTAX.length ? PATTERN_CHAR_IS_SYNTAX[ch & 0xff] : false;
     }
@@ -502,51 +615,55 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
     private static final int HEBREW_CAL_CUR_MILLENIUM_END_YEAR = 6000;
 
     /**
-     * The version of the serialized data on the stream.  Possible values:
+     * The version of the serialized data on the stream. Possible values:
+     *
      * <ul>
-     * <li><b>0</b> or not present on stream: JDK 1.1.3.  This version
-     * has no <code>defaultCenturyStart</code> on stream.
-     * <li><b>1</b> JDK 1.1.4 or later.  This version adds
-     * <code>defaultCenturyStart</code>.
-     * <li><b>2</b> This version writes an additional int for
-     * <code>capitalizationSetting</code>.
+     *   <li><b>0</b> or not present on stream: JDK 1.1.3. This version has no <code>
+     *       defaultCenturyStart</code> on stream.
+     *   <li><b>1</b> JDK 1.1.4 or later. This version adds <code>defaultCenturyStart</code>.
+     *   <li><b>2</b> This version writes an additional int for <code>capitalizationSetting</code>.
      * </ul>
-     * When streaming out this class, the most recent format
-     * and the highest allowable <code>serialVersionOnStream</code>
-     * is written.
+     *
+     * When streaming out this class, the most recent format and the highest allowable <code>
+     * serialVersionOnStream</code> is written.
+     *
      * @serial
      */
     private int serialVersionOnStream = currentSerialVersion;
 
     /**
-     * The pattern string of this formatter.  This is always a non-localized
-     * pattern.  May not be null.  See class documentation for details.
+     * The pattern string of this formatter. This is always a non-localized pattern. May not be
+     * null. See class documentation for details.
+     *
      * @serial
      */
     private String pattern;
 
     /**
-     * The override string of this formatter.  Used to override the
-     * numbering system for one or more fields.
+     * The override string of this formatter. Used to override the numbering system for one or more
+     * fields.
+     *
      * @serial
      */
     private String override;
 
     /**
      * The hash map used for number format overrides.
+     *
      * @serial
      */
     private HashMap<String, NumberFormat> numberFormatters;
 
     /**
      * The hash map used for number format overrides.
+     *
      * @serial
      */
     private HashMap<Character, String> overrideMap;
 
     /**
-     * The symbols used by this formatter for week names, month names,
-     * etc.  May not be null.
+     * The symbols used by this formatter for week names, month names, etc. May not be null.
+     *
      * @serial
      * @see DateFormatSymbols
      */
@@ -555,9 +672,9 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
     private transient ULocale locale;
 
     /**
-     * We map dates with two-digit years into the century starting at
-     * <code>defaultCenturyStart</code>, which may be any date.  May
-     * not be null.
+     * We map dates with two-digit years into the century starting at <code>defaultCenturyStart
+     * </code>, which may be any date. May not be null.
+     *
      * @serial
      * @since JDK1.1.4
      */
@@ -581,8 +698,8 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
     private static final String SUPPRESS_NEGATIVE_PREFIX = "\uAB00";
 
     /**
-     * If true, this object supports fast formatting using the
-     * subFormat variant that takes a StringBuffer.
+     * If true, this object supports fast formatting using the subFormat variant that takes a
+     * StringBuffer.
      */
     private transient boolean useFastFormat;
 
@@ -591,19 +708,13 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
      */
     private volatile TimeZoneFormat tzFormat;
 
-    /**
-     * BreakIterator to use for capitalization (will be cloned for actual use)
-     */
+    /** BreakIterator to use for capitalization (will be cloned for actual use) */
     private transient BreakIterator capitalizationBrkIter = null;
 
-    /**
-     * DateFormat pattern contains the minute field.
-     */
+    /** DateFormat pattern contains the minute field. */
     private transient boolean hasMinute;
 
-    /**
-     * DateFormat pattern contains the second field.
-     */
+    /** DateFormat pattern contains the second field. */
     private transient boolean hasSecond;
 
     /**
@@ -624,11 +735,8 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
      *  Old defaultCapitalizationContext field
      *  from ICU 49.1:
      */
-    //private ContextValue defaultCapitalizationContext;
-    /**
-     *  Old ContextValue enum, preserved only to avoid
-     *  deserialization errs from ICU 49.1.
-     */
+    // private ContextValue defaultCapitalizationContext;
+    /** Old ContextValue enum, preserved only to avoid deserialization errs from ICU 49.1. */
     @SuppressWarnings("unused")
     private enum ContextValue {
         UNKNOWN,
@@ -640,8 +748,8 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
 
     /**
      * Constructs a SimpleDateFormat using the default pattern for the default <code>FORMAT</code>
-     * locale.  <b>Note:</b> Not all locales support SimpleDateFormat; for full
-     * generality, use the factory methods in the DateFormat class.
+     * locale. <b>Note:</b> Not all locales support SimpleDateFormat; for full generality, use the
+     * factory methods in the DateFormat class.
      *
      * @see DateFormat
      * @see Category#FORMAT
@@ -653,64 +761,65 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
 
     /**
      * Constructs a SimpleDateFormat using the given pattern in the default <code>FORMAT</code>
-     * locale.  <b>Note:</b> Not all locales support SimpleDateFormat; for full
-     * generality, use the factory methods in the DateFormat class.
+     * locale. <b>Note:</b> Not all locales support SimpleDateFormat; for full generality, use the
+     * factory methods in the DateFormat class.
+     *
      * @see Category#FORMAT
      * @stable ICU 2.0
      */
-    public SimpleDateFormat(String pattern)
-    {
+    public SimpleDateFormat(String pattern) {
         this(pattern, null, null, null, null, true, null);
     }
 
     /**
-     * Constructs a SimpleDateFormat using the given pattern and locale.
-     * <b>Note:</b> Not all locales support SimpleDateFormat; for full
-     * generality, use the factory methods in the DateFormat class.
+     * Constructs a SimpleDateFormat using the given pattern and locale. <b>Note:</b> Not all
+     * locales support SimpleDateFormat; for full generality, use the factory methods in the
+     * DateFormat class.
+     *
      * @stable ICU 2.0
      */
-    public SimpleDateFormat(String pattern, Locale loc)
-    {
+    public SimpleDateFormat(String pattern, Locale loc) {
         this(pattern, null, null, null, ULocale.forLocale(loc), true, null);
     }
 
     /**
-     * Constructs a SimpleDateFormat using the given pattern and locale.
-     * <b>Note:</b> Not all locales support SimpleDateFormat; for full
-     * generality, use the factory methods in the DateFormat class.
+     * Constructs a SimpleDateFormat using the given pattern and locale. <b>Note:</b> Not all
+     * locales support SimpleDateFormat; for full generality, use the factory methods in the
+     * DateFormat class.
+     *
      * @stable ICU 3.2
      */
-    public SimpleDateFormat(String pattern, ULocale loc)
-    {
+    public SimpleDateFormat(String pattern, ULocale loc) {
         this(pattern, null, null, null, loc, true, null);
     }
 
     /**
      * Constructs a SimpleDateFormat using the given pattern , override and locale.
+     *
      * @param pattern The pattern to be used
-     * @param override The override string.  A numbering system override string can take one of the following forms:
-     *     1). If just a numbering system name is specified, it applies to all numeric fields in the date format pattern.
-     *     2). To specify an alternate numbering system on a field by field basis, use the field letters from the pattern
-     *         followed by an = sign, followed by the numbering system name.  For example, to specify that just the year
-     *         be formatted using Hebrew digits, use the override "y=hebr".  Multiple overrides can be specified in a single
-     *         string by separating them with a semi-colon. For example, the override string "m=thai;y=deva" would format using
-     *         Thai digits for the month and Devanagari digits for the year.
+     * @param override The override string. A numbering system override string can take one of the
+     *     following forms: 1). If just a numbering system name is specified, it applies to all
+     *     numeric fields in the date format pattern. 2). To specify an alternate numbering system
+     *     on a field by field basis, use the field letters from the pattern followed by an = sign,
+     *     followed by the numbering system name. For example, to specify that just the year be
+     *     formatted using Hebrew digits, use the override "y=hebr". Multiple overrides can be
+     *     specified in a single string by separating them with a semi-colon. For example, the
+     *     override string "m=thai;y=deva" would format using Thai digits for the month and
+     *     Devanagari digits for the year.
      * @param loc The locale to be used
      * @stable ICU 4.2
      */
-    public SimpleDateFormat(String pattern, String override, ULocale loc)
-    {
-        this(pattern, null, null, null, loc, false,override);
+    public SimpleDateFormat(String pattern, String override, ULocale loc) {
+        this(pattern, null, null, null, loc, false, override);
     }
 
     /**
-     * Constructs a SimpleDateFormat using the given pattern and
-     * locale-specific symbol data.
+     * Constructs a SimpleDateFormat using the given pattern and locale-specific symbol data.
      * Warning: uses default <code>FORMAT</code> locale for digits!
+     *
      * @stable ICU 2.0
      */
-    public SimpleDateFormat(String pattern, DateFormatSymbols formatData)
-    {
+    public SimpleDateFormat(String pattern, DateFormatSymbols formatData) {
         this(pattern, formatData.clone(), null, null, null, true, null);
     }
 
@@ -719,27 +828,37 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
-    public SimpleDateFormat(String pattern, DateFormatSymbols formatData, ULocale loc)
-    {
-        this(pattern, formatData.clone(), null, null, loc, true,null);
+    public SimpleDateFormat(String pattern, DateFormatSymbols formatData, ULocale loc) {
+        this(pattern, formatData.clone(), null, null, loc, true, null);
     }
 
     /**
-     * Package-private constructor that allows a subclass to specify
-     * whether it supports fast formatting.
+     * Package-private constructor that allows a subclass to specify whether it supports fast
+     * formatting.
      *
-     * TODO make this API public.
+     * <p>TODO make this API public.
      */
-    SimpleDateFormat(String pattern, DateFormatSymbols formatData, Calendar calendar, ULocale locale,
-                     boolean useFastFormat, String override) {
-        this(pattern, formatData.clone(), calendar.clone(), null, locale, useFastFormat,override);
+    SimpleDateFormat(
+            String pattern,
+            DateFormatSymbols formatData,
+            Calendar calendar,
+            ULocale locale,
+            boolean useFastFormat,
+            String override) {
+        this(pattern, formatData.clone(), calendar.clone(), null, locale, useFastFormat, override);
     }
 
     /*
      * The constructor called from all other SimpleDateFormat constructors
      */
-    private SimpleDateFormat(String pattern, DateFormatSymbols formatData, Calendar calendar,
-            NumberFormat numberFormat, ULocale locale, boolean useFastFormat,String override) {
+    private SimpleDateFormat(
+            String pattern,
+            DateFormatSymbols formatData,
+            Calendar calendar,
+            NumberFormat numberFormat,
+            ULocale locale,
+            boolean useFastFormat,
+            String override) {
         this.pattern = pattern;
         this.formatData = formatData;
         this.calendar = calendar;
@@ -752,6 +871,7 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
 
     /**
      * Creates an instance of SimpleDateFormat for the given format configuration
+     *
      * @param formatConfig the format configuration
      * @return A SimpleDateFormat instance
      * @internal
@@ -761,15 +881,16 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
     public static SimpleDateFormat getInstance(Calendar.FormatConfiguration formatConfig) {
 
         String ostr = formatConfig.getOverrideString();
-        boolean useFast = ( ostr != null && ostr.length() > 0 );
+        boolean useFast = (ostr != null && ostr.length() > 0);
 
-        return new SimpleDateFormat(formatConfig.getPatternString(),
-                    formatConfig.getDateFormatSymbols(),
-                    formatConfig.getCalendar(),
-                    null,
-                    formatConfig.getLocale(),
-                    useFast,
-                    formatConfig.getOverrideString());
+        return new SimpleDateFormat(
+                formatConfig.getPatternString(),
+                formatConfig.getDateFormatSymbols(),
+                formatConfig.getCalendar(),
+                null,
+                formatConfig.getLocale(),
+                useFast,
+                formatConfig.getOverrideString());
     }
 
     /*
@@ -805,7 +926,9 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
         // Instead, we just record time of construction for backward compatibility.
         defaultCenturyBase = System.currentTimeMillis();
 
-        setLocale(calendar.getLocale(ULocale.VALID_LOCALE ), calendar.getLocale(ULocale.ACTUAL_LOCALE));
+        setLocale(
+                calendar.getLocale(ULocale.VALID_LOCALE),
+                calendar.getLocale(ULocale.ACTUAL_LOCALE));
         initLocalZeroPaddingNumberFormat();
 
         parsePattern(); // Need this before initNumberFormatters(), to set hasHanYearChar
@@ -813,22 +936,25 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
         // Simple-minded hack to force Gannen year numbering for ja@calendar=japanese
         // if format is non-numeric (includes 年) and overrides are not already specified.
         // Now this does get updated if applyPattern subsequently changes the pattern type.
-        if (override == null && hasHanYearChar &&
-                calendar != null && calendar.getType().equals("japanese") &&
-                locale != null && locale.getLanguage().equals("ja")) {
+        if (override == null
+                && hasHanYearChar
+                && calendar != null
+                && calendar.getType().equals("japanese")
+                && locale != null
+                && locale.getLanguage().equals("ja")) {
             override = "y=jpanyear";
         }
 
         if (override != null) {
-           initNumberFormatters(locale);
+            initNumberFormatters(locale);
         }
     }
 
     /**
      * Private method lazily instantiate the TimeZoneFormat field
-     * @param bForceUpdate when true, check if tzFormat is synchronized with
-     * the current numberFormat and update its digits if necessary. When false,
-     * this check is skipped.
+     *
+     * @param bForceUpdate when true, check if tzFormat is synchronized with the current
+     *     numberFormat and update its digits if necessary. When false, this check is skipped.
      */
     private synchronized void initializeTimeZoneFormat(boolean bForceUpdate) {
         if (bForceUpdate || tzFormat == null) {
@@ -836,7 +962,8 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
 
             String digits = null;
             if (numberFormat instanceof DecimalFormat) {
-                DecimalFormatSymbols decsym = ((DecimalFormat) numberFormat).getDecimalFormatSymbols();
+                DecimalFormatSymbols decsym =
+                        ((DecimalFormat) numberFormat).getDecimalFormatSymbols();
                 String[] strDigits = decsym.getDigitStringsLocal();
                 // Note: TimeZoneFormat#setGMTOffsetDigits() does not support string array,
                 // so we need to concatenate digits to make a single string.
@@ -846,7 +973,7 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
                 }
                 digits = digitsBuf.toString();
             } else if (numberFormat instanceof DateNumberFormat) {
-                digits = new String(((DateNumberFormat)numberFormat).getDigits());
+                digits = new String(((DateNumberFormat) numberFormat).getDigits());
             }
 
             if (digits != null) {
@@ -862,6 +989,7 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
 
     /**
      * Private method, returns non-null TimeZoneFormat.
+     *
      * @return the TimeZoneFormat used by this formatter.
      */
     private TimeZoneFormat tzFormat() {
@@ -888,10 +1016,12 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
 
             try {
                 // Load the calendar data directly.
-                ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(
-                        ICUData.ICU_BASE_NAME, cachedDefaultLocale);
+                ICUResourceBundle rb =
+                        (ICUResourceBundle)
+                                UResourceBundle.getBundleInstance(
+                                        ICUData.ICU_BASE_NAME, cachedDefaultLocale);
                 String resourcePath = "calendar/" + cal.getType() + "/DateTimePatterns";
-                ICUResourceBundle patternsRb= rb.findWithFallback(resourcePath);
+                ICUResourceBundle patternsRb = rb.findWithFallback(resourcePath);
 
                 if (patternsRb == null) {
                     patternsRb = rb.findWithFallback("calendar/gregorian/DateTimePatterns");
@@ -899,11 +1029,16 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
                 if (patternsRb == null || patternsRb.getSize() < 9) {
                     cachedDefaultPattern = FALLBACKPATTERN;
                 } else {
-                    String basePattern = Calendar.getDateAtTimePattern(cal, cachedDefaultLocale, SHORT);
+                    String basePattern =
+                            Calendar.getDateAtTimePattern(cal, cachedDefaultLocale, SHORT);
 
-                    cachedDefaultPattern = SimpleFormatterImpl.formatRawPattern(
-                            basePattern, 2, 2,
-                            patternsRb.getString(SHORT), patternsRb.getString(SHORT + 4));
+                    cachedDefaultPattern =
+                            SimpleFormatterImpl.formatRawPattern(
+                                    basePattern,
+                                    2,
+                                    2,
+                                    patternsRb.getString(SHORT),
+                                    patternsRb.getString(SHORT + 4));
                 }
             } catch (MissingResourceException e) {
                 cachedDefaultPattern = FALLBACKPATTERN;
@@ -954,10 +1089,11 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
     }
 
     /**
-     * Sets the 100-year period 2-digit years will be interpreted as being in
-     * to begin on the date the user specifies.
-     * @param startDate During parsing, two digit years will be placed in the range
-     * <code>startDate</code> to <code>startDate + 100 years</code>.
+     * Sets the 100-year period 2-digit years will be interpreted as being in to begin on the date
+     * the user specifies.
+     *
+     * @param startDate During parsing, two digit years will be placed in the range <code>startDate
+     *     </code> to <code>startDate + 100 years</code>.
      * @stable ICU 2.0
      */
     public void set2DigitYearStart(Date startDate) {
@@ -965,10 +1101,10 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
     }
 
     /**
-     * Returns the beginning date of the 100-year period 2-digit years are interpreted
-     * as being within.
-     * @return the start of the 100-year period into which two digit years are
-     * parsed
+     * Returns the beginning date of the 100-year period 2-digit years are interpreted as being
+     * within.
+     *
+     * @return the start of the 100-year period into which two digit years are parsed
      * @stable ICU 2.0
      */
     public Date get2DigitYearStart() {
@@ -976,9 +1112,8 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
     }
 
     /**
-     * {@icu} Set a particular DisplayContext value in the formatter,
-     * such as CAPITALIZATION_FOR_STANDALONE. Note: For getContext, see
-     * DateFormat.
+     * {@icu} Set a particular DisplayContext value in the formatter, such as
+     * CAPITALIZATION_FOR_STANDALONE. Note: For getContext, see DateFormat.
      *
      * @param context The DisplayContext value to set.
      * @stable ICU 53
@@ -987,34 +1122,39 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
     @Override
     public void setContext(DisplayContext context) {
         super.setContext(context);
-        if (capitalizationBrkIter == null && (context==DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE ||
-              context==DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU ||
-              context==DisplayContext.CAPITALIZATION_FOR_STANDALONE)) {
+        if (capitalizationBrkIter == null
+                && (context == DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE
+                        || context == DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU
+                        || context == DisplayContext.CAPITALIZATION_FOR_STANDALONE)) {
             capitalizationBrkIter = BreakIterator.getSentenceInstance(locale);
         }
     }
 
     /**
-     * Formats a date or time, which is the standard millis
-     * since January 1, 1970, 00:00:00 GMT.
-     * <p>Example: using the US locale:
-     * "yyyy.MM.dd G 'at' HH:mm:ss zzz" -&gt;&gt; 1996.07.10 AD at 15:08:56 PDT
+     * Formats a date or time, which is the standard millis since January 1, 1970, 00:00:00 GMT.
+     *
+     * <p>Example: using the US locale: "yyyy.MM.dd G 'at' HH:mm:ss zzz" -&gt;&gt; 1996.07.10 AD at
+     * 15:08:56 PDT
+     *
      * @param cal the calendar whose date-time value is to be formatted into a date-time string
      * @param toAppendTo where the new date-time text is to be appended
-     * @param pos the formatting position. On input: an alignment field,
-     * if desired. On output: the offsets of the alignment field.
+     * @param pos the formatting position. On input: an alignment field, if desired. On output: the
+     *     offsets of the alignment field.
      * @return the formatted date-time string.
      * @see DateFormat
      * @stable ICU 2.0
      */
     @Override
-    public StringBuffer format(Calendar cal, StringBuffer toAppendTo,
-                               FieldPosition pos) {
+    public StringBuffer format(Calendar cal, StringBuffer toAppendTo, FieldPosition pos) {
         return format(cal, toAppendTo, pos, null);
     }
 
     /** Internal formatting method that accepts an attributes list. */
-    StringBuffer format(Calendar cal, StringBuffer toAppendTo, FieldPosition pos, List<FieldPosition> attributes) {
+    StringBuffer format(
+            Calendar cal,
+            StringBuffer toAppendTo,
+            FieldPosition pos,
+            List<FieldPosition> attributes) {
         TimeZone backupTZ = null;
         if (cal != calendar && !cal.getType().equals(calendar.getType())) {
             // Different calendar type
@@ -1025,7 +1165,13 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
             calendar.setTimeZone(cal.getTimeZone());
             cal = calendar;
         }
-        StringBuffer result = format(cal, getContext(DisplayContext.Type.CAPITALIZATION), toAppendTo, pos, attributes);
+        StringBuffer result =
+                format(
+                        cal,
+                        getContext(DisplayContext.Type.CAPITALIZATION),
+                        toAppendTo,
+                        pos,
+                        attributes);
         if (backupTZ != null) {
             // Restore the original time zone
             calendar.setTimeZone(backupTZ);
@@ -1035,8 +1181,12 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
 
     // The actual method to format date. If List attributes is not null,
     // then attribute information will be recorded.
-    private StringBuffer format(Calendar cal, DisplayContext capitalizationContext,
-            StringBuffer toAppendTo, FieldPosition pos, List<FieldPosition> attributes) {
+    private StringBuffer format(
+            Calendar cal,
+            DisplayContext capitalizationContext,
+            StringBuffer toAppendTo,
+            FieldPosition pos,
+            List<FieldPosition> attributes) {
         // Initialize
         pos.setBeginIndex(0);
         pos.setEndIndex(0);
@@ -1048,20 +1198,36 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
         Object[] items = getPatternItems();
         for (int i = 0; i < items.length; i++) {
             if (items[i] instanceof String) {
-                toAppendTo.append((String)items[i]);
+                toAppendTo.append((String) items[i]);
             } else {
-                PatternItem item = (PatternItem)items[i];
+                PatternItem item = (PatternItem) items[i];
                 int start = 0;
                 if (attributes != null) {
                     // Save the current length
                     start = toAppendTo.length();
                 }
                 if (useFastFormat) {
-                    subFormat(toAppendTo, item.type, item.length, toAppendTo.length(),
-                              i, capitalizationContext, pos, item.type, cal);
+                    subFormat(
+                            toAppendTo,
+                            item.type,
+                            item.length,
+                            toAppendTo.length(),
+                            i,
+                            capitalizationContext,
+                            pos,
+                            item.type,
+                            cal);
                 } else {
-                    toAppendTo.append(subFormat(item.type, item.length, toAppendTo.length(),
-                                                i, capitalizationContext, pos, item.type, cal));
+                    toAppendTo.append(
+                            subFormat(
+                                    item.type,
+                                    item.length,
+                                    toAppendTo.length(),
+                                    i,
+                                    capitalizationContext,
+                                    pos,
+                                    item.type,
+                                    cal));
                 }
                 if (attributes != null) {
                     // Check the sub format length
@@ -1078,27 +1244,25 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
             }
         }
         return toAppendTo;
-
     }
 
     // Map pattern character to index
-    private static final int[] PATTERN_CHAR_TO_INDEX =
-    {
+    private static final int[] PATTERN_CHAR_TO_INDEX = {
         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-    //
+        //
         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-    //       !   "   #   $   %   &   '   (   )   *   +   ,   -   .   /
+        //       !   "   #   $   %   &   '   (   )   *   +   ,   -   .   /
         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-    //   0   1   2   3   4   5   6   7   8   9   :   ;   <   =   >   ?
+        //   0   1   2   3   4   5   6   7   8   9   :   ;   <   =   >   ?
         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-    //   @   A   B   C   D   E   F   G   H   I   J   K   L   M   N   O
-        -1, 22, 36, -1, 10,  9, 11,  0,  5, -1, -1, 16, 26,  2, -1, 31,
-    //   P   Q   R   S   T   U   V   W   X   Y   Z   [   \   ]   ^   _
-        -1, 27, -1,  8, -1, 30, 29, 13, 32, 18, 23, -1, -1, -1, -1, -1,
-    //   `   a   b   c   d   e   f   g   h   i   j   k   l   m   n   o
-        -1, 14, 35, 25,  3, 19, -1, 21, 15, -1, -1,  4, -1,  6, -1, -1,
-    //   p   q   r   s   t   u   v   w   x   y   z   {   |   }   ~
-        -1, 28, 34,  7, -1, 20, 24, 12, 33,  1, 17, -1, -1, -1, -1, -1,
+        //   @   A   B   C   D   E   F   G   H   I   J   K   L   M   N   O
+        -1, 22, 36, -1, 10, 9, 11, 0, 5, -1, -1, 16, 26, 2, -1, 31,
+        //   P   Q   R   S   T   U   V   W   X   Y   Z   [   \   ]   ^   _
+        -1, 27, -1, 8, -1, 30, 29, 13, 32, 18, 23, -1, -1, -1, -1, -1,
+        //   `   a   b   c   d   e   f   g   h   i   j   k   l   m   n   o
+        -1, 14, 35, 25, 3, 19, -1, 21, 15, -1, -1, 4, -1, 6, -1, -1,
+        //   p   q   r   s   t   u   v   w   x   y   z   {   |   }   ~
+        -1, 28, 34, 7, -1, 20, 24, 12, 33, 1, 17, -1, -1, -1, -1, -1,
     };
 
     private static int getIndexFromChar(char ch) {
@@ -1106,82 +1270,136 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
     }
 
     // Map pattern character index to Calendar field number
-    private static final int[] PATTERN_INDEX_TO_CALENDAR_FIELD =
-    {
-        /*GyM*/ Calendar.ERA, Calendar.YEAR, Calendar.MONTH,
-        /*dkH*/ Calendar.DATE, Calendar.HOUR_OF_DAY, Calendar.HOUR_OF_DAY,
-        /*msS*/ Calendar.MINUTE, Calendar.SECOND, Calendar.MILLISECOND,
-        /*EDF*/ Calendar.DAY_OF_WEEK, Calendar.DAY_OF_YEAR, Calendar.DAY_OF_WEEK_IN_MONTH,
-        /*wWa*/ Calendar.WEEK_OF_YEAR, Calendar.WEEK_OF_MONTH, Calendar.AM_PM,
-        /*hKz*/ Calendar.HOUR, Calendar.HOUR, Calendar.ZONE_OFFSET,
-        /*Yeu*/ Calendar.YEAR_WOY, Calendar.DOW_LOCAL, Calendar.EXTENDED_YEAR,
-        /*gAZ*/ Calendar.JULIAN_DAY, Calendar.MILLISECONDS_IN_DAY, Calendar.ZONE_OFFSET /* also DST_OFFSET */,
-        /*v*/   Calendar.ZONE_OFFSET /* also DST_OFFSET */,
-        /*c*/   Calendar.DOW_LOCAL,
-        /*L*/   Calendar.MONTH,
-        /*Qq*/  Calendar.MONTH, Calendar.MONTH,
-        /*V*/   Calendar.ZONE_OFFSET /* also DST_OFFSET */,
-        /*U*/   Calendar.YEAR,
-        /*O*/   Calendar.ZONE_OFFSET /* also DST_OFFSET */,
-        /*Xx*/  Calendar.ZONE_OFFSET /* also DST_OFFSET */, Calendar.ZONE_OFFSET /* also DST_OFFSET */,
-        /*r*/   Calendar.EXTENDED_YEAR /* not an exact match */,
-        /*bB*/  -1, -1 /* am/pm/midnight/noon and flexible day period fields; no mapping to calendar fields */
-        /*:*/   -1, /* => no useful mapping to any calendar field, can't use protected Calendar.BASE_FIELD_COUNT */
+    private static final int[] PATTERN_INDEX_TO_CALENDAR_FIELD = {
+        /*GyM*/ Calendar.ERA,
+        Calendar.YEAR,
+        Calendar.MONTH,
+        /*dkH*/ Calendar.DATE,
+        Calendar.HOUR_OF_DAY,
+        Calendar.HOUR_OF_DAY,
+        /*msS*/ Calendar.MINUTE,
+        Calendar.SECOND,
+        Calendar.MILLISECOND,
+        /*EDF*/ Calendar.DAY_OF_WEEK,
+        Calendar.DAY_OF_YEAR,
+        Calendar.DAY_OF_WEEK_IN_MONTH,
+        /*wWa*/ Calendar.WEEK_OF_YEAR,
+        Calendar.WEEK_OF_MONTH,
+        Calendar.AM_PM,
+        /*hKz*/ Calendar.HOUR,
+        Calendar.HOUR,
+        Calendar.ZONE_OFFSET,
+        /*Yeu*/ Calendar.YEAR_WOY,
+        Calendar.DOW_LOCAL,
+        Calendar.EXTENDED_YEAR,
+        /*gAZ*/ Calendar.JULIAN_DAY,
+        Calendar.MILLISECONDS_IN_DAY,
+        Calendar.ZONE_OFFSET /* also DST_OFFSET */,
+        /*v*/ Calendar.ZONE_OFFSET /* also DST_OFFSET */,
+        /*c*/ Calendar.DOW_LOCAL,
+        /*L*/ Calendar.MONTH,
+        /*Qq*/ Calendar.MONTH,
+        Calendar.MONTH,
+        /*V*/ Calendar.ZONE_OFFSET /* also DST_OFFSET */,
+        /*U*/ Calendar.YEAR,
+        /*O*/ Calendar.ZONE_OFFSET /* also DST_OFFSET */,
+        /*Xx*/ Calendar.ZONE_OFFSET /* also DST_OFFSET */,
+        Calendar.ZONE_OFFSET /* also DST_OFFSET */,
+        /*r*/ Calendar.EXTENDED_YEAR /* not an exact match */,
+        /*bB*/ -1,
+        -1 /* am/pm/midnight/noon and flexible day period fields; no mapping to calendar fields */
+                /*:*/ - 1, /* => no useful mapping to any calendar field, can't use protected Calendar.BASE_FIELD_COUNT */
     };
 
     // Map pattern character index to DateFormat field number
     private static final int[] PATTERN_INDEX_TO_DATE_FORMAT_FIELD = {
-        /*GyM*/ DateFormat.ERA_FIELD, DateFormat.YEAR_FIELD, DateFormat.MONTH_FIELD,
-        /*dkH*/ DateFormat.DATE_FIELD, DateFormat.HOUR_OF_DAY1_FIELD, DateFormat.HOUR_OF_DAY0_FIELD,
-        /*msS*/ DateFormat.MINUTE_FIELD, DateFormat.SECOND_FIELD, DateFormat.FRACTIONAL_SECOND_FIELD,
-        /*EDF*/ DateFormat.DAY_OF_WEEK_FIELD, DateFormat.DAY_OF_YEAR_FIELD, DateFormat.DAY_OF_WEEK_IN_MONTH_FIELD,
-        /*wWa*/ DateFormat.WEEK_OF_YEAR_FIELD, DateFormat.WEEK_OF_MONTH_FIELD, DateFormat.AM_PM_FIELD,
-        /*hKz*/ DateFormat.HOUR1_FIELD, DateFormat.HOUR0_FIELD, DateFormat.TIMEZONE_FIELD,
-        /*Yeu*/ DateFormat.YEAR_WOY_FIELD, DateFormat.DOW_LOCAL_FIELD, DateFormat.EXTENDED_YEAR_FIELD,
-        /*gAZ*/ DateFormat.JULIAN_DAY_FIELD, DateFormat.MILLISECONDS_IN_DAY_FIELD, DateFormat.TIMEZONE_RFC_FIELD,
-        /*v*/   DateFormat.TIMEZONE_GENERIC_FIELD,
-        /*c*/   DateFormat.STANDALONE_DAY_FIELD,
-        /*L*/   DateFormat.STANDALONE_MONTH_FIELD,
-        /*Qq*/  DateFormat.QUARTER_FIELD, DateFormat.STANDALONE_QUARTER_FIELD,
-        /*V*/   DateFormat.TIMEZONE_SPECIAL_FIELD,
-        /*U*/   DateFormat.YEAR_NAME_FIELD,
-        /*O*/   DateFormat.TIMEZONE_LOCALIZED_GMT_OFFSET_FIELD,
-        /*Xx*/  DateFormat.TIMEZONE_ISO_FIELD, DateFormat.TIMEZONE_ISO_LOCAL_FIELD,
-        /*r*/   DateFormat.RELATED_YEAR,
-        /*bB*/  DateFormat.AM_PM_MIDNIGHT_NOON_FIELD, DateFormat.FLEXIBLE_DAY_PERIOD_FIELD,
-        /*(no pattern character defined for this)*/   DateFormat.TIME_SEPARATOR,
+        /*GyM*/ DateFormat.ERA_FIELD,
+        DateFormat.YEAR_FIELD,
+        DateFormat.MONTH_FIELD,
+        /*dkH*/ DateFormat.DATE_FIELD,
+        DateFormat.HOUR_OF_DAY1_FIELD,
+        DateFormat.HOUR_OF_DAY0_FIELD,
+        /*msS*/ DateFormat.MINUTE_FIELD,
+        DateFormat.SECOND_FIELD,
+        DateFormat.FRACTIONAL_SECOND_FIELD,
+        /*EDF*/ DateFormat.DAY_OF_WEEK_FIELD,
+        DateFormat.DAY_OF_YEAR_FIELD,
+        DateFormat.DAY_OF_WEEK_IN_MONTH_FIELD,
+        /*wWa*/ DateFormat.WEEK_OF_YEAR_FIELD,
+        DateFormat.WEEK_OF_MONTH_FIELD,
+        DateFormat.AM_PM_FIELD,
+        /*hKz*/ DateFormat.HOUR1_FIELD,
+        DateFormat.HOUR0_FIELD,
+        DateFormat.TIMEZONE_FIELD,
+        /*Yeu*/ DateFormat.YEAR_WOY_FIELD,
+        DateFormat.DOW_LOCAL_FIELD,
+        DateFormat.EXTENDED_YEAR_FIELD,
+        /*gAZ*/ DateFormat.JULIAN_DAY_FIELD,
+        DateFormat.MILLISECONDS_IN_DAY_FIELD,
+        DateFormat.TIMEZONE_RFC_FIELD,
+        /*v*/ DateFormat.TIMEZONE_GENERIC_FIELD,
+        /*c*/ DateFormat.STANDALONE_DAY_FIELD,
+        /*L*/ DateFormat.STANDALONE_MONTH_FIELD,
+        /*Qq*/ DateFormat.QUARTER_FIELD,
+        DateFormat.STANDALONE_QUARTER_FIELD,
+        /*V*/ DateFormat.TIMEZONE_SPECIAL_FIELD,
+        /*U*/ DateFormat.YEAR_NAME_FIELD,
+        /*O*/ DateFormat.TIMEZONE_LOCALIZED_GMT_OFFSET_FIELD,
+        /*Xx*/ DateFormat.TIMEZONE_ISO_FIELD,
+        DateFormat.TIMEZONE_ISO_LOCAL_FIELD,
+        /*r*/ DateFormat.RELATED_YEAR,
+        /*bB*/ DateFormat.AM_PM_MIDNIGHT_NOON_FIELD,
+        DateFormat.FLEXIBLE_DAY_PERIOD_FIELD,
+        /*(no pattern character defined for this)*/ DateFormat.TIME_SEPARATOR,
     };
 
     // Map pattern character index to DateFormat.Field
     private static final DateFormat.Field[] PATTERN_INDEX_TO_DATE_FORMAT_ATTRIBUTE = {
-        /*GyM*/ DateFormat.Field.ERA, DateFormat.Field.YEAR, DateFormat.Field.MONTH,
-        /*dkH*/ DateFormat.Field.DAY_OF_MONTH, DateFormat.Field.HOUR_OF_DAY1, DateFormat.Field.HOUR_OF_DAY0,
-        /*msS*/ DateFormat.Field.MINUTE, DateFormat.Field.SECOND, DateFormat.Field.MILLISECOND,
-        /*EDF*/ DateFormat.Field.DAY_OF_WEEK, DateFormat.Field.DAY_OF_YEAR, DateFormat.Field.DAY_OF_WEEK_IN_MONTH,
-        /*wWa*/ DateFormat.Field.WEEK_OF_YEAR, DateFormat.Field.WEEK_OF_MONTH, DateFormat.Field.AM_PM,
-        /*hKz*/ DateFormat.Field.HOUR1, DateFormat.Field.HOUR0, DateFormat.Field.TIME_ZONE,
-        /*Yeu*/ DateFormat.Field.YEAR_WOY, DateFormat.Field.DOW_LOCAL, DateFormat.Field.EXTENDED_YEAR,
-        /*gAZ*/ DateFormat.Field.JULIAN_DAY, DateFormat.Field.MILLISECONDS_IN_DAY, DateFormat.Field.TIME_ZONE,
-        /*v*/   DateFormat.Field.TIME_ZONE,
-        /*c*/   DateFormat.Field.DAY_OF_WEEK,
-        /*L*/   DateFormat.Field.MONTH,
-        /*Qq*/  DateFormat.Field.QUARTER, DateFormat.Field.QUARTER,
-        /*V*/   DateFormat.Field.TIME_ZONE,
-        /*U*/   DateFormat.Field.YEAR,
-        /*O*/   DateFormat.Field.TIME_ZONE,
-        /*Xx*/  DateFormat.Field.TIME_ZONE, DateFormat.Field.TIME_ZONE,
-        /*r*/   DateFormat.Field.RELATED_YEAR,
-        /*bB*/  DateFormat.Field.AM_PM_MIDNIGHT_NOON, DateFormat.Field.FLEXIBLE_DAY_PERIOD,
-        /*(no pattern character defined for this)*/   DateFormat.Field.TIME_SEPARATOR,
+        /*GyM*/ DateFormat.Field.ERA,
+        DateFormat.Field.YEAR,
+        DateFormat.Field.MONTH,
+        /*dkH*/ DateFormat.Field.DAY_OF_MONTH,
+        DateFormat.Field.HOUR_OF_DAY1,
+        DateFormat.Field.HOUR_OF_DAY0,
+        /*msS*/ DateFormat.Field.MINUTE,
+        DateFormat.Field.SECOND,
+        DateFormat.Field.MILLISECOND,
+        /*EDF*/ DateFormat.Field.DAY_OF_WEEK,
+        DateFormat.Field.DAY_OF_YEAR,
+        DateFormat.Field.DAY_OF_WEEK_IN_MONTH,
+        /*wWa*/ DateFormat.Field.WEEK_OF_YEAR,
+        DateFormat.Field.WEEK_OF_MONTH,
+        DateFormat.Field.AM_PM,
+        /*hKz*/ DateFormat.Field.HOUR1,
+        DateFormat.Field.HOUR0,
+        DateFormat.Field.TIME_ZONE,
+        /*Yeu*/ DateFormat.Field.YEAR_WOY,
+        DateFormat.Field.DOW_LOCAL,
+        DateFormat.Field.EXTENDED_YEAR,
+        /*gAZ*/ DateFormat.Field.JULIAN_DAY,
+        DateFormat.Field.MILLISECONDS_IN_DAY,
+        DateFormat.Field.TIME_ZONE,
+        /*v*/ DateFormat.Field.TIME_ZONE,
+        /*c*/ DateFormat.Field.DAY_OF_WEEK,
+        /*L*/ DateFormat.Field.MONTH,
+        /*Qq*/ DateFormat.Field.QUARTER,
+        DateFormat.Field.QUARTER,
+        /*V*/ DateFormat.Field.TIME_ZONE,
+        /*U*/ DateFormat.Field.YEAR,
+        /*O*/ DateFormat.Field.TIME_ZONE,
+        /*Xx*/ DateFormat.Field.TIME_ZONE,
+        DateFormat.Field.TIME_ZONE,
+        /*r*/ DateFormat.Field.RELATED_YEAR,
+        /*bB*/ DateFormat.Field.AM_PM_MIDNIGHT_NOON,
+        DateFormat.Field.FLEXIBLE_DAY_PERIOD,
+        /*(no pattern character defined for this)*/ DateFormat.Field.TIME_SEPARATOR,
     };
 
     /**
-     * Returns a DateFormat.Field constant associated with the specified format pattern
-     * character.
+     * Returns a DateFormat.Field constant associated with the specified format pattern character.
      *
      * @param ch The pattern character
      * @return DateFormat.Field associated with the pattern character
-     *
      * @stable ICU 3.8
      */
     protected DateFormat.Field patternCharToDateFormatField(char ch) {
@@ -1193,65 +1411,83 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
     }
 
     /**
-     * Formats a single field, given its pattern character.  Subclasses may
-     * override this method in order to modify or add formatting
-     * capabilities.
+     * Formats a single field, given its pattern character. Subclasses may override this method in
+     * order to modify or add formatting capabilities.
+     *
      * @param ch the pattern character
      * @param count the number of times ch is repeated in the pattern
-     * @param beginOffset the offset of the output string at the start of
-     * this field; used to set pos when appropriate
+     * @param beginOffset the offset of the output string at the start of this field; used to set
+     *     pos when appropriate
      * @param pos receives the position of a field, when appropriate
      * @param fmtData the symbols for this formatter
      * @stable ICU 2.0
      */
-    protected String subFormat(char ch, int count, int beginOffset,
-                               FieldPosition pos, DateFormatSymbols fmtData,
-                               Calendar cal)
-        throws IllegalArgumentException
-    {
+    protected String subFormat(
+            char ch,
+            int count,
+            int beginOffset,
+            FieldPosition pos,
+            DateFormatSymbols fmtData,
+            Calendar cal)
+            throws IllegalArgumentException {
         // Note: formatData is ignored
-        return subFormat(ch, count, beginOffset, 0, DisplayContext.CAPITALIZATION_NONE, pos, ch, cal);
+        return subFormat(
+                ch, count, beginOffset, 0, DisplayContext.CAPITALIZATION_NONE, pos, ch, cal);
     }
 
-     /**
-     * Formats a single field. This is the version called internally; it
-     * adds fieldNum and capitalizationContext parameters.
+    /**
+     * Formats a single field. This is the version called internally; it adds fieldNum and
+     * capitalizationContext parameters.
      *
      * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
-    protected String subFormat(char ch, int count, int beginOffset,
-                               int fieldNum, DisplayContext capitalizationContext,
-                               FieldPosition pos,
-                               char patternCharToOutput,
-                               Calendar cal)
-    {
+    protected String subFormat(
+            char ch,
+            int count,
+            int beginOffset,
+            int fieldNum,
+            DisplayContext capitalizationContext,
+            FieldPosition pos,
+            char patternCharToOutput,
+            Calendar cal) {
         StringBuffer buf = new StringBuffer();
-        subFormat(buf, ch, count, beginOffset, fieldNum, capitalizationContext, pos, patternCharToOutput, cal);
+        subFormat(
+                buf,
+                ch,
+                count,
+                beginOffset,
+                fieldNum,
+                capitalizationContext,
+                pos,
+                patternCharToOutput,
+                cal);
         return buf.toString();
     }
 
-   /**
-     * Formats a single field; useFastFormat variant.  Reuses a
-     * StringBuffer for results instead of creating a String on the
-     * heap for each call.
+    /**
+     * Formats a single field; useFastFormat variant. Reuses a StringBuffer for results instead of
+     * creating a String on the heap for each call.
      *
-     * NOTE We don't really need the beginOffset parameter, EXCEPT for
-     * the need to support the slow subFormat variant (above) which
-     * has to pass it in to us.
+     * <p>NOTE We don't really need the beginOffset parameter, EXCEPT for the need to support the
+     * slow subFormat variant (above) which has to pass it in to us.
      *
      * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
     @SuppressWarnings("fallthrough")
-    protected void subFormat(StringBuffer buf,
-                             char ch, int count, int beginOffset,
-                             int fieldNum, DisplayContext capitalizationContext,
-                             FieldPosition pos,
-                             char patternCharToOutput,
-                             Calendar cal) {
+    protected void subFormat(
+            StringBuffer buf,
+            char ch,
+            int count,
+            int beginOffset,
+            int fieldNum,
+            DisplayContext capitalizationContext,
+            FieldPosition pos,
+            char patternCharToOutput,
+            Calendar cal) {
 
         final int maxIntCount = Integer.MAX_VALUE;
         final int bufstart = buf.length();
@@ -1261,12 +1497,12 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
 
         int patternCharIndex = getIndexFromChar(ch);
         if (patternCharIndex == -1) {
-            if (ch == 'l') { // (SMALL LETTER L) deprecated placeholder for leap month marker, ignore
+            if (ch == 'l') { // (SMALL LETTER L) deprecated placeholder for leap month marker,
+                // ignore
                 return;
             } else {
-                throw new IllegalArgumentException("Illegal pattern character " +
-                                                   "'" + ch + "' in \"" +
-                                                   pattern + '"');
+                throw new IllegalArgumentException(
+                        "Illegal pattern character " + "'" + ch + "' in \"" + pattern + '"');
             }
         }
 
@@ -1274,470 +1510,605 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
         int value = 0;
         // Don't get value unless it is useful
         if (field >= 0) {
-            value = (patternCharIndex != DateFormat.RELATED_YEAR)? cal.get(field): cal.getRelatedYear();
+            value =
+                    (patternCharIndex != DateFormat.RELATED_YEAR)
+                            ? cal.get(field)
+                            : cal.getRelatedYear();
         }
 
         NumberFormat currentNumberFormat = getNumberFormat(ch);
-        DateFormatSymbols.CapitalizationContextUsage capContextUsageType = DateFormatSymbols.CapitalizationContextUsage.OTHER;
+        DateFormatSymbols.CapitalizationContextUsage capContextUsageType =
+                DateFormatSymbols.CapitalizationContextUsage.OTHER;
 
         switch (patternCharIndex) {
-        case 0: // 'G' - ERA
-            if ( cal.getType().equals("chinese") || cal.getType().equals("dangi") ) {
-                // moved from ChineseDateFormat
-                zeroPaddingNumber(currentNumberFormat, buf, value, 1, 9);
-            } else {
+            case 0: // 'G' - ERA
+                if (cal.getType().equals("chinese") || cal.getType().equals("dangi")) {
+                    // moved from ChineseDateFormat
+                    zeroPaddingNumber(currentNumberFormat, buf, value, 1, 9);
+                } else {
+                    if (count == 5) {
+                        safeAppend(formatData.narrowEras, value, buf);
+                        capContextUsageType =
+                                DateFormatSymbols.CapitalizationContextUsage.ERA_NARROW;
+                    } else if (count == 4) {
+                        safeAppend(formatData.eraNames, value, buf);
+                        capContextUsageType = DateFormatSymbols.CapitalizationContextUsage.ERA_WIDE;
+                    } else {
+                        safeAppend(formatData.eras, value, buf);
+                        capContextUsageType =
+                                DateFormatSymbols.CapitalizationContextUsage.ERA_ABBREV;
+                    }
+                }
+                break;
+            case 30: // 'U' - YEAR_NAME_FIELD
+                if (formatData.shortYearNames != null
+                        && value <= formatData.shortYearNames.length) {
+                    safeAppend(formatData.shortYearNames, value - 1, buf);
+                    break;
+                }
+                // else fall through to numeric year handling, do not break here
+            case 1: // 'y' - YEAR
+            case 18: // 'Y' - YEAR_WOY
+                if (override != null
+                        && (override.compareTo("hebr") == 0 || override.indexOf("y=hebr") >= 0)
+                        && value > HEBREW_CAL_CUR_MILLENIUM_START_YEAR
+                        && value < HEBREW_CAL_CUR_MILLENIUM_END_YEAR) {
+                    value -= HEBREW_CAL_CUR_MILLENIUM_START_YEAR;
+                }
+                /* According to the specification, if the number of pattern letters ('y') is 2,
+                 * the year is truncated to 2 digits; otherwise it is interpreted as a number.
+                 * But the original code process 'y', 'yy', 'yyy' in the same way. and process
+                 * patterns with 4 or more than 4 'y' characters in the same way.
+                 * So I change the codes to meet the specification. [Richard/GCl]
+                 */
+                if (count == 2) {
+                    zeroPaddingNumber(currentNumberFormat, buf, value, 2, 2); // clip 1996 to 96
+                } else { // count = 1 or count > 2
+                    zeroPaddingNumber(currentNumberFormat, buf, value, count, maxIntCount);
+                }
+                break;
+            case 2: // 'M' - MONTH
+            case 26: // 'L' - STANDALONE MONTH
+                if (cal.getType().equals("hebrew")) {
+                    boolean isLeap = HebrewCalendar.isLeapYear(cal.get(Calendar.YEAR));
+                    if (isLeap && value == 6 && count >= 3) {
+                        value = 13; // Show alternate form for Adar II in leap years in Hebrew
+                        // calendar.
+                    }
+                    if (!isLeap && value >= 6 && count < 3) {
+                        value--; // Adjust the month number down 1 in Hebrew non-leap years, i.e.
+                        // Adar is 6, not 7.
+                    }
+                }
+                int isLeapMonth =
+                        (formatData.leapMonthPatterns != null
+                                        && formatData.leapMonthPatterns.length
+                                                >= DateFormatSymbols.DT_MONTH_PATTERN_COUNT)
+                                ? cal.get(Calendar.IS_LEAP_MONTH)
+                                : 0;
+                // should consolidate the next section by using arrays of pointers & counts for the
+                // right symbols...
                 if (count == 5) {
-                    safeAppend(formatData.narrowEras, value, buf);
-                    capContextUsageType = DateFormatSymbols.CapitalizationContextUsage.ERA_NARROW;
+                    if (patternCharIndex == 2) {
+                        safeAppendWithMonthPattern(
+                                formatData.narrowMonths,
+                                value,
+                                buf,
+                                (isLeapMonth != 0)
+                                        ? formatData
+                                                .leapMonthPatterns[
+                                                DateFormatSymbols
+                                                        .DT_LEAP_MONTH_PATTERN_FORMAT_NARROW]
+                                        : null);
+                    } else {
+                        safeAppendWithMonthPattern(
+                                formatData.standaloneNarrowMonths,
+                                value,
+                                buf,
+                                (isLeapMonth != 0)
+                                        ? formatData
+                                                .leapMonthPatterns[
+                                                DateFormatSymbols
+                                                        .DT_LEAP_MONTH_PATTERN_STANDALONE_NARROW]
+                                        : null);
+                    }
+                    capContextUsageType = DateFormatSymbols.CapitalizationContextUsage.MONTH_NARROW;
                 } else if (count == 4) {
-                    safeAppend(formatData.eraNames, value, buf);
-                    capContextUsageType = DateFormatSymbols.CapitalizationContextUsage.ERA_WIDE;
+                    if (patternCharIndex == 2) {
+                        safeAppendWithMonthPattern(
+                                formatData.months,
+                                value,
+                                buf,
+                                (isLeapMonth != 0)
+                                        ? formatData
+                                                .leapMonthPatterns[
+                                                DateFormatSymbols.DT_LEAP_MONTH_PATTERN_FORMAT_WIDE]
+                                        : null);
+                        capContextUsageType =
+                                DateFormatSymbols.CapitalizationContextUsage.MONTH_FORMAT;
+                    } else {
+                        safeAppendWithMonthPattern(
+                                formatData.standaloneMonths,
+                                value,
+                                buf,
+                                (isLeapMonth != 0)
+                                        ? formatData
+                                                .leapMonthPatterns[
+                                                DateFormatSymbols
+                                                        .DT_LEAP_MONTH_PATTERN_STANDALONE_WIDE]
+                                        : null);
+                        capContextUsageType =
+                                DateFormatSymbols.CapitalizationContextUsage.MONTH_STANDALONE;
+                    }
+                } else if (count == 3) {
+                    if (patternCharIndex == 2) {
+                        safeAppendWithMonthPattern(
+                                formatData.shortMonths,
+                                value,
+                                buf,
+                                (isLeapMonth != 0)
+                                        ? formatData
+                                                .leapMonthPatterns[
+                                                DateFormatSymbols
+                                                        .DT_LEAP_MONTH_PATTERN_FORMAT_ABBREV]
+                                        : null);
+                        capContextUsageType =
+                                DateFormatSymbols.CapitalizationContextUsage.MONTH_FORMAT;
+                    } else {
+                        safeAppendWithMonthPattern(
+                                formatData.standaloneShortMonths,
+                                value,
+                                buf,
+                                (isLeapMonth != 0)
+                                        ? formatData
+                                                .leapMonthPatterns[
+                                                DateFormatSymbols
+                                                        .DT_LEAP_MONTH_PATTERN_STANDALONE_ABBREV]
+                                        : null);
+                        capContextUsageType =
+                                DateFormatSymbols.CapitalizationContextUsage.MONTH_STANDALONE;
+                    }
                 } else {
-                    safeAppend(formatData.eras, value, buf);
-                    capContextUsageType = DateFormatSymbols.CapitalizationContextUsage.ERA_ABBREV;
+                    StringBuffer monthNumber = new StringBuffer();
+                    zeroPaddingNumber(
+                            currentNumberFormat, monthNumber, value + 1, count, maxIntCount);
+                    String[] monthNumberStrings = new String[1];
+                    monthNumberStrings[0] = monthNumber.toString();
+                    safeAppendWithMonthPattern(
+                            monthNumberStrings,
+                            0,
+                            buf,
+                            (isLeapMonth != 0)
+                                    ? formatData
+                                            .leapMonthPatterns[
+                                            DateFormatSymbols.DT_LEAP_MONTH_PATTERN_NUMERIC]
+                                    : null);
                 }
-            }
-            break;
-        case 30: // 'U' - YEAR_NAME_FIELD
-            if (formatData.shortYearNames != null && value <= formatData.shortYearNames.length) {
-                safeAppend(formatData.shortYearNames, value-1, buf);
                 break;
-            }
-            // else fall through to numeric year handling, do not break here
-        case 1: // 'y' - YEAR
-        case 18: // 'Y' - YEAR_WOY
-            if ( override != null && (override.compareTo("hebr") == 0 || override.indexOf("y=hebr") >= 0) &&
-                    value > HEBREW_CAL_CUR_MILLENIUM_START_YEAR && value < HEBREW_CAL_CUR_MILLENIUM_END_YEAR ) {
-                value -= HEBREW_CAL_CUR_MILLENIUM_START_YEAR;
-            }
-            /* According to the specification, if the number of pattern letters ('y') is 2,
-             * the year is truncated to 2 digits; otherwise it is interpreted as a number.
-             * But the original code process 'y', 'yy', 'yyy' in the same way. and process
-             * patterns with 4 or more than 4 'y' characters in the same way.
-             * So I change the codes to meet the specification. [Richard/GCl]
-             */
-            if (count == 2) {
-                zeroPaddingNumber(currentNumberFormat,buf, value, 2, 2); // clip 1996 to 96
-            } else { //count = 1 or count > 2
-                zeroPaddingNumber(currentNumberFormat,buf, value, count, maxIntCount);
-            }
-            break;
-        case 2: // 'M' - MONTH
-        case 26: // 'L' - STANDALONE MONTH
-            if ( cal.getType().equals("hebrew")) {
-                boolean isLeap = HebrewCalendar.isLeapYear(cal.get(Calendar.YEAR));
-                if (isLeap && value == 6 && count >= 3 ) {
-                    value = 13; // Show alternate form for Adar II in leap years in Hebrew calendar.
-                }
-                if (!isLeap && value >= 6 && count < 3 ) {
-                    value--; // Adjust the month number down 1 in Hebrew non-leap years, i.e. Adar is 6, not 7.
-                }
-            }
-            int isLeapMonth = (formatData.leapMonthPatterns != null && formatData.leapMonthPatterns.length >= DateFormatSymbols.DT_MONTH_PATTERN_COUNT)?
-                     cal.get(Calendar.IS_LEAP_MONTH): 0;
-            // should consolidate the next section by using arrays of pointers & counts for the right symbols...
-            if (count == 5) {
-                if (patternCharIndex == 2) {
-                    safeAppendWithMonthPattern(formatData.narrowMonths, value, buf, (isLeapMonth!=0)? formatData.leapMonthPatterns[DateFormatSymbols.DT_LEAP_MONTH_PATTERN_FORMAT_NARROW]: null);
+            case 4: // 'k' - HOUR_OF_DAY (1..24)
+                if (value == 0) {
+                    zeroPaddingNumber(
+                            currentNumberFormat,
+                            buf,
+                            cal.getMaximum(Calendar.HOUR_OF_DAY) + 1,
+                            count,
+                            maxIntCount);
                 } else {
-                    safeAppendWithMonthPattern(formatData.standaloneNarrowMonths, value, buf, (isLeapMonth!=0)? formatData.leapMonthPatterns[DateFormatSymbols.DT_LEAP_MONTH_PATTERN_STANDALONE_NARROW]: null);
+                    zeroPaddingNumber(currentNumberFormat, buf, value, count, maxIntCount);
                 }
-                capContextUsageType = DateFormatSymbols.CapitalizationContextUsage.MONTH_NARROW;
-            } else if (count == 4) {
-                if (patternCharIndex == 2) {
-                    safeAppendWithMonthPattern(formatData.months, value, buf, (isLeapMonth!=0)? formatData.leapMonthPatterns[DateFormatSymbols.DT_LEAP_MONTH_PATTERN_FORMAT_WIDE]: null);
-                    capContextUsageType = DateFormatSymbols.CapitalizationContextUsage.MONTH_FORMAT;
-                } else {
-                    safeAppendWithMonthPattern(formatData.standaloneMonths, value, buf, (isLeapMonth!=0)? formatData.leapMonthPatterns[DateFormatSymbols.DT_LEAP_MONTH_PATTERN_STANDALONE_WIDE]: null);
-                    capContextUsageType = DateFormatSymbols.CapitalizationContextUsage.MONTH_STANDALONE;
-                }
-            } else if (count == 3) {
-                if (patternCharIndex == 2) {
-                    safeAppendWithMonthPattern(formatData.shortMonths, value, buf, (isLeapMonth!=0)? formatData.leapMonthPatterns[DateFormatSymbols.DT_LEAP_MONTH_PATTERN_FORMAT_ABBREV]: null);
-                    capContextUsageType = DateFormatSymbols.CapitalizationContextUsage.MONTH_FORMAT;
-                } else {
-                    safeAppendWithMonthPattern(formatData.standaloneShortMonths, value, buf, (isLeapMonth!=0)? formatData.leapMonthPatterns[DateFormatSymbols.DT_LEAP_MONTH_PATTERN_STANDALONE_ABBREV]: null);
-                    capContextUsageType = DateFormatSymbols.CapitalizationContextUsage.MONTH_STANDALONE;
-                }
-            } else {
-                StringBuffer monthNumber = new StringBuffer();
-                zeroPaddingNumber(currentNumberFormat, monthNumber, value+1, count, maxIntCount);
-                String[] monthNumberStrings = new String[1];
-                monthNumberStrings[0] = monthNumber.toString();
-                safeAppendWithMonthPattern(monthNumberStrings, 0, buf, (isLeapMonth!=0)? formatData.leapMonthPatterns[DateFormatSymbols.DT_LEAP_MONTH_PATTERN_NUMERIC]: null);
-            }
-            break;
-        case 4: // 'k' - HOUR_OF_DAY (1..24)
-            if (value == 0) {
-                zeroPaddingNumber(currentNumberFormat,buf,
-                                  cal.getMaximum(Calendar.HOUR_OF_DAY)+1,
-                                  count, maxIntCount);
-            } else {
-                zeroPaddingNumber(currentNumberFormat,buf, value, count, maxIntCount);
-            }
-            break;
-        case 8: // 'S' - FRACTIONAL_SECOND
-            // Fractional seconds left-justify
-            {
-                numberFormat.setMinimumIntegerDigits(Math.min(3, count));
-                numberFormat.setMaximumIntegerDigits(maxIntCount);
-                if (count == 1) {
-                    value /= 100;
-                } else if (count == 2) {
-                    value /= 10;
-                }
-                FieldPosition p = new FieldPosition(-1);
-                numberFormat.format(value, buf, p);
-                if (count > 3) {
-                    numberFormat.setMinimumIntegerDigits(count - 3);
-                    numberFormat.format(0L, buf, p);
-                }
-            }
-            break;
-        case 19: // 'e' - DOW_LOCAL (use DOW_LOCAL for numeric, DAY_OF_WEEK for format names)
-            if (count < 3) {
-                zeroPaddingNumber(currentNumberFormat,buf, value, count, maxIntCount);
                 break;
-            }
-            // For alpha day-of-week, we don't want DOW_LOCAL,
-            // we need the standard DAY_OF_WEEK.
-            value = cal.get(Calendar.DAY_OF_WEEK);
-            // fall through, do not break here
-        case 9: // 'E' - DAY_OF_WEEK
-            if (count == 5) {
-                safeAppend(formatData.narrowWeekdays, value, buf);
-                capContextUsageType = DateFormatSymbols.CapitalizationContextUsage.DAY_NARROW;
-            } else if (count == 4) {
-                safeAppend(formatData.weekdays, value, buf);
-                capContextUsageType = DateFormatSymbols.CapitalizationContextUsage.DAY_FORMAT;
-            } else if (count == 6 && formatData.shorterWeekdays != null) {
-                safeAppend(formatData.shorterWeekdays, value, buf);
-                capContextUsageType = DateFormatSymbols.CapitalizationContextUsage.DAY_FORMAT;
-            } else {// count <= 3, use abbreviated form if exists
-                safeAppend(formatData.shortWeekdays, value, buf);
-                capContextUsageType = DateFormatSymbols.CapitalizationContextUsage.DAY_FORMAT;
-            }
-            break;
-        case 14: // 'a' - AM_PM
-            // formatData.ampmsNarrow may be null when deserializing DateFormatSymbolsfrom old version
-            if (count == 4 && formatData.ampmsWide != null) {
-                safeAppend(formatData.ampmsWide, value, buf);
-            } else if (count == 5 && formatData.ampmsNarrow != null) {
-                safeAppend(formatData.ampmsNarrow, value, buf);
-            } else {
-                safeAppend(formatData.ampms, value, buf);
-            }
-            break;
-        case 15: // 'h' - HOUR (1..12)
-            if (value == 0) {
-                zeroPaddingNumber(currentNumberFormat,buf,
-                                  cal.getLeastMaximum(Calendar.HOUR)+1,
-                                  count, maxIntCount);
-            } else {
-                zeroPaddingNumber(currentNumberFormat,buf, value, count, maxIntCount);
-            }
-            break;
+            case 8: // 'S' - FRACTIONAL_SECOND
+                // Fractional seconds left-justify
+                {
+                    numberFormat.setMinimumIntegerDigits(Math.min(3, count));
+                    numberFormat.setMaximumIntegerDigits(maxIntCount);
+                    if (count == 1) {
+                        value /= 100;
+                    } else if (count == 2) {
+                        value /= 10;
+                    }
+                    FieldPosition p = new FieldPosition(-1);
+                    numberFormat.format(value, buf, p);
+                    if (count > 3) {
+                        numberFormat.setMinimumIntegerDigits(count - 3);
+                        numberFormat.format(0L, buf, p);
+                    }
+                }
+                break;
+            case 19: // 'e' - DOW_LOCAL (use DOW_LOCAL for numeric, DAY_OF_WEEK for format names)
+                if (count < 3) {
+                    zeroPaddingNumber(currentNumberFormat, buf, value, count, maxIntCount);
+                    break;
+                }
+                // For alpha day-of-week, we don't want DOW_LOCAL,
+                // we need the standard DAY_OF_WEEK.
+                value = cal.get(Calendar.DAY_OF_WEEK);
+                // fall through, do not break here
+            case 9: // 'E' - DAY_OF_WEEK
+                if (count == 5) {
+                    safeAppend(formatData.narrowWeekdays, value, buf);
+                    capContextUsageType = DateFormatSymbols.CapitalizationContextUsage.DAY_NARROW;
+                } else if (count == 4) {
+                    safeAppend(formatData.weekdays, value, buf);
+                    capContextUsageType = DateFormatSymbols.CapitalizationContextUsage.DAY_FORMAT;
+                } else if (count == 6 && formatData.shorterWeekdays != null) {
+                    safeAppend(formatData.shorterWeekdays, value, buf);
+                    capContextUsageType = DateFormatSymbols.CapitalizationContextUsage.DAY_FORMAT;
+                } else { // count <= 3, use abbreviated form if exists
+                    safeAppend(formatData.shortWeekdays, value, buf);
+                    capContextUsageType = DateFormatSymbols.CapitalizationContextUsage.DAY_FORMAT;
+                }
+                break;
+            case 14: // 'a' - AM_PM
+                // formatData.ampmsNarrow may be null when deserializing DateFormatSymbolsfrom old
+                // version
+                if (count == 4 && formatData.ampmsWide != null) {
+                    safeAppend(formatData.ampmsWide, value, buf);
+                } else if (count == 5 && formatData.ampmsNarrow != null) {
+                    safeAppend(formatData.ampmsNarrow, value, buf);
+                } else {
+                    safeAppend(formatData.ampms, value, buf);
+                }
+                break;
+            case 15: // 'h' - HOUR (1..12)
+                if (value == 0) {
+                    zeroPaddingNumber(
+                            currentNumberFormat,
+                            buf,
+                            cal.getLeastMaximum(Calendar.HOUR) + 1,
+                            count,
+                            maxIntCount);
+                } else {
+                    zeroPaddingNumber(currentNumberFormat, buf, value, count, maxIntCount);
+                }
+                break;
 
-        case 17: // 'z' - TIMEZONE_FIELD
-            if (count < 4) {
-                // "z", "zz", "zzz"
-                result = tzFormat().format(Style.SPECIFIC_SHORT, tz, date);
-                capContextUsageType = DateFormatSymbols.CapitalizationContextUsage.METAZONE_SHORT;
-            } else {
-                result = tzFormat().format(Style.SPECIFIC_LONG, tz, date);
-                capContextUsageType = DateFormatSymbols.CapitalizationContextUsage.METAZONE_LONG;
-            }
-            buf.append(result);
-            break;
-        case 23: // 'Z' - TIMEZONE_RFC_FIELD
-            if (count < 4) {
-                // RFC822 format - equivalent to ISO 8601 local offset fixed width format
-                result = tzFormat().format(Style.ISO_BASIC_LOCAL_FULL, tz, date);
-            } else if (count == 5) {
-                // ISO 8601 extended format
-                result = tzFormat().format(Style.ISO_EXTENDED_FULL, tz, date);
-            } else {
-                // long form, localized GMT pattern
-                result = tzFormat().format(Style.LOCALIZED_GMT, tz, date);
-            }
+            case 17: // 'z' - TIMEZONE_FIELD
+                if (count < 4) {
+                    // "z", "zz", "zzz"
+                    result = tzFormat().format(Style.SPECIFIC_SHORT, tz, date);
+                    capContextUsageType =
+                            DateFormatSymbols.CapitalizationContextUsage.METAZONE_SHORT;
+                } else {
+                    result = tzFormat().format(Style.SPECIFIC_LONG, tz, date);
+                    capContextUsageType =
+                            DateFormatSymbols.CapitalizationContextUsage.METAZONE_LONG;
+                }
                 buf.append(result);
-            break;
-        case 24: // 'v' - TIMEZONE_GENERIC_FIELD
-            if (count == 1) {
-                // "v"
-                result = tzFormat().format(Style.GENERIC_SHORT, tz, date);
-                capContextUsageType = DateFormatSymbols.CapitalizationContextUsage.METAZONE_SHORT;
-            } else if (count == 4) {
-                // "vvvv"
-                result = tzFormat().format(Style.GENERIC_LONG, tz, date);
-                capContextUsageType = DateFormatSymbols.CapitalizationContextUsage.METAZONE_LONG;
-            }
-            buf.append(result);
-            break;
-        case 29: // 'V' - TIMEZONE_SPECIAL_FIELD
-            if (count == 1) {
-                // "V"
-                result = tzFormat().format(Style.ZONE_ID_SHORT, tz, date);
-            } else if (count == 2) {
-                // "VV"
-                result = tzFormat().format(Style.ZONE_ID, tz, date);
-            } else if (count == 3) {
-                // "VVV"
-                result = tzFormat().format(Style.EXEMPLAR_LOCATION, tz, date);
-            } else if (count == 4) {
-                // "VVVV"
-                result = tzFormat().format(Style.GENERIC_LOCATION, tz, date);
-                capContextUsageType = DateFormatSymbols.CapitalizationContextUsage.ZONE_LONG;
-            }
-            buf.append(result);
-            break;
-        case 31: // 'O' - TIMEZONE_LOCALIZED_GMT_OFFSET_FIELD
-            if (count == 1) {
-                // "O" - Short Localized GMT format
-                result = tzFormat().format(Style.LOCALIZED_GMT_SHORT, tz, date);
-            } else if (count == 4) {
-                // "OOOO" - Localized GMT format
-                result = tzFormat().format(Style.LOCALIZED_GMT, tz, date);
-            }
-            buf.append(result);
-            break;
-        case 32: // 'X' - TIMEZONE_ISO_FIELD
-            if (count == 1) {
-                // "X" - ISO Basic/Short
-                result = tzFormat().format(Style.ISO_BASIC_SHORT, tz, date);
-            } else if (count == 2) {
-                // "XX" - ISO Basic/Fixed
-                result = tzFormat().format(Style.ISO_BASIC_FIXED, tz, date);
-            } else if (count == 3) {
-                // "XXX" - ISO Extended/Fixed
-                result = tzFormat().format(Style.ISO_EXTENDED_FIXED, tz, date);
-            } else if (count == 4) {
-                // "XXXX" - ISO Basic/Optional second field
-                result = tzFormat().format(Style.ISO_BASIC_FULL, tz, date);
-            } else if (count == 5) {
-                // "XXXXX" - ISO Extended/Optional second field
-                result = tzFormat().format(Style.ISO_EXTENDED_FULL, tz, date);
-            }
-            buf.append(result);
-            break;
-        case 33: // 'x' - TIMEZONE_ISO_LOCAL_FIELD
-            if (count == 1) {
-                // "x" - ISO Local Basic/Short
-                result = tzFormat().format(Style.ISO_BASIC_LOCAL_SHORT, tz, date);
-            } else if (count == 2) {
-                // "x" - ISO Local Basic/Fixed
-                result = tzFormat().format(Style.ISO_BASIC_LOCAL_FIXED, tz, date);
-            } else if (count == 3) {
-                // "xxx" - ISO Local Extended/Fixed
-                result = tzFormat().format(Style.ISO_EXTENDED_LOCAL_FIXED, tz, date);
-            } else if (count == 4) {
-                // "xxxx" - ISO Local Basic/Optional second field
-                result = tzFormat().format(Style.ISO_BASIC_LOCAL_FULL, tz, date);
-            } else if (count == 5) {
-                // "xxxxx" - ISO Local Extended/Optional second field
-                result = tzFormat().format(Style.ISO_EXTENDED_LOCAL_FULL, tz, date);
-            }
-            buf.append(result);
-            break;
-
-        case 25: // 'c' - STANDALONE DAY (use DOW_LOCAL for numeric, DAY_OF_WEEK for standalone)
-            if (count < 3) {
-                zeroPaddingNumber(currentNumberFormat,buf, value, 1, maxIntCount);
                 break;
-            }
-            // For alpha day-of-week, we don't want DOW_LOCAL,
-            // we need the standard DAY_OF_WEEK.
-            value = cal.get(Calendar.DAY_OF_WEEK);
-            if (count == 5) {
-                safeAppend(formatData.standaloneNarrowWeekdays, value, buf);
-                capContextUsageType = DateFormatSymbols.CapitalizationContextUsage.DAY_NARROW;
-            } else if (count == 4) {
-                safeAppend(formatData.standaloneWeekdays, value, buf);
-                capContextUsageType = DateFormatSymbols.CapitalizationContextUsage.DAY_STANDALONE;
-            } else if (count == 6 && formatData.standaloneShorterWeekdays != null) {
-                safeAppend(formatData.standaloneShorterWeekdays, value, buf);
-                capContextUsageType = DateFormatSymbols.CapitalizationContextUsage.DAY_STANDALONE;
-            } else { // count == 3
-                safeAppend(formatData.standaloneShortWeekdays, value, buf);
-                capContextUsageType = DateFormatSymbols.CapitalizationContextUsage.DAY_STANDALONE;
-            }
-            break;
-        case 27: // 'Q' - QUARTER
-            if (count >= 5) {
-                safeAppend(formatData.narrowQuarters, value/3, buf);
-            } else if (count == 4) {
-                safeAppend(formatData.quarters, value/3, buf);
-            } else if (count == 3) {
-                safeAppend(formatData.shortQuarters, value/3, buf);
-            } else {
-                zeroPaddingNumber(currentNumberFormat,buf, (value/3)+1, count, maxIntCount);
-            }
-            break;
-        case 28: // 'q' - STANDALONE QUARTER
-            if (count >= 5) {
-                safeAppend(formatData.standaloneNarrowQuarters, value/3, buf);
-            } else if (count == 4) {
-                safeAppend(formatData.standaloneQuarters, value/3, buf);
-            } else if (count == 3) {
-                safeAppend(formatData.standaloneShortQuarters, value/3, buf);
-            } else {
-                zeroPaddingNumber(currentNumberFormat,buf, (value/3)+1, count, maxIntCount);
-            }
-            break;
-        case 35: // 'b' - am/pm/noon/midnight
-        {
-            // Note: "midnight" can be ambiguous as to whether it refers to beginning of day or end of day.
-            // For ICU 57 output of "midnight" is temporarily suppressed.
-
-            int hour = cal.get(Calendar.HOUR_OF_DAY);
-            String toAppend = null;
-
-            // For "midnight" and "noon":
-            // Time, as displayed, must be exactly noon or midnight.
-            // This means minutes and seconds, if present, must be zero.
-            if ((/*hour == 0 ||*/ hour == 12) &&
-                    (!hasMinute || cal.get(Calendar.MINUTE) == 0) &&
-                    (!hasSecond || cal.get(Calendar.SECOND) == 0)) {
-                // Stealing am/pm value to use as our array index.
-                // It works out: am/midnight are both 0, pm/noon are both 1,
-                // 12 am is 12 midnight, and 12 pm is 12 noon.
-                value = cal.get(Calendar.AM_PM);
-
-                if (count <= 3) {
-                    toAppend = formatData.abbreviatedDayPeriods[value];
-                } else if (count == 4 || count > 5) {
-                    toAppend = formatData.wideDayPeriods[value];
-                } else { // count == 5
-                    toAppend = formatData.narrowDayPeriods[value];
+            case 23: // 'Z' - TIMEZONE_RFC_FIELD
+                if (count < 4) {
+                    // RFC822 format - equivalent to ISO 8601 local offset fixed width format
+                    result = tzFormat().format(Style.ISO_BASIC_LOCAL_FULL, tz, date);
+                } else if (count == 5) {
+                    // ISO 8601 extended format
+                    result = tzFormat().format(Style.ISO_EXTENDED_FULL, tz, date);
+                } else {
+                    // long form, localized GMT pattern
+                    result = tzFormat().format(Style.LOCALIZED_GMT, tz, date);
                 }
-            }
-
-            if (toAppend == null) {
-                // Time isn't exactly midnight or noon (as displayed) or localized string doesn't
-                // exist for requested period. Fall back to am/pm instead.
-                // We are passing a different patternCharToOutput because we want to add
-                // 'b' to field position. This makes this fallback stable when
-                // there is a data change on locales.
-                subFormat(buf, 'a', count, beginOffset, fieldNum, capitalizationContext, pos, 'b', cal);
-            } else {
-                buf.append(toAppend);
-            }
-
-            break;
-        }
-        case 36: // 'B' - flexible day period
-        {
-            // TODO: Maybe fetch the DayperiodRules during initialization (instead of at the first
-            // loading of an instance) if a relevant pattern character (b or B) is used.
-            DayPeriodRules ruleSet = DayPeriodRules.getInstance(getLocale());
-            if (ruleSet == null) {
-                // Data doesn't exist for the locale we're looking for.
-                // Fall back to am/pm.
-                // We are passing a different patternCharToOutput because we want to add
-                // 'B' to field position. This makes this fallback stable when
-                // there is a data change on locales.
-                subFormat(buf, 'a', count, beginOffset, fieldNum, capitalizationContext, pos, 'B', cal);
-                return;
-            }
-
-            // Get current display time.
-            int hour = cal.get(Calendar.HOUR_OF_DAY);
-            int minute = 0;
-            int second = 0;
-            if (hasMinute) { minute = cal.get(Calendar.MINUTE); }
-            if (hasSecond) { second = cal.get(Calendar.SECOND); }
-
-            // Determine day period.
-            DayPeriodRules.DayPeriod periodType;
-            if (hour == 0 && minute == 0 && second == 0 && ruleSet.hasMidnight()) {
-                periodType = DayPeriodRules.DayPeriod.MIDNIGHT;
-            } else if (hour == 12 && minute == 0 && second == 0 && ruleSet.hasNoon()) {
-                periodType = DayPeriodRules.DayPeriod.NOON;
-            } else {
-                periodType = ruleSet.getDayPeriodForHour(hour);
-            }
-
-            // Note: "midnight" can be ambiguous as to whether it refers to beginning of day or end of day.
-            // For ICU 57 output of "midnight" is temporarily suppressed.
-
-            // Rule set exists, therefore periodType can't be null.
-            // Get localized string.
-            assert(periodType != null);
-            String toAppend = null;
-            int index;
-
-            if (periodType != DayPeriodRules.DayPeriod.AM && periodType != DayPeriodRules.DayPeriod.PM &&
-                    periodType != DayPeriodRules.DayPeriod.MIDNIGHT) {
-                index = periodType.ordinal();
-                if (count <= 3) {
-                    toAppend = formatData.abbreviatedDayPeriods[index];  // i.e. short
-                } else if (count == 4 || count > 5) {
-                    toAppend = formatData.wideDayPeriods[index];
-                } else {  // count == 5
-                    toAppend = formatData.narrowDayPeriods[index];
+                buf.append(result);
+                break;
+            case 24: // 'v' - TIMEZONE_GENERIC_FIELD
+                if (count == 1) {
+                    // "v"
+                    result = tzFormat().format(Style.GENERIC_SHORT, tz, date);
+                    capContextUsageType =
+                            DateFormatSymbols.CapitalizationContextUsage.METAZONE_SHORT;
+                } else if (count == 4) {
+                    // "vvvv"
+                    result = tzFormat().format(Style.GENERIC_LONG, tz, date);
+                    capContextUsageType =
+                            DateFormatSymbols.CapitalizationContextUsage.METAZONE_LONG;
                 }
-            }
-
-
-            // Fallback schedule:
-            // Midnight/Noon -> General Periods -> AM/PM.
-
-            // Midnight/Noon -> General Periods.
-            if (toAppend == null &&
-                    (periodType == DayPeriodRules.DayPeriod.MIDNIGHT ||
-                     periodType == DayPeriodRules.DayPeriod.NOON)) {
-                periodType = ruleSet.getDayPeriodForHour(hour);
-                index = periodType.ordinal();
-
-                if (count <= 3) {
-                    toAppend = formatData.abbreviatedDayPeriods[index];  // i.e. short
-                } else if (count == 4 || count > 5) {
-                    toAppend = formatData.wideDayPeriods[index];
-                } else {  // count == 5
-                    toAppend = formatData.narrowDayPeriods[index];
+                buf.append(result);
+                break;
+            case 29: // 'V' - TIMEZONE_SPECIAL_FIELD
+                if (count == 1) {
+                    // "V"
+                    result = tzFormat().format(Style.ZONE_ID_SHORT, tz, date);
+                } else if (count == 2) {
+                    // "VV"
+                    result = tzFormat().format(Style.ZONE_ID, tz, date);
+                } else if (count == 3) {
+                    // "VVV"
+                    result = tzFormat().format(Style.EXEMPLAR_LOCATION, tz, date);
+                } else if (count == 4) {
+                    // "VVVV"
+                    result = tzFormat().format(Style.GENERIC_LOCATION, tz, date);
+                    capContextUsageType = DateFormatSymbols.CapitalizationContextUsage.ZONE_LONG;
                 }
-            }
+                buf.append(result);
+                break;
+            case 31: // 'O' - TIMEZONE_LOCALIZED_GMT_OFFSET_FIELD
+                if (count == 1) {
+                    // "O" - Short Localized GMT format
+                    result = tzFormat().format(Style.LOCALIZED_GMT_SHORT, tz, date);
+                } else if (count == 4) {
+                    // "OOOO" - Localized GMT format
+                    result = tzFormat().format(Style.LOCALIZED_GMT, tz, date);
+                }
+                buf.append(result);
+                break;
+            case 32: // 'X' - TIMEZONE_ISO_FIELD
+                if (count == 1) {
+                    // "X" - ISO Basic/Short
+                    result = tzFormat().format(Style.ISO_BASIC_SHORT, tz, date);
+                } else if (count == 2) {
+                    // "XX" - ISO Basic/Fixed
+                    result = tzFormat().format(Style.ISO_BASIC_FIXED, tz, date);
+                } else if (count == 3) {
+                    // "XXX" - ISO Extended/Fixed
+                    result = tzFormat().format(Style.ISO_EXTENDED_FIXED, tz, date);
+                } else if (count == 4) {
+                    // "XXXX" - ISO Basic/Optional second field
+                    result = tzFormat().format(Style.ISO_BASIC_FULL, tz, date);
+                } else if (count == 5) {
+                    // "XXXXX" - ISO Extended/Optional second field
+                    result = tzFormat().format(Style.ISO_EXTENDED_FULL, tz, date);
+                }
+                buf.append(result);
+                break;
+            case 33: // 'x' - TIMEZONE_ISO_LOCAL_FIELD
+                if (count == 1) {
+                    // "x" - ISO Local Basic/Short
+                    result = tzFormat().format(Style.ISO_BASIC_LOCAL_SHORT, tz, date);
+                } else if (count == 2) {
+                    // "x" - ISO Local Basic/Fixed
+                    result = tzFormat().format(Style.ISO_BASIC_LOCAL_FIXED, tz, date);
+                } else if (count == 3) {
+                    // "xxx" - ISO Local Extended/Fixed
+                    result = tzFormat().format(Style.ISO_EXTENDED_LOCAL_FIXED, tz, date);
+                } else if (count == 4) {
+                    // "xxxx" - ISO Local Basic/Optional second field
+                    result = tzFormat().format(Style.ISO_BASIC_LOCAL_FULL, tz, date);
+                } else if (count == 5) {
+                    // "xxxxx" - ISO Local Extended/Optional second field
+                    result = tzFormat().format(Style.ISO_EXTENDED_LOCAL_FULL, tz, date);
+                }
+                buf.append(result);
+                break;
 
-            // General Periods -> AM/PM.
-            if (periodType == DayPeriodRules.DayPeriod.AM ||
-                    periodType == DayPeriodRules.DayPeriod.PM ||
-                    toAppend == null) {
-                // We are passing a different patternCharToOutput because we want to add
-                // 'B' to field position. This makes this fallback stable when
-                // there is a data change on locales.
-                subFormat(buf, 'a', count, beginOffset, fieldNum, capitalizationContext, pos, 'B', cal);
-                return;
-            }
-            else {
-                buf.append(toAppend);
-            }
+            case 25: // 'c' - STANDALONE DAY (use DOW_LOCAL for numeric, DAY_OF_WEEK for standalone)
+                if (count < 3) {
+                    zeroPaddingNumber(currentNumberFormat, buf, value, 1, maxIntCount);
+                    break;
+                }
+                // For alpha day-of-week, we don't want DOW_LOCAL,
+                // we need the standard DAY_OF_WEEK.
+                value = cal.get(Calendar.DAY_OF_WEEK);
+                if (count == 5) {
+                    safeAppend(formatData.standaloneNarrowWeekdays, value, buf);
+                    capContextUsageType = DateFormatSymbols.CapitalizationContextUsage.DAY_NARROW;
+                } else if (count == 4) {
+                    safeAppend(formatData.standaloneWeekdays, value, buf);
+                    capContextUsageType =
+                            DateFormatSymbols.CapitalizationContextUsage.DAY_STANDALONE;
+                } else if (count == 6 && formatData.standaloneShorterWeekdays != null) {
+                    safeAppend(formatData.standaloneShorterWeekdays, value, buf);
+                    capContextUsageType =
+                            DateFormatSymbols.CapitalizationContextUsage.DAY_STANDALONE;
+                } else { // count == 3
+                    safeAppend(formatData.standaloneShortWeekdays, value, buf);
+                    capContextUsageType =
+                            DateFormatSymbols.CapitalizationContextUsage.DAY_STANDALONE;
+                }
+                break;
+            case 27: // 'Q' - QUARTER
+                if (count >= 5) {
+                    safeAppend(formatData.narrowQuarters, value / 3, buf);
+                } else if (count == 4) {
+                    safeAppend(formatData.quarters, value / 3, buf);
+                } else if (count == 3) {
+                    safeAppend(formatData.shortQuarters, value / 3, buf);
+                } else {
+                    zeroPaddingNumber(
+                            currentNumberFormat, buf, (value / 3) + 1, count, maxIntCount);
+                }
+                break;
+            case 28: // 'q' - STANDALONE QUARTER
+                if (count >= 5) {
+                    safeAppend(formatData.standaloneNarrowQuarters, value / 3, buf);
+                } else if (count == 4) {
+                    safeAppend(formatData.standaloneQuarters, value / 3, buf);
+                } else if (count == 3) {
+                    safeAppend(formatData.standaloneShortQuarters, value / 3, buf);
+                } else {
+                    zeroPaddingNumber(
+                            currentNumberFormat, buf, (value / 3) + 1, count, maxIntCount);
+                }
+                break;
+            case 35: // 'b' - am/pm/noon/midnight
+                {
+                    // Note: "midnight" can be ambiguous as to whether it refers to beginning of day
+                    // or end of day.
+                    // For ICU 57 output of "midnight" is temporarily suppressed.
 
-            break;
-        }
-        case 37: // TIME SEPARATOR (no pattern character currently defined, we should
-                 // not get here but leave support in for future definition.
-            buf.append(formatData.getTimeSeparatorString());
-            break;
-        default:
-            // case 3: // 'd' - DATE
-            // case 5: // 'H' - HOUR_OF_DAY (0..23)
-            // case 6: // 'm' - MINUTE
-            // case 7: // 's' - SECOND
-            // case 10: // 'D' - DAY_OF_YEAR
-            // case 11: // 'F' - DAY_OF_WEEK_IN_MONTH
-            // case 12: // 'w' - WEEK_OF_YEAR
-            // case 13: // 'W' - WEEK_OF_MONTH
-            // case 16: // 'K' - HOUR (0..11)
-            // case 20: // 'u' - EXTENDED_YEAR
-            // case 21: // 'g' - JULIAN_DAY
-            // case 22: // 'A' - MILLISECONDS_IN_DAY
+                    int hour = cal.get(Calendar.HOUR_OF_DAY);
+                    String toAppend = null;
 
-            zeroPaddingNumber(currentNumberFormat,buf, value, count, maxIntCount);
-            break;
+                    // For "midnight" and "noon":
+                    // Time, as displayed, must be exactly noon or midnight.
+                    // This means minutes and seconds, if present, must be zero.
+                    if ((
+                            /*hour == 0 ||*/ hour == 12)
+                            && (!hasMinute || cal.get(Calendar.MINUTE) == 0)
+                            && (!hasSecond || cal.get(Calendar.SECOND) == 0)) {
+                        // Stealing am/pm value to use as our array index.
+                        // It works out: am/midnight are both 0, pm/noon are both 1,
+                        // 12 am is 12 midnight, and 12 pm is 12 noon.
+                        value = cal.get(Calendar.AM_PM);
+
+                        if (count <= 3) {
+                            toAppend = formatData.abbreviatedDayPeriods[value];
+                        } else if (count == 4 || count > 5) {
+                            toAppend = formatData.wideDayPeriods[value];
+                        } else { // count == 5
+                            toAppend = formatData.narrowDayPeriods[value];
+                        }
+                    }
+
+                    if (toAppend == null) {
+                        // Time isn't exactly midnight or noon (as displayed) or localized string
+                        // doesn't
+                        // exist for requested period. Fall back to am/pm instead.
+                        // We are passing a different patternCharToOutput because we want to add
+                        // 'b' to field position. This makes this fallback stable when
+                        // there is a data change on locales.
+                        subFormat(
+                                buf,
+                                'a',
+                                count,
+                                beginOffset,
+                                fieldNum,
+                                capitalizationContext,
+                                pos,
+                                'b',
+                                cal);
+                    } else {
+                        buf.append(toAppend);
+                    }
+
+                    break;
+                }
+            case 36: // 'B' - flexible day period
+                {
+                    // TODO: Maybe fetch the DayperiodRules during initialization (instead of at the
+                    // first
+                    // loading of an instance) if a relevant pattern character (b or B) is used.
+                    DayPeriodRules ruleSet = DayPeriodRules.getInstance(getLocale());
+                    if (ruleSet == null) {
+                        // Data doesn't exist for the locale we're looking for.
+                        // Fall back to am/pm.
+                        // We are passing a different patternCharToOutput because we want to add
+                        // 'B' to field position. This makes this fallback stable when
+                        // there is a data change on locales.
+                        subFormat(
+                                buf,
+                                'a',
+                                count,
+                                beginOffset,
+                                fieldNum,
+                                capitalizationContext,
+                                pos,
+                                'B',
+                                cal);
+                        return;
+                    }
+
+                    // Get current display time.
+                    int hour = cal.get(Calendar.HOUR_OF_DAY);
+                    int minute = 0;
+                    int second = 0;
+                    if (hasMinute) {
+                        minute = cal.get(Calendar.MINUTE);
+                    }
+                    if (hasSecond) {
+                        second = cal.get(Calendar.SECOND);
+                    }
+
+                    // Determine day period.
+                    DayPeriodRules.DayPeriod periodType;
+                    if (hour == 0 && minute == 0 && second == 0 && ruleSet.hasMidnight()) {
+                        periodType = DayPeriodRules.DayPeriod.MIDNIGHT;
+                    } else if (hour == 12 && minute == 0 && second == 0 && ruleSet.hasNoon()) {
+                        periodType = DayPeriodRules.DayPeriod.NOON;
+                    } else {
+                        periodType = ruleSet.getDayPeriodForHour(hour);
+                    }
+
+                    // Note: "midnight" can be ambiguous as to whether it refers to beginning of day
+                    // or end of day.
+                    // For ICU 57 output of "midnight" is temporarily suppressed.
+
+                    // Rule set exists, therefore periodType can't be null.
+                    // Get localized string.
+                    assert (periodType != null);
+                    String toAppend = null;
+                    int index;
+
+                    if (periodType != DayPeriodRules.DayPeriod.AM
+                            && periodType != DayPeriodRules.DayPeriod.PM
+                            && periodType != DayPeriodRules.DayPeriod.MIDNIGHT) {
+                        index = periodType.ordinal();
+                        if (count <= 3) {
+                            toAppend = formatData.abbreviatedDayPeriods[index]; // i.e. short
+                        } else if (count == 4 || count > 5) {
+                            toAppend = formatData.wideDayPeriods[index];
+                        } else { // count == 5
+                            toAppend = formatData.narrowDayPeriods[index];
+                        }
+                    }
+
+                    // Fallback schedule:
+                    // Midnight/Noon -> General Periods -> AM/PM.
+
+                    // Midnight/Noon -> General Periods.
+                    if (toAppend == null
+                            && (periodType == DayPeriodRules.DayPeriod.MIDNIGHT
+                                    || periodType == DayPeriodRules.DayPeriod.NOON)) {
+                        periodType = ruleSet.getDayPeriodForHour(hour);
+                        index = periodType.ordinal();
+
+                        if (count <= 3) {
+                            toAppend = formatData.abbreviatedDayPeriods[index]; // i.e. short
+                        } else if (count == 4 || count > 5) {
+                            toAppend = formatData.wideDayPeriods[index];
+                        } else { // count == 5
+                            toAppend = formatData.narrowDayPeriods[index];
+                        }
+                    }
+
+                    // General Periods -> AM/PM.
+                    if (periodType == DayPeriodRules.DayPeriod.AM
+                            || periodType == DayPeriodRules.DayPeriod.PM
+                            || toAppend == null) {
+                        // We are passing a different patternCharToOutput because we want to add
+                        // 'B' to field position. This makes this fallback stable when
+                        // there is a data change on locales.
+                        subFormat(
+                                buf,
+                                'a',
+                                count,
+                                beginOffset,
+                                fieldNum,
+                                capitalizationContext,
+                                pos,
+                                'B',
+                                cal);
+                        return;
+                    } else {
+                        buf.append(toAppend);
+                    }
+
+                    break;
+                }
+            case 37: // TIME SEPARATOR (no pattern character currently defined, we should
+                // not get here but leave support in for future definition.
+                buf.append(formatData.getTimeSeparatorString());
+                break;
+            default:
+                // case 3: // 'd' - DATE
+                // case 5: // 'H' - HOUR_OF_DAY (0..23)
+                // case 6: // 'm' - MINUTE
+                // case 7: // 's' - SECOND
+                // case 10: // 'D' - DAY_OF_YEAR
+                // case 11: // 'F' - DAY_OF_WEEK_IN_MONTH
+                // case 12: // 'w' - WEEK_OF_YEAR
+                // case 13: // 'W' - WEEK_OF_MONTH
+                // case 16: // 'K' - HOUR (0..11)
+                // case 20: // 'u' - EXTENDED_YEAR
+                // case 21: // 'g' - JULIAN_DAY
+                // case 22: // 'A' - MILLISECONDS_IN_DAY
+
+                zeroPaddingNumber(currentNumberFormat, buf, value, count, maxIntCount);
+                break;
         } // switch (patternCharIndex)
 
-        if (fieldNum == 0 && capitalizationContext != null && buf.length() > bufstart &&
-                UCharacter.isLowerCase(buf.codePointAt(bufstart))) {
+        if (fieldNum == 0
+                && capitalizationContext != null
+                && buf.length() > bufstart
+                && UCharacter.isLowerCase(buf.codePointAt(bufstart))) {
             boolean titlecase = false;
             switch (capitalizationContext) {
                 case CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE:
@@ -1747,12 +2118,16 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
                 case CAPITALIZATION_FOR_STANDALONE:
                     if (formatData.capitalization != null) {
                         boolean[] transforms = formatData.capitalization.get(capContextUsageType);
-                        titlecase = (capitalizationContext==DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU)?
-                                    transforms[0]: transforms[1];
+                        titlecase =
+                                (capitalizationContext
+                                                == DisplayContext
+                                                        .CAPITALIZATION_FOR_UI_LIST_OR_MENU)
+                                        ? transforms[0]
+                                        : transforms[1];
                     }
                     break;
                 default:
-                   break;
+                    break;
             }
             if (titlecase) {
                 if (capitalizationBrkIter == null) {
@@ -1762,9 +2137,15 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
                 // Note, the call to UCharacter.toTitleCase below is the only place that
                 // (the clone of) capitalizationBrkIter is actually used.
                 BreakIterator mutableCapitalizationBrkIter = capitalizationBrkIter.clone();
-                String firstField = buf.substring(bufstart); // bufstart or beginOffset, should be the same
-                String firstFieldTitleCase = UCharacter.toTitleCase(locale, firstField, mutableCapitalizationBrkIter,
-                                                     UCharacter.TITLECASE_NO_LOWERCASE | UCharacter.TITLECASE_NO_BREAK_ADJUSTMENT);
+                String firstField =
+                        buf.substring(bufstart); // bufstart or beginOffset, should be the same
+                String firstFieldTitleCase =
+                        UCharacter.toTitleCase(
+                                locale,
+                                firstField,
+                                mutableCapitalizationBrkIter,
+                                UCharacter.TITLECASE_NO_LOWERCASE
+                                        | UCharacter.TITLECASE_NO_BREAK_ADJUSTMENT);
                 buf.replace(bufstart, buf.length(), firstFieldTitleCase);
             }
         }
@@ -1775,8 +2156,8 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
             if (pos.getField() == PATTERN_INDEX_TO_DATE_FORMAT_FIELD[outputCharIndex]) {
                 pos.setBeginIndex(beginOffset);
                 pos.setEndIndex(beginOffset + buf.length() - bufstart);
-            } else if (pos.getFieldAttribute() ==
-                       PATTERN_INDEX_TO_DATE_FORMAT_ATTRIBUTE[outputCharIndex]) {
+            } else if (pos.getFieldAttribute()
+                    == PATTERN_INDEX_TO_DATE_FORMAT_ATTRIBUTE[outputCharIndex]) {
                 pos.setBeginIndex(beginOffset);
                 pos.setEndIndex(beginOffset + buf.length() - bufstart);
             }
@@ -1789,7 +2170,8 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
         }
     }
 
-    private static void safeAppendWithMonthPattern(String[] array, int value, StringBuffer appendTo, String monthPattern) {
+    private static void safeAppendWithMonthPattern(
+            String[] array, int value, StringBuffer appendTo, String monthPattern) {
         if (array != null && value >= 0 && value < array.length) {
             if (monthPattern == null) {
                 appendTo.append(array[value]);
@@ -1815,8 +2197,7 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
         }
     }
 
-    private static ICUCache<String, Object[]> PARSED_PATTERN_CACHE =
-        new SimpleCache<>();
+    private static ICUCache<String, Object[]> PARSED_PATTERN_CACHE = new SimpleCache<>();
     private transient Object[] patternItems;
 
     /*
@@ -1836,7 +2217,7 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
         boolean isPrevQuote = false;
         boolean inQuote = false;
         StringBuilder text = new StringBuilder();
-        char itemType = 0;  // 0 for string literal, otherwise date/time pattern character
+        char itemType = 0; // 0 for string literal, otherwise date/time pattern character
         int itemLength = 1;
 
         List<Object> items = new ArrayList<>();
@@ -1905,14 +2286,15 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
     }
 
     /**
-     * Internal high-speed method.  Reuses a StringBuffer for results
-     * instead of creating a String on the heap for each call.
+     * Internal high-speed method. Reuses a StringBuffer for results instead of creating a String on
+     * the heap for each call.
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
-    protected void zeroPaddingNumber(NumberFormat nf,StringBuffer buf, int value,
-                                     int minDigits, int maxDigits) {
+    protected void zeroPaddingNumber(
+            NumberFormat nf, StringBuffer buf, int value, int minDigits, int maxDigits) {
         // Note: Indian calendar uses negative value for a calendar
         // field. fastZeroPaddingNumber cannot handle negative numbers.
         // BTW, it looks like a design bug in the Indian calendar...
@@ -1926,8 +2308,7 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
     }
 
     /**
-     * Overrides superclass method and
-     * This method also clears per field NumberFormat instances
+     * Overrides superclass method and This method also clears per field NumberFormat instances
      * previously set by {@link #setNumberFormat(String, NumberFormat)}
      *
      * @stable ICU 2.0
@@ -1953,7 +2334,8 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
      */
     private void initLocalZeroPaddingNumberFormat() {
         if (numberFormat instanceof DecimalFormat) {
-            DecimalFormatSymbols tmpDecfs = ((DecimalFormat)numberFormat).getDecimalFormatSymbols();
+            DecimalFormatSymbols tmpDecfs =
+                    ((DecimalFormat) numberFormat).getDecimalFormatSymbols();
             String[] tmpDigits = tmpDecfs.getDigitStringsLocal();
             useLocalZeroPaddingNumberFormat = true;
             decDigits = new char[10];
@@ -1965,7 +2347,7 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
                 decDigits[i] = tmpDigits[i].charAt(0);
             }
         } else if (numberFormat instanceof DateNumberFormat) {
-            decDigits = ((DateNumberFormat)numberFormat).getDigits();
+            decDigits = ((DateNumberFormat) numberFormat).getDigits();
             useLocalZeroPaddingNumberFormat = true;
         } else {
             useLocalZeroPaddingNumberFormat = false;
@@ -1978,8 +2360,8 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
 
     // If true, use local version of zero padding number format
     private transient boolean useLocalZeroPaddingNumberFormat;
-    private transient char[] decDigits;     // read-only - can be shared by multiple instances
-    private transient char[] decimalBuf;    // mutable - one per instance
+    private transient char[] decDigits; // read-only - can be shared by multiple instances
+    private transient char[] decimalBuf; // mutable - one per instance
     private static final int DECIMAL_BUF_SIZE = 10; // sufficient for int numbers
 
     /*
@@ -2020,29 +2402,23 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
 
     /**
      * Formats a number with the specified minimum and maximum number of digits.
+     *
      * @stable ICU 2.0
      */
-    protected String zeroPaddingNumber(long value, int minDigits, int maxDigits)
-    {
+    protected String zeroPaddingNumber(long value, int minDigits, int maxDigits) {
         numberFormat.setMinimumIntegerDigits(minDigits);
         numberFormat.setMaximumIntegerDigits(maxDigits);
         return numberFormat.format(value);
     }
 
-    /**
-     * Format characters that indicate numeric fields always.
-     */
+    /** Format characters that indicate numeric fields always. */
     private static final String NUMERIC_FORMAT_CHARS = "ADdFgHhKkmrSsuWwYy";
 
-    /**
-     * Format characters that indicate numeric fields when pattern length
-     * is up to 2.
-     */
+    /** Format characters that indicate numeric fields when pattern length is up to 2. */
     private static final String NUMERIC_FORMAT_CHARS2 = "ceLMQq";
 
     /**
-     * Return true if the given format character, occurring count
-     * times, represents a numeric field.
+     * Return true if the given format character, occurring count times, represents a numeric field.
      */
     private static final boolean isNumeric(char formatChar, int count) {
         return NUMERIC_FORMAT_CHARS.indexOf(formatChar) >= 0
@@ -2050,20 +2426,20 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
     }
 
     /**
-     * Maximum range for detecting daylight offset of a time zone when parsed time zone
-     * string indicates it's daylight saving time, but the detected time zone does not
-     * observe daylight saving time at the parsed date.
+     * Maximum range for detecting daylight offset of a time zone when parsed time zone string
+     * indicates it's daylight saving time, but the detected time zone does not observe daylight
+     * saving time at the parsed date.
      */
-    private static final long MAX_DAYLIGHT_DETECTION_RANGE = 30*365*24*60*60*1000L;
+    private static final long MAX_DAYLIGHT_DETECTION_RANGE = 30 * 365 * 24 * 60 * 60 * 1000L;
 
     /**
      * Overrides DateFormat
+     *
      * @see DateFormat
      * @stable ICU 2.0
      */
     @Override
-    public void parse(String text, Calendar cal, ParsePosition parsePos)
-    {
+    public void parse(String text, Calendar cal, ParsePosition parsePos) {
         TimeZone backupTZ = null;
         Calendar resultCal = null;
         if (cal != calendar && !cal.getType().equals(calendar.getType())) {
@@ -2078,7 +2454,7 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
         }
 
         int pos = parsePos.getIndex();
-        if(pos < 0) {
+        if (pos < 0) {
             parsePos.setErrorIndex(0);
             return;
         }
@@ -2090,7 +2466,7 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
         Output<DayPeriodRules.DayPeriod> dayPeriod = new Output<>(null);
 
         Output<TimeType> tzTimeType = new Output<>(TimeType.UNKNOWN);
-        boolean[] ambiguousYear = { false };
+        boolean[] ambiguousYear = {false};
 
         // item index for the first numeric field within a contiguous numeric run
         int numericFieldStart = -1;
@@ -2100,8 +2476,15 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
         int numericStartPos = 0;
 
         MessageFormat numericLeapMonthFormatter = null;
-        if (formatData.leapMonthPatterns != null && formatData.leapMonthPatterns.length >= DateFormatSymbols.DT_MONTH_PATTERN_COUNT) {
-            numericLeapMonthFormatter = new MessageFormat(formatData.leapMonthPatterns[DateFormatSymbols.DT_LEAP_MONTH_PATTERN_NUMERIC], locale);
+        if (formatData.leapMonthPatterns != null
+                && formatData.leapMonthPatterns.length
+                        >= DateFormatSymbols.DT_MONTH_PATTERN_COUNT) {
+            numericLeapMonthFormatter =
+                    new MessageFormat(
+                            formatData
+                                    .leapMonthPatterns[
+                                    DateFormatSymbols.DT_LEAP_MONTH_PATTERN_NUMERIC],
+                            locale);
         }
 
         Object[] items = getPatternItems();
@@ -2109,7 +2492,7 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
         while (i < items.length) {
             if (items[i] instanceof PatternItem) {
                 // Handle pattern field
-                PatternItem field = (PatternItem)items[i];
+                PatternItem field = (PatternItem) items[i];
                 if (field.isNumeric) {
                     // Handle fields within a run of abutting numeric fields.  Take
                     // the pattern "HHmmss" as an example. We will try to parse
@@ -2122,7 +2505,7 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
                         // check if this field is followed by abutting another numeric field
                         if ((i + 1) < items.length
                                 && (items[i + 1] instanceof PatternItem)
-                                && ((PatternItem)items[i + 1]).isNumeric) {
+                                && ((PatternItem) items[i + 1]).isNumeric) {
                             // record the first numeric field within a numeric text run
                             numericFieldStart = i;
                             numericFieldLength = field.length;
@@ -2138,8 +2521,18 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
                     }
 
                     // Parse a numeric field
-                    pos = subParse(text, pos, field.type, len,
-                            true, false, ambiguousYear, cal, numericLeapMonthFormatter, tzTimeType);
+                    pos =
+                            subParse(
+                                    text,
+                                    pos,
+                                    field.type,
+                                    len,
+                                    true,
+                                    false,
+                                    ambiguousYear,
+                                    cal,
+                                    numericLeapMonthFormatter,
+                                    tzTimeType);
 
                     if (pos < 0) {
                         // If the parse fails anywhere in the numeric run, back up to the
@@ -2160,26 +2553,39 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
                         continue;
                     }
 
-                } else if (field.type != 'l') { // (SMALL LETTER L) obsolete pattern char just gets ignored
+                } else if (field.type
+                        != 'l') { // (SMALL LETTER L) obsolete pattern char just gets ignored
                     // Handle a non-numeric field or a non-abutting numeric field
                     numericFieldStart = -1;
 
                     int s = pos;
-                    pos = subParse(text, pos, field.type, field.length,
-                            false, true, ambiguousYear, cal, numericLeapMonthFormatter, tzTimeType, dayPeriod);
+                    pos =
+                            subParse(
+                                    text,
+                                    pos,
+                                    field.type,
+                                    field.length,
+                                    false,
+                                    true,
+                                    ambiguousYear,
+                                    cal,
+                                    numericLeapMonthFormatter,
+                                    tzTimeType,
+                                    dayPeriod);
 
                     if (pos < 0) {
                         if (pos == ISOSpecialEra) {
                             // era not present, in special cases allow this to continue
                             pos = s;
 
-                            if (i+1 < items.length) {
+                            if (i + 1 < items.length) {
 
                                 String patl = null;
-                                // if it will cause a class cast exception to String, we can't use it
+                                // if it will cause a class cast exception to String, we can't use
+                                // it
                                 try {
-                                    patl = (String)items[i+1];
-                                } catch(ClassCastException cce) {
+                                    patl = (String) items[i + 1];
+                                } catch (ClassCastException cce) {
                                     parsePos.setIndex(start);
                                     parsePos.setErrorIndex(s);
                                     if (backupTZ != null) {
@@ -2189,27 +2595,24 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
                                 }
 
                                 // get next item in pattern
-                                if(patl == null)
-                                    patl = (String)items[i+1];
+                                if (patl == null) patl = (String) items[i + 1];
                                 int plen = patl.length();
-                                int idx=0;
+                                int idx = 0;
 
                                 // White space characters found in pattern.
                                 // Skip contiguous white spaces.
                                 while (idx < plen) {
 
                                     char pch = patl.charAt(idx);
-                                    if (PatternProps.isWhiteSpace(pch) || UCharacter.isUWhiteSpace(pch))
-                                        idx++;
-                                    else
-                                        break;
+                                    if (PatternProps.isWhiteSpace(pch)
+                                            || UCharacter.isUWhiteSpace(pch)) idx++;
+                                    else break;
                                 }
 
                                 // if next item in pattern is all whitespace, skip it
                                 if (idx == plen) {
                                     i++;
                                 }
-
                             }
                         } else {
                             parsePos.setIndex(start);
@@ -2220,7 +2623,6 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
                             return;
                         }
                     }
-
                 }
             } else {
                 // Handle literal pattern text literal
@@ -2243,10 +2645,12 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
         // Special hack for trailing "." after non-numeric field.
         if (pos < text.length()) {
             char extra = text.charAt(pos);
-            if (extra == '.' && getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_ALLOW_WHITESPACE) && items.length != 0) {
+            if (extra == '.'
+                    && getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_ALLOW_WHITESPACE)
+                    && items.length != 0) {
                 // only do if the last field is not numeric
                 Object lastItem = items[items.length - 1];
-                if (lastItem instanceof PatternItem && !((PatternItem)lastItem).isNumeric) {
+                if (lastItem instanceof PatternItem && !((PatternItem) lastItem).isNumeric) {
                     pos++; // skip the extra "."
                 }
             }
@@ -2272,18 +2676,20 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
             } else {
                 int hourOfDay;
 
-                if (cal.isSet(Calendar.HOUR_OF_DAY)) {  // Hour is parsed in 24-hour format.
+                if (cal.isSet(Calendar.HOUR_OF_DAY)) { // Hour is parsed in 24-hour format.
                     hourOfDay = cal.get(Calendar.HOUR_OF_DAY);
-                } else {  // Hour is parsed in 12-hour format.
+                } else { // Hour is parsed in 12-hour format.
                     hourOfDay = cal.get(Calendar.HOUR);
                     // cal.get() turns 12 to 0 for 12-hour time; change 0 to 12
                     // so 0 unambiguously means a 24-hour time from above.
-                    if (hourOfDay == 0) { hourOfDay = 12; }
+                    if (hourOfDay == 0) {
+                        hourOfDay = 12;
+                    }
                 }
-                assert(0 <= hourOfDay && hourOfDay <= 23);
+                assert (0 <= hourOfDay && hourOfDay <= 23);
 
-
-                // If hour-of-day is 0 or 13 thru 23 then input time in unambiguously in 24-hour format.
+                // If hour-of-day is 0 or 13 thru 23 then input time in unambiguously in 24-hour
+                // format.
                 if (hourOfDay == 0 || (13 <= hourOfDay && hourOfDay <= 23)) {
                     // Make hour-of-day take precedence over (hour + am/pm) by setting it again.
                     cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
@@ -2296,10 +2702,13 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
 
                     // Assume current time is in the AM.
                     // - Change 12 back to 0 for easier handling of 12am.
-                    // - Append minutes as fractional hours because e.g. 8:15 and 8:45 could be parsed
+                    // - Append minutes as fractional hours because e.g. 8:15 and 8:45 could be
+                    // parsed
                     // into different half-days if center of dayPeriod is at 14:30.
                     // - cal.get(MINUTE) will return 0 if MINUTE is unset, which works.
-                    if (hourOfDay == 12) { hourOfDay = 0; }
+                    if (hourOfDay == 12) {
+                        hourOfDay = 0;
+                    }
                     double currentHour = hourOfDay + cal.get(Calendar.MINUTE) / 60.0;
                     double midPointHour = ruleSet.getMidPointForDayPeriod(dayPeriod.value);
 
@@ -2365,7 +2774,7 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
                     TimeZone tz = copy.getTimeZone();
                     BasicTimeZone btz = null;
                     if (tz instanceof BasicTimeZone) {
-                        btz = (BasicTimeZone)tz;
+                        btz = (BasicTimeZone) tz;
                     }
 
                     // Get local millis
@@ -2378,11 +2787,17 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
                     int[] offsets = new int[2];
                     if (btz != null) {
                         if (tztype == TimeType.STANDARD) {
-                            btz.getOffsetFromLocal(localMillis,
-                                    LocalOption.STANDARD_FORMER, LocalOption.STANDARD_LATTER, offsets);
+                            btz.getOffsetFromLocal(
+                                    localMillis,
+                                    LocalOption.STANDARD_FORMER,
+                                    LocalOption.STANDARD_LATTER,
+                                    offsets);
                         } else {
-                            btz.getOffsetFromLocal(localMillis,
-                                    LocalOption.DAYLIGHT_FORMER, LocalOption.DAYLIGHT_LATTER, offsets);
+                            btz.getOffsetFromLocal(
+                                    localMillis,
+                                    LocalOption.DAYLIGHT_FORMER,
+                                    LocalOption.DAYLIGHT_LATTER,
+                                    offsets);
                         }
                     } else {
                         // No good way to resolve ambiguous time at transition,
@@ -2390,13 +2805,13 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
                         tz.getOffset(localMillis, true, offsets);
 
                         if (tztype == TimeType.STANDARD && offsets[1] != 0
-                            || tztype == TimeType.DAYLIGHT && offsets[1] == 0) {
+                                || tztype == TimeType.DAYLIGHT && offsets[1] == 0) {
                             // Roll back one day and try it again.
                             // Note: This code assumes 1. timezone transition only happens
                             // once within 24 hours at max
                             // 2. the difference of local offsets at the transition is
                             // less than 24 hours.
-                            tz.getOffset(localMillis - (24*60*60*1000), true, offsets);
+                            tz.getOffset(localMillis - (24 * 60 * 60 * 1000), true, offsets);
                         }
                     }
 
@@ -2489,17 +2904,23 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
     }
 
     /**
-     * Matches text (starting at pos) with patl. Returns the new pos, and sets complete[0]
-     * if it matched the entire text. Whitespace sequences are treated as singletons.
-     * <p>If isLenient and if we fail to match the first time, some special hacks are put into place.
-     * <ul><li>we are between date and time fields, then one or more whitespace characters
-     * in the text are accepted instead.</li>
-     * <ul><li>we are after a non-numeric field, and the text starts with a ".", we skip it.</li>
-     * </ul>
+     * Matches text (starting at pos) with patl. Returns the new pos, and sets complete[0] if it
+     * matched the entire text. Whitespace sequences are treated as singletons.
+     *
+     * <p>If isLenient and if we fail to match the first time, some special hacks are put into
+     * place.
+     *
+     * <ul>
+     *   <li>we are between date and time fields, then one or more whitespace characters in the text
+     *       are accepted instead.
+     *       <ul>
+     *         <li>we are after a non-numeric field, and the text starts with a ".", we skip it.
+     *       </ul>
      */
-    private int matchLiteral(String text, int pos, Object[] items, int itemIndex, boolean[] complete) {
+    private int matchLiteral(
+            String text, int pos, Object[] items, int itemIndex, boolean[] complete) {
         int originalPos = pos;
-        String patternLiteral = (String)items[itemIndex];
+        String patternLiteral = (String) items[itemIndex];
         int plen = patternLiteral.length();
         int tlen = text.length();
         int idx = 0;
@@ -2507,22 +2928,26 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
             char pch = patternLiteral.charAt(idx);
             char ich = text.charAt(pos);
             if ((PatternProps.isWhiteSpace(pch) || UCharacter.isUWhiteSpace(pch))
-                && (PatternProps.isWhiteSpace(ich) || UCharacter.isUWhiteSpace(ich))) {
+                    && (PatternProps.isWhiteSpace(ich) || UCharacter.isUWhiteSpace(ich))) {
                 // White space characters found in both patten and input.
                 // Skip contiguous white spaces.
-                while ((idx + 1) < plen &&
-                        (PatternProps.isWhiteSpace(patternLiteral.charAt(idx + 1)) ||
-                        UCharacter.isUWhiteSpace(patternLiteral.charAt(idx + 1)))) {
-                     ++idx;
+                while ((idx + 1) < plen
+                        && (PatternProps.isWhiteSpace(patternLiteral.charAt(idx + 1))
+                                || UCharacter.isUWhiteSpace(patternLiteral.charAt(idx + 1)))) {
+                    ++idx;
                 }
-                while ((pos + 1) < tlen &&
-                        (PatternProps.isWhiteSpace(text.charAt(pos + 1)) ||
-                        UCharacter.isUWhiteSpace(text.charAt(pos + 1)))) {
-                     ++pos;
+                while ((pos + 1) < tlen
+                        && (PatternProps.isWhiteSpace(text.charAt(pos + 1))
+                                || UCharacter.isUWhiteSpace(text.charAt(pos + 1)))) {
+                    ++pos;
                 }
             } else if (pch != ich) {
-                if (ich == '.' && pos == originalPos && 0 < itemIndex && getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_ALLOW_WHITESPACE)) {
-                    Object before = items[itemIndex-1];
+                if (ich == '.'
+                        && pos == originalPos
+                        && 0 < itemIndex
+                        && getBooleanAttribute(
+                                DateFormat.BooleanAttribute.PARSE_ALLOW_WHITESPACE)) {
+                    Object before = items[itemIndex - 1];
                     if (before instanceof PatternItem) {
                         boolean isNumeric = ((PatternItem) before).isNumeric;
                         if (!isNumeric) {
@@ -2530,10 +2955,14 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
                             continue;
                         }
                     }
-                } else if ((pch == ' ' || pch == '.') && getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_ALLOW_WHITESPACE)) {
+                } else if ((pch == ' ' || pch == '.')
+                        && getBooleanAttribute(
+                                DateFormat.BooleanAttribute.PARSE_ALLOW_WHITESPACE)) {
                     ++idx;
                     continue;
-                } else if (pos != originalPos && getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_PARTIAL_LITERAL_MATCH)) {
+                } else if (pos != originalPos
+                        && getBooleanAttribute(
+                                DateFormat.BooleanAttribute.PARSE_PARTIAL_LITERAL_MATCH)) {
                     ++idx;
                     continue;
                 }
@@ -2543,17 +2972,21 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
             ++pos;
         }
         complete[0] = idx == plen;
-        if (complete[0] == false && getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_ALLOW_WHITESPACE) && 0 < itemIndex && itemIndex < items.length - 1) {
+        if (complete[0] == false
+                && getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_ALLOW_WHITESPACE)
+                && 0 < itemIndex
+                && itemIndex < items.length - 1) {
             // If fully lenient, accept " "* for any text between a date and a time field
             // We don't go more lenient, because we don't want to accept "12/31" for "12:31".
             // People may be trying to parse for a date, then for a time.
             if (originalPos < tlen) {
-                Object before = items[itemIndex-1];
-                Object after = items[itemIndex+1];
+                Object before = items[itemIndex - 1];
+                Object after = items[itemIndex + 1];
                 if (before instanceof PatternItem && after instanceof PatternItem) {
                     char beforeType = ((PatternItem) before).type;
                     char afterType = ((PatternItem) after).type;
-                    if (DATE_PATTERN_TYPE.contains(beforeType) != DATE_PATTERN_TYPE.contains(afterType)) {
+                    if (DATE_PATTERN_TYPE.contains(beforeType)
+                            != DATE_PATTERN_TYPE.contains(afterType)) {
                         int newPos = originalPos;
                         while (newPos < tlen) {
                             char ich = text.charAt(newPos);
@@ -2574,113 +3007,104 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
     static final UnicodeSet DATE_PATTERN_TYPE = new UnicodeSet("[GyYuUQqMLlwWd]").freeze();
 
     /**
-     * Attempt to match the text at a given position against two arrays of
-     * month symbol strings.  Since multiple strings in the array may match (for
-     * example, if the array contains "a", "ab", and "abc", all will match
-     * the input string "abcd") the longest match is returned.  As a side
-     * effect, the given field of <code>cal</code> is set to the index
-     * of the best match, if there is one.
+     * Attempt to match the text at a given position against two arrays of month symbol strings.
+     * Since multiple strings in the array may match (for example, if the array contains "a", "ab",
+     * and "abc", all will match the input string "abcd") the longest match is returned. As a side
+     * effect, the given field of <code>cal</code> is set to the index of the best match, if there
+     * is one.
+     *
      * @param text the time text being parsed.
      * @param start where to start parsing.
      * @param wideData the string array of wide month symbols
      * @param shortData the string array of short month symbols
      * @param cal
-     * @return the new start position if matching succeeded; a negative
-     * number indicating matching failure, otherwise.  As a side effect,
-     * sets the <code>cal</code> field <code>field</code> to the index
-     * of the best match, if matching succeeded.
+     * @return the new start position if matching succeeded; a negative number indicating matching
+     *     failure, otherwise. As a side effect, sets the <code>cal</code> field <code>field</code>
+     *     to the index of the best match, if matching succeeded.
      * @internal
-     * @deprecated This API is ICU internal only.
-     * Does not handle monthPattern.
-     * field is always Calendar.MONTH
+     * @deprecated This API is ICU internal only. Does not handle monthPattern. field is always
+     *     Calendar.MONTH
      */
     @Deprecated
-    private int matchAlphaMonthStrings(String text, int start, String[] wideData, String[] shortData, Calendar cal)
-    {
+    private int matchAlphaMonthStrings(
+            String text, int start, String[] wideData, String[] shortData, Calendar cal) {
         int i;
         int bestMatchLength = 0, bestMatch = -1;
 
-        for (i = 0; i<wideData.length; ++i)
-            {
-                int length = wideData[i].length();
-                int matchLength = 0;
-                // Always compare if we have no match yet; otherwise only compare
-                // against potentially better matches (longer strings).
-                if (length > bestMatchLength &&
-                    (matchLength = regionMatchesWithOptionalDot(text, start, wideData[i], length)) >= 0)
-                    {
-                        bestMatch = i;
-                        bestMatchLength = matchLength;
-                    }
+        for (i = 0; i < wideData.length; ++i) {
+            int length = wideData[i].length();
+            int matchLength = 0;
+            // Always compare if we have no match yet; otherwise only compare
+            // against potentially better matches (longer strings).
+            if (length > bestMatchLength
+                    && (matchLength =
+                                    regionMatchesWithOptionalDot(text, start, wideData[i], length))
+                            >= 0) {
+                bestMatch = i;
+                bestMatchLength = matchLength;
             }
-        for (i = 0; i<shortData.length; ++i)
-            {
-                int length = shortData[i].length();
-                int matchLength = 0;
-                // Always compare if we have no match yet; otherwise only compare
-                // against potentially better matches (longer strings).
-                if (length > bestMatchLength &&
-                    (matchLength = regionMatchesWithOptionalDot(text, start, shortData[i], length)) >= 0)
-                    {
-                        bestMatch = i;
-                        bestMatchLength = matchLength;
-                    }
+        }
+        for (i = 0; i < shortData.length; ++i) {
+            int length = shortData[i].length();
+            int matchLength = 0;
+            // Always compare if we have no match yet; otherwise only compare
+            // against potentially better matches (longer strings).
+            if (length > bestMatchLength
+                    && (matchLength =
+                                    regionMatchesWithOptionalDot(text, start, shortData[i], length))
+                            >= 0) {
+                bestMatch = i;
+                bestMatchLength = matchLength;
             }
-        if (bestMatch >= 0)
-            {
-                cal.set(Calendar.MONTH, bestMatch);
-                return start + bestMatchLength;
-            }
+        }
+        if (bestMatch >= 0) {
+            cal.set(Calendar.MONTH, bestMatch);
+            return start + bestMatchLength;
+        }
         return ~start;
     }
 
-
     /**
-     * Attempt to match the text at a given position against an array of
-     * strings.  Since multiple strings in the array may match (for
-     * example, if the array contains "a", "ab", and "abc", all will match
-     * the input string "abcd") the longest match is returned.  As a side
-     * effect, the given field of <code>cal</code> is set to the index
-     * of the best match, if there is one.
+     * Attempt to match the text at a given position against an array of strings. Since multiple
+     * strings in the array may match (for example, if the array contains "a", "ab", and "abc", all
+     * will match the input string "abcd") the longest match is returned. As a side effect, the
+     * given field of <code>cal</code> is set to the index of the best match, if there is one.
+     *
      * @param text the time text being parsed.
      * @param start where to start parsing.
      * @param field the date field being parsed.
      * @param data the string array to parsed.
      * @param cal
-     * @return the new start position if matching succeeded; a negative
-     * number indicating matching failure, otherwise.  As a side effect,
-     * sets the <code>cal</code> field <code>field</code> to the index
-     * of the best match, if matching succeeded.
+     * @return the new start position if matching succeeded; a negative number indicating matching
+     *     failure, otherwise. As a side effect, sets the <code>cal</code> field <code>field</code>
+     *     to the index of the best match, if matching succeeded.
      * @stable ICU 2.0
      */
-    protected int matchString(String text, int start, int field, String[] data, Calendar cal)
-    {
+    protected int matchString(String text, int start, int field, String[] data, Calendar cal) {
         return matchString(text, start, field, data, null, cal);
     }
 
     /**
-     * Attempt to match the text at a given position against an array of
-     * strings.  Since multiple strings in the array may match (for
-     * example, if the array contains "a", "ab", and "abc", all will match
-     * the input string "abcd") the longest match is returned.  As a side
-     * effect, the given field of <code>cal</code> is set to the index
-     * of the best match, if there is one.
+     * Attempt to match the text at a given position against an array of strings. Since multiple
+     * strings in the array may match (for example, if the array contains "a", "ab", and "abc", all
+     * will match the input string "abcd") the longest match is returned. As a side effect, the
+     * given field of <code>cal</code> is set to the index of the best match, if there is one.
+     *
      * @param text the time text being parsed.
      * @param start where to start parsing.
      * @param field the date field being parsed.
      * @param data the string array to parsed.
      * @param monthPattern leap month pattern, or null if none.
      * @param cal
-     * @return the new start position if matching succeeded; a negative
-     * number indicating matching failure, otherwise.  As a side effect,
-     * sets the <code>cal</code> field <code>field</code> to the index
-     * of the best match, if matching succeeded.
+     * @return the new start position if matching succeeded; a negative number indicating matching
+     *     failure, otherwise. As a side effect, sets the <code>cal</code> field <code>field</code>
+     *     to the index of the best match, if matching succeeded.
      * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
-    private int matchString(String text, int start, int field, String[] data, String monthPattern, Calendar cal)
-    {
+    private int matchString(
+            String text, int start, int field, String[] data, String monthPattern, Calendar cal) {
         int i = 0;
         int count = data.length;
 
@@ -2694,44 +3118,45 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
         int isLeapMonth = 0;
         int matchLength = 0;
 
-        for (; i<count; ++i)
-            {
-                int length = data[i].length();
-                // Always compare if we have no match yet; otherwise only compare
-                // against potentially better matches (longer strings).
-                if (length > bestMatchLength &&
-                    (matchLength = regionMatchesWithOptionalDot(text, start, data[i], length)) >= 0)
-                    {
-                        bestMatch = i;
-                        bestMatchLength = matchLength;
-                        isLeapMonth = 0;
-                    }
-                if (monthPattern != null) {
-                    String leapMonthName = SimpleFormatterImpl.formatRawPattern(
-                            monthPattern, 1, 1, data[i]);
-                    length = leapMonthName.length();
-                    if (length > bestMatchLength &&
-                        (matchLength = regionMatchesWithOptionalDot(text, start, leapMonthName, length)) >= 0)
-                        {
-                            bestMatch = i;
-                            bestMatchLength = matchLength;
-                            isLeapMonth = 1;
-                        }
-                 }
+        for (; i < count; ++i) {
+            int length = data[i].length();
+            // Always compare if we have no match yet; otherwise only compare
+            // against potentially better matches (longer strings).
+            if (length > bestMatchLength
+                    && (matchLength = regionMatchesWithOptionalDot(text, start, data[i], length))
+                            >= 0) {
+                bestMatch = i;
+                bestMatchLength = matchLength;
+                isLeapMonth = 0;
             }
-        if (bestMatch >= 0)
-            {
-                if (field >= 0) {
-                    if (field == Calendar.YEAR) {
-                        bestMatch++; // only get here for cyclic year names, which match 1-based years 1-60
-                    }
-                    cal.set(field, bestMatch);
-                    if (monthPattern != null) {
-                        cal.set(Calendar.IS_LEAP_MONTH, isLeapMonth);
-                    }
+            if (monthPattern != null) {
+                String leapMonthName =
+                        SimpleFormatterImpl.formatRawPattern(monthPattern, 1, 1, data[i]);
+                length = leapMonthName.length();
+                if (length > bestMatchLength
+                        && (matchLength =
+                                        regionMatchesWithOptionalDot(
+                                                text, start, leapMonthName, length))
+                                >= 0) {
+                    bestMatch = i;
+                    bestMatchLength = matchLength;
+                    isLeapMonth = 1;
                 }
-                return start + bestMatchLength;
             }
+        }
+        if (bestMatch >= 0) {
+            if (field >= 0) {
+                if (field == Calendar.YEAR) {
+                    bestMatch++; // only get here for cyclic year names, which match 1-based years
+                    // 1-60
+                }
+                cal.set(field, bestMatch);
+                if (monthPattern != null) {
+                    cal.set(Calendar.IS_LEAP_MONTH, isLeapMonth);
+                }
+            }
+            return start + bestMatchLength;
+        }
         return ~start;
     }
 
@@ -2740,8 +3165,8 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
         if (matches) {
             return length;
         }
-        if (data.length() > 0 && data.charAt(data.length()-1) == '.') {
-            if (text.regionMatches(true, start, data, 0, length-1)) {
+        if (data.length() > 0 && data.charAt(data.length() - 1) == '.') {
+            if (text.regionMatches(true, start, data, 0, length - 1)) {
                 return length - 1;
             }
         }
@@ -2749,24 +3174,23 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
     }
 
     /**
-     * Attempt to match the text at a given position against an array of quarter
-     * strings.  Since multiple strings in the array may match (for
-     * example, if the array contains "a", "ab", and "abc", all will match
-     * the input string "abcd") the longest match is returned.  As a side
-     * effect, the given field of <code>cal</code> is set to the index
-     * of the best match, if there is one.
+     * Attempt to match the text at a given position against an array of quarter strings. Since
+     * multiple strings in the array may match (for example, if the array contains "a", "ab", and
+     * "abc", all will match the input string "abcd") the longest match is returned. As a side
+     * effect, the given field of <code>cal</code> is set to the index of the best match, if there
+     * is one.
+     *
      * @param text the time text being parsed.
      * @param start where to start parsing.
      * @param field the date field being parsed.
      * @param data the string array to parsed.
-     * @return the new start position if matching succeeded; a negative
-     * number indicating matching failure, otherwise.  As a side effect,
-     * sets the <code>cal</code> field <code>field</code> to the index
-     * of the best match, if matching succeeded.
+     * @return the new start position if matching succeeded; a negative number indicating matching
+     *     failure, otherwise. As a side effect, sets the <code>cal</code> field <code>field</code>
+     *     to the index of the best match, if matching succeeded.
      * @stable ICU 2.0
      */
-    protected int matchQuarterString(String text, int start, int field, String[] data, Calendar cal)
-    {
+    protected int matchQuarterString(
+            String text, int start, int field, String[] data, Calendar cal) {
         int i = 0;
         int count = data.length;
 
@@ -2776,12 +3200,13 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
         // unfortunately requires us to test all array elements.
         int bestMatchLength = 0, bestMatch = -1;
         int matchLength = 0;
-        for (; i<count; ++i) {
+        for (; i < count; ++i) {
             int length = data[i].length();
             // Always compare if we have no match yet; otherwise only compare
             // against potentially better matches (longer strings).
-            if (length > bestMatchLength &&
-                (matchLength = regionMatchesWithOptionalDot(text, start, data[i], length)) >= 0) {
+            if (length > bestMatchLength
+                    && (matchLength = regionMatchesWithOptionalDot(text, start, data[i], length))
+                            >= 0) {
 
                 bestMatch = i;
                 bestMatchLength = matchLength;
@@ -2796,20 +3221,23 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
         return -start;
     }
 
-    /**
-     * Similar to matchQuarterString but customized for day periods.
-     */
-    private int matchDayPeriodString(String text, int start, String[] data, int dataLength,
-            Output<DayPeriodRules.DayPeriod> dayPeriod)
-    {
+    /** Similar to matchQuarterString but customized for day periods. */
+    private int matchDayPeriodString(
+            String text,
+            int start,
+            String[] data,
+            int dataLength,
+            Output<DayPeriodRules.DayPeriod> dayPeriod) {
         int bestMatchLength = 0, bestMatch = -1;
         int matchLength = 0;
         for (int i = 0; i < dataLength; ++i) {
             // Only try matching if the string exists.
             if (data[i] != null) {
                 int length = data[i].length();
-                if (length > bestMatchLength &&
-                        (matchLength = regionMatchesWithOptionalDot(text, start, data[i], length)) >= 0) {
+                if (length > bestMatchLength
+                        && (matchLength =
+                                        regionMatchesWithOptionalDot(text, start, data[i], length))
+                                >= 0) {
                     bestMatch = i;
                     bestMatchLength = matchLength;
                 }
@@ -2825,74 +3253,100 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
     }
 
     /**
-     * Protected method that converts one field of the input string into a
-     * numeric field value in <code>cal</code>.  Returns -start (for
-     * ParsePosition) if failed.  Subclasses may override this method to
-     * modify or add parsing capabilities.
+     * Protected method that converts one field of the input string into a numeric field value in
+     * <code>cal</code>. Returns -start (for ParsePosition) if failed. Subclasses may override this
+     * method to modify or add parsing capabilities.
+     *
      * @param text the time text to be parsed.
      * @param start where to start parsing.
      * @param ch the pattern character for the date field text to be parsed.
      * @param count the count of a pattern character.
-     * @param obeyCount if true, then the next field directly abuts this one,
-     * and we should use the count to know when to stop parsing.
-     * @param ambiguousYear return parameter; upon return, if ambiguousYear[0]
-     * is true, then a two-digit year was parsed and may need to be readjusted.
+     * @param obeyCount if true, then the next field directly abuts this one, and we should use the
+     *     count to know when to stop parsing.
+     * @param ambiguousYear return parameter; upon return, if ambiguousYear[0] is true, then a
+     *     two-digit year was parsed and may need to be readjusted.
      * @param cal
-     * @return the new start position if matching succeeded; a negative
-     * number indicating matching failure, otherwise.  As a side effect,
-     * set the appropriate field of <code>cal</code> with the parsed
-     * value.
+     * @return the new start position if matching succeeded; a negative number indicating matching
+     *     failure, otherwise. As a side effect, set the appropriate field of <code>cal</code> with
+     *     the parsed value.
      * @stable ICU 2.0
      */
-    protected int subParse(String text, int start, char ch, int count,
-                           boolean obeyCount, boolean allowNegative,
-                           boolean[] ambiguousYear, Calendar cal)
-    {
-        return subParse(text, start, ch, count, obeyCount, allowNegative, ambiguousYear, cal, null, null);
+    protected int subParse(
+            String text,
+            int start,
+            char ch,
+            int count,
+            boolean obeyCount,
+            boolean allowNegative,
+            boolean[] ambiguousYear,
+            Calendar cal) {
+        return subParse(
+                text, start, ch, count, obeyCount, allowNegative, ambiguousYear, cal, null, null);
+    }
+
+    /** Overloading to provide default argument (null) for day period. */
+    private int subParse(
+            String text,
+            int start,
+            char ch,
+            int count,
+            boolean obeyCount,
+            boolean allowNegative,
+            boolean[] ambiguousYear,
+            Calendar cal,
+            MessageFormat numericLeapMonthFormatter,
+            Output<TimeType> tzTimeType) {
+        return subParse(
+                text,
+                start,
+                ch,
+                count,
+                obeyCount,
+                allowNegative,
+                ambiguousYear,
+                cal,
+                null,
+                null,
+                null);
     }
 
     /**
-     * Overloading to provide default argument (null) for day period.
-     */
-    private int subParse(String text, int start, char ch, int count,
-            boolean obeyCount, boolean allowNegative,
-            boolean[] ambiguousYear, Calendar cal,
-            MessageFormat numericLeapMonthFormatter, Output<TimeType> tzTimeType) {
-        return subParse(text, start, ch, count, obeyCount, allowNegative, ambiguousYear, cal, null, null, null);
-    }
-
-    /**
-     * Protected method that converts one field of the input string into a
-     * numeric field value in <code>cal</code>.  Returns -start (for
-     * ParsePosition) if failed.  Subclasses may override this method to
-     * modify or add parsing capabilities.
+     * Protected method that converts one field of the input string into a numeric field value in
+     * <code>cal</code>. Returns -start (for ParsePosition) if failed. Subclasses may override this
+     * method to modify or add parsing capabilities.
+     *
      * @param text the time text to be parsed.
      * @param start where to start parsing.
      * @param ch the pattern character for the date field text to be parsed.
      * @param count the count of a pattern character.
-     * @param obeyCount if true, then the next field directly abuts this one,
-     * and we should use the count to know when to stop parsing.
-     * @param ambiguousYear return parameter; upon return, if ambiguousYear[0]
-     * is true, then a two-digit year was parsed and may need to be readjusted.
+     * @param obeyCount if true, then the next field directly abuts this one, and we should use the
+     *     count to know when to stop parsing.
+     * @param ambiguousYear return parameter; upon return, if ambiguousYear[0] is true, then a
+     *     two-digit year was parsed and may need to be readjusted.
      * @param cal
      * @param numericLeapMonthFormatter if non-null, used to parse numeric leap months.
-     * @param tzTimeType the type of parsed time zone - standard, daylight or unknown (output).
-     *      This parameter can be null if caller does not need the information.
-     * @return the new start position if matching succeeded; a negative
-     * number indicating matching failure, otherwise.  As a side effect,
-     * set the appropriate field of <code>cal</code> with the parsed
-     * value.
+     * @param tzTimeType the type of parsed time zone - standard, daylight or unknown (output). This
+     *     parameter can be null if caller does not need the information.
+     * @return the new start position if matching succeeded; a negative number indicating matching
+     *     failure, otherwise. As a side effect, set the appropriate field of <code>cal</code> with
+     *     the parsed value.
      * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
     @SuppressWarnings("fallthrough")
-    private int subParse(String text, int start, char ch, int count,
-                           boolean obeyCount, boolean allowNegative,
-                           boolean[] ambiguousYear, Calendar cal,
-                           MessageFormat numericLeapMonthFormatter, Output<TimeType> tzTimeType,
-                           Output<DayPeriodRules.DayPeriod> dayPeriod)
-    {
+    private int subParse(
+            String text,
+            int start,
+            char ch,
+            int count,
+            boolean obeyCount,
+            boolean allowNegative,
+            boolean[] ambiguousYear,
+            Calendar cal,
+            MessageFormat numericLeapMonthFormatter,
+            Output<TimeType> tzTimeType,
+            Output<DayPeriodRules.DayPeriod> dayPeriod) {
         Number number = null;
         NumberFormat currentNumberFormat = null;
         int value = 0;
@@ -2911,17 +3365,19 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
         if (numericLeapMonthFormatter != null) {
             numericLeapMonthFormatter.setFormatByArgumentIndex(0, currentNumberFormat);
         }
-        boolean isChineseCalendar = ( cal.getType().equals("chinese") || cal.getType().equals("dangi") );
+        boolean isChineseCalendar =
+                (cal.getType().equals("chinese") || cal.getType().equals("dangi"));
 
         // If there are any spaces here, skip over them.  If we hit the end
         // of the string, then fail.
-        for (;;) {
+        for (; ; ) {
             if (start >= text.length()) {
                 return ~start;
             }
             int c = UTF16.charAt(text, start);
             // Changed the following from || to &&, as in ICU4C; needed to skip NBSP, NNBSP.
-            // Only UWhiteSpace includes \u00A0\u202F\u2009\u3000...; only PatternProps.isWhiteSpace includes \u200E\u200F
+            // Only UWhiteSpace includes \u00A0\u202F\u2009\u3000...; only PatternProps.isWhiteSpace
+            // includes \u200E\u200F
             if (!UCharacter.isUWhiteSpace(c) && !PatternProps.isWhiteSpace(c)) {
                 break;
             }
@@ -2933,60 +3389,60 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
         // a number value.  We handle further, more generic cases below.  We need
         // to handle some of them here because some fields require extra processing on
         // the parsed value.
-        if (patternCharIndex == 4 /*'k' HOUR_OF_DAY1_FIELD*/ ||
-            patternCharIndex == 15 /*'h' HOUR1_FIELD*/ ||
-            (patternCharIndex == 2 /*'M' MONTH_FIELD*/ && count <= 2) ||
-            patternCharIndex == 26 /*'L' STAND_ALONE_MONTH*/ ||
-            patternCharIndex == 19 /*'e' DOW_LOCAL*/ ||
-            patternCharIndex == 25 /*'c' STAND_ALONE_DAY_OF_WEEK*/ ||
-            patternCharIndex == 1 /*'y' YEAR */ || patternCharIndex == 18 /*'Y' YEAR_WOY */ ||
-            patternCharIndex == 30 /*'U' YEAR_NAME_FIELD, falls back to numeric */ ||
-            (patternCharIndex == 0 /*'G' ERA */ && isChineseCalendar) ||
-            patternCharIndex == 27 /* 'Q' - QUARTER*/ ||
-            patternCharIndex == 28 /* 'q' - STANDALONE QUARTER*/ ||
-            patternCharIndex == 8 /*'S' FRACTIONAL_SECOND */ )
-            {
-                // It would be good to unify this with the obeyCount logic below,
-                // but that's going to be difficult.
+        if (patternCharIndex == 4 /*'k' HOUR_OF_DAY1_FIELD*/
+                || patternCharIndex == 15 /*'h' HOUR1_FIELD*/
+                || (patternCharIndex == 2 /*'M' MONTH_FIELD*/ && count <= 2)
+                || patternCharIndex == 26 /*'L' STAND_ALONE_MONTH*/
+                || patternCharIndex == 19 /*'e' DOW_LOCAL*/
+                || patternCharIndex == 25 /*'c' STAND_ALONE_DAY_OF_WEEK*/
+                || patternCharIndex == 1 /*'y' YEAR */
+                || patternCharIndex == 18 /*'Y' YEAR_WOY */
+                || patternCharIndex == 30 /*'U' YEAR_NAME_FIELD, falls back to numeric */
+                || (patternCharIndex == 0 /*'G' ERA */ && isChineseCalendar)
+                || patternCharIndex == 27 /* 'Q' - QUARTER*/
+                || patternCharIndex == 28 /* 'q' - STANDALONE QUARTER*/
+                || patternCharIndex == 8 /*'S' FRACTIONAL_SECOND */) {
+            // It would be good to unify this with the obeyCount logic below,
+            // but that's going to be difficult.
 
-                boolean parsedNumericLeapMonth = false;
-                if (numericLeapMonthFormatter != null && (patternCharIndex == 2 || patternCharIndex == 26)) {
-                    // First see if we can parse month number with leap month pattern
-                    Object[] args = numericLeapMonthFormatter.parse(text, pos);
-                    if (args != null && pos.getIndex() > start && (args[0] instanceof Number)) {
-                        parsedNumericLeapMonth = true;
-                        number = (Number)args[0];
-                        cal.set(Calendar.IS_LEAP_MONTH, 1);
-                    } else {
-                        pos.setIndex(start);
-                        cal.set(Calendar.IS_LEAP_MONTH, 0);
-                   }
-                }
-
-                if (!parsedNumericLeapMonth) {
-                    if (obeyCount) {
-                        if ((start+count) > text.length()) {
-                            return ~start;
-                        }
-                        number = parseInt(text, count, pos, allowNegative,currentNumberFormat);
-                    } else {
-                        number = parseInt(text, pos, allowNegative,currentNumberFormat);
-                    }
-                    if (number == null && !allowNumericFallback(patternCharIndex)) {
-                        // only return if pattern is NOT one that allows numeric fallback
-                        return ~start;
-                    }
-                }
-
-                if (number != null) {
-                    value = number.intValue();
+            boolean parsedNumericLeapMonth = false;
+            if (numericLeapMonthFormatter != null
+                    && (patternCharIndex == 2 || patternCharIndex == 26)) {
+                // First see if we can parse month number with leap month pattern
+                Object[] args = numericLeapMonthFormatter.parse(text, pos);
+                if (args != null && pos.getIndex() > start && (args[0] instanceof Number)) {
+                    parsedNumericLeapMonth = true;
+                    number = (Number) args[0];
+                    cal.set(Calendar.IS_LEAP_MONTH, 1);
+                } else {
+                    pos.setIndex(start);
+                    cal.set(Calendar.IS_LEAP_MONTH, 0);
                 }
             }
 
-        switch (patternCharIndex)
-            {
+            if (!parsedNumericLeapMonth) {
+                if (obeyCount) {
+                    if ((start + count) > text.length()) {
+                        return ~start;
+                    }
+                    number = parseInt(text, count, pos, allowNegative, currentNumberFormat);
+                } else {
+                    number = parseInt(text, pos, allowNegative, currentNumberFormat);
+                }
+                if (number == null && !allowNumericFallback(patternCharIndex)) {
+                    // only return if pattern is NOT one that allows numeric fallback
+                    return ~start;
+                }
+            }
+
+            if (number != null) {
+                value = number.intValue();
+            }
+        }
+
+        switch (patternCharIndex) {
             case 0: // 'G' - ERA
-                if ( isChineseCalendar ) {
+                if (isChineseCalendar) {
                     // Numeric era handling moved from ChineseDateFormat,
                     // If we didn't have a number, already returned -start above
                     cal.set(Calendar.ERA, value);
@@ -3004,8 +3460,7 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
                 // check return position, if it equals -start, then matchString error
                 // special case the return code so we don't necessarily fail out until we
                 // verify no year information also
-                if (ps == ~start)
-                    ps = ISOSpecialEra;
+                if (ps == ~start) ps = ISOSpecialEra;
 
                 return ps;
 
@@ -3019,47 +3474,65 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
                 // is treated literally:  "2250", "-1", "1", "002".
                 /* 'yy' is the only special case, 'y' is interpreted as number. [Richard/GCL]*/
                 /* Skip this for Chinese calendar, moved from ChineseDateFormat */
-                if ( override != null && (override.compareTo("hebr") == 0 || override.indexOf("y=hebr") >= 0) && value < 1000 ) {
+                if (override != null
+                        && (override.compareTo("hebr") == 0 || override.indexOf("y=hebr") >= 0)
+                        && value < 1000) {
                     value += HEBREW_CAL_CUR_MILLENIUM_START_YEAR;
-                } else if (count == 2 && countDigits(text, start, pos.getIndex()) == 2 && cal.haveDefaultCentury()) {
-                        // Assume for example that the defaultCenturyStart is 6/18/1903.
-                        // This means that two-digit years will be forced into the range
-                        // 6/18/1903 to 6/17/2003.  As a result, years 00, 01, and 02
-                        // correspond to 2000, 2001, and 2002.  Years 04, 05, etc. correspond
-                        // to 1904, 1905, etc.  If the year is 03, then it is 2003 if the
-                        // other fields specify a date before 6/18, or 1903 if they specify a
-                        // date afterwards.  As a result, 03 is an ambiguous year.  All other
-                        // two-digit years are unambiguous.
-                        int ambiguousTwoDigitYear = getDefaultCenturyStartYear() % 100;
-                        ambiguousYear[0] = value == ambiguousTwoDigitYear;
-                        value += (getDefaultCenturyStartYear()/100)*100 +
-                            (value < ambiguousTwoDigitYear ? 100 : 0);
+                } else if (count == 2
+                        && countDigits(text, start, pos.getIndex()) == 2
+                        && cal.haveDefaultCentury()) {
+                    // Assume for example that the defaultCenturyStart is 6/18/1903.
+                    // This means that two-digit years will be forced into the range
+                    // 6/18/1903 to 6/17/2003.  As a result, years 00, 01, and 02
+                    // correspond to 2000, 2001, and 2002.  Years 04, 05, etc. correspond
+                    // to 1904, 1905, etc.  If the year is 03, then it is 2003 if the
+                    // other fields specify a date before 6/18, or 1903 if they specify a
+                    // date afterwards.  As a result, 03 is an ambiguous year.  All other
+                    // two-digit years are unambiguous.
+                    int ambiguousTwoDigitYear = getDefaultCenturyStartYear() % 100;
+                    ambiguousYear[0] = value == ambiguousTwoDigitYear;
+                    value +=
+                            (getDefaultCenturyStartYear() / 100) * 100
+                                    + (value < ambiguousTwoDigitYear ? 100 : 0);
                 }
                 cal.set(field, value);
 
                 // Delayed checking for adjustment of Hebrew month numbers in non-leap years.
                 if (DelayedHebrewMonthCheck) {
                     if (!HebrewCalendar.isLeapYear(value)) {
-                        cal.add(Calendar.MONTH,1);
+                        cal.add(Calendar.MONTH, 1);
                     }
                     DelayedHebrewMonthCheck = false;
                 }
                 return pos.getIndex();
             case 30: // 'U' - YEAR_NAME_FIELD
                 if (formatData.shortYearNames != null) {
-                    int newStart = matchString(text, start, Calendar.YEAR, formatData.shortYearNames, null, cal);
+                    int newStart =
+                            matchString(
+                                    text,
+                                    start,
+                                    Calendar.YEAR,
+                                    formatData.shortYearNames,
+                                    null,
+                                    cal);
                     if (newStart > 0) {
                         return newStart;
                     }
                 }
-                if ( number != null && (getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_ALLOW_NUMERIC) || formatData.shortYearNames == null || value > formatData.shortYearNames.length) ) {
+                if (number != null
+                        && (getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_ALLOW_NUMERIC)
+                                || formatData.shortYearNames == null
+                                || value > formatData.shortYearNames.length)) {
                     cal.set(Calendar.YEAR, value);
                     return pos.getIndex();
                 }
                 return ~start;
             case 2: // 'M' - MONTH
             case 26: // 'L' - STAND_ALONE_MONTH
-                if (count <= 2 || (number != null && getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_ALLOW_NUMERIC))) {
+                if (count <= 2
+                        || (number != null
+                                && getBooleanAttribute(
+                                        DateFormat.BooleanAttribute.PARSE_ALLOW_NUMERIC))) {
                     // i.e., M/MM, L/LL or lenient & have a number
                     // Don't want to parse the month if it is a string
                     // while pattern uses numeric style: M/MM, L/LL.
@@ -3082,40 +3555,103 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
                 } else {
                     // count >= 3 // i.e., MMM/MMMM or LLL/LLLL
                     // Want to be able to parse both short and long forms.
-                    boolean haveMonthPat = (formatData.leapMonthPatterns != null && formatData.leapMonthPatterns.length >= DateFormatSymbols.DT_MONTH_PATTERN_COUNT);
+                    boolean haveMonthPat =
+                            (formatData.leapMonthPatterns != null
+                                    && formatData.leapMonthPatterns.length
+                                            >= DateFormatSymbols.DT_MONTH_PATTERN_COUNT);
                     // Try count == 4 first:, unless we're strict
                     int newStart = 0;
-                    if(getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH)&& count>=3 && count <=4 && !haveMonthPat) {
-                        newStart = (patternCharIndex == 2)?
-                            matchAlphaMonthStrings(text, start, formatData.months, formatData.shortMonths, cal):
-                            matchAlphaMonthStrings(text, start, formatData.standaloneMonths, formatData.standaloneShortMonths, cal);
+                    if (getBooleanAttribute(
+                                    DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH)
+                            && count >= 3
+                            && count <= 4
+                            && !haveMonthPat) {
+                        newStart =
+                                (patternCharIndex == 2)
+                                        ? matchAlphaMonthStrings(
+                                                text,
+                                                start,
+                                                formatData.months,
+                                                formatData.shortMonths,
+                                                cal)
+                                        : matchAlphaMonthStrings(
+                                                text,
+                                                start,
+                                                formatData.standaloneMonths,
+                                                formatData.standaloneShortMonths,
+                                                cal);
                         if (newStart > 0) {
                             return newStart;
                         }
                     }
-                    if(getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH) || count == 4) {
-                        newStart = (patternCharIndex == 2)?
-                            matchString(text, start, Calendar.MONTH, formatData.months,
-                                    (haveMonthPat)? formatData.leapMonthPatterns[DateFormatSymbols.DT_LEAP_MONTH_PATTERN_FORMAT_WIDE]: null, cal):
-                            matchString(text, start, Calendar.MONTH, formatData.standaloneMonths,
-                                    (haveMonthPat)? formatData.leapMonthPatterns[DateFormatSymbols.DT_LEAP_MONTH_PATTERN_STANDALONE_WIDE]: null, cal);
+                    if (getBooleanAttribute(
+                                    DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH)
+                            || count == 4) {
+                        newStart =
+                                (patternCharIndex == 2)
+                                        ? matchString(
+                                                text,
+                                                start,
+                                                Calendar.MONTH,
+                                                formatData.months,
+                                                (haveMonthPat)
+                                                        ? formatData
+                                                                .leapMonthPatterns[
+                                                                DateFormatSymbols
+                                                                        .DT_LEAP_MONTH_PATTERN_FORMAT_WIDE]
+                                                        : null,
+                                                cal)
+                                        : matchString(
+                                                text,
+                                                start,
+                                                Calendar.MONTH,
+                                                formatData.standaloneMonths,
+                                                (haveMonthPat)
+                                                        ? formatData
+                                                                .leapMonthPatterns[
+                                                                DateFormatSymbols
+                                                                        .DT_LEAP_MONTH_PATTERN_STANDALONE_WIDE]
+                                                        : null,
+                                                cal);
                         if (newStart > 0) {
                             return newStart;
                         }
                     }
                     // count == 4 failed, now try count == 3
-                    if(getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH) || count == 3) {
-                        return (patternCharIndex == 2)?
-                                matchString(text, start, Calendar.MONTH, formatData.shortMonths,
-                                        (haveMonthPat)? formatData.leapMonthPatterns[DateFormatSymbols.DT_LEAP_MONTH_PATTERN_FORMAT_ABBREV]: null, cal):
-                                matchString(text, start, Calendar.MONTH, formatData.standaloneShortMonths,
-                                        (haveMonthPat)? formatData.leapMonthPatterns[DateFormatSymbols.DT_LEAP_MONTH_PATTERN_STANDALONE_ABBREV]: null, cal);
+                    if (getBooleanAttribute(
+                                    DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH)
+                            || count == 3) {
+                        return (patternCharIndex == 2)
+                                ? matchString(
+                                        text,
+                                        start,
+                                        Calendar.MONTH,
+                                        formatData.shortMonths,
+                                        (haveMonthPat)
+                                                ? formatData
+                                                        .leapMonthPatterns[
+                                                        DateFormatSymbols
+                                                                .DT_LEAP_MONTH_PATTERN_FORMAT_ABBREV]
+                                                : null,
+                                        cal)
+                                : matchString(
+                                        text,
+                                        start,
+                                        Calendar.MONTH,
+                                        formatData.standaloneShortMonths,
+                                        (haveMonthPat)
+                                                ? formatData
+                                                        .leapMonthPatterns[
+                                                        DateFormatSymbols
+                                                                .DT_LEAP_MONTH_PATTERN_STANDALONE_ABBREV]
+                                                : null,
+                                        cal);
                     }
                     return newStart;
                 }
             case 4: // 'k' - HOUR_OF_DAY (1..24)
                 // [We computed 'value' above.]
-                if (value == cal.getMaximum(Calendar.HOUR_OF_DAY)+1) {
+                if (value == cal.getMaximum(Calendar.HOUR_OF_DAY) + 1) {
                     value = 0;
                 }
                 cal.set(Calendar.HOUR_OF_DAY, value);
@@ -3139,213 +3675,320 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
                 cal.set(Calendar.MILLISECOND, value);
                 return pos.getIndex();
             case 19: // 'e' - DOW_LOCAL
-                if(count <= 2 || (number != null && (getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_ALLOW_NUMERIC))) ) {
+                if (count <= 2
+                        || (number != null
+                                && (getBooleanAttribute(
+                                        DateFormat.BooleanAttribute.PARSE_ALLOW_NUMERIC)))) {
                     // i.e. e/ee or lenient and have a number
                     cal.set(field, value);
                     return pos.getIndex();
                 }
                 // else for eee-eeeeee, fall through to EEE-EEEEEE handling
-                //$FALL-THROUGH$
-            case 9: { // 'E' - DAY_OF_WEEK
-                // Want to be able to parse at least wide, abbrev, short, and narrow forms.
-                int newStart = 0;
-                if(getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH) || count == 4) {
-                    if ((newStart = matchString(text, start, Calendar.DAY_OF_WEEK, formatData.weekdays, null, cal)) > 0) { // try EEEE wide
-                        return newStart;
-                    }
-                }
-                if(getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH) || count == 3) {
-                    if ((newStart = matchString(text, start, Calendar.DAY_OF_WEEK, formatData.shortWeekdays, null, cal)) > 0) { // try EEE abbrev
-                        return newStart;
-                    }
-                }
-                if(getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH) || count == 6) {
-                    if (formatData.shorterWeekdays != null) {
-                        if((newStart = matchString(text, start, Calendar.DAY_OF_WEEK, formatData.shorterWeekdays, null, cal)) > 0) { // try EEEEEE short
+                // $FALL-THROUGH$
+            case 9:
+                { // 'E' - DAY_OF_WEEK
+                    // Want to be able to parse at least wide, abbrev, short, and narrow forms.
+                    int newStart = 0;
+                    if (getBooleanAttribute(
+                                    DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH)
+                            || count == 4) {
+                        if ((newStart =
+                                        matchString(
+                                                text,
+                                                start,
+                                                Calendar.DAY_OF_WEEK,
+                                                formatData.weekdays,
+                                                null,
+                                                cal))
+                                > 0) { // try EEEE wide
                             return newStart;
                         }
                     }
-                }
-                if(getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH) || count == 5) {
-                    if (formatData.narrowWeekdays != null) {
-                        if((newStart = matchString(text, start, Calendar.DAY_OF_WEEK, formatData.narrowWeekdays, null, cal)) > 0) { // try EEEEE narrow
+                    if (getBooleanAttribute(
+                                    DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH)
+                            || count == 3) {
+                        if ((newStart =
+                                        matchString(
+                                                text,
+                                                start,
+                                                Calendar.DAY_OF_WEEK,
+                                                formatData.shortWeekdays,
+                                                null,
+                                                cal))
+                                > 0) { // try EEE abbrev
                             return newStart;
                         }
                     }
-                }
-                return newStart;
-            }
-            case 25: { // 'c' - STAND_ALONE_DAY_OF_WEEK
-                if(count == 1 || (number != null && (getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_ALLOW_NUMERIC))) ) {
-                    // i.e. c or lenient and have a number
-                    cal.set(field, value);
-                    return pos.getIndex();
-                }
-                // Want to be able to parse at least wide, abbrev, short forms.
-                int newStart = 0;
-                if(getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH) || count == 4) {
-                    if ((newStart = matchString(text, start, Calendar.DAY_OF_WEEK, formatData.standaloneWeekdays, null, cal)) > 0) { // try cccc wide
-                        return newStart;
+                    if (getBooleanAttribute(
+                                    DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH)
+                            || count == 6) {
+                        if (formatData.shorterWeekdays != null) {
+                            if ((newStart =
+                                            matchString(
+                                                    text,
+                                                    start,
+                                                    Calendar.DAY_OF_WEEK,
+                                                    formatData.shorterWeekdays,
+                                                    null,
+                                                    cal))
+                                    > 0) { // try EEEEEE short
+                                return newStart;
+                            }
+                        }
                     }
-                }
-                if(getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH) || count == 3) {
-                    if ((newStart = matchString(text, start, Calendar.DAY_OF_WEEK, formatData.standaloneShortWeekdays, null, cal)) > 0) { // try ccc abbrev
-                        return newStart;
+                    if (getBooleanAttribute(
+                                    DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH)
+                            || count == 5) {
+                        if (formatData.narrowWeekdays != null) {
+                            if ((newStart =
+                                            matchString(
+                                                    text,
+                                                    start,
+                                                    Calendar.DAY_OF_WEEK,
+                                                    formatData.narrowWeekdays,
+                                                    null,
+                                                    cal))
+                                    > 0) { // try EEEEE narrow
+                                return newStart;
+                            }
+                        }
                     }
+                    return newStart;
                 }
-                if(getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH) || count == 6) {
-                    if (formatData.standaloneShorterWeekdays != null) {
-                        return matchString(text, start, Calendar.DAY_OF_WEEK, formatData.standaloneShorterWeekdays, null, cal); // try cccccc short
+            case 25:
+                { // 'c' - STAND_ALONE_DAY_OF_WEEK
+                    if (count == 1
+                            || (number != null
+                                    && (getBooleanAttribute(
+                                            DateFormat.BooleanAttribute.PARSE_ALLOW_NUMERIC)))) {
+                        // i.e. c or lenient and have a number
+                        cal.set(field, value);
+                        return pos.getIndex();
                     }
-                }
-                return newStart;
-            }
-            case 14: { // 'a' - AM_PM
-                // Optionally try both wide/abbrev and narrow forms.
-                // formatData.ampmsNarrow may be null when deserializing DateFormatSymbolsfrom old version,
-                // in which case our only option is wide form
-                int newStart = 0;
-                // try wide/abbrev a-aaaa
-                if(formatData.ampmsNarrow == null || count < 5 || getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH)) {
-                    if ((newStart = matchString(text, start, Calendar.AM_PM, formatData.ampms, null, cal)) > 0) {
-                        return newStart;
+                    // Want to be able to parse at least wide, abbrev, short forms.
+                    int newStart = 0;
+                    if (getBooleanAttribute(
+                                    DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH)
+                            || count == 4) {
+                        if ((newStart =
+                                        matchString(
+                                                text,
+                                                start,
+                                                Calendar.DAY_OF_WEEK,
+                                                formatData.standaloneWeekdays,
+                                                null,
+                                                cal))
+                                > 0) { // try cccc wide
+                            return newStart;
+                        }
                     }
-                }
-                // try narrow aaaaa
-                if(formatData.ampmsNarrow != null && (count >= 5 || getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH))) {
-                    if ((newStart = matchString(text, start, Calendar.AM_PM, formatData.ampmsNarrow, null, cal)) > 0) {
-                        return newStart;
+                    if (getBooleanAttribute(
+                                    DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH)
+                            || count == 3) {
+                        if ((newStart =
+                                        matchString(
+                                                text,
+                                                start,
+                                                Calendar.DAY_OF_WEEK,
+                                                formatData.standaloneShortWeekdays,
+                                                null,
+                                                cal))
+                                > 0) { // try ccc abbrev
+                            return newStart;
+                        }
                     }
+                    if (getBooleanAttribute(
+                                    DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH)
+                            || count == 6) {
+                        if (formatData.standaloneShorterWeekdays != null) {
+                            return matchString(
+                                    text,
+                                    start,
+                                    Calendar.DAY_OF_WEEK,
+                                    formatData.standaloneShorterWeekdays,
+                                    null,
+                                    cal); // try cccccc short
+                        }
+                    }
+                    return newStart;
                 }
-                // no matches for given options
-                return ~start;
-            }
+            case 14:
+                { // 'a' - AM_PM
+                    // Optionally try both wide/abbrev and narrow forms.
+                    // formatData.ampmsNarrow may be null when deserializing DateFormatSymbolsfrom
+                    // old version,
+                    // in which case our only option is wide form
+                    int newStart = 0;
+                    // try wide/abbrev a-aaaa
+                    if (formatData.ampmsNarrow == null
+                            || count < 5
+                            || getBooleanAttribute(
+                                    DateFormat.BooleanAttribute
+                                            .PARSE_MULTIPLE_PATTERNS_FOR_MATCH)) {
+                        if ((newStart =
+                                        matchString(
+                                                text,
+                                                start,
+                                                Calendar.AM_PM,
+                                                formatData.ampms,
+                                                null,
+                                                cal))
+                                > 0) {
+                            return newStart;
+                        }
+                    }
+                    // try narrow aaaaa
+                    if (formatData.ampmsNarrow != null
+                            && (count >= 5
+                                    || getBooleanAttribute(
+                                            DateFormat.BooleanAttribute
+                                                    .PARSE_MULTIPLE_PATTERNS_FOR_MATCH))) {
+                        if ((newStart =
+                                        matchString(
+                                                text,
+                                                start,
+                                                Calendar.AM_PM,
+                                                formatData.ampmsNarrow,
+                                                null,
+                                                cal))
+                                > 0) {
+                            return newStart;
+                        }
+                    }
+                    // no matches for given options
+                    return ~start;
+                }
             case 15: // 'h' - HOUR (1..12)
                 // [We computed 'value' above.]
-                if (value == cal.getLeastMaximum(Calendar.HOUR)+1) {
+                if (value == cal.getLeastMaximum(Calendar.HOUR) + 1) {
                     value = 0;
                 }
                 cal.set(Calendar.HOUR, value);
                 return pos.getIndex();
             case 17: // 'z' - ZONE_OFFSET
-            {
-                Style style = (count < 4) ? Style.SPECIFIC_SHORT : Style.SPECIFIC_LONG;
-                TimeZone tz = tzFormat().parse(style, text, pos, tzTimeType);
-                if (tz != null) {
-                    cal.setTimeZone(tz);
-                    return pos.getIndex();
-                }
-                return ~start;
-            }
-            case 23: // 'Z' - TIMEZONE_RFC
-            {
-                Style style = (count < 4) ? Style.ISO_BASIC_LOCAL_FULL : ((count == 5) ? Style.ISO_EXTENDED_FULL : Style.LOCALIZED_GMT);
-                TimeZone tz = tzFormat().parse(style, text, pos, tzTimeType);
-                if (tz != null) {
-                    cal.setTimeZone(tz);
-                    return pos.getIndex();
+                {
+                    Style style = (count < 4) ? Style.SPECIFIC_SHORT : Style.SPECIFIC_LONG;
+                    TimeZone tz = tzFormat().parse(style, text, pos, tzTimeType);
+                    if (tz != null) {
+                        cal.setTimeZone(tz);
+                        return pos.getIndex();
                     }
-                return ~start;
+                    return ~start;
+                }
+            case 23: // 'Z' - TIMEZONE_RFC
+                {
+                    Style style =
+                            (count < 4)
+                                    ? Style.ISO_BASIC_LOCAL_FULL
+                                    : ((count == 5)
+                                            ? Style.ISO_EXTENDED_FULL
+                                            : Style.LOCALIZED_GMT);
+                    TimeZone tz = tzFormat().parse(style, text, pos, tzTimeType);
+                    if (tz != null) {
+                        cal.setTimeZone(tz);
+                        return pos.getIndex();
+                    }
+                    return ~start;
                 }
             case 24: // 'v' - TIMEZONE_GENERIC
-            {
-                // Note: 'v' only supports count 1 and 4
-                Style style = (count < 4) ? Style.GENERIC_SHORT : Style.GENERIC_LONG;
-                TimeZone tz = tzFormat().parse(style, text, pos, tzTimeType);
-                if (tz != null) {
-                    cal.setTimeZone(tz);
-                    return pos.getIndex();
+                {
+                    // Note: 'v' only supports count 1 and 4
+                    Style style = (count < 4) ? Style.GENERIC_SHORT : Style.GENERIC_LONG;
+                    TimeZone tz = tzFormat().parse(style, text, pos, tzTimeType);
+                    if (tz != null) {
+                        cal.setTimeZone(tz);
+                        return pos.getIndex();
+                    }
+                    return ~start;
                 }
-                return ~start;
-            }
             case 29: // 'V' - TIMEZONE_SPECIAL
-            {
-                Style style = null;
-                switch (count) {
-                case 1:
-                    style = Style.ZONE_ID_SHORT;
-                    break;
-                case 2:
-                    style = Style.ZONE_ID;
-                    break;
-                case 3:
-                    style = Style.EXEMPLAR_LOCATION;
-                    break;
-                default:
-                    style = Style.GENERIC_LOCATION;
-                    break;
+                {
+                    Style style = null;
+                    switch (count) {
+                        case 1:
+                            style = Style.ZONE_ID_SHORT;
+                            break;
+                        case 2:
+                            style = Style.ZONE_ID;
+                            break;
+                        case 3:
+                            style = Style.EXEMPLAR_LOCATION;
+                            break;
+                        default:
+                            style = Style.GENERIC_LOCATION;
+                            break;
+                    }
+                    TimeZone tz = tzFormat().parse(style, text, pos, tzTimeType);
+                    if (tz != null) {
+                        cal.setTimeZone(tz);
+                        return pos.getIndex();
+                    }
+                    return ~start;
                 }
-                TimeZone tz = tzFormat().parse(style, text, pos, tzTimeType);
-                if (tz != null) {
-                    cal.setTimeZone(tz);
-                    return pos.getIndex();
-                }
-                return ~start;
-            }
             case 31: // 'O' - TIMEZONE_LOCALIZED_GMT_OFFSET
-            {
-                Style style = (count < 4) ? Style.LOCALIZED_GMT_SHORT : Style.LOCALIZED_GMT;
-                TimeZone tz = tzFormat().parse(style, text, pos, tzTimeType);
-                if (tz != null) {
-                    cal.setTimeZone(tz);
-                    return pos.getIndex();
+                {
+                    Style style = (count < 4) ? Style.LOCALIZED_GMT_SHORT : Style.LOCALIZED_GMT;
+                    TimeZone tz = tzFormat().parse(style, text, pos, tzTimeType);
+                    if (tz != null) {
+                        cal.setTimeZone(tz);
+                        return pos.getIndex();
+                    }
+                    return ~start;
                 }
-                return ~start;
-            }
             case 32: // 'X' - TIMEZONE_ISO
-            {
-                Style style;
-                switch (count) {
-                case 1:
-                    style = Style.ISO_BASIC_SHORT;
-                    break;
-                case 2:
-                    style = Style.ISO_BASIC_FIXED;
-                    break;
-                case 3:
-                    style = Style.ISO_EXTENDED_FIXED;
-                    break;
-                case 4:
-                    style = Style.ISO_BASIC_FULL;
-                    break;
-                default: // count >= 5
-                    style = Style.ISO_EXTENDED_FULL;
-                    break;
+                {
+                    Style style;
+                    switch (count) {
+                        case 1:
+                            style = Style.ISO_BASIC_SHORT;
+                            break;
+                        case 2:
+                            style = Style.ISO_BASIC_FIXED;
+                            break;
+                        case 3:
+                            style = Style.ISO_EXTENDED_FIXED;
+                            break;
+                        case 4:
+                            style = Style.ISO_BASIC_FULL;
+                            break;
+                        default: // count >= 5
+                            style = Style.ISO_EXTENDED_FULL;
+                            break;
+                    }
+                    TimeZone tz = tzFormat().parse(style, text, pos, tzTimeType);
+                    if (tz != null) {
+                        cal.setTimeZone(tz);
+                        return pos.getIndex();
+                    }
+                    return ~start;
                 }
-                TimeZone tz = tzFormat().parse(style, text, pos, tzTimeType);
-                if (tz != null) {
-                    cal.setTimeZone(tz);
-                    return pos.getIndex();
-                }
-                return ~start;
-            }
             case 33: // 'x' - TIMEZONE_ISO_LOCAL
-            {
-                Style style;
-                switch (count) {
-                case 1:
-                    style = Style.ISO_BASIC_LOCAL_SHORT;
-                    break;
-                case 2:
-                    style = Style.ISO_BASIC_LOCAL_FIXED;
-                    break;
-                case 3:
-                    style = Style.ISO_EXTENDED_LOCAL_FIXED;
-                    break;
-                case 4:
-                    style = Style.ISO_BASIC_LOCAL_FULL;
-                    break;
-                default: // count >= 5
-                    style = Style.ISO_EXTENDED_LOCAL_FULL;
-                    break;
+                {
+                    Style style;
+                    switch (count) {
+                        case 1:
+                            style = Style.ISO_BASIC_LOCAL_SHORT;
+                            break;
+                        case 2:
+                            style = Style.ISO_BASIC_LOCAL_FIXED;
+                            break;
+                        case 3:
+                            style = Style.ISO_EXTENDED_LOCAL_FIXED;
+                            break;
+                        case 4:
+                            style = Style.ISO_BASIC_LOCAL_FULL;
+                            break;
+                        default: // count >= 5
+                            style = Style.ISO_EXTENDED_LOCAL_FULL;
+                            break;
+                    }
+                    TimeZone tz = tzFormat().parse(style, text, pos, tzTimeType);
+                    if (tz != null) {
+                        cal.setTimeZone(tz);
+                        return pos.getIndex();
+                    }
+                    return ~start;
                 }
-                TimeZone tz = tzFormat().parse(style, text, pos, tzTimeType);
-                if (tz != null) {
-                    cal.setTimeZone(tz);
-                    return pos.getIndex();
-                }
-                return ~start;
-            }
             case 27: // 'Q' - QUARTER
                 if (count <= 2 && number != null) {
                     // i.e., Q or QQ.
@@ -3359,25 +4002,53 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
                     // Want to be able to parse short, long, and narrow forms.
                     // Try count == 4 first:
                     int newStart = 0;
-                    if(getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH) || count == 4) {
-                        if((newStart = matchQuarterString(text, start, Calendar.MONTH, formatData.quarters, cal)) > 0) {
+                    if (getBooleanAttribute(
+                                    DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH)
+                            || count == 4) {
+                        if ((newStart =
+                                        matchQuarterString(
+                                                text,
+                                                start,
+                                                Calendar.MONTH,
+                                                formatData.quarters,
+                                                cal))
+                                > 0) {
                             return newStart;
                         }
                     }
                     // count == 4 failed, now try count == 3
-                    if(getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH) || count == 3) {
-                        if((newStart = matchQuarterString(text, start, Calendar.MONTH, formatData.shortQuarters, cal)) > 0) {
+                    if (getBooleanAttribute(
+                                    DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH)
+                            || count == 3) {
+                        if ((newStart =
+                                        matchQuarterString(
+                                                text,
+                                                start,
+                                                Calendar.MONTH,
+                                                formatData.shortQuarters,
+                                                cal))
+                                > 0) {
                             return newStart;
                         }
                     }
                     // count == 3 failed, now try count == 5
-                    if(getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH) || count == 5) {
-                        if ((newStart = matchQuarterString(text, start, Calendar.MONTH, formatData.narrowQuarters, cal)) > 0) {
+                    if (getBooleanAttribute(
+                                    DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH)
+                            || count == 5) {
+                        if ((newStart =
+                                        matchQuarterString(
+                                                text,
+                                                start,
+                                                Calendar.MONTH,
+                                                formatData.narrowQuarters,
+                                                cal))
+                                > 0) {
                             return newStart;
                         }
                     }
                     // if numeric parsing is on and we got the numeric value already, return it
-                    if (getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_ALLOW_NUMERIC) && number != null) {
+                    if (getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_ALLOW_NUMERIC)
+                            && number != null) {
                         cal.set(Calendar.MONTH, (value - 1) * 3);
                         return pos.getIndex();
                     }
@@ -3397,25 +4068,53 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
                     // Want to be able to parse short, long, and narrow forms.
                     // Try count == 4 first:
                     int newStart = 0;
-                    if(getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH) || count == 4) {
-                        if((newStart = matchQuarterString(text, start, Calendar.MONTH, formatData.standaloneQuarters, cal)) > 0) {
+                    if (getBooleanAttribute(
+                                    DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH)
+                            || count == 4) {
+                        if ((newStart =
+                                        matchQuarterString(
+                                                text,
+                                                start,
+                                                Calendar.MONTH,
+                                                formatData.standaloneQuarters,
+                                                cal))
+                                > 0) {
                             return newStart;
                         }
                     }
                     // count == 4 failed, now try count == 3
-                    if(getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH) || count == 3) {
-                        if((newStart = matchQuarterString(text, start, Calendar.MONTH, formatData.standaloneShortQuarters, cal)) > 0) {
+                    if (getBooleanAttribute(
+                                    DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH)
+                            || count == 3) {
+                        if ((newStart =
+                                        matchQuarterString(
+                                                text,
+                                                start,
+                                                Calendar.MONTH,
+                                                formatData.standaloneShortQuarters,
+                                                cal))
+                                > 0) {
                             return newStart;
                         }
                     }
                     // count == 3 failed, now try count == 5
-                    if(getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH) || count == 5) {
-                        if ((newStart = matchQuarterString(text, start, Calendar.MONTH, formatData.standaloneNarrowQuarters, cal)) > 0) {
+                    if (getBooleanAttribute(
+                                    DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH)
+                            || count == 5) {
+                        if ((newStart =
+                                        matchQuarterString(
+                                                text,
+                                                start,
+                                                Calendar.MONTH,
+                                                formatData.standaloneNarrowQuarters,
+                                                cal))
+                                > 0) {
                             return newStart;
                         }
                     }
                     // if numeric parsing is on and we got the numeric value already, return it
-                    if (getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_ALLOW_NUMERIC) && number != null) {
+                    if (getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_ALLOW_NUMERIC)
+                            && number != null) {
                         cal.set(Calendar.MONTH, (value - 1) * 3);
                         return pos.getIndex();
                     }
@@ -3423,85 +4122,153 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
                 }
 
             case 37: // TIME SEPARATOR (no pattern character currently defined, we should
-                     // not get here but leave support in for future definition.
-            {
-                // Try matching a time separator.
-                ArrayList<String> data = new ArrayList<>(3);
-                data.add(formatData.getTimeSeparatorString());
+                // not get here but leave support in for future definition.
+                {
+                    // Try matching a time separator.
+                    ArrayList<String> data = new ArrayList<>(3);
+                    data.add(formatData.getTimeSeparatorString());
 
-                // Add the default, if different from the locale.
-                if (!formatData.getTimeSeparatorString().equals(DateFormatSymbols.DEFAULT_TIME_SEPARATOR)) {
-                    data.add(DateFormatSymbols.DEFAULT_TIME_SEPARATOR);
+                    // Add the default, if different from the locale.
+                    if (!formatData
+                            .getTimeSeparatorString()
+                            .equals(DateFormatSymbols.DEFAULT_TIME_SEPARATOR)) {
+                        data.add(DateFormatSymbols.DEFAULT_TIME_SEPARATOR);
+                    }
+
+                    // If lenient, add also the alternate, if different from the locale.
+                    if (getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_PARTIAL_LITERAL_MATCH)
+                            && !formatData
+                                    .getTimeSeparatorString()
+                                    .equals(DateFormatSymbols.ALTERNATE_TIME_SEPARATOR)) {
+                        data.add(DateFormatSymbols.ALTERNATE_TIME_SEPARATOR);
+                    }
+
+                    return matchString(
+                            text,
+                            start,
+                            -1 /* => nothing to set */,
+                            data.toArray(new String[0]),
+                            cal);
                 }
-
-                // If lenient, add also the alternate, if different from the locale.
-                if (getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_PARTIAL_LITERAL_MATCH) &&
-                        !formatData.getTimeSeparatorString().equals(DateFormatSymbols.ALTERNATE_TIME_SEPARATOR)) {
-                    data.add(DateFormatSymbols.ALTERNATE_TIME_SEPARATOR);
-                }
-
-                return matchString(text, start, -1 /* => nothing to set */, data.toArray(new String[0]), cal);
-            }
 
             case 35: // 'b' -- fixed day period (am/pm/midnight/noon)
-            {
-                int ampmStart = subParse(text, start, 'a', count, obeyCount, allowNegative, ambiguousYear, cal,
-                        numericLeapMonthFormatter, tzTimeType, dayPeriod);
+                {
+                    int ampmStart =
+                            subParse(
+                                    text,
+                                    start,
+                                    'a',
+                                    count,
+                                    obeyCount,
+                                    allowNegative,
+                                    ambiguousYear,
+                                    cal,
+                                    numericLeapMonthFormatter,
+                                    tzTimeType,
+                                    dayPeriod);
 
-                if (ampmStart > 0) {
-                    return ampmStart;
-                } else {
+                    if (ampmStart > 0) {
+                        return ampmStart;
+                    } else {
+                        int newStart = 0;
+                        if (getBooleanAttribute(
+                                        DateFormat.BooleanAttribute
+                                                .PARSE_MULTIPLE_PATTERNS_FOR_MATCH)
+                                || count == 3) {
+                            if ((newStart =
+                                            matchDayPeriodString(
+                                                    text,
+                                                    start,
+                                                    formatData.abbreviatedDayPeriods,
+                                                    2,
+                                                    dayPeriod))
+                                    > 0) {
+                                return newStart;
+                            }
+                        }
+                        if (getBooleanAttribute(
+                                        DateFormat.BooleanAttribute
+                                                .PARSE_MULTIPLE_PATTERNS_FOR_MATCH)
+                                || count == 4) {
+                            if ((newStart =
+                                            matchDayPeriodString(
+                                                    text,
+                                                    start,
+                                                    formatData.wideDayPeriods,
+                                                    2,
+                                                    dayPeriod))
+                                    > 0) {
+                                return newStart;
+                            }
+                        }
+                        if (getBooleanAttribute(
+                                        DateFormat.BooleanAttribute
+                                                .PARSE_MULTIPLE_PATTERNS_FOR_MATCH)
+                                || count == 4) {
+                            if ((newStart =
+                                            matchDayPeriodString(
+                                                    text,
+                                                    start,
+                                                    formatData.narrowDayPeriods,
+                                                    2,
+                                                    dayPeriod))
+                                    > 0) {
+                                return newStart;
+                            }
+                        }
+
+                        return newStart;
+                    }
+                }
+
+            case 36: // 'B' -- flexible day period
+                {
                     int newStart = 0;
-                    if(getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH) || count == 3) {
-                        if ((newStart = matchDayPeriodString(
-                                text, start, formatData.abbreviatedDayPeriods, 2, dayPeriod)) > 0) {
+                    if (getBooleanAttribute(
+                                    DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH)
+                            || count == 3) {
+                        if ((newStart =
+                                        matchDayPeriodString(
+                                                text,
+                                                start,
+                                                formatData.abbreviatedDayPeriods,
+                                                formatData.abbreviatedDayPeriods.length,
+                                                dayPeriod))
+                                > 0) {
                             return newStart;
                         }
                     }
-                    if(getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH) || count == 4) {
-                        if ((newStart = matchDayPeriodString(
-                                text, start, formatData.wideDayPeriods, 2, dayPeriod)) > 0) {
+                    if (getBooleanAttribute(
+                                    DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH)
+                            || count == 4) {
+                        if ((newStart =
+                                        matchDayPeriodString(
+                                                text,
+                                                start,
+                                                formatData.wideDayPeriods,
+                                                formatData.wideDayPeriods.length,
+                                                dayPeriod))
+                                > 0) {
                             return newStart;
                         }
                     }
-                    if(getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH) || count == 4) {
-                        if ((newStart = matchDayPeriodString(
-                                text, start, formatData.narrowDayPeriods, 2, dayPeriod)) > 0) {
+                    if (getBooleanAttribute(
+                                    DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH)
+                            || count == 4) {
+                        if ((newStart =
+                                        matchDayPeriodString(
+                                                text,
+                                                start,
+                                                formatData.narrowDayPeriods,
+                                                formatData.narrowDayPeriods.length,
+                                                dayPeriod))
+                                > 0) {
                             return newStart;
                         }
                     }
 
                     return newStart;
                 }
-            }
-
-            case 36: // 'B' -- flexible day period
-            {
-                int newStart = 0;
-                if(getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH) || count == 3) {
-                    if ((newStart = matchDayPeriodString(
-                            text, start, formatData.abbreviatedDayPeriods,
-                            formatData.abbreviatedDayPeriods.length, dayPeriod)) > 0) {
-                        return newStart;
-                    }
-                }
-                if(getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH) || count == 4) {
-                    if ((newStart = matchDayPeriodString(
-                            text, start, formatData.wideDayPeriods,
-                            formatData.wideDayPeriods.length, dayPeriod)) > 0) {
-                        return newStart;
-                    }
-                }
-                if(getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH) || count == 4) {
-                    if ((newStart = matchDayPeriodString(
-                            text, start, formatData.narrowDayPeriods,
-                            formatData.narrowDayPeriods.length, dayPeriod)) > 0) {
-                        return newStart;
-                    }
-                }
-
-                return newStart;
-            }
 
             default:
                 // case 3: // 'd' - DATE
@@ -3520,10 +4287,10 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
 
                 // Handle "generic" fields
                 if (obeyCount) {
-                    if ((start+count) > text.length()) return -start;
-                    number = parseInt(text, count, pos, allowNegative,currentNumberFormat);
+                    if ((start + count) > text.length()) return -start;
+                    number = parseInt(text, count, pos, allowNegative, currentNumberFormat);
                 } else {
-                    number = parseInt(text, pos, allowNegative,currentNumberFormat);
+                    number = parseInt(text, pos, allowNegative, currentNumberFormat);
                 }
                 if (obeyCount && !isLenient() && pos.getIndex() < start + count) {
                     return -start;
@@ -3537,44 +4304,41 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
                     return pos.getIndex();
                 }
                 return ~start;
-            }
+        }
     }
 
     /**
-     * return true if the pattern specified by patternCharIndex is one that allows
-     * numeric fallback regardless of actual pattern size.
+     * return true if the pattern specified by patternCharIndex is one that allows numeric fallback
+     * regardless of actual pattern size.
      */
     private boolean allowNumericFallback(int patternCharIndex) {
-        if (patternCharIndex == 26 /*'L' STAND_ALONE_MONTH*/ ||
-            patternCharIndex == 19 /*'e' DOW_LOCAL*/ ||
-            patternCharIndex == 25 /*'c' STAND_ALONE_DAY_OF_WEEK*/ ||
-            patternCharIndex == 30 /*'U' YEAR_NAME_FIELD*/ ||
-            patternCharIndex == 27 /* 'Q' - QUARTER*/ ||
-            patternCharIndex == 28 /* 'q' - STANDALONE QUARTER*/) {
+        if (patternCharIndex == 26 /*'L' STAND_ALONE_MONTH*/
+                || patternCharIndex == 19 /*'e' DOW_LOCAL*/
+                || patternCharIndex == 25 /*'c' STAND_ALONE_DAY_OF_WEEK*/
+                || patternCharIndex == 30 /*'U' YEAR_NAME_FIELD*/
+                || patternCharIndex == 27 /* 'Q' - QUARTER*/
+                || patternCharIndex == 28 /* 'q' - STANDALONE QUARTER*/) {
             return true;
         }
         return false;
     }
 
     /**
-     * Parse an integer using numberFormat.  This method is semantically
-     * const, but actually may modify fNumberFormat.
+     * Parse an integer using numberFormat. This method is semantically const, but actually may
+     * modify fNumberFormat.
      */
-    private Number parseInt(String text,
-                            ParsePosition pos,
-                            boolean allowNegative,
-                            NumberFormat fmt) {
+    private Number parseInt(
+            String text, ParsePosition pos, boolean allowNegative, NumberFormat fmt) {
         return parseInt(text, -1, pos, allowNegative, fmt);
     }
 
-    /**
-     * Parse an integer using numberFormat up to maxDigits.
-     */
-    private Number parseInt(String text,
-                            int maxDigits,
-                            ParsePosition pos,
-                            boolean allowNegative,
-                            NumberFormat fmt) {
+    /** Parse an integer using numberFormat up to maxDigits. */
+    private Number parseInt(
+            String text,
+            int maxDigits,
+            ParsePosition pos,
+            boolean allowNegative,
+            NumberFormat fmt) {
         Number number;
         int oldPos = pos.getIndex();
         if (allowNegative) {
@@ -3582,18 +4346,18 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
         } else {
             // Invalidate negative numbers
             if (fmt instanceof DecimalFormat) {
-                String oldPrefix = ((DecimalFormat)fmt).getNegativePrefix();
-                ((DecimalFormat)fmt).setNegativePrefix(SUPPRESS_NEGATIVE_PREFIX);
+                String oldPrefix = ((DecimalFormat) fmt).getNegativePrefix();
+                ((DecimalFormat) fmt).setNegativePrefix(SUPPRESS_NEGATIVE_PREFIX);
                 number = fmt.parse(text, pos);
-                ((DecimalFormat)fmt).setNegativePrefix(oldPrefix);
+                ((DecimalFormat) fmt).setNegativePrefix(oldPrefix);
             } else {
                 boolean dateNumberFormat = (fmt instanceof DateNumberFormat);
                 if (dateNumberFormat) {
-                    ((DateNumberFormat)fmt).setParsePositiveOnly(true);
+                    ((DateNumberFormat) fmt).setParsePositiveOnly(true);
                 }
                 number = fmt.parse(text, pos);
                 if (dateNumberFormat) {
-                    ((DateNumberFormat)fmt).setParsePositiveOnly(false);
+                    ((DateNumberFormat) fmt).setParsePositiveOnly(false);
                 }
             }
         }
@@ -3618,10 +4382,10 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
     /**
      * Counts number of digit code points in the specified text.
      *
-     * @param text  input text
+     * @param text input text
      * @param start start index, inclusive
-     * @param end   end index, exclusive
-     * @return  number of digits found in the text in the specified range.
+     * @param end end index, exclusive
+     * @return number of digits found in the text in the specified range.
      */
     private static int countDigits(String text, int start, int end) {
         int numDigits = 0;
@@ -3637,8 +4401,8 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
     }
 
     /**
-     * Translate a pattern, mapping each character in the from string to the
-     * corresponding character in the to string.
+     * Translate a pattern, mapping each character in the from string to the corresponding character
+     * in the to string.
      */
     private String translatePattern(String pat, String from, String to) {
         StringBuilder result = new StringBuilder();
@@ -3646,8 +4410,7 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
         for (int i = 0; i < pat.length(); ++i) {
             char c = pat.charAt(i);
             if (inQuote) {
-                if (c == '\'')
-                    inQuote = false;
+                if (c == '\'') inQuote = false;
             } else {
                 if (c == '\'') {
                     inQuote = true;
@@ -3670,6 +4433,7 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
 
     /**
      * Return a pattern string describing this date format.
+     *
      * @stable ICU 2.0
      */
     public String toPattern() {
@@ -3678,27 +4442,25 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
 
     /**
      * Return a localized pattern string describing this date format.
-     * <p>
-     * <b>Note:</b> This implementation depends on {@link DateFormatSymbols#getLocalPatternChars()}
-     * to get localized format pattern characters. ICU does not include
-     * localized pattern character data, therefore, unless user sets localized
-     * pattern characters manually, this method returns the same result as
-     * {@link #toPattern()}.
+     *
+     * <p><b>Note:</b> This implementation depends on {@link
+     * DateFormatSymbols#getLocalPatternChars()} to get localized format pattern characters. ICU
+     * does not include localized pattern character data, therefore, unless user sets localized
+     * pattern characters manually, this method returns the same result as {@link #toPattern()}.
      *
      * @stable ICU 2.0
      */
     public String toLocalizedPattern() {
-        return translatePattern(pattern,
-                                DateFormatSymbols.patternChars,
-                                formatData.localPatternChars);
+        return translatePattern(
+                pattern, DateFormatSymbols.patternChars, formatData.localPatternChars);
     }
 
     /**
      * Apply the given unlocalized pattern string to this date format.
+     *
      * @stable ICU 2.0
      */
-    public void applyPattern(String pat)
-    {
+    public void applyPattern(String pat) {
         this.pattern = pat;
         parsePattern();
 
@@ -3708,8 +4470,10 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
 
         // Hack to update use of Gannen year numbering for ja@calendar=japanese -
         // use only if format is non-numeric (includes 年) and no other fDateOverride.
-        if (calendar != null && calendar.getType().equals("japanese") &&
-                locale != null && locale.getLanguage().equals("ja")) {
+        if (calendar != null
+                && calendar.getType().equals("japanese")
+                && locale != null
+                && locale.getLanguage().equals("ja")) {
             if (override != null && override.equals("y=jpanyear") && !hasHanYearChar) {
                 // Gannen numbering is set but new pattern should not use it, unset;
                 // use procedure from setNumberFormat(NUmberFormat) to clear overrides
@@ -3721,12 +4485,12 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
                 // use procedures from initNumberFormatters / setNumberFormat(String,NumberFormat)
                 numberFormatters = new HashMap<>();
                 overrideMap = new HashMap<>();
-                overrideMap.put('y',"jpanyear");
-                ULocale ovrLoc = new ULocale(locale.getBaseName()+"@numbers=jpanyear");
-                NumberFormat nf = NumberFormat.createInstance(ovrLoc,NumberFormat.NUMBERSTYLE);
+                overrideMap.put('y', "jpanyear");
+                ULocale ovrLoc = new ULocale(locale.getBaseName() + "@numbers=jpanyear");
+                NumberFormat nf = NumberFormat.createInstance(ovrLoc, NumberFormat.NUMBERSTYLE);
                 nf.setGroupingUsed(false);
                 useLocalZeroPaddingNumberFormat = false;
-                numberFormatters.put("jpanyear",nf);
+                numberFormatters.put("jpanyear", nf);
                 override = "y=jpanyear"; // record status
             }
         }
@@ -3734,38 +4498,38 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
 
     /**
      * Apply the given localized pattern string to this date format.
+     *
      * @stable ICU 2.0
      */
     public void applyLocalizedPattern(String pat) {
-        this.pattern = translatePattern(pat,
-                                        formatData.localPatternChars,
-                                        DateFormatSymbols.patternChars);
+        this.pattern =
+                translatePattern(pat, formatData.localPatternChars, DateFormatSymbols.patternChars);
         setLocale(null, null);
     }
 
     /**
      * Gets the date/time formatting data.
-     * @return a copy of the date-time formatting data associated
-     * with this date-time formatter.
+     *
+     * @return a copy of the date-time formatting data associated with this date-time formatter.
      * @stable ICU 2.0
      */
-    public DateFormatSymbols getDateFormatSymbols()
-    {
+    public DateFormatSymbols getDateFormatSymbols() {
         return formatData.clone();
     }
 
     /**
      * Allows you to set the date/time formatting data.
+     *
      * @param newFormatSymbols the new symbols
      * @stable ICU 2.0
      */
-    public void setDateFormatSymbols(DateFormatSymbols newFormatSymbols)
-    {
+    public void setDateFormatSymbols(DateFormatSymbols newFormatSymbols) {
         this.formatData = newFormatSymbols.clone();
     }
 
     /**
      * Method for subclasses to access the DateFormatSymbols.
+     *
      * @stable ICU 2.0
      */
     protected DateFormatSymbols getSymbols() {
@@ -3773,11 +4537,10 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
     }
 
     /**
-     * {@icu} Gets the time zone formatter which this date/time
-     * formatter uses to format and parse a time zone.
+     * {@icu} Gets the time zone formatter which this date/time formatter uses to format and parse a
+     * time zone.
      *
-     * @return the time zone formatter which this date/time
-     * formatter uses.
+     * @return the time zone formatter which this date/time formatter uses.
      * @stable ICU 49
      */
     public TimeZoneFormat getTimeZoneFormat() {
@@ -3802,6 +4565,7 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
 
     /**
      * Overrides Cloneable
+     *
      * @stable ICU 2.0
      */
     @Override
@@ -3817,35 +4581,33 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
     }
 
     /**
-     * Override hashCode.
-     * Generates the hash code for the SimpleDateFormat object
+     * Override hashCode. Generates the hash code for the SimpleDateFormat object
+     *
      * @stable ICU 2.0
      */
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return pattern.hashCode();
         // just enough fields for a reasonable distribution
     }
 
     /**
      * Override equals.
+     *
      * @stable ICU 2.0
      */
     @Override
-    public boolean equals(Object obj)
-    {
+    public boolean equals(Object obj) {
         if (!super.equals(obj)) return false; // super does class check
         SimpleDateFormat that = (SimpleDateFormat) obj;
-        return (pattern.equals(that.pattern)
-                && formatData.equals(that.formatData));
+        return (pattern.equals(that.pattern) && formatData.equals(that.formatData));
     }
 
     /**
-     * Override writeObject.
-     * See http://docs.oracle.com/javase/6/docs/api/java/io/ObjectOutputStream.html
+     * Override writeObject. See
+     * http://docs.oracle.com/javase/6/docs/api/java/io/ObjectOutputStream.html
      */
-    private void writeObject(ObjectOutputStream stream) throws IOException{
+    private void writeObject(ObjectOutputStream stream) throws IOException {
         if (defaultCenturyStart == null) {
             // if defaultCenturyStart is not yet initialized,
             // calculate and set value before serialization.
@@ -3857,20 +4619,19 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
     }
 
     /**
-     * Override readObject.
-     * See http://docs.oracle.com/javase/6/docs/api/java/io/ObjectInputStream.html
+     * Override readObject. See
+     * http://docs.oracle.com/javase/6/docs/api/java/io/ObjectInputStream.html
      */
-    private void readObject(ObjectInputStream stream)
-        throws IOException, ClassNotFoundException {
+    private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
         stream.defaultReadObject();
-        int capitalizationSettingValue = (serialVersionOnStream > 1)? stream.readInt(): -1;
-        ///CLOVER:OFF
+        int capitalizationSettingValue = (serialVersionOnStream > 1) ? stream.readInt() : -1;
+        /// CLOVER:OFF
         // don't have old serial data to test with
         if (serialVersionOnStream < 1) {
             // didn't have defaultCenturyStart field
             defaultCenturyBase = System.currentTimeMillis();
         }
-        ///CLOVER:ON
+        /// CLOVER:ON
         else {
             // fill in dependent transient field
             parseAmbiguousDatesAsAfter(defaultCenturyStart);
@@ -3888,7 +4649,7 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
 
         setContext(DisplayContext.CAPITALIZATION_NONE);
         if (capitalizationSettingValue >= 0) {
-            for (DisplayContext context: DisplayContext.values()) {
+            for (DisplayContext context : DisplayContext.values()) {
                 if (context.value() == capitalizationSettingValue) {
                     setContext(context);
                     break;
@@ -3897,7 +4658,7 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
         }
 
         // if serialized pre-56 update & turned off partial match switch to new enum value
-        if(getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_PARTIAL_MATCH) == false) {
+        if (getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_PARTIAL_MATCH) == false) {
             setBooleanAttribute(DateFormat.BooleanAttribute.PARSE_PARTIAL_LITERAL_MATCH, false);
         }
 
@@ -3905,25 +4666,24 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
     }
 
     /**
-     * Format the object to an attributed string, and return the corresponding iterator
-     * Overrides superclass method.
+     * Format the object to an attributed string, and return the corresponding iterator Overrides
+     * superclass method.
      *
      * @param obj The object to format
      * @return <code>AttributedCharacterIterator</code> describing the formatted value.
-     *
      * @stable ICU 3.8
      */
     @Override
     public AttributedCharacterIterator formatToCharacterIterator(Object obj) {
         Calendar cal = calendar;
         if (obj instanceof Calendar) {
-            cal = (Calendar)obj;
+            cal = (Calendar) obj;
         } else if (obj instanceof java.util.Calendar) {
-            calendar = JavaTimeConverters.convertCalendar((java.util.Calendar)obj);
+            calendar = JavaTimeConverters.convertCalendar((java.util.Calendar) obj);
         } else if (obj instanceof Date) {
-            calendar.setTime((Date)obj);
+            calendar.setTime((Date) obj);
         } else if (obj instanceof Number) {
-            calendar.setTimeInMillis(((Number)obj).longValue());
+            calendar.setTimeInMillis(((Number) obj).longValue());
         } else if (obj instanceof Temporal) {
             cal = JavaTimeConverters.temporalToCalendar((Temporal) obj);
         } else if (obj instanceof DayOfWeek) {
@@ -3951,32 +4711,27 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
     }
 
     /**
-     * Get the locale of this simple date formatter.
-     * It is package accessible. also used in DateIntervalFormat.
+     * Get the locale of this simple date formatter. It is package accessible. also used in
+     * DateIntervalFormat.
      *
-     * @return   locale in this simple date formatter
+     * @return locale in this simple date formatter
      */
-    ULocale getLocale()
-    {
+    ULocale getLocale() {
         return locale;
     }
 
-
-
     /**
-     * Check whether the 'field' is smaller than all the fields covered in
-     * pattern, return true if it is.
-     * The sequence of calendar field,
-     * from large to small is: ERA, YEAR, MONTH, DATE, AM_PM, HOUR, MINUTE,...
-     * @param field    the calendar field need to check against
-     * @return         true if the 'field' is smaller than all the fields
-     *                 covered in pattern. false otherwise.
+     * Check whether the 'field' is smaller than all the fields covered in pattern, return true if
+     * it is. The sequence of calendar field, from large to small is: ERA, YEAR, MONTH, DATE, AM_PM,
+     * HOUR, MINUTE,...
+     *
+     * @param field the calendar field need to check against
+     * @return true if the 'field' is smaller than all the fields covered in pattern. false
+     *     otherwise.
      */
-
     boolean isFieldUnitIgnored(int field) {
         return isFieldUnitIgnored(pattern, field);
     }
-
 
     /*
      * Check whether the 'field' is smaller than all the fields covered in
@@ -4006,10 +4761,10 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
                 count = 0;
             }
             if (ch == '\'') {
-                if ((i+1) < pattern.length() && pattern.charAt(i+1) == '\'') {
+                if ((i + 1) < pattern.length() && pattern.charAt(i + 1) == '\'') {
                     ++i;
                 } else {
-                    inQuote = ! inQuote;
+                    inQuote = !inQuote;
                 }
             } else if (!inQuote && isSyntaxChar(ch)) {
                 prevCh = ch;
@@ -4026,34 +4781,27 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
         return true;
     }
 
-
     /**
-     * Format date interval by algorithm.
-     * It is supposed to be used only by CLDR survey tool.
+     * Format date interval by algorithm. It is supposed to be used only by CLDR survey tool.
      *
-     * @param fromCalendar      calendar set to the from date in date interval
-     *                          to be formatted into date interval string
-     * @param toCalendar        calendar set to the to date in date interval
-     *                          to be formatted into date interval string
-     * @param appendTo          Output parameter to receive result.
-     *                          Result is appended to existing contents.
-     * @param pos               On input: an alignment field, if desired.
-     *                          On output: the offsets of the alignment field.
-     * @exception IllegalArgumentException when there is non-recognized
-     *                                     pattern letter
-     * @return                  Reference to 'appendTo' parameter.
+     * @param fromCalendar calendar set to the from date in date interval to be formatted into date
+     *     interval string
+     * @param toCalendar calendar set to the to date in date interval to be formatted into date
+     *     interval string
+     * @param appendTo Output parameter to receive result. Result is appended to existing contents.
+     * @param pos On input: an alignment field, if desired. On output: the offsets of the alignment
+     *     field.
+     * @exception IllegalArgumentException when there is non-recognized pattern letter
+     * @return Reference to 'appendTo' parameter.
      * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
-    public final StringBuffer intervalFormatByAlgorithm(Calendar fromCalendar,
-                                                        Calendar toCalendar,
-                                                        StringBuffer appendTo,
-                                                        FieldPosition pos)
-                              throws IllegalArgumentException
-    {
+    public final StringBuffer intervalFormatByAlgorithm(
+            Calendar fromCalendar, Calendar toCalendar, StringBuffer appendTo, FieldPosition pos)
+            throws IllegalArgumentException {
         // not support different calendar types and time zones
-        if ( !fromCalendar.isEquivalentTo(toCalendar) ) {
+        if (!fromCalendar.isEquivalentTo(toCalendar)) {
             throw new IllegalArgumentException("can not format on two different calendars");
         }
 
@@ -4065,88 +4813,83 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
         // look for start of difference
         try {
             for (int i = 0; i < items.length; i++) {
-                if ( diffCalFieldValue(fromCalendar, toCalendar, items, i) ) {
+                if (diffCalFieldValue(fromCalendar, toCalendar, items, i)) {
                     diffBegin = i;
                     break;
                 }
             }
 
-            if ( diffBegin == -1 ) {
+            if (diffBegin == -1) {
                 // no difference, single date format
                 return format(fromCalendar, appendTo, pos);
             }
 
             // look for end of difference
-            for (int i = items.length-1; i >= diffBegin; i--) {
-                if ( diffCalFieldValue(fromCalendar, toCalendar, items, i) ) {
+            for (int i = items.length - 1; i >= diffBegin; i--) {
+                if (diffCalFieldValue(fromCalendar, toCalendar, items, i)) {
                     diffEnd = i;
                     break;
                 }
             }
-        } catch ( IllegalArgumentException e ) {
+        } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException(e.toString());
         }
 
         // full range is different
-        if ( diffBegin == 0 && diffEnd == items.length-1 ) {
+        if (diffBegin == 0 && diffEnd == items.length - 1) {
             format(fromCalendar, appendTo, pos);
             appendTo.append(" \u2013 "); // default separator
             format(toCalendar, appendTo, pos);
             return appendTo;
         }
 
-
         /* search for largest calendar field within the different range */
         int highestLevel = 1000;
         for (int i = diffBegin; i <= diffEnd; i++) {
-            if ( items[i] instanceof String) {
+            if (items[i] instanceof String) {
                 continue;
             }
-            PatternItem item = (PatternItem)items[i];
+            PatternItem item = (PatternItem) items[i];
             char ch = item.type;
             int patternCharIndex = getIndexFromChar(ch);
             if (patternCharIndex == -1) {
-                throw new IllegalArgumentException("Illegal pattern character " +
-                                                   "'" + ch + "' in \"" +
-                                                   pattern + '"');
+                throw new IllegalArgumentException(
+                        "Illegal pattern character " + "'" + ch + "' in \"" + pattern + '"');
             }
 
-            if ( patternCharIndex < highestLevel ) {
+            if (patternCharIndex < highestLevel) {
                 highestLevel = patternCharIndex;
             }
         }
 
         /* re-calculate diff range, including those calendar field which
-           is in lower level than the largest calendar field covered
-           in diff range calculated. */
+        is in lower level than the largest calendar field covered
+        in diff range calculated. */
         try {
             for (int i = 0; i < diffBegin; i++) {
-                if ( lowerLevel(items, i, highestLevel) ) {
+                if (lowerLevel(items, i, highestLevel)) {
                     diffBegin = i;
                     break;
                 }
             }
 
-
-            for (int i = items.length-1; i > diffEnd; i--) {
-                if ( lowerLevel(items, i, highestLevel) ) {
+            for (int i = items.length - 1; i > diffEnd; i--) {
+                if (lowerLevel(items, i, highestLevel)) {
                     diffEnd = i;
                     break;
                 }
             }
-        } catch ( IllegalArgumentException e ) {
+        } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException(e.toString());
         }
 
-
         // full range is different
-        if ( diffBegin == 0 && diffEnd == items.length-1 ) {
+        if (diffBegin == 0 && diffEnd == items.length - 1) {
             format(fromCalendar, appendTo, pos);
             appendTo.append(" \u2013 "); // default separator
             format(toCalendar, appendTo, pos);
             return appendTo;
         }
-
 
         // formatting
         // Initialize
@@ -4157,15 +4900,31 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
         // formatting date 1
         for (int i = 0; i <= diffEnd; i++) {
             if (items[i] instanceof String) {
-                appendTo.append((String)items[i]);
+                appendTo.append((String) items[i]);
             } else {
-                PatternItem item = (PatternItem)items[i];
+                PatternItem item = (PatternItem) items[i];
                 if (useFastFormat) {
-                    subFormat(appendTo, item.type, item.length, appendTo.length(),
-                              i, capSetting, pos, item.type, fromCalendar);
+                    subFormat(
+                            appendTo,
+                            item.type,
+                            item.length,
+                            appendTo.length(),
+                            i,
+                            capSetting,
+                            pos,
+                            item.type,
+                            fromCalendar);
                 } else {
-                    appendTo.append(subFormat(item.type, item.length, appendTo.length(),
-                                              i, capSetting, pos, item.type, fromCalendar));
+                    appendTo.append(
+                            subFormat(
+                                    item.type,
+                                    item.length,
+                                    appendTo.length(),
+                                    i,
+                                    capSetting,
+                                    pos,
+                                    item.type,
+                                    fromCalendar));
                 }
             }
         }
@@ -4175,91 +4934,97 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
         // formatting date 2
         for (int i = diffBegin; i < items.length; i++) {
             if (items[i] instanceof String) {
-                appendTo.append((String)items[i]);
+                appendTo.append((String) items[i]);
             } else {
-                PatternItem item = (PatternItem)items[i];
+                PatternItem item = (PatternItem) items[i];
                 if (useFastFormat) {
-                    subFormat(appendTo, item.type, item.length, appendTo.length(),
-                              i, capSetting, pos, item.type, toCalendar);
+                    subFormat(
+                            appendTo,
+                            item.type,
+                            item.length,
+                            appendTo.length(),
+                            i,
+                            capSetting,
+                            pos,
+                            item.type,
+                            toCalendar);
                 } else {
-                    appendTo.append(subFormat(item.type, item.length, appendTo.length(),
-                                              i, capSetting, pos, item.type, toCalendar));
+                    appendTo.append(
+                            subFormat(
+                                    item.type,
+                                    item.length,
+                                    appendTo.length(),
+                                    i,
+                                    capSetting,
+                                    pos,
+                                    item.type,
+                                    toCalendar));
                 }
             }
         }
         return appendTo;
     }
 
-
     /**
      * check whether the i-th item in 2 calendar is in different value.
      *
-     * It is supposed to be used only by CLDR survey tool.
-     * It is used by intervalFormatByAlgorithm().
+     * <p>It is supposed to be used only by CLDR survey tool. It is used by
+     * intervalFormatByAlgorithm().
      *
-     * @param fromCalendar   one calendar
-     * @param toCalendar     the other calendar
-     * @param items          pattern items
-     * @param i              the i-th item in pattern items
-     * @exception IllegalArgumentException when there is non-recognized
-     *                                     pattern letter
-     * @return               true is i-th item in 2 calendar is in different
-     *                       value, false otherwise.
+     * @param fromCalendar one calendar
+     * @param toCalendar the other calendar
+     * @param items pattern items
+     * @param i the i-th item in pattern items
+     * @exception IllegalArgumentException when there is non-recognized pattern letter
+     * @return true is i-th item in 2 calendar is in different value, false otherwise.
      */
-    private boolean diffCalFieldValue(Calendar fromCalendar,
-                                      Calendar toCalendar,
-                                      Object[] items,
-                                      int i) throws IllegalArgumentException {
-        if ( items[i] instanceof String) {
+    private boolean diffCalFieldValue(
+            Calendar fromCalendar, Calendar toCalendar, Object[] items, int i)
+            throws IllegalArgumentException {
+        if (items[i] instanceof String) {
             return false;
         }
-        PatternItem item = (PatternItem)items[i];
+        PatternItem item = (PatternItem) items[i];
         char ch = item.type;
         int patternCharIndex = getIndexFromChar(ch);
         if (patternCharIndex == -1) {
-            throw new IllegalArgumentException("Illegal pattern character " +
-                                               "'" + ch + "' in \"" +
-                                               pattern + '"');
+            throw new IllegalArgumentException(
+                    "Illegal pattern character " + "'" + ch + "' in \"" + pattern + '"');
         }
 
         final int field = PATTERN_INDEX_TO_CALENDAR_FIELD[patternCharIndex];
         if (field >= 0) {
             int value = fromCalendar.get(field);
             int value_2 = toCalendar.get(field);
-            if ( value != value_2 ) {
+            if (value != value_2) {
                 return true;
             }
         }
         return false;
     }
 
-
     /**
      * check whether the i-th item's level is lower than the input 'level'
      *
-     * It is supposed to be used only by CLDR survey tool.
-     * It is used by intervalFormatByAlgorithm().
+     * <p>It is supposed to be used only by CLDR survey tool. It is used by
+     * intervalFormatByAlgorithm().
      *
-     * @param items  the pattern items
-     * @param i      the i-th item in pattern items
-     * @param level  the level with which the i-th pattern item compared to
-     * @exception IllegalArgumentException when there is non-recognized
-     *                                     pattern letter
-     * @return       true if i-th pattern item is lower than 'level',
-     *               false otherwise
+     * @param items the pattern items
+     * @param i the i-th item in pattern items
+     * @param level the level with which the i-th pattern item compared to
+     * @exception IllegalArgumentException when there is non-recognized pattern letter
+     * @return true if i-th pattern item is lower than 'level', false otherwise
      */
-    private boolean lowerLevel(Object[] items, int i, int level)
-                    throws IllegalArgumentException {
+    private boolean lowerLevel(Object[] items, int i, int level) throws IllegalArgumentException {
         if (items[i] instanceof String) {
             return false;
         }
-        PatternItem item = (PatternItem)items[i];
+        PatternItem item = (PatternItem) items[i];
         char ch = item.type;
         int patternCharIndex = getLevelFromChar(ch);
         if (patternCharIndex == -1) {
-            throw new IllegalArgumentException("Illegal pattern character " +
-                                               "'" + ch + "' in \"" +
-                                               pattern + '"');
+            throw new IllegalArgumentException(
+                    "Illegal pattern character " + "'" + ch + "' in \"" + pattern + '"');
         }
 
         if (patternCharIndex >= level) {
@@ -4269,12 +5034,11 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
     }
 
     /**
-     * allow the user to set the NumberFormat for several fields
-     * It can be a single field like: "y"(year) or "M"(month)
-     * It can be several field combined together: "yMd"(year, month and date)
-     * Note:
-     * 1 symbol field is enough for multiple symbol fields (so "y" will override "yy", "yyy")
-     * If the field is not numeric, then override has no effect (like "MMM" will use abbreviation, not numerical field)
+     * allow the user to set the NumberFormat for several fields It can be a single field like:
+     * "y"(year) or "M"(month) It can be several field combined together: "yMd"(year, month and
+     * date) Note: 1 symbol field is enough for multiple symbol fields (so "y" will override "yy",
+     * "yyy") If the field is not numeric, then override has no effect (like "MMM" will use
+     * abbreviation, not numerical field)
      *
      * @param fields the fields to override
      * @param overrideNF the NumbeferFormat used
@@ -4297,7 +5061,8 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
         for (int i = 0; i < fields.length(); i++) {
             char field = fields.charAt(i);
             if (DateFormatSymbols.patternChars.indexOf(field) == -1) {
-                throw new IllegalArgumentException("Illegal field character " + "'" + field + "' in setNumberFormat.");
+                throw new IllegalArgumentException(
+                        "Illegal field character " + "'" + field + "' in setNumberFormat.");
             }
             overrideMap.put(field, nsName);
             numberFormatters.put(nsName, overrideNF);
@@ -4328,16 +5093,14 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
 
     private void initNumberFormatters(ULocale loc) {
 
-       numberFormatters = new HashMap<>();
-       overrideMap = new HashMap<>();
-       processOverrideString(loc,override);
-
+        numberFormatters = new HashMap<>();
+        overrideMap = new HashMap<>();
+        processOverrideString(loc, override);
     }
 
     private void processOverrideString(ULocale loc, String str) {
 
-        if ( str == null || str.length() == 0 )
-            return;
+        if (str == null || str.length() == 0) return;
 
         int start = 0;
         int end;
@@ -4347,7 +5110,7 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
         boolean fullOverride;
 
         while (moreToProcess) {
-            int delimiterPosition = str.indexOf(";",start);
+            int delimiterPosition = str.indexOf(";", start);
             if (delimiterPosition == -1) {
                 moreToProcess = false;
                 end = str.length();
@@ -4355,20 +5118,20 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
                 end = delimiterPosition;
             }
 
-            String currentString = str.substring(start,end);
+            String currentString = str.substring(start, end);
             int equalSignPosition = currentString.indexOf("=");
             if (equalSignPosition == -1) { // Simple override string such as "hebrew"
-               nsName = currentString;
-               fullOverride = true;
+                nsName = currentString;
+                fullOverride = true;
             } else { // Field specific override string such as "y=hebrew"
-               nsName = currentString.substring(equalSignPosition+1);
-               ovrField = currentString.charAt(0);
-               overrideMap.put(ovrField,nsName);
-               fullOverride = false;
+                nsName = currentString.substring(equalSignPosition + 1);
+                ovrField = currentString.charAt(0);
+                overrideMap.put(ovrField, nsName);
+                fullOverride = false;
             }
 
-            ULocale ovrLoc = new ULocale(loc.getBaseName()+"@numbers="+nsName);
-            NumberFormat nf = NumberFormat.createInstance(ovrLoc,NumberFormat.NUMBERSTYLE);
+            ULocale ovrLoc = new ULocale(loc.getBaseName() + "@numbers=" + nsName);
+            NumberFormat nf = NumberFormat.createInstance(ovrLoc, NumberFormat.NUMBERSTYLE);
             nf.setGroupingUsed(false);
 
             if (fullOverride) {
@@ -4380,7 +5143,7 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
             }
 
             if (!fullOverride && !numberFormatters.containsKey(nsName)) {
-                  numberFormatters.put(nsName,nf);
+                numberFormatters.put(nsName, nf);
             }
 
             start = delimiterPosition + 1;

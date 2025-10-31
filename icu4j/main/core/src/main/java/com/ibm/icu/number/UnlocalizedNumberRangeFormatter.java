@@ -2,20 +2,21 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.number;
 
+import com.ibm.icu.util.ULocale;
 import java.util.Locale;
 
-import com.ibm.icu.util.ULocale;
-
 /**
- * A NumberRangeFormatter that does not yet have a locale. In order to format, a locale must be specified.
+ * A NumberRangeFormatter that does not yet have a locale. In order to format, a locale must be
+ * specified.
  *
- * Instances of this class are immutable and thread-safe.
+ * <p>Instances of this class are immutable and thread-safe.
  *
  * @author sffc
  * @stable ICU 63
  * @see NumberRangeFormatter
  */
-public class UnlocalizedNumberRangeFormatter extends NumberRangeFormatterSettings<UnlocalizedNumberRangeFormatter> {
+public class UnlocalizedNumberRangeFormatter
+        extends NumberRangeFormatterSettings<UnlocalizedNumberRangeFormatter> {
 
     /** Base constructor; called during startup only. */
     UnlocalizedNumberRangeFormatter() {
@@ -27,18 +28,16 @@ public class UnlocalizedNumberRangeFormatter extends NumberRangeFormatterSetting
     }
 
     /**
-     * Associate the given locale with the number range formatter. The locale is used for picking the
-     * appropriate symbols, formats, and other data for number display.
+     * Associate the given locale with the number range formatter. The locale is used for picking
+     * the appropriate symbols, formats, and other data for number display.
      *
-     * <p>
-     * To use the Java default locale, call Locale.getDefault():
+     * <p>To use the Java default locale, call Locale.getDefault():
      *
      * <pre>
      * NumberFormatter.with(). ... .locale(Locale.getDefault())
      * </pre>
      *
-     * @param locale
-     *            The locale to use when loading data for number range formatting.
+     * @param locale The locale to use when loading data for number range formatting.
      * @return The fluent chain
      * @stable ICU 63
      */
@@ -49,8 +48,7 @@ public class UnlocalizedNumberRangeFormatter extends NumberRangeFormatterSetting
     /**
      * ULocale version of the {@link #locale(Locale)} setter above.
      *
-     * @param locale
-     *            The locale to use when loading data for number range formatting.
+     * @param locale The locale to use when loading data for number range formatting.
      * @return The fluent chain
      * @see #locale(Locale)
      * @stable ICU 63

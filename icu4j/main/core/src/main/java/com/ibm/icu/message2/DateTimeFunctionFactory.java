@@ -3,6 +3,8 @@
 
 package com.ibm.icu.message2;
 
+import com.ibm.icu.impl.JavaTimeConverters;
+import com.ibm.icu.text.DateFormat;
 import java.time.DayOfWeek;
 import java.time.Month;
 import java.time.temporal.Temporal;
@@ -11,14 +13,11 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.ibm.icu.impl.JavaTimeConverters;
-import com.ibm.icu.text.DateFormat;
-
 /**
- * Creates a {@link Function} doing formatting of date / time, similar to
- * <code>{exp, date}</code> and <code>{exp, time}</code> in {@link com.ibm.icu.text.MessageFormat}.
+ * Creates a {@link Function} doing formatting of date / time, similar to <code>{exp, date}</code>
+ * and <code>{exp, time}</code> in {@link com.ibm.icu.text.MessageFormat}.
  *
- * It does not do selection.
+ * <p>It does not do selection.
  */
 class DateTimeFunctionFactory implements FunctionFactory {
     private final String kind;
@@ -41,8 +40,8 @@ class DateTimeFunctionFactory implements FunctionFactory {
     /**
      * {@inheritDoc}
      *
-     * @throws IllegalArgumentException when something goes wrong
-     *         (for example conflicting options, invalid option values, etc.)
+     * @throws IllegalArgumentException when something goes wrong (for example conflicting options,
+     *     invalid option values, etc.)
      */
     @Override
     public Function create(Locale locale, Map<String, Object> fixedOptions) {
@@ -85,8 +84,9 @@ class DateTimeFunctionFactory implements FunctionFactory {
                     break;
                 case "datetime": // $FALL-THROUGH$
                 default: // {$d :datetime dateFields=year-month-day timePrecision=minute}
-                    skeleton = DATE_STYLES_TO_SKELETON.get("year-month-day-weekday::medium")
-                            + TIME_STYLES_TO_SKELETON.get("minute::");
+                    skeleton =
+                            DATE_STYLES_TO_SKELETON.get("year-month-day-weekday::medium")
+                                    + TIME_STYLES_TO_SKELETON.get("minute::");
             }
         }
 
@@ -98,10 +98,11 @@ class DateTimeFunctionFactory implements FunctionFactory {
 
         String calendarOverride = OptUtils.getString(fixedOptions, "calendar", "");
         if (!calendarOverride.isEmpty()) {
-            locale = new Locale.Builder()
-                    .setLocale(locale)
-                    .setUnicodeLocaleKeyword("ca", calendarOverride)
-                    .build();
+            locale =
+                    new Locale.Builder()
+                            .setLocale(locale)
+                            .setUnicodeLocaleKeyword("ca", calendarOverride)
+                            .build();
         }
 
         DateFormat df = DateFormat.getInstanceForSkeleton(skeleton, locale);
@@ -112,43 +113,43 @@ class DateTimeFunctionFactory implements FunctionFactory {
         return new DateTimeFunctionImpl(locale, df, reportErrors);
     }
 
-    private static Map<String, String> DATE_STYLES_TO_SKELETON = Map.ofEntries(
-            // dateFields + dateLength
-            Map.entry("weekday::long", "EEEE"),
-            Map.entry("weekday::medium", "E"),
-            Map.entry("weekday::short", "EEEEEE"),
-            Map.entry("day-weekday::long", "dEEEE"),
-            Map.entry("day-weekday::medium", "dE"),
-            Map.entry("day-weekday::short", "dEEEEEE"),
-            Map.entry("month-day::long", "MMMMd"),
-            Map.entry("month-day::medium", "MMMd"),
-            Map.entry("month-day::short", "Md"),
-            Map.entry("month-day-weekday::long", "MMMMdEEEE"),
-            Map.entry("month-day-weekday::medium", "MMMdE"),
-            Map.entry("month-day-weekday::short", "MdEEEEEE"),
-            Map.entry("year-month-day::long", "yMMMMd"),
-            Map.entry("year-month-day::medium", "yMMMd"),
-            Map.entry("year-month-day::short", "yMd"),
-            Map.entry("year-month-day-weekday::long", "yMMMMdEEEE"),
-            Map.entry("year-month-day-weekday::medium", "yMMMdE"),
-            Map.entry("year-month-day-weekday::short", "yMdEEEEEE")
-    );
+    private static Map<String, String> DATE_STYLES_TO_SKELETON =
+            Map.ofEntries(
+                    // dateFields + dateLength
+                    Map.entry("weekday::long", "EEEE"),
+                    Map.entry("weekday::medium", "E"),
+                    Map.entry("weekday::short", "EEEEEE"),
+                    Map.entry("day-weekday::long", "dEEEE"),
+                    Map.entry("day-weekday::medium", "dE"),
+                    Map.entry("day-weekday::short", "dEEEEEE"),
+                    Map.entry("month-day::long", "MMMMd"),
+                    Map.entry("month-day::medium", "MMMd"),
+                    Map.entry("month-day::short", "Md"),
+                    Map.entry("month-day-weekday::long", "MMMMdEEEE"),
+                    Map.entry("month-day-weekday::medium", "MMMdE"),
+                    Map.entry("month-day-weekday::short", "MdEEEEEE"),
+                    Map.entry("year-month-day::long", "yMMMMd"),
+                    Map.entry("year-month-day::medium", "yMMMd"),
+                    Map.entry("year-month-day::short", "yMd"),
+                    Map.entry("year-month-day-weekday::long", "yMMMMdEEEE"),
+                    Map.entry("year-month-day-weekday::medium", "yMMMdE"),
+                    Map.entry("year-month-day-weekday::short", "yMdEEEEEE"));
 
-    private static Map<String, String> TIME_STYLES_TO_SKELETON = Map.ofEntries(
-            // timePrecision + hour12
-            Map.entry("hour::", "j"),
-            Map.entry("hour::true", "h"),
-            Map.entry("hour::false", "H"),
-            Map.entry("minute::", "jm"),
-            Map.entry("minute::true", "hm"),
-            Map.entry("minute::false", "Hm"),
-            Map.entry("second::", "jms"),
-            Map.entry("second::true", "hms"),
-            Map.entry("second::false", "Hms")
-    );
+    private static Map<String, String> TIME_STYLES_TO_SKELETON =
+            Map.ofEntries(
+                    // timePrecision + hour12
+                    Map.entry("hour::", "j"),
+                    Map.entry("hour::true", "h"),
+                    Map.entry("hour::false", "H"),
+                    Map.entry("minute::", "jm"),
+                    Map.entry("minute::true", "hm"),
+                    Map.entry("minute::false", "Hm"),
+                    Map.entry("second::", "jms"),
+                    Map.entry("second::true", "hms"),
+                    Map.entry("second::false", "Hms"));
 
-    private static String getDateFieldOptions(Map<String, Object> options,
-            String fieldName, String lengthName) {
+    private static String getDateFieldOptions(
+            Map<String, Object> options, String fieldName, String lengthName) {
         StringBuilder skeleton = new StringBuilder();
         String opt;
 
@@ -156,9 +157,10 @@ class DateTimeFunctionFactory implements FunctionFactory {
         // Would be nice to report (log?), but ICU does not have a clear policy on how to do that.
         // But we don't want to throw, that is too drastic.
 
-        opt = OptUtils.getString(options, fieldName, "")
-                + "::"
-                + OptUtils.getString(options, lengthName, "");
+        opt =
+                OptUtils.getString(options, fieldName, "")
+                        + "::"
+                        + OptUtils.getString(options, lengthName, "");
         opt = DATE_STYLES_TO_SKELETON.get(opt);
         if (opt != null) {
             skeleton.append(opt);
@@ -167,8 +169,7 @@ class DateTimeFunctionFactory implements FunctionFactory {
         return skeleton.toString();
     }
 
-    private static String getTimeFieldOptions(Map<String, Object> options,
-            String precisionName) {
+    private static String getTimeFieldOptions(Map<String, Object> options, String precisionName) {
         StringBuilder skeleton = new StringBuilder();
         String opt;
 
@@ -176,9 +177,10 @@ class DateTimeFunctionFactory implements FunctionFactory {
         // Would be nice to report (log?), but ICU does not have a clear policy on how to do that.
         // But we don't want to throw, that is too drastic.
 
-        opt = OptUtils.getString(options, precisionName, "")
-                + "::"
-                + OptUtils.getString(options, "hour12", "");
+        opt =
+                OptUtils.getString(options, precisionName, "")
+                        + "::"
+                        + OptUtils.getString(options, "hour12", "");
         opt = TIME_STYLES_TO_SKELETON.get(opt);
         if (opt != null) {
             skeleton.append(opt);
@@ -210,9 +212,7 @@ class DateTimeFunctionFactory implements FunctionFactory {
             this.reportErrors = reportErrors;
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        /** {@inheritDoc} */
         @Override
         public FormattedPlaceholder format(Object toFormat, Map<String, Object> variableOptions) {
             // TODO: use a special type to indicate function without input argument.
@@ -224,7 +224,8 @@ class DateTimeFunctionFactory implements FunctionFactory {
                 // We were unable to parse the input as iso date
                 if (toFormat instanceof CharSequence) {
                     if (reportErrors) {
-                        throw new IllegalArgumentException("bad-operand: argument must be ISO 8601");
+                        throw new IllegalArgumentException(
+                                "bad-operand: argument must be ISO 8601");
                     }
                     return new FormattedPlaceholder(
                             toFormat, new PlainStringFormattedValue("{|" + toFormat + "|}"));
@@ -236,7 +237,8 @@ class DateTimeFunctionFactory implements FunctionFactory {
             } else if (toFormat instanceof Month) {
                 toFormat = JavaTimeConverters.monthToCalendar((Month) toFormat);
             }
-            // Not an else-if here, because the `Temporal` conditions before make `toFormat` a `Calendar`
+            // Not an else-if here, because the `Temporal` conditions before make `toFormat` a
+            // `Calendar`
             if (toFormat instanceof java.util.Calendar) {
                 toFormat = JavaTimeConverters.convertCalendar((java.util.Calendar) toFormat);
             }
@@ -244,9 +246,7 @@ class DateTimeFunctionFactory implements FunctionFactory {
             return new FormattedPlaceholder(toFormat, new PlainStringFormattedValue(result));
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        /** {@inheritDoc} */
         @Override
         public String formatToString(Object toFormat, Map<String, Object> variableOptions) {
             FormattedPlaceholder result = format(toFormat, variableOptions);
@@ -254,8 +254,9 @@ class DateTimeFunctionFactory implements FunctionFactory {
         }
     }
 
-    private final static Pattern ISO_PATTERN = Pattern.compile(
-            "^(([0-9]{4})-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])){1}(T([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])(\\.[0-9]{1,3})?(Z|[+-]((0[0-9]|1[0-3]):[0-5][0-9]|14:00))?)?$");
+    private static final Pattern ISO_PATTERN =
+            Pattern.compile(
+                    "^(([0-9]{4})-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])){1}(T([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])(\\.[0-9]{1,3})?(Z|[+-]((0[0-9]|1[0-3]):[0-5][0-9]|14:00))?)?$");
 
     private static Integer safeParse(String str) {
         if (str == null || str.isEmpty()) {
@@ -288,8 +289,9 @@ class DateTimeFunctionFactory implements FunctionFactory {
                 second = 0;
             }
 
-            com.ibm.icu.util.GregorianCalendar gc = new com.ibm.icu.util.GregorianCalendar(
-                    year, month - 1, day, hour, minute, second);
+            com.ibm.icu.util.GregorianCalendar gc =
+                    new com.ibm.icu.util.GregorianCalendar(
+                            year, month - 1, day, hour, minute, second);
             gc.set(com.ibm.icu.util.Calendar.MILLISECOND, millisecond);
 
             if (tzPart != null) {
@@ -313,5 +315,4 @@ class DateTimeFunctionFactory implements FunctionFactory {
         }
         return text;
     }
-
 }

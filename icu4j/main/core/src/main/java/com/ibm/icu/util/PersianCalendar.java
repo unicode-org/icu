@@ -9,59 +9,50 @@
 
 package com.ibm.icu.util;
 
+import com.ibm.icu.util.ULocale.Category;
 import java.util.BitSet;
 import java.util.Date;
 import java.util.Locale;
 
-import com.ibm.icu.util.ULocale.Category;
-
 /**
- * <code>PersianCalendar</code> is a subclass of <code>Calendar</code> that
- * that implements the Persian calendar.  It is used as the main civil
- * calendar in Iran and Afghanistan, and by Iranians and Afghans worldwide.
- * <p>
- * The Persian calendar is solar, and is similar to the Gregorian calendar
- * in various ways, except its leap year rule, which is determined
- * astronomically.  The Persian year starts around the March equinox.
- * <p>
- * The modern Persian calendar (used in Iran since 1925 CE and in
- * Afghanistan since 1957 CE), has the lengths of the months fixed.  The
- * first six months are 31 days each, the next five months are 30 days each,
- * and the final month is 29 days in non-leap years and 30 days in leap
- * ones.  Historically, the lengths of the month differed in different
- * years, but they were finally fixed at the times mentioned above.  Partial
- * information is available about the historical lengths.
- * <p>
- * The official rule for determination of the beginning of the Persian year
- * is locale dependent, but at the same time, it has not specified a locale.
- * Iranians around the world traditionally follow the calendar authorities
- * of Iran, which haven't officially specified the locale.  Some
- * calendarists use some point in Tehran as the locale, while others have
- * tried the more neutral 52.5 degrees east meridian.  It is not clear which
- * locale should be used for the Persian calendar of Afghanistan, but it is
- * expected that for about one year in every twenty-four years, the Afghan
+ * <code>PersianCalendar</code> is a subclass of <code>Calendar</code> that that implements the
+ * Persian calendar. It is used as the main civil calendar in Iran and Afghanistan, and by Iranians
+ * and Afghans worldwide.
+ *
+ * <p>The Persian calendar is solar, and is similar to the Gregorian calendar in various ways,
+ * except its leap year rule, which is determined astronomically. The Persian year starts around the
+ * March equinox.
+ *
+ * <p>The modern Persian calendar (used in Iran since 1925 CE and in Afghanistan since 1957 CE), has
+ * the lengths of the months fixed. The first six months are 31 days each, the next five months are
+ * 30 days each, and the final month is 29 days in non-leap years and 30 days in leap ones.
+ * Historically, the lengths of the month differed in different years, but they were finally fixed
+ * at the times mentioned above. Partial information is available about the historical lengths.
+ *
+ * <p>The official rule for determination of the beginning of the Persian year is locale dependent,
+ * but at the same time, it has not specified a locale. Iranians around the world traditionally
+ * follow the calendar authorities of Iran, which haven't officially specified the locale. Some
+ * calendarists use some point in Tehran as the locale, while others have tried the more neutral
+ * 52.5 degrees east meridian. It is not clear which locale should be used for the Persian calendar
+ * of Afghanistan, but it is expected that for about one year in every twenty-four years, the Afghan
  * calendar may become different from the Iranian one.
- * <p>
- * The exact locale to be used for the Iranian calendar starts to make a
- * difference at around 2090 CE.  The specific arithmetic method implemented
- * here, commonly known as the 33-year cycle rule, matches the astronomical
- * calendar at least for the whole period that the calendar has been both
- * well-defined and official, from 1925 to around 2090 CE.  The other
- * commonly known algorithm, the 2820-year cycle, has been incorrectly
- * designed to follow the tropical year instead of the spring equinoctial
- * year, and fails to match the astronomical one as early as 2025 CE.
- * <p>
- * This class should not be subclassed.</p>
- * <p>
- * PersianCalendar usually should be instantiated using
- * {@link com.ibm.icu.util.Calendar#getInstance(ULocale)} passing in a
- * <code>ULocale</code> with the tag <code>"@calendar=persian"</code>.</p>
+ *
+ * <p>The exact locale to be used for the Iranian calendar starts to make a difference at around
+ * 2090 CE. The specific arithmetic method implemented here, commonly known as the 33-year cycle
+ * rule, matches the astronomical calendar at least for the whole period that the calendar has been
+ * both well-defined and official, from 1925 to around 2090 CE. The other commonly known algorithm,
+ * the 2820-year cycle, has been incorrectly designed to follow the tropical year instead of the
+ * spring equinoctial year, and fails to match the astronomical one as early as 2025 CE.
+ *
+ * <p>This class should not be subclassed.
+ *
+ * <p>PersianCalendar usually should be instantiated using {@link
+ * com.ibm.icu.util.Calendar#getInstance(ULocale)} passing in a <code>ULocale</code> with the tag
+ * <code>"@calendar=persian"</code>.
  *
  * @see com.ibm.icu.util.GregorianCalendar
  * @see com.ibm.icu.util.Calendar
- *
  * @author Roozbeh Pournader
- *
  * @internal
  * @deprecated This API is ICU internal only.
  */
@@ -69,24 +60,24 @@ import com.ibm.icu.util.ULocale.Category;
 public class PersianCalendar extends Calendar {
     private static final long serialVersionUID = -6727306982975111643L;
 
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     // Constants...
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
 
     private static final int[][] MONTH_COUNT = {
-        //len len2   st
-        {  31,  31,   0 }, // Farvardin
-        {  31,  31,  31 }, // Ordibehesht
-        {  31,  31,  62 }, // Khordad
-        {  31,  31,  93 }, // Tir
-        {  31,  31, 124 }, // Mordad
-        {  31,  31, 155 }, // Shahrivar
-        {  30,  30, 186 }, // Mehr
-        {  30,  30, 216 }, // Aban
-        {  30,  30, 246 }, // Azar
-        {  30,  30, 276 }, // Dey
-        {  30,  30, 306 }, // Bahman
-        {  29,  30, 336 }  // Esfand
+        // len len2   st
+        {31, 31, 0}, // Farvardin
+        {31, 31, 31}, // Ordibehesht
+        {31, 31, 62}, // Khordad
+        {31, 31, 93}, // Tir
+        {31, 31, 124}, // Mordad
+        {31, 31, 155}, // Shahrivar
+        {30, 30, 186}, // Mehr
+        {30, 30, 216}, // Aban
+        {30, 30, 246}, // Azar
+        {30, 30, 276}, // Dey
+        {30, 30, 306}, // Bahman
+        {29, 30, 336} // Esfand
         // len  length of month
         // len2 length of month in a leap year
         // st   days in year before start of month
@@ -95,12 +86,16 @@ public class PersianCalendar extends Calendar {
     private static final int PERSIAN_EPOCH = 1948320;
 
     private static final class NonLeapYears {
-       private static final int NON_LEAP_YEARS[] = {
-           1502, 1601, 1634, 1667, 1700, 1733, 1766, 1799, 1832, 1865, 1898, 1931, 1964, 1997, 2030, 2059,
-           2063, 2096, 2129, 2158, 2162, 2191, 2195, 2224, 2228, 2257, 2261, 2290, 2294, 2323, 2327, 2356,
-           2360, 2389, 2393, 2422, 2426, 2455, 2459, 2488, 2492, 2521, 2525, 2554, 2558, 2587, 2591, 2620,
-           2624, 2653, 2657, 2686, 2690, 2719, 2723, 2748, 2752, 2756, 2781, 2785, 2789, 2818, 2822, 2847,
-           2851, 2855, 2880, 2884, 2888, 2913, 2917, 2921, 2946, 2950, 2954, 2979, 2983, 2987,
+        private static final int NON_LEAP_YEARS[] = {
+            1502, 1601, 1634, 1667, 1700, 1733, 1766, 1799, 1832, 1865, 1898, 1931, 1964, 1997,
+                    2030, 2059,
+            2063, 2096, 2129, 2158, 2162, 2191, 2195, 2224, 2228, 2257, 2261, 2290, 2294, 2323,
+                    2327, 2356,
+            2360, 2389, 2393, 2422, 2426, 2455, 2459, 2488, 2492, 2521, 2525, 2554, 2558, 2587,
+                    2591, 2620,
+            2624, 2653, 2657, 2686, 2690, 2719, 2723, 2748, 2752, 2756, 2781, 2785, 2789, 2818,
+                    2822, 2847,
+            2851, 2855, 2880, 2884, 2888, 2913, 2917, 2921, 2946, 2950, 2954, 2979, 2983, 2987,
         };
         private int minYear = NON_LEAP_YEARS[0];
         private int maxYear = NON_LEAP_YEARS[NON_LEAP_YEARS.length - 1];
@@ -120,110 +115,99 @@ public class PersianCalendar extends Calendar {
 
     private static NonLeapYears LEAP_CORRECTION = new NonLeapYears();
 
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     // Constructors...
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
 
     /**
-     * Constructs a default <code>PersianCalendar</code> using the current time
-     * in the default time zone with the default <code>FORMAT</code> locale.
-     * @see Category#FORMAT
+     * Constructs a default <code>PersianCalendar</code> using the current time in the default time
+     * zone with the default <code>FORMAT</code> locale.
      *
+     * @see Category#FORMAT
      * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
-    public PersianCalendar()
-    {
+    public PersianCalendar() {
         this(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT));
     }
 
     /**
-     * Constructs a <code>PersianCalendar</code> based on the current time
-     * in the given time zone with the default <code>FORMAT</code> locale.
+     * Constructs a <code>PersianCalendar</code> based on the current time in the given time zone
+     * with the default <code>FORMAT</code> locale.
+     *
      * @param zone the given time zone.
      * @see Category#FORMAT
-     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
-    public PersianCalendar(TimeZone zone)
-    {
+    public PersianCalendar(TimeZone zone) {
         this(zone, ULocale.getDefault(Category.FORMAT));
     }
 
     /**
-     * Constructs a <code>PersianCalendar</code> based on the current time
-     * in the default time zone with the given locale.
+     * Constructs a <code>PersianCalendar</code> based on the current time in the default time zone
+     * with the given locale.
      *
      * @param aLocale the given locale.
-     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
-    public PersianCalendar(Locale aLocale)
-    {
+    public PersianCalendar(Locale aLocale) {
         this(TimeZone.forLocaleOrDefault(aLocale), aLocale);
     }
 
     /**
-     * Constructs a <code>PersianCalendar</code> based on the current time
-     * in the default time zone with the given locale.
+     * Constructs a <code>PersianCalendar</code> based on the current time in the default time zone
+     * with the given locale.
      *
      * @param locale the given ulocale.
-     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
-    public PersianCalendar(ULocale locale)
-    {
+    public PersianCalendar(ULocale locale) {
         this(TimeZone.forULocaleOrDefault(locale), locale);
     }
 
     /**
-     * Constructs a <code>PersianCalendar</code> based on the current time
-     * in the given time zone with the given locale.
+     * Constructs a <code>PersianCalendar</code> based on the current time in the given time zone
+     * with the given locale.
      *
      * @param zone the given time zone.
      * @param aLocale the given locale.
-     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
-    public PersianCalendar(TimeZone zone, Locale aLocale)
-    {
+    public PersianCalendar(TimeZone zone, Locale aLocale) {
         super(zone, aLocale);
         setTimeInMillis(System.currentTimeMillis());
     }
 
     /**
-     * Constructs a <code>PersianCalendar</code> based on the current time
-     * in the given time zone with the given locale.
+     * Constructs a <code>PersianCalendar</code> based on the current time in the given time zone
+     * with the given locale.
      *
      * @param zone the given time zone.
      * @param locale the given ulocale.
-     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
-    public PersianCalendar(TimeZone zone, ULocale locale)
-    {
+    public PersianCalendar(TimeZone zone, ULocale locale) {
         super(zone, locale);
         setTimeInMillis(System.currentTimeMillis());
     }
 
     /**
-     * Constructs a <code>PersianCalendar</code> with the given date set
-     * in the default time zone with the default <code>FORMAT</code> locale.
+     * Constructs a <code>PersianCalendar</code> with the given date set in the default time zone
+     * with the default <code>FORMAT</code> locale.
      *
-     * @param date      The date to which the new calendar is set.
+     * @param date The date to which the new calendar is set.
      * @see Category#FORMAT
-     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -234,21 +218,19 @@ public class PersianCalendar extends Calendar {
     }
 
     /**
-     * Constructs a <code>PersianCalendar</code> with the given date set
-     * in the default time zone with the default <code>FORMAT</code> locale.
+     * Constructs a <code>PersianCalendar</code> with the given date set in the default time zone
+     * with the default <code>FORMAT</code> locale.
      *
      * @param year the value used to set the {@link #YEAR YEAR} time field in the calendar.
-     * @param month the value used to set the {@link #MONTH MONTH} time field in the calendar.
-     *              Note that the month value is 0-based. e.g., 0 for Farvardin.
+     * @param month the value used to set the {@link #MONTH MONTH} time field in the calendar. Note
+     *     that the month value is 0-based. e.g., 0 for Farvardin.
      * @param date the value used to set the {@link #DATE DATE} time field in the calendar.
      * @see Category#FORMAT
-     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
-    public PersianCalendar(int year, int month, int date)
-    {
+    public PersianCalendar(int year, int month, int date) {
         super(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT));
         this.set(Calendar.YEAR, year);
         this.set(Calendar.MONTH, month);
@@ -256,28 +238,23 @@ public class PersianCalendar extends Calendar {
     }
 
     /**
-     * Constructs a <code>PersianCalendar</code> with the given date
-     * and time set for the default time zone with the default <code>FORMAT</code> locale.
+     * Constructs a <code>PersianCalendar</code> with the given date and time set for the default
+     * time zone with the default <code>FORMAT</code> locale.
      *
-     * @param year  the value used to set the {@link #YEAR YEAR} time field in the calendar.
-     * @param month the value used to set the {@link #MONTH MONTH} time field in the calendar.
-     *              Note that the month value is 0-based. e.g., 0 for Farvardin.
-     * @param date  the value used to set the {@link #DATE DATE} time field in the calendar.
-     * @param hour  the value used to set the {@link #HOUR_OF_DAY HOUR_OF_DAY} time field
-     *              in the calendar.
-     * @param minute the value used to set the {@link #MINUTE MINUTE} time field
-     *              in the calendar.
-     * @param second the value used to set the {@link #SECOND SECOND} time field
-     *              in the calendar.
+     * @param year the value used to set the {@link #YEAR YEAR} time field in the calendar.
+     * @param month the value used to set the {@link #MONTH MONTH} time field in the calendar. Note
+     *     that the month value is 0-based. e.g., 0 for Farvardin.
+     * @param date the value used to set the {@link #DATE DATE} time field in the calendar.
+     * @param hour the value used to set the {@link #HOUR_OF_DAY HOUR_OF_DAY} time field in the
+     *     calendar.
+     * @param minute the value used to set the {@link #MINUTE MINUTE} time field in the calendar.
+     * @param second the value used to set the {@link #SECOND SECOND} time field in the calendar.
      * @see Category#FORMAT
-     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
-    public PersianCalendar(int year, int month, int date, int hour,
-                           int minute, int second)
-    {
+    public PersianCalendar(int year, int month, int date, int hour, int minute, int second) {
         super(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT));
         this.set(Calendar.YEAR, year);
         this.set(Calendar.MONTH, month);
@@ -287,38 +264,65 @@ public class PersianCalendar extends Calendar {
         this.set(Calendar.SECOND, second);
     }
 
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     // Minimum / Maximum access functions
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
 
     private static final int LIMITS[][] = {
         // Minimum  Greatest     Least   Maximum
         //           Minimum   Maximum
-        {        0,        0,        0,        0}, // ERA
-        { -5000000, -5000000,  5000000,  5000000}, // YEAR
-        {        0,        0,       11,       11}, // MONTH
-        {        1,        1,       52,       53}, // WEEK_OF_YEAR
-        {/*                                   */}, // WEEK_OF_MONTH
-        {        1,        1,       29,       31}, // DAY_OF_MONTH
-        {        1,        1,      365,      366}, // DAY_OF_YEAR
-        {/*                                   */}, // DAY_OF_WEEK
-        {       -1,       -1,        5,        5}, // DAY_OF_WEEK_IN_MONTH
-        {/*                                   */}, // AM_PM
-        {/*                                   */}, // HOUR
-        {/*                                   */}, // HOUR_OF_DAY
-        {/*                                   */}, // MINUTE
-        {/*                                   */}, // SECOND
-        {/*                                   */}, // MILLISECOND
-        {/*                                   */}, // ZONE_OFFSET
-        {/*                                   */}, // DST_OFFSET
-        { -5000000, -5000000,  5000000,  5000000}, // YEAR_WOY
-        {/*                                   */}, // DOW_LOCAL
-        { -5000000, -5000000,  5000000,  5000000}, // EXTENDED_YEAR
-        {/*                                   */}, // JULIAN_DAY
-        {/*                                   */}, // MILLISECONDS_IN_DAY
-        {/*                                   */}, // IS_LEAP_MONTH
-        {        0,        0,       11,      11 }, // ORDINAL_MONTH
-
+        {0, 0, 0, 0}, // ERA
+        {-5000000, -5000000, 5000000, 5000000}, // YEAR
+        {0, 0, 11, 11}, // MONTH
+        {1, 1, 52, 53}, // WEEK_OF_YEAR
+        {
+            /*                                   */
+        }, // WEEK_OF_MONTH
+        {1, 1, 29, 31}, // DAY_OF_MONTH
+        {1, 1, 365, 366}, // DAY_OF_YEAR
+        {
+            /*                                   */
+        }, // DAY_OF_WEEK
+        {-1, -1, 5, 5}, // DAY_OF_WEEK_IN_MONTH
+        {
+            /*                                   */
+        }, // AM_PM
+        {
+            /*                                   */
+        }, // HOUR
+        {
+            /*                                   */
+        }, // HOUR_OF_DAY
+        {
+            /*                                   */
+        }, // MINUTE
+        {
+            /*                                   */
+        }, // SECOND
+        {
+            /*                                   */
+        }, // MILLISECOND
+        {
+            /*                                   */
+        }, // ZONE_OFFSET
+        {
+            /*                                   */
+        }, // DST_OFFSET
+        {-5000000, -5000000, 5000000, 5000000}, // YEAR_WOY
+        {
+            /*                                   */
+        }, // DOW_LOCAL
+        {-5000000, -5000000, 5000000, 5000000}, // EXTENDED_YEAR
+        {
+            /*                                   */
+        }, // JULIAN_DAY
+        {
+            /*                                   */
+        }, // MILLISECONDS_IN_DAY
+        {
+            /*                                   */
+        }, // IS_LEAP_MONTH
+        {0, 0, 11, 11}, // ORDINAL_MONTH
     };
 
     /**
@@ -331,19 +335,16 @@ public class PersianCalendar extends Calendar {
         return LIMITS[field][limitType];
     }
 
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     // Assorted calculation utilities
     //
 
-    /**
-     * Determine whether a year is a leap year in the Persian calendar
-     */
-    private final static boolean isLeapYear(int year)
-    {
+    /** Determine whether a year is a leap year in the Persian calendar */
+    private static final boolean isLeapYear(int year) {
         if (LEAP_CORRECTION.contains(year)) {
             return false;
         }
-        if (LEAP_CORRECTION.contains(year-1)) {
+        if (LEAP_CORRECTION.contains(year - 1)) {
             return true;
         }
         int[] remainder = new int[1];
@@ -351,16 +352,15 @@ public class PersianCalendar extends Calendar {
         return remainder[0] < 8;
     }
 
-    //----------------------------------------------------------------------
+    // ----------------------------------------------------------------------
     // Calendar framework
-    //----------------------------------------------------------------------
+    // ----------------------------------------------------------------------
 
     /**
      * Return the length (in days) of the given month.
      *
-     * @param extendedYear  The Persian year
+     * @param extendedYear The Persian year
      * @param month The Persian month, 0-based
-     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -375,7 +375,7 @@ public class PersianCalendar extends Calendar {
             month = rem[0];
         }
 
-        return MONTH_COUNT[month][isLeapYear(extendedYear)?1:0];
+        return MONTH_COUNT[month][isLeapYear(extendedYear) ? 1 : 0];
     }
 
     /**
@@ -390,9 +390,9 @@ public class PersianCalendar extends Calendar {
         return isLeapYear(extendedYear) ? 366 : 365;
     }
 
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     // Functions for converting from field values to milliseconds....
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
 
     /**
      * Return JD of start of given month/year
@@ -415,12 +415,12 @@ public class PersianCalendar extends Calendar {
         if (month != 0) {
             julianDay += MONTH_COUNT[month][2];
         }
-        return (int)julianDay;
+        return (int) julianDay;
     }
 
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     // Functions for converting from milliseconds to field values
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
 
     /**
      * @internal
@@ -440,24 +440,26 @@ public class PersianCalendar extends Calendar {
 
     private static long firstJulianOfYear(int year) {
         long julianDay = 365L * (year - 1L) + floorDivide(8L * year + 21, 33L);
-        if (LEAP_CORRECTION.contains(year-1)) {
+        if (LEAP_CORRECTION.contains(year - 1)) {
             julianDay--;
         }
         return julianDay;
     }
+
     /**
-     * Override Calendar to compute several fields specific to the Persian
-     * calendar system.  These are:
+     * Override Calendar to compute several fields specific to the Persian calendar system. These
+     * are:
      *
-     * <ul><li>ERA
-     * <li>YEAR
-     * <li>MONTH
-     * <li>DAY_OF_MONTH
-     * <li>DAY_OF_YEAR
-     * <li>EXTENDED_YEAR</ul>
+     * <ul>
+     *   <li>ERA
+     *   <li>YEAR
+     *   <li>MONTH
+     *   <li>DAY_OF_MONTH
+     *   <li>DAY_OF_YEAR
+     *   <li>EXTENDED_YEAR
+     * </ul>
      *
-     * The DAY_OF_WEEK and DOW_LOCAL fields are already set when this
-     * method is called.
+     * The DAY_OF_WEEK and DOW_LOCAL fields are already set when this method is called.
      *
      * @internal
      * @deprecated This API is ICU internal only.
@@ -472,7 +474,7 @@ public class PersianCalendar extends Calendar {
 
         long farvardin1 = firstJulianOfYear(year);
 
-        dayOfYear = (int)(daysSinceEpoch - farvardin1); // 0-based
+        dayOfYear = (int) (daysSinceEpoch - farvardin1); // 0-based
         if (dayOfYear == 365 && LEAP_CORRECTION.contains(year)) {
             year++;
             dayOfYear = 0;
@@ -496,6 +498,7 @@ public class PersianCalendar extends Calendar {
     }
 
     private static final int PERSIAN_CALENDAR_RELATED_YEAR_DIFFERENCE = 622;
+
     /**
      * @internal
      * @deprecated This API is ICU internal only.

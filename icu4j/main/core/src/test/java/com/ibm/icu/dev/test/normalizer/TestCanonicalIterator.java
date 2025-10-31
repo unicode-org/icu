@@ -8,23 +8,20 @@
  */
 package com.ibm.icu.dev.test.normalizer;
 
-import java.util.Collection;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.StringJoiner;
-import java.util.TreeSet;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.CanonicalIterator;
 import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.UTF16;
-
+import java.util.Collection;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.StringJoiner;
+import java.util.TreeSet;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 // TODO: fit into test framework
 
@@ -34,10 +31,13 @@ public class TestCanonicalIterator extends CoreTestFmwk {
     static final boolean SHOW_NAMES = false;
 
     static final String testArray[][] = {
-        {"\u00C5d\u0307\u0327", "A\u030Ad\u0307\u0327, A\u030Ad\u0327\u0307, A\u030A\u1E0B\u0327, "
-            + "A\u030A\u1E11\u0307, \u00C5d\u0307\u0327, \u00C5d\u0327\u0307, "
-            + "\u00C5\u1E0B\u0327, \u00C5\u1E11\u0307, \u212Bd\u0307\u0327, "
-            + "\u212Bd\u0327\u0307, \u212B\u1E0B\u0327, \u212B\u1E11\u0307"},
+        {
+            "\u00C5d\u0307\u0327",
+            "A\u030Ad\u0307\u0327, A\u030Ad\u0327\u0307, A\u030A\u1E0B\u0327, "
+                    + "A\u030A\u1E11\u0307, \u00C5d\u0307\u0327, \u00C5d\u0327\u0307, "
+                    + "\u00C5\u1E0B\u0327, \u00C5\u1E11\u0307, \u212Bd\u0307\u0327, "
+                    + "\u212Bd\u0327\u0307, \u212B\u1E0B\u0327, \u212B\u1E11\u0307"
+        },
         {"\u010d\u017E", "c\u030Cz\u030C, c\u030C\u017E, \u010Dz\u030C, \u010D\u017E"},
         {"x\u0307\u0327", "x\u0307\u0327, x\u0327\u0307, \u1E8B\u0327"},
     };
@@ -50,19 +50,19 @@ public class TestCanonicalIterator extends CoreTestFmwk {
         CanonicalIterator slowIt = new CanonicalIterator("");
         slowIt.SKIP_ZEROS = false;
         */
-        //Transliterator name = Transliterator.getInstance("[^\\u0020-\\u007F] name");
-        //Set itSet = new TreeSet();
-        //Set slowItSet = new TreeSet();
-
+        // Transliterator name = Transliterator.getInstance("[^\\u0020-\\u007F] name");
+        // Set itSet = new TreeSet();
+        // Set slowItSet = new TreeSet();
 
         for (int i = 0; i < 0x10FFFF; ++i) {
 
             // skip characters we know don't have decomps
             int type = UCharacter.getType(i);
-            if (type == Character.UNASSIGNED || type == Character.PRIVATE_USE
-                || type == Character.SURROGATE) continue;
+            if (type == Character.UNASSIGNED
+                    || type == Character.PRIVATE_USE
+                    || type == Character.SURROGATE) continue;
 
-            if ((++counter % 5000) == 0) logln("Testing " + Utility.hex(i,0));
+            if ((++counter % 5000) == 0) logln("Testing " + Utility.hex(i, 0));
 
             String s = UTF16.valueOf(i);
             characterTest(s, i, it);
@@ -72,10 +72,10 @@ public class TestCanonicalIterator extends CoreTestFmwk {
     }
 
     public int TestSpeed() {
-         // skip unless verbose
+        // skip unless verbose
         if (!isVerbose()) return 0;
 
-           String s = "\uAC01\u0345";
+        String s = "\uAC01\u0345";
 
         CanonicalIterator it = new CanonicalIterator(s);
         double start, end;
@@ -111,58 +111,66 @@ public class TestCanonicalIterator extends CoreTestFmwk {
             }
         }
         end = System.currentTimeMillis();
-        double fastDelta = (end-start) / iterations;
-        logln("Fast iteration: " + fastDelta + (slowDelta != 0 ? ", " + (fastDelta/slowDelta) : ""));
-
+        double fastDelta = (end - start) / iterations;
+        logln(
+                "Fast iteration: "
+                        + fastDelta
+                        + (slowDelta != 0 ? ", " + (fastDelta / slowDelta) : ""));
 
         return x;
     }
 
     @Test
     public void TestBasic() {
-//      This is not interesting anymore as the data is already built
-//      beforehand
+        //      This is not interesting anymore as the data is already built
+        //      beforehand
 
-//        check build
-//        UnicodeSet ss = CanonicalIterator.getSafeStart();
-//        logln("Safe Start: " + ss.toPattern(true));
-//        ss = CanonicalIterator.getStarts('a');
-//        expectEqual("Characters with 'a' at the start of their decomposition: ", "", CanonicalIterator.getStarts('a'),
-//            new UnicodeSet("[\u00E0-\u00E5\u0101\u0103\u0105\u01CE\u01DF\u01E1\u01FB"
-//            + "\u0201\u0203\u0227\u1E01\u1EA1\u1EA3\u1EA5\u1EA7\u1EA9\u1EAB\u1EAD\u1EAF\u1EB1\u1EB3\u1EB5\u1EB7]")
-//                );
+        //        check build
+        //        UnicodeSet ss = CanonicalIterator.getSafeStart();
+        //        logln("Safe Start: " + ss.toPattern(true));
+        //        ss = CanonicalIterator.getStarts('a');
+        //        expectEqual("Characters with 'a' at the start of their decomposition: ", "",
+        // CanonicalIterator.getStarts('a'),
+        //            new UnicodeSet("[\u00E0-\u00E5\u0101\u0103\u0105\u01CE\u01DF\u01E1\u01FB"
+        //            +
+        // "\u0201\u0203\u0227\u1E01\u1EA1\u1EA3\u1EA5\u1EA7\u1EA9\u1EAB\u1EAD\u1EAF\u1EB1\u1EB3\u1EB5\u1EB7]")
+        //                );
 
         // check permute
         // NOTE: we use a TreeSet below to sort the output, which is not guaranteed to be sorted!
 
         Set<String> results = new TreeSet<>();
         CanonicalIterator.permute("ABC", false, results);
-        expectEqual("Simple permutation ", "", collectionToString(results), "ABC, ACB, BAC, BCA, CAB, CBA");
+        expectEqual(
+                "Simple permutation ",
+                "",
+                collectionToString(results),
+                "ABC, ACB, BAC, BCA, CAB, CBA");
 
         // try samples
         SortedSet<String> set = new TreeSet<>();
         for (int i = 0; i < testArray.length; ++i) {
-            //logln("Results for: " + name.transliterate(testArray[i]));
+            // logln("Results for: " + name.transliterate(testArray[i]));
             CanonicalIterator it = new CanonicalIterator(testArray[i][0]);
-           // int counter = 0;
+            // int counter = 0;
             set.clear();
             String first = null;
             while (true) {
                 String result = it.next();
-                if(first==null){
+                if (first == null) {
                     first = result;
                 }
                 if (result == null) break;
                 set.add(result); // sort them
-                //logln(++counter + ": " + hex.transliterate(result));
-                //logln(" = " + name.transliterate(result));
+                // logln(++counter + ": " + hex.transliterate(result));
+                // logln(" = " + name.transliterate(result));
             }
             expectEqual(i + ": ", testArray[i][0], collectionToString(set), testArray[i][1]);
             it.reset();
-            if(!it.next().equals(first)){
+            if (!it.next().equals(first)) {
                 errln("CanonicalIterator.reset() failed");
             }
-            if(!it.getSource().equals(Normalizer.normalize(testArray[i][0],Normalizer.NFD))){
+            if (!it.getSource().equals(Normalizer.normalize(testArray[i][0], Normalizer.NFD))) {
                 errln("CanonicalIterator.getSource() does not return NFD of input source");
             }
         }
@@ -180,21 +188,20 @@ public class TestCanonicalIterator extends CoreTestFmwk {
         }
     }
 
-    //Transliterator name = null;
-    //Transliterator hex = null;
+    // Transliterator name = null;
+    // Transliterator hex = null;
 
     public String getReadable(Object obj) {
         if (obj == null) return "null";
         String s = obj.toString();
         if (s.length() == 0) return "";
         // set up for readable display
-        //if (name == null) name = Transliterator.getInstance("[^\\ -\\u007F] name");
-        //if (hex == null) hex = Transliterator.getInstance("[^\\ -\\u007F] hex");
+        // if (name == null) name = Transliterator.getInstance("[^\\ -\\u007F] name");
+        // if (hex == null) hex = Transliterator.getInstance("[^\\ -\\u007F] hex");
         return "[" + (SHOW_NAMES ? hex(s) + "; " : "") + hex(s) + "]";
     }
 
-    private void characterTest(String s, int ch, CanonicalIterator it)
-    {
+    private void characterTest(String s, int ch, CanonicalIterator it) {
         int mixedCounter = 0;
         int lastMixedCounter = -1;
         boolean gotDecomp = false;
@@ -220,13 +227,15 @@ public class TestCanonicalIterator extends CoreTestFmwk {
                     logln("");
                     lastMixedCounter = mixedCounter;
                 }
-                logln("\t" + mixedCounter + "\t" + hex(item)
-                + (item.equals(s) ? "\t(*original*)" : "")
-                + (item.equals(decomp) ? "\t(*decomp*)" : "")
-                + (item.equals(comp) ? "\t(*comp*)" : "")
-                );
+                logln(
+                        "\t"
+                                + mixedCounter
+                                + "\t"
+                                + hex(item)
+                                + (item.equals(s) ? "\t(*original*)" : "")
+                                + (item.equals(decomp) ? "\t(*decomp*)" : "")
+                                + (item.equals(comp) ? "\t(*comp*)" : ""));
             }
-
         }
 
         // check that zeros optimization doesn't mess up.
@@ -254,9 +263,9 @@ public class TestCanonicalIterator extends CoreTestFmwk {
 
         mixedCounter++;
         if (!gotSource || !gotDecomp || !gotComp) {
-            errln("FAIL CanonicalIterator: " + s + " decomp: " +decomp+" comp: "+comp);
+            errln("FAIL CanonicalIterator: " + s + " decomp: " + decomp + " comp: " + comp);
             it.reset();
-            for(String item=it.next();item!=null;item=it.next()){
+            for (String item = it.next(); item != null; item = it.next()) {
                 err(item + "    ");
             }
             errln("");

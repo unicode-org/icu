@@ -1,13 +1,13 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /*
-*******************************************************************************
-*   Copyright (C) 2011-2014, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-*******************************************************************************
-*   created on: 2011jul14
-*   created by: Markus W. Scherer
-*/
+ *******************************************************************************
+ *   Copyright (C) 2011-2014, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ *******************************************************************************
+ *   created on: 2011jul14
+ *   created by: Markus W. Scherer
+ */
 
 package com.ibm.icu.text;
 
@@ -16,29 +16,28 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Utilities for working with a MessagePattern.
- * Intended for use in tools when convenience is more important than
- * minimizing runtime and object creations.
+ * Utilities for working with a MessagePattern. Intended for use in tools when convenience is more
+ * important than minimizing runtime and object creations.
  *
- * <p>This class only has static methods.
- * Each of the nested classes is immutable and thread-safe.
+ * <p>This class only has static methods. Each of the nested classes is immutable and thread-safe.
  *
  * <p>This class and its nested classes are not intended for public subclassing.
+ *
  * @stable ICU 49
  * @author Markus Scherer
  */
 public final class MessagePatternUtil {
 
     // Private constructor preventing object instantiation
-    private MessagePatternUtil() {
-    }
+    private MessagePatternUtil() {}
 
     /**
      * Factory method, builds and returns a MessageNode from a MessageFormat pattern string.
+     *
      * @param patternString a MessageFormat pattern string
      * @return a MessageNode or a ComplexArgStyleNode
-     * @throws IllegalArgumentException if the MessagePattern is empty
-     *         or does not represent a MessageFormat pattern
+     * @throws IllegalArgumentException if the MessagePattern is empty or does not represent a
+     *     MessageFormat pattern
      * @stable ICU 49
      */
     public static MessageNode buildMessageNode(String patternString) {
@@ -47,10 +46,11 @@ public final class MessagePatternUtil {
 
     /**
      * Factory method, builds and returns a MessageNode from a MessagePattern.
+     *
      * @param pattern a parsed MessageFormat pattern string
      * @return a MessageNode or a ComplexArgStyleNode
-     * @throws IllegalArgumentException if the MessagePattern is empty
-     *         or does not represent a MessageFormat pattern
+     * @throws IllegalArgumentException if the MessagePattern is empty or does not represent a
+     *     MessageFormat pattern
      * @stable ICU 49
      */
     public static MessageNode buildMessageNode(MessagePattern pattern) {
@@ -59,15 +59,16 @@ public final class MessagePatternUtil {
             throw new IllegalArgumentException("The MessagePattern is empty");
         } else if (pattern.getPartType(0) != MessagePattern.Part.Type.MSG_START) {
             throw new IllegalArgumentException(
-            "The MessagePattern does not represent a MessageFormat pattern");
+                    "The MessagePattern does not represent a MessageFormat pattern");
         }
         return buildMessageNode(pattern, 0, limit);
     }
 
     /**
-     * Common base class for all elements in a tree of nodes
-     * returned by {@link MessagePatternUtil#buildMessageNode(MessagePattern)}.
-     * This class and all subclasses are immutable and thread-safe.
+     * Common base class for all elements in a tree of nodes returned by {@link
+     * MessagePatternUtil#buildMessageNode(MessagePattern)}. This class and all subclasses are
+     * immutable and thread-safe.
+     *
      * @stable ICU 49
      */
     public static class Node {
@@ -76,6 +77,7 @@ public final class MessagePatternUtil {
 
     /**
      * A Node representing a parsed MessageFormat pattern string.
+     *
      * @stable ICU 49
      */
     public static class MessageNode extends Node {
@@ -86,8 +88,10 @@ public final class MessagePatternUtil {
         public List<MessageContentsNode> getContents() {
             return list;
         }
+
         /**
          * {@inheritDoc}
+         *
          * @stable ICU 49
          */
         @Override
@@ -98,18 +102,20 @@ public final class MessagePatternUtil {
         private MessageNode() {
             super();
         }
+
         private void addContentsNode(MessageContentsNode node) {
             if (node instanceof TextNode && !list.isEmpty()) {
                 // Coalesce adjacent text nodes.
                 MessageContentsNode lastNode = list.get(list.size() - 1);
                 if (lastNode instanceof TextNode) {
-                    TextNode textNode = (TextNode)lastNode;
-                    textNode.text = textNode.text + ((TextNode)node).text;
+                    TextNode textNode = (TextNode) lastNode;
+                    textNode.text = textNode.text + ((TextNode) node).text;
                     return;
                 }
             }
             list.add(node);
         }
+
         private MessageNode freeze() {
             list = Collections.unmodifiableList(list);
             return this;
@@ -119,43 +125,52 @@ public final class MessagePatternUtil {
     }
 
     /**
-     * A piece of MessageNode contents.
-     * Use getType() to determine the type and the actual Node subclass.
+     * A piece of MessageNode contents. Use getType() to determine the type and the actual Node
+     * subclass.
+     *
      * @stable ICU 49
      */
     public static class MessageContentsNode extends Node {
         /**
          * The type of a piece of MessageNode contents.
+         *
          * @stable ICU 49
          */
         public enum Type {
             /**
              * This is a TextNode containing literal text (downcast and call getText()).
+             *
              * @stable ICU 49
              */
             TEXT,
             /**
-             * This is an ArgNode representing a message argument
-             * (downcast and use specific methods).
+             * This is an ArgNode representing a message argument (downcast and use specific
+             * methods).
+             *
              * @stable ICU 49
              */
             ARG,
             /**
-             * This Node represents a place in a plural argument's variant where
-             * the formatted (plural-offset) value is to be put.
+             * This Node represents a place in a plural argument's variant where the formatted
+             * (plural-offset) value is to be put.
+             *
              * @stable ICU 49
              */
             REPLACE_NUMBER
         }
+
         /**
          * Returns the type of this piece of MessageNode contents.
+         *
          * @stable ICU 49
          */
         public Type getType() {
             return type;
         }
+
         /**
          * {@inheritDoc}
+         *
          * @stable ICU 49
          */
         @Override
@@ -171,6 +186,7 @@ public final class MessagePatternUtil {
             super();
             this.type = type;
         }
+
         private static MessageContentsNode createReplaceNumberNode() {
             return new MessageContentsNode(Type.REPLACE_NUMBER);
         }
@@ -180,6 +196,7 @@ public final class MessagePatternUtil {
 
     /**
      * Literal text, a piece of MessageNode contents.
+     *
      * @stable ICU 49
      */
     public static class TextNode extends MessageContentsNode {
@@ -190,8 +207,10 @@ public final class MessagePatternUtil {
         public String getText() {
             return text;
         }
+
         /**
          * {@inheritDoc}
+         *
          * @stable ICU 49
          */
         @Override
@@ -209,6 +228,7 @@ public final class MessagePatternUtil {
 
     /**
      * A piece of MessageNode contents representing a message argument and its details.
+     *
      * @stable ICU 49
      */
     public static class ArgNode extends MessageContentsNode {
@@ -219,6 +239,7 @@ public final class MessagePatternUtil {
         public MessagePattern.ArgType getArgType() {
             return argType;
         }
+
         /**
          * @return the argument name string (the decimal-digit string if the argument has a number)
          * @stable ICU 49
@@ -226,6 +247,7 @@ public final class MessagePatternUtil {
         public String getName() {
             return name;
         }
+
         /**
          * @return the argument number, or -1 if none (for a named argument)
          * @stable ICU 49
@@ -233,6 +255,7 @@ public final class MessagePatternUtil {
         public int getNumber() {
             return number;
         }
+
         /**
          * @return the argument type string, or null if none was specified
          * @stable ICU 49
@@ -240,24 +263,28 @@ public final class MessagePatternUtil {
         public String getTypeName() {
             return typeName;
         }
+
         /**
-         * @return the simple-argument style string,
-         *         or null if no style is specified and for other argument types
+         * @return the simple-argument style string, or null if no style is specified and for other
+         *     argument types
          * @stable ICU 49
          */
         public String getSimpleStyle() {
             return style;
         }
+
         /**
-         * @return the complex-argument-style object,
-         *         or null if the argument type is NONE_ARG or SIMPLE_ARG
+         * @return the complex-argument-style object, or null if the argument type is NONE_ARG or
+         *     SIMPLE_ARG
          * @stable ICU 49
          */
         public ComplexArgStyleNode getComplexStyle() {
             return complexStyle;
         }
+
         /**
          * {@inheritDoc}
+         *
          * @stable ICU 49
          */
         @Override
@@ -280,6 +307,7 @@ public final class MessagePatternUtil {
         private ArgNode() {
             super(Type.ARG);
         }
+
         private static ArgNode createArgNode() {
             return new ArgNode();
         }
@@ -293,8 +321,9 @@ public final class MessagePatternUtil {
     }
 
     /**
-     * A Node representing details of the argument style of a complex argument.
-     * (Which is a choice/plural/select argument which selects among nested messages.)
+     * A Node representing details of the argument style of a complex argument. (Which is a
+     * choice/plural/select argument which selects among nested messages.)
+     *
      * @stable ICU 49
      */
     public static class ComplexArgStyleNode extends Node {
@@ -305,6 +334,7 @@ public final class MessagePatternUtil {
         public MessagePattern.ArgType getArgType() {
             return argType;
         }
+
         /**
          * @return true if this is a plural style with an explicit offset
          * @stable ICU 49
@@ -312,14 +342,16 @@ public final class MessagePatternUtil {
         public boolean hasExplicitOffset() {
             return explicitOffset;
         }
+
         /**
-         * @return the plural offset, or 0 if this is not a plural style or
-         *         the offset is explicitly or implicitly 0
+         * @return the plural offset, or 0 if this is not a plural style or the offset is explicitly
+         *     or implicitly 0
          * @stable ICU 49
          */
         public double getOffset() {
             return offset;
         }
+
         /**
          * @return the list of variants: the nested messages with their selection criteria
          * @stable ICU 49
@@ -327,24 +359,24 @@ public final class MessagePatternUtil {
         public List<VariantNode> getVariants() {
             return list;
         }
+
         /**
-         * Separates the variants by type.
-         * Intended for use with plural and select argument styles,
+         * Separates the variants by type. Intended for use with plural and select argument styles,
          * not useful for choice argument styles.
          *
          * <p>Both parameters are used only for output, and are first cleared.
-         * @param numericVariants Variants with numeric-value selectors (if any) are added here.
-         *        Can be null for a select argument style.
+         *
+         * @param numericVariants Variants with numeric-value selectors (if any) are added here. Can
+         *     be null for a select argument style.
          * @param keywordVariants Variants with keyword selectors, except "other", are added here.
-         *        For a plural argument, if this list is empty after the call, then
-         *        all variants except "other" have explicit values
-         *        and PluralRules need not be called.
-         * @return the "other" variant (the first one if there are several),
-         *         null if none (choice style)
+         *     For a plural argument, if this list is empty after the call, then all variants except
+         *     "other" have explicit values and PluralRules need not be called.
+         * @return the "other" variant (the first one if there are several), null if none (choice
+         *     style)
          * @stable ICU 49
          */
-        public VariantNode getVariantsByType(List<VariantNode> numericVariants,
-                                             List<VariantNode> keywordVariants) {
+        public VariantNode getVariantsByType(
+                List<VariantNode> numericVariants, List<VariantNode> keywordVariants) {
             if (numericVariants != null) {
                 numericVariants.clear();
             }
@@ -364,8 +396,10 @@ public final class MessagePatternUtil {
             }
             return other;
         }
+
         /**
          * {@inheritDoc}
+         *
          * @stable ICU 49
          */
         @Override
@@ -382,9 +416,11 @@ public final class MessagePatternUtil {
             super();
             this.argType = argType;
         }
+
         private void addVariant(VariantNode variant) {
             list.add(variant);
         }
+
         private ComplexArgStyleNode freeze() {
             list = Collections.unmodifiableList(list);
             return this;
@@ -397,21 +433,23 @@ public final class MessagePatternUtil {
     }
 
     /**
-     * A Node representing a nested message (nested inside an argument)
-     * with its selection criterion.
+     * A Node representing a nested message (nested inside an argument) with its selection
+     * criterion.
+     *
      * @stable ICU 49
      */
     public static class VariantNode extends Node {
         /**
-         * Returns the selector string.
-         * For example: A plural/select keyword ("few"), a plural explicit value ("=1"),
-         * a choice comparison operator ("#").
+         * Returns the selector string. For example: A plural/select keyword ("few"), a plural
+         * explicit value ("=1"), a choice comparison operator ("#").
+         *
          * @return the selector string
          * @stable ICU 49
          */
         public String getSelector() {
             return selector;
         }
+
         /**
          * @return true for choice variants and for plural explicit values
          * @stable ICU 49
@@ -419,6 +457,7 @@ public final class MessagePatternUtil {
         public boolean isSelectorNumeric() {
             return numericValue != MessagePattern.NO_NUMERIC_VALUE;
         }
+
         /**
          * @return the selector's numeric value, or NO_NUMERIC_VALUE if !isSelectorNumeric()
          * @stable ICU 49
@@ -426,6 +465,7 @@ public final class MessagePatternUtil {
         public double getSelectorValue() {
             return numericValue;
         }
+
         /**
          * @return the nested message
          * @stable ICU 49
@@ -433,8 +473,10 @@ public final class MessagePatternUtil {
         public MessageNode getMessage() {
             return msgNode;
         }
+
         /**
          * {@inheritDoc}
+         *
          * @stable ICU 49
          */
         @Override
@@ -460,13 +502,14 @@ public final class MessagePatternUtil {
     private static MessageNode buildMessageNode(MessagePattern pattern, int start, int limit) {
         int prevPatternIndex = pattern.getPart(start).getLimit();
         MessageNode node = new MessageNode();
-        for (int i = start + 1;; ++i) {
+        for (int i = start + 1; ; ++i) {
             MessagePattern.Part part = pattern.getPart(i);
             int patternIndex = part.getIndex();
             if (prevPatternIndex < patternIndex) {
                 node.addContentsNode(
-                        new TextNode(pattern.getPatternString().substring(prevPatternIndex,
-                                     patternIndex)));
+                        new TextNode(
+                                pattern.getPatternString()
+                                        .substring(prevPatternIndex, patternIndex)));
             }
             if (i == limit) {
                 break;
@@ -490,46 +533,46 @@ public final class MessagePatternUtil {
         ArgNode node = ArgNode.createArgNode();
         MessagePattern.Part part = pattern.getPart(start);
         MessagePattern.ArgType argType = node.argType = part.getArgType();
-        part = pattern.getPart(++start);  // ARG_NAME or ARG_NUMBER
+        part = pattern.getPart(++start); // ARG_NAME or ARG_NUMBER
         node.name = pattern.getSubstring(part);
         if (part.getType() == MessagePattern.Part.Type.ARG_NUMBER) {
             node.number = part.getValue();
         }
         ++start;
-        switch(argType) {
-        case SIMPLE:
-            // ARG_TYPE
-            node.typeName = pattern.getSubstring(pattern.getPart(start++));
-            if (start < limit) {
-                // ARG_STYLE
-                node.style = pattern.getSubstring(pattern.getPart(start));
-            }
-            break;
-        case CHOICE:
-            node.typeName = "choice";
-            node.complexStyle = buildChoiceStyleNode(pattern, start, limit);
-            break;
-        case PLURAL:
-            node.typeName = "plural";
-            node.complexStyle = buildPluralStyleNode(pattern, start, limit, argType);
-            break;
-        case SELECT:
-            node.typeName = "select";
-            node.complexStyle = buildSelectStyleNode(pattern, start, limit);
-            break;
-        case SELECTORDINAL:
-            node.typeName = "selectordinal";
-            node.complexStyle = buildPluralStyleNode(pattern, start, limit, argType);
-            break;
-        default:
-            // NONE type, nothing else to do
-            break;
+        switch (argType) {
+            case SIMPLE:
+                // ARG_TYPE
+                node.typeName = pattern.getSubstring(pattern.getPart(start++));
+                if (start < limit) {
+                    // ARG_STYLE
+                    node.style = pattern.getSubstring(pattern.getPart(start));
+                }
+                break;
+            case CHOICE:
+                node.typeName = "choice";
+                node.complexStyle = buildChoiceStyleNode(pattern, start, limit);
+                break;
+            case PLURAL:
+                node.typeName = "plural";
+                node.complexStyle = buildPluralStyleNode(pattern, start, limit, argType);
+                break;
+            case SELECT:
+                node.typeName = "select";
+                node.complexStyle = buildSelectStyleNode(pattern, start, limit);
+                break;
+            case SELECTORDINAL:
+                node.typeName = "selectordinal";
+                node.complexStyle = buildPluralStyleNode(pattern, start, limit, argType);
+                break;
+            default:
+                // NONE type, nothing else to do
+                break;
         }
         return node;
     }
 
-    private static ComplexArgStyleNode buildChoiceStyleNode(MessagePattern pattern,
-                                                            int start, int limit) {
+    private static ComplexArgStyleNode buildChoiceStyleNode(
+            MessagePattern pattern, int start, int limit) {
         ComplexArgStyleNode node = new ComplexArgStyleNode(MessagePattern.ArgType.CHOICE);
         while (start < limit) {
             int valueIndex = start;
@@ -547,9 +590,8 @@ public final class MessagePatternUtil {
         return node.freeze();
     }
 
-    private static ComplexArgStyleNode buildPluralStyleNode(MessagePattern pattern,
-                                                            int start, int limit,
-                                                            MessagePattern.ArgType argType) {
+    private static ComplexArgStyleNode buildPluralStyleNode(
+            MessagePattern pattern, int start, int limit, MessagePattern.ArgType argType) {
         ComplexArgStyleNode node = new ComplexArgStyleNode(argType);
         MessagePattern.Part offset = pattern.getPart(start);
         if (offset.getType().hasNumericValue()) {
@@ -576,8 +618,8 @@ public final class MessagePatternUtil {
         return node.freeze();
     }
 
-    private static ComplexArgStyleNode buildSelectStyleNode(MessagePattern pattern,
-                                                            int start, int limit) {
+    private static ComplexArgStyleNode buildSelectStyleNode(
+            MessagePattern pattern, int start, int limit) {
         ComplexArgStyleNode node = new ComplexArgStyleNode(MessagePattern.ArgType.SELECT);
         while (start < limit) {
             MessagePattern.Part selector = pattern.getPart(start++);

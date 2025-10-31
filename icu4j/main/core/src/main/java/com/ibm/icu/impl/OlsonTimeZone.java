@@ -1,18 +1,12 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
- /*
-  *******************************************************************************
-  * Copyright (C) 2005-2016, International Business Machines Corporation and
-  * others. All Rights Reserved.
-  *******************************************************************************
-  */
+/*
+ *******************************************************************************
+ * Copyright (C) 2005-2016, International Business Machines Corporation and
+ * others. All Rights Reserved.
+ *******************************************************************************
+ */
 package com.ibm.icu.impl;
-
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.MissingResourceException;
 
 import com.ibm.icu.util.AnnualTimeZoneRule;
 import com.ibm.icu.util.BasicTimeZone;
@@ -26,93 +20,83 @@ import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.TimeZoneRule;
 import com.ibm.icu.util.TimeZoneTransition;
 import com.ibm.icu.util.UResourceBundle;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.MissingResourceException;
 
 /**
- * A time zone based on the Olson tz database.  Olson time zones change
- * behavior over time.  The raw offset, rules, presence or absence of
- * daylight savings time, and even the daylight savings amount can all
- * vary.
+ * A time zone based on the Olson tz database. Olson time zones change behavior over time. The raw
+ * offset, rules, presence or absence of daylight savings time, and even the daylight savings amount
+ * can all vary.
  *
- * This class uses a resource bundle named "zoneinfo".  Zoneinfo is a
- * table containing different kinds of resources.  In several places,
- * zones are referred to using integers.  A zone's integer is a number
- * from 0..n-1, where n is the number of zones, with the zones sorted
- * in lexicographic order.
+ * <p>This class uses a resource bundle named "zoneinfo". Zoneinfo is a table containing different
+ * kinds of resources. In several places, zones are referred to using integers. A zone's integer is
+ * a number from 0..n-1, where n is the number of zones, with the zones sorted in lexicographic
+ * order.
  *
- * 1. Zones.  These have keys corresponding to the Olson IDs, e.g.,
- * "Asia/Shanghai".  Each resource describes the behavior of the given
- * zone.  Zones come in two different formats.
+ * <p>1. Zones. These have keys corresponding to the Olson IDs, e.g., "Asia/Shanghai". Each resource
+ * describes the behavior of the given zone. Zones come in two different formats.
  *
- *   a. Zone (table).  A zone is a table resource contains several
- *   type of resources below:
+ * <p>a. Zone (table). A zone is a table resource contains several type of resources below:
  *
- *   - typeOffsets:intvector (Required)
+ * <p>- typeOffsets:intvector (Required)
  *
- *   Sets of UTC raw/dst offset pairs in seconds.  Entries at
- *   2n represents raw offset and 2n+1 represents dst offset
- *   paired with the raw offset at 2n.  The very first pair represents
- *   the initial zone offset (before the first transition) always.
+ * <p>Sets of UTC raw/dst offset pairs in seconds. Entries at 2n represents raw offset and 2n+1
+ * represents dst offset paired with the raw offset at 2n. The very first pair represents the
+ * initial zone offset (before the first transition) always.
  *
- *   - trans:intvector (Optional)
+ * <p>- trans:intvector (Optional)
  *
- *   List of transition times represented by 32bit seconds from the
- *   epoch (1970-01-01T00:00Z) in ascending order.
+ * <p>List of transition times represented by 32bit seconds from the epoch (1970-01-01T00:00Z) in
+ * ascending order.
  *
- *   - transPre32/transPost32:intvector (Optional)
+ * <p>- transPre32/transPost32:intvector (Optional)
  *
- *   List of transition times before/after 32bit minimum seconds.
- *   Each time is represented by a pair of 32bit integer.
+ * <p>List of transition times before/after 32bit minimum seconds. Each time is represented by a
+ * pair of 32bit integer.
  *
- *   - typeMap:bin (Optional)
+ * <p>- typeMap:bin (Optional)
  *
- *   Array of bytes representing the mapping between each transition
- *   time (transPre32/trans/transPost32) and its corresponding offset
- *   data (typeOffsets).
+ * <p>Array of bytes representing the mapping between each transition time
+ * (transPre32/trans/transPost32) and its corresponding offset data (typeOffsets).
  *
- *   - finalRule:string (Optional)
+ * <p>- finalRule:string (Optional)
  *
- *   If a recurrent transition rule is applicable to a zone forever
- *   after the final transition time, finalRule represents the rule
- *   in Rules data.
+ * <p>If a recurrent transition rule is applicable to a zone forever after the final transition
+ * time, finalRule represents the rule in Rules data.
  *
- *   - finalRaw:int (Optional)
+ * <p>- finalRaw:int (Optional)
  *
- *   When finalRule is available, finalRaw is required and specifies
- *   the raw (base) offset of the rule.
+ * <p>When finalRule is available, finalRaw is required and specifies the raw (base) offset of the
+ * rule.
  *
- *   - finalYear:int (Optional)
+ * <p>- finalYear:int (Optional)
  *
- *   When finalRule is available, finalYear is required and specifies
- *   the start year of the rule.
+ * <p>When finalRule is available, finalYear is required and specifies the start year of the rule.
  *
- *   - links:intvector (Optional)
+ * <p>- links:intvector (Optional)
  *
- *   When this zone data is shared with other zones, links specifies
- *   all zones including the zone itself.  Each zone is referenced by
- *   integer index.
+ * <p>When this zone data is shared with other zones, links specifies all zones including the zone
+ * itself. Each zone is referenced by integer index.
  *
- *  b. Link (int, length 1).  A link zone is an int resource.  The
- *  integer is the zone number of the target zone.  The key of this
- *  resource is an alternate name for the target zone.  This data
- *  is corresponding to Link data in the tz database.
+ * <p>b. Link (int, length 1). A link zone is an int resource. The integer is the zone number of the
+ * target zone. The key of this resource is an alternate name for the target zone. This data is
+ * corresponding to Link data in the tz database.
  *
+ * <p>2. Rules. These have keys corresponding to the Olson rule IDs, with an underscore prepended,
+ * e.g., "_EU". Each resource describes the behavior of the given rule using an intvector,
+ * containing the onset list, the cessation list, and the DST savings. The onset and cessation lists
+ * consist of the month, dowim, dow, time, and time mode. The end result is that the 11 integers
+ * describing the rule can be passed directly into the SimpleTimeZone 13-argument constructor (the
+ * other two arguments will be the raw offset, taken from the complex zone element 5, and the ID
+ * string, which is not used), with the times and the DST savings multiplied by 1000 to scale from
+ * seconds to milliseconds.
  *
- * 2. Rules.  These have keys corresponding to the Olson rule IDs,
- * with an underscore prepended, e.g., "_EU".  Each resource describes
- * the behavior of the given rule using an intvector, containing the
- * onset list, the cessation list, and the DST savings.  The onset and
- * cessation lists consist of the month, dowim, dow, time, and time
- * mode.  The end result is that the 11 integers describing the rule
- * can be passed directly into the SimpleTimeZone 13-argument
- * constructor (the other two arguments will be the raw offset, taken
- * from the complex zone element 5, and the ID string, which is not
- * used), with the times and the DST savings multiplied by 1000 to
- * scale from seconds to milliseconds.
- *
- * 3. Regions.  An array specifies mapping between zones and regions.
- * Each item is either a 2-letter ISO country code or "001"
- * (UN M.49 - World).  This data is generated from "zone.tab"
- * in the tz database.
+ * <p>3. Regions. An array specifies mapping between zones and regions. Each item is either a
+ * 2-letter ISO country code or "001" (UN M.49 - World). This data is generated from "zone.tab" in
+ * the tz database.
  */
 public class OlsonTimeZone extends BasicTimeZone implements Cloneable {
 
@@ -125,28 +109,28 @@ public class OlsonTimeZone extends BasicTimeZone implements Cloneable {
     @Override
     public int getOffset(int era, int year, int month, int day, int dayOfWeek, int milliseconds) {
         if (month < Calendar.JANUARY || month > Calendar.DECEMBER) {
-            throw new IllegalArgumentException("Month is not in the legal range: " +month);
+            throw new IllegalArgumentException("Month is not in the legal range: " + month);
         } else {
-            return getOffset(era, year, month, day, dayOfWeek, milliseconds, Grego.monthLength(year, month));
+            return getOffset(
+                    era, year, month, day, dayOfWeek, milliseconds, Grego.monthLength(year, month));
         }
     }
 
-    /**
-     * TimeZone API.
-     */
-    public int getOffset(int era, int year, int month,int dom, int dow, int millis, int monthLength){
+    /** TimeZone API. */
+    public int getOffset(
+            int era, int year, int month, int dom, int dow, int millis, int monthLength) {
 
         if ((era != GregorianCalendar.AD && era != GregorianCalendar.BC)
-            || month < Calendar.JANUARY
-            || month > Calendar.DECEMBER
-            || dom < 1
-            || dom > monthLength
-            || dow < Calendar.SUNDAY
-            || dow > Calendar.SATURDAY
-            || millis < 0
-            || millis >= Grego.MILLIS_PER_DAY
-            || monthLength < 28
-            || monthLength > 31) {
+                || month < Calendar.JANUARY
+                || month > Calendar.DECEMBER
+                || dom < 1
+                || dom > monthLength
+                || dow < Calendar.SUNDAY
+                || dow > Calendar.SATURDAY
+                || millis < 0
+                || millis >= Grego.MILLIS_PER_DAY
+                || monthLength < 28
+                || monthLength > 31) {
             throw new IllegalArgumentException();
         }
 
@@ -172,7 +156,8 @@ public class OlsonTimeZone extends BasicTimeZone implements Cloneable {
     @Override
     public void setRawOffset(int offsetMillis) {
         if (isFrozen()) {
-            throw new UnsupportedOperationException("Attempt to modify a frozen OlsonTimeZone instance.");
+            throw new UnsupportedOperationException(
+                    "Attempt to modify a frozen OlsonTimeZone instance.");
         }
 
         if (getRawOffset() == offsetMillis) {
@@ -200,8 +185,8 @@ public class OlsonTimeZone extends BasicTimeZone implements Cloneable {
                         && (currentRules[1] instanceof AnnualTimeZoneRule)
                         && (currentRules[2] instanceof AnnualTimeZoneRule)) {
                     // A pair of AnnualTimeZoneRule
-                    AnnualTimeZoneRule r1 = (AnnualTimeZoneRule)currentRules[1];
-                    AnnualTimeZoneRule r2 = (AnnualTimeZoneRule)currentRules[2];
+                    AnnualTimeZoneRule r1 = (AnnualTimeZoneRule) currentRules[1];
+                    AnnualTimeZoneRule r2 = (AnnualTimeZoneRule) currentRules[2];
                     DateTimeRule start, end;
                     int offset1 = r1.getRawOffset() + r1.getDSTSavings();
                     int offset2 = r2.getRawOffset() + r2.getDSTSavings();
@@ -216,10 +201,16 @@ public class OlsonTimeZone extends BasicTimeZone implements Cloneable {
                         sav = offset2 - offset1;
                     }
                     // getSimpleTimeZoneRulesNear always return rules using DOW / WALL_TIME
-                    stz.setStartRule(start.getRuleMonth(), start.getRuleWeekInMonth(), start.getRuleDayOfWeek(),
-                                            start.getRuleMillisInDay());
-                    stz.setEndRule(end.getRuleMonth(), end.getRuleWeekInMonth(), end.getRuleDayOfWeek(),
-                                            end.getRuleMillisInDay());
+                    stz.setStartRule(
+                            start.getRuleMonth(),
+                            start.getRuleWeekInMonth(),
+                            start.getRuleDayOfWeek(),
+                            start.getRuleMillisInDay());
+                    stz.setEndRule(
+                            end.getRuleMonth(),
+                            end.getRuleWeekInMonth(),
+                            end.getRuleDayOfWeek(),
+                            end.getRuleMillisInDay());
                     // set DST saving amount and start year
                     stz.setDSTSavings(sav);
                 } else {
@@ -260,29 +251,32 @@ public class OlsonTimeZone extends BasicTimeZone implements Cloneable {
         return cloneAsThawed();
     }
 
-    /**
-     * TimeZone API.
-     */
+    /** TimeZone API. */
     @Override
-    public void getOffset(long date, boolean local, int[] offsets)  {
+    public void getOffset(long date, boolean local, int[] offsets) {
         if (finalZone != null && date >= finalStartMillis) {
             finalZone.getOffset(date, local, offsets);
         } else {
-            getHistoricalOffset(date, local,
-                    LOCAL_FORMER, LOCAL_LATTER, offsets);
+            getHistoricalOffset(date, local, LOCAL_FORMER, LOCAL_LATTER, offsets);
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
-    public void getOffsetFromLocal(long date,
-            LocalOption nonExistingTimeOpt, LocalOption duplicatedTimeOpt, int[] offsets) {
+    public void getOffsetFromLocal(
+            long date,
+            LocalOption nonExistingTimeOpt,
+            LocalOption duplicatedTimeOpt,
+            int[] offsets) {
         if (finalZone != null && date >= finalStartMillis) {
             finalZone.getOffsetFromLocal(date, nonExistingTimeOpt, duplicatedTimeOpt, offsets);
         } else {
-            getHistoricalOffset(date, true, getLocalOptionValue(nonExistingTimeOpt), getLocalOptionValue(duplicatedTimeOpt), offsets);
+            getHistoricalOffset(
+                    date,
+                    true,
+                    getLocalOptionValue(nonExistingTimeOpt),
+                    getLocalOptionValue(duplicatedTimeOpt),
+                    offsets);
         }
     }
 
@@ -364,14 +358,14 @@ public class OlsonTimeZone extends BasicTimeZone implements Cloneable {
         }
         return false;
     }
+
     /**
-     * TimeZone API
-     * Returns the amount of time to be added to local standard time
-     * to get local wall clock time.
+     * TimeZone API Returns the amount of time to be added to local standard time to get local wall
+     * clock time.
      */
     @Override
     public int getDSTSavings() {
-        if (finalZone != null){
+        if (finalZone != null) {
             return finalZone.getDSTSavings();
         }
         return super.getDSTSavings();
@@ -407,7 +401,7 @@ public class OlsonTimeZone extends BasicTimeZone implements Cloneable {
         }
 
         // Check final zone
-        OlsonTimeZone o = (OlsonTimeZone)other;
+        OlsonTimeZone o = (OlsonTimeZone) other;
         if (finalZone == null) {
             if (o.finalZone != null) {
                 return false;
@@ -422,26 +416,24 @@ public class OlsonTimeZone extends BasicTimeZone implements Cloneable {
         // Check transitions
         // Note: The code below actually fails to compare two equivalent rules in
         // different representation properly.
-        if (transitionCount != o.transitionCount ||
-                !Arrays.equals(transitionTimes64, o.transitionTimes64) ||
-                typeCount != o.typeCount ||
-                !Arrays.equals(typeMapData, o.typeMapData) ||
-                !Arrays.equals(typeOffsets, o.typeOffsets)){
+        if (transitionCount != o.transitionCount
+                || !Arrays.equals(transitionTimes64, o.transitionTimes64)
+                || typeCount != o.typeCount
+                || !Arrays.equals(typeMapData, o.typeMapData)
+                || !Arrays.equals(typeOffsets, o.typeOffsets)) {
             return false;
         }
         return true;
     }
 
-    /**
-     * Returns the canonical ID of this system time zone
-     */
+    /** Returns the canonical ID of this system time zone */
     public String getCanonicalID() {
         if (canonicalID == null) {
-            synchronized(this) {
+            synchronized (this) {
                 if (canonicalID == null) {
                     canonicalID = getCanonicalID(getID());
 
-                    assert(canonicalID != null);
+                    assert (canonicalID != null);
                     if (canonicalID == null) {
                         // This should never happen...
                         canonicalID = getID();
@@ -453,16 +445,16 @@ public class OlsonTimeZone extends BasicTimeZone implements Cloneable {
     }
 
     /**
-     * Construct a GMT+0 zone with no transitions.  This is done when a
-     * constructor fails so the resultant object is well-behaved.
+     * Construct a GMT+0 zone with no transitions. This is done when a constructor fails so the
+     * resultant object is well-behaved.
      */
-    private void constructEmpty(){
+    private void constructEmpty() {
         transitionCount = 0;
         transitionTimes64 = null;
-        typeMapData =  null;
+        typeMapData = null;
 
         typeCount = 1;
-        typeOffsets = new int[]{0,0};
+        typeOffsets = new int[] {0, 0};
         finalZone = null;
         finalStartYear = Integer.MAX_VALUE;
         finalStartMillis = Double.MAX_VALUE;
@@ -472,22 +464,23 @@ public class OlsonTimeZone extends BasicTimeZone implements Cloneable {
 
     /**
      * Construct from a resource bundle
-     * @param top the top-level zoneinfo resource bundle.  This is used
-     * to lookup the rule that {@code res} may refer to, if there is one.
+     *
+     * @param top the top-level zoneinfo resource bundle. This is used to lookup the rule that
+     *     {@code res} may refer to, if there is one.
      * @param res the resource bundle of the zone to be constructed
      * @param id time zone ID
      */
-    public OlsonTimeZone(UResourceBundle top, UResourceBundle res, String id){
+    public OlsonTimeZone(UResourceBundle top, UResourceBundle res, String id) {
         super(id);
         construct(top, res, id);
     }
 
-    private void construct(UResourceBundle top, UResourceBundle res, String id){
+    private void construct(UResourceBundle top, UResourceBundle res, String id) {
 
         if ((top == null || res == null)) {
             throw new IllegalArgumentException();
         }
-        if(DEBUG) System.out.println("OlsonTimeZone(" + res.getKey() +")");
+        if (DEBUG) System.out.println("OlsonTimeZone(" + res.getKey() + ")");
 
         UResourceBundle r;
         int[] transPre32, trans32, transPost32;
@@ -536,8 +529,8 @@ public class OlsonTimeZone extends BasicTimeZone implements Cloneable {
             if (transPre32 != null) {
                 for (int i = 0; i < transPre32.length / 2; i++, idx++) {
                     transitionTimes64[idx] =
-                        ((transPre32[i * 2]) & 0x00000000FFFFFFFFL) << 32
-                        | ((transPre32[i * 2 + 1]) & 0x00000000FFFFFFFFL);
+                            ((transPre32[i * 2]) & 0x00000000FFFFFFFFL) << 32
+                                    | ((transPre32[i * 2 + 1]) & 0x00000000FFFFFFFFL);
                 }
             }
             if (trans32 != null) {
@@ -548,8 +541,8 @@ public class OlsonTimeZone extends BasicTimeZone implements Cloneable {
             if (transPost32 != null) {
                 for (int i = 0; i < transPost32.length / 2; i++, idx++) {
                     transitionTimes64[idx] =
-                        ((transPost32[i * 2]) & 0x00000000FFFFFFFFL) << 32
-                        | ((transPost32[i * 2 + 1]) & 0x00000000FFFFFFFFL);
+                            ((transPost32[i * 2]) & 0x00000000FFFFFFFFL) << 32
+                                    | ((transPost32[i * 2 + 1]) & 0x00000000FFFFFFFFL);
                 }
             }
         } else {
@@ -559,7 +552,9 @@ public class OlsonTimeZone extends BasicTimeZone implements Cloneable {
         // Type offsets list must be of even size, with size >= 2
         r = res.get("typeOffsets");
         typeOffsets = r.getIntVector();
-        if ((typeOffsets.length < 2 || typeOffsets.length > 0x7FFE || typeOffsets.length % 2 != 0)) {
+        if ((typeOffsets.length < 2
+                || typeOffsets.length > 0x7FFE
+                || typeOffsets.length % 2 != 0)) {
             throw new IllegalArgumentException("Invalid Format");
         }
         typeCount = typeOffsets.length / 2;
@@ -592,21 +587,29 @@ public class OlsonTimeZone extends BasicTimeZone implements Cloneable {
             if (ruleData == null || ruleData.length != 11) {
                 throw new IllegalArgumentException("Invalid Format");
             }
-            finalZone = new SimpleTimeZone(ruleRaw, id,
-                    ruleData[0], ruleData[1], ruleData[2],
-                    ruleData[3] * Grego.MILLIS_PER_SECOND,
-                    ruleData[4],
-                    ruleData[5], ruleData[6], ruleData[7],
-                    ruleData[8] * Grego.MILLIS_PER_SECOND,
-                    ruleData[9],
-                    ruleData[10] * Grego.MILLIS_PER_SECOND);
+            finalZone =
+                    new SimpleTimeZone(
+                            ruleRaw,
+                            id,
+                            ruleData[0],
+                            ruleData[1],
+                            ruleData[2],
+                            ruleData[3] * Grego.MILLIS_PER_SECOND,
+                            ruleData[4],
+                            ruleData[5],
+                            ruleData[6],
+                            ruleData[7],
+                            ruleData[8] * Grego.MILLIS_PER_SECOND,
+                            ruleData[9],
+                            ruleData[10] * Grego.MILLIS_PER_SECOND);
 
             r = res.get("finalYear");
             finalStartYear = r.getInt();
 
             // Note: Setting finalStartYear to the finalZone is problematic.  When a date is around
             // year boundary, SimpleTimeZone may return false result when DST is observed at the
-            // beginning of year.  We could apply safe margin (day or two), but when one of recurrent
+            // beginning of year.  We could apply safe margin (day or two), but when one of
+            // recurrent
             // rules falls around year boundary, it could return false result.  Without setting the
             // start year, finalZone works fine around the year boundary of the start year.
 
@@ -631,10 +634,13 @@ public class OlsonTimeZone extends BasicTimeZone implements Cloneable {
     }
 
     // This constructor is used for testing purpose only
-    public OlsonTimeZone(String id){
+    public OlsonTimeZone(String id) {
         super(id);
-        UResourceBundle top = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME,
-                ZONEINFORES, ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+        UResourceBundle top =
+                UResourceBundle.getBundleInstance(
+                        ICUData.ICU_BASE_NAME,
+                        ZONEINFORES,
+                        ICUResourceBundle.ICU_DATA_CLASS_LOADER);
         UResourceBundle res = ZoneMeta.openOlsonResource(top, id);
         construct(top, res, id);
     }
@@ -643,22 +649,23 @@ public class OlsonTimeZone extends BasicTimeZone implements Cloneable {
      * @see com.ibm.icu.util.TimeZone#setID(java.lang.String)
      */
     @Override
-    public void setID(String id){
+    public void setID(String id) {
         if (isFrozen()) {
-            throw new UnsupportedOperationException("Attempt to modify a frozen OlsonTimeZone instance.");
+            throw new UnsupportedOperationException(
+                    "Attempt to modify a frozen OlsonTimeZone instance.");
         }
 
         // Before updating the ID, preserve the original ID's canonical ID.
         if (canonicalID == null) {
             canonicalID = getCanonicalID(getID());
-            assert(canonicalID != null);
+            assert (canonicalID != null);
             if (canonicalID == null) {
                 // This should never happen...
                 canonicalID = getID();
             }
         }
 
-        if (finalZone != null){
+        if (finalZone != null) {
             finalZone.setID(id);
         }
         super.setID(id);
@@ -670,8 +677,12 @@ public class OlsonTimeZone extends BasicTimeZone implements Cloneable {
     // quick zone transition checking.
     private static final int MAX_OFFSET_SECONDS = 86400; // 60 * 60 * 24;
 
-    private void getHistoricalOffset(long date, boolean local,
-            int NonExistingTimeOpt, int DuplicatedTimeOpt, int[] offsets) {
+    private void getHistoricalOffset(
+            long date,
+            boolean local,
+            int NonExistingTimeOpt,
+            int DuplicatedTimeOpt,
+            int[] offsets) {
         if (transitionCount != 0) {
             long sec = Grego.floorDivide(date, Grego.MILLIS_PER_SECOND);
             if (!local && sec < transitionTimes64[0]) {
@@ -697,10 +708,13 @@ public class OlsonTimeZone extends BasicTimeZone implements Cloneable {
                         if (offsetAfter - offsetBefore >= 0) {
                             // Positive transition, which makes a non-existing local time range
                             if (((NonExistingTimeOpt & STD_DST_MASK) == LOCAL_STD && dstToStd)
-                                    || ((NonExistingTimeOpt & STD_DST_MASK) == LOCAL_DST && stdToDst)) {
+                                    || ((NonExistingTimeOpt & STD_DST_MASK) == LOCAL_DST
+                                            && stdToDst)) {
                                 transition += offsetBefore;
-                            } else if (((NonExistingTimeOpt & STD_DST_MASK) == LOCAL_STD && stdToDst)
-                                    || ((NonExistingTimeOpt & STD_DST_MASK) == LOCAL_DST && dstToStd)) {
+                            } else if (((NonExistingTimeOpt & STD_DST_MASK) == LOCAL_STD
+                                            && stdToDst)
+                                    || ((NonExistingTimeOpt & STD_DST_MASK) == LOCAL_DST
+                                            && dstToStd)) {
                                 transition += offsetAfter;
                             } else if ((NonExistingTimeOpt & FORMER_LATTER_MASK) == LOCAL_LATTER) {
                                 transition += offsetBefore;
@@ -712,10 +726,12 @@ public class OlsonTimeZone extends BasicTimeZone implements Cloneable {
                         } else {
                             // Negative transition, which makes a duplicated local time range
                             if (((DuplicatedTimeOpt & STD_DST_MASK) == LOCAL_STD && dstToStd)
-                                    || ((DuplicatedTimeOpt & STD_DST_MASK) == LOCAL_DST && stdToDst)) {
+                                    || ((DuplicatedTimeOpt & STD_DST_MASK) == LOCAL_DST
+                                            && stdToDst)) {
                                 transition += offsetAfter;
                             } else if (((DuplicatedTimeOpt & STD_DST_MASK) == LOCAL_STD && stdToDst)
-                                    || ((DuplicatedTimeOpt & STD_DST_MASK) == LOCAL_DST && dstToStd)) {
+                                    || ((DuplicatedTimeOpt & STD_DST_MASK) == LOCAL_DST
+                                            && dstToStd)) {
                                 transition += offsetBefore;
                             } else if ((DuplicatedTimeOpt & FORMER_LATTER_MASK) == LOCAL_FORMER) {
                                 transition += offsetBefore;
@@ -741,7 +757,7 @@ public class OlsonTimeZone extends BasicTimeZone implements Cloneable {
         }
     }
 
-    private int getInt(byte val){
+    private int getInt(byte val) {
         return val & 0xFF;
     }
 
@@ -826,60 +842,46 @@ public class OlsonTimeZone extends BasicTimeZone implements Cloneable {
         return buf.toString();
     }
 
-    /**
-     * Number of transitions, 0..~370
-     */
+    /** Number of transitions, 0..~370 */
     private int transitionCount;
 
-    /**
-     * Number of types, 1..255
-     */
+    /** Number of types, 1..255 */
     private int typeCount;
 
-    /**
-     * Time of each transition in seconds from 1970 epoch.
-     */
+    /** Time of each transition in seconds from 1970 epoch. */
     private long[] transitionTimes64;
 
-    /**
-     * Offset from GMT in seconds for each type.
-     * Length is equal to typeCount
-     */
+    /** Offset from GMT in seconds for each type. Length is equal to typeCount */
     private int[] typeOffsets;
 
     /**
-     * Type description data, consisting of transitionCount uint8_t
-     * type indices (from 0..typeCount-1).
-     * Length is equal to transitionCount
+     * Type description data, consisting of transitionCount uint8_t type indices (from
+     * 0..typeCount-1). Length is equal to transitionCount
      */
     private byte[] typeMapData;
 
-    /**
-     * For year >= finalStartYear, the finalZone will be used.
-     */
+    /** For year >= finalStartYear, the finalZone will be used. */
     private int finalStartYear = Integer.MAX_VALUE;
 
-    /**
-     * For date >= finalStartMillis, the finalZone will be used.
-     */
+    /** For date >= finalStartMillis, the finalZone will be used. */
     private double finalStartMillis = Double.MAX_VALUE;
 
     /**
-     * A SimpleTimeZone that governs the behavior for years >= finalYear.
-     * If and only if finalYear == INT32_MAX then finalZone == 0.
+     * A SimpleTimeZone that governs the behavior for years >= finalYear. If and only if finalYear
+     * == INT32_MAX then finalZone == 0.
      */
     private SimpleTimeZone finalZone = null; // owned, may be NULL
 
     /**
-     * The canonical ID of this zone. Initialized when {@link #getCanonicalID()}
-     * is invoked first time, or {@link #setID(String)} is called.
+     * The canonical ID of this zone. Initialized when {@link #getCanonicalID()} is invoked first
+     * time, or {@link #setID(String)} is called.
      */
     private volatile String canonicalID = null;
 
     private static final String ZONEINFORES = "zoneinfo64";
 
     private static final boolean DEBUG = ICUDebug.enabled("olson");
-    private static final int SECONDS_PER_DAY = 24*60*60;
+    private static final int SECONDS_PER_DAY = 24 * 60 * 60;
 
     private static UResourceBundle loadRule(UResourceBundle top, String ruleid) {
         UResourceBundle r = top.get("Rules");
@@ -888,47 +890,52 @@ public class OlsonTimeZone extends BasicTimeZone implements Cloneable {
     }
 
     @Override
-    public boolean equals(Object obj){
+    public boolean equals(Object obj) {
         if (!super.equals(obj)) return false; // super does class check
 
         OlsonTimeZone z = (OlsonTimeZone) obj;
 
-        return (Utility.arrayEquals(typeMapData, z.typeMapData) ||
-                 // If the pointers are not equal, the zones may still
-                 // be equal if their rules and transitions are equal
-                 (finalStartYear == z.finalStartYear &&
-                  // Don't compare finalMillis; if finalYear is ==, so is finalMillis
-                  ((finalZone == null && z.finalZone == null) ||
-                   (finalZone != null && z.finalZone != null &&
-                    finalZone.equals(z.finalZone)) &&
-                  transitionCount == z.transitionCount &&
-                  typeCount == z.typeCount &&
-                  Utility.arrayEquals(transitionTimes64, z.transitionTimes64) &&
-                  Utility.arrayEquals(typeOffsets, z.typeOffsets) &&
-                  Utility.arrayEquals(typeMapData, z.typeMapData)
-                  )));
-
+        return (Utility.arrayEquals(typeMapData, z.typeMapData)
+                ||
+                // If the pointers are not equal, the zones may still
+                // be equal if their rules and transitions are equal
+                (finalStartYear == z.finalStartYear
+                        &&
+                        // Don't compare finalMillis; if finalYear is ==, so is finalMillis
+                        ((finalZone == null && z.finalZone == null)
+                                || (finalZone != null
+                                                && z.finalZone != null
+                                                && finalZone.equals(z.finalZone))
+                                        && transitionCount == z.transitionCount
+                                        && typeCount == z.typeCount
+                                        && Utility.arrayEquals(
+                                                transitionTimes64, z.transitionTimes64)
+                                        && Utility.arrayEquals(typeOffsets, z.typeOffsets)
+                                        && Utility.arrayEquals(typeMapData, z.typeMapData))));
     }
 
     @Override
-    public int hashCode(){
-        int ret =   (int)  (finalStartYear ^ (finalStartYear>>>4) +
-                   transitionCount ^ (transitionCount>>>6) +
-                   typeCount ^ (typeCount>>>8) +
-                   Double.doubleToLongBits(finalStartMillis)+
-                   (finalZone == null ? 0 : finalZone.hashCode()) +
-                   super.hashCode());
+    public int hashCode() {
+        int ret =
+                (int)
+                        (finalStartYear
+                                ^ (finalStartYear >>> 4) + transitionCount
+                                ^ (transitionCount >>> 6) + typeCount
+                                ^ (typeCount >>> 8)
+                                        + Double.doubleToLongBits(finalStartMillis)
+                                        + (finalZone == null ? 0 : finalZone.hashCode())
+                                        + super.hashCode());
         if (transitionTimes64 != null) {
-            for(int i=0; i<transitionTimes64.length; i++){
-                ret+=transitionTimes64[i]^(transitionTimes64[i]>>>8);
+            for (int i = 0; i < transitionTimes64.length; i++) {
+                ret += transitionTimes64[i] ^ (transitionTimes64[i] >>> 8);
             }
         }
-        for(int i=0; i<typeOffsets.length; i++){
-            ret+=typeOffsets[i]^(typeOffsets[i]>>>8);
+        for (int i = 0; i < typeOffsets.length; i++) {
+            ret += typeOffsets[i] ^ (typeOffsets[i] >>> 8);
         }
         if (typeMapData != null) {
-            for(int i=0; i<typeMapData.length; i++){
-                ret+=typeMapData[i] & 0xFF;
+            for (int i = 0; i < typeMapData.length; i++) {
+                ret += typeMapData[i] & 0xFF;
             }
         }
         return ret;
@@ -950,7 +957,7 @@ public class OlsonTimeZone extends BasicTimeZone implements Cloneable {
                 return firstFinalTZTransition;
             } else if (base >= firstFinalTZTransition.getTime()) {
                 if (finalZone.useDaylightTime()) {
-                    //return finalZone.getNextTransition(base, inclusive);
+                    // return finalZone.getNextTransition(base, inclusive);
                     return finalZoneWithStartYear.getNextTransition(base, inclusive);
                 } else {
                     // No more transitions
@@ -967,7 +974,7 @@ public class OlsonTimeZone extends BasicTimeZone implements Cloneable {
                     break;
                 }
             }
-            if (ttidx == transitionCount - 1)  {
+            if (ttidx == transitionCount - 1) {
                 return firstFinalTZTransition;
             } else if (ttidx < firstTZTransitionIdx) {
                 return firstTZTransition;
@@ -975,10 +982,11 @@ public class OlsonTimeZone extends BasicTimeZone implements Cloneable {
                 // Create a TimeZoneTransition
                 TimeZoneRule to = historicRules[getInt(typeMapData[ttidx + 1])];
                 TimeZoneRule from = historicRules[getInt(typeMapData[ttidx])];
-                long startTime = transitionTimes64[ttidx+1] * Grego.MILLIS_PER_SECOND;
+                long startTime = transitionTimes64[ttidx + 1] * Grego.MILLIS_PER_SECOND;
 
                 // The transitions loaded from zoneinfo.res may contain non-transition data
-                if (from.getName().equals(to.getName()) && from.getRawOffset() == to.getRawOffset()
+                if (from.getName().equals(to.getName())
+                        && from.getRawOffset() == to.getRawOffset()
                         && from.getDSTSavings() == to.getDSTSavings()) {
                     return getNextTransition(startTime, false);
                 }
@@ -1001,7 +1009,7 @@ public class OlsonTimeZone extends BasicTimeZone implements Cloneable {
                 return firstFinalTZTransition;
             } else if (base > firstFinalTZTransition.getTime()) {
                 if (finalZone.useDaylightTime()) {
-                    //return finalZone.getPreviousTransition(base, inclusive);
+                    // return finalZone.getPreviousTransition(base, inclusive);
                     return finalZoneWithStartYear.getPreviousTransition(base, inclusive);
                 } else {
                     return firstFinalTZTransition;
@@ -1026,11 +1034,12 @@ public class OlsonTimeZone extends BasicTimeZone implements Cloneable {
             } else {
                 // Create a TimeZoneTransition
                 TimeZoneRule to = historicRules[getInt(typeMapData[ttidx])];
-                TimeZoneRule from = historicRules[getInt(typeMapData[ttidx-1])];
+                TimeZoneRule from = historicRules[getInt(typeMapData[ttidx - 1])];
                 long startTime = transitionTimes64[ttidx] * Grego.MILLIS_PER_SECOND;
 
                 // The transitions loaded from zoneinfo.res may contain non-transition data
-                if (from.getName().equals(to.getName()) && from.getRawOffset() == to.getRawOffset()
+                if (from.getName().equals(to.getName())
+                        && from.getRawOffset() == to.getRawOffset()
                         && from.getDSTSavings() == to.getDSTSavings()) {
                     return getPreviousTransition(startTime, false);
                 }
@@ -1075,7 +1084,7 @@ public class OlsonTimeZone extends BasicTimeZone implements Cloneable {
                     rules[idx++] = historicRules[i];
                 }
             }
-         }
+        }
 
         if (finalZone != null) {
             if (finalZone.useDaylightTime()) {
@@ -1085,8 +1094,13 @@ public class OlsonTimeZone extends BasicTimeZone implements Cloneable {
                 rules[idx++] = stzr[2];
             } else {
                 // Create a TimeArrayTimeZoneRule at finalMillis
-                rules[idx++] = new TimeArrayTimeZoneRule(getID() + "(STD)", finalZone.getRawOffset(), 0,
-                        new long[] {(long)finalStartMillis}, DateTimeRule.UTC_TIME);
+                rules[idx++] =
+                        new TimeArrayTimeZoneRule(
+                                getID() + "(STD)",
+                                finalZone.getRawOffset(),
+                                0,
+                                new long[] {(long) finalStartMillis},
+                                DateTimeRule.UTC_TIME);
             }
         }
         return rules;
@@ -1143,7 +1157,9 @@ public class OlsonTimeZone extends BasicTimeZone implements Cloneable {
                 for (typeIdx = 0; typeIdx < typeCount; typeIdx++) {
                     // Gather all start times for each pair of offsets
                     int nTimes = 0;
-                    for (transitionIdx = firstTZTransitionIdx; transitionIdx < transitionCount; transitionIdx++) {
+                    for (transitionIdx = firstTZTransitionIdx;
+                            transitionIdx < transitionCount;
+                            transitionIdx++) {
                         if (typeIdx == getInt(typeMapData[transitionIdx])) {
                             long tt = transitionTimes64[transitionIdx] * Grego.MILLIS_PER_SECOND;
                             if (tt < finalStartMillis) {
@@ -1156,27 +1172,34 @@ public class OlsonTimeZone extends BasicTimeZone implements Cloneable {
                         long[] startTimes = new long[nTimes];
                         System.arraycopy(times, 0, startTimes, 0, nTimes);
                         // Create a TimeArrayTimeZoneRule
-                        raw = typeOffsets[typeIdx*2]*Grego.MILLIS_PER_SECOND;
-                        dst = typeOffsets[typeIdx*2 + 1]*Grego.MILLIS_PER_SECOND;
+                        raw = typeOffsets[typeIdx * 2] * Grego.MILLIS_PER_SECOND;
+                        dst = typeOffsets[typeIdx * 2 + 1] * Grego.MILLIS_PER_SECOND;
                         if (historicRules == null) {
                             historicRules = new TimeArrayTimeZoneRule[typeCount];
                         }
-                        historicRules[typeIdx] = new TimeArrayTimeZoneRule((dst == 0 ? stdName : dstName),
-                                raw, dst, startTimes, DateTimeRule.UTC_TIME);
+                        historicRules[typeIdx] =
+                                new TimeArrayTimeZoneRule(
+                                        (dst == 0 ? stdName : dstName),
+                                        raw,
+                                        dst,
+                                        startTimes,
+                                        DateTimeRule.UTC_TIME);
                     }
                 }
 
                 // Create initial transition
                 typeIdx = getInt(typeMapData[firstTZTransitionIdx]);
-                firstTZTransition = new TimeZoneTransition(transitionTimes64[firstTZTransitionIdx] * Grego.MILLIS_PER_SECOND,
-                        initialRule, historicRules[typeIdx]);
-
+                firstTZTransition =
+                        new TimeZoneTransition(
+                                transitionTimes64[firstTZTransitionIdx] * Grego.MILLIS_PER_SECOND,
+                                initialRule,
+                                historicRules[typeIdx]);
             }
         }
 
         if (finalZone != null) {
             // Get the first occurrence of final rule starts
-            long startTime = (long)finalStartMillis;
+            long startTime = (long) finalStartMillis;
             TimeZoneRule firstFinalRule;
             if (finalZone.useDaylightTime()) {
                 /*
@@ -1191,12 +1214,17 @@ public class OlsonTimeZone extends BasicTimeZone implements Cloneable {
                 finalZoneWithStartYear.setStartYear(finalStartYear);
 
                 TimeZoneTransition tzt = finalZoneWithStartYear.getNextTransition(startTime, false);
-                firstFinalRule  = tzt.getTo();
+                firstFinalRule = tzt.getTo();
                 startTime = tzt.getTime();
             } else {
                 finalZoneWithStartYear = finalZone;
-                firstFinalRule = new TimeArrayTimeZoneRule(finalZone.getID(),
-                        finalZone.getRawOffset(), 0, new long[] {startTime}, DateTimeRule.UTC_TIME);
+                firstFinalRule =
+                        new TimeArrayTimeZoneRule(
+                                finalZone.getID(),
+                                finalZone.getRawOffset(),
+                                0,
+                                new long[] {startTime},
+                                DateTimeRule.UTC_TIME);
             }
             TimeZoneRule prevRule = null;
             if (transitionCount > 0) {
@@ -1235,8 +1263,11 @@ public class OlsonTimeZone extends BasicTimeZone implements Cloneable {
             String tzid = getID();
             if (tzid != null) {
                 try {
-                    UResourceBundle top = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME,
-                            ZONEINFORES, ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+                    UResourceBundle top =
+                            UResourceBundle.getBundleInstance(
+                                    ICUData.ICU_BASE_NAME,
+                                    ZONEINFORES,
+                                    ICUResourceBundle.ICU_DATA_CLASS_LOADER);
                     UResourceBundle res = ZoneMeta.openOlsonResource(top, tzid);
                     construct(top, res, tzid);
                     initialized = true;
@@ -1279,7 +1310,7 @@ public class OlsonTimeZone extends BasicTimeZone implements Cloneable {
      */
     @Override
     public OlsonTimeZone cloneAsThawed() {
-        OlsonTimeZone tz = (OlsonTimeZone)super.cloneAsThawed();
+        OlsonTimeZone tz = (OlsonTimeZone) super.cloneAsThawed();
         if (finalZone != null) {
             tz.finalZone = finalZone.clone();
         }

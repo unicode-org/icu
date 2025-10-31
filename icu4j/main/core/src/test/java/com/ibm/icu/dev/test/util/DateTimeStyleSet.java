@@ -12,7 +12,6 @@ import com.ibm.icu.text.DateFormat;
 
 /**
  * @author srl
- *
  */
 public class DateTimeStyleSet extends FieldsSet {
 
@@ -25,7 +24,7 @@ public class DateTimeStyleSet extends FieldsSet {
     private static final String kRELATIVE_ = "RELATIVE_";
 
     private int getOrNone(int which) {
-        if(!isSet(which)) {
+        if (!isSet(which)) {
             return DateFormat.NONE;
         } else {
             return get(which);
@@ -46,9 +45,13 @@ public class DateTimeStyleSet extends FieldsSet {
 
     @Override
     protected void handleParseValue(FieldsSet inheritFrom, int field, String substr) {
-        if(substr.startsWith(kRELATIVE_)) {
-            parseValueEnum(DebugUtilitiesData.UDateFormatStyle, inheritFrom, field, substr.substring(kRELATIVE_.length()));
-            if(isSet(field)) {
+        if (substr.startsWith(kRELATIVE_)) {
+            parseValueEnum(
+                    DebugUtilitiesData.UDateFormatStyle,
+                    inheritFrom,
+                    field,
+                    substr.substring(kRELATIVE_.length()));
+            if (isSet(field)) {
                 set(field, get(field) | DateFormat.RELATIVE);
             }
         } else {
@@ -58,9 +61,9 @@ public class DateTimeStyleSet extends FieldsSet {
 
     @Override
     protected int handleParseName(FieldsSet inheritFrom, String name, String substr) {
-        if(name.equals(kDATE)) {
+        if (name.equals(kDATE)) {
             return DTS_DATE;
-        } else if(name.equals(kTIME)) {
+        } else if (name.equals(kTIME)) {
             return DTS_TIME;
         } else {
             throw new IllegalArgumentException("Bad field: " + name);

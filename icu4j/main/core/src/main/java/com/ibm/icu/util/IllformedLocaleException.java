@@ -9,9 +9,9 @@
 package com.ibm.icu.util;
 
 /**
- * Thrown by methods in {@link ULocale} and {@link ULocale.Builder} to
- * indicate that an argument is not a well-formed BCP 47 tag.
- * 
+ * Thrown by methods in {@link ULocale} and {@link ULocale.Builder} to indicate that an argument is
+ * not a well-formed BCP 47 tag.
+ *
  * @see ULocale
  * @stable ICU 4.2
  */
@@ -22,8 +22,9 @@ public class IllformedLocaleException extends RuntimeException {
     private int _errIdx = -1;
 
     /**
-     * Constructs a new <code>IllformedLocaleException</code> with no
-     * detail message and -1 as the error index.
+     * Constructs a new <code>IllformedLocaleException</code> with no detail message and -1 as the
+     * error index.
+     *
      * @stable ICU 4.6
      */
     public IllformedLocaleException() {
@@ -31,8 +32,8 @@ public class IllformedLocaleException extends RuntimeException {
     }
 
     /**
-     * Constructs a new <code>IllformedLocaleException</code> with the
-     * given message and -1 as the error index.
+     * Constructs a new <code>IllformedLocaleException</code> with the given message and -1 as the
+     * error index.
      *
      * @param message the message
      * @stable ICU 4.2
@@ -42,10 +43,9 @@ public class IllformedLocaleException extends RuntimeException {
     }
 
     /**
-     * Constructs a new <code>IllformedLocaleException</code> with the
-     * given message and the error index.  The error index is the approximate
-     * offset from the start of the ill-formed value to the point where the
-     * parse first detected an error.  A negative error index value indicates
+     * Constructs a new <code>IllformedLocaleException</code> with the given message and the error
+     * index. The error index is the approximate offset from the start of the ill-formed value to
+     * the point where the parse first detected an error. A negative error index value indicates
      * either the error index is not applicable or unknown.
      *
      * @param message the message
@@ -58,8 +58,8 @@ public class IllformedLocaleException extends RuntimeException {
     }
 
     /**
-     * Returns the index where the error was found. A negative value indicates
-     * either the error index is not applicable or unknown.
+     * Returns the index where the error was found. A negative value indicates either the error
+     * index is not applicable or unknown.
      *
      * @return the error index
      * @stable ICU 4.2

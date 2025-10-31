@@ -1,22 +1,17 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /**
-*******************************************************************************
-* Copyright (C) 1996-2010, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
-*******************************************************************************
-*/
-
+ * ****************************************************************************** Copyright (C)
+ * 1996-2010, International Business Machines Corporation and * others. All Rights Reserved. *
+ * ******************************************************************************
+ */
 package com.ibm.icu.impl;
 
 import com.ibm.icu.text.UCharacterIterator;
 
-
 /**
  * @author Doug Felt
- *
  */
-
 public final class UCharArrayIterator extends UCharacterIterator implements Cloneable {
     private final char[] text;
     private final int start;
@@ -25,9 +20,14 @@ public final class UCharArrayIterator extends UCharacterIterator implements Clon
 
     public UCharArrayIterator(char[] text, int start, int limit) {
         if (start < 0 || limit > text.length || start > limit) {
-            throw new IllegalArgumentException("start: " + start + " or limit: "
-                                               + limit + " out of range [0, "
-                                               + text.length + ")");
+            throw new IllegalArgumentException(
+                    "start: "
+                            + start
+                            + " or limit: "
+                            + limit
+                            + " out of range [0, "
+                            + text.length
+                            + ")");
         }
         this.text = text;
         this.start = start;
@@ -64,9 +64,8 @@ public final class UCharArrayIterator extends UCharacterIterator implements Clon
     @Override
     public void setIndex(int index) {
         if (index < 0 || index > limit - start) {
-            throw new IndexOutOfBoundsException("index: " + index +
-                                                " out of range [0, "
-                                                + (limit - start) + ")");
+            throw new IndexOutOfBoundsException(
+                    "index: " + index + " out of range [0, " + (limit - start) + ")");
         }
         pos = start + index;
     }
@@ -79,14 +78,14 @@ public final class UCharArrayIterator extends UCharacterIterator implements Clon
     }
 
     /**
-     * Creates a copy of this iterator, does not clone the underlying
-     * <code>Replaceable</code>object
+     * Creates a copy of this iterator, does not clone the underlying <code>Replaceable</code>object
+     *
      * @return copy of this iterator
      */
     @Override
     public UCharArrayIterator clone() {
         try {
-          return (UCharArrayIterator) super.clone();
+            return (UCharArrayIterator) super.clone();
         } catch (CloneNotSupportedException e) {
             return null; // never invoked
         }

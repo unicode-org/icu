@@ -1,16 +1,12 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /**
-*******************************************************************************
-* Copyright (C) 2004-2015, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
-*******************************************************************************
-*/
-
-/**
- * Represent a file of APIInfo records.
+ * ****************************************************************************** Copyright (C)
+ * 2004-2015, International Business Machines Corporation and * others. All Rights Reserved. *
+ * ******************************************************************************
  */
 
+/** Represent a file of APIInfo records. */
 package com.ibm.icu.dev.tool.docs;
 
 import java.io.BufferedReader;
@@ -43,8 +39,11 @@ public final class APIData {
             data.version = Integer.parseInt(APIInfo.readToken(br)); // version
             if (data.version > APIInfo.VERSION) {
                 throw new IllegalArgumentException(
-                    "data version " + data.version
-                    + " is newer than current version (" + APIInfo.VERSION + ")");
+                        "data version "
+                                + data.version
+                                + " is newer than current version ("
+                                + APIInfo.VERSION
+                                + ")");
             }
             data.name = APIInfo.readToken(br);
             data.base = APIInfo.readToken(br); // base
@@ -58,8 +57,7 @@ public final class APIData {
             }
             // System.out.println("read " + data.set.size() + " record(s)");
             return data;
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             RuntimeException re = new RuntimeException("error reading api data");
             re.initCause(e);
             throw re;
@@ -100,7 +98,8 @@ public final class APIData {
                 try {
                     zf.close();
                 } catch (IOException e) {
-                    RuntimeException re = new RuntimeException("failed to close the zip file: " + fileName);
+                    RuntimeException re =
+                            new RuntimeException("failed to close the zip file: " + fileName);
                     re.initCause(e);
                     throw re;
                 }
@@ -115,9 +114,7 @@ public final class APIData {
     private static final String[] stanames = {
         "draft", "stable", "deprecated", "obsolete", "internal"
     };
-    private static final String[] catnames = {
-        "classes", "fields", "constructors", "methods"
-    };
+    private static final String[] catnames = {"classes", "fields", "constructors", "methods"};
 
     public void printStats(PrintStream ps) {
         // classes, methods, fields
@@ -127,7 +124,7 @@ public final class APIData {
 
         Iterator iter = set.iterator();
         while (iter.hasNext()) {
-            APIInfo info = (APIInfo)iter.next();
+            APIInfo info = (APIInfo) iter.next();
 
             if (info.isPublic() || info.isProtected()) {
                 int sta = info.getVal(APIInfo.STA);
@@ -164,7 +161,7 @@ public final class APIData {
 
         String fn = "icu4j52.api3.gz";
         if (args.length == 0) {
-            args = new String[] { "-file", fn };
+            args = new String[] {"-file", fn};
         }
 
         for (int i = 0; i < args.length; ++i) {
@@ -177,7 +174,7 @@ public final class APIData {
                 fn = args[++i];
 
                 File f = new File(path, fn);
-                read(f,internal).printStats(out);
+                read(f, internal).printStats(out);
                 out.flush();
             }
         }

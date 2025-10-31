@@ -3,16 +3,11 @@
 
 package com.ibm.icu.message2;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.StringJoiner;
-
 import com.ibm.icu.message2.MFDataModel.CatchallKey;
 import com.ibm.icu.message2.MFDataModel.Declaration;
 import com.ibm.icu.message2.MFDataModel.Expression;
-import com.ibm.icu.message2.MFDataModel.FunctionRef;
 import com.ibm.icu.message2.MFDataModel.FunctionExpression;
+import com.ibm.icu.message2.MFDataModel.FunctionRef;
 import com.ibm.icu.message2.MFDataModel.InputDeclaration;
 import com.ibm.icu.message2.MFDataModel.Literal;
 import com.ibm.icu.message2.MFDataModel.LiteralExpression;
@@ -25,6 +20,10 @@ import com.ibm.icu.message2.MFDataModel.SelectMessage;
 import com.ibm.icu.message2.MFDataModel.VariableExpression;
 import com.ibm.icu.message2.MFDataModel.VariableRef;
 import com.ibm.icu.message2.MFDataModel.Variant;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.StringJoiner;
 
 // I can merge all this in the MFDataModel class and make it private
 class MFDataModelValidator {

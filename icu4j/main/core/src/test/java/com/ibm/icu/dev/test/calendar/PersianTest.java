@@ -7,22 +7,19 @@
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.calendar;
-import java.util.Date;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.PersianCalendar;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
+import java.util.Date;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public class PersianTest extends CalendarTestFmwk {
-    /**
-     * Test basic mapping to and from Gregorian.
-     */
+    /** Test basic mapping to and from Gregorian. */
     @Test
     public void TestMapping() {
         final int[] DATA = {
@@ -30,26 +27,21 @@ public class PersianTest extends CalendarTestFmwk {
             2011, 1, 11, 1389, 10, 21,
             1986, 2, 25, 1364, 12, 6,
             1934, 3, 14, 1312, 12, 23,
-
             2090, 3, 19, 1468, 12, 29,
             2007, 2, 22, 1385, 12, 3,
             1969, 12, 31, 1348, 10, 10,
             1945, 11, 12, 1324, 8, 21,
             1925, 3, 31, 1304, 1, 11,
-
             1996, 3, 19, 1374, 12, 29,
             1996, 3, 20, 1375, 1, 1,
             1997, 3, 20, 1375, 12, 30,
             1997, 3, 21, 1376, 1, 1,
-
             2008, 3, 19, 1386, 12, 29,
             2008, 3, 20, 1387, 1, 1,
             2004, 3, 19, 1382, 12, 29,
             2004, 3, 20, 1383, 1, 1,
-
             2006, 3, 20, 1384, 12, 29,
             2006, 3, 21, 1385, 1, 1,
-
             2005, 4, 20, 1384, 1, 31,
             2005, 4, 21, 1384, 2, 1,
             2005, 5, 21, 1384, 2, 31,
@@ -86,7 +78,7 @@ public class PersianTest extends CalendarTestFmwk {
 
         Calendar grego = Calendar.getInstance();
         grego.clear();
-        for (int i = 0; i < DATA.length;) {
+        for (int i = 0; i < DATA.length; ) {
             grego.set(DATA[i++], DATA[i++] - 1, DATA[i++]);
             Date date = grego.getTime();
             cal.setTime(date);
@@ -107,7 +99,7 @@ public class PersianTest extends CalendarTestFmwk {
         }
 
         logln("Persian -> Gregorian");
-        for (int i = 0; i < DATA.length;) {
+        for (int i = 0; i < DATA.length; ) {
             grego.set(DATA[i++], DATA[i++] - 1, DATA[i++]);
             Date dexp = grego.getTime();
             int cyear = DATA[i++];
@@ -133,13 +125,14 @@ public class PersianTest extends CalendarTestFmwk {
     public void TestCoverage12424() {
         class StubCalendar extends PersianCalendar {
             private static final long serialVersionUID = 1L;
+
             public StubCalendar() {
                 assertEquals("Persian month 0 length", 31, handleGetMonthLength(1000, 0));
                 assertEquals("Persian month 7 length", 30, handleGetMonthLength(1000, 7));
 
                 int leastWeeks = handleGetLimit(Calendar.WEEK_OF_YEAR, Calendar.LEAST_MAXIMUM);
                 assertEquals("Persian Week of Year least maximum", 52, leastWeeks);
-             }
+            }
         }
 
         new StubCalendar();
@@ -179,9 +172,10 @@ public class PersianTest extends CalendarTestFmwk {
 
     @Test
     public void TestPersianJulianDayToYMD() {
-        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Tehran"),
-            new ULocale("fa_IR@calendar=persian"));
-        for (int i = 0; i < PERSIAN_TEST_CASE_1.length;) {
+        Calendar cal =
+                Calendar.getInstance(
+                        TimeZone.getTimeZone("Asia/Tehran"), new ULocale("fa_IR@calendar=persian"));
+        for (int i = 0; i < PERSIAN_TEST_CASE_1.length; ) {
             int rd = PERSIAN_TEST_CASE_1[i++];
             int year = PERSIAN_TEST_CASE_1[i++];
             int month = PERSIAN_TEST_CASE_1[i++];
@@ -190,21 +184,38 @@ public class PersianTest extends CalendarTestFmwk {
             cal.clear();
             cal.set(Calendar.JULIAN_DAY, jday);
             int actualYear = cal.get(Calendar.YEAR);
-            int actualMonth = cal.get(Calendar.MONTH)+1;
+            int actualMonth = cal.get(Calendar.MONTH) + 1;
             int actualDay = cal.get(Calendar.DAY_OF_MONTH);
             if (actualYear != year || actualMonth != month || actualDay != day) {
-               errln("Fail: rd " + rd + " = jday " + jday + " -> expect Persian(" +
-                 year + "/" + month + "/" + day + ") " +
-                 "actual Persian(" + actualYear + "/" + actualMonth + "/" + actualDay + ")");
+                errln(
+                        "Fail: rd "
+                                + rd
+                                + " = jday "
+                                + jday
+                                + " -> expect Persian("
+                                + year
+                                + "/"
+                                + month
+                                + "/"
+                                + day
+                                + ") "
+                                + "actual Persian("
+                                + actualYear
+                                + "/"
+                                + actualMonth
+                                + "/"
+                                + actualDay
+                                + ")");
             }
         }
     }
 
     @Test
     public void TestPersianYMDToJulianDay() {
-        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Tehran"),
-            new ULocale("fa_IR@calendar=persian"));
-        for (int i = 0; i < PERSIAN_TEST_CASE_1.length;) {
+        Calendar cal =
+                Calendar.getInstance(
+                        TimeZone.getTimeZone("Asia/Tehran"), new ULocale("fa_IR@calendar=persian"));
+        for (int i = 0; i < PERSIAN_TEST_CASE_1.length; ) {
             int rd = PERSIAN_TEST_CASE_1[i++];
             int year = PERSIAN_TEST_CASE_1[i++];
             int month = PERSIAN_TEST_CASE_1[i++];
@@ -212,13 +223,25 @@ public class PersianTest extends CalendarTestFmwk {
             int jday = rd + 1721425;
             cal.clear();
             cal.set(Calendar.YEAR, year);
-            cal.set(Calendar.MONTH, month-1);
+            cal.set(Calendar.MONTH, month - 1);
             cal.set(Calendar.DAY_OF_MONTH, day);
             int actualJday = cal.get(Calendar.JULIAN_DAY);
             int actualRD = actualJday - 1721425;
             if (actualRD != rd) {
-            errln("Fail: Persian(" + year + "/" + month + "/" + day + ") => "+
-                  "expect rd " + rd + " but actual jd: " + actualJday + " = rd " + actualRD);
+                errln(
+                        "Fail: Persian("
+                                + year
+                                + "/"
+                                + month
+                                + "/"
+                                + day
+                                + ") => "
+                                + "expect rd "
+                                + rd
+                                + " but actual jd: "
+                                + actualJday
+                                + " = rd "
+                                + actualRD);
             }
         }
     }
@@ -526,11 +549,12 @@ public class PersianTest extends CalendarTestFmwk {
 
     @Test
     public void TestPersianJan1ToGregorian() {
-        Calendar gcal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Tehran"),
-            new ULocale("en"));
-        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Tehran"),
-            new ULocale("fa_IR@calendar=persian"));
-        for (int i = 0; i < PERSIAN_TEST_CASE_2.length;) {
+        Calendar gcal =
+                Calendar.getInstance(TimeZone.getTimeZone("Asia/Tehran"), new ULocale("en"));
+        Calendar cal =
+                Calendar.getInstance(
+                        TimeZone.getTimeZone("Asia/Tehran"), new ULocale("fa_IR@calendar=persian"));
+        for (int i = 0; i < PERSIAN_TEST_CASE_2.length; ) {
             int pYear = PERSIAN_TEST_CASE_2[i++];
             boolean pLeap = PERSIAN_TEST_CASE_2[i++] != 0;
             int year = PERSIAN_TEST_CASE_2[i++];
@@ -542,23 +566,39 @@ public class PersianTest extends CalendarTestFmwk {
             cal.set(Calendar.DAY_OF_MONTH, 1);
             gcal.setTime(cal.getTime());
             int actualYear = gcal.get(Calendar.YEAR);
-            int actualMonth = gcal.get(Calendar.MONTH)+1;
+            int actualMonth = gcal.get(Calendar.MONTH) + 1;
             int actualDay = gcal.get(Calendar.DAY_OF_MONTH);
             if (actualYear != year || actualMonth != month || actualDay != day) {
-                errln("Fail: Persian(" + pYear + ", 1, 1) => " +
-                      "expect Gregorian(" + year + "/" +  month + "/" + day + ") " +
-                      "actual Gregorian(" + actualYear + "/" + actualMonth + "/" + actualDay + ")");
+                errln(
+                        "Fail: Persian("
+                                + pYear
+                                + ", 1, 1) => "
+                                + "expect Gregorian("
+                                + year
+                                + "/"
+                                + month
+                                + "/"
+                                + day
+                                + ") "
+                                + "actual Gregorian("
+                                + actualYear
+                                + "/"
+                                + actualMonth
+                                + "/"
+                                + actualDay
+                                + ")");
             }
         }
     }
 
     @Test
     public void TestGregorianToPersian() {
-        Calendar gcal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Tehran"),
-            new ULocale("en"));
-        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Tehran"),
-            new ULocale("fa_IR@calendar=persian"));
-        for (int i = 0; i < PERSIAN_TEST_CASE_2.length;) {
+        Calendar gcal =
+                Calendar.getInstance(TimeZone.getTimeZone("Asia/Tehran"), new ULocale("en"));
+        Calendar cal =
+                Calendar.getInstance(
+                        TimeZone.getTimeZone("Asia/Tehran"), new ULocale("fa_IR@calendar=persian"));
+        for (int i = 0; i < PERSIAN_TEST_CASE_2.length; ) {
             int pYear = PERSIAN_TEST_CASE_2[i++];
             boolean pLeap = PERSIAN_TEST_CASE_2[i++] != 0;
             int year = PERSIAN_TEST_CASE_2[i++];
@@ -566,16 +606,31 @@ public class PersianTest extends CalendarTestFmwk {
             int day = PERSIAN_TEST_CASE_2[i++];
             gcal.clear();
             gcal.set(Calendar.YEAR, year);
-            gcal.set(Calendar.MONTH, month-1);
+            gcal.set(Calendar.MONTH, month - 1);
             gcal.set(Calendar.DAY_OF_MONTH, day);
             cal.setTime(gcal.getTime());
             int persianYear = cal.get(Calendar.YEAR);
-            int persianMonth = cal.get(Calendar.MONTH)+1;
+            int persianMonth = cal.get(Calendar.MONTH) + 1;
             int persianDay = cal.get(Calendar.DAY_OF_MONTH);
             if (persianYear != pYear || persianMonth != 1 || persianDay != 1) {
-                errln("Fail: Gregorian(" + year + "/" + month + "/" + day + ") "+
-                      " => expect Persian(" + pYear + "/1/1) actual " +
-                      "Persian(" + persianYear + "/" + persianMonth + "/" + persianDay + ")");
+                errln(
+                        "Fail: Gregorian("
+                                + year
+                                + "/"
+                                + month
+                                + "/"
+                                + day
+                                + ") "
+                                + " => expect Persian("
+                                + pYear
+                                + "/1/1) actual "
+                                + "Persian("
+                                + persianYear
+                                + "/"
+                                + persianMonth
+                                + "/"
+                                + persianDay
+                                + ")");
             }
         }
     }

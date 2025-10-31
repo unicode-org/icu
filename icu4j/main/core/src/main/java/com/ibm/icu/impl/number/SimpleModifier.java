@@ -2,16 +2,15 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.number;
 
-import java.text.Format.Field;
-
 import com.ibm.icu.impl.FormattedStringBuilder;
 import com.ibm.icu.impl.SimpleFormatterImpl;
 import com.ibm.icu.impl.number.range.PrefixInfixSuffixLengthHelper;
 import com.ibm.icu.util.ICUException;
+import java.text.Format.Field;
 
 /**
- * The second primary implementation of {@link Modifier}, this one consuming a
- * {@link com.ibm.icu.text.SimpleFormatter} pattern.
+ * The second primary implementation of {@link Modifier}, this one consuming a {@link
+ * com.ibm.icu.text.SimpleFormatter} pattern.
  */
 public class SimpleModifier implements Modifier {
     private final String compiledPattern;
@@ -30,7 +29,8 @@ public class SimpleModifier implements Modifier {
     }
 
     /** Creates a modifier that uses the SimpleFormatter string formats. */
-    public SimpleModifier(String compiledPattern, Field field, boolean strong, Parameters parameters) {
+    public SimpleModifier(
+            String compiledPattern, Field field, boolean strong, Parameters parameters) {
         assert compiledPattern != null;
         this.compiledPattern = compiledPattern;
         this.field = field;
@@ -40,7 +40,8 @@ public class SimpleModifier implements Modifier {
 
     @Override
     public int apply(FormattedStringBuilder output, int leftIndex, int rightIndex) {
-        return SimpleFormatterImpl.formatPrefixSuffix(compiledPattern, field, leftIndex, rightIndex, output);
+        return SimpleFormatterImpl.formatPrefixSuffix(
+                compiledPattern, field, leftIndex, rightIndex, output);
     }
 
     @Override
@@ -76,21 +77,25 @@ public class SimpleModifier implements Modifier {
             return false;
         }
         SimpleModifier _other = (SimpleModifier) other;
-        return compiledPattern.equals(_other.compiledPattern) && field == _other.field && strong == _other.strong;
+        return compiledPattern.equals(_other.compiledPattern)
+                && field == _other.field
+                && strong == _other.strong;
     }
 
     /**
-     * TODO: Like above, this belongs with the rest of the SimpleFormatterImpl code.
-     * I put it here so that the SimpleFormatter uses in FormattedStringBuilder are near each other.
+     * TODO: Like above, this belongs with the rest of the SimpleFormatterImpl code. I put it here
+     * so that the SimpleFormatter uses in FormattedStringBuilder are near each other.
      *
-     * <p>
-     * Applies the compiled two-argument pattern to the FormattedStringBuilder.
+     * <p>Applies the compiled two-argument pattern to the FormattedStringBuilder.
      *
-     * <p>
-     * This method is optimized for the case where the prefix and suffix are often empty, such as
+     * <p>This method is optimized for the case where the prefix and suffix are often empty, such as
      * in the range pattern like "{0}-{1}".
      */
-    public static void formatTwoArgPattern(String compiledPattern, FormattedStringBuilder result, int index, PrefixInfixSuffixLengthHelper h,
+    public static void formatTwoArgPattern(
+            String compiledPattern,
+            FormattedStringBuilder result,
+            int index,
+            PrefixInfixSuffixLengthHelper h,
             Field field) {
         int argLimit = SimpleFormatterImpl.getArgumentLimit(compiledPattern);
         if (argLimit != 2) {
@@ -130,7 +135,7 @@ public class SimpleModifier implements Modifier {
             // No suffix
             suffixLength = 0;
         } else {
-            suffixLength = compiledPattern.charAt(offset) -  ARG_NUM_LIMIT;
+            suffixLength = compiledPattern.charAt(offset) - ARG_NUM_LIMIT;
             offset++;
             result.insert(index + length, compiledPattern, offset, offset + suffixLength, field);
             length += suffixLength;

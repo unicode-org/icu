@@ -10,32 +10,27 @@
 
 package com.ibm.icu.dev.test.serializable;
 
+import com.ibm.icu.dev.test.serializable.SerializableTestUtility.Handler;
+import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.util.VersionInfo;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
-import com.ibm.icu.dev.test.serializable.SerializableTestUtility.Handler;
-import com.ibm.icu.util.TimeZone;
-import com.ibm.icu.util.VersionInfo;
-
 /**
- * This class writes the test objects for each class to a file. The work is
- * actually done by the superclass, CoverageTest. This class just constructs
- * a CoverageTest w/ a non-null path, which tells it to write the data.
- *
+ * This class writes the test objects for each class to a file. The work is actually done by the
+ * superclass, CoverageTest. This class just constructs a CoverageTest w/ a non-null path, which
+ * tells it to write the data.
  */
-public class SerializableWriter
-{
+public class SerializableWriter {
     String path;
 
-    public SerializableWriter(String path)
-    {
+    public SerializableWriter(String path) {
         this.path = path;
     }
 
-    private static String folderName()
-    {
+    private static String folderName() {
         int major = VersionInfo.ICU_VERSION.getMajor();
         int minor = VersionInfo.ICU_VERSION.getMinor();
         int milli = VersionInfo.ICU_VERSION.getMilli();
@@ -59,8 +54,7 @@ public class SerializableWriter
         return result.toString();
     }
 
-    public static void main(String[] args) throws IOException
-    {
+    public static void main(String[] args) throws IOException {
         String outDir = null;
         if (args.length == 0) {
             URL dataURL = SerializableWriter.class.getResource("data");

@@ -8,10 +8,6 @@
  */
 package com.ibm.icu.impl;
 
-import java.text.CharacterIterator;
-import java.util.HashSet;
-import java.util.Locale;
-
 import com.ibm.icu.impl.ICUResourceBundle.OpenType;
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.FilteredBreakIteratorBuilder;
@@ -22,6 +18,9 @@ import com.ibm.icu.util.CharsTrieBuilder;
 import com.ibm.icu.util.ICUCloneNotSupportedException;
 import com.ibm.icu.util.StringTrieBuilder;
 import com.ibm.icu.util.ULocale;
+import java.text.CharacterIterator;
+import java.util.HashSet;
+import java.util.Locale;
 
 /**
  * @author tomzhang
@@ -34,24 +33,20 @@ public class SimpleFilteredSentenceBreakIterator extends BreakIterator implement
     private CharsTrie forwardsPartialTrie; // Has ".a" for "a.M."
 
     /**
-     * @param adoptBreakIterator
-     *            break iterator to adopt
-     * @param forwardsPartialTrie
-     *            forward & partial char trie to adopt
-     * @param backwardsTrie
-     *            backward trie to adopt
+     * @param adoptBreakIterator break iterator to adopt
+     * @param forwardsPartialTrie forward & partial char trie to adopt
+     * @param backwardsTrie backward trie to adopt
      */
-    public SimpleFilteredSentenceBreakIterator(BreakIterator adoptBreakIterator, CharsTrie forwardsPartialTrie,
+    public SimpleFilteredSentenceBreakIterator(
+            BreakIterator adoptBreakIterator,
+            CharsTrie forwardsPartialTrie,
             CharsTrie backwardsTrie) {
         this.delegate = adoptBreakIterator;
         this.forwardsPartialTrie = forwardsPartialTrie;
         this.backwardsTrie = backwardsTrie;
     }
 
-
-    /**
-     * Reset the filter from the delegate.
-     */
+    /** Reset the filter from the delegate. */
     private final void resetState() {
         text = UCharacterIterator.getInstance((CharacterIterator) delegate.getText().clone());
     }
@@ -63,7 +58,8 @@ public class SimpleFilteredSentenceBreakIterator extends BreakIterator implement
      * @return
      */
     private final boolean breakExceptionAt(int n) {
-        // Note: the C++ version of this function is SimpleFilteredSentenceBreakIterator::breakExceptionAt()
+        // Note: the C++ version of this function is
+        // SimpleFilteredSentenceBreakIterator::breakExceptionAt()
 
         int bestPosn = -1;
         int bestValue = -1;
@@ -97,15 +93,15 @@ public class SimpleFilteredSentenceBreakIterator extends BreakIterator implement
                 return true; // Exception here.
             } else if (bestValue == Builder.PARTIAL && forwardsPartialTrie != null) {
                 // make sure there's a forward trie
-                // We matched the "Ph." in "Ph.D." - now we need to run everything through the forwards trie
+                // We matched the "Ph." in "Ph.D." - now we need to run everything through the
+                // forwards trie
                 // to see if it matches something going forward.
                 forwardsPartialTrie.reset();
 
                 BytesTrie.Result rfwd = BytesTrie.Result.INTERMEDIATE_VALUE;
                 text.setIndex(bestPosn); // hope that's close ..
                 while ((uch = text.nextCodePoint()) != BreakIterator.DONE
-                        && ((rfwd = forwardsPartialTrie.nextForCodePoint(uch)).hasNext())) {
-                }
+                        && ((rfwd = forwardsPartialTrie.nextForCodePoint(uch)).hasNext())) {}
                 forwardsPartialTrie.reset(); // for equals() & hashCode()
                 if (rfwd.matches()) {
                     // Exception here
@@ -117,13 +113,15 @@ public class SimpleFilteredSentenceBreakIterator extends BreakIterator implement
     }
 
     /**
-     * Given that the delegate has already given its "initial" answer,
-     * find the NEXT actual (non-suppressed) break.
+     * Given that the delegate has already given its "initial" answer, find the NEXT actual
+     * (non-suppressed) break.
+     *
      * @param n initial position from delegate
      * @return new break position or BreakIterator.DONE
      */
     private final int internalNext(int n) {
-        if (n == BreakIterator.DONE || // at end or
+        if (n == BreakIterator.DONE
+                || // at end or
                 backwardsTrie == null) { // .. no backwards table loaded == no exceptions
             return n;
         }
@@ -143,17 +141,20 @@ public class SimpleFilteredSentenceBreakIterator extends BreakIterator implement
                 return n;
             }
         }
-        return n; //hit underlying DONE or break at end of text
+        return n; // hit underlying DONE or break at end of text
     }
 
     /**
-     * Given that the delegate has already given its "initial" answer,
-     * find the PREV actual (non-suppressed) break.
+     * Given that the delegate has already given its "initial" answer, find the PREV actual
+     * (non-suppressed) break.
+     *
      * @param n initial position from delegate
      * @return new break position or BreakIterator.DONE
      */
     private final int internalPrev(int n) {
-        if (n == 0 || n == BreakIterator.DONE || // at end or
+        if (n == 0
+                || n == BreakIterator.DONE
+                || // at end or
                 backwardsTrie == null) { // .. no backwards table loaded == no exceptions
             return n;
         }
@@ -171,21 +172,19 @@ public class SimpleFilteredSentenceBreakIterator extends BreakIterator implement
                 return n;
             }
         }
-        return n; //hit underlying DONE or break at end of text
+        return n; // hit underlying DONE or break at end of text
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null)
-            return false;
-        if (this == obj)
-            return true;
-        if (getClass() != obj.getClass())
-            return false;
+        if (obj == null) return false;
+        if (this == obj) return true;
+        if (getClass() != obj.getClass()) return false;
         SimpleFilteredSentenceBreakIterator other = (SimpleFilteredSentenceBreakIterator) obj;
         // TODO(ICU-21575): CharsTrie.equals() is not defined.
         // Should compare the underlying data, and can then stop resetting after iteration.
-        return delegate.equals(other.delegate) && text.equals(other.text)
+        return delegate.equals(other.delegate)
+                && text.equals(other.text)
                 && backwardsTrie.equals(other.backwardsTrie)
                 && forwardsPartialTrie.equals(other.forwardsPartialTrie);
     }
@@ -193,13 +192,15 @@ public class SimpleFilteredSentenceBreakIterator extends BreakIterator implement
     @Override
     public int hashCode() {
         // TODO(ICU-21575): CharsTrie.hashCode() is not defined.
-        return (forwardsPartialTrie.hashCode() * 39) + (backwardsTrie.hashCode() * 11)
+        return (forwardsPartialTrie.hashCode() * 39)
+                + (backwardsTrie.hashCode() * 11)
                 + delegate.hashCode();
     }
 
     @Override
     public SimpleFilteredSentenceBreakIterator clone() {
-        SimpleFilteredSentenceBreakIterator other = (SimpleFilteredSentenceBreakIterator) super.clone();
+        SimpleFilteredSentenceBreakIterator other =
+                (SimpleFilteredSentenceBreakIterator) super.clone();
         try {
             if (delegate != null) {
                 other.delegate = delegate.clone();
@@ -218,7 +219,6 @@ public class SimpleFilteredSentenceBreakIterator extends BreakIterator implement
         }
         return other;
     }
-
 
     @Override
     public int first() {
@@ -243,12 +243,12 @@ public class SimpleFilteredSentenceBreakIterator extends BreakIterator implement
 
     @Override
     public boolean isBoundary(int offset) {
-        if(!delegate.isBoundary(offset)) {
+        if (!delegate.isBoundary(offset)) {
             return false; // No underlying break to suppress?
         }
 
         // delegate thinks there's a break…
-        if(backwardsTrie == null) {
+        if (backwardsTrie == null) {
             return true; // no data
         }
 
@@ -288,9 +288,7 @@ public class SimpleFilteredSentenceBreakIterator extends BreakIterator implement
     }
 
     public static class Builder extends FilteredBreakIteratorBuilder {
-        /**
-         * filter set to store all exceptions
-         */
+        /** filter set to store all exceptions */
         private HashSet<CharSequence> filterSet = new HashSet<>();
 
         static final int PARTIAL = (1 << 0); // < partial - need to run through forward trie
@@ -301,13 +299,16 @@ public class SimpleFilteredSentenceBreakIterator extends BreakIterator implement
         public Builder(Locale loc) {
             this(ULocale.forLocale(loc));
         }
+
         /**
          * Create SimpleFilteredBreakIteratorBuilder using given locale
+         *
          * @param loc the locale to get filtered iterators
          */
         public Builder(ULocale loc) {
-            ICUResourceBundle rb = ICUResourceBundle.getBundleInstance(
-                    ICUData.ICU_BRKITR_BASE_NAME, loc, OpenType.LOCALE_ROOT);
+            ICUResourceBundle rb =
+                    ICUResourceBundle.getBundleInstance(
+                            ICUData.ICU_BRKITR_BASE_NAME, loc, OpenType.LOCALE_ROOT);
 
             ICUResourceBundle breaks = rb.findWithFallback("exceptions/SentenceBreak");
 
@@ -320,11 +321,8 @@ public class SimpleFilteredSentenceBreakIterator extends BreakIterator implement
             }
         }
 
-        /**
-         * Create SimpleFilteredBreakIteratorBuilder with no exception
-         */
-        public Builder() {
-        }
+        /** Create SimpleFilteredBreakIteratorBuilder with no exception */
+        public Builder() {}
 
         @Override
         public boolean suppressBreakAfter(CharSequence str) {
@@ -338,7 +336,7 @@ public class SimpleFilteredSentenceBreakIterator extends BreakIterator implement
 
         @Override
         public BreakIterator wrapIteratorWithFilter(BreakIterator adoptBreakIterator) {
-            if( filterSet.isEmpty() ) {
+            if (filterSet.isEmpty()) {
                 // Short circuit - nothing to except.
                 return adoptBreakIterator;
             }
@@ -371,8 +369,7 @@ public class SimpleFilteredSentenceBreakIterator extends BreakIterator implement
                     // is it unique?
                     int sameAs = -1;
                     for (int j = 0; j < subCount; j++) {
-                        if (j == i)
-                            continue;
+                        if (j == i) continue;
                         if (thisStr.regionMatches(0, ustrs[j].toString() /* TODO */, 0, nn + 1)) {
                             if (partials[j] == 0) { // hasn't been processed yet
                                 partials[j] = SuppressInReverse | AddToForward;
@@ -401,7 +398,8 @@ public class SimpleFilteredSentenceBreakIterator extends BreakIterator implement
                     revCount++;
                 } else {
                     // an optimization would be to only add the portion after the '.'
-                    // for example, for "Ph.D." we store ".hP" in the reverse table. We could just store "D." in the
+                    // for example, for "Ph.D." we store ".hP" in the reverse table. We could just
+                    // store "D." in the
                     // forward,
                     // instead of "Ph.D." since we already know the "Ph." part is a match.
                     // would need the trie to be able to hold 0-length strings, though.
@@ -417,7 +415,8 @@ public class SimpleFilteredSentenceBreakIterator extends BreakIterator implement
             if (fwdCount > 0) {
                 forwardsPartialTrie = builder2.build(StringTrieBuilder.Option.FAST);
             }
-            return new SimpleFilteredSentenceBreakIterator(adoptBreakIterator, forwardsPartialTrie, backwardsTrie);
+            return new SimpleFilteredSentenceBreakIterator(
+                    adoptBreakIterator, forwardsPartialTrie, backwardsTrie);
         }
     }
 }

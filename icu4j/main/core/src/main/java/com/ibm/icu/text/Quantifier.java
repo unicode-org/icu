@@ -7,6 +7,7 @@
  *******************************************************************************
  */
 package com.ibm.icu.text;
+
 import com.ibm.icu.impl.Utility;
 
 class Quantifier implements UnicodeMatcher {
@@ -17,13 +18,10 @@ class Quantifier implements UnicodeMatcher {
 
     private int maxCount;
 
-    /**
-     * Maximum count a quantifier can have.
-     */
+    /** Maximum count a quantifier can have. */
     public static final int MAX = Integer.MAX_VALUE;
 
-    public Quantifier(UnicodeMatcher theMatcher,
-                      int theMinCount, int theMaxCount) {
+    public Quantifier(UnicodeMatcher theMatcher, int theMinCount, int theMaxCount) {
         if (theMatcher == null || theMinCount < 0 || theMaxCount < 0 || theMinCount > theMaxCount) {
             throw new IllegalArgumentException();
         }
@@ -32,14 +30,9 @@ class Quantifier implements UnicodeMatcher {
         maxCount = theMaxCount;
     }
 
-    /**
-     * Implement UnicodeMatcher API.
-     */
+    /** Implement UnicodeMatcher API. */
     @Override
-    public int matches(Replaceable text,
-                       int[] offset,
-                       int limit,
-                       boolean incremental) {
+    public int matches(Replaceable text, int[] offset, int limit, boolean incremental) {
         int start = offset[0];
         int count = 0;
         while (count < maxCount) {
@@ -68,9 +61,7 @@ class Quantifier implements UnicodeMatcher {
         return U_MISMATCH;
     }
 
-    /**
-     * Implement UnicodeMatcher API
-     */
+    /** Implement UnicodeMatcher API */
     @Override
     public String toPattern(boolean escapeUnprintable) {
         StringBuilder result = new StringBuilder();
@@ -86,27 +77,25 @@ class Quantifier implements UnicodeMatcher {
             return result.append('+').toString();
         }
         result.append('{');
-        result.append(Utility.hex(minCount,1));
+        result.append(Utility.hex(minCount, 1));
         result.append(',');
         if (maxCount != MAX) {
-            result.append(Utility.hex(maxCount,1));
+            result.append(Utility.hex(maxCount, 1));
         }
         result.append('}');
         return result.toString();
     }
 
-    /**
-     * Implement UnicodeMatcher API
-     */
+    /** Implement UnicodeMatcher API */
     @Override
     public boolean matchesIndexValue(int v) {
         return (minCount == 0) || matcher.matchesIndexValue(v);
     }
 
     /**
-     * Implementation of UnicodeMatcher API.  Union the set of all
-     * characters that may be matched by this object into the given
-     * set.
+     * Implementation of UnicodeMatcher API. Union the set of all characters that may be matched by
+     * this object into the given set.
+     *
      * @param toUnionTo the set into which to union the source characters
      * @returns a reference to toUnionTo
      */
@@ -118,4 +107,4 @@ class Quantifier implements UnicodeMatcher {
     }
 }
 
-//eof
+// eof

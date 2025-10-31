@@ -3,13 +3,12 @@
 
 package com.ibm.icu.dev.test.message2;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 
 // Helper class that converts an array of objects with key named "type"
 // and value `String` to a List<String>.
@@ -40,7 +39,7 @@ public class ExpectedErrorAdapter extends TypeAdapter<ExpErrors> {
             while (reader.hasNext()) {
                 reader.beginObject();
                 String name = reader.nextName();
-                assert(name.equals("type"));
+                assert (name.equals("type"));
                 String value = reader.nextString();
                 result.add(value);
                 reader.endObject();
@@ -66,4 +65,3 @@ public class ExpectedErrorAdapter extends TypeAdapter<ExpErrors> {
         writer.endArray();
     }
 }
-

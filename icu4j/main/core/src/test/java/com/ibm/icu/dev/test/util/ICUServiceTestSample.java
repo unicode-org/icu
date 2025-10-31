@@ -1,40 +1,37 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /**
- *******************************************************************************
- * Copyright (C) 2001-2010, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
- *******************************************************************************
+ * ****************************************************************************** Copyright (C)
+ * 2001-2010, International Business Machines Corporation and * others. All Rights Reserved. *
+ * ******************************************************************************
  */
 package com.ibm.icu.dev.test.util;
 
+import com.ibm.icu.impl.ICULocaleService;
+import com.ibm.icu.impl.ICUService;
+import com.ibm.icu.util.ULocale;
 import java.text.Collator;
 import java.util.EventListener;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 
-import com.ibm.icu.impl.ICULocaleService;
-import com.ibm.icu.impl.ICUService;
-import com.ibm.icu.util.ULocale;
-
 public class ICUServiceTestSample {
-    static public void main(String[] args) {
+    public static void main(String[] args) {
         new HelloServiceClient();
 
         Thread t = new HelloUpdateThread();
         t.start();
         try {
             t.join();
-        }
-        catch (InterruptedException e) {
+        } catch (InterruptedException e) {
         }
         System.out.println("done");
     }
 
     /**
-     * A class that displays the current names in the Hello service.
-     * Each time the service changes, it redisplays the names.
+     * A class that displays the current names in the Hello service. Each time the service changes,
+     * it redisplays the names.
      */
     static class HelloServiceClient implements HelloService.HelloServiceListener {
 
@@ -43,15 +40,12 @@ public class ICUServiceTestSample {
             display();
         }
 
-
         /**
-         * This will be called in the notification thread of
-         * ICUNotifier.  ICUNotifier could spawn a (non-daemon) thread
-         * for each listener, so that impolite listeners wouldn't hold
-         * up notification, but right now it doesn't.  Instead, all
-         * notifications are delivered on the notification thread.
-         * Since that's a daemon thread, a notification might not
-         * complete before main terminates.
+         * This will be called in the notification thread of ICUNotifier. ICUNotifier could spawn a
+         * (non-daemon) thread for each listener, so that impolite listeners wouldn't hold up
+         * notification, but right now it doesn't. Instead, all notifications are delivered on the
+         * notification thread. Since that's a daemon thread, a notification might not complete
+         * before main terminates.
          */
         @Override
         public void helloServiceChanged() {
@@ -67,35 +61,32 @@ public class ICUServiceTestSample {
                 System.out.println(displayName + " says " + service.hello());
                 try {
                     Thread.sleep(50);
-                }
-                catch (InterruptedException e) {
+                } catch (InterruptedException e) {
                 }
             }
             System.out.println("----");
         }
     }
 
-    /**
-     * A thread to update the service.
-     */
+    /** A thread to update the service. */
     static class HelloUpdateThread extends Thread {
         String[][] updates = {
-            { "Hey", "en_US_INFORMAL" },
-            { "Hallo", "de_DE_INFORMAL" },
-            { "Yo!", "en_US_CALIFORNIA_INFORMAL" },
-            { "Chi Fanle Ma?", "zh__INFORMAL" },
-            { "Munch munch... Burger?", "en" },
-            { "Sniff", "fr" },
-            { "TongZhi! MaoZeDong SiXiang Wan Sui!", "zh_CN" },
-            { "Bier? Ja!", "de" },
+            {"Hey", "en_US_INFORMAL"},
+            {"Hallo", "de_DE_INFORMAL"},
+            {"Yo!", "en_US_CALIFORNIA_INFORMAL"},
+            {"Chi Fanle Ma?", "zh__INFORMAL"},
+            {"Munch munch... Burger?", "en"},
+            {"Sniff", "fr"},
+            {"TongZhi! MaoZeDong SiXiang Wan Sui!", "zh_CN"},
+            {"Bier? Ja!", "de"},
         };
+
         @Override
         public void run() {
             for (int i = 0; i < updates.length; ++i) {
                 try {
                     Thread.sleep(500);
-                }
-                catch (InterruptedException e) {
+                } catch (InterruptedException e) {
                 }
                 HelloService.register(updates[i][0], new ULocale(updates[i][1]));
             }
@@ -103,8 +94,8 @@ public class ICUServiceTestSample {
     }
 
     /**
-     * An example service that wraps an ICU service in order to export custom API and
-     * notification. The service just implements 'hello'.
+     * An example service that wraps an ICU service in order to export custom API and notification.
+     * The service just implements 'hello'.
      */
     static final class HelloService {
         private static ICUService registry;
@@ -114,9 +105,7 @@ public class ICUServiceTestSample {
             this.name = name;
         }
 
-        /**
-         * The hello service...
-         */
+        /** The hello service... */
         public String hello() {
             return name;
         }
@@ -126,9 +115,7 @@ public class ICUServiceTestSample {
             return super.toString() + ": " + name;
         }
 
-        /**
-         * Deferred init.
-         */
+        /** Deferred init. */
         private static ICUService registry() {
             if (registry == null) {
                 initRegistry();
@@ -137,16 +124,18 @@ public class ICUServiceTestSample {
         }
 
         private static void initRegistry() {
-            registry = new ICULocaleService() {
-                    @Override
-                    protected boolean acceptsListener(EventListener l) {
-                        return true; // we already verify in our wrapper APIs
-                    }
-                    @Override
-                    protected void notifyListener(EventListener l) {
-                        ((HelloServiceListener)l).helloServiceChanged();
-                    }
-                };
+            registry =
+                    new ICULocaleService() {
+                        @Override
+                        protected boolean acceptsListener(EventListener l) {
+                            return true; // we already verify in our wrapper APIs
+                        }
+
+                        @Override
+                        protected void notifyListener(EventListener l) {
+                            ((HelloServiceListener) l).helloServiceChanged();
+                        }
+                    };
 
             // initialize
             doRegister("Hello", "en");
@@ -156,33 +145,26 @@ public class ICUServiceTestSample {
         }
 
         /**
-         * A custom listener for changes to this service.  We don't need to
-         * point to the service since it is defined by this class and not
-         * an object.
+         * A custom listener for changes to this service. We don't need to point to the service
+         * since it is defined by this class and not an object.
          */
         public static interface HelloServiceListener extends EventListener {
             public void helloServiceChanged();
         }
 
-        /**
-         * Type-safe notification for this service.
-         */
+        /** Type-safe notification for this service. */
         public static void addListener(HelloServiceListener l) {
             registry().addListener(l);
         }
 
-        /**
-         * Type-safe notification for this service.
-         */
+        /** Type-safe notification for this service. */
         public static void removeListener(HelloServiceListener l) {
             registry().removeListener(l);
         }
 
-        /**
-         * Type-safe access to the service.
-         */
+        /** Type-safe access to the service. */
         public static HelloService get(String id) {
-            return (HelloService)registry().get(id);
+            return (HelloService) registry().get(id);
         }
 
         public static Set<String> getVisibleIDs() {
@@ -193,9 +175,7 @@ public class ICUServiceTestSample {
             return getDisplayNames(registry(), locale);
         }
 
-        /**
-         * Register a new hello string for this locale.
-         */
+        /** Register a new hello string for this locale. */
         public static void register(String helloString, ULocale locale) {
             if (helloString == null || locale == null) {
                 throw new NullPointerException();
@@ -206,12 +186,14 @@ public class ICUServiceTestSample {
         private static void doRegister(String hello, String id) {
             registry().registerObject(new HelloService(hello), id);
         }
+
         /**
-         * Convenience override of getDisplayNames(ULocale, Comparator, String) that
-         * uses the default collator for the locale as the comparator to
-         * sort the display names, and null for the matchID.
+         * Convenience override of getDisplayNames(ULocale, Comparator, String) that uses the
+         * default collator for the locale as the comparator to sort the display names, and null for
+         * the matchID.
          */
-        public static SortedMap<String, String> getDisplayNames(ICUService service, ULocale locale) {
+        public static SortedMap<String, String> getDisplayNames(
+                ICUService service, ULocale locale) {
             Collator col = Collator.getInstance(locale.toLocale());
             return service.getDisplayNames(locale, col, null);
         }

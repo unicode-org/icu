@@ -9,16 +9,6 @@
 
 package com.ibm.icu.text;
 
-import java.math.BigInteger;
-import java.text.FieldPosition;
-import java.text.ParsePosition;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.MissingResourceException;
-import java.util.Set;
-
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.impl.ICUResourceBundle;
@@ -29,37 +19,43 @@ import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.UResourceBundleIterator;
-
+import java.math.BigInteger;
+import java.text.FieldPosition;
+import java.text.ParsePosition;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.Set;
 
 /**
  * The RuleBasedNumberFormat class formats numbers according to a set of rules.
  *
  * <p>This number formatter is typically used for spelling out numeric values in words (e.g., 25,376
  * as &quot;twenty-five thousand three hundred seventy-six&quot; or &quot;vingt-cinq mille trois
- * cent soixante-seize&quot; or
- * &quot;f&uuml;nfundzwanzigtausenddreihundertsechsundsiebzig&quot;), but can also be used for
- * other complicated formatting tasks. For example, formatting a number as Roman numerals (e.g. 8 as VIII)
- * or as ordinal digits (e.g. 1st, 2nd, 3rd, 4th).</p>
+ * cent soixante-seize&quot; or &quot;f&uuml;nfundzwanzigtausenddreihundertsechsundsiebzig&quot;),
+ * but can also be used for other complicated formatting tasks. For example, formatting a number as
+ * Roman numerals (e.g. 8 as VIII) or as ordinal digits (e.g. 1st, 2nd, 3rd, 4th).
  *
- * <p>The resources contain three predefined formatters for each locale: spellout, which
- * spells out a value in words (123 is &quot;one hundred twenty-three&quot;); ordinal, which
- * appends an ordinal suffix to the end of a numeral (123 is &quot;123rd&quot;); and
- * numbering system, which shows a number in other non-decimal based systems (e.g. Roman numerals).
- * The client can also define more specialized <code>RuleBasedNumberFormat</code>s
- * by supplying programmer-defined rule sets.</p>
+ * <p>The resources contain three predefined formatters for each locale: spellout, which spells out
+ * a value in words (123 is &quot;one hundred twenty-three&quot;); ordinal, which appends an ordinal
+ * suffix to the end of a numeral (123 is &quot;123rd&quot;); and numbering system, which shows a
+ * number in other non-decimal based systems (e.g. Roman numerals). The client can also define more
+ * specialized <code>RuleBasedNumberFormat</code>s by supplying programmer-defined rule sets.
  *
  * <p>The behavior of a <code>RuleBasedNumberFormat</code> is specified by a textual description
  * that is either passed to the constructor as a <code>String</code> or loaded from a resource
- * bundle. In its simplest form, the description consists of a semicolon-delimited list of <em>rules.</em>
- * Each rule has a string of output text and a value or range of values it is applicable to.
- * In a typical spellout rule set, the first twenty rules are the words for the numbers from
- * 0 to 19:</p>
+ * bundle. In its simplest form, the description consists of a semicolon-delimited list of
+ * <em>rules.</em> Each rule has a string of output text and a value or range of values it is
+ * applicable to. In a typical spellout rule set, the first twenty rules are the words for the
+ * numbers from 0 to 19:
  *
  * <pre>zero; one; two; three; four; five; six; seven; eight; nine;
  * ten; eleven; twelve; thirteen; fourteen; fifteen; sixteen; seventeen; eighteen; nineteen;</pre>
  *
- * <p>For larger numbers, we can use the preceding set of rules to format the ones place, and
- * we only have to supply the words for the multiples of 10:</p>
+ * <p>For larger numbers, we can use the preceding set of rules to format the ones place, and we
+ * only have to supply the words for the multiples of 10:
  *
  * <pre>
  * 20: twenty[-&gt;&gt;];
@@ -71,43 +67,41 @@ import com.ibm.icu.util.UResourceBundleIterator;
  * 80: eighty[-&gt;&gt;];
  * 90: ninety[-&gt;&gt;];</pre>
  *
- * <p>In these rules, the <em>base value</em> is spelled out explicitly and set off from the
- * rule's output text with a colon. The rules are in a sorted list, and a rule is applicable
- * to all numbers from its own base value to one less than the next rule's base value. The
- * &quot;&gt;&gt;&quot; token is called a <em>substitution</em> and tells the formatter to
- * isolate the number's ones digit, format it using this same set of rules, and place the
- * result at the position of the &quot;&gt;&gt;&quot; token. Text in brackets is omitted if
- * the number being formatted is an even multiple of 10 (the hyphen is a literal hyphen; 24
- * is &quot;twenty-four,&quot; not &quot;twenty four&quot;).</p>
+ * <p>In these rules, the <em>base value</em> is spelled out explicitly and set off from the rule's
+ * output text with a colon. The rules are in a sorted list, and a rule is applicable to all numbers
+ * from its own base value to one less than the next rule's base value. The &quot;&gt;&gt;&quot;
+ * token is called a <em>substitution</em> and tells the formatter to isolate the number's ones
+ * digit, format it using this same set of rules, and place the result at the position of the
+ * &quot;&gt;&gt;&quot; token. Text in brackets is omitted if the number being formatted is an even
+ * multiple of 10 (the hyphen is a literal hyphen; 24 is &quot;twenty-four,&quot; not &quot;twenty
+ * four&quot;).
  *
- * <p>For even larger numbers, we can actually look up several parts of the number in the
- * list:</p>
+ * <p>For even larger numbers, we can actually look up several parts of the number in the list:
  *
  * <pre>
  * 100: &lt;&lt; hundred[ &gt;&gt;];</pre>
  *
- * <p>The &quot;&lt;&lt;&quot; represents a new kind of substitution. The &lt;&lt; isolates
- * the hundreds digit (and any digits to its left), formats it using this same rule set, and
- * places the result where the &quot;&lt;&lt;&quot; was. Notice also that the meaning of
- * &gt;&gt; has changed: it now refers to both the tens and the ones digits. The meaning of
- * both substitutions depends on the rule's base value. The base value determines the rule's <em>divisor,</em>
- * which is the highest power of 10 that is less than or equal to the base value (the user
- * can change this). To fill in the substitutions, the formatter divides the number being
- * formatted by the divisor. The integral quotient is used to fill in the &lt;&lt;
- * substitution, and the remainder is used to fill in the &gt;&gt; substitution. The meaning
- * of the brackets changes similarly: text in brackets is omitted if the value being
- * formatted is an even multiple of the rule's divisor. The rules are applied recursively, so
- * if a substitution is filled in with text that includes another substitution, that
- * substitution is also filled in.</p>
+ * <p>The &quot;&lt;&lt;&quot; represents a new kind of substitution. The &lt;&lt; isolates the
+ * hundreds digit (and any digits to its left), formats it using this same rule set, and places the
+ * result where the &quot;&lt;&lt;&quot; was. Notice also that the meaning of &gt;&gt; has changed:
+ * it now refers to both the tens and the ones digits. The meaning of both substitutions depends on
+ * the rule's base value. The base value determines the rule's <em>divisor,</em> which is the
+ * highest power of 10 that is less than or equal to the base value (the user can change this). To
+ * fill in the substitutions, the formatter divides the number being formatted by the divisor. The
+ * integral quotient is used to fill in the &lt;&lt; substitution, and the remainder is used to fill
+ * in the &gt;&gt; substitution. The meaning of the brackets changes similarly: text in brackets is
+ * omitted if the value being formatted is an even multiple of the rule's divisor. The rules are
+ * applied recursively, so if a substitution is filled in with text that includes another
+ * substitution, that substitution is also filled in.
  *
- * <p>This rule covers values up to 999, at which point we add another rule:</p>
+ * <p>This rule covers values up to 999, at which point we add another rule:
  *
  * <pre>
  * 1000: &lt;&lt; thousand[ &gt;&gt;];</pre>
  *
- * <p>Just like the 100 rule, the meanings of the brackets and substitution tokens shift because the rule's
- * base value is a higher power of 10, changing the rule's divisor. This rule can actually be
- * used all the way up to 999,999. This allows us to finish out the rules as follows:</p>
+ * <p>Just like the 100 rule, the meanings of the brackets and substitution tokens shift because the
+ * rule's base value is a higher power of 10, changing the rule's divisor. This rule can actually be
+ * used all the way up to 999,999. This allows us to finish out the rules as follows:
  *
  * <pre>
  * 1,000,000: &lt;&lt; million[ &gt;&gt;];
@@ -115,16 +109,16 @@ import com.ibm.icu.util.UResourceBundleIterator;
  * 1,000,000,000,000: &lt;&lt; trillion[ &gt;&gt;];
  * 1,000,000,000,000,000: OUT OF RANGE!;</pre>
  *
- * <p>Commas, periods, and spaces can be used in the base values to improve legibility and
- * are ignored by the rule parser. The last rule in the list is customarily treated as an
- * &quot;overflow rule&quot;, applying to everything from its base value on up, and often (as
- * in this example) being used to print out an error message or default representation.
- * Notice also that the size of the major groupings in large numbers is controlled by the
- * spacing of the rules: because in English we group numbers by thousand, the higher rules
- * are separated from each other by a factor of 1,000.</p>
+ * <p>Commas, periods, and spaces can be used in the base values to improve legibility and are
+ * ignored by the rule parser. The last rule in the list is customarily treated as an &quot;overflow
+ * rule&quot;, applying to everything from its base value on up, and often (as in this example)
+ * being used to print out an error message or default representation. Notice also that the size of
+ * the major groupings in large numbers is controlled by the spacing of the rules: because in
+ * English we group numbers by thousand, the higher rules are separated from each other by a factor
+ * of 1,000.
  *
- * <p>To see how these rules actually work in practice, consider the following example.
- * Formatting 25,340 with this rule set would work like this:</p>
+ * <p>To see how these rules actually work in practice, consider the following example. Formatting
+ * 25,340 with this rule set would work like this:
  *
  * <table style="border-collapse: collapse;">
  *   <tr>
@@ -154,60 +148,57 @@ import com.ibm.icu.util.UResourceBundleIterator;
  *   </tr>
  * </table>
  *
- * <p>The above syntax suffices only to format positive integers. To format negative numbers,
- * we add a special rule:</p>
+ * <p>The above syntax suffices only to format positive integers. To format negative numbers, we add
+ * a special rule:
  *
  * <pre>-x: minus &gt;&gt;;</pre>
  *
- * <p>This is called a <em>negative-number rule,</em> and is identified by &quot;-x&quot;
- * where the base value would be. This rule is used to format all negative numbers. the
- * &gt;&gt; token here means &quot;find the number's absolute value, format it with these
- * rules, and put the result here.&quot;</p>
+ * <p>This is called a <em>negative-number rule,</em> and is identified by &quot;-x&quot; where the
+ * base value would be. This rule is used to format all negative numbers. the &gt;&gt; token here
+ * means &quot;find the number's absolute value, format it with these rules, and put the result
+ * here.&quot;
  *
- * <p>We also add a special rule called a <em>fraction rule</em> for numbers with fractional
- * parts:</p>
+ * <p>We also add a special rule called a <em>fraction rule</em> for numbers with fractional parts:
  *
  * <pre>x.x: &lt;&lt; point &gt;&gt;;</pre>
  *
  * <p>This rule is used for all positive non-integers (negative non-integers pass through the
- * negative-number rule first and then through this rule). Here, the &lt;&lt; token refers to
- * the number's integral part, and the &gt;&gt; to the number's fractional part. The
- * fractional part is formatted as a series of single-digit numbers (e.g., 123.456 would be
- * formatted as &quot;one hundred twenty-three point four five six&quot;).</p>
+ * negative-number rule first and then through this rule). Here, the &lt;&lt; token refers to the
+ * number's integral part, and the &gt;&gt; to the number's fractional part. The fractional part is
+ * formatted as a series of single-digit numbers (e.g., 123.456 would be formatted as &quot;one
+ * hundred twenty-three point four five six&quot;).
  *
- * <p>To see how this rule syntax is applied to various languages, examine the resource data.</p>
+ * <p>To see how this rule syntax is applied to various languages, examine the resource data.
  *
- * <p>There is actually much more flexibility built into the rule language than the
- * description above shows. A formatter may own multiple rule sets, which can be selected by
- * the caller, and which can use each other to fill in their substitutions. Substitutions can
- * also be filled in with digits, using a DecimalFormat object. There is syntax that can be
- * used to alter a rule's divisor in various ways. And there is provision for much more
- * flexible fraction handling. A complete description of the rule syntax follows:</p>
+ * <p>There is actually much more flexibility built into the rule language than the description
+ * above shows. A formatter may own multiple rule sets, which can be selected by the caller, and
+ * which can use each other to fill in their substitutions. Substitutions can also be filled in with
+ * digits, using a DecimalFormat object. There is syntax that can be used to alter a rule's divisor
+ * in various ways. And there is provision for much more flexible fraction handling. A complete
+ * description of the rule syntax follows: <hr>
  *
- * <hr>
- *
- * <p>The description of a <code>RuleBasedNumberFormat</code>'s behavior consists of one or more <em>rule
- * sets.</em> Each rule set consists of a name, a colon, and a list of <em>rules</em>. A rule
- * set name must begin with a % sign. Rule sets with a name that begins with a single % sign
- * are <em>public</em>, and that name can be referenced to format and parse numbers.
- * Rule sets with names that begin with %% are <em>private.</em>. They exist only for the use
- * of other rule sets. If a formatter only has one rule set, the name may be omitted.</p>
+ * <p>The description of a <code>RuleBasedNumberFormat</code>'s behavior consists of one or more
+ * <em>rule sets.</em> Each rule set consists of a name, a colon, and a list of <em>rules</em>. A
+ * rule set name must begin with a % sign. Rule sets with a name that begins with a single % sign
+ * are <em>public</em>, and that name can be referenced to format and parse numbers. Rule sets with
+ * names that begin with %% are <em>private.</em>. They exist only for the use of other rule sets.
+ * If a formatter only has one rule set, the name may be omitted.
  *
  * <p>The user can also specify a special &quot;rule set&quot; named <code>%%lenient-parse</code>.
- * The body of <code>%%lenient-parse</code> isn't a set of number-formatting rules, but a <code>RuleBasedCollator</code>
- * description which is used to define equivalences for lenient parsing. For more information
- * on the syntax, see <code>RuleBasedCollator</code>. For more information on lenient parsing,
- * see <code>setLenientParse()</code>. <em>Note:</em> symbols that have syntactic meaning
- * in collation rules, such as '&amp;', have no particular meaning when appearing outside
- * of the <code>lenient-parse</code> rule set.</p>
+ * The body of <code>%%lenient-parse</code> isn't a set of number-formatting rules, but a <code>
+ * RuleBasedCollator</code> description which is used to define equivalences for lenient parsing.
+ * For more information on the syntax, see <code>RuleBasedCollator</code>. For more information on
+ * lenient parsing, see <code>setLenientParse()</code>. <em>Note:</em> symbols that have syntactic
+ * meaning in collation rules, such as '&amp;', have no particular meaning when appearing outside of
+ * the <code>lenient-parse</code> rule set.
  *
  * <p>The body of a rule set consists of an ordered, semicolon-delimited list of <em>rules.</em>
- * Internally, every rule has a base value, a divisor, rule text, and zero, one, or two <em>substitutions.</em>
- * These parameters are controlled by the description syntax, which consists of a <em>rule
- * descriptor,</em> a colon, and a <em>rule body.</em></p>
+ * Internally, every rule has a base value, a divisor, rule text, and zero, one, or two
+ * <em>substitutions.</em> These parameters are controlled by the description syntax, which consists
+ * of a <em>rule descriptor,</em> a colon, and a <em>rule body.</em>
  *
- * <p>A rule descriptor can take one of the following forms (text in <em>italics</em> is the
- * name of a token):</p>
+ * <p>A rule descriptor can take one of the following forms (text in <em>italics</em> is the name of
+ * a token):
  *
  * <table style="border-collapse: collapse;">
  *   <tr>
@@ -296,62 +287,58 @@ import com.ibm.icu.util.UResourceBundleIterator;
  *   </tr>
  * </table>
  *
- * <p>A rule set may be either a regular rule set or a <em>fraction rule set,</em> depending
- * on whether it is used to format a number's integral part (or the whole number) or a
- * number's fractional part. Using a rule set to format a rule's fractional part makes it a
- * fraction rule set.</p>
+ * <p>A rule set may be either a regular rule set or a <em>fraction rule set,</em> depending on
+ * whether it is used to format a number's integral part (or the whole number) or a number's
+ * fractional part. Using a rule set to format a rule's fractional part makes it a fraction rule
+ * set.
  *
- * <p>Which rule is used to format a number is defined according to one of the following
- * algorithms: If the rule set is a regular rule set, do the following:
+ * <p>Which rule is used to format a number is defined according to one of the following algorithms:
+ * If the rule set is a regular rule set, do the following:
  *
  * <ul>
- *   <li>If the rule set includes a default rule (and the number was passed in as a <code>double</code>),
- *     use the default rule. If the number being formatted was passed in as a <code>long</code>,
- *     the default rule is ignored.</li>
- *   <li>If the number is negative, use the negative-number rule.</li>
- *   <li>If the number has a fractional part and is greater than 1, use the improper fraction
- *     rule.</li>
- *   <li>If the number has a fractional part and is between 0 and 1, use the proper fraction
- *     rule.</li>
- *   <li>Binary-search the rule list for the rule with the highest base value less than or equal
- *     to the number. If that rule has two substitutions, its base value is not an even multiple
- *     of its divisor, and the number <em>is</em> an even multiple of the rule's divisor, use the
- *     rule that precedes it in the rule list. Otherwise, use the rule itself.</li>
+ *   <li>If the rule set includes a default rule (and the number was passed in as a <code>double
+ *       </code>), use the default rule. If the number being formatted was passed in as a <code>long
+ *       </code>, the default rule is ignored.
+ *   <li>If the number is negative, use the negative-number rule.
+ *   <li>If the number has a fractional part and is greater than 1, use the improper fraction rule.
+ *   <li>If the number has a fractional part and is between 0 and 1, use the proper fraction rule.
+ *   <li>Binary-search the rule list for the rule with the highest base value less than or equal to
+ *       the number. If that rule has two substitutions, its base value is not an even multiple of
+ *       its divisor, and the number <em>is</em> an even multiple of the rule's divisor, use the
+ *       rule that precedes it in the rule list. Otherwise, use the rule itself.
  * </ul>
  *
  * <p>If the rule set is a fraction rule set, do the following:
  *
  * <ul>
- *   <li>Ignore negative-number and fraction rules.</li>
+ *   <li>Ignore negative-number and fraction rules.
  *   <li>For each rule in the list, multiply the number being formatted (which will always be
- *     between 0 and 1) by the rule's base value. Keep track of the distance between the result
- *     the nearest integer.</li>
+ *       between 0 and 1) by the rule's base value. Keep track of the distance between the result
+ *       the nearest integer.
  *   <li>Use the rule that produced the result closest to zero in the above calculation. In the
- *     event of a tie or a direct hit, use the first matching rule encountered. (The idea here is
- *     to try each rule's base value as a possible denominator of a fraction. Whichever
- *     denominator produces the fraction closest in value to the number being formatted wins.) If
- *     the rule following the matching rule has the same base value, use it if the numerator of
- *     the fraction is anything other than 1; if the numerator is 1, use the original matching
- *     rule. (This is to allow singular and plural forms of the rule text without a lot of extra
- *     hassle.)</li>
+ *       event of a tie or a direct hit, use the first matching rule encountered. (The idea here is
+ *       to try each rule's base value as a possible denominator of a fraction. Whichever
+ *       denominator produces the fraction closest in value to the number being formatted wins.) If
+ *       the rule following the matching rule has the same base value, use it if the numerator of
+ *       the fraction is anything other than 1; if the numerator is 1, use the original matching
+ *       rule. (This is to allow singular and plural forms of the rule text without a lot of extra
+ *       hassle.)
  * </ul>
  *
- * <p>A rule's body consists of a string of characters terminated by a semicolon. The rule
- * may include zero, one, or two <em>substitution tokens,</em> and a range of text in
- * brackets. The brackets denote optional text (and may also include one or both
- * substitutions). The exact meanings of the substitution tokens, and under what conditions
- * optional text is omitted, depend on the syntax of the substitution token and the context.
- * The rest of the text in a rule body is literal text that is output when the rule matches
- * the number being formatted.</p>
+ * <p>A rule's body consists of a string of characters terminated by a semicolon. The rule may
+ * include zero, one, or two <em>substitution tokens,</em> and a range of text in brackets. The
+ * brackets denote optional text (and may also include one or both substitutions). The exact
+ * meanings of the substitution tokens, and under what conditions optional text is omitted, depend
+ * on the syntax of the substitution token and the context. The rest of the text in a rule body is
+ * literal text that is output when the rule matches the number being formatted.
  *
- * <p>A substitution token begins and ends with a <em>token character.</em> The token
- * character and the context together specify a mathematical operation to be performed on the
- * number being formatted. An optional <em>substitution descriptor </em>specifies how the
- * value resulting from that operation is used to fill in the substitution. The position of
- * the substitution token in the rule body specifies the location of the resultant text in
- * the original rule text.</p>
+ * <p>A substitution token begins and ends with a <em>token character.</em> The token character and
+ * the context together specify a mathematical operation to be performed on the number being
+ * formatted. An optional <em>substitution descriptor </em>specifies how the value resulting from
+ * that operation is used to fill in the substitution. The position of the substitution token in the
+ * rule body specifies the location of the resultant text in the original rule text.
  *
- * <p>The meanings of the substitution token characters are as follows:</p>
+ * <p>The meanings of the substitution token characters are as follows:
  *
  * <table style="border-collapse: collapse;">
  *   <tr>
@@ -493,8 +480,8 @@ import com.ibm.icu.util.UResourceBundleIterator;
  *   </tr>
  * </table>
  *
- * <p>The substitution descriptor (i.e., the text between the token characters) may take one
- * of three forms:</p>
+ * <p>The substitution descriptor (i.e., the text between the token characters) may take one of
+ * three forms:
  *
  * <table style="border-collapse: collapse;">
  *   <tr>
@@ -525,20 +512,18 @@ import com.ibm.icu.util.UResourceBundleIterator;
  *   </tr>
  * </table>
  *
- * <p>Whitespace is ignored between a rule set name and a rule set body, between a rule
- * descriptor and a rule body, or between rules. If a rule body begins with an apostrophe,
- * the apostrophe is ignored, but all text after it becomes significant (this is how you can
- * have a rule's rule text begin with whitespace). There is no escape function: the semicolon
- * is not allowed in rule set names or in rule text, and the colon is not allowed in rule set
- * names. The characters beginning a substitution token are always treated as the beginning
- * of a substitution token.</p>
+ * <p>Whitespace is ignored between a rule set name and a rule set body, between a rule descriptor
+ * and a rule body, or between rules. If a rule body begins with an apostrophe, the apostrophe is
+ * ignored, but all text after it becomes significant (this is how you can have a rule's rule text
+ * begin with whitespace). There is no escape function: the semicolon is not allowed in rule set
+ * names or in rule text, and the colon is not allowed in rule set names. The characters beginning a
+ * substitution token are always treated as the beginning of a substitution token.
  *
- * <p>See the resource data and the demo program for annotated examples of real rule sets
- * using these features.</p>
+ * <p>See the resource data and the demo program for annotated examples of real rule sets using
+ * these features.
  *
- * <p><em>User subclasses are not supported.</em> While clients may write
- * subclasses, such code will not necessarily work and will not be
- * guaranteed to work stably from release to release.
+ * <p><em>User subclasses are not supported.</em> While clients may write subclasses, such code will
+ * not necessarily work and will not be guaranteed to work stably from release to release.
  *
  * @author Richard Gillam
  * @see NumberFormat
@@ -549,75 +534,71 @@ import com.ibm.icu.util.UResourceBundleIterator;
  */
 public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     // constants
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
 
     // Generated by serialver from JDK 1.4.1_01
     private static final long serialVersionUID = -7664252765575395068L;
 
     /**
      * Selector code that tells the constructor to create a spellout formatter
+     *
      * @stable ICU 2.0
      */
     public static final int SPELLOUT = 1;
 
     /**
      * Selector code that tells the constructor to create an ordinal formatter
+     *
      * @stable ICU 2.0
      */
     public static final int ORDINAL = 2;
 
     /**
      * Selector code that tells the constructor to create a duration formatter
+     *
      * @deprecated ICU 74 Use MeasureFormat instead.
      */
-    @Deprecated
-    public static final int DURATION = 3;
+    @Deprecated public static final int DURATION = 3;
 
     /**
      * Selector code that tells the constructor to create a numbering system formatter
+     *
      * @stable ICU 4.2
      */
     public static final int NUMBERING_SYSTEM = 4;
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     // data members
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
 
-    /**
-     * The formatter's rule sets.
-     */
+    /** The formatter's rule sets. */
     private transient NFRuleSet[] ruleSets = null;
 
-    /**
-     * The formatter's rule names mapped to rule sets.
-     */
+    /** The formatter's rule names mapped to rule sets. */
     private transient Map<String, NFRuleSet> ruleSetsMap = null;
 
-    /**
-     * A pointer to the formatter's default rule set.  This is always included
-     * in ruleSets.
-     */
+    /** A pointer to the formatter's default rule set. This is always included in ruleSets. */
     private transient NFRuleSet defaultRuleSet = null;
 
     /**
-     * The formatter's locale.  This is used to create DecimalFormatSymbols and
-     * Collator objects.
+     * The formatter's locale. This is used to create DecimalFormatSymbols and Collator objects.
+     *
      * @serial
      */
     private ULocale locale = null;
 
     /**
      * The formatter's rounding mode.
+     *
      * @serial
      */
     private int roundingMode = BigDecimal.ROUND_UNNECESSARY;
 
     /**
-     * Collator to be used in lenient parsing.  This variable is lazy-evaluated:
-     * the collator is actually created the first time the client does a parse
-     * with lenient-parse mode turned on.
+     * Collator to be used in lenient parsing. This variable is lazy-evaluated: the collator is
+     * actually created the first time the client does a parse with lenient-parse mode turned on.
      */
     private transient RbnfLenientScannerProvider scannerProvider = null;
 
@@ -625,87 +606,86 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
     private transient boolean lookedForScanner;
 
     /**
-     * The DecimalFormatSymbols object that any DecimalFormat objects this
-     * formatter uses should use.  This variable is lazy-evaluated: it isn't
-     * filled in if the rule set never uses a DecimalFormat pattern.
+     * The DecimalFormatSymbols object that any DecimalFormat objects this formatter uses should
+     * use. This variable is lazy-evaluated: it isn't filled in if the rule set never uses a
+     * DecimalFormat pattern.
      */
     private transient DecimalFormatSymbols decimalFormatSymbols = null;
 
     /**
-     * The NumberFormat used when lenient parsing numbers.  This needs to reflect
-     * the locale.  This is lazy-evaluated, like decimalFormatSymbols.  It is
-     * here so it can be shared by different NFSubstitutions.
+     * The NumberFormat used when lenient parsing numbers. This needs to reflect the locale. This is
+     * lazy-evaluated, like decimalFormatSymbols. It is here so it can be shared by different
+     * NFSubstitutions.
      */
     private transient DecimalFormat decimalFormat = null;
 
     /**
-     * The rule used when dealing with infinity. This is lazy-evaluated, and derived from decimalFormat.
-     * It is here so it can be shared by different NFRuleSets.
+     * The rule used when dealing with infinity. This is lazy-evaluated, and derived from
+     * decimalFormat. It is here so it can be shared by different NFRuleSets.
      */
     private transient NFRule defaultInfinityRule = null;
 
     /**
-     * The rule used when dealing with IEEE 754 NaN. This is lazy-evaluated, and derived from decimalFormat.
-     * It is here so it can be shared by different NFRuleSets.
+     * The rule used when dealing with IEEE 754 NaN. This is lazy-evaluated, and derived from
+     * decimalFormat. It is here so it can be shared by different NFRuleSets.
      */
     private transient NFRule defaultNaNRule = null;
 
     /**
-     * Flag specifying whether lenient parse mode is on or off.  Off by default.
+     * Flag specifying whether lenient parse mode is on or off. Off by default.
+     *
      * @serial
      */
     private boolean lenientParse = false;
 
     /**
-     * If the description specifies lenient-parse rules, they're stored here until
-     * the collator is created.
+     * If the description specifies lenient-parse rules, they're stored here until the collator is
+     * created.
      */
     private transient String lenientParseRules;
 
     /**
-     * If the description specifies post-process rules, they're stored here until
-     * post-processing is required.
+     * If the description specifies post-process rules, they're stored here until post-processing is
+     * required.
      */
     private transient String postProcessRules;
 
-    /**
-     * Post processor lazily constructed from the postProcessRules.
-     */
+    /** Post processor lazily constructed from the postProcessRules. */
     private transient RBNFPostProcessor postProcessor;
 
     /**
      * Localizations for rule set names.
+     *
      * @serial
      */
     private Map<String, String[]> ruleSetDisplayNames;
 
     /**
      * The public rule set names;
+     *
      * @serial
      */
     private String[] publicRuleSetNames;
 
-    /**
-     * Data for handling context-based capitalization
-     */
+    /** Data for handling context-based capitalization */
     private boolean capitalizationInfoIsSet = false;
+
     private boolean capitalizationForListOrMenu = false;
     private boolean capitalizationForStandAlone = false;
     private transient BreakIterator capitalizationBrkIter = null;
 
+    private static final boolean DEBUG = ICUDebug.enabled("rbnf");
 
-    private static final boolean DEBUG  =  ICUDebug.enabled("rbnf");
-
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     // constructors
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
 
     /**
-     * Creates a RuleBasedNumberFormat that behaves according to the description
-     * passed in.  The formatter uses the default <code>FORMAT</code> locale.
-     * @param description A description of the formatter's desired behavior.
-     * See the class documentation for a complete explanation of the description
-     * syntax.
+     * Creates a RuleBasedNumberFormat that behaves according to the description passed in. The
+     * formatter uses the default <code>FORMAT</code> locale.
+     *
+     * @param description A description of the formatter's desired behavior. See the class
+     *     documentation for a complete explanation of the description syntax.
      * @see Category#FORMAT
      * @stable ICU 2.0
      */
@@ -715,24 +695,20 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
     }
 
     /**
-     * Creates a RuleBasedNumberFormat that behaves according to the description
-     * passed in.  The formatter uses the default <code>FORMAT</code> locale.
-     * <p>
-     * The localizations data provides information about the public
-     * rule sets and their localized display names for different
-     * locales. The first element in the list is an array of the names
-     * of the public rule sets.  The first element in this array is
-     * the initial default ruleset.  The remaining elements in the
-     * list are arrays of localizations of the names of the public
-     * rule sets.  Each of these is one longer than the initial array,
-     * with the first String being the ULocale ID, and the remaining
-     * Strings being the localizations of the rule set names, in the
+     * Creates a RuleBasedNumberFormat that behaves according to the description passed in. The
+     * formatter uses the default <code>FORMAT</code> locale.
+     *
+     * <p>The localizations data provides information about the public rule sets and their localized
+     * display names for different locales. The first element in the list is an array of the names
+     * of the public rule sets. The first element in this array is the initial default ruleset. The
+     * remaining elements in the list are arrays of localizations of the names of the public rule
+     * sets. Each of these is one longer than the initial array, with the first String being the
+     * ULocale ID, and the remaining Strings being the localizations of the rule set names, in the
      * same order as the initial array.
-     * @param description A description of the formatter's desired behavior.
-     * See the class documentation for a complete explanation of the description
-     * syntax.
-     * @param localizations a list of localizations for the rule set
-     * names in the description.
+     *
+     * @param description A description of the formatter's desired behavior. See the class
+     *     documentation for a complete explanation of the description syntax.
+     * @param localizations a list of localizations for the rule set names in the description.
      * @see Category#FORMAT
      * @stable ICU 3.2
      */
@@ -742,16 +718,14 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
     }
 
     /**
-     * Creates a RuleBasedNumberFormat that behaves according to the description
-     * passed in.  The formatter uses the specified locale to determine the
-     * characters to use when formatting in numerals, and to define equivalences
-     * for lenient parsing.
-     * @param description A description of the formatter's desired behavior.
-     * See the class documentation for a complete explanation of the description
-     * syntax.
-     * @param locale A locale, which governs which characters are used for
-     * formatting values in numerals, and which characters are equivalent in
-     * lenient parsing.
+     * Creates a RuleBasedNumberFormat that behaves according to the description passed in. The
+     * formatter uses the specified locale to determine the characters to use when formatting in
+     * numerals, and to define equivalences for lenient parsing.
+     *
+     * @param description A description of the formatter's desired behavior. See the class
+     *     documentation for a complete explanation of the description syntax.
+     * @param locale A locale, which governs which characters are used for formatting values in
+     *     numerals, and which characters are equivalent in lenient parsing.
      * @stable ICU 2.0
      */
     public RuleBasedNumberFormat(String description, Locale locale) {
@@ -759,16 +733,14 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
     }
 
     /**
-     * Creates a RuleBasedNumberFormat that behaves according to the description
-     * passed in.  The formatter uses the specified locale to determine the
-     * characters to use when formatting in numerals, and to define equivalences
-     * for lenient parsing.
-     * @param description A description of the formatter's desired behavior.
-     * See the class documentation for a complete explanation of the description
-     * syntax.
-     * @param locale A locale, which governs which characters are used for
-     * formatting values in numerals, and which characters are equivalent in
-     * lenient parsing.
+     * Creates a RuleBasedNumberFormat that behaves according to the description passed in. The
+     * formatter uses the specified locale to determine the characters to use when formatting in
+     * numerals, and to define equivalences for lenient parsing.
+     *
+     * @param description A description of the formatter's desired behavior. See the class
+     *     documentation for a complete explanation of the description syntax.
+     * @param locale A locale, which governs which characters are used for formatting values in
+     *     numerals, and which characters are equivalent in lenient parsing.
      * @stable ICU 3.2
      */
     public RuleBasedNumberFormat(String description, ULocale locale) {
@@ -777,28 +749,23 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
     }
 
     /**
-     * Creates a RuleBasedNumberFormat that behaves according to the description
-     * passed in.  The formatter uses the specified locale to determine the
-     * characters to use when formatting in numerals, and to define equivalences
-     * for lenient parsing.
-     * <p>
-     * The localizations data provides information about the public
-     * rule sets and their localized display names for different
-     * locales. The first element in the list is an array of the names
-     * of the public rule sets.  The first element in this array is
-     * the initial default ruleset.  The remaining elements in the
-     * list are arrays of localizations of the names of the public
-     * rule sets.  Each of these is one longer than the initial array,
-     * with the first String being the ULocale ID, and the remaining
-     * Strings being the localizations of the rule set names, in the
+     * Creates a RuleBasedNumberFormat that behaves according to the description passed in. The
+     * formatter uses the specified locale to determine the characters to use when formatting in
+     * numerals, and to define equivalences for lenient parsing.
+     *
+     * <p>The localizations data provides information about the public rule sets and their localized
+     * display names for different locales. The first element in the list is an array of the names
+     * of the public rule sets. The first element in this array is the initial default ruleset. The
+     * remaining elements in the list are arrays of localizations of the names of the public rule
+     * sets. Each of these is one longer than the initial array, with the first String being the
+     * ULocale ID, and the remaining Strings being the localizations of the rule set names, in the
      * same order as the initial array.
-     * @param description A description of the formatter's desired behavior.
-     * See the class documentation for a complete explanation of the description
-     * syntax.
+     *
+     * @param description A description of the formatter's desired behavior. See the class
+     *     documentation for a complete explanation of the description syntax.
      * @param localizations a list of localizations for the rule set names in the description.
-     * @param locale A ULocale that governs which characters are used for
-     * formatting values in numerals, and determines which characters are equivalent in
-     * lenient parsing.
+     * @param locale A ULocale that governs which characters are used for formatting values in
+     *     numerals, and determines which characters are equivalent in lenient parsing.
      * @stable ICU 3.2
      */
     public RuleBasedNumberFormat(String description, String[][] localizations, ULocale locale) {
@@ -807,15 +774,15 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
     }
 
     /**
-     * Creates a RuleBasedNumberFormat from a predefined description.  The selector
-     * code chooses among three possible predefined formats: spellout, ordinal,
-     * and duration.
+     * Creates a RuleBasedNumberFormat from a predefined description. The selector code chooses
+     * among three possible predefined formats: spellout, ordinal, and duration.
+     *
      * @param locale The locale for the formatter.
-     * @param format A selector code specifying which kind of formatter to create for that
-     * locale.  There are three legal values: SPELLOUT, which creates a formatter that
-     * spells out a value in words in the desired language, ORDINAL, which attaches
-     * an ordinal suffix from the desired language to the end of a number (e.g. "123rd"),
-     * and DURATION, which formats a duration in seconds as hours, minutes, and seconds.
+     * @param format A selector code specifying which kind of formatter to create for that locale.
+     *     There are three legal values: SPELLOUT, which creates a formatter that spells out a value
+     *     in words in the desired language, ORDINAL, which attaches an ordinal suffix from the
+     *     desired language to the end of a number (e.g. "123rd"), and DURATION, which formats a
+     *     duration in seconds as hours, minutes, and seconds.
      * @stable ICU 2.0
      */
     public RuleBasedNumberFormat(Locale locale, int format) {
@@ -823,24 +790,25 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
     }
 
     /**
-     * Creates a RuleBasedNumberFormat from a predefined description.  The selector
-     * code chooses among three possible predefined formats: spellout, ordinal,
-     * and duration.
+     * Creates a RuleBasedNumberFormat from a predefined description. The selector code chooses
+     * among three possible predefined formats: spellout, ordinal, and duration.
+     *
      * @param locale The locale for the formatter.
-     * @param format A selector code specifying which kind of formatter to create for that
-     * locale.  There are four legal values: SPELLOUT, which creates a formatter that
-     * spells out a value in words in the desired language, ORDINAL, which attaches
-     * an ordinal suffix from the desired language to the end of a number (e.g. "123rd"),
-     * DURATION, which formats a duration in seconds as hours, minutes, and seconds, and
-     * NUMBERING_SYSTEM, which is used to invoke rules for alternate numbering
-     * systems such as the Hebrew numbering system, or for Roman numerals, etc..
+     * @param format A selector code specifying which kind of formatter to create for that locale.
+     *     There are four legal values: SPELLOUT, which creates a formatter that spells out a value
+     *     in words in the desired language, ORDINAL, which attaches an ordinal suffix from the
+     *     desired language to the end of a number (e.g. "123rd"), DURATION, which formats a
+     *     duration in seconds as hours, minutes, and seconds, and NUMBERING_SYSTEM, which is used
+     *     to invoke rules for alternate numbering systems such as the Hebrew numbering system, or
+     *     for Roman numerals, etc..
      * @stable ICU 3.2
      */
     public RuleBasedNumberFormat(ULocale locale, int format) {
         this.locale = locale;
 
-        ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.
-            getBundleInstance(ICUData.ICU_RBNF_BASE_NAME, locale);
+        ICUResourceBundle bundle =
+                (ICUResourceBundle)
+                        UResourceBundle.getBundleInstance(ICUData.ICU_RBNF_BASE_NAME, locale);
 
         // TODO: determine correct actual/valid locale.  Note ambiguity
         // here -- do actual/valid refer to pattern, DecimalFormatSymbols,
@@ -852,13 +820,12 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
         String[][] localizations = null;
 
         try {
-            ICUResourceBundle rules = bundle.getWithFallback("RBNFRules/"+rulenames[format-1]);
+            ICUResourceBundle rules = bundle.getWithFallback("RBNFRules/" + rulenames[format - 1]);
             UResourceBundleIterator it = rules.getIterator();
             while (it.hasNext()) {
-               description.append(it.nextString());
+                description.append(it.nextString());
             }
-        }
-        catch (MissingResourceException e1) {
+        } catch (MissingResourceException e1) {
         }
 
         // We use findTopLevel() instead of get() because
@@ -879,18 +846,22 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
         "SpelloutRules", "OrdinalRules", "DurationRules", "NumberingSystemRules",
     };
     private static final String[] locnames = {
-        "SpelloutLocalizations", "OrdinalLocalizations", "DurationLocalizations", "NumberingSystemLocalizations",
+        "SpelloutLocalizations",
+        "OrdinalLocalizations",
+        "DurationLocalizations",
+        "NumberingSystemLocalizations",
     };
 
     /**
-     * Creates a RuleBasedNumberFormat from a predefined description.  Uses the
-     * default <code>FORMAT</code> locale.
-     * @param format A selector code specifying which kind of formatter to create.
-     * There are three legal values: SPELLOUT, which creates a formatter that spells
-     * out a value in words in the default locale's language, ORDINAL, which attaches
-     * an ordinal suffix from the default locale's language to a numeral, and
-     * DURATION, which formats a duration in seconds as hours, minutes, and seconds always rounding down.
-     * or NUMBERING_SYSTEM, which is used for alternate numbering systems such as Hebrew.
+     * Creates a RuleBasedNumberFormat from a predefined description. Uses the default <code>FORMAT
+     * </code> locale.
+     *
+     * @param format A selector code specifying which kind of formatter to create. There are three
+     *     legal values: SPELLOUT, which creates a formatter that spells out a value in words in the
+     *     default locale's language, ORDINAL, which attaches an ordinal suffix from the default
+     *     locale's language to a numeral, and DURATION, which formats a duration in seconds as
+     *     hours, minutes, and seconds always rounding down. or NUMBERING_SYSTEM, which is used for
+     *     alternate numbering systems such as Hebrew.
      * @see Category#FORMAT
      * @stable ICU 2.0
      */
@@ -898,12 +869,13 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
         this(ULocale.getDefault(Category.FORMAT), format);
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     // boilerplate
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
 
     /**
      * Duplicates this formatter.
+     *
      * @return A RuleBasedNumberFormat that is equal to this one.
      * @stable ICU 2.0
      */
@@ -914,6 +886,7 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
 
     /**
      * Tests two RuleBasedNumberFormats for equality.
+     *
      * @param that The formatter to compare against this one.
      * @return true if the two formatters have identical behavior.
      * @stable ICU 2.0
@@ -930,7 +903,7 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
         } else {
             // cast the other object's pointer to a pointer to a
             // RuleBasedNumberFormat
-            RuleBasedNumberFormat that2 = (RuleBasedNumberFormat)that;
+            RuleBasedNumberFormat that2 = (RuleBasedNumberFormat) that;
 
             // compare their locales and lenient-parse modes
             if (!locale.equals(that2.locale) || lenientParse != that2.lenientParse) {
@@ -953,6 +926,7 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
 
     /**
      * {@inheritDoc}
+     *
      * @stable ICU 2.0
      */
     @Override
@@ -962,10 +936,10 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
 
     /**
      * Generates a textual description of this formatter.
-     * @return a String containing a rule set that will produce a RuleBasedNumberFormat
-     * with identical behavior to this one.  This won't necessarily be identical
-     * to the rule set description that was originally passed in, but will produce
-     * the same result.
+     *
+     * @return a String containing a rule set that will produce a RuleBasedNumberFormat with
+     *     identical behavior to this one. This won't necessarily be identical to the rule set
+     *     description that was originally passed in, but will produce the same result.
      * @stable ICU 2.0
      */
     @Override
@@ -982,10 +956,10 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
 
     /**
      * Writes this object to a stream.
+     *
      * @param out The stream to write to.
      */
-    private void writeObject(java.io.ObjectOutputStream out)
-        throws java.io.IOException {
+    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
         // we just write the textual description to the stream, so we
         // have an implementation-independent streaming format
         out.writeUTF(this.toString());
@@ -995,10 +969,10 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
 
     /**
      * Reads this object in from a stream.
+     *
      * @param in The stream to read from.
      */
-    private void readObject(java.io.ObjectInputStream in)
-        throws java.io.IOException {
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException {
 
         // read the description in from the stream
         String description = in.readUTF();
@@ -1030,13 +1004,13 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
         defaultNaNRule = temp.defaultNaNRule;
     }
 
-
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     // public API functions
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
 
     /**
      * Returns a list of the names of all of this formatter's public rule sets.
+     *
      * @return A list of the names of all of this formatter's public rule sets.
      * @stable ICU 2.0
      */
@@ -1045,8 +1019,9 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
     }
 
     /**
-     * Return a list of locales for which there are locale-specific display names
-     * for the rule sets in this formatter.  If there are no localized display names, return null.
+     * Return a list of locales for which there are locale-specific display names for the rule sets
+     * in this formatter. If there are no localized display names, return null.
+     *
      * @return an array of the ULocales for which there is rule set display name information
      * @stable ICU 3.2
      */
@@ -1066,7 +1041,9 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
 
     private String[] getNameListForLocale(ULocale loc) {
         if (loc != null && ruleSetDisplayNames != null) {
-            String[] localeNames = { loc.getBaseName(), ULocale.getDefault(Category.DISPLAY).getBaseName() };
+            String[] localeNames = {
+                loc.getBaseName(), ULocale.getDefault(Category.DISPLAY).getBaseName()
+            };
             for (String lname : localeNames) {
                 while (lname.length() > 0) {
                     String[] names = ruleSetDisplayNames.get(lname);
@@ -1081,11 +1058,11 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
     }
 
     /**
-     * Return the rule set display names for the provided locale.  These are in the same order
-     * as those returned by getRuleSetNames.  The locale is matched against the locales for
-     * which there is display name data, using normal fallback rules.  If no locale matches,
-     * the default display names are returned.  (These are the internal rule set names minus
-     * the leading '%'.)
+     * Return the rule set display names for the provided locale. These are in the same order as
+     * those returned by getRuleSetNames. The locale is matched against the locales for which there
+     * is display name data, using normal fallback rules. If no locale matches, the default display
+     * names are returned. (These are the internal rule set names minus the leading '%'.)
+     *
      * @return an array of the locales that have display name information
      * @see #getRuleSetNames
      * @stable ICU 3.2
@@ -1104,6 +1081,7 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
 
     /**
      * Return the rule set display names for the current default <code>DISPLAY</code> locale.
+     *
      * @return an array of the display names
      * @see #getRuleSetDisplayNames(ULocale)
      * @see Category#DISPLAY
@@ -1114,9 +1092,10 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
     }
 
     /**
-     * Return the rule set display name for the provided rule set and locale.
-     * The locale is matched against the locales for which there is display name data, using
-     * normal fallback rules.  If no locale matches, the default display name is returned.
+     * Return the rule set display name for the provided rule set and locale. The locale is matched
+     * against the locales for which there is display name data, using normal fallback rules. If no
+     * locale matches, the default display name is returned.
+     *
      * @return the display name for the rule set
      * @see #getRuleSetDisplayNames
      * @throws IllegalArgumentException if ruleSetName is not a valid rule set name for this format
@@ -1137,7 +1116,9 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
     }
 
     /**
-     * Return the rule set display name for the provided rule set in the current default <code>DISPLAY</code> locale.
+     * Return the rule set display name for the provided rule set in the current default <code>
+     * DISPLAY</code> locale.
+     *
      * @return the display name for the rule set
      * @see #getRuleSetDisplayName(String,ULocale)
      * @see Category#DISPLAY
@@ -1149,9 +1130,10 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
 
     /**
      * Formats the specified number according to the specified rule set.
+     *
      * @param number The number to format.
-     * @param ruleSet The name of the rule set to format the number with.
-     * This must be the name of a valid public rule set for this formatter.
+     * @param ruleSet The name of the rule set to format the number with. This must be the name of a
+     *     valid public rule set for this formatter.
      * @return A textual representation of the number.
      * @stable ICU 2.0
      */
@@ -1163,14 +1145,14 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
     }
 
     /**
-     * Formats the specified number according to the specified rule set.
-     * (If the specified rule set specifies a default ["x.0"] rule, this function
-     * ignores it.  Convert the number to a double first if you need it.)  This
-     * function preserves all the precision in the long-- it doesn't convert it
-     * to a double.
+     * Formats the specified number according to the specified rule set. (If the specified rule set
+     * specifies a default ["x.0"] rule, this function ignores it. Convert the number to a double
+     * first if you need it.) This function preserves all the precision in the long-- it doesn't
+     * convert it to a double.
+     *
      * @param number The number to format.
-     * @param ruleSet The name of the rule set to format the number with.
-     * This must be the name of a valid public rule set for this formatter.
+     * @param ruleSet The name of the rule set to format the number with. This must be the name of a
+     *     valid public rule set for this formatter.
      * @return A textual representation of the number.
      * @stable ICU 2.0
      */
@@ -1182,8 +1164,9 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
     }
 
     /**
-     * Formats the specified number using the formatter's default rule set.
-     * (The default rule set is the last public rule set defined in the description.)
+     * Formats the specified number using the formatter's default rule set. (The default rule set is
+     * the last public rule set defined in the description.)
+     *
      * @param number The number to format.
      * @param toAppendTo A StringBuffer that the result should be appended to.
      * @param ignore This function doesn't examine or update the field position.
@@ -1191,9 +1174,7 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
      * @stable ICU 2.0
      */
     @Override
-    public StringBuffer format(double number,
-                               StringBuffer toAppendTo,
-                               FieldPosition ignore) {
+    public StringBuffer format(double number, StringBuffer toAppendTo, FieldPosition ignore) {
         // this is one of the inherited format() methods.  Since it doesn't
         // have a way to select the rule set to use, it just uses the
         // default one
@@ -1208,12 +1189,12 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
     }
 
     /**
-     * Formats the specified number using the formatter's default rule set.
-     * (The default rule set is the last public rule set defined in the description.)
-     * (If the specified rule set specifies a default ["x.0"] rule, this function
-     * ignores it.  Convert the number to a double first if you need it.)  This
-     * function preserves all the precision in the long-- it doesn't convert it
-     * to a double.
+     * Formats the specified number using the formatter's default rule set. (The default rule set is
+     * the last public rule set defined in the description.) (If the specified rule set specifies a
+     * default ["x.0"] rule, this function ignores it. Convert the number to a double first if you
+     * need it.) This function preserves all the precision in the long-- it doesn't convert it to a
+     * double.
+     *
      * @param number The number to format.
      * @param toAppendTo A StringBuffer that the result should be appended to.
      * @param ignore This function doesn't examine or update the field position.
@@ -1221,9 +1202,7 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
      * @stable ICU 2.0
      */
     @Override
-    public StringBuffer format(long number,
-                               StringBuffer toAppendTo,
-                               FieldPosition ignore) {
+    public StringBuffer format(long number, StringBuffer toAppendTo, FieldPosition ignore) {
         // this is one of the inherited format() methods.  Since it doesn't
         // have a way to select the rule set to use, it just uses the
         // default one
@@ -1237,44 +1216,42 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
     }
 
     /**
-     * <strong style="font-family: helvetica; color: red;">NEW</strong>
-     * Implement com.ibm.icu.text.NumberFormat:
-     * Format a BigInteger.
+     * <strong style="font-family: helvetica; color: red;">NEW</strong> Implement
+     * com.ibm.icu.text.NumberFormat: Format a BigInteger.
+     *
      * @stable ICU 2.0
      */
     @Override
-    public StringBuffer format(BigInteger number,
-                               StringBuffer toAppendTo,
-                               FieldPosition pos) {
+    public StringBuffer format(BigInteger number, StringBuffer toAppendTo, FieldPosition pos) {
         return format(new com.ibm.icu.math.BigDecimal(number), toAppendTo, pos);
     }
 
     /**
-     * <strong style="font-family: helvetica; color: red;">NEW</strong>
-     * Implement com.ibm.icu.text.NumberFormat:
-     * Format a BigDecimal.
+     * <strong style="font-family: helvetica; color: red;">NEW</strong> Implement
+     * com.ibm.icu.text.NumberFormat: Format a BigDecimal.
+     *
      * @stable ICU 2.0
      */
     @Override
-    public StringBuffer format(java.math.BigDecimal number,
-                               StringBuffer toAppendTo,
-                               FieldPosition pos) {
+    public StringBuffer format(
+            java.math.BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {
         return format(new com.ibm.icu.math.BigDecimal(number), toAppendTo, pos);
     }
 
-    private static final com.ibm.icu.math.BigDecimal MAX_VALUE = com.ibm.icu.math.BigDecimal.valueOf(Long.MAX_VALUE);
-    private static final com.ibm.icu.math.BigDecimal MIN_VALUE = com.ibm.icu.math.BigDecimal.valueOf(Long.MIN_VALUE);
+    private static final com.ibm.icu.math.BigDecimal MAX_VALUE =
+            com.ibm.icu.math.BigDecimal.valueOf(Long.MAX_VALUE);
+    private static final com.ibm.icu.math.BigDecimal MIN_VALUE =
+            com.ibm.icu.math.BigDecimal.valueOf(Long.MIN_VALUE);
 
     /**
-     * <strong style="font-family: helvetica; color: red;">NEW</strong>
-     * Implement com.ibm.icu.text.NumberFormat:
-     * Format a BigDecimal.
+     * <strong style="font-family: helvetica; color: red;">NEW</strong> Implement
+     * com.ibm.icu.text.NumberFormat: Format a BigDecimal.
+     *
      * @stable ICU 2.0
      */
     @Override
-    public StringBuffer format(com.ibm.icu.math.BigDecimal number,
-                               StringBuffer toAppendTo,
-                               FieldPosition pos) {
+    public StringBuffer format(
+            com.ibm.icu.math.BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {
         if (MIN_VALUE.compareTo(number) > 0 || MAX_VALUE.compareTo(number) < 0) {
             // We're outside of our normal range that this framework can handle.
             // The DecimalFormat will provide more accurate results.
@@ -1287,18 +1264,17 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
     }
 
     /**
-     * Parses the specified string, beginning at the specified position, according
-     * to this formatter's rules.  This will match the string against all of the
-     * formatter's public rule sets and return the value corresponding to the longest
-     * parseable substring.  This function's behavior is affected by the lenient
-     * parse mode.
+     * Parses the specified string, beginning at the specified position, according to this
+     * formatter's rules. This will match the string against all of the formatter's public rule sets
+     * and return the value corresponding to the longest parseable substring. This function's
+     * behavior is affected by the lenient parse mode.
+     *
      * @param text The string to parse
-     * @param parsePosition On entry, contains the position of the first character
-     * in "text" to examine.  On exit, has been updated to contain the position
-     * of the first character in "text" that wasn't consumed by the parse.
-     * @return The number that corresponds to the parsed text.  This will be an
-     * instance of either Long or Double, depending on whether the result has a
-     * fractional part.
+     * @param parsePosition On entry, contains the position of the first character in "text" to
+     *     examine. On exit, has been updated to contain the position of the first character in
+     *     "text" that wasn't consumed by the parse.
+     * @return The number that corresponds to the parsed text. This will be an instance of either
+     *     Long or Double, depending on whether the result has a fractional part.
      * @see #setLenientParseMode
      * @stable ICU 2.0
      */
@@ -1362,11 +1338,10 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
     /**
      * Turns lenient parse mode on and off.
      *
-     * When in lenient parse mode, the formatter uses an RbnfLenientScanner
-     * for parsing the text.  Lenient parsing is only in effect if a scanner
-     * is set.  If a provider is not set, and this is used for parsing,
-     * a default scanner <code>RbnfLenientScannerProviderImpl</code> will be set if
-     * it is available on the classpath.  Otherwise this will have no effect.
+     * <p>When in lenient parse mode, the formatter uses an RbnfLenientScanner for parsing the text.
+     * Lenient parsing is only in effect if a scanner is set. If a provider is not set, and this is
+     * used for parsing, a default scanner <code>RbnfLenientScannerProviderImpl</code> will be set
+     * if it is available on the classpath. Otherwise this will have no effect.
      *
      * @param enabled If true, turns lenient-parse mode on; if false, turns it off.
      * @see RbnfLenientScanner
@@ -1378,8 +1353,8 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
     }
 
     /**
-     * Returns true if lenient-parse mode is turned on.  Lenient parsing is off
-     * by default.
+     * Returns true if lenient-parse mode is turned on. Lenient parsing is off by default.
+     *
      * @return true if lenient-parse mode is turned on.
      * @see #setLenientParseMode
      * @stable ICU 2.0
@@ -1389,9 +1364,10 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
     }
 
     /**
-     * Sets the provider for the lenient scanner.  If this has not been set,
-     * {@link #setLenientParseMode}
-     * has no effect.  This is necessary to decouple collation from format code.
+     * Sets the provider for the lenient scanner. If this has not been set, {@link
+     * #setLenientParseMode} has no effect. This is necessary to decouple collation from format
+     * code.
+     *
      * @param scannerProvider the provider
      * @see #setLenientParseMode
      * @see #getLenientScannerProvider
@@ -1402,9 +1378,9 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
     }
 
     /**
-     * Returns the lenient scanner provider.  If none was set, and lenient parse is
-     * enabled, this will attempt to instantiate a default scanner, setting it if
-     * it was successful.  Otherwise this returns false.
+     * Returns the lenient scanner provider. If none was set, and lenient parse is enabled, this
+     * will attempt to instantiate a default scanner, setting it if it was successful. Otherwise
+     * this returns false.
      *
      * @see #setLenientScannerProvider
      * @stable ICU 4.4
@@ -1417,10 +1393,10 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
             try {
                 lookedForScanner = true;
                 Class<?> cls = Class.forName("com.ibm.icu.impl.text.RbnfScannerProviderImpl");
-                RbnfLenientScannerProvider provider = (RbnfLenientScannerProvider)cls.newInstance();
+                RbnfLenientScannerProvider provider =
+                        (RbnfLenientScannerProvider) cls.newInstance();
                 setLenientScannerProvider(provider);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 // any failure, we just ignore and return null
             }
         }
@@ -1429,8 +1405,9 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
     }
 
     /**
-     * Override the default rule set to use.  If ruleSetName is null, reset
-     * to the initial default rule set.
+     * Override the default rule set to use. If ruleSetName is null, reset to the initial default
+     * rule set.
+     *
      * @param ruleSetName the name of the rule set, or null to reset the initial default.
      * @throws IllegalArgumentException if ruleSetName is not the name of a public ruleset.
      * @stable ICU 2.0
@@ -1443,14 +1420,14 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
                 defaultRuleSet = null;
                 int n = ruleSets.length;
                 while (--n >= 0) {
-                   String currentName = ruleSets[n].getName();
-                   if (currentName.equals("%spellout-numbering") ||
-                       currentName.equals("%digits-ordinal") ||
-                       currentName.equals("%duration")) {
+                    String currentName = ruleSets[n].getName();
+                    if (currentName.equals("%spellout-numbering")
+                            || currentName.equals("%digits-ordinal")
+                            || currentName.equals("%duration")) {
 
-                       defaultRuleSet = ruleSets[n];
-                       return;
-                   }
+                        defaultRuleSet = ruleSets[n];
+                        return;
+                    }
                 }
 
                 n = ruleSets.length;
@@ -1470,6 +1447,7 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
 
     /**
      * Return the name of the current default rule set.
+     *
      * @return the name of the current default rule set, if it is public, else the empty string.
      * @stable ICU 3.0
      */
@@ -1511,9 +1489,8 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
     }
 
     /**
-     * {@icu} Set a particular DisplayContext value in the formatter,
-     * such as CAPITALIZATION_FOR_STANDALONE. Note: For getContext, see
-     * NumberFormat.
+     * {@icu} Set a particular DisplayContext value in the formatter, such as
+     * CAPITALIZATION_FOR_STANDALONE. Note: For getContext, see NumberFormat.
      *
      * @param context The DisplayContext value to set.
      * @stable ICU 53
@@ -1523,14 +1500,18 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
     @Override
     public void setContext(DisplayContext context) {
         super.setContext(context);
-        if (!capitalizationInfoIsSet &&
-              (context==DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU || context==DisplayContext.CAPITALIZATION_FOR_STANDALONE)) {
+        if (!capitalizationInfoIsSet
+                && (context == DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU
+                        || context == DisplayContext.CAPITALIZATION_FOR_STANDALONE)) {
             initCapitalizationContextInfo(locale);
             capitalizationInfoIsSet = true;
         }
-        if (capitalizationBrkIter == null && (context==DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE ||
-              (context==DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU && capitalizationForListOrMenu) ||
-              (context==DisplayContext.CAPITALIZATION_FOR_STANDALONE && capitalizationForStandAlone) )) {
+        if (capitalizationBrkIter == null
+                && (context == DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE
+                        || (context == DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU
+                                && capitalizationForListOrMenu)
+                        || (context == DisplayContext.CAPITALIZATION_FOR_STANDALONE
+                                && capitalizationForStandAlone))) {
             capitalizationBrkIter = BreakIterator.getSentenceInstance(locale);
         }
     }
@@ -1538,8 +1519,8 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
     /**
      * Returns the rounding mode.
      *
-     * @return A rounding mode, between <code>BigDecimal.ROUND_UP</code> and
-     * <code>BigDecimal.ROUND_UNNECESSARY</code>.
+     * @return A rounding mode, between <code>BigDecimal.ROUND_UP</code> and <code>
+     *     BigDecimal.ROUND_UNNECESSARY</code>.
      * @see #setRoundingMode
      * @see java.math.BigDecimal
      * @stable ICU 56
@@ -1550,11 +1531,11 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
     }
 
     /**
-     * Sets the rounding mode. This has no effect unless the rounding increment is greater
-     * than zero.
+     * Sets the rounding mode. This has no effect unless the rounding increment is greater than
+     * zero.
      *
-     * @param roundingMode A rounding mode, between <code>BigDecimal.ROUND_UP</code> and
-     * <code>BigDecimal.ROUND_UNNECESSARY</code>.
+     * @param roundingMode A rounding mode, between <code>BigDecimal.ROUND_UP</code> and <code>
+     *     BigDecimal.ROUND_UNNECESSARY</code>.
      * @exception IllegalArgumentException if <code>roundingMode</code> is unrecognized.
      * @see #getRoundingMode
      * @see java.math.BigDecimal
@@ -1569,15 +1550,14 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
         this.roundingMode = roundingMode;
     }
 
-
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     // package-internal API
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
 
     /**
-     * Returns a reference to the formatter's default rule set.  The default
-     * rule set is the last public rule set in the description, or the one
-     * most recently set by setDefaultRuleSet.
+     * Returns a reference to the formatter's default rule set. The default rule set is the last
+     * public rule set in the description, or the one most recently set by setDefaultRuleSet.
+     *
      * @return The formatter's default rule set.
      */
     NFRuleSet getDefaultRuleSet() {
@@ -1585,10 +1565,9 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
     }
 
     /**
-     * Returns the scanner to use for lenient parsing.  The scanner is
-     * provided by the provider.
-     * @return The collator to use for lenient parsing, or null if lenient parsing
-     * is turned off.
+     * Returns the scanner to use for lenient parsing. The scanner is provided by the provider.
+     *
+     * @return The collator to use for lenient parsing, or null if lenient parsing is turned off.
      */
     RbnfLenientScanner getLenientScanner() {
         if (lenientParse) {
@@ -1601,11 +1580,12 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
     }
 
     /**
-     * Returns the DecimalFormatSymbols object that should be used by all DecimalFormat
-     * instances owned by this formatter.  This object is lazily created: this function
-     * creates it the first time it's called.
-     * @return The DecimalFormatSymbols object that should be used by all DecimalFormat
-     * instances owned by this formatter.
+     * Returns the DecimalFormatSymbols object that should be used by all DecimalFormat instances
+     * owned by this formatter. This object is lazily created: this function creates it the first
+     * time it's called.
+     *
+     * @return The DecimalFormatSymbols object that should be used by all DecimalFormat instances
+     *     owned by this formatter.
      */
     DecimalFormatSymbols getDecimalFormatSymbols() {
         // lazy-evaluate the DecimalFormatSymbols object.  This object
@@ -1631,19 +1611,20 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
     }
 
     /**
-     * Returns the default rule for infinity. This object is lazily created: this function
-     * creates it the first time it's called.
+     * Returns the default rule for infinity. This object is lazily created: this function creates
+     * it the first time it's called.
      */
     NFRule getDefaultInfinityRule() {
         if (defaultInfinityRule == null) {
-            defaultInfinityRule = new NFRule(this, "Inf: " + getDecimalFormatSymbols().getInfinity());
+            defaultInfinityRule =
+                    new NFRule(this, "Inf: " + getDecimalFormatSymbols().getInfinity());
         }
         return defaultInfinityRule;
     }
 
     /**
-     * Returns the default rule for NaN. This object is lazily created: this function
-     * creates it the first time it's called.
+     * Returns the default rule for NaN. This object is lazily created: this function creates it the
+     * first time it's called.
      */
     NFRule getDefaultNaNRule() {
         if (defaultNaNRule == null) {
@@ -1652,17 +1633,17 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
         return defaultNaNRule;
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     // construction implementation
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
 
     /**
-     * This extracts the special information from the rule sets before the
-     * main parsing starts.  Extra whitespace must have already been removed
-     * from the description.  If found, the special information is removed from the
-     * description and returned, otherwise the description is unchanged and null
-     * is returned.  Note: the trailing semicolon at the end of the special
-     * rules is stripped.
+     * This extracts the special information from the rule sets before the main parsing starts.
+     * Extra whitespace must have already been removed from the description. If found, the special
+     * information is removed from the description and returned, otherwise the description is
+     * unchanged and null is returned. Note: the trailing semicolon at the end of the special rules
+     * is stripped.
+     *
      * @param description the rbnf description with extra whitespace removed
      * @param specialName the name of the special rule text to extract
      * @return the special rule text, or null if the rule was not found
@@ -1684,8 +1665,7 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
                     lpEnd = description.length() - 1; // later we add 1 back to get the '%'
                 }
                 int lpStart = lp + specialName.length();
-                while (lpStart < lpEnd &&
-                       PatternProps.isWhiteSpace(description.charAt(lpStart))) {
+                while (lpStart < lpEnd && PatternProps.isWhiteSpace(description.charAt(lpStart))) {
                     ++lpStart;
                 }
 
@@ -1693,19 +1673,19 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
                 result = description.substring(lpStart, lpEnd);
 
                 // remove the special rule from the description
-                description.delete(lp, lpEnd+1); // delete the semicolon but not the '%'
+                description.delete(lp, lpEnd + 1); // delete the semicolon but not the '%'
             }
         }
         return result;
     }
 
     /**
-     * This function parses the description and uses it to build all of the
-     * internal data structures that the formatter uses to do formatting
-     * @param description The description of the formatter's desired behavior.
-     * This is either passed in by the caller or loaded out of a resource
-     * by one of the constructors, and is in the description format specified
-     * in the class docs.
+     * This function parses the description and uses it to build all of the internal data structures
+     * that the formatter uses to do formatting
+     *
+     * @param description The description of the formatter's desired behavior. This is either passed
+     *     in by the caller or loaded out of a resource by one of the constructors, and is in the
+     *     description format specified in the class docs.
      */
     private void init(String description, String[][] localizations) {
         initLocalizations(localizations);
@@ -1768,11 +1748,9 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
             ruleSetsMap.put(currentName, ruleSet);
             if (!currentName.startsWith("%%")) {
                 ++publicRuleSetCount;
-                if (defaultRuleSet == null
-                        && currentName.equals("%spellout-numbering")
+                if (defaultRuleSet == null && currentName.equals("%spellout-numbering")
                         || currentName.equals("%digits-ordinal")
-                        || currentName.equals("%duration"))
-                {
+                        || currentName.equals("%duration")) {
                     defaultRuleSet = ruleSet;
                 }
             }
@@ -1826,7 +1804,8 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
         if (publicRuleSetNames != null) {
             // confirm the names, if any aren't in the rules, that's an error
             // it is ok if the rules contain public rule sets that are not in this list
-            loop: for (int i = 0; i < publicRuleSetNames.length; ++i) {
+            loop:
+            for (int i = 0; i < publicRuleSetNames.length; ++i) {
                 String name = publicRuleSetNames[i];
                 for (int j = 0; j < publicRuleSetTemp.length; ++j) {
                     if (name.equals(publicRuleSetTemp[j])) {
@@ -1843,8 +1822,8 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
     }
 
     /**
-     * Take the localizations array and create a Map from the locale strings to
-     * the localization arrays.
+     * Take the localizations array and create a Map from the locale strings to the localization
+     * arrays.
      */
     private void initLocalizations(String[][] localizations) {
         if (localizations != null) {
@@ -1854,10 +1833,15 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
             for (int i = 1; i < localizations.length; ++i) {
                 String[] data = localizations[i];
                 String loc = data[0];
-                String[] names = new String[data.length-1];
+                String[] names = new String[data.length - 1];
                 if (names.length != publicRuleSetNames.length) {
-                    throw new IllegalArgumentException("public name length: " + publicRuleSetNames.length +
-                                                       " != localized names[" + i + "] length: " + names.length);
+                    throw new IllegalArgumentException(
+                            "public name length: "
+                                    + publicRuleSetNames.length
+                                    + " != localized names["
+                                    + i
+                                    + "] length: "
+                                    + names.length);
                 }
                 System.arraycopy(data, 1, names, 0, names.length);
                 m.put(loc, names);
@@ -1869,11 +1853,11 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
         }
     }
 
-    /**
-     * Set capitalizationForListOrMenu, capitalizationForStandAlone
-     */
+    /** Set capitalizationForListOrMenu, capitalizationForStandAlone */
     private void initCapitalizationContextInfo(ULocale theLocale) {
-        ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, theLocale);
+        ICUResourceBundle rb =
+                (ICUResourceBundle)
+                        UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, theLocale);
         try {
             ICUResourceBundle rdb = rb.getWithFallback("contextTransforms/number-spellout");
             int[] intVector = rdb.getIntVector();
@@ -1887,11 +1871,10 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
     }
 
     /**
-     * This function is used by init() to strip whitespace between rules (i.e.,
-     * after semicolons).
+     * This function is used by init() to strip whitespace between rules (i.e., after semicolons).
+     *
      * @param description The formatter description
-     * @return The description with all the whitespace that follows semicolons
-     * taken out.
+     * @return The description with all the whitespace that follows semicolons taken out.
      */
     private StringBuilder stripWhitespace(String description) {
         // since we don't have a method that deletes characters (why?!!)
@@ -1906,8 +1889,7 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
             // Seek to the first non-whitespace character...
             // If the first non-whitespace character is semicolon, skip it and continue
             while (start < descriptionLength
-                   && (PatternProps.isWhiteSpace(ch = description.charAt(start)) || ch == ';'))
-            {
+                    && (PatternProps.isWhiteSpace(ch = description.charAt(start)) || ch == ';')) {
                 ++start;
             }
 
@@ -1919,8 +1901,7 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
                 // the string into the result
                 result.append(description, start, descriptionLength);
                 break;
-            }
-            else if (p < descriptionLength) {
+            } else if (p < descriptionLength) {
                 int end = p + 1;
                 result.append(description, start, end);
                 start = end;
@@ -1933,14 +1914,14 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
         return result;
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     // formatting implementation
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
 
     /**
-     * Bottleneck through which all the public format() methods
-     * that take a double pass. By the time we get here, we know
-     * which rule set we're using to do the formatting.
+     * Bottleneck through which all the public format() methods that take a double pass. By the time
+     * we get here, we know which rule set we're using to do the formatting.
+     *
      * @param number The number to format
      * @param ruleSet The rule set to use to format the number
      * @return The text that resulted from formatting the number
@@ -1952,9 +1933,14 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
         // position of 0 and the number being formatted) to the rule set
         // for formatting
         StringBuilder result = new StringBuilder();
-        if (getRoundingMode() != BigDecimal.ROUND_UNNECESSARY && !Double.isNaN(number) && !Double.isInfinite(number)) {
+        if (getRoundingMode() != BigDecimal.ROUND_UNNECESSARY
+                && !Double.isNaN(number)
+                && !Double.isInfinite(number)) {
             // We convert to a string because BigDecimal insists on excessive precision.
-            number = new BigDecimal(Double.toString(number)).setScale(getMaximumFractionDigits(), roundingMode).doubleValue();
+            number =
+                    new BigDecimal(Double.toString(number))
+                            .setScale(getMaximumFractionDigits(), roundingMode)
+                            .doubleValue();
         }
         ruleSet.format(number, result, 0, 0);
         postProcess(result, ruleSet);
@@ -1962,9 +1948,9 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
     }
 
     /**
-     * Bottleneck through which all the public format() methods
-     * that take a long pass. By the time we get here, we know
-     * which rule set we're using to do the formatting.
+     * Bottleneck through which all the public format() methods that take a long pass. By the time
+     * we get here, we know which rule set we're using to do the formatting.
+     *
      * @param number The number to format
      * @param ruleSet The rule set to use to format the number
      * @return The text that resulted from formatting the number
@@ -1984,17 +1970,14 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
         if (number == Long.MIN_VALUE) {
             // We can't handle this value right now. Provide an accurate default value.
             result.append(getDecimalFormat().format(Long.MIN_VALUE));
-        }
-        else {
+        } else {
             ruleSet.format(number, result, 0, 0);
         }
         postProcess(result, ruleSet);
         return result.toString();
     }
 
-    /**
-     * Post-process the rules if we have a post-processor.
-     */
+    /** Post-process the rules if we have a post-processor. */
     private void postProcess(StringBuilder result, NFRuleSet ruleSet) {
         if (postProcessRules != null) {
             if (postProcessor == null) {
@@ -2005,13 +1988,18 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
                 String ppClassName = postProcessRules.substring(0, ix).trim();
                 try {
                     Class<?> cls = Class.forName(ppClassName);
-                    postProcessor = (RBNFPostProcessor)cls.newInstance();
+                    postProcessor = (RBNFPostProcessor) cls.newInstance();
                     postProcessor.init(this, postProcessRules);
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     // if debug, print it out
-                    if (DEBUG) System.out.println("could not locate " + ppClassName + ", error " +
-                                       e.getClass().getName() + ", " + e.getMessage());
+                    if (DEBUG)
+                        System.out.println(
+                                "could not locate "
+                                        + ppClassName
+                                        + ", error "
+                                        + e.getClass().getName()
+                                        + ", "
+                                        + e.getMessage());
                     postProcessor = null;
                     postProcessRules = null; // don't try again
                     return;
@@ -2022,31 +2010,37 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
         }
     }
 
-    /**
-     * Adjust capitalization of formatted result for display context
-     */
+    /** Adjust capitalization of formatted result for display context */
     private String adjustForContext(String result) {
         DisplayContext capitalization = getContext(DisplayContext.Type.CAPITALIZATION);
-        if (capitalization != DisplayContext.CAPITALIZATION_NONE && result != null && result.length() > 0
-            && UCharacter.isLowerCase(result.codePointAt(0)))
-        {
-            if (  capitalization==DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE ||
-                  (capitalization == DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU && capitalizationForListOrMenu) ||
-                  (capitalization == DisplayContext.CAPITALIZATION_FOR_STANDALONE && capitalizationForStandAlone) ) {
+        if (capitalization != DisplayContext.CAPITALIZATION_NONE
+                && result != null
+                && result.length() > 0
+                && UCharacter.isLowerCase(result.codePointAt(0))) {
+            if (capitalization == DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE
+                    || (capitalization == DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU
+                            && capitalizationForListOrMenu)
+                    || (capitalization == DisplayContext.CAPITALIZATION_FOR_STANDALONE
+                            && capitalizationForStandAlone)) {
                 if (capitalizationBrkIter == null) {
                     // should only happen when deserializing, etc.
                     capitalizationBrkIter = BreakIterator.getSentenceInstance(locale);
                 }
-                return UCharacter.toTitleCase(locale, result, capitalizationBrkIter,
-                                UCharacter.TITLECASE_NO_LOWERCASE | UCharacter.TITLECASE_NO_BREAK_ADJUSTMENT);
+                return UCharacter.toTitleCase(
+                        locale,
+                        result,
+                        capitalizationBrkIter,
+                        UCharacter.TITLECASE_NO_LOWERCASE
+                                | UCharacter.TITLECASE_NO_BREAK_ADJUSTMENT);
             }
         }
         return result;
     }
 
     /**
-     * Returns the named rule set.  Throws an IllegalArgumentException
-     * if this formatter doesn't have a rule set with that name.
+     * Returns the named rule set. Throws an IllegalArgumentException if this formatter doesn't have
+     * a rule set with that name.
+     *
      * @param name The name of the desired rule set
      * @return The rule set with that name
      */

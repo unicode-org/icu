@@ -8,6 +8,11 @@
  */
 package com.ibm.icu.impl;
 
+import com.ibm.icu.impl.number.range.StandardPluralRanges;
+import com.ibm.icu.text.PluralRules;
+import com.ibm.icu.text.PluralRules.PluralType;
+import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.UResourceBundle;
 import java.text.ParseException;
 import java.util.Collections;
 import java.util.HashMap;
@@ -18,15 +23,7 @@ import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.TreeMap;
 
-import com.ibm.icu.impl.number.range.StandardPluralRanges;
-import com.ibm.icu.text.PluralRules;
-import com.ibm.icu.text.PluralRules.PluralType;
-import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.UResourceBundle;
-
-/**
- * Loader for plural rules data.
- */
+/** Loader for plural rules data. */
 public class PluralRulesLoader extends PluralRules.Factory {
     // Key is rules set + ranges set
     private final Map<String, PluralRules> pluralRulesCache;
@@ -35,29 +32,22 @@ public class PluralRulesLoader extends PluralRules.Factory {
     private Map<String, String> localeIdToOrdinalRulesId;
     private Map<String, ULocale> rulesIdToEquivalentULocale;
 
-
-    /**
-     * Access through singleton.
-     */
+    /** Access through singleton. */
     private PluralRulesLoader() {
         pluralRulesCache = new HashMap<String, PluralRules>();
     }
 
-    /**
-     * Returns the locales for which we have plurals data. Utility for testing.
-     */
+    /** Returns the locales for which we have plurals data. Utility for testing. */
     public ULocale[] getAvailableULocales() {
         Set<String> keys = getLocaleIdToRulesIdMap(PluralType.CARDINAL).keySet();
         Set<ULocale> locales = new LinkedHashSet<ULocale>(keys.size());
-        for (Iterator<String> iter = keys.iterator(); iter.hasNext();) {
+        for (Iterator<String> iter = keys.iterator(); iter.hasNext(); ) {
             locales.add(ULocale.createCanonical(iter.next()));
         }
         return locales.toArray(new ULocale[0]);
     }
 
-    /**
-     * Returns the functionally equivalent locale.
-     */
+    /** Returns the functionally equivalent locale. */
     public ULocale getFunctionalEquivalent(ULocale locale, boolean[] isAvailable) {
         if (isAvailable != null && isAvailable.length > 0) {
             String localeId = ULocale.canonicalize(locale.getBaseName());
@@ -70,8 +60,7 @@ public class PluralRulesLoader extends PluralRules.Factory {
             return ULocale.ROOT; // ultimate fallback
         }
 
-        ULocale result = getRulesIdToEquivalentULocaleMap().get(
-                rulesId);
+        ULocale result = getRulesIdToEquivalentULocaleMap().get(rulesId);
         if (result == null) {
             return ULocale.ROOT; // ultimate fallback
         }
@@ -79,26 +68,21 @@ public class PluralRulesLoader extends PluralRules.Factory {
         return result;
     }
 
-    /**
-     * Returns the lazily-constructed map.
-     */
+    /** Returns the lazily-constructed map. */
     private Map<String, String> getLocaleIdToRulesIdMap(PluralType type) {
         checkBuildRulesIdMaps();
         return (type == PluralType.CARDINAL) ? localeIdToCardinalRulesId : localeIdToOrdinalRulesId;
     }
 
-    /**
-     * Returns the lazily-constructed map.
-     */
+    /** Returns the lazily-constructed map. */
     private Map<String, ULocale> getRulesIdToEquivalentULocaleMap() {
         checkBuildRulesIdMaps();
         return rulesIdToEquivalentULocale;
     }
 
     /**
-     * Lazily constructs the localeIdToRulesId and rulesIdToEquivalentULocale
-     * maps if necessary. These exactly reflect the contents of the locales
-     * resource in plurals.res.
+     * Lazily constructs the localeIdToRulesId and rulesIdToEquivalentULocale maps if necessary.
+     * These exactly reflect the contents of the locales resource in plurals.res.
      */
     private void checkBuildRulesIdMaps() {
         boolean haveMap;
@@ -146,7 +130,7 @@ public class PluralRulesLoader extends PluralRules.Factory {
                 tempRulesIdToEquivalentULocale = Collections.emptyMap();
             }
 
-            synchronized(this) {
+            synchronized (this) {
                 if (localeIdToCardinalRulesId == null) {
                     localeIdToCardinalRulesId = tempLocaleIdToCardinalRulesId;
                     localeIdToOrdinalRulesId = tempLocaleIdToOrdinalRulesId;
@@ -157,9 +141,8 @@ public class PluralRulesLoader extends PluralRules.Factory {
     }
 
     /**
-     * Gets the rulesId from the locale,with locale fallback. If there is no
-     * rulesId, return null. The rulesId might be the empty string if the rule
-     * is the default rule.
+     * Gets the rulesId from the locale,with locale fallback. If there is no rulesId, return null.
+     * The rulesId might be the empty string if the rule is the default rule.
      */
     public String getRulesIdForLocale(ULocale locale, PluralType type) {
         Map<String, String> idMap = getLocaleIdToRulesIdMap(type);
@@ -175,10 +158,7 @@ public class PluralRulesLoader extends PluralRules.Factory {
         return rulesId;
     }
 
-    /**
-     * Gets the rule from the rulesId. If there is no rule for this rulesId,
-     * return null.
-     */
+    /** Gets the rule from the rulesId. If there is no rule for this rulesId, return null. */
     public PluralRules getOrCreateRulesForLocale(ULocale locale, PluralRules.PluralType type) {
         String rulesId = getRulesIdForLocale(locale, type);
         if (rulesId == null || rulesId.trim().length() == 0) {
@@ -188,11 +168,11 @@ public class PluralRulesLoader extends PluralRules.Factory {
         String cacheKey = rulesId + "/" + rangesId; // could end with "/null" (this is OK)
         // synchronize on the map.  release the lock temporarily while we build the rules.
         PluralRules rules = null;
-        boolean hasRules;  // Separate boolean because stored rules can be null.
+        boolean hasRules; // Separate boolean because stored rules can be null.
         synchronized (pluralRulesCache) {
             hasRules = pluralRulesCache.containsKey(cacheKey);
             if (hasRules) {
-                rules = pluralRulesCache.get(cacheKey);  // can be null
+                rules = pluralRulesCache.get(cacheKey); // can be null
             }
         }
         if (!hasRules) {
@@ -220,7 +200,7 @@ public class PluralRulesLoader extends PluralRules.Factory {
                 if (pluralRulesCache.containsKey(cacheKey)) {
                     rules = pluralRulesCache.get(cacheKey);
                 } else {
-                    pluralRulesCache.put(cacheKey, rules);  // can be null
+                    pluralRulesCache.put(cacheKey, rules); // can be null
                 }
             }
         }
@@ -228,13 +208,12 @@ public class PluralRulesLoader extends PluralRules.Factory {
     }
 
     /**
-     * Return the plurals resource. Note MissingResourceException is unchecked,
-     * listed here for clarity. Callers should handle this exception.
+     * Return the plurals resource. Note MissingResourceException is unchecked, listed here for
+     * clarity. Callers should handle this exception.
      */
     public UResourceBundle getPluralBundle() throws MissingResourceException {
         return ICUResourceBundle.getBundleInstance(
-                ICUData.ICU_BASE_NAME, "plurals",
-                ICUResourceBundle.ICU_DATA_CLASS_LOADER, true);
+                ICUData.ICU_BASE_NAME, "plurals", ICUResourceBundle.ICU_DATA_CLASS_LOADER, true);
     }
 
     /**
@@ -249,9 +228,7 @@ public class PluralRulesLoader extends PluralRules.Factory {
         return rules;
     }
 
-    /**
-     * The only instance of the loader.
-     */
+    /** The only instance of the loader. */
     public static final PluralRulesLoader loader = new PluralRulesLoader();
 
     /* (non-Javadoc)

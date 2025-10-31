@@ -12,7 +12,6 @@ import com.ibm.icu.util.Calendar;
 
 /**
  * @author srl
- *
  */
 public class CalendarFieldsSet extends FieldsSet {
 
@@ -21,15 +20,15 @@ public class CalendarFieldsSet extends FieldsSet {
      * @param fieldsCount
      */
     public CalendarFieldsSet() {
-        super(DebugUtilitiesData.UCalendarDateFields,-1);
+        super(DebugUtilitiesData.UCalendarDateFields, -1);
     }
 
-    public boolean  matches(Calendar cal, CalendarFieldsSet diffSet) {
+    public boolean matches(Calendar cal, CalendarFieldsSet diffSet) {
         boolean match = true;
-        for(int i=0;i<fieldCount();i++) {
-            if(isSet(i)) {
+        for (int i = 0; i < fieldCount(); i++) {
+            if (isSet(i)) {
                 int calVal = cal.get(i);
-                if(calVal != get(i)) {
+                if (calVal != get(i)) {
                     match = false;
                     diffSet.set(i, calVal);
                 }
@@ -42,8 +41,8 @@ public class CalendarFieldsSet extends FieldsSet {
      * set the specified fields on this calendar. Doesn't clear first. Returns any errors the cale
      */
     public void setOnCalendar(Calendar cal) {
-        for(int i=0;i<fieldCount();i++) {
-            if(isSet(i)) {
+        for (int i = 0; i < fieldCount(); i++) {
+            if (isSet(i)) {
                 cal.set(i, get(i));
             }
         }
@@ -51,7 +50,7 @@ public class CalendarFieldsSet extends FieldsSet {
 
     @Override
     protected void handleParseValue(FieldsSet inheritFrom, int field, String substr) {
-        if(field == Calendar.MONTH) {
+        if (field == Calendar.MONTH) {
             parseValueEnum(DebugUtilitiesData.UCalendarMonths, inheritFrom, field, substr);
             // will fallback to default.
         } else {

@@ -8,12 +8,17 @@
  */
 
 /**
- * Port From:   ICU4C v1.8.1 : format : IntlTestDecimalFormatAPI
- * Source File: $ICU4CRoot/source/test/intltest/dcfmapts.cpp
- **/
-
+ * Port From: ICU4C v1.8.1 : format : IntlTestDecimalFormatAPI Source File:
+ * $ICU4CRoot/source/test/intltest/dcfmapts.cpp
+ */
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
+import com.ibm.icu.text.CurrencyPluralInfo;
+import com.ibm.icu.text.DecimalFormat;
+import com.ibm.icu.text.DecimalFormatSymbols;
+import com.ibm.icu.text.NumberFormat;
+import com.ibm.icu.util.ULocale;
 import java.text.AttributedCharacterIterator;
 import java.text.FieldPosition;
 import java.text.Format;
@@ -22,17 +27,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
-import com.ibm.icu.dev.test.CoreTestFmwk;
-import com.ibm.icu.text.CurrencyPluralInfo;
-import com.ibm.icu.text.DecimalFormat;
-import com.ibm.icu.text.DecimalFormatSymbols;
-import com.ibm.icu.text.NumberFormat;
-import com.ibm.icu.util.ULocale;
 
 // This is an API test, not a unit test.  It doesn't test very many cases, and doesn't
 // try to test the full functionality.  It just calls each function in the class and
@@ -76,11 +73,12 @@ public class IntlTestDecimalFormatAPIC extends CoreTestFmwk {
         @SuppressWarnings("unused")
         DecimalFormat cust2 = null;
         try {
-            cust2 = new DecimalFormat(pattern, symbols, infoInput, NumberFormat.PLURALCURRENCYSTYLE);
+            cust2 =
+                    new DecimalFormat(
+                            pattern, symbols, infoInput, NumberFormat.PLURALCURRENCYSTYLE);
         } catch (IllegalArgumentException e) {
             errln("ERROR: Could not create DecimalFormat (pattern, symbols, infoInput, style)");
         }
-
 
         // ======= Test clone(), assignment, and equality
 
@@ -133,7 +131,12 @@ public class IntlTestDecimalFormatAPIC extends CoreTestFmwk {
         double d2 = pat.parse(text, pos).doubleValue();
         if (d2 != d) {
             errln(
-                "ERROR: Roundtrip failed (via parse(" + Double.toString(d2) + " != " + Double.toString(d) + ")) for " + text);
+                    "ERROR: Roundtrip failed (via parse("
+                            + Double.toString(d2)
+                            + " != "
+                            + Double.toString(d)
+                            + ")) for "
+                            + text);
         }
         logln(text + " parsed into " + (long) d2);
 
@@ -189,8 +192,7 @@ public class IntlTestDecimalFormatAPIC extends CoreTestFmwk {
 
         pat.setDecimalSeparatorAlwaysShown(true);
         boolean tf = pat.isDecimalSeparatorAlwaysShown();
-        logln(
-            "DecimalSeparatorIsAlwaysShown (should be true) is " + (tf ? "true" : "false"));
+        logln("DecimalSeparatorIsAlwaysShown (should be true) is " + (tf ? "true" : "false"));
         if (tf != true) {
             errln("ERROR: setDecimalSeparatorAlwaysShown() failed");
         }
@@ -204,13 +206,12 @@ public class IntlTestDecimalFormatAPIC extends CoreTestFmwk {
         logln("Localized pattern is " + locPat);
 
         pat.setCurrencyPluralInfo(infoInput);
-        if(!infoInput.equals(pat.getCurrencyPluralInfo())) {
+        if (!infoInput.equals(pat.getCurrencyPluralInfo())) {
             errln("ERROR: set/get CurrencyPluralInfo() failed");
         }
 
-
         pat.setCurrencyPluralInfo(infoInput);
-        if(!infoInput.equals(pat.getCurrencyPluralInfo())) {
+        if (!infoInput.equals(pat.getCurrencyPluralInfo())) {
             errln("ERROR: set/get CurrencyPluralInfo() failed");
         }
 
@@ -258,7 +259,7 @@ public class IntlTestDecimalFormatAPIC extends CoreTestFmwk {
     public void TestRounding() {
         double Roundingnumber = 2.55;
         double Roundingnumber1 = -2.55;
-        //+2.55 results   -2.55 results
+        // +2.55 results   -2.55 results
         double result[] = {
             3, -3,
             2, -2,
@@ -279,23 +280,30 @@ public class IntlTestDecimalFormatAPIC extends CoreTestFmwk {
         for (mode = 0; mode < 7; mode++) {
             pat.setRoundingMode(mode);
             if (pat.getRoundingMode() != mode) {
-                errln(
-                     "SetRoundingMode or GetRoundingMode failed for mode=" + mode);
+                errln("SetRoundingMode or GetRoundingMode failed for mode=" + mode);
             }
 
-            //for +2.55 with RoundingIncrement=1.0
+            // for +2.55 with RoundingIncrement=1.0
             pat.setRoundingIncrement(java.math.BigDecimal.ONE);
             resultStr = pat.format(Roundingnumber);
-            message = "round(" + Roundingnumber
-                    + "," + mode + ",false) with RoundingIncrement=1.0==>";
+            message =
+                    "round("
+                            + Roundingnumber
+                            + ","
+                            + mode
+                            + ",false) with RoundingIncrement=1.0==>";
             verify(message, resultStr, result[i++]);
             message = "";
             resultStr = "";
 
-            //for -2.55 with RoundingIncrement=1.0
+            // for -2.55 with RoundingIncrement=1.0
             resultStr = pat.format(Roundingnumber1);
-            message = "round(" + Roundingnumber1
-                    + "," + mode + ",false) with RoundingIncrement=1.0==>";
+            message =
+                    "round("
+                            + Roundingnumber1
+                            + ","
+                            + mode
+                            + ",false) with RoundingIncrement=1.0==>";
             verify(message, resultStr, result[i++]);
             message = "";
             resultStr = "";
@@ -311,12 +319,10 @@ public class IntlTestDecimalFormatAPIC extends CoreTestFmwk {
         Locale us = Locale.US;
 
         // test number instance
-        t_Format(1, number, NumberFormat.getNumberInstance(us),
-                getNumberVectorUS());
+        t_Format(1, number, NumberFormat.getNumberInstance(us), getNumberVectorUS());
 
         // test percent instance
-        t_Format(3, number, NumberFormat.getPercentInstance(us),
-                getPercentVectorUS());
+        t_Format(3, number, NumberFormat.getPercentInstance(us), getPercentVectorUS());
 
         // test permille pattern
         DecimalFormat format = new DecimalFormat("###0.##\u2030");
@@ -331,22 +337,22 @@ public class IntlTestDecimalFormatAPIC extends CoreTestFmwk {
         t_Format(6, number, format, getNegativeExponentVector());
 
         // test currency instance with US Locale
-        t_Format(7, number, NumberFormat.getCurrencyInstance(us),
-                getPositiveCurrencyVectorUS());
+        t_Format(7, number, NumberFormat.getCurrencyInstance(us), getPositiveCurrencyVectorUS());
 
         // test negative currency instance with US Locale
-        t_Format(8, negativeNumber, NumberFormat.getCurrencyInstance(us),
+        t_Format(
+                8,
+                negativeNumber,
+                NumberFormat.getCurrencyInstance(us),
                 getNegativeCurrencyVectorUS());
 
         // test multiple grouping separators
         number = 100300400L;
-        t_Format(11, number, NumberFormat.getNumberInstance(us),
-                getNumberVector2US());
+        t_Format(11, number, NumberFormat.getNumberInstance(us), getNumberVector2US());
 
         // test 0
         number = 0L;
-        t_Format(12, number, NumberFormat.getNumberInstance(us),
-                getZeroVector());
+        t_Format(12, number, NumberFormat.getNumberInstance(us), getZeroVector());
     }
 
     private static List<FieldContainer> getNumberVectorUS() {
@@ -357,20 +363,20 @@ public class IntlTestDecimalFormatAPIC extends CoreTestFmwk {
         return v;
     }
 
-//    private static Vector getPositiveCurrencyVectorTR() {
-//        Vector v = new Vector();
-//        v.add(new FieldContainer(0, 3, NumberFormat.Field.INTEGER));
-//        v.add(new FieldContainer(4, 6, NumberFormat.Field.CURRENCY));
-//        return v;
-//    }
-//
-//    private static Vector getNegativeCurrencyVectorTR() {
-//        Vector v = new Vector();
-//        v.add(new FieldContainer(0, 1, NumberFormat.Field.SIGN));
-//        v.add(new FieldContainer(1, 4, NumberFormat.Field.INTEGER));
-//        v.add(new FieldContainer(5, 7, NumberFormat.Field.CURRENCY));
-//        return v;
-//    }
+    //    private static Vector getPositiveCurrencyVectorTR() {
+    //        Vector v = new Vector();
+    //        v.add(new FieldContainer(0, 3, NumberFormat.Field.INTEGER));
+    //        v.add(new FieldContainer(4, 6, NumberFormat.Field.CURRENCY));
+    //        return v;
+    //    }
+    //
+    //    private static Vector getNegativeCurrencyVectorTR() {
+    //        Vector v = new Vector();
+    //        v.add(new FieldContainer(0, 1, NumberFormat.Field.SIGN));
+    //        v.add(new FieldContainer(1, 4, NumberFormat.Field.INTEGER));
+    //        v.add(new FieldContainer(5, 7, NumberFormat.Field.CURRENCY));
+    //        return v;
+    //    }
 
     private static List<FieldContainer> getPositiveCurrencyVectorUS() {
         List<FieldContainer> v = new ArrayList<FieldContainer>(4);
@@ -448,29 +454,29 @@ public class IntlTestDecimalFormatAPIC extends CoreTestFmwk {
         return v;
     }
 
-    private void t_Format(int count, Object object, Format format,
-            List<FieldContainer> expectedResults) {
+    private void t_Format(
+            int count, Object object, Format format, List<FieldContainer> expectedResults) {
         List<FieldContainer> results = findFields(format.formatToCharacterIterator(object));
-        assertTrue("Test " + count
-                + ": Format returned incorrect CharacterIterator for "
-                + format.format(object), compare(results, expectedResults));
+        assertTrue(
+                "Test "
+                        + count
+                        + ": Format returned incorrect CharacterIterator for "
+                        + format.format(object),
+                compare(results, expectedResults));
     }
 
-    /**
-     * compares two vectors regardless of the order of their elements
-     */
+    /** compares two vectors regardless of the order of their elements */
     private static boolean compare(List<FieldContainer> vector1, List<FieldContainer> vector2) {
         return vector1.size() == vector2.size() && vector1.containsAll(vector2);
     }
 
     /**
-     * finds attributes with regards to char index in this
-     * AttributedCharacterIterator, and puts them in a vector
+     * finds attributes with regards to char index in this AttributedCharacterIterator, and puts
+     * them in a vector
      *
      * @param iterator
-     * @return a vector, each entry in this vector are of type FieldContainer ,
-     *         which stores start and end indexes and an attribute this range
-     *         has
+     * @return a vector, each entry in this vector are of type FieldContainer , which stores start
+     *     and end indexes and an attribute this range has
      */
     private static List<FieldContainer> findFields(AttributedCharacterIterator iterator) {
         List<FieldContainer> result = new ArrayList<FieldContainer>();
@@ -478,10 +484,11 @@ public class IntlTestDecimalFormatAPIC extends CoreTestFmwk {
             int start = iterator.getRunStart();
             int end = iterator.getRunLimit();
 
-            Iterator<AttributedCharacterIterator.Attribute> it = iterator.getAttributes().keySet().iterator();
+            Iterator<AttributedCharacterIterator.Attribute> it =
+                    iterator.getAttributes().keySet().iterator();
             while (it.hasNext()) {
-                AttributedCharacterIterator.Attribute attribute = (AttributedCharacterIterator.Attribute) it
-                        .next();
+                AttributedCharacterIterator.Attribute attribute =
+                        (AttributedCharacterIterator.Attribute) it.next();
                 Object value = iterator.getAttribute(attribute);
                 result.add(new FieldContainer(start, end, attribute, value));
                 // System.out.println(start + " " + end + ": " + attribute + ",
@@ -493,6 +500,7 @@ public class IntlTestDecimalFormatAPIC extends CoreTestFmwk {
         }
         return result;
     }
+
     protected static class FieldContainer {
         int start, end;
 
@@ -500,45 +508,46 @@ public class IntlTestDecimalFormatAPIC extends CoreTestFmwk {
 
         Object value;
 
-//         called from support_decimalformat and support_simpledateformat tests
-        public FieldContainer(int start, int end,
-        AttributedCharacterIterator.Attribute attribute) {
+        //         called from support_decimalformat and support_simpledateformat tests
+        public FieldContainer(int start, int end, AttributedCharacterIterator.Attribute attribute) {
             this(start, end, attribute, attribute);
         }
 
-//         called from support_messageformat tests
-        public FieldContainer(int start, int end, AttributedCharacterIterator.Attribute attribute, int value) {
-        this(start, end, attribute, Integer.valueOf(value));
+        //         called from support_messageformat tests
+        public FieldContainer(
+                int start, int end, AttributedCharacterIterator.Attribute attribute, int value) {
+            this(start, end, attribute, Integer.valueOf(value));
         }
 
-//         called from support_messageformat tests
-        public FieldContainer(int start, int end, AttributedCharacterIterator.Attribute attribute,
-        Object value) {
-        this.start = start;
-        this.end = end;
-        this.attribute = attribute;
-        this.value = value;
+        //         called from support_messageformat tests
+        public FieldContainer(
+                int start, int end, AttributedCharacterIterator.Attribute attribute, Object value) {
+            this.start = start;
+            this.end = end;
+            this.attribute = attribute;
+            this.value = value;
         }
 
         @Override
         public boolean equals(Object obj) {
-        if (!(obj instanceof FieldContainer))
-        return false;
+            if (!(obj instanceof FieldContainer)) return false;
 
-        FieldContainer fc = (FieldContainer) obj;
-        return (start == fc.start && end == fc.end
-        && attribute == fc.attribute && value.equals(fc.value));
+            FieldContainer fc = (FieldContainer) obj;
+            return (start == fc.start
+                    && end == fc.end
+                    && attribute == fc.attribute
+                    && value.equals(fc.value));
         }
     }
 
     /*Helper functions */
     public void verify(String message, String got, double expected) {
-        logln(message + got + " Expected : " + (long)expected);
+        logln(message + got + " Expected : " + (long) expected);
         String expectedStr = "";
-        expectedStr=expectedStr + (long)expected;
-        if(!got.equals(expectedStr) ) {
+        expectedStr = expectedStr + (long) expected;
+        if (!got.equals(expectedStr)) {
             errln("ERROR: Round() failed:  " + message + got + "  Expected : " + expectedStr);
         }
     }
 }
-//eof
+// eof

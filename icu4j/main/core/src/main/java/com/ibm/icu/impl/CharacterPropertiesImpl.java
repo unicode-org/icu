@@ -7,18 +7,17 @@ import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.text.UnicodeSet;
 
 /**
- * Properties functionality above class UCharacterProperty
- * but below class CharacterProperties and class UnicodeSet.
+ * Properties functionality above class UCharacterProperty but below class CharacterProperties and
+ * class UnicodeSet.
  */
 public final class CharacterPropertiesImpl {
-    private static final int NUM_INCLUSIONS = UCharacterProperty.SRC_COUNT +
-            UProperty.INT_LIMIT - UProperty.INT_START;
+    private static final int NUM_INCLUSIONS =
+            UCharacterProperty.SRC_COUNT + UProperty.INT_LIMIT - UProperty.INT_START;
 
     /**
-     * A set of all characters _except_ the second through last characters of
-     * certain ranges. These ranges are ranges of characters whose
-     * properties are all exactly alike, e.g. CJK Ideographs from
-     * U+4E00 to U+9FA5.
+     * A set of all characters _except_ the second through last characters of certain ranges. These
+     * ranges are ranges of characters whose properties are all exactly alike, e.g. CJK Ideographs
+     * from U+4E00 to U+9FA5.
      */
     private static final UnicodeSet inclusions[] = new UnicodeSet[NUM_INCLUSIONS];
 
@@ -32,64 +31,65 @@ public final class CharacterPropertiesImpl {
     private static UnicodeSet getInclusionsForSource(int src) {
         if (inclusions[src] == null) {
             UnicodeSet incl = new UnicodeSet();
-            switch(src) {
-            case UCharacterProperty.SRC_CHAR:
-                UCharacterProperty.INSTANCE.addPropertyStarts(incl);
-                break;
-            case UCharacterProperty.SRC_PROPSVEC:
-                UCharacterProperty.INSTANCE.upropsvec_addPropertyStarts(incl);
-                break;
-            case UCharacterProperty.SRC_CHAR_AND_PROPSVEC:
-                UCharacterProperty.INSTANCE.addPropertyStarts(incl);
-                UCharacterProperty.INSTANCE.upropsvec_addPropertyStarts(incl);
-                break;
-            case UCharacterProperty.SRC_CASE_AND_NORM:
-                Norm2AllModes.getNFCInstance().impl.addPropertyStarts(incl);
-                UCaseProps.INSTANCE.addPropertyStarts(incl);
-                break;
-            case UCharacterProperty.SRC_NFC:
-                Norm2AllModes.getNFCInstance().impl.addPropertyStarts(incl);
-                break;
-            case UCharacterProperty.SRC_NFKC:
-                Norm2AllModes.getNFKCInstance().impl.addPropertyStarts(incl);
-                break;
-            case UCharacterProperty.SRC_NFKC_CF:
-                Norm2AllModes.getNFKC_CFInstance().impl.addPropertyStarts(incl);
-                break;
-            case UCharacterProperty.SRC_NFC_CANON_ITER:
-                Norm2AllModes.getNFCInstance().impl.addCanonIterPropertyStarts(incl);
-                break;
-            case UCharacterProperty.SRC_CASE:
-                UCaseProps.INSTANCE.addPropertyStarts(incl);
-                break;
-            case UCharacterProperty.SRC_BIDI:
-                UBiDiProps.INSTANCE.addPropertyStarts(incl);
-                break;
-            case UCharacterProperty.SRC_INPC:
-            case UCharacterProperty.SRC_INSC:
-            case UCharacterProperty.SRC_VO:
-                UCharacterProperty.ulayout_addPropertyStarts(src, incl);
-                break;
-            case UCharacterProperty.SRC_EMOJI: {
-                EmojiProps.INSTANCE.addPropertyStarts(incl);
-                break;
-            }
-            case UCharacterProperty.SRC_IDSU:
-                // New in Unicode 15.1 for just two characters.
-                incl.add(0x2FFE);
-                incl.add(0x2FFF + 1);
-                break;
-            case UCharacterProperty.SRC_ID_COMPAT_MATH:
-                UCharacterProperty.mathCompat_addPropertyStarts(incl);
-                break;
-            case UCharacterProperty.SRC_MCM:
-                UCharacterProperty.mcm_addPropertyStarts(incl);
-                break;
-            case UCharacterProperty.SRC_BLOCK:
-                UCharacterProperty.INSTANCE.ublock_addPropertyStarts(incl);
-                break;
-            default:
-                throw new IllegalStateException("getInclusions(unknown src " + src + ")");
+            switch (src) {
+                case UCharacterProperty.SRC_CHAR:
+                    UCharacterProperty.INSTANCE.addPropertyStarts(incl);
+                    break;
+                case UCharacterProperty.SRC_PROPSVEC:
+                    UCharacterProperty.INSTANCE.upropsvec_addPropertyStarts(incl);
+                    break;
+                case UCharacterProperty.SRC_CHAR_AND_PROPSVEC:
+                    UCharacterProperty.INSTANCE.addPropertyStarts(incl);
+                    UCharacterProperty.INSTANCE.upropsvec_addPropertyStarts(incl);
+                    break;
+                case UCharacterProperty.SRC_CASE_AND_NORM:
+                    Norm2AllModes.getNFCInstance().impl.addPropertyStarts(incl);
+                    UCaseProps.INSTANCE.addPropertyStarts(incl);
+                    break;
+                case UCharacterProperty.SRC_NFC:
+                    Norm2AllModes.getNFCInstance().impl.addPropertyStarts(incl);
+                    break;
+                case UCharacterProperty.SRC_NFKC:
+                    Norm2AllModes.getNFKCInstance().impl.addPropertyStarts(incl);
+                    break;
+                case UCharacterProperty.SRC_NFKC_CF:
+                    Norm2AllModes.getNFKC_CFInstance().impl.addPropertyStarts(incl);
+                    break;
+                case UCharacterProperty.SRC_NFC_CANON_ITER:
+                    Norm2AllModes.getNFCInstance().impl.addCanonIterPropertyStarts(incl);
+                    break;
+                case UCharacterProperty.SRC_CASE:
+                    UCaseProps.INSTANCE.addPropertyStarts(incl);
+                    break;
+                case UCharacterProperty.SRC_BIDI:
+                    UBiDiProps.INSTANCE.addPropertyStarts(incl);
+                    break;
+                case UCharacterProperty.SRC_INPC:
+                case UCharacterProperty.SRC_INSC:
+                case UCharacterProperty.SRC_VO:
+                    UCharacterProperty.ulayout_addPropertyStarts(src, incl);
+                    break;
+                case UCharacterProperty.SRC_EMOJI:
+                    {
+                        EmojiProps.INSTANCE.addPropertyStarts(incl);
+                        break;
+                    }
+                case UCharacterProperty.SRC_IDSU:
+                    // New in Unicode 15.1 for just two characters.
+                    incl.add(0x2FFE);
+                    incl.add(0x2FFF + 1);
+                    break;
+                case UCharacterProperty.SRC_ID_COMPAT_MATH:
+                    UCharacterProperty.mathCompat_addPropertyStarts(incl);
+                    break;
+                case UCharacterProperty.SRC_MCM:
+                    UCharacterProperty.mcm_addPropertyStarts(incl);
+                    break;
+                case UCharacterProperty.SRC_BLOCK:
+                    UCharacterProperty.INSTANCE.ublock_addPropertyStarts(incl);
+                    break;
+                default:
+                    throw new IllegalStateException("getInclusions(unknown src " + src + ")");
             }
             // We do not freeze() the set because we only iterate over it,
             // rather than testing contains(),
@@ -100,7 +100,7 @@ public final class CharacterPropertiesImpl {
     }
 
     private static UnicodeSet getIntPropInclusions(int prop) {
-        assert(UProperty.INT_START <= prop && prop < UProperty.INT_LIMIT);
+        assert (UProperty.INT_START <= prop && prop < UProperty.INT_LIMIT);
         int inclIndex = UCharacterProperty.SRC_COUNT + prop - UProperty.INT_START;
         if (inclusions[inclIndex] != null) {
             return inclusions[inclIndex];
@@ -127,9 +127,7 @@ public final class CharacterPropertiesImpl {
         return inclusions[inclIndex] = intPropIncl.compact();
     }
 
-    /**
-     * Returns a mutable UnicodeSet -- do not modify!
-     */
+    /** Returns a mutable UnicodeSet -- do not modify! */
     public static synchronized UnicodeSet getInclusionsForProperty(int prop) {
         if (UProperty.INT_START <= prop && prop < UProperty.INT_LIMIT) {
             return getIntPropInclusions(prop);

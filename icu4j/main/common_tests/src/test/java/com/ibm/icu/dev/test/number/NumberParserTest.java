@@ -2,9 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.dev.test.number;
 
-import org.junit.Assert;
-import org.junit.Test;
-
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.StringSegment;
 import com.ibm.icu.impl.number.CustomSymbolCurrency;
@@ -23,127 +20,139 @@ import com.ibm.icu.impl.number.parse.SeriesMatcher;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.ULocale;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * @author sffc
- *
  */
 public class NumberParserTest extends CoreTestFmwk {
     @Test
     public void testBasic() {
-        Object[][] cases = new Object[][] {
-                // Fields:
-                // a) Flags:
-                // --- Bit 0x01 => Test greedy implementation
-                // --- Bit 0x02 => Test slow implementation
-                // --- Bit 0x04 => Test strict grouping separators
-                // b) Input string
-                // c) Pattern
-                // d) Expected chars consumed
-                // e) Expected double result
-                { 3, "51423", "0", 5, 51423. },
-                { 3, "51423x", "0", 5, 51423. },
-                { 3, " 51423", "0", 6, 51423. },
-                { 3, "51423 ", "0", 5, 51423. },
-                { 3, "𝟱𝟭𝟰𝟮𝟯", "0", 10, 51423. },
-                { 3, "𝟱𝟭𝟰𝟮𝟯x", "0", 10, 51423. },
-                { 3, " 𝟱𝟭𝟰𝟮𝟯", "0", 11, 51423. },
-                { 3, "𝟱𝟭𝟰𝟮𝟯 ", "0", 10, 51423. },
-                { 7, "51,423", "#,##,##0", 6, 51423. },
-                { 7, " 51,423", "#,##,##0", 7, 51423. },
-                { 7, "51,423 ", "#,##,##0", 6, 51423. },
-                { 7, "51,423,", "#,##,##0", 6, 51423. },
-                { 7, "51,423,,", "#,##,##0", 6, 51423. },
-                { 7, "51,423.5", "#,##,##0", 8, 51423.5 },
-                { 7, "51,423.5,", "#,##,##0", 8, 51423.5 },
-                { 7, "51,423.5,,", "#,##,##0", 8, 51423.5 },
-                { 7, "51,423.5.", "#,##,##0", 8, 51423.5 },
-                { 7, "51,423.5..", "#,##,##0", 8, 51423.5 },
-                { 7, "𝟱𝟭,𝟰𝟮𝟯", "#,##,##0", 11, 51423. },
-                { 7, "𝟳,𝟴𝟵,𝟱𝟭,𝟰𝟮𝟯", "#,##,##0", 19, 78951423. },
-                { 7, "𝟳𝟴,𝟵𝟱𝟭.𝟰𝟮𝟯", "#,##,##0", 18, 78951.423 },
-                { 7, "𝟳𝟴,𝟬𝟬𝟬", "#,##,##0", 11, 78000. },
-                { 7, "𝟳𝟴,𝟬𝟬𝟬.𝟬𝟬𝟬", "#,##,##0", 18, 78000. },
-                { 7, "𝟳𝟴,𝟬𝟬𝟬.𝟬𝟮𝟯", "#,##,##0", 18, 78000.023 },
-                { 7, "𝟳𝟴.𝟬𝟬𝟬.𝟬𝟮𝟯", "#,##,##0", 11, 78. },
-                { 7, "1,", "#,##,##0", 1, 1. },
-                { 7, "1,,", "#,##,##0", 1, 1. },
-                { 7, "1.,", "#,##,##0", 2, 1. },
-                { 3, "1,.", "#,##,##0", 3, 1. },
-                { 7, "1..", "#,##,##0", 2, 1. },
-                { 3, ",1", "#,##,##0", 2, 1. },
-                { 3, "1,1", "#,##,##0", 1, 1. },
-                { 3, "1,1,", "#,##,##0", 1, 1. },
-                { 3, "1,1,,", "#,##,##0", 1, 1. },
-                { 3, "1,1,1", "#,##,##0", 1, 1. },
-                { 3, "1,1,1,", "#,##,##0", 1, 1. },
-                { 3, "1,1,1,1", "#,##,##0", 1, 1. },
-                { 3, "1,1,1,,", "#,##,##0", 1, 1. },
-                { 3, "-51423", "0", 6, -51423. },
-                { 3, "51423-", "0", 5, 51423. }, // plus and minus sign by default do NOT match after
-                { 3, "+51423", "0", 6, 51423. },
-                { 3, "51423+", "0", 5, 51423. }, // plus and minus sign by default do NOT match after
-                { 3, "%51423", "0", 6, 51423. },
-                { 3, "51423%", "0", 6, 51423. },
-                { 3, "51423%%", "0", 6, 51423. },
-                { 3, "‰51423", "0", 6, 51423. },
-                { 3, "51423‰", "0", 6, 51423. },
-                { 3, "51423‰‰", "0", 6, 51423. },
-                { 3, "∞", "0", 1, Double.POSITIVE_INFINITY },
-                { 3, "-∞", "0", 2, Double.NEGATIVE_INFINITY },
-                { 3, "@@@123  @@", "0", 6, 123. }, // TODO: Should padding be strong instead of weak?
-                { 3, "@@@123@@  ", "0", 6, 123. }, // TODO: Should padding be strong instead of weak?
-                { 3, "a51423US dollars", "a0¤¤¤", 16, 51423. },
-                { 3, "a 51423 US dollars", "a0¤¤¤", 18, 51423. },
-                { 3, "514.23 USD", "¤0", 10, 514.23 },
-                { 3, "514.23 GBP", "¤0", 10, 514.23 },
-                { 3, "a 𝟱𝟭𝟰𝟮𝟯 b", "a0b", 14, 51423. },
-                { 3, "-a 𝟱𝟭𝟰𝟮𝟯 b", "a0b", 15, -51423. },
-                { 3, "a -𝟱𝟭𝟰𝟮𝟯 b", "a0b", 15, -51423. },
-                { 3, "𝟱𝟭𝟰𝟮𝟯", "[0];(0)", 10, 51423. },
-                { 3, "[𝟱𝟭𝟰𝟮𝟯", "[0];(0)", 11, 51423. },
-                { 3, "𝟱𝟭𝟰𝟮𝟯]", "[0];(0)", 11, 51423. },
-                { 3, "[𝟱𝟭𝟰𝟮𝟯]", "[0];(0)", 12, 51423. },
-                { 3, "(𝟱𝟭𝟰𝟮𝟯", "[0];(0)", 11, -51423. },
-                { 3, "𝟱𝟭𝟰𝟮𝟯)", "[0];(0)", 11, -51423. },
-                { 3, "(𝟱𝟭𝟰𝟮𝟯)", "[0];(0)", 12, -51423. },
-                { 3, "𝟱𝟭𝟰𝟮𝟯", "{0};{0}", 10, 51423. },
-                { 3, "{𝟱𝟭𝟰𝟮𝟯", "{0};{0}", 11, 51423. },
-                { 3, "𝟱𝟭𝟰𝟮𝟯}", "{0};{0}", 11, 51423. },
-                { 3, "{𝟱𝟭𝟰𝟮𝟯}", "{0};{0}", 12, 51423. },
-                { 1, "a40b", "a0'0b'", 3, 40. }, // greedy code path thinks "40" is the number
-                { 2, "a40b", "a0'0b'", 4, 4. }, // slow code path finds the suffix "0b"
-                { 3, "𝟱.𝟭𝟰𝟮E𝟯", "0", 12, 5142. },
-                { 3, "𝟱.𝟭𝟰𝟮E-𝟯", "0", 13, 0.005142 },
-                { 3, "𝟱.𝟭𝟰𝟮e-𝟯", "0", 13, 0.005142 },
-                { 3, "5.142e+3", "0", 8, 5142.0 },
-                { 3, "5.142\u200Ee+3", "0", 9, 5142.0 },
-                { 3, "5.142e\u200E+3", "0", 9, 5142.0 },
-                { 3, "5.142e+\u200E3", "0", 9, 5142.0 },
-                { 7, "5,142.50 Canadian dollars", "#,##,##0 ¤¤¤", 25, 5142.5 },
-                { 3, "a$ b5", "a ¤ b0", 5, 5.0 },
-                { 3, "📺1.23", "📺0;📻0", 6, 1.23 },
-                { 3, "📻1.23", "📺0;📻0", 6, -1.23 },
-                { 3, ".00", "0", 3, 0.0 },
-                { 3, "                              1,234", "a0", 35, 1234. }, // should not hang
-                { 3, "NaN", "0", 3, Double.NaN },
-                { 3, "NaN E5", "0", 6, Double.NaN },
-                { 3, "~100", "~0", 4, 100.0 },
-                { 3, " ~ 100", "~0", 6, 100.0 },
-                { 3, "≈100", "~0", 4, 100.0 },
-                { 3, "100≈", "~0", 3, 100.0 },
-                { 3, "0", "0", 1, 0.0 } };
+        Object[][] cases =
+                new Object[][] {
+                    // Fields:
+                    // a) Flags:
+                    // --- Bit 0x01 => Test greedy implementation
+                    // --- Bit 0x02 => Test slow implementation
+                    // --- Bit 0x04 => Test strict grouping separators
+                    // b) Input string
+                    // c) Pattern
+                    // d) Expected chars consumed
+                    // e) Expected double result
+                    {3, "51423", "0", 5, 51423.},
+                    {3, "51423x", "0", 5, 51423.},
+                    {3, " 51423", "0", 6, 51423.},
+                    {3, "51423 ", "0", 5, 51423.},
+                    {3, "𝟱𝟭𝟰𝟮𝟯", "0", 10, 51423.},
+                    {3, "𝟱𝟭𝟰𝟮𝟯x", "0", 10, 51423.},
+                    {3, " 𝟱𝟭𝟰𝟮𝟯", "0", 11, 51423.},
+                    {3, "𝟱𝟭𝟰𝟮𝟯 ", "0", 10, 51423.},
+                    {7, "51,423", "#,##,##0", 6, 51423.},
+                    {7, " 51,423", "#,##,##0", 7, 51423.},
+                    {7, "51,423 ", "#,##,##0", 6, 51423.},
+                    {7, "51,423,", "#,##,##0", 6, 51423.},
+                    {7, "51,423,,", "#,##,##0", 6, 51423.},
+                    {7, "51,423.5", "#,##,##0", 8, 51423.5},
+                    {7, "51,423.5,", "#,##,##0", 8, 51423.5},
+                    {7, "51,423.5,,", "#,##,##0", 8, 51423.5},
+                    {7, "51,423.5.", "#,##,##0", 8, 51423.5},
+                    {7, "51,423.5..", "#,##,##0", 8, 51423.5},
+                    {7, "𝟱𝟭,𝟰𝟮𝟯", "#,##,##0", 11, 51423.},
+                    {7, "𝟳,𝟴𝟵,𝟱𝟭,𝟰𝟮𝟯", "#,##,##0", 19, 78951423.},
+                    {7, "𝟳𝟴,𝟵𝟱𝟭.𝟰𝟮𝟯", "#,##,##0", 18, 78951.423},
+                    {7, "𝟳𝟴,𝟬𝟬𝟬", "#,##,##0", 11, 78000.},
+                    {7, "𝟳𝟴,𝟬𝟬𝟬.𝟬𝟬𝟬", "#,##,##0", 18, 78000.},
+                    {7, "𝟳𝟴,𝟬𝟬𝟬.𝟬𝟮𝟯", "#,##,##0", 18, 78000.023},
+                    {7, "𝟳𝟴.𝟬𝟬𝟬.𝟬𝟮𝟯", "#,##,##0", 11, 78.},
+                    {7, "1,", "#,##,##0", 1, 1.},
+                    {7, "1,,", "#,##,##0", 1, 1.},
+                    {7, "1.,", "#,##,##0", 2, 1.},
+                    {3, "1,.", "#,##,##0", 3, 1.},
+                    {7, "1..", "#,##,##0", 2, 1.},
+                    {3, ",1", "#,##,##0", 2, 1.},
+                    {3, "1,1", "#,##,##0", 1, 1.},
+                    {3, "1,1,", "#,##,##0", 1, 1.},
+                    {3, "1,1,,", "#,##,##0", 1, 1.},
+                    {3, "1,1,1", "#,##,##0", 1, 1.},
+                    {3, "1,1,1,", "#,##,##0", 1, 1.},
+                    {3, "1,1,1,1", "#,##,##0", 1, 1.},
+                    {3, "1,1,1,,", "#,##,##0", 1, 1.},
+                    {3, "-51423", "0", 6, -51423.},
+                    {
+                        3, "51423-", "0", 5, 51423.
+                    }, // plus and minus sign by default do NOT match after
+                    {3, "+51423", "0", 6, 51423.},
+                    {
+                        3, "51423+", "0", 5, 51423.
+                    }, // plus and minus sign by default do NOT match after
+                    {3, "%51423", "0", 6, 51423.},
+                    {3, "51423%", "0", 6, 51423.},
+                    {3, "51423%%", "0", 6, 51423.},
+                    {3, "‰51423", "0", 6, 51423.},
+                    {3, "51423‰", "0", 6, 51423.},
+                    {3, "51423‰‰", "0", 6, 51423.},
+                    {3, "∞", "0", 1, Double.POSITIVE_INFINITY},
+                    {3, "-∞", "0", 2, Double.NEGATIVE_INFINITY},
+                    {
+                        3, "@@@123  @@", "0", 6, 123.
+                    }, // TODO: Should padding be strong instead of weak?
+                    {
+                        3, "@@@123@@  ", "0", 6, 123.
+                    }, // TODO: Should padding be strong instead of weak?
+                    {3, "a51423US dollars", "a0¤¤¤", 16, 51423.},
+                    {3, "a 51423 US dollars", "a0¤¤¤", 18, 51423.},
+                    {3, "514.23 USD", "¤0", 10, 514.23},
+                    {3, "514.23 GBP", "¤0", 10, 514.23},
+                    {3, "a 𝟱𝟭𝟰𝟮𝟯 b", "a0b", 14, 51423.},
+                    {3, "-a 𝟱𝟭𝟰𝟮𝟯 b", "a0b", 15, -51423.},
+                    {3, "a -𝟱𝟭𝟰𝟮𝟯 b", "a0b", 15, -51423.},
+                    {3, "𝟱𝟭𝟰𝟮𝟯", "[0];(0)", 10, 51423.},
+                    {3, "[𝟱𝟭𝟰𝟮𝟯", "[0];(0)", 11, 51423.},
+                    {3, "𝟱𝟭𝟰𝟮𝟯]", "[0];(0)", 11, 51423.},
+                    {3, "[𝟱𝟭𝟰𝟮𝟯]", "[0];(0)", 12, 51423.},
+                    {3, "(𝟱𝟭𝟰𝟮𝟯", "[0];(0)", 11, -51423.},
+                    {3, "𝟱𝟭𝟰𝟮𝟯)", "[0];(0)", 11, -51423.},
+                    {3, "(𝟱𝟭𝟰𝟮𝟯)", "[0];(0)", 12, -51423.},
+                    {3, "𝟱𝟭𝟰𝟮𝟯", "{0};{0}", 10, 51423.},
+                    {3, "{𝟱𝟭𝟰𝟮𝟯", "{0};{0}", 11, 51423.},
+                    {3, "𝟱𝟭𝟰𝟮𝟯}", "{0};{0}", 11, 51423.},
+                    {3, "{𝟱𝟭𝟰𝟮𝟯}", "{0};{0}", 12, 51423.},
+                    {1, "a40b", "a0'0b'", 3, 40.}, // greedy code path thinks "40" is the number
+                    {2, "a40b", "a0'0b'", 4, 4.}, // slow code path finds the suffix "0b"
+                    {3, "𝟱.𝟭𝟰𝟮E𝟯", "0", 12, 5142.},
+                    {3, "𝟱.𝟭𝟰𝟮E-𝟯", "0", 13, 0.005142},
+                    {3, "𝟱.𝟭𝟰𝟮e-𝟯", "0", 13, 0.005142},
+                    {3, "5.142e+3", "0", 8, 5142.0},
+                    {3, "5.142\u200Ee+3", "0", 9, 5142.0},
+                    {3, "5.142e\u200E+3", "0", 9, 5142.0},
+                    {3, "5.142e+\u200E3", "0", 9, 5142.0},
+                    {7, "5,142.50 Canadian dollars", "#,##,##0 ¤¤¤", 25, 5142.5},
+                    {3, "a$ b5", "a ¤ b0", 5, 5.0},
+                    {3, "📺1.23", "📺0;📻0", 6, 1.23},
+                    {3, "📻1.23", "📺0;📻0", 6, -1.23},
+                    {3, ".00", "0", 3, 0.0},
+                    {3, "                              1,234", "a0", 35, 1234.}, // should not hang
+                    {3, "NaN", "0", 3, Double.NaN},
+                    {3, "NaN E5", "0", 6, Double.NaN},
+                    {3, "~100", "~0", 4, 100.0},
+                    {3, " ~ 100", "~0", 6, 100.0},
+                    {3, "≈100", "~0", 4, 100.0},
+                    {3, "100≈", "~0", 3, 100.0},
+                    {3, "0", "0", 1, 0.0}
+                };
 
-        int parseFlags = ParsingUtils.PARSE_FLAG_IGNORE_CASE
-                | ParsingUtils.PARSE_FLAG_INCLUDE_UNPAIRED_AFFIXES;
+        int parseFlags =
+                ParsingUtils.PARSE_FLAG_IGNORE_CASE
+                        | ParsingUtils.PARSE_FLAG_INCLUDE_UNPAIRED_AFFIXES;
         for (Object[] cas : cases) {
             int flags = (Integer) cas[0];
             String inputString = (String) cas[1];
             String patternString = (String) cas[2];
             int expectedCharsConsumed = (Integer) cas[3];
             double expectedResultDouble = (Double) cas[4];
-            NumberParserImpl parser = NumberParserImpl
-                    .createSimpleParser(ULocale.ENGLISH, patternString, parseFlags);
+            NumberParserImpl parser =
+                    NumberParserImpl.createSimpleParser(ULocale.ENGLISH, patternString, parseFlags);
             String message = "Input <" + inputString + "> Parser " + parser;
 
             if (0 != (flags & 0x01)) {
@@ -151,10 +160,12 @@ public class NumberParserTest extends CoreTestFmwk {
                 ParsedNumber resultObject = new ParsedNumber();
                 parser.parse(inputString, true, resultObject);
                 assertTrue("Greedy Parse failed: " + message, resultObject.success());
-                assertEquals("Greedy Parse failed: " + message,
+                assertEquals(
+                        "Greedy Parse failed: " + message,
                         expectedCharsConsumed,
                         resultObject.charEnd);
-                assertEquals("Greedy Parse failed: " + message,
+                assertEquals(
+                        "Greedy Parse failed: " + message,
                         expectedResultDouble,
                         resultObject.getNumber().doubleValue(),
                         0.0);
@@ -165,10 +176,12 @@ public class NumberParserTest extends CoreTestFmwk {
                 ParsedNumber resultObject = new ParsedNumber();
                 parser.parse(inputString, false, resultObject);
                 assertTrue("Non-Greedy Parse failed: " + message, resultObject.success());
-                assertEquals("Non-Greedy Parse failed: " + message,
+                assertEquals(
+                        "Non-Greedy Parse failed: " + message,
                         expectedCharsConsumed,
                         resultObject.charEnd);
-                assertEquals("Non-Greedy Parse failed: " + message,
+                assertEquals(
+                        "Non-Greedy Parse failed: " + message,
                         expectedResultDouble,
                         resultObject.getNumber().doubleValue(),
                         0.0);
@@ -176,16 +189,20 @@ public class NumberParserTest extends CoreTestFmwk {
 
             if (0 != (flags & 0x04)) {
                 // Test with strict separators
-                parser = NumberParserImpl.createSimpleParser(ULocale.ENGLISH,
-                        patternString,
-                        parseFlags | ParsingUtils.PARSE_FLAG_STRICT_GROUPING_SIZE);
+                parser =
+                        NumberParserImpl.createSimpleParser(
+                                ULocale.ENGLISH,
+                                patternString,
+                                parseFlags | ParsingUtils.PARSE_FLAG_STRICT_GROUPING_SIZE);
                 ParsedNumber resultObject = new ParsedNumber();
                 parser.parse(inputString, true, resultObject);
                 assertTrue("Strict Parse failed: " + message, resultObject.success());
-                assertEquals("Strict Parse failed: " + message,
+                assertEquals(
+                        "Strict Parse failed: " + message,
                         expectedCharsConsumed,
                         resultObject.charEnd);
-                assertEquals("Strict Parse failed: " + message,
+                assertEquals(
+                        "Strict Parse failed: " + message,
                         expectedResultDouble,
                         resultObject.getNumber().doubleValue(),
                         0.0);
@@ -195,9 +212,11 @@ public class NumberParserTest extends CoreTestFmwk {
 
     @Test
     public void testLocaleFi() {
-        // This case is interesting because locale fi has NaN starting with 'e', the same as scientific
-        NumberParserImpl parser = NumberParserImpl
-                .createSimpleParser(new ULocale("fi"), "0", ParsingUtils.PARSE_FLAG_IGNORE_CASE);
+        // This case is interesting because locale fi has NaN starting with 'e', the same as
+        // scientific
+        NumberParserImpl parser =
+                NumberParserImpl.createSimpleParser(
+                        new ULocale("fi"), "0", ParsingUtils.PARSE_FLAG_IGNORE_CASE);
 
         ParsedNumber resultObject = new ParsedNumber();
         parser.parse("epäluku", false, resultObject);
@@ -225,20 +244,22 @@ public class NumberParserTest extends CoreTestFmwk {
         Assert.assertFalse(series.smokeTest(new StringSegment("-", false)));
         Assert.assertTrue(series.smokeTest(new StringSegment("+", false)));
 
-        Object[][] cases = new Object[][] {
-                { "", 0, true },
-                { " ", 0, false },
-                { "$", 0, false },
-                { "+", 0, true },
-                { " +", 0, false },
-                { "+-", 0, true },
-                { "+ -", 0, false },
-                { "+-  ", 0, true },
-                { "+-  $", 0, false },
-                { "+-%", 3, true },
-                { "  +-  %  ", 0, false },
-                { "+-  %  ", 7, true },
-                { "+-%$", 3, false } };
+        Object[][] cases =
+                new Object[][] {
+                    {"", 0, true},
+                    {" ", 0, false},
+                    {"$", 0, false},
+                    {"+", 0, true},
+                    {" +", 0, false},
+                    {"+-", 0, true},
+                    {"+ -", 0, false},
+                    {"+-  ", 0, true},
+                    {"+-  $", 0, false},
+                    {"+-%", 3, true},
+                    {"  +-  %  ", 0, false},
+                    {"+-  %  ", 7, true},
+                    {"+-%$", 3, false}
+                };
         for (Object[] cas : cases) {
             String input = (String) cas[0];
             int expectedOffset = (Integer) cas[1];
@@ -266,16 +287,18 @@ public class NumberParserTest extends CoreTestFmwk {
         factory.parseFlags = ParsingUtils.PARSE_FLAG_NO_FOREIGN_CURRENCIES;
         CombinedCurrencyMatcher matcherNoForeignCurrencies = factory.currency();
 
-        Object[][] cases = new Object[][] {
-                { "", null, null },
-                { "FOO", null, null },
-                { "USD", "USD", null },
-                { "$", "USD", null },
-                { "US dollars", "USD", null },
-                { "eu", null, null },
-                { "euros", "EUR", null },
-                { "ICU", "ICU", "ICU" },
-                { "IU$", "ICU", "ICU" } };
+        Object[][] cases =
+                new Object[][] {
+                    {"", null, null},
+                    {"FOO", null, null},
+                    {"USD", "USD", null},
+                    {"$", "USD", null},
+                    {"US dollars", "USD", null},
+                    {"eu", null, null},
+                    {"euros", "EUR", null},
+                    {"ICU", "ICU", "ICU"},
+                    {"IU$", "ICU", "ICU"}
+                };
         for (Object[] cas : cases) {
             String input = (String) cas[0];
             String expectedCurrencyCode = (String) cas[1];
@@ -285,10 +308,9 @@ public class NumberParserTest extends CoreTestFmwk {
                 StringSegment segment = new StringSegment(input, true);
                 ParsedNumber result = new ParsedNumber();
                 matcher.match(segment, result);
-                assertEquals("Parsing " + input,
-                        expectedCurrencyCode,
-                        result.currencyCode);
-                assertEquals("Whole string on " + input,
+                assertEquals("Parsing " + input, expectedCurrencyCode, result.currencyCode);
+                assertEquals(
+                        "Whole string on " + input,
                         expectedCurrencyCode == null ? 0 : input.length(),
                         result.charEnd);
             }
@@ -296,10 +318,12 @@ public class NumberParserTest extends CoreTestFmwk {
                 StringSegment segment = new StringSegment(input, true);
                 ParsedNumber result = new ParsedNumber();
                 matcherNoForeignCurrencies.match(segment, result);
-                assertEquals("[no foreign] Parsing " + input,
+                assertEquals(
+                        "[no foreign] Parsing " + input,
                         expectedNoForeignCurrencyCode,
                         result.currencyCode);
-                assertEquals("[no foreign] Whole string on " + input,
+                assertEquals(
+                        "[no foreign] Whole string on " + input,
                         expectedNoForeignCurrencyCode == null ? 0 : input.length(),
                         result.charEnd);
             }
@@ -316,12 +340,13 @@ public class NumberParserTest extends CoreTestFmwk {
         factory.parseFlags = 0;
 
         Object[][] cases = {
-                { false, "-", 1, "-" },
-                { false, "+-%", 5, "+-%" },
-                { true, "+-%", 3, "+-%" },
-                { false, "ab c", 5, "a    bc" },
-                { true, "abc", 3, "abc" },
-                { false, "hello-to+this%very¤long‰string", 59, "hello-to+this%very USD long‰string" } };
+            {false, "-", 1, "-"},
+            {false, "+-%", 5, "+-%"},
+            {true, "+-%", 3, "+-%"},
+            {false, "ab c", 5, "a    bc"},
+            {true, "abc", 3, "abc"},
+            {false, "hello-to+this%very¤long‰string", 59, "hello-to+this%very USD long‰string"}
+        };
 
         for (Object[] cas : cases) {
             boolean exactMatch = (Boolean) cas[0];
@@ -330,8 +355,8 @@ public class NumberParserTest extends CoreTestFmwk {
             String sampleParseableString = (String) cas[3];
             int parseFlags = exactMatch ? ParsingUtils.PARSE_FLAG_EXACT_AFFIX : 0;
 
-            AffixPatternMatcher matcher = AffixPatternMatcher
-                    .fromAffixPattern(affixPattern, factory, parseFlags);
+            AffixPatternMatcher matcher =
+                    AffixPatternMatcher.fromAffixPattern(affixPattern, factory, parseFlags);
 
             // Check that the matcher has the expected number of children
             assertEquals(affixPattern + " " + exactMatch, expectedMatcherLength, matcher.length());
@@ -340,7 +365,8 @@ public class NumberParserTest extends CoreTestFmwk {
             StringSegment segment = new StringSegment(sampleParseableString, true);
             ParsedNumber result = new ParsedNumber();
             matcher.match(segment, result);
-            assertEquals(affixPattern + " " + exactMatch,
+            assertEquals(
+                    affixPattern + " " + exactMatch,
                     sampleParseableString.length(),
                     result.charEnd);
         }
@@ -351,11 +377,12 @@ public class NumberParserTest extends CoreTestFmwk {
         DecimalFormatProperties properties = new DecimalFormatProperties();
         properties.setGroupingSize(0);
         DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(ULocale.ENGLISH);
-        NumberParserImpl parser = NumberParserImpl
-                .createParserFromProperties(properties, symbols, false);
+        NumberParserImpl parser =
+                NumberParserImpl.createParserFromProperties(properties, symbols, false);
         ParsedNumber result = new ParsedNumber();
         parser.parse("12,345.678", true, result);
-        assertEquals("Should not parse with grouping separator",
+        assertEquals(
+                "Should not parse with grouping separator",
                 12.0,
                 result.getNumber().doubleValue(),
                 0.0);
@@ -363,34 +390,38 @@ public class NumberParserTest extends CoreTestFmwk {
 
     @Test
     public void testCaseFolding() {
-        Object[][] cases = new Object[][] {
-                // pattern, input string, case sensitive chars, case insensitive chars
-                { "0", "JP¥3456", 7, 7 },
-                { "0", "jp¥3456", 0, 0 }, // not to be accepted, even in case insensitive mode
-                { "A0", "A5", 2, 2 },
-                { "A0", "a5", 0, 2 },
-                { "0", "NaN", 3, 3 },
-                { "0", "nan", 0, 3 } };
+        Object[][] cases =
+                new Object[][] {
+                    // pattern, input string, case sensitive chars, case insensitive chars
+                    {"0", "JP¥3456", 7, 7},
+                    {"0", "jp¥3456", 0, 0}, // not to be accepted, even in case insensitive mode
+                    {"A0", "A5", 2, 2},
+                    {"A0", "a5", 0, 2},
+                    {"0", "NaN", 3, 3},
+                    {"0", "nan", 0, 3}
+                };
         for (Object[] cas : cases) {
             String patternString = (String) cas[0];
             String inputString = (String) cas[1];
             int expectedCaseSensitiveChars = (Integer) cas[2];
             int expectedCaseFoldingChars = (Integer) cas[3];
 
-            NumberParserImpl caseSensitiveParser = NumberParserImpl
-                    .createSimpleParser(ULocale.ENGLISH, patternString, 0);
+            NumberParserImpl caseSensitiveParser =
+                    NumberParserImpl.createSimpleParser(ULocale.ENGLISH, patternString, 0);
             ParsedNumber result = new ParsedNumber();
             caseSensitiveParser.parse(inputString, true, result);
-            assertEquals("Case-Sensitive: " + inputString + " on " + patternString,
+            assertEquals(
+                    "Case-Sensitive: " + inputString + " on " + patternString,
                     expectedCaseSensitiveChars,
                     result.charEnd);
 
-            NumberParserImpl caseFoldingParser = NumberParserImpl.createSimpleParser(ULocale.ENGLISH,
-                    patternString,
-                    ParsingUtils.PARSE_FLAG_IGNORE_CASE);
+            NumberParserImpl caseFoldingParser =
+                    NumberParserImpl.createSimpleParser(
+                            ULocale.ENGLISH, patternString, ParsingUtils.PARSE_FLAG_IGNORE_CASE);
             result = new ParsedNumber();
             caseFoldingParser.parse(inputString, true, result);
-            assertEquals("Folded: " + inputString + " on " + patternString,
+            assertEquals(
+                    "Folded: " + inputString + " on " + patternString,
                     expectedCaseFoldingChars,
                     result.charEnd);
         }
@@ -400,7 +431,7 @@ public class NumberParserTest extends CoreTestFmwk {
     public void test20360_BidiOverflow() {
         StringBuilder inputString = new StringBuilder();
         inputString.append('-');
-        for (int i=0; i<100000; i++) {
+        for (int i = 0; i < 100000; i++) {
             inputString.append('\u061C');
         }
         inputString.append('5');
@@ -423,7 +454,7 @@ public class NumberParserTest extends CoreTestFmwk {
     public void testInfiniteRecursion() {
         StringBuilder inputString = new StringBuilder();
         inputString.append('-');
-        for (int i=0; i<200; i++) {
+        for (int i = 0; i < 200; i++) {
             inputString.append('\u061C');
         }
         inputString.append('5');
@@ -435,12 +466,14 @@ public class NumberParserTest extends CoreTestFmwk {
         assertFalse("Default recursion limit, success", resultObject.success());
         assertEquals("Default recursion limit, chars consumed", 1, resultObject.charEnd);
 
-        parser = NumberParserImpl.createSimpleParser(
-                ULocale.ENGLISH, "0", ParsingUtils.PARSE_FLAG_ALLOW_INFINITE_RECURSION);
+        parser =
+                NumberParserImpl.createSimpleParser(
+                        ULocale.ENGLISH, "0", ParsingUtils.PARSE_FLAG_ALLOW_INFINITE_RECURSION);
         resultObject.clear();
         parser.parse(inputString.toString(), false, resultObject);
         assertTrue("Unlimited recursion, success", resultObject.success());
         assertEquals("Unlimited recursion, chars consumed", 202, resultObject.charEnd);
-        assertEquals("Unlimited recursion, expected double", -5, resultObject.getNumber().intValue());
+        assertEquals(
+                "Unlimited recursion, expected double", -5, resultObject.getNumber().intValue());
     }
 }

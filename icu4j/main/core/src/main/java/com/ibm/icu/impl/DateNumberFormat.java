@@ -1,13 +1,18 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /*
-*******************************************************************************
-*   Copyright (C) 2007-2016, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-*******************************************************************************
-*/
+ *******************************************************************************
+ *   Copyright (C) 2007-2016, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ *******************************************************************************
+ */
 package com.ibm.icu.impl;
 
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.math.BigDecimal;
+import com.ibm.icu.text.NumberFormat;
+import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.UResourceBundle;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.math.BigInteger;
@@ -15,12 +20,6 @@ import java.text.FieldPosition;
 import java.text.ParsePosition;
 import java.util.Arrays;
 import java.util.MissingResourceException;
-
-import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.math.BigDecimal;
-import com.ibm.icu.text.NumberFormat;
-import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.UResourceBundle;
 
 /*
  * NumberFormat implementation dedicated/optimized for DateFormat,
@@ -36,7 +35,8 @@ public final class DateNumberFormat extends NumberFormat implements Cloneable {
     private char minusSign;
     private boolean positiveOnly = false;
 
-    private static final int DECIMAL_BUF_SIZE = 20; // 20 digits is good enough to store Long.MAX_VALUE
+    private static final int DECIMAL_BUF_SIZE =
+            20; // 20 digits is good enough to store Long.MAX_VALUE
     private transient char[] decimalBuf = new char[DECIMAL_BUF_SIZE];
 
     private static SimpleCache<ULocale, char[]> CACHE = new SimpleCache<ULocale, char[]>();
@@ -46,31 +46,36 @@ public final class DateNumberFormat extends NumberFormat implements Cloneable {
 
     public DateNumberFormat(ULocale loc, String digitString, String nsName) {
         if (digitString.length() > 10) {
-            throw new UnsupportedOperationException("DateNumberFormat does not support digits out of BMP.");
+            throw new UnsupportedOperationException(
+                    "DateNumberFormat does not support digits out of BMP.");
         }
-        initialize(loc,digitString,nsName);
+        initialize(loc, digitString, nsName);
     }
 
     public DateNumberFormat(ULocale loc, char zeroDigit, String nsName) {
         StringBuffer buf = new StringBuffer();
-        for ( int i = 0 ; i < 10 ; i++ ) {
-            buf.append((char)(zeroDigit+i));
+        for (int i = 0; i < 10; i++) {
+            buf.append((char) (zeroDigit + i));
         }
-        initialize(loc,buf.toString(),nsName);
+        initialize(loc, buf.toString(), nsName);
     }
 
-    private void initialize(ULocale loc,String digitString,String nsName) {
+    private void initialize(ULocale loc, String digitString, String nsName) {
         char[] elems = CACHE.get(loc);
         if (elems == null) {
             // Missed cache
             String minusString;
-            ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, loc);
+            ICUResourceBundle rb =
+                    (ICUResourceBundle)
+                            UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, loc);
             try {
-                minusString = rb.getStringWithFallback("NumberElements/"+nsName+"/symbols/minusSign");
+                minusString =
+                        rb.getStringWithFallback("NumberElements/" + nsName + "/symbols/minusSign");
             } catch (MissingResourceException ex) {
-                if ( !nsName.equals("latn") ) {
+                if (!nsName.equals("latn")) {
                     try {
-                       minusString = rb.getStringWithFallback("NumberElements/latn/symbols/minusSign");
+                        minusString =
+                                rb.getStringWithFallback("NumberElements/latn/symbols/minusSign");
                     } catch (MissingResourceException ex1) {
                         minusString = "-";
                     }
@@ -79,8 +84,8 @@ public final class DateNumberFormat extends NumberFormat implements Cloneable {
                 }
             }
             elems = new char[11];
-            for ( int i = 0 ; i < 10 ; i++ ) {
-                 elems[i] = digitString.charAt(i);
+            for (int i = 0; i < 10; i++) {
+                elems[i] = digitString.charAt(i);
             }
             elems[10] = minusString.charAt(0);
             CACHE.put(loc, elems);
@@ -128,8 +133,8 @@ public final class DateNumberFormat extends NumberFormat implements Cloneable {
             digits = new char[10];
         }
         digits[0] = zero;
-        for ( int i = 1 ; i < 10 ; i++ ) {
-            digits[i] = (char)(zero+i);
+        for (int i = 1; i < 10; i++) {
+            digits[i] = (char) (zero + i);
         }
     }
 
@@ -138,14 +143,13 @@ public final class DateNumberFormat extends NumberFormat implements Cloneable {
     }
 
     @Override
-    public StringBuffer format(double number, StringBuffer toAppendTo,
-            FieldPosition pos) {
-        throw new UnsupportedOperationException("StringBuffer format(double, StringBuffer, FieldPosition) is not implemented");
+    public StringBuffer format(double number, StringBuffer toAppendTo, FieldPosition pos) {
+        throw new UnsupportedOperationException(
+                "StringBuffer format(double, StringBuffer, FieldPosition) is not implemented");
     }
 
     @Override
-    public StringBuffer format(long numberL, StringBuffer toAppendTo,
-            FieldPosition pos) {
+    public StringBuffer format(long numberL, StringBuffer toAppendTo, FieldPosition pos) {
 
         if (numberL < 0) {
             // negative
@@ -156,7 +160,7 @@ public final class DateNumberFormat extends NumberFormat implements Cloneable {
         // Note: NumberFormat used by DateFormat only uses int numbers.
         // Remainder operation on 32bit platform using long is significantly slower
         // than int.  So, this method casts long number into int.
-        int number = (int)numberL;
+        int number = (int) numberL;
 
         int limit = decimalBuf.length < maxIntDigits ? decimalBuf.length : maxIntDigits;
         int index = limit - 1;
@@ -184,21 +188,22 @@ public final class DateNumberFormat extends NumberFormat implements Cloneable {
     }
 
     @Override
-    public StringBuffer format(BigInteger number, StringBuffer toAppendTo,
-            FieldPosition pos) {
-        throw new UnsupportedOperationException("StringBuffer format(BigInteger, StringBuffer, FieldPosition) is not implemented");
+    public StringBuffer format(BigInteger number, StringBuffer toAppendTo, FieldPosition pos) {
+        throw new UnsupportedOperationException(
+                "StringBuffer format(BigInteger, StringBuffer, FieldPosition) is not implemented");
     }
 
     @Override
-    public StringBuffer format(java.math.BigDecimal number, StringBuffer toAppendTo,
-            FieldPosition pos) {
-        throw new UnsupportedOperationException("StringBuffer format(BigDecimal, StringBuffer, FieldPosition) is not implemented");
+    public StringBuffer format(
+            java.math.BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {
+        throw new UnsupportedOperationException(
+                "StringBuffer format(BigDecimal, StringBuffer, FieldPosition) is not implemented");
     }
 
     @Override
-    public StringBuffer format(BigDecimal number,
-            StringBuffer toAppendTo, FieldPosition pos) {
-        throw new UnsupportedOperationException("StringBuffer format(BigDecimal, StringBuffer, FieldPosition) is not implemented");
+    public StringBuffer format(BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {
+        throw new UnsupportedOperationException(
+                "StringBuffer format(BigDecimal, StringBuffer, FieldPosition) is not implemented");
     }
 
     /*
@@ -226,8 +231,8 @@ public final class DateNumberFormat extends NumberFormat implements Cloneable {
                     digit = UCharacter.digit(ch);
                 }
                 if (digit < 0 || 9 < digit) {
-                    for ( digit = 0 ; digit < 10 ; digit++ ) {
-                        if ( ch == digits[digit]) {
+                    for (digit = 0; digit < 10; digit++) {
+                        if (ch == digits[digit]) {
                             break;
                         }
                     }
@@ -254,7 +259,7 @@ public final class DateNumberFormat extends NumberFormat implements Cloneable {
         if (obj == null || !super.equals(obj) || !(obj instanceof DateNumberFormat)) {
             return false;
         }
-        DateNumberFormat other = (DateNumberFormat)obj;
+        DateNumberFormat other = (DateNumberFormat) obj;
         return (this.maxIntDigits == other.maxIntDigits
                 && this.minIntDigits == other.minIntDigits
                 && this.minusSign == other.minusSign
@@ -278,11 +283,11 @@ public final class DateNumberFormat extends NumberFormat implements Cloneable {
 
     @Override
     public DateNumberFormat clone() {
-        DateNumberFormat dnfmt = (DateNumberFormat)super.clone();
+        DateNumberFormat dnfmt = (DateNumberFormat) super.clone();
         dnfmt.digits = this.digits.clone();
         dnfmt.decimalBuf = new char[DECIMAL_BUF_SIZE];
         return dnfmt;
     }
 }
 
-//eof
+// eof

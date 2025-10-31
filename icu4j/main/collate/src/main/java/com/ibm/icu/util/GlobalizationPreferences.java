@@ -5,9 +5,15 @@
  * Copyright (C) 2004-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
-*/
+ */
 package com.ibm.icu.util;
 
+import com.ibm.icu.impl.Utility;
+import com.ibm.icu.text.BreakIterator;
+import com.ibm.icu.text.Collator;
+import com.ibm.icu.text.DateFormat;
+import com.ibm.icu.text.NumberFormat;
+import com.ibm.icu.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
@@ -19,65 +25,57 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.Set;
 
-import com.ibm.icu.impl.Utility;
-import com.ibm.icu.text.BreakIterator;
-import com.ibm.icu.text.Collator;
-import com.ibm.icu.text.DateFormat;
-import com.ibm.icu.text.NumberFormat;
-import com.ibm.icu.text.SimpleDateFormat;
-
 /**
- * This convenience class provides a mechanism for bundling together different
- * globalization preferences. It includes:
+ * This convenience class provides a mechanism for bundling together different globalization
+ * preferences. It includes:
+ *
  * <ul>
- * <li>A list of locales/languages in preference order</li>
- * <li>A territory</li>
- * <li>A currency</li>
- * <li>A timezone</li>
- * <li>A calendar</li>
- * <li>A collator (for language-sensitive sorting, searching, and matching).</li>
- * <li>Explicit overrides for date/time formats, etc.</li>
+ *   <li>A list of locales/languages in preference order
+ *   <li>A territory
+ *   <li>A currency
+ *   <li>A timezone
+ *   <li>A calendar
+ *   <li>A collator (for language-sensitive sorting, searching, and matching).
+ *   <li>Explicit overrides for date/time formats, etc.
  * </ul>
- * The class will heuristically compute implicit, heuristic values for the above
- * based on available data if explicit values are not supplied. These implicit
- * values can be presented to users for confirmation, or replacement if the
- * values are incorrect.
- * <p>
- * To reset any explicit field so that it will get heuristic values, pass in
- * null. For example, myPreferences.setLocale(null);
- * <p>
- * All of the heuristics can be customized by subclasses, by overriding
- * getTerritory(), guessCollator(), etc.
- * <p>
- * The class also supplies display names for languages, scripts, territories,
- * currencies, timezones, etc. These are computed according to the
- * locale/language preference list. Thus, if the preference is Breton; French;
- * English, then the display name for a language will be returned in Breton if
- * available, otherwise in French if available, otherwise in English.
- * <p>
- * The codes used to reference territory, currency, etc. are as defined elsewhere
- * in ICU, and are taken from CLDR (which reflects RFC 3066bis usage, ISO 4217,
- * and the TZ Timezone database identifiers).
- * <p>
- * <b>This is at a prototype stage, and has not incorporated all the design
- * changes that we would like yet; further feedback is welcome.</b></p>
- * Note:
+ *
+ * The class will heuristically compute implicit, heuristic values for the above based on available
+ * data if explicit values are not supplied. These implicit values can be presented to users for
+ * confirmation, or replacement if the values are incorrect.
+ *
+ * <p>To reset any explicit field so that it will get heuristic values, pass in null. For example,
+ * myPreferences.setLocale(null);
+ *
+ * <p>All of the heuristics can be customized by subclasses, by overriding getTerritory(),
+ * guessCollator(), etc.
+ *
+ * <p>The class also supplies display names for languages, scripts, territories, currencies,
+ * timezones, etc. These are computed according to the locale/language preference list. Thus, if the
+ * preference is Breton; French; English, then the display name for a language will be returned in
+ * Breton if available, otherwise in French if available, otherwise in English.
+ *
+ * <p>The codes used to reference territory, currency, etc. are as defined elsewhere in ICU, and are
+ * taken from CLDR (which reflects RFC 3066bis usage, ISO 4217, and the TZ Timezone database
+ * identifiers).
+ *
+ * <p><b>This is at a prototype stage, and has not incorporated all the design changes that we would
+ * like yet; further feedback is welcome.</b> Note:
+ *
  * <ul>
- * <li>to get the display name for the first day of the week, use the calendar +
- * display names.</li>
- * <li>to get the work days, ask the calendar (when that is available).</li>
- * <li>to get papersize / measurement system/bidi-orientation, ask the locale
- * (when that is available there)</li>
- * <li>to get the field order in a date, and whether a time is 24hour or not,
- * ask the DateFormat (when that is available there)</li>
- * <li>it will support HOST locale when it becomes available (it is a special
- * locale that will ask the services to use the host platform's values).</li>
+ *   <li>to get the display name for the first day of the week, use the calendar + display names.
+ *   <li>to get the work days, ask the calendar (when that is available).
+ *   <li>to get papersize / measurement system/bidi-orientation, ask the locale (when that is
+ *       available there)
+ *   <li>to get the field order in a date, and whether a time is 24hour or not, ask the DateFormat
+ *       (when that is available there)
+ *   <li>it will support HOST locale when it becomes available (it is a special locale that will ask
+ *       the services to use the host platform's values).
  * </ul>
  *
  * @draft ICU 3.6 (retainAll)
  */
 
-//TODO:
+// TODO:
 // - Add Holidays
 // - Add convenience to get/take Locale as well as ULocale.
 // - Add Lenient datetime formatting when that is available.
@@ -88,75 +86,76 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
 
     /**
      * Default constructor
+     *
      * @draft ICU 3.6
      */
-    public GlobalizationPreferences(){}
+    public GlobalizationPreferences() {}
+
     /**
      * Number Format type
+     *
      * @draft ICU 3.6
      */
-    public static final int
-        NF_NUMBER = 0,      // NumberFormat.NUMBERSTYLE
-        NF_CURRENCY = 1,    // NumberFormat.CURRENCYSTYLE
-        NF_PERCENT = 2,     // NumberFormat.PERCENTSTYLE
-        NF_SCIENTIFIC = 3,  // NumberFormat.SCIENTIFICSTYLE
-        NF_INTEGER = 4;     // NumberFormat.INTEGERSTYLE
+    public static final int NF_NUMBER = 0, // NumberFormat.NUMBERSTYLE
+            NF_CURRENCY = 1, // NumberFormat.CURRENCYSTYLE
+            NF_PERCENT = 2, // NumberFormat.PERCENTSTYLE
+            NF_SCIENTIFIC = 3, // NumberFormat.SCIENTIFICSTYLE
+            NF_INTEGER = 4; // NumberFormat.INTEGERSTYLE
 
     private static final int NF_LIMIT = NF_INTEGER + 1;
 
     /**
      * Date Format type
+     *
      * @draft ICU 3.6
      */
-    public static final int
-        DF_FULL = DateFormat.FULL,      // 0
-        DF_LONG = DateFormat.LONG,      // 1
-        DF_MEDIUM = DateFormat.MEDIUM,  // 2
-        DF_SHORT = DateFormat.SHORT,    // 3
-        DF_NONE = 4;
+    public static final int DF_FULL = DateFormat.FULL, // 0
+            DF_LONG = DateFormat.LONG, // 1
+            DF_MEDIUM = DateFormat.MEDIUM, // 2
+            DF_SHORT = DateFormat.SHORT, // 3
+            DF_NONE = 4;
 
     private static final int DF_LIMIT = DF_NONE + 1;
 
     /**
      * For selecting a choice of display names
+     *
      * @draft ICU 3.6
      */
-    public static final int
-        ID_LOCALE = 0,
-        ID_LANGUAGE = 1,
-        ID_SCRIPT = 2,
-        ID_TERRITORY = 3,
-        ID_VARIANT = 4,
-        ID_KEYWORD = 5,
-        ID_KEYWORD_VALUE = 6,
-        ID_CURRENCY = 7,
-        ID_CURRENCY_SYMBOL = 8,
-        ID_TIMEZONE = 9;
+    public static final int ID_LOCALE = 0,
+            ID_LANGUAGE = 1,
+            ID_SCRIPT = 2,
+            ID_TERRITORY = 3,
+            ID_VARIANT = 4,
+            ID_KEYWORD = 5,
+            ID_KEYWORD_VALUE = 6,
+            ID_CURRENCY = 7,
+            ID_CURRENCY_SYMBOL = 8,
+            ID_TIMEZONE = 9;
 
-    //private static final int ID_LIMIT = ID_TIMEZONE + 1;
+    // private static final int ID_LIMIT = ID_TIMEZONE + 1;
 
     /**
      * Break iterator type
+     *
      * @draft ICU 3.6
      */
-    public static final int
-        BI_CHARACTER = BreakIterator.KIND_CHARACTER,    // 0
-        BI_WORD = BreakIterator.KIND_WORD,              // 1
-        BI_LINE = BreakIterator.KIND_LINE,              // 2
-        BI_SENTENCE = BreakIterator.KIND_SENTENCE,      // 3
-        BI_TITLE = BreakIterator.KIND_TITLE;            // 4
+    public static final int BI_CHARACTER = BreakIterator.KIND_CHARACTER, // 0
+            BI_WORD = BreakIterator.KIND_WORD, // 1
+            BI_LINE = BreakIterator.KIND_LINE, // 2
+            BI_SENTENCE = BreakIterator.KIND_SENTENCE, // 3
+            BI_TITLE = BreakIterator.KIND_TITLE; // 4
 
     private static final int BI_LIMIT = BI_TITLE + 1;
 
     /**
-     * Sets the language/locale priority list. If other information is
-     * not (yet) available, this is used to to produce a default value
-     * for the appropriate territory, currency, timezone, etc.  The
-     * user should be given the opportunity to correct those defaults
-     * in case they are incorrect.
+     * Sets the language/locale priority list. If other information is not (yet) available, this is
+     * used to to produce a default value for the appropriate territory, currency, timezone, etc.
+     * The user should be given the opportunity to correct those defaults in case they are
+     * incorrect.
      *
-     * @param inputLocales list of locales in priority order, eg {"be", "fr"}
-     *     for Breton first, then French if that fails.
+     * @param inputLocales list of locales in priority order, eg {"be", "fr"} for Breton first, then
+     *     French if that fails.
      * @return this, for chaining
      * @draft ICU 3.6
      */
@@ -187,6 +186,7 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
 
     /**
      * Convenience function for getting the locales in priority order
+     *
      * @param index The index (0..n) of the desired item.
      * @return desired item. null if index is out of range
      * @draft ICU 3.6
@@ -203,8 +203,7 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
     }
 
     /**
-     * Convenience routine for setting the language/locale priority
-     * list from an array.
+     * Convenience routine for setting the language/locale priority list from an array.
      *
      * @see #setLocales(List locales)
      * @param uLocales list of locales in an array
@@ -219,8 +218,8 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
     }
 
     /**
-     * Convenience routine for setting the language/locale priority
-     * list from a single locale/language.
+     * Convenience routine for setting the language/locale priority list from a single
+     * locale/language.
      *
      * @see #setLocales(List locales)
      * @param uLocale single locale
@@ -231,15 +230,15 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
         if (isFrozen()) {
             throw new UnsupportedOperationException("Attempt to modify immutable object");
         }
-        return setLocales(new ULocale[]{uLocale});
+        return setLocales(new ULocale[] {uLocale});
     }
 
     /**
-     * Convenience routine for setting the locale priority list from
-     * an Accept-Language string.
+     * Convenience routine for setting the locale priority list from an Accept-Language string.
+     *
      * @see #setLocales(List locales)
-     * @param acceptLanguageString Accept-Language list, as defined by
-     *     Section 14.4 of the RFC 2616 (HTTP 1.1)
+     * @param acceptLanguageString Accept-Language list, as defined by Section 14.4 of the RFC 2616
+     *     (HTTP 1.1)
      * @return this, for chaining
      * @draft ICU 3.6
      */
@@ -254,14 +253,12 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
     }
 
     /**
-     * Convenience function to get a ResourceBundle instance using
-     * the specified base name based on the language/locale priority list
-     * stored in this object.
+     * Convenience function to get a ResourceBundle instance using the specified base name based on
+     * the language/locale priority list stored in this object.
      *
-     * @param baseName the base name of the resource bundle, a fully qualified
-     * class name
-     * @return a resource bundle for the given base name and locale based on the
-     * language/locale priority list stored in this object
+     * @param baseName the base name of the resource bundle, a fully qualified class name
+     * @return a resource bundle for the given base name and locale based on the language/locale
+     *     priority list stored in this object
      * @draft ICU 3.6
      */
     public ResourceBundle getResourceBundle(String baseName) {
@@ -269,15 +266,13 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
     }
 
     /**
-     * Convenience function to get a ResourceBundle instance using
-     * the specified base name and class loader based on the language/locale
-     * priority list stored in this object.
+     * Convenience function to get a ResourceBundle instance using the specified base name and class
+     * loader based on the language/locale priority list stored in this object.
      *
-     * @param baseName the base name of the resource bundle, a fully qualified
-     * class name
+     * @param baseName the base name of the resource bundle, a fully qualified class name
      * @param loader the class object from which to load the resource bundle
-     * @return a resource bundle for the given base name and locale based on the
-     * language/locale priority list stored in this object
+     * @return a resource bundle for the given base name and locale based on the language/locale
+     *     priority list stored in this object
      * @draft ICU 3.6
      */
     public ResourceBundle getResourceBundle(String baseName, ClassLoader loader) {
@@ -296,8 +291,7 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
             try {
                 if (loader == null) {
                     candidate = UResourceBundle.getBundleInstance(baseName, localeName);
-                }
-                else {
+                } else {
                     candidate = UResourceBundle.getBundleInstance(baseName, localeName, loader);
                 }
                 if (candidate != null) {
@@ -317,18 +311,16 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
             }
         }
         if (urb == null) {
-            throw new MissingResourceException("Can't find bundle for base name "
-                    + baseName, baseName, "");
+            throw new MissingResourceException(
+                    "Can't find bundle for base name " + baseName, baseName, "");
         }
         return urb;
     }
 
     /**
-     * Sets the territory, which is a valid territory according to for
-     * RFC 3066 (or successor).  If not otherwise set, default
-     * currency and timezone values will be set from this.  The user
-     * should be given the opportunity to correct those defaults in
-     * case they are incorrect.
+     * Sets the territory, which is a valid territory according to for RFC 3066 (or successor). If
+     * not otherwise set, default currency and timezone values will be set from this. The user
+     * should be given the opportunity to correct those defaults in case they are incorrect.
      *
      * @param territory code
      * @return this, for chaining
@@ -343,8 +335,8 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
     }
 
     /**
-     * Gets the territory setting. If it wasn't explicitly set, it is
-     * computed from the general locale setting.
+     * Gets the territory setting. If it wasn't explicitly set, it is computed from the general
+     * locale setting.
      *
      * @return territory code, explicit or implicit.
      * @draft ICU 3.6
@@ -416,7 +408,7 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
     }
 
     /**
-     * Sets the timezone ID.  If this has not been set, uses default for territory.
+     * Sets the timezone ID. If this has not been set, uses default for territory.
      *
      * @param timezone a valid TZID (see UTS#35).
      * @return this, for chaining
@@ -431,8 +423,8 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
     }
 
     /**
-     * Get the timezone. It was either explicitly set, or is
-     * heuristically computed from other settings.
+     * Get the timezone. It was either explicitly set, or is heuristically computed from other
+     * settings.
      *
      * @return timezone, either implicitly or explicitly set
      * @draft ICU 3.6
@@ -455,7 +447,7 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
             return guessCollator();
         }
         try {
-            return collator.clone();  // clone for safety
+            return collator.clone(); // clone for safety
         } catch (CloneNotSupportedException e) {
             throw new ICUCloneNotSupportedException("Error in cloning collator", e);
         }
@@ -463,6 +455,7 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
 
     /**
      * Explicitly set the collator for this object.
+     *
      * @param collator The collator object to be passed.
      * @return this, for chaining
      * @draft ICU 3.6
@@ -474,14 +467,13 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
         try {
             this.collator = collator.clone(); // clone for safety
         } catch (CloneNotSupportedException e) {
-                throw new ICUCloneNotSupportedException("Error in cloning collator", e);
+            throw new ICUCloneNotSupportedException("Error in cloning collator", e);
         }
         return this;
     }
 
     /**
-     * Get a copy of the break iterator for the specified type according to the
-     * settings.
+     * Get a copy of the break iterator for the specified type according to the settings.
      *
      * @param type break type - BI_CHARACTER or BI_WORD, BI_LINE, BI_SENTENCE, BI_TITLE
      * @return break iterator explicit or implicit
@@ -512,15 +504,14 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
         if (isFrozen()) {
             throw new UnsupportedOperationException("Attempt to modify immutable object");
         }
-        if (breakIterators == null)
-            breakIterators = new BreakIterator[BI_LIMIT];
+        if (breakIterators == null) breakIterators = new BreakIterator[BI_LIMIT];
         breakIterators[type] = iterator.clone(); // clone for safety
         return this;
     }
 
     /**
-     * Get the display name for an ID: language, script, territory, currency, timezone...
-     * Uses the language priority list to do so.
+     * Get the display name for an ID: language, script, territory, currency, timezone... Uses the
+     * language priority list to do so.
      *
      * @param id language code, script code, ...
      * @param type specifies the type of the ID: ID_LANGUAGE, etc.
@@ -534,79 +525,82 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
                 continue;
             }
             switch (type) {
-            case ID_LOCALE:
-                result = ULocale.getDisplayName(id, locale);
-                break;
-            case ID_LANGUAGE:
-                result = ULocale.getDisplayLanguage(id, locale);
-                break;
-            case ID_SCRIPT:
-                result = ULocale.getDisplayScript("und-" + id, locale);
-                break;
-            case ID_TERRITORY:
-                result = ULocale.getDisplayCountry("und-" + id, locale);
-                break;
-            case ID_VARIANT:
-                // TODO fix variant parsing
-                result = ULocale.getDisplayVariant("und-QQ-" + id, locale);
-                break;
-            case ID_KEYWORD:
-                result = ULocale.getDisplayKeyword(id, locale);
-                break;
-            case ID_KEYWORD_VALUE:
-                String[] parts = new String[2];
-                Utility.split(id,'=',parts);
-                result = ULocale.getDisplayKeywordValue("und@"+id, parts[0], locale);
-                // TODO fix to tell when successful
-                if (result.equals(parts[1])) {
-                    continue;
-                }
-                break;
-            case ID_CURRENCY_SYMBOL:
-            case ID_CURRENCY:
-                Currency temp = new Currency(id);
-                result =temp.getName(locale, type==ID_CURRENCY
-                                     ? Currency.LONG_NAME
-                                     : Currency.SYMBOL_NAME, null /* isChoiceFormat */);
-                // TODO: have method that doesn't take parameter. Add
-                // function to determine whether string is choice
-                // format.
-                // TODO: have method that doesn't require us
-                // to create a currency
-                break;
-            case ID_TIMEZONE:
-                SimpleDateFormat dtf = new SimpleDateFormat("vvvv",locale);
-                dtf.setTimeZone(TimeZone.getFrozenTimeZone(id));
-                result = dtf.format(new Date());
-                // TODO, have method that doesn't require us to create a timezone
-                // fix other hacks
-                // hack for couldn't match
+                case ID_LOCALE:
+                    result = ULocale.getDisplayName(id, locale);
+                    break;
+                case ID_LANGUAGE:
+                    result = ULocale.getDisplayLanguage(id, locale);
+                    break;
+                case ID_SCRIPT:
+                    result = ULocale.getDisplayScript("und-" + id, locale);
+                    break;
+                case ID_TERRITORY:
+                    result = ULocale.getDisplayCountry("und-" + id, locale);
+                    break;
+                case ID_VARIANT:
+                    // TODO fix variant parsing
+                    result = ULocale.getDisplayVariant("und-QQ-" + id, locale);
+                    break;
+                case ID_KEYWORD:
+                    result = ULocale.getDisplayKeyword(id, locale);
+                    break;
+                case ID_KEYWORD_VALUE:
+                    String[] parts = new String[2];
+                    Utility.split(id, '=', parts);
+                    result = ULocale.getDisplayKeywordValue("und@" + id, parts[0], locale);
+                    // TODO fix to tell when successful
+                    if (result.equals(parts[1])) {
+                        continue;
+                    }
+                    break;
+                case ID_CURRENCY_SYMBOL:
+                case ID_CURRENCY:
+                    Currency temp = new Currency(id);
+                    result =
+                            temp.getName(
+                                    locale,
+                                    type == ID_CURRENCY ? Currency.LONG_NAME : Currency.SYMBOL_NAME,
+                                    null /* isChoiceFormat */);
+                    // TODO: have method that doesn't take parameter. Add
+                    // function to determine whether string is choice
+                    // format.
+                    // TODO: have method that doesn't require us
+                    // to create a currency
+                    break;
+                case ID_TIMEZONE:
+                    SimpleDateFormat dtf = new SimpleDateFormat("vvvv", locale);
+                    dtf.setTimeZone(TimeZone.getFrozenTimeZone(id));
+                    result = dtf.format(new Date());
+                    // TODO, have method that doesn't require us to create a timezone
+                    // fix other hacks
+                    // hack for couldn't match
 
-                boolean isBadStr = false;
-                // Matcher badTimeZone = Pattern.compile("[A-Z]{2}|.*\\s\\([A-Z]{2}\\)").matcher("");
-                // badtzstr = badTimeZone.reset(result).matches();
-                String teststr = result;
-                int sidx = result.indexOf('(');
-                int eidx = result.indexOf(')');
-                if (sidx != -1 && eidx != -1 && (eidx - sidx) == 3) {
-                    teststr = result.substring(sidx+1, eidx);
-                }
-                if (teststr.length() == 2) {
-                    isBadStr = true;
-                    for (int i = 0; i < 2; i++) {
-                        char c = teststr.charAt(i);
-                        if (c < 'A' || 'Z' < c) {
-                            isBadStr = false;
-                            break;
+                    boolean isBadStr = false;
+                    // Matcher badTimeZone =
+                    // Pattern.compile("[A-Z]{2}|.*\\s\\([A-Z]{2}\\)").matcher("");
+                    // badtzstr = badTimeZone.reset(result).matches();
+                    String teststr = result;
+                    int sidx = result.indexOf('(');
+                    int eidx = result.indexOf(')');
+                    if (sidx != -1 && eidx != -1 && (eidx - sidx) == 3) {
+                        teststr = result.substring(sidx + 1, eidx);
+                    }
+                    if (teststr.length() == 2) {
+                        isBadStr = true;
+                        for (int i = 0; i < 2; i++) {
+                            char c = teststr.charAt(i);
+                            if (c < 'A' || 'Z' < c) {
+                                isBadStr = false;
+                                break;
+                            }
                         }
                     }
-                }
-                if (isBadStr) {
-                    continue;
-                }
-                break;
-            default:
-                throw new IllegalArgumentException("Unknown type: " + type);
+                    if (isBadStr) {
+                        continue;
+                    }
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unknown type: " + type);
             }
 
             // TODO need better way of seeing if we fell back to root!!
@@ -619,10 +613,9 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
     }
 
     /**
-     * Set an explicit date format. Overrides the locale priority list for
-     * a particular combination of dateStyle and timeStyle. DF_NONE should
-     * be used if for the style, where only the date or time format individually
-     * is being set.
+     * Set an explicit date format. Overrides the locale priority list for a particular combination
+     * of dateStyle and timeStyle. DF_NONE should be used if for the style, where only the date or
+     * time format individually is being set.
      *
      * @param dateStyle DF_FULL, DF_LONG, DF_MEDIUM, DF_SHORT or DF_NONE
      * @param timeStyle DF_FULL, DF_LONG, DF_MEDIUM, DF_SHORT or DF_NONE
@@ -642,11 +635,10 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
     }
 
     /**
-     * Gets a date format according to the current settings. If there
-     * is an explicit (non-null) date/time format set, a copy of that
-     * is returned. Otherwise, the language priority list is used.
-     * DF_NONE should be used for the style, where only the date or
-     * time format individually is being gotten.
+     * Gets a date format according to the current settings. If there is an explicit (non-null)
+     * date/time format set, a copy of that is returned. Otherwise, the language priority list is
+     * used. DF_NONE should be used for the style, where only the date or time format individually
+     * is being gotten.
      *
      * @param dateStyle DF_FULL, DF_LONG, DF_MEDIUM, DF_SHORT or DF_NONE
      * @param timeStyle DF_FULL, DF_LONG, DF_MEDIUM, DF_SHORT or DF_NONE
@@ -655,8 +647,10 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
      */
     public DateFormat getDateFormat(int dateStyle, int timeStyle) {
         if (dateStyle == DF_NONE && timeStyle == DF_NONE
-                || dateStyle < 0 || dateStyle >= DF_LIMIT
-                || timeStyle < 0 || timeStyle >= DF_LIMIT) {
+                || dateStyle < 0
+                || dateStyle >= DF_LIMIT
+                || timeStyle < 0
+                || timeStyle >= DF_LIMIT) {
             throw new IllegalArgumentException("Illegal date format style arguments");
         }
         DateFormat result = null;
@@ -674,10 +668,8 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
     }
 
     /**
-     * Gets a number format according to the current settings.  If
-     * there is an explicit (non-null) number format set, a copy of
-     * that is returned.  Otherwise, the language priority list is
-     * used.
+     * Gets a number format according to the current settings. If there is an explicit (non-null)
+     * number format set, a copy of that is returned. Otherwise, the language priority list is used.
      *
      * @param style NF_NUMBER, NF_CURRENCY, NF_PERCENT, NF_SCIENTIFIC, NF_INTEGER
      * @draft ICU 3.6
@@ -741,38 +733,27 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
     }
 
     /**
-     * Process a language/locale priority list specified via <code>setLocales</code>.
-     * The input locale list may be expanded or re-ordered to represent the prioritized
-     * language/locale order actually used by this object by the algorithm explained
-     * below.
+     * Process a language/locale priority list specified via <code>setLocales</code>. The input
+     * locale list may be expanded or re-ordered to represent the prioritized language/locale order
+     * actually used by this object by the algorithm explained below. <br>
      * <br>
+     * <b>Step 1</b>: Move later occurrence of more specific locale before earlier occurrence of
+     * less specific locale. <br>
+     * Before: en, fr_FR, en_US, en_GB <br>
+     * After: en_US, en_GB, en, fr_FR <br>
      * <br>
-     * <b>Step 1</b>: Move later occurrence of more specific locale before earlier
-     * occurrence of less specific locale.
+     * <b>Step 2</b>: Append a fallback locale to each locale. <br>
+     * Before: en_US, en_GB, en, fr_FR <br>
+     * After: en_US, en, en_GB, en, en, fr_FR, fr <br>
      * <br>
-     * Before: en, fr_FR, en_US, en_GB
-     * <br>
-     * After: en_US, en_GB, en, fr_FR
-     * <br>
-     * <br>
-     * <b>Step 2</b>: Append a fallback locale to each locale.
-     * <br>
-     * Before: en_US, en_GB, en, fr_FR
-     * <br>
-     * After: en_US, en, en_GB, en, en, fr_FR, fr
-     * <br>
-     * <br>
-     * <b>Step 3</b>: Remove earlier occurrence of duplicated locale entries.
-     * <br>
-     * Before: en_US, en, en_GB, en, en, fr_FR, fr
-     * <br>
-     * After: en_US, en_GB, en, fr_FR, fr
-     * <br>
+     * <b>Step 3</b>: Remove earlier occurrence of duplicated locale entries. <br>
+     * Before: en_US, en, en_GB, en, en, fr_FR, fr <br>
+     * After: en_US, en_GB, en, fr_FR, fr <br>
      * <br>
      * The final locale list is used to produce a default value for the appropriate territory,
-     * currency, timezone, etc.  The list also represents the lookup order used in
-     * <code>getResourceBundle</code> for this object.  A subclass may override this method
-     * to customize the algorithm used for populating the locale list.
+     * currency, timezone, etc. The list also represents the lookup order used in <code>
+     * getResourceBundle</code> for this object. A subclass may override this method to customize
+     * the algorithm used for populating the locale list.
      *
      * @param inputLocales The list of input locales
      * @draft ICU 3.6
@@ -897,11 +878,9 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
         return result;
     }
 
-
     /**
-     * This function can be overridden by subclasses to use different heuristics.
-     * <b>It MUST return a 'safe' value,
-     * one whose modification will not affect this object.</b>
+     * This function can be overridden by subclasses to use different heuristics. <b>It MUST return
+     * a 'safe' value, one whose modification will not affect this object.</b>
      *
      * @param dateStyle
      * @param timeStyle
@@ -924,9 +903,8 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
     }
 
     /**
-     * This function can be overridden by subclasses to use different heuristics.
-     * <b>It MUST return a 'safe' value,
-     * one whose modification will not affect this object.</b>
+     * This function can be overridden by subclasses to use different heuristics. <b>It MUST return
+     * a 'safe' value, one whose modification will not affect this object.</b>
      *
      * @param style
      * @draft ICU 3.6
@@ -938,24 +916,24 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
             nfLocale = ULocale.ROOT;
         }
         switch (style) {
-        case NF_NUMBER:
-            result = NumberFormat.getInstance(nfLocale);
-            break;
-        case NF_SCIENTIFIC:
-            result = NumberFormat.getScientificInstance(nfLocale);
-            break;
-        case NF_INTEGER:
-            result = NumberFormat.getIntegerInstance(nfLocale);
-            break;
-        case NF_PERCENT:
-            result = NumberFormat.getPercentInstance(nfLocale);
-            break;
-        case NF_CURRENCY:
-            result = NumberFormat.getCurrencyInstance(nfLocale);
-            result.setCurrency(getCurrency());
-            break;
-        default:
-            throw new IllegalArgumentException("Unknown number format style");
+            case NF_NUMBER:
+                result = NumberFormat.getInstance(nfLocale);
+                break;
+            case NF_SCIENTIFIC:
+                result = NumberFormat.getScientificInstance(nfLocale);
+                break;
+            case NF_INTEGER:
+                result = NumberFormat.getIntegerInstance(nfLocale);
+                break;
+            case NF_PERCENT:
+                result = NumberFormat.getPercentInstance(nfLocale);
+                break;
+            case NF_CURRENCY:
+                result = NumberFormat.getCurrencyInstance(nfLocale);
+                result.setCurrency(getCurrency());
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown number format style");
         }
         return result;
     }
@@ -1004,9 +982,8 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
     }
 
     /**
-     * This function can be overridden by subclasses to use different heuristics
-     * <b>It MUST return a 'safe' value,
-     * one whose modification will not affect this object.</b>
+     * This function can be overridden by subclasses to use different heuristics <b>It MUST return a
+     * 'safe' value, one whose modification will not affect this object.</b>
      *
      * @draft ICU 3.6
      */
@@ -1020,9 +997,8 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
     }
 
     /**
-     * This function can be overridden by subclasses to use different heuristics.
-     * <b>It MUST return a 'safe' value,
-     * one whose modification will not affect this object.</b>
+     * This function can be overridden by subclasses to use different heuristics. <b>It MUST return
+     * a 'safe' value, one whose modification will not affect this object.</b>
      *
      * @draft ICU 3.6
      */
@@ -1035,9 +1011,8 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
     }
 
     /**
-     * This function can be overridden by subclasses to use different heuristics.
-     * <b>It MUST return a 'safe' value,
-     * one whose modification will not affect this object.</b>
+     * This function can be overridden by subclasses to use different heuristics. <b>It MUST return
+     * a 'safe' value, one whose modification will not affect this object.</b>
      *
      * @param type
      * @draft ICU 3.6
@@ -1049,31 +1024,30 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
             brkLocale = ULocale.ROOT;
         }
         switch (type) {
-        case BI_CHARACTER:
-            bitr = BreakIterator.getCharacterInstance(brkLocale);
-            break;
-        case BI_TITLE:
-            bitr = BreakIterator.getTitleInstance(brkLocale);
-            break;
-        case BI_WORD:
-            bitr = BreakIterator.getWordInstance(brkLocale);
-            break;
-        case BI_LINE:
-            bitr = BreakIterator.getLineInstance(brkLocale);
-            break;
-        case BI_SENTENCE:
-            bitr = BreakIterator.getSentenceInstance(brkLocale);
-            break;
-        default:
-            throw new IllegalArgumentException("Unknown break iterator type");
+            case BI_CHARACTER:
+                bitr = BreakIterator.getCharacterInstance(brkLocale);
+                break;
+            case BI_TITLE:
+                bitr = BreakIterator.getTitleInstance(brkLocale);
+                break;
+            case BI_WORD:
+                bitr = BreakIterator.getWordInstance(brkLocale);
+                break;
+            case BI_LINE:
+                bitr = BreakIterator.getLineInstance(brkLocale);
+                break;
+            case BI_SENTENCE:
+                bitr = BreakIterator.getSentenceInstance(brkLocale);
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown break iterator type");
         }
         return bitr;
     }
 
     /**
-     * This function can be overridden by subclasses to use different heuristics.
-     * <b>It MUST return a 'safe' value,
-     * one whose modification will not affect this object.</b>
+     * This function can be overridden by subclasses to use different heuristics. <b>It MUST return
+     * a 'safe' value, one whose modification will not affect this object.</b>
      *
      * @draft ICU 3.6
      */
@@ -1092,7 +1066,8 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
                 timezoneString = "Etc/GMT"; // gotta do something
             } else {
                 int i;
-                // this all needs to be fixed to use real data. But for now, do slightly better by skipping cruft
+                // this all needs to be fixed to use real data. But for now, do slightly better by
+                // skipping cruft
                 for (i = 0; i < attempt.length; ++i) {
                     if (attempt[i].indexOf("/") >= 0) break;
                 }
@@ -1104,9 +1079,8 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
     }
 
     /**
-     * This function can be overridden by subclasses to use different heuristics.
-     * <b>It MUST return a 'safe' value,
-     * one whose modification will not affect this object.</b>
+     * This function can be overridden by subclasses to use different heuristics. <b>It MUST return
+     * a 'safe' value, one whose modification will not affect this object.</b>
      *
      * @draft ICU 3.6
      */
@@ -1135,7 +1109,6 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
         reset();
     }
 
-
     private ULocale getAvailableLocale(int type) {
         List<ULocale> locs = getLocales();
         ULocale result = null;
@@ -1161,14 +1134,13 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
      * Available locales for service types
      */
     private static final HashMap<ULocale, BitSet> available_locales = new HashMap<>();
-    private static final int
-        TYPE_GENERIC = 0,
-        TYPE_CALENDAR = 1,
-        TYPE_DATEFORMAT= 2,
-        TYPE_NUMBERFORMAT = 3,
-        TYPE_COLLATOR = 4,
-        TYPE_BREAKITERATOR = 5,
-        TYPE_LIMIT = TYPE_BREAKITERATOR + 1;
+    private static final int TYPE_GENERIC = 0,
+            TYPE_CALENDAR = 1,
+            TYPE_DATEFORMAT = 2,
+            TYPE_NUMBERFORMAT = 3,
+            TYPE_COLLATOR = 4,
+            TYPE_BREAKITERATOR = 5,
+            TYPE_LIMIT = TYPE_BREAKITERATOR + 1;
 
     static {
         BitSet bits;
@@ -1226,10 +1198,9 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
         }
     }
 
-    /** WARNING: All of this data is temporary, until we start importing from CLDR!!!
-     *
-     */
+    /** WARNING: All of this data is temporary, until we start importing from CLDR!!! */
     private static final Map<String, String> language_territory_hack_map = new HashMap<>();
+
     private static final String[][] language_territory_hack = {
         {"af", "ZA"},
         {"am", "ET"},
@@ -1384,10 +1355,13 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
         {"syr", "SY"},
         {"tig", "ER"},
         {"tt", "RU"},
-        {"wal", "ET"},  };
+        {"wal", "ET"},
+    };
+
     static {
         for (int i = 0; i < language_territory_hack.length; ++i) {
-            language_territory_hack_map.put(language_territory_hack[i][0],language_territory_hack[i][1]);
+            language_territory_hack_map.put(
+                    language_territory_hack[i][0], language_territory_hack[i][1]);
         }
     }
 
@@ -1424,9 +1398,10 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
         {"SJ", "Arctic/Longyearbyen"},
         {"UM", "Pacific/Midway"},
     };
+
     static {
         for (int i = 0; i < territory_tzid_hack.length; ++i) {
-            territory_tzid_hack_map.put(territory_tzid_hack[i][0],territory_tzid_hack[i][1]);
+            territory_tzid_hack_map.put(territory_tzid_hack[i][0], territory_tzid_hack[i][1]);
         }
     }
 

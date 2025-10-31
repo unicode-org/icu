@@ -23,8 +23,7 @@ public class SimpleCache<K, V> implements ICUCache<K, V> {
     private int type = ICUCache.SOFT;
     private int capacity = DEFAULT_CAPACITY;
 
-    public SimpleCache() {
-    }
+    public SimpleCache() {}
 
     public SimpleCache(int cacheType) {
         this(cacheType, DEFAULT_CAPACITY);
@@ -74,5 +73,4 @@ public class SimpleCache<K, V> implements ICUCache<K, V> {
     public void clear() {
         cacheRef = null;
     }
-
 }

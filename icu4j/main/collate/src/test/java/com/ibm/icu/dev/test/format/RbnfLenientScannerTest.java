@@ -8,113 +8,94 @@
  */
 package com.ibm.icu.dev.test.format;
 
-import java.text.NumberFormat;
-import java.text.ParseException;
-import java.util.Locale;
-import java.util.Random;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.text.RbnfScannerProviderImpl;
 import com.ibm.icu.text.RbnfLenientScannerProvider;
 import com.ibm.icu.text.RuleBasedNumberFormat;
 import com.ibm.icu.util.ULocale;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.Locale;
+import java.util.Random;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public class RbnfLenientScannerTest extends TestFmwk {
     private static final RbnfLenientScannerProvider provider = new RbnfScannerProviderImpl();
 
     /**
-     * Ensure that the default provider is instantiated and used if none is set
-     * and lenient parse is on.
+     * Ensure that the default provider is instantiated and used if none is set and lenient parse is
+     * on.
      */
     @Test
     public void TestDefaultProvider() {
-        RuleBasedNumberFormat formatter
-            = new RuleBasedNumberFormat(Locale.US,
-                                        RuleBasedNumberFormat.SPELLOUT);
+        RuleBasedNumberFormat formatter =
+                new RuleBasedNumberFormat(Locale.US, RuleBasedNumberFormat.SPELLOUT);
         formatter.setLenientScannerProvider(null);
         formatter.setLenientParseMode(true);
         String[][] lpTestData = {
-            { "2 thousand six HUNDRED   fifty-7", "2,657" },
+            {"2 thousand six HUNDRED   fifty-7", "2,657"},
         };
 
         doLenientParseTest(formatter, lpTestData);
     }
 
-    /**
-     * Perform a simple spot check on the English spellout rules
-     */
+    /** Perform a simple spot check on the English spellout rules */
     @Test
     public void TestEnglishSpellout() {
-        RuleBasedNumberFormat formatter
-            = new RuleBasedNumberFormat(Locale.US,
-                                        RuleBasedNumberFormat.SPELLOUT);
+        RuleBasedNumberFormat formatter =
+                new RuleBasedNumberFormat(Locale.US, RuleBasedNumberFormat.SPELLOUT);
         formatter.setLenientScannerProvider(provider);
         formatter.setLenientParseMode(true);
         String[][] lpTestData = {
-            { "FOurhundred     thiRTY six", "436" },
+            {"FOurhundred     thiRTY six", "436"},
             // test spaces before fifty-7 causing lenient parse match of "fifty-" to " fifty"
             // leaving "-7" for remaining parse, resulting in 2643 as the parse result.
-            { "fifty-7", "57" },
-            { " fifty-7", "57" },
-            { "  fifty-7", "57" },
-            { "2 thousand six HUNDRED   fifty-7", "2,657" },
-            { "fifteen hundred and zero", "1,500" }
+            {"fifty-7", "57"},
+            {" fifty-7", "57"},
+            {"  fifty-7", "57"},
+            {"2 thousand six HUNDRED   fifty-7", "2,657"},
+            {"fifteen hundred and zero", "1,500"}
         };
 
         doLenientParseTest(formatter, lpTestData);
     }
 
-    /**
-     * Perform a simple spot check on the duration-formatting rules
-     */
+    /** Perform a simple spot check on the duration-formatting rules */
     @Test
     public void TestDurations() {
-        RuleBasedNumberFormat formatter
-            = new RuleBasedNumberFormat(Locale.US,
-                                        RuleBasedNumberFormat.DURATION);
+        RuleBasedNumberFormat formatter =
+                new RuleBasedNumberFormat(Locale.US, RuleBasedNumberFormat.DURATION);
         formatter.setLenientScannerProvider(provider);
         formatter.setLenientParseMode(true);
-        String[][] lpTestData = {
-            { "2-51-33", "10,293" }
-        };
+        String[][] lpTestData = {{"2-51-33", "10,293"}};
         doLenientParseTest(formatter, lpTestData);
     }
 
-    /**
-     * Perform a simple spot check on the French spellout rules
-     */
+    /** Perform a simple spot check on the French spellout rules */
     @Test
     public void TestFrenchSpellout() {
-        RuleBasedNumberFormat formatter
-            = new RuleBasedNumberFormat(Locale.FRANCE,
-                                        RuleBasedNumberFormat.SPELLOUT);
+        RuleBasedNumberFormat formatter =
+                new RuleBasedNumberFormat(Locale.FRANCE, RuleBasedNumberFormat.SPELLOUT);
         formatter.setLenientScannerProvider(provider);
         formatter.setLenientParseMode(true);
         String[][] lpTestData = {
-            { "trente-et-un", "31" },
-            { "un cent quatre vingt dix huit", "198" }
+            {"trente-et-un", "31"},
+            {"un cent quatre vingt dix huit", "198"}
         };
         doLenientParseTest(formatter, lpTestData);
     }
 
-    /**
-     * Perform a simple spot check on the German spellout rules
-     */
+    /** Perform a simple spot check on the German spellout rules */
     @Test
     public void TestGermanSpellout() {
-        RuleBasedNumberFormat formatter
-            = new RuleBasedNumberFormat(Locale.GERMANY,
-                                        RuleBasedNumberFormat.SPELLOUT);
+        RuleBasedNumberFormat formatter =
+                new RuleBasedNumberFormat(Locale.GERMANY, RuleBasedNumberFormat.SPELLOUT);
         formatter.setLenientScannerProvider(provider);
         formatter.setLenientParseMode(true);
-        String[][] lpTestData = {
-            { "ein Tausend sechs Hundert fuenfunddreissig", "1,635" }
-        };
+        String[][] lpTestData = {{"ein Tausend sechs Hundert fuenfunddreissig", "1,635"}};
         doLenientParseTest(formatter, lpTestData);
     }
 
@@ -122,11 +103,7 @@ public class RbnfLenientScannerTest extends TestFmwk {
     public void TestAllLocales() {
         StringBuilder errors = null;
         ULocale[] locales = ULocale.getAvailableLocales();
-        String[] names = {
-            " (spellout) ",
-            " (ordinal)  ",
-            " (duration) "
-        };
+        String[] names = {" (spellout) ", " (ordinal)  ", " (duration) "};
         double[] numbers = {45.678, 1, 2, 10, 11, 100, 110, 200, 1000, 1111, -1111};
         Random r = null;
 
@@ -148,12 +125,12 @@ public class RbnfLenientScannerTest extends TestFmwk {
                     }
                 }
             } else {
-                //RBNF parse is too slow.  Increase count only for debugging purpose for now.
-                //count = 100;
+                // RBNF parse is too slow.  Increase count only for debugging purpose for now.
+                // count = 100;
             }
 
             for (int j = 0; j < 3; ++j) {
-                RuleBasedNumberFormat fmt = new RuleBasedNumberFormat(loc, j+1);
+                RuleBasedNumberFormat fmt = new RuleBasedNumberFormat(loc, j + 1);
 
                 for (int c = 0; c < count; c++) {
                     double n;
@@ -182,7 +159,13 @@ public class RbnfLenientScannerTest extends TestFmwk {
                             fmt.setLenientScannerProvider(provider);
                             fmt.setLenientParseMode(true);
                             num = fmt.parse(s);
-                            logln(loc.getName() + names[j] + "success parse (lenient): " + s + " -> " + num);
+                            logln(
+                                    loc.getName()
+                                            + names[j]
+                                            + "success parse (lenient): "
+                                            + s
+                                            + " -> "
+                                            + num);
                         } catch (ParseException pe) {
                             String msg = loc.getName() + names[j] + "ERROR:" + pe.getMessage();
                             logln(msg);
@@ -196,14 +179,13 @@ public class RbnfLenientScannerTest extends TestFmwk {
             }
         }
         if (errors != null) {
-            //TODO: We need to fix parse problems - see #6895 / #6896
-            //errln(errors.toString());
+            // TODO: We need to fix parse problems - see #6895 / #6896
+            // errln(errors.toString());
             logln(errors.toString());
         }
     }
 
-    void doLenientParseTest(RuleBasedNumberFormat formatter,
-                            String[][] testData) {
+    void doLenientParseTest(RuleBasedNumberFormat formatter, String[][] testData) {
         NumberFormat decFmt = NumberFormat.getInstance(Locale.US);
 
         try {
@@ -213,13 +195,16 @@ public class RbnfLenientScannerTest extends TestFmwk {
                 String actualNumber = decFmt.format(formatter.parse(words));
 
                 if (!actualNumber.equals(expectedNumber)) {
-                    errln("Lenient-parse spot check failed: for "
-                          + words + ", expected " + expectedNumber
-                          + ", but got " + actualNumber);
+                    errln(
+                            "Lenient-parse spot check failed: for "
+                                    + words
+                                    + ", expected "
+                                    + expectedNumber
+                                    + ", but got "
+                                    + actualNumber);
                 }
             }
-        }
-        catch (Throwable e) {
+        } catch (Throwable e) {
             errln("Test failed with exception: " + e.toString());
             e.printStackTrace();
         }

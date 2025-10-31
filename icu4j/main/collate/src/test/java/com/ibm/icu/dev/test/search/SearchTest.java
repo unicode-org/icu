@@ -8,10 +8,9 @@
  */
 
 /**
- * Port From:   ICU4C v2.1 : collate/StringSearchTest
- * Source File: $ICU4CRoot/source/test/intltest/srchtest.cpp
- **/
-
+ * Port From: ICU4C v2.1 : collate/StringSearchTest Source File:
+ * $ICU4CRoot/source/test/intltest/srchtest.cpp
+ */
 package com.ibm.icu.dev.test.search;
 
 import static com.ibm.icu.text.Collator.IDENTICAL;
@@ -23,15 +22,6 @@ import static com.ibm.icu.text.SearchIterator.ElementComparisonType.ANY_BASE_WEI
 import static com.ibm.icu.text.SearchIterator.ElementComparisonType.PATTERN_BASE_WEIGHT_IS_WILDCARD;
 import static com.ibm.icu.text.SearchIterator.ElementComparisonType.STANDARD_ELEMENT_COMPARISON;
 
-import java.text.CharacterIterator;
-import java.text.StringCharacterIterator;
-import java.util.Locale;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.Collator;
@@ -40,15 +30,28 @@ import com.ibm.icu.text.SearchIterator;
 import com.ibm.icu.text.SearchIterator.ElementComparisonType;
 import com.ibm.icu.text.StringSearch;
 import com.ibm.icu.util.ULocale;
+import java.text.CharacterIterator;
+import java.text.StringCharacterIterator;
+import java.util.Locale;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public class SearchTest extends TestFmwk {
 
-    //inner class
+    // inner class
     static class SearchData {
-        SearchData(String text, String pattern,
-                    String coll, int strength, ElementComparisonType cmpType, String breaker,
-                    int[] offset, int[] size) {
+        SearchData(
+                String text,
+                String pattern,
+                String coll,
+                int strength,
+                ElementComparisonType cmpType,
+                String breaker,
+                int[] offset,
+                int[] size) {
             this.text = text;
             this.pattern = pattern;
             this.collator = coll;
@@ -58,27 +61,35 @@ public class SearchTest extends TestFmwk {
             this.offset = offset;
             this.size = size;
         }
-        String              text;
-        String              pattern;
-        String              collator;
-        int                 strength;
-        ElementComparisonType   cmpType;
-        String              breaker;
-        int[]               offset;
-        int[]               size;
+
+        String text;
+        String pattern;
+        String collator;
+        int strength;
+        ElementComparisonType cmpType;
+        String breaker;
+        int[] offset;
+        int[] size;
     }
 
     RuleBasedCollator m_en_us_;
     RuleBasedCollator m_fr_fr_;
     RuleBasedCollator m_de_;
     RuleBasedCollator m_es_;
-    BreakIterator     m_en_wordbreaker_;
-    BreakIterator     m_en_characterbreaker_;
+    BreakIterator m_en_wordbreaker_;
+    BreakIterator m_en_characterbreaker_;
 
     // Just calling SearchData constructor, to make the test data source code
     // nice and short
-    private static SearchData SD(String text, String pattern, String coll, int strength,
-                    ElementComparisonType cmpType, String breaker, int[] offset, int[] size) {
+    private static SearchData SD(
+            String text,
+            String pattern,
+            String coll,
+            int strength,
+            ElementComparisonType cmpType,
+            String breaker,
+            int[] offset,
+            int[] size) {
         return new SearchData(text, pattern, coll, strength, cmpType, breaker, offset, size);
     }
 
@@ -88,81 +99,400 @@ public class SearchTest extends TestFmwk {
     }
 
     static SearchData[] BASIC = {
-        SD("xxxxxxxxxxxxxxxxxxxx", "fisher", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
-        SD("silly spring string", "string", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(13, -1), IA(6)),
-        SD("silly spring string string", "string", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(13, 20, -1), IA(6, 6)),
-        SD("silly string spring string", "string", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(6, 20, -1), IA(6, 6)),
-        SD("string spring string", "string", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(0, 14, -1), IA(6, 6)),
+        SD(
+                "xxxxxxxxxxxxxxxxxxxx",
+                "fisher",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(-1),
+                IA(0)),
+        SD(
+                "silly spring string",
+                "string",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(13, -1),
+                IA(6)),
+        SD(
+                "silly spring string string",
+                "string",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(13, 20, -1),
+                IA(6, 6)),
+        SD(
+                "silly string spring string",
+                "string",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(6, 20, -1),
+                IA(6, 6)),
+        SD(
+                "string spring string",
+                "string",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(0, 14, -1),
+                IA(6, 6)),
         SD("Scott Ganyo", "c", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(1, -1), IA(1)),
         SD("Scott Ganyo", " ", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(5, -1), IA(1)),
-        SD("\u0300\u0325", "\u0300", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
-        SD("a\u0300\u0325", "\u0300", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
-        SD("a\u0300\u0325", "\u0300\u0325", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
+        SD(
+                "\u0300\u0325",
+                "\u0300",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(-1),
+                IA(0)),
+        SD(
+                "a\u0300\u0325",
+                "\u0300",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(-1),
+                IA(0)),
+        SD(
+                "a\u0300\u0325",
+                "\u0300\u0325",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(-1),
+                IA(0)),
         SD("a\u0300b", "\u0300", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
         SD("\u00c9", "e", null, PRIMARY, STANDARD_ELEMENT_COMPARISON, null, IA(0, -1), IA(1)),
     };
 
     SearchData BREAKITERATOREXACT[] = {
-        SD("foxy fox", "fox", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, "characterbreaker", IA(0, 5, -1), IA(3, 3)),
-        SD("foxy fox", "fox", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, "wordbreaker", IA(5, -1), IA(3)),
-        SD("This is a toe T\u00F6ne", "toe", "de", PRIMARY, STANDARD_ELEMENT_COMPARISON, "characterbreaker", IA(10, 14, -1), IA(3, 2)),
-        SD("This is a toe T\u00F6ne", "toe", "de", PRIMARY, STANDARD_ELEMENT_COMPARISON, "wordbreaker", IA(10, -1), IA(3)),
-        SD("Channel, another channel, more channels, and one last Channel", "Channel", "es", TERTIARY, STANDARD_ELEMENT_COMPARISON, "wordbreaker", IA(0, 54, -1), IA(7, 7)),
+        SD(
+                "foxy fox",
+                "fox",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                "characterbreaker",
+                IA(0, 5, -1),
+                IA(3, 3)),
+        SD(
+                "foxy fox",
+                "fox",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                "wordbreaker",
+                IA(5, -1),
+                IA(3)),
+        SD(
+                "This is a toe T\u00F6ne",
+                "toe",
+                "de",
+                PRIMARY,
+                STANDARD_ELEMENT_COMPARISON,
+                "characterbreaker",
+                IA(10, 14, -1),
+                IA(3, 2)),
+        SD(
+                "This is a toe T\u00F6ne",
+                "toe",
+                "de",
+                PRIMARY,
+                STANDARD_ELEMENT_COMPARISON,
+                "wordbreaker",
+                IA(10, -1),
+                IA(3)),
+        SD(
+                "Channel, another channel, more channels, and one last Channel",
+                "Channel",
+                "es",
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                "wordbreaker",
+                IA(0, 54, -1),
+                IA(7, 7)),
         /* jitterbug 1745 */
-        SD("testing that \u00e9 does not match e", "e", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, "characterbreaker", IA(1, 17, 30, -1), IA(1, 1, 1)),
-        SD("testing that string ab\u00e9cd does not match e", "e", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, "characterbreaker", IA(1, 28, 41, -1), IA(1, 1, 1)),
-        SD("\u00c9", "e", "fr", PRIMARY, STANDARD_ELEMENT_COMPARISON, "characterbreaker", IA(0, -1), IA(1)),
+        SD(
+                "testing that \u00e9 does not match e",
+                "e",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                "characterbreaker",
+                IA(1, 17, 30, -1),
+                IA(1, 1, 1)),
+        SD(
+                "testing that string ab\u00e9cd does not match e",
+                "e",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                "characterbreaker",
+                IA(1, 28, 41, -1),
+                IA(1, 1, 1)),
+        SD(
+                "\u00c9",
+                "e",
+                "fr",
+                PRIMARY,
+                STANDARD_ELEMENT_COMPARISON,
+                "characterbreaker",
+                IA(0, -1),
+                IA(1)),
     };
 
     SearchData BREAKITERATORCANONICAL[] = {
-        SD("foxy fox", "fox", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, "characterbreaker", IA(0, 5, -1), IA(3, 3)),
-        SD("foxy fox", "fox", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, "wordbreaker", IA(5, -1), IA(3)),
-        SD("This is a toe T\u00F6ne", "toe", "de", PRIMARY, STANDARD_ELEMENT_COMPARISON, "characterbreaker", IA(10, 14, -1), IA(3, 2)),
-        SD("This is a toe T\u00F6ne", "toe", "de", PRIMARY, STANDARD_ELEMENT_COMPARISON, "wordbreaker", IA(10, -1), IA(3)),
-        SD("Channel, another channel, more channels, and one last Channel", "Channel", "es", TERTIARY, STANDARD_ELEMENT_COMPARISON, "wordbreaker", IA(0, 54, -1), IA(7, 7)),
+        SD(
+                "foxy fox",
+                "fox",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                "characterbreaker",
+                IA(0, 5, -1),
+                IA(3, 3)),
+        SD(
+                "foxy fox",
+                "fox",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                "wordbreaker",
+                IA(5, -1),
+                IA(3)),
+        SD(
+                "This is a toe T\u00F6ne",
+                "toe",
+                "de",
+                PRIMARY,
+                STANDARD_ELEMENT_COMPARISON,
+                "characterbreaker",
+                IA(10, 14, -1),
+                IA(3, 2)),
+        SD(
+                "This is a toe T\u00F6ne",
+                "toe",
+                "de",
+                PRIMARY,
+                STANDARD_ELEMENT_COMPARISON,
+                "wordbreaker",
+                IA(10, -1),
+                IA(3)),
+        SD(
+                "Channel, another channel, more channels, and one last Channel",
+                "Channel",
+                "es",
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                "wordbreaker",
+                IA(0, 54, -1),
+                IA(7, 7)),
         /* jitterbug 1745 */
-        SD("testing that \u00e9 does not match e", "e", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, "characterbreaker", IA(1, 17, 30, -1), IA(1, 1, 1)),
-        SD("testing that string ab\u00e9cd does not match e", "e", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, "characterbreaker", IA(1, 28, 41, -1), IA(1, 1, 1)),
-        SD("\u00c9", "e", "fr", PRIMARY, STANDARD_ELEMENT_COMPARISON, "characterbreaker", IA(0, -1), IA(1)),
+        SD(
+                "testing that \u00e9 does not match e",
+                "e",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                "characterbreaker",
+                IA(1, 17, 30, -1),
+                IA(1, 1, 1)),
+        SD(
+                "testing that string ab\u00e9cd does not match e",
+                "e",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                "characterbreaker",
+                IA(1, 28, 41, -1),
+                IA(1, 1, 1)),
+        SD(
+                "\u00c9",
+                "e",
+                "fr",
+                PRIMARY,
+                STANDARD_ELEMENT_COMPARISON,
+                "characterbreaker",
+                IA(0, -1),
+                IA(1)),
     };
 
     SearchData BASICCANONICAL[] = {
-        SD("xxxxxxxxxxxxxxxxxxxx", "fisher", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
-        SD("silly spring string", "string", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(13, -1), IA(6)),
-        SD("silly spring string string", "string", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(13, 20, -1), IA(6, 6)),
-        SD("silly string spring string", "string", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(6, 20, -1), IA(6, 6)),
-        SD("string spring string", "string", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(0, 14, -1), IA(6, 6)),
+        SD(
+                "xxxxxxxxxxxxxxxxxxxx",
+                "fisher",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(-1),
+                IA(0)),
+        SD(
+                "silly spring string",
+                "string",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(13, -1),
+                IA(6)),
+        SD(
+                "silly spring string string",
+                "string",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(13, 20, -1),
+                IA(6, 6)),
+        SD(
+                "silly string spring string",
+                "string",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(6, 20, -1),
+                IA(6, 6)),
+        SD(
+                "string spring string",
+                "string",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(0, 14, -1),
+                IA(6, 6)),
         SD("Scott Ganyo", "c", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(1, -1), IA(1)),
         SD("Scott Ganyo", " ", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(5, -1), IA(1)),
-
-        SD("\u0300\u0325", "\u0300", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
-        SD("a\u0300\u0325", "\u0300", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
-        SD("a\u0300\u0325", "\u0300\u0325", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
+        SD(
+                "\u0300\u0325",
+                "\u0300",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(-1),
+                IA(0)),
+        SD(
+                "a\u0300\u0325",
+                "\u0300",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(-1),
+                IA(0)),
+        SD(
+                "a\u0300\u0325",
+                "\u0300\u0325",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(-1),
+                IA(0)),
         SD("a\u0300b", "\u0300", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
-        SD("a\u0300\u0325b", "\u0300b", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
-        SD("\u0325\u0300A\u0325\u0300", "\u0300A\u0300", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
-        SD("\u0325\u0300A\u0325\u0300", "\u0325A\u0325", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
-        SD("a\u0300\u0325b\u0300\u0325c \u0325b\u0300 \u0300b\u0325", "\u0300b\u0325", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
-
-        SD("\u00c4\u0323", "A\u0323\u0308", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(0, -1), IA(2)),
-        SD("\u0308\u0323", "\u0323\u0308", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(0, -1), IA(2)),
+        SD(
+                "a\u0300\u0325b",
+                "\u0300b",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(-1),
+                IA(0)),
+        SD(
+                "\u0325\u0300A\u0325\u0300",
+                "\u0300A\u0300",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(-1),
+                IA(0)),
+        SD(
+                "\u0325\u0300A\u0325\u0300",
+                "\u0325A\u0325",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(-1),
+                IA(0)),
+        SD(
+                "a\u0300\u0325b\u0300\u0325c \u0325b\u0300 \u0300b\u0325",
+                "\u0300b\u0325",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(-1),
+                IA(0)),
+        SD(
+                "\u00c4\u0323",
+                "A\u0323\u0308",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(0, -1),
+                IA(2)),
+        SD(
+                "\u0308\u0323",
+                "\u0323\u0308",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(0, -1),
+                IA(2)),
     };
 
     SearchData COLLATOR[] = {
         /* english */
         SD("fox fpx", "fox", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(0, -1), IA(3)),
         /* tailored */
-        SD("fox fpx", "fox", null, PRIMARY, STANDARD_ELEMENT_COMPARISON, null, IA(0, 4, -1), IA(3, 3)),
+        SD(
+                "fox fpx",
+                "fox",
+                null,
+                PRIMARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(0, 4, -1),
+                IA(3, 3)),
     };
 
     String TESTCOLLATORRULE = "& o,O ; p,P";
-    String EXTRACOLLATIONRULE = " & ae ; \u00e4 & AE ; \u00c4 & oe ; \u00f6 & OE ; \u00d6 & ue ; \u00fc & UE ; \u00dc";
+    String EXTRACOLLATIONRULE =
+            " & ae ; \u00e4 & AE ; \u00c4 & oe ; \u00f6 & OE ; \u00d6 & ue ; \u00fc & UE ; \u00dc";
 
     SearchData COLLATORCANONICAL[] = {
         /* english */
         SD("fox fpx", "fox", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(0, -1), IA(3)),
         /* tailored */
-        SD("fox fpx", "fox", null, PRIMARY, STANDARD_ELEMENT_COMPARISON, null, IA(0, 4, -1), IA(3, 3)),
+        SD(
+                "fox fpx",
+                "fox",
+                null,
+                PRIMARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(0, 4, -1),
+                IA(3, 3)),
     };
 
     SearchData COMPOSITEBOUNDARIES[] = {
@@ -174,40 +504,80 @@ public class SearchTest extends TestFmwk {
         SD("\u00C0", "\u0300", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
 
         /* first one matches only because it's at the start of the text */
-        SD("\u0300\u00C0", "\u0300", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(0, -1), IA(1)),
+        SD(
+                "\u0300\u00C0",
+                "\u0300",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(0, -1),
+                IA(1)),
 
         /* \\u0300 blocked by \\u0300 */
-        SD("\u00C0\u0300", "\u0300", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
+        SD(
+                "\u00C0\u0300",
+                "\u0300",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(-1),
+                IA(0)),
 
         /* A + 030A + 0301 */
         SD("\u01FA", "\u01FA", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(0, -1), IA(1)),
-        SD("\u01FA", "A\u030A\u0301", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(0, -1), IA(1)),
-
+        SD(
+                "\u01FA",
+                "A\u030A\u0301",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(0, -1),
+                IA(1)),
         SD("\u01FA", "\u030A", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
         SD("\u01FA", "A\u030A", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
-
         SD("\u01FA", "\u030AA", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
-
         SD("\u01FA", "\u0301", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
 
         /* blocked accent */
         SD("\u01FA", "A\u0301", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
         SD("\u01FA", "\u0301A", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
-
-        SD("\u01FA", "\u030A\u0301", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
+        SD(
+                "\u01FA",
+                "\u030A\u0301",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(-1),
+                IA(0)),
         SD("A\u01FA", "A\u030A", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
         SD("\u01FAA", "\u0301A", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
-
         SD("\u0F73", "\u0F73", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(0, -1), IA(1)),
-
         SD("\u0F73", "\u0F71", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
         SD("\u0F73", "\u0F72", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
-
-        SD("\u0F73", "\u0F71\u0F72", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(0, -1), IA(1)),
-
+        SD(
+                "\u0F73",
+                "\u0F71\u0F72",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(0, -1),
+                IA(1)),
         SD("A\u0F73", "A\u0F71", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
         SD("\u0F73A", "\u0F72A", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
-        SD("\u01FA A\u0301\u030A A\u030A\u0301 A\u030A \u01FA", "A\u030A", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(10, -1), IA(2)),
+        SD(
+                "\u01FA A\u0301\u030A A\u030A\u0301 A\u030A \u01FA",
+                "A\u030A",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(10, -1),
+                IA(2)),
     };
 
     SearchData COMPOSITEBOUNDARIESCANONICAL[] = {
@@ -219,64 +589,164 @@ public class SearchTest extends TestFmwk {
         SD("\u00C0", "\u0300", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
 
         /* first one matches only because it's at the start of the text */
-        SD("\u0300\u00C0", "\u0300", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(0, -1), IA(1)),
+        SD(
+                "\u0300\u00C0",
+                "\u0300",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(0, -1),
+                IA(1)),
 
         /* \u0300 blocked by \u0300 */
-        SD("\u00C0\u0300", "\u0300", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
+        SD(
+                "\u00C0\u0300",
+                "\u0300",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(-1),
+                IA(0)),
 
         /* A + 030A + 0301 */
         SD("\u01FA", "\u01FA", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(0, -1), IA(1)),
-        SD("\u01FA", "A\u030A\u0301", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(0, -1), IA(1)),
-
+        SD(
+                "\u01FA",
+                "A\u030A\u0301",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(0, -1),
+                IA(1)),
         SD("\u01FA", "\u030A", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
         SD("\u01FA", "A\u030A", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
-
         SD("\u01FA", "\u030AA", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
-
         SD("\u01FA", "\u0301", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
 
         /* blocked accent */
         SD("\u01FA", "A\u0301", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
         SD("\u01FA", "\u0301A", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
-
-        SD("\u01FA", "\u030A\u0301", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
+        SD(
+                "\u01FA",
+                "\u030A\u0301",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(-1),
+                IA(0)),
         SD("A\u01FA", "A\u030A", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
         SD("\u01FAA", "\u0301A", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
-
         SD("\u0F73", "\u0F73", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(0, -1), IA(1)),
-
         SD("\u0F73", "\u0F71", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
         SD("\u0F73", "\u0F72", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
-
-        SD("\u0F73", "\u0F71\u0F72", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(0, -1), IA(1)),
-
+        SD(
+                "\u0F73",
+                "\u0F71\u0F72",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(0, -1),
+                IA(1)),
         SD("A\u0F73", "A\u0F71", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
         SD("\u0F73A", "\u0F72A", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
-
-        SD("\u01FA A\u0301\u030A A\u030A\u0301 A\u030A \u01FA", "A\u030A", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(10, -1), IA(2)),
+        SD(
+                "\u01FA A\u0301\u030A A\u030A\u0301 A\u030A \u01FA",
+                "A\u030A",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(10, -1),
+                IA(2)),
     };
 
     SearchData SUPPLEMENTARY[] = {
-        SD("abc \uD800\uDC00 \uD800\uDC01 \uD801\uDC00 \uD800\uDC00abc abc\uD800\uDC00 \uD800\uD800\uDC00 \uD800\uDC00\uDC00",
-                "\uD800\uDC00", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(4, 13, 22, 26, 29, -1), IA(2, 2, 2, 2, 2)),
-        SD("and\uD834\uDDB9this sentence", "\uD834\uDDB9", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(3, -1), IA(2)),
-        SD("and \uD834\uDDB9 this sentence", " \uD834\uDDB9 ", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(3, -1), IA(4)),
-        SD("and-\uD834\uDDB9-this sentence", "-\uD834\uDDB9-", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(3, -1), IA(4)),
-        SD("and,\uD834\uDDB9,this sentence", ",\uD834\uDDB9,", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(3, -1), IA(4)),
-        SD("and?\uD834\uDDB9?this sentence", "?\uD834\uDDB9?", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(3, -1), IA(4)),
+        SD(
+                "abc \uD800\uDC00 \uD800\uDC01 \uD801\uDC00 \uD800\uDC00abc abc\uD800\uDC00 \uD800\uD800\uDC00 \uD800\uDC00\uDC00",
+                "\uD800\uDC00",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(4, 13, 22, 26, 29, -1),
+                IA(2, 2, 2, 2, 2)),
+        SD(
+                "and\uD834\uDDB9this sentence",
+                "\uD834\uDDB9",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(3, -1),
+                IA(2)),
+        SD(
+                "and \uD834\uDDB9 this sentence",
+                " \uD834\uDDB9 ",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(3, -1),
+                IA(4)),
+        SD(
+                "and-\uD834\uDDB9-this sentence",
+                "-\uD834\uDDB9-",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(3, -1),
+                IA(4)),
+        SD(
+                "and,\uD834\uDDB9,this sentence",
+                ",\uD834\uDDB9,",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(3, -1),
+                IA(4)),
+        SD(
+                "and?\uD834\uDDB9?this sentence",
+                "?\uD834\uDDB9?",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(3, -1),
+                IA(4)),
     };
 
     String CONTRACTIONRULE = "&z = ab/c < AB < X\u0300 < ABC < X\u0300\u0315";
 
     SearchData CONTRACTION[] = {
         /* common discontiguous */
-        SD("A\u0300\u0315", "\u0300", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
-
-        SD("A\u0300\u0315", "\u0300\u0315", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
+        SD(
+                "A\u0300\u0315",
+                "\u0300",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(-1),
+                IA(0)),
+        SD(
+                "A\u0300\u0315",
+                "\u0300\u0315",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(-1),
+                IA(0)),
 
         /* contraction prefix */
         SD("AB\u0315C", "A", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
-
         SD("AB\u0315C", "AB", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
         SD("AB\u0315C", "\u0315", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
 
@@ -284,13 +754,53 @@ public class SearchTest extends TestFmwk {
          * discontiguous problem here for backwards iteration. accents not found because discontiguous stores all
          * information
          */
-        SD("X\u0300\u0319\u0315", "\u0319", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
+        SD(
+                "X\u0300\u0319\u0315",
+                "\u0319",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(-1),
+                IA(0)),
         /* ends not with a contraction character */
-        SD("X\u0315\u0300D", "\u0300\u0315", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
-        SD("X\u0315\u0300D", "X\u0300\u0315", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(0, -1), IA(3)),
-        SD("X\u0300\u031A\u0315D", "X\u0300", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
+        SD(
+                "X\u0315\u0300D",
+                "\u0300\u0315",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(-1),
+                IA(0)),
+        SD(
+                "X\u0315\u0300D",
+                "X\u0300\u0315",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(0, -1),
+                IA(3)),
+        SD(
+                "X\u0300\u031A\u0315D",
+                "X\u0300",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(-1),
+                IA(0)),
         /* blocked discontiguous */
-        SD("X\u0300\u031A\u0315D", "\u031A\u0315D", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
+        SD(
+                "X\u0300\u031A\u0315D",
+                "\u031A\u0315D",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(-1),
+                IA(0)),
 
         /*
          * "ab" generates a contraction that's an expansion. The "z" matches the first CE of the expansion but the
@@ -301,12 +811,27 @@ public class SearchTest extends TestFmwk {
 
     SearchData CONTRACTIONCANONICAL[] = {
         /* common discontiguous */
-        SD("A\u0300\u0315", "\u0300", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
-        SD("A\u0300\u0315", "\u0300\u0315", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
+        SD(
+                "A\u0300\u0315",
+                "\u0300",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(-1),
+                IA(0)),
+        SD(
+                "A\u0300\u0315",
+                "\u0300\u0315",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(-1),
+                IA(0)),
 
         /* contraction prefix */
         SD("AB\u0315C", "A", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
-
         SD("AB\u0315C", "AB", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
         SD("AB\u0315C", "\u0315", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
 
@@ -318,13 +843,44 @@ public class SearchTest extends TestFmwk {
          */
 
         /* ends not with a contraction character */
-        SD("X\u0315\u0300D", "\u0300\u0315", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
-        SD("X\u0315\u0300D", "X\u0300\u0315", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(0, -1), IA(3)),
-
-        SD("X\u0300\u031A\u0315D", "X\u0300", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
+        SD(
+                "X\u0315\u0300D",
+                "\u0300\u0315",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(-1),
+                IA(0)),
+        SD(
+                "X\u0315\u0300D",
+                "X\u0300\u0315",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(0, -1),
+                IA(3)),
+        SD(
+                "X\u0300\u031A\u0315D",
+                "X\u0300",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(-1),
+                IA(0)),
 
         /* blocked discontiguous */
-        SD("X\u0300\u031A\u0315D", "\u031A\u0315D", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
+        SD(
+                "X\u0300\u031A\u0315D",
+                "\u031A\u0315D",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(-1),
+                IA(0)),
 
         /*
          * "ab" generates a contraction that's an expansion. The "z" matches the first CE of the expansion but the
@@ -334,9 +890,25 @@ public class SearchTest extends TestFmwk {
     };
 
     SearchData MATCH[] = {
-        SD("a busy bee is a very busy beeee", "bee", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(7, 26, -1), IA(3, 3)),
+        SD(
+                "a busy bee is a very busy beeee",
+                "bee",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(7, 26, -1),
+                IA(3, 3)),
         /*  012345678901234567890123456789012345678901234567890 */
-        SD("a busy bee is a very busy beeee with no bee life", "bee", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(7, 26, 40, -1), IA(3, 3, 3)),
+        SD(
+                "a busy bee is a very busy beeee with no bee life",
+                "bee",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(7, 26, 40, -1),
+                IA(3, 3, 3)),
     };
 
     String IGNORABLERULE = "&a = \u0300";
@@ -346,69 +918,229 @@ public class SearchTest extends TestFmwk {
          * This isn't much of a test when matches have to be on grapheme boundiaries. The match at 0 only works because it's
          * at the start of the text.
          */
-        SD("\u0300\u0315 \u0300\u0315 ", "\u0300", null, PRIMARY, STANDARD_ELEMENT_COMPARISON, null, IA(0, -1), IA(2)),
+        SD(
+                "\u0300\u0315 \u0300\u0315 ",
+                "\u0300",
+                null,
+                PRIMARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(0, -1),
+                IA(2)),
     };
 
     SearchData DIACTRICMATCH[] = {
-        SD("\u0061\u0061\u00E1", "\u0061\u00E1", null, SECONDARY, STANDARD_ELEMENT_COMPARISON, null, IA(1, -1), IA(2)),
-        SD("\u0020\u00C2\u0303\u0020\u0041\u0061\u1EAA\u0041\u0302\u0303\u00C2\u0303\u1EAB\u0061\u0302\u0303\u00E2\u0303\uD806\uDC01\u0300\u0020", "\u00C2\u0303",
-            null, PRIMARY, STANDARD_ELEMENT_COMPARISON, null, IA(1, 4, 5, 6, 7, 10, 12, 13, 16, -1), IA(2, 1, 1, 1, 3, 2, 1, 3, 2)),
-        SD("\u03BA\u03B1\u03B9\u0300\u0020\u03BA\u03B1\u1F76", "\u03BA\u03B1\u03B9", null, PRIMARY, STANDARD_ELEMENT_COMPARISON, null, IA(0, 5, -1), IA(4, 3)),
+        SD(
+                "\u0061\u0061\u00E1",
+                "\u0061\u00E1",
+                null,
+                SECONDARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(1, -1),
+                IA(2)),
+        SD(
+                "\u0020\u00C2\u0303\u0020\u0041\u0061\u1EAA\u0041\u0302\u0303\u00C2\u0303\u1EAB\u0061\u0302\u0303\u00E2\u0303\uD806\uDC01\u0300\u0020",
+                "\u00C2\u0303",
+                null,
+                PRIMARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(1, 4, 5, 6, 7, 10, 12, 13, 16, -1),
+                IA(2, 1, 1, 1, 3, 2, 1, 3, 2)),
+        SD(
+                "\u03BA\u03B1\u03B9\u0300\u0020\u03BA\u03B1\u1F76",
+                "\u03BA\u03B1\u03B9",
+                null,
+                PRIMARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(0, 5, -1),
+                IA(4, 3)),
     };
 
     SearchData NORMCANONICAL[] = {
-        SD("\u0300\u0325", "\u0300", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
-        SD("\u0300\u0325", "\u0325", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
-        SD("a\u0300\u0325", "\u0325\u0300", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
-        SD("a\u0300\u0325", "\u0300\u0325", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
-        SD("a\u0300\u0325", "\u0325", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
-        SD("a\u0300\u0325", "\u0300", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
+        SD(
+                "\u0300\u0325",
+                "\u0300",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(-1),
+                IA(0)),
+        SD(
+                "\u0300\u0325",
+                "\u0325",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(-1),
+                IA(0)),
+        SD(
+                "a\u0300\u0325",
+                "\u0325\u0300",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(-1),
+                IA(0)),
+        SD(
+                "a\u0300\u0325",
+                "\u0300\u0325",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(-1),
+                IA(0)),
+        SD(
+                "a\u0300\u0325",
+                "\u0325",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(-1),
+                IA(0)),
+        SD(
+                "a\u0300\u0325",
+                "\u0300",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(-1),
+                IA(0)),
     };
 
     SearchData NORMEXACT[] = {
-        SD("a\u0300\u0325", "a\u0325\u0300", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(0, -1), IA(3)),
+        SD(
+                "a\u0300\u0325",
+                "a\u0325\u0300",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(0, -1),
+                IA(3)),
     };
 
     SearchData NONNORMEXACT[] = {
-        SD("a\u0300\u0325", "\u0325\u0300", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
+        SD(
+                "a\u0300\u0325",
+                "\u0325\u0300",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(-1),
+                IA(0)),
     };
 
     SearchData OVERLAP[] = {
-        SD("abababab", "abab", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(0, 2, 4, -1), IA(4, 4, 4)),
+        SD(
+                "abababab",
+                "abab",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(0, 2, 4, -1),
+                IA(4, 4, 4)),
     };
 
     SearchData NONOVERLAP[] = {
-        SD("abababab", "abab", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(0, 4, -1), IA(4, 4)),
+        SD(
+                "abababab",
+                "abab",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(0, 4, -1),
+                IA(4, 4)),
     };
 
     SearchData OVERLAPCANONICAL[] = {
-        SD("abababab", "abab", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(0, 2, 4, -1), IA(4, 4, 4)),
+        SD(
+                "abababab",
+                "abab",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(0, 2, 4, -1),
+                IA(4, 4, 4)),
     };
 
     SearchData NONOVERLAPCANONICAL[] = {
-        SD("abababab", "abab", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(0, 4, -1), IA(4, 4)),
+        SD(
+                "abababab",
+                "abab",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(0, 4, -1),
+                IA(4, 4)),
     };
 
     SearchData PATTERNCANONICAL[] = {
-        SD("The quick brown fox jumps over the lazy foxes", "the", null, PRIMARY, STANDARD_ELEMENT_COMPARISON, null, IA(0, 31, -1), IA(3, 3)),
-        SD("The quick brown fox jumps over the lazy foxes", "fox", null, PRIMARY, STANDARD_ELEMENT_COMPARISON, null, IA(16, 40, -1), IA(3, 3)),
+        SD(
+                "The quick brown fox jumps over the lazy foxes",
+                "the",
+                null,
+                PRIMARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(0, 31, -1),
+                IA(3, 3)),
+        SD(
+                "The quick brown fox jumps over the lazy foxes",
+                "fox",
+                null,
+                PRIMARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(16, 40, -1),
+                IA(3, 3)),
     };
 
     SearchData PATTERN[] = {
-        SD("The quick brown fox jumps over the lazy foxes", "the", null, PRIMARY, STANDARD_ELEMENT_COMPARISON, null, IA(0, 31, -1), IA(3, 3)),
-        SD("The quick brown fox jumps over the lazy foxes", "fox", null, PRIMARY, STANDARD_ELEMENT_COMPARISON, null, IA(16, 40, -1), IA(3, 3)),
+        SD(
+                "The quick brown fox jumps over the lazy foxes",
+                "the",
+                null,
+                PRIMARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(0, 31, -1),
+                IA(3, 3)),
+        SD(
+                "The quick brown fox jumps over the lazy foxes",
+                "fox",
+                null,
+                PRIMARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(16, 40, -1),
+                IA(3, 3)),
     };
 
-    String PECHE_WITH_ACCENTS = "un p\u00E9ch\u00E9, "
-                                + "\u00E7a p\u00E8che par, "
-                                + "p\u00E9cher, "
-                                + "une p\u00EAche, "
-                                + "un p\u00EAcher, "
-                                + "j\u2019ai p\u00EAch\u00E9, "
-                                + "un p\u00E9cheur, "
-                                + "\u201Cp\u00E9che\u201D, "
-                                + "decomp peche\u0301, "
-                                + "base peche";
+    String PECHE_WITH_ACCENTS =
+            "un p\u00E9ch\u00E9, "
+                    + "\u00E7a p\u00E8che par, "
+                    + "p\u00E9cher, "
+                    + "une p\u00EAche, "
+                    + "un p\u00EAcher, "
+                    + "j\u2019ai p\u00EAch\u00E9, "
+                    + "un p\u00E9cheur, "
+                    + "\u201Cp\u00E9che\u201D, "
+                    + "decomp peche\u0301, "
+                    + "base peche";
     // in the above, the interesting words and their offsets are:
     //    3 pe<301>che<301>
     //    13 pe<300>che
@@ -423,142 +1155,649 @@ public class SearchTest extends TestFmwk {
 
     SearchData STRENGTH[] = {
         /*  012345678901234567890123456789012345678901234567890123456789 */
-        SD("The quick brown fox jumps over the lazy foxes", "fox", "en", PRIMARY, STANDARD_ELEMENT_COMPARISON, null, IA(16, 40, -1), IA(3, 3)),
-        SD("The quick brown fox jumps over the lazy foxes", "fox", "en", PRIMARY, STANDARD_ELEMENT_COMPARISON, "wordbreaker", IA(16, -1), IA(3)),
-        SD("blackbirds Pat p\u00E9ch\u00E9 p\u00EAche p\u00E9cher p\u00EAcher Tod T\u00F6ne black Tofu blackbirds Ton PAT toehold blackbird black-bird pat toe big Toe",
-                "peche", "fr", PRIMARY, STANDARD_ELEMENT_COMPARISON, null, IA(15, 21, 27, 34, -1), IA(5, 5, 5, 5)),
-        SD("This is a toe T\u00F6ne", "toe", "de", PRIMARY, STANDARD_ELEMENT_COMPARISON, null, IA(10, 14, -1), IA(3, 2)),
-        SD("A channel, another CHANNEL, more Channels, and one last channel...", "channel", "es", PRIMARY, STANDARD_ELEMENT_COMPARISON, null, IA(2, 19, 33, 56, -1), IA(7, 7, 7, 7)),
-        SD("\u00c0 should match but not A", "A\u0300", "en", IDENTICAL, STANDARD_ELEMENT_COMPARISON,  null, IA(0, -1), IA(1, 0)),
+        SD(
+                "The quick brown fox jumps over the lazy foxes",
+                "fox",
+                "en",
+                PRIMARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(16, 40, -1),
+                IA(3, 3)),
+        SD(
+                "The quick brown fox jumps over the lazy foxes",
+                "fox",
+                "en",
+                PRIMARY,
+                STANDARD_ELEMENT_COMPARISON,
+                "wordbreaker",
+                IA(16, -1),
+                IA(3)),
+        SD(
+                "blackbirds Pat p\u00E9ch\u00E9 p\u00EAche p\u00E9cher p\u00EAcher Tod T\u00F6ne black Tofu blackbirds Ton PAT toehold blackbird black-bird pat toe big Toe",
+                "peche",
+                "fr",
+                PRIMARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(15, 21, 27, 34, -1),
+                IA(5, 5, 5, 5)),
+        SD(
+                "This is a toe T\u00F6ne",
+                "toe",
+                "de",
+                PRIMARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(10, 14, -1),
+                IA(3, 2)),
+        SD(
+                "A channel, another CHANNEL, more Channels, and one last channel...",
+                "channel",
+                "es",
+                PRIMARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(2, 19, 33, 56, -1),
+                IA(7, 7, 7, 7)),
+        SD(
+                "\u00c0 should match but not A",
+                "A\u0300",
+                "en",
+                IDENTICAL,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(0, -1),
+                IA(1, 0)),
 
         /* some tests for modified element comparison, ticket #7093 */
-        SD(PECHE_WITH_ACCENTS, "peche", "en", PRIMARY, STANDARD_ELEMENT_COMPARISON, null, IA(3, 13, 24, 36, 46, 59, 69, 79, 94, 107, -1), IA(5, 5, 5, 5, 5, 5, 5, 5, 6, 5)),
-        SD(PECHE_WITH_ACCENTS, "peche", "en", PRIMARY, STANDARD_ELEMENT_COMPARISON, "wordbreaker", IA(3, 13, 36, 59, 79, 94, 107, -1), IA(5, 5, 5, 5, 5, 6, 5)),
-        SD(PECHE_WITH_ACCENTS, "peche", "en", SECONDARY, STANDARD_ELEMENT_COMPARISON, null, IA(107, -1), IA(5)),
-        SD(PECHE_WITH_ACCENTS, "peche", "en", SECONDARY, PATTERN_BASE_WEIGHT_IS_WILDCARD, null, IA(3, 13, 24, 36, 46, 59, 69, 79, 94, 107, -1), IA(5, 5, 5, 5, 5, 5, 5, 5, 6, 5)),
-        SD(PECHE_WITH_ACCENTS, "peche", "en", SECONDARY, PATTERN_BASE_WEIGHT_IS_WILDCARD, "wordbreaker", IA(3, 13, 36, 59, 79, 94, 107, -1), IA(5, 5, 5, 5, 5, 6, 5)),
-        SD(PECHE_WITH_ACCENTS, "p\u00E9che", "en", SECONDARY, STANDARD_ELEMENT_COMPARISON, null, IA(24, 69, 79, -1), IA(5, 5, 5)),
-        SD(PECHE_WITH_ACCENTS, "p\u00E9che", "en", SECONDARY, STANDARD_ELEMENT_COMPARISON, "wordbreaker", IA(79, -1), IA(5)),
-        SD(PECHE_WITH_ACCENTS, "p\u00E9che", "en", SECONDARY, PATTERN_BASE_WEIGHT_IS_WILDCARD, null, IA(3, 24, 69, 79, -1), IA(5, 5, 5, 5)),
-        SD(PECHE_WITH_ACCENTS, "p\u00E9che", "en", SECONDARY, PATTERN_BASE_WEIGHT_IS_WILDCARD, "wordbreaker", IA(3, 79, -1), IA(5, 5)),
-        SD(PECHE_WITH_ACCENTS, "p\u00E9che", "en", SECONDARY, ANY_BASE_WEIGHT_IS_WILDCARD, null, IA(3, 24, 69, 79, 94, 107, -1), IA(5, 5, 5, 5, 6, 5)),
-        SD(PECHE_WITH_ACCENTS, "p\u00E9che", "en", SECONDARY, ANY_BASE_WEIGHT_IS_WILDCARD, "wordbreaker", IA(3, 79, 94, 107, -1), IA(5, 5, 6, 5)),
-        SD(PECHE_WITH_ACCENTS, "pech\u00E9", "en", SECONDARY, PATTERN_BASE_WEIGHT_IS_WILDCARD, null, IA(3, 59, 94, -1), IA(5, 5, 6)),
-        SD(PECHE_WITH_ACCENTS, "pech\u00E9", "en", SECONDARY, PATTERN_BASE_WEIGHT_IS_WILDCARD, "wordbreaker", IA(3, 59, 94, -1), IA(5, 5, 6)),
-        SD(PECHE_WITH_ACCENTS, "pech\u00E9", "en", SECONDARY, ANY_BASE_WEIGHT_IS_WILDCARD, null, IA(3, 13, 24, 36, 46, 59, 69, 79, 94, 107, -1), IA(5, 5, 5, 5, 5, 5, 5, 5, 6, 5)),
-        SD(PECHE_WITH_ACCENTS, "pech\u00E9", "en", SECONDARY, ANY_BASE_WEIGHT_IS_WILDCARD, "wordbreaker", IA(3, 13, 36, 59, 79, 94, 107, -1), IA(5, 5, 5, 5, 5, 6, 5)),
-        SD(PECHE_WITH_ACCENTS, "peche\u0301", "en", SECONDARY, PATTERN_BASE_WEIGHT_IS_WILDCARD, null, IA(3, 59, 94, -1), IA(5, 5, 6)),
-        SD(PECHE_WITH_ACCENTS, "peche\u0301", "en", SECONDARY, PATTERN_BASE_WEIGHT_IS_WILDCARD, "wordbreaker", IA(3, 59, 94, -1), IA(5, 5, 6)),
-        SD(PECHE_WITH_ACCENTS, "peche\u0301", "en", SECONDARY, ANY_BASE_WEIGHT_IS_WILDCARD, null, IA(3, 13, 24, 36, 46, 59, 69, 79, 94, 107, -1), IA(5, 5, 5, 5, 5, 5, 5, 5, 6, 5)),
-        SD(PECHE_WITH_ACCENTS, "peche\u0301", "en", SECONDARY, ANY_BASE_WEIGHT_IS_WILDCARD, "wordbreaker", IA(3, 13, 36, 59, 79, 94, 107, -1), IA(5, 5, 5, 5, 5, 6, 5)),
+        SD(
+                PECHE_WITH_ACCENTS,
+                "peche",
+                "en",
+                PRIMARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(3, 13, 24, 36, 46, 59, 69, 79, 94, 107, -1),
+                IA(5, 5, 5, 5, 5, 5, 5, 5, 6, 5)),
+        SD(
+                PECHE_WITH_ACCENTS,
+                "peche",
+                "en",
+                PRIMARY,
+                STANDARD_ELEMENT_COMPARISON,
+                "wordbreaker",
+                IA(3, 13, 36, 59, 79, 94, 107, -1),
+                IA(5, 5, 5, 5, 5, 6, 5)),
+        SD(
+                PECHE_WITH_ACCENTS,
+                "peche",
+                "en",
+                SECONDARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(107, -1),
+                IA(5)),
+        SD(
+                PECHE_WITH_ACCENTS,
+                "peche",
+                "en",
+                SECONDARY,
+                PATTERN_BASE_WEIGHT_IS_WILDCARD,
+                null,
+                IA(3, 13, 24, 36, 46, 59, 69, 79, 94, 107, -1),
+                IA(5, 5, 5, 5, 5, 5, 5, 5, 6, 5)),
+        SD(
+                PECHE_WITH_ACCENTS,
+                "peche",
+                "en",
+                SECONDARY,
+                PATTERN_BASE_WEIGHT_IS_WILDCARD,
+                "wordbreaker",
+                IA(3, 13, 36, 59, 79, 94, 107, -1),
+                IA(5, 5, 5, 5, 5, 6, 5)),
+        SD(
+                PECHE_WITH_ACCENTS,
+                "p\u00E9che",
+                "en",
+                SECONDARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(24, 69, 79, -1),
+                IA(5, 5, 5)),
+        SD(
+                PECHE_WITH_ACCENTS,
+                "p\u00E9che",
+                "en",
+                SECONDARY,
+                STANDARD_ELEMENT_COMPARISON,
+                "wordbreaker",
+                IA(79, -1),
+                IA(5)),
+        SD(
+                PECHE_WITH_ACCENTS,
+                "p\u00E9che",
+                "en",
+                SECONDARY,
+                PATTERN_BASE_WEIGHT_IS_WILDCARD,
+                null,
+                IA(3, 24, 69, 79, -1),
+                IA(5, 5, 5, 5)),
+        SD(
+                PECHE_WITH_ACCENTS,
+                "p\u00E9che",
+                "en",
+                SECONDARY,
+                PATTERN_BASE_WEIGHT_IS_WILDCARD,
+                "wordbreaker",
+                IA(3, 79, -1),
+                IA(5, 5)),
+        SD(
+                PECHE_WITH_ACCENTS,
+                "p\u00E9che",
+                "en",
+                SECONDARY,
+                ANY_BASE_WEIGHT_IS_WILDCARD,
+                null,
+                IA(3, 24, 69, 79, 94, 107, -1),
+                IA(5, 5, 5, 5, 6, 5)),
+        SD(
+                PECHE_WITH_ACCENTS,
+                "p\u00E9che",
+                "en",
+                SECONDARY,
+                ANY_BASE_WEIGHT_IS_WILDCARD,
+                "wordbreaker",
+                IA(3, 79, 94, 107, -1),
+                IA(5, 5, 6, 5)),
+        SD(
+                PECHE_WITH_ACCENTS,
+                "pech\u00E9",
+                "en",
+                SECONDARY,
+                PATTERN_BASE_WEIGHT_IS_WILDCARD,
+                null,
+                IA(3, 59, 94, -1),
+                IA(5, 5, 6)),
+        SD(
+                PECHE_WITH_ACCENTS,
+                "pech\u00E9",
+                "en",
+                SECONDARY,
+                PATTERN_BASE_WEIGHT_IS_WILDCARD,
+                "wordbreaker",
+                IA(3, 59, 94, -1),
+                IA(5, 5, 6)),
+        SD(
+                PECHE_WITH_ACCENTS,
+                "pech\u00E9",
+                "en",
+                SECONDARY,
+                ANY_BASE_WEIGHT_IS_WILDCARD,
+                null,
+                IA(3, 13, 24, 36, 46, 59, 69, 79, 94, 107, -1),
+                IA(5, 5, 5, 5, 5, 5, 5, 5, 6, 5)),
+        SD(
+                PECHE_WITH_ACCENTS,
+                "pech\u00E9",
+                "en",
+                SECONDARY,
+                ANY_BASE_WEIGHT_IS_WILDCARD,
+                "wordbreaker",
+                IA(3, 13, 36, 59, 79, 94, 107, -1),
+                IA(5, 5, 5, 5, 5, 6, 5)),
+        SD(
+                PECHE_WITH_ACCENTS,
+                "peche\u0301",
+                "en",
+                SECONDARY,
+                PATTERN_BASE_WEIGHT_IS_WILDCARD,
+                null,
+                IA(3, 59, 94, -1),
+                IA(5, 5, 6)),
+        SD(
+                PECHE_WITH_ACCENTS,
+                "peche\u0301",
+                "en",
+                SECONDARY,
+                PATTERN_BASE_WEIGHT_IS_WILDCARD,
+                "wordbreaker",
+                IA(3, 59, 94, -1),
+                IA(5, 5, 6)),
+        SD(
+                PECHE_WITH_ACCENTS,
+                "peche\u0301",
+                "en",
+                SECONDARY,
+                ANY_BASE_WEIGHT_IS_WILDCARD,
+                null,
+                IA(3, 13, 24, 36, 46, 59, 69, 79, 94, 107, -1),
+                IA(5, 5, 5, 5, 5, 5, 5, 5, 6, 5)),
+        SD(
+                PECHE_WITH_ACCENTS,
+                "peche\u0301",
+                "en",
+                SECONDARY,
+                ANY_BASE_WEIGHT_IS_WILDCARD,
+                "wordbreaker",
+                IA(3, 13, 36, 59, 79, 94, 107, -1),
+                IA(5, 5, 5, 5, 5, 6, 5)),
 
         /* more tests for modified element comparison (with fr), ticket #7093 */
-        SD(PECHE_WITH_ACCENTS, "peche", "fr", PRIMARY, STANDARD_ELEMENT_COMPARISON, null, IA(3, 13, 24, 36, 46, 59, 69, 79, 94, 107, -1), IA(5, 5, 5, 5, 5, 5, 5, 5, 6, 5)),
-        SD(PECHE_WITH_ACCENTS, "peche", "fr", PRIMARY, STANDARD_ELEMENT_COMPARISON, "wordbreaker", IA(3, 13, 36, 59, 79, 94, 107, -1), IA(5, 5, 5, 5, 5, 6, 5)),
-        SD(PECHE_WITH_ACCENTS, "peche", "fr", SECONDARY, STANDARD_ELEMENT_COMPARISON, null, IA(107, -1), IA(5)),
-        SD(PECHE_WITH_ACCENTS, "peche", "fr", SECONDARY, PATTERN_BASE_WEIGHT_IS_WILDCARD, null, IA(3, 13, 24, 36, 46, 59, 69, 79, 94, 107, -1), IA(5, 5, 5, 5, 5, 5, 5, 5, 6, 5)),
-        SD(PECHE_WITH_ACCENTS, "peche", "fr", SECONDARY, PATTERN_BASE_WEIGHT_IS_WILDCARD, "wordbreaker", IA(3, 13, 36, 59, 79, 94, 107, -1), IA(5, 5, 5, 5, 5, 6, 5)),
-        SD(PECHE_WITH_ACCENTS, "p\u00E9che", "fr", SECONDARY, STANDARD_ELEMENT_COMPARISON, null, IA(24, 69, 79, -1), IA(5, 5, 5)),
-        SD(PECHE_WITH_ACCENTS, "p\u00E9che", "fr", SECONDARY, STANDARD_ELEMENT_COMPARISON, "wordbreaker", IA(79, -1), IA(5)),
-        SD(PECHE_WITH_ACCENTS, "p\u00E9che", "fr", SECONDARY, PATTERN_BASE_WEIGHT_IS_WILDCARD, null, IA(3, 24, 69, 79, -1), IA(5, 5, 5, 5)),
-        SD(PECHE_WITH_ACCENTS, "p\u00E9che", "fr", SECONDARY, PATTERN_BASE_WEIGHT_IS_WILDCARD, "wordbreaker", IA(3, 79, -1), IA(5, 5)),
-        SD(PECHE_WITH_ACCENTS, "p\u00E9che", "fr", SECONDARY, ANY_BASE_WEIGHT_IS_WILDCARD, null, IA(3, 24, 69, 79, 94, 107, -1), IA(5, 5, 5, 5, 6, 5)),
-        SD(PECHE_WITH_ACCENTS, "p\u00E9che", "fr", SECONDARY, ANY_BASE_WEIGHT_IS_WILDCARD, "wordbreaker", IA(3, 79, 94, 107, -1), IA(5, 5, 6, 5)),
-        SD(PECHE_WITH_ACCENTS, "pech\u00E9", "fr", SECONDARY, PATTERN_BASE_WEIGHT_IS_WILDCARD, null, IA(3, 59, 94, -1), IA(5, 5, 6)),
-        SD(PECHE_WITH_ACCENTS, "pech\u00E9", "fr", SECONDARY, PATTERN_BASE_WEIGHT_IS_WILDCARD, "wordbreaker", IA(3, 59, 94, -1), IA(5, 5, 6)),
-        SD(PECHE_WITH_ACCENTS, "pech\u00E9", "fr", SECONDARY, ANY_BASE_WEIGHT_IS_WILDCARD, null, IA(3, 13, 24, 36, 46, 59, 69, 79, 94, 107, -1), IA(5, 5, 5, 5, 5, 5, 5, 5, 6, 5)),
-        SD(PECHE_WITH_ACCENTS, "pech\u00E9", "fr", SECONDARY, ANY_BASE_WEIGHT_IS_WILDCARD, "wordbreaker", IA(3, 13, 36, 59, 79, 94, 107, -1), IA(5, 5, 5, 5, 5, 6, 5)),
-        SD(PECHE_WITH_ACCENTS, "peche\u0301", "fr", SECONDARY, PATTERN_BASE_WEIGHT_IS_WILDCARD, null, IA(3, 59, 94, -1), IA(5, 5, 6)),
-        SD(PECHE_WITH_ACCENTS, "peche\u0301", "fr", SECONDARY, PATTERN_BASE_WEIGHT_IS_WILDCARD, "wordbreaker", IA(3, 59, 94, -1), IA(5, 5, 6)),
-        SD(PECHE_WITH_ACCENTS, "peche\u0301", "fr", SECONDARY, ANY_BASE_WEIGHT_IS_WILDCARD, null, IA(3, 13, 24, 36, 46, 59, 69, 79, 94, 107, -1), IA(5, 5, 5, 5, 5, 5, 5, 5, 6, 5)),
-        SD(PECHE_WITH_ACCENTS, "peche\u0301", "fr", SECONDARY, ANY_BASE_WEIGHT_IS_WILDCARD, "wordbreaker", IA(3, 13, 36, 59, 79, 94, 107, -1), IA(5, 5, 5, 5, 5, 6, 5)),
-
+        SD(
+                PECHE_WITH_ACCENTS,
+                "peche",
+                "fr",
+                PRIMARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(3, 13, 24, 36, 46, 59, 69, 79, 94, 107, -1),
+                IA(5, 5, 5, 5, 5, 5, 5, 5, 6, 5)),
+        SD(
+                PECHE_WITH_ACCENTS,
+                "peche",
+                "fr",
+                PRIMARY,
+                STANDARD_ELEMENT_COMPARISON,
+                "wordbreaker",
+                IA(3, 13, 36, 59, 79, 94, 107, -1),
+                IA(5, 5, 5, 5, 5, 6, 5)),
+        SD(
+                PECHE_WITH_ACCENTS,
+                "peche",
+                "fr",
+                SECONDARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(107, -1),
+                IA(5)),
+        SD(
+                PECHE_WITH_ACCENTS,
+                "peche",
+                "fr",
+                SECONDARY,
+                PATTERN_BASE_WEIGHT_IS_WILDCARD,
+                null,
+                IA(3, 13, 24, 36, 46, 59, 69, 79, 94, 107, -1),
+                IA(5, 5, 5, 5, 5, 5, 5, 5, 6, 5)),
+        SD(
+                PECHE_WITH_ACCENTS,
+                "peche",
+                "fr",
+                SECONDARY,
+                PATTERN_BASE_WEIGHT_IS_WILDCARD,
+                "wordbreaker",
+                IA(3, 13, 36, 59, 79, 94, 107, -1),
+                IA(5, 5, 5, 5, 5, 6, 5)),
+        SD(
+                PECHE_WITH_ACCENTS,
+                "p\u00E9che",
+                "fr",
+                SECONDARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(24, 69, 79, -1),
+                IA(5, 5, 5)),
+        SD(
+                PECHE_WITH_ACCENTS,
+                "p\u00E9che",
+                "fr",
+                SECONDARY,
+                STANDARD_ELEMENT_COMPARISON,
+                "wordbreaker",
+                IA(79, -1),
+                IA(5)),
+        SD(
+                PECHE_WITH_ACCENTS,
+                "p\u00E9che",
+                "fr",
+                SECONDARY,
+                PATTERN_BASE_WEIGHT_IS_WILDCARD,
+                null,
+                IA(3, 24, 69, 79, -1),
+                IA(5, 5, 5, 5)),
+        SD(
+                PECHE_WITH_ACCENTS,
+                "p\u00E9che",
+                "fr",
+                SECONDARY,
+                PATTERN_BASE_WEIGHT_IS_WILDCARD,
+                "wordbreaker",
+                IA(3, 79, -1),
+                IA(5, 5)),
+        SD(
+                PECHE_WITH_ACCENTS,
+                "p\u00E9che",
+                "fr",
+                SECONDARY,
+                ANY_BASE_WEIGHT_IS_WILDCARD,
+                null,
+                IA(3, 24, 69, 79, 94, 107, -1),
+                IA(5, 5, 5, 5, 6, 5)),
+        SD(
+                PECHE_WITH_ACCENTS,
+                "p\u00E9che",
+                "fr",
+                SECONDARY,
+                ANY_BASE_WEIGHT_IS_WILDCARD,
+                "wordbreaker",
+                IA(3, 79, 94, 107, -1),
+                IA(5, 5, 6, 5)),
+        SD(
+                PECHE_WITH_ACCENTS,
+                "pech\u00E9",
+                "fr",
+                SECONDARY,
+                PATTERN_BASE_WEIGHT_IS_WILDCARD,
+                null,
+                IA(3, 59, 94, -1),
+                IA(5, 5, 6)),
+        SD(
+                PECHE_WITH_ACCENTS,
+                "pech\u00E9",
+                "fr",
+                SECONDARY,
+                PATTERN_BASE_WEIGHT_IS_WILDCARD,
+                "wordbreaker",
+                IA(3, 59, 94, -1),
+                IA(5, 5, 6)),
+        SD(
+                PECHE_WITH_ACCENTS,
+                "pech\u00E9",
+                "fr",
+                SECONDARY,
+                ANY_BASE_WEIGHT_IS_WILDCARD,
+                null,
+                IA(3, 13, 24, 36, 46, 59, 69, 79, 94, 107, -1),
+                IA(5, 5, 5, 5, 5, 5, 5, 5, 6, 5)),
+        SD(
+                PECHE_WITH_ACCENTS,
+                "pech\u00E9",
+                "fr",
+                SECONDARY,
+                ANY_BASE_WEIGHT_IS_WILDCARD,
+                "wordbreaker",
+                IA(3, 13, 36, 59, 79, 94, 107, -1),
+                IA(5, 5, 5, 5, 5, 6, 5)),
+        SD(
+                PECHE_WITH_ACCENTS,
+                "peche\u0301",
+                "fr",
+                SECONDARY,
+                PATTERN_BASE_WEIGHT_IS_WILDCARD,
+                null,
+                IA(3, 59, 94, -1),
+                IA(5, 5, 6)),
+        SD(
+                PECHE_WITH_ACCENTS,
+                "peche\u0301",
+                "fr",
+                SECONDARY,
+                PATTERN_BASE_WEIGHT_IS_WILDCARD,
+                "wordbreaker",
+                IA(3, 59, 94, -1),
+                IA(5, 5, 6)),
+        SD(
+                PECHE_WITH_ACCENTS,
+                "peche\u0301",
+                "fr",
+                SECONDARY,
+                ANY_BASE_WEIGHT_IS_WILDCARD,
+                null,
+                IA(3, 13, 24, 36, 46, 59, 69, 79, 94, 107, -1),
+                IA(5, 5, 5, 5, 5, 5, 5, 5, 6, 5)),
+        SD(
+                PECHE_WITH_ACCENTS,
+                "peche\u0301",
+                "fr",
+                SECONDARY,
+                ANY_BASE_WEIGHT_IS_WILDCARD,
+                "wordbreaker",
+                IA(3, 13, 36, 59, 79, 94, 107, -1),
+                IA(5, 5, 5, 5, 5, 6, 5)),
     };
 
     SearchData STRENGTHCANONICAL[] = {
         /*  012345678901234567890123456789012345678901234567890123456789 */
-        SD("The quick brown fox jumps over the lazy foxes", "fox", "en", PRIMARY, STANDARD_ELEMENT_COMPARISON, null, IA(16, 40, -1), IA(3, 3)),
-        SD("The quick brown fox jumps over the lazy foxes", "fox", "en", PRIMARY, STANDARD_ELEMENT_COMPARISON, "wordbreaker", IA(16, -1), IA(3)),
-        SD("blackbirds Pat p\u00E9ch\u00E9 p\u00EAche p\u00E9cher p\u00EAcher Tod T\u00F6ne black Tofu blackbirds Ton PAT toehold blackbird black-bird pat toe big Toe",
-                "peche", "fr", PRIMARY, STANDARD_ELEMENT_COMPARISON, null, IA(15, 21, 27, 34, -1), IA(5, 5, 5, 5)),
-        SD("This is a toe T\u00F6ne", "toe", "de", PRIMARY, STANDARD_ELEMENT_COMPARISON, null, IA(10, 14, -1), IA(3, 2)),
-        SD("A channel, another CHANNEL, more Channels, and one last channel...", "channel", "es", PRIMARY, STANDARD_ELEMENT_COMPARISON, null, IA(2, 19, 33, 56, -1), IA(7, 7, 7, 7)),
+        SD(
+                "The quick brown fox jumps over the lazy foxes",
+                "fox",
+                "en",
+                PRIMARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(16, 40, -1),
+                IA(3, 3)),
+        SD(
+                "The quick brown fox jumps over the lazy foxes",
+                "fox",
+                "en",
+                PRIMARY,
+                STANDARD_ELEMENT_COMPARISON,
+                "wordbreaker",
+                IA(16, -1),
+                IA(3)),
+        SD(
+                "blackbirds Pat p\u00E9ch\u00E9 p\u00EAche p\u00E9cher p\u00EAcher Tod T\u00F6ne black Tofu blackbirds Ton PAT toehold blackbird black-bird pat toe big Toe",
+                "peche",
+                "fr",
+                PRIMARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(15, 21, 27, 34, -1),
+                IA(5, 5, 5, 5)),
+        SD(
+                "This is a toe T\u00F6ne",
+                "toe",
+                "de",
+                PRIMARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(10, 14, -1),
+                IA(3, 2)),
+        SD(
+                "A channel, another CHANNEL, more Channels, and one last channel...",
+                "channel",
+                "es",
+                PRIMARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(2, 19, 33, 56, -1),
+                IA(7, 7, 7, 7)),
     };
 
     SearchData SUPPLEMENTARYCANONICAL[] = {
         /*  012345678901234567890123456789012345678901234567890012345678901234567890123456789012345678901234567890012345678901234567890123456789 */
-        SD("abc \uD800\uDC00 \uD800\uDC01 \uD801\uDC00 \uD800\uDC00abc abc\uD800\uDC00 \uD800\uD800\uDC00 \uD800\uDC00\uDC00", "\uD800\uDC00",
-            null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(4, 13, 22, 26, 29, -1), IA(2, 2, 2, 2, 2)),
-        SD("and\uD834\uDDB9this sentence", "\uD834\uDDB9", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(3, -1), IA(2)),
-        SD("and \uD834\uDDB9 this sentence", " \uD834\uDDB9 ", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(3, -1), IA(4)),
-        SD("and-\uD834\uDDB9-this sentence", "-\uD834\uDDB9-", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(3, -1), IA(4)),
-        SD("and,\uD834\uDDB9,this sentence", ",\uD834\uDDB9,", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(3, -1), IA(4)),
-        SD("and?\uD834\uDDB9?this sentence", "?\uD834\uDDB9?", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(3, -1), IA(4)),
+        SD(
+                "abc \uD800\uDC00 \uD800\uDC01 \uD801\uDC00 \uD800\uDC00abc abc\uD800\uDC00 \uD800\uD800\uDC00 \uD800\uDC00\uDC00",
+                "\uD800\uDC00",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(4, 13, 22, 26, 29, -1),
+                IA(2, 2, 2, 2, 2)),
+        SD(
+                "and\uD834\uDDB9this sentence",
+                "\uD834\uDDB9",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(3, -1),
+                IA(2)),
+        SD(
+                "and \uD834\uDDB9 this sentence",
+                " \uD834\uDDB9 ",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(3, -1),
+                IA(4)),
+        SD(
+                "and-\uD834\uDDB9-this sentence",
+                "-\uD834\uDDB9-",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(3, -1),
+                IA(4)),
+        SD(
+                "and,\uD834\uDDB9,this sentence",
+                ",\uD834\uDDB9,",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(3, -1),
+                IA(4)),
+        SD(
+                "and?\uD834\uDDB9?this sentence",
+                "?\uD834\uDDB9?",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(3, -1),
+                IA(4)),
     };
 
     static SearchData VARIABLE[] = {
         /*  012345678901234567890123456789012345678901234567890123456789 */
-        SD("blackbirds black blackbirds blackbird black-bird", "blackbird", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(0, 17, 28, 38, -1), IA(9, 9, 9, 10)),
+        SD(
+                "blackbirds black blackbirds blackbird black-bird",
+                "blackbird",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(0, 17, 28, 38, -1),
+                IA(9, 9, 9, 10)),
 
         /*
          * to see that it doesn't go into an infinite loop if the start of text is a ignorable character
          */
         SD(" on", "go", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
-        SD("abcdefghijklmnopqrstuvwxyz", "   ",
-            null, PRIMARY, STANDARD_ELEMENT_COMPARISON, null,
-            IA(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, -1),
-            IA(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
+        SD(
+                "abcdefghijklmnopqrstuvwxyz",
+                "   ",
+                null,
+                PRIMARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(
+                        0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+                        21, 22, 23, 24, 25, -1),
+                IA(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 
         /* testing tightest match */
-        SD(" abc  a bc   ab c    a  bc     ab  c", "abc", null, QUATERNARY, STANDARD_ELEMENT_COMPARISON, null, IA(1, -1), IA(3)),
+        SD(
+                " abc  a bc   ab c    a  bc     ab  c",
+                "abc",
+                null,
+                QUATERNARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(1, -1),
+                IA(3)),
         /*  012345678901234567890123456789012345678901234567890123456789 */
-        SD(" abc  a bc   ab c    a  bc     ab  c", "abc", null, SECONDARY, STANDARD_ELEMENT_COMPARISON, null, IA(1, 6, 13, 21, 31, -1), IA(3, 4, 4, 5, 5)),
+        SD(
+                " abc  a bc   ab c    a  bc     ab  c",
+                "abc",
+                null,
+                SECONDARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(1, 6, 13, 21, 31, -1),
+                IA(3, 4, 4, 5, 5)),
 
         /* totally ignorable text */
-        SD("           ---------------", "abc", null, SECONDARY, STANDARD_ELEMENT_COMPARISON, null, IA(-1), IA(0)),
+        SD(
+                "           ---------------",
+                "abc",
+                null,
+                SECONDARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(-1),
+                IA(0)),
     };
 
     static SearchData TEXTCANONICAL[] = {
-        SD("the foxy brown fox", "fox", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(4, 15, -1), IA(3, 3)),
-        SD("the quick brown fox", "fox", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(16, -1), IA(3)),
+        SD(
+                "the foxy brown fox",
+                "fox",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(4, 15, -1),
+                IA(3, 3)),
+        SD(
+                "the quick brown fox",
+                "fox",
+                null,
+                TERTIARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(16, -1),
+                IA(3)),
     };
 
     static SearchData INDICPREFIXMATCH[] = {
-        SD("\u0915\u0020\u0915\u0901\u0020\u0915\u0902\u0020\u0915\u0903\u0020\u0915\u0940\u0020\u0915\u093F\u0020\u0915\u0943\u0020\u0915\u093C\u0020\u0958",
-                "\u0915", null, PRIMARY, STANDARD_ELEMENT_COMPARISON, null, IA(0, 2, 5, 8, 11, 14, 17, 20, 23,-1), IA(1, 2, 2, 2, 1, 1, 1, 2, 1)),
-        SD("\u0915\u0924\u0020\u0915\u0924\u0940\u0020\u0915\u0924\u093F\u0020\u0915\u0924\u0947\u0020\u0915\u0943\u0924\u0020\u0915\u0943\u0924\u0947",
-                "\u0915\u0924", null, PRIMARY, STANDARD_ELEMENT_COMPARISON, null, IA(0, 3, 7, 11, -1), IA(2, 2, 2, 2)),
-        SD("\u0915\u0924\u0020\u0915\u0924\u0940\u0020\u0915\u0924\u093F\u0020\u0915\u0924\u0947\u0020\u0915\u0943\u0924\u0020\u0915\u0943\u0924\u0947",
-                "\u0915\u0943\u0924", null, PRIMARY, STANDARD_ELEMENT_COMPARISON, null, IA(15, 19, -1), IA(3, 3)),
+        SD(
+                "\u0915\u0020\u0915\u0901\u0020\u0915\u0902\u0020\u0915\u0903\u0020\u0915\u0940\u0020\u0915\u093F\u0020\u0915\u0943\u0020\u0915\u093C\u0020\u0958",
+                "\u0915",
+                null,
+                PRIMARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(0, 2, 5, 8, 11, 14, 17, 20, 23, -1),
+                IA(1, 2, 2, 2, 1, 1, 1, 2, 1)),
+        SD(
+                "\u0915\u0924\u0020\u0915\u0924\u0940\u0020\u0915\u0924\u093F\u0020\u0915\u0924\u0947\u0020\u0915\u0943\u0924\u0020\u0915\u0943\u0924\u0947",
+                "\u0915\u0924",
+                null,
+                PRIMARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(0, 3, 7, 11, -1),
+                IA(2, 2, 2, 2)),
+        SD(
+                "\u0915\u0924\u0020\u0915\u0924\u0940\u0020\u0915\u0924\u093F\u0020\u0915\u0924\u0947\u0020\u0915\u0943\u0924\u0020\u0915\u0943\u0924\u0947",
+                "\u0915\u0943\u0924",
+                null,
+                PRIMARY,
+                STANDARD_ELEMENT_COMPARISON,
+                null,
+                IA(15, 19, -1),
+                IA(3, 3)),
     };
 
-    /**
-     * Constructor
-     */
-    public SearchTest()
-    {
-
-    }
+    /** Constructor */
+    public SearchTest() {}
 
     @Before
     public void init() throws Exception {
-        m_en_us_ = (RuleBasedCollator)Collator.getInstance(Locale.US);
-        m_fr_fr_ = (RuleBasedCollator)Collator.getInstance(Locale.FRANCE);
-        m_de_ = (RuleBasedCollator)Collator.getInstance(new Locale("de", "DE"));
-        m_es_ = (RuleBasedCollator)Collator.getInstance(new Locale("es", "ES"));
+        m_en_us_ = (RuleBasedCollator) Collator.getInstance(Locale.US);
+        m_fr_fr_ = (RuleBasedCollator) Collator.getInstance(Locale.FRANCE);
+        m_de_ = (RuleBasedCollator) Collator.getInstance(new Locale("de", "DE"));
+        m_es_ = (RuleBasedCollator) Collator.getInstance(new Locale("es", "ES"));
         m_en_wordbreaker_ = BreakIterator.getWordInstance();
         m_en_characterbreaker_ = BreakIterator.getCharacterInstance();
         String rules = m_de_.getRules() + EXTRACOLLATIONRULE;
         m_de_ = new RuleBasedCollator(rules);
         rules = m_es_.getRules() + EXTRACOLLATIONRULE;
         m_es_ = new RuleBasedCollator(rules);
-
     }
 
     RuleBasedCollator getCollator(String collator) {
         if (collator == null) {
             return m_en_us_;
-        } if (collator.equals("fr")) {
+        }
+        if (collator.equals("fr")) {
             return m_fr_fr_;
         } else if (collator.equals("de")) {
             return m_de_;
@@ -572,7 +1811,8 @@ public class SearchTest extends TestFmwk {
     BreakIterator getBreakIterator(String breaker) {
         if (breaker == null) {
             return null;
-        } if (breaker.equals("wordbreaker")) {
+        }
+        if (breaker.equals("wordbreaker")) {
             return m_en_wordbreaker_;
         } else {
             return m_en_characterbreaker_;
@@ -580,12 +1820,12 @@ public class SearchTest extends TestFmwk {
     }
 
     boolean assertCanonicalEqual(SearchData search) {
-        Collator      collator = getCollator(search.collator);
-        BreakIterator breaker  = getBreakIterator(search.breaker);
-        StringSearch  strsrch;
+        Collator collator = getCollator(search.collator);
+        BreakIterator breaker = getBreakIterator(search.breaker);
+        StringSearch strsrch;
 
         String text = search.text;
-        String  pattern = search.pattern;
+        String pattern = search.pattern;
 
         if (breaker != null) {
             breaker.setText(text);
@@ -593,7 +1833,12 @@ public class SearchTest extends TestFmwk {
         collator.setStrength(search.strength);
         collator.setDecomposition(Collator.CANONICAL_DECOMPOSITION);
         try {
-            strsrch = new StringSearch(pattern, new StringCharacterIterator(text), (RuleBasedCollator)collator, breaker);
+            strsrch =
+                    new StringSearch(
+                            pattern,
+                            new StringCharacterIterator(text),
+                            (RuleBasedCollator) collator,
+                            breaker);
             strsrch.setElementComparisonType(search.cmpType);
             strsrch.setCanonical(true);
         } catch (Exception e) {
@@ -612,19 +1857,24 @@ public class SearchTest extends TestFmwk {
     }
 
     boolean assertEqual(SearchData search) {
-        Collator      collator = getCollator(search.collator);
-        BreakIterator breaker  = getBreakIterator(search.breaker);
-        StringSearch  strsrch;
+        Collator collator = getCollator(search.collator);
+        BreakIterator breaker = getBreakIterator(search.breaker);
+        StringSearch strsrch;
 
         String text = search.text;
-        String  pattern = search.pattern;
+        String pattern = search.pattern;
 
         if (breaker != null) {
             breaker.setText(text);
         }
         collator.setStrength(search.strength);
         try {
-            strsrch = new StringSearch(pattern, new StringCharacterIterator(text), (RuleBasedCollator)collator, breaker);
+            strsrch =
+                    new StringSearch(
+                            pattern,
+                            new StringCharacterIterator(text),
+                            (RuleBasedCollator) collator,
+                            breaker);
             strsrch.setElementComparisonType(search.cmpType);
         } catch (Exception e) {
             errln("Error opening string search " + e.getMessage());
@@ -640,19 +1890,24 @@ public class SearchTest extends TestFmwk {
     }
 
     boolean assertEqualWithAttribute(SearchData search, boolean canonical, boolean overlap) {
-        Collator      collator = getCollator(search.collator);
-        BreakIterator breaker  = getBreakIterator(search.breaker);
-        StringSearch  strsrch;
+        Collator collator = getCollator(search.collator);
+        BreakIterator breaker = getBreakIterator(search.breaker);
+        StringSearch strsrch;
 
         String text = search.text;
-        String  pattern = search.pattern;
+        String pattern = search.pattern;
 
         if (breaker != null) {
             breaker.setText(text);
         }
         collator.setStrength(search.strength);
         try {
-            strsrch = new StringSearch(pattern, new StringCharacterIterator(text), (RuleBasedCollator)collator, breaker);
+            strsrch =
+                    new StringSearch(
+                            pattern,
+                            new StringCharacterIterator(text),
+                            (RuleBasedCollator) collator,
+                            breaker);
             strsrch.setCanonical(canonical);
             strsrch.setOverlapping(overlap);
             strsrch.setElementComparisonType(search.cmpType);
@@ -670,44 +1925,56 @@ public class SearchTest extends TestFmwk {
     }
 
     boolean assertEqualWithStringSearch(StringSearch strsrch, SearchData search) {
-        int           count       = 0;
-        int   matchindex  = search.offset[count];
+        int count = 0;
+        int matchindex = search.offset[count];
         String matchtext;
 
-        if (strsrch.getMatchStart() != SearchIterator.DONE ||
-            strsrch.getMatchLength() != 0) {
+        if (strsrch.getMatchStart() != SearchIterator.DONE || strsrch.getMatchLength() != 0) {
             errln("Error with the initialization of match start and length");
         }
         // start of following matches
         while (matchindex >= 0) {
             int matchlength = search.size[count];
             strsrch.next();
-            //int x = strsrch.getMatchStart();
-            if (matchindex != strsrch.getMatchStart() ||
-                matchlength != strsrch.getMatchLength()) {
+            // int x = strsrch.getMatchStart();
+            if (matchindex != strsrch.getMatchStart() || matchlength != strsrch.getMatchLength()) {
                 errln("Text: " + search.text);
                 errln("Searching forward for pattern: " + strsrch.getPattern());
-                errln("Expected offset,len " + matchindex + ", " + matchlength + "; got " + strsrch.getMatchStart() + ", " + strsrch.getMatchLength());
+                errln(
+                        "Expected offset,len "
+                                + matchindex
+                                + ", "
+                                + matchlength
+                                + "; got "
+                                + strsrch.getMatchStart()
+                                + ", "
+                                + strsrch.getMatchLength());
                 return false;
             }
-            count ++;
+            count++;
 
             matchtext = strsrch.getMatchedText();
             String targetText = search.text;
-            if (matchlength > 0 &&
-                targetText.substring(matchindex, matchindex + matchlength).compareTo(matchtext) != 0) {
+            if (matchlength > 0
+                    && targetText
+                                    .substring(matchindex, matchindex + matchlength)
+                                    .compareTo(matchtext)
+                            != 0) {
                 errln("Error getting following matched text");
             }
 
             matchindex = search.offset[count];
         }
         strsrch.next();
-        if (strsrch.getMatchStart() != SearchIterator.DONE ||
-            strsrch.getMatchLength() != 0) {
-                errln("Text: " + search.text);
-                errln("Searching forward for pattern: " + strsrch.getPattern());
-                errln("Expected DONE offset,len -1, 0; got " + strsrch.getMatchStart() + ", " + strsrch.getMatchLength());
-                return false;
+        if (strsrch.getMatchStart() != SearchIterator.DONE || strsrch.getMatchLength() != 0) {
+            errln("Text: " + search.text);
+            errln("Searching forward for pattern: " + strsrch.getPattern());
+            errln(
+                    "Expected DONE offset,len -1, 0; got "
+                            + strsrch.getMatchStart()
+                            + ", "
+                            + strsrch.getMatchLength());
+            return false;
         }
         // start of preceding matches
         count = count == 0 ? 0 : count - 1;
@@ -715,38 +1982,50 @@ public class SearchTest extends TestFmwk {
         while (matchindex >= 0) {
             int matchlength = search.size[count];
             strsrch.previous();
-            if (matchindex != strsrch.getMatchStart() ||
-                matchlength != strsrch.getMatchLength()) {
+            if (matchindex != strsrch.getMatchStart() || matchlength != strsrch.getMatchLength()) {
                 errln("Text: " + search.text);
                 errln("Searching backward for pattern: " + strsrch.getPattern());
-                errln("Expected offset,len " + matchindex + ", " + matchlength + "; got " + strsrch.getMatchStart() + ", " + strsrch.getMatchLength());
+                errln(
+                        "Expected offset,len "
+                                + matchindex
+                                + ", "
+                                + matchlength
+                                + "; got "
+                                + strsrch.getMatchStart()
+                                + ", "
+                                + strsrch.getMatchLength());
                 return false;
             }
 
             matchtext = strsrch.getMatchedText();
             String targetText = search.text;
-            if (matchlength > 0 &&
-                targetText.substring(matchindex, matchindex + matchlength).compareTo(matchtext) != 0) {
+            if (matchlength > 0
+                    && targetText
+                                    .substring(matchindex, matchindex + matchlength)
+                                    .compareTo(matchtext)
+                            != 0) {
                 errln("Error getting following matched text");
             }
 
             matchindex = count > 0 ? search.offset[count - 1] : -1;
-            count --;
+            count--;
         }
         strsrch.previous();
-        if (strsrch.getMatchStart() != SearchIterator.DONE ||
-            strsrch.getMatchLength() != 0) {
-                errln("Text: " + search.text);
-                errln("Searching backward for pattern: " + strsrch.getPattern());
-                errln("Expected DONE offset,len -1, 0; got " + strsrch.getMatchStart() + ", " + strsrch.getMatchLength());
-                return false;
+        if (strsrch.getMatchStart() != SearchIterator.DONE || strsrch.getMatchLength() != 0) {
+            errln("Text: " + search.text);
+            errln("Searching backward for pattern: " + strsrch.getPattern());
+            errln(
+                    "Expected DONE offset,len -1, 0; got "
+                            + strsrch.getMatchStart()
+                            + ", "
+                            + strsrch.getMatchLength());
+            return false;
         }
         return true;
     }
 
     @Test
-    public void TestConstructor()
-    {
+    public void TestConstructor() {
         String pattern = "pattern";
         String text = "text";
         StringCharacterIterator textiter = new StringCharacterIterator(text);
@@ -755,39 +2034,35 @@ public class SearchTest extends TestFmwk {
         breaker.setText(text);
         StringSearch search = new StringSearch(pattern, text);
         if (!search.getPattern().equals(pattern)
-            || !search.getTarget().equals(textiter)
-            || !search.getCollator().equals(defaultcollator)
-            /*|| !search.getBreakIterator().equals(breaker)*/) {
+                || !search.getTarget().equals(textiter)
+                || !search.getCollator().equals(defaultcollator)
+        /*|| !search.getBreakIterator().equals(breaker)*/ ) {
             errln("StringSearch(String, String) error");
         }
         search = new StringSearch(pattern, textiter, m_fr_fr_);
         if (!search.getPattern().equals(pattern)
-            || !search.getTarget().equals(textiter)
-            || !search.getCollator().equals(m_fr_fr_)
-            /*|| !search.getBreakIterator().equals(breaker)*/) {
-            errln("StringSearch(String, StringCharacterIterator, "
-                  + "RuleBasedCollator) error");
+                || !search.getTarget().equals(textiter)
+                || !search.getCollator().equals(m_fr_fr_)
+        /*|| !search.getBreakIterator().equals(breaker)*/ ) {
+            errln("StringSearch(String, StringCharacterIterator, " + "RuleBasedCollator) error");
         }
         Locale de = new Locale("de", "DE");
         breaker = BreakIterator.getCharacterInstance(de);
         breaker.setText(text);
         search = new StringSearch(pattern, textiter, de);
         if (!search.getPattern().equals(pattern)
-            || !search.getTarget().equals(textiter)
-            || !search.getCollator().equals(Collator.getInstance(de))
-            /*|| !search.getBreakIterator().equals(breaker)*/) {
-            errln("StringSearch(String, StringCharacterIterator, Locale) "
-                  + "error");
+                || !search.getTarget().equals(textiter)
+                || !search.getCollator().equals(Collator.getInstance(de))
+        /*|| !search.getBreakIterator().equals(breaker)*/ ) {
+            errln("StringSearch(String, StringCharacterIterator, Locale) " + "error");
         }
 
-        search = new StringSearch(pattern, textiter, m_fr_fr_,
-                                  m_en_wordbreaker_);
+        search = new StringSearch(pattern, textiter, m_fr_fr_, m_en_wordbreaker_);
         if (!search.getPattern().equals(pattern)
-            || !search.getTarget().equals(textiter)
-            || !search.getCollator().equals(m_fr_fr_)
-            || !search.getBreakIterator().equals(m_en_wordbreaker_)) {
-            errln("StringSearch(String, StringCharacterIterator, Locale) "
-                  + "error");
+                || !search.getTarget().equals(textiter)
+                || !search.getCollator().equals(m_fr_fr_)
+                || !search.getBreakIterator().equals(m_en_wordbreaker_)) {
+            errln("StringSearch(String, StringCharacterIterator, Locale) " + "error");
         }
     }
 
@@ -831,10 +2106,10 @@ public class SearchTest extends TestFmwk {
         int count = 0;
         while (count < 4) {
             // special purposes for tests numbers 0-3
-            SearchData        search   = BREAKITERATOREXACT[count];
+            SearchData search = BREAKITERATOREXACT[count];
             RuleBasedCollator collator = getCollator(search.collator);
-            BreakIterator     breaker  = getBreakIterator(search.breaker);
-                  //StringSearch      strsrch;
+            BreakIterator breaker = getBreakIterator(search.breaker);
+            // StringSearch      strsrch;
 
             text = search.text;
             pattern = search.pattern;
@@ -842,15 +2117,16 @@ public class SearchTest extends TestFmwk {
                 breaker.setText(text);
             }
             collator.setStrength(search.strength);
-            strsrch = new StringSearch(pattern, new StringCharacterIterator(text), collator, breaker);
+            strsrch =
+                    new StringSearch(pattern, new StringCharacterIterator(text), collator, breaker);
             if (strsrch.getBreakIterator() != breaker) {
                 errln("Error setting break iterator");
             }
             if (!assertEqualWithStringSearch(strsrch, search)) {
                 collator.setStrength(TERTIARY);
             }
-            search   = BREAKITERATOREXACT[count + 1];
-            breaker  = getBreakIterator(search.breaker);
+            search = BREAKITERATOREXACT[count + 1];
+            breaker = getBreakIterator(search.breaker);
             if (breaker != null) {
                 breaker.setText(text);
             }
@@ -860,7 +2136,7 @@ public class SearchTest extends TestFmwk {
             }
             strsrch.reset();
             if (!assertEqualWithStringSearch(strsrch, search)) {
-                 errln("Error at test number " + count);
+                errln("Error at test number " + count);
             }
             count += 2;
         }
@@ -873,10 +2149,10 @@ public class SearchTest extends TestFmwk {
 
     @Test
     public void TestBreakIteratorCanonical() {
-        int        count  = 0;
+        int count = 0;
         while (count < 4) {
             // special purposes for tests numbers 0-3
-            SearchData     search   = BREAKITERATORCANONICAL[count];
+            SearchData search = BREAKITERATORCANONICAL[count];
 
             String text = search.text;
             String pattern = search.pattern;
@@ -884,9 +2160,11 @@ public class SearchTest extends TestFmwk {
             collator.setStrength(search.strength);
 
             BreakIterator breaker = getBreakIterator(search.breaker);
-            StringSearch  strsrch = null;
+            StringSearch strsrch = null;
             try {
-                strsrch = new StringSearch(pattern, new StringCharacterIterator(text), collator, breaker);
+                strsrch =
+                        new StringSearch(
+                                pattern, new StringCharacterIterator(text), collator, breaker);
             } catch (Exception e) {
                 errln("Error creating string search data");
                 return;
@@ -900,7 +2178,7 @@ public class SearchTest extends TestFmwk {
                 collator.setStrength(TERTIARY);
                 return;
             }
-            search  = BREAKITERATOREXACT[count + 1];
+            search = BREAKITERATOREXACT[count + 1];
             breaker = getBreakIterator(search.breaker);
             breaker.setText(strsrch.getTarget());
             strsrch.setBreakIterator(breaker);
@@ -911,17 +2189,17 @@ public class SearchTest extends TestFmwk {
             strsrch.reset();
             strsrch.setCanonical(true);
             if (!assertEqualWithStringSearch(strsrch, search)) {
-                 errln("Error at test number " + count);
-                 return;
+                errln("Error at test number " + count);
+                return;
             }
             count += 2;
         }
 
         for (count = 0; count < BREAKITERATORCANONICAL.length; count++) {
-             if (!assertEqual(BREAKITERATORCANONICAL[count])) {
-                 errln("Error at test number " + count);
-                 return;
-             }
+            if (!assertEqual(BREAKITERATORCANONICAL[count])) {
+                errln("Error at test number " + count);
+                return;
+            }
         }
     }
 
@@ -938,7 +2216,7 @@ public class SearchTest extends TestFmwk {
     public void TestCollator() {
         // test collator that thinks "o" and "p" are the same thing
         String text = COLLATOR[0].text;
-        String pattern  = COLLATOR[0].pattern;
+        String pattern = COLLATOR[0].pattern;
         StringSearch strsrch = null;
         try {
             strsrch = new StringSearch(pattern, new StringCharacterIterator(text), m_en_us_, null);
@@ -973,7 +2251,7 @@ public class SearchTest extends TestFmwk {
             errln("Error setting rule based collator");
         }
         if (!assertEqualWithStringSearch(strsrch, COLLATOR[0])) {
-           errln("Error searching collator test");
+            errln("Error searching collator test");
         }
     }
 
@@ -1012,7 +2290,7 @@ public class SearchTest extends TestFmwk {
         strsrch.reset();
         strsrch.setCanonical(true);
         if (!assertEqualWithStringSearch(strsrch, COLLATORCANONICAL[1])) {
-            logln("COLLATORCANONICAL[1] failed");  // Error should already be reported.
+            logln("COLLATORCANONICAL[1] failed"); // Error should already be reported.
         }
         strsrch.setCollator(m_en_us_);
         strsrch.reset();
@@ -1020,7 +2298,7 @@ public class SearchTest extends TestFmwk {
             errln("Error setting rule based collator");
         }
         if (!assertEqualWithStringSearch(strsrch, COLLATORCANONICAL[0])) {
-            logln("COLLATORCANONICAL[0] failed");  // Error should already be reported.
+            logln("COLLATORCANONICAL[0] failed"); // Error should already be reported.
         }
     }
 
@@ -1064,7 +2342,7 @@ public class SearchTest extends TestFmwk {
             errln("Error opening string search ");
         }
 
-        for (int count = 0; count< CONTRACTION.length; count++) {
+        for (int count = 0; count < CONTRACTION.length; count++) {
             text = CONTRACTION[count].text;
             pattern = CONTRACTION[count].pattern;
             strsrch.setTarget(new StringCharacterIterator(text));
@@ -1121,30 +2399,32 @@ public class SearchTest extends TestFmwk {
             return;
         }
 
-        int           count      = 0;
-        int   matchindex = search.offset[count];
+        int count = 0;
+        int matchindex = search.offset[count];
         String matchtext;
         while (matchindex >= 0) {
             int matchlength = search.size[count];
             strsrch.next();
-            if (matchindex != strsrch.getMatchStart() ||
-                matchlength != strsrch.getMatchLength()) {
+            if (matchindex != strsrch.getMatchStart() || matchlength != strsrch.getMatchLength()) {
                 errln("Text: " + search.text);
                 errln("Pattern: " + strsrch.getPattern());
-                errln("Error match found at " + strsrch.getMatchStart() + ", " + strsrch.getMatchLength());
+                errln(
+                        "Error match found at "
+                                + strsrch.getMatchStart()
+                                + ", "
+                                + strsrch.getMatchLength());
                 return;
             }
             count++;
 
             matchtext = strsrch.getMatchedText();
-            if (matchtext.length() != matchlength){
+            if (matchtext.length() != matchlength) {
                 errln("Error getting match text");
             }
             matchindex = search.offset[count];
         }
         strsrch.next();
-        if (strsrch.getMatchStart()  != StringSearch.DONE ||
-            strsrch.getMatchLength() != 0) {
+        if (strsrch.getMatchStart() != StringSearch.DONE || strsrch.getMatchLength() != 0) {
             errln("Error end of match not found");
         }
         matchtext = strsrch.getMatchedText();
@@ -1155,9 +2435,9 @@ public class SearchTest extends TestFmwk {
 
     @Test
     public void TestGetSetAttribute() {
-        String  pattern = "pattern";
-        String  text = "text";
-        StringSearch  strsrch = null;
+        String pattern = "pattern";
+        String text = "text";
+        StringSearch strsrch = null;
         try {
             strsrch = new StringSearch(pattern, new StringCharacterIterator(text), m_en_us_, null);
         } catch (Exception e) {
@@ -1190,16 +2470,17 @@ public class SearchTest extends TestFmwk {
             errln("Error default element comparison type should be STANDARD_ELEMENT_COMPARISON");
         }
         strsrch.setElementComparisonType(ElementComparisonType.PATTERN_BASE_WEIGHT_IS_WILDCARD);
-        if (strsrch.getElementComparisonType() != ElementComparisonType.PATTERN_BASE_WEIGHT_IS_WILDCARD) {
+        if (strsrch.getElementComparisonType()
+                != ElementComparisonType.PATTERN_BASE_WEIGHT_IS_WILDCARD) {
             errln("Error setting element comparison type PATTERN_BASE_WEIGHT_IS_WILDCARD");
         }
     }
 
     @Test
     public void TestGetSetOffset() {
-        String  pattern = "1234567890123456";
-        String  text  = "12345678901234567890123456789012";
-        StringSearch  strsrch = null;
+        String pattern = "1234567890123456";
+        String text = "12345678901234567890123456789012";
+        StringSearch strsrch = null;
         try {
             strsrch = new StringSearch(pattern, new StringCharacterIterator(text), m_en_us_, null);
         } catch (Exception e) {
@@ -1224,9 +2505,9 @@ public class SearchTest extends TestFmwk {
         }
 
         for (int index = 0; index < BASIC.length; index++) {
-            SearchData  search      = BASIC[index];
+            SearchData search = BASIC[index];
 
-            text =search.text;
+            text = search.text;
             pattern = search.pattern;
             strsrch.setTarget(new StringCharacterIterator(text));
             strsrch.setPattern(pattern);
@@ -1234,20 +2515,23 @@ public class SearchTest extends TestFmwk {
             strsrch.reset();
 
             int count = 0;
-            int matchindex  = search.offset[count];
+            int matchindex = search.offset[count];
 
             while (matchindex >= 0) {
                 int matchlength = search.size[count];
                 strsrch.next();
-                if (matchindex != strsrch.getMatchStart() ||
-                    matchlength != strsrch.getMatchLength()) {
+                if (matchindex != strsrch.getMatchStart()
+                        || matchlength != strsrch.getMatchLength()) {
                     errln("Text: " + text);
                     errln("Pattern: " + strsrch.getPattern());
-                    errln("Error match found at " + strsrch.getMatchStart() + ", " + strsrch.getMatchLength());
+                    errln(
+                            "Error match found at "
+                                    + strsrch.getMatchStart()
+                                    + ", "
+                                    + strsrch.getMatchLength());
                     return;
                 }
-                matchindex = search.offset[count + 1] == -1 ? -1 :
-                             search.offset[count + 2];
+                matchindex = search.offset[count + 1] == -1 ? -1 : search.offset[count + 2];
                 if (search.offset[count + 1] != -1) {
                     strsrch.setIndex(search.offset[count + 1] + 1);
                     if (strsrch.getIndex() != search.offset[count + 1] + 1) {
@@ -1262,7 +2546,11 @@ public class SearchTest extends TestFmwk {
             if (strsrch.getMatchStart() != StringSearch.DONE) {
                 errln("Text: " + text);
                 errln("Pattern: " + strsrch.getPattern());
-                errln("Error match found at " + strsrch.getMatchStart() + ", " + strsrch.getMatchLength());
+                errln(
+                        "Error match found at "
+                                + strsrch.getMatchStart()
+                                + ", "
+                                + strsrch.getMatchLength());
                 return;
             }
         }
@@ -1272,9 +2560,9 @@ public class SearchTest extends TestFmwk {
     @Test
     public void TestGetSetOffsetCanonical() {
 
-        String  text = "text";
-        String  pattern = "pattern";
-        StringSearch  strsrch = null;
+        String text = "text";
+        String pattern = "pattern";
+        StringSearch strsrch = null;
         try {
             strsrch = new StringSearch(pattern, new StringCharacterIterator(text), m_en_us_, null);
         } catch (Exception e) {
@@ -1282,7 +2570,7 @@ public class SearchTest extends TestFmwk {
             return;
         }
         strsrch.setCanonical(true);
-        //TODO: setCanonical is not sufficient for canonical match. See #10725
+        // TODO: setCanonical is not sufficient for canonical match. See #10725
         strsrch.getCollator().setDecomposition(Collator.CANONICAL_DECOMPOSITION);
         /* testing out of bounds error */
         try {
@@ -1299,25 +2587,28 @@ public class SearchTest extends TestFmwk {
         }
 
         for (int index = 0; index < BASICCANONICAL.length; index++) {
-            SearchData  search      = BASICCANONICAL[index];
+            SearchData search = BASICCANONICAL[index];
             text = search.text;
             pattern = search.pattern;
             strsrch.setTarget(new StringCharacterIterator(text));
             strsrch.setPattern(pattern);
-            int         count       = 0;
-            int matchindex  = search.offset[count];
+            int count = 0;
+            int matchindex = search.offset[count];
             while (matchindex >= 0) {
                 int matchlength = search.size[count];
                 strsrch.next();
-                if (matchindex != strsrch.getMatchStart() ||
-                    matchlength != strsrch.getMatchLength()) {
+                if (matchindex != strsrch.getMatchStart()
+                        || matchlength != strsrch.getMatchLength()) {
                     errln("Text: " + text);
                     errln("Pattern: " + strsrch.getPattern());
-                    errln("Error match found at " + strsrch.getMatchStart() + ", " + strsrch.getMatchLength());
+                    errln(
+                            "Error match found at "
+                                    + strsrch.getMatchStart()
+                                    + ", "
+                                    + strsrch.getMatchLength());
                     return;
                 }
-                matchindex = search.offset[count + 1] == -1 ? -1 :
-                             search.offset[count + 2];
+                matchindex = search.offset[count + 1] == -1 ? -1 : search.offset[count + 2];
                 if (search.offset[count + 1] != -1) {
                     strsrch.setIndex(search.offset[count + 1] + 1);
                     if (strsrch.getIndex() != search.offset[count + 1] + 1) {
@@ -1332,7 +2623,11 @@ public class SearchTest extends TestFmwk {
             if (strsrch.getMatchStart() != StringSearch.DONE) {
                 errln("Text: " + text);
                 errln("Pattern: %s" + strsrch.getPattern());
-                errln("Error match found at " + strsrch.getMatchStart() + ", " + strsrch.getMatchLength());
+                errln(
+                        "Error match found at "
+                                + strsrch.getMatchStart()
+                                + ", "
+                                + strsrch.getMatchLength());
                 return;
             }
         }
@@ -1343,7 +2638,7 @@ public class SearchTest extends TestFmwk {
     @Test
     public void TestIgnorable() {
         String rules = IGNORABLERULE;
-        int        count  = 0;
+        int count = 0;
         RuleBasedCollator collator = null;
         try {
             collator = new RuleBasedCollator(rules);
@@ -1376,10 +2671,10 @@ public class SearchTest extends TestFmwk {
 
     @Test
     public void TestInitialization() {
-        String  pattern;
-        String  text;
-        String  temp = "a";
-        StringSearch  result;
+        String pattern;
+        String text;
+        String temp = "a";
+        StringSearch result;
 
         /* simple test on the pattern ce construction */
         pattern = temp + temp;
@@ -1393,7 +2688,7 @@ public class SearchTest extends TestFmwk {
 
         /* testing if an extremely large pattern will fail the initialization */
         pattern = "";
-        for (int count = 0; count < 512; count ++) {
+        for (int count = 0; count < 512; count++) {
             pattern += temp;
         }
         try {
@@ -1441,12 +2736,12 @@ public class SearchTest extends TestFmwk {
 
     @Test
     public void TestOpenClose() {
-        StringSearch            result;
-        BreakIterator           breakiter = m_en_wordbreaker_;
-        String           pattern = "";
-        String           text = "";
-        String           temp  = "a";
-        StringCharacterIterator  chariter= new StringCharacterIterator(text);
+        StringSearch result;
+        BreakIterator breakiter = m_en_wordbreaker_;
+        String pattern = "";
+        String text = "";
+        String temp = "a";
+        StringCharacterIterator chariter = new StringCharacterIterator(text);
 
         /* testing null arguments */
         try {
@@ -1464,7 +2759,7 @@ public class SearchTest extends TestFmwk {
             logln("PASS: null arguments failed as expected");
         }
 
-        text  = String.valueOf(0x1);
+        text = String.valueOf(0x1);
         try {
             result = new StringSearch(pattern, new StringCharacterIterator(text), null, null);
             errln("Error: Empty pattern should produce an error");
@@ -1481,7 +2776,7 @@ public class SearchTest extends TestFmwk {
         }
 
         text = "";
-        pattern =temp;
+        pattern = temp;
         try {
             result = new StringSearch(pattern, new StringCharacterIterator(text), null, null);
             errln("Error: Empty text should produce an error");
@@ -1538,7 +2833,9 @@ public class SearchTest extends TestFmwk {
         }
 
         try {
-            result = new StringSearch(pattern, new StringCharacterIterator(text), m_en_us_, breakiter);
+            result =
+                    new StringSearch(
+                            pattern, new StringCharacterIterator(text), m_en_us_, breakiter);
         } catch (Exception e) {
             errln("Error: Break iterator is valid for opening search");
         }
@@ -1575,7 +2872,9 @@ public class SearchTest extends TestFmwk {
             RuleBasedCollator collator = getCollator(search.collator);
             StringSearch strsrch = null;
             try {
-                strsrch  = new StringSearch(pattern, new StringCharacterIterator(text), collator, null);
+                strsrch =
+                        new StringSearch(
+                                pattern, new StringCharacterIterator(text), collator, null);
             } catch (Exception e) {
                 errln("error open StringSearch");
                 return;
@@ -1597,7 +2896,7 @@ public class SearchTest extends TestFmwk {
             strsrch.reset();
             if (!assertEqualWithStringSearch(strsrch, search)) {
                 errln("Error at test number " + count);
-             }
+            }
         }
     }
 
@@ -1617,10 +2916,17 @@ public class SearchTest extends TestFmwk {
             }
         }
 
-        for (count = 0; count < OVERLAPCANONICAL.length && count < NONOVERLAPCANONICAL.length; count++) {
+        for (count = 0;
+                count < OVERLAPCANONICAL.length && count < NONOVERLAPCANONICAL.length;
+                count++) {
             SearchData search = OVERLAPCANONICAL[count];
             RuleBasedCollator collator = getCollator(search.collator);
-            StringSearch strsrch = new StringSearch(search.pattern, new StringCharacterIterator(search.text), collator, null);
+            StringSearch strsrch =
+                    new StringSearch(
+                            search.pattern,
+                            new StringCharacterIterator(search.text),
+                            collator,
+                            null);
             strsrch.setCanonical(true);
             strsrch.setOverlapping(true);
             if (strsrch.isOverlapping() != true) {
@@ -1639,14 +2945,19 @@ public class SearchTest extends TestFmwk {
             if (!assertEqualWithStringSearch(strsrch, search)) {
                 strsrch = null;
                 errln("Error at test number %d" + count);
-             }
+            }
         }
     }
 
     @Test
     public void TestPattern() {
         m_en_us_.setStrength(PATTERN[0].strength);
-        StringSearch strsrch = new StringSearch(PATTERN[0].pattern, new StringCharacterIterator(PATTERN[0].text), m_en_us_, null);
+        StringSearch strsrch =
+                new StringSearch(
+                        PATTERN[0].pattern,
+                        new StringCharacterIterator(PATTERN[0].text),
+                        m_en_us_,
+                        null);
 
         assertSame("Error setting pattern", strsrch.getPattern(), PATTERN[0].pattern);
         if (!assertEqualWithStringSearch(strsrch, PATTERN[0])) {
@@ -1682,12 +2993,12 @@ public class SearchTest extends TestFmwk {
         }
         /* enormous pattern size to see if this crashes */
         String pattern = "";
-        for (int templength = 0; templength != 512; templength ++) {
+        for (int templength = 0; templength != 512; templength++) {
             pattern += 0x61;
         }
-        try{
+        try {
             strsrch.setPattern(pattern);
-        }catch(Exception e) {
+        } catch (Exception e) {
             errln("Error setting pattern with size 512");
         }
 
@@ -1699,10 +3010,14 @@ public class SearchTest extends TestFmwk {
 
     @Test
     public void TestPatternCanonical() {
-        //StringCharacterIterator text = new StringCharacterIterator(PATTERNCANONICAL[0].text);
+        // StringCharacterIterator text = new StringCharacterIterator(PATTERNCANONICAL[0].text);
         m_en_us_.setStrength(PATTERNCANONICAL[0].strength);
-        StringSearch strsrch = new StringSearch(PATTERNCANONICAL[0].pattern, new StringCharacterIterator(PATTERNCANONICAL[0].text),
-                                                m_en_us_, null);
+        StringSearch strsrch =
+                new StringSearch(
+                        PATTERNCANONICAL[0].pattern,
+                        new StringCharacterIterator(PATTERNCANONICAL[0].text),
+                        m_en_us_,
+                        null);
         strsrch.setCanonical(true);
         assertSame("Error setting pattern", PATTERNCANONICAL[0].pattern, strsrch.getPattern());
         if (!assertEqualWithStringSearch(strsrch, PATTERNCANONICAL[0])) {
@@ -1739,15 +3054,17 @@ public class SearchTest extends TestFmwk {
         StringCharacterIterator text = new StringCharacterIterator("fish fish");
         String pattern = "s";
 
-        StringSearch  strsrch = new StringSearch(pattern, text, m_en_us_, null);
+        StringSearch strsrch = new StringSearch(pattern, text, m_en_us_, null);
         strsrch.setOverlapping(true);
         strsrch.setCanonical(true);
         strsrch.setIndex(9);
         strsrch.reset();
-        if (strsrch.isCanonical() || strsrch.isOverlapping() ||
-            strsrch.getIndex() != 0 || strsrch.getMatchLength() != 0 ||
-            strsrch.getMatchStart() != SearchIterator.DONE) {
-                errln("Error resetting string search");
+        if (strsrch.isCanonical()
+                || strsrch.isOverlapping()
+                || strsrch.getIndex() != 0
+                || strsrch.getMatchLength() != 0
+                || strsrch.getMatchStart() != SearchIterator.DONE) {
+            errln("Error resetting string search");
         }
 
         strsrch.previous();
@@ -1759,32 +3076,42 @@ public class SearchTest extends TestFmwk {
     @Test
     public void TestSetMatch() {
         for (int count = 0; count < MATCH.length; count++) {
-            SearchData     search = MATCH[count];
-            StringSearch strsrch = new StringSearch(search.pattern, new StringCharacterIterator(search.text),
-                                                    m_en_us_, null);
+            SearchData search = MATCH[count];
+            StringSearch strsrch =
+                    new StringSearch(
+                            search.pattern,
+                            new StringCharacterIterator(search.text),
+                            m_en_us_,
+                            null);
 
             int size = 0;
             while (search.offset[size] != -1) {
-                size ++;
+                size++;
             }
 
             if (strsrch.first() != search.offset[0]) {
                 errln("Error getting first match");
             }
-            if (strsrch.last() != search.offset[size -1]) {
+            if (strsrch.last() != search.offset[size - 1]) {
                 errln("Error getting last match");
             }
 
             int index = 0;
             while (index < size) {
                 if (index + 2 < size) {
-                    if (strsrch.following(search.offset[index + 2] - 1) != search.offset[index + 2]) {
-                        errln("Error getting following match at index " + (search.offset[index + 2]-1));
+                    if (strsrch.following(search.offset[index + 2] - 1)
+                            != search.offset[index + 2]) {
+                        errln(
+                                "Error getting following match at index "
+                                        + (search.offset[index + 2] - 1));
                     }
                 }
                 if (index + 1 < size) {
-                    if (strsrch.preceding(search.offset[index + 1] + search.size[index + 1] + 1) != search.offset[index + 1]) {
-                        errln("Error getting preceding match at index " + (search.offset[index + 1] + 1));
+                    if (strsrch.preceding(search.offset[index + 1] + search.size[index + 1] + 1)
+                            != search.offset[index + 1]) {
+                        errln(
+                                "Error getting preceding match at index "
+                                        + (search.offset[index + 1] + 1));
                     }
                 }
                 index += 2;
@@ -1838,8 +3165,24 @@ public class SearchTest extends TestFmwk {
     @Test
     public void TestText() {
         SearchData TEXT[] = {
-            SD("the foxy brown fox", "fox", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(4, 15, -1), IA(3, 3)),
-            SD("the quick brown fox", "fox", null, TERTIARY, STANDARD_ELEMENT_COMPARISON, null, IA(16, -1), IA(3))
+            SD(
+                    "the foxy brown fox",
+                    "fox",
+                    null,
+                    TERTIARY,
+                    STANDARD_ELEMENT_COMPARISON,
+                    null,
+                    IA(4, 15, -1),
+                    IA(3, 3)),
+            SD(
+                    "the quick brown fox",
+                    "fox",
+                    null,
+                    TERTIARY,
+                    STANDARD_ELEMENT_COMPARISON,
+                    null,
+                    IA(16, -1),
+                    IA(3))
         };
         StringCharacterIterator t = new StringCharacterIterator(TEXT[0].text);
         StringSearch strsrch = new StringSearch(TEXT[0].pattern, t, m_en_us_, null);
@@ -1932,16 +3275,12 @@ public class SearchTest extends TestFmwk {
     }
 
     @Test
-    public void TestSubClass()
-    {
-        class TestSearch extends SearchIterator
-        {
+    public void TestSubClass() {
+        class TestSearch extends SearchIterator {
             String pattern;
             String text;
 
-            TestSearch(StringCharacterIterator target, BreakIterator breaker,
-                       String pattern)
-            {
+            TestSearch(StringCharacterIterator target, BreakIterator breaker, String pattern) {
                 super(target, breaker);
                 this.pattern = pattern;
                 StringBuilder buffer = new StringBuilder();
@@ -1952,9 +3291,9 @@ public class SearchTest extends TestFmwk {
                 text = buffer.toString();
                 targetText.setIndex(targetText.getBeginIndex());
             }
+
             @Override
-            protected int handleNext(int start)
-            {
+            protected int handleNext(int start) {
                 int match = text.indexOf(pattern, start);
                 if (match < 0) {
                     targetText.last();
@@ -1964,9 +3303,9 @@ public class SearchTest extends TestFmwk {
                 setMatchLength(pattern.length());
                 return match;
             }
+
             @Override
-            protected int handlePrevious(int start)
-            {
+            protected int handlePrevious(int start) {
                 int match = text.lastIndexOf(pattern, start - 1);
                 if (match < 0) {
                     targetText.setIndex(0);
@@ -1978,8 +3317,7 @@ public class SearchTest extends TestFmwk {
             }
 
             @Override
-            public int getIndex()
-            {
+            public int getIndex() {
                 int result = targetText.getIndex();
                 if (result < 0 || result >= text.length()) {
                     return DONE;
@@ -1988,11 +3326,10 @@ public class SearchTest extends TestFmwk {
             }
         }
 
-        TestSearch search = new TestSearch(
-                            new StringCharacterIterator("abc abcd abc"),
-                            null, "abc");
+        TestSearch search =
+                new TestSearch(new StringCharacterIterator("abc abcd abc"), null, "abc");
         int expected[] = {0, 4, 9};
-        for (int i = 0; i < expected.length; i ++) {
+        for (int i = 0; i < expected.length; i++) {
             if (search.next() != expected[i]) {
                 errln("Error getting next match");
             }
@@ -2003,7 +3340,7 @@ public class SearchTest extends TestFmwk {
         if (search.next() != SearchIterator.DONE) {
             errln("Error should have reached the end of the iteration");
         }
-        for (int i = expected.length - 1; i >= 0; i --) {
+        for (int i = expected.length - 1; i >= 0; i--) {
             if (search.previous() != expected[i]) {
                 errln("Error getting next match");
             }
@@ -2016,7 +3353,7 @@ public class SearchTest extends TestFmwk {
         }
     }
 
-    //Test for ticket 5024
+    // Test for ticket 5024
     @Test
     public void TestDiactricMatch() {
         String pattern = "pattern";
@@ -2047,20 +3384,33 @@ public class SearchTest extends TestFmwk {
     @Test
     public void TestUsingSearchCollator() {
         String scKoText =
-            " " +
-    /*01*/  "\uAC00 " +                   // simple LV Hangul
-    /*03*/  "\uAC01 " +                   // simple LVT Hangul
-    /*05*/  "\uAC0F " +                   // LVTT, last jamo expands for search
-    /*07*/  "\uAFFF " +                   // LLVVVTT, every jamo expands for search
-    /*09*/  "\u1100\u1161\u11A8 " +       // 0xAC01 as conjoining jamo
-    /*13*/  "\u1100\u1161\u1100 " +       // 0xAC01 as basic conjoining jamo (per search rules)
-    /*17*/  "\u3131\u314F\u3131 " +       // 0xAC01 as compatibility jamo
-    /*21*/  "\u1100\u1161\u11B6 " +       // 0xAC0F as conjoining jamo; last expands for search
-    /*25*/  "\u1100\u1161\u1105\u1112 " + // 0xAC0F as basic conjoining jamo; last expands for search
-    /*30*/  "\u1101\u1170\u11B6 " +       // 0xAFFF as conjoining jamo; all expand for search
-    /*34*/  "\u00E6 " +                   // small letter ae, expands
-    /*36*/  "\u1E4D " +                   // small letter o with tilde and acute, decomposes
-            "";
+                " "
+                        +
+                        /*01*/ "\uAC00 "
+                        + // simple LV Hangul
+                        /*03*/ "\uAC01 "
+                        + // simple LVT Hangul
+                        /*05*/ "\uAC0F "
+                        + // LVTT, last jamo expands for search
+                        /*07*/ "\uAFFF "
+                        + // LLVVVTT, every jamo expands for search
+                        /*09*/ "\u1100\u1161\u11A8 "
+                        + // 0xAC01 as conjoining jamo
+                        /*13*/ "\u1100\u1161\u1100 "
+                        + // 0xAC01 as basic conjoining jamo (per search rules)
+                        /*17*/ "\u3131\u314F\u3131 "
+                        + // 0xAC01 as compatibility jamo
+                        /*21*/ "\u1100\u1161\u11B6 "
+                        + // 0xAC0F as conjoining jamo; last expands for search
+                        /*25*/ "\u1100\u1161\u1105\u1112 "
+                        + // 0xAC0F as basic conjoining jamo; last expands for search
+                        /*30*/ "\u1101\u1170\u11B6 "
+                        + // 0xAFFF as conjoining jamo; all expand for search
+                        /*34*/ "\u00E6 "
+                        + // small letter ae, expands
+                        /*36*/ "\u1E4D "
+                        + // small letter o with tilde and acute, decomposes
+                        "";
 
         String scKoPat0 = "\uAC01";
         String scKoPat1 = "\u1100\u1161\u11A8"; // 0xAC01 as conjoining jamo
@@ -2069,76 +3419,93 @@ public class SearchTest extends TestFmwk {
         String scKoPat4 = "\uAFFF";
         String scKoPat5 = "\u1101\u1170\u11B6"; // 0xAFFF as conjoining jamo
 
-        int[] scKoSrchOff01 = { 3,  9, 13 };
-        int[] scKoSrchOff23 = { 5, 21, 25 };
-        int[] scKoSrchOff45 = { 7, 30     };
+        int[] scKoSrchOff01 = {3, 9, 13};
+        int[] scKoSrchOff23 = {5, 21, 25};
+        int[] scKoSrchOff45 = {7, 30};
 
-        int[] scKoStndOff01 = { 3,  9 };
-        int[] scKoStndOff2  = { 5, 21 };
-        int[] scKoStndOff3  = { 25    };
-        int[] scKoStndOff45 = { 7, 30 };
+        int[] scKoStndOff01 = {3, 9};
+        int[] scKoStndOff2 = {5, 21};
+        int[] scKoStndOff3 = {25};
+        int[] scKoStndOff45 = {7, 30};
 
         class PatternAndOffsets {
             private String pattern;
             private int[] offsets;
+
             PatternAndOffsets(String pat, int[] offs) {
                 pattern = pat;
                 offsets = offs;
             }
-            public String getPattern() { return pattern; }
-            public int[] getOffsets() { return offsets; }
+
+            public String getPattern() {
+                return pattern;
+            }
+
+            public int[] getOffsets() {
+                return offsets;
+            }
         }
         final PatternAndOffsets[] scKoSrchPatternsOffsets = {
-            new PatternAndOffsets( scKoPat0, scKoSrchOff01 ),
-            new PatternAndOffsets( scKoPat1, scKoSrchOff01 ),
-            new PatternAndOffsets( scKoPat2, scKoSrchOff23 ),
-            new PatternAndOffsets( scKoPat3, scKoSrchOff23 ),
-            new PatternAndOffsets( scKoPat4, scKoSrchOff45 ),
-            new PatternAndOffsets( scKoPat5, scKoSrchOff45 ),
+            new PatternAndOffsets(scKoPat0, scKoSrchOff01),
+            new PatternAndOffsets(scKoPat1, scKoSrchOff01),
+            new PatternAndOffsets(scKoPat2, scKoSrchOff23),
+            new PatternAndOffsets(scKoPat3, scKoSrchOff23),
+            new PatternAndOffsets(scKoPat4, scKoSrchOff45),
+            new PatternAndOffsets(scKoPat5, scKoSrchOff45),
         };
         final PatternAndOffsets[] scKoStndPatternsOffsets = {
-            new PatternAndOffsets( scKoPat0, scKoStndOff01 ),
-            new PatternAndOffsets( scKoPat1, scKoStndOff01 ),
-            new PatternAndOffsets( scKoPat2, scKoStndOff2  ),
-            new PatternAndOffsets( scKoPat3, scKoStndOff3  ),
-            new PatternAndOffsets( scKoPat4, scKoStndOff45 ),
-            new PatternAndOffsets( scKoPat5, scKoStndOff45 ),
+            new PatternAndOffsets(scKoPat0, scKoStndOff01),
+            new PatternAndOffsets(scKoPat1, scKoStndOff01),
+            new PatternAndOffsets(scKoPat2, scKoStndOff2),
+            new PatternAndOffsets(scKoPat3, scKoStndOff3),
+            new PatternAndOffsets(scKoPat4, scKoStndOff45),
+            new PatternAndOffsets(scKoPat5, scKoStndOff45),
         };
 
         class TUSCItem {
             private String localeString;
             private String text;
             private PatternAndOffsets[] patternsAndOffsets;
+
             TUSCItem(String locStr, String txt, PatternAndOffsets[] patsAndOffs) {
                 localeString = locStr;
                 text = txt;
                 patternsAndOffsets = patsAndOffs;
             }
-            public String getLocaleString() { return localeString; }
-            public String getText() { return text; }
-            public PatternAndOffsets[] getPatternsAndOffsets() { return patternsAndOffsets; }
+
+            public String getLocaleString() {
+                return localeString;
+            }
+
+            public String getText() {
+                return text;
+            }
+
+            public PatternAndOffsets[] getPatternsAndOffsets() {
+                return patternsAndOffsets;
+            }
         }
         final TUSCItem[] tuscItems = {
-            new TUSCItem( "root",                  scKoText, scKoStndPatternsOffsets ),
-            new TUSCItem( "root@collation=search", scKoText, scKoSrchPatternsOffsets ),
-            new TUSCItem( "ko@collation=search",   scKoText, scKoSrchPatternsOffsets ),
+            new TUSCItem("root", scKoText, scKoStndPatternsOffsets),
+            new TUSCItem("root@collation=search", scKoText, scKoSrchPatternsOffsets),
+            new TUSCItem("ko@collation=search", scKoText, scKoSrchPatternsOffsets),
         };
 
         String dummyPat = "a";
 
-        for (TUSCItem tuscItem: tuscItems) {
+        for (TUSCItem tuscItem : tuscItems) {
             String localeString = tuscItem.getLocaleString();
             ULocale uloc = new ULocale(localeString);
             RuleBasedCollator col = null;
             try {
-                col = (RuleBasedCollator)Collator.getInstance(uloc);
+                col = (RuleBasedCollator) Collator.getInstance(uloc);
             } catch (Exception e) {
                 errln("Error: in locale " + localeString + ", err in Collator.getInstance");
                 continue;
             }
             StringCharacterIterator ci = new StringCharacterIterator(tuscItem.getText());
             StringSearch srch = new StringSearch(dummyPat, ci, col);
-            for ( PatternAndOffsets patternAndOffsets: tuscItem.getPatternsAndOffsets() ) {
+            for (PatternAndOffsets patternAndOffsets : tuscItem.getPatternsAndOffsets()) {
                 srch.setPattern(patternAndOffsets.getPattern());
                 int[] offsets = patternAndOffsets.getOffsets();
                 int ioff, noff = offsets.length;
@@ -2151,19 +3518,31 @@ public class SearchTest extends TestFmwk {
                     if (offset == SearchIterator.DONE) {
                         break;
                     }
-                    if ( ioff < noff ) {
-                        if ( offset != offsets[ioff] ) {
-                            errln("Error: in locale " + localeString + ", expected SearchIterator.next() " + offsets[ioff] + ", got " + offset);
-                            //ioff = noff;
-                            //break;
+                    if (ioff < noff) {
+                        if (offset != offsets[ioff]) {
+                            errln(
+                                    "Error: in locale "
+                                            + localeString
+                                            + ", expected SearchIterator.next() "
+                                            + offsets[ioff]
+                                            + ", got "
+                                            + offset);
+                            // ioff = noff;
+                            // break;
                         }
                         ioff++;
                     } else {
-                        errln("Error: in locale " + localeString + ", SearchIterator.next() returned more matches than expected");
+                        errln(
+                                "Error: in locale "
+                                        + localeString
+                                        + ", SearchIterator.next() returned more matches than expected");
                     }
                 }
-                if ( ioff < noff ) {
-                    errln("Error: in locale " + localeString + ", SearchIterator.next() returned fewer matches than expected");
+                if (ioff < noff) {
+                    errln(
+                            "Error: in locale "
+                                    + localeString
+                                    + ", SearchIterator.next() returned fewer matches than expected");
                 }
 
                 srch.reset();
@@ -2173,19 +3552,31 @@ public class SearchTest extends TestFmwk {
                     if (offset == SearchIterator.DONE) {
                         break;
                     }
-                    if ( ioff > 0 ) {
+                    if (ioff > 0) {
                         ioff--;
-                        if ( offset != offsets[ioff] ) {
-                             errln("Error: in locale " + localeString + ", expected SearchIterator.previous() " + offsets[ioff] + ", got " + offset);
-                            //ioff = 0;
+                        if (offset != offsets[ioff]) {
+                            errln(
+                                    "Error: in locale "
+                                            + localeString
+                                            + ", expected SearchIterator.previous() "
+                                            + offsets[ioff]
+                                            + ", got "
+                                            + offset);
+                            // ioff = 0;
                             // break;
                         }
                     } else {
-                        errln("Error: in locale " + localeString + ", expected SearchIterator.previous() returned more matches than expected");
+                        errln(
+                                "Error: in locale "
+                                        + localeString
+                                        + ", expected SearchIterator.previous() returned more matches than expected");
                     }
                 }
-                if ( ioff > 0 ) {
-                    errln("Error: in locale " + localeString + ", expected SearchIterator.previous() returned fewer matches than expected");
+                if (ioff > 0) {
+                    errln(
+                            "Error: in locale "
+                                    + localeString
+                                    + ", expected SearchIterator.previous() returned fewer matches than expected");
                 }
             }
         }
@@ -2199,7 +3590,6 @@ public class SearchTest extends TestFmwk {
             }
         }
     }
-
 
     // Test case for ticket#12555
     @Test
@@ -2224,17 +3614,15 @@ public class SearchTest extends TestFmwk {
     @Test
     public void TestBug22775() {
         // Used to crash due to bad management of the pattern collation element array.
-        String pattern = "Xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
-                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
-                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
-                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa響";
+        String pattern =
+                "Xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                        + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                        + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                        + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa響";
         RuleBasedCollator collator = (RuleBasedCollator) Collator.getInstance(Locale.US);
         collator.setStrength(Collator.PRIMARY);
-        StringSearch stringSearch = new StringSearch(
-                pattern,
-                new StringCharacterIterator(" "),
-                collator
-        );
+        StringSearch stringSearch =
+                new StringSearch(pattern, new StringCharacterIterator(" "), collator);
         stringSearch.next();
     }
 }

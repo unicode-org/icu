@@ -1,19 +1,17 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /*
-*******************************************************************************
-* Copyright (C) 2013-2015, International Business Machines
-* Corporation and others.  All Rights Reserved.
-*******************************************************************************
-* CollationTailoring.java, ported from collationtailoring.h/.cpp
-*
-* C++ version created on: 2013mar12
-* created by: Markus W. Scherer
-*/
+ *******************************************************************************
+ * Copyright (C) 2013-2015, International Business Machines
+ * Corporation and others.  All Rights Reserved.
+ *******************************************************************************
+ * CollationTailoring.java, ported from collationtailoring.h/.cpp
+ *
+ * C++ version created on: 2013mar12
+ * created by: Markus W. Scherer
+ */
 
 package com.ibm.icu.impl.coll;
-
-import java.util.Map;
 
 import com.ibm.icu.impl.Norm2AllModes;
 import com.ibm.icu.impl.Normalizer2Impl;
@@ -22,21 +20,20 @@ import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.VersionInfo;
+import java.util.Map;
 
 /**
- * Collation tailoring data & settings.
- * This is a container of values for a collation tailoring
+ * Collation tailoring data & settings. This is a container of values for a collation tailoring
  * built from rules or deserialized from binary data.
  *
- * It is logically immutable: Do not modify its values.
- * The fields are public for convenience.
+ * <p>It is logically immutable: Do not modify its values. The fields are public for convenience.
  */
 public final class CollationTailoring {
     CollationTailoring(SharedObject.Reference<CollationSettings> baseSettings) {
-        if(baseSettings != null) {
-            assert(baseSettings.readOnly().reorderCodes.length == 0);
-            assert(baseSettings.readOnly().reorderTable == null);
-            assert(baseSettings.readOnly().minHighNoReorder == 0);
+        if (baseSettings != null) {
+            assert (baseSettings.readOnly().reorderCodes.length == 0);
+            assert (baseSettings.readOnly().reorderTable == null);
+            assert (baseSettings.readOnly().minHighNoReorder == 0);
             settings = baseSettings.clone();
         } else {
             settings = new SharedObject.Reference<CollationSettings>(new CollationSettings());
@@ -44,7 +41,7 @@ public final class CollationTailoring {
     }
 
     void ensureOwnedData() {
-        if(ownedData == null) {
+        if (ownedData == null) {
             Normalizer2Impl nfcImpl = Norm2AllModes.getNFCInstance().impl;
             ownedData = new CollationData(nfcImpl);
         }
@@ -56,11 +53,13 @@ public final class CollationTailoring {
         assert rules == null && rulesResource == null;
         rules = r;
     }
+
     /** Not thread-safe, call only before sharing. */
     void setRulesResource(UResourceBundle res) {
         assert rules == null && rulesResource == null;
         rulesResource = res;
     }
+
     public String getRules() {
         if (rules != null) {
             return rules;
@@ -78,17 +77,21 @@ public final class CollationTailoring {
                 ucaVersion.getMilli() << 6,
                 0);
     }
+
     void setVersion(int baseVersion, int rulesVersion) {
         // See comments for version field.
         int r = (rulesVersion >> 16) & 0xff00;
         int s = (rulesVersion >> 16) & 0xff;
         int t = (rulesVersion >> 8) & 0xff;
         int q = rulesVersion & 0xff;
-        version = (VersionInfo.UCOL_BUILDER_VERSION.getMajor() << 24) |
-                (baseVersion & 0xffc000) |  // UCA version u.v.w
-                ((r + (r >> 6)) & 0x3f00) |
-                (((s << 3) + (s >> 5) + t + (q << 4) + (q >> 4)) & 0xff);
+        version =
+                (VersionInfo.UCOL_BUILDER_VERSION.getMajor() << 24)
+                        | (baseVersion & 0xffc000)
+                        | // UCA version u.v.w
+                        ((r + (r >> 6)) & 0x3f00)
+                        | (((s << 3) + (s >> 5) + t + (q << 4) + (q >> 4)) & 0xff);
     }
+
     int getUCAVersion() {
         // Version second byte/bits 23..16 to bits 11..4,
         // third byte/bits 15..14 to bits 1..0.
@@ -96,8 +99,8 @@ public final class CollationTailoring {
     }
 
     // data for sorting etc.
-    public CollationData data;  // == base data or ownedData
-    public SharedObject.Reference<CollationSettings> settings;  // reference-counted
+    public CollationData data; // == base data or ownedData
+    public SharedObject.Reference<CollationSettings> settings; // reference-counted
     // In Java, deserialize the rules string from the resource bundle
     // only when it is used. (It can be large and is rarely used.)
     private String rules;

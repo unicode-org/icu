@@ -1,16 +1,20 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /*
-**********************************************************************
-*   Copyright (c) 2001-2010, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-**********************************************************************
-*   Date        Name        Description
-*   11/29/2001  aliu        Creation.
-*   06/26/2002  aliu        Moved to com.ibm.icu.dev.tool.translit
-**********************************************************************
-*/
+ **********************************************************************
+ *   Copyright (c) 2001-2010, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ **********************************************************************
+ *   Date        Name        Description
+ *   11/29/2001  aliu        Creation.
+ *   06/26/2002  aliu        Moved to com.ibm.icu.dev.tool.translit
+ **********************************************************************
+ */
 package com.ibm.icu.dev.tool.translit;
+
+import com.ibm.icu.text.Normalizer;
+import com.ibm.icu.text.Transliterator;
+import com.ibm.icu.text.UnicodeSet;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -18,26 +22,22 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.Enumeration;
 
-import com.ibm.icu.text.Normalizer;
-import com.ibm.icu.text.Transliterator;
-import com.ibm.icu.text.UnicodeSet;
-
 /**
  * Class that generates source set information for a transliterator.
- * 
- * To run, use:
- * 
- *   java com.ibm.icu.dev.tool.translit.SourceSet Latin-Katakana NFD lower
- * 
- * Output is produced in the command console, and a file with more detail is also written.
- * 
- * To see if it works, use:
- * 
- *   java com.ibm.icu.dev.test.translit.TransliteratorTest -v -nothrow TestIncrementalProgress
- * 
- * and
- *  
- *   java com.ibm.icu.dev.demo.translit.Demo
+ *
+ * <p>To run, use:
+ *
+ * <p>java com.ibm.icu.dev.tool.translit.SourceSet Latin-Katakana NFD lower
+ *
+ * <p>Output is produced in the command console, and a file with more detail is also written.
+ *
+ * <p>To see if it works, use:
+ *
+ * <p>java com.ibm.icu.dev.test.translit.TransliteratorTest -v -nothrow TestIncrementalProgress
+ *
+ * <p>and
+ *
+ * <p>java com.ibm.icu.dev.demo.translit.Demo
  */
 public class SourceSet {
 
@@ -79,9 +79,7 @@ public class SourceSet {
     static void showSourceSet(String ID, Normalizer.Mode m, boolean lowerFirst) throws IOException {
         File f = new File("UnicodeSetClosure.txt");
         String filename = f.getCanonicalFile().toString();
-        out = new PrintWriter(
-            new OutputStreamWriter(
-                new FileOutputStream(filename), "UTF-8"));
+        out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(filename), "UTF-8"));
         out.print('\uFEFF'); // BOM
         System.out.println();
         System.out.println("Writing " + filename);
@@ -90,22 +88,23 @@ public class SourceSet {
         showSourceSetAux(t.getInverse(), m, lowerFirst, false);
         out.close();
     }
-    
+
     static PrintWriter out;
-    
-    static void showSourceSetAux(Transliterator t, Normalizer.Mode m, boolean lowerFirst, boolean forward) {
+
+    static void showSourceSetAux(
+            Transliterator t, Normalizer.Mode m, boolean lowerFirst, boolean forward) {
         UnicodeSet sourceSet = t.getSourceSet();
         if (m != Normalizer.NONE || lowerFirst) {
             UnicodeSetClosure.close(sourceSet, m, lowerFirst);
         }
-        System.out.println(t.getID() + ": " +
-                           sourceSet.toPattern(true));
+        System.out.println(t.getID() + ": " + sourceSet.toPattern(true));
         out.println("# MINIMAL FILTER GENERATED FOR: " + t.getID() + (forward ? "" : " REVERSE"));
-        out.println(":: " 
-            + (forward ? "" : "( ") 
-            + sourceSet.toPattern(true) 
-            + (forward ? "" : " )")
-            + " ;");
+        out.println(
+                ":: "
+                        + (forward ? "" : "( ")
+                        + sourceSet.toPattern(true)
+                        + (forward ? "" : " )")
+                        + " ;");
         out.println("# Unicode: " + sourceSet.toPattern(false));
         out.println();
     }

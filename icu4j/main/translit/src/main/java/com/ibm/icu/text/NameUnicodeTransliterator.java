@@ -5,6 +5,7 @@
  * others. All Rights Reserved.
  */
 package com.ibm.icu.text;
+
 import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.impl.UCharacterName;
 import com.ibm.icu.impl.Utility;
@@ -12,45 +13,42 @@ import com.ibm.icu.lang.UCharacter;
 
 /**
  * A transliterator that performs name to character mapping.
+ *
  * @author Alan Liu
  */
 class NameUnicodeTransliterator extends Transliterator {
 
     static final String _ID = "Name-Any";
 
-    static final String OPEN_PAT    = "\\N~{~";
-    static final char   OPEN_DELIM  = '\\'; // first char of OPEN_PAT
-    static final char   CLOSE_DELIM = '}';
-    static final char   SPACE       = ' ';
+    static final String OPEN_PAT = "\\N~{~";
+    static final char OPEN_DELIM = '\\'; // first char of OPEN_PAT
+    static final char CLOSE_DELIM = '}';
+    static final char SPACE = ' ';
 
-
-    /**
-     * System registration hook.
-     */
+    /** System registration hook. */
     static void register() {
-        Transliterator.registerFactory(_ID, new Transliterator.Factory() {
-            @Override
-            public Transliterator getInstance(String ID) {
-                return new NameUnicodeTransliterator(null);
-            }
-        });
+        Transliterator.registerFactory(
+                _ID,
+                new Transliterator.Factory() {
+                    @Override
+                    public Transliterator getInstance(String ID) {
+                        return new NameUnicodeTransliterator(null);
+                    }
+                });
     }
 
-    /**
-     * Constructs a transliterator.
-     */
+    /** Constructs a transliterator. */
     public NameUnicodeTransliterator(UnicodeFilter filter) {
         super(_ID, filter);
     }
 
-    /**
-     * Implements {@link Transliterator#handleTransliterate}.
-     */
+    /** Implements {@link Transliterator#handleTransliterate}. */
     @Override
-    protected void handleTransliterate(Replaceable text,
-                                       Position offsets, boolean isIncremental) {
+    protected void handleTransliterate(Replaceable text, Position offsets, boolean isIncremental) {
 
-        int maxLen = UCharacterName.INSTANCE.getMaxCharNameLength() + 1; // allow for temporary trailing space
+        int maxLen =
+                UCharacterName.INSTANCE.getMaxCharNameLength()
+                        + 1; // allow for temporary trailing space
 
         StringBuilder name = new StringBuilder(maxLen);
 
@@ -72,92 +70,90 @@ class NameUnicodeTransliterator extends Transliterator {
             c = text.char32At(cursor);
 
             switch (mode) {
-            case 0: // looking for open delimiter
-                if (c == OPEN_DELIM) { // quick check first
-                    openPos = cursor;
-                    int i = Utility.parsePattern(OPEN_PAT, text, cursor, limit);
-                    if (i >= 0 && i < limit) {
-                        mode = 1;
-                        name.setLength(0);
-                        cursor = i;
-                        continue; // *** reprocess char32At(cursor)
-                    }
-                }
-                break;
-
-            case 1: // after open delimiter
-                // Look for legal chars.  If \s+ is found, convert it
-                // to a single space.  If closeDelimiter is found, exit
-                // the loop.  If any other character is found, exit the
-                // loop.  If the limit is reached, exit the loop.
-
-                // Convert \s+ => SPACE.  This assumes there are no
-                // runs of >1 space characters in names.
-                if (PatternProps.isWhiteSpace(c)) {
-                    // Ignore leading whitespace
-                    if (name.length() > 0 &&
-                        name.charAt(name.length()-1) != SPACE) {
-                        name.append(SPACE);
-                        // If we are too long then abort.  maxLen includes
-                        // temporary trailing space, so use '>'.
-                        if (name.length() > maxLen) {
-                            mode = 0;
+                case 0: // looking for open delimiter
+                    if (c == OPEN_DELIM) { // quick check first
+                        openPos = cursor;
+                        int i = Utility.parsePattern(OPEN_PAT, text, cursor, limit);
+                        if (i >= 0 && i < limit) {
+                            mode = 1;
+                            name.setLength(0);
+                            cursor = i;
+                            continue; // *** reprocess char32At(cursor)
                         }
                     }
                     break;
-                }
 
-                if (c == CLOSE_DELIM) {
+                case 1: // after open delimiter
+                    // Look for legal chars.  If \s+ is found, convert it
+                    // to a single space.  If closeDelimiter is found, exit
+                    // the loop.  If any other character is found, exit the
+                    // loop.  If the limit is reached, exit the loop.
 
-                    int len = name.length();
-
-                    // Delete trailing space, if any
-                    if (len > 0 &&
-                        name.charAt(len-1) == SPACE) {
-                        name.setLength(--len);
+                    // Convert \s+ => SPACE.  This assumes there are no
+                    // runs of >1 space characters in names.
+                    if (PatternProps.isWhiteSpace(c)) {
+                        // Ignore leading whitespace
+                        if (name.length() > 0 && name.charAt(name.length() - 1) != SPACE) {
+                            name.append(SPACE);
+                            // If we are too long then abort.  maxLen includes
+                            // temporary trailing space, so use '>'.
+                            if (name.length() > maxLen) {
+                                mode = 0;
+                            }
+                        }
+                        break;
                     }
 
-                    c = UCharacter.getCharFromExtendedName(name.toString());
-                    if (c != -1) {
-                        // Lookup succeeded
+                    if (c == CLOSE_DELIM) {
 
-                        // assert(UTF16.getCharCount(CLOSE_DELIM) == 1);
-                        cursor++; // advance over CLOSE_DELIM
+                        int len = name.length();
 
-                        String str = UTF16.valueOf(c);
-                        text.replace(openPos, cursor, str);
+                        // Delete trailing space, if any
+                        if (len > 0 && name.charAt(len - 1) == SPACE) {
+                            name.setLength(--len);
+                        }
 
-                        // Adjust indices for the change in the length of
-                        // the string.  Do not assume that str.length() ==
-                        // 1, in case of surrogates.
-                        int delta = cursor - openPos - str.length();
-                        cursor -= delta;
-                        limit -= delta;
-                        // assert(cursor == openPos + str.length());
+                        c = UCharacter.getCharFromExtendedName(name.toString());
+                        if (c != -1) {
+                            // Lookup succeeded
+
+                            // assert(UTF16.getCharCount(CLOSE_DELIM) == 1);
+                            cursor++; // advance over CLOSE_DELIM
+
+                            String str = UTF16.valueOf(c);
+                            text.replace(openPos, cursor, str);
+
+                            // Adjust indices for the change in the length of
+                            // the string.  Do not assume that str.length() ==
+                            // 1, in case of surrogates.
+                            int delta = cursor - openPos - str.length();
+                            cursor -= delta;
+                            limit -= delta;
+                            // assert(cursor == openPos + str.length());
+                        }
+                        // If the lookup failed, we leave things as-is and
+                        // still switch to mode 0 and continue.
+                        mode = 0;
+                        openPos = -1; // close off candidate
+                        continue; // *** reprocess char32At(cursor)
                     }
-                    // If the lookup failed, we leave things as-is and
-                    // still switch to mode 0 and continue.
-                    mode = 0;
-                    openPos = -1; // close off candidate
-                    continue; // *** reprocess char32At(cursor)
-                }
 
-                if (legal.contains(c)) {
-                    name.appendCodePoint(c);
-                    // If we go past the longest possible name then abort.
-                    // maxLen includes temporary trailing space, so use '>='.
-                    if (name.length() >= maxLen) {
+                    if (legal.contains(c)) {
+                        name.appendCodePoint(c);
+                        // If we go past the longest possible name then abort.
+                        // maxLen includes temporary trailing space, so use '>='.
+                        if (name.length() >= maxLen) {
+                            mode = 0;
+                        }
+                    }
+
+                    // Invalid character
+                    else {
+                        --cursor; // Backup and reprocess this character
                         mode = 0;
                     }
-                }
 
-                // Invalid character
-                else {
-                    --cursor; // Backup and reprocess this character
-                    mode = 0;
-                }
-
-                break;
+                    break;
             }
 
             cursor += UTF16.getCharCount(c);
@@ -174,21 +170,26 @@ class NameUnicodeTransliterator extends Transliterator {
      * @see com.ibm.icu.text.Transliterator#addSourceTargetSet(com.ibm.icu.text.UnicodeSet, com.ibm.icu.text.UnicodeSet, com.ibm.icu.text.UnicodeSet)
      */
     @Override
-    public void addSourceTargetSet(UnicodeSet inputFilter, UnicodeSet sourceSet, UnicodeSet targetSet) {
+    public void addSourceTargetSet(
+            UnicodeSet inputFilter, UnicodeSet sourceSet, UnicodeSet targetSet) {
         UnicodeSet myFilter = getFilterAsUnicodeSet(inputFilter);
-        if (!myFilter.containsAll(UnicodeNameTransliterator.OPEN_DELIM) || !myFilter.contains(CLOSE_DELIM)) {
+        if (!myFilter.containsAll(UnicodeNameTransliterator.OPEN_DELIM)
+                || !myFilter.contains(CLOSE_DELIM)) {
             return; // we have to contain both prefix and suffix
         }
-        UnicodeSet items = new UnicodeSet()
-        .addAll('0', '9')
-        .addAll('A', 'F')
-        .addAll('a', 'z') // for controls
-        .add('<').add('>') // for controls
-        .add('(').add(')') // for controls
-        .add('-')
-        .add(' ')
-        .addAll(UnicodeNameTransliterator.OPEN_DELIM)
-        .add(CLOSE_DELIM);
+        UnicodeSet items =
+                new UnicodeSet()
+                        .addAll('0', '9')
+                        .addAll('A', 'F')
+                        .addAll('a', 'z') // for controls
+                        .add('<')
+                        .add('>') // for controls
+                        .add('(')
+                        .add(')') // for controls
+                        .add('-')
+                        .add(' ')
+                        .addAll(UnicodeNameTransliterator.OPEN_DELIM)
+                        .add(CLOSE_DELIM);
         items.retainAll(myFilter);
         if (items.size() > 0) {
             sourceSet.addAll(items);

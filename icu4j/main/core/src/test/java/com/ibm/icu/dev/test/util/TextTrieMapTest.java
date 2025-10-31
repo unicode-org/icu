@@ -5,19 +5,17 @@
  * Copyright (C) 2007, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
-*/
+ */
 package com.ibm.icu.dev.test.util;
-
-import java.util.Arrays;
-import java.util.Iterator;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.TextTrieMap;
 import com.ibm.icu.text.UnicodeSet;
+import java.util.Arrays;
+import java.util.Iterator;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public class TextTrieMapTest extends CoreTestFmwk {
@@ -76,9 +74,9 @@ public class TextTrieMapTest extends CoreTestFmwk {
         {"Mo", MON, MON},
         {"mo", null, MON},
         {"Thursday Friday", THU, THU},
-        {"T", new Object[]{TUE, THU}, new Object[]{TUE, THU}},
-        {"TEST", new Object[]{TUE, THU}, new Object[]{TUE, THU}},
-        {"SUN", new Object[]{SUN, SAT}, SUN},
+        {"T", new Object[] {TUE, THU}, new Object[] {TUE, THU}},
+        {"TEST", new Object[] {TUE, THU}, new Object[] {TUE, THU}},
+        {"SUN", new Object[] {SUN, SAT}, SUN},
         {"super", null, SUN},
         {"NO", null, null},
         {"L📺", SUP1, SUP1},
@@ -90,12 +88,12 @@ public class TextTrieMapTest extends CoreTestFmwk {
         Iterator<Object> itr = null;
         TextTrieMap<Object> map = new TextTrieMap<>(false);
         for (int i = 0; i < TESTDATA.length; i++) {
-            map.put((String)TESTDATA[i][0], TESTDATA[i][1]);
+            map.put((String) TESTDATA[i][0], TESTDATA[i][1]);
         }
 
         logln("Test for get(String)");
         for (int i = 0; i < TESTCASES.length; i++) {
-            itr = map.get((String)TESTCASES[i][0]);
+            itr = map.get((String) TESTCASES[i][0]);
             checkResult("get(String) case " + i, itr, TESTCASES[i][1]);
         }
 
@@ -142,7 +140,7 @@ public class TextTrieMapTest extends CoreTestFmwk {
 
         // Make sure the all entries are returned
         itr = map.get("Sunday");
-        checkResult("Get Sunday", itr, new Object[]{FOO, SUN});
+        checkResult("Get Sunday", itr, new Object[] {FOO, SUN});
     }
 
     @Test
@@ -150,12 +148,12 @@ public class TextTrieMapTest extends CoreTestFmwk {
         Iterator<Object> itr = null;
         TextTrieMap<Object> map = new TextTrieMap<>(true);
         for (int i = 0; i < TESTDATA.length; i++) {
-            map.put((String)TESTDATA[i][0], TESTDATA[i][1]);
+            map.put((String) TESTDATA[i][0], TESTDATA[i][1]);
         }
 
         logln("Test for get(String)");
         for (int i = 0; i < TESTCASES.length; i++) {
-            itr = map.get((String)TESTCASES[i][0]);
+            itr = map.get((String) TESTCASES[i][0]);
             checkResult("get(String) case " + i, itr, TESTCASES[i][2]);
         }
 
@@ -201,7 +199,7 @@ public class TextTrieMapTest extends CoreTestFmwk {
 
         // Make sure the all entries are returned
         itr = map.get("Sunday");
-        checkResult("Get Sunday", itr, new Object[]{SUN, FOO, BAR});
+        checkResult("Get Sunday", itr, new Object[] {SUN, FOO, BAR});
     }
 
     private boolean eql(Object o1, Object o2) {
@@ -217,9 +215,10 @@ public class TextTrieMapTest extends CoreTestFmwk {
     private void checkResult(String memo, Iterator<Object> itr, Object expected) {
         if (itr == null) {
             if (expected != null) {
-                String expectedStr = (expected instanceof Object[])
-                        ? Arrays.toString((Object[]) expected)
-                        : expected.toString();
+                String expectedStr =
+                        (expected instanceof Object[])
+                                ? Arrays.toString((Object[]) expected)
+                                : expected.toString();
                 errln("FAIL: Empty results: " + memo + ": Expected: " + expectedStr);
             }
             return;
@@ -231,9 +230,9 @@ public class TextTrieMapTest extends CoreTestFmwk {
 
         Object[] exp;
         if (expected instanceof Object[]) {
-            exp = (Object[])expected;
+            exp = (Object[]) expected;
         } else {
-            exp = new Object[]{expected};
+            exp = new Object[] {expected};
         }
 
         boolean[] found = new boolean[exp.length];

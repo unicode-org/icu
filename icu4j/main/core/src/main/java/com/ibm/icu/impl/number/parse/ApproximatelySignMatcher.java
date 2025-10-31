@@ -8,14 +8,15 @@ import com.ibm.icu.text.DecimalFormatSymbols;
 
 /**
  * @author sffc
- *
  */
 public class ApproximatelySignMatcher extends SymbolMatcher {
 
     private static final ApproximatelySignMatcher DEFAULT = new ApproximatelySignMatcher(false);
-    private static final ApproximatelySignMatcher DEFAULT_ALLOW_TRAILING = new ApproximatelySignMatcher(true);
+    private static final ApproximatelySignMatcher DEFAULT_ALLOW_TRAILING =
+            new ApproximatelySignMatcher(true);
 
-    public static ApproximatelySignMatcher getInstance(DecimalFormatSymbols symbols, boolean allowTrailing) {
+    public static ApproximatelySignMatcher getInstance(
+            DecimalFormatSymbols symbols, boolean allowTrailing) {
         String symbolString = symbols.getApproximatelySignString();
         if (DEFAULT.uniSet.contains(symbolString)) {
             return allowTrailing ? DEFAULT_ALLOW_TRAILING : DEFAULT;
@@ -50,5 +51,4 @@ public class ApproximatelySignMatcher extends SymbolMatcher {
     public String toString() {
         return "<ApproximatelySignMatcher>";
     }
-
 }

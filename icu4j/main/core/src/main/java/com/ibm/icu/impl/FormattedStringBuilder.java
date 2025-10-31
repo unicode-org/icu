@@ -2,21 +2,21 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl;
 
+import com.ibm.icu.text.NumberFormat; // NumberFormat is imported only for the toDebugString()
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-// NumberFormat is imported only for the toDebugString() implementation.
-import com.ibm.icu.text.NumberFormat;
+// implementation.
 
 /**
  * A StringBuilder optimized for formatting. It implements the following key features beyond a
  * normal JDK StringBuilder:
  *
  * <ol>
- * <li>Efficient prepend as well as append.
- * <li>Keeps tracks of Fields in an efficient manner.
- * <li>String operations are fast-pathed to code point operations when possible.
+ *   <li>Efficient prepend as well as append.
+ *   <li>Keeps tracks of Fields in an efficient manner.
+ *   <li>String operations are fast-pathed to code point operations when possible.
  * </ol>
  *
  * See also FormattedValueStringBuilderImpl.
@@ -167,8 +167,7 @@ public class FormattedStringBuilder implements CharSequence, Appendable {
         int position = prepareForInsert(index, count);
         Character.toChars(codePoint, chars, position);
         fields[position] = field;
-        if (count == 2)
-            fields[position + 1] = field;
+        if (count == 2) fields[position + 1] = field;
         return count;
     }
 
@@ -191,7 +190,8 @@ public class FormattedStringBuilder implements CharSequence, Appendable {
             // Nothing to insert.
             return 0;
         } else if (sequence.length() == 1) {
-            // Fast path: on a single-char string, using insertCodePoint below is 70% faster than the
+            // Fast path: on a single-char string, using insertCodePoint below is 70% faster than
+            // the
             // CharSequence method: 12.2 ns versus 41.9 ns for five operations on my Linux x86-64.
             return insertCodePoint(index, sequence.charAt(0), field);
         } else {
@@ -216,12 +216,12 @@ public class FormattedStringBuilder implements CharSequence, Appendable {
     }
 
     /**
-     * Replaces the chars between startThis and endThis with the chars between startOther and endOther of
-     * the given CharSequence. Calling this method with startThis == endThis is equivalent to calling
-     * insert.
+     * Replaces the chars between startThis and endThis with the chars between startOther and
+     * endOther of the given CharSequence. Calling this method with startThis == endThis is
+     * equivalent to calling insert.
      *
-     * @return The number of chars added, which may be negative if the removed segment is longer than the
-     *         length of the CharSequence segment that was inserted.
+     * @return The number of chars added, which may be negative if the removed segment is longer
+     *     than the length of the CharSequence segment that was inserted.
      */
     public int splice(
             int startThis,
@@ -249,8 +249,8 @@ public class FormattedStringBuilder implements CharSequence, Appendable {
     }
 
     /**
-     * Appends the chars in the specified char array to the end of the string, and associates them with
-     * the fields in the specified field array, which must have the same length as chars.
+     * Appends the chars in the specified char array to the end of the string, and associates them
+     * with the fields in the specified field array, which must have the same length as chars.
      *
      * @return The number of chars added, which is the length of the char array.
      */
@@ -259,16 +259,16 @@ public class FormattedStringBuilder implements CharSequence, Appendable {
     }
 
     /**
-     * Inserts the chars in the specified char array at the specified index in the string, and associates
-     * them with the fields in the specified field array, which must have the same length as chars.
+     * Inserts the chars in the specified char array at the specified index in the string, and
+     * associates them with the fields in the specified field array, which must have the same length
+     * as chars.
      *
      * @return The number of chars added, which is the length of the char array.
      */
     public int insert(int index, char[] chars, Object[] fields) {
         assert fields == null || chars.length == fields.length;
         int count = chars.length;
-        if (count == 0)
-            return 0; // nothing to insert
+        if (count == 0) return 0; // nothing to insert
         int position = prepareForInsert(index, count);
         for (int i = 0; i < count; i++) {
             this.chars[position + i] = chars[i];
@@ -280,16 +280,19 @@ public class FormattedStringBuilder implements CharSequence, Appendable {
     /**
      * Appends the contents of another {@link FormattedStringBuilder} to the end of this instance.
      *
-     * @return The number of chars added, which is the length of the other {@link FormattedStringBuilder}.
+     * @return The number of chars added, which is the length of the other {@link
+     *     FormattedStringBuilder}.
      */
     public int append(FormattedStringBuilder other) {
         return insert(length - appendOffset, other);
     }
 
     /**
-     * Inserts the contents of another {@link FormattedStringBuilder} into this instance at the given index.
+     * Inserts the contents of another {@link FormattedStringBuilder} into this instance at the
+     * given index.
      *
-     * @return The number of chars added, which is the length of the other {@link FormattedStringBuilder}.
+     * @return The number of chars added, which is the length of the other {@link
+     *     FormattedStringBuilder}.
      */
     public int insert(int index, FormattedStringBuilder other) {
         if (this == other) {
@@ -311,10 +314,8 @@ public class FormattedStringBuilder implements CharSequence, Appendable {
     /**
      * Shifts around existing data if necessary to make room for new characters.
      *
-     * @param index
-     *            The location in the string where the operation is to take place.
-     * @param count
-     *            The number of chars (UTF-16 code units) to be inserted at that location.
+     * @param index The location in the string where the operation is to take place.
+     * @param count The number of chars (UTF-16 code units) to be inserted at that location.
      * @return The position in the char array to insert the chars.
      */
     private int prepareForInsert(int index, int count) {
@@ -353,17 +354,11 @@ public class FormattedStringBuilder implements CharSequence, Appendable {
             // First copy the prefix and then the suffix, leaving room for the new chars that the
             // caller wants to insert.
             System.arraycopy(oldChars, oldZero, newChars, newZero, index);
-            System.arraycopy(oldChars,
-                    oldZero + index,
-                    newChars,
-                    newZero + index + count,
-                    length - index);
+            System.arraycopy(
+                    oldChars, oldZero + index, newChars, newZero + index + count, length - index);
             System.arraycopy(oldFields, oldZero, newFields, newZero, index);
-            System.arraycopy(oldFields,
-                    oldZero + index,
-                    newFields,
-                    newZero + index + count,
-                    length - index);
+            System.arraycopy(
+                    oldFields, oldZero + index, newFields, newZero + index + count, length - index);
 
             chars = newChars;
             fields = newFields;
@@ -375,17 +370,11 @@ public class FormattedStringBuilder implements CharSequence, Appendable {
             // First copy the entire string to the location of the prefix, and then move the suffix
             // to make room for the new chars that the caller wants to insert.
             System.arraycopy(oldChars, oldZero, oldChars, newZero, length);
-            System.arraycopy(oldChars,
-                    newZero + index,
-                    oldChars,
-                    newZero + index + count,
-                    length - index);
+            System.arraycopy(
+                    oldChars, newZero + index, oldChars, newZero + index + count, length - index);
             System.arraycopy(oldFields, oldZero, oldFields, newZero, length);
-            System.arraycopy(oldFields,
-                    newZero + index,
-                    oldFields,
-                    newZero + index + count,
-                    length - index);
+            System.arraycopy(
+                    oldFields, newZero + index, oldFields, newZero + index + count, length - index);
 
             zero = newZero;
             length += count;
@@ -433,8 +422,7 @@ public class FormattedStringBuilder implements CharSequence, Appendable {
     /**
      * Returns the string represented by the characters in this string builder.
      *
-     * <p>
-     * For a string intended be used for debugging, use {@link #toDebugString}.
+     * <p>For a string intended be used for debugging, use {@link #toDebugString}.
      */
     @Override
     public String toString() {
@@ -462,8 +450,7 @@ public class FormattedStringBuilder implements CharSequence, Appendable {
     /**
      * Returns a string that includes field information, for debugging purposes.
      *
-     * <p>
-     * For example, if the string is "-12.345", the debug string will be something like
+     * <p>For example, if the string is "-12.345", the debug string will be something like
      * "&lt;FormattedStringBuilder [-123.45] [-iii.ff]&gt;"
      *
      * @return A string for debugging purposes.
@@ -486,12 +473,16 @@ public class FormattedStringBuilder implements CharSequence, Appendable {
         return sb.toString();
     }
 
-    /** @return A new array containing the contents of this string builder. */
+    /**
+     * @return A new array containing the contents of this string builder.
+     */
     public char[] toCharArray() {
         return Arrays.copyOfRange(chars, zero, zero + length);
     }
 
-    /** @return A new array containing the field values of this string builder. */
+    /**
+     * @return A new array containing the field values of this string builder.
+     */
     public Object[] toFieldArray() {
         return Arrays.copyOfRange(fields, zero, zero + length);
     }
@@ -506,8 +497,9 @@ public class FormattedStringBuilder implements CharSequence, Appendable {
     }
 
     /**
-     * This method is provided for Java Appendable compatibility. In most cases, please use the append methods that take
-     * a Field parameter. If you do use this method, you must call {@link #setAppendableField} first.
+     * This method is provided for Java Appendable compatibility. In most cases, please use the
+     * append methods that take a Field parameter. If you do use this method, you must call {@link
+     * #setAppendableField} first.
      */
     @Override
     public Appendable append(CharSequence csq) {
@@ -517,8 +509,9 @@ public class FormattedStringBuilder implements CharSequence, Appendable {
     }
 
     /**
-     * This method is provided for Java Appendable compatibility. In most cases, please use the append methods that take
-     * a Field parameter. If you do use this method, you must call {@link #setAppendableField} first.
+     * This method is provided for Java Appendable compatibility. In most cases, please use the
+     * append methods that take a Field parameter. If you do use this method, you must call {@link
+     * #setAppendableField} first.
      */
     @Override
     public Appendable append(CharSequence csq, int start, int end) {
@@ -528,8 +521,9 @@ public class FormattedStringBuilder implements CharSequence, Appendable {
     }
 
     /**
-     * This method is provided for Java Appendable compatibility. In most cases, please use the append methods that take
-     * a Field parameter. If you do use this method, you must call {@link #setAppendableField} first.
+     * This method is provided for Java Appendable compatibility. In most cases, please use the
+     * append methods that take a Field parameter. If you do use this method, you must call {@link
+     * #setAppendableField} first.
      */
     @Override
     public Appendable append(char c) {
@@ -539,16 +533,14 @@ public class FormattedStringBuilder implements CharSequence, Appendable {
     }
 
     /**
-     * @return Whether the contents and field values of this string builder are equal to the given chars
-     *         and fields.
+     * @return Whether the contents and field values of this string builder are equal to the given
+     *     chars and fields.
      * @see #toCharArray
      * @see #toFieldArray
      */
     public boolean contentEquals(char[] chars, Object[] fields) {
-        if (chars.length != length)
-            return false;
-        if (fields.length != length)
-            return false;
+        if (chars.length != length) return false;
+        if (fields.length != length) return false;
         for (int i = 0; i < length; i++) {
             if (this.chars[zero + i] != chars[i]) {
                 return false;
@@ -561,13 +553,11 @@ public class FormattedStringBuilder implements CharSequence, Appendable {
     }
 
     /**
-     * @param other
-     *            The instance to compare.
+     * @param other The instance to compare.
      * @return Whether the contents of this instance is currently equal to the given instance.
      */
     public boolean contentEquals(FormattedStringBuilder other) {
-        if (length != other.length)
-            return false;
+        if (length != other.length) return false;
         for (int i = 0; i < length; i++) {
             if (charAt(i) != other.charAt(i)) {
                 return false;
@@ -581,11 +571,13 @@ public class FormattedStringBuilder implements CharSequence, Appendable {
 
     @Override
     public int hashCode() {
-        throw new UnsupportedOperationException("Don't call #hashCode() or #equals() on a mutable.");
+        throw new UnsupportedOperationException(
+                "Don't call #hashCode() or #equals() on a mutable.");
     }
 
     @Override
     public boolean equals(Object other) {
-        throw new UnsupportedOperationException("Don't call #hashCode() or #equals() on a mutable.");
+        throw new UnsupportedOperationException(
+                "Don't call #hashCode() or #equals() on a mutable.");
     }
 }

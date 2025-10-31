@@ -1,15 +1,13 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /*
-*******************************************************************************
-*   Copyright (C) 2001-2013, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-*******************************************************************************
-*/
+ *******************************************************************************
+ *   Copyright (C) 2001-2013, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ *******************************************************************************
+ */
 
 package com.ibm.icu.dev.test.bidi;
-
-import java.util.Arrays;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.Utility;
@@ -17,22 +15,42 @@ import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.Bidi;
 import com.ibm.icu.text.BidiRun;
 import com.ibm.icu.util.VersionInfo;
+import java.util.Arrays;
 
 /**
  * A base class for the Bidi test suite.
  *
  * @author Lina Kemmel, Matitiahu Allouche
  */
-
 public class BidiFmwk extends CoreTestFmwk {
 
     protected static final char[] charFromDirProp = {
-         /* L      R    EN    ES    ET     AN    CS    B    S    WS    ON */
-         0x61, 0x5d0, 0x30, 0x2f, 0x25, 0x660, 0x2c, 0xa, 0x9, 0x20, 0x26,
-         /* LRE     LRO     AL     RLE     RLO     PDF    NSM      BN */
-         0x202a, 0x202d, 0x627, 0x202b, 0x202e, 0x202c, 0x308, 0x200c,
-         /* FSI     LRI     RLI     PDI */
-         0x2068, 0x2066, 0x2067, 0x2069  /* new in Unicode 6.3/ICU 52 */
+        /* L      R    EN    ES    ET     AN    CS    B    S    WS    ON */
+        0x61,
+        0x5d0,
+        0x30,
+        0x2f,
+        0x25,
+        0x660,
+        0x2c,
+        0xa,
+        0x9,
+        0x20,
+        0x26,
+        /* LRE     LRO     AL     RLE     RLO     PDF    NSM      BN */
+        0x202a,
+        0x202d,
+        0x627,
+        0x202b,
+        0x202e,
+        0x202c,
+        0x308,
+        0x200c,
+        /* FSI     LRI     RLI     PDI */
+        0x2068,
+        0x2066,
+        0x2067,
+        0x2069 /* new in Unicode 6.3/ICU 52 */
     };
 
     static {
@@ -40,13 +58,12 @@ public class BidiFmwk extends CoreTestFmwk {
     }
 
     private static void initCharFromDirProps() {
-        final VersionInfo ucd401 =  VersionInfo.getInstance(4, 0, 1, 0);
+        final VersionInfo ucd401 = VersionInfo.getInstance(4, 0, 1, 0);
         VersionInfo ucdVersion = VersionInfo.getInstance(0, 0, 0, 0);
 
         /* lazy initialization */
         if (ucdVersion.getMajor() > 0) {
             return;
-
         }
         ucdVersion = UCharacter.getUnicodeVersion();
         if (ucdVersion.compareTo(ucd401) >= 0) {
@@ -56,9 +73,14 @@ public class BidiFmwk extends CoreTestFmwk {
         }
     }
 
-    protected boolean assertEquals(String message, String expected, String actual,
-                                   String src, String mode, String option,
-                                   String level) {
+    protected boolean assertEquals(
+            String message,
+            String expected,
+            String actual,
+            String src,
+            String mode,
+            String option,
+            String level) {
         if (expected == null || actual == null) {
             return super.assertEquals(message, expected, actual);
         }
@@ -104,20 +126,17 @@ public class BidiFmwk extends CoreTestFmwk {
     };
 
     protected static String modeToString(int mode) {
-        if (mode < Bidi.REORDER_DEFAULT ||
-            mode > Bidi.REORDER_INVERSE_FOR_NUMBERS_SPECIAL) {
+        if (mode < Bidi.REORDER_DEFAULT || mode > Bidi.REORDER_INVERSE_FOR_NUMBERS_SPECIAL) {
             return "INVALID";
         }
         return modeDescriptions[mode];
     }
 
-    private static final short SETPARA_MASK = Bidi.OPTION_INSERT_MARKS |
-        Bidi.OPTION_REMOVE_CONTROLS | Bidi.OPTION_STREAMING;
+    private static final short SETPARA_MASK =
+            Bidi.OPTION_INSERT_MARKS | Bidi.OPTION_REMOVE_CONTROLS | Bidi.OPTION_STREAMING;
 
     private static final String[] setParaDescriptions = {
-        "OPTION_INSERT_MARKS",
-        "OPTION_REMOVE_CONTROLS",
-        "OPTION_STREAMING"
+        "OPTION_INSERT_MARKS", "OPTION_REMOVE_CONTROLS", "OPTION_STREAMING"
     };
 
     protected static String spOptionsToString(int option) {
@@ -128,18 +147,18 @@ public class BidiFmwk extends CoreTestFmwk {
     private static final int REORDER_MASK = (MAX_WRITE_REORDERED_OPTION << 1) - 1;
 
     private static final String[] writeReorderedDescriptions = {
-        "KEEP_BASE_COMBINING",      //  1
-        "DO_MIRRORING",             //  2
-        "INSERT_LRM_FOR_NUMERIC",   //  4
-        "REMOVE_BIDI_CONTROLS",     //  8
-        "OUTPUT_REVERSE"            // 16
+        "KEEP_BASE_COMBINING", //  1
+        "DO_MIRRORING", //  2
+        "INSERT_LRM_FOR_NUMERIC", //  4
+        "REMOVE_BIDI_CONTROLS", //  8
+        "OUTPUT_REVERSE" // 16
     };
 
     public static String wrOptionsToString(int option) {
         return optionToString(option, REORDER_MASK, writeReorderedDescriptions);
     }
-    public static String optionToString(int option, int mask,
-                                        String[] descriptions) {
+
+    public static String optionToString(int option, int mask, String[] descriptions) {
         StringBuilder desc = new StringBuilder(50);
 
         if ((option &= mask) == 0) {
@@ -159,45 +178,45 @@ public class BidiFmwk extends CoreTestFmwk {
     }
 
     static final String columnString =
-        "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+            "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     static final char[] columns = columnString.toCharArray();
     private static final int TABLE_SIZE = 256;
     private static boolean tablesInitialized = false;
     private static char[] pseudoToUChar;
-    private static char[] UCharToPseudo;    /* used for Unicode chars < 0x0100 */
-    private static char[] UCharToPseud2;    /* used for Unicode chars >=0x0100 */
+    private static char[] UCharToPseudo; /* used for Unicode chars < 0x0100 */
+    private static char[] UCharToPseud2; /* used for Unicode chars >=0x0100 */
 
     static void buildPseudoTables()
-    /*
-        The rules for pseudo-Bidi are as follows:
-        - [ == LRE
-        - ] == RLE
-        - { == LRO
-        - } == RLO
-        - ^ == PDF
-        - @ == LRM
-        - & == RLM
-        - A-F == Arabic Letters 0631-0636
-        - G-V == Hebrew letters 05d7-05ea
-        - W-Z == Unassigned RTL 05CC..05CF
-            originally 08D0..08D3
-            Unicode 6.1 changes U+08A0..U+08FF from R to AL which works ok.
-            Unicode 11 adds U+08D3 ARABIC SMALL LOW WAW which has bc=NSM
-                so we stop using Z in this test.
-            Unicode 14 assigns 08D0..08D2 to diacritics (bc=NSM) so we switch to 05CC..05CF.
-        - 0-5 == western digits 0030-0035
-        - 6-9 == Arabic-Indic digits 0666-0669
-        - ` == Combining Grave Accent 0300 (NSM)
-        - ~ == Delete 007f (BN)
-        - | == Paragraph Separator 2029 (B)
-        - _ == Info Separator 1 001f (S)
-        All other characters represent themselves as Latin-1, with the corresponding
-        Bidi properties.
-    */
-    {
-        int     i;
-        char    uchar;
-        char    c;
+                /*
+                    The rules for pseudo-Bidi are as follows:
+                    - [ == LRE
+                    - ] == RLE
+                    - { == LRO
+                    - } == RLO
+                    - ^ == PDF
+                    - @ == LRM
+                    - & == RLM
+                    - A-F == Arabic Letters 0631-0636
+                    - G-V == Hebrew letters 05d7-05ea
+                    - W-Z == Unassigned RTL 05CC..05CF
+                        originally 08D0..08D3
+                        Unicode 6.1 changes U+08A0..U+08FF from R to AL which works ok.
+                        Unicode 11 adds U+08D3 ARABIC SMALL LOW WAW which has bc=NSM
+                            so we stop using Z in this test.
+                        Unicode 14 assigns 08D0..08D2 to diacritics (bc=NSM) so we switch to 05CC..05CF.
+                    - 0-5 == western digits 0030-0035
+                    - 6-9 == Arabic-Indic digits 0666-0669
+                    - ` == Combining Grave Accent 0300 (NSM)
+                    - ~ == Delete 007f (BN)
+                    - | == Paragraph Separator 2029 (B)
+                    - _ == Info Separator 1 001f (S)
+                    All other characters represent themselves as Latin-1, with the corresponding
+                    Bidi properties.
+                */
+            {
+        int i;
+        char uchar;
+        char c;
 
         /* initialize all tables to unknown */
         pseudoToUChar = new char[TABLE_SIZE];
@@ -209,41 +228,75 @@ public class BidiFmwk extends CoreTestFmwk {
             UCharToPseud2[i] = '?';
         }
         /* initialize non letters or digits */
-        pseudoToUChar[ 0 ] = 0x0000;    UCharToPseudo[0x00] =  0 ;
-        pseudoToUChar[' '] = 0x0020;    UCharToPseudo[0x20] = ' ';
-        pseudoToUChar['!'] = 0x0021;    UCharToPseudo[0x21] = '!';
-        pseudoToUChar['"'] = 0x0022;    UCharToPseudo[0x22] = '"';
-        pseudoToUChar['#'] = 0x0023;    UCharToPseudo[0x23] = '#';
-        pseudoToUChar['$'] = 0x0024;    UCharToPseudo[0x24] = '$';
-        pseudoToUChar['%'] = 0x0025;    UCharToPseudo[0x25] = '%';
-        pseudoToUChar['\'']= 0x0027;    UCharToPseudo[0x27] = '\'';
-        pseudoToUChar['('] = 0x0028;    UCharToPseudo[0x28] = '(';
-        pseudoToUChar[')'] = 0x0029;    UCharToPseudo[0x29] = ')';
-        pseudoToUChar['*'] = 0x002A;    UCharToPseudo[0x2A] = '*';
-        pseudoToUChar['+'] = 0x002B;    UCharToPseudo[0x2B] = '+';
-        pseudoToUChar[','] = 0x002C;    UCharToPseudo[0x2C] = ',';
-        pseudoToUChar['-'] = 0x002D;    UCharToPseudo[0x2D] = '-';
-        pseudoToUChar['.'] = 0x002E;    UCharToPseudo[0x2E] = '.';
-        pseudoToUChar['/'] = 0x002F;    UCharToPseudo[0x2F] = '/';
-        pseudoToUChar[':'] = 0x003A;    UCharToPseudo[0x3A] = ':';
-        pseudoToUChar[';'] = 0x003B;    UCharToPseudo[0x3B] = ';';
-        pseudoToUChar['<'] = 0x003C;    UCharToPseudo[0x3C] = '<';
-        pseudoToUChar['='] = 0x003D;    UCharToPseudo[0x3D] = '=';
-        pseudoToUChar['>'] = 0x003E;    UCharToPseudo[0x3E] = '>';
-        pseudoToUChar['?'] = 0x003F;    UCharToPseudo[0x3F] = '?';
-        pseudoToUChar['\\']= 0x005C;    UCharToPseudo[0x5C] = '\\';
+        pseudoToUChar[0] = 0x0000;
+        UCharToPseudo[0x00] = 0;
+        pseudoToUChar[' '] = 0x0020;
+        UCharToPseudo[0x20] = ' ';
+        pseudoToUChar['!'] = 0x0021;
+        UCharToPseudo[0x21] = '!';
+        pseudoToUChar['"'] = 0x0022;
+        UCharToPseudo[0x22] = '"';
+        pseudoToUChar['#'] = 0x0023;
+        UCharToPseudo[0x23] = '#';
+        pseudoToUChar['$'] = 0x0024;
+        UCharToPseudo[0x24] = '$';
+        pseudoToUChar['%'] = 0x0025;
+        UCharToPseudo[0x25] = '%';
+        pseudoToUChar['\''] = 0x0027;
+        UCharToPseudo[0x27] = '\'';
+        pseudoToUChar['('] = 0x0028;
+        UCharToPseudo[0x28] = '(';
+        pseudoToUChar[')'] = 0x0029;
+        UCharToPseudo[0x29] = ')';
+        pseudoToUChar['*'] = 0x002A;
+        UCharToPseudo[0x2A] = '*';
+        pseudoToUChar['+'] = 0x002B;
+        UCharToPseudo[0x2B] = '+';
+        pseudoToUChar[','] = 0x002C;
+        UCharToPseudo[0x2C] = ',';
+        pseudoToUChar['-'] = 0x002D;
+        UCharToPseudo[0x2D] = '-';
+        pseudoToUChar['.'] = 0x002E;
+        UCharToPseudo[0x2E] = '.';
+        pseudoToUChar['/'] = 0x002F;
+        UCharToPseudo[0x2F] = '/';
+        pseudoToUChar[':'] = 0x003A;
+        UCharToPseudo[0x3A] = ':';
+        pseudoToUChar[';'] = 0x003B;
+        UCharToPseudo[0x3B] = ';';
+        pseudoToUChar['<'] = 0x003C;
+        UCharToPseudo[0x3C] = '<';
+        pseudoToUChar['='] = 0x003D;
+        UCharToPseudo[0x3D] = '=';
+        pseudoToUChar['>'] = 0x003E;
+        UCharToPseudo[0x3E] = '>';
+        pseudoToUChar['?'] = 0x003F;
+        UCharToPseudo[0x3F] = '?';
+        pseudoToUChar['\\'] = 0x005C;
+        UCharToPseudo[0x5C] = '\\';
         /* initialize specially used characters */
-        pseudoToUChar['`'] = 0x0300;    UCharToPseud2[0x00] = '`';  /* NSM */
-        pseudoToUChar['@'] = 0x200E;    UCharToPseud2[0x0E] = '@';  /* LRM */
-        pseudoToUChar['&'] = 0x200F;    UCharToPseud2[0x0F] = '&';  /* RLM */
-        pseudoToUChar['_'] = 0x001F;    UCharToPseudo[0x1F] = '_';  /* S   */
-        pseudoToUChar['|'] = 0x2029;    UCharToPseud2[0x29] = '|';  /* B   */
-        pseudoToUChar['['] = 0x202A;    UCharToPseud2[0x2A] = '[';  /* LRE */
-        pseudoToUChar[']'] = 0x202B;    UCharToPseud2[0x2B] = ']';  /* RLE */
-        pseudoToUChar['^'] = 0x202C;    UCharToPseud2[0x2C] = '^';  /* PDF */
-        pseudoToUChar['{'] = 0x202D;    UCharToPseud2[0x2D] = '{';  /* LRO */
-        pseudoToUChar['}'] = 0x202E;    UCharToPseud2[0x2E] = '}';  /* RLO */
-        pseudoToUChar['~'] = 0x007F;    UCharToPseudo[0x7F] = '~';  /* BN  */
+        pseudoToUChar['`'] = 0x0300;
+        UCharToPseud2[0x00] = '`'; /* NSM */
+        pseudoToUChar['@'] = 0x200E;
+        UCharToPseud2[0x0E] = '@'; /* LRM */
+        pseudoToUChar['&'] = 0x200F;
+        UCharToPseud2[0x0F] = '&'; /* RLM */
+        pseudoToUChar['_'] = 0x001F;
+        UCharToPseudo[0x1F] = '_'; /* S   */
+        pseudoToUChar['|'] = 0x2029;
+        UCharToPseud2[0x29] = '|'; /* B   */
+        pseudoToUChar['['] = 0x202A;
+        UCharToPseud2[0x2A] = '['; /* LRE */
+        pseudoToUChar[']'] = 0x202B;
+        UCharToPseud2[0x2B] = ']'; /* RLE */
+        pseudoToUChar['^'] = 0x202C;
+        UCharToPseud2[0x2C] = '^'; /* PDF */
+        pseudoToUChar['{'] = 0x202D;
+        UCharToPseud2[0x2D] = '{'; /* LRO */
+        pseudoToUChar['}'] = 0x202E;
+        UCharToPseud2[0x2E] = '}'; /* RLO */
+        pseudoToUChar['~'] = 0x007F;
+        UCharToPseudo[0x7F] = '~'; /* BN  */
         /* initialize western digits */
         for (i = 0, uchar = 0x0030; i < 6; i++, uchar++) {
             c = columns[i];
@@ -286,28 +339,27 @@ public class BidiFmwk extends CoreTestFmwk {
     /*----------------------------------------------------------------------*/
 
     static String pseudoToU16(String input)
-    /*  This function converts a pseudo-Bidi string into a char string.
-        It returns the char string.
-    */
-    {
+                /*  This function converts a pseudo-Bidi string into a char string.
+                    It returns the char string.
+                */
+            {
         int len = input.length();
         char[] output = new char[len];
         int i;
         if (!tablesInitialized) {
             buildPseudoTables();
         }
-        for (i = 0; i < len; i++)
-            output[i] = pseudoToUChar[input.charAt(i)];
+        for (i = 0; i < len; i++) output[i] = pseudoToUChar[input.charAt(i)];
         return new String(output);
     }
 
     /*----------------------------------------------------------------------*/
 
     static String u16ToPseudo(String input)
-    /*  This function converts a char string into a pseudo-Bidi string.
-        It returns the pseudo-Bidi string.
-    */
-    {
+                /*  This function converts a char string into a pseudo-Bidi string.
+                    It returns the pseudo-Bidi string.
+                */
+            {
         int len = input.length();
         char[] output = new char[len];
         int i;
@@ -315,11 +367,9 @@ public class BidiFmwk extends CoreTestFmwk {
         if (!tablesInitialized) {
             buildPseudoTables();
         }
-        for (i = 0; i < len; i++)
-        {
+        for (i = 0; i < len; i++) {
             uchar = input.charAt(i);
-            output[i] = uchar < 0x0100 ? UCharToPseudo[uchar] :
-                                         UCharToPseud2[uchar & 0x00ff];
+            output[i] = uchar < 0x0100 ? UCharToPseudo[uchar] : UCharToPseud2[uchar & 0x00ff];
         }
         return new String(output);
     }
@@ -332,11 +382,10 @@ public class BidiFmwk extends CoreTestFmwk {
         msg(message, ERR, false, true);
     }
 
-    void printCaseInfo(Bidi bidi, String src, String dst)
-    {
+    void printCaseInfo(Bidi bidi, String src, String dst) {
         int length = bidi.getProcessedLength();
         byte[] levels = bidi.getLevels();
-        char[] levelChars  = new char[length];
+        char[] levelChars = new char[length];
         byte lev;
         int runCount = bidi.countRuns();
         errcontln("========================================");
@@ -362,8 +411,7 @@ public class BidiFmwk extends CoreTestFmwk {
         for (int i = 0; i < runCount; i++) {
             BidiRun run;
             run = bidi.getVisualRun(i);
-            errcont(" " + run.getStart() + "." + run.getLength() + "/" +
-                    run.getEmbeddingLevel());
+            errcont(" " + run.getStart() + "." + run.getLength() + "/" + run.getEmbeddingLevel());
         }
         errcont("\n");
     }
@@ -373,14 +421,13 @@ public class BidiFmwk extends CoreTestFmwk {
     static final char[] mates1Chars = mates1.toCharArray();
     static final char[] mates2Chars = mates2.toCharArray();
 
-    boolean matchingPair(Bidi bidi, int i, char c1, char c2)
-    {
+    boolean matchingPair(Bidi bidi, int i, char c1, char c2) {
         if (c1 == c2) {
             return true;
         }
         /* For REORDER_RUNS_ONLY, it would not be correct to check levels[i],
-           so we use the appropriate run's level, which is good for all cases.
-         */
+          so we use the appropriate run's level, which is good for all cases.
+        */
         if (bidi.getLogicalRun(i).getDirection() == 0) {
             return false;
         }
@@ -392,8 +439,7 @@ public class BidiFmwk extends CoreTestFmwk {
         return false;
     }
 
-    boolean checkWhatYouCan(Bidi bidi, String src, String dst)
-    {
+    boolean checkWhatYouCan(Bidi bidi, String src, String dst) {
         int i, idx, logLimit, visLimit;
         boolean testOK, errMap, errDst;
         char[] srcChars = src.toCharArray();
@@ -499,5 +545,4 @@ public class BidiFmwk extends CoreTestFmwk {
         }
         return testOK;
     }
-
 }

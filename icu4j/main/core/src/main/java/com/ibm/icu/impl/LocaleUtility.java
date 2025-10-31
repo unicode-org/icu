@@ -8,19 +8,17 @@
  *
  ******************************************************************************
  */
- 
+
 package com.ibm.icu.impl;
 
 import java.util.Locale;
 
-/**
- * A class to hold utility functions missing from java.util.Locale.
- */
+/** A class to hold utility functions missing from java.util.Locale. */
 public class LocaleUtility {
 
     /**
-     * A helper function to convert a string of the form
-     * aa_BB_CC to a locale object.  Why isn't this in Locale?
+     * A helper function to convert a string of the form aa_BB_CC to a locale object. Why isn't this
+     * in Locale?
      */
     public static Locale getLocaleFromName(String name) {
         String language = "";
@@ -38,7 +36,7 @@ public class LocaleUtility {
                 country = name.substring(i1);
             } else {
                 country = name.substring(i1, i2);
-                variant = name.substring(i2+1);
+                variant = name.substring(i2 + 1);
             }
         }
 
@@ -46,28 +44,24 @@ public class LocaleUtility {
     }
 
     /**
-     * Compare two locale strings of the form aa_BB_CC, and
-     * return true if parent is a 'strict' fallback of child, that is,
-     * if child =~ "^parent(_.+)*" (roughly).
+     * Compare two locale strings of the form aa_BB_CC, and return true if parent is a 'strict'
+     * fallback of child, that is, if child =~ "^parent(_.+)*" (roughly).
      */
     public static boolean isFallbackOf(String parent, String child) {
         if (!child.startsWith(parent)) {
             return false;
         }
         int i = parent.length();
-        return (i == child.length() ||
-                child.charAt(i) == '_');
+        return (i == child.length() || child.charAt(i) == '_');
     }
 
     /**
-     * Compare two locales, and return true if the parent is a
-     * 'strict' fallback of the child (parent string is a fallback
-     * of child string).
+     * Compare two locales, and return true if the parent is a 'strict' fallback of the child
+     * (parent string is a fallback of child string).
      */
     public static boolean isFallbackOf(Locale parent, Locale child) {
         return isFallbackOf(parent.toString(), child.toString());
     }
-
 
     /*
      * Convenience method that calls canonicalLocaleString(String) with
@@ -81,7 +75,7 @@ public class LocaleUtility {
      * You'd think that Locale canonicalizes, since it munges the
      * renamed languages, but it doesn't quite.  It forces the region
      * to be upper case but doesn't do anything about the language or
-     * variant.  Our canonical form is 'lower_UPPER_UPPER'.  
+     * variant.  Our canonical form is 'lower_UPPER_UPPER'.
      */
     /*public static String canonicalLocaleString(String id) {
         if (id != null) {
@@ -107,26 +101,24 @@ public class LocaleUtility {
     }*/
 
     /**
-     * Fallback from the given locale name by removing the rightmost _-delimited
-     * element. If there is none, return the root locale ("", "", ""). If this
-     * is the root locale, return null. NOTE: The string "root" is not
-     * recognized; do not use it.
-     * 
+     * Fallback from the given locale name by removing the rightmost _-delimited element. If there
+     * is none, return the root locale ("", "", ""). If this is the root locale, return null. NOTE:
+     * The string "root" is not recognized; do not use it.
+     *
      * @return a new Locale that is a fallback from the given locale, or null.
      */
     public static Locale fallback(Locale loc) {
 
         // Split the locale into parts and remove the rightmost part
-        String[] parts = new String[]
-            { loc.getLanguage(), loc.getCountry(), loc.getVariant() };
+        String[] parts = new String[] {loc.getLanguage(), loc.getCountry(), loc.getVariant()};
         int i;
-        for (i=2; i>=0; --i) {
+        for (i = 2; i >= 0; --i) {
             if (parts[i].length() != 0) {
                 parts[i] = "";
                 break;
             }
         }
-        if (i<0) {
+        if (i < 0) {
             return null; // All parts were empty
         }
         return new Locale(parts[0], parts[1], parts[2]);

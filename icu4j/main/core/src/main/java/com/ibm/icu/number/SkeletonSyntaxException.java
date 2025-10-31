@@ -12,7 +12,8 @@ public class SkeletonSyntaxException extends IllegalArgumentException {
     private static final long serialVersionUID = 7733971331648360554L;
 
     /**
-     * Construct a new SkeletonSyntaxException with information about the token at the point of failure.
+     * Construct a new SkeletonSyntaxException with information about the token at the point of
+     * failure.
      *
      * @stable ICU 62
      * @see NumberFormatter
@@ -22,7 +23,8 @@ public class SkeletonSyntaxException extends IllegalArgumentException {
     }
 
     /**
-     * Construct a new SkeletonSyntaxException with information about the token at the point of failure.
+     * Construct a new SkeletonSyntaxException with information about the token at the point of
+     * failure.
      *
      * @stable ICU 62
      * @see NumberFormatter

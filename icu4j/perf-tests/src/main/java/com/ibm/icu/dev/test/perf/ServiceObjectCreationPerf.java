@@ -8,10 +8,7 @@
  */
 package com.ibm.icu.dev.test.perf;
 
-
-/**
- * ICU service object creation performance test cases
- */
+/** ICU service object creation performance test cases */
 public class ServiceObjectCreationPerf extends PerfTest {
     private static final long DEF_COUNT = 1000L;
 
@@ -22,12 +19,14 @@ public class ServiceObjectCreationPerf extends PerfTest {
     PerfTest.Function TestCalendarJava() {
         return new PerfTest.Function() {
             private long n = DEF_COUNT;
+
             public void call() {
                 for (long i = 0; i < n; i++) {
                     @SuppressWarnings("unused")
                     java.util.Calendar cal = java.util.Calendar.getInstance();
                 }
             }
+
             public long getOperationsPerIteration() {
                 return n;
             }
@@ -37,12 +36,14 @@ public class ServiceObjectCreationPerf extends PerfTest {
     PerfTest.Function TestCalendarICU() {
         return new PerfTest.Function() {
             private long n = DEF_COUNT;
+
             public void call() {
                 for (long i = 0; i < n; i++) {
                     @SuppressWarnings("unused")
                     com.ibm.icu.util.Calendar cal = com.ibm.icu.util.Calendar.getInstance();
                 }
             }
+
             public long getOperationsPerIteration() {
                 return n;
             }
@@ -52,12 +53,14 @@ public class ServiceObjectCreationPerf extends PerfTest {
     PerfTest.Function TestTimeZoneJava() {
         return new PerfTest.Function() {
             private long n = DEF_COUNT;
+
             public void call() {
                 for (long i = 0; i < n; i++) {
                     @SuppressWarnings("unused")
                     java.util.TimeZone tz = java.util.TimeZone.getDefault();
                 }
             }
+
             public long getOperationsPerIteration() {
                 return n;
             }
@@ -67,16 +70,17 @@ public class ServiceObjectCreationPerf extends PerfTest {
     PerfTest.Function TestTimeZoneICU() {
         return new PerfTest.Function() {
             private long n = DEF_COUNT;
+
             public void call() {
                 for (long i = 0; i < n; i++) {
                     @SuppressWarnings("unused")
                     com.ibm.icu.util.TimeZone tz = com.ibm.icu.util.TimeZone.getDefault();
                 }
             }
+
             public long getOperationsPerIteration() {
                 return n;
             }
         };
     }
-
 }

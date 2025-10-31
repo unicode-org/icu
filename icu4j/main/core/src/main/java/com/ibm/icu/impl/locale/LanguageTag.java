@@ -29,19 +29,19 @@ public class LanguageTag {
     //
     // Language subtag fields
     //
-    private String _language = "";      // language subtag
-    private String _script = "";        // script subtag
-    private String _region = "";        // region subtag
-    private String _privateuse = "";    // privateuse
+    private String _language = ""; // language subtag
+    private String _script = ""; // script subtag
+    private String _region = ""; // region subtag
+    private String _privateuse = ""; // privateuse
 
-    private List<String> _extlangs = Collections.emptyList();   // extlang subtags
-    private List<String> _variants = Collections.emptyList();   // variant subtags
+    private List<String> _extlangs = Collections.emptyList(); // extlang subtags
+    private List<String> _variants = Collections.emptyList(); // variant subtags
     private List<String> _extensions = Collections.emptyList(); // extensions
 
     // The Map contains legacy language tags (marked as “Type: grandfathered” in BCP 47)
     // and their preferred mappings from BCP 47.
     private static final Map<AsciiUtil.CaseInsensitiveKey, String[]> LEGACY =
-        new HashMap<AsciiUtil.CaseInsensitiveKey, String[]>();
+            new HashMap<AsciiUtil.CaseInsensitiveKey, String[]>();
 
     static {
         // legacy        = irregular           ; non-redundant tags registered
@@ -76,45 +76,43 @@ public class LanguageTag {
         //               / "zh-xiang"
 
         final String[][] entries = {
-          //{"tag",         "preferred"},
-            {"art-lojban",  "jbo"},
-            {"cel-gaulish", "xtg"},   // fallback
-            {"en-GB-oed",   "en-GB-x-oed"},         // fallback
-            {"i-ami",       "ami"},
-            {"i-bnn",       "bnn"},
-            {"i-default",   "en-x-i-default"},      // fallback
-            {"i-enochian",  "und-x-i-enochian"},    // fallback
-            {"i-hak",       "hak"},
-            {"i-klingon",   "tlh"},
-            {"i-lux",       "lb"},
-            {"i-mingo",     "see-x-i-mingo"},       // fallback
-            {"i-navajo",    "nv"},
-            {"i-pwn",       "pwn"},
-            {"i-tao",       "tao"},
-            {"i-tay",       "tay"},
-            {"i-tsu",       "tsu"},
-            {"no-bok",      "nb"},
-            {"no-nyn",      "nn"},
-            {"sgn-BE-FR",   "sfb"},
-            {"sgn-BE-NL",   "vgt"},
-            {"sgn-CH-DE",   "sgg"},
-            {"zh-guoyu",    "cmn"},
-            {"zh-hakka",    "hak"},
-            {"zh-min",      "nan-x-zh-min"},        // fallback
-            {"zh-min-nan",  "nan"},
-            {"zh-xiang",    "hsn"},
+            // {"tag",         "preferred"},
+            {"art-lojban", "jbo"},
+            {"cel-gaulish", "xtg"}, // fallback
+            {"en-GB-oed", "en-GB-x-oed"}, // fallback
+            {"i-ami", "ami"},
+            {"i-bnn", "bnn"},
+            {"i-default", "en-x-i-default"}, // fallback
+            {"i-enochian", "und-x-i-enochian"}, // fallback
+            {"i-hak", "hak"},
+            {"i-klingon", "tlh"},
+            {"i-lux", "lb"},
+            {"i-mingo", "see-x-i-mingo"}, // fallback
+            {"i-navajo", "nv"},
+            {"i-pwn", "pwn"},
+            {"i-tao", "tao"},
+            {"i-tay", "tay"},
+            {"i-tsu", "tsu"},
+            {"no-bok", "nb"},
+            {"no-nyn", "nn"},
+            {"sgn-BE-FR", "sfb"},
+            {"sgn-BE-NL", "vgt"},
+            {"sgn-CH-DE", "sgg"},
+            {"zh-guoyu", "cmn"},
+            {"zh-hakka", "hak"},
+            {"zh-min", "nan-x-zh-min"}, // fallback
+            {"zh-min-nan", "nan"},
+            {"zh-xiang", "hsn"},
         };
         for (String[] e : entries) {
             LEGACY.put(new AsciiUtil.CaseInsensitiveKey(e[0]), e);
         }
     }
 
-    private LanguageTag() {
-    }
+    private LanguageTag() {}
 
     /**
-     * See BCP 47 “Tags for Identifying Languages”:
-     * https://www.rfc-editor.org/info/bcp47 -->
+     * See BCP 47 “Tags for Identifying Languages”: https://www.rfc-editor.org/info/bcp47 -->
      * https://www.rfc-editor.org/rfc/rfc5646.html#section-2.1
      */
     public static LanguageTag parse(String languageTag, ParseStatus sts) {
@@ -152,8 +150,7 @@ public class LanguageTag {
         // langtag must start with either language or privateuse
         if (tag.parseLanguage(itr, sts)) {
             // ExtLang can only be preceded by 2-3 letter language subtag.
-            if (tag._language.length() <= 3)
-                tag.parseExtlangs(itr, sts);
+            if (tag._language.length() <= 3) tag.parseExtlangs(itr, sts);
             tag.parseScript(itr, sts);
             tag.parseRegion(itr, sts);
             tag.parseVariants(itr, sts);
@@ -336,7 +333,7 @@ public class LanguageTag {
                     alreadyHas |= extension.charAt(0) == sb.charAt(0);
                 }
                 if (!alreadyHas) {
-                  _extensions.add(sb.toString());
+                    _extensions.add(sb.toString());
                 }
                 found = true;
             } else {
@@ -383,7 +380,8 @@ public class LanguageTag {
         return found;
     }
 
-    public static LanguageTag parseLocale(BaseLocale baseLocale, LocaleExtensions localeExtensions) {
+    public static LanguageTag parseLocale(
+            BaseLocale baseLocale, LocaleExtensions localeExtensions) {
         LanguageTag tag = new LanguageTag();
 
         String language = baseLocale.getLanguage();
@@ -393,7 +391,7 @@ public class LanguageTag {
 
         boolean hasSubtag = false;
 
-        String privuseVar = null;   // store ill-formed variant subtags
+        String privuseVar = null; // store ill-formed variant subtags
 
         if (language.length() > 0 && isLanguage(language)) {
             // Convert a deprecated language code used by Java to
@@ -438,7 +436,7 @@ public class LanguageTag {
                     variants = new ArrayList<String>();
                 }
                 if (JDKIMPL) {
-                    variants.add(var);  // Do not canonicalize!
+                    variants.add(var); // Do not canonicalize!
                 } else {
                     variants.add(canonicalizeVariant(var));
                 }
@@ -498,7 +496,12 @@ public class LanguageTag {
             if (privateuse == null) {
                 privateuse = PRIVUSE_VARIANT_PREFIX + SEP + privuseVar;
             } else {
-                privateuse = privateuse + SEP + PRIVUSE_VARIANT_PREFIX + SEP + privuseVar.replace(BaseLocale.SEP, SEP);
+                privateuse =
+                        privateuse
+                                + SEP
+                                + PRIVUSE_VARIANT_PREFIX
+                                + SEP
+                                + privuseVar.replace(BaseLocale.SEP, SEP);
             }
         }
 
@@ -597,8 +600,9 @@ public class LanguageTag {
 
     public static boolean isTKey(String s) {
         // tkey        =  = alpha digit ;
-        return (s.length() == 2) && AsciiUtil.isAlpha(s.charAt(0))
-            && AsciiUtil.isNumeric(s.charAt(1));
+        return (s.length() == 2)
+                && AsciiUtil.isAlpha(s.charAt(0))
+                && AsciiUtil.isNumeric(s.charAt(1));
     }
 
     public static boolean isExtensionSingleton(String s) {
@@ -624,8 +628,7 @@ public class LanguageTag {
 
     public static boolean isPrivateusePrefix(String s) {
         // privateuse    = "x" 1*("-" (1*8alphanum))
-        return (s.length() == 1)
-                && AsciiUtil.caseIgnoreMatch(PRIVATEUSE, s);
+        return (s.length() == 1) && AsciiUtil.caseIgnoreMatch(PRIVATEUSE, s);
     }
 
     public static boolean isPrivateusePrefixChar(char c) {
@@ -666,16 +669,16 @@ public class LanguageTag {
         if (s.startsWith("u-")) {
             int found;
             while (s.endsWith("-true")) {
-                s = s.substring(0, s.length() - 5);  // length of "-true" is 5
+                s = s.substring(0, s.length() - 5); // length of "-true" is 5
             }
             while ((found = s.indexOf("-true-")) > 0) {
-                s = s.substring(0, found) + s.substring(found + 5);  // length of "-true" is 5
+                s = s.substring(0, found) + s.substring(found + 5); // length of "-true" is 5
             }
             while (s.endsWith("-yes")) {
-                s = s.substring(0, s.length() - 4);  // length of "-yes" is 4
+                s = s.substring(0, s.length() - 4); // length of "-yes" is 4
             }
             while ((found = s.indexOf("-yes-")) > 0) {
-                s = s.substring(0, found) + s.substring(found + 4);  // length of "-yes" is 5
+                s = s.substring(0, found) + s.substring(found + 4); // length of "-yes" is 5
             }
         }
         return s;

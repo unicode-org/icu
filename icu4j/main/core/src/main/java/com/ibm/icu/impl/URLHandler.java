@@ -37,12 +37,12 @@ public abstract class URLHandler {
 
         BufferedReader br = null;
         try {
-            @SuppressWarnings("resource")  // Closed by BufferedReader.
+            @SuppressWarnings("resource") // Closed by BufferedReader.
             ClassLoader loader = ClassLoaderUtil.getClassLoader(URLHandler.class);
             InputStream is = loader.getResourceAsStream(PROPNAME);
 
             if (is != null) {
-                Class<?>[] params = { URL.class };
+                Class<?>[] params = {URL.class};
                 br = new BufferedReader(new InputStreamReader(is));
 
                 for (String line = br.readLine(); line != null; line = br.readLine()) {
@@ -60,7 +60,7 @@ public abstract class URLHandler {
                     }
 
                     String key = line.substring(0, ix).trim();
-                    String value = line.substring(ix+1).trim();
+                    String value = line.substring(ix + 1).trim();
 
                     try {
                         Class<?> cl = Class.forName(value);
@@ -71,14 +71,11 @@ public abstract class URLHandler {
                         }
 
                         h.put(key, m);
-                    }
-                    catch (ClassNotFoundException e) {
+                    } catch (ClassNotFoundException e) {
                         if (DEBUG) System.err.println(e);
-                    }
-                    catch(NoSuchMethodException e) {
+                    } catch (NoSuchMethodException e) {
                         if (DEBUG) System.err.println(e);
-                    }
-                    catch(SecurityException e) {
+                    } catch (SecurityException e) {
                         if (DEBUG) System.err.println(e);
                     }
                 }
@@ -110,19 +107,16 @@ public abstract class URLHandler {
 
             if (m != null) {
                 try {
-                    URLHandler handler = (URLHandler)m.invoke(null, new Object[] { url });
+                    URLHandler handler = (URLHandler) m.invoke(null, new Object[] {url});
 
                     if (handler != null) {
                         return handler;
                     }
-                }
-                catch(IllegalAccessException e) {
+                } catch (IllegalAccessException e) {
                     if (DEBUG) System.err.println(e);
-                }
-                catch(IllegalArgumentException e) {
+                } catch (IllegalArgumentException e) {
                     if (DEBUG) System.err.println(e);
-                }
-                catch(InvocationTargetException e) {
+                } catch (InvocationTargetException e) {
                     if (DEBUG) System.err.println(e);
                 }
             }
@@ -171,17 +165,18 @@ public abstract class URLHandler {
             }
         }
 
-        private void process(URLVisitor v, boolean recurse, boolean strip, String path, File[] files) {
+        private void process(
+                URLVisitor v, boolean recurse, boolean strip, String path, File[] files) {
             if (files != null) {
                 for (int i = 0; i < files.length; i++) {
                     File f = files[i];
 
                     if (f.isDirectory()) {
                         if (recurse) {
-                            process(v, recurse, strip, path + f.getName()+ '/', f.listFiles());
+                            process(v, recurse, strip, path + f.getName() + '/', f.listFiles());
                         }
                     } else {
-                        v.visit(strip? f.getName() : path + f.getName());
+                        v.visit(strip ? f.getName() : path + f.getName());
                     }
                 }
             }
@@ -213,10 +208,9 @@ public abstract class URLHandler {
                     }
                 }
 
-                JarURLConnection conn = (JarURLConnection)url.openConnection();
+                JarURLConnection conn = (JarURLConnection) url.openConnection();
                 jarFile = conn.getJarFile();
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 if (DEBUG) System.err.println("icurb jar error: " + e);
                 throw new IllegalArgumentException("jar error: " + e.getMessage());
             }
@@ -240,21 +234,19 @@ public abstract class URLHandler {
                                 continue;
                             }
                             if (strip && ix != -1) {
-                                name = name.substring(ix+1);
+                                name = name.substring(ix + 1);
                             }
                             v.visit(name);
                         }
                     }
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 if (DEBUG) System.err.println("icurb jar error: " + e);
             }
         }
     }
 
-    public void guide(URLVisitor visitor, boolean recurse)
-    {
+    public void guide(URLVisitor visitor, boolean recurse) {
         guide(visitor, recurse, true);
     }
 

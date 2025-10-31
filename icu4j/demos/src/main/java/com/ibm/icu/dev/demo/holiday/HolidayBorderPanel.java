@@ -17,64 +17,77 @@ import java.awt.Insets;
 import java.awt.Panel;
 
 /**
- * Various graphical borders. The border itself is a Panel so that it can
- * contain other Components (i.e. it borders something). You use the
- * HolidayBorderPanel like any other Panel: you set the layout that you prefer and
- * add Components to it. Beware that a null layout does not obey the insets
- * of the panel so if you use null layouts, adjust your measurements to
- * handle the border by calling insets().
+ * Various graphical borders. The border itself is a Panel so that it can contain other Components
+ * (i.e. it borders something). You use the HolidayBorderPanel like any other Panel: you set the
+ * layout that you prefer and add Components to it. Beware that a null layout does not obey the
+ * insets of the panel so if you use null layouts, adjust your measurements to handle the border by
+ * calling insets().
  *
- * @author  Andy Clark, Taligent Inc.
+ * @author Andy Clark, Taligent Inc.
  * @version 1.0
  */
 public class HolidayBorderPanel extends Panel {
-    /**
-     * For serialization
-     */
+    /** For serialization */
     private static final long serialVersionUID = 4669213306492461159L;
+
     // Constants
 
     /** Solid border. */
-    public final static int SOLID = 0;
+    public static final int SOLID = 0;
+
     /** A raised border. */
-    public final static int RAISED = 1;
+    public static final int RAISED = 1;
+
     /** A lowered border. */
-    public final static int LOWERED = 2;
+    public static final int LOWERED = 2;
+
     /** An etched in border. */
-    public final static int IN = 3;
+    public static final int IN = 3;
+
     /** An etched out border. */
-    public final static int OUT = 4;
+    public static final int OUT = 4;
 
     /** Left alignment. */
-    public final static int LEFT = 0;
+    public static final int LEFT = 0;
+
     /** Center alignment. */
-    public final static int CENTER = 1;
+    public static final int CENTER = 1;
+
     /** Right alignment. */
-    public final static int RIGHT = 2;
+    public static final int RIGHT = 2;
 
     /** Default style (IN). */
-    public final static int DEFAULT_STYLE = IN;
+    public static final int DEFAULT_STYLE = IN;
+
     /** Default thickness (10). */
-    public final static int DEFAULT_THICKNESS = 10;
+    public static final int DEFAULT_THICKNESS = 10;
+
     /** Default thickness for solid borders (4). */
-    public final static int DEFAULT_SOLID_THICKNESS = 4;
+    public static final int DEFAULT_SOLID_THICKNESS = 4;
+
     /** Default thickness for raised borders (2). */
-    public final static int DEFAULT_RAISED_THICKNESS = 2;
+    public static final int DEFAULT_RAISED_THICKNESS = 2;
+
     /** Default thickness for lowered borders (2). */
-    public final static int DEFAULT_LOWERED_THICKNESS = 2;
+    public static final int DEFAULT_LOWERED_THICKNESS = 2;
+
     /** Default thickness for etched-in borders (10). */
-    public final static int DEFAULT_IN_THICKNESS = 10;
+    public static final int DEFAULT_IN_THICKNESS = 10;
+
     /** Default thickness for etched-out borders (10). */
-    public final static int DEFAULT_OUT_THICKNESS = 10;
+    public static final int DEFAULT_OUT_THICKNESS = 10;
+
     /** Default gap between border and contained component (5). */
-    public final static int DEFAULT_GAP = 5;
+    public static final int DEFAULT_GAP = 5;
+
     /** Default color (black). Applies to SOLID and etched borders. */
-    public final static Color DEFAULT_COLOR = Color.black;
+    public static final Color DEFAULT_COLOR = Color.black;
 
     /** Default font (TimesRoman,PLAIN,14). Only applies to etched borders. */
-    public final static Font DEFAULT_FONT = new Font("TimesRoman", Font.PLAIN, 14);
+    public static final Font DEFAULT_FONT = new Font("TimesRoman", Font.PLAIN, 14);
+
     /** Default alignment (LEFT). Only applies to etched borders. */
-    public final static int DEFAULT_ALIGNMENT = LEFT;
+    public static final int DEFAULT_ALIGNMENT = LEFT;
 
     // Data
     private int style;
@@ -86,39 +99,36 @@ public class HolidayBorderPanel extends Panel {
     private String text;
     private int alignment;
 
-    /**
-     * Constructor. Makes default border.
-     */
+    /** Constructor. Makes default border. */
     public HolidayBorderPanel() {
 
         // initialize data
-        style       = DEFAULT_STYLE;
-        thickness   = DEFAULT_THICKNESS;
-        gap         = DEFAULT_GAP;
-        color       = DEFAULT_COLOR;
+        style = DEFAULT_STYLE;
+        thickness = DEFAULT_THICKNESS;
+        gap = DEFAULT_GAP;
+        color = DEFAULT_COLOR;
 
-        text        = null;
-        font        = DEFAULT_FONT;
-        alignment   = DEFAULT_ALIGNMENT;
-
-        }
+        text = null;
+        font = DEFAULT_FONT;
+        alignment = DEFAULT_ALIGNMENT;
+    }
 
     /**
      * Constructor. Makes an etched IN border with given text caption.
      *
-     * @param text  Text caption
+     * @param text Text caption
      */
     public HolidayBorderPanel(String text) {
         this();
 
         style = IN;
         this.text = text;
-        }
+    }
 
     /**
      * Constructor. Makes SOLID border with color and thickness given.
      *
-     * @param color     The color for the border.
+     * @param color The color for the border.
      * @param thickness The thickness of the border.
      */
     public HolidayBorderPanel(Color color, int thickness) {
@@ -127,11 +137,10 @@ public class HolidayBorderPanel extends Panel {
         style = SOLID;
         this.color = color;
         this.thickness = thickness;
-        }
+    }
 
     /**
-     * Constructor. Makes a border of the given style with the default
-     * thickness for that style.
+     * Constructor. Makes a border of the given style with the default thickness for that style.
      *
      * @param style The style for this border.
      */
@@ -140,22 +149,32 @@ public class HolidayBorderPanel extends Panel {
 
         // set thickness appropriate to this style
         switch (style) {
-            case SOLID: thickness = DEFAULT_SOLID_THICKNESS; break;
-            case RAISED: thickness = DEFAULT_RAISED_THICKNESS; break;
-            case LOWERED: thickness = DEFAULT_LOWERED_THICKNESS; break;
-            case IN: thickness = DEFAULT_IN_THICKNESS; break;
-            case OUT: thickness = DEFAULT_OUT_THICKNESS; break;
+            case SOLID:
+                thickness = DEFAULT_SOLID_THICKNESS;
+                break;
+            case RAISED:
+                thickness = DEFAULT_RAISED_THICKNESS;
+                break;
+            case LOWERED:
+                thickness = DEFAULT_LOWERED_THICKNESS;
+                break;
+            case IN:
+                thickness = DEFAULT_IN_THICKNESS;
+                break;
+            case OUT:
+                thickness = DEFAULT_OUT_THICKNESS;
+                break;
             default:
                 thickness = DEFAULT_THICKNESS;
-            }
+        }
 
         this.style = style;
-        }
+    }
 
     /**
      * Constructor. Makes border with given style and thickness.
      *
-     * @param style     The style for this border.
+     * @param style The style for this border.
      * @param thickness The thickness for this border.
      */
     public HolidayBorderPanel(int style, int thickness) {
@@ -163,11 +182,9 @@ public class HolidayBorderPanel extends Panel {
 
         this.style = style;
         this.thickness = thickness;
-        }
+    }
 
-    /**
-     * Returns the insets of this panel..
-     */
+    /** Returns the insets of this panel.. */
     public Insets getInsets() {
         int adjustment = 0;
 
@@ -177,21 +194,19 @@ public class HolidayBorderPanel extends Panel {
                 try {
                     // set font and get info
                     int height = getGraphics().getFontMetrics(font).getHeight();
-                    if (height > thickness)
-                        adjustment = height - thickness;
-                    }
-                catch (Exception e) {
+                    if (height > thickness) adjustment = height - thickness;
+                } catch (Exception e) {
                     // nothing: just in case there is no graphics context
                     //   at the beginning.
                     System.out.print("");
-                    }
                 }
             }
+        }
 
         // return appropriate insets
         int dist = thickness + gap;
         return new Insets(dist + adjustment, dist, dist, dist);
-        }
+    }
 
     /**
      * Sets the style of the border
@@ -206,15 +221,13 @@ public class HolidayBorderPanel extends Panel {
         repaint();
 
         return this;
-        }
+    }
 
-    /**
-     * Gets the style of the border
-     */
+    /** Gets the style of the border */
     public int getStyle() {
 
         return style;
-        }
+    }
 
     /**
      * Sets the thickness of the border.
@@ -227,18 +240,16 @@ public class HolidayBorderPanel extends Panel {
             this.thickness = thickness;
             doLayout();
             repaint();
-            }
-
-        return this;
         }
 
-    /**
-     * Gets the thickness of the border.
-     */
+        return this;
+    }
+
+    /** Gets the thickness of the border. */
     public int getThickness() {
 
         return thickness;
-        }
+    }
 
     /**
      * Sets the gap between the border and the contained Component.
@@ -251,46 +262,37 @@ public class HolidayBorderPanel extends Panel {
             this.gap = gap;
             doLayout();
             repaint();
-            }
-
-        return this;
         }
 
-    /**
-     * Gets the gap between the border and the contained Component.
-     */
+        return this;
+    }
+
+    /** Gets the gap between the border and the contained Component. */
     public int getGap() {
 
         return gap;
-        }
+    }
 
     /**
-     * Sets the current color for SOLID borders and the caption text
-     * color for etched borders.
+     * Sets the current color for SOLID borders and the caption text color for etched borders.
      *
      * @param color The new color.
      */
     public HolidayBorderPanel setColor(Color color) {
 
         this.color = color;
-        if (style == SOLID || style == IN || style == OUT)
-            repaint();
+        if (style == SOLID || style == IN || style == OUT) repaint();
 
         return this;
-        }
+    }
 
-    /**
-     * Gets the current color for SOLID borders and the caption
-     * text color for etched borders.
-     */
+    /** Gets the current color for SOLID borders and the caption text color for etched borders. */
     public Color getColor() {
 
         return color;
-        }
+    }
 
-    /**
-     * Sets the font. Only applies to etched borders.
-     */
+    /** Sets the font. Only applies to etched borders. */
     public HolidayBorderPanel setTextFont(Font font) {
 
         // set font
@@ -299,24 +301,22 @@ public class HolidayBorderPanel extends Panel {
             if (style == IN || style == OUT) {
                 doLayout();
                 repaint();
-                }
             }
-
-        return this;
         }
 
-    /**
-     * Gets the font of the text. Only applies to etched borders.
-     */
+        return this;
+    }
+
+    /** Gets the font of the text. Only applies to etched borders. */
     public Font getTextFont() {
 
         return font;
-        }
+    }
 
     /**
      * Sets the text. Only applies to etched borders.
      *
-     * @param text  The new text.
+     * @param text The new text.
      */
     public HolidayBorderPanel setText(String text) {
 
@@ -324,18 +324,16 @@ public class HolidayBorderPanel extends Panel {
         if (style == IN || style == OUT) {
             doLayout();
             repaint();
-            }
-
-        return this;
         }
 
-    /**
-     * Gets the text. Only applies to etched borders.
-     */
+        return this;
+    }
+
+    /** Gets the text. Only applies to etched borders. */
     public String getText() {
 
         return text;
-        }
+    }
 
     /**
      * Sets the text alignment. Only applies to etched borders.
@@ -348,18 +346,16 @@ public class HolidayBorderPanel extends Panel {
         if (style == IN || style == OUT) {
             doLayout();
             repaint();
-            }
-
-        return this;
         }
 
-    /**
-     * Gets the text alignment.
-     */
+        return this;
+    }
+
+    /** Gets the text alignment. */
     public int getAlignment() {
 
         return alignment;
-        }
+    }
 
     /**
      * Repaints the border.
@@ -379,7 +375,7 @@ public class HolidayBorderPanel extends Panel {
 
         // Draw border
         switch (style) {
-            case RAISED:    // 3D Border (in or out)
+            case RAISED: // 3D Border (in or out)
             case LOWERED:
                 Color topleft = null;
                 Color bottomright = null;
@@ -388,26 +384,25 @@ public class HolidayBorderPanel extends Panel {
                 if (style == RAISED) {
                     topleft = light;
                     bottomright = dark;
-                    }
-                else {
+                } else {
                     topleft = dark;
                     bottomright = light;
-                    }
+                }
 
                 // draw border
                 g.setColor(topleft);
                 for (int i = 0; i < thickness; i++) {
                     g.drawLine(i, i, width - i - 2, i);
                     g.drawLine(i, i + 1, i, height - i - 1);
-                    }
+                }
                 g.setColor(bottomright);
                 for (int i = 0; i < thickness; i++) {
                     g.drawLine(i + 1, height - i - 1, width - i - 1, height - i - 1);
                     g.drawLine(width - i - 1, i, width - i - 1, height - i - 2);
-                    }
+                }
                 break;
 
-            case IN:    // Etched Border (in or out)
+            case IN: // Etched Border (in or out)
             case OUT:
                 int adjust1 = 0;
                 int adjust2 = 0;
@@ -419,17 +414,14 @@ public class HolidayBorderPanel extends Panel {
                 int ascent = fm.getAscent();
 
                 // set adjustment
-                if (style == IN)
-                    adjust1 = 1;
-                else
-                    adjust2 = 1;
+                if (style == IN) adjust1 = 1;
+                else adjust2 = 1;
 
                 // Calculate adjustment for text
                 int adjustment = 0;
                 if (text != null && text.length() > 0) {
-                    if (ascent > thickness)
-                        adjustment = (ascent - thickness) / 2;
-                    }
+                    if (ascent > thickness) adjustment = (ascent - thickness) / 2;
+                }
 
                 // The adjustment is there so that we always draw the
                 // light rectangle first. Otherwise, your eye picks up
@@ -453,8 +445,7 @@ public class HolidayBorderPanel extends Panel {
                     int strwidth = fm.stringWidth(text);
 
                     int textwidth = width - 2 * (thickness + 5);
-                    if (strwidth > textwidth)
-                        strwidth = textwidth;
+                    if (strwidth > textwidth) strwidth = textwidth;
 
                     // calculate offset for alignment
                     int offset;
@@ -469,10 +460,10 @@ public class HolidayBorderPanel extends Panel {
                         default: // assume left alignment if invalid
                             offset = thickness + 5;
                             break;
-                        }
+                    }
 
                     // clear drawing area and set clipping region
-                    g.clearRect(offset - 5, 0, strwidth  + 10, fontheight);
+                    g.clearRect(offset - 5, 0, strwidth + 10, fontheight);
                     g.clipRect(offset, 0, strwidth, fontheight);
 
                     // draw text
@@ -481,7 +472,7 @@ public class HolidayBorderPanel extends Panel {
 
                     // restore old clipping area
                     g.clipRect(0, 0, width, height);
-                    }
+                }
 
                 g.setFont(oldfont);
                 break;
@@ -491,26 +482,34 @@ public class HolidayBorderPanel extends Panel {
                 g.setColor(color);
                 for (int i = 0; i < thickness; i++)
                     g.drawRect(i, i, width - 2 * i - 1, height - 2 * i - 1);
-            }
-
         }
+    }
 
-    /**
-     * Returns the settings of this HolidayBorderPanel instance as a string.
-     */
+    /** Returns the settings of this HolidayBorderPanel instance as a string. */
     public String toString() {
         StringBuilder str = new StringBuilder("HolidayBorderPanel[");
 
         // style
         str.append("style=");
         switch (style) {
-            case SOLID: str.append("SOLID"); break;
-            case RAISED: str.append("RAISED"); break;
-            case LOWERED: str.append("LOWERED"); break;
-            case IN: str.append("IN"); break;
-            case OUT: str.append("OUT"); break;
-            default: str.append("unknown");
-            }
+            case SOLID:
+                str.append("SOLID");
+                break;
+            case RAISED:
+                str.append("RAISED");
+                break;
+            case LOWERED:
+                str.append("LOWERED");
+                break;
+            case IN:
+                str.append("IN");
+                break;
+            case OUT:
+                str.append("OUT");
+                break;
+            default:
+                str.append("unknown");
+        }
         str.append(",");
 
         // thickness
@@ -539,16 +538,21 @@ public class HolidayBorderPanel extends Panel {
         // alignment
         str.append("alignment=");
         switch (alignment) {
-            case LEFT: str.append("LEFT"); break;
-            case CENTER: str.append("CENTER"); break;
-            case RIGHT: str.append("RIGHT"); break;
-            default: str.append("unknown");
-            }
+            case LEFT:
+                str.append("LEFT");
+                break;
+            case CENTER:
+                str.append("CENTER");
+                break;
+            case RIGHT:
+                str.append("RIGHT");
+                break;
+            default:
+                str.append("unknown");
+        }
 
         str.append("]");
 
         return str.toString();
-        }
-
     }
-
+}

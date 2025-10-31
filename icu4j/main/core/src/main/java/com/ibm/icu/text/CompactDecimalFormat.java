@@ -9,26 +9,23 @@
 
 package com.ibm.icu.text;
 
-import java.text.ParsePosition;
-import java.util.Locale;
-
 import com.ibm.icu.impl.number.DecimalFormatProperties;
 import com.ibm.icu.number.NumberFormatter;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
+import java.text.ParsePosition;
+import java.util.Locale;
 
 /**
  * Formats numbers in compact (abbreviated) notation, like "1.2K" instead of "1200".
  *
- * <p>
- * <strong>IMPORTANT:</strong> New users are strongly encouraged to see if
- * {@link NumberFormatter} fits their use case.  Although not deprecated, this
- * class, CompactDecimalFormat, is provided for backwards compatibility only.
- * <hr>
+ * <p><strong>IMPORTANT:</strong> New users are strongly encouraged to see if {@link
+ * NumberFormatter} fits their use case. Although not deprecated, this class, CompactDecimalFormat,
+ * is provided for backwards compatibility only. <hr>
  *
- * The CompactDecimalFormat produces abbreviated numbers, suitable for display in environments will
- * limited real estate. For example, 'Hits: 1.2B' instead of 'Hits: 1,200,000,000'. The format will
- * be appropriate for the given language, such as "1,2 Mrd." for German.
+ * <p>The CompactDecimalFormat produces abbreviated numbers, suitable for display in environments
+ * will limited real estate. For example, 'Hits: 1.2B' instead of 'Hits: 1,200,000,000'. The format
+ * will be appropriate for the given language, such as "1,2 Mrd." for German.
  *
  * <p>For numbers under 1000 trillion (under 10^15, such as 123,456,789,012,345), the result will be
  * short for supported languages. However, the result may sometimes exceed 7 characters, such as
@@ -56,92 +53,89 @@ import com.ibm.icu.util.ULocale;
  */
 public class CompactDecimalFormat extends DecimalFormat {
 
-  private static final long serialVersionUID = 4716293295276629682L;
+    private static final long serialVersionUID = 4716293295276629682L;
 
-  /**
-   * Style parameter for CompactDecimalFormat.
-   *
-   * @stable ICU 50
-   */
-  public enum CompactStyle {
     /**
-     * Short version, like "1.2T"
+     * Style parameter for CompactDecimalFormat.
      *
      * @stable ICU 50
      */
-    SHORT,
+    public enum CompactStyle {
+        /**
+         * Short version, like "1.2T"
+         *
+         * @stable ICU 50
+         */
+        SHORT,
+        /**
+         * Longer version, like "1.2 trillion", if available. May return same result as SHORT if
+         * not.
+         *
+         * @stable ICU 50
+         */
+        LONG
+    }
+
     /**
-     * Longer version, like "1.2 trillion", if available. May return same result as SHORT if not.
+     * <strong>NOTE:</strong> New users are strongly encouraged to use {@link NumberFormatter}
+     * instead of NumberFormat. <hr> Creates a CompactDecimalFormat appropriate for a locale. The
+     * result may be affected by the number system in the locale, such as ar-u-nu-latn.
      *
+     * @param locale the desired locale
+     * @param style the compact style
      * @stable ICU 50
      */
-    LONG
-  }
+    public static CompactDecimalFormat getInstance(ULocale locale, CompactStyle style) {
+        return new CompactDecimalFormat(locale, style);
+    }
 
-  /**
-   * <strong>NOTE:</strong> New users are strongly encouraged to use
-   * {@link NumberFormatter} instead of NumberFormat.
-   * <hr>
-   * Creates a CompactDecimalFormat appropriate for a locale. The result may be affected by the
-   * number system in the locale, such as ar-u-nu-latn.
-   *
-   * @param locale the desired locale
-   * @param style the compact style
-   * @stable ICU 50
-   */
-  public static CompactDecimalFormat getInstance(ULocale locale, CompactStyle style) {
-    return new CompactDecimalFormat(locale, style);
-  }
+    /**
+     * <strong>NOTE:</strong> New users are strongly encouraged to use {@link NumberFormatter}
+     * instead of NumberFormat. <hr> Creates a CompactDecimalFormat appropriate for a locale. The
+     * result may be affected by the number system in the locale, such as ar-u-nu-latn.
+     *
+     * @param locale the desired locale
+     * @param style the compact style
+     * @stable ICU 50
+     */
+    public static CompactDecimalFormat getInstance(Locale locale, CompactStyle style) {
+        return new CompactDecimalFormat(ULocale.forLocale(locale), style);
+    }
 
-  /**
-   * <strong>NOTE:</strong> New users are strongly encouraged to use
-   * {@link NumberFormatter} instead of NumberFormat.
-   * <hr>
-   * Creates a CompactDecimalFormat appropriate for a locale. The result may be affected by the
-   * number system in the locale, such as ar-u-nu-latn.
-   *
-   * @param locale the desired locale
-   * @param style the compact style
-   * @stable ICU 50
-   */
-  public static CompactDecimalFormat getInstance(Locale locale, CompactStyle style) {
-    return new CompactDecimalFormat(ULocale.forLocale(locale), style);
-  }
+    /**
+     * The public mechanism is CompactDecimalFormat.getInstance().
+     *
+     * @param locale the desired locale
+     * @param style the compact style
+     */
+    CompactDecimalFormat(ULocale locale, CompactStyle style) {
+        // Minimal properties: let the non-shim code path do most of the logic for us.
+        symbols = DecimalFormatSymbols.getInstance(locale);
+        properties = new DecimalFormatProperties();
+        properties.setCompactStyle(style);
+        properties.setGroupingSize(-2); // do not forward grouping information
+        properties.setMinimumGroupingDigits(2);
+        exportedProperties = new DecimalFormatProperties();
+        refreshFormatter();
+    }
 
-  /**
-   * The public mechanism is CompactDecimalFormat.getInstance().
-   *
-   * @param locale the desired locale
-   * @param style the compact style
-   */
-  CompactDecimalFormat(ULocale locale, CompactStyle style) {
-    // Minimal properties: let the non-shim code path do most of the logic for us.
-    symbols = DecimalFormatSymbols.getInstance(locale);
-    properties = new DecimalFormatProperties();
-    properties.setCompactStyle(style);
-    properties.setGroupingSize(-2); // do not forward grouping information
-    properties.setMinimumGroupingDigits(2);
-    exportedProperties = new DecimalFormatProperties();
-    refreshFormatter();
-  }
+    /**
+     * Parsing is currently unsupported, and throws an UnsupportedOperationException.
+     *
+     * @stable ICU 49
+     */
+    @Override
+    public Number parse(String text, ParsePosition parsePosition) {
+        throw new UnsupportedOperationException();
+    }
 
-  /**
-   * Parsing is currently unsupported, and throws an UnsupportedOperationException.
-   *
-   * @stable ICU 49
-   */
-  @Override
-  public Number parse(String text, ParsePosition parsePosition) {
-    throw new UnsupportedOperationException();
-  }
-
-  /**
-   * Parsing is currently unsupported, and throws an UnsupportedOperationException.
-   *
-   * @stable ICU 49
-   */
-  @Override
-  public CurrencyAmount parseCurrency(CharSequence text, ParsePosition parsePosition) {
-    throw new UnsupportedOperationException();
-  }
+    /**
+     * Parsing is currently unsupported, and throws an UnsupportedOperationException.
+     *
+     * @stable ICU 49
+     */
+    @Override
+    public CurrencyAmount parseCurrency(CharSequence text, ParsePosition parsePosition) {
+        throw new UnsupportedOperationException();
+    }
 }

@@ -9,6 +9,16 @@
 
 package com.ibm.icu.dev.demo.calendar;
 
+import com.ibm.icu.dev.demo.impl.DemoApplet;
+import com.ibm.icu.dev.demo.impl.DemoUtility;
+import com.ibm.icu.text.DateFormat;
+import com.ibm.icu.util.BuddhistCalendar;
+import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.GregorianCalendar;
+import com.ibm.icu.util.HebrewCalendar;
+import com.ibm.icu.util.IslamicCalendar;
+import com.ibm.icu.util.JapaneseCalendar;
+import com.ibm.icu.util.SimpleTimeZone;
 import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Choice;
@@ -35,75 +45,60 @@ import java.awt.event.WindowEvent;
 import java.util.Date;
 import java.util.Locale;
 
-import com.ibm.icu.dev.demo.impl.DemoApplet;
-import com.ibm.icu.dev.demo.impl.DemoUtility;
-import com.ibm.icu.text.DateFormat;
-import com.ibm.icu.util.BuddhistCalendar;
-import com.ibm.icu.util.Calendar;
-import com.ibm.icu.util.GregorianCalendar;
-import com.ibm.icu.util.HebrewCalendar;
-import com.ibm.icu.util.IslamicCalendar;
-import com.ibm.icu.util.JapaneseCalendar;
-import com.ibm.icu.util.SimpleTimeZone;
-
 /**
- * A Frame is a top-level window with a title. The default layout for a frame
- * is BorderLayout.  The CalendarFrame class defines the window layout of
- * CalendarDemo.
+ * A Frame is a top-level window with a title. The default layout for a frame is BorderLayout. The
+ * CalendarFrame class defines the window layout of CalendarDemo.
  */
-class CalendarFrame extends Frame
-{
-    /**
-     * For serialization
-     */
+class CalendarFrame extends Frame {
+    /** For serialization */
     private static final long serialVersionUID = -4289697663503820619L;
 
     private static final boolean DEBUG = false;
 
     private DemoApplet applet;
 
-    /**
-     * Constructs a new CalendarFrame that is initially invisible.
-     */
-    public CalendarFrame(DemoApplet myApplet)
-    {
+    /** Constructs a new CalendarFrame that is initially invisible. */
+    public CalendarFrame(DemoApplet myApplet) {
         super("Calendar Demo");
         this.applet = myApplet;
         init();
 
         // When the window is closed, we want to shut down the applet or application
         addWindowListener(
-            new WindowAdapter() {
-                public void windowClosing(WindowEvent e) {
-                    setVisible(false);
-                    dispose();
+                new WindowAdapter() {
+                    public void windowClosing(WindowEvent e) {
+                        setVisible(false);
+                        dispose();
 
-                    if (applet != null) {
-                        applet.demoClosed();
-                    } else System.exit(0);
-                }
-            } );
+                        if (applet != null) {
+                            applet.demoClosed();
+                        } else System.exit(0);
+                    }
+                });
     }
 
-    private Choice          displayMenu;
-    private Locale[]        locales = DemoUtility.getG7Locales();
+    private Choice displayMenu;
+    private Locale[] locales = DemoUtility.getG7Locales();
 
-    private Calendar        calendars[]   = new Calendar[2];
-    private Choice          calMenu[]     = new Choice[2];
-    private ColoredLabel    monthLabel[]  = new ColoredLabel[2];
-    private DateFormat      monthFormat[] = new DateFormat[2];
+    private Calendar calendars[] = new Calendar[2];
+    private Choice calMenu[] = new Choice[2];
+    private ColoredLabel monthLabel[] = new ColoredLabel[2];
+    private DateFormat monthFormat[] = new DateFormat[2];
 
-    private Button          prevYear;
-    private Button          prevMonth;
-    private Button          gotoToday;
-    private Button          nextMonth;
-    private Button          nextYear;
-    private CalendarPanel   calendarPanel;
+    private Button prevYear;
+    private Button prevMonth;
+    private Button gotoToday;
+    private Button nextMonth;
+    private Button nextYear;
+    private CalendarPanel calendarPanel;
 
-    private static void add(Container container, Component component,
-                            GridBagLayout g, GridBagConstraints c,
-                            int gridwidth, int weightx)
-    {
+    private static void add(
+            Container container,
+            Component component,
+            GridBagLayout g,
+            GridBagConstraints c,
+            int gridwidth,
+            int weightx) {
         c.gridwidth = gridwidth;
         c.weightx = weightx;
         g.setConstraints(component, c);
@@ -111,12 +106,12 @@ class CalendarFrame extends Frame
     }
 
     /**
-     * Initializes the applet. You never need to call this directly, it
-     * is called automatically by the system once the applet is created.
+     * Initializes the applet. You never need to call this directly, it is called automatically by
+     * the system once the applet is created.
      */
     public void init() {
         setBackground(DemoUtility.bgColor);
-        setLayout(new BorderLayout(10,10));
+        setLayout(new BorderLayout(10, 10));
 
         Panel topPanel = new Panel();
         GridBagLayout g = new GridBagLayout();
@@ -154,13 +149,13 @@ class CalendarFrame extends Frame
         prevMonth.addActionListener(new AddAction(Calendar.MONTH, -1));
 
         gotoToday = new Button("Today");
-        gotoToday.addActionListener( new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e) {
-                calendarPanel.setDate( new Date() );
-                updateMonthName();
-            }
-        } );
+        gotoToday.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        calendarPanel.setDate(new Date());
+                        updateMonthName();
+                    }
+                });
 
         nextMonth = new Button(">");
         nextMonth.addActionListener(new AddAction(Calendar.MONTH, 1));
@@ -169,11 +164,11 @@ class CalendarFrame extends Frame
         nextYear.addActionListener(new AddAction(Calendar.YEAR, 1));
 
         c.fill = GridBagConstraints.NONE;
-        add(topPanel, prevYear,  g, c, 1, 0);
+        add(topPanel, prevYear, g, c, 1, 0);
         add(topPanel, prevMonth, g, c, 1, 0);
         add(topPanel, gotoToday, g, c, 1, 0);
         add(topPanel, nextMonth, g, c, 1, 0);
-        add(topPanel, nextYear,  g, c, 1, 0);
+        add(topPanel, nextYear, g, c, 1, 0);
 
         // Now add the menu for selecting the display language
         Panel displayPanel = new Panel();
@@ -182,39 +177,37 @@ class CalendarFrame extends Frame
             Locale defaultLocale = Locale.getDefault();
             int bestMatch = -1, thisMatch = -1;
             int selectMe = 0;
-            
+
             for (int i = 0; i < locales.length; i++) {
-                if (i > 0 &&
-                        locales[i].getLanguage().equals(locales[i-1].getLanguage()) ||
-                    i < locales.length - 1 &&
-                        locales[i].getLanguage().equals(locales[i+1].getLanguage()))
-                {
-                    displayMenu.addItem( locales[i].getDisplayName() );
+                if (i > 0 && locales[i].getLanguage().equals(locales[i - 1].getLanguage())
+                        || i < locales.length - 1
+                                && locales[i].getLanguage().equals(locales[i + 1].getLanguage())) {
+                    displayMenu.addItem(locales[i].getDisplayName());
                 } else {
-                    displayMenu.addItem( locales[i].getDisplayLanguage());
+                    displayMenu.addItem(locales[i].getDisplayLanguage());
                 }
 
                 thisMatch = DemoUtility.compareLocales(locales[i], defaultLocale);
-                
+
                 if (thisMatch >= bestMatch) {
                     bestMatch = thisMatch;
                     selectMe = i;
                 }
             }
-            
+
             displayMenu.setBackground(DemoUtility.choiceColor);
             displayMenu.select(selectMe);
 
-            displayMenu.addItemListener( new ItemListener()
-            {
-                 public void itemStateChanged(ItemEvent e) {
-                    Locale loc = locales[displayMenu.getSelectedIndex()];
-                    calendarPanel.setLocale( loc );
-                    monthFormat[0] = monthFormat[1] = null;
-                    updateMonthName();
-                    repaint();
-                }
-            } );
+            displayMenu.addItemListener(
+                    new ItemListener() {
+                        public void itemStateChanged(ItemEvent e) {
+                            Locale loc = locales[displayMenu.getSelectedIndex()];
+                            calendarPanel.setLocale(loc);
+                            monthFormat[0] = monthFormat[1] = null;
+                            updateMonthName();
+                            repaint();
+                        }
+                    });
 
             Label l1 = new Label("Display Language:", Label.RIGHT);
             l1.setFont(DemoUtility.labelFont);
@@ -222,7 +215,6 @@ class CalendarFrame extends Frame
             displayPanel.setLayout(new FlowLayout());
             displayPanel.add(l1);
             displayPanel.add(displayMenu);
-
         }
         c.fill = GridBagConstraints.NONE;
         c.anchor = GridBagConstraints.EAST;
@@ -238,7 +230,7 @@ class CalendarFrame extends Frame
         add("South", copyright);
 
         // Now create the big calendar panel and stick it in the middle
-        calendarPanel = new CalendarPanel( locales[displayMenu.getSelectedIndex()] );
+        calendarPanel = new CalendarPanel(locales[displayMenu.getSelectedIndex()]);
         add("Center", calendarPanel);
 
         for (int i = 0; i < 2; i++) {
@@ -249,51 +241,47 @@ class CalendarFrame extends Frame
         updateMonthName();
     }
 
-
-    private void updateMonthName()
-    {
-            for (int i = 0; i < 2; i++) {
-                try {
-                    if (monthFormat[i] == null) {     // TODO: optimize
-                        DateFormat f = DateFormat.getDateTimeInstance(
-                                                calendars[i], DateFormat.MEDIUM, -1,
-                                                locales[displayMenu.getSelectedIndex()]);
-                        if (f instanceof com.ibm.icu.text.SimpleDateFormat) {
-                            com.ibm.icu.text.SimpleDateFormat f1 = (com.ibm.icu.text.SimpleDateFormat) f;
-                            f1.applyPattern("MMMM, yyyy G");
-                            f1.setTimeZone(new SimpleTimeZone(0, "UTC"));
-                        }
-                        monthFormat[i] = f;
+    private void updateMonthName() {
+        for (int i = 0; i < 2; i++) {
+            try {
+                if (monthFormat[i] == null) { // TODO: optimize
+                    DateFormat f =
+                            DateFormat.getDateTimeInstance(
+                                    calendars[i],
+                                    DateFormat.MEDIUM,
+                                    -1,
+                                    locales[displayMenu.getSelectedIndex()]);
+                    if (f instanceof com.ibm.icu.text.SimpleDateFormat) {
+                        com.ibm.icu.text.SimpleDateFormat f1 =
+                                (com.ibm.icu.text.SimpleDateFormat) f;
+                        f1.applyPattern("MMMM, yyyy G");
+                        f1.setTimeZone(new SimpleTimeZone(0, "UTC"));
                     }
-                } catch (ClassCastException e) {
-                    //hey {lw} - there's something wrong in this routine that causes exceptions.
-                    System.out.println(e);
+                    monthFormat[i] = f;
                 }
-
-                monthLabel[i].setText( monthFormat[i].format( calendarPanel.firstOfMonth() ));
+            } catch (ClassCastException e) {
+                // hey {lw} - there's something wrong in this routine that causes exceptions.
+                System.out.println(e);
             }
+
+            monthLabel[i].setText(monthFormat[i].format(calendarPanel.firstOfMonth()));
+        }
     }
 
     /**
-     * CalMenuListener responds to events in the two popup menus that select
-     * the calendar systems to be used in the display.  It figures out which
-     * of the two menus the event occurred in and updates the corresponding
-     * element of the calendars[] array to match the new selection.
+     * CalMenuListener responds to events in the two popup menus that select the calendar systems to
+     * be used in the display. It figures out which of the two menus the event occurred in and
+     * updates the corresponding element of the calendars[] array to match the new selection.
      */
-    private class CalMenuListener implements ItemListener
-    {
-         @SuppressWarnings("ReferenceEquality")
-         public void itemStateChanged(ItemEvent e)
-         {
-            for (int i = 0; i < calMenu.length; i++)
-            {
-                if (e.getItemSelectable() == calMenu[i])
-                {
+    private class CalMenuListener implements ItemListener {
+        @SuppressWarnings("ReferenceEquality")
+        public void itemStateChanged(ItemEvent e) {
+            for (int i = 0; i < calMenu.length; i++) {
+                if (e.getItemSelectable() == calMenu[i]) {
                     // We found the menu that the event happened in.
                     // Figure out which new calendar they selected.
-                    Calendar newCal = CALENDARS[ calMenu[i].getSelectedIndex() ].calendar;
-                    if (newCal != calendars[i])
-                    {
+                    Calendar newCal = CALENDARS[calMenu[i].getSelectedIndex()].calendar;
+                    if (newCal != calendars[i]) {
                         // If any of the other menus are set to the same new calendar
                         // we're about to use for this menu, set them to the current
                         // calendar from *this* menu so we won't have two the same
@@ -321,12 +309,10 @@ class CalendarFrame extends Frame
                     break;
                 }
             }
-         }
+        }
     }
 
-    /**
-     * AddAction handles the next/previous year/month buttons...
-     */
+    /** AddAction handles the next/previous year/month buttons... */
     private class AddAction implements ActionListener {
         AddAction(int field, int amount) {
             this.field = field;
@@ -344,17 +330,15 @@ class CalendarFrame extends Frame
     /**
      * ColoredLabel is similar to java.awt.Label, with two differences:
      *
-     *  - You can set its text color
+     * <p>- You can set its text color
      *
-     *  - It draws text using drawString rather than using a host-specific
-     *    "Peer" object like AWT does.  On 1.2, using drawString gives
-     *    us Bidi reordering for free.
+     * <p>- It draws text using drawString rather than using a host-specific "Peer" object like AWT
+     * does. On 1.2, using drawString gives us Bidi reordering for free.
      */
-    static private class ColoredLabel extends Component {
-        /**
-         * For serialization
-         */
+    private static class ColoredLabel extends Component {
+        /** For serialization */
         private static final long serialVersionUID = 5004484960341875722L;
+
         public ColoredLabel(String label) {
             text = label;
         }
@@ -381,9 +365,10 @@ class CalendarFrame extends Frame
 
             g.setColor(color);
             g.setFont(font);
-            g.drawString(text, fm.stringWidth("\u00a0"),
-                         bounds.height/2 + fm.getHeight()
-                         - fm.getAscent() + fm.getLeading()/2);
+            g.drawString(
+                    text,
+                    fm.stringWidth("\u00a0"),
+                    bounds.height / 2 + fm.getHeight() - fm.getAscent() + fm.getLeading() / 2);
         }
 
         public Dimension getPreferredSize() {
@@ -393,8 +378,9 @@ class CalendarFrame extends Frame
         public Dimension getMinimumSize() {
             FontMetrics fm = getFontMetrics(font);
 
-            return new Dimension( fm.stringWidth(text) + 2*fm.stringWidth("\u00a0"),
-                                  fm.getHeight() + fm.getLeading()*2);
+            return new Dimension(
+                    fm.stringWidth(text) + 2 * fm.stringWidth("\u00a0"),
+                    fm.getHeight() + fm.getLeading() * 2);
         }
 
         String text;
@@ -402,43 +388,37 @@ class CalendarFrame extends Frame
         Font font = DemoUtility.labelFont;
     }
 
-    /**
-     * Print out the error message while debugging this program.
-     */
-    public void errorText(String s)
-    {
-        if (DEBUG)
-        {
+    /** Print out the error message while debugging this program. */
+    public void errorText(String s) {
+        if (DEBUG) {
             System.out.println(s);
         }
     }
 
     class CalendarRec {
-        public CalendarRec(String nameStr, Calendar cal)
-        {
+        public CalendarRec(String nameStr, Calendar cal) {
             name = nameStr;
             calendar = cal;
         }
 
-        Calendar  calendar;
-        String              name;
+        Calendar calendar;
+        String name;
     }
 
     private final CalendarRec[] CALENDARS = {
-        new CalendarRec("Gregorian Calendar",       new GregorianCalendar()),
-        new CalendarRec("Hebrew Calendar",          new HebrewCalendar()),
-        new CalendarRec("Islamic Calendar",         makeIslamic(false)),
-        new CalendarRec("Islamic Civil Calendar ",  makeIslamic(true)),
-        new CalendarRec("Buddhist Calendar",        new BuddhistCalendar()),
-        new CalendarRec("Japanese Calendar",        new JapaneseCalendar()),
+        new CalendarRec("Gregorian Calendar", new GregorianCalendar()),
+        new CalendarRec("Hebrew Calendar", new HebrewCalendar()),
+        new CalendarRec("Islamic Calendar", makeIslamic(false)),
+        new CalendarRec("Islamic Civil Calendar ", makeIslamic(true)),
+        new CalendarRec("Buddhist Calendar", new BuddhistCalendar()),
+        new CalendarRec("Japanese Calendar", new JapaneseCalendar()),
     };
 
-    static private final Calendar makeIslamic(boolean civil) {
+    private static final Calendar makeIslamic(boolean civil) {
         IslamicCalendar cal = new IslamicCalendar();
         cal.setCivil(civil);
         return cal;
     }
 
-    static final Color[] COLORS = { Color.blue, Color.black };
+    static final Color[] COLORS = {Color.blue, Color.black};
 }
-

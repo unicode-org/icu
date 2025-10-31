@@ -8,6 +8,8 @@
  */
 package com.ibm.icu.impl;
 
+import com.ibm.icu.lang.CharSequences;
+import com.ibm.icu.util.ICUException;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -17,9 +19,6 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import com.ibm.icu.lang.CharSequences;
-import com.ibm.icu.util.ICUException;
-
 @SuppressWarnings("deprecation")
 public class StringRange {
     private static final boolean DEBUG = false;
@@ -27,33 +26,37 @@ public class StringRange {
     public interface Adder {
         /**
          * @param start
-         * @param end   may be null, for adding single string
+         * @param end may be null, for adding single string
          */
         void add(String start, String end);
     }
 
-    public static final Comparator<int[]> COMPARE_INT_ARRAYS = new Comparator<int[]>() {
-        @Override
-        public int compare(int[] o1, int[] o2) {
-            int minIndex = Math.min(o1.length, o2.length);
-            for (int i = 0; i < minIndex; ++i) {
-                int diff = o1[i] - o2[i];
-                if (diff != 0) {
-                    return diff;
+    public static final Comparator<int[]> COMPARE_INT_ARRAYS =
+            new Comparator<int[]>() {
+                @Override
+                public int compare(int[] o1, int[] o2) {
+                    int minIndex = Math.min(o1.length, o2.length);
+                    for (int i = 0; i < minIndex; ++i) {
+                        int diff = o1[i] - o2[i];
+                        if (diff != 0) {
+                            return diff;
+                        }
+                    }
+                    return o1.length - o2.length;
                 }
-            }
-            return o1.length - o2.length;
-        }
-    };
+            };
 
     /**
      * Compact the set of strings.
+     *
      * @param source set of strings
      * @param adder adds each pair to the output. See the {@link Adder} interface.
      * @param shorterPairs use abc-d instead of abc-abd
-     * @param moreCompact use a more compact form, at the expense of more processing. If false, source must be sorted.
+     * @param moreCompact use a more compact form, at the expense of more processing. If false,
+     *     source must be sorted.
      */
-    public static void compact(Set<String> source, Adder adder, boolean shorterPairs, boolean moreCompact) {
+    public static void compact(
+            Set<String> source, Adder adder, boolean shorterPairs, boolean moreCompact) {
         if (!moreCompact) {
             String start = null;
             String end = null;
@@ -63,16 +66,19 @@ public class StringRange {
                 if (start != null) { // We have something queued up
                     if (s.regionMatches(0, start, 0, prefixLen)) {
                         int currentCp = s.codePointAt(prefixLen);
-                        if (currentCp == 1+lastCp && s.length() == prefixLen + Character.charCount(currentCp)) {
+                        if (currentCp == 1 + lastCp
+                                && s.length() == prefixLen + Character.charCount(currentCp)) {
                             end = s;
                             lastCp = currentCp;
                             continue;
                         }
                     }
                     // We failed to find continuation. Add what we have and restart
-                    adder.add(start, end == null ? null
-                        : !shorterPairs ? end
-                            : end.substring(prefixLen, end.length()));
+                    adder.add(
+                            start,
+                            end == null
+                                    ? null
+                                    : !shorterPairs ? end : end.substring(prefixLen, end.length()));
                 }
                 // new possible range
                 start = s;
@@ -80,14 +86,18 @@ public class StringRange {
                 lastCp = s.codePointBefore(s.length());
                 prefixLen = s.length() - Character.charCount(lastCp);
             }
-            adder.add(start, end == null ? null
-                : !shorterPairs ? end
-                    : end.substring(prefixLen, end.length()));
+            adder.add(
+                    start,
+                    end == null
+                            ? null
+                            : !shorterPairs ? end : end.substring(prefixLen, end.length()));
         } else {
             // not a fast algorithm, but ok for now
-            // TODO rewire to use the first (slower) algorithm to generate the ranges, then compact them from there.
+            // TODO rewire to use the first (slower) algorithm to generate the ranges, then compact
+            // them from there.
             // first sort by lengths
-            Relation<Integer,Ranges> lengthToArrays = Relation.of(new TreeMap<Integer,Set<Ranges>>(), TreeSet.class);
+            Relation<Integer, Ranges> lengthToArrays =
+                    Relation.of(new TreeMap<Integer, Set<Ranges>>(), TreeSet.class);
             for (String s : source) {
                 Ranges item = new Ranges(s);
                 lengthToArrays.put(item.size(), item);
@@ -104,19 +114,20 @@ public class StringRange {
 
     /**
      * Faster but not as good compaction. Only looks at final codepoint.
+     *
      * @param source set of strings
      * @param adder adds each pair to the output. See the {@link Adder} interface.
      * @param shorterPairs use abc-d instead of abc-abd
      */
     public static void compact(Set<String> source, Adder adder, boolean shorterPairs) {
-        compact(source,adder,shorterPairs,false);
+        compact(source, adder, shorterPairs, false);
     }
 
     private static LinkedList<Ranges> compact(int size, Set<Ranges> inputRanges) {
         LinkedList<Ranges> ranges = new LinkedList<Ranges>(inputRanges);
-        for (int i = size-1; i >= 0; --i) {
+        for (int i = size - 1; i >= 0; --i) {
             Ranges last = null;
-            for (Iterator<Ranges> it = ranges.iterator(); it.hasNext();) {
+            for (Iterator<Ranges> it = ranges.iterator(); it.hasNext(); ) {
                 Ranges item = it.next();
                 if (last == null) {
                     last = item;
@@ -126,21 +137,26 @@ public class StringRange {
                     last = item; // go to next
                 }
             }
-        };
+        }
+        ;
         return ranges;
     }
 
-    static final class Range implements Comparable<Range>{
+    static final class Range implements Comparable<Range> {
         int min;
         int max;
+
         public Range(int min, int max) {
             this.min = min;
             this.max = max;
         }
+
         @Override
         public boolean equals(Object obj) {
-            return this == obj || (obj != null && obj instanceof Range && compareTo((Range)obj) == 0);
+            return this == obj
+                    || (obj != null && obj instanceof Range && compareTo((Range) obj) == 0);
         }
+
         @Override
         public int compareTo(Range that) {
             int diff = min - that.min;
@@ -149,19 +165,24 @@ public class StringRange {
             }
             return max - that.max;
         }
+
         @Override
         public int hashCode() {
             return min * 37 + max;
         }
+
         @Override
         public String toString() {
             StringBuilder result = new StringBuilder().appendCodePoint(min);
-            return min == max ? result.toString() : result.append('~').appendCodePoint(max).toString();
+            return min == max
+                    ? result.toString()
+                    : result.append('~').appendCodePoint(max).toString();
         }
     }
 
     static final class Ranges implements Comparable<Ranges> {
         private final Range[] ranges;
+
         public Ranges(String s) {
             int[] array = CharSequences.codePoints(s);
             ranges = new Range[array.length];
@@ -169,23 +190,24 @@ public class StringRange {
                 ranges[i] = new Range(array[i], array[i]);
             }
         }
+
         public boolean merge(int pivot, Ranges other) {
-           // We merge items if the pivot is adjacent, and all later ranges are equal.
-           for (int i = ranges.length-1; i >= 0; --i) {
-               if (i == pivot) {
-                   if (ranges[i].max != other.ranges[i].min-1) { // not adjacent
-                       return false;
-                   }
-               } else {
-                   if (!ranges[i].equals(other.ranges[i])) {
-                       return false;
-                   }
-               }
-           }
-           if (DEBUG) System.out.print("Merging: " + this + ", " + other);
-           ranges[pivot].max = other.ranges[pivot].max;
-           if (DEBUG) System.out.println(" => " + this);
-           return true;
+            // We merge items if the pivot is adjacent, and all later ranges are equal.
+            for (int i = ranges.length - 1; i >= 0; --i) {
+                if (i == pivot) {
+                    if (ranges[i].max != other.ranges[i].min - 1) { // not adjacent
+                        return false;
+                    }
+                } else {
+                    if (!ranges[i].equals(other.ranges[i])) {
+                        return false;
+                    }
+                }
+            }
+            if (DEBUG) System.out.print("Merging: " + this + ", " + other);
+            ranges[pivot].max = other.ranges[pivot].max;
+            if (DEBUG) System.out.println(" => " + this);
+            return true;
         }
 
         public String start() {
@@ -195,6 +217,7 @@ public class StringRange {
             }
             return result.toString();
         }
+
         public String end(boolean mostCompact) {
             int firstDiff = firstDifference();
             if (firstDiff == ranges.length) {
@@ -206,17 +229,20 @@ public class StringRange {
             }
             return result.toString();
         }
+
         public int firstDifference() {
             for (int i = 0; i < ranges.length; ++i) {
-                if (ranges[i].min != ranges[i].max){
+                if (ranges[i].min != ranges[i].max) {
                     return i;
                 }
             }
             return ranges.length;
         }
+
         public Integer size() {
             return ranges.length;
         }
+
         @Override
         public int compareTo(Ranges other) {
             int diff = ranges.length - other.ranges.length;
@@ -231,6 +257,7 @@ public class StringRange {
             }
             return 0;
         }
+
         @Override
         public String toString() {
             String start = start();
@@ -239,7 +266,8 @@ public class StringRange {
         }
     }
 
-    public static Collection<String> expand(String start, String end, boolean requireSameLength, Collection<String> output) {
+    public static Collection<String> expand(
+            String start, String end, boolean requireSameLength, Collection<String> output) {
         if (start == null || end == null) {
             throw new ICUException("Range must have 2 valid strings");
         }
@@ -263,8 +291,14 @@ public class StringRange {
         return output;
     }
 
-    private static void add(int endIndex, int startOffset, int[] starts, int[] ends, StringBuilder builder, Collection<String> output) {
-        int start = starts[endIndex+startOffset];
+    private static void add(
+            int endIndex,
+            int startOffset,
+            int[] starts,
+            int[] ends,
+            StringBuilder builder,
+            Collection<String> output) {
+        int start = starts[endIndex + startOffset];
         int end = ends[endIndex];
         if (start > end) {
             throw new ICUException("Range must have xᵢ ≤ yᵢ for each index i");
@@ -276,7 +310,7 @@ public class StringRange {
             if (last) {
                 output.add(builder.toString());
             } else {
-                add(endIndex+1, startOffset, starts, ends, builder, output);
+                add(endIndex + 1, startOffset, starts, ends, builder, output);
             }
             builder.setLength(startLen);
         }

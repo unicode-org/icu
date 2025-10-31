@@ -24,15 +24,14 @@ public final class InternalLocaleBuilder {
     private String _region = "";
     private String _variant = "";
 
-    private static final CaseInsensitiveChar PRIVUSE_KEY = new CaseInsensitiveChar(LanguageTag.PRIVATEUSE.charAt(0));
+    private static final CaseInsensitiveChar PRIVUSE_KEY =
+            new CaseInsensitiveChar(LanguageTag.PRIVATEUSE.charAt(0));
 
     private HashMap<CaseInsensitiveChar, String> _extensions;
     private HashSet<CaseInsensitiveString> _uattributes;
     private HashMap<CaseInsensitiveString, String> _ukeywords;
 
-
-    public InternalLocaleBuilder() {
-    }
+    public InternalLocaleBuilder() {}
 
     public InternalLocaleBuilder setLanguage(String language) throws LocaleSyntaxException {
         if (language == null || language.length() == 0) {
@@ -85,7 +84,8 @@ public final class InternalLocaleBuilder {
         return this;
     }
 
-    public InternalLocaleBuilder addUnicodeLocaleAttribute(String attribute) throws LocaleSyntaxException {
+    public InternalLocaleBuilder addUnicodeLocaleAttribute(String attribute)
+            throws LocaleSyntaxException {
         if (attribute == null || !UnicodeLocaleExtension.isAttribute(attribute)) {
             throw new LocaleSyntaxException("Ill-formed Unicode locale attribute: " + attribute);
         }
@@ -97,7 +97,8 @@ public final class InternalLocaleBuilder {
         return this;
     }
 
-    public InternalLocaleBuilder removeUnicodeLocaleAttribute(String attribute) throws LocaleSyntaxException {
+    public InternalLocaleBuilder removeUnicodeLocaleAttribute(String attribute)
+            throws LocaleSyntaxException {
         if (attribute == null || !UnicodeLocaleExtension.isAttribute(attribute)) {
             throw new LocaleSyntaxException("Ill-formed Unicode locale attribute: " + attribute);
         }
@@ -107,7 +108,8 @@ public final class InternalLocaleBuilder {
         return this;
     }
 
-    public InternalLocaleBuilder setUnicodeLocaleKeyword(String key, String type) throws LocaleSyntaxException {
+    public InternalLocaleBuilder setUnicodeLocaleKeyword(String key, String type)
+            throws LocaleSyntaxException {
         if (!UnicodeLocaleExtension.isKey(key)) {
             throw new LocaleSyntaxException("Ill-formed Unicode locale keyword key: " + key);
         }
@@ -127,7 +129,9 @@ public final class InternalLocaleBuilder {
                 while (!itr.isDone()) {
                     String s = itr.current();
                     if (!UnicodeLocaleExtension.isTypeSubtag(s)) {
-                        throw new LocaleSyntaxException("Ill-formed Unicode locale keyword type: " + type, itr.currentStart());
+                        throw new LocaleSyntaxException(
+                                "Ill-formed Unicode locale keyword type: " + type,
+                                itr.currentStart());
                     }
                     itr.next();
                 }
@@ -140,7 +144,8 @@ public final class InternalLocaleBuilder {
         return this;
     }
 
-    public InternalLocaleBuilder setExtension(char singleton, String value) throws LocaleSyntaxException {
+    public InternalLocaleBuilder setExtension(char singleton, String value)
+            throws LocaleSyntaxException {
         // validate key
         boolean isBcpPrivateuse = LanguageTag.isPrivateusePrefixChar(singleton);
         if (!isBcpPrivateuse && !LanguageTag.isExtensionSingletonChar(singleton)) {
@@ -177,7 +182,8 @@ public final class InternalLocaleBuilder {
                     validSubtag = LanguageTag.isExtensionSubtag(s);
                 }
                 if (!validSubtag) {
-                    throw new LocaleSyntaxException("Ill-formed extension value: " + s, itr.currentStart());
+                    throw new LocaleSyntaxException(
+                            "Ill-formed extension value: " + s, itr.currentStart());
                 }
                 itr.next();
             }
@@ -232,7 +238,8 @@ public final class InternalLocaleBuilder {
                 }
 
                 if (parsed < start) {
-                    throw new LocaleSyntaxException("Incomplete extension '" + singleton + "'", start);
+                    throw new LocaleSyntaxException(
+                            "Incomplete extension '" + singleton + "'", start);
                 }
 
                 if (extensions == null) {
@@ -261,7 +268,8 @@ public final class InternalLocaleBuilder {
                     itr.next();
                 }
                 if (parsed <= start) {
-                    throw new LocaleSyntaxException("Incomplete privateuse:" + subtags.substring(start), start);
+                    throw new LocaleSyntaxException(
+                            "Incomplete privateuse:" + subtags.substring(start), start);
                 } else {
                     privateuse = sb.toString();
                 }
@@ -269,7 +277,9 @@ public final class InternalLocaleBuilder {
         }
 
         if (!itr.isDone()) {
-            throw new LocaleSyntaxException("Ill-formed extension subtags:" + subtags.substring(itr.currentStart()), itr.currentStart());
+            throw new LocaleSyntaxException(
+                    "Ill-formed extension subtags:" + subtags.substring(itr.currentStart()),
+                    itr.currentStart());
         }
 
         return setExtensions(extensions, privateuse);
@@ -283,7 +293,8 @@ public final class InternalLocaleBuilder {
         clearExtensions();
 
         if (bcpExtensions != null && bcpExtensions.size() > 0) {
-            HashSet<CaseInsensitiveChar> processedExtensions = new HashSet<CaseInsensitiveChar>(bcpExtensions.size());
+            HashSet<CaseInsensitiveChar> processedExtensions =
+                    new HashSet<CaseInsensitiveChar>(bcpExtensions.size());
             for (String bcpExt : bcpExtensions) {
                 CaseInsensitiveChar key = new CaseInsensitiveChar(bcpExt.charAt(0));
                 // ignore duplicates
@@ -342,7 +353,8 @@ public final class InternalLocaleBuilder {
         return this;
     }
 
-    public InternalLocaleBuilder setLocale(BaseLocale base, LocaleExtensions extensions) throws LocaleSyntaxException {
+    public InternalLocaleBuilder setLocale(BaseLocale base, LocaleExtensions extensions)
+            throws LocaleSyntaxException {
         String language = base.getLanguage();
         String script = base.getScript();
         String region = base.getRegion();
@@ -355,14 +367,14 @@ public final class InternalLocaleBuilder {
             if (language.equals("ja") && region.equals("JP") && variant.equals("JP")) {
                 // When locale ja_JP_JP is created, ca-japanese is always there.
                 // The builder ignores the variant "JP"
-                assert("japanese".equals(extensions.getUnicodeLocaleType("ca")));
+                assert ("japanese".equals(extensions.getUnicodeLocaleType("ca")));
                 variant = "";
             }
             // Exception 2 - th_TH_TH
             else if (language.equals("th") && region.equals("TH") && variant.equals("TH")) {
                 // When locale th_TH_TH is created, nu-thai is always there.
                 // The builder ignores the variant "TH"
-                assert("thai".equals(extensions.getUnicodeLocaleType("nu")));
+                assert ("thai".equals(extensions.getUnicodeLocaleType("nu")));
                 variant = "";
             }
             // Exception 3 - no_NO_NY
@@ -410,7 +422,7 @@ public final class InternalLocaleBuilder {
             for (Character key : extKeys) {
                 Extension e = extensions.getExtension(key);
                 if (e instanceof UnicodeLocaleExtension) {
-                    UnicodeLocaleExtension ue = (UnicodeLocaleExtension)e;
+                    UnicodeLocaleExtension ue = (UnicodeLocaleExtension) e;
                     for (String uatr : ue.getUnicodeLocaleAttributes()) {
                         if (_uattributes == null) {
                             _uattributes = new HashSet<CaseInsensitiveString>(4);
@@ -421,7 +433,8 @@ public final class InternalLocaleBuilder {
                         if (_ukeywords == null) {
                             _ukeywords = new HashMap<CaseInsensitiveString, String>(4);
                         }
-                        _ukeywords.put(new CaseInsensitiveString(ukey), ue.getUnicodeLocaleType(ukey));
+                        _ukeywords.put(
+                                new CaseInsensitiveString(ukey), ue.getUnicodeLocaleType(ukey));
                     }
                 } else {
                     if (_extensions == null) {
@@ -475,7 +488,8 @@ public final class InternalLocaleBuilder {
                         privVarStart = itr.currentStart();
                         break;
                     }
-                    if (AsciiUtil.caseIgnoreMatch(itr.current(), LanguageTag.PRIVUSE_VARIANT_PREFIX)) {
+                    if (AsciiUtil.caseIgnoreMatch(
+                            itr.current(), LanguageTag.PRIVUSE_VARIANT_PREFIX)) {
                         sawPrefix = true;
                     }
                     itr.next();
@@ -485,7 +499,9 @@ public final class InternalLocaleBuilder {
                     if (sb.length() != 0) {
                         sb.append(BaseLocale.SEP);
                     }
-                    sb.append(privuse.substring(privVarStart).replace(LanguageTag.SEP, BaseLocale.SEP));
+                    sb.append(
+                            privuse.substring(privVarStart)
+                                    .replace(LanguageTag.SEP, BaseLocale.SEP));
                     variant = sb.toString();
                 }
             }
@@ -532,8 +548,8 @@ public final class InternalLocaleBuilder {
             return privuseVal;
         }
 
-        assert(prefixStart == 0 || prefixStart > 1);
-        return (prefixStart == 0) ? null : privuseVal.substring(0, prefixStart -1);
+        assert (prefixStart == 0 || prefixStart > 1);
+        return (prefixStart == 0) ? null : privuseVal.substring(0, prefixStart - 1);
     }
 
     /*
@@ -589,7 +605,7 @@ public final class InternalLocaleBuilder {
             if (key != null) {
                 if (UnicodeLocaleExtension.isKey(itr.current())) {
                     // next keyword - emit previous one
-                    assert(typeStart == -1 || typeEnd != -1);
+                    assert (typeStart == -1 || typeEnd != -1);
                     type = (typeStart == -1) ? "" : subtags.substring(typeStart, typeEnd);
                     if (_ukeywords == null) {
                         _ukeywords = new HashMap<CaseInsensitiveString, String>(4);
@@ -619,7 +635,7 @@ public final class InternalLocaleBuilder {
             if (!itr.hasNext()) {
                 if (key != null) {
                     // last keyword
-                    assert(typeStart == -1 || typeEnd != -1);
+                    assert (typeStart == -1 || typeEnd != -1);
                     type = (typeStart == -1) ? "" : subtags.substring(typeStart, typeEnd);
                     if (_ukeywords == null) {
                         _ukeywords = new HashMap<CaseInsensitiveString, String>(4);
@@ -657,7 +673,7 @@ public final class InternalLocaleBuilder {
             if (!(obj instanceof CaseInsensitiveString)) {
                 return false;
             }
-            return AsciiUtil.caseIgnoreMatch(_s, ((CaseInsensitiveString)obj).value());
+            return AsciiUtil.caseIgnoreMatch(_s, ((CaseInsensitiveString) obj).value());
         }
     }
 
@@ -685,8 +701,7 @@ public final class InternalLocaleBuilder {
             if (!(obj instanceof CaseInsensitiveChar)) {
                 return false;
             }
-            return _c ==  AsciiUtil.toLower(((CaseInsensitiveChar)obj).value());
+            return _c == AsciiUtil.toLower(((CaseInsensitiveChar) obj).value());
         }
-
     }
 }

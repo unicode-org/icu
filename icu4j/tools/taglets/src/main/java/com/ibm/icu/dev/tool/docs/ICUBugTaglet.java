@@ -3,9 +3,8 @@
 
 package com.ibm.icu.dev.tool.docs;
 
-import javax.lang.model.element.Element;
-
 import com.sun.source.doctree.DocTree;
+import javax.lang.model.element.Element;
 
 public class ICUBugTaglet extends ICUTaglet {
     private static ICUTaglet singleton;

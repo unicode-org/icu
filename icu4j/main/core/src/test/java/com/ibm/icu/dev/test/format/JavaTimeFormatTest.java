@@ -3,6 +3,13 @@
 
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
+import com.ibm.icu.message2.MessageFormatter;
+import com.ibm.icu.text.DateFormat;
+import com.ibm.icu.text.DateFormatSymbols;
+import com.ibm.icu.text.DateIntervalFormat;
+import com.ibm.icu.text.MessageFormat;
+import com.ibm.icu.util.TimeZone;
 import java.text.FieldPosition;
 import java.time.Clock;
 import java.time.DayOfWeek;
@@ -22,24 +29,21 @@ import java.time.chrono.ThaiBuddhistDate;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.CoreTestFmwk;
-import com.ibm.icu.message2.MessageFormatter;
-import com.ibm.icu.text.DateFormat;
-import com.ibm.icu.text.DateFormatSymbols;
-import com.ibm.icu.text.DateIntervalFormat;
-import com.ibm.icu.text.MessageFormat;
-import com.ibm.icu.util.TimeZone;
-
 @RunWith(JUnit4.class)
 public class JavaTimeFormatTest extends CoreTestFmwk {
-    final static LocalDateTime LDT =
-            LocalDateTime.of(/*year*/ 2013, Month.SEPTEMBER, 27,
-                    /*hour*/ 19, /*min*/43, /*sec*/ 56, /*nanosec*/ 123_456_789);
+    static final LocalDateTime LDT =
+            LocalDateTime.of(
+                    /*year*/ 2013,
+                    Month.SEPTEMBER,
+                    27,
+                    /*hour*/ 19, /*min*/
+                    43, /*sec*/
+                    56, /*nanosec*/
+                    123_456_789);
 
     @Test
     public void testLocalDateFormatting() {
@@ -57,11 +61,16 @@ public class JavaTimeFormatTest extends CoreTestFmwk {
     @Test
     public void testLocalDateTimeFormatting() {
         // Formatting with skeleton
-        DateFormat formatFromSkeleton = DateFormat.getInstanceForSkeleton("EEEEyMMMMd jmsSSS", Locale.US);
-        assertEquals("", "Friday, September 27, 2013 at 7:43:56.123\u202FPM", formatFromSkeleton.format(LDT));
+        DateFormat formatFromSkeleton =
+                DateFormat.getInstanceForSkeleton("EEEEyMMMMd jmsSSS", Locale.US);
+        assertEquals(
+                "",
+                "Friday, September 27, 2013 at 7:43:56.123\u202FPM",
+                formatFromSkeleton.format(LDT));
 
         // Format with style
-        DateFormat dateTimeFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.SHORT, Locale.US);
+        DateFormat dateTimeFormat =
+                DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.SHORT, Locale.US);
         assertEquals("", "September 27, 2013 at 7:43\u202FPM", dateTimeFormat.format(LDT));
 
         DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT, Locale.US);
@@ -80,12 +89,12 @@ public class JavaTimeFormatTest extends CoreTestFmwk {
 
         // Comprehensive, testing all day-of-week at all widths
         int[] widths = {
-                DateFormatSymbols.NARROW,
-                DateFormatSymbols.SHORT,
-                DateFormatSymbols.ABBREVIATED,
-                DateFormatSymbols.WIDE
+            DateFormatSymbols.NARROW,
+            DateFormatSymbols.SHORT,
+            DateFormatSymbols.ABBREVIATED,
+            DateFormatSymbols.WIDE
         };
-        String[] widthSkeletons = { "EEEEE", "EEEEEE", "EEE", "EEEE" };
+        String[] widthSkeletons = {"EEEEE", "EEEEEE", "EEE", "EEEE"};
         assertEquals("same size", widths.length, widthSkeletons.length);
 
         Locale locale = Locale.US;
@@ -118,11 +127,9 @@ public class JavaTimeFormatTest extends CoreTestFmwk {
 
         // Comprehensive, testing all months at all widths
         int[] widths = {
-                DateFormatSymbols.NARROW,
-                DateFormatSymbols.ABBREVIATED,
-                DateFormatSymbols.WIDE
+            DateFormatSymbols.NARROW, DateFormatSymbols.ABBREVIATED, DateFormatSymbols.WIDE
         };
-        String[] widthSkeletons = { "MMMMM", "MMM", "MMMM" };
+        String[] widthSkeletons = {"MMMMM", "MMM", "MMMM"};
         assertEquals("same size", widths.length, widthSkeletons.length);
 
         Locale locale = Locale.US;
@@ -131,7 +138,7 @@ public class JavaTimeFormatTest extends CoreTestFmwk {
             String[] expected = dfs.getMonths(DateFormatSymbols.FORMAT, widths[i]);
             df = DateFormat.getInstanceForSkeleton(widthSkeletons[i], locale);
             for (Month month : Month.values()) {
-                int index = month.getValue() - 1;// java.time.Month is 1 based
+                int index = month.getValue() - 1; // java.time.Month is 1 based
                 assertEquals("java.time.Month", expected[index], df.format(month));
             }
         }
@@ -148,7 +155,8 @@ public class JavaTimeFormatTest extends CoreTestFmwk {
         java.util.TimeZone.setDefault(java.util.TimeZone.getTimeZone(timeZoneId));
 
         // We check that the calendar from conversion uses the default time zone.
-        DateFormat icuDateFormat = DateFormat.getInstanceForSkeleton("EEEEdMMMMyjmszzzz", Locale.US);
+        DateFormat icuDateFormat =
+                DateFormat.getInstanceForSkeleton("EEEEdMMMMyjmszzzz", Locale.US);
         String result = icuDateFormat.format(LDT);
 
         // Restore the default time zones
@@ -164,18 +172,32 @@ public class JavaTimeFormatTest extends CoreTestFmwk {
         ZonedDateTime zdt = ZonedDateTime.of(LDT, ZoneId.of("Europe/Paris"));
         OffsetDateTime odt = OffsetDateTime.of(LDT, ZoneOffset.ofHoursMinutes(5, 30));
 
-        DateFormat formatFromSkeleton = DateFormat.getInstanceForSkeleton("EEEEyMMMMd jmsSSS vvvv", Locale.US);
-        assertEquals("", "Friday, September 27, 2013 at 7:43:56.123\u202FPM Central European Time", formatFromSkeleton.format(zdt));
-        assertEquals("", "Friday, September 27, 2013 at 7:43:56.123\u202FPM GMT+05:30", formatFromSkeleton.format(odt));
+        DateFormat formatFromSkeleton =
+                DateFormat.getInstanceForSkeleton("EEEEyMMMMd jmsSSS vvvv", Locale.US);
+        assertEquals(
+                "",
+                "Friday, September 27, 2013 at 7:43:56.123\u202FPM Central European Time",
+                formatFromSkeleton.format(zdt));
+        assertEquals(
+                "",
+                "Friday, September 27, 2013 at 7:43:56.123\u202FPM GMT+05:30",
+                formatFromSkeleton.format(odt));
 
         // Format with style
         DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.FULL, Locale.US);
-        assertEquals("", "7:43:56\u202FPM Central European Summer Time",timeFormat.format(zdt));
+        assertEquals("", "7:43:56\u202FPM Central European Summer Time", timeFormat.format(zdt));
         assertEquals("", "7:43:56\u202FPM GMT+05:30", timeFormat.format(odt));
 
-        DateFormat dateTimeFormat = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL, Locale.US);
-        assertEquals("", "Friday, September 27, 2013 at 7:43:56\u202FPM Central European Summer Time", dateTimeFormat.format(zdt));
-        assertEquals("", "Friday, September 27, 2013 at 7:43:56\u202FPM GMT+05:30", dateTimeFormat.format(odt));
+        DateFormat dateTimeFormat =
+                DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL, Locale.US);
+        assertEquals(
+                "",
+                "Friday, September 27, 2013 at 7:43:56\u202FPM Central European Summer Time",
+                dateTimeFormat.format(zdt));
+        assertEquals(
+                "",
+                "Friday, September 27, 2013 at 7:43:56\u202FPM GMT+05:30",
+                dateTimeFormat.format(odt));
     }
 
     @Test
@@ -187,7 +209,8 @@ public class JavaTimeFormatTest extends CoreTestFmwk {
         MinguoDate md = MinguoDate.from(ld);
         ThaiBuddhistDate td = ThaiBuddhistDate.from(ld);
 
-        DateFormat formatFromSkeleton = DateFormat.getInstanceForSkeleton("EEEEGGGyMMMMd", Locale.US);
+        DateFormat formatFromSkeleton =
+                DateFormat.getInstanceForSkeleton("EEEEGGGyMMMMd", Locale.US);
         String expected = "Friday, September 27, 2013 AD";
         assertEquals("", expected, formatFromSkeleton.format(hd));
         assertEquals("", expected, formatFromSkeleton.format(jd));
@@ -196,14 +219,14 @@ public class JavaTimeFormatTest extends CoreTestFmwk {
 
         // Non-Gregorian as formatting calendar
         String[] expectedPerCalendar = {
-                "buddhist", "September 27, 2556 BE",
-                "chinese",  "Eighth Month 23, 2013(gui-si)",
-                "hebrew",   "23 Tishri 5774 AM",
-                "indian",   "Asvina 5, 1935 Śaka",
-                "islamic",  "Dhuʻl-Qiʻdah 22, 1434 Anno Hegirae",
-                "japanese", "September 27, 25 Heisei",
-                "persian",  "Mehr 5, 1392 AP",
-                "roc",      "September 27, 102 Minguo",
+            "buddhist", "September 27, 2556 BE",
+            "chinese", "Eighth Month 23, 2013(gui-si)",
+            "hebrew", "23 Tishri 5774 AM",
+            "indian", "Asvina 5, 1935 Śaka",
+            "islamic", "Dhuʻl-Qiʻdah 22, 1434 Anno Hegirae",
+            "japanese", "September 27, 25 Heisei",
+            "persian", "Mehr 5, 1392 AP",
+            "roc", "September 27, 102 Minguo",
         };
         String skeleton = "GGGGyMMMMd";
         for (int i = 0; i < expectedPerCalendar.length; i++) {
@@ -215,7 +238,8 @@ public class JavaTimeFormatTest extends CoreTestFmwk {
 
     @Test(expected = IllegalArgumentException.class)
     public void testInstantFormattingFails() {
-        DateFormat formatFromSkeleton = DateFormat.getInstanceForSkeleton("yMMMMd jmsSSSvvvv", Locale.US);
+        DateFormat formatFromSkeleton =
+                DateFormat.getInstanceForSkeleton("yMMMMd jmsSSSvvvv", Locale.US);
         Instant instant = LDT.toInstant(ZoneOffset.UTC);
         formatFromSkeleton.format(instant);
     }
@@ -230,7 +254,8 @@ public class JavaTimeFormatTest extends CoreTestFmwk {
         MessageFormat mf = new MessageFormat("Your card expires on {expDate}", locale);
         assertEquals("", "Your card expires on 27/09/2013 19:43", mf.format(arguments));
 
-        // Now we specify that the placeholder is a date, make sure that the style & skeleton are honored.
+        // Now we specify that the placeholder is a date, make sure that the style & skeleton are
+        // honored.
         mf = new MessageFormat("Your card expires on {expDate, date}", locale);
         assertEquals("", "Your card expires on 27 sept. 2013", mf.format(arguments));
 
@@ -242,20 +267,34 @@ public class JavaTimeFormatTest extends CoreTestFmwk {
 
         // MessageFormatter (MF2)
 
-        MessageFormatter.Builder mf2Builder = MessageFormatter.builder()
-                .setLocale(locale);
+        MessageFormatter.Builder mf2Builder = MessageFormatter.builder().setLocale(locale);
 
-        MessageFormatter mf2 = mf2Builder.setPattern("(mf2) Your card expires on {$expDate}").build();
-        assertEquals("", "(mf2) Your card expires on ven. 27 sept. 2013, 19:43", mf2.formatToString(arguments));
+        MessageFormatter mf2 =
+                mf2Builder.setPattern("(mf2) Your card expires on {$expDate}").build();
+        assertEquals(
+                "",
+                "(mf2) Your card expires on ven. 27 sept. 2013, 19:43",
+                mf2.formatToString(arguments));
 
         mf2 = mf2Builder.setPattern("(mf2) Your card expires on {$expDate :date}").build();
-        assertEquals("", "(mf2) Your card expires on ven. 27 sept. 2013", mf2.formatToString(arguments));
+        assertEquals(
+                "", "(mf2) Your card expires on ven. 27 sept. 2013", mf2.formatToString(arguments));
 
-        mf2 = mf2Builder.setPattern("(mf2) Your card expires on {$expDate :date fields=year-month-day length=long}").build();
-        assertEquals("", "(mf2) Your card expires on 27 septembre 2013", mf2.formatToString(arguments));
+        mf2 =
+                mf2Builder
+                        .setPattern(
+                                "(mf2) Your card expires on {$expDate :date fields=year-month-day length=long}")
+                        .build();
+        assertEquals(
+                "", "(mf2) Your card expires on 27 septembre 2013", mf2.formatToString(arguments));
 
-        mf2 = mf2Builder.setPattern("(mf2) Your card expires on {$expDate :date icu:skeleton=EEEyMMMd}").build();
-        assertEquals("", "(mf2) Your card expires on ven. 27 sept. 2013", mf2.formatToString(arguments));
+        mf2 =
+                mf2Builder
+                        .setPattern(
+                                "(mf2) Your card expires on {$expDate :date icu:skeleton=EEEyMMMd}")
+                        .build();
+        assertEquals(
+                "", "(mf2) Your card expires on ven. 27 sept. 2013", mf2.formatToString(arguments));
 
         // Test several java.time types
         // We don't care much about the string result, as we test that somewhere else.
@@ -289,22 +328,30 @@ public class JavaTimeFormatTest extends CoreTestFmwk {
         try {
             mf.format(arguments);
             fail("Should not be able to format java.time.Instant");
-        } catch (IllegalArgumentException ex) { /* expected to throw */ }
+        } catch (IllegalArgumentException ex) {
+            /* expected to throw */
+        }
         try {
             mf2.formatToString(arguments);
             fail("Should not be able to format java.time.Instant");
-        } catch (IllegalArgumentException ex) { /* expected to throw */ }
+        } catch (IllegalArgumentException ex) {
+            /* expected to throw */
+        }
 
         // Clock
         arguments.put("expDate", Clock.fixed(instant, ZoneId.of("Europe/Paris")));
         try {
             mf.format(arguments);
             fail("Should not be able to format java.time.Clock");
-        } catch (IllegalArgumentException ex) { /* expected to throw */ }
+        } catch (IllegalArgumentException ex) {
+            /* expected to throw */
+        }
         try {
             mf2.formatToString(arguments);
             fail("Should not be able to format java.time.Clock");
-        } catch (IllegalArgumentException ex) { /* expected to throw */ }
+        } catch (IllegalArgumentException ex) {
+            /* expected to throw */
+        }
     }
 
     @Test
@@ -313,18 +360,21 @@ public class JavaTimeFormatTest extends CoreTestFmwk {
         String expected = "wide:lundi abbr:lun. short:lu narrow:L";
         Map<String, Object> arguments = Map.of("dow", DayOfWeek.MONDAY);
 
-        MessageFormat mf = new MessageFormat(
-                "wide:{dow,date,::EEEE} abbr:{dow,date,::EEE} short:{dow,date,::EEEEEE} narrow:{dow,date,::EEEEE}",
-                locale);
+        MessageFormat mf =
+                new MessageFormat(
+                        "wide:{dow,date,::EEEE} abbr:{dow,date,::EEE} short:{dow,date,::EEEEEE} narrow:{dow,date,::EEEEE}",
+                        locale);
         assertEquals("", expected, mf.format(arguments));
 
-        MessageFormatter mf2 = MessageFormatter.builder()
-                .setPattern("wide:{$dow :date icu:skeleton=EEEE}"
-                        + " abbr:{$dow :date icu:skeleton=EEE}"
-                        + " short:{$dow :date icu:skeleton=EEEEEE}"
-                        + " narrow:{$dow :date icu:skeleton=EEEEE}")
-                .setLocale(locale)
-                .build();
+        MessageFormatter mf2 =
+                MessageFormatter.builder()
+                        .setPattern(
+                                "wide:{$dow :date icu:skeleton=EEEE}"
+                                        + " abbr:{$dow :date icu:skeleton=EEE}"
+                                        + " short:{$dow :date icu:skeleton=EEEEEE}"
+                                        + " narrow:{$dow :date icu:skeleton=EEEEE}")
+                        .setLocale(locale)
+                        .build();
         assertEquals("", expected, mf2.formatToString(arguments));
     }
 
@@ -334,17 +384,20 @@ public class JavaTimeFormatTest extends CoreTestFmwk {
         String expected = "wide:septembre abbr:sept. narrow:S";
         Map<String, Object> arguments = Map.of("mon", Month.SEPTEMBER);
 
-        MessageFormat mf = new MessageFormat(
-                "wide:{mon,date,::MMMM} abbr:{mon,date,::MMM} narrow:{mon,date,::MMMMM}",
-                locale);
+        MessageFormat mf =
+                new MessageFormat(
+                        "wide:{mon,date,::MMMM} abbr:{mon,date,::MMM} narrow:{mon,date,::MMMMM}",
+                        locale);
         assertEquals("", expected, mf.format(arguments));
 
-        MessageFormatter mf2 = MessageFormatter.builder()
-                .setPattern("wide:{$mon :date icu:skeleton=MMMM}"
-                        + " abbr:{$mon :date icu:skeleton=MMM}"
-                        + " narrow:{$mon :date icu:skeleton=MMMMM}")
-                .setLocale(locale)
-                .build();
+        MessageFormatter mf2 =
+                MessageFormatter.builder()
+                        .setPattern(
+                                "wide:{$mon :date icu:skeleton=MMMM}"
+                                        + " abbr:{$mon :date icu:skeleton=MMM}"
+                                        + " narrow:{$mon :date icu:skeleton=MMMMM}")
+                        .setLocale(locale)
+                        .build();
         assertEquals("", expected, mf2.formatToString(arguments));
     }
 
@@ -358,13 +411,17 @@ public class JavaTimeFormatTest extends CoreTestFmwk {
 
         result.setLength(0);
         DateIntervalFormat di = DateIntervalFormat.getInstance(intervalSkeleton, locale);
-        assertEquals("", "17–23 septembre 2024",
+        assertEquals(
+                "",
+                "17–23 septembre 2024",
                 di.format(from, to, result, new FieldPosition(0)).toString());
 
         to = LocalDate.of(2024, Month.OCTOBER, 3);
         result.setLength(0);
         di = DateIntervalFormat.getInstance(intervalSkeleton, locale);
-        assertEquals("", "17 septembre – 3 octobre 2024",
+        assertEquals(
+                "",
+                "17 septembre – 3 octobre 2024",
                 di.format(from, to, result, new FieldPosition(0)).toString());
 
         // LocalDateTime. Date + time difference, same day, different times
@@ -374,7 +431,9 @@ public class JavaTimeFormatTest extends CoreTestFmwk {
 
         result.setLength(0);
         di = DateIntervalFormat.getInstance("dMMMMy jm", locale);
-        assertEquals("", "17 septembre 2024, 09:30 – 18:00",
+        assertEquals(
+                "",
+                "17 septembre 2024, 09:30 – 18:00",
                 di.format(fromDt, toDt, result, new FieldPosition(0)).toString());
 
         // LocalDateTime. Time difference, same day
@@ -384,24 +443,38 @@ public class JavaTimeFormatTest extends CoreTestFmwk {
 
         result.setLength(0);
         di = DateIntervalFormat.getInstance("jm", locale);
-        assertEquals("", "09:30 – 18:00",
+        assertEquals(
+                "",
+                "09:30 – 18:00",
                 di.format(fromT, toT, result, new FieldPosition(0)).toString());
 
         // Non-Gregorian output
 
-        di = DateIntervalFormat.getInstance(intervalSkeleton, Locale.forLanguageTag("fr-u-ca-hebrew"));
+        di =
+                DateIntervalFormat.getInstance(
+                        intervalSkeleton, Locale.forLanguageTag("fr-u-ca-hebrew"));
         result.setLength(0);
-        assertEquals("", "14 éloul – 1 tichri 5785 A. M.",
+        assertEquals(
+                "",
+                "14 éloul – 1 tichri 5785 A. M.",
                 di.format(from, to, result, new FieldPosition(0)).toString());
 
-        di = DateIntervalFormat.getInstance(intervalSkeleton, Locale.forLanguageTag("fr-u-ca-coptic"));
+        di =
+                DateIntervalFormat.getInstance(
+                        intervalSkeleton, Locale.forLanguageTag("fr-u-ca-coptic"));
         result.setLength(0);
-        assertEquals("", "7 tout – 23 tout 1741 ap. D.",
+        assertEquals(
+                "",
+                "7 tout – 23 tout 1741 ap. D.",
                 di.format(from, to, result, new FieldPosition(0)).toString());
 
-        di = DateIntervalFormat.getInstance(intervalSkeleton, Locale.forLanguageTag("fr-u-ca-japanese"));
+        di =
+                DateIntervalFormat.getInstance(
+                        intervalSkeleton, Locale.forLanguageTag("fr-u-ca-japanese"));
         result.setLength(0);
-        assertEquals("", "17 septembre – 3 octobre 6 Reiwa",
+        assertEquals(
+                "",
+                "17 septembre – 3 octobre 6 Reiwa",
                 di.format(from, to, result, new FieldPosition(0)).toString());
     }
 }

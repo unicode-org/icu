@@ -11,8 +11,7 @@ package com.ibm.icu.text;
 import java.text.ParseException;
 
 /**
- * Exception that signals an error has occurred while parsing the
- * input to StringPrep or IDNA.
+ * Exception that signals an error has occurred while parsing the input to StringPrep or IDNA.
  *
  * @author Ram Viswanadha
  * @stable ICU 2.8
@@ -24,125 +23,133 @@ public class StringPrepParseException extends ParseException {
     /**
      * @stable ICU 2.8
      */
-    public static final int INVALID_CHAR_FOUND      = 0;
-    /**
-     * @stable ICU 2.8
-     */
-    public static final int ILLEGAL_CHAR_FOUND      = 1;
-    /**
-     * @stable ICU 2.8
-     */
-    public static final int PROHIBITED_ERROR        = 2;
-    /**
-     * @stable ICU 2.8
-     */
-    public static final int UNASSIGNED_ERROR        = 3;
-    /**
-     * @stable ICU 2.8
-     */
-    public static final int CHECK_BIDI_ERROR        = 4;
-    /**
-     * @stable ICU 2.8
-     */
-    public static final int STD3_ASCII_RULES_ERROR  = 5;
-    /**
-     * @stable ICU 2.8
-     */
-    public static final int ACE_PREFIX_ERROR        = 6;
-    /**
-     * @stable ICU 2.8
-     */
-    public static final int VERIFICATION_ERROR      = 7;
-    /**
-     * @stable ICU 2.8
-     */
-    public static final int LABEL_TOO_LONG_ERROR    = 8;
-    /**
-     * @stable ICU 2.8
-     */
-    public static final int BUFFER_OVERFLOW_ERROR   = 9;
+    public static final int INVALID_CHAR_FOUND = 0;
 
     /**
      * @stable ICU 2.8
      */
-    public static final int ZERO_LENGTH_LABEL   = 10;
+    public static final int ILLEGAL_CHAR_FOUND = 1;
+
+    /**
+     * @stable ICU 2.8
+     */
+    public static final int PROHIBITED_ERROR = 2;
+
+    /**
+     * @stable ICU 2.8
+     */
+    public static final int UNASSIGNED_ERROR = 3;
+
+    /**
+     * @stable ICU 2.8
+     */
+    public static final int CHECK_BIDI_ERROR = 4;
+
+    /**
+     * @stable ICU 2.8
+     */
+    public static final int STD3_ASCII_RULES_ERROR = 5;
+
+    /**
+     * @stable ICU 2.8
+     */
+    public static final int ACE_PREFIX_ERROR = 6;
+
+    /**
+     * @stable ICU 2.8
+     */
+    public static final int VERIFICATION_ERROR = 7;
+
+    /**
+     * @stable ICU 2.8
+     */
+    public static final int LABEL_TOO_LONG_ERROR = 8;
+
+    /**
+     * @stable ICU 2.8
+     */
+    public static final int BUFFER_OVERFLOW_ERROR = 9;
+
+    /**
+     * @stable ICU 2.8
+     */
+    public static final int ZERO_LENGTH_LABEL = 10;
 
     /**
      * @stable ICU 3.8
      */
-    public static final int DOMAIN_NAME_TOO_LONG_ERROR   = 11;
+    public static final int DOMAIN_NAME_TOO_LONG_ERROR = 11;
 
     /**
-     * Construct a ParseException object with the given message
-     * and error code
+     * Construct a ParseException object with the given message and error code
      *
      * @param message A string describing the type of error that occurred
-     * @param error   The error that has occurred
+     * @param error The error that has occurred
      * @stable ICU 2.8
      */
-    public StringPrepParseException(String message,int error){
+    public StringPrepParseException(String message, int error) {
         super(message, -1);
         this.error = error;
         this.line = 0;
     }
 
     /**
-     * Construct a ParseException object with the given message and
-     * error code
+     * Construct a ParseException object with the given message and error code
      *
      * @param message A string describing the type of error that occurred
-     * @param error   The error that has occurred
-     * @param rules   The input rules string
-     * @param pos     The position of error in the rules string
+     * @param error The error that has occurred
+     * @param rules The input rules string
+     * @param pos The position of error in the rules string
      * @stable ICU 2.8
      */
-    public StringPrepParseException(String message,int error, String rules, int pos){
+    public StringPrepParseException(String message, int error, String rules, int pos) {
         super(message, -1);
         this.error = error;
-        setContext(rules,pos);
+        setContext(rules, pos);
         this.line = 0;
     }
+
     /**
-     * Construct  a ParseException object with the given message and error code
+     * Construct a ParseException object with the given message and error code
      *
-     * @param message    A string describing the type of error that occurred
-     * @param error      The error that has occurred
-     * @param rules      The input rules string
-     * @param pos        The position of error in the rules string
-     * @param lineNumber The line number at which the error has occurred.
-     *                   If the parse engine is not using this field, it should set it to zero.  Otherwise
-     *                   it should be a positive integer. The default value of this field
-     *                   is -1. It will be set to 0 if the code populating this struct is not
-     *                   using line numbers.
+     * @param message A string describing the type of error that occurred
+     * @param error The error that has occurred
+     * @param rules The input rules string
+     * @param pos The position of error in the rules string
+     * @param lineNumber The line number at which the error has occurred. If the parse engine is not
+     *     using this field, it should set it to zero. Otherwise it should be a positive integer.
+     *     The default value of this field is -1. It will be set to 0 if the code populating this
+     *     struct is not using line numbers.
      * @stable ICU 2.8
      */
-    public StringPrepParseException(String message, int error, String rules, int pos, int lineNumber){
+    public StringPrepParseException(
+            String message, int error, String rules, int pos, int lineNumber) {
         super(message, -1);
         this.error = error;
-        setContext(rules,pos);
+        setContext(rules, pos);
         this.line = lineNumber;
     }
+
     /**
-     * Compare this ParseException to another and evaluate if they are equal.
-     * The comparison works only on the type of error and does not compare
-     * the rules strings, if any, for equality.
+     * Compare this ParseException to another and evaluate if they are equal. The comparison works
+     * only on the type of error and does not compare the rules strings, if any, for equality.
      *
      * @param other The exception that this object should be compared to
      * @return true if the objects are equal, false if unequal
      * @stable ICU 2.8
      */
     @Override
-    public boolean equals(Object other){
-        if(!(other instanceof StringPrepParseException)){
+    public boolean equals(Object other) {
+        if (!(other instanceof StringPrepParseException)) {
             return false;
         }
-        return ((StringPrepParseException)other).error == this.error;
-
+        return ((StringPrepParseException) other).error == this.error;
     }
 
     /**
-     * Mock implementation of hashCode(). This implementation always returns a constant
-     * value. When Java assertion is enabled, this method triggers an assertion failure.
+     * Mock implementation of hashCode(). This implementation always returns a constant value. When
+     * Java assertion is enabled, this method triggers an assertion failure.
+     *
      * @return a hash code value for this object.
      * @stable ICU 2.8
      */
@@ -159,7 +166,7 @@ public class StringPrepParseException extends ParseException {
      * @stable ICU 2.8
      */
     @Override
-    public String toString(){
+    public String toString() {
         StringBuilder buf = new StringBuilder();
         buf.append(super.getMessage());
         buf.append(". line:  ");
@@ -175,63 +182,59 @@ public class StringPrepParseException extends ParseException {
     private int error;
 
     /**
-     * The line on which the error occurred.  If the parse engine
-     * is not using this field, it should set it to zero.  Otherwise
-     * it should be a positive integer. The default value of this field
-     * is -1. It will be set to 0 if the code populating this struct is not
-     * using line numbers.
+     * The line on which the error occurred. If the parse engine is not using this field, it should
+     * set it to zero. Otherwise it should be a positive integer. The default value of this field is
+     * -1. It will be set to 0 if the code populating this struct is not using line numbers.
      */
     private int line;
 
-
     /**
-     * Textual context before the error.  Null-terminated.
-     * May be the empty string if not implemented by parser.
+     * Textual context before the error. Null-terminated. May be the empty string if not implemented
+     * by parser.
      */
     private StringBuffer preContext = new StringBuffer();
 
     /**
-     * Textual context after the error.  Null-terminated.
-     * May be the empty string if not implemented by parser.
+     * Textual context after the error. Null-terminated. May be the empty string if not implemented
+     * by parser.
      */
-    private StringBuffer postContext =  new StringBuffer();
+    private StringBuffer postContext = new StringBuffer();
 
     private static final int PARSE_CONTEXT_LEN = 16;
 
-    private void setPreContext(String str, int pos){
-        setPreContext(str.toCharArray(),pos);
+    private void setPreContext(String str, int pos) {
+        setPreContext(str.toCharArray(), pos);
     }
 
-    private void setPreContext(char[] str, int pos){
-        int start = (pos <= PARSE_CONTEXT_LEN)? 0 : (pos - (PARSE_CONTEXT_LEN-1));
-        int len = (start <= PARSE_CONTEXT_LEN)? start : PARSE_CONTEXT_LEN;
-        preContext.append(str,start,len);
-
+    private void setPreContext(char[] str, int pos) {
+        int start = (pos <= PARSE_CONTEXT_LEN) ? 0 : (pos - (PARSE_CONTEXT_LEN - 1));
+        int len = (start <= PARSE_CONTEXT_LEN) ? start : PARSE_CONTEXT_LEN;
+        preContext.append(str, start, len);
     }
 
-    private void setPostContext(String str, int pos){
-        setPostContext(str.toCharArray(),pos);
+    private void setPostContext(String str, int pos) {
+        setPostContext(str.toCharArray(), pos);
     }
 
-    private void setPostContext(char[] str, int pos){
+    private void setPostContext(char[] str, int pos) {
         int start = pos;
-        int len  = str.length - start;
-        postContext.append(str,start,len);
-
+        int len = str.length - start;
+        postContext.append(str, start, len);
     }
 
-    private void setContext(String str,int pos){
-        setPreContext(str,pos);
-        setPostContext(str,pos);
+    private void setContext(String str, int pos) {
+        setPreContext(str, pos);
+        setPostContext(str, pos);
     }
 
     /**
-     * Returns the error code of this exception.
-     * This method is only used for testing to verify the error.
+     * Returns the error code of this exception. This method is only used for testing to verify the
+     * error.
+     *
      * @return The error code
      * @stable ICU 3.8
      */
-    public int getError(){
+    public int getError() {
         return error;
     }
 }

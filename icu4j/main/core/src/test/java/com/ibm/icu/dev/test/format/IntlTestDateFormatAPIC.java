@@ -8,25 +8,22 @@
  */
 
 /**
- * Port From:   ICU4C v1.8.1 : format : IntlTestDateFormatAPI
- * Source File: $ICU4CRoot/source/test/intltest/dtfmapts.cpp
- **/
-
+ * Port From: ICU4C v1.8.1 : format : IntlTestDateFormatAPI Source File:
+ * $ICU4CRoot/source/test/intltest/dtfmapts.cpp
+ */
 package com.ibm.icu.dev.test.format;
-
-import java.text.FieldPosition;
-import java.text.ParsePosition;
-import java.util.Date;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.SimpleDateFormat;
+import java.text.FieldPosition;
+import java.text.ParsePosition;
+import java.util.Date;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 /*
  * This is an API test, not a unit test.  It doesn't test very many cases, and doesn't
@@ -36,9 +33,8 @@ import com.ibm.icu.text.SimpleDateFormat;
 @RunWith(JUnit4.class)
 public class IntlTestDateFormatAPIC extends CoreTestFmwk {
     /**
-     * Test hiding of parse() and format() APIs in the Format hierarchy.
-     * We test the entire hierarchy, even though this test is located in
-     * the DateFormat API test.
+     * Test hiding of parse() and format() APIs in the Format hierarchy. We test the entire
+     * hierarchy, even though this test is located in the DateFormat API test.
      */
     @Test
     public void TestNameHiding() {
@@ -110,15 +106,15 @@ public class IntlTestDateFormatAPIC extends CoreTestFmwk {
             Number obj = fmt.parse(str, ppos);
             try {
                 obj = fmt.parse(str);
-                if(obj==null){
-                    errln("FAIL: The format object could not parse the string : "+str);
+                if (obj == null) {
+                    errln("FAIL: The format object could not parse the string : " + str);
                 }
             } catch (java.text.ParseException pe) {
                 System.out.println(pe);
             }
         }
 
-        //ICU4J have not the classes ChoiceFormat and MessageFormat
+        // ICU4J have not the classes ChoiceFormat and MessageFormat
         /*
         // ChoiceFormat calling Format & NumberFormat API
         {

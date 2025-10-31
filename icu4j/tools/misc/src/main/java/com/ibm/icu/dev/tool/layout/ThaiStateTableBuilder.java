@@ -12,17 +12,12 @@
  */
 package com.ibm.icu.dev.tool.layout;
 
-
-public class ThaiStateTableBuilder
-{
-    public static void main(String args[])
-    {
+public class ThaiStateTableBuilder {
+    public static void main(String args[]) {
         ThaiStateTableModuleWriter writer = new ThaiStateTableModuleWriter();
-        
+
         writer.openFile(args[0]);
         writer.writeTables();
         writer.closeFile();
-        
     }
-    
 }

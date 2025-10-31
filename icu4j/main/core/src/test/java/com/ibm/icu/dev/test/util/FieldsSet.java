@@ -12,8 +12,7 @@ import com.ibm.icu.impl.Utility;
 
 /**
  * @author srl
- *
- * analog of FieldsSet in C++
+ *     <p>analog of FieldsSet in C++
  */
 public class FieldsSet {
     public static final int NO_ENUM = -1;
@@ -24,7 +23,7 @@ public class FieldsSet {
         }
         fEnum = whichEnum;
         fFieldsCount = fieldsCount;
-        if(fieldsCount<0) {
+        if (fieldsCount < 0) {
             throw new InternalError("Preposterous field count " + fieldsCount);
         }
         fValues = new int[fFieldsCount];
@@ -77,33 +76,34 @@ public class FieldsSet {
     }
 
     /**
-     * @param other  "expected" set to match against
-     * @return a formatted string listing which fields are set in this, with the
-     *         comparison made agaainst those fields in other, or, 'null' if there is no difference.
+     * @param other "expected" set to match against
+     * @return a formatted string listing which fields are set in this, with the comparison made
+     *     agaainst those fields in other, or, 'null' if there is no difference.
      */
     public String diffFrom(FieldsSet other) {
         StringBuffer str = new StringBuffer();
-        if(!isSameType(other)) {
-            throw new IllegalArgumentException("U_ILLEGAL_ARGUMENT_ERROR: FieldsSet of a different type!");
+        if (!isSameType(other)) {
+            throw new IllegalArgumentException(
+                    "U_ILLEGAL_ARGUMENT_ERROR: FieldsSet of a different type!");
         }
-        for (int i=0; i<fieldCount(); i++) {
+        for (int i = 0; i < fieldCount(); i++) {
             if (isSet(i)) {
                 int myVal = get(i);
                 int theirVal = other.get(i);
 
-                if(fEnum != NO_ENUM) {
+                if (fEnum != NO_ENUM) {
                     String fieldName = DebugUtilities.enumString(fEnum, i);
 
                     String aval = Integer.toString(myVal);
                     String bval = Integer.toString(theirVal);
 
-                    str.append(fieldName +"="+aval+" not "+bval+", ");
+                    str.append(fieldName + "=" + aval + " not " + bval + ", ");
                 } else {
-                    str.append(Integer.toString(i) + "=" + myVal+" not " + theirVal+", ");
+                    str.append(Integer.toString(i) + "=" + myVal + " not " + theirVal + ", ");
                 }
             }
         }
-        if(str.length()==0) {
+        if (str.length() == 0) {
             return null;
         }
         return str.toString();
@@ -121,20 +121,20 @@ public class FieldsSet {
         int goodFields = 0;
 
         String[] fields = Utility.split(str, ',');
-        for(int i=0;i<fields.length;i++) {
+        for (int i = 0; i < fields.length; i++) {
             String fieldStr = fields[i];
             String kv[] = Utility.split(fieldStr, '=');
-            if(kv.length < 1 || kv.length > 2) {
+            if (kv.length < 1 || kv.length > 2) {
                 throw new InternalError("split around '=' failed: " + fieldStr);
             }
             String key = kv[0];
             String value = "";
-            if(kv.length>1) {
+            if (kv.length > 1) {
                 value = kv[1];
             }
 
             int field = handleParseName(inheritFrom, key, value);
-            if(field != -1) {
+            if (field != -1) {
                 handleParseValue(inheritFrom, field, value);
                 goodFields++;
             }
@@ -144,65 +144,65 @@ public class FieldsSet {
     }
 
     /**
-     * Callback interface for subclass. This function is called when parsing a
-     * field name, such as "MONTH" in "MONTH=4". Base implementation is to
-     * lookup the enum value using udbg_* utilities, or else as an integer if
-     * enum is not available.
+     * Callback interface for subclass. This function is called when parsing a field name, such as
+     * "MONTH" in "MONTH=4". Base implementation is to lookup the enum value using udbg_* utilities,
+     * or else as an integer if enum is not available.
      *
-     * If there is a special directive, the implementer can catch it here and
-     * return -1 after special processing completes.
+     * <p>If there is a special directive, the implementer can catch it here and return -1 after
+     * special processing completes.
      *
-     * @param inheritFrom  the set inheriting from - may be null.
-     * @param name  the field name (key side)
-     * @param substr  the string in question (value side)
-     * @param status  error status - set to error for failure.
+     * @param inheritFrom the set inheriting from - may be null.
+     * @param name the field name (key side)
+     * @param substr the string in question (value side)
+     * @param status error status - set to error for failure.
      * @return field number, or negative if field should be skipped.
      */
-    protected int handleParseName(FieldsSet inheritFrom, String name,
-            String substr) {
+    protected int handleParseName(FieldsSet inheritFrom, String name, String substr) {
         int field = -1;
-        if(fEnum != NO_ENUM) {
+        if (fEnum != NO_ENUM) {
             field = DebugUtilities.enumByString(fEnum, name);
         }
-        if(field < 0) {
+        if (field < 0) {
             field = Integer.parseInt(name);
         }
         return field;
     }
 
     /**
-     * Callback interface for subclass. Base implementation is to call
-     * parseValueDefault(...)
+     * Callback interface for subclass. Base implementation is to call parseValueDefault(...)
      *
-     * @param inheritFrom  the set inheriting from - may be null.
-     * @param field   which field is being parsed
-     * @param substr  the string in question (value side)
-     * @param status  error status - set to error for failure.
+     * @param inheritFrom the set inheriting from - may be null.
+     * @param field which field is being parsed
+     * @param substr the string in question (value side)
+     * @param status error status - set to error for failure.
      * @see parseValueDefault
      */
-    protected void handleParseValue(FieldsSet inheritFrom, int field,
-            String substr) {
+    protected void handleParseValue(FieldsSet inheritFrom, int field, String substr) {
         parseValueDefault(inheritFrom, field, substr);
     }
 
     /**
-     * the default implementation for handleParseValue. Base implementation is
-     * to parse a decimal integer value, or inherit from inheritFrom if the
-     * string is 0-length. Implementations of this function should call
-     * set(field,...) on successful parse.
+     * the default implementation for handleParseValue. Base implementation is to parse a decimal
+     * integer value, or inherit from inheritFrom if the string is 0-length. Implementations of this
+     * function should call set(field,...) on successful parse.
      *
      * @see handleParseValue
      */
-    protected void parseValueDefault(FieldsSet inheritFrom, int field,
-            String substr) {
-        if(substr.length()==0) {
-            if(inheritFrom == null) {
-                throw new InternalError("Trying to inherit from field " + field + " but inheritFrom is null");
+    protected void parseValueDefault(FieldsSet inheritFrom, int field, String substr) {
+        if (substr.length() == 0) {
+            if (inheritFrom == null) {
+                throw new InternalError(
+                        "Trying to inherit from field " + field + " but inheritFrom is null");
             }
-            if(!inheritFrom.isSet(field)) {
-                throw new InternalError("Trying to inherit from field " + field + " but inheritFrom["+field+"] is  not set");
+            if (!inheritFrom.isSet(field)) {
+                throw new InternalError(
+                        "Trying to inherit from field "
+                                + field
+                                + " but inheritFrom["
+                                + field
+                                + "] is  not set");
             }
-            set(field,inheritFrom.get(field));
+            set(field, inheritFrom.get(field));
         } else {
             int value = Integer.parseInt(substr);
             set(field, value);
@@ -210,33 +210,40 @@ public class FieldsSet {
     }
 
     /**
-     * convenience implementation for handleParseValue attempt to load a value
-     * from an enum value using udbg_enumByString() if fails, will call
-     * parseValueDefault()
+     * convenience implementation for handleParseValue attempt to load a value from an enum value
+     * using udbg_enumByString() if fails, will call parseValueDefault()
      *
      * @see handleParseValue
      */
-    protected void parseValueEnum(int type, FieldsSet inheritFrom, int field,
-            String substr) {
+    protected void parseValueEnum(int type, FieldsSet inheritFrom, int field, String substr) {
         int value = DebugUtilities.enumByString(type, substr);
-        if(value>=0) {
-            set(field,value);
+        if (value >= 0) {
+            set(field, value);
             return;
         }
         parseValueDefault(inheritFrom, field, substr);
     }
 
     public String fieldName(int field) {
-        return (fEnum!=NO_ENUM)?DebugUtilities.enumString(fEnum, field):Integer.toString(field);
+        return (fEnum != NO_ENUM)
+                ? DebugUtilities.enumString(fEnum, field)
+                : Integer.toString(field);
     }
 
     @Override
     public String toString() {
-        String str = getClass().getName()+" ["+fFieldsCount+","
-        +(fEnum!=NO_ENUM?DebugUtilities.typeString(fEnum):Integer.toString(fEnum))+"]: ";
-        for(int i=0;i<fFieldsCount;i++) {
-            if(isSet(i)) {
-                str = str + fieldName(i)+"="+get(i)+",";
+        String str =
+                getClass().getName()
+                        + " ["
+                        + fFieldsCount
+                        + ","
+                        + (fEnum != NO_ENUM
+                                ? DebugUtilities.typeString(fEnum)
+                                : Integer.toString(fEnum))
+                        + "]: ";
+        for (int i = 0; i < fFieldsCount; i++) {
+            if (isSet(i)) {
+                str = str + fieldName(i) + "=" + get(i) + ",";
             }
         }
         return str;

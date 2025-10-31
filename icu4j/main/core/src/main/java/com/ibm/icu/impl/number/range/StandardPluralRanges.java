@@ -2,10 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.number.range;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.StandardPlural;
@@ -13,10 +9,12 @@ import com.ibm.icu.impl.UResource;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.UResourceTypeMismatchException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author sffc
- *
  */
 public class StandardPluralRanges {
 
@@ -24,8 +22,8 @@ public class StandardPluralRanges {
     int numTriples = 0;
 
     /**
-     * An immutable map from language codes to set IDs.
-     * Pre-computed and cached in Java since it is used as a cache key for PluralRules.
+     * An immutable map from language codes to set IDs. Pre-computed and cached in Java since it is
+     * used as a cache key for PluralRules.
      */
     private static volatile Map<String, String> languageToSet;
 
@@ -59,8 +57,10 @@ public class StandardPluralRanges {
         if (candidate == null) {
             Map<String, String> map = new HashMap<String, String>();
             PluralRangeSetsDataSink sink = new PluralRangeSetsDataSink(map);
-            ICUResourceBundle resource = (ICUResourceBundle)
-                UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "pluralRanges");
+            ICUResourceBundle resource =
+                    (ICUResourceBundle)
+                            UResourceBundle.getBundleInstance(
+                                    ICUData.ICU_BASE_NAME, "pluralRanges");
             resource.getAllItemsWithFallback("locales", sink);
             candidate = Collections.unmodifiableMap(map);
         }
@@ -87,7 +87,7 @@ public class StandardPluralRanges {
                 UResource.Array pluralFormsArray = value.getArray();
                 if (pluralFormsArray.getSize() != 3) {
                     throw new UResourceTypeMismatchException(
-                        "Expected 3 elements in pluralRanges.txt array");
+                            "Expected 3 elements in pluralRanges.txt array");
                 }
                 pluralFormsArray.getValue(0, value);
                 StandardPlural first = StandardPlural.fromString(value.getString());
@@ -100,12 +100,12 @@ public class StandardPluralRanges {
         }
     }
 
-    private static void getPluralRangesData(
-            String set,
-            StandardPluralRanges out) {
+    private static void getPluralRangesData(String set, StandardPluralRanges out) {
         StringBuilder sb = new StringBuilder();
         ICUResourceBundle resource;
-        resource = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "pluralRanges");
+        resource =
+                (ICUResourceBundle)
+                        UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "pluralRanges");
         sb.setLength(0);
         sb.append("rules/");
         sb.append(set);
@@ -137,11 +137,11 @@ public class StandardPluralRanges {
         return getLanguageToSet().get(locale.getLanguage());
     }
 
-    private StandardPluralRanges() {
-    }
+    private StandardPluralRanges() {}
 
     /** Used for data loading. */
-    private void addPluralRange(StandardPlural first, StandardPlural second, StandardPlural result) {
+    private void addPluralRange(
+            StandardPlural first, StandardPlural second, StandardPlural result) {
         flatTriples[3 * numTriples] = first;
         flatTriples[3 * numTriples + 1] = second;
         flatTriples[3 * numTriples + 2] = result;
@@ -150,7 +150,7 @@ public class StandardPluralRanges {
 
     /** Used for data loading. */
     private void setCapacity(int length) {
-        flatTriples = new StandardPlural[length*3];
+        flatTriples = new StandardPlural[length * 3];
     }
 
     public StandardPlural resolve(StandardPlural first, StandardPlural second) {
@@ -162,5 +162,4 @@ public class StandardPluralRanges {
         // Default fallback
         return StandardPlural.OTHER;
     }
-
 }

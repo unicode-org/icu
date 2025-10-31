@@ -8,12 +8,11 @@
  */
 package com.ibm.icu.impl.breakiter;
 
-import java.text.CharacterIterator;
-
 import com.ibm.icu.impl.CharacterIteration;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.text.UnicodeSet;
+import java.text.CharacterIterator;
 
 public final class UnhandledBreakEngine implements LanguageBreakEngine {
     // TODO: Use two UnicodeSets, one with all frozen sets, one with unfrozen.
@@ -34,8 +33,8 @@ public final class UnhandledBreakEngine implements LanguageBreakEngine {
     // threading specific issue). Possibly stop on script boundaries?
 
     volatile UnicodeSet fHandled = new UnicodeSet();
-    public UnhandledBreakEngine() {
-    }
+
+    public UnhandledBreakEngine() {}
 
     @Override
     public boolean handles(int c) {
@@ -43,8 +42,12 @@ public final class UnhandledBreakEngine implements LanguageBreakEngine {
     }
 
     @Override
-    public int findBreaks(CharacterIterator text, int startPos, int endPos,
-            DictionaryBreakEngine.DequeI foundBreaks, boolean isPhraseBreaking) {
+    public int findBreaks(
+            CharacterIterator text,
+            int startPos,
+            int endPos,
+            DictionaryBreakEngine.DequeI foundBreaks,
+            boolean isPhraseBreaking) {
 
         UnicodeSet uniset = fHandled;
         int c = CharacterIteration.current32(text);
@@ -56,10 +59,9 @@ public final class UnhandledBreakEngine implements LanguageBreakEngine {
     }
 
     /**
-     * Update the set of unhandled characters to include
-     * all that have the same script as c.
-     * May be called concurrently with handles() or findBreaks().
-     * Must not be called concurrently with itself.
+     * Update the set of unhandled characters to include all that have the same script as c. May be
+     * called concurrently with handles() or findBreaks(). Must not be called concurrently with
+     * itself.
      */
     public void handleChar(int c) {
         UnicodeSet originalSet = fHandled;

@@ -9,20 +9,6 @@
 
 package com.ibm.icu.text;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
-import java.util.Set;
-import java.util.TreeMap;
-
 import com.ibm.icu.impl.CacheBase;
 import com.ibm.icu.impl.CalendarUtil;
 import com.ibm.icu.impl.EraRules;
@@ -40,49 +26,59 @@ import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.UResourceBundleIterator;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+import java.util.Set;
+import java.util.TreeMap;
 
 /**
  * {@icuenhanced java.text.DateFormatSymbols}.{@icu _usage_}
  *
- * <p><code>DateFormatSymbols</code> is a public class for encapsulating
- * localizable date-time formatting data, such as the names of the
- * months, the names of the days of the week, and the time zone data.
- * <code>DateFormat</code> and <code>SimpleDateFormat</code> both use
- * <code>DateFormatSymbols</code> to encapsulate this information.
+ * <p><code>DateFormatSymbols</code> is a public class for encapsulating localizable date-time
+ * formatting data, such as the names of the months, the names of the days of the week, and the time
+ * zone data. <code>DateFormat</code> and <code>SimpleDateFormat</code> both use <code>
+ * DateFormatSymbols</code> to encapsulate this information.
  *
- * <p>Typically you shouldn't use <code>DateFormatSymbols</code> directly.
- * Rather, you are encouraged to create a date-time formatter with the
- * <code>DateFormat</code> class's factory methods: <code>getTimeInstance</code>,
- * <code>getDateInstance</code>, or <code>getDateTimeInstance</code>.
- * These methods automatically create a <code>DateFormatSymbols</code> for
- * the formatter so that you don't have to. After the
- * formatter is created, you may modify its format pattern using the
- * <code>setPattern</code> method. For more information about
- * creating formatters using <code>DateFormat</code>'s factory methods,
- * see {@link DateFormat}.
+ * <p>Typically you shouldn't use <code>DateFormatSymbols</code> directly. Rather, you are
+ * encouraged to create a date-time formatter with the <code>DateFormat</code> class's factory
+ * methods: <code>getTimeInstance</code>, <code>getDateInstance</code>, or <code>getDateTimeInstance
+ * </code>. These methods automatically create a <code>DateFormatSymbols</code> for the formatter so
+ * that you don't have to. After the formatter is created, you may modify its format pattern using
+ * the <code>setPattern</code> method. For more information about creating formatters using <code>
+ * DateFormat</code>'s factory methods, see {@link DateFormat}.
  *
- * <p>If you decide to create a date-time formatter with a specific
- * format pattern for a specific locale, you can do so with:
+ * <p>If you decide to create a date-time formatter with a specific format pattern for a specific
+ * locale, you can do so with:
+ *
  * <blockquote>
+ *
  * <pre>
  * new SimpleDateFormat(aPattern, new DateFormatSymbols(aLocale)).
  * </pre>
+ *
  * </blockquote>
  *
- * <p><code>DateFormatSymbols</code> objects are clonable. When you obtain
- * a <code>DateFormatSymbols</code> object, feel free to modify the
- * date-time formatting data. For instance, you can replace the localized
- * date-time format pattern characters with the ones that you feel easy
- * to remember. Or you can change the representative cities
- * to your favorite ones.
+ * <p><code>DateFormatSymbols</code> objects are clonable. When you obtain a <code>DateFormatSymbols
+ * </code> object, feel free to modify the date-time formatting data. For instance, you can replace
+ * the localized date-time format pattern characters with the ones that you feel easy to remember.
+ * Or you can change the representative cities to your favorite ones.
  *
- * <p>New <code>DateFormatSymbols</code> subclasses may be added to support
- * <code>SimpleDateFormat</code> for date-time formatting for additional locales.
+ * <p>New <code>DateFormatSymbols</code> subclasses may be added to support <code>SimpleDateFormat
+ * </code> for date-time formatting for additional locales.
  *
- * @see          DateFormat
- * @see          SimpleDateFormat
- * @see          com.ibm.icu.util.SimpleTimeZone
- * @author       Chen-Lieh Huang
+ * @see DateFormat
+ * @see SimpleDateFormat
+ * @see com.ibm.icu.util.SimpleTimeZone
+ * @author Chen-Lieh Huang
  * @stable ICU 2.0
  */
 public class DateFormatSymbols implements Serializable, Cloneable {
@@ -95,175 +91,194 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     // Constants for context
     /**
      * {@icu} Constant for context.
+     *
      * @stable ICU 3.6
      */
     public static final int FORMAT = 0;
 
     /**
      * {@icu} Constant for context.
+     *
      * @stable ICU 3.6
      */
     public static final int STANDALONE = 1;
 
     /**
-     * {@icu} Constant for context. NUMERIC context
-     * is only supported for leapMonthPatterns.
+     * {@icu} Constant for context. NUMERIC context is only supported for leapMonthPatterns.
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    @Deprecated
-    public static final int NUMERIC = 2;
+    @Deprecated public static final int NUMERIC = 2;
 
     /**
      * {@icu} Constant for context.
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    @Deprecated
-    public static final int DT_CONTEXT_COUNT = 3;
+    @Deprecated public static final int DT_CONTEXT_COUNT = 3;
 
     // Constants for width
 
     /**
      * {@icu} Constant for width.
+     *
      * @stable ICU 3.6
      */
     public static final int ABBREVIATED = 0;
 
     /**
      * {@icu} Constant for width.
+     *
      * @stable ICU 3.6
      */
     public static final int WIDE = 1;
 
     /**
      * {@icu} Constant for width.
+     *
      * @stable ICU 3.6
      */
     public static final int NARROW = 2;
 
     /**
      * {@icu} Constant for width; only supported for weekdays.
+     *
      * @stable ICU 51
      */
     public static final int SHORT = 3;
 
     /**
      * {@icu} Constant for width.
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    @Deprecated
-    public static final int DT_WIDTH_COUNT = 4;
+    @Deprecated public static final int DT_WIDTH_COUNT = 4;
 
     /**
-     * {@icu} Somewhat temporary constant for leap month pattern type, adequate for Chinese calendar.
+     * {@icu} Somewhat temporary constant for leap month pattern type, adequate for Chinese
+     * calendar.
+     *
      * @internal
      */
     static final int DT_LEAP_MONTH_PATTERN_FORMAT_WIDE = 0;
 
     /**
-     * {@icu} Somewhat temporary constant for leap month pattern type, adequate for Chinese calendar.
+     * {@icu} Somewhat temporary constant for leap month pattern type, adequate for Chinese
+     * calendar.
+     *
      * @internal
      */
     static final int DT_LEAP_MONTH_PATTERN_FORMAT_ABBREV = 1;
 
     /**
-     * {@icu} Somewhat temporary constant for leap month pattern type, adequate for Chinese calendar.
+     * {@icu} Somewhat temporary constant for leap month pattern type, adequate for Chinese
+     * calendar.
+     *
      * @internal
      */
     static final int DT_LEAP_MONTH_PATTERN_FORMAT_NARROW = 2;
 
     /**
-     * {@icu} Somewhat temporary constant for leap month pattern type, adequate for Chinese calendar.
+     * {@icu} Somewhat temporary constant for leap month pattern type, adequate for Chinese
+     * calendar.
+     *
      * @internal
      */
     static final int DT_LEAP_MONTH_PATTERN_STANDALONE_WIDE = 3;
 
     /**
-     * {@icu} Somewhat temporary constant for leap month pattern type, adequate for Chinese calendar.
+     * {@icu} Somewhat temporary constant for leap month pattern type, adequate for Chinese
+     * calendar.
+     *
      * @internal
      */
     static final int DT_LEAP_MONTH_PATTERN_STANDALONE_ABBREV = 4;
 
     /**
-     * {@icu} Somewhat temporary constant for leap month pattern type, adequate for Chinese calendar.
+     * {@icu} Somewhat temporary constant for leap month pattern type, adequate for Chinese
+     * calendar.
+     *
      * @internal
      */
     static final int DT_LEAP_MONTH_PATTERN_STANDALONE_NARROW = 5;
 
     /**
-     * {@icu} Somewhat temporary constant for leap month pattern type, adequate for Chinese calendar.
+     * {@icu} Somewhat temporary constant for leap month pattern type, adequate for Chinese
+     * calendar.
+     *
      * @internal
      */
     static final int DT_LEAP_MONTH_PATTERN_NUMERIC = 6;
 
     /**
      * {@icu} Somewhat temporary constant for month pattern count, adequate for Chinese calendar.
+     *
      * @internal
      */
     static final int DT_MONTH_PATTERN_COUNT = 7;
 
     /**
-     * {@icu} This default time separator is used for formatting when the locale
-     * doesn't specify any time separator, and always recognized when parsing.
+     * {@icu} This default time separator is used for formatting when the locale doesn't specify any
+     * time separator, and always recognized when parsing.
+     *
      * @internal
      */
     static final String DEFAULT_TIME_SEPARATOR = ":";
 
     /**
      * {@icu} This alternate time separator is always recognized when parsing.
+     *
      * @internal
      */
     static final String ALTERNATE_TIME_SEPARATOR = ".";
 
-   /**
-     * Constructs a DateFormatSymbols object by loading format data from
-     * resources for the default <code>FORMAT</code> locale.
+    /**
+     * Constructs a DateFormatSymbols object by loading format data from resources for the default
+     * <code>FORMAT</code> locale.
      *
-     * @throws java.util.MissingResourceException if the resources for the default locale
-     *          cannot be found or cannot be loaded.
+     * @throws java.util.MissingResourceException if the resources for the default locale cannot be
+     *     found or cannot be loaded.
      * @see Category#FORMAT
      * @stable ICU 2.0
      */
-    public DateFormatSymbols()
-    {
+    public DateFormatSymbols() {
         this(ULocale.getDefault(Category.FORMAT));
     }
 
     /**
-     * Constructs a DateFormatSymbols object by loading format data from
-     * resources for the given locale.
+     * Constructs a DateFormatSymbols object by loading format data from resources for the given
+     * locale.
      *
-     * @throws java.util.MissingResourceException if the resources for the specified
-     *          locale cannot be found or cannot be loaded.
+     * @throws java.util.MissingResourceException if the resources for the specified locale cannot
+     *     be found or cannot be loaded.
      * @stable ICU 2.0
      */
-    public DateFormatSymbols(Locale locale)
-    {
+    public DateFormatSymbols(Locale locale) {
         this(ULocale.forLocale(locale));
     }
 
     /**
-     * {@icu} Constructs a DateFormatSymbols object by loading format data from
-     * resources for the given ulocale.
+     * {@icu} Constructs a DateFormatSymbols object by loading format data from resources for the
+     * given ulocale.
      *
-     * @throws java.util.MissingResourceException if the resources for the specified
-     *          locale cannot be found or cannot be loaded.
+     * @throws java.util.MissingResourceException if the resources for the specified locale cannot
+     *     be found or cannot be loaded.
      * @stable ICU 3.2
      */
-    public DateFormatSymbols(ULocale locale)
-    {
+    public DateFormatSymbols(ULocale locale) {
         initializeData(locale, CalendarUtil.getCalendarType(locale));
     }
 
     /**
      * Returns a DateFormatSymbols instance for the default locale.
      *
-     * {@icunote} Unlike <code>java.text.DateFormatSymbols#getInstance</code>,
-     * this method simply returns <code>new com.ibm.icu.text.DateFormatSymbols()</code>.
-     * ICU does not support <code>DateFormatSymbolsProvider</code> introduced in Java 6
-     * or its equivalent implementation for now.
+     * <p>{@icunote} Unlike <code>java.text.DateFormatSymbols#getInstance</code>, this method simply
+     * returns <code>new com.ibm.icu.text.DateFormatSymbols()</code>. ICU does not support <code>
+     * DateFormatSymbolsProvider</code> introduced in Java 6 or its equivalent implementation for
+     * now.
      *
      * @return A DateFormatSymbols instance.
      * @stable ICU 3.8
@@ -275,10 +290,10 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     /**
      * Returns a DateFormatSymbols instance for the given locale.
      *
-     * {@icunote} Unlike <code>java.text.DateFormatSymbols#getInstance</code>,
-     * this method simply returns <code>new com.ibm.icu.text.DateFormatSymbols(locale)</code>.
-     * ICU does not support <code>DateFormatSymbolsProvider</code> introduced in Java 6
-     * or its equivalent implementation for now.
+     * <p>{@icunote} Unlike <code>java.text.DateFormatSymbols#getInstance</code>, this method simply
+     * returns <code>new com.ibm.icu.text.DateFormatSymbols(locale)</code>. ICU does not support
+     * <code>DateFormatSymbolsProvider</code> introduced in Java 6 or its equivalent implementation
+     * for now.
      *
      * @param locale the locale.
      * @return A DateFormatSymbols instance.
@@ -291,10 +306,10 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     /**
      * {@icu} Returns a DateFormatSymbols instance for the given locale.
      *
-     * {@icunote} Unlike <code>java.text.DateFormatSymbols#getInstance</code>,
-     * this method simply returns <code>new com.ibm.icu.text.DateFormatSymbols(locale)</code>.
-     * ICU does not support <code>DateFormatSymbolsProvider</code> introduced in Java 6
-     * or its equivalent implementation for now.
+     * <p>{@icunote} Unlike <code>java.text.DateFormatSymbols#getInstance</code>, this method simply
+     * returns <code>new com.ibm.icu.text.DateFormatSymbols(locale)</code>. ICU does not support
+     * <code>DateFormatSymbolsProvider</code> introduced in Java 6 or its equivalent implementation
+     * for now.
      *
      * @param locale the locale.
      * @return A DateFormatSymbols instance.
@@ -305,16 +320,16 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
-     * Returns an array of all locales for which the <code>getInstance</code> methods of
-     * this class can return localized instances.
+     * Returns an array of all locales for which the <code>getInstance</code> methods of this class
+     * can return localized instances.
      *
-     * {@icunote} Unlike <code>java.text.DateFormatSymbols#getAvailableLocales</code>,
-     * this method simply returns the array of <code>Locale</code>s available in this
-     * class.  ICU does not support <code>DateFormatSymbolsProvider</code> introduced in
-     * Java 6 or its equivalent implementation for now.
+     * <p>{@icunote} Unlike <code>java.text.DateFormatSymbols#getAvailableLocales</code>, this
+     * method simply returns the array of <code>Locale</code>s available in this class. ICU does not
+     * support <code>DateFormatSymbolsProvider</code> introduced in Java 6 or its equivalent
+     * implementation for now.
      *
-     * @return An array of <code>Locale</code>s for which localized
-     * <code>DateFormatSymbols</code> instances are available.
+     * @return An array of <code>Locale</code>s for which localized <code>DateFormatSymbols</code>
+     *     instances are available.
      * @stable ICU 3.8
      */
     public static Locale[] getAvailableLocales() {
@@ -322,16 +337,16 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
-     * {@icu} Returns an array of all locales for which the <code>getInstance</code>
-     * methods of this class can return localized instances.
+     * {@icu} Returns an array of all locales for which the <code>getInstance</code> methods of this
+     * class can return localized instances.
      *
-     * {@icunote} Unlike <code>java.text.DateFormatSymbols#getAvailableLocales</code>,
-     * this method simply returns the array of <code>ULocale</code>s available in this
-     * class.  ICU does not support <code>DateFormatSymbolsProvider</code> introduced in
-     * Java 6 or its equivalent implementation for now.
+     * <p>{@icunote} Unlike <code>java.text.DateFormatSymbols#getAvailableLocales</code>, this
+     * method simply returns the array of <code>ULocale</code>s available in this class. ICU does
+     * not support <code>DateFormatSymbolsProvider</code> introduced in Java 6 or its equivalent
+     * implementation for now.
      *
-     * @return An array of <code>ULocale</code>s for which localized
-     * <code>DateFormatSymbols</code> instances are available.
+     * @return An array of <code>ULocale</code>s for which localized <code>DateFormatSymbols</code>
+     *     instances are available.
      * @draft ICU 3.8 (retain)
      */
     public static ULocale[] getAvailableULocales() {
@@ -339,339 +354,343 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
-     * Era strings. For example: "AD" and "BC".  An array of 2 strings,
-     * indexed by <code>Calendar.BC</code> and <code>Calendar.AD</code>.
+     * Era strings. For example: "AD" and "BC". An array of 2 strings, indexed by <code>Calendar.BC
+     * </code> and <code>Calendar.AD</code>.
+     *
      * @serial
      */
     String eras[] = null;
 
     /**
-     * Era name strings. For example: "Anno Domini" and "Before Christ".  An array of 2 strings,
+     * Era name strings. For example: "Anno Domini" and "Before Christ". An array of 2 strings,
      * indexed by <code>Calendar.BC</code> and <code>Calendar.AD</code>.
+     *
      * @serial
      */
     String eraNames[] = null;
 
     /**
-     * Narrow era names. For example: "A" and "B". An array of 2 strings,
-     * indexed by <code>Calendar.BC</code> and <code>Calendar.AD</code>.
+     * Narrow era names. For example: "A" and "B". An array of 2 strings, indexed by <code>
+     * Calendar.BC</code> and <code>Calendar.AD</code>.
+     *
      * @serial
      */
     String narrowEras[] = null;
 
     /**
-     * Month strings. For example: "January", "February", etc.  An array
-     * of 13 strings (some calendars have 13 months), indexed by
-     * <code>Calendar.JANUARY</code>, <code>Calendar.FEBRUARY</code>, etc.
+     * Month strings. For example: "January", "February", etc. An array of 13 strings (some
+     * calendars have 13 months), indexed by <code>Calendar.JANUARY</code>, <code>Calendar.FEBRUARY
+     * </code>, etc.
+     *
      * @serial
      */
     String months[] = null;
 
     /**
-     * Short month strings. For example: "Jan", "Feb", etc.  An array of
-     * 13 strings (some calendars have 13 months), indexed by
-     * <code>Calendar.JANUARY</code>, <code>Calendar.FEBRUARY</code>, etc.
-
+     * Short month strings. For example: "Jan", "Feb", etc. An array of 13 strings (some calendars
+     * have 13 months), indexed by <code>Calendar.JANUARY</code>, <code>Calendar.FEBRUARY</code>,
+     * etc.
+     *
      * @serial
      */
     String shortMonths[] = null;
 
     /**
-     * Narrow month strings. For example: "J", "F", etc.  An array of
-     * 13 strings (some calendars have 13 months), indexed by
-     * <code>Calendar.JANUARY</code>, <code>Calendar.FEBRUARY</code>, etc.
-
+     * Narrow month strings. For example: "J", "F", etc. An array of 13 strings (some calendars have
+     * 13 months), indexed by <code>Calendar.JANUARY</code>, <code>Calendar.FEBRUARY</code>, etc.
+     *
      * @serial
      */
     String narrowMonths[] = null;
 
     /**
-     * Standalone month strings. For example: "January", "February", etc.  An array
-     * of 13 strings (some calendars have 13 months), indexed by
-     * <code>Calendar.JANUARY</code>, <code>Calendar.FEBRUARY</code>, etc.
+     * Standalone month strings. For example: "January", "February", etc. An array of 13 strings
+     * (some calendars have 13 months), indexed by <code>Calendar.JANUARY</code>, <code>
+     * Calendar.FEBRUARY</code>, etc.
+     *
      * @serial
      */
     String standaloneMonths[] = null;
 
     /**
-     * Standalone short month strings. For example: "Jan", "Feb", etc.  An array of
-     * 13 strings (some calendars have 13 months), indexed by
-     * <code>Calendar.JANUARY</code>, <code>Calendar.FEBRUARY</code>, etc.
-
+     * Standalone short month strings. For example: "Jan", "Feb", etc. An array of 13 strings (some
+     * calendars have 13 months), indexed by <code>Calendar.JANUARY</code>, <code>Calendar.FEBRUARY
+     * </code>, etc.
+     *
      * @serial
      */
     String standaloneShortMonths[] = null;
 
     /**
-     * Standalone narrow month strings. For example: "J", "F", etc.  An array of
-     * 13 strings (some calendars have 13 months), indexed by
-     * <code>Calendar.JANUARY</code>, <code>Calendar.FEBRUARY</code>, etc.
-
+     * Standalone narrow month strings. For example: "J", "F", etc. An array of 13 strings (some
+     * calendars have 13 months), indexed by <code>Calendar.JANUARY</code>, <code>Calendar.FEBRUARY
+     * </code>, etc.
+     *
      * @serial
      */
     String standaloneNarrowMonths[] = null;
 
     /**
-     * Format wide weekday strings, for example: "Sunday", "Monday", etc.
-     * An array of 8 strings, indexed by <code>Calendar.SUNDAY</code>,
-     * <code>Calendar.MONDAY</code>, etc.
-     * The element <code>weekdays[0]</code> is ignored.
+     * Format wide weekday strings, for example: "Sunday", "Monday", etc. An array of 8 strings,
+     * indexed by <code>Calendar.SUNDAY</code>, <code>Calendar.MONDAY</code>, etc. The element
+     * <code>weekdays[0]</code> is ignored.
+     *
      * @serial
      */
     String weekdays[] = null;
 
     /**
-     * CLDR-style format abbreviated (not short) weekday strings,
-     * for example: "Sun", "Mon", etc.
-     * An array of 8 strings, indexed by <code>Calendar.SUNDAY</code>,
-     * <code>Calendar.MONDAY</code>, etc.
-     * The element <code>shortWeekdays[0]</code> is ignored.
+     * CLDR-style format abbreviated (not short) weekday strings, for example: "Sun", "Mon", etc. An
+     * array of 8 strings, indexed by <code>Calendar.SUNDAY</code>, <code>Calendar.MONDAY</code>,
+     * etc. The element <code>shortWeekdays[0]</code> is ignored.
+     *
      * @serial
      */
     String shortWeekdays[] = null;
 
     /**
-     * CLDR-style format short weekday strings, for example: "Su", "Mo", etc.
-     * An array of 8 strings, indexed by <code>Calendar.SUNDAY</code>,
-     * <code>Calendar.MONDAY</code>, etc.
-     * The element <code>shorterWeekdays[0]</code> is ignored.
+     * CLDR-style format short weekday strings, for example: "Su", "Mo", etc. An array of 8 strings,
+     * indexed by <code>Calendar.SUNDAY</code>, <code>Calendar.MONDAY</code>, etc. The element
+     * <code>shorterWeekdays[0]</code> is ignored.
+     *
      * @serial
      */
-   // Note, serialization restore from pre-ICU-51 will leave this null.
+    // Note, serialization restore from pre-ICU-51 will leave this null.
     String shorterWeekdays[] = null;
 
     /**
-     * CLDR-style format narrow weekday strings, for example: "S", "M", etc.
-     * An array of 8 strings, indexed by <code>Calendar.SUNDAY</code>,
-     * <code>Calendar.MONDAY</code>, etc.
-     * The element <code>narrowWeekdays[0]</code> is ignored.
+     * CLDR-style format narrow weekday strings, for example: "S", "M", etc. An array of 8 strings,
+     * indexed by <code>Calendar.SUNDAY</code>, <code>Calendar.MONDAY</code>, etc. The element
+     * <code>narrowWeekdays[0]</code> is ignored.
+     *
      * @serial
      */
     String narrowWeekdays[] = null;
 
     /**
-     * Standalone wide weekday strings. For example: "Sunday", "Monday", etc.
-     * An array of 8 strings, indexed by <code>Calendar.SUNDAY</code>,
-     * <code>Calendar.MONDAY</code>, etc.
-     * The element <code>standaloneWeekdays[0]</code> is ignored.
+     * Standalone wide weekday strings. For example: "Sunday", "Monday", etc. An array of 8 strings,
+     * indexed by <code>Calendar.SUNDAY</code>, <code>Calendar.MONDAY</code>, etc. The element
+     * <code>standaloneWeekdays[0]</code> is ignored.
+     *
      * @serial
      */
     String standaloneWeekdays[] = null;
 
     /**
-     * CLDR-style standalone abbreviated (not short) weekday strings,
-     * for example: "Sun", "Mon", etc.
-     * An array of 8 strings, indexed by <code>Calendar.SUNDAY</code>,
-     * <code>Calendar.MONDAY</code>, etc.
-     * The element <code>standaloneShortWeekdays[0]</code> is ignored.
+     * CLDR-style standalone abbreviated (not short) weekday strings, for example: "Sun", "Mon",
+     * etc. An array of 8 strings, indexed by <code>Calendar.SUNDAY</code>, <code>Calendar.MONDAY
+     * </code>, etc. The element <code>standaloneShortWeekdays[0]</code> is ignored.
+     *
      * @serial
      */
     String standaloneShortWeekdays[] = null;
 
     /**
-     * CLDR-style standalone short weekday strings, for example: "Sun", "Mon", etc.
-     * An array of 8 strings, indexed by <code>Calendar.SUNDAY</code>,
-     * <code>Calendar.MONDAY</code>, etc.
-     * The element <code>standaloneShorterWeekdays[0]</code> is ignored.
+     * CLDR-style standalone short weekday strings, for example: "Sun", "Mon", etc. An array of 8
+     * strings, indexed by <code>Calendar.SUNDAY</code>, <code>Calendar.MONDAY</code>, etc. The
+     * element <code>standaloneShorterWeekdays[0]</code> is ignored.
+     *
      * @serial
      */
     // Note, serialization restore from pre-ICU-51 will leave this null.
     String standaloneShorterWeekdays[] = null;
 
     /**
-     * Standalone narrow weekday strings. For example: "S", "M", etc.  An array
-     * of 8 strings, indexed by <code>Calendar.SUNDAY</code>,
-     * <code>Calendar.MONDAY</code>, etc.
-     * The element <code>standaloneNarrowWeekdays[0]</code> is ignored.
+     * Standalone narrow weekday strings. For example: "S", "M", etc. An array of 8 strings, indexed
+     * by <code>Calendar.SUNDAY</code>, <code>Calendar.MONDAY</code>, etc. The element <code>
+     * standaloneNarrowWeekdays[0]</code> is ignored.
+     *
      * @serial
      */
     String standaloneNarrowWeekdays[] = null;
 
     /**
-     * AM and PM strings. For example: "AM" and "PM".  An array of
-     * 2 strings, indexed by <code>Calendar.AM</code> and
-     * <code>Calendar.PM</code>.
+     * AM and PM strings. For example: "AM" and "PM". An array of 2 strings, indexed by <code>
+     * Calendar.AM</code> and <code>Calendar.PM</code>.
+     *
      * @serial
      */
     String ampms[] = null;
 
     /**
-     * wide AM and PM strings. For example: "ante meridiem" and "post meridiem".  An array of
-     * 2 strings, indexed by <code>Calendar.AM</code> and
-     * <code>Calendar.PM</code>.
-     * These strings are uncommon but exist in a handful of locales.
+     * wide AM and PM strings. For example: "ante meridiem" and "post meridiem". An array of 2
+     * strings, indexed by <code>Calendar.AM</code> and <code>Calendar.PM</code>. These strings are
+     * uncommon but exist in a handful of locales.
+     *
      * @serial
      */
     String ampmsWide[] = null;
 
     /**
-     * narrow AM and PM strings. For example: "a" and "p".  An array of
-     * 2 strings, indexed by <code>Calendar.AM</code> and
-     * <code>Calendar.PM</code>.
+     * narrow AM and PM strings. For example: "a" and "p". An array of 2 strings, indexed by <code>
+     * Calendar.AM</code> and <code>Calendar.PM</code>.
+     *
      * @serial
      */
     String ampmsNarrow[] = null;
 
     /**
      * Time separator string. For example: ":".
+     *
      * @serial
      */
     private String timeSeparator = null;
 
     /**
-     * Abbreviated quarter names. For example: "Q1", "Q2", "Q3", "Q4". An array
-     * of 4 strings indexed by the month divided by 3.
+     * Abbreviated quarter names. For example: "Q1", "Q2", "Q3", "Q4". An array of 4 strings indexed
+     * by the month divided by 3.
+     *
      * @serial
      */
     String shortQuarters[] = null;
 
     /**
-     * Narrow quarter names. For example: "1", "2", "3", "4". An array
-     * of 4 strings indexed by the month divided by 3.
+     * Narrow quarter names. For example: "1", "2", "3", "4". An array of 4 strings indexed by the
+     * month divided by 3.
+     *
      * @serial
      */
     String narrowQuarters[] = null;
 
     /**
-     * Full quarter names. For example: "1st Quarter", "2nd Quarter", "3rd Quarter",
-     * "4th Quarter". An array of 4 strings, indexed by the month divided by 3.
+     * Full quarter names. For example: "1st Quarter", "2nd Quarter", "3rd Quarter", "4th Quarter".
+     * An array of 4 strings, indexed by the month divided by 3.
+     *
      * @serial
      */
     String quarters[] = null;
 
     /**
-     * Standalone abbreviated quarter names. For example: "Q1", "Q2", "Q3", "Q4". An array
-     * of 4 strings indexed by the month divided by 3.
+     * Standalone abbreviated quarter names. For example: "Q1", "Q2", "Q3", "Q4". An array of 4
+     * strings indexed by the month divided by 3.
+     *
      * @serial
      */
     String standaloneShortQuarters[] = null;
 
     /**
-     * Standalone narrow quarter names. For example: "1", "2", "3", "4". An array
-     * of 4 strings indexed by the month divided by 3.
+     * Standalone narrow quarter names. For example: "1", "2", "3", "4". An array of 4 strings
+     * indexed by the month divided by 3.
+     *
      * @serial
      */
     String standaloneNarrowQuarters[] = null;
 
     /**
-     * Standalone full quarter names. For example: "1st Quarter", "2nd Quarter", "3rd Quarter",
-     * "4th Quarter". An array of 4 strings, indexed by the month divided by 3.
+     * Standalone full quarter names. For example: "1st Quarter", "2nd Quarter", "3rd Quarter", "4th
+     * Quarter". An array of 4 strings, indexed by the month divided by 3.
+     *
      * @serial
      */
     String standaloneQuarters[] = null;
 
     /**
-     * All leap month patterns, for example "{0}bis".
-     * An array of DT_MONTH_PATTERN_COUNT strings, indexed by the DT_LEAP_MONTH_PATTERN_XXX value.
+     * All leap month patterns, for example "{0}bis". An array of DT_MONTH_PATTERN_COUNT strings,
+     * indexed by the DT_LEAP_MONTH_PATTERN_XXX value.
+     *
      * @serial
      */
     String leapMonthPatterns[] = null;
 
-     /**
-     * Cyclic year names, for example: "jia-zi", "yi-chou", ... "gui-hai".
-     * An array of (normally) 60 strings, corresponding to cyclic years 1-60 (in Calendar YEAR field).
-     * Currently we only have data for format/abbreviated.
-     * For the others, just get from format/abbreviated, ignore set.
+    /**
+     * Cyclic year names, for example: "jia-zi", "yi-chou", ... "gui-hai". An array of (normally) 60
+     * strings, corresponding to cyclic years 1-60 (in Calendar YEAR field). Currently we only have
+     * data for format/abbreviated. For the others, just get from format/abbreviated, ignore set.
+     *
      * @serial
      */
     String shortYearNames[] = null;
 
-     /**
-     * Cyclic zodiac names, for example: "Rat", "Ox", "Tiger", etc.
-     * An array of (normally) 12 strings.
-     * Currently we only have data for format/abbreviated.
-     * For the others, just get from format/abbreviated, ignore set.
+    /**
+     * Cyclic zodiac names, for example: "Rat", "Ox", "Tiger", etc. An array of (normally) 12
+     * strings. Currently we only have data for format/abbreviated. For the others, just get from
+     * format/abbreviated, ignore set.
+     *
      * @serial
      */
     String shortZodiacNames[] = null;
 
-   /**
-     * Localized names of time zones in this locale.  This is a
-     * two-dimensional array of strings of size <em>n</em> by <em>m</em>,
-     * where <em>m</em> is at least 5 and up to 7.  Each of the <em>n</em> rows is an
-     * entry containing the localized names for a single <code>TimeZone</code>.
-     * Each such row contains (with <code>i</code> ranging from
-     * 0..<em>n</em>-1):
+    /**
+     * Localized names of time zones in this locale. This is a two-dimensional array of strings of
+     * size <em>n</em> by <em>m</em>, where <em>m</em> is at least 5 and up to 7. Each of the
+     * <em>n</em> rows is an entry containing the localized names for a single <code>TimeZone</code>
+     * . Each such row contains (with <code>i</code> ranging from 0..<em>n</em>-1):
+     *
      * <ul>
-     * <li><code>zoneStrings[i][0]</code> - time zone ID</li>
-     * <li><code>zoneStrings[i][1]</code> - long name of zone in standard
-     * time</li>
-     * <li><code>zoneStrings[i][2]</code> - short name of zone in
-     * standard time</li>
-     * <li><code>zoneStrings[i][3]</code> - long name of zone in daylight
-     * savings time</li>
-     * <li><code>zoneStrings[i][4]</code> - short name of zone in daylight
-     * savings time</li>
-     * <li><code>zoneStrings[i][5]</code> - location name of zone</li>
-     * <li><code>zoneStrings[i][6]</code> - long generic name of zone</li>
-     * <li><code>zoneStrings[i][7]</code> - short generic of zone</li>
-    *  </ul>
-     * The zone ID is <em>not</em> localized; it corresponds to the ID
-     * value associated with a system time zone object.  All other entries
-     * are localized names.  If a zone does not implement daylight savings
-     * time, the daylight savings time names are ignored.
-     * <em>Note:</em>CLDR 1.5 introduced metazone and its historical mappings.
-     * This simple two-dimensional array is no longer sufficient to represent
-     * localized names and its historic changes.  Since ICU 3.8.1, localized
-     * zone names extracted from ICU locale data is stored in a ZoneStringFormat
-     * instance.  But we still need to support the old way of customizing
-     * localized zone names, so we keep this field for the purpose.
+     *   <li><code>zoneStrings[i][0]</code> - time zone ID
+     *   <li><code>zoneStrings[i][1]</code> - long name of zone in standard time
+     *   <li><code>zoneStrings[i][2]</code> - short name of zone in standard time
+     *   <li><code>zoneStrings[i][3]</code> - long name of zone in daylight savings time
+     *   <li><code>zoneStrings[i][4]</code> - short name of zone in daylight savings time
+     *   <li><code>zoneStrings[i][5]</code> - location name of zone
+     *   <li><code>zoneStrings[i][6]</code> - long generic name of zone
+     *   <li><code>zoneStrings[i][7]</code> - short generic of zone
+     * </ul>
+     *
+     * The zone ID is <em>not</em> localized; it corresponds to the ID value associated with a
+     * system time zone object. All other entries are localized names. If a zone does not implement
+     * daylight savings time, the daylight savings time names are ignored. <em>Note:</em>CLDR 1.5
+     * introduced metazone and its historical mappings. This simple two-dimensional array is no
+     * longer sufficient to represent localized names and its historic changes. Since ICU 3.8.1,
+     * localized zone names extracted from ICU locale data is stored in a ZoneStringFormat instance.
+     * But we still need to support the old way of customizing localized zone names, so we keep this
+     * field for the purpose.
+     *
      * @see com.ibm.icu.util.TimeZone
      * @serial
      */
     private String zoneStrings[][] = null;
 
-     /**
-     * Unlocalized date-time pattern characters. For example: 'y', 'd', etc.
-     * All locales use the same unlocalized pattern characters.
+    /**
+     * Unlocalized date-time pattern characters. For example: 'y', 'd', etc. All locales use the
+     * same unlocalized pattern characters.
      */
     static final String patternChars = "GyMdkHmsSEDFwWahKzYeugAZvcLQqVUOXxrbB";
 
     /**
-     * Localized date-time pattern characters. For example, a locale may
-     * wish to use 'u' rather than 'y' to represent years in its date format
-     * pattern strings.
-     * This string must be exactly 18 characters long, with the index of
-     * the characters described by <code>DateFormat.ERA_FIELD</code>,
-     * <code>DateFormat.YEAR_FIELD</code>, etc.  Thus, if the string were
-     * "Xz...", then localized patterns would use 'X' for era and 'z' for year.
+     * Localized date-time pattern characters. For example, a locale may wish to use 'u' rather than
+     * 'y' to represent years in its date format pattern strings. This string must be exactly 18
+     * characters long, with the index of the characters described by <code>DateFormat.ERA_FIELD
+     * </code>, <code>DateFormat.YEAR_FIELD</code>, etc. Thus, if the string were "Xz...", then
+     * localized patterns would use 'X' for era and 'z' for year.
+     *
      * @serial
      */
     String localPatternChars = null;
 
     /**
-     * Localized names for abbreviated (== short) day periods.
-     * An array of strings, in the order of DayPeriod constants.
+     * Localized names for abbreviated (== short) day periods. An array of strings, in the order of
+     * DayPeriod constants.
      */
     String abbreviatedDayPeriods[] = null;
 
     /**
-     * Localized names for wide day periods.
-     * An array of strings, in the order of DayPeriod constants.
+     * Localized names for wide day periods. An array of strings, in the order of DayPeriod
+     * constants.
      */
     String wideDayPeriods[] = null;
 
     /**
-     * Localized names for narrow day periods.
-     * An array of strings, in the order of DayPeriod constants.
+     * Localized names for narrow day periods. An array of strings, in the order of DayPeriod
+     * constants.
      */
     String narrowDayPeriods[] = null;
 
     /**
-     * Localized names for standalone abbreviated (== short) day periods.
-     * An array of strings, in the order of DayPeriod constants.
+     * Localized names for standalone abbreviated (== short) day periods. An array of strings, in
+     * the order of DayPeriod constants.
      */
     String standaloneAbbreviatedDayPeriods[] = null;
 
     /**
-     * Localized names for standalone wide day periods.
-     * An array of strings, in the order of DayPeriod constants.
+     * Localized names for standalone wide day periods. An array of strings, in the order of
+     * DayPeriod constants.
      */
     String standaloneWideDayPeriods[] = null;
 
     /**
-     * Localized names for standalone narrow day periods.
-     * An array of strings, in the order of DayPeriod constants.
+     * Localized names for standalone narrow day periods. An array of strings, in the order of
+     * DayPeriod constants.
      */
     String standaloneNarrowDayPeriods[] = null;
 
@@ -693,16 +712,16 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     };
 
     /**
-     * {@icu} Constants for capitalization context usage types
-     * related to date formatting.
+     * {@icu} Constants for capitalization context usage types related to date formatting.
+     *
      * @internal
      */
     enum CapitalizationContextUsage {
         OTHER,
-        MONTH_FORMAT,     /* except narrow */
+        MONTH_FORMAT, /* except narrow */
         MONTH_STANDALONE, /* except narrow */
         MONTH_NARROW,
-        DAY_FORMAT,     /* except narrow */
+        DAY_FORMAT, /* except narrow */
         DAY_STANDALONE, /* except narrow */
         DAY_NARROW,
         ERA_WIDE,
@@ -714,36 +733,41 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         METAZONE_SHORT
     }
 
-    /** Map from resource key to CapitalizationContextUsage value
-     */
+    /** Map from resource key to CapitalizationContextUsage value */
     private static final Map<String, CapitalizationContextUsage> contextUsageTypeMap;
+
     static {
-        contextUsageTypeMap=new HashMap<>();
-        contextUsageTypeMap.put("month-format-except-narrow", CapitalizationContextUsage.MONTH_FORMAT);
-        contextUsageTypeMap.put("month-standalone-except-narrow", CapitalizationContextUsage.MONTH_STANDALONE);
-        contextUsageTypeMap.put("month-narrow",   CapitalizationContextUsage.MONTH_NARROW);
+        contextUsageTypeMap = new HashMap<>();
+        contextUsageTypeMap.put(
+                "month-format-except-narrow", CapitalizationContextUsage.MONTH_FORMAT);
+        contextUsageTypeMap.put(
+                "month-standalone-except-narrow", CapitalizationContextUsage.MONTH_STANDALONE);
+        contextUsageTypeMap.put("month-narrow", CapitalizationContextUsage.MONTH_NARROW);
         contextUsageTypeMap.put("day-format-except-narrow", CapitalizationContextUsage.DAY_FORMAT);
-        contextUsageTypeMap.put("day-standalone-except-narrow", CapitalizationContextUsage.DAY_STANDALONE);
-        contextUsageTypeMap.put("day-narrow",     CapitalizationContextUsage.DAY_NARROW);
-        contextUsageTypeMap.put("era-name",       CapitalizationContextUsage.ERA_WIDE);
-        contextUsageTypeMap.put("era-abbr",       CapitalizationContextUsage.ERA_ABBREV);
-        contextUsageTypeMap.put("era-narrow",     CapitalizationContextUsage.ERA_NARROW);
-        contextUsageTypeMap.put("zone-long",      CapitalizationContextUsage.ZONE_LONG);
-        contextUsageTypeMap.put("zone-short",     CapitalizationContextUsage.ZONE_SHORT);
-        contextUsageTypeMap.put("metazone-long",  CapitalizationContextUsage.METAZONE_LONG);
+        contextUsageTypeMap.put(
+                "day-standalone-except-narrow", CapitalizationContextUsage.DAY_STANDALONE);
+        contextUsageTypeMap.put("day-narrow", CapitalizationContextUsage.DAY_NARROW);
+        contextUsageTypeMap.put("era-name", CapitalizationContextUsage.ERA_WIDE);
+        contextUsageTypeMap.put("era-abbr", CapitalizationContextUsage.ERA_ABBREV);
+        contextUsageTypeMap.put("era-narrow", CapitalizationContextUsage.ERA_NARROW);
+        contextUsageTypeMap.put("zone-long", CapitalizationContextUsage.ZONE_LONG);
+        contextUsageTypeMap.put("zone-short", CapitalizationContextUsage.ZONE_SHORT);
+        contextUsageTypeMap.put("metazone-long", CapitalizationContextUsage.METAZONE_LONG);
         contextUsageTypeMap.put("metazone-short", CapitalizationContextUsage.METAZONE_SHORT);
     }
 
-     /**
-     * Capitalization transforms. For each usage type, the first array element indicates
-     * whether to titlecase for uiListOrMenu context, the second indicates whether to
-     * titlecase for stand-alone context.
+    /**
+     * Capitalization transforms. For each usage type, the first array element indicates whether to
+     * titlecase for uiListOrMenu context, the second indicates whether to titlecase for stand-alone
+     * context.
+     *
      * @serial
      */
-    Map<CapitalizationContextUsage,boolean[]> capitalization = null;
+    Map<CapitalizationContextUsage, boolean[]> capitalization = null;
 
     /**
      * Returns abbreviated era strings. For example: "AD" and "BC".
+     *
      * @return the era strings.
      * @stable ICU 2.0
      */
@@ -753,6 +777,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     /**
      * Sets abbreviated era strings. For example: "AD" and "BC".
+     *
      * @param newEras the new era strings.
      * @stable ICU 2.0
      */
@@ -762,6 +787,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     /**
      * {@icu} Returns full era name strings. For example: "Anno Domini" and "Before Christ".
+     *
      * @return the era strings.
      * @stable ICU 3.4
      */
@@ -771,6 +797,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     /**
      * {@icu} Sets full era name strings. For example: "Anno Domini" and "Before Christ".
+     *
      * @param newEraNames the new era strings.
      * @stable ICU 3.8
      */
@@ -780,6 +807,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     /**
      * {@icu} Returns narrow era name strings. For example: "A" and "B".
+     *
      * @return the narrow era strings.
      * @stable ICU 64
      */
@@ -789,6 +817,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     /**
      * {@icu} Sets narrow era name strings. For example: "A" and "B".
+     *
      * @param newNarrowEras the new narrow era strings.
      * @stable ICU 64
      */
@@ -798,6 +827,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     /**
      * Returns month strings. For example: "January", "February", etc.
+     *
      * @return the month strings.
      * @stable ICU 2.0
      */
@@ -807,43 +837,43 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     /**
      * Returns month strings. For example: "January", "February", etc.
-     * @param context    The month context, FORMAT or STANDALONE.
-     * @param width      The width or the returned month string,
-     *                   either WIDE, ABBREVIATED, or NARROW.
+     *
+     * @param context The month context, FORMAT or STANDALONE.
+     * @param width The width or the returned month string, either WIDE, ABBREVIATED, or NARROW.
      * @return the month strings.
      * @stable ICU 3.4
      */
     public String[] getMonths(int context, int width) {
-        String [] returnValue = null;
+        String[] returnValue = null;
         switch (context) {
-           case FORMAT :
-              switch(width) {
-                 case WIDE :
-                    returnValue = months;
-                    break;
-                 case ABBREVIATED :
-                 case SHORT : // no month data for this, defaults to ABBREVIATED
-                    returnValue = shortMonths;
-                    break;
-                 case NARROW :
-                    returnValue = narrowMonths;
-                    break;
-              }
-              break;
-           case STANDALONE :
-              switch(width) {
-                 case WIDE :
-                    returnValue = standaloneMonths;
-                    break;
-                 case ABBREVIATED :
-                 case SHORT : // no month data for this, defaults to ABBREVIATED
-                    returnValue = standaloneShortMonths;
-                    break;
-                 case NARROW :
-                    returnValue = standaloneNarrowMonths;
-                    break;
-              }
-              break;
+            case FORMAT:
+                switch (width) {
+                    case WIDE:
+                        returnValue = months;
+                        break;
+                    case ABBREVIATED:
+                    case SHORT: // no month data for this, defaults to ABBREVIATED
+                        returnValue = shortMonths;
+                        break;
+                    case NARROW:
+                        returnValue = narrowMonths;
+                        break;
+                }
+                break;
+            case STANDALONE:
+                switch (width) {
+                    case WIDE:
+                        returnValue = standaloneMonths;
+                        break;
+                    case ABBREVIATED:
+                    case SHORT: // no month data for this, defaults to ABBREVIATED
+                        returnValue = standaloneShortMonths;
+                        break;
+                    case NARROW:
+                        returnValue = standaloneNarrowMonths;
+                        break;
+                }
+                break;
         }
         if (returnValue == null) {
             throw new IllegalArgumentException("Bad context or width argument");
@@ -853,6 +883,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     /**
      * Sets month strings. For example: "January", "February", etc.
+     *
      * @param newMonths the new month strings.
      * @stable ICU 2.0
      */
@@ -862,49 +893,50 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     /**
      * Sets month strings. For example: "January", "February", etc.
+     *
      * @param newMonths the new month strings.
-     * @param context    The formatting context, FORMAT or STANDALONE.
-     * @param width      The width of the month string,
-     *                   either WIDE, ABBREVIATED, or NARROW.
+     * @param context The formatting context, FORMAT or STANDALONE.
+     * @param width The width of the month string, either WIDE, ABBREVIATED, or NARROW.
      * @stable ICU 3.8
      */
     public void setMonths(String[] newMonths, int context, int width) {
         switch (context) {
-           case FORMAT :
-              switch(width) {
-                 case WIDE :
-                    months = duplicate(newMonths);
-                    break;
-                 case ABBREVIATED :
-                    shortMonths = duplicate(newMonths);
-                    break;
-                 case NARROW :
-                    narrowMonths = duplicate(newMonths);
-                    break;
-                 default : // HANDLE SHORT, etc.
-                    break;
-              }
-              break;
-           case STANDALONE :
-              switch(width) {
-                 case WIDE :
-                    standaloneMonths = duplicate(newMonths);
-                    break;
-                 case ABBREVIATED :
-                    standaloneShortMonths = duplicate(newMonths);
-                    break;
-                 case NARROW :
-                    standaloneNarrowMonths = duplicate(newMonths);
-                    break;
-                 default : // HANDLE SHORT, etc.
-                    break;
-              }
-              break;
+            case FORMAT:
+                switch (width) {
+                    case WIDE:
+                        months = duplicate(newMonths);
+                        break;
+                    case ABBREVIATED:
+                        shortMonths = duplicate(newMonths);
+                        break;
+                    case NARROW:
+                        narrowMonths = duplicate(newMonths);
+                        break;
+                    default: // HANDLE SHORT, etc.
+                        break;
+                }
+                break;
+            case STANDALONE:
+                switch (width) {
+                    case WIDE:
+                        standaloneMonths = duplicate(newMonths);
+                        break;
+                    case ABBREVIATED:
+                        standaloneShortMonths = duplicate(newMonths);
+                        break;
+                    case NARROW:
+                        standaloneNarrowMonths = duplicate(newMonths);
+                        break;
+                    default: // HANDLE SHORT, etc.
+                        break;
+                }
+                break;
         }
     }
 
     /**
      * Returns short month strings. For example: "Jan", "Feb", etc.
+     *
      * @return the short month strings.
      * @stable ICU 2.0
      */
@@ -914,6 +946,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     /**
      * Sets short month strings. For example: "Jan", "Feb", etc.
+     *
      * @param newShortMonths the new short month strings.
      * @stable ICU 2.0
      */
@@ -923,8 +956,9 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     /**
      * Returns wide weekday strings. For example: "Sunday", "Monday", etc.
-     * @return the weekday strings. Use <code>Calendar.SUNDAY</code>,
-     * <code>Calendar.MONDAY</code>, etc. to index the result array.
+     *
+     * @return the weekday strings. Use <code>Calendar.SUNDAY</code>, <code>Calendar.MONDAY</code>,
+     *     etc. to index the result array.
      * @stable ICU 2.0
      */
     public String[] getWeekdays() {
@@ -933,48 +967,51 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     /**
      * Returns weekday strings. For example: "Sunday", "Monday", etc.
-     * @return the weekday strings. Use <code>Calendar.SUNDAY</code>,
-     * <code>Calendar.MONDAY</code>, etc. to index the result array.
-     * @param context    Formatting context, either FORMAT or STANDALONE.
-     * @param width      Width of strings to be returned, either
-     *                   WIDE, ABBREVIATED, SHORT, or NARROW
+     *
+     * @return the weekday strings. Use <code>Calendar.SUNDAY</code>, <code>Calendar.MONDAY</code>,
+     *     etc. to index the result array.
+     * @param context Formatting context, either FORMAT or STANDALONE.
+     * @param width Width of strings to be returned, either WIDE, ABBREVIATED, SHORT, or NARROW
      * @stable ICU 3.4
      */
     public String[] getWeekdays(int context, int width) {
-        String [] returnValue = null;
+        String[] returnValue = null;
         switch (context) {
-           case FORMAT :
-              switch(width) {
-                 case WIDE :
-                    returnValue = weekdays;
-                    break;
-                 case ABBREVIATED :
-                    returnValue = shortWeekdays;
-                    break;
-                 case SHORT :
-                    returnValue = (shorterWeekdays != null)? shorterWeekdays: shortWeekdays;
-                    break;
-                 case NARROW :
-                    returnValue = narrowWeekdays;
-                    break;
-              }
-              break;
-           case STANDALONE :
-              switch(width) {
-                 case WIDE :
-                    returnValue = standaloneWeekdays;
-                    break;
-                 case ABBREVIATED :
-                    returnValue = standaloneShortWeekdays;
-                    break;
-                 case SHORT :
-                    returnValue = (standaloneShorterWeekdays != null)? standaloneShorterWeekdays: standaloneShortWeekdays;
-                    break;
-                 case NARROW :
-                    returnValue = standaloneNarrowWeekdays;
-                    break;
-              }
-              break;
+            case FORMAT:
+                switch (width) {
+                    case WIDE:
+                        returnValue = weekdays;
+                        break;
+                    case ABBREVIATED:
+                        returnValue = shortWeekdays;
+                        break;
+                    case SHORT:
+                        returnValue = (shorterWeekdays != null) ? shorterWeekdays : shortWeekdays;
+                        break;
+                    case NARROW:
+                        returnValue = narrowWeekdays;
+                        break;
+                }
+                break;
+            case STANDALONE:
+                switch (width) {
+                    case WIDE:
+                        returnValue = standaloneWeekdays;
+                        break;
+                    case ABBREVIATED:
+                        returnValue = standaloneShortWeekdays;
+                        break;
+                    case SHORT:
+                        returnValue =
+                                (standaloneShorterWeekdays != null)
+                                        ? standaloneShorterWeekdays
+                                        : standaloneShortWeekdays;
+                        break;
+                    case NARROW:
+                        returnValue = standaloneNarrowWeekdays;
+                        break;
+                }
+                break;
         }
         if (returnValue == null) {
             throw new IllegalArgumentException("Bad context or width argument");
@@ -984,54 +1021,54 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     /**
      * Sets weekday strings. For example: "Sunday", "Monday", etc.
+     *
      * @param newWeekdays The new weekday strings.
-     * @param context     The formatting context, FORMAT or STANDALONE.
-     * @param width       The width of the strings,
-     *                    either WIDE, ABBREVIATED, SHORT, or NARROW.
+     * @param context The formatting context, FORMAT or STANDALONE.
+     * @param width The width of the strings, either WIDE, ABBREVIATED, SHORT, or NARROW.
      * @stable ICU 3.8
      */
     public void setWeekdays(String[] newWeekdays, int context, int width) {
         switch (context) {
-           case FORMAT :
-              switch(width) {
-                 case WIDE :
-                    weekdays = duplicate(newWeekdays);
-                    break;
-                 case ABBREVIATED :
-                    shortWeekdays = duplicate(newWeekdays);
-                    break;
-                 case SHORT :
-                    shorterWeekdays = duplicate(newWeekdays);
-                    break;
-                 case NARROW :
-                    narrowWeekdays = duplicate(newWeekdays);
-                    break;
-              }
-              break;
-           case STANDALONE :
-              switch(width) {
-                 case WIDE :
-                    standaloneWeekdays = duplicate(newWeekdays);
-                    break;
-                 case ABBREVIATED :
-                    standaloneShortWeekdays = duplicate(newWeekdays);
-                    break;
-                 case SHORT :
-                    standaloneShorterWeekdays = duplicate(newWeekdays);
-                    break;
-                 case NARROW :
-                    standaloneNarrowWeekdays = duplicate(newWeekdays);
-                    break;
-              }
-              break;
+            case FORMAT:
+                switch (width) {
+                    case WIDE:
+                        weekdays = duplicate(newWeekdays);
+                        break;
+                    case ABBREVIATED:
+                        shortWeekdays = duplicate(newWeekdays);
+                        break;
+                    case SHORT:
+                        shorterWeekdays = duplicate(newWeekdays);
+                        break;
+                    case NARROW:
+                        narrowWeekdays = duplicate(newWeekdays);
+                        break;
+                }
+                break;
+            case STANDALONE:
+                switch (width) {
+                    case WIDE:
+                        standaloneWeekdays = duplicate(newWeekdays);
+                        break;
+                    case ABBREVIATED:
+                        standaloneShortWeekdays = duplicate(newWeekdays);
+                        break;
+                    case SHORT:
+                        standaloneShorterWeekdays = duplicate(newWeekdays);
+                        break;
+                    case NARROW:
+                        standaloneNarrowWeekdays = duplicate(newWeekdays);
+                        break;
+                }
+                break;
         }
     }
 
     /**
      * Sets wide weekday strings. For example: "Sunday", "Monday", etc.
-     * @param newWeekdays the new weekday strings. The array should
-     * be indexed by <code>Calendar.SUNDAY</code>,
-     * <code>Calendar.MONDAY</code>, etc.
+     *
+     * @param newWeekdays the new weekday strings. The array should be indexed by <code>
+     *     Calendar.SUNDAY</code>, <code>Calendar.MONDAY</code>, etc.
      * @stable ICU 2.0
      */
     public void setWeekdays(String[] newWeekdays) {
@@ -1039,11 +1076,11 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
-     * Returns abbreviated weekday strings; for example: "Sun", "Mon", etc.
-     * (Note: the method name is misleading; it does not get the CLDR-style
-     * "short" weekday strings, e.g. "Su", "Mo", etc.)
-     * @return the abbreviated weekday strings. Use <code>Calendar.SUNDAY</code>,
-     * <code>Calendar.MONDAY</code>, etc. to index the result array.
+     * Returns abbreviated weekday strings; for example: "Sun", "Mon", etc. (Note: the method name
+     * is misleading; it does not get the CLDR-style "short" weekday strings, e.g. "Su", "Mo", etc.)
+     *
+     * @return the abbreviated weekday strings. Use <code>Calendar.SUNDAY</code>, <code>
+     *     Calendar.MONDAY</code>, etc. to index the result array.
      * @stable ICU 2.0
      */
     public String[] getShortWeekdays() {
@@ -1051,57 +1088,57 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
-     * Sets abbreviated weekday strings; for example: "Sun", "Mon", etc.
-     * (Note: the method name is misleading; it does not set the CLDR-style
-     * "short" weekday strings, e.g. "Su", "Mo", etc.)
-     * @param newAbbrevWeekdays the new abbreviated weekday strings. The array should
-     * be indexed by <code>Calendar.SUNDAY</code>,
-     * <code>Calendar.MONDAY</code>, etc.
+     * Sets abbreviated weekday strings; for example: "Sun", "Mon", etc. (Note: the method name is
+     * misleading; it does not set the CLDR-style "short" weekday strings, e.g. "Su", "Mo", etc.)
+     *
+     * @param newAbbrevWeekdays the new abbreviated weekday strings. The array should be indexed by
+     *     <code>Calendar.SUNDAY</code>, <code>Calendar.MONDAY</code>, etc.
      * @stable ICU 2.0
      */
     public void setShortWeekdays(String[] newAbbrevWeekdays) {
         shortWeekdays = duplicate(newAbbrevWeekdays);
     }
+
     /**
      * {@icu} Returns quarter strings. For example: "1st Quarter", "2nd Quarter", etc.
-     * @param context    The quarter context, FORMAT or STANDALONE.
-     * @param width      The width or the returned quarter string,
-     *                   WIDE, NARROW, or ABBREVIATED.
+     *
+     * @param context The quarter context, FORMAT or STANDALONE.
+     * @param width The width or the returned quarter string, WIDE, NARROW, or ABBREVIATED.
      * @return the quarter strings.
      * @stable ICU 3.6
      */
     public String[] getQuarters(int context, int width) {
-        String [] returnValue = null;
+        String[] returnValue = null;
         switch (context) {
-           case FORMAT :
-              switch(width) {
-                 case WIDE :
-                    returnValue = quarters;
-                    break;
-                 case ABBREVIATED :
-                 case SHORT : // no quarter data for this, defaults to ABBREVIATED
-                    returnValue = shortQuarters;
-                    break;
-                 case NARROW :
-                     returnValue = narrowQuarters;
-                     break;
-              }
-              break;
+            case FORMAT:
+                switch (width) {
+                    case WIDE:
+                        returnValue = quarters;
+                        break;
+                    case ABBREVIATED:
+                    case SHORT: // no quarter data for this, defaults to ABBREVIATED
+                        returnValue = shortQuarters;
+                        break;
+                    case NARROW:
+                        returnValue = narrowQuarters;
+                        break;
+                }
+                break;
 
-           case STANDALONE :
-              switch(width) {
-                 case WIDE :
-                    returnValue = standaloneQuarters;
-                    break;
-                 case ABBREVIATED :
-                 case SHORT : // no quarter data for this, defaults to ABBREVIATED
-                    returnValue = standaloneShortQuarters;
-                    break;
-                 case NARROW:
-                     returnValue = standaloneNarrowQuarters;
-                     break;
-              }
-              break;
+            case STANDALONE:
+                switch (width) {
+                    case WIDE:
+                        returnValue = standaloneQuarters;
+                        break;
+                    case ABBREVIATED:
+                    case SHORT: // no quarter data for this, defaults to ABBREVIATED
+                        returnValue = standaloneShortQuarters;
+                        break;
+                    case NARROW:
+                        returnValue = standaloneNarrowQuarters;
+                        break;
+                }
+                break;
         }
         if (returnValue == null) {
             throw new IllegalArgumentException("Bad context or width argument");
@@ -1111,54 +1148,54 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     /**
      * {@icu} Sets quarter strings. For example: "1st Quarter", "2nd Quarter", etc.
+     *
      * @param newQuarters the new quarter strings.
-     * @param context    The formatting context, FORMAT or STANDALONE.
-     * @param width      The width of the quarter string,
-     *                   WIDE, NARROW, or ABBREVIATED.
+     * @param context The formatting context, FORMAT or STANDALONE.
+     * @param width The width of the quarter string, WIDE, NARROW, or ABBREVIATED.
      * @stable ICU 3.8
      */
     public void setQuarters(String[] newQuarters, int context, int width) {
         switch (context) {
-           case FORMAT :
-              switch(width) {
-                 case WIDE :
-                    quarters = duplicate(newQuarters);
-                    break;
-                 case ABBREVIATED :
-                    shortQuarters = duplicate(newQuarters);
-                    break;
-                 case NARROW :
-                    narrowQuarters = duplicate(newQuarters);
-                    break;
-                 default : // HANDLE SHORT, etc.
-                    break;
-              }
-              break;
-           case STANDALONE :
-              switch(width) {
-                 case WIDE :
-                    standaloneQuarters = duplicate(newQuarters);
-                    break;
-                 case ABBREVIATED :
-                    standaloneShortQuarters = duplicate(newQuarters);
-                    break;
-                 case NARROW :
-                    standaloneNarrowQuarters = duplicate(newQuarters);
-                    break;
-                 default : // HANDLE SHORT, etc.
-                    break;
-              }
-              break;
+            case FORMAT:
+                switch (width) {
+                    case WIDE:
+                        quarters = duplicate(newQuarters);
+                        break;
+                    case ABBREVIATED:
+                        shortQuarters = duplicate(newQuarters);
+                        break;
+                    case NARROW:
+                        narrowQuarters = duplicate(newQuarters);
+                        break;
+                    default: // HANDLE SHORT, etc.
+                        break;
+                }
+                break;
+            case STANDALONE:
+                switch (width) {
+                    case WIDE:
+                        standaloneQuarters = duplicate(newQuarters);
+                        break;
+                    case ABBREVIATED:
+                        standaloneShortQuarters = duplicate(newQuarters);
+                        break;
+                    case NARROW:
+                        standaloneNarrowQuarters = duplicate(newQuarters);
+                        break;
+                    default: // HANDLE SHORT, etc.
+                        break;
+                }
+                break;
         }
     }
 
     /**
-     * Returns cyclic year name strings if the calendar has them,
-     * for example: "jia-zi", "yi-chou", etc.
-     * @param context   The usage context: FORMAT, STANDALONE.
-     * @param width     The requested name width: WIDE, ABBREVIATED, SHORT, NARROW.
-     * @return          The year name strings, or null if they are not
-     *                  available for this calendar.
+     * Returns cyclic year name strings if the calendar has them, for example: "jia-zi", "yi-chou",
+     * etc.
+     *
+     * @param context The usage context: FORMAT, STANDALONE.
+     * @param width The requested name width: WIDE, ABBREVIATED, SHORT, NARROW.
+     * @return The year name strings, or null if they are not available for this calendar.
      * @stable ICU 54
      */
     public String[] getYearNames(int context, int width) {
@@ -1171,9 +1208,11 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     /**
      * Sets cyclic year name strings, for example: "jia-zi", "yi-chou", etc.
+     *
      * @param yearNames The new cyclic year name strings.
-     * @param context   The usage context: FORMAT, STANDALONE (currently only FORMAT is supported).
-     * @param width     The name width: WIDE, ABBREVIATED, NARROW (currently only ABBREVIATED is supported).
+     * @param context The usage context: FORMAT, STANDALONE (currently only FORMAT is supported).
+     * @param width The name width: WIDE, ABBREVIATED, NARROW (currently only ABBREVIATED is
+     *     supported).
      * @stable ICU 54
      */
     public void setYearNames(String[] yearNames, int context, int width) {
@@ -1183,12 +1222,12 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
-     * Returns calendar zodiac name strings if the calendar has them,
-     * for example: "Rat", "Ox", "Tiger", etc.
-     * @param context   The usage context: FORMAT, STANDALONE.
-     * @param width     The requested name width: WIDE, ABBREVIATED, SHORT, NARROW.
-     * @return          The zodiac name strings, or null if they are not
-     *                  available for this calendar.
+     * Returns calendar zodiac name strings if the calendar has them, for example: "Rat", "Ox",
+     * "Tiger", etc.
+     *
+     * @param context The usage context: FORMAT, STANDALONE.
+     * @param width The requested name width: WIDE, ABBREVIATED, SHORT, NARROW.
+     * @return The zodiac name strings, or null if they are not available for this calendar.
      * @stable ICU 54
      */
     public String[] getZodiacNames(int context, int width) {
@@ -1201,9 +1240,11 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     /**
      * Sets calendar zodiac name strings, for example: "Rat", "Ox", "Tiger", etc.
-     * @param zodiacNames   The new zodiac name strings.
-     * @param context   The usage context: FORMAT, STANDALONE (currently only FORMAT is supported).
-     * @param width     The name width: WIDE, ABBREVIATED, NARROW (currently only ABBREVIATED is supported).
+     *
+     * @param zodiacNames The new zodiac name strings.
+     * @param context The usage context: FORMAT, STANDALONE (currently only FORMAT is supported).
+     * @param width The name width: WIDE, ABBREVIATED, NARROW (currently only ABBREVIATED is
+     *     supported).
      * @stable ICU 54
      */
     public void setZodiacNames(String[] zodiacNames, int context, int width) {
@@ -1213,12 +1254,11 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
-     * Returns the appropriate leapMonthPattern if the calendar has them,
-     * for example: "{0}bis"
-     * @param context   The usage context: FORMAT, STANDALONE, NUMERIC.
-     * @param width     The requested pattern width: WIDE, ABBREVIATED, SHORT, NARROW.
-     * @return          The leapMonthPattern, or null if not available for
-     *                  this calendar.
+     * Returns the appropriate leapMonthPattern if the calendar has them, for example: "{0}bis"
+     *
+     * @param context The usage context: FORMAT, STANDALONE, NUMERIC.
+     * @param width The requested pattern width: WIDE, ABBREVIATED, SHORT, NARROW.
+     * @return The leapMonthPattern, or null if not available for this calendar.
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -1227,37 +1267,37 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         if (leapMonthPatterns != null) {
             int leapMonthPatternIndex = -1;
             switch (context) {
-               case FORMAT :
-                  switch(width) {
-                     case WIDE :
-                        leapMonthPatternIndex = DT_LEAP_MONTH_PATTERN_FORMAT_WIDE;
-                        break;
-                     case ABBREVIATED :
-                     case SHORT : // no month data for this, defaults to ABBREVIATED
-                        leapMonthPatternIndex = DT_LEAP_MONTH_PATTERN_FORMAT_ABBREV;
-                        break;
-                     case NARROW :
-                        leapMonthPatternIndex = DT_LEAP_MONTH_PATTERN_FORMAT_NARROW;
-                        break;
-                  }
-                  break;
-               case STANDALONE :
-                  switch(width) {
-                     case WIDE :
-                        leapMonthPatternIndex = DT_LEAP_MONTH_PATTERN_STANDALONE_WIDE;
-                        break;
-                     case ABBREVIATED :
-                     case SHORT : // no month data for this, defaults to ABBREVIATED
-                        leapMonthPatternIndex = DT_LEAP_MONTH_PATTERN_FORMAT_ABBREV;
-                        break;
-                     case NARROW :
-                        leapMonthPatternIndex = DT_LEAP_MONTH_PATTERN_STANDALONE_NARROW;
-                        break;
-                  }
-                  break;
-               case NUMERIC :
-                  leapMonthPatternIndex = DT_LEAP_MONTH_PATTERN_NUMERIC;
-                  break;
+                case FORMAT:
+                    switch (width) {
+                        case WIDE:
+                            leapMonthPatternIndex = DT_LEAP_MONTH_PATTERN_FORMAT_WIDE;
+                            break;
+                        case ABBREVIATED:
+                        case SHORT: // no month data for this, defaults to ABBREVIATED
+                            leapMonthPatternIndex = DT_LEAP_MONTH_PATTERN_FORMAT_ABBREV;
+                            break;
+                        case NARROW:
+                            leapMonthPatternIndex = DT_LEAP_MONTH_PATTERN_FORMAT_NARROW;
+                            break;
+                    }
+                    break;
+                case STANDALONE:
+                    switch (width) {
+                        case WIDE:
+                            leapMonthPatternIndex = DT_LEAP_MONTH_PATTERN_STANDALONE_WIDE;
+                            break;
+                        case ABBREVIATED:
+                        case SHORT: // no month data for this, defaults to ABBREVIATED
+                            leapMonthPatternIndex = DT_LEAP_MONTH_PATTERN_FORMAT_ABBREV;
+                            break;
+                        case NARROW:
+                            leapMonthPatternIndex = DT_LEAP_MONTH_PATTERN_STANDALONE_NARROW;
+                            break;
+                    }
+                    break;
+                case NUMERIC:
+                    leapMonthPatternIndex = DT_LEAP_MONTH_PATTERN_NUMERIC;
+                    break;
             }
             if (leapMonthPatternIndex < 0) {
                 throw new IllegalArgumentException("Bad context or width argument");
@@ -1269,9 +1309,10 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     /**
      * Sets a leapMonthPattern, for example: "{0}bis"
-     * @param leapMonthPattern  The new leapMonthPattern.
-     * @param context   The usage context: FORMAT, STANDALONE, NUMERIC.
-     * @param width     The name width: WIDE, ABBREVIATED, NARROW.
+     *
+     * @param leapMonthPattern The new leapMonthPattern.
+     * @param context The usage context: FORMAT, STANDALONE, NUMERIC.
+     * @param width The name width: WIDE, ABBREVIATED, NARROW.
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -1280,41 +1321,41 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         if (leapMonthPatterns != null) {
             int leapMonthPatternIndex = -1;
             switch (context) {
-               case FORMAT :
-                  switch(width) {
-                     case WIDE :
-                        leapMonthPatternIndex = DT_LEAP_MONTH_PATTERN_FORMAT_WIDE;
-                        break;
-                     case ABBREVIATED :
-                        leapMonthPatternIndex = DT_LEAP_MONTH_PATTERN_FORMAT_ABBREV;
-                        break;
-                     case NARROW :
-                        leapMonthPatternIndex = DT_LEAP_MONTH_PATTERN_FORMAT_NARROW;
-                        break;
-                     default : // HANDLE SHORT, etc.
-                        break;
-                  }
-                  break;
-               case STANDALONE :
-                  switch(width) {
-                     case WIDE :
-                        leapMonthPatternIndex = DT_LEAP_MONTH_PATTERN_STANDALONE_WIDE;
-                        break;
-                     case ABBREVIATED :
-                        leapMonthPatternIndex = DT_LEAP_MONTH_PATTERN_FORMAT_ABBREV;
-                        break;
-                     case NARROW :
-                        leapMonthPatternIndex = DT_LEAP_MONTH_PATTERN_STANDALONE_NARROW;
-                        break;
-                     default : // HANDLE SHORT, etc.
-                        break;
-                  }
-                  break;
-               case NUMERIC :
-                  leapMonthPatternIndex = DT_LEAP_MONTH_PATTERN_NUMERIC;
-                  break;
-               default :
-                  break;
+                case FORMAT:
+                    switch (width) {
+                        case WIDE:
+                            leapMonthPatternIndex = DT_LEAP_MONTH_PATTERN_FORMAT_WIDE;
+                            break;
+                        case ABBREVIATED:
+                            leapMonthPatternIndex = DT_LEAP_MONTH_PATTERN_FORMAT_ABBREV;
+                            break;
+                        case NARROW:
+                            leapMonthPatternIndex = DT_LEAP_MONTH_PATTERN_FORMAT_NARROW;
+                            break;
+                        default: // HANDLE SHORT, etc.
+                            break;
+                    }
+                    break;
+                case STANDALONE:
+                    switch (width) {
+                        case WIDE:
+                            leapMonthPatternIndex = DT_LEAP_MONTH_PATTERN_STANDALONE_WIDE;
+                            break;
+                        case ABBREVIATED:
+                            leapMonthPatternIndex = DT_LEAP_MONTH_PATTERN_FORMAT_ABBREV;
+                            break;
+                        case NARROW:
+                            leapMonthPatternIndex = DT_LEAP_MONTH_PATTERN_STANDALONE_NARROW;
+                            break;
+                        default: // HANDLE SHORT, etc.
+                            break;
+                    }
+                    break;
+                case NUMERIC:
+                    leapMonthPatternIndex = DT_LEAP_MONTH_PATTERN_NUMERIC;
+                    break;
+                default:
+                    break;
             }
             if (leapMonthPatternIndex >= 0) {
                 leapMonthPatterns[leapMonthPatternIndex] = leapMonthPattern;
@@ -1324,6 +1365,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     /**
      * Returns am/pm strings. For example: "AM" and "PM".
+     *
      * @return the weekday strings.
      * @stable ICU 2.0
      */
@@ -1333,6 +1375,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     /**
      * Sets am/pm strings. For example: "AM" and "PM".
+     *
      * @param newAmpms the new ampm strings.
      * @stable ICU 2.0
      */
@@ -1342,47 +1385,48 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     /**
      * Returns am/pm strings with the specified width. For example: "AM" and "PM".
-     * @param context  The usage context. Currently ignored; FORMAT names always returned.
-     * @param width    The width or the AM/PM strings,
-     *                 either WIDE, ABBREVIATED, or NARROW.
+     *
+     * @param context The usage context. Currently ignored; FORMAT names always returned.
+     * @param width The width or the AM/PM strings, either WIDE, ABBREVIATED, or NARROW.
      * @return the weekday strings.
      * @draft ICU 78
      */
     public String[] getAmPmStrings(int context, int width) {
         switch (width) {
-        case WIDE:
-            return duplicate(ampmsWide);
-        case NARROW:
-            return duplicate(ampmsNarrow);
-        default:
-            return duplicate(ampms);
+            case WIDE:
+                return duplicate(ampmsWide);
+            case NARROW:
+                return duplicate(ampmsNarrow);
+            default:
+                return duplicate(ampms);
         }
     }
 
     /**
      * Sets am/pm strings with the specified width. For example: "AM" and "PM".
+     *
      * @param newAmpms the new ampm strings.
-     * @param context  The usage context. Currently ignored; always sets FORMAT names.
-     * @param width    The width or the AM/PM strings,
-     *                 either WIDE, ABBREVIATED, or NARROW.
+     * @param context The usage context. Currently ignored; always sets FORMAT names.
+     * @param width The width or the AM/PM strings, either WIDE, ABBREVIATED, or NARROW.
      * @draft ICU 78
      */
     public void setAmPmStrings(String[] newAmpms, int context, int width) {
         switch (width) {
-        case WIDE:
-            ampmsWide = duplicate(newAmpms);
-            break;
-        case NARROW:
-            ampmsNarrow = duplicate(newAmpms);
-            break;
-        default:
-            ampms = duplicate(newAmpms);
-            break;
+            case WIDE:
+                ampmsWide = duplicate(newAmpms);
+                break;
+            case NARROW:
+                ampmsNarrow = duplicate(newAmpms);
+                break;
+            default:
+                ampms = duplicate(newAmpms);
+                break;
         }
     }
 
     /**
      * Returns the time separator string. For example: ":".
+     *
      * @return the time separator string.
      * @internal
      * @deprecated This API is ICU internal only.
@@ -1394,6 +1438,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     /**
      * Sets the time separator string. For example: ":".
+     *
      * @param newTimeSeparator the new time separator string.
      * @internal
      * @deprecated This API is ICU internal only.
@@ -1405,26 +1450,27 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     /**
      * Returns time zone strings.
-     * <p>
-     * The array returned by this API is a two dimensional String array and
-     * each row contains at least following strings:
+     *
+     * <p>The array returned by this API is a two dimensional String array and each row contains at
+     * least following strings:
+     *
      * <ul>
-     * <li>ZoneStrings[n][0] - System time zone ID
-     * <li>ZoneStrings[n][1] - Long standard time display name
-     * <li>ZoneStrings[n][2] - Short standard time display name
-     * <li>ZoneStrings[n][3] - Long daylight saving time display name
-     * <li>ZoneStrings[n][4] - Short daylight saving time display name
+     *   <li>ZoneStrings[n][0] - System time zone ID
+     *   <li>ZoneStrings[n][1] - Long standard time display name
+     *   <li>ZoneStrings[n][2] - Short standard time display name
+     *   <li>ZoneStrings[n][3] - Long daylight saving time display name
+     *   <li>ZoneStrings[n][4] - Short daylight saving time display name
      * </ul>
-     * When a localized display name is not available, the corresponding
-     * array element will be <code>null</code>.
-     * <p>
-     * <b>Note</b>: ICU implements the time zone display name formatting algorithm
-     * specified by <a href="http://www.unicode.org/reports/tr35/">UTS#35 Unicode
-     * Locale Data Markup Language(LDML)</a>. The algorithm supports historic
-     * display name changes and various different types of names not available in
-     * {@link java.text.DateFormatSymbols#getZoneStrings()}. For accessing the full
-     * set of time zone string data used by ICU implementation, you should use
-     * {@link TimeZoneNames} APIs instead.
+     *
+     * When a localized display name is not available, the corresponding array element will be
+     * <code>null</code>.
+     *
+     * <p><b>Note</b>: ICU implements the time zone display name formatting algorithm specified by
+     * <a href="http://www.unicode.org/reports/tr35/">UTS#35 Unicode Locale Data Markup
+     * Language(LDML)</a>. The algorithm supports historic display name changes and various
+     * different types of names not available in {@link
+     * java.text.DateFormatSymbols#getZoneStrings()}. For accessing the full set of time zone string
+     * data used by ICU implementation, you should use {@link TimeZoneNames} APIs instead.
      *
      * @return the time zone strings.
      * @stable ICU 2.0
@@ -1459,16 +1505,13 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     /**
      * Sets time zone strings.
-     * <p>
-     * <b>Note</b>: {@link SimpleDateFormat} no longer uses the
-     * zone strings stored in a <code>DateFormatSymbols</code>.
-     * Therefore, the time zone strings set by this method have
-     * no effects in an instance of <code>SimpleDateFormat</code>
-     * for formatting time zones. If you want to customize time
-     * zone display names formatted by <code>SimpleDateFormat</code>,
-     * you should customize {@link TimeZoneFormat} and set the
-     * instance by {@link SimpleDateFormat#setTimeZoneFormat(TimeZoneFormat)}
-     * instead.
+     *
+     * <p><b>Note</b>: {@link SimpleDateFormat} no longer uses the zone strings stored in a <code>
+     * DateFormatSymbols</code>. Therefore, the time zone strings set by this method have no effects
+     * in an instance of <code>SimpleDateFormat</code> for formatting time zones. If you want to
+     * customize time zone display names formatted by <code>SimpleDateFormat</code>, you should
+     * customize {@link TimeZoneFormat} and set the instance by {@link
+     * SimpleDateFormat#setTimeZoneFormat(TimeZoneFormat)} instead.
      *
      * @param newZoneStrings the new time zone strings.
      * @stable ICU 2.0
@@ -1480,9 +1523,10 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     /**
      * Returns localized date-time pattern characters. For example: 'u', 't', etc.
      *
-     * <p>Note: ICU no longer provides localized date-time pattern characters for a locale
-     * starting ICU 3.8.  This method returns the non-localized date-time pattern
-     * characters unless user defined localized data is set by setLocalPatternChars.
+     * <p>Note: ICU no longer provides localized date-time pattern characters for a locale starting
+     * ICU 3.8. This method returns the non-localized date-time pattern characters unless user
+     * defined localized data is set by setLocalPatternChars.
+     *
      * @return the localized date-time pattern characters.
      * @stable ICU 2.0
      */
@@ -1492,8 +1536,8 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     /**
      * Sets localized date-time pattern characters. For example: 'u', 't', etc.
-     * @param newLocalPatternChars the new localized date-time
-     * pattern characters.
+     *
+     * @param newLocalPatternChars the new localized date-time pattern characters.
      * @stable ICU 2.0
      */
     public void setLocalPatternChars(String newLocalPatternChars) {
@@ -1502,21 +1546,21 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     /**
      * Overrides clone.
+     *
      * @stable ICU 2.0
      */
     @Override
-    public DateFormatSymbols clone()
-    {
+    public DateFormatSymbols clone() {
         try {
-            return (DateFormatSymbols)super.clone();
+            return (DateFormatSymbols) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new ICUCloneNotSupportedException(e);
         }
     }
 
     /**
-     * Override hashCode.
-     * Generates a hash code for the DateFormatSymbols object.
+     * Override hashCode. Generates a hash code for the DateFormatSymbols object.
+     *
      * @stable ICU 2.0
      */
     @Override
@@ -1527,11 +1571,11 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     /**
      * Overrides equals.
+     *
      * @stable ICU 2.0
      */
     @Override
-    public boolean equals(Object obj)
-    {
+    public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         DateFormatSymbols that = (DateFormatSymbols) obj;
@@ -1558,7 +1602,8 @@ public class DateFormatSymbols implements Serializable, Cloneable {
                 && Utility.arrayEquals(abbreviatedDayPeriods, that.abbreviatedDayPeriods)
                 && Utility.arrayEquals(wideDayPeriods, that.wideDayPeriods)
                 && Utility.arrayEquals(narrowDayPeriods, that.narrowDayPeriods)
-                && Utility.arrayEquals(standaloneAbbreviatedDayPeriods, that.standaloneAbbreviatedDayPeriods)
+                && Utility.arrayEquals(
+                        standaloneAbbreviatedDayPeriods, that.standaloneAbbreviatedDayPeriods)
                 && Utility.arrayEquals(standaloneWideDayPeriods, that.standaloneWideDayPeriods)
                 && Utility.arrayEquals(standaloneNarrowDayPeriods, that.standaloneNarrowDayPeriods)
                 && Utility.arrayEquals(timeSeparator, that.timeSeparator)
@@ -1567,46 +1612,43 @@ public class DateFormatSymbols implements Serializable, Cloneable {
                 // too bad there is no way to get the current codes!
                 // I thought canonicalize() would map the codes but .. alas! it doesn't.
                 && requestedLocale.getDisplayName().equals(that.requestedLocale.getDisplayName())
-                && Utility.arrayEquals(localPatternChars,
-                                       that.localPatternChars));
+                && Utility.arrayEquals(localPatternChars, that.localPatternChars));
     }
 
     // =======================privates===============================
 
-    /**
-     * Useful constant for defining timezone offsets.
-     */
-    static final int millisPerHour = 60*60*1000;
+    /** Useful constant for defining timezone offsets. */
+    static final int millisPerHour = 60 * 60 * 1000;
 
     // DateFormatSymbols cache
     private static CacheBase<String, DateFormatSymbols, ULocale> DFSCACHE =
-        new SoftCache<String, DateFormatSymbols, ULocale>() {
-            @Override
-            protected DateFormatSymbols createInstance(String key, ULocale locale) {
-                // Extract the type string from the key.
-                // Otherwise we would have to create a pair object that
-                // carries both the locale and the type.
-                int typeStart = key.indexOf('+') + 1;
-                int typeLimit = key.indexOf('+', typeStart);
-                if (typeLimit < 0) {
-                    // no numbers keyword value
-                    typeLimit = key.length();
+            new SoftCache<String, DateFormatSymbols, ULocale>() {
+                @Override
+                protected DateFormatSymbols createInstance(String key, ULocale locale) {
+                    // Extract the type string from the key.
+                    // Otherwise we would have to create a pair object that
+                    // carries both the locale and the type.
+                    int typeStart = key.indexOf('+') + 1;
+                    int typeLimit = key.indexOf('+', typeStart);
+                    if (typeLimit < 0) {
+                        // no numbers keyword value
+                        typeLimit = key.length();
+                    }
+                    String type = key.substring(typeStart, typeLimit);
+                    return new DateFormatSymbols(locale, null, type);
                 }
-                String type = key.substring(typeStart, typeLimit);
-                return new DateFormatSymbols(locale, null, type);
-            }
-        };
+            };
 
     /**
      * Initializes format symbols for the locale and calendar type
+     *
      * @param desiredLocale The locale whose symbols are desired.
-     * @param type          The calendar type whose date format symbols are desired.
+     * @param type The calendar type whose date format symbols are desired.
      * @stable ICU 3.0
      */
-    //TODO: This protected seems to be marked as @stable accidentally.
+    // TODO: This protected seems to be marked as @stable accidentally.
     // We may need to deescalate this API to @internal.
-    protected void initializeData(ULocale desiredLocale, String type)
-    {
+    protected void initializeData(ULocale desiredLocale, String type) {
         String key = desiredLocale.getBaseName() + '+' + type;
         String ns = desiredLocale.getKeywordValue("numbers");
         if (ns != null && ns.length() > 0) {
@@ -1619,7 +1661,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     /**
      * Initializes format symbols using another instance.
      *
-     * TODO Clean up initialization methods for subclasses
+     * <p>TODO Clean up initialization methods for subclasses
      */
     void initializeData(DateFormatSymbols dfs) {
         this.eras = dfs.eras;
@@ -1669,10 +1711,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         this.requestedLocale = dfs.requestedLocale;
     }
 
-
-    /**
-     * Sink to enumerate the calendar data
-     */
+    /** Sink to enumerate the calendar data */
     private static final class CalendarDataSink extends UResource.Sink {
 
         // Data structures to store resources from the resource bundle
@@ -1690,21 +1729,15 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         // Alias' relative path populated when an alias is read
         private String aliasRelativePath;
 
-        /**
-         * Initializes CalendarDataSink with default values
-         */
-        CalendarDataSink() { }
+        /** Initializes CalendarDataSink with default values */
+        CalendarDataSink() {}
 
-        /**
-         * Configure the CalendarSink to visit all the resources
-         */
+        /** Configure the CalendarSink to visit all the resources */
         void visitAllResources() {
             resourcesToVisit = null;
         }
 
-        /**
-         * Actions to be done before enumerating
-         */
+        /** Actions to be done before enumerating */
         void preEnumerate(String calendarType) {
             currentCalendarType = calendarType;
             nextCalendarType = null;
@@ -1726,11 +1759,13 @@ public class DateFormatSymbols implements Serializable, Cloneable {
                 // == Handle aliases ==
                 AliasType aliasType = processAliasFromValue(keyString, value);
                 if (aliasType == AliasType.GREGORIAN) {
-                    // Ignore aliases to the gregorian calendar, all of its resources will be loaded anyways.
+                    // Ignore aliases to the gregorian calendar, all of its resources will be loaded
+                    // anyways.
                     continue;
 
                 } else if (aliasType == AliasType.DIFFERENT_CALENDAR) {
-                    // Whenever an alias to the next calendar (except gregorian) is encountered, register the
+                    // Whenever an alias to the next calendar (except gregorian) is encountered,
+                    // register the
                     // calendar type it's pointing to
                     if (resourcesToVisitNext == null) {
                         resourcesToVisitNext = new HashSet<>();
@@ -1747,10 +1782,15 @@ public class DateFormatSymbols implements Serializable, Cloneable {
                     continue;
                 }
 
-                // Only visit the resources that were referenced by an alias on the previous calendar
+                // Only visit the resources that were referenced by an alias on the previous
+                // calendar
                 // (AmPmMarkersAbbr is an exception).
-                if (resourcesToVisit != null && !resourcesToVisit.isEmpty() && !resourcesToVisit.contains(keyString)
-                        && !keyString.equals("AmPmMarkersAbbr")) { continue; }
+                if (resourcesToVisit != null
+                        && !resourcesToVisit.isEmpty()
+                        && !resourcesToVisit.contains(keyString)
+                        && !keyString.equals("AmPmMarkersAbbr")) {
+                    continue;
+                }
 
                 // == Handle data ==
                 if (keyString.startsWith("AmPmMarkers")) {
@@ -1773,7 +1813,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
             boolean modified;
             do {
                 modified = false;
-                for (int i = 0; i < aliasPathPairs.size();) {
+                for (int i = 0; i < aliasPathPairs.size(); ) {
                     boolean mod = false;
                     String alias = aliasPathPairs.get(i);
                     if (arrays.containsKey(alias)) {
@@ -1801,6 +1841,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
         /**
          * Process the nested resource bundle tables
+         *
          * @param path Table's relative path to the calendar
          * @param key Resource bundle key
          * @param value Resource bundle value (has to have the table to read)
@@ -1811,9 +1852,11 @@ public class DateFormatSymbols implements Serializable, Cloneable {
             Map<String, String> stringMap = null;
 
             // Iterate over all the elements of the table and add them to the map
-            for(int i = 0; table.getKeyAndValue(i, key, value); i++) {
+            for (int i = 0; table.getKeyAndValue(i, key, value); i++) {
                 // Ignore '%variant' keys
-                if (key.endsWith("%variant")) { continue; }
+                if (key.endsWith("%variant")) {
+                    continue;
+                }
 
                 String keyString = key.toString();
 
@@ -1836,13 +1879,16 @@ public class DateFormatSymbols implements Serializable, Cloneable {
                 if (currentPath.startsWith("cyclicNameSets")) {
                     if (!"cyclicNameSets/years/format/abbreviated".startsWith(currentPath)
                             && !"cyclicNameSets/zodiacs/format/abbreviated".startsWith(currentPath)
-                            && !"cyclicNameSets/dayParts/format/abbreviated".startsWith(currentPath))
-                    { continue; }
+                            && !"cyclicNameSets/dayParts/format/abbreviated"
+                                    .startsWith(currentPath)) {
+                        continue;
+                    }
                 }
 
                 // == Handle aliases ==
-                if (arrays.containsKey(currentPath)
-                        || maps.containsKey(currentPath)) { continue; }
+                if (arrays.containsKey(currentPath) || maps.containsKey(currentPath)) {
+                    continue;
+                }
 
                 AliasType aliasType = processAliasFromValue(currentPath, value);
                 if (aliasType == AliasType.SAME_CALENDAR) {
@@ -1869,6 +1915,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
         /**
          * Populates an AliasIdentifier with the alias information contained on the UResource.Value.
+         *
          * @param currentRelativePath Relative path of this alias' resource
          * @param value Value which contains the alias
          * @return The AliasType of the alias found on Value
@@ -1876,24 +1923,28 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         private AliasType processAliasFromValue(String currentRelativePath, UResource.Value value) {
             if (value.getType() == ICUResourceBundle.ALIAS) {
                 String aliasPath = value.getAliasString();
-                if (aliasPath.startsWith(CALENDAR_ALIAS_PREFIX) &&
-                        aliasPath.length() > CALENDAR_ALIAS_PREFIX.length()) {
+                if (aliasPath.startsWith(CALENDAR_ALIAS_PREFIX)
+                        && aliasPath.length() > CALENDAR_ALIAS_PREFIX.length()) {
                     int typeLimit = aliasPath.indexOf('/', CALENDAR_ALIAS_PREFIX.length());
                     if (typeLimit > CALENDAR_ALIAS_PREFIX.length()) {
-                        String aliasCalendarType = aliasPath.substring(CALENDAR_ALIAS_PREFIX.length(), typeLimit);
+                        String aliasCalendarType =
+                                aliasPath.substring(CALENDAR_ALIAS_PREFIX.length(), typeLimit);
                         aliasRelativePath = aliasPath.substring(typeLimit + 1);
 
                         if (currentCalendarType.equals(aliasCalendarType)
                                 && !currentRelativePath.equals(aliasRelativePath)) {
-                            // If we have an alias to the same calendar, the path to the resource must be different
+                            // If we have an alias to the same calendar, the path to the resource
+                            // must be different
                             return AliasType.SAME_CALENDAR;
 
                         } else if (!currentCalendarType.equals(aliasCalendarType)
                                 && currentRelativePath.equals(aliasRelativePath)) {
-                            // If we have an alias to a different calendar, the path to the resource must be the same
+                            // If we have an alias to a different calendar, the path to the resource
+                            // must be the same
                             if (aliasCalendarType.equals("gregorian")) {
                                 return AliasType.GREGORIAN;
-                            } else if (nextCalendarType == null || nextCalendarType.equals(aliasCalendarType)) {
+                            } else if (nextCalendarType == null
+                                    || nextCalendarType.equals(aliasCalendarType)) {
                                 nextCalendarType = aliasCalendarType;
                                 return AliasType.DIFFERENT_CALENDAR;
                             }
@@ -1905,9 +1956,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
             return AliasType.NONE;
         }
 
-        /**
-         * Enum which specifies the type of alias received, or no alias
-         */
+        /** Enum which specifies the type of alias received, or no alias */
         private enum AliasType {
             SAME_CALENDAR,
             DIFFERENT_CALENDAR,
@@ -1923,12 +1972,16 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     /**
      * Convert era names map from CalendarSink to array, filling in missing values from fallback.
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
-    protected String[] initEras(String erasKey, Map<String, Map<String, String>> maps,
-            ICUResourceBundle calBundle, int maxEra) {
+    protected String[] initEras(
+            String erasKey,
+            Map<String, Map<String, String>> maps,
+            ICUResourceBundle calBundle,
+            int maxEra) {
         Map<String, String> eraNamesTable = maps.get(erasKey);
         if (eraNamesTable == null) {
             return null;
@@ -1948,7 +2001,8 @@ public class DateFormatSymbols implements Serializable, Cloneable {
                     // there is no parent entry.
                     eraArray[eraCode] = "";
                     if (calErasWidthBundle != null) {
-                        ICUResourceBundle calErasWidthKeyBundle = calErasWidthBundle.findWithFallback(eraKey);
+                        ICUResourceBundle calErasWidthKeyBundle =
+                                calErasWidthBundle.findWithFallback(eraKey);
                         if (calErasWidthKeyBundle != null) {
                             eraName = calErasWidthKeyBundle.getString();
                             if (eraName != null) {
@@ -1964,26 +2018,28 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     /**
      * Initializes format symbols for the locale and calendar type
+     *
      * @param desiredLocale The locale whose symbols are desired.
      * @param b Resource bundle provided externally
-     * @param calendarType  The calendar type being used
+     * @param calendarType The calendar type being used
      * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
     // This API was accidentally marked as @stable ICU 3.0 formerly.
-    protected void initializeData(ULocale desiredLocale, ICUResourceBundle b, String calendarType)
-    {
+    protected void initializeData(ULocale desiredLocale, ICUResourceBundle b, String calendarType) {
         // Create a CalendarSink to load this data and a resource bundle
         CalendarDataSink calendarSink = new CalendarDataSink();
         if (b == null) {
-            b = (ICUResourceBundle) UResourceBundle
-                    .getBundleInstance(ICUData.ICU_BASE_NAME, desiredLocale);
+            b =
+                    (ICUResourceBundle)
+                            UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, desiredLocale);
         }
         // Save the calendarType (with fallback) for later use with initEras:
-        String calTypeForEras = ((calendarType!=null)? calendarType : "gregorian");
+        String calTypeForEras = ((calendarType != null) ? calendarType : "gregorian");
 
-        // Iterate over the resource bundle data following the fallbacks through different calendar types
+        // Iterate over the resource bundle data following the fallbacks through different calendar
+        // types
         while (calendarType != null) {
 
             // Enumerate this calendar type. If the calendar is not found fallback to gregorian.
@@ -1994,8 +2050,11 @@ public class DateFormatSymbols implements Serializable, Cloneable {
                     calendarSink.visitAllResources();
                     continue;
                 }
-                throw new MissingResourceException("The 'gregorian' calendar type wasn't found for the locale: "
-                        + desiredLocale.getBaseName(), getClass().getName(), "gregorian");
+                throw new MissingResourceException(
+                        "The 'gregorian' calendar type wasn't found for the locale: "
+                                + desiredLocale.getBaseName(),
+                        getClass().getName(),
+                        "gregorian");
             }
             calendarSink.preEnumerate(calendarType);
             dataForType.getAllItemsWithFallback("", calendarSink);
@@ -2029,7 +2088,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
             calTypeForEras = "gregorian";
             eraRules = EraRules.getInstance(calTypeForEras, false);
         }
-        int maxEra = (eraRules != null)? eraRules.getMaxEraCode() : 0;
+        int maxEra = (eraRules != null) ? eraRules.getMaxEraCode() : 0;
         ICUResourceBundle calBundle = b.findWithFallback("calendar/" + calTypeForEras);
 
         eras = initEras("eras/abbreviated", maps, calBundle, maxEra);
@@ -2046,20 +2105,20 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
         String[] lWeekdays = arrays.get("dayNames/format/wide");
         weekdays = new String[8];
-        weekdays[0] = "";  // 1-based
+        weekdays[0] = ""; // 1-based
         System.arraycopy(lWeekdays, 0, weekdays, 1, lWeekdays.length);
 
         String[] aWeekdays = arrays.get("dayNames/format/abbreviated");
         shortWeekdays = new String[8];
-        shortWeekdays[0] = "";  // 1-based
+        shortWeekdays[0] = ""; // 1-based
         System.arraycopy(aWeekdays, 0, shortWeekdays, 1, aWeekdays.length);
 
         String[] sWeekdays = arrays.get("dayNames/format/short");
         shorterWeekdays = new String[8];
-        shorterWeekdays[0] = "";  // 1-based
+        shorterWeekdays[0] = ""; // 1-based
         System.arraycopy(sWeekdays, 0, shorterWeekdays, 1, sWeekdays.length);
 
-        String [] nWeekdays = arrays.get("dayNames/format/narrow");
+        String[] nWeekdays = arrays.get("dayNames/format/narrow");
         if (nWeekdays == null) {
             nWeekdays = arrays.get("dayNames/stand-alone/narrow");
 
@@ -2067,37 +2126,39 @@ public class DateFormatSymbols implements Serializable, Cloneable {
                 nWeekdays = arrays.get("dayNames/format/abbreviated");
 
                 if (nWeekdays == null) {
-                    throw new MissingResourceException("Resource not found",
-                            getClass().getName(), "dayNames/format/abbreviated");
+                    throw new MissingResourceException(
+                            "Resource not found",
+                            getClass().getName(),
+                            "dayNames/format/abbreviated");
                 }
             }
         }
         narrowWeekdays = new String[8];
-        narrowWeekdays[0] = "";  // 1-based
+        narrowWeekdays[0] = ""; // 1-based
         System.arraycopy(nWeekdays, 0, narrowWeekdays, 1, nWeekdays.length);
 
-        String [] swWeekdays = null;
+        String[] swWeekdays = null;
         swWeekdays = arrays.get("dayNames/stand-alone/wide");
         standaloneWeekdays = new String[8];
-        standaloneWeekdays[0] = "";  // 1-based
+        standaloneWeekdays[0] = ""; // 1-based
         System.arraycopy(swWeekdays, 0, standaloneWeekdays, 1, swWeekdays.length);
 
-        String [] saWeekdays = null;
+        String[] saWeekdays = null;
         saWeekdays = arrays.get("dayNames/stand-alone/abbreviated");
         standaloneShortWeekdays = new String[8];
-        standaloneShortWeekdays[0] = "";  // 1-based
+        standaloneShortWeekdays[0] = ""; // 1-based
         System.arraycopy(saWeekdays, 0, standaloneShortWeekdays, 1, saWeekdays.length);
 
-        String [] ssWeekdays = null;
+        String[] ssWeekdays = null;
         ssWeekdays = arrays.get("dayNames/stand-alone/short");
         standaloneShorterWeekdays = new String[8];
-        standaloneShorterWeekdays[0] = "";  // 1-based
+        standaloneShorterWeekdays[0] = ""; // 1-based
         System.arraycopy(ssWeekdays, 0, standaloneShorterWeekdays, 1, ssWeekdays.length);
 
-        String [] snWeekdays = null;
+        String[] snWeekdays = null;
         snWeekdays = arrays.get("dayNames/stand-alone/narrow");
         standaloneNarrowWeekdays = new String[8];
-        standaloneNarrowWeekdays[0] = "";  // 1-based
+        standaloneNarrowWeekdays[0] = ""; // 1-based
         System.arraycopy(snWeekdays, 0, standaloneNarrowWeekdays, 1, snWeekdays.length);
 
         ampms = arrays.get("AmPmMarkersAbbr");
@@ -2112,12 +2173,21 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         standaloneShortQuarters = arrays.get("quarters/stand-alone/abbreviated");
         standaloneNarrowQuarters = arrays.get("quarters/stand-alone/narrow");
 
-        abbreviatedDayPeriods = loadDayPeriodStrings(maps.get("dayPeriod/format/abbreviated"), null);
-        wideDayPeriods = loadDayPeriodStrings(maps.get("dayPeriod/format/wide"), abbreviatedDayPeriods);
-        narrowDayPeriods = loadDayPeriodStrings(maps.get("dayPeriod/format/narrow"), abbreviatedDayPeriods);
-        standaloneAbbreviatedDayPeriods = loadDayPeriodStrings(maps.get("dayPeriod/stand-alone/abbreviated"), abbreviatedDayPeriods);
-        standaloneWideDayPeriods = loadDayPeriodStrings(maps.get("dayPeriod/stand-alone/wide"), standaloneAbbreviatedDayPeriods);
-        standaloneNarrowDayPeriods = loadDayPeriodStrings(maps.get("dayPeriod/stand-alone/narrow"), standaloneAbbreviatedDayPeriods);
+        abbreviatedDayPeriods =
+                loadDayPeriodStrings(maps.get("dayPeriod/format/abbreviated"), null);
+        wideDayPeriods =
+                loadDayPeriodStrings(maps.get("dayPeriod/format/wide"), abbreviatedDayPeriods);
+        narrowDayPeriods =
+                loadDayPeriodStrings(maps.get("dayPeriod/format/narrow"), abbreviatedDayPeriods);
+        standaloneAbbreviatedDayPeriods =
+                loadDayPeriodStrings(
+                        maps.get("dayPeriod/stand-alone/abbreviated"), abbreviatedDayPeriods);
+        standaloneWideDayPeriods =
+                loadDayPeriodStrings(
+                        maps.get("dayPeriod/stand-alone/wide"), standaloneAbbreviatedDayPeriods);
+        standaloneNarrowDayPeriods =
+                loadDayPeriodStrings(
+                        maps.get("dayPeriod/stand-alone/narrow"), standaloneAbbreviatedDayPeriods);
 
         for (int i = 0; i < DT_MONTH_PATTERN_COUNT; i++) {
             String monthPatternPath = LEAP_MONTH_PATTERNS_PATHS[i];
@@ -2141,8 +2211,8 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         requestedLocale = desiredLocale;
 
         ICUResourceBundle rb =
-            (ICUResourceBundle)UResourceBundle.getBundleInstance(
-                ICUData.ICU_BASE_NAME, desiredLocale);
+                (ICUResourceBundle)
+                        UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, desiredLocale);
 
         localPatternChars = patternChars;
 
@@ -2155,19 +2225,18 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         noTransforms[0] = false;
         noTransforms[1] = false;
         CapitalizationContextUsage allUsages[] = CapitalizationContextUsage.values();
-        for (CapitalizationContextUsage usage: allUsages) {
+        for (CapitalizationContextUsage usage : allUsages) {
             capitalization.put(usage, noTransforms);
         }
         UResourceBundle contextTransformsBundle = null;
         try {
-           contextTransformsBundle = rb.getWithFallback("contextTransforms");
-        }
-        catch (MissingResourceException e) {
+            contextTransformsBundle = rb.getWithFallback("contextTransforms");
+        } catch (MissingResourceException e) {
             contextTransformsBundle = null; // probably redundant
         }
         if (contextTransformsBundle != null) {
             UResourceBundleIterator ctIterator = contextTransformsBundle.getIterator();
-            while ( ctIterator.hasNext() ) {
+            while (ctIterator.hasNext()) {
                 UResourceBundle contextTransformUsage = ctIterator.next();
                 int[] intVector = contextTransformUsage.getIntVector();
                 if (intVector.length >= 2) {
@@ -2184,7 +2253,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         }
 
         NumberingSystem ns = NumberingSystem.getInstance(desiredLocale);
-        String nsName = ns == null ? "latn" : ns.getName();  // Latin is default.
+        String nsName = ns == null ? "latn" : ns.getName(); // Latin is default.
         String tsPath = "NumberElements/" + nsName + "/symbols/timeSeparator";
         try {
             setTimeSeparatorString(rb.getStringWithFallback(tsPath));
@@ -2193,21 +2262,25 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         }
     }
 
-    /**
-     * Resource bundle paths for each leap month pattern
-     */
+    /** Resource bundle paths for each leap month pattern */
     private static final String[] LEAP_MONTH_PATTERNS_PATHS = new String[DT_MONTH_PATTERN_COUNT];
+
     static {
         LEAP_MONTH_PATTERNS_PATHS[DT_LEAP_MONTH_PATTERN_FORMAT_WIDE] = "monthPatterns/format/wide";
-        LEAP_MONTH_PATTERNS_PATHS[DT_LEAP_MONTH_PATTERN_FORMAT_ABBREV] = "monthPatterns/format/abbreviated";
-        LEAP_MONTH_PATTERNS_PATHS[DT_LEAP_MONTH_PATTERN_FORMAT_NARROW] = "monthPatterns/format/narrow";
-        LEAP_MONTH_PATTERNS_PATHS[DT_LEAP_MONTH_PATTERN_STANDALONE_WIDE] = "monthPatterns/stand-alone/wide";
-        LEAP_MONTH_PATTERNS_PATHS[DT_LEAP_MONTH_PATTERN_STANDALONE_ABBREV] = "monthPatterns/stand-alone/abbreviated";
-        LEAP_MONTH_PATTERNS_PATHS[DT_LEAP_MONTH_PATTERN_STANDALONE_NARROW] = "monthPatterns/stand-alone/narrow";
+        LEAP_MONTH_PATTERNS_PATHS[DT_LEAP_MONTH_PATTERN_FORMAT_ABBREV] =
+                "monthPatterns/format/abbreviated";
+        LEAP_MONTH_PATTERNS_PATHS[DT_LEAP_MONTH_PATTERN_FORMAT_NARROW] =
+                "monthPatterns/format/narrow";
+        LEAP_MONTH_PATTERNS_PATHS[DT_LEAP_MONTH_PATTERN_STANDALONE_WIDE] =
+                "monthPatterns/stand-alone/wide";
+        LEAP_MONTH_PATTERNS_PATHS[DT_LEAP_MONTH_PATTERN_STANDALONE_ABBREV] =
+                "monthPatterns/stand-alone/abbreviated";
+        LEAP_MONTH_PATTERNS_PATHS[DT_LEAP_MONTH_PATTERN_STANDALONE_NARROW] =
+                "monthPatterns/stand-alone/narrow";
         LEAP_MONTH_PATTERNS_PATHS[DT_LEAP_MONTH_PATTERN_NUMERIC] = "monthPatterns/numeric/all";
     }
 
-    private static final boolean arrayOfArrayEquals(Object[][] aa1, Object[][]aa2) {
+    private static final boolean arrayOfArrayEquals(Object[][] aa1, Object[][] aa2) {
         if (aa1 == aa2) { // both are null
             return true;
         }
@@ -2227,18 +2300,26 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         return equal;
     }
 
-    /**
-     * Keys for dayPeriods
-     */
-    private static final String[] DAY_PERIOD_KEYS = {"midnight", "noon",
-            "morning1", "afternoon1", "evening1", "night1",
-            "morning2", "afternoon2", "evening2", "night2"};
+    /** Keys for dayPeriods */
+    private static final String[] DAY_PERIOD_KEYS = {
+        "midnight",
+        "noon",
+        "morning1",
+        "afternoon1",
+        "evening1",
+        "night1",
+        "morning2",
+        "afternoon2",
+        "evening2",
+        "night2"
+    };
 
     /**
      * Loads localized names for day periods in the requested format.
+     *
      * @param resourceMap Contains the dayPeriod resource to load
      * @param copyFrom If non-null, any values in the result that would otherwise be null are copied
-     *                 from this array
+     *     from this array
      */
     private String[] loadDayPeriodStrings(Map<String, String> resourceMap, String[] copyFrom) {
         if (resourceMap == null && copyFrom != null) {
@@ -2247,7 +2328,8 @@ public class DateFormatSymbols implements Serializable, Cloneable {
             String strings[] = new String[DAY_PERIOD_KEYS.length];
             if (resourceMap != null) {
                 for (int i = 0; i < DAY_PERIOD_KEYS.length; ++i) {
-                    strings[i] = resourceMap.get(DAY_PERIOD_KEYS[i]);  // Null if string doesn't exist.
+                    strings[i] =
+                            resourceMap.get(DAY_PERIOD_KEYS[i]); // Null if string doesn't exist.
                     if (strings[i] == null && copyFrom != null) {
                         strings[i] = copyFrom[i];
                     }
@@ -2267,16 +2349,13 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @param srcArray the source array to be cloned.
      * @return a cloned array.
      */
-    private final String[] duplicate(String[] srcArray)
-    {
+    private final String[] duplicate(String[] srcArray) {
         return srcArray.clone();
     }
 
-    private final String[][] duplicate(String[][] srcArray)
-    {
+    private final String[][] duplicate(String[][] srcArray) {
         String[][] aCopy = new String[srcArray.length][];
-        for (int i = 0; i < srcArray.length; ++i)
-            aCopy[i] = duplicate(srcArray[i]);
+        for (int i = 0; i < srcArray.length; ++i) aCopy[i] = duplicate(srcArray[i]);
         return aCopy;
     }
 
@@ -2295,15 +2374,14 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
      */
 
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     /**
-     * Returns the {@link DateFormatSymbols} object that should be used to format a
-     * calendar system's dates in the given locale.
+     * Returns the {@link DateFormatSymbols} object that should be used to format a calendar
+     * system's dates in the given locale.
      *
-     * @param cal       The calendar system whose date format symbols are desired.
-     * @param locale    The locale whose symbols are desired.
-     *
+     * @param cal The calendar system whose date format symbols are desired.
+     * @param locale The locale whose symbols are desired.
      * @see DateFormatSymbols#DateFormatSymbols(java.util.Locale)
      * @stable ICU 2.0
      */
@@ -2312,11 +2390,11 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
-     * Returns the {@link DateFormatSymbols} object that should be used to format a
-     * calendar system's dates in the given locale.
-     * @param cal       The calendar system whose date format symbols are desired.
-     * @param locale    The ulocale whose symbols are desired.
+     * Returns the {@link DateFormatSymbols} object that should be used to format a calendar
+     * system's dates in the given locale.
      *
+     * @param cal The calendar system whose date format symbols are desired.
+     * @param locale The ulocale whose symbols are desired.
      * @see DateFormatSymbols#DateFormatSymbols(java.util.Locale)
      * @stable ICU 3.2
      */
@@ -2325,8 +2403,9 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
-     * Variant of DateFormatSymbols(Calendar, Locale) that takes the Calendar class
-     * instead of a Calendar instance.
+     * Variant of DateFormatSymbols(Calendar, Locale) that takes the Calendar class instead of a
+     * Calendar instance.
+     *
      * @see #DateFormatSymbols(Calendar, Locale)
      * @stable ICU 2.2
      */
@@ -2335,15 +2414,16 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
-     * Variant of DateFormatSymbols(Calendar, ULocale) that takes the Calendar class
-     * instead of a Calendar instance.
+     * Variant of DateFormatSymbols(Calendar, ULocale) that takes the Calendar class instead of a
+     * Calendar instance.
+     *
      * @see #DateFormatSymbols(Calendar, Locale)
      * @stable ICU 3.2
      */
     public DateFormatSymbols(Class<? extends Calendar> calendarClass, ULocale locale) {
         String fullName = calendarClass.getName();
         int lastDot = fullName.lastIndexOf('.');
-        String className = fullName.substring(lastDot+1);
+        String className = fullName.substring(lastDot + 1);
         String calType = null;
         for (String[] calClassInfo : CALENDAR_CLASSES) {
             if (calClassInfo[0].equals(className)) {
@@ -2359,9 +2439,9 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
-     * Fetches a custom calendar's DateFormatSymbols out of the given resource
-     * bundle.  Symbols that are not overridden are inherited from the
-     * default DateFormatSymbols for the locale.
+     * Fetches a custom calendar's DateFormatSymbols out of the given resource bundle. Symbols that
+     * are not overridden are inherited from the default DateFormatSymbols for the locale.
+     *
      * @see DateFormatSymbols#DateFormatSymbols(java.util.Locale)
      * @stable ICU 2.0
      */
@@ -2370,9 +2450,9 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
-     * Fetches a custom calendar's DateFormatSymbols out of the given resource
-     * bundle.  Symbols that are not overridden are inherited from the
-     * default DateFormatSymbols for the locale.
+     * Fetches a custom calendar's DateFormatSymbols out of the given resource bundle. Symbols that
+     * are not overridden are inherited from the default DateFormatSymbols for the locale.
+     *
      * @see DateFormatSymbols#DateFormatSymbols(java.util.Locale)
      * @stable ICU 3.2
      */
@@ -2381,123 +2461,118 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
-     * Finds the ResourceBundle containing the date format information for
-     * a specified calendar subclass in a given locale.
-     * <p>
-     * The resource bundle name is based on the calendar's fully-specified
-     * class name, with ".resources" inserted at the end of the package name
-     * (just before the class name) and "Symbols" appended to the end.
-     * For example, the bundle corresponding to "com.ibm.icu.util.HebrewCalendar"
-     * is "com.ibm.icu.impl.data.HebrewCalendarSymbols".
-     * <p>
-     * <b>Note:</b>Because of the structural changes in the ICU locale bundle,
-     * this API no longer works as described.  This method always returns null.
+     * Finds the ResourceBundle containing the date format information for a specified calendar
+     * subclass in a given locale.
+     *
+     * <p>The resource bundle name is based on the calendar's fully-specified class name, with
+     * ".resources" inserted at the end of the package name (just before the class name) and
+     * "Symbols" appended to the end. For example, the bundle corresponding to
+     * "com.ibm.icu.util.HebrewCalendar" is "com.ibm.icu.impl.data.HebrewCalendarSymbols".
+     *
+     * <p><b>Note:</b>Because of the structural changes in the ICU locale bundle, this API no longer
+     * works as described. This method always returns null.
+     *
      * @deprecated ICU 4.0
      */
     @Deprecated
     // This API was formerly @stable ICU 2.0
-    static public ResourceBundle getDateFormatBundle(Class<? extends Calendar> calendarClass,
-                                                     Locale locale)
-        throws MissingResourceException {
+    public static ResourceBundle getDateFormatBundle(
+            Class<? extends Calendar> calendarClass, Locale locale)
+            throws MissingResourceException {
         return null;
     }
 
     /**
-     * Finds the ResourceBundle containing the date format information for
-     * a specified calendar subclass in a given locale.
-     * <p>
-     * The resource bundle name is based on the calendar's fully-specified
-     * class name, with ".resources" inserted at the end of the package name
-     * (just before the class name) and "Symbols" appended to the end.
-     * For example, the bundle corresponding to "com.ibm.icu.util.HebrewCalendar"
-     * is "com.ibm.icu.impl.data.HebrewCalendarSymbols".
-     * <p>
-     * <b>Note:</b>Because of the structural changes in the ICU locale bundle,
-     * this API no longer works as described.  This method always returns null.
+     * Finds the ResourceBundle containing the date format information for a specified calendar
+     * subclass in a given locale.
+     *
+     * <p>The resource bundle name is based on the calendar's fully-specified class name, with
+     * ".resources" inserted at the end of the package name (just before the class name) and
+     * "Symbols" appended to the end. For example, the bundle corresponding to
+     * "com.ibm.icu.util.HebrewCalendar" is "com.ibm.icu.impl.data.HebrewCalendarSymbols".
+     *
+     * <p><b>Note:</b>Because of the structural changes in the ICU locale bundle, this API no longer
+     * works as described. This method always returns null.
+     *
      * @deprecated ICU 4.0
      */
     @Deprecated
     // This API was formerly @stable ICU 3.2
-    static public ResourceBundle getDateFormatBundle(Class<? extends Calendar> calendarClass,
-                                                     ULocale locale)
-        throws MissingResourceException {
+    public static ResourceBundle getDateFormatBundle(
+            Class<? extends Calendar> calendarClass, ULocale locale)
+            throws MissingResourceException {
         return null;
     }
 
     /**
-     * Variant of getDateFormatBundle(java.lang.Class, java.util.Locale) that takes
-     * a Calendar instance instead of a Calendar class.
-     * <p>
-     * <b>Note:</b>Because of the structural changes in the ICU locale bundle,
-     * this API no longer works as described.  This method always returns null.
+     * Variant of getDateFormatBundle(java.lang.Class, java.util.Locale) that takes a Calendar
+     * instance instead of a Calendar class.
+     *
+     * <p><b>Note:</b>Because of the structural changes in the ICU locale bundle, this API no longer
+     * works as described. This method always returns null.
+     *
      * @see #getDateFormatBundle(java.lang.Class, java.util.Locale)
      * @deprecated ICU 4.0
      */
     @Deprecated
     // This API was formerly @stable ICU 2.2
     public static ResourceBundle getDateFormatBundle(Calendar cal, Locale locale)
-        throws MissingResourceException {
+            throws MissingResourceException {
         return null;
     }
 
     /**
-     * Variant of getDateFormatBundle(java.lang.Class, java.util.Locale) that takes
-     * a Calendar instance instead of a Calendar class.
-     * <p>
-     * <b>Note:</b>Because of the structural changes in the ICU locale bundle,
-     * this API no longer works as described.  This method always returns null.
+     * Variant of getDateFormatBundle(java.lang.Class, java.util.Locale) that takes a Calendar
+     * instance instead of a Calendar class.
+     *
+     * <p><b>Note:</b>Because of the structural changes in the ICU locale bundle, this API no longer
+     * works as described. This method always returns null.
+     *
      * @see #getDateFormatBundle(java.lang.Class, java.util.Locale)
      * @deprecated ICU 4.0
      */
     @Deprecated
     // This API was formerly @stable ICU 3.2
     public static ResourceBundle getDateFormatBundle(Calendar cal, ULocale locale)
-        throws MissingResourceException {
+            throws MissingResourceException {
         return null;
     }
 
     // -------- BEGIN ULocale boilerplate --------
 
     /**
-     * Returns the locale that was used to create this object, or null.
-     * This may may differ from the locale requested at the time of
-     * this object's creation.  For example, if an object is created
-     * for locale {@code en_US_CALIFORNIA}, the actual data may be
-     * drawn from {@code en} (the <i>actual</i> locale), and
-     * {@code en_US} may be the most specific locale that exists (the
+     * Returns the locale that was used to create this object, or null. This may may differ from the
+     * locale requested at the time of this object's creation. For example, if an object is created
+     * for locale {@code en_US_CALIFORNIA}, the actual data may be drawn from {@code en} (the
+     * <i>actual</i> locale), and {@code en_US} may be the most specific locale that exists (the
      * <i>valid</i> locale).
      *
-     * <p>Note: This method will be implemented in ICU 3.0; ICU 2.8
-     * contains a partial preview implementation.  The <i>actual</i>
-     * locale is returned correctly, but the <i>valid</i> locale is
-     * not, in most cases.
+     * <p>Note: This method will be implemented in ICU 3.0; ICU 2.8 contains a partial preview
+     * implementation. The <i>actual</i> locale is returned correctly, but the <i>valid</i> locale
+     * is not, in most cases.
+     *
      * @param type type of information requested, either {@link
-     * com.ibm.icu.util.ULocale#VALID_LOCALE} or {@link
-     * com.ibm.icu.util.ULocale#ACTUAL_LOCALE}.
-     * @return the information specified by <i>type</i>, or null if
-     * this object was not constructed from locale data.
+     *     com.ibm.icu.util.ULocale#VALID_LOCALE} or {@link com.ibm.icu.util.ULocale#ACTUAL_LOCALE}.
+     * @return the information specified by <i>type</i>, or null if this object was not constructed
+     *     from locale data.
      * @see com.ibm.icu.util.ULocale
      * @see com.ibm.icu.util.ULocale#VALID_LOCALE
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
      * @draft ICU 2.8 (retain)
      */
     public final ULocale getLocale(ULocale.Type type) {
-        return type == ULocale.ACTUAL_LOCALE ?
-            this.actualLocale : this.validLocale;
+        return type == ULocale.ACTUAL_LOCALE ? this.actualLocale : this.validLocale;
     }
 
     /**
-     * Sets information about the locales that were used to create this
-     * object.  If the object was not constructed from locale data,
-     * both arguments should be set to null.  Otherwise, neither
-     * should be null.  The actual locale must be at the same level or
-     * less specific than the valid locale.  This method is intended
-     * for use by factories or other entities that create objects of
+     * Sets information about the locales that were used to create this object. If the object was
+     * not constructed from locale data, both arguments should be set to null. Otherwise, neither
+     * should be null. The actual locale must be at the same level or less specific than the valid
+     * locale. This method is intended for use by factories or other entities that create objects of
      * this class.
-     * @param valid the most specific locale containing any resource
-     * data, or null
-     * @param actual the locale containing data used to construct this
-     * object, or null
+     *
+     * @param valid the most specific locale containing any resource data, or null
+     * @param actual the locale containing data used to construct this object, or null
      * @see com.ibm.icu.util.ULocale
      * @see com.ibm.icu.util.ULocale#VALID_LOCALE
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
@@ -2505,9 +2580,9 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     final void setLocale(ULocale valid, ULocale actual) {
         // Change the following to an assertion later
         if ((valid == null) != (actual == null)) {
-            ///CLOVER:OFF
+            /// CLOVER:OFF
             throw new IllegalArgumentException();
-            ///CLOVER:ON
+            /// CLOVER:ON
         }
         // Another check we could do is that the actual locale is at
         // the same level or less specific than the valid locale.
@@ -2517,23 +2592,21 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     /**
      * The most specific locale containing any resource data, or null.
+     *
      * @see com.ibm.icu.util.ULocale
      */
     private ULocale validLocale;
 
     /**
-     * The locale containing data used to construct this object, or
-     * null.
+     * The locale containing data used to construct this object, or null.
+     *
      * @see com.ibm.icu.util.ULocale
      */
     private ULocale actualLocale;
 
     // -------- END ULocale boilerplate --------
 
-    /**
-     * 3.8 or older version did not have localized GMT format
-     * patterns.
-     */
+    /** 3.8 or older version did not have localized GMT format patterns. */
     private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
         stream.defaultReadObject();
     }

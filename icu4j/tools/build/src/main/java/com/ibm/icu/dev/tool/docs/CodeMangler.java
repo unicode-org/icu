@@ -1,12 +1,10 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /**
-*******************************************************************************
-* Copyright (C) 2004-2012, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
-*******************************************************************************
-*/
-
+ * ****************************************************************************** Copyright (C)
+ * 2004-2012, International Business Machines Corporation and * others. All Rights Reserved. *
+ * ******************************************************************************
+ */
 package com.ibm.icu.dev.tool.docs;
 
 import java.io.BufferedReader;
@@ -23,26 +21,24 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 
-
 /**
- * A simple facility for adding C-like preprocessing to .java files.
- * This only understands a subset of the C preprocessing syntax.
- * Its used to manage files that with only small differences can be
- * compiled for different JVMs.  This changes files in place, 
- * commenting out lines based on the current flag settings.
+ * A simple facility for adding C-like preprocessing to .java files. This only understands a subset
+ * of the C preprocessing syntax. Its used to manage files that with only small differences can be
+ * compiled for different JVMs. This changes files in place, commenting out lines based on the
+ * current flag settings.
  */
 public class CodeMangler {
-    private File indir;        // root of input
-    private File outdir;       // root of output
-    private String suffix;     // suffix to process, default '.jpp'
-    private boolean recurse;   // true if recurse on directories
-    private boolean force;     // true if force reprocess of files
-    private boolean clean;     // true if output is to be cleaned
+    private File indir; // root of input
+    private File outdir; // root of output
+    private String suffix; // suffix to process, default '.jpp'
+    private boolean recurse; // true if recurse on directories
+    private boolean force; // true if force reprocess of files
+    private boolean clean; // true if output is to be cleaned
     private boolean timestamp; // true if we read/write timestamp
-    private boolean nonames;   // true if no names in header
-    private HashMap map;       // defines
-    private ArrayList names;   // files/directories to process
-    private String header;     // sorted list of defines passed in
+    private boolean nonames; // true if no names in header
+    private HashMap map; // defines
+    private ArrayList names; // files/directories to process
+    private String header; // sorted list of defines passed in
 
     private boolean verbose; // true if we emit debug output
 
@@ -53,32 +49,33 @@ public class CodeMangler {
         new CodeMangler(args).run();
     }
 
-    private static final String usage = "Usage:\n" +
-        "    CodeMangler [flags] file... dir... @argfile... \n" +
-        "-in[dir] path          - root directory of input files, otherwise use current directory\n" +
-        "-out[dir] path         - root directory of output files, otherwise use input directory\n" +
-        "-s[uffix] string       - suffix of inputfiles to process, otherwise use '.java' (directories only)\n" +
-        "-c[lean]               - remove all control flags from code on output (does not proceed if overwriting)\n" +
-        "-r[ecurse]             - if present, recursively process subdirectories\n" +
-        "-f[orce]               - force reprocessing of files even if timestamp and headers match\n" +
-        "-t[imestamp]           - expect/write timestamp in header\n" +
-        "-dNAME[=VALUE]         - define NAME with optional value VALUE\n" +
-        "  (or -d NAME[=VALUE])\n" +
-        "-n                     - do not put NAME/VALUE in header\n" +
-        "-help                  - print this usage message and exit.\n" +
-        "\n" +
-        "For file arguments, output '.java' files using the same path/name under the output directory.\n" +
-        "For directory arguments, process all files with the defined suffix in the directory.\n" +
-        "  (if recursing, do the same for all files recursively under each directory)\n" +
-        "For @argfile arguments, read the specified text file (strip the '@'), and process each line of that file as \n" +
-        "an argument.\n" +
-        "\n" +
-        "Directives are one of the following:\n" +
-        "  #ifdef, #ifndef, #else, #endif, #if, #elif, #define, #undef\n" +
-        "These may optionally be preceded by whitespace or //.\n" +
-        "#if, #elif args are of the form 'key == value' or 'key != value'.\n" +
-        "Only exact character match key with value is performed.\n" +
-        "#define args are 'key [==] value', the '==' is optional.\n";
+    private static final String usage =
+            "Usage:\n"
+                    + "    CodeMangler [flags] file... dir... @argfile... \n"
+                    + "-in[dir] path          - root directory of input files, otherwise use current directory\n"
+                    + "-out[dir] path         - root directory of output files, otherwise use input directory\n"
+                    + "-s[uffix] string       - suffix of inputfiles to process, otherwise use '.java' (directories only)\n"
+                    + "-c[lean]               - remove all control flags from code on output (does not proceed if overwriting)\n"
+                    + "-r[ecurse]             - if present, recursively process subdirectories\n"
+                    + "-f[orce]               - force reprocessing of files even if timestamp and headers match\n"
+                    + "-t[imestamp]           - expect/write timestamp in header\n"
+                    + "-dNAME[=VALUE]         - define NAME with optional value VALUE\n"
+                    + "  (or -d NAME[=VALUE])\n"
+                    + "-n                     - do not put NAME/VALUE in header\n"
+                    + "-help                  - print this usage message and exit.\n"
+                    + "\n"
+                    + "For file arguments, output '.java' files using the same path/name under the output directory.\n"
+                    + "For directory arguments, process all files with the defined suffix in the directory.\n"
+                    + "  (if recursing, do the same for all files recursively under each directory)\n"
+                    + "For @argfile arguments, read the specified text file (strip the '@'), and process each line of that file as \n"
+                    + "an argument.\n"
+                    + "\n"
+                    + "Directives are one of the following:\n"
+                    + "  #ifdef, #ifndef, #else, #endif, #if, #elif, #define, #undef\n"
+                    + "These may optionally be preceded by whitespace or //.\n"
+                    + "#if, #elif args are of the form 'key == value' or 'key != value'.\n"
+                    + "Only exact character match key with value is performed.\n"
+                    + "#define args are 'key [==] value', the '==' is optional.\n";
 
     CodeMangler(String[] args) {
         map = new HashMap();
@@ -109,8 +106,8 @@ public class CodeMangler {
                         String val = "";
                         int ix = id.indexOf('=');
                         if (ix >= 0) {
-                            val = id.substring(ix+1);
-                            id = id.substring(0,ix);
+                            val = id.substring(ix + 1);
+                            id = id.substring(0, ix);
                         }
                         map.put(id, val);
                     } else if (arg.startsWith("-s")) {
@@ -139,19 +136,25 @@ public class CodeMangler {
                     if (arg.charAt(0) == '@') {
                         File argfile = new File(arg.substring(1));
                         if (argfile.exists() && !argfile.isDirectory()) {
-                            try (BufferedReader br = Files.newBufferedReader(argfile.toPath(), StandardCharsets.UTF_8)) {
+                            try (BufferedReader br =
+                                    Files.newBufferedReader(
+                                            argfile.toPath(), StandardCharsets.UTF_8)) {
                                 ArrayList<String> list = new ArrayList<>();
                                 for (String argument : args) {
                                     list.add(argument);
                                 }
                                 br.lines()
-                                    .map(String::trim)
-                                    .filter(line -> !line.startsWith("#"))
-                                    .peek(line -> { if (verbose) System.out.println("adding argument: " + line); })
-                                    .forEach(list::add);
+                                        .map(String::trim)
+                                        .filter(line -> !line.startsWith("#"))
+                                        .peek(
+                                                line -> {
+                                                    if (verbose)
+                                                        System.out.println(
+                                                                "adding argument: " + line);
+                                                })
+                                        .forEach(list::add);
                                 args = list.toArray(new String[list.size()]);
-                            }
-                            catch (IOException e) {
+                            } catch (IOException e) {
                                 System.err.println("error reading arg file: " + e);
                             }
                         }
@@ -176,14 +179,15 @@ public class CodeMangler {
         indir = new File(inname);
         try {
             indir = indir.getCanonicalFile();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             // continue, but most likely we'll fail later
         }
         if (!indir.exists()) {
-            throw new IllegalArgumentException("Input directory '" + indir.getAbsolutePath() + "' does not exist.");
+            throw new IllegalArgumentException(
+                    "Input directory '" + indir.getAbsolutePath() + "' does not exist.");
         } else if (!indir.isDirectory()) {
-            throw new IllegalArgumentException("Input path '" + indir.getAbsolutePath() + "' is not a directory.");
+            throw new IllegalArgumentException(
+                    "Input path '" + indir.getAbsolutePath() + "' is not a directory.");
         }
         if (verbose) System.out.println("indir: " + indir.getAbsolutePath());
 
@@ -195,24 +199,25 @@ public class CodeMangler {
         outdir = new File(outname);
         try {
             outdir = outdir.getCanonicalFile();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             // continue, but most likely we'll fail later
         }
         if (!outdir.exists()) {
-            throw new IllegalArgumentException("Output directory '" + outdir.getAbsolutePath() + "' does not exist.");
+            throw new IllegalArgumentException(
+                    "Output directory '" + outdir.getAbsolutePath() + "' does not exist.");
         } else if (!outdir.isDirectory()) {
-            throw new IllegalArgumentException("Output path '" + outdir.getAbsolutePath() + "' is not a directory.");
+            throw new IllegalArgumentException(
+                    "Output path '" + outdir.getAbsolutePath() + "' is not a directory.");
         }
         if (verbose) System.out.println("outdir: " + outdir.getAbsolutePath());
 
         if (clean && suffix.equals(".java")) {
             try {
                 if (outdir.getCanonicalPath().equals(indir.getCanonicalPath())) {
-                    throw new IllegalArgumentException("Cannot use 'clean' to overwrite .java files in same directory tree");
+                    throw new IllegalArgumentException(
+                            "Cannot use 'clean' to overwrite .java files in same directory tree");
                 }
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 System.err.println("possible overwrite, error: " + e.getMessage());
                 throw new IllegalArgumentException("Cannot use 'clean' to overrwrite .java files");
             }
@@ -228,12 +233,12 @@ public class CodeMangler {
         StringBuilder buf = new StringBuilder();
         if (!nonames) {
             while (iter.hasNext()) {
-                Map.Entry e = (Map.Entry)iter.next();
+                Map.Entry e = (Map.Entry) iter.next();
                 if (buf.length() > 0) {
                     buf.append(", ");
                 }
                 buf.append(e.getKey());
-                String v = (String)e.getValue();
+                String v = (String) e.getValue();
                 if (v != null && v.length() > 0) {
                     buf.append('=');
                     buf.append(v);
@@ -244,20 +249,21 @@ public class CodeMangler {
     }
 
     public int run() {
-        return process("", (String[])names.toArray(new String[names.size()]));
+        return process("", (String[]) names.toArray(new String[names.size()]));
     }
 
     public int process(String path, String[] filenames) {
         if (verbose) System.out.println("path: '" + path + "'");
         int count = 0;
         for (int i = 0; i < filenames.length; ++i) {
-            if (verbose) System.out.println("name " + i + " of " + filenames.length + ": '" + filenames[i] + "'");
+            if (verbose)
+                System.out.println(
+                        "name " + i + " of " + filenames.length + ": '" + filenames[i] + "'");
             String name = path + filenames[i];
             File fin = new File(indir, name);
             try {
                 fin = fin.getCanonicalFile();
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
             }
             if (!fin.exists()) {
                 System.err.println("File " + fin.getAbsolutePath() + " does not exist.");
@@ -278,7 +284,8 @@ public class CodeMangler {
                     ++count;
                 }
             } else if (fin.isDirectory()) {
-                if (verbose) System.out.println("recursing on directory '" + fin.getAbsolutePath() + "'");
+                if (verbose)
+                    System.out.println("recursing on directory '" + fin.getAbsolutePath() + "'");
                 String npath = ".".equals(name) ? path : path + fin.getName() + File.separator;
                 count += process(npath, fin.list(filter)); // recursive call
             }
@@ -286,13 +293,13 @@ public class CodeMangler {
         return count;
     }
 
-                
-    private final FilenameFilter filter = new FilenameFilter() {
-            public boolean accept(File dir, String name) {
-                File f = new File(dir, name);
-                return (f.isFile() && name.endsWith(suffix)) || (f.isDirectory() && recurse);
-            }
-        };
+    private final FilenameFilter filter =
+            new FilenameFilter() {
+                public boolean accept(File dir, String name) {
+                    File f = new File(dir, name);
+                    return (f.isFile() && name.endsWith(suffix)) || (f.isDirectory() && recurse);
+                }
+            };
 
     public boolean processFile(File infile, File outfile) {
         File backup = null;
@@ -305,11 +312,15 @@ public class CodeMangler {
             private State next;
 
             public String toString() {
-                return "line " + lc 
-                    + ": '" + line 
-                    + "' (emit: " + emit 
-                    + " tripped: " + tripped 
-                    + ")";
+                return "line "
+                        + lc
+                        + ": '"
+                        + line
+                        + "' (emit: "
+                        + emit
+                        + " tripped: "
+                        + tripped
+                        + ")";
             }
 
             void trip(boolean trip) {
@@ -320,7 +331,7 @@ public class CodeMangler {
                     emit = false;
                 }
             }
-                        
+
             State push(int lc, String line, boolean trip) {
                 this.lc = lc;
                 this.line = line;
@@ -335,12 +346,13 @@ public class CodeMangler {
                 return next;
             }
         }
-          
+
         HashMap oldMap = null;
-        
+
         long outModTime = 0;
 
-        try (BufferedReader reader = Files.newBufferedReader(infile.toPath(), StandardCharsets.UTF_8)) {
+        try (BufferedReader reader =
+                Files.newBufferedReader(infile.toPath(), StandardCharsets.UTF_8)) {
             PrintStream outstream = null;
             int lc = 0;
             State state = new State();
@@ -349,7 +361,7 @@ public class CodeMangler {
                 if (lc == 0) { // check and write header for output file if needed
                     boolean hasHeader = line.startsWith(HEADER_PREFIX);
                     if (hasHeader && !force) {
-                        long expectLastModified = ((infile.lastModified() + 999)/1000)*1000;
+                        long expectLastModified = ((infile.lastModified() + 999) / 1000) * 1000;
                         String headerline = HEADER_PREFIX;
                         if (header.length() > 0) {
                             headerline += " ";
@@ -360,7 +372,9 @@ public class CodeMangler {
                             headerline += String.valueOf(expectLastModified);
                         }
                         if (line.equals(headerline)) {
-                            if (verbose) System.out.println("no changes necessary to " + infile.getCanonicalPath());
+                            if (verbose)
+                                System.out.println(
+                                        "no changes necessary to " + infile.getCanonicalPath());
                             reader.close();
                             return false; // nothing to do
                         }
@@ -385,16 +399,17 @@ public class CodeMangler {
                     if (suffix.equals(".java")) {
                         backup = outfile;
                         try {
-                            outfile = File.createTempFile(outfile.getName(), null, outfile.getParentFile());
-                        }
-                        catch (IOException ex) {
+                            outfile =
+                                    File.createTempFile(
+                                            outfile.getName(), null, outfile.getParentFile());
+                        } catch (IOException ex) {
                             System.err.println(ex.getMessage());
                             reader.close();
                             return false;
                         }
                     }
 
-                    outModTime = ((outfile.lastModified()+999)/1000)*1000; // round up
+                    outModTime = ((outfile.lastModified() + 999) / 1000) * 1000; // round up
                     outstream = new PrintStream(new FileOutputStream(outfile));
                     String headerline = HEADER_PREFIX;
                     if (header.length() > 0) {
@@ -408,23 +423,30 @@ public class CodeMangler {
                     outstream.println(headerline);
                     if (verbose) System.out.println("header: " + headerline);
 
-                    // discard the old header if we had one, otherwise match this line like any other
+                    // discard the old header if we had one, otherwise match this line like any
+                    // other
                     if (hasHeader) {
                         ++lc; // mark as having read a line so we never reexecute this block
                         continue;
                     }
                 }
-                
+
                 String[] res = new String[3];
                 if (patMatch(line, res)) {
                     String lead = res[0];
                     String key = res[1];
                     String val = res[2];
 
-                    if (verbose) System.out.println("directive: " + line
-                                                    + " key: '" + key
-                                                    + "' val: '" + val 
-                                                    + "' " + state);
+                    if (verbose)
+                        System.out.println(
+                                "directive: "
+                                        + line
+                                        + " key: '"
+                                        + key
+                                        + "' val: '"
+                                        + val
+                                        + "' "
+                                        + state);
                     if (key.equals("ifdef")) {
                         state = state.push(lc, line, map.get(val) != null);
                     } else if (key.equals("ifndef")) {
@@ -436,7 +458,7 @@ public class CodeMangler {
                     } else if (key.equals("undef")) {
                         if (state.emit) {
                             if (oldMap == null) {
-                                oldMap = (HashMap)map.clone();
+                                oldMap = (HashMap) map.clone();
                             }
                             map.remove(val);
                         }
@@ -445,12 +467,11 @@ public class CodeMangler {
                             String key2 = res[0];
                             String val2 = res[2];
 
-                            if (verbose) System.out.println("val2: '" + val2 
-                                                            + "' key2: '" + key2 
-                                                            + "'");
+                            if (verbose)
+                                System.out.println("val2: '" + val2 + "' key2: '" + key2 + "'");
                             if (state.emit) {
                                 if (oldMap == null) {
-                                    oldMap = (HashMap)map.clone();
+                                    oldMap = (HashMap) map.clone();
                                 }
                                 map.put(key2, val2);
                             }
@@ -489,11 +510,15 @@ public class CodeMangler {
 
                                 if (key2.equals("defined")) {
                                     // defined command
-                                    if (verbose) System.out.println(
-                                            "index: '" + count
-                                            + "' val2: '" + val2 
-                                            + "' key2: '" + key2 
-                                            + "'");
+                                    if (verbose)
+                                        System.out.println(
+                                                "index: '"
+                                                        + count
+                                                        + "' val2: '"
+                                                        + val2
+                                                        + "' key2: '"
+                                                        + key2
+                                                        + "'");
                                     eval = map.containsKey(val2);
                                 } else {
                                     boolean neq = false;
@@ -502,12 +527,17 @@ public class CodeMangler {
                                     } else if (!res[1].equals("==")) {
                                         System.err.println("Invalid expression: '" + val);
                                     }
-                                    if (verbose) System.out.println(
-                                            "index: '" + count
-                                            + "' val2: '" + val2 
-                                            + "' neq: '" + neq 
-                                            + "' key2: '" + key2 
-                                            + "'");
+                                    if (verbose)
+                                        System.out.println(
+                                                "index: '"
+                                                        + count
+                                                        + "' val2: '"
+                                                        + val2
+                                                        + "' neq: '"
+                                                        + neq
+                                                        + "' key2: '"
+                                                        + key2
+                                                        + "'");
                                     eval = (val2.equals(map.get(key2)) != neq);
                                 }
                             }
@@ -559,7 +589,7 @@ public class CodeMangler {
                 outstream.close();
                 return false;
             }
-                
+
             outstream.close();
 
             if (backup != null) {
@@ -576,21 +606,18 @@ public class CodeMangler {
             if (oldMap != null) {
                 map = oldMap;
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             System.err.println(e);
             return false;
         }
         return true;
     }
 
-
     /**
-     * Perform same operation as matching on pat.  on exit
-     * leadKeyValue contains the three strings lead, key, and value.
-     * 'lead' is the portion before the #ifdef directive.  'key' is
-     * the directive.  'value' is the portion after the directive.  if
-     * there is a match, return true, else return false.
+     * Perform same operation as matching on pat. on exit leadKeyValue contains the three strings
+     * lead, key, and value. 'lead' is the portion before the #ifdef directive. 'key' is the
+     * directive. 'value' is the portion after the directive. if there is a match, return true, else
+     * return false.
      */
     static boolean patMatch(String line, String[] leadKeyValue) {
         if (line.length() == 0) {
@@ -601,51 +628,74 @@ public class CodeMangler {
         }
         int mark = 0;
         int state = 0;
-        loop: for (int i = 0; i < line.length(); ++i) {
+        loop:
+        for (int i = 0; i < line.length(); ++i) {
             char c = line.charAt(i);
             switch (state) {
-            case 0: // at start of line, haven't seen anything but whitespace yet
-                if (c == ' ' || c == '\t' || c == '\r') continue;
-                if (c == '/') { state = 1; continue; }
-                if (c == '#') { state = 4; continue; }
-                return false;
-            case 1: // have seen a single slash after start of line
-                if (c == '/') { state = 2; continue; }
-                return false;
-            case 2: // have seen two or more slashes
-                if (c == '/') continue;
-                if (c == ' ' || c == '\t' || c == '\r') { state = 3; continue; }
-                if (c == '#') { state = 4; continue; }
-                return false;
-            case 3: // have seen a space after two or more slashes
-                if (c == ' ' || c == '\t' || c == '\r') continue;
-                if (c == '#') { state = 4; continue; }
-                return false;
-            case 4: // have seen a '#' 
-                leadKeyValue[0] = line.substring(mark, i-1);
-                if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) { mark = i; state = 5; continue; }
-                return false;
-            case 5: // an ascii char followed the '#'
-                if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) continue;
-                if (c == ' ' || c == '\t' || c == '\n') {
-                    String key = line.substring(mark, i).toLowerCase();
-                    if (key.equals("ifdef") ||
-                        key.equals("ifndef") ||
-                        key.equals("else") ||
-                        key.equals("endif") ||
-                        key.equals("undef") ||
-                        key.equals("define") ||
-                        key.equals("if") ||
-                        key.equals("elif")) {
-                        leadKeyValue[1] = key;
-                        mark = i;
-                        state = 6;
-                        break loop;
+                case 0: // at start of line, haven't seen anything but whitespace yet
+                    if (c == ' ' || c == '\t' || c == '\r') continue;
+                    if (c == '/') {
+                        state = 1;
+                        continue;
                     }
-                }
-                return false;
-            default:
-                throw new IllegalStateException();
+                    if (c == '#') {
+                        state = 4;
+                        continue;
+                    }
+                    return false;
+                case 1: // have seen a single slash after start of line
+                    if (c == '/') {
+                        state = 2;
+                        continue;
+                    }
+                    return false;
+                case 2: // have seen two or more slashes
+                    if (c == '/') continue;
+                    if (c == ' ' || c == '\t' || c == '\r') {
+                        state = 3;
+                        continue;
+                    }
+                    if (c == '#') {
+                        state = 4;
+                        continue;
+                    }
+                    return false;
+                case 3: // have seen a space after two or more slashes
+                    if (c == ' ' || c == '\t' || c == '\r') continue;
+                    if (c == '#') {
+                        state = 4;
+                        continue;
+                    }
+                    return false;
+                case 4: // have seen a '#'
+                    leadKeyValue[0] = line.substring(mark, i - 1);
+                    if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
+                        mark = i;
+                        state = 5;
+                        continue;
+                    }
+                    return false;
+                case 5: // an ascii char followed the '#'
+                    if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) continue;
+                    if (c == ' ' || c == '\t' || c == '\n') {
+                        String key = line.substring(mark, i).toLowerCase();
+                        if (key.equals("ifdef")
+                                || key.equals("ifndef")
+                                || key.equals("else")
+                                || key.equals("endif")
+                                || key.equals("undef")
+                                || key.equals("define")
+                                || key.equals("if")
+                                || key.equals("elif")) {
+                            leadKeyValue[1] = key;
+                            mark = i;
+                            state = 6;
+                            break loop;
+                        }
+                    }
+                    return false;
+                default:
+                    throw new IllegalStateException();
             }
         }
         if (state == 6) {
@@ -656,11 +706,10 @@ public class CodeMangler {
     }
 
     /**
-     * Perform same operation as matching on pat2.  on exit
-     * keyRelValue contains the three strings key, rel, and value.
-     * 'key' is the portion before the relation (or final word).  'rel' is
-     * the relation, if present, either == or !=.  'value' is the final
-     * word.  if there is a match, return true, else return false.
+     * Perform same operation as matching on pat2. on exit keyRelValue contains the three strings
+     * key, rel, and value. 'key' is the portion before the relation (or final word). 'rel' is the
+     * relation, if present, either == or !=. 'value' is the final word. if there is a match, return
+     * true, else return false.
      */
     static boolean pat2Match(String line, String[] keyRelVal) {
 
@@ -671,106 +720,117 @@ public class CodeMangler {
         int mark = 0;
         int state = 0;
         String command = null;
-        loop: for (int i = 0; i < line.length(); ++i) {
+        loop:
+        for (int i = 0; i < line.length(); ++i) {
             char c = line.charAt(i);
             switch (state) {
-            case 0: // saw beginning or space, no rel yet
-                if (c == ' ' || c == '\t' || c == '\n') {
-                    continue;
-                }
-                if ((c == '!' || c == '=')) {
-                    return false;
-                }
-                state = 1;
-                continue;
-            case 1: // saw start of a word
-                if (c == ' ' || c == '\t') {
-                    state = 2;
-                }
-                else if (c == '(') {
-                    command = line.substring(0, i).trim();
-                    if (!command.equals("defined")) {
+                case 0: // saw beginning or space, no rel yet
+                    if (c == ' ' || c == '\t' || c == '\n') {
+                        continue;
+                    }
+                    if ((c == '!' || c == '=')) {
                         return false;
                     }
-                    keyRelVal[0] = command;
-                    state = 2;
-                }
-                else if (c == '!' || c == '=') {
-                    state = 3;
-                }
-                continue;
-            case 2: // saw end of word, and space
-                if (c == ' ' || c == '\t') {
+                    state = 1;
                     continue;
-                }
-                else if (command == null && c == '(') {
+                case 1: // saw start of a word
+                    if (c == ' ' || c == '\t') {
+                        state = 2;
+                    } else if (c == '(') {
+                        command = line.substring(0, i).trim();
+                        if (!command.equals("defined")) {
+                            return false;
+                        }
+                        keyRelVal[0] = command;
+                        state = 2;
+                    } else if (c == '!' || c == '=') {
+                        state = 3;
+                    }
                     continue;
-                }
-                else if (c == '!' || c == '=') {
-                    state = 3;
-                    continue;
-                }
-                keyRelVal[0] = line.substring(0, i-1).trim();
-                mark = i;
-                state = 4;
-                break loop;
-            case 3: // saw end of word, and '!' or '='
-                if (c == '=') {
-                    keyRelVal[0] = line.substring(0, i-1).trim();
-                    keyRelVal[1] = line.substring(i-1, i+1);
-                    mark = i+1;
+                case 2: // saw end of word, and space
+                    if (c == ' ' || c == '\t') {
+                        continue;
+                    } else if (command == null && c == '(') {
+                        continue;
+                    } else if (c == '!' || c == '=') {
+                        state = 3;
+                        continue;
+                    }
+                    keyRelVal[0] = line.substring(0, i - 1).trim();
+                    mark = i;
                     state = 4;
                     break loop;
-                }
-                return false;
-            default:
-                break;
+                case 3: // saw end of word, and '!' or '='
+                    if (c == '=') {
+                        keyRelVal[0] = line.substring(0, i - 1).trim();
+                        keyRelVal[1] = line.substring(i - 1, i + 1);
+                        mark = i + 1;
+                        state = 4;
+                        break loop;
+                    }
+                    return false;
+                default:
+                    break;
             }
         }
         switch (state) {
-        case 0: 
-            return false; // found nothing
-        case 1: 
-        case 2:
-            keyRelVal[0] = line.trim(); break; // found only a word
-        case 3:
-            return false; // found a word and '!' or '=" then end of line, incomplete
-        case 4:
-            keyRelVal[2] = line.substring(mark).trim(); // found a word, possible rel, and who knows what
-            if (command != null) {
-                int len = keyRelVal[2].length();
-                if (keyRelVal[2].charAt(len - 1) != ')') {
-                    // closing parenthesis is missing
-                    return false;
+            case 0:
+                return false; // found nothing
+            case 1:
+            case 2:
+                keyRelVal[0] = line.trim();
+                break; // found only a word
+            case 3:
+                return false; // found a word and '!' or '=" then end of line, incomplete
+            case 4:
+                keyRelVal[2] =
+                        line.substring(mark)
+                                .trim(); // found a word, possible rel, and who knows what
+                if (command != null) {
+                    int len = keyRelVal[2].length();
+                    if (keyRelVal[2].charAt(len - 1) != ')') {
+                        // closing parenthesis is missing
+                        return false;
+                    }
+                    keyRelVal[2] = keyRelVal[2].substring(0, len - 1).trim();
                 }
-                keyRelVal[2] = keyRelVal[2].substring(0, len - 1).trim();
-            }
-            break;
-        default: 
-            throw new IllegalStateException();
+                break;
+            default:
+                throw new IllegalStateException();
         }
         return true;
     }
 
     static String pat3Match(String line) {
         int state = 0;
-        loop: for (int i = 0; i < line.length(); ++i) {
+        loop:
+        for (int i = 0; i < line.length(); ++i) {
             char c = line.charAt(i);
-            switch(state) {
-            case 0: if (c == ' ' || c == '\t') continue;
-                if (c == '/') { state = 1; continue; }
-                break loop;
-            case 1:
-                if (c == '/') { state = 2; continue; }
-                break loop;
-            case 2:
-                if (c == '#') { state = 3; continue; }
-                break loop;
-            case 3:
-                if (c == '#') return line.substring(0, i+1);
-                break loop;
-            default:
-                break loop;
+            switch (state) {
+                case 0:
+                    if (c == ' ' || c == '\t') continue;
+                    if (c == '/') {
+                        state = 1;
+                        continue;
+                    }
+                    break loop;
+                case 1:
+                    if (c == '/') {
+                        state = 2;
+                        continue;
+                    }
+                    break loop;
+                case 2:
+                    if (c == '#') {
+                        state = 3;
+                        continue;
+                    }
+                    break loop;
+                case 3:
+                    if (c == '#') return line.substring(0, i + 1);
+                    break loop;
+                default:
+                    break loop;
             }
         }
         return null;

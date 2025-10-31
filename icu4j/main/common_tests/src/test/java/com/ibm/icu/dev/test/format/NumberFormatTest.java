@@ -8,37 +8,10 @@
  */
 
 /**
- * Port From:   ICU4C v1.8.1 : format : NumberFormatTest
- * Source File: $ICU4oot/source/test/intltest/numfmtst.cpp
- **/
-
+ * Port From: ICU4C v1.8.1 : format : NumberFormatTest Source File:
+ * $ICU4oot/source/test/intltest/numfmtst.cpp
+ */
 package com.ibm.icu.dev.test.format;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.math.BigInteger;
-import java.math.RoundingMode;
-import java.text.AttributedCharacterIterator;
-import java.text.FieldPosition;
-import java.text.Format;
-import java.text.ParseException;
-import java.text.ParsePosition;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Random;
-import java.util.Set;
-
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
@@ -71,137 +44,190 @@ import com.ibm.icu.util.Currency.CurrencyUsage;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.ULocale;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.math.BigInteger;
+import java.math.RoundingMode;
+import java.text.AttributedCharacterIterator;
+import java.text.FieldPosition;
+import java.text.Format;
+import java.text.ParseException;
+import java.text.ParsePosition;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Random;
+import java.util.Set;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public class NumberFormatTest extends CoreTestFmwk {
 
     @Test
     public void TestRoundingScientific10542() {
-        DecimalFormat format =
-                new DecimalFormat("0.00E0");
+        DecimalFormat format = new DecimalFormat("0.00E0");
 
         int[] roundingModes = {
-              BigDecimal.ROUND_CEILING,
-              BigDecimal.ROUND_DOWN,
-              BigDecimal.ROUND_FLOOR,
-              BigDecimal.ROUND_HALF_DOWN,
-              BigDecimal.ROUND_HALF_EVEN,
-              BigDecimal.ROUND_HALF_UP,
-              BigDecimal.ROUND_UP};
+            BigDecimal.ROUND_CEILING,
+            BigDecimal.ROUND_DOWN,
+            BigDecimal.ROUND_FLOOR,
+            BigDecimal.ROUND_HALF_DOWN,
+            BigDecimal.ROUND_HALF_EVEN,
+            BigDecimal.ROUND_HALF_UP,
+            BigDecimal.ROUND_UP
+        };
         String[] descriptions = {
-                "Round Ceiling",
-                "Round Down",
-                "Round Floor",
-                "Round half down",
-                "Round half even",
-                "Round half up",
-                "Round up"};
+            "Round Ceiling",
+            "Round Down",
+            "Round Floor",
+            "Round half down",
+            "Round half even",
+            "Round half up",
+            "Round up"
+        };
 
         double[] values = {-0.003006, -0.003005, -0.003004, 0.003014, 0.003015, 0.003016};
-        // The order of these expected values correspond to the order of roundingModes and the order of values.
+        // The order of these expected values correspond to the order of roundingModes and the order
+        // of values.
         String[][] expected = {
-                {"-3.00E-3", "-3.00E-3", "-3.00E-3", "3.02E-3", "3.02E-3", "3.02E-3"},
-                {"-3.00E-3", "-3.00E-3", "-3.00E-3", "3.01E-3", "3.01E-3", "3.01E-3"},
-                {"-3.01E-3", "-3.01E-3", "-3.01E-3", "3.01E-3", "3.01E-3", "3.01E-3"},
-                {"-3.01E-3", "-3.00E-3", "-3.00E-3", "3.01E-3", "3.01E-3", "3.02E-3"},
-                {"-3.01E-3", "-3.00E-3", "-3.00E-3", "3.01E-3", "3.02E-3", "3.02E-3"},
-                {"-3.01E-3", "-3.01E-3", "-3.00E-3", "3.01E-3", "3.02E-3", "3.02E-3"},
-                {"-3.01E-3", "-3.01E-3", "-3.01E-3", "3.02E-3", "3.02E-3", "3.02E-3"}};
+            {"-3.00E-3", "-3.00E-3", "-3.00E-3", "3.02E-3", "3.02E-3", "3.02E-3"},
+            {"-3.00E-3", "-3.00E-3", "-3.00E-3", "3.01E-3", "3.01E-3", "3.01E-3"},
+            {"-3.01E-3", "-3.01E-3", "-3.01E-3", "3.01E-3", "3.01E-3", "3.01E-3"},
+            {"-3.01E-3", "-3.00E-3", "-3.00E-3", "3.01E-3", "3.01E-3", "3.02E-3"},
+            {"-3.01E-3", "-3.00E-3", "-3.00E-3", "3.01E-3", "3.02E-3", "3.02E-3"},
+            {"-3.01E-3", "-3.01E-3", "-3.00E-3", "3.01E-3", "3.02E-3", "3.02E-3"},
+            {"-3.01E-3", "-3.01E-3", "-3.01E-3", "3.02E-3", "3.02E-3", "3.02E-3"}
+        };
         verifyRounding(format, values, expected, roundingModes, descriptions);
-        values = new double[]{-3006.0, -3005, -3004, 3014, 3015, 3016};
-        // The order of these expected values correspond to the order of roundingModes and the order of values.
-        expected = new String[][]{
-                {"-3.00E3", "-3.00E3", "-3.00E3", "3.02E3", "3.02E3", "3.02E3"},
-                {"-3.00E3", "-3.00E3", "-3.00E3", "3.01E3", "3.01E3", "3.01E3"},
-                {"-3.01E3", "-3.01E3", "-3.01E3", "3.01E3", "3.01E3", "3.01E3"},
-                {"-3.01E3", "-3.00E3", "-3.00E3", "3.01E3", "3.01E3", "3.02E3"},
-                {"-3.01E3", "-3.00E3", "-3.00E3", "3.01E3", "3.02E3", "3.02E3"},
-                {"-3.01E3", "-3.01E3", "-3.00E3", "3.01E3", "3.02E3", "3.02E3"},
-                {"-3.01E3", "-3.01E3", "-3.01E3", "3.02E3", "3.02E3", "3.02E3"}};
+        values = new double[] {-3006.0, -3005, -3004, 3014, 3015, 3016};
+        // The order of these expected values correspond to the order of roundingModes and the order
+        // of values.
+        expected =
+                new String[][] {
+                    {"-3.00E3", "-3.00E3", "-3.00E3", "3.02E3", "3.02E3", "3.02E3"},
+                    {"-3.00E3", "-3.00E3", "-3.00E3", "3.01E3", "3.01E3", "3.01E3"},
+                    {"-3.01E3", "-3.01E3", "-3.01E3", "3.01E3", "3.01E3", "3.01E3"},
+                    {"-3.01E3", "-3.00E3", "-3.00E3", "3.01E3", "3.01E3", "3.02E3"},
+                    {"-3.01E3", "-3.00E3", "-3.00E3", "3.01E3", "3.02E3", "3.02E3"},
+                    {"-3.01E3", "-3.01E3", "-3.00E3", "3.01E3", "3.02E3", "3.02E3"},
+                    {"-3.01E3", "-3.01E3", "-3.01E3", "3.02E3", "3.02E3", "3.02E3"}
+                };
         verifyRounding(format, values, expected, roundingModes, descriptions);
-        values = new double[]{0.0, -0.0};
-        // The order of these expected values correspond to the order of roundingModes and the order of values.
-        expected = new String[][]{
-                {"0.00E0", "-0.00E0"},
-                {"0.00E0", "-0.00E0"},
-                {"0.00E0", "-0.00E0"},
-                {"0.00E0", "-0.00E0"},
-                {"0.00E0", "-0.00E0"},
-                {"0.00E0", "-0.00E0"},
-                {"0.00E0", "-0.00E0"}};
+        values = new double[] {0.0, -0.0};
+        // The order of these expected values correspond to the order of roundingModes and the order
+        // of values.
+        expected =
+                new String[][] {
+                    {"0.00E0", "-0.00E0"},
+                    {"0.00E0", "-0.00E0"},
+                    {"0.00E0", "-0.00E0"},
+                    {"0.00E0", "-0.00E0"},
+                    {"0.00E0", "-0.00E0"},
+                    {"0.00E0", "-0.00E0"},
+                    {"0.00E0", "-0.00E0"}
+                };
         verifyRounding(format, values, expected, roundingModes, descriptions);
-        values = new double[]{1e25, 1e25 + 1e15, 1e25 - 1e15};
-        // The order of these expected values correspond to the order of roundingModes and the order of values.
-        expected = new String[][]{
-                {"1.00E25", "1.01E25", "1.00E25"},
-                {"1.00E25", "1.00E25", "9.99E24"},
-                {"1.00E25", "1.00E25", "9.99E24"},
-                {"1.00E25", "1.00E25", "1.00E25"},
-                {"1.00E25", "1.00E25", "1.00E25"},
-                {"1.00E25", "1.00E25", "1.00E25"},
-                {"1.00E25", "1.01E25", "1.00E25"}};
+        values = new double[] {1e25, 1e25 + 1e15, 1e25 - 1e15};
+        // The order of these expected values correspond to the order of roundingModes and the order
+        // of values.
+        expected =
+                new String[][] {
+                    {"1.00E25", "1.01E25", "1.00E25"},
+                    {"1.00E25", "1.00E25", "9.99E24"},
+                    {"1.00E25", "1.00E25", "9.99E24"},
+                    {"1.00E25", "1.00E25", "1.00E25"},
+                    {"1.00E25", "1.00E25", "1.00E25"},
+                    {"1.00E25", "1.00E25", "1.00E25"},
+                    {"1.00E25", "1.01E25", "1.00E25"}
+                };
         verifyRounding(format, values, expected, roundingModes, descriptions);
-        values = new double[]{-1e25, -1e25 + 1e15, -1e25 - 1e15};
-        // The order of these expected values correspond to the order of roundingModes and the order of values.
-        expected = new String[][]{
-                {"-1.00E25", "-9.99E24", "-1.00E25"},
-                {"-1.00E25", "-9.99E24", "-1.00E25"},
-                {"-1.00E25", "-1.00E25", "-1.01E25"},
-                {"-1.00E25", "-1.00E25", "-1.00E25"},
-                {"-1.00E25", "-1.00E25", "-1.00E25"},
-                {"-1.00E25", "-1.00E25", "-1.00E25"},
-                {"-1.00E25", "-1.00E25", "-1.01E25"}};
+        values = new double[] {-1e25, -1e25 + 1e15, -1e25 - 1e15};
+        // The order of these expected values correspond to the order of roundingModes and the order
+        // of values.
+        expected =
+                new String[][] {
+                    {"-1.00E25", "-9.99E24", "-1.00E25"},
+                    {"-1.00E25", "-9.99E24", "-1.00E25"},
+                    {"-1.00E25", "-1.00E25", "-1.01E25"},
+                    {"-1.00E25", "-1.00E25", "-1.00E25"},
+                    {"-1.00E25", "-1.00E25", "-1.00E25"},
+                    {"-1.00E25", "-1.00E25", "-1.00E25"},
+                    {"-1.00E25", "-1.00E25", "-1.01E25"}
+                };
         verifyRounding(format, values, expected, roundingModes, descriptions);
-        values = new double[]{1e-25, 1e-25 + 1e-35, 1e-25 - 1e-35};
-        // The order of these expected values correspond to the order of roundingModes and the order of values.
-        expected = new String[][]{
-                {"1.00E-25", "1.01E-25", "1.00E-25"},
-                {"1.00E-25", "1.00E-25", "9.99E-26"},
-                {"1.00E-25", "1.00E-25", "9.99E-26"},
-                {"1.00E-25", "1.00E-25", "1.00E-25"},
-                {"1.00E-25", "1.00E-25", "1.00E-25"},
-                {"1.00E-25", "1.00E-25", "1.00E-25"},
-                {"1.00E-25", "1.01E-25", "1.00E-25"}};
+        values = new double[] {1e-25, 1e-25 + 1e-35, 1e-25 - 1e-35};
+        // The order of these expected values correspond to the order of roundingModes and the order
+        // of values.
+        expected =
+                new String[][] {
+                    {"1.00E-25", "1.01E-25", "1.00E-25"},
+                    {"1.00E-25", "1.00E-25", "9.99E-26"},
+                    {"1.00E-25", "1.00E-25", "9.99E-26"},
+                    {"1.00E-25", "1.00E-25", "1.00E-25"},
+                    {"1.00E-25", "1.00E-25", "1.00E-25"},
+                    {"1.00E-25", "1.00E-25", "1.00E-25"},
+                    {"1.00E-25", "1.01E-25", "1.00E-25"}
+                };
         verifyRounding(format, values, expected, roundingModes, descriptions);
-        values = new double[]{-1e-25, -1e-25 + 1e-35, -1e-25 - 1e-35};
-        // The order of these expected values correspond to the order of roundingModes and the order of values.
-        expected = new String[][]{
-                {"-1.00E-25", "-9.99E-26", "-1.00E-25"},
-                {"-1.00E-25", "-9.99E-26", "-1.00E-25"},
-                {"-1.00E-25", "-1.00E-25", "-1.01E-25"},
-                {"-1.00E-25", "-1.00E-25", "-1.00E-25"},
-                {"-1.00E-25", "-1.00E-25", "-1.00E-25"},
-                {"-1.00E-25", "-1.00E-25", "-1.00E-25"},
-                {"-1.00E-25", "-1.00E-25", "-1.01E-25"}};
+        values = new double[] {-1e-25, -1e-25 + 1e-35, -1e-25 - 1e-35};
+        // The order of these expected values correspond to the order of roundingModes and the order
+        // of values.
+        expected =
+                new String[][] {
+                    {"-1.00E-25", "-9.99E-26", "-1.00E-25"},
+                    {"-1.00E-25", "-9.99E-26", "-1.00E-25"},
+                    {"-1.00E-25", "-1.00E-25", "-1.01E-25"},
+                    {"-1.00E-25", "-1.00E-25", "-1.00E-25"},
+                    {"-1.00E-25", "-1.00E-25", "-1.00E-25"},
+                    {"-1.00E-25", "-1.00E-25", "-1.00E-25"},
+                    {"-1.00E-25", "-1.00E-25", "-1.01E-25"}
+                };
         verifyRounding(format, values, expected, roundingModes, descriptions);
     }
 
-    private void verifyRounding(DecimalFormat format, double[] values, String[][] expected, int[] roundingModes,
+    private void verifyRounding(
+            DecimalFormat format,
+            double[] values,
+            String[][] expected,
+            int[] roundingModes,
             String[] descriptions) {
         for (int i = 0; i < roundingModes.length; i++) {
             format.setRoundingMode(roundingModes[i]);
             for (int j = 0; j < values.length; j++) {
-                assertEquals(descriptions[i]+" " +values[j], expected[i][j], format.format(values[j]));
+                assertEquals(
+                        descriptions[i] + " " + values[j],
+                        expected[i][j],
+                        format.format(values[j]));
             }
         }
     }
 
     @Test
     public void Test10419RoundingWith0FractionDigits() {
-        Object[][] data = new Object[][]{
-                {BigDecimal.ROUND_CEILING, 1.488, "2"},
-                {BigDecimal.ROUND_DOWN, 1.588, "1"},
-                {BigDecimal.ROUND_FLOOR, 1.588, "1"},
-                {BigDecimal.ROUND_HALF_DOWN, 1.5, "1"},
-                {BigDecimal.ROUND_HALF_EVEN, 2.5, "2"},
-                {BigDecimal.ROUND_HALF_UP, 2.5, "3"},
-                {BigDecimal.ROUND_UP, 1.5, "2"},
-        };
+        Object[][] data =
+                new Object[][] {
+                    {BigDecimal.ROUND_CEILING, 1.488, "2"},
+                    {BigDecimal.ROUND_DOWN, 1.588, "1"},
+                    {BigDecimal.ROUND_FLOOR, 1.588, "1"},
+                    {BigDecimal.ROUND_HALF_DOWN, 1.5, "1"},
+                    {BigDecimal.ROUND_HALF_EVEN, 2.5, "2"},
+                    {BigDecimal.ROUND_HALF_UP, 2.5, "3"},
+                    {BigDecimal.ROUND_UP, 1.5, "2"},
+                };
         NumberFormat nff = NumberFormat.getNumberInstance(ULocale.ENGLISH);
         nff.setMaximumFractionDigits(0);
         for (Object[] item : data) {
-          nff.setRoundingMode(((Integer) item[0]).intValue());
-          assertEquals("Test10419", item[2], nff.format(item[1]));
+            nff.setRoundingMode(((Integer) item[0]).intValue());
+            assertEquals("Test10419", item[2], nff.format(item[1]));
         }
     }
 
@@ -232,31 +258,46 @@ public class NumberFormatTest extends CoreTestFmwk {
     public void TestPatterns() {
 
         DecimalFormatSymbols sym = new DecimalFormatSymbols(Locale.US);
-        final String pat[]    = { "#.#", "#.", ".#", "#" };
+        final String pat[] = {"#.#", "#.", ".#", "#"};
         int pat_length = pat.length;
-        final String newpat[] = { "0.#", "0.", "#.0", "0" };
-        final String num[]    = { "0",   "0.", ".0", "0" };
-        for (int i=0; i<pat_length; ++i)
-        {
+        final String newpat[] = {"0.#", "0.", "#.0", "0"};
+        final String num[] = {"0", "0.", ".0", "0"};
+        for (int i = 0; i < pat_length; ++i) {
             DecimalFormat fmt = new DecimalFormat(pat[i], sym);
             String newp = fmt.toPattern();
             if (!newp.equals(newpat[i]))
-                errln("FAIL: Pattern " + pat[i] + " should transmute to " + newpat[i] +
-                        "; " + newp + " seen instead");
+                errln(
+                        "FAIL: Pattern "
+                                + pat[i]
+                                + " should transmute to "
+                                + newpat[i]
+                                + "; "
+                                + newp
+                                + " seen instead");
 
-            String s = ((NumberFormat)fmt).format(0);
-            if (!s.equals(num[i]))
-            {
-                errln("FAIL: Pattern " + pat[i] + " should format zero as " + num[i] +
-                        "; " + s + " seen instead");
+            String s = ((NumberFormat) fmt).format(0);
+            if (!s.equals(num[i])) {
+                errln(
+                        "FAIL: Pattern "
+                                + pat[i]
+                                + " should format zero as "
+                                + num[i]
+                                + "; "
+                                + s
+                                + " seen instead");
                 logln("Min integer digits = " + fmt.getMinimumIntegerDigits());
             }
             // BigInteger 0 - ticket#4731
-            s = ((NumberFormat)fmt).format(BigInteger.ZERO);
-            if (!s.equals(num[i]))
-            {
-                errln("FAIL: Pattern " + pat[i] + " should format BigInteger zero as " + num[i] +
-                        "; " + s + " seen instead");
+            s = ((NumberFormat) fmt).format(BigInteger.ZERO);
+            if (!s.equals(num[i])) {
+                errln(
+                        "FAIL: Pattern "
+                                + pat[i]
+                                + " should format BigInteger zero as "
+                                + num[i]
+                                + "; "
+                                + s
+                                + " seen instead");
                 logln("Min integer digits = " + fmt.getMinimumIntegerDigits());
             }
         }
@@ -274,7 +315,7 @@ public class NumberFormatTest extends CoreTestFmwk {
 
         df = new DecimalFormat("0.00;0.00");
         expect2(df, 1, "1.00");
-        expect(df, -1, "1.00");  // parses as 1, not -1
+        expect(df, -1, "1.00"); // parses as 1, not -1
 
         df = new DecimalFormat(" 0.00 ; -0.00 ");
         expect2(df, 1, " 1.00 ");
@@ -286,46 +327,48 @@ public class NumberFormatTest extends CoreTestFmwk {
     public void TestExponential() {
 
         DecimalFormatSymbols sym = new DecimalFormatSymbols(Locale.US);
-        final String pat[] = { "0.####E0", "00.000E00", "##0.######E000", "0.###E0;[0.###E0]" };
+        final String pat[] = {"0.####E0", "00.000E00", "##0.######E000", "0.###E0;[0.###E0]"};
         int pat_length = pat.length;
 
-        double val[] = { 0.01234, 123456789, 1.23e300, -3.141592653e-271 };
+        double val[] = {0.01234, 123456789, 1.23e300, -3.141592653e-271};
         int val_length = val.length;
         final String valFormat[] = {
-                // 0.####E0
-                "1.234E-2", "1.2346E8", "1.23E300", "-3.1416E-271",
-                // 00.000E00
-                "12.340E-03", "12.346E07", "12.300E299", "-31.416E-272",
-                // ##0.######E000
-                "12.34E-003", "123.4568E006", "1.23E300", "-314.1593E-273",
-                // 0.###E0;[0.###E0]
-                "1.234E-2", "1.235E8", "1.23E300", "[3.142E-271]" };
+            // 0.####E0
+            "1.234E-2", "1.2346E8", "1.23E300", "-3.1416E-271",
+            // 00.000E00
+            "12.340E-03", "12.346E07", "12.300E299", "-31.416E-272",
+            // ##0.######E000
+            "12.34E-003", "123.4568E006", "1.23E300", "-314.1593E-273",
+            // 0.###E0;[0.###E0]
+            "1.234E-2", "1.235E8", "1.23E300", "[3.142E-271]"
+        };
         /*double valParse[] =
-            {
-                0.01234, 123460000, 1.23E300, -3.1416E-271,
-                0.01234, 123460000, 1.23E300, -3.1416E-271,
-                0.01234, 123456800, 1.23E300, -3.141593E-271,
-                0.01234, 123500000, 1.23E300, -3.142E-271,
-            };*/ //The variable is never used
+        {
+            0.01234, 123460000, 1.23E300, -3.1416E-271,
+            0.01234, 123460000, 1.23E300, -3.1416E-271,
+            0.01234, 123456800, 1.23E300, -3.141593E-271,
+            0.01234, 123500000, 1.23E300, -3.142E-271,
+        };*/
+        // The variable is never used
 
-        int lval[] = { 0, -1, 1, 123456789 };
+        int lval[] = {0, -1, 1, 123456789};
         int lval_length = lval.length;
         final String lvalFormat[] = {
-                // 0.####E0
-                "0E0", "-1E0", "1E0", "1.2346E8",
-                // 00.000E00
-                "00.000E00", "-10.000E-01", "10.000E-01", "12.346E07",
-                // ##0.######E000
-                "0E000", "-1E000", "1E000", "123.4568E006",
-                // 0.###E0;[0.###E0]
-                "0E0", "[1E0]", "1E0", "1.235E8" };
-        int lvalParse[] =
-            {
-                0, -1, 1, 123460000,
-                0, -1, 1, 123460000,
-                0, -1, 1, 123456800,
-                0, -1, 1, 123500000,
-            };
+            // 0.####E0
+            "0E0", "-1E0", "1E0", "1.2346E8",
+            // 00.000E00
+            "00.000E00", "-10.000E-01", "10.000E-01", "12.346E07",
+            // ##0.######E000
+            "0E000", "-1E000", "1E000", "123.4568E006",
+            // 0.###E0;[0.###E0]
+            "0E0", "[1E0]", "1E0", "1.235E8"
+        };
+        int lvalParse[] = {
+            0, -1, 1, 123460000,
+            0, -1, 1, 123460000,
+            0, -1, 1, 123456800,
+            0, -1, 1, 123500000,
+        };
         int ival = 0, ilval = 0;
         for (int p = 0; p < pat_length; ++p) {
             DecimalFormat fmt = new DecimalFormat(pat[p], sym);
@@ -335,16 +378,14 @@ public class NumberFormatTest extends CoreTestFmwk {
                 String s;
                 s = ((NumberFormat) fmt).format(val[v]);
                 logln(" " + val[v] + " -format-> " + s);
-                if (!s.equals(valFormat[v + ival]))
-                    errln("FAIL: Expected " + valFormat[v + ival]);
+                if (!s.equals(valFormat[v + ival])) errln("FAIL: Expected " + valFormat[v + ival]);
 
                 ParsePosition pos = new ParsePosition(0);
                 double a = fmt.parse(s, pos).doubleValue();
                 if (pos.getIndex() == s.length()) {
                     logln("  -parse-> " + Double.toString(a));
                     // Use epsilon comparison as necessary
-                } else
-                    errln("FAIL: Partial parse (" + pos.getIndex() + " chars) -> " + a);
+                } else errln("FAIL: Partial parse (" + pos.getIndex() + " chars) -> " + a);
             }
             for (v = 0; v < lval_length; ++v) {
                 String s;
@@ -363,7 +404,11 @@ public class NumberFormatTest extends CoreTestFmwk {
                         if (a != lvalParse[v + ilval])
                             errln("FAIL: Expected " + lvalParse[v + ilval]);
                     } else
-                        errln("FAIL: Partial parse (" + pos.getIndex() + " chars) -> " + Long.toString(a));
+                        errln(
+                                "FAIL: Partial parse ("
+                                        + pos.getIndex()
+                                        + " chars) -> "
+                                        + Long.toString(a));
                 } else {
                     errln("Fail to parse the string: " + s);
                 }
@@ -381,20 +426,18 @@ public class NumberFormatTest extends CoreTestFmwk {
         DecimalFormatSymbols sym = new DecimalFormatSymbols(Locale.US);
         pat = new StringBuffer("a'fo''o'b#");
         DecimalFormat fmt = new DecimalFormat(pat.toString(), sym);
-        String s = ((NumberFormat)fmt).format(123);
+        String s = ((NumberFormat) fmt).format(123);
         logln("Pattern \"" + pat + "\"");
         logln(" Format 123 . " + s);
-        if (!s.equals("afo'ob123"))
-            errln("FAIL: Expected afo'ob123");
+        if (!s.equals("afo'ob123")) errln("FAIL: Expected afo'ob123");
 
-        s ="";
+        s = "";
         pat = new StringBuffer("a''b#");
         fmt = new DecimalFormat(pat.toString(), sym);
-        s = ((NumberFormat)fmt).format(123);
+        s = ((NumberFormat) fmt).format(123);
         logln("Pattern \"" + pat + "\"");
         logln(" Format 123 . " + s);
-        if (!s.equals("a'b123"))
-            errln("FAIL: Expected a'b123");
+        if (!s.equals("a'b123")) errln("FAIL: Expected a'b123");
     }
 
     @Test
@@ -412,9 +455,7 @@ public class NumberFormatTest extends CoreTestFmwk {
         }
     }
 
-    /**
-     * Test the handling of the currency symbol in patterns.
-     **/
+    /** Test the handling of the currency symbol in patterns. */
     @Test
     public void TestCurrencySign() {
         DecimalFormatSymbols sym = new DecimalFormatSymbols(Locale.US);
@@ -435,7 +476,12 @@ public class NumberFormatTest extends CoreTestFmwk {
 
         pat.setLength(0);
         // "\xA4\xA4 #,##0.00;\xA4\xA4 -#,##0.00"
-        pat.append(currency).append(currency).append(" #,##0.00;").append(currency).append(currency).append(" -#,##0.00");
+        pat.append(currency)
+                .append(currency)
+                .append(" #,##0.00;")
+                .append(currency)
+                .append(currency)
+                .append(" -#,##0.00");
         fmt = new DecimalFormat(pat.toString(), sym);
         s = ((NumberFormat) fmt).format(1234.56);
         logln("Pattern \"" + fmt.toPattern() + "\"");
@@ -452,17 +498,17 @@ public class NumberFormatTest extends CoreTestFmwk {
         // the data are:
         // the string to be parsed, parsed position, parsed error index
         String[][] DATA = {
-                {"$124", "4", "-1"},
-                {"$124 $124", "4", "-1"},
-                {"$124 ", "4", "-1"},
-                {"$124  ", "4", "-1"},
-                {"$ 124 ", "5", "-1"},
-                {"$\u00A0124 ", "5", "-1"},
-                {" $ 124 ", "6", "-1"},
-                {"124$", "4", "-1"},
-                {"124 $", "5", "-1"},
-                {"$124\u200A", "4", "-1"},
-                {"$\u200A124", "5", "-1"},
+            {"$124", "4", "-1"},
+            {"$124 $124", "4", "-1"},
+            {"$124 ", "4", "-1"},
+            {"$124  ", "4", "-1"},
+            {"$ 124 ", "5", "-1"},
+            {"$\u00A0124 ", "5", "-1"},
+            {" $ 124 ", "6", "-1"},
+            {"124$", "4", "-1"},
+            {"124 $", "5", "-1"},
+            {"$124\u200A", "4", "-1"},
+            {"$\u200A124", "5", "-1"},
         };
         NumberFormat foo = NumberFormat.getCurrencyInstance();
         for (int i = 0; i < DATA.length; ++i) {
@@ -472,12 +518,17 @@ public class NumberFormatTest extends CoreTestFmwk {
             int errorIndex = Integer.parseInt(DATA[i][2]);
             try {
                 Number result = foo.parse(stringToBeParsed, parsePosition);
-                if (parsePosition.getIndex() != parsedPosition ||
-                        parsePosition.getErrorIndex() != errorIndex) {
-                    errln("FAILED parse " + stringToBeParsed + "; parse position: " + parsePosition.getIndex() + "; error position: " + parsePosition.getErrorIndex());
+                if (parsePosition.getIndex() != parsedPosition
+                        || parsePosition.getErrorIndex() != errorIndex) {
+                    errln(
+                            "FAILED parse "
+                                    + stringToBeParsed
+                                    + "; parse position: "
+                                    + parsePosition.getIndex()
+                                    + "; error position: "
+                                    + parsePosition.getErrorIndex());
                 }
-                if (parsePosition.getErrorIndex() == -1 &&
-                        result.doubleValue() != 124) {
+                if (parsePosition.getErrorIndex() == -1 && result.doubleValue() != 124) {
                     errln("FAILED parse " + stringToBeParsed + "; value " + result.doubleValue());
                 }
             } catch (Exception e) {
@@ -490,18 +541,18 @@ public class NumberFormatTest extends CoreTestFmwk {
     public void TestSpaceParsingStrict() {
         // All trailing grouping separators should be ignored in strict mode, not just the first.
         Object[][] cases = {
-                {"123 ", 3, -1},
-                {"123  ", 3, -1},
-                {"123  ,", 3, -1},
-                {"123,", 3, -1},
-                {"123, ", 3, -1},
-                {"123,,", 3, -1},
-                {"123,, ", 3, -1},
-                {"123,,456", 3, -1},
-                {"123 ,", 3, -1},
-                {"123, ", 3, -1},
-                {"123, 456", 3, -1},
-                {"123  456", 3, -1}
+            {"123 ", 3, -1},
+            {"123  ", 3, -1},
+            {"123  ,", 3, -1},
+            {"123,", 3, -1},
+            {"123, ", 3, -1},
+            {"123,,", 3, -1},
+            {"123,, ", 3, -1},
+            {"123,,456", 3, -1},
+            {"123 ,", 3, -1},
+            {"123, ", 3, -1},
+            {"123, 456", 3, -1},
+            {"123  456", 3, -1}
         };
         DecimalFormat df = new DecimalFormat("#,###");
         df.setParseStrict(true);
@@ -512,39 +563,82 @@ public class NumberFormatTest extends CoreTestFmwk {
             ParsePosition ppos = new ParsePosition(0);
             df.parse(input, ppos);
             assertEquals("Failed on index: '" + input + "'", expectedIndex, ppos.getIndex());
-            assertEquals("Failed on error: '" + input + "'", expectedErrorIndex, ppos.getErrorIndex());
+            assertEquals(
+                    "Failed on error: '" + input + "'", expectedErrorIndex, ppos.getErrorIndex());
         }
     }
 
     @Test
     public void TestMultiCurrencySign() {
         String[][] DATA = {
-                // the fields in the following test are:
-                // locale,
-                // currency pattern (with negative pattern),
-                // currency number to be formatted,
-                // currency format using currency symbol name, such as "$" for USD,
-                // currency format using currency ISO name, such as "USD",
-                // currency format using plural name, such as "US dollars".
-                // for US locale
-                {"en_US", "\u00A4#,##0.00;-\u00A4#,##0.00", "1234.56", "$1,234.56", "USD 1,234.56", "US dollars 1,234.56"},
-                {"en_US", "\u00A4#,##0.00;-\u00A4#,##0.00", "-1234.56", "-$1,234.56", "-USD 1,234.56", "-US dollars 1,234.56"},
-                {"en_US", "\u00A4#,##0.00;-\u00A4#,##0.00", "1", "$1.00", "USD 1.00", "US dollars 1.00"},
-                // for CHINA locale
-                {"zh_CN", "\u00A4#,##0.00;(\u00A4#,##0.00)", "1234.56", "\u00A51,234.56", "CNY 1,234.56", "\u4EBA\u6C11\u5E01 1,234.56"},
-                {"zh_CN", "\u00A4#,##0.00;(\u00A4#,##0.00)", "-1234.56", "(\u00A51,234.56)", "(CNY 1,234.56)", "(\u4EBA\u6C11\u5E01 1,234.56)"},
-                {"zh_CN", "\u00A4#,##0.00;(\u00A4#,##0.00)", "1", "\u00A51.00", "CNY 1.00", "\u4EBA\u6C11\u5E01 1.00"}
+            // the fields in the following test are:
+            // locale,
+            // currency pattern (with negative pattern),
+            // currency number to be formatted,
+            // currency format using currency symbol name, such as "$" for USD,
+            // currency format using currency ISO name, such as "USD",
+            // currency format using plural name, such as "US dollars".
+            // for US locale
+            {
+                "en_US",
+                "\u00A4#,##0.00;-\u00A4#,##0.00",
+                "1234.56",
+                "$1,234.56",
+                "USD 1,234.56",
+                "US dollars 1,234.56"
+            },
+            {
+                "en_US",
+                "\u00A4#,##0.00;-\u00A4#,##0.00",
+                "-1234.56",
+                "-$1,234.56",
+                "-USD 1,234.56",
+                "-US dollars 1,234.56"
+            },
+            {
+                "en_US",
+                "\u00A4#,##0.00;-\u00A4#,##0.00",
+                "1",
+                "$1.00",
+                "USD 1.00",
+                "US dollars 1.00"
+            },
+            // for CHINA locale
+            {
+                "zh_CN",
+                "\u00A4#,##0.00;(\u00A4#,##0.00)",
+                "1234.56",
+                "\u00A51,234.56",
+                "CNY 1,234.56",
+                "\u4EBA\u6C11\u5E01 1,234.56"
+            },
+            {
+                "zh_CN",
+                "\u00A4#,##0.00;(\u00A4#,##0.00)",
+                "-1234.56",
+                "(\u00A51,234.56)",
+                "(CNY 1,234.56)",
+                "(\u4EBA\u6C11\u5E01 1,234.56)"
+            },
+            {
+                "zh_CN",
+                "\u00A4#,##0.00;(\u00A4#,##0.00)",
+                "1",
+                "\u00A51.00",
+                "CNY 1.00",
+                "\u4EBA\u6C11\u5E01 1.00"
+            }
         };
 
         String doubleCurrencyStr = "\u00A4\u00A4";
         String tripleCurrencyStr = "\u00A4\u00A4\u00A4";
 
-        for (int i=0; i<DATA.length; ++i) {
+        for (int i = 0; i < DATA.length; ++i) {
             String locale = DATA[i][0];
             String pat = DATA[i][1];
             Double numberToBeFormat = Double.valueOf(DATA[i][2]);
             DecimalFormatSymbols sym = new DecimalFormatSymbols(new ULocale(locale));
-            for (int j=1; j<=3; ++j) {
+            for (int j = 1; j <= 3; ++j) {
                 // j represents the number of currency sign in the pattern.
                 if (j == 2) {
                     pat = pat.replaceAll("\u00A4", doubleCurrencyStr);
@@ -561,13 +655,13 @@ public class NumberFormatTest extends CoreTestFmwk {
                 // triple currency sign.
                 // DATA[i][j+2] is the currency format result using
                 // 'j' number of currency sign.
-                String currencyFormatResult = DATA[i][2+j];
+                String currencyFormatResult = DATA[i][2 + j];
                 if (!s.equals(currencyFormatResult)) {
                     errln("FAIL format: Expected " + currencyFormatResult + " but got " + s);
                 }
                 try {
                     // mix style parsing
-                    for (int k=3; k<=4; ++k) {
+                    for (int k = 3; k <= 4; ++k) {
                         // DATA[i][3] is the currency format result using a
                         // single currency sign.
                         // DATA[i][4] is the currency format result using
@@ -576,8 +670,8 @@ public class NumberFormatTest extends CoreTestFmwk {
                         // triple currency sign.
                         // ICU 59: long name parsing requires currency mode.
                         String oneCurrencyFormat = DATA[i][k];
-                        if (fmt.parse(oneCurrencyFormat).doubleValue() !=
-                                numberToBeFormat.doubleValue()) {
+                        if (fmt.parse(oneCurrencyFormat).doubleValue()
+                                != numberToBeFormat.doubleValue()) {
                             errln("FAILED parse " + oneCurrencyFormat);
                         }
                     }
@@ -592,21 +686,24 @@ public class NumberFormatTest extends CoreTestFmwk {
     public void TestCurrencyFormatForMixParsing() {
         MeasureFormat curFmt = MeasureFormat.getCurrencyFormat(new ULocale("en_US"));
         String[] formats = {
-                "$1,234.56",  // string to be parsed
-                "USD1,234.56",
-                "US dollars1,234.56",
-                "1,234.56 US dollars"
+            "$1,234.56", // string to be parsed
+            "USD1,234.56",
+            "US dollars1,234.56",
+            "1,234.56 US dollars"
         };
         try {
             for (int i = 0; i < formats.length; ++i) {
                 String stringToBeParsed = formats[i];
-                CurrencyAmount parsedVal = (CurrencyAmount)curFmt.parseObject(stringToBeParsed);
+                CurrencyAmount parsedVal = (CurrencyAmount) curFmt.parseObject(stringToBeParsed);
                 Number val = parsedVal.getNumber();
                 if (!val.equals(new BigDecimal("1234.56"))) {
-                    errln("FAIL: getCurrencyFormat of default locale (en_US) failed roundtripping the number. val=" + val);
+                    errln(
+                            "FAIL: getCurrencyFormat of default locale (en_US) failed roundtripping the number. val="
+                                    + val);
                 }
                 if (!parsedVal.getCurrency().equals(Currency.getInstance("USD"))) {
-                    errln("FAIL: getCurrencyFormat of default locale (en_US) failed roundtripping the currency");
+                    errln(
+                            "FAIL: getCurrencyFormat of default locale (en_US) failed roundtripping the currency");
                 }
             }
         } catch (ParseException e) {
@@ -614,12 +711,12 @@ public class NumberFormatTest extends CoreTestFmwk {
         }
     }
 
-
     /** Starting in ICU 62, strict mode is actually strict with currency formats. */
     @Test
     public void TestMismatchedCurrencyFormatFail() {
         DecimalFormat df = (DecimalFormat) NumberFormat.getCurrencyInstance(ULocale.ENGLISH);
-        assertEquals("Test assumes that currency sign is at the beginning",
+        assertEquals(
+                "Test assumes that currency sign is at the beginning",
                 "\u00A4#,##0.00",
                 df.toPattern());
         // Should round-trip on the correct currency format:
@@ -651,17 +748,24 @@ public class NumberFormatTest extends CoreTestFmwk {
         StringBuffer pat = new StringBuffer("");
         char currency = 0x00A4;
         // "\xA4#,##0.00;-\xA4#,##0.00"
-        pat.append(currency).append(currency).append(currency).append("#,##0.00;-").append(currency).append(currency).append(currency).append("#,##0.00");
+        pat.append(currency)
+                .append(currency)
+                .append(currency)
+                .append("#,##0.00;-")
+                .append(currency)
+                .append(currency)
+                .append(currency)
+                .append("#,##0.00");
         DecimalFormat fmt = new DecimalFormat(pat.toString(), sym);
         String[][] DATA = {
-                // the data are:
-                // string to be parsed, the parsed result (number)
-                {"$1.00", "1"},
-                {"USD1.00", "1"},
-                {"1.00 US dollar", "1"},
-                {"$1,234.56", "1234.56"},
-                {"USD1,234.56", "1234.56"},
-                {"1,234.56 US dollar", "1234.56"},
+            // the data are:
+            // string to be parsed, the parsed result (number)
+            {"$1.00", "1"},
+            {"USD1.00", "1"},
+            {"1.00 US dollar", "1"},
+            {"$1,234.56", "1234.56"},
+            {"USD1,234.56", "1234.56"},
+            {"1,234.56 US dollar", "1234.56"},
         };
         try {
             for (int i = 0; i < DATA.length; ++i) {
@@ -677,67 +781,69 @@ public class NumberFormatTest extends CoreTestFmwk {
         }
     }
 
-    /**
-     * Test localized currency patterns.
-     */
+    /** Test localized currency patterns. */
     @Test
     public void TestCurrency() {
         String[] DATA = {
-                "fr_CA", "1,50\u00a0$",
-                "de_DE", "1,50\u00a0\u20AC",
-                "de_DE@currency=DEM", "1,50\u00a0DM",
-                "fr_FR", "1,50\u00a0\u20AC",
-                "fr_FR@currency=FRF", "1,50\u00a0F",
+            "fr_CA", "1,50\u00a0$",
+            "de_DE", "1,50\u00a0\u20AC",
+            "de_DE@currency=DEM", "1,50\u00a0DM",
+            "fr_FR", "1,50\u00a0\u20AC",
+            "fr_FR@currency=FRF", "1,50\u00a0F",
         };
 
-        for (int i=0; i<DATA.length; i+=2) {
+        for (int i = 0; i < DATA.length; i += 2) {
             Locale locale = new Locale(DATA[i]);
             NumberFormat fmt = NumberFormat.getCurrencyInstance(locale);
             String s = fmt.format(1.50);
-            if (s.equals(DATA[i+1])) {
+            if (s.equals(DATA[i + 1])) {
                 logln("Ok: 1.50 x " + locale + " => " + s);
             } else {
-                logln("FAIL: 1.50 x " + locale + " => " + s +
-                        ", expected " + DATA[i+1]);
+                logln("FAIL: 1.50 x " + locale + " => " + s + ", expected " + DATA[i + 1]);
             }
         }
 
         // format currency with CurrencyAmount
-        for (int i=0; i<DATA.length; i+=2) {
+        for (int i = 0; i < DATA.length; i += 2) {
             Locale locale = new Locale(DATA[i]);
 
             Currency curr = Currency.getInstance(locale);
-            logln("\nName of the currency is: " + curr.getName(locale, Currency.LONG_NAME, new boolean[] {false}));
+            logln(
+                    "\nName of the currency is: "
+                            + curr.getName(locale, Currency.LONG_NAME, new boolean[] {false}));
             CurrencyAmount cAmt = new CurrencyAmount(1.5, curr);
-            logln("CurrencyAmount object's hashCode is: " + cAmt.hashCode()); //cover hashCode
+            logln("CurrencyAmount object's hashCode is: " + cAmt.hashCode()); // cover hashCode
 
             NumberFormat fmt = NumberFormat.getCurrencyInstance(locale);
             String sCurr = fmt.format(cAmt);
-            if (sCurr.equals(DATA[i+1])) {
+            if (sCurr.equals(DATA[i + 1])) {
                 logln("Ok: 1.50 x " + locale + " => " + sCurr);
             } else {
-                errln("FAIL: 1.50 x " + locale + " => " + sCurr +
-                        ", expected " + DATA[i+1]);
+                errln("FAIL: 1.50 x " + locale + " => " + sCurr + ", expected " + DATA[i + 1]);
             }
         }
 
-        //Cover MeasureFormat.getCurrencyFormat()
+        // Cover MeasureFormat.getCurrencyFormat()
         ULocale save = ULocale.getDefault();
         ULocale.setDefault(ULocale.US);
         MeasureFormat curFmt = MeasureFormat.getCurrencyFormat();
-        String strBuf = curFmt.format(new CurrencyAmount(Float.valueOf(1234.56f), Currency.getInstance("USD")));
+        String strBuf =
+                curFmt.format(
+                        new CurrencyAmount(Float.valueOf(1234.56f), Currency.getInstance("USD")));
 
         try {
-            CurrencyAmount parsedVal = (CurrencyAmount)curFmt.parseObject(strBuf);
+            CurrencyAmount parsedVal = (CurrencyAmount) curFmt.parseObject(strBuf);
             Number val = parsedVal.getNumber();
             if (!val.equals(new BigDecimal("1234.56"))) {
-                errln("FAIL: getCurrencyFormat of default locale (en_US) failed roundtripping the number. val=" + val);
+                errln(
+                        "FAIL: getCurrencyFormat of default locale (en_US) failed roundtripping the number. val="
+                                + val);
             }
             if (!parsedVal.getCurrency().equals(Currency.getInstance("USD"))) {
-                errln("FAIL: getCurrencyFormat of default locale (en_US) failed roundtripping the currency");
+                errln(
+                        "FAIL: getCurrencyFormat of default locale (en_US) failed roundtripping the currency");
             }
-        }
-        catch (ParseException e) {
+        } catch (ParseException e) {
             errln("FAIL: " + e.getMessage());
         }
         ULocale.setDefault(save);
@@ -762,39 +868,53 @@ public class NumberFormatTest extends CoreTestFmwk {
     @Test
     public void TestCurrencyIsoPluralFormat() {
         String[][] DATA = {
-                // the data are:
-                // locale,
-                // currency amount to be formatted,
-                // currency ISO code to be formatted,
-                // format result using CURRENCYSTYLE,
-                // format result using ISOCURRENCYSTYLE,
-                // format result using PLURALCURRENCYSTYLE,
-                {"en_US", "1", "USD", "$1.00", "USD 1.00", "1.00 US dollars"},
-                {"en_US", "1234.56", "USD", "$1,234.56", "USD 1,234.56", "1,234.56 US dollars"},
-                {"en_US", "-1234.56", "USD", "-$1,234.56", "-USD 1,234.56", "-1,234.56 US dollars"},
-                {"zh_CN", "1", "USD", "US$1.00", "USD 1.00", "1.00 美元"},
-                {"zh_CN", "1234.56", "USD", "US$1,234.56", "USD 1,234.56", "1,234.56 美元"},
-                {"zh_CN", "1", "CNY", "¥1.00", "CNY 1.00", "1.00 人民币"},
-                {"zh_CN", "1234.56", "CNY", "¥1,234.56", "CNY 1,234.56", "1,234.56 人民币"},
-                {"ru_RU", "1", "RUB", "1,00 \u20BD", "1,00 RUB", "1,00 российского рубля"},
-                {"ru_RU", "2", "RUB", "2,00 \u20BD", "2,00 RUB", "2,00 российского рубля"},
-                {"ru_RU", "5", "RUB", "5,00 \u20BD", "5,00 RUB", "5,00 российского рубля"},
-                // test locale without currency information
-                {"root", "-1.23", "USD", "-US$ 1.23", "-USD 1.23", "-1.23 USD"},
-                {"root@numbers=latn", "-1.23", "USD", "-US$ 1.23", "-USD 1.23", "-1.23 USD"}, // ensure that the root locale is still used with modifiers
-                {"root@numbers=arab", "-1.23", "USD", "\u061C-\u0661\u066B\u0662\u0663\u00A0US$", "\u061C-\u0661\u066B\u0662\u0663\u00A0USD", "\u061C-\u0661\u066B\u0662\u0663 USD"}, // ensure that the root locale is still used with modifiers
-                {"es_AR", "1", "INR", "INR\u00A01,00", "INR\u00A01,00", "1,00 rupia india"},
-                {"ar_EG", "1", "USD", "\u200F١٫٠٠\u00A0US$", "\u200F١٫٠٠\u00A0USD", "١٫٠٠ دولار أمريكي"},
+            // the data are:
+            // locale,
+            // currency amount to be formatted,
+            // currency ISO code to be formatted,
+            // format result using CURRENCYSTYLE,
+            // format result using ISOCURRENCYSTYLE,
+            // format result using PLURALCURRENCYSTYLE,
+            {"en_US", "1", "USD", "$1.00", "USD 1.00", "1.00 US dollars"},
+            {"en_US", "1234.56", "USD", "$1,234.56", "USD 1,234.56", "1,234.56 US dollars"},
+            {"en_US", "-1234.56", "USD", "-$1,234.56", "-USD 1,234.56", "-1,234.56 US dollars"},
+            {"zh_CN", "1", "USD", "US$1.00", "USD 1.00", "1.00 美元"},
+            {"zh_CN", "1234.56", "USD", "US$1,234.56", "USD 1,234.56", "1,234.56 美元"},
+            {"zh_CN", "1", "CNY", "¥1.00", "CNY 1.00", "1.00 人民币"},
+            {"zh_CN", "1234.56", "CNY", "¥1,234.56", "CNY 1,234.56", "1,234.56 人民币"},
+            {"ru_RU", "1", "RUB", "1,00 \u20BD", "1,00 RUB", "1,00 российского рубля"},
+            {"ru_RU", "2", "RUB", "2,00 \u20BD", "2,00 RUB", "2,00 российского рубля"},
+            {"ru_RU", "5", "RUB", "5,00 \u20BD", "5,00 RUB", "5,00 российского рубля"},
+            // test locale without currency information
+            {"root", "-1.23", "USD", "-US$ 1.23", "-USD 1.23", "-1.23 USD"},
+            {
+                "root@numbers=latn", "-1.23", "USD", "-US$ 1.23", "-USD 1.23", "-1.23 USD"
+            }, // ensure that the root locale is still used with modifiers
+            {
+                "root@numbers=arab",
+                "-1.23",
+                "USD",
+                "\u061C-\u0661\u066B\u0662\u0663\u00A0US$",
+                "\u061C-\u0661\u066B\u0662\u0663\u00A0USD",
+                "\u061C-\u0661\u066B\u0662\u0663 USD"
+            }, // ensure that the root locale is still used with modifiers
+            {"es_AR", "1", "INR", "INR\u00A01,00", "INR\u00A01,00", "1,00 rupia india"},
+            {
+                "ar_EG",
+                "1",
+                "USD",
+                "\u200F١٫٠٠\u00A0US$",
+                "\u200F١٫٠٠\u00A0USD",
+                "١٫٠٠ دولار أمريكي"
+            },
         };
 
-        for (int i=0; i<DATA.length; ++i) {
-            for (int k = NumberFormat.CURRENCYSTYLE;
-                    k <= NumberFormat.PLURALCURRENCYSTYLE;
-                    ++k) {
+        for (int i = 0; i < DATA.length; ++i) {
+            for (int k = NumberFormat.CURRENCYSTYLE; k <= NumberFormat.PLURALCURRENCYSTYLE; ++k) {
                 // k represents currency format style.
-                if ( k != NumberFormat.CURRENCYSTYLE &&
-                        k != NumberFormat.ISOCURRENCYSTYLE &&
-                        k != NumberFormat.PLURALCURRENCYSTYLE ) {
+                if (k != NumberFormat.CURRENCYSTYLE
+                        && k != NumberFormat.ISOCURRENCYSTYLE
+                        && k != NumberFormat.PLURALCURRENCYSTYLE) {
                     continue;
                 }
                 String localeString = DATA[i][0];
@@ -804,15 +924,26 @@ public class NumberFormatTest extends CoreTestFmwk {
                 NumberFormat numFmt = NumberFormat.getInstance(locale, k);
                 numFmt.setCurrency(Currency.getInstance(currencyISOCode));
                 String strBuf = numFmt.format(numberToBeFormat);
-                int resultDataIndex = k-1;
-                if ( k == NumberFormat.CURRENCYSTYLE ) {
-                    resultDataIndex = k+2;
+                int resultDataIndex = k - 1;
+                if (k == NumberFormat.CURRENCYSTYLE) {
+                    resultDataIndex = k + 2;
                 }
                 // DATA[i][resultDataIndex] is the currency format result
                 // using 'k' currency style.
                 String formatResult = DATA[i][resultDataIndex];
                 if (!strBuf.equals(formatResult)) {
-                    errln("FAIL: localeID: " + localeString + ", expected(" + formatResult.length() + "): \"" + formatResult + "\", actual(" + strBuf.length() + "): \"" + strBuf + "\"");
+                    errln(
+                            "FAIL: localeID: "
+                                    + localeString
+                                    + ", expected("
+                                    + formatResult.length()
+                                    + "): \""
+                                    + formatResult
+                                    + "\", actual("
+                                    + strBuf.length()
+                                    + "): \""
+                                    + strBuf
+                                    + "\"");
                 }
                 // test parsing, and test parsing for all currency formats.
                 for (int j = 3; j < 6; ++j) {
@@ -825,27 +956,32 @@ public class NumberFormatTest extends CoreTestFmwk {
                     String oneCurrencyFormatResult = DATA[i][j];
                     CurrencyAmount val = numFmt.parseCurrency(oneCurrencyFormatResult, null);
                     if (val.getNumber().doubleValue() != numberToBeFormat.doubleValue()) {
-                        errln("FAIL: getCurrencyFormat of locale " + localeString + " failed roundtripping the number. val=" + val + "; expected: " + numberToBeFormat);
+                        errln(
+                                "FAIL: getCurrencyFormat of locale "
+                                        + localeString
+                                        + " failed roundtripping the number. val="
+                                        + val
+                                        + "; expected: "
+                                        + numberToBeFormat);
                     }
                 }
             }
         }
     }
 
-
     @Test
     public void TestMiscCurrencyParsing() {
         String[][] DATA = {
-                // each has: string to be parsed, parsed position, error position
-                {"1.00 ", "4", "-1", "0", "4"},
-                {"1.00 UAE dirha", "4", "-1", "0", "4"},
-                {"1.00 us dollar", "14", "-1", "14", "-1"},
-                {"1.00 US DOLLAR", "14", "-1", "14", "-1"},
-                {"1.00 usd", "8", "-1", "8", "-1"},
-                {"1.00 USD", "8", "-1", "8", "-1"},
+            // each has: string to be parsed, parsed position, error position
+            {"1.00 ", "4", "-1", "0", "4"},
+            {"1.00 UAE dirha", "4", "-1", "0", "4"},
+            {"1.00 us dollar", "14", "-1", "14", "-1"},
+            {"1.00 US DOLLAR", "14", "-1", "14", "-1"},
+            {"1.00 usd", "8", "-1", "8", "-1"},
+            {"1.00 USD", "8", "-1", "8", "-1"},
         };
         ULocale locale = new ULocale("en_US");
-        for (int i=0; i<DATA.length; ++i) {
+        for (int i = 0; i < DATA.length; ++i) {
             String stringToBeParsed = DATA[i][0];
             int parsedPosition = Integer.parseInt(DATA[i][1]);
             int errorIndex = Integer.parseInt(DATA[i][2]);
@@ -854,24 +990,46 @@ public class NumberFormatTest extends CoreTestFmwk {
             NumberFormat numFmt = NumberFormat.getInstance(locale, NumberFormat.CURRENCYSTYLE);
             ParsePosition parsePosition = new ParsePosition(0);
             Number val = numFmt.parse(stringToBeParsed, parsePosition);
-            if (parsePosition.getIndex() != parsedPosition ||
-                    parsePosition.getErrorIndex() != errorIndex) {
-                errln("FAIL: parse failed on case "+i+". expected position: " + parsedPosition +"; actual: " + parsePosition.getIndex());
-                errln("FAIL: parse failed on case "+i+". expected error position: " + errorIndex + "; actual: " + parsePosition.getErrorIndex());
+            if (parsePosition.getIndex() != parsedPosition
+                    || parsePosition.getErrorIndex() != errorIndex) {
+                errln(
+                        "FAIL: parse failed on case "
+                                + i
+                                + ". expected position: "
+                                + parsedPosition
+                                + "; actual: "
+                                + parsePosition.getIndex());
+                errln(
+                        "FAIL: parse failed on case "
+                                + i
+                                + ". expected error position: "
+                                + errorIndex
+                                + "; actual: "
+                                + parsePosition.getErrorIndex());
             }
-            if (parsePosition.getErrorIndex() == -1 &&
-                    val.doubleValue() != 1.00) {
+            if (parsePosition.getErrorIndex() == -1 && val.doubleValue() != 1.00) {
                 errln("FAIL: parse failed. expected 1.00, actual:" + val);
             }
             parsePosition = new ParsePosition(0);
             CurrencyAmount amt = numFmt.parseCurrency(stringToBeParsed, parsePosition);
-            if (parsePosition.getIndex() != currParsedPosition ||
-                    parsePosition.getErrorIndex() != currErrorIndex) {
-                errln("FAIL: parseCurrency failed on case "+i+". expected error position: " + currErrorIndex + "; actual: " + parsePosition.getErrorIndex());
-                errln("FAIL: parseCurrency failed on case "+i+". expected position: " + currParsedPosition +"; actual: " + parsePosition.getIndex());
+            if (parsePosition.getIndex() != currParsedPosition
+                    || parsePosition.getErrorIndex() != currErrorIndex) {
+                errln(
+                        "FAIL: parseCurrency failed on case "
+                                + i
+                                + ". expected error position: "
+                                + currErrorIndex
+                                + "; actual: "
+                                + parsePosition.getErrorIndex());
+                errln(
+                        "FAIL: parseCurrency failed on case "
+                                + i
+                                + ". expected position: "
+                                + currParsedPosition
+                                + "; actual: "
+                                + parsePosition.getIndex());
             }
-            if (parsePosition.getErrorIndex() == -1 &&
-                    amt.getNumber().doubleValue() != 1.00) {
+            if (parsePosition.getErrorIndex() == -1 && amt.getNumber().doubleValue() != 1.00) {
                 errln("FAIL: parseCurrency failed. expected 1.00, actual:" + val);
             }
         }
@@ -883,57 +1041,88 @@ public class NumberFormatTest extends CoreTestFmwk {
             private final String localeString;
             private final String descrip;
             private final String currStr;
-            private final int    doubExpectPos;
-            private final int    doubExpectVal;
-            private final int    curExpectPos;
-            private final int    curExpectVal;
+            private final int doubExpectPos;
+            private final int doubExpectVal;
+            private final int curExpectPos;
+            private final int curExpectVal;
             private final String curExpectCurr;
 
-            ParseCurrencyItem(String locStr, String desc, String curr, int doubExPos, int doubExVal, int curExPos, int curExVal, String curExCurr) {
-                localeString  = locStr;
-                descrip       = desc;
-                currStr       = curr;
-                doubExpectPos  = doubExPos;
-                doubExpectVal  = doubExVal;
-                curExpectPos  = curExPos;
-                curExpectVal  = curExVal;
+            ParseCurrencyItem(
+                    String locStr,
+                    String desc,
+                    String curr,
+                    int doubExPos,
+                    int doubExVal,
+                    int curExPos,
+                    int curExVal,
+                    String curExCurr) {
+                localeString = locStr;
+                descrip = desc;
+                currStr = curr;
+                doubExpectPos = doubExPos;
+                doubExpectVal = doubExVal;
+                curExpectPos = curExPos;
+                curExpectVal = curExVal;
                 curExpectCurr = curExCurr;
             }
-            public String getLocaleString()  { return localeString; }
-            public String getDescrip()       { return descrip; }
-            public String getCurrStr()       { return currStr; }
-            public int    getDoubExpectPos()  { return doubExpectPos; }
-            public int    getDoubExpectVal()  { return doubExpectVal; }
-            public int    getCurExpectPos()  { return curExpectPos; }
-            public int    getCurExpectVal()  { return curExpectVal; }
-            public String getCurExpectCurr() { return curExpectCurr; }
+
+            public String getLocaleString() {
+                return localeString;
+            }
+
+            public String getDescrip() {
+                return descrip;
+            }
+
+            public String getCurrStr() {
+                return currStr;
+            }
+
+            public int getDoubExpectPos() {
+                return doubExpectPos;
+            }
+
+            public int getDoubExpectVal() {
+                return doubExpectVal;
+            }
+
+            public int getCurExpectPos() {
+                return curExpectPos;
+            }
+
+            public int getCurExpectVal() {
+                return curExpectVal;
+            }
+
+            public String getCurExpectCurr() {
+                return curExpectCurr;
+            }
         }
-        // Note: In cases where the number occurs before the currency sign, non-currency mode will parse the number
+        // Note: In cases where the number occurs before the currency sign, non-currency mode will
+        // parse the number
         // and stop when it reaches the currency symbol.
         final ParseCurrencyItem[] parseCurrencyItems = {
-                new ParseCurrencyItem( "en_US", "dollars2", "$2.00",            5,  2,  5,  2,  "USD" ),
-                new ParseCurrencyItem( "en_US", "dollars4", "$4",               2,  4,  2,  4,  "USD" ),
-                new ParseCurrencyItem( "en_US", "dollars9", "9\u00A0$",         3,  9,  3,  9,  "USD" ),
-                new ParseCurrencyItem( "en_US", "pounds3",  "\u00A33.00",       0,  0,  5,  3,  "GBP" ),
-                new ParseCurrencyItem( "en_US", "pounds5",  "\u00A35",          0,  0,  2,  5,  "GBP" ),
-                new ParseCurrencyItem( "en_US", "pounds7",  "7\u00A0\u00A3",    1,  7,  3,  7,  "GBP" ),
-                new ParseCurrencyItem( "en_US", "euros8",   "\u20AC8",          0,  0,  2,  8,  "EUR" ),
-
-                new ParseCurrencyItem( "en_GB", "pounds3",  "\u00A33.00",       5,  3,  5,  3,  "GBP" ),
-                new ParseCurrencyItem( "en_GB", "pounds5",  "\u00A35",          2,  5,  2,  5,  "GBP" ),
-                new ParseCurrencyItem( "en_GB", "pounds7",  "7\u00A0\u00A3",    3,  7,  3,  7,  "GBP" ),
-                new ParseCurrencyItem( "en_GB", "euros4",   "4,00\u00A0\u20AC", 4,400,  6,400,  "EUR" ),
-                new ParseCurrencyItem( "en_GB", "euros6",   "6\u00A0\u20AC",    1,  6,  3,  6,  "EUR" ),
-                new ParseCurrencyItem( "en_GB", "euros8",   "\u20AC8",          0,  0,  2,  8,  "EUR" ),
-                new ParseCurrencyItem( "en_GB", "dollars4", "US$4",             0,  0,  4,  4,  "USD" ),
-
-                new ParseCurrencyItem( "fr_FR", "euros4",   "4,00\u00A0\u20AC", 6,  4,  6,  4,  "EUR" ),
-                new ParseCurrencyItem( "fr_FR", "euros6",   "6\u00A0\u20AC",    3,  6,  3,  6,  "EUR" ),
-                new ParseCurrencyItem( "fr_FR", "euros8",   "\u20AC8",          2,  8,  2,  8,  "EUR" ),
-                new ParseCurrencyItem( "fr_FR", "dollars2", "$2.00",            0,  0,  0,  0,  ""    ),
-                new ParseCurrencyItem( "fr_FR", "dollars4", "$4",               0,  0,  0,  0,  ""    ),
+            new ParseCurrencyItem("en_US", "dollars2", "$2.00", 5, 2, 5, 2, "USD"),
+            new ParseCurrencyItem("en_US", "dollars4", "$4", 2, 4, 2, 4, "USD"),
+            new ParseCurrencyItem("en_US", "dollars9", "9\u00A0$", 3, 9, 3, 9, "USD"),
+            new ParseCurrencyItem("en_US", "pounds3", "\u00A33.00", 0, 0, 5, 3, "GBP"),
+            new ParseCurrencyItem("en_US", "pounds5", "\u00A35", 0, 0, 2, 5, "GBP"),
+            new ParseCurrencyItem("en_US", "pounds7", "7\u00A0\u00A3", 1, 7, 3, 7, "GBP"),
+            new ParseCurrencyItem("en_US", "euros8", "\u20AC8", 0, 0, 2, 8, "EUR"),
+            new ParseCurrencyItem("en_GB", "pounds3", "\u00A33.00", 5, 3, 5, 3, "GBP"),
+            new ParseCurrencyItem("en_GB", "pounds5", "\u00A35", 2, 5, 2, 5, "GBP"),
+            new ParseCurrencyItem("en_GB", "pounds7", "7\u00A0\u00A3", 3, 7, 3, 7, "GBP"),
+            new ParseCurrencyItem("en_GB", "euros4", "4,00\u00A0\u20AC", 4, 400, 6, 400, "EUR"),
+            new ParseCurrencyItem("en_GB", "euros6", "6\u00A0\u20AC", 1, 6, 3, 6, "EUR"),
+            new ParseCurrencyItem("en_GB", "euros8", "\u20AC8", 0, 0, 2, 8, "EUR"),
+            new ParseCurrencyItem("en_GB", "dollars4", "US$4", 0, 0, 4, 4, "USD"),
+            new ParseCurrencyItem("fr_FR", "euros4", "4,00\u00A0\u20AC", 6, 4, 6, 4, "EUR"),
+            new ParseCurrencyItem("fr_FR", "euros6", "6\u00A0\u20AC", 3, 6, 3, 6, "EUR"),
+            new ParseCurrencyItem("fr_FR", "euros8", "\u20AC8", 2, 8, 2, 8, "EUR"),
+            new ParseCurrencyItem("fr_FR", "dollars2", "$2.00", 0, 0, 0, 0, ""),
+            new ParseCurrencyItem("fr_FR", "dollars4", "$4", 0, 0, 0, 0, ""),
         };
-        for (ParseCurrencyItem item: parseCurrencyItems) {
+        for (ParseCurrencyItem item : parseCurrencyItems) {
             String localeString = item.getLocaleString();
             ULocale uloc = new ULocale(localeString);
             NumberFormat fmt = null;
@@ -947,31 +1136,81 @@ public class NumberFormatTest extends CoreTestFmwk {
             ParsePosition parsePos = new ParsePosition(0);
 
             Number numVal = fmt.parse(currStr, parsePos);
-            if ( parsePos.getIndex() != item.getDoubExpectPos() || (numVal != null && numVal.intValue() != item.getDoubExpectVal()) ) {
+            if (parsePos.getIndex() != item.getDoubExpectPos()
+                    || (numVal != null && numVal.intValue() != item.getDoubExpectVal())) {
                 if (numVal != null) {
-                    errln("NumberFormat.getCurrencyInstance parse " + localeString + "/" + item.getDescrip() +
-                            ", expect pos/val " + item.getDoubExpectPos() + "/" + item.getDoubExpectVal() +
-                            ", get " + parsePos.getIndex() + "/" + numVal.intValue() );
+                    errln(
+                            "NumberFormat.getCurrencyInstance parse "
+                                    + localeString
+                                    + "/"
+                                    + item.getDescrip()
+                                    + ", expect pos/val "
+                                    + item.getDoubExpectPos()
+                                    + "/"
+                                    + item.getDoubExpectVal()
+                                    + ", get "
+                                    + parsePos.getIndex()
+                                    + "/"
+                                    + numVal.intValue());
                 } else {
-                    errln("NumberFormat.getCurrencyInstance parse " + localeString + "/" + item.getDescrip() +
-                            ", expect pos/val " + item.getDoubExpectPos() + "/" + item.getDoubExpectVal() +
-                            ", get " + parsePos.getIndex() + "/(NULL)" );
+                    errln(
+                            "NumberFormat.getCurrencyInstance parse "
+                                    + localeString
+                                    + "/"
+                                    + item.getDescrip()
+                                    + ", expect pos/val "
+                                    + item.getDoubExpectPos()
+                                    + "/"
+                                    + item.getDoubExpectVal()
+                                    + ", get "
+                                    + parsePos.getIndex()
+                                    + "/(NULL)");
                 }
             }
 
             parsePos.setIndex(0);
             int curExpectPos = item.getCurExpectPos();
             CurrencyAmount currAmt = fmt.parseCurrency(currStr, parsePos);
-            if ( parsePos.getIndex() != curExpectPos || (currAmt != null && (currAmt.getNumber().intValue() != item.getCurExpectVal() ||
-                    currAmt.getCurrency().getCurrencyCode().compareTo(item.getCurExpectCurr()) != 0)) ) {
+            if (parsePos.getIndex() != curExpectPos
+                    || (currAmt != null
+                            && (currAmt.getNumber().intValue() != item.getCurExpectVal()
+                                    || currAmt.getCurrency()
+                                                    .getCurrencyCode()
+                                                    .compareTo(item.getCurExpectCurr())
+                                            != 0))) {
                 if (currAmt != null) {
-                    errln("NumberFormat.getCurrencyInstance parseCurrency " + localeString + "/" + item.getDescrip() +
-                            ", expect pos/val/curr " + curExpectPos + "/" + item.getCurExpectVal() + "/" + item.getCurExpectCurr() +
-                            ", get " + parsePos.getIndex() + "/" + currAmt.getNumber().intValue() + "/" + currAmt.getCurrency().getCurrencyCode() );
+                    errln(
+                            "NumberFormat.getCurrencyInstance parseCurrency "
+                                    + localeString
+                                    + "/"
+                                    + item.getDescrip()
+                                    + ", expect pos/val/curr "
+                                    + curExpectPos
+                                    + "/"
+                                    + item.getCurExpectVal()
+                                    + "/"
+                                    + item.getCurExpectCurr()
+                                    + ", get "
+                                    + parsePos.getIndex()
+                                    + "/"
+                                    + currAmt.getNumber().intValue()
+                                    + "/"
+                                    + currAmt.getCurrency().getCurrencyCode());
                 } else {
-                    errln("NumberFormat.getCurrencyInstance parseCurrency " + localeString + "/" + item.getDescrip() +
-                            ", expect pos/val/curr " + curExpectPos + "/" + item.getCurExpectVal() + "/" + item.getCurExpectCurr() +
-                            ", get " + parsePos.getIndex() + "/(NULL)" );
+                    errln(
+                            "NumberFormat.getCurrencyInstance parseCurrency "
+                                    + localeString
+                                    + "/"
+                                    + item.getDescrip()
+                                    + ", expect pos/val/curr "
+                                    + curExpectPos
+                                    + "/"
+                                    + item.getCurExpectVal()
+                                    + "/"
+                                    + item.getCurExpectCurr()
+                                    + ", get "
+                                    + parsePos.getIndex()
+                                    + "/(NULL)");
                 }
             }
         }
@@ -989,60 +1228,65 @@ public class NumberFormatTest extends CoreTestFmwk {
     public void TestParseCurrPatternWithDecStyle() {
         String currpat = "¤#,##0.00";
         String parsetxt = "x0y$";
-        DecimalFormat decfmt = (DecimalFormat)NumberFormat.getInstance(new ULocale("en_US"), NumberFormat.NUMBERSTYLE);
+        DecimalFormat decfmt =
+                (DecimalFormat)
+                        NumberFormat.getInstance(new ULocale("en_US"), NumberFormat.NUMBERSTYLE);
         decfmt.applyPattern(currpat);
         ParsePosition ppos = new ParsePosition(0);
         Number value = decfmt.parse(parsetxt, ppos);
         if (ppos.getIndex() != 0) {
-            errln("DecimalFormat.parse expected to fail but got ppos " + ppos.getIndex() + ", value " + value);
+            errln(
+                    "DecimalFormat.parse expected to fail but got ppos "
+                            + ppos.getIndex()
+                            + ", value "
+                            + value);
         }
     }
 
-    /**
-     * Test the Currency object handling, new as of ICU 2.2.
-     */
+    /** Test the Currency object handling, new as of ICU 2.2. */
     @Test
     public void TestCurrencyObject() {
-        NumberFormat fmt =
-                NumberFormat.getCurrencyInstance(Locale.US);
+        NumberFormat fmt = NumberFormat.getCurrencyInstance(Locale.US);
 
         expectCurrency(fmt, null, 1234.56, "$1,234.56");
 
-        expectCurrency(fmt, Currency.getInstance(Locale.FRANCE),
-                1234.56, "\u20AC1,234.56"); // Euro
+        expectCurrency(fmt, Currency.getInstance(Locale.FRANCE), 1234.56, "\u20AC1,234.56"); // Euro
 
-        expectCurrency(fmt, Currency.getInstance(Locale.JAPAN),
-                1234.56, "\u00A51,235"); // Yen
+        expectCurrency(fmt, Currency.getInstance(Locale.JAPAN), 1234.56, "\u00A51,235"); // Yen
 
-        expectCurrency(fmt, Currency.getInstance(new Locale("fr", "CH", "")),
-                1234.56, "CHF 1,234.56"); // no more 0.05 rounding here, see cldrbug 5548
+        expectCurrency(
+                fmt,
+                Currency.getInstance(new Locale("fr", "CH", "")),
+                1234.56,
+                "CHF 1,234.56"); // no more 0.05 rounding here, see cldrbug 5548
 
-        expectCurrency(fmt, Currency.getInstance(Locale.US),
-                1234.56, "$1,234.56");
+        expectCurrency(fmt, Currency.getInstance(Locale.US), 1234.56, "$1,234.56");
 
         fmt = NumberFormat.getCurrencyInstance(Locale.FRANCE);
 
         expectCurrency(fmt, null, 1234.56, "1\u202F234,56 \u20AC");
 
-        expectCurrency(fmt, Currency.getInstance(Locale.JAPAN),
-                1234.56, "1\u202F235 JPY"); // Yen
+        expectCurrency(fmt, Currency.getInstance(Locale.JAPAN), 1234.56, "1\u202F235 JPY"); // Yen
 
-        expectCurrency(fmt, Currency.getInstance(new Locale("fr", "CH", "")),
-                1234.56, "1\u202F234,56 CHF"); // no more rounding here, see cldrbug 5548
+        expectCurrency(
+                fmt,
+                Currency.getInstance(new Locale("fr", "CH", "")),
+                1234.56,
+                "1\u202F234,56 CHF"); // no more rounding here, see cldrbug 5548
 
-        expectCurrency(fmt, Currency.getInstance(Locale.US),
-                1234.56, "1\u202F234,56 $US");
+        expectCurrency(fmt, Currency.getInstance(Locale.US), 1234.56, "1\u202F234,56 $US");
 
-        expectCurrency(fmt, Currency.getInstance(Locale.FRANCE),
-                1234.56, "1\u202F234,56 \u20AC"); // Euro
+        expectCurrency(
+                fmt, Currency.getInstance(Locale.FRANCE), 1234.56, "1\u202F234,56 \u20AC"); // Euro
     }
 
     @Test
     public void TestCompatibleCurrencies() {
-        NumberFormat fmt =
-                NumberFormat.getCurrencyInstance(Locale.US);
-        expectParseCurrency(fmt, Currency.getInstance(Locale.JAPAN), "\u00A51,235"); // Yen half-width
-        expectParseCurrency(fmt, Currency.getInstance(Locale.JAPAN), "\uFFE51,235"); // Yen full-wdith
+        NumberFormat fmt = NumberFormat.getCurrencyInstance(Locale.US);
+        expectParseCurrency(
+                fmt, Currency.getInstance(Locale.JAPAN), "\u00A51,235"); // Yen half-width
+        expectParseCurrency(
+                fmt, Currency.getInstance(Locale.JAPAN), "\uFFE51,235"); // Yen full-wdith
     }
 
     @Test
@@ -1050,7 +1294,7 @@ public class NumberFormatTest extends CoreTestFmwk {
         int i;
         Random rnd = new Random(2017);
         Locale[] locs = NumberFormat.getAvailableLocales();
-        for (i=0; i<locs.length; ++i) {
+        for (i = 0; i < locs.length; ++i) {
             if (rnd.nextDouble() < 0.9) {
                 // Check a random subset for speed:
                 // Otherwise, this test takes a large fraction of the entire time.
@@ -1064,10 +1308,14 @@ public class NumberFormatTest extends CoreTestFmwk {
             if (min != max) {
                 String a = nf.format(1.0);
                 String b = nf.format(1.125);
-                errln("FAIL: " + locs[i] +
-                        " min fraction digits != max fraction digits; "+
-                        "x 1.0 => " + a +
-                        "; x 1.125 => " + b);
+                errln(
+                        "FAIL: "
+                                + locs[i]
+                                + " min fraction digits != max fraction digits; "
+                                + "x 1.0 => "
+                                + a
+                                + "; x 1.125 => "
+                                + b);
             }
 
             // Make sure EURO currency formats have exactly 2 fraction digits
@@ -1076,19 +1324,19 @@ public class NumberFormatTest extends CoreTestFmwk {
                 if (curr != null && "EUR".equals(curr.getCurrencyCode())) {
                     if (min != 2 || max != 2) {
                         String a = nf.format(1.0);
-                        errln("FAIL: " + locs[i] +
-                                " is a EURO format but it does not have 2 fraction digits; "+
-                                "x 1.0 => " +
-                                a);
+                        errln(
+                                "FAIL: "
+                                        + locs[i]
+                                        + " is a EURO format but it does not have 2 fraction digits; "
+                                        + "x 1.0 => "
+                                        + a);
                     }
                 }
             }
         }
     }
 
-    /**
-     * Do rudimentary testing of parsing.
-     */
+    /** Do rudimentary testing of parsing. */
     @Test
     public void TestParse() {
         String arg = "0.0";
@@ -1102,9 +1350,7 @@ public class NumberFormatTest extends CoreTestFmwk {
         logln("parse(" + arg + ") = " + aNumber);
     }
 
-    /**
-     * Test proper rounding by the format method.
-     */
+    /** Test proper rounding by the format method. */
     @Test
     public void TestRounding487() {
 
@@ -1115,13 +1361,10 @@ public class NumberFormatTest extends CoreTestFmwk {
         roundingTest(nf, 12.3995, 3, "12.4");
 
         roundingTest(nf, 12.4999, 0, "12");
-        roundingTest(nf, - 19.5, 0, "-20");
-
+        roundingTest(nf, -19.5, 0, "-20");
     }
 
-    /**
-     * Test the functioning of the secondary grouping value.
-     */
+    /** Test the functioning of the secondary grouping value. */
     @Test
     public void TestSecondaryGrouping() {
 
@@ -1150,12 +1393,12 @@ public class NumberFormatTest extends CoreTestFmwk {
             for (int i = 0; i < out.length(); ++i) {
                 boolean expectGroup = false;
                 switch (i) {
-                case 1 :
-                case 4 :
-                case 7 :
-                case 10 :
-                    expectGroup = true;
-                    break;
+                    case 1:
+                    case 4:
+                    case 7:
+                    case 10:
+                        expectGroup = true;
+                        break;
                 }
                 // Later -- fix this to get the actual grouping
                 // character from the resource bundle.
@@ -1167,8 +1410,12 @@ public class NumberFormatTest extends CoreTestFmwk {
             }
         }
         if (!ok) {
-            errln("FAIL  Expected "+ l + " x hi_IN . \"1,87,65,43,210\" (with Hindi digits), got \""
-                    + out + "\"");
+            errln(
+                    "FAIL  Expected "
+                            + l
+                            + " x hi_IN . \"1,87,65,43,210\" (with Hindi digits), got \""
+                            + out
+                            + "\"");
         } else {
             logln("Ok    " + l + " x hi_IN . \"" + out + "\"");
         }
@@ -1177,17 +1424,15 @@ public class NumberFormatTest extends CoreTestFmwk {
     /*
      * Internal test utility.
      */
-    private void roundingTest(NumberFormat nf, double x, int maxFractionDigits, final String expected) {
+    private void roundingTest(
+            NumberFormat nf, double x, int maxFractionDigits, final String expected) {
         nf.setMaximumFractionDigits(maxFractionDigits);
         String out = nf.format(x);
         logln(x + " formats with " + maxFractionDigits + " fractional digits to " + out);
-        if (!out.equals(expected))
-            errln("FAIL: Expected " + expected);
+        if (!out.equals(expected)) errln("FAIL: Expected " + expected);
     }
 
-    /**
-     * Upgrade to alphaWorks
-     */
+    /** Upgrade to alphaWorks */
     @Test
     public void TestExponent() {
         DecimalFormatSymbols US = new DecimalFormatSymbols(Locale.US);
@@ -1197,27 +1442,24 @@ public class NumberFormatTest extends CoreTestFmwk {
         expect2(fmt1, n, "1.234E3");
         expect2(fmt2, n, "1.234E+3");
         expect(fmt1, "1.234E+3", n); // Either format should parse "E+3"
-
     }
 
-    /**
-     * Upgrade to alphaWorks
-     */
+    /** Upgrade to alphaWorks */
     @Test
     public void TestScientific() {
 
         DecimalFormatSymbols US = new DecimalFormatSymbols(Locale.US);
 
         // Test pattern round-trip
-        final String PAT[] = { "#E0", "0.####E0", "00.000E00", "##0.####E000", "0.###E0;[0.###E0]" };
+        final String PAT[] = {"#E0", "0.####E0", "00.000E00", "##0.####E000", "0.###E0;[0.###E0]"};
         int PAT_length = PAT.length;
         int DIGITS[] = {
-                // min int, max int, min frac, max frac
-                0, 1, 0, 0, // "#E0"
-                1, 1, 0, 4, // "0.####E0"
-                2, 2, 3, 3, // "00.000E00"
-                1, 3, 0, 4, // "##0.####E000"
-                1, 1, 0, 3, // "0.###E0;[0.###E0]"
+            // min int, max int, min frac, max frac
+            0, 1, 0, 0, // "#E0"
+            1, 1, 0, 4, // "0.####E0"
+            2, 2, 3, 3, // "00.000E00"
+            1, 3, 0, 4, // "##0.####E000"
+            1, 1, 0, 3, // "0.###E0;[0.###E0]"
         };
         for (int i = 0; i < PAT_length; ++i) {
             String pat = PAT[i];
@@ -1232,17 +1474,27 @@ public class NumberFormatTest extends CoreTestFmwk {
             if (i == 0) continue; // outputs to 1,1,0,0 since at least one min digit is required.
             if (df.getMinimumIntegerDigits() != DIGITS[4 * i]
                     || df.getMaximumIntegerDigits() != DIGITS[4 * i + 1]
-                            || df.getMinimumFractionDigits() != DIGITS[4 * i + 2]
-                                    || df.getMaximumFractionDigits() != DIGITS[4 * i + 3]) {
-                errln("FAIL \""+ pat+ "\" min/max int; min/max frac = "
-                        + df.getMinimumIntegerDigits() + "/"
-                        + df.getMaximumIntegerDigits() + ";"
-                        + df.getMinimumFractionDigits() + "/"
-                        + df.getMaximumFractionDigits() + ", expect "
-                        + DIGITS[4 * i] + "/"
-                        + DIGITS[4 * i + 1] + ";"
-                        + DIGITS[4 * i + 2] + "/"
-                        + DIGITS[4 * i + 3]);
+                    || df.getMinimumFractionDigits() != DIGITS[4 * i + 2]
+                    || df.getMaximumFractionDigits() != DIGITS[4 * i + 3]) {
+                errln(
+                        "FAIL \""
+                                + pat
+                                + "\" min/max int; min/max frac = "
+                                + df.getMinimumIntegerDigits()
+                                + "/"
+                                + df.getMaximumIntegerDigits()
+                                + ";"
+                                + df.getMinimumFractionDigits()
+                                + "/"
+                                + df.getMaximumFractionDigits()
+                                + ", expect "
+                                + DIGITS[4 * i]
+                                + "/"
+                                + DIGITS[4 * i + 1]
+                                + ";"
+                                + DIGITS[4 * i + 2]
+                                + "/"
+                                + DIGITS[4 * i + 3]);
             }
         }
 
@@ -1251,8 +1503,8 @@ public class NumberFormatTest extends CoreTestFmwk {
 
         // pattern of NumberFormat.getScientificInstance(Locale.US) = "0.######E0" not "#E0"
         // so result = 1.234568E4 not 1.2345678901E4
-        //when the pattern problem is finalized, delete comment mark'//'
-        //of the following code
+        // when the pattern problem is finalized, delete comment mark'//'
+        // of the following code
         expect2(NumberFormat.getScientificInstance(Locale.US), 12345.678901, "1.2345678901E4");
         logln("Testing NumberFormat.getScientificInstance(ULocale) ...");
         expect2(NumberFormat.getScientificInstance(ULocale.US), 12345.678901, "1.2345678901E4");
@@ -1336,28 +1588,17 @@ public class NumberFormatTest extends CoreTestFmwk {
         expect2(new DecimalFormat("0.#E+00", US), 12000, "1.2E+04");
     }
 
-    /**
-     * Upgrade to alphaWorks
-     */
+    /** Upgrade to alphaWorks */
     @Test
     public void TestPad() {
 
         DecimalFormatSymbols US = new DecimalFormatSymbols(Locale.US);
         expect2(new DecimalFormat("*^##.##", US), 0, "^^^^0");
         expect2(new DecimalFormat("*^##.##", US), -1.3, "^-1.3");
-        expect2(
-                new DecimalFormat("##0.0####E0*_ 'g-m/s^2'", US),
-                0,
-                "0.0E0______ g-m/s^2");
-        expect(
-                new DecimalFormat("##0.0####E0*_ 'g-m/s^2'", US),
-                1.0 / 3,
-                "333.333E-3_ g-m/s^2");
+        expect2(new DecimalFormat("##0.0####E0*_ 'g-m/s^2'", US), 0, "0.0E0______ g-m/s^2");
+        expect(new DecimalFormat("##0.0####E0*_ 'g-m/s^2'", US), 1.0 / 3, "333.333E-3_ g-m/s^2");
         expect2(new DecimalFormat("##0.0####*_ 'g-m/s^2'", US), 0, "0.0______ g-m/s^2");
-        expect(
-                new DecimalFormat("##0.0####*_ 'g-m/s^2'", US),
-                1.0 / 3,
-                "0.33333__ g-m/s^2");
+        expect(new DecimalFormat("##0.0####*_ 'g-m/s^2'", US), 1.0 / 3, "0.33333__ g-m/s^2");
 
         // Test padding before a sign
         final String formatStr = "*x#,###,###,##0.0#;*x(###,###,##0.0#)";
@@ -1399,24 +1640,24 @@ public class NumberFormatTest extends CoreTestFmwk {
         expect2(new DecimalFormat(formatStr2, US), 112045600.37, "112,045,600.37xx");
         expect2(new DecimalFormat(formatStr2, US), 10252045600.37, "10,252,045,600.37");
 
-        //testing the setPadCharacter(UnicodeString) and getPadCharacterString()
+        // testing the setPadCharacter(UnicodeString) and getPadCharacterString()
         DecimalFormat fmt = new DecimalFormat("#", US);
         char padString = 'P';
         fmt.setPadCharacter(padString);
         expectPad(fmt, "*P##.##", DecimalFormat.PAD_BEFORE_PREFIX, 5, padString);
         fmt.setPadCharacter('^');
         expectPad(fmt, "*^#", DecimalFormat.PAD_BEFORE_PREFIX, 1, '^');
-        //commented until implementation is complete
+        // commented until implementation is complete
         /*  fmt.setPadCharacter((UnicodeString)"^^^");
-          expectPad(fmt, "*^^^#", DecimalFormat.kPadBeforePrefix, 3, (UnicodeString)"^^^");
-          padString.remove();
-          padString.append((UChar)0x0061);
-          padString.append((UChar)0x0302);
-          fmt.setPadCharacter(padString);
-          UChar patternChars[]={0x002a, 0x0061, 0x0302, 0x0061, 0x0302, 0x0023, 0x0000};
-          UnicodeString pattern(patternChars);
-          expectPad(fmt, pattern , DecimalFormat.kPadBeforePrefix, 4, padString);
-         */
+         expectPad(fmt, "*^^^#", DecimalFormat.kPadBeforePrefix, 3, (UnicodeString)"^^^");
+         padString.remove();
+         padString.append((UChar)0x0061);
+         padString.append((UChar)0x0302);
+         fmt.setPadCharacter(padString);
+         UChar patternChars[]={0x002a, 0x0061, 0x0302, 0x0061, 0x0302, 0x0023, 0x0000};
+         UnicodeString pattern(patternChars);
+         expectPad(fmt, pattern , DecimalFormat.kPadBeforePrefix, 4, padString);
+        */
 
         // Test multi-char padding sequence specified via pattern
         expect2(new DecimalFormat("*'😃'####.00", US), 1.1, "😃😃😃1.10");
@@ -1441,13 +1682,11 @@ public class NumberFormatTest extends CoreTestFmwk {
         fmt.applyPattern(pattern);
         String format = fmt.format(24);
         if (!format.equals("24")) {
-             errln("ERROR format result expect 24 but get \"" + format + "\"");
-       }
+            errln("ERROR format result expect 24 but get \"" + format + "\"");
+        }
     }
 
-    /**
-     * Upgrade to alphaWorks
-     */
+    /** Upgrade to alphaWorks */
     @Test
     public void TestPatterns2() {
         DecimalFormatSymbols US = new DecimalFormatSymbols(Locale.US);
@@ -1461,7 +1700,12 @@ public class NumberFormatTest extends CoreTestFmwk {
         expectPad(fmt, "#$*^", DecimalFormat.PAD_AFTER_SUFFIX, 2, hat);
         expectPad(fmt, "$*^$#", -1);
         expectPad(fmt, "#$*^$", -1);
-        expectPad(fmt, "'pre'#,##0*x'post'", DecimalFormat.PAD_BEFORE_SUFFIX, 12, (char) 0x0078 /*x*/);
+        expectPad(
+                fmt,
+                "'pre'#,##0*x'post'",
+                DecimalFormat.PAD_BEFORE_SUFFIX,
+                12,
+                (char) 0x0078 /*x*/);
         expectPad(fmt, "''#0*x", DecimalFormat.PAD_BEFORE_SUFFIX, 3, (char) 0x0078 /*x*/);
         expectPad(fmt, "'I''ll'*a###.##", DecimalFormat.PAD_AFTER_PREFIX, 10, (char) 0x0061 /*a*/);
 
@@ -1501,7 +1745,7 @@ public class NumberFormatTest extends CoreTestFmwk {
         // to what the old implementation produced, "AA*^#,###,##0.00ZZ"
         fmt.setFormatWidth(16);
         //              12  34567890123456
-        //expectPat(fmt, "AA*^#,###,##0.00ZZ");
+        // expectPat(fmt, "AA*^#,###,##0.00ZZ");
         expectPat(fmt, "AA*^#####,##0.00ZZ");
     }
 
@@ -1558,7 +1802,7 @@ public class NumberFormatTest extends CoreTestFmwk {
     @Test
     public void TestScientific2() {
         // jb 2552
-        DecimalFormat fmt = (DecimalFormat)NumberFormat.getCurrencyInstance();
+        DecimalFormat fmt = (DecimalFormat) NumberFormat.getCurrencyInstance();
         Number num = 12.34d;
         expect(fmt, num, "$12.34");
         fmt.setScientificNotation(true);
@@ -1584,24 +1828,40 @@ public class NumberFormatTest extends CoreTestFmwk {
     // sigh, can't have static inner classes, why not?
 
     static final class PI extends Number {
-        /**
-         * For serialization
-         */
+        /** For serialization */
         private static final long serialVersionUID = -305601227915602172L;
 
         private PI() {}
+
         @Override
-        public int intValue() { return (int)Math.PI; }
+        public int intValue() {
+            return (int) Math.PI;
+        }
+
         @Override
-        public long longValue() { return (long)Math.PI; }
+        public long longValue() {
+            return (long) Math.PI;
+        }
+
         @Override
-        public float  floatValue() { return (float)Math.PI; }
+        public float floatValue() {
+            return (float) Math.PI;
+        }
+
         @Override
-        public double doubleValue() { return Math.PI; }
+        public double doubleValue() {
+            return Math.PI;
+        }
+
         @Override
-        public byte byteValue() { return (byte)Math.PI; }
+        public byte byteValue() {
+            return (byte) Math.PI;
+        }
+
         @Override
-        public short shortValue() { return (short)Math.PI; }
+        public short shortValue() {
+            return (short) Math.PI;
+        }
 
         public static final Number INSTANCE = new PI();
     }
@@ -1618,8 +1878,7 @@ public class NumberFormatTest extends CoreTestFmwk {
         try {
             logln(fmt.format("12345"));
             errln("numberformat of string did not throw exception");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             logln("PASS: numberformat of string failed as expected");
         }
 
@@ -1655,10 +1914,12 @@ public class NumberFormatTest extends CoreTestFmwk {
         if (!df.isScientificNotation()) {
             errln("FAIL: isScientificNotation = false, expect true");
         }
-        df.setMinimumExponentDigits((byte)2);
+        df.setMinimumExponentDigits((byte) 2);
         if (df.getMinimumExponentDigits() != 2) {
-            errln("FAIL: getMinimumExponentDigits = " +
-                    df.getMinimumExponentDigits() + ", expect 2");
+            errln(
+                    "FAIL: getMinimumExponentDigits = "
+                            + df.getMinimumExponentDigits()
+                            + ", expect 2");
         }
         df.setExponentSignAlwaysShown(true);
         if (!df.isExponentSignAlwaysShown()) {
@@ -1666,8 +1927,10 @@ public class NumberFormatTest extends CoreTestFmwk {
         }
         df.setSecondaryGroupingSize(0);
         if (df.getSecondaryGroupingSize() != 0) {
-            errln("FAIL: getSecondaryGroupingSize = " +
-                    df.getSecondaryGroupingSize() + ", expect 0");
+            errln(
+                    "FAIL: getSecondaryGroupingSize = "
+                            + df.getSecondaryGroupingSize()
+                            + ", expect 0");
         }
         expect2(df, 3.14159, "3.14159E+00");
 
@@ -1675,14 +1938,16 @@ public class NumberFormatTest extends CoreTestFmwk {
         DecimalFormatSymbols decsym1 = DecimalFormatSymbols.getInstance();
         DecimalFormatSymbols decsym2 = new DecimalFormatSymbols();
         if (!decsym1.equals(decsym2)) {
-            errln("FAIL: DecimalFormatSymbols returned by getInstance()" +
-                    "does not match new DecimalFormatSymbols().");
+            errln(
+                    "FAIL: DecimalFormatSymbols returned by getInstance()"
+                            + "does not match new DecimalFormatSymbols().");
         }
         decsym1 = DecimalFormatSymbols.getInstance(Locale.JAPAN);
         decsym2 = DecimalFormatSymbols.getInstance(ULocale.JAPAN);
         if (!decsym1.equals(decsym2)) {
-            errln("FAIL: DecimalFormatSymbols returned by getInstance(Locale.JAPAN)" +
-                    "does not match the one returned by getInstance(ULocale.JAPAN).");
+            errln(
+                    "FAIL: DecimalFormatSymbols returned by getInstance(Locale.JAPAN)"
+                            + "does not match the one returned by getInstance(ULocale.JAPAN).");
         }
 
         // DecimalFormatSymbols#getAvailableLocales/#getAvailableULocales
@@ -1690,22 +1955,26 @@ public class NumberFormatTest extends CoreTestFmwk {
         if (allLocales.length == 0) {
             errln("FAIL: Got a empty list for DecimalFormatSymbols.getAvailableLocales");
         } else {
-            logln("PASS: " + allLocales.length +
-                    " available locales returned by DecimalFormatSymbols.getAvailableLocales");
+            logln(
+                    "PASS: "
+                            + allLocales.length
+                            + " available locales returned by DecimalFormatSymbols.getAvailableLocales");
         }
         ULocale[] allULocales = DecimalFormatSymbols.getAvailableULocales();
         if (allULocales.length == 0) {
             errln("FAIL: Got a empty list for DecimalFormatSymbols.getAvailableLocales");
         } else {
-            logln("PASS: " + allULocales.length +
-                    " available locales returned by DecimalFormatSymbols.getAvailableULocales");
+            logln(
+                    "PASS: "
+                            + allULocales.length
+                            + " available locales returned by DecimalFormatSymbols.getAvailableULocales");
         }
     }
 
     @Test
     public void TestLocalizedPatternSymbolCoverage() {
-        String[] standardPatterns = { "#,##0.05+%;#,##0.05-%", "* @@@E0‰" };
-        String[] localizedPatterns = { "▰⁖▰▰໐⁘໐໕†⁜⁙▰⁖▰▰໐⁘໐໕‡⁜", "⁂ ⁕⁕⁕⁑⁑໐‱" };
+        String[] standardPatterns = {"#,##0.05+%;#,##0.05-%", "* @@@E0‰"};
+        String[] localizedPatterns = {"▰⁖▰▰໐⁘໐໕†⁜⁙▰⁖▰▰໐⁘໐໕‡⁜", "⁂ ⁕⁕⁕⁑⁑໐‱"};
 
         DecimalFormatSymbols dfs = new DecimalFormatSymbols();
         dfs.setGroupingSeparator('⁖');
@@ -1721,7 +1990,7 @@ public class NumberFormatTest extends CoreTestFmwk {
         dfs.setExponentSeparator("⁑⁑"); // tests multi-char sequence
         dfs.setPadEscape('⁂');
 
-        for (int i=0; i<2; i++) {
+        for (int i = 0; i < 2; i++) {
             String standardPattern = standardPatterns[i];
             String localizedPattern = localizedPatterns[i];
 
@@ -1729,32 +1998,42 @@ public class NumberFormatTest extends CoreTestFmwk {
             df1.applyPattern(standardPattern);
             DecimalFormat df2 = new DecimalFormat("#", dfs);
             df2.applyLocalizedPattern(localizedPattern);
-            assertEquals("DecimalFormat instances should be equal",
-                    df1, df2);
-            assertEquals("toPattern should match on localizedPattern instance",
-                    standardPattern, df2.toPattern());
-            assertEquals("toLocalizedPattern should match on standardPattern instance",
-                    localizedPattern, df1.toLocalizedPattern());
+            assertEquals("DecimalFormat instances should be equal", df1, df2);
+            assertEquals(
+                    "toPattern should match on localizedPattern instance",
+                    standardPattern,
+                    df2.toPattern());
+            assertEquals(
+                    "toLocalizedPattern should match on standardPattern instance",
+                    localizedPattern,
+                    df1.toLocalizedPattern());
         }
     }
 
     @Test
-    public void TestParseEmpty(){
+    public void TestParseEmpty() {
         String parsetxt = "";
-        NumberFormat numfmt = NumberFormat.getInstance(new ULocale("en_US"), NumberFormat.NUMBERSTYLE);
+        NumberFormat numfmt =
+                NumberFormat.getInstance(new ULocale("en_US"), NumberFormat.NUMBERSTYLE);
         ParsePosition ppos = new ParsePosition(0);
         Number value = null;
         try {
             value = numfmt.parse(parsetxt, ppos);
-            if (value==null) {
-                logln("NumberFormat.parse empty string succeeds (no exception) with null return as expected, ppos " + ppos.getIndex());
+            if (value == null) {
+                logln(
+                        "NumberFormat.parse empty string succeeds (no exception) with null return as expected, ppos "
+                                + ppos.getIndex());
             } else {
-                errln("NumberFormat.parse empty string succeeds (no exception) but returns non-null value " + value + ", ppos " + ppos.getIndex());
+                errln(
+                        "NumberFormat.parse empty string succeeds (no exception) but returns non-null value "
+                                + value
+                                + ", ppos "
+                                + ppos.getIndex());
             }
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             errln("NumberFormat.parse empty string throws IllegalArgumentException");
         }
-     }
+    }
 
     @Test
     public void TestParseNull() throws ParseException {
@@ -1762,15 +2041,18 @@ public class NumberFormatTest extends CoreTestFmwk {
         try {
             df.parse(null);
             fail("df.parse(null) didn't throw an exception");
-        } catch (IllegalArgumentException e){}
+        } catch (IllegalArgumentException e) {
+        }
         try {
             df.parse(null, null);
             fail("df.parse(null) didn't throw an exception");
-        } catch (IllegalArgumentException e){}
+        } catch (IllegalArgumentException e) {
+        }
         try {
             df.parseCurrency(null, null);
             fail("df.parse(null) didn't throw an exception");
-        } catch (IllegalArgumentException e){}
+        } catch (IllegalArgumentException e) {
+        }
     }
 
     @Test
@@ -1833,9 +2115,7 @@ public class NumberFormatTest extends CoreTestFmwk {
         }
     }
 
-    /**
-     * Test currencies whose display name is a ChoiceFormat.
-     */
+    /** Test currencies whose display name is a ChoiceFormat. */
     @Test
     public void TestComplexCurrency() {
         //  CLDR No Longer uses complex currency symbols.
@@ -1861,9 +2141,7 @@ public class NumberFormatTest extends CoreTestFmwk {
         }
     }
 
-    /**
-     * Test alternate numbering systems
-     */
+    /** Test alternate numbering systems */
     @Test
     public void TestNumberingSystems() {
         class TestNumberingSystemItem {
@@ -1873,7 +2151,7 @@ public class NumberFormatTest extends CoreTestFmwk {
             private final String expectedResult;
 
             TestNumberingSystemItem(String loc, double val, boolean rbnf, String exp) {
-                localeName  = loc;
+                localeName = loc;
                 value = val;
                 isRBNF = rbnf;
                 expectedResult = exp;
@@ -1881,32 +2159,84 @@ public class NumberFormatTest extends CoreTestFmwk {
         }
 
         final TestNumberingSystemItem[] DATA = {
-                new TestNumberingSystemItem( "en_US@numbers=thai",        1234.567, false, "\u0e51,\u0e52\u0e53\u0e54.\u0e55\u0e56\u0e57" ),
-                new TestNumberingSystemItem( "en_US@numbers=thai",        1234.567, false, "\u0E51,\u0E52\u0E53\u0E54.\u0E55\u0E56\u0E57" ),
-                new TestNumberingSystemItem( "en_US@numbers=hebr",        5678.0,   true,  "\u05D4\u05F3\u05EA\u05E8\u05E2\u05F4\u05D7" ),
-                new TestNumberingSystemItem( "en_US@numbers=arabext",     1234.567, false, "\u06F1\u066c\u06F2\u06F3\u06F4\u066b\u06F5\u06F6\u06F7" ),
-                new TestNumberingSystemItem( "de_DE@numbers=foobar",      1234.567, false, "1.234,567" ),
-                new TestNumberingSystemItem( "ar_EG",                     1234.567, false, "\u0661\u066c\u0662\u0663\u0664\u066b\u0665\u0666\u0667" ),
-                new TestNumberingSystemItem( "th_TH@numbers=traditional", 1234.567, false, "\u0E51,\u0E52\u0E53\u0E54.\u0E55\u0E56\u0E57" ), // fall back to native per TR35
-                new TestNumberingSystemItem( "ar_MA",                     1234.567, false, "1.234,567" ),
-                new TestNumberingSystemItem( "en_US@numbers=hanidec",     1234.567, false, "\u4e00,\u4e8c\u4e09\u56db.\u4e94\u516d\u4e03" ),
-                new TestNumberingSystemItem( "ta_IN@numbers=native",      1234.567, false, "\u0BE7,\u0BE8\u0BE9\u0BEA.\u0BEB\u0BEC\u0BED" ),
-                new TestNumberingSystemItem( "ta_IN@numbers=traditional", 1235.0,   true,  "\u0BF2\u0BE8\u0BF1\u0BE9\u0BF0\u0BEB" ),
-                new TestNumberingSystemItem( "ta_IN@numbers=finance",     1234.567, false, "1,234.567" ), // fall back to default per TR35
-                new TestNumberingSystemItem( "zh_TW@numbers=native",      1234.567, false, "\u4e00,\u4e8c\u4e09\u56db.\u4e94\u516d\u4e03" ),
-                new TestNumberingSystemItem( "zh_TW@numbers=traditional", 1234.567, true,  "\u4E00\u5343\u4E8C\u767E\u4E09\u5341\u56DB\u9EDE\u4E94\u516D\u4E03" ),
-                new TestNumberingSystemItem( "zh_TW@numbers=finance",     1234.567, true,  "\u58F9\u4EDF\u8CB3\u4F70\u53C3\u62FE\u8086\u9EDE\u4F0D\u9678\u67D2" ),
-                new TestNumberingSystemItem( "en_US@numbers=mathsanb",    1234.567, false,  "𝟭,𝟮𝟯𝟰.𝟱𝟲𝟳" ), // ticket #13286
+            new TestNumberingSystemItem(
+                    "en_US@numbers=thai",
+                    1234.567,
+                    false,
+                    "\u0e51,\u0e52\u0e53\u0e54.\u0e55\u0e56\u0e57"),
+            new TestNumberingSystemItem(
+                    "en_US@numbers=thai",
+                    1234.567,
+                    false,
+                    "\u0E51,\u0E52\u0E53\u0E54.\u0E55\u0E56\u0E57"),
+            new TestNumberingSystemItem(
+                    "en_US@numbers=hebr",
+                    5678.0,
+                    true,
+                    "\u05D4\u05F3\u05EA\u05E8\u05E2\u05F4\u05D7"),
+            new TestNumberingSystemItem(
+                    "en_US@numbers=arabext",
+                    1234.567,
+                    false,
+                    "\u06F1\u066c\u06F2\u06F3\u06F4\u066b\u06F5\u06F6\u06F7"),
+            new TestNumberingSystemItem("de_DE@numbers=foobar", 1234.567, false, "1.234,567"),
+            new TestNumberingSystemItem(
+                    "ar_EG",
+                    1234.567,
+                    false,
+                    "\u0661\u066c\u0662\u0663\u0664\u066b\u0665\u0666\u0667"),
+            new TestNumberingSystemItem(
+                    "th_TH@numbers=traditional",
+                    1234.567,
+                    false,
+                    "\u0E51,\u0E52\u0E53\u0E54.\u0E55\u0E56\u0E57"), // fall back to native per TR35
+            new TestNumberingSystemItem("ar_MA", 1234.567, false, "1.234,567"),
+            new TestNumberingSystemItem(
+                    "en_US@numbers=hanidec",
+                    1234.567,
+                    false,
+                    "\u4e00,\u4e8c\u4e09\u56db.\u4e94\u516d\u4e03"),
+            new TestNumberingSystemItem(
+                    "ta_IN@numbers=native",
+                    1234.567,
+                    false,
+                    "\u0BE7,\u0BE8\u0BE9\u0BEA.\u0BEB\u0BEC\u0BED"),
+            new TestNumberingSystemItem(
+                    "ta_IN@numbers=traditional",
+                    1235.0,
+                    true,
+                    "\u0BF2\u0BE8\u0BF1\u0BE9\u0BF0\u0BEB"),
+            new TestNumberingSystemItem(
+                    "ta_IN@numbers=finance",
+                    1234.567,
+                    false,
+                    "1,234.567"), // fall back to default per TR35
+            new TestNumberingSystemItem(
+                    "zh_TW@numbers=native",
+                    1234.567,
+                    false,
+                    "\u4e00,\u4e8c\u4e09\u56db.\u4e94\u516d\u4e03"),
+            new TestNumberingSystemItem(
+                    "zh_TW@numbers=traditional",
+                    1234.567,
+                    true,
+                    "\u4E00\u5343\u4E8C\u767E\u4E09\u5341\u56DB\u9EDE\u4E94\u516D\u4E03"),
+            new TestNumberingSystemItem(
+                    "zh_TW@numbers=finance",
+                    1234.567,
+                    true,
+                    "\u58F9\u4EDF\u8CB3\u4F70\u53C3\u62FE\u8086\u9EDE\u4F0D\u9678\u67D2"),
+            new TestNumberingSystemItem(
+                    "en_US@numbers=mathsanb", 1234.567, false, "𝟭,𝟮𝟯𝟰.𝟱𝟲𝟳"), // ticket #13286
         };
-
 
         for (TestNumberingSystemItem item : DATA) {
             ULocale loc = new ULocale(item.localeName);
             NumberFormat fmt = NumberFormat.getInstance(loc);
             if (item.isRBNF) {
-                expect3(fmt,item.value,item.expectedResult);
+                expect3(fmt, item.value, item.expectedResult);
             } else {
-                expect2(fmt,item.value,item.expectedResult);
+                expect2(fmt, item.value, item.expectedResult);
             }
         }
     }
@@ -1920,15 +2250,18 @@ public class NumberFormatTest extends CoreTestFmwk {
             errln("ERROR: NumberingSystem.getAvailableNames() returned a null or empty array.");
         } else {
             // Check for alphabetical order
-            for (int i=0; i<availableNames.length-1; i++) {
-                assertTrue("Names should be in alphabetical order",
-                        availableNames[i].compareTo(availableNames[i+1]) < 0);
+            for (int i = 0; i < availableNames.length - 1; i++) {
+                assertTrue(
+                        "Names should be in alphabetical order",
+                        availableNames[i].compareTo(availableNames[i + 1]) < 0);
             }
 
             boolean latnFound = false;
-            for (String name : availableNames){
-                assertNotEquals("should not throw and should not be null",
-                        null, NumberingSystem.getInstanceByName(name));
+            for (String name : availableNames) {
+                assertNotEquals(
+                        "should not throw and should not be null",
+                        null,
+                        NumberingSystem.getInstanceByName(name));
                 if ("latn".equals(name)) {
                     latnFound = true;
                     break;
@@ -1936,17 +2269,21 @@ public class NumberFormatTest extends CoreTestFmwk {
             }
 
             if (!latnFound) {
-                errln("ERROR: 'latn' numbering system not found on NumberingSystem.getAvailableNames().");
+                errln(
+                        "ERROR: 'latn' numbering system not found on NumberingSystem.getAvailableNames().");
             }
         }
 
-        assertEquals("Non-existing numbering system should return null",
-                null, NumberingSystem.getInstanceByName("dummy"));
+        assertEquals(
+                "Non-existing numbering system should return null",
+                null,
+                NumberingSystem.getInstanceByName("dummy"));
 
         // Test NumberingSystem.getInstance()
         NumberingSystem ns1 = NumberingSystem.getInstance();
         if (ns1 == null || ns1.isAlgorithmic()) {
-            errln("ERROR: NumberingSystem.getInstance() returned a null or invalid NumberingSystem");
+            errln(
+                    "ERROR: NumberingSystem.getInstance() returned a null or invalid NumberingSystem");
         }
 
         // Test NumberingSystem.getInstance(int,boolean,String)
@@ -1957,13 +2294,15 @@ public class NumberFormatTest extends CoreTestFmwk {
          */
         NumberingSystem ns2 = NumberingSystem.getInstance(10, false, "0123456789");
         if (ns2 == null || ns2.isAlgorithmic()) {
-            errln("ERROR: NumberingSystem.getInstance(int,boolean,String) returned a null or invalid NumberingSystem");
+            errln(
+                    "ERROR: NumberingSystem.getInstance(int,boolean,String) returned a null or invalid NumberingSystem");
         }
 
         // Test NumberingSystem.getInstance(Locale)
         NumberingSystem ns3 = NumberingSystem.getInstance(Locale.ENGLISH);
         if (ns3 == null || ns3.isAlgorithmic()) {
-            errln("ERROR: NumberingSystem.getInstance(Locale) returned a null or invalid NumberingSystem");
+            errln(
+                    "ERROR: NumberingSystem.getInstance(Locale) returned a null or invalid NumberingSystem");
         }
     }
 
@@ -1972,13 +2311,16 @@ public class NumberFormatTest extends CoreTestFmwk {
         Currency cur1 = Currency.getInstance(new Locale("und", "PH"));
 
         NumberFormat nfmt = NumberFormat.getCurrencyInstance(new Locale("und", "PH"));
-        DecimalFormatSymbols decsym = ((DecimalFormat)nfmt).getDecimalFormatSymbols();
+        DecimalFormatSymbols decsym = ((DecimalFormat) nfmt).getDecimalFormatSymbols();
         Currency cur2 = decsym.getCurrency();
 
-        if ( !cur1.getCurrencyCode().equals("PHP") || !cur2.getCurrencyCode().equals("PHP")) {
-            errln("FAIL: Currencies should match PHP: cur1 = "+cur1.getCurrencyCode()+"; cur2 = "+cur2.getCurrencyCode());
+        if (!cur1.getCurrencyCode().equals("PHP") || !cur2.getCurrencyCode().equals("PHP")) {
+            errln(
+                    "FAIL: Currencies should match PHP: cur1 = "
+                            + cur1.getCurrencyCode()
+                            + "; cur2 = "
+                            + cur2.getCurrencyCode());
         }
-
     }
 
     @Test
@@ -2027,7 +2369,7 @@ public class NumberFormatTest extends CoreTestFmwk {
 
         for (int i = 2; i < tasks.length; i++) {
             String str1 = tasks[i].result();
-            String str2 = tasks[i-2].result();
+            String str2 = tasks[i - 2].result();
             if (!str1.equals(str2)) {
                 System.out.println("mismatch at " + i);
                 System.out.println(str1);
@@ -2043,15 +2385,13 @@ public class NumberFormatTest extends CoreTestFmwk {
     @Test
     public void TestPerMill() {
         DecimalFormat fmt = new DecimalFormat("###.###\u2030");
-        assertEquals("0.4857 x ###.###\u2030",
-                "485.7\u2030", fmt.format(0.4857));
+        assertEquals("0.4857 x ###.###\u2030", "485.7\u2030", fmt.format(0.4857));
 
         DecimalFormatSymbols sym = new DecimalFormatSymbols(Locale.ENGLISH);
         sym.setPerMill('m');
         DecimalFormat fmt2 = new DecimalFormat("", sym);
         fmt2.applyLocalizedPattern("###.###m");
-        assertEquals("0.4857 x ###.###m",
-                "485.7m", fmt2.format(0.4857));
+        assertEquals("0.4857 x ###.###m", "485.7m", fmt2.format(0.4857));
     }
 
     @Test
@@ -2060,12 +2400,11 @@ public class NumberFormatTest extends CoreTestFmwk {
         // Prefix with "-:" for illegal patterns
         // Prefix with "+:" for legal patterns
         String DATA[] = {
-                // Unquoted special characters in the suffix are illegal
-                "-:000.000|###",
-                "+:000.000'|###'",
+            // Unquoted special characters in the suffix are illegal
+            "-:000.000|###", "+:000.000'|###'",
         };
-        for (int i=0; i<DATA.length; ++i) {
-            String pat=DATA[i];
+        for (int i = 0; i < DATA.length; ++i) {
+            String pat = DATA[i];
             boolean valid = pat.charAt(0) == '+';
             pat = pat.substring(2);
             Exception e = null;
@@ -2077,36 +2416,39 @@ public class NumberFormatTest extends CoreTestFmwk {
             } catch (IndexOutOfBoundsException e1) {
                 e = e1;
             }
-            String msg = (e==null) ? "success" : e.getMessage();
-            if ((e==null) == valid) {
+            String msg = (e == null) ? "success" : e.getMessage();
+            if ((e == null) == valid) {
                 logln("Ok: pattern \"" + pat + "\": " + msg);
             } else {
-                errln("FAIL: pattern \"" + pat + "\" should have " +
-                        (valid?"succeeded":"failed") + "; got " + msg);
+                errln(
+                        "FAIL: pattern \""
+                                + pat
+                                + "\" should have "
+                                + (valid ? "succeeded" : "failed")
+                                + "; got "
+                                + msg);
             }
         }
     }
 
     /**
-     * Parse a CurrencyAmount using the given NumberFormat, with
-     * the 'delim' character separating the number and the currency.
+     * Parse a CurrencyAmount using the given NumberFormat, with the 'delim' character separating
+     * the number and the currency.
      */
-    private static CurrencyAmount parseCurrencyAmount(String str, NumberFormat fmt,
-            char delim)
-                    throws ParseException {
+    private static CurrencyAmount parseCurrencyAmount(String str, NumberFormat fmt, char delim)
+            throws ParseException {
         int i = str.indexOf(delim);
-        return new CurrencyAmount(fmt.parse(str.substring(0,i)),
-                Currency.getInstance(str.substring(i+1)));
+        return new CurrencyAmount(
+                fmt.parse(str.substring(0, i)), Currency.getInstance(str.substring(i + 1)));
     }
 
     /**
-     * Return an integer representing the next token from this
-     * iterator.  The integer will be an index into the given list, or
-     * -1 if there are no more tokens, or -2 if the token is not on
+     * Return an integer representing the next token from this iterator. The integer will be an
+     * index into the given list, or -1 if there are no more tokens, or -2 if the token is not on
      * the list.
      */
     private static int keywordIndex(String tok) {
-        for (int i=0; i<KEYWORDS.length; ++i) {
+        for (int i = 0; i < KEYWORDS.length; ++i) {
             if (tok.equals(KEYWORDS[i])) {
                 return i;
             }
@@ -2117,17 +2459,17 @@ public class NumberFormatTest extends CoreTestFmwk {
     private static final String KEYWORDS[] = {
         /*0*/ "ref=", // <reference pattern to parse numbers>
         /*1*/ "loc=", // <locale for formats>
-        /*2*/ "f:",   // <pattern or '-'> <number> <exp. string>
-        /*3*/ "fp:",  // <pattern or '-'> <number> <exp. string> <exp. number>
-        /*4*/ "rt:",  // <pattern or '-'> <(exp.) number> <(exp.) string>
-        /*5*/ "p:",   // <pattern or '-'> <string> <exp. number>
+        /*2*/ "f:", // <pattern or '-'> <number> <exp. string>
+        /*3*/ "fp:", // <pattern or '-'> <number> <exp. string> <exp. number>
+        /*4*/ "rt:", // <pattern or '-'> <(exp.) number> <(exp.) string>
+        /*5*/ "p:", // <pattern or '-'> <string> <exp. number>
         /*6*/ "perr:", // <pattern or '-'> <invalid string>
         /*7*/ "pat:", // <pattern or '-'> <exp. toPattern or '-' or 'err'>
         /*8*/ "fpc:", // <loc or '-'> <curr.amt> <exp. string> <exp. curr.amt>
         /*9*/ "strict=", // true or false
     };
 
-    @SuppressWarnings("resource")  // InputStream is will be closed by the ResourceReader.
+    @SuppressWarnings("resource") // InputStream is will be closed by the ResourceReader.
     @Test
     public void TestCases() {
         String caseFileName = "NumberFormatTestCases.txt";
@@ -2143,7 +2485,7 @@ public class NumberFormatTest extends CoreTestFmwk {
         boolean strict = false;
 
         try {
-            for (;;) {
+            for (; ; ) {
                 String tok = tokens.next();
                 if (tok == null) {
                     break;
@@ -2151,157 +2493,196 @@ public class NumberFormatTest extends CoreTestFmwk {
                 String where = "(" + tokens.getLineNumber() + ") ";
                 int cmd = keywordIndex(tok);
                 switch (cmd) {
-                case 0:
-                    // ref= <reference pattern>
-                    ref = new DecimalFormat(tokens.next(),
-                            new DecimalFormatSymbols(Locale.US));
-                    ref.setParseStrict(strict);
-                    logln("Setting reference pattern to:\t" + ref);
-                    break;
-                case 1:
-                    // loc= <locale>
-                    loc = LocaleUtility.getLocaleFromName(tokens.next());
-                    pat = ((DecimalFormat) NumberFormat.getInstance(loc)).toPattern();
-                    logln("Setting locale to:\t" + loc + ", \tand pattern to:\t" + pat);
-                    break;
-                case 2: // f:
-                case 3: // fp:
-                case 4: // rt:
-                case 5: // p:
-                    tok = tokens.next();
-                    if (!tok.equals("-")) {
-                        pat = tok;
-                    }
-                    try {
-                        fmt = new DecimalFormat(pat, new DecimalFormatSymbols(loc));
-                        fmt.setParseStrict(strict);
-                    } catch (IllegalArgumentException iae) {
-                        errln(where + "Pattern \"" + pat + '"');
-                        iae.printStackTrace();
-                        tokens.next(); // consume remaining tokens
-                        //tokens.next();
-                        if (cmd == 3) tokens.next();
-                        continue;
-                    }
-                    str = null;
-                    try {
-                        if (cmd == 2 || cmd == 3 || cmd == 4) {
-                            // f: <pattern or '-'> <number> <exp. string>
-                            // fp: <pattern or '-'> <number> <exp. string> <exp. number>
-                            // rt: <pattern or '-'> <number> <string>
-                            String num = tokens.next();
-                            str = tokens.next();
-                            Number n = ref.parse(num);
-                            assertEquals(where + '"' + pat + "\".format(" + num + ")",
-                                    str, fmt.format(n));
-                            if (cmd == 3) { // fp:
-                                n = ref.parse(tokens.next());
-                            }
-                            if (cmd != 2) { // != f:
-                                assertEquals(where + '"' + pat + "\".parse(\"" + str + "\")",
-                                        n, fmt.parse(str));
-                            }
+                    case 0:
+                        // ref= <reference pattern>
+                        ref = new DecimalFormat(tokens.next(), new DecimalFormatSymbols(Locale.US));
+                        ref.setParseStrict(strict);
+                        logln("Setting reference pattern to:\t" + ref);
+                        break;
+                    case 1:
+                        // loc= <locale>
+                        loc = LocaleUtility.getLocaleFromName(tokens.next());
+                        pat = ((DecimalFormat) NumberFormat.getInstance(loc)).toPattern();
+                        logln("Setting locale to:\t" + loc + ", \tand pattern to:\t" + pat);
+                        break;
+                    case 2: // f:
+                    case 3: // fp:
+                    case 4: // rt:
+                    case 5: // p:
+                        tok = tokens.next();
+                        if (!tok.equals("-")) {
+                            pat = tok;
                         }
-                        // p: <pattern or '-'> <string to parse> <exp. number>
-                        else {
-                            str = tokens.next();
-                            String expstr = tokens.next();
-                            Number parsed = fmt.parse(str);
-                            Number exp = ref.parse(expstr);
-                            assertEquals(where + '"' + pat + "\".parse(\"" + str + "\")",
-                                    exp, parsed);
-                        }
-                    } catch (ParseException e) {
-                        errln(where + '"' + pat + "\".parse(\"" + str +
-                                "\") threw an exception");
-                        e.printStackTrace();
-                    }
-                    break;
-                case 6:
-                    // perr: <pattern or '-'> <invalid string>
-                    errln("Under construction");
-                    return;
-                case 7:
-                    // pat: <pattern> <exp. toPattern, or '-' or 'err'>
-                    String testpat = tokens.next();
-                    String exppat  = tokens.next();
-                    boolean err    = exppat.equals("err");
-                    if (testpat.equals("-")) {
-                        if (err) {
-                            errln("Invalid command \"pat: - err\" at " +  tokens.describePosition());
-                            continue;
-                        }
-                        testpat = pat;
-                    }
-                    if (exppat.equals("-")) exppat = testpat;
-                    try {
-                        DecimalFormat f = null;
-                        if (testpat == pat) { // [sic]
-                            f = fmt;
-                        } else {
-                            f = new DecimalFormat(testpat);
-                            f.setParseStrict(strict);
-                        }
-                        if (err) {
-                            errln(where + "Invalid pattern \"" + testpat +
-                                    "\" was accepted");
-                        } else {
-                            assertEquals(where + '"' + testpat + "\".toPattern()",
-                                    exppat, f.toPattern());
-                        }
-                    } catch (IllegalArgumentException iae2) {
-                        if (err) {
-                            logln("Ok: " + where + "Invalid pattern \"" + testpat +
-                                    "\" threw an exception");
-                        } else {
-                            errln(where + "Valid pattern \"" + testpat +
-                                    "\" threw an exception");
-                            iae2.printStackTrace();
-                        }
-                    }
-                    break;
-                case 8: // fpc:
-                    tok = tokens.next();
-                    if (!tok.equals("-")) {
-                        mloc = tok;
-                        ULocale l = new ULocale(mloc);
                         try {
-                            mfmt = MeasureFormat.getCurrencyFormat(l);
+                            fmt = new DecimalFormat(pat, new DecimalFormatSymbols(loc));
+                            fmt.setParseStrict(strict);
                         } catch (IllegalArgumentException iae) {
-                            errln(where + "Loc \"" + tok + '"');
+                            errln(where + "Pattern \"" + pat + '"');
                             iae.printStackTrace();
                             tokens.next(); // consume remaining tokens
-                            tokens.next();
-                            tokens.next();
+                            // tokens.next();
+                            if (cmd == 3) tokens.next();
                             continue;
                         }
-                    }
-                    str = null;
-                    try {
-                        // fpc: <loc or '-'> <curr.amt> <exp. string> <exp. curr.amt>
-                        String currAmt = tokens.next();
-                        str = tokens.next();
-                        CurrencyAmount target = parseCurrencyAmount(currAmt, ref, '/');
-                        String formatResult = mfmt.format(target);
-                        assertEquals(where + "getCurrencyFormat(" + mloc + ").format(" + currAmt + ")",
-                                str, formatResult);
-                        target = parseCurrencyAmount(tokens.next(), ref, '/');
-                        CurrencyAmount parseResult = (CurrencyAmount) mfmt.parseObject(str);
-                        assertEquals(where + "getCurrencyFormat(" + mloc + ").parse(\"" + str + "\")",
-                                target, parseResult);
-                    } catch (ParseException e) {
-                        errln(where + '"' + pat + "\".parse(\"" + str +
-                                "\") threw an exception");
-                        e.printStackTrace();
-                    }
-                    break;
-                case 9: // strict= true or false
-                    strict = "true".equalsIgnoreCase(tokens.next());
-                    logln("Setting strict to:\t" + strict);
-                    break;
-                case -1:
-                    errln("Unknown command \"" + tok + "\" at " + tokens.describePosition());
-                    return;
+                        str = null;
+                        try {
+                            if (cmd == 2 || cmd == 3 || cmd == 4) {
+                                // f: <pattern or '-'> <number> <exp. string>
+                                // fp: <pattern or '-'> <number> <exp. string> <exp. number>
+                                // rt: <pattern or '-'> <number> <string>
+                                String num = tokens.next();
+                                str = tokens.next();
+                                Number n = ref.parse(num);
+                                assertEquals(
+                                        where + '"' + pat + "\".format(" + num + ")",
+                                        str,
+                                        fmt.format(n));
+                                if (cmd == 3) { // fp:
+                                    n = ref.parse(tokens.next());
+                                }
+                                if (cmd != 2) { // != f:
+                                    assertEquals(
+                                            where + '"' + pat + "\".parse(\"" + str + "\")",
+                                            n,
+                                            fmt.parse(str));
+                                }
+                            }
+                            // p: <pattern or '-'> <string to parse> <exp. number>
+                            else {
+                                str = tokens.next();
+                                String expstr = tokens.next();
+                                Number parsed = fmt.parse(str);
+                                Number exp = ref.parse(expstr);
+                                assertEquals(
+                                        where + '"' + pat + "\".parse(\"" + str + "\")",
+                                        exp,
+                                        parsed);
+                            }
+                        } catch (ParseException e) {
+                            errln(
+                                    where
+                                            + '"'
+                                            + pat
+                                            + "\".parse(\""
+                                            + str
+                                            + "\") threw an exception");
+                            e.printStackTrace();
+                        }
+                        break;
+                    case 6:
+                        // perr: <pattern or '-'> <invalid string>
+                        errln("Under construction");
+                        return;
+                    case 7:
+                        // pat: <pattern> <exp. toPattern, or '-' or 'err'>
+                        String testpat = tokens.next();
+                        String exppat = tokens.next();
+                        boolean err = exppat.equals("err");
+                        if (testpat.equals("-")) {
+                            if (err) {
+                                errln(
+                                        "Invalid command \"pat: - err\" at "
+                                                + tokens.describePosition());
+                                continue;
+                            }
+                            testpat = pat;
+                        }
+                        if (exppat.equals("-")) exppat = testpat;
+                        try {
+                            DecimalFormat f = null;
+                            if (testpat == pat) { // [sic]
+                                f = fmt;
+                            } else {
+                                f = new DecimalFormat(testpat);
+                                f.setParseStrict(strict);
+                            }
+                            if (err) {
+                                errln(where + "Invalid pattern \"" + testpat + "\" was accepted");
+                            } else {
+                                assertEquals(
+                                        where + '"' + testpat + "\".toPattern()",
+                                        exppat,
+                                        f.toPattern());
+                            }
+                        } catch (IllegalArgumentException iae2) {
+                            if (err) {
+                                logln(
+                                        "Ok: "
+                                                + where
+                                                + "Invalid pattern \""
+                                                + testpat
+                                                + "\" threw an exception");
+                            } else {
+                                errln(
+                                        where
+                                                + "Valid pattern \""
+                                                + testpat
+                                                + "\" threw an exception");
+                                iae2.printStackTrace();
+                            }
+                        }
+                        break;
+                    case 8: // fpc:
+                        tok = tokens.next();
+                        if (!tok.equals("-")) {
+                            mloc = tok;
+                            ULocale l = new ULocale(mloc);
+                            try {
+                                mfmt = MeasureFormat.getCurrencyFormat(l);
+                            } catch (IllegalArgumentException iae) {
+                                errln(where + "Loc \"" + tok + '"');
+                                iae.printStackTrace();
+                                tokens.next(); // consume remaining tokens
+                                tokens.next();
+                                tokens.next();
+                                continue;
+                            }
+                        }
+                        str = null;
+                        try {
+                            // fpc: <loc or '-'> <curr.amt> <exp. string> <exp. curr.amt>
+                            String currAmt = tokens.next();
+                            str = tokens.next();
+                            CurrencyAmount target = parseCurrencyAmount(currAmt, ref, '/');
+                            String formatResult = mfmt.format(target);
+                            assertEquals(
+                                    where
+                                            + "getCurrencyFormat("
+                                            + mloc
+                                            + ").format("
+                                            + currAmt
+                                            + ")",
+                                    str,
+                                    formatResult);
+                            target = parseCurrencyAmount(tokens.next(), ref, '/');
+                            CurrencyAmount parseResult = (CurrencyAmount) mfmt.parseObject(str);
+                            assertEquals(
+                                    where
+                                            + "getCurrencyFormat("
+                                            + mloc
+                                            + ").parse(\""
+                                            + str
+                                            + "\")",
+                                    target,
+                                    parseResult);
+                        } catch (ParseException e) {
+                            errln(
+                                    where
+                                            + '"'
+                                            + pat
+                                            + "\".parse(\""
+                                            + str
+                                            + "\") threw an exception");
+                            e.printStackTrace();
+                        }
+                        break;
+                    case 9: // strict= true or false
+                        strict = "true".equalsIgnoreCase(tokens.next());
+                        logln("Setting strict to:\t" + strict);
+                        break;
+                    case -1:
+                        errln("Unknown command \"" + tok + "\" at " + tokens.describePosition());
+                        return;
                 }
             }
         } catch (java.io.IOException e) {
@@ -2316,7 +2697,8 @@ public class NumberFormatTest extends CoreTestFmwk {
 
     @Test
     public void TestFieldPositionDecimal() {
-        DecimalFormat nf = (DecimalFormat) com.ibm.icu.text.NumberFormat.getInstance(ULocale.ENGLISH);
+        DecimalFormat nf =
+                (DecimalFormat) com.ibm.icu.text.NumberFormat.getInstance(ULocale.ENGLISH);
         nf.setPositivePrefix("FOO");
         nf.setPositiveSuffix("BA");
         StringBuffer buffer = new StringBuffer();
@@ -2329,7 +2711,8 @@ public class NumberFormatTest extends CoreTestFmwk {
 
     @Test
     public void TestFieldPositionInteger() {
-        DecimalFormat nf = (DecimalFormat) com.ibm.icu.text.NumberFormat.getInstance(ULocale.ENGLISH);
+        DecimalFormat nf =
+                (DecimalFormat) com.ibm.icu.text.NumberFormat.getInstance(ULocale.ENGLISH);
         nf.setPositivePrefix("FOO");
         nf.setPositiveSuffix("BA");
         StringBuffer buffer = new StringBuffer();
@@ -2342,7 +2725,8 @@ public class NumberFormatTest extends CoreTestFmwk {
 
     @Test
     public void TestFieldPositionFractionButInteger() {
-        DecimalFormat nf = (DecimalFormat) com.ibm.icu.text.NumberFormat.getInstance(ULocale.ENGLISH);
+        DecimalFormat nf =
+                (DecimalFormat) com.ibm.icu.text.NumberFormat.getInstance(ULocale.ENGLISH);
         nf.setPositivePrefix("FOO");
         nf.setPositiveSuffix("BA");
         StringBuffer buffer = new StringBuffer();
@@ -2355,7 +2739,8 @@ public class NumberFormatTest extends CoreTestFmwk {
 
     @Test
     public void TestFieldPositionFraction() {
-        DecimalFormat nf = (DecimalFormat) com.ibm.icu.text.NumberFormat.getInstance(ULocale.ENGLISH);
+        DecimalFormat nf =
+                (DecimalFormat) com.ibm.icu.text.NumberFormat.getInstance(ULocale.ENGLISH);
         nf.setPositivePrefix("FOO");
         nf.setPositiveSuffix("BA");
         StringBuffer buffer = new StringBuffer();
@@ -2368,7 +2753,8 @@ public class NumberFormatTest extends CoreTestFmwk {
 
     @Test
     public void TestFieldPositionCurrency() {
-        DecimalFormat nf = (DecimalFormat) com.ibm.icu.text.NumberFormat.getCurrencyInstance(Locale.US);
+        DecimalFormat nf =
+                (DecimalFormat) com.ibm.icu.text.NumberFormat.getCurrencyInstance(Locale.US);
         double amount = 35.47;
         double negAmount = -34.567;
         FieldPosition cp = new FieldPosition(NumberFormat.Field.CURRENCY);
@@ -2425,7 +2811,8 @@ public class NumberFormatTest extends CoreTestFmwk {
         assertEquals("cp begin", 7, cp.getBeginIndex());
         assertEquals("cp end", 10, cp.getEndIndex());
 
-        NumberFormat plCurrencyFmt = NumberFormat.getInstance(new Locale("fr", "ch"), NumberFormat.PLURALCURRENCYSTYLE);
+        NumberFormat plCurrencyFmt =
+                NumberFormat.getInstance(new Locale("fr", "ch"), NumberFormat.PLURALCURRENCYSTYLE);
         StringBuffer buffer6 = new StringBuffer();
         plCurrencyFmt.format(negAmount, buffer6, cp);
         assertEquals("-34.57 francs suisses", "-34.57 francs suisses", buffer6.toString());
@@ -2433,7 +2820,8 @@ public class NumberFormatTest extends CoreTestFmwk {
         assertEquals("cp end", 21, cp.getEndIndex());
 
         // Positive value with PLURALCURRENCYSTYLE.
-        plCurrencyFmt = NumberFormat.getInstance(new Locale("ja", "ch"), NumberFormat.PLURALCURRENCYSTYLE);
+        plCurrencyFmt =
+                NumberFormat.getInstance(new Locale("ja", "ch"), NumberFormat.PLURALCURRENCYSTYLE);
         StringBuffer buffer7 = new StringBuffer();
         plCurrencyFmt.format(amount, buffer7, cp);
         assertEquals("35.47 スイス フラン", "35.47 スイス フラン", buffer7.toString());
@@ -2441,7 +2829,8 @@ public class NumberFormatTest extends CoreTestFmwk {
         assertEquals("cp end", 13, cp.getEndIndex());
 
         // PLURALCURRENCYSTYLE for non-ASCII.
-        plCurrencyFmt = NumberFormat.getInstance(new Locale("ja", "de"), NumberFormat.PLURALCURRENCYSTYLE);
+        plCurrencyFmt =
+                NumberFormat.getInstance(new Locale("ja", "de"), NumberFormat.PLURALCURRENCYSTYLE);
         StringBuffer buffer8 = new StringBuffer();
         plCurrencyFmt.format(negAmount, buffer8, cp);
         assertEquals("-34.57 ユーロ", "-34.57 ユーロ", buffer8.toString());
@@ -2457,7 +2846,8 @@ public class NumberFormatTest extends CoreTestFmwk {
         assertEquals("cp end", 2, cp.getEndIndex());
 
         // Negative value with PLURALCURRENCYSTYLE.
-        plCurrencyFmt = NumberFormat.getInstance(new Locale("ja", "ch"), NumberFormat.PLURALCURRENCYSTYLE);
+        plCurrencyFmt =
+                NumberFormat.getInstance(new Locale("ja", "ch"), NumberFormat.PLURALCURRENCYSTYLE);
         StringBuffer buffer10 = new StringBuffer();
         plCurrencyFmt.format(negAmount, buffer10, cp);
         assertEquals("-34.57 スイス フラン", "-34.57 スイス フラン", buffer10.toString());
@@ -2465,8 +2855,11 @@ public class NumberFormatTest extends CoreTestFmwk {
         assertEquals("cp end", 14, cp.getEndIndex());
 
         // Negative value with PLURALCURRENCYSTYLE, Arabic digits.
-        nf = (DecimalFormat) com.ibm.icu.text.NumberFormat.getCurrencyInstance(new Locale("ar", "eg"));
-        plCurrencyFmt = NumberFormat.getInstance(new Locale("ar", "eg"), NumberFormat.PLURALCURRENCYSTYLE);
+        nf =
+                (DecimalFormat)
+                        com.ibm.icu.text.NumberFormat.getCurrencyInstance(new Locale("ar", "eg"));
+        plCurrencyFmt =
+                NumberFormat.getInstance(new Locale("ar", "eg"), NumberFormat.PLURALCURRENCYSTYLE);
         StringBuffer buffer11 = new StringBuffer();
         plCurrencyFmt.format(negAmount, buffer11, cp);
         assertEquals("؜-٣٤٫٥٧ جنيه مصري", "؜-٣٤٫٥٧ جنيه مصري", buffer11.toString());
@@ -2476,7 +2869,8 @@ public class NumberFormatTest extends CoreTestFmwk {
 
     @Test
     public void TestRounding() {
-        DecimalFormat nf = (DecimalFormat) com.ibm.icu.text.NumberFormat.getInstance(ULocale.ENGLISH);
+        DecimalFormat nf =
+                (DecimalFormat) com.ibm.icu.text.NumberFormat.getInstance(ULocale.ENGLISH);
         if (false) { // for debugging specific value
             nf.setRoundingMode(BigDecimal.ROUND_HALF_UP);
             checkRounding(nf, new BigDecimal("300.0300000000"), 0, new BigDecimal("0.020000000"));
@@ -2490,9 +2884,9 @@ public class NumberFormatTest extends CoreTestFmwk {
                 for (int increment = 0; increment < roundingIncrements.length; ++increment) {
                     BigDecimal base = new BigDecimal(testValues[j]);
                     BigDecimal rInc = new BigDecimal(roundingIncrements[increment]);
-                    checkRounding(nf,  base, 20, rInc);
+                    checkRounding(nf, base, 20, rInc);
                     rInc = new BigDecimal("1.000000000").divide(rInc);
-                    checkRounding(nf,  base, 20, rInc);
+                    checkRounding(nf, base, 20, rInc);
                 }
             }
         }
@@ -2501,25 +2895,31 @@ public class NumberFormatTest extends CoreTestFmwk {
     @Test
     public void TestRoundingPattern() {
         class TestRoundingPatternItem {
-            String     pattern;
+            String pattern;
             BigDecimal roundingIncrement;
-            double     testCase;
-            String     expected;
+            double testCase;
+            String expected;
 
-            TestRoundingPatternItem(String pattern, BigDecimal roundingIncrement, double testCase, String expected) {
+            TestRoundingPatternItem(
+                    String pattern,
+                    BigDecimal roundingIncrement,
+                    double testCase,
+                    String expected) {
                 this.pattern = pattern;
                 this.roundingIncrement = roundingIncrement;
                 this.testCase = testCase;
                 this.expected = expected;
             }
+        }
+        ;
+
+        TestRoundingPatternItem[] tests = {
+            new TestRoundingPatternItem("##0.65", new BigDecimal("0.65"), 1.234, "1.30"),
+            new TestRoundingPatternItem("#50", new BigDecimal("50"), 1230, "1250")
         };
 
-        TestRoundingPatternItem []tests = {
-                new TestRoundingPatternItem("##0.65", new BigDecimal("0.65"), 1.234, "1.30"),
-                new TestRoundingPatternItem("#50", new BigDecimal("50"), 1230, "1250")
-        };
-
-        DecimalFormat df = (DecimalFormat) com.ibm.icu.text.NumberFormat.getInstance(ULocale.ENGLISH);
+        DecimalFormat df =
+                (DecimalFormat) com.ibm.icu.text.NumberFormat.getInstance(ULocale.ENGLISH);
         String result;
         for (int i = 0; i < tests.length; i++) {
             df.applyPattern(tests[i].pattern);
@@ -2527,7 +2927,15 @@ public class NumberFormatTest extends CoreTestFmwk {
             result = df.format(tests[i].testCase);
 
             if (!tests[i].expected.equals(result)) {
-                errln("String Pattern Rounding Test Failed: Pattern: \"" + tests[i].pattern + "\" Number: " + tests[i].testCase + " - Got: " + result + " Expected: " + tests[i].expected);
+                errln(
+                        "String Pattern Rounding Test Failed: Pattern: \""
+                                + tests[i].pattern
+                                + "\" Number: "
+                                + tests[i].testCase
+                                + " - Got: "
+                                + result
+                                + " Expected: "
+                                + tests[i].expected);
             }
 
             df.setRoundingIncrement(tests[i].roundingIncrement);
@@ -2535,7 +2943,15 @@ public class NumberFormatTest extends CoreTestFmwk {
             result = df.format(tests[i].testCase);
 
             if (!tests[i].expected.equals(result)) {
-                errln("BigDecimal Rounding Test Failed: Pattern: \"" + tests[i].pattern + "\" Number: " + tests[i].testCase + " - Got: " + result + " Expected: " + tests[i].expected);
+                errln(
+                        "BigDecimal Rounding Test Failed: Pattern: \""
+                                + tests[i].pattern
+                                + "\" Number: "
+                                + tests[i].testCase
+                                + " - Got: "
+                                + result
+                                + " Expected: "
+                                + tests[i].expected);
             }
         }
     }
@@ -2566,7 +2982,8 @@ public class NumberFormatTest extends CoreTestFmwk {
 
     void checkRounding(DecimalFormat nf, BigDecimal base, int iterations, BigDecimal increment) {
         nf.setRoundingIncrement(increment.toBigDecimal());
-        BigDecimal lastParsed = new BigDecimal(Integer.MIN_VALUE); // used to make sure that rounding is monotonic
+        BigDecimal lastParsed =
+                new BigDecimal(Integer.MIN_VALUE); // used to make sure that rounding is monotonic
         for (int i = -iterations; i <= iterations; ++i) {
             BigDecimal iValue = base.add(increment.multiply(new BigDecimal(i)).movePointLeft(1));
             BigDecimal smallIncrement = new BigDecimal("0.00000001");
@@ -2585,18 +3002,33 @@ public class NumberFormatTest extends CoreTestFmwk {
         String formattedDouble = nf.format(iValue.doubleValue());
         if (!equalButForTrailingZeros(formatedBigDecimal, formattedDouble)) {
 
-            errln("Failure at: " + iValue + " (" + iValue.doubleValue() + ")"
-                    + ",\tRounding-mode: " + roundingModeNames[nf.getRoundingMode()]
-                            + ",\tRounding-increment: " + nf.getRoundingIncrement()
-                            + ",\tdouble: " + formattedDouble
-                            + ",\tBigDecimal: " + formatedBigDecimal);
+            errln(
+                    "Failure at: "
+                            + iValue
+                            + " ("
+                            + iValue.doubleValue()
+                            + ")"
+                            + ",\tRounding-mode: "
+                            + roundingModeNames[nf.getRoundingMode()]
+                            + ",\tRounding-increment: "
+                            + nf.getRoundingIncrement()
+                            + ",\tdouble: "
+                            + formattedDouble
+                            + ",\tBigDecimal: "
+                            + formatedBigDecimal);
 
         } else {
-            logln("Value: " + iValue
-                    + ",\tRounding-mode: " + roundingModeNames[nf.getRoundingMode()]
-                            + ",\tRounding-increment: " + nf.getRoundingIncrement()
-                            + ",\tdouble: " + formattedDouble
-                            + ",\tBigDecimal: " + formatedBigDecimal);
+            logln(
+                    "Value: "
+                            + iValue
+                            + ",\tRounding-mode: "
+                            + roundingModeNames[nf.getRoundingMode()]
+                            + ",\tRounding-increment: "
+                            + nf.getRoundingIncrement()
+                            + ",\tdouble: "
+                            + formattedDouble
+                            + ",\tBigDecimal: "
+                            + formatedBigDecimal);
         }
         try {
             // Number should have compareTo(...)
@@ -2612,17 +3044,27 @@ public class NumberFormatTest extends CoreTestFmwk {
     }
 
     static BigDecimal toBigDecimal(Number number) {
-        return number instanceof BigDecimal ? (BigDecimal) number
-                : number instanceof BigInteger ? new BigDecimal((BigInteger)number)
-        : number instanceof java.math.BigDecimal ? new BigDecimal((java.math.BigDecimal)number)
-                : number instanceof Double ? new BigDecimal(number.doubleValue())
-        : number instanceof Float ? new BigDecimal(number.floatValue())
-                : new BigDecimal(number.longValue());
+        return number instanceof BigDecimal
+                ? (BigDecimal) number
+                : number instanceof BigInteger
+                        ? new BigDecimal((BigInteger) number)
+                        : number instanceof java.math.BigDecimal
+                                ? new BigDecimal((java.math.BigDecimal) number)
+                                : number instanceof Double
+                                        ? new BigDecimal(number.doubleValue())
+                                        : number instanceof Float
+                                                ? new BigDecimal(number.floatValue())
+                                                : new BigDecimal(number.longValue());
     }
 
     static String[] roundingModeNames = {
-        "ROUND_UP", "ROUND_DOWN", "ROUND_CEILING", "ROUND_FLOOR",
-        "ROUND_HALF_UP", "ROUND_HALF_DOWN", "ROUND_HALF_EVEN",
+        "ROUND_UP",
+        "ROUND_DOWN",
+        "ROUND_CEILING",
+        "ROUND_FLOOR",
+        "ROUND_HALF_UP",
+        "ROUND_HALF_DOWN",
+        "ROUND_HALF_EVEN",
         "ROUND_UNNECESSARY"
     };
 
@@ -2634,14 +3076,14 @@ public class NumberFormatTest extends CoreTestFmwk {
     private static String stripFinalZeros(String formatted) {
         int len1 = formatted.length();
         char ch;
-        while (len1 > 0 && ((ch = formatted.charAt(len1-1)) == '0' || ch == '.')) --len1;
-        if (len1==1 && ((ch = formatted.charAt(len1-1)) == '-')) --len1;
-        return formatted.substring(0,len1);
+        while (len1 > 0 && ((ch = formatted.charAt(len1 - 1)) == '0' || ch == '.')) --len1;
+        if (len1 == 1 && ((ch = formatted.charAt(len1 - 1)) == '-')) --len1;
+        return formatted.substring(0, len1);
     }
 
-    //------------------------------------------------------------------
+    // ------------------------------------------------------------------
     // Support methods
-    //------------------------------------------------------------------
+    // ------------------------------------------------------------------
 
     /** Format-Parse test */
     public void expect2(NumberFormat fmt, Number n, String exp) {
@@ -2649,6 +3091,7 @@ public class NumberFormatTest extends CoreTestFmwk {
         expect(fmt, n, exp, false);
         expect(fmt, exp, n);
     }
+
     /** Format-Parse test */
     public void expect3(NumberFormat fmt, Number n, String exp) {
         // Don't round-trip format test, since we explicitly do it
@@ -2660,6 +3103,7 @@ public class NumberFormatTest extends CoreTestFmwk {
     public void expect2(NumberFormat fmt, double n, String exp) {
         expect2(fmt, Double.valueOf(n), exp);
     }
+
     /** RBNF Format-Parse test (convenience) */
     public void expect3(NumberFormat fmt, double n, String exp) {
         expect3(fmt, Double.valueOf(n), exp);
@@ -2669,6 +3113,7 @@ public class NumberFormatTest extends CoreTestFmwk {
     public void expect2(NumberFormat fmt, long n, String exp) {
         expect2(fmt, Long.valueOf(n), exp);
     }
+
     /** RBNF Format-Parse test (convenience) */
     public void expect3(NumberFormat fmt, long n, String exp) {
         expect3(fmt, Long.valueOf(n), exp);
@@ -2679,11 +3124,9 @@ public class NumberFormatTest extends CoreTestFmwk {
         StringBuffer saw = new StringBuffer();
         FieldPosition pos = new FieldPosition(0);
         fmt.format(n, saw, pos);
-        String pat = ((DecimalFormat)fmt).toPattern();
+        String pat = ((DecimalFormat) fmt).toPattern();
         if (saw.toString().equals(exp)) {
-            logln("Ok   " + n + " x " +
-                    pat + " = \"" +
-                    saw + "\"");
+            logln("Ok   " + n + " x " + pat + " = \"" + saw + "\"");
             // We should be able to round-trip the formatted string =>
             // number => string (but not the other way around: number
             // => string => number2, might have number2 != number):
@@ -2693,28 +3136,49 @@ public class NumberFormatTest extends CoreTestFmwk {
                     StringBuffer saw2 = new StringBuffer();
                     fmt.format(n2, saw2, pos);
                     if (!saw2.toString().equals(exp)) {
-                        errln("expect() format test rt, locale " + fmt.getLocale(ULocale.VALID_LOCALE) +
-                                ", FAIL \"" + exp + "\" => " + n2 + " => \"" + saw2 + '"');
+                        errln(
+                                "expect() format test rt, locale "
+                                        + fmt.getLocale(ULocale.VALID_LOCALE)
+                                        + ", FAIL \""
+                                        + exp
+                                        + "\" => "
+                                        + n2
+                                        + " => \""
+                                        + saw2
+                                        + '"');
                     }
                 } catch (ParseException e) {
-                    errln("expect() format test rt, locale " + fmt.getLocale(ULocale.VALID_LOCALE) +
-                            ", " + e.getMessage());
+                    errln(
+                            "expect() format test rt, locale "
+                                    + fmt.getLocale(ULocale.VALID_LOCALE)
+                                    + ", "
+                                    + e.getMessage());
                     return;
                 }
             }
         } else {
-            errln("expect() format test, locale " + fmt.getLocale(ULocale.VALID_LOCALE) +
-                    ", FAIL " + n + " x " + pat + " = \"" + saw + "\", expected \"" + exp + "\"");
+            errln(
+                    "expect() format test, locale "
+                            + fmt.getLocale(ULocale.VALID_LOCALE)
+                            + ", FAIL "
+                            + n
+                            + " x "
+                            + pat
+                            + " = \""
+                            + saw
+                            + "\", expected \""
+                            + exp
+                            + "\"");
         }
     }
+
     /** RBNF format test */
     public void expect_rbnf(NumberFormat fmt, Number n, String exp, boolean rt) {
         StringBuffer saw = new StringBuffer();
         FieldPosition pos = new FieldPosition(0);
         fmt.format(n, saw, pos);
         if (saw.toString().equals(exp)) {
-            logln("Ok   " + n + " = \"" +
-                    saw + "\"");
+            logln("Ok   " + n + " = \"" + saw + "\"");
             // We should be able to round-trip the formatted string =>
             // number => string (but not the other way around: number
             // => string => number2, might have number2 != number):
@@ -2724,18 +3188,37 @@ public class NumberFormatTest extends CoreTestFmwk {
                     StringBuffer saw2 = new StringBuffer();
                     fmt.format(n2, saw2, pos);
                     if (!saw2.toString().equals(exp)) {
-                        errln("expect_rbnf() format test rt, locale " + fmt.getLocale(ULocale.VALID_LOCALE) +
-                                ", FAIL \"" + exp + "\" => " + n2 + " => \"" + saw2 + '"');
+                        errln(
+                                "expect_rbnf() format test rt, locale "
+                                        + fmt.getLocale(ULocale.VALID_LOCALE)
+                                        + ", FAIL \""
+                                        + exp
+                                        + "\" => "
+                                        + n2
+                                        + " => \""
+                                        + saw2
+                                        + '"');
                     }
                 } catch (ParseException e) {
-                    errln("expect_rbnf() format test rt, locale " + fmt.getLocale(ULocale.VALID_LOCALE) +
-                            ", " + e.getMessage());
+                    errln(
+                            "expect_rbnf() format test rt, locale "
+                                    + fmt.getLocale(ULocale.VALID_LOCALE)
+                                    + ", "
+                                    + e.getMessage());
                     return;
                 }
             }
         } else {
-            errln("expect_rbnf() format test, locale " + fmt.getLocale(ULocale.VALID_LOCALE) +
-                    ", FAIL " + n + " = \"" + saw + "\", expected \"" + exp + "\"");
+            errln(
+                    "expect_rbnf() format test, locale "
+                            + fmt.getLocale(ULocale.VALID_LOCALE)
+                            + ", FAIL "
+                            + n
+                            + " = \""
+                            + saw
+                            + "\", expected \""
+                            + exp
+                            + "\"");
         }
     }
 
@@ -2763,16 +3246,23 @@ public class NumberFormatTest extends CoreTestFmwk {
             errln(e.getMessage());
             return;
         }
-        String pat = ((DecimalFormat)fmt).toPattern();
+        String pat = ((DecimalFormat) fmt).toPattern();
         // A little tricky here -- make sure Double(12345.0) and
         // Long(12345) match.
         if (num.equals(n) || num.doubleValue() == n.doubleValue()) {
-            logln("Ok   \"" + str + "\" x " +
-                    pat + " = " +
-                    num);
+            logln("Ok   \"" + str + "\" x " + pat + " = " + num);
         } else {
-            errln("expect() parse test, locale " + fmt.getLocale(ULocale.VALID_LOCALE) +
-                    ", FAIL \"" + str + "\" x " + pat + " = " + num + ", expected " + n);
+            errln(
+                    "expect() parse test, locale "
+                            + fmt.getLocale(ULocale.VALID_LOCALE)
+                            + ", FAIL \""
+                            + str
+                            + "\" x "
+                            + pat
+                            + " = "
+                            + num
+                            + ", expected "
+                            + n);
         }
     }
 
@@ -2788,11 +3278,17 @@ public class NumberFormatTest extends CoreTestFmwk {
         // A little tricky here -- make sure Double(12345.0) and
         // Long(12345) match.
         if (num.equals(n) || num.doubleValue() == n.doubleValue()) {
-            logln("Ok   \"" + str + " = " +
-                    num);
+            logln("Ok   \"" + str + " = " + num);
         } else {
-            errln("expect_rbnf() parse test, locale " + fmt.getLocale(ULocale.VALID_LOCALE) +
-                    ", FAIL \"" + str + " = " + num + ", expected " + n);
+            errln(
+                    "expect_rbnf() parse test, locale "
+                            + fmt.getLocale(ULocale.VALID_LOCALE)
+                            + ", FAIL \""
+                            + str
+                            + " = "
+                            + num
+                            + ", expected "
+                            + n);
         }
     }
 
@@ -2816,8 +3312,7 @@ public class NumberFormatTest extends CoreTestFmwk {
         }
     }
 
-    private void expectCurrency(NumberFormat nf, Currency curr,
-            double value, String string) {
+    private void expectCurrency(NumberFormat nf, Currency curr, double value, String string) {
         DecimalFormat fmt = (DecimalFormat) nf;
         if (curr != null) {
             fmt.setCurrency(curr);
@@ -2827,13 +3322,12 @@ public class NumberFormatTest extends CoreTestFmwk {
         if (s.equals(string)) {
             logln("Ok: " + value + " x " + curr + " => " + s);
         } else {
-            errln("FAIL: " + value + " x " + curr + " => " + s +
-                    ", expected " + string);
+            errln("FAIL: " + value + " x " + curr + " => " + s + ", expected " + string);
         }
     }
 
     public void expectPad(DecimalFormat fmt, String pat, int pos) {
-        expectPad(fmt, pat, pos, 0, (char)0);
+        expectPad(fmt, pat, pos, 0, (char) 0);
     }
 
     public void expectPad(DecimalFormat fmt, final String pat, int pos, int width, final char pad) {
@@ -2851,12 +3345,28 @@ public class NumberFormatTest extends CoreTestFmwk {
         }
 
         if (apos == pos && awidth == width && apadStr == pad) {
-            logln("Ok   \"" + pat + "\" pos="
-                    + apos + ((pos == -1) ? "" : " width=" + awidth + " pad=" + apadStr));
+            logln(
+                    "Ok   \""
+                            + pat
+                            + "\" pos="
+                            + apos
+                            + ((pos == -1) ? "" : " width=" + awidth + " pad=" + apadStr));
         } else {
-            errln("FAIL \"" + pat + "\" pos=" + apos + " width="
-                    + awidth + " pad=" + apadStr + ", expected "
-                    + pos + " " + width + " " + pad);
+            errln(
+                    "FAIL \""
+                            + pat
+                            + "\" pos="
+                            + apos
+                            + " width="
+                            + awidth
+                            + " pad="
+                            + apadStr
+                            + ", expected "
+                            + pos
+                            + " "
+                            + width
+                            + " "
+                            + pad);
         }
     }
 
@@ -2869,7 +3379,6 @@ public class NumberFormatTest extends CoreTestFmwk {
         }
     }
 
-
     private void expectParseCurrency(NumberFormat fmt, Currency expected, String text) {
         ParsePosition pos = new ParsePosition(0);
         CurrencyAmount currencyAmount = fmt.parseCurrency(text, pos);
@@ -2878,17 +3387,19 @@ public class NumberFormatTest extends CoreTestFmwk {
     }
 
     @Test
-    public void TestJB3832(){
+    public void TestJB3832() {
         ULocale locale = new ULocale("pt_PT@currency=PTE");
         NumberFormat format = NumberFormat.getCurrencyInstance(locale);
         Currency curr = Currency.getInstance(locale);
-        logln("\nName of the currency is: " + curr.getName(locale, Currency.LONG_NAME, new boolean[] {false}));
+        logln(
+                "\nName of the currency is: "
+                        + curr.getName(locale, Currency.LONG_NAME, new boolean[] {false}));
         CurrencyAmount cAmt = new CurrencyAmount(1150.50, curr);
-        logln("CurrencyAmount object's hashCode is: " + cAmt.hashCode()); //cover hashCode
+        logln("CurrencyAmount object's hashCode is: " + cAmt.hashCode()); // cover hashCode
         String str = format.format(cAmt);
         String expected = "1,150$50\u00a0\u200b";
-        if(!expected.equals(str)){
-            errln("Did not get the expected output Expected: "+expected+" Got: "+ str);
+        if (!expected.equals(str)) {
+            errln("Did not get the expected output Expected: " + expected + " Got: " + str);
         }
     }
 
@@ -2907,77 +3418,67 @@ public class NumberFormatTest extends CoreTestFmwk {
     public void TestStrictParse() {
         // Pass both strict and lenient:
         String[] pass = {
-                "0",           // single zero before end of text is not leading
-                "0 ",          // single zero at end of number is not leading
-                "0.",          // single zero before period (or decimal, it's ambiguous) is not leading
-                "0,",          // single zero before comma (not group separator) is not leading
-                "0.0",         // single zero before decimal followed by digit is not leading
-                "0. ",         // same as above before period (or decimal) is not leading
-                "0.100,5",     // comma stops parse of decimal (no grouping)
-                "0.100,,5",    // two commas also stops parse
-                ".00",         // leading decimal is ok, even with zeros
-                "1234567",     // group separators are not required
-                "12345, ",     // comma not followed by digit is not a group separator, but end of number
-                "1,234, ",     // if group separator is present, group sizes must be appropriate
-                "1,234,567",   // ...secondary too
-                "0E",          // an exponent not followed by zero or digits is not an exponent
-                "00",          // leading zero before zero - used to be error - see ticket #7913
-                "012",         // leading zero before digit - used to be error - see ticket #7913
-                "0,456",       // leading zero before group separator - used to be error - see ticket #7913
-                "999,999",     // see ticket #6863
-                "-99,999",     // see ticket #6863
-                "-999,999",    // see ticket #6863
-                "-9,999,999",  // see ticket #6863
+            "0", // single zero before end of text is not leading
+            "0 ", // single zero at end of number is not leading
+            "0.", // single zero before period (or decimal, it's ambiguous) is not leading
+            "0,", // single zero before comma (not group separator) is not leading
+            "0.0", // single zero before decimal followed by digit is not leading
+            "0. ", // same as above before period (or decimal) is not leading
+            "0.100,5", // comma stops parse of decimal (no grouping)
+            "0.100,,5", // two commas also stops parse
+            ".00", // leading decimal is ok, even with zeros
+            "1234567", // group separators are not required
+            "12345, ", // comma not followed by digit is not a group separator, but end of number
+            "1,234, ", // if group separator is present, group sizes must be appropriate
+            "1,234,567", // ...secondary too
+            "0E", // an exponent not followed by zero or digits is not an exponent
+            "00", // leading zero before zero - used to be error - see ticket #7913
+            "012", // leading zero before digit - used to be error - see ticket #7913
+            "0,456", // leading zero before group separator - used to be error - see ticket #7913
+            "999,999", // see ticket #6863
+            "-99,999", // see ticket #6863
+            "-999,999", // see ticket #6863
+            "-9,999,999", // see ticket #6863
         };
         // Pass lenient, fail strict:
         String[] fail = {
-                "1,2",       // wrong number of digits after group separator
-                ",.02",      // leading group separator before decimal
-                "1,.02",     // group separator before decimal
-                ",0",        // leading group separator before a single digit
-                ",1",        // leading group separator before a single digit
-                "1,45",      // wrong number of digits in primary group
-                "1,45 that", // wrong number of digits in primary group
-                "1,45.34",   // wrong number of digits in primary group
-                "1234,567",  // wrong number of digits in secondary group
-                "12,34,567", // wrong number of digits in secondary group
-                "1,23,456,7890", // wrong number of digits in primary and secondary groups
+            "1,2", // wrong number of digits after group separator
+            ",.02", // leading group separator before decimal
+            "1,.02", // group separator before decimal
+            ",0", // leading group separator before a single digit
+            ",1", // leading group separator before a single digit
+            "1,45", // wrong number of digits in primary group
+            "1,45 that", // wrong number of digits in primary group
+            "1,45.34", // wrong number of digits in primary group
+            "1234,567", // wrong number of digits in secondary group
+            "12,34,567", // wrong number of digits in secondary group
+            "1,23,456,7890", // wrong number of digits in primary and secondary groups
         };
         // Fail both lenient and strict:
-        String[] failBoth = {
-        };
+        String[] failBoth = {};
 
         DecimalFormat nf = (DecimalFormat) NumberFormat.getInstance(Locale.ENGLISH);
         runStrictParseBatch(nf, pass, fail, failBoth);
 
         String[] scientificPass = {
-                "0E2",      // single zero before exponent is ok
-                "1234E2",   // any number of digits before exponent is ok
-                "1,234E",   // an exponent string not followed by zero or digits is not an exponent
-                "00E2",     // leading zeroes now allowed in strict mode - see ticket #
+            "0E2", // single zero before exponent is ok
+            "1234E2", // any number of digits before exponent is ok
+            "1,234E", // an exponent string not followed by zero or digits is not an exponent
+            "00E2", // leading zeroes now allowed in strict mode - see ticket #
         };
-        String[] scientificFail = {
-        };
-        String[] scientificFailBoth = {
-        };
+        String[] scientificFail = {};
+        String[] scientificFailBoth = {};
 
         nf = (DecimalFormat) NumberFormat.getInstance(Locale.ENGLISH);
         runStrictParseBatch(nf, scientificPass, scientificFail, scientificFailBoth);
 
         String[] mixedPass = {
-                "12,34,567",
-                "12,34,567,",
-                "12,34,567, that",
-                "12,34,567 that",
+            "12,34,567", "12,34,567,", "12,34,567, that", "12,34,567 that",
         };
         String[] mixedFail = {
-                "12,34,56",
-                "12,34,56,",
-                "12,34,56, that ",
-                "12,34,56 that",
+            "12,34,56", "12,34,56,", "12,34,56, that ", "12,34,56 that",
         };
-        String[] mixedFailBoth = {
-        };
+        String[] mixedFailBoth = {};
 
         nf = new DecimalFormat("#,##,##0.#");
         runStrictParseBatch(nf, mixedPass, mixedFail, mixedFailBoth);
@@ -3005,57 +3506,67 @@ public class NumberFormatTest extends CoreTestFmwk {
             String formatted = n != null ? nf.format(n) : "null";
             String err = pp.getErrorIndex() == -1 ? "" : "(error at " + pp.getErrorIndex() + ")";
             if ((err.length() == 0) != pass) {
-                errln("'" + str + "' parsed '" +
-                        str.substring(0, pp.getIndex()) +
-                        "' returned " + n + " formats to '" +
-                        formatted + "' " + err);
+                errln(
+                        "'"
+                                + str
+                                + "' parsed '"
+                                + str.substring(0, pp.getIndex())
+                                + "' returned "
+                                + n
+                                + " formats to '"
+                                + formatted
+                                + "' "
+                                + err);
             } else {
                 if (err.length() > 0) {
                     err = "got expected " + err;
                 }
-                logln("'" + str + "' parsed '" +
-                        str.substring(0, pp.getIndex()) +
-                        "' returned " + n + " formats to '" +
-                        formatted + "' " + err);
+                logln(
+                        "'"
+                                + str
+                                + "' parsed '"
+                                + str.substring(0, pp.getIndex())
+                                + "' returned "
+                                + n
+                                + " formats to '"
+                                + formatted
+                                + "' "
+                                + err);
             }
         }
     }
 
     @Test
-    public void TestJB5251(){
-        //save default locale
+    public void TestJB5251() {
+        // save default locale
         ULocale defaultLocale = ULocale.getDefault();
         ULocale.setDefault(new ULocale("qr_QR"));
         try {
             NumberFormat.getInstance();
+        } catch (Exception e) {
+            errln(
+                    "Numberformat threw exception for non-existent locale. It should use the default.");
         }
-        catch (Exception e) {
-            errln("Numberformat threw exception for non-existent locale. It should use the default.");
-        }
-        //reset default locale
+        // reset default locale
         ULocale.setDefault(defaultLocale);
     }
 
     @Test
     public void TestParseReturnType() {
         String[] defaultLong = {
-                "123",
-                "123.0",
-                "0.0",
-                "-9223372036854775808", // Min Long
-                "9223372036854775807" // Max Long
+            "123",
+            "123.0",
+            "0.0",
+            "-9223372036854775808", // Min Long
+            "9223372036854775807" // Max Long
         };
 
         String[] defaultNonLong = {
-                "12345678901234567890",
-                "9223372036854775808",
-                "-9223372036854775809"
+            "12345678901234567890", "9223372036854775808", "-9223372036854775809"
         };
 
         String[] doubles = {
-                "-0.0",
-                "NaN",
-                "\u221E"    // Infinity
+            "-0.0", "NaN", "\u221E" // Infinity
         };
 
         DecimalFormatSymbols sym = new DecimalFormatSymbols(Locale.US);
@@ -3106,7 +3617,10 @@ public class NumberFormatTest extends CoreTestFmwk {
 
         // isParseBigDecimal() is true
         for (int i = 0; i < defaultLong.length + defaultNonLong.length; i++) {
-            String input = (i < defaultLong.length) ? defaultLong[i] : defaultNonLong[i - defaultLong.length];
+            String input =
+                    (i < defaultLong.length)
+                            ? defaultLong[i]
+                            : defaultNonLong[i - defaultLong.length];
             try {
                 Number n = nf.parse(input);
                 if (!(n instanceof BigDecimal)) {
@@ -3171,11 +3685,23 @@ public class NumberFormatTest extends CoreTestFmwk {
         expect2(df, Long.MAX_VALUE / 2, BigInteger.valueOf(Long.MAX_VALUE / 2).negate().toString());
         expect2(df, Long.MIN_VALUE / 2, BigInteger.valueOf(Long.MIN_VALUE / 2).negate().toString());
 
-        expect2(df, BigDecimal.valueOf(Long.MAX_VALUE), BigDecimal.valueOf(Long.MAX_VALUE).negate().toString());
-        expect2(df, BigDecimal.valueOf(Long.MIN_VALUE), BigDecimal.valueOf(Long.MIN_VALUE).negate().toString());
+        expect2(
+                df,
+                BigDecimal.valueOf(Long.MAX_VALUE),
+                BigDecimal.valueOf(Long.MAX_VALUE).negate().toString());
+        expect2(
+                df,
+                BigDecimal.valueOf(Long.MIN_VALUE),
+                BigDecimal.valueOf(Long.MIN_VALUE).negate().toString());
 
-        expect2(df, java.math.BigDecimal.valueOf(Long.MAX_VALUE), java.math.BigDecimal.valueOf(Long.MAX_VALUE).negate().toString());
-        expect2(df, java.math.BigDecimal.valueOf(Long.MIN_VALUE), java.math.BigDecimal.valueOf(Long.MIN_VALUE).negate().toString());
+        expect2(
+                df,
+                java.math.BigDecimal.valueOf(Long.MAX_VALUE),
+                java.math.BigDecimal.valueOf(Long.MAX_VALUE).negate().toString());
+        expect2(
+                df,
+                java.math.BigDecimal.valueOf(Long.MIN_VALUE),
+                java.math.BigDecimal.valueOf(Long.MIN_VALUE).negate().toString());
     }
 
     @Test
@@ -3209,13 +3735,14 @@ public class NumberFormatTest extends CoreTestFmwk {
         }
     }
 
-    static private class ParseThreadJB5358 extends Thread {
+    private static class ParseThreadJB5358 extends Thread {
         private final DecimalFormat decfmt;
         private final String numstr;
         private final double expect;
         private final ArrayList<String> errors;
 
-        public ParseThreadJB5358(DecimalFormat decfmt, String numstr, double expect, ArrayList<String> errors) {
+        public ParseThreadJB5358(
+                DecimalFormat decfmt, String numstr, double expect, ArrayList<String> errors) {
             this.decfmt = decfmt;
             this.numstr = numstr;
             this.expect = expect;
@@ -3228,12 +3755,17 @@ public class NumberFormatTest extends CoreTestFmwk {
                 try {
                     Number n = decfmt.parse(numstr);
                     if (n.doubleValue() != expect) {
-                        synchronized(errors) {
-                            errors.add(new String("Bad parse result - expected:" + expect + " actual:" + n.doubleValue()));
+                        synchronized (errors) {
+                            errors.add(
+                                    new String(
+                                            "Bad parse result - expected:"
+                                                    + expect
+                                                    + " actual:"
+                                                    + n.doubleValue()));
                         }
                     }
                 } catch (Throwable t) {
-                    synchronized(errors) {
+                    synchronized (errors) {
                         errors.add(new String(t.getClass().getName() + " - " + t.getMessage()));
                     }
                 }
@@ -3267,63 +3799,77 @@ public class NumberFormatTest extends CoreTestFmwk {
         try {
             nf.format(Long.valueOf("0"), sb, fp);
         } catch (Exception e) {
-            errln("NumberFormat.format(Object number, ...) was not suppose to "
-                    + "return an exception for a Long object. Error: " + e);
+            errln(
+                    "NumberFormat.format(Object number, ...) was not suppose to "
+                            + "return an exception for a Long object. Error: "
+                            + e);
         }
 
         // Tests when "else if (number instanceof BigInteger)" is true
         try {
-            nf.format((Object)new BigInteger("0"), sb, fp);
+            nf.format((Object) new BigInteger("0"), sb, fp);
         } catch (Exception e) {
-            errln("NumberFormat.format(Object number, ...) was not suppose to "
-                    + "return an exception for a BigInteger object. Error: " + e);
+            errln(
+                    "NumberFormat.format(Object number, ...) was not suppose to "
+                            + "return an exception for a BigInteger object. Error: "
+                            + e);
         }
 
         // Tests when "else if (number instanceof java.math.BigDecimal)" is true
         try {
-            nf.format((Object)new java.math.BigDecimal("0"), sb, fp);
+            nf.format((Object) new java.math.BigDecimal("0"), sb, fp);
         } catch (Exception e) {
-            errln("NumberFormat.format(Object number, ...) was not suppose to "
-                    + "return an exception for a java.math.BigDecimal object. Error: " + e);
+            errln(
+                    "NumberFormat.format(Object number, ...) was not suppose to "
+                            + "return an exception for a java.math.BigDecimal object. Error: "
+                            + e);
         }
 
         // Tests when "else if (number instanceof com.ibm.icu.math.BigDecimal)" is true
         try {
-            nf.format((Object)new com.ibm.icu.math.BigDecimal("0"), sb, fp);
+            nf.format((Object) new com.ibm.icu.math.BigDecimal("0"), sb, fp);
         } catch (Exception e) {
-            errln("NumberFormat.format(Object number, ...) was not suppose to "
-                    + "return an exception for a com.ibm.icu.math.BigDecimal object. Error: " + e);
+            errln(
+                    "NumberFormat.format(Object number, ...) was not suppose to "
+                            + "return an exception for a com.ibm.icu.math.BigDecimal object. Error: "
+                            + e);
         }
 
         // Tests when "else if (number instanceof CurrencyAmount)" is true
         try {
             CurrencyAmount ca = new CurrencyAmount(0.0, Currency.getInstance(new ULocale("en_US")));
-            nf.format((Object)ca, sb, fp);
+            nf.format((Object) ca, sb, fp);
         } catch (Exception e) {
-            errln("NumberFormat.format(Object number, ...) was not suppose to "
-                    + "return an exception for a CurrencyAmount object. Error: " + e);
+            errln(
+                    "NumberFormat.format(Object number, ...) was not suppose to "
+                            + "return an exception for a CurrencyAmount object. Error: "
+                            + e);
         }
 
         // Tests when "else if (number instanceof Number)" is true
         try {
             nf.format(0.0, sb, fp);
         } catch (Exception e) {
-            errln("NumberFormat.format(Object number, ...) was not suppose to "
-                    + "to return an exception for a Number object. Error: " + e);
+            errln(
+                    "NumberFormat.format(Object number, ...) was not suppose to "
+                            + "to return an exception for a Number object. Error: "
+                            + e);
         }
 
         // Tests when "else" is true
         try {
             nf.format(new Object(), sb, fp);
-            errln("NumberFormat.format(Object number, ...) was suppose to "
-                    + "return an exception for an invalid object.");
+            errln(
+                    "NumberFormat.format(Object number, ...) was suppose to "
+                            + "return an exception for an invalid object.");
         } catch (Exception e) {
         }
 
         try {
             nf.format(new String("dummy"), sb, fp);
-            errln("NumberFormat.format(Object number, ...) was suppose to "
-                    + "return an exception for an invalid object.");
+            errln(
+                    "NumberFormat.format(Object number, ...) was suppose to "
+                            + "return an exception for an invalid object.");
         } catch (Exception e) {
         }
     }
@@ -3334,8 +3880,11 @@ public class NumberFormatTest extends CoreTestFmwk {
     @Test
     public void TestFormatAbstractImplCoverage() {
         NumberFormat df = DecimalFormat.getInstance(Locale.ENGLISH);
-        NumberFormat cdf = CompactDecimalFormat.getInstance(Locale.ENGLISH, CompactDecimalFormat.CompactStyle.SHORT);
-        NumberFormat rbf = new RuleBasedNumberFormat(ULocale.ENGLISH, RuleBasedNumberFormat.SPELLOUT);
+        NumberFormat cdf =
+                CompactDecimalFormat.getInstance(
+                        Locale.ENGLISH, CompactDecimalFormat.CompactStyle.SHORT);
+        NumberFormat rbf =
+                new RuleBasedNumberFormat(ULocale.ENGLISH, RuleBasedNumberFormat.SPELLOUT);
 
         /*
          *  Test  NumberFormat.format(BigDecimal,StringBuffer,FieldPosition)
@@ -3355,7 +3904,10 @@ public class NumberFormatTest extends CoreTestFmwk {
         sb.delete(0, sb.length());
         result = rbf.format(new BigDecimal(2000.43), sb, new FieldPosition(0)).toString();
         if (!"two thousand point four three".equals(result)) {
-            errln("DecimalFormat failed. Expected: 'two thousand point four three' - Actual: '" + result + "'");
+            errln(
+                    "DecimalFormat failed. Expected: 'two thousand point four three' - Actual: '"
+                            + result
+                            + "'");
         }
     }
 
@@ -3368,37 +3920,46 @@ public class NumberFormatTest extends CoreTestFmwk {
         // Tests "public final static NumberFormat getInstance(int style)"
         int maxStyle = NumberFormat.STANDARDCURRENCYSTYLE;
 
-        int[] invalid_cases = { NumberFormat.NUMBERSTYLE - 1, NumberFormat.NUMBERSTYLE - 2,
-                maxStyle + 1, maxStyle + 2 };
+        int[] invalid_cases = {
+            NumberFormat.NUMBERSTYLE - 1, NumberFormat.NUMBERSTYLE - 2, maxStyle + 1, maxStyle + 2
+        };
 
         for (int i = NumberFormat.NUMBERSTYLE; i < maxStyle; i++) {
             try {
                 NumberFormat.getInstance(i);
             } catch (Exception e) {
-                errln("NumberFormat.getInstance(int style) was not suppose to "
-                        + "return an exception for passing value of " + i);
+                errln(
+                        "NumberFormat.getInstance(int style) was not suppose to "
+                                + "return an exception for passing value of "
+                                + i);
             }
         }
 
         for (int i = 0; i < invalid_cases.length; i++) {
             try {
                 NumberFormat.getInstance(invalid_cases[i]);
-                errln("NumberFormat.getInstance(int style) was suppose to "
-                        + "return an exception for passing value of " + invalid_cases[i]);
+                errln(
+                        "NumberFormat.getInstance(int style) was suppose to "
+                                + "return an exception for passing value of "
+                                + invalid_cases[i]);
             } catch (Exception e) {
             }
         }
 
         // Tests "public static NumberFormat getInstance(Locale inLocale, int style)"
-        String[] localeCases = { "en_US", "fr_FR", "de_DE", "jp_JP" };
+        String[] localeCases = {"en_US", "fr_FR", "de_DE", "jp_JP"};
 
         for (int i = NumberFormat.NUMBERSTYLE; i < maxStyle; i++) {
             for (int j = 0; j < localeCases.length; j++) {
                 try {
                     NumberFormat.getInstance(new Locale(localeCases[j]), i);
                 } catch (Exception e) {
-                    errln("NumberFormat.getInstance(Locale inLocale, int style) was not suppose to "
-                            + "return an exception for passing value of " + localeCases[j] + ", " + i);
+                    errln(
+                            "NumberFormat.getInstance(Locale inLocale, int style) was not suppose to "
+                                    + "return an exception for passing value of "
+                                    + localeCases[j]
+                                    + ", "
+                                    + i);
                 }
             }
         }
@@ -3408,8 +3969,10 @@ public class NumberFormatTest extends CoreTestFmwk {
         for (int i = 0; i < invalid_cases.length; i++) {
             try {
                 NumberFormat.getInstance((ULocale) null, invalid_cases[i]);
-                errln("NumberFormat.getInstance(ULocale inLocale, int choice) was not suppose to "
-                        + "return an exception for passing value of " + invalid_cases[i]);
+                errln(
+                        "NumberFormat.getInstance(ULocale inLocale, int choice) was not suppose to "
+                                + "return an exception for passing value of "
+                                + invalid_cases[i]);
             } catch (Exception e) {
             }
         }
@@ -3466,14 +4029,18 @@ public class NumberFormatTest extends CoreTestFmwk {
          * Tests the method public NumberFormat createFormat(Locale loc, int formatType)
          */
         if (tf.createFormat(new Locale(""), 0) != null) {
-            errln("NumberFormatFactory.createFormat(Locale loc, int formatType) " + "was suppose to return null");
+            errln(
+                    "NumberFormatFactory.createFormat(Locale loc, int formatType) "
+                            + "was suppose to return null");
         }
 
         /*
          * Tests the method public NumberFormat createFormat(ULocale loc, int formatType)
          */
         if (tf1.createFormat(new ULocale(""), 0) != null) {
-            errln("NumberFormatFactory.createFormat(ULocale loc, int formatType) " + "was suppose to return null");
+            errln(
+                    "NumberFormatFactory.createFormat(ULocale loc, int formatType) "
+                            + "was suppose to return null");
         }
     }
 
@@ -3514,17 +4081,20 @@ public class NumberFormatTest extends CoreTestFmwk {
             }
 
             @Override
-            public StringBuffer format(BigInteger number, StringBuffer toAppendTo, FieldPosition pos) {
+            public StringBuffer format(
+                    BigInteger number, StringBuffer toAppendTo, FieldPosition pos) {
                 return null;
             }
 
             @Override
-            public StringBuffer format(java.math.BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {
+            public StringBuffer format(
+                    java.math.BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {
                 return null;
             }
 
             @Override
-            public StringBuffer format(BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {
+            public StringBuffer format(
+                    BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {
                 return null;
             }
 
@@ -3538,8 +4108,9 @@ public class NumberFormatTest extends CoreTestFmwk {
             TestGetAvailableLocales test = new TestGetAvailableLocales();
             test.getAvailableLocales();
         } catch (Exception e) {
-            errln("NumberFormat.getAvailableLocales() was not suppose to "
-                    + "return an exception when getting getting available locales.");
+            errln(
+                    "NumberFormat.getAvailableLocales() was not suppose to "
+                            + "return an exception when getting getting available locales.");
         }
     }
 
@@ -3551,19 +4122,27 @@ public class NumberFormatTest extends CoreTestFmwk {
         NumberFormat nf = NumberFormat.getInstance();
         // For valid array, it is displayed as {min value, max value}
         // Tests when "if (minimumIntegerDigits > maximumIntegerDigits)" is true
-        int[][] cases = { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 2, 0 }, { 2, 1 }, { 10, 0 } };
-        int[] expectedMax = { 1, 1, 0, 0, 1, 0 };
+        int[][] cases = {{-1, 0}, {0, 1}, {1, 0}, {2, 0}, {2, 1}, {10, 0}};
+        int[] expectedMax = {1, 1, 0, 0, 1, 0};
         if (cases.length != expectedMax.length) {
-            errln("Can't continue test case method TestSetMinimumIntegerDigits "
-                    + "since the test case arrays are unequal.");
+            errln(
+                    "Can't continue test case method TestSetMinimumIntegerDigits "
+                            + "since the test case arrays are unequal.");
         } else {
             for (int i = 0; i < cases.length; i++) {
                 nf.setMinimumIntegerDigits(cases[i][0]);
                 nf.setMaximumIntegerDigits(cases[i][1]);
                 if (nf.getMaximumIntegerDigits() != expectedMax[i]) {
-                    errln("NumberFormat.setMinimumIntegerDigits(int newValue "
-                            + "did not return an expected result for parameter " + cases[i][0] + " and " + cases[i][1]
-                                    + " and expected " + expectedMax[i] + " but got " + nf.getMaximumIntegerDigits());
+                    errln(
+                            "NumberFormat.setMinimumIntegerDigits(int newValue "
+                                    + "did not return an expected result for parameter "
+                                    + cases[i][0]
+                                    + " and "
+                                    + cases[i][1]
+                                    + " and expected "
+                                    + expectedMax[i]
+                                    + " but got "
+                                    + nf.getMaximumIntegerDigits());
                 }
             }
         }
@@ -3587,17 +4166,20 @@ public class NumberFormatTest extends CoreTestFmwk {
             }
 
             @Override
-            public StringBuffer format(BigInteger number, StringBuffer toAppendTo, FieldPosition pos) {
+            public StringBuffer format(
+                    BigInteger number, StringBuffer toAppendTo, FieldPosition pos) {
                 return null;
             }
 
             @Override
-            public StringBuffer format(java.math.BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {
+            public StringBuffer format(
+                    java.math.BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {
                 return null;
             }
 
             @Override
-            public StringBuffer format(BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {
+            public StringBuffer format(
+                    BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {
                 return null;
             }
 
@@ -3647,7 +4229,6 @@ public class NumberFormatTest extends CoreTestFmwk {
         expect(fmt, "23\u300245", 23.45);
         fmt.setParseStrict(false);
 
-
         // Ticket#7345 - case 2
         // Decimal separator variants other than DecimalFormatSymbols.decimalSeparator
         // should not hide the grouping separator DecimalFormatSymbols.groupingSeparator.
@@ -3667,7 +4248,9 @@ public class NumberFormatTest extends CoreTestFmwk {
         sym.setGroupingSeparator(',');
         fmt.setDecimalFormatSymbols(sym);
 
-        String skipExtSepParse = ICUConfig.get("com.ibm.icu.text.DecimalFormat.SkipExtendedSeparatorParsing", "false");
+        String skipExtSepParse =
+                ICUConfig.get(
+                        "com.ibm.icu.text.DecimalFormat.SkipExtendedSeparatorParsing", "false");
         if (skipExtSepParse.equals("true")) {
             // When the property SkipExtendedSeparatorParsing is true,
             // DecimalFormat does not use the extended equivalent separator
@@ -3717,7 +4300,7 @@ public class NumberFormatTest extends CoreTestFmwk {
         double value = 99.12345;
 
         // Create currency instance
-        NumberFormat cfmt  = NumberFormat.getCurrencyInstance(new ULocale("ja_JP"));
+        NumberFormat cfmt = NumberFormat.getCurrencyInstance(new ULocale("ja_JP"));
         String text1 = cfmt.format(value);
 
         // Reset the same currency and format the test value again
@@ -3726,8 +4309,11 @@ public class NumberFormatTest extends CoreTestFmwk {
 
         // output1 and output2 must be identical
         if (!text1.equals(text2)) {
-            errln("NumberFormat.format() should return the same result - text1="
-                    + text1 + " text2=" + text2);
+            errln(
+                    "NumberFormat.format() should return the same result - text1="
+                            + text1
+                            + " text2="
+                            + text2);
         }
     }
 
@@ -3749,10 +4335,12 @@ public class NumberFormatTest extends CoreTestFmwk {
 
         // output1 and output2 must be identical
         if (!text1.equals(text2)) {
-            errln("NumberFormat.format() should return the same result - text1="
-                    + text1 + " text2=" + text2);
+            errln(
+                    "NumberFormat.format() should return the same result - text1="
+                            + text1
+                            + " text2="
+                            + text2);
         }
-
     }
 
     @Test
@@ -3789,34 +4377,37 @@ public class NumberFormatTest extends CoreTestFmwk {
         DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
         DecimalFormat fmt = new DecimalFormat("#####", symbols);
         Number result = fmt.parse("5.06e-27", parsePos);
-        if ( result.doubleValue() != 5.06E-27 || parsePos.getIndex() != 8) {
-            errln("ERROR: ERROR: parse failed - expected 5.06E-27, 8; got " + result.doubleValue() + ", " + parsePos.getIndex());
+        if (result.doubleValue() != 5.06E-27 || parsePos.getIndex() != 8) {
+            errln(
+                    "ERROR: ERROR: parse failed - expected 5.06E-27, 8; got "
+                            + result.doubleValue()
+                            + ", "
+                            + parsePos.getIndex());
         }
     }
 
     @Test
     public void TestExplicitParents() {
-        // We use these for testing because decimal and grouping separators will be inherited from es_419
+        // We use these for testing because decimal and grouping separators will be inherited from
+        // es_419
         // starting with CLDR 2.0
         String[] DATA = {
-                "es", "CO", "", "1.250,75",
-                "es", "ES", "", "1.250,75",
-                "es", "GQ", "", "1.250,75",
-                "es", "MX", "", "1,250.75",
-                "es", "US", "", "1,250.75",
-                "es", "VE", "", "1.250,75",
-
+            "es", "CO", "", "1.250,75",
+            "es", "ES", "", "1.250,75",
+            "es", "GQ", "", "1.250,75",
+            "es", "MX", "", "1,250.75",
+            "es", "US", "", "1,250.75",
+            "es", "VE", "", "1.250,75",
         };
 
-        for (int i=0; i<DATA.length; i+=4) {
-            Locale locale = new Locale(DATA[i], DATA[i+1], DATA[i+2]);
+        for (int i = 0; i < DATA.length; i += 4) {
+            Locale locale = new Locale(DATA[i], DATA[i + 1], DATA[i + 2]);
             NumberFormat fmt = NumberFormat.getInstance(locale);
             String s = fmt.format(1250.75);
-            if (s.equals(DATA[i+3])) {
+            if (s.equals(DATA[i + 3])) {
                 logln("Ok: 1250.75 x " + locale + " => " + s);
             } else {
-                errln("FAIL: 1250.75 x " + locale + " => " + s +
-                        ", expected " + DATA[i+3]);
+                errln("FAIL: 1250.75 x " + locale + " => " + s + ", expected " + DATA[i + 3]);
             }
         }
     }
@@ -3848,7 +4439,7 @@ public class NumberFormatTest extends CoreTestFmwk {
             t1.join();
             t2.join();
         } catch (InterruptedException e) {
-            //TODO
+            // TODO
         }
 
         int val1 = res1[0];
@@ -3921,46 +4512,18 @@ public class NumberFormatTest extends CoreTestFmwk {
     @Test
     public void TestRoundingBehavior() {
         final Object[][] TEST_CASES = {
-                {
-                    ULocale.US,                             // ULocale - null for default locale
-                    "#.##",                                 // Pattern
-                    BigDecimal.ROUND_DOWN, // Rounding Mode or null (implicit)
-                    0.0d,                   // Rounding increment, Double or BigDecimal, or null (implicit)
-                    123.4567d,              // Input value, Long, Double, BigInteger or BigDecimal
-                    "123.45"                                // Expected result, null for exception
-                },
-                {
-                    ULocale.US,
-                    "#.##",
-                    null,
-                    0.1d,
-                    123.4567d,
-                    "123.5"
-                },
-                {
-                    ULocale.US,
-                    "#.##",
-                    BigDecimal.ROUND_DOWN,
-                    0.1d,
-                    123.4567d,
-                    "123.4"
-                },
-                {
-                    ULocale.US,
-                    "#.##",
-                    BigDecimal.ROUND_UNNECESSARY,
-                    null,
-                    123.4567d,
-                    null
-                },
-                {
-                    ULocale.US,
-                    "#.##",
-                    BigDecimal.ROUND_DOWN,
-                    null,
-                    1234L,
-                    "1234"
-                },
+            {
+                ULocale.US, // ULocale - null for default locale
+                "#.##", // Pattern
+                BigDecimal.ROUND_DOWN, // Rounding Mode or null (implicit)
+                0.0d, // Rounding increment, Double or BigDecimal, or null (implicit)
+                123.4567d, // Input value, Long, Double, BigInteger or BigDecimal
+                "123.45" // Expected result, null for exception
+            },
+            {ULocale.US, "#.##", null, 0.1d, 123.4567d, "123.5"},
+            {ULocale.US, "#.##", BigDecimal.ROUND_DOWN, 0.1d, 123.4567d, "123.4"},
+            {ULocale.US, "#.##", BigDecimal.ROUND_UNNECESSARY, null, 123.4567d, null},
+            {ULocale.US, "#.##", BigDecimal.ROUND_DOWN, null, 1234L, "1234"},
         };
 
         int testNum = 1;
@@ -3968,26 +4531,27 @@ public class NumberFormatTest extends CoreTestFmwk {
         for (Object[] testCase : TEST_CASES) {
             // 0: locale
             // 1: pattern
-            ULocale locale = testCase[0] == null ? ULocale.getDefault() : (ULocale)testCase[0];
-            String pattern = (String)testCase[1];
+            ULocale locale = testCase[0] == null ? ULocale.getDefault() : (ULocale) testCase[0];
+            String pattern = (String) testCase[1];
 
-            DecimalFormat fmt = new DecimalFormat(pattern, DecimalFormatSymbols.getInstance(locale));
+            DecimalFormat fmt =
+                    new DecimalFormat(pattern, DecimalFormatSymbols.getInstance(locale));
 
             // 2: rounding mode
             Integer roundingMode = null;
             if (testCase[2] != null) {
-                roundingMode = (Integer)testCase[2];
+                roundingMode = (Integer) testCase[2];
                 fmt.setRoundingMode(roundingMode);
             }
 
             // 3: rounding increment
             if (testCase[3] != null) {
                 if (testCase[3] instanceof Double) {
-                    fmt.setRoundingIncrement((Double)testCase[3]);
+                    fmt.setRoundingIncrement((Double) testCase[3]);
                 } else if (testCase[3] instanceof BigDecimal) {
-                    fmt.setRoundingIncrement((BigDecimal)testCase[3]);
+                    fmt.setRoundingIncrement((BigDecimal) testCase[3]);
                 } else if (testCase[3] instanceof java.math.BigDecimal) {
-                    fmt.setRoundingIncrement((java.math.BigDecimal)testCase[3]);
+                    fmt.setRoundingIncrement((java.math.BigDecimal) testCase[3]);
                 }
             }
 
@@ -4006,9 +4570,11 @@ public class NumberFormatTest extends CoreTestFmwk {
                 }
             } else {
                 if (testCase[5] == null) {
-                    errln("Test case #" + testNum +
-                            ": ArithmeticException must be thrown, but got formatted result: " +
-                            s);
+                    errln(
+                            "Test case #"
+                                    + testNum
+                                    + ": ArithmeticException must be thrown, but got formatted result: "
+                                    + s);
                 } else {
                     assertEquals("Test case #" + testNum, testCase[5], s);
                 }
@@ -4021,35 +4587,46 @@ public class NumberFormatTest extends CoreTestFmwk {
     @Test
     public void TestSignificantDigits() {
         double input[] = {
-                0, 0,
-                123, -123,
-                12345, -12345,
-                123.45, -123.45,
-                123.44501, -123.44501,
-                0.001234, -0.001234,
-                0.00000000123, -0.00000000123,
-                0.0000000000000000000123, -0.0000000000000000000123,
-                1.2, -1.2,
-                0.0000000012344501, -0.0000000012344501,
-                123445.01, -123445.01,
-                12344501000000000000000000000000000.0, -12344501000000000000000000000000000.0,
+            0,
+            0,
+            123,
+            -123,
+            12345,
+            -12345,
+            123.45,
+            -123.45,
+            123.44501,
+            -123.44501,
+            0.001234,
+            -0.001234,
+            0.00000000123,
+            -0.00000000123,
+            0.0000000000000000000123,
+            -0.0000000000000000000123,
+            1.2,
+            -1.2,
+            0.0000000012344501,
+            -0.0000000012344501,
+            123445.01,
+            -123445.01,
+            12344501000000000000000000000000000.0,
+            -12344501000000000000000000000000000.0,
         };
         String[] expected = {
-                "0.00", "0.00",
-                "123", "-123",
-                "12345", "-12345",
-                "123.45", "-123.45",
-                "123.45", "-123.45",
-                "0.001234", "-0.001234",
-                "0.00000000123", "-0.00000000123",
-                "0.0000000000000000000123", "-0.0000000000000000000123",
-                "1.20", "-1.20",
-                "0.0000000012345", "-0.0000000012345",
-                "123450", "-123450",
-                "12345000000000000000000000000000000", "-12345000000000000000000000000000000",
+            "0.00", "0.00",
+            "123", "-123",
+            "12345", "-12345",
+            "123.45", "-123.45",
+            "123.45", "-123.45",
+            "0.001234", "-0.001234",
+            "0.00000000123", "-0.00000000123",
+            "0.0000000000000000000123", "-0.0000000000000000000123",
+            "1.20", "-1.20",
+            "0.0000000012345", "-0.0000000012345",
+            "123450", "-123450",
+            "12345000000000000000000000000000000", "-12345000000000000000000000000000000",
         };
-        DecimalFormat numberFormat =
-                (DecimalFormat) NumberFormat.getInstance(ULocale.US);
+        DecimalFormat numberFormat = (DecimalFormat) NumberFormat.getInstance(ULocale.US);
         numberFormat.setSignificantDigitsUsed(true);
         numberFormat.setMinimumSignificantDigits(3);
         numberFormat.setMaximumSignificantDigits(5);
@@ -4060,7 +4637,8 @@ public class NumberFormatTest extends CoreTestFmwk {
 
         // Test for ICU-20063
         {
-            DecimalFormat df = new DecimalFormat("0.######", DecimalFormatSymbols.getInstance(ULocale.US));
+            DecimalFormat df =
+                    new DecimalFormat("0.######", DecimalFormatSymbols.getInstance(ULocale.US));
             df.setSignificantDigitsUsed(true);
             expect(df, 9.87654321, "9.87654");
             df.setMaximumSignificantDigits(3);
@@ -4093,17 +4671,27 @@ public class NumberFormatTest extends CoreTestFmwk {
         class SetMxFrAndRndIncrItem {
             String descrip;
             String localeID;
-            int    style;
-            int    minInt;
-            int    minFrac;
-            int    maxFrac;
+            int style;
+            int minInt;
+            int minFrac;
+            int maxFrac;
             double roundIncr;
             String expPattern;
             double valueToFmt;
             String expFormat;
-             // Simple constructor
-            public SetMxFrAndRndIncrItem(String desc, String loc, int stl, int mnI, int mnF, int mxF,
-                                                double rdIn, String ePat, double val, String eFmt) {
+
+            // Simple constructor
+            public SetMxFrAndRndIncrItem(
+                    String desc,
+                    String loc,
+                    int stl,
+                    int mnI,
+                    int mnF,
+                    int mxF,
+                    double rdIn,
+                    String ePat,
+                    double val,
+                    String eFmt) {
                 descrip = desc;
                 localeID = loc;
                 style = stl;
@@ -4113,56 +4701,319 @@ public class NumberFormatTest extends CoreTestFmwk {
                 roundIncr = rdIn;
                 expPattern = ePat;
                 valueToFmt = val;
-                expFormat = eFmt ;
+                expFormat = eFmt;
             }
-        };
+        }
+        ;
 
         final SetMxFrAndRndIncrItem[] items = {
-            //                         descrip                     locale   style                      mnI mnF mxF rdInc   expPat        value  expFmt
-            new SetMxFrAndRndIncrItem( "01 en_US DEC 1/0/3/0.0",    "en_US", NumberFormat.NUMBERSTYLE,  1,  0,  3, 0.0,    "#,##0.###",  0.128, "0.128" ),
-            new SetMxFrAndRndIncrItem( "02 en_US DEC 1/0/1/0.0",    "en_US", NumberFormat.NUMBERSTYLE,  1,  0,  1, 0.0,    "#,##0.#",    0.128, "0.1"   ),
-            new SetMxFrAndRndIncrItem( "03 en_US DEC 1/0/1/0.01",   "en_US", NumberFormat.NUMBERSTYLE,  1,  0,  1, 0.01,   "#,##0.#",    0.128, "0.1"   ),
-            new SetMxFrAndRndIncrItem( "04 en_US DEC 1/1/1/0.01",   "en_US", NumberFormat.NUMBERSTYLE,  1,  1,  1, 0.01,   "#,##0.0",    0.128, "0.1"   ),
-            new SetMxFrAndRndIncrItem( "05 en_US DEC 1/0/1/0.1",    "en_US", NumberFormat.NUMBERSTYLE,  1,  0,  1, 0.1,    "#,##0.1",    0.128, "0.1"   ), // use incr
-            new SetMxFrAndRndIncrItem( "06 en_US DEC 1/1/1/0.1",    "en_US", NumberFormat.NUMBERSTYLE,  1,  1,  1, 0.1,    "#,##0.1",    0.128, "0.1"   ), // use incr
-
-            new SetMxFrAndRndIncrItem( "10 en_US DEC 1/0/1/0.02",   "en_US", NumberFormat.NUMBERSTYLE,  1,  0,  1, 0.02,   "#,##0.#",    0.128, "0.1"   ),
-            new SetMxFrAndRndIncrItem( "11 en_US DEC 1/0/2/0.02",   "en_US", NumberFormat.NUMBERSTYLE,  1,  0,  2, 0.02,   "#,##0.02",   0.128, "0.12"  ), // use incr
-            new SetMxFrAndRndIncrItem( "12 en_US DEC 1/0/3/0.02",   "en_US", NumberFormat.NUMBERSTYLE,  1,  0,  3, 0.02,   "#,##0.02#",  0.128, "0.12"  ), // use incr
-            new SetMxFrAndRndIncrItem( "13 en_US DEC 1/1/1/0.02",   "en_US", NumberFormat.NUMBERSTYLE,  1,  1,  1, 0.02,   "#,##0.0",    0.128, "0.1"   ),
-            new SetMxFrAndRndIncrItem( "14 en_US DEC 1/1/2/0.02",   "en_US", NumberFormat.NUMBERSTYLE,  1,  1,  2, 0.02,   "#,##0.02",   0.128, "0.12"  ), // use incr
-            new SetMxFrAndRndIncrItem( "15 en_US DEC 1/1/3/0.02",   "en_US", NumberFormat.NUMBERSTYLE,  1,  1,  3, 0.02,   "#,##0.02#",  0.128, "0.12"  ), // use incr
-            new SetMxFrAndRndIncrItem( "16 en_US DEC 1/2/2/0.02",   "en_US", NumberFormat.NUMBERSTYLE,  1,  2,  2, 0.02,   "#,##0.02",   0.128, "0.12"  ), // use incr
-            new SetMxFrAndRndIncrItem( "17 en_US DEC 1/2/3/0.02",   "en_US", NumberFormat.NUMBERSTYLE,  1,  2,  3, 0.02,   "#,##0.02#",  0.128, "0.12"  ), // use incr
-            new SetMxFrAndRndIncrItem( "18 en_US DEC 1/3/3/0.02",   "en_US", NumberFormat.NUMBERSTYLE,  1,  3,  3, 0.02,   "#,##0.020",  0.128, "0.120" ), // use incr
-
-            new SetMxFrAndRndIncrItem( "20 en_US DEC 1/1/1/0.0075", "en_US", NumberFormat.NUMBERSTYLE,  1,  1,  1, 0.0075, "#,##0.0",    0.019, "0.0"    ),
-            new SetMxFrAndRndIncrItem( "21 en_US DEC 1/1/2/0.0075", "en_US", NumberFormat.NUMBERSTYLE,  1,  1,  2, 0.0075, "#,##0.0075", 0.004, "0.0075" ), // use incr
-            new SetMxFrAndRndIncrItem( "22 en_US DEC 1/1/2/0.0075", "en_US", NumberFormat.NUMBERSTYLE,  1,  1,  2, 0.0075, "#,##0.0075", 0.019, "0.0225" ), // use incr
-            new SetMxFrAndRndIncrItem( "23 en_US DEC 1/1/3/0.0075", "en_US", NumberFormat.NUMBERSTYLE,  1,  1,  3, 0.0075, "#,##0.0075", 0.004, "0.0075" ), // use incr
-            new SetMxFrAndRndIncrItem( "24 en_US DEC 1/1/3/0.0075", "en_US", NumberFormat.NUMBERSTYLE,  1,  1,  3, 0.0075, "#,##0.0075", 0.019, "0.0225" ), // use incr
-            new SetMxFrAndRndIncrItem( "25 en_US DEC 1/2/2/0.0075", "en_US", NumberFormat.NUMBERSTYLE,  1,  2,  2, 0.0075, "#,##0.0075", 0.004, "0.0075" ), // use incr
-            new SetMxFrAndRndIncrItem( "26 en_US DEC 1/2/2/0.0075", "en_US", NumberFormat.NUMBERSTYLE,  1,  2,  2, 0.0075, "#,##0.0075", 0.019, "0.0225" ), // use incr
-            new SetMxFrAndRndIncrItem( "27 en_US DEC 1/2/3/0.0075", "en_US", NumberFormat.NUMBERSTYLE,  1,  2,  3, 0.0075, "#,##0.0075", 0.004, "0.0075" ), // use incr
-            new SetMxFrAndRndIncrItem( "28 en_US DEC 1/2/3/0.0075", "en_US", NumberFormat.NUMBERSTYLE,  1,  2,  3, 0.0075, "#,##0.0075", 0.019, "0.0225" ), // use incr
-            new SetMxFrAndRndIncrItem( "29 en_US DEC 1/3/3/0.0075", "en_US", NumberFormat.NUMBERSTYLE,  1,  3,  3, 0.0075, "#,##0.0075", 0.004, "0.0075" ), // use incr
-            new SetMxFrAndRndIncrItem( "2A en_US DEC 1/3/3/0.0075", "en_US", NumberFormat.NUMBERSTYLE,  1,  3,  3, 0.0075, "#,##0.0075", 0.019, "0.0225" ), // use incr
+            //                         descrip                     locale   style
+            //   mnI mnF mxF rdInc   expPat        value  expFmt
+            new SetMxFrAndRndIncrItem(
+                    "01 en_US DEC 1/0/3/0.0",
+                    "en_US",
+                    NumberFormat.NUMBERSTYLE,
+                    1,
+                    0,
+                    3,
+                    0.0,
+                    "#,##0.###",
+                    0.128,
+                    "0.128"),
+            new SetMxFrAndRndIncrItem(
+                    "02 en_US DEC 1/0/1/0.0",
+                    "en_US",
+                    NumberFormat.NUMBERSTYLE,
+                    1,
+                    0,
+                    1,
+                    0.0,
+                    "#,##0.#",
+                    0.128,
+                    "0.1"),
+            new SetMxFrAndRndIncrItem(
+                    "03 en_US DEC 1/0/1/0.01",
+                    "en_US",
+                    NumberFormat.NUMBERSTYLE,
+                    1,
+                    0,
+                    1,
+                    0.01,
+                    "#,##0.#",
+                    0.128,
+                    "0.1"),
+            new SetMxFrAndRndIncrItem(
+                    "04 en_US DEC 1/1/1/0.01",
+                    "en_US",
+                    NumberFormat.NUMBERSTYLE,
+                    1,
+                    1,
+                    1,
+                    0.01,
+                    "#,##0.0",
+                    0.128,
+                    "0.1"),
+            new SetMxFrAndRndIncrItem(
+                    "05 en_US DEC 1/0/1/0.1",
+                    "en_US",
+                    NumberFormat.NUMBERSTYLE,
+                    1,
+                    0,
+                    1,
+                    0.1,
+                    "#,##0.1",
+                    0.128,
+                    "0.1"), // use incr
+            new SetMxFrAndRndIncrItem(
+                    "06 en_US DEC 1/1/1/0.1",
+                    "en_US",
+                    NumberFormat.NUMBERSTYLE,
+                    1,
+                    1,
+                    1,
+                    0.1,
+                    "#,##0.1",
+                    0.128,
+                    "0.1"), // use incr
+            new SetMxFrAndRndIncrItem(
+                    "10 en_US DEC 1/0/1/0.02",
+                    "en_US",
+                    NumberFormat.NUMBERSTYLE,
+                    1,
+                    0,
+                    1,
+                    0.02,
+                    "#,##0.#",
+                    0.128,
+                    "0.1"),
+            new SetMxFrAndRndIncrItem(
+                    "11 en_US DEC 1/0/2/0.02",
+                    "en_US",
+                    NumberFormat.NUMBERSTYLE,
+                    1,
+                    0,
+                    2,
+                    0.02,
+                    "#,##0.02",
+                    0.128,
+                    "0.12"), // use incr
+            new SetMxFrAndRndIncrItem(
+                    "12 en_US DEC 1/0/3/0.02",
+                    "en_US",
+                    NumberFormat.NUMBERSTYLE,
+                    1,
+                    0,
+                    3,
+                    0.02,
+                    "#,##0.02#",
+                    0.128,
+                    "0.12"), // use incr
+            new SetMxFrAndRndIncrItem(
+                    "13 en_US DEC 1/1/1/0.02",
+                    "en_US",
+                    NumberFormat.NUMBERSTYLE,
+                    1,
+                    1,
+                    1,
+                    0.02,
+                    "#,##0.0",
+                    0.128,
+                    "0.1"),
+            new SetMxFrAndRndIncrItem(
+                    "14 en_US DEC 1/1/2/0.02",
+                    "en_US",
+                    NumberFormat.NUMBERSTYLE,
+                    1,
+                    1,
+                    2,
+                    0.02,
+                    "#,##0.02",
+                    0.128,
+                    "0.12"), // use incr
+            new SetMxFrAndRndIncrItem(
+                    "15 en_US DEC 1/1/3/0.02",
+                    "en_US",
+                    NumberFormat.NUMBERSTYLE,
+                    1,
+                    1,
+                    3,
+                    0.02,
+                    "#,##0.02#",
+                    0.128,
+                    "0.12"), // use incr
+            new SetMxFrAndRndIncrItem(
+                    "16 en_US DEC 1/2/2/0.02",
+                    "en_US",
+                    NumberFormat.NUMBERSTYLE,
+                    1,
+                    2,
+                    2,
+                    0.02,
+                    "#,##0.02",
+                    0.128,
+                    "0.12"), // use incr
+            new SetMxFrAndRndIncrItem(
+                    "17 en_US DEC 1/2/3/0.02",
+                    "en_US",
+                    NumberFormat.NUMBERSTYLE,
+                    1,
+                    2,
+                    3,
+                    0.02,
+                    "#,##0.02#",
+                    0.128,
+                    "0.12"), // use incr
+            new SetMxFrAndRndIncrItem(
+                    "18 en_US DEC 1/3/3/0.02",
+                    "en_US",
+                    NumberFormat.NUMBERSTYLE,
+                    1,
+                    3,
+                    3,
+                    0.02,
+                    "#,##0.020",
+                    0.128,
+                    "0.120"), // use incr
+            new SetMxFrAndRndIncrItem(
+                    "20 en_US DEC 1/1/1/0.0075",
+                    "en_US",
+                    NumberFormat.NUMBERSTYLE,
+                    1,
+                    1,
+                    1,
+                    0.0075,
+                    "#,##0.0",
+                    0.019,
+                    "0.0"),
+            new SetMxFrAndRndIncrItem(
+                    "21 en_US DEC 1/1/2/0.0075",
+                    "en_US",
+                    NumberFormat.NUMBERSTYLE,
+                    1,
+                    1,
+                    2,
+                    0.0075,
+                    "#,##0.0075",
+                    0.004,
+                    "0.0075"), // use incr
+            new SetMxFrAndRndIncrItem(
+                    "22 en_US DEC 1/1/2/0.0075",
+                    "en_US",
+                    NumberFormat.NUMBERSTYLE,
+                    1,
+                    1,
+                    2,
+                    0.0075,
+                    "#,##0.0075",
+                    0.019,
+                    "0.0225"), // use incr
+            new SetMxFrAndRndIncrItem(
+                    "23 en_US DEC 1/1/3/0.0075",
+                    "en_US",
+                    NumberFormat.NUMBERSTYLE,
+                    1,
+                    1,
+                    3,
+                    0.0075,
+                    "#,##0.0075",
+                    0.004,
+                    "0.0075"), // use incr
+            new SetMxFrAndRndIncrItem(
+                    "24 en_US DEC 1/1/3/0.0075",
+                    "en_US",
+                    NumberFormat.NUMBERSTYLE,
+                    1,
+                    1,
+                    3,
+                    0.0075,
+                    "#,##0.0075",
+                    0.019,
+                    "0.0225"), // use incr
+            new SetMxFrAndRndIncrItem(
+                    "25 en_US DEC 1/2/2/0.0075",
+                    "en_US",
+                    NumberFormat.NUMBERSTYLE,
+                    1,
+                    2,
+                    2,
+                    0.0075,
+                    "#,##0.0075",
+                    0.004,
+                    "0.0075"), // use incr
+            new SetMxFrAndRndIncrItem(
+                    "26 en_US DEC 1/2/2/0.0075",
+                    "en_US",
+                    NumberFormat.NUMBERSTYLE,
+                    1,
+                    2,
+                    2,
+                    0.0075,
+                    "#,##0.0075",
+                    0.019,
+                    "0.0225"), // use incr
+            new SetMxFrAndRndIncrItem(
+                    "27 en_US DEC 1/2/3/0.0075",
+                    "en_US",
+                    NumberFormat.NUMBERSTYLE,
+                    1,
+                    2,
+                    3,
+                    0.0075,
+                    "#,##0.0075",
+                    0.004,
+                    "0.0075"), // use incr
+            new SetMxFrAndRndIncrItem(
+                    "28 en_US DEC 1/2/3/0.0075",
+                    "en_US",
+                    NumberFormat.NUMBERSTYLE,
+                    1,
+                    2,
+                    3,
+                    0.0075,
+                    "#,##0.0075",
+                    0.019,
+                    "0.0225"), // use incr
+            new SetMxFrAndRndIncrItem(
+                    "29 en_US DEC 1/3/3/0.0075",
+                    "en_US",
+                    NumberFormat.NUMBERSTYLE,
+                    1,
+                    3,
+                    3,
+                    0.0075,
+                    "#,##0.0075",
+                    0.004,
+                    "0.0075"), // use incr
+            new SetMxFrAndRndIncrItem(
+                    "2A en_US DEC 1/3/3/0.0075",
+                    "en_US",
+                    NumberFormat.NUMBERSTYLE,
+                    1,
+                    3,
+                    3,
+                    0.0075,
+                    "#,##0.0075",
+                    0.019,
+                    "0.0225"), // use incr
         };
 
-        for (SetMxFrAndRndIncrItem item: items) {
+        for (SetMxFrAndRndIncrItem item : items) {
             ULocale locale = new ULocale(item.localeID);
-            DecimalFormat df = (DecimalFormat)NumberFormat.getInstance(locale, item.style);
+            DecimalFormat df = (DecimalFormat) NumberFormat.getInstance(locale, item.style);
             df.setMinimumIntegerDigits(item.minInt);
             df.setMinimumFractionDigits(item.minFrac);
             df.setMaximumFractionDigits(item.maxFrac);
             df.setRoundingIncrement(item.roundIncr);
 
-            boolean roundIncrUsed = (item.roundIncr != 0 &&
-                    !PatternStringUtils.ignoreRoundingIncrement(java.math.BigDecimal.valueOf(item.roundIncr),item.maxFrac));
+            boolean roundIncrUsed =
+                    (item.roundIncr != 0
+                            && !PatternStringUtils.ignoreRoundingIncrement(
+                                    java.math.BigDecimal.valueOf(item.roundIncr), item.maxFrac));
             int fracForRoundIncr = 0;
             if (roundIncrUsed) {
-                double  testIncr = item.roundIncr;
-                for (; testIncr > ((int)testIncr); testIncr *= 10.0, fracForRoundIncr++);
+                double testIncr = item.roundIncr;
+                for (; testIncr > ((int) testIncr); testIncr *= 10.0, fracForRoundIncr++)
+                    ;
             }
             if (fracForRoundIncr < item.minFrac) {
                 fracForRoundIncr = item.minFrac;
@@ -4170,32 +5021,69 @@ public class NumberFormatTest extends CoreTestFmwk {
 
             int minInt = df.getMinimumIntegerDigits();
             if (minInt != item.minInt) {
-                errln("test " + item.descrip + ": getMinimumIntegerDigits, expected " + item.minInt + ", got " + minInt);
+                errln(
+                        "test "
+                                + item.descrip
+                                + ": getMinimumIntegerDigits, expected "
+                                + item.minInt
+                                + ", got "
+                                + minInt);
             }
             int minFrac = df.getMinimumFractionDigits();
-            int expMinFrac = (roundIncrUsed)? fracForRoundIncr: item.minFrac;
+            int expMinFrac = (roundIncrUsed) ? fracForRoundIncr : item.minFrac;
             if (minFrac != expMinFrac) {
-                errln("test " + item.descrip + ": getMinimumFractionDigits, expected " + expMinFrac + ", got " + minFrac);
+                errln(
+                        "test "
+                                + item.descrip
+                                + ": getMinimumFractionDigits, expected "
+                                + expMinFrac
+                                + ", got "
+                                + minFrac);
             }
             int maxFrac = df.getMaximumFractionDigits();
-            int expMaxFrac = (roundIncrUsed)? fracForRoundIncr: item.maxFrac;
+            int expMaxFrac = (roundIncrUsed) ? fracForRoundIncr : item.maxFrac;
             if (maxFrac != expMaxFrac) {
-                errln("test " + item.descrip + ": getMaximumFractionDigits, expected " + expMaxFrac + ", got " + maxFrac);
+                errln(
+                        "test "
+                                + item.descrip
+                                + ": getMaximumFractionDigits, expected "
+                                + expMaxFrac
+                                + ", got "
+                                + maxFrac);
             }
-            java.math.BigDecimal bigdec = df.getRoundingIncrement(); // why doesn't this return com.ibm.icu.math.BigDecimal?
-            double roundIncr = (bigdec != null)? bigdec.doubleValue(): 0.0;
-            double expRoundIncr = (roundIncrUsed)? item.roundIncr: 0.0;
+            java.math.BigDecimal bigdec = df.getRoundingIncrement(); // why doesn't this return
+            // com.ibm.icu.math.BigDecimal?
+            double roundIncr = (bigdec != null) ? bigdec.doubleValue() : 0.0;
+            double expRoundIncr = (roundIncrUsed) ? item.roundIncr : 0.0;
             if (roundIncr != expRoundIncr) {
-                errln("test " + item.descrip + ": getRoundingIncrement, expected " + expRoundIncr + ", got " + roundIncr);
+                errln(
+                        "test "
+                                + item.descrip
+                                + ": getRoundingIncrement, expected "
+                                + expRoundIncr
+                                + ", got "
+                                + roundIncr);
             }
 
             String getPattern = df.toPattern();
             if (!getPattern.equals(item.expPattern)) {
-                errln("test " + item.descrip + ": toPattern, expected " + item.expPattern + ", got " + getPattern);
+                errln(
+                        "test "
+                                + item.descrip
+                                + ": toPattern, expected "
+                                + item.expPattern
+                                + ", got "
+                                + getPattern);
             }
             String getFormat = df.format(item.valueToFmt);
             if (!getFormat.equals(item.expFormat)) {
-                errln("test " + item.descrip + ": format, expected " + item.expFormat + ", got " + getFormat);
+                errln(
+                        "test "
+                                + item.descrip
+                                + ": format, expected "
+                                + item.expFormat
+                                + ", got "
+                                + getFormat);
             }
         }
     }
@@ -4203,22 +5091,25 @@ public class NumberFormatTest extends CoreTestFmwk {
     @Test
     public void TestMinIntMinFracZero() {
         class TestMinIntMinFracItem {
-            double value;;
+            double value;
+            ;
             String expDecFmt;
             String expCurFmt;
-             // Simple constructor
+
+            // Simple constructor
             public TestMinIntMinFracItem(double valueIn, String expDecFmtIn, String expCurFmtIn) {
                 value = valueIn;
                 expDecFmt = expDecFmtIn;
                 expCurFmt = expCurFmtIn;
             }
-        };
+        }
+        ;
 
         final TestMinIntMinFracItem[] items = {
             //                              decFmt curFmt
-            new TestMinIntMinFracItem( 10.0, "10", "$10" ),
-            new TestMinIntMinFracItem(  0.9, ".9", "$.9" ),
-            new TestMinIntMinFracItem(  0.0, "0",  "$0"  ),
+            new TestMinIntMinFracItem(10.0, "10", "$10"),
+            new TestMinIntMinFracItem(0.9, ".9", "$.9"),
+            new TestMinIntMinFracItem(0.0, "0", "$0"),
         };
         int minInt, minFrac;
 
@@ -4228,11 +5119,17 @@ public class NumberFormatTest extends CoreTestFmwk {
         minInt = decFormat.getMinimumIntegerDigits();
         minFrac = decFormat.getMinimumFractionDigits();
         if (minInt != 0 || minFrac != 0) {
-            errln("after setting DECIMAL  minInt=minFrac=0, get minInt " + minInt + ", minFrac " + minFrac);
+            errln(
+                    "after setting DECIMAL  minInt=minFrac=0, get minInt "
+                            + minInt
+                            + ", minFrac "
+                            + minFrac);
         }
-        String decPattern = ((DecimalFormat)decFormat).toPattern();
-        if (decPattern.length() < 3 || decPattern.indexOf("#.#")< 0) {
-            errln("after setting DECIMAL  minInt=minFrac=0, expect pattern to contain \"#.#\", but get " + decPattern);
+        String decPattern = ((DecimalFormat) decFormat).toPattern();
+        if (decPattern.length() < 3 || decPattern.indexOf("#.#") < 0) {
+            errln(
+                    "after setting DECIMAL  minInt=minFrac=0, expect pattern to contain \"#.#\", but get "
+                            + decPattern);
         }
 
         NumberFormat curFormat = NumberFormat.getInstance(ULocale.US, NumberFormat.CURRENCYSTYLE);
@@ -4241,25 +5138,42 @@ public class NumberFormatTest extends CoreTestFmwk {
         minInt = curFormat.getMinimumIntegerDigits();
         minFrac = curFormat.getMinimumFractionDigits();
         if (minInt != 0 || minFrac != 0) {
-            errln("after setting CURRENCY minInt=minFrac=0, get minInt " + minInt + ", minFrac " + minFrac);
+            errln(
+                    "after setting CURRENCY minInt=minFrac=0, get minInt "
+                            + minInt
+                            + ", minFrac "
+                            + minFrac);
         }
 
-        for (TestMinIntMinFracItem item: items) {
+        for (TestMinIntMinFracItem item : items) {
             String decString = decFormat.format(item.value);
             if (!decString.equals(item.expDecFmt)) {
-                errln("format DECIMAL  value " + item.value + ", expected \"" + item.expDecFmt + "\", got \"" + decString + "\"");
+                errln(
+                        "format DECIMAL  value "
+                                + item.value
+                                + ", expected \""
+                                + item.expDecFmt
+                                + "\", got \""
+                                + decString
+                                + "\"");
             }
             String curString = curFormat.format(item.value);
             if (!curString.equals(item.expCurFmt)) {
-                errln("format CURRENCY value " + item.value + ", expected \"" + item.expCurFmt + "\", got \"" + curString + "\"");
+                errln(
+                        "format CURRENCY value "
+                                + item.value
+                                + ", expected \""
+                                + item.expCurFmt
+                                + "\", got \""
+                                + curString
+                                + "\"");
             }
         }
     }
 
     @Test
     public void TestBug9936() {
-        DecimalFormat numberFormat =
-                (DecimalFormat) NumberFormat.getInstance(ULocale.US);
+        DecimalFormat numberFormat = (DecimalFormat) NumberFormat.getInstance(ULocale.US);
         assertFalse("", numberFormat.areSignificantDigitsUsed());
 
         numberFormat.setSignificantDigitsUsed(true);
@@ -4278,8 +5192,7 @@ public class NumberFormatTest extends CoreTestFmwk {
 
     @Test
     public void TestShowZero() {
-        DecimalFormat numberFormat =
-                (DecimalFormat) NumberFormat.getInstance(ULocale.US);
+        DecimalFormat numberFormat = (DecimalFormat) NumberFormat.getInstance(ULocale.US);
         numberFormat.setSignificantDigitsUsed(true);
         numberFormat.setMaximumSignificantDigits(3);
         assertEquals("TestShowZero", "0", numberFormat.format(0.0));
@@ -4288,23 +5201,41 @@ public class NumberFormatTest extends CoreTestFmwk {
     @Test
     public void TestCurrencyPlurals() {
         String[][] tests = {
-                {"en", "USD", "1", "1 US dollar"},
-                {"en", "USD", "1.0", "1.0 US dollars"},
-                {"en", "USD", "1.00", "1.00 US dollars"},
-                {"en", "USD", "1.99", "1.99 US dollars"},
-                {"en", "AUD", "1", "1 Australian dollar"},
-                {"en", "AUD", "1.00", "1.00 Australian dollars"},
-                {"sl", "USD", "1", "1 ameri\u0161ki dolar"},
-                {"sl", "USD", "2", "2 ameri\u0161ka dolarja"},
-                {"sl", "USD", "3", "3 ameri\u0161ki dolarji"},
-                {"sl", "USD", "5", "5 ameriških dolarjev"},
-                {"fr", "USD", "1.99", "1,99 dollar des États-Unis"},
-                {"ru", "RUB", "1", "1 \u0440\u043E\u0441\u0441\u0438\u0439\u0441\u043A\u0438\u0439 \u0440\u0443\u0431\u043B\u044C"},
-                {"ru", "RUB", "2", "2 \u0440\u043E\u0441\u0441\u0438\u0439\u0441\u043A\u0438\u0445 \u0440\u0443\u0431\u043B\u044F"},
-                {"ru", "RUB", "5", "5 \u0440\u043E\u0441\u0441\u0438\u0439\u0441\u043A\u0438\u0445 \u0440\u0443\u0431\u043B\u0435\u0439"},
+            {"en", "USD", "1", "1 US dollar"},
+            {"en", "USD", "1.0", "1.0 US dollars"},
+            {"en", "USD", "1.00", "1.00 US dollars"},
+            {"en", "USD", "1.99", "1.99 US dollars"},
+            {"en", "AUD", "1", "1 Australian dollar"},
+            {"en", "AUD", "1.00", "1.00 Australian dollars"},
+            {"sl", "USD", "1", "1 ameri\u0161ki dolar"},
+            {"sl", "USD", "2", "2 ameri\u0161ka dolarja"},
+            {"sl", "USD", "3", "3 ameri\u0161ki dolarji"},
+            {"sl", "USD", "5", "5 ameriških dolarjev"},
+            {"fr", "USD", "1.99", "1,99 dollar des États-Unis"},
+            {
+                "ru",
+                "RUB",
+                "1",
+                "1 \u0440\u043E\u0441\u0441\u0438\u0439\u0441\u043A\u0438\u0439 \u0440\u0443\u0431\u043B\u044C"
+            },
+            {
+                "ru",
+                "RUB",
+                "2",
+                "2 \u0440\u043E\u0441\u0441\u0438\u0439\u0441\u043A\u0438\u0445 \u0440\u0443\u0431\u043B\u044F"
+            },
+            {
+                "ru",
+                "RUB",
+                "5",
+                "5 \u0440\u043E\u0441\u0441\u0438\u0439\u0441\u043A\u0438\u0445 \u0440\u0443\u0431\u043B\u0435\u0439"
+            },
         };
         for (String test[] : tests) {
-            DecimalFormat numberFormat = (DecimalFormat) DecimalFormat.getInstance(new ULocale(test[0]), NumberFormat.PLURALCURRENCYSTYLE);
+            DecimalFormat numberFormat =
+                    (DecimalFormat)
+                            DecimalFormat.getInstance(
+                                    new ULocale(test[0]), NumberFormat.PLURALCURRENCYSTYLE);
             numberFormat.setCurrency(Currency.getInstance(test[1]));
             double number = Double.parseDouble(test[2]);
             int dotPos = test[2].indexOf('.');
@@ -4342,97 +5273,94 @@ public class NumberFormatTest extends CoreTestFmwk {
             public boolean lenient;
             public String numString;
             public double value;
-             // Simple constructor
+
+            // Simple constructor
             public SignsAndMarksItem(String loc, boolean lnt, String numStr, double val) {
                 locale = loc;
                 lenient = lnt;
                 numString = numStr;
                 value = val;
             }
-        };
+        }
+        ;
         final SignsAndMarksItem[] items = {
             // *** Note, ICU4J lenient number parsing does not handle arbitrary whitespace, but can
             // treat some whitespace as a grouping separator. The cases marked *** below depend
             // on isGroupingUsed() being set for the locale, which in turn depends on grouping
             // separators being present in the decimalFormat pattern for the locale (& num sys).
             //
-            //                    locale                lenient numString                               value
-            new SignsAndMarksItem("en",                 false,  "12",                                    12 ),
-            new SignsAndMarksItem("en",                 true,   "12",                                    12 ),
-            new SignsAndMarksItem("en",                 false,  "-23",                                  -23 ),
-            new SignsAndMarksItem("en",                 true,   "-23",                                  -23 ),
-            new SignsAndMarksItem("en",                 true,   "- 23",                                 -23 ), // ***
-            new SignsAndMarksItem("en",                 false,  "\u200E-23",                            -23 ),
-            new SignsAndMarksItem("en",                 true,   "\u200E-23",                            -23 ),
-            new SignsAndMarksItem("en",                 true,   "\u200E- 23",                           -23 ), // ***
-
-            new SignsAndMarksItem("en@numbers=arab",    false,  "\u0663\u0664",                          34 ),
-            new SignsAndMarksItem("en@numbers=arab",    true,   "\u0663\u0664",                          34 ),
-            new SignsAndMarksItem("en@numbers=arab",    false,  "-\u0664\u0665",                        -45 ),
-            new SignsAndMarksItem("en@numbers=arab",    true,   "-\u0664\u0665",                        -45 ),
-            new SignsAndMarksItem("en@numbers=arab",    true,   "- \u0664\u0665",                       -45 ), // ***
-            new SignsAndMarksItem("en@numbers=arab",    false,  "\u200F-\u0664\u0665",                  -45 ),
-            new SignsAndMarksItem("en@numbers=arab",    true,   "\u200F-\u0664\u0665",                  -45 ),
-            new SignsAndMarksItem("en@numbers=arab",    true,   "\u200F- \u0664\u0665",                 -45 ), // ***
-
-            new SignsAndMarksItem("en@numbers=arabext", false,  "\u06F5\u06F6",                          56 ),
-            new SignsAndMarksItem("en@numbers=arabext", true,   "\u06F5\u06F6",                          56 ),
-            new SignsAndMarksItem("en@numbers=arabext", false,  "-\u06F6\u06F7",                        -67 ),
-            new SignsAndMarksItem("en@numbers=arabext", true,   "-\u06F6\u06F7",                        -67 ),
-            new SignsAndMarksItem("en@numbers=arabext", true,   "- \u06F6\u06F7",                       -67 ), // ***
-            new SignsAndMarksItem("en@numbers=arabext", false,  "\u200E-\u200E\u06F6\u06F7",            -67 ),
-            new SignsAndMarksItem("en@numbers=arabext", true,   "\u200E-\u200E\u06F6\u06F7",            -67 ),
-            new SignsAndMarksItem("en@numbers=arabext", true,   "\u200E-\u200E \u06F6\u06F7",           -67 ), // ***
-
-            new SignsAndMarksItem("he",                 false,  "12",                                    12 ),
-            new SignsAndMarksItem("he",                 true,   "12",                                    12 ),
-            new SignsAndMarksItem("he",                 false,  "-23",                                  -23 ),
-            new SignsAndMarksItem("he",                 true,   "-23",                                  -23 ),
-            new SignsAndMarksItem("he",                 true,   "- 23",                                 -23 ), // ***
-            new SignsAndMarksItem("he",                 false,  "\u200E-23",                            -23 ),
-            new SignsAndMarksItem("he",                 true,   "\u200E-23",                            -23 ),
-            new SignsAndMarksItem("he",                 true,   "\u200E- 23",                           -23 ), // ***
-
-            new SignsAndMarksItem("ar",                 false,  "\u0663\u0664",                          34 ),
-            new SignsAndMarksItem("ar",                 true,   "\u0663\u0664",                          34 ),
-            new SignsAndMarksItem("ar",                 false,  "-\u0664\u0665",                        -45 ),
-            new SignsAndMarksItem("ar",                 true,   "-\u0664\u0665",                        -45 ),
-            new SignsAndMarksItem("ar",                 true,   "- \u0664\u0665",                       -45 ), // ***
-            new SignsAndMarksItem("ar",                 false,  "\u200F-\u0664\u0665",                  -45 ),
-            new SignsAndMarksItem("ar",                 true,   "\u200F-\u0664\u0665",                  -45 ),
-            new SignsAndMarksItem("ar",                 true,   "\u200F- \u0664\u0665",                 -45 ), // ***
-
-            new SignsAndMarksItem("ar_MA",              false,  "12",                                    12 ),
-            new SignsAndMarksItem("ar_MA",              true,   "12",                                    12 ),
-            new SignsAndMarksItem("ar_MA",              false,  "-23",                                  -23 ),
-            new SignsAndMarksItem("ar_MA",              true,   "-23",                                  -23 ),
-            new SignsAndMarksItem("ar_MA",              true,   "- 23",                                 -23 ), // ***
-            new SignsAndMarksItem("ar_MA",              false,  "\u200E-23",                            -23 ),
-            new SignsAndMarksItem("ar_MA",              true,   "\u200E-23",                            -23 ),
-            new SignsAndMarksItem("ar_MA",              true,   "\u200E- 23",                           -23 ), // ***
-
-            new SignsAndMarksItem("fa",                 false,  "\u06F5\u06F6",                          56 ),
-            new SignsAndMarksItem("fa",                 true,   "\u06F5\u06F6",                          56 ),
-            new SignsAndMarksItem("fa",                 false,  "\u2212\u06F6\u06F7",                   -67 ),
-            new SignsAndMarksItem("fa",                 true,   "\u2212\u06F6\u06F7",                   -67 ),
-            new SignsAndMarksItem("fa",                 true,   "\u2212 \u06F6\u06F7",                  -67 ), // ***
-            new SignsAndMarksItem("fa",                 false,  "\u200E\u2212\u200E\u06F6\u06F7",       -67 ),
-            new SignsAndMarksItem("fa",                 true,   "\u200E\u2212\u200E\u06F6\u06F7",       -67 ),
-            new SignsAndMarksItem("fa",                 true,   "\u200E\u2212\u200E \u06F6\u06F7",      -67 ), // ***
-
-            new SignsAndMarksItem("ps",                 false,  "\u06F5\u06F6",                          56 ),
-            new SignsAndMarksItem("ps",                 true,   "\u06F5\u06F6",                          56 ),
-            new SignsAndMarksItem("ps",                 false,  "-\u06F6\u06F7",                        -67 ),
-            new SignsAndMarksItem("ps",                 true,   "-\u06F6\u06F7",                        -67 ),
-            new SignsAndMarksItem("ps",                 true,   "- \u06F6\u06F7",                       -67 ), // ***
-            new SignsAndMarksItem("ps",                 false,  "\u200E-\u200E\u06F6\u06F7",            -67 ),
-            new SignsAndMarksItem("ps",                 true,   "\u200E-\u200E\u06F6\u06F7",            -67 ),
-            new SignsAndMarksItem("ps",                 true,   "\u200E-\u200E \u06F6\u06F7",           -67 ), // ***
-            new SignsAndMarksItem("ps",                 false,  "-\u200E\u06F6\u06F7",                  -67 ),
-            new SignsAndMarksItem("ps",                 true,   "-\u200E\u06F6\u06F7",                  -67 ),
-            new SignsAndMarksItem("ps",                 true,   "-\u200E \u06F6\u06F7",                 -67 ), // ***
+            //                    locale                lenient numString
+            //    value
+            new SignsAndMarksItem("en", false, "12", 12),
+            new SignsAndMarksItem("en", true, "12", 12),
+            new SignsAndMarksItem("en", false, "-23", -23),
+            new SignsAndMarksItem("en", true, "-23", -23),
+            new SignsAndMarksItem("en", true, "- 23", -23), // ***
+            new SignsAndMarksItem("en", false, "\u200E-23", -23),
+            new SignsAndMarksItem("en", true, "\u200E-23", -23),
+            new SignsAndMarksItem("en", true, "\u200E- 23", -23), // ***
+            new SignsAndMarksItem("en@numbers=arab", false, "\u0663\u0664", 34),
+            new SignsAndMarksItem("en@numbers=arab", true, "\u0663\u0664", 34),
+            new SignsAndMarksItem("en@numbers=arab", false, "-\u0664\u0665", -45),
+            new SignsAndMarksItem("en@numbers=arab", true, "-\u0664\u0665", -45),
+            new SignsAndMarksItem("en@numbers=arab", true, "- \u0664\u0665", -45), // ***
+            new SignsAndMarksItem("en@numbers=arab", false, "\u200F-\u0664\u0665", -45),
+            new SignsAndMarksItem("en@numbers=arab", true, "\u200F-\u0664\u0665", -45),
+            new SignsAndMarksItem("en@numbers=arab", true, "\u200F- \u0664\u0665", -45), // ***
+            new SignsAndMarksItem("en@numbers=arabext", false, "\u06F5\u06F6", 56),
+            new SignsAndMarksItem("en@numbers=arabext", true, "\u06F5\u06F6", 56),
+            new SignsAndMarksItem("en@numbers=arabext", false, "-\u06F6\u06F7", -67),
+            new SignsAndMarksItem("en@numbers=arabext", true, "-\u06F6\u06F7", -67),
+            new SignsAndMarksItem("en@numbers=arabext", true, "- \u06F6\u06F7", -67), // ***
+            new SignsAndMarksItem("en@numbers=arabext", false, "\u200E-\u200E\u06F6\u06F7", -67),
+            new SignsAndMarksItem("en@numbers=arabext", true, "\u200E-\u200E\u06F6\u06F7", -67),
+            new SignsAndMarksItem(
+                    "en@numbers=arabext", true, "\u200E-\u200E \u06F6\u06F7", -67), // ***
+            new SignsAndMarksItem("he", false, "12", 12),
+            new SignsAndMarksItem("he", true, "12", 12),
+            new SignsAndMarksItem("he", false, "-23", -23),
+            new SignsAndMarksItem("he", true, "-23", -23),
+            new SignsAndMarksItem("he", true, "- 23", -23), // ***
+            new SignsAndMarksItem("he", false, "\u200E-23", -23),
+            new SignsAndMarksItem("he", true, "\u200E-23", -23),
+            new SignsAndMarksItem("he", true, "\u200E- 23", -23), // ***
+            new SignsAndMarksItem("ar", false, "\u0663\u0664", 34),
+            new SignsAndMarksItem("ar", true, "\u0663\u0664", 34),
+            new SignsAndMarksItem("ar", false, "-\u0664\u0665", -45),
+            new SignsAndMarksItem("ar", true, "-\u0664\u0665", -45),
+            new SignsAndMarksItem("ar", true, "- \u0664\u0665", -45), // ***
+            new SignsAndMarksItem("ar", false, "\u200F-\u0664\u0665", -45),
+            new SignsAndMarksItem("ar", true, "\u200F-\u0664\u0665", -45),
+            new SignsAndMarksItem("ar", true, "\u200F- \u0664\u0665", -45), // ***
+            new SignsAndMarksItem("ar_MA", false, "12", 12),
+            new SignsAndMarksItem("ar_MA", true, "12", 12),
+            new SignsAndMarksItem("ar_MA", false, "-23", -23),
+            new SignsAndMarksItem("ar_MA", true, "-23", -23),
+            new SignsAndMarksItem("ar_MA", true, "- 23", -23), // ***
+            new SignsAndMarksItem("ar_MA", false, "\u200E-23", -23),
+            new SignsAndMarksItem("ar_MA", true, "\u200E-23", -23),
+            new SignsAndMarksItem("ar_MA", true, "\u200E- 23", -23), // ***
+            new SignsAndMarksItem("fa", false, "\u06F5\u06F6", 56),
+            new SignsAndMarksItem("fa", true, "\u06F5\u06F6", 56),
+            new SignsAndMarksItem("fa", false, "\u2212\u06F6\u06F7", -67),
+            new SignsAndMarksItem("fa", true, "\u2212\u06F6\u06F7", -67),
+            new SignsAndMarksItem("fa", true, "\u2212 \u06F6\u06F7", -67), // ***
+            new SignsAndMarksItem("fa", false, "\u200E\u2212\u200E\u06F6\u06F7", -67),
+            new SignsAndMarksItem("fa", true, "\u200E\u2212\u200E\u06F6\u06F7", -67),
+            new SignsAndMarksItem("fa", true, "\u200E\u2212\u200E \u06F6\u06F7", -67), // ***
+            new SignsAndMarksItem("ps", false, "\u06F5\u06F6", 56),
+            new SignsAndMarksItem("ps", true, "\u06F5\u06F6", 56),
+            new SignsAndMarksItem("ps", false, "-\u06F6\u06F7", -67),
+            new SignsAndMarksItem("ps", true, "-\u06F6\u06F7", -67),
+            new SignsAndMarksItem("ps", true, "- \u06F6\u06F7", -67), // ***
+            new SignsAndMarksItem("ps", false, "\u200E-\u200E\u06F6\u06F7", -67),
+            new SignsAndMarksItem("ps", true, "\u200E-\u200E\u06F6\u06F7", -67),
+            new SignsAndMarksItem("ps", true, "\u200E-\u200E \u06F6\u06F7", -67), // ***
+            new SignsAndMarksItem("ps", false, "-\u200E\u06F6\u06F7", -67),
+            new SignsAndMarksItem("ps", true, "-\u200E\u06F6\u06F7", -67),
+            new SignsAndMarksItem("ps", true, "-\u200E \u06F6\u06F7", -67), // ***
         };
-        for (SignsAndMarksItem item: items) {
+        for (SignsAndMarksItem item : items) {
             ULocale locale = new ULocale(item.locale);
             NumberFormat numfmt = NumberFormat.getInstance(locale);
             if (numfmt != null) {
@@ -4442,10 +5370,26 @@ public class NumberFormatTest extends CoreTestFmwk {
                 if (num != null && ppos.getIndex() == item.numString.length()) {
                     double parsedValue = num.doubleValue();
                     if (parsedValue != item.value) {
-                        errln("FAIL: locale " + item.locale + ", lenient " + item.lenient + ", parse of \"" + item.numString + "\" gives value " + parsedValue);
+                        errln(
+                                "FAIL: locale "
+                                        + item.locale
+                                        + ", lenient "
+                                        + item.lenient
+                                        + ", parse of \""
+                                        + item.numString
+                                        + "\" gives value "
+                                        + parsedValue);
                     }
                 } else {
-                    errln("FAIL: locale " + item.locale + ", lenient " + item.lenient + ", parse of \"" + item.numString + "\" gives position " + ppos.getIndex());
+                    errln(
+                            "FAIL: locale "
+                                    + item.locale
+                                    + ", lenient "
+                                    + item.lenient
+                                    + ", parse of \""
+                                    + item.numString
+                                    + "\" gives position "
+                                    + ppos.getIndex());
                 }
             } else {
                 errln("FAIL: NumberFormat.getInstance for locale " + item.locale);
@@ -4464,84 +5408,127 @@ public class NumberFormatTest extends CoreTestFmwk {
         nfmt.setContext(DisplayContext.CAPITALIZATION_FOR_STANDALONE);
         context = nfmt.getContext(DisplayContext.Type.CAPITALIZATION);
         if (context != DisplayContext.CAPITALIZATION_FOR_STANDALONE) {
-            errln("FAIL: NumberFormat.getContext() does not return the value set, CAPITALIZATION_FOR_STANDALONE");
+            errln(
+                    "FAIL: NumberFormat.getContext() does not return the value set, CAPITALIZATION_FOR_STANDALONE");
         }
     }
 
     @Test
     public void TestAccountingCurrency() {
         String[][] tests = {
-                //locale              num         curr fmt per loc     curr std fmt         curr acct fmt        rt
-                {"en_US",             "1234.5",   "$1,234.50",         "$1,234.50",         "$1,234.50",         "true"},
-                {"en_US@cf=account",  "1234.5",   "$1,234.50",         "$1,234.50",         "$1,234.50",         "true"},
-                {"en_US",             "-1234.5",  "-$1,234.50",        "-$1,234.50",        "($1,234.50)",       "true"},
-                {"en_US@cf=standard", "-1234.5",  "-$1,234.50",        "-$1,234.50",        "($1,234.50)",       "true"},
-                {"en_US@cf=account",  "-1234.5",  "($1,234.50)",       "-$1,234.50",        "($1,234.50)",       "true"},
-                {"en_US",             "0",        "$0.00",             "$0.00",             "$0.00",             "true"},
-                {"en_US",             "-0.2",     "-$0.20",            "-$0.20",            "($0.20)",           "true"},
-                {"en_US@cf=standard", "-0.2",     "-$0.20",            "-$0.20",            "($0.20)",           "true"},
-                {"en_US@cf=account",  "-0.2",     "($0.20)",           "-$0.20",            "($0.20)",           "true"},
-                {"ja_JP",             "10000",    "￥10,000",          "￥10,000",          "￥10,000",          "true" },
-                {"ja_JP",             "-1000.5",  "-￥1,000",          "-￥1,000",          "(￥1,000)",         "false"},
-                {"ja_JP@cf=account",  "-1000.5",  "(￥1,000)",         "-￥1,000",          "(￥1,000)",         "false"},
-                {"de_DE",             "-23456.7", "-23.456,70\u00A0€", "-23.456,70\u00A0€", "-23.456,70\u00A0€", "true" },
-                {"en_ID",             "1234.5",   "Rp 1.234",      "Rp 1.234",      "Rp 1.234",      "true"},
-                {"en_ID@cf=account",  "1234.5",   "Rp 1.234",      "Rp 1.234",      "Rp 1.234",      "true"},
-                {"en_ID@cf=standard", "1234.5",   "Rp 1.234",      "Rp 1.234",      "Rp 1.234",      "true"},
-                {"en_ID",             "-1234.5",  "-Rp 1.234",     "-Rp 1.234",     "(Rp 1.234)",    "true"},
-                {"en_ID@cf=account",  "-1234.5",  "(Rp 1.234)",    "-Rp 1.234",     "(Rp 1.234)",    "true"},
-                {"en_ID@cf=standard", "-1234.5",  "-Rp 1.234",     "-Rp 1.234",     "(Rp 1.234)",    "true"},
-                {"sh_ME",             "1234.5",   "1.234,50 €",        "1.234,50 €",        "1.234,50 €",        "true"},
-                {"sh_ME@cf=account",  "1234.5",   "1.234,50 €",        "1.234,50 €",        "1.234,50 €",        "true"},
-                {"sh_ME@cf=standard", "1234.5",   "1.234,50 €",        "1.234,50 €",        "1.234,50 €",        "true"},
-                {"sh_ME",             "-1234.5",  "-1.234,50 €",       "-1.234,50 €",       "(1.234,50 €)",      "true"},
-                {"sh_ME@cf=account",  "-1234.5",  "(1.234,50 €)",      "-1.234,50 €",       "(1.234,50 €)",      "true"},
-                {"sh_ME@cf=standard", "-1234.5",  "-1.234,50 €",       "-1.234,50 €",       "(1.234,50 €)",      "true"},
+            // locale              num         curr fmt per loc     curr std fmt         curr acct
+            // fmt        rt
+            {"en_US", "1234.5", "$1,234.50", "$1,234.50", "$1,234.50", "true"},
+            {"en_US@cf=account", "1234.5", "$1,234.50", "$1,234.50", "$1,234.50", "true"},
+            {"en_US", "-1234.5", "-$1,234.50", "-$1,234.50", "($1,234.50)", "true"},
+            {"en_US@cf=standard", "-1234.5", "-$1,234.50", "-$1,234.50", "($1,234.50)", "true"},
+            {"en_US@cf=account", "-1234.5", "($1,234.50)", "-$1,234.50", "($1,234.50)", "true"},
+            {"en_US", "0", "$0.00", "$0.00", "$0.00", "true"},
+            {"en_US", "-0.2", "-$0.20", "-$0.20", "($0.20)", "true"},
+            {"en_US@cf=standard", "-0.2", "-$0.20", "-$0.20", "($0.20)", "true"},
+            {"en_US@cf=account", "-0.2", "($0.20)", "-$0.20", "($0.20)", "true"},
+            {"ja_JP", "10000", "￥10,000", "￥10,000", "￥10,000", "true"},
+            {"ja_JP", "-1000.5", "-￥1,000", "-￥1,000", "(￥1,000)", "false"},
+            {"ja_JP@cf=account", "-1000.5", "(￥1,000)", "-￥1,000", "(￥1,000)", "false"},
+            {
+                "de_DE",
+                "-23456.7",
+                "-23.456,70\u00A0€",
+                "-23.456,70\u00A0€",
+                "-23.456,70\u00A0€",
+                "true"
+            },
+            {"en_ID", "1234.5", "Rp 1.234", "Rp 1.234", "Rp 1.234", "true"},
+            {"en_ID@cf=account", "1234.5", "Rp 1.234", "Rp 1.234", "Rp 1.234", "true"},
+            {"en_ID@cf=standard", "1234.5", "Rp 1.234", "Rp 1.234", "Rp 1.234", "true"},
+            {"en_ID", "-1234.5", "-Rp 1.234", "-Rp 1.234", "(Rp 1.234)", "true"},
+            {"en_ID@cf=account", "-1234.5", "(Rp 1.234)", "-Rp 1.234", "(Rp 1.234)", "true"},
+            {"en_ID@cf=standard", "-1234.5", "-Rp 1.234", "-Rp 1.234", "(Rp 1.234)", "true"},
+            {"sh_ME", "1234.5", "1.234,50 €", "1.234,50 €", "1.234,50 €", "true"},
+            {"sh_ME@cf=account", "1234.5", "1.234,50 €", "1.234,50 €", "1.234,50 €", "true"},
+            {"sh_ME@cf=standard", "1234.5", "1.234,50 €", "1.234,50 €", "1.234,50 €", "true"},
+            {"sh_ME", "-1234.5", "-1.234,50 €", "-1.234,50 €", "(1.234,50 €)", "true"},
+            {"sh_ME@cf=account", "-1234.5", "(1.234,50 €)", "-1.234,50 €", "(1.234,50 €)", "true"},
+            {"sh_ME@cf=standard", "-1234.5", "-1.234,50 €", "-1.234,50 €", "(1.234,50 €)", "true"},
         };
         for (String[] data : tests) {
             ULocale loc = new ULocale(data[0]);
             double num = Double.parseDouble(data[1]);
-            String fmtPerLocExpected   = data[2];
+            String fmtPerLocExpected = data[2];
             String fmtStandardExpected = data[3];
-            String fmtAccountExpected  = data[4];
+            String fmtAccountExpected = data[4];
             boolean rt = Boolean.parseBoolean(data[5]);
 
             NumberFormat fmtPerLoc = NumberFormat.getInstance(loc, NumberFormat.CURRENCYSTYLE);
             expect(fmtPerLoc, num, fmtPerLocExpected, rt);
 
-            NumberFormat fmtStandard = NumberFormat.getInstance(loc, NumberFormat.STANDARDCURRENCYSTYLE);
+            NumberFormat fmtStandard =
+                    NumberFormat.getInstance(loc, NumberFormat.STANDARDCURRENCYSTYLE);
             expect(fmtStandard, num, fmtStandardExpected, rt);
 
-            NumberFormat fmtAccount = NumberFormat.getInstance(loc, NumberFormat.ACCOUNTINGCURRENCYSTYLE);
+            NumberFormat fmtAccount =
+                    NumberFormat.getInstance(loc, NumberFormat.ACCOUNTINGCURRENCYSTYLE);
             expect(fmtAccount, num, fmtAccountExpected, rt);
         }
     }
 
     /**
-     * en_ID/sh_ME uses language only locales en/sh which requires NumberFormatServiceShim to fill in the currency, but
-     * prior to ICU-20631, currency was not filled in for accounting, cash and standard, so currency placeholder was
-     * used instead of the desired locale's currency.
+     * en_ID/sh_ME uses language only locales en/sh which requires NumberFormatServiceShim to fill
+     * in the currency, but prior to ICU-20631, currency was not filled in for accounting, cash and
+     * standard, so currency placeholder was used instead of the desired locale's currency.
      */
     @Test
     public void TestCurrencyFormatForMissingLocale() {
         ULocale loc = new ULocale("sh_ME");
         Currency cur = Currency.getInstance(loc);
         NumberFormat curFmt = NumberFormat.getInstance(loc, NumberFormat.CURRENCYSTYLE);
-        assertNotNull("NumberFormat is missing currency instance for CURRENCYSTYLE", curFmt.getCurrency());
-        assertEquals("Currency instance is not for the desired locale for CURRENCYSTYLE", cur, curFmt.getCurrency());
-        assertEquals("NumberFormat format outputs wrong value for CURRENCYSTYLE", "-1.234,50 €", curFmt.format(-1234.5d));
+        assertNotNull(
+                "NumberFormat is missing currency instance for CURRENCYSTYLE",
+                curFmt.getCurrency());
+        assertEquals(
+                "Currency instance is not for the desired locale for CURRENCYSTYLE",
+                cur,
+                curFmt.getCurrency());
+        assertEquals(
+                "NumberFormat format outputs wrong value for CURRENCYSTYLE",
+                "-1.234,50 €",
+                curFmt.format(-1234.5d));
         NumberFormat accFmt = NumberFormat.getInstance(loc, NumberFormat.ACCOUNTINGCURRENCYSTYLE);
-        assertNotNull("NumberFormat is missing currency instance for ACCOUNTINGCURRENCYSTYLE", accFmt.getCurrency());
-        assertEquals("Currency instance is not for the desired locale for ACCOUNTINGCURRENCYSTYLE", cur, accFmt.getCurrency());
-        assertEquals("NumberFormat format outputs wrong value for ACCOUNTINGCURRENCYSTYLE", "(1.234,50 €)", accFmt.format(-1234.5d));
+        assertNotNull(
+                "NumberFormat is missing currency instance for ACCOUNTINGCURRENCYSTYLE",
+                accFmt.getCurrency());
+        assertEquals(
+                "Currency instance is not for the desired locale for ACCOUNTINGCURRENCYSTYLE",
+                cur,
+                accFmt.getCurrency());
+        assertEquals(
+                "NumberFormat format outputs wrong value for ACCOUNTINGCURRENCYSTYLE",
+                "(1.234,50 €)",
+                accFmt.format(-1234.5d));
         NumberFormat cashFmt = NumberFormat.getInstance(loc, NumberFormat.CASHCURRENCYSTYLE);
-        assertNotNull("NumberFormat is missing currency instance for CASHCURRENCYSTYLE", cashFmt.getCurrency());
-        assertEquals("Currency instance is not for the desired locale for CASHCURRENCYSTYLE", cur, cashFmt.getCurrency());
-        assertEquals("NumberFormat format outputs wrong value for CASHCURRENCYSTYLE", "-1.234,50 €", cashFmt.format(-1234.5d));
+        assertNotNull(
+                "NumberFormat is missing currency instance for CASHCURRENCYSTYLE",
+                cashFmt.getCurrency());
+        assertEquals(
+                "Currency instance is not for the desired locale for CASHCURRENCYSTYLE",
+                cur,
+                cashFmt.getCurrency());
+        assertEquals(
+                "NumberFormat format outputs wrong value for CASHCURRENCYSTYLE",
+                "-1.234,50 €",
+                cashFmt.format(-1234.5d));
         NumberFormat stdFmt = NumberFormat.getInstance(loc, NumberFormat.STANDARDCURRENCYSTYLE);
-        assertNotNull("NumberFormat is missing currency instance for STANDARDCURRENCYSTYLE", stdFmt.getCurrency());
-        assertEquals("Currency instance is not for the desired locale for STANDARDCURRENCYSTYLE", cur, stdFmt.getCurrency());
-        assertEquals("NumberFormat format outputs wrong value for STANDARDCURRENCYSTYLE", "-1.234,50 €", stdFmt.format(-1234.5d));
+        assertNotNull(
+                "NumberFormat is missing currency instance for STANDARDCURRENCYSTYLE",
+                stdFmt.getCurrency());
+        assertEquals(
+                "Currency instance is not for the desired locale for STANDARDCURRENCYSTYLE",
+                cur,
+                stdFmt.getCurrency());
+        assertEquals(
+                "NumberFormat format outputs wrong value for STANDARDCURRENCYSTYLE",
+                "-1.234,50 €",
+                stdFmt.format(-1234.5d));
     }
 
     @Test
@@ -4555,23 +5542,37 @@ public class NumberFormatTest extends CoreTestFmwk {
             String original_expected = "ISK 124";
             DecimalFormat custom = null;
             if (i == 0) {
-                custom = (DecimalFormat) DecimalFormat.getInstance(new ULocale("en_US@currency=ISK"),
-                        DecimalFormat.CURRENCYSTYLE);
+                custom =
+                        (DecimalFormat)
+                                DecimalFormat.getInstance(
+                                        new ULocale("en_US@currency=ISK"),
+                                        DecimalFormat.CURRENCYSTYLE);
 
                 String original = custom.format(123.567);
                 assertEquals("Test Currency Context", original_expected, original);
 
                 // test the getter
-                assertEquals("Test Currency Context Purpose", custom.getCurrencyUsage(),
+                assertEquals(
+                        "Test Currency Context Purpose",
+                        custom.getCurrencyUsage(),
                         Currency.CurrencyUsage.STANDARD);
                 custom.setCurrencyUsage(Currency.CurrencyUsage.CASH);
-                assertEquals("Test Currency Context Purpose", custom.getCurrencyUsage(), Currency.CurrencyUsage.CASH);
+                assertEquals(
+                        "Test Currency Context Purpose",
+                        custom.getCurrencyUsage(),
+                        Currency.CurrencyUsage.CASH);
             } else {
-                custom = (DecimalFormat) DecimalFormat.getInstance(new ULocale("en_US@currency=ISK"),
-                        DecimalFormat.CASHCURRENCYSTYLE);
+                custom =
+                        (DecimalFormat)
+                                DecimalFormat.getInstance(
+                                        new ULocale("en_US@currency=ISK"),
+                                        DecimalFormat.CASHCURRENCYSTYLE);
 
                 // test the getter
-                assertEquals("Test Currency Context Purpose", custom.getCurrencyUsage(), Currency.CurrencyUsage.CASH);
+                assertEquals(
+                        "Test Currency Context Purpose",
+                        custom.getCurrencyUsage(),
+                        Currency.CurrencyUsage.CASH);
             }
 
             String cash_currency = custom.format(123.567);
@@ -4585,21 +5586,31 @@ public class NumberFormatTest extends CoreTestFmwk {
             String original_rounding_expected = "CA$123.57";
             DecimalFormat fmt = null;
             if (i == 0) {
-                fmt = (DecimalFormat) DecimalFormat.getInstance(new ULocale("en_US@currency=CAD"),
-                        DecimalFormat.CURRENCYSTYLE);
+                fmt =
+                        (DecimalFormat)
+                                DecimalFormat.getInstance(
+                                        new ULocale("en_US@currency=CAD"),
+                                        DecimalFormat.CURRENCYSTYLE);
 
                 String original_rounding = fmt.format(123.566);
-                assertEquals("Test Currency Context", original_rounding_expected, original_rounding);
+                assertEquals(
+                        "Test Currency Context", original_rounding_expected, original_rounding);
 
                 fmt.setCurrencyUsage(Currency.CurrencyUsage.CASH);
             } else {
-                fmt = (DecimalFormat) DecimalFormat.getInstance(new ULocale("en_US@currency=CAD"),
-                        DecimalFormat.CASHCURRENCYSTYLE);
+                fmt =
+                        (DecimalFormat)
+                                DecimalFormat.getInstance(
+                                        new ULocale("en_US@currency=CAD"),
+                                        DecimalFormat.CASHCURRENCYSTYLE);
             }
 
             String cash_rounding_currency = fmt.format(123.567);
             String cash__rounding_currency_expected = "CA$123.55";
-            assertEquals("Test Currency Context", cash__rounding_currency_expected, cash_rounding_currency);
+            assertEquals(
+                    "Test Currency Context",
+                    cash__rounding_currency_expected,
+                    cash_rounding_currency);
         }
 
         // the 1st one is checking setter/getter, while the 2nd one checks for getInstance
@@ -4607,12 +5618,18 @@ public class NumberFormatTest extends CoreTestFmwk {
         for (int i = 0; i < 2; i++) {
             DecimalFormat fmt2 = null;
             if (i == 1) {
-                fmt2 = (DecimalFormat) NumberFormat.getInstance(new ULocale("en_US@currency=JPY"),
-                        NumberFormat.CURRENCYSTYLE);
+                fmt2 =
+                        (DecimalFormat)
+                                NumberFormat.getInstance(
+                                        new ULocale("en_US@currency=JPY"),
+                                        NumberFormat.CURRENCYSTYLE);
                 fmt2.setCurrencyUsage(Currency.CurrencyUsage.CASH);
             } else {
-                fmt2 = (DecimalFormat) NumberFormat.getInstance(new ULocale("en_US@currency=JPY"),
-                        NumberFormat.CASHCURRENCYSTYLE);
+                fmt2 =
+                        (DecimalFormat)
+                                NumberFormat.getInstance(
+                                        new ULocale("en_US@currency=JPY"),
+                                        NumberFormat.CASHCURRENCYSTYLE);
             }
 
             fmt2.setCurrency(Currency.getInstance("PKR"));
@@ -4637,11 +5654,11 @@ public class NumberFormatTest extends CoreTestFmwk {
     @Test
     public void TestParseRequiredDecimalPoint() {
 
-        String[] testPattern = { "00.####", "00.0", "00" };
+        String[] testPattern = {"00.####", "00.0", "00"};
 
         String value2Parse = "99";
         String value2ParseWithDecimal = "99.9";
-        double parseValue  =  99;
+        double parseValue = 99;
         double parseValueWithDecimal = 99.9;
         DecimalFormat parser = new DecimalFormat();
         double result;
@@ -4655,36 +5672,58 @@ public class NumberFormatTest extends CoreTestFmwk {
                 result = parser.parse(value2Parse).doubleValue();
                 assertEquals("wrong parsed value", parseValue, result);
             } catch (ParseException e) {
-                errln("Parsing " + value2Parse + " should have succeeded with " + testPattern[i] +
-                            " and isDecimalPointMatchRequired set to: " + parser.isDecimalPatternMatchRequired());
+                errln(
+                        "Parsing "
+                                + value2Parse
+                                + " should have succeeded with "
+                                + testPattern[i]
+                                + " and isDecimalPointMatchRequired set to: "
+                                + parser.isDecimalPatternMatchRequired());
             }
             try {
                 result = parser.parse(value2ParseWithDecimal).doubleValue();
                 assertEquals("wrong parsed value", parseValueWithDecimal, result);
             } catch (ParseException e) {
-                errln("Parsing " + value2ParseWithDecimal + " should have succeeded with " + testPattern[i] +
-                            " and isDecimalPointMatchRequired set to: " + parser.isDecimalPatternMatchRequired());
+                errln(
+                        "Parsing "
+                                + value2ParseWithDecimal
+                                + " should have succeeded with "
+                                + testPattern[i]
+                                + " and isDecimalPointMatchRequired set to: "
+                                + parser.isDecimalPatternMatchRequired());
             }
 
             parser.setDecimalPatternMatchRequired(true);
             try {
                 result = parser.parse(value2Parse).doubleValue();
-                if(hasDecimalPoint){
-                    errln("Parsing " + value2Parse + " should NOT have succeeded with " + testPattern[i] +
-                            " and isDecimalPointMatchRequired set to: " + parser.isDecimalPatternMatchRequired());
+                if (hasDecimalPoint) {
+                    errln(
+                            "Parsing "
+                                    + value2Parse
+                                    + " should NOT have succeeded with "
+                                    + testPattern[i]
+                                    + " and isDecimalPointMatchRequired set to: "
+                                    + parser.isDecimalPatternMatchRequired());
                 }
             } catch (ParseException e) {
-                    // OK, should fail
+                // OK, should fail
             }
             try {
                 result = parser.parse(value2ParseWithDecimal).doubleValue();
-                if(!hasDecimalPoint){
-                    errln("Parsing " + value2ParseWithDecimal + " should NOT have succeeded with " + testPattern[i] +
-                            " and isDecimalPointMatchRequired set to: " + parser.isDecimalPatternMatchRequired() +
-                            " (got: " + result + ")");
+                if (!hasDecimalPoint) {
+                    errln(
+                            "Parsing "
+                                    + value2ParseWithDecimal
+                                    + " should NOT have succeeded with "
+                                    + testPattern[i]
+                                    + " and isDecimalPointMatchRequired set to: "
+                                    + parser.isDecimalPatternMatchRequired()
+                                    + " (got: "
+                                    + result
+                                    + ")");
                 }
             } catch (ParseException e) {
-                    // OK, should fail
+                // OK, should fail
             }
         }
     }
@@ -4705,13 +5744,14 @@ public class NumberFormatTest extends CoreTestFmwk {
         new DataDrivenNumberFormatTestData().toString();
     }
 
-   // Testing for Issue 11805.
+    // Testing for Issue 11805.
     @Test
-    public void TestFormatToCharacterIteratorIssue11805 () {
+    public void TestFormatToCharacterIteratorIssue11805() {
         final double number = -350.76;
         DecimalFormat dfUS = (DecimalFormat) DecimalFormat.getCurrencyInstance(Locale.US);
         String strUS = dfUS.format(number);
-        Set<AttributedCharacterIterator.Attribute> resultUS  = dfUS.formatToCharacterIterator(number).getAllAttributeKeys();
+        Set<AttributedCharacterIterator.Attribute> resultUS =
+                dfUS.formatToCharacterIterator(number).getAllAttributeKeys();
         assertEquals("Negative US Results: " + strUS, 5, resultUS.size());
 
         // For each test, add assert that all the fields are present and in the right spot.
@@ -4719,53 +5759,63 @@ public class NumberFormatTest extends CoreTestFmwk {
 
         DecimalFormat dfDE = (DecimalFormat) DecimalFormat.getCurrencyInstance(Locale.GERMANY);
         String strDE = dfDE.format(number);
-        Set<AttributedCharacterIterator.Attribute> resultDE  = dfDE.formatToCharacterIterator(number).getAllAttributeKeys();
+        Set<AttributedCharacterIterator.Attribute> resultDE =
+                dfDE.formatToCharacterIterator(number).getAllAttributeKeys();
         assertEquals("Negative DE Results: " + strDE, 5, resultDE.size());
 
-        DecimalFormat dfIN = (DecimalFormat) DecimalFormat.getCurrencyInstance(new Locale("hi", "in"));
+        DecimalFormat dfIN =
+                (DecimalFormat) DecimalFormat.getCurrencyInstance(new Locale("hi", "in"));
         String strIN = dfIN.format(number);
-        Set<AttributedCharacterIterator.Attribute> resultIN  = dfIN.formatToCharacterIterator(number).getAllAttributeKeys();
+        Set<AttributedCharacterIterator.Attribute> resultIN =
+                dfIN.formatToCharacterIterator(number).getAllAttributeKeys();
         assertEquals("Negative IN Results: " + strIN, 5, resultIN.size());
 
         DecimalFormat dfJP = (DecimalFormat) DecimalFormat.getCurrencyInstance(Locale.JAPAN);
         String strJP = dfJP.format(number);
-        Set<AttributedCharacterIterator.Attribute> resultJP  = dfJP.formatToCharacterIterator(number).getAllAttributeKeys();
+        Set<AttributedCharacterIterator.Attribute> resultJP =
+                dfJP.formatToCharacterIterator(number).getAllAttributeKeys();
         assertEquals("Negative JA Results: " + strJP, 3, resultJP.size());
 
-        DecimalFormat dfGB = (DecimalFormat) DecimalFormat.getCurrencyInstance(new Locale("en", "gb"));
+        DecimalFormat dfGB =
+                (DecimalFormat) DecimalFormat.getCurrencyInstance(new Locale("en", "gb"));
         String strGB = dfGB.format(number);
-        Set<AttributedCharacterIterator.Attribute> resultGB  = dfGB.formatToCharacterIterator(number).getAllAttributeKeys();
-        assertEquals("Negative GB Results: " + strGB , 5, resultGB.size());
+        Set<AttributedCharacterIterator.Attribute> resultGB =
+                dfGB.formatToCharacterIterator(number).getAllAttributeKeys();
+        assertEquals("Negative GB Results: " + strGB, 5, resultGB.size());
 
-        DecimalFormat dfPlural = (DecimalFormat) NumberFormat.getInstance(new Locale("en", "gb"),
-            NumberFormat.PLURALCURRENCYSTYLE);
+        DecimalFormat dfPlural =
+                (DecimalFormat)
+                        NumberFormat.getInstance(
+                                new Locale("en", "gb"), NumberFormat.PLURALCURRENCYSTYLE);
         strGB = dfPlural.format(number);
         resultGB = dfPlural.formatToCharacterIterator(number).getAllAttributeKeys();
-        assertEquals("Negative GB Results: " + strGB , 5, resultGB.size());
+        assertEquals("Negative GB Results: " + strGB, 5, resultGB.size());
 
         strGB = dfPlural.format(1);
         resultGB = dfPlural.formatToCharacterIterator(1).getAllAttributeKeys();
-        assertEquals("Negative GB Results: " + strGB , 4, resultGB.size());
+        assertEquals("Negative GB Results: " + strGB, 4, resultGB.size());
 
         // Test output with unit value.
-        DecimalFormat auPlural = (DecimalFormat) NumberFormat.getInstance(new Locale("en", "au"),
-                NumberFormat.PLURALCURRENCYSTYLE);
+        DecimalFormat auPlural =
+                (DecimalFormat)
+                        NumberFormat.getInstance(
+                                new Locale("en", "au"), NumberFormat.PLURALCURRENCYSTYLE);
         String strAU = auPlural.format(1L);
-        Set<AttributedCharacterIterator.Attribute> resultAU  =
+        Set<AttributedCharacterIterator.Attribute> resultAU =
                 auPlural.formatToCharacterIterator(1L).getAllAttributeKeys();
-        assertEquals("Unit AU Result: " + strAU , 4, resultAU.size());
+        assertEquals("Unit AU Result: " + strAU, 4, resultAU.size());
 
         // Verify Permille fields.
         DecimalFormatSymbols sym = new DecimalFormatSymbols(new Locale("en", "gb"));
         DecimalFormat dfPermille = new DecimalFormat("####0.##\u2030", sym);
         strGB = dfPermille.format(number);
         resultGB = dfPermille.formatToCharacterIterator(number).getAllAttributeKeys();
-        assertEquals("Negative GB Permille Results: " + strGB , 3, resultGB.size());
+        assertEquals("Negative GB Permille Results: " + strGB, 3, resultGB.size());
     }
 
     // Testing for Issue 11808.
     @Test
-    public void TestRoundUnnecessarytIssue11808 () {
+    public void TestRoundUnnecessarytIssue11808() {
         DecimalFormat df = (DecimalFormat) DecimalFormat.getInstance();
         StringBuffer result = new StringBuffer("");
         df.setRoundingMode(BigDecimal.ROUND_UNNECESSARY);
@@ -4781,8 +5831,8 @@ public class NumberFormatTest extends CoreTestFmwk {
         try {
             result = df.format(99999, result, new FieldPosition(0));
             fail("Missing ArithmeticException for int: " + result);
-       } catch (ArithmeticException expected) {
-           // The exception should be thrown, since rounding is needed.
+        } catch (ArithmeticException expected) {
+            // The exception should be thrown, since rounding is needed.
         }
 
         try {
@@ -4812,20 +5862,27 @@ public class NumberFormatTest extends CoreTestFmwk {
     public void TestNPEIssue11735() {
         DecimalFormat fmt = new DecimalFormat("0", new DecimalFormatSymbols(new ULocale("en")));
         ParsePosition ppos = new ParsePosition(0);
-        assertEquals("Currency symbol missing in parse. Expect null result.",
-                fmt.parseCurrency("53.45", ppos), null);
+        assertEquals(
+                "Currency symbol missing in parse. Expect null result.",
+                fmt.parseCurrency("53.45", ppos),
+                null);
     }
 
-    private void CompareAttributedCharacterFormatOutput(AttributedCharacterIterator iterator,
-        List<FieldContainer> expected, String formattedOutput) {
+    private void CompareAttributedCharacterFormatOutput(
+            AttributedCharacterIterator iterator,
+            List<FieldContainer> expected,
+            String formattedOutput) {
 
         List<FieldContainer> result = new ArrayList<>();
         while (iterator.getIndex() != iterator.getEndIndex()) {
             int start = iterator.getRunStart();
             int end = iterator.getRunLimit();
-            Iterator<AttributedCharacterIterator.Attribute> it = iterator.getAttributes().keySet().iterator();
-            AttributedCharacterIterator.Attribute attribute = (AttributedCharacterIterator.Attribute) it.next();
-            // For positions with both INTEGER and GROUPING attributes, we want the GROUPING attribute.
+            Iterator<AttributedCharacterIterator.Attribute> it =
+                    iterator.getAttributes().keySet().iterator();
+            AttributedCharacterIterator.Attribute attribute =
+                    (AttributedCharacterIterator.Attribute) it.next();
+            // For positions with both INTEGER and GROUPING attributes, we want the GROUPING
+            // attribute.
             if (it.hasNext() && attribute.equals(NumberFormat.Field.INTEGER)) {
                 attribute = (AttributedCharacterIterator.Attribute) it.next();
             }
@@ -4833,23 +5890,35 @@ public class NumberFormatTest extends CoreTestFmwk {
             result.add(new FieldContainer(start, end, attribute, value));
             iterator.setIndex(end);
         }
-        assertEquals("Comparing vector length for " + formattedOutput,
-            expected.size(), result.size());
+        assertEquals(
+                "Comparing vector length for " + formattedOutput, expected.size(), result.size());
 
         if (!expected.containsAll(result)) {
-          // Print information on the differences.
-          for (int i = 0; i < expected.size(); i++) {
-            System.out.println("     expected[" + i + "] =" +
-                expected.get(i).start + " " +
-                expected.get(i).end + " " +
-                expected.get(i).attribute + " " +
-                expected.get(i).value);
-            System.out.println(" result[" + i + "] =" +
-                result.get(i).start + " " +
-                result.get(i).end + " " +
-                result.get(i).attribute + " " +
-                result.get(i).value);
-          }
+            // Print information on the differences.
+            for (int i = 0; i < expected.size(); i++) {
+                System.out.println(
+                        "     expected["
+                                + i
+                                + "] ="
+                                + expected.get(i).start
+                                + " "
+                                + expected.get(i).end
+                                + " "
+                                + expected.get(i).attribute
+                                + " "
+                                + expected.get(i).value);
+                System.out.println(
+                        " result["
+                                + i
+                                + "] ="
+                                + result.get(i).start
+                                + " "
+                                + result.get(i).end
+                                + " "
+                                + result.get(i).attribute
+                                + " "
+                                + result.get(i).value);
+            }
         }
         assertTrue("Comparing vector results for " + formattedOutput, expected.containsAll(result));
     }
@@ -4873,8 +5942,7 @@ public class NumberFormatTest extends CoreTestFmwk {
 
         NumberFormat outFmt = NumberFormat.getNumberInstance(usLoc);
         String numFmtted = outFmt.format(number);
-        AttributedCharacterIterator iterator =
-                outFmt.formatToCharacterIterator(number);
+        AttributedCharacterIterator iterator = outFmt.formatToCharacterIterator(number);
         CompareAttributedCharacterFormatOutput(iterator, v1, numFmtted);
 
         // Second test: Double with scientific notation formatting.
@@ -4928,7 +5996,6 @@ public class NumberFormatTest extends CoreTestFmwk {
 
         iterator = fmt2.formatToCharacterIterator(numberBigD);
         CompareAttributedCharacterFormatOutput(iterator, v4, fmtNumberBigDExp);
-
     }
 
     // Test that the decimal is shown even when there are no fractional digits
@@ -4939,27 +6006,36 @@ public class NumberFormatTest extends CoreTestFmwk {
         DecimalFormatSymbols icuSym = new DecimalFormatSymbols(Locale.US);
         DecimalFormat icuFmt = new DecimalFormat(pat, icuSym);
         icuFmt.setDecimalSeparatorAlwaysShown(true);
-        String icu = ((NumberFormat)icuFmt).format(299792458);
+        String icu = ((NumberFormat) icuFmt).format(299792458);
 
         java.text.DecimalFormatSymbols jdkSym = new java.text.DecimalFormatSymbols(Locale.US);
-        java.text.DecimalFormat jdkFmt = new java.text.DecimalFormat(pat,jdkSym);
+        java.text.DecimalFormat jdkFmt = new java.text.DecimalFormat(pat, jdkSym);
         jdkFmt.setDecimalSeparatorAlwaysShown(true);
-        String jdk = ((java.text.NumberFormat)jdkFmt).format(299792458);
+        String jdk = ((java.text.NumberFormat) jdkFmt).format(299792458);
 
         assertEquals("ICU and JDK placement of decimal in exponent", jdk, icu);
     }
 
-    private void checkFormatWithField(String testInfo, Format format, Object object,
-            String expected, Format.Field field, int begin, int end) {
+    private void checkFormatWithField(
+            String testInfo,
+            Format format,
+            Object object,
+            String expected,
+            Format.Field field,
+            int begin,
+            int end) {
         StringBuffer buffer = new StringBuffer();
         FieldPosition pos = new FieldPosition(field);
         format.format(object, buffer, pos);
 
-        assertEquals("Test " + testInfo + ": incorrect formatted text", expected, buffer.toString());
+        assertEquals(
+                "Test " + testInfo + ": incorrect formatted text", expected, buffer.toString());
 
         if (begin != pos.getBeginIndex() || end != pos.getEndIndex()) {
-            assertEquals("Index mismatch", field + " " + begin + ".." + end,
-                pos.getFieldAttribute() + " " + pos.getBeginIndex() + ".." + pos.getEndIndex());
+            assertEquals(
+                    "Index mismatch",
+                    field + " " + begin + ".." + end,
+                    pos.getFieldAttribute() + " " + pos.getBeginIndex() + ".." + pos.getEndIndex());
         }
     }
 
@@ -4969,16 +6045,28 @@ public class NumberFormatTest extends CoreTestFmwk {
         Number number = 92314587.66d;
         String result = "$92,314,587.66";
 
-        checkFormatWithField("currency", formatter, number, result,
-            NumberFormat.Field.CURRENCY, 0, 1);
-        checkFormatWithField("integer", formatter, number, result,
-            NumberFormat.Field.INTEGER, 1, 11);
-        checkFormatWithField("grouping separator", formatter, number, result,
-            NumberFormat.Field.GROUPING_SEPARATOR, 3, 4);
-        checkFormatWithField("decimal separator", formatter, number, result,
-            NumberFormat.Field.DECIMAL_SEPARATOR, 11, 12);
-        checkFormatWithField("fraction", formatter, number, result,
-            NumberFormat.Field.FRACTION, 12, 14);
+        checkFormatWithField(
+                "currency", formatter, number, result, NumberFormat.Field.CURRENCY, 0, 1);
+        checkFormatWithField(
+                "integer", formatter, number, result, NumberFormat.Field.INTEGER, 1, 11);
+        checkFormatWithField(
+                "grouping separator",
+                formatter,
+                number,
+                result,
+                NumberFormat.Field.GROUPING_SEPARATOR,
+                3,
+                4);
+        checkFormatWithField(
+                "decimal separator",
+                formatter,
+                number,
+                result,
+                NumberFormat.Field.DECIMAL_SEPARATOR,
+                11,
+                12);
+        checkFormatWithField(
+                "fraction", formatter, number, result, NumberFormat.Field.FRACTION, 12, 14);
     }
 
     @Test
@@ -4989,18 +6077,35 @@ public class NumberFormatTest extends CoreTestFmwk {
         DecimalFormat formatter = new DecimalFormat("0.#####E+00", us_symbols);
         String numFmtted = formatter.format(number);
 
-        checkFormatWithField("sign", formatter, number, numFmtted,
-            NumberFormat.Field.SIGN, 0, 1);
-        checkFormatWithField("integer", formatter, number, numFmtted,
-            NumberFormat.Field.INTEGER, 1, 2);
-        checkFormatWithField("decimal separator", formatter, number, numFmtted,
-            NumberFormat.Field.DECIMAL_SEPARATOR, 2, 3);
-        checkFormatWithField("exponent symbol", formatter, number, numFmtted,
-            NumberFormat.Field.EXPONENT_SYMBOL, 8, 9);
-        checkFormatWithField("exponent sign", formatter, number, numFmtted,
-            NumberFormat.Field.EXPONENT_SIGN, 9, 10);
-        checkFormatWithField("exponent", formatter, number, numFmtted,
-            NumberFormat.Field.EXPONENT, 10, 12);
+        checkFormatWithField("sign", formatter, number, numFmtted, NumberFormat.Field.SIGN, 0, 1);
+        checkFormatWithField(
+                "integer", formatter, number, numFmtted, NumberFormat.Field.INTEGER, 1, 2);
+        checkFormatWithField(
+                "decimal separator",
+                formatter,
+                number,
+                numFmtted,
+                NumberFormat.Field.DECIMAL_SEPARATOR,
+                2,
+                3);
+        checkFormatWithField(
+                "exponent symbol",
+                formatter,
+                number,
+                numFmtted,
+                NumberFormat.Field.EXPONENT_SYMBOL,
+                8,
+                9);
+        checkFormatWithField(
+                "exponent sign",
+                formatter,
+                number,
+                numFmtted,
+                NumberFormat.Field.EXPONENT_SIGN,
+                9,
+                10);
+        checkFormatWithField(
+                "exponent", formatter, number, numFmtted, NumberFormat.Field.EXPONENT, 10, 12);
     }
 
     @Test
@@ -5009,12 +6114,24 @@ public class NumberFormatTest extends CoreTestFmwk {
         DecimalFormat percentFormat = (DecimalFormat) NumberFormat.getPercentInstance(ULocale.US);
         Number number = -0.986d;
         String numberFormatted = percentFormat.format(number);
-        checkFormatWithField("sign", percentFormat, number, numberFormatted,
-            NumberFormat.Field.SIGN, 0, 1);
-        checkFormatWithField("integer", percentFormat, number, numberFormatted,
-            NumberFormat.Field.INTEGER, 1, 3);
-        checkFormatWithField("percent", percentFormat, number, numberFormatted,
-            NumberFormat.Field.PERCENT, 3, 4);
+        checkFormatWithField(
+                "sign", percentFormat, number, numberFormatted, NumberFormat.Field.SIGN, 0, 1);
+        checkFormatWithField(
+                "integer",
+                percentFormat,
+                number,
+                numberFormatted,
+                NumberFormat.Field.INTEGER,
+                1,
+                3);
+        checkFormatWithField(
+                "percent",
+                percentFormat,
+                number,
+                numberFormatted,
+                NumberFormat.Field.PERCENT,
+                3,
+                4);
     }
 
     @Test
@@ -5025,16 +6142,21 @@ public class NumberFormatTest extends CoreTestFmwk {
         Number number = -0.986d;
         String numFmtted = fmtPercent.format(number);
 
-        checkFormatWithField("sign", fmtPercent, number, numFmtted,
-            NumberFormat.Field.SIGN, 0, 1);
-        checkFormatWithField("integer", fmtPercent, number, numFmtted,
-            NumberFormat.Field.INTEGER, 1, 3);
-        checkFormatWithField("decimal separator", fmtPercent, number, numFmtted,
-            NumberFormat.Field.DECIMAL_SEPARATOR, 3, 4);
-        checkFormatWithField("fraction", fmtPercent, number, numFmtted,
-            NumberFormat.Field.FRACTION, 4, 5);
-        checkFormatWithField("percent", fmtPercent, number, numFmtted,
-            NumberFormat.Field.PERCENT, 5, 6);
+        checkFormatWithField("sign", fmtPercent, number, numFmtted, NumberFormat.Field.SIGN, 0, 1);
+        checkFormatWithField(
+                "integer", fmtPercent, number, numFmtted, NumberFormat.Field.INTEGER, 1, 3);
+        checkFormatWithField(
+                "decimal separator",
+                fmtPercent,
+                number,
+                numFmtted,
+                NumberFormat.Field.DECIMAL_SEPARATOR,
+                3,
+                4);
+        checkFormatWithField(
+                "fraction", fmtPercent, number, numFmtted, NumberFormat.Field.FRACTION, 4, 5);
+        checkFormatWithField(
+                "percent", fmtPercent, number, numFmtted, NumberFormat.Field.PERCENT, 5, 6);
     }
 
     @Test
@@ -5045,37 +6167,79 @@ public class NumberFormatTest extends CoreTestFmwk {
         Number numberPermille = -0.98654d;
         String numFmtted = fmtPerMille.format(numberPermille);
 
-        checkFormatWithField("sign", fmtPerMille, numberPermille, numFmtted,
-            NumberFormat.Field.SIGN, 0, 1);
-        checkFormatWithField("integer", fmtPerMille, numberPermille, numFmtted,
-            NumberFormat.Field.INTEGER, 1, 4);
-        checkFormatWithField("decimal separator", fmtPerMille, numberPermille, numFmtted,
-            NumberFormat.Field.DECIMAL_SEPARATOR, 4, 5);
-        checkFormatWithField("fraction", fmtPerMille, numberPermille, numFmtted,
-            NumberFormat.Field.FRACTION, 5, 7);
-        checkFormatWithField("permille", fmtPerMille, numberPermille, numFmtted,
-            NumberFormat.Field.PERMILLE, 7, 8);
+        checkFormatWithField(
+                "sign", fmtPerMille, numberPermille, numFmtted, NumberFormat.Field.SIGN, 0, 1);
+        checkFormatWithField(
+                "integer",
+                fmtPerMille,
+                numberPermille,
+                numFmtted,
+                NumberFormat.Field.INTEGER,
+                1,
+                4);
+        checkFormatWithField(
+                "decimal separator",
+                fmtPerMille,
+                numberPermille,
+                numFmtted,
+                NumberFormat.Field.DECIMAL_SEPARATOR,
+                4,
+                5);
+        checkFormatWithField(
+                "fraction",
+                fmtPerMille,
+                numberPermille,
+                numFmtted,
+                NumberFormat.Field.FRACTION,
+                5,
+                7);
+        checkFormatWithField(
+                "permille",
+                fmtPerMille,
+                numberPermille,
+                numFmtted,
+                NumberFormat.Field.PERMILLE,
+                7,
+                8);
     }
 
     @Test
     public void TestMissingFieldPositionsNegativeBigInt() {
-      DecimalFormatSymbols us_symbols = new DecimalFormatSymbols(ULocale.US);
+        DecimalFormatSymbols us_symbols = new DecimalFormatSymbols(ULocale.US);
         DecimalFormat formatter = new DecimalFormat("0.#####E+0", us_symbols);
         Number number = new BigDecimal("-123456789987654321");
         String bigDecFmtted = formatter.format(number);
 
-        checkFormatWithField("sign", formatter, number, bigDecFmtted,
-            NumberFormat.Field.SIGN, 0, 1);
-        checkFormatWithField("integer", formatter, number, bigDecFmtted,
-            NumberFormat.Field.INTEGER, 1, 2);
-        checkFormatWithField("decimal separator", formatter, number, bigDecFmtted,
-            NumberFormat.Field.DECIMAL_SEPARATOR, 2, 3);
-        checkFormatWithField("exponent symbol", formatter, number, bigDecFmtted,
-            NumberFormat.Field.EXPONENT_SYMBOL, 8, 9);
-        checkFormatWithField("exponent sign", formatter, number, bigDecFmtted,
-            NumberFormat.Field.EXPONENT_SIGN, 9, 10);
-        checkFormatWithField("exponent", formatter, number, bigDecFmtted,
-            NumberFormat.Field.EXPONENT, 10, 12);
+        checkFormatWithField(
+                "sign", formatter, number, bigDecFmtted, NumberFormat.Field.SIGN, 0, 1);
+        checkFormatWithField(
+                "integer", formatter, number, bigDecFmtted, NumberFormat.Field.INTEGER, 1, 2);
+        checkFormatWithField(
+                "decimal separator",
+                formatter,
+                number,
+                bigDecFmtted,
+                NumberFormat.Field.DECIMAL_SEPARATOR,
+                2,
+                3);
+        checkFormatWithField(
+                "exponent symbol",
+                formatter,
+                number,
+                bigDecFmtted,
+                NumberFormat.Field.EXPONENT_SYMBOL,
+                8,
+                9);
+        checkFormatWithField(
+                "exponent sign",
+                formatter,
+                number,
+                bigDecFmtted,
+                NumberFormat.Field.EXPONENT_SIGN,
+                9,
+                10);
+        checkFormatWithField(
+                "exponent", formatter, number, bigDecFmtted, NumberFormat.Field.EXPONENT, 10, 12);
     }
 
     @Test
@@ -5085,18 +6249,35 @@ public class NumberFormatTest extends CoreTestFmwk {
         DecimalFormat formatter = new DecimalFormat("0.#####E+0", us_symbols);
         String longFmtted = formatter.format(number);
 
-        checkFormatWithField("sign", formatter, number, longFmtted,
-            NumberFormat.Field.SIGN, 0, 1);
-        checkFormatWithField("integer", formatter, number, longFmtted,
-            NumberFormat.Field.INTEGER, 1, 2);
-        checkFormatWithField("decimal separator", formatter, number, longFmtted,
-            NumberFormat.Field.DECIMAL_SEPARATOR, 2, 3);
-        checkFormatWithField("exponent symbol", formatter, number, longFmtted,
-            NumberFormat.Field.EXPONENT_SYMBOL, 8, 9);
-        checkFormatWithField("exponent sign", formatter, number, longFmtted,
-            NumberFormat.Field.EXPONENT_SIGN, 9, 10);
-        checkFormatWithField("exponent", formatter, number, longFmtted,
-            NumberFormat.Field.EXPONENT, 10, 12);
+        checkFormatWithField("sign", formatter, number, longFmtted, NumberFormat.Field.SIGN, 0, 1);
+        checkFormatWithField(
+                "integer", formatter, number, longFmtted, NumberFormat.Field.INTEGER, 1, 2);
+        checkFormatWithField(
+                "decimal separator",
+                formatter,
+                number,
+                longFmtted,
+                NumberFormat.Field.DECIMAL_SEPARATOR,
+                2,
+                3);
+        checkFormatWithField(
+                "exponent symbol",
+                formatter,
+                number,
+                longFmtted,
+                NumberFormat.Field.EXPONENT_SYMBOL,
+                8,
+                9);
+        checkFormatWithField(
+                "exponent sign",
+                formatter,
+                number,
+                longFmtted,
+                NumberFormat.Field.EXPONENT_SIGN,
+                9,
+                10);
+        checkFormatWithField(
+                "exponent", formatter, number, longFmtted, NumberFormat.Field.EXPONENT, 10, 12);
     }
 
     @Test
@@ -5107,44 +6288,116 @@ public class NumberFormatTest extends CoreTestFmwk {
         Number positiveExp = Double.valueOf("9876543210");
         String posExpFormatted = fmtPosNegSign.format(positiveExp);
 
-        checkFormatWithField("sign", fmtPosNegSign, positiveExp, posExpFormatted,
-            NumberFormat.Field.SIGN, 0, 1);
-        checkFormatWithField("integer", fmtPosNegSign, positiveExp, posExpFormatted,
-            NumberFormat.Field.INTEGER, 1, 2);
-        checkFormatWithField("decimal separator", fmtPosNegSign, positiveExp, posExpFormatted,
-            NumberFormat.Field.DECIMAL_SEPARATOR, 2, 3);
-        checkFormatWithField("fraction", fmtPosNegSign, positiveExp, posExpFormatted,
-            NumberFormat.Field.FRACTION, 3, 7);
-        checkFormatWithField("exponent symbol", fmtPosNegSign, positiveExp, posExpFormatted,
-            NumberFormat.Field.EXPONENT_SYMBOL, 7, 8);
-        checkFormatWithField("exponent sign", fmtPosNegSign, positiveExp, posExpFormatted,
-            NumberFormat.Field.EXPONENT_SIGN, 8, 9);
-        checkFormatWithField("exponent", fmtPosNegSign, positiveExp, posExpFormatted,
-            NumberFormat.Field.EXPONENT, 9, 11);
+        checkFormatWithField(
+                "sign", fmtPosNegSign, positiveExp, posExpFormatted, NumberFormat.Field.SIGN, 0, 1);
+        checkFormatWithField(
+                "integer",
+                fmtPosNegSign,
+                positiveExp,
+                posExpFormatted,
+                NumberFormat.Field.INTEGER,
+                1,
+                2);
+        checkFormatWithField(
+                "decimal separator",
+                fmtPosNegSign,
+                positiveExp,
+                posExpFormatted,
+                NumberFormat.Field.DECIMAL_SEPARATOR,
+                2,
+                3);
+        checkFormatWithField(
+                "fraction",
+                fmtPosNegSign,
+                positiveExp,
+                posExpFormatted,
+                NumberFormat.Field.FRACTION,
+                3,
+                7);
+        checkFormatWithField(
+                "exponent symbol",
+                fmtPosNegSign,
+                positiveExp,
+                posExpFormatted,
+                NumberFormat.Field.EXPONENT_SYMBOL,
+                7,
+                8);
+        checkFormatWithField(
+                "exponent sign",
+                fmtPosNegSign,
+                positiveExp,
+                posExpFormatted,
+                NumberFormat.Field.EXPONENT_SIGN,
+                8,
+                9);
+        checkFormatWithField(
+                "exponent",
+                fmtPosNegSign,
+                positiveExp,
+                posExpFormatted,
+                NumberFormat.Field.EXPONENT,
+                9,
+                11);
     }
 
     @Test
     public void TestMissingFieldPositionsNegativeBigDec() {
         // Check complex positive;negative pattern.
-      DecimalFormatSymbols us_symbols = new DecimalFormatSymbols(ULocale.US);
+        DecimalFormatSymbols us_symbols = new DecimalFormatSymbols(ULocale.US);
         DecimalFormat fmtPosNegSign = new DecimalFormat("+0.####E+00;-0.#######E+0", us_symbols);
         Number negativeExp = new BigDecimal("-0.000000987654321083");
         String negExpFormatted = fmtPosNegSign.format(negativeExp);
 
-        checkFormatWithField("sign", fmtPosNegSign, negativeExp, negExpFormatted,
-            NumberFormat.Field.SIGN, 0, 1);
-        checkFormatWithField("integer", fmtPosNegSign, negativeExp, negExpFormatted,
-            NumberFormat.Field.INTEGER, 1, 2);
-        checkFormatWithField("decimal separator", fmtPosNegSign, negativeExp, negExpFormatted,
-            NumberFormat.Field.DECIMAL_SEPARATOR, 2, 3);
-        checkFormatWithField("fraction", fmtPosNegSign, negativeExp, negExpFormatted,
-            NumberFormat.Field.FRACTION, 3, 7);
-        checkFormatWithField("exponent symbol", fmtPosNegSign, negativeExp, negExpFormatted,
-            NumberFormat.Field.EXPONENT_SYMBOL, 7, 8);
-        checkFormatWithField("exponent sign", fmtPosNegSign, negativeExp, negExpFormatted,
-            NumberFormat.Field.EXPONENT_SIGN, 8, 9);
-        checkFormatWithField("exponent", fmtPosNegSign, negativeExp, negExpFormatted,
-            NumberFormat.Field.EXPONENT, 9, 11);
+        checkFormatWithField(
+                "sign", fmtPosNegSign, negativeExp, negExpFormatted, NumberFormat.Field.SIGN, 0, 1);
+        checkFormatWithField(
+                "integer",
+                fmtPosNegSign,
+                negativeExp,
+                negExpFormatted,
+                NumberFormat.Field.INTEGER,
+                1,
+                2);
+        checkFormatWithField(
+                "decimal separator",
+                fmtPosNegSign,
+                negativeExp,
+                negExpFormatted,
+                NumberFormat.Field.DECIMAL_SEPARATOR,
+                2,
+                3);
+        checkFormatWithField(
+                "fraction",
+                fmtPosNegSign,
+                negativeExp,
+                negExpFormatted,
+                NumberFormat.Field.FRACTION,
+                3,
+                7);
+        checkFormatWithField(
+                "exponent symbol",
+                fmtPosNegSign,
+                negativeExp,
+                negExpFormatted,
+                NumberFormat.Field.EXPONENT_SYMBOL,
+                7,
+                8);
+        checkFormatWithField(
+                "exponent sign",
+                fmtPosNegSign,
+                negativeExp,
+                negExpFormatted,
+                NumberFormat.Field.EXPONENT_SIGN,
+                8,
+                9);
+        checkFormatWithField(
+                "exponent",
+                fmtPosNegSign,
+                negativeExp,
+                negExpFormatted,
+                NumberFormat.Field.EXPONENT,
+                9,
+                11);
     }
 
     @Test
@@ -5152,7 +6405,9 @@ public class NumberFormatTest extends CoreTestFmwk {
         DecimalFormatSymbols symbols = new DecimalFormatSymbols(ULocale.US);
 
         // Attempt digits with multiple code points.
-        String[] customDigits = {"(0)", "(1)", "(2)", "(3)", "(4)", "(5)", "(6)", "(7)", "(8)", "(9)"};
+        String[] customDigits = {
+            "(0)", "(1)", "(2)", "(3)", "(4)", "(5)", "(6)", "(7)", "(8)", "(9)"
+        };
         symbols.setDigitStrings(customDigits);
         DecimalFormat fmt = new DecimalFormat("#,##0.0#", symbols);
         expect2(fmt, 1234567.89, "(1),(2)(3)(4),(5)(6)(7).(8)(9)");
@@ -5170,7 +6425,7 @@ public class NumberFormatTest extends CoreTestFmwk {
 
         // Digits starting at U+1D7CE MATHEMATICAL BOLD DIGIT ZERO
         // These are all single code points, so parsing will work.
-        for (int i=0; i<10; i++) customDigits[i] = new String(Character.toChars(0x1D7CE+i));
+        for (int i = 0; i < 10; i++) customDigits[i] = new String(Character.toChars(0x1D7CE + i));
         symbols.setDigitStrings(customDigits);
         symbols.setDecimalSeparatorString("😁");
         symbols.setGroupingSeparatorString("😎");
@@ -5183,22 +6438,30 @@ public class NumberFormatTest extends CoreTestFmwk {
         ULocale arLocale = new ULocale("ar");
 
         DecimalFormatSymbols symbols = new DecimalFormatSymbols(arLocale);
-        String currSpacingPatn = symbols.getPatternForCurrencySpacing(DecimalFormatSymbols.CURRENCY_SPC_CURRENCY_MATCH, true);
-        if (currSpacingPatn==null || currSpacingPatn.length() == 0) {
+        String currSpacingPatn =
+                symbols.getPatternForCurrencySpacing(
+                        DecimalFormatSymbols.CURRENCY_SPC_CURRENCY_MATCH, true);
+        if (currSpacingPatn == null || currSpacingPatn.length() == 0) {
             errln("locale ar, getPatternForCurrencySpacing returns null or 0-length string");
         }
 
-        DecimalFormat currAcctFormat = (DecimalFormat)NumberFormat.getInstance(arLocale, NumberFormat.ACCOUNTINGCURRENCYSTYLE);
+        DecimalFormat currAcctFormat =
+                (DecimalFormat)
+                        NumberFormat.getInstance(arLocale, NumberFormat.ACCOUNTINGCURRENCYSTYLE);
         String currAcctPatn = currAcctFormat.toPattern();
-        if (currAcctPatn==null || currAcctPatn.length() == 0) {
-            errln("locale ar, toPattern for ACCOUNTINGCURRENCYSTYLE returns null or 0-length string");
+        if (currAcctPatn == null || currAcctPatn.length() == 0) {
+            errln(
+                    "locale ar, toPattern for ACCOUNTINGCURRENCYSTYLE returns null or 0-length string");
         }
     }
 
     @Test
     public void TestMinMaxOverrides()
-            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
-                NoSuchMethodException, SecurityException {
+            throws IllegalAccessException,
+                    IllegalArgumentException,
+                    InvocationTargetException,
+                    NoSuchMethodException,
+                    SecurityException {
         Class<?>[] baseClasses = {NumberFormat.class, NumberFormat.class, DecimalFormat.class};
         String[] names = {"Integer", "Fraction", "Significant"};
         for (int i = 0; i < 3; i++) {
@@ -5206,9 +6469,11 @@ public class NumberFormatTest extends CoreTestFmwk {
             Class<?> base = baseClasses[i];
             String name = names[i];
             Method getMinimum = base.getDeclaredMethod("getMinimum" + name + "Digits");
-            Method setMinimum = base.getDeclaredMethod("setMinimum" + name + "Digits", Integer.TYPE);
+            Method setMinimum =
+                    base.getDeclaredMethod("setMinimum" + name + "Digits", Integer.TYPE);
             Method getMaximum = base.getDeclaredMethod("getMaximum" + name + "Digits");
-            Method setMaximum = base.getDeclaredMethod("setMaximum" + name + "Digits", Integer.TYPE);
+            Method setMaximum =
+                    base.getDeclaredMethod("setMaximum" + name + "Digits", Integer.TYPE);
 
             // Check max overrides min
             setMinimum.invoke(df, 2);
@@ -5283,8 +6548,8 @@ public class NumberFormatTest extends CoreTestFmwk {
     }
 
     /**
-     * ArithmeticException is thrown when inverting multiplier produces a non-terminating
-     * decimal result in conjunction with MathContext of unlimited precision.
+     * ArithmeticException is thrown when inverting multiplier produces a non-terminating decimal
+     * result in conjunction with MathContext of unlimited precision.
      */
     @Test
     public void testSetMathContextArithmeticException() {
@@ -5299,8 +6564,8 @@ public class NumberFormatTest extends CoreTestFmwk {
     }
 
     /**
-     * ArithmeticException is thrown when inverting multiplier produces a non-terminating
-     * decimal result in conjunction with MathContext of unlimited precision.
+     * ArithmeticException is thrown when inverting multiplier produces a non-terminating decimal
+     * result in conjunction with MathContext of unlimited precision.
      */
     @Test
     public void testSetMathContextICUArithmeticException() {
@@ -5315,8 +6580,8 @@ public class NumberFormatTest extends CoreTestFmwk {
     }
 
     /**
-     * ArithmeticException is thrown when inverting multiplier produces a non-terminating
-     * decimal result in conjunction with MathContext of unlimited precision.
+     * ArithmeticException is thrown when inverting multiplier produces a non-terminating decimal
+     * result in conjunction with MathContext of unlimited precision.
      */
     @Test
     public void testSetMultiplierArithmeticException() {
@@ -5367,7 +6632,8 @@ public class NumberFormatTest extends CoreTestFmwk {
         DecimalFormatSymbols sym = new DecimalFormatSymbols(ULocale.FRANCE);
         DecimalFormat fmt = new DecimalFormat("0.05E0", sym);
         String result = fmt.format(12301.2).replace('\u00a0', ' ');
-        assertEquals("Rounding increment should be applied after magnitude scaling", "1,25E4", result);
+        assertEquals(
+                "Rounding increment should be applied after magnitude scaling", "1,25E4", result);
     }
 
     @Test
@@ -5384,7 +6650,10 @@ public class NumberFormatTest extends CoreTestFmwk {
         DecimalFormat df = (DecimalFormat) NumberFormat.getInstance();
         df.applyPattern("¤¤¤ 0");
         String result = df.getPositivePrefix();
-        assertEquals("Triple-currency should give long name on getPositivePrefix", "US dollars ", result);
+        assertEquals(
+                "Triple-currency should give long name on getPositivePrefix",
+                "US dollars ",
+                result);
     }
 
     @Test
@@ -5440,28 +6709,28 @@ public class NumberFormatTest extends CoreTestFmwk {
         // Test equality with affixes. set affix methods can't capture special
         // characters which is why equality should fail.
         {
-          DecimalFormat fmtCopy = fmt.clone();
-          assertEquals("", fmt, fmtCopy);
-          fmtCopy.setPositivePrefix(fmtCopy.getPositivePrefix());
-          assertNotEquals("", fmt, fmtCopy);
+            DecimalFormat fmtCopy = fmt.clone();
+            assertEquals("", fmt, fmtCopy);
+            fmtCopy.setPositivePrefix(fmtCopy.getPositivePrefix());
+            assertNotEquals("", fmt, fmtCopy);
         }
         {
-          DecimalFormat fmtCopy = fmt.clone();
-          assertEquals("", fmt, fmtCopy);
-          fmtCopy.setPositiveSuffix(fmtCopy.getPositiveSuffix());
-          assertNotEquals("", fmt, fmtCopy);
+            DecimalFormat fmtCopy = fmt.clone();
+            assertEquals("", fmt, fmtCopy);
+            fmtCopy.setPositiveSuffix(fmtCopy.getPositiveSuffix());
+            assertNotEquals("", fmt, fmtCopy);
         }
         {
-          DecimalFormat fmtCopy = fmt.clone();
-          assertEquals("", fmt, fmtCopy);
-          fmtCopy.setNegativePrefix(fmtCopy.getNegativePrefix());
-          assertNotEquals("", fmt, fmtCopy);
+            DecimalFormat fmtCopy = fmt.clone();
+            assertEquals("", fmt, fmtCopy);
+            fmtCopy.setNegativePrefix(fmtCopy.getNegativePrefix());
+            assertNotEquals("", fmt, fmtCopy);
         }
         {
-          DecimalFormat fmtCopy = fmt.clone();
-          assertEquals("", fmt, fmtCopy);
-          fmtCopy.setNegativeSuffix(fmtCopy.getNegativeSuffix());
-          assertNotEquals("", fmt, fmtCopy);
+            DecimalFormat fmtCopy = fmt.clone();
+            assertEquals("", fmt, fmtCopy);
+            fmtCopy.setNegativeSuffix(fmtCopy.getNegativeSuffix());
+            assertNotEquals("", fmt, fmtCopy);
         }
     }
 
@@ -5478,21 +6747,31 @@ public class NumberFormatTest extends CoreTestFmwk {
         String pattern = "\u00a4\u00a4\u00a4 0.00";
         DecimalFormat fmt = new DecimalFormat(pattern);
         fmt.setCurrency(Currency.getInstance("USD"));
-        assertEquals("Triple currency sign should format long name", "US dollars 12.34", fmt.format(12.34));
+        assertEquals(
+                "Triple currency sign should format long name",
+                "US dollars 12.34",
+                fmt.format(12.34));
 
         String newPattern = fmt.toPattern();
         assertEquals("Should produce a valid pattern", pattern, newPattern);
 
         DecimalFormat fmt2 = new DecimalFormat(newPattern);
         fmt2.setCurrency(Currency.getInstance("USD"));
-        assertEquals("Triple currency sign pattern should round-trip", "US dollars 12.34", fmt2.format(12.34));
+        assertEquals(
+                "Triple currency sign pattern should round-trip",
+                "US dollars 12.34",
+                fmt2.format(12.34));
 
         String quotedPattern = "\u00a4\u00a4'\u00a4' 0.00";
         DecimalFormat fmt3 = new DecimalFormat(quotedPattern);
-        assertEquals("Should be treated as double currency sign", "USD\u00a4 12.34", fmt3.format(12.34));
+        assertEquals(
+                "Should be treated as double currency sign", "USD\u00a4 12.34", fmt3.format(12.34));
 
         String outQuotedPattern = fmt3.toPattern();
-        assertEquals("Double currency sign with quoted sign should round-trip", quotedPattern, outQuotedPattern);
+        assertEquals(
+                "Double currency sign with quoted sign should round-trip",
+                quotedPattern,
+                outQuotedPattern);
     }
 
     @Test
@@ -5546,11 +6825,17 @@ public class NumberFormatTest extends CoreTestFmwk {
         DecimalFormat df = new DecimalFormat("0.00", symbols);
         df.setDecimalPatternMatchRequired(true);
         Number result = df.parse("infinity");
-        assertEquals("Should parse to +INF even though decimal is required", Double.POSITIVE_INFINITY, result);
+        assertEquals(
+                "Should parse to +INF even though decimal is required",
+                Double.POSITIVE_INFINITY,
+                result);
         result = df.parse("notanumber");
         assertEquals("Should parse to NaN even though decimal is required", Double.NaN, result);
         result = df.parse("-infinity");
-        assertEquals("Should parse to -INF even though decimal is required", Double.NEGATIVE_INFINITY, result);
+        assertEquals(
+                "Should parse to -INF even though decimal is required",
+                Double.NEGATIVE_INFINITY,
+                result);
     }
 
     @Test
@@ -5558,7 +6843,8 @@ public class NumberFormatTest extends CoreTestFmwk {
         String pat = "**0.00";
         DecimalFormat df = new DecimalFormat(pat);
         String newPat = df.toPattern();
-        assertEquals("Format width changed upon calling applyPattern", pat.length(), newPat.length());
+        assertEquals(
+                "Format width changed upon calling applyPattern", pat.length(), newPat.length());
     }
 
     @Test
@@ -5585,17 +6871,22 @@ public class NumberFormatTest extends CoreTestFmwk {
 
     @Test
     public void Test12045() {
-        if (logKnownIssue("12045", "XSU is missing from fr")) { return; }
+        if (logKnownIssue("12045", "XSU is missing from fr")) {
+            return;
+        }
 
-        NumberFormat nf = NumberFormat.getInstance(new ULocale("fr"), NumberFormat.PLURALCURRENCYSTYLE);
+        NumberFormat nf =
+                NumberFormat.getInstance(new ULocale("fr"), NumberFormat.PLURALCURRENCYSTYLE);
         ParsePosition ppos = new ParsePosition(0);
         try {
             CurrencyAmount result = nf.parseCurrency("2,34 XSU", ppos);
-            assertEquals("Parsing should succeed on XSU",
-                         new CurrencyAmount(2.34, Currency.getInstance("XSU")), result);
+            assertEquals(
+                    "Parsing should succeed on XSU",
+                    new CurrencyAmount(2.34, Currency.getInstance("XSU")),
+                    result);
             // pass
         } catch (Exception e) {
-            //throw new AssertionError("Should have been able to parse XSU", e);
+            // throw new AssertionError("Should have been able to parse XSU", e);
             throw new AssertionError("Should have been able to parse XSU: " + e.getMessage());
         }
     }
@@ -5606,7 +6897,10 @@ public class NumberFormatTest extends CoreTestFmwk {
         ((DecimalFormat) nf).applyPattern("#,##0.0 ¤¤¤");
         ParsePosition ppos = new ParsePosition(0);
         CurrencyAmount result = nf.parseCurrency("1.500 амерички долар", ppos);
-        assertEquals("Should parse to 1500 USD", new CurrencyAmount(1500, Currency.getInstance("USD")), result);
+        assertEquals(
+                "Should parse to 1500 USD",
+                new CurrencyAmount(1500, Currency.getInstance("USD")),
+                result);
     }
 
     @Test
@@ -5619,7 +6913,8 @@ public class NumberFormatTest extends CoreTestFmwk {
 
     @Test
     public void Test12567() {
-        DecimalFormat df1 = (DecimalFormat) NumberFormat.getInstance(NumberFormat.PLURALCURRENCYSTYLE);
+        DecimalFormat df1 =
+                (DecimalFormat) NumberFormat.getInstance(NumberFormat.PLURALCURRENCYSTYLE);
         DecimalFormat df2 = (DecimalFormat) NumberFormat.getInstance(NumberFormat.NUMBERSTYLE);
         df2.setCurrency(df1.getCurrency());
         df2.setCurrencyPluralInfo(df1.getCurrencyPluralInfo());
@@ -5638,9 +6933,7 @@ public class NumberFormatTest extends CoreTestFmwk {
         // kPatternSeparatorSymbol should still be ';'
         {
             DecimalFormatSymbols dfs = new DecimalFormatSymbols(new ULocale("ar"));
-            assertEquals("pattern separator symbol should be ;",
-                    ';',
-                    dfs.getPatternSeparator());
+            assertEquals("pattern separator symbol should be ;", ';', dfs.getPatternSeparator());
         }
 
         // However, the custom symbol should be used in localized notation
@@ -5650,13 +6943,9 @@ public class NumberFormatTest extends CoreTestFmwk {
             dfs.setPatternSeparator('!');
             DecimalFormat df = new DecimalFormat("0", dfs);
             df.applyPattern("a0;b0"); // should not throw
-            assertEquals("should apply the normal pattern",
-                    df.getNegativePrefix(),
-                    "b");
+            assertEquals("should apply the normal pattern", df.getNegativePrefix(), "b");
             df.applyLocalizedPattern("c0!d0"); // should not throw
-            assertEquals("should apply the localized pattern",
-                    df.getNegativePrefix(),
-                    "d");
+            assertEquals("should apply the localized pattern", df.getNegativePrefix(), "d");
         }
     }
 
@@ -5678,14 +6967,19 @@ public class NumberFormatTest extends CoreTestFmwk {
         assertEquals("Secondary grouping should round-trip", 3, df.getSecondaryGroupingSize());
         df.setGroupingSize(4);
         assertEquals("Primary grouping should return 4", 4, df.getGroupingSize());
-        assertEquals("Secondary should remember explicit setting and return 3", 3, df.getSecondaryGroupingSize());
+        assertEquals(
+                "Secondary should remember explicit setting and return 3",
+                3,
+                df.getSecondaryGroupingSize());
     }
 
     @Test
     public void Test13074() {
-        DecimalFormat df = (DecimalFormat) NumberFormat.getCurrencyInstance(new ULocale("en_US_POSIX"));
+        DecimalFormat df =
+                (DecimalFormat) NumberFormat.getCurrencyInstance(new ULocale("en_US_POSIX"));
         String result = df.format(987654.321);
-        assertEquals("Locale 'en_US_POSIX' should not use monetary grouping", "$ 987654.32", result);
+        assertEquals(
+                "Locale 'en_US_POSIX' should not use monetary grouping", "$ 987654.32", result);
     }
 
     @Test
@@ -5710,24 +7004,26 @@ public class NumberFormatTest extends CoreTestFmwk {
     @Test
     public void Test13113_MalformedPatterns() {
         String[][] cases = {
-                {"'", "quoted literal"},
-                {"ab#c'd", "quoted literal"},
-                {"ab#c*", "unquoted literal"},
-                {"0#", "# cannot follow 0"},
-                {".#0", "0 cannot follow #"},
-                {"@0", "Cannot mix @ and 0"},
-                {"0@", "Cannot mix 0 and @"},
-                {"#x#", "unquoted special character"},
-                {"@#@", "# inside of a run of @"},
+            {"'", "quoted literal"},
+            {"ab#c'd", "quoted literal"},
+            {"ab#c*", "unquoted literal"},
+            {"0#", "# cannot follow 0"},
+            {".#0", "0 cannot follow #"},
+            {"@0", "Cannot mix @ and 0"},
+            {"0@", "Cannot mix 0 and @"},
+            {"#x#", "unquoted special character"},
+            {"@#@", "# inside of a run of @"},
         };
         for (String[] cas : cases) {
             try {
                 new DecimalFormat(cas[0]);
                 fail("Should have thrown on malformed pattern");
             } catch (IllegalArgumentException ex) {
-                assertTrue("Exception should contain \"Malformed pattern\": " + ex.getMessage(),
+                assertTrue(
+                        "Exception should contain \"Malformed pattern\": " + ex.getMessage(),
                         ex.getMessage().contains("Malformed pattern"));
-                assertTrue("Exception should contain \"" + cas[1] + "\"" + ex.getMessage(),
+                assertTrue(
+                        "Exception should contain \"" + cas[1] + "\"" + ex.getMessage(),
                         ex.getMessage().contains(cas[1]));
             }
         }
@@ -5737,10 +7033,12 @@ public class NumberFormatTest extends CoreTestFmwk {
     public void Test13118() {
         DecimalFormat df = new DecimalFormat("@@@");
         df.setScientificNotation(true);
-        for (double d=12345.67; d>1e-6; d/=10) {
+        for (double d = 12345.67; d > 1e-6; d /= 10) {
             String result = df.format(d);
-            assertEquals("Should produce a string of expected length on " + d,
-                    d > 1 ? 6 : 7, result.length());
+            assertEquals(
+                    "Should produce a string of expected length on " + d,
+                    d > 1 ? 6 : 7,
+                    result.length());
         }
     }
 
@@ -5754,7 +7052,8 @@ public class NumberFormatTest extends CoreTestFmwk {
     @Test
     public void Test13310() {
         // Note: if minInt > 8, then maxInt can be greater than 8.
-        assertEquals("Should not throw an assertion error",
+        assertEquals(
+                "Should not throw an assertion error",
                 "100000007.6E-1",
                 new DecimalFormat("000000000.0#E0").format(10000000.76d));
     }
@@ -5771,11 +7070,12 @@ public class NumberFormatTest extends CoreTestFmwk {
         df = (DecimalFormat) NumberFormat.getScientificInstance(new ULocale("ccp"));
         df.setParseStrict(true);
         String expectedScientific = "\uD804\uDD37.\uD804\uDD39E\uD804\uDD38";
-        assertEquals("Should produce expected scientific output in ccp",
-                expectedScientific, df.format(130));
+        assertEquals(
+                "Should produce expected scientific output in ccp",
+                expectedScientific,
+                df.format(130));
         Number resultScientific = df.parse(expectedScientific);
-        assertEquals("Should parse scientific to 130 in ccp",
-                130, resultScientific.longValue());
+        assertEquals("Should parse scientific to 130 in ccp", 130, resultScientific.longValue());
     }
 
     @Test
@@ -5783,7 +7083,9 @@ public class NumberFormatTest extends CoreTestFmwk {
         DecimalFormat df = (DecimalFormat) DecimalFormat.getScientificInstance();
         assertEquals("Scientific should NOT be included", "", df.getPositiveSuffix());
 
-        df = CompactDecimalFormat.getInstance(ULocale.ENGLISH, CompactDecimalFormat.CompactStyle.SHORT);
+        df =
+                CompactDecimalFormat.getInstance(
+                        ULocale.ENGLISH, CompactDecimalFormat.CompactStyle.SHORT);
         assertEquals("Compact should NOT be included", "", df.getPositiveSuffix());
 
         df = (DecimalFormat) DecimalFormat.getInstance(NumberFormat.ISOCURRENCYSTYLE);
@@ -5878,7 +7180,10 @@ public class NumberFormatTest extends CoreTestFmwk {
     @Test
     public void testGetSetCurrency() {
         DecimalFormat df = new DecimalFormat("¤#", DecimalFormatSymbols.getInstance(ULocale.US));
-        assertEquals("Currency should start out as the locale default", Currency.getInstance("USD"), df.getCurrency());
+        assertEquals(
+                "Currency should start out as the locale default",
+                Currency.getInstance("USD"),
+                df.getCurrency());
         Currency curr = Currency.getInstance("EUR");
         df.setCurrency(curr);
         assertEquals("Currency should equal EUR after set", curr, df.getCurrency());
@@ -5896,7 +7201,8 @@ public class NumberFormatTest extends CoreTestFmwk {
         df2.setRoundingMode(com.ibm.icu.math.BigDecimal.ROUND_CEILING);
         assertEquals("Rounding mode from icu.math and java.math should be the same", df1, df2);
         df2.setRoundingMode(java.math.RoundingMode.CEILING.ordinal());
-        assertEquals("Rounding mode ordinal from java.math.RoundingMode should be the same", df1, df2);
+        assertEquals(
+                "Rounding mode ordinal from java.math.RoundingMode should be the same", df1, df2);
     }
 
     @Test
@@ -5923,7 +7229,8 @@ public class NumberFormatTest extends CoreTestFmwk {
         assertEquals("Should NOT reject number without exponent", 123L, result0);
         ppos.setIndex(0);
         CurrencyAmount result1 = df.parseCurrency("USD123", ppos);
-        assertEquals("Should NOT reject currency without exponent",
+        assertEquals(
+                "Should NOT reject currency without exponent",
                 new CurrencyAmount(123L, Currency.getInstance("USD")),
                 result1);
     }
@@ -6010,18 +7317,18 @@ public class NumberFormatTest extends CoreTestFmwk {
         DecimalFormat df = new DecimalFormat();
         df.setParseBigDecimal(true);
 
-        String[] patterns = { "+0.00%;-0.00%", "+0.00%;0.00%", "0.00%;-0.00%" };
-        String[] inputs = { "+5.67%", "-5.67%", "5.67%" };
+        String[] patterns = {"+0.00%;-0.00%", "+0.00%;0.00%", "0.00%;-0.00%"};
+        String[] inputs = {"+5.67%", "-5.67%", "5.67%"};
         boolean[][] expectedPositive = {
-                { true, false, true },
-                { true, false, false },
-                { true, false, true }
+            {true, false, true},
+            {true, false, false},
+            {true, false, true}
         };
 
-        for (int i=0; i<patterns.length; i++) {
+        for (int i = 0; i < patterns.length; i++) {
             String pattern = patterns[i];
             df.applyPattern(pattern);
-            for (int j=0; j<inputs.length; j++) {
+            for (int j = 0; j < inputs.length; j++) {
                 String input = inputs[j];
                 ParsePosition ppos = new ParsePosition(0);
                 Number actual = df.parse(input, ppos);
@@ -6042,7 +7349,8 @@ public class NumberFormatTest extends CoreTestFmwk {
         ParsePosition ppos = new ParsePosition(0);
         Number result = df.parse("42\u200E%\u200E ", ppos);
         assertEquals("Should parse as percentage", new BigDecimal("0.42"), result);
-        assertEquals("Should consume the trailing bidi since it is in the symbol", 5, ppos.getIndex());
+        assertEquals(
+                "Should consume the trailing bidi since it is in the symbol", 5, ppos.getIndex());
         ppos.setIndex(0);
         result = df.parse("-42a\u200E ", ppos);
         assertEquals("Should parse as percent", -0.42, result.doubleValue());
@@ -6085,16 +7393,15 @@ public class NumberFormatTest extends CoreTestFmwk {
         ParsePosition ppos = new ParsePosition(0);
 
         Object[][] cases = {
-                {"1.2E+1234567890", Double.POSITIVE_INFINITY},
-                {"1.2E+999999999", new com.ibm.icu.math.BigDecimal("1.2E+999999999")},
-                {"1.2E+1000000000", Double.POSITIVE_INFINITY},
-                {"-1.2E+999999999", new com.ibm.icu.math.BigDecimal("-1.2E+999999999")},
-                {"-1.2E+1000000000", Double.NEGATIVE_INFINITY},
-                {"1.2E-999999999", new com.ibm.icu.math.BigDecimal("1.2E-999999999")},
-                {"1.2E-1000000000", 0.0},
-                {"-1.2E-999999999", new com.ibm.icu.math.BigDecimal("-1.2E-999999999")},
-                {"-1.2E-1000000000", -0.0},
-
+            {"1.2E+1234567890", Double.POSITIVE_INFINITY},
+            {"1.2E+999999999", new com.ibm.icu.math.BigDecimal("1.2E+999999999")},
+            {"1.2E+1000000000", Double.POSITIVE_INFINITY},
+            {"-1.2E+999999999", new com.ibm.icu.math.BigDecimal("-1.2E+999999999")},
+            {"-1.2E+1000000000", Double.NEGATIVE_INFINITY},
+            {"1.2E-999999999", new com.ibm.icu.math.BigDecimal("1.2E-999999999")},
+            {"1.2E-1000000000", 0.0},
+            {"-1.2E-999999999", new com.ibm.icu.math.BigDecimal("-1.2E-999999999")},
+            {"-1.2E-1000000000", -0.0},
         };
 
         for (Object[] cas : cases) {
@@ -6109,24 +7416,28 @@ public class NumberFormatTest extends CoreTestFmwk {
     @Test
     public void testStringMethodsNPE() {
         String[] npeMethods = {
-                "applyLocalizedPattern",
-                "applyPattern",
-                "setNegativePrefix",
-                "setNegativeSuffix",
-                "setPositivePrefix",
-                "setPositiveSuffix"
+            "applyLocalizedPattern",
+            "applyPattern",
+            "setNegativePrefix",
+            "setNegativeSuffix",
+            "setPositivePrefix",
+            "setPositiveSuffix"
         };
         for (String npeMethod : npeMethods) {
             DecimalFormat df = new DecimalFormat();
             try {
-                DecimalFormat.class.getDeclaredMethod(npeMethod, String.class).invoke(df, (String) null);
+                DecimalFormat.class
+                        .getDeclaredMethod(npeMethod, String.class)
+                        .invoke(df, (String) null);
                 fail("NullPointerException not thrown in method " + npeMethod);
             } catch (InvocationTargetException e) {
-                assertTrue("Exception should be NullPointerException in method " + npeMethod,
+                assertTrue(
+                        "Exception should be NullPointerException in method " + npeMethod,
                         e.getCause() instanceof NullPointerException);
             } catch (Exception e) {
                 // Other reflection exceptions
-                throw new AssertionError("Reflection error in method " + npeMethod + ": " + e.getMessage());
+                throw new AssertionError(
+                        "Reflection error in method " + npeMethod + ": " + e.getMessage());
             }
         }
 
@@ -6144,7 +7455,8 @@ public class NumberFormatTest extends CoreTestFmwk {
             // Expected
         }
         try {
-            new DecimalFormat(null, new DecimalFormatSymbols(), CurrencyPluralInfo.getInstance(), 0);
+            new DecimalFormat(
+                    null, new DecimalFormatSymbols(), CurrencyPluralInfo.getInstance(), 0);
             fail("NullPointerException not thrown in 4-parameter constructor");
         } catch (NullPointerException e) {
             // Expected
@@ -6166,60 +7478,67 @@ public class NumberFormatTest extends CoreTestFmwk {
     @Test
     public void testMinimumGroupingDigits() {
         String[][] allExpected = {
-                {"123", "123"},
-                {"1,230", "1230"},
-                {"12,300", "12,300"},
-                {"1,23,000", "1,23,000"}
+            {"123", "123"},
+            {"1,230", "1230"},
+            {"12,300", "12,300"},
+            {"1,23,000", "1,23,000"}
         };
 
         DecimalFormat df = new DecimalFormat("#,##,##0");
         assertEquals("Minimum grouping digits has wrong default", 1, df.getMinimumGroupingDigits());
 
-        for (int l = 123, i=0; l <= 123000; l *= 10, i++) {
+        for (int l = 123, i = 0; l <= 123000; l *= 10, i++) {
             df.setMinimumGroupingDigits(1);
-            assertEquals("Minimum grouping digits getter is broken", 1, df.getMinimumGroupingDigits());
+            assertEquals(
+                    "Minimum grouping digits getter is broken", 1, df.getMinimumGroupingDigits());
             String actual = df.format(l);
-            assertEquals("Output is wrong for 1, "+i, allExpected[i][0], actual);
+            assertEquals("Output is wrong for 1, " + i, allExpected[i][0], actual);
             df.setMinimumGroupingDigits(2);
-            assertEquals("Minimum grouping digits getter is broken", 2, df.getMinimumGroupingDigits());
+            assertEquals(
+                    "Minimum grouping digits getter is broken", 2, df.getMinimumGroupingDigits());
             actual = df.format(l);
-            assertEquals("Output is wrong for 2, "+i, allExpected[i][1], actual);
+            assertEquals("Output is wrong for 2, " + i, allExpected[i][1], actual);
         }
 
         String[] locales = {"en-US", "es"};
         int[] groupingDigits = {
-          1,
-          DecimalFormat.MINIMUM_GROUPING_DIGITS_AUTO,
-          DecimalFormat.MINIMUM_GROUPING_DIGITS_MIN2
+            1,
+            DecimalFormat.MINIMUM_GROUPING_DIGITS_AUTO,
+            DecimalFormat.MINIMUM_GROUPING_DIGITS_MIN2
         };
         int[] values = {1000, 10000};
         String[] allExpected2 = {
-          // locale: en-US
-          "1,000", "10,000",  // minimumGroupingDigits = 1
-          "1,000", "10,000",  // minimumGroupingDigits = MINIMUM_GROUPING_DIGITS_AUTO
-          "1000" , "10,000",  // minimumGroupingDigits = MINIMUM_GROUPING_DIGITS_MIN2
-          // locale: es
-          "1.000", "10.000",  // minimumGroupingDigits = 1
-          "1000",  "10.000",  // minimumGroupingDigits = MINIMUM_GROUPING_DIGITS_AUTO
-          "1000",  "10.000"   // minimumGroupingDigits = MINIMUM_GROUPING_DIGITS_MIN2
+            // locale: en-US
+            "1,000", "10,000", // minimumGroupingDigits = 1
+            "1,000", "10,000", // minimumGroupingDigits = MINIMUM_GROUPING_DIGITS_AUTO
+            "1000", "10,000", // minimumGroupingDigits = MINIMUM_GROUPING_DIGITS_MIN2
+            // locale: es
+            "1.000", "10.000", // minimumGroupingDigits = 1
+            "1000", "10.000", // minimumGroupingDigits = MINIMUM_GROUPING_DIGITS_AUTO
+            "1000", "10.000" // minimumGroupingDigits = MINIMUM_GROUPING_DIGITS_MIN2
         };
 
         int i = 0;
         for (String locale : locales) {
-          for (int minimumGroupingDigits : groupingDigits) {
-            for (int value : values) {
-              NumberFormat f = NumberFormat.getInstance(new ULocale(locale));
-              df = (DecimalFormat) f;
-              df.setMinimumGroupingDigits(minimumGroupingDigits);
-              String actual = df.format(value);
-              String expected = allExpected2[i++];
-              assertEquals("Output is wrong for " + value +
-                  " locale=" + locale + " minimumGroupingDigits=" + minimumGroupingDigits,
-                  expected, actual);
+            for (int minimumGroupingDigits : groupingDigits) {
+                for (int value : values) {
+                    NumberFormat f = NumberFormat.getInstance(new ULocale(locale));
+                    df = (DecimalFormat) f;
+                    df.setMinimumGroupingDigits(minimumGroupingDigits);
+                    String actual = df.format(value);
+                    String expected = allExpected2[i++];
+                    assertEquals(
+                            "Output is wrong for "
+                                    + value
+                                    + " locale="
+                                    + locale
+                                    + " minimumGroupingDigits="
+                                    + minimumGroupingDigits,
+                            expected,
+                            actual);
+                }
             }
-          }
         }
-
     }
 
     @Test
@@ -6227,10 +7546,10 @@ public class NumberFormatTest extends CoreTestFmwk {
         String[] patterns = {"a#b", "A#B"};
         String[] inputs = {"a500b", "A500b", "a500B", "a500e10b", "a500E10b"};
         int[][] expectedParsePositions = {
-                {5, 5, 5, 8, 8}, // case insensitive, pattern 0
-                {5, 0, 4, 4, 8}, // case sensitive, pattern 0
-                {5, 5, 5, 8, 8}, // case insensitive, pattern 1
-                {0, 4, 0, 0, 0}, // case sensitive, pattern 1
+            {5, 5, 5, 8, 8}, // case insensitive, pattern 0
+            {5, 0, 4, 4, 8}, // case sensitive, pattern 0
+            {5, 5, 5, 8, 8}, // case insensitive, pattern 1
+            {0, 4, 0, 0, 0}, // case sensitive, pattern 1
         };
 
         for (int p = 0; p < patterns.length; p++) {
@@ -6240,17 +7559,23 @@ public class NumberFormatTest extends CoreTestFmwk {
             for (int i = 0; i < inputs.length; i++) {
                 String inp = inputs[i];
                 df.setParseCaseSensitive(false);
-                assertEquals("parseCaseSensitive getter is broken", false, df.isParseCaseSensitive());
+                assertEquals(
+                        "parseCaseSensitive getter is broken", false, df.isParseCaseSensitive());
                 ParsePosition actualInsensitive = new ParsePosition(0);
                 df.parse(inp, actualInsensitive);
-                assertEquals("Insensitive, pattern "+p+", input "+i,
-                        expectedParsePositions[p*2][i], actualInsensitive.getIndex());
+                assertEquals(
+                        "Insensitive, pattern " + p + ", input " + i,
+                        expectedParsePositions[p * 2][i],
+                        actualInsensitive.getIndex());
                 df.setParseCaseSensitive(true);
-                assertEquals("parseCaseSensitive getter is broken", true, df.isParseCaseSensitive());
+                assertEquals(
+                        "parseCaseSensitive getter is broken", true, df.isParseCaseSensitive());
                 ParsePosition actualSensitive = new ParsePosition(0);
                 df.parse(inp, actualSensitive);
-                assertEquals("Sensitive, pattern "+p+", input "+i,
-                        expectedParsePositions[p*2+1][i], actualSensitive.getIndex());
+                assertEquals(
+                        "Sensitive, pattern " + p + ", input " + i,
+                        expectedParsePositions[p * 2 + 1][i],
+                        actualSensitive.getIndex());
             }
         }
     }
@@ -6260,42 +7585,42 @@ public class NumberFormatTest extends CoreTestFmwk {
         double[] numbers = {0.012, 5.78, 0, -0.012, -5.78};
         ULocale[] locs = {new ULocale("en-US"), new ULocale("ar-EG"), new ULocale("es-CL")};
         String[][][] expecteds = {
-                // en-US
+            // en-US
+            {
+                // decimal
+                {"+0.012", "+5.78", "+0", "-0.012", "-5.78"},
+                // currency
+                {"+$0.01", "+$5.78", "+$0.00", "-$0.01", "-$5.78"}
+            },
+            // ar-EG (interesting because the plus sign string starts with \u061C)
+            {
+                // decimal
                 {
-                    // decimal
-                    { "+0.012", "+5.78", "+0", "-0.012", "-5.78" },
-                    // currency
-                    { "+$0.01", "+$5.78", "+$0.00", "-$0.01", "-$5.78" }
+                    "\u061C+\u0660\u066B\u0660\u0661\u0662", // "؜+٠٫٠١٢"
+                    "\u061C+\u0665\u066B\u0667\u0668", // "؜+٥٫٧٨"
+                    "\u061C+\u0660", // "؜+٠"
+                    "\u061C-\u0660\u066B\u0660\u0661\u0662", // "؜-٠٫٠١٢"
+                    "\u061C-\u0665\u066B\u0667\u0668", // "؜-٥٫٧٨"
                 },
-                // ar-EG (interesting because the plus sign string starts with \u061C)
+                // currency (\062C.\0645.\200F is the currency sign in ar for EGP)
                 {
-                    // decimal
-                    {
-                        "\u061C+\u0660\u066B\u0660\u0661\u0662", // "؜+٠٫٠١٢"
-                        "\u061C+\u0665\u066B\u0667\u0668", // "؜+٥٫٧٨"
-                        "\u061C+\u0660", // "؜+٠"
-                        "\u061C-\u0660\u066B\u0660\u0661\u0662", // "؜-٠٫٠١٢"
-                        "\u061C-\u0665\u066B\u0667\u0668", // "؜-٥٫٧٨"
-                    },
-                    // currency (\062C.\0645.\200F is the currency sign in ar for EGP)
-                    {
-                        "\u061C+\u200F\u0660\u066B\u0660\u0661\u00A0\u062C.\u0645.\u200F",
-                        "\u061C+\u200F\u0665\u066B\u0667\u0668\u00A0\u062C.\u0645.\u200F",
-                        "\u061C+\u200F\u0660\u066B\u0660\u0660\u00A0\u062C.\u0645.\u200F",
-                        "\u061C-\u200F\u0660\u066B\u0660\u0661\u00A0\u062C.\u0645.\u200F",
-                        "\u061C-\u200F\u0665\u066B\u0667\u0668\u00A0\u062C.\u0645.\u200F"
-                    }
-                },
-                // es-CL (interesting because of position of sign in currency)
-                {
-                    // decimal
-                    { "+0,012", "+5,78", "+0", "-0,012", "-5,78" },
-                    // currency (note: rounding for es-CL's currency, CLP, is 0 fraction digits)
-                    { "$+0", "$+6", "$+0", "$-0", "$-6" }
+                    "\u061C+\u200F\u0660\u066B\u0660\u0661\u00A0\u062C.\u0645.\u200F",
+                    "\u061C+\u200F\u0665\u066B\u0667\u0668\u00A0\u062C.\u0645.\u200F",
+                    "\u061C+\u200F\u0660\u066B\u0660\u0660\u00A0\u062C.\u0645.\u200F",
+                    "\u061C-\u200F\u0660\u066B\u0660\u0661\u00A0\u062C.\u0645.\u200F",
+                    "\u061C-\u200F\u0665\u066B\u0667\u0668\u00A0\u062C.\u0645.\u200F"
                 }
+            },
+            // es-CL (interesting because of position of sign in currency)
+            {
+                // decimal
+                {"+0,012", "+5,78", "+0", "-0,012", "-5,78"},
+                // currency (note: rounding for es-CL's currency, CLP, is 0 fraction digits)
+                {"$+0", "$+6", "$+0", "$-0", "$-6"}
+            }
         };
 
-        for (int i=0; i<locs.length; i++) {
+        for (int i = 0; i < locs.length; i++) {
             ULocale loc = locs[i];
             DecimalFormat df1 = (DecimalFormat) NumberFormat.getNumberInstance(loc);
             assertFalse("Default should be false", df1.isSignAlwaysShown());
@@ -6305,9 +7630,9 @@ public class NumberFormatTest extends CoreTestFmwk {
             assertFalse("Default should be false", df2.isSignAlwaysShown());
             df2.setSignAlwaysShown(true);
             assertTrue("Getter should now return true", df2.isSignAlwaysShown());
-            for (int j=0; j<2; j++) {
+            for (int j = 0; j < 2; j++) {
                 DecimalFormat df = (j == 0) ? df1 : df2;
-                for (int k=0; k<numbers.length; k++) {
+                for (int k = 0; k < numbers.length; k++) {
                     double d = numbers[k];
                     String exp = expecteds[i][j][k];
                     String act = df.format(d);
@@ -6319,12 +7644,15 @@ public class NumberFormatTest extends CoreTestFmwk {
                         parsedExp = parsedExp.setScale(scale, BigDecimal.ROUND_HALF_EVEN);
                     }
                     Number parsedNum = df.parse(exp);
-                    BigDecimal parsedAct = (parsedNum.getClass() == BigDecimal.class)
-                            ? (BigDecimal) parsedNum
-                            : BigDecimal.valueOf(parsedNum.doubleValue());
+                    BigDecimal parsedAct =
+                            (parsedNum.getClass() == BigDecimal.class)
+                                    ? (BigDecimal) parsedNum
+                                    : BigDecimal.valueOf(parsedNum.doubleValue());
                     assertEquals(
-                            "Locale " + loc + ", type " + j + ", " + d + ", " + parsedExp + " => " + parsedAct,
-                            0, parsedExp.compareTo(parsedAct));
+                            "Locale " + loc + ", type " + j + ", " + d + ", " + parsedExp + " => "
+                                    + parsedAct,
+                            0,
+                            parsedExp.compareTo(parsedAct));
                 }
             }
         }
@@ -6373,8 +7701,7 @@ public class NumberFormatTest extends CoreTestFmwk {
         pattern = pattern.replace("¤", "¤¤¤¤¤");
         df.applyPattern(pattern);
         // Note: Narrow currency is not parseable because of ambiguity.
-        assertEquals("Narrow currency symbol for USD in en_CA is $",
-                "$123.45", df.format(123.45));
+        assertEquals("Narrow currency symbol for USD in en_CA is $", "$123.45", df.format(123.45));
     }
 
     @Test
@@ -6382,7 +7709,8 @@ public class NumberFormatTest extends CoreTestFmwk {
         DecimalFormat df = (DecimalFormat) NumberFormat.getInstance(ULocale.ENGLISH);
         expect2(df, 100, "100");
         expect2(df, -100, "-100");
-        // This is not the right way to set an override plus sign, but we need to support it for compatibility.
+        // This is not the right way to set an override plus sign, but we need to support it for
+        // compatibility.
         df.setPositivePrefix("+");
         expect2(df, 100, "+100");
         expect2(df, -100, "-100"); // note: the positive prefix does not affect the negative prefix
@@ -6402,10 +7730,10 @@ public class NumberFormatTest extends CoreTestFmwk {
         // CAD-Cash uses nickel rounding.
         currencyFormat = DecimalFormat.getCurrencyInstance(Locale.US);
         currencyFormat.setCurrency(Currency.getInstance("CAD"));
-        ((DecimalFormat)currencyFormat).setCurrencyUsage(CurrencyUsage.CASH);
+        ((DecimalFormat) currencyFormat).setCurrencyUsage(CurrencyUsage.CASH);
         currencyFormat.setMinimumFractionDigits(0);
         // expect(currencyFormat, 0.08, "CA$0.1");  // ICU 58 and down
-        expect(currencyFormat, 0.08, "CA$0.10");  // ICU 59 and up
+        expect(currencyFormat, 0.08, "CA$0.10"); // ICU 59 and up
     }
 
     @Test
@@ -6429,14 +7757,16 @@ public class NumberFormatTest extends CoreTestFmwk {
         DecimalFormat df = (DecimalFormat) DecimalFormat.getInstance(ULocale.ENGLISH);
         ParsePosition ppos = new ParsePosition(0);
         Number result = df.parse(input, ppos);
-        assertEquals("Trailing sign should NOT be accepted after the number in English by default",
+        assertEquals(
+                "Trailing sign should NOT be accepted after the number in English by default",
                 52.0,
                 result.doubleValue(),
                 0.0);
         df.applyPattern("#;#-");
         ppos.setIndex(0);
         result = df.parse(input, ppos);
-        assertEquals("Trailing sign SHOULD be accepted if there is one in the pattern",
+        assertEquals(
+                "Trailing sign SHOULD be accepted if there is one in the pattern",
                 -52.0,
                 result.doubleValue(),
                 0.0);
@@ -6483,7 +7813,10 @@ public class NumberFormatTest extends CoreTestFmwk {
 
     @Test
     public void testStrictParseCurrencyLongNames() {
-        DecimalFormat df = (DecimalFormat) DecimalFormat.getInstance(ULocale.ENGLISH, DecimalFormat.PLURALCURRENCYSTYLE);
+        DecimalFormat df =
+                (DecimalFormat)
+                        DecimalFormat.getInstance(
+                                ULocale.ENGLISH, DecimalFormat.PLURALCURRENCYSTYLE);
         df.setParseStrict(true);
         df.setCurrency(Currency.getInstance("USD"));
         double input = 514.23;
@@ -6509,7 +7842,8 @@ public class NumberFormatTest extends CoreTestFmwk {
 
     @Test
     public void testCaseSensitiveCustomIsoCurrency() {
-        DecimalFormat df = new DecimalFormat("¤¤0", DecimalFormatSymbols.getInstance(ULocale.ENGLISH));
+        DecimalFormat df =
+                new DecimalFormat("¤¤0", DecimalFormatSymbols.getInstance(ULocale.ENGLISH));
         df.setCurrency(Currency.getInstance("ICU"));
         ParsePosition ppos = new ParsePosition(0);
         df.parseCurrency("icu123", ppos);
@@ -6519,8 +7853,11 @@ public class NumberFormatTest extends CoreTestFmwk {
 
     @Test
     public void testCurrencyPluralAffixOverrides() {
-        // The affix setters should override CurrencyPluralInfo, used in the plural currency constructor.
-        DecimalFormat df = (DecimalFormat) NumberFormat.getInstance(ULocale.ENGLISH, NumberFormat.PLURALCURRENCYSTYLE);
+        // The affix setters should override CurrencyPluralInfo, used in the plural currency
+        // constructor.
+        DecimalFormat df =
+                (DecimalFormat)
+                        NumberFormat.getInstance(ULocale.ENGLISH, NumberFormat.PLURALCURRENCYSTYLE);
         assertEquals("Defaults to unknown currency", " (unknown currency)", df.getPositiveSuffix());
         df.setCurrency(Currency.getInstance("USD"));
         assertEquals("Should resolve to CurrencyPluralInfo", " US dollars", df.getPositiveSuffix());
@@ -6531,7 +7868,8 @@ public class NumberFormatTest extends CoreTestFmwk {
 
     @Test
     public void testParseDoubleMinus() {
-        DecimalFormat df = new DecimalFormat("-0", DecimalFormatSymbols.getInstance(ULocale.ENGLISH));
+        DecimalFormat df =
+                new DecimalFormat("-0", DecimalFormatSymbols.getInstance(ULocale.ENGLISH));
         expect2(df, -5, "--5");
     }
 
@@ -6557,7 +7895,8 @@ public class NumberFormatTest extends CoreTestFmwk {
         {
             ParsePosition ppos = new ParsePosition(0);
             Number result = df2.parse("50", ppos);
-            assertEquals("df2 should return the number as 0.5 even though the percent sign is missing",
+            assertEquals(
+                    "df2 should return the number as 0.5 even though the percent sign is missing",
                     0.5,
                     result.doubleValue());
         }
@@ -6565,7 +7904,7 @@ public class NumberFormatTest extends CoreTestFmwk {
 
     @Test
     public void test13148_GroupingSeparatorOverride() throws Exception {
-        DecimalFormat fmt = (DecimalFormat)NumberFormat.getInstance(new ULocale("en", "ZA"));
+        DecimalFormat fmt = (DecimalFormat) NumberFormat.getInstance(new ULocale("en", "ZA"));
         DecimalFormatSymbols symbols = fmt.getDecimalFormatSymbols();
         symbols.setDecimalSeparator('.');
         symbols.setGroupingSeparator(',');
@@ -6597,7 +7936,7 @@ public class NumberFormatTest extends CoreTestFmwk {
         DecimalFormatSymbols dfs = DecimalFormatSymbols.getInstance(ULocale.ENGLISH);
         dfs.setCurrencySymbol("");
         dfs.setDecimalSeparatorString("");
-        dfs.setDigitStrings(new String[] { "", "", "", "", "", "", "", "", "", "" });
+        dfs.setDigitStrings(new String[] {"", "", "", "", "", "", "", "", "", ""});
         dfs.setExponentMultiplicationSign("");
         dfs.setExponentSeparator("");
         dfs.setGroupingSeparatorString("");
@@ -6618,15 +7957,7 @@ public class NumberFormatTest extends CoreTestFmwk {
         df.setScientificNotation(true);
         df.setParseStrict(false); // enable all matchers
         df.format(0); // should not throw or hit infinite loop
-        String[] samples = new String[] {
-                "",
-                "123",
-                "$123",
-                "-",
-                "+",
-                "44%",
-                "1E+2.3"
-        };
+        String[] samples = new String[] {"", "123", "$123", "-", "+", "44%", "1E+2.3"};
         for (String sample : samples) {
             logln("Attempting parse on: " + sample);
             // We don't care about the results, only that we don't throw and don't loop.
@@ -6651,50 +7982,47 @@ public class NumberFormatTest extends CoreTestFmwk {
 
         // Test overflow of exponent
         Number result = nf.parse("1E-2147483648");
-        assertEquals("Should snap to zero",
-                "0", result.toString());
+        assertEquals("Should snap to zero", "0", result.toString());
 
         // Test edge case overflow of exponent
         // Note: the behavior is different from C++; this is probably due to the
         // intermediate BigDecimal form, which has its own restrictions
         result = nf.parse("1E-2147483647E-1");
-        assertEquals("Should not overflow and should parse only the first exponent",
-                "0.0", result.toString());
+        assertEquals(
+                "Should not overflow and should parse only the first exponent",
+                "0.0",
+                result.toString());
 
         // For Java, we should get *pretty close* to 2^31.
         result = nf.parse("1E-547483647");
-        assertEquals("Should *not* snap to zero",
-                "1E-547483647", result.toString());
+        assertEquals("Should *not* snap to zero", "1E-547483647", result.toString());
 
         // Test edge case overflow of exponent
         result = nf.parse(".0003e-2147483644");
-        assertEquals("Should not overflow",
-                "0", result.toString());
+        assertEquals("Should not overflow", "0", result.toString());
 
         // Test largest parseable exponent
         // This is limited by ICU's BigDecimal implementation
         result = nf.parse("1e999999999");
-        assertEquals("Should not overflow",
-                "1E+999999999", result.toString());
+        assertEquals("Should not overflow", "1E+999999999", result.toString());
 
         // Test max value as well
         String[] infinityInputs = {
-                "9876e1000000000",
-                "9876e2147483640",
-                "9876e2147483641",
-                "9876e2147483642",
-                "9876e2147483643",
-                "9876e2147483644",
-                "9876e2147483645",
-                "9876e2147483646",
-                "9876e2147483647",
-                "9876e2147483648",
-                "9876e2147483649",
+            "9876e1000000000",
+            "9876e2147483640",
+            "9876e2147483641",
+            "9876e2147483642",
+            "9876e2147483643",
+            "9876e2147483644",
+            "9876e2147483645",
+            "9876e2147483646",
+            "9876e2147483647",
+            "9876e2147483648",
+            "9876e2147483649",
         };
         for (String input : infinityInputs) {
             result = nf.parse(input);
-            assertEquals("Should become Infinity: " + input,
-                    "Infinity", result.toString());
+            assertEquals("Should become Infinity: " + input, "Infinity", result.toString());
         }
     }
 
@@ -6702,12 +8030,12 @@ public class NumberFormatTest extends CoreTestFmwk {
     public void test13840_ParseLongStringCrash() throws ParseException {
         NumberFormat nf = NumberFormat.getInstance(ULocale.ENGLISH);
         String bigString =
-            "111111111111111111111111111111111111111111111111111111111111111111111" +
-            "111111111111111111111111111111111111111111111111111111111111111111111" +
-            "111111111111111111111111111111111111111111111111111111111111111111111" +
-            "111111111111111111111111111111111111111111111111111111111111111111111" +
-            "111111111111111111111111111111111111111111111111111111111111111111111" +
-            "111111111111111111111111111111111111111111111111111111111111111111111";
+                "111111111111111111111111111111111111111111111111111111111111111111111"
+                        + "111111111111111111111111111111111111111111111111111111111111111111111"
+                        + "111111111111111111111111111111111111111111111111111111111111111111111"
+                        + "111111111111111111111111111111111111111111111111111111111111111111111"
+                        + "111111111111111111111111111111111111111111111111111111111111111111111"
+                        + "111111111111111111111111111111111111111111111111111111111111111111111";
         Number result = nf.parse(bigString);
 
         // Normalize the input string:
@@ -6724,34 +8052,22 @@ public class NumberFormatTest extends CoreTestFmwk {
     @Test
     public void test20348_CurrencyPrefixOverride() {
         DecimalFormat fmt = (DecimalFormat) NumberFormat.getCurrencyInstance(ULocale.ENGLISH);
-        assertEquals("Initial pattern",
-            "¤#,##0.00", fmt.toPattern());
-        assertEquals("Initial prefix",
-            "¤", fmt.getPositivePrefix());
-        assertEquals("Initial suffix",
-            "-¤", fmt.getNegativePrefix());
-        assertEquals("Initial format",
-            "\u00A4100.00", fmt.format(100));
+        assertEquals("Initial pattern", "¤#,##0.00", fmt.toPattern());
+        assertEquals("Initial prefix", "¤", fmt.getPositivePrefix());
+        assertEquals("Initial suffix", "-¤", fmt.getNegativePrefix());
+        assertEquals("Initial format", "\u00A4100.00", fmt.format(100));
 
         fmt.setPositivePrefix("$");
-        assertEquals("Set positive prefix pattern",
-            "$#,##0.00;-\u00A4#,##0.00", fmt.toPattern());
-        assertEquals("Set positive prefix prefix",
-            "$", fmt.getPositivePrefix());
-        assertEquals("Set positive prefix suffix",
-            "-¤", fmt.getNegativePrefix());
-        assertEquals("Set positive prefix format",
-            "$100.00", fmt.format(100));
+        assertEquals("Set positive prefix pattern", "$#,##0.00;-\u00A4#,##0.00", fmt.toPattern());
+        assertEquals("Set positive prefix prefix", "$", fmt.getPositivePrefix());
+        assertEquals("Set positive prefix suffix", "-¤", fmt.getNegativePrefix());
+        assertEquals("Set positive prefix format", "$100.00", fmt.format(100));
 
         fmt.setNegativePrefix("-$");
-        assertEquals("Set negative prefix pattern",
-            "$#,##0.00;'-'$#,##0.00", fmt.toPattern());
-        assertEquals("Set negative prefix prefix",
-            "$", fmt.getPositivePrefix());
-        assertEquals("Set negative prefix suffix",
-            "-$", fmt.getNegativePrefix());
-        assertEquals("Set negative prefix format",
-            "$100.00", fmt.format(100));
+        assertEquals("Set negative prefix pattern", "$#,##0.00;'-'$#,##0.00", fmt.toPattern());
+        assertEquals("Set negative prefix prefix", "$", fmt.getPositivePrefix());
+        assertEquals("Set negative prefix suffix", "-$", fmt.getNegativePrefix());
+        assertEquals("Set negative prefix format", "$100.00", fmt.format(100));
     }
 
     @Test
@@ -6763,9 +8079,15 @@ public class NumberFormatTest extends CoreTestFmwk {
         decimalFormat.setCurrency(currency);
 
         DecimalFormatSymbols decimalFormatSymbols = decimalFormat.getDecimalFormatSymbols();
-        assertEquals("MONETARY DECIMAL SEPARATOR", ".", decimalFormatSymbols.getMonetaryDecimalSeparatorString());
+        assertEquals(
+                "MONETARY DECIMAL SEPARATOR",
+                ".",
+                decimalFormatSymbols.getMonetaryDecimalSeparatorString());
         assertEquals("DECIMAL SEPARATOR", ",", decimalFormatSymbols.getDecimalSeparatorString());
-        assertEquals("MONETARY GROUPING SEPARATOR", " ", decimalFormatSymbols.getMonetaryGroupingSeparatorString());
+        assertEquals(
+                "MONETARY GROUPING SEPARATOR",
+                " ",
+                decimalFormatSymbols.getMonetaryGroupingSeparatorString());
         assertEquals("GROUPING SEPARATOR", " ", decimalFormatSymbols.getGroupingSeparatorString());
         assertEquals("CURRENCY SYMBOL", "kr", decimalFormatSymbols.getCurrencySymbol());
 
@@ -6777,28 +8099,19 @@ public class NumberFormatTest extends CoreTestFmwk {
     @Test
     public void test20358_GroupingInPattern() {
         DecimalFormat fmt = (DecimalFormat) NumberFormat.getInstance(ULocale.ENGLISH);
-        assertEquals("Initial pattern",
-            "#,##0.###", fmt.toPattern());
-        assertTrue("Initial grouping",
-            fmt.isGroupingUsed());
-        assertEquals("Initial format",
-            "54,321", fmt.format(54321));
+        assertEquals("Initial pattern", "#,##0.###", fmt.toPattern());
+        assertTrue("Initial grouping", fmt.isGroupingUsed());
+        assertEquals("Initial format", "54,321", fmt.format(54321));
 
         fmt.setGroupingUsed(false);
-        assertEquals("Set grouping false",
-            "0.###", fmt.toPattern());
-        assertFalse("Set grouping false grouping",
-            fmt.isGroupingUsed());
-        assertEquals("Set grouping false format",
-            "54321", fmt.format(54321));
+        assertEquals("Set grouping false", "0.###", fmt.toPattern());
+        assertFalse("Set grouping false grouping", fmt.isGroupingUsed());
+        assertEquals("Set grouping false format", "54321", fmt.format(54321));
 
         fmt.setGroupingUsed(true);
-        assertEquals("Set grouping true",
-            "#,##0.###", fmt.toPattern());
-        assertTrue("Set grouping true grouping",
-            fmt.isGroupingUsed());
-        assertEquals("Set grouping true format",
-            "54,321", fmt.format(54321));
+        assertEquals("Set grouping true", "#,##0.###", fmt.toPattern());
+        assertTrue("Set grouping true grouping", fmt.isGroupingUsed());
+        assertEquals("Set grouping true format", "54,321", fmt.format(54321));
     }
 
     @Test
@@ -6809,12 +8122,14 @@ public class NumberFormatTest extends CoreTestFmwk {
             assertEquals("currency", "XXX", nf.getCurrency().getCurrencyCode());
         }
         {
-            NumberFormat nf = NumberFormat.getInstance(ULocale.ENGLISH, NumberFormat.ISOCURRENCYSTYLE);
+            NumberFormat nf =
+                    NumberFormat.getInstance(ULocale.ENGLISH, NumberFormat.ISOCURRENCYSTYLE);
             assertEquals("iso_code", "XXX 1.10", nf.format(1.1));
             assertEquals("currency", "XXX", nf.getCurrency().getCurrencyCode());
         }
         {
-            NumberFormat nf = NumberFormat.getInstance(ULocale.ENGLISH, NumberFormat.PLURALCURRENCYSTYLE);
+            NumberFormat nf =
+                    NumberFormat.getInstance(ULocale.ENGLISH, NumberFormat.PLURALCURRENCYSTYLE);
             assertEquals("plural", "1.10 (unknown currency)", nf.format(1.1));
             assertEquals("currency", "XXX", nf.getCurrency().getCurrencyCode());
         }
@@ -6825,7 +8140,7 @@ public class NumberFormatTest extends CoreTestFmwk {
         ULocale locale = new ULocale("ro-RO");
         NumberFormat nf = NumberFormat.getInstance(locale, NumberFormat.PLURALCURRENCYSTYLE);
         String expected = "24,00 lei românești";
-        for (int i=0; i<5; i++) {
+        for (int i = 0; i < 5; i++) {
             String actual = nf.format(24);
             assertEquals("iteration " + i, expected, actual);
         }
@@ -6856,74 +8171,78 @@ public class NumberFormatTest extends CoreTestFmwk {
     public void test13734_StrictFlexibleWhitespace() {
         DecimalFormatSymbols EN = DecimalFormatSymbols.getInstance(ULocale.ENGLISH);
         {
-          DecimalFormat df = new DecimalFormat("+0", EN);
-          df.setParseStrict(true);
-          ParsePosition ppos = new ParsePosition(0);
-          Number result = df.parse("+  33", ppos);
-          assertEquals("ppos: ", 0, ppos.getIndex());
-          assertEquals("result: ", null, result);
+            DecimalFormat df = new DecimalFormat("+0", EN);
+            df.setParseStrict(true);
+            ParsePosition ppos = new ParsePosition(0);
+            Number result = df.parse("+  33", ppos);
+            assertEquals("ppos: ", 0, ppos.getIndex());
+            assertEquals("result: ", null, result);
         }
         {
-          DecimalFormat df = new DecimalFormat("+ 0", EN);
-          df.setParseStrict(true);
-          ParsePosition ppos = new ParsePosition(0);
-          Number result = df.parse("+  33", ppos);
-          assertEquals("ppos: ", 0, ppos.getIndex());
-          assertEquals("result: ", null, result);
+            DecimalFormat df = new DecimalFormat("+ 0", EN);
+            df.setParseStrict(true);
+            ParsePosition ppos = new ParsePosition(0);
+            Number result = df.parse("+  33", ppos);
+            assertEquals("ppos: ", 0, ppos.getIndex());
+            assertEquals("result: ", null, result);
         }
     }
 
     @Test
     public void test20961_CurrencyPluralPattern() {
-        DecimalFormat decimalFormat = (DecimalFormat) NumberFormat.getInstance(ULocale.US, NumberFormat.PLURALCURRENCYSTYLE);
+        DecimalFormat decimalFormat =
+                (DecimalFormat)
+                        NumberFormat.getInstance(ULocale.US, NumberFormat.PLURALCURRENCYSTYLE);
         assertEquals("Currency pattern", "#,##0.00 ¤¤¤", decimalFormat.toPattern());
     }
 
     @Test
     public void test13733_StrictAndLenient() {
-        Object[][] cases = { {"CA$ 12", "¤ 0", 12, 12},
-                {"CA$12", "¤0", 12, 12},
-                {"CAD 12", "¤¤ 0", 12, 12},
-                {"12 CAD", "0 ¤¤", 12, 12},
-                {"12 Canadian dollars", "0 ¤¤¤", 12, 12},
-                {"$12 ", "¤¤¤¤0", 12, 12},
-                {"12$", "0¤¤¤¤", 12, 12},
-                {"CA$ 12", "¤0", 0, 12},
-                {"CA$ 12", "0 ¤¤", 0, 12},
-                {"CA$ 12", "0 ¤¤¤", 0, 12},
-                {"CA$ 12", "¤¤¤¤0", 0, 12},
-                {"CA$ 12", "0¤¤¤¤", 0, 12},
-                {"CA$12", "¤ 0", 0, 12},
-                {"CA$12", "¤¤ 0", 0, 12},
-                {"CA$12", "0 ¤¤", 0, 12},
-                {"CA$12", "0 ¤¤¤", 0, 12},
-                {"CA$12", "0¤¤¤¤", 0, 12},
-                {"CAD 12", "¤0", 0, 12},
-                {"CAD 12", "0 ¤¤", 0, 12},
-                {"CAD 12", "0 ¤¤¤", 0, 12},
-                {"CAD 12", "¤¤¤¤0", 0, 12},
-                {"CAD 12", "0¤¤¤¤", 0, 12},
-                {"12 CAD", "¤ 0", 0, 12},
-                {"12 CAD", "¤0", 0, 12},
-                {"12 CAD", "¤¤ 0", 0, 12},
-                {"12 CAD", "¤¤¤¤0", 0, 12},
-                {"12 CAD", "0¤¤¤¤", 0, 12},
-                {"12 Canadian dollars", "¤ 0", 0, 12},
-                {"12 Canadian dollars", "¤0", 0, 12},
-                {"12 Canadian dollars", "¤¤ 0", 0, 12},
-                {"12 Canadian dollars", "¤¤¤¤0", 0, 12},
-                {"12 Canadian dollars", "0¤¤¤¤", 0, 12},
-                {"$12 ", "¤ 0", 0, 12},
-                {"$12 ", "¤¤ 0", 0, 12},
-                {"$12 ", "0 ¤¤", 0, 12},
-                {"$12 ", "0 ¤¤¤", 0, 12},
-                {"$12 ", "0¤¤¤¤", 0, 12},
-                {"12$", "¤ 0", 0, 12},
-                {"12$", "¤0", 0, 12},
-                {"12$", "¤¤ 0", 0, 12},
-                {"12$", "0 ¤¤", 0, 12},
-                {"12$", "0 ¤¤¤", 0, 12},
-                {"12$", "¤¤¤¤0", 0, 12} };
+        Object[][] cases = {
+            {"CA$ 12", "¤ 0", 12, 12},
+            {"CA$12", "¤0", 12, 12},
+            {"CAD 12", "¤¤ 0", 12, 12},
+            {"12 CAD", "0 ¤¤", 12, 12},
+            {"12 Canadian dollars", "0 ¤¤¤", 12, 12},
+            {"$12 ", "¤¤¤¤0", 12, 12},
+            {"12$", "0¤¤¤¤", 12, 12},
+            {"CA$ 12", "¤0", 0, 12},
+            {"CA$ 12", "0 ¤¤", 0, 12},
+            {"CA$ 12", "0 ¤¤¤", 0, 12},
+            {"CA$ 12", "¤¤¤¤0", 0, 12},
+            {"CA$ 12", "0¤¤¤¤", 0, 12},
+            {"CA$12", "¤ 0", 0, 12},
+            {"CA$12", "¤¤ 0", 0, 12},
+            {"CA$12", "0 ¤¤", 0, 12},
+            {"CA$12", "0 ¤¤¤", 0, 12},
+            {"CA$12", "0¤¤¤¤", 0, 12},
+            {"CAD 12", "¤0", 0, 12},
+            {"CAD 12", "0 ¤¤", 0, 12},
+            {"CAD 12", "0 ¤¤¤", 0, 12},
+            {"CAD 12", "¤¤¤¤0", 0, 12},
+            {"CAD 12", "0¤¤¤¤", 0, 12},
+            {"12 CAD", "¤ 0", 0, 12},
+            {"12 CAD", "¤0", 0, 12},
+            {"12 CAD", "¤¤ 0", 0, 12},
+            {"12 CAD", "¤¤¤¤0", 0, 12},
+            {"12 CAD", "0¤¤¤¤", 0, 12},
+            {"12 Canadian dollars", "¤ 0", 0, 12},
+            {"12 Canadian dollars", "¤0", 0, 12},
+            {"12 Canadian dollars", "¤¤ 0", 0, 12},
+            {"12 Canadian dollars", "¤¤¤¤0", 0, 12},
+            {"12 Canadian dollars", "0¤¤¤¤", 0, 12},
+            {"$12 ", "¤ 0", 0, 12},
+            {"$12 ", "¤¤ 0", 0, 12},
+            {"$12 ", "0 ¤¤", 0, 12},
+            {"$12 ", "0 ¤¤¤", 0, 12},
+            {"$12 ", "0¤¤¤¤", 0, 12},
+            {"12$", "¤ 0", 0, 12},
+            {"12$", "¤0", 0, 12},
+            {"12$", "¤¤ 0", 0, 12},
+            {"12$", "0 ¤¤", 0, 12},
+            {"12$", "0 ¤¤¤", 0, 12},
+            {"12$", "¤¤¤¤0", 0, 12}
+        };
 
         for (Object[] cas : cases) {
             String inputString = (String) cas[0];
@@ -6942,8 +8261,10 @@ public class NumberFormatTest extends CoreTestFmwk {
             if (null != ca_strict) {
                 parsedStrictValue = ca_strict.getNumber().intValue();
             }
-            assertEquals("Strict parse of " + inputString + " using " + patternString,
-                    expectedStrictParse, parsedStrictValue);
+            assertEquals(
+                    "Strict parse of " + inputString + " using " + patternString,
+                    expectedStrictParse,
+                    parsedStrictValue);
 
             ppos.setIndex(0);
             df.setParseStrict(false);
@@ -6951,8 +8272,10 @@ public class NumberFormatTest extends CoreTestFmwk {
             if (null != ca_lenient) {
                 parsedLenientValue = ca_lenient.getNumber().intValue();
             }
-            assertEquals("Strict parse of " + inputString + " using " + patternString,
-                    expectedLenientParse, parsedLenientValue);
+            assertEquals(
+                    "Strict parse of " + inputString + " using " + patternString,
+                    expectedLenientParse,
+                    parsedLenientValue);
         }
     }
 
@@ -7015,18 +8338,23 @@ public class NumberFormatTest extends CoreTestFmwk {
 
     @Test
     public void TestParseWithEmptyCurr() {
-        DecimalFormat df = (DecimalFormat)NumberFormat.getInstance(new ULocale("en_US"), NumberFormat.CURRENCYSTYLE);
+        DecimalFormat df =
+                (DecimalFormat)
+                        NumberFormat.getInstance(new ULocale("en_US"), NumberFormat.CURRENCYSTYLE);
         DecimalFormatSymbols dfs = df.getDecimalFormatSymbols();
         dfs.setCurrencySymbol("");
         df.setDecimalFormatSymbols(dfs);
- 
-        String textToParse = "3";    
+
+        String textToParse = "3";
         ParsePosition ppos = new ParsePosition(0);
 
         Number num = df.parse(textToParse, ppos);
         if (ppos.getIndex() != 1 || num.doubleValue() != 3.0) {
-            errln("parse with empty curr symbol, expect pos 1, value 3.0; get "
-                                + ppos.getIndex() + ", " + num.doubleValue());
+            errln(
+                    "parse with empty curr symbol, expect pos 1, value 3.0; get "
+                            + ppos.getIndex()
+                            + ", "
+                            + num.doubleValue());
         }
 
         ppos.setIndex(0);
@@ -7036,9 +8364,12 @@ public class NumberFormatTest extends CoreTestFmwk {
         }
 
         //                        "¤#,##0.00" "¤ #,##0.00" "#,##0.00 ¤" "#,##,##0.00¤"
-        final String[] locales = {"en_US",    "nb_NO",     "cs_CZ",     "bn_BD"};
-        for (String locale: locales) {
-            df = (DecimalFormat)NumberFormat.getInstance(new ULocale(locale), NumberFormat.CURRENCYSTYLE);
+        final String[] locales = {"en_US", "nb_NO", "cs_CZ", "bn_BD"};
+        for (String locale : locales) {
+            df =
+                    (DecimalFormat)
+                            NumberFormat.getInstance(
+                                    new ULocale(locale), NumberFormat.CURRENCYSTYLE);
             dfs = df.getDecimalFormatSymbols();
             dfs.setCurrencySymbol("");
             df.setDecimalFormatSymbols(dfs);
@@ -7054,9 +8385,17 @@ public class NumberFormatTest extends CoreTestFmwk {
             ppos.setIndex(0);
             num = df.parse(textToParse, ppos);
             if (ppos.getIndex() != expectParseLen || num.doubleValue() != posValToUse) {
-                errln("locale " + locale + ", parse with empty curr symbol, expect pos, value "
-                                + expectParseLen + ", " + posValToUse + ";  get "
-                                + ppos.getIndex() + ", " + num.doubleValue());
+                errln(
+                        "locale "
+                                + locale
+                                + ", parse with empty curr symbol, expect pos, value "
+                                + expectParseLen
+                                + ", "
+                                + posValToUse
+                                + ";  get "
+                                + ppos.getIndex()
+                                + ", "
+                                + num.doubleValue());
             }
 
             textToParse = df.format(negValToUse);
@@ -7067,9 +8406,17 @@ public class NumberFormatTest extends CoreTestFmwk {
             ppos.setIndex(0);
             num = df.parse(textToParse, ppos);
             if (ppos.getIndex() != expectParseLen || num.doubleValue() != negValToUse) {
-                errln("locale " + locale + ", parse with empty curr symbol, expect pos, value "
-                                + expectParseLen + ", " + negValToUse + ";  get "
-                                + ppos.getIndex() + ", " + num.doubleValue());
+                errln(
+                        "locale "
+                                + locale
+                                + ", parse with empty curr symbol, expect pos, value "
+                                + expectParseLen
+                                + ", "
+                                + negValToUse
+                                + ";  get "
+                                + ppos.getIndex()
+                                + ", "
+                                + num.doubleValue());
             }
 
             df.applyPattern("#,##0.00¤");
@@ -7082,9 +8429,17 @@ public class NumberFormatTest extends CoreTestFmwk {
             ppos.setIndex(0);
             num = df.parse(textToParse, ppos);
             if (ppos.getIndex() != expectParseLen || num.doubleValue() != posValToUse) {
-                errln("locale " + locale + "with \"#,##0.00¤\", parse with empty curr symbol, expect pos, value "
-                                + expectParseLen + ", " + posValToUse + ";  get "
-                                + ppos.getIndex() + ", " + num.doubleValue());
+                errln(
+                        "locale "
+                                + locale
+                                + "with \"#,##0.00¤\", parse with empty curr symbol, expect pos, value "
+                                + expectParseLen
+                                + ", "
+                                + posValToUse
+                                + ";  get "
+                                + ppos.getIndex()
+                                + ", "
+                                + num.doubleValue());
             }
 
             textToParse = df.format(negValToUse);
@@ -7095,11 +8450,18 @@ public class NumberFormatTest extends CoreTestFmwk {
             ppos.setIndex(0);
             num = df.parse(textToParse, ppos);
             if (ppos.getIndex() != expectParseLen || num.doubleValue() != negValToUse) {
-                errln("locale " + locale + "with \"#,##0.00¤\", parse with empty curr symbol, expect pos, value "
-                                + expectParseLen + ", " + negValToUse + ";  get "
-                                + ppos.getIndex() + ", " + num.doubleValue());
+                errln(
+                        "locale "
+                                + locale
+                                + "with \"#,##0.00¤\", parse with empty curr symbol, expect pos, value "
+                                + expectParseLen
+                                + ", "
+                                + negValToUse
+                                + ";  get "
+                                + ppos.getIndex()
+                                + ", "
+                                + num.doubleValue());
             }
-
         }
     }
 
@@ -7113,7 +8475,11 @@ public class NumberFormatTest extends CoreTestFmwk {
             UnitWidth width;
             ULocale locale;
 
-            public TestData(String unitIdentifier, Integer inputValue, UnitWidth width, ULocale locale,
+            public TestData(
+                    String unitIdentifier,
+                    Integer inputValue,
+                    UnitWidth width,
+                    ULocale locale,
                     String expectedOutput) {
                 this.unitIdentifier = unitIdentifier;
                 this.inputValue = inputValue;
@@ -7124,43 +8490,94 @@ public class NumberFormatTest extends CoreTestFmwk {
         }
 
         TestData[] testData = {
-                new TestData("meter-per-kelvin-second", 2, UnitWidth.FULL_NAME, ULocale.ENGLISH,
-                        "2 meters per second-kelvin"),
-                new TestData("meter-per-100-kelvin-second", 3, UnitWidth.FULL_NAME, ULocale.ENGLISH,
-                        "3 meters per 100-second-kelvin"),
-                new TestData("meter-per-kelvin-second", 1, UnitWidth.FULL_NAME, ULocale.ENGLISH,
-                        "1 meter per second-kelvin"),
-                new TestData("meter-per-1000", 1, UnitWidth.FULL_NAME, ULocale.ENGLISH, "1 meter per 1000"),
-                new TestData("meter-per-1000-second", 1, UnitWidth.FULL_NAME, ULocale.ENGLISH,
-                        "1 meter per 1000-second"),
-                new TestData("meter-per-1000-second-kelvin", 1, UnitWidth.FULL_NAME, ULocale.ENGLISH,
-                        "1 meter per 1000-second-kelvin"),
-                new TestData("meter-per-1-second-kelvin-per-kilogram", 1, UnitWidth.FULL_NAME, ULocale.ENGLISH,
-                        "1 meter per 1-kilogram-second-kelvin"),
-                new TestData("meter-second-per-kilogram-kelvin", 1, UnitWidth.FULL_NAME, ULocale.ENGLISH,
-                        "1 meter-second per kilogram-kelvin"),
-                new TestData("meter-second-per-1000-kilogram-kelvin", 1, UnitWidth.FULL_NAME, ULocale.ENGLISH,
-                        "1 meter-second per 1000-kilogram-kelvin"),
-                new TestData("meter-second-per-1000-kilogram-kelvin", 1, UnitWidth.SHORT, ULocale.ENGLISH,
-                        "1 m⋅sec/1000⋅kg⋅K"),
-                new TestData("meter-second-per-1000-kilogram-kelvin", 1, UnitWidth.FULL_NAME, ULocale.GERMAN,
-                        "1 Meter⋅Sekunde pro 1000⋅Kilogramm⋅Kelvin"),
-                new TestData("meter-second-per-1000-kilogram-kelvin", 1, UnitWidth.SHORT, ULocale.GERMAN,
-                        "1 m⋅Sek./1000⋅kg⋅K"),
+            new TestData(
+                    "meter-per-kelvin-second",
+                    2,
+                    UnitWidth.FULL_NAME,
+                    ULocale.ENGLISH,
+                    "2 meters per second-kelvin"),
+            new TestData(
+                    "meter-per-100-kelvin-second",
+                    3,
+                    UnitWidth.FULL_NAME,
+                    ULocale.ENGLISH,
+                    "3 meters per 100-second-kelvin"),
+            new TestData(
+                    "meter-per-kelvin-second",
+                    1,
+                    UnitWidth.FULL_NAME,
+                    ULocale.ENGLISH,
+                    "1 meter per second-kelvin"),
+            new TestData(
+                    "meter-per-1000", 1, UnitWidth.FULL_NAME, ULocale.ENGLISH, "1 meter per 1000"),
+            new TestData(
+                    "meter-per-1000-second",
+                    1,
+                    UnitWidth.FULL_NAME,
+                    ULocale.ENGLISH,
+                    "1 meter per 1000-second"),
+            new TestData(
+                    "meter-per-1000-second-kelvin",
+                    1,
+                    UnitWidth.FULL_NAME,
+                    ULocale.ENGLISH,
+                    "1 meter per 1000-second-kelvin"),
+            new TestData(
+                    "meter-per-1-second-kelvin-per-kilogram",
+                    1,
+                    UnitWidth.FULL_NAME,
+                    ULocale.ENGLISH,
+                    "1 meter per 1-kilogram-second-kelvin"),
+            new TestData(
+                    "meter-second-per-kilogram-kelvin",
+                    1,
+                    UnitWidth.FULL_NAME,
+                    ULocale.ENGLISH,
+                    "1 meter-second per kilogram-kelvin"),
+            new TestData(
+                    "meter-second-per-1000-kilogram-kelvin",
+                    1,
+                    UnitWidth.FULL_NAME,
+                    ULocale.ENGLISH,
+                    "1 meter-second per 1000-kilogram-kelvin"),
+            new TestData(
+                    "meter-second-per-1000-kilogram-kelvin",
+                    1,
+                    UnitWidth.SHORT,
+                    ULocale.ENGLISH,
+                    "1 m⋅sec/1000⋅kg⋅K"),
+            new TestData(
+                    "meter-second-per-1000-kilogram-kelvin",
+                    1,
+                    UnitWidth.FULL_NAME,
+                    ULocale.GERMAN,
+                    "1 Meter⋅Sekunde pro 1000⋅Kilogramm⋅Kelvin"),
+            new TestData(
+                    "meter-second-per-1000-kilogram-kelvin",
+                    1,
+                    UnitWidth.SHORT,
+                    ULocale.GERMAN,
+                    "1 m⋅Sek./1000⋅kg⋅K"),
         };
 
         for (TestData testCase : testData) {
             MeasureUnit unit = MeasureUnit.forIdentifier(testCase.unitIdentifier);
-            LocalizedNumberFormatter formatter = NumberFormatter.withLocale(testCase.locale).unit(unit)
-                    .unitWidth(testCase.width);
+            LocalizedNumberFormatter formatter =
+                    NumberFormatter.withLocale(testCase.locale)
+                            .unit(unit)
+                            .unitWidth(testCase.width);
 
             String formatted = formatter.format(testCase.inputValue).toString();
             assertEquals(
-                    "Unit: " + testCase.unitIdentifier + ", Width: " + testCase.width + ", Input: "
+                    "Unit: "
+                            + testCase.unitIdentifier
+                            + ", Width: "
+                            + testCase.width
+                            + ", Input: "
                             + testCase.inputValue,
-                    testCase.expectedOutput, formatted);
+                    testCase.expectedOutput,
+                    formatted);
         }
-
     }
 
     @Test
@@ -7171,7 +8588,11 @@ public class NumberFormatTest extends CoreTestFmwk {
             double inputValue;
             String expectedOutput;
 
-            TestCase(String unitIdentifier, String locale, double inputValue, String expectedOutput) {
+            TestCase(
+                    String unitIdentifier,
+                    String locale,
+                    double inputValue,
+                    String expectedOutput) {
                 this.unitIdentifier = unitIdentifier;
                 this.locale = locale;
                 this.inputValue = inputValue;
@@ -7180,30 +8601,36 @@ public class NumberFormatTest extends CoreTestFmwk {
         }
 
         TestCase[] testCases = {
-                new TestCase("part-per-1e9", "en-US", 1, "1 part per billion"),
-                new TestCase("part-per-1e9", "en-US", 2, "2 parts per billion"),
-                new TestCase("part-per-1e9", "en-US", 1000000, "1,000,000 parts per billion"),
-                new TestCase("part-per-1e9", "de-DE", 1000000, "1.000.000 Milliardstel"),
-                new TestCase("part-per-1e1", "en-US", 1, "1 part per 10"),
-                new TestCase("part-per-1e2", "en-US", 1, "1 part per 100"),
-                new TestCase("part-per-1e3", "en-US", 1, "1 part per 1000"),
-                new TestCase("part-per-1e4", "en-US", 1, "1 part per 10000"),
-                new TestCase("part-per-1e5", "en-US", 1, "1 part per 100000"),
-                new TestCase("part-per-1e6", "en-US", 1, "1 part per million"),
-                new TestCase("part-per-1e7", "en-US", 1, "1 part per 10000000"),
-                new TestCase("part-per-1e8", "en-US", 1, "1 part per 100000000"),
+            new TestCase("part-per-1e9", "en-US", 1, "1 part per billion"),
+            new TestCase("part-per-1e9", "en-US", 2, "2 parts per billion"),
+            new TestCase("part-per-1e9", "en-US", 1000000, "1,000,000 parts per billion"),
+            new TestCase("part-per-1e9", "de-DE", 1000000, "1.000.000 Milliardstel"),
+            new TestCase("part-per-1e1", "en-US", 1, "1 part per 10"),
+            new TestCase("part-per-1e2", "en-US", 1, "1 part per 100"),
+            new TestCase("part-per-1e3", "en-US", 1, "1 part per 1000"),
+            new TestCase("part-per-1e4", "en-US", 1, "1 part per 10000"),
+            new TestCase("part-per-1e5", "en-US", 1, "1 part per 100000"),
+            new TestCase("part-per-1e6", "en-US", 1, "1 part per million"),
+            new TestCase("part-per-1e7", "en-US", 1, "1 part per 10000000"),
+            new TestCase("part-per-1e8", "en-US", 1, "1 part per 100000000"),
         };
 
         for (TestCase testCase : testCases) {
             MeasureUnit unit = MeasureUnit.forIdentifier(testCase.unitIdentifier);
-            LocalizedNumberFormatter formatter = NumberFormatter.withLocale(ULocale.forLanguageTag(testCase.locale))
-                    .unit(unit)
-                    .unitWidth(UnitWidth.FULL_NAME);
+            LocalizedNumberFormatter formatter =
+                    NumberFormatter.withLocale(ULocale.forLanguageTag(testCase.locale))
+                            .unit(unit)
+                            .unitWidth(UnitWidth.FULL_NAME);
             String formatted = formatter.format(testCase.inputValue).toString();
             assertEquals(
-                    "Unit: " + testCase.unitIdentifier + ", Locale: " + testCase.locale + ", Input: "
+                    "Unit: "
+                            + testCase.unitIdentifier
+                            + ", Locale: "
+                            + testCase.locale
+                            + ", Input: "
                             + testCase.inputValue,
-                    testCase.expectedOutput, formatted);
+                    testCase.expectedOutput,
+                    formatted);
         }
     }
 
@@ -7213,20 +8640,19 @@ public class NumberFormatTest extends CoreTestFmwk {
         // en-US: grouping separator ',', decimal separator '.'
         // de: grouping separator '.', decimal separator ','
         // de-CH: grouping separator '\u2019', decimal separator '.'
-        String[] locales = { "fr-FR", "en-US", "de", "de-CH" };
-        String[] toParse =
-            { "1.234", "1,234", "1\u00a0234", "1 234", "1.234,567" };
+        String[] locales = {"fr-FR", "en-US", "de", "de-CH"};
+        String[] toParse = {"1.234", "1,234", "1\u00a0234", "1 234", "1.234,567"};
         double[][] expectedLenient = {
-            {   1234,   1.234,         1234,    1234,    1234.567 }, // fr-FR
-            {  1.234,    1234,         1234,    1234,   1.234 }, // en-US
-            {   1234,   1.234,         1234,    1234,    1234.567 }, // de
-            {  1.234,    1234,         1234,    1234,   1.234 } // de-CH
+            {1234, 1.234, 1234, 1234, 1234.567}, // fr-FR
+            {1.234, 1234, 1234, 1234, 1.234}, // en-US
+            {1234, 1.234, 1234, 1234, 1234.567}, // de
+            {1.234, 1234, 1234, 1234, 1.234} // de-CH
         };
-        double[][] expectedStrict  = {
-            {      1,   1.234,         1234,    1234,       1 }, // fr-FR
-            {  1.234,    1234,            1,       1,   1.234 }, // en-US
-            {   1234,   1.234,            1,       1,    1234.567 }, // de
-            {  1.234,       1,         1234,    1234,   1.234 } // de-CH
+        double[][] expectedStrict = {
+            {1, 1.234, 1234, 1234, 1}, // fr-FR
+            {1.234, 1234, 1, 1, 1.234}, // en-US
+            {1234, 1.234, 1, 1, 1234.567}, // de
+            {1.234, 1, 1234, 1234, 1.234} // de-CH
         };
 
         Number result;
@@ -7239,7 +8665,8 @@ public class NumberFormatTest extends CoreTestFmwk {
             for (int i = 0; i < toParse.length; i++) {
                 String test = toParse[i];
                 result = nf.parse(test);
-                assertEquals("Lenient parsing", expectedLenient[idxLocale][i], result.doubleValue());
+                assertEquals(
+                        "Lenient parsing", expectedLenient[idxLocale][i], result.doubleValue());
             }
 
             nf.setParseStrict(true);
@@ -7250,5 +8677,4 @@ public class NumberFormatTest extends CoreTestFmwk {
             }
         }
     }
-
 }

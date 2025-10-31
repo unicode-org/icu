@@ -3,19 +3,18 @@
 
 package com.ibm.icu.dev.test.impl;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
+import com.ibm.icu.impl.CSCharacterIterator;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.CoreTestFmwk;
-import com.ibm.icu.impl.CSCharacterIterator;
-
 @RunWith(JUnit4.class)
 public class CSCharacterIteratorTest extends CoreTestFmwk {
-    public CSCharacterIteratorTest() {};
+    public CSCharacterIteratorTest() {}
+    ;
 
     @Test
     public void TestAPI() {
@@ -38,10 +37,10 @@ public class CSCharacterIteratorTest extends CoreTestFmwk {
         csci.setIndex(4);
         sci.setIndex(4);
         CharacterIterator clci = csci.clone();
-        for (int i=0; i<50; ++i) {
+        for (int i = 0; i < 50; ++i) {
             assertEquals("", sci.next(), clci.next());
         }
-        for (int i=0; i<50; ++i) {
+        for (int i = 0; i < 50; ++i) {
             assertEquals("", sci.previous(), clci.previous());
         }
     }

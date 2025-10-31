@@ -8,6 +8,8 @@
  */
 package com.ibm.icu.charset;
 
+import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeSet;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.IntBuffer;
@@ -16,18 +18,15 @@ import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
 import java.nio.charset.UnsupportedCharsetException;
 
-import com.ibm.icu.text.UTF16;
-import com.ibm.icu.text.UnicodeSet;
-
 class CharsetHZ extends CharsetICU {
 
     private static final int UCNV_TILDE = 0x7E; /* ~ */
     private static final int UCNV_OPEN_BRACE = 0x7B; /* { */
     private static final int UCNV_CLOSE_BRACE = 0x7D; /* } */
-    private static final byte[] SB_ESCAPE = new byte[] { 0x7E, 0x7D };
-    private static final byte[] DB_ESCAPE = new byte[] { 0x7E, 0x7B };
-    private static final byte[] TILDE_ESCAPE = new byte[] { 0x7E, 0x7E };
-    private static final byte[] fromUSubstitution = new byte[] { (byte) 0x1A };
+    private static final byte[] SB_ESCAPE = new byte[] {0x7E, 0x7D};
+    private static final byte[] DB_ESCAPE = new byte[] {0x7E, 0x7B};
+    private static final byte[] TILDE_ESCAPE = new byte[] {0x7E, 0x7E};
+    private static final byte[] fromUSubstitution = new byte[] {(byte) 0x1A};
 
     private CharsetMBCS gbCharset;
     private boolean isEmptySegment;
@@ -36,7 +35,8 @@ class CharsetHZ extends CharsetICU {
         super(icuCanonicalName, canonicalName, aliases);
         gbCharset = (CharsetMBCS) new CharsetProviderICU().charsetForName("GBK");
         if (gbCharset == null) {
-            throw new UnsupportedCharsetException("unable to open ICU GBK Charset, required for HZ");
+            throw new UnsupportedCharsetException(
+                    "unable to open ICU GBK Charset, required for HZ");
         }
 
         maxBytesPerChar = 4;
@@ -65,16 +65,15 @@ class CharsetHZ extends CharsetICU {
         }
 
         @Override
-        protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush) {
+        protected CoderResult decodeLoop(
+                ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush) {
             CoderResult err = CoderResult.UNDERFLOW;
             byte[] tempBuf = new byte[2];
             int targetUniChar = 0;
             int mySourceChar = 0;
 
-            if (!source.hasRemaining())
-                return CoderResult.UNDERFLOW;
-            else if (!target.hasRemaining())
-                return CoderResult.OVERFLOW;
+            if (!source.hasRemaining()) return CoderResult.UNDERFLOW;
+            else if (!target.hasRemaining()) return CoderResult.OVERFLOW;
 
             while (source.hasRemaining()) {
 
@@ -87,51 +86,55 @@ class CharsetHZ extends CharsetICU {
                         /* second byte after ~ */
                         mode = 0;
                         switch (mySourceChar) {
-                        case 0x0A:
-                            /* no output for ~\n (line-continuation marker) */
-                            continue;
-                        case UCNV_TILDE:
-                            if (offsets != null) {
-                                offsets.put(source.position() - 2);
-                            }
-                            target.put((char) mySourceChar);
-                            continue;
-                        case UCNV_OPEN_BRACE:
-                        case UCNV_CLOSE_BRACE:
-                            isStateDBCS = (mySourceChar == UCNV_OPEN_BRACE);
-                            if (isEmptySegment) {
-                                isEmptySegment = false; /* we are handling it, reset to avoid future spurious errors */
-                                this.toUBytesArray[0] = UCNV_TILDE;
-                                this.toUBytesArray[1] = (byte)mySourceChar;
-                                this.toULength = 2;
-                                return CoderResult.malformedForLength(1);
-                            }
-                            isEmptySegment = true;
-                            continue;
-                        default:
-                            /*
-                             * if the first byte is equal to TILDE and the trail byte is not a valid byte then it is an
-                             * error condition
-                             */
-                            /*
-                             * Ticket 5691: consistent illegal sequences:
-                             * - We include at least the first byte in the illegal sequence.
-                             * - If any of the non-initial bytes could be the start of a character,
-                             *   we stop the illegal sequence before the first one of those.
-                             */
-                            isEmptySegment = false; /* different error here, reset this to avoid spurious future error */
-                            err = CoderResult.malformedForLength(1);
-                            toUBytesArray[0] = UCNV_TILDE;
-                            if (isStateDBCS ? (0x21 <= mySourceChar && mySourceChar <= 0x7e) : mySourceChar <= 0x7f) {
-                                /* The current byte could be the start of a character: Back it out. */
-                                toULength = 1;
-                                source.position(source.position() - 1);
-                            } else {
-                                /* Include the current byte in the illegal sequence. */
-                                toUBytesArray[1] = (byte)mySourceChar;
-                                toULength = 2;
-                            }
-                            return err;
+                            case 0x0A:
+                                /* no output for ~\n (line-continuation marker) */
+                                continue;
+                            case UCNV_TILDE:
+                                if (offsets != null) {
+                                    offsets.put(source.position() - 2);
+                                }
+                                target.put((char) mySourceChar);
+                                continue;
+                            case UCNV_OPEN_BRACE:
+                            case UCNV_CLOSE_BRACE:
+                                isStateDBCS = (mySourceChar == UCNV_OPEN_BRACE);
+                                if (isEmptySegment) {
+                                    isEmptySegment =
+                                            false; /* we are handling it, reset to avoid future spurious errors */
+                                    this.toUBytesArray[0] = UCNV_TILDE;
+                                    this.toUBytesArray[1] = (byte) mySourceChar;
+                                    this.toULength = 2;
+                                    return CoderResult.malformedForLength(1);
+                                }
+                                isEmptySegment = true;
+                                continue;
+                            default:
+                                /*
+                                 * if the first byte is equal to TILDE and the trail byte is not a valid byte then it is an
+                                 * error condition
+                                 */
+                                /*
+                                 * Ticket 5691: consistent illegal sequences:
+                                 * - We include at least the first byte in the illegal sequence.
+                                 * - If any of the non-initial bytes could be the start of a character,
+                                 *   we stop the illegal sequence before the first one of those.
+                                 */
+                                isEmptySegment =
+                                        false; /* different error here, reset this to avoid spurious future error */
+                                err = CoderResult.malformedForLength(1);
+                                toUBytesArray[0] = UCNV_TILDE;
+                                if (isStateDBCS
+                                        ? (0x21 <= mySourceChar && mySourceChar <= 0x7e)
+                                        : mySourceChar <= 0x7f) {
+                                    /* The current byte could be the start of a character: Back it out. */
+                                    toULength = 1;
+                                    source.position(source.position() - 1);
+                                } else {
+                                    /* Include the current byte in the illegal sequence. */
+                                    toUBytesArray[1] = (byte) mySourceChar;
+                                    toULength = 2;
+                                }
+                                return err;
                         }
                     } else if (isStateDBCS) {
                         if (toUnicodeStatus == 0) {
@@ -143,7 +146,8 @@ class CharsetHZ extends CharsetICU {
                                  * add another bit to distinguish a 0 byte from not having seen a lead byte
                                  */
                                 toUnicodeStatus = mySourceChar | 0x100;
-                                isEmptySegment = false; /* the segment has something, either valid or will produce a different error, so reset this */
+                                isEmptySegment =
+                                        false; /* the segment has something, either valid or will produce a different error, so reset this */
                             }
                             continue;
                         } else {
@@ -161,12 +165,22 @@ class CharsetHZ extends CharsetICU {
                              * we report only the first byte as the illegal sequence.
                              * Otherwise we convert of report the pair of bytes.
                              */
-                            leadIsOk = (short)(UConverterConstants.UNSIGNED_BYTE_MASK & (leadByte - 0x21)) <= (0x7d - 0x21);
-                            trailIsOk = (short)(UConverterConstants.UNSIGNED_BYTE_MASK & (mySourceChar - 0x21)) <= (0x7e - 0x21);
+                            leadIsOk =
+                                    (short)
+                                                    (UConverterConstants.UNSIGNED_BYTE_MASK
+                                                            & (leadByte - 0x21))
+                                            <= (0x7d - 0x21);
+                            trailIsOk =
+                                    (short)
+                                                    (UConverterConstants.UNSIGNED_BYTE_MASK
+                                                            & (mySourceChar - 0x21))
+                                            <= (0x7e - 0x21);
                             if (leadIsOk && trailIsOk) {
-                                tempBuf[0] = (byte)(leadByte + 0x80);
-                                tempBuf[1] = (byte)(mySourceChar + 0x80);
-                                targetUniChar = gbDecoder.simpleGetNextUChar(ByteBuffer.wrap(tempBuf), super.isFallbackUsed());
+                                tempBuf[0] = (byte) (leadByte + 0x80);
+                                tempBuf[1] = (byte) (mySourceChar + 0x80);
+                                targetUniChar =
+                                        gbDecoder.simpleGetNextUChar(
+                                                ByteBuffer.wrap(tempBuf), super.isFallbackUsed());
                                 mySourceChar = (leadByte << 8) | mySourceChar;
                             } else if (trailIsOk) {
                                 /* report a single illegal byte and continue with the following DBCS starter byte */
@@ -188,7 +202,8 @@ class CharsetHZ extends CharsetICU {
                             isEmptySegment = false; /* the segment has something valid */
                         } else {
                             targetUniChar = 0xffff;
-                            isEmptySegment = false; /* different error here, reset this to avoid spurious future error */
+                            isEmptySegment =
+                                    false; /* different error here, reset this to avoid spurious future error */
                         }
                     }
 
@@ -198,7 +213,7 @@ class CharsetHZ extends CharsetICU {
                         }
 
                         target.put((char) targetUniChar);
-                    } else /* targetUniChar >= 0xfffe */{
+                    } else /* targetUniChar >= 0xfffe */ {
                         if (mySourceChar > 0xff) {
                             toUBytesArray[toUBytesBegin + 0] = (byte) (mySourceChar >> 8);
                             toUBytesArray[toUBytesBegin + 1] = (byte) mySourceChar;
@@ -242,16 +257,15 @@ class CharsetHZ extends CharsetICU {
         }
 
         @Override
-        protected CoderResult encodeLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush) {
+        protected CoderResult encodeLoop(
+                CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush) {
             int length = 0;
-            int[] targetUniChar = new int[] { 0 };
+            int[] targetUniChar = new int[] {0};
             int mySourceChar = 0;
             boolean oldIsTargetUCharDBCS = isTargetUCharDBCS;
 
-            if (!source.hasRemaining())
-                return CoderResult.UNDERFLOW;
-            else if (!target.hasRemaining())
-                return CoderResult.OVERFLOW;
+            if (!source.hasRemaining()) return CoderResult.UNDERFLOW;
+            else if (!target.hasRemaining()) return CoderResult.OVERFLOW;
 
             if (fromUChar32 != 0 && target.hasRemaining()) {
                 CoderResult cr = handleSurrogates(source, (char) fromUChar32);
@@ -275,13 +289,18 @@ class CharsetHZ extends CharsetICU {
                         length = 1;
                         targetUniChar[0] = mySourceChar;
                     } else {
-                        length = gbEncoder.fromUChar32(mySourceChar, targetUniChar, super.isFallbackUsed());
+                        length =
+                                gbEncoder.fromUChar32(
+                                        mySourceChar, targetUniChar, super.isFallbackUsed());
 
                         /*
                          * we can only use lead bytes 21..7D and trail bytes 21..7E
                          */
-                        if (length == 2 && 0xa1a1 <= targetUniChar[0] && targetUniChar[0] <= 0xfdfe
-                                && 0xa1 <= (targetUniChar[0] & 0xff) && (targetUniChar[0] & 0xff) <= 0xfe) {
+                        if (length == 2
+                                && 0xa1a1 <= targetUniChar[0]
+                                && targetUniChar[0] <= 0xfdfe
+                                && 0xa1 <= (targetUniChar[0] & 0xff)
+                                && (targetUniChar[0] & 0xff) <= 0xfe) {
                             targetUniChar[0] -= 0x8080;
                         } else {
                             targetUniChar[0] = MISSING_CHAR_MARKER;
@@ -294,12 +313,12 @@ class CharsetHZ extends CharsetICU {
                             if (!isTargetUCharDBCS) {
                                 concatEscape(source, target, offsets, SB_ESCAPE);
                                 isEscapeAppended = true;
-                            } else { /*
-                                         * Shifting from a single byte to double byte mode
-                                         */
+                            } else {
+                                /*
+                                 * Shifting from a single byte to double byte mode
+                                 */
                                 concatEscape(source, target, offsets, DB_ESCAPE);
                                 isEscapeAppended = true;
-
                             }
                         }
 
@@ -362,14 +381,14 @@ class CharsetHZ extends CharsetICU {
             return CoderResult.UNDERFLOW;
         }
 
-        private CoderResult concatEscape(CharBuffer source, ByteBuffer target, IntBuffer offsets, byte[] strToAppend) {
+        private CoderResult concatEscape(
+                CharBuffer source, ByteBuffer target, IntBuffer offsets, byte[] strToAppend) {
             CoderResult cr = null;
-            for (int i=0; i<strToAppend.length; i++) {
+            for (int i = 0; i < strToAppend.length; i++) {
                 byte b = strToAppend[i];
                 if (target.hasRemaining()) {
                     target.put(b);
-                    if (offsets != null)
-                        offsets.put(source.position() - 1);
+                    if (offsets != null) offsets.put(source.position() - 1);
                 } else {
                     errorBuffer[errorBufferLength++] = b;
                     cr = CoderResult.OVERFLOW;
@@ -390,9 +409,10 @@ class CharsetHZ extends CharsetICU {
     }
 
     @Override
-    void getUnicodeSetImpl( UnicodeSet setFillIn, int which){
-        setFillIn.add(0,0x7f);
-       // CharsetMBCS mbcshz = (CharsetMBCS)CharsetICU.forNameICU("icu-internal-25546");
-        gbCharset.MBCSGetFilteredUnicodeSetForUnicode(gbCharset.sharedData, setFillIn, which, CharsetMBCS.UCNV_SET_FILTER_HZ);
+    void getUnicodeSetImpl(UnicodeSet setFillIn, int which) {
+        setFillIn.add(0, 0x7f);
+        // CharsetMBCS mbcshz = (CharsetMBCS)CharsetICU.forNameICU("icu-internal-25546");
+        gbCharset.MBCSGetFilteredUnicodeSetForUnicode(
+                gbCharset.sharedData, setFillIn, which, CharsetMBCS.UCNV_SET_FILTER_HZ);
     }
 }

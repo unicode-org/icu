@@ -9,26 +9,6 @@
 
 package com.ibm.icu.dev.test.format;
 
-import java.text.FieldPosition;
-import java.text.ParseException;
-import java.text.ParsePosition;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Random;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.regex.Pattern;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.TZDBTimeZoneNames;
@@ -52,6 +32,24 @@ import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.TimeZone.SystemTimeZoneType;
 import com.ibm.icu.util.TimeZoneTransition;
 import com.ibm.icu.util.ULocale;
+import java.text.FieldPosition;
+import java.text.ParseException;
+import java.text.ParsePosition;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Random;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Pattern;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public class TimeZoneFormatTest extends CoreTestFmwk {
@@ -60,28 +58,10 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
     private static final Pattern EXCL_TZ_PATTERN = Pattern.compile(".*/Riyadh8[7-9]");
 
     private static final String[] PATTERNS = {
-        "z",
-        "zzzz",
-        "Z",        // equivalent to "xxxx"
-        "ZZZZ",     // equivalent to "OOOO"
-        "v",
-        "vvvv",
-        "O",
-        "OOOO",
-        "X",
-        "XX",
-        "XXX",
-        "XXXX",
-        "XXXXX",
-        "x",
-        "xx",
-        "xxx",
-        "xxxx",
-        "xxxxx",
-        "V",
-        "VV",
-        "VVV",
-        "VVVV"
+        "z", "zzzz", "Z", // equivalent to "xxxx"
+        "ZZZZ", // equivalent to "OOOO"
+        "v", "vvvv", "O", "OOOO", "X", "XX", "XXX", "XXXX", "XXXXX", "x", "xx", "xxx", "xxxx",
+        "xxxxx", "V", "VV", "VVV", "VVVV"
     };
     boolean REALLY_VERBOSE_LOG = false;
 
@@ -129,8 +109,15 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
         if (TEST_ALL || TestFmwk.getExhaustiveness() > 5) {
             LOCALES = ULocale.getAvailableLocales();
         } else {
-            LOCALES = new ULocale[] {new ULocale("en"), new ULocale("en_CA"), new ULocale("fr"),
-                    new ULocale("zh_Hant"), new ULocale("fa"), new ULocale("ccp")};
+            LOCALES =
+                    new ULocale[] {
+                        new ULocale("en"),
+                        new ULocale("en_CA"),
+                        new ULocale("fr"),
+                        new ULocale("zh_Hant"),
+                        new ULocale("fa"),
+                        new ULocale("ccp")
+                    };
         }
 
         String[] tzids;
@@ -188,62 +175,116 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
                                     // Note that some zones like Asia/Riyadh87 does not have
                                     // short zone ID and "unk" is used as the fallback
                                     if (REALLY_VERBOSE_LOG) {
-                                        logln("Canonical round trip failed (probably as expected); tz=" + tzids[tzidx]
-                                            + ", locale=" + LOCALES[locidx] + ", pattern=" + PATTERNS[patidx]
-                                            + ", time=" + DATES[datidx].getTime() + ", str=" + tzstr
-                                            + ", outtz=" + outtz.getID());
+                                        logln(
+                                                "Canonical round trip failed (probably as expected); tz="
+                                                        + tzids[tzidx]
+                                                        + ", locale="
+                                                        + LOCALES[locidx]
+                                                        + ", pattern="
+                                                        + PATTERNS[patidx]
+                                                        + ", time="
+                                                        + DATES[datidx].getTime()
+                                                        + ", str="
+                                                        + tzstr
+                                                        + ", outtz="
+                                                        + outtz.getID());
                                     }
                                 } else {
-                                    errln("Canonical round trip failed; tz=" + tzids[tzidx]
-                                        + ", locale=" + LOCALES[locidx] + ", pattern=" + PATTERNS[patidx]
-                                        + ", time=" + DATES[datidx].getTime() + ", str=" + tzstr
-                                        + ", outtz=" + outtz.getID());
+                                    errln(
+                                            "Canonical round trip failed; tz="
+                                                    + tzids[tzidx]
+                                                    + ", locale="
+                                                    + LOCALES[locidx]
+                                                    + ", pattern="
+                                                    + PATTERNS[patidx]
+                                                    + ", time="
+                                                    + DATES[datidx].getTime()
+                                                    + ", str="
+                                                    + tzstr
+                                                    + ", outtz="
+                                                    + outtz.getID());
                                 }
                             }
                         } else if (PATTERNS[patidx].equals("VV")) {
                             // Zone ID - full roundtrip support
                             if (!outtz.getID().equals(tzids[tzidx])) {
-                                errln("Zone ID round trip failed; tz=" + tzids[tzidx]
-                                        + ", locale=" + LOCALES[locidx] + ", pattern=" + PATTERNS[patidx]
-                                        + ", time=" + DATES[datidx].getTime() + ", str=" + tzstr
-                                        + ", outtz=" + outtz.getID());
+                                errln(
+                                        "Zone ID round trip failed; tz="
+                                                + tzids[tzidx]
+                                                + ", locale="
+                                                + LOCALES[locidx]
+                                                + ", pattern="
+                                                + PATTERNS[patidx]
+                                                + ", time="
+                                                + DATES[datidx].getTime()
+                                                + ", str="
+                                                + tzstr
+                                                + ", outtz="
+                                                + outtz.getID());
                             }
-                        } else if (PATTERNS[patidx].equals("VVV") || PATTERNS[patidx].equals("VVVV")) {
+                        } else if (PATTERNS[patidx].equals("VVV")
+                                || PATTERNS[patidx].equals("VVVV")) {
                             // Location: time zone rule must be preserved except
                             // zones not actually associated with a specific location.
                             String canonicalID = TimeZone.getCanonicalID(tzids[tzidx]);
                             if (canonicalID != null && !outtz.getID().equals(canonicalID)) {
                                 // Canonical ID did not match - check the rules
                                 boolean bFailure = false;
-                                if ((tz instanceof BasicTimeZone) && (outtz instanceof BasicTimeZone)) {
-                                    boolean hasNoLocation = TimeZone.getRegion(tzids[tzidx]).equals("001");
-                                    bFailure = !hasNoLocation
-                                                && !((BasicTimeZone)outtz).hasEquivalentTransitions(tz, low, high);
+                                if ((tz instanceof BasicTimeZone)
+                                        && (outtz instanceof BasicTimeZone)) {
+                                    boolean hasNoLocation =
+                                            TimeZone.getRegion(tzids[tzidx]).equals("001");
+                                    bFailure =
+                                            !hasNoLocation
+                                                    && !((BasicTimeZone) outtz)
+                                                            .hasEquivalentTransitions(
+                                                                    tz, low, high);
                                 }
                                 if (bFailure) {
-                                    errln("Canonical round trip failed; tz=" + tzids[tzidx]
-                                            + ", locale=" + LOCALES[locidx] + ", pattern=" + PATTERNS[patidx]
-                                            + ", time=" + DATES[datidx].getTime() + ", str=" + tzstr
-                                            + ", outtz=" + outtz.getID());
+                                    errln(
+                                            "Canonical round trip failed; tz="
+                                                    + tzids[tzidx]
+                                                    + ", locale="
+                                                    + LOCALES[locidx]
+                                                    + ", pattern="
+                                                    + PATTERNS[patidx]
+                                                    + ", time="
+                                                    + DATES[datidx].getTime()
+                                                    + ", str="
+                                                    + tzstr
+                                                    + ", outtz="
+                                                    + outtz.getID());
                                 } else if (REALLY_VERBOSE_LOG) {
-                                    logln("Canonical round trip failed (as expected); tz=" + tzids[tzidx]
-                                            + ", locale=" + LOCALES[locidx] + ", pattern=" + PATTERNS[patidx]
-                                            + ", time=" + DATES[datidx].getTime() + ", str=" + tzstr
-                                            + ", outtz=" + outtz.getID());
+                                    logln(
+                                            "Canonical round trip failed (as expected); tz="
+                                                    + tzids[tzidx]
+                                                    + ", locale="
+                                                    + LOCALES[locidx]
+                                                    + ", pattern="
+                                                    + PATTERNS[patidx]
+                                                    + ", time="
+                                                    + DATES[datidx].getTime()
+                                                    + ", str="
+                                                    + tzstr
+                                                    + ", outtz="
+                                                    + outtz.getID());
                                 }
                             }
                         } else {
-                            boolean isOffsetFormat = (PATTERNS[patidx].charAt(0) == 'Z'
-                                    || PATTERNS[patidx].charAt(0) == 'O'
-                                    || PATTERNS[patidx].charAt(0) == 'X'
-                                    || PATTERNS[patidx].charAt(0) == 'x');
+                            boolean isOffsetFormat =
+                                    (PATTERNS[patidx].charAt(0) == 'Z'
+                                            || PATTERNS[patidx].charAt(0) == 'O'
+                                            || PATTERNS[patidx].charAt(0) == 'X'
+                                            || PATTERNS[patidx].charAt(0) == 'x');
                             boolean minutesOffset = false;
-                            if (PATTERNS[patidx].charAt(0) == 'X' || PATTERNS[patidx].charAt(0) == 'x') {
+                            if (PATTERNS[patidx].charAt(0) == 'X'
+                                    || PATTERNS[patidx].charAt(0) == 'x') {
                                 minutesOffset = PATTERNS[patidx].length() <= 3;
                             }
 
                             if (!isOffsetFormat) {
-                                // Check if localized GMT format is used as a fallback of name styles
+                                // Check if localized GMT format is used as a fallback of name
+                                // styles
                                 int numDigits = 0;
                                 int idx = 0;
                                 while (idx < tzstr.length()) {
@@ -265,29 +306,62 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
                                     diff = (diff / 60000) * 60000;
                                 }
                                 if (diff != 0) {
-                                    errln("Offset round trip failed; tz=" + tzids[tzidx]
-                                        + ", locale=" + LOCALES[locidx] + ", pattern=" + PATTERNS[patidx]
-                                        + ", time=" + DATES[datidx].getTime() + ", str=" + tzstr
-                                        + ", inOffset=" + inOffset + ", outOffset=" + outOffset);
+                                    errln(
+                                            "Offset round trip failed; tz="
+                                                    + tzids[tzidx]
+                                                    + ", locale="
+                                                    + LOCALES[locidx]
+                                                    + ", pattern="
+                                                    + PATTERNS[patidx]
+                                                    + ", time="
+                                                    + DATES[datidx].getTime()
+                                                    + ", str="
+                                                    + tzstr
+                                                    + ", inOffset="
+                                                    + inOffset
+                                                    + ", outOffset="
+                                                    + outOffset);
                                 }
                             } else {
                                 // Specific or generic: raw offset must be preserved.
-                                if (inOffsets[0] != outOffsets[0] ) {
+                                if (inOffsets[0] != outOffsets[0]) {
                                     if (JDKTZ && tzids[tzidx].startsWith("SystemV/")) {
                                         // JDK uses rule SystemV for these zones while
                                         // ICU handles these zones as aliases of existing time zones
                                         if (REALLY_VERBOSE_LOG) {
-                                            logln("Raw offset round trip failed; tz=" + tzids[tzidx]
-                                                + ", locale=" + LOCALES[locidx] + ", pattern=" + PATTERNS[patidx]
-                                                + ", time=" + DATES[datidx].getTime() + ", str=" + tzstr
-                                                + ", inRawOffset=" + inOffsets[0] + ", outRawOffset=" + outOffsets[0]);
+                                            logln(
+                                                    "Raw offset round trip failed; tz="
+                                                            + tzids[tzidx]
+                                                            + ", locale="
+                                                            + LOCALES[locidx]
+                                                            + ", pattern="
+                                                            + PATTERNS[patidx]
+                                                            + ", time="
+                                                            + DATES[datidx].getTime()
+                                                            + ", str="
+                                                            + tzstr
+                                                            + ", inRawOffset="
+                                                            + inOffsets[0]
+                                                            + ", outRawOffset="
+                                                            + outOffsets[0]);
                                         }
 
                                     } else {
-                                        errln("Raw offset round trip failed; tz=" + tzids[tzidx]
-                                            + ", locale=" + LOCALES[locidx] + ", pattern=" + PATTERNS[patidx]
-                                            + ", time=" + DATES[datidx].getTime() + ", str=" + tzstr
-                                            + ", inRawOffset=" + inOffsets[0] + ", outRawOffset=" + outOffsets[0]);
+                                        errln(
+                                                "Raw offset round trip failed; tz="
+                                                        + tzids[tzidx]
+                                                        + ", locale="
+                                                        + LOCALES[locidx]
+                                                        + ", pattern="
+                                                        + PATTERNS[patidx]
+                                                        + ", time="
+                                                        + DATES[datidx].getTime()
+                                                        + ", str="
+                                                        + tzstr
+                                                        + ", inRawOffset="
+                                                        + inOffsets[0]
+                                                        + ", outRawOffset="
+                                                        + outOffsets[0]);
                                     }
                                 }
                             }
@@ -296,7 +370,6 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
                 }
             }
         }
-
     }
 
     /*
@@ -330,7 +403,8 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
         List<String> AMBIGUOUS_DST_DECESSION = Arrays.asList("v", "vvvv", "V", "VV", "VVV", "VVVV");
 
         // These patterns are ambiguous at STD->STD/DST->DST local time overlap
-        List<String> AMBIGUOUS_NEGATIVE_SHIFT = Arrays.asList("z", "zzzz", "v", "vvvv", "V", "VV", "VVV", "VVVV");
+        List<String> AMBIGUOUS_NEGATIVE_SHIFT =
+                Arrays.asList("z", "zzzz", "v", "vvvv", "V", "VV", "VVV", "VVVV");
 
         // These patterns only support integer minutes offset
         List<String> MINUTES_OFFSET = Arrays.asList("X", "XX", "XXX", "x", "xx", "xxx");
@@ -350,21 +424,32 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
             // It may take about an hour for testing all locales
             LOCALES = ULocale.getAvailableLocales();
         } else if (TestFmwk.getExhaustiveness() > 5) {
-            LOCALES = new ULocale[] {
-                new ULocale("ar_EG"), new ULocale("bg_BG"), new ULocale("ca_ES"), new ULocale("da_DK"), new ULocale("de"),
-                new ULocale("de_DE"), new ULocale("el_GR"), new ULocale("en"), new ULocale("en_AU"), new ULocale("en_CA"),
-                new ULocale("en_US"), new ULocale("es"), new ULocale("es_ES"), new ULocale("es_MX"), new ULocale("fi_FI"),
-                new ULocale("fr"), new ULocale("fr_CA"), new ULocale("fr_FR"), new ULocale("he_IL"), new ULocale("hu_HU"),
-                new ULocale("it"), new ULocale("it_IT"), new ULocale("ja"), new ULocale("ja_JP"), new ULocale("ko"),
-                new ULocale("ko_KR"), new ULocale("nb_NO"), new ULocale("nl_NL"), new ULocale("nn_NO"), new ULocale("pl_PL"),
-                new ULocale("pt"), new ULocale("pt_BR"), new ULocale("pt_PT"), new ULocale("ru_RU"), new ULocale("sv_SE"),
-                new ULocale("th_TH"), new ULocale("tr_TR"), new ULocale("zh"), new ULocale("zh_Hans"), new ULocale("zh_Hans_CN"),
-                new ULocale("zh_Hant"), new ULocale("zh_Hant_HK"), new ULocale("zh_Hant_TW"), new ULocale("ccp"), new ULocale("fa")
-            };
+            LOCALES =
+                    new ULocale[] {
+                        new ULocale("ar_EG"), new ULocale("bg_BG"), new ULocale("ca_ES"),
+                                new ULocale("da_DK"), new ULocale("de"),
+                        new ULocale("de_DE"), new ULocale("el_GR"), new ULocale("en"),
+                                new ULocale("en_AU"), new ULocale("en_CA"),
+                        new ULocale("en_US"), new ULocale("es"), new ULocale("es_ES"),
+                                new ULocale("es_MX"), new ULocale("fi_FI"),
+                        new ULocale("fr"), new ULocale("fr_CA"), new ULocale("fr_FR"),
+                                new ULocale("he_IL"), new ULocale("hu_HU"),
+                        new ULocale("it"), new ULocale("it_IT"), new ULocale("ja"),
+                                new ULocale("ja_JP"), new ULocale("ko"),
+                        new ULocale("ko_KR"), new ULocale("nb_NO"), new ULocale("nl_NL"),
+                                new ULocale("nn_NO"), new ULocale("pl_PL"),
+                        new ULocale("pt"), new ULocale("pt_BR"), new ULocale("pt_PT"),
+                                new ULocale("ru_RU"), new ULocale("sv_SE"),
+                        new ULocale("th_TH"), new ULocale("tr_TR"), new ULocale("zh"),
+                                new ULocale("zh_Hans"), new ULocale("zh_Hans_CN"),
+                        new ULocale("zh_Hant"), new ULocale("zh_Hant_HK"),
+                                new ULocale("zh_Hant_TW"), new ULocale("ccp"), new ULocale("fa")
+                    };
         } else {
-            LOCALES = new ULocale[] {
-                new ULocale("en"),
-            };
+            LOCALES =
+                    new ULocale[] {
+                        new ULocale("en"),
+                    };
         }
 
         SimpleDateFormat sdfGMT = new SimpleDateFormat(BASEPATTERN);
@@ -400,16 +485,20 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
                 }
 
                 for (String id : ids) {
-					// NOTE: This test only fails in the exhaustive tests.  If you take out this check,
-					// make sure you run the exhaustive tests!
-                    if (logKnownIssue("CLDR-18924", "Time round trip issues for Pacific/Apia in various locales")
+                    // NOTE: This test only fails in the exhaustive tests.  If you take out this
+                    // check,
+                    // make sure you run the exhaustive tests!
+                    if (logKnownIssue(
+                                    "CLDR-18924",
+                                    "Time round trip issues for Pacific/Apia in various locales")
                             && id.equals("Pacific/Apia")) {
                         continue;
                     }
 
-                 	if (PATTERNS[patidx].equals("V")) {
+                    if (PATTERNS[patidx].equals("V")) {
                         // Some zones do not have short ID assigned, such as Asia/Riyadh87.
-                        // The time roundtrip will fail for such zones with pattern "V" (short zone ID).
+                        // The time roundtrip will fail for such zones with pattern "V" (short zone
+                        // ID).
                         // This is expected behavior.
                         String shortZoneID = ZoneMeta.getShortID(id);
                         if (shortZoneID == null) {
@@ -417,14 +506,16 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
                         }
                     } else if (PATTERNS[patidx].equals("VVV")) {
                         // Some zones are not associated with any region, such as Etc/GMT+8.
-                        // The time roundtrip will fail for such zones with pattern "VVV" (exemplar location).
+                        // The time roundtrip will fail for such zones with pattern "VVV" (exemplar
+                        // location).
                         // This is expected behavior.
                         if (id.indexOf('/') < 0 || LOC_EXCLUSION_PATTERN.matcher(id).matches()) {
                             continue;
                         }
                     }
 
-                    BasicTimeZone btz = (BasicTimeZone)TimeZone.getTimeZone(id, TimeZone.TIMEZONE_ICU);
+                    BasicTimeZone btz =
+                            (BasicTimeZone) TimeZone.getTimeZone(id, TimeZone.TIMEZONE_ICU);
                     TimeZone tz = TimeZone.getTimeZone(id);
                     sdf.setTimeZone(tz);
 
@@ -438,21 +529,30 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
                             expectedRoundTrip[0] = true;
                             testLen = 1;
                         } else {
-                            int fromOffset = tzt.getFrom().getRawOffset() + tzt.getFrom().getDSTSavings();
+                            int fromOffset =
+                                    tzt.getFrom().getRawOffset() + tzt.getFrom().getDSTSavings();
                             int toOffset = tzt.getTo().getRawOffset() + tzt.getTo().getDSTSavings();
                             int delta = toOffset - fromOffset;
                             if (delta < 0) {
-                                boolean isDstDecession = tzt.getFrom().getDSTSavings() > 0 && tzt.getTo().getDSTSavings() == 0;
+                                boolean isDstDecession =
+                                        tzt.getFrom().getDSTSavings() > 0
+                                                && tzt.getTo().getDSTSavings() == 0;
                                 testTimes[0] = t + delta - 1;
                                 expectedRoundTrip[0] = true;
                                 testTimes[1] = t + delta;
-                                expectedRoundTrip[1] = isDstDecession ?
-                                        !AMBIGUOUS_DST_DECESSION.contains(PATTERNS[patidx]) :
-                                        !AMBIGUOUS_NEGATIVE_SHIFT.contains(PATTERNS[patidx]);
+                                expectedRoundTrip[1] =
+                                        isDstDecession
+                                                ? !AMBIGUOUS_DST_DECESSION.contains(
+                                                        PATTERNS[patidx])
+                                                : !AMBIGUOUS_NEGATIVE_SHIFT.contains(
+                                                        PATTERNS[patidx]);
                                 testTimes[2] = t - 1;
-                                expectedRoundTrip[2] = isDstDecession ?
-                                        !AMBIGUOUS_DST_DECESSION.contains(PATTERNS[patidx]) :
-                                        !AMBIGUOUS_NEGATIVE_SHIFT.contains(PATTERNS[patidx]);
+                                expectedRoundTrip[2] =
+                                        isDstDecession
+                                                ? !AMBIGUOUS_DST_DECESSION.contains(
+                                                        PATTERNS[patidx])
+                                                : !AMBIGUOUS_NEGATIVE_SHIFT.contains(
+                                                        PATTERNS[patidx]);
                                 testTimes[3] = t;
                                 expectedRoundTrip[3] = true;
                                 testLen = 4;
@@ -472,29 +572,52 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
                                 Date parsedDate = sdf.parse(text);
                                 long restime = parsedDate.getTime();
                                 long timeDiff = restime - testTimes[testidx];
-                                boolean bTimeMatch = minutesOffset ?
-                                        (timeDiff/60000)*60000 == 0 : timeDiff == 0;
+                                boolean bTimeMatch =
+                                        minutesOffset
+                                                ? (timeDiff / 60000) * 60000 == 0
+                                                : timeDiff == 0;
                                 if (!bTimeMatch) {
                                     StringBuffer msg = new StringBuffer();
                                     msg.append("Time round trip failed for ")
-                                        .append("tzid=").append(id)
-                                        .append(", locale=").append(LOCALES[locidx])
-                                        .append(", pattern=").append(PATTERNS[patidx])
-                                        .append(", text=").append(text)
-                                        .append(", gmt=").append(sdfGMT.format(new Date(testTimes[testidx])))
-                                        .append(", time=").append(testTimes[testidx])
-                                        .append(", restime=").append(restime)
-                                        .append(", diff=").append(timeDiff);
+                                            .append("tzid=")
+                                            .append(id)
+                                            .append(", locale=")
+                                            .append(LOCALES[locidx])
+                                            .append(", pattern=")
+                                            .append(PATTERNS[patidx])
+                                            .append(", text=")
+                                            .append(text)
+                                            .append(", gmt=")
+                                            .append(sdfGMT.format(new Date(testTimes[testidx])))
+                                            .append(", time=")
+                                            .append(testTimes[testidx])
+                                            .append(", restime=")
+                                            .append(restime)
+                                            .append(", diff=")
+                                            .append(timeDiff);
                                     if (expectedRoundTrip[testidx]
-                                            && !isSpecialTimeRoundTripCase(LOCALES[locidx], id, PATTERNS[patidx], testTimes[testidx])) {
+                                            && !isSpecialTimeRoundTripCase(
+                                                    LOCALES[locidx],
+                                                    id,
+                                                    PATTERNS[patidx],
+                                                    testTimes[testidx])) {
                                         errln("FAIL: " + msg.toString());
                                     } else if (REALLY_VERBOSE_LOG) {
                                         logln(msg.toString());
                                     }
                                 }
                             } catch (ParseException pe) {
-                                errln("FAIL: " + pe.getMessage() + " tzid=" + id + ", locale=" + LOCALES[locidx] +
-                                        ", pattern=" + PATTERNS[patidx] + ", text=" + text);
+                                errln(
+                                        "FAIL: "
+                                                + pe.getMessage()
+                                                + " tzid="
+                                                + id
+                                                + ", locale="
+                                                + LOCALES[locidx]
+                                                + ", pattern="
+                                                + PATTERNS[patidx]
+                                                + ", text="
+                                                + text);
                             }
                             times[patidx] += System.currentTimeMillis() - timer;
                         }
@@ -509,7 +632,7 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
                             t = END_TIME - 1;
                         } else if (middle) {
                             // Test the date in the middle of two transitions.
-                            t += (tzt.getTime() - t)/2;
+                            t += (tzt.getTime() - t) / 2;
                             middle = false;
                             tzt = null;
                         } else {
@@ -544,7 +667,7 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
             if (excl[0] == null || loc.equals(excl[0])) {
                 if (id.equals(excl[1])) {
                     if (excl[2] == null || pattern.equals(excl[2])) {
-                        if (excl[3] == null || ((Long)excl[3]).compareTo(time) == 0) {
+                        if (excl[3] == null || ((Long) excl[3]).compareTo(time) == 0) {
                             isExcluded = true;
                             break;
                         }
@@ -558,105 +681,237 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
     @Test
     public void TestParse() {
         final Object[][] DATA = {
-        //   text                   inpos       locale      style
-        //      parseOptions            expected            outpos      time type
-            {"Z",                   0,          "en_US",    Style.ISO_EXTENDED_FULL,
-                null,                   "Etc/GMT",          1,          TimeType.UNKNOWN},
-
-            {"Z",                   0,          "en_US",    Style.SPECIFIC_LONG,
-                null,                   "Etc/GMT",          1,          TimeType.UNKNOWN},
-
-            {"Zambia time",         0,          "en_US",    Style.ISO_EXTENDED_FULL,
-                EnumSet.of(ParseOption.ALL_STYLES), "Etc/GMT",  1,      TimeType.UNKNOWN},
-
-            {"Zambia time",         0,          "en_US",    Style.GENERIC_LOCATION,
-                null,                   "Africa/Lusaka",    11,         TimeType.UNKNOWN},
-
-            {"Zambia time",         0,          "en_US",    Style.ISO_BASIC_LOCAL_FULL,
-                EnumSet.of(ParseOption.ALL_STYLES), "Africa/Lusaka",    11, TimeType.UNKNOWN},
-
-            {"+00:00",              0,          "en_US",    Style.ISO_EXTENDED_FULL,
-                null,                   "Etc/GMT",          6,          TimeType.UNKNOWN},
-
-            {"-01:30:45",           0,          "en_US",    Style.ISO_EXTENDED_FULL,
-                null,                   "GMT-01:30:45",     9,          TimeType.UNKNOWN},
-
-            {"-7",                  0,          "en_US",    Style.ISO_BASIC_LOCAL_FULL,
-                null,                   "GMT-07:00",        2,          TimeType.UNKNOWN},
-
-            {"-2222",               0,          "en_US",    Style.ISO_BASIC_LOCAL_FULL,
-                null,                   "GMT-22:22",        5,          TimeType.UNKNOWN},
-
-            {"-3333",               0,          "en_US",    Style.ISO_BASIC_LOCAL_FULL,
-                null,                   "GMT-03:33",        4,          TimeType.UNKNOWN},
-
-            {"XXX+01:30YYY",        3,          "en_US",    Style.LOCALIZED_GMT,
-                null,                   "GMT+01:30",        9,          TimeType.UNKNOWN},
-
-            {"GMT0",                0,          "en_US",    Style.SPECIFIC_SHORT,
-                null,                   "Etc/GMT",          3,          TimeType.UNKNOWN},
-
-            {"EST",                 0,          "en_US",    Style.SPECIFIC_SHORT,
-                null,                   "America/New_York", 3,          TimeType.STANDARD},
-
-            {"ESTx",                0,          "en_US",    Style.SPECIFIC_SHORT,
-                null,                   "America/New_York", 3,          TimeType.STANDARD},
-
-            {"EDTx",                0,          "en_US",    Style.SPECIFIC_SHORT,
-                null,                   "America/New_York", 3,          TimeType.DAYLIGHT},
-
-            {"EST",                 0,          "en_US",    Style.SPECIFIC_LONG,
-                null,                   null,               0,          TimeType.UNKNOWN},
-
-            {"EST",                 0,          "en_US",    Style.SPECIFIC_LONG,
-                EnumSet.of(ParseOption.ALL_STYLES), "America/New_York", 3,  TimeType.STANDARD},
-
-            {"EST",                 0,          "en_CA",    Style.SPECIFIC_SHORT,
-                null,                   "America/Toronto",  3,          TimeType.STANDARD},
-
-            {"CST",                 0,          "en_US",    Style.SPECIFIC_SHORT,
-                null,                   "America/Chicago",  3,          TimeType.STANDARD},
-
-            {"CST",                 0,          "en_GB",    Style.SPECIFIC_SHORT,
-                null,                   null,               0,          TimeType.UNKNOWN},
-
-            {"CST",                 0,          "en_GB",    Style.SPECIFIC_SHORT,
-                EnumSet.of(ParseOption.TZ_DATABASE_ABBREVIATIONS),  "America/Chicago",  3,  TimeType.STANDARD},
-
-            {"--CST--",             2,          "en_GB",    Style.SPECIFIC_SHORT,
-                EnumSet.of(ParseOption.TZ_DATABASE_ABBREVIATIONS),  "America/Chicago",  5,  TimeType.STANDARD},
-
-            {"CST",                 0,          "zh_CN",    Style.SPECIFIC_SHORT,
-                EnumSet.of(ParseOption.TZ_DATABASE_ABBREVIATIONS),  "Asia/Shanghai",    3,  TimeType.STANDARD},
-
-            {"AEST",                0,          "en_AU",    Style.SPECIFIC_SHORT,
-                EnumSet.of(ParseOption.TZ_DATABASE_ABBREVIATIONS),  "Australia/Sydney", 4,  TimeType.STANDARD},
-
-            {"AST",                 0,          "ar_SA",    Style.SPECIFIC_SHORT,
-                EnumSet.of(ParseOption.TZ_DATABASE_ABBREVIATIONS),  "Asia/Riyadh",      3,  TimeType.STANDARD},
-
-            {"AQTST",               0,          "en",       Style.SPECIFIC_LONG,
-                null,                       null,           0,          TimeType.UNKNOWN},
-
-            {"AQTST",           0,      "en",       Style.SPECIFIC_LONG,
-                EnumSet.of(ParseOption.ALL_STYLES), null,   0,          TimeType.UNKNOWN},
-
-            {"AQTST",           0,      "en",       Style.SPECIFIC_LONG,
-                EnumSet.of(ParseOption.ALL_STYLES, ParseOption.TZ_DATABASE_ABBREVIATIONS),  "Asia/Aqtobe",  5,  TimeType.DAYLIGHT},
-
-            {"hora de verano británica", 0,     "es",       Style.SPECIFIC_LONG,
-                null,                   "Europe/London",    24,         TimeType.DAYLIGHT},
+            //   text                   inpos       locale      style
+            //      parseOptions            expected            outpos      time type
+            {"Z", 0, "en_US", Style.ISO_EXTENDED_FULL, null, "Etc/GMT", 1, TimeType.UNKNOWN},
+            {"Z", 0, "en_US", Style.SPECIFIC_LONG, null, "Etc/GMT", 1, TimeType.UNKNOWN},
+            {
+                "Zambia time",
+                0,
+                "en_US",
+                Style.ISO_EXTENDED_FULL,
+                EnumSet.of(ParseOption.ALL_STYLES),
+                "Etc/GMT",
+                1,
+                TimeType.UNKNOWN
+            },
+            {
+                "Zambia time",
+                0,
+                "en_US",
+                Style.GENERIC_LOCATION,
+                null,
+                "Africa/Lusaka",
+                11,
+                TimeType.UNKNOWN
+            },
+            {
+                "Zambia time",
+                0,
+                "en_US",
+                Style.ISO_BASIC_LOCAL_FULL,
+                EnumSet.of(ParseOption.ALL_STYLES),
+                "Africa/Lusaka",
+                11,
+                TimeType.UNKNOWN
+            },
+            {"+00:00", 0, "en_US", Style.ISO_EXTENDED_FULL, null, "Etc/GMT", 6, TimeType.UNKNOWN},
+            {
+                "-01:30:45",
+                0,
+                "en_US",
+                Style.ISO_EXTENDED_FULL,
+                null,
+                "GMT-01:30:45",
+                9,
+                TimeType.UNKNOWN
+            },
+            {"-7", 0, "en_US", Style.ISO_BASIC_LOCAL_FULL, null, "GMT-07:00", 2, TimeType.UNKNOWN},
+            {
+                "-2222",
+                0,
+                "en_US",
+                Style.ISO_BASIC_LOCAL_FULL,
+                null,
+                "GMT-22:22",
+                5,
+                TimeType.UNKNOWN
+            },
+            {
+                "-3333",
+                0,
+                "en_US",
+                Style.ISO_BASIC_LOCAL_FULL,
+                null,
+                "GMT-03:33",
+                4,
+                TimeType.UNKNOWN
+            },
+            {
+                "XXX+01:30YYY",
+                3,
+                "en_US",
+                Style.LOCALIZED_GMT,
+                null,
+                "GMT+01:30",
+                9,
+                TimeType.UNKNOWN
+            },
+            {"GMT0", 0, "en_US", Style.SPECIFIC_SHORT, null, "Etc/GMT", 3, TimeType.UNKNOWN},
+            {
+                "EST",
+                0,
+                "en_US",
+                Style.SPECIFIC_SHORT,
+                null,
+                "America/New_York",
+                3,
+                TimeType.STANDARD
+            },
+            {
+                "ESTx",
+                0,
+                "en_US",
+                Style.SPECIFIC_SHORT,
+                null,
+                "America/New_York",
+                3,
+                TimeType.STANDARD
+            },
+            {
+                "EDTx",
+                0,
+                "en_US",
+                Style.SPECIFIC_SHORT,
+                null,
+                "America/New_York",
+                3,
+                TimeType.DAYLIGHT
+            },
+            {"EST", 0, "en_US", Style.SPECIFIC_LONG, null, null, 0, TimeType.UNKNOWN},
+            {
+                "EST",
+                0,
+                "en_US",
+                Style.SPECIFIC_LONG,
+                EnumSet.of(ParseOption.ALL_STYLES),
+                "America/New_York",
+                3,
+                TimeType.STANDARD
+            },
+            {
+                "EST",
+                0,
+                "en_CA",
+                Style.SPECIFIC_SHORT,
+                null,
+                "America/Toronto",
+                3,
+                TimeType.STANDARD
+            },
+            {
+                "CST",
+                0,
+                "en_US",
+                Style.SPECIFIC_SHORT,
+                null,
+                "America/Chicago",
+                3,
+                TimeType.STANDARD
+            },
+            {"CST", 0, "en_GB", Style.SPECIFIC_SHORT, null, null, 0, TimeType.UNKNOWN},
+            {
+                "CST",
+                0,
+                "en_GB",
+                Style.SPECIFIC_SHORT,
+                EnumSet.of(ParseOption.TZ_DATABASE_ABBREVIATIONS),
+                "America/Chicago",
+                3,
+                TimeType.STANDARD
+            },
+            {
+                "--CST--",
+                2,
+                "en_GB",
+                Style.SPECIFIC_SHORT,
+                EnumSet.of(ParseOption.TZ_DATABASE_ABBREVIATIONS),
+                "America/Chicago",
+                5,
+                TimeType.STANDARD
+            },
+            {
+                "CST",
+                0,
+                "zh_CN",
+                Style.SPECIFIC_SHORT,
+                EnumSet.of(ParseOption.TZ_DATABASE_ABBREVIATIONS),
+                "Asia/Shanghai",
+                3,
+                TimeType.STANDARD
+            },
+            {
+                "AEST",
+                0,
+                "en_AU",
+                Style.SPECIFIC_SHORT,
+                EnumSet.of(ParseOption.TZ_DATABASE_ABBREVIATIONS),
+                "Australia/Sydney",
+                4,
+                TimeType.STANDARD
+            },
+            {
+                "AST",
+                0,
+                "ar_SA",
+                Style.SPECIFIC_SHORT,
+                EnumSet.of(ParseOption.TZ_DATABASE_ABBREVIATIONS),
+                "Asia/Riyadh",
+                3,
+                TimeType.STANDARD
+            },
+            {"AQTST", 0, "en", Style.SPECIFIC_LONG, null, null, 0, TimeType.UNKNOWN},
+            {
+                "AQTST",
+                0,
+                "en",
+                Style.SPECIFIC_LONG,
+                EnumSet.of(ParseOption.ALL_STYLES),
+                null,
+                0,
+                TimeType.UNKNOWN
+            },
+            {
+                "AQTST",
+                0,
+                "en",
+                Style.SPECIFIC_LONG,
+                EnumSet.of(ParseOption.ALL_STYLES, ParseOption.TZ_DATABASE_ABBREVIATIONS),
+                "Asia/Aqtobe",
+                5,
+                TimeType.DAYLIGHT
+            },
+            {
+                "hora de verano británica",
+                0,
+                "es",
+                Style.SPECIFIC_LONG,
+                null,
+                "Europe/London",
+                24,
+                TimeType.DAYLIGHT
+            },
         };
 
         for (Object[] test : DATA) {
-            String text = (String)test[0];
-            int inPos = (Integer)test[1];
-            ULocale loc = new ULocale((String)test[2]);
-            Style style = (Style)test[3];
-            EnumSet<ParseOption> options = (EnumSet<ParseOption>)test[4];
-            String expID = (String)test[5];
-            int expPos = (Integer)test[6];
-            TimeType expType = (TimeType)test[7];
+            String text = (String) test[0];
+            int inPos = (Integer) test[1];
+            ULocale loc = new ULocale((String) test[2]);
+            Style style = (Style) test[3];
+            EnumSet<ParseOption> options = (EnumSet<ParseOption>) test[4];
+            String expID = (String) test[5];
+            int expPos = (Integer) test[6];
+            TimeType expType = (TimeType) test[7];
 
             TimeZoneFormat tzfmt = TimeZoneFormat.getInstance(loc);
             Output<TimeType> timeType = new Output<>(TimeType.UNKNOWN);
@@ -677,9 +932,18 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
             }
 
             if (errMsg != null) {
-                errln("Fail: " + errMsg +
-                        " [text=" + text + ", pos=" + inPos +
-                        ", locale=" + loc + ", style=" + style + "]");
+                errln(
+                        "Fail: "
+                                + errMsg
+                                + " [text="
+                                + text
+                                + ", pos="
+                                + inPos
+                                + ", locale="
+                                + loc
+                                + ", style="
+                                + style
+                                + "]");
             }
         }
     }
@@ -697,50 +961,63 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
             if (tz1 == null) {
                 errln("Parse failure using parse(String) - expected: " + expectedTZ.getID());
             } else if (!expectedTZ.equals(tz1)) {
-                errln("Parsed TimeZone: '" + tz1.getID()  + "' using parse(String) - expected: "
-                        + expectedTZ.getID());
+                errln(
+                        "Parsed TimeZone: '"
+                                + tz1.getID()
+                                + "' using parse(String) - expected: "
+                                + expectedTZ.getID());
             }
         } catch (ParseException e) {
-            errln("Parse failure using parse(String) - expected: " + expectedTZ.getID()
-                    + " exception: " + e.getMessage());
+            errln(
+                    "Parse failure using parse(String) - expected: "
+                            + expectedTZ.getID()
+                            + " exception: "
+                            + e.getMessage());
         }
 
         // Test parse(String, ParsePosition)
         TimeZone tz2 = fmt.parse("++America/Los_Angeles", new ParsePosition(2));
         if (tz2 == null) {
-            errln("Parse failure using parse(String, ParsePosition) - expected: "
-                    + expectedTZ.getID());
+            errln(
+                    "Parse failure using parse(String, ParsePosition) - expected: "
+                            + expectedTZ.getID());
         } else if (!expectedTZ.equals(tz2)) {
-            errln("Parsed TimeZone: '" + tz2.getID()  + "' using parse(String, ParsePosition) - expected: "
-                    + expectedTZ.getID());
+            errln(
+                    "Parsed TimeZone: '"
+                            + tz2.getID()
+                            + "' using parse(String, ParsePosition) - expected: "
+                            + expectedTZ.getID());
         }
 
         // Test parseObject(String, ParsePosition)
         Object tz3 = fmt.parseObject("++America/Los_Angeles", new ParsePosition(2));
         if (tz3 == null) {
-            errln("Parse failure using parseObject(String, ParsePosition) - expected: "
-                    + expectedTZ.getID());
+            errln(
+                    "Parse failure using parseObject(String, ParsePosition) - expected: "
+                            + expectedTZ.getID());
         } else if (!expectedTZ.equals(tz3)) {
-            errln("Parsed TimeZone: '" + ((TimeZone)tz3).getID()
-                    + "' using parseObject(String, ParsePosition) - expected: "
-                    + expectedTZ.getID());
+            errln(
+                    "Parsed TimeZone: '"
+                            + ((TimeZone) tz3).getID()
+                            + "' using parseObject(String, ParsePosition) - expected: "
+                            + expectedTZ.getID());
         }
     }
 
     @Test
     public void TestISOFormat() {
         final int[] OFFSET = {
-            0,          // 0
-            999,        // 0.999s
-            -59999,     // -59.999s
-            60000,      // 1m
-            -77777,     // -1m 17.777s
-            1800000,    // 30m
-            -3600000,   // -1h
-            36000000,   // 10h
-            -37800000,  // -10h 30m
-            -37845000,  // -10h 30m 45s
-            108000000,  // 30h
+            0, // 0
+            999, // 0.999s
+            -59999, // -59.999s
+            60000, // 1m
+            -77777, // -1m 17.777s
+            1800000, // 30m
+            -3600000, // -1h
+            36000000, // 10h
+            -37800000, // -10h 30m
+            -37845000, // -10h 30m 45s
+            108000000, // 30h
         };
 
         final String[][] ISO_STR = {
@@ -818,8 +1095,7 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
         };
 
         final int[] MIN_OFFSET_UNIT = {
-            60000, 60000, 60000, 1000, 1000, 60000, 60000, 60000, 1000, 1000,
-            1000,
+            60000, 60000, 60000, 1000, 1000, 60000, 60000, 60000, 1000, 1000, 1000,
         };
 
         // Formatting
@@ -827,20 +1103,36 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
         Date d = new Date();
 
         for (int i = 0; i < OFFSET.length; i++) {
-            SimpleTimeZone tz = new SimpleTimeZone(OFFSET[i], "Zone Offset:" + String.valueOf(OFFSET[i]) + "ms");
+            SimpleTimeZone tz =
+                    new SimpleTimeZone(
+                            OFFSET[i], "Zone Offset:" + String.valueOf(OFFSET[i]) + "ms");
             sdf.setTimeZone(tz);
             for (int j = 0; j < PATTERN.length; j++) {
                 sdf.applyPattern(PATTERN[j]);
                 try {
                     String result = sdf.format(d);
                     if (!result.equals(ISO_STR[i][j])) {
-                        errln("FAIL: pattern=" + PATTERN[j] + ", offset=" + OFFSET[i] + " -> "
-                            + result + " (expected: " + ISO_STR[i][j] + ")");
+                        errln(
+                                "FAIL: pattern="
+                                        + PATTERN[j]
+                                        + ", offset="
+                                        + OFFSET[i]
+                                        + " -> "
+                                        + result
+                                        + " (expected: "
+                                        + ISO_STR[i][j]
+                                        + ")");
                     }
                 } catch (IllegalArgumentException e) {
                     if (ISO_STR[i][j] != null) {
-                        errln("FAIL: IAE thrown for pattern=" + PATTERN[j] + ", offset=" + OFFSET[i]
-                                + " (expected: " + ISO_STR[i][j] + ")");
+                        errln(
+                                "FAIL: IAE thrown for pattern="
+                                        + PATTERN[j]
+                                        + ", offset="
+                                        + OFFSET[i]
+                                        + " (expected: "
+                                        + ISO_STR[i][j]
+                                        + ")");
                     }
                 }
             }
@@ -869,8 +1161,14 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
                 int adjustedOffset = OFFSET[i] / MIN_OFFSET_UNIT[j] * MIN_OFFSET_UNIT[j];
 
                 if (outOffset != adjustedOffset) {
-                    errln("FAIL: Incorrect offset:" + outOffset + "ms for input string: " + ISO_STR[i][j]
-                            + " (expected:" + adjustedOffset + "ms)");
+                    errln(
+                            "FAIL: Incorrect offset:"
+                                    + outOffset
+                                    + "ms for input string: "
+                                    + ISO_STR[i][j]
+                                    + " (expected:"
+                                    + adjustedOffset
+                                    + "ms)");
                 }
             }
         }
@@ -878,8 +1176,8 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
 
     @Test
     public void TestFormat() {
-        final Date dateJan = new Date(1358208000000L);  // 2013-01-15T00:00:00Z
-        final Date dateJul = new Date(1373846400000L);  // 2013-07-15T00:00:00Z
+        final Date dateJan = new Date(1358208000000L); // 2013-01-15T00:00:00Z
+        final Date dateJul = new Date(1373846400000L); // 2013-07-15T00:00:00Z
 
         final Object[][] TESTDATA = {
             {
@@ -922,14 +1220,7 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
                 "America/Los_Angeles",
                 TimeType.UNKNOWN
             },
-            {
-                "fr",
-                "America/Los_Angeles",
-                dateJul,
-                Style.ZONE_ID_SHORT,
-                "uslax",
-                TimeType.UNKNOWN
-            },
+            {"fr", "America/Los_Angeles", dateJul, Style.ZONE_ID_SHORT, "uslax", TimeType.UNKNOWN},
             {
                 "en",
                 "America/Los_Angeles",
@@ -943,116 +1234,121 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
                 "Asia/Tokyo",
                 dateJan,
                 Style.GENERIC_LONG,
-                "\u65E5\u672C\u6A19\u6E96\u6642",   // "日本標準時"
+                "\u65E5\u672C\u6A19\u6E96\u6642", // "日本標準時"
                 TimeType.UNKNOWN
             },
         };
 
         for (Object[] testCase : TESTDATA) {
-            TimeZone tz = TimeZone.getTimeZone((String)testCase[1]);
+            TimeZone tz = TimeZone.getTimeZone((String) testCase[1]);
             Output<TimeType> timeType = new Output<>();
 
-            ULocale uloc = new ULocale((String)testCase[0]);
+            ULocale uloc = new ULocale((String) testCase[0]);
             TimeZoneFormat tzfmt = TimeZoneFormat.getInstance(uloc);
-            String out = tzfmt.format((Style)testCase[3], tz, ((Date)testCase[2]).getTime(), timeType);
+            String out =
+                    tzfmt.format((Style) testCase[3], tz, ((Date) testCase[2]).getTime(), timeType);
 
             if (!out.equals(testCase[4]) || timeType.value != testCase[5]) {
-                errln("Format result for [locale=" + testCase[0] + ",tzid=" + testCase[1] + ",date=" + testCase[2]
-                        + ",style=" + testCase[3] + "]: expected [output=" + testCase[4] + ",type=" + testCase[5]
-                        + "]; actual [output=" + out + ",type=" + timeType.value + "]");
+                errln(
+                        "Format result for [locale="
+                                + testCase[0]
+                                + ",tzid="
+                                + testCase[1]
+                                + ",date="
+                                + testCase[2]
+                                + ",style="
+                                + testCase[3]
+                                + "]: expected [output="
+                                + testCase[4]
+                                + ",type="
+                                + testCase[5]
+                                + "]; actual [output="
+                                + out
+                                + ",type="
+                                + timeType.value
+                                + "]");
             }
 
             // with equivalent Java Locale
             Locale loc = uloc.toLocale();
             tzfmt = TimeZoneFormat.getInstance(loc);
-            out = tzfmt.format((Style)testCase[3], tz, ((Date)testCase[2]).getTime(), timeType);
+            out = tzfmt.format((Style) testCase[3], tz, ((Date) testCase[2]).getTime(), timeType);
 
             if (!out.equals(testCase[4]) || timeType.value != testCase[5]) {
-                errln("Format result for [locale(Java)=" + testCase[0] + ",tzid=" + testCase[1] + ",date=" + testCase[2]
-                        + ",style=" + testCase[3] + "]: expected [output=" + testCase[4] + ",type=" + testCase[5]
-                        + "]; actual [output=" + out + ",type=" + timeType.value + "]");
+                errln(
+                        "Format result for [locale(Java)="
+                                + testCase[0]
+                                + ",tzid="
+                                + testCase[1]
+                                + ",date="
+                                + testCase[2]
+                                + ",style="
+                                + testCase[3]
+                                + "]: expected [output="
+                                + testCase[4]
+                                + ",type="
+                                + testCase[5]
+                                + "]; actual [output="
+                                + out
+                                + ",type="
+                                + timeType.value
+                                + "]");
             }
         }
     }
 
     @Test
     public void TestFormatTZDBNames() {
-        final Date dateJan = new Date(1358208000000L);  // 2013-01-15T00:00:00Z
-        final Date dateJul = new Date(1373846400000L);  // 2013-07-15T00:00:00Z
+        final Date dateJan = new Date(1358208000000L); // 2013-01-15T00:00:00Z
+        final Date dateJul = new Date(1373846400000L); // 2013-07-15T00:00:00Z
 
         final Object[][] TESTDATA = {
-            {
-                "en",
-                "America/Chicago",
-                dateJan,
-                Style.SPECIFIC_SHORT,
-                "CST",
-                TimeType.STANDARD
-            },
-            {
-                "en",
-                "Asia/Shanghai",
-                dateJan,
-                Style.SPECIFIC_SHORT,
-                "CST",
-                TimeType.STANDARD
-            },
-            {
-                "zh_Hans",
-                "Asia/Shanghai",
-                dateJan,
-                Style.SPECIFIC_SHORT,
-                "CST",
-                TimeType.STANDARD
-            },
+            {"en", "America/Chicago", dateJan, Style.SPECIFIC_SHORT, "CST", TimeType.STANDARD},
+            {"en", "Asia/Shanghai", dateJan, Style.SPECIFIC_SHORT, "CST", TimeType.STANDARD},
+            {"zh_Hans", "Asia/Shanghai", dateJan, Style.SPECIFIC_SHORT, "CST", TimeType.STANDARD},
             {
                 "en",
                 "America/Los_Angeles",
                 dateJul,
                 Style.SPECIFIC_LONG,
-                "GMT-07:00",    // No long display names
+                "GMT-07:00", // No long display names
                 TimeType.DAYLIGHT
             },
-            {
-                "ja",
-                "America/Los_Angeles",
-                dateJul,
-                Style.SPECIFIC_SHORT,
-                "PDT",
-                TimeType.DAYLIGHT
-            },
-            {
-                "en",
-                "Australia/Sydney",
-                dateJan,
-                Style.SPECIFIC_SHORT,
-                "AEDT",
-                TimeType.DAYLIGHT
-            },
-            {
-                "en",
-                "Australia/Sydney",
-                dateJul,
-                Style.SPECIFIC_SHORT,
-                "AEST",
-                TimeType.STANDARD
-            },
+            {"ja", "America/Los_Angeles", dateJul, Style.SPECIFIC_SHORT, "PDT", TimeType.DAYLIGHT},
+            {"en", "Australia/Sydney", dateJan, Style.SPECIFIC_SHORT, "AEDT", TimeType.DAYLIGHT},
+            {"en", "Australia/Sydney", dateJul, Style.SPECIFIC_SHORT, "AEST", TimeType.STANDARD},
         };
 
         for (Object[] testCase : TESTDATA) {
-            ULocale loc = new ULocale((String)testCase[0]);
+            ULocale loc = new ULocale((String) testCase[0]);
             TimeZoneFormat tzfmt = TimeZoneFormat.getInstance(loc).cloneAsThawed();
             TimeZoneNames tzdbNames = TimeZoneNames.getTZDBInstance(loc);
             tzfmt.setTimeZoneNames(tzdbNames);
 
-            TimeZone tz = TimeZone.getTimeZone((String)testCase[1]);
+            TimeZone tz = TimeZone.getTimeZone((String) testCase[1]);
             Output<TimeType> timeType = new Output<>();
-            String out = tzfmt.format((Style)testCase[3], tz, ((Date)testCase[2]).getTime(), timeType);
+            String out =
+                    tzfmt.format((Style) testCase[3], tz, ((Date) testCase[2]).getTime(), timeType);
 
             if (!out.equals(testCase[4]) || timeType.value != testCase[5]) {
-                errln("Format result for [locale=" + testCase[0] + ",tzid=" + testCase[1] + ",date=" + testCase[2]
-                        + ",style=" + testCase[3] + "]: expected [output=" + testCase[4] + ",type=" + testCase[5]
-                        + "]; actual [output=" + out + ",type=" + timeType.value + "]");
+                errln(
+                        "Format result for [locale="
+                                + testCase[0]
+                                + ",tzid="
+                                + testCase[1]
+                                + ",date="
+                                + testCase[2]
+                                + ",style="
+                                + testCase[3]
+                                + "]: expected [output="
+                                + testCase[4]
+                                + ",type="
+                                + testCase[5]
+                                + "]; actual [output="
+                                + out
+                                + ",type="
+                                + timeType.value
+                                + "]");
             }
         }
     }
@@ -1074,7 +1370,9 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
         try {
             fmt.format(new Object(), sb, fp);
             errln("ERROR: format non-timezone related object failed");
-        } catch (IllegalArgumentException e) { /* Expected */ }
+        } catch (IllegalArgumentException e) {
+            /* Expected */
+        }
 
         // Test formatting a TimeZone object
         sb = new StringBuffer();
@@ -1082,7 +1380,11 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
         // When formatting a TimeZone object the formatter uses the current date.
         String fmtOutput = tz.inDaylightTime(new Date()) ? "GMT-07:00" : "GMT-08:00";
         if (!sb.toString().equals(fmtOutput)) {
-            errln("ERROR: format TimerZone object failed. Expected: " + fmtOutput + ", actual: " + sb);
+            errln(
+                    "ERROR: format TimerZone object failed. Expected: "
+                            + fmtOutput
+                            + ", actual: "
+                            + sb);
         }
 
         // Test formatting a Calendar object
@@ -1107,20 +1409,22 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
 
         try {
             for (int i = 0; i < numIteration; i++) {
-                Thread thread = new Thread() {
-                    @Override
-                    public void run() {
-                        int resultSize = names.find("GMT", 0, EnumSet.allOf(NameType.class)).size();
-                        if (resultSize > 0) {
-                            found.incrementAndGet();
-                        }
-                    }
-                };
+                Thread thread =
+                        new Thread() {
+                            @Override
+                            public void run() {
+                                int resultSize =
+                                        names.find("GMT", 0, EnumSet.allOf(NameType.class)).size();
+                                if (resultSize > 0) {
+                                    found.incrementAndGet();
+                                }
+                            }
+                        };
                 thread.start();
                 threads.add(thread);
             }
 
-            for(Thread thread: threads) {
+            for (Thread thread : threads) {
                 thread.join();
             }
         } catch (Throwable t) {
@@ -1135,18 +1439,23 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
     @Test
     public void TestGetDisplayNames() {
         long date = System.currentTimeMillis();
-        NameType[] types = new NameType[]{
-                NameType.LONG_STANDARD, NameType.LONG_DAYLIGHT,
-                NameType.SHORT_STANDARD, NameType.SHORT_DAYLIGHT
-        };
+        NameType[] types =
+                new NameType[] {
+                    NameType.LONG_STANDARD, NameType.LONG_DAYLIGHT,
+                    NameType.SHORT_STANDARD, NameType.SHORT_DAYLIGHT
+                };
         Set<String> zones = ZoneMeta.getAvailableIDs(SystemTimeZoneType.ANY, null, null);
 
         int casesTested = 0;
         Random rnd = new Random(2016);
         for (ULocale uloc : ULocale.getAvailableLocales()) {
-            if (rnd.nextDouble() > 0.01) { continue; }
+            if (rnd.nextDouble() > 0.01) {
+                continue;
+            }
             for (String zone : zones) {
-                if (rnd.nextDouble() > 0.01) { continue; }
+                if (rnd.nextDouble() > 0.01) {
+                    continue;
+                }
                 casesTested++;
 
                 // Test default TimeZoneNames (uses an overridden getDisplayNames)
@@ -1155,12 +1464,18 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
                     tznames.loadAllDisplayNames();
                     String[] result = new String[types.length];
                     tznames.getDisplayNames(zone, types, date, result, 0);
-                    for (int i=0; i<types.length; i++) {
+                    for (int i = 0; i < types.length; i++) {
                         NameType type = types[i];
                         String expected = result[i];
                         String actual = tznames.getDisplayName(zone, type, date);
-                        assertEquals("TimeZoneNames: getDisplayNames() returns different result than getDisplayName()"
-                                + " for " + zone + " in locale " + uloc, expected, actual);
+                        assertEquals(
+                                "TimeZoneNames: getDisplayNames() returns different result than getDisplayName()"
+                                        + " for "
+                                        + zone
+                                        + " in locale "
+                                        + uloc,
+                                expected,
+                                actual);
                     }
                     // Coverage for empty call to getDisplayNames
                     tznames.getDisplayNames(null, null, 0, null, 0);
@@ -1172,12 +1487,18 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
                     tznames.loadAllDisplayNames();
                     String[] result = new String[types.length];
                     tznames.getDisplayNames(zone, types, date, result, 0);
-                    for (int i=0; i<types.length; i++) {
+                    for (int i = 0; i < types.length; i++) {
                         NameType type = types[i];
                         String expected = result[i];
                         String actual = tznames.getDisplayName(zone, type, date);
-                        assertEquals("TZDBTimeZoneNames: getDisplayNames() returns different result than getDisplayName()"
-                                + " for " + zone + " in locale " + uloc, expected, actual);
+                        assertEquals(
+                                "TZDBTimeZoneNames: getDisplayNames() returns different result than getDisplayName()"
+                                        + " for "
+                                        + zone
+                                        + " in locale "
+                                        + uloc,
+                                expected,
+                                actual);
                     }
                     // Coverage for empty call to getDisplayNames
                     tznames.getDisplayNames(null, null, 0, null, 0);
@@ -1228,34 +1549,57 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
         long date = System.currentTimeMillis();
         TimeZoneNames.Factory factory;
         try {
-            Class<?> cls = Class.forName("com.ibm.icu.text.TimeZoneNames$DefaultTimeZoneNames$FactoryImpl");
+            Class<?> cls =
+                    Class.forName(
+                            "com.ibm.icu.text.TimeZoneNames$DefaultTimeZoneNames$FactoryImpl");
             factory = (Factory) cls.newInstance();
         } catch (Exception e) {
-            errln("Could not create class DefaultTimeZoneNames.FactoryImpl: " + e.getClass() + ": " + e.getMessage());
+            errln(
+                    "Could not create class DefaultTimeZoneNames.FactoryImpl: "
+                            + e.getClass()
+                            + ": "
+                            + e.getMessage());
             return;
         }
         TimeZoneNames tzn = factory.getTimeZoneNames(ULocale.ENGLISH);
-        assertEquals("Abstract: getAvailableMetaZoneIDs()",
-                tzn.getAvailableMetaZoneIDs(), Collections.emptySet());
-        assertEquals("Abstract: getAvailableMetaZoneIDs(String tzID)",
-                tzn.getAvailableMetaZoneIDs("America/Chicago"), Collections.emptySet());
-        assertEquals("Abstract: getMetaZoneID(String tzID, long date)",
-                tzn.getMetaZoneID("America/Chicago", date), null);
-        assertEquals("Abstract: getReferenceZoneID(String mzID, String region)",
-                tzn.getReferenceZoneID("America_Central", "IT"), null);
-        assertEquals("Abstract: getMetaZoneDisplayName(String mzID, NameType type)",
-                tzn.getMetaZoneDisplayName("America_Central", NameType.LONG_DAYLIGHT), null);
-        assertEquals("Abstract: getTimeZoneDisplayName(String mzID, NameType type)",
-                tzn.getTimeZoneDisplayName("America/Chicago", NameType.LONG_DAYLIGHT), null);
-        assertEquals("Abstract: find(CharSequence text, int start, EnumSet<NameType> nameTypes)",
-                tzn.find("foo", 0, EnumSet.noneOf(NameType.class)), Collections.emptyList());
+        assertEquals(
+                "Abstract: getAvailableMetaZoneIDs()",
+                tzn.getAvailableMetaZoneIDs(),
+                Collections.emptySet());
+        assertEquals(
+                "Abstract: getAvailableMetaZoneIDs(String tzID)",
+                tzn.getAvailableMetaZoneIDs("America/Chicago"),
+                Collections.emptySet());
+        assertEquals(
+                "Abstract: getMetaZoneID(String tzID, long date)",
+                tzn.getMetaZoneID("America/Chicago", date),
+                null);
+        assertEquals(
+                "Abstract: getReferenceZoneID(String mzID, String region)",
+                tzn.getReferenceZoneID("America_Central", "IT"),
+                null);
+        assertEquals(
+                "Abstract: getMetaZoneDisplayName(String mzID, NameType type)",
+                tzn.getMetaZoneDisplayName("America_Central", NameType.LONG_DAYLIGHT),
+                null);
+        assertEquals(
+                "Abstract: getTimeZoneDisplayName(String mzID, NameType type)",
+                tzn.getTimeZoneDisplayName("America/Chicago", NameType.LONG_DAYLIGHT),
+                null);
+        assertEquals(
+                "Abstract: find(CharSequence text, int start, EnumSet<NameType> nameTypes)",
+                tzn.find("foo", 0, EnumSet.noneOf(NameType.class)),
+                Collections.emptyList());
 
         // Other abstract-class methods that aren't covered
         tzn = new TimeZoneNamesInheriter();
         try {
             tzn.find(null, 0, null);
         } catch (UnsupportedOperationException e) {
-            assertEquals("find() exception", "The method is not implemented in TimeZoneNames base class.", e.getMessage());
+            assertEquals(
+                    "find() exception",
+                    "The method is not implemented in TimeZoneNames base class.",
+                    e.getMessage());
         }
     }
 
@@ -1290,8 +1634,10 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
         }
 
         Set<String> kinshasaAvailableMZIDs = tzn.getAvailableMetaZoneIDs("Africa/Kinshasa");
-        if (!kinshasaAvailableMZIDs.contains("Africa_Western") || kinshasaAvailableMZIDs.contains("America_Central")) {
-            errln("ERROR: getAvailableMetaZoneIDs('Africa/Kinshasa') did not return expected value");
+        if (!kinshasaAvailableMZIDs.contains("Africa_Western")
+                || kinshasaAvailableMZIDs.contains("America_Central")) {
+            errln(
+                    "ERROR: getAvailableMetaZoneIDs('Africa/Kinshasa') did not return expected value");
         }
 
         try {
@@ -1305,14 +1651,20 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
             new TimeZoneNames.MatchInfo(NameType.LONG_GENERIC, null, null, -1);
             assertTrue("MatchInfo doesn't throw IllegalArgumentException", false);
         } catch (IllegalArgumentException e) {
-            assertEquals("MatchInfo constructor exception", "Either tzID or mzID must be available", e.getMessage());
+            assertEquals(
+                    "MatchInfo constructor exception",
+                    "Either tzID or mzID must be available",
+                    e.getMessage());
         }
 
         try {
             new TimeZoneNames.MatchInfo(NameType.LONG_GENERIC, "America/Chicago", null, -1);
             assertTrue("MatchInfo doesn't throw IllegalArgumentException", false);
         } catch (IllegalArgumentException e) {
-            assertEquals("MatchInfo constructor exception", "matchLength must be positive value", e.getMessage());
+            assertEquals(
+                    "MatchInfo constructor exception",
+                    "matchLength must be positive value",
+                    e.getMessage());
         }
     }
 

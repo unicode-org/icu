@@ -1,19 +1,8 @@
 // © 2021 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 //
-/**
- * A LSTMBreakEngine
- */
+/** A LSTMBreakEngine */
 package com.ibm.icu.impl.breakiter;
-
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.text.CharacterIterator;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
@@ -23,29 +12,37 @@ import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.UResourceBundle;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.text.CharacterIterator;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @internal
  */
 public class LSTMBreakEngine extends DictionaryBreakEngine {
     public enum EmbeddingType {
-      UNKNOWN,
-      CODE_POINTS,
-      GRAPHEME_CLUSTER
+        UNKNOWN,
+        CODE_POINTS,
+        GRAPHEME_CLUSTER
     }
 
     public enum LSTMClass {
-      BEGIN,
-      INSIDE,
-      END,
-      SINGLE,
+        BEGIN,
+        INSIDE,
+        END,
+        SINGLE,
     }
 
     private static float[][] make2DArray(int[] data, int start, int d1, int d2) {
         byte[] bytes = new byte[4];
-        float [][] result = new float[d1][d2];
-        for (int i = 0; i < d1 ; i++) {
-            for (int j = 0; j < d2 ; j++) {
+        float[][] result = new float[d1][d2];
+        for (int i = 0; i < d1; i++) {
+            for (int j = 0; j < d2; j++) {
                 int d = data[start++];
                 bytes[0] = (byte) (d >> 24);
                 bytes[1] = (byte) (d >> 16);
@@ -59,8 +56,8 @@ public class LSTMBreakEngine extends DictionaryBreakEngine {
 
     private static float[] make1DArray(int[] data, int start, int d1) {
         byte[] bytes = new byte[4];
-        float [] result = new float[d1];
-        for (int i = 0; i < d1 ; i++) {
+        float[] result = new float[d1];
+        for (int i = 0; i < d1; i++) {
             int d = data[start++];
             bytes[0] = (byte) (d >> 24);
             bytes[1] = (byte) (d >> 16);
@@ -71,10 +68,11 @@ public class LSTMBreakEngine extends DictionaryBreakEngine {
         return result;
     }
 
-    /** @internal */
+    /**
+     * @internal
+     */
     public static class LSTMData {
-        private LSTMData() {
-        }
+        private LSTMData() {}
 
         public LSTMData(UResourceBundle rb) {
             int embeddings = rb.get("embeddings").getInt();
@@ -93,7 +91,7 @@ public class LSTMBreakEngine extends DictionaryBreakEngine {
             int numIndex = dict.length;
             fDict = new HashMap<String, Integer>(numIndex + 1);
             int idx = 0;
-            for (String embedding : dict){
+            for (String embedding : dict) {
                 fDict.put(embedding, idx++);
             }
             int mat1Size = (numIndex + 1) * embeddings;
@@ -105,9 +103,11 @@ public class LSTMBreakEngine extends DictionaryBreakEngine {
             int mat7Size = mat4Size;
             int mat8Size = 2 * hunits * 4;
             int mat9Size = 4;
-            assert dataLen == mat1Size + mat2Size + mat3Size + mat4Size + mat5Size + mat6Size + mat7Size + mat8Size + mat9Size;
+            assert dataLen
+                    == mat1Size + mat2Size + mat3Size + mat4Size + mat5Size + mat6Size + mat7Size
+                            + mat8Size + mat9Size;
             int start = 0;
-            this.fEmbedding = make2DArray(data, start, (numIndex+1), embeddings);
+            this.fEmbedding = make2DArray(data, start, (numIndex + 1), embeddings);
             start += mat1Size;
             this.fForwardW = make2DArray(data, start, embeddings, 4 * hunits);
             start += mat2Size;
@@ -150,12 +150,19 @@ public class LSTMBreakEngine extends DictionaryBreakEngine {
         public Vectorizer(Map<String, Integer> dict) {
             this.fDict = dict;
         }
-        abstract public void vectorize(CharacterIterator fIter, int rangeStart, int rangeEnd,
-                              List<Integer> offsets, List<Integer> indicies);
+
+        public abstract void vectorize(
+                CharacterIterator fIter,
+                int rangeStart,
+                int rangeEnd,
+                List<Integer> offsets,
+                List<Integer> indicies);
+
         protected int getIndex(String token) {
             Integer res = fDict.get(token);
             return (res == null) ? fDict.size() : res;
         }
+
         private Map<String, Integer> fDict;
     }
 
@@ -165,12 +172,16 @@ public class LSTMBreakEngine extends DictionaryBreakEngine {
         }
 
         @Override
-        public void vectorize(CharacterIterator fIter, int rangeStart, int rangeEnd,
-                              List<Integer> offsets, List<Integer> indicies) {
+        public void vectorize(
+                CharacterIterator fIter,
+                int rangeStart,
+                int rangeEnd,
+                List<Integer> offsets,
+                List<Integer> indicies) {
             fIter.setIndex(rangeStart);
             for (char c = fIter.current();
-                 c != CharacterIterator.DONE && fIter.getIndex() < rangeEnd;
-                 c = fIter.next()) {
+                    c != CharacterIterator.DONE && fIter.getIndex() < rangeEnd;
+                    c = fIter.next()) {
                 offsets.add(fIter.getIndex());
                 indicies.add(getIndex(String.valueOf(c)));
             }
@@ -187,8 +198,8 @@ public class LSTMBreakEngine extends DictionaryBreakEngine {
             text.setIndex(startPos);
             StringBuilder sb = new StringBuilder();
             for (char c = text.current();
-                 c != CharacterIterator.DONE && text.getIndex() < endPos;
-                 c = text.next()) {
+                    c != CharacterIterator.DONE && text.getIndex() < endPos;
+                    c = text.next()) {
                 sb.append(c);
             }
             text.setIndex(saved);
@@ -196,12 +207,18 @@ public class LSTMBreakEngine extends DictionaryBreakEngine {
         }
 
         @Override
-        public void vectorize(CharacterIterator text, int startPos, int endPos,
-                              List<Integer> offsets, List<Integer> indicies) {
+        public void vectorize(
+                CharacterIterator text,
+                int startPos,
+                int endPos,
+                List<Integer> offsets,
+                List<Integer> indicies) {
             BreakIterator iter = BreakIterator.getCharacterInstance();
             iter.setText(text);
             int last = iter.next(startPos);
-            for (int curr = iter.next(); curr != BreakIterator.DONE && curr <= endPos; curr = iter.next()) {
+            for (int curr = iter.next();
+                    curr != BreakIterator.DONE && curr <= endPos;
+                    curr = iter.next()) {
                 offsets.add(last);
                 String segment = substring(text, last, curr);
                 int index = getIndex(segment);
@@ -216,7 +233,7 @@ public class LSTMBreakEngine extends DictionaryBreakEngine {
     private final Vectorizer fVectorizer;
 
     private Vectorizer makeVectorizer(LSTMData data) {
-        switch(data.fType) {
+        switch (data.fType) {
             case CODE_POINTS:
                 return new CodePointsVectorizer(data.fDict);
             case GRAPHEME_CLUSTER:
@@ -243,7 +260,7 @@ public class LSTMBreakEngine extends DictionaryBreakEngine {
         return fScript == UCharacter.getIntPropertyValue(c, UProperty.SCRIPT);
     }
 
-    static private void addDotProductTo(final float [] a, final float[][] b, float[] result) {
+    private static void addDotProductTo(final float[] a, final float[][] b, float[] result) {
         assert a.length == b.length;
         assert b[0].length == result.length;
         for (int i = 0; i < result.length; i++) {
@@ -253,21 +270,21 @@ public class LSTMBreakEngine extends DictionaryBreakEngine {
         }
     }
 
-    static private void addTo(final float [] a, float[] result) {
+    private static void addTo(final float[] a, float[] result) {
         assert a.length == result.length;
         for (int i = 0; i < result.length; i++) {
             result[i] += a[i];
         }
     }
 
-    static private void hadamardProductTo(final float [] a, float[] result) {
+    private static void hadamardProductTo(final float[] a, float[] result) {
         assert a.length == result.length;
         for (int i = 0; i < result.length; i++) {
             result[i] *= a[i];
         }
     }
 
-    static private void addHadamardProductTo(final float [] a, final float [] b, float[] result) {
+    private static void addHadamardProductTo(final float[] a, final float[] b, float[] result) {
         assert a.length == result.length;
         assert b.length == result.length;
         for (int i = 0; i < result.length; i++) {
@@ -275,23 +292,23 @@ public class LSTMBreakEngine extends DictionaryBreakEngine {
         }
     }
 
-    static private void sigmoid(float [] result, int start, int length) {
+    private static void sigmoid(float[] result, int start, int length) {
         assert start < result.length;
         assert start + length <= result.length;
         for (int i = start; i < start + length; i++) {
-            result[i] = (float)(1.0/(1.0 + Math.exp(-result[i])));
+            result[i] = (float) (1.0 / (1.0 + Math.exp(-result[i])));
         }
     }
 
-    static private void tanh(float [] result, int start, int length) {
+    private static void tanh(float[] result, int start, int length) {
         assert start < result.length;
         assert start + length <= result.length;
         for (int i = start; i < start + length; i++) {
-            result[i] = (float)Math.tanh(result[i]);
+            result[i] = (float) Math.tanh(result[i]);
         }
     }
 
-    static private int maxIndex(float [] data) {
+    private static int maxIndex(float[] data) {
         int index = 0;
         float max = data[0];
         for (int i = 1; i < data.length; i++) {
@@ -315,8 +332,13 @@ public class LSTMBreakEngine extends DictionaryBreakEngine {
     }
     */
 
-    private float[] compute(final float[][] W, final float[][] U, final float[] B,
-                            final float[] x, float[] h, float[] c) {
+    private float[] compute(
+            final float[][] W,
+            final float[][] U,
+            final float[] B,
+            final float[] x,
+            float[] h,
+            float[] c) {
         // ifco = x * W + h * U + b
         float[] ifco = Arrays.copyOf(B, B.length);
         addDotProductTo(x, W, ifco);
@@ -324,18 +346,18 @@ public class LSTMBreakEngine extends DictionaryBreakEngine {
         addDotProductTo(h, U, ifco);
 
         int hunits = B.length / 4;
-        sigmoid(ifco, 0*hunits, hunits);  // i
-        sigmoid(ifco, 1*hunits, hunits);  // f
-        tanh(ifco, 2*hunits, hunits);  // c_
-        sigmoid(ifco, 3*hunits, hunits);  // o
+        sigmoid(ifco, 0 * hunits, hunits); // i
+        sigmoid(ifco, 1 * hunits, hunits); // f
+        tanh(ifco, 2 * hunits, hunits); // c_
+        sigmoid(ifco, 3 * hunits, hunits); // o
 
-        hadamardProductTo(Arrays.copyOfRange(ifco, hunits, 2*hunits), c);
-        addHadamardProductTo(Arrays.copyOf(ifco, hunits),
-            Arrays.copyOfRange(ifco, 2*hunits, 3*hunits), c);
+        hadamardProductTo(Arrays.copyOfRange(ifco, hunits, 2 * hunits), c);
+        addHadamardProductTo(
+                Arrays.copyOf(ifco, hunits), Arrays.copyOfRange(ifco, 2 * hunits, 3 * hunits), c);
 
         h = Arrays.copyOf(c, c.length);
         tanh(h, 0, h.length);
-        hadamardProductTo(Arrays.copyOfRange(ifco, 3*hunits, 4*hunits), h);
+        hadamardProductTo(Arrays.copyOfRange(ifco, 3 * hunits, 4 * hunits), h);
         // System.out.println("c");
         // print(c);
         // System.out.println("h");
@@ -344,12 +366,16 @@ public class LSTMBreakEngine extends DictionaryBreakEngine {
     }
 
     @Override
-    public int divideUpDictionaryRange(CharacterIterator fIter, int rangeStart, int rangeEnd,
-            DequeI foundBreaks, boolean isPhraseBreaking) {
+    public int divideUpDictionaryRange(
+            CharacterIterator fIter,
+            int rangeStart,
+            int rangeEnd,
+            DequeI foundBreaks,
+            boolean isPhraseBreaking) {
         int beginSize = foundBreaks.size();
 
         if ((rangeEnd - rangeStart) < MIN_WORD_SPAN) {
-            return 0;  // Not enough characters for word
+            return 0; // Not enough characters for word
         }
         List<Integer> offsets = new ArrayList<Integer>(rangeEnd - rangeStart);
         List<Integer> indicies = new ArrayList<Integer>(rangeEnd - rangeStart);
@@ -368,33 +394,43 @@ public class LSTMBreakEngine extends DictionaryBreakEngine {
         // run out of memory.
         // Backward LSTM
         float hBackward[][] = new float[inputSeqLength][hunits];
-        for (int i = inputSeqLength - 1; i >= 0;  i--) {
+        for (int i = inputSeqLength - 1; i >= 0; i--) {
             if (i != inputSeqLength - 1) {
-                hBackward[i] = Arrays.copyOf(hBackward[i+1], hunits);
+                hBackward[i] = Arrays.copyOf(hBackward[i + 1], hunits);
             }
             // System.out.println("Backward LSTM " + i);
-            hBackward[i] = compute(this.fData.fBackwardW, this.fData.fBackwardU, this.fData.fBackwardB,
-                    this.fData.fEmbedding[indicies.get(i)],
-                    hBackward[i], c);
+            hBackward[i] =
+                    compute(
+                            this.fData.fBackwardW,
+                            this.fData.fBackwardU,
+                            this.fData.fBackwardB,
+                            this.fData.fEmbedding[indicies.get(i)],
+                            hBackward[i],
+                            c);
         }
 
         c = new float[hunits];
         float forwardH[] = new float[hunits];
-        float both[] = new float[2*hunits];
+        float both[] = new float[2 * hunits];
 
         // The following iteration merge the forward LSTM and the output layer
         // together.
-        for (int i = 0 ; i < inputSeqLength; i++) {
+        for (int i = 0; i < inputSeqLength; i++) {
             // Forward LSTM
-            forwardH = compute(this.fData.fForwardW, this.fData.fForwardU, this.fData.fForwardB,
-                    this.fData.fEmbedding[indicies.get(i)],
-                    forwardH, c);
+            forwardH =
+                    compute(
+                            this.fData.fForwardW,
+                            this.fData.fForwardU,
+                            this.fData.fForwardB,
+                            this.fData.fEmbedding[indicies.get(i)],
+                            forwardH,
+                            c);
 
             System.arraycopy(forwardH, 0, both, 0, hunits);
             System.arraycopy(hBackward[i], 0, both, hunits, hunits);
 
-            //System.out.println("Merged " + i);
-            //print(both);
+            // System.out.println("Merged " + i);
+            // print(both);
 
             // Output layer
             // logp = fbRow * fOutputW + fOutputB
@@ -404,8 +440,7 @@ public class LSTMBreakEngine extends DictionaryBreakEngine {
             int current = maxIndex(logp);
 
             // BIES logic.
-            if (current == LSTMClass.BEGIN.ordinal() ||
-                current == LSTMClass.SINGLE.ordinal()) {
+            if (current == LSTMClass.BEGIN.ordinal() || current == LSTMClass.SINGLE.ordinal()) {
                 if (i != 0) {
                     foundBreaks.push(offsets.get(i));
                 }
@@ -420,20 +455,26 @@ public class LSTMBreakEngine extends DictionaryBreakEngine {
     }
 
     private static String defaultLSTM(int script) {
-        ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUData.ICU_BRKITR_BASE_NAME);
+        ICUResourceBundle rb =
+                (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BRKITR_BASE_NAME);
         return rb.getStringWithFallback("lstm/" + UScript.getShortName(script));
     }
 
     public static LSTMData createData(int script) {
-        if (script != UScript.KHMER && script != UScript.LAO && script != UScript.MYANMAR && script != UScript.THAI) {
+        if (script != UScript.KHMER
+                && script != UScript.LAO
+                && script != UScript.MYANMAR
+                && script != UScript.THAI) {
             return null;
         }
         String name = defaultLSTM(script);
         name = name.substring(0, name.indexOf("."));
 
-        UResourceBundle rb = UResourceBundle.getBundleInstance(
-             ICUData.ICU_BRKITR_BASE_NAME, name,
-             ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+        UResourceBundle rb =
+                UResourceBundle.getBundleInstance(
+                        ICUData.ICU_BRKITR_BASE_NAME,
+                        name,
+                        ICUResourceBundle.ICU_DATA_CLASS_LOADER);
         return createData(rb);
     }
 

@@ -8,40 +8,33 @@
  */
 package com.ibm.icu.text;
 
+import com.ibm.icu.impl.CurrencyData;
+import com.ibm.icu.util.ICUCloneNotSupportedException;
+import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.ULocale.Category;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 
-import com.ibm.icu.impl.CurrencyData;
-import com.ibm.icu.util.ICUCloneNotSupportedException;
-import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.ULocale.Category;
-
 /**
- * This class represents the information needed by
- * DecimalFormat to format currency plural,
- * such as "3.00 US dollars" or "1.00 US dollar".
- * DecimalFormat creates for itself an instance of
- * CurrencyPluralInfo from its locale data.
- * If you need to change any of these symbols, you can get the
- * CurrencyPluralInfo object from your
- * DecimalFormat and modify it.
+ * This class represents the information needed by DecimalFormat to format currency plural, such as
+ * "3.00 US dollars" or "1.00 US dollar". DecimalFormat creates for itself an instance of
+ * CurrencyPluralInfo from its locale data. If you need to change any of these symbols, you can get
+ * the CurrencyPluralInfo object from your DecimalFormat and modify it.
  *
- * Following are the information needed for currency plural format and parse:
- * locale information,
- * plural rule of the locale,
- * currency plural pattern of the locale.
+ * <p>Following are the information needed for currency plural format and parse: locale information,
+ * plural rule of the locale, currency plural pattern of the locale.
  *
  * @stable ICU 4.2
  */
-
 public class CurrencyPluralInfo implements Cloneable, Serializable {
     private static final long serialVersionUID = 1;
 
     /**
      * Create a CurrencyPluralInfo object for the default <code>FORMAT</code> locale.
+     *
      * @see Category#FORMAT
      * @stable ICU 4.2
      */
@@ -51,6 +44,7 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
 
     /**
      * Create a CurrencyPluralInfo object for the given locale.
+     *
      * @param locale the locale
      * @stable ICU 4.2
      */
@@ -60,6 +54,7 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
 
     /**
      * Create a CurrencyPluralInfo object for the given locale.
+     *
      * @param locale the locale
      * @stable ICU 4.2
      */
@@ -110,10 +105,10 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
     }
 
     /**
-     * Given a plural count, gets currency plural pattern of this locale,
-     * used for currency plural format
+     * Given a plural count, gets currency plural pattern of this locale, used for currency plural
+     * format
      *
-     * @param  pluralCount currency plural count
+     * @param pluralCount currency plural count
      * @return a currency plural pattern based on plural count
      * @stable ICU 4.2
      */
@@ -140,7 +135,6 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
      * Get locale
      *
      * @return locale
-     *
      * @stable ICU 4.2
      */
     public ULocale getLocale() {
@@ -148,8 +142,8 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
     }
 
     /**
-     * Set plural rules.  These are initially set in the constructor based on the locale,
-     * and usually do not need to be changed.
+     * Set plural rules. These are initially set in the constructor based on the locale, and usually
+     * do not need to be changed.
      *
      * @param ruleDescription new plural rule description
      * @stable ICU 4.2
@@ -159,16 +153,15 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
     }
 
     /**
-     * Set currency plural patterns.  These are initially set in the constructor based on the
-     * locale, and usually do not need to be changed.
+     * Set currency plural patterns. These are initially set in the constructor based on the locale,
+     * and usually do not need to be changed.
      *
-     * The decimal digits part of the pattern cannot be specified via this method.  All plural
-     * forms will use the same decimal pattern as set in the constructor of DecimalFormat.  For
+     * <p>The decimal digits part of the pattern cannot be specified via this method. All plural
+     * forms will use the same decimal pattern as set in the constructor of DecimalFormat. For
      * example, you can't set "0.0" for plural "few" but "0.00" for plural "many".
      *
-     * @param pluralCount the plural count for which the currency pattern will
-     *                    be overridden.
-     * @param pattern     the new currency plural pattern
+     * @param pluralCount the plural count for which the currency pattern will be overridden.
+     * @param pattern the new currency plural pattern
      * @stable ICU 4.2
      */
     public void setCurrencyPluralPattern(String pluralCount, String pattern) {
@@ -176,8 +169,8 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
     }
 
     /**
-     * Set locale.  This also sets both the plural rules and the currency plural patterns to be
-     * the defaults for the locale.
+     * Set locale. This also sets both the plural rules and the currency plural patterns to be the
+     * defaults for the locale.
      *
      * @param loc the new locale to set
      * @stable ICU 4.2
@@ -199,9 +192,9 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
             // locale is immutable
             other.ulocale = ulocale.clone();
             // plural rule is immutable
-            //other.pluralRules = pluralRules;
+            // other.pluralRules = pluralRules;
             // clone content
-            //other.pluralCountToCurrencyUnitPattern = pluralCountToCurrencyUnitPattern;
+            // other.pluralCountToCurrencyUnitPattern = pluralCountToCurrencyUnitPattern;
             other.pluralCountToCurrencyUnitPattern = new HashMap<>();
             for (String pluralCount : pluralCountToCurrencyUnitPattern.keySet()) {
                 String currencyPattern = pluralCountToCurrencyUnitPattern.get(pluralCount);
@@ -221,9 +214,10 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
     @Override
     public boolean equals(Object a) {
         if (a instanceof CurrencyPluralInfo) {
-            CurrencyPluralInfo other = (CurrencyPluralInfo)a;
-            return pluralRules.equals(other.pluralRules) &&
-                   pluralCountToCurrencyUnitPattern.equals(other.pluralCountToCurrencyUnitPattern);
+            CurrencyPluralInfo other = (CurrencyPluralInfo) a;
+            return pluralRules.equals(other.pluralRules)
+                    && pluralCountToCurrencyUnitPattern.equals(
+                            other.pluralCountToCurrencyUnitPattern);
         }
         return false;
     }
@@ -235,14 +229,14 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
      */
     @Override
     public int hashCode() {
-      return pluralCountToCurrencyUnitPattern.hashCode()
-          ^ pluralRules.hashCode()
-          ^ ulocale.hashCode();
+        return pluralCountToCurrencyUnitPattern.hashCode()
+                ^ pluralRules.hashCode()
+                ^ ulocale.hashCode();
     }
 
     /**
-     * Given a number, returns the keyword of the first rule that applies
-     * to the number.
+     * Given a number, returns the keyword of the first rule that applies to the number.
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -252,8 +246,8 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
     }
 
     /**
-     * Given a number, returns the keyword of the first rule that applies
-     * to the number.
+     * Given a number, returns the keyword of the first rule that applies to the number.
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -313,8 +307,7 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
         }
     }
 
-
-    //-------------------- private data member ---------------------
+    // -------------------- private data member ---------------------
     //
     // triple currency sign char array
     private static final char[] tripleCurrencySign = {0xA4, 0xA4, 0xA4};
@@ -322,9 +315,12 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
     private static final String tripleCurrencyStr = new String(tripleCurrencySign);
 
     // default currency plural pattern char array
-    private static final char[] defaultCurrencyPluralPatternChar = {0, '.', '#', '#', ' ', 0xA4, 0xA4, 0xA4};
+    private static final char[] defaultCurrencyPluralPatternChar = {
+        0, '.', '#', '#', ' ', 0xA4, 0xA4, 0xA4
+    };
     // default currency plural pattern string
-    private static final String defaultCurrencyPluralPattern = new String(defaultCurrencyPluralPatternChar);
+    private static final String defaultCurrencyPluralPattern =
+            new String(defaultCurrencyPluralPatternChar);
 
     // map from plural count to currency plural pattern, for example
     // one (plural count) --> {0} {1} (currency plural pattern,

@@ -1,25 +1,22 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /*
-*******************************************************************************
-*   Copyright (C) 2001-2013, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-*******************************************************************************
-*/
+ *******************************************************************************
+ *   Copyright (C) 2001-2013, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ *******************************************************************************
+ */
 
 package com.ibm.icu.dev.test.bidi;
 
-import org.junit.Test;
-
 import com.ibm.icu.text.Bidi;
-
+import org.junit.Test;
 
 /**
  * Regression test for the UBA implementation.
  *
- * ported from C by Lina Kemmel, Matitiahu Allouche
+ * <p>ported from C by Lina Kemmel, Matitiahu Allouche
  */
-
 public class TestReorder extends BidiFmwk {
 
     private static final String[] logicalOrder = {
@@ -40,8 +37,8 @@ public class TestReorder extends BidiFmwk {
     private static final String[] visualOrder = {
         "del(CK)add(&.C.K)",
         "del(TVDQ) add(LDVB)",
-        "del(QP)add(S.R.)&.U(T",        /* updated for Unicode 6.3 matching brackets */
-        "del(VL)add(V.L.) &.V.L",       /* updated for Unicode 6.3 matching brackets */
+        "del(QP)add(S.R.)&.U(T", /* updated for Unicode 6.3 matching brackets */
+        "del(VL)add(V.L.) &.V.L", /* updated for Unicode 6.3 matching brackets */
         "day  0  RVRHDPD  R dayabbr",
         "day  1  ADHDPHPD  H dayabbr",
         "day  2   ADNELBPD  L dayabbr",
@@ -55,8 +52,8 @@ public class TestReorder extends BidiFmwk {
     private static final String[] visualOrder1 = {
         ")K.C.&(dda)KC(led",
         ")BVDL(dda )QDVT(led",
-        "T(U.&).R.S(dda)PQ(led",        /* updated for Unicode 6.3 matching brackets */
-        "L.V.& ).L.V(dda)LV(led",       /* updated for Unicode 6.3 matching brackets */
+        "T(U.&).R.S(dda)PQ(led", /* updated for Unicode 6.3 matching brackets */
+        "L.V.& ).L.V(dda)LV(led", /* updated for Unicode 6.3 matching brackets */
         "rbbayad R  DPDHRVR  0  yad",
         "rbbayad H  DPHPDHDA  1  yad",
         "rbbayad L  DPBLENDA   2  yad",
@@ -128,19 +125,32 @@ public class TestReorder extends BidiFmwk {
             try {
                 bidi.setPara(srcU16, Bidi.LEVEL_DEFAULT_LTR, null);
             } catch (Exception e) {
-                errln("Bidi.setPara(tests[" + testNumber + "], paraLevel " +
-                      Bidi.LEVEL_DEFAULT_LTR + " failed.");
+                errln(
+                        "Bidi.setPara(tests["
+                                + testNumber
+                                + "], paraLevel "
+                                + Bidi.LEVEL_DEFAULT_LTR
+                                + " failed.");
             }
             try {
                 dest = u16ToPseudo(bidi.writeReordered(Bidi.DO_MIRRORING));
             } catch (Exception e) {
-                errln("Bidi.writeReordered(tests[" + testNumber + "], paraLevel " +
-                      Bidi.LEVEL_DEFAULT_LTR + " failed.");
+                errln(
+                        "Bidi.writeReordered(tests["
+                                + testNumber
+                                + "], paraLevel "
+                                + Bidi.LEVEL_DEFAULT_LTR
+                                + " failed.");
             }
             if (!visualOrder[testNumber].equals(dest)) {
-                assertEquals("Failure #1 in Bidi.writeReordered(), test number " +
-                             testNumber, visualOrder[testNumber], dest, src, null,
-                             "Bidi.DO_MIRRORING", "Bidi.LEVEL_DEFAULT_LTR");
+                assertEquals(
+                        "Failure #1 in Bidi.writeReordered(), test number " + testNumber,
+                        visualOrder[testNumber],
+                        dest,
+                        src,
+                        null,
+                        "Bidi.DO_MIRRORING",
+                        "Bidi.LEVEL_DEFAULT_LTR");
             }
             checkWhatYouCan(bidi, src, dest);
         }
@@ -152,21 +162,31 @@ public class TestReorder extends BidiFmwk {
             try {
                 bidi.setPara(srcU16, Bidi.LEVEL_DEFAULT_LTR, null);
             } catch (Exception e) {
-                errln("Bidi.setPara(tests[" + testNumber + "], paraLevel " +
-                      Bidi.LEVEL_DEFAULT_LTR + " failed.");
+                errln(
+                        "Bidi.setPara(tests["
+                                + testNumber
+                                + "], paraLevel "
+                                + Bidi.LEVEL_DEFAULT_LTR
+                                + " failed.");
             }
             try {
-                dest = u16ToPseudo(bidi.writeReordered(Bidi.DO_MIRRORING +
-                                                       Bidi.OUTPUT_REVERSE));
+                dest = u16ToPseudo(bidi.writeReordered(Bidi.DO_MIRRORING + Bidi.OUTPUT_REVERSE));
             } catch (Exception e) {
-                errln("Bidi.writeReordered(test[" + testNumber + "], paraLevel "
-                        + Bidi.LEVEL_DEFAULT_LTR + " failed.");
+                errln(
+                        "Bidi.writeReordered(test["
+                                + testNumber
+                                + "], paraLevel "
+                                + Bidi.LEVEL_DEFAULT_LTR
+                                + " failed.");
             }
-            assertEquals("Failure #2 in Bidi.writeReordered() at index " +
-                         testNumber, visualOrder1[testNumber], dest,
-                         logicalOrder[testNumber], null,
-                         "DO_MIRRORING + OUTPUT_REVERSE",
-                         "Bidi.LEVEL_DEFAULT_LTR");
+            assertEquals(
+                    "Failure #2 in Bidi.writeReordered() at index " + testNumber,
+                    visualOrder1[testNumber],
+                    dest,
+                    logicalOrder[testNumber],
+                    null,
+                    "DO_MIRRORING + OUTPUT_REVERSE",
+                    "Bidi.LEVEL_DEFAULT_LTR");
         }
 
         for (testNumber = 0; testNumber < nTests; testNumber++) {
@@ -177,21 +197,34 @@ public class TestReorder extends BidiFmwk {
             try {
                 bidi.setPara(srcU16, Bidi.LEVEL_DEFAULT_LTR, null);
             } catch (Exception e) {
-                errln("Bidi.setPara(tests[" + testNumber + "], paraLevel " +
-                      Bidi.LEVEL_DEFAULT_LTR + " failed.");
+                errln(
+                        "Bidi.setPara(tests["
+                                + testNumber
+                                + "], paraLevel "
+                                + Bidi.LEVEL_DEFAULT_LTR
+                                + " failed.");
             }
             try {
-                dest = u16ToPseudo(bidi.writeReordered(Bidi.OUTPUT_REVERSE |
-                                                       Bidi.INSERT_LRM_FOR_NUMERIC));
+                dest =
+                        u16ToPseudo(
+                                bidi.writeReordered(
+                                        Bidi.OUTPUT_REVERSE | Bidi.INSERT_LRM_FOR_NUMERIC));
             } catch (Exception e) {
-                errln("Bidi.writeReordered(test[" + testNumber + "], paraLevel " +
-                      Bidi.LEVEL_DEFAULT_LTR + " failed.");
+                errln(
+                        "Bidi.writeReordered(test["
+                                + testNumber
+                                + "], paraLevel "
+                                + Bidi.LEVEL_DEFAULT_LTR
+                                + " failed.");
             }
-            assertEquals("Failure #3 in Bidi.writeReordered(test[" + testNumber +
-                         "])", visualOrder2[testNumber], dest,
-                         logicalOrder[testNumber], null,
-                         "INSERT_LRM_FOR_NUMERIC + OUTPUT_REVERSE",
-                         "Bidi.LEVEL_DEFAULT_LTR");
+            assertEquals(
+                    "Failure #3 in Bidi.writeReordered(test[" + testNumber + "])",
+                    visualOrder2[testNumber],
+                    dest,
+                    logicalOrder[testNumber],
+                    null,
+                    "INSERT_LRM_FOR_NUMERIC + OUTPUT_REVERSE",
+                    "Bidi.LEVEL_DEFAULT_LTR");
         }
 
         /* Max Explicit level */
@@ -201,25 +234,36 @@ public class TestReorder extends BidiFmwk {
             srcU16 = pseudoToU16(src);
             byte[] levels = new byte[Bidi.MAX_EXPLICIT_LEVEL];
             for (int i = 0; i < 10; i++) {
-                levels[i] = (byte)(i + 1);
+                levels[i] = (byte) (i + 1);
             }
             try {
                 bidi.setPara(srcU16, Bidi.LEVEL_DEFAULT_LTR, levels);
             } catch (Exception e) {
-                errln("Bidi.setPara(tests[" + testNumber +
-                      "], paraLevel = MAX_EXPLICIT_LEVEL = " +
-                      Bidi.MAX_EXPLICIT_LEVEL + " failed.");
+                errln(
+                        "Bidi.setPara(tests["
+                                + testNumber
+                                + "], paraLevel = MAX_EXPLICIT_LEVEL = "
+                                + Bidi.MAX_EXPLICIT_LEVEL
+                                + " failed.");
             }
             try {
                 dest = u16ToPseudo(bidi.writeReordered(Bidi.OUTPUT_REVERSE));
             } catch (Exception e) {
-                errln("Bidi.writeReordered(test[" + testNumber + "], paraLevel " +
-                      Bidi.LEVEL_DEFAULT_LTR + " failed.");
+                errln(
+                        "Bidi.writeReordered(test["
+                                + testNumber
+                                + "], paraLevel "
+                                + Bidi.LEVEL_DEFAULT_LTR
+                                + " failed.");
             }
-            assertEquals("Failure #4 in Bidi.writeReordered(test[" + testNumber +
-                         "])", visualOrder3[testNumber], dest,
-                         logicalOrder[testNumber], null,
-                         "OUTPUT_REVERSE", "Bidi.LEVEL_DEFAULT_LTR");
+            assertEquals(
+                    "Failure #4 in Bidi.writeReordered(test[" + testNumber + "])",
+                    visualOrder3[testNumber],
+                    dest,
+                    logicalOrder[testNumber],
+                    null,
+                    "OUTPUT_REVERSE",
+                    "Bidi.LEVEL_DEFAULT_LTR");
         }
 
         for (testNumber = 0; testNumber < nTests; testNumber++) {
@@ -228,26 +272,38 @@ public class TestReorder extends BidiFmwk {
             srcU16 = pseudoToU16(src);
             byte[] levels = new byte[Bidi.MAX_EXPLICIT_LEVEL];
             for (int i = 0; i < 10; i++) {
-                levels[i] = (byte)(i + 1);
+                levels[i] = (byte) (i + 1);
             }
             try {
                 bidi.setPara(srcU16, Bidi.LEVEL_DEFAULT_LTR, levels);
             } catch (Exception e) {
-                errln("Bidi.setPara(tests[" + testNumber + "], paraLevel " +
-                      Bidi.MAX_EXPLICIT_LEVEL + " failed.");
+                errln(
+                        "Bidi.setPara(tests["
+                                + testNumber
+                                + "], paraLevel "
+                                + Bidi.MAX_EXPLICIT_LEVEL
+                                + " failed.");
             }
             try {
-                dest = u16ToPseudo(bidi.writeReordered(Bidi.DO_MIRRORING |
-                                                       Bidi.REMOVE_BIDI_CONTROLS));
+                dest =
+                        u16ToPseudo(
+                                bidi.writeReordered(Bidi.DO_MIRRORING | Bidi.REMOVE_BIDI_CONTROLS));
             } catch (Exception e) {
-                errln("Bidi.writeReordered(test[" + testNumber + "], paraLevel "
-                        + Bidi.LEVEL_DEFAULT_LTR + " failed.");
+                errln(
+                        "Bidi.writeReordered(test["
+                                + testNumber
+                                + "], paraLevel "
+                                + Bidi.LEVEL_DEFAULT_LTR
+                                + " failed.");
             }
-            assertEquals("Failure #5 in Bidi.writeReordered(test[" + testNumber +
-                         "])", visualOrder4[testNumber], dest,
-                         logicalOrder[testNumber], null,
-                         "DO_MIRRORING + REMOVE_BIDI_CONTROLS",
-                         "Bidi.LEVEL_DEFAULT_LTR");
+            assertEquals(
+                    "Failure #5 in Bidi.writeReordered(test[" + testNumber + "])",
+                    visualOrder4[testNumber],
+                    dest,
+                    logicalOrder[testNumber],
+                    null,
+                    "DO_MIRRORING + REMOVE_BIDI_CONTROLS",
+                    "Bidi.LEVEL_DEFAULT_LTR");
         }
 
         logln("\nExiting TestReorder\n");

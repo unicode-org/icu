@@ -8,13 +8,6 @@
  */
 package com.ibm.icu.dev.test.calendar;
 
-import java.util.Date;
-import java.util.Locale;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.util.Calendar;
@@ -26,10 +19,13 @@ import com.ibm.icu.util.SimpleDateRule;
 import com.ibm.icu.util.SimpleHoliday;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
+import java.util.Date;
+import java.util.Locale;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
-/**
- * Tests for the <code>Holiday</code> class.
- */
+/** Tests for the <code>Holiday</code> class. */
 @RunWith(JUnit4.class)
 public class HolidayTest extends CoreTestFmwk {
 
@@ -59,29 +55,9 @@ public class HolidayTest extends CoreTestFmwk {
 
         {
             // getHolidays(Locale)
-            String[] localeNames =
-            {
-                "en_US",
-                "da",
-                "da_DK",
-                "de",
-                "de_AT",
-                "de_DE",
-                "el",
-                "el_GR",
-                "en",
-                "en_CA",
-                "en_GB",
-                "es",
-                "es_MX",
-                "fr",
-                "fr_CA",
-                "fr_FR",
-                "it",
-                "it_IT",
-                "iw",
-                "iw_IL",
-                "ja",
+            String[] localeNames = {
+                "en_US", "da", "da_DK", "de", "de_AT", "de_DE", "el", "el_GR", "en", "en_CA",
+                "en_GB", "es", "es_MX", "fr", "fr_CA", "fr_FR", "it", "it_IT", "iw", "iw_IL", "ja",
                 "ja_JP",
             };
 
@@ -115,32 +91,27 @@ public class HolidayTest extends CoreTestFmwk {
         if (second == null) {
             second = now;
         } else {
-            if(second.after(now)) {
-                errln("Error: "+h.getDisplayName()+".firstBetween("+first+", "+now+")="+second);
+            if (second.after(now)) {
+                errln(
+                        "Error: "
+                                + h.getDisplayName()
+                                + ".firstBetween("
+                                + first
+                                + ", "
+                                + now
+                                + ")="
+                                + second);
             }
         }
 
         logln("is on " + first + ": " + h.isOn(first));
         logln("is on " + now + ": " + h.isOn(now));
-        logln(
-              "is between "
-              + first
-              + " and "
-              + now
-              + ": "
-              + h.isBetween(first, now));
-        logln(
-              "is between "
-              + first
-              + " and "
-              + second
-              + ": "
-              + h.isBetween(first, second));
+        logln("is between " + first + " and " + now + ": " + h.isBetween(first, now));
+        logln("is between " + first + " and " + second + ": " + h.isBetween(first, second));
 
         //        logln("rule: " + h.getRule().toString());
 
         //        h.setRule(h.getRule());
-
 
         logln("HolidayCalendarDemo test");
         {
@@ -149,16 +120,16 @@ public class HolidayTest extends CoreTestFmwk {
             final Date fStartOfMonth = startOfMonth(c.clone());
 
             // Stash away a few useful constants for this calendar and display
-            //minDay = c.getMinimum(Calendar.DAY_OF_WEEK);
-            //daysInWeek = c.getMaximum(Calendar.DAY_OF_WEEK) - minDay + 1;
+            // minDay = c.getMinimum(Calendar.DAY_OF_WEEK);
+            // daysInWeek = c.getMaximum(Calendar.DAY_OF_WEEK) - minDay + 1;
 
-            //firstDayOfWeek = Calendar.getInstance(fDisplayLocale).getFirstDayOfWeek();
+            // firstDayOfWeek = Calendar.getInstance(fDisplayLocale).getFirstDayOfWeek();
 
             // Stash away a Date for the start of this month
 
             // Find the day of week of the first day in this month
             c.setTime(fStartOfMonth);
-            //firstDayInMonth = c.get(Calendar.DAY_OF_WEEK);
+            // firstDayInMonth = c.get(Calendar.DAY_OF_WEEK);
 
             // Now find the # of days in the month
             c.roll(Calendar.DATE, false);
@@ -167,7 +138,7 @@ public class HolidayTest extends CoreTestFmwk {
             // Finally, find the end of the month, i.e. the start of the next one
             c.roll(Calendar.DATE, true);
             c.add(Calendar.MONTH, 1);
-            c.getTime();        // JDK 1.1.2 bug workaround
+            c.getTime(); // JDK 1.1.2 bug workaround
             c.add(Calendar.SECOND, -1);
             Date endOfMonth = c.getTime();
 
@@ -176,65 +147,72 @@ public class HolidayTest extends CoreTestFmwk {
             // To do this I can just reuse the code that calculates which
             // calendar cell contains a given date.
             //
-            //numWeeks = dateToCell(daysInMonth).y - dateToCell(1).y + 1;
+            // numWeeks = dateToCell(daysInMonth).y - dateToCell(1).y + 1;
 
             // Remember which holidays fall on which days in this month,
             // to save the trouble of having to do it later
-            //fHolidays.setSize(0);
-            int patience=100;
+            // fHolidays.setSize(0);
+            int patience = 100;
 
-            //for (int h = 0; h < fAllHolidays.length; h++)
+            // for (int h = 0; h < fAllHolidays.length; h++)
             {
                 Date d = fStartOfMonth;
-                while ( (d = h.firstBetween(d, endOfMonth) ) != null)
-                {
-                    if(--patience <= 0) {
-                        errln("Patience exceeded for " + h.getDisplayName() +" at " + d);
+                while ((d = h.firstBetween(d, endOfMonth)) != null) {
+                    if (--patience <= 0) {
+                        errln("Patience exceeded for " + h.getDisplayName() + " at " + d);
                         break;
                     }
-                    if(d.after(endOfMonth)) {
-                        errln("Error: for " + h.getDisplayName()+": " + d +" is after end of month " + endOfMonth);
+                    if (d.after(endOfMonth)) {
+                        errln(
+                                "Error: for "
+                                        + h.getDisplayName()
+                                        + ": "
+                                        + d
+                                        + " is after end of month "
+                                        + endOfMonth);
                         break;
                     }
                     c.setTime(d);
                     logln("New date: " + d);
-//                    fHolidays.addElement( new HolidayInfo(c.get(Calendar.DATE),
-//                                            fAllHolidays[h],
-//                                            fAllHolidays[h].getDisplayName(fDisplayLocale) ));
+                    //                    fHolidays.addElement( new
+                    // HolidayInfo(c.get(Calendar.DATE),
+                    //                                            fAllHolidays[h],
+                    //
+                    // fAllHolidays[h].getDisplayName(fDisplayLocale) ));
 
-                    d.setTime( d.getTime() + 1000 );    // "d++"
+                    d.setTime(d.getTime() + 1000); // "d++"
                 }
             }
-//            dirty = false;
+            //            dirty = false;
         }
         // end HolidayDemoApplet code
 
     }
 
     // from HolidayCalendarDemo
-    private Date startOfMonth(/*Date dateInMonth,*/ Calendar fCalendar)
-    {
-        //synchronized(fCalendar) {
+    private Date startOfMonth(/*Date dateInMonth,*/ Calendar fCalendar) {
+        // synchronized(fCalendar) {
         //    fCalendar.setTime(dateInMonth);             // TODO: synchronization
 
-            int era = fCalendar.get(Calendar.ERA);
-            int year = fCalendar.get(Calendar.YEAR);
-            int month = fCalendar.get(Calendar.MONTH);
+        int era = fCalendar.get(Calendar.ERA);
+        int year = fCalendar.get(Calendar.YEAR);
+        int month = fCalendar.get(Calendar.MONTH);
 
-            fCalendar.clear();
-            fCalendar.set(Calendar.ERA, era);
-            fCalendar.set(Calendar.YEAR, year);
-            fCalendar.set(Calendar.MONTH, month);
-            fCalendar.set(Calendar.DATE, 1);
+        fCalendar.clear();
+        fCalendar.set(Calendar.ERA, era);
+        fCalendar.set(Calendar.YEAR, year);
+        fCalendar.set(Calendar.MONTH, month);
+        fCalendar.set(Calendar.DATE, 1);
 
-            return fCalendar.getTime();
-       // }
+        return fCalendar.getTime();
+        // }
     }
 
     @Test
-    public void TestCoverage(){
-        Holiday[] h = { new EasterHoliday("Ram's Easter"),
-                        new SimpleHoliday(2, 29, 0, "Leap year", 1900, 2100)};
+    public void TestCoverage() {
+        Holiday[] h = {
+            new EasterHoliday("Ram's Easter"), new SimpleHoliday(2, 29, 0, "Leap year", 1900, 2100)
+        };
         exerciseHolidays(h, Locale.getDefault());
 
         RangeDateRule rdr = new RangeDateRule();
@@ -259,7 +237,7 @@ public class HolidayTest extends CoreTestFmwk {
         logln("first between " + abd + " and " + null + " is " + rdr.firstBetween(abd, null));
         logln("first between " + xbd + " and " + null + " is " + rdr.firstBetween(xbd, null));
 
-        //getRule, setRule
+        // getRule, setRule
         logln("The rule in the holiday: " + h[1].getRule());
         exerciseHoliday(h[1], Locale.getDefault());
         h[1].setRule(rdr);
@@ -271,15 +249,15 @@ public class HolidayTest extends CoreTestFmwk {
     }
 
     @Test
-    public void TestEaster(){
+    public void TestEaster() {
         // Verify that Easter is working. Should be April 20, 2014
         final Holiday h = new EasterHoliday("Easter Sunday");
         final Date beginApril = getDate(2014, Calendar.APRIL, 1);
-        final Date endApril   = getDate(2014, Calendar.APRIL, 30);
-        final Date expect     = getDate(2014, Calendar.APRIL, 20);
-        final Date actual     = h.firstBetween(beginApril, endApril);
+        final Date endApril = getDate(2014, Calendar.APRIL, 30);
+        final Date expect = getDate(2014, Calendar.APRIL, 20);
+        final Date actual = h.firstBetween(beginApril, endApril);
 
-        if(actual == null) {
+        if (actual == null) {
             errln("Error: Easter 2014 should be on " + expect + " but got null.");
         } else {
             Calendar c = Calendar.getInstance(TimeZone.GMT_ZONE, Locale.US);
@@ -320,8 +298,8 @@ public class HolidayTest extends CoreTestFmwk {
         gcal.set(Calendar.YEAR, 2059);
         Date d8 = gcal.getTime();
 
-        Date[] dates = { d0, d1, d2, d3, d4, d5, d6, d7, d8 };
-        boolean[] isOns = { true, true, false, true, false, false, true, true, false };
+        Date[] dates = {d0, d1, d2, d3, d4, d5, d6, d7, d8};
+        boolean[] isOns = {true, true, false, true, false, false, true, true, false};
         for (int i = 0; i < dates.length; ++i) {
             Date d = dates[i];
             logln("\ndate: " + d);

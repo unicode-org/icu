@@ -8,31 +8,6 @@
  */
 package com.ibm.icu.dev.test.format;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.lang.reflect.Field;
-import java.text.FieldPosition;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
-import java.util.TreeMap;
-
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.serializable.FormatHandler;
 import com.ibm.icu.dev.test.serializable.SerializableTestUtility;
@@ -52,186 +27,212 @@ import com.ibm.icu.util.NoUnit;
 import com.ibm.icu.util.TimeUnit;
 import com.ibm.icu.util.TimeUnitAmount;
 import com.ibm.icu.util.ULocale;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.text.FieldPosition;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
+import java.util.TreeMap;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
-/**
- * This file contains regular unit tests.
- */
+/** This file contains regular unit tests. */
 @RunWith(JUnit4.class)
 public class MeasureUnitTest extends CoreTestFmwk {
     private static final boolean DEBUG = ICUDebug.enabled("measureunittest");
 
     @Test
     public void TestExamplesInDocs() {
-        MeasureFormat fmtFr = MeasureFormat.getInstance(
-                ULocale.FRENCH, FormatWidth.SHORT);
+        MeasureFormat fmtFr = MeasureFormat.getInstance(ULocale.FRENCH, FormatWidth.SHORT);
         Measure measure = new Measure(23, MeasureUnit.CELSIUS);
         assertEquals("23\u202F°C", "23\u202F°C", fmtFr.format(measure));
         Measure measureF = new Measure(70, MeasureUnit.FAHRENHEIT);
         assertEquals("70\u202F°F", "70\u202F°F", fmtFr.format(measureF));
-        MeasureFormat fmtFrFull = MeasureFormat.getInstance(
-                ULocale.FRENCH, FormatWidth.WIDE);
+        MeasureFormat fmtFrFull = MeasureFormat.getInstance(ULocale.FRENCH, FormatWidth.WIDE);
         assertEquals(
                 "70 pied et 5,3 pouces",
                 "70 pieds et 5,3 pouces",
                 fmtFrFull.formatMeasures(
-                        new Measure(70, MeasureUnit.FOOT),
-                        new Measure(5.3, MeasureUnit.INCH)));
+                        new Measure(70, MeasureUnit.FOOT), new Measure(5.3, MeasureUnit.INCH)));
         assertEquals(
                 "1\u00A0pied et 1\u00A0pouce",
                 "1\u00A0pied et 1\u00A0pouce",
                 fmtFrFull.formatMeasures(
-                        new Measure(1, MeasureUnit.FOOT),
-                        new Measure(1, MeasureUnit.INCH)));
-        MeasureFormat fmtFrNarrow = MeasureFormat.getInstance(
-                ULocale.FRENCH, FormatWidth.NARROW);
+                        new Measure(1, MeasureUnit.FOOT), new Measure(1, MeasureUnit.INCH)));
+        MeasureFormat fmtFrNarrow = MeasureFormat.getInstance(ULocale.FRENCH, FormatWidth.NARROW);
         assertEquals(
                 "1′ 1″",
                 "1′ 1″",
                 fmtFrNarrow.formatMeasures(
-                        new Measure(1, MeasureUnit.FOOT),
-                        new Measure(1, MeasureUnit.INCH)));
+                        new Measure(1, MeasureUnit.FOOT), new Measure(1, MeasureUnit.INCH)));
         MeasureFormat fmtEn = MeasureFormat.getInstance(ULocale.ENGLISH, FormatWidth.WIDE);
         assertEquals(
                 "1 inch, 2 feet",
                 "1 inch, 2 feet",
                 fmtEn.formatMeasures(
-                        new Measure(1, MeasureUnit.INCH),
-                        new Measure(2, MeasureUnit.FOOT)));
+                        new Measure(1, MeasureUnit.INCH), new Measure(2, MeasureUnit.FOOT)));
     }
 
     @Test
     public void TestFormatPeriodEn() {
         TimeUnitAmount[] _19m = {new TimeUnitAmount(19.0, TimeUnit.MINUTE)};
         TimeUnitAmount[] _1h_23_5s = {
-                new TimeUnitAmount(1.0, TimeUnit.HOUR),
-                new TimeUnitAmount(23.5, TimeUnit.SECOND)};
+            new TimeUnitAmount(1.0, TimeUnit.HOUR), new TimeUnitAmount(23.5, TimeUnit.SECOND)
+        };
         TimeUnitAmount[] _1h_23_5m = {
-                new TimeUnitAmount(1.0, TimeUnit.HOUR),
-                new TimeUnitAmount(23.5, TimeUnit.MINUTE)};
+            new TimeUnitAmount(1.0, TimeUnit.HOUR), new TimeUnitAmount(23.5, TimeUnit.MINUTE)
+        };
         TimeUnitAmount[] _1h_0m_23s = {
-                new TimeUnitAmount(1.0, TimeUnit.HOUR),
-                new TimeUnitAmount(0.0, TimeUnit.MINUTE),
-                new TimeUnitAmount(23.0, TimeUnit.SECOND)};
+            new TimeUnitAmount(1.0, TimeUnit.HOUR),
+            new TimeUnitAmount(0.0, TimeUnit.MINUTE),
+            new TimeUnitAmount(23.0, TimeUnit.SECOND)
+        };
         TimeUnitAmount[] _2y_5M_3w_4d = {
-                new TimeUnitAmount(2.0, TimeUnit.YEAR),
-                new TimeUnitAmount(5.0, TimeUnit.MONTH),
-                new TimeUnitAmount(3.0, TimeUnit.WEEK),
-                new TimeUnitAmount(4.0, TimeUnit.DAY)};
+            new TimeUnitAmount(2.0, TimeUnit.YEAR),
+            new TimeUnitAmount(5.0, TimeUnit.MONTH),
+            new TimeUnitAmount(3.0, TimeUnit.WEEK),
+            new TimeUnitAmount(4.0, TimeUnit.DAY)
+        };
         TimeUnitAmount[] _1m_59_9996s = {
-                new TimeUnitAmount(1.0, TimeUnit.MINUTE),
-                new TimeUnitAmount(59.9996, TimeUnit.SECOND)};
+            new TimeUnitAmount(1.0, TimeUnit.MINUTE), new TimeUnitAmount(59.9996, TimeUnit.SECOND)
+        };
         TimeUnitAmount[] _5h_17m = {
-                new TimeUnitAmount(5.0, TimeUnit.HOUR),
-                new TimeUnitAmount(17.0, TimeUnit.MINUTE)};
+            new TimeUnitAmount(5.0, TimeUnit.HOUR), new TimeUnitAmount(17.0, TimeUnit.MINUTE)
+        };
         TimeUnitAmount[] _neg5h_17m = {
-                new TimeUnitAmount(-5.0, TimeUnit.HOUR),
-                new TimeUnitAmount(17.0, TimeUnit.MINUTE)};
+            new TimeUnitAmount(-5.0, TimeUnit.HOUR), new TimeUnitAmount(17.0, TimeUnit.MINUTE)
+        };
         TimeUnitAmount[] _19m_28s = {
-                new TimeUnitAmount(19.0, TimeUnit.MINUTE),
-                new TimeUnitAmount(28.0, TimeUnit.SECOND)};
+            new TimeUnitAmount(19.0, TimeUnit.MINUTE), new TimeUnitAmount(28.0, TimeUnit.SECOND)
+        };
         TimeUnitAmount[] _0h_0m_9s = {
-                new TimeUnitAmount(0.0, TimeUnit.HOUR),
-                new TimeUnitAmount(0.0, TimeUnit.MINUTE),
-                new TimeUnitAmount(9.0, TimeUnit.SECOND)};
+            new TimeUnitAmount(0.0, TimeUnit.HOUR),
+            new TimeUnitAmount(0.0, TimeUnit.MINUTE),
+            new TimeUnitAmount(9.0, TimeUnit.SECOND)
+        };
         TimeUnitAmount[] _0h_0m_17s = {
-                new TimeUnitAmount(0.0, TimeUnit.HOUR),
-                new TimeUnitAmount(0.0, TimeUnit.MINUTE),
-                new TimeUnitAmount(17.0, TimeUnit.SECOND)};
+            new TimeUnitAmount(0.0, TimeUnit.HOUR),
+            new TimeUnitAmount(0.0, TimeUnit.MINUTE),
+            new TimeUnitAmount(17.0, TimeUnit.SECOND)
+        };
         TimeUnitAmount[] _6h_56_92m = {
-                new TimeUnitAmount(6.0, TimeUnit.HOUR),
-                new TimeUnitAmount(56.92, TimeUnit.MINUTE)};
+            new TimeUnitAmount(6.0, TimeUnit.HOUR), new TimeUnitAmount(56.92, TimeUnit.MINUTE)
+        };
         TimeUnitAmount[] _3h_4s_5m = {
-                new TimeUnitAmount(3.0, TimeUnit.HOUR),
-                new TimeUnitAmount(4.0, TimeUnit.SECOND),
-                new TimeUnitAmount(5.0, TimeUnit.MINUTE)};
+            new TimeUnitAmount(3.0, TimeUnit.HOUR),
+            new TimeUnitAmount(4.0, TimeUnit.SECOND),
+            new TimeUnitAmount(5.0, TimeUnit.MINUTE)
+        };
         TimeUnitAmount[] _6_7h_56_92m = {
-                new TimeUnitAmount(6.7, TimeUnit.HOUR),
-                new TimeUnitAmount(56.92, TimeUnit.MINUTE)};
+            new TimeUnitAmount(6.7, TimeUnit.HOUR), new TimeUnitAmount(56.92, TimeUnit.MINUTE)
+        };
         TimeUnitAmount[] _3h_5h = {
-                new TimeUnitAmount(3.0, TimeUnit.HOUR),
-                new TimeUnitAmount(5.0, TimeUnit.HOUR)};
+            new TimeUnitAmount(3.0, TimeUnit.HOUR), new TimeUnitAmount(5.0, TimeUnit.HOUR)
+        };
 
         Object[][] fullData = {
-                {_1m_59_9996s, "1 minute, 59.9996 seconds"},
-                {_19m, "19 minutes"},
-                {_1h_23_5s, "1 hour, 23.5 seconds"},
-                {_1h_23_5m, "1 hour, 23.5 minutes"},
-                {_1h_0m_23s, "1 hour, 0 minutes, 23 seconds"},
-                {_2y_5M_3w_4d, "2 years, 5 months, 3 weeks, 4 days"}};
+            {_1m_59_9996s, "1 minute, 59.9996 seconds"},
+            {_19m, "19 minutes"},
+            {_1h_23_5s, "1 hour, 23.5 seconds"},
+            {_1h_23_5m, "1 hour, 23.5 minutes"},
+            {_1h_0m_23s, "1 hour, 0 minutes, 23 seconds"},
+            {_2y_5M_3w_4d, "2 years, 5 months, 3 weeks, 4 days"}
+        };
         Object[][] abbrevData = {
-                {_1m_59_9996s, "1 min, 59.9996 sec"},
-                {_19m, "19 min"},
-                {_1h_23_5s, "1 hr, 23.5 sec"},
-                {_1h_23_5m, "1 hr, 23.5 min"},
-                {_1h_0m_23s, "1 hr, 0 min, 23 sec"},
-                {_2y_5M_3w_4d, "2 yrs, 5 mths, 3 wks, 4 days"}};
+            {_1m_59_9996s, "1 min, 59.9996 sec"},
+            {_19m, "19 min"},
+            {_1h_23_5s, "1 hr, 23.5 sec"},
+            {_1h_23_5m, "1 hr, 23.5 min"},
+            {_1h_0m_23s, "1 hr, 0 min, 23 sec"},
+            {_2y_5M_3w_4d, "2 yrs, 5 mths, 3 wks, 4 days"}
+        };
         Object[][] narrowData = {
-                {_1m_59_9996s, "1m 59.9996s"},
-                {_19m, "19m"},
-                {_1h_23_5s, "1h 23.5s"},
-                {_1h_23_5m, "1h 23.5m"},
-                {_1h_0m_23s, "1h 0m 23s"},
-                {_2y_5M_3w_4d, "2y 5m 3w 4d"}};
-
+            {_1m_59_9996s, "1m 59.9996s"},
+            {_19m, "19m"},
+            {_1h_23_5s, "1h 23.5s"},
+            {_1h_23_5m, "1h 23.5m"},
+            {_1h_0m_23s, "1h 0m 23s"},
+            {_2y_5M_3w_4d, "2y 5m 3w 4d"}
+        };
 
         Object[][] numericData = {
-                {_1m_59_9996s, "1:59.9996"},
-                {_19m, "19m"},
-                {_1h_23_5s, "1:00:23.5"},
-                {_1h_0m_23s, "1:00:23"},
-                {_1h_23_5m, "1:23.5"},
-                {_5h_17m, "5:17"},
-                {_neg5h_17m, "-5h 17m"},
-                {_19m_28s, "19:28"},
-                {_2y_5M_3w_4d, "2y 5m 3w 4d"},
-                {_0h_0m_9s, "0:00:09"},
-                {_6h_56_92m, "6:56.92"},
-                {_6_7h_56_92m, "6:56.92"},
-                {_3h_4s_5m, "3h 4s 5m"},
-                {_3h_5h, "3h 5h"}};
+            {_1m_59_9996s, "1:59.9996"},
+            {_19m, "19m"},
+            {_1h_23_5s, "1:00:23.5"},
+            {_1h_0m_23s, "1:00:23"},
+            {_1h_23_5m, "1:23.5"},
+            {_5h_17m, "5:17"},
+            {_neg5h_17m, "-5h 17m"},
+            {_19m_28s, "19:28"},
+            {_2y_5M_3w_4d, "2y 5m 3w 4d"},
+            {_0h_0m_9s, "0:00:09"},
+            {_6h_56_92m, "6:56.92"},
+            {_6_7h_56_92m, "6:56.92"},
+            {_3h_4s_5m, "3h 4s 5m"},
+            {_3h_5h, "3h 5h"}
+        };
         Object[][] fullDataDe = {
-                {_1m_59_9996s, "1 Minute, 59,9996 Sekunden"},
-                {_19m, "19 Minuten"},
-                {_1h_23_5s, "1 Stunde, 23,5 Sekunden"},
-                {_1h_23_5m, "1 Stunde, 23,5 Minuten"},
-                {_1h_0m_23s, "1 Stunde, 0 Minuten und 23 Sekunden"},
-                {_2y_5M_3w_4d, "2 Jahre, 5 Monate, 3 Wochen und 4 Tage"}};
+            {_1m_59_9996s, "1 Minute, 59,9996 Sekunden"},
+            {_19m, "19 Minuten"},
+            {_1h_23_5s, "1 Stunde, 23,5 Sekunden"},
+            {_1h_23_5m, "1 Stunde, 23,5 Minuten"},
+            {_1h_0m_23s, "1 Stunde, 0 Minuten und 23 Sekunden"},
+            {_2y_5M_3w_4d, "2 Jahre, 5 Monate, 3 Wochen und 4 Tage"}
+        };
         Object[][] numericDataDe = {
-                {_1m_59_9996s, "1:59,9996"},
-                {_19m, "19 Min."},
-                {_1h_23_5s, "1:00:23,5"},
-                {_1h_0m_23s, "1:00:23"},
-                {_1h_23_5m, "1:23,5"},
-                {_5h_17m, "5:17"},
-                {_19m_28s, "19:28"},
-                {_2y_5M_3w_4d, "2 J, 5 M, 3 W und 4 T"},
-                {_0h_0m_17s, "0:00:17"},
-                {_6h_56_92m, "6:56,92"},
-                {_3h_5h, "3 Std., 5 Std."}};
+            {_1m_59_9996s, "1:59,9996"},
+            {_19m, "19 Min."},
+            {_1h_23_5s, "1:00:23,5"},
+            {_1h_0m_23s, "1:00:23"},
+            {_1h_23_5m, "1:23,5"},
+            {_5h_17m, "5:17"},
+            {_19m_28s, "19:28"},
+            {_2y_5M_3w_4d, "2 J, 5 M, 3 W und 4 T"},
+            {_0h_0m_17s, "0:00:17"},
+            {_6h_56_92m, "6:56,92"},
+            {_3h_5h, "3 Std., 5 Std."}
+        };
         Object[][] numericDataBn = {
-                {_1m_59_9996s, "১:৫৯.৯৯৯৬"},
-                {_19m, "১৯ মিঃ"},
-                {_1h_23_5s, "১:০০:২৩.৫"},
-                {_1h_0m_23s, "১:০০:২৩"},
-                {_1h_23_5m, "১:২৩.৫"},
-                {_5h_17m, "৫:১৭"},
-                {_19m_28s, "১৯:২৮"},
-                {_2y_5M_3w_4d, "২ বছর, ৫ মাস, ৩ সপ্তাহ, ৪ দিন"},
-                {_0h_0m_17s, "০:০০:১৭"},
-                {_6h_56_92m, "৬:৫৬.৯২"},
-                {_3h_5h, "৩ ঘঃ, ৫ ঘঃ"}};
+            {_1m_59_9996s, "১:৫৯.৯৯৯৬"},
+            {_19m, "১৯ মিঃ"},
+            {_1h_23_5s, "১:০০:২৩.৫"},
+            {_1h_0m_23s, "১:০০:২৩"},
+            {_1h_23_5m, "১:২৩.৫"},
+            {_5h_17m, "৫:১৭"},
+            {_19m_28s, "১৯:২৮"},
+            {_2y_5M_3w_4d, "২ বছর, ৫ মাস, ৩ সপ্তাহ, ৪ দিন"},
+            {_0h_0m_17s, "০:০০:১৭"},
+            {_6h_56_92m, "৬:৫৬.৯২"},
+            {_3h_5h, "৩ ঘঃ, ৫ ঘঃ"}
+        };
         Object[][] numericDataBnLatn = {
-                {_1m_59_9996s, "1:59.9996"},
-                {_19m, "19 মিঃ"},
-                {_1h_23_5s, "1:00:23.5"},
-                {_1h_0m_23s, "1:00:23"},
-                {_1h_23_5m, "1:23.5"},
-                {_5h_17m, "5:17"},
-                {_19m_28s, "19:28"},
-                {_2y_5M_3w_4d, "2 বছর, 5 মাস, 3 সপ্তাহ, 4 দিন"},
-                {_0h_0m_17s, "0:00:17"},
-                {_6h_56_92m, "6:56.92"},
-                {_3h_5h, "3 ঘঃ, 5 ঘঃ"}};
+            {_1m_59_9996s, "1:59.9996"},
+            {_19m, "19 মিঃ"},
+            {_1h_23_5s, "1:00:23.5"},
+            {_1h_0m_23s, "1:00:23"},
+            {_1h_23_5m, "1:23.5"},
+            {_5h_17m, "5:17"},
+            {_19m_28s, "19:28"},
+            {_2y_5M_3w_4d, "2 বছর, 5 মাস, 3 সপ্তাহ, 4 দিন"},
+            {_0h_0m_17s, "0:00:17"},
+            {_6h_56_92m, "6:56.92"},
+            {_3h_5h, "3 ঘঃ, 5 ঘঃ"}
+        };
 
         NumberFormat nf = NumberFormat.getNumberInstance(ULocale.ENGLISH);
         nf.setMaximumFractionDigits(4);
@@ -276,7 +277,9 @@ public class MeasureUnitTest extends CoreTestFmwk {
         for (Object[] testCase : testData) {
             String actual = mf.format(testCase[0]);
             if (!testCase[1].equals(actual)) {
-                builder.append(String.format("%s: Expected: '%s', got: '%s'\n", desc, testCase[1], actual));
+                builder.append(
+                        String.format(
+                                "%s: Expected: '%s', got: '%s'\n", desc, testCase[1], actual));
                 failure = true;
             }
         }
@@ -289,8 +292,8 @@ public class MeasureUnitTest extends CoreTestFmwk {
     public void Test10219FractionalPlurals() {
         double[] values = {1.588, 1.011};
         String[][] expected = {
-                {"1 minute", "1.5 minutes", "1.58 minutes"},
-                {"1 minute", "1.0 minutes", "1.01 minutes"}
+            {"1 minute", "1.5 minutes", "1.58 minutes"},
+            {"1 minute", "1.0 minutes", "1.01 minutes"}
         };
         for (int j = 0; j < values.length; j++) {
             for (int i = 0; i < expected[j].length; i++) {
@@ -298,9 +301,11 @@ public class MeasureUnitTest extends CoreTestFmwk {
                 nf.setRoundingMode(BigDecimal.ROUND_DOWN);
                 nf.setMinimumFractionDigits(i);
                 nf.setMaximumFractionDigits(i);
-                MeasureFormat mf = MeasureFormat.getInstance(
-                        ULocale.ENGLISH, FormatWidth.WIDE, nf);
-                assertEquals("Test10219", expected[j][i], mf.format(new Measure(values[j], MeasureUnit.MINUTE)));
+                MeasureFormat mf = MeasureFormat.getInstance(ULocale.ENGLISH, FormatWidth.WIDE, nf);
+                assertEquals(
+                        "Test10219",
+                        expected[j][i],
+                        mf.format(new Measure(values[j], MeasureUnit.MINUTE)));
             }
         }
     }
@@ -308,96 +313,106 @@ public class MeasureUnitTest extends CoreTestFmwk {
     @Test
     public void TestGreek() {
         String[] locales = {"el_GR", "el"};
-        final MeasureUnit[] units = new MeasureUnit[]{
-                MeasureUnit.SECOND,
-                MeasureUnit.MINUTE,
-                MeasureUnit.HOUR,
-                MeasureUnit.DAY,
-                MeasureUnit.WEEK,
-                MeasureUnit.MONTH,
-                MeasureUnit.YEAR};
+        final MeasureUnit[] units =
+                new MeasureUnit[] {
+                    MeasureUnit.SECOND,
+                    MeasureUnit.MINUTE,
+                    MeasureUnit.HOUR,
+                    MeasureUnit.DAY,
+                    MeasureUnit.WEEK,
+                    MeasureUnit.MONTH,
+                    MeasureUnit.YEAR
+                };
         FormatWidth[] styles = new FormatWidth[] {FormatWidth.WIDE, FormatWidth.SHORT};
         int[] numbers = new int[] {1, 7};
         String[] expected = {
-                // "el_GR" 1 wide
-                "1 δευτερόλεπτο",
-                "1 λεπτό",
-                "1 ώρα",
-                "1 ημέρα",
-                "1 εβδομάδα",
-                "1 μήνας",
-                "1 έτος",
-                // "el_GR" 1 short
-                "1 δευτ.",
-                "1 λ.",
-                "1 ώ.",
-                "1 ημέρα",
-                "1 εβδ.",
-                "1 μήν.",
-                "1 έτ.",	        // year (one)
-                // "el_GR" 7 wide
-                "7 δευτερόλεπτα",
-                "7 λεπτά",
-                "7 ώρες",
-                "7 ημέρες",
-                "7 εβδομάδες",
-                "7 μήνες",
-                "7 έτη",
-                // "el_GR" 7 short
-                "7 δευτ.",
-                "7 λ.",
-                "7 ώ.",		       // hour (other)
-                "7 ημέρες",
-                "7 εβδ.",
-                "7 μήν.",
-                "7 έτ.",            // year (other)
-                // "el" 1 wide
-                "1 δευτερόλεπτο",
-                "1 λεπτό",
-                "1 ώρα",
-                "1 ημέρα",
-                "1 εβδομάδα",
-                "1 μήνας",
-                "1 έτος",
-                // "el" 1 short
-                "1 δευτ.",
-                "1 λ.",
-                "1 ώ.",
-                "1 ημέρα",
-                "1 εβδ.",
-                "1 μήν.",
-                "1 έτ.",	        // year (one)
-                // "el" 7 wide
-                "7 δευτερόλεπτα",
-                "7 λεπτά",
-                "7 ώρες",
-                "7 ημέρες",
-                "7 εβδομάδες",
-                "7 μήνες",
-                "7 έτη",
-                // "el" 7 short
-                "7 δευτ.",
-                "7 λ.",
-                "7 ώ.",		        // hour (other)
-                "7 ημέρες",
-                "7 εβδ.",
-                "7 μήν.",
-                "7 έτ."};           // year (other
+            // "el_GR" 1 wide
+            "1 δευτερόλεπτο",
+            "1 λεπτό",
+            "1 ώρα",
+            "1 ημέρα",
+            "1 εβδομάδα",
+            "1 μήνας",
+            "1 έτος",
+            // "el_GR" 1 short
+            "1 δευτ.",
+            "1 λ.",
+            "1 ώ.",
+            "1 ημέρα",
+            "1 εβδ.",
+            "1 μήν.",
+            "1 έτ.", // year (one)
+            // "el_GR" 7 wide
+            "7 δευτερόλεπτα",
+            "7 λεπτά",
+            "7 ώρες",
+            "7 ημέρες",
+            "7 εβδομάδες",
+            "7 μήνες",
+            "7 έτη",
+            // "el_GR" 7 short
+            "7 δευτ.",
+            "7 λ.",
+            "7 ώ.", // hour (other)
+            "7 ημέρες",
+            "7 εβδ.",
+            "7 μήν.",
+            "7 έτ.", // year (other)
+            // "el" 1 wide
+            "1 δευτερόλεπτο",
+            "1 λεπτό",
+            "1 ώρα",
+            "1 ημέρα",
+            "1 εβδομάδα",
+            "1 μήνας",
+            "1 έτος",
+            // "el" 1 short
+            "1 δευτ.",
+            "1 λ.",
+            "1 ώ.",
+            "1 ημέρα",
+            "1 εβδ.",
+            "1 μήν.",
+            "1 έτ.", // year (one)
+            // "el" 7 wide
+            "7 δευτερόλεπτα",
+            "7 λεπτά",
+            "7 ώρες",
+            "7 ημέρες",
+            "7 εβδομάδες",
+            "7 μήνες",
+            "7 έτη",
+            // "el" 7 short
+            "7 δευτ.",
+            "7 λ.",
+            "7 ώ.", // hour (other)
+            "7 ημέρες",
+            "7 εβδ.",
+            "7 μήν.",
+            "7 έτ."
+        }; // year (other
         int counter = 0;
         String formatted;
-        for ( int locIndex = 0; locIndex < locales.length; ++locIndex ) {
-            for( int numIndex = 0; numIndex < numbers.length; ++numIndex ) {
-                for ( int styleIndex = 0; styleIndex < styles.length; ++styleIndex ) {
-                    for ( int unitIndex = 0; unitIndex < units.length; ++unitIndex ) {
+        for (int locIndex = 0; locIndex < locales.length; ++locIndex) {
+            for (int numIndex = 0; numIndex < numbers.length; ++numIndex) {
+                for (int styleIndex = 0; styleIndex < styles.length; ++styleIndex) {
+                    for (int unitIndex = 0; unitIndex < units.length; ++unitIndex) {
                         Measure m = new Measure(numbers[numIndex], units[unitIndex]);
-                        MeasureFormat fmt = MeasureFormat.getInstance(new ULocale(locales[locIndex]), styles[styleIndex]);
+                        MeasureFormat fmt =
+                                MeasureFormat.getInstance(
+                                        new ULocale(locales[locIndex]), styles[styleIndex]);
                         formatted = fmt.format(m);
                         assertEquals(
-                                "locale: " + locales[locIndex]
-                                        + ", style: " + styles[styleIndex]
-                                                + ", units: " + units[unitIndex]
-                                                        + ", value: " + numbers[numIndex],
-                                                expected[counter], formatted);
+                                "locale: "
+                                        + locales[locIndex]
+                                        + ", style: "
+                                        + styles[styleIndex]
+                                        + ", units: "
+                                        + units[unitIndex]
+                                        + ", value: "
+                                        + numbers[numIndex],
+                                expected[counter],
+                                formatted);
                         ++counter;
                     }
                 }
@@ -447,22 +462,32 @@ public class MeasureUnitTest extends CoreTestFmwk {
         assertEquals("", "5 meters", mf.formatMeasures(new Measure(5, MeasureUnit.METER)));
     }
 
-
-
     @Test
     public void testMultiples() {
         ULocale russia = new ULocale("ru");
-        Object[][] data = new Object[][] {
-                {ULocale.ENGLISH, FormatWidth.WIDE, "2 miles, 1 foot, 2.3 inches"},
-                {ULocale.ENGLISH, FormatWidth.SHORT, "2 mi, 1 ft, 2.3 in"},
-                {ULocale.ENGLISH, FormatWidth.NARROW, "2mi 1\u2032 2.3\u2033"},
-                {russia, FormatWidth.WIDE,   "2 \u043C\u0438\u043B\u0438 1 \u0444\u0443\u0442 2,3 \u0434\u044E\u0439\u043C\u0430"},
-                {russia, FormatWidth.SHORT,  "2 \u043C\u0438 1 \u0444\u0442 2,3 \u0434\u044E\u0439\u043C."},
-                {russia, FormatWidth.NARROW, "2 \u043C\u0438 1 \u0444\u0442 2,3 \u0434\u044E\u0439\u043C."},
-   };
+        Object[][] data =
+                new Object[][] {
+                    {ULocale.ENGLISH, FormatWidth.WIDE, "2 miles, 1 foot, 2.3 inches"},
+                    {ULocale.ENGLISH, FormatWidth.SHORT, "2 mi, 1 ft, 2.3 in"},
+                    {ULocale.ENGLISH, FormatWidth.NARROW, "2mi 1\u2032 2.3\u2033"},
+                    {
+                        russia,
+                        FormatWidth.WIDE,
+                        "2 \u043C\u0438\u043B\u0438 1 \u0444\u0443\u0442 2,3 \u0434\u044E\u0439\u043C\u0430"
+                    },
+                    {
+                        russia,
+                        FormatWidth.SHORT,
+                        "2 \u043C\u0438 1 \u0444\u0442 2,3 \u0434\u044E\u0439\u043C."
+                    },
+                    {
+                        russia,
+                        FormatWidth.NARROW,
+                        "2 \u043C\u0438 1 \u0444\u0442 2,3 \u0434\u044E\u0439\u043C."
+                    },
+                };
         for (Object[] row : data) {
-            MeasureFormat mf = MeasureFormat.getInstance(
-                    (ULocale) row[0], (FormatWidth) row[1]);
+            MeasureFormat mf = MeasureFormat.getInstance((ULocale) row[0], (FormatWidth) row[1]);
             assertEquals(
                     "testMultiples",
                     row[2],
@@ -475,57 +500,71 @@ public class MeasureUnitTest extends CoreTestFmwk {
 
     @Test
     public void testManyLocaleDurations() {
-        Measure hours   = new Measure(5, MeasureUnit.HOUR);
+        Measure hours = new Measure(5, MeasureUnit.HOUR);
         Measure minutes = new Measure(37, MeasureUnit.MINUTE);
-        ULocale ulocDanish       = new ULocale("da");
-        ULocale ulocSpanish      = new ULocale("es");
-        ULocale ulocFinnish      = new ULocale("fi");
-        ULocale ulocIcelandic    = new ULocale("is");
+        ULocale ulocDanish = new ULocale("da");
+        ULocale ulocSpanish = new ULocale("es");
+        ULocale ulocFinnish = new ULocale("fi");
+        ULocale ulocIcelandic = new ULocale("is");
         ULocale ulocNorwegianBok = new ULocale("nb");
         ULocale ulocNorwegianNyn = new ULocale("nn");
-        ULocale ulocDutch        = new ULocale("nl");
-        ULocale ulocSwedish      = new ULocale("sv");
-        Object[][] data = new Object[][] {
-            { ulocDanish,       FormatWidth.NARROW,  "5 t og 37 m" },
-            { ulocDanish,       FormatWidth.NUMERIC, "5.37" },
-            { ULocale.GERMAN,   FormatWidth.NARROW,  "5h, 37 Min." },
-            { ULocale.GERMAN,   FormatWidth.NUMERIC, "5:37" },
-            { ULocale.ENGLISH,  FormatWidth.NARROW,  "5h 37m" },
-            { ULocale.ENGLISH,  FormatWidth.NUMERIC, "5:37" },
-            { ulocSpanish,      FormatWidth.NARROW,  "5h 37min" },
-            { ulocSpanish,      FormatWidth.NUMERIC, "5:37" },
-            { ulocFinnish,      FormatWidth.NARROW,  "5t 37min" },
-            { ulocFinnish,      FormatWidth.NUMERIC, "5.37" },
-            { ULocale.FRENCH,   FormatWidth.NARROW,  "5h 37min" },
-            { ULocale.FRENCH,   FormatWidth.NUMERIC, "5:37" },
-            { ulocIcelandic,    FormatWidth.NARROW,  "5 klst. og 37 m\u00EDn." },
-            { ulocIcelandic,    FormatWidth.NUMERIC, "5:37" },
-            { ULocale.JAPANESE, FormatWidth.NARROW,  "5h37m" },
-            { ULocale.JAPANESE, FormatWidth.NUMERIC, "5:37" },
-            { ulocNorwegianBok, FormatWidth.NARROW,  "5t, 37m" },
-            { ulocNorwegianBok, FormatWidth.NUMERIC, "5:37" },
-            { ulocDutch,        FormatWidth.NARROW,  "5 u, 37 m" },
-            { ulocDutch,        FormatWidth.NUMERIC, "5:37" },
-            { ulocNorwegianNyn, FormatWidth.NARROW,  "5t 37m" },
-            { ulocNorwegianNyn, FormatWidth.NUMERIC, "5:37" },
-            { ulocSwedish,      FormatWidth.NARROW,  "5h 37m" },
-            { ulocSwedish,      FormatWidth.NUMERIC, "5:37" },
-            { ULocale.CHINESE,  FormatWidth.NARROW,  "5\u5C0F\u65F637\u5206\u949F" },
-            { ULocale.CHINESE,  FormatWidth.NUMERIC, "5:37" },
-        };
+        ULocale ulocDutch = new ULocale("nl");
+        ULocale ulocSwedish = new ULocale("sv");
+        Object[][] data =
+                new Object[][] {
+                    {ulocDanish, FormatWidth.NARROW, "5 t og 37 m"},
+                    {ulocDanish, FormatWidth.NUMERIC, "5.37"},
+                    {ULocale.GERMAN, FormatWidth.NARROW, "5h, 37 Min."},
+                    {ULocale.GERMAN, FormatWidth.NUMERIC, "5:37"},
+                    {ULocale.ENGLISH, FormatWidth.NARROW, "5h 37m"},
+                    {ULocale.ENGLISH, FormatWidth.NUMERIC, "5:37"},
+                    {ulocSpanish, FormatWidth.NARROW, "5h 37min"},
+                    {ulocSpanish, FormatWidth.NUMERIC, "5:37"},
+                    {ulocFinnish, FormatWidth.NARROW, "5t 37min"},
+                    {ulocFinnish, FormatWidth.NUMERIC, "5.37"},
+                    {ULocale.FRENCH, FormatWidth.NARROW, "5h 37min"},
+                    {ULocale.FRENCH, FormatWidth.NUMERIC, "5:37"},
+                    {ulocIcelandic, FormatWidth.NARROW, "5 klst. og 37 m\u00EDn."},
+                    {ulocIcelandic, FormatWidth.NUMERIC, "5:37"},
+                    {ULocale.JAPANESE, FormatWidth.NARROW, "5h37m"},
+                    {ULocale.JAPANESE, FormatWidth.NUMERIC, "5:37"},
+                    {ulocNorwegianBok, FormatWidth.NARROW, "5t, 37m"},
+                    {ulocNorwegianBok, FormatWidth.NUMERIC, "5:37"},
+                    {ulocDutch, FormatWidth.NARROW, "5 u, 37 m"},
+                    {ulocDutch, FormatWidth.NUMERIC, "5:37"},
+                    {ulocNorwegianNyn, FormatWidth.NARROW, "5t 37m"},
+                    {ulocNorwegianNyn, FormatWidth.NUMERIC, "5:37"},
+                    {ulocSwedish, FormatWidth.NARROW, "5h 37m"},
+                    {ulocSwedish, FormatWidth.NUMERIC, "5:37"},
+                    {ULocale.CHINESE, FormatWidth.NARROW, "5\u5C0F\u65F637\u5206\u949F"},
+                    {ULocale.CHINESE, FormatWidth.NUMERIC, "5:37"},
+                };
         for (Object[] row : data) {
             MeasureFormat mf = null;
-            try{
-                mf = MeasureFormat.getInstance( (ULocale)row[0], (FormatWidth)row[1] );
-            } catch(Exception e) {
-                errln("Exception creating MeasureFormat for locale " + row[0] + ", width " +
-                        row[1] + ": " + e);
+            try {
+                mf = MeasureFormat.getInstance((ULocale) row[0], (FormatWidth) row[1]);
+            } catch (Exception e) {
+                errln(
+                        "Exception creating MeasureFormat for locale "
+                                + row[0]
+                                + ", width "
+                                + row[1]
+                                + ": "
+                                + e);
                 continue;
             }
             String result = mf.formatMeasures(hours, minutes);
             if (!result.equals(row[2])) {
-                errln("MeasureFormat.formatMeasures for locale " + row[0] + ", width " +
-                        row[1] + ", expected \"" + (String)row[2] + "\", got \"" + result + "\"" );
+                errln(
+                        "MeasureFormat.formatMeasures for locale "
+                                + row[0]
+                                + ", width "
+                                + row[1]
+                                + ", expected \""
+                                + (String) row[2]
+                                + "\", got \""
+                                + result
+                                + "\"");
             }
         }
     }
@@ -533,32 +572,96 @@ public class MeasureUnitTest extends CoreTestFmwk {
     @Test
     public void testSimplePer() {
         Object DONT_CARE = null;
-        Object[][] data = new Object[][] {
-                // per unit pattern
-                {FormatWidth.WIDE, 1.0, MeasureUnit.SECOND, "1 pound per second", DONT_CARE, 0, 0},
-                {FormatWidth.WIDE, 2.0, MeasureUnit.SECOND, "2 pounds per second", DONT_CARE, 0, 0},
-                // compound pattern
-                {FormatWidth.WIDE, 1.0, MeasureUnit.MINUTE, "1 pound per minute", DONT_CARE, 0, 0},
-                {FormatWidth.WIDE, 2.0, MeasureUnit.MINUTE, "2 pounds per minute", DONT_CARE, 0, 0},
-                // per unit
-                {FormatWidth.SHORT, 1.0, MeasureUnit.SECOND, "1 lb/s", DONT_CARE, 0, 0},
-                {FormatWidth.SHORT, 2.0, MeasureUnit.SECOND, "2 lb/s", DONT_CARE, 0, 0},
-                // compound
-                {FormatWidth.SHORT, 1.0, MeasureUnit.MINUTE, "1 lb/min", DONT_CARE, 0, 0},
-                {FormatWidth.SHORT, 2.0, MeasureUnit.MINUTE, "2 lb/min", DONT_CARE, 0, 0},
-                // per unit
-                {FormatWidth.NARROW, 1.0, MeasureUnit.SECOND, "1#/s", DONT_CARE, 0, 0},
-                {FormatWidth.NARROW, 2.0, MeasureUnit.SECOND, "2#/s", DONT_CARE, 0, 0},
-                // compound
-                {FormatWidth.NARROW, 1.0, MeasureUnit.MINUTE, "1#/min", DONT_CARE, 0, 0},
-                {FormatWidth.NARROW, 2.0, MeasureUnit.MINUTE, "2#/min", DONT_CARE, 0, 0},
-                // field positions
-                {FormatWidth.SHORT, 23.3, MeasureUnit.SECOND, "23.3 lb/s", NumberFormat.Field.DECIMAL_SEPARATOR, 2, 3},
-                {FormatWidth.SHORT, 23.3, MeasureUnit.SECOND, "23.3 lb/s", NumberFormat.Field.INTEGER, 0, 2},
-                {FormatWidth.SHORT, 23.3, MeasureUnit.MINUTE, "23.3 lb/min", NumberFormat.Field.DECIMAL_SEPARATOR, 2, 3},
-                {FormatWidth.SHORT, 23.3, MeasureUnit.MINUTE, "23.3 lb/min", NumberFormat.Field.INTEGER, 0, 2},
-
-        };
+        Object[][] data =
+                new Object[][] {
+                    // per unit pattern
+                    {
+                        FormatWidth.WIDE,
+                        1.0,
+                        MeasureUnit.SECOND,
+                        "1 pound per second",
+                        DONT_CARE,
+                        0,
+                        0
+                    },
+                    {
+                        FormatWidth.WIDE,
+                        2.0,
+                        MeasureUnit.SECOND,
+                        "2 pounds per second",
+                        DONT_CARE,
+                        0,
+                        0
+                    },
+                    // compound pattern
+                    {
+                        FormatWidth.WIDE,
+                        1.0,
+                        MeasureUnit.MINUTE,
+                        "1 pound per minute",
+                        DONT_CARE,
+                        0,
+                        0
+                    },
+                    {
+                        FormatWidth.WIDE,
+                        2.0,
+                        MeasureUnit.MINUTE,
+                        "2 pounds per minute",
+                        DONT_CARE,
+                        0,
+                        0
+                    },
+                    // per unit
+                    {FormatWidth.SHORT, 1.0, MeasureUnit.SECOND, "1 lb/s", DONT_CARE, 0, 0},
+                    {FormatWidth.SHORT, 2.0, MeasureUnit.SECOND, "2 lb/s", DONT_CARE, 0, 0},
+                    // compound
+                    {FormatWidth.SHORT, 1.0, MeasureUnit.MINUTE, "1 lb/min", DONT_CARE, 0, 0},
+                    {FormatWidth.SHORT, 2.0, MeasureUnit.MINUTE, "2 lb/min", DONT_CARE, 0, 0},
+                    // per unit
+                    {FormatWidth.NARROW, 1.0, MeasureUnit.SECOND, "1#/s", DONT_CARE, 0, 0},
+                    {FormatWidth.NARROW, 2.0, MeasureUnit.SECOND, "2#/s", DONT_CARE, 0, 0},
+                    // compound
+                    {FormatWidth.NARROW, 1.0, MeasureUnit.MINUTE, "1#/min", DONT_CARE, 0, 0},
+                    {FormatWidth.NARROW, 2.0, MeasureUnit.MINUTE, "2#/min", DONT_CARE, 0, 0},
+                    // field positions
+                    {
+                        FormatWidth.SHORT,
+                        23.3,
+                        MeasureUnit.SECOND,
+                        "23.3 lb/s",
+                        NumberFormat.Field.DECIMAL_SEPARATOR,
+                        2,
+                        3
+                    },
+                    {
+                        FormatWidth.SHORT,
+                        23.3,
+                        MeasureUnit.SECOND,
+                        "23.3 lb/s",
+                        NumberFormat.Field.INTEGER,
+                        0,
+                        2
+                    },
+                    {
+                        FormatWidth.SHORT,
+                        23.3,
+                        MeasureUnit.MINUTE,
+                        "23.3 lb/min",
+                        NumberFormat.Field.DECIMAL_SEPARATOR,
+                        2,
+                        3
+                    },
+                    {
+                        FormatWidth.SHORT,
+                        23.3,
+                        MeasureUnit.MINUTE,
+                        "23.3 lb/min",
+                        NumberFormat.Field.INTEGER,
+                        0,
+                        2
+                    },
+                };
 
         for (Object[] row : data) {
             FormatWidth formatWidth = (FormatWidth) row[0];
@@ -568,18 +671,18 @@ public class MeasureUnitTest extends CoreTestFmwk {
             NumberFormat.Field field = (NumberFormat.Field) row[4];
             int startOffset = ((Integer) row[5]).intValue();
             int endOffset = ((Integer) row[6]).intValue();
-            MeasureFormat mf = MeasureFormat.getInstance(
-                    ULocale.ENGLISH, formatWidth);
+            MeasureFormat mf = MeasureFormat.getInstance(ULocale.ENGLISH, formatWidth);
             FieldPosition pos = field != null ? new FieldPosition(field) : new FieldPosition(0);
             String prefix = "Prefix: ";
             assertEquals(
                     "",
                     prefix + expected,
                     mf.formatMeasurePerUnit(
-                            new Measure(amount, MeasureUnit.POUND),
-                            perUnit,
-                            new StringBuilder(prefix),
-                            pos).toString());
+                                    new Measure(amount, MeasureUnit.POUND),
+                                    perUnit,
+                                    new StringBuilder(prefix),
+                                    pos)
+                            .toString());
             if (field != DONT_CARE) {
                 assertEquals("startOffset", startOffset, pos.getBeginIndex() - prefix.length());
                 assertEquals("endOffset", endOffset, pos.getEndIndex() - prefix.length());
@@ -590,11 +693,13 @@ public class MeasureUnitTest extends CoreTestFmwk {
     @Test
     public void testNumeratorPlurals() {
         ULocale polish = new ULocale("pl");
-        Object[][] data = new Object[][] {
-                {1, "1 stopa na sekundę"},
-                {2, "2 stopy na sekundę"},
-                {5, "5 stóp na sekundę"},
-                {1.5, "1,5 stopy na sekundę"}};
+        Object[][] data =
+                new Object[][] {
+                    {1, "1 stopa na sekundę"},
+                    {2, "2 stopy na sekundę"},
+                    {5, "5 stóp na sekundę"},
+                    {1.5, "1,5 stopy na sekundę"}
+                };
 
         for (Object[] row : data) {
             MeasureFormat mf = MeasureFormat.getInstance(polish, FormatWidth.WIDE);
@@ -602,24 +707,19 @@ public class MeasureUnitTest extends CoreTestFmwk {
                     "",
                     row[1],
                     mf.formatMeasurePerUnit(
-                            new Measure((Number) row[0], MeasureUnit.FOOT),
-                            MeasureUnit.SECOND,
-                            new StringBuilder(),
-                            new FieldPosition(0)).toString());
+                                    new Measure((Number) row[0], MeasureUnit.FOOT),
+                                    MeasureUnit.SECOND,
+                                    new StringBuilder(),
+                                    new FieldPosition(0))
+                            .toString());
         }
     }
 
     @Test
     public void testGram() {
         MeasureFormat mf = MeasureFormat.getInstance(ULocale.ENGLISH, FormatWidth.SHORT);
-        assertEquals(
-                "testGram",
-                "1 g",
-                mf.format(new Measure(1, MeasureUnit.GRAM)));
-        assertEquals(
-                "testGram",
-                "1 G",
-                mf.format(new Measure(1, MeasureUnit.G_FORCE)));
+        assertEquals("testGram", "1 g", mf.format(new Measure(1, MeasureUnit.GRAM)));
+        assertEquals("testGram", "1 G", mf.format(new Measure(1, MeasureUnit.G_FORCE)));
     }
 
     @Test
@@ -658,30 +758,41 @@ public class MeasureUnitTest extends CoreTestFmwk {
 
     @Test
     public void testDisplayNames() {
-        Object[][] data = new Object[][] {
-            // Unit, locale, width, expected result
-            { MeasureUnit.YEAR, "en", FormatWidth.WIDE, "years" },
-            { MeasureUnit.YEAR, "ja", FormatWidth.WIDE, "年" },
-            { MeasureUnit.YEAR, "es", FormatWidth.WIDE, "años" },
-            { MeasureUnit.YEAR, "pt", FormatWidth.WIDE, "anos" },
-            { MeasureUnit.YEAR, "pt-PT", FormatWidth.WIDE, "anos" },
-            { MeasureUnit.AMPERE, "en", FormatWidth.WIDE, "amperes" },
-            { MeasureUnit.AMPERE, "ja", FormatWidth.WIDE, "アンペア" },
-            { MeasureUnit.AMPERE, "es", FormatWidth.WIDE, "amperios" },
-            { MeasureUnit.AMPERE, "pt", FormatWidth.WIDE, "amperes" },
-            { MeasureUnit.AMPERE, "pt-PT", FormatWidth.WIDE, "amperes" },
-            { MeasureUnit.METER_PER_SECOND_SQUARED, "pt", FormatWidth.WIDE, "metros por segundo ao quadrado" },
-            { MeasureUnit.METER_PER_SECOND_SQUARED, "pt-PT", FormatWidth.WIDE, "metros por segundo quadrado" },
-            { MeasureUnit.SQUARE_KILOMETER, "pt", FormatWidth.NARROW, "km²" },
-            { MeasureUnit.SQUARE_KILOMETER, "pt", FormatWidth.SHORT, "km²" },
-            { MeasureUnit.SQUARE_KILOMETER, "pt", FormatWidth.WIDE, "quilômetros quadrados" },
-            { MeasureUnit.SECOND, "pt-PT", FormatWidth.NARROW, "s" },
-            { MeasureUnit.SECOND, "pt-PT", FormatWidth.SHORT, "s" },
-            { MeasureUnit.SECOND, "pt-PT", FormatWidth.WIDE, "segundos" },
-            { MeasureUnit.SECOND, "pt", FormatWidth.NARROW, "s" },
-            { MeasureUnit.SECOND, "pt", FormatWidth.SHORT, "s" },
-            { MeasureUnit.SECOND, "pt", FormatWidth.WIDE, "segundos" },
-        };
+        Object[][] data =
+                new Object[][] {
+                    // Unit, locale, width, expected result
+                    {MeasureUnit.YEAR, "en", FormatWidth.WIDE, "years"},
+                    {MeasureUnit.YEAR, "ja", FormatWidth.WIDE, "年"},
+                    {MeasureUnit.YEAR, "es", FormatWidth.WIDE, "años"},
+                    {MeasureUnit.YEAR, "pt", FormatWidth.WIDE, "anos"},
+                    {MeasureUnit.YEAR, "pt-PT", FormatWidth.WIDE, "anos"},
+                    {MeasureUnit.AMPERE, "en", FormatWidth.WIDE, "amperes"},
+                    {MeasureUnit.AMPERE, "ja", FormatWidth.WIDE, "アンペア"},
+                    {MeasureUnit.AMPERE, "es", FormatWidth.WIDE, "amperios"},
+                    {MeasureUnit.AMPERE, "pt", FormatWidth.WIDE, "amperes"},
+                    {MeasureUnit.AMPERE, "pt-PT", FormatWidth.WIDE, "amperes"},
+                    {
+                        MeasureUnit.METER_PER_SECOND_SQUARED,
+                        "pt",
+                        FormatWidth.WIDE,
+                        "metros por segundo ao quadrado"
+                    },
+                    {
+                        MeasureUnit.METER_PER_SECOND_SQUARED,
+                        "pt-PT",
+                        FormatWidth.WIDE,
+                        "metros por segundo quadrado"
+                    },
+                    {MeasureUnit.SQUARE_KILOMETER, "pt", FormatWidth.NARROW, "km²"},
+                    {MeasureUnit.SQUARE_KILOMETER, "pt", FormatWidth.SHORT, "km²"},
+                    {MeasureUnit.SQUARE_KILOMETER, "pt", FormatWidth.WIDE, "quilômetros quadrados"},
+                    {MeasureUnit.SECOND, "pt-PT", FormatWidth.NARROW, "s"},
+                    {MeasureUnit.SECOND, "pt-PT", FormatWidth.SHORT, "s"},
+                    {MeasureUnit.SECOND, "pt-PT", FormatWidth.WIDE, "segundos"},
+                    {MeasureUnit.SECOND, "pt", FormatWidth.NARROW, "s"},
+                    {MeasureUnit.SECOND, "pt", FormatWidth.SHORT, "s"},
+                    {MeasureUnit.SECOND, "pt", FormatWidth.WIDE, "segundos"},
+                };
 
         for (Object[] test : data) {
             MeasureUnit unit = (MeasureUnit) test[0];
@@ -691,15 +802,16 @@ public class MeasureUnitTest extends CoreTestFmwk {
 
             MeasureFormat mf = MeasureFormat.getInstance(locale, formatWidth);
             String actual = mf.getUnitDisplayName(unit);
-            assertEquals(String.format("Unit Display Name for %s, %s, %s", unit, locale, formatWidth),
-                    expected, actual);
+            assertEquals(
+                    String.format("Unit Display Name for %s, %s, %s", unit, locale, formatWidth),
+                    expected,
+                    actual);
         }
     }
 
     @Test
     public void testFieldPosition() {
-        MeasureFormat fmt = MeasureFormat.getInstance(
-                ULocale.ENGLISH, FormatWidth.SHORT);
+        MeasureFormat fmt = MeasureFormat.getInstance(ULocale.ENGLISH, FormatWidth.SHORT);
         FieldPosition pos = new FieldPosition(NumberFormat.Field.DECIMAL_SEPARATOR);
         fmt.format(new Measure(43.5, MeasureUnit.FOOT), new StringBuffer("123456: "), pos);
         assertEquals("beginIndex", 10, pos.getBeginIndex());
@@ -713,14 +825,15 @@ public class MeasureUnitTest extends CoreTestFmwk {
 
     @Test
     public void testFieldPositionMultiple() {
-        MeasureFormat fmt = MeasureFormat.getInstance(
-                ULocale.ENGLISH, FormatWidth.SHORT);
+        MeasureFormat fmt = MeasureFormat.getInstance(ULocale.ENGLISH, FormatWidth.SHORT);
         FieldPosition pos = new FieldPosition(NumberFormat.Field.INTEGER);
-        String result = fmt.formatMeasures(
-                new StringBuilder(),
-                pos,
-                new Measure(354, MeasureUnit.METER),
-                new Measure(23, MeasureUnit.CENTIMETER)).toString();
+        String result =
+                fmt.formatMeasures(
+                                new StringBuilder(),
+                                pos,
+                                new Measure(354, MeasureUnit.METER),
+                                new Measure(23, MeasureUnit.CENTIMETER))
+                        .toString();
         assertEquals("result", "354 m, 23 cm", result);
 
         // According to javadocs for {@link Format#format} FieldPosition is set to
@@ -730,46 +843,53 @@ public class MeasureUnitTest extends CoreTestFmwk {
         assertEquals("endIndex", 3, pos.getEndIndex());
 
         pos = new FieldPosition(NumberFormat.Field.DECIMAL_SEPARATOR);
-        result = fmt.formatMeasures(
-                new StringBuilder("123456: "),
-                pos,
-                new Measure(354, MeasureUnit.METER),
-                new Measure(23, MeasureUnit.CENTIMETER),
-                new Measure(5.4, MeasureUnit.MILLIMETER)).toString();
+        result =
+                fmt.formatMeasures(
+                                new StringBuilder("123456: "),
+                                pos,
+                                new Measure(354, MeasureUnit.METER),
+                                new Measure(23, MeasureUnit.CENTIMETER),
+                                new Measure(5.4, MeasureUnit.MILLIMETER))
+                        .toString();
         assertEquals("result", "123456: 354 m, 23 cm, 5.4 mm", result);
         assertEquals("beginIndex", 23, pos.getBeginIndex());
         assertEquals("endIndex", 24, pos.getEndIndex());
 
-        result = fmt.formatMeasures(
-                new StringBuilder(),
-                pos,
-                new Measure(3, MeasureUnit.METER),
-                new Measure(23, MeasureUnit.CENTIMETER),
-                new Measure(5.4, MeasureUnit.MILLIMETER)).toString();
+        result =
+                fmt.formatMeasures(
+                                new StringBuilder(),
+                                pos,
+                                new Measure(3, MeasureUnit.METER),
+                                new Measure(23, MeasureUnit.CENTIMETER),
+                                new Measure(5.4, MeasureUnit.MILLIMETER))
+                        .toString();
         assertEquals("result", "3 m, 23 cm, 5.4 mm", result);
         assertEquals("beginIndex", 13, pos.getBeginIndex());
         assertEquals("endIndex", 14, pos.getEndIndex());
 
         pos = new FieldPosition(NumberFormat.Field.DECIMAL_SEPARATOR);
-        result = fmt.formatMeasures(
-                new StringBuilder("123456: "),
-                pos,
-                new Measure(3, MeasureUnit.METER),
-                new Measure(23, MeasureUnit.CENTIMETER),
-                new Measure(5, MeasureUnit.MILLIMETER)).toString();
+        result =
+                fmt.formatMeasures(
+                                new StringBuilder("123456: "),
+                                pos,
+                                new Measure(3, MeasureUnit.METER),
+                                new Measure(23, MeasureUnit.CENTIMETER),
+                                new Measure(5, MeasureUnit.MILLIMETER))
+                        .toString();
         assertEquals("result", "123456: 3 m, 23 cm, 5 mm", result);
         assertEquals("beginIndex", 0, pos.getBeginIndex());
         assertEquals("endIndex", 0, pos.getEndIndex());
 
         pos = new FieldPosition(NumberFormat.Field.INTEGER);
-        result = fmt.formatMeasures(
-                new StringBuilder("123456: "),
-                pos,
-                new Measure(57, MeasureUnit.MILLIMETER)).toString();
+        result =
+                fmt.formatMeasures(
+                                new StringBuilder("123456: "),
+                                pos,
+                                new Measure(57, MeasureUnit.MILLIMETER))
+                        .toString();
         assertEquals("result", "123456: 57 mm", result);
         assertEquals("beginIndex", 8, pos.getBeginIndex());
         assertEquals("endIndex", 10, pos.getEndIndex());
-
     }
 
     @Test
@@ -777,8 +897,7 @@ public class MeasureUnitTest extends CoreTestFmwk {
         List<Measure> measures = new ArrayList<>(2);
         measures.add(new Measure(5, MeasureUnit.ACRE));
         measures.add(new Measure(3000, MeasureUnit.SQUARE_FOOT));
-        MeasureFormat fmt = MeasureFormat.getInstance(
-                ULocale.ENGLISH, FormatWidth.WIDE);
+        MeasureFormat fmt = MeasureFormat.getInstance(ULocale.ENGLISH, FormatWidth.WIDE);
         assertEquals("", "5 acres, 3,000 square feet", fmt.format(measures));
         assertEquals("", "5 acres", fmt.format(measures.subList(0, 1)));
         List<String> badList = new ArrayList<>();
@@ -788,25 +907,23 @@ public class MeasureUnitTest extends CoreTestFmwk {
             fmt.format(badList);
             fail("Expected IllegalArgumentException.");
         } catch (IllegalArgumentException expected) {
-           // Expected
+            // Expected
         }
     }
 
     @Test
     public void testOldFormatWithArray() {
-        Measure[] measures = new Measure[] {
-                new Measure(5, MeasureUnit.ACRE),
-                new Measure(3000, MeasureUnit.SQUARE_FOOT),
-        };
-        MeasureFormat fmt = MeasureFormat.getInstance(
-                ULocale.ENGLISH, FormatWidth.WIDE);
+        Measure[] measures =
+                new Measure[] {
+                    new Measure(5, MeasureUnit.ACRE), new Measure(3000, MeasureUnit.SQUARE_FOOT),
+                };
+        MeasureFormat fmt = MeasureFormat.getInstance(ULocale.ENGLISH, FormatWidth.WIDE);
         assertEquals("", "5 acres, 3,000 square feet", fmt.format(measures));
     }
 
     @Test
     public void testOldFormatBadArg() {
-        MeasureFormat fmt = MeasureFormat.getInstance(
-                ULocale.ENGLISH, FormatWidth.WIDE);
+        MeasureFormat fmt = MeasureFormat.getInstance(ULocale.ENGLISH, FormatWidth.WIDE);
         try {
             fmt.format("be");
             fail("Expected IllegalArgumentExceptino.");
@@ -821,12 +938,15 @@ public class MeasureUnitTest extends CoreTestFmwk {
         MeasureFormat fmt = MeasureFormat.getInstance(Locale.ENGLISH, FormatWidth.SHORT);
 
         // This fails unless we resolve to MeasureUnit.POUND_PER_SQUARE_INCH
-        assertEquals("", "50 psi",
+        assertEquals(
+                "",
+                "50 psi",
                 fmt.formatMeasurePerUnit(
-                        new Measure(50, MeasureUnit.POUND_FORCE),
-                        MeasureUnit.SQUARE_INCH,
-                        new StringBuilder(),
-                        new FieldPosition(0)).toString());
+                                new Measure(50, MeasureUnit.POUND_FORCE),
+                                MeasureUnit.SQUARE_INCH,
+                                new StringBuilder(),
+                                new FieldPosition(0))
+                        .toString());
     }
 
     @Test
@@ -879,10 +999,12 @@ public class MeasureUnitTest extends CoreTestFmwk {
                 "70 feet, 5.3 inches",
                 "70 feet, 5.3 inches",
                 mf.formatMeasures(
-                        new Measure(70, MeasureUnit.FOOT),
-                        new Measure(5.3, MeasureUnit.INCH)));
+                        new Measure(70, MeasureUnit.FOOT), new Measure(5.3, MeasureUnit.INCH)));
         assertEquals("getLocale", ULocale.ENGLISH, mf.getLocale());
-        assertEquals("getNumberFormat", ULocale.ENGLISH, mf.getNumberFormat().getLocale(ULocale.VALID_LOCALE));
+        assertEquals(
+                "getNumberFormat",
+                ULocale.ENGLISH,
+                mf.getNumberFormat().getLocale(ULocale.VALID_LOCALE));
         assertEquals("getWidth", MeasureFormat.FormatWidth.WIDE, mf.getWidth());
     }
 
@@ -899,8 +1021,10 @@ public class MeasureUnitTest extends CoreTestFmwk {
         MeasureFormat mf = MeasureFormat.getCurrencyFormat(ULocale.ENGLISH);
         CurrencyAmount result = (CurrencyAmount) mf.parseObject("GTQ 34.56");
         assertEquals("Parse should succeed", result.getNumber().doubleValue(), 34.56, 0.0);
-        assertEquals("Should parse ISO code GTQ even though the currency is USD",
-                "GTQ", result.getCurrency().getCurrencyCode());
+        assertEquals(
+                "Should parse ISO code GTQ even though the currency is USD",
+                "GTQ",
+                result.getCurrency().getCurrencyCode());
     }
 
     @Test
@@ -924,7 +1048,6 @@ public class MeasureUnitTest extends CoreTestFmwk {
                         new Measure(-4.7, MeasureUnit.HOUR),
                         new Measure(23, MeasureUnit.MINUTE),
                         new Measure(16, MeasureUnit.SECOND)));
-
     }
 
     @Test
@@ -940,7 +1063,9 @@ public class MeasureUnitTest extends CoreTestFmwk {
     @Test
     public void testPopulateCache() {
         // Quick check that the lazily added additions to the MeasureUnit cache are present.
-        assertTrue("MeasureUnit: unexpectedly few currencies defined", MeasureUnit.getAvailable("currency").size() > 50);
+        assertTrue(
+                "MeasureUnit: unexpectedly few currencies defined",
+                MeasureUnit.getAvailable("currency").size() > 50);
     }
 
     @Test
@@ -948,8 +1073,9 @@ public class MeasureUnitTest extends CoreTestFmwk {
         MeasureFormat mf = MeasureFormat.getInstance(Locale.GERMAN, FormatWidth.NARROW);
         try {
             mf.parseObject("3m", null);
-            fail("MeasureFormat.parseObject(String, ParsePosition) " +
-                    "should throw an UnsupportedOperationException");
+            fail(
+                    "MeasureFormat.parseObject(String, ParsePosition) "
+                            + "should throw an UnsupportedOperationException");
         } catch (UnsupportedOperationException expected) {
         }
     }
@@ -988,7 +1114,9 @@ public class MeasureUnitTest extends CoreTestFmwk {
             }
             for (MeasureUnit unit : MeasureUnit.getAvailable(type)) {
                 if (!knownUnits.contains(unit)) {
-                    fail("Unit present in CLDR but not available via constant in MeasureUnit: " + unit);
+                    fail(
+                            "Unit present in CLDR but not available via constant in MeasureUnit: "
+                                    + unit);
                 }
             }
         }
@@ -1003,20 +1131,56 @@ public class MeasureUnitTest extends CoreTestFmwk {
 
     @Test
     public void test20332_PersonUnits() {
-        Object[][] cases = new Object[][] {
-            {ULocale.US, MeasureUnit.YEAR_PERSON, MeasureFormat.FormatWidth.NARROW, "25y"},
-            {ULocale.US, MeasureUnit.YEAR_PERSON, MeasureFormat.FormatWidth.SHORT, "25 yrs"},
-            {ULocale.US, MeasureUnit.YEAR_PERSON, MeasureFormat.FormatWidth.WIDE, "25 years"},
-            {ULocale.US, MeasureUnit.MONTH_PERSON, MeasureFormat.FormatWidth.NARROW, "25m"},
-            {ULocale.US, MeasureUnit.MONTH_PERSON, MeasureFormat.FormatWidth.SHORT, "25 mths"},
-            {ULocale.US, MeasureUnit.MONTH_PERSON, MeasureFormat.FormatWidth.WIDE, "25 months"},
-            {ULocale.US, MeasureUnit.WEEK_PERSON, MeasureFormat.FormatWidth.NARROW, "25w"},
-            {ULocale.US, MeasureUnit.WEEK_PERSON, MeasureFormat.FormatWidth.SHORT, "25 wks"},
-            {ULocale.US, MeasureUnit.WEEK_PERSON, MeasureFormat.FormatWidth.WIDE, "25 weeks"},
-            {ULocale.US, MeasureUnit.DAY_PERSON, MeasureFormat.FormatWidth.NARROW, "25d"},
-            {ULocale.US, MeasureUnit.DAY_PERSON, MeasureFormat.FormatWidth.SHORT, "25 days"},
-            {ULocale.US, MeasureUnit.DAY_PERSON, MeasureFormat.FormatWidth.WIDE, "25 days"}
-        };
+        Object[][] cases =
+                new Object[][] {
+                    {ULocale.US, MeasureUnit.YEAR_PERSON, MeasureFormat.FormatWidth.NARROW, "25y"},
+                    {
+                        ULocale.US,
+                        MeasureUnit.YEAR_PERSON,
+                        MeasureFormat.FormatWidth.SHORT,
+                        "25 yrs"
+                    },
+                    {
+                        ULocale.US,
+                        MeasureUnit.YEAR_PERSON,
+                        MeasureFormat.FormatWidth.WIDE,
+                        "25 years"
+                    },
+                    {ULocale.US, MeasureUnit.MONTH_PERSON, MeasureFormat.FormatWidth.NARROW, "25m"},
+                    {
+                        ULocale.US,
+                        MeasureUnit.MONTH_PERSON,
+                        MeasureFormat.FormatWidth.SHORT,
+                        "25 mths"
+                    },
+                    {
+                        ULocale.US,
+                        MeasureUnit.MONTH_PERSON,
+                        MeasureFormat.FormatWidth.WIDE,
+                        "25 months"
+                    },
+                    {ULocale.US, MeasureUnit.WEEK_PERSON, MeasureFormat.FormatWidth.NARROW, "25w"},
+                    {
+                        ULocale.US,
+                        MeasureUnit.WEEK_PERSON,
+                        MeasureFormat.FormatWidth.SHORT,
+                        "25 wks"
+                    },
+                    {
+                        ULocale.US,
+                        MeasureUnit.WEEK_PERSON,
+                        MeasureFormat.FormatWidth.WIDE,
+                        "25 weeks"
+                    },
+                    {ULocale.US, MeasureUnit.DAY_PERSON, MeasureFormat.FormatWidth.NARROW, "25d"},
+                    {
+                        ULocale.US,
+                        MeasureUnit.DAY_PERSON,
+                        MeasureFormat.FormatWidth.SHORT,
+                        "25 days"
+                    },
+                    {ULocale.US, MeasureUnit.DAY_PERSON, MeasureFormat.FormatWidth.WIDE, "25 days"}
+                };
         for (Object[] cas : cases) {
             ULocale locale = (ULocale) cas[0];
             MeasureUnit unit = (MeasureUnit) cas[1];
@@ -1041,7 +1205,6 @@ public class MeasureUnitTest extends CoreTestFmwk {
                         public int compare(MeasureUnit o1, MeasureUnit o2) {
                             return o1.getSubtype().compareTo(o2.getSubtype());
                         }
-
                     });
             allUnits.put(type, units);
         }
@@ -1050,39 +1213,45 @@ public class MeasureUnitTest extends CoreTestFmwk {
 
     public <T extends Serializable> void checkStreamingEquality(T item) {
         try {
-          ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
-          ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteOut);
-          objectOutputStream.writeObject(item);
-          objectOutputStream.close();
-          byte[] contents = byteOut.toByteArray();
-          logln("bytes: " + contents.length + "; " + item.getClass() + ": " + showBytes(contents));
-          ByteArrayInputStream byteIn = new ByteArrayInputStream(contents);
-          ObjectInputStream objectInputStream = new ObjectInputStream(byteIn);
-          Object obj = objectInputStream.readObject();
-          assertEquals("Streamed Object equals ", item, obj);
+            ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteOut);
+            objectOutputStream.writeObject(item);
+            objectOutputStream.close();
+            byte[] contents = byteOut.toByteArray();
+            logln(
+                    "bytes: "
+                            + contents.length
+                            + "; "
+                            + item.getClass()
+                            + ": "
+                            + showBytes(contents));
+            ByteArrayInputStream byteIn = new ByteArrayInputStream(contents);
+            ObjectInputStream objectInputStream = new ObjectInputStream(byteIn);
+            Object obj = objectInputStream.readObject();
+            assertEquals("Streamed Object equals ", item, obj);
         } catch (IOException e) {
-          e.printStackTrace();
-          assertNull("Test Serialization " + item.getClass(), e);
+            e.printStackTrace();
+            assertNull("Test Serialization " + item.getClass(), e);
         } catch (ClassNotFoundException e) {
-          assertNull("Test Serialization " + item.getClass(), e);
+            assertNull("Test Serialization " + item.getClass(), e);
         }
-      }
+    }
 
     /**
      * @param contents
      * @return
      */
     private String showBytes(byte[] contents) {
-      StringBuilder b = new StringBuilder("[");
-      for (int i = 0; i < contents.length; ++i) {
-        int item = contents[i] & 0xFF;
-        if (item >= 0x20 && item <= 0x7F) {
-          b.append((char) item);
-        } else {
-          b.append('(').append(Utility.hex(item, 2)).append(')');
+        StringBuilder b = new StringBuilder("[");
+        for (int i = 0; i < contents.length; ++i) {
+            int item = contents[i] & 0xFF;
+            if (item >= 0x20 && item <= 0x7F) {
+                b.append((char) item);
+            } else {
+                b.append('(').append(Utility.hex(item, 2)).append(')');
+            }
         }
-      }
-      return b.append(']').toString();
+        return b.append(']').toString();
     }
 
     private void verifyEqualsHashCode(Object o, Object eq, Object ne) {
@@ -1097,62 +1266,61 @@ public class MeasureUnitTest extends CoreTestFmwk {
         assertNotEquals("verifyEqualsHashCodeHashNe", o.hashCode(), ne.hashCode());
     }
 
-    public static class MeasureUnitHandler implements SerializableTestUtility.Handler
-    {
+    public static class MeasureUnitHandler implements SerializableTestUtility.Handler {
         @Override
-        public Object[] getTestObjects()
-        {
-            MeasureUnit items[] = {
-                    MeasureUnit.CELSIUS,
-                    Currency.getInstance("EUR")
-            };
+        public Object[] getTestObjects() {
+            MeasureUnit items[] = {MeasureUnit.CELSIUS, Currency.getInstance("EUR")};
             return items;
         }
+
         @Override
-        public boolean hasSameBehavior(Object a, Object b)
-        {
+        public boolean hasSameBehavior(Object a, Object b) {
             MeasureUnit a1 = (MeasureUnit) a;
             MeasureUnit b1 = (MeasureUnit) b;
-            return a1.getType().equals(b1.getType())
-                    && a1.getSubtype().equals(b1.getSubtype());
+            return a1.getType().equals(b1.getType()) && a1.getSubtype().equals(b1.getSubtype());
         }
     }
 
-    public static class MeasureFormatHandler  implements SerializableTestUtility.Handler
-    {
+    public static class MeasureFormatHandler implements SerializableTestUtility.Handler {
         FormatHandler.NumberFormatHandler nfh = new FormatHandler.NumberFormatHandler();
 
         @Override
-        public Object[] getTestObjects()
-        {
+        public Object[] getTestObjects() {
             MeasureFormat items[] = {
-                    MeasureFormat.getInstance(ULocale.FRANCE, FormatWidth.SHORT),
-                    MeasureFormat.getInstance(
-                            ULocale.FRANCE,
-                            FormatWidth.WIDE,
-                            NumberFormat.getIntegerInstance(ULocale.CANADA_FRENCH)),
+                MeasureFormat.getInstance(ULocale.FRANCE, FormatWidth.SHORT),
+                MeasureFormat.getInstance(
+                        ULocale.FRANCE,
+                        FormatWidth.WIDE,
+                        NumberFormat.getIntegerInstance(ULocale.CANADA_FRENCH)),
             };
             return items;
         }
+
         @Override
-        public boolean hasSameBehavior(Object a, Object b)
-        {
+        public boolean hasSameBehavior(Object a, Object b) {
             MeasureFormat a1 = (MeasureFormat) a;
             MeasureFormat b1 = (MeasureFormat) b;
             boolean getLocaleEqual = a1.getLocale().equals(b1.getLocale());
             boolean getWidthEqual = a1.getWidth().equals(b1.getWidth());
-            boolean numFmtHasSameBehavior = nfh.hasSameBehavior(a1.getNumberFormat(), b1.getNumberFormat());
+            boolean numFmtHasSameBehavior =
+                    nfh.hasSameBehavior(a1.getNumberFormat(), b1.getNumberFormat());
             if (getLocaleEqual && getWidthEqual && numFmtHasSameBehavior) {
                 return true;
             }
             System.out.println("MeasureFormatHandler.hasSameBehavior fails:");
             if (!getLocaleEqual) {
-                System.out.println("- getLocale equality fails: old a1: " + a1.getLocale().getName() + "; test b1: "
-                        + b1.getLocale().getName());
+                System.out.println(
+                        "- getLocale equality fails: old a1: "
+                                + a1.getLocale().getName()
+                                + "; test b1: "
+                                + b1.getLocale().getName());
             }
             if (!getWidthEqual) {
-                System.out.println("- getWidth equality fails: old a1: " + a1.getWidth().name() + "; test b1: "
-                        + b1.getWidth().name());
+                System.out.println(
+                        "- getWidth equality fails: old a1: "
+                                + a1.getWidth().name()
+                                + "; test b1: "
+                                + b1.getWidth().name());
             }
             if (!numFmtHasSameBehavior) {
                 System.out.println("- getNumberFormat hasSameBehavior fails");
@@ -1165,13 +1333,17 @@ public class MeasureUnitTest extends CoreTestFmwk {
     public void TestNumericTimeNonLatin() {
         ULocale ulocale = ULocale.forLanguageTag("bn");
         MeasureFormat fmt = MeasureFormat.getInstance(ulocale, FormatWidth.NUMERIC);
-        String actual = fmt.formatMeasures(new Measure(12, MeasureUnit.MINUTE), new Measure(39.12345, MeasureUnit.SECOND));
+        String actual =
+                fmt.formatMeasures(
+                        new Measure(12, MeasureUnit.MINUTE),
+                        new Measure(39.12345, MeasureUnit.SECOND));
         assertEquals("Incorrect digits", "১২:৩৯.১২৩", actual);
     }
 
     @Test
     public void TestNumericTime() {
-        MeasureFormat fmt = MeasureFormat.getInstance(ULocale.forLanguageTag("en"), FormatWidth.NUMERIC);
+        MeasureFormat fmt =
+                MeasureFormat.getInstance(ULocale.forLanguageTag("en"), FormatWidth.NUMERIC);
 
         Measure hours = new Measure(112, MeasureUnit.HOUR);
         Measure minutes = new Measure(113, MeasureUnit.MINUTE);
@@ -1214,7 +1386,8 @@ public class MeasureUnitTest extends CoreTestFmwk {
         Measure fminutes = new Measure(3.8765432, MeasureUnit.MINUTE);
 
         // Latvian is one of the very few locales 0-padding the hour
-        MeasureFormat fmt = MeasureFormat.getInstance(ULocale.forLanguageTag("lt"), FormatWidth.NUMERIC);
+        MeasureFormat fmt =
+                MeasureFormat.getInstance(ULocale.forLanguageTag("lt"), FormatWidth.NUMERIC);
         Assert.assertEquals("02:03,877", fmt.formatMeasures(fhours, fminutes));
 
         // Danish is one of the very few locales using '.' as separator
@@ -1237,8 +1410,9 @@ public class MeasureUnitTest extends CoreTestFmwk {
         TestCase cases[] = {
             // Correctly normalized identifiers should not change
             new TestCase("square-meter-per-square-meter", "square-meter-per-square-meter"),
-            new TestCase("kilogram-meter-per-square-meter-square-second",
-                         "kilogram-meter-per-square-meter-square-second"),
+            new TestCase(
+                    "kilogram-meter-per-square-meter-square-second",
+                    "kilogram-meter-per-square-meter-square-second"),
             new TestCase("square-mile-and-square-foot", "square-mile-and-square-foot"),
             new TestCase("square-foot-and-square-mile", "square-foot-and-square-mile"),
             new TestCase("per-cubic-centimeter", "per-cubic-centimeter"),
@@ -1297,11 +1471,20 @@ public class MeasureUnitTest extends CoreTestFmwk {
             new TestCase("dot", "dot"),
 
             // Testing sort order of prefixes.
-            new TestCase("megafoot-mebifoot-kibifoot-kilofoot", "mebifoot-megafoot-kibifoot-kilofoot"),
-            new TestCase("per-megafoot-mebifoot-kibifoot-kilofoot", "per-mebifoot-megafoot-kibifoot-kilofoot"),
-            new TestCase("megafoot-mebifoot-kibifoot-kilofoot-per-megafoot-mebifoot-kibifoot-kilofoot", "mebifoot-megafoot-kibifoot-kilofoot-per-mebifoot-megafoot-kibifoot-kilofoot"),
-            new TestCase("microfoot-millifoot-megafoot-mebifoot-kibifoot-kilofoot", "mebifoot-megafoot-kibifoot-kilofoot-millifoot-microfoot"),
-            new TestCase("per-microfoot-millifoot-megafoot-mebifoot-kibifoot-kilofoot", "per-mebifoot-megafoot-kibifoot-kilofoot-millifoot-microfoot"),
+            new TestCase(
+                    "megafoot-mebifoot-kibifoot-kilofoot", "mebifoot-megafoot-kibifoot-kilofoot"),
+            new TestCase(
+                    "per-megafoot-mebifoot-kibifoot-kilofoot",
+                    "per-mebifoot-megafoot-kibifoot-kilofoot"),
+            new TestCase(
+                    "megafoot-mebifoot-kibifoot-kilofoot-per-megafoot-mebifoot-kibifoot-kilofoot",
+                    "mebifoot-megafoot-kibifoot-kilofoot-per-mebifoot-megafoot-kibifoot-kilofoot"),
+            new TestCase(
+                    "microfoot-millifoot-megafoot-mebifoot-kibifoot-kilofoot",
+                    "mebifoot-megafoot-kibifoot-kilofoot-millifoot-microfoot"),
+            new TestCase(
+                    "per-microfoot-millifoot-megafoot-mebifoot-kibifoot-kilofoot",
+                    "per-mebifoot-megafoot-kibifoot-kilofoot-millifoot-microfoot"),
         };
 
         for (TestCase testCase : cases) {
@@ -1311,8 +1494,10 @@ public class MeasureUnitTest extends CoreTestFmwk {
             assertEquals(testCase.id, testCase.normalized, actual);
         }
 
-        assertEquals("for empty identifiers, the MeasureUnit will be null",
-                null, MeasureUnit.forIdentifier(""));
+        assertEquals(
+                "for empty identifiers, the MeasureUnit will be null",
+                null,
+                MeasureUnit.forIdentifier(""));
     }
 
     @Test
@@ -1327,137 +1512,148 @@ public class MeasureUnitTest extends CoreTestFmwk {
             }
         }
 
-        List<ConstantDenominatorTestCase> testCases = Arrays.asList(
-                new ConstantDenominatorTestCase("meter-per-1000", 1000),
-                new ConstantDenominatorTestCase("liter-per-1000-kiloliter", 1000),
-                new ConstantDenominatorTestCase("meter-per-100-kilometer", 100),
-                new ConstantDenominatorTestCase("liter-per-kilometer", 0),
-                new ConstantDenominatorTestCase("second-per-1000-minute", 1000),
-                new ConstantDenominatorTestCase("gram-per-1000-kilogram", 1000),
-                new ConstantDenominatorTestCase("meter-per-100", 100),
-                new ConstantDenominatorTestCase("part-per-1", 1),
-                new ConstantDenominatorTestCase("part-per-2", 2),
-                new ConstantDenominatorTestCase("part-per-3", 3),
-                new ConstantDenominatorTestCase("part-per-4", 4),
-                new ConstantDenominatorTestCase("part-per-5", 5),
-                new ConstantDenominatorTestCase("part-per-6", 6),
-                new ConstantDenominatorTestCase("part-per-7", 7),
-                new ConstantDenominatorTestCase("part-per-8", 8),
-                new ConstantDenominatorTestCase("part-per-9", 9),
+        List<ConstantDenominatorTestCase> testCases =
+                Arrays.asList(
+                        new ConstantDenominatorTestCase("meter-per-1000", 1000),
+                        new ConstantDenominatorTestCase("liter-per-1000-kiloliter", 1000),
+                        new ConstantDenominatorTestCase("meter-per-100-kilometer", 100),
+                        new ConstantDenominatorTestCase("liter-per-kilometer", 0),
+                        new ConstantDenominatorTestCase("second-per-1000-minute", 1000),
+                        new ConstantDenominatorTestCase("gram-per-1000-kilogram", 1000),
+                        new ConstantDenominatorTestCase("meter-per-100", 100),
+                        new ConstantDenominatorTestCase("part-per-1", 1),
+                        new ConstantDenominatorTestCase("part-per-2", 2),
+                        new ConstantDenominatorTestCase("part-per-3", 3),
+                        new ConstantDenominatorTestCase("part-per-4", 4),
+                        new ConstantDenominatorTestCase("part-per-5", 5),
+                        new ConstantDenominatorTestCase("part-per-6", 6),
+                        new ConstantDenominatorTestCase("part-per-7", 7),
+                        new ConstantDenominatorTestCase("part-per-8", 8),
+                        new ConstantDenominatorTestCase("part-per-9", 9),
 
-                // Test for constant denominators that are powers of 10
-                new ConstantDenominatorTestCase("part-per-10", 10),
-                new ConstantDenominatorTestCase("part-per-100", 100),
-                new ConstantDenominatorTestCase("part-per-1000", 1000),
-                new ConstantDenominatorTestCase("part-per-10000", 10000),
-                new ConstantDenominatorTestCase("part-per-100000", 100000),
-                new ConstantDenominatorTestCase("part-per-1000000", 1000000),
-                new ConstantDenominatorTestCase("part-per-10000000", 10000000),
-                new ConstantDenominatorTestCase("part-per-100000000", 100000000),
-                new ConstantDenominatorTestCase("part-per-1000000000", 1000000000),
-                new ConstantDenominatorTestCase("part-per-10000000000", 10000000000L),
-                new ConstantDenominatorTestCase("part-per-100000000000", 100000000000L),
-                new ConstantDenominatorTestCase("part-per-1000000000000", 1000000000000L),
-                new ConstantDenominatorTestCase("part-per-10000000000000", 10000000000000L),
-                new ConstantDenominatorTestCase("part-per-100000000000000", 100000000000000L),
-                new ConstantDenominatorTestCase("part-per-1000000000000000", 1000000000000000L),
-                new ConstantDenominatorTestCase("part-per-10000000000000000", 10000000000000000L),
-                new ConstantDenominatorTestCase("part-per-100000000000000000", 100000000000000000L),
-                new ConstantDenominatorTestCase("part-per-1000000000000000000", 1000000000000000000L),
-                new ConstantDenominatorTestCase("part-per-1e3-kilometer", 1000),
-        
-                // Test for constant denominators that are represented as scientific notation numbers.
-                new ConstantDenominatorTestCase("part-per-1e1", 10),
-                new ConstantDenominatorTestCase("part-per-1E1", 10),
-                new ConstantDenominatorTestCase("part-per-1e2", 100),
-                new ConstantDenominatorTestCase("part-per-1E2", 100),
-                new ConstantDenominatorTestCase("part-per-1e3", 1000),
-                new ConstantDenominatorTestCase("part-per-1E3", 1000),
-                new ConstantDenominatorTestCase("part-per-1e4", 10000),
-                new ConstantDenominatorTestCase("part-per-1E4", 10000),
-                new ConstantDenominatorTestCase("part-per-1e5", 100000),
-                new ConstantDenominatorTestCase("part-per-1E5", 100000),
-                new ConstantDenominatorTestCase("part-per-1e6", 1000000),
-                new ConstantDenominatorTestCase("part-per-1E6", 1000000),
-                new ConstantDenominatorTestCase("part-per-1e9", 1000000000),
-                new ConstantDenominatorTestCase("part-per-1E9", 1000000000),
-                new ConstantDenominatorTestCase("part-per-1e10", 10000000000L),
-                new ConstantDenominatorTestCase("part-per-1E10", 10000000000L),
-                new ConstantDenominatorTestCase("part-per-1e18", 1000000000000000000L),
-                new ConstantDenominatorTestCase("part-per-1E18", 1000000000000000000L),
-        
-                // Test for constant denominators that are randomly selected.
-                new ConstantDenominatorTestCase("liter-per-12345-kilometer", 12345),
-                new ConstantDenominatorTestCase("per-1000-kilometer", 1000),
-                new ConstantDenominatorTestCase("liter-per-1000-kiloliter", 1000),
+                        // Test for constant denominators that are powers of 10
+                        new ConstantDenominatorTestCase("part-per-10", 10),
+                        new ConstantDenominatorTestCase("part-per-100", 100),
+                        new ConstantDenominatorTestCase("part-per-1000", 1000),
+                        new ConstantDenominatorTestCase("part-per-10000", 10000),
+                        new ConstantDenominatorTestCase("part-per-100000", 100000),
+                        new ConstantDenominatorTestCase("part-per-1000000", 1000000),
+                        new ConstantDenominatorTestCase("part-per-10000000", 10000000),
+                        new ConstantDenominatorTestCase("part-per-100000000", 100000000),
+                        new ConstantDenominatorTestCase("part-per-1000000000", 1000000000),
+                        new ConstantDenominatorTestCase("part-per-10000000000", 10000000000L),
+                        new ConstantDenominatorTestCase("part-per-100000000000", 100000000000L),
+                        new ConstantDenominatorTestCase("part-per-1000000000000", 1000000000000L),
+                        new ConstantDenominatorTestCase("part-per-10000000000000", 10000000000000L),
+                        new ConstantDenominatorTestCase(
+                                "part-per-100000000000000", 100000000000000L),
+                        new ConstantDenominatorTestCase(
+                                "part-per-1000000000000000", 1000000000000000L),
+                        new ConstantDenominatorTestCase(
+                                "part-per-10000000000000000", 10000000000000000L),
+                        new ConstantDenominatorTestCase(
+                                "part-per-100000000000000000", 100000000000000000L),
+                        new ConstantDenominatorTestCase(
+                                "part-per-1000000000000000000", 1000000000000000000L),
+                        new ConstantDenominatorTestCase("part-per-1e3-kilometer", 1000),
 
-                // Test for constant denominators that give 0.
-                new ConstantDenominatorTestCase("meter", 0),
-                new ConstantDenominatorTestCase("meter-per-second", 0),
-                new ConstantDenominatorTestCase("meter-per-square-second", 0));
+                        // Test for constant denominators that are represented as scientific
+                        // notation numbers.
+                        new ConstantDenominatorTestCase("part-per-1e1", 10),
+                        new ConstantDenominatorTestCase("part-per-1E1", 10),
+                        new ConstantDenominatorTestCase("part-per-1e2", 100),
+                        new ConstantDenominatorTestCase("part-per-1E2", 100),
+                        new ConstantDenominatorTestCase("part-per-1e3", 1000),
+                        new ConstantDenominatorTestCase("part-per-1E3", 1000),
+                        new ConstantDenominatorTestCase("part-per-1e4", 10000),
+                        new ConstantDenominatorTestCase("part-per-1E4", 10000),
+                        new ConstantDenominatorTestCase("part-per-1e5", 100000),
+                        new ConstantDenominatorTestCase("part-per-1E5", 100000),
+                        new ConstantDenominatorTestCase("part-per-1e6", 1000000),
+                        new ConstantDenominatorTestCase("part-per-1E6", 1000000),
+                        new ConstantDenominatorTestCase("part-per-1e9", 1000000000),
+                        new ConstantDenominatorTestCase("part-per-1E9", 1000000000),
+                        new ConstantDenominatorTestCase("part-per-1e10", 10000000000L),
+                        new ConstantDenominatorTestCase("part-per-1E10", 10000000000L),
+                        new ConstantDenominatorTestCase("part-per-1e18", 1000000000000000000L),
+                        new ConstantDenominatorTestCase("part-per-1E18", 1000000000000000000L),
+
+                        // Test for constant denominators that are randomly selected.
+                        new ConstantDenominatorTestCase("liter-per-12345-kilometer", 12345),
+                        new ConstantDenominatorTestCase("per-1000-kilometer", 1000),
+                        new ConstantDenominatorTestCase("liter-per-1000-kiloliter", 1000),
+
+                        // Test for constant denominators that give 0.
+                        new ConstantDenominatorTestCase("meter", 0),
+                        new ConstantDenominatorTestCase("meter-per-second", 0),
+                        new ConstantDenominatorTestCase("meter-per-square-second", 0));
 
         for (ConstantDenominatorTestCase testCase : testCases) {
             MeasureUnit unit = MeasureUnit.forIdentifier(testCase.identifier);
-            assertEquals("Constant denominator for " + testCase.identifier, testCase.expectedConstantDenominator,
+            assertEquals(
+                    "Constant denominator for " + testCase.identifier,
+                    testCase.expectedConstantDenominator,
                     unit.getConstantDenominator());
-            assertTrue("Complexity for " + testCase.identifier,
-                    unit.getComplexity() == Complexity.COMPOUND || unit.getComplexity() == Complexity.SINGLE);
+            assertTrue(
+                    "Complexity for " + testCase.identifier,
+                    unit.getComplexity() == Complexity.COMPOUND
+                            || unit.getComplexity() == Complexity.SINGLE);
         }
     }
 
     @Test
     public void TestInvalidIdentifiers() {
         final String inputs[] = {
-                "kilo",
-                "kilokilo",
-                "onekilo",
-                "meterkilo",
-                "meter-kilo",
-                "k",
-                "meter-",
-                "meter+",
-                "-meter",
-                "+meter",
-                "-kilometer",
-                "+kilometer",
-                "-pow2-meter",
-                "+pow2-meter",
-                "p2-meter",
-                "p4-meter",
-                "+",
-                "-",
-                "-mile",
-                "-and-mile",
-                "-per-mile",
-                "one",
-                "one-one",
-                "one-per-mile",
-                "one-per-cubic-centimeter",
-                "square--per-meter",
-                "metersecond", // Must have compound part in between single units
+            "kilo",
+            "kilokilo",
+            "onekilo",
+            "meterkilo",
+            "meter-kilo",
+            "k",
+            "meter-",
+            "meter+",
+            "-meter",
+            "+meter",
+            "-kilometer",
+            "+kilometer",
+            "-pow2-meter",
+            "+pow2-meter",
+            "p2-meter",
+            "p4-meter",
+            "+",
+            "-",
+            "-mile",
+            "-and-mile",
+            "-per-mile",
+            "one",
+            "one-one",
+            "one-per-mile",
+            "one-per-cubic-centimeter",
+            "square--per-meter",
+            "metersecond", // Must have compound part in between single units
 
-                // Negative powers not supported in mixed units yet. TODO(CLDR-13701).
-                "per-hour-and-hertz",
-                "hertz-and-per-hour",
+            // Negative powers not supported in mixed units yet. TODO(CLDR-13701).
+            "per-hour-and-hertz",
+            "hertz-and-per-hour",
 
-                // Compound units not supported in mixed units yet. TODO(CLDR-13701).
-                "kilonewton-meter-and-newton-meter",
+            // Compound units not supported in mixed units yet. TODO(CLDR-13701).
+            "kilonewton-meter-and-newton-meter",
 
-                // Invalid units due to invalid constant denominator
-                "meter-per--20-second",
-                "meter-per-1000-1e9-second",
-                "meter-per-1e20-second",
-                "per-1000",
-                "meter-per-1000-1000",
-                "meter-per-1000-second-1000-kilometer",
-                "1000-meter",
-                "meter-1000",
-                "meter-per-1000-1000",
-                "meter-per-1000-second-1000-kilometer",
-                "per-1000-and-per-1000",
-                "liter-per-kilometer-100",
-                "meter-per-100-100-kilometer",
-            };
+            // Invalid units due to invalid constant denominator
+            "meter-per--20-second",
+            "meter-per-1000-1e9-second",
+            "meter-per-1e20-second",
+            "per-1000",
+            "meter-per-1000-1000",
+            "meter-per-1000-second-1000-kilometer",
+            "1000-meter",
+            "meter-1000",
+            "meter-per-1000-1000",
+            "meter-per-1000-second-1000-kilometer",
+            "per-1000-and-per-1000",
+            "liter-per-kilometer-100",
+            "meter-per-100-100-kilometer",
+        };
 
         for (String input : inputs) {
             try {
@@ -1472,20 +1668,20 @@ public class MeasureUnitTest extends CoreTestFmwk {
     @Test
     public void TestGetIdentifierForConstantDenominator() {
         String testCases[][] = {
-                { "meter-per-1000", "meter-per-1000" },
-                { "meter-per-1000-kilometer", "meter-per-1000-kilometer" },
-                { "meter-per-1000000", "meter-per-1e6" },
-                { "meter-per-1000000-kilometer", "meter-per-1e6-kilometer" },
-                { "meter-per-1000000000", "meter-per-1e9" },
-                { "meter-per-1000000000-kilometer", "meter-per-1e9-kilometer" },
-                { "meter-per-1000000000000", "meter-per-1e12" },
-                { "meter-per-1000000000000-kilometer", "meter-per-1e12-kilometer" },
-                { "meter-per-1000000000000000", "meter-per-1e15" },
-                { "meter-per-1e15-kilometer", "meter-per-1e15-kilometer" },
-                { "meter-per-1000000000000000000", "meter-per-1e18" },
-                { "meter-per-1e18-kilometer", "meter-per-1e18-kilometer" },
-                { "meter-per-1000000000000001", "meter-per-1000000000000001" },
-                { "meter-per-1000000000000001-kilometer", "meter-per-1000000000000001-kilometer" },
+            {"meter-per-1000", "meter-per-1000"},
+            {"meter-per-1000-kilometer", "meter-per-1000-kilometer"},
+            {"meter-per-1000000", "meter-per-1e6"},
+            {"meter-per-1000000-kilometer", "meter-per-1e6-kilometer"},
+            {"meter-per-1000000000", "meter-per-1e9"},
+            {"meter-per-1000000000-kilometer", "meter-per-1e9-kilometer"},
+            {"meter-per-1000000000000", "meter-per-1e12"},
+            {"meter-per-1000000000000-kilometer", "meter-per-1e12-kilometer"},
+            {"meter-per-1000000000000000", "meter-per-1e15"},
+            {"meter-per-1e15-kilometer", "meter-per-1e15-kilometer"},
+            {"meter-per-1000000000000000000", "meter-per-1e18"},
+            {"meter-per-1e18-kilometer", "meter-per-1e18-kilometer"},
+            {"meter-per-1000000000000001", "meter-per-1000000000000001"},
+            {"meter-per-1000000000000001-kilometer", "meter-per-1000000000000001-kilometer"},
         };
 
         for (String[] testCase : testCases) {
@@ -1571,7 +1767,8 @@ public class MeasureUnitTest extends CoreTestFmwk {
     public void TestParseBuiltIns() {
         for (MeasureUnit unit : MeasureUnit.getAvailable()) {
             if (DEBUG) {
-                System.out.println("unit ident: " + unit.getIdentifier() + ", type: " + unit.getType());
+                System.out.println(
+                        "unit ident: " + unit.getIdentifier() + ", type: " + unit.getType());
             }
             if (unit.getType() == "currency") {
                 continue;
@@ -1582,14 +1779,16 @@ public class MeasureUnitTest extends CoreTestFmwk {
             if (unit == MeasureUnit.GENERIC_TEMPERATURE) {
                 try {
                     MeasureUnit.forIdentifier(unit.getIdentifier());
-                    Assert.fail("GENERIC_TEMPERATURE should not be parseable (BEAUFORT also currently non-parseable)");
+                    Assert.fail(
+                            "GENERIC_TEMPERATURE should not be parseable (BEAUFORT also currently non-parseable)");
                 } catch (IllegalArgumentException e) {
                     continue;
                 }
             } else {
                 MeasureUnit parsed = MeasureUnit.forIdentifier(unit.getIdentifier());
-                assertTrue("parsed MeasureUnit '" + parsed + "'' should equal built-in '" + unit + "'",
-                           unit.equals(parsed));
+                assertTrue(
+                        "parsed MeasureUnit '" + parsed + "'' should equal built-in '" + unit + "'",
+                        unit.equals(parsed));
             }
         }
     }
@@ -1619,7 +1818,8 @@ public class MeasureUnitTest extends CoreTestFmwk {
 
         for (TestCase testCase : cases) {
             MeasureUnit m = MeasureUnit.forIdentifier(testCase.identifier);
-            assertTrue(testCase.identifier + " parsed to builtin", m.equals(testCase.expectedBuiltin));
+            assertTrue(
+                    testCase.identifier + " parsed to builtin", m.equals(testCase.expectedBuiltin));
         }
     }
 
@@ -1640,8 +1840,8 @@ public class MeasureUnitTest extends CoreTestFmwk {
         verifySingleUnit(centimeter2, MeasureUnit.MeasurePrefix.CENTI, 1, "centimeter");
         verifySingleUnit(cubicDecimeter, MeasureUnit.MeasurePrefix.DECI, 3, "cubic-decimeter");
 
-        assertTrue("centimeter equality", centimeter1.equals( centimeter2));
-        assertTrue("kilometer inequality", !centimeter1.equals( kilometer));
+        assertTrue("centimeter equality", centimeter1.equals(centimeter2));
+        assertTrue("kilometer inequality", !centimeter1.equals(kilometer));
 
         MeasureUnit squareMeter = meter.withDimensionality(2);
         MeasureUnit overCubicCentimeter = centimeter1.withDimensionality(-3);
@@ -1649,72 +1849,82 @@ public class MeasureUnitTest extends CoreTestFmwk {
         MeasureUnit overQuarticKilometer1 = kilometer.withDimensionality(-4);
 
         verifySingleUnit(squareMeter, MeasureUnit.MeasurePrefix.ONE, 2, "square-meter");
-        verifySingleUnit(overCubicCentimeter, MeasureUnit.MeasurePrefix.CENTI, -3, "per-cubic-centimeter");
+        verifySingleUnit(
+                overCubicCentimeter, MeasureUnit.MeasurePrefix.CENTI, -3, "per-cubic-centimeter");
         verifySingleUnit(quarticKilometer, MeasureUnit.MeasurePrefix.KILO, 4, "pow4-kilometer");
-        verifySingleUnit(overQuarticKilometer1, MeasureUnit.MeasurePrefix.KILO, -4, "per-pow4-kilometer");
+        verifySingleUnit(
+                overQuarticKilometer1, MeasureUnit.MeasurePrefix.KILO, -4, "per-pow4-kilometer");
 
         assertTrue("power inequality", quarticKilometer != overQuarticKilometer1);
 
         MeasureUnit overQuarticKilometer2 = quarticKilometer.reciprocal();
-        MeasureUnit overQuarticKilometer3 = kilometer.product(kilometer)
-                .product(kilometer)
-                .product(kilometer)
-                .reciprocal();
-        MeasureUnit overQuarticKilometer4 = meter.withDimensionality(4)
-                .reciprocal()
-                .withPrefix(MeasureUnit.MeasurePrefix.KILO);
+        MeasureUnit overQuarticKilometer3 =
+                kilometer.product(kilometer).product(kilometer).product(kilometer).reciprocal();
+        MeasureUnit overQuarticKilometer4 =
+                meter.withDimensionality(4).reciprocal().withPrefix(MeasureUnit.MeasurePrefix.KILO);
 
-        verifySingleUnit(overQuarticKilometer2, MeasureUnit.MeasurePrefix.KILO, -4, "per-pow4-kilometer");
-        verifySingleUnit(overQuarticKilometer3, MeasureUnit.MeasurePrefix.KILO, -4, "per-pow4-kilometer");
-        verifySingleUnit(overQuarticKilometer4, MeasureUnit.MeasurePrefix.KILO, -4, "per-pow4-kilometer");
+        verifySingleUnit(
+                overQuarticKilometer2, MeasureUnit.MeasurePrefix.KILO, -4, "per-pow4-kilometer");
+        verifySingleUnit(
+                overQuarticKilometer3, MeasureUnit.MeasurePrefix.KILO, -4, "per-pow4-kilometer");
+        verifySingleUnit(
+                overQuarticKilometer4, MeasureUnit.MeasurePrefix.KILO, -4, "per-pow4-kilometer");
 
         assertTrue("reciprocal equality", overQuarticKilometer1.equals(overQuarticKilometer2));
         assertTrue("reciprocal equality", overQuarticKilometer1.equals(overQuarticKilometer3));
         assertTrue("reciprocal equality", overQuarticKilometer1.equals(overQuarticKilometer4));
 
-        MeasureUnit kiloSquareSecond = MeasureUnit.SECOND
-                .withDimensionality(2).withPrefix(MeasureUnit.MeasurePrefix.KILO);
+        MeasureUnit kiloSquareSecond =
+                MeasureUnit.SECOND.withDimensionality(2).withPrefix(MeasureUnit.MeasurePrefix.KILO);
         MeasureUnit meterSecond = meter.product(kiloSquareSecond);
         MeasureUnit cubicMeterSecond1 = meter.withDimensionality(3).product(kiloSquareSecond);
-        MeasureUnit centimeterSecond1 = meter.withPrefix(MeasureUnit.MeasurePrefix.CENTI).product(kiloSquareSecond);
+        MeasureUnit centimeterSecond1 =
+                meter.withPrefix(MeasureUnit.MeasurePrefix.CENTI).product(kiloSquareSecond);
         MeasureUnit secondCubicMeter = kiloSquareSecond.product(meter.withDimensionality(3));
-        MeasureUnit secondCentimeter = kiloSquareSecond.product(meter.withPrefix(MeasureUnit.MeasurePrefix.CENTI));
+        MeasureUnit secondCentimeter =
+                kiloSquareSecond.product(meter.withPrefix(MeasureUnit.MeasurePrefix.CENTI));
         MeasureUnit secondCentimeterPerKilometer = secondCentimeter.product(kilometer.reciprocal());
 
         verifySingleUnit(kiloSquareSecond, MeasureUnit.MeasurePrefix.KILO, 2, "square-kilosecond");
-        String meterSecondSub[] = {
-                "meter", "square-kilosecond"
-        };
-        verifyCompoundUnit(meterSecond, "meter-square-kilosecond",
-                meterSecondSub, meterSecondSub.length);
-        String cubicMeterSecond1Sub[] = {
-                "cubic-meter", "square-kilosecond"
-        };
-        verifyCompoundUnit(cubicMeterSecond1, "cubic-meter-square-kilosecond",
-                cubicMeterSecond1Sub, cubicMeterSecond1Sub.length);
-        String centimeterSecond1Sub[] = {
-                "centimeter", "square-kilosecond"
-        };
-        verifyCompoundUnit(centimeterSecond1, "centimeter-square-kilosecond",
-                centimeterSecond1Sub, centimeterSecond1Sub.length);
-        String secondCubicMeterSub[] = {
-                "cubic-meter", "square-kilosecond"
-        };
-        verifyCompoundUnit(secondCubicMeter, "cubic-meter-square-kilosecond",
-                secondCubicMeterSub, secondCubicMeterSub.length);
-        String secondCentimeterSub[] = {
-                "centimeter", "square-kilosecond"
-        };
-        verifyCompoundUnit(secondCentimeter, "centimeter-square-kilosecond",
-                secondCentimeterSub, secondCentimeterSub.length);
+        String meterSecondSub[] = {"meter", "square-kilosecond"};
+        verifyCompoundUnit(
+                meterSecond, "meter-square-kilosecond", meterSecondSub, meterSecondSub.length);
+        String cubicMeterSecond1Sub[] = {"cubic-meter", "square-kilosecond"};
+        verifyCompoundUnit(
+                cubicMeterSecond1,
+                "cubic-meter-square-kilosecond",
+                cubicMeterSecond1Sub,
+                cubicMeterSecond1Sub.length);
+        String centimeterSecond1Sub[] = {"centimeter", "square-kilosecond"};
+        verifyCompoundUnit(
+                centimeterSecond1,
+                "centimeter-square-kilosecond",
+                centimeterSecond1Sub,
+                centimeterSecond1Sub.length);
+        String secondCubicMeterSub[] = {"cubic-meter", "square-kilosecond"};
+        verifyCompoundUnit(
+                secondCubicMeter,
+                "cubic-meter-square-kilosecond",
+                secondCubicMeterSub,
+                secondCubicMeterSub.length);
+        String secondCentimeterSub[] = {"centimeter", "square-kilosecond"};
+        verifyCompoundUnit(
+                secondCentimeter,
+                "centimeter-square-kilosecond",
+                secondCentimeterSub,
+                secondCentimeterSub.length);
         String secondCentimeterPerKilometerSub[] = {
-                "centimeter", "square-kilosecond", "per-kilometer"
+            "centimeter", "square-kilosecond", "per-kilometer"
         };
-        verifyCompoundUnit(secondCentimeterPerKilometer, "centimeter-square-kilosecond-per-kilometer",
-                secondCentimeterPerKilometerSub, secondCentimeterPerKilometerSub.length);
+        verifyCompoundUnit(
+                secondCentimeterPerKilometer,
+                "centimeter-square-kilosecond-per-kilometer",
+                secondCentimeterPerKilometerSub,
+                secondCentimeterPerKilometerSub.length);
 
         assertTrue("reordering equality", cubicMeterSecond1.equals(secondCubicMeter));
-        assertTrue("additional simple units inequality", !secondCubicMeter.equals(secondCentimeter));
+        assertTrue(
+                "additional simple units inequality", !secondCubicMeter.equals(secondCentimeter));
 
         // Don't allow get/set power or SI or binary prefix on compound units
         try {
@@ -1748,21 +1958,14 @@ public class MeasureUnitTest extends CoreTestFmwk {
         MeasureUnit footInch = MeasureUnit.forIdentifier("foot-and-inch");
         MeasureUnit inchFoot = MeasureUnit.forIdentifier("inch-and-foot");
 
-        String footInchSub[] = {
-                "foot", "inch"
-        };
-        verifyMixedUnit(footInch, "foot-and-inch",
-                footInchSub, footInchSub.length);
-        String inchFootSub[] = {
-                "inch", "foot"
-        };
-        verifyMixedUnit(inchFoot, "inch-and-foot",
-                inchFootSub, inchFootSub.length);
+        String footInchSub[] = {"foot", "inch"};
+        verifyMixedUnit(footInch, "foot-and-inch", footInchSub, footInchSub.length);
+        String inchFootSub[] = {"inch", "foot"};
+        verifyMixedUnit(inchFoot, "inch-and-foot", inchFootSub, inchFootSub.length);
 
         assertTrue("order matters inequality", !footInch.equals(inchFoot));
 
-
-        MeasureUnit dimensionless  = NoUnit.BASE;
+        MeasureUnit dimensionless = NoUnit.BASE;
         MeasureUnit dimensionless2 = MeasureUnit.forIdentifier("");
         assertEquals("dimensionless equality", dimensionless, dimensionless2);
 
@@ -1826,18 +2029,26 @@ public class MeasureUnitTest extends CoreTestFmwk {
         verifySingleUnit(mile, MeasureUnit.MeasurePrefix.ONE, 1, "mile");
     }
 
-    private void verifySingleUnit(MeasureUnit singleMeasureUnit, MeasureUnit.MeasurePrefix prefix, int power, String identifier) {
+    private void verifySingleUnit(
+            MeasureUnit singleMeasureUnit,
+            MeasureUnit.MeasurePrefix prefix,
+            int power,
+            String identifier) {
         assertEquals(identifier + ": SI or binary prefix", prefix, singleMeasureUnit.getPrefix());
 
         assertEquals(identifier + ": Power", power, singleMeasureUnit.getDimensionality());
 
         assertEquals(identifier + ": Identifier", identifier, singleMeasureUnit.getIdentifier());
 
-        assertTrue(identifier + ": Constructor", singleMeasureUnit.equals(MeasureUnit.forIdentifier(identifier)));
+        assertTrue(
+                identifier + ": Constructor",
+                singleMeasureUnit.equals(MeasureUnit.forIdentifier(identifier)));
 
-        assertEquals(identifier + ": Complexity", MeasureUnit.Complexity.SINGLE, singleMeasureUnit.getComplexity());
+        assertEquals(
+                identifier + ": Complexity",
+                MeasureUnit.Complexity.SINGLE,
+                singleMeasureUnit.getComplexity());
     }
-
 
     // Kilogram is a "base unit", although it's also "gram" with a kilo- prefix.
     // This tests that it is handled in the preferred manner.
@@ -1852,16 +2063,27 @@ public class MeasureUnitTest extends CoreTestFmwk {
         // Nanogram: not a built-in type at this time
         MeasureUnit nanogram = MeasureUnit.forIdentifier("nanogram");
 
-        assertEquals("parsed kilogram equals built-in kilogram", MeasureUnit.KILOGRAM.getType(),
+        assertEquals(
+                "parsed kilogram equals built-in kilogram",
+                MeasureUnit.KILOGRAM.getType(),
                 kilogram.getType());
-        assertEquals("parsed kilogram equals built-in kilogram", MeasureUnit.KILOGRAM.getSubtype(),
+        assertEquals(
+                "parsed kilogram equals built-in kilogram",
+                MeasureUnit.KILOGRAM.getSubtype(),
                 kilogram.getSubtype());
-        assertEquals("parsed gram equals built-in gram", MeasureUnit.GRAM.getType(), gram.getType());
-        assertEquals("parsed gram equals built-in gram", MeasureUnit.GRAM.getSubtype(),
+        assertEquals(
+                "parsed gram equals built-in gram", MeasureUnit.GRAM.getType(), gram.getType());
+        assertEquals(
+                "parsed gram equals built-in gram",
+                MeasureUnit.GRAM.getSubtype(),
                 gram.getSubtype());
-        assertEquals("parsed microgram equals built-in microgram", MeasureUnit.MICROGRAM.getType(),
+        assertEquals(
+                "parsed microgram equals built-in microgram",
+                MeasureUnit.MICROGRAM.getType(),
                 microgram.getType());
-        assertEquals("parsed microgram equals built-in microgram", MeasureUnit.MICROGRAM.getSubtype(),
+        assertEquals(
+                "parsed microgram equals built-in microgram",
+                MeasureUnit.MICROGRAM.getSubtype(),
                 microgram.getSubtype());
         assertEquals("nanogram", null, nanogram.getType());
         assertEquals("nanogram", "nanogram", nanogram.getIdentifier());
@@ -1872,8 +2094,10 @@ public class MeasureUnitTest extends CoreTestFmwk {
         assertEquals("prefix of nanogram", MeasureUnit.MeasurePrefix.NANO, nanogram.getPrefix());
 
         MeasureUnit tmp = kilogram.withPrefix(MeasureUnit.MeasurePrefix.MILLI);
-        assertEquals("Kilogram + milli should be milligram, got: " + tmp.getIdentifier(),
-                MeasureUnit.MILLIGRAM.getIdentifier(), tmp.getIdentifier());
+        assertEquals(
+                "Kilogram + milli should be milligram, got: " + tmp.getIdentifier(),
+                MeasureUnit.MILLIGRAM.getIdentifier(),
+                tmp.getIdentifier());
     }
 
     @Test
@@ -1882,15 +2106,18 @@ public class MeasureUnitTest extends CoreTestFmwk {
         assertEquals("mu1 initial identifier", null, mu1.getIdentifier());
         assertEquals("mu1 initial complexity", MeasureUnit.Complexity.SINGLE, mu1.getComplexity());
         assertEquals("mu1 initial units length", 1, mu1.getSingleUnits().size());
-        assertEquals("mu1 initial units[0]", "meter", mu1.getSingleUnits().get(0).getSimpleUnitID());
+        assertEquals(
+                "mu1 initial units[0]", "meter", mu1.getSingleUnits().get(0).getSimpleUnitID());
 
         // Producing identifier via build(): the MeasureUnitImpl instance gets modified
         // while it also gets assigned to tmp's internal measureUnitImpl.
         MeasureUnit tmp = mu1.build();
         assertEquals("mu1 post-build identifier", "meter", mu1.getIdentifier());
-        assertEquals("mu1 post-build complexity", MeasureUnit.Complexity.SINGLE, mu1.getComplexity());
+        assertEquals(
+                "mu1 post-build complexity", MeasureUnit.Complexity.SINGLE, mu1.getComplexity());
         assertEquals("mu1 post-build units length", 1, mu1.getSingleUnits().size());
-        assertEquals("mu1 post-build units[0]", "meter", mu1.getSingleUnits().get(0).getSimpleUnitID());
+        assertEquals(
+                "mu1 post-build units[0]", "meter", mu1.getSingleUnits().get(0).getSimpleUnitID());
         assertEquals("MeasureUnit tmp identifier", "meter", tmp.getIdentifier());
 
         mu1 = MeasureUnitImpl.forIdentifier("hour-and-minute-and-second");
@@ -1898,81 +2125,97 @@ public class MeasureUnitTest extends CoreTestFmwk {
         assertEquals("mu1 = HMS: complexity", MeasureUnit.Complexity.MIXED, mu1.getComplexity());
         assertEquals("mu1 = HMS: units length", 3, mu1.getSingleUnits().size());
         assertEquals("mu1 = HMS: units[0]", "hour", mu1.getSingleUnits().get(0).getSimpleUnitID());
-        assertEquals("mu1 = HMS: units[1]", "minute", mu1.getSingleUnits().get(1).getSimpleUnitID());
-        assertEquals("mu1 = HMS: units[2]", "second", mu1.getSingleUnits().get(2).getSimpleUnitID());
+        assertEquals(
+                "mu1 = HMS: units[1]", "minute", mu1.getSingleUnits().get(1).getSimpleUnitID());
+        assertEquals(
+                "mu1 = HMS: units[2]", "second", mu1.getSingleUnits().get(2).getSimpleUnitID());
 
         MeasureUnitImpl m2 = MeasureUnitImpl.forIdentifier("meter");
         m2.appendSingleUnit(MeasureUnit.METER.getCopyOfMeasureUnitImpl().getSingleUnitImpl());
-        assertEquals("append meter twice: complexity", MeasureUnit.Complexity.SINGLE, m2.getComplexity());
+        assertEquals(
+                "append meter twice: complexity",
+                MeasureUnit.Complexity.SINGLE,
+                m2.getComplexity());
         assertEquals("append meter twice: units length", 1, m2.getSingleUnits().size());
-        assertEquals("append meter twice: units[0]", "meter", m2.getSingleUnits().get(0).getSimpleUnitID());
+        assertEquals(
+                "append meter twice: units[0]",
+                "meter",
+                m2.getSingleUnits().get(0).getSimpleUnitID());
         assertEquals("append meter twice: identifier", "square-meter", m2.build().getIdentifier());
 
         MeasureUnitImpl mcm = MeasureUnitImpl.forIdentifier("meter");
         mcm.appendSingleUnit(MeasureUnit.CENTIMETER.getCopyOfMeasureUnitImpl().getSingleUnitImpl());
-        assertEquals("append meter & centimeter: complexity", MeasureUnit.Complexity.COMPOUND, mcm.getComplexity());
+        assertEquals(
+                "append meter & centimeter: complexity",
+                MeasureUnit.Complexity.COMPOUND,
+                mcm.getComplexity());
         assertEquals("append meter & centimeter: units length", 2, mcm.getSingleUnits().size());
-        assertEquals("append meter & centimeter: units[0]", "meter", mcm.getSingleUnits().get(0).getSimpleUnitID());
-        assertEquals("append meter & centimeter: units[1]", "meter", mcm.getSingleUnits().get(1).getSimpleUnitID());
-        assertEquals("append meter & centimeter: identifier", "meter-centimeter", mcm.build().getIdentifier());
+        assertEquals(
+                "append meter & centimeter: units[0]",
+                "meter",
+                mcm.getSingleUnits().get(0).getSimpleUnitID());
+        assertEquals(
+                "append meter & centimeter: units[1]",
+                "meter",
+                mcm.getSingleUnits().get(1).getSimpleUnitID());
+        assertEquals(
+                "append meter & centimeter: identifier",
+                "meter-centimeter",
+                mcm.build().getIdentifier());
 
         MeasureUnitImpl m2m = MeasureUnitImpl.forIdentifier("meter-square-meter");
-        assertEquals("meter-square-meter: complexity", MeasureUnit.Complexity.SINGLE, m2m.getComplexity());
+        assertEquals(
+                "meter-square-meter: complexity",
+                MeasureUnit.Complexity.SINGLE,
+                m2m.getComplexity());
         assertEquals("meter-square-meter: units length", 1, m2m.getSingleUnits().size());
-        assertEquals("meter-square-meter: units[0]", "meter", m2m.getSingleUnits().get(0).getSimpleUnitID());
+        assertEquals(
+                "meter-square-meter: units[0]",
+                "meter",
+                m2m.getSingleUnits().get(0).getSimpleUnitID());
         assertEquals("meter-square-meter: identifier", "cubic-meter", m2m.build().getIdentifier());
-
     }
 
     private void verifyCompoundUnit(
-            MeasureUnit unit,
-            String identifier,
-            String subIdentifiers[],
-            int subIdentifierCount) {
-        assertEquals(identifier + ": Identifier",
-                identifier,
-                unit.getIdentifier());
+            MeasureUnit unit, String identifier, String subIdentifiers[], int subIdentifierCount) {
+        assertEquals(identifier + ": Identifier", identifier, unit.getIdentifier());
 
-        assertTrue(identifier + ": Constructor",
-                unit.equals(MeasureUnit.forIdentifier(identifier)));
+        assertTrue(
+                identifier + ": Constructor", unit.equals(MeasureUnit.forIdentifier(identifier)));
 
-        assertEquals(identifier + ": Complexity",
-                MeasureUnit.Complexity.COMPOUND,
-                unit.getComplexity());
+        assertEquals(
+                identifier + ": Complexity", MeasureUnit.Complexity.COMPOUND, unit.getComplexity());
 
         List<MeasureUnit> subUnits = unit.splitToSingleUnits();
         assertEquals(identifier + ": Length", subIdentifierCount, subUnits.size());
         for (int i = 0; ; i++) {
             if (i >= subIdentifierCount || i >= subUnits.size()) break;
-            assertEquals(identifier + ": Sub-unit #" + i,
+            assertEquals(
+                    identifier + ": Sub-unit #" + i,
                     subIdentifiers[i],
                     subUnits.get(i).getIdentifier());
-            assertEquals(identifier + ": Sub-unit Complexity",
+            assertEquals(
+                    identifier + ": Sub-unit Complexity",
                     MeasureUnit.Complexity.SINGLE,
                     subUnits.get(i).getComplexity());
         }
     }
 
     private void verifyMixedUnit(
-            MeasureUnit unit,
-            String identifier,
-            String subIdentifiers[],
-            int subIdentifierCount) {
-        assertEquals(identifier + ": Identifier",
-                identifier,
-                unit.getIdentifier());
-        assertTrue(identifier + ": Constructor",
-                unit.equals(MeasureUnit.forIdentifier(identifier)));
+            MeasureUnit unit, String identifier, String subIdentifiers[], int subIdentifierCount) {
+        assertEquals(identifier + ": Identifier", identifier, unit.getIdentifier());
+        assertTrue(
+                identifier + ": Constructor", unit.equals(MeasureUnit.forIdentifier(identifier)));
 
-        assertEquals(identifier + ": Complexity",
-                MeasureUnit.Complexity.MIXED,
-                unit.getComplexity());
+        assertEquals(
+                identifier + ": Complexity", MeasureUnit.Complexity.MIXED, unit.getComplexity());
 
         List<MeasureUnit> subUnits = unit.splitToSingleUnits();
         assertEquals(identifier + ": Length", subIdentifierCount, subUnits.size());
         for (int i = 0; ; i++) {
             if (i >= subIdentifierCount || i >= subUnits.size()) break;
-            assertEquals(identifier + ": Sub-unit #" + i,
+            assertEquals(
+                    identifier + ": Sub-unit #" + i,
                     subIdentifiers[i],
                     subUnits.get(i).getIdentifier());
         }

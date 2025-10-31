@@ -11,15 +11,11 @@ import java.util.List;
  * Represents all the display options that are supported by CLDR such as grammatical case, noun
  * class, ... etc. It currently supports enums, but may be extended in the future to have other
  * types of data. It replaces a DisplayContext[] as a method parameter.
- * <p>
- * NOTE: This class is Immutable, and uses a Builder interface.
- * <p>For example:
- * {@code DisplayOptions x =
- *                DisplayOptions.builder()
- *                             .setNounClass(NounClass.DATIVE)
- *                             .setPluralCategory(PluralCategory.FEW)
- *                             .build();
- *                             }
+ *
+ * <p>NOTE: This class is Immutable, and uses a Builder interface.
+ *
+ * <p>For example: {@code DisplayOptions x = DisplayOptions.builder()
+ * .setNounClass(NounClass.DATIVE) .setPluralCategory(PluralCategory.FEW) .build(); }
  *
  * @stable ICU 72
  */
@@ -280,8 +276,8 @@ public final class DisplayOptions {
      */
     public enum NounClass {
         /**
-         * A possible setting for NounClass. The noun class context to be used is unknown (this is the
-         * default value).
+         * A possible setting for NounClass. The noun class context to be used is unknown (this is
+         * the default value).
          *
          * @stable ICU 72
          */
@@ -368,8 +364,8 @@ public final class DisplayOptions {
      */
     public enum NameStyle {
         /**
-         * A possible setting for NameStyle. The NameStyle context to be used is unknown (this is the
-         * default value).
+         * A possible setting for NameStyle. The NameStyle context to be used is unknown (this is
+         * the default value).
          *
          * @stable ICU 72
          */
@@ -383,7 +379,8 @@ public final class DisplayOptions {
         STANDARD_NAMES,
 
         /**
-         * Use dialect names, when generating a locale name, e.g. en_GB displays as 'British English'.
+         * Use dialect names, when generating a locale name, e.g. en_GB displays as 'British
+         * English'.
          *
          * @stable ICU 72
          */
@@ -427,7 +424,8 @@ public final class DisplayOptions {
         NO_SUBSTITUTE;
 
         /**
-         * Unmodifiable List of all substitute handlings constants. List version of {@link #values()}.
+         * Unmodifiable List of all substitute handlings constants. List version of {@link
+         * #values()}.
          *
          * @stable ICU 72
          */
@@ -442,8 +440,8 @@ public final class DisplayOptions {
      */
     public enum DisplayLength {
         /**
-         * A possible setting for DisplayLength. The DisplayLength context to be used is unknown (this
-         * is the default value).
+         * A possible setting for DisplayLength. The DisplayLength context to be used is unknown
+         * (this is the default value).
          *
          * @stable ICU 72
          */
@@ -478,8 +476,8 @@ public final class DisplayOptions {
      */
     public enum Capitalization {
         /**
-         * A possible setting for Capitalization. The capitalization context to be used is unknown (this
-         * is the default value).
+         * A possible setting for Capitalization. The capitalization context to be used is unknown
+         * (this is the default value).
          *
          * @stable ICU 72
          */
@@ -519,7 +517,8 @@ public final class DisplayOptions {
         UI_LIST_OR_MENU;
 
         /**
-         * Unmodifiable List of all the capitalizations constants. List version of {@link #values()}.
+         * Unmodifiable List of all the capitalizations constants. List version of {@link
+         * #values()}.
          *
          * @stable ICU 72
          */
@@ -528,7 +527,8 @@ public final class DisplayOptions {
     }
 
     /**
-     * Standard CLDR plural category constants. See http://www.unicode.org/reports/tr35/tr35-numbers.html#Language_Plural_Rules
+     * Standard CLDR plural category constants. See
+     * http://www.unicode.org/reports/tr35/tr35-numbers.html#Language_Plural_Rules
      *
      * @stable ICU 72
      */
@@ -620,8 +620,8 @@ public final class DisplayOptions {
      */
     public enum GrammaticalCase {
         /**
-         * A possible setting for GrammaticalCase. The grammatical case context to be used is unknown
-         * (this is the default value).
+         * A possible setting for GrammaticalCase. The grammatical case context to be used is
+         * unknown (this is the default value).
          *
          * @stable ICU 72
          */

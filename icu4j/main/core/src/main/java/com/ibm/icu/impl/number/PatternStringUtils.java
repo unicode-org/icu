@@ -2,17 +2,14 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.number;
 
-import java.math.BigDecimal;
-
 import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.impl.number.Modifier.Signum;
 import com.ibm.icu.impl.number.Padder.PadPosition;
 import com.ibm.icu.number.NumberFormatter.SignDisplay;
 import com.ibm.icu.text.DecimalFormatSymbols;
+import java.math.BigDecimal;
 
-/**
- * Assorted utilities relating to decimal formatting pattern strings.
- */
+/** Assorted utilities relating to decimal formatting pattern strings. */
 public class PatternStringUtils {
 
     // Note: the order of fields in this enum matters for parsing.
@@ -28,22 +25,19 @@ public class PatternStringUtils {
     };
 
     /**
-     * Determine whether a given roundingIncrement should be ignored for formatting
-     * based on the current maxFrac value (maximum fraction digits). For example a
-     * roundingIncrement of 0.01 should be ignored if maxFrac is 1, but not if maxFrac
-     * is 2 or more. Note that roundingIncrements are rounded up in significance, so
-     * a roundingIncrement of 0.006 is treated like 0.01 for this determination, i.e.
-     * it should not be ignored if maxFrac is 2 or more (but a roundingIncrement of
-     * 0.005 is treated like 0.001 for significance).
+     * Determine whether a given roundingIncrement should be ignored for formatting based on the
+     * current maxFrac value (maximum fraction digits). For example a roundingIncrement of 0.01
+     * should be ignored if maxFrac is 1, but not if maxFrac is 2 or more. Note that
+     * roundingIncrements are rounded up in significance, so a roundingIncrement of 0.006 is treated
+     * like 0.01 for this determination, i.e. it should not be ignored if maxFrac is 2 or more (but
+     * a roundingIncrement of 0.005 is treated like 0.001 for significance).
      *
-     * This test is needed for both NumberPropertyMapper.oldToNew and
-     * PatternStringUtils.propertiesToPatternString, but NumberPropertyMapper
-     * is package-private so we have it here.
+     * <p>This test is needed for both NumberPropertyMapper.oldToNew and
+     * PatternStringUtils.propertiesToPatternString, but NumberPropertyMapper is package-private so
+     * we have it here.
      *
-     * @param roundIncrDec
-     *            The roundingIncrement to be checked. Must be non-null.
-     * @param maxFrac
-     *            The current maximum fraction digits value.
+     * @param roundIncrDec The roundingIncrement to be checked. Must be non-null.
+     * @param maxFrac The current maximum fraction digits value.
      * @return true if roundIncr should be ignored for formatting.
      */
     public static boolean ignoreRoundingIncrement(BigDecimal roundIncrDec, int maxFrac) {
@@ -56,20 +50,19 @@ public class PatternStringUtils {
         }
         int frac = 0;
         roundIncr *= 2.0; // This handles the rounding up of values above e.g. 0.005 or 0.0005
-        for (frac = 0; frac <= maxFrac && roundIncr <= 1.0; frac++, roundIncr *= 10.0);
+        for (frac = 0; frac <= maxFrac && roundIncr <= 1.0; frac++, roundIncr *= 10.0)
+            ;
         return (frac > maxFrac);
     }
 
     /**
      * Creates a pattern string from a property bag.
      *
-     * <p>
-     * Since pattern strings support only a subset of the functionality available in a property bag, a
-     * new property bag created from the string returned by this function may not be the same as the
-     * original property bag.
+     * <p>Since pattern strings support only a subset of the functionality available in a property
+     * bag, a new property bag created from the string returned by this function may not be the same
+     * as the original property bag.
      *
-     * @param properties
-     *            The property bag to serialize.
+     * @param properties The property bag to serialize.
      * @return A pattern string approximately serializing the property bag.
      */
     public static String propertiesToPatternString(DecimalFormatProperties properties) {
@@ -121,11 +114,13 @@ public class PatternStringUtils {
             while (digitsString.length() < maxSig) {
                 digitsString.append('#');
             }
-        } else if (roundingInterval != null && !ignoreRoundingIncrement(roundingInterval,maxFrac)) {
+        } else if (roundingInterval != null
+                && !ignoreRoundingIncrement(roundingInterval, maxFrac)) {
             // Rounding Interval.
             digitsStringScale = -roundingInterval.scale();
             // TODO: Check for DoS here?
-            String str = roundingInterval.scaleByPowerOfTen(roundingInterval.scale()).toPlainString();
+            String str =
+                    roundingInterval.scaleByPowerOfTen(roundingInterval.scale()).toPlainString();
             if (str.charAt(0) == '-') {
                 // TODO: Unsupported operation exception or fail silently?
                 digitsString.append(str, 1, str.length());
@@ -168,7 +163,9 @@ public class PatternStringUtils {
                 sb.append(',');
             }
             // All other grouping separators
-            if (magnitude > grouping1 && grouping2 > 0 && (magnitude - grouping1) % grouping2 == 0) {
+            if (magnitude > grouping1
+                    && grouping2 > 0
+                    && (magnitude - grouping1) % grouping2 == 0) {
                 sb.append(',');
             }
         }
@@ -196,26 +193,28 @@ public class PatternStringUtils {
             }
             int addedLength;
             switch (paddingLocation) {
-            case BEFORE_PREFIX:
-                addedLength = PatternStringUtils.escapePaddingString(paddingString, sb, 0);
-                sb.insert(0, '*');
-                afterPrefixPos += addedLength + 1;
-                beforeSuffixPos += addedLength + 1;
-                break;
-            case AFTER_PREFIX:
-                addedLength = PatternStringUtils.escapePaddingString(paddingString, sb, afterPrefixPos);
-                sb.insert(afterPrefixPos, '*');
-                afterPrefixPos += addedLength + 1;
-                beforeSuffixPos += addedLength + 1;
-                break;
-            case BEFORE_SUFFIX:
-                PatternStringUtils.escapePaddingString(paddingString, sb, beforeSuffixPos);
-                sb.insert(beforeSuffixPos, '*');
-                break;
-            case AFTER_SUFFIX:
-                sb.append('*');
-                PatternStringUtils.escapePaddingString(paddingString, sb, sb.length());
-                break;
+                case BEFORE_PREFIX:
+                    addedLength = PatternStringUtils.escapePaddingString(paddingString, sb, 0);
+                    sb.insert(0, '*');
+                    afterPrefixPos += addedLength + 1;
+                    beforeSuffixPos += addedLength + 1;
+                    break;
+                case AFTER_PREFIX:
+                    addedLength =
+                            PatternStringUtils.escapePaddingString(
+                                    paddingString, sb, afterPrefixPos);
+                    sb.insert(afterPrefixPos, '*');
+                    afterPrefixPos += addedLength + 1;
+                    beforeSuffixPos += addedLength + 1;
+                    break;
+                case BEFORE_SUFFIX:
+                    PatternStringUtils.escapePaddingString(paddingString, sb, beforeSuffixPos);
+                    sb.insert(beforeSuffixPos, '*');
+                    break;
+                case AFTER_SUFFIX:
+                    sb.append('*');
+                    PatternStringUtils.escapePaddingString(paddingString, sb, sb.length());
+                    break;
             }
         }
 
@@ -233,10 +232,12 @@ public class PatternStringUtils {
         return sb.toString();
     }
 
-    /** @return The number of chars inserted. */
-    private static int escapePaddingString(CharSequence input, StringBuilder output, int startIndex) {
-        if (input == null || input.length() == 0)
-            input = Padder.FALLBACK_PADDING_STRING;
+    /**
+     * @return The number of chars inserted.
+     */
+    private static int escapePaddingString(
+            CharSequence input, StringBuilder output, int startIndex) {
+        if (input == null || input.length() == 0) input = Padder.FALLBACK_PADDING_STRING;
         int startLength = output.length();
         if (input.length() == 1) {
             if (input.equals("'")) {
@@ -248,7 +249,8 @@ public class PatternStringUtils {
             output.insert(startIndex, '\'');
             int offset = 1;
             for (int i = 0; i < input.length(); i++) {
-                // it's okay to deal in chars here because the quote mark is the only interesting thing.
+                // it's okay to deal in chars here because the quote mark is the only interesting
+                // thing.
                 char ch = input.charAt(i);
                 if (ch == '\'') {
                     output.insert(startIndex + offset, "''");
@@ -264,37 +266,29 @@ public class PatternStringUtils {
     }
 
     /**
-     * Converts a pattern between standard notation and localized notation. Localized notation means that
-     * instead of using generic placeholders in the pattern, you use the corresponding locale-specific
-     * characters instead. For example, in locale <em>fr-FR</em>, the period in the pattern "0.000" means
-     * "decimal" in standard notation (as it does in every other locale), but it means "grouping" in
-     * localized notation.
+     * Converts a pattern between standard notation and localized notation. Localized notation means
+     * that instead of using generic placeholders in the pattern, you use the corresponding
+     * locale-specific characters instead. For example, in locale <em>fr-FR</em>, the period in the
+     * pattern "0.000" means "decimal" in standard notation (as it does in every other locale), but
+     * it means "grouping" in localized notation.
      *
-     * <p>
-     * A greedy string-substitution strategy is used to substitute locale symbols. If two symbols are
-     * ambiguous or have the same prefix, the result is not well-defined.
+     * <p>A greedy string-substitution strategy is used to substitute locale symbols. If two symbols
+     * are ambiguous or have the same prefix, the result is not well-defined.
      *
-     * <p>
-     * Locale symbols are not allowed to contain the ASCII quote character.
+     * <p>Locale symbols are not allowed to contain the ASCII quote character.
      *
-     * <p>
-     * This method is provided for backwards compatibility and should not be used in any new code.
+     * <p>This method is provided for backwards compatibility and should not be used in any new
+     * code.
      *
-     * @param input
-     *            The pattern to convert.
-     * @param symbols
-     *            The symbols corresponding to the localized pattern.
-     * @param toLocalized
-     *            true to convert from standard to localized notation; false to convert from localized to
-     *            standard notation.
+     * @param input The pattern to convert.
+     * @param symbols The symbols corresponding to the localized pattern.
+     * @param toLocalized true to convert from standard to localized notation; false to convert from
+     *     localized to standard notation.
      * @return The pattern expressed in the other notation.
      */
     public static String convertLocalized(
-            String input,
-            DecimalFormatSymbols symbols,
-            boolean toLocalized) {
-        if (input == null)
-            return null;
+            String input, DecimalFormatSymbols symbols, boolean toLocalized) {
+        if (input == null) return null;
 
         // Construct a table of strings to be converted between localized and standard.
         String[][] table = new String[21][2];
@@ -346,7 +340,8 @@ public class PatternStringUtils {
         // inside quoted sequence in output string
         StringBuilder result = new StringBuilder();
         int state = 0;
-        outer: for (int offset = 0; offset < input.length(); offset++) {
+        outer:
+        for (int offset = 0; offset < input.length(); offset++) {
             char ch = input.charAt(offset);
 
             // Handle a quote character (state shift)
@@ -441,14 +436,16 @@ public class PatternStringUtils {
             boolean perMilleReplacesPercent,
             StringBuilder output) {
 
-        boolean plusReplacesMinusSign = (patternSignType == PatternSignType.POS_SIGN)
-                && !patternInfo.positiveHasPlusSign();
+        boolean plusReplacesMinusSign =
+                (patternSignType == PatternSignType.POS_SIGN) && !patternInfo.positiveHasPlusSign();
 
         // Should we use the affix from the negative subpattern?
         // (If not, we will use the positive subpattern.)
-        boolean useNegativeAffixPattern = patternInfo.hasNegativeSubpattern()
-                && (patternSignType == PatternSignType.NEG
-                    || (patternInfo.negativeHasMinusSign() && (plusReplacesMinusSign || approximately)));
+        boolean useNegativeAffixPattern =
+                patternInfo.hasNegativeSubpattern()
+                        && (patternSignType == PatternSignType.NEG
+                                || (patternInfo.negativeHasMinusSign()
+                                        && (plusReplacesMinusSign || approximately)));
 
         // Resolve the flags for the affix pattern.
         int flags = 0;
@@ -577,5 +574,4 @@ public class PatternStringUtils {
 
         throw new AssertionError("Unreachable");
     }
-
 }

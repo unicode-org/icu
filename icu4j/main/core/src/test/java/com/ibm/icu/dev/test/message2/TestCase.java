@@ -37,9 +37,10 @@ class TestCase {
     private TestCase(TestCase.Builder builder) {
         this.ignore = builder.ignore;
         this.message = builder.pattern == null ? "" : builder.pattern;
-        this.locale = (builder.localeId == null)
-                ? Locale.getDefault(Category.FORMAT)
-                : Locale.forLanguageTag(builder.localeId);
+        this.locale =
+                (builder.localeId == null)
+                        ? Locale.getDefault(Category.FORMAT)
+                        : Locale.forLanguageTag(builder.localeId);
         this.arguments = builder.arguments == null ? Args.NONE : builder.arguments;
         this.expected = builder.expected == null ? "" : builder.expected;
         this.errors = builder.errors == null ? new ArrayList<>() : builder.errors;

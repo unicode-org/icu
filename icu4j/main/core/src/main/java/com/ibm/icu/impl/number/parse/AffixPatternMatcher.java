@@ -5,8 +5,8 @@ package com.ibm.icu.impl.number.parse;
 import com.ibm.icu.impl.number.AffixUtils;
 
 /**
- * A specialized version of {@link SeriesMatcher} that matches EITHER a prefix OR a suffix.
- * {@link AffixMatcher} combines two of these in order to match both the prefix and suffix.
+ * A specialized version of {@link SeriesMatcher} that matches EITHER a prefix OR a suffix. {@link
+ * AffixMatcher} combines two of these in order to match both the prefix and suffix.
  *
  * @author sffc
  */
@@ -24,21 +24,21 @@ public class AffixPatternMatcher extends SeriesMatcher implements AffixUtils.Tok
     }
 
     /**
-     * Creates an AffixPatternMatcher (based on SeriesMatcher) from the given affix pattern. Returns null
-     * if the affix pattern is empty.
+     * Creates an AffixPatternMatcher (based on SeriesMatcher) from the given affix pattern. Returns
+     * null if the affix pattern is empty.
      */
     public static AffixPatternMatcher fromAffixPattern(
-            String affixPattern,
-            AffixTokenMatcherFactory factory,
-            int parseFlags) {
+            String affixPattern, AffixTokenMatcherFactory factory, int parseFlags) {
         if (affixPattern.isEmpty()) {
             return null;
         }
 
         AffixPatternMatcher series = new AffixPatternMatcher(affixPattern);
         series.factory = factory;
-        series.ignorables = (0 != (parseFlags & ParsingUtils.PARSE_FLAG_EXACT_AFFIX)) ? null
-                : factory.ignorables();
+        series.ignorables =
+                (0 != (parseFlags & ParsingUtils.PARSE_FLAG_EXACT_AFFIX))
+                        ? null
+                        : factory.ignorables();
         series.lastTypeOrCp = 0;
         AffixUtils.iterateWithConsumer(affixPattern, series);
 
@@ -52,8 +52,8 @@ public class AffixPatternMatcher extends SeriesMatcher implements AffixUtils.Tok
     }
 
     /**
-     * This method is NOT intended to be called directly. It is here for the AffixUtils.TokenConsumer
-     * interface only.
+     * This method is NOT intended to be called directly. It is here for the
+     * AffixUtils.TokenConsumer interface only.
      */
     @Override
     public void consumeToken(int typeOrCp) {
@@ -70,32 +70,32 @@ public class AffixPatternMatcher extends SeriesMatcher implements AffixUtils.Tok
         if (typeOrCp < 0) {
             // Case 1: the token is a symbol.
             switch (typeOrCp) {
-            case AffixUtils.TYPE_MINUS_SIGN:
-                addMatcher(factory.minusSign());
-                break;
-            case AffixUtils.TYPE_PLUS_SIGN:
-                addMatcher(factory.plusSign());
-                break;
-            case AffixUtils.TYPE_APPROXIMATELY_SIGN:
-                addMatcher(factory.approximatelySign());
-                break;
-            case AffixUtils.TYPE_PERCENT:
-                addMatcher(factory.percent());
-                break;
-            case AffixUtils.TYPE_PERMILLE:
-                addMatcher(factory.permille());
-                break;
-            case AffixUtils.TYPE_CURRENCY_SINGLE:
-            case AffixUtils.TYPE_CURRENCY_DOUBLE:
-            case AffixUtils.TYPE_CURRENCY_TRIPLE:
-            case AffixUtils.TYPE_CURRENCY_QUAD:
-            case AffixUtils.TYPE_CURRENCY_QUINT:
-            case AffixUtils.TYPE_CURRENCY_OVERFLOW:
-                // All currency symbols use the same matcher
-                addMatcher(factory.currency());
-                break;
-            default:
-                throw new AssertionError();
+                case AffixUtils.TYPE_MINUS_SIGN:
+                    addMatcher(factory.minusSign());
+                    break;
+                case AffixUtils.TYPE_PLUS_SIGN:
+                    addMatcher(factory.plusSign());
+                    break;
+                case AffixUtils.TYPE_APPROXIMATELY_SIGN:
+                    addMatcher(factory.approximatelySign());
+                    break;
+                case AffixUtils.TYPE_PERCENT:
+                    addMatcher(factory.percent());
+                    break;
+                case AffixUtils.TYPE_PERMILLE:
+                    addMatcher(factory.permille());
+                    break;
+                case AffixUtils.TYPE_CURRENCY_SINGLE:
+                case AffixUtils.TYPE_CURRENCY_DOUBLE:
+                case AffixUtils.TYPE_CURRENCY_TRIPLE:
+                case AffixUtils.TYPE_CURRENCY_QUAD:
+                case AffixUtils.TYPE_CURRENCY_QUINT:
+                case AffixUtils.TYPE_CURRENCY_OVERFLOW:
+                    // All currency symbols use the same matcher
+                    addMatcher(factory.currency());
+                    break;
+                default:
+                    throw new AssertionError();
             }
 
         } else if (ignorables != null && ignorables.getSet().contains(typeOrCp)) {
@@ -115,10 +115,8 @@ public class AffixPatternMatcher extends SeriesMatcher implements AffixUtils.Tok
 
     @Override
     public boolean equals(Object other) {
-        if (this == other)
-            return true;
-        if (!(other instanceof AffixPatternMatcher))
-            return false;
+        if (this == other) return true;
+        if (!(other instanceof AffixPatternMatcher)) return false;
         return affixPattern.equals(((AffixPatternMatcher) other).affixPattern);
     }
 

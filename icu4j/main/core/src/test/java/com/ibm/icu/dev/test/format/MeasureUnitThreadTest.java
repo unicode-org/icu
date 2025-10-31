@@ -3,10 +3,6 @@
 
 package com.ibm.icu.dev.test.format;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.DontCareFieldPosition;
 import com.ibm.icu.text.MeasureFormat;
@@ -14,6 +10,9 @@ import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.ULocale;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public class MeasureUnitThreadTest extends CoreTestFmwk {
@@ -23,15 +22,20 @@ public class MeasureUnitThreadTest extends CoreTestFmwk {
         // Ticket #12034 deadlock on multi-threaded static init of MeasureUnit.
         // The code below reliably deadlocks with ICU 56.
         // The test is here in its own file so it can be made to run independent of anything else.
-        Thread thread = new Thread()  {
-            @Override
-            public void run() {
-                MeasureUnit.getAvailableTypes();
-            }
-        };
+        Thread thread =
+                new Thread() {
+                    @Override
+                    public void run() {
+                        MeasureUnit.getAvailableTypes();
+                    }
+                };
         thread.start();
         Currency.getInstance(ULocale.ENGLISH);
-        try {thread.join();} catch(InterruptedException e) {};
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+        }
+        ;
     }
 
     static class NumericMeasureThread extends Thread {
@@ -67,14 +71,18 @@ public class MeasureUnitThreadTest extends CoreTestFmwk {
     // https://unicode-org.atlassian.net/browse/ICU-13606
     @Test
     public void NumericRaceTest() throws InterruptedException {
-        NumericMeasureThread t1 = new NumericMeasureThread(new Measure[] {
-          new Measure(3, MeasureUnit.MINUTE),
-          new Measure(4, MeasureUnit.SECOND)
-        }, "3:04");
-        NumericMeasureThread t2 = new NumericMeasureThread(new Measure[] {
-          new Measure(5, MeasureUnit.MINUTE),
-          new Measure(6, MeasureUnit.SECOND)
-        }, "5:06");
+        NumericMeasureThread t1 =
+                new NumericMeasureThread(
+                        new Measure[] {
+                            new Measure(3, MeasureUnit.MINUTE), new Measure(4, MeasureUnit.SECOND)
+                        },
+                        "3:04");
+        NumericMeasureThread t2 =
+                new NumericMeasureThread(
+                        new Measure[] {
+                            new Measure(5, MeasureUnit.MINUTE), new Measure(6, MeasureUnit.SECOND)
+                        },
+                        "5:06");
         t1.start();
         t2.start();
         Thread.sleep(5);

@@ -8,26 +8,23 @@
  */
 package com.ibm.icu.impl;
 
+import com.ibm.icu.text.UCharacterIterator;
 import java.text.CharacterIterator;
 
-import com.ibm.icu.text.UCharacterIterator;
-
 /**
- * This class is a wrapper around CharacterIterator and implements the
- * UCharacterIterator protocol
+ * This class is a wrapper around CharacterIterator and implements the UCharacterIterator protocol
+ *
  * @author ram
  */
-
 public class CharacterIteratorWrapper extends UCharacterIterator implements Cloneable {
 
     private CharacterIterator iterator;
 
-
-    public CharacterIteratorWrapper(CharacterIterator iter){
-        if(iter==null){
+    public CharacterIteratorWrapper(CharacterIterator iter) {
+        if (iter == null) {
             throw new IllegalArgumentException();
         }
-        iterator     = iter;
+        iterator = iter;
     }
 
     /**
@@ -36,8 +33,8 @@ public class CharacterIteratorWrapper extends UCharacterIterator implements Clon
     @Override
     public int current() {
         int c = iterator.current();
-        if(c==CharacterIterator.DONE){
-          return DONE;
+        if (c == CharacterIterator.DONE) {
+            return DONE;
         }
         return c;
     }
@@ -65,8 +62,8 @@ public class CharacterIteratorWrapper extends UCharacterIterator implements Clon
     public int next() {
         int i = iterator.current();
         iterator.next();
-        if(i==CharacterIterator.DONE){
-          return DONE;
+        if (i == CharacterIterator.DONE) {
+            return DONE;
         }
         return i;
     }
@@ -77,7 +74,7 @@ public class CharacterIteratorWrapper extends UCharacterIterator implements Clon
     @Override
     public int previous() {
         int i = iterator.previous();
-        if(i==CharacterIterator.DONE){
+        if (i == CharacterIterator.DONE) {
             return DONE;
         }
         return i;
@@ -88,9 +85,9 @@ public class CharacterIteratorWrapper extends UCharacterIterator implements Clon
      */
     @Override
     public void setIndex(int index) {
-        try{
+        try {
             iterator.setIndex(index);
-        }catch(IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new IndexOutOfBoundsException();
         }
     }
@@ -107,10 +104,10 @@ public class CharacterIteratorWrapper extends UCharacterIterator implements Clon
      * @see UCharacterIterator#getText(char[])
      */
     @Override
-    public int getText(char[] fillIn, int offset){
-        int length =iterator.getEndIndex() - iterator.getBeginIndex();
+    public int getText(char[] fillIn, int offset) {
+        int length = iterator.getEndIndex() - iterator.getBeginIndex();
         int currentIndex = iterator.getIndex();
-        if(offset < 0 || offset + length > fillIn.length){
+        if (offset < 0 || offset + length > fillIn.length) {
             throw new IndexOutOfBoundsException(Integer.toString(length));
         }
 
@@ -123,29 +120,29 @@ public class CharacterIteratorWrapper extends UCharacterIterator implements Clon
     }
 
     /**
-     * Creates a clone of this iterator.  Clones the underlying character iterator.
+     * Creates a clone of this iterator. Clones the underlying character iterator.
+     *
      * @see UCharacterIterator#clone()
      */
     @Override
-    public CharacterIteratorWrapper clone(){
+    public CharacterIteratorWrapper clone() {
         try {
             CharacterIteratorWrapper result = (CharacterIteratorWrapper) super.clone();
-            result.iterator = (CharacterIterator)this.iterator.clone();
+            result.iterator = (CharacterIterator) this.iterator.clone();
             return result;
         } catch (CloneNotSupportedException e) {
             return null; // only invoked if bad underlying character iterator
         }
     }
 
-
     @Override
-    public int moveIndex(int delta){
+    public int moveIndex(int delta) {
         int length = iterator.getEndIndex() - iterator.getBeginIndex();
-        int idx = iterator.getIndex()+delta;
+        int idx = iterator.getIndex() + delta;
 
-        if(idx < 0) {
+        if (idx < 0) {
             idx = 0;
-        } else if(idx > length) {
+        } else if (idx > length) {
             idx = length;
         }
         return iterator.setIndex(idx);
@@ -155,7 +152,7 @@ public class CharacterIteratorWrapper extends UCharacterIterator implements Clon
      * @see UCharacterIterator#getCharacterIterator()
      */
     @Override
-    public CharacterIterator getCharacterIterator(){
-        return (CharacterIterator)iterator.clone();
+    public CharacterIterator getCharacterIterator() {
+        return (CharacterIterator) iterator.clone();
     }
 }

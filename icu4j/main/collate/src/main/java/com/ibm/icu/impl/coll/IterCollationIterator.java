@@ -1,24 +1,23 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /*
-*******************************************************************************
-* Copyright (C) 2012-2014, International Business Machines
-* Corporation and others.  All Rights Reserved.
-*******************************************************************************
-* IterCollationIterator.java, ported from uitercollationiterator.h/.cpp
-*
-* C++ version created on: 2012sep23 (from utf16collationiterator.h)
-* created by: Markus W. Scherer
-*/
+ *******************************************************************************
+ * Copyright (C) 2012-2014, International Business Machines
+ * Corporation and others.  All Rights Reserved.
+ *******************************************************************************
+ * IterCollationIterator.java, ported from uitercollationiterator.h/.cpp
+ *
+ * C++ version created on: 2012sep23 (from utf16collationiterator.h)
+ * created by: Markus W. Scherer
+ */
 
 package com.ibm.icu.impl.coll;
 
 import com.ibm.icu.text.UCharacterIterator;
 
 /**
- * UCharIterator-based collation element and character iterator.
- * Handles normalized text, with length or NUL-terminated.
- * Unnormalized text is handled by a subclass.
+ * UCharIterator-based collation element and character iterator. Handles normalized text, with
+ * length or NUL-terminated. Unnormalized text is handled by a subclass.
  */
 public class IterCollationIterator extends CollationIterator {
     public IterCollationIterator(CollationData d, boolean numeric, UCharacterIterator ui) {
@@ -50,17 +49,19 @@ public class IterCollationIterator extends CollationIterator {
     @Override
     protected long handleNextCE32() {
         int c = iter.next();
-        if(c < 0) {
+        if (c < 0) {
             return NO_CP_AND_CE32;
         }
-        return makeCodePointAndCE32Pair(c, trie.getFromU16SingleLead((char)c));
+        return makeCodePointAndCE32Pair(c, trie.getFromU16SingleLead((char) c));
     }
 
     @Override
     protected char handleGetTrailSurrogate() {
         int trail = iter.next();
-        if(!isTrailSurrogate(trail) && trail >= 0) { iter.previous(); }
-        return (char)trail;
+        if (!isTrailSurrogate(trail) && trail >= 0) {
+            iter.previous();
+        }
+        return (char) trail;
     }
 
     @Override
