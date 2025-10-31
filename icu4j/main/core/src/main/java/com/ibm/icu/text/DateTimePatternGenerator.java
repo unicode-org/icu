@@ -2421,10 +2421,12 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                     }
                     int adjFieldLen = reqFieldLen;
                     DateTimeMatcher matcherWithSkeleton = patternWithMatcher.matcherWithSkeleton;
-                    if ( (type == HOUR && (options & MATCH_HOUR_FIELD_LENGTH)==0) ||
-                            (type == MINUTE && (options & MATCH_MINUTE_FIELD_LENGTH)==0) ||
-                            (type == SECOND && (options & MATCH_SECOND_FIELD_LENGTH)==0) ) {
-                        adjFieldLen = fieldBuilder.length();
+                    if (type == HOUR || type == MINUTE || type == SECOND) {
+                        if ((type == HOUR && (options & MATCH_HOUR_FIELD_LENGTH)==0)
+                                || (type == MINUTE && (options & MATCH_MINUTE_FIELD_LENGTH)==0)
+                                || (type == SECOND && (options & MATCH_SECOND_FIELD_LENGTH)==0)) {
+                            adjFieldLen = fieldBuilder.length();
+                        }
                     } else if (matcherWithSkeleton != null && reqFieldChar != 'c' && reqFieldChar != 'e') {
                         // (we skip this section for 'c' and 'e' because unlike the other characters considered in this function,
                         // they have no minimum field length-- 'E' and 'EE' are equivalent to 'EEE', but 'e' and 'ee' are not
