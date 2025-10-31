@@ -24,8 +24,8 @@
             for the icu4j.version tag to use. In general we should just use the latest
             SNAPSHOT for the ICU version that we want, so this should only need updating
             when the ICU version changes e.g. from 74.0.1, to 74.1, then to 75.0.1 -->
-        <icu4j.version>78.1</icu4j.version>
-        <cldr-code.version>48.0</cldr-code.version>
+        <icu4j.version>79.0.1-SNAPSHOT</icu4j.version>
+        <cldr-code.version>49.0-SNAPSHOT</cldr-code.version>
         <guava.version>32.1.1-jre</guava.version>
         <truth.version>1.4.4</truth.version>
         <commons-cli.version>1.9.0</commons-cli.version>
