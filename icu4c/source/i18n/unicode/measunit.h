@@ -425,6 +425,61 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     MeasureUnit(MeasureUnit &&other) noexcept;
 
+#ifndef U_HIDE_DRAFT_API
+
+    /**
+     * Converts a numeric value from another unit to this unit.
+     *
+     * Example usage:
+     *
+     * MeasureUnit meter = MeasureUnit::getMeter();
+     * MeasureUnit centimeter = MeasureUnit::getCentimeter();
+     * double valueInCentimeters = 100.0;
+     * double valueInMeters = meter.convertFrom(centimeter, valueInCentimeters, status);
+     *
+     * Note: This method supports conversion only between SINGLE and COMPOUND units.
+     * Conversion involving MIXED units is not supported.
+     *
+     * See UMeasureUnitComplexity for details on unit types.
+     *
+     * @param other The unit from which the value is being converted.
+     * @param value The numeric value in the other unit to be converted.
+     * @param status Set if the units are not convertible or if one of the units is not a SINGLE or
+     * COMPOUND unit.
+     * @return The value converted to this unit.
+     *
+     * @draft ICU 78
+     */
+    double convertFrom(const MeasureUnit &other, double value, UErrorCode &status) const;
+
+    /**
+     * Converts a Measure from another unit to this unit.
+     *
+     * Example usage:
+     *
+     * MeasureUnit meter = MeasureUnit::getMeter();
+     * MeasureUnit centimeter = MeasureUnit::getCentimeter();
+     * Measure measure(100.0, centimeter);
+     * Measure convertedMeasure = meter.convertFrom(measure, status);
+     *
+     * Note: This method supports conversion only between SINGLE and COMPOUND units.
+     * Conversion involving MIXED units is not supported.
+     *
+     * See UMeasureUnitComplexity for details on unit types.
+     *
+     * Note: This method is a wrapper around convertFrom(const MeasureUnit&, double, UErrorCode&).
+     *
+     * @param measure The measure to be converted.
+     * @param status Set if the units are not convertible or if one of the units is not a SINGLE or
+     * COMPOUND unit.
+     * @return The measure converted to this unit.
+     *
+     * @draft ICU 78
+     */
+    Measure convertFrom(const Measure &measure, UErrorCode &status) const;
+
+#endif /* U_HIDE_DRAFT_API */
+
     /**
      * Constructs a MeasureUnit from a CLDR Core Unit Identifier, as defined in UTS 35.
      * This method supports core unit identifiers and mixed unit identifiers.
