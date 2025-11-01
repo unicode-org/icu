@@ -32,6 +32,14 @@ public class MeasureUnitImpl {
      * NOTE: when it is 0, it means there is no constant denominator.
      */
     private long constantDenominator = 0;
+
+    // Conversion info for the unit to the base unit.
+    //
+    // NOTE
+    //   If the conversionInfo is null, then the conversion info is not set for this
+    //   unit.
+    private ConversionInfoToBase conversionInfo = null;
+
     /**
      * The list of single units. These may be summed or multiplied, based on the
      * value of the complexity field.
@@ -58,8 +66,10 @@ public class MeasureUnitImpl {
      * @return A newly parsed object.
      * @throws IllegalArgumentException in case of incorrect/non-parsed identifier.
      */
-    public static MeasureUnitImpl forIdentifier(String identifier) {
-        return UnitsParser.parseForIdentifier(identifier);
+    public static MeasureUnitImpl forIdentifier(String identifier, ConversionRates conversionRates) {
+        MeasureUnitImpl result = UnitsParser.parseForIdentifier(identifier);
+        result.conversionInfo = new ConversionInfoToBase(conversionRates);
+        return result;
     }
 
     /**

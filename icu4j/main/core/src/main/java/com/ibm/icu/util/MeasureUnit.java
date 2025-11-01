@@ -14,6 +14,7 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.io.ObjectStreamException;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -21,13 +22,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.math.MathContext;
 
 import com.ibm.icu.impl.CollectionSet;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.UResource;
+import com.ibm.icu.impl.units.ConversionInfoToBase;
+import com.ibm.icu.impl.units.ConversionRates;
 import com.ibm.icu.impl.units.MeasureUnitImpl;
 import com.ibm.icu.impl.units.SingleUnitImpl;
+import com.ibm.icu.impl.units.UnitsConverter.Convertibility;
 import com.ibm.icu.text.UnicodeSet;
 
 
@@ -42,6 +47,14 @@ import com.ibm.icu.text.UnicodeSet;
  */
 public class MeasureUnit implements Serializable {
     private static final long serialVersionUID = -1839973855554750484L;
+
+    
+    // Conversion info for the unit to the base unit.
+    //
+    // NOTE
+    // If the conversionInfo is null, then the conversion info is not set for this
+    // unit.
+    private final ConversionInfoToBase conversionInfo;
 
     // Cache of MeasureUnits.
     // All access to the cache or cacheIsPopulated flag must be synchronized on
@@ -408,6 +421,151 @@ public class MeasureUnit implements Serializable {
     protected MeasureUnit(String type, String subType) {
         this.type = type;
         this.subType = subType;
+        this.conversionInfo = null;
+    }
+
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    protected MeasureUnit(String type, String subType, ConversionInfoToBase conversionInfo) {
+        this.type = type;
+        this.subType = subType;
+        this.conversionInfo = conversionInfo;
+    }
+
+    /** 
+     * Converts a numeric value from another unit to this unit.
+     *
+     * <p>Example usage:</p>
+     * <pre>{@code
+     * MeasureUnit meter = MeasureUnit.METER;
+     * MeasureUnit centimeter = MeasureUnit.CENTIMETER;
+     * BigDecimal valueInCentimeters = new BigDecimal("100");
+     * BigDecimal valueInMeters = meter.convertFrom(valueInCentimeters, centimeter);
+     * }</pre>
+     *
+     * <p>Note: This method supports conversion only between SINGLE and COMPOUND units.
+     * Conversion involving MIXED units is not supported.</p>
+     *
+     * <p>See {@link Complexity} for details on unit types.</p>
+     *
+     * @param value The numeric value in the other unit to be converted.
+     * @param source The unit from which the value is being converted.
+     * @return The value converted to this unit.
+     * @throws IllegalArgumentException if one of the units is MIXED.
+     * @throws UnitsIncompatibleException if the units are not convertible.
+     * @throws UnsupportedOperationException if conversion info is not set for this unit or the other unit.
+     *
+     * @draft ICU 78
+     */
+    public double convertFrom(double value, MeasureUnit source ) {
+        if (this.getComplexity() == Complexity.MIXED || source.getComplexity() == Complexity.MIXED) {
+            throw new IllegalArgumentException("Conversion between mixed units is not supported");
+        }
+
+        if (conversionInfo == null || source.conversionInfo == null) {
+            throw new UnsupportedOperationException("Conversion info not set for this unit");
+        }
+
+        String targetBaseUnit = this.conversionInfo.getBaseUnit();
+        String sourceBaseUnit = source.conversionInfo.getBaseUnit();
+        String sourceReciprocalBaseUnit = source.conversionInfo.getReciprocalBaseUnit();
+
+        // Determine convertibility
+        Convertibility convertibility;
+        if (targetBaseUnit.equals(sourceBaseUnit)) {
+            convertibility = Convertibility.CONVERTIBLE;
+        } else if (targetBaseUnit.equals(sourceReciprocalBaseUnit)) {
+            convertibility = Convertibility.RECIPROCAL;
+        } else {
+            throw new UnitsIncompatibleException("Units are not convertible");
+        }
+
+        double sourceRate = source.conversionInfo.getConversionRateToBaseUnit();
+        double sourceOffset = source.conversionInfo.getOffsetToBaseUnit();
+
+        double targetRate = this.conversionInfo.getConversionRateToBaseUnit();
+        double targetOffset = this.conversionInfo.getOffsetToBaseUnit();
+
+
+        // In order to calculate the final result, there are two cases:
+        // 1. the units are convertible (linearly convertible)
+        //    in this case, we have the following formulas:
+        //      source * sourceRate + sourceOffset = Base
+        //      target * targetRate + targetOffset = Base
+        //    by solving these equations, we get the final conversion rate and offset.
+        //      target = source * (sourceRate / targetRate) + (targetOffset - sourceOffset)/ targetRate.
+        //
+        // 2. the units are reciprocal (reciprocally convertible)
+        //       Note: when the units are reciprocal, the offset is 0.
+        //    in this case, we have the following formulas:
+        //      source * sourceRate = Base
+        //      target * targetRate = 1 / Base
+        //    by solving these equations, we get the final conversion rate and offset.
+        //      target = 1 / (source * sourceRate * targetRate) 
+        if (convertibility == Convertibility.CONVERTIBLE) {
+            return value * sourceRate / targetRate + (targetOffset - sourceOffset)/ targetRate;
+        } else {
+            return 1 / (value * sourceRate * targetRate);
+        }
+    }
+
+    /**
+     * Converts a Measure from another unit to this unit.
+     *
+     * <p>
+     * Example usage:
+     * </p>
+     * 
+     * <pre>{@code
+     * MeasureUnit meter = MeasureUnit.METER;
+     * MeasureUnit centimeter = MeasureUnit.CENTIMETER;
+     * Measure measure = new Measure(new BigDecimal("100"), centimeter);
+     * Measure convertedMeasure = meter.convertFrom(measure);
+     * }</pre>
+     *
+     * <p>
+     * Note: This method supports conversion only between SINGLE and COMPOUND units.
+     * Conversion involving MIXED units is not supported.
+     * </p>
+     *
+     * <p>
+     * See {@link Complexity} for details on unit types.
+     * </p>
+     * 
+     * <p>
+     * Note: This method is a wrapper around {@link #convertFrom(MeasureUnit, BigDecimal)}.
+     * </p>
+     * 
+     * @param measure The measure to be converted.
+     * @return The measure converted to this unit.
+     * @throws IllegalArgumentException if one of the measure's units is MIXED or conversion info is not set.
+     * @throws UnitsIncompatibleException if the measure's units are not convertible.
+     *
+     * @draft ICU 78
+     */
+    public Measure convertFrom(Measure measure) {
+        if (measure == null) {
+            throw new UnsupportedOperationException("`measure` must not be null");
+        }
+
+        MeasureUnit sourceUnit = measure.getUnit();
+
+        // If the measure's unit is the same as the current unit, no conversion is needed.
+        if (this.equals(sourceUnit)) {
+            return measure;
+        }
+
+        if (this.getComplexity() == Complexity.MIXED || sourceUnit.getComplexity() == Complexity.MIXED) {
+            throw new UnsupportedOperationException("Conversion involving MIXED units is not supported");
+        }
+
+        double sourceValue = measure.getNumber().doubleValue();
+        double convertedValue = this.convertFrom( sourceValue, sourceUnit);
+
+        return new Measure(convertedValue, this);
     }
 
     /**
@@ -435,7 +593,9 @@ public class MeasureUnit implements Serializable {
             return NoUnit.BASE;
         }
 
-        return MeasureUnitImpl.forIdentifier(identifier).build();
+        ConversionRates conversionRates = new ConversionRates();
+
+        return MeasureUnitImpl.forIdentifier(identifier, conversionRates).build();
     }
 
     /**
@@ -457,6 +617,14 @@ public class MeasureUnit implements Serializable {
     private MeasureUnit(MeasureUnitImpl measureUnitImpl) {
         type = null;
         subType = null;
+        conversionInfo = null;
+        this.measureUnitImpl = measureUnitImpl.copy();
+    }
+
+    private MeasureUnit(MeasureUnitImpl measureUnitImpl, ConversionInfoToBase conversionInfo) {
+        type = null;
+        subType = null;
+        this.conversionInfo = conversionInfo;
         this.measureUnitImpl = measureUnitImpl.copy();
     }
 

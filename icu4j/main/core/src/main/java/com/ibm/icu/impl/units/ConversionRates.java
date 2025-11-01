@@ -50,6 +50,21 @@ public class ConversionRates {
         return result.applyPrefix(unitPrefix).power(power);
     }
 
+    public ConversionInfoToBase getConversionInfoToBase(MeasureUnitImpl measureUnit) {
+        MeasureUnitImpl BaseUnit = new MeasureUnitImpl();
+        for (SingleUnitImpl singleUnit : measureUnit.getSingleUnits()) {
+            int power = singleUnit.getDimensionality();
+            MeasureUnit.MeasurePrefix unitPrefix = singleUnit.getPrefix();
+            ConversionRateInfo conversionRateInfo = mapToConversionRate.get(singleUnit.getSimpleUnitID());
+            String baseUnit = conversionRateInfo.getTarget();
+
+            /// TODO: append all the single units to the BaseUnit.
+            
+        }
+
+        return getConversionInfoToBase(BaseUnit);
+    }
+
     public UnitsConverter.Factor getFactorToBase(MeasureUnitImpl measureUnit) {
         UnitsConverter.Factor result = new UnitsConverter.Factor();
         for (SingleUnitImpl singleUnit :
