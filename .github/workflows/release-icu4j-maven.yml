@@ -127,7 +127,7 @@ jobs:
         popd # out of icu4j
 
     - name: Upload build results
-      uses: actions/upload-artifact@v4.3.6
+      uses: actions/upload-artifact@v5
       with:
         name: icu4j-binaries
         path: ${{ env.RELEASE_FOLDER }}

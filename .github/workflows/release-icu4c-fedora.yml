@@ -70,7 +70,7 @@ jobs:
         popd
 
     - name: Upload build results
-      uses: actions/upload-artifact@v4.3.6
+      uses: actions/upload-artifact@v5
       with:
         name: icu4c-fedora-binaries
         path: ${{ env.RELEASE_FOLDER }}

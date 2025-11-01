@@ -484,7 +484,7 @@ jobs:
         ls -l .
         echo "newZipName=$newZipName" | Out-File -FilePath $env:GITHUB_ENV -Append
     - name: Upload artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: icu4c.${{ matrix.win_ver }}.run_#${{ github.run_number }}
         path: icu4c/source/dist/${{ env.newZipName }}.zip
@@ -943,7 +943,7 @@ jobs:
           cd icu4c/source/icuexportdata
           zip -r ../../../icu4x-icuexportdata_${{ inputs.gitReleaseFilename }}.zip .
       - name: Publish Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: icuexportdata_output
           path: icu4x-icuexportdata_*.zip

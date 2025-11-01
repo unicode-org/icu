@@ -67,7 +67,7 @@ jobs:
         mv icu4c/source/dist/icu4c-${github_rel_version}-sources.* ${RELEASE_FOLDER}
 
     - name: Upload build results
-      uses: actions/upload-artifact@v4.3.6
+      uses: actions/upload-artifact@v5
       with:
         name: icu4c-ubuntu-binaries
         path: ${{ env.RELEASE_FOLDER }}
