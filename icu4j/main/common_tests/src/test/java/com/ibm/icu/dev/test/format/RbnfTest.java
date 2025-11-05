@@ -1364,18 +1364,18 @@ public class RbnfTest extends CoreTestFmwk {
                                                 + " -> "
                                                 + num);
                             }
-                            if (j != 0) {
-                                // TODO: Fix the ordinal rules.
+                            if (j != 0 && n != (int) n) {
+                                // Ordinals are never fractional
                                 continue;
                             }
                             if (n != num.doubleValue()) {
                                 errors.append(
                                         "\n" + loc + names[j] + "got " + num + " expected " + n);
                             }
-                        } catch (ParseException pe) {
-                            String msg = loc.getName() + names[j] + "ERROR:" + pe.getMessage();
+                        } catch (IllegalArgumentException | ParseException e) {
+                            String msg = loc.getName() + names[j] + "ERROR:" + e.getMessage();
                             logln(msg);
-                            errors.append("\n" + msg);
+                            errors.append("\n").append(msg);
                         }
                     }
                 }
@@ -2270,5 +2270,36 @@ public class RbnfTest extends CoreTestFmwk {
             {"999201", "nine hundred ninety-nine thousands two hundreds first"},
         };
         doTest(rbnf, enTestFullData, false);
+    }
+
+    /*
+     * Using << twice, or >> twice, or == twice is ambiguous for parsing the real value.
+     * While the results may sometimes format correctly, it is too ambiguous to parse.
+     * Is the first or second substitution the correct value?
+     * Newer plural rules and the orElse operator made this kind of syntax unnecessary, but
+     * some people may have previously developed rules that used this kind of workaround.
+     */
+    @Test
+    public void TestUnparseableConflictingSubstitutions() {
+        RuleBasedNumberFormat rbnf =
+                new RuleBasedNumberFormat("<<✧<<✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧", Locale.US);
+        try {
+            rbnf.parse("✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧");
+            errln("Failed to throw exception");
+        } catch (IllegalArgumentException | ParseException e) {
+            // Works as expected
+        }
+    }
+
+    @Test
+    public void TestAmbiguousDelimiter() throws ParseException {
+        RuleBasedNumberFormat rbnf =
+                new RuleBasedNumberFormat("%default:\n0: =#,##0=.;", Locale.GERMANY);
+
+        Number result = rbnf.parse("10.000.000.");
+        if (result.longValue() != 10000000) {
+            // It better not be 10!
+            errln("parse got " + result.longValue() + " instead of 10000000");
+        }
     }
 }

@@ -775,10 +775,9 @@ final class NFRuleSet {
                     result = tempResult;
                     highWaterMark.setIndex(parsePosition.getIndex());
                 }
-                // commented out because the error-index API on ParsePosition isn't there in 1.1.x
-                //            if (parsePosition.getErrorIndex() > highWaterMark.getErrorIndex()) {
-                //                highWaterMark.setErrorIndex(parsePosition.getErrorIndex());
-                //            }
+                if (parsePosition.getErrorIndex() > highWaterMark.getErrorIndex()) {
+                    highWaterMark.setErrorIndex(parsePosition.getErrorIndex());
+                }
                 parsePosition.setIndex(0);
             }
         }
@@ -809,10 +808,9 @@ final class NFRuleSet {
                 result = tempResult;
                 highWaterMark.setIndex(parsePosition.getIndex());
             }
-            // commented out because the error-index API on ParsePosition isn't there in 1.1.x
-            //            if (parsePosition.getErrorIndex() > highWaterMark.getErrorIndex()) {
-            //                highWaterMark.setErrorIndex(parsePosition.getErrorIndex());
-            //            }
+            if (parsePosition.getErrorIndex() > highWaterMark.getErrorIndex()) {
+                highWaterMark.setErrorIndex(parsePosition.getErrorIndex());
+            }
             parsePosition.setIndex(0);
         }
 
@@ -820,10 +818,9 @@ final class NFRuleSet {
         // first character we didn't use, and return the result that
         // corresponds to that string of characters
         parsePosition.setIndex(highWaterMark.getIndex());
-        // commented out because the error-index API on ParsePosition isn't there in 1.1.x
-        //        if (parsePosition.getIndex() == 0) {
-        //            parsePosition.setErrorIndex(highWaterMark.getErrorIndex());
-        //        }
+        if (parsePosition.getIndex() == 0) {
+            parsePosition.setErrorIndex(highWaterMark.getErrorIndex());
+        }
 
         return result;
     }

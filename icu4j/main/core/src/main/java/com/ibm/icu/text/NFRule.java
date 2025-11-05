@@ -237,17 +237,15 @@ final class NFRule {
      *     unchanged.
      */
     private String parseRuleDescriptor(String description) {
-        String descriptor;
-
         // the description consists of a rule descriptor and a rule body,
         // separated by a colon.  The rule descriptor is optional.  If
         // it's omitted, just set the base value to 0.
-        int p = description.indexOf(":");
+        int p = description.indexOf(':');
         if (p != -1) {
             // copy the descriptor out into its own string and strip it,
             // along with any trailing whitespace, out of the original
             // description
-            descriptor = description.substring(0, p);
+            String descriptor = description.substring(0, p);
             ++p;
             while (p < description.length() && PatternProps.isWhiteSpace(description.charAt(p))) {
                 ++p;
@@ -263,18 +261,18 @@ final class NFRule {
             if (firstChar >= '0' && firstChar <= '9' && lastChar != 'x') {
                 // if the rule descriptor begins with a digit, it's a descriptor
                 // for a normal rule
-                long tempValue = 0;
+                long val = 0;
                 char c = 0;
                 p = 0;
 
                 // begin parsing the descriptor: copy digits
-                // into "tempValue", skip periods, commas, and spaces,
+                // into "val", skip periods, commas, and spaces,
                 // stop on a slash or > sign (or at the end of the string),
                 // and throw an exception on any other character
                 while (p < descriptorLength) {
                     c = descriptor.charAt(p);
                     if (c >= '0' && c <= '9') {
-                        tempValue = tempValue * 10 + (c - '0');
+                        val = val * 10 + (c - '0');
                     } else if (c == '/' || c == '>') {
                         break;
                     } else if (!PatternProps.isWhiteSpace(c) && c != ',' && c != '.') {
@@ -285,19 +283,19 @@ final class NFRule {
                 }
 
                 // Set the rule's base value according to what we parsed
-                setBaseValue(tempValue);
+                setBaseValue(val);
 
                 // if we stopped the previous loop on a slash, we're
                 // now parsing the rule's radix.  Again, accumulate digits
-                // in tempValue, skip punctuation, stop on a > mark, and
+                // in val, skip punctuation, stop on a > mark, and
                 // throw an exception on anything else
                 if (c == '/') {
-                    tempValue = 0;
+                    val = 0;
                     ++p;
                     while (p < descriptorLength) {
                         c = descriptor.charAt(p);
                         if (c >= '0' && c <= '9') {
-                            tempValue = tempValue * 10 + (c - '0');
+                            val = val * 10 + (c - '0');
                         } else if (c == '>') {
                             break;
                         } else if (!PatternProps.isWhiteSpace(c) && c != ',' && c != '.') {
@@ -307,9 +305,9 @@ final class NFRule {
                         ++p;
                     }
 
-                    // tempValue now contains the rule's radix.  Set it
+                    // val now contains the rule's radix.  Set it
                     // accordingly, and recalculate the rule's exponent
-                    radix = (int) tempValue;
+                    radix = (int) val;
                     if (radix == 0) {
                         throw new IllegalArgumentException("Rule can't have radix of 0");
                     }
@@ -371,11 +369,11 @@ final class NFRule {
      * removes the substitution tokens from the rule's rule text.
      *
      * @param owner The rule set containing this rule
+     * @param sourceRuleText The rule text
      * @param predecessor The rule preceding this one in "owners" rule list
-     * @param ruleText The rule text
      */
-    private void extractSubstitutions(NFRuleSet owner, String ruleText, NFRule predecessor) {
-        this.ruleText = ruleText;
+    private void extractSubstitutions(NFRuleSet owner, String sourceRuleText, NFRule predecessor) {
+        this.ruleText = sourceRuleText;
         sub1 = extractSubstitution(owner, predecessor);
         if (sub1 == null) {
             // Small optimization. There is no need to create a redundant NullSubstitution.
@@ -383,7 +381,12 @@ final class NFRule {
         } else {
             sub2 = extractSubstitution(owner, predecessor);
         }
-        ruleText = this.ruleText;
+
+        if (sub1 != null && sub2 != null && sub1.getClass().equals(sub2.getClass())) {
+            // Something like << << or >> >> or == == was encountered.
+            owner.owner.unparseable = true;
+        }
+
         int pluralRuleStart = ruleText.indexOf("$(");
         int pluralRuleEnd = (pluralRuleStart >= 0 ? ruleText.indexOf(")$", pluralRuleStart) : -1);
         if (pluralRuleEnd >= 0) {
@@ -486,7 +489,7 @@ final class NFRule {
      *
      * @param newBaseValue The new base value for the rule.
      */
-    final void setBaseValue(long newBaseValue) {
+    void setBaseValue(long newBaseValue) {
         // set the base value
         baseValue = newBaseValue;
         radix = 10;
@@ -556,7 +559,7 @@ final class NFRule {
      */
     private static int indexOfAnyRulePrefix(String ruleText) {
         int result = -1;
-        if (ruleText.length() > 0) {
+        if (!ruleText.isEmpty()) {
             int pos;
             for (String string : RULE_PREFIXES) {
                 pos = ruleText.indexOf(string);
@@ -611,32 +614,34 @@ final class NFRule {
 
         // start with the rule descriptor.  Special-case the special rules
         if (baseValue == NEGATIVE_NUMBER_RULE) {
-            result.append("-x: ");
+            result.append("-x");
         } else if (baseValue == IMPROPER_FRACTION_RULE) {
-            result.append('x').append(decimalPoint == 0 ? '.' : decimalPoint).append("x: ");
+            result.append('x').append(decimalPoint == 0 ? '.' : decimalPoint).append('x');
         } else if (baseValue == PROPER_FRACTION_RULE) {
-            result.append('0').append(decimalPoint == 0 ? '.' : decimalPoint).append("x: ");
+            result.append('0').append(decimalPoint == 0 ? '.' : decimalPoint).append('x');
         } else if (baseValue == DEFAULT_RULE) {
-            result.append('x').append(decimalPoint == 0 ? '.' : decimalPoint).append("0: ");
+            result.append('x').append(decimalPoint == 0 ? '.' : decimalPoint).append('0');
         } else if (baseValue == INFINITY_RULE) {
-            result.append("Inf: ");
+            result.append("Inf");
         } else if (baseValue == NAN_RULE) {
-            result.append("NaN: ");
+            result.append("NaN");
         } else {
             // for a normal rule, write out its base value, and if the radix is
             // something other than 10, write out the radix (with the preceding
             // slash, of course).  Then calculate the expected exponent and if
-            // if isn't the same as the actual exponent, write an appropriate
+            // it isn't the same as the actual exponent, write an appropriate
             // number of > signs.  Finally, terminate the whole thing with
             // a colon.
-            result.append(String.valueOf(baseValue));
+            result.append(baseValue);
             if (radix != 10) {
                 result.append('/').append(radix);
             }
             int numCarets = expectedExponent() - exponent;
-            for (int i = 0; i < numCarets; i++) result.append('>');
-            result.append(": ");
+            for (int i = 0; i < numCarets; i++) {
+                result.append('>');
+            }
         }
+        result.append(": ");
 
         // if the rule text begins with a space, write an apostrophe
         // (whitespace after the rule descriptor is ignored; the
@@ -649,12 +654,12 @@ final class NFRule {
         // substitution tokens in the appropriate places
         StringBuilder ruleTextCopy = new StringBuilder(ruleText);
         if (sub2 != null) {
-            ruleTextCopy.insert(sub2.getPos(), sub2.toString());
+            ruleTextCopy.insert(sub2.getPos(), sub2);
         }
         if (sub1 != null) {
-            ruleTextCopy.insert(sub1.getPos(), sub1.toString());
+            ruleTextCopy.insert(sub1.getPos(), sub1);
         }
-        result.append(ruleTextCopy.toString());
+        result.append(ruleTextCopy);
 
         // and finally, top the whole thing off with a semicolon and
         // return the result
@@ -671,7 +676,7 @@ final class NFRule {
      *
      * @return The rule's base value
      */
-    public final char getDecimalPoint() {
+    public char getDecimalPoint() {
         return decimalPoint;
     }
 
@@ -680,7 +685,7 @@ final class NFRule {
      *
      * @return The rule's base value
      */
-    public final long getBaseValue() {
+    public long getBaseValue() {
         return baseValue;
     }
 
@@ -856,12 +861,12 @@ final class NFRule {
         // a modulus substitution, its base value isn't an even multiple
         // of 100, and the value we're trying to format _is_ an even
         // multiple of 100.  This is called the "rollback rule."
-        if (!((sub1 != null && sub1.isModulusSubstitution())
-                || (sub2 != null && sub2.isModulusSubstitution()))) {
-            return false;
+        if ((sub1 != null && sub1.isModulusSubstitution())
+                || (sub2 != null && sub2.isModulusSubstitution())) {
+            long divisor = power(radix, exponent);
+            return (number % divisor) == 0 && (baseValue % divisor) != 0;
         }
-        long divisor = power(radix, exponent);
-        return (number % divisor) == 0 && (baseValue % divisor) != 0;
+        return false;
     }
 
     // -----------------------------------------------------------------------
@@ -897,16 +902,15 @@ final class NFRule {
 
         // check to see whether the text before the first substitution
         // matches the text at the beginning of the string being
-        // parsed.  If it does, strip that off the front of workText;
-        // otherwise, dump out with a mismatch
+        // parsed. If it does, strip that off the front of workText; otherwise,
+        // dump out with a mismatch
         int sub1Pos = sub1 != null ? sub1.getPos() : ruleText.length();
         int sub2Pos = sub2 != null ? sub2.getPos() : ruleText.length();
         String workText = stripPrefix(text, ruleText.substring(0, sub1Pos), pp);
         int prefixLength = text.length() - workText.length();
 
         if (pp.getIndex() == 0 && sub1Pos != 0) {
-            // commented out because ParsePosition doesn't have error index in 1.1.x
-            //                parsePosition.setErrorIndex(pp.getErrorIndex());
+            parsePosition.setErrorIndex(pp.getErrorIndex());
             return ZERO;
         }
         if (baseValue == INFINITY_RULE) {
@@ -1010,23 +1014,18 @@ final class NFRule {
                         highWaterMark = prefixLength + pp.getIndex() + pp2.getIndex();
                         result = partialResult;
                     }
+                } else {
+                    int temp = pp2.getErrorIndex() + sub1.getPos() + pp.getIndex();
+                    if (temp > parsePosition.getErrorIndex()) {
+                        parsePosition.setErrorIndex(temp);
+                    }
                 }
-                // commented out because ParsePosition doesn't have error index in 1.1.x
-                //                    else {
-                //                        int temp = pp2.getErrorIndex() + sub1.getPos() +
-                // pp.getIndex();
-                //                        if (temp> parsePosition.getErrorIndex()) {
-                //                            parsePosition.setErrorIndex(temp);
-                //                        }
-                //                    }
+            } else {
+                int temp = sub1.getPos() + pp.getErrorIndex();
+                if (temp > parsePosition.getErrorIndex()) {
+                    parsePosition.setErrorIndex(temp);
+                }
             }
-            // commented out because ParsePosition doesn't have error index in 1.1.x
-            //                else {
-            //                    int temp = sub1.getPos() + pp.getErrorIndex();
-            //                    if (temp > parsePosition.getErrorIndex()) {
-            //                        parsePosition.setErrorIndex(temp);
-            //                    }
-            //                }
             // keep trying to match things until the outer matchToDelimiter()
             // call fails to make a match (each time, it picks up where it
             // left off the previous time)
@@ -1040,10 +1039,9 @@ final class NFRule {
         // didn't match-- the ParsePosition is therefore unchanged if
         // we didn't match anything)
         parsePosition.setIndex(highWaterMark);
-        // commented out because ParsePosition doesn't have error index in 1.1.x
-        //        if (highWaterMark > 0) {
-        //            parsePosition.setErrorIndex(0);
-        //        }
+        if (highWaterMark > 0) {
+            parsePosition.setErrorIndex(0);
+        }
 
         // this is a hack for one unusual condition: Normally, whether this
         // rule belong to a fraction rule set or not is handled by its
@@ -1080,7 +1078,7 @@ final class NFRule {
      */
     private String stripPrefix(String text, String prefix, ParsePosition pp) {
         // if the prefix text is empty, dump out without doing anything
-        if (prefix.length() == 0) {
+        if (prefix.isEmpty()) {
             return text;
         } else {
             // otherwise, use prefixLength() to match the beginning of
@@ -1141,22 +1139,27 @@ final class NFRule {
         // instance of "delimiter" we just found.
         if (!allIgnorable(delimiter)) {
             ParsePosition tempPP = new ParsePosition(0);
-            Number tempResult;
+            Number bestResult = null;
+            int currPos = startPos;
 
-            // use findText() to search for "delimiter".  It returns a two-
-            // element array: element 0 is the position of the match, and
-            // element 1 is the number of characters that matched
-            // "delimiter".
-            int[] temp = findText(text, delimiter, pluralFormatDelimiter, startPos);
-            int dPos = temp[0];
-            int dLen = temp[1];
+            for (; ; ) {
+                // use findText() to search for "delimiter". It returns a two-
+                // element array: element 0 is the position of the match, and
+                // element 1 is the number of characters that matched
+                // "delimiter".
+                tempPP.setIndex(0);
+                int[] temp = findText(text, delimiter, pluralFormatDelimiter, currPos);
+                int dPos = temp[0];
+                int dLen = temp[1];
 
-            // if findText() succeeded, isolate the text preceding the
-            // match, and use "sub" to match that text
-            while (dPos >= 0) {
+                if (dPos < 0) {
+                    break;
+                }
+                // if findText() succeeded, isolate the text preceding the
+                // match, and use "sub" to match that text
                 String subText = text.substring(0, dPos);
-                if (subText.length() > 0) {
-                    tempResult =
+                if (!subText.isEmpty()) {
+                    Number result =
                             sub.doParse(
                                     subText,
                                     tempPP,
@@ -1174,25 +1177,28 @@ final class NFRule {
                     // we got from parsing the substitution.
                     if (tempPP.getIndex() == dPos) {
                         pp.setIndex(dPos + dLen);
-                        return tempResult;
+                        bestResult = result;
+                    } else {
+                        if (bestResult != null) {
+                            // We matched the delimiter once already.
+                            // We didn't find a better match.
+                            return bestResult;
+                        }
+                        if (tempPP.getErrorIndex() > 0) {
+                            pp.setErrorIndex(tempPP.getErrorIndex());
+                        } else {
+                            pp.setErrorIndex(tempPP.getIndex());
+                        }
                     }
-                    // commented out because ParsePosition doesn't have error index in 1.1.x
-                    //                    else {
-                    //                        if (tempPP.getErrorIndex() > 0) {
-                    //                            pp.setErrorIndex(tempPP.getErrorIndex());
-                    //                        } else {
-                    //                            pp.setErrorIndex(tempPP.getIndex());
-                    //                        }
-                    //                    }
                 }
 
                 // if we didn't match the substitution, search for another
                 // copy of "delimiter" in "text" and repeat the loop if
                 // we find it
-                tempPP.setIndex(0);
-                temp = findText(text, delimiter, pluralFormatDelimiter, dPos + dLen);
-                dPos = temp[0];
-                dLen = temp[1];
+                currPos = dPos + dLen;
+            }
+            if (bestResult != null) {
+                return bestResult;
             }
             // if we make it here, this was an unsuccessful match, and we
             // leave pp unchanged and return 0
@@ -1200,7 +1206,7 @@ final class NFRule {
             return ZERO;
 
             // if "delimiter" is empty, or consists only of ignorable characters
-            // (i.e., is semantically empty), thwe we obviously can't search
+            // (i.e., is semantically empty), then we obviously can't search
             // for "delimiter".  Instead, just use "sub" to parse as much of
             // "text" as possible.
         } else if (sub == null) {
@@ -1227,11 +1233,9 @@ final class NFRule {
                 if (tempResult != null) {
                     result = tempResult;
                 }
+            } else {
+                pp.setErrorIndex(tempPP.getErrorIndex());
             }
-            // commented out because ParsePosition doesn't have error index in 1.1.x
-            //            else {
-            //                pp.setErrorIndex(tempPP.getErrorIndex());
-            //            }
 
             // and if we get to here, then nothing matched, so we return
             // 0 and leave pp alone
@@ -1254,7 +1258,7 @@ final class NFRule {
     private int prefixLength(String str, String prefix) {
         // if we're looking for an empty prefix, it obviously matches
         // zero characters.  Just go ahead and return 0.
-        if (prefix.length() == 0) {
+        if (prefix.isEmpty()) {
             return 0;
         }
 
@@ -1312,7 +1316,7 @@ final class NFRule {
 
         if (scanner != null) {
             // Check if non-lenient rule finds the text before call lenient parsing
-            int pos[] = new int[] {str.indexOf(key, startingAt), key.length()};
+            int[] pos = new int[] {str.indexOf(key, startingAt), key.length()};
             if (pos[0] >= 0) {
                 return pos;
             } else {
@@ -1334,7 +1338,7 @@ final class NFRule {
      */
     private boolean allIgnorable(String str) {
         // if the string is empty, we can just return true
-        if (str == null || str.length() == 0) {
+        if (str == null || str.isEmpty()) {
             return true;
         }
         RbnfLenientScanner scanner = formatter.getLenientScanner();

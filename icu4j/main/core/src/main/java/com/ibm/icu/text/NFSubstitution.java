@@ -739,33 +739,22 @@ class MultiplierSubstitution extends NFSubstitution {
     @Override
     public double transformNumber(double number) {
         // Most of the time, when a number is handled by an NFSubstitution, we do a floor() on it,
-        // but
-        // if a substitution uses a DecimalFormat to format the number instead of a ruleset, we
-        // generally
-        // don't want to do a floor()-- we want to keep the value intact so that the DecimalFormat
-        // can
-        // either include the fractional part or round properly.  The big exception to this is here
-        // in
-        // MultiplierSubstitution.  If the rule includes two substitutions, the
-        // MultiplierSubstitution
-        // (which is handling the larger part of the number) really _does_ want to do a floor(),
-        // because
-        // the ModulusSubstitution (which is handling the smaller part of the number) will take
-        // care of the fractional part.  (Consider something like `1/12: <0< feet >0.0> inches;`.)
-        // But if there is no ModulusSubstitution, we're shortening the number in some way-- the
-        // "larger part"
-        // of the number is the only part we're keeping.  Even if the DecimalFormat doesn't include
-        // the
-        // fractional part in its output, we still want it to round.  (Consider something like
-        // `1/1000: <0<K;`.)
+        // but if a substitution uses a DecimalFormat to format the number instead of a ruleset,
+        // we generally don't want to do a floor()-- we want to keep the value intact so that
+        // the DecimalFormat can either include the fractional part or round properly.
+        // The big exception to this is here in MultiplierSubstitution. If the rule includes two
+        // substitutions, the MultiplierSubstitution (which is handling the larger part of the
+        // number) really _does_ want to do a floor(), because the ModulusSubstitution (which is
+        // handling the smaller part of the number) will take care of the fractional part. Consider
+        // something like `1/12: <0< feet >0.0> inches;`. But if there is no ModulusSubstitution,
+        // we're shortening the number in some way-- the "larger part" of the number is the only
+        // part we're keeping. Even if the DecimalFormat doesn't include the fractional part in
+        // its output, we still want it to round.  (Consider something like `1/1000: <0<K;`.)
         // (TODO: The ROUND_FLOOR thing is a kludge to preserve the previous floor-always behavior.
-        // What we
-        // probably really want to do is just set the rounding mode on the DecimalFormat to match
-        // the rounding
-        // mode on the RuleBasedNumberFormat and then pass the number to it whole and let it do its
-        // own rounding.
-        // But before making that change, we'd have to make sure it didn't have undesirable side
-        // effects.)
+        // What we probably really want to do is just set the rounding mode on the DecimalFormat
+        // to match the rounding mode on the RuleBasedNumberFormat and then pass the number to it
+        // whole and let it do its own rounding. But before making that change, we'd have to make
+        // sure it didn't have undesirable side effects.)
         if (ruleSet != null
                 || owningRule.hasModulusSubstitution()
                 || owningRule.formatter.getRoundingMode() == BigDecimal.ROUND_FLOOR) {
@@ -943,7 +932,6 @@ class ModulusSubstitution extends NFSubstitution {
         // to format its substitution value)
         if (ruleToUse == null) {
             super.doSubstitution(number, toInsertInto, position, recursionCount);
-
         } else {
             // a >>> substitution goes straight to a particular rule to
             // format the substitution value

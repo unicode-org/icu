@@ -639,6 +639,12 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
     private boolean lenientParse = false;
 
     /**
+     * Specifies if one of the rules is unparseable. For example, there may be substitutions of the
+     * same type in a rule.
+     */
+    transient boolean unparseable = false;
+
+    /**
      * If the description specifies lenient-parse rules, they're stored here until the collator is
      * created.
      */
@@ -1280,6 +1286,10 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
      */
     @Override
     public Number parse(String text, ParsePosition parsePosition) {
+        if (unparseable) {
+            // Something like << << or >> >> or == == was encountered in the original rules.
+            throw new IllegalArgumentException("Rules do not allow parsing");
+        }
 
         // parsePosition tells us where to start parsing.  We copy the
         // text in the string from here to the end into a new string,

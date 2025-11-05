@@ -134,13 +134,9 @@ static const char16_t gNoparse[] =
 }; /* "@noparse" */
 
 NFRuleSet::NFRuleSet(RuleBasedNumberFormat *_owner, UnicodeString* descriptions, int32_t index, UErrorCode& status)
-  : name()
-  , rules(0)
+  : rules(0)
   , owner(_owner)
   , fractionRules()
-  , fIsFractionRuleSet(false)
-  , fIsPublic(false)
-  , fIsParseable(true)
 {
     for (int32_t i = 0; i < NON_NUMERICAL_RULE_LENGTH; ++i) {
         nonNumericalRules[i] = nullptr;

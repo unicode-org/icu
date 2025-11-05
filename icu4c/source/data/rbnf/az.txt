@@ -4,11 +4,9 @@
 az{
     RBNFRules{
         OrdinalRules{
-            "%%digits-ordinal-indicator:",
-            "0: ''inci;",
             "%digits-ordinal:",
             "-x: \u2212>>;",
-            "0: =#,##0==%%digits-ordinal-indicator=;",
+            "0: =#,##0='inci;",
         }
         SpelloutRules{
             "%spellout-numbering-year:",

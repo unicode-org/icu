@@ -4,17 +4,9 @@
 es_419{
     RBNFRules{
         OrdinalRules{
-            "%%dord-mascabbrev:",
-            "0: \u00BA;",
-            "1: \u1D49\u02B3;",
-            "2: \u00BA;",
-            "3: \u1D49\u02B3;",
-            "4: \u00BA;",
-            "20: >>;",
-            "100: >>;",
             "%digits-ordinal-masculine-adjective:",
             "-x: \u2212>>;",
-            "0: =#,##0==%%dord-mascabbrev=.;",
+            "0: =#,##0=.$(ordinal,one{\u1D49\u02B3}other{\u00BA})$;",
             "%digits-ordinal-masculine:",
             "-x: \u2212>>;",
             "0: =#,##0=\u00BA.;",

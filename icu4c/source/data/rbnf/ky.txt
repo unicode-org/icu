@@ -4,11 +4,9 @@
 ky{
     RBNFRules{
         OrdinalRules{
-            "%%digits-ordinal-indicator:",
-            "0: ''\u0438\u043D\u0447\u0438;",
             "%digits-ordinal:",
             "-x: \u2212>>;",
-            "0: =#,##0==%%digits-ordinal-indicator=;",
+            "0: =#,##0='\u0438\u043D\u0447\u0438;",
         }
         SpelloutRules{
             "%spellout-numbering-year:",

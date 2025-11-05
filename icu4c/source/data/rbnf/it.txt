@@ -4,16 +4,12 @@
 it{
     RBNFRules{
         OrdinalRules{
-            "%%dord-mascabbrev:",
-            "0: \u00BA;",
             "%digits-ordinal-masculine:",
             "-x: \u2212>>;",
-            "0: =#,##0==%%dord-mascabbrev=;",
-            "%%dord-femabbrev:",
-            "0: \u00AA;",
+            "0: =#,##0=\u00BA;",
             "%digits-ordinal-feminine:",
             "-x: \u2212>>;",
-            "0: =#,##0==%%dord-femabbrev=;",
+            "0: =#,##0=\u00AA;",
             "%digits-ordinal:",
             "0: =%digits-ordinal-masculine=;",
         }
