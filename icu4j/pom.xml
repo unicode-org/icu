@@ -117,8 +117,8 @@
     <mf.Bundle-ManifestVersion>2</mf.Bundle-ManifestVersion>
     <mf.Bundle-Copyright>© 2016 and later: Unicode, Inc. and others. License &amp; terms of use: http://www.unicode.org/copyright.html</mf.Bundle-Copyright>
 
-    <formatter.plugin.spotless.version>2.43.0</formatter.plugin.spotless.version>
-    <formatter.google-java-style.version>1.22.0</formatter.google-java-style.version>
+    <formatter.plugin.spotless.version>3.0.0</formatter.plugin.spotless.version>
+    <formatter.google-java-style.version>1.32.0</formatter.google-java-style.version>
   </properties>
 
   <licenses>
