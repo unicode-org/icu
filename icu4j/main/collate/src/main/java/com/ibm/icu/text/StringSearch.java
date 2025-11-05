@@ -1715,11 +1715,11 @@ public final class StringSearch extends SearchIterator {
             switch (strength_) {
                 default:
                     tertiary = CollationElementIterator.tertiaryOrder(ce);
-                    /* note fall-through */
+                /* note fall-through */
 
                 case Collator.SECONDARY:
                     secondary = CollationElementIterator.secondaryOrder(ce);
-                    /* note fall-through */
+                /* note fall-through */
 
                 case Collator.PRIMARY:
                     primary = CollationElementIterator.primaryOrder(ce);

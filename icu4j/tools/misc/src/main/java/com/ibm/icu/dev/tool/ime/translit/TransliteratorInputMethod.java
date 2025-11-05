@@ -662,7 +662,7 @@ public class TransliteratorInputMethod implements InputMethod {
                     return caretTowardsLimit();
                 case KeyEvent.VK_BACK_SPACE:
                     return canBackspace(); // unfortunately, in 1.5 swing handles this in keyPressed
-                    // instead of keyTyped
+                // instead of keyTyped
                 case KeyEvent.VK_DELETE:
                     return canDelete(); // this too?
                 case KeyEvent.VK_TAB:

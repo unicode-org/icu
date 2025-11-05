@@ -695,7 +695,7 @@ class NumberSkeletonImpl {
         StemEnum stem = STEM_ENUM_VALUES[stemTrie.getValue()];
         switch (stem) {
 
-                // Stems with meaning on their own, not requiring an option:
+            // Stems with meaning on their own, not requiring an option:
 
             case STEM_COMPACT_SHORT:
             case STEM_COMPACT_LONG:
@@ -801,7 +801,7 @@ class NumberSkeletonImpl {
                 macros.decimal = StemToObject.decimalSeparatorDisplay(stem);
                 return ParseState.STATE_NULL;
 
-                // Stems requiring an option:
+            // Stems requiring an option:
 
             case STEM_PRECISION_INCREMENT:
                 checkNull(macros.precision, segment);

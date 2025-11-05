@@ -392,15 +392,15 @@ public class UnicodeSetTest extends CoreTestFmwk {
             case 'u':
                 minDig = maxDig = 4;
                 break;
-                /*
-                case 'U':
-                minDig = maxDig = 8;
-                break;
-                case 'x':
-                minDig = 1;
-                maxDig = 2;
-                break;
-                    */
+            /*
+            case 'U':
+            minDig = maxDig = 8;
+            break;
+            case 'x':
+            minDig = 1;
+            maxDig = 2;
+            break;
+                */
             default:
                 dig = UCharacter.digit(c, 8);
                 if (dig >= 0) {
@@ -2234,7 +2234,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
 
                     default:
                         continue main; // so we don't keep having to change the endpoint, and gaps
-                        // are not skipped.
+                    // are not skipped.
                     case 35:
                         return;
                 }

@@ -1142,7 +1142,7 @@ class CharsetISO2022 extends CharsetICU {
                                     err = CoderResult.malformedForLength(malformLength);
                                 }
                                 break;
-                                /* case SS3_STATE: not used in ISO-2022-JP-x */
+                            /* case SS3_STATE: not used in ISO-2022-JP-x */
                             case ISO8859_1:
                             case ISO8859_7:
                                 if ((jpCharsetMasks[myConverterData.version] & CSM(tempState))
@@ -1201,9 +1201,9 @@ class CharsetISO2022 extends CharsetICU {
                                     err = CoderResult.unmappableForLength(malformLength);
                                     break;
                                 }
-                                /* fall through */
+                            /* fall through */
                             case GB2312_1:
-                                /* fall through */
+                            /* fall through */
                             case CNS_11643_1:
                                 myConverterData.toU2022State.cs[1] = tempState;
                                 break;
@@ -1502,9 +1502,9 @@ class CharsetISO2022 extends CharsetICU {
                             }
 
                             continue;
-                            /* ISO-2022-JP does not use single-byte (C1) SS2 and SS3 */
+                        /* ISO-2022-JP does not use single-byte (C1) SS2 and SS3 */
                         case CR:
-                            /* falls through */
+                        /* falls through */
                         case LF:
                             /* automatically reset to single-byte mode */
                             if (myConverterData.toU2022State.cs[0] != ASCII
@@ -1513,7 +1513,7 @@ class CharsetISO2022 extends CharsetICU {
                             }
                             myConverterData.toU2022State.cs[2] = 0;
                             myConverterData.toU2022State.g = 0;
-                            /* falls through */
+                        /* falls through */
                         default:
                             /* convert one or two bytes */
                             myConverterData.isEmptySegment = false;
@@ -1819,12 +1819,12 @@ class CharsetISO2022 extends CharsetICU {
                             }
                             continue;
 
-                            /*ISO-2022-CN does not use single-byte (C1) SS2 and SS3 */
+                        /*ISO-2022-CN does not use single-byte (C1) SS2 and SS3 */
                         case CR:
-                            /* falls through */
+                        /* falls through */
                         case LF:
                             myConverterData.toU2022State.reset();
-                            /* falls through */
+                        /* falls through */
                         default:
                             /* converter one or two bytes */
                             myConverterData.isEmptySegment = false;
@@ -2738,7 +2738,7 @@ class CharsetISO2022 extends CharsetICU {
                         /* write the shift sequence if necessary */
                         if (g != myConverterData.fromU2022State.g) {
                             switch (g) {
-                                    /* case 0 handled before writing escapes */
+                                /* case 0 handled before writing escapes */
                                 case 1:
                                     buffer[outLen++] = UConverterConstants.SO;
                                     myConverterData.fromU2022State.g = 1;

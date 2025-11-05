@@ -154,8 +154,8 @@ public class SortedSetRelation {
             case RETAINALL:
                 a.retainAll(b);
                 return a;
-                // the following is the only case not really supported by Java
-                // although all could be optimized
+            // the following is the only case not really supported by Java
+            // although all could be optimized
             case COMPLEMENTALL:
                 temp = new TreeSet<T>(b);
                 temp.removeAll(a);

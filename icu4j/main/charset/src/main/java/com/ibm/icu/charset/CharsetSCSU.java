@@ -155,12 +155,12 @@ class CharsetSCSU extends CharsetICU {
             }
             this.nextWindowUseIndex = 0;
             switch (this.locale) {
-                    /* Note being used right now because "SCSU,locale=ja" does not work in ICU4J. */
-                    /*    case l_ja:
-                    for(int i=0;i<8;i++){
-                        this.windowUse[i] = initialWindowUse_ja[i];
-                    }
-                    break; */
+                /* Note being used right now because "SCSU,locale=ja" does not work in ICU4J. */
+                /*    case l_ja:
+                for(int i=0;i<8;i++){
+                    this.windowUse[i] = initialWindowUse_ja[i];
+                }
+                break; */
                 default:
                     for (int i = 0; i < 8; i++) {
                         this.windowUse[i] = initialWindowUse[i];
@@ -1231,7 +1231,7 @@ class CharsetSCSU extends CharsetICU {
             /*from the first if in the loop we know that targetCapacity>0*/
             if (length <= targetCapacity) {
                 switch (length) {
-                        /*each branch falls through the next one*/
+                    /*each branch falls through the next one*/
                     case 4:
                         target.put((byte) (c >> 24));
                         if (offsets != null) {
@@ -1275,7 +1275,7 @@ class CharsetSCSU extends CharsetICU {
                 /* targetCapacity==0 when SCU+supplementary where SCU used up targetCapacity==1 */
                 length -= targetCapacity;
                 switch (length) {
-                        /*each branch falls through the next one*/
+                    /*each branch falls through the next one*/
                     case 4:
                         p.put((byte) (c >> 24));
                     case 3:
@@ -1293,7 +1293,7 @@ class CharsetSCSU extends CharsetICU {
                 /*now output what fits into the regular target*/
                 c >>= 8 * length; // length was reduced by targetCapacity
                 switch (targetCapacity) {
-                        /*each branch falls through the next one*/
+                    /*each branch falls through the next one*/
                     case 3:
                         target.put((byte) (c >> 16));
                         if (offsets != null) {

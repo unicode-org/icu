@@ -271,12 +271,12 @@ final class CollationFastLatinBuilder {
                             return false;
                         }
                     }
-                    // Note: We could support PREFIX_TAG (assert c>=0)
-                    // by recursing on its default CE32 and checking that none of the prefixes
-                    // starts
-                    // with a fast Latin character.
-                    // However, currently (2013) there are only the L-before-middle-dot
-                    // prefix mappings in the Latin range, and those would be rejected anyway.
+                // Note: We could support PREFIX_TAG (assert c>=0)
+                // by recursing on its default CE32 and checking that none of the prefixes
+                // starts
+                // with a fast Latin character.
+                // However, currently (2013) there are only the L-before-middle-dot
+                // prefix mappings in the Latin range, and those would be rejected anyway.
                 case Collation.CONTRACTION_TAG:
                     assert (c >= 0);
                     return getCEsFromContractionCE32(data, ce32);

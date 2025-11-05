@@ -201,7 +201,7 @@ public class PeriodFormatterData {
                     if (count > 1000) {
                         break;
                     }
-                    // else fall through to decimal
+                // else fall through to decimal
                 case EHalfSupport.NO:
                     {
                         count = (count / 500) * 500; // round to 1/2
@@ -713,21 +713,21 @@ public class PeriodFormatterData {
                     }
                 }
                 break;
-                /*
-                case EPluralization.RPT_DUAL_FEW: {
-                  int v = val;
-                  if (v > 20) {
-                    v = v % 10;
-                  }
-                  if (v == 1) {
-                    form = FORM_SINGULAR;
-                  } else if (v == 2) {
-                    form = FORM_DUAL;
-                  } else if (v > 2 && v < 5) {
-                    form = FORM_PAUCAL;
-                  }
-                } break;
-                  */
+            /*
+            case EPluralization.RPT_DUAL_FEW: {
+              int v = val;
+              if (v > 20) {
+                v = v % 10;
+              }
+              if (v == 1) {
+                form = FORM_SINGULAR;
+              } else if (v == 2) {
+                form = FORM_DUAL;
+              } else if (v > 2 && v < 5) {
+                form = FORM_PAUCAL;
+              }
+            } break;
+              */
             case EPluralization.HEBREW:
                 {
                     if (val == 2) {

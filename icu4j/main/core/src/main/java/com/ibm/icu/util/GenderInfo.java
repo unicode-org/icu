@@ -202,7 +202,7 @@ public class GenderInfo {
                     }
                 }
                 return hasMale ? Gender.MALE : Gender.FEMALE;
-                // Note: any OTHER would have caused a return in the loop, which always happens.
+            // Note: any OTHER would have caused a return in the loop, which always happens.
             case MALE_TAINTS:
                 for (Gender gender : genders) {
                     if (gender != Gender.FEMALE) {

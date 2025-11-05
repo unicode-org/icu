@@ -585,7 +585,7 @@ class CharsetBOCU1 extends CharsetICU {
                         /*from the first if in the loop we know that targetCapacity>0*/
                         if (length <= targetCapacity) {
                             switch (length) {
-                                    /*each branch falls through the next one*/
+                                /*each branch falls through the next one*/
                                 case 4:
                                     target.put((byte) (diff >> 24));
                                     if (offsets != null) {
@@ -623,7 +623,7 @@ class CharsetBOCU1 extends CharsetICU {
                             /* we know that 1<=targetCapacity<length<=4 */
                             length -= targetCapacity;
                             switch (length) {
-                                    /* each branch falls through to the next one */
+                                /* each branch falls through to the next one */
                                 case 3:
                                     error.put((byte) (diff >> 16));
                                 case 2:
@@ -639,7 +639,7 @@ class CharsetBOCU1 extends CharsetICU {
                             /* now output what fits into the regular target */
                             diff >>= 8 * length; /* length was reduced by targetCapacity */
                             switch (targetCapacity) {
-                                    /* each branch falls through to the next one */
+                                /* each branch falls through to the next one */
                                 case 3:
                                     target.put((byte) (diff >> 16));
                                     if (offsets != null) {

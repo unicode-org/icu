@@ -1546,7 +1546,7 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
                     safeAppend(formatData.shortYearNames, value - 1, buf);
                     break;
                 }
-                // else fall through to numeric year handling, do not break here
+            // else fall through to numeric year handling, do not break here
             case 1: // 'y' - YEAR
             case 18: // 'Y' - YEAR_WOY
                 if (override != null
@@ -1723,7 +1723,7 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
                 // For alpha day-of-week, we don't want DOW_LOCAL,
                 // we need the standard DAY_OF_WEEK.
                 value = cal.get(Calendar.DAY_OF_WEEK);
-                // fall through, do not break here
+            // fall through, do not break here
             case 9: // 'E' - DAY_OF_WEEK
                 if (count == 5) {
                     safeAppend(formatData.narrowWeekdays, value, buf);
@@ -3683,8 +3683,8 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
                     cal.set(field, value);
                     return pos.getIndex();
                 }
-                // else for eee-eeeeee, fall through to EEE-EEEEEE handling
-                // $FALL-THROUGH$
+            // else for eee-eeeeee, fall through to EEE-EEEEEE handling
+            // $FALL-THROUGH$
             case 9:
                 { // 'E' - DAY_OF_WEEK
                     // Want to be able to parse at least wide, abbrev, short, and narrow forms.

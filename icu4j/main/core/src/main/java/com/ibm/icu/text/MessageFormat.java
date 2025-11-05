@@ -2554,7 +2554,7 @@ public class MessageFormat extends UFormat implements Cloneable {
                             break;
                     }
                     break;
-                    /// CLOVER:OFF
+                /// CLOVER:OFF
                 default: // Never happens.
                     break;
                     /// CLOVER:ON

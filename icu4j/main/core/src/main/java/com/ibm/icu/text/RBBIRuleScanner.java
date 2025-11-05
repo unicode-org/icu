@@ -329,12 +329,12 @@ class RBBIRuleScanner {
                 error(RBBIRuleBuilder.U_BRK_RULE_SYNTAX);
                 break;
 
-                //
-                //  Unary operands + ? *
-                //    These all appear after the operand to which they apply.
-                //    When we hit one, the operand (may be a whole sub expression)
-                //    will be on the top of the stack.
-                //    Unary Operator becomes TOS, with the old TOS as its one child.
+            //
+            //  Unary operands + ? *
+            //    These all appear after the operand to which they apply.
+            //    When we hit one, the operand (may be a whole sub expression)
+            //    will be on the top of the stack.
+            //    Unary Operator becomes TOS, with the old TOS as its one child.
             case RBBIRuleParseTable.doUnaryOpPlus:
                 {
                     RBBINode operandNode = fNodeStack[fNodeStackPtr--];

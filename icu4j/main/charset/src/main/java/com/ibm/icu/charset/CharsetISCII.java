@@ -1538,7 +1538,7 @@ class CharsetISCII extends CharsetICU {
                                 }
                                 break;
                             case 0x0A:
-                                /* fall through */
+                            /* fall through */
                             case 0x0D:
                                 data.resetToDefaultToUnicode = true;
                                 targetUniChar = GetMapping(sourceChar, targetUniChar, data);

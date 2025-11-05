@@ -1386,7 +1386,7 @@ public class RoundTripTest extends TestFmwk {
                         break;
                     case Character.TITLECASE_LETTER:
                         if (haveLower) return true;
-                        // drop through, since second letter is lower.
+                    // drop through, since second letter is lower.
                     case Character.LOWERCASE_LETTER:
                         haveLower = true;
                         break;

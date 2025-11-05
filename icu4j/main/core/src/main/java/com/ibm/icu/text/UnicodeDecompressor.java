@@ -221,9 +221,9 @@ public final class UnicodeDecompressor implements SCSU {
                     while (bytePos < byteBufferLimit && ucPos < charBufferLimit) {
                         aByte = byteBuffer[bytePos++] & 0xFF;
                         switch (aByte) {
-                                // All bytes from 0x80 through 0xFF are remapped
-                                // to chars or surrogate pairs according to the
-                                // currently active window
+                            // All bytes from 0x80 through 0xFF are remapped
+                            // to chars or surrogate pairs according to the
+                            // currently active window
                             case 0x80:
                             case 0x81:
                             case 0x82:
@@ -393,11 +393,11 @@ public final class UnicodeDecompressor implements SCSU {
                                 }
                                 break;
 
-                                // bytes from 0x20 through 0x7F are treated as ASCII and
-                                // are remapped to chars by padding the high byte
-                                // (this is the same as quoting from static window 0)
-                                // NUL (0x00), HT (0x09), CR (0x0A), LF (0x0D)
-                                // are treated as ASCII as well
+                            // bytes from 0x20 through 0x7F are treated as ASCII and
+                            // are remapped to chars by padding the high byte
+                            // (this is the same as quoting from static window 0)
+                            // NUL (0x00), HT (0x09), CR (0x0A), LF (0x0D)
+                            // are treated as ASCII as well
                             case 0x00:
                             case 0x09:
                             case 0x0A:
@@ -501,7 +501,7 @@ public final class UnicodeDecompressor implements SCSU {
                                 charBuffer[ucPos++] = (char) aByte;
                                 break;
 
-                                // quote unicode
+                            // quote unicode
                             case SQUOTEU:
                                 // verify we have two bytes following tag
                                 // if not, save state and break out
@@ -523,13 +523,13 @@ public final class UnicodeDecompressor implements SCSU {
                                         (char) (aByte << 8 | (byteBuffer[bytePos++] & 0xFF));
                                 break;
 
-                                // switch to Unicode mode
+                            // switch to Unicode mode
                             case SCHANGEU:
                                 fMode = UNICODEMODE;
                                 break singleByteModeLoop;
-                                // break;
+                            // break;
 
-                                // handle all quote tags
+                            // handle all quote tags
                             case SQUOTE0:
                             case SQUOTE1:
                             case SQUOTE2:
@@ -565,7 +565,7 @@ public final class UnicodeDecompressor implements SCSU {
                                                                         - COMPRESSIONOFFSET)));
                                 break;
 
-                                // handle all change tags
+                            // handle all change tags
                             case SCHANGE0:
                             case SCHANGE1:
                             case SCHANGE2:
@@ -577,7 +577,7 @@ public final class UnicodeDecompressor implements SCSU {
                                 fCurrentWindow = aByte - SCHANGE0;
                                 break;
 
-                                // handle all define tags
+                            // handle all define tags
                             case SDEFINE0:
                             case SDEFINE1:
                             case SDEFINE2:
@@ -606,7 +606,7 @@ public final class UnicodeDecompressor implements SCSU {
                                         sOffsetTable[byteBuffer[bytePos++] & 0xFF];
                                 break;
 
-                                // handle define extended tag
+                            // handle define extended tag
                             case SDEFINEX:
                                 // verify we have two bytes following tag
                                 // if not, save state and break out
@@ -632,7 +632,7 @@ public final class UnicodeDecompressor implements SCSU {
                                                                 | (byteBuffer[bytePos++] & 0xFF)));
                                 break;
 
-                                // reserved, shouldn't happen
+                            // reserved, shouldn't happen
                             case SRESERVED:
                                 break;
                         } // end switch
@@ -645,7 +645,7 @@ public final class UnicodeDecompressor implements SCSU {
                     while (bytePos < byteBufferLimit && ucPos < charBufferLimit) {
                         aByte = byteBuffer[bytePos++] & 0xFF;
                         switch (aByte) {
-                                // handle all define tags
+                            // handle all define tags
                             case UDEFINE0:
                             case UDEFINE1:
                             case UDEFINE2:
@@ -674,9 +674,9 @@ public final class UnicodeDecompressor implements SCSU {
                                         sOffsetTable[byteBuffer[bytePos++] & 0xFF];
                                 fMode = SINGLEBYTEMODE;
                                 break unicodeModeLoop;
-                                // break;
+                            // break;
 
-                                // handle define extended tag
+                            // handle define extended tag
                             case UDEFINEX:
                                 // verify we have two bytes following tag
                                 // if not, save state and break out
@@ -702,9 +702,9 @@ public final class UnicodeDecompressor implements SCSU {
                                                                 | (byteBuffer[bytePos++] & 0xFF)));
                                 fMode = SINGLEBYTEMODE;
                                 break unicodeModeLoop;
-                                // break;
+                            // break;
 
-                                // handle all change tags
+                            // handle all change tags
                             case UCHANGE0:
                             case UCHANGE1:
                             case UCHANGE2:
@@ -716,9 +716,9 @@ public final class UnicodeDecompressor implements SCSU {
                                 fCurrentWindow = aByte - UCHANGE0;
                                 fMode = SINGLEBYTEMODE;
                                 break unicodeModeLoop;
-                                // break;
+                            // break;
 
-                                // quote unicode
+                            // quote unicode
                             case UQUOTEU:
                                 // verify we have two bytes following tag
                                 // if not, save state and break out

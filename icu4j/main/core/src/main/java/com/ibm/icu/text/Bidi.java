@@ -4053,7 +4053,7 @@ public class Bidi {
                     case REORDER_RUNS_ONLY:
                         /* we should never get here */
                         throw new InternalError("Internal ICU error in setPara");
-                        /* break; */
+                    /* break; */
                     case REORDER_INVERSE_NUMBERS_AS_L:
                         this.impTabPair = impTab_INVERSE_NUMBERS_AS_L;
                         break;

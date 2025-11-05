@@ -425,7 +425,7 @@ public class ExhaustiveTest extends CoreTestFmwk {
                             default:
                                 log(Integer.toHexString((aByte) & 0xFF) + " ");
                                 break;
-                                // quote unicode
+                            // quote unicode
                             case SQUOTEU:
                                 log("SQUOTEU ");
                                 if (curByteIndex < byteBufferLimit) {
@@ -440,13 +440,13 @@ public class ExhaustiveTest extends CoreTestFmwk {
                                 }
                                 break;
 
-                                // switch to Unicode mode
+                            // switch to Unicode mode
                             case SSWITCHU:
                                 log("SSWITCHU ");
                                 mode = UNICODEMODE;
                                 break;
 
-                                // handle all quote tags
+                            // handle all quote tags
                             case SQUOTE0:
                             case SQUOTE1:
                             case SQUOTE2:
@@ -463,7 +463,7 @@ public class ExhaustiveTest extends CoreTestFmwk {
                                 }
                                 break;
 
-                                // handle all switch tags
+                            // handle all switch tags
                             case SSWITCH0:
                             case SSWITCH1:
                             case SSWITCH2:
@@ -475,7 +475,7 @@ public class ExhaustiveTest extends CoreTestFmwk {
                                 log("SSWITCH" + (aByte - SSWITCH0) + " ");
                                 break;
 
-                                // handle all define tags
+                            // handle all define tags
                             case SDEFINE0:
                             case SDEFINE1:
                             case SDEFINE2:
@@ -492,7 +492,7 @@ public class ExhaustiveTest extends CoreTestFmwk {
                                 }
                                 break;
 
-                                // handle define extended tag
+                            // handle define extended tag
                             case SDEFINEX:
                                 log("SDEFINEX ");
                                 if (curByteIndex < byteBufferLimit) {
@@ -514,7 +514,7 @@ public class ExhaustiveTest extends CoreTestFmwk {
                     while (curByteIndex < byteBufferLimit && mode == UNICODEMODE) {
                         aByte = (byteBuffer[curByteIndex++]) & 0xFF;
                         switch (aByte) {
-                                // handle all define tags
+                            // handle all define tags
                             case UDEFINE0:
                             case UDEFINE1:
                             case UDEFINE2:
@@ -532,7 +532,7 @@ public class ExhaustiveTest extends CoreTestFmwk {
                                 mode = SINGLEBYTEMODE;
                                 break;
 
-                                // handle define extended tag
+                            // handle define extended tag
                             case UDEFINEX:
                                 log("UDEFINEX ");
                                 if (curByteIndex < byteBufferLimit) {
@@ -547,7 +547,7 @@ public class ExhaustiveTest extends CoreTestFmwk {
                                 }
                                 break;
 
-                                // handle all switch tags
+                            // handle all switch tags
                             case USWITCH0:
                             case USWITCH1:
                             case USWITCH2:
@@ -560,7 +560,7 @@ public class ExhaustiveTest extends CoreTestFmwk {
                                 mode = SINGLEBYTEMODE;
                                 break;
 
-                                // quote unicode
+                            // quote unicode
                             case UQUOTEU:
                                 log("UQUOTEU ");
                                 if (curByteIndex < byteBufferLimit) {

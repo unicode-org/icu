@@ -3128,7 +3128,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
                         amount = -amount;
                     }
                 }
-                // Fall through into standard handling
+            // Fall through into standard handling
             case EXTENDED_YEAR:
             case MONTH:
             case ORDINAL_MONTH:

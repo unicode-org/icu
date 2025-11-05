@@ -3261,15 +3261,15 @@ class CharsetMBCS extends CharsetICU {
 
                             /* get the bytes and the length for the output */
                             switch (outputType) {
-                                    /* This is handled above with the method cnvMBCSDoubleFromUnicodeWithOffsets() */
-                                    /* case MBCS_OUTPUT_2:
-                                    value = MBCS_VALUE_2_FROM_STAGE_2(bytes, stage2Entry, c);
-                                    if ((value & UConverterConstants.UNSIGNED_INT_MASK) <= 0xff) {
-                                        length = 1;
-                                    } else {
-                                        length = 2;
-                                    }
-                                    break; */
+                                /* This is handled above with the method cnvMBCSDoubleFromUnicodeWithOffsets() */
+                                /* case MBCS_OUTPUT_2:
+                                value = MBCS_VALUE_2_FROM_STAGE_2(bytes, stage2Entry, c);
+                                if ((value & UConverterConstants.UNSIGNED_INT_MASK) <= 0xff) {
+                                    length = 1;
+                                } else {
+                                    length = 2;
+                                }
+                                break; */
                                 case MBCS_OUTPUT_2_SISO:
                                     /* 1/2-byte stateful with Shift-In/Shift-Out */
                                     /*
@@ -3465,7 +3465,7 @@ class CharsetMBCS extends CharsetICU {
                             /* from the first if in the loop we know that targetCapacity>0 */
                             if (length <= target.remaining()) {
                                 switch (length) {
-                                        /* each branch falls through to the next one */
+                                    /* each branch falls through to the next one */
                                     case 4:
                                         target.put((byte) (value >>> 24));
                                         if (offsets != null) {
@@ -3502,7 +3502,7 @@ class CharsetMBCS extends CharsetICU {
 
                                 errorBufferArrayIndex = 0;
                                 switch (length) {
-                                        /* each branch falls through to the next one */
+                                    /* each branch falls through to the next one */
                                     case 3:
                                         errorBuffer[errorBufferArrayIndex++] =
                                                 (byte) (value >>> 16);
@@ -3519,7 +3519,7 @@ class CharsetMBCS extends CharsetICU {
                                 /* now output what fits into the regular target */
                                 value >>>= 8 * length; /* length was reduced by targetCapacity */
                                 switch (target.remaining()) {
-                                        /* each branch falls through to the next one */
+                                    /* each branch falls through to the next one */
                                     case 3:
                                         target.put((byte) (value >>> 16));
                                         if (offsets != null) {
@@ -3666,21 +3666,21 @@ class CharsetMBCS extends CharsetICU {
                                 length = 2;
                             }
                             break;
-                            // #if 0
-                            // /* #if 0 because this is not currently used in ICU - reduce code,
-                            // increase code coverage */
-                            // case MBCS_OUTPUT_DBCS_ONLY:
-                            // /* table with single-byte results, but only DBCS mappings used */
-                            // value=MBCS_VALUE_2_FROM_STAGE_2(sharedData->mbcs.fromUnicodeBytes,
-                            // stage2Entry, c);
-                            // if(value<=0xff) {
-                            // /* no mapping or SBCS result, not taken for DBCS-only */
-                            // value=stage2Entry=0; /* stage2Entry=0 to reset roundtrip flags */
-                            // length=0;
-                            // } else {
-                            // length=2;
-                            // }
-                            // break;
+                        // #if 0
+                        // /* #if 0 because this is not currently used in ICU - reduce code,
+                        // increase code coverage */
+                        // case MBCS_OUTPUT_DBCS_ONLY:
+                        // /* table with single-byte results, but only DBCS mappings used */
+                        // value=MBCS_VALUE_2_FROM_STAGE_2(sharedData->mbcs.fromUnicodeBytes,
+                        // stage2Entry, c);
+                        // if(value<=0xff) {
+                        // /* no mapping or SBCS result, not taken for DBCS-only */
+                        // value=stage2Entry=0; /* stage2Entry=0 to reset roundtrip flags */
+                        // length=0;
+                        // } else {
+                        // length=2;
+                        // }
+                        // break;
                         case MBCS_OUTPUT_3:
                             byte[] bytes = sharedData.mbcs.fromUnicodeBytes;
                             p = CharsetMBCS.MBCS_POINTER_3_FROM_STAGE_2(bytes, stage2Entry, c);
@@ -3700,56 +3700,56 @@ class CharsetMBCS extends CharsetICU {
                                 length = 3;
                             }
                             break;
-                            // case MBCS_OUTPUT_4:
-                            // value=MBCS_VALUE_4_FROM_STAGE_2(sharedData->mbcs.fromUnicodeBytes,
-                            // stage2Entry, c);
-                            // if(value<=0xff) {
-                            // length=1;
-                            // } else if(value<=0xffff) {
-                            // length=2;
-                            // } else if(value<=0xffffff) {
-                            // length=3;
-                            // } else {
-                            // length=4;
-                            // }
-                            // break;
-                            // case MBCS_OUTPUT_3_EUC:
-                            // value=MBCS_VALUE_2_FROM_STAGE_2(sharedData->mbcs.fromUnicodeBytes,
-                            // stage2Entry, c);
-                            // /* EUC 16-bit fixed-length representation */
-                            // if(value<=0xff) {
-                            // length=1;
-                            // } else if((value&0x8000)==0) {
-                            // value|=0x8e8000;
-                            // length=3;
-                            // } else if((value&0x80)==0) {
-                            // value|=0x8f0080;
-                            // length=3;
-                            // } else {
-                            // length=2;
-                            // }
-                            // break;
-                            // case MBCS_OUTPUT_4_EUC:
-                            // p=MBCS_POINTER_3_FROM_STAGE_2(sharedData->mbcs.fromUnicodeBytes,
-                            // stage2Entry, c);
-                            // value=((uint32_t)*p<<16)|((uint32_t)p[1]<<8)|p[2];
-                            // /* EUC 16-bit fixed-length representation applied to the first two
-                            // bytes */
-                            // if(value<=0xff) {
-                            // length=1;
-                            // } else if(value<=0xffff) {
-                            // length=2;
-                            // } else if((value&0x800000)==0) {
-                            // value|=0x8e800000;
-                            // length=4;
-                            // } else if((value&0x8000)==0) {
-                            // value|=0x8f008000;
-                            // length=4;
-                            // } else {
-                            // length=3;
-                            // }
-                            // break;
-                            // #endif
+                        // case MBCS_OUTPUT_4:
+                        // value=MBCS_VALUE_4_FROM_STAGE_2(sharedData->mbcs.fromUnicodeBytes,
+                        // stage2Entry, c);
+                        // if(value<=0xff) {
+                        // length=1;
+                        // } else if(value<=0xffff) {
+                        // length=2;
+                        // } else if(value<=0xffffff) {
+                        // length=3;
+                        // } else {
+                        // length=4;
+                        // }
+                        // break;
+                        // case MBCS_OUTPUT_3_EUC:
+                        // value=MBCS_VALUE_2_FROM_STAGE_2(sharedData->mbcs.fromUnicodeBytes,
+                        // stage2Entry, c);
+                        // /* EUC 16-bit fixed-length representation */
+                        // if(value<=0xff) {
+                        // length=1;
+                        // } else if((value&0x8000)==0) {
+                        // value|=0x8e8000;
+                        // length=3;
+                        // } else if((value&0x80)==0) {
+                        // value|=0x8f0080;
+                        // length=3;
+                        // } else {
+                        // length=2;
+                        // }
+                        // break;
+                        // case MBCS_OUTPUT_4_EUC:
+                        // p=MBCS_POINTER_3_FROM_STAGE_2(sharedData->mbcs.fromUnicodeBytes,
+                        // stage2Entry, c);
+                        // value=((uint32_t)*p<<16)|((uint32_t)p[1]<<8)|p[2];
+                        // /* EUC 16-bit fixed-length representation applied to the first two
+                        // bytes */
+                        // if(value<=0xff) {
+                        // length=1;
+                        // } else if(value<=0xffff) {
+                        // length=2;
+                        // } else if((value&0x800000)==0) {
+                        // value|=0x8e800000;
+                        // length=4;
+                        // } else if((value&0x8000)==0) {
+                        // value|=0x8f008000;
+                        // length=4;
+                        // } else {
+                        // length=3;
+                        // }
+                        // break;
+                        // #endif
                         default:
                             /* must not occur */
                             return -1;

@@ -1565,18 +1565,18 @@ public final class UCaseProps {
                 return NONE != getType(c);
             case UProperty.CASE_IGNORABLE:
                 return (getTypeOrIgnorable(c) >> 2) != 0;
-                /*
-                 * Note: The following Changes_When_Xyz are defined as testing whether
-                 * the NFD form of the input changes when Xyz-case-mapped.
-                 * However, this simpler implementation of these properties,
-                 * ignoring NFD, passes the tests.
-                 * The implementation needs to be changed if the tests start failing.
-                 * When that happens, optimizations should be used to work with the
-                 * per-single-code point ucase_toFullXyz() functions unless
-                 * the NFD form has more than one code point,
-                 * and the property starts set needs to be the union of the
-                 * start sets for normalization and case mappings.
-                 */
+            /*
+             * Note: The following Changes_When_Xyz are defined as testing whether
+             * the NFD form of the input changes when Xyz-case-mapped.
+             * However, this simpler implementation of these properties,
+             * ignoring NFD, passes the tests.
+             * The implementation needs to be changed if the tests start failing.
+             * When that happens, optimizations should be used to work with the
+             * per-single-code point ucase_toFullXyz() functions unless
+             * the NFD form has more than one code point,
+             * and the property starts set needs to be the union of the
+             * start sets for normalization and case mappings.
+             */
             case UProperty.CHANGES_WHEN_LOWERCASED:
                 dummyStringBuilder.setLength(0);
                 return toFullLower(c, null, dummyStringBuilder, LOC_ROOT) >= 0;
@@ -1586,7 +1586,7 @@ public final class UCaseProps {
             case UProperty.CHANGES_WHEN_TITLECASED:
                 dummyStringBuilder.setLength(0);
                 return toFullTitle(c, null, dummyStringBuilder, LOC_ROOT) >= 0;
-                /* case UProperty.CHANGES_WHEN_CASEFOLDED: -- in UCharacterProperty.java */
+            /* case UProperty.CHANGES_WHEN_CASEFOLDED: -- in UCharacterProperty.java */
             case UProperty.CHANGES_WHEN_CASEMAPPED:
                 dummyStringBuilder.setLength(0);
                 return toFullLower(c, null, dummyStringBuilder, LOC_ROOT) >= 0

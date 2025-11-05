@@ -706,7 +706,7 @@ public final class XLIFF2ICUConverter {
                 switch (str[i]) {
                     case '\u0022':
                         result.append('\\'); // append backslash
-                        // $FALL-THROUGH$
+                    // $FALL-THROUGH$
                     default:
                         result.append(str[i]);
                 }

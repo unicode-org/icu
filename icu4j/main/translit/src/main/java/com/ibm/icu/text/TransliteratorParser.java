@@ -508,9 +508,9 @@ class TransliteratorParser {
 
                 switch (c) {
 
-                        // ------------------------------------------------------
-                        // Elements allowed within and out of segments
-                        // ------------------------------------------------------
+                    // ------------------------------------------------------
+                    // Elements allowed within and out of segments
+                    // ------------------------------------------------------
                     case ANCHOR_START:
                         if (buf.length() == 0 && !anchorStart) {
                             anchorStart = true;
@@ -716,17 +716,17 @@ class TransliteratorParser {
                         }
                         break;
 
-                        // ------------------------------------------------------
-                        // Elements allowed ONLY WITHIN segments
-                        // ------------------------------------------------------
+                    // ------------------------------------------------------
+                    // Elements allowed ONLY WITHIN segments
+                    // ------------------------------------------------------
                     case SEGMENT_CLOSE:
                         // assert(isSegment);
                         // We're done parsing a segment.
                         break main;
 
-                        // ------------------------------------------------------
-                        // Elements allowed ONLY OUTSIDE segments
-                        // ------------------------------------------------------
+                    // ------------------------------------------------------
+                    // Elements allowed ONLY OUTSIDE segments
+                    // ------------------------------------------------------
                     case CONTEXT_ANTE:
                         if (ante >= 0) {
                             syntaxError("Multiple ante contexts", rule, start);
@@ -768,9 +768,9 @@ class TransliteratorParser {
                         }
                         break;
 
-                        // ------------------------------------------------------
-                        // Non-special characters
-                        // ------------------------------------------------------
+                    // ------------------------------------------------------
+                    // Non-special characters
+                    // ------------------------------------------------------
                     default:
                         // Disallow unquoted characters other than [0-9A-Za-z]
                         // in the printable ASCII range.  These characters are

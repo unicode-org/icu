@@ -832,7 +832,7 @@ public final class UnicodeCompressor implements SCSU {
         mainLoop:
         while (ucPos < charBufferLimit && bytePos < byteBufferLimit) {
             switch (fMode) {
-                    // main single byte mode compression loop
+                // main single byte mode compression loop
                 case SINGLEBYTEMODE:
                     singleByteModeLoop:
                     while (ucPos < charBufferLimit && bytePos < byteBufferLimit) {

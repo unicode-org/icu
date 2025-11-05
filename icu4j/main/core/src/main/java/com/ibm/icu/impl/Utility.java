@@ -1150,7 +1150,7 @@ public final class Utility {
                     if (!PatternProps.isWhiteSpace(c)) {
                         return -1;
                     }
-                    // FALL THROUGH to skipWhitespace
+                // FALL THROUGH to skipWhitespace
                 case '~':
                     pos = PatternProps.skipWhiteSpace(rule, pos);
                     break;
