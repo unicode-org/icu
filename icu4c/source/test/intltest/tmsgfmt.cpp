@@ -75,6 +75,7 @@ TestMessageFormat::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO(TestMessageFormatNumberSkeleton);
     TESTCASE_AUTO(TestMessageFormatDateSkeleton);
     TESTCASE_AUTO(TestMessageFormatTimeSkeleton);
+    TESTCASE_AUTO(TestNumberOverflow);
     TESTCASE_AUTO_END;
 }
 
@@ -2075,4 +2076,9 @@ void TestMessageFormat::TestMessageFormatTimeSkeleton() {
     doTheRealDateTimeSkeletonTesting(date, u"{0,time,'::'yMMMMd}", "en", u"::2021November23", status);
 }
 
+void TestMessageFormat::TestNumberOverflow() {
+    IcuTestErrorCode status(*this, "TestNumberOverflow");
+    MessageFormat msgf(u"{90000000000}", status);
+    status.expectErrorAndReset(U_PATTERN_SYNTAX_ERROR);
+}
 #endif /* #if !UCONFIG_NO_FORMATTING */

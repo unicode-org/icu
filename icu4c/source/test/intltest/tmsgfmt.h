@@ -124,6 +124,7 @@ public:
     void TestMessageFormatNumberSkeleton();
     void TestMessageFormatDateSkeleton();
     void TestMessageFormatTimeSkeleton();
+    void TestNumberOverflow();
 
 private:
     UnicodeString GetPatternAndSkipSyntax(const MessagePattern& pattern);

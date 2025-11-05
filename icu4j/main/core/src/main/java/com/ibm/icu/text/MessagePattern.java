@@ -1387,8 +1387,9 @@ public final class MessagePattern implements Cloneable, Freezable<MessagePattern
             if ('0' <= c && c <= '9') {
                 if (number >= Integer.MAX_VALUE / 10) {
                     badNumber = true; // overflow
+                } else {
+                    number = number * 10 + (c - '0');
                 }
-                number = number * 10 + (c - '0');
             } else {
                 return ARG_NAME_NOT_NUMBER;
             }

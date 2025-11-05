@@ -948,4 +948,14 @@ public class MessageRegressionTest extends CoreTestFmwk {
                 "ab3.3cd4,4ef***gh50\u00A0%ij",
                 format2.format(new Object[] {4.4, 3.3, "+++", "***", 50}));
     }
+
+    @Test
+    public void TestNumberOverflow() {
+        try {
+            MessageFormat format = new MessageFormat("{90000000000}");
+            errln("MessageFormat overflow should throw IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+            // expeted
+        }
+    }
 }
