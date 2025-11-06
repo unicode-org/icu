@@ -502,10 +502,11 @@ to be updated. See [charts/Performance & Size](../../../../charts/index.md).
 ### Old sensitive tickets
 
 Unset the "sensitive" flag on old tickets. For example, on tickets that were
-fixed two or more releases ago.
+fixed one or more releases ago.
 
-[Sample ticket query for ICU 65, for tickets fixed in 63 or
-earlier](https://unicode-org.atlassian.net/issues/?jql=project%20%3D%20ICU%20AND%20Level%3DSensitive%20AND%20fixVersion%20not%20in%20(65.1%2C%2064.2%2C%2064.1)%20AND%20status%3DDone).
+[Sample ticket query for ICU 78, for tickets fixed in 77 or
+earlier](https://unicode-org.atlassian.net/issues?jql=project%20%3D%20ICU%20AND%20Level%20%3D%20Sensitive%20AND%20fixversion%20NOT%20IN%20%2879.1%2C%2078.1%29%20AND%20status%20%3D%20Done)
+(excluding 79 & 78).
 Adjust the fixVersion selection as appropriate. Check the list in the ICU
 meeting.
 
