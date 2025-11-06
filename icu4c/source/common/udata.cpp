@@ -1270,7 +1270,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
 
 #ifdef UDATA_DEBUG
     fprintf(stderr, " tocEntryName = %s\n", tocEntryName.data());
-    fprintf(stderr, " tocEntryPath = %s\n", tocEntryName.data());
+    fprintf(stderr, " tocEntryPath = %s\n", tocEntryPath.data());
 #endif
 
 #if !defined(ICU_DATA_DIR_WINDOWS)
