@@ -86,6 +86,7 @@ void IntlTestRBNF::runIndexedTest(int32_t index, UBool exec, const char* &name, 
         TESTCASE(34, testOmissionReplacementWithPluralRules);
         TESTCASE(35, TestNullDereferenceWRITE23149);
         TESTCASE(36, TestNullDereferenceREAD23184);
+        TESTCASE(39, TestDividedByZero);
 #else
         TESTCASE(0, TestRBNFDisabled);
 #endif
@@ -2779,6 +2780,14 @@ IntlTestRBNF::TestNullDereferenceREAD23184() {
     if (U_SUCCESS(status)) {
        errln("Construct \"x00:>%%>>;%%;<0<<\" should get error");
     }
+}
+
+void
+IntlTestRBNF::TestDividedByZero() {
+    UParseError perror;
+    UErrorCode status = U_ZERO_ERROR;
+    RuleBasedNumberFormat rbnf(u"7060920374060940374/4:[]", Locale::getUS(), perror, status);
+    assertEquals("base is too large", U_NUMBER_ARG_OUTOFBOUNDS_ERROR, status);
 }
 
 /* U_HAVE_RBNF */
