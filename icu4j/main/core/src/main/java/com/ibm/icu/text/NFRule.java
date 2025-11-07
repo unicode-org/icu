@@ -131,10 +131,14 @@ final class NFRule {
             StringBuilder sbuf = new StringBuilder();
             int orElseOp = description.indexOf('|');
 
+            long mod = power(rule1.radix, rule1.exponent);
+            if (rule1.baseValue > 0 && mod == 0) {
+                throw new IllegalArgumentException("value out of range");
+            }
             // we'll actually only split the rule into two rules if its
             // base value is an even multiple of its divisor (or it's one
             // of the special rules)
-            if ((rule1.baseValue > 0 && rule1.baseValue % (power(rule1.radix, rule1.exponent)) == 0)
+            if ((rule1.baseValue > 0 && rule1.baseValue % mod == 0)
                     || rule1.baseValue == IMPROPER_FRACTION_RULE
                     || rule1.baseValue == DEFAULT_RULE) {
 
