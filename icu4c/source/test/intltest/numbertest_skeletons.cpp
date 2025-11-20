@@ -35,6 +35,7 @@ void NumberSkeletonTest::runIndexedTest(int32_t index, UBool exec, const char*& 
         TESTCASE_AUTO(perUnitInArabic);
         TESTCASE_AUTO(perUnitToSkeleton);
         TESTCASE_AUTO(measurementSystemOverride);
+        TESTCASE_AUTO(longSkeletonCrash);
     TESTCASE_AUTO_END;
 }
 
@@ -570,6 +571,14 @@ void NumberSkeletonTest::measurementSystemOverride() {
             assertEquals(u"Wrong result" + errorMessage, testCase.expectedResult, actualResult);
         }
     }
+}
+
+void NumberSkeletonTest::longSkeletonCrash() {
+    IcuTestErrorCode status(*this, "longSkeletonCrash");
+    UErrorCode err = U_ZERO_ERROR;
+    UnicodeString skeleton(u"K\n%\nusage/");
+    skeleton.padTrailing(65535, 0);
+    UnlocalizedNumberFormatter nf = NumberFormatter::forSkeleton(skeleton, err);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
