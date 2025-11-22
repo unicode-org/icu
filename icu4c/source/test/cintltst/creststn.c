@@ -1656,7 +1656,7 @@ static UBool testTag(const char* frag,
     UChar* base = NULL;
     UChar* expected_string = NULL;
     const UChar* string = NULL;
-    char buf[5];
+    char buf[12];
     char item_tag[10];
     int32_t i,j,row,col, len;
     int32_t actual_bundle;

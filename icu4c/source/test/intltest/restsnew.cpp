@@ -371,7 +371,7 @@ NewResourceBundleTest::TestIteration()
     }
     uint32_t i;
     int32_t count, row=0, col=0;
-    char buf[5];
+    char buf[12];
     UnicodeString expected;
     UnicodeString element("TE_IN");
     UnicodeString action;
@@ -584,7 +584,7 @@ NewResourceBundleTest::TestOtherAPI(){
 
         uint32_t i;
         int32_t count, row=0, col=0;
-        char buf[5];
+        char buf[12];
         UnicodeString expected;
         UnicodeString element("TE_IN");
         UnicodeString action;
@@ -811,7 +811,7 @@ NewResourceBundleTest::testTag(const char* frag,
            
             for (j=0; j<count; ++j)
             {
-                char buf[32];
+                char buf[12];
                 expected_string = base;
                 expected_string += itoa(j,buf);
                 CONFIRM_EQ(array.getNextString(status),expected_string);
@@ -846,7 +846,7 @@ NewResourceBundleTest::testTag(const char* frag,
             CONFIRM_UErrorCode(status,expected_status);
 
             if (U_SUCCESS(status)){
-                char buf[32];
+                char buf[12];
                 expected_string = base;
                 expected_string += itoa(index,buf);
             } else {
@@ -896,7 +896,7 @@ NewResourceBundleTest::testTag(const char* frag,
                     CONFIRM_GE(column_count,1);
 
                     for (col=0; j<column_count; ++j) {
-                           char buf[32];
+                           char buf[12];
                            expected_string = base;
                            expected_string += itoa(row,buf);
                            expected_string += itoa(col,buf);
@@ -936,7 +936,7 @@ NewResourceBundleTest::testTag(const char* frag,
            CONFIRM_UErrorCode(status,expected_status);
 
            if (U_SUCCESS(status)){
-               char buf[32];
+               char buf[12];
                expected_string = base;
                expected_string += itoa(row,buf);
                expected_string += itoa(col,buf);
@@ -1015,7 +1015,7 @@ NewResourceBundleTest::testTag(const char* frag,
         count = 0;
         for (index=-20; index<20; ++index)
         {
-            char buf[32];
+            char buf[12];
             status = U_ZERO_ERROR;
             string = kErrorUChars;
             char item_tag[8];

@@ -168,7 +168,7 @@ case $platform in
         fi
         RELEASE_CFLAGS="-O3"
         RELEASE_CXXFLAGS="-O3"
-	;;
+        ;;
     Solaris)
         THE_OS=SOLARIS
         THE_COMP="Sun's CC"
@@ -227,18 +227,18 @@ case $platform in
         THE_OS="Linux"
         CC=`which icc`; export CC
         CXX=`which icpc`; export CXX
-	ICC_VER=`${CC} -v 2>&1`
+        ICC_VER=`${CC} -v 2>&1`
         RELEASE_CFLAGS='-O'
         RELEASE_CXXFLAGS='-O'
         export CFLAGS="-fp-model precise"
         export CXXFLAGS="-fp-model precise"
-	if [ "${ICC_VER}" = "Version 9.0 " ]; then
-		RELEASE_CFLAGS=''
-		RELEASE_CXXFLAGS=''
-		export CFLAGS="${CFLAGS} -O0"
-		export CXXFLAGS="${CXXFLAGS} -O0"
-		echo "ICC 9.0 does not work with optimization- disabling optimizations"
-	fi
+        if [ "${ICC_VER}" = "Version 9.0 " ]; then
+            RELEASE_CFLAGS=''
+            RELEASE_CXXFLAGS=''
+            export CFLAGS="${CFLAGS} -O0"
+            export CXXFLAGS="${CXXFLAGS} -O0"
+            echo "ICC 9.0 does not work with optimization- disabling optimizations"
+        fi
         THE_COMP="Intel ${ICC_VER}"
         ;;
     Linux/VA)
@@ -254,8 +254,8 @@ case $platform in
         THE_COMP="the GNU C++"
         CC=gcc; export CC
         CXX=g++; export CXX
-        RELEASE_CFLAGS='-O3'
-        RELEASE_CXXFLAGS='-O3'
+        RELEASE_CFLAGS='-O3 -flto=auto'
+        RELEASE_CXXFLAGS='-O3 -flto=auto'
         DEBUG_CFLAGS='-g'
         DEBUG_CXXFLAGS='-g'
         ;;
@@ -264,8 +264,8 @@ case $platform in
         THE_COMP="the Clang C++"
         CC=clang; export CC
         CXX=clang++; export CXX
-        RELEASE_CFLAGS='-O3'
-        RELEASE_CXXFLAGS='-O3'
+        RELEASE_CFLAGS='-O3 -flto'
+        RELEASE_CXXFLAGS='-O3 -flto'
         DEBUG_CFLAGS='-g'
         DEBUG_CXXFLAGS='-g'
         ;;
@@ -320,8 +320,8 @@ case $platform in
     macOS|MacOSX)
         THE_OS="MacOS X (Darwin)"
         THE_COMP="the default"
-        RELEASE_CFLAGS='-O2'
-        RELEASE_CXXFLAGS='-O2'
+        RELEASE_CFLAGS='-O2 -flto'
+        RELEASE_CXXFLAGS='-O2 -flto'
         DEBUG_CFLAGS='-g -O0'
         DEBUG_CXXFLAGS='-g -O0'
         ;;
@@ -456,11 +456,11 @@ echo "Running ./configure $OPTS $@ for $THE_OS using $THE_COMP compiler"
 echo
 if $configure $OPTS $@
 then
-	echo
-	echo If the result of the above commands looks okay to you, go to the directory
-	echo source in the ICU distribution to build ICU. Please remember that ICU needs
-	echo GNU make to build properly...
+    echo
+    echo If the result of the above commands looks okay to you, go to the directory
+    echo source in the ICU distribution to build ICU. Please remember that ICU needs
+    echo GNU make to build properly...
 else
-	echo $0: ./configure failed
-	exit 1
+    echo $0: ./configure failed
+    exit 1
 fi

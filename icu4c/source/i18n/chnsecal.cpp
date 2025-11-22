@@ -658,7 +658,7 @@ int32_t newMoonNear(const TimeZone* timeZone, double days, UBool after, UErrorCo
     return static_cast<int32_t>(millisToDays(
         timeZone,
         CalendarAstronomer(ms)
-              .getMoonTime(CalendarAstronomer::NEW_MOON(), after),
+              .getMoonTime(CalendarAstronomer::NEW_MOON, after),
               status));
 }
 
