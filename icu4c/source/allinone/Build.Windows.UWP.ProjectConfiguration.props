@@ -33,6 +33,22 @@
     <IcuBinOutputDir>binARM64uwp</IcuBinOutputDir>
     <IcuLibOutputDir>libARM64uwp</IcuLibOutputDir>
   </PropertyGroup>
+  <!-- Desktop ARM/ARM64 support requires a different version of the Windows SDK -->
+  <!--
+      Note: This version must match the version below in the ARM64 section for AdditionalLibraryDirectories
+  -->
+  <PropertyGroup Condition="'$(Platform)'=='ARM'">
+    <WindowsTargetPlatformVersion>10.0.22621.0</WindowsTargetPlatformVersion>
+    <WindowsSDKDesktopARMSupport>true</WindowsSDKDesktopARMSupport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Platform)'=='ARM64'">
+    <WindowsTargetPlatformVersion>10.0.22621.0</WindowsTargetPlatformVersion>
+    <WindowsSDKDesktopARM64Support>true</WindowsSDKDesktopARM64Support>
+  </PropertyGroup>
+  <PropertyGroup>
+    <!-- We need to explicitly set the target version to Windows 7. -->
+    <Win32_WinNTVersion>0x0601</Win32_WinNTVersion>
+  </PropertyGroup>
   <ItemDefinitionGroup>
     <Midl>
       <PreprocessorDefinitions>
