@@ -1430,9 +1430,6 @@ static void U_CALLCONV dataDirectoryInitFn() {
     }
 
     const char *path = nullptr;
-#if defined(ICU_DATA_DIR_PREFIX_ENV_VAR)
-    char datadir_path_buffer[PATH_MAX];
-#endif
 
     /*
     When ICU_NO_USER_DATA_OVERRIDE is defined, users aren't allowed to
@@ -1462,6 +1459,9 @@ static void U_CALLCONV dataDirectoryInitFn() {
      * set their own path.
      */
 #if defined(ICU_DATA_DIR) || defined(U_ICU_DATA_DEFAULT_DIR)
+# if defined(ICU_DATA_DIR_PREFIX_ENV_VAR)
+    char datadir_path_buffer[PATH_MAX];
+# endif
     if(path==nullptr || *path==0) {
 # if defined(ICU_DATA_DIR_PREFIX_ENV_VAR)
         const char *prefix = getenv(ICU_DATA_DIR_PREFIX_ENV_VAR);
