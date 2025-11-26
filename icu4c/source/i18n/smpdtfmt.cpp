@@ -236,6 +236,7 @@ static const int32_t gFieldRangeBias[] = {
 // offset the years within the current millennium down to 1-999
 static const int32_t HEBREW_CAL_CUR_MILLENIUM_START_YEAR = 5000;
 static const int32_t HEBREW_CAL_CUR_MILLENIUM_END_YEAR = 6000;
+static constexpr const char16_t HEBREW_CALENDAR_VALUE[] = u"hebr";
 
 /**
  * Maximum range for detecting daylight offset of a time zone when parsed time zone
@@ -1483,8 +1484,7 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
                             Calendar& cal,
                             UErrorCode& status) const
 {
-    static const int32_t maxIntCount = 10;
-    static const UnicodeString hebr(u"hebr");
+    static constexpr int32_t maxIntCount = 10;
 
     if (U_FAILURE(status)) {
         return;
@@ -1565,7 +1565,7 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
 //AD 12345 12345     45   12345    12345     12345
     case UDAT_YEAR_FIELD:
     case UDAT_YEAR_WOY_FIELD:
-        if (fDateOverride.compare(hebr)==0 && value>HEBREW_CAL_CUR_MILLENIUM_START_YEAR && value<HEBREW_CAL_CUR_MILLENIUM_END_YEAR) {
+        if (fDateOverride == HEBREW_CALENDAR_VALUE && value>HEBREW_CAL_CUR_MILLENIUM_START_YEAR && value<HEBREW_CAL_CUR_MILLENIUM_END_YEAR) {
             value-=HEBREW_CAL_CUR_MILLENIUM_START_YEAR;
         }
         if(count == 2)
@@ -3055,7 +3055,6 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, ch
         return -start;
     }
     UCalendarDateFields field = fgPatternIndexToCalendarField[patternCharIndex]; // UCAL_FIELD_COUNT if irrelevant
-    UnicodeString hebr("hebr", 4, US_INV);
 
     if (numericLeapMonthFormatter != nullptr) {
         numericLeapMonthFormatter->setFormats(reinterpret_cast<const Format**>(&currentNumberFormat), 1);
@@ -3223,7 +3222,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, ch
         // we made adjustments to place the 2-digit year in the proper
         // century, for parsed strings from "00" to "99".  Any other string
         // is treated literally:  "2250", "-1", "1", "002".
-        if (fDateOverride.compare(hebr)==0 && value < 1000) {
+        if (fDateOverride == HEBREW_CALENDAR_VALUE && value < 1000) {
             value += HEBREW_CAL_CUR_MILLENIUM_START_YEAR;
         } else if (text.moveIndex32(start, 2) == pos.getIndex() && !isChineseCalendar
             && u_isdigit(text.char32At(start))
@@ -3263,7 +3262,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, ch
 
     case UDAT_YEAR_WOY_FIELD:
         // Comment is the same as for UDAT_Year_FIELDs - look above
-        if (fDateOverride.compare(hebr)==0 && value < 1000) {
+        if (fDateOverride == HEBREW_CALENDAR_VALUE && value < 1000) {
             value += HEBREW_CAL_CUR_MILLENIUM_START_YEAR;
         } else if (text.moveIndex32(start, 2) == pos.getIndex()
             && u_isdigit(text.char32At(start))

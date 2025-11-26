@@ -15,8 +15,6 @@
 #include "unicode/unistr.h"
 #include "unicode/ucnv.h"
 
-IcuEnvironment* env = new IcuEnvironment();
-
 template <typename T>
 using deleted_unique_ptr = std::unique_ptr<T, std::function<void(T*)>>;
 
@@ -47,7 +45,7 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
   }
 
   static const size_t dest_buffer_size = 1024 * 1204;
-  static const std::unique_ptr<char[]> dest_buffer(new char[dest_buffer_size]);
+  const std::unique_ptr<char[]> dest_buffer(new char[dest_buffer_size]);
 
   fuzzstr.extract(dest_buffer.get(), dest_buffer_size, converter.get(), status);
 

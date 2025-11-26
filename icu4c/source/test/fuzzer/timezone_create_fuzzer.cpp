@@ -8,8 +8,6 @@
 #include "unicode/timezone.h"
 #include "unicode/vtzone.h"
 
-IcuEnvironment* env = new IcuEnvironment();
-
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
 
   // Limit the test for at most 1000 Unicode characters.

@@ -9,8 +9,6 @@
 #include "unicode/localpointer.h"
 #include "unicode/locid.h"
 
-IcuEnvironment* env = new IcuEnvironment();
-
 static const std::array<icu::Collator::ECollationStrength, 5> kStrength = {
     icu::Collator::PRIMARY,
     icu::Collator::SECONDARY,

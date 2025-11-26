@@ -63,8 +63,6 @@ static const std::array<const char*, 45> kConverters = {
   }
 };
 
-IcuEnvironment* env = new IcuEnvironment();
-
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
   if (size < 1) {
     return 0;

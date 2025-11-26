@@ -542,6 +542,7 @@ TransliteratorRegistry::TransliteratorRegistry(UErrorCode& status) :
         variantList.adoptElement(emptyString, status);
     }
     specDAG.setValueDeleter(uhash_deleteHashtable);
+    fBogus.setToBogus();
 }
 
 TransliteratorRegistry::~TransliteratorRegistry() {
@@ -754,10 +755,11 @@ const UnicodeString& TransliteratorRegistry::getAvailableID(int32_t index) const
         return *static_cast<UnicodeString*>(e->key.pointer);
     }
 
-    // If the code reaches here, the hash table was likely modified during iteration.
-    // Return an statically initialized empty string due to reference return type.
-    static UnicodeString empty;
-    return empty;
+    // If the code reaches here, the hash table was likely modified during iteration,
+    // or the requested index is out of bounds.
+    // Return a bogus string due to reference return type,
+    // and inability to return a UErrorCode from this API.
+    return fBogus;
 }
 
 StringEnumeration* TransliteratorRegistry::getAvailableIDs() const {

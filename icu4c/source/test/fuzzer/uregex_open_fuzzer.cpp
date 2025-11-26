@@ -9,8 +9,6 @@
 #include "fuzzer_utils.h"
 #include "unicode/regex.h"
 
-IcuEnvironment* env = new IcuEnvironment();
-
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
   UParseError pe = { 0, 0, {0}, {0} };
   UErrorCode status = U_ZERO_ERROR;

@@ -10,8 +10,6 @@
 #include "unicode/sortkey.h"
 #include "unicode/tblcoll.h"
 
-IcuEnvironment* env = new IcuEnvironment();
-
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
   UErrorCode status = U_ZERO_ERROR;
   if (size > 2000) {

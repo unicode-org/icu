@@ -70,7 +70,7 @@ void DataDrivenNumberFormatTestSuite::run(const char *fileName, UBool runAllTest
         } else if (state == 1) {
             columnCount = splitBy(columnValues, UPRV_LENGTHOF(columnValues), 0x9);
             for (int32_t i = 0; i < columnCount; ++i) {
-                columnTypes[i] = NumberFormatTestTuple::getFieldByName(
+                columnTypes[i] = fTuple.getFieldByName(
                     columnValues[i]);
                 if (columnTypes[i] == kNumberFormatTestTupleFieldCount) {
                     showError("Unrecognized field name.");
@@ -134,7 +134,7 @@ void DataDrivenNumberFormatTestSuite::setTupleField(UErrorCode &status) {
         return;
     }
     if (!fTuple.setField(
-            NumberFormatTestTuple::getFieldByName(parts[1]),
+            fTuple.getFieldByName(parts[1]),
             parts[2].unescape(),
             status)) {
         showError("Invalid field value");

@@ -1987,7 +1987,6 @@ namespace {
 
 using RandomNumberGenerator = std::ranlux48;
 constexpr RandomNumberGenerator::result_type defaultSeed = std::ranlux48_base::default_seed;
-static RandomNumberGenerator randomNumberGenerator;
 
 RandomNumberGenerator deserialize(const std::string& state) {
     RandomNumberGenerator result;
@@ -3058,11 +3057,12 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name
     char             precedingBreaks[TESTSTRINGLEN*2+1];
     int              i;
     int64_t          loopCount = 0;
+    RandomNumberGenerator randomNumberGenerator;
 
     if (engineState.empty()) {
         randomNumberGenerator = {};
     } else {
-      randomNumberGenerator = deserialize(engineState);
+        randomNumberGenerator = deserialize(engineState);
     }
 
     numCharClasses = mk.charClasses().size();
@@ -4632,7 +4632,7 @@ void RBBITest::TestRandomAccess() {
     };
 
     auto randomStringIndex = [testData]() {
-        static icu_rand randomGenerator;  // produces random uint32_t values.
+        icu_rand randomGenerator;  // produces random uint32_t values.
         static int lastNum;
         static int clusterCount;
         static constexpr int CLUSTER_SIZE = 100;

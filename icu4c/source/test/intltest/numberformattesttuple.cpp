@@ -17,21 +17,7 @@
 #include "cstring.h"
 #include "cmemory.h"
 
-static NumberFormatTestTuple emptyObject;
-
-static NumberFormatTestTuple *gNullPtr = &emptyObject;
-
-#define FIELD_OFFSET(fieldName) ((int32_t) (((char *) &gNullPtr->fieldName) - ((char *) gNullPtr)))
-#define FIELD_FLAG_OFFSET(fieldName) ((int32_t) (((char *) &gNullPtr->fieldName##Flag) - ((char *) gNullPtr)))
-
-#define FIELD_INIT(fieldName, fieldType) {#fieldName, FIELD_OFFSET(fieldName), FIELD_FLAG_OFFSET(fieldName), fieldType}
-
-struct Numberformattesttuple_EnumConversion {
-    const char *str;
-    int32_t value;
-};
-
-static Numberformattesttuple_EnumConversion gRoundingEnum[] = {
+static NumberFormatTestTuple::Numberformattesttuple_EnumConversion gRoundingEnum[] = {
     {"ceiling", DecimalFormat::kRoundCeiling},
     {"floor", DecimalFormat::kRoundFloor},
     {"down", DecimalFormat::kRoundDown},
@@ -44,17 +30,17 @@ static Numberformattesttuple_EnumConversion gRoundingEnum[] = {
     {"halfCeiling", DecimalFormat::kRoundHalfCeiling},
     {"halfFloor", DecimalFormat::kRoundHalfFloor}};
 
-static Numberformattesttuple_EnumConversion gCurrencyUsageEnum[] = {
+static NumberFormatTestTuple::Numberformattesttuple_EnumConversion gCurrencyUsageEnum[] = {
     {"standard", UCURR_USAGE_STANDARD},
     {"cash", UCURR_USAGE_CASH}};
 
-static Numberformattesttuple_EnumConversion gPadPositionEnum[] = {
+static NumberFormatTestTuple::Numberformattesttuple_EnumConversion gPadPositionEnum[] = {
     {"beforePrefix", DecimalFormat::kPadBeforePrefix},
     {"afterPrefix", DecimalFormat::kPadAfterPrefix},
     {"beforeSuffix", DecimalFormat::kPadBeforeSuffix},
     {"afterSuffix", DecimalFormat::kPadAfterSuffix}};
 
-static Numberformattesttuple_EnumConversion gFormatStyleEnum[] = {
+static NumberFormatTestTuple::Numberformattesttuple_EnumConversion gFormatStyleEnum[] = {
     {"patternDecimal", UNUM_PATTERN_DECIMAL},
     {"decimal", UNUM_DECIMAL},
     {"currency", UNUM_CURRENCY},
@@ -72,7 +58,7 @@ static Numberformattesttuple_EnumConversion gFormatStyleEnum[] = {
     {"default", UNUM_DEFAULT},
     {"ignore", UNUM_IGNORE}};
 
-static int32_t toEnum(
+int32_t NumberFormatTestTuple::toEnum(
         const Numberformattesttuple_EnumConversion *table,
         int32_t tableLength,
         const UnicodeString &str,
@@ -94,7 +80,7 @@ static int32_t toEnum(
     return 0;
 }
 
-static void fromEnum(
+void NumberFormatTestTuple::fromEnum(
         const Numberformattesttuple_EnumConversion *table,
         int32_t tableLength,
         int32_t val,
@@ -106,17 +92,17 @@ static void fromEnum(
     }
 }
 
-static void identVal(
+void NumberFormatTestTuple::identVal(
         const UnicodeString &str, void *strPtr, UErrorCode & /*status*/) {
     *static_cast<UnicodeString *>(strPtr) = str;
 }
  
-static void identStr(
+void NumberFormatTestTuple::identStr(
         const void *strPtr, UnicodeString &appendTo) {
     appendTo.append(*static_cast<const UnicodeString *>(strPtr));
 }
 
-static void strToLocale(
+void NumberFormatTestTuple::strToLocale(
         const UnicodeString &str, void *localePtr, UErrorCode &status) {
     if (U_FAILURE(status)) {
         return;
@@ -126,14 +112,14 @@ static void strToLocale(
     *static_cast<Locale *>(localePtr) = Locale(localeStr.data());
 }
 
-static void localeToStr(
+void NumberFormatTestTuple::localeToStr(
         const void *localePtr, UnicodeString &appendTo) {
     appendTo.append(
             UnicodeString(
                     static_cast<const Locale *>(localePtr)->getName()));
 }
 
-static void strToInt(
+void NumberFormatTestTuple::strToInt(
         const UnicodeString &str, void *intPtr, UErrorCode &status) {
     if (U_FAILURE(status)) {
         return;
@@ -162,7 +148,7 @@ static void strToInt(
     *static_cast<int32_t *>(intPtr) = signedValue;
 }
 
-static void intToStr(
+void NumberFormatTestTuple::intToStr(
         const void *intPtr, UnicodeString &appendTo) {
     char16_t buffer[20];
     // int64_t such that all int32_t values can be negated
@@ -178,7 +164,7 @@ static void intToStr(
     appendTo.append(buffer, 0, len);
 }
 
-static void strToDouble(
+void NumberFormatTestTuple::strToDouble(
         const UnicodeString &str, void *doublePtr, UErrorCode &status) {
     if (U_FAILURE(status)) {
         return;
@@ -191,7 +177,7 @@ static void strToDouble(
     *static_cast<double *>(doublePtr) = atof(buffer.data());
 }
 
-static void doubleToStr(
+void NumberFormatTestTuple::doubleToStr(
         const void *doublePtr, UnicodeString &appendTo) {
     char buffer[256];
     double x = *static_cast<const double *>(doublePtr);
@@ -199,14 +185,14 @@ static void doubleToStr(
     appendTo.append(buffer);
 }
 
-static void strToERounding(
+void NumberFormatTestTuple::strToERounding(
         const UnicodeString &str, void *roundPtr, UErrorCode &status) {
     int32_t val = toEnum(
             gRoundingEnum, UPRV_LENGTHOF(gRoundingEnum), str, status);
     *static_cast<DecimalFormat::ERoundingMode*>(roundPtr) = static_cast<DecimalFormat::ERoundingMode>(val);
 }
 
-static void eRoundingToStr(
+void NumberFormatTestTuple::eRoundingToStr(
         const void *roundPtr, UnicodeString &appendTo) {
     DecimalFormat::ERoundingMode rounding = 
             *static_cast<const DecimalFormat::ERoundingMode *>(roundPtr);
@@ -217,14 +203,14 @@ static void eRoundingToStr(
             appendTo);
 }
 
-static void strToCurrencyUsage(
+void NumberFormatTestTuple::strToCurrencyUsage(
         const UnicodeString &str, void *currencyUsagePtr, UErrorCode &status) {
     int32_t val = toEnum(
             gCurrencyUsageEnum, UPRV_LENGTHOF(gCurrencyUsageEnum), str, status);
     *static_cast<UCurrencyUsage*>(currencyUsagePtr) = static_cast<UCurrencyUsage>(val);
 }
 
-static void currencyUsageToStr(
+void NumberFormatTestTuple::currencyUsageToStr(
         const void *currencyUsagePtr, UnicodeString &appendTo) {
     UCurrencyUsage currencyUsage = 
             *static_cast<const UCurrencyUsage *>(currencyUsagePtr);
@@ -235,7 +221,7 @@ static void currencyUsageToStr(
             appendTo);
 }
 
-static void strToEPadPosition(
+void NumberFormatTestTuple::strToEPadPosition(
         const UnicodeString &str, void *padPositionPtr, UErrorCode &status) {
     int32_t val = toEnum(
             gPadPositionEnum, UPRV_LENGTHOF(gPadPositionEnum), str, status);
@@ -243,7 +229,7 @@ static void strToEPadPosition(
             static_cast<DecimalFormat::EPadPosition>(val);
 }
 
-static void ePadPositionToStr(
+void NumberFormatTestTuple::ePadPositionToStr(
         const void *padPositionPtr, UnicodeString &appendTo) {
     DecimalFormat::EPadPosition padPosition = 
             *static_cast<const DecimalFormat::EPadPosition *>(padPositionPtr);
@@ -254,14 +240,14 @@ static void ePadPositionToStr(
             appendTo);
 }
 
-static void strToFormatStyle(
+void NumberFormatTestTuple::strToFormatStyle(
         const UnicodeString &str, void *formatStylePtr, UErrorCode &status) {
     int32_t val = toEnum(
             gFormatStyleEnum, UPRV_LENGTHOF(gFormatStyleEnum), str, status);
     *static_cast<UNumberFormatStyle*>(formatStylePtr) = static_cast<UNumberFormatStyle>(val);
 }
 
-static void formatStyleToStr(
+void NumberFormatTestTuple::formatStyleToStr(
         const void *formatStylePtr, UnicodeString &appendTo) {
     UNumberFormatStyle formatStyle = 
             *static_cast<const UNumberFormatStyle *>(formatStylePtr);
@@ -271,77 +257,6 @@ static void formatStyleToStr(
             formatStyle,
             appendTo);
 }
-
-struct NumberFormatTestTupleFieldOps {
-    void (*toValue)(const UnicodeString &str, void *valPtr, UErrorCode &);
-    void (*toString)(const void *valPtr, UnicodeString &appendTo);
-};
-
-const NumberFormatTestTupleFieldOps gStrOps = {identVal, identStr};
-const NumberFormatTestTupleFieldOps gIntOps = {strToInt, intToStr};
-const NumberFormatTestTupleFieldOps gLocaleOps = {strToLocale, localeToStr};
-const NumberFormatTestTupleFieldOps gDoubleOps = {strToDouble, doubleToStr};
-const NumberFormatTestTupleFieldOps gERoundingOps = {strToERounding, eRoundingToStr};
-const NumberFormatTestTupleFieldOps gCurrencyUsageOps = {strToCurrencyUsage, currencyUsageToStr};
-const NumberFormatTestTupleFieldOps gEPadPositionOps = {strToEPadPosition, ePadPositionToStr};
-const NumberFormatTestTupleFieldOps gFormatStyleOps = {strToFormatStyle, formatStyleToStr};
-
-struct NumberFormatTestTupleFieldData {
-    const char *name;
-    int32_t offset;
-    int32_t flagOffset;
-    const NumberFormatTestTupleFieldOps *ops;
-};
-
-// Order must correspond to ENumberFormatTestTupleField
-const NumberFormatTestTupleFieldData gFieldData[] = {
-    FIELD_INIT(locale, &gLocaleOps),
-    FIELD_INIT(currency, &gStrOps),
-    FIELD_INIT(pattern, &gStrOps),
-    FIELD_INIT(format, &gStrOps),
-    FIELD_INIT(output, &gStrOps),
-    FIELD_INIT(comment, &gStrOps),
-    FIELD_INIT(minIntegerDigits, &gIntOps),
-    FIELD_INIT(maxIntegerDigits, &gIntOps),
-    FIELD_INIT(minFractionDigits, &gIntOps),
-    FIELD_INIT(maxFractionDigits, &gIntOps),
-    FIELD_INIT(minGroupingDigits, &gIntOps),
-    FIELD_INIT(breaks, &gStrOps),
-    FIELD_INIT(useSigDigits, &gIntOps),
-    FIELD_INIT(minSigDigits, &gIntOps),
-    FIELD_INIT(maxSigDigits, &gIntOps),
-    FIELD_INIT(useGrouping, &gIntOps),
-    FIELD_INIT(multiplier, &gIntOps),
-    FIELD_INIT(roundingIncrement, &gDoubleOps),
-    FIELD_INIT(formatWidth, &gIntOps),
-    FIELD_INIT(padCharacter, &gStrOps),
-    FIELD_INIT(useScientific, &gIntOps),
-    FIELD_INIT(grouping, &gIntOps),
-    FIELD_INIT(grouping2, &gIntOps),
-    FIELD_INIT(roundingMode, &gERoundingOps),
-    FIELD_INIT(currencyUsage, &gCurrencyUsageOps),
-    FIELD_INIT(minimumExponentDigits, &gIntOps),
-    FIELD_INIT(exponentSignAlwaysShown, &gIntOps),
-    FIELD_INIT(decimalSeparatorAlwaysShown, &gIntOps),
-    FIELD_INIT(padPosition, &gEPadPositionOps),
-    FIELD_INIT(positivePrefix, &gStrOps),
-    FIELD_INIT(positiveSuffix, &gStrOps),
-    FIELD_INIT(negativePrefix, &gStrOps),
-    FIELD_INIT(negativeSuffix, &gStrOps),
-    FIELD_INIT(signAlwaysShown, &gIntOps),
-    FIELD_INIT(localizedPattern, &gStrOps),
-    FIELD_INIT(toPattern, &gStrOps),
-    FIELD_INIT(toLocalizedPattern, &gStrOps),
-    FIELD_INIT(style, &gFormatStyleOps),
-    FIELD_INIT(parse, &gStrOps),
-    FIELD_INIT(lenient, &gIntOps),
-    FIELD_INIT(plural, &gStrOps),
-    FIELD_INIT(parseIntegerOnly, &gIntOps),
-    FIELD_INIT(decimalPatternMatchRequired, &gIntOps),
-    FIELD_INIT(parseNoExponent, &gIntOps),
-    FIELD_INIT(parseCaseSensitive, &gIntOps),
-    FIELD_INIT(outputCurrency, &gStrOps)
-};
 
 UBool
 NumberFormatTestTuple::setField(
@@ -409,7 +324,7 @@ NumberFormatTestTuple::toString(
 
 ENumberFormatTestTupleField
 NumberFormatTestTuple::getFieldByName(
-        const UnicodeString &name) {
+        const UnicodeString &name) const {
     CharString buffer;
     UErrorCode status = U_ZERO_ERROR;
     buffer.appendInvariantChars(name, status);
@@ -431,24 +346,22 @@ NumberFormatTestTuple::getFieldByName(
 
 const void *
 NumberFormatTestTuple::getFieldAddress(int32_t fieldId) const {
-    return reinterpret_cast<const char *>(this) + gFieldData[fieldId].offset;
+    return gFieldData[fieldId].fieldPtr;
 }
 
 void *
 NumberFormatTestTuple::getMutableFieldAddress(int32_t fieldId) {
-    return reinterpret_cast<char *>(this) + gFieldData[fieldId].offset;
+    return gFieldData[fieldId].fieldPtr;
 }
 
 void 
 NumberFormatTestTuple::setFlag(int32_t fieldId, UBool value) {
-    void *flagAddr = reinterpret_cast<char *>(this) + gFieldData[fieldId].flagOffset;
-    *static_cast<UBool *>(flagAddr) = value;
+    gFieldData[fieldId].flag = value;
 }
 
 UBool
 NumberFormatTestTuple::isFlag(int32_t fieldId) const {
-    const void *flagAddr = reinterpret_cast<const char *>(this) + gFieldData[fieldId].flagOffset;
-    return *static_cast<const UBool *>(flagAddr);
+    return gFieldData[fieldId].flag;
 }
 
 #endif /* !UCONFIG_NO_FORMATTING */

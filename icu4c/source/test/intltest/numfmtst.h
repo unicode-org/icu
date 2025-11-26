@@ -36,12 +36,12 @@ struct NumberFormatTest_Attributes {
  * Header for the data-driven test, powered by numberformattestspecification.txt
  */
 class NumberFormatDataDrivenTest : public DataDrivenNumberFormatTestSuite {
-  public:
+public:
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par ) override;
     void TestNumberFormatTestTuple();
     void TestDataDrivenICU4C();
 
-  protected:
+protected:
     UBool isFormatPass(
             const NumberFormatTestTuple &tuple,
             UnicodeString &appendErrorMessage,
@@ -58,6 +58,8 @@ class NumberFormatDataDrivenTest : public DataDrivenNumberFormatTestSuite {
             const NumberFormatTestTuple &tuple,
             UnicodeString &appendErrorMessage,
             UErrorCode &status) override;
+
+    NumberFormatTestTuple fTuple;
 };
 
 /**

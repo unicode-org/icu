@@ -459,11 +459,11 @@ void NumberFormatDataDrivenTest::TestNumberFormatTestTuple() {
     UErrorCode status = U_ZERO_ERROR;
 
     tuple.setField(
-            NumberFormatTestTuple::getFieldByName("locale"), "en", status);
+            fTuple.getFieldByName("locale"), "en", status);
     tuple.setField(
-            NumberFormatTestTuple::getFieldByName("pattern"), "#,##0.00", status);
+            fTuple.getFieldByName("pattern"), "#,##0.00", status);
     tuple.setField(
-            NumberFormatTestTuple::getFieldByName("minIntegerDigits"), "-10", status);
+            fTuple.getFieldByName("minIntegerDigits"), "-10", status);
     if (!assertSuccess("", status)) {
         return;
     }
@@ -486,13 +486,13 @@ void NumberFormatDataDrivenTest::TestNumberFormatTestTuple() {
     assertEquals(
             "", "{}", tuple.toString(appendTo));
     tuple.setField(
-            NumberFormatTestTuple::getFieldByName("aBadFieldName"), "someValue", status);
+            fTuple.getFieldByName("aBadFieldName"), "someValue", status);
     if (status != U_ILLEGAL_ARGUMENT_ERROR) {
         errln("Expected U_ILLEGAL_ARGUMENT_ERROR");
     }
     status = U_ZERO_ERROR;
     tuple.setField(
-            NumberFormatTestTuple::getFieldByName("minIntegerDigits"), "someBadValue", status);
+            fTuple.getFieldByName("minIntegerDigits"), "someBadValue", status);
     if (status != U_ILLEGAL_ARGUMENT_ERROR) {
         errln("Expected U_ILLEGAL_ARGUMENT_ERROR");
     }

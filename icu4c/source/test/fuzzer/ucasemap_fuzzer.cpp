@@ -11,8 +11,6 @@
 #include "fuzzer_utils.h"
 #include "unicode/ucasemap.h"
 
-IcuEnvironment* env = new IcuEnvironment();
-
 template<typename T>
 using deleted_unique_ptr = std::unique_ptr<T,std::function<void(T*)>>;
 

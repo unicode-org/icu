@@ -333,11 +333,9 @@ DateTimePatternGenerator::createEmptyInstance(UErrorCode& status) {
 }
 
 DateTimePatternGenerator::DateTimePatternGenerator(UErrorCode &status) :
-    skipMatcher(nullptr),
-    fAvailableFormatKeyHash(nullptr),
-    fDefaultHourFormatChar(0),
-    internalErrorCode(U_ZERO_ERROR)
+    UObject()
 {
+    emptyString.getTerminatedBuffer();
     fp = new FormatParser();
     dtMatcher = new DateTimeMatcher();
     distanceInfo = new DistanceInfo();
@@ -348,30 +346,15 @@ DateTimePatternGenerator::DateTimePatternGenerator(UErrorCode &status) :
 }
 
 DateTimePatternGenerator::DateTimePatternGenerator(const Locale& locale, UErrorCode &status, UBool skipStdPatterns) :
-    skipMatcher(nullptr),
-    fAvailableFormatKeyHash(nullptr),
-    fDefaultHourFormatChar(0),
-    internalErrorCode(U_ZERO_ERROR)
+    DateTimePatternGenerator(status)
 {
-    fp = new FormatParser();
-    dtMatcher = new DateTimeMatcher();
-    distanceInfo = new DistanceInfo();
-    patternMap = new PatternMap();
-    if (fp == nullptr || dtMatcher == nullptr || distanceInfo == nullptr || patternMap == nullptr) {
-        internalErrorCode = status = U_MEMORY_ALLOCATION_ERROR;
-    }
-    else {
-        initData(locale, status, skipStdPatterns);
-    }
+    initData(locale, status, skipStdPatterns);
 }
 
 DateTimePatternGenerator::DateTimePatternGenerator(const DateTimePatternGenerator& other) :
-    UObject(),
-    skipMatcher(nullptr),
-    fAvailableFormatKeyHash(nullptr),
-    fDefaultHourFormatChar(0),
-    internalErrorCode(U_ZERO_ERROR)
+    UObject()
 {
+    emptyString.getTerminatedBuffer();
     fp = new FormatParser();
     dtMatcher = new DateTimeMatcher();
     distanceInfo = new DistanceInfo();
@@ -1406,7 +1389,6 @@ DateTimePatternGenerator::setDateTimeFormat(UDateFormatStyle style, const Unicod
 
 const UnicodeString&
 DateTimePatternGenerator::getDateTimeFormat(UDateFormatStyle style, UErrorCode& status) const {
-    static const UnicodeString emptyString = UNICODE_STRING_SIMPLE("");
     if (U_FAILURE(status)) {
         return emptyString;
     }

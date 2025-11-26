@@ -2370,11 +2370,8 @@ CalFields::setTo(Calendar& cal) const {
 }
 
 char*
-CalFields::toString(char* buf, int32_t len) const {
-    char local[32];
-    snprintf(local, sizeof(local), "%04d-%02d-%02d %02d:%02d:%02d.%03d", year, month, day, hour, min, sec, ms);
-    uprv_strncpy(buf, local, len - 1);
-    buf[len - 1] = 0;
+CalFields::toString(char* buf, int32_t capacity) const {
+    snprintf(buf, capacity, "%04d-%02d-%02d %02d:%02d:%02d.%03d", year, month, day, hour, min, sec, ms);
     return buf;
 }
 
@@ -2412,28 +2409,27 @@ typedef struct {
     const CalFields expFirstGMT;
 } RepeatedWallTimeTestData;
 
-static const RepeatedWallTimeTestData RPDATA[] =
-{
-    // Time zone            Input wall time                 WALLTIME_LAST in GMT            WALLTIME_FIRST in GMT
-    {"America/New_York",    CalFields(2011,11,6,0,59,59),   CalFields(2011,11,6,4,59,59),   CalFields(2011,11,6,4,59,59)},
-    {"America/New_York",    CalFields(2011,11,6,1,0,0),     CalFields(2011,11,6,6,0,0),     CalFields(2011,11,6,5,0,0)},
-    {"America/New_York",    CalFields(2011,11,6,1,0,1),     CalFields(2011,11,6,6,0,1),     CalFields(2011,11,6,5,0,1)},
-    {"America/New_York",    CalFields(2011,11,6,1,30,0),    CalFields(2011,11,6,6,30,0),    CalFields(2011,11,6,5,30,0)},
-    {"America/New_York",    CalFields(2011,11,6,1,59,59),   CalFields(2011,11,6,6,59,59),   CalFields(2011,11,6,5,59,59)},
-    {"America/New_York",    CalFields(2011,11,6,2,0,0),     CalFields(2011,11,6,7,0,0),     CalFields(2011,11,6,7,0,0)},
-    {"America/New_York",    CalFields(2011,11,6,2,0,1),     CalFields(2011,11,6,7,0,1),     CalFields(2011,11,6,7,0,1)},
-
-    {"Australia/Lord_Howe", CalFields(2011,4,3,1,29,59),    CalFields(2011,4,2,14,29,59),   CalFields(2011,4,2,14,29,59)},
-    {"Australia/Lord_Howe", CalFields(2011,4,3,1,30,0),     CalFields(2011,4,2,15,0,0),     CalFields(2011,4,2,14,30,0)},
-    {"Australia/Lord_Howe", CalFields(2011,4,3,1,45,0),     CalFields(2011,4,2,15,15,0),    CalFields(2011,4,2,14,45,0)},
-    {"Australia/Lord_Howe", CalFields(2011,4,3,1,59,59),    CalFields(2011,4,2,15,29,59),   CalFields(2011,4,2,14,59,59)},
-    {"Australia/Lord_Howe", CalFields(2011,4,3,2,0,0),      CalFields(2011,4,2,15,30,0),    CalFields(2011,4,2,15,30,0)},
-    {"Australia/Lord_Howe", CalFields(2011,4,3,2,0,1),      CalFields(2011,4,2,15,30,1),    CalFields(2011,4,2,15,30,1)},
-
-    {nullptr,                  CalFields(0,0,0,0,0,0),         CalFields(0,0,0,0,0,0),          CalFields(0,0,0,0,0,0)}
-};
-
 void CalendarTest::TestRepeatedWallTime() {
+    const RepeatedWallTimeTestData RPDATA[] =
+    {
+        // Time zone            Input wall time                 WALLTIME_LAST in GMT            WALLTIME_FIRST in GMT
+        {"America/New_York",    CalFields(2011,11,6,0,59,59),   CalFields(2011,11,6,4,59,59),   CalFields(2011,11,6,4,59,59)},
+        {"America/New_York",    CalFields(2011,11,6,1,0,0),     CalFields(2011,11,6,6,0,0),     CalFields(2011,11,6,5,0,0)},
+        {"America/New_York",    CalFields(2011,11,6,1,0,1),     CalFields(2011,11,6,6,0,1),     CalFields(2011,11,6,5,0,1)},
+        {"America/New_York",    CalFields(2011,11,6,1,30,0),    CalFields(2011,11,6,6,30,0),    CalFields(2011,11,6,5,30,0)},
+        {"America/New_York",    CalFields(2011,11,6,1,59,59),   CalFields(2011,11,6,6,59,59),   CalFields(2011,11,6,5,59,59)},
+        {"America/New_York",    CalFields(2011,11,6,2,0,0),     CalFields(2011,11,6,7,0,0),     CalFields(2011,11,6,7,0,0)},
+        {"America/New_York",    CalFields(2011,11,6,2,0,1),     CalFields(2011,11,6,7,0,1),     CalFields(2011,11,6,7,0,1)},
+
+        {"Australia/Lord_Howe", CalFields(2011,4,3,1,29,59),    CalFields(2011,4,2,14,29,59),   CalFields(2011,4,2,14,29,59)},
+        {"Australia/Lord_Howe", CalFields(2011,4,3,1,30,0),     CalFields(2011,4,2,15,0,0),     CalFields(2011,4,2,14,30,0)},
+        {"Australia/Lord_Howe", CalFields(2011,4,3,1,45,0),     CalFields(2011,4,2,15,15,0),    CalFields(2011,4,2,14,45,0)},
+        {"Australia/Lord_Howe", CalFields(2011,4,3,1,59,59),    CalFields(2011,4,2,15,29,59),   CalFields(2011,4,2,14,59,59)},
+        {"Australia/Lord_Howe", CalFields(2011,4,3,2,0,0),      CalFields(2011,4,2,15,30,0),    CalFields(2011,4,2,15,30,0)},
+        {"Australia/Lord_Howe", CalFields(2011,4,3,2,0,1),      CalFields(2011,4,2,15,30,1),    CalFields(2011,4,2,15,30,1)},
+
+        {nullptr,                  CalFields(0,0,0,0,0,0),         CalFields(0,0,0,0,0,0),          CalFields(0,0,0,0,0,0)}
+    };
     UErrorCode status = U_ZERO_ERROR;
     GregorianCalendar calGMT((const TimeZone&)*TimeZone::getGMT(), status);
     GregorianCalendar calDefault(status);
@@ -2512,27 +2508,27 @@ typedef struct {
     const CalFields expNextAvailGMT;
 } SkippedWallTimeTestData;
 
-static SkippedWallTimeTestData SKDATA[] =
-{
-     // Time zone           Input wall time                 valid?  WALLTIME_LAST in GMT            WALLTIME_FIRST in GMT           WALLTIME_NEXT_VALID in GMT
-    {"America/New_York",    CalFields(2011,3,13,1,59,59),   true,   CalFields(2011,3,13,6,59,59),   CalFields(2011,3,13,6,59,59),   CalFields(2011,3,13,6,59,59)},
-    {"America/New_York",    CalFields(2011,3,13,2,0,0),     false,  CalFields(2011,3,13,7,0,0),     CalFields(2011,3,13,6,0,0),     CalFields(2011,3,13,7,0,0)},
-    {"America/New_York",    CalFields(2011,3,13,2,1,0),     false,  CalFields(2011,3,13,7,1,0),     CalFields(2011,3,13,6,1,0),     CalFields(2011,3,13,7,0,0)},
-    {"America/New_York",    CalFields(2011,3,13,2,30,0),    false,  CalFields(2011,3,13,7,30,0),    CalFields(2011,3,13,6,30,0),    CalFields(2011,3,13,7,0,0)},
-    {"America/New_York",    CalFields(2011,3,13,2,59,59),   false,  CalFields(2011,3,13,7,59,59),   CalFields(2011,3,13,6,59,59),   CalFields(2011,3,13,7,0,0)},
-    {"America/New_York",    CalFields(2011,3,13,3,0,0),     true,   CalFields(2011,3,13,7,0,0),     CalFields(2011,3,13,7,0,0),     CalFields(2011,3,13,7,0,0)},
-
-    {"Pacific/Apia",        CalFields(2011,12,29,23,59,59), true,   CalFields(2011,12,30,9,59,59),  CalFields(2011,12,30,9,59,59),  CalFields(2011,12,30,9,59,59)},
-    {"Pacific/Apia",        CalFields(2011,12,30,0,0,0),    false,  CalFields(2011,12,30,10,0,0),   CalFields(2011,12,29,10,0,0),   CalFields(2011,12,30,10,0,0)},
-    {"Pacific/Apia",        CalFields(2011,12,30,12,0,0),   false,  CalFields(2011,12,30,22,0,0),   CalFields(2011,12,29,22,0,0),   CalFields(2011,12,30,10,0,0)},
-    {"Pacific/Apia",        CalFields(2011,12,30,23,59,59), false,  CalFields(2011,12,31,9,59,59),  CalFields(2011,12,30,9,59,59),  CalFields(2011,12,30,10,0,0)},
-    {"Pacific/Apia",        CalFields(2011,12,31,0,0,0),    true,   CalFields(2011,12,30,10,0,0),   CalFields(2011,12,30,10,0,0),   CalFields(2011,12,30,10,0,0)},
-
-    {nullptr,                  CalFields(0,0,0,0,0,0),         true,   CalFields(0,0,0,0,0,0),         CalFields(0,0,0,0,0,0),         CalFields(0,0,0,0,0,0)}
-};
-
 
 void CalendarTest::TestSkippedWallTime() {
+    const SkippedWallTimeTestData SKDATA[] =
+    {
+         // Time zone           Input wall time                 valid?  WALLTIME_LAST in GMT            WALLTIME_FIRST in GMT           WALLTIME_NEXT_VALID in GMT
+        {"America/New_York",    CalFields(2011,3,13,1,59,59),   true,   CalFields(2011,3,13,6,59,59),   CalFields(2011,3,13,6,59,59),   CalFields(2011,3,13,6,59,59)},
+        {"America/New_York",    CalFields(2011,3,13,2,0,0),     false,  CalFields(2011,3,13,7,0,0),     CalFields(2011,3,13,6,0,0),     CalFields(2011,3,13,7,0,0)},
+        {"America/New_York",    CalFields(2011,3,13,2,1,0),     false,  CalFields(2011,3,13,7,1,0),     CalFields(2011,3,13,6,1,0),     CalFields(2011,3,13,7,0,0)},
+        {"America/New_York",    CalFields(2011,3,13,2,30,0),    false,  CalFields(2011,3,13,7,30,0),    CalFields(2011,3,13,6,30,0),    CalFields(2011,3,13,7,0,0)},
+        {"America/New_York",    CalFields(2011,3,13,2,59,59),   false,  CalFields(2011,3,13,7,59,59),   CalFields(2011,3,13,6,59,59),   CalFields(2011,3,13,7,0,0)},
+        {"America/New_York",    CalFields(2011,3,13,3,0,0),     true,   CalFields(2011,3,13,7,0,0),     CalFields(2011,3,13,7,0,0),     CalFields(2011,3,13,7,0,0)},
+
+        {"Pacific/Apia",        CalFields(2011,12,29,23,59,59), true,   CalFields(2011,12,30,9,59,59),  CalFields(2011,12,30,9,59,59),  CalFields(2011,12,30,9,59,59)},
+        {"Pacific/Apia",        CalFields(2011,12,30,0,0,0),    false,  CalFields(2011,12,30,10,0,0),   CalFields(2011,12,29,10,0,0),   CalFields(2011,12,30,10,0,0)},
+        {"Pacific/Apia",        CalFields(2011,12,30,12,0,0),   false,  CalFields(2011,12,30,22,0,0),   CalFields(2011,12,29,22,0,0),   CalFields(2011,12,30,10,0,0)},
+        {"Pacific/Apia",        CalFields(2011,12,30,23,59,59), false,  CalFields(2011,12,31,9,59,59),  CalFields(2011,12,30,9,59,59),  CalFields(2011,12,30,10,0,0)},
+        {"Pacific/Apia",        CalFields(2011,12,31,0,0,0),    true,   CalFields(2011,12,30,10,0,0),   CalFields(2011,12,30,10,0,0),   CalFields(2011,12,30,10,0,0)},
+
+        {nullptr,                  CalFields(0,0,0,0,0,0),         true,   CalFields(0,0,0,0,0,0),         CalFields(0,0,0,0,0,0),         CalFields(0,0,0,0,0,0)}
+    };
+
     UErrorCode status = U_ZERO_ERROR;
     GregorianCalendar calGMT((const TimeZone&)*TimeZone::getGMT(), status);
     GregorianCalendar calDefault(status);
@@ -3673,148 +3669,148 @@ typedef struct {
     const CalFields expected;
 } TestAddAcrossZoneTransitionData;
 
-static const TestAddAcrossZoneTransitionData AAZTDATA[] =
-{
-    // Time zone                Base wall time                      day(s)  Skipped time options
-    //                          Expected wall time
-
-    // Add 1 day, from the date before DST transition
-    {"America/Los_Angeles",     CalFields(2014,3,8,1,59,59,999),    1,      UCAL_WALLTIME_FIRST,
-                                CalFields(2014,3,9,1,59,59,999)},
-
-    {"America/Los_Angeles",     CalFields(2014,3,8,1,59,59,999),    1,      UCAL_WALLTIME_LAST,
-                                CalFields(2014,3,9,1,59,59,999)},
-
-    {"America/Los_Angeles",     CalFields(2014,3,8,1,59,59,999),    1,      UCAL_WALLTIME_NEXT_VALID,
-                                CalFields(2014,3,9,1,59,59,999)},
-
-
-    {"America/Los_Angeles",     CalFields(2014,3,8,2,0,0,0),        1,      UCAL_WALLTIME_FIRST,
-                                CalFields(2014,3,9,1,0,0,0)},
-
-    {"America/Los_Angeles",     CalFields(2014,3,8,2,0,0,0),        1,      UCAL_WALLTIME_LAST,
-                                CalFields(2014,3,9,3,0,0,0)},
-
-    {"America/Los_Angeles",     CalFields(2014,3,8,2,0,0,0),        1,      UCAL_WALLTIME_NEXT_VALID,
-                                CalFields(2014,3,9,3,0,0,0)},
-
-
-    {"America/Los_Angeles",     CalFields(2014,3,8,2,30,0,0),       1,      UCAL_WALLTIME_FIRST,
-                                CalFields(2014,3,9,1,30,0,0)},
-
-    {"America/Los_Angeles",     CalFields(2014,3,8,2,30,0,0),       1,      UCAL_WALLTIME_LAST,
-                                CalFields(2014,3,9,3,30,0,0)},
-
-    {"America/Los_Angeles",     CalFields(2014,3,8,2,30,0,0),       1,      UCAL_WALLTIME_NEXT_VALID,
-                                CalFields(2014,3,9,3,0,0,0)},
-
-
-    {"America/Los_Angeles",     CalFields(2014,3,8,3,0,0,0),        1,      UCAL_WALLTIME_FIRST,
-                                CalFields(2014,3,9,3,0,0,0)},
-
-    {"America/Los_Angeles",     CalFields(2014,3,8,3,0,0,0),        1,      UCAL_WALLTIME_LAST,
-                                CalFields(2014,3,9,3,0,0,0)},
-
-    {"America/Los_Angeles",     CalFields(2014,3,8,3,0,0,0),        1,      UCAL_WALLTIME_NEXT_VALID,
-                                CalFields(2014,3,9,3,0,0,0)},
-
-    // Subtract 1 day, from one day after DST transition
-    {"America/Los_Angeles",     CalFields(2014,3,10,1,59,59,999),   -1,     UCAL_WALLTIME_FIRST,
-                                CalFields(2014,3,9,1,59,59,999)},
-
-    {"America/Los_Angeles",     CalFields(2014,3,10,1,59,59,999),   -1,     UCAL_WALLTIME_LAST,
-                                CalFields(2014,3,9,1,59,59,999)},
-
-    {"America/Los_Angeles",     CalFields(2014,3,10,1,59,59,999),   -1,     UCAL_WALLTIME_NEXT_VALID,
-                                CalFields(2014,3,9,1,59,59,999)},
-
-
-    {"America/Los_Angeles",     CalFields(2014,3,10,2,0,0,0),       -1,     UCAL_WALLTIME_FIRST,
-                                CalFields(2014,3,9,1,0,0,0)},
-
-    {"America/Los_Angeles",     CalFields(2014,3,10,2,0,0,0),       -1,     UCAL_WALLTIME_LAST,
-                                CalFields(2014,3,9,3,0,0,0)},
-
-    {"America/Los_Angeles",     CalFields(2014,3,10,2,0,0,0),       -1,     UCAL_WALLTIME_NEXT_VALID,
-                                CalFields(2014,3,9,3,0,0,0)},
-
-
-    {"America/Los_Angeles",     CalFields(2014,3,10,2,30,0,0),      -1,     UCAL_WALLTIME_FIRST,
-                                CalFields(2014,3,9,1,30,0,0)},
-
-    {"America/Los_Angeles",     CalFields(2014,3,10,2,30,0,0),      -1,     UCAL_WALLTIME_LAST,
-                                CalFields(2014,3,9,3,30,0,0)},
-
-    {"America/Los_Angeles",     CalFields(2014,3,10,2,30,0,0),      -1,     UCAL_WALLTIME_NEXT_VALID,
-                                CalFields(2014,3,9,3,0,0,0)},
-
-
-    {"America/Los_Angeles",     CalFields(2014,3,10,3,0,0,0),       -1,     UCAL_WALLTIME_FIRST,
-                                CalFields(2014,3,9,3,0,0,0)},
-
-    {"America/Los_Angeles",     CalFields(2014,3,10,3,0,0,0),       -1,     UCAL_WALLTIME_LAST,
-                                CalFields(2014,3,9,3,0,0,0)},
-
-    {"America/Los_Angeles",     CalFields(2014,3,10,3,0,0,0),       -1,     UCAL_WALLTIME_NEXT_VALID,
-                                CalFields(2014,3,9,3,0,0,0)},
-
-
-    // Test case for ticket#10544
-    {"America/Santiago",        CalFields(2013,4,27,0,0,0,0),       134,    UCAL_WALLTIME_FIRST,
-                                CalFields(2013,9,7,23,0,0,0)},
-
-    {"America/Santiago",        CalFields(2013,4,27,0,0,0,0),       134,    UCAL_WALLTIME_LAST,
-                                CalFields(2013,9,8,1,0,0,0)},
-
-    {"America/Santiago",        CalFields(2013,4,27,0,0,0,0),       134,    UCAL_WALLTIME_NEXT_VALID,
-                                CalFields(2013,9,8,1,0,0,0)},
-
-
-    {"America/Santiago",        CalFields(2013,4,27,0,30,0,0),      134,    UCAL_WALLTIME_FIRST,
-                                CalFields(2013,9,7,23,30,0,0)},
-
-    {"America/Santiago",        CalFields(2013,4,27,0,30,0,0),      134,    UCAL_WALLTIME_LAST,
-                                CalFields(2013,9,8,1,30,0,0)},
-
-    {"America/Santiago",        CalFields(2013,4,27,0,30,0,0),      134,    UCAL_WALLTIME_NEXT_VALID,
-                                CalFields(2013,9,8,1,0,0,0)},
-
-
-    // Extreme transition - Pacific/Apia completely skips 2011-12-30
-    {"Pacific/Apia",            CalFields(2011,12,29,0,0,0,0),      1,      UCAL_WALLTIME_FIRST,
-                                CalFields(2011,12,31,0,0,0,0)},
-
-    {"Pacific/Apia",            CalFields(2011,12,29,0,0,0,0),      1,      UCAL_WALLTIME_LAST,
-                                CalFields(2011,12,31,0,0,0,0)},
-
-    {"Pacific/Apia",            CalFields(2011,12,29,0,0,0,0),      1,      UCAL_WALLTIME_NEXT_VALID,
-                                CalFields(2011,12,31,0,0,0,0)},
-
-
-    {"Pacific/Apia",            CalFields(2011,12,31,12,0,0,0),     -1,     UCAL_WALLTIME_FIRST,
-                                CalFields(2011,12,29,12,0,0,0)},
-
-    {"Pacific/Apia",            CalFields(2011,12,31,12,0,0,0),     -1,     UCAL_WALLTIME_LAST,
-                                CalFields(2011,12,29,12,0,0,0)},
-
-    {"Pacific/Apia",            CalFields(2011,12,31,12,0,0,0),     -1,     UCAL_WALLTIME_NEXT_VALID,
-                                CalFields(2011,12,29,12,0,0,0)},
-
-
-    // 30 minutes DST - Australia/Lord_Howe
-    {"Australia/Lord_Howe",     CalFields(2013,10,5,2,15,0,0),      1,      UCAL_WALLTIME_FIRST,
-                                CalFields(2013,10,6,1,45,0,0)},
-
-    {"Australia/Lord_Howe",     CalFields(2013,10,5,2,15,0,0),      1,      UCAL_WALLTIME_LAST,
-                                CalFields(2013,10,6,2,45,0,0)},
-
-    {"Australia/Lord_Howe",     CalFields(2013,10,5,2,15,0,0),      1,      UCAL_WALLTIME_NEXT_VALID,
-                                CalFields(2013,10,6,2,30,0,0)},
-
-    {nullptr, CalFields(0,0,0,0,0,0,0), 0, UCAL_WALLTIME_LAST, CalFields(0,0,0,0,0,0,0)}
-};
-
 void CalendarTest::TestAddAcrossZoneTransition() {
+    const TestAddAcrossZoneTransitionData AAZTDATA[] =
+    {
+        // Time zone                Base wall time                      day(s)  Skipped time options
+        //                          Expected wall time
+
+        // Add 1 day, from the date before DST transition
+        {"America/Los_Angeles",     CalFields(2014,3,8,1,59,59,999),    1,      UCAL_WALLTIME_FIRST,
+                                    CalFields(2014,3,9,1,59,59,999)},
+
+        {"America/Los_Angeles",     CalFields(2014,3,8,1,59,59,999),    1,      UCAL_WALLTIME_LAST,
+                                    CalFields(2014,3,9,1,59,59,999)},
+
+        {"America/Los_Angeles",     CalFields(2014,3,8,1,59,59,999),    1,      UCAL_WALLTIME_NEXT_VALID,
+                                    CalFields(2014,3,9,1,59,59,999)},
+
+
+        {"America/Los_Angeles",     CalFields(2014,3,8,2,0,0,0),        1,      UCAL_WALLTIME_FIRST,
+                                    CalFields(2014,3,9,1,0,0,0)},
+
+        {"America/Los_Angeles",     CalFields(2014,3,8,2,0,0,0),        1,      UCAL_WALLTIME_LAST,
+                                    CalFields(2014,3,9,3,0,0,0)},
+
+        {"America/Los_Angeles",     CalFields(2014,3,8,2,0,0,0),        1,      UCAL_WALLTIME_NEXT_VALID,
+                                    CalFields(2014,3,9,3,0,0,0)},
+
+
+        {"America/Los_Angeles",     CalFields(2014,3,8,2,30,0,0),       1,      UCAL_WALLTIME_FIRST,
+                                    CalFields(2014,3,9,1,30,0,0)},
+
+        {"America/Los_Angeles",     CalFields(2014,3,8,2,30,0,0),       1,      UCAL_WALLTIME_LAST,
+                                    CalFields(2014,3,9,3,30,0,0)},
+
+        {"America/Los_Angeles",     CalFields(2014,3,8,2,30,0,0),       1,      UCAL_WALLTIME_NEXT_VALID,
+                                    CalFields(2014,3,9,3,0,0,0)},
+
+
+        {"America/Los_Angeles",     CalFields(2014,3,8,3,0,0,0),        1,      UCAL_WALLTIME_FIRST,
+                                    CalFields(2014,3,9,3,0,0,0)},
+
+        {"America/Los_Angeles",     CalFields(2014,3,8,3,0,0,0),        1,      UCAL_WALLTIME_LAST,
+                                    CalFields(2014,3,9,3,0,0,0)},
+
+        {"America/Los_Angeles",     CalFields(2014,3,8,3,0,0,0),        1,      UCAL_WALLTIME_NEXT_VALID,
+                                    CalFields(2014,3,9,3,0,0,0)},
+
+        // Subtract 1 day, from one day after DST transition
+        {"America/Los_Angeles",     CalFields(2014,3,10,1,59,59,999),   -1,     UCAL_WALLTIME_FIRST,
+                                    CalFields(2014,3,9,1,59,59,999)},
+
+        {"America/Los_Angeles",     CalFields(2014,3,10,1,59,59,999),   -1,     UCAL_WALLTIME_LAST,
+                                    CalFields(2014,3,9,1,59,59,999)},
+
+        {"America/Los_Angeles",     CalFields(2014,3,10,1,59,59,999),   -1,     UCAL_WALLTIME_NEXT_VALID,
+                                    CalFields(2014,3,9,1,59,59,999)},
+
+
+        {"America/Los_Angeles",     CalFields(2014,3,10,2,0,0,0),       -1,     UCAL_WALLTIME_FIRST,
+                                    CalFields(2014,3,9,1,0,0,0)},
+
+        {"America/Los_Angeles",     CalFields(2014,3,10,2,0,0,0),       -1,     UCAL_WALLTIME_LAST,
+                                    CalFields(2014,3,9,3,0,0,0)},
+
+        {"America/Los_Angeles",     CalFields(2014,3,10,2,0,0,0),       -1,     UCAL_WALLTIME_NEXT_VALID,
+                                    CalFields(2014,3,9,3,0,0,0)},
+
+
+        {"America/Los_Angeles",     CalFields(2014,3,10,2,30,0,0),      -1,     UCAL_WALLTIME_FIRST,
+                                    CalFields(2014,3,9,1,30,0,0)},
+
+        {"America/Los_Angeles",     CalFields(2014,3,10,2,30,0,0),      -1,     UCAL_WALLTIME_LAST,
+                                    CalFields(2014,3,9,3,30,0,0)},
+
+        {"America/Los_Angeles",     CalFields(2014,3,10,2,30,0,0),      -1,     UCAL_WALLTIME_NEXT_VALID,
+                                    CalFields(2014,3,9,3,0,0,0)},
+
+
+        {"America/Los_Angeles",     CalFields(2014,3,10,3,0,0,0),       -1,     UCAL_WALLTIME_FIRST,
+                                    CalFields(2014,3,9,3,0,0,0)},
+
+        {"America/Los_Angeles",     CalFields(2014,3,10,3,0,0,0),       -1,     UCAL_WALLTIME_LAST,
+                                    CalFields(2014,3,9,3,0,0,0)},
+
+        {"America/Los_Angeles",     CalFields(2014,3,10,3,0,0,0),       -1,     UCAL_WALLTIME_NEXT_VALID,
+                                    CalFields(2014,3,9,3,0,0,0)},
+
+
+        // Test case for ticket#10544
+        {"America/Santiago",        CalFields(2013,4,27,0,0,0,0),       134,    UCAL_WALLTIME_FIRST,
+                                    CalFields(2013,9,7,23,0,0,0)},
+
+        {"America/Santiago",        CalFields(2013,4,27,0,0,0,0),       134,    UCAL_WALLTIME_LAST,
+                                    CalFields(2013,9,8,1,0,0,0)},
+
+        {"America/Santiago",        CalFields(2013,4,27,0,0,0,0),       134,    UCAL_WALLTIME_NEXT_VALID,
+                                    CalFields(2013,9,8,1,0,0,0)},
+
+
+        {"America/Santiago",        CalFields(2013,4,27,0,30,0,0),      134,    UCAL_WALLTIME_FIRST,
+                                    CalFields(2013,9,7,23,30,0,0)},
+
+        {"America/Santiago",        CalFields(2013,4,27,0,30,0,0),      134,    UCAL_WALLTIME_LAST,
+                                    CalFields(2013,9,8,1,30,0,0)},
+
+        {"America/Santiago",        CalFields(2013,4,27,0,30,0,0),      134,    UCAL_WALLTIME_NEXT_VALID,
+                                    CalFields(2013,9,8,1,0,0,0)},
+
+
+        // Extreme transition - Pacific/Apia completely skips 2011-12-30
+        {"Pacific/Apia",            CalFields(2011,12,29,0,0,0,0),      1,      UCAL_WALLTIME_FIRST,
+                                    CalFields(2011,12,31,0,0,0,0)},
+
+        {"Pacific/Apia",            CalFields(2011,12,29,0,0,0,0),      1,      UCAL_WALLTIME_LAST,
+                                    CalFields(2011,12,31,0,0,0,0)},
+
+        {"Pacific/Apia",            CalFields(2011,12,29,0,0,0,0),      1,      UCAL_WALLTIME_NEXT_VALID,
+                                    CalFields(2011,12,31,0,0,0,0)},
+
+
+        {"Pacific/Apia",            CalFields(2011,12,31,12,0,0,0),     -1,     UCAL_WALLTIME_FIRST,
+                                    CalFields(2011,12,29,12,0,0,0)},
+
+        {"Pacific/Apia",            CalFields(2011,12,31,12,0,0,0),     -1,     UCAL_WALLTIME_LAST,
+                                    CalFields(2011,12,29,12,0,0,0)},
+
+        {"Pacific/Apia",            CalFields(2011,12,31,12,0,0,0),     -1,     UCAL_WALLTIME_NEXT_VALID,
+                                    CalFields(2011,12,29,12,0,0,0)},
+
+
+        // 30 minutes DST - Australia/Lord_Howe
+        {"Australia/Lord_Howe",     CalFields(2013,10,5,2,15,0,0),      1,      UCAL_WALLTIME_FIRST,
+                                    CalFields(2013,10,6,1,45,0,0)},
+
+        {"Australia/Lord_Howe",     CalFields(2013,10,5,2,15,0,0),      1,      UCAL_WALLTIME_LAST,
+                                    CalFields(2013,10,6,2,45,0,0)},
+
+        {"Australia/Lord_Howe",     CalFields(2013,10,5,2,15,0,0),      1,      UCAL_WALLTIME_NEXT_VALID,
+                                    CalFields(2013,10,6,2,30,0,0)},
+
+        {nullptr, CalFields(0,0,0,0,0,0,0), 0, UCAL_WALLTIME_LAST, CalFields(0,0,0,0,0,0,0)}
+    };
+
     UErrorCode status = U_ZERO_ERROR;
     GregorianCalendar cal(status);
     TEST_CHECK_STATUS;

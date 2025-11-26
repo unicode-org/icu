@@ -5844,9 +5844,9 @@ void DateFormatTest::TestNumericFieldStrictParse() {
 }
 
 void DateFormatTest::TestHourCycle() {
-    static const UDate date = -845601267742; // March 16, 1943 at 3:45 PM
+    const UDate date = -845601267742; // March 16, 1943 at 3:45 PM
     
-    static const struct {
+    const struct {
         const char* languageTag;
         UnicodeString expectedResult;
     } TEST_CASES[] = {

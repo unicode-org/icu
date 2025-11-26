@@ -10,12 +10,6 @@
 #include "unicode/numsys.h"
 #include "unicode/strenum.h"
 
-struct IcuEnvironment {
-  IcuEnvironment() {
-    // nothing to initialize yet;
-  }
-};
-
 const icu::Locale& GetRandomLocale(uint16_t rnd) {
   int32_t num_locales = 0;
   const icu::Locale* locales = icu::Locale::getAvailableLocales(num_locales);

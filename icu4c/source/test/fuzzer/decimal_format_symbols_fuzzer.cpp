@@ -13,8 +13,6 @@
 #include "unicode/unum.h"
 #include "uassert.h"
 
-IcuEnvironment* env = new IcuEnvironment();
-
 void testMethods(
     const icu::DecimalFormatSymbols& dfs,
     icu::DecimalFormatSymbols::ENumberFormatSymbol symbol,

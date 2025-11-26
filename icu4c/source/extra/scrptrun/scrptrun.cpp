@@ -23,7 +23,7 @@ U_NAMESPACE_BEGIN
 
 const char ScriptRun::fgClassID=0;
 
-UChar32 ScriptRun::pairedChars[] = {
+const UChar32 ScriptRun::pairedChars[] = {
     0x0028, 0x0029, // ascii paired punctuation
     0x003c, 0x003e,
     0x005b, 0x005d,
@@ -43,11 +43,7 @@ UChar32 ScriptRun::pairedChars[] = {
     0x301a, 0x301b
 };
 
-const int32_t ScriptRun::pairedCharCount = UPRV_LENGTHOF(pairedChars);
-const int32_t ScriptRun::pairedCharPower = 1 << highBit(pairedCharCount);
-const int32_t ScriptRun::pairedCharExtra = pairedCharCount - pairedCharPower;
-
-int8_t ScriptRun::highBit(int32_t value)
+static constexpr int8_t highBit(int32_t value)
 {
     if (value <= 0) {
         return -32;
@@ -82,6 +78,10 @@ int8_t ScriptRun::highBit(int32_t value)
 
     return bit;
 }
+
+const int32_t ScriptRun::pairedCharCount = UPRV_LENGTHOF(pairedChars);
+const int32_t ScriptRun::pairedCharPower = 1 << highBit(pairedCharCount);
+const int32_t ScriptRun::pairedCharExtra = pairedCharCount - pairedCharPower;
 
 int32_t ScriptRun::getPairIndex(UChar32 ch)
 {

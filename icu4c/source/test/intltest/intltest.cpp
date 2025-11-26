@@ -59,7 +59,11 @@
 static char* _testDataPath=nullptr;
 
 // Static list of errors found
-static UnicodeString errorList;
+static UnicodeString& getErrorList() {
+    static UnicodeString* errorList = new UnicodeString();
+    return *errorList;
+}
+
 static void *knownList = nullptr; // known issues
 static UBool noKnownIssues = false; // if true, don't emit known issues
 
@@ -832,10 +836,10 @@ UBool IntlTest::runTestLoop( char* testname, char* par, char *baseName )
                 if(!no_time) str_timeDelta(msg+strlen(msg),timeStop-timeStart);
 
                 for(int i=0;i<LL_indentlevel;i++) {
-                    errorList += " ";
+                    getErrorList() += " ";
                 }
-                errorList += name;
-                errorList += "\n";
+                getErrorList() += name;
+                getErrorList() += "\n";
                 lastTestFailed = true;
             }
             LL_indentlevel -= 3;
@@ -1120,7 +1124,7 @@ void IntlTest::errcheckln(UErrorCode status, const char *fmt, ...)
 
 void IntlTest::printErrors()
 {
-     IntlTest::LL_message(errorList, true);
+     IntlTest::LL_message(getErrorList(), true);
 }
 
 UBool IntlTest::printKnownIssues()
@@ -1578,7 +1582,7 @@ main(int argc, char* argv[])
           FILE *summf = fopen(summary_file, "w");
           if( summf != nullptr) {
             char buf[10000];
-            int32_t length = errorList.extract(0, errorList.length(), buf, sizeof(buf));
+            int32_t length = getErrorList().extract(0, getErrorList().length(), buf, sizeof(buf));
             fwrite(buf, sizeof(*buf), length, summf);
             fclose(summf);
           }

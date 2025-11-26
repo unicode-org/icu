@@ -1861,8 +1861,8 @@ void
 LocaleTest::TestAddLikelySubtags() {
     IcuTestErrorCode status(*this, "TestAddLikelySubtags()");
 
-    static const Locale min("sv");
-    static const Locale max("sv_Latn_SE");
+    const Locale min("sv");
+    const Locale max("sv_Latn_SE");
 
     Locale result(min);
     result.addLikelySubtags(status);
@@ -1875,8 +1875,8 @@ void
 LocaleTest::TestMinimizeSubtags() {
     IcuTestErrorCode status(*this, "TestMinimizeSubtags()");
 
-    static const Locale max("zh_Hant_TW");
-    static const Locale min("zh_TW");
+    const Locale max("zh_Hant_TW");
+    const Locale min("zh_TW");
 
     Locale result(max);
     result.minimizeSubtags(status);
@@ -4278,7 +4278,7 @@ void
 LocaleTest::TestCreateUnicodeKeywords() {
     IcuTestErrorCode status(*this, "TestCreateUnicodeKeywords()");
 
-    static const Locale l("de@calendar=buddhist;collation=phonebook");
+    const Locale l("de@calendar=buddhist;collation=phonebook");
 
     LocalPointer<StringEnumeration> keys(l.createUnicodeKeywords(status));
     status.errIfFailureAndReset("\"%s\"", l.getName());
@@ -4367,7 +4367,7 @@ void
 LocaleTest::TestCreateKeywordSet() {
     IcuTestErrorCode status(*this, "TestCreateKeywordSet()");
 
-    static const Locale l("de@calendar=buddhist;collation=phonebook");
+    const Locale l("de@calendar=buddhist;collation=phonebook");
 
     std::set<std::string> result;
     l.getKeywords<std::string>(
@@ -4386,7 +4386,7 @@ void
 LocaleTest::TestCreateKeywordSetEmpty() {
     IcuTestErrorCode status(*this, "TestCreateKeywordSetEmpty()");
 
-    static const Locale l("de");
+    const Locale l("de");
 
     std::set<std::string> result;
     l.getKeywords<std::string>(
@@ -4402,7 +4402,7 @@ LocaleTest::TestCreateKeywordSetWithPrivateUse() {
     IcuTestErrorCode status(*this, "TestCreateKeywordSetWithPrivateUse()");
 
     static const char tag[] = "en-US-u-ca-gregory-x-foo";
-    static const Locale l = Locale::forLanguageTag(tag, status);
+    const Locale l = Locale::forLanguageTag(tag, status);
     std::set<std::string> result;
     l.getKeywords<std::string>(
                  std::insert_iterator<decltype(result)>(result, result.begin()),
@@ -4422,7 +4422,7 @@ void
 LocaleTest::TestCreateUnicodeKeywordSet() {
     IcuTestErrorCode status(*this, "TestCreateUnicodeKeywordSet()");
 
-    static const Locale l("de@calendar=buddhist;collation=phonebook");
+    const Locale l("de@calendar=buddhist;collation=phonebook");
 
     std::set<std::string> result;
     l.getUnicodeKeywords<std::string>(
@@ -4446,7 +4446,7 @@ void
 LocaleTest::TestCreateUnicodeKeywordSetEmpty() {
     IcuTestErrorCode status(*this, "TestCreateUnicodeKeywordSetEmpty()");
 
-    static const Locale l("de");
+    const Locale l("de");
 
     std::set<std::string> result;
     l.getUnicodeKeywords<std::string>(
@@ -4466,7 +4466,7 @@ LocaleTest::TestCreateUnicodeKeywordSetWithPrivateUse() {
     IcuTestErrorCode status(*this, "TestCreateUnicodeKeywordSetWithPrivateUse()");
 
     static const char tag[] = "en-US-u-ca-gregory-x-foo";
-    static const Locale l = Locale::forLanguageTag(tag, status);
+    const Locale l = Locale::forLanguageTag(tag, status);
 
     std::set<std::string> result;
     l.getUnicodeKeywords<std::string>(
@@ -4510,7 +4510,7 @@ LocaleTest::TestGetUnicodeKeywordValueStdString() {
     static const char keyword[] = "co";
     static const char expected[] = "phonebk";
 
-    static const Locale l("de@calendar=buddhist;collation=phonebook");
+    const Locale l("de@calendar=buddhist;collation=phonebook");
 
     std::string result = l.getUnicodeKeywordValue<std::string>(keyword, status);
     status.errIfFailureAndReset("\"%s\"", keyword);
@@ -5802,25 +5802,25 @@ void LocaleTest::TestBug20410() {
     IcuTestErrorCode status(*this, "TestBug20410()");
 
     static const char tag1[] = "art-lojban-x-0";
-    static const Locale expected1("jbo@x=0");
+    const Locale expected1("jbo@x=0");
     Locale result1 = Locale::forLanguageTag(tag1, status);
     status.errIfFailureAndReset("\"%s\"", tag1);
     assertEquals(tag1, expected1.getName(), result1.getName());
 
     static const char tag2[] = "zh-xiang-u-nu-thai-x-0";
-    static const Locale expected2("hsn@numbers=thai;x=0");
+    const Locale expected2("hsn@numbers=thai;x=0");
     Locale result2 = Locale::forLanguageTag(tag2, status);
     status.errIfFailureAndReset("\"%s\"", tag2);
     assertEquals(tag2, expected2.getName(), result2.getName());
 
     static const char locid3[] = "art__lojban@x=0";
     Locale result3 = Locale::createCanonical(locid3);
-    static const Locale expected3("jbo@x=0");
+    const Locale expected3("jbo@x=0");
     assertEquals(locid3, expected3.getName(), result3.getName());
 
     static const char locid4[] = "art-lojban-x-0";
     Locale result4 = Locale::createCanonical(locid4);
-    static const Locale expected4("jbo@x=0");
+    const Locale expected4("jbo@x=0");
     assertEquals(locid4, expected4.getName(), result4.getName());
 }
 
@@ -6124,13 +6124,13 @@ void LocaleTest::TestForLanguageTag() {
     static const char tag_ext[] = "en-GB-1-abc-efg-a-xyz";
     static const char tag_var[] = "sl-rozaj-biske-1994";
 
-    static const Locale loc_en("en_US");
-    static const Locale loc_oed("en_GB_OXENDICT");
-    static const Locale loc_af("af@calendar=coptic;t=ar-i0-handwrit;x=foo");
-    static const Locale loc_null("");
-    static const Locale loc_gb("en_GB");
-    static const Locale loc_ext("en_GB@1=abc-efg;a=xyz");
-    static const Locale loc_var("sl__1994_BISKE_ROZAJ");
+    const Locale loc_en("en_US");
+    const Locale loc_oed("en_GB_OXENDICT");
+    const Locale loc_af("af@calendar=coptic;t=ar-i0-handwrit;x=foo");
+    const Locale loc_null("");
+    const Locale loc_gb("en_GB");
+    const Locale loc_ext("en_GB@1=abc-efg;a=xyz");
+    const Locale loc_var("sl__1994_BISKE_ROZAJ");
 
     Locale result_en = Locale::forLanguageTag(tag_en, status);
     status.errIfFailureAndReset("\"%s\"", tag_en);
@@ -6221,13 +6221,13 @@ void LocaleTest::TestForLanguageTagLegacyTagBug21676() {
 void LocaleTest::TestToLanguageTag() {
     IcuTestErrorCode status(*this, "TestToLanguageTag()");
 
-    static const Locale loc_c("en_US_POSIX");
-    static const Locale loc_en("en_US");
-    static const Locale loc_af("af@calendar=coptic;t=ar-i0-handwrit;x=foo");
-    static const Locale loc_ext("en@0=abc;a=xyz");
-    static const Locale loc_empty("");
-    static const Locale loc_ill("!");
-    static const Locale loc_variant("sl__ROZAJ_BISKE_1994");
+    const Locale loc_c("en_US_POSIX");
+    const Locale loc_en("en_US");
+    const Locale loc_af("af@calendar=coptic;t=ar-i0-handwrit;x=foo");
+    const Locale loc_ext("en@0=abc;a=xyz");
+    const Locale loc_empty("");
+    const Locale loc_ill("!");
+    const Locale loc_variant("sl__ROZAJ_BISKE_1994");
 
     static const char tag_c[] = "en-US-u-va-posix";
     static const char tag_en[] = "en-US";
@@ -6649,8 +6649,8 @@ void LocaleTest::TestUnd() {
 
     assertTrue("root_build == und_build", root_build == und_build);
 
-    static const Locale& displayLocale = Locale::getEnglish();
-    static const UnicodeString displayName("Unknown language");
+    const Locale& displayLocale = Locale::getEnglish();
+    const UnicodeString displayName("Unknown language");
     UnicodeString tmp;
 
     assertEquals("getDisplayName()", displayName, empty_ctor.getDisplayName(displayLocale, tmp));
@@ -6689,8 +6689,8 @@ void LocaleTest::TestUndScript() {
     assertEquals("toLanguageTag()", tag, locale_build.toLanguageTag<std::string>(status).c_str());
     status.errIfFailureAndReset();
 
-    static const Locale& displayLocale = Locale::getEnglish();
-    static const UnicodeString displayName("Unknown language (Cyrillic)");
+    const Locale& displayLocale = Locale::getEnglish();
+    const UnicodeString displayName("Unknown language (Cyrillic)");
     UnicodeString tmp;
 
     assertEquals("getDisplayName()", displayName, locale_ctor.getDisplayName(displayLocale, tmp));
@@ -6723,8 +6723,8 @@ void LocaleTest::TestUndRegion() {
     assertEquals("toLanguageTag()", tag, locale_build.toLanguageTag<std::string>(status).c_str());
     status.errIfFailureAndReset();
 
-    static const Locale& displayLocale = Locale::getEnglish();
-    static const UnicodeString displayName("Unknown language (Antarctica)");
+    const Locale& displayLocale = Locale::getEnglish();
+    const UnicodeString displayName("Unknown language (Antarctica)");
     UnicodeString tmp;
 
     assertEquals("getDisplayName()", displayName, locale_ctor.getDisplayName(displayLocale, tmp));

@@ -8,8 +8,6 @@
 #include "unicode/locid.h"
 #include "unicode/rbbi.h"
 
-IcuEnvironment* env = new IcuEnvironment();
-
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
   UErrorCode status = U_ZERO_ERROR;
 

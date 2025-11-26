@@ -455,6 +455,8 @@ class TransliteratorRegistry : public UMemory {
      */
     Hashtable availableIDs;
 
+    UnicodeString fBogus;
+
     TransliteratorRegistry(const TransliteratorRegistry &other); // forbid copying of this class
     TransliteratorRegistry &operator=(const TransliteratorRegistry &other); // forbid copying of this class
 };
