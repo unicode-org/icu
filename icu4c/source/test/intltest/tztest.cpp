@@ -2395,8 +2395,15 @@ static struct   {
 
       // Repeating the test data for DST.  The test data below trigger the problem reported
       // by Ticket#6644
+      {"Europe/London",       "en", false, TimeZone::SHORT, "GMT" /*"BST"*/},
+      {"Europe/London",       "en", false, TimeZone::LONG,  "Greenwich Mean Time"},
       {"Europe/London",       "en", true, TimeZone::SHORT, "GMT+1" /*"BST"*/},
       {"Europe/London",       "en", true, TimeZone::LONG,  "British Summer Time"},
+
+      {"Europe/Dublin",       "en", false, TimeZone::SHORT, "GMT" /*"IST"*/},
+      {"Europe/Dublin",       "en", false, TimeZone::LONG,  "Greenwich Mean Time"},
+      {"Europe/Dublin",       "en", true, TimeZone::SHORT, "GMT+1" /*"IST"*/},
+      {"Europe/Dublin",       "en", true, TimeZone::LONG,  "Irish Standard Time"},
 
       {nullptr, nullptr, false, TimeZone::SHORT, nullptr}   // nullptr values terminate list
     };
