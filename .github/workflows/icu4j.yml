@@ -47,7 +47,7 @@ jobs:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - name: Checkout and setup
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Cache local Maven repository
         uses: actions/cache@v4
         with:
@@ -74,7 +74,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout and setup
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0  # fetch all branches so that Spotless can resolve `origin/main`
       - name: Restore read-only cache of local Maven repository
@@ -102,7 +102,7 @@ jobs:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - name: Checkout and setup
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Restore read-only cache of local Maven repository
         uses: actions/cache/restore@v4
         id: cache
@@ -131,7 +131,7 @@ jobs:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - name: Checkout and setup
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Restore read-only cache of local Maven repository
         uses: actions/cache/restore@v4
         id: cache
@@ -168,7 +168,7 @@ jobs:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - name: Checkout and setup
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Restore read-only cache of local Maven repository
         uses: actions/cache/restore@v4
         id: cache

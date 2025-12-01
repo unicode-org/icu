@@ -22,7 +22,7 @@ jobs:
     steps:
 
     - name: Checkout and setup
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
 
     - name: Set up JDK
       uses: actions/setup-java@v5
