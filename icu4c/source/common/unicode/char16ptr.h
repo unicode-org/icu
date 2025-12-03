@@ -402,7 +402,7 @@ namespace internal {
  */
 template <typename T,
           typename = typename std::enable_if_t<DirectlyConvertibleToU16StringView<T>>>
-std::u16string_view toU16StringView(std::u16string_view sv) { return sv; }
+std::u16string_view toU16StringView(const T& text) { return text; }
 
 #if !U_CHAR16_IS_TYPEDEF && (!defined(_LIBCPP_VERSION) || _LIBCPP_VERSION < 180000)
 /**
