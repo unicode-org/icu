@@ -431,9 +431,8 @@ inline std::u16string_view toU16StringView(std::wstring_view sv) {
  * @internal
  */
 template <typename T,
-          typename = typename std::enable_if_t<!DirectlyConvertibleToU16StringView<T> &&
-                                               !std::is_pointer_v<std::remove_reference_t<T>>>>
-inline std::u16string_view toU16StringViewNullable(const T& text) {
+          typename = typename std::enable_if_t<!std::is_pointer_v<std::remove_reference_t<T>>>>
+std::u16string_view toU16StringViewNullable(const T& text) {
     return toU16StringView(text);
 }
 
@@ -442,10 +441,9 @@ inline std::u16string_view toU16StringViewNullable(const T& text) {
  * @internal
  */
 template <typename T,
-          typename = typename std::enable_if_t<!DirectlyConvertibleToU16StringView<T> &&
-                                               std::is_pointer_v<std::remove_reference_t<T>>>,
+          typename = typename std::enable_if_t<std::is_pointer_v<std::remove_reference_t<T>>>,
           typename = void>
-inline std::u16string_view toU16StringViewNullable(const T& text) {
+std::u16string_view toU16StringViewNullable(const T& text) {
     if (text == nullptr) return {};  // For backward compatibility.
     return toU16StringView(text);
 }
