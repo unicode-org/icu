@@ -7,9 +7,8 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.ibm.icu</groupId>
-    <artifactId>icu4j-root</artifactId>
+    <artifactId>icu4j-tools</artifactId>
     <version>79.0.1-SNAPSHOT</version>
-    <relativePath>../../pom.xml</relativePath>
   </parent>
 
   <artifactId>tools_pmd</artifactId>

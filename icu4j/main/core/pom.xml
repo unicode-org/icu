@@ -7,16 +7,11 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.ibm.icu</groupId>
-    <artifactId>icu4j-root</artifactId>
+    <artifactId>icu4j-main</artifactId>
     <version>79.0.1-SNAPSHOT</version>
-    <relativePath>../../pom.xml</relativePath>
   </parent>
 
   <artifactId>core</artifactId>
-
-  <properties>
-    <icu4j.api.doc.root.dir>${project.basedir}/../..</icu4j.api.doc.root.dir>
-  </properties>
 
   <dependencies>
     <dependency>
@@ -25,6 +20,7 @@
       <version>${project.version}</version>
     </dependency>
 
+    <!-- Test only -->
     <dependency>
       <groupId>com.ibm.icu</groupId>
       <artifactId>framework</artifactId>
@@ -36,27 +32,20 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>${junit.version}</version>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>pl.pragmatists</groupId>
       <artifactId>JUnitParams</artifactId>
-      <version>${junitparams.version}</version>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
-      <version>${gson.version}</version>
-      <scope>test</scope>
     </dependency>
   </dependencies>
 
   <build>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
         <executions>
           <execution>

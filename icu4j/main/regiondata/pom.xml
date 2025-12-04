@@ -7,16 +7,14 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.ibm.icu</groupId>
-    <artifactId>icu4j-root</artifactId>
+    <artifactId>icu4j-main</artifactId>
     <version>79.0.1-SNAPSHOT</version>
-    <relativePath>../../pom.xml</relativePath>
   </parent>
 
   <artifactId>regiondata</artifactId>
 
   <properties>
     <proj.displayname>region data</proj.displayname>
-    <icu4j.api.doc.root.dir>${project.basedir}/../..</icu4j.api.doc.root.dir>
   </properties>
 
   <dependencies>
