@@ -382,11 +382,8 @@ U_NAMESPACE_BEGIN
  * @internal
  */
 template<typename T>
-constexpr bool DirectlyConvertibleToU16StringView = std::is_convertible_v<T, std::u16string_view>;
-
-template<typename T>
 constexpr bool ConvertibleToU16StringView =
-    DirectlyConvertibleToU16StringView<T>
+    std::is_convertible_v<T, std::u16string_view>
 #if !U_CHAR16_IS_TYPEDEF && (!defined(_LIBCPP_VERSION) || _LIBCPP_VERSION < 180000)
     || std::is_convertible_v<T, std::basic_string_view<uint16_t>>
 #endif
@@ -401,7 +398,7 @@ namespace internal {
  * @internal
  */
 template <typename T,
-          typename = typename std::enable_if_t<DirectlyConvertibleToU16StringView<T>>>
+          typename = typename std::enable_if_t<std::is_convertible_v<T, std::u16string_view>>>
 std::u16string_view toU16StringView(const T& text) { return text; }
 
 #if !U_CHAR16_IS_TYPEDEF && (!defined(_LIBCPP_VERSION) || _LIBCPP_VERSION < 180000)
