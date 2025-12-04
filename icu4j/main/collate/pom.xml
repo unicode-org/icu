@@ -7,16 +7,11 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.ibm.icu</groupId>
-    <artifactId>icu4j-root</artifactId>
+    <artifactId>icu4j-main</artifactId>
     <version>79.0.1-SNAPSHOT</version>
-    <relativePath>../../pom.xml</relativePath>
   </parent>
 
   <artifactId>collate</artifactId>
-
-  <properties>
-    <icu4j.api.doc.root.dir>${project.basedir}/../..</icu4j.api.doc.root.dir>
-  </properties>
 
   <dependencies>
     <dependency>
@@ -25,7 +20,7 @@
       <version>${project.version}</version>
     </dependency>
 
-    <!-- Test -->
+    <!-- Test only -->
     <dependency>
       <groupId>com.ibm.icu</groupId>
       <artifactId>core</artifactId>
@@ -62,8 +57,6 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>${junit.version}</version>
-      <scope>test</scope>
     </dependency>
   </dependencies>
 

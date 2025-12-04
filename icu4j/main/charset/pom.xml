@@ -7,9 +7,8 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.ibm.icu</groupId>
-    <artifactId>icu4j-root</artifactId>
+    <artifactId>icu4j-main</artifactId>
     <version>79.0.1-SNAPSHOT</version>
-    <relativePath>../../pom.xml</relativePath>
   </parent>
 
   <artifactId>icu4j-charset</artifactId>
@@ -23,7 +22,6 @@
   </scm>
 
   <properties>
-    <icu4j.api.doc.root.dir>${project.basedir}/../..</icu4j.api.doc.root.dir>
     <module-name>charset</module-name>
     <proj.displayname>charset</proj.displayname>
   </properties>
@@ -35,6 +33,7 @@
       <version>${project.version}</version>
     </dependency>
 
+    <!-- Test only -->
     <dependency>
       <groupId>com.ibm.icu</groupId>
       <artifactId>core</artifactId>
@@ -53,14 +52,10 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>${junit.version}</version>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>pl.pragmatists</groupId>
       <artifactId>JUnitParams</artifactId>
-      <version>${junitparams.version}</version>
-      <scope>test</scope>
     </dependency>
 
   </dependencies>

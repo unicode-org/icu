@@ -5,7 +5,7 @@
 export MAVEN_ARGS='--no-transfer-progress'
 
 # Version update!
-export artifact_version='79.0.1'
+export artifact_version='79.0.1-SNAPSHOT'
 export github_rel_version='79.0.1'
 export api_report_version='79'
 export api_report_prev_version='78'
