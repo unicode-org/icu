@@ -3466,7 +3466,7 @@ static void TestConv(const uint16_t in[],int len, const char* conv, const char* 
     free(offsets);
 }
 static UChar U_CALLCONV
-_charAt(int32_t offset, void *context) {
+_charAt(int32_t offset, void *context) UPRV_NO_SANITIZE_FUNCTION {
     return ((char*)context)[offset];
 }
 

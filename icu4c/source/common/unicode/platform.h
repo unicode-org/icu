@@ -421,8 +421,10 @@
 
 
 #if defined(__clang__)
+#define UPRV_NO_SANITIZE_FUNCTION __attribute__((no_sanitize("function")))
 #define UPRV_NO_SANITIZE_UNDEFINED __attribute__((no_sanitize("undefined")))
 #else
+#define UPRV_NO_SANITIZE_FUNCTION
 #define UPRV_NO_SANITIZE_UNDEFINED
 #endif
 

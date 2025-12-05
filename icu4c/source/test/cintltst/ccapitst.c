@@ -1365,12 +1365,12 @@ static TSCCContext *TSCC_clone(TSCCContext *ctx)
 
 #if !UCONFIG_NO_LEGACY_CONVERSION
 static void TSCC_fromU(const void *context,
-                        UConverterFromUnicodeArgs *fromUArgs,
-                        const UChar* codeUnits,
-                        int32_t length,
-                        UChar32 codePoint,
-                        UConverterCallbackReason reason,
-                        UErrorCode * err)
+                       UConverterFromUnicodeArgs *fromUArgs,
+                       const UChar* codeUnits,
+                       int32_t length,
+                       UChar32 codePoint,
+                       UConverterCallbackReason reason,
+                       UErrorCode *err) UPRV_NO_SANITIZE_FUNCTION
 {
     // suppress compiler warnings about unused variables
     (void)codeUnits;

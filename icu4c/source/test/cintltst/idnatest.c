@@ -72,8 +72,8 @@ addIDNATest(TestNode** root)
 
 static void
 testAPI(const UChar* src, const UChar* expected, const char* testName,
-            UBool useSTD3ASCIIRules,UErrorCode expectedStatus,
-            UBool doCompare, UBool testUnassigned,  TestFunc func){
+        UBool useSTD3ASCIIRules, UErrorCode expectedStatus,
+        UBool doCompare, UBool testUnassigned, TestFunc func) UPRV_NO_SANITIZE_FUNCTION {
 
     UErrorCode status = U_ZERO_ERROR;
     UChar destStack[MAX_DEST_SIZE];
@@ -455,7 +455,7 @@ TestToUnicode(void){
 
 
 static void
-TestIDNToUnicode(void){
+TestIDNToUnicode(void) UPRV_NO_SANITIZE_FUNCTION {
     int32_t i;
     UChar buf[MAX_DEST_SIZE];
     UChar expected[MAX_DEST_SIZE];
@@ -484,7 +484,7 @@ TestIDNToUnicode(void){
 }
 
 static void
-TestIDNToASCII(void){
+TestIDNToASCII(void) UPRV_NO_SANITIZE_FUNCTION {
     int32_t i;
     UChar buf[MAX_DEST_SIZE];
     UChar expected[MAX_DEST_SIZE];
@@ -517,9 +517,9 @@ TestIDNToASCII(void){
 
 static void
 testCompareWithSrc(const UChar* s1, int32_t s1Len,
-            const UChar* s2, int32_t s2Len,
-            const char* testName, CompareFunc func,
-            UBool isEqual){
+                   const UChar* s2, int32_t s2Len,
+                   const char* testName, CompareFunc func,
+                   UBool isEqual) UPRV_NO_SANITIZE_FUNCTION {
 
     UErrorCode status = U_ZERO_ERROR;
     int32_t retVal = func(s1,-1,s2,-1,UIDNA_DEFAULT,&status);

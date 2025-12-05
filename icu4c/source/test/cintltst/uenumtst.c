@@ -64,7 +64,7 @@ chArrayCount(UEnumeration *en, UErrorCode *status) {
 }
 
 static const UChar* U_CALLCONV 
-chArrayUNext(UEnumeration *en, int32_t *resultLength, UErrorCode *status) {
+chArrayUNext(UEnumeration *en, int32_t *resultLength, UErrorCode *status) UPRV_NO_SANITIZE_FUNCTION {
     (void)status; // suppress compiler warnings about unused variable
     if(cont->currIndex >= cont->maxIndex) {
         return NULL;
@@ -169,7 +169,7 @@ uchArrayCount(UEnumeration *en, UErrorCode *status) {
 }
 
 static const UChar* U_CALLCONV
-uchArrayUNext(UEnumeration *en, int32_t *resultLength, UErrorCode *status) {
+uchArrayUNext(UEnumeration *en, int32_t *resultLength, UErrorCode *status) UPRV_NO_SANITIZE_FUNCTION {
     (void)status; // suppress compiler warnings about unused variable
     if(ucont->currIndex >= ucont->maxIndex) {
         return NULL;

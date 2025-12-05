@@ -86,7 +86,7 @@ static int32_t Xlength(const UReplaceable* rep) {
 }
 
 /* UReplaceableCallbacks callback */
-static UChar XcharAt(const UReplaceable* rep, int32_t offset) {
+static UChar XcharAt(const UReplaceable* rep, int32_t offset) UPRV_NO_SANITIZE_FUNCTION {
     const XReplaceable* x = (const XReplaceable*)rep;
     return x->text[offset];
 }
@@ -99,7 +99,7 @@ static UChar32 Xchar32At(const UReplaceable* rep, int32_t offset) {
 
 /* UReplaceableCallbacks callback */
 static void Xreplace(UReplaceable* rep, int32_t start, int32_t limit,
-              const UChar* text, int32_t textLength) {
+                     const UChar* text, int32_t textLength) UPRV_NO_SANITIZE_FUNCTION {
     XReplaceable* x = (XReplaceable*)rep;
     int32_t newLen = Xlength(rep) + limit - start + textLength;
     UChar* newText = (UChar*) malloc(sizeof(UChar) * (newLen+1));
