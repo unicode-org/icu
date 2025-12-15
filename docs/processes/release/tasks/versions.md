@@ -101,6 +101,16 @@ Edit icuver.txt directly.
 
 ### ICU4J
 
+#### Since ICU 79
+
+> :point_right: **Note**: The maven commands _must_ be executed from the
+root of the ICU project, not from `<ICU>/icu4j`. This is a slight change from ICU versions 74-78.
+
+```sh
+cd $ICU_DIR
+mvn versions:set -DnewVersion=79.1 -DgenerateBackupPoms=false
+```
+
 #### Since ICU 74
 
 Changing the version for Java starting with ICU 74 requires a few steps:
@@ -146,7 +156,7 @@ Changing the version for Java starting with ICU 74 requires a few steps:
         UNICODE_6_2 = getInstance(6, 2, 0, 0);
         UNICODE_6_3 = getInstance(6, 3, 0, 0);
         UNICODE_7_0 = getInstance(7, 0, 0, 0);
-    <b>
+    <b style="color:red">
         ICU_VERSION = getInstance(74, 1, 0, 0);
         ICU_DATA_VERSION = ICU_VERSION;</b>
         UNICODE_VERSION = UNICODE_7_0;
@@ -167,7 +177,7 @@ Changing the version for Java starting with ICU 74 requires a few steps:
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
-    public static final String <b>ICU_DATA_VERSION_PATH = "74b";</b>
+    public static final String <b style="color:red">ICU_DATA_VERSION_PATH = "74b";</b>
     </pre>
 
 2. [icu4j/main/core/src/test/java/com/ibm/icu/dev/test/util/DebugUtilitiesData.java](https://github.com/unicode-org/icu/blob/main/icu4j/main/core/src/test/java/com/ibm/icu/dev/test/util/DebugUtilitiesData.java)
@@ -195,7 +205,7 @@ The command requires a version number string that follows the typical Java / Mav
     With the proper new version number, run the following Maven command to update the version numbers
     throughout all of the ICU4J `pom.xml` build files.
 
-    ```
+    ```sh
     mvn versions:set -DnewVersion=74.1 -DgenerateBackupPoms=false
     ```
 
@@ -203,7 +213,7 @@ The command requires a version number string that follows the typical Java / Mav
 
     This can be done by running the following command:
 
-    ```
+    ```sh
     mvn versions:set-property -DnewVersion=74 -Dproperty=icu.major.version -DgenerateBackupPoms=false
     ```
 

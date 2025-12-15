@@ -380,7 +380,7 @@ a new naming scheme.
 
 The documentation of the old macros has been removed. If you need it, see a User
 Guide version from ICU 4.2 or earlier (see the [download
-page](https://icu.unicode.org/download)).
+page](https://unicode-org.github.io/icu/download)).
 
 C Unicode String Literals
 

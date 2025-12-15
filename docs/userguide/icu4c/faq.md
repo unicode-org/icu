@@ -30,7 +30,7 @@ formatting, text boundary detection, character set conversion and so on.
 
 #### Where can I get ICU?
 
-You can get ICU4C and ICU4J from <https://icu.unicode.org/download>
+You can get ICU4C and ICU4J from <https://unicode-org.github.io/icu/download>
 
 **Why don't you build binaries for my platform?**
 
@@ -276,7 +276,7 @@ section in the [ICU Design](../design.md) chapter.
 ICU versions 65 supports Unicode version 12.
 
 The Unicode versions for older versions of ICU are listed on the ICU download
-page, <https://icu.unicode.org/download>
+page, <https://unicode-org.github.io/icu/download>
 
 #### Does ICU support UTF-16 surrogates and Unicode supplementary characters?
 

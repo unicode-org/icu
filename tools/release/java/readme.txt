@@ -25,8 +25,11 @@ To use the utility:
    
 3. Create a Makefile.local in this readme's directory (tools/release/java/) 
             with just these two lines, for example:
-			OLD_ICU=/xsrl/E/icu-6.7
-			NEW_ICU=/xsrl/E/icu-6.8
+			OLD_ICU=/xsrl/E/icu-6.7/icu4c/sources
+			NEW_ICU=/xsrl/E/icu-6.8/icu4c/sources
+
+     WARNING: the paths must be absolute paths, and should not use ~ or
+     environment variables.
 
            Set these paths to the location of parent directory of the
 	   ICU4C sources in the previous version (OLD) and the
@@ -34,8 +37,8 @@ To use the utility:
 	   
            If your ICU is an out-of-source-build, add these two lines
            indicating the build location:
-                        OLD_ICU_BUILD=/xsrl/E/icu-build-m48
-                        NEW_ICU_BUILD=/xsrl/E/icu-build
+                        OLD_ICU_BUILD=/xsrl/E/icu-build-m48/icu4c/sources
+                        NEW_ICU_BUILD=/xsrl/E/icu-build/icu4c/sources
 			
 4. From this directory, (tools/release/java/) run Make to build docs: (the tool will be built automatically)
             make APIChangeReport.html

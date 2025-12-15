@@ -5,6 +5,10 @@
 export MAVEN_ARGS='--no-transfer-progress'
 
 # Version update!
+# WARNING: `artifact_version` must match the version in the current `pom.xml`
+# files, including the `-SNAPSHOT` if it is there.
+# Should match what this command shows:
+#   mvn help:evaluate -Dexpression=project.version -q -DforceStdout
 export artifact_version='79.0.1-SNAPSHOT'
 export github_rel_version='79.0.1'
 export api_report_version='79'
@@ -21,7 +25,6 @@ function checkThatJdk8IsNotDefault() {
     echo "The default JDK is newer than JDK 8, all good!"
     javac -version
   fi
-
 }
 
 # Copy the icu artifacts from the local maven repo to the lib folder,

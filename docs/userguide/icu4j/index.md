@@ -55,7 +55,7 @@ ICU4J is an add-on to the regular JRE that provides:
 
 ## Platform Dependencies
 
-Check the [Downloading ICU](https://icu.unicode.org/download) page to look up the minimum supported version of Java
+Check the [Downloading ICU](https://unicode-org.github.io/icu/download/) page to look up the minimum supported version of Java
 for your version of ICU.
 
 ## How to Download ICU4J
@@ -64,7 +64,7 @@ There are a few different ways to download the ICU4J releases.
 
 *   **Official Release:**
     If you want to use ICU4J (as opposed to developing it), your best bet is to download an official, packaged version of the ICU4J library files. These versions are tested more thoroughly than day-to-day development builds, and they are packaged in jar files for convenient download.
-    *   [ICU Download page](https://icu.unicode.org/download)
+    *   [ICU Download page](https://unicode-org.github.io/icu/download/)
     *   Maven repository:
 
         ```
@@ -90,8 +90,16 @@ There are a few different ways to download the ICU4J releases.
 *   **GitHub Source Repository:**
     If you are interested in developing features, patches, or bug fixes for ICU4J, you should probably be working with the latest version of the ICU4J source code. You will need to clone and checkout the code from our GitHub repository to ensure that you have the most recent version of all of the files. There are several ways to do this. Please follow the directions that are contained on the [Source Code Setup page](../../devsetup/source/) for details.
 
-For more details on how to download ICU4J directly from the web site, please see the ICU download page at [https://icu.unicode.org/download](https://icu.unicode.org/download)
+For more details on how to download ICU4J directly from the web site, please see the ICU download page at
+[https://unicode-org.github.io/icu/download](https://unicode-org.github.io/icu/download)
 
+## The Structure and Contents of ICU4J - ICU 79 and later
+
+The structure is identical to ICU 74-78, but there is also a Maven project in the ICU root, and in
+intermediate folders like `<ICU>/icu4j/main` and `<ICU>/icu4j/tools`.
+
+These projects only act to gather the sub-projects under the same parent, allowing one to build
+everything (from the root), or just the ICU proper (no demos, no tools, etc.), or just the tools.
 
 ## The Structure and Contents of ICU4J - ICU 74 and later
 
@@ -253,6 +261,34 @@ The complete API documentation for ICU4J (javadoc) is available on the ICU4J web
 *   Unicode Text [Compression](https://unicode-org.github.io/icu-docs/apidoc/released/icu4j/com/ibm/icu/text/UnicodeCompressor.html) & [Decompression](https://unicode-org.github.io/icu-docs/apidoc/released/icu4j/com/ibm/icu/text/UnicodeDecompressor.html) – 2:1 compression on English Unicode text.
 *   Collation – [Rule-based sorting](https://unicode-org.github.io/icu-docs/apidoc/released/icu4j/com/ibm/icu/text/RuleBasedCollator.html), [Efficient multi-lingual searching](https://unicode-org.github.io/icu-docs/apidoc/released/icu4j/com/ibm/icu/text/StringSearch.html), [Alphabetic indexing](https://unicode-org.github.io/icu-docs/apidoc/released/icu4j/com/ibm/icu/text/AlphabeticIndex.html)
 
+## How to Install and Build - ICU 79 and later
+
+This is identical to ICU 74, but you can run maven commands in the icu root.
+
+And you can alsways build just the subtree you want with the -f option in maven.
+
+All of this works:
+```sh
+cd <icu_root>
+mvn install
+mvn install -f icu4j
+mvn install -f icu4j/main
+mvn install -f icu4j/main/core
+
+cd icu4j
+# this is the same as `-f icu4j` in root
+mvn install
+# this is the same as `-f icu4j/main` in root
+mvn install -f main
+
+cd main
+# this is the same as `-f icu4j/main` in root
+mvn install
+```
+
+Of course, any maven lifecycle phase or goal will work (`clean`, `compile`,
+`test`,`package`,`verify`, `install`, etc.)
+
 ## How to Install and Build - ICU 74 and later
 
 Using a pre-built version of ICU from Maven Central can be achieved simply by using the artifact
@@ -272,7 +308,7 @@ Once the JDK and Maven are installed, run the desired Maven target. For example:
 [INFO] Scanning for projects...
 [INFO] ------------------------------------------------------------------------
 [INFO] Reactor Build Order:
-[INFO] 
+[INFO]
 [INFO] International Components for Unicode for Java (icu4j-root)         [pom]
 [INFO] framework                                                          [jar]
 [INFO] core                                                               [jar]
@@ -289,21 +325,21 @@ Once the JDK and Maven are installed, run the desired Maven target. For example:
 [INFO] samples                                                            [jar]
 [INFO] tools_misc                                                         [jar]
 [INFO] perf-tests                                                         [jar]
-[INFO] 
+[INFO]
 [INFO] -----------------------< com.ibm.icu:icu4j-root >-----------------------
 [INFO] Building International Components for Unicode for Java (icu4j-root) 74.1-SNAPSHOT [1/16]
 [INFO] --------------------------------[ pom ]---------------------------------
-[INFO] 
+[INFO]
 [INFO] --- maven-enforcer-plugin:3.3.0:enforce (enforce-maven) @ icu4j-root ---
 [INFO] Rule 0: org.apache.maven.enforcer.rules.version.RequireMavenVersion passed
-[INFO] 
+[INFO]
 
 ...
 ...
 ...
 
 [INFO] Reactor Summary for International Components for Unicode for Java (icu4j-root) 74.1-SNAPSHOT:
-[INFO] 
+[INFO]
 [INFO] International Components for Unicode for Java (icu4j-root) SUCCESS [  0.317 s]
 [INFO] framework .......................................... SUCCESS [  1.125 s]
 [INFO] core ............................................... SUCCESS [02:28 min]
@@ -330,7 +366,7 @@ Once the JDK and Maven are installed, run the desired Maven target. For example:
 
 > :point_right: **Note**:  The above output is an example. The numbers are likely to be different with the current version ICU4J.
 
-For more information on how to build or test specific components, 
+For more information on how to build or test specific components,
 or run specific tests,
 or to set up your IDE, refer to
 [Maven Setup for Java](../../devsetup/java/maven)

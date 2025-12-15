@@ -30,12 +30,11 @@ The command line invocation is still, of course, the standard of truth for the b
 ## Installation
 
 Install Maven from your OS package manager.
-The minimum version is 3.2.5 as of ICU 74,
-although this may change.
-See the `<ICU>/icu4j/pom.xml` root POM file's maven-enforcer-plugin
+The minimum version is 3.9.0 as of ICU 79, although this may change.
+See the `<ICU>/pom.xml` root POM file's `maven-enforcer-plugin`
 for the current minimum version.
 The Maven page lists [system requirements](https://maven.apache.org/download.cgi),
-which includes a minimum of JDK 8 as of ICU 74.
+which includes a minimum of JDK 11 as of ICU 78.
 
 ## Maven multi-module projects
 
@@ -48,7 +47,7 @@ Commonly-found instructions to use Maven at the command line
 are usually designed for simple "single-module" Maven projects.
 In such cases, the command names correspond intuitively to their function:
 `mvn test` for running unit tests, `mvn package` for creating jar files, etc.
-However, multi-module projects have the tradeoff between time and complexity:
+However, multi-module projects have the trade-off between time and complexity:
 running `mvn test` at the root recompiles all the sources
 even if a module's sources are all unchanged,
 which takes longer than it otherwise could.
@@ -65,8 +64,7 @@ The instructions in this page for command line usage will choose,
 from the 2 alternatives above,
 the option that consistently uses `mvn install` for all Maven tasks.
 Note that this choice should not affect IDEs with well working native Maven support like IntelliJ and Eclipse.
-See the "IDE Setup" section for more details on how IDEs handle Maven projects differently than
-the standard command line style usage of Maven.
+See the "IDE Setup" section for more details on how IDEs handle Maven projects differently than the standard command line style usage of Maven.
 
 ## IDE Setup
 
@@ -96,7 +94,9 @@ To import into IntelliJ:
 
 1. In IntelliJ, open a new project. 
   a. Recent versions of IntelliJ provide a dialog box on startup to select a project. Click the "Open" button.)
-2. Select the root `pom.xml` in ICU4J (ex: `<ICU>/icu4j/pom.xml`)
+2. Select the root `pom.xml` in ICU4J. Can be `<ICU>/icu4j/pom.xml` or `<ICU>/pom.xml`.
+   If you don't work on any module under `<ICU>/tools` then opening the `icu4j/` project
+   is less "noisy."
 3. That's it. Note: IntelliJ will take a few minutes to do a one-time indexing of the new source code.
 
 Navigating the source code files between main code and test code, and running tests individually or for an entire module,
@@ -106,7 +106,22 @@ work as they do normally in IntelliJ.
 
 [Eclipse's Maven plugin](https://eclipse.dev/m2e/)
 works reasonably well and can support the import of a multi-module Maven project.
-These instructions have not yet verified Eclipse's handling of the import of the ICU4J using a Maven build.
+
+1. It is highly recommended (but optional) to do the ICU work in a separate workspace. \
+   You can also import to a working-set. Whatever you prefer. \
+   A workspace allows you to configure the Eclipse options for ICU at workspace level,
+   not at module level. It also separates the (many) ICU modules from the other work
+   you do. The downside is that whenever you open Eclipse, you will have to select
+   the workspace to work on.
+   See the official Eclipse [Workspaces](https://www.ibm.com/docs/en/baw/23.0.x?topic=modules-workspaces) page for more.
+   1. From "Settings" -- "Startup and Shutdown" -- "Workspaces" check the
+   "Prompt for workspace on startup" option.
+   2. Restart Eclipse, and when prompted type a workspace name
+   (for example `/Users/john/workspace_icu`).
+2. Start Eclipse (choosing the workspace you prefer)
+3. Import ICU Maven projects. "File" -- "Import" -- "Maven" -- "Existing Maven projects"
+4. Navigate to the `<ICU>` or  `<ICU>/icu4j`. Both work.
+   The root is more "noisy", but and if you don't plan to work on anything under `<ICU>/tools` you can import the `icu4j/` submodule instead.
 
 ### VS Code
 
