@@ -91,7 +91,7 @@ There are a few different ways to download the ICU4J releases.
     If you are interested in developing features, patches, or bug fixes for ICU4J, you should probably be working with the latest version of the ICU4J source code. You will need to clone and checkout the code from our GitHub repository to ensure that you have the most recent version of all of the files. There are several ways to do this. Please follow the directions that are contained on the [Source Code Setup page](../../devsetup/source/) for details.
 
 For more details on how to download ICU4J directly from the web site, please see the ICU download page at
-[https://unicode-org.github.io/icu/download](https://unicode-org.github.io/icu/download)
+<https://unicode-org.github.io/icu/download>
 
 ## The Structure and Contents of ICU4J - ICU 79 and later
 
@@ -265,7 +265,7 @@ The complete API documentation for ICU4J (javadoc) is available on the ICU4J web
 
 This is identical to ICU 74, but you can run maven commands in the icu root.
 
-And you can alsways build just the subtree you want with the -f option in maven.
+And you can always build just the subtree you want with the -f option in maven.
 
 All of this works:
 ```sh

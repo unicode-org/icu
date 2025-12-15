@@ -115,13 +115,13 @@ works reasonably well and can support the import of a multi-module Maven project
    the workspace to work on.
    See the official Eclipse [Workspaces](https://www.ibm.com/docs/en/baw/23.0.x?topic=modules-workspaces) page for more.
    1. From "Settings" -- "Startup and Shutdown" -- "Workspaces" check the
-   "Prompt for workspace on startup" option.
+      "Prompt for workspace on startup" option.
    2. Restart Eclipse, and when prompted type a workspace name
-   (for example `/Users/john/workspace_icu`).
+      (for example `/Users/john/workspace_icu`).
 2. Start Eclipse (choosing the workspace you prefer)
 3. Import ICU Maven projects. "File" -- "Import" -- "Maven" -- "Existing Maven projects"
 4. Navigate to the `<ICU>` or  `<ICU>/icu4j`. Both work.
-   The root is more "noisy", but and if you don't plan to work on anything under `<ICU>/tools` you can import the `icu4j/` submodule instead.
+   The root is more "noisy", so if you don't plan to work on anything under `<ICU>/tools` you can import the `icu4j/` submodule instead.
 
 ### VS Code
 
