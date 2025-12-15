@@ -354,10 +354,10 @@ public final class VersionInfo implements Comparable<VersionInfo> {
             if (c == '.') {
                 count++;
             } else {
-                c -= '0';
-                if (c < 0 || c > 9) {
+                if (c < '0' || c > '9') {
                     throw new IllegalArgumentException(INVALID_VERSION_NUMBER_);
                 }
+                c -= '0';
                 array[count] *= 10;
                 array[count] += c;
             }

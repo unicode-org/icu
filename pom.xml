@@ -632,13 +632,64 @@
   <profiles>
 
     <profile>
-      <!-- Run
-           mvn clean test -ntp -DskipTests -DskipITs -l /tmp/errorprone.log -P errorprone
-           mvn exec:java -f tools/build/ -P errorprone_report -DlogFile=/tmp/errorprone.log
+      <!-- Run this in the root of the ICU project:
+           mvn clean package -ntp -DskipTests -DskipITs -P errorprone
+      -->
+      <id>errorprone</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+              <showWarnings>true</showWarnings>
+              <fork>true</fork>
+              <encoding>UTF-8</encoding>
+              <!-- Use <compilerArg> to pass flags to errorprone. See https://errorprone.info/docs/flags -->
+              <compilerArgs>
+                <arg>-XDcompilePolicy=simple</arg>
+                <!--
+                  WARNING: Do not wrap the line below, it will fail on Windows.
+                  See https://github.com/google/error-prone/issues/4256
+                -->
+                <arg>-Xplugin:ErrorProne -Xep:UnicodeEscape:OFF -Xep:InvalidBlockTag:OFF -Xep:ComparableType:WARN -Xep:EqualsHashCode:WARN -Xep:SelfEquals:WARN -Xep:ReturnValueIgnored:WARN -Xep:ArrayToString:WARN -Xep:MisusedDayOfYear:WARN -Xep:SelfComparison:WARN -Xep:MisusedWeekYear:WARN -Xep:IdentityBinaryExpression:WARN</arg>
+                <arg>-Xmaxerrs</arg>
+                <arg>10000</arg>
+                <arg>-Xmaxwarns</arg>
+                <arg>10000</arg>
+                <arg>-J-Dfile.encoding=UTF-8</arg>
+                <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED</arg>
+                <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED</arg>
+                <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED</arg>
+                <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED</arg>
+                <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED</arg>
+                <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED</arg>
+                <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED</arg>
+                <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED</arg>
+                <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED</arg>
+                <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED</arg>
+              </compilerArgs>
+              <annotationProcessorPaths>
+                <path>
+                  <groupId>com.google.errorprone</groupId>
+                  <artifactId>error_prone_core</artifactId>
+                  <version>${error_prone.version}</version>
+                </path>
+              </annotationProcessorPaths>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
+      <!-- Run this in the root of the ICU project:
+           mvn clean test -ntp -DskipTests -DskipITs -l /tmp/errorprone.log -P errorprone-all
+           mvn exec:java -f icu4j/tools/build/ -P errorprone_report -DlogFile=/tmp/errorprone.log
         On Windows you can use %TEMP%\errorprone.log for the temporary folder.
         You can then inspect the content of the errorprone.log file, or the reports in
         the target folder (errorprone*.html, errorprone.md, errorprone.tsv) -->
-      <id>errorprone</id>
+      <id>errorprone-all</id>
       <build>
         <plugins>
           <plugin>
@@ -680,7 +731,7 @@
                 <path>
                   <groupId>com.google.errorprone</groupId>
                   <artifactId>error_prone_core</artifactId>
-                  <version>2.25.0</version>
+                  <version>${error_prone.version}</version>
                 </path>
               </annotationProcessorPaths>
             </configuration>
