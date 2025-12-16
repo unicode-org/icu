@@ -633,7 +633,7 @@
 
     <profile>
       <!-- Run this in the root of the ICU project:
-           mvn clean package -ntp -DskipTests -DskipITs -P errorprone
+           mvn clean test -DskipTests -DskipITs -P errorprone
       -->
       <id>errorprone</id>
       <build>
@@ -684,9 +684,9 @@
 
     <profile>
       <!-- Run this in the root of the ICU project:
-           mvn clean test -ntp -DskipTests -DskipITs -l /tmp/errorprone.log -P errorprone-all
-           mvn exec:java -f icu4j/tools/build/ -P errorprone_report -DlogFile=/tmp/errorprone.log
-        On Windows you can use %TEMP%\errorprone.log for the temporary folder.
+           mvn clean test -DskipTests -DskipITs -l /tmp/errorprone_all.log -P errorprone-all
+           mvn exec:java -f icu4j/tools/build/ -P errorprone_report -DlogFile=/tmp/errorprone_all.log
+        On Windows you can use %TEMP%\errorprone_all.log for the temporary folder.
         You can then inspect the content of the errorprone.log file, or the reports in
         the target folder (errorprone*.html, errorprone.md, errorprone.tsv) -->
       <id>errorprone-all</id>

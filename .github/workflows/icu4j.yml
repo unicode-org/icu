@@ -32,7 +32,7 @@ concurrency:
   cancel-in-progress: ${{ !contains(github.ref, 'maint/') && github.ref != 'main' }}
 
 env:
-  SHARED_MVN_ARGS: '--show-version --no-transfer-progress'
+  SHARED_MVN_ARGS: '--show-version'
 
 permissions:
   contents: read
@@ -94,6 +94,61 @@ jobs:
         run: |
           cd icu4j;
           mvn spotless:check || (echo "Style checker failed. Formatting changes can be applied by 'mvn spotless:apply'" && exit 1)
+
+  # Runs an error-prone test that fails the build if any issues are found.
+  formatter:
+    name: Error-prone check
+    needs: icu4j-mvn-init-cache
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout and setup
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          fetch-depth: 0
+      - name: Restore read-only cache of local Maven repository
+        uses: actions/cache/restore@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
+        id: cache
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+          lookup-only: true
+      - uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+      - name: Run error-prone
+        run: |
+          mvn -version
+          # ICU_STATUS will be used to indicate whether the errorprone process succeeds or fails.
+          # Failure means errors need to be fixed.
+          echo "ICU_STATUS=1" >> "$GITHUB_ENV"
+          mvn ${SHARED_MVN_ARGS} clean test -DskipTests -DskipITs -P errorprone -l /tmp/errorprone.log
+          # We only get here if Maven does not fail
+          echo "ICU_STATUS=0" >> "$GITHUB_ENV"
+        continue-on-error: true
+      - name: Generate errorprone report and output it to summary
+        run: |
+          if [ $ICU_STATUS -ne 0 ]; then
+            grep '^\[ERROR\] ' /tmp/errorprone.log
+            # We need to build this sub-project. If maven fails in a previous sub-project the
+            # whole build stops and we never get to build the report tool, so we can't run it.
+            mvn install -f icu4j/tools/build/ -q
+            mvn exec:java -f icu4j/tools/build/ -P errorprone_report -DlogFile=/tmp/errorprone.log
+            # Output messages and the error-prone report as workflow job summary
+            echo '**Run this command locally and fix all errors:**' >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            echo '`mvn clean test -DskipTests -DskipITs -P errorprone`' >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            echo '**Error-prone errors:**' >> $GITHUB_STEP_SUMMARY
+            grep -v -E ' WARNING | ICU_PRI' ./icu4j/target/errorprone.md >> $GITHUB_STEP_SUMMARY
+            # User friendly messages to standard output
+            echo 'View the Summary page of this Workflow instance to view the rendered Markdown of this report.'
+            echo 'Run this command locally and fix all errors:'
+            echo '  mvn clean test -DskipTests -DskipITs -P errorprone'
+            exit 1
+          fi
 
   # ICU4J build and unit test using Maven
   # https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven

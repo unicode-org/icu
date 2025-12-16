@@ -17,10 +17,14 @@ import java.util.regex.Pattern;
 
 class ParseMavenOutForErrorProne {
     // The `(?:[A-F]:)?` in the beginning is for the Windows drive letter (for example D:)
-    private static final String RE_ERROR_PRONE_START =
+    private static final String RE_ERROR_PRONE_START_WARN =
             "^\\[WARNING\\] ((?:[A-F]:)?[\\\\/a-zA-Z0-9_.\\-]+\\.java):\\[([0-9,]+)\\]"
                     + " \\[(\\S+)\\] (.+)";
-    private static final Pattern PATTERN = Pattern.compile(RE_ERROR_PRONE_START);
+    private static final String RE_ERROR_PRONE_START_ERR =
+            "^\\[ERROR\\] ((?:[A-F]:)?[\\\\/a-zA-Z0-9_.\\-]+\\.java):\\[([0-9,]+)\\]"
+                    + " error: \\[(\\S+)\\] (.+)";
+    private static final Pattern PATTERN_WARN = Pattern.compile(RE_ERROR_PRONE_START_WARN);
+    private static final Pattern PATTERN_ERR = Pattern.compile(RE_ERROR_PRONE_START_ERR);
 
     // These are ICU custom tags, but errorprone does not allow us to exclude them.
     // So we will filter them out in our code.
@@ -63,8 +67,11 @@ class ParseMavenOutForErrorProne {
         int currentLine = 0;
         for (String line : Files.readAllLines(Paths.get(fileName), StandardCharsets.UTF_8)) {
             currentLine++;
-            Matcher m = PATTERN.matcher(line);
-            if (m.find()) {
+            Matcher m = PATTERN_WARN.matcher(line);
+            if (!m.find()) {
+                m = PATTERN_ERR.matcher(line);
+            }
+            if (m.find(0)) {
                 String path = line.substring(m.start(1), m.end(1)).replace('\\', '/');
                 if (baseDir != null) {
                     if (path.startsWith(baseDir)) {
@@ -109,6 +116,14 @@ class ParseMavenOutForErrorProne {
                     "[WARNING] Unable to autodetect 'javac' path, using 'javac' from the"
                             + " environment.")) {
                 currentError = addErrorToReportAndReset(errorReport, currentError);
+            } else if (line.startsWith("[INFO] BUILD FAILURE")) {
+                // Stop parsing, after this there will be a duplication of the issues
+                // already reported, and possibly all kind of non-error-prone errors.
+                break;
+            } else if (line.startsWith("[WARNING] COMPILATION WARNING")) {
+                // Known, but not actionable
+            } else if (line.startsWith("[ERROR] COMPILATION ERROR")) {
+                // Known, but not actionable
             } else if (line.startsWith("[INFO]")) {
                 currentError = addErrorToReportAndReset(errorReport, currentError);
             } else {
