@@ -17,7 +17,7 @@ yue_Hant_CN{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
-                "{1} {0}",
+                "{1} {0}",
             }
             DateTimeSkeletons{
                 "HHmmsszzzz",
