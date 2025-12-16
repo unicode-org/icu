@@ -69,7 +69,7 @@ jobs:
   # Spotless is configured to run only on files in this branch (PR) that differ
   # from origin/main
   formatter:
-    name: Formatter + Style checker
+    name: Format checker
     needs: icu4j-mvn-init-cache
     runs-on: ubuntu-latest
     steps:
@@ -96,8 +96,8 @@ jobs:
           mvn spotless:check || (echo "Style checker failed. Formatting changes can be applied by 'mvn spotless:apply'" && exit 1)
 
   # Runs an error-prone test that fails the build if any issues are found.
-  formatter:
-    name: Error-prone check
+  linter:
+    name: Linter
     needs: icu4j-mvn-init-cache
     runs-on: ubuntu-latest
     steps:
