@@ -21,7 +21,7 @@ jobs:
     commit-report:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v6
+            - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
               with:
                 fetch-tags: true
                 fetch-depth: 0
@@ -36,7 +36,7 @@ jobs:
               run: |
                 git fetch origin
             - name: Setup Python
-              uses: actions/setup-python@v6
+              uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
               with:
                 python-version: '3.12.8'
                 cache: 'pipenv'

@@ -32,7 +32,7 @@ concurrency:
   cancel-in-progress: ${{ !contains(github.ref, 'maint/') && github.ref != 'main' }}
 
 env:
-  SHARED_MVN_ARGS: '--show-version'
+  SHARED_MVN_ARGS: '--show-version --no-transfer-progress'
 
 permissions:
   contents: read
@@ -47,13 +47,13 @@ jobs:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - name: Checkout and setup
-        uses: actions/checkout@v6
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
       - name: Cache local Maven repository
-        uses: actions/cache@v4
+        uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-      - uses: actions/setup-java@v5
+      - uses: actions/setup-java@f2beeb24e141e01a676f977032f5a29d81c9e27e # v5.1.0
         with:
           distribution: 'temurin'
           java-version: '11'
@@ -74,11 +74,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout and setup
-        uses: actions/checkout@v6
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           fetch-depth: 0  # fetch all branches so that Spotless can resolve `origin/main`
       - name: Restore read-only cache of local Maven repository
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
         id: cache
         with:
           path: ~/.m2/repository
@@ -86,7 +86,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
           lookup-only: true
-      - uses: actions/setup-java@v5
+      - uses: actions/setup-java@f2beeb24e141e01a676f977032f5a29d81c9e27e # v5.1.0
         with:
           distribution: 'temurin'
           java-version: '21'
@@ -114,7 +114,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
           lookup-only: true
-      - uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
+      - uses: actions/setup-java@f2beeb24e141e01a676f977032f5a29d81c9e27e # v5.1.0
         with:
           distribution: 'temurin'
           java-version: '21'
@@ -161,16 +161,16 @@ jobs:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - name: Checkout and setup
-        uses: actions/checkout@v6
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
       - name: Restore read-only cache of local Maven repository
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
         id: cache
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-      - uses: actions/setup-java@v5
+      - uses: actions/setup-java@f2beeb24e141e01a676f977032f5a29d81c9e27e # v5.1.0
         with:
           distribution: 'temurin'
           java-version: ${{ matrix.java-version }}
@@ -190,9 +190,9 @@ jobs:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - name: Checkout and setup
-        uses: actions/checkout@v6
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
       - name: Restore read-only cache of local Maven repository
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
         id: cache
         with:
           path: ~/.m2/repository
@@ -200,7 +200,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
           lookup-only: true
-      - uses: actions/setup-java@v5
+      - uses: actions/setup-java@f2beeb24e141e01a676f977032f5a29d81c9e27e # v5.1.0
         with:
           distribution: 'temurin'
           java-version: '11'
@@ -227,9 +227,9 @@ jobs:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
       - name: Checkout and setup
-        uses: actions/checkout@v6
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
       - name: Restore read-only cache of local Maven repository
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
         id: cache
         with:
           path: ~/.m2/repository
@@ -237,7 +237,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
           lookup-only: true
-      - uses: actions/setup-java@v5
+      - uses: actions/setup-java@f2beeb24e141e01a676f977032f5a29d81c9e27e # v5.1.0
         with:
           distribution: 'temurin'
           java-version: '11'

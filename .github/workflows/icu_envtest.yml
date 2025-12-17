@@ -46,7 +46,7 @@ jobs:
         run: |
           locale -a;
       - name: Checkout and setup
-        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v4.1.1
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
       - name: Build
         run: |
           cd icu4c/source/;
@@ -105,7 +105,7 @@ jobs:
           find /usr/share/zoneinfo/ -type f,l|egrep -v "/(right|posix)/"|egrep -v "\.tab"|wc -l;
           find /usr/share/zoneinfo/ -type f,l|egrep -v "/(right|posix)/"|egrep -v "\.tab"|cut -d '/' -f5-50;
       - name: Checkout and setup
-        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v4.1.1
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
       - name: Build
         run: |
           cd icu4c/source/;

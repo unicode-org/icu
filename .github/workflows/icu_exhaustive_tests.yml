@@ -50,7 +50,7 @@ jobs:
     runs-on: ubuntu-22.04  # Updated in BRS
     timeout-minutes: 180
     steps:
-      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v4.1.1
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
       - name: Build and Run Exhaustive Tests
         run: |
           echo "Building ICU4J" && cd icu4j && mvn ${SHARED_MVN_ARGS} install -DICU.exhaustive=10
@@ -67,7 +67,7 @@ jobs:
     runs-on: ubuntu-22.04  # Updated in BRS
     timeout-minutes: 120
     steps:
-      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v4.1.1
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
       - name: Build
         run: |
           cd icu4c/source && ./runConfigureICU Linux/clang && make -j -l4.5
