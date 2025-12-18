@@ -13,6 +13,9 @@ on:
     - cron: "23 15 * * 6"
   push:
     branches: ["main"]
+  workflow_dispatch:
+    # To trigger the Env Test workflow manually, follow the instructions in
+    # https://docs.github.com/en/actions/managing-workflow-runs/manually-running-a-workflow
 
 # Declare default permissions as read only.
 permissions: read-all
