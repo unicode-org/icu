@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   sign_and_checksums:
-    if: ${{ inputs.gitReleaseTag && startsWith(inputs.gitReleaseTag, 'release-') }}
+    if: ${{ inputs.gitReleaseTag && (startsWith(inputs.gitReleaseTag, 'release-') || startsWith(inputs.gitReleaseTag, 'icu4x/')) }}
     runs-on: ubuntu-22.04  # Updated in BRS
     environment: release-env
 
