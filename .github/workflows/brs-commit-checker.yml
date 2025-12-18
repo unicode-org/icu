@@ -17,6 +17,9 @@ on:
             # Jira user name & API token is used for processing sensitive tickets comes from Github Secrets
             # stored in the repository
 
+permissions:
+  contents: read
+
 jobs:
     commit-report:
         runs-on: ubuntu-latest

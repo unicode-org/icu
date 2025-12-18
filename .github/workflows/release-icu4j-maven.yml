@@ -37,6 +37,9 @@ env:
   SHARED_MVN_ARGS: '--no-transfer-progress --show-version --batch-mode'
   RELEASE_FOLDER: '${{ github.workspace }}/releaseDist'
 
+permissions:
+  contents: read
+
 jobs:
   publish:
     runs-on: ubuntu-22.04  # Updated in BRS

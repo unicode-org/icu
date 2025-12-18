@@ -13,6 +13,9 @@ on:
   pull_request:
     branches: '**'
 
+permissions:
+  contents: read
+
 jobs:
   enforce-all-checks:
     runs-on: ubuntu-22.04  # Updated in BRS
