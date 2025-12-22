@@ -337,10 +337,9 @@ jobs:
 
       - name: Build and run unicodesetperf test
         run: |
-          cd icu4j;
           mvn ${SHARED_MVN_ARGS} install -DskipITs -DskipTests;
           git status
-          cd perf-tests;
+          cd icu4j/perf-tests;
           mkdir -p perf/results/j_unicodesetperf/${{ matrix.perf }};
           mvn dependency:copy-dependencies
           java -cp ./target/*:./target/dependency/* com.ibm.icu.dev.test.perf.UnicodeSetPerf ${{ matrix.perf }} -a -t 2 -p 4 [:Lt:] | tee perf/results/j_unicodesetperf/${{ matrix.perf }}/output.txt
@@ -391,9 +390,8 @@ jobs:
 
       - name: Build and run ucharacterperf test
         run: |
-          cd icu4j;
           mvn ${SHARED_MVN_ARGS} install -DskipITs -DskipTests;
-          cd perf-tests;
+          cd icu4j/perf-tests;
           mkdir -p perf/results/j_ucharacterperf;
           mvn dependency:copy-dependencies
           java -cp ./target/*:./target/dependency/* com.ibm.icu.dev.test.perf.UCharacterPerf -a -t 2 -p 4 0 ffff | tee perf/results/j_ucharacterperf/output.txt
@@ -447,9 +445,8 @@ jobs:
 
       - name: Build and run decimalformatperf
         run: |
-          cd icu4j;
           mvn ${SHARED_MVN_ARGS} install -DskipITs -DskipTests;
-          cd perf-tests;
+          cd icu4j/perf-tests;
           mkdir -p perf/results/j_decimalformatperf/${{ matrix.locale }}/${{ matrix.perf }};
           # Delay execution by random number of seconds. Spreading execution of multiple
           # tests over 180 secs. minimizes the possibility of push conflicts when storing
@@ -510,9 +507,8 @@ jobs:
         env:
           DATA_FILE_PATH: data/collation
         run: |
-          cd icu4j;
           mvn ${SHARED_MVN_ARGS} install -DskipITs -DskipTests;
-          cd perf-tests;
+          cd icu4j/perf-tests;
           mkdir -p perf/results/j_normperf/${{ matrix.source_text }}/${{ matrix.perf }};
           # Delay execution by random number of seconds. Spreading execution of multiple
           # tests over 180 secs. minimizes the possibility of push conflicts when storing
@@ -641,9 +637,8 @@ jobs:
         env:
           DATA_FILE_PATH: data/conversion
         run: |
-          cd icu4j;
           mvn ${SHARED_MVN_ARGS} install -DskipITs -DskipTests;
-          cd perf-tests;
+          cd icu4j/perf-tests;
           mkdir -p perf/results/j_converterperf/${{ matrix.source_text }}/${{ matrix.test_enc }}/${{ matrix.perf }};
           # Delay execution by random number of seconds. Spreading execution of multiple
           # tests over 180 secs. minimizes the possibility of push conflicts when storing
@@ -719,9 +714,8 @@ jobs:
           echo "DDIR=${ddir: -1}" >> $GITHUB_ENV
       - name: Build and run dateformatperf
         run: |
-          cd icu4j;
           mvn ${SHARED_MVN_ARGS} install -DskipITs -DskipTests;
-          cd perf-tests;
+          cd icu4j/perf-tests;
           mkdir -p perf/results/j_dateformatperf/${{ matrix.locale }}/${{ matrix.perf }}/${{ env.DDIR }};
           # Delay execution by random number of seconds. Spreading execution of multiple
           # tests over 180 secs. minimizes the possibility of push conflicts when storing
