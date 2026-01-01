@@ -536,7 +536,7 @@ jobs:
   wasm-wasi-sdk:
     runs-on: ubuntu-22.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
 
       - name: Install WASI SDK
         env:
