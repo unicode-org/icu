@@ -25,7 +25,7 @@
             SNAPSHOT for the ICU version that we want, so this should only need updating
             when the ICU version changes e.g. from 74.0.1, to 74.1, then to 75.0.1 -->
         <icu4j.version>78.2</icu4j.version>
-        <cldr-code.version>48.1-SNAPSHOT</cldr-code.version>
+        <cldr-code.version>48.1</cldr-code.version>
         <guava.version>32.1.1-jre</guava.version>
         <truth.version>1.4.4</truth.version>
         <commons-cli.version>1.9.0</commons-cli.version>
