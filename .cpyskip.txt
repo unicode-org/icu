@@ -78,6 +78,9 @@ icu4c/source/test/testdata/encoded.utf16be
 icu4c/source/test/testdata/idna_conf.txt
 icu4c/source/test/testdata/ra.xlf
 icu4c/source/test/testdata/re_tests.txt
+icu4c/source/test/testdata/cldr/localeIdentifiers/README.md
+icu4c/source/test/testdata/cldr/personNameTest/README.md
+icu4c/source/test/testdata/cldr/units/README.md
 icu4c/source/test/thaitest/space.txt
 icu4c/source/tools/tzcode/asctime.c
 icu4c/source/tools/tzcode/ialloc.c
@@ -94,6 +97,9 @@ icu4c/source/tools/tzcode/zic.c
 icu4j/eclipse-build/pdebuild/allElements.xml
 icu4j/eclipse-build/pdebuild/customTargets.xml
 icu4j/main/core/src/test/resources/com/ibm/icu/dev/data/IDNATestInput.txt
+icu4j/main/core/src/test/resources/com/ibm/icu/dev/data/cldr/localeIdentifiers/README.md
+icu4j/main/core/src/test/resources/com/ibm/icu/dev/data/cldr/personNameTest/README.md
+icu4j/main/core/src/test/resources/com/ibm/icu/dev/data/cldr/units/README.md
 icu4j/main/core/src/test/resources/com/ibm/icu/dev/data/unicode/confusablesWholeScript.txt
 icu4j/main/core/src/test/resources/com/ibm/icu/dev/data/unicode/UnicodeData.txt
 icu4j/main/core/src/test/resources/com/ibm/icu/dev/test/message2/*.json

@@ -4185,21 +4185,21 @@ public class DateIntervalFormatTest extends CoreTestFmwk {
         FormattedDateInterval formatted = roc.formatToValue(bothAfterMG);
         assertEquals(
                 "roc calendar - both dates in MG Era",
-                "民國1/1/2上午6時\u2009\u2013\u2009民國2/1/2上午6時",
+                "民國1/1/2\u2009上午6時\u2009\u2013\u2009民國2/1/2\u2009上午6時",
                 formatted.toString());
         List<Field> expectedFields = getFields(formatted);
 
         formatted = roc.formatToValue(beforeAfterMG);
         assertEquals(
                 "roc calendar - prior MG Era and in MG Era",
-                "民國前1/1/2上午6時\u2009\u2013\u2009民國2/1/2上午6時",
+                "民國前1/1/2\u2009上午6時\u2009\u2013\u2009民國2/1/2\u2009上午6時",
                 formatted.toString());
         verifyFields(formatted, expectedFields);
 
         formatted = roc.formatToValue(bothBeforeMG);
         assertEquals(
                 "roc calendar - both dates prior MG Era",
-                "民國前2/1/2上午6時\u2009\u2013\u2009民國前1/1/2上午6時",
+                "民國前2/1/2\u2009上午6時\u2009\u2013\u2009民國前1/1/2\u2009上午6時",
                 formatted.toString());
         verifyFields(formatted, expectedFields);
     }

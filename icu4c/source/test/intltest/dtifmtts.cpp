@@ -2293,20 +2293,20 @@ void DateIntervalFormatTest::testTicket21222ROCEraDiff() {
 
     formatted = roc->formatToValue(bothAfterMG, status);
     assertEquals("roc calendar - both dates in MG Era",
-                 u"民國1/1/2上午6時\u2009\u2013\u2009民國2/1/2上午6時",
+                 u"民國1/1/2\u2009上午6時\u2009\u2013\u2009民國2/1/2\u2009上午6時",
                  formatted.toString(status));
     getCategoryAndField(formatted, expectedCategory,
                         expectedField, status);
 
     formatted = roc->formatToValue(beforeAfterMG, status);
     assertEquals("roc calendar - prior MG Era and in MG Era",
-                 u"民國前1/1/2上午6時\u2009\u2013\u2009民國2/1/2上午6時",
+                 u"民國前1/1/2\u2009上午6時\u2009\u2013\u2009民國2/1/2\u2009上午6時",
                  formatted.toString(status));
     verifyCategoryAndField(formatted, expectedCategory, expectedField, status);
 
     formatted = roc->formatToValue(bothBeforeMG, status);
     assertEquals("roc calendar - both dates prior MG Era",
-                 u"民國前2/1/2上午6時\u2009\u2013\u2009民國前1/1/2上午6時",
+                 u"民國前2/1/2\u2009上午6時\u2009\u2013\u2009民國前1/1/2\u2009上午6時",
                  formatted.toString(status));
     verifyCategoryAndField(formatted, expectedCategory, expectedField, status);
 }
