@@ -699,12 +699,16 @@ sw{
             text{"Maandiko"}
         }
         hc{
+            c12{"Kipindi cha saa 12"}
+            c24{"Kipindi cha saa 24"}
             h11{"Kipindi cha saa 12 (0–11)"}
             h12{"Kipindi cha saa 12 (1–12)"}
             h23{"Kipindi cha saa 24 (0–23)"}
             h24{"Kipindi cha saa 24 (1–24)"}
         }
         hc%core{
+            c12{"12"}
+            c24{"24"}
             h11{"12 (0–11)"}
             h12{"12 (1–12)"}
             h23{"24 (0–23)"}

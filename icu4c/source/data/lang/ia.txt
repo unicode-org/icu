@@ -604,6 +604,8 @@ ia{
             standard{"standard"}
         }
         hc{
+            c12{"systema de 12 horas"}
+            c24{"systema de 24 horas"}
             h11{"systema de 12 horas (0–11)"}
             h12{"systema de 12 horas (1–12)"}
             h23{"systema de 24 horas (0–23)"}

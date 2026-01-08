@@ -814,12 +814,16 @@ lv{
             text{"Teksts"}
         }
         hc{
+            c12{"12 stundu sistēma"}
+            c24{"24 stundu sistēma"}
             h11{"12 stundu sistēma (0–11)"}
             h12{"12 stundu sistēma (1–12)"}
             h23{"24 stundu sistēma (0–23)"}
             h24{"24 stundu sistēma (1–24)"}
         }
         hc%core{
+            c12{"12"}
+            c24{"24"}
             h11{"12 (0–11)"}
             h12{"12 (1–12)"}
             h23{"24 (0–23)"}

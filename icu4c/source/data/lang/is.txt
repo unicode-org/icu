@@ -789,12 +789,16 @@ is{
             text{"Texti"}
         }
         hc{
+            c12{"12 tíma kerfi"}
+            c24{"24 tíma kerfi"}
             h11{"12 tíma kerfi (0–11)"}
             h12{"12 tíma kerfi (1–12)"}
             h23{"24 tíma kerfi (0–23)"}
             h24{"24 tíma kerfi (1–24)"}
         }
         hc%core{
+            c12{"12"}
+            c24{"24"}
             h11{"12 (0–11)"}
             h12{"12 (1–12)"}
             h23{"24 (0–23)"}

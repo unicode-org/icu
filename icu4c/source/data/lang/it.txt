@@ -987,12 +987,16 @@ it{
             text{"Testo"}
         }
         hc{
+            c12{"Sistema orario a 12 ore"}
+            c24{"Sistema orario a 24 ore"}
             h11{"Sistema orario a 12 ore (0–11)"}
             h12{"Sistema orario a 12 ore (1–12)"}
             h23{"Sistema orario a 24 ore (0–23)"}
             h24{"Sistema orario a 24 ore (1–24)"}
         }
         hc%core{
+            c12{"12 ore"}
+            c24{"24 ore"}
             h11{"12 ore (0–11)"}
             h12{"12 ore (1–12)"}
             h23{"24 ore (0–23)"}

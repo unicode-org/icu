@@ -318,6 +318,8 @@ kea{
             standard{"Órdi padron"}
         }
         hc{
+            c12{"Sistema di 12 ora"}
+            c24{"Sistema di 24 ora"}
             h11{"Sistema di 12 ora (0–11)"}
             h12{"Sistema di 12 ora (1–12)"}
             h23{"Sistema di 24 ora (0–23)"}

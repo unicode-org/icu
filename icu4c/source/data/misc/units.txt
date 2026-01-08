@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/
 units:table(nofallback){
-    cldrVersion{"48"}
+    cldrVersion{"49"}
     convertUnits{
         acre{
             factor{"ft2_to_m2 * 43560"}

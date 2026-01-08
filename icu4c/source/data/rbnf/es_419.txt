@@ -6,7 +6,7 @@ es_419{
         OrdinalRules{
             "%digits-ordinal-masculine-adjective:",
             "-x: \u2212>>;",
-            "0: =#,##0=.$(ordinal,one{\u1D49\u02B3}other{\u00BA})$;",
+            "0: =#,##0=$(ordinal,one{\u1D49\u02B3}other{\u00BA})$.;",
             "%digits-ordinal-masculine:",
             "-x: \u2212>>;",
             "0: =#,##0=\u00BA.;",

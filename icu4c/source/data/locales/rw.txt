@@ -7,8 +7,8 @@ rw{
     NumberElements{
         latn{
             symbols{
-                decimal{","}
-                group{"."}
+                decimal{"."}
+                group{","}
             }
         }
     }

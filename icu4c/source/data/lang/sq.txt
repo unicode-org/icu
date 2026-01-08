@@ -753,12 +753,16 @@ sq{
             text{"mesazh me tekst"}
         }
         hc{
+            c12{"sistem 12-orësh"}
+            c24{"sistem 24-orësh"}
             h11{"sistem 12-orësh (0 - 11)"}
             h12{"sistem 12-orësh (1 - 12)"}
             h23{"sistem 24-orësh (0 - 23)"}
             h24{"sistem 24-orësh (1 - 24)"}
         }
         hc%core{
+            c12{"12-orësh"}
+            c24{"24-orësh"}
             h11{"12-orësh (0 - 11)"}
             h12{"12-orësh (0 - 12)"}
             h23{"24-orësh (0 - 23)"}

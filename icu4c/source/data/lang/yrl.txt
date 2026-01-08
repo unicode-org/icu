@@ -777,6 +777,8 @@ yrl{
             npinyin{"Papasawera"}
         }
         hc{
+            c12{"Sistẽma 24 húra-ita"}
+            c24{"Sistẽma 24 húra-ita"}
             h11{"Sistẽma 12 húra-ita (0-11)"}
             h12{"Sistẽma 24 húra-ita (1-24)"}
             h23{"Sistẽma 24 húra-ita (0-23)"}

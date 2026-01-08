@@ -152,6 +152,8 @@ nn{
             hwidth{"halv breidd"}
         }
         hc{
+            c12{"12-timarssystem"}
+            c24{"24-timarssystem"}
             h11{"12-timarssystem (0–11)"}
             h12{"12-timarssystem (1–12)"}
             h23{"24-timarssystem (0–23)"}

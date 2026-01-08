@@ -879,12 +879,16 @@ es{
             text{"texto"}
         }
         hc{
+            c12{"sistema de 12 horas"}
+            c24{"sistema de 24 horas"}
             h11{"sistema de 12 horas (0–11)"}
             h12{"sistema de 12 horas (1–12)"}
             h23{"sistema de 24 horas (0–23)"}
             h24{"sistema de 24 horas (1–24)"}
         }
         hc%core{
+            c12{"12"}
+            c24{"24"}
             h11{"12 (0–11)"}
             h12{"12 (1–12)"}
             h23{"24 (0–23)"}

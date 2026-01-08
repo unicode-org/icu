@@ -982,12 +982,16 @@ de{
             text{"Text"}
         }
         hc{
+            c12{"12-Stunden-Format"}
+            c24{"24-Stunden-Format"}
             h11{"12-Stunden-Format (0–11)"}
             h12{"12-Stunden-Format (1-12)"}
             h23{"24-Stunden-Format (0-23)"}
             h24{"24-Stunden-Format (1-24)"}
         }
         hc%core{
+            c12{"12"}
+            c24{"24"}
             h11{"12 (0–11)"}
             h12{"12 (1–12)"}
             h23{"24 (0–23)"}

@@ -12,7 +12,7 @@ blo{
                 "&ŋ < ŋm <<< Ŋm <<< ŊM"
                 "&s < sh <<< Sh <<< SH"
             }
-            Version{"48"}
+            Version{"49"}
         }
     }
 }

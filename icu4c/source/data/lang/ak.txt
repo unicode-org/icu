@@ -286,8 +286,10 @@ ak{
             standard{"Susudua"}
         }
         hc{
+            c12{"Nnɔnhwere 12 Sestɛm"}
+            c24{"Nnɔnhwere 24 Sestɛm"}
             h11{"Nnɔnhwere 12 Sestɛm (0–11)"}
-            h12{"Nnɔnhwere 12 Sestɛm (1–12"}
+            h12{"Nnɔnhwere 12 Sestɛm (1–12)"}
             h23{"Nnɔnhwere 24 Sestɛm (0–23)"}
             h24{"Nnɔnhwere 24 Sestɛm (0–24)"}
         }

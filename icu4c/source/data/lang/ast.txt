@@ -849,6 +849,8 @@ ast{
             zhuyin{"orde de clasificación zhuyin"}
         }
         hc{
+            c12{"sistema de 12 hores"}
+            c24{"sistema de 24 hores"}
             h11{"sistema de 12 hores (0–11)"}
             h12{"sistema de 12 hores (1–12)"}
             h23{"sistema de 24 hores (0–23)"}

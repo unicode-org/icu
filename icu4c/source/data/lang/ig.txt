@@ -760,12 +760,16 @@ ig{
             text{"Ederede"}
         }
         hc{
+            c12{"Ụsọrọ Okịrịkịrị awa iri na abụọ"}
+            c24{"Ụsọrọ Okịrịkịrị"}
             h11{"Ụsọrọ Okịrịkịrị awa iri na abụọ (0–11)"}
             h12{"Ụsọrọ Okịrịkịrị awa iri na abụọ (0–12)"}
             h23{"Ụsọrọ Okịrịkịrị (0–23)"}
             h24{"Ụsọrọ Okịrịkịrị (1–24)"}
         }
         hc%core{
+            c12{"12"}
+            c24{"24"}
             h11{"12 (0–11)"}
             h12{"12 (1–12)"}
             h23{"24 (0–23)"}

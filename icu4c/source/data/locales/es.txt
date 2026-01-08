@@ -192,7 +192,8 @@ es{
                 masculine{"El {0} es…"}
             }
             ordinal{
-                other{"Toma la {0}.ª a la derecha."}
+                one{"El {0}.ᵉʳ equipo clasificado ganó."}
+                other{"El equipo {0}.º clasificado ganó."}
             }
             plural{
                 many{"{0} de días"}

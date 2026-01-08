@@ -631,6 +631,8 @@ fo{
             standard{"vanlig"}
         }
         hc{
+            c12{"12 tímar klokkuskipan"}
+            c24{"24 tímar klokkuskipan"}
             h11{"12 tímar klokkuskipan (0–11)"}
             h12{"12 tímar klokkuskipan (1–12)"}
             h23{"24 tímar klokkuskipan (0–23)"}

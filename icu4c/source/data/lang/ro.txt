@@ -926,12 +926,16 @@ ro{
             text{"text"}
         }
         hc{
+            c12{"sistem cu 12 ore"}
+            c24{"sistem cu 24 de ore"}
             h11{"sistem cu 12 ore (0–11)"}
             h12{"sistem cu 12 ore (1–12)"}
             h23{"sistem cu 24 de ore (0–23)"}
             h24{"sistem cu 24 de ore (1–24)"}
         }
         hc%core{
+            c12{"12"}
+            c24{"24"}
             h11{"12 (0–11)"}
             h12{"12 (1–12)"}
             h23{"24 (0–23)"}

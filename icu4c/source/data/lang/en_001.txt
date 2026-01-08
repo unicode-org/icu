@@ -17,6 +17,8 @@ en_001{
             yes{"Sort Unicode Normalised"}
         }
         hc{
+            c12{"12-Hour System"}
+            c24{"24-Hour System"}
             h11{"12-Hour System (0–11)"}
             h12{"12-Hour System (1–12)"}
             h23{"24-Hour System (0–23)"}

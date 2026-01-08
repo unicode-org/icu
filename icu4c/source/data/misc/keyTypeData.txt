@@ -78,10 +78,6 @@ keyTypeData:table(nofallback){
                 gb2312{"true"}
                 reformed{"true"}
             }
-            hc{
-                c12{"true"}
-                c24{"true"}
-            }
         }
     }
     typeMap{

@@ -2204,7 +2204,7 @@ supplementalData:table(nofallback){
             "islamic-tbla",
         }
     }
-    cldrVersion{"48"}
+    cldrVersion{"49"}
     codeMappings{
         {
             "AA",
@@ -13180,6 +13180,17 @@ supplementalData:table(nofallback){
                 scripts{"Latn"}
             }
         }
+        esg{
+            primary{
+                scripts{"Gonm"}
+            }
+            secondary{
+                scripts{
+                    "Deva",
+                    "Telu",
+                }
+            }
+        }
         esu{
             primary{
                 scripts{"Latn"}
@@ -13457,9 +13468,14 @@ supplementalData:table(nofallback){
         }
         gon{
             primary{
+                scripts{"Deva"}
+            }
+            secondary{
                 scripts{
-                    "Deva",
                     "Telu",
+                    "Gong",
+                    "Gonm",
+                    "Orya",
                 }
             }
         }
@@ -13800,6 +13816,14 @@ supplementalData:table(nofallback){
         is{
             primary{
                 scripts{"Latn"}
+            }
+        }
+        isv{
+            primary{
+                scripts{"Latn"}
+            }
+            secondary{
+                scripts{"Cyrl"}
             }
         }
         it{
@@ -16440,6 +16464,18 @@ supplementalData:table(nofallback){
                 scripts{"Arab"}
             }
         }
+        wsg{
+            primary{
+                scripts{"Telu"}
+            }
+            secondary{
+                scripts{
+                    "Deva",
+                    "Gong",
+                    "Gonm",
+                }
+            }
+        }
         wtm{
             primary{
                 scripts{"Deva"}
@@ -17214,6 +17250,24 @@ supplementalData:table(nofallback){
             }
             {
                 "rn",
+                "rw",
+                "10",
+                "0",
+            }
+            {
+                "rn",
+                "fr",
+                "30",
+                "1",
+            }
+            {
+                "rn",
+                "en",
+                "35",
+                "1",
+            }
+            {
+                "rw",
                 "en",
                 "30",
                 "1",
@@ -17221,7 +17275,7 @@ supplementalData:table(nofallback){
             {
                 "rw",
                 "fr",
-                "30",
+                "35",
                 "1",
             }
             {
@@ -29016,6 +29070,9 @@ supplementalData:table(nofallback){
             }
             wbr{
                 populationShareF:int{47150000}
+            }
+            wsg{
+                populationShareF:int{46210000}
             }
             wtm{
                 literacyShareF:int{49250000}

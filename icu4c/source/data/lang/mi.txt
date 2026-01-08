@@ -553,6 +553,8 @@ mi{
             standard{"Arowhānui"}
         }
         hc{
+            c12{"Pūnaha Haora 12"}
+            c24{"Pūnaha Haora 24"}
             h11{"Pūnaha Haora 12 (0–11)"}
             h12{"Pūnaha Haora 12 (1–12)"}
             h23{"Pūnaha Haora 24 (0–23)"}
