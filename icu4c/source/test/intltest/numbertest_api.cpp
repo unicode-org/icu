@@ -888,6 +888,17 @@ void NumberFormatterApiTest::unitMeasure() {
             Locale("en"),
             100,
             u"100");
+    
+      // This test checks the behavior of using a fixed-size length for the units array with a fixed number of units.
+      // The array size is fixed, and we are now using a binary search approach.
+      assertFormatSingle(
+              u"One of the latest unit, volume-teaspoon",
+                    u"measure-unit/volume-teaspoon",
+                    u"unit/teaspoon",
+                    NumberFormatter::with().unit(MeasureUnit::forIdentifier("teaspoon", status)),
+                    Locale("en-US"),
+                    100,
+                    u"100 tsp");
 
     // TODO: desired behaviour for this "pathological" case?
     // Since this is pointless, we don't test that its behaviour doesn't change.

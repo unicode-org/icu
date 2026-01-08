@@ -870,6 +870,26 @@ public class MeasureUnit implements Serializable {
         return null;
     }
 
+    /**
+     * Returns the MeasureUnit instance if the given type and subtype combination is valid, or null
+     * otherwise.
+     *
+     * <p>Example: "length", "meter" -> METER "length", "kilometer" -> KILOMETER "length",
+     * "kilometer-per-hour" -> null --> not valid
+     *
+     * @param type the unit type (e.g., "length", "mass", "volume")
+     * @param subtype the unit subtype (e.g., "meter", "kilogram", "liter")
+     * @return the MeasureUnit if valid, otherwise null
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public static MeasureUnit getUnit(String type, String subtype) {
+        populateCache();
+        Map<String, MeasureUnit> units = cache.get(type);
+        return units != null ? units.get(subtype) : null;
+    }
+
     static final UnicodeSet ASCII = new UnicodeSet('a', 'z').freeze();
     static final UnicodeSet ASCII_HYPHEN_DIGITS =
             new UnicodeSet('-', '-', '0', '9', 'a', 'z').freeze();

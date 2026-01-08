@@ -720,6 +720,22 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static StringEnumeration* getAvailableTypes(UErrorCode &errorCode);
 
+#ifndef U_HIDE_INTERNAL_API
+    /**
+     * Validates that a specific type and subtype combination exists and retrieve the unit.
+     * 
+     * <p> Note: This is more efficient than calling getAvailable() when you only need
+     * to validate and retrieve a single unit.
+     *
+     * @param type the unit type (e.g., "length", "mass", "volume")
+     * @param subtype the unit subtype (e.g., "meter", "kilogram", "liter")
+     * @param result if the unit is valid, this will be set to the MeasureUnit
+     * @return true if the type/subtype combination is valid, false otherwise
+     * @internal
+     */
+    static bool validateAndGet(StringPiece type, StringPiece subtype, MeasureUnit &result);
+#endif /* U_HIDE_INTERNAL_API */
+
     /**
      * Return the class ID for this class. This is useful only for comparing to
      * a return value from getDynamicClassID(). For example:

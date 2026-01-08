@@ -2546,6 +2546,14 @@ MeasureUnit MeasureUnit::getToJp() {
 
 // End generated code for measunit.cpp
 
+/**
+ * Generic binary search function for string arrays.
+ * @param array the array of strings to search in
+ * @param start the starting index (inclusive)
+ * @param end the ending index (exclusive)
+ * @param key the string to search for
+ * @return the index if found, -1 if not found
+ */
 static int32_t binarySearch(
         const char * const * array, int32_t start, int32_t end, StringPiece key) {
     while (start < end) {
@@ -2561,6 +2569,33 @@ static int32_t binarySearch(
         end = mid;
     }
     return -1;
+}
+
+/**
+ * Helper function to get the subtype range for a given type index.
+ * @param typeIdx the type index (0 to UPRV_LENGTHOF(gTypes)-1)
+ * @param start will be set to the starting index in gSubTypes
+ * @param end will be set to the ending index in gSubTypes (exclusive)
+ * @return the length of the range (end - start)
+ */
+static int32_t getSubtypeRange(int32_t typeIdx, int32_t &start, int32_t &end) {
+    U_ASSERT(typeIdx >= 0 && typeIdx < UPRV_LENGTHOF(gTypes));
+    start = gOffsets[typeIdx];
+    end = gOffsets[typeIdx + 1];
+    return end - start;
+}
+
+/**
+ * Binary search function that searches for a subtype in gSubTypes within the range
+ * corresponding to the given type.
+ * @param typeIdx the type index (0 to UPRV_LENGTHOF(gTypes)-1)
+ * @param key the subtype string to search for
+ * @return the index in gSubTypes if found, -1 if not found
+ */
+static int32_t binarySearch(int32_t typeIdx, StringPiece key) {
+    int32_t start, end;
+    (void)getSubtypeRange(typeIdx, start, end);
+    return binarySearch(gSubTypes, start, end, key);
 }
 
 MeasureUnit::MeasureUnit() : MeasureUnit(kBaseTypeIdx, kBaseSubTypeIdx) {
@@ -2680,7 +2715,8 @@ int32_t MeasureUnit::getAvailable(
     }
     int32_t idx = 0;
     for (int32_t typeIdx = 0; typeIdx < UPRV_LENGTHOF(gTypes); ++typeIdx) {
-        int32_t len = gOffsets[typeIdx + 1] - gOffsets[typeIdx];
+        int32_t start, end;
+        int32_t len = getSubtypeRange(typeIdx, start, end);
         for (int32_t subTypeIdx = 0; subTypeIdx < len; ++subTypeIdx) {
             dest[idx].setTo(typeIdx, subTypeIdx);
             ++idx;
@@ -2702,7 +2738,8 @@ int32_t MeasureUnit::getAvailable(
     if (typeIdx == -1) {
         return 0;
     }
-    int32_t len = gOffsets[typeIdx + 1] - gOffsets[typeIdx];
+    int32_t start, end;
+    int32_t len = getSubtypeRange(typeIdx, start, end);
     if (destCapacity < len) {
         errorCode = U_BUFFER_OVERFLOW_ERROR;
         return len;
@@ -2729,6 +2766,24 @@ StringEnumeration* MeasureUnit::getAvailableTypes(UErrorCode &errorCode) {
     return result;
 }
 
+bool MeasureUnit::validateAndGet(StringPiece type, StringPiece subtype, MeasureUnit &result) {
+    // Find the type index using binary search
+    int32_t typeIdx = binarySearch(gTypes, 0, UPRV_LENGTHOF(gTypes), type);
+    if (typeIdx == -1) {
+        return false;  // Type not found
+    }
+    
+    // Find the subtype within the type's range using binary search
+    int32_t subtypeIdx = binarySearch(typeIdx, subtype);
+    if (subtypeIdx == -1) {
+        return false;  // Subtype not found
+    }
+    
+    // Create the MeasureUnit and return it
+    result.setTo(typeIdx, subtypeIdx - gOffsets[typeIdx]);
+    return true;
+}
+
 bool MeasureUnit::findBySubType(StringPiece subType, MeasureUnit* output) {
     // Sanity checking kCurrencyOffset and final entry in gOffsets
     U_ASSERT(uprv_strcmp(gTypes[kCurrencyOffset], "currency") == 0);
@@ -2739,7 +2794,7 @@ bool MeasureUnit::findBySubType(StringPiece subType, MeasureUnit* output) {
         if (t == kCurrencyOffset) {
             continue;
         }
-        int32_t st = binarySearch(gSubTypes, gOffsets[t], gOffsets[t + 1], subType);
+        int32_t st = binarySearch(t, subType);
         if (st >= 0) {
             output->setTo(t, st - gOffsets[t]);
             return true;
@@ -2763,7 +2818,7 @@ void MeasureUnit::initTime(const char *timeId) {
     int32_t result = binarySearch(gTypes, 0, UPRV_LENGTHOF(gTypes), "duration");
     U_ASSERT(result != -1);
     fTypeId = result;
-    result = binarySearch(gSubTypes, gOffsets[fTypeId], gOffsets[fTypeId + 1], timeId);
+    result = binarySearch(fTypeId, timeId);
     U_ASSERT(result != -1);
     fSubTypeId = result - gOffsets[fTypeId];
 }
@@ -2772,8 +2827,7 @@ void MeasureUnit::initCurrency(StringPiece isoCurrency) {
     int32_t result = binarySearch(gTypes, 0, UPRV_LENGTHOF(gTypes), "currency");
     U_ASSERT(result != -1);
     fTypeId = result;
-    result = binarySearch(
-            gSubTypes, gOffsets[fTypeId], gOffsets[fTypeId + 1], isoCurrency);
+    result = binarySearch(fTypeId, isoCurrency);
     if (result == -1) {
         UErrorCode status = U_ZERO_ERROR;
         fImpl = new MeasureUnitImpl(MeasureUnitImpl::forCurrencyCode(isoCurrency, status));
