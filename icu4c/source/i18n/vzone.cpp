@@ -81,32 +81,116 @@ vzone_setLastModified(VZone* zone, UDate lastModified) {
 
 U_CAPI void U_EXPORT2
 vzone_write(VZone* zone, char16_t* & result, int32_t & resultLength, UErrorCode& status) {
+    result = nullptr;
+    resultLength = 0;
+    if (U_FAILURE(status)) {
+        return;
+    }
     UnicodeString s;
     ((VTimeZone*)zone)->VTimeZone::write(s, status);
+    if (U_FAILURE(status)) {
+        return;
+    }
 
     resultLength = s.length();
-    result = (char16_t*)uprv_malloc(resultLength);
-    memcpy(result,s.getBuffer(),resultLength);
+    if (resultLength < 0) {
+        status = U_INTERNAL_PROGRAM_ERROR;
+        return;
+    }
+
+    const size_t units = static_cast<size_t>(resultLength);
+    if (units > (SIZE_MAX / sizeof(char16_t)) - 1) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+    const size_t bytesWithTerminator = (units + 1) * sizeof(char16_t);
+
+    result = static_cast<char16_t*>(uprv_malloc(bytesWithTerminator));
+    if (result == nullptr) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        resultLength = 0;
+        return;
+    }
+    if (units != 0) {
+        memcpy(result, s.getBuffer(), units * sizeof(char16_t));
+    }
+    result[resultLength] = 0;
 }
 
 U_CAPI void U_EXPORT2
 vzone_writeFromStart(VZone* zone, UDate start, char16_t* & result, int32_t & resultLength, UErrorCode& status) {
+    result = nullptr;
+    resultLength = 0;
+    if (U_FAILURE(status)) {
+        return;
+    }
     UnicodeString s;
     ((VTimeZone*)zone)->VTimeZone::write(start, s, status);
+    if (U_FAILURE(status)) {
+        return;
+    }
 
     resultLength = s.length();
-    result = (char16_t*)uprv_malloc(resultLength);
-    memcpy(result,s.getBuffer(),resultLength);
+    if (resultLength < 0) {
+        status = U_INTERNAL_PROGRAM_ERROR;
+        return;
+    }
+
+    const size_t units = static_cast<size_t>(resultLength);
+    if (units > (SIZE_MAX / sizeof(char16_t)) - 1) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+    const size_t bytesWithTerminator = (units + 1) * sizeof(char16_t);
+
+    result = static_cast<char16_t*>(uprv_malloc(bytesWithTerminator));
+    if (result == nullptr) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        resultLength = 0;
+        return;
+    }
+    if (units != 0) {
+        memcpy(result, s.getBuffer(), units * sizeof(char16_t));
+    }
+    result[resultLength] = 0;
 }
 
 U_CAPI void U_EXPORT2
 vzone_writeSimple(VZone* zone, UDate time, char16_t* & result, int32_t & resultLength, UErrorCode& status) {
+    result = nullptr;
+    resultLength = 0;
+    if (U_FAILURE(status)) {
+        return;
+    }
     UnicodeString s;
     ((VTimeZone*)zone)->VTimeZone::writeSimple(time, s, status);
+    if (U_FAILURE(status)) {
+        return;
+    }
 
     resultLength = s.length();
-    result = (char16_t*)uprv_malloc(resultLength);
-    memcpy(result,s.getBuffer(),resultLength);
+    if (resultLength < 0) {
+        status = U_INTERNAL_PROGRAM_ERROR;
+        return;
+    }
+
+    const size_t units = static_cast<size_t>(resultLength);
+    if (units > (SIZE_MAX / sizeof(char16_t)) - 1) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+    const size_t bytesWithTerminator = (units + 1) * sizeof(char16_t);
+
+    result = static_cast<char16_t*>(uprv_malloc(bytesWithTerminator));
+    if (result == nullptr) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        resultLength = 0;
+        return;
+    }
+    if (units != 0) {
+        memcpy(result, s.getBuffer(), units * sizeof(char16_t));
+    }
+    result[resultLength] = 0;
 }
 
 U_CAPI int32_t U_EXPORT2

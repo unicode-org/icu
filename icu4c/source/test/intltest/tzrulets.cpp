@@ -2178,120 +2178,92 @@ TimeZoneRuleTest::TestT6669() {
 
 void
 TimeZoneRuleTest::TestVTimeZoneWrapper() {
-#if 0
-    // local variables
-    UBool b;
-    char16_t * data = nullptr;
-    int32_t length = 0;
-    int32_t i;
-    UDate result;
-    UDate base = 1231027200000.0; //2009-01-04T00:00:00
-    UErrorCode status;
+    // Regression coverage for vzone_write*() UTF-16 code unit vs byte length handling.
+    // This test is intentionally focused on returned buffer invariants.
+    UErrorCode status = U_ZERO_ERROR;
 
-    const char *name = "Test Initial";
-    char16_t uname[20];
+    const char16_t tzid[] = u"America/Chicago";
+    const int32_t tzidLen = u_strlen(reinterpret_cast<const UChar*>(tzid));
+    VZone* zone = vzone_openID(reinterpret_cast<const UChar*>(tzid), tzidLen);
+    if (zone == nullptr) {
+        errln("FAIL: vzone_openID returned nullptr");
+        return;
+    }
 
-    UClassID cid1;
-    UClassID cid2;
+    // Make TZURL very large to stress serialization paths.
+    const int32_t kUrlLen = 100000;
+    LocalArray<UChar> tzurl(new UChar[kUrlLen + 1]);
+    if (tzurl.isNull()) {
+        errln("FAIL: Failed to allocate TZURL buffer");
+        vzone_close(zone);
+        return;
+    }
+    for (int32_t i = 0; i < kUrlLen; i++) {
+        tzurl.getAlias()[i] = static_cast<UChar>('a' + (i % 26));
+    }
+    tzurl.getAlias()[kUrlLen] = 0;
+    vzone_setTZURL(zone, tzurl.getAlias(), kUrlLen);
 
-    ZRule * r;
-    IZRule* ir1;
-    IZRule* ir2;
-    ZTrans* zt1;
-    ZTrans* zt2;
-    VZone*  v1;
-    VZone*  v2;
+    // vzone_write
+    {
+        UChar* out = nullptr;
+        int32_t outLen = 0;
+        status = U_ZERO_ERROR;
+        vzone_write(zone, out, outLen, status);
+        if (U_FAILURE(status) || out == nullptr || outLen <= 0) {
+            errln("FAIL: vzone_write failed - status=%s", u_errorName(status));
+        } else {
+            if (out[outLen] != 0) {
+                errln("FAIL: vzone_write did not NUL-terminate the output buffer");
+            }
+            if (u_strlen(out) != outLen) {
+                errln("FAIL: vzone_write returned length mismatch");
+            }
+        }
+        uprv_free(out);
+    }
 
-    uprv_memset(uname, 0, sizeof(uname));
-    u_uastrcpy(uname, name);
+    // vzone_writeFromStart
+    {
+        UChar* out = nullptr;
+        int32_t outLen = 0;
+        status = U_ZERO_ERROR;
+        const UDate start = getUTCMillis(2020, UCAL_JANUARY, 1, 0, 0, 0, 0);
+        vzone_writeFromStart(zone, start, out, outLen, status);
+        if (U_FAILURE(status) || out == nullptr || outLen <= 0) {
+            errln("FAIL: vzone_writeFromStart failed - status=%s", u_errorName(status));
+        } else {
+            if (out[outLen] != 0) {
+                errln("FAIL: vzone_writeFromStart did not NUL-terminate the output buffer");
+            }
+            if (u_strlen(out) != outLen) {
+                errln("FAIL: vzone_writeFromStart returned length mismatch");
+            }
+        }
+        uprv_free(out);
+    }
 
-    // create rules
-    ir1 = izrule_open(uname, 13, 2*HOUR, 0);
-    ir2 = izrule_clone(ir1);
+    // vzone_writeSimple
+    {
+        UChar* out = nullptr;
+        int32_t outLen = 0;
+        status = U_ZERO_ERROR;
+        const UDate time = getUTCMillis(2020, UCAL_JANUARY, 1, 0, 0, 0, 0);
+        vzone_writeSimple(zone, time, out, outLen, status);
+        if (U_FAILURE(status) || out == nullptr || outLen <= 0) {
+            errln("FAIL: vzone_writeSimple failed - status=%s", u_errorName(status));
+        } else {
+            if (out[outLen] != 0) {
+                errln("FAIL: vzone_writeSimple did not NUL-terminate the output buffer");
+            }
+            if (u_strlen(out) != outLen) {
+                errln("FAIL: vzone_writeSimple returned length mismatch");
+            }
+        }
+        uprv_free(out);
+    }
 
-    // test equality
-    b = izrule_equals(ir1, ir2);
-    b = izrule_isEquivalentTo(ir1, ir2);
-
-    // test accessors
-    izrule_getName(ir1, data, length);
-    i = izrule_getRawOffset(ir1);
-    i = izrule_getDSTSavings(ir1);
-
-    b = izrule_getFirstStart(ir1, 2*HOUR, 0, result);
-    b = izrule_getFinalStart(ir1, 2*HOUR, 0, result);
-    b = izrule_getNextStart(ir1, base , 2*HOUR, 0, true, result);
-    b = izrule_getPreviousStart(ir1, base, 2*HOUR, 0, true, result);
-
-    // test class ids
-    cid1 = izrule_getStaticClassID(ir1);
-    cid2 = izrule_getDynamicClassID(ir1);
-
-    // test transitions
-    zt1 = ztrans_open(base, ir1, ir2);
-    zt2 = ztrans_clone(zt1);
-    zt2 = ztrans_openEmpty();
-
-    // test equality
-    b = ztrans_equals(zt1, zt2);
-
-    // test accessors
-    result = ztrans_getTime(zt1);
-    ztrans_setTime(zt1, result);
-
-    r = (ZRule*)ztrans_getFrom(zt1);
-    ztrans_setFrom(zt1, (void*)ir1);
-    ztrans_adoptFrom(zt1, (void*)ir1);
-
-    r = (ZRule*)ztrans_getTo(zt1);
-    ztrans_setTo(zt1, (void*)ir2);
-    ztrans_adoptTo(zt1, (void*)ir2);
-
-    // test class ids
-    cid1 = ztrans_getStaticClassID(zt1);
-    cid2 = ztrans_getDynamicClassID(zt2);
-
-    // test vzone
-    v1 = vzone_openID((char16_t*)"America/Chicago", sizeof("America/Chicago"));
-    v2 = vzone_clone(v1);
-    //v2 = vzone_openData(const char16_t* vtzdata, int32_t vtzdataLength, UErrorCode& status);
-
-    // test equality
-    b = vzone_equals(v1, v2);
-    b = vzone_hasSameRules(v1, v2);
-
-    // test accessors
-    b = vzone_getTZURL(v1, data, length);
-    vzone_setTZURL(v1, data, length);
-    
-    b = vzone_getLastModified(v1, result);
-    vzone_setLastModified(v1, result);
-    
-    // test writers
-    vzone_write(v1, data, length, status);
-    vzone_writeFromStart(v1, result, data, length, status);
-    vzone_writeSimple(v1, result, data, length, status);
-
-    // test more accessors
-    i = vzone_getRawOffset(v1);
-    vzone_setRawOffset(v1, i);
-
-    b = vzone_useDaylightTime(v1);
-    b = vzone_inDaylightTime(v1, result, status);
-
-    b = vzone_getNextTransition(v1, result, false, zt1);
-    b = vzone_getPreviousTransition(v1, result, false, zt1);
-    i = vzone_countTransitionRules(v1, status);
-
-    cid1 = vzone_getStaticClassID(v1);
-    cid2 = vzone_getDynamicClassID(v1);
-
-    // cleanup
-    vzone_close(v1);
-    vzone_close(v2);
-    ztrans_close(zt1);
-    ztrans_close(zt2);
-#endif
+    vzone_close(zone);
 }
 
 //----------- private test helpers -------------------------------------------------
