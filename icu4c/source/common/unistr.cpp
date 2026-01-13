@@ -995,7 +995,7 @@ UnicodeString::extract(int32_t start,
 }
 
 UnicodeString
-UnicodeString::tempSubString(int32_t start, int32_t len) const {
+UnicodeString::tempSubString(int32_t start, int32_t len) const &{
   pinIndices(start, len);
   const char16_t *array = getBuffer();  // not getArrayStart() to check kIsBogus & kOpenGetBuffer
   if(array==nullptr) {

@@ -1739,7 +1739,9 @@ public:
    * @return a read-only alias UnicodeString object for the substring
    * @stable ICU 4.4
    */
-  UnicodeString tempSubString(int32_t start=0, int32_t length=INT32_MAX) const;
+  UnicodeString tempSubString(int32_t start=0, int32_t length=INT32_MAX) const &;
+
+  UnicodeString tempSubString(int32_t, int32_t) const && = delete;
 
   /**
    * Create a temporary substring for the specified range.
@@ -1749,7 +1751,9 @@ public:
    * @param start offset of the first character visible in the substring
    * @param limit offset immediately following the last character visible in the substring
    * @return a read-only alias UnicodeString object for the substring
-   * @stable ICU 4.4
+  inline UnicodeString tempSubStringBetween(int32_t start, int32_t limit=INT32_MAX) const &;
+
+  inline UnicodeString tempSubStringBetween(int32_t, int32_t) const && = delete;
    */
   inline UnicodeString tempSubStringBetween(int32_t start, int32_t limit=INT32_MAX) const;
 
@@ -4898,7 +4902,7 @@ UnicodeString::extractBetween(int32_t start,
 }
 
 inline UnicodeString
-UnicodeString::tempSubStringBetween(int32_t start, int32_t limit) const {
+UnicodeString::tempSubStringBetween(int32_t start, int32_t limit) const & {
     return tempSubString(start, limit - start);
 }
 
