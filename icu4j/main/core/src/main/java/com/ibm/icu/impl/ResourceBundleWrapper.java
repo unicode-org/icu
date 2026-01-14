@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.MissingResourceException;
+import java.util.Objects;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
@@ -36,10 +37,39 @@ public final class ResourceBundleWrapper extends UResourceBundle {
         abstract ResourceBundleWrapper load();
     }
 
-    private static CacheBase<String, ResourceBundleWrapper, Loader> BUNDLE_CACHE =
-            new SoftCache<String, ResourceBundleWrapper, Loader>() {
+    private static class BundleCacheKey {
+        public final String baseName;
+        public final ClassLoader classLoader;
+
+        private BundleCacheKey(String baseName, ClassLoader classLoader) {
+            this.baseName = baseName;
+            this.classLoader = classLoader;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            BundleCacheKey that = (BundleCacheKey) o;
+            return Objects.equals(baseName, that.baseName)
+                    && Objects.equals(classLoader, that.classLoader);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(baseName, classLoader);
+        }
+    }
+
+    private static CacheBase<BundleCacheKey, ResourceBundleWrapper, Loader> BUNDLE_CACHE =
+            new SoftCache<BundleCacheKey, ResourceBundleWrapper, Loader>() {
                 @Override
-                protected ResourceBundleWrapper createInstance(String unusedKey, Loader loader) {
+                protected ResourceBundleWrapper createInstance(
+                        BundleCacheKey unusedKey, Loader loader) {
                     return loader.load();
                 }
             };
@@ -153,7 +183,8 @@ public final class ResourceBundleWrapper extends UResourceBundle {
             final ClassLoader root,
             final boolean disableFallback) {
         final String name = localeID.isEmpty() ? baseName : baseName + '_' + localeID;
-        String cacheKey = disableFallback ? name : name + '#' + defaultID;
+        BundleCacheKey cacheKey =
+                new BundleCacheKey(disableFallback ? name : name + '#' + defaultID, root);
         return BUNDLE_CACHE.getInstance(
                 cacheKey,
                 new Loader() {
