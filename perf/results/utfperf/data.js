@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1768496904192,
+  "lastUpdate": 1768517612071,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -62955,6 +62955,48 @@ window.BENCHMARK_DATA = {
           {
             "name": "FromUTF8",
             "value": 1.9383,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "148f5cac9d88e12c249a74b4f8d99c51e9cefe19",
+          "message": "ICU-23247 Format source code damaged in the CLDR integration",
+          "timestamp": "2026-01-15T14:30:41-08:00",
+          "tree_id": "1b37af75b27951c12003d43deaa9abd97ab21913",
+          "url": "https://github.com/unicode-org/icu/commit/148f5cac9d88e12c249a74b4f8d99c51e9cefe19"
+        },
+        "date": 1768517162842,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Roundtrip",
+            "value": 9.0801,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUnicode",
+            "value": 2.6839,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUTF8",
+            "value": 1.5344,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
