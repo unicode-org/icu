@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1768063007026,
+  "lastUpdate": 1768495514355,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -42057,6 +42057,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFC_NFC_Text",
             "value": 1.5195993104718495,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "e4a6e225db6893a97ffc67b4b9e814c1e2b63355",
+          "message": "ICU-23247 Bump the version for Java dependencies and maven plugins",
+          "timestamp": "2026-01-15T08:35:37-08:00",
+          "tree_id": "8956543d0a2df17b31ec3143e7f5c8f78e2f2e54",
+          "url": "https://github.com/unicode-org/icu/commit/e4a6e225db6893a97ffc67b4b9e814c1e2b63355"
+        },
+        "date": 1768495115327,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 1.571153940500026,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
