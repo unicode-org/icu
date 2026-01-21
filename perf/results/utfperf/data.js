@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1768517612071,
+  "lastUpdate": 1768994164096,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -62997,6 +62997,48 @@ window.BENCHMARK_DATA = {
           {
             "name": "FromUTF8",
             "value": 1.5344,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "committer": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "distinct": true,
+          "id": "4ebbe0c828056017f47d2ba3b8e44d44367282c5",
+          "message": "ICU-23307 Manually apply the changes from unicode-org/cldr#5297",
+          "timestamp": "2026-01-21T11:42:53+01:00",
+          "tree_id": "6b09d88f659eb8e2a1417f9cbb9f17c42d134b0b",
+          "url": "https://github.com/unicode-org/icu/commit/4ebbe0c828056017f47d2ba3b8e44d44367282c5"
+        },
+        "date": 1768993761115,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Roundtrip",
+            "value": 9.305,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUnicode",
+            "value": 3.0197,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUTF8",
+            "value": 1.9395,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
