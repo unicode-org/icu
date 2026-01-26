@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1768993594393,
+  "lastUpdate": 1769436416639,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -42387,6 +42387,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFD_Text",
             "value": 3.168371327644238,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "committer": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "distinct": true,
+          "id": "7a3190ea6be2161f6c04a92cabde22d302bd1fb5",
+          "message": "ICU-23311 Disallow \\p and \\P in UnicodeSet string literals",
+          "timestamp": "2026-01-21T11:42:28+01:00",
+          "tree_id": "fd38d47b2ef75f6a2234684c369e7997daf41cef",
+          "url": "https://github.com/unicode-org/icu/commit/7a3190ea6be2161f6c04a92cabde22d302bd1fb5"
+        },
+        "date": 1769435959955,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 3.9320170518637285,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
