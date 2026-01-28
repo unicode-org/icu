@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1769435930040,
+  "lastUpdate": 1769640600023,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -133827,6 +133827,96 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIsWhiteSpace",
             "value": 4.6135,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "younies.mahmoud@gmail.com",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "committer": {
+            "email": "younies.mahmoud@gmail.com",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "distinct": true,
+          "id": "649262a75ecddb15a0e58d71f637a8a32eaabd43",
+          "message": "ICU-23264 Add validateAndGet function to MeasureUnit for efficient unit validation\n\nSee #3780",
+          "timestamp": "2026-01-28T22:59:49+01:00",
+          "tree_id": "998910101024d810d017a88a55d95d3b113c7155",
+          "url": "https://github.com/unicode-org/icu/commit/649262a75ecddb15a0e58d71f637a8a32eaabd43"
+        },
+        "date": 1769640194552,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIsAlpha",
+            "value": 4.3049,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsUpper",
+            "value": 4.2876,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsLower",
+            "value": 4.3036,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsDigit",
+            "value": 4.6013,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsSpace",
+            "value": 5.2161,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsAlphaNumeric",
+            "value": 4.5985,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsPrint",
+            "value": 4.598,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsControl",
+            "value": 4.304,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestToLower",
+            "value": 5.4794,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestToUpper",
+            "value": 5.221,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsWhiteSpace",
+            "value": 4.6108,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
