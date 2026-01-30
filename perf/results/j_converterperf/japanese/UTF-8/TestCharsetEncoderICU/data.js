@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1769640052216,
+  "lastUpdate": 1769812475712,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -42057,6 +42057,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 2.827431049465727,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "a5e74707a0dd57e76b41b964e7e3f049ae5f9d8b",
+          "message": "ICU-23258 Cleanup pom information for artifacts not published to Maven Central",
+          "timestamp": "2026-01-30T14:07:51-08:00",
+          "tree_id": "e3eae645f68ce228a0d9e6fc8469bf3250432b5a",
+          "url": "https://github.com/unicode-org/icu/commit/a5e74707a0dd57e76b41b964e7e3f049ae5f9d8b"
+        },
+        "date": 1769812066028,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 2.3574641689510134,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
