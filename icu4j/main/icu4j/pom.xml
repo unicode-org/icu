@@ -97,9 +97,15 @@
                   <excludes>
                     <!-- Exclude taglets code -->
                     <exclude>com/ibm/icu/dev/tool/docs/**</exclude>
+                    <!-- Exclude maven info for unpublished artifacts -->
+                    <exclude>META-INF/maven/com.ibm.icu/core/**</exclude>
+                    <exclude>META-INF/maven/com.ibm.icu/tools_taglets/**</exclude>
+                    <exclude>META-INF/maven/com.ibm.icu/collate/**</exclude>
+                    <exclude>META-INF/maven/com.ibm.icu/currdata/**</exclude>
+                    <exclude>META-INF/maven/com.ibm.icu/langdata/**</exclude>
+                    <exclude>META-INF/maven/com.ibm.icu/regiondata/**</exclude>
+                    <exclude>META-INF/maven/com.ibm.icu/translit/**</exclude>
                   </excludes>
-                  <includes>
-                  </includes>
                 </filter>
               </filters>
               <transformers>
