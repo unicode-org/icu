@@ -1529,7 +1529,7 @@ namespace {
  * Replaces unpaired surrogates with U+FFFD.
  * Returns s if no replacement was made, otherwise buffer.
  */
-const UnicodeString &surrogatesToFFFD(const UnicodeString &s, UnicodeString &buffer) {
+const UnicodeString &surrogatesToFFFD(const UnicodeString &s U_LIFETIME_BOUND, UnicodeString &buffer) {
     int32_t i = 0;
     while(i < s.length()) {
         UChar32 c = s.char32At(i);

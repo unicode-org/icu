@@ -431,7 +431,8 @@ void NumberRangeFormatterImpl::formatRange(UFormattedNumberRangeData& data,
 
 
 const Modifier&
-NumberRangeFormatterImpl::resolveModifierPlurals(const Modifier& first, const Modifier& second) const {
+NumberRangeFormatterImpl::resolveModifierPlurals(const Modifier& first U_LIFETIME_BOUND,
+                                                 const Modifier& second) const {
     Modifier::Parameters parameters;
     first.getParameters(parameters);
     if (parameters.obj == nullptr) {
