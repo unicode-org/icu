@@ -154,7 +154,8 @@ addCaseMapping(UnicodeSet &set, int32_t result, const char16_t *full, UnicodeStr
 namespace {
 
 /** For case closure on a large set, look only at code points with relevant properties. */
-const UnicodeSet &maybeOnlyCaseSensitive(const UnicodeSet &src U_LIFETIME_BOUND, UnicodeSet &subset) {
+const UnicodeSet &maybeOnlyCaseSensitive(const UnicodeSet &src U_LIFETIME_BOUND,
+                                         UnicodeSet &subset U_LIFETIME_BOUND) {
     // The subset must have been constructed with all code points,
     // so that the retainAll() intersection effectively copies all single code points from src.
     U_ASSERT(subset.contains(0, 0x10ffff));

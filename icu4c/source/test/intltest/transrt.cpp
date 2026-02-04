@@ -269,7 +269,7 @@ namespace {
  * density is the approximate total number of code points to returned for the entire set.
  */
 const UnicodeSet &abbreviateSet(const UnicodeSet &set U_LIFETIME_BOUND, bool abbreviated, int density,
-                                UnicodeSet &copy) {
+                                UnicodeSet &copy U_LIFETIME_BOUND) {
     if (!abbreviated) {
         return set;
     }
