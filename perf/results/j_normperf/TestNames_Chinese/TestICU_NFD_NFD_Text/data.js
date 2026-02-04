@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1769812020832,
+  "lastUpdate": 1770243654152,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -42657,6 +42657,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFD_Text",
             "value": 3.771211381658465,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "1707552+eranl@users.noreply.github.com",
+            "name": "eranl",
+            "username": "eranl"
+          },
+          "committer": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "distinct": true,
+          "id": "0494a6f2740cf82bd844303ff3dbbbceb587d0a0",
+          "message": "ICU-23292 add `toString` method to `ICUResourceBundle`",
+          "timestamp": "2026-02-04T14:00:41-08:00",
+          "tree_id": "1d59bd9c6b3b126b0e1361d7e9b1dce3564b8678",
+          "url": "https://github.com/unicode-org/icu/commit/0494a6f2740cf82bd844303ff3dbbbceb587d0a0"
+        },
+        "date": 1770243247359,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 3.770963307893239,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
