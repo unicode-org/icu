@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1769812376062,
+  "lastUpdate": 1770244102794,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -42477,6 +42477,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 1.2874464508725585,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "1707552+eranl@users.noreply.github.com",
+            "name": "eranl",
+            "username": "eranl"
+          },
+          "committer": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "distinct": true,
+          "id": "0494a6f2740cf82bd844303ff3dbbbceb587d0a0",
+          "message": "ICU-23292 add `toString` method to `ICUResourceBundle`",
+          "timestamp": "2026-02-04T14:00:41-08:00",
+          "tree_id": "1d59bd9c6b3b126b0e1361d7e9b1dce3564b8678",
+          "url": "https://github.com/unicode-org/icu/commit/0494a6f2740cf82bd844303ff3dbbbceb587d0a0"
+        },
+        "date": 1770243696511,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 1.4850209542013386,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
