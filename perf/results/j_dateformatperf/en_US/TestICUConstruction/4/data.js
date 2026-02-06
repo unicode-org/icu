@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1770243385394,
+  "lastUpdate": 1770407538338,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -42297,6 +42297,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 1883.29379044138,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "f172fc8d9efaefeba20b8377e3ab0f1deccf04c9",
+          "message": "ICU-23310 Annotate returned non-constant reference parameters.",
+          "timestamp": "2026-02-06T20:25:56+01:00",
+          "tree_id": "38f70ad676fab7ac4e87b883aa6575dcf2209ba5",
+          "url": "https://github.com/unicode-org/icu/commit/f172fc8d9efaefeba20b8377e3ab0f1deccf04c9"
+        },
+        "date": 1770407128132,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 1957.5284765637298,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
