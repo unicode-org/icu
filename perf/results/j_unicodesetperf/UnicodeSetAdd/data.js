@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1770406668836,
+  "lastUpdate": 1770410774773,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -42447,6 +42447,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "UnicodeSetAdd",
             "value": 7.963464262404787,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "1707552+eranl@users.noreply.github.com",
+            "name": "eranl",
+            "username": "eranl"
+          },
+          "committer": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "distinct": true,
+          "id": "3a5666b562dd45ba8d8b05a2f57421894fd2c022",
+          "message": "ICU-20656 Add icu4j data tracing",
+          "timestamp": "2026-02-04T14:00:31-08:00",
+          "tree_id": "85fe1e4d5a57ab3fbf1dfc0bddca4eaf92ab88de",
+          "url": "https://github.com/unicode-org/icu/commit/3a5666b562dd45ba8d8b05a2f57421894fd2c022"
+        },
+        "date": 1770410369083,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "UnicodeSetAdd",
+            "value": 7.921759568773687,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
