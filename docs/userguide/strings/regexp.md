@@ -104,7 +104,7 @@ After finding a match, additional information is available about the range of
 the input matched, and the contents of any capture groups. Note that, for
 simplicity, any error parameters have been omitted. See the [API
 reference](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classRegexMatcher.html) for
-complete a complete description of the API.
+a complete description of the API.
 
 | Function        | Description                                                    |
 |:----------------|:---------------------------------------------------------------|
@@ -165,7 +165,7 @@ complete a complete description of the API.
 
 ## Regular Expression Operators
 
-| Operator      | Description
+| Operator      | Description                                                    |
 |:--------------|:---------------------------------------------------------------|
 | `|`           | Alternation. A\|B matches either A or B.
 | `*`           | Match 0 or more times. Match as many times as possible.
@@ -242,9 +242,9 @@ For ICU regular expression matching,
 
 Examples:
 
-*   pattern "fussball" will match "fußball or "fussball".
+*   pattern "fussball" will match "fußball" or "fussball".
 *   pattern "fu(s)(s)ball" or "fus{2}ball" will match "fussball" or "FUSSBALL"
-    but not "fußball.
+    but not "fußball".
 *   pattern "ß" will find occurrences of "ss" or "ß".
 *   pattern "s+" will not find "ß".
 
@@ -318,7 +318,7 @@ fields themselves.
 
 If, in the “dog cat giraffe” example, the pattern had been `“(\s+)”` instead of
 `“\s+”`, `split()` would have produced five output strings instead of three.
-`Words[1]` and `words[3]` would have been the spaces.
+`words[1]` and `words[3]` would have been the spaces.
 
 ## Find and Replace
 
@@ -378,7 +378,7 @@ Some regular expression patterns can result in very slow match operations,
 sometimes so slow that it will appear as though the match has gone into an
 infinite loop. The problem is not unique to ICU - it affects any regular
 expression implementation using a conventional nondeterministic finite automaton
-(NFA) style matching engine. This section gives some suggestion on how to avoid
+(NFA) style matching engine. This section gives some suggestions on how to avoid
 problems.
 
 The performance problems tend to show up most commonly on failing matches - when
@@ -429,7 +429,7 @@ Some suggestions:
     possible to do something completely in one large expression doesn't mean
     that you should. Long expressions are difficult to understand and can be
     almost impossible to debug when they go wrong. It is no sin to break a
-    parsing problem into pieces and to have some code involved involved in the
+    parsing problem into pieces and to have some code involved in the
     process.
 
 *   Set a time limit. ICU includes the ability to limit the time spent on a
@@ -502,7 +502,7 @@ processes, can be a problem with some regular expression packages.
 *   ICU has an extended syntax for set \[bracket\] expressions, including
     additional operators. Added for improved compatibility with the original ICU
     implementation, which was based on ICU UnicodeSet pattern syntax.
-*   The property expression `\p{punct}` differs in what it matches. Java matches
+*   The property expression `\p{punct}` differs in what it matches. Java
     matches any of ```!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~```. From that list,
     ICU omits ```$+<=>^`|~``` &nbsp; &nbsp;
     ICU follows the recommendations from Unicode UTS-18,
