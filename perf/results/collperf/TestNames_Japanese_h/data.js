@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1770411878194,
+  "lastUpdate": 1770632704487,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -81213,6 +81213,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5354438.7004,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "1707552+eranl@users.noreply.github.com",
+            "name": "eranl",
+            "username": "eranl"
+          },
+          "committer": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "distinct": true,
+          "id": "ac5f1bb9270997ad55f270b69107b1309f9796f7",
+          "message": "ICU-20656 Add ICU4J data tracing doc",
+          "timestamp": "2026-02-09T02:02:07-08:00",
+          "tree_id": "034e5a98337ea05f9261e3a8ee8cac0f8e5bb51e",
+          "url": "https://github.com/unicode-org/icu/commit/ac5f1bb9270997ad55f270b69107b1309f9796f7"
+        },
+        "date": 1770632304199,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 208.0962,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 21411482.0855,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5205526.7146,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 20158686.3962,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5360824.5511,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
