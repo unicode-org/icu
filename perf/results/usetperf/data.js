@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1770411832918,
+  "lastUpdate": 1770632936664,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -116763,6 +116763,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 3300.143,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "1707552+eranl@users.noreply.github.com",
+            "name": "eranl",
+            "username": "eranl"
+          },
+          "committer": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "distinct": true,
+          "id": "ac5f1bb9270997ad55f270b69107b1309f9796f7",
+          "message": "ICU-20656 Add ICU4J data tracing doc",
+          "timestamp": "2026-02-09T02:02:07-08:00",
+          "tree_id": "034e5a98337ea05f9261e3a8ee8cac0f8e5bb51e",
+          "url": "https://github.com/unicode-org/icu/commit/ac5f1bb9270997ad55f270b69107b1309f9796f7"
+        },
+        "date": 1770632527492,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 78262.2412,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 167618.4891,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.5521,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 10.52,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 6.3772,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 19751.8483,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 64943.043,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 3329.9852,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
