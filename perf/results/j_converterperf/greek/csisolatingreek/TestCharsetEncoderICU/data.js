@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1770410791312,
+  "lastUpdate": 1770632445252,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -42297,6 +42297,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 1.0456290761070257,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "1707552+eranl@users.noreply.github.com",
+            "name": "eranl",
+            "username": "eranl"
+          },
+          "committer": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "distinct": true,
+          "id": "ac5f1bb9270997ad55f270b69107b1309f9796f7",
+          "message": "ICU-20656 Add ICU4J data tracing doc",
+          "timestamp": "2026-02-09T02:02:07-08:00",
+          "tree_id": "034e5a98337ea05f9261e3a8ee8cac0f8e5bb51e",
+          "url": "https://github.com/unicode-org/icu/commit/ac5f1bb9270997ad55f270b69107b1309f9796f7"
+        },
+        "date": 1770632038523,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 1.0579879514672748,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
