@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1770631892763,
+  "lastUpdate": 1770829653583,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -42597,6 +42597,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFD_Text",
             "value": 2.555741713776817,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "committer": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "distinct": true,
+          "id": "bda99ab8c18a52497bda319202b08fdb1d5fd1b3",
+          "message": "ICU-23313 UnicodeSet: binary query negation with NOT EQUAL TO",
+          "timestamp": "2026-02-11T17:28:10+01:00",
+          "tree_id": "d45cdde5f212d36e1f8f990cad8a514a028cd178",
+          "url": "https://github.com/unicode-org/icu/commit/bda99ab8c18a52497bda319202b08fdb1d5fd1b3"
+        },
+        "date": 1770829234785,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 3.599179868281187,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
