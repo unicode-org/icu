@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1770851925495,
+  "lastUpdate": 1770855921520,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -51945,6 +51945,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 49.1263,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "committer": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "distinct": true,
+          "id": "1da16a3868f8d544d898468c2826064ebdc2c42b",
+          "message": "ICU-23312 UnicodeSet: Make bracketed-element a RangeElement.",
+          "timestamp": "2026-02-12T00:47:42+01:00",
+          "tree_id": "11e39c754cee2d8b006b1ba6828552963d00af68",
+          "url": "https://github.com/unicode-org/icu/commit/1da16a3868f8d544d898468c2826064ebdc2c42b"
+        },
+        "date": 1770855468553,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 19.9122,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 42.2981,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
