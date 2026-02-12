@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1770921171752,
+  "lastUpdate": 1770922943410,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -42357,6 +42357,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 5.788242648426521,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "59776195+hagaddour@users.noreply.github.com",
+            "name": "Hammam Gaddour",
+            "username": "hagaddour"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "5e31983fc5667aa9dda73a845624e3bdceec6cf4",
+          "message": "ICU-23248 Fix typos and enhance clarity in regexp documentation\n\nCorrected typos and improved clarity in the documentation.",
+          "timestamp": "2026-02-12T18:52:28Z",
+          "tree_id": "186dbc45e3eb93f0c36b79482ddb91dd479352b5",
+          "url": "https://github.com/unicode-org/icu/commit/5e31983fc5667aa9dda73a845624e3bdceec6cf4"
+        },
+        "date": 1770922531621,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 5.8320343180250855,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
