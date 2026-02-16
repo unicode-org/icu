@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1770938605645,
+  "lastUpdate": 1771278440349,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -42357,6 +42357,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 220.53783149228295,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "6ebdf13d95b42c3ecaed44d78db3b66f656161c7",
+          "message": "ICU-23320 Add JaCoCo code coverage to Maven",
+          "timestamp": "2026-02-16T13:36:32-08:00",
+          "tree_id": "bc79c50c92b315092620625e909a61fb8e83a408",
+          "url": "https://github.com/unicode-org/icu/commit/6ebdf13d95b42c3ecaed44d78db3b66f656161c7"
+        },
+        "date": 1771278038622,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 222.28586522821115,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
