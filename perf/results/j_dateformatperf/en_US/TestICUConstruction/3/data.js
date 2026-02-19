@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1771278494150,
+  "lastUpdate": 1771475272028,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -42477,6 +42477,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 1908.398028984433,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "committer": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "distinct": true,
+          "id": "7df0d91df7aa955777f57615df5e919ffaa797cf",
+          "message": "ICU-23247 Create gemini code assist config file",
+          "timestamp": "2026-02-18T20:17:26-08:00",
+          "tree_id": "5d02501a84dd3abf4ccaedb623966c2e72f5dbe5",
+          "url": "https://github.com/unicode-org/icu/commit/7df0d91df7aa955777f57615df5e919ffaa797cf"
+        },
+        "date": 1771474885863,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 1716.68406196103,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
