@@ -334,7 +334,7 @@ ml{
                 GyM{"G y/M"}
                 GyMEd{"G y/M/d, E"}
                 GyMd{"G y/M/d"}
-                Hv{"v HH'h'"}
+                Hv{"v HH"}
                 MEd{"d/M, E"}
                 MMMMEd{"MMMM d, E"}
                 MMdd{"dd-MM"}
@@ -434,7 +434,7 @@ ml{
                 GyMd{"G y/M/d"}
                 Hmsv{"v HH:mm:ss"}
                 Hmv{"v HH:mm"}
-                Hv{"v HH'h'"}
+                Hv{"v HH"}
                 MEd{"d/M, E"}
                 MMMMEd{"MMMM d, E"}
                 MMMMW{

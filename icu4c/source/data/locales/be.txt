@@ -554,7 +554,7 @@ be{
                 GyMMMd{"d MMM y 'г'. G"}
                 GyMd{"dd.MM.y GGGGG"}
                 H{"H"}
-                Hv{"HH 'г' v"}
+                Hv{"HH v"}
                 MEd{"E, d.M"}
                 MMMEd{"E, d MMM"}
                 MMMMEd{"E, d MMMM"}

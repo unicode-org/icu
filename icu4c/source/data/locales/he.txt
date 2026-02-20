@@ -344,6 +344,7 @@ he{
                 H{"H"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
+                Hv{"H v"}
                 MEd{"E, d/M"}
                 MMMEd{"E, d בMMM"}
                 MMMd{"d בMMM"}
@@ -511,6 +512,7 @@ he{
                 H{"H"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
+                Hv{"H v"}
                 MEd{"E, d.M"}
                 MMMEd{"E, d בMMM"}
                 MMMMW{

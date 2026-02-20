@@ -318,7 +318,7 @@ pt{
                 GyMMMEd{"E, d 'de' MMM 'de' y G"}
                 GyMMMd{"d 'de' MMM 'de' y G"}
                 GyMd{"dd/MM/y GGGGG"}
-                Hv{"HH'h', v"}
+                Hv{"HH v"}
                 MEd{"E, dd/MM"}
                 MMMEd{"E, d 'de' MMM"}
                 MMMMEd{"E, d 'de' MMMM"}
@@ -470,7 +470,7 @@ pt{
                 GyMMMEd{"E, d 'de' MMM 'de' y G"}
                 GyMMMd{"d 'de' MMM 'de' y G"}
                 GyMd{"dd/MM/y GGGGG"}
-                Hv{"HH'h', v"}
+                Hv{"HH v"}
                 MEd{"E, dd/MM"}
                 MMMEd{"E, d 'de' MMM"}
                 MMMMEd{"E, d 'de' MMMM"}

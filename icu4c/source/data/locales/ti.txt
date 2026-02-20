@@ -362,7 +362,7 @@ ti{
                 GyMMMEd{"E፣ d MMM y G"}
                 GyMMMd{"MMM d, y G"}
                 GyMd{"M/d/y GGGGG"}
-                Hv{"HHሰ v"}
+                Hv{"HH v"}
                 MEd{"E፣ d/M"}
                 MMMEd{"E, MMM d"}
                 MMMMd{"d MMMM"}

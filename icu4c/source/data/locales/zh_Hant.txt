@@ -347,6 +347,7 @@ zh_Hant{
                 GyMMMMd{"r(U)MMMMd日"}
                 GyMMMd{"r年MMMd"}
                 H{"HH時"}
+                Hv{"H時 v"}
                 M{"MMM"}
                 MEd{"M/dE"}
                 MMMEd{"MMMd日E"}
@@ -875,6 +876,7 @@ zh_Hant{
                 H{"H時"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
+                Hv{"H時 v"}
                 M{"M月"}
                 MEd{"M/d（E）"}
                 MMMEd{"M月d日 E"}
@@ -1052,6 +1054,7 @@ zh_Hant{
                 H{"H時"}
                 Hmsv{"HH:mm:ss [v]"}
                 Hmv{"HH:mm [v]"}
+                Hv{"H時 v"}
                 M{"M月"}
                 MEd{"M/d（E）"}
                 MMMEd{"M月d日E"}

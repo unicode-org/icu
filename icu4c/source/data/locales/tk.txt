@@ -235,7 +235,7 @@ tk{
                 Ehms{"E h:mm:ss a"}
                 GyM{"G M.y"}
                 GyMEd{"G dd.MM.y E"}
-                Hv{"'sagat' HH, v"}
+                Hv{"HH v"}
                 MEd{"dd.MM E"}
                 MMMEd{"d MMM E"}
                 MMMMEd{"d MMMM E"}
@@ -358,7 +358,7 @@ tk{
                 GyMMMEd{"G d MMM y, E"}
                 GyMMMd{"G d MMM y"}
                 GyMd{"G dd.MM.y"}
-                Hv{"'sagat' HH v"}
+                Hv{"HH v"}
                 MEd{"dd.MM E"}
                 MMMEd{"d MMM E"}
                 MMMMEd{"d MMMM E"}

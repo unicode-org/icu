@@ -588,7 +588,7 @@ lt{
                 GyMd{"y-MM-dd G"}
                 Hmsv{"HH:mm:ss; v"}
                 Hmv{"HH:mm; v"}
-                Hv{"HH 'h' v"}
+                Hv{"HH v"}
                 M{"MM"}
                 MMM{"MM"}
                 MMMEd{"MM-dd, E"}

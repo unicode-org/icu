@@ -409,7 +409,7 @@ si{
                 Hms{"HH.mm.ss"}
                 Hmsv{"v HH.mm.ss"}
                 Hmv{"v HH.mm"}
-                Hv{"v HH'h'"}
+                Hv{"v HH"}
                 MEd{"M-d, E"}
                 MMMEd{"MMM d E"}
                 MMMMW{

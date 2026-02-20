@@ -333,6 +333,7 @@ am{
                 GyMMMd{"MMM d፣ y G"}
                 GyMd{"M/d/y GGGGG"}
                 H{"H"}
+                Hv{"H v"}
                 MEd{"E፣ M/d"}
                 MMMEd{"E፣ MMM d"}
                 MMMMEd{"E፣ MMMM d"}
@@ -473,6 +474,7 @@ am{
                 GyMMMd{"MMM d y G"}
                 GyMd{"d/M/y GGGGG"}
                 H{"H"}
+                Hv{"H v"}
                 MEd{"E፣ d/M"}
                 MMMEd{"E፣ MMM d"}
                 MMMMEd{"E፣ MMMM d"}

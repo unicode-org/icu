@@ -245,7 +245,7 @@ km{
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, d MMM y G"}
                 GyMMMd{"d MMM y G"}
-                Hv{"ម៉HH v"}
+                Hv{"HH v"}
                 MEd{"E d/M"}
                 MMMEd{"E d MMM"}
                 MMMMd{"d MMMM"}
@@ -435,7 +435,7 @@ km{
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E d MMM y G"}
                 GyMMMd{"d MMM y G"}
-                Hv{"ម៉HH v"}
+                Hv{"HH v"}
                 MEd{"E d/M"}
                 MMMEd{"E d MMM"}
                 MMMMW{

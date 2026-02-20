@@ -466,7 +466,7 @@ ru{
                 GyMMMd{"d MMM y 'г'. G"}
                 GyMd{"dd.MM.y G"}
                 H{"H"}
-                Hv{"HH 'ч'. v"}
+                Hv{"HH v"}
                 MEd{"E, dd.MM"}
                 MMMEd{"ccc, d MMM"}
                 MMMMd{"d MMMM"}
@@ -673,7 +673,7 @@ ru{
                 GyMMMd{"d MMM y 'г'. G"}
                 GyMd{"dd.MM.y GGGGG"}
                 H{"H"}
-                Hv{"HH 'ч'. v"}
+                Hv{"HH v"}
                 MEd{"E, dd.MM"}
                 MMMEd{"ccc, d MMM"}
                 MMMMW{
@@ -849,7 +849,7 @@ ru{
                     H{"HH–HH 'ч'"}
                 }
                 Hv{
-                    H{"HH–HH 'ч'. v"}
+                    H{"HH–HH v"}
                 }
                 M{
                     M{"M–M"}

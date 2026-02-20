@@ -319,7 +319,7 @@ hr{
                 GyMMMEd{"E, d. MMM y. G"}
                 GyMMMd{"d. MMM y. G"}
                 GyMd{"d. M. y. GGGGG"}
-                Hv{"HH 'h' v"}
+                Hv{"HH (v)"}
                 M{"L."}
                 MEd{"E, dd. MM."}
                 MMMEd{"E, d. MMM"}
@@ -517,7 +517,7 @@ hr{
                 GyMMMEd{"E, d. MMM y. G"}
                 GyMMMd{"d. MMM y. G"}
                 GyMd{"d. M. y. GGGGG"}
-                Hv{"HH 'h' v"}
+                Hv{"HH (v)"}
                 M{"L."}
                 MEd{"E, dd. MM."}
                 MMMEd{"E, d. MMM"}

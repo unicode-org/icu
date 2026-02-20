@@ -313,7 +313,7 @@ sr_Latn{
                 GyMMMEd{"E, d. MMM y. G"}
                 GyMMMd{"d. MMM y. G"}
                 GyMd{"d.M.y. GGGGG"}
-                Hv{"HH 'č'. v"}
+                Hv{"HH v"}
                 MEd{"E, d.M."}
                 MMMEd{"E, d. MMM"}
                 MMMMEd{"E, d. MMMM"}
@@ -455,7 +455,7 @@ sr_Latn{
                 GyMMMEd{"E, d. MMM y. G"}
                 GyMMMd{"d. MMM y. G"}
                 GyMd{"d.MM.y. GGGGG"}
-                Hv{"HH 'h' v"}
+                Hv{"HH v"}
                 MEd{"E, d. M."}
                 MMMEd{"E d. MMM"}
                 MMMMEd{"E, d. MMMM"}

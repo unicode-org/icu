@@ -398,7 +398,7 @@ mk{
                 H{"H"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
-                Hv{"HH 'ч'. v"}
+                Hv{"HH v"}
                 MEd{"E, d.M"}
                 MMMEd{"E, d MMM"}
                 MMMMEd{"E, d MMMM"}
@@ -600,7 +600,7 @@ mk{
                 GyMMMd{"d MMM y 'г'. G"}
                 GyMd{"d.M.y 'г'. G"}
                 H{"H"}
-                Hv{"HH 'ч'. v"}
+                Hv{"HH v"}
                 MEd{"E, d.M"}
                 MMMEd{"E, d MMM"}
                 MMMMEd{"E, d MMMM"}

@@ -451,7 +451,7 @@ id{
                 GyMd{"d/M/y G"}
                 Hm{"HH.mm"}
                 Hms{"HH.mm.ss"}
-                Hv{"HH'j' v"}
+                Hv{"HH v"}
                 MEd{"E, d/M"}
                 MMMEd{"E, d MMM"}
                 MMMMEd{"E, d MMMM"}

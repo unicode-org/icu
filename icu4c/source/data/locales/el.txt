@@ -270,7 +270,7 @@ el{
                 GyMMMEd{"E, d MMM y G"}
                 GyMMMd{"d MMM y G"}
                 GyMd{"d/M/y GGGGG"}
-                Hv{"HH'h' (vvvv)"}
+                Hv{"HH (vvvv)"}
                 MEd{"E, d/M"}
                 MMMEd{"E, d MMM"}
                 MMMMEd{"E, d MMMM"}
@@ -464,7 +464,7 @@ el{
                 GyMd{"d/M/y GGGGG"}
                 Hmsv{"HH:mm:ss (vvvv)"}
                 Hmv{"HH:mm (vvvv)"}
-                Hv{"HH'h' (vvvv)"}
+                Hv{"HH (vvvv)"}
                 MEd{"E d/M"}
                 MMM{"MMM"}
                 MMMEd{"E d MMM"}
