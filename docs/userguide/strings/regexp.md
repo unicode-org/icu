@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Regular Expressions
-nav_order: 6
+nav_order: 60
 parent: Chars and Strings
 ---
 <!--

@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Plug-ins
-nav_order: 4
+nav_order: 40
 parent: ICU4C
 ---
 <!--

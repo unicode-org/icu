@@ -1,7 +1,7 @@
 ---
 layout: default
 title: UnicodeSet
-nav_order: 5
+nav_order: 50
 parent: Chars and Strings
 ---
 <!--

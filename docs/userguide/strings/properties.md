@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Properties
-nav_order: 2
+nav_order: 20
 parent: Chars and Strings
 ---
 <!--

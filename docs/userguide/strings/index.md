@@ -26,6 +26,13 @@ Logically, and often physically, they contain contiguous arrays (vectors) of
 basic units. Most of the ICU API functions work directly with simple strings,
 and where possible, this is preferred.
 
+Modern APIs tend to use “string views” for read-only input strings.
+They allow random access, and in C++ require a contiguous buffer,
+but do not own the text buffer and are thus cheap to construct
+from many string classes.
+
+### Complex Text Access
+
 Sometimes, text needs to be accessed via more powerful and complicated methods.
 For example, text may be stored in discontiguous chunks in order to deal with
 frequent modification (like typing) and large amounts, or it may not be stored
@@ -35,11 +42,13 @@ italic styles.
 ### Guidance
 
 ICU provides multiple text access interfaces which were added over time. If
-simple strings cannot be used, then consider the following:
+simple strings and string views cannot be used, then consider the following:
 
-1.  [UText](utext.md): Intended to be the strategic text access API for use
-    with ICU. C API, high performance, writable, supports native indexes for
-    efficient non-UTF-16 text storage.
+1.  [UText](utext.md): C API, high performance, writable, supports native indexes for
+    efficient non-UTF-16 text storage.\
+    At one point, this was intended to be the strategic text access API for use with ICU.
+    However, the additional complications from implementing and using
+    this C interface have so far not proven worth using in many ICU APIs.
 
 2.  Replaceable (Java & C++) and UReplaceable (C): Writable, designed for use
     with Transliterator.
@@ -113,35 +122,53 @@ UText chaper.
 
 ### Strings in Java
 
-In Java, ICU uses the standard String and StringBuffer classes, `char[]`, etc.
+In Java, ICU uses the standard `String` and `StringBuilder` classes, `char[]`, etc.
+
+`String` and `StringBuilder` implement `CharSequence` which is a kind of “string view” type.
+
 See the Java documentation for details.
 
 ### Strings in C/C++
 
 Strings in C and C++ are, at the lowest level, arrays of some particular base
-type. In most cases, the base type is a char, which is an 8-bit byte in modern
-compilers. Some APIs use a "wide character" type wchar_t that is typically 8,
+type. In most cases, the base type is a `char`, which is an 8-bit byte in modern
+compilers. Some APIs use a "wide character" type `wchar_t` that is typically 8,
 16, or 32 bits wide and upwards compatible with char. C code passes `char *` or
-wchar_t pointers to the first element of an array. C++ enables you to create a
+`wchar_t` pointers to the first element of an array. C++ enables you to create a
 class for encapsulating these kinds of character arrays in handy and safe
 objects.
 
-The interpretation of the byte or wchar_t values depends on the platform, the
-compiler, the signed state of both char and wchar_t, and the width of wchar_t.
+In C++17 and later, `std::string_view` can be used for both UTF-8 strings
+as well as invariant-character strings (e.g., locale IDs)
+and system-charset strings (via conversion).
+`std::u16string_view` works for UTF-16.
+
+ICU’s older `StringPiece` is similar to the newer `std::string_view`
+and can be constructed from the latter.
+
+### String encodings
+
+The interpretation of the byte or `wchar_t` values depends on the platform, the
+compiler, the signed state of both `char` and `wchar_t`, and the width of `wchar_t`.
 These characteristics are not specified in the language standards. When using
 internationalized text, the encoding often uses multiple chars for most
-characters and a wchar_t that is wide enough to hold exactly one character code
+characters and a `wchar_t` that is wide enough to hold exactly one character code
 point value each. Some APIs, especially in the standard library (stdlib), assume
-that wchar_t strings use a fixed-width encoding with exactly one character code
-point per wchar_t.
+that `wchar_t` strings use a fixed-width encoding with exactly one character code
+point per `wchar_t`.
 
 ### ICU: 16-bit Unicode strings
 
 In order to take advantage of Unicode with its large character repertoire and
 its well-defined properties, there must be types with consistent definitions and
 semantics. The Unicode standard defines a default encoding based on 16-bit code
-units. This is supported in ICU by the definition of the UChar to be an unsigned
-16-bit integer type. This is the base type for character arrays for strings in
+units.
+
+Since ICU has moved to C++11, it uses the standard type `char16_t`.
+Previously, ICU defined its own `UChar` type to be an unsigned
+16-bit integer type.
+
+`char16_t` or `UChar` is the base type for character arrays for strings in
 ICU.
 
 > :point_right: **Note**: *Endianness is not an issue on this level because the interpretation of an
@@ -182,11 +209,14 @@ sections about handling lengths and overflows.
 ### Separate type for single code points
 
 A Unicode code point is an integer with a value from 0 to 0x10FFFF. ICU 2.4 and
-later defines the UChar32 type for single code point values as a 32 bits wide
+later defines the `UChar32` type for single code point values as a 32 bits wide
 signed integer (int32_t). This allows the use of easily testable negative values
 as sentinels, to indicate errors, exceptions or "done" conditions. All negative
 values and positive values greater than 0x10FFFF are illegal as Unicode code
 points.
+
+C++11 and later provide the `char32_t` for UTF-32 string code units and also for code points.
+Unlike `UChar32`, `char32_t` is unsigned. ICU has therefore not switched to this newer type.
 
 ICU 2.2 and earlier defined UChar32 depending on the platform: If the compiler's
 wchar_t was 32 bits wide, then UChar32 was defined to be the same as wchar_t.
@@ -382,7 +412,26 @@ The documentation of the old macros has been removed. If you need it, see a User
 Guide version from ICU 4.2 or earlier (see the [download
 page](https://unicode-org.github.io/icu/download)).
 
-C Unicode String Literals
+#### C Unicode String Literals
+
+Since C++11, Unicode string literals are supported directly by the language.
+Use the `u` prefix for UTF-16, for example `u"abçカ🚴"`.
+
+String literals without a prefix may or may not be in UTF-8, depending on the platform, compiler, and options.
+
+C11 also supports `u"UTF-16 string literals"`.
+
+Since C++11, the `u8` prefix reliably encodes the string literal in UTF-8.
+Example: `u8"abçカ🚴"`
+
+However, the type of a `u8` string literal depends on the C++ version.
+Up to C++17, it had `char` base units and was compatible with `std::string` and `std::string_view`.
+Since C++20, it has `char8_t` base units (a distinct type)
+and is compatible with `std::u8string` and `std::u8string_view`.
+You may need to use `reinterpret_cast`s to use `u8"string literals"`
+with customary string classes.
+
+For code compiled with old versions of ICU and C/C++ versions before 11:
 
 There is a pair of macros that together enable users to instantiate a Unicode
 string in C — a `UChar []` array — from a C string literal:
@@ -423,7 +472,10 @@ U_IS_SURROGATE().
 a C++ string class that wraps a UChar array and associated bookkeeping. It
 provides a rich set of string handling functions.
 
-UnicodeString combines elements of both the Java String and StringBuffer
+Starting with ICU 76, a UnicodeString can be converted to/from a `std::u16string_view`,
+and several other member functions also work directly with `std::u16string_view` inputs.
+
+UnicodeString combines elements of both the Java String and StringBuilder
 classes. Many UnicodeString functions are named and work similar to Java String
 methods but modify the object (UnicodeString is "mutable").
 
@@ -432,7 +484,11 @@ etc.) of both code units and code points. For each non-iterative string/code
 point macro in utf.h there is at least one UnicodeString member function. The
 names of most of these functions contain "32" to indicate the use of a UChar32.
 
-Code point and code unit iteration is provided by the
+Starting with ICU 78, ICU4C has [C++ header-only APIs](../icu4c/header-only.md)
+for conveniently iterating over the code points of a Unicode string in any standard encoding form (UTF-8/16/32).
+See [C++ Code Point Iterators](cpp-code-point-iterator.md).
+
+Code point and code unit iteration is also provided by the older
 [CharacterIterator](characteriterator.md) abstract class and its subclasses.
 There are concrete iterator implementations for UnicodeString objects and plain
 `UChar []` arrays.
@@ -618,7 +674,9 @@ memory consumption:
     their own copy of the buffer and decrement the reference counter of the
     previously co-used buffer.
 3.  A UnicodeString can be constructed (or set with a setTo() function) so that
-    it aliases a readonly buffer instead of copying the characters. In this
+    it aliases a readonly buffer instead of copying the characters.
+    (Using the UnicodeString like a “string view”.)
+    In this
     case, the string object uses this aliased buffer for as long as the object
     is not modified and it will never attempt to modify or release the buffer.
     This model has copy-on-write semantics. For example, when the string object
@@ -699,6 +757,10 @@ processing performance.
 While ICU mostly does not natively use UTF-8 strings, there are many ways to
 work with UTF-8 strings and ICU. For more information see the newer
 [UTF-8](utf-8.md) subpage.
+
+Starting with ICU 78, ICU4C has [C++ header-only APIs](../icu4c/header-only.md)
+for conveniently iterating over the code points of a Unicode string in any standard encoding form (UTF-8/16/32).
+See [C++ Code Point Iterators](cpp-code-point-iterator.md).
 
 ## Using UTF-32 strings with ICU
 
