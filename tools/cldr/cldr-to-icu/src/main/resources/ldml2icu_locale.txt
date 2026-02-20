@@ -112,6 +112,7 @@
 //ldml/characters/exemplarCharacters                         ; /ExemplarCharacters
 
 //ldml/characters/ellipsis[@type="(%A)"]                     ; /Ellipsis/$1
+//ldml/characters/nestedBracketReplacement[@bracket="(%A)"]  ; /nestedBracketReplacements ; values="$1" "{value}"
 //ldml/characters/moreInformation                            ; /MoreInformation
 //ldml/characters/special/icu:scripts/icu:script[@type="%N"] ; /LocaleScript
 
