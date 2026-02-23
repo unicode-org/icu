@@ -26,22 +26,6 @@
 #include "idnaconf.h"
 #include "charstr.h"
 
-static const char16_t C_TAG[] = {0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0}; // =====
-static const char16_t C_NAMEZONE[] = {0x6E, 0x61, 0x6D, 0x65, 0x7A, 0x6F, 0x6E, 0x65, 0}; // namezone
-static const char16_t C_NAMEBASE[] = {0x6E, 0x61, 0x6D, 0x65, 0x62, 0x61, 0x73, 0x65, 0}; // namebase
-
-static const char16_t C_TYPE[] = {0x74, 0x79, 0x70, 0x65, 0}; // type
-static const char16_t C_TOASCII[]  =  {0x74, 0x6F, 0x61, 0x73, 0x63, 0x69, 0x69, 0};       // toascii
-static const char16_t C_TOUNICODE[] = {0x74, 0x6F, 0x75, 0x6E, 0x69, 0x63, 0x6F, 0x64, 0x65, 0}; // tounicode
-
-static const char16_t C_PASSFAIL[] = {0x70, 0x61, 0x73, 0x73, 0x66, 0x61, 0x69, 0x6C, 0}; // passfail
-static const char16_t C_PASS[] = {0x70, 0x61, 0x73, 0x73, 0}; // pass
-static const char16_t C_FAIL[] = {0x66, 0x61, 0x69, 0x6C, 0}; // fail
-
-static const char16_t C_DESC[] = {0x64, 0x65, 0x73, 0x63, 0}; // desc
-static const char16_t C_USESTD3ASCIIRULES[] = {0x55, 0x73, 0x65, 0x53, 0x54, 0x44,
-       0x33, 0x41, 0x53, 0x43, 0x49, 0x49, 0x52, 0x75, 0x6C, 0x65, 0x73, 0}; // UseSTD3ASCIIRules
-
 IdnaConfTest::IdnaConfTest(){
     base = nullptr;
     len = 0;
@@ -49,6 +33,7 @@ IdnaConfTest::IdnaConfTest(){
 
     type = option = passfail = -1;
     namebase.setToBogus();
+    nameutf8.setToBogus();
     namezone.setToBogus();
 }
 IdnaConfTest::~IdnaConfTest(){
@@ -183,8 +168,7 @@ void IdnaConfTest::Call(){
         } else if (passfail == 1){
             if (U_FAILURE(status)){
                 // expected
-                // TODO: Uncomment this when U_IDNA_ZERO_LENGTH_LABEL_ERROR is added to u_errorName
-                //logln("Got the expected error: " + UnicodeString(u_errorName(status)));
+                logln("Got the expected error: " + UnicodeString(u_errorName(status)));
             } else{
                 if (namebase.compare(result, -1) == 0){
                     // garbage in -> garbage out
@@ -197,8 +181,13 @@ void IdnaConfTest::Call(){
             }
         }
     }
+    if (!nameutf8.isBogus() && nameutf8 != namebase) {
+        errln(UnicodeString(u"input mismatch: namebase=") +
+                prettify(namebase) + u" ≠ nameutf8=" + prettify(nameutf8));
+    }
     type = option = passfail = -1;
     namebase.setToBogus();
+    nameutf8.setToBogus();
     namezone.setToBogus();
     id.remove();
 }
@@ -227,45 +216,46 @@ void IdnaConfTest::Test(){
             errln("End of file prematurely found");
             break;
         }
-    }
-    while (s.compare(C_TAG, -1) != 0);   //"====="
+    } while (s != u"=====");
 
     while(ReadOneLine(s)){
         s.trim();
         key.remove();
         value.remove();
-        if (s.compare(C_TAG, -1) == 0){   //"====="
+        if (s == u"=====") {
             Call();
        } else {
             // explain      key:value
-            int p = s.indexOf(static_cast<char16_t>(0x3A)); // :
+            int p = s.indexOf(u':');
             key.setTo(s,0,p).trim();
             value.setTo(s,p+1).trim();
-            if (key.compare(C_TYPE, -1) == 0){
-                if (value.compare(C_TOASCII, -1) == 0) {
+            if (key == u"type") {
+                if (value == u"toascii") {
                     type = 0;
-                } else if (value.compare(C_TOUNICODE, -1) == 0){
+                } else if (value == u"tounicode") {
                     type = 1;
                 }
-            } else if (key.compare(C_PASSFAIL, -1) == 0){
-                if (value.compare(C_PASS, -1) == 0){
+            } else if (key == u"passfail") {
+                if (value == u"pass") {
                     passfail = 0;
-                } else if (value.compare(C_FAIL, -1) == 0){
+                } else if (value == u"fail") {
                     passfail = 1;
                 }
-            } else if (key.compare(C_DESC, -1) == 0){
-                if (value.indexOf(C_USESTD3ASCIIRULES, u_strlen(C_USESTD3ASCIIRULES), 0) == -1){
+            } else if (key == u"desc") {
+                if (value.indexOf(u"UseSTD3ASCIIRules") == -1) {
                     option = 1; // not found
                 } else {
                     option = 0;
                 }
-                id.setTo(value, 0, value.indexOf(static_cast<char16_t>(0x20))); // space
-            } else if (key.compare(C_NAMEZONE, -1) == 0){
+                id.setTo(value, 0, value.indexOf(u' ')); // space
+            } else if (key == u"namezone") {
                 ExplainCodePointTag(value);
                 namezone.setTo(value);
-            } else if (key.compare(C_NAMEBASE, -1) == 0){
+            } else if (key == u"namebase") {
                 ExplainCodePointTag(value);
                 namebase.setTo(value);
+            } else if (key == u"nameutf8") {
+                nameutf8.setTo(value);
             }
             // just skip other lines
         }

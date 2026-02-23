@@ -595,7 +595,6 @@ type: toascii
 =====
 desc: 2-8-1 Zero-length label after Nameprep
 namebase: <00AD>
-nameutf8: 
 namezone: 
 failzone1: xn--kba
 failzone2: xn--
@@ -919,7 +918,7 @@ type: toascii
 desc: 4-1-2-9 nonbmp<10400><00ED>dn ->\
  nonbmp<10428><00ED>dn
 namebase: nonbmp<10400><00ED>dn
-nameutf8: nonbmpí í°€Ã­dn
+nameutf8: nonbmpğ€Ã­dn
 namezone: xn--nonbmpdn-h2a34747d
 failzone1: xn--nonbmpdn-h2a37046d
 failzone2: 
@@ -931,7 +930,7 @@ type: toascii
 desc: 4-1-2-10 nonbmptoascii<1D400><00ED>dn ->\
  nonbmptoasciia<00ED>dn
 namebase: nonbmptoascii<1D400><00ED>dn
-nameutf8: nonbmptoasciií µí°€Ã­dn
+nameutf8: nonbmptoasciiğ€Ã­dn
 namezone: xn--nonbmptoasciiadn-msb
 failzone1: xn--nonbmptoasciidn-hpb54112i
 failzone2: 
@@ -1015,7 +1014,7 @@ type: toascii
 desc: 4-2-2-1 newnorm<2F874><00ED>dn ->\
  newnorm<5F33><00ED>dn should not become <5F53>
 namebase: newnorm<2F874><00ED>dn
-nameutf8: newnormí¡¾í±´Ã­dn
+nameutf8: newnormğ¯¡´Ã­dn
 namezone: xn--newnormdn-m5a7856x
 failzone1: xn--newnormdn-m5a9396x
 failzone2: xn--newnormdn-m5a9968x
@@ -1026,7 +1025,6 @@ type: toascii
 =====
 desc: 4-3-1 If UseSTD3ASCIIRules: Spacing; <icu> \u0020 is prohibited from the output only when UseSTD3ASCIIRules is set </icu>
 namebase: <2000><00ED>dn
-nameutf8: â€€Ã­dn
 namezone: 
 failzone1: xn--dn-mja3392a
 failzone2: 
@@ -1059,7 +1057,7 @@ type: toascii
 =====
 desc: 4-3-4 Private use, non-BMP
 namebase: <F0005><00ED>dn
-nameutf8: í®€í°…Ã­dn
+nameutf8: ó°€…Ã­dn
 namezone: 
 failzone1: xn--dn-mja7922x
 failzone2: 
@@ -1081,7 +1079,7 @@ type: toascii
 =====
 desc: 4-3-6 Non-character, non-BMP
 namebase: <1FFFE><00ED>dn
-nameutf8: í ¿í¿¾Ã­dn
+nameutf8: ğŸ¿¾Ã­dn
 namezone: 
 failzone1: xn--dn-mja7922x
 failzone2: 
@@ -1092,7 +1090,6 @@ type: toascii
 =====
 desc: 4-3-7 Surrogate points
 namebase: <D805><00ED>dn
-nameutf8: ï¿½Ã­dn
 namezone: 
 failzone1: xn--dn-mja7922x
 failzone2: 
@@ -1147,7 +1144,6 @@ type: toascii
 =====
 desc: 4-3-12 Language tags
 namebase: <E0001><E0045><E004E><0068><0069>idn
-nameutf8: í­€í°í­€í±…í­€í±hiidn
 namezone: 
 failzone1: xn--hiidn-km43aaa
 failzone2: 
@@ -1235,7 +1231,7 @@ type: toascii
 =====
 desc: 5-1-2 Unassigned outside BMP; zone editors should reject
 namebase: <10205><00ED>dn
-nameutf8: í €í¸…Ã­dn
+nameutf8: ğˆ…Ã­dn
 namezone: xn--dn-mja7734x
 failzone1: xn--dn-mja7922x
 failzone2: 
@@ -1257,7 +1253,7 @@ type: toascii
 =====
 desc: 5-2-2 Newly assigned outside of BMP; zone editors should reject
 namebase: <10005><00ED>dn
-nameutf8: í €í°…Ã­dn
+nameutf8: ğ€…Ã­dn
 namezone: xn--dn-mja9232x
 failzone1: xn--dn-mja7922x
 failzone2: 

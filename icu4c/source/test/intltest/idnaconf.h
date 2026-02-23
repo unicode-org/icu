@@ -38,6 +38,7 @@ private:
     // for parsing one test record
     UnicodeString id;   // for debug & error output
     UnicodeString namebase;
+    UnicodeString nameutf8;
     UnicodeString namezone;
     int type;     // 0 toascii,             1 tounicode
     int option;   // 0 UseSTD3ASCIIRules,   1 ALLOW_UNASSIGNED
