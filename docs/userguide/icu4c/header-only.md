@@ -9,7 +9,7 @@ parent: ICU4C
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
-# Plug-ins
+# C++ Header-Only APIs
 {: .no_toc }
 
 ## Contents

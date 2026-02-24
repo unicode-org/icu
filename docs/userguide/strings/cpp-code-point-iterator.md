@@ -1,15 +1,15 @@
 ---
 layout: default
 title: C++ Code Point Iterators
-nav_order: 24
-parent: ICU4C
+nav_order: 20
+parent: Chars and Strings
 ---
 <!--
 © 2025 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
-# Plug-ins
+# C++ Code Point Iterators
 {: .no_toc }
 
 ## Contents
