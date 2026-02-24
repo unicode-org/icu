@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1771891832406,
+  "lastUpdate": 1771909869081,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -81429,6 +81429,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 13248053.403,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "55615ca487806e94c769258d15e7d7b9db065e71",
+          "message": "ICU-23318 fix UTF-8 encoding of idna_conf.txt\n\nalso find & remove nameutf8 ≠ namebase\r\n\r\nSee #3866",
+          "timestamp": "2026-02-24T04:18:39Z",
+          "tree_id": "d5914192144e9a4386d70c6234ed630cb43497fb",
+          "url": "https://github.com/unicode-org/icu/commit/55615ca487806e94c769258d15e7d7b9db065e71"
+        },
+        "date": 1771909449782,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 208.9857,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 55078943.5705,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 12276973.9721,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 51508152.2077,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 12551714.6446,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
