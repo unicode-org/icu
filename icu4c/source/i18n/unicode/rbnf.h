@@ -1148,24 +1148,25 @@ private:
     void format(double number, NFRuleSet& rs, UnicodeString& toAppendTo, UErrorCode& status) const;
 
 private:
-    NFRuleSet **fRuleSets;
-    UnicodeString* ruleSetDescriptions;
-    int32_t numRuleSets;
-    NFRuleSet *defaultRuleSet;
+    NFRuleSet **fRuleSets {  };
+    UnicodeString* ruleSetDescriptions {  };
+    int32_t numRuleSets {  };
+    NFRuleSet *defaultRuleSet {  };
     Locale locale;
-    RuleBasedCollator* collator;
-    DecimalFormatSymbols* decimalFormatSymbols;
-    NFRule *defaultInfinityRule;
-    NFRule *defaultNaNRule;
-    ERoundingMode fRoundingMode;
-    UBool lenient;
-    UnicodeString* lenientParseRules;
-    LocalizationInfo* localizations;
+    RuleBasedCollator* collator {  };
+    DecimalFormatSymbols* decimalFormatSymbols {  };
+    NFRule *defaultInfinityRule {  };
+    NFRule *defaultNaNRule {  };
+    ERoundingMode fRoundingMode { ERoundingMode::kRoundUnnecessary };
+    UBool lenient {  };
+    UBool unparseable {  };
+    UnicodeString* lenientParseRules {  };
+    LocalizationInfo* localizations {  };
     UnicodeString originalDescription;
-    UBool capitalizationInfoSet;
-    UBool capitalizationForUIListMenu;
-    UBool capitalizationForStandAlone;
-    BreakIterator* capitalizationBrkIter;
+    UBool capitalizationInfoSet {  };
+    UBool capitalizationForUIListMenu {  };
+    UBool capitalizationForStandAlone {  };
+    BreakIterator* capitalizationBrkIter {  };
 };
 
 // ---------------

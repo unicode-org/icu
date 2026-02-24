@@ -86,6 +86,8 @@ void IntlTestRBNF::runIndexedTest(int32_t index, UBool exec, const char* &name, 
         TESTCASE(34, testOmissionReplacementWithPluralRules);
         TESTCASE(35, TestNullDereferenceWRITE23149);
         TESTCASE(36, TestNullDereferenceREAD23184);
+        TESTCASE(37, TestUnparseableConflictingSubstitutions);
+        TESTCASE(38, TestAmbiguousDelimiter);
 #else
         TESTCASE(0, TestRBNFDisabled);
 #endif
@@ -2074,7 +2076,7 @@ IntlTestRBNF::TestAllLocales()
                         + "ERROR could not parse '" + str + "' -> " + u_errorName(status));
                 }
                 // We only check the spellout. The behavior is undefined for numbers < 1 and fractional numbers.
-                if (j == 0) {
+                if (j == 0 || n == (int32_t)n) {
                     if (num.getType() == Formattable::kLong && num.getLong() != n) {
                         errln(UnicodeString(loc->getName()) + names[j]
                             + UnicodeString("ERROR could not roundtrip ") + n
@@ -2096,7 +2098,7 @@ IntlTestRBNF::TestAllLocales()
                         + "ERROR could not parse(lenient) '" + str + "' -> " + u_errorName(status));
                 }
                 // We only check the spellout. The behavior is undefined for numbers < 1 and fractional numbers.
-                if (j == 0) {
+                if (j == 0 || n == (int32_t)n) {
                     if (num.getType() == Formattable::kLong && num.getLong() != n) {
                         errln(UnicodeString(loc->getName()) + names[j]
                             + UnicodeString("ERROR could not roundtrip ") + n
@@ -2778,6 +2780,41 @@ IntlTestRBNF::TestNullDereferenceREAD23184() {
     icu::RuleBasedNumberFormat rbfmt2(u"x00:>%>>;%;<0<<", Locale::getUS(), perror, status);
     if (U_SUCCESS(status)) {
        errln("Construct \"x00:>%%>>;%%;<0<<\" should get error");
+    }
+}
+
+/*
+ * Using << twice, or >> twice, or == twice is ambiguous for parsing the real value.
+ * While the results may sometimes format correctly, it is too ambiguous to parse.
+ * Is the first or second substitution the correct value?
+ * Newer plural rules and the orElse operator made this kind of syntax unnecessary, but
+ * some people may have previously developed rules that used this kind of workaround.
+ */
+void
+IntlTestRBNF::TestUnparseableConflictingSubstitutions() {
+    Formattable result;
+    UParseError perror;
+    UErrorCode status = U_ZERO_ERROR;
+    RuleBasedNumberFormat rbnf(u"<<✧<<✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧", Locale::getUS(), perror, status);
+    assertTrue("rbnf constructor didn't return U_STATE_OLD_WARNING!", status == U_STATE_OLD_WARNING);
+
+    rbnf.parse("✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧✧", result, status);
+    assertTrue("rbnf parse didn't return U_INVALID_FORMAT_ERROR!", status == U_INVALID_FORMAT_ERROR);
+}
+
+void
+IntlTestRBNF::TestAmbiguousDelimiter() {
+    Formattable result;
+    UParseError perror;
+    UErrorCode status = U_ZERO_ERROR;
+    RuleBasedNumberFormat rbnf(u"%default:\n0: =#,##0=.;", Locale::getGermany(), perror, status);
+    assertTrue("rbnf constructor failed!", U_SUCCESS(status));
+
+    rbnf.parse(u"10.000.000.", result, status);
+    assertTrue("rbnf parse failed!", U_SUCCESS(status));
+    if (result.getLong() != 10000000) {
+        // It better not be 10!
+        errln("parse got %l instead of 10000000", result.getLong());
     }
 }
 

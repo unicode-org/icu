@@ -193,14 +193,14 @@ LocalizationInfo::indexForRuleSet(const char16_t* ruleset) const {
 typedef void (*Fn_Deleter)(void*);
 
 class VArray {
-    void** buf;
-    int32_t cap;
-    int32_t size;
-    Fn_Deleter deleter;
+    void** buf {  };
+    int32_t cap {  };
+    int32_t size {  };
+    Fn_Deleter deleter {  };
 public:
-    VArray() : buf(nullptr), cap(0), size(0), deleter(nullptr) {}
+    VArray() {}
     
-    VArray(Fn_Deleter del) : buf(nullptr), cap(0), size(0), deleter(del) {}
+    VArray(Fn_Deleter del) : deleter(del) {}
     
     ~VArray() {
         if (deleter) {
@@ -298,16 +298,16 @@ enum {
  * Utility for parsing a localization string and returning a StringLocalizationInfo*.
  */
 class LocDataParser {
-    char16_t* data;
-    const char16_t* e;
-    char16_t* p;
-    char16_t ch;
+    char16_t* data {  };
+    const char16_t* e {  };
+    char16_t* p {  };
+    char16_t ch { 0xffff };
     UParseError& pe;
     UErrorCode& ec;
-    
+
 public:
     LocDataParser(UParseError& parseError, UErrorCode& status) 
-        : data(nullptr), e(nullptr), p(nullptr), ch(0xffff), pe(parseError), ec(status) {}
+        : pe(parseError), ec(status) {}
     ~LocDataParser() {}
     
     /*
@@ -686,144 +686,44 @@ StringLocalizationInfo::getDisplayName(int32_t localeIndex, int32_t ruleIndex) c
 RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description, 
                                              const UnicodeString& locs,
                                              const Locale& alocale, UParseError& perror, UErrorCode& status)
-  : fRuleSets(nullptr)
-  , ruleSetDescriptions(nullptr)
-  , numRuleSets(0)
-  , defaultRuleSet(nullptr)
-  , locale(alocale)
-  , collator(nullptr)
-  , decimalFormatSymbols(nullptr)
-  , defaultInfinityRule(nullptr)
-  , defaultNaNRule(nullptr)
-  , fRoundingMode(DecimalFormat::ERoundingMode::kRoundUnnecessary)
-  , lenient(false)
-  , lenientParseRules(nullptr)
-  , localizations(nullptr)
-  , capitalizationInfoSet(false)
-  , capitalizationForUIListMenu(false)
-  , capitalizationForStandAlone(false)
-  , capitalizationBrkIter(nullptr)
+  : locale(alocale)
 {
-  LocalizationInfo* locinfo = StringLocalizationInfo::create(locs, perror, status);
-  init(description, locinfo, perror, status);
+    LocalizationInfo* locinfo = StringLocalizationInfo::create(locs, perror, status);
+    init(description, locinfo, perror, status);
 }
 
 RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description, 
                                              const UnicodeString& locs,
                                              UParseError& perror, UErrorCode& status)
-  : fRuleSets(nullptr)
-  , ruleSetDescriptions(nullptr)
-  , numRuleSets(0)
-  , defaultRuleSet(nullptr)
-  , locale(Locale::getDefault())
-  , collator(nullptr)
-  , decimalFormatSymbols(nullptr)
-  , defaultInfinityRule(nullptr)
-  , defaultNaNRule(nullptr)
-  , fRoundingMode(DecimalFormat::ERoundingMode::kRoundUnnecessary)
-  , lenient(false)
-  , lenientParseRules(nullptr)
-  , localizations(nullptr)
-  , capitalizationInfoSet(false)
-  , capitalizationForUIListMenu(false)
-  , capitalizationForStandAlone(false)
-  , capitalizationBrkIter(nullptr)
+  : RuleBasedNumberFormat(description, locs, Locale::getDefault(), perror, status)
 {
-  LocalizationInfo* locinfo = StringLocalizationInfo::create(locs, perror, status);
-  init(description, locinfo, perror, status);
 }
 
 RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description, 
                                              LocalizationInfo* info,
                                              const Locale& alocale, UParseError& perror, UErrorCode& status)
-  : fRuleSets(nullptr)
-  , ruleSetDescriptions(nullptr)
-  , numRuleSets(0)
-  , defaultRuleSet(nullptr)
-  , locale(alocale)
-  , collator(nullptr)
-  , decimalFormatSymbols(nullptr)
-  , defaultInfinityRule(nullptr)
-  , defaultNaNRule(nullptr)
-  , fRoundingMode(DecimalFormat::ERoundingMode::kRoundUnnecessary)
-  , lenient(false)
-  , lenientParseRules(nullptr)
-  , localizations(nullptr)
-  , capitalizationInfoSet(false)
-  , capitalizationForUIListMenu(false)
-  , capitalizationForStandAlone(false)
-  , capitalizationBrkIter(nullptr)
+  : locale(alocale)
 {
-  init(description, info, perror, status);
+    init(description, info, perror, status);
 }
 
 RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description, 
                          UParseError& perror, 
                          UErrorCode& status) 
-  : fRuleSets(nullptr)
-  , ruleSetDescriptions(nullptr)
-  , numRuleSets(0)
-  , defaultRuleSet(nullptr)
-  , locale(Locale::getDefault())
-  , collator(nullptr)
-  , decimalFormatSymbols(nullptr)
-  , defaultInfinityRule(nullptr)
-  , defaultNaNRule(nullptr)
-  , fRoundingMode(DecimalFormat::ERoundingMode::kRoundUnnecessary)
-  , lenient(false)
-  , lenientParseRules(nullptr)
-  , localizations(nullptr)
-  , capitalizationInfoSet(false)
-  , capitalizationForUIListMenu(false)
-  , capitalizationForStandAlone(false)
-  , capitalizationBrkIter(nullptr)
+  : RuleBasedNumberFormat(description, nullptr, Locale::getDefault(), perror, status)
 {
-    init(description, nullptr, perror, status);
 }
 
 RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description, 
                          const Locale& aLocale,
                          UParseError& perror, 
                          UErrorCode& status) 
-  : fRuleSets(nullptr)
-  , ruleSetDescriptions(nullptr)
-  , numRuleSets(0)
-  , defaultRuleSet(nullptr)
-  , locale(aLocale)
-  , collator(nullptr)
-  , decimalFormatSymbols(nullptr)
-  , defaultInfinityRule(nullptr)
-  , defaultNaNRule(nullptr)
-  , fRoundingMode(DecimalFormat::ERoundingMode::kRoundUnnecessary)
-  , lenient(false)
-  , lenientParseRules(nullptr)
-  , localizations(nullptr)
-  , capitalizationInfoSet(false)
-  , capitalizationForUIListMenu(false)
-  , capitalizationForStandAlone(false)
-  , capitalizationBrkIter(nullptr)
+  : RuleBasedNumberFormat(description, nullptr, aLocale, perror, status)
 {
-    init(description, nullptr, perror, status);
 }
 
 RuleBasedNumberFormat::RuleBasedNumberFormat(URBNFRuleSetTag tag, const Locale& alocale, UErrorCode& status)
-  : fRuleSets(nullptr)
-  , ruleSetDescriptions(nullptr)
-  , numRuleSets(0)
-  , defaultRuleSet(nullptr)
-  , locale(alocale)
-  , collator(nullptr)
-  , decimalFormatSymbols(nullptr)
-  , defaultInfinityRule(nullptr)
-  , defaultNaNRule(nullptr)
-  , fRoundingMode(DecimalFormat::ERoundingMode::kRoundUnnecessary)
-  , lenient(false)
-  , lenientParseRules(nullptr)
-  , localizations(nullptr)
-  , capitalizationInfoSet(false)
-  , capitalizationForUIListMenu(false)
-  , capitalizationForStandAlone(false)
-  , capitalizationBrkIter(nullptr)
+  : locale(alocale)
 {
     if (U_FAILURE(status)) {
         return;
@@ -874,23 +774,7 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(URBNFRuleSetTag tag, const Locale& 
 
 RuleBasedNumberFormat::RuleBasedNumberFormat(const RuleBasedNumberFormat& rhs)
   : NumberFormat(rhs)
-  , fRuleSets(nullptr)
-  , ruleSetDescriptions(nullptr)
-  , numRuleSets(0)
-  , defaultRuleSet(nullptr)
   , locale(rhs.locale)
-  , collator(nullptr)
-  , decimalFormatSymbols(nullptr)
-  , defaultInfinityRule(nullptr)
-  , defaultNaNRule(nullptr)
-  , fRoundingMode(DecimalFormat::ERoundingMode::kRoundUnnecessary)
-  , lenient(false)
-  , lenientParseRules(nullptr)
-  , localizations(nullptr)
-  , capitalizationInfoSet(false)
-  , capitalizationForUIListMenu(false)
-  , capitalizationForStandAlone(false)
-  , capitalizationBrkIter(nullptr)
 {
     this->operator=(rhs);
 }
@@ -908,6 +792,7 @@ RuleBasedNumberFormat::operator=(const RuleBasedNumberFormat& rhs)
     dispose();
     locale = rhs.locale;
     lenient = rhs.lenient;
+    unparseable = rhs.unparseable;
 
     UParseError perror;
     setDecimalFormatSymbols(*rhs.getDecimalFormatSymbols());
@@ -1345,7 +1230,7 @@ RuleBasedNumberFormat::parse(const UnicodeString& text,
                              Formattable& result,
                              ParsePosition& parsePosition) const
 {
-    if (!fRuleSets) {
+    if (!fRuleSets || unparseable) {
         parsePosition.setErrorIndex(0);
         return;
     }

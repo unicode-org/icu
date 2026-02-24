@@ -8,131 +8,100 @@
  */
 package com.ibm.icu.text;
 
+import com.ibm.icu.impl.PatternProps;
+
 import java.text.FieldPosition;
 import java.text.ParsePosition;
 import java.util.List;
 import java.util.Objects;
 
-import com.ibm.icu.impl.PatternProps;
-
 /**
- * A class representing a single rule in a RuleBasedNumberFormat.  A rule
- * inserts its text into the result string and then passes control to its
- * substitutions, which do the same thing.
+ * A class representing a single rule in a RuleBasedNumberFormat. A rule inserts its text into the
+ * result string and then passes control to its substitutions, which do the same thing.
  */
 final class NFRule {
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     // constants
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
 
-    /**
-     * Special base value used to identify a negative-number rule
-     */
+    /** Special base value used to identify a negative-number rule */
     static final int NEGATIVE_NUMBER_RULE = -1;
 
-    /**
-     * Special base value used to identify an improper fraction (x.x) rule
-     */
+    /** Special base value used to identify an improper fraction (x.x) rule */
     static final int IMPROPER_FRACTION_RULE = -2;
 
-    /**
-     * Special base value used to identify a proper fraction (0.x) rule
-     */
+    /** Special base value used to identify a proper fraction (0.x) rule */
     static final int PROPER_FRACTION_RULE = -3;
 
-    /**
-     * Special base value used to identify a default rule
-     */
+    /** Special base value used to identify a default rule */
     static final int DEFAULT_RULE = -4;
 
-    /**
-     * Special base value used to identify an infinity rule
-     */
+    /** Special base value used to identify an infinity rule */
     static final int INFINITY_RULE = -5;
 
-    /**
-     * Special base value used to identify a not a number rule
-     */
+    /** Special base value used to identify a not a number rule */
     static final int NAN_RULE = -6;
 
     static final Long ZERO = (long) 0;
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     // data members
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
 
-    /**
-     * The rule's base value
-     */
+    /** The rule's base value */
     private long baseValue;
 
-    /**
-     * The rule's radix (the radix to the power of the exponent equals
-     * the rule's divisor)
-     */
+    /** The rule's radix (the radix to the power of the exponent equals the rule's divisor) */
     private int radix = 10;
 
     /**
-     * The rule's exponent (the radix raised to the power of the exponent
-     * equals the rule's divisor)
+     * The rule's exponent (the radix raised to the power of the exponent equals the rule's divisor)
      */
     private short exponent = 0;
 
-    /**
-     * If this is a fraction rule, this is the decimal point from DecimalFormatSymbols to match.
-     */
+    /** If this is a fraction rule, this is the decimal point from DecimalFormatSymbols to match. */
     private char decimalPoint = 0;
 
     /**
-     * The rule's rule text.  When formatting a number, the rule's text
-     * is inserted into the result string, and then the text from any
-     * substitutions is inserted into the result string
+     * The rule's rule text. When formatting a number, the rule's text is inserted into the result
+     * string, and then the text from any substitutions is inserted into the result string
      */
     private String ruleText = null;
 
     /**
-     * The rule's plural format when defined. This is not a substitution
-     * because it only works on the current baseValue. It's normally not used
-     * due to the overhead.
+     * The rule's plural format when defined. This is not a substitution because it only works on
+     * the current baseValue. It's normally not used due to the overhead.
      */
     private PluralFormat rulePatternFormat = null;
 
-    /**
-     * The rule's first substitution (the one with the lower offset
-     * into the rule text)
-     */
+    /** The rule's first substitution (the one with the lower offset into the rule text) */
     private NFSubstitution sub1 = null;
 
-    /**
-     * The rule's second substitution (the one with the higher offset
-     * into the rule text)
-     */
+    /** The rule's second substitution (the one with the higher offset into the rule text) */
     private NFSubstitution sub2 = null;
 
-    /**
-     * The RuleBasedNumberFormat that owns this rule
-     */
+    /** The RuleBasedNumberFormat that owns this rule */
     final RuleBasedNumberFormat formatter;
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     // construction
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
 
     /**
      * Creates one or more rules based on the description passed in.
+     *
      * @param description The description of the rule(s).
      * @param owner The rule set containing the new rule(s).
-     * @param predecessor The rule that precedes the new one(s) in "owner"'s
-     * rule list
-     * @param ownersOwner The RuleBasedNumberFormat that owns the
-     * rule set that owns the new rule(s)
+     * @param predecessor The rule that precedes the new one(s) in "owner"'s rule list
+     * @param ownersOwner The RuleBasedNumberFormat that owns the rule set that owns the new rule(s)
      * @param returnList One or more instances of NFRule are added and returned here
      */
-    public static void makeRules(String                description,
-                                   NFRuleSet             owner,
-                                   NFRule                predecessor,
-                                   RuleBasedNumberFormat ownersOwner,
-                                   List<NFRule>          returnList) {
+    public static void makeRules(
+            String description,
+            NFRuleSet owner,
+            NFRule predecessor,
+            RuleBasedNumberFormat ownersOwner,
+            List<NFRule> returnList) {
         // we know we're making at least one rule, so go ahead and
         // new it up and initialize its basevalue and divisor
         // (this also strips the rule descriptor, if any, off the
@@ -149,15 +118,14 @@ final class NFRule {
         // or if it's of a type that doesn't recognize bracketed text,
         // then leave the description alone, initialize the rule's
         // rule text and substitutions, and return that rule
-        if (brack2 < 0 || brack1 > brack2
-            || rule1.baseValue == PROPER_FRACTION_RULE
-            || rule1.baseValue == NEGATIVE_NUMBER_RULE
-            || rule1.baseValue == INFINITY_RULE
-            || rule1.baseValue == NAN_RULE)
-        {
+        if (brack2 < 0
+                || brack1 > brack2
+                || rule1.baseValue == PROPER_FRACTION_RULE
+                || rule1.baseValue == NEGATIVE_NUMBER_RULE
+                || rule1.baseValue == INFINITY_RULE
+                || rule1.baseValue == NAN_RULE) {
             rule1.extractSubstitutions(owner, description, predecessor);
-        }
-        else {
+        } else {
             // if the description does contain a matched pair of brackets,
             // then it's really shorthand for two rules (with one exception)
             NFRule rule2 = null;
@@ -167,11 +135,9 @@ final class NFRule {
             // we'll actually only split the rule into two rules if its
             // base value is an even multiple of its divisor (or it's one
             // of the special rules)
-            if ((rule1.baseValue > 0
-                 && rule1.baseValue % (power(rule1.radix, rule1.exponent)) == 0)
-                || rule1.baseValue == IMPROPER_FRACTION_RULE
-                || rule1.baseValue == DEFAULT_RULE)
-            {
+            if ((rule1.baseValue > 0 && rule1.baseValue % (power(rule1.radix, rule1.exponent)) == 0)
+                    || rule1.baseValue == IMPROPER_FRACTION_RULE
+                    || rule1.baseValue == DEFAULT_RULE) {
 
                 // if it passes that test, new up the second rule.  If the
                 // rule set both rules will belong to is a fraction rule
@@ -184,14 +150,12 @@ final class NFRule {
                     if (!owner.isFractionSet()) {
                         ++rule1.baseValue;
                     }
-                }
-                else if (rule1.baseValue == IMPROPER_FRACTION_RULE) {
+                } else if (rule1.baseValue == IMPROPER_FRACTION_RULE) {
                     // if the description began with "x.x" and contains bracketed
                     // text, it describes both the improper fraction rule and
                     // the proper fraction rule
                     rule2.baseValue = PROPER_FRACTION_RULE;
-                }
-                else if (rule1.baseValue == DEFAULT_RULE) {
+                } else if (rule1.baseValue == DEFAULT_RULE) {
                     // if the description began with "x.0" and contains bracketed
                     // text, it describes both the default rule and the
                     // improper fraction rule
@@ -224,8 +188,7 @@ final class NFRule {
             sbuf.append(description, 0, brack1);
             if (orElseOp >= 0) {
                 sbuf.append(description, brack1 + 1, orElseOp);
-            }
-            else {
+            } else {
                 sbuf.append(description, brack1 + 1, brack2);
             }
             if (brack2 + 1 < description.length()) {
@@ -241,23 +204,21 @@ final class NFRule {
             if (rule2 != null) {
                 if (rule2.baseValue >= 0) {
                     returnList.add(rule2);
-                }
-                else {
+                } else {
                     owner.setNonNumericalRule(rule2);
                 }
             }
         }
         if (rule1.baseValue >= 0) {
             returnList.add(rule1);
-        }
-        else {
+        } else {
             owner.setNonNumericalRule(rule1);
         }
     }
 
     /**
-     * Nominal constructor for NFRule.  Most of the work of constructing
-     * an NFRule is actually performed by makeRules().
+     * Nominal constructor for NFRule. Most of the work of constructing an NFRule is actually
+     * performed by makeRules().
      */
     public NFRule(RuleBasedNumberFormat formatter, String ruleText) {
         this.formatter = formatter;
@@ -265,29 +226,27 @@ final class NFRule {
     }
 
     /**
-     * This function parses the rule's rule descriptor (i.e., the base
-     * value and/or other tokens that precede the rule's rule text
-     * in the description) and sets the rule's base value, radix, and
-     * exponent according to the descriptor.  (If the description doesn't
-     * include a rule descriptor, then this function sets everything to
-     * default values and the rule set sets the rule's real base value).
+     * This function parses the rule's rule descriptor (i.e., the base value and/or other tokens
+     * that precede the rule's rule text in the description) and sets the rule's base value, radix,
+     * and exponent according to the descriptor. (If the description doesn't include a rule
+     * descriptor, then this function sets everything to default values and the rule set sets the
+     * rule's real base value).
+     *
      * @param description The rule's description
-     * @return If "description" included a rule descriptor, this is
-     * "description" with the descriptor and any trailing whitespace
-     * stripped off.  Otherwise; it's "descriptor" unchanged.
+     * @return If "description" included a rule descriptor, this is "description" with the
+     *     descriptor and any trailing whitespace stripped off. Otherwise; it's "descriptor"
+     *     unchanged.
      */
     private String parseRuleDescriptor(String description) {
-        String descriptor;
-
         // the description consists of a rule descriptor and a rule body,
         // separated by a colon.  The rule descriptor is optional.  If
         // it's omitted, just set the base value to 0.
-        int p = description.indexOf(":");
+        int p = description.indexOf(':');
         if (p != -1) {
             // copy the descriptor out into its own string and strip it,
             // along with any trailing whitespace, out of the original
             // description
-            descriptor = description.substring(0, p);
+            String descriptor = description.substring(0, p);
             ++p;
             while (p < description.length() && PatternProps.isWhiteSpace(description.charAt(p))) {
                 ++p;
@@ -303,55 +262,53 @@ final class NFRule {
             if (firstChar >= '0' && firstChar <= '9' && lastChar != 'x') {
                 // if the rule descriptor begins with a digit, it's a descriptor
                 // for a normal rule
-                long tempValue = 0;
+                long val = 0;
                 char c = 0;
                 p = 0;
 
                 // begin parsing the descriptor: copy digits
-                // into "tempValue", skip periods, commas, and spaces,
+                // into "val", skip periods, commas, and spaces,
                 // stop on a slash or > sign (or at the end of the string),
                 // and throw an exception on any other character
                 while (p < descriptorLength) {
                     c = descriptor.charAt(p);
                     if (c >= '0' && c <= '9') {
-                        tempValue = tempValue * 10 + (c - '0');
-                    }
-                    else if (c == '/' || c == '>') {
+                        val = val * 10 + (c - '0');
+                    } else if (c == '/' || c == '>') {
                         break;
-                    }
-                    else if (!PatternProps.isWhiteSpace(c) && c != ',' && c != '.') {
-                        throw new IllegalArgumentException("Illegal character " + c + " in rule descriptor");
+                    } else if (!PatternProps.isWhiteSpace(c) && c != ',' && c != '.') {
+                        throw new IllegalArgumentException(
+                                "Illegal character " + c + " in rule descriptor");
                     }
                     ++p;
                 }
 
                 // Set the rule's base value according to what we parsed
-                setBaseValue(tempValue);
+                setBaseValue(val);
 
                 // if we stopped the previous loop on a slash, we're
                 // now parsing the rule's radix.  Again, accumulate digits
-                // in tempValue, skip punctuation, stop on a > mark, and
+                // in val, skip punctuation, stop on a > mark, and
                 // throw an exception on anything else
                 if (c == '/') {
-                    tempValue = 0;
+                    val = 0;
                     ++p;
                     while (p < descriptorLength) {
                         c = descriptor.charAt(p);
                         if (c >= '0' && c <= '9') {
-                            tempValue = tempValue * 10 + (c - '0');
-                        }
-                        else if (c == '>') {
+                            val = val * 10 + (c - '0');
+                        } else if (c == '>') {
                             break;
-                        }
-                        else if (!PatternProps.isWhiteSpace(c) && c != ',' && c != '.') {
-                            throw new IllegalArgumentException("Illegal character " + c + " in rule descriptor");
+                        } else if (!PatternProps.isWhiteSpace(c) && c != ',' && c != '.') {
+                            throw new IllegalArgumentException(
+                                    "Illegal character " + c + " in rule descriptor");
                         }
                         ++p;
                     }
 
-                    // tempValue now contains the rule's radix.  Set it
+                    // val now contains the rule's radix.  Set it
                     // accordingly, and recalculate the rule's exponent
-                    radix = (int)tempValue;
+                    radix = (int) val;
                     if (radix == 0) {
                         throw new IllegalArgumentException("Rule can't have radix of 0");
                     }
@@ -369,32 +326,27 @@ final class NFRule {
                         if (c == '>' && exponent > 0) {
                             --exponent;
                         } else {
-                            throw new IllegalArgumentException("Illegal character in rule descriptor");
+                            throw new IllegalArgumentException(
+                                    "Illegal character in rule descriptor");
                         }
                         ++p;
                     }
                 }
-            }
-            else if (descriptor.equals("-x")) {
+            } else if (descriptor.equals("-x")) {
                 setBaseValue(NEGATIVE_NUMBER_RULE);
-            }
-            else if (descriptorLength == 3) {
+            } else if (descriptorLength == 3) {
                 if (firstChar == '0' && lastChar == 'x') {
                     setBaseValue(PROPER_FRACTION_RULE);
                     decimalPoint = descriptor.charAt(1);
-                }
-                else if (firstChar == 'x' && lastChar == 'x') {
+                } else if (firstChar == 'x' && lastChar == 'x') {
                     setBaseValue(IMPROPER_FRACTION_RULE);
                     decimalPoint = descriptor.charAt(1);
-                }
-                else if (firstChar == 'x' && lastChar == '0') {
+                } else if (firstChar == 'x' && lastChar == '0') {
                     setBaseValue(DEFAULT_RULE);
                     decimalPoint = descriptor.charAt(1);
-                }
-                else if (descriptor.equals("NaN")) {
+                } else if (descriptor.equals("NaN")) {
                     setBaseValue(NAN_RULE);
-                }
-                else if (descriptor.equals("Inf")) {
+                } else if (descriptor.equals("Inf")) {
                     setBaseValue(INFINITY_RULE);
                 }
             }
@@ -414,62 +366,61 @@ final class NFRule {
     }
 
     /**
-     * Searches the rule's rule text for the substitution tokens,
-     * creates the substitutions, and removes the substitution tokens
-     * from the rule's rule text.
+     * Searches the rule's rule text for the substitution tokens, creates the substitutions, and
+     * removes the substitution tokens from the rule's rule text.
+     *
      * @param owner The rule set containing this rule
+     * @param sourceRuleText The rule text
      * @param predecessor The rule preceding this one in "owners" rule list
-     * @param ruleText The rule text
      */
-    private void extractSubstitutions(NFRuleSet             owner,
-                                      String                ruleText,
-                                      NFRule                predecessor) {
-        this.ruleText = ruleText;
+    private void extractSubstitutions(NFRuleSet owner, String sourceRuleText, NFRule predecessor) {
+        this.ruleText = sourceRuleText;
         sub1 = extractSubstitution(owner, predecessor);
         if (sub1 == null) {
             // Small optimization. There is no need to create a redundant NullSubstitution.
             sub2 = null;
-        }
-        else {
+        } else {
             sub2 = extractSubstitution(owner, predecessor);
         }
-        ruleText = this.ruleText;
+
+        if (sub1 != null && sub2 != null && sub1.getClass().equals(sub2.getClass())) {
+            // Something like << << or >> >> or == == was encountered.
+            owner.owner.unparseable = true;
+        }
+
         int pluralRuleStart = ruleText.indexOf("$(");
         int pluralRuleEnd = (pluralRuleStart >= 0 ? ruleText.indexOf(")$", pluralRuleStart) : -1);
         if (pluralRuleEnd >= 0) {
             int endType = ruleText.indexOf(',', pluralRuleStart);
             if (endType < 0) {
-                throw new IllegalArgumentException("Rule \"" + ruleText + "\" does not have a defined type");
+                throw new IllegalArgumentException(
+                        "Rule \"" + ruleText + "\" does not have a defined type");
             }
             String type = this.ruleText.substring(pluralRuleStart + 2, endType);
             PluralRules.PluralType pluralType;
             if ("cardinal".equals(type)) {
                 pluralType = PluralRules.PluralType.CARDINAL;
-            }
-            else if ("ordinal".equals(type)) {
+            } else if ("ordinal".equals(type)) {
                 pluralType = PluralRules.PluralType.ORDINAL;
-            }
-            else {
+            } else {
                 throw new IllegalArgumentException(type + " is an unknown type");
             }
-            rulePatternFormat = formatter.createPluralFormat(pluralType,
-                    ruleText.substring(endType + 1, pluralRuleEnd));
+            rulePatternFormat =
+                    formatter.createPluralFormat(
+                            pluralType, ruleText.substring(endType + 1, pluralRuleEnd));
         }
     }
 
     /**
-     * Searches the rule's rule text for the first substitution token,
-     * creates a substitution based on it, and removes the token from
-     * the rule's rule text.
+     * Searches the rule's rule text for the first substitution token, creates a substitution based
+     * on it, and removes the token from the rule's rule text.
+     *
      * @param owner The rule set containing this rule
-     * @param predecessor The rule preceding this one in the rule set's
-     * rule list
-     * @return The newly-created substitution.  This is never null; if
-     * the rule text doesn't contain any substitution tokens, this will
-     * be a NullSubstitution.
+     * @param predecessor The rule preceding this one in the rule set's rule list
+     * @return The newly-created substitution. This is never null; if the rule text doesn't contain
+     *     any substitution tokens, this will be a NullSubstitution.
      */
-    private NFSubstitution extractSubstitution(NFRuleSet             owner,
-                                               NFRule                predecessor) {
+    private NFSubstitution extractSubstitution(NFRuleSet owner, NFRule predecessor) {
         NFSubstitution result;
         int subStart;
         int subEnd;
@@ -488,16 +439,20 @@ final class NFRule {
         // end will actually find the > in the middle
         if (ruleText.startsWith(">>>", subStart)) {
             subEnd = subStart + 2;
-        }
-        else {
+        } else {
             // otherwise the substitution token ends with the same character
             // it began with
             char c = ruleText.charAt(subStart);
             subEnd = ruleText.indexOf(c, subStart + 1);
             // special case for '<%foo<<'
-            if (c == '<' && subEnd != -1 && subEnd < ruleText.length() - 1 && ruleText.charAt(subEnd+1) == c) {
-                // ordinals use "=#,##0==%abbrev=" as their rule.  Notice that the '==' in the middle
-                // occurs because of the juxtaposition of two different rules.  The check for '<' is a hack
+            if (c == '<'
+                    && subEnd != -1
+                    && subEnd < ruleText.length() - 1
+                    && ruleText.charAt(subEnd + 1) == c) {
+                // ordinals use "=#,##0==%abbrev=" as their rule.  Notice that the '==' in the
+                // middle
+                // occurs because of the juxtaposition of two different rules.  The check for '<' is
+                // a hack
                 // to get around this.  Having the duplicate at the front would cause problems with
                 // rules like "<<%" to format, say, percents...
                 ++subEnd;
@@ -514,8 +469,14 @@ final class NFRule {
         // if we get here, we have a real substitution token (or at least
         // some text bounded by substitution token characters).  Use
         // makeSubstitution() to create the right kind of substitution
-        result = NFSubstitution.makeSubstitution(subStart, this, predecessor, owner,
-                this.formatter, ruleText.substring(subStart, subEnd + 1));
+        result =
+                NFSubstitution.makeSubstitution(
+                        subStart,
+                        this,
+                        predecessor,
+                        owner,
+                        this.formatter,
+                        ruleText.substring(subStart, subEnd + 1));
 
         // remove the substitution from the rule text
         ruleText = ruleText.substring(0, subStart) + ruleText.substring(subEnd + 1);
@@ -523,13 +484,13 @@ final class NFRule {
     }
 
     /**
-     * Sets the rule's base value, and causes the radix and exponent
-     * to be recalculated.  This is used during construction when we
-     * don't know the rule's base value until after it's been
-     * constructed.  It should not be used at any other time.
+     * Sets the rule's base value, and causes the radix and exponent to be recalculated. This is
+     * used during construction when we don't know the rule's base value until after it's been
+     * constructed. It should not be used at any other time.
+     *
      * @param newBaseValue The new base value for the rule.
      */
-    final void setBaseValue(long newBaseValue) {
+    void setBaseValue(long newBaseValue) {
         // set the base value
         baseValue = newBaseValue;
         radix = 10;
@@ -552,8 +513,7 @@ final class NFRule {
             if (sub2 != null) {
                 sub2.setDivisor(radix, exponent);
             }
-        }
-        else {
+        } else {
             // if this is a special rule, its radix and exponent are basically
             // ignored.  Set them to "safe" default values
             exponent = 0;
@@ -561,9 +521,9 @@ final class NFRule {
     }
 
     /**
-     * This calculates the rule's exponent based on its radix and base
-     * value.  This will be the highest power the radix can be raised to
-     * and still produce a result less than or equal to the base value.
+     * This calculates the rule's exponent based on its radix and base value. This will be the
+     * highest power the radix can be raised to and still produce a result less than or equal to the
+     * base value.
      */
     private short expectedExponent() {
         // since the log of 0, or the log base 0 of something, causes an
@@ -576,30 +536,31 @@ final class NFRule {
         // we get rounding error in some cases-- for example, log 1000 / log 10
         // gives us 1.9999999996 instead of 2.  The extra logic here is to take
         // that into account
-        short tempResult = (short)(Math.log(baseValue) / Math.log(radix));
-        if (power(radix, (short)(tempResult + 1)) <= baseValue) {
-            return (short)(tempResult + 1);
+        short tempResult = (short) (Math.log(baseValue) / Math.log(radix));
+        if (power(radix, (short) (tempResult + 1)) <= baseValue) {
+            return (short) (tempResult + 1);
         } else {
             return tempResult;
         }
     }
 
-    private static final String[] RULE_PREFIXES = new String[] {
-            "<<", "<%", "<#", "<0",
-            ">>", ">%", ">#", ">0",
-            "=%", "=#", "=0"
-    };
+    private static final String[] RULE_PREFIXES =
+            new String[] {
+                "<<", "<%", "<#", "<0",
+                ">>", ">%", ">#", ">0",
+                "=%", "=#", "=0"
+            };
 
     /**
      * Searches the rule's rule text for any of the specified strings.
-     * @return The index of the first match in the rule's rule text
-     * (i.e., the first substring in the rule's rule text that matches
-     * _any_ of the strings in "strings").  If none of the strings in
-     * "strings" is found in the rule's rule text, returns -1.
+     *
+     * @return The index of the first match in the rule's rule text (i.e., the first substring in
+     *     the rule's rule text that matches _any_ of the strings in "strings"). If none of the
+     *     strings in "strings" is found in the rule's rule text, returns -1.
      */
     private static int indexOfAnyRulePrefix(String ruleText) {
         int result = -1;
-        if (ruleText.length() > 0) {
+        if (!ruleText.isEmpty()) {
             int pos;
             for (String string : RULE_PREFIXES) {
                 pos = ruleText.indexOf(string);
@@ -611,26 +572,27 @@ final class NFRule {
         return result;
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     // boilerplate
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
 
     /**
      * Tests two rules for equality.
+     *
      * @param that The rule to compare this one against
      * @return True if the two rules are functionally equivalent
      */
     @Override
     public boolean equals(Object that) {
         if (that instanceof NFRule) {
-            NFRule that2 = (NFRule)that;
+            NFRule that2 = (NFRule) that;
 
             return baseValue == that2.baseValue
-                && radix == that2.radix
-                && exponent == that2.exponent
-                && ruleText.equals(that2.ruleText)
-                && Objects.equals(sub1, that2.sub1)
-                && Objects.equals(sub2, that2.sub2);
+                    && radix == that2.radix
+                    && exponent == that2.exponent
+                    && ruleText.equals(that2.ruleText)
+                    && Objects.equals(sub1, that2.sub1)
+                    && Objects.equals(sub2, that2.sub2);
         }
         return false;
     }
@@ -642,9 +604,9 @@ final class NFRule {
     }
 
     /**
-     * Returns a textual representation of the rule.  This won't
-     * necessarily be the same as the description that this rule
-     * was created with, but it will produce the same result.
+     * Returns a textual representation of the rule. This won't necessarily be the same as the
+     * description that this rule was created with, but it will produce the same result.
+     *
      * @return A textual description of the rule
      */
     @Override
@@ -653,39 +615,34 @@ final class NFRule {
 
         // start with the rule descriptor.  Special-case the special rules
         if (baseValue == NEGATIVE_NUMBER_RULE) {
-            result.append("-x: ");
-        }
-        else if (baseValue == IMPROPER_FRACTION_RULE) {
-            result.append('x').append(decimalPoint == 0 ? '.' : decimalPoint).append("x: ");
-        }
-        else if (baseValue == PROPER_FRACTION_RULE) {
-            result.append('0').append(decimalPoint == 0 ? '.' : decimalPoint).append("x: ");
-        }
-        else if (baseValue == DEFAULT_RULE) {
-            result.append('x').append(decimalPoint == 0 ? '.' : decimalPoint).append("0: ");
-        }
-        else if (baseValue == INFINITY_RULE) {
-            result.append("Inf: ");
-        }
-        else if (baseValue == NAN_RULE) {
-            result.append("NaN: ");
-        }
-        else {
+            result.append("-x");
+        } else if (baseValue == IMPROPER_FRACTION_RULE) {
+            result.append('x').append(decimalPoint == 0 ? '.' : decimalPoint).append('x');
+        } else if (baseValue == PROPER_FRACTION_RULE) {
+            result.append('0').append(decimalPoint == 0 ? '.' : decimalPoint).append('x');
+        } else if (baseValue == DEFAULT_RULE) {
+            result.append('x').append(decimalPoint == 0 ? '.' : decimalPoint).append('0');
+        } else if (baseValue == INFINITY_RULE) {
+            result.append("Inf");
+        } else if (baseValue == NAN_RULE) {
+            result.append("NaN");
+        } else {
             // for a normal rule, write out its base value, and if the radix is
             // something other than 10, write out the radix (with the preceding
             // slash, of course).  Then calculate the expected exponent and if
-            // if isn't the same as the actual exponent, write an appropriate
+            // it isn't the same as the actual exponent, write an appropriate
             // number of > signs.  Finally, terminate the whole thing with
             // a colon.
-            result.append(String.valueOf(baseValue));
+            result.append(baseValue);
             if (radix != 10) {
                 result.append('/').append(radix);
             }
             int numCarets = expectedExponent() - exponent;
-            for (int i = 0; i < numCarets; i++)
+            for (int i = 0; i < numCarets; i++) {
                 result.append('>');
-            result.append(": ");
+            }
         }
+        result.append(": ");
 
         // if the rule text begins with a space, write an apostrophe
         // (whitespace after the rule descriptor is ignored; the
@@ -698,12 +655,12 @@ final class NFRule {
         // substitution tokens in the appropriate places
         StringBuilder ruleTextCopy = new StringBuilder(ruleText);
         if (sub2 != null) {
-            ruleTextCopy.insert(sub2.getPos(), sub2.toString());
+            ruleTextCopy.insert(sub2.getPos(), sub2);
         }
         if (sub1 != null) {
-            ruleTextCopy.insert(sub1.getPos(), sub1.toString());
+            ruleTextCopy.insert(sub1.getPos(), sub1);
         }
-        result.append(ruleTextCopy.toString());
+        result.append(ruleTextCopy);
 
         // and finally, top the whole thing off with a semicolon and
         // return the result
@@ -711,54 +668,52 @@ final class NFRule {
         return result.toString();
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     // simple accessors
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
 
     /**
      * Returns the rule's base value
+     *
      * @return The rule's base value
      */
-    public final char getDecimalPoint() {
+    public char getDecimalPoint() {
         return decimalPoint;
     }
 
     /**
      * Returns the rule's base value
+     *
      * @return The rule's base value
      */
-    public final long getBaseValue() {
+    public long getBaseValue() {
         return baseValue;
     }
 
     /**
-     * Returns the rule's divisor (the value that controls the behavior
-     * of its substitutions)
+     * Returns the rule's divisor (the value that controls the behavior of its substitutions)
+     *
      * @return The rule's divisor
      */
     public long getDivisor() {
         return power(radix, exponent);
     }
 
-    /**
-     * Internal function used by the rounding code in MultiplierSubstitution.
-     */
+    /** Internal function used by the rounding code in MultiplierSubstitution. */
     boolean hasModulusSubstitution() {
         return (sub1 instanceof ModulusSubstitution) || (sub2 instanceof ModulusSubstitution);
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     // formatting
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
 
     /**
-     * Formats the number, and inserts the resulting text into
-     * toInsertInto.
+     * Formats the number, and inserts the resulting text into toInsertInto.
+     *
      * @param number The number being formatted
-     * @param toInsertInto The string where the resultant text should
-     * be inserted
-     * @param pos The position in toInsertInto where the resultant text
-     * should be inserted
+     * @param toInsertInto The string where the resultant text should be inserted
+     * @param pos The position in toInsertInto where the resultant text should be inserted
      */
     public void doFormat(long number, StringBuilder toInsertInto, int pos, int recursionCount) {
         // first, insert the rule's rule text into toInsertInto at the
@@ -770,8 +725,7 @@ final class NFRule {
         int lengthOffset = 0;
         if (rulePatternFormat == null) {
             toInsertInto.insert(pos, ruleText);
-        }
-        else {
+        } else {
             pluralRuleStart = ruleText.indexOf("$(");
             int pluralRuleEnd = ruleText.indexOf(")$", pluralRuleStart);
             int initialLength = toInsertInto.length();
@@ -785,21 +739,27 @@ final class NFRule {
             lengthOffset = ruleText.length() - (toInsertInto.length() - initialLength);
         }
         if (sub2 != null) {
-            sub2.doSubstitution(number, toInsertInto, pos - (sub2.getPos() > pluralRuleStart ? lengthOffset : 0), recursionCount);
+            sub2.doSubstitution(
+                    number,
+                    toInsertInto,
+                    pos - (sub2.getPos() > pluralRuleStart ? lengthOffset : 0),
+                    recursionCount);
         }
         if (sub1 != null) {
-            sub1.doSubstitution(number, toInsertInto, pos - (sub1.getPos() > pluralRuleStart ? lengthOffset : 0), recursionCount);
+            sub1.doSubstitution(
+                    number,
+                    toInsertInto,
+                    pos - (sub1.getPos() > pluralRuleStart ? lengthOffset : 0),
+                    recursionCount);
         }
     }
 
     /**
-     * Formats the number, and inserts the resulting text into
-     * toInsertInto.
+     * Formats the number, and inserts the resulting text into toInsertInto.
+     *
      * @param number The number being formatted
-     * @param toInsertInto The string where the resultant text should
-     * be inserted
-     * @param pos The position in toInsertInto where the resultant text
-     * should be inserted
+     * @param toInsertInto The string where the resultant text should be inserted
+     * @param pos The position in toInsertInto where the resultant text should be inserted
      */
     public void doFormat(double number, StringBuilder toInsertInto, int pos, int recursionCount) {
         // first, insert the rule's rule text into toInsertInto at the
@@ -812,8 +772,7 @@ final class NFRule {
         int lengthOffset = 0;
         if (rulePatternFormat == null) {
             toInsertInto.insert(pos, ruleText);
-        }
-        else {
+        } else {
             pluralRuleStart = ruleText.indexOf("$(");
             int pluralRuleEnd = ruleText.indexOf(")$", pluralRuleStart);
             int initialLength = toInsertInto.length();
@@ -822,29 +781,38 @@ final class NFRule {
             }
             double pluralVal = number;
             if (0 <= pluralVal && pluralVal < 1) {
-                // We're in a fractional rule, and we have to match the NumeratorSubstitution behavior.
+                // We're in a fractional rule, and we have to match the NumeratorSubstitution
+                // behavior.
                 // 2.3 can become 0.2999999999999998 for the fraction due to rounding errors.
                 pluralVal = Math.round(pluralVal * power(radix, exponent));
-            }
-            else {
+            } else {
                 pluralVal = pluralVal / power(radix, exponent);
             }
-            toInsertInto.insert(pos, rulePatternFormat.format((long)(pluralVal)));
+            toInsertInto.insert(pos, rulePatternFormat.format((long) (pluralVal)));
             if (pluralRuleStart > 0) {
                 toInsertInto.insert(pos, ruleText.substring(0, pluralRuleStart));
             }
             lengthOffset = ruleText.length() - (toInsertInto.length() - initialLength);
         }
         if (sub2 != null) {
-            sub2.doSubstitution(number, toInsertInto, pos - (sub2.getPos() > pluralRuleStart ? lengthOffset : 0), recursionCount);
+            sub2.doSubstitution(
+                    number,
+                    toInsertInto,
+                    pos - (sub2.getPos() > pluralRuleStart ? lengthOffset : 0),
+                    recursionCount);
         }
         if (sub1 != null) {
-            sub1.doSubstitution(number, toInsertInto, pos - (sub1.getPos() > pluralRuleStart ? lengthOffset : 0), recursionCount);
+            sub1.doSubstitution(
+                    number,
+                    toInsertInto,
+                    pos - (sub1.getPos() > pluralRuleStart ? lengthOffset : 0),
+                    recursionCount);
         }
     }
 
     /**
      * This is an equivalent to Math.pow that accurately works on 64-bit numbers
+     *
      * @param base The base
      * @param exponent The exponent
      * @return radix ** exponent
@@ -869,12 +837,13 @@ final class NFRule {
     }
 
     /**
-     * Used by the owning rule set to determine whether to invoke the
-     * rollback rule (i.e., whether this rule or the one that precedes
-     * it in the rule set's list should be used to format the number)
+     * Used by the owning rule set to determine whether to invoke the rollback rule (i.e., whether
+     * this rule or the one that precedes it in the rule set's list should be used to format the
+     * number)
+     *
      * @param number The number being formatted
-     * @return True if the rule set should use the rule that precedes
-     * this one in its list; false if it should use this rule
+     * @return True if the rule set should use the rule that precedes this one in its list; false if
+     *     it should use this rule
      */
     public boolean shouldRollBack(long number) {
         // we roll back if the rule contains a modulus substitution,
@@ -893,37 +862,40 @@ final class NFRule {
         // a modulus substitution, its base value isn't an even multiple
         // of 100, and the value we're trying to format _is_ an even
         // multiple of 100.  This is called the "rollback rule."
-        if (!((sub1 != null && sub1.isModulusSubstitution()) || (sub2 != null && sub2.isModulusSubstitution()))) {
-            return false;
+        if ((sub1 != null && sub1.isModulusSubstitution())
+                || (sub2 != null && sub2.isModulusSubstitution())) {
+            long divisor = power(radix, exponent);
+            return (number % divisor) == 0 && (baseValue % divisor) != 0;
         }
-        long divisor = power(radix, exponent);
-        return (number % divisor) == 0 && (baseValue % divisor) != 0;
+        return false;
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     // parsing
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
 
     /**
      * Attempts to parse the string with this rule.
+     *
      * @param text The string being parsed
-     * @param parsePosition On entry, the value is ignored and assumed to
-     * be 0. On exit, this has been updated with the position of the first
-     * character not consumed by matching the text against this rule
-     * (if this rule doesn't match the text at all, the parse position
-     * if left unchanged (presumably at 0) and the function returns
-     * Long.valueOf(0)).
-     * @param isFractionRule True if this rule is contained within a
-     * fraction rule set.  This is only used if the rule has no
-     * substitutions.
-     * @return If this rule matched the text, this is the rule's base value
-     * combined appropriately with the results of parsing the substitutions.
-     * If nothing matched, this is Long.valueOf(0) and the parse position is
-     * left unchanged.  The result will be an instance of Long if the
-     * result is an integer and Double otherwise.  The result is never null.
+     * @param parsePosition On entry, the value is ignored and assumed to be 0. On exit, this has
+     *     been updated with the position of the first character not consumed by matching the text
+     *     against this rule (if this rule doesn't match the text at all, the parse position if left
+     *     unchanged (presumably at 0) and the function returns Long.valueOf(0)).
+     * @param isFractionRule True if this rule is contained within a fraction rule set. This is only
+     *     used if the rule has no substitutions.
+     * @return If this rule matched the text, this is the rule's base value combined appropriately
+     *     with the results of parsing the substitutions. If nothing matched, this is
+     *     Long.valueOf(0) and the parse position is left unchanged. The result will be an instance
+     *     of Long if the result is an integer and Double otherwise. The result is never null.
      */
-    public Number doParse(String text, ParsePosition parsePosition, boolean isFractionRule,
-                          double upperBound, int nonNumericalExecutedRuleMask, int recursionCount) {
+    public Number doParse(
+            String text,
+            ParsePosition parsePosition,
+            boolean isFractionRule,
+            double upperBound,
+            int nonNumericalExecutedRuleMask,
+            int recursionCount) {
 
         // internally we operate on a copy of the string being parsed
         // (because we're going to change it) and use our own ParsePosition
@@ -931,16 +903,15 @@ final class NFRule {
 
         // check to see whether the text before the first substitution
         // matches the text at the beginning of the string being
-        // parsed.  If it does, strip that off the front of workText;
-        // otherwise, dump out with a mismatch
+        // parsed. If it does, strip that off the front of workText; otherwise,
+        // dump out with a mismatch
         int sub1Pos = sub1 != null ? sub1.getPos() : ruleText.length();
         int sub2Pos = sub2 != null ? sub2.getPos() : ruleText.length();
         String workText = stripPrefix(text, ruleText.substring(0, sub1Pos), pp);
         int prefixLength = text.length() - workText.length();
 
         if (pp.getIndex() == 0 && sub1Pos != 0) {
-            // commented out because ParsePosition doesn't have error index in 1.1.x
-            //                parsePosition.setErrorIndex(pp.getErrorIndex());
+            parsePosition.setErrorIndex(pp.getErrorIndex());
             return ZERO;
         }
         if (baseValue == INFINITY_RULE) {
@@ -994,9 +965,19 @@ final class NFRule {
             // will compose this in some way with what it gets back from
             // the substitution, giving us a new partial parse result
             pp.setIndex(0);
-            double partialResult = matchToDelimiter(workText, start, tempBaseValue,
-                                                    ruleText.substring(sub1Pos, sub2Pos), rulePatternFormat,
-                                                    pp, sub1, upperBound, nonNumericalExecutedRuleMask, recursionCount).doubleValue();
+            double partialResult =
+                    matchToDelimiter(
+                                    workText,
+                                    start,
+                                    tempBaseValue,
+                                    ruleText.substring(sub1Pos, sub2Pos),
+                                    rulePatternFormat,
+                                    pp,
+                                    sub1,
+                                    upperBound,
+                                    nonNumericalExecutedRuleMask,
+                                    recursionCount)
+                            .doubleValue();
 
             // if we got a successful match (or were trying to match a
             // null substitution), pp is now pointing at the first unmatched
@@ -1012,9 +993,19 @@ final class NFRule {
                 // partial result with whatever it gets back from its
                 // substitution if there's a successful match, giving us
                 // a real result
-                partialResult = matchToDelimiter(workText2, 0, partialResult,
-                                                 ruleText.substring(sub2Pos), rulePatternFormat, pp2, sub2,
-                                                 upperBound, nonNumericalExecutedRuleMask, recursionCount).doubleValue();
+                partialResult =
+                        matchToDelimiter(
+                                        workText2,
+                                        0,
+                                        partialResult,
+                                        ruleText.substring(sub2Pos),
+                                        rulePatternFormat,
+                                        pp2,
+                                        sub2,
+                                        upperBound,
+                                        nonNumericalExecutedRuleMask,
+                                        recursionCount)
+                                .doubleValue();
 
                 // if we got a successful match on this second
                 // matchToDelimiter() call, update the high-water mark
@@ -1024,38 +1015,34 @@ final class NFRule {
                         highWaterMark = prefixLength + pp.getIndex() + pp2.getIndex();
                         result = partialResult;
                     }
+                } else {
+                    int temp = pp2.getErrorIndex() + sub1.getPos() + pp.getIndex();
+                    if (temp > parsePosition.getErrorIndex()) {
+                        parsePosition.setErrorIndex(temp);
+                    }
                 }
-                // commented out because ParsePosition doesn't have error index in 1.1.x
-                //                    else {
-                //                        int temp = pp2.getErrorIndex() + sub1.getPos() + pp.getIndex();
-                //                        if (temp> parsePosition.getErrorIndex()) {
-                //                            parsePosition.setErrorIndex(temp);
-                //                        }
-                //                    }
+            } else {
+                int temp = sub1.getPos() + pp.getErrorIndex();
+                if (temp > parsePosition.getErrorIndex()) {
+                    parsePosition.setErrorIndex(temp);
+                }
             }
-            // commented out because ParsePosition doesn't have error index in 1.1.x
-            //                else {
-            //                    int temp = sub1.getPos() + pp.getErrorIndex();
-            //                    if (temp > parsePosition.getErrorIndex()) {
-            //                        parsePosition.setErrorIndex(temp);
-            //                    }
-            //                }
             // keep trying to match things until the outer matchToDelimiter()
             // call fails to make a match (each time, it picks up where it
             // left off the previous time)
-        }
-        while (sub1Pos != sub2Pos && pp.getIndex() > 0 && pp.getIndex()
-                 < workText.length() && pp.getIndex() != start);
+        } while (sub1Pos != sub2Pos
+                && pp.getIndex() > 0
+                && pp.getIndex() < workText.length()
+                && pp.getIndex() != start);
 
         // update the caller's ParsePosition with our high-water mark
         // (i.e., it now points at the first character this function
         // didn't match-- the ParsePosition is therefore unchanged if
         // we didn't match anything)
         parsePosition.setIndex(highWaterMark);
-        // commented out because ParsePosition doesn't have error index in 1.1.x
-        //        if (highWaterMark > 0) {
-        //            parsePosition.setErrorIndex(0);
-        //        }
+        if (highWaterMark > 0) {
+            parsePosition.setErrorIndex(0);
+        }
 
         // this is a hack for one unusual condition: Normally, whether this
         // rule belong to a fraction rule set or not is handled by its
@@ -1068,7 +1055,7 @@ final class NFRule {
         }
 
         // return the result as a Long if possible, or as a Double
-        if (result == (long)result) {
+        if (result == (long) result) {
             return (long) result;
         } else {
             return result;
@@ -1076,24 +1063,23 @@ final class NFRule {
     }
 
     /**
-     * This function is used by parse() to match the text being parsed
-     * against a possible prefix string.  This function
-     * matches characters from the beginning of the string being parsed
-     * to characters from the prospective prefix.  If they match, pp is
-     * updated to the first character not matched, and the result is
-     * the unparsed part of the string.  If they don't match, the whole
-     * string is returned, and pp is left unchanged.
+     * This function is used by parse() to match the text being parsed against a possible prefix
+     * string. This function matches characters from the beginning of the string being parsed to
+     * characters from the prospective prefix. If they match, pp is updated to the first character
+     * not matched, and the result is the unparsed part of the string. If they don't match, the
+     * whole string is returned, and pp is left unchanged.
+     *
      * @param text The string being parsed
      * @param prefix The text to match against
-     * @param pp On entry, ignored and assumed to be 0.  On exit, points
-     * to the first unmatched character (assuming the whole prefix matched),
-     * or is unchanged (if the whole prefix didn't match).
-     * @return If things match, this is the unparsed part of "text";
-     * if they didn't match, this is "text".
+     * @param pp On entry, ignored and assumed to be 0. On exit, points to the first unmatched
+     *     character (assuming the whole prefix matched), or is unchanged (if the whole prefix
+     *     didn't match).
+     * @return If things match, this is the unparsed part of "text"; if they didn't match, this is
+     *     "text".
      */
     private String stripPrefix(String text, String prefix, ParsePosition pp) {
         // if the prefix text is empty, dump out without doing anything
-        if (prefix.length() == 0) {
+        if (prefix.isEmpty()) {
             return text;
         } else {
             // otherwise, use prefixLength() to match the beginning of
@@ -1115,57 +1101,74 @@ final class NFRule {
     }
 
     /**
-     * Used by parse() to match a substitution and any following text.
-     * "text" is searched for instances of "delimiter".  For each instance
-     * of delimiter, the intervening text is tested to see whether it
-     * matches the substitution.  The longest match wins.
+     * Used by parse() to match a substitution and any following text. "text" is searched for
+     * instances of "delimiter". For each instance of delimiter, the intervening text is tested to
+     * see whether it matches the substitution. The longest match wins.
+     *
      * @param text The string being parsed
-     * @param startPos The position in "text" where we should start looking
-     * for "delimiter".
-     * @param baseVal A partial parse result (often the rule's base value),
-     * which is combined with the result from matching the substitution
+     * @param startPos The position in "text" where we should start looking for "delimiter".
+     * @param baseVal A partial parse result (often the rule's base value), which is combined with
+     *     the result from matching the substitution
      * @param delimiter The string to search "text" for.
-     * @param pp Ignored and presumed to be 0 on entry.  If there's a match,
-     * on exit this will point to the first unmatched character.
-     * @param sub If we find "delimiter" in "text", this substitution is used
-     * to match the text between the beginning of the string and the
-     * position of "delimiter."  (If "delimiter" is the empty string, then
-     * this function just matches against this substitution and updates
-     * everything accordingly.)
-     * @param upperBound When matching the substitution, it will only
-     * consider rules with base values lower than this value.
-     * @return If there's a match, this is the result of composing
-     * baseValue with the result of matching the substitution.  Otherwise,
-     * this is Long.valueOf(0).  It's never null.  If the result is an integer,
-     * this will be an instance of Long; otherwise, it's an instance of
-     * Double.
+     * @param pp Ignored and presumed to be 0 on entry. If there's a match, on exit this will point
+     *     to the first unmatched character.
+     * @param sub If we find "delimiter" in "text", this substitution is used to match the text
+     *     between the beginning of the string and the position of "delimiter." (If "delimiter" is
+     *     the empty string, then this function just matches against this substitution and updates
+     *     everything accordingly.)
+     * @param upperBound When matching the substitution, it will only consider rules with base
+     *     values lower than this value.
+     * @return If there's a match, this is the result of composing baseValue with the result of
+     *     matching the substitution. Otherwise, this is Long.valueOf(0). It's never null. If the
+     *     result is an integer, this will be an instance of Long; otherwise, it's an instance of
+     *     Double.
      */
-    private Number matchToDelimiter(String text, int startPos, double baseVal,
-                                    String delimiter, PluralFormat pluralFormatDelimiter, ParsePosition pp, NFSubstitution sub,
-                                    double upperBound, int nonNumericalExecutedRuleMask, int recursionCount) {
+    private Number matchToDelimiter(
+            String text,
+            int startPos,
+            double baseVal,
+            String delimiter,
+            PluralFormat pluralFormatDelimiter,
+            ParsePosition pp,
+            NFSubstitution sub,
+            double upperBound,
+            int nonNumericalExecutedRuleMask,
+            int recursionCount) {
         // if "delimiter" contains real (i.e., non-ignorable) text, search
         // it for "delimiter" beginning at "start".  If that succeeds, then
         // use "sub"'s doParse() method to match the text before the
         // instance of "delimiter" we just found.
         if (!allIgnorable(delimiter)) {
             ParsePosition tempPP = new ParsePosition(0);
-            Number tempResult;
+            Number bestResult = null;
+            int currPos = startPos;
 
-            // use findText() to search for "delimiter".  It returns a two-
-            // element array: element 0 is the position of the match, and
-            // element 1 is the number of characters that matched
-            // "delimiter".
-            int[] temp = findText(text, delimiter, pluralFormatDelimiter, startPos);
-            int dPos = temp[0];
-            int dLen = temp[1];
+            for (; ; ) {
+                // use findText() to search for "delimiter". It returns a two-
+                // element array: element 0 is the position of the match, and
+                // element 1 is the number of characters that matched
+                // "delimiter".
+                tempPP.setIndex(0);
+                int[] temp = findText(text, delimiter, pluralFormatDelimiter, currPos);
+                int dPos = temp[0];
+                int dLen = temp[1];
 
-            // if findText() succeeded, isolate the text preceding the
-            // match, and use "sub" to match that text
-            while (dPos >= 0) {
+                if (dPos < 0) {
+                    break;
+                }
+                // if findText() succeeded, isolate the text preceding the
+                // match, and use "sub" to match that text
                 String subText = text.substring(0, dPos);
-                if (subText.length() > 0) {
-                    tempResult = sub.doParse(subText, tempPP, baseVal, upperBound,
-                                             formatter.lenientParseEnabled(), nonNumericalExecutedRuleMask, recursionCount);
+                if (!subText.isEmpty()) {
+                    Number result =
+                            sub.doParse(
+                                    subText,
+                                    tempPP,
+                                    baseVal,
+                                    upperBound,
+                                    formatter.lenientParseEnabled(),
+                                    nonNumericalExecutedRuleMask,
+                                    recursionCount);
 
                     // if the substitution could match all the text up to
                     // where we found "delimiter", then this function has
@@ -1175,25 +1178,28 @@ final class NFRule {
                     // we got from parsing the substitution.
                     if (tempPP.getIndex() == dPos) {
                         pp.setIndex(dPos + dLen);
-                        return tempResult;
+                        bestResult = result;
+                    } else {
+                        if (bestResult != null) {
+                            // We matched the delimiter once already.
+                            // We didn't find a better match.
+                            return bestResult;
+                        }
+                        if (tempPP.getErrorIndex() > 0) {
+                            pp.setErrorIndex(tempPP.getErrorIndex());
+                        } else {
+                            pp.setErrorIndex(tempPP.getIndex());
+                        }
                     }
-                    // commented out because ParsePosition doesn't have error index in 1.1.x
-                    //                    else {
-                    //                        if (tempPP.getErrorIndex() > 0) {
-                    //                            pp.setErrorIndex(tempPP.getErrorIndex());
-                    //                        } else {
-                    //                            pp.setErrorIndex(tempPP.getIndex());
-                    //                        }
-                    //                    }
                 }
 
                 // if we didn't match the substitution, search for another
                 // copy of "delimiter" in "text" and repeat the loop if
                 // we find it
-                tempPP.setIndex(0);
-                temp = findText(text, delimiter, pluralFormatDelimiter, dPos + dLen);
-                dPos = temp[0];
-                dLen = temp[1];
+                currPos = dPos + dLen;
+            }
+            if (bestResult != null) {
+                return bestResult;
             }
             // if we make it here, this was an unsuccessful match, and we
             // leave pp unchanged and return 0
@@ -1201,19 +1207,24 @@ final class NFRule {
             return ZERO;
 
             // if "delimiter" is empty, or consists only of ignorable characters
-            // (i.e., is semantically empty), thwe we obviously can't search
+            // (i.e., is semantically empty), then we obviously can't search
             // for "delimiter".  Instead, just use "sub" to parse as much of
             // "text" as possible.
-        }
-        else if (sub == null) {
+        } else if (sub == null) {
             return baseVal;
-        }
-        else {
+        } else {
             ParsePosition tempPP = new ParsePosition(0);
             Number result = ZERO;
             // try to match the whole string against the substitution
-            Number tempResult = sub.doParse(text, tempPP, baseVal, upperBound,
-                    formatter.lenientParseEnabled(), nonNumericalExecutedRuleMask, recursionCount);
+            Number tempResult =
+                    sub.doParse(
+                            text,
+                            tempPP,
+                            baseVal,
+                            upperBound,
+                            formatter.lenientParseEnabled(),
+                            nonNumericalExecutedRuleMask,
+                            recursionCount);
             if (tempPP.getIndex() != 0) {
                 // if there's a successful match (or it's a null
                 // substitution), update pp to point to the first
@@ -1223,11 +1234,9 @@ final class NFRule {
                 if (tempResult != null) {
                     result = tempResult;
                 }
+            } else {
+                pp.setErrorIndex(tempPP.getErrorIndex());
             }
-            // commented out because ParsePosition doesn't have error index in 1.1.x
-            //            else {
-            //                pp.setErrorIndex(tempPP.getErrorIndex());
-            //            }
 
             // and if we get to here, then nothing matched, so we return
             // 0 and leave pp alone
@@ -1236,23 +1245,21 @@ final class NFRule {
     }
 
     /**
-     * Used by stripPrefix() to match characters.  If lenient parse mode
-     * is off, this just calls startsWith().  If lenient parse mode is on,
-     * this function uses CollationElementIterators to match characters in
-     * the strings (only primary-order differences are significant in
+     * Used by stripPrefix() to match characters. If lenient parse mode is off, this just calls
+     * startsWith(). If lenient parse mode is on, this function uses CollationElementIterators to
+     * match characters in the strings (only primary-order differences are significant in
      * determining whether there's a match).
+     *
      * @param str The string being tested
-     * @param prefix The text we're hoping to see at the beginning
-     * of "str"
-     * @return If "prefix" is found at the beginning of "str", this
-     * is the number of characters in "str" that were matched (this
-     * isn't necessarily the same as the length of "prefix" when matching
-     * text with a collator).  If there's no match, this is 0.
+     * @param prefix The text we're hoping to see at the beginning of "str"
+     * @return If "prefix" is found at the beginning of "str", this is the number of characters in
+     *     "str" that were matched (this isn't necessarily the same as the length of "prefix" when
+     *     matching text with a collator). If there's no match, this is 0.
      */
     private int prefixLength(String str, String prefix) {
         // if we're looking for an empty prefix, it obviously matches
         // zero characters.  Just go ahead and return 0.
-        if (prefix.length() == 0) {
+        if (prefix.isEmpty()) {
             return 0;
         }
 
@@ -1274,19 +1281,16 @@ final class NFRule {
     }
 
     /**
-     * Searches a string for another string.  If lenient parsing is off,
-     * this just calls indexOf().  If lenient parsing is on, this function
-     * uses CollationElementIterator to match characters, and only
-     * primary-order differences are significant in determining whether
-     * there's a match.
+     * Searches a string for another string. If lenient parsing is off, this just calls indexOf().
+     * If lenient parsing is on, this function uses CollationElementIterator to match characters,
+     * and only primary-order differences are significant in determining whether there's a match.
+     *
      * @param str The string to search
      * @param key The string to search "str" for
-     * @param startingAt The index into "str" where the search is to
-     * begin
-     * @return A two-element array of ints.  Element 0 is the position
-     * of the match, or -1 if there was no match.  Element 1 is the
-     * number of characters in "str" that matched (which isn't necessarily
-     * the same as the length of "key")
+     * @param startingAt The index into "str" where the search is to begin
+     * @return A two-element array of ints. Element 0 is the position of the match, or -1 if there
+     *     was no match. Element 1 is the number of characters in "str" that matched (which isn't
+     *     necessarily the same as the length of "key")
      */
     private int[] findText(String str, String key, PluralFormat pluralFormatKey, int startingAt) {
         RbnfLenientScanner scanner = formatter.getLenientScanner();
@@ -1302,17 +1306,18 @@ final class NFRule {
                 String prefix = ruleText.substring(0, pluralRuleStart);
                 String suffix = ruleText.substring(pluralRuleSuffix);
                 if (str.regionMatches(start - prefix.length(), prefix, 0, prefix.length())
-                        && str.regionMatches(start + matchLen, suffix, 0, suffix.length()))
-                {
-                    return new int[]{start - prefix.length(), matchLen + prefix.length() + suffix.length()};
+                        && str.regionMatches(start + matchLen, suffix, 0, suffix.length())) {
+                    return new int[] {
+                        start - prefix.length(), matchLen + prefix.length() + suffix.length()
+                    };
                 }
             }
-            return new int[]{-1, 0};
+            return new int[] {-1, 0};
         }
 
         if (scanner != null) {
             // Check if non-lenient rule finds the text before call lenient parsing
-            int pos[] = new int[] { str.indexOf(key, startingAt), key.length() };
+            int[] pos = new int[] {str.indexOf(key, startingAt), key.length()};
             if (pos[0] >= 0) {
                 return pos;
             } else {
@@ -1322,20 +1327,19 @@ final class NFRule {
         }
         // if lenient parsing is turned off, this is easy. Just call
         // String.indexOf() and we're done
-        return new int[]{str.indexOf(key, startingAt), key.length()};
+        return new int[] {str.indexOf(key, startingAt), key.length()};
     }
 
     /**
-     * Checks to see whether a string consists entirely of ignorable
-     * characters.
+     * Checks to see whether a string consists entirely of ignorable characters.
+     *
      * @param str The string to test.
-     * @return true if the string is empty of consists entirely of
-     * characters that the number formatter's collator says are
-     * ignorable at the primary-order level.  false otherwise.
+     * @return true if the string is empty of consists entirely of characters that the number
+     *     formatter's collator says are ignorable at the primary-order level. false otherwise.
      */
     private boolean allIgnorable(String str) {
         // if the string is empty, we can just return true
-        if (str == null || str.length() == 0) {
+        if (str == null || str.isEmpty()) {
             return true;
         }
         RbnfLenientScanner scanner = formatter.getLenientScanner();
