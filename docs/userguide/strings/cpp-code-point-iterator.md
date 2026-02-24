@@ -9,7 +9,7 @@ parent: ICU4C
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
-# Plug-ins
+# C++ Code Point Iterators
 {: .no_toc }
 
 ## Contents
