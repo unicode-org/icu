@@ -111,6 +111,8 @@ main(int argc, char* argv[]) {
     LocalPointer<PropsBuilder> layoutPropsBuilder(createLayoutPropsBuilder(errorCode));
     LocalPointer<PropsBuilder> emojiPropsBuilder(createEmojiPropsBuilder(errorCode));
     LocalPointer<PropsBuilder> namesPropsBuilder(createNamesPropsBuilder(errorCode));
+    LocalPointer<PropsBuilder> linkTermPropsBuilder(createLinkTermPropsBuilder(errorCode));
+    LocalPointer<PropsBuilder> linkEmailPropsBuilder(createLinkEmailPropsBuilder(errorCode));
     if(errorCode.isFailure()) {
         fprintf(stderr, "genprops: unable to create PropsBuilders - %s\n", errorCode.errorName());
         return errorCode.reset();
@@ -165,6 +167,8 @@ main(int argc, char* argv[]) {
             layoutPropsBuilder->setUnicodeVersion(version);
             emojiPropsBuilder->setUnicodeVersion(version);
             namesPropsBuilder->setUnicodeVersion(version);
+            linkTermPropsBuilder->setUnicodeVersion(version);
+            linkEmailPropsBuilder->setUnicodeVersion(version);
         } else if(lineType==PreparsedUCD::ALG_NAMES_RANGE_LINE) {
             UChar32 start, end;
             if(ppucd.getRangeForAlgNames(start, end, errorCode)) {
@@ -182,6 +186,8 @@ main(int argc, char* argv[]) {
     }
 
     emojiPropsBuilder->parseUnidataFiles(unidataPath.data(), errorCode);
+    linkTermPropsBuilder->parseUnidataFiles(unidataPath.data(), errorCode);
+    linkEmailPropsBuilder->parseUnidataFiles(unidataPath.data(), errorCode);
 
     if (!beQuiet) { puts(""); }
     corePropsBuilder->build(errorCode);
@@ -195,6 +201,10 @@ main(int argc, char* argv[]) {
     emojiPropsBuilder->build(errorCode);
     if (!beQuiet) { puts(""); }
     namesPropsBuilder->build(errorCode);
+    if (!beQuiet) { puts(""); }
+    linkTermPropsBuilder->build(errorCode);
+    if (!beQuiet) { puts(""); }
+    linkEmailPropsBuilder->build(errorCode);
     if(errorCode.isFailure()) {
         fprintf(stderr, "genprops error: failure finalizing the data - %s\n",
                 errorCode.errorName());
@@ -221,6 +231,8 @@ main(int argc, char* argv[]) {
     namesPropsBuilder->writeBinaryData(sourceDataIn.data(), withCopyright, errorCode);
     layoutPropsBuilder->writeBinaryData(sourceDataIn.data(), withCopyright, errorCode);
     emojiPropsBuilder->writeBinaryData(sourceDataIn.data(), withCopyright, errorCode);
+    linkTermPropsBuilder->writeBinaryData(sourceDataIn.data(), withCopyright, errorCode);
+    linkEmailPropsBuilder->writeBinaryData(sourceDataIn.data(), withCopyright, errorCode);
 
     return errorCode;
 }

@@ -11,6 +11,7 @@
 add_executable(genprops genprops.cpp
                pnamesbuilder.cpp corepropsbuilder.cpp
                bidipropsbuilder.cpp casepropsbuilder.cpp
-               layoutpropsbuilder.cpp
-               namespropsbuilder.cpp)
+               layoutpropsbuilder.cpp emojipropsbuilder.cpp
+               namespropsbuilder.cpp linktermpropsbuilder.cpp
+               linkemailpropsbuilder.cpp)
 target_link_libraries(genprops icuuc icutu)

@@ -54,6 +54,8 @@ PropsBuilder *createCasePropsBuilder(UErrorCode &errorCode);
 PropsBuilder *createLayoutPropsBuilder(UErrorCode &errorCode);
 PropsBuilder *createEmojiPropsBuilder(UErrorCode &errorCode);
 PropsBuilder *createNamesPropsBuilder(UErrorCode &errorCode);
+PropsBuilder *createLinkTermPropsBuilder(UErrorCode &errorCode);
+PropsBuilder *createLinkEmailPropsBuilder(UErrorCode &errorCode);
 
 /* global flags */
 extern UBool beVerbose;
