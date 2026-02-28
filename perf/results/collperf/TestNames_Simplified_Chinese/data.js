@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1771964516270,
+  "lastUpdate": 1772306510896,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -81591,6 +81591,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2147617.3144,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "dmytroh@bookmap.com",
+            "name": "Dmytro Holovko",
+            "username": "own-mind"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "fd6268d09513dab1e5a5af46294c9b088df7b1dc",
+          "message": "ICU-23309 Add ClassLoader to caching key in ResourceBundleWrapper",
+          "timestamp": "2026-02-28T10:51:02-08:00",
+          "tree_id": "48e77cb742419549201c11f7a459af7d55bea225",
+          "url": "https://github.com/unicode-org/icu/commit/fd6268d09513dab1e5a5af46294c9b088df7b1dc"
+        },
+        "date": 1772306117730,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 150.9395,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 8780117.6058,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2129337.5376,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 7828409.2891,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2141413.0819,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
