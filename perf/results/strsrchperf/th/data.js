@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1771963924383,
+  "lastUpdate": 1772305853120,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -52197,6 +52197,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 76.9346,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "dmytroh@bookmap.com",
+            "name": "Dmytro Holovko",
+            "username": "own-mind"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "fd6268d09513dab1e5a5af46294c9b088df7b1dc",
+          "message": "ICU-23309 Add ClassLoader to caching key in ResourceBundleWrapper",
+          "timestamp": "2026-02-28T10:51:02-08:00",
+          "tree_id": "48e77cb742419549201c11f7a459af7d55bea225",
+          "url": "https://github.com/unicode-org/icu/commit/fd6268d09513dab1e5a5af46294c9b088df7b1dc"
+        },
+        "date": 1772305468954,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 32.8089,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 80.1007,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
