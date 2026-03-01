@@ -1,7 +1,7 @@
 REM /*
 REM  *******************************************************************************
 REM  * Copyright (C) 2016 and later: Unicode, Inc. and others.
-REM  * License & terms of use: http://www.unicode.org/copyright.html#License
+REM  * License & terms of use: http://www.unicode.org/copyright.html
 REM  *******************************************************************************
 REM  *******************************************************************************
 REM  * Copyright (C) 1996-2004, International Business Machines Corporation and    *

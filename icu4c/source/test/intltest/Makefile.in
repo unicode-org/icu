@@ -52,7 +52,7 @@ tfsmalls.o tmsgfmt.o trcoll.o tscoll.o tsdate.o tsdcfmsy.o tsdtfmsy.o	\
 tsmthred.o tsnmfmt.o tsputil.o tstnrapi.o tstnorm.o tzbdtest.o		\
 tzregts.o tztest.o ucdtest.o usettest.o ustrtest.o strcase.o transtst.o strtest.o thcoll.o \
 bytestrietest.o ucharstrietest.o \
-itrbbi.o rbbiapts.o rbbitst.o rbbimonkeytest.o ittrans.o transapi.o cpdtrtst.o \
+itrbbi.o lstmbetst.o rbbiapts.o rbbitst.o rbbimonkeytest.o ittrans.o transapi.o cpdtrtst.o \
 testutil.o transrt.o trnserr.o normconf.o sfwdchit.o \
 jamotest.o srchtest.o reptest.o regextst.o \
 itrbnf.o itrbnfrt.o itrbnfp.o ucaconf.o icusvtst.o \
@@ -68,7 +68,8 @@ numbertest_modifiers.o numbertest_patternmodifier.o numbertest_patternstring.o \
 string_segment_test.o \
 numbertest_parse.o numbertest_doubleconversion.o numbertest_skeletons.o \
 static_unisets_test.o numfmtdatadriventest.o numbertest_range.o erarulestest.o \
-formattedvaluetest.o formatted_string_builder_test.o numbertest_permutation.o
+formattedvaluetest.o formatted_string_builder_test.o numbertest_permutation.o \
+units_data_test.o units_router_test.o units_test.o
 
 DEPS = $(OBJECTS:.o=.d)
 

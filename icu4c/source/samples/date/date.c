@@ -1,7 +1,7 @@
 /*
 *************************************************************************
 *   © 2016 and later: Unicode, Inc. and others.
-*   License & terms of use: http://www.unicode.org/copyright.html#License
+*   License & terms of use: http://www.unicode.org/copyright.html
 *************************************************************************
 ***********************************************************************
 *   Copyright (C) 1998-2012, International Business Machines
@@ -19,6 +19,7 @@
 *******************************************************************************
 */
 
+#include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -276,7 +277,7 @@ date(UDate when,
   fmt = udat_open(style, style, locale, tz, -1,NULL,0, status);
   if ( format != NULL ) {
     charsToUCharsDefault(uFormat,sizeof(uFormat)/sizeof(uFormat[0]),format,-1,status);
-    udat_applyPattern(fmt,FALSE,uFormat,-1);
+    udat_applyPattern(fmt,false,uFormat,-1);
   }
   len = udat_format(fmt, when, 0, len, 0, status);
   if(*status == U_BUFFER_OVERFLOW_ERROR) {
@@ -331,7 +332,7 @@ static UDate getWhen(const char *millis, const char *seconds, const char *format
     fmt = udat_open(style, style, locale, tz, -1,NULL,0, status);
     if ( format != NULL ) {
       charsToUCharsDefault(uFormat,sizeof(uFormat)/sizeof(uFormat[0]), format,-1,status);
-      udat_applyPattern(fmt,FALSE,uFormat,-1);
+      udat_applyPattern(fmt,false,uFormat,-1);
     }
     
     charsToUCharsDefault(uParse,sizeof(uParse)/sizeof(uParse[0]), parse,-1,status);

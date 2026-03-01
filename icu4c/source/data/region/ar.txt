@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 ar{
     Countries{
         001{"العالم"}
@@ -287,6 +288,8 @@ ar{
         VU{"فانواتو"}
         WF{"جزر والس وفوتونا"}
         WS{"ساموا"}
+        XA{"لكنات تجريبية غير أصلية"}
+        XB{"لكنات تجريبية ثنائية الاتجاه"}
         XK{"كوسوفو"}
         YE{"اليمن"}
         YT{"مايوت"}
@@ -296,12 +299,9 @@ ar{
         ZZ{"منطقة غير معروفة"}
     }
     Countries%short{
-        GB{"المملكة المتحدة"}
         HK{"هونغ كونغ"}
         MO{"مكاو"}
         PS{"فلسطين"}
-        UN{"الأمم المتحدة"}
-        US{"الولايات المتحدة"}
     }
     Countries%variant{
         CD{"جمهورية الكونغو الديمقراطية"}
@@ -312,5 +312,4 @@ ar{
         SZ{"سوازيلاند"}
         TL{"تيمور الشرقية"}
     }
-    Version{"36"}
 }

@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 en_CA{
     %%Parent{"en_001"}
     NumberElements{
@@ -9,7 +10,6 @@ en_CA{
             }
         }
     }
-    Version{"36"}
     calendar{
         chinese{
             DateTimePatterns{
@@ -325,6 +325,16 @@ en_CA{
                 "{1}, {0}",
                 "{1}, {0}",
             }
+            DateTimeSkeletons{
+                "ahmmsszzzz",
+                "ahmmssz",
+                "ahmmss",
+                "ahmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyMMdd",
+            }
             availableFormats{
                 GyMMMEd{"E, MMM d, y G"}
                 GyMMMd{"MMM d, y G"}
@@ -344,6 +354,7 @@ en_CA{
         leftwards_rightwards_arrows{"leftward rightward arrow"}
         letterlike_symbols{"letter-like symbol"}
         limited_use{"limited use"}
+        math_symbols{"math symbol"}
         nonspacing{"non-spacing"}
         rightwards_arrows{"rightward arrow"}
         upwards_arrows{"upward arrows"}
@@ -436,6 +447,18 @@ en_CA{
                 past{
                     one{"{0} min. ago"}
                     other{"{0} mins. ago"}
+                }
+            }
+        }
+        mon-narrow{
+            relativeTime{
+                future{
+                    one{"in {0} M"}
+                    other{"in {0} Mo’s"}
+                }
+                past{
+                    one{"{0} M ago"}
+                    other{"{0} Mo’s ago"}
                 }
             }
         }
@@ -707,22 +730,6 @@ en_CA{
                     other{"{0} yrs. ago"}
                 }
             }
-        }
-    }
-    listPattern{
-        or-narrow{
-            end{"{0} or {1}"}
-        }
-        or-short{
-            end{"{0} or {1}"}
-        }
-        standard-narrow{
-            2{"{0} and {1}"}
-            end{"{0}, and {1}"}
-        }
-        standard-short{
-            2{"{0} and {1}"}
-            end{"{0}, and {1}"}
         }
     }
 }

@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 2000-2016, International Business Machines Corporation and
@@ -28,6 +28,9 @@ import com.ibm.icu.util.BuddhistCalendar;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.ChineseCalendar;
 import com.ibm.icu.util.GregorianCalendar;
+import com.ibm.icu.util.HebrewCalendar;
+import com.ibm.icu.util.IndianCalendar;
+import com.ibm.icu.util.IslamicCalendar;
 import com.ibm.icu.util.JapaneseCalendar;
 import com.ibm.icu.util.TaiwanCalendar;
 import com.ibm.icu.util.TimeZone;
@@ -2012,5 +2015,222 @@ public class IBMCalendarTest extends CalendarTestFmwk {
         }
         StubSimpleDateFormat stub = new StubSimpleDateFormat("EEE MMM dd yyyy G HH:mm:ss.SSS", Locale.US);
         stub.run();
+    }
+
+    @Test
+    public void TestConsistencyGregorian() {
+        checkConsistency("en@calendar=gregorian");
+    }
+
+    @Test
+    public void TestConsistencyIndian() {
+        checkConsistency("en@calendar=indian");
+    }
+
+    @Test
+    public void TestConsistencyHebrew() {
+        checkConsistency("en@calendar=hebrew");
+    }
+
+    @Test
+    public void TestConsistencyIslamic() {
+        checkConsistency("en@calendar=islamic");
+    }
+
+    @Test
+    public void TestConsistencyIslamicRGSA() {
+        checkConsistency("en@calendar=islamic-rgsa");
+    }
+
+    @Test
+    public void TestConsistencyIslamicTBLA() {
+        checkConsistency("en@calendar=islamic-tbla");
+    }
+
+    @Test
+    public void TestConsistencyIslamicUmalqura() {
+        checkConsistency("en@calendar=islamic-umalqura");
+    }
+
+    @Test
+    public void TestConsistencyIslamicCivil() {
+        checkConsistency("en@calendar=islamic-civil");
+    }
+
+    @Test
+    public void TestConsistencyCoptic() {
+        checkConsistency("en@calendar=coptic");
+    }
+
+    @Test
+    public void TestConsistencyEthiopic() {
+        checkConsistency("en@calendar=ethiopic");
+    }
+
+    @Test
+    public void TestConsistencyROC() {
+        checkConsistency("en@calendar=roc");
+    }
+
+    @Test
+    public void TestConsistencyChinese() {
+        checkConsistency("en@calendar=chinese");
+    }
+
+    @Test
+    public void TestConsistencyDangi() {
+        checkConsistency("en@calendar=dangi");
+    }
+
+    @Test
+    public void TestConsistencyPersian() {
+        checkConsistency("en@calendar=persian");
+    }
+
+    @Test
+    public void TestConsistencyBuddhist() {
+        checkConsistency("en@calendar=buddhist");
+    }
+
+    @Test
+    public void TestConsistencyJapanese() {
+        checkConsistency("en@calendar=japanese");
+    }
+
+    @Test
+    public void TestConsistencyEthiopicAmeteAlem() {
+        checkConsistency("en@calendar=ethiopic-amete-alem");
+    }
+
+    public void checkConsistency(String locale) {
+        boolean quick = getExhaustiveness() <= 5;
+        // Check 3 years in quick mode and 8000 years in exhaustive mode.
+        int numOfDaysToTest = (quick ? 3 * 365 : 8000 * 365);
+        int msInADay = 1000*60*60*24;
+
+        // g is just for debugging messages.
+        Calendar g = new GregorianCalendar(TimeZone.GMT_ZONE, ULocale.ENGLISH);
+        Calendar base = Calendar.getInstance(TimeZone.GMT_ZONE, new ULocale(locale));
+        Date test = Calendar.getInstance().getTime();
+
+        Calendar r = (Calendar)base.clone();
+        int lastDay = 1;
+        for (int j = 0; j < numOfDaysToTest; j++, test.setTime(test.getTime() - msInADay)) {
+            g.setTime(test);
+            base.clear();
+            base.setTime(test);
+            // First, we verify the date from base is decrease one day from the
+            // last day unless the last day is 1.
+            int cday = base.get(Calendar.DAY_OF_MONTH);
+            if (lastDay == 1) {
+                lastDay = cday;
+            } else {
+                if (cday != lastDay-1) {
+                    // Ignore if it is the last day before Gregorian Calendar switch on
+                    // 1582 Oct 4
+                    if (    g.get(Calendar.YEAR) == 1582 && (g.get(Calendar.MONTH) + 1) == 10 &&
+                            g.get(Calendar.DAY_OF_MONTH) == 4) {
+                        lastDay = 5;
+                    } else {
+                        errln("Day is not one less from previous date for Gregorian(e=" +
+                            g.get(Calendar.ERA) + " " + g.get(Calendar.YEAR) + "/" +
+                            (g.get(Calendar.MONTH) + 1) + "/" + g.get(Calendar.DAY_OF_MONTH) +
+                            ") " + locale + "(" +
+                            base.get(Calendar.ERA) + " " + base.get(Calendar.YEAR) + "/" +
+                            (base.get(Calendar.MONTH) + 1 ) + "/" + base.get(Calendar.DAY_OF_MONTH) +
+                            ")");
+                    }
+                }
+                lastDay--;
+            }
+            // Second, we verify the month is in reasonale range.
+            int cmonth = base.get(Calendar.MONTH);
+            if (cmonth < 0 || cmonth > 13) {
+                errln("Month is out of range Gregorian(e=" + g.get(Calendar.ERA) + " " +
+                    g.get(Calendar.YEAR) + "/" + (g.get(Calendar.MONTH) + 1) + "/" +
+                    g.get(Calendar.DAY_OF_MONTH) + ") " + locale + "(" + base.get(Calendar.ERA) +
+                    " " + base.get(Calendar.YEAR) + "/" + (base.get(Calendar.MONTH) + 1 ) + "/" +
+                    base.get(Calendar.DAY_OF_MONTH) + ")");
+            }
+            // Third, we verify the set function can round trip the time back.
+            r.clear();
+            for (int f = 0; f < base.getFieldCount(); f++) {
+                r.set(f, base.get(f));
+            }
+            Date result = r.getTime();
+            if (!test.equals(result)) {
+                errln("Round trip conversion produces different time from " + test + " to  " +
+                    result + " delta: " + (result.getTime() - test.getTime()) +
+                    " Gregorian(e=" + g.get(Calendar.ERA) + " " + g.get(Calendar.YEAR) + "/" +
+                    (g.get(Calendar.MONTH) + 1) + "/" + g.get(Calendar.DAY_OF_MONTH) + ") ");
+            }
+        }
+    }
+
+    @Test
+    public void TestBug21043Indian() {
+        Calendar cal = new IndianCalendar(ULocale.ENGLISH);
+        Calendar g = new GregorianCalendar(ULocale.ENGLISH);
+        // set to 10 BC
+        g.set(Calendar.ERA, GregorianCalendar.BC);
+        g.set(10, 1, 1);
+        cal.setTime(g.getTime());
+        int m = cal.get(Calendar.MONTH);
+        if (m < 0 || m > 11) {
+            errln("Month (" + m + ") should be between 0 and 11 in India calendar");
+        }
+    }
+
+    @Test
+    public void TestBug21044Hebrew() {
+        Calendar cal = new HebrewCalendar(ULocale.ENGLISH);
+        Calendar g = new GregorianCalendar(ULocale.ENGLISH);
+        // set to 3771/10/27 BC which is before 3760 BC.
+        g.set(Calendar.ERA, GregorianCalendar.BC);
+        g.set(3771, 9, 27);
+        cal.setTime(g.getTime());
+        int y = cal.get(Calendar.YEAR);
+        int m = cal.get(Calendar.MONTH);
+        int d = cal.get(Calendar.DATE);
+        if (y > 0 || m < 0 || m > 12 || d < 0 || d > 32) {
+            errln("Out of rage!\nYear " +  y + " should be " +
+              "negative number before 1AD.\nMonth " + m + " should " +
+              "be between 0 and 12 in Hebrew calendar.\nDate " + d +
+              " should be between 0 and 32 in Islamic calendar.");
+        }
+    }
+
+    @Test
+    public void TestBug21045Islamic() {
+        Calendar cal = new IslamicCalendar(ULocale.ENGLISH);
+        Calendar g = new GregorianCalendar(ULocale.ENGLISH);
+        // set to 500 AD before 622 AD.
+        g.set(Calendar.ERA, GregorianCalendar.AD);
+        g.set(500, 1, 1);
+        cal.setTime(g.getTime());
+        int m = cal.get(Calendar.MONTH);
+        if (m < 0 || m > 11) {
+            errln("Month (" + m + ") should be between 0 and 11 in Islamic calendar");
+        }
+    }
+
+    @Test
+    public void TestBug21046IslamicUmalqura() {
+        IslamicCalendar cal = new IslamicCalendar(ULocale.ENGLISH);
+        cal.setCalculationType(IslamicCalendar.CalculationType.ISLAMIC_UMALQURA);
+        Calendar g = new GregorianCalendar(ULocale.ENGLISH);
+        // set to 195366 BC
+        g.set(Calendar.ERA, GregorianCalendar.BC);
+        g.set(195366, 1, 1);
+        cal.setTime(g.getTime());
+        int y = cal.get(Calendar.YEAR);
+        int m = cal.get(Calendar.MONTH);
+        int d = cal.get(Calendar.DATE);
+        if (y > 0 || m < 0 || m > 11 || d < 0 || d > 32) {
+            errln("Out of rage!\nYear " +  y + " should be " +
+              "negative number before 1AD.\nMonth " + m + " should " +
+              "be between 0 and 11 in Islamic calendar.\nDate " + d +
+              " should be between 0 and 32 in Islamic calendar.");
+        }
     }
 }

@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 *******************************************************************************
 *   Copyright (C) 2011, International Business Machines
@@ -113,6 +113,29 @@ public final class PatternProps {
             // There is non-white space at start; we will not move limit below that,
             // so we need not test start<limit in the loop.
             while(isWhiteSpace(s.charAt(limit-1))) {
+                --limit;
+            }
+        }
+        return s.substring(start, limit);
+    }
+
+    /**
+     * @return s except with leading and trailing SpaceChar characters removed.
+     */
+    public static String trimSpaceChar(String s) {
+        if (s.length() == 0 ||
+            (!Character.isSpaceChar(s.charAt(0)) && !Character.isSpaceChar(s.charAt(s.length() - 1)))) {
+            return s;
+        }
+        int start = 0;
+        int limit = s.length();
+        while (start < limit && Character.isSpaceChar(s.charAt(start))) {
+            ++start;
+        }
+        if (start < limit) {
+            // There is non-SpaceChar at start; we will not move limit below that,
+            // so we need not test start<limit in the loop.
+            while (isWhiteSpace(s.charAt(limit - 1))) {
                 --limit;
             }
         }

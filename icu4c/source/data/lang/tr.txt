@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 tr{
     Keys{
         calendar{"Takvim"}
@@ -183,6 +184,7 @@ tr{
         ewo{"Ewondo"}
         ext{"Ekstremadura Dili"}
         fa{"Farsça"}
+        fa_AF{"Darice"}
         fan{"Fang"}
         fat{"Fanti"}
         ff{"Fula dili"}
@@ -436,7 +438,7 @@ tr{
         oc{"Oksitan dili"}
         oj{"Ojibva dili"}
         om{"Oromo dili"}
-        or{"Oriya Dili"}
+        or{"Oriya dili"}
         os{"Osetçe"}
         osa{"Osage"}
         ota{"Osmanlı Türkçesi"}
@@ -478,7 +480,6 @@ tr{
         ro_MD{"Moldovaca"}
         rof{"Rombo"}
         rom{"Romanca"}
-        root{"Köken"}
         rtm{"Rotuman"}
         ru{"Rusça"}
         rue{"Rusince"}
@@ -646,6 +647,8 @@ tr{
         zh_Hant{"Geleneksel Çince (Mandarin)"}
     }
     Languages%menu{
+        ars{"Arapça, Necd"}
+        ckb{"Kürtçe, Orta"}
         yue{"Çince, Kantonca"}
         zh{"Çince, Mandarin"}
     }
@@ -654,10 +657,14 @@ tr{
         en_GB{"Birleşik Krallık İngilizcesi"}
         en_US{"ABD İngilizcesi"}
     }
+    Languages%variant{
+        ckb{"Kürtçe, Sorani"}
+    }
     Scripts{
         Afak{"Afaka"}
         Aghb{"Kafkas Albanyası"}
         Arab{"Arap"}
+        Aran{"Nestâlik"}
         Armi{"İmparatorluk Aramicesi"}
         Armn{"Ermeni"}
         Avst{"Avesta"}
@@ -722,7 +729,7 @@ tr{
         Khmr{"Kmer"}
         Khoj{"Khojki"}
         Knda{"Kannada"}
-        Kore{"Kore"}
+        Kore{"Korece"}
         Kpel{"Kpelle"}
         Kthi{"Kaithi"}
         Lana{"Lanna"}
@@ -740,7 +747,6 @@ tr{
         Lydi{"Lidya"}
         Mahj{"Mahajani"}
         Mand{"Manden"}
-        Mani{"Mani"}
         Maya{"Maya Hiyeroglifleri"}
         Mend{"Mende"}
         Merc{"Meroitik El Yazısı"}
@@ -772,6 +778,7 @@ tr{
         Phnx{"Fenike"}
         Plrd{"Pollard Fonetik"}
         Prti{"Partça Kitabe Dili"}
+        Qaag{"Zawgyi"}
         Rjng{"Rejang"}
         Roro{"Rongorongo"}
         Runr{"Runik"}
@@ -1047,7 +1054,6 @@ tr{
         VALENCIA{"Valensiyaca"}
         WADEGILE{"Wade-Giles (Latin Alfabesinde Yazımı)"}
     }
-    Version{"36"}
     characterLabelPattern{
         all{"{0} — tümü"}
         category-list{"{0}: {1}"}
@@ -1062,6 +1068,8 @@ tr{
             one{"{0} çizgi"}
             other{"{0} çizgi"}
         }
+        subscript{"alt simge {0}"}
+        superscript{"üst simge {0}"}
     }
     codePatterns{
         language{"Dil: {0}"}

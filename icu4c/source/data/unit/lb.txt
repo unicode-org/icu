@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 lb{
-    Version{"36"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -14,7 +14,7 @@ lb{
                 one{"{0}-fach Äerdacceleratioun"}
                 other{"{0}-fach Äerdacceleratioun"}
             }
-            meter-per-second-squared{
+            meter-per-square-second{
                 dnam{"Meter pro Quadratsekonn"}
                 one{"{0} Meter pro Quadratsekonn"}
                 other{"{0} Meter pro Quadratsekonn"}
@@ -479,7 +479,7 @@ lb{
                 one{"{0} Hektopascal"}
                 other{"{0} Hektopascal"}
             }
-            inch-hg{
+            inch-ofhg{
                 dnam{"inHg"}
                 one{"{0} Zoll Quecksëlwersail"}
                 other{"{0} Zoll Quecksëlwersail"}
@@ -489,12 +489,12 @@ lb{
                 one{"{0} Millibar"}
                 other{"{0} Millibar"}
             }
-            millimeter-of-mercury{
+            millimeter-ofhg{
                 dnam{"mm Hg"}
                 one{"{0} mm Hg"}
                 other{"{0} mm Hg"}
             }
-            pound-per-square-inch{
+            pound-force-per-square-inch{
                 dnam{"psi"}
                 one{"{0} psi"}
                 other{"{0} psi"}
@@ -653,7 +653,7 @@ lb{
                 one{"{0} G"}
                 other{"{0} G"}
             }
-            meter-per-second-squared{
+            meter-per-square-second{
                 one{"{0} m/s²"}
                 other{"{0} m/s²"}
             }
@@ -795,8 +795,8 @@ lb{
                 other{"{0} m"}
             }
             micrometer{
-                one{"{0} µm"}
-                other{"{0} µm"}
+                one{"{0} μm"}
+                other{"{0} μm"}
             }
             mile{
                 one{"{0} mi"}
@@ -848,8 +848,8 @@ lb{
                 other{"{0} t"}
             }
             microgram{
-                one{"{0} µg"}
-                other{"{0} µg"}
+                one{"{0} μg"}
+                other{"{0} μg"}
             }
             milligram{
                 one{"{0} mg"}
@@ -896,7 +896,7 @@ lb{
                 one{"{0} hPa"}
                 other{"{0} hPa"}
             }
-            inch-hg{
+            inch-ofhg{
                 one{"{0} inHg"}
                 other{"{0} inHg"}
             }
@@ -904,11 +904,11 @@ lb{
                 one{"{0} mbar"}
                 other{"{0} mbar"}
             }
-            millimeter-of-mercury{
+            millimeter-ofhg{
                 one{"{0} mm Hg"}
                 other{"{0} mm Hg"}
             }
-            pound-per-square-inch{
+            pound-force-per-square-inch{
                 one{"{0} psi"}
                 other{"{0} psi"}
             }
@@ -1043,7 +1043,7 @@ lb{
                 one{"{0} G"}
                 other{"{0} G"}
             }
-            meter-per-second-squared{
+            meter-per-square-second{
                 dnam{"m/s²"}
                 one{"{0} m/s²"}
                 other{"{0} m/s²"}
@@ -1371,9 +1371,9 @@ lb{
                 other{"{0} m"}
             }
             micrometer{
-                dnam{"µm"}
-                one{"{0} µm"}
-                other{"{0} µm"}
+                dnam{"μm"}
+                one{"{0} μm"}
+                other{"{0} μm"}
             }
             mile{
                 dnam{"mi"}
@@ -1440,9 +1440,9 @@ lb{
                 other{"{0} t"}
             }
             microgram{
-                dnam{"µg"}
-                one{"{0} µg"}
-                other{"{0} µg"}
+                dnam{"μg"}
+                one{"{0} μg"}
+                other{"{0} μg"}
             }
             milligram{
                 dnam{"mg"}
@@ -1513,7 +1513,7 @@ lb{
                 one{"{0} hPa"}
                 other{"{0} hPa"}
             }
-            inch-hg{
+            inch-ofhg{
                 dnam{"inHg"}
                 one{"{0} inHg"}
                 other{"{0} inHg"}
@@ -1523,12 +1523,12 @@ lb{
                 one{"{0} mbar"}
                 other{"{0} mbar"}
             }
-            millimeter-of-mercury{
+            millimeter-ofhg{
                 dnam{"mm Hg"}
                 one{"{0} mm Hg"}
                 other{"{0} mm Hg"}
             }
-            pound-per-square-inch{
+            pound-force-per-square-inch{
                 dnam{"psi"}
                 one{"{0} psi"}
                 other{"{0} psi"}

@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 1996-2014, International Business Machines Corporation and    *
@@ -296,7 +296,6 @@ public class JapaneseCalendar extends GregorianCalendar {
      * taking year and era into account.  Defaults to 0 (JANUARY) for Gregorian.
      * @param extendedYear the extendedYear, as returned by handleGetExtendedYear
      * @return the default month
-     * @provisional ICU 3.6
      * @draft ICU 3.6 (retain)
      * @see #MONTH
      */
@@ -322,7 +321,6 @@ public class JapaneseCalendar extends GregorianCalendar {
      * @param month the month, as returned by getDefaultMonthInYear
      * @return the default day of the month
      * @draft ICU 3.6 (retain)
-     * @provisional ICU 3.6
      * @see #DAY_OF_MONTH
      */
     @Override

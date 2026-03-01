@@ -35,6 +35,10 @@ typedef struct UFieldPositionWithCategory {
 
 class IntlTestWithFieldPosition : public IntlTest {
 public:
+    // Tests FormattedValue's toString, toTempString, and nextPosition methods.
+    //
+    // expectedCategory gets combined with expectedFieldPositions to call
+    // checkMixedFormattedValue.
     void checkFormattedValue(
         const char16_t* message,
         const FormattedValue& fv,
@@ -43,6 +47,7 @@ public:
         const UFieldPosition* expectedFieldPositions,
         int32_t length);
 
+    // Tests FormattedValue's toString, toTempString, and nextPosition methods.
     void checkMixedFormattedValue(
         const char16_t* message,
         const FormattedValue& fv,

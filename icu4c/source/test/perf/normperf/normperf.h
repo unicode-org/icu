@@ -1,7 +1,7 @@
 /*
 ***********************************************************************
 * © 2016 and later: Unicode, Inc. and others.
-* License & terms of use: http://www.unicode.org/copyright.html#License
+* License & terms of use: http://www.unicode.org/copyright.html
 ***********************************************************************
 ***********************************************************************
 * Copyright (c) 2002-2011, International Business Machines
@@ -47,7 +47,7 @@ private:
 
 public:
     virtual void call(UErrorCode* status){
-        if(line_mode==TRUE){
+        if(line_mode){
             if(uselen){
                 for(int32_t i = 0; i< numLines; i++){
                     retVal =  (*fn)(lines[i].name,lines[i].len,mode, options, status);
@@ -68,7 +68,7 @@ public:
 
     }
     virtual long getOperationsPerIteration(){
-        if(line_mode==TRUE){
+        if(line_mode){
             int32_t totalChars=0;
             for(int32_t i =0; i< numLines; i++){
                 totalChars+= lines[i].len;
@@ -86,7 +86,7 @@ public:
         mode = _mode;
         src = NULL;
         srcLen = 0;
-        line_mode = TRUE;
+        line_mode = true;
     }
     QuickCheckPerfFunction(QuickCheckFn func, const UChar* source,int32_t sourceLen, UNormalizationMode _mode, int32_t opts, UBool _uselen) : options(opts) {
         fn = func;
@@ -96,7 +96,7 @@ public:
         mode = _mode;
         src = source;
         srcLen = sourceLen;
-        line_mode = FALSE;
+        line_mode = false;
     }
 };
 
@@ -118,7 +118,7 @@ private:
 
 public:
     virtual void call(UErrorCode* status){
-        if(line_mode==TRUE){
+        if(line_mode){
             if(uselen){
                 for(int32_t i = 0; i< numLines; i++){
                     retVal =  (*fn)(lines[i].name,lines[i].len,pDest,destLen, options, status);
@@ -137,7 +137,7 @@ public:
         }
     }
     virtual long getOperationsPerIteration(){
-        if(line_mode ==TRUE){
+        if(line_mode){
             int32_t totalChars=0;
             for(int32_t i =0; i< numLines; i++){
                 totalChars+= lines[i].len;
@@ -156,7 +156,7 @@ public:
         pDest = dest;
         src = NULL;
         srcLen = 0;
-        line_mode = TRUE;
+        line_mode = true;
     }
     NormPerfFunction(NormFn func, int32_t opts, const UChar* source,int32_t sourceLen,UBool _uselen) : options(opts) {
         fn = func;
@@ -167,7 +167,7 @@ public:
         pDest = (UChar*) malloc(destLen * U_SIZEOF_UCHAR);
         src = source;
         srcLen = sourceLen;
-        line_mode = FALSE;
+        line_mode = false;
     }
     ~NormPerfFunction(){
         if(dest != pDest){

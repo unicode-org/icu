@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *   Copyright (C) 1996-2016, International Business Machines
  *   Corporation and others.  All Rights Reserved.
@@ -534,6 +534,36 @@ public abstract class DateFormat extends UFormat {
      * boolean attributes for this instance. Inclusion in this is indicates a true condition.
      */
     private EnumSet<BooleanAttribute> booleanAttributes = EnumSet.allOf(BooleanAttribute.class);
+
+    /**
+     * Hour Cycle
+     * @stable ICU 67
+     */
+    public enum HourCycle {
+        /**
+         * hour in am/pm (0~11)
+         * @stable ICU 67
+         */
+        HOUR_CYCLE_11,
+
+        /**
+         * hour in am/pm (1~12)
+         * @stable ICU 67
+         */
+        HOUR_CYCLE_12,
+
+        /**
+         * hour in day (0~23)
+         * @stable ICU 67
+         */
+        HOUR_CYCLE_23,
+
+        /**
+         * hour in day (1~24)
+         * @stable ICU 67
+         */
+        HOUR_CYCLE_24;
+    };
 
     /*
      * Capitalization setting, hoisted to DateFormat ICU 53
@@ -1562,7 +1592,6 @@ public abstract class DateFormat extends UFormat {
      * {@icu} Returns the set of locales for which DateFormats are installed.
      * @return the set of locales for which DateFormats are installed.
      * @draft ICU 3.2 (retain)
-     * @provisional This API might change or be removed in a future release.
      */
     public static ULocale[] getAvailableULocales()
     {
@@ -2044,7 +2073,6 @@ public abstract class DateFormat extends UFormat {
      * @param cal   The calendar system for which a date/time format is desired.
      * @param locale The locale for which the date/time format is desired.
      * @stable ICU 3.2
-     * @provisional This API might change or be removed in a future release.
      */
     static final public DateFormat getInstance(Calendar cal, ULocale locale) {
         return getDateTimeInstance(cal, SHORT, SHORT, locale);
@@ -2324,7 +2352,7 @@ public abstract class DateFormat extends UFormat {
             GregorianCalendar cal = new GregorianCalendar();
             CAL_FIELD_COUNT = cal.getFieldCount();
             CAL_FIELDS = new Field[CAL_FIELD_COUNT];
-            FIELD_NAME_MAP = new HashMap<String, Field>(CAL_FIELD_COUNT);
+            FIELD_NAME_MAP = new HashMap<>(CAL_FIELD_COUNT);
         }
 
         // Java fields -------------------

@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 ms{
-    AuxExemplarCharacters{"[]"}
     Ellipsis{
         final{"{0}…"}
         initial{"…{0}"}
@@ -10,10 +10,7 @@ ms{
         word-initial{"… {0}"}
         word-medial{"{0} … {1}"}
     }
-    ExemplarCharacters{
-        "[a {ai} {au} b c d {dz} e f g h i j k {kh} l m n {ng} {ngg} {ny} o p q r s {"
-        "sy} t {ts} u {ua} v w x y z]"
-    }
+    ExemplarCharacters{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]"}
     ExemplarCharactersNumbers{"[\\- ‑ , . % ‰ + 0 1 2 3 4 5 6 7 8 9]"}
     ExemplarCharactersPunctuation{
@@ -22,6 +19,11 @@ ms{
     }
     MoreInformation{"?"}
     NumberElements{
+        arabext{
+            symbols{
+                decimal{"."}
+            }
+        }
         default{"latn"}
         latn{
             miscPatterns{
@@ -40,51 +42,39 @@ ms{
             patternsLong{
                 decimalFormat{
                     1000{
-                        one{"0K"}
                         other{"0 ribu"}
                     }
                     10000{
-                        one{"00K"}
                         other{"00 ribu"}
                     }
                     100000{
-                        one{"000K"}
                         other{"000 ribu"}
                     }
                     1000000{
-                        one{"0J"}
                         other{"0 juta"}
                     }
                     10000000{
-                        one{"00J"}
                         other{"00 juta"}
                     }
                     100000000{
-                        one{"000J"}
                         other{"000 juta"}
                     }
                     1000000000{
-                        one{"0B"}
                         other{"0 bilion"}
                     }
                     10000000000{
-                        one{"00B"}
                         other{"00 bilion"}
                     }
                     100000000000{
-                        one{"000B"}
                         other{"000 bilion"}
                     }
                     1000000000000{
-                        one{"0T"}
                         other{"0 trilion"}
                     }
                     10000000000000{
-                        one{"00T"}
                         other{"00 trilion"}
                     }
                     100000000000000{
-                        one{"000T"}
                         other{"000 trilion"}
                     }
                 }
@@ -130,51 +120,39 @@ ms{
                 }
                 decimalFormat{
                     1000{
-                        one{"0K"}
                         other{"0K"}
                     }
                     10000{
-                        one{"00K"}
                         other{"00K"}
                     }
                     100000{
-                        one{"000K"}
                         other{"000K"}
                     }
                     1000000{
-                        one{"0J"}
                         other{"0J"}
                     }
                     10000000{
-                        one{"00J"}
                         other{"00J"}
                     }
                     100000000{
-                        one{"000J"}
                         other{"000J"}
                     }
                     1000000000{
-                        one{"0B"}
                         other{"0B"}
                     }
                     10000000000{
-                        one{"00B"}
                         other{"00B"}
                     }
                     100000000000{
-                        one{"000B"}
                         other{"000B"}
                     }
                     1000000000000{
-                        one{"0T"}
                         other{"0T"}
                     }
                     10000000000000{
-                        one{"00T"}
                         other{"00T"}
                     }
                     100000000000000{
-                        one{"000T"}
                         other{"000T"}
                     }
                 }
@@ -196,7 +174,7 @@ ms{
         }
         minimalPairs{
             ordinal{
-                one{"Ambil belokan kanan yang pertama."}
+                one{"Ambil belokan kanan {0}."}
                 other{"Ambil belokan kanan yang ke-{0}."}
             }
             plural{
@@ -206,7 +184,6 @@ ms{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"36"}
     calendar{
         buddhist{
             eras{
@@ -236,6 +213,16 @@ ms{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "ahmmsszzzz",
+                "ahmmssz",
+                "ahmmss",
+                "ahmm",
+                "rMMMMEEEEd",
+                "rMMMMd",
+                "rMMMd",
+                "rMd",
             }
             monthNames{
                 format{
@@ -581,6 +568,16 @@ ms{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "ahmmsszzzz",
+                "ahmmssz",
+                "ahmmss",
+                "ahmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMdd",
+                "GGGGGyMMd",
+            }
             availableFormats{
                 Bh{"h B"}
                 Bhm{"h:mm B"}
@@ -785,6 +782,16 @@ ms{
                 "{1} {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "ahmmsszzzz",
+                "ahmmssz",
+                "ahmmss",
+                "ahmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMMMd",
+                "yyMMd",
             }
             appendItems{
                 Timezone{"{0} {1}"}
@@ -992,7 +999,7 @@ ms{
                 }
                 GyM{
                     G{"M/y GGGGG – M/y GGGGG"}
-                    M{"M/y –M/y GGGGG"}
+                    M{"M/y – M/y GGGGG"}
                     y{"M/y – M/y GGGGG"}
                 }
                 GyMEd{
@@ -1266,6 +1273,16 @@ ms{
                 "{1} {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "ahmmsszzzz",
+                "ahmmssz",
+                "ahmmss",
+                "ahmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMdd",
+                "GGGGGyMMd",
             }
             availableFormats{
                 E{"ccc"}
@@ -1710,6 +1727,16 @@ ms{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "ahmmsszzzz",
+                "ahmmssz",
+                "ahmmss",
+                "ahmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMdd",
+                "GGGGGyMMd",
             }
         }
         persian{

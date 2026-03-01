@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /**
  *******************************************************************************
  * Copyright (C) 2001-2016, International Business Machines Corporation and
@@ -612,9 +612,9 @@ public class ICULocaleService extends ICUService {
         if (loc != fallbackLocale) {
             synchronized (this) {
                 if (loc != fallbackLocale) {
-                    fallbackLocale = loc;
                     fallbackLocaleName = loc.getBaseName();
                     clearServiceCache();
+                    fallbackLocale = loc;
                 }
             }
         }

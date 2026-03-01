@@ -478,7 +478,7 @@ setInitialStateFromUnicodeKR(UConverter* converter,UConverterDataISO2022 *myConv
 static void U_CALLCONV
 _ISO2022Open(UConverter *cnv, UConverterLoadArgs *pArgs, UErrorCode *errorCode){
 
-    char myLocale[6]={' ',' ',' ',' ',' ',' '};
+    char myLocale[7]={' ',' ',' ',' ',' ',' ', '\0'};
 
     cnv->extraInfo = uprv_malloc (sizeof (UConverterDataISO2022));
     if(cnv->extraInfo != NULL) {
@@ -493,7 +493,7 @@ _ISO2022Open(UConverter *cnv, UConverterLoadArgs *pArgs, UErrorCode *errorCode){
         myConverterData->currentType = ASCII1;
         cnv->fromUnicodeStatus =FALSE;
         if(pArgs->locale){
-            uprv_strncpy(myLocale, pArgs->locale, sizeof(myLocale));
+            uprv_strncpy(myLocale, pArgs->locale, sizeof(myLocale)-1);
         }
         version = pArgs->options & UCNV_OPTIONS_VERSION_MASK;
         myConverterData->version = version;
@@ -527,7 +527,7 @@ _ISO2022Open(UConverter *cnv, UConverterLoadArgs *pArgs, UErrorCode *errorCode){
                     ucnv_loadSharedData("ksc_5601", &stackPieces, &stackArgs, errorCode);
             }
 
-            /* set the function pointers to appropriate funtions */
+            /* set the function pointers to appropriate functions */
             cnv->sharedData=(UConverterSharedData*)(&_ISO2022JPData);
             uprv_strcpy(myConverterData->locale,"ja");
 
@@ -578,7 +578,7 @@ _ISO2022Open(UConverter *cnv, UConverterLoadArgs *pArgs, UErrorCode *errorCode){
                 setInitialStateToUnicodeKR(cnv, myConverterData);
                 setInitialStateFromUnicodeKR(cnv, myConverterData);
 
-                /* set the function pointers to appropriate funtions */
+                /* set the function pointers to appropriate functions */
                 cnv->sharedData=(UConverterSharedData*)&_ISO2022KRData;
                 uprv_strcpy(myConverterData->locale,"ko");
             }
@@ -605,7 +605,7 @@ _ISO2022Open(UConverter *cnv, UConverterLoadArgs *pArgs, UErrorCode *errorCode){
                 ucnv_loadSharedData("cns-11643-1992", &stackPieces, &stackArgs, errorCode);
 
 
-            /* set the function pointers to appropriate funtions */
+            /* set the function pointers to appropriate functions */
             cnv->sharedData=(UConverterSharedData*)&_ISO2022CNData;
             uprv_strcpy(myConverterData->locale,"cn");
 
@@ -820,7 +820,7 @@ getKey_2022(char c,int32_t* key,int32_t* offset){
     return INVALID_2022;
 }
 
-/*runs through a state machine to determine the escape sequence - codepage correspondance
+/*runs through a state machine to determine the escape sequence - codepage correspondence
  */
 static void
 changeState_2022(UConverter* _this,
@@ -1424,7 +1424,7 @@ toUnicodeCallback(UConverter *cnv,
 *          KSC5601 : alias to ibm-949 mapping table
 *          GB2312 : alias to ibm-1386 mapping table
 *          ISO-8859-1 : Algorithmic implemented as LATIN1 case
-*          ISO-8859-7 : alisas to ibm-9409 mapping table
+*          ISO-8859-7 : alias to ibm-9409 mapping table
 */
 
 /* preference order of JP charsets */
@@ -2324,7 +2324,7 @@ endloop:
 /***************************************************************
 *   Rules for ISO-2022-KR encoding
 *   i) The KSC5601 designator sequence should appear only once in a file,
-*      at the begining of a line before any KSC5601 characters. This usually
+*      at the beginning of a line before any KSC5601 characters. This usually
 *      means that it appears by itself on the first line of the file
 *  ii) There are only 2 shifting sequences SO to shift into double byte mode
 *      and SI to shift into single byte mode

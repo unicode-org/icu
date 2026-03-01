@@ -27,6 +27,15 @@
 #include "utrie2.h"
 
 /**
+ * An input to some of the functions in this file specifying whether to write data
+ * as C/C++ code initializers or as TOML.
+ */
+typedef enum UTargetSyntax {
+    UPRV_TARGET_SYNTAX_CCODE = 0,
+    UPRV_TARGET_SYNTAX_TOML = 1,
+} UTargetSyntax;
+
+/**
  * Creates a source text file and writes a header comment with the ICU copyright.
  * Writes a C/Java-style comment with the generator name.
  */
@@ -38,7 +47,23 @@ usrc_create(const char *path, const char *filename, int32_t copyrightYear, const
  * Writes the comment with # lines, as used in scripts and text data.
  */
 U_CAPI FILE * U_EXPORT2
-usrc_createTextData(const char *path, const char *filename, const char *generator);
+usrc_createTextData(const char *path, const char *filename, int32_t copyrightYear, const char *generator);
+
+/**
+ * Writes the ICU copyright to a file stream, with configurable year and comment style.
+ */
+U_CAPI void U_EXPORT2
+usrc_writeCopyrightHeader(FILE *f, const char *prefix, int32_t copyrightYear);
+
+/**
+ * Writes information about the file being machine-generated.
+ */
+U_CAPI void U_EXPORT2
+usrc_writeFileNameGeneratedBy(
+        FILE *f,
+        const char *prefix,
+        const char *filename,
+        const char *generator);
 
 /**
  * Writes the contents of an array of 8/16/32-bit words.
@@ -51,6 +76,7 @@ U_CAPI void U_EXPORT2
 usrc_writeArray(FILE *f,
                 const char *prefix,
                 const void *p, int32_t width, int32_t length,
+                const char *indent,
                 const char *postfix);
 
 /**
@@ -83,7 +109,8 @@ U_CAPI void U_EXPORT2
 usrc_writeUCPTrieArrays(FILE *f,
                         const char *indexPrefix, const char *dataPrefix,
                         const UCPTrie *pTrie,
-                        const char *postfix);
+                        const char *postfix,
+                        UTargetSyntax syntax);
 
 /**
  * Writes the UCPTrie struct values.
@@ -95,13 +122,14 @@ usrc_writeUCPTrieStruct(FILE *f,
                         const char *prefix,
                         const UCPTrie *pTrie,
                         const char *indexName, const char *dataName,
-                        const char *postfix);
+                        const char *postfix,
+                        UTargetSyntax syntax);
 
 /**
  * Writes the UCPTrie arrays and struct values.
  */
 U_CAPI void U_EXPORT2
-usrc_writeUCPTrie(FILE *f, const char *name, const UCPTrie *pTrie);
+usrc_writeUCPTrie(FILE *f, const char *name, const UCPTrie *pTrie, UTargetSyntax syntax);
 
 /**
  * Writes the contents of an array of mostly invariant characters.

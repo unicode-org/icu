@@ -34,6 +34,10 @@ if not exist "%ICU_BINDIR%" (
  goto :eof
 )
 
+REM Change the codepage to UTF-8 in order to better handle non-ASCII characters from the samples.
+echo Setting codepage to UTF-8
+chcp 65001
+
 echo Testing ICU samples in %ICU_ICUDIR%  arch=%ICU_ARCH% type=%ICU_DBRL%
 set PATH=%ICU_BINDIR%;%PATH%
 pushd %ICU_BINDIR%

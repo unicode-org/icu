@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /**
 *******************************************************************************
 * Copyright (C) 1996-2016, International Business Machines Corporation and
@@ -41,7 +41,7 @@ import com.ibm.icu.util.VersionInfo;
 *
 * <p>Following the <a href=http://www.unicode.org>Unicode
 * Consortium</a>'s specifications for the
-* <a href="http://www.unicode.org/unicode/reports/tr10/">Unicode Collation
+* <a href="https://www.unicode.org/reports/tr10/">Unicode Collation
 * Algorithm (UCA)</a>, there are 5 different levels of strength used
 * in comparisons:
 *
@@ -64,7 +64,7 @@ import com.ibm.icu.util.VersionInfo;
 *     difference between large and small Kana. A tertiary difference is ignored
 *     when there is a primary or secondary difference anywhere in the strings.
 * <li>QUATERNARY strength: When punctuation is ignored
-*     (see <a href="http://userguide.icu-project.org/collation/concepts#TOC-Ignoring-Punctuation">
+*     (see <a href="https://unicode-org.github.io/icu/userguide/collation/concepts#ignoring-punctuation">
 *     Ignoring Punctuations in the User Guide</a>) at PRIMARY to TERTIARY
 *     strength, an additional strength level can
 *     be used to distinguish words with and without punctuation (for example,
@@ -76,7 +76,7 @@ import com.ibm.icu.util.VersionInfo;
 *     When all other strengths are equal, the IDENTICAL strength is used as a
 *     tiebreaker. The Unicode code point values of the NFD form of each string
 *     are compared, just in case there is no difference.
-*     For example, Hebrew cantellation marks are only distinguished at this
+*     For example, Hebrew cantillation marks are only distinguished at this
 *     strength. This strength should be used sparingly, as only code point
 *     value differences between two strings is an extremely rare occurrence.
 *     Using this strength substantially decreases the performance for both
@@ -95,7 +95,7 @@ import com.ibm.icu.util.VersionInfo;
 * a comparison or before getting a CollationKey.
 *
 * <p>For more information about the collation service see the
-* <a href="http://userguide.icu-project.org/collation">User Guide</a>.
+* <a href="https://unicode-org.github.io/icu/userguide/collation">User Guide</a>.
 *
 * <p>Examples of use
 * <pre>
@@ -172,7 +172,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
     /**
      * {@icu} Fourth level collator strength value.
      * When punctuation is ignored
-     * (see <a href="http://userguide.icu-project.org/collation/concepts#TOC-Ignoring-Punctuation">
+     * (see <a href="https://unicode-org.github.io/icu/userguide/collation/concepts#ignoring-punctuation">
      * Ignoring Punctuation in the User Guide</a>) at PRIMARY to TERTIARY
      * strength, an additional strength level can
      * be used to distinguish words with and without punctuation.
@@ -223,7 +223,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      * will be decomposed for collation.
      *
      * <p>CANONICAL_DECOMPOSITION corresponds to Normalization Form D as
-     * described in <a href="http://www.unicode.org/unicode/reports/tr15/">
+     * described in <a href="https://www.unicode.org/reports/tr15/">
      * Unicode Technical Report #15</a>.
      *
      * @see #NO_DECOMPOSITION
@@ -807,7 +807,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      * Starting with ICU 54, collation attributes can be specified via locale keywords as well,
      * in the old locale extension syntax ("el@colCaseFirst=upper")
      * or in language tag syntax ("el-u-kf-upper").
-     * See <a href="http://userguide.icu-project.org/collation/api">User Guide: Collation API</a>.
+     * See <a href="https://unicode-org.github.io/icu/userguide/collation/api">User Guide: Collation API</a>.
      *
      * @param locale the desired locale.
      * @return Collator for the desired locale if it is created successfully.
@@ -841,7 +841,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      * Starting with ICU 54, collation attributes can be specified via locale keywords as well,
      * in the old locale extension syntax ("el@colCaseFirst=upper", only with {@link ULocale})
      * or in language tag syntax ("el-u-kf-upper").
-     * See <a href="http://userguide.icu-project.org/collation/api">User Guide: Collation API</a>.
+     * See <a href="https://unicode-org.github.io/icu/userguide/collation/api">User Guide: Collation API</a>.
      *
      * @param locale the desired locale.
      * @return Collator for the desired locale if it is created successfully.
@@ -1056,7 +1056,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      * applications who wish to cache collators, or otherwise reuse
      * collators when possible.  The functional equivalent may change
      * over time.  For more information, please see the <a
-     * href="http://userguide.icu-project.org/locale#TOC-Locales-and-Services">
+     * href="https://unicode-org.github.io/icu/userguide/locale#locales-and-services">
      * Locales and Services</a> section of the ICU User Guide.
      * @param keyword a particular keyword as enumerated by
      * getKeywords.
@@ -1509,7 +1509,6 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      * @see com.ibm.icu.util.ULocale#VALID_LOCALE
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
      * @draft ICU 2.8 (retain)
-     * @provisional This API might change or be removed in a future release.
      */
     public ULocale getLocale(ULocale.Type type) {
         return ULocale.ROOT;

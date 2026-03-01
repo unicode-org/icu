@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 1996-2015, International Business Machines Corporation and
@@ -48,7 +48,7 @@ public class UnicodeNormalizerConformanceTest extends TestFmwk {
 
     /**
      * Test the conformance of NewNormalizer to
-     * http://www.unicode.org/unicode/reports/tr15/conformance/Draft-TestSuite.txt.
+     * https://www.unicode.org/reports/tr15/conformance/Draft-TestSuite.txt.
      * This file must be located at the path specified as TEST_SUITE_FILE.
      */
     @Test

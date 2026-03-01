@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 **********************************************************************
 * Copyright (c) 2003-2015, International Business Machines
@@ -12,6 +12,7 @@
 */
 package com.ibm.icu.dev.test.util;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -48,6 +49,20 @@ public class UtilityTest extends TestFmwk {
         if (!result.equals(expect)) {
             errln("FAIL: Utility.unescape() returned " + result + ", exp. " + expect);
         }
+
+        // Regression test for ICU-21645
+        String s = "\\U0001DA8B\\U0001DF00-\\U0001DF1E";
+        // This returned U+B2F00 for the first _two_ escapes.
+        int cpAndLength = Utility.unescapeAndLengthAt(s, 1);  // index 1 = after the backslash
+        assertEquals(s + " unescape at 1, cpAndLength", 0x1DA8B09, cpAndLength);
+        String pattern = "[" + s + "]";
+        // This threw an IllegalArgumentException because the parser called Utility.unescapeAt()
+        // and saw an invalid range of B2F00..1DF1E (start >= end).
+        UnicodeSet set = new UnicodeSet(pattern);
+        assertEquals(pattern + " size", 32, set.size());
+        assertTrue(pattern + " contains U+1DA8B", set.contains(0x1DA8B));
+        assertTrue(pattern + " contains U+1DF00..U+1DF1E", set.contains(0x1DF00, 0x1DF1E));
+        assertFalse(pattern + " contains U+1DF1F", set.contains(0x1DF1F));
     }
 
     @Test
@@ -290,5 +305,31 @@ public class UtilityTest extends TestFmwk {
             sb.append(RANDOM_CHARS.charAt(RANDOM.nextInt(RANDOM_CHARS.length())));
         }
         return sb;
+    }
+
+    @Test
+    public void TestJoinStrings() {
+        final String data[][] = {
+            //  {"<expected>", "<delimiter>", "<element1>", "<element2>", ...}
+                {"abc-def", "-", "abc", "def"},
+                {"abc-def-ghi", "-", "abc", "def", "ghi"},
+                {"abc--def", "--", "abc", "def"},
+                {"abc", "-", "abc"},
+                {"def", "_", null, "def"},
+                {"abc_def", "_", null, "abc", null, "def", null},
+                {"", "-", null},
+        };
+
+        for (int i = 0; i < data.length; i++) {
+            String expected = data[i][0];
+            String delim = data[i][1];
+            List<String> elements = new ArrayList<>(data.length - 2);
+            for (int j = 2; j < data[i].length; j++) {
+                elements.add(data[i][j]);
+            }
+
+            String actual = Utility.joinStrings(delim, elements);
+            assertEquals("data[" + i + "]", expected, actual);
+        }
     }
 }

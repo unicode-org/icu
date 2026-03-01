@@ -13,7 +13,7 @@
 #  (bring up Powershell ISE)
 #    cd C:\icu\icu4c\
 #    Set-ExecutionPolicy -Scope Process Unrestricted
-#    .\packaging\distrelease.ps1 -arch "x64 or x86"
+#    .\packaging\distrelease.ps1 -arch "x64 or x86 or ARM64"
 #
 # Will emit: c:\icu4c\icu\source\dist\icu-windows.zip
 #
@@ -47,6 +47,11 @@ elseif ($arch -eq "x86")
 {
     Copy-Item -Path "$icuDir\lib" -Destination $source -Recurse
     Copy-Item -Path "$icuDir\bin" -Destination $source -Recurse
+}
+elseif ($arch -eq "ARM64")
+{
+    Copy-Item -Path "$icuDir\libARM64" -Destination $source -Recurse
+    Copy-Item -Path "$icuDir\binARM64" -Destination $source -Recurse
 }
 else
 {

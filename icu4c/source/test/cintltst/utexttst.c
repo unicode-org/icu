@@ -57,7 +57,7 @@ addUTextTest(TestNode** root)
  *            This is not intended to be a complete test of the API functionality.  That is
  *            in the C++ intltest program.
  *            This test is intended to check that everything can be accessed and built in 
- *            a pure C enviornment.
+ *            a pure C environment.
  */
 
 

@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 ca{
     Keys{
         calendar{"calendari"}
@@ -170,6 +171,7 @@ ca{
         ewo{"ewondo"}
         ext{"extremeny"}
         fa{"persa"}
+        fa_AF{"dari"}
         fan{"fang"}
         fat{"fanti"}
         ff{"ful"}
@@ -278,7 +280,7 @@ ca{
         kj{"kuanyama"}
         kk{"kazakh"}
         kkj{"kako"}
-        kl{"grenlandès"}
+        kl{"groenlandès"}
         kln{"kalenjin"}
         km{"khmer"}
         kmb{"kimbundu"}
@@ -448,7 +450,6 @@ ca{
         ro_MD{"moldau"}
         rof{"rombo"}
         rom{"romaní"}
-        root{"arrel"}
         ru{"rus"}
         rup{"aromanès"}
         rw{"ruandès"}
@@ -601,6 +602,7 @@ ca{
         zh_Hant{"xinès mandarí (tradicional)"}
     }
     Languages%menu{
+        ckb{"sorani"}
         yue{"xinès, cantonès"}
         zh{"xinès, mandarí"}
     }
@@ -609,6 +611,7 @@ ca{
         en_GB{"anglès (GB)"}
     }
     Languages%variant{
+        ckb{"kurd sorani"}
         ps{"pushtu"}
     }
     Scripts{
@@ -617,6 +620,7 @@ ca{
         Aghb{"albanès caucàsic"}
         Ahom{"ahom"}
         Arab{"àrab"}
+        Aran{"nastaliq"}
         Armi{"arameu imperial"}
         Armn{"armeni"}
         Avst{"avèstic"}
@@ -668,7 +672,7 @@ ca{
         Hira{"hiragana"}
         Hluw{"jeroglífic anatoli"}
         Hmng{"pahawh hmong"}
-        Hrkt{"katakana o hiragana"}
+        Hrkt{"sil·labaris japonesos"}
         Hung{"hongarès antic"}
         Inds{"escriptura de la vall de l’Indus"}
         Ital{"cursiva antiga"}
@@ -735,6 +739,7 @@ ca{
         Phnx{"fenici"}
         Plrd{"pollard miao"}
         Prti{"parthià inscripcional"}
+        Qaag{"zawgyi"}
         Rjng{"rejang"}
         Roro{"rongo-rongo"}
         Runr{"rúnic"}
@@ -1007,7 +1012,6 @@ ca{
         VALLADER{"baix engiadinès"}
         WADEGILE{"romanització Wade-Giles"}
     }
-    Version{"36"}
     characterLabelPattern{
         all{"{0} — tot"}
         category-list{"{0}: {1}"}
@@ -1022,6 +1026,8 @@ ca{
             one{"{0} traç"}
             other{"{0} traços"}
         }
+        subscript{"subíndex {0}"}
+        superscript{"superíndex {0}"}
     }
     codePatterns{
         language{"Idioma: {0}"}

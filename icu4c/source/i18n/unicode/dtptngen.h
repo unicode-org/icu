@@ -77,6 +77,13 @@ public:
 #ifndef U_HIDE_INTERNAL_API
 
     /**
+     * For ICU use only. Skips loading the standard date/time patterns (which is done via DateFormat).
+     *
+     * @internal
+     */
+    static DateTimePatternGenerator* U_EXPORT2 createInstanceNoStdPat(const Locale& uLocale, UErrorCode& status);
+
+    /**
      * For ICU use only
      *
      * @internal
@@ -483,6 +490,24 @@ public:
      */
     const UnicodeString& getDecimal() const;
 
+#if !UCONFIG_NO_FORMATTING
+
+    /**
+     * Get the default hour cycle for a locale. Uses the locale that the
+     * DateTimePatternGenerator was initially created with.
+     * 
+     * Cannot be used on an empty DateTimePatternGenerator instance.
+     * 
+     * @param status  Output param set to success/failure code on exit, which
+     *                which must not indicate a failure before the function call.
+     *                Set to U_UNSUPPORTED_ERROR if used on an empty instance.
+     * @return the default hour cycle.
+     * @stable ICU 67
+     */
+    UDateFormatHourCycle getDefaultHourCycle(UErrorCode& status) const;
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
+    
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
@@ -506,7 +531,7 @@ private:
     /**
      * Constructor.
      */
-    DateTimePatternGenerator(const Locale& locale, UErrorCode & status);
+    DateTimePatternGenerator(const Locale& locale, UErrorCode & status, UBool skipStdPatterns = false);
 
     /**
      * Copy constructor.
@@ -553,7 +578,7 @@ private:
         // with #13183, no longer need flags for b, B
     };
 
-    void initData(const Locale &locale, UErrorCode &status);
+    void initData(const Locale &locale, UErrorCode &status, UBool skipStdPatterns = false);
     void addCanonicalItems(UErrorCode &status);
     void addICUPatterns(const Locale& locale, UErrorCode& status);
     void hackTimes(const UnicodeString& hackPattern, UErrorCode& status);
@@ -565,12 +590,10 @@ private:
     void setDateTimeFromCalendar(const Locale& locale, UErrorCode& status);
     void setDecimalSymbols(const Locale& locale, UErrorCode& status);
     UDateTimePatternField getAppendFormatNumber(const char* field) const;
-#ifndef U_HIDE_DRAFT_API
-    // The following three have to be U_HIDE_DRAFT_API (though private) because UDateTimePGDisplayWidth is
+    // Note for the next 3: UDateTimePGDisplayWidth is now stable ICU 61
     UDateTimePatternField getFieldAndWidthIndices(const char* key, UDateTimePGDisplayWidth* widthP) const;
     void setFieldDisplayName(UDateTimePatternField field, UDateTimePGDisplayWidth width, const UnicodeString& value);
     UnicodeString& getMutableFieldDisplayName(UDateTimePatternField field, UDateTimePGDisplayWidth width);
-#endif  // U_HIDE_DRAFT_API
     void getAppendName(UDateTimePatternField field, UnicodeString& value);
     UnicodeString mapSkeletonMetacharacters(const UnicodeString& patternForm, int32_t* flags, UErrorCode& status);
     const UnicodeString* getBestRaw(DateTimeMatcher& source, int32_t includeMask, DistanceInfo* missingFields, UErrorCode& status, const PtnSkeleton** specifiedSkeletonPtr = 0);

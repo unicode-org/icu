@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /**
  *******************************************************************************
  * Copyright (C) 2002-2010, International Business Machines Corporation and    *
@@ -133,7 +133,7 @@ public class CanonGSUBBuilder
                     break;
                     
                 case UCharacter.DecompositionType.CANONICAL:
-                    //cannonicalTree.insert(decomposition + UCharacter.toString(ligature));
+                    //canonicalTree.insert(decomposition + UCharacter.toString(ligature));
                     break;
                 }
             }

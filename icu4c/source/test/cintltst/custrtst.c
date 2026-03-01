@@ -22,6 +22,7 @@
 #include "unicode/ucnv.h"
 #include "unicode/uiter.h"
 #include "cintltst.h"
+#include "cstring.h"
 #include "cmemory.h"
 #include <string.h>
 
@@ -36,6 +37,7 @@ static void TestStringFunctions(void);
 static void TestStringSearching(void);
 static void TestSurrogateSearching(void);
 static void TestUnescape(void);
+static void TestUnescapeRepeatedSurrogateLead20725(void);
 static void TestCountChar32(void);
 static void TestUCharIterator(void);
 
@@ -48,6 +50,8 @@ void addUStringTest(TestNode** root)
     addTest(root, &TestStringSearching, "tsutil/custrtst/TestStringSearching");
     addTest(root, &TestSurrogateSearching, "tsutil/custrtst/TestSurrogateSearching");
     addTest(root, &TestUnescape, "tsutil/custrtst/TestUnescape");
+    addTest(root, &TestUnescapeRepeatedSurrogateLead20725,
+            "tsutil/custrtst/TestUnescapeRepeatedSurrogateLead20725");
     addTest(root, &TestCountChar32, "tsutil/custrtst/TestCountChar32");
     addTest(root, &TestUCharIterator, "tsutil/custrtst/TestUCharIterator");
 }
@@ -962,6 +966,16 @@ TestSurrogateSearching() {
     ) {
         log_err("error: one of the u_str[str etc](\"aba\") incorrectly finds something\n");
     }
+    /* Regression test for ICU-20684 Use-of-uninitialized-value in isMatchAtCPBoundary
+     * Condition: search the same string while the first char is not an
+     * surrogate and the last char is the leading surragte.
+     */
+    {
+        static const UChar s[]={ 0x0020, 0xD9C1 };
+        if (u_strFindFirst(s, 2, s, 2) != s) {
+            log_err("error: ending with a partial supplementary code point should match\n");
+        }
+    }
 }
 
 static void TestStringCopy()
@@ -1112,6 +1126,55 @@ TestUnescape() {
     }
 
     /* ### TODO: test u_unescapeAt() */
+}
+
+static void
+TestUnescapeRepeatedSurrogateLead20725() {
+    const int32_t repeat = 20000;
+    const int32_t srclen = repeat * 6 + 1;
+    char *src = (char*)malloc(srclen);
+    UChar *dest = (UChar*) malloc(sizeof(UChar) * (repeat + 1));
+    if (src == NULL || dest == NULL) {
+        log_err("memory allocation error");
+    }
+    for (int32_t i = 0; i < repeat; i++) {
+      uprv_strcpy(src + (i * 6), "\\ud841");
+    }
+    int32_t len = u_unescape(src, dest, repeat);
+    if (len != repeat) {
+        log_err("failure in u_unescape()");
+    }
+    for (int32_t i = 0; i < repeat; i++) {
+      if (dest[i] != 0xd841) {
+        log_err("failure in u_unescape() return value");
+      }
+    }
+    free(src);
+
+    // A few simple test cases to make sure that the code recovers properly
+    u_unescape("\\ud841\\x5A", dest, repeat);
+    const UChar expected1[] = {0xd841, 'Z', 0};
+    if (u_strcmp(dest, expected1)!=0) {
+        log_err("u_unescape() should return u\"\\ud841Z\" but got %s", dest);
+    }
+
+    u_unescape("\\ud841\\U00050005", dest, repeat);
+    const UChar expected2[] = {0xd841, 0xd900, 0xdc05, 0};
+    if (u_strcmp(dest, expected2)!=0) {
+        log_err("u_unescape() should return u\"\\ud841\\ud900\\udc05\" "
+                "but got %s", dest);
+    }
+
+    // \\xXX is ill-formed. The documentation states:
+    // If an escape sequence is ill-formed, this method returns an empty string.
+    u_unescape("\\ud841\\xXX", dest, repeat);
+    const UChar expected3[] = { 0 };
+    if (u_strcmp(dest, expected3)!=0) {
+        log_err("u_unescape() should return empty string");
+    }
+
+    free(dest);
+
 }
 
 /* test code point counting functions --------------------------------------- */

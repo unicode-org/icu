@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 1997-2007, International Business Machines Corporation and    *
@@ -266,7 +266,7 @@ class CalendarFrame extends Frame
                         monthFormat[i] = f;
                     }
                 } catch (ClassCastException e) {
-                    //hey {lw} - there's something wrong in this routine that cuases exceptions.
+                    //hey {lw} - there's something wrong in this routine that causes exceptions.
                     System.out.println(e);
                 }
 

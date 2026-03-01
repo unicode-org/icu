@@ -1,6 +1,10 @@
 # Copyright (C) 2018 and later: Unicode, Inc. and others.
 # License & terms of use: http://www.unicode.org/copyright.html
 
+# Python 2/3 Compatibility (ICU-20299)
+# TODO(ICU-20301): Remove this.
+from __future__ import print_function
+
 from . import *
 from .. import *
 from .. import utils
@@ -120,12 +124,15 @@ def run_shell_command(command_line, platform, verbose):
     # If the command line length on Windows exceeds the absolute maximum that CMD supports (8191), then
     # we temporarily switch over to use PowerShell for the command, and then switch back to CMD.
     # We don't want to use PowerShell for everything though, as it tends to be slower.
-    if (platform == "windows") and (len(command_line) > 8190):
-        if verbose:
-            print("Command length exceeds the max length for CMD on Windows, using PowerShell instead.")
+    if (platform == "windows"):
         previous_comspec = os.environ["COMSPEC"]
-        os.environ["COMSPEC"] = 'powershell'
-        changed_windows_comspec = True
+        # Add 7 to the length for the argument /c with quotes.
+        # For example:  C:\WINDOWS\system32\cmd.exe /c "<command_line>"
+        if ((len(previous_comspec) + len(command_line) + 7) > 8190):
+            if verbose:
+                print("Command length exceeds the max length for CMD on Windows, using PowerShell instead.")
+            os.environ["COMSPEC"] = 'powershell'
+            changed_windows_comspec = True
     if verbose:
         print("Running: %s" % command_line)
         returncode = subprocess.call(
@@ -143,4 +150,6 @@ def run_shell_command(command_line, platform, verbose):
             )
     if changed_windows_comspec:
         os.environ["COMSPEC"] = previous_comspec
+    if returncode != 0:
+        print("Command failed: %s" % command_line, file=sys.stderr)
     return returncode

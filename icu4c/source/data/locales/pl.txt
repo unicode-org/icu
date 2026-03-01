@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 pl{
     AuxExemplarCharacters{"[à â å ä æ ç é è ê ë î ï ô ö œ q ß ù û ü v x ÿ]"}
     Ellipsis{
@@ -7,7 +8,7 @@ pl{
         word-initial{"…{0}"}
     }
     ExemplarCharacters{"[a ą b c ć d e ę f g h i j k l ł m n ń o ó p r s ś t u w y z ź ż]"}
-    ExemplarCharactersIndex{"[A Ą B C Ć D E Ę F G H I J K L Ł M N Ń O Ó P Q R S Ś T U V W X Y Z Ź Ż]"}
+    ExemplarCharactersIndex{"[A B C Ć D E F G H I J K L Ł M N O Ó P Q R S Ś T U V W X Y Z Ź Ż]"}
     ExemplarCharactersNumbers{"[  \\- ‑ , % ‰ + 0 1 2 3 4 5 6 7 8 9]"}
     ExemplarCharactersPunctuation{
         "[\\- ‐ ‑ – — , ; \\: ! ? . … ' \u0022 ” „ « » ( ) \\[ \\] \\{ \\} § @ * / "
@@ -17,7 +18,7 @@ pl{
         latn{
             miscPatterns{
                 approximately{"~{0}"}
-                atLeast{"{0}+"}
+                atLeast{"≥{0}"}
                 atMost{"≤{0}"}
                 range{"{0}–{1}"}
             }
@@ -35,96 +36,72 @@ pl{
                         many{"0 tysięcy"}
                         one{"0 tysiąc"}
                         other{"0 tysiąca"}
-                        two{"0 tys'.'"}
-                        zero{"0 tys'.'"}
                     }
                     10000{
                         few{"00 tysiące"}
                         many{"00 tysięcy"}
                         one{"00 tysiąc"}
                         other{"00 tysiąca"}
-                        two{"00 tys'.'"}
-                        zero{"00 tys'.'"}
                     }
                     100000{
                         few{"000 tysiące"}
                         many{"000 tysięcy"}
                         one{"000 tysiąc"}
                         other{"000 tysiąca"}
-                        two{"000 tys'.'"}
-                        zero{"000 tys'.'"}
                     }
                     1000000{
                         few{"0 miliony"}
                         many{"0 milionów"}
                         one{"0 milion"}
                         other{"0 miliona"}
-                        two{"0 mln"}
-                        zero{"0 mln"}
                     }
                     10000000{
                         few{"00 miliony"}
                         many{"00 milionów"}
                         one{"00 milion"}
                         other{"00 miliona"}
-                        two{"00 mln"}
-                        zero{"00 mln"}
                     }
                     100000000{
                         few{"000 miliony"}
                         many{"000 milionów"}
                         one{"000 milion"}
                         other{"000 miliona"}
-                        two{"000 mln"}
-                        zero{"000 mln"}
                     }
                     1000000000{
                         few{"0 miliardy"}
                         many{"0 miliardów"}
                         one{"0 miliard"}
                         other{"0 miliarda"}
-                        two{"0 mld"}
-                        zero{"0 mld"}
                     }
                     10000000000{
                         few{"00 miliardy"}
                         many{"00 miliardów"}
                         one{"00 miliard"}
                         other{"00 miliarda"}
-                        two{"00 mld"}
-                        zero{"00 mld"}
                     }
                     100000000000{
                         few{"000 miliardy"}
                         many{"000 miliardów"}
                         one{"000 miliard"}
                         other{"000 miliarda"}
-                        two{"000 mld"}
-                        zero{"000 mld"}
                     }
                     1000000000000{
                         few{"0 biliony"}
                         many{"0 bilionów"}
                         one{"0 bilion"}
                         other{"0 biliona"}
-                        two{"0 bln"}
-                        zero{"0 bln"}
                     }
                     10000000000000{
                         few{"00 biliony"}
                         many{"00 bilionów"}
                         one{"00 bilion"}
                         other{"00 biliona"}
-                        two{"00 bln"}
-                        zero{"00 bln"}
                     }
                     100000000000000{
                         few{"000 biliony"}
                         many{"000 bilionów"}
                         one{"000 bilion"}
                         other{"000 biliona"}
-                        two{"000 bln"}
-                        zero{"000 bln"}
                     }
                 }
             }
@@ -209,96 +186,72 @@ pl{
                         many{"0 tys'.'"}
                         one{"0 tys'.'"}
                         other{"0 tys'.'"}
-                        two{"0 tys'.'"}
-                        zero{"0 tys'.'"}
                     }
                     10000{
                         few{"00 tys'.'"}
                         many{"00 tys'.'"}
                         one{"00 tys'.'"}
                         other{"00 tys'.'"}
-                        two{"00 tys'.'"}
-                        zero{"00 tys'.'"}
                     }
                     100000{
                         few{"000 tys'.'"}
                         many{"000 tys'.'"}
                         one{"000 tys'.'"}
                         other{"000 tys'.'"}
-                        two{"000 tys'.'"}
-                        zero{"000 tys'.'"}
                     }
                     1000000{
                         few{"0 mln"}
                         many{"0 mln"}
                         one{"0 mln"}
                         other{"0 mln"}
-                        two{"0 mln"}
-                        zero{"0 mln"}
                     }
                     10000000{
                         few{"00 mln"}
                         many{"00 mln"}
                         one{"00 mln"}
                         other{"00 mln"}
-                        two{"00 mln"}
-                        zero{"00 mln"}
                     }
                     100000000{
                         few{"000 mln"}
                         many{"000 mln"}
                         one{"000 mln"}
                         other{"000 mln"}
-                        two{"000 mln"}
-                        zero{"000 mln"}
                     }
                     1000000000{
                         few{"0 mld"}
                         many{"0 mld"}
                         one{"0 mld"}
                         other{"0 mld"}
-                        two{"0 mld"}
-                        zero{"0 mld"}
                     }
                     10000000000{
                         few{"00 mld"}
                         many{"00 mld"}
                         one{"00 mld"}
                         other{"00 mld"}
-                        two{"00 mld"}
-                        zero{"00 mld"}
                     }
                     100000000000{
                         few{"000 mld"}
                         many{"000 mld"}
                         one{"000 mld"}
                         other{"000 mld"}
-                        two{"000 mld"}
-                        zero{"000 mld"}
                     }
                     1000000000000{
                         few{"0 bln"}
                         many{"0 bln"}
                         one{"0 bln"}
                         other{"0 bln"}
-                        two{"0 bln"}
-                        zero{"0 bln"}
                     }
                     10000000000000{
                         few{"00 bln"}
                         many{"00 bln"}
                         one{"00 bln"}
                         other{"00 bln"}
-                        two{"00 bln"}
-                        zero{"00 bln"}
                     }
                     100000000000000{
                         few{"000 bln"}
                         many{"000 bln"}
                         one{"000 bln"}
                         other{"000 bln"}
-                        two{"000 bln"}
-                        zero{"000 bln"}
                     }
                 }
             }
@@ -318,8 +271,22 @@ pl{
             }
         }
         minimalPairs{
+            case{
+                accusative{"Widzę {0}"}
+                dative{"Ufam {0}"}
+                genitive{"Nie widzę {0}"}
+                instrumental{"Interesuję się {0}"}
+                locative{"Siedzę na {0}"}
+                nominative{"{0} jest/są tutaj"}
+                vocative{"Pani(e) {0}!"}
+            }
+            gender{
+                feminine{"ta {0}"}
+                inanimate{"ten {0}"}
+                neuter{"to {0}"}
+            }
             ordinal{
-                other{"Skręć w {0} w prawo."}
+                other{"Skręć w {0}. w prawo."}
             }
             plural{
                 few{"{0} miesiące"}
@@ -330,7 +297,6 @@ pl{
         }
         minimumGroupingDigits{"2"}
     }
-    Version{"36"}
     calendar{
         buddhist{
             eras{
@@ -360,6 +326,16 @@ pl{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "UMMMMEEEEd",
+                "UMMMMd",
+                "UMMMd",
+                "yMMdd",
             }
             monthNames{
                 format{
@@ -481,6 +457,16 @@ pl{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GyMMdd",
             }
             availableFormats{
                 Ed{"E, d"}
@@ -670,6 +656,16 @@ pl{
                 "{1} {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMMMd",
+                "yMMdd",
             }
             appendItems{
                 Timezone{"{0} {1}"}
@@ -995,7 +991,6 @@ pl{
                 d{
                     d{"d–d"}
                 }
-                fallback{"{0}–{1}"}
                 h{
                     a{"h a–h a"}
                     h{"h–h a"}
@@ -1436,6 +1431,16 @@ pl{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GyMMdd",
             }
         }
         persian{
@@ -2718,7 +2723,7 @@ pl{
         number{
             lenient{
                 "[\\-‒⁻₋−➖﹣－]",
-                "[,،٫、︐︑﹐﹑，､]",
+                "[,،٫⹁、︐︑﹐﹑，､]",
                 "[+⁺₊➕﬩﹢＋]",
             }
         }

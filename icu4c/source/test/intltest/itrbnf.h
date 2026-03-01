@@ -102,6 +102,11 @@ class IntlTestRBNF : public IntlTest {
   void TestThaiSpellout();
 
   /**
+   * Perform a simple spot check on the Norwegian (no,nb) spellout rules
+   */
+  void TestNorwegianSpellout();
+
+  /**
    * Perform a simple spot check on the Swedish spellout rules
    */
   void TestSwedishSpellout();

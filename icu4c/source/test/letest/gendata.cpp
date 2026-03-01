@@ -283,7 +283,7 @@ int main(int argc, char *argv[])
                 } else if (tag.compare(test_text) == 0) {
                     char *utf8 = NULL;
 
-                    text = element->getText(TRUE);
+                    text = element->getText(true);
                     charCount = text.length();
 
                     utf8 = getUTF8String(&text);

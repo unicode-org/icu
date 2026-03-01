@@ -15,7 +15,7 @@
 *   Date        Name        Description
 *   01/11/02    Ram         Creation.
 *   02/12/08    Spieth      Fix errant 'new Object[][]{' insertion
-*   02/19/08    Spieth      Removed ICUListResourceBundle dependancy
+*   02/19/08    Spieth      Removed ICUListResourceBundle dependency
 *******************************************************************************
 */
 

@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 2003-2015, International Business Machines Corporation and
@@ -221,7 +221,7 @@ public final class StringPrep {
     private static final int INDEX_TOP                        = 16;                          /* changing this requires a new formatVersion */
    
    
-    // CharTrie implmentation for reading the trie data
+    // CharTrie implementation for reading the trie data
     private CharTrie sprepTrie;
     // Indexes read from the data file
     private int[] indexes;
@@ -432,7 +432,7 @@ public final class StringPrep {
                     ch -= val.value;
                 }
             }else if(val.type == DELETE){
-                // just consume the codepoint and contine
+                // just consume the codepoint and continue
                 continue;
             }
             //copy the source into destination

@@ -2,7 +2,7 @@
  *******************************************************************************
  *
  *   © 2016 and later: Unicode, Inc. and others.
- *   License & terms of use: http://www.unicode.org/copyright.html#License
+ *   License & terms of use: http://www.unicode.org/copyright.html
  *
  *******************************************************************************
  *******************************************************************************
@@ -69,9 +69,9 @@ isAcceptable(void *context,
         pInfo->dataFormat[3]==0x74 &&
         pInfo->formatVersion[0]==1 &&
         pInfo->dataVersion[0]==1   ) {
-        return TRUE;
+        return true;
     } else {
-        return FALSE;
+        return false;
     }
 
 

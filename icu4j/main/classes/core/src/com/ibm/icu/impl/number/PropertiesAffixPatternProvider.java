@@ -1,5 +1,5 @@
 // © 2017 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.number;
 
 public class PropertiesAffixPatternProvider implements AffixPatternProvider {
@@ -9,7 +9,15 @@ public class PropertiesAffixPatternProvider implements AffixPatternProvider {
     private final String negSuffix;
     private final boolean isCurrencyPattern;
 
-    public PropertiesAffixPatternProvider(DecimalFormatProperties properties) {
+    public static AffixPatternProvider forProperties(DecimalFormatProperties properties) {
+        if (properties.getCurrencyPluralInfo() == null) {
+            return new PropertiesAffixPatternProvider(properties);
+        } else {
+            return new CurrencyPluralInfoAffixProvider(properties.getCurrencyPluralInfo(), properties);
+        }
+    }
+
+    PropertiesAffixPatternProvider(DecimalFormatProperties properties) {
         // There are two ways to set affixes in DecimalFormat: via the pattern string (applyPattern), and via the
         // explicit setters (setPositivePrefix and friends).  The way to resolve the settings is as follows:
         //

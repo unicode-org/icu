@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 fil{
     Keys{
         calendar{"Kalendaryo"}
@@ -107,7 +108,7 @@ fil{
         eka{"Ekajuk"}
         el{"Greek"}
         en{"Ingles"}
-        en_AU{"Ingles ng Australya"}
+        en_AU{"Ingles ng Australia"}
         en_CA{"Ingles sa Canada"}
         en_GB{"Ingles na British"}
         en_US{"Ingles na American"}
@@ -120,6 +121,7 @@ fil{
         eu{"Basque"}
         ewo{"Ewondo"}
         fa{"Persian"}
+        fa_AF{"Dari"}
         ff{"Fulah"}
         fi{"Finnish"}
         fil{"Filipino"}
@@ -320,7 +322,6 @@ fil{
         ro{"Romanian"}
         ro_MD{"Moldavian"}
         rof{"Rombo"}
-        root{"Root"}
         ru{"Russian"}
         rup{"Aromanian"}
         rw{"Kinyarwanda"}
@@ -459,7 +460,7 @@ fil{
         Grek{"Greek"}
         Gujr{"Gujarati"}
         Guru{"Gurmukhi"}
-        Hanb{"Hanb"}
+        Hanb{"Han na may Bopomofo"}
         Hang{"Hangul"}
         Hani{"Han"}
         Hans{"Pinasimple"}
@@ -673,7 +674,6 @@ fil{
         PINYIN{"Pinyin Romanization"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"36"}
     characterLabelPattern{
         all{"{0} — lahat"}
         category-list{"{0}: {1}"}

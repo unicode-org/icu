@@ -1,6 +1,6 @@
 <!--
 * © 2017 and later: Unicode, Inc. and others.
-* License & terms of use: http://www.unicode.org/copyright.html#License
+* License & terms of use: http://www.unicode.org/copyright.html
 -->
 <ivy-module version="2.0">
 	<info organisation="com.ibm.icu" module="icu4j"/>

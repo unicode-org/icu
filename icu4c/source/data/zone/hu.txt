@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 hu{
-    Version{"36"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidjan"}
@@ -955,7 +955,7 @@ hu{
             ec{"Sydney"}
         }
         "Etc:UTC"{
-            ls{"Koordinált világidő"}
+            ls{"koordinált világidő"}
         }
         "Etc:Unknown"{
             ec{"Ismeretlen város"}
@@ -1761,7 +1761,9 @@ hu{
             ls{"niuei idő"}
         }
         "meta:Norfolk"{
-            ls{"norfolk-szigeteki idő"}
+            ld{"norfolk-szigeteki nyári idő"}
+            lg{"norfolk-szigeteki idő"}
+            ls{"norfolk-szigeteki téli idő"}
         }
         "meta:Noronha"{
             ld{"Fernando de Noronha-i nyári idő"}

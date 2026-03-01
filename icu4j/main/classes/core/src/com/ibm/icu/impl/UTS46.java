@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 *******************************************************************************
 * Copyright (C) 2010-2014, International Business Machines
@@ -341,6 +341,16 @@ public final class UTS46 extends IDNA {
             dest.charAt(labelStart+2)=='-' && dest.charAt(labelStart+3)=='-'
         ) {
             // Label starts with "xn--", try to un-Punycode it.
+            // In IDNA2008, labels like "xn--" (decodes to an empty string) and
+            // "xn--ASCII-" (decodes to just "ASCII") fail the round-trip validation from
+            // comparing the ToUnicode input with the back-to-ToASCII output.
+            // They are alternate encodings of the respective ASCII labels.
+            // Ignore "xn---" here: It will fail Punycode.decode() which logically comes before
+            // the round-trip verification.
+            if(labelLength==4 || (labelLength>5 && dest.charAt(labelStart+labelLength-1)=='-')) {
+                addLabelError(info, Error.INVALID_ACE_LABEL);
+                return markBadACELabel(dest, labelStart, labelLength, toASCII, info);
+            }
             wasPunycode=true;
             try {
                 fromPunycode=Punycode.decode(dest.subSequence(labelStart+4, labelStart+labelLength), null);
@@ -496,9 +506,9 @@ public final class UTS46 extends IDNA {
         boolean disallowNonLDHDot=(options&USE_STD3_RULES)!=0;
         boolean isASCII=true;
         boolean onlyLDH=true;
-        int i=labelStart+4;  // After the initial "xn--".
         int limit=labelStart+labelLength;
-        do {
+        // Start after the initial "xn--".
+        for(int i=labelStart+4; i<limit; ++i) {
             char c=dest.charAt(i);
             if(c<=0x7f) {
                 if(c=='.') {
@@ -515,7 +525,7 @@ public final class UTS46 extends IDNA {
             } else {
                 isASCII=onlyLDH=false;
             }
-        } while(++i<limit);
+        }
         if(onlyLDH) {
             dest.insert(labelStart+labelLength, '\ufffd');
             ++labelLength;

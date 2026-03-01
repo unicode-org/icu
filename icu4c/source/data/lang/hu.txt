@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 hu{
     Keys{
         calendar{"Naptár"}
@@ -42,7 +43,7 @@ hu{
         ang{"óangol"}
         anp{"angika"}
         ar{"arab"}
-        ar_001{"modern szabányos arab"}
+        ar_001{"modern szabványos arab"}
         arc{"arámi"}
         arn{"mapucse"}
         arp{"arapaho"}
@@ -160,6 +161,7 @@ hu{
         eu{"baszk"}
         ewo{"evondo"}
         fa{"perzsa"}
+        fa_AF{"dari"}
         fan{"fang"}
         fat{"fanti"}
         ff{"fulani"}
@@ -418,7 +420,6 @@ hu{
         ro_MD{"moldvai"}
         rof{"rombo"}
         rom{"roma"}
-        root{"ősi"}
         ru{"orosz"}
         rup{"aromán"}
         rw{"kinyarvanda"}
@@ -561,14 +562,19 @@ hu{
         zh_Hant{"kínai (hagyományos)"}
     }
     Languages%menu{
+        ars{"arab, nedzsdi"}
         yue{"kantoni kínai"}
         zh{"mandarin"}
     }
     Languages%short{
         az{"azeri"}
     }
+    Languages%variant{
+        ckb{"kurd, szoráni"}
+    }
     Scripts{
         Arab{"Arab"}
+        Aran{"Nasztalik"}
         Armi{"Birodalmi arámi"}
         Armn{"Örmény"}
         Avst{"Avesztán"}
@@ -603,7 +609,7 @@ hu{
         Grek{"Görög"}
         Gujr{"Gudzsaráti"}
         Guru{"Gurmuki"}
-        Hanb{"Hanb"}
+        Hanb{"Han bopomofóval"}
         Hang{"Hangul"}
         Hani{"Han"}
         Hano{"Hanunoo"}
@@ -660,6 +666,7 @@ hu{
         Phnx{"Főniciai"}
         Plrd{"Pollard fonetikus"}
         Prti{"Feliratos parthian"}
+        Qaag{"Zawgyi"}
         Rjng{"Redzsang"}
         Roro{"Rongorongo"}
         Runr{"Runikus"}
@@ -911,7 +918,6 @@ hu{
         VALLADER{"Vallader"}
         WADEGILE{"Wade-Giles átírás"}
     }
-    Version{"36"}
     characterLabelPattern{
         all{"{0} – összes"}
         category-list{"{0}: {1}"}
@@ -926,6 +932,8 @@ hu{
             one{"{0} vonás"}
             other{"{0} vonás"}
         }
+        subscript{"alsó index {0}"}
+        superscript{"felső index {0}"}
     }
     codePatterns{
         language{"Nyelv: {0}"}

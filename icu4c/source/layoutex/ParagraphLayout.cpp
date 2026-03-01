@@ -137,7 +137,7 @@ le_int32 StyleRuns::getRuns(le_int32 runLimits[], le_int32 styleIndices[])
  * process, rather for all scripts which require
  * complex processing for correct rendering.
  */
-static const le_bool complexTable[scriptCodeCount] = {
+static const le_bool complexTable[] = {
     FALSE , /* Zyyy */
     FALSE,  /* Qaai */
     TRUE,   /* Arab */
@@ -974,7 +974,7 @@ le_int32 ParagraphLayout::getLanguageCode(const Locale *locale)
 
 le_bool ParagraphLayout::isComplex(UScriptCode script)
 {
-    if (script < 0 || script >= (UScriptCode) scriptCodeCount) {
+    if (script < 0 || script >= ARRAY_SIZE(complexTable)) {
         return FALSE;
     }
 

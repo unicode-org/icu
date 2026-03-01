@@ -1,5 +1,5 @@
 // © 2017 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.dev.impl.number;
 
 import java.math.BigDecimal;
@@ -95,6 +95,7 @@ public final class DecimalQuantity_64BitBCD extends DecimalQuantity_AbstractBCD 
     isApproximate = false;
     origDouble = 0;
     origDelta = 0;
+    exponent = 0;
   }
 
   @Override

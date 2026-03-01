@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 **********************************************************************
 * Copyright (c) 2004-2016, International Business Machines
@@ -802,7 +802,7 @@ public class TestMessageFormat extends TestFmwk {
     }
 
     /**
-     * Verify that MessageFormat accomodates more than 10 arguments and
+     * Verify that MessageFormat accommodates more than 10 arguments and
      * more than 10 subformats.
      */
     @Test

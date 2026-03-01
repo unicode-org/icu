@@ -32,7 +32,6 @@ private:
     int len ;
     int curOffset;
 
-    UBool  ReadAndConvertFile();
     int isNewlineMark();
     UBool ReadOneLine(UnicodeString&);
 

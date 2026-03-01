@@ -604,7 +604,7 @@ UnicodeString& U_EXPORT2 Collator::getDisplayName(const Locale& objectLocale,
 /**
 * Default constructor.
 * Constructor is different from the old default Collator constructor.
-* The task for determing the default collation strength and normalization mode
+* The task for determining the default collation strength and normalization mode
 * is left to the child class.
 */
 Collator::Collator()

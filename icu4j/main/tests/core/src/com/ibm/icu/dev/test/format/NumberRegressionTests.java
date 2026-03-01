@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*****************************************************************************************
  *
  * Copyright (C) 1996-2016, International Business Machines
@@ -552,7 +552,7 @@ public class NumberRegressionTests extends TestFmwk {
         String expectedPercent = "-578 998%";
     */
         String expectedDefault = "-5\u00a0789,988";
-        String expectedCurrency = "5\u00a0789,99\u00a0$";
+        String expectedCurrency = "5\u00a0789,99\u00a0$\u00a0CA";
         String expectedPercent = "-578\u00a0999\u00A0%";
 
         formatter = NumberFormat.getNumberInstance(Locale.CANADA_FRENCH);
@@ -1802,7 +1802,7 @@ public class NumberRegressionTests extends TestFmwk {
     }
 
     /**
-     * 4241880: Decimal format doesnt round a double properly when the number is less than 1
+     * 4241880: Decimal format doesn't round a double properly when the number is less than 1
      */
     @Test
     public void test4241880() {

@@ -1,5 +1,5 @@
 // © 2017 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.number;
 
 import java.text.Format.Field;
@@ -16,6 +16,15 @@ import com.ibm.icu.impl.StandardPlural;
  * mutable for performance reasons.
  */
 public interface Modifier {
+
+    static enum Signum {
+        NEG,
+        NEG_ZERO,
+        POS_ZERO,
+        POS;
+
+        static final int COUNT = Signum.values().length;
+    };
 
     /**
      * Apply this Modifier to the string builder.
@@ -65,7 +74,7 @@ public interface Modifier {
      */
     public static class Parameters {
         public ModifierStore obj;
-        public int signum;
+        public Signum signum;
         public StandardPlural plural;
     }
 

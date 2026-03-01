@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 1996-2015, International Business Machines Corporation and
@@ -12,10 +12,12 @@ package com.ibm.icu.impl;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import com.ibm.icu.impl.ICUBinary.Authenticate;
 import com.ibm.icu.text.RuleBasedBreakIterator;
+import com.ibm.icu.util.CodePointTrie;
 
 /**
 * <p>Internal class used for Rule Based Break Iterators.</p>
@@ -40,17 +42,28 @@ public final class RBBIDataWrapper {
          */
         public int     fRowLen;
         /**
+         * Char category number of the first dictionary char class,
+         * or the the largest category number + 1 if there are no dictionary categories.
+         */
+        public int     fDictCategoriesStart;
+        /**
+         * Size of run-time array required for holding
+         * look-ahead results. Indexed by row.fLookAhead.
+         */
+        public int     fLookAheadResultsSize;
+        /**
          * Option Flags for this state table.
          */
         public int     fFlags;
         /**
-         * Option Flags for this state table.
+         * Length in bytes of the state table header, of all the int32 fields
+         * preceding fTable in the serialized form.
          */
-        public int     fReserved;
+        public static int fHeaderSize = 20;
         /**
          * Linear array of next state values, accessed as short[state, char_class]
          */
-        public short[] fTable;
+        public char[] fTable;
 
         public RBBIStateTable() {
         }
@@ -59,30 +72,50 @@ public final class RBBIDataWrapper {
             if (length == 0) {
                 return null;
             }
-            if (length < 16) {
+            if (length < fHeaderSize) {
                 throw new IOException("Invalid RBBI state table length.");
             }
             RBBIStateTable This = new RBBIStateTable();
             This.fNumStates = bytes.getInt();
             This.fRowLen    = bytes.getInt();
+            This.fDictCategoriesStart = bytes.getInt();
+            This.fLookAheadResultsSize = bytes.getInt();
             This.fFlags     = bytes.getInt();
-            This.fReserved  = bytes.getInt();
-            int lengthOfShorts = length - 16;   // length in bytes.
-            This.fTable     = ICUBinary.getShorts(bytes, lengthOfShorts / 2, lengthOfShorts & 1);
+            int lengthOfTable = length - fHeaderSize;   // length in bytes.
+            boolean use8Bits = (This.fFlags & RBBIDataWrapper.RBBI_8BITS_ROWS) == RBBIDataWrapper.RBBI_8BITS_ROWS;
+            if (use8Bits) {
+                This.fTable = new char[lengthOfTable];
+                for (int i = 0; i < lengthOfTable; i++) {
+                    byte b = bytes.get();
+                    This.fTable[i] = (char)(0xff & b); // Treat b as unsigned.
+                }
+                ICUBinary.skipBytes(bytes, lengthOfTable & 1);
+            } else {
+                This.fTable    = ICUBinary.getChars(bytes, lengthOfTable / 2, lengthOfTable & 1);
+            }
             return This;
         }
 
         public int put(DataOutputStream bytes) throws IOException {
             bytes.writeInt(fNumStates);
             bytes.writeInt(fRowLen);
+            bytes.writeInt(fDictCategoriesStart);
+            bytes.writeInt(fLookAheadResultsSize);
             bytes.writeInt(fFlags);
-            bytes.writeInt(fReserved);
-            int tableLen = fRowLen * fNumStates / 2;  // fRowLen is bytes.
-            for (int i = 0; i < tableLen; i++) {
-                bytes.writeShort(fTable[i]);
+            if ((fFlags & RBBIDataWrapper.RBBI_8BITS_ROWS) == RBBIDataWrapper.RBBI_8BITS_ROWS) {
+                int tableLen = fRowLen * fNumStates;  // fRowLen is bytes.
+                for (int i = 0; i < tableLen; i++) {
+                    byte b = (byte)(fTable[i] & 0x00ff);
+                    bytes.writeByte(b);
+                }
+            } else {
+                int tableLen = fRowLen * fNumStates / 2;  // fRowLen is bytes.
+                for (int i = 0; i < tableLen; i++) {
+                    bytes.writeChar(fTable[i]);
+                }
             }
-            int bytesWritten = 16 + fRowLen * fNumStates;   // total bytes written,
-                                                            // including 16 for the header.
+            int bytesWritten = fHeaderSize + fRowLen * fNumStates;   // total bytes written,
+                                                                     // including the header.
             while (bytesWritten % 8 != 0) {
                 bytes.writeByte(0);
                 ++bytesWritten;
@@ -104,8 +137,9 @@ public final class RBBIDataWrapper {
             RBBIStateTable otherST = (RBBIStateTable)other;
             if (fNumStates != otherST.fNumStates) return false;
             if (fRowLen    != otherST.fRowLen)    return false;
+            if (fDictCategoriesStart != otherST.fDictCategoriesStart) return false;
+            if (fLookAheadResultsSize != otherST.fLookAheadResultsSize) return false;
             if (fFlags     != otherST.fFlags)     return false;
-            if (fReserved  != otherST.fReserved)  return false;
             return Arrays.equals(fTable, otherST.fTable);
         }
     }
@@ -134,12 +168,12 @@ public final class RBBIDataWrapper {
 
     public RBBIStateTable   fRTable;
 
-    public Trie2   fTrie;
+    public CodePointTrie    fTrie;
     public String  fRuleSource;
     public int     fStatusTable[];
 
     public static final int DATA_FORMAT = 0x42726b20;     // "Brk "
-    public static final int FORMAT_VERSION = 0x05000000;  // 4.0.0.0
+    public static final int FORMAT_VERSION = 0x06000000;  // 6.0.0.0
 
     private static final class IsAcceptable implements Authenticate {
         @Override
@@ -185,21 +219,23 @@ public final class RBBIDataWrapper {
     /**
      * offset to the "tagIndex" field in a state table row.
      */
-    public final static int      TAGIDX     = 2;
-    /**
-     * offset to the reserved field in a state table row.
-     */
-    public final static int      RESERVED   = 3;
+    public final static int      TAGSIDX    = 2;
     /**
      * offset to the start of the next states array in a state table row.
      */
-    public final static int      NEXTSTATES = 4;
+    public final static int      NEXTSTATES = 3;
+
+    /**
+     *  value constant for the ACCEPTING field of a state table row.
+     */
+    public final static int      ACCEPTING_UNCONDITIONAL = 1;
 
     //  Bit selectors for the "FLAGS" field of the state table header
     //     enum RBBIStateTableFlags in the C version.
     //
     public final static int      RBBI_LOOKAHEAD_HARD_BREAK = 1;
     public final static int      RBBI_BOF_REQUIRED         = 2;
+    public final static int      RBBI_8BITS_ROWS           = 4;
 
     /**
      * Data Header.  A struct-like class with the fields from the RBBI data file header.
@@ -243,7 +279,7 @@ public final class RBBIDataWrapper {
      * array index of the start of the state table row for that state.
      */
     public int getRowIndex(int state){
-        return state * (fHeader.fCatCount + 4);
+        return state * (fHeader.fCatCount + NEXTSTATES);
     }
 
     RBBIDataWrapper() {
@@ -330,7 +366,10 @@ public final class RBBIDataWrapper {
                                                 //  as we don't go more than 100 bytes past the
                                                 //  past the end of the TRIE.
 
-        This.fTrie = Trie2.createFromSerialized(bytes);  // Deserialize the TRIE, leaving buffer
+        This.fTrie = CodePointTrie.fromBinary(
+            CodePointTrie.Type.FAST,
+            null,
+            bytes);  // Deserialize the TRIE, leaving buffer
                                                 //  at an unknown position, preceding the
                                                 //  padding between TRIE and following section.
 
@@ -359,8 +398,8 @@ public final class RBBIDataWrapper {
         }
         ICUBinary.skipBytes(bytes, This.fHeader.fRuleSource - pos);
         pos = This.fHeader.fRuleSource;
-        This.fRuleSource = ICUBinary.getString(
-                bytes, This.fHeader.fRuleSourceLen / 2, This.fHeader.fRuleSourceLen & 1);
+        This.fRuleSource = new String(
+            ICUBinary.getBytes(bytes, This.fHeader.fRuleSourceLen, 0), StandardCharsets.UTF_8);
 
         if (RuleBasedBreakIterator.fDebugEnv!=null && RuleBasedBreakIterator.fDebugEnv.indexOf("data")>=0) {
             This.dump(System.out);
@@ -396,6 +435,15 @@ public final class RBBIDataWrapper {
         return dest.toString();
     }
 
+    static public String charToString(char n, int width) {
+        StringBuilder  dest = new StringBuilder(width);
+        dest.append(n);
+        while (dest.length() < width) {
+           dest.insert(0, ' ');
+        }
+        return dest.toString();
+    }
+
     /** Fixed width int-to-string conversion. */
     static public String intToHexString(int n, int width) {
         StringBuilder  dest = new StringBuilder(width);
@@ -408,11 +456,11 @@ public final class RBBIDataWrapper {
 
     /** Dump a state table.  (A full set of RBBI rules has 4 state tables.)  */
     private void dumpTable(java.io.PrintStream out, RBBIStateTable table) {
-        if (table == null || table.fTable.length == 0)   {
+        if (table == null || (table.fTable.length == 0)) {
             out.println("  -- null -- ");
         } else {
-            int n;
-            int state;
+            char n;
+            char state;
             StringBuilder header = new StringBuilder(" Row  Acc Look  Tag");
             for (n=0; n<fHeader.fCatCount; n++) {
                 header.append(intToString(n, 5));
@@ -434,21 +482,21 @@ public final class RBBIDataWrapper {
      * @param table
      * @param state
      */
-    private void dumpRow(java.io.PrintStream out, RBBIStateTable table, int   state) {
+    private void dumpRow(java.io.PrintStream out, RBBIStateTable table, char   state) {
         StringBuilder dest = new StringBuilder(fHeader.fCatCount*5 + 20);
         dest.append(intToString(state, 4));
         int row = getRowIndex(state);
         if (table.fTable[row+ACCEPTING] != 0) {
-           dest.append(intToString(table.fTable[row+ACCEPTING], 5));
-        }else {
+            dest.append(intToString(table.fTable[row+ACCEPTING], 5));
+        } else {
             dest.append("     ");
         }
         if (table.fTable[row+LOOKAHEAD] != 0) {
             dest.append(intToString(table.fTable[row+LOOKAHEAD], 5));
-        }else {
+        } else {
             dest.append("     ");
         }
-        dest.append(intToString(table.fTable[row+TAGIDX], 5));
+        dest.append(intToString(table.fTable[row+TAGSIDX], 5));
 
         for (int col=0; col<fHeader.fCatCount; col++) {
             dest.append(intToString(table.fTable[row+NEXTSTATES+col], 5));
@@ -474,7 +522,6 @@ public final class RBBIDataWrapper {
         out.println("--------------------");
         for (char32 = 0; char32<=0x10ffff; char32++) {
             category = fTrie.get(char32);
-            category &= ~0x4000;            // Mask off dictionary bit.
             if (category < 0 || category > fHeader.fCatCount) {
                 out.println("Error, bad category " + Integer.toHexString(category) +
                         " for char " + Integer.toHexString(char32));

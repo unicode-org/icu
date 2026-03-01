@@ -56,6 +56,7 @@ public:
     void TestTruncatingIteratorFromLinearMatchLong();
     void TestIteratorFromBytes();
     void TestFailedIterator();
+    void TestDelta();
 
     void checkData(const StringAndValue data[], int32_t dataLength);
     void checkData(const StringAndValue data[], int32_t dataLength, UStringTrieBuildOption buildOption);
@@ -110,6 +111,7 @@ void BytesTrieTest::runIndexedTest(int32_t index, UBool exec, const char *&name,
     TESTCASE_AUTO(TestTruncatingIteratorFromLinearMatchLong);
     TESTCASE_AUTO(TestIteratorFromBytes);
     TESTCASE_AUTO(TestFailedIterator);
+    TESTCASE_AUTO(TestDelta);
     TESTCASE_AUTO_END;
 }
 
@@ -596,6 +598,45 @@ void BytesTrieTest::TestFailedIterator() {
     StringPiece sp = iter.getString();
     if (!sp.empty()) {
         errln("failed iterator returned garbage data");
+    }
+}
+
+void BytesTrieTest::TestDelta() {
+    char intBytes0[5];
+    char intBytes1[5];
+    static constexpr int32_t sampleDeltas[] = {
+        -1, 0, 1, 2, 3, 0xa5, 0xbe, 0xbf,
+        -2, 0xc0, 0xc1, 0xeee, 0x1234, 0x2ffe, 0x2fff,
+        -3, 0x3000, 0x3001, 0x3003, 0x50005, 0xdfffe, 0xdffff,
+        -4, 0xe0000, 0xe0001, 0xef0123, 0xfffffe, 0xffffff,
+        -5, 0x1000000, 0x1000001, 0x7fffffff
+    };
+    int32_t expectedLength = 0;
+    for (int32_t delta : sampleDeltas) {
+        if (delta < 0) {
+            expectedLength = -delta;
+            continue;
+        }
+        // Encoding twice into differently-initialized arrays
+        // catches bytes that are not written to.
+        memset(intBytes0, 0, sizeof(intBytes0));
+        memset(intBytes1, 1, sizeof(intBytes1));
+        int32_t length0 = BytesTrieBuilder::internalEncodeDelta(delta, intBytes0);
+        int32_t length1 = BytesTrieBuilder::internalEncodeDelta(delta, intBytes1);
+        assertTrue(UnicodeString(u"non-zero length to encode delta ") + delta, length0 > 0);
+        assertEquals(UnicodeString(u"consistent length to encode delta ") + delta, length0, length1);
+        assertEquals(UnicodeString(u"expected length to encode delta ") + delta,
+                     expectedLength, length0);
+        for (int32_t i = 0; i < length0; ++i) {
+            uint8_t b0 = intBytes0[i];
+            uint8_t b1 = intBytes1[i];
+            assertEquals(UnicodeString(u"differently encoded delta ") + delta +
+                            u" at byte index " + i, b0, b1);
+        }
+        const uint8_t *start = (const uint8_t *)intBytes0;
+        const uint8_t *pos = BytesTrie::jumpByDelta(start);
+        assertEquals(UnicodeString(u"roundtrip for delta ") + delta,
+                     delta, (int32_t)(pos - start) - length0);
     }
 }
 

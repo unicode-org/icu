@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 fi{
     AuxExemplarCharacters{
         "[á à ă â ã ą ā ć č ċ ç ď ð đ é è ê ě ë ė ę ē ğ ǧ ģ ǥ ȟ ħ í î ï İ į ī ı ǩ ķ ĺ"
@@ -190,6 +191,7 @@ fi{
                 }
             }
             symbols{
+                approximatelySign{"~"}
                 decimal{","}
                 exponential{"E"}
                 group{" "}
@@ -216,7 +218,6 @@ fi{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"36"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -233,6 +234,16 @@ fi{
                 "{1} 'klo' {0}",
                 "{1} 'klo' {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "GyMMMMccccd",
+                "GyMMMMd",
+                "GyMd",
+                "GGGGGyMd",
             }
             availableFormats{
                 Ed{"E d."}
@@ -280,6 +291,16 @@ fi{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "yMccccd",
+                "yMd",
+                "yMd",
+                "yMd",
             }
             availableFormats{
                 H{"H"}
@@ -452,6 +473,16 @@ fi{
                 "{1} 'klo' {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "GyMMMMccccd",
+                "GyMMMMd",
+                "GyMd",
+                "GGGGGyMd",
+            }
             availableFormats{
                 Bh{"h B"}
                 Bhm{"h.mm B"}
@@ -528,6 +559,23 @@ fi{
                     M{"E d.M. – E d.M.y G"}
                     d{"E d.M. – E d.M.y G"}
                     y{"E d.M.y – E d.M.y G"}
+                }
+                GyMMMM{
+                    G{"LLLL y G – LLLL y G"}
+                    M{"LLLL–LLLL y G"}
+                    y{"LLLL y – LLLL y G"}
+                }
+                GyMMMMEd{
+                    G{"E d. MMMM y G – E d. MMMM y G"}
+                    M{"E d. MMMM – E d. MMMM y G"}
+                    d{"E d. – E d. MMMM y G"}
+                    y{"E d. MMMM y – E d. MMMM y G"}
+                }
+                GyMMMMd{
+                    G{"d. MMMM y G – d. MMMM y G"}
+                    M{"d. MMMM – d. MMMM y G"}
+                    d{"d.–d. MMMM y G"}
+                    y{"d. MMMM y – d. MMMM y G"}
                 }
                 GyMMMd{
                     G{"d.M.y G – d.M.y G"}
@@ -666,6 +714,16 @@ fi{
                 "{1} 'klo' {0}",
                 "{1} 'klo' {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "yMMMMccccd",
+                "yMMMMd",
+                "yMd",
+                "yMd",
             }
             appendItems{
                 Timezone{"{0} {1}"}
@@ -923,15 +981,32 @@ fi{
                     y{"E d.M.y – E d.M.y GGGGG"}
                 }
                 GyMMM{
-                    G{"MMM y G – MMM y G"}
-                    M{"MMM–MMM y G"}
-                    y{"MMM y – MMM y G"}
+                    G{"M.y G – M.y G"}
+                    M{"M.–M.y G"}
+                    y{"M.y–M.y G"}
                 }
                 GyMMMEd{
                     G{"E d.M.y – E d.M.y G"}
                     M{"E d.M. – E d.M.y G"}
                     d{"E d.M – E d.M.y G"}
                     y{"E d.M.y – E d.M.y G"}
+                }
+                GyMMMM{
+                    G{"LLLL y G – LLLL y G"}
+                    M{"LLLL–LLLL y G"}
+                    y{"LLLL y – LLLL y G"}
+                }
+                GyMMMMEd{
+                    G{"E d. MMMM y G – E d. MMMM y G"}
+                    M{"E d. MMMM – E d. MMMM y G"}
+                    d{"E d. – E d. MMMM y G"}
+                    y{"E d. MMMM y – E d. MMMM y G"}
+                }
+                GyMMMMd{
+                    G{"d. MMMM y G – d. MMMM y G"}
+                    M{"d. MMMM – d. MMMM y G"}
+                    d{"d.–d. MMMM y G"}
+                    y{"d. MMMM y – d. MMMM y G"}
                 }
                 GyMMMd{
                     G{"d.M.y. G – d.M.y G"}
@@ -1411,6 +1486,16 @@ fi{
                 "{1} 'klo' {0}",
                 "{1} 'klo' {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "GyMMMMccccd",
+                "GyMMMMd",
+                "GyMd",
+                "GGGGGyMd",
             }
         }
         persian{

@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 2011-2016, International Business Machines Corporation and
@@ -462,7 +462,7 @@ public class TimeZoneGenericNames implements Serializable, Freezable<TimeZoneGen
     /**
      * Private method returning LocaleDisplayNames instance for the locale of this
      * instance. Because LocaleDisplayNames is only used for generic
-     * location formant and partial location format, the LocaleDisplayNames
+     * location format and partial location format, the LocaleDisplayNames
      * is instantiated lazily.
      *
      * @return the instance of LocaleDisplayNames for the locale of this object.

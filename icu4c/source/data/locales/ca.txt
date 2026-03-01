@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 ca{
     AuxExemplarCharacters{"[á ă â å ä ã ā æ ĕ ê ë ē ì ĭ î ī ŀ ñ º ŏ ô ö ø ō œ ù ŭ û ū ÿ]"}
     Ellipsis{
@@ -218,11 +219,10 @@ ca{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"36"}
     calendar{
         buddhist{
             DateTimePatterns{
-                "H:mm:ss zzzz",
+                "H:mm:ss (zzzz)",
                 "H:mm:ss z",
                 "H:mm:ss",
                 "H:mm",
@@ -235,6 +235,16 @@ ca{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "GyMMMMEEEEdd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyMMdd",
             }
             availableFormats{
                 MEd{"E, d/M"}
@@ -257,7 +267,7 @@ ca{
         }
         chinese{
             DateTimePatterns{
-                "H:mm:ss zzzz",
+                "H:mm:ss (zzzz)",
                 "H:mm:ss z",
                 "H:mm:ss",
                 "H:mm",
@@ -270,6 +280,16 @@ ca{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "UUMMMMEEEEdd",
+                "UMMMMd",
+                "UMMMd",
+                "yMd",
             }
             monthNames{
                 format{
@@ -336,7 +356,7 @@ ca{
         }
         generic{
             DateTimePatterns{
-                "H:mm:ss zzzz",
+                "H:mm:ss (zzzz)",
                 "H:mm:ss z",
                 "H:mm:ss",
                 "H:mm",
@@ -349,6 +369,16 @@ ca{
                 "{1} 'a' 'les' {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMd",
+                "GGGGGyyMd",
             }
             availableFormats{
                 Bh{"h B"}
@@ -558,7 +588,7 @@ ca{
                 "p. m.",
             }
             DateTimePatterns{
-                "H:mm:ss zzzz",
+                "H:mm:ss (zzzz)",
                 "H:mm:ss z",
                 "H:mm:ss",
                 "H:mm",
@@ -567,10 +597,20 @@ ca{
                 "d MMM y",
                 "d/M/yy",
                 "{1}, {0}",
-                "{1} 'a' 'les' {0}",
-                "{1} 'a' 'les' {0}",
+                "{1}, 'a' 'les' {0}",
+                "{1}, 'a' 'les' {0}",
                 "{1}, {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMMMd",
+                "yyMd",
             }
             appendItems{
                 Timezone{"{0} {1}"}
@@ -598,7 +638,9 @@ ca{
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
                 Hmsv{"H:mm:ss v"}
+                Hmsvvvv{"H:mm:ss (vvvv)"}
                 Hmv{"H:mm v"}
+                Hmvvvv{"H:mm (vvvv)"}
                 M{"L"}
                 MEd{"E d/M"}
                 MMM{"LLL"}
@@ -616,7 +658,9 @@ ca{
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
                 hmsv{"h:mm:ss a v"}
+                hmsvvvv{"h:mm:ss a (vvvv)"}
                 hmv{"h:mm a v"}
+                hmvvvv{"h:mm a (vvvv)"}
                 ms{"mm:ss"}
                 y{"y"}
                 yM{"M/y"}
@@ -1083,7 +1127,7 @@ ca{
         }
         roc{
             DateTimePatterns{
-                "H:mm:ss zzzz",
+                "H:mm:ss (zzzz)",
                 "H:mm:ss z",
                 "H:mm:ss",
                 "H:mm",
@@ -1096,6 +1140,16 @@ ca{
                 "{1} 'a' 'les' {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMdd",
+                "GGGGGyMMdd",
             }
             eras{
                 wide{

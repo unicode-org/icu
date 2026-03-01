@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 eo{
     Languages{
         aa{"afara"}
@@ -137,7 +138,6 @@ eo{
         tr{"turka"}
         ts{"conga"}
         tt{"tatara"}
-        tw{"tw"}
         ug{"ujgura"}
         uk{"ukraina"}
         und{"nekonata lingvo"}
@@ -156,5 +156,4 @@ eo{
         zu{"zulua"}
         zxx{"nelingvaĵo"}
     }
-    Version{"36"}
 }

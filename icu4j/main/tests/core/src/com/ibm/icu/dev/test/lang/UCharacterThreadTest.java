@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 2008, International Business Machines Corporation and         *
@@ -28,7 +28,7 @@ public class UCharacterThreadTest extends TestFmwk {
   // constructor -----------------------------------------------------------
 
     /**
-    * Private constructor to prevent initialisation
+    * Private constructor to prevent initialization
     */
     public UCharacterThreadTest()
     {

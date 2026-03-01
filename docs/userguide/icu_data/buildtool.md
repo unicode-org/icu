@@ -1,10 +1,26 @@
+---
+layout: default
+title: ICU Data Build Tool
+nav_order: 1
+parent: ICU Data
+---
 <!--
 © 2019 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
-ICU Data Build Tool
-===================
+# ICU Data Build Tool
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
+
+## Overview
 
 ICU 64 provides a tool for configuring your ICU locale data file with finer
 granularity.  This page explains how to use this tool to customize and reduce
@@ -45,10 +61,12 @@ Unix or when building the data package on Windows.  For example:
 
     ICU_DATA_FILTER_FILE=filters.json path/to/icu4c/source/runConfigureICU Linux
 
-You must have the data sources in order to use the ICU Data Build Tool.
-Check for the file icu4c/source/data/locales/root.txt. If that file is
-missing, you need to download "icu4c-*-data.zip" and replace the contents of
-icu4c/source/data with the data directory from the zip file.
+**Important:** You *must* have the data sources in order to use the ICU Data
+Build Tool. Check for the file icu4c/source/data/locales/root.txt. If that file
+is missing, you need to download "icu4c-\*-data.zip", delete the old
+icu4c/source/data directory, and replace it with the data directory from the zip
+file. If there is a \*.dat file in icu4c/source/data/in, that file will be used
+even if you gave ICU custom filter rules.
 
 In order to use Hjson syntax, the `hjson` pip module must be installed on
 your system.  You should also consider installing the `jsonschema` module to
@@ -57,8 +75,8 @@ print messages when errors are found in your config file.
     $ pip3 install --user hjson jsonschema
 
 To build ICU4J with custom data, you must first build ICU4C with custom data
-and then generate the JAR file.  For more information, read
-[icu4j-readme.txt](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/icu4j-readme.txt).
+and then generate the JAR file.  For more information on building ICU4J, read the
+[ICU4J Readme](../icu4j/).
 
 ### Locale Slicing
 
@@ -74,7 +92,7 @@ languages:
     {
       "localeFilter": {
         "filterType": "language",
-        "whitelist": [
+        "includelist": [
           "en",
           "de",
           "zh"
@@ -84,6 +102,11 @@ languages:
 
 The *filterType* "language" only supports slicing by entire languages.
 
+##### Terminology: Includelist, Excludelist, Whitelist, Blacklist
+
+Prior to ICU 68, use `"whitelist"` and `"blacklist"` instead of `"includelist"`
+and `"excludelist"`, respectively. ICU 68 allows all four terms.
+
 #### Filtering by Locale
 
 For more control, use *filterType* "locale".  Here is a *filters.hjson* file that
@@ -92,12 +115,14 @@ only the default script (e.g., Simplified Han for Chinese):
 
     localeFilter: {
       filterType: locale
-      whitelist: [
+      includelist: [
         en
         de
         zh
       ]
     }
+
+*If using ICU 67 or earlier, see note above regarding allowed keywords.*
 
 #### Adding Script Variants (includeScripts = true)
 
@@ -110,13 +135,15 @@ Chinese are included:
       "localeFilter": {
         "filterType": "locale",
         "includeScripts": true,
-        "whitelist": [
+        "includelist": [
           "en",
           "de",
           "zh"
         ]
       }
     }
+
+*If using ICU 67 or earlier, see note above regarding allowed keywords.*
 
 If you wish to explicitly list the scripts, you may put the script code in the
 locale tag in the whitelist, and you do not need the *includeScripts* option
@@ -125,14 +152,16 @@ Simplified***:
 
     localeFilter: {
       filterType: locale
-      whitelist: [
+      includelist: [
         en
         de
         zh_Hant
       ]
     }
 
-Note: the option *includeScripts* is only supported at the language level;
+*If using ICU 67 or earlier, see note above regarding allowed keywords.*
+
+**Note:** the option *includeScripts* is only supported at the language level;
 i.e., in order to include all scripts for a particular language, you must
 specify the language alone, without a region tag.
 
@@ -148,13 +177,15 @@ German (Switzerland), or Chinese (Taiwan, Han Traditional):
     localeFilter: {
       filterType: locale
       includeChildren: false
-      whitelist: [
+      includelist: [
         en_US
         en_GB
         de_DE
         zh_CN
       ]
     }
+
+*If using ICU 67 or earlier, see note above regarding allowed keywords.*
 
 Including dependencies, the above filter would include the following data files:
 
@@ -186,7 +217,7 @@ The data for many ICU features live in individual files.  The ICU Data Build
 Tool puts puts similar *types* of files into categories.  The following table
 summarizes the ICU data files and their corresponding features and categories:
 
-| Feature | Category ID(s) | Data Files <br/> ([icu4c/source/data](https://github.com/unicode-org/icu/tree/master/icu4c/source/data)) | Resource Size <br/> (as of ICU 64) |
+| Feature | Category ID(s) | Data Files <br/> ([icu4c/source/data](https://github.com/unicode-org/icu/tree/main/icu4c/source/data)) | Resource Size <br/> (as of ICU 64) |
 |---|---|---|---|
 | Break Iteration | `"brkitr_rules"` <br/> `"brkitr_dictionaries"` <br/> `"brkitr_tree"` | brkitr/rules/\*.txt <br/> brkitr/dictionaries/\*.txt <br/> brkitr/\*.txt | 522 KiB <br/> **2.8 MiB** <br/> 14 KiB |
 | Charset Conversion | `"conversion_mappings"` | mappings/\*.ucm | **4.9 MiB** |
@@ -200,7 +231,7 @@ summarizes the ICU data files and their corresponding features and categories:
 | Region Display <br/> Names | `"region_tree"` | region/\*.txt | **1.1 MiB** |
 | Rule-Based <br/> Number Formatting <br/> (Spellout, Ordinals) | `"rbnf_tree"` | rbnf/\*.txt | 538 KiB |
 | StringPrep | `"stringprep"` | sprep/\*.txt | 193 KiB |
-| Time Zones | `"misc"` <br/> `"zone_tree"` | misc/metaZones.txt <br/> misc/timezoneTypes.txt <br/> misc/windowsZones.txt <br/> misc/zoneinfo64.txt <br/> zone/\*.txt | 41 KiB <br/> 20 KiB <br/> 22 KiB <br/> 151 KiB <br/> **2.7 MiB** |
+| Time Zones | `"misc"` <br/> `"zone_tree"` <br/> `"zone_supplemental"` | misc/metaZones.txt <br/> misc/timezoneTypes.txt <br/> misc/windowsZones.txt <br/> misc/zoneinfo64.txt <br/> zone/\*.txt <br/> zone/tzdbNames.txt | 41 KiB <br/> 20 KiB <br/> 22 KiB <br/> 151 KiB <br/> **2.7 MiB** <br/> 4.8 KiB |
 | Transliteration | `"translit"` | translit/\*.txt | 685 KiB |
 | Unicode Character <br/> Names | `"unames"` | in/unames.icu | 269 KiB |
 | Unicode Text Layout | `"ulayout"` | in/ulayout.icu | 14 KiB |
@@ -222,11 +253,16 @@ There are two concrete differences between additive and subtractive mode:
 |                         | Additive    | Subtractive |
 |-------------------------|-------------|-------------|
 | Default Feature Filter  | `"exclude"` | `"include"` |
-| Default Resource Filter | `"-/"`      | `"+/"`      |
+| Default Resource Filter | `"-/"`, `"+/%%ALIAS"`, `"+/%%Parent"` | `"+/"` |
 
 To enable additive mode, add the following setting to your filter file:
 
     strategy: "additive"
+
+**Caution:** If using `"-/"` or similar top-level exclusion rules, be aware of
+the fields `"+/%%Parent"` and `"+/%%ALIAS"`, which are required in locale tree
+resource bundles. Excluding these paths may cause unexpected locale fallback
+behavior.
 
 #### Filter Types
 
@@ -278,7 +314,7 @@ dictionaries:
 
     featureFilters: {
       brkitr_dictionaries: {
-        whitelist: [
+        includelist: [
           burmesedict
         ]
       }
@@ -288,7 +324,8 @@ Do *not* include directories or file extensions.  They will be added
 automatically for you.  Note that all files in a particular category have the
 same directory and extension.
 
-You can use either a whitelist or a blacklist for the file name filter.
+You can use either `"includelist"` or `"excludelist"` for the file name filter.
+*If using ICU 67 or earlier, see note above regarding allowed keywords.*
 
 ##### Regex Filter
 
@@ -298,7 +335,7 @@ To exclude filenames matching a certain regular expression, use *filterType*
     featureFilters: {
       brkitr_rules: {
         filterType: regex
-        blacklist: [
+        excludelist: [
           ^.*_cj$
         ]
       }
@@ -346,11 +383,13 @@ the common locales specified in *localeFilter*, you can do the following:
     featureFilters:
       curr_tree: {
         filterType: locale
-        whitelist: [
+        includelist: [
           it
         ]
       }
     }
+
+*If using ICU 67 or earlier, see note above regarding allowed keywords.*
 
 You can exclude an entire `_tree` category without affecting other categories.
 For example, to exclude region display names:
@@ -377,7 +416,7 @@ You can apply resource filters to all locale tree categories as well as to
 categories that include resource bundles, such as the `"misc"` category.
 
 For example, consider measurement units.  There is one unit file per locale (example:
-[en.txt](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/unit/en.txt)),
+[en.txt](https://github.com/unicode-org/icu/blob/main/icu4c/source/data/unit/en.txt)),
 and that file contains data for all measurement units in CLDR.  However, if
 you are only formatting distances, for example, you may need the data for only
 a small set of units.
@@ -439,13 +478,15 @@ following (this example removes calendar data):
       {
         categories: ["misc"]
         files: {
-          whitelist: ["supplementalData"]
+          includelist: ["supplementalData"]
         }
         rules: [
           -/calendarData
         ]
       }
     ]
+
+*If using ICU 67 or earlier, see note above regarding allowed keywords.*
 
 #### Combining Multiple Resource Filter Specs
 
@@ -467,7 +508,7 @@ en-CA; this also makes use of the *files* option:
         categories: ["unit_tree"]
         files: {
           filterType: locale
-          whitelist: ["en_US"]
+          includelist: ["en_US"]
         }
         rules: [
           +/*/length/mile
@@ -477,7 +518,7 @@ en-CA; this also makes use of the *files* option:
         categories: ["unit_tree"]
         files: {
           filterType: locale
-          whitelist: ["en_CA"]
+          includelist: ["en_CA"]
         }
         rules: [
           +/*/length/kilometer
@@ -569,7 +610,7 @@ files are not in such a directory, derb fails with U_MISSING_RESOURCE_ERROR.
 of the filter rules matters a great deal in how effective your data size
 reduction can be, and the wildcard `*` can sometimes produce behavior that is
 tricky to reason about. For example, these three lists of filter rules look
-similar on first glance but acutally produce different output:
+similar on first glance but actually produce different output:
 
 <table>
 <tr>

@@ -2,6 +2,9 @@
      License & terms of use: http://www.unicode.org/copyright.html -->
 
 <!--================================================================================
+    Setup:
+    Follow the installation instructions in README.txt in this directory.
+
     To build ICU data files:
     1: Determine the CLDR base directory and set the CLDR_DIR environment variable.
     2: Determine the flags required (see the list of properties below).
@@ -10,22 +13,30 @@
 <!-- TODO: Add things like copying of a template directory and deleting previous files
      (perhaps always generate into a temporary directory and copy back to avoid having
       inconsistent state when the conversion is cancelled). -->
-<project name="Convert" default="convert" basedir=".">
+<project name="Convert" default="all" basedir=".">
+
+    <target name="all" depends="init-args, prepare-jar, clean, convert"/>
+
     <!-- Initialize the properties which were not already set on the command line. -->
     <target name="init-args">
         <property environment="env"/>
-        <condition property="hascldrdir" >
-            <isset property="env.CLDR_DIR" />
+        <!-- Inherit properties from environment variable unless specified. As usual
+             with Ant, this is messier than it should be. All we are saying here is:
+             "Use the property if explicitly set, otherwise use the environment variable."
+             We cannot just set the property to the environment variable, since expansion
+             fails for non existent properties, and you are left with a literal value of
+             "${env.CLDR_DATA_DIR}". -->
+        <condition property="cldrDataDir" value="${env.CLDR_DATA_DIR}">
+            <isset property="env.CLDR_DATA_DIR"/>
         </condition>
-        <fail unless="hascldrdir"
-              message="Please set the CLDR_DIR environment variable to the top level CLDR source dir (containing 'common')."/>
+        <fail unless="cldrDataDir"
+              message="Set the CLDR_DATA_DIR environment variable (or cldrDataDir property) to the CLDR data directory (typically ending in '/production')"/>
 
-        <!-- The base directory of the CLDR release from which CLDR data is obtained. For
-             legacy reasons, this must also match an environment variable called CLDR_DIR,
-             which is read here, so it is best to set this via the environment variable for
-             now. -->
-        <!-- TODO: Update this when the CLDR_DIR environment variable is no longer needed. -->
-        <property name="cldrDir" value="${env.CLDR_DIR}"/>
+        <!-- Ant does not inherit this from the user's environment (and it can matter).
+             This is only needed because we have to "exec" a new Ant task below. -->
+        <condition property="javaHome" value="${env.JAVA_HOME}">
+            <isset property="env.JAVA_HOME"/>
+        </condition>
 
         <!-- The output directory into which to write the converted ICU data. By default
              this will overwrite (without deletion) the ICU data files in this ICU release,
@@ -35,9 +46,28 @@
         <!-- The directory in which the additional ICU XML data is stored. -->
         <property name="specialsDir" value="${basedir}/../../../icu4c/source/data/xml"/>
 
+        <!-- Default value for ICU version (icuver.txt). Update this for each release. -->
+        <property name="icuVersion" value="70.0.1.0"/>
+
+        <!-- Default value for ICU data version (icuver.txt). Update this for each release. -->
+        <property name="icuDataVersion" value="70.0.1.0"/>
+
+        <!-- An override for the CLDR version string (icuver.txt and others). This will be
+             extracted from the CLDR library used for building the data if not set here. -->
+        <property name="cldrVersion" value=""/>
+
         <!-- The minimum draft status for CLDR data to be used in the conversion. See
              CldrDraftStatus for more details. -->
         <property name="minDraftStatus" value="contributed"/>
+
+        <!-- A regular expression to match the locale IDs to be generated (useful for
+             debugging specific regions). This is applied after locale ID specifications
+             have been expanded into full locale IDs, so the value "en" will NOT match
+             "en_GB" or "en_001" etc. -->
+        <property name="localeIdFilter" value=""/>
+
+        <!-- Whether to synthetically generate "pseudo locale" data ("en_XA" and "ar_XB"). -->
+        <property name="includePseudoLocales" value="false"/>
 
         <!-- Whether to emit a debug report containing some possibly useful information after
              the conversion has finished. -->
@@ -52,260 +82,360 @@
              produces locale data for curr/, lang/, main/, region/, unit/, zone/ but NOT
              coll/, brkitr/ or rbnf/).
 
-             You can also specify by DTD type (e.g. dtdBcp47, dtdSupplemental or dtdLdml)
-             which is still not quite directly associated with output directories either,
-             since some supplemental data is also written to the curr/ directory.
-
-             See LdmlConverter.OutputType for the full list of valid types. -->
-        <!-- TODO: Find out what people actually want here and switch to that. -->
+             Pass in the value "HELP" (or any invalid value) to see the full list of types. -->
+        <!-- TODO: Find out what common use cases are and use them. -->
         <property name="outputTypes" value=""/>
+
+        <!-- Override to force the 'clean' task to delete files it cannot determine to be
+             auto-generated by this tool. This is useful if the file header changes since
+             the heading is what's used to recognize auto-generated files. -->
+        <property name="forceDelete" value="false"/>
     </target>
 
     <!-- Build a standalone JAR which is called by Ant (and which avoids needing to mess
          about making Ant know the Maven class-path). -->
     <target name="prepare-jar" depends="init-args">
-        <exec executable="mvn" searchpath="true">
+        <exec executable="mvn" searchpath="true" failonerror="true">
             <arg value="compile"/>
+        </exec>
+    </target>
+
+    <!-- Somewhat hacky wrapper target which invokes the real conversion task.
+         This is done so we can set the environment variable of the new process and
+         effectively overwrite the CLDR_DIR value. If ever the CLDR library doesn't
+         need to use CLDR_DIR at runtime to find the production data, this can all be
+         removed. -->
+    <target name="convert" depends="init-args, prepare-jar">
+        <exec executable="ant" searchpath="true" failonerror="true">
+            <!-- The CLDR library wants CLDR_DIR set, to the data directory. -->
+            <env key="CLDR_DIR" value="${cldrDataDir}" />
+            <!-- Force inherit JAVA_HOME (this can be important). -->
+            <env key="JAVA_HOME" value="${javaHome}" />
+            <!-- Initial Ant command line with all the "interesting" bit in. -->
+            <arg line="-f build-icu-data.xml convert-impl -DcldrDir=${cldrDataDir}"/>
+            <!-- List all properties in the "convert-impl" task (except cldrDir). -->
+            <arg value="-DoutDir=${outDir}"/>
+            <arg value="-DspecialsDir=${specialsDir}"/>
+            <arg value="-DoutputTypes=${outputTypes}"/>
+            <arg value="-DicuVersion=${icuVersion}"/>
+            <arg value="-DicuDataVersion=${icuDataVersion}"/>
+            <arg value="-DcldrVersion=${cldrVersion}"/>
+            <arg value="-DminDraftStatus=${minDraftStatus}"/>
+            <arg value="-DlocaleIdFilter=${localeIdFilter}"/>
+            <arg value="-DincludePseudoLocales=${includePseudoLocales}"/>
+            <arg value="-DemitReport=${emitReport}"/>
         </exec>
     </target>
 
     <!-- Do the actual CLDR data conversion, based on the command line arguments, built in
          default properties and the configuration in the "<convert>" element below. -->
-    <target name="convert" depends="init-args, prepare-jar">
+    <target name="convert-impl">
         <taskdef name="convert" classname="org.unicode.icu.tool.cldrtoicu.ant.ConvertIcuDataTask">
             <classpath>
                 <pathelement path="target/cldr-to-icu-1.0-SNAPSHOT-jar-with-dependencies.jar"/>
             </classpath>
         </taskdef>
         <convert cldrDir="${cldrDir}" outputDir="${outDir}" specialsDir="${specialsDir}"
-                 minimalDraftStatus="${minDraftStatus}" emitReport="${emitReport}">
+                 outputTypes="${outputTypes}" cldrVersion="${cldrVersion}"
+                 icuVersion="${icuVersion}" icuDataVersion="${icuDataVersion}"
+                 minimalDraftStatus="${minDraftStatus}" localeIdFilter="${localeIdFilter}"
+                 includePseudoLocales="${includePseudoLocales}" emitReport="${emitReport}">
 
-            <!-- It is not at all clear why this is being done (we expect "sr_Latn_ME" normally).
-                 TODO: Find out and document this properly. -->
-            <forcedAlias dir="coll" source="sr_ME" target="sr_Cyrl_ME"/>
+            <!-- The primary set of locale IDs to be generated by default. The IDs in this list are
+                 automatically expanded to include default scripts and all available regions. The
+                 rules are:
 
-            <!-- This appears to be a hack to avoid needing to copy and maintain the same "zh"
-                 data for "yue". The files for "yue" in this directory should be empty otherwise.
-                 The maximized versions of "yue_Hans" is "yue_Hans_CN" (vs "zh_Hans_CN"), and for
-                 "yue" it's "yue_Hant_HK" (vs "zh_Hant_HK"), so the aliases are effectively just
-                 rewriting the base language. -->
-            <forcedAlias dir="coll" source="yue_Hans" target="zh_Hans"/>
-            <forcedAlias dir="coll" source="yue" target="zh_Hant"/>
+                 1) Base languages are expanded to include default scripts (e.g. "en" -> "en_Latn").
+                 2) All region and variant subtags are added for any base language or language+script
+                    (e.g. "en" -> "en_GB" or "shi_Latn" -> "shi_Latn_MA").
 
-            <!-- It is not at all clear why this is being done. It's certainly not exactly the same
-                 as above, since (a) the alias is reversed (b) "zh_Hant" does exist, with different
-                 data than "yue", so this alias is not just rewriting the base language.
-                 TODO: Find out and document this properly. -->
-            <forcedAlias dir="rbnf" source="zh_Hant_HK" target="yue"/>
+                 If a non-default script is desired it should be listed explicitly (e.g. "sr_Latn").
 
-            <!-- The primary set of locale IDs to be generated. Other, directory specific, sets exist
-                 and do not have to be subsets of this. Some of these ID are aliases, so XML files
-                 may not exist for all of them. -->
-            <!-- TODO: Add locale ID inference to reduce this list considerably. -->
-            <localeIds dirs="curr,lang,locales,region,unit,zone">
-                root,
-
+                 Locale IDs with deprecated subtags (which become aliases) must still be listed in
+                 full (e.g. "en_RH" or "sr_Latn_YU").
+            -->
+            <localeIds>
                 // A
-                af, af_NA, af_ZA, agq, agq_CM, ak, ak_GH, am, am_ET, ar, ar_001,
-                ar_AE, ar_BH, ar_DJ, ar_DZ, ar_EG, ar_EH, ar_ER, ar_IL, ar_IQ,
-                ar_JO, ar_KM, ar_KW, ar_LB, ar_LY, ar_MA, ar_MR, ar_OM, ar_PS,
-                ar_QA, ar_SA, ar_SD, ar_SO, ar_SS, ar_SY, ar_TD, ar_TN, ar_YE, ars,
-                as, as_IN, asa, asa_TZ, ast, ast_ES, az, az_AZ, az_Cyrl, az_Cyrl_AZ,
-                az_Latn, az_Latn_AZ,
+                af, agq, ak, am, ar, ars, as, asa, ast, az, az_AZ, az_Cyrl
 
                 // B
-                bas, bas_CM, be, be_BY, bem, bem_ZM, bez, bez_TZ, bg, bg_BG, bm,
-                bm_ML, bn, bn_BD, bn_IN, bo, bo_CN, bo_IN, br, br_FR, brx, brx_IN,
-                bs, bs_Cyrl, bs_Cyrl_BA, bs_Latn, bs_Latn_BA, bs_BA,
+                bas, be, bem, bez, bg, bm, bn, bo, br, brx, bs, bs_BA, bs_Cyrl
 
                 // C
-                ca, ca_AD, ca_ES, ca_FR, ca_IT, ccp, ccp_BD, ccp_IN, ce, ce_RU,
-                ceb, ceb_PH, cgg, cgg_UG, chr, chr_US, ckb, ckb_IQ, ckb_IR, cs,
-                cs_CZ, cy, cy_GB,
+                ca, ccp, ce, ceb, cgg, chr, ckb, cs, cy
 
                 // D
-                da, da_DK, da_GL, dav, dav_KE, de, de_AT, de_BE, de_CH, de_DE,
-                de_IT, de_LI, de_LU, dje, dje_NE, dsb, dsb_DE, dua, dua_CM, dyo,
-                dyo_SN, dz, dz_BT,
+                da, dav, de, dje, doi, dsb, dua, dyo, dz
 
                 // E
-                ebu, ebu_KE, ee, ee_GH, ee_TG, el, el_CY, el_GR, en, en_001,
-                en_150, en_AE, en_AG, en_AI, en_AS, en_AT, en_AU, en_BB, en_BE,
-                en_BI, en_BM, en_BS, en_BW, en_BZ, en_CA, en_CC, en_CH, en_CK,
-                en_CM, en_CX, en_CY, en_DE, en_DG, en_DK, en_DM, en_ER, en_FI,
-                en_FJ, en_FK, en_FM, en_GB, en_GD, en_GG, en_GH, en_GI, en_GM,
-                en_GU, en_GY, en_HK, en_IE, en_IL, en_IM, en_IN, en_IO, en_JE,
-                en_JM, en_KE, en_KI, en_KN, en_KY, en_LC, en_LR, en_LS, en_MG,
-                en_MH, en_MO, en_MP, en_MS, en_MT, en_MU, en_MW, en_MY, en_NA,
-                en_NF, en_NG, en_NH, en_NL, en_NR, en_NU, en_NZ, en_PG, en_PH,
-                en_PK, en_PN, en_PR, en_PW, en_RH, en_RW, en_SB, en_SC, en_SD,
-                en_SE, en_SG, en_SH, en_SI, en_SL, en_SS, en_SX, en_SZ, en_TC,
-                en_TK, en_TO, en_TT, en_TV, en_TZ, en_UG, en_UM, en_US, en_US_POSIX,
-                en_VC, en_VG, en_VI, en_VU, en_WS, en_ZA, en_ZM, en_ZW, eo,
-                eo_001, es, es_419, es_AR, es_BO, es_BR, es_BZ, es_CL, es_CO,
-                es_CR, es_CU, es_DO, es_EA, es_EC, es_ES, es_GQ, es_GT, es_HN,
-                es_IC, es_MX, es_NI, es_PA, es_PE, es_PH, es_PR, es_PY, es_SV,
-                es_US, es_UY, es_VE, et, et_EE, eu, eu_ES, ewo, ewo_CM,
+                ebu, ee, el, en, en_NH, en_RH, eo, es, et, eu, ewo
 
                 // F
-                fa, fa_AF, fa_IR, ff, ff_CM, ff_GN, ff_Latn, ff_Latn_BF, ff_Latn_CM,
-                ff_Latn_GH, ff_Latn_GM, ff_Latn_GN, ff_Latn_GW, ff_Latn_LR, ff_Latn_MR,
-                ff_Latn_NE, ff_Latn_NG, ff_Latn_SL, ff_Latn_SN, ff_MR, ff_SN, fi,
-                fi_FI, fil, fil_PH, fo, fo_DK, fo_FO, fr, fr_BE, fr_BF, fr_BI,
-                fr_BJ, fr_BL, fr_CA, fr_CD, fr_CF, fr_CG, fr_CH, fr_CI, fr_CM,
-                fr_DJ, fr_DZ, fr_FR, fr_GA, fr_GF, fr_GN, fr_GP, fr_GQ, fr_HT,
-                fr_KM, fr_LU, fr_MA, fr_MC, fr_MF, fr_MG, fr_ML, fr_MQ, fr_MR,
-                fr_MU, fr_NC, fr_NE, fr_PF, fr_PM, fr_RE, fr_RW, fr_SC, fr_SN,
-                fr_SY, fr_TD, fr_TG, fr_TN, fr_VU, fr_WF, fr_YT, fur, fur_IT,
-                fy, fy_NL,
+                fa, ff, ff_Adlm, ff_CM, ff_GN, ff_MR, ff_SN, fi, fil, fo, fr, fur, fy
 
                 // G
-                ga, ga_IE, gd, gd_GB, gl, gl_ES, gsw, gsw_CH, gsw_FR, gsw_LI,
-                gu, gu_IN, guz, guz_KE, gv, gv_IM,
+                ga, gd, gl, gsw, gu, guz, gv
 
                 // H
-                ha, ha_GH, ha_NE, ha_NG, haw, haw_US, he, he_IL, hi, hi_IN,
-                hr, hr_BA, hr_HR, hsb, hsb_DE, hu, hu_HU, hy, hy_AM,
+                ha, haw, he, hi, hr, hsb, hu, hy
 
                 // I
-                ia, ia_001, id, id_ID, ig, ig_NG, ii, ii_CN, in, in_ID, is,
-                is_IS, it, it_CH, it_IT, it_SM, it_VA, iw, iw_IL,
+                ia, id, ig, ii, in, in_ID, is, it, iw, iw_IL
 
                 // J
-                ja, ja_JP, ja_JP_TRADITIONAL, jgo, jgo_CM, jmc, jmc_TZ, jv, jv_ID,
+                ja, jgo, jmc, jv
 
                 // K
-                ka, ka_GE, kab, kab_DZ, kam, kam_KE, kde, kde_TZ, kea, kea_CV,
-                khq, khq_ML, ki, ki_KE, kk, kk_KZ, kkj, kkj_CM, kl, kl_GL, kln,
-                kln_KE, km, km_KH, kn, kn_IN, ko, ko_KP, ko_KR, kok, kok_IN,
-                ks, ks_IN, ksb, ksb_TZ, ksf, ksf_CM, ksh, ksh_DE, ku, ku_TR,
-                kw, kw_GB, ky, ky_KG,
+                ka, kab, kam, kde, kea, khq, ki, kk, kkj, kl, kln, km, kn, ko, kok, ks
+                ks_IN, ksb, ksf, ksh, ku, kw, ky
 
                 // L
-                lag, lag_TZ, lb, lb_LU, lg, lg_UG, lkt, lkt_US, ln, ln_AO,
-                ln_CD, ln_CF, ln_CG, lo, lo_LA, lrc, lrc_IQ, lrc_IR, lt, lt_LT,
-                lu, lu_CD, luo, luo_KE, luy, luy_KE, lv, lv_LV,
+                lag, lb, lg, lkt, ln, lo, lrc, lt, lu, luo, luy, lv
 
                 // M
-                mas, mas_KE, mas_TZ, mer, mer_KE, mfe, mfe_MU, mg, mg_MG, mgh,
-                mgh_MZ, mgo, mgo_CM, mi, mi_NZ, mk, mk_MK, ml, ml_IN, mn,
-                mn_MN, mo, mr, mr_IN, ms, ms_BN, ms_MY, ms_SG, mt, mt_MT, mua,
-                mua_CM, my, my_MM, mzn, mzn_IR,
+                mai, mas, mer, mfe, mg, mgh, mgo, mi, mk, ml, mn, mni, mni_IN, mo, mr, ms
+                mt, mua, my, mzn
 
                 // N
-                naq, naq_NA, nb, nb_NO, nb_SJ, nd, nd_ZW, nds, nds_DE, nds_NL,
-                ne, ne_IN, ne_NP, nl, nl_AW, nl_BE, nl_BQ, nl_CW, nl_NL, nl_SR,
-                nl_SX, nmg, nmg_CM, nn, nn_NO, nnh, nnh_CM, no, no_NO, no_NO_NY,
-                nus, nus_SS, nyn, nyn_UG,
+                naq, nb, nd, ne, nl, nmg, nn, nnh, no, no_NO, no_NO_NY, nus, nyn
 
                 // O
-                om, om_ET, om_KE, or, or_IN, os, os_GE, os_RU,
+                om, or, os
 
                 // P
-                pa, pa_Arab, pa_Arab_PK, pa_Guru, pa_Guru_IN, pa_IN, pa_PK, pl,
-                pl_PL, ps, ps_AF, ps_PK, pt, pt_AO, pt_BR, pt_CH, pt_CV, pt_GQ,
-                pt_GW, pt_LU, pt_MO, pt_MZ, pt_PT, pt_ST, pt_TL,
+                pa, pa_Arab, pa_IN, pa_PK, pcm, pl, ps, pt
 
                 // Q
-                qu, qu_BO, qu_EC, qu_PE,
+                qu
 
                 // R
-                rm, rm_CH, rn, rn_BI, ro, ro_MD, ro_RO, rof, rof_TZ, ru,
-                ru_BY, ru_KG, ru_KZ, ru_MD, ru_RU, ru_UA, rw, rw_RW, rwk, rwk_TZ,
+                rm, rn, ro, rof, ru, rw, rwk
 
                 // S
-                sah, sah_RU, saq, saq_KE, sbp, sbp_TZ, sd, sd_PK, se, se_FI,
-                se_NO, se_SE, seh, seh_MZ, ses, ses_ML, sg, sg_CF, sh, sh_BA,
-                sh_CS, sh_YU, shi, shi_Latn, shi_Latn_MA, shi_Tfng, shi_Tfng_MA,
-                shi_MA, si, si_LK, sk, sk_SK, sl, sl_SI, smn, smn_FI, sn, sn_ZW,
-                so, so_DJ, so_ET, so_KE, so_SO, sq, sq_AL, sq_MK, sq_XK, sr,
-                sr_Cyrl, sr_Cyrl_BA, sr_Cyrl_ME, sr_Cyrl_RS, sr_Cyrl_CS, sr_Cyrl_XK,
-                sr_Cyrl_YU, sr_Latn, sr_Latn_BA, sr_Latn_ME, sr_Latn_RS, sr_Latn_CS,
-                sr_Latn_XK, sr_Latn_YU, sr_BA, sr_ME, sr_RS, sr_CS, sr_XK, sr_YU,
-                sv, sv_AX, sv_FI, sv_SE, sw, sw_CD, sw_KE, sw_TZ, sw_UG,
+                sa, sah, saq, sat, sat_IN, sbp, sd, sd_Deva, sd_PK, se, seh, ses, sg, sh, sh_BA, sh_CS, sh_YU
+                shi, shi_Latn, shi_MA, si, sk, sl, smn, sn, so, sq, sr, sr_BA, sr_CS, sr_Cyrl_CS, sr_Cyrl_YU, sr_Latn
+                sr_Latn_CS, sr_Latn_YU, sr_ME, sr_RS, sr_XK, sr_YU, su, su_ID, sv, sw
 
                 // T
-                ta, ta_IN, ta_LK, ta_MY, ta_SG, te, te_IN, teo, teo_KE, teo_UG,
-                tg, tg_TJ, th, th_TH, th_TH_TRADITIONAL, ti, ti_ER, ti_ET, tk,
-                tk_TM, tl, tl_PH, to, to_TO, tr, tr_CY, tr_TR, tt, tt_RU,
-                twq, twq_NE, tzm, tzm_MA,
+                ta, te, teo, tg, th, ti, tk, tl, tl_PH, to, tr, tt, twq, tzm
 
                 // U
-                ug, ug_CN, uk, uk_UA, ur, ur_IN, ur_PK, uz, uz_AF, uz_Arab,
-                uz_Arab_AF, uz_Cyrl, uz_Cyrl_UZ, uz_Latn, uz_Latn_UZ, uz_UZ,
+                ug, uk, ur, uz, uz_AF, uz_Arab, uz_Cyrl, uz_UZ
 
                 // V
-                vai, vai_Latn, vai_Latn_LR, vai_LR, vai_Vaii, vai_Vaii_LR, vi,
-                vi_VN, vun, vun_TZ,
+                vai, vai_LR, vai_Latn, vi, vun
 
                 // W
-                wae, wae_CH, wo, wo_SN,
+                wae, wo
 
                 // X
-                xh, xh_ZA, xog, xog_UG,
+                xh, xog
 
                 // Y
-                yav, yav_CM, yi, yi_001, yo, yo_BJ, yo_NG, yue, yue_CN, yue_HK,
-                yue_Hans, yue_Hans_CN, yue_Hant, yue_Hant_HK,
+                yav, yi, yo, yue, yue_CN, yue_HK, yue_Hans
 
                 // Z
-                zgh, zgh_MA, zh, zh_Hans, zh_Hans_CN, zh_Hans_HK, zh_Hans_MO,
-                zh_Hans_SG, zh_Hant, zh_Hant_HK, zh_Hant_MO, zh_Hant_TW, zh_CN,
-                zh_HK, zh_MO, zh_SG, zh_TW, zu, zu_ZA
+                zgh, zh, zh_CN, zh_HK, zh_Hant, zh_MO, zh_SG, zh_TW, zu
             </localeIds>
 
+            <!-- The following elements configure directories in which a subset of the available
+                 locales IDs should be generated. Unlike the main <localeId> element, these
+                 filters must specify all locale IDs in full (but since they mostly select base
+                 languages, this isn't a big deal).
+
+                 As well as allowing some data directories to have a subset of available data (via
+                 the <localeIds> element) there are also mechanisms for controlling aliasing and
+                 the locale parent relation which allows the sharing of some ICU data in cases
+                 where it would otherwise need to be copied. The two mechanisms are:
+
+                 1: inheritLanguageSubtag: Used to rewrite the parent of a locale ID from "root" to
+                    its language subtag (e.g. "zh_Hant" has a natural parent of "root", but to allow
+                    some base language data to be shared it can be made to have a parent of "zh").
+
+                 2: forcedAlias: Used to add aliases for specific directories in order to affect the
+                    ICU behaviour in special cases.
+
+                 Between them these mechanisms are known as "tailorings" of the affected locales. -->
             <!-- TODO: Explain why these special cases are needed/different. -->
-            <localeIds dirs="coll">
-                root,
 
-                // A-B
-                af, am, ars, ar, as, az, be, bg, bn, bo, bs_Cyrl, bs,
+            <!-- Collation data is large, but also more sharable than other data, which is why there
+                 are a number of aliases and parent remappings for this directory. -->
+            <directory dir="coll" inheritLanguageSubtag="bs_Cyrl, sr_Latn, zh_Hant">
+                <!-- These aliases are to avoid needing to copy and maintain the same collation data
+                     for "zh" and "yue". The maximized versions of "yue_Hans" is "yue_Hans_CN" (vs
+                     "zh_Hans_CN"), and for "yue" it's "yue_Hant_HK" (vs "zh_Hant_HK"), so the
+                     aliases are effectively just rewriting the base language. -->
+                <forcedAlias source="yue" target="zh_Hant"/>
+                <forcedAlias source="yue_Hant" target="zh_Hant"/>
+                <forcedAlias source="yue_CN" target="zh_Hans"/>
+                <forcedAlias source="yue_Hans" target="zh_Hans"/>
+                <forcedAlias source="yue_Hans_CN" target="zh_Hans"/>
 
-                // C-F
-                ca, ceb, chr, cs, cy, da, de_AT, de, dsb, dz, ee, el, en,
-                en_US_POSIX, en_US, eo, es, et, fa_AF, fa, fil, fi, fo, fr_CA, fr,
+                <!-- TODO: Find out and document this properly. -->
+                <forcedAlias source="sr_ME" target="sr_Cyrl_ME"/>
 
-                // G-J
-                ga, gl, gu, ha, haw, he, hi, hr, hsb, hu, hy,
-                id_ID, id, ig, in, in_ID, is, it, iw_IL, iw, ja,
+                <localeIds>
+                    root,
 
-                // K-P
-                ka, kk, kl, km, kn, kok, ko, ku, ky, lb, lkt, ln, lo, lt, lv,
-                mk, ml, mn, mo, mr, ms, mt, my, nb, ne, nl, nn, no_NO, no,
-                om, or, pa_IN, pa, pa_Guru, pl, ps, pt,
+                    // A-B
+                    af, am, ars, ar, as, az, be, bg, bn, bo, br, bs_Cyrl, bs,
 
-                // R-T
-                ro, ru, se, sh_BA, sh_CS, sh, sh_YU, si, sk, sl, smn, sq,
-                sr_BA, sr_Cyrl_ME, sr_Latn, sr_ME, sr_RS, sr, sv, sw,
-                ta, te, th, tk, to, tr,
+                    // C-F
+                    ca, ceb, chr, cs, cy, da, de_AT, de, dsb, dz, ee, el, en,
+                    en_US_POSIX, en_US, eo, es, et, fa_AF, fa, ff_Adlm, ff, fil, fi, fo, fr_CA, fr,
 
-                // U-Z
-                ug, uk, ur, uz, vi, wae, wo, xh, yi, yo, yue_CN, yue_Hans,
-                yue, zh_CN, zh_Hant, zh_HK, zh_MO, zh_SG, zh_TW, zh, zu
-            </localeIds>
+                    // G-J
+                    ga, gl, gu, ha, haw, he, hi, hr, hsb, hu, hy,
+                    id_ID, id, ig, in, in_ID, is, it, iw_IL, iw, ja,
 
-            <localeIds dirs="rbnf">
-                root,
+                    // K-P
+                    ka, kk, kl, km, kn, kok, ko, ku, ky, lb, lkt, ln, lo, lt, lv,
+                    mk, ml, mn, mo, mr, ms, mt, my, nb, nb_NO, ne, nl, nn, no, no_NO,
+                    om, or, pa_IN, pa, pa_Guru, pl, ps, pt,
 
-                // A-E
-                af, ak, am, ars, ar, az, be, bg, bs, ca, ccp, chr, cs, cy,
-                da, de_CH, de, ee, el, en_001, en_IN, en, eo, es_419, es_DO,
-                es_GT, es_HN, es_MX, es_NI, es_PA, es_PR, es_SV, es, es_US, et,
+                    // R-T
+                    ro, ru, sa, se, sh_BA, sh_CS, sh, sh_YU, si, sk, sl, smn, sq,
+                    sr_BA, sr_Cyrl_ME, sr_Latn, sr_ME, sr_RS, sr, sv, sw,
+                    ta, te, th, tk, to, tr,
 
-                // F-P
-                fa_AF, fa, ff, fil, fi, fo, fr_BE, fr_CH, fr, ga, he, hi, hr,
-                hu, hy, id, in, is, it, iw, ja, ka, kl, km, ko, ky, lb,
-                lo, lrc, lt, lv, mk, ms, mt, my, nb, nl, nn, no, pl, pt_PT, pt,
+                    // U-Z
+                    ug, uk, ur, uz, vi, wae, wo, xh, yi, yo, yue_CN, yue_Hans_CN, yue_Hans
+                    yue_Hant, yue, zh_CN, zh_Hans, zh_Hant, zh_HK, zh_MO, zh_SG, zh_TW, zh, zu
+                </localeIds>
+            </directory>
 
-                // Q-Z
-                qu, ro, ru, se, sh, sk, sl, sq, sr_Latn, sr, sv, sw, ta, th, tr,
-                uk, vi, yue_Hans, yue, zh_Hant_HK, zh_Hant, zh_HK, zh_MO, zh_TW, zh
-            </localeIds>
+            <directory dir="rbnf">
+                <!-- It is not at all clear why this is being done. It's certainly not exactly the
+                     same as above, since (a) the alias is reversed (b) "zh_Hant" does exist, with
+                     different data than "yue", so this alias is not just rewriting the base
+                     language. -->
+                <!-- TODO: Find out and document this properly. -->
+                <forcedAlias source="zh_Hant_HK" target="yue"/>
 
-            <localeIds dirs="brkitr">
-                root,
-                de, el, en, en_US_POSIX, en_US, es, fr, it, ja, pt, ru, zh_Hant, zh
-            </localeIds>
+                <localeIds>
+                    root,
+
+                    // A-E
+                    af, ak, am, ars, ar, az, be, bg, bs, ca, ccp, chr, cs, cy,
+                    da, de_CH, de, ee, el, en_001, en_IN, en, eo, es_419, es_DO,
+                    es_GT, es_HN, es_MX, es_NI, es_PA, es_PR, es_SV, es, es_US, et,
+
+                    // F-P
+                    fa_AF, fa, ff, fil, fi, fo, fr_BE, fr_CH, fr, ga, he, hi, hr,
+                    hu, hy, id, in, is, it, iw, ja, ka, kl, km, ko, ky, lb,
+                    lo, lrc, lt, lv, mk, ms, mt, my, nb, ne, nl, nn, no, pl, pt_PT, pt,
+
+                    // Q-Z
+                    qu, ro, ru, se, sh, sk, sl, sq, sr_Latn, sr, su, sv, sw, ta, th, tr,
+                    uk, vi, yue_Hans, yue, zh_Hant_HK, zh_Hant, zh_HK, zh_MO, zh_TW, zh
+                </localeIds>
+            </directory>
+
+            <directory dir="brkitr" inheritLanguageSubtag="zh_Hant">
+                <localeIds>
+                    root,
+                    de, el, en, en_US_POSIX, en_US, es, fr, it, ja, pt, ru, zh_Hant, zh
+                </localeIds>
+            </directory>
+
+            <!-- GLOBAL ALIASES -->
+
+            <!-- Some spoken languages (e.g. "ars") inherit all their data from a written language
+                 (e.g. "ar_SA"). However CLDR doesn't currently support a way to represent that
+                 relationship. Unlike deprecated languages for which an alias can be inferred from
+                 the "languageAlias" CLDR data, there's no way in CLDR to represent the fact that
+                 we want "ars" (a non-deprecated language) to inherit the data of "ar_SA".
+
+                 This alias is the first example of potentially many cases where ICU needs to
+                 generate an alias in order to affect "sideways inheritance" for spoken languages,
+                 and at some stage it should probably be supported properly in the CLDR data. -->
+            <forcedAlias source="ars" target="ar_SA"/>
+
+            <!-- A legacy global alias (note that "no_NO_NY" is not even structurally valid). -->
+            <forcedAlias source="no_NO_NY" target="nn_NO"/>
+
+            <!-- This one is a bit silly, it is just to generate a stub for no_NO, which is
+                 not in CLDR. If we do not do this, then including it in localeIds will generate
+                 empty no_Latn and no_Latn_NO and then no_NO aliasing to no_Latn_NO. -->
+            <forcedAlias source="no_NO" target="no"/>
+
+            <!-- ALTERNATE VALUES -->
+
+            <!-- The following elements configure alternate values for some special case paths.
+                 The target path will only be replaced if both it, and the source path, exist in
+                 the CLDR data (paths will not be modified if only the source path exists).
+
+                 Since the paths must represent the same semantic type of data, they must be in the
+                 same "namespace" (same element names) and must not contain value attributes. Thus
+                 they can only differ by distinguishing attributes (either added or modified).
+
+                 This feature is typically used to select alternate translations (e.g. short forms)
+                 for certain paths. -->
+            <!-- <altPath target="//path/to/value[@attr='foo']"
+                          source="//path/to/value[@attr='bar']"
+                          locales="xx,yy_ZZ"/> -->
         </convert>
     </target>
+
+    <target name="clean" depends="init-args, prepare-jar">
+        <taskdef name="outputDirectories" classname="org.unicode.icu.tool.cldrtoicu.ant.CleanOutputDirectoryTask">
+            <classpath>
+                <pathelement path="target/cldr-to-icu-1.0-SNAPSHOT-jar-with-dependencies.jar"/>
+            </classpath>
+        </taskdef>
+
+        <!-- If a directory is listed here, then every file in it is assumed to be automatically
+             generated by the conversion tool, unless it is explicitly listed in a <retain> element.
+             The tool then checks every file to determine if it has the expected header present,
+             indiciating that it was automatically generated, before deleting it.
+             
+             If unexpected files are found, the "clean" task will fail without deleting anything
+             (unless'forceDelete' is set to override this). Note that even if 'forceDelete' is set,
+             the files listed explicitly below will never be deleted by this process.
+
+             This two-step approach minimizes the risk that the conversion process will ever
+             accidentally delete a manually maintained file.             
+             -->
+        <outputDirectories root="${outDir}" forceDelete="${forceDelete}">
+            <dir name="brkitr">
+                <retain path="dictionaries"/>
+                <retain path="lstm"/>
+                <retain path="rules"/>
+            </dir>
+            <dir name="coll">
+                <!-- Legacy files whose file names aren't supported for automatic generation.
+                     Simple to maintain manually and unlikely to ever change again. -->
+                <retain path="de__PHONEBOOK.txt"/>
+                <retain path="de_.txt"/>
+                <retain path="es__TRADITIONAL.txt"/>
+                <retain path="es_.txt"/>
+            </dir>
+            <dir name="curr"/>
+            <dir name="lang"/>
+            <dir name="locales"/>
+            <dir name="misc">
+                <!-- Machine generated files produced by different tools.
+                     Possibly worth moving into the new LDML conversion tool one day. -->
+                <retain path="currencyNumericCodes.txt"/>
+                <retain path="zoneinfo64.txt"/>
+                <!-- Project file (not ICU data), unlikely to ever be auto-generated. -->
+                <retain path="icudata.rc"/>
+                <!-- Small high-level metadata file, stable and easy to maintain manually. -->
+                <retain path="icustd.txt"/>
+            </dir>
+            <dir name="rbnf"/>
+            <dir name="region"/>
+            <dir name="translit">
+                <!-- Small, easy to maintain, special case top-level files. -->
+                <retain path="en.txt"/>
+                <retain path="el.txt"/>
+            </dir>
+            <dir name="unit"/>
+            <dir name="zone">
+                <!-- Manually edited to support TZ database name compatibility. -->
+                <retain path="tzdbNames.txt"/>
+            </dir>
+        </outputDirectories>
+    </target>
 </project>
+

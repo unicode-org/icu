@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 to{
     Keys{
         calendar{"tohi māhina"}
@@ -162,9 +163,9 @@ to{
         enm{"lea fakapālangi-lotoloto"}
         eo{"lea fakaʻesipulanito"}
         es{"lea fakasipēnisi"}
-        es_419{"lea fakasipēnisi lātini-ʻamelika"}
-        es_ES{"lea fakasipēnisi-‘iulope"}
-        es_MX{"lea fakasipēnisi-mekisikou"}
+        es_419{"lea fakasipeini-lātini-ʻamelika"}
+        es_ES{"lea fakasipeini-ʻeulope"}
+        es_MX{"lea fakasipeini-mekisikou"}
         esu{"lea fakaiūpiki-loloto"}
         et{"lea fakaʻesitōnia"}
         eu{"lea fakapāsiki"}
@@ -465,7 +466,6 @@ to{
         ro_MD{"lea fakamolitāvia"}
         rof{"lea fakalomipō"}
         rom{"lea fakalomani"}
-        root{"lea fakaʻilonga-tefito"}
         rtm{"lea fakalotuma"}
         ru{"lea fakalūsia"}
         rue{"lea fakalusini"}
@@ -637,7 +637,6 @@ to{
         zh{"lea fakasiaina-mānitali"}
     }
     Languages%short{
-        az{"lea fakaʻasapaisani"}
         en_GB{"lea fakapilitānia"}
         en_US{"lea fakapālangi-ʻAmelika"}
     }
@@ -810,10 +809,6 @@ to{
         Zyyy{"tohinima fakatatau"}
         Zzzz{"tohinima taʻeʻiloa"}
     }
-    Scripts%stand-alone{
-        Hans{"tohinima fakasiaina-fakafaingofua"}
-        Hant{"tohinima fakasiaina-tukufakaholo"}
-    }
     Types{
         calendar{
             buddhist{"fakaputa"}
@@ -896,7 +891,6 @@ to{
             tibt{"fika fakatipeti"}
         }
     }
-    Version{"36"}
     characterLabelPattern{
         all{"{0} — kotoa"}
         category-list{"{0}: {1}"}
@@ -910,6 +904,8 @@ to{
         strokes{
             other{"kohi ʻe {0}"}
         }
+        subscript{"tohi ʻi lalo {0}"}
+        superscript{"tohi ʻi ʻolunga {0}"}
     }
     codePatterns{
         language{"Lea: {0}"}

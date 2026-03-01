@@ -1,10 +1,11 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 ro{
     Keys{
-        calendar{"calendar"}
+        calendar{"tip calendar"}
         cf{"Format monedă"}
-        colAlternate{"sortare cu ignorarea simbolurilo"}
+        colAlternate{"sortare cu ignorarea simbolurilor"}
         colBackwards{"sortare inversă după accent"}
         colCaseFirst{"sortare după majuscule/minuscule"}
         colCaseLevel{"sortare care ține seama de majuscule/minuscule"}
@@ -153,13 +154,14 @@ ro{
         eu{"bască"}
         ewo{"ewondo"}
         fa{"persană"}
+        fa_AF{"dari"}
         fan{"fang"}
         fat{"fanti"}
         ff{"fulah"}
         fi{"finlandeză"}
         fil{"filipineză"}
         fj{"fijiană"}
-        fo{"faroeză"}
+        fo{"feroeză"}
         fon{"fon"}
         fr{"franceză"}
         frc{"franceză cajun"}
@@ -407,7 +409,6 @@ ro{
         ro{"română"}
         rof{"rombo"}
         rom{"romani"}
-        root{"root"}
         ru{"rusă"}
         rup{"aromână"}
         rw{"kinyarwanda"}
@@ -499,7 +500,7 @@ ro{
         twq{"tasawaq"}
         ty{"tahitiană"}
         tyv{"tuvană"}
-        tzm{"tamazight din Altasul Central"}
+        tzm{"tamazight din Atlasul Central"}
         udm{"udmurt"}
         ug{"uigură"}
         uga{"ugaritică"}
@@ -554,14 +555,15 @@ ro{
         zh{"chineză, mandarină"}
     }
     Languages%short{
-        az{"azeră"}
         en_US{"engleză (S.U.A)"}
     }
     Languages%variant{
+        ckb{"kurdă sorani"}
         ps{"pushto"}
     }
     Scripts{
         Arab{"arabă"}
+        Aran{"nastaaliq"}
         Armn{"armeană"}
         Bali{"balineză"}
         Beng{"bengaleză"}
@@ -613,9 +615,12 @@ ro{
         Maya{"hieroglife maya"}
         Mlym{"malayalam"}
         Mong{"mongolă"}
+        Mtei{"meitei mayek"}
         Mymr{"birmană"}
+        Olck{"ol chiki"}
         Orya{"oriya"}
         Phnx{"feniciană"}
+        Qaag{"zawgyi"}
         Runr{"runică"}
         Sinh{"singaleză"}
         Syrc{"siriacă"}
@@ -786,11 +791,40 @@ ro{
         }
     }
     Variants{
+        1606NICT{"franceză medievală târzie până la 1606"}
+        1694ACAD{"franceză modernă veche"}
+        1901{"ortografie germană tradițională"}
+        1959ACAD{"belarusă academică"}
+        1994{"ortografie resiană standardizată"}
+        1996{"ortografie germană de la 1996"}
+        AREVELA{"armeană orientală"}
+        AREVMDA{"armeană occidentală"}
+        BAKU1926{"alfabet latin altaic unificat"}
+        BISKE{"dialect San Giorgio/Bila"}
+        BOONT{"boontling"}
+        FONIPA{"alfabet fonetic internațional"}
+        FONUPA{"alfabet fonetic uralic"}
+        KKCOR{"ortografie comuna cornish"}
+        LIPAW{"dialect lipovaz din resiană"}
+        MONOTON{"monotonică"}
+        NEDIS{"dialect Natisone"}
+        NJIVA{"dialect Gniva/Njiva"}
+        OSOJS{"dialect Oseacco/Osojane"}
         PINYIN{"pinyin"}
+        POLYTON{"politonică"}
+        POSIX{"informatică"}
+        REVISED{"ortografie revizuită"}
+        ROZAJ{"dialect resian"}
+        SAAHO{"dialect saho"}
         SCOTLAND{"engleză standard scoțiană"}
+        SCOUSE{"dialect scouse"}
+        SOLBA{"dialect Stolvizza/Solbica"}
+        TARASK{"ortografie taraskievica"}
+        UCCOR{"ortografie unificată cornish"}
+        UCRCOR{"ortografie revizuită unificată cornish"}
+        VALENCIA{"valenciană"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"36"}
     characterLabelPattern{
         all{"{0} – toate"}
         category-list{"{0}: {1}"}
@@ -806,6 +840,8 @@ ro{
             one{"{0} trasare"}
             other{"{0} de trasări"}
         }
+        subscript{"indice {0}"}
+        superscript{"exponent {0}"}
     }
     codePatterns{
         language{"Limbă: {0}"}

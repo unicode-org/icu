@@ -497,6 +497,7 @@ public:
     static UnicodeString& U_EXPORT2 getDisplayName(const Locale& objectLocale,
                                          UnicodeString& name);
 
+#ifndef U_FORCE_HIDE_DEPRECATED_API
     /**
      * Deprecated functionality. Use clone() instead.
      *
@@ -519,6 +520,7 @@ public:
     virtual BreakIterator *  createBufferClone(void *stackBuffer,
                                                int32_t &BufferSize,
                                                UErrorCode &status) = 0;
+#endif  // U_FORCE_HIDE_DEPRECATED_API
 
 #ifndef U_HIDE_DEPRECATED_API
 
@@ -562,7 +564,7 @@ public:
      * BreakIterator::createXXXInstance to avoid undefined behavior.
      * @param key the registry key returned by a previous call to registerInstance
      * @param status the in/out status code, no special meanings are assigned
-     * @return TRUE if the iterator for the key was successfully unregistered
+     * @return true if the iterator for the key was successfully unregistered
      * @stable ICU 2.4
      */
     static UBool U_EXPORT2 unregister(URegistryKey key, UErrorCode& status);
@@ -653,7 +655,7 @@ private:
 
 inline UBool BreakIterator::isBufferClone()
 {
-    return FALSE;
+    return false;
 }
 
 #endif /* U_HIDE_DEPRECATED_API */

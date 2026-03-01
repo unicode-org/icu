@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 fa{
     Countries{
         001{"جهان"}
@@ -287,6 +288,7 @@ fa{
         VU{"وانواتو"}
         WF{"والیس و فوتونا"}
         WS{"ساموآ"}
+        XA{"انگلیسی با لهجه خارجی"}
         XB{"مجازی - دوجهته"}
         XK{"کوزوو"}
         YE{"یمن"}
@@ -297,21 +299,19 @@ fa{
         ZZ{"ناحیهٔ نامشخص"}
     }
     Countries%short{
-        GB{"بریتانیا"}
         HK{"هنگ‌کنگ"}
         MO{"ماکائو"}
         PS{"فلسطین"}
         SA{"عربستان"}
         UN{"سازمان ملل"}
-        US{"ایالات متحده"}
     }
     Countries%variant{
         CD{"کنگو (جمهوری دموکراتیک)"}
         CG{"کنگو (جمهوری)"}
+        CI{"ساحل‌عاج"}
         CZ{"جمهوری چک"}
         FK{"جزایر فالکلند (ایسلاس مالویناس)"}
         SZ{"سوازیلند"}
         TL{"تیمور شرقی"}
     }
-    Version{"36"}
 }

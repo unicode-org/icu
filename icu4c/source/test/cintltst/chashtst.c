@@ -11,6 +11,7 @@
 *******************************************************************************
 */
 
+#include <stdbool.h>
 #include "cintltst.h"
 #include "uhash.h"
 #include "unicode/ctest.h"
@@ -22,6 +23,7 @@
  *********************************************************************/
 
 static void TestBasic(void);
+static void TestAllowZero(void);
 static void TestOtherAPI(void);
 static void hashIChars(void);
 
@@ -87,6 +89,7 @@ _compareLong(int32_t a, int32_t b) {
 void addHashtableTest(TestNode** root) {
    
     addTest(root, &TestBasic,   "tsutil/chashtst/TestBasic");
+    addTest(root, &TestAllowZero, "tsutil/chashtst/TestAllowZero");
     addTest(root, &TestOtherAPI, "tsutil/chashtst/TestOtherAPI");
     addTest(root, &hashIChars, "tsutil/chashtst/hashIChars");
     
@@ -133,6 +136,9 @@ static void TestBasic(void) {
     _get(hash, omega, 48);
     _get(hash, two, 200);
 
+    // puti(key, value==0) removes the key's element.
+    _put(hash, two, 0, 200);
+
     if(_compareChars((void*)one, (void*)three) == TRUE ||
         _compareChars((void*)one, (void*)one2) != TRUE ||
         _compareChars((void*)one, (void*)one) != TRUE ||
@@ -145,9 +151,56 @@ static void TestBasic(void) {
         _compareIChars((void*)one, NULL) == TRUE  )  {
         log_err("FAIL: compareIChars failed\n");
     }
-     
-    uhash_close(hash);
 
+    uhash_close(hash);
+}
+
+static void TestAllowZero() {
+    UErrorCode status = U_ZERO_ERROR;
+    UHashtable *hash = uhash_open(hashChars, isEqualChars, NULL,  &status);
+    if (U_FAILURE(status)) {
+        log_err("FAIL: uhash_open failed with %s and returned 0x%08x\n",
+                u_errorName(status), hash);
+        return;
+    }
+    if (hash == NULL) {
+        log_err("FAIL: uhash_open returned NULL\n");
+        return;
+    }
+    log_verbose("Ok: uhash_open returned 0x%08X\n", hash);
+
+    int32_t oldValue = uhash_putiAllowZero(hash, (char *)"one", 1, &status);
+    UBool found = false;
+    if (U_FAILURE(status) || oldValue != 0 || !uhash_containsKey(hash, "one") ||
+            uhash_geti(hash, "one") != 1 ||
+            uhash_getiAndFound(hash, "one", &found) != 1 || !found) {
+        log_err("FAIL: uhash_putiAllowZero(one, 1)");
+    }
+    oldValue = uhash_putiAllowZero(hash, (char *)"zero", 0, &status);
+    found = false;
+    if (U_FAILURE(status) || oldValue != 0 || !uhash_containsKey(hash, "zero") ||
+            uhash_geti(hash, "zero") != 0 ||
+            uhash_getiAndFound(hash, "zero", &found) != 0 || !found) {
+        log_err("FAIL: uhash_putiAllowZero(zero, 0)");
+    }
+    // Overwrite "one" to 0.
+    oldValue = uhash_putiAllowZero(hash, (char *)"one", 0, &status);
+    found = false;
+    if (U_FAILURE(status) || oldValue != 1 || !uhash_containsKey(hash, "one") ||
+            uhash_geti(hash, "one") != 0 ||
+            uhash_getiAndFound(hash, "one", &found) != 0 || !found) {
+        log_err("FAIL: uhash_putiAllowZero(one, 0)");
+    }
+    // Remove "zero" using puti(zero, 0).
+    oldValue = uhash_puti(hash, (char *)"zero", 0, &status);
+    found = true;
+    if (U_FAILURE(status) || oldValue != 0 || uhash_containsKey(hash, "zero") ||
+            uhash_geti(hash, "zero") != 0 ||
+            uhash_getiAndFound(hash, "zero", &found) != 0 || found) {
+        log_err("FAIL: uhash_puti(zero, 0)");
+    }
+
+    uhash_close(hash);
 }
 
 static void TestOtherAPI(void){
@@ -343,30 +396,46 @@ static void _put(UHashtable* hash,
     int32_t oldValue =
         uhash_puti(hash, (void*) key, value, &status);
     if (U_FAILURE(status)) {
-        log_err("FAIL: uhash_put(%s) failed with %s and returned %ld\n",
+        log_err("FAIL: uhash_puti(%s) failed with %s and returned %ld\n",
                 key, u_errorName(status), oldValue);
     } else if (oldValue != expectedOldValue) {
-        log_err("FAIL: uhash_put(%s) returned old value %ld; expected %ld\n",
+        log_err("FAIL: uhash_puti(%s) returned old value %ld; expected %ld\n",
                 key, oldValue, expectedOldValue);
     } else {
-        log_verbose("Ok: uhash_put(%s, %d) returned old value %ld\n",
+        log_verbose("Ok: uhash_puti(%s, %d) returned old value %ld\n",
                     key, value, oldValue);
+    }
+    int32_t newValue = uhash_geti(hash, key);
+    if (newValue != value) {
+        log_err("FAIL: uhash_puti(%s) failed to set the intended value %ld: "
+                "uhash_geti() returns %ld\n",
+                key, value, newValue);
+    }
+    UBool contained = uhash_containsKey(hash, key);
+    if (value == 0) {
+        if (contained) {
+            log_err("FAIL: uhash_puti(%s, zero) failed to remove the key item: "
+                    "uhash_containsKey() returns true\n",
+                    key);
+        }
+    } else {
+        if (!contained) {
+            log_err("FAIL: uhash_puti(%s, not zero) appears to have removed the key item: "
+                    "uhash_containsKey() returns false\n",
+                    key);
+        }
     }
 }
 
 static void _get(UHashtable* hash,
           const char* key,
           int32_t expectedValue) {
-    UErrorCode status = U_ZERO_ERROR;
     int32_t value = uhash_geti(hash, key);
-    if (U_FAILURE(status)) {
-        log_err("FAIL: uhash_get(%s) failed with %s and returned %ld\n",
-                key, u_errorName(status), value);
-    } else if (value != expectedValue) {
-        log_err("FAIL: uhash_get(%s) returned %ld; expected %ld\n",
+    if (value != expectedValue) {
+        log_err("FAIL: uhash_geti(%s) returned %ld; expected %ld\n",
                 key, value, expectedValue);
     } else {
-        log_verbose("Ok: uhash_get(%s) returned value %ld\n",
+        log_verbose("Ok: uhash_geti(%s) returned value %ld\n",
                     key, value);
     }
 }
@@ -376,11 +445,15 @@ static void _remove(UHashtable* hash,
              int32_t expectedValue) {
     int32_t value = uhash_removei(hash, key);
     if (value != expectedValue) {
-        log_err("FAIL: uhash_remove(%s) returned %ld; expected %ld\n",
+        log_err("FAIL: uhash_removei(%s) returned %ld; expected %ld\n",
                 key, value, expectedValue);
     } else {
-        log_verbose("Ok: uhash_remove(%s) returned old value %ld\n",
+        log_verbose("Ok: uhash_removei(%s) returned old value %ld\n",
                     key, value);
     }
+    if (uhash_containsKey(hash, key)) {
+        log_err("FAIL: uhash_removei(%s) failed to remove the key item: "
+                "uhash_containsKey() returns false\n",
+                key);
+    }
 }
-

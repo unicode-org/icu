@@ -70,7 +70,7 @@ void UVectorTest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
     }\
 } UPRV_BLOCK_MACRO_END
 
-static int8_t U_CALLCONV
+static int32_t U_CALLCONV
 UVectorTest_compareInt32(UElement key1, UElement key2) {
     if (key1.integer > key2.integer) {
         return 1;

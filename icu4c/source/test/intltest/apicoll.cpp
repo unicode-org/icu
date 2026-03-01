@@ -804,11 +804,11 @@ CollationAPITest::TestElemIter(/* char* par */)
     coliter->reset();
     coliter->setText(*chariter, success);
     if(!U_FAILURE(success)){
-        errln("Expeceted error");
+        errln("Expected error");
     }
     iterator1->setText((UnicodeString)"hello there", success);
     if(!U_FAILURE(success)){
-        errln("Expeceted error");
+        errln("Expected error");
     }
 
     delete chariter;
@@ -1173,7 +1173,7 @@ void CollationAPITest::TestSortKey()
     doAssert(memcmp(tempkey, sortkey3, keylength) == 0,
         "Test3 string should have the same collation key and sort key");
 
-    logln("Use secondary comparision level testing ...\n");
+    logln("Use secondary comparison level testing ...\n");
     col->setStrength(Collator::SECONDARY);
 
     col->getCollationKey(test1, u_strlen(test1), key1, status);

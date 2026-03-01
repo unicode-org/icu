@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 lkt{
     AuxExemplarCharacters{"[c d f {ȟʼ} j q r {sʼ} {šʼ} v x]"}
     ExemplarCharacters{
@@ -9,25 +10,7 @@ lkt{
     ExemplarCharactersIndex{"[A B Č E G Ǧ H Ȟ I K L M N Ŋ O P S Š T U W Y Z Ž]"}
     ExemplarCharactersNumbers{"[\\- ‑ , . % ‰ + 0 1 2 3 4 5 6 7 8 9]"}
     ExemplarCharactersPunctuation{"[\\- ‐ ‑ – — , ; \\: ! ? . \u0022 “ ” ( ) \\[ \\] @ * / \\& #]"}
-    Version{"36"}
     calendar{
-        generic{
-            DateTimePatterns{
-                "h:mm:ss a zzzz",
-                "h:mm:ss a z",
-                "h:mm:ss a",
-                "h:mm a",
-                "G y MMMM d, EEEE",
-                "G y MMMM d",
-                "G y MMM d",
-                "GGGGG y-MM-dd",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-        }
         gregorian{
             DateTimePatterns{
                 "h:mm:ss a zzzz",
@@ -43,6 +26,16 @@ lkt{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "ahmmsszzzz",
+                "ahmmssz",
+                "ahmmss",
+                "ahmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMMMd",
+                "yyMd",
             }
             dayNames{
                 format{

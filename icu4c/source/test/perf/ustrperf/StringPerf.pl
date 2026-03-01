@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 #  ********************************************************************
 #  * Copyright (C) 2016 and later: Unicode, Inc. and others.
-#  *License & terms of use: http://www.unicode.org/copyright.html#License
+#  *License & terms of use: http://www.unicode.org/copyright.html
 #  ********************************************************************
 #  ********************************************************************
 #  * COPYRIGHT:
@@ -68,7 +68,7 @@ my $dataFiles = {
         "TestNames_SerbianSH.txt",
         "TestNames_SerbianSR.txt",
         "TestNames_Thai.txt",
-        "Testnames_Russian.txt",
+        "TestNames_Russian.txt",
         "th18057.txt",
     ]
 };

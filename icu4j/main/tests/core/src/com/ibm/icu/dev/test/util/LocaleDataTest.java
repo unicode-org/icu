@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 2003-2016, International Business Machines Corporation and    *
@@ -92,13 +92,13 @@ public class LocaleDataTest extends TestFmwk{
                 continue;
             }
             ULocale fullLoc = ULocale.addLikelySubtags(locale);
-            if(fullLoc.toString().indexOf("_US") >= 0 || fullLoc.toString().indexOf("_MM") >= 0 || fullLoc.toString().indexOf("_LR") >= 0){
+            if(fullLoc.toString().indexOf("_US") >= 0 || fullLoc.toString().indexOf("_LR") >= 0){
                 if(ms == LocaleData.MeasurementSystem.US){
                     logln("Got the expected measurement system for locale: " + locale);
                 }else{
                     errln("Did not get the expected measurement system for locale: "+ locale);
                 }
-            } else if(fullLoc.toString().indexOf("_GB") >= 0){
+            } else if(fullLoc.toString().indexOf("_GB") >= 0 || fullLoc.toString().indexOf("_MM") >= 0){
                 if(ms == LocaleData.MeasurementSystem.UK){
                     logln("Got the expected measurement system for locale: " + locale);
                 }else{

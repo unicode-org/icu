@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 2003-2011, International Business Machines Corporation and    *
@@ -158,7 +158,7 @@ public class IDNAReference {
         }
         int poLen = processOut.length();
         if(poLen==0){
-            throw new StringPrepParseException("Found zero length lable after NamePrep.",StringPrepParseException.ZERO_LENGTH_LABEL);
+            throw new StringPrepParseException("Found zero length label after NamePrep.",StringPrepParseException.ZERO_LENGTH_LABEL);
         }
         StringBuffer dest = new StringBuffer();
         
@@ -359,7 +359,7 @@ public class IDNAReference {
             sepIndex = getSeparatorIndex(srcArr,sepIndex,srcArr.length);
             String label = new String(srcArr,oldSepIndex,sepIndex-oldSepIndex);
             if(label.length()==0 && sepIndex!=srcArr.length ){
-                throw new StringPrepParseException("Found zero length lable after NamePrep.",StringPrepParseException.ZERO_LENGTH_LABEL);
+                throw new StringPrepParseException("Found zero length label after NamePrep.",StringPrepParseException.ZERO_LENGTH_LABEL);
             }
             UCharacterIterator iter = UCharacterIterator.getInstance(label);
             result.append(convertToUnicode(iter,options));

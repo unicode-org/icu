@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  ******************************************************************************
  * Copyright (C) 2003-2013, International Business Machines Corporation and   *
@@ -934,7 +934,7 @@ public final class XLIFF2ICUConverter {
                currentSource.comment =  currentTarget.comment = transUnit.getNodeValue();
             }else if( type == Node.ELEMENT_NODE){
                 if(name.equals(BINSOURCE)){
-                    // loop to pickup internal-file/extenal-file element
+                    // loop to pickup internal-file/external-file element
                     continue;
                 }else if(name.equals(NOTE)){
                     // save the note values

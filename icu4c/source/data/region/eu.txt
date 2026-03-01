@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 eu{
     Countries{
         001{"Mundua"}
@@ -288,6 +289,7 @@ eu{
         WF{"Wallis eta Futuna"}
         WS{"Samoa"}
         XA{"Sasiazentuak"}
+        XB{"Pseudobidia"}
         XK{"Kosovo"}
         YE{"Yemen"}
         YT{"Mayotte"}
@@ -306,10 +308,8 @@ eu{
     Countries%variant{
         CD{"Kongo (DR)"}
         CG{"Kongoko Errepublika"}
-        CI{"CI"}
+        CI{"C¨ôte d’Ivore"}
         CZ{"Txekiar Errepublika"}
         FK{"Falklandak (Malvinak)"}
-        TL{"TL"}
     }
-    Version{"36"}
 }

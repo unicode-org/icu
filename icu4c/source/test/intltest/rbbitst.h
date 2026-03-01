@@ -22,6 +22,7 @@
 #include "intltest.h"
 #include "unicode/brkiter.h"
 #include "unicode/rbbi.h"
+#include "unicode/uscript.h"
 
 class  Enumeration;
 class  BITestData;
@@ -54,7 +55,6 @@ public:
     void TestMonkey();
 
     void TestExtended();
-    UChar *ReadAndConvertFile(const char *fileName, int &ulen, const char *encoding, UErrorCode &status);
     void executeTest(TestParams *, UErrorCode &status);
 
     void TestWordBreaks();
@@ -82,9 +82,31 @@ public:
     void TestReverse();
     void TestReverse(std::unique_ptr<RuleBasedBreakIterator>bi);
     void TestBug13692();
+    void TestDebugRules();
+    void TestUnpairedSurrogate();
 
     void TestDebug();
     void TestProperties();
+    void Test8BitsTrieWith8BitStateTable();
+    void Test8BitsTrieWith16BitStateTable();
+    void Test16BitsTrieWith8BitStateTable();
+    void Test16BitsTrieWith16BitStateTable();
+    void TestTable_8_16_Bits();
+    void TestBug13590();
+    void TestLSTMThai();
+    void TestLSTMBurmese();
+
+#if U_ENABLE_TRACING
+    void TestTraceCreateCharacter();
+    void TestTraceCreateWord();
+    void TestTraceCreateSentence();
+    void TestTraceCreateTitle();
+    void TestTraceCreateLine();
+    void TestTraceCreateLineNormal();
+    void TestTraceCreateLineStrict();
+    void TestTraceCreateLineLoose();
+    void TestTraceCreateBreakEngine();
+#endif
 
 /***********************/
 private:
@@ -97,6 +119,9 @@ private:
 
     // Run one of the Unicode Consortium boundary test data files.
     void runUnicodeTestData(const char *fileName, RuleBasedBreakIterator *bi);
+
+    // Run tests from one of the LSTM test files.
+    void runLSTMTestFromFile(const char* filename, UScriptCode script);
 
     // Run a single test case from one of the Unicode Consortium test files.
     void checkUnicodeTestCase(const char *testFileName, int lineNumber,
@@ -119,6 +144,14 @@ private:
 
     // Test parameters, from the test framework and test invocation.
     const char* fTestParams;
+
+    // Helper functions to test different trie bit sizes and state table bit sizes.
+    void testTrieStateTable(int32_t numChar, bool expectedTrieWidthIn8Bits, bool expectedStateRowIn8Bits);
+
+#if U_ENABLE_TRACING
+    void assertTestTraceResult(int32_t fnNumber, const char* expectedData);
+#endif
+
 };
 
 #endif /* #if !UCONFIG_NO_BREAK_ITERATION */

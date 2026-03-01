@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  **********************************************************************
  * Copyright (c) 2004-2016, International Business Machines
@@ -31,13 +31,16 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.ibm.icu.impl.DontCareFieldPosition;
 import com.ibm.icu.impl.FormattedStringBuilder;
+import com.ibm.icu.impl.FormattedValueStringBuilderImpl;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.impl.SimpleFormatterImpl;
+import com.ibm.icu.impl.Utility;
+import com.ibm.icu.impl.number.DecimalQuantity;
+import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
 import com.ibm.icu.impl.number.LongNameHandler;
 import com.ibm.icu.impl.number.RoundingUtils;
-import com.ibm.icu.number.FormattedNumber;
 import com.ibm.icu.number.IntegerWidth;
 import com.ibm.icu.number.LocalizedNumberFormatter;
 import com.ibm.icu.number.NumberFormatter;
@@ -59,7 +62,8 @@ import com.ibm.icu.util.UResourceBundle;
  * <p>
  * <strong>IMPORTANT:</strong> New users are strongly encouraged to see if
  * {@link NumberFormatter} fits their use case.  Although not deprecated, this
- * class, MeasureFormat, is provided for backwards compatibility only.
+ * class, MeasureFormat, is provided for backwards compatibility only, and has
+ * much more limited capabilities.
  * <hr>
  *
  * <p>
@@ -156,21 +160,21 @@ public class MeasureFormat extends UFormat {
          *
          * @stable ICU 53
          */
-        WIDE(ListFormatter.Style.UNIT, UnitWidth.FULL_NAME, UnitWidth.FULL_NAME),
+        WIDE(ListFormatter.Width.WIDE, UnitWidth.FULL_NAME, UnitWidth.FULL_NAME),
 
         /**
          * Abbreviate when possible.
          *
          * @stable ICU 53
          */
-        SHORT(ListFormatter.Style.UNIT_SHORT, UnitWidth.SHORT, UnitWidth.ISO_CODE),
+        SHORT(ListFormatter.Width.SHORT, UnitWidth.SHORT, UnitWidth.ISO_CODE),
 
         /**
          * Brief. Use only a symbol for the unit when possible.
          *
          * @stable ICU 53
          */
-        NARROW(ListFormatter.Style.UNIT_NARROW, UnitWidth.NARROW, UnitWidth.SHORT),
+        NARROW(ListFormatter.Width.NARROW, UnitWidth.NARROW, UnitWidth.SHORT),
 
         /**
          * Identical to NARROW except when formatMeasures is called with an hour and minute; minute and
@@ -179,7 +183,7 @@ public class MeasureFormat extends UFormat {
          *
          * @stable ICU 53
          */
-        NUMERIC(ListFormatter.Style.UNIT_NARROW, UnitWidth.NARROW, UnitWidth.SHORT),
+        NUMERIC(ListFormatter.Width.NARROW, UnitWidth.NARROW, UnitWidth.SHORT),
 
         /**
          * The default format width for getCurrencyFormat(), which is to show the symbol for currency
@@ -189,9 +193,9 @@ public class MeasureFormat extends UFormat {
          * @deprecated ICU 61 This API is ICU internal only.
          */
         @Deprecated
-        DEFAULT_CURRENCY(ListFormatter.Style.UNIT, UnitWidth.FULL_NAME, UnitWidth.SHORT);
+        DEFAULT_CURRENCY(ListFormatter.Width.SHORT, UnitWidth.FULL_NAME, UnitWidth.SHORT);
 
-        private final ListFormatter.Style listFormatterStyle;
+        final ListFormatter.Width listWidth;
 
         /**
          * The {@link UnitWidth} (used for newer NumberFormatter API) that corresponds to this
@@ -205,14 +209,13 @@ public class MeasureFormat extends UFormat {
          */
         final UnitWidth currencyWidth;
 
-        private FormatWidth(ListFormatter.Style style, UnitWidth unitWidth, UnitWidth currencyWidth) {
-            this.listFormatterStyle = style;
+        private FormatWidth(
+                ListFormatter.Width listWidth,
+                UnitWidth unitWidth,
+                UnitWidth currencyWidth) {
+            this.listWidth = listWidth;
             this.unitWidth = unitWidth;
             this.currencyWidth = currencyWidth;
-        }
-
-        ListFormatter.Style getListFormatterStyle() {
-            return listFormatterStyle;
         }
     }
 
@@ -320,9 +323,10 @@ public class MeasureFormat extends UFormat {
         } else if (obj instanceof Measure[]) {
             formatMeasuresInternal(toAppendTo, fpos, (Measure[]) obj);
         } else if (obj instanceof Measure) {
-            FormattedNumber result = formatMeasure((Measure) obj);
-            result.nextFieldPosition(fpos); // No offset: toAppendTo.length() is considered below
-            result.appendTo(toAppendTo);
+            FormattedStringBuilder result = formatMeasure((Measure) obj);
+            // No offset: toAppendTo.length() is considered below
+            FormattedValueStringBuilderImpl.nextFieldPosition(result, fpos);
+            Utility.appendTo(result, toAppendTo);
         } else {
             throw new IllegalArgumentException(obj.toString());
         }
@@ -340,7 +344,6 @@ public class MeasureFormat extends UFormat {
      * @throws UnsupportedOperationException
      *             Not supported.
      * @draft ICU 53 (Retain)
-     * @provisional This API might change or be removed in a future release.
      */
     @Override
     public Measure parseObject(String source, ParsePosition pos) {
@@ -386,11 +389,13 @@ public class MeasureFormat extends UFormat {
             MeasureUnit perUnit,
             StringBuilder appendTo,
             FieldPosition pos) {
-        FormattedNumber result = getUnitFormatterFromCache(NUMBER_FORMATTER_STANDARD,
-                measure.getUnit(),
-                perUnit).format(measure.getNumber());
-        DecimalFormat.fieldPositionHelper(result, pos, appendTo.length());
-        result.appendTo(appendTo);
+        DecimalQuantity dq = new DecimalQuantity_DualStorageBCD(measure.getNumber());
+        FormattedStringBuilder string = new FormattedStringBuilder();
+        getUnitFormatterFromCache(
+            NUMBER_FORMATTER_STANDARD, measure.getUnit(), perUnit
+        ).formatImpl(dq, string);
+        DecimalFormat.fieldPositionHelper(dq, string, pos, appendTo.length());
+        Utility.appendTo(string, appendTo);
         return appendTo;
     }
 
@@ -433,9 +438,9 @@ public class MeasureFormat extends UFormat {
             return;
         }
         if (measures.length == 1) {
-            FormattedNumber result = formatMeasure(measures[0]);
-            result.nextFieldPosition(fieldPosition);
-            result.appendTo(appendTo);
+            FormattedStringBuilder result = formatMeasure(measures[0]);
+            FormattedValueStringBuilderImpl.nextFieldPosition(result, fieldPosition);
+            Utility.appendTo(result, appendTo);
             return;
         }
 
@@ -450,7 +455,8 @@ public class MeasureFormat extends UFormat {
         }
 
         ListFormatter listFormatter = ListFormatter.getInstance(getLocale(),
-                formatWidth.getListFormatterStyle());
+                ListFormatter.Type.UNITS,
+                formatWidth.listWidth);
         if (fieldPosition != DontCareFieldPosition.INSTANCE) {
             formatMeasuresSlowTrack(listFormatter, appendTo, fieldPosition, measures);
             return;
@@ -464,7 +470,7 @@ public class MeasureFormat extends UFormat {
                 results[i] = formatMeasureInteger(measures[i]).toString();
             }
         }
-        FormattedListBuilder builder = listFormatter.format(Arrays.asList(results), -1);
+        FormattedListBuilder builder = listFormatter.formatImpl(Arrays.asList(results), false);
         builder.appendTo(appendTo);
     }
 
@@ -768,20 +774,26 @@ public class MeasureFormat extends UFormat {
 
     /// END NUMBER FORMATTER CACHING MACHINERY ///
 
-    private FormattedNumber formatMeasure(Measure measure) {
+    private FormattedStringBuilder formatMeasure(Measure measure) {
         MeasureUnit unit = measure.getUnit();
+        DecimalQuantity dq = new DecimalQuantity_DualStorageBCD(measure.getNumber());
+        FormattedStringBuilder string = new FormattedStringBuilder();
         if (unit instanceof Currency) {
-            return getUnitFormatterFromCache(NUMBER_FORMATTER_CURRENCY, unit, null)
-                    .format(measure.getNumber());
+            getUnitFormatterFromCache(NUMBER_FORMATTER_CURRENCY, unit, null)
+                    .formatImpl(dq, string);
         } else {
-            return getUnitFormatterFromCache(NUMBER_FORMATTER_STANDARD, unit, null)
-                    .format(measure.getNumber());
+            getUnitFormatterFromCache(NUMBER_FORMATTER_STANDARD, unit, null)
+                    .formatImpl(dq, string);
         }
+        return string;
     }
 
-    private FormattedNumber formatMeasureInteger(Measure measure) {
-        return getUnitFormatterFromCache(NUMBER_FORMATTER_INTEGER, measure.getUnit(), null)
-                .format(measure.getNumber());
+    private FormattedStringBuilder formatMeasureInteger(Measure measure) {
+        DecimalQuantity dq = new DecimalQuantity_DualStorageBCD(measure.getNumber());
+        FormattedStringBuilder string = new FormattedStringBuilder();
+        getUnitFormatterFromCache(NUMBER_FORMATTER_INTEGER, measure.getUnit(), null)
+                .formatImpl(dq, string);
+        return string;
     }
 
     private void formatMeasuresSlowTrack(
@@ -797,27 +809,27 @@ public class MeasureFormat extends UFormat {
 
         int fieldPositionFoundIndex = -1;
         for (int i = 0; i < measures.length; ++i) {
-            FormattedNumber result;
+            FormattedStringBuilder result;
             if (i == measures.length - 1) {
                 result = formatMeasure(measures[i]);
             } else {
                 result = formatMeasureInteger(measures[i]);
             }
             if (fieldPositionFoundIndex == -1) {
-                result.nextFieldPosition(fpos);
+                FormattedValueStringBuilderImpl.nextFieldPosition(result, fpos);
                 if (fpos.getEndIndex() != 0) {
                     fieldPositionFoundIndex = i;
                 }
             }
             results[i] = result.toString();
         }
-        ListFormatter.FormattedListBuilder builder = listFormatter.format(Arrays.asList(results),
-                fieldPositionFoundIndex);
+        ListFormatter.FormattedListBuilder builder = listFormatter.formatImpl(Arrays.asList(results), true);
 
         // Fix up FieldPosition indexes if our field is found.
-        if (builder.getOffset() != -1) {
-            fieldPosition.setBeginIndex(fpos.getBeginIndex() + builder.getOffset());
-            fieldPosition.setEndIndex(fpos.getEndIndex() + builder.getOffset());
+        int offset = builder.getOffset(fieldPositionFoundIndex);
+        if (offset != -1) {
+            fieldPosition.setBeginIndex(fpos.getBeginIndex() + offset);
+            fieldPosition.setEndIndex(fpos.getEndIndex() + offset);
         }
         builder.appendTo(appendTo);
     }

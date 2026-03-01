@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- © 2020 and later: Unicode, Inc. and others.
+     License & terms of use: http://www.unicode.org/copyright.html
+     See README.txt for instructions on updating the local repository.
+     -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- This POM file acts as a parent POM file for any tool which is built
+         via Maven and requires access to the CLDR data APIs. This POM file
+         and the other files in this directory encapsulate the somewhat messy
+         task of including the Ant-built CLDR JAR file in Maven projects. -->
+
+    <!-- Declares this to be a POM that's included by other POM files. -->
+    <packaging>pom</packaging>    
+    
+    <!-- This must match any child POM file's <parent> declaration. -->         
+    <groupId>org.unicode.icu</groupId>
+    <artifactId>cldr-lib</artifactId>
+    <version>1.0</version>
+    
+    <!-- Important: The "${project.basedir}" property is the directory of the
+         child POM file, not this directory (and there's no easy way in Maven
+         to identify the absolute path of a parent POM file). However since
+         child POM files should have a <parent> declaration with the relative
+         path in it, we can use that. Note however that this is a bit fragile
+         and relies on <relativePath> being a directory, not a POM file.
+         
+         In order to allow the local repository to work either when it is used
+         by a child POM file or when it's used directly (e.g. for installing
+         or purging the cache) when it is invoked from this directory, the
+           -Dproject.parent.relativePath=""
+         argument must be given. -->
+    <repositories>
+        <repository>
+            <id>local-maven-repo</id>
+            <url>file://${project.basedir}/${project.parent.relativePath}</url>
+        </repository>
+    </repositories>
+    
+    <!-- Ant-built JAR file(s) installed into the local Maven repository in this
+         directory by the 'install-cldr-jars.sh' script. -->
+    <dependencies>
+        <dependency>
+            <groupId>org.unicode.cldr</groupId>
+            <artifactId>cldr-api</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+</project>
+

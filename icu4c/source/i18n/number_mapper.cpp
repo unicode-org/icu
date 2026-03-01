@@ -13,7 +13,6 @@
 #include "number_patternstring.h"
 #include "unicode/errorcode.h"
 #include "number_utils.h"
-#include "number_currencysymbols.h"
 
 using namespace icu;
 using namespace icu::number;
@@ -63,17 +62,8 @@ MacroProps NumberPropertyMapper::oldToNew(const DecimalFormatProperties& propert
     // AFFIXES //
     /////////////
 
-    AffixPatternProvider* affixProvider;
-    if (properties.currencyPluralInfo.fPtr.isNull()) {
-        warehouse.currencyPluralInfoAPP.setToBogus();
-        warehouse.propertiesAPP.setTo(properties, status);
-        affixProvider = &warehouse.propertiesAPP;
-    } else {
-        warehouse.currencyPluralInfoAPP.setTo(*properties.currencyPluralInfo.fPtr, properties, status);
-        warehouse.propertiesAPP.setToBogus();
-        affixProvider = &warehouse.currencyPluralInfoAPP;
-    }
-    macros.affixProvider = affixProvider;
+    warehouse.affixProvider.setTo(properties, status);
+    macros.affixProvider = &warehouse.affixProvider.get();
 
     ///////////
     // UNITS //
@@ -83,15 +73,13 @@ MacroProps NumberPropertyMapper::oldToNew(const DecimalFormatProperties& propert
             !properties.currency.isNull() ||
             !properties.currencyPluralInfo.fPtr.isNull() ||
             !properties.currencyUsage.isNull() ||
-            affixProvider->hasCurrencySign());
+            warehouse.affixProvider.get().hasCurrencySign());
     CurrencyUnit currency = resolveCurrency(properties, locale, status);
     UCurrencyUsage currencyUsage = properties.currencyUsage.getOrDefault(UCURR_USAGE_STANDARD);
     if (useCurrency) {
         // NOTE: Slicing is OK.
         macros.unit = currency; // NOLINT
     }
-    warehouse.currencySymbols = {currency, locale, symbols, status};
-    macros.currencySymbols = &warehouse.currencySymbols;
 
     ///////////////////////
     // ROUNDING STRATEGY //
@@ -104,6 +92,8 @@ MacroProps NumberPropertyMapper::oldToNew(const DecimalFormatProperties& propert
     int32_t minSig = properties.minimumSignificantDigits;
     int32_t maxSig = properties.maximumSignificantDigits;
     double roundingIncrement = properties.roundingIncrement;
+    // Not assigning directly to macros.roundingMode here: we change
+    // roundingMode if and when we also change macros.precision.
     RoundingMode roundingMode = properties.roundingMode.getOrDefault(UNUM_ROUND_HALFEVEN);
     bool explicitMinMaxFrac = minFrac != -1 || maxFrac != -1;
     bool explicitMinMaxSig = minSig != -1 || maxSig != -1;
@@ -125,10 +115,8 @@ MacroProps NumberPropertyMapper::oldToNew(const DecimalFormatProperties& propert
     }
     // Validate min/max int/frac.
     // For backwards compatibility, minimum overrides maximum if the two conflict.
-    // The following logic ensures that there is always a minimum of at least one digit.
     if (minInt == 0 && maxFrac != 0) {
-        // Force a digit after the decimal point.
-        minFrac = minFrac <= 0 ? 1 : minFrac;
+        minFrac = (minFrac < 0 || (minFrac == 0 && maxInt == 0)) ? 1 : minFrac;
         maxFrac = maxFrac < 0 ? -1 : maxFrac < minFrac ? minFrac : maxFrac;
         minInt = 0;
         maxInt = maxInt < 0 ? -1 : maxInt > kMaxIntFracSig ? -1 : maxInt;
@@ -159,7 +147,7 @@ MacroProps NumberPropertyMapper::oldToNew(const DecimalFormatProperties& propert
         precision = Precision::constructCurrency(currencyUsage);
     }
     if (!precision.isBogus()) {
-        precision.fRoundingMode = roundingMode;
+        macros.roundingMode = roundingMode;
         macros.precision = precision;
     }
 
@@ -253,7 +241,7 @@ MacroProps NumberPropertyMapper::oldToNew(const DecimalFormatProperties& propert
                 // TODO: Reset maxSig_ = 1 + minFrac_ to follow the spec.
                 macros.precision = Precision::constructSignificant(minSig_, maxSig_);
             }
-            macros.precision.fRoundingMode = roundingMode;
+            macros.roundingMode = roundingMode;
         }
     }
 

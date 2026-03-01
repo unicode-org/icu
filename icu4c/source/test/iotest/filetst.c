@@ -15,6 +15,7 @@
  */
 
 #include "cmemory.h"
+#include "cstring.h"
 #include "iotest.h"
 #include "unicode/ustdio.h"
 #include "unicode/ustring.h"
@@ -27,9 +28,18 @@ const char *STANDARD_TEST_FILE = "iotest-c.txt";
 
 const char *STANDARD_TEST_LOCALE = "en_US_POSIX";
 
+const char *MEDIUMNAME_TEST_FILE =
+"iotest_medium_filename_4567_30_234567_40_234567_50_234567_60_234567_70_234567_80_234567_90_23456_100"
+"_23456_110_23456_120.txt"; // 124 chars
+
+const char *LONGNAME_TEST_FILE =
+"iotest_long_filename_234567_30_234567_40_234567_50_234567_60_234567_70_234567_80_234567_90_23456_100"
+"_23456_110_23456_120_23456_130_23456_140_23456_150_23456_160_23456_170_23456_180_23456_190_23456_200"
+"_23456_210_23456_220_23456_230_23456_240_23456_250_23456_260.txt"; // 264 chars, may  be too long on some filesystems
+
 
 #if !UCONFIG_NO_FORMATTING
-static void TestFileFromICU(UFILE *myFile) {
+static void TestFileFromICU(UFILE *myFile, const char* description) {
     int32_t n[1];
     float myFloat = -1234.0;
     int32_t newValuePtr[1];
@@ -48,7 +58,11 @@ static void TestFileFromICU(UFILE *myFile) {
     memset(testBuf, '*', UPRV_LENGTHOF(testBuf));
 
     if (myFile == NULL) {
-        log_err("Can't write test file.\n");
+        if (uprv_strstr(description, "ULONGNAME")) {
+            log_info("Can't %s test file, OK.\n", description);
+        } else {
+            log_err("Can't %s test file.\n", description);
+        }
         return;
     }
 
@@ -314,10 +328,24 @@ static void TestFileFromICU(UFILE *myFile) {
     u_fclose(myFile);
 }
 
+enum { kUFilenameBufLen = 296 };
 static void TestFile(void) {
+    
+    UChar ufilename[kUFilenameBufLen + 1]; // +1 for guaranteed 0 termination
+    ufilename[kUFilenameBufLen] = 0; // ensure 0 termination
+ 
+    log_verbose("Testing u_fopen with STANDARD_TEST_FILE\n");
+    TestFileFromICU(u_fopen(STANDARD_TEST_FILE, "w", STANDARD_TEST_LOCALE, NULL), "u_fopen STANDARD");
 
-    log_verbose("Testing u_fopen\n");
-    TestFileFromICU(u_fopen(STANDARD_TEST_FILE, "w", STANDARD_TEST_LOCALE, NULL));
+    u_uastrncpy(ufilename, MEDIUMNAME_TEST_FILE, kUFilenameBufLen); 
+    log_verbose("Testing u_fopen_u with UMEDIUMNAME_TEST_FILE\n");
+    TestFileFromICU(u_fopen_u(ufilename, "w", STANDARD_TEST_LOCALE, NULL), "u_fopen_u UMEDIUMNAME");
+
+    // The following u_fopen_u will fail to open a file on many filesystems (name too long)
+    // but we want to make sure that at least we do not crash in u_fopen_u name conversion.
+    u_uastrncpy(ufilename, LONGNAME_TEST_FILE, kUFilenameBufLen); 
+    log_verbose("Testing u_fopen_u with ULONGNAME_TEST_FILE\n");
+    TestFileFromICU(u_fopen_u(ufilename, "w", STANDARD_TEST_LOCALE, NULL), "u_fopen_u ULONGNAME");
 }
 
 static void TestFinit(void) {
@@ -325,7 +353,7 @@ static void TestFinit(void) {
 
     log_verbose("Testing u_finit\n");
     standardFile = fopen(STANDARD_TEST_FILE, "w");
-    TestFileFromICU(u_finit(standardFile, STANDARD_TEST_LOCALE, NULL));
+    TestFileFromICU(u_finit(standardFile, STANDARD_TEST_LOCALE, NULL), "u_finit STANDARD");
     fclose(standardFile);
 }
 
@@ -334,7 +362,7 @@ static void TestFadopt(void) {
 
     log_verbose("Testing u_fadopt\n");
     standardFile = fopen(STANDARD_TEST_FILE, "w");
-    TestFileFromICU(u_fadopt(standardFile, STANDARD_TEST_LOCALE, NULL));
+    TestFileFromICU(u_fadopt(standardFile, STANDARD_TEST_LOCALE, NULL), "u_fadopt STANDARD");
 }
 #endif
 

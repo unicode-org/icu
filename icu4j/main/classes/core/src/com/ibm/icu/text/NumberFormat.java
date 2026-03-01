@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 1996-2016, International Business Machines Corporation and
@@ -1078,7 +1078,6 @@ public abstract class NumberFormat extends UFormat {
      * {@icu} Returns the list of Locales for which NumberFormats are available.
      * @return the available locales
      * @draft ICU 3.2 (retain)
-     * @provisional This API might change or be removed in a future release.
      */
     public static ULocale[] getAvailableULocales() {
         if (shim == null) {
@@ -1440,7 +1439,7 @@ public abstract class NumberFormat extends UFormat {
     static NumberFormat createInstance(ULocale desiredLocale, int choice) {
         // If the choice is PLURALCURRENCYSTYLE, the pattern is not a single
         // pattern, it is a pattern set, so we do not need to get them here.
-        // If the choice is ISOCURRENCYSTYLE, the pattern is the currrency
+        // If the choice is ISOCURRENCYSTYLE, the pattern is the currency
         // pattern in the locale but by replacing the single currency sign
         // with double currency sign.
         String pattern = getPattern(desiredLocale, choice);
@@ -1961,12 +1960,12 @@ public abstract class NumberFormat extends UFormat {
         public static final Field CURRENCY = new Field("currency");
 
         /**
-         * @draft ICU 64
+         * @stable ICU 64
          */
         public static final Field MEASURE_UNIT = new Field("measure unit");
 
         /**
-         * @draft ICU 64
+         * @stable ICU 64
          */
         public static final Field COMPACT = new Field("compact");
 

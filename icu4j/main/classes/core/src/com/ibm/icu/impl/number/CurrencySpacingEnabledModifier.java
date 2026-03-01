@@ -1,8 +1,6 @@
 // © 2017 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.number;
-
-import java.text.Format.Field;
 
 import com.ibm.icu.impl.FormattedStringBuilder;
 import com.ibm.icu.text.DecimalFormatSymbols;
@@ -16,7 +14,7 @@ public class CurrencySpacingEnabledModifier extends ConstantMultiFieldModifier {
     // Pre-compute them for performance.
     // The unit test testCurrencySpacingPatternStability() will start failing if these change in CLDR.
     private static final UnicodeSet UNISET_DIGIT = new UnicodeSet("[:digit:]").freeze();
-    private static final UnicodeSet UNISET_NOTS = new UnicodeSet("[:^S:]").freeze();
+    private static final UnicodeSet UNISET_NOTSZ = new UnicodeSet("[[:^S:]&[:^Z:]]").freeze();
 
     // Constants for better readability. Types are for compiler checking.
     static final byte PREFIX = 0;
@@ -56,7 +54,7 @@ public class CurrencySpacingEnabledModifier extends ConstantMultiFieldModifier {
             afterPrefixInsert = null;
         }
         if (suffix.length() > 0 && suffix.fieldAt(0) == NumberFormat.Field.CURRENCY) {
-            int suffixCp = suffix.getLastCodePoint();
+            int suffixCp = suffix.getFirstCodePoint();
             UnicodeSet suffixUnicodeSet = getUnicodeSet(symbols, IN_CURRENCY, SUFFIX);
             if (suffixUnicodeSet.contains(suffixCp)) {
                 beforeSuffixUnicodeSet = getUnicodeSet(symbols, IN_NUMBER, SUFFIX);
@@ -125,7 +123,7 @@ public class CurrencySpacingEnabledModifier extends ConstantMultiFieldModifier {
         // NOTE: For prefix, output.fieldAt(index-1) gets the last field type in the prefix.
         // This works even if the last code point in the prefix is 2 code units because the
         // field value gets populated to both indices in the field array.
-        Field affixField = (affix == PREFIX) ? output.fieldAt(index - 1)
+        Object affixField = (affix == PREFIX) ? output.fieldAt(index - 1)
                 : output.fieldAt(index);
         if (affixField != NumberFormat.Field.CURRENCY) {
             return 0;
@@ -159,8 +157,8 @@ public class CurrencySpacingEnabledModifier extends ConstantMultiFieldModifier {
                         affix == SUFFIX);
         if (pattern.equals("[:digit:]")) {
             return UNISET_DIGIT;
-        } else if (pattern.equals("[:^S:]")) {
-            return UNISET_NOTS;
+        } else if (pattern.equals("[[:^S:]&[:^Z:]]")) {
+            return UNISET_NOTSZ;
         } else {
             return new UnicodeSet(pattern);
         }

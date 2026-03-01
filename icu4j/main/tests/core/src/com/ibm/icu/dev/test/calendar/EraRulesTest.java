@@ -1,5 +1,5 @@
 // © 2018 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.dev.test.calendar;
 
 import org.junit.Test;
@@ -11,8 +11,8 @@ import com.ibm.icu.impl.CalType;
 import com.ibm.icu.impl.EraRules;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.JapaneseCalendar;
-import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.util.ULocale;
 
 /**
  * Tests for EraRules class

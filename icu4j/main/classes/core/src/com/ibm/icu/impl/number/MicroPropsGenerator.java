@@ -1,5 +1,5 @@
 // © 2017 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.number;
 
 /**
@@ -18,6 +18,10 @@ package com.ibm.icu.impl.number;
  * quantity-dependent part of the MicroProps. At the top of the linked list is a base instance of
  * {@link MicroProps} with properties that are not quantity-dependent. Each element in the linked list
  * calls {@link #processQuantity} on its "parent", then does its work, and then returns the result.
+ *
+ * <p>
+ * This chain of MicroPropsGenerators is typically constructed by NumberFormatterImpl::macrosToMicroGenerator() when
+ * constructing a NumberFormatter.
  *
  * <p>
  * A class implementing MicroPropsGenerator looks something like this:

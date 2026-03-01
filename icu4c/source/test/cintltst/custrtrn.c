@@ -1239,7 +1239,7 @@ static void Test_UChar_WCHART_API(void){
         free(uDest);
         
        
-        /* test with embeded nulls */
+        /* test with embedded nulls */
         uSrc = src16WithNulls;
         uSrcLen = sizeof(src16WithNulls)/2;
         wDestLen =0;

@@ -102,7 +102,7 @@ public class RBManager {
 		
         String[] encodings;
 		
-        // Initiailize the readers to the main NLS file
+        // Initialize the readers to the main NLS file
         FileReader fr = new FileReader(mainFile);
         BufferedReader br = new BufferedReader(fr);
 		

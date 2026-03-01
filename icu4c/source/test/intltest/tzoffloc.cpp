@@ -79,9 +79,9 @@ TimeZoneOffsetLocalTest::TestGetOffsetAroundTransition() {
 
     // Expected offsets by void getOffset(UDate date, UBool local, int32_t& rawOffset,
     // int32_t& dstOffset, UErrorCode& ec) with local=TRUE
-    // or void getOffsetFromLocal(UDate date, int32_t nonExistingTimeOpt, int32_t duplicatedTimeOpt,
+    // or void getOffsetFromLocal(UDate date, UTimeZoneLocalOption nonExistingTimeOpt, UTimeZoneLocalOption duplicatedTimeOpt,
     // int32_t& rawOffset, int32_t& dstOffset, UErrorCode& status) with
-    // nonExistingTimeOpt=kStandard/duplicatedTimeOpt=kStandard
+    // nonExistingTimeOpt=STANDARD_*/duplicatedTimeOpt=STANDARD_*
     const int32_t OFFSETS2[NUM_DATES][2] = {
         // April 2, 2006
         {-8*HOUR, 0},
@@ -98,9 +98,9 @@ TimeZoneOffsetLocalTest::TestGetOffsetAroundTransition() {
         {-8*HOUR, 0},
     };
 
-    // Expected offsets by void getOffsetFromLocal(UDate date, int32_t nonExistingTimeOpt,
-    // int32_t duplicatedTimeOpt, int32_t& rawOffset, int32_t& dstOffset, UErrorCode& status) with
-    // nonExistingTimeOpt=kDaylight/duplicatedTimeOpt=kDaylight
+    // Expected offsets by void getOffsetFromLocal(UDate date, UTimeZoneLocalOption nonExistingTimeOpt,
+    // UTimeZoneLocalOption duplicatedTimeOpt, int32_t& rawOffset, int32_t& dstOffset, UErrorCode& status) with
+    // nonExistingTimeOpt=DAYLIGHT_*/duplicatedTimeOpt=DAYLIGHT_*
     const int32_t OFFSETS3[][2] = {
         // April 2, 2006
         {-8*HOUR, 0},
@@ -237,84 +237,84 @@ TimeZoneOffsetLocalTest::TestGetOffsetAroundTransition() {
         }
     }
 
-    // Test getOffsetFromLocal(UDate date, int32_t nonExistingTimeOpt, int32_t duplicatedTimeOpt,
+    // Test getOffsetFromLocal(UDate date, UTimeZoneLocalOption nonExistingTimeOpt, UTimeZoneLocalOption duplicatedTimeOpt,
     // int32_t& rawOffset, int32_t& dstOffset, UErroCode& status)
-    // with nonExistingTimeOpt=kStandard/duplicatedTimeOpt=kStandard
+    // with nonExistingTimeOpt=STANDARD_FORMER/duplicatedTimeOpt=STANDARD_LATTER
     for (int32_t i = 0; i < NUM_TIMEZONES; i++) {
         for (int m = 0; m < NUM_DATES; m++) {
             status = U_ZERO_ERROR;
-            TESTZONES[i]->getOffsetFromLocal(MILLIS[m], BasicTimeZone::kStandard, BasicTimeZone::kStandard,
+            TESTZONES[i]->getOffsetFromLocal(MILLIS[m], UCAL_TZ_LOCAL_STANDARD_FORMER, UCAL_TZ_LOCAL_STANDARD_LATTER,
                 rawOffset, dstOffset, status);
             if (U_FAILURE(status)) {
-                errln((UnicodeString)"getOffsetFromLocal with kStandard/kStandard failed for TESTZONES[" + i + "]");
+                errln((UnicodeString)"getOffsetFromLocal with UCAL_TZ_LOCAL_STANDARD_FORMER/UCAL_TZ_LOCAL_STANDARD_LATTER failed for TESTZONES[" + i + "]");
             } else if (rawOffset != OFFSETS2[m][0] || dstOffset != OFFSETS2[m][1]) {
                 dateStr.remove();
                 df.format(MILLIS[m], dateStr);
                 dataerrln((UnicodeString)"Bad offset returned by TESTZONES[" + i + "] at "
-                        + dateStr + "(wall/kStandard/kStandard) - Got: "
+                        + dateStr + "(wall/STANDARD_FORMER/STANDARD_LATTER) - Got: "
                         + rawOffset + "/" + dstOffset
                         + " Expected: " + OFFSETS2[m][0] + "/" + OFFSETS2[m][1]);
             }
         }
     }
 
-    // Test getOffsetFromLocal(UDate date, int32_t nonExistingTimeOpt, int32_t duplicatedTimeOpt,
+    // Test getOffsetFromLocal(UDate date, UTimeZoneLocalOption nonExistingTimeOpt, UTimeZoneLocalOption duplicatedTimeOpt,
     // int32_t& rawOffset, int32_t& dstOffset, UErroCode& status)
-    // with nonExistingTimeOpt=kDaylight/duplicatedTimeOpt=kDaylight
+    // with nonExistingTimeOpt=DAYLIGHT_LATTER/duplicatedTimeOpt=DAYLIGHT_FORMER
     for (int32_t i = 0; i < NUM_TIMEZONES; i++) {
         for (int m = 0; m < NUM_DATES; m++) {
             status = U_ZERO_ERROR;
-            TESTZONES[i]->getOffsetFromLocal(MILLIS[m], BasicTimeZone::kDaylight, BasicTimeZone::kDaylight,
+            TESTZONES[i]->getOffsetFromLocal(MILLIS[m], UCAL_TZ_LOCAL_DAYLIGHT_LATTER, UCAL_TZ_LOCAL_DAYLIGHT_FORMER,
                 rawOffset, dstOffset, status);
             if (U_FAILURE(status)) {
-                errln((UnicodeString)"getOffsetFromLocal with kDaylight/kDaylight failed for TESTZONES[" + i + "]");
+                errln((UnicodeString)"getOffsetFromLocal with UCAL_TZ_LOCAL_DAYLIGHT_LATTER/UCAL_TZ_LOCAL_DAYLIGHT_FORMER failed for TESTZONES[" + i + "]");
             } else if (rawOffset != OFFSETS3[m][0] || dstOffset != OFFSETS3[m][1]) {
                 dateStr.remove();
                 df.format(MILLIS[m], dateStr);
                 dataerrln((UnicodeString)"Bad offset returned by TESTZONES[" + i + "] at "
-                        + dateStr + "(wall/kDaylight/kDaylight) - Got: "
+                        + dateStr + "(wall/DAYLIGHT_LATTER/DAYLIGHT_FORMER) - Got: "
                         + rawOffset + "/" + dstOffset
                         + " Expected: " + OFFSETS3[m][0] + "/" + OFFSETS3[m][1]);
             }
         }
     }
 
-    // Test getOffsetFromLocal(UDate date, int32_t nonExistingTimeOpt, int32_t duplicatedTimeOpt,
+    // Test getOffsetFromLocal(UDate date, UTimeZoneLocalOption nonExistingTimeOpt, UTimeZoneLocalOption duplicatedTimeOpt,
     // int32_t& rawOffset, int32_t& dstOffset, UErroCode& status)
-    // with nonExistingTimeOpt=kFormer/duplicatedTimeOpt=kLatter
+    // with nonExistingTimeOpt=FORMER/duplicatedTimeOpt=LATTER
     for (int32_t i = 0; i < NUM_TIMEZONES; i++) {
         for (int m = 0; m < NUM_DATES; m++) {
             status = U_ZERO_ERROR;
-            TESTZONES[i]->getOffsetFromLocal(MILLIS[m], BasicTimeZone::kFormer, BasicTimeZone::kLatter,
+            TESTZONES[i]->getOffsetFromLocal(MILLIS[m], UCAL_TZ_LOCAL_FORMER, UCAL_TZ_LOCAL_LATTER,
                 rawOffset, dstOffset, status);
             if (U_FAILURE(status)) {
-                errln((UnicodeString)"getOffsetFromLocal with kFormer/kLatter failed for TESTZONES[" + i + "]");
+                errln((UnicodeString)"getOffsetFromLocal with UCAL_TZ_LOCAL_FORMER/UCAL_TZ_LOCAL_LATTER failed for TESTZONES[" + i + "]");
             } else if (rawOffset != OFFSETS2[m][0] || dstOffset != OFFSETS2[m][1]) {
                 dateStr.remove();
                 df.format(MILLIS[m], dateStr);
                 dataerrln((UnicodeString)"Bad offset returned by TESTZONES[" + i + "] at "
-                        + dateStr + "(wall/kFormer/kLatter) - Got: "
+                        + dateStr + "(wall/FORMER/LATTER) - Got: "
                         + rawOffset + "/" + dstOffset
                         + " Expected: " + OFFSETS2[m][0] + "/" + OFFSETS2[m][1]);
             }
         }
     }
 
-    // Test getOffsetFromLocal(UDate date, int32_t nonExistingTimeOpt, int32_t duplicatedTimeOpt,
+    // Test getOffsetFromLocal(UDate date, UTimeZoneLocalOption nonExistingTimeOpt, UTimeZoneLocalOption duplicatedTimeOpt,
     // int32_t& rawOffset, int32_t& dstOffset, UErroCode& status)
-    // with nonExistingTimeOpt=kLatter/duplicatedTimeOpt=kFormer
+    // with nonExistingTimeOpt=LATTER/duplicatedTimeOpt=FORMER
     for (int32_t i = 0; i < NUM_TIMEZONES; i++) {
         for (int m = 0; m < NUM_DATES; m++) {
             status = U_ZERO_ERROR;
-            TESTZONES[i]->getOffsetFromLocal(MILLIS[m], BasicTimeZone::kLatter, BasicTimeZone::kFormer,
+            TESTZONES[i]->getOffsetFromLocal(MILLIS[m], UCAL_TZ_LOCAL_LATTER, UCAL_TZ_LOCAL_FORMER,
                 rawOffset, dstOffset, status);
             if (U_FAILURE(status)) {
-                errln((UnicodeString)"getOffsetFromLocal with kLatter/kFormer failed for TESTZONES[" + i + "]");
+                errln((UnicodeString)"getOffsetFromLocal with UCAL_TZ_LOCAL_LATTER/UCAL_TZ_LOCAL_FORMER failed for TESTZONES[" + i + "]");
             } else if (rawOffset != OFFSETS3[m][0] || dstOffset != OFFSETS3[m][1]) {
                 dateStr.remove();
                 df.format(MILLIS[m], dateStr);
                 dataerrln((UnicodeString)"Bad offset returned by TESTZONES[" + i + "] at "
-                        + dateStr + "(wall/kLatter/kFormer) - Got: "
+                        + dateStr + "(wall/LATTER/FORMER) - Got: "
                         + rawOffset + "/" + dstOffset
                         + " Expected: " + OFFSETS3[m][0] + "/" + OFFSETS3[m][1]);
             }

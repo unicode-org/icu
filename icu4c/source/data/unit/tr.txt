@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 tr{
-    Version{"36"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -14,7 +14,7 @@ tr{
                 one{"{0} g kuvveti"}
                 other{"{0} g kuvveti"}
             }
-            meter-per-second-squared{
+            meter-per-square-second{
                 dnam{"metre/saniye²"}
                 one{"{0} metre/saniye²"}
                 other{"{0} metre/saniye²"}
@@ -105,7 +105,59 @@ tr{
             }
         }
         compound{
+            1024p1{"kibi{0}"}
+            1024p2{"mebi{0}"}
+            1024p3{"gibi{0}"}
+            1024p4{"tebi{0}"}
+            1024p5{"pebi{0}"}
+            1024p6{"exbi{0}"}
+            1024p7{"zebi{0}"}
+            1024p8{"yobe{0}"}
+            10p-1{"desi{0}"}
+            10p-12{"piko{0}"}
+            10p-15{"femto{0}"}
+            10p-18{"atto{0}"}
+            10p-2{"santi{0}"}
+            10p-21{"zepto{0}"}
+            10p-24{"yokto{0}"}
+            10p-3{"mili{0}"}
+            10p-6{"mikro{0}"}
+            10p-9{"nano{0}"}
+            10p1{"deka{0}"}
+            10p12{"tera{0}"}
+            10p15{"peta{0}"}
+            10p18{"exa{0}"}
+            10p2{"hekto{0}"}
+            10p21{"zetta{0}"}
+            10p24{"yotta{0}"}
+            10p3{"kilo{0}"}
+            10p6{"mega{0}"}
+            10p9{"giga{0}"}
             per{"{0}/{1}"}
+            power2{
+                one{
+                    _{
+                        _{"{0}kare"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0}kare"}
+                    }
+                }
+            }
+            power3{
+                one{
+                    _{
+                        _{"{0}küp"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0}küp"}
+                    }
+                }
+            }
         }
         concentr{
             karat{
@@ -113,7 +165,7 @@ tr{
                 one{"{0} ayar"}
                 other{"{0} ayar"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"miligram/desilitre"}
                 one{"{0} miligram/desilitre"}
                 other{"{0} miligram/desilitre"}
@@ -122,11 +174,6 @@ tr{
                 dnam{"milimol/litre"}
                 one{"{0} milimol/litre"}
                 other{"{0} milimol/litre"}
-            }
-            part-per-million{
-                dnam{"parça/milyon"}
-                one{"{0} parça/milyon"}
-                other{"{0} parça/milyon"}
             }
             percent{
                 dnam{"yüzde"}
@@ -138,6 +185,11 @@ tr{
                 one{"binde {0}"}
                 other{"binde {0}"}
             }
+            permillion{
+                dnam{"parça/milyon"}
+                one{"{0} parça/milyon"}
+                other{"{0} parça/milyon"}
+            }
             permyriad{
                 dnam{"onbinde"}
                 one{"onbinde {0}"}
@@ -145,7 +197,7 @@ tr{
             }
         }
         consumption{
-            liter-per-100kilometers{
+            liter-per-100-kilometer{
                 dnam{"litre/100 kilometre"}
                 one{"{0} litre/100 kilometre"}
                 other{"{0} litre/100 kilometre"}
@@ -403,6 +455,11 @@ tr{
             }
         }
         graphics{
+            dot{
+                dnam{"nokta"}
+                one{"{0} nokta"}
+                other{"{0} nokta"}
+            }
             dot-per-centimeter{
                 dnam{"nokta/santimetre"}
                 one{"{0} nokta/santimetre"}
@@ -453,6 +510,11 @@ tr{
                 dnam{"desimetre"}
                 one{"{0} desimetre"}
                 other{"{0} desimetre"}
+            }
+            earth-radius{
+                dnam{"Dünya yarıçapı"}
+                one{"{0} Dünya yarıçapı"}
+                other{"{0} Dünya yarıçapı"}
             }
             fathom{
                 dnam{"fathom"}
@@ -550,6 +612,16 @@ tr{
             }
         }
         light{
+            candela{
+                dnam{"kandela"}
+                one{"{0} kandela"}
+                other{"{0} kandela"}
+            }
+            lumen{
+                dnam{"lümen"}
+                one{"{0} lümen"}
+                other{"{0} lümen"}
+            }
             lux{
                 dnam{"lüks"}
                 one{"{0} lüks"}
@@ -576,6 +648,11 @@ tr{
                 dnam{"Dünya kütlesi"}
                 one{"{0} Dünya kütlesi"}
                 other{"{0} Dünya kütlesi"}
+            }
+            grain{
+                dnam{"tane"}
+                one{"{0} tane"}
+                other{"{0} tane"}
             }
             gram{
                 dnam{"gram"}
@@ -680,7 +757,7 @@ tr{
                 one{"{0} hektopaskal"}
                 other{"{0} hektopaskal"}
             }
-            inch-hg{
+            inch-ofhg{
                 dnam{"inç cıva"}
                 one{"{0} inç cıva"}
                 other{"{0} inç cıva"}
@@ -700,7 +777,7 @@ tr{
                 one{"{0} milibar"}
                 other{"{0} milibar"}
             }
-            millimeter-of-mercury{
+            millimeter-ofhg{
                 dnam{"milimetre cıva"}
                 one{"{0} milimetre cıva"}
                 other{"{0} milimetre cıva"}
@@ -710,7 +787,7 @@ tr{
                 one{"{0} paskal"}
                 other{"{0} paskal"}
             }
-            pound-per-square-inch{
+            pound-force-per-square-inch{
                 dnam{"libre/inç kare"}
                 one{"{0} libre/inç kare"}
                 other{"{0} libre/inç kare"}
@@ -766,7 +843,7 @@ tr{
                 one{"{0} newton metre"}
                 other{"{0} newton metre"}
             }
-            pound-foot{
+            pound-force-foot{
                 dnam{"pound fit"}
                 one{"{0} pound fit"}
                 other{"{0} pound fit"}
@@ -845,6 +922,26 @@ tr{
                 one{"{0} desilitre"}
                 other{"{0} desilitre"}
             }
+            dessert-spoon{
+                dnam{"tatlı kaşığı"}
+                one{"{0} tatlı kaşığı"}
+                other{"{0} tatlı kaşığı"}
+            }
+            dessert-spoon-imperial{
+                dnam{"İng. tatlı kaşığı"}
+                one{"{0} İng. tatlı kaşığı"}
+                other{"{0} İng. tatlı kaşığı"}
+            }
+            dram{
+                dnam{"dram"}
+                one{"{0} dram"}
+                other{"{0} dram"}
+            }
+            drop{
+                dnam{"damla"}
+                one{"{0} damla"}
+                other{"{0} damla"}
+            }
             fluid-ounce{
                 dnam{"sıvı ons"}
                 one{"{0} sıvı ons"}
@@ -888,6 +985,11 @@ tr{
                 one{"{0} mililitre"}
                 other{"{0} mililitre"}
             }
+            pinch{
+                dnam{"tutam"}
+                one{"{0} tutam"}
+                other{"{0} tutam"}
+            }
             pint{
                 dnam{"pint"}
                 one{"{0} pint"}
@@ -903,15 +1005,20 @@ tr{
                 one{"{0} quart"}
                 other{"{0} quart"}
             }
+            quart-imperial{
+                dnam{"İng. quart"}
+                one{"{0} İng. quart"}
+                other{"{0} İng. quart"}
+            }
             tablespoon{
                 dnam{"yemek kaşığı"}
                 one{"{0} yemek kaşığı"}
                 other{"{0} yemek kaşığı"}
             }
             teaspoon{
-                dnam{"tatlı kaşığı"}
-                one{"{0} tatlı kaşığı"}
-                other{"{0} tatlı kaşığı"}
+                dnam{"çay kaşığı"}
+                one{"{0} çay kaşığı"}
+                other{"{0} çay kaşığı"}
             }
         }
     }
@@ -922,7 +1029,7 @@ tr{
                 one{"{0}G"}
                 other{"{0}G"}
             }
-            meter-per-second-squared{
+            meter-per-square-second{
                 dnam{"m/sn²"}
                 one{"{0} m/sn²"}
                 other{"{0} m/sn²"}
@@ -1002,6 +1109,14 @@ tr{
             }
         }
         compound{
+            1024p1{"Ki{0}"}
+            1024p2{"Mi{0}"}
+            1024p3{"Gi{0}"}
+            1024p4{"Ti{0}"}
+            1024p5{"Pi{0}"}
+            1024p6{"Ei{0}"}
+            1024p7{"Zi{0}"}
+            1024p8{"Yi{0}"}
             per{"{0}/{1}"}
         }
         concentr{
@@ -1010,7 +1125,7 @@ tr{
                 one{"{0} ayar"}
                 other{"{0} ayar"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dL"}
                 one{"{0} mg/dL"}
                 other{"{0} mg/dL"}
@@ -1019,11 +1134,6 @@ tr{
                 dnam{"mmol/L"}
                 one{"{0} mmol/L"}
                 other{"{0} mmol/L"}
-            }
-            part-per-million{
-                dnam{"ppm"}
-                one{"{0} ppm"}
-                other{"{0} ppm"}
             }
             percent{
                 dnam{"%"}
@@ -1035,9 +1145,14 @@ tr{
                 one{"{0}‰"}
                 other{"{0}‰"}
             }
+            permillion{
+                dnam{"ppm"}
+                one{"{0} ppm"}
+                other{"{0} ppm"}
+            }
         }
         consumption{
-            liter-per-100kilometers{
+            liter-per-100-kilometer{
                 dnam{"l/100km"}
                 one{"{0} l/100km"}
                 other{"{0} l/100km"}
@@ -1294,14 +1409,14 @@ tr{
                 other{"{0} IY"}
             }
             meter{
-                dnam{"metre"}
+                dnam{"m"}
                 one{"{0} m"}
                 other{"{0} m"}
                 per{"{0}/m"}
             }
             micrometer{
-                one{"{0} µm"}
-                other{"{0} µm"}
+                one{"{0} μm"}
+                other{"{0} μm"}
             }
             mile{
                 dnam{"mil"}
@@ -1378,9 +1493,9 @@ tr{
                 other{"{0} t"}
             }
             microgram{
-                dnam{"µg"}
-                one{"{0} µg"}
-                other{"{0} µg"}
+                dnam{"μg"}
+                one{"{0} μg"}
+                other{"{0} μg"}
             }
             milligram{
                 dnam{"mg"}
@@ -1446,7 +1561,7 @@ tr{
                 one{"{0} hPa"}
                 other{"{0} hPa"}
             }
-            inch-hg{
+            inch-ofhg{
                 dnam{"inHg"}
                 one{"{0}\u0022 Hg"}
                 other{"{0}\u0022 Hg"}
@@ -1456,12 +1571,12 @@ tr{
                 one{"{0} mb"}
                 other{"{0} mb"}
             }
-            millimeter-of-mercury{
+            millimeter-ofhg{
                 dnam{"mm Hg"}
                 one{"{0} mm Hg"}
                 other{"{0} mm Hg"}
             }
-            pound-per-square-inch{
+            pound-force-per-square-inch{
                 dnam{"lb/in²"}
                 one{"{0} lb/in²"}
                 other{"{0} lb/in²"}
@@ -1612,7 +1727,7 @@ tr{
                 one{"{0} G"}
                 other{"{0} G"}
             }
-            meter-per-second-squared{
+            meter-per-square-second{
                 dnam{"m/sn²"}
                 one{"{0} m/sn²"}
                 other{"{0} m/sn²"}
@@ -1703,6 +1818,14 @@ tr{
             }
         }
         compound{
+            1024p1{"Ki{0}"}
+            1024p2{"Mi{0}"}
+            1024p3{"Gi{0}"}
+            1024p4{"Ti{0}"}
+            1024p5{"Pi{0}"}
+            1024p6{"Ei{0}"}
+            1024p7{"Zi{0}"}
+            1024p8{"Yi{0}"}
             per{"{0}/{1}"}
         }
         concentr{
@@ -1711,7 +1834,7 @@ tr{
                 one{"{0} ayar"}
                 other{"{0} ayar"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dl"}
                 one{"{0} mg/dl"}
                 other{"{0} mg/dl"}
@@ -1720,11 +1843,6 @@ tr{
                 dnam{"mmol/l"}
                 one{"{0} mmol/l"}
                 other{"{0} mmol/l"}
-            }
-            part-per-million{
-                dnam{"ppm"}
-                one{"{0} ppm"}
-                other{"{0} ppm"}
             }
             percent{
                 dnam{"%"}
@@ -1736,6 +1854,11 @@ tr{
                 one{"‰{0}"}
                 other{"‰{0}"}
             }
+            permillion{
+                dnam{"ppm"}
+                one{"{0} ppm"}
+                other{"{0} ppm"}
+            }
             permyriad{
                 dnam{"onbinde"}
                 one{"‱{0}"}
@@ -1743,7 +1866,7 @@ tr{
             }
         }
         consumption{
-            liter-per-100kilometers{
+            liter-per-100-kilometer{
                 dnam{"l/100 km"}
                 one{"{0} l/100 km"}
                 other{"{0} l/100 km"}
@@ -1999,6 +2122,11 @@ tr{
             }
         }
         graphics{
+            dot{
+                dnam{"nokta"}
+                one{"{0} nokta"}
+                other{"{0} nokta"}
+            }
             megapixel{
                 dnam{"megapiksel"}
             }
@@ -2064,8 +2192,8 @@ tr{
             }
             micrometer{
                 dnam{"mikron"}
-                one{"{0} µm"}
-                other{"{0} µm"}
+                one{"{0} μm"}
+                other{"{0} μm"}
             }
             mile{
                 dnam{"mil"}
@@ -2146,6 +2274,11 @@ tr{
                 one{"{0} M⊕"}
                 other{"{0} M⊕"}
             }
+            grain{
+                dnam{"tane"}
+                one{"{0} tane"}
+                other{"{0} tane"}
+            }
             gram{
                 dnam{"gram"}
                 one{"{0} g"}
@@ -2164,9 +2297,9 @@ tr{
                 other{"{0} t"}
             }
             microgram{
-                dnam{"µg"}
-                one{"{0} µg"}
-                other{"{0} µg"}
+                dnam{"μg"}
+                one{"{0} μg"}
+                other{"{0} μg"}
             }
             milligram{
                 dnam{"mg"}
@@ -2249,7 +2382,7 @@ tr{
                 one{"{0} hPa"}
                 other{"{0} hPa"}
             }
-            inch-hg{
+            inch-ofhg{
                 dnam{"inHg"}
                 one{"{0} inHg"}
                 other{"{0} inHg"}
@@ -2269,12 +2402,12 @@ tr{
                 one{"{0} mbar"}
                 other{"{0} mbar"}
             }
-            millimeter-of-mercury{
-                dnam{"mm Hg"}
-                one{"{0} mm Hg"}
-                other{"{0} mm Hg"}
+            millimeter-ofhg{
+                dnam{"mmHg"}
+                one{"{0} mmHg"}
+                other{"{0} mmHg"}
             }
-            pound-per-square-inch{
+            pound-force-per-square-inch{
                 dnam{"lb/in²"}
                 one{"{0} lb/in²"}
                 other{"{0} lb/in²"}
@@ -2330,7 +2463,7 @@ tr{
                 one{"{0} N⋅m"}
                 other{"{0} N⋅m"}
             }
-            pound-foot{
+            pound-force-foot{
                 dnam{"lbf⋅ft"}
                 one{"{0} lbf⋅ft"}
                 other{"{0} lbf⋅ft"}
@@ -2409,6 +2542,26 @@ tr{
                 one{"{0} dl"}
                 other{"{0} dl"}
             }
+            dessert-spoon{
+                dnam{"tat. kaşığı"}
+                one{"{0} tat. kaşığı"}
+                other{"{0} tat. kaşığı"}
+            }
+            dessert-spoon-imperial{
+                dnam{"İng. tat. kaşığı"}
+                one{"{0} İng. tat. kaşığı"}
+                other{"{0} İng. tat. kaşığı"}
+            }
+            dram{
+                dnam{"sıvı dram"}
+                one{"{0} sıvı dram"}
+                other{"{0} sıvı dram"}
+            }
+            drop{
+                dnam{"damla"}
+                one{"{0} damla"}
+                other{"{0} damla"}
+            }
             fluid-ounce{
                 dnam{"sıvı ons"}
                 one{"{0} sıvı ons"}
@@ -2452,6 +2605,11 @@ tr{
                 one{"{0} ml"}
                 other{"{0} ml"}
             }
+            pinch{
+                dnam{"tutam"}
+                one{"{0} tutam"}
+                other{"{0} tutam"}
+            }
             pint{
                 dnam{"pint"}
                 one{"{0} pint"}
@@ -2466,15 +2624,20 @@ tr{
                 one{"{0} qt"}
                 other{"{0} qt"}
             }
+            quart-imperial{
+                dnam{"İng quart"}
+                one{"{0} İng. quart"}
+                other{"{0} İng. quart"}
+            }
             tablespoon{
                 dnam{"yk"}
                 one{"{0} yk"}
                 other{"{0} yk"}
             }
             teaspoon{
-                dnam{"tk"}
-                one{"{0} tk"}
-                other{"{0} tk"}
+                dnam{"çk"}
+                one{"{0} çk"}
+                other{"{0} çk"}
             }
         }
     }

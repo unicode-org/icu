@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 1996-2016, International Business Machines Corporation and
@@ -37,6 +37,7 @@ import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.TimeZoneFormat.Style;
 import com.ibm.icu.text.TimeZoneFormat.TimeType;
 import com.ibm.icu.util.BasicTimeZone;
+import com.ibm.icu.util.BasicTimeZone.LocalOption;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.HebrewCalendar;
 import com.ibm.icu.util.Output;
@@ -925,7 +926,7 @@ public class SimpleDateFormat extends DateFormat {
     private volatile TimeZoneFormat tzFormat;
 
     /**
-     * BreakIterator to use for capitalization
+     * BreakIterator to use for capitalization (will be cloned for actual use)
      */
     private transient BreakIterator capitalizationBrkIter = null;
 
@@ -1395,10 +1396,10 @@ public class SimpleDateFormat extends DateFormat {
                 }
                 if (useFastFormat) {
                     subFormat(toAppendTo, item.type, item.length, toAppendTo.length(),
-                              i, capitalizationContext, pos, cal);
+                              i, capitalizationContext, pos, item.type, cal);
                 } else {
                     toAppendTo.append(subFormat(item.type, item.length, toAppendTo.length(),
-                                                i, capitalizationContext, pos, cal));
+                                                i, capitalizationContext, pos, item.type, cal));
                 }
                 if (attributes != null) {
                     // Check the sub format length
@@ -1547,7 +1548,7 @@ public class SimpleDateFormat extends DateFormat {
         throws IllegalArgumentException
     {
         // Note: formatData is ignored
-        return subFormat(ch, count, beginOffset, 0, DisplayContext.CAPITALIZATION_NONE, pos, cal);
+        return subFormat(ch, count, beginOffset, 0, DisplayContext.CAPITALIZATION_NONE, pos, ch, cal);
     }
 
      /**
@@ -1561,10 +1562,11 @@ public class SimpleDateFormat extends DateFormat {
     protected String subFormat(char ch, int count, int beginOffset,
                                int fieldNum, DisplayContext capitalizationContext,
                                FieldPosition pos,
+                               char patternCharToOutput,
                                Calendar cal)
     {
         StringBuffer buf = new StringBuffer();
-        subFormat(buf, ch, count, beginOffset, fieldNum, capitalizationContext, pos, cal);
+        subFormat(buf, ch, count, beginOffset, fieldNum, capitalizationContext, pos, patternCharToOutput, cal);
         return buf.toString();
     }
 
@@ -1586,6 +1588,7 @@ public class SimpleDateFormat extends DateFormat {
                              char ch, int count, int beginOffset,
                              int fieldNum, DisplayContext capitalizationContext,
                              FieldPosition pos,
+                             char patternCharToOutput,
                              Calendar cal) {
 
         final int maxIntCount = Integer.MAX_VALUE;
@@ -1944,7 +1947,10 @@ public class SimpleDateFormat extends DateFormat {
             if (toAppend == null) {
                 // Time isn't exactly midnight or noon (as displayed) or localized string doesn't
                 // exist for requested period. Fall back to am/pm instead.
-                subFormat(buf, 'a', count, beginOffset, fieldNum, capitalizationContext, pos, cal);
+                // We are passing a different patternCharToOutput because we want to add
+                // 'b' to field position. This makes this fallback stable when
+                // there is a data change on locales.
+                subFormat(buf, 'a', count, beginOffset, fieldNum, capitalizationContext, pos, 'b', cal);
             } else {
                 buf.append(toAppend);
             }
@@ -1959,8 +1965,11 @@ public class SimpleDateFormat extends DateFormat {
             if (ruleSet == null) {
                 // Data doesn't exist for the locale we're looking for.
                 // Fall back to am/pm.
-                subFormat(buf, 'a', count, beginOffset, fieldNum, capitalizationContext, pos, cal);
-                break;
+                // We are passing a different patternCharToOutput because we want to add
+                // 'B' to field position. This makes this fallback stable when
+                // there is a data change on locales.
+                subFormat(buf, 'a', count, beginOffset, fieldNum, capitalizationContext, pos, 'B', cal);
+                return;
             }
 
             // Get current display time.
@@ -2025,7 +2034,11 @@ public class SimpleDateFormat extends DateFormat {
             if (periodType == DayPeriodRules.DayPeriod.AM ||
                     periodType == DayPeriodRules.DayPeriod.PM ||
                     toAppend == null) {
-                subFormat(buf, 'a', count, beginOffset, fieldNum, capitalizationContext, pos, cal);
+                // We are passing a different patternCharToOutput because we want to add
+                // 'B' to field position. This makes this fallback stable when
+                // there is a data change on locales.
+                subFormat(buf, 'a', count, beginOffset, fieldNum, capitalizationContext, pos, 'B', cal);
+                return;
             }
             else {
                 buf.append(toAppend);
@@ -2078,20 +2091,24 @@ public class SimpleDateFormat extends DateFormat {
                     // should only happen when deserializing, etc.
                     capitalizationBrkIter = BreakIterator.getSentenceInstance(locale);
                 }
+                // Note, the call to UCharacter.toTitleCase below is the only place that
+                // (the clone of) capitalizationBrkIter is actually used.
+                BreakIterator mutableCapitalizationBrkIter = (BreakIterator)capitalizationBrkIter.clone();
                 String firstField = buf.substring(bufstart); // bufstart or beginOffset, should be the same
-                String firstFieldTitleCase = UCharacter.toTitleCase(locale, firstField, capitalizationBrkIter,
+                String firstFieldTitleCase = UCharacter.toTitleCase(locale, firstField, mutableCapitalizationBrkIter,
                                                      UCharacter.TITLECASE_NO_LOWERCASE | UCharacter.TITLECASE_NO_BREAK_ADJUSTMENT);
                 buf.replace(bufstart, buf.length(), firstFieldTitleCase);
             }
         }
 
         // Set the FieldPosition (for the first occurrence only)
+        int outputCharIndex = getIndexFromChar(patternCharToOutput);
         if (pos.getBeginIndex() == pos.getEndIndex()) {
-            if (pos.getField() == PATTERN_INDEX_TO_DATE_FORMAT_FIELD[patternCharIndex]) {
+            if (pos.getField() == PATTERN_INDEX_TO_DATE_FORMAT_FIELD[outputCharIndex]) {
                 pos.setBeginIndex(beginOffset);
                 pos.setEndIndex(beginOffset + buf.length() - bufstart);
             } else if (pos.getFieldAttribute() ==
-                       PATTERN_INDEX_TO_DATE_FORMAT_ATTRIBUTE[patternCharIndex]) {
+                       PATTERN_INDEX_TO_DATE_FORMAT_ATTRIBUTE[outputCharIndex]) {
                 pos.setBeginIndex(beginOffset);
                 pos.setEndIndex(beginOffset + buf.length() - bufstart);
             }
@@ -2350,7 +2367,7 @@ public class SimpleDateFormat extends DateFormat {
     private static final String NUMERIC_FORMAT_CHARS = "ADdFgHhKkmrSsuWwYy";
 
     /**
-     * Format characters that indicate numeric fields when pattern lengh
+     * Format characters that indicate numeric fields when pattern length
      * is up to 2.
      */
     private static final String NUMERIC_FORMAT_CHARS2 = "ceLMQq";
@@ -2363,6 +2380,13 @@ public class SimpleDateFormat extends DateFormat {
         return NUMERIC_FORMAT_CHARS.indexOf(formatChar) >= 0
                 || (count <= 2 && NUMERIC_FORMAT_CHARS2.indexOf(formatChar) >= 0);
     }
+
+    /**
+     * Maximum range for detecting daylight offset of a time zone when parsed time zone
+     * string indicates it's daylight saving time, but the detected time zone does not
+     * observe daylight saving time at the parsed date.
+     */
+    private static final long MAX_DAYLIGHT_DETECTION_RANGE = 30*365*24*60*60*1000L;
 
     /**
      * Overrides DateFormat
@@ -2687,10 +2711,10 @@ public class SimpleDateFormat extends DateFormat {
                     if (btz != null) {
                         if (tztype == TimeType.STANDARD) {
                             btz.getOffsetFromLocal(localMillis,
-                                    BasicTimeZone.LOCAL_STD, BasicTimeZone.LOCAL_STD, offsets);
+                                    LocalOption.STANDARD_FORMER, LocalOption.STANDARD_LATTER, offsets);
                         } else {
                             btz.getOffsetFromLocal(localMillis,
-                                    BasicTimeZone.LOCAL_DST, BasicTimeZone.LOCAL_DST, offsets);
+                                    LocalOption.DAYLIGHT_FORMER, LocalOption.DAYLIGHT_LATTER, offsets);
                         }
                     } else {
                         // No good way to resolve ambiguous time at transition,
@@ -2719,50 +2743,46 @@ public class SimpleDateFormat extends DateFormat {
                     } else { // tztype == TZTYPE_DST
                         if (offsets[1] == 0) {
                             if (btz != null) {
-                                long time = localMillis + offsets[0];
-                                // We use the nearest daylight saving time rule.
-                                TimeZoneTransition beforeTrs, afterTrs;
-                                long beforeT = time, afterT = time;
-                                int beforeSav = 0, afterSav = 0;
+                                // This implementation resolves daylight saving time offset
+                                // closest rule after the given time.
+                                long baseTime = localMillis + offsets[0];
+                                long time = baseTime;
+                                long limit = baseTime + MAX_DAYLIGHT_DETECTION_RANGE;
+                                TimeZoneTransition trs = null;
 
-                                // Search for DST rule before or on the time
-                                while (true) {
-                                    beforeTrs = btz.getPreviousTransition(beforeT, true);
-                                    if (beforeTrs == null) {
+                                // Search for DST rule after the given time
+                                while (time < limit) {
+                                    trs = btz.getNextTransition(time, false);
+                                    if (trs == null) {
                                         break;
                                     }
-                                    beforeT = beforeTrs.getTime() - 1;
-                                    beforeSav = beforeTrs.getFrom().getDSTSavings();
-                                    if (beforeSav != 0) {
+                                    resolvedSavings = trs.getTo().getDSTSavings();
+                                    if (resolvedSavings != 0) {
                                         break;
                                     }
+                                    time = trs.getTime();
                                 }
 
-                                // Search for DST rule after the time
-                                while (true) {
-                                    afterTrs = btz.getNextTransition(afterT, false);
-                                    if (afterTrs == null) {
-                                        break;
+                                if (resolvedSavings == 0) {
+                                    // If no DST rule after the given time was found, search for
+                                    // DST rule before.
+                                    time = baseTime;
+                                    limit = baseTime - MAX_DAYLIGHT_DETECTION_RANGE;
+                                    while (time > limit) {
+                                        trs = btz.getPreviousTransition(time, true);
+                                        if (trs == null) {
+                                            break;
+                                        }
+                                        resolvedSavings = trs.getFrom().getDSTSavings();
+                                        if (resolvedSavings != 0) {
+                                            break;
+                                        }
+                                        time = trs.getTime() - 1;
                                     }
-                                    afterT = afterTrs.getTime();
-                                    afterSav = afterTrs.getTo().getDSTSavings();
-                                    if (afterSav != 0) {
-                                        break;
-                                    }
-                                }
 
-                                if (beforeTrs != null && afterTrs != null) {
-                                    if (time - beforeT > afterT - time) {
-                                        resolvedSavings = afterSav;
-                                    } else {
-                                        resolvedSavings = beforeSav;
+                                    if (resolvedSavings == 0) {
+                                        resolvedSavings = btz.getDSTSavings();
                                     }
-                                } else if (beforeTrs != null && beforeSav != 0) {
-                                    resolvedSavings = beforeSav;
-                                } else if (afterTrs != null && afterSav != 0) {
-                                    resolvedSavings = afterSav;
-                                } else {
-                                    resolvedSavings = btz.getDSTSavings();
                                 }
                             } else {
                                 resolvedSavings = tz.getDSTSavings();
@@ -4365,10 +4385,10 @@ public class SimpleDateFormat extends DateFormat {
                 PatternItem item = (PatternItem)items[i];
                 if (useFastFormat) {
                     subFormat(appendTo, item.type, item.length, appendTo.length(),
-                              i, capSetting, pos, fromCalendar);
+                              i, capSetting, pos, item.type, fromCalendar);
                 } else {
                     appendTo.append(subFormat(item.type, item.length, appendTo.length(),
-                                              i, capSetting, pos, fromCalendar));
+                                              i, capSetting, pos, item.type, fromCalendar));
                 }
             }
         }
@@ -4383,10 +4403,10 @@ public class SimpleDateFormat extends DateFormat {
                 PatternItem item = (PatternItem)items[i];
                 if (useFastFormat) {
                     subFormat(appendTo, item.type, item.length, appendTo.length(),
-                              i, capSetting, pos, toCalendar);
+                              i, capSetting, pos, item.type, toCalendar);
                 } else {
                     appendTo.append(subFormat(item.type, item.length, appendTo.length(),
-                                              i, capSetting, pos, toCalendar));
+                                              i, capSetting, pos, item.type, toCalendar));
                 }
             }
         }

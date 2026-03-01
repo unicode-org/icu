@@ -2,7 +2,7 @@
  * %W% %E%
  *
  * © 2016 and later: Unicode, Inc. and others.
- * License & terms of use: http://www.unicode.org/copyright.html#License
+ * License & terms of use: http://www.unicode.org/copyright.html
  *
  * (C) Copyright IBM Corp. 1998-2011 - All Rights Reserved
  *

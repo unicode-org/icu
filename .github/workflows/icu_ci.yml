@@ -1,0 +1,381 @@
+# Copyright (C) 2016 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+#
+# GitHub Action configuration script for ICU continuous integration tasks.
+
+name: GHA CI
+
+on:
+  push:
+    branches:
+      - main
+      - 'maint/maint*'
+  pull_request:
+    branches: '**'
+
+jobs:
+
+  # ICU4C docs build using doxygen..
+  icu4c-docs-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: ICU4C doc
+        run: |
+          sudo apt-get -y install doxygen;
+          cd icu4c/source;
+          ./runConfigureICU Linux --disable-renaming;
+           # Fail if 'warning:' appears in doxygen's output, but ignore warnings from file Doxyfile.
+           # Regex note: (?! ... ) is a negative lookahead. Succeed if the pattern is not present. 
+          set +o pipefail && make doc 2>&1 | tee doxygen.log && ( ! grep -P 'warning:(?! .* file .?Doxyfile)' doxygen.log )
+
+  # Java7 ICU4J build and unit test
+  java7-icu4j-build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout and setup
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+      - name: Checkout lfs objects
+        run: git lfs pull
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '8'
+      - name: Cache for Java 7 tarball
+        id: cache-java7
+        uses: actions/cache@v2
+        with:
+          path: java7-tarball
+          key: ${{ runner.os }}-java7-tarball
+      - name: Download Java 7
+        if: steps.cache-java7.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p java7-tarball
+          download_url="https://download.java.net/openjdk/jdk7u75/ri/openjdk-7u75-b13-linux-x64-18_dec_2014.tar.gz"
+          wget -O java7-tarball/java_package.tar.gz $download_url
+          pushd java7-tarball
+          gunzip java_package.tar.gz
+          tar xvf java_package.tar
+          popd
+      - name: Configure Ant build to use Java 7 JRE
+        run: |
+          echo "java7.bootclasspath" > $RUNNER_TEMP/draft
+          ls java7-tarball/java-se-7u75-ri/jre/lib/*.jar|paste -sd ":" - >> $RUNNER_TEMP/draft
+          paste -sd "=" < $RUNNER_TEMP/draft >  icu4j/build-local.properties
+      - name: ICU4J
+        run: |
+          cd icu4j;
+          ant init;
+          ant check;
+      - name: List failures (if any)
+        run: |
+          [ -d icu4j/out/junit-results ] && cd icu4j && cat `find out/junit-results -name "*.txt" -exec grep -l FAILED {} \;`;
+        if: ${{ failure() }}
+
+
+  # ICU4J build and unit test under Java11
+  java11-icu4j-build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout and setup
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+      - name: Checkout lfs objects
+        run: git lfs pull
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '11'
+      - name: ICU4J
+        run: |
+          cd icu4j;
+          ant init;
+          ant check;
+      - name: List failures (if any)
+        run: |
+          [ -d icu4j/out/junit-results ] && cd icu4j && cat `find out/junit-results -name "*.txt" -exec grep -l FAILED {} \;`;
+        if: ${{ failure() }}
+
+  # ICU4J build and unit test under Java16
+  java16-icu4j-build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout and setup
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+      - name: Checkout lfs objects
+        run: git lfs pull
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '16'
+      - name: ICU4J
+        run: |
+          cd icu4j;
+          ant init;
+          ant check;
+      - name: List failures (if any)
+        run: |
+          [ -d icu4j/out/junit-results ] && cd icu4j && cat `find out/junit-results -name "*.txt" -exec grep -l FAILED {} \;`;
+        if: ${{ failure() }}
+
+  # ICU4J build and unit test under lstm
+  lstm-icu4j-build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout and setup
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+      - name: Checkout lfs objects
+        run: git lfs pull
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '11'
+      - name: Config LSTM and Rebuild data jar
+        run: |
+          cd icu4c/source;
+          ICU_DATA_BUILDTOOL_OPTS=--include_uni_core_data ICU_DATA_FILTER_FILE=../../.github/lstm_for_th_my.json ./runConfigureICU --enable-debug --disable-release Linux -disable-layoutex;
+          make clean;
+          make -j2 ICU4J_ROOT=../../../icu4j icu4j-data-install;
+          cd ../..
+      - name: ICU4J
+        run: |
+          cd icu4j;
+          ant init;
+          ant check;
+      - name: List failures (if any)
+        run: |
+          [ -d icu4j/out/junit-results ] && cd icu4j && cat `find out/junit-results -name "*.txt" -exec grep -l FAILED {} \;`;
+        if: ${{ failure() }}
+
+  # gcc debug build.
+  # Includes dependency checker.
+  # Note - the dependency checker needs to be run on both a debug and an optimized build.
+  # This one (gcc) for debug, and linux clang (see job below) for optimized.
+  #
+  # Test both out-of-source and in-source builds. This one (gcc) for out-of-source,
+  # and linux clang (below) for in-source.
+  #
+  # Invokes test/hdrtst to check public headers compliance.
+  gcc-debug-build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: ICU4C with gcc
+        env:
+          PREFIX: /tmp/icu-prefix
+        run: |
+          mkdir build;
+          cd build;
+          ../icu4c/source/runConfigureICU --enable-debug --disable-release Linux/gcc --prefix=$PREFIX --enable-tracing;
+          make -j2;
+          make -j2 check;
+          ( cd ../icu4c/source/test/depstest && ./depstest.py ../../../../build/ );
+          make install;
+          PATH=$PREFIX/bin:$PATH make -C test/hdrtst check
+
+  # clang release build with some options to enforce useful constraints.
+  # Includes dependency checker on an in-source, optimized build.
+  # Includes checking @draft etc. API tags vs. ifndef guards like
+  # U_HIDE_DRAFT_API and U_FORCE_HIDE_DRAFT_API.
+  # (FORCE guards make this tool pass but won't compile to working code.
+  # See the testtagsguards.sh script for details.)
+  clang-release-build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: ICU4C with clang
+        env:
+          CPPFLAGS: -DU_NO_DEFAULT_INCLUDE_UTF_HEADERS=1
+          CFLAGS: -Wimplicit-fallthrough
+          CXXFLAGS: -Wimplicit-fallthrough
+        run: |
+          sudo apt-get -y install doxygen;
+          cd icu4c/source;
+          ./runConfigureICU Linux;
+          make -j 2;
+          make -j 2 check;
+          ( cd test/depstest && python3 depstest.py ../../../source/ );
+          ( cd .. && source/test/hdrtst/testtagsguards.sh );
+          make dist
+
+  # Out of source build with gcc 10, c++14, and extra warnings; executes icuinfo.
+  gcc-10-stdlib14:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: ICU4C with gcc 10 and c++14 and extra warnings.
+        env:
+          PREFIX: /tmp/icu-prefix
+          CC: gcc-10
+          CXX: g++-10
+          CXXFLAGS: -std=c++14 -Wextra
+        run: |
+          mkdir build;
+          cd build;
+          ../icu4c/source/runConfigureICU Linux --disable-layout --disable-layoutex --prefix=$PREFIX;
+          make -j2;
+          make -j2 check;
+          make install;
+          cd $PREFIX/bin;
+          LD_LIBRARY_PATH=../lib ./icuinfo
+
+  # Clang Linux with address sanitizer.
+  clang-asan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: ICU4C with clang and asan
+        run: |
+          cd icu4c/source;
+          ./runConfigureICU --enable-debug --disable-release Linux --disable-renaming --enable-tracing;
+          make -j2;
+          make -j2 check
+        env:
+          CPPFLAGS: -fsanitize=address
+          LDFLAGS: -fsanitize=address
+
+  # Clang Linux with thread sanitizer.
+  clang-tsan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: ICU4C with clang and tsan
+        run: |
+          cd icu4c/source;
+          ./runConfigureICU --enable-debug --disable-release Linux --disable-renaming
+          make -j2;
+          make -j2 -C test;
+          make -j2 -C test/intltest check
+        env:
+          INTLTEST_OPTS: utility/MultithreadTest
+          CPPFLAGS: -fsanitize=thread
+          LDFLAGS: -fsanitize=thread
+
+  # MacOS with clang
+  macos-clang:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: ICU4C with clang on MacOS
+        run: |
+          cd icu4c/source;
+          PYTHON=python3 ./runConfigureICU MacOSX;
+          make -j2 check
+
+  # Run ICU4C tests with stubdata.
+  run-with-stubdata:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: ICU4C tests with stubdata
+        run: |
+          cd icu4c/source;
+          ./runConfigureICU Linux;
+          make -j2 check;
+          rm lib/libicudata.so*;
+          cp -P stubdata/libicudata.so* lib;
+          cd test/cintltst;
+          echo 'Running ICU4C cintltst with stubdata.';
+          # Note: 'Elapsed Time: ' is printed by makefile upon final success.
+          CINTLTST_OPTS=-w make check 2>&1 | grep 'Elapsed Time: ';
+          cd ../intltest;
+          echo 'Running ICU4C intltest with stubdata.';
+          INTLTEST_OPTS=-w make check 2>&1 | grep 'Elapsed Time: '
+
+  # Test U_CHARSET_IS_UTF8
+  u-charset-is-utf8-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          cd icu4c/source;
+          ./runConfigureICU Linux CPPFLAGS="-DU_CHARSET_IS_UTF8=1";
+          make -j2 check
+
+  # Test U_OVERRIDE_CXX_ALLOCATION-is-0-test
+  u-override-cxx-allocation-is-0-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          cd icu4c/source;
+          ./runConfigureICU Linux CPPFLAGS="-DU_OVERRIDE_CXX_ALLOCATION=0";
+          make clean;
+          make -j2 check
+
+  # Test LSTM
+  lstm-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          cd icu4c/source;
+          ICU_DATA_FILTER_FILE=../../.github/lstm_for_th_my.json ./runConfigureICU --enable-debug --disable-release Linux -disable-layoutex;
+          make clean;
+          make -j2 check
+
+  # Build and run testmap
+  testmap:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          cd icu4c/source;
+          ./runConfigureICU Linux;
+          make -j2 check;
+          CONFIG_FILES=test/testmap/Makefile ./config.status;
+          cd test/testmap;
+          make check | grep '*** PASS PASS PASS, test PASSED!!!!!!!!'
+
+  # Copyright scan
+  copyright-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: perl tools/scripts/cpysearch/cpyscan.pl
+
+  # Check compilation of internal headers.
+  internal-header-compilation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: cd icu4c/source; test/hdrtst/testinternalheaders.sh
+
+  # Check source files for valid UTF-8 and for absence of BOM.
+  valid-UTF-8-and-no-BOM-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: tools/scripts/icu-file-utf8-check.py
+
+  # Verify icu4c release tools buildability.
+  icu4c-release-tools:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: mvn -f tools/release/java/pom.xml package dependency:analyze
+
+  # Run unit tests with UCONFIG_NO_XXX variations.
+  uconfig_variation-check-unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: python3 tools/scripts/uconfig_vars_test.py -u
+
+# Run header tests with UCONFIG_NO_XXX variations.
+  uconfig_variation-check-all-header-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: python3 tools/scripts/uconfig_vars_test.py -p

@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 ksh{
     AuxExemplarCharacters{"[á à ă â ã ā ç é è ĕ ê ē ğ í ì ĭ î ï ī ĳ ı ł ñ ó ò ŏ ô ø ō ú ù ŭ û ū ÿ]"}
     ExemplarCharacters{"[a å ä æ b c d e ë ė f g h i j k l m n o ö œ p q r s ß t u ů ü v w x y z]"}
@@ -21,99 +22,63 @@ ksh{
             patternsLong{
                 decimalFormat{
                     1000{
-                        few{"0 tsd"}
-                        many{"0 tsd"}
                         one{"0 Dousend"}
                         other{"0 Dousend"}
-                        two{"0 tsd"}
                         zero{"0 Dousend"}
                     }
                     10000{
-                        few{"00 tsd"}
-                        many{"00 tsd"}
                         one{"00 Dousend"}
                         other{"00 Dousend"}
-                        two{"00 tsd"}
                         zero{"00 Dousend"}
                     }
                     100000{
-                        few{"000 tsd"}
-                        many{"000 tsd"}
                         one{"000 Dousend"}
                         other{"000 Dousend"}
-                        two{"000 tsd"}
                         zero{"000 Dousend"}
                     }
                     1000000{
-                        few{"0 Mio"}
-                        many{"0 Mio"}
                         one{"0 Million"}
                         other{"0 Milljuhne"}
-                        two{"0 Mio"}
                         zero{"0 Milljuhne"}
                     }
                     10000000{
-                        few{"00 Mio"}
-                        many{"00 Mio"}
                         one{"00 Milljuhne"}
                         other{"00 Millionen"}
-                        two{"00 Mio"}
                         zero{"00 Milljuhne"}
                     }
                     100000000{
-                        few{"000 Mio"}
-                        many{"000 Mio"}
                         one{"000 Milljuhne"}
                         other{"000 Millionen"}
-                        two{"000 Mio"}
                         zero{"000 Milljuhne"}
                     }
                     1000000000{
-                        few{"0 Mrd"}
-                        many{"0 Mrd"}
                         one{"0 Milliarde"}
                         other{"0 Milljarde"}
-                        two{"0 Mrd"}
                         zero{"0 Milljard"}
                     }
                     10000000000{
-                        few{"00 Mrd"}
-                        many{"00 Mrd"}
                         one{"00 Milljarde"}
                         other{"00 Milliarden"}
-                        two{"00 Mrd"}
                         zero{"00 Milljarde"}
                     }
                     100000000000{
-                        few{"000 Mrd"}
-                        many{"000 Mrd"}
                         one{"000 Milliarde"}
                         other{"000 Milliarden"}
-                        two{"000 Mrd"}
                         zero{"000 Milljarde"}
                     }
                     1000000000000{
-                        few{"0 Bio"}
-                        many{"0 Bio"}
                         one{"0 Billjuhn"}
                         other{"0 Billjuhn"}
-                        two{"0 Bio"}
                         zero{"0 Billjuhn"}
                     }
                     10000000000000{
-                        few{"00 Bio"}
-                        many{"00 Bio"}
                         one{"00 Billion"}
                         other{"00 Billionen"}
-                        two{"00 Bio"}
                         zero{"00 Billjuhn"}
                     }
                     100000000000000{
-                        few{"000 Bio"}
-                        many{"000 Bio"}
                         one{"000 Billion"}
                         other{"000 Billionen"}
-                        two{"000 Bio"}
                         zero{"000 Billjuhn"}
                     }
                 }
@@ -121,99 +86,63 @@ ksh{
             patternsShort{
                 decimalFormat{
                     1000{
-                        few{"0 tsd"}
-                        many{"0 tsd"}
                         one{"0 tsd"}
                         other{"0 tsd"}
-                        two{"0 tsd"}
                         zero{"0 tsd"}
                     }
                     10000{
-                        few{"00 tsd"}
-                        many{"00 tsd"}
                         one{"00 tsd"}
                         other{"00 tsd"}
-                        two{"00 tsd"}
                         zero{"00 tsd"}
                     }
                     100000{
-                        few{"000 tsd"}
-                        many{"000 tsd"}
                         one{"000 tsd"}
                         other{"000 tsd"}
-                        two{"000 tsd"}
                         zero{"000 tsd"}
                     }
                     1000000{
-                        few{"0 Mio"}
-                        many{"0 Mio"}
                         one{"0 Mio"}
                         other{"0 Mio"}
-                        two{"0 Mio"}
                         zero{"0 Mio"}
                     }
                     10000000{
-                        few{"00 Mio"}
-                        many{"00 Mio"}
                         one{"00 Mio"}
                         other{"00 Mio"}
-                        two{"00 Mio"}
                         zero{"00 Mio"}
                     }
                     100000000{
-                        few{"000 Mio"}
-                        many{"000 Mio"}
                         one{"000 Mio"}
                         other{"000 Mio"}
-                        two{"000 Mio"}
                         zero{"000 Mio"}
                     }
                     1000000000{
-                        few{"0 Mrd"}
-                        many{"0 Mrd"}
                         one{"0 Mrd"}
                         other{"0 Mrd"}
-                        two{"0 Mrd"}
                         zero{"0 Mrd"}
                     }
                     10000000000{
-                        few{"00 Mrd"}
-                        many{"00 Mrd"}
                         one{"00 Mrd"}
                         other{"00 Mrd"}
-                        two{"00 Mrd"}
                         zero{"00 Mrd"}
                     }
                     100000000000{
-                        few{"000 Mrd"}
-                        many{"000 Mrd"}
                         one{"000 Mrd"}
                         other{"000 Mrd"}
-                        two{"000 Mrd"}
                         zero{"000 Mrd"}
                     }
                     1000000000000{
-                        few{"0 Bio"}
-                        many{"0 Bio"}
                         one{"0 Bio"}
                         other{"0 Bio"}
-                        two{"0 Bio"}
                         zero{"0 Bio"}
                     }
                     10000000000000{
-                        few{"00 Bio"}
-                        many{"00 Bio"}
                         one{"00 Bio"}
                         other{"00 Bio"}
-                        two{"00 Bio"}
                         zero{"00 Bio"}
                     }
                     100000000000000{
-                        few{"000 Bio"}
-                        many{"000 Bio"}
                         one{"000 Bio"}
                         other{"000 Bio"}
-                        two{"000 Bio"}
                         zero{"000 Bio"}
                     }
                 }
@@ -233,7 +162,6 @@ ksh{
         }
         native{"latn"}
     }
-    Version{"36"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -251,6 +179,16 @@ ksh{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyMd",
+            }
         }
         generic{
             DateTimePatterns{
@@ -267,6 +205,16 @@ ksh{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyMd",
             }
             availableFormats{
                 Ed{"E 'dä' d."}
@@ -357,6 +305,16 @@ ksh{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMMMd",
+                "yMd",
             }
             availableFormats{
                 Ed{"E 'dä' d."}

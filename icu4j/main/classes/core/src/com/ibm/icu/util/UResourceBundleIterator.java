@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 ******************************************************************************
 * Copyright (C) 2004-2009, International Business Machines Corporation and   *
@@ -18,7 +18,7 @@ import java.util.NoSuchElementException;
  * ICUResourceBundleIterator iterator = resB.getIterator();
  * ICUResourceBundle temp;
  * while (iterator.hasNext()) {
- *    temp = iterartor.next();  
+ *    temp = iterator.next();  
  *    int type = temp.getType();
  *    switch(type){
  *      case UResourceBundle.STRING:

@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 ia{
     Keys{
         calendar{"calendario"}
@@ -298,7 +299,6 @@ ia{
         ro{"romaniano"}
         ro_MD{"moldavo"}
         rof{"rombo"}
-        root{"radice"}
         ru{"russo"}
         rup{"aromaniano"}
         rw{"kinyarwanda"}
@@ -532,7 +532,6 @@ ia{
             tibt{"cifras tibetan"}
         }
     }
-    Version{"36"}
     characterLabelPattern{
         all{"{0} — toto"}
         category-list{"{0}: {1}"}

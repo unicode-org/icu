@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (c) 2004-2014, International Business Machines
@@ -19,6 +19,7 @@ import com.ibm.icu.impl.DateNumberFormat;
 import com.ibm.icu.impl.TZDBTimeZoneNames;
 import com.ibm.icu.impl.TimeZoneGenericNames;
 import com.ibm.icu.impl.TimeZoneGenericNames.GenericNameType;
+import com.ibm.icu.number.NumberRangeFormatter;
 import com.ibm.icu.text.ChineseDateFormat;
 import com.ibm.icu.text.ChineseDateFormatSymbols;
 import com.ibm.icu.text.CompactDecimalFormat;
@@ -30,6 +31,7 @@ import com.ibm.icu.text.DateIntervalInfo;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.DurationFormat;
+import com.ibm.icu.text.ListFormatter;
 import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.PluralFormat;
@@ -1201,7 +1203,7 @@ public class FormatHandler
                    // beginning at 20, we use the >> to mark the position where
                    // the result of formatting the number's ones digit.  Thus,
                    // we only need a new rule at every multiple of 10.  Text in
-                   // backets is omitted if the value being formatted is an
+                   // brackets is omitted if the value being formatted is an
                    // even multiple of 10.
                 "20: twenty[->>];\n" +
                 "30: thirty[->>];\n" +
@@ -1358,7 +1360,7 @@ public class FormatHandler
                 "40: quarante[->%%alt-ones>];\n" +
                 "50: cinquante[->%%alt-ones>];\n" +
                    // rule for 60.  The /20 causes this rule's multiplier to be
-                   // 20 rather than 10, allowinhg us to recurse for all values
+                   // 20 rather than 10, allowing us to recurse for all values
                    // from 60 to 79...
                 "60/20: soixante[->%%alt-ones>];\n" +
                    // ...except for 71, which must be special-cased
@@ -1381,7 +1383,7 @@ public class FormatHandler
                    // of 1,000.  This prevents us from getting "onze cents cent
                    // vingt-deux" ("eleven hundred one hundred twenty-two").
                 "1100>: onze cents[ >>];\n" +
-                   // at 1,200, we go back to formating in thousands, so we
+                   // at 1,200, we go back to formatting in thousands, so we
                    // repeat the rule for 1,000
                 "1200: mille >>;\n" +
                    // at 2,000, the multiplier is added
@@ -1822,6 +1824,51 @@ public class FormatHandler
         public Object[] getTestObjects()
         {
             return new Object[] {DateIntervalFormat.SpanField.DATE_INTERVAL_SPAN};
+        }
+
+        @Override
+        public boolean hasSameBehavior(Object a, Object b)
+        {
+            return (a == b);
+        }
+    }
+
+    public static class ListFormatterFieldHandler implements SerializableTestUtility.Handler
+    {
+        @Override
+        public Object[] getTestObjects()
+        {
+            return new Object[] {ListFormatter.Field.ELEMENT, ListFormatter.Field.LITERAL};
+        }
+
+        @Override
+        public boolean hasSameBehavior(Object a, Object b)
+        {
+            return (a == b);
+        }
+    }
+
+    public static class ListFormatterSpanFieldHandler implements SerializableTestUtility.Handler
+    {
+        @Override
+        public Object[] getTestObjects()
+        {
+            return new Object[] {ListFormatter.SpanField.LIST_SPAN};
+        }
+
+        @Override
+        public boolean hasSameBehavior(Object a, Object b)
+        {
+            return (a == b);
+        }
+    }
+
+    public static class NumberRangeFormatterSpanFieldHandler implements SerializableTestUtility.Handler
+    {
+        @Override
+        public Object[] getTestObjects()
+        {
+            return new Object[] {NumberRangeFormatter.SpanField.NUMBER_RANGE_SPAN};
         }
 
         @Override

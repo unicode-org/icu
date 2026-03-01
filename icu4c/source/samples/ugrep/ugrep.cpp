@@ -1,7 +1,7 @@
 /*************************************************************************
 *
 *   © 2016 and later: Unicode, Inc. and others.
-*   License & terms of use: http://www.unicode.org/copyright.html#License
+*   License & terms of use: http://www.unicode.org/copyright.html
 *
 **************************************************************************
 **************************************************************************
@@ -42,8 +42,8 @@ using namespace icu;
 //
 const char *pattern = NULL;     // The regular expression
 int        firstFileNum;        //  argv index of the first file name
-UBool      displayFileName = FALSE;
-UBool      displayLineNum  = FALSE;
+UBool      displayFileName = false;
+UBool      displayLineNum  = false;
 
 
 //
@@ -93,7 +93,7 @@ void readFile(const char *name);
 //
 //------------------------------------------------------------------------------------------
 int main(int argc, const char** argv) {
-    UBool     matchFound = FALSE;
+    UBool     matchFound = false;
 
     //
     //  Process the command line options.
@@ -141,10 +141,10 @@ int main(int argc, const char** argv) {
         //  Loop through the lines of a file, trying to match the regex pattern on each.
         //
         for (nextLine(0); lineStart<fileLen; nextLine(lineEnd)) {
-            UnicodeString s(FALSE, ucharBuf+lineStart, lineEnd-lineStart);
+            UnicodeString s(false, ucharBuf+lineStart, lineEnd-lineStart);
             matcher->reset(s);
             if (matcher->find()) {
-                matchFound = TRUE;
+                matchFound = true;
                 printMatch();
             }
         }
@@ -177,8 +177,8 @@ int main(int argc, const char** argv) {
 //------------------------------------------------------------------------------------------
 void processOptions(int argc, const char **argv) {
     int            optInd;
-    UBool          doUsage   = FALSE;
-    UBool          doVersion = FALSE;
+    UBool          doUsage   = false;
+    UBool          doVersion = false;
     const char    *arg;
 
 
@@ -187,14 +187,14 @@ void processOptions(int argc, const char **argv) {
         
         /* version info */
         if(strcmp(arg, "-V") == 0 || strcmp(arg, "--version") == 0) {
-            doVersion = TRUE;
+            doVersion = true;
         }
         /* usage info */
         else if(strcmp(arg, "--help") == 0) {
-            doUsage = TRUE;
+            doUsage = true;
         }
         else if(strcmp(arg, "-n") == 0 || strcmp(arg, "--line-number") == 0) {
-            displayLineNum = TRUE;
+            displayLineNum = true;
         }
         /* POSIX.1 says all arguments after -- are not options */
         else if(strcmp(arg, "--") == 0) {
@@ -205,7 +205,7 @@ void processOptions(int argc, const char **argv) {
         /* unrecognized option */
         else if(strncmp(arg, "-", strlen("-")) == 0) {
             printf("ugrep: invalid option -- %s\n", arg+1);
-            doUsage = TRUE;
+            doUsage = true;
         }
         /* done with options */
         else {
@@ -234,7 +234,7 @@ void processOptions(int argc, const char **argv) {
 
     if (remainingArgs > 2) {
         // More than one file to be processed.   Display file names with match output.
-        displayFileName = TRUE;
+        displayFileName = true;
     }
 
     pattern      = argv[optInd];

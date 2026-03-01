@@ -251,7 +251,7 @@ public:
     virtual ~ULocRuns();
 
     /**
-     * Get the name of the locale assoicated with the given run
+     * Get the name of the locale associated with the given run
      * of text. Use <code>RunArray::getLimit(run)</code> to get the corresponding
      * limit index.
      *

@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 fr{
     AuxExemplarCharacters{"[á å ä ã ā ć ē í ì ī ĳ ñ ó ò ö õ ø ř š ſ ß ú ǔ]"}
     Ellipsis{
@@ -42,6 +43,7 @@ fr{
             patternsLong{
                 decimalFormat{
                     1000{
+                        1{"mille"}
                         one{"0 millier"}
                         other{"0 mille"}
                     }
@@ -194,6 +196,7 @@ fr{
                 }
             }
             symbols{
+                approximatelySign{"≃"}
                 decimal{","}
                 exponential{"E"}
                 group{" "}
@@ -209,11 +212,16 @@ fr{
             }
         }
         minimalPairs{
+            gender{
+                feminine{"La {0} est"}
+                masculine{"Le {0} est"}
+            }
             ordinal{
                 one{"Prenez la {0}re à droite."}
                 other{"Prenez la {0}e à droite."}
             }
             plural{
+                many{"{0} de jours"}
                 one{"{0} jour"}
                 other{"{0} jours"}
             }
@@ -221,7 +229,6 @@ fr{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"36"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -238,6 +245,16 @@ fr{
                 "{1} 'à' {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyMMdd",
             }
             availableFormats{
                 M{"L"}
@@ -276,6 +293,16 @@ fr{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "UMMMMEEEEd",
+                "UMMMMd",
+                "UMMMd",
+                "yMd",
             }
             availableFormats{
                 Gy{"U"}
@@ -494,6 +521,16 @@ fr{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "UMMMMEEEEd",
+                "UMMMMd",
+                "UMMMd",
+                "yMd",
+            }
             monthNames{
                 format{
                     abbreviated{
@@ -685,6 +722,16 @@ fr{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyMMdd",
+            }
             availableFormats{
                 Bh{"h B"}
                 Bhm{"h:mm B"}
@@ -701,16 +748,17 @@ fr{
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E d MMM y G"}
                 GyMMMd{"d MMM y G"}
+                GyMd{"dd/MM/y GGGGG"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
                 M{"L"}
-                MEd{"E d/M"}
+                MEd{"E dd/MM"}
                 MMM{"LLL"}
                 MMMEd{"E d MMM"}
                 MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
-                Md{"d/M"}
+                Md{"dd/MM"}
                 d{"d"}
                 h{"h a"}
                 hm{"h:mm a"}
@@ -718,13 +766,13 @@ fr{
                 ms{"mm:ss"}
                 y{"y G"}
                 yyyy{"y G"}
-                yyyyM{"M/y GGGGG"}
-                yyyyMEd{"E d/M/y GGGGG"}
+                yyyyM{"MM/y GGGGG"}
+                yyyyMEd{"E dd/MM/y GGGGG"}
                 yyyyMMM{"MMM y G"}
                 yyyyMMMEd{"E d MMM y G"}
                 yyyyMMMM{"MMMM y G"}
                 yyyyMMMd{"d MMM y G"}
-                yyyyMd{"d/M/y GGGGG"}
+                yyyyMd{"dd/MM/y GGGGG"}
                 yyyyQQQ{"QQQ y G"}
                 yyyyQQQQ{"QQQQ y G"}
             }
@@ -893,11 +941,21 @@ fr{
                 "d MMMM y",
                 "d MMM y",
                 "dd/MM/y",
+                "{1}, {0}",
                 "{1} 'à' {0}",
                 "{1} 'à' {0}",
-                "{1} 'à' {0}",
-                "{1} 'à' {0}",
+                "{1}, {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMMMd",
+                "yMMdd",
             }
             appendItems{
                 Timezone{"{0} {1}"}
@@ -1411,6 +1469,16 @@ fr{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyMMdd",
+            }
             eras{
                 abbreviated{
                     "A. M.",
@@ -1641,6 +1709,16 @@ fr{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyMMdd",
+            }
             availableFormats{
                 E{"ccc"}
                 Ed{"E d"}
@@ -1785,6 +1863,16 @@ fr{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyMMdd",
             }
             availableFormats{
                 Ed{"E d"}

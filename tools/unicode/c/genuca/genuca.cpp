@@ -591,7 +591,6 @@ static void readAnOption(
                     *status = U_INVALID_FORMAT_ERROR;
                     return;
                 }
-                UBool ok;
                 if(uprv_strcmp(pointer, "end]") == 0) {
                     if(radicalStrokeOrder->getSet() != implicitHanOrder->getSet()) {
                         fprintf(stderr, "[radical end]: "
@@ -1251,19 +1250,19 @@ buildAndWriteFCDData(const char *path, UErrorCode &errorCode) {
     usrc_writeArray(f,
         "const uint8_t CollationFCD::lcccIndex[%ld]={\n",
         lcccIndex, 8, 0x800,
-        "\n};\n\n");
+        "", "\n};\n\n");
     usrc_writeArray(f,
         "const uint32_t CollationFCD::lcccBits[%ld]={\n",
         lcccBits, 32, lcccBitsLength,
-        "\n};\n\n");
+        "", "\n};\n\n");
     usrc_writeArray(f,
         "const uint8_t CollationFCD::tcccIndex[%ld]={\n",
         tcccIndex, 8, 0x800,
-        "\n};\n\n");
+        "", "\n};\n\n");
     usrc_writeArray(f,
         "const uint32_t CollationFCD::tcccBits[%ld]={\n",
         tcccBits, 32, tcccBitsLength,
-        "\n};\n\n");
+        "", "\n};\n\n");
     fputs("U_NAMESPACE_END\n\n", f);
     fputs("#endif  // !UCONFIG_NO_COLLATION\n", f);
     fclose(f);

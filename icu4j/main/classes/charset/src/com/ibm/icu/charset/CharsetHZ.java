@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 2008-2015, International Business Machines Corporation and
@@ -119,7 +119,7 @@ class CharsetHZ extends CharsetICU {
                              * - If any of the non-initial bytes could be the start of a character,
                              *   we stop the illegal sequence before the first one of those.
                              */
-                            isEmptySegment = false; /* different error here, reset this to avoid spurious furture error */
+                            isEmptySegment = false; /* different error here, reset this to avoid spurious future error */
                             err = CoderResult.malformedForLength(1);
                             toUBytesArray[0] = UCNV_TILDE;
                             if (isStateDBCS ? (0x21 <= mySourceChar && mySourceChar <= 0x7e) : mySourceChar <= 0x7f) {

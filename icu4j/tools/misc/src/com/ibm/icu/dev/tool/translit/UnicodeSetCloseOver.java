@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 **********************************************************************
 * Copyright (c) 2003-2012, International Business Machines
@@ -324,7 +324,7 @@ class UnicodeSetCloseOver {
 
         // Make sure the CaseEquivClass data can fit.
         if (maxLen > 8) {
-            throw new RuntimeException("Must adjust CaseEquivClass to accomodate " + maxLen + " UChars");
+            throw new RuntimeException("Must adjust CaseEquivClass to accommodate " + maxLen + " UChars");
         }
 
         // Also make sure that we can map into this array using a

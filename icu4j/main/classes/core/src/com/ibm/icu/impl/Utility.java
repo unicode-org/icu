@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 1996-2015, International Business Machines Corporation and    *
@@ -10,6 +10,7 @@ package com.ibm.icu.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
@@ -777,14 +778,16 @@ public final class Utility {
     };
 
     /**
-     * Convert an escape to a 32-bit code point value.  We attempt
+     * Converts an escape to a code point value. We attempt
      * to parallel the icu4c unescapeAt() function.
-     * @param offset16 an array containing offset to the character
-     * <em>after</em> the backslash.  Upon return offset16[0] will
-     * be updated to point after the escape sequence.
-     * @return character value from 0 to 10FFFF, or -1 on error.
+     * This function returns an integer with
+     * both the code point (bits 28..8) and the length of the escape sequence (bits 7..0).
+     * offset+length is the index after the escape sequence.
+     *
+     * @param offset the offset to the character <em>after</em> the backslash.
+     * @return the code point and length, or -1 on error.
      */
-    public static int unescapeAt(String s, int[] offset16) {
+    public static int unescapeAndLengthAt(CharSequence s, int offset) {
         int c;
         int result = 0;
         int n = 0;
@@ -796,11 +799,11 @@ public final class Utility {
         boolean braces = false;
 
         /* Check that offset is in range */
-        int offset = offset16[0];
         int length = s.length();
         if (offset < 0 || offset >= length) {
             return -1;
         }
+        int start = offset;
 
         /* Fetch first UChar after '\\' */
         c = Character.codePointAt(s, offset);
@@ -862,29 +865,28 @@ public final class Utility {
             // if there is a trail surrogate after it, either as an
             // escape or as a literal.  If so, join them up into a
             // supplementary.
-            if (offset < length &&
-                    UTF16.isLeadSurrogate((char) result)) {
+            if (offset < length && result <= 0xffff && UTF16.isLeadSurrogate((char) result)) {
                 int ahead = offset+1;
                 c = s.charAt(offset); // [sic] get 16-bit code unit
                 if (c == '\\' && ahead < length) {
-                    int o[] = new int[] { ahead };
-                    c = unescapeAt(s, o);
-                    ahead = o[0];
+                    int cpAndLength = unescapeAndLengthAt(s, ahead);
+                    if (cpAndLength >= 0) {
+                        c = cpAndLength >> 8;
+                        ahead += cpAndLength & 0xff;
+                    }
                 }
-                if (UTF16.isTrailSurrogate((char) c)) {
+                if (c <= 0xffff && UTF16.isTrailSurrogate((char) c)) {
                     offset = ahead;
                     result = Character.toCodePoint((char) result, (char) c);
                 }
             }
-            offset16[0] = offset;
-            return result;
+            return codePointAndLength(result, start, offset);
         }
 
         /* Convert C-style escapes in table */
         for (i=0; i<UNESCAPE_MAP.length; i+=2) {
             if (c == UNESCAPE_MAP[i]) {
-                offset16[0] = offset;
-                return UNESCAPE_MAP[i+1];
+                return codePointAndLength(UNESCAPE_MAP[i+1], start, offset);
             } else if (c < UNESCAPE_MAP[i]) {
                 break;
             }
@@ -893,63 +895,93 @@ public final class Utility {
         /* Map \cX to control-X: X & 0x1F */
         if (c == 'c' && offset < length) {
             c = UTF16.charAt(s, offset);
-            offset16[0] = offset + UTF16.getCharCount(c);
-            return 0x1F & c;
+            return codePointAndLength(c & 0x1F, start, offset + UTF16.getCharCount(c));
         }
 
         /* If no special forms are recognized, then consider
          * the backslash to generically escape the next character. */
-        offset16[0] = offset;
-        return c;
+        return codePointAndLength(c, start, offset);
+    }
+
+    private static int codePointAndLength(int c, int length) {
+        assert 0 <= c && c <= 0x10ffff;
+        assert 0 <= length && length <= 0xff;
+        return c << 8 | length;
+    }
+
+    private static int codePointAndLength(int c, int start, int limit) {
+        return codePointAndLength(c, limit - start);
+    }
+
+    public static int cpFromCodePointAndLength(int cpAndLength) {
+        assert cpAndLength >= 0;
+        return cpAndLength >> 8;
+    }
+
+    public static int lengthFromCodePointAndLength(int cpAndLength) {
+        assert cpAndLength >= 0;
+        return cpAndLength & 0xff;
     }
 
     /**
-     * Convert all escapes in a given string using unescapeAt().
+     * Convert all escapes in a given string using unescapeAndLengthAt().
      * @exception IllegalArgumentException if an invalid escape is
      * seen.
      */
-    public static String unescape(String s) {
-        StringBuilder buf = new StringBuilder();
-        int[] pos = new int[1];
+    public static String unescape(CharSequence s) {
+        StringBuilder buf = null;
         for (int i=0; i<s.length(); ) {
             char c = s.charAt(i++);
             if (c == '\\') {
-                pos[0] = i;
-                int e = unescapeAt(s, pos);
-                if (e < 0) {
-                    throw new IllegalArgumentException("Invalid escape sequence " +
-                            s.substring(i-1, Math.min(i+8, s.length())));
+                if (buf == null) {
+                    buf = new StringBuilder(s.length()).append(s, 0, i - 1);
                 }
-                buf.appendCodePoint(e);
-                i = pos[0];
-            } else {
+                int cpAndLength = unescapeAndLengthAt(s, i);
+                if (cpAndLength < 0) {
+                    throw new IllegalArgumentException("Invalid escape sequence " +
+                            s.subSequence(i-1, Math.min(i+9, s.length())));
+                }
+                buf.appendCodePoint(cpAndLength >> 8);
+                i += cpAndLength & 0xff;
+            } else if (buf != null) {
+                // We could optimize this further by appending whole substrings between escapes.
                 buf.append(c);
             }
+        }
+        if (buf == null) {
+            // No escapes in s.
+            return s.toString();
         }
         return buf.toString();
     }
 
     /**
-     * Convert all escapes in a given string using unescapeAt().
+     * Convert all escapes in a given string using unescapeAndLengthAt().
      * Leave invalid escape sequences unchanged.
      */
-    public static String unescapeLeniently(String s) {
-        StringBuilder buf = new StringBuilder();
-        int[] pos = new int[1];
+    public static String unescapeLeniently(CharSequence s) {
+        StringBuilder buf = null;
         for (int i=0; i<s.length(); ) {
             char c = s.charAt(i++);
             if (c == '\\') {
-                pos[0] = i;
-                int e = unescapeAt(s, pos);
-                if (e < 0) {
+                if (buf == null) {
+                    buf = new StringBuilder(s.length()).append(s, 0, i - 1);
+                }
+                int cpAndLength = unescapeAndLengthAt(s, i);
+                if (cpAndLength < 0) {
                     buf.append(c);
                 } else {
-                    buf.appendCodePoint(e);
-                    i = pos[0];
+                    buf.appendCodePoint(cpAndLength >> 8);
+                    i += cpAndLength & 0xff;
                 }
-            } else {
+            } else if (buf != null) {
+                // We could optimize this further by appending whole substrings between escapes.
                 buf.append(c);
             }
+        }
+        if (buf == null) {
+            // No escapes in s.
+            return s.toString();
         }
         return buf.toString();
     }
@@ -1044,7 +1076,7 @@ public final class Utility {
      * this character are not included in the output
      * @param output an array to receive the substrings between
      * instances of divider.  It must be large enough on entry to
-     * accomodate all output.  Adjacent instances of the divider
+     * accommodate all output.  Adjacent instances of the divider
      * character will place empty strings into output.  Before
      * returning, output is padded out with empty strings.
      */
@@ -1857,5 +1889,33 @@ public final class Utility {
         } catch (IOException e) {
             throw new ICUUncheckedIOException(e);
         }
+    }
+
+    /**
+     * Java 8+ String#join(CharSequence, Iterable<? extends CharSequence>) compatible method for Java 7 env.
+     * @param delimiter the delimiter that separates each element
+     * @param elements the elements to join together.
+     * @return a new String that is composed of the elements separated by the delimiter
+     * @throws NullPointerException If delimiter or elements is null
+     */
+    public static String joinStrings(CharSequence delimiter, Iterable<? extends CharSequence> elements) {
+        if (delimiter == null || elements == null) {
+            throw new NullPointerException("Delimiter or elements is null");
+        }
+        StringBuilder buf = new StringBuilder();
+        Iterator<? extends CharSequence> itr = elements.iterator();
+        boolean isFirstElem = true;
+        while (itr.hasNext()) {
+            CharSequence element = itr.next();
+            if (element != null) {
+                if (!isFirstElem) {
+                    buf.append(delimiter);
+                } else {
+                    isFirstElem = false;
+                }
+                buf.append(element);
+            }
+        }
+        return buf.toString();
     }
 }

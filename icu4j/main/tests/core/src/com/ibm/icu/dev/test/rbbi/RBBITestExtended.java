@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  * Created on May 5, 2004
  *
@@ -19,6 +19,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.BreakIterator;
@@ -52,6 +53,9 @@ static class TestParams {
 
 @Test
 public void TestExtended() {
+    // The expectations in this test heavily depends on the Thai dictionary.
+    // Therefore, we skip this test under the LSTM configuration.
+    org.junit.Assume.assumeTrue(!TestUtil.skipDictionaryTest());
     TestParams     tp = new TestParams();
 
 
@@ -245,6 +249,11 @@ public void TestExtended() {
         case PARSE_DATA:
             if (c == '•') {
                 int  breakIdx = tp.dataToBreak.length();
+                if (tp.expectedBreaks[breakIdx] != 0) {
+                    errln(String.format(
+                            "rbbitst.txt:%d:%d adjacent expected breaks with no intervening test text",
+                            lineNum, column));
+                }
                 tp.expectedBreaks[breakIdx] = -1;
                 tp.srcLine[breakIdx]        = lineNum;
                 tp.srcCol[breakIdx]         = column;
@@ -335,14 +344,12 @@ public void TestExtended() {
                 }
 
                 // Let unescape handle the back slash.
-                int  charIdxAr[] = new int[1];
-                charIdxAr[0] = charIdx;
-                cp = Utility.unescapeAt(testString, charIdxAr);
-                if (cp != -1) {
+                int cpAndLength = Utility.unescapeAndLengthAt(testString, charIdx);
+                if (cpAndLength >= 0) {
                     // Escape sequence was recognized.  Insert the char
                     //   into the test data.
-                    charIdx = charIdxAr[0];
-                    tp.dataToBreak.appendCodePoint(cp);
+                    charIdx += Utility.lengthFromCodePointAndLength(cpAndLength);
+                    tp.dataToBreak.appendCodePoint(Utility.cpFromCodePointAndLength(cpAndLength));
                     for (i=tp.dataToBreak.length()-1; i>=0 && tp.srcLine[i]==0; i--) {
                         tp.srcLine[i] = lineNum;
                         tp.srcCol[i]  = column;
@@ -388,6 +395,11 @@ public void TestExtended() {
                     tagValue = -1;
                 }
                 int  breakIdx = tp.dataToBreak.length();
+                if (tp.expectedBreaks[breakIdx] != 0) {
+                    errln(String.format(
+                            "rbbitst.txt:%d:%d adjacent expected breaks with no intervening test text",
+                            lineNum, column));
+                }
                 tp.expectedBreaks[breakIdx] = tagValue;
                 tp.srcLine[breakIdx]        = lineNum;
                 tp.srcCol[breakIdx]         = column;

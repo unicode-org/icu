@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 2002-2010, International Business Machines Corporation and    *
@@ -234,10 +234,10 @@ public class JapaneseTest extends CalendarTestFmwk {
 
     @Test
     public void TestForceGannenNumbering() {
-        final String jCalShortPattern = "y/M/d"; // Note: just 'y' doesn't work here.
-        final String jCalGannenDate = "1/5/9"; // A date in the above format after the accession date for Heisei [1989-] era (Heisei year 1 Jan 8)
-                                               // or Reiwa [2019-] era (Reiwa year 1 May 1). If before the accession date,
-                                               // the year will be in the previous era.
+//        final String jCalShortPattern = "y/M/d"; // Note: just 'y' doesn't work here.
+//        final String jCalGannenDate = "1/5/9"; // A date in the above format after the accession date for Heisei [1989-] era (Heisei year 1 Jan 8)
+//                                               // or Reiwa [2019-] era (Reiwa year 1 May 1). If before the accession date,
+//                                               // the year will be in the previous era.
         ULocale loc = new ULocale("ja_JP@calendar=japanese");
         Date refDate = new Date(600336000000L); // 1989 Jan 9 Monday = Heisei 1
         final String patText = "Gy年M月d日";

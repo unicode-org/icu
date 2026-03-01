@@ -149,6 +149,7 @@ void IntlTestDateFormatSymbols::TestGetSetSpecificItems()
         dataerrln("ERROR: Couldn't create English DateFormatSymbols " + (UnicodeString)u_errorName(status));
         return;
     }
+    symbol->operator=(*symbol);  // self-assignment should be a no-op
     int32_t cntFmtAbbrev, cntFmtShort, cntStdAloneShort;
     const UnicodeString * wdFmtAbbrev     = symbol->getWeekdays(cntFmtAbbrev,DateFormatSymbols::FORMAT,DateFormatSymbols::ABBREVIATED);
     const UnicodeString * wdFmtShort      = symbol->getWeekdays(cntFmtShort,DateFormatSymbols::FORMAT,DateFormatSymbols::SHORT);

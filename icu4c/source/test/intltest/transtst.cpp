@@ -196,6 +196,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(82,TestHalfwidthFullwidth);
         TESTCASE(83,TestThai);
         TESTCASE(84,TestAny);
+        TESTCASE(85,TestBasicTransliteratorEvenWithoutData);
         default: name = ""; break;
     }
 }
@@ -1506,6 +1507,84 @@ void TransliteratorTest::TestNormalizationTransliterator() {
     expect(*t, CharsToUnicodeString("\\u010dx"),
            CharsToUnicodeString("c\\u030C"));
     delete t;
+}
+
+/**
+ * Test we can create basic transliterator even without data.
+ */
+void TransliteratorTest::TestBasicTransliteratorEvenWithoutData() {
+    const char16_t* TEST_DATA = u"\u0124e\u0301 \uFB01nd x";
+    const char16_t* EXPECTED_RESULTS[] = {
+        u"H\u0302e\u0301 \uFB01nd x",  // NFD
+        u"\u0124\u00E9 \uFB01nd x",  // NFC
+        u"H\u0302e\u0301 find x",  // NFKD
+        u"\u0124\u00E9 find x",  // NFKC
+        u"\u0124e\u0301 \uFB01nd x",  // Hex-Any
+        u"\u0125e\u0301 \uFB01nd x",  // Lower
+        u"\u0124e\uFB01ndx",  // [:^L:]Remove
+        u"H\u0302e\u0301 \uFB01nd ",  // NFD; [x]Remove
+        u"h\u0302e\u0301 find x",  // Lower; NFKD;
+        u"hefindx",  // Lower; NFKD; [:^L:]Remove; NFC;
+        u"\u0124e \uFB01nd x",  // [:Nonspacing Mark:] Remove;
+        u"He \uFB01nd x",  // NFD; [:Nonspacing Mark:] Remove; NFC;
+        // end
+        0
+    };
+
+    const char* BASIC_TRANSLITERATOR_ID[] = {
+        "NFD",
+        "NFC",
+        "NFKD",
+        "NFKC",
+        "Hex-Any",
+        "Lower",
+        "[:^L:]Remove",
+        "NFD; [x]Remove",
+        "Lower; NFKD;",
+        "Lower; NFKD; [:^L:]Remove; NFC;",
+        "[:Nonspacing Mark:] Remove;",
+        "NFD; [:Nonspacing Mark:] Remove; NFC;",
+        // end
+        0
+    };
+    const char* BASIC_TRANSLITERATOR_RULES[] = {
+        "::Lower; ::NFKD;",
+        "::Lower; ::NFKD; ::[:^L:]Remove; ::NFC;",
+        "::[:Nonspacing Mark:] Remove;",
+        "::NFD; ::[:Nonspacing Mark:] Remove; ::NFC;",
+        // end
+        0
+    };
+    for (int32_t i=0; BASIC_TRANSLITERATOR_ID[i]; i++) {
+        UErrorCode status = U_ZERO_ERROR;
+        UParseError parseError;
+        std::unique_ptr<Transliterator> translit(Transliterator::createInstance(
+            BASIC_TRANSLITERATOR_ID[i], UTRANS_FORWARD, parseError, status));
+        if (translit.get() == nullptr || !U_SUCCESS(status)) {
+            dataerrln("FAIL: createInstance %s failed", BASIC_TRANSLITERATOR_ID[i]);
+            continue;
+        }
+        UnicodeString data(TEST_DATA);
+        UnicodeString expected(EXPECTED_RESULTS[i]);
+        translit->transliterate(data);
+        if (data != expected) {
+            dataerrln(UnicodeString("FAIL: expected translit(") +
+                      BASIC_TRANSLITERATOR_ID[i] + ") = '" +
+                      EXPECTED_RESULTS[i] + "' but got '" + data);
+            continue;
+        }
+    }
+    for (int32_t i=0; BASIC_TRANSLITERATOR_RULES[i]; i++) {
+        UErrorCode status = U_ZERO_ERROR;
+        UParseError parseError;
+        std::unique_ptr<Transliterator> translit(Transliterator::createFromRules(
+            "Test",
+            BASIC_TRANSLITERATOR_RULES[i], UTRANS_FORWARD, parseError, status));
+        if (translit.get() == nullptr || !U_SUCCESS(status)) {
+            dataerrln("FAIL: createFromRules %s failed", BASIC_TRANSLITERATOR_RULES[i]);
+            continue;
+        }
+    }
 }
 
 /**
@@ -3880,7 +3959,7 @@ void TransliteratorTest::TestAnyX(void) {
  */
 void TransliteratorTest::TestAny(void) {
     UErrorCode status = U_ZERO_ERROR;
-    // Note: there is a lot of implict construction of UnicodeStrings from (char *) in
+    // Note: there is a lot of implicit construction of UnicodeStrings from (char *) in
     //       function call parameters going on in this test.
     UnicodeSet alphabetic("[:alphabetic:]", status);
     if (U_FAILURE(status)) {
@@ -4599,6 +4678,11 @@ void TransliteratorTest::TestHalfwidthFullwidth(void) {
      */
 void TransliteratorTest::TestThai(void) {
 #if !UCONFIG_NO_BREAK_ITERATION
+    // The expectations in this test heavily depends on the Thai dictionary.
+    // Therefore, we skip this test under the LSTM configuration.
+    if (skipDictionaryTest()) {
+        return;
+    }
     UParseError parseError;
     UErrorCode status = U_ZERO_ERROR;
     Transliterator* tr = Transliterator::createInstance("Any-Latin", UTRANS_FORWARD, parseError, status);

@@ -955,7 +955,7 @@ SortedLines::gooseUp(int32_t resetIndex, int32_t expansionIndex, Line &expLine, 
     prefix.append(*toSort[expIndexes[n]]);
   }
 
-  // try inserting ingorables
+  // try inserting ignorables
   UColAttributeValue lastStr = UCOL_OFF;
   k = 0;
   while(toSort[k]->strengthFromEmpty > strength) {

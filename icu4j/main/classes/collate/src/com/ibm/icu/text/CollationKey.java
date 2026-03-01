@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /**
 *******************************************************************************
 * Copyright (C) 1996-2016, International Business Machines Corporation and
@@ -491,7 +491,7 @@ public final class CollationKey implements Comparable<CollationKey>
      * Using strings with U+FFFE may yield shorter sort keys.
      *
      * <p>For details about Sort Key Features see
-     * http://userguide.icu-project.org/collation/api#TOC-Sort-Key-Features
+     * https://unicode-org.github.io/icu/userguide/collation/api#sort-key-features
      *
      * <p>It is possible to merge multiple sort keys by consecutively merging
      * another one with the intermediate result.

@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 xog{
     Currencies{
         AED{
@@ -211,7 +212,7 @@ xog{
             "Faranga yamu Afirika ya wakati",
         }
         XOF{
-            "CFA",
+            "F CFA",
             "Faranga yamu Afirika ya bugwanjuba",
         }
         ZAR{
@@ -231,5 +232,4 @@ xog{
             "Doola ey’eZimbabwe",
         }
     }
-    Version{"36"}
 }

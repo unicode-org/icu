@@ -1167,7 +1167,7 @@ void IntlTestDecimalFormatAPI::testInvalidObject() {
         assertEquals(WHERE, U_MEMORY_ALLOCATION_ERROR, status);
 
         // Two invalid objects should not be equal.
-        // (Also verify that nullptr isn't t dereferenced in the comparision operator.)
+        // (Also verify that nullptr isn't t dereferenced in the comparison operator.)
         assertTrue(WHERE, dfBogus != dfBogus2);
 
         // Verify the comparison operator works for two valid objects.

@@ -88,6 +88,7 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
     TESTCASE_AUTO(TestHebrewClone);
     TESTCASE_AUTO(TestDateFormatSymbolsClone);
     TESTCASE_AUTO(TestTimeZoneDisplayName);
+    TESTCASE_AUTO(TestTimeZoneInLocale);
     TESTCASE_AUTO(TestRoundtripWithCalendar);
     TESTCASE_AUTO(Test6338);
     TESTCASE_AUTO(Test6726);
@@ -128,6 +129,7 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
     TESTCASE_AUTO(TestDayPeriodParsing);
     TESTCASE_AUTO(TestParseRegression13744);
     TESTCASE_AUTO(TestAdoptCalendarLeak);
+    TESTCASE_AUTO(Test20741_ABFields);
 
     TESTCASE_AUTO_END;
 }
@@ -2856,13 +2858,13 @@ void DateFormatTest::TestTimeZoneDisplayName()
         { "de", "Asia/Calcutta", "2004-01-15T00:00:00Z", "Z", "+0530", "+5:30" },
         { "de", "Asia/Calcutta", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+05:30", "+5:30" },
         { "de", "Asia/Calcutta", "2004-01-15T00:00:00Z", "z", "GMT+5:30", "+5:30" },
-        { "de", "Asia/Calcutta", "2004-01-15T00:00:00Z", "zzzz", "Indische Zeit", "+5:30" },
+        { "de", "Asia/Calcutta", "2004-01-15T00:00:00Z", "zzzz", "Indische Normalzeit", "+5:30" },
         { "de", "Asia/Calcutta", "2004-07-15T00:00:00Z", "Z", "+0530", "+5:30" },
         { "de", "Asia/Calcutta", "2004-07-15T00:00:00Z", "ZZZZ", "GMT+05:30", "+5:30" },
         { "de", "Asia/Calcutta", "2004-07-15T00:00:00Z", "z", "GMT+5:30", "+05:30" },
-        { "de", "Asia/Calcutta", "2004-07-15T00:00:00Z", "zzzz", "Indische Zeit", "+5:30" },
+        { "de", "Asia/Calcutta", "2004-07-15T00:00:00Z", "zzzz", "Indische Normalzeit", "+5:30" },
         { "de", "Asia/Calcutta", "2004-07-15T00:00:00Z", "v", "Indien Zeit", "Asia/Calcutta" },
-        { "de", "Asia/Calcutta", "2004-07-15T00:00:00Z", "vvvv", "Indische Zeit", "Asia/Calcutta" },
+        { "de", "Asia/Calcutta", "2004-07-15T00:00:00Z", "vvvv", "Indische Normalzeit", "Asia/Calcutta" },
 
         // ==========
 
@@ -3358,7 +3360,7 @@ void DateFormatTest::TestTimeZoneDisplayName()
         { "ti", "Europe/London", "2004-07-15T00:00:00Z", "Z", "+0100", "+1:00" },
         { "ti", "Europe/London", "2004-07-15T00:00:00Z", "ZZZZ", "GMT+01:00", "+1:00" },
         { "ti", "Europe/London", "2004-07-15T00:00:00Z", "z", "GMT+1", "+1:00" },
-        { "ti", "Europe/London", "2004-07-15T00:00:00Z", "zzzz", "GMT+01:00", "+1:00" },
+        { "ti", "Europe/London", "2004-07-15T00:00:00Z", "zzzz", "British Summer Time", "+1:00" },
         { "ti", "Europe/London", "2004-07-15T00:00:00Z", "v", "\\u12A5\\u1295\\u130D\\u120A\\u12DD", "Europe/London" },
         { "ti", "Europe/London", "2004-07-15T00:00:00Z", "vvvv", "\\u12A5\\u1295\\u130D\\u120A\\u12DD", "Europe/London" },
 
@@ -3438,6 +3440,82 @@ void DateFormatTest::TestTimeZoneDisplayName()
             errln(info[0] + ";" + info[1] + ";" + info[2] + ";" + info[3] + " expected: '" +
                   info[4] + "' but got: '" + result + "'");
         }
+    }
+}
+
+void DateFormatTest::TestTimeZoneInLocale()
+{
+    const char *tests[][3]  = {
+        { "en-u-tz-usden",                     "America/Denver",             "gregorian" },
+        { "es-u-tz-usden",                     "America/Denver",             "gregorian" },
+        { "ms-u-tz-mykul",                     "Asia/Kuala_Lumpur",          "gregorian" },
+        { "zh-u-tz-mykul",                     "Asia/Kuala_Lumpur",          "gregorian" },
+        { "fr-u-ca-buddhist-tz-phmnl",         "Asia/Manila",                "buddhist" },
+        { "th-u-ca-chinese-tz-gblon",          "Europe/London",              "chinese" },
+        { "de-u-ca-coptic-tz-ciabj",           "Africa/Abidjan",             "coptic" },
+        { "ja-u-ca-dangi-tz-hkhkg",            "Asia/Hong_Kong",             "dangi" },
+        { "da-u-ca-ethioaa-tz-ruunera",        "Asia/Ust-Nera",              "ethiopic-amete-alem" },
+        { "ko-u-ca-ethiopic-tz-cvrai",         "Atlantic/Cape_Verde",        "ethiopic" },
+        { "fil-u-ca-gregory-tz-aubne",         "Australia/Brisbane",         "gregorian" },
+        { "fa-u-ca-hebrew-tz-brrbr",           "America/Rio_Branco",         "hebrew" },
+        { "gr-u-ca-indian-tz-lccas",           "America/St_Lucia",           "indian" },
+        { "or-u-ca-islamic-tz-cayyn",          "America/Swift_Current",      "islamic" },
+        { "my-u-ca-islamic-umalqura-tz-kzala", "Asia/Almaty",                "islamic-umalqura" },
+        { "lo-u-ca-islamic-tbla-tz-bmbda",     "Atlantic/Bermuda",           "islamic-tbla" },
+        { "km-u-ca-islamic-civil-tz-aqplm",    "Antarctica/Palmer",          "islamic-civil" },
+        { "kk-u-ca-islamic-rgsa-tz-usanc",     "America/Anchorage",          "islamic" },
+        { "ar-u-ca-iso8601-tz-bjptn",          "Africa/Porto-Novo",          "gregorian" },
+        { "he-u-ca-japanese-tz-tzdar",         "Africa/Dar_es_Salaam",       "japanese" },
+        { "bs-u-ca-persian-tz-etadd",          "Africa/Addis_Ababa",         "persian" },
+        { "it-u-ca-roc-tz-aruaq",              "America/Argentina/San_Juan", "roc" },
+    };
+
+    for (int32_t i = 0; i < UPRV_LENGTHOF(tests); ++i) {
+        UErrorCode status = U_ZERO_ERROR;
+        const char **testLine = tests[i];
+        Locale locale(testLine[0]);
+        UnicodeString expectedTimezone(testLine[1], -1, US_INV);
+        UnicodeString actual;
+
+        SimpleDateFormat smptfmt("Z", locale, status);
+        ASSERT_OK(status);
+        assertEquals("TimeZone from SimpleDateFormat constructor",
+                     expectedTimezone, smptfmt.getTimeZone().getID(actual));
+        assertEquals("Calendar from SimpleDateFormat constructor",
+                     testLine[2], smptfmt.getCalendar()->getType());
+
+        LocalPointer<DateFormat> datefmt(
+                DateFormat::createDateInstance(DateFormat::kDefault, locale));
+        if (datefmt == nullptr) {
+            dataerrln("Error calling DateFormat::createDateInstance()");
+            return;
+        }
+        assertEquals("TimeZone from DateFormat::createDateInstance",
+                     expectedTimezone, datefmt->getTimeZone().getID(actual));
+        assertEquals("Calendar from DateFormat::createDateInstance",
+                     testLine[2], datefmt->getCalendar()->getType());
+        LocalPointer<DateFormat> timefmt(
+                DateFormat::createTimeInstance(DateFormat::kDefault, locale));
+        if (timefmt == nullptr) {
+            dataerrln("Error calling DateFormat::createTimeInstance()");
+            return;
+        }
+        assertEquals("TimeZone from TimeFormat::createTimeInstance",
+                     expectedTimezone, timefmt->getTimeZone().getID(actual));
+        assertEquals("Calendar from DateFormat::createTimeInstance",
+                     testLine[2], timefmt->getCalendar()->getType());
+
+        LocalPointer<DateFormat> datetimefmt(
+                DateFormat::createDateTimeInstance(
+                    DateFormat::kDefault, DateFormat::kDefault, locale));
+        if (datetimefmt == nullptr) {
+            dataerrln("Error calling DateFormat::createDateTimeInstance()");
+            return;
+        }
+        assertEquals("TimeZone from DateTimeFormat::createDateTimeInstance",
+                     expectedTimezone, datetimefmt->getTimeZone().getID(actual));
+        assertEquals("Calendar from DateFormat::createDateTimeInstance",
+                     testLine[2], datetimefmt->getCalendar()->getType());
     }
 }
 
@@ -4912,7 +4990,37 @@ void DateFormatTest::TestPatternFromSkeleton() {
         {Locale::getEnglish(), "jjmm", "h:mm a"},
         {Locale::getEnglish(), "JJmm", "hh:mm"},
         {Locale::getGerman(), "jjmm", "HH:mm"},
-        {Locale::getGerman(), "JJmm", "HH:mm"}
+        {Locale::getGerman(), "JJmm", "HH:mm"},
+        // Ticket #20739
+        // minutes+milliseconds, seconds missing, should be repaired
+        {Locale::getEnglish(), "SSSSm", "mm:ss.SSSS"},
+        {Locale::getEnglish(), "mSSSS", "mm:ss.SSSS"},
+        {Locale::getEnglish(), "SSSm", "mm:ss.SSS"},
+        {Locale::getEnglish(), "mSSS", "mm:ss.SSS"},
+        {Locale::getEnglish(), "SSm", "mm:ss.SS"},
+        {Locale::getEnglish(), "mSS", "mm:ss.SS"},
+        {Locale::getEnglish(), "Sm", "mm:ss.S"},
+        {Locale::getEnglish(), "mS", "mm:ss.S"},
+        // only milliseconds, untouched, no repairs
+        {Locale::getEnglish(), "S", "S"},
+        {Locale::getEnglish(), "SS", "SS"},
+        {Locale::getEnglish(), "SSS", "SSS"},
+        {Locale::getEnglish(), "SSSS", "SSSS"},
+        // hour:minute+seconds+milliseconds, correct, no repairs, proper pattern
+        {Locale::getEnglish(), "jmsSSS", "h:mm:ss.SSS a"},
+        {Locale::getEnglish(), "jmSSS", "h:mm:ss.SSS a"},
+        // Ticket #20738
+        // seconds+milliseconds, correct, no repairs, proper pattern
+        {Locale::getEnglish(), "sS", "s.S"},
+        {Locale::getEnglish(), "sSS", "s.SS"},
+        {Locale::getEnglish(), "sSSS", "s.SSS"},
+        {Locale::getEnglish(), "sSSSS", "s.SSSS"},
+        {Locale::getEnglish(), "sS", "s.S"},
+        // minutes+seconds+milliseconds, correct, no repairs, proper pattern
+        {Locale::getEnglish(), "msS", "mm:ss.S"},
+        {Locale::getEnglish(), "msSS", "mm:ss.SS"},
+        {Locale::getEnglish(), "msSSS", "mm:ss.SSS"},
+        {Locale::getEnglish(), "msSSSS", "mm:ss.SSSS"}
     };
 
     for (size_t i = 0; i < UPRV_LENGTHOF(TESTDATA); i++) {
@@ -5545,14 +5653,64 @@ void DateFormatTest::TestAdoptCalendarLeak() {
     UErrorCode status = U_ZERO_ERROR;
     // This test relies on the locale fullName exceeding ULOC_FULLNAME_CAPACITY
     // in order for setKeywordValue to fail.
+    Calendar* cal = Calendar::createInstance(status);
+    ASSERT_OK(status);
     SimpleDateFormat sdf(
         "d.M.y",
         Locale("de__POSIX@colstrength=primary;currency=eur;em=default;"
                "hours=h23;lb=strict;lw=normal;measure=metric;numbers=latn;"
                "rg=atzzzz;sd=atat1;ss=none;timezone=Europe/Vienna"),
         status);
-    ASSERT_OK(status);
-    sdf.adoptCalendar(Calendar::createInstance(status));
+    // ASSERT_OK(status); Please do NOT add ASSERT_OK here. The point of this
+    // test is to ensure sdf.adoptCalendar won't leak AFTER the above FAILED.
+    // If the following caused crash we should fix the implementation not change
+    // this test.
+    sdf.adoptCalendar(cal);
+}
+
+/**
+ * Test that 'a' and 'B' fields are not duplicated in the field position iterator.
+ */
+void DateFormatTest::Test20741_ABFields() {
+    IcuTestErrorCode status(*this, "Test20741_ABFields");
+
+    const char16_t timeZone[] = u"PST8PDT";
+
+    UnicodeString skeletons[] = {u"EEEEEBBBBB", u"EEEEEbbbbb"};
+
+    for (int32_t j = 0; j < 2; j++) {
+        UnicodeString skeleton = skeletons[j];
+
+        int32_t count = 0;
+        const Locale* locales = Locale::getAvailableLocales(count);
+        for (int32_t i = 0; i < count; i++) {
+            if (quick && (i % 17) != 0) { continue; }
+
+            const Locale locale = locales[i];
+            LocalPointer<DateTimePatternGenerator> gen(DateTimePatternGenerator::createInstance(locale, status));
+            UnicodeString pattern = gen->getBestPattern(skeleton, status);
+
+            SimpleDateFormat dateFormat(pattern, locale, status);
+            FieldPositionIterator fpositer;
+            UnicodeString result;
+            LocalPointer<Calendar> calendar(Calendar::createInstance(TimeZone::createTimeZone(timeZone), status));
+            calendar->setTime(UDate(0), status);
+            dateFormat.format(*calendar, result, &fpositer, status);
+
+            FieldPosition curFieldPosition;
+            FieldPosition lastFieldPosition;
+            lastFieldPosition.setBeginIndex(-1);
+            lastFieldPosition.setEndIndex(-1);
+            while(fpositer.next(curFieldPosition)) {
+                assertFalse("Field missing on pattern", pattern.indexOf(PATTERN_CHARS[curFieldPosition.getField()]) == -1);
+                if (curFieldPosition.getBeginIndex() == lastFieldPosition.getBeginIndex() && curFieldPosition.getEndIndex() == lastFieldPosition.getEndIndex()) {
+                    assertEquals("Different fields at same position", PATTERN_CHARS[curFieldPosition.getField()], PATTERN_CHARS[lastFieldPosition.getField()]);
+                }
+
+                lastFieldPosition = curFieldPosition;
+            }
+        }
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

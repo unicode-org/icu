@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 2005-2011, International Business Machines Corporation and    *
@@ -76,7 +76,7 @@ abstract class CECalendar extends Calendar {
      * @param aLocale The locale for the new calendar.
      */
     protected CECalendar(Locale aLocale) {
-        this(TimeZone.getDefault(), aLocale);
+        this(TimeZone.forLocaleOrDefault(aLocale), aLocale);
     }
 
     /**
@@ -86,7 +86,7 @@ abstract class CECalendar extends Calendar {
      * @param locale The locale for the new calendar.
      */
     protected CECalendar(ULocale locale) {
-        this(TimeZone.getDefault(), locale);
+        this(TimeZone.forULocaleOrDefault(locale), locale);
     }
 
     /**
@@ -263,7 +263,7 @@ abstract class CECalendar extends Calendar {
 
         c4 = floorDivide(julianDay - jdEpochOffset, 1461, r4);
 
-        // exteded year
+        // extended year
         fields[0] = 4 * c4 + (r4[0]/365 - r4[0]/1460); // 4 * <number of 4year cycle> + <years within the last cycle>
 
         int doy = (r4[0] == 1460) ? 365 : (r4[0] % 365); // days in present year

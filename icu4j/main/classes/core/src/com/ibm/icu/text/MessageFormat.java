@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 **********************************************************************
 * Copyright (c) 2004-2016, International Business Machines
@@ -130,7 +130,7 @@ import com.ibm.icu.util.ULocale.Category;
  *   <li>messageText can contain quoted literal strings including syntax characters.
  *       A quoted literal string begins with an ASCII apostrophe and a syntax character
  *       (usually a {curly brace}) and continues until the next single apostrophe.
- *       A double ASCII apostrohpe inside or outside of a quoted string represents
+ *       A double ASCII apostrophe inside or outside of a quoted string represents
  *       one literal apostrophe.
  *   <li>Quotable syntax characters are the {curly braces} in all messageText parts,
  *       plus the '#' sign in a messageText immediately inside a pluralStyle,
@@ -280,7 +280,7 @@ import com.ibm.icu.util.ULocale.Category;
  * or preformatted values, but not pattern strings or custom format objects.</p>
  *
  * <p>For more details, see the
- * <a href="http://userguide.icu-project.org/formatparse/messages">ICU User Guide</a>.</p>
+ * <a href="https://unicode-org.github.io/icu/userguide/format_parse/messages">ICU User Guide</a>.</p>
  *
  * <h4>Usage Information</h4>
  *
@@ -980,7 +980,7 @@ public class MessageFormat extends UFormat {
      * <p>
      * The text substituted for the individual format elements is derived from
      * the current subformat of the format element and the
-     * <code>arguments</code> value corresopnding to the format element's
+     * <code>arguments</code> value corresponding to the format element's
      * argument name.
      * <p>
      * A numbered pattern argument is matched with a map key that contains that number

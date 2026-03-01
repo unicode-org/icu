@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 2009-2010, International Business Machines Corporation and    *
@@ -9,6 +9,7 @@
 package com.ibm.icu.impl.locale;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -326,7 +327,8 @@ public final class InternalLocaleBuilder {
         _script = langtag.getScript();
         _region = langtag.getRegion();
 
-        List<String> bcpVariants = langtag.getVariants();
+        ArrayList<String> bcpVariants = new ArrayList<String>(langtag.getVariants());
+        Collections.sort(bcpVariants);
         if (bcpVariants.size() > 0) {
             StringBuilder var = new StringBuilder(bcpVariants.get(0));
             for (int i = 1; i < bcpVariants.size(); i++) {

@@ -1,0 +1,10022 @@
+/**
+# * © 2021 and later: Unicode, Inc. and others.
+# * License & terms of use: http://www.unicode.org/copyright.html
+# *******************************************************************************
+#  Copyright (C) 2013, International Business Machines Corporation and
+#  others. All Rights Reserved.
+# *******************************************************************************
+#
+# This test data file was generated from the UDHR translated to Turkish.
+#
+# Each line consists from one or more words collected from the UDHR, and concatenated randomly.
+# Therefore, the generated phrase does not make sense literally.
+#
+# Source file: http://www.unicode.org/udhr/d/udhr_tur.txt
+#
+faaliyetlere dulluk
+işsizlik
+erkek
+fikir refahın
+emniyeti Öğrenim hususunun
+etmeleri
+ayrılık
+memleketin vecibelerinin cürüme
+mecburidir edilmemek tecavüzlere
+Öğrenim
+hiçbir
+edilmesini yiyecek derece
+Ana
+hukuka milletler kanunen
+zümreye
+Teşkilatı
+demokratik yerleşme
+sanat zorlanamaz hukuk
+çare altındaki
+dürüst
+sebep sahip şahsiyetinin
+getirmek insanlık saygının
+vasıtasıyla
+daha temeli
+ekonomik sahiptir uyrukluğunu
+cemiyet
+serbest sınırlamalara
+mümkündür
+menfaatlerin ile
+kabul
+haysiyetine verilemez zalimane
+fikirlerini
+etmeyen İnsanin muhtar
+tutarak barışın
+edilmiş bunların hakkıdır
+akide türlü ihtimam
+yerine
+yardım görülmesi baba
+bulunmalarına kişiliğinin sanat
+belirlenmiş icaplarını gerekse
+talep eğlenmeye kölelik
+gerçekten gerek olmasına
+Bütün mecburidir
+iyi hürriyet
+ana unsurudur memleketin
+ırk
+gerek veya
+kurtulmuş
+oralak
+ayırdedici temin gözetilmeksizin
+insan için
+İnsanlık sağlığı
+bilim görevleri
+tam dostluğu
+gelişmesi
+devrelerde olursa
+çağına derece Beyannamenin
+saygının hürriyeti
+sadece kendi tanınmasını
+fikir birlikte
+unsurudur
+Ana mahkeme korunmasına
+birlikte
+kısıtlamaya ilan
+etmeleri
+amacıyla hürriyetin sınırlandırılmasına
+hukuki gösterilmesi
+haizdir mahkum hakkıdır
+haizdirler
+ilerleyişe
+cemiyetin talep
+kanaat bütün
+tatbikat olan çare
+etmenin emniyeti
+mahkemelere refahın
+uyrukluk baba
+tecavüzlere
+temel haizdirler
+olmaya
+temsilciler Teşkilatı
+ahlâkın Aile surette
+fiilli Bir savunması
+dinini demokratik
+sınırları sahip
+edilmesini maruz
+çocuklar
+sağlayacak seçilmiş daima
+Evrensel türünü
+gerekli bakımından hor
+sakatlık
+köle birlikte gereğince
+olmalıdır mualeleye hakkından
+muamelesi
+şekliyle
+giyim uyrukluğunu
+başka Herkesin tutarak
+üye
+yapılacak tarafından
+türünü
+baba
+herkes rahatsız hürriyetlerin
+akdi
+başkalarının renk
+usul edilmemek
+tutarak malümat altındaki
+bir
+etmeleri hükmü
+haklar sağlayan dinlenmeye
+öğretim
+otoritesinin vesayet
+haysiyeti kendisine hakkı
+parasızdır dünyada
+getirmek kaynaklarıyla
+Yüksek
+yazışması
+devlete
+cürüme maksadıyla
+herkese
+mülkünden gösterilmesi
+Ana
+fiillerden
+bundan şekilde hakkı
+idamesi hususunun gerçekleştirilmesine
+bırakacak
+cemiyet eşitlikle
+olduğu Aile
+gerekli fark
+evlenmek hedef
+edilmemek ermesinde doğrudan
+barışın
+devletler barışın kaynaklarıyla
+adaletin bunlara belirlenmiş
+aramak Birleşmiş prensip
+müstakbel girme
+alıkonulanamaz almalıdır makul
+iyi
+karşısında bilhassa seçimlerle
+insanların Beyannamenin
+edilmedikçe güzel hükmü
+imanlarını
+hallerde
+devri
+egemenlik vicdan kere
+Kanun öğretim işlemekten
+geniş işbirliği etmiş
+verilecek edilemez
+sosyal girişme eşit
+hayatı gözetilmeyecektir hürriyetlerine
+verilecek
+egemenlik açık tertibatın
+getirilmesi haysiyetine baskıya
+işlemekten
+hor
+bunlara işlemekten
+Kurulu
+milletler ötürü
+Evlenme parasızdır eşitliğine
+eğitim dürüst
+işsizlik
+varan ifade teminini
+olmak
+baskıya edilemez hususlarında
+kanunla zihniyeti
+sendikalar
+açıklamak
+amacıyla terketmek insanlar
+İlk
+keyfi öncelikle ihtiyarlık
+uzuvlarının tek
+ifade demokratik Teşkilatı
+başkalarıyla ülkeler düzeninin
+ticareti kovuşturmalar doğsunlar
+müddetinin
+ilim öncelikle çocuk
+geliştirmelidir
+çalışma
+yargılama idamesi şartlarına
+Bunun açık faydalanmak
+anlaşılmasının sahiptir
+Üye
+tespitinde mecbur anlayış
+eğlenmeye
+ticareti devrelerde
+girme muayyen başına
+eşitlikle tam ana
+statüsü
+erkek kişiliğinin derece
+anlaşılmasının
+ayinlerle içtimai İşbu
+olmazsa serbestçe vesayet
+girişme kölelik
+amacıyla genel
+Teşkilatı
+memleketin tutulamaz Bundan
+milli devletler halinde
+Milletler cinsiyet statüsü
+çalışmaya işini kanunen
+karışma gerekli Aile
+dünyanın sahibi milletler
+beyan ülke
+ferde anayasa
+getirmek
+etmek isyana renk
+bulunma
+hürriyetini imkânlarından
+serbestliği diğer
+ailesinin birbirlerine
+memleketler prensiplerine temin
+ile topluluğa
+dostluğu siyasi tutuklanamaz
+şahsiyetinin devlet
+dehşetten zorlanamaz eşittir
+kurmaya olan gösterilmesinin
+karar memleketler
+Yaşamak sağlığı doğarlar
+çare
+evlenme sahibi
+olmalıdır
+yoketmeye
+amaçlarına
+sanat maruz yapılır
+beyannamesi
+eserlerinden zulüm
+cürüme gözönünde haklarının
+ferde oralak hayat
+ideal
+altında tedbirlerle süresince
+verme seçilmiş geliştirilmesini
+saygının
+şiddetli kişi
+servet tatillere
+tertibatın
+işlendiği gelişmesi teşkilatı
+işini edebilmelidir hakkıdır
+elde
+topluluğun fikirlerinden ilim
+müracaat
+Madde insanlık
+saygının bulunan
+başkalarıyla kulluk zalimane
+köle edilmesini teşkilatı
+fertleriyle
+dürüst
+mülk refahını
+uzuvlarının
+sendikalar öğretim
+mahkeme korunma
+zaruret daima korunmasına
+sürülemez
+olmazsa tatmak
+masum
+Milletler temeli beyan
+cezalara fikirlerinden
+kendine sair şartlarına
+giyim kanaat
+sayılır müracaat
+Yaşamak davasının oralak
+güvenliğe rahatsız hürriyetler
+kabulü işbu dernek
+korunmasının serbest
+karışma milletlerarası çocuklarına
+olmalarına gittikçe muamelelere
+başkalarının kimsenin
+cürüme hiç öncelikle
+şiddetli Beyannamenin esaslı
+maruz mahiyette görülmesinin
+tutulamaz dünyanın geniş
+menfaatlerin
+mensup aykırı
+hükmü teşkil
+hürriyetlerin cürüme gerçekleştirilmesine
+bütün gibi
+evliliğin
+olmasına muayyen
+katılma kanun devrelerde
+yaşayış
+bunların altında
+evrensel mevzubahis
+saygı elverişli
+isnadın
+tek emniyeti bulunduğu
+refahın ayrılık hallerde
+yoketmeye mahiyette hususlarında
+ihmallerden seçilmiş muamelelere
+evliliğin
+vasıtasıyla imanlarını hürriyetlerine
+mualeleye ifade anlayış
+derneğe şekilde
+yapılır sağlayan uyruğu
+yoksulluktan memleketler haizdirler
+vecibelerinin İnsan
+gittikçe ilerlemeyi inanma
+seçilmiş vasıtasıyla ailesine
+doğarlar
+Hiç devir altında
+Evrensel amacıyla etmiş
+dünyada
+aramak amacıyla
+sağlayacak
+özel
+yiyecek memleketler
+tecavüzlere üye
+faydalanmak
+mecburidir bulunduğu
+söz imkânlarından uyrukluğundan
+ifade
+hor netice
+görülmesinin dolaşma
+Teşkilatı türlü sağlığı
+hürriyetlerine dürüst vicdanını
+bırakılamaz
+korunmasına
+muadil hedef
+Akıl eşittir
+yönelik
+ailesi
+sahip kurmaya
+yaymak memleketi
+hayat sağlamaya serbest
+kurmak ayırdedici
+işbu düzeninin
+haysiyetine barışının
+Hiç doğruya çocuklar
+faydalanırlar hiç
+kendi elde
+seviyesine verecek uyrukluğunu
+maruz
+düzeninin
+düzeninin uyrukluk tanınan
+hakkını uyruğu
+Ana
+cürüme
+mülteci müracaat hür
+zulüm serbestliği Beyannameye
+gerekse
+insanlar çalışma bulunan
+sanat ifade
+unsurudur ederek dönmek
+çağına ötürü
+hakkı dehşetten menfaatlerin
+hak
+faaliyetine
+olmalarına
+ilerleyişe terketmek
+kolaylaştırmaya ticareti
+refahın mesken herkese
+istifade veya
+herkese topluluğa cereyan
+barışının şahsının
+olmalarına iştirak
+etmelidirler tıbbi
+işleri vicdana
+geliştirmeye
+hakların şöhretine verme
+Öğrenim edilmemek
+seçimlerle
+uygulanabilecek uyrukluğundan
+tıbbi zulüm dil
+katılmak tanınmaması
+taahhüt herkese tutarak
+elde tanınması hakkıdır
+hürriyetine yönetimine
+hakkını
+parasızdır tanınmasını saldırısız
+menşe
+Beyannamesini Hakları
+böyle ayrılık Yüksek
+talep halklarının
+kırıcı hür
+ilerlemeyi
+hürriyetlerin öğretim sağlanmış
+hürriyetler
+zaruret sağlayacak vicdanını
+hakların hükmü Aile
+Beyannameye korunmak
+topluluğa
+Evrensel vicdanını baskıya
+öğrenim
+mümkündür verilecek mütevellit
+cereyan eşitliğine tecavüzlere
+hukuki
+hukuka etmeli
+derece Önsöz müddetinin
+akide dünya fertleriyle
+mahiyette
+doğarlar grupları yarattığı
+evliliğin katılma kullanılamaz
+uyrukluğundan
+girme idamesi
+kurma birbirlerine sırada
+İşbu şartlarına Aile
+Milletler mualeleye
+kanunla
+hürriyetlere
+ilerleyişe hürriyetine
+ticareti sahiptir gösterilmesi
+tecavüzlere haklar edebiyat
+memleketlerden
+hayat hizmetlerine
+kadın öncelikle
+gibi hayatı derpiş
+savunması sağlanmış
+istifade uygun zalimane
+olmalıdır şekliyle ayinlerle
+başkalarının içinde
+teşvik
+geliştirilmesini işini
+Beyannamenin Uluslararasında
+sahip
+kayıtlamasına izhar
+gereğince Genel kanaat
+esaslı şahıs Teşkilatı
+Beyannamesini
+karışma her adaletin
+hukuk uyrukluğundan
+serbestisine
+yapılır akide
+barışın irade olmasına
+bağımsız
+surette kabulü hür
+devletlerin istifade bulunduğu
+bırakacak çalışmaya servet
+olmaksızın
+kültürel ülkeler verir
+savunması
+kırıcı
+dönmek kırıcı üyesi
+kendisi halklar
+meskeni fikirlerini devletlerin
+hususlarında muhtar
+köle
+içerir böyle
+kere başka kışkırtmaya
+kendine
+uyrukluğunu
+olan dünyanın
+ihtimam devletler çocuk
+milletlerarası edebiyat vesayet
+teşkil kimse dönmek
+iyi mütenasip sahip
+Öğrenim dışında
+esasıdır kendisi değerine
+teşkil kanunla sahiptirler
+iyi
+doğsunlar son
+kendine grupları
+evliliğin
+hükmü uygulanabilecek
+hakkında yoketmeye
+gayri eder temel
+rejimi
+serbestliği
+kimsenin
+son
+hizmetler şartları
+saldırısız faydalanmak
+insanlar için alıkonulanamaz
+mütenasip mahkeme adaletin
+gösterilmesinin hürriyeti görevleri
+cezadan tutarak
+prensip
+kısıtlamaya giyim gerçekleştirilmesine
+yapılacak çalışmaya etmek
+faydalanmak haizdir başkalarının
+sahiptir
+mal Evlilik ahlâkın
+öğretim bulunmalarına yardım
+fertleriyle cemiyette zaruret
+ibadet evlenme adil
+geçim
+vicdanını isnadın hürriyet
+erkek yapılacak
+ederek yoksulluktan
+Her
+tanınmaması ederek temeli
+sağlamaya haklara ileri
+gayri
+saldırısız seviyesine
+vesayet verme
+Milletlerin gözetilmeksizin
+Genel beyan hakkı
+parasızdır aramak
+tabi sağlanmış menfaatlerinin
+yaşayış
+menşe
+muamelesi
+herkesçe dünyaca zihniyeti
+izhar bağımsız hükmü
+vasıtasıyla
+menfaatlerinin
+Beyannamenin
+sahip
+hürriyetlerinin etmeyen hürriyetine
+gerekirse tarafsız
+kovuşturmalar mülteci
+korunmasının ekonomik
+girme
+ihtiyarlık imkânlarından elverişli
+faydalanırlar
+memleketi
+kovuşturmalar
+nerede Bundan gerek
+usul anlaşılmasının safhalarında
+başka halinde haklardan
+milletlerarası başkalarının
+memleketlerden
+doğruya evlilik
+her idamesi
+sebep
+dil
+kovuşturmalar
+işbirliği eylemde ailesi
+kültürel
+verdiklerini
+işbirliği olursa
+kanunla
+unsurudur
+iştirak
+şahsının konusunda mesken
+hükmü şekliyle
+safhalarında Antlaşmada olursa
+müracaat yazışması ailesine
+göre itibariyle kişiliğinin
+insanlar
+üye inanma ayaklanmaya
+kanaatini
+uyrukluğunu
+işsizlik
+olan
+ticareti Öğretim
+işini şartlarına
+ortak zihniyeti devletin
+maksadıyla hayatı
+bakımından sadece bir
+ailesine
+değiştirmek
+maksadıyla tabi
+kanun dostça
+mal
+memleketlerden Birleşmiş
+kültürel başına
+altında haklara
+haklarının gözönünde
+daha ötürü öğretim
+cinsiyet
+verdiklerini
+beyan faydalanırlar
+gerek memleketine icaplarını
+üzere Akıl temeli
+edilmemek verilemez
+Milletlerin özel serbestliği
+belirlenmiş içtimai
+mülkünden karışmalara
+karar sınırlamalara
+evlenmek yaymak
+teminini
+evlenmek irade
+usul birbirlerine
+serbestisine bulunduğu yoketmeye
+eşit Öğrenim siyasi
+irade
+çalışan gerçekten
+olmalıdır tutulabilir
+herhangi dünyada
+yapılır
+talep
+hoşgörü sağlayacak kanunen
+olursa kişiliğinin görmek
+gayriinsani prensip anlaşılmasının
+bunlara İnsanin
+hürriyetleri içinde
+rejimi esasıdır
+eylemde kalmaması
+gösterilmesinin
+İnsanlık
+tabii
+kabulü
+ulaşılacak
+vasıta
+aykırı vesayet zalimane
+devlete
+demokratik hor hizmetlerine
+ticareti kanaat
+veya
+gizli barışın mülk
+Ana temin insan
+yapılır
+yapılır ermesinde
+gerçekleştirilmesine fikirlerinden
+anayasa türlü
+aramak kanaatini
+verme sendikalar gözönünde
+korunmasına alıkonulanamaz
+ailesine
+korumasından sona
+farksız tıbbi davasının
+açık mahrum devlet
+milli faaliyetine gerçekten
+haklara varan vicdan
+dışında
+işsizlikten
+varan anlayış sağlamaya
+başına
+şekilde uyrukluk vicdan
+bulunduğu
+malümat ülkenin barışının
+göre ceza ifade
+görmek
+kölelik temeli dünya
+egemenlik
+süresince gerek kurulması
+öncelikle
+mütenasip
+dünyanın ilim fertleriyle
+devri
+Ana yönetimine hizmetlerine
+haklarının memleketlerden Evlilik
+idaresi suçun esaslı
+Beyannamesini hayat
+sağlayan
+idamesi ihtiyarlık çalışmalarını
+hizmetlerine aynı herkese
+kişiliğinin
+tam
+geçim sosyal
+olmak
+Antlaşmada hakkına
+makul giyim şartları
+rızasıyla halklarının
+kışkırtmaya ahalisi
+sağlığı isyana
+vicdanını
+mümkündür tarafsız
+Madde
+Halkın Bundan dolaşma
+bağımsız serbestisine
+vecibelerinin çalışan
+genel
+devri
+teşvik
+faaliyetlere anlaşılmasının gittikçe
+Bundan
+hiç refahını köle
+hastalık kayıtlamasına siyasi
+edilmemek kuvvetlenmesini bunların
+inanma verecek
+sahip geniş işbirliği
+uyrukluğundan yaymak
+seçmek Beyannameye
+zalimane
+hürriyetlerden
+sair
+kanaatini hak zaruret
+tıbbi
+idaresi
+mütenasip haizdirler
+giyim bütün yardım
+bulunma haysiyetine topluluğa
+sendikalar devlete halklarının
+katılma refahını
+yönelik isyana
+özel karar işlemekten
+serbestçe
+ancak hukuk
+kölelik ailesi devlet
+kolaylaştırmaya şahsiyetinin
+gayret mütenasip
+insanların hürriyetlerine hakkından
+Beyannamenin
+süresince
+İşbu kölelik
+derneğe
+hürriyetini olmaksızın
+daima mütenasip
+makul ticareti edilmesini
+ihmallerden cezai ayaklanmaya
+serbestçe esaslı isyana
+unsurudur şahsiyetinin izhar
+faaliyetlere
+gerekli yukarıdaki toplanma
+fikirlerini ticareti
+hizmetler olmuş
+dinini
+hayatı gözetilmeksizin
+uyrukluğundan vasıta
+muadil şiddetli amaç
+bulunduğu edilmemek bağımsız
+hürriyet
+iradesi içtimai
+mütenasip emniyeti
+açıklamak sahibi
+görevleri işsizlik makul
+hür Beyannamenin kurulması
+görülmesi Önsöz
+tutulamaz bulunma
+sırada veya faaliyete
+ana kendisi farksız
+ferde yönelik
+rahatsız halklarının bilhassa
+ederek üyelerinde bunların
+milli savunması
+gizli
+sınırlamalara
+mensup amaç yasaktır
+çalışmaya devletin
+gözönünde evliliğin
+yorumlanamaz evlenme Beyannamede
+bütün şiddetli daima
+karşı beyannameyi tabii
+korunmasi
+bağımsız cezai
+kendisi muamelesi
+dünyanın idamesi memleketine
+işkenceye
+haklarıyla
+dostluğu
+baba
+memleketine işbu köle
+anlayış haizdir uyrukluk
+çalışmaya akide fikirleri
+ancak
+fikir yoluyla
+vasıta
+cürüme vasıtalarıyla işsizlik
+cinsiyet devri
+derpiş eşitliğine
+ayırdedici izhar hukuk
+kullanılamaz devlet
+Beyannamenin
+getirmek
+mütenasip Önsöz
+hukuk verme şöhretine
+ailesine
+dünyanın sevkeden Herkesin
+vicdan gözönünde uygun
+Bütün Beyannamenin
+makul
+mecbur vecibelerinin
+gibi Öğretim
+müracaat hizmetlerine
+muayyen yolundaki
+anlayış memleket
+gayriinsani
+hakları muayyen
+faydalanırlar
+mal sağlayacak seçmeye
+güzel hürriyetlere
+serbestisine rızasıyla
+kaynaklarıyla
+mahkemelere ücrete
+gerekli
+korumasından
+tatbikat bulunan kışkırtmaya
+ayrılık derneğe
+korunmasının
+beyan
+Beyannamenin istifade
+bulunan mümkündür
+servet
+davasının Uluslararasında idamesi
+özel suçun hükmü
+yardım sahibi
+çare ilim sahibi
+milletler
+saldırısız yönelik topluca
+ülke korunmaya
+muadil
+dünyanın eşitliğine sahip
+verilecek
+haklardan davasının ilişkiler
+hakkından hürriyetlerin
+yarattığı suç
+katılmak keyfi görülmesinin
+çağına topluluğa ırk
+mülkünden ulaşılacak otoritesinin
+olmuş
+dahilinde edilmesini
+alıkonulanamaz türlü gözönünde
+ihtiyarlık adil
+evlenme alıkonulanamaz
+gözetilmeyecektir başkalarıyla kendisine
+yaşayış dönmek
+ulaşılacak beyannamesi Akıl
+kurmaya ahalisi güzel
+olmak
+üyesi
+ailesinin beyan tatbikini
+İnsanin altında güvenliğe
+güvenliğe esaslı netice
+birbirlerine saygı
+yapılır kullanılamaz kuvvetlenmesini
+ülkeler gerçekten
+işlendikleri
+yönelik saldırısız olmak
+sair
+Kurulu ferde mahiyette
+bulunduğu kurma
+eşitliğine halklarının toplanma
+faydalanmak
+edecek üye
+sağlayacak ahalisi
+olarak prensip
+Evlenme hukuki temin
+gösterilmesinin
+gerçekten
+hallerde
+bir almalıdır çocuklar
+hakkından
+ekonomik
+karşısında ilan
+sınırlandırılmasına
+dünya
+varan hürriyeti
+olarak içtimai karşı
+halinde usul Üye
+dahil sevkeden
+sahasındaki alıkonulanamaz
+milletlerarası
+sanatları
+belirlenmiş
+eşittir
+menşe
+edilmedikçe güvenliğe imkânlarından
+vasıtasıyla verecek
+ekonomik cezai geniş
+üyesi mütevellit çalışan
+teminini devlete
+ilerleyişe memleket
+ayırdedici devletler
+sahip
+hükmü istifade taahhüt
+gittikçe yiyecek faaliyetlere
+hürriyetine grupları sağlayan
+süresince ideal
+Beyannamede
+menfaatlerin aynı
+sağlamaya
+sağlayan beyannamesi akide
+adil gösterilmesinin anlayış
+bilhassa ötürü
+insanın
+tedbirlerle suç
+adi
+evliliğin fark icaplarını
+hakkından
+katılmak tarafından
+menfaatlerin mahkum
+hareket
+bakım otoritesinin serbestisine
+hakkına tabi
+gerekse karşı
+olmaya
+kullanılmasında dostça
+gözönünde maruz gerçekleştirilmesine
+temel
+hürriyeti topluluk
+ailesi karışmalara kanaatini
+ileri dinlenmeye
+mevzubahis ancak
+bakım kanun
+vicdanını muamele
+Beyannamesini daha hürriyetlerin
+yazışması
+altındaki
+kadınların korunmadan kendi
+korunmasının eğitim dulluk
+devletlerin gerek Herkes
+Herkesin ahlâkın olunan
+her yüksek
+olunan yüksek dahil
+ülke geniş
+doğrudan kaynaklarıyla
+çocuk sahibi
+serbest
+uyrukluğunu
+terketmek verme görülmesi
+mal uzuvlarının
+verdiklerini ferdin
+Yaşamak yiyecek görmek
+rızasıyla Yüksek dışında
+kurmak
+seçilmiş
+hürriyetini arasında
+yoksulluktan Önsöz
+karşı Üye hürriyeti
+tanınması
+yapılır üyesi altındaki
+son çalışma kurma
+sırada hürriyetler
+barışının akdi
+evlenmek yazışması
+din
+netice
+derece her hürriyet
+yasaktır katılma
+uyrukluğunu sanatları yaşayış
+ifade
+tutuklanamaz olunan sağlayan
+devletin fikirleri
+muayyen hürriyetlere
+ekonomik
+ferde devrelerde vecibelerinin
+ihtiyarlık kısıtlamaya
+sanat rızasıyla
+grupları Herkesin
+yapılacak fikirlerinden
+hürriyetleri çalışmalarını statüsü
+kendisine eşit
+renk diğer kaynaklarıyla
+oralak ile ermesinde
+temsilciler seçmeye tatmak
+Beyannamesini hürriyetleri
+ferde bulunma olacakları
+mütevellit sosyal
+mesleki etmiş
+devir ortak
+olduğu tatbikat
+kurmak ücrete yönelik
+serbestçe zihniyeti bilim
+temel altındaki ailesi
+korunmasının ulaşılacak konusunda
+gayret sahiptir
+evlilik topluluğa
+olmalarına
+kovuşturmalar
+mütenasip mesleki
+Bütün tatillere mümkündür
+tekmil dürüst Akıl
+Aile
+mahrum
+memleket mahkemelere maruz
+devlet
+edebiyat gereğince tekmil
+korunmasına veya
+daha
+her dinlenmeye dahil
+mahiyette
+memleket kardeşlik dünyanın
+devlet kardeşlik
+İlk bütün hükmü
+amaç
+söz
+memleketi dürüst tatbikat
+suçlu
+dünyanın
+verdiklerini Her uygulanabilecek
+tıbbi tatillere sanat
+tamamlanan
+getirilmesi hak verilecek
+yiyecek
+ferdin sahiptirler devir
+topluluğunun
+olduğu sahibi kaynaklarıyla
+müstenit
+meskeni
+işsizlik
+hürriyetler ilan
+hukuk evrensel ekonomik
+ülke
+uygulanabilecek
+seçmek
+olursa savunması menfaatlerinin
+geçim işbu hakkı
+zümreye sağlanmış cezadan
+insanlar sağlığı
+işsizlik ihmallerden özel
+Evlilik evlilik
+bulunma tam
+hususunun
+içinde
+kabulü
+kadın şartlarına konusunda
+yönetimine şahsın bilhassa
+şahıs
+kolaylaştırmaya Beyannamenin dostluğu
+adil kanun zaruret
+çalışma
+almalıdır
+yazışması
+ücretli
+uyrukluğunu
+ideal yönetimine Evlenme
+evrensel
+ihtimam açıklamak
+kırıcı
+topluluk hürriyetin
+hakkını zaruret saygıyı
+sahiptirler mal
+ilk ibadet memleketlerden
+sağlanmış şahsiyetinin bağımsız
+düzeninin hürriyetin şartları
+prensiplerine
+içinde temel
+hürriyetin
+teşvik
+vicdan kurulması
+bilim çocuklar serbestisine
+altında
+temsilciler
+ilişkiler
+amacıyla ayinlerle sahip
+hak elde
+anlaşılmasının bunlara sair
+muayyen
+serbestçe Bundan kölelik
+yapılacak korumasından herkesçe
+mahiyette makul
+aile etmeyen karışmalara
+hakların
+sendikalar
+Hakları veya
+mecburidir almalıdır
+çalışmaya haysiyeti üyesi
+İnsanin üyelerinde
+dünya grupları ilk
+ile hakkı sanat
+sağlanmış dahil çocuk
+ulaşılacak memleketin
+taahhüdün ticareti vicdana
+fiilli mecbur sahiptirler
+mütenasip olmak
+memleketine görülmesinin edilen
+cürüme
+yönelik Yaşamak
+hususlarında
+yapılacak
+hiçbir tatbikini mecburidir
+tespit Bunun topluluk
+sanık
+bakım birlikte mülteci
+Beyannameye eğitim menfaatlerinin
+doğruya memleket dil
+korunmadan korunmasının
+kimsenin ifade amaçları
+ibadet bilhassa cemiyet
+korunmasına
+imanlarını aramak
+cereyan
+mahkeme gittikçe hürriyetlerin
+hür
+anlaşılmasının etmenin tam
+ailesi korunmasına
+ferdin esaslı işlemekten
+evlilik zaruret
+hizmetler
+doğrudan Evrensel
+katılmak aramak
+korunmaya karşı yapılacak
+korunmaya ilan
+yönelik
+ibadet
+milletlerarası
+almalıdır
+savunması tatmak
+Hakları cemiyetin Aile
+mahkeme
+hareket aile gayriinsani
+ibadet memleketine sahiptirler
+mualeleye kanaatini hukuka
+evlilik memleketin önünde
+verilemez eşitliğine
+bunların verilemez Bunun
+köle
+muamele edilmedikçe anayasa
+kimse haysiyetine ayaklanmaya
+yolundaki
+verir eder
+sendikalar savunması devir
+cereyan
+olduğu
+özel kullanılmasında
+halklarının yarattığı artan
+olarak elde
+bizzat Evlilik
+koruma ulaşılacak
+saygı yoluyla memleket
+ihtiyarlık barışının bulunmasına
+eşitliğine sahasındaki
+muamelesi İlk sebep
+ekonomik
+içtimai
+şahıs ile yoksulluktan
+cezadan tespit
+hakkına dünya
+hedef
+muamelelere
+sınırlamalara
+geçim etmiş
+Milletlerin topluca Birleşmiş
+çalışan muamelelere eşittir
+geçim maliktir
+gerekli dinini doğuş
+eşitliğine
+zaruri cemiyet tatbikini
+kurmak
+dönmek cemiyetin
+halinde korunma taahhüdün
+müracaat yolundaki prensiplerine
+çare sadece
+daha hakkını yönelik
+getirmek hukuka
+haklı mahkum haklar
+kovuşturmalar mahiyette
+sağlamaya hakkı
+renk aramak
+elverişli
+kalmaması dinini prensiplerine
+geliştirmelidir prensiplerine gerçekleştirilmesine
+gereğince sahibi şekliyle
+olmuş olunan
+hürriyeti
+cezalara cezai evliliğin
+getirmek korumasından cemiyette
+İnsanin esaslı Beyannameye
+her saygının
+ötürü
+faydalanmak devlet doğrudan
+devri zihniyeti
+memleket korunmasi kullanılamaz
+korunmaya hallerde
+tatillere işini açıklamak
+şartları
+sürülemez sadece ilişkiler
+zihniyeti eylemde hakkı
+bırakacak suçlu Hakları
+İnsan
+derece
+çare inanma ihtiyarlık
+türlü
+zaruret müddetinin
+yüksek hizmetlerine
+faaliyetlere gösterilmesi
+temin
+gittikçe anlayış
+savunması dışında devrelerde
+devri girme
+hürriyetleri Uluslararasında ihmallerden
+halinde topluca
+cezadan devlet
+idaresi Önsöz olursa
+hizmetlerine çalışmaya mahrum
+kullanılamaz
+başkalarının unsurudur
+yarattığı altındaki tekmil
+sahasındaki bağımsız kanunla
+ile içtimai hallerde
+surette halklar
+akide
+işlemekten maliktir iyi
+ilan derece gerçekleştirilmesine
+çalışmalarını bundan geliştirilmesini
+mülk muadil Bundan
+girme ilerleyişe temin
+dolaşma izhar
+yerine
+itibariyle fikirleri sağlamaya
+edilmesini işsizlikten hukuk
+cinsiyet etmeli
+teşkil dolaşma başkalarıyla
+olunan
+cemiyet uygulanabilecek
+amaçları nerede kanaatini
+doğsunlar saygı
+haklı
+göre devletlerin
+makul
+bulunmalarına erkek
+olduğu tutulamaz
+tam meskeni koruma
+teşvik altındaki
+sağlayacak
+öğrenim görmek
+anayasa
+yasaktır
+hürriyetleri verdiklerini
+isyana ücretli
+masum
+kuvvetlenmesini faaliyetine fikirleri
+ailesi İnsan kovuşturmalar
+kültürel üyelerinde zaruri
+milletlerarası şekliyle gittikçe
+Antlaşmada
+her edilmiş
+topluluk bulunmalarına
+kovuşturmalar
+renk dinini olmak
+mecbur haklara
+keyfi
+yarattığı devletlerin
+özel
+eylemde
+ekonomik eşitlikle
+hürriyetini hürriyetini kırıcı
+çalışan cezalara
+ailesi
+saygı katılmaya
+uygulanabilecek
+elverişli
+sırada inanma itibariyle
+refahını
+ayaklanmaya katılmaya Uluslararasında
+Kanun Yaşamak
+etmek hareket ilk
+hürriyetine
+uzuvlarının mevzubahis
+Evlilik
+eğlenmeye
+idamesi kamu
+maddi kurmak teşkilatı
+adaletin
+çalışan akdi hürriyetlerden
+tatbikat İnsanlık hürriyetlerine
+olarak
+zalimane karşılığında
+herkese
+muayyen ayinlerle
+idamesi
+devletin
+işkenceye
+refahın
+görmek sınırlandırılmasına
+Evlilik vesayet
+sınırları
+mecburidir koruma tarafından
+bırakılamaz
+edilir
+verilecek kolaylaştırmaya kulluk
+sınırlamalara
+içinde faaliyete safhalarında
+beyannameyi katılma
+geliştirilmesini
+hürriyetlerine haklarının çocuklarına
+gözetilmeyecektir muhtar vahşiliklere
+daima sahiptir hürriyetlere
+fertleriyle memleketine
+ihtiyarlık
+istifade sanat
+hürriyetini muamelesi
+insanların tutulabilir
+refahını katılmak
+imkânlarından gözetilmeksizin düzeninin
+vicdan
+tatmak
+Halkın amaçlarına
+yerleşme teminini
+varan
+dahilinde servet
+tarafından
+hususunun talep unsurudur
+esaslı dünyada
+kullanılmasında oralak güvenliğe
+vardır vasıta veya
+renk egemenlik
+isyana görevleri statüsü
+muamelesi dinlenmeye
+göre etmeleri
+bulunmalarına
+almalıdır ırk
+girme fiillerden
+Teşkilatı mahkeme hürriyetlerin
+ilk fiillerden ferde
+barışının
+vicdan
+olmazsa hareket
+memleketin tutuklanamaz sevkeden
+güvenliğe surette
+ferdin
+dostça
+dil
+memleket uyruğu ermesinde
+sair İnsanlık hükmü
+sınırları haysiyetine işlemekten
+ücrete yiyecek
+geniş
+seviyesine hizmetlerine
+Herkesin derneğe arasında
+tamamlanan herkese
+topluluğunun İnsanin
+vicdan
+menşe
+ötürü cemiyet
+ayinlerle hukuki cemiyet
+nerede
+inanma irade
+itibariyle netice
+verecek doğruya türünü
+edilemez tamamlanan elverişli
+aynı bunlara nerede
+korunmaya
+şahıs elverişli
+çocuklarına
+kurmak kullanılamaz geçim
+memleketine İşbu topluluk
+Evrensel kovuşturmalar verilemez
+haizdir dışında
+saygıyı
+bağımsız
+ülke vahşiliklere tutarak
+konusunda
+bulunan
+milli mal
+korunmasının karışmalara veya
+Evrensel
+daha gösterilmesi gereğince
+hususunun zaruret hak
+milli etmeli
+gerek Her
+olmasına
+olacakları kurmaya gereğince
+doğuş olmalıdır kölelik
+olacakları köle
+muamelesi tabii
+memleketin tatbik
+şartları Uluslararasında dışında
+sınırlandırılmasına hukuk
+topluca muamele işlemekten
+tatmak servet surette
+yapılacak kölelik
+mesken
+gerekse zaruri meskeni
+karışmalara
+bırakılamaz olacakları
+tutuklanamaz hakkında
+herkesçe
+seviyesine kaynaklarıyla dil
+vasıta yorumlanamaz
+Akıl
+sebep fikirlerini etmez
+yapılacak prensiplerine kurulması
+katılma vicdan
+menfaatlerin
+hakkı
+herkes konusunda başına
+menfaatlerinin etmiş
+gibi
+taahhüdün ilk hürriyetlerinin
+cemiyette
+Genel
+aramak
+saygıyı kadınların
+yönelik verilecek edecek
+başka yerine kaynaklarıyla
+sahiptir baskıya ilan
+muayyen demokratik
+mal geliştirmelidir bunların
+sırada
+malümat teşkil memleketlerden
+kurmak teşkil
+irade konusunda insanın
+ötürü faaliyetine uyrukluğundan
+ayaklanmaya çalışmaya makul
+dostluğu Aile
+topluluğun
+olsun makul
+sadece haysiyetine amacıyla
+son hizmetlerine
+altındaki eşittir
+devrelerde şartlarına amaçlarına
+mahrum müracaat
+amaç sağlayacak
+yüksek
+ile eserlerinden
+ilk daha
+anlaşılmasının haklarına
+Ana davasının servet
+cinsiyet almalıdır
+eder seçmeye mülkünden
+idaresi sebep verme
+talep kamu prensiplerine
+tarafsız
+kanunla unsurudur ticareti
+evlenmek yardım doğsunlar
+bulunma dünyanın memleket
+Her dünyanın
+derneğe haysiyet öğretim
+kısıtlamaya
+yapılır söz
+sahibi ırk arasında
+kırıcı
+edilemez üzere
+renk alıkonulanamaz
+görevleri
+gözönünde sayılır dahilinde
+barışının uygulanabilecek
+etmek katılmak Aile
+barışının köle etmek
+ana
+fikirleri hiçbir
+seçilmiş taahhüdün çalışma
+serbestisine
+çağına yasaktır daha
+mülkünden
+hürriyetlere
+hürriyetin prensiplerine
+din
+hür eşitlikle
+doğuş İnsanlık
+olmuş tedbirlerle
+şartları
+bulunmalarına farksız
+yarattığı hürriyeti başkalarının
+hastalık verilecek
+saygı
+hürriyetlerine
+akide alıkonulanamaz yüksek
+hastalık
+edilmesini mütevellit seviyesine
+dahil zulüm haklar
+hayatı icaplarını savunması
+sağlanmış ticareti
+yüksek
+görülmesi genel sendikalar
+şahsın
+ortak menfaatlerin
+mülkünden
+dulluk
+yönetimine diğer
+maruz derpiş haklarıyla
+haklara hürriyeti eylemde
+farksız
+korunmasının maksadıyla
+dahil liyakatlerine
+kanunen
+ailesi işbirliği
+akdi yönelik devri
+verilemez
+devir cinsiyet böyle
+alıkonulanamaz sanık
+ayırdedici
+hususlarında yapılacak
+kişi
+tatillere
+olmaksızın Yüksek din
+erkek ilişkiler yüksek
+gerçekten bunların tatbik
+hiçbir dönmek
+Kurulu haklarıyla düzeninin
+bütün
+hiçbir çağına kuvvetlenmesini
+mahkemelere
+Madde
+parasızdır
+girme devlet
+yardım
+görülmesinin insanlar
+topluluğun faaliyetlere
+kurma
+dostluğu
+kanunla demokratik hakkından
+vicdanını
+eğitim tanınmasını
+kurulması bırakacak kamu
+anayasa bakım dolaşma
+öncelikle
+şekliyle
+vardır
+fiilli olmasına
+ederek kendisi
+vicdana hürriyetine işini
+taahhüdün
+iştirak tekmil
+Öğrenim maddi amacıyla
+fikir hallerde haklara
+etmeleri vicdana
+yapılacak insanın hallerde
+milletler
+fikirlerini
+fikir
+malümat
+tam bırakacak
+halinde erkek
+ahalisi şöhretine idamesi
+manevi surette
+Teşkilatı dünyada kendisi
+devletin hususlarında
+hür halklarının renk
+süresince yiyecek muamele
+farksız haklarının Öğretim
+menfaatlerin
+iştirak tutulamaz
+etmeyen vecibelerinin savunması
+menfaatlerin
+karar
+memleketlerden haysiyeti amaçlarına
+gayret
+geniş inanma
+yargılama seviyesine
+dünyaca otoritesinin
+etmeli devletin
+evlenme Yüksek
+müddetinin
+herkesçe
+muayyen suç fiilen
+evliliğin
+şahıs mecburidir
+ülkeler
+ihmallerden
+evrensel servet
+tertibatın
+isyana memleketi
+kölelik edilemez kovuşturmalar
+doğrudan idamesi ibadet
+gayret
+hakkında hiçbir
+haklarıyla hizmetlerine
+kültürel yiyecek teşkil
+barışının ancak
+geliştirmeye mecbur
+geliştirmeye tanınmaması
+beyan
+sayılır korunmasının gözönünde
+müracaat sürülemez demokratik
+yasaktır yardım halklarının
+halklar
+topluluğa mensup
+Hiç
+içerisinde şiddetli
+altında türlü
+şartları
+kadınların veya ücretli
+işlendiği
+adi giyim
+ülkenin
+edebiyat Yüksek gelişmesini
+ülkenin
+gerçekten dünyada
+dulluk
+temsilciler kanunen
+ailesine verme
+Her memleketi
+ermesinde servet cezai
+olmak haklardan ibadet
+temel ücretli hürriyetlerden
+getirmek geçim
+ayırdedici doğrudan haklarıyla
+ırk korunmasına
+tıbbi edilemez
+etmiş
+Kanun
+şiddetli değiştirmek uyruğu
+söz kışkırtmaya bulunma
+akdi elde şekliyle
+bütün refahını maruz
+kölelik haysiyet
+ailesine açık girişme
+yargılama
+hürriyetlerden ileri devletlerin
+siyasi
+dünyanın edebilir anayasa
+şekilde zaruri
+hayat nerede
+bulunma
+tekmil hakkından altında
+vardır
+genel dahilinde safhalarında
+aramak
+başkalarının statüsü gizli
+imkânlarından zorlanamaz
+beyan
+sendikalar baskıya görülmesinin
+kendi etmelidirler esaslı
+kanun dünyaca
+girme
+olmaksızın
+elde
+tabi
+hürriyetlerinin sahiptir
+eşlerin herhangi
+tarafından çare
+insanın Üye olsun
+işsizlik fikirlerini ceza
+ideal kendi verilemez
+tarafsız evlenme isyana
+beyannameyi şartları işbirliği
+hiç
+anlaşılmasının çocuklar bulunan
+müddetinin elverişli
+sanatları muamele Beyannamede
+görülmesinin
+adi fikirlerini uyrukluğundan
+doğrudan
+hakların ibadet karşılığında
+hiç açıklamak dehşetten
+haizdir temin
+inanma
+başkalarının görevleri
+söz gerçekten
+aile
+sağlığı almalıdır
+kimsenin arasında
+şahsın süresince adi
+gayriinsani İnsanlık
+barışının
+menfaatlerin kuvvetlenmesini sırada
+Uluslararasında edilir tertibatın
+Herkes temel
+ulaşılacak hürriyetlerinin hakkını
+çocuklarına Bütün birbirlerine
+maksadıyla dahilinde
+temel yapılacak dostluğu
+etmez Bütün
+haklardan ihtimam karşısında
+insanların
+açıklamak çağına
+son
+ermesinde ayrılık çare
+aile bir daha
+açıklamak
+çare Evlilik ailesine
+tecavüzlere hukuk
+altındaki
+Beyannamede memleketlerden
+bütün
+derece Öğrenim Bütün
+sağlayacak dönmek kadınların
+iştirak geliştirilmesini
+yardım beyannamesi Uluslararasında
+Madde
+doğuş mahiyette idaresi
+suçlu
+bakım şiddetli
+eğlenmeye mülk
+imanlarını karşı
+tamamlanan yoluyla hizmetler
+tutulamaz verme Yüksek
+akdi sebep vardır
+herhangi yönetimine
+sağlamaya siyasi
+ideal ırk
+ortak devlet olursa
+yolundaki vecibelerinin işbirliği
+çocuklarına çağına zulüm
+bütün
+suçlu olsun Madde
+hakkını evlilik muamelesi
+sürülemez
+açıklamak girme
+adaletin
+görmek açıklamak katılmaya
+adaletin başına ulaşılacak
+topluluk gerçekten gözönünde
+cinsiyet dışında
+kullanılmasında
+şahsının evlilik
+doğrudan surette
+kanaatini ilk masum
+safhalarında kaynaklarıyla
+hürriyetlere
+devletin üyesi
+beyan serbestçe hürriyetlerden
+İşbu mahrum
+hürriyetin iyi
+halklar mümkündür
+hürriyetler vicdan yaşayış
+Her
+tam topluluğa yapılacak
+verecek
+dostça
+zaruri geliştirmeye
+Hiç
+gereğince
+imkânlarından Aile
+cemiyette
+sağlığı eylemde
+Herkes inanma
+vasıta daha
+üyesi işsizlikten
+sahiptirler hak
+karışma Bundan görevleri
+hallerde suçun meskeni
+açıklamak anlaşılmasının
+evrensel insanların
+hürriyeti kayıtlamasına
+saygının
+katılmaya
+prensip imanlarını
+mütenasip edebilmelidir
+verilecek
+hürriyetine gözönünde
+temin
+rızasıyla keyfi
+edebilir her hakkını
+hürriyetler kırıcı
+korunmasına kimsenin
+süresince derpiş hizmetler
+gerek
+temeli
+Her girişme işsizlik
+insan
+yoksulluktan
+ilişkiler vasıtasıyla
+her artan fikir
+farksız anlaşılmasının
+verdiklerini manevi içtimai
+serbestçe insanlar
+devletin fiillerden
+Kanun gerekli türünü
+başkalarının din refahını
+unsurudur
+sona
+devlete edebilir
+imkânlarından halklar
+masum elverişli mensup
+yorumlanamaz şiddetli Öğretim
+girişme kurma
+bulunan birbirlerine
+korunmasının
+hürriyeti
+sürülemez memleketlerden
+olarak
+faydalanırlar hürriyeti
+tabi seçilmiş
+beyannamesi
+yönetimine mahrum tutulabilir
+cemiyetin tutuklanamaz olmaksızın
+fiilli faydalanırlar dünyanın
+söz belirlenmiş
+ilan vicdana
+Teşkilatı refahını
+tutarak süresince Aile
+kanunun tatmak mütenasip
+haklı doğruya kanun
+mütevellit tespitinde zaruri
+Öğretim Evlenme
+topluluğun kendine rejimi
+masum ülkenin tatmak
+saygıyı izhar
+vasıtasıyla
+tam bunlara
+Herkesin
+ilerleyişe
+parasızdır ihtimam hakkından
+mahiyette ücrete grupları
+imanlarını
+sahasındaki ilim kendi
+adil
+işbirliği vicdana adaletin
+artan
+Evrensel fiilli beyannamesi
+altında
+mensup
+irade
+vasıtalarıyla
+hürriyetlerin
+vicdan
+yoluyla doğrudan
+tarafından güvenliğe türünü
+uyrukluk karşısında refahın
+tutarak
+haklardan hakkını olan
+yasaktır kişiliğinin şartlarına
+amaç
+yasaktır Her
+insan keyfi
+sebep
+hürriyetlerin
+hükmü erkek beyannameyi
+refahın önemli
+öğretimden kalmaması öğrenim
+sağlayan
+hakkı
+kurulması suçlu kalmaması
+hizmetler ırk Öğrenim
+mahrum böyle
+kölelik çalışmalarını icaplarını
+gereğince
+ahalisi
+İşbu tam
+tabi hakkı
+menşe mülteci kısıtlamaya
+Evrensel fikirleri
+doğsunlar memleketler
+fiillerden doğuş
+liyakatlerine otoritesinin
+hizmetlerine mahrum
+Kanun
+maruz
+eğlenmeye çalışan parasızdır
+yüksek
+tanınan sınırlandırılmasına
+adil hiçbir
+korunmasi kalmaması Madde
+şartları edebilir Aile
+nizama sağlayan
+serbestçe hürriyetin
+olarak
+tatmak tespit işbirliği
+amaçlarına kendisine baba
+bundan olmalıdır haizdir
+temin müddetinin suçlu
+teşkilatı yargılama Beyannamede
+güzel olmaya
+renk
+hususunun
+zaruri
+ilerlemeyi sahibi
+edilmemek eserlerinden
+menfaatlerinin görevleri olsun
+müstenit yolundaki
+ailesi çalışan
+dünya sakatlık
+gözetilmeyecektir altında
+kamu ifade dönmek
+yönetimine devletler
+manevi haizdir fikirlerini
+bunların çocuklar
+bilhassa evlenmek hastalık
+hürriyetleri
+nerede haklarıyla fikirleri
+insanlar topluluğa başka
+gerek tarafından
+Birleşmiş ilerleyişe serbestisine
+için
+tutulamaz
+sair
+mahkemelere müstenit
+fark
+olacakları
+dostça fikirlerini istifade
+gerekse ifade
+şahsının
+yaymak kuvvetlenmesini
+devlet aramak vesayet
+eşlerin şöhretine
+tarafsız sakatlık hakkından
+gayret devlet
+haklarının
+sağlayacak beyannamesi
+ancak kulluk vardır
+statüsü
+katılmaya
+olmalıdır kırıcı tek
+yerine idaresi
+amacıyla gibi son
+Herkesin kırıcı edilir
+ayinlerle iradesi
+muamele ırk çocuklarına
+uyruğu mahiyette
+ayrılık ötürü
+saygıyı teşkilatı amaç
+tarafsız birbirlerine
+iyi
+hürriyeti şartları
+dulluk
+herhangi eşitlikle açık
+işleri maliktir
+dünyada
+cemiyette devri hoşgörü
+dernek ermesinde netice
+memleketi ihtimam olunan
+devri
+halklar görülmesinin şeref
+sahiptirler hakkını halklarının
+Beyannamesini
+olsun ahlâkın
+yiyecek tatillere hürriyeti
+tedbirlerle cereyan
+kırıcı evlilik
+menfaatlerinin
+vasıtalarıyla nerede hizmetler
+amaçları Beyannamesini zorlanamaz
+istifade
+daha edilmedikçe ötürü
+temsilciler vardır
+hürriyetlerine
+olursa herkesçe
+memleketin uyruğu
+kendine tanınan katılmak
+yoketmeye hürriyeti
+altındaki vesayet
+eşittir işlendiği
+kabul servet mal
+egemenlik kabulü verir
+masum hürriyetlerinin
+sürülemez kanunen çocuklar
+eşit eğlenmeye Beyannamesini
+suçlu
+adil egemenlik
+kurmaya nizama kanaatini
+görevleri
+vasıtasıyla halklar şiddetli
+menşe hürriyetlerinin dünyaca
+zulüm saygı
+dahil sahiptirler gerek
+temsilciler ücrete ilk
+gerekse
+hayatı Herkesin
+maksadıyla
+haklarıyla insan
+Genel tıbbi
+faaliyete edebilmelidir kendi
+evrensel netice
+sağlayacak
+dehşetten herhangi netice
+saygı temeli
+birbirlerine
+bakım açık
+sanat
+dünyanın önünde bir
+içinde tatmak eşittir
+doğsunlar hukuka iradesi
+sınırlamalara netice imanlarını
+mahrum içerisinde gelişmesi
+bilim
+saygı
+ermesinde
+Ana tutarak Öğrenim
+suçun sahibi ülke
+temin
+keyfi sona kullanılmasında
+menfaatlerin adil
+mensup muhtar
+devlet
+hürriyetlere görülmesi
+işleri
+birlikte hukuk din
+işlemekten
+sahip ücretli haklı
+tutuklanamaz
+görülmesi başka dolaşma
+hürriyet evlilik mecbur
+egemenlik beyannameyi
+ifade doğruya
+önünde
+olmazsa vicdan
+isnadın cinsiyet hak
+esaslı renk düzeninin
+işlendikleri tamamlanan edilen
+saygıyı egemenlik
+tatbikat şahıs
+tabi Ana
+karışmalara rejimi
+hürriyetine
+herkes Teknik amacıyla
+dostça
+hoşgörü uygun
+elde aynı dünya
+açık kullanılmasında
+yaşayış değerine zalimane
+yarattığı zihniyeti korunmaya
+bulunduğu farksız korunma
+gerçekten
+din işlendikleri
+kanaatini hürriyetlerden yarattığı
+dahil
+Uluslararasında kanun anlayış
+müddetinin bütün vesayet
+saygıyı haysiyeti servet
+Antlaşmada mevzubahis için
+kolaylaştırmaya
+tutuklanamaz uyrukluğundan sahiptir
+daha barışının seviyesine
+insan
+ticareti yapılır üyesi
+Beyannamede almalıdır
+kolaylaştırmaya ile
+muamelesi ancak öğrenim
+bağımsız bırakılamaz sendikalar
+kere
+serbest hak
+devletin
+ulaşılacak anayasa
+etmek
+tek
+edilen
+şöhretine bulunma
+kanunen
+Teşkilatı gözetilmeksizin mümkündür
+yönetimine
+yerleşme kurmaya
+çocuklarına zümreye mümkündür
+Halkın memleketine
+rızasıyla Herkesin hallerde
+seçimlerle ferdin zulüm
+olacakları
+kimse
+renk
+kışkırtmaya edilmedikçe
+dernek gösterilmesinin
+korunmak menşe kültürel
+bir mülk menfaatlerinin
+Beyannamesini zulüm
+katılmaya iradesi çalışma
+güzel
+faaliyetlere İşbu
+yardım Milletler akide
+adaletin sahibi birlikte
+olmak
+Teknik sınırlandırılmasına
+hürriyetleri kendi
+mecbur eşit
+savunması
+ceza çalışmaya usul
+hedef ferdin topluca
+haizdir
+memleketi çocuk
+edecek derneğe süresince
+açıklamak
+prensiplerine getirilmesi girişme
+topluluk
+hor zaruret Halkın
+içerir
+karışmalara fikirlerinden
+ideal imkânlarından mahkeme
+evliliğin gereğince
+haysiyeti haklarının
+mahkum korunmasi eşitlikle
+eşit
+evrensel
+tatbikat hoşgörü sınırlandırılmasına
+tutarak hastalık
+girme gerçekleştirilmesine
+kurmak kanaat adaletin
+Hakları edecek
+getirmek hürriyetlerden
+tıbbi haysiyet
+kişi sınırlandırılmasına Milletler
+eşit haklarının
+memleketi edilir
+tanınması bulunma
+sağlanmış
+fertleriyle sağlanmış
+ücretli gerekse daima
+gizli tatillere
+edilmemek
+maliktir
+derece evlenmek
+terketmek
+muhtar dostça ferdin
+sendikalar
+ilişkiler
+muamele ihtiyarlık
+derneğe
+grupları görevleri sanatları
+kurulması
+kuvvetlenmesini
+parasızdır
+gereğince artan menfaatlerinin
+kanaatini
+sanatları
+Akıl eğlenmeye yolundaki
+doğrudan
+korunmaya uyrukluğunu dolaşma
+evlenmek ahalisi işini
+menşe fiillerden
+kırıcı saygı yiyecek
+vasıtalarıyla gayret
+teşvik
+tertibatın
+temel mülk yönelik
+ihtiyarlık ilim
+sebep
+açıklamak gözetilmeksizin belirlenmiş
+Beyannameye devri dil
+halklarının kurulması
+sağlanmış başına barışının
+sebep siyasi
+hükmü
+olmaksızın ayırdedici
+ileri tanınmaması
+sırada kendisi
+ilan
+fikirlerini bulunma zorlanamaz
+zorlanamaz surette iradesi
+hürriyet türlü bulunmalarına
+hürriyetini haysiyetine son
+görevleri haysiyet eşitlikle
+kadın mahkeme
+irade
+beyannamesi böyle
+gerekirse içinde dulluk
+almalıdır
+mümkündür
+ermesinde
+vicdanını tutuklanamaz kanun
+fertleriyle hükmü edebiyat
+ayırdedici fiilli
+kere davasının geliştirmelidir
+yarattığı kere Antlaşmada
+mülk
+İşbu
+vecibelerinin erkek başkalarının
+şekliyle hükmü türlü
+serbestçe
+Teknik verilemez maddi
+yönetimine
+yarattığı davasının kısıtlamaya
+mal geçim ilan
+terketmek
+kanaatini
+etmek
+icaplarını
+şahsın açıklamak gelişmesini
+haklardan işbirliği
+savunması dünyanın
+fark Yaşamak katılmaya
+giyim gerekse
+müracaat gayret
+cereyan yarattığı
+vasıta
+mal dil edebilmelidir
+haklarına hizmetler
+taahhüt tanınan aynı
+kardeşlik teşkil Bir
+bırakılamaz devletlerin
+saygıyı almalıdır
+sendikalar seçmeye güzel
+şartları gittikçe serbestçe
+olmalarına gelişmesi
+kanunla varan daha
+türlü
+eşittir devrelerde dünyanın
+öğretim almalıdır Kanun
+birbirlerine şahsiyetinin uzuvlarının
+bir kabulü memleketin
+hürriyetler davasının iyi
+çare ortak fiilli
+gittikçe şekliyle halklarının
+dolaşma
+ile
+haklardan
+kamu anlayış dostluğu
+korunmaya olmazsa
+saygının
+olacakları milletler
+zümreye derpiş
+ancak korunmasının
+sahiptirler
+verecek anayasa
+sendikalar
+talep cezai işleri
+üyelerinde erkek
+halklarının hükmü
+karşı sahasındaki Hiç
+amacıyla kışkırtmaya
+çocuk doğarlar
+idaresi
+mütevellit menfaatlerinin
+tanınmaması başka
+şekilde yaymak
+olmalarına karar ifade
+köle
+kardeşlik eşitliğine halinde
+kabul bırakılamaz
+olursa hakkında yoketmeye
+korunma
+tıbbi fertleriyle
+olarak kanaatini anayasa
+ülkenin tutarak görülmesi
+hiçbir geliştirmelidir kayıtlamasına
+işleri sahibi faydalanırlar
+geliştirilmesini fikir memleket
+etmeli fikirlerini
+mecbur
+süresince
+tam
+bulundurulamaz iştirak Teşkilatı
+hakkını düzeninin
+tatbik Antlaşmada olarak
+vardır
+hürriyetleri dinlenmeye içinde
+zihniyeti başına verdiklerini
+başına
+evlenmek şekliyle
+tutulabilir seçilmiş bir
+uyrukluğundan
+bakım şahsın
+altındaki edebiyat
+grupları
+mütevellit devir emniyeti
+dünya şiddetli
+bulunmalarına görülmesi Genel
+etmenin görülmesi
+faydalanmak korunmaya oralak
+gerçekten tecavüzlere
+nizama mütenasip göre
+Antlaşmada etmez
+gizli tutarak
+yaymak suçlu
+tecavüzlere
+memleketler
+uygun değiştirmek
+önemli
+mesken ilim ayinlerle
+hizmetler artan seçimlerle
+eserlerinden netice
+tanınan
+imanlarını hukuka Kurulu
+sebep edebilmelidir müstakbel
+birbirlerine gizli
+korunmasına usul
+mütenasip ihtimam
+Yüksek herkesçe
+saygıyı Ana
+bağımsız
+köle
+dünya daha
+zorlanamaz olmalarına
+akide tecavüzlere mülkünden
+teşkil hukuka görülmesinin
+için
+hukuka
+işbirliği katılmak olursa
+surette fikirleri temin
+haysiyetin
+haysiyetin haizdir muayyen
+hakkını
+ceza eserlerinden
+kanun haklar sınırlandırılmasına
+daima mahkum
+sendikalar kültürel görülmesinin
+irade devlet fertleriyle
+kaynaklarıyla inanma
+öğrenim
+sanatları doğrudan Halkın
+edilir işlendikleri altında
+teminini
+zümreye
+olmalıdır sahibi
+geliştirmelidir
+kanaat
+temin şahsiyetinin
+mahkum hakkını fikirlerinden
+önünde esasıdır
+geniş mahiyette kışkırtmaya
+işbirliği
+Bütün
+Evlilik
+korumasından olmalarına Önsöz
+edebiyat Bütün tutulamaz
+haklarına çalışan bilhassa
+sona işsizlikten
+etmeli dünyaca
+üyelerinde korunma kölelik
+faaliyete vesayet
+haklara hallerde hürriyetlerine
+cemiyet bilhassa
+davasının Hiç bakımından
+olsun görülmesi tamamlanan
+yapılacak siyasi geçim
+otoritesinin tanınmasını artan
+fiillerden ücretli işkenceye
+seviyesine memleketine
+eşittir
+faaliyetine davasının
+cemiyette bunların mahkemelere
+öğretim sınırlandırılmasına
+sağlığı
+halklarının Evlilik Evlilik
+yarattığı
+yönetimine müracaat dinlenmeye
+hakkından
+çocuklar daha
+bırakılamaz sakatlık teşkil
+şahsının
+anlayış kaynaklarıyla
+manevi
+çocuklar topluca hayat
+teşkilatı Herkesin
+mesken son
+karar Milletler zaruret
+bırakacak ücretli
+icaplarını Öğrenim kardeşlik
+alıkonulanamaz
+hayatı adi diğer
+kanunen topluluğa dünyaca
+kaynaklarıyla güzel
+ihtiyarlık
+maliktir gittikçe
+yargılama ücretli
+öğretim ortak serbestçe
+fertleriyle
+kaynaklarıyla haklarının
+renk içerir ülkeler
+edebilir
+istifade
+cürüme
+görülmesi
+muhtar almalıdır ihmallerden
+kalmaması
+irade kullanılmasında
+ilişkiler safhalarında ticareti
+mahkeme eğitim geniş
+sebep üye
+evlenme
+zaruret icaplarını
+Öğrenim
+veya
+hür yardım
+veçhile
+korunmaya hürriyetine
+mahkum sağlığı tatbik
+yerine kaynaklarıyla
+temeli
+bulunmalarına emniyeti gayret
+verdiklerini
+hürriyetler mütevellit aile
+saldırısız evliliğin demokratik
+diğer fertleriyle teşkilatı
+getirmek fikirlerinden
+birbirlerine fikirleri aykırı
+aramak göre
+gözönünde
+kanaatini
+başına getirilmesi
+devrelerde
+insanın zulüm şöhretine
+bilim
+kendi devletlerin kanunen
+devir vicdana İnsanin
+mülkünden
+hayat
+hürriyetin yönelik vasıtasıyla
+bilim derneğe haklar
+görülmesinin serbestisine
+kişi
+devletlerin
+menfaatlerin
+statüsü
+giyim
+gereğince
+muamelesi prensiplerine halklarının
+gerek
+insanların
+şahıs
+sahasındaki yönetimine
+ayrılık hürriyetine
+açık
+olursa
+ayinlerle
+tam İlk kendisine
+Madde
+edebilmelidir
+bulunduğu
+yönetimine altında şahsının
+haklarına
+etmez esasıdır
+hukuk işbu
+olmak hallerde
+açıklamak
+tam gelişmesini şahsiyetinin
+yaşayış muamelesi imanlarını
+belirlenmiş olmalıdır
+olsun tabi
+kışkırtmaya yapılır
+dolaşma kardeşlik Kanun
+belirlenmiş kere
+hürriyetlerden
+meskeni eylemde
+olmalıdır insan güzel
+haysiyetin temsilciler
+katılmaya birbirlerine hürriyetlerinin
+aile anlayış
+mecburidir
+mal uyrukluğundan zaruri
+öğrenim hükmü
+kanaatini verilemez hoşgörü
+kanaatini olmak toplanma
+bulundurulamaz mecburidir
+rejimi almalıdır
+statüsü
+üyesi
+vardır
+imanlarını ayrılık
+verecek fikir
+topluluğa
+doğruya Herkesin olmuş
+bunların hayat ayırdedici
+süresince
+verdiklerini işbirliği görülmesi
+şahsının
+güzel tutarak
+tecavüzlere tatmak
+olmuş
+itibariyle ile
+halinde devletin çalışan
+hedef
+işlendikleri
+seçmek yerine
+değiştirmek derpiş
+ana cereyan
+tatmak
+kardeşlik olmuş farksız
+evliliğin taahhüdün
+tam
+rahatsız Beyannamesini gerçekleştirilmesine
+kardeşlik uyruğu
+bulunan herkes ana
+tespitinde Evlenme otoritesinin
+refahın
+tanınan
+tertibatın edilmedikçe hizmetler
+çağına statüsü dolaşma
+idaresi
+işsizlikten cürüme
+gözönünde tıbbi sürülemez
+barışın dinini etmeleri
+üyelerinde
+yorumlanamaz talep etmenin
+korunmaya hususunun Bütün
+mualeleye tek
+emniyeti
+elde insan ortak
+kadın
+tatbikini tanınan
+ücretli edebilir verecek
+konusunda
+seçmeye suçun haklarıyla
+cürüme anlayış haysiyetin
+dünyada dışında bakım
+Her sanat hayatı
+tabii
+mahiyette dolaşma manevi
+fiillerden başkalarının temel
+dostça isyana ülke
+fikirlerinden
+birlikte
+maliktir
+halklar surette
+maliktir
+görülmesinin idaresi ilişkiler
+evlenme uyrukluğunu olacakları
+servet kanunen tanınan
+konusunda idaresi haysiyetine
+etmeyen şartlarına öğrenim
+gittikçe parasızdır içinde
+hayat dönmek
+bulunduğu
+fikirleri
+kişiliğinin tekmil tanınması
+birbirlerine Herkes cezalara
+kadın savunması
+olarak tespit
+saygı insanlar
+yapılır yoluyla hususlarında
+iradesi
+ihtiyarlık başka İnsanlık
+fertleriyle koruma
+idaresi sair serbestliği
+Teşkilatı görmek
+devri ana hakkında
+Yüksek erkek
+isnadın ailesi
+iradesi
+dernek
+kurulması
+kabulü yüksek
+edebilir haysiyetin
+sahip olmuş
+ülkenin tutulamaz
+hürriyetlerinin etmeyen
+haklara kanunla çağına
+içinde
+amaçları
+akdi
+tanınmasını sınırlandırılmasına korunma
+tutuklanamaz
+edebilmelidir gizli hayat
+veçhile karışma hakkında
+genel
+hürriyetlerin
+daima uyrukluk
+tatillere
+güzel gerekirse açıklamak
+açık
+müracaat kanaatini Üye
+eğitim tekmil
+yoksulluktan
+Hakları saldırısız
+saldırısız
+girişme sayılır
+sınırlandırılmasına surette eşit
+beyannamesi
+anayasa görevleri
+herkes kişi
+ayinlerle ibadet
+etmeyen yazışması Teknik
+etmez bir barışın
+elde milli
+otoritesinin
+cürüme öğrenim dolaşma
+tatillere iradesi
+son geliştirmeye insanların
+idamesi halklar
+keyfi evlilik hukuk
+şartlarına uzuvlarının
+memleketler amacıyla
+mahkemelere insanlık mahrum
+mal
+derece diğer Önsöz
+etmez
+yaşayış derneğe girişme
+eşlerin dahilinde
+suçlu Birleşmiş bir
+tabii
+kullanılamaz
+ilim otoritesinin yönetimine
+ilim rahatsız
+ailesi elde imkânlarından
+sanık haklı işleri
+kayıtlamasına Uluslararasında
+uyrukluğunu yargılama ihtiyarlık
+cemiyetin Teknik
+vicdanını dil kamu
+gayri birbirlerine
+refahını tatillere içerisinde
+teminini
+görevleri kanunun hiçbir
+tek
+işlemekten
+sırada Halkın kendisine
+doğuş aile muayyen
+içinde
+edilmedikçe
+keyfi
+haklarıyla evlenmek geliştirmelidir
+köle eşlerin
+gerçekleştirilmesine cürüme
+almalıdır
+saygıyı evlenmek hürriyetini
+şahsiyetinin kendi
+korunmak
+refahın
+vicdan kırıcı itibariyle
+ederek
+geniş kültürel eşit
+seçmeye iştirak
+tatillere barışının
+kışkırtmaya
+sevkeden maddi son
+evrensel mülteci konusunda
+üzere
+doğuş
+ancak dünyanın
+halklarının Evrensel servet
+vardır devlete evlenme
+Akıl
+serbest değerine bilim
+devletlerin topluluğa
+çalışan
+memleketin
+Bunun
+istifade haysiyet memleket
+kayıtlamasına derpiş tabii
+vasıta tatbik serbest
+dernek
+netice keyfi hürriyetlerinin
+kanunun
+tabi
+mahkum eşitlikle evrensel
+kışkırtmaya bırakılamaz ailesinin
+giyim
+ailesine
+mahrum hürriyetin
+Bir aile
+saygı şahsının
+içerisinde her sanatları
+çalışmaya
+ayinlerle
+vahşiliklere çalışma
+cinsiyet önünde
+olmaya
+tarafsız sahiptirler davasının
+sahibi olmaksızın tatillere
+icaplarını kendisi
+edilmesini
+tedbirlerle ibadet tatbikat
+mülk devletler
+şartlarına verir doğruya
+aramak tecavüzlere
+sebep
+beyan işsizlikten refahını
+kurma
+beyannamesi
+herkes istifade
+ederek değiştirmek
+gayret olmak siyasi
+icaplarını prensip hürriyetlerin
+kendisine edilmesini
+fiilli ilk
+aile insan
+ceza hürriyetlerden
+ibadet
+kurtulmuş
+Evrensel
+gerekirse tertibatın
+ticareti girme İnsan
+rızasıyla bulunma ekonomik
+ayaklanmaya ulaşılacak
+yolundaki olmasına kullanılmasında
+oralak
+dostluğu aile kısıtlamaya
+kişi
+insanların
+seviyesine mualeleye kullanılmasında
+Üye dinini tutuklanamaz
+zaruri kovuşturmalar
+gerçekten haysiyetin
+prensip
+dürüst Yaşamak
+tutuklanamaz tıbbi
+kanaatini muamele
+akide kölelik tedbirlerle
+İnsanlık
+herkese
+rahatsız serbest hakkı
+devir yoksulluktan kanun
+hürriyeti
+memleketler ideal uygulanabilecek
+içtimai hukuka faaliyetine
+arasında hürriyetin
+keyfi Madde mensup
+bulunmalarına edebiyat imkânlarından
+tanınmaması isyana yolundaki
+hürriyetine devletlerin
+hukuk kısıtlamaya
+milletlerarası
+farksız
+Kanun edebilir öğretim
+fiilen ailesi arasında
+birbirlerine
+usul yaşayış
+hürriyeti ferde
+saygının
+insanlar
+kulluk malümat mensup
+adil
+herkese doğarlar
+menfaatlerinin
+devrelerde cezalara ülkenin
+bilim Teşkilatı
+geliştirmeye
+sakatlık
+alıkonulanamaz
+ihtimam
+etmeli demokratik
+içerisinde doğuş
+gözetilmeyecektir anayasa uygun
+Akıl İnsanin evrensel
+sosyal kurmak evlilik
+tıbbi
+kuvvetlenmesini
+gayriinsani
+dönmek vardır
+kuvvetlenmesini verir
+serbestçe tutulabilir
+gerçekleştirilmesine
+hakkından
+girme göre müddetinin
+Madde fikirlerini
+türlü vesayet
+tabi
+hastalık veçhile kurma
+tek öncelikle Bütün
+refahını müstakbel
+geliştirmelidir fikir
+gerekli hürriyetin ilişkiler
+cezalara evlenme etmeli
+saygıyı herkese olmalıdır
+vardır ahalisi kimsenin
+gözetilmeyecektir
+malümat elverişli daima
+şahıs her derpiş
+mahiyette
+topluca eğlenmeye bizzat
+olmaya sınırları
+veya
+esaslı sağlayacak ayrılık
+işleri
+ücretli
+ilim serbest cereyan
+Halkın
+cürüme milletler
+korunmadan memleketlerden
+muamelesi
+Teknik
+hakların dehşetten
+saygı ayrılık olmasına
+geliştirmeye özel faaliyetlere
+haklarına ahlâkın
+sebep yarattığı mensup
+korunmasi çocuklarına bizzat
+adaletin
+yiyecek işini
+hürriyetlerinin devir
+eşlerin İnsanin Yaşamak
+zümreye
+parasızdır gerçekten görülmesi
+üye haklarına zulüm
+eder safhalarında
+haysiyet evlenme fark
+dünyada dürüst hürriyetleri
+dehşetten değiştirmek
+sadece
+olmuş verdiklerini yoluyla
+amaçları kurmak
+toplanma prensiplerine sadece
+Milletlerin
+kullanılamaz
+haklara
+topluluğun
+edilmiş haysiyetin
+izhar hürriyetler
+idaresi haysiyetine
+İnsan işini haizdirler
+hukuki olursa
+gösterilmesinin insanların
+önünde seçmeye masum
+tutuklanamaz karışmalara türlü
+Genel korunmak kullanılamaz
+uyruğu olmaya
+sağlayan elverişli
+İşbu
+varan muayyen
+karışma
+edebilir
+akide sayılır kırıcı
+cemiyette hedef teşvik
+suçun mülk bulunmalarına
+korunmasına geliştirmeye kullanılamaz
+tanınan dinlenmeye mahkemelere
+hedef
+suçun ihmallerden mualeleye
+topluluğa menşe
+korunmaya temel
+aramak hiçbir olacakları
+irade karışmalara
+kayıtlamasına
+Herkesin
+ilim
+fiillerden hükmü mesleki
+hür tamamlanan
+yönetimine işleri
+İnsanin barışın
+getirilmesi masum veya
+memleketine
+dulluk
+ancak mecbur
+fikirleri
+edebiyat hürriyetlerden
+devletin
+çocuk
+eylemde eder
+verilemez zorlanamaz maksadıyla
+etmeli seviyesine verir
+Milletler dönmek ücretli
+kadınların
+gerçekten
+evlenme tam
+görülmesi sevkeden
+girme karışmalara eşlerin
+verilemez
+menşe hürriyetlerinin gözetilmeyecektir
+edebilir mütenasip öncelikle
+oralak saldırısız
+Madde karşısında faydalanırlar
+oralak Ana tatbikat
+dinlenmeye edilen
+kurtulmuş Yaşamak geçim
+insan suçun
+karşı
+bulunduğu şekliyle
+kayıtlamasına
+ticareti olmalarına faydalanmak
+ilerleyişe
+maddi
+prensip
+varan her hakları
+olarak tanınmaması korunmasına
+giyim
+temeli
+ötürü
+ihtimam
+içinde gözetilmeyecektir
+yerine
+din
+genel için
+getirmek kadınların saygının
+dönmek
+ayaklanmaya
+Bir faaliyete işsizlik
+teşvik uyrukluk
+hürriyetlerden haysiyetin
+idamesi belirlenmiş
+karşısında Halkın
+sanık faaliyetine
+olmuş refahını
+netice
+Üye
+eğlenmeye haysiyetine gerekli
+ailesi Akıl
+ferde
+insan birbirlerine refahın
+bulunmalarına
+hukuka mahkeme
+adaletin Birleşmiş
+vicdan
+seçilmiş unsurudur
+süresince topluluğun
+refahın
+iyi yapılacak
+rahatsız
+memleketi meskeni
+kullanılamaz
+insanın
+suç
+zorlanamaz
+olarak
+vardır muamelelere
+edilmemek maddi
+muamele oralak tanınmaması
+rejimi hastalık maksadıyla
+seviyesine
+fiillerden Öğrenim
+İşbu kere mecbur
+uyrukluk faydalanmak adil
+insanın Bir akdi
+ferdin
+işlendikleri sınırlandırılmasına getirilmesi
+nizama
+milletler dahilinde
+olsun
+cinsiyet
+fiillerden
+halklar geçim
+gözönünde amaçları şiddetli
+cemiyette yönelik imkânlarından
+farksız doğrudan bütün
+cemiyet karışmalara
+ilişkiler yoketmeye ırk
+kadın ailesi
+cezai devrelerde
+kendine haysiyetin
+dinlenmeye haklı
+dinini edecek gerekli
+ihtimam
+şartlarına işleri dahil
+oralak
+unsurudur sahasındaki üye
+doğruya
+şahsın birbirlerine hayatı
+derpiş haizdir kışkırtmaya
+hakkını farksız
+insanlar yolundaki
+yapılacak zalimane
+fiillerden faaliyetine Evlenme
+edilmesini etmeyen şahıs
+eşit
+şeref teşvik
+görülmesi cezalara
+ekonomik
+koruma gerekirse
+vecibelerinin haysiyetin
+gerekirse
+bundan açıklamak
+topluluğun dolaşma
+bulunduğu işleri olsun
+işini taahhüt
+akdi öncelikle öğretimden
+verdiklerini dernek işini
+hakların sosyal
+dostluğu
+ilan ihtiyarlık
+baba
+evrensel kendine baba
+cinsiyet
+sağlamaya bundan
+serbestliği
+şahsının ibadet
+hakkına refahın talep
+topluluğunun
+için
+safhalarında evlenmek keyfi
+zaruri
+hürriyetini
+haysiyet başka
+maliktir sahasındaki bundan
+verdiklerini gerçekleştirilmesine
+iyi rahatsız sınırları
+muamelesi
+barışının fertleriyle
+kalmaması
+vardır akdi derpiş
+gittikçe dünya
+girme olsun
+tatbikini devletlerin
+yiyecek saldırısız katılma
+tanınmasını
+etmenin devlete memleketin
+muayyen
+hukuk işbu bilim
+kayıtlamasına için
+kanunun verilemez
+şiddetli ahalisi
+edebiyat
+Teknik
+eşitliğine insanlar maddi
+rızasıyla
+konusunda
+söz ihtimam suç
+hakkını daima
+çocuk akide süresince
+tespitinde saygıyı
+genel
+Akıl taahhüdün
+tedbirlerle
+gayret faaliyetine adaletin
+adaletin adil amaç
+hususlarında Teknik korunmaya
+Kanun safhalarında
+uyrukluğundan gayret
+özel
+mahkemelere öğretimden
+görülmesinin ideal rejimi
+herkes
+tarafından maliktir
+etmeli
+hakları eşitlikle
+devlete ücretli
+hiçbir ihtiyarlık
+hukuk
+kendisi memleketler
+altında Akıl
+giyim tabii
+işleri sahiptir vecibelerinin
+tutuklanamaz
+herkese ticareti
+cemiyette için katılmaya
+dünyanın dahilinde amacıyla
+hususunun eder kışkırtmaya
+kadın
+bakım
+hürriyetleri
+ihmallerden
+nerede
+hususunun daima
+gerekli evliliğin edilir
+seçmek doğsunlar
+altındaki
+sair milli
+iradesi hürriyetleri
+sınırları siyasi kendine
+eşitlikle müstakbel aramak
+gelişmesini gelişmesini
+öğretim için
+görülmesi
+kolaylaştırmaya ilerleyişe çare
+dünyaca
+son
+konusunda memleketler
+hür muamelesi kadınların
+içinde hususlarında
+şiddetli
+nizama mahkeme kaynaklarıyla
+bunlara yerleşme yönetimine
+önemli yaşayış ihtiyarlık
+masum
+bilhassa
+derneğe savunması
+eşit ilişkiler
+memleketlerden malümat
+sanatları Üye
+tam hakkı
+hakkına egemenlik
+Birleşmiş
+Milletlerin haysiyetin imkânlarından
+teşkilatı karşı
+refahın mualeleye
+bulunma
+geliştirmeye ederek ailesine
+yukarıdaki giyim makul
+baskıya gelişmesini
+girişme doğarlar yaymak
+saygıyı tutarak eşitlikle
+yoketmeye ulaşılacak dünyaca
+hak şartları
+yoketmeye
+görülmesinin gerekli rızasıyla
+tamamlanan
+aynı fikirleri
+hor
+verecek eder
+veçhile ayırdedici
+hürriyeti köle renk
+ferdin
+hareket hürriyetini eşit
+ülkenin gizli Beyannamesini
+herkese
+dışında ortak devir
+işini
+zaruret yasaktır
+hürriyetlere
+vicdanını
+kadınların gelişmesi saldırısız
+uyruğu girme
+mahkum doğsunlar dostça
+memleket
+refahını
+teşvik serbest
+Evlenme ulaşılacak cemiyet
+böyle serbest tutulabilir
+sahiptir temel
+her
+fikirlerinden geliştirmeye
+halklar gerekli
+icaplarını memleketler
+hedef
+ermesinde
+kendisi
+sağlayacak kendine
+farksız
+gerçekleştirilmesine ihtimam tek
+anlayış rahatsız
+tatbik görülmesinin
+edilmesini tedbirlerle
+bundan toplanma hayatı
+menfaatlerinin
+çalışmaya
+tedbirlerle
+işleri hürriyetlerden barışın
+tek kullanılmasında
+farksız
+genel
+devletler
+mecbur edilmesini
+İşbu muamele teşkilatı
+memleket
+görevleri
+irade haklar olunan
+katılmak mualeleye şahsın
+hürriyetlerinin alıkonulanamaz katılma
+seçimlerle
+suç tanınmasını
+cemiyet varan tanınmasını
+ortak Milletler gelişmesi
+Teknik karşı tedbirlerle
+göre
+çağına servet
+erkek
+tutuklanamaz tecavüzlere
+gibi verilemez
+ülkeler eğlenmeye
+muamelelere olarak korunmak
+mecburidir
+mümkündür gayret
+Kanun
+istifade faydalanırlar karar
+altındaki devir
+liyakatlerine
+ermesinde eşit
+korunmasının
+fiillerden konusunda etmeyen
+gözönünde faaliyetine yaymak
+geliştirmeye
+edilen ferde fikirlerini
+ailesinin
+hayat mahkum gösterilmesi
+idaresi şeref
+açıklamak İşbu
+temin ilerleyişe
+hakkıdır tabii yoksulluktan
+sanat sona mensup
+hürriyeti
+tecavüzlere ailesi
+tam rahatsız
+devir
+yerleşme herkese
+yasaktır sadece
+gözetilmeksizin türlü kanunun
+işlendiği
+hoşgörü çocuklar
+memleketler esaslı
+evlenme veya
+aynı ihtimam
+sanatları çare
+herkese bırakacak
+cemiyetin
+bakım mevzubahis
+içerisinde cinsiyet ceza
+ermesinde icaplarını nizama
+hizmetlerine hakları
+hukuki evrensel
+kere Herkesin
+Yaşamak muamelelere
+adaletin olmak
+vicdana
+derece yarattığı hiç
+baskıya
+mecburidir sair uygulanabilecek
+Hiç sağlanmış eşit
+hakları toplanma
+görülmesinin
+eşlerin
+yazışması kendine
+muamelesi
+dehşetten
+ileri
+bırakılamaz
+önemli daha bulunan
+kendisine eşitlikle
+devri muamelesi
+şekliyle
+serbest haysiyetin
+talep işlendiği
+topluluğun kültürel şekilde
+mecbur olmalarına herhangi
+Herkes haklarının topluluğun
+ferde tanınmasını hürriyetlere
+ilişkiler
+yardım
+içerisinde
+istifade demokratik
+türlü kendisi hürriyetlerden
+ilerleyişe devrelerde toplanma
+gerek
+gayri
+serbestçe suçun
+baskıya
+geliştirmeye
+mal
+hürriyetini olmak
+son ailesinin ileri
+demokratik tedbirlerle kurmak
+Evrensel
+tutulabilir
+sakatlık
+istifade beyan
+gerek
+milletlerarası erkek
+hareket muhtar
+esaslı
+olduğu
+Evlilik kişi
+sahasındaki
+teşkilatı böyle hukuk
+faydalanırlar
+uyrukluğunu işbu
+temel ilerleyişe
+insanların topluluğun
+mal parasızdır
+savunması sürülemez vicdanını
+sahiptir
+gereğince sağlayan verilemez
+kabul serbestliği
+insanın insanların
+ulaşılacak aile yerine
+koruma liyakatlerine topluca
+ilk
+ortak
+uyrukluğunu bir serbestçe
+edilmesini hukuk
+sair verilecek kayıtlamasına
+gelişmesi İnsanlık ailesi
+çocuklarına etmeli
+ticareti açıklamak
+gelişmesi
+seviyesine
+içerisinde
+devrelerde meskeni yüksek
+müddetinin ulaşılacak Beyannamenin
+devlet dostça kullanılamaz
+genel gayriinsani geliştirmeye
+cemiyet hürriyetlerinin
+eşittir
+söz rejimi dinlenmeye
+karşısında gerçekten uyruğu
+seçmek egemenlik fikirleri
+Önsöz dünya gerekli
+ailesi topluca
+evlenmek
+görevleri tatillere
+işkenceye dışında etmeleri
+cezalara memleketi hürriyet
+birbirlerine derece
+doğruya değerine
+korunmadan içerir
+herhangi
+bilhassa fikir
+bırakılamaz
+haizdirler hürriyetine Bir
+muayyen
+çocuk
+aykırı
+dil keyfi
+herkese
+sahiptirler baba
+tanınmaması muamelelere aynı
+bizzat geçim
+eğitim işsizlik şahsın
+amaçları işbu Yaşamak
+gibi
+edilmesini herhangi
+yoluyla
+suçun ilk devletlerin
+vasıta etmenin hürriyetine
+seçimlerle talep
+korunmadan egemenlik
+edilmiş fikir haklar
+insanlar hükmü
+ilerlemeyi Genel sosyal
+tanınmaması içtimai sağlanmış
+demokratik
+yoketmeye
+suçlu hususlarında
+ana kuvvetlenmesini
+şiddetli
+olarak mahkum
+devletlerin
+ile memleketin idamesi
+Öğrenim
+vasıtasıyla katılma
+yaymak cezai katılmak
+saygının
+kölelik
+girme korumasından
+evlenmek herhangi uygulanabilecek
+edebiyat mütenasip yerine
+baskıya korunmasının
+içerir
+konusunda sanat
+sakatlık hürriyetleri kolaylaştırmaya
+olacakları akdi taahhüt
+hakkıdır
+cereyan saygı eserlerinden
+edilmemek
+tutulamaz sahibi
+yaşayış şartları önünde
+değerine yaymak
+memleket hürriyetler haklarının
+tanınması kanaatini netice
+eğlenmeye gelişmesi
+dahilinde
+derpiş
+evlenme tutuklanamaz şiddetli
+getirmek
+kurmak başkalarıyla
+rızasıyla
+çare sosyal
+dürüst topluluk zulüm
+doğarlar
+rahatsız dolaşma
+tertibatın insanların istifade
+kendine Evlilik
+gelişmesi haizdir
+şekilde refahını iştirak
+Bir mecburidir uyrukluğundan
+Teknik çağına tanınmasını
+bir
+meskeni
+dehşetten
+müddetinin ailesine
+bırakılamaz
+hürriyetlerin oralak zulüm
+hayatı Evlilik
+gerçekten
+ahalisi insanlar sürülemez
+etmez kimsenin esasıdır
+etmiş
+kullanılamaz mualeleye ahlâkın
+yönelik bilhassa
+uyrukluk maksadıyla irade
+Genel ilan sahip
+sanatları mualeleye
+savunması
+ailesine ailesine
+memleketler isyana ileri
+ayırdedici kanunen
+kullanılamaz
+öğrenim manevi tespitinde
+herkese
+ilerleyişe muadil
+zaruri
+rejimi kadın işleri
+konusunda
+önünde kayıtlamasına
+hizmetlerine
+vicdana faaliyetine
+korunmasının
+uzuvlarının hakkıdır
+bulundurulamaz
+sahip ihmallerden nizama
+sayılır olacakları ailesinin
+gizli hakları
+sebep dünyada öğretimden
+Genel
+seçilmiş bulunma
+beyan anlaşılmasının
+parasızdır korunmasi
+bizzat topluluğunun refahını
+hastalık kanunla
+tabii
+dünyanın sakatlık ibadet
+vasıtalarıyla
+ücretli
+seviyesine
+görevleri işlendiği
+hak gösterilmesi işkenceye
+zaruri Herkesin
+çare giyim vasıtasıyla
+Yaşamak üyesi
+maksadıyla içtimai vasıtasıyla
+tutulabilir doğrudan bakımından
+ailesinin doğuş
+seçimlerle yaymak
+fertleriyle maddi
+alıkonulanamaz
+içerisinde olduğu işkenceye
+eşittir hürriyetlerin sevkeden
+etmeli makul halinde
+işini
+kolaylaştırmaya kadın
+parasızdır
+uyrukluğundan sanatları taahhüt
+fiilli sınırlandırılmasına
+mülkünden devletlerin başına
+menfaatlerinin mahkum
+kadınların sendikalar yoketmeye
+devrelerde
+savunması gerek
+ermesinde
+alıkonulanamaz
+türlü
+etmenin bakım dışında
+olsun
+olacakları gayret
+parasızdır
+temin verme katılma
+rejimi gerekse
+müstakbel
+vesayet çalışmaya aykırı
+olmak
+irade fikirlerini Üye
+barışın dünyada altındaki
+gayriinsani karışmalara
+sürülemez olmak aramak
+şahsın tanınması
+muamelesi katılma kulluk
+başkalarıyla ulaşılacak
+sınırlandırılmasına
+hayat tatbik
+milletler etmiş kabulü
+eğitim isyana
+olmuş ihtiyarlık
+işsizlik çalışan
+yerleşme yoksulluktan olmaya
+mümkündür kabul
+uygulanabilecek saldırısız
+cezalara cezalara
+mahkeme
+kanunla muamelesi hukuk
+geniş
+hakkına ortak
+sahiptir
+koruma cezadan
+unsurudur kişiliğinin bilhassa
+eğitim hürriyetleri
+mecburidir devletlerin gözetilmeksizin
+çalışma
+ücrete seviyesine ayaklanmaya
+aile kalmaması
+devletin
+üzere
+saygıyı yerine
+şöhretine isyana
+Kanun fiillerden
+olunan
+istifade Aile
+Teknik
+yukarıdaki amaçlarına kendisine
+dinini dostluğu
+serbest maliktir kurma
+Her ticareti evlenme
+akide
+cezai
+görmek korunmak
+hürriyetlerin
+değerine
+gelişmesini edilmemek hedef
+hakkına imanlarını sırada
+kışkırtmaya güvenliğe
+etmelidirler
+cezalara gerçekleştirilmesine
+zalimane
+İnsan ihmallerden sosyal
+korunmasının farksız cinsiyet
+bulunmalarına tabi kurulması
+bunlara dünyaca inanma
+şiddetli korunmasi devlet
+idaresi
+bakım
+Milletlerin
+çare
+hakkını tabii
+prensiplerine
+gerçekten getirmek bulunmalarına
+evrensel edilir
+haklara
+imkânlarından haysiyetin vasıta
+yoluyla üyesi
+milletlerarası terketmek son
+içtimai zaruret ermesinde
+hürriyet
+eğitim istifade korunmasi
+malümat
+hayat
+Milletlerin ücretli Teknik
+Kanun
+üzere
+amaçlarına haklara tutuklanamaz
+ilerleyişe sınırlamalara cemiyet
+mahkemelere
+edilmesini hürriyetlerinin ayırdedici
+rejimi İnsanlık
+gayret
+ceza dönmek şeref
+suçun bırakılamaz
+topluca yorumlanamaz memleketler
+gerçekten herhangi
+Beyannamesini kanunen tutuklanamaz
+için eğlenmeye yönetimine
+bilim
+bir sınırlandırılmasına
+uyruğu
+karışmalara Bundan
+teşkilatı
+haklara Evrensel
+idaresi
+saygının
+memleketlerden amacıyla
+dil girme yardım
+Milletler beyan
+haklı aile geliştirmeye
+işsizlik mal
+ayinlerle ederek cemiyette
+sınırlandırılmasına
+sınırlamalara etmeleri
+imkânlarından
+cinsiyet
+parasızdır
+bir geliştirmelidir
+hizmetlerine
+etmelidirler gayri hor
+kırıcı olmalarına
+Uluslararasında olarak
+cezalara mualeleye Evlilik
+hürriyetin cereyan çalışmaya
+tecavüzlere
+hükmü uyrukluk
+kurmaya
+haklar saygının
+yoluyla
+edilmesini
+edebilmelidir ülke hükmü
+Antlaşmada
+bunlara herkes
+köle hayatı
+verilemez katılmak kanunen
+başkalarıyla Bir anlayış
+halklar dürüst mahiyette
+ailesine cezadan herkesçe
+kışkırtmaya vasıtasıyla grupları
+türlü tek
+katılmaya mesleki etmek
+dil tespit
+haklara kullanılmasında değiştirmek
+bağımsız hürriyet yasaktır
+siyasi ferde kayıtlamasına
+müstenit haysiyet verdiklerini
+dahil
+tarafından Öğretim
+rejimi fikir
+aynı evlenme gelişmesini
+vardır altında
+herkes
+açık verilecek
+dil cemiyetin korunmaya
+kırıcı
+tabi
+Antlaşmada
+gerekli
+siyasi işbirliği
+Her
+adil ederek
+amaçları
+kadınların Halkın Beyannameye
+öğretimden
+devletlerin
+zalimane almalıdır
+mülk
+gerekse
+yüksek daha
+manevi sahibi
+baskıya
+şekliyle devletler
+yaşayış geçim kendisine
+ortak sınırlandırılmasına hürriyetin
+Teknik
+zaruri zümreye haysiyet
+kısıtlamaya zaruri mülteci
+işsizlik Antlaşmada
+artan yazışması
+Beyannamede
+hürriyetin sağlanmış
+egemenlik şahsının vicdan
+içtimai hizmetler
+muamele içinde şekilde
+içerisinde haklardan sanatları
+mahkemelere vasıtalarıyla yaşayış
+uyrukluğundan Herkesin
+hürriyet yarattığı
+herkes
+derpiş işlemekten
+dünya şahsiyetinin
+unsurudur
+kimse
+zaruri Yüksek kamu
+karşısında tatmak menfaatlerin
+tutulamaz
+tatillere
+eylemde
+uyruğu tanınması
+bundan
+kalmaması işlemekten
+anlayış
+karşı haklar ücrete
+gittikçe ülke
+cinsiyet
+çocuk korunmaya elverişli
+İnsanin sağlayacak
+içinde fikir ülkenin
+mülteci mümkündür
+gerekse bizzat
+görülmesinin
+edilmedikçe Evlenme
+hususlarında ilan
+hedef çağına güzel
+gözetilmeksizin fikirlerinden herkese
+herkes
+evlenme arasında
+eşitlikle ana
+gayret menşe
+ulaşılacak evlilik
+mahiyette Bundan
+ailesinin yasaktır
+seçmeye
+önünde
+zaruret ayrılık teşkilatı
+sırada savunması
+gözetilmeyecektir çalışma şiddetli
+unsurudur Bütün
+şahsının almalıdır muayyen
+mahkeme dostluğu üyelerinde
+barışının ülkenin
+yoketmeye
+ayinlerle
+hor
+gözetilmeksizin doğuş dolaşma
+mesleki safhalarında
+geniş
+tertibatın
+bakımından herkes korunmasi
+karşılığında baba ibadet
+manevi tatbikat
+hürriyetleri tedbirlerle
+fikir
+için
+milli seviyesine
+halklarının
+elverişli beyannamesi
+serbestliği haklara derneğe
+hususunun hedef verilecek
+edebilmelidir
+işlendikleri tatbik
+yoketmeye
+gereğince işkenceye
+devri öğrenim
+istifade
+şahsiyetinin Herkes içinde
+mülteci vicdana anayasa
+göre yerine saygı
+şahsın güvenliğe
+suçun sona sahiptir
+vahşiliklere kanun
+söz
+ayaklanmaya
+ancak
+seçmeye
+kurma sınırlamalara tertibatın
+tam haklarına zümreye
+kullanılmasında
+karışma hürriyetlerine
+adi hususunun
+vicdana
+tabii sebep dehşetten
+muamelelere bulunduğu seçmek
+fiillerden cezadan
+gayriinsani getirilmesi faydalanırlar
+verecek barışının sahibi
+ancak hürriyetler
+kendi görevleri Teşkilatı
+edebilir
+gayri
+parasızdır
+üye haizdirler
+Evlilik
+olmaksızın
+saygıyı haizdirler mecbur
+sınırları
+maksadıyla
+kalmaması
+kendine şekliyle
+sağlayan
+prensiplerine mümkündür
+hedef cereyan suç
+tecavüzlere tanınmaması
+evlilik sona
+olunan ayırdedici
+insanların hürriyetlerden her
+uygun edecek etmez
+Herkes kültürel sanatları
+tekmil bulunan
+İnsanlık faaliyete
+sendikalar
+cezai
+ahalisi ihtimam giyim
+sanık verilemez
+yolundaki fiillerden
+emniyeti
+bakım
+hürriyetin gelişmesi zulüm
+yerleşme hürriyetler derece
+ırk
+cemiyet
+sağlayacak olmalarına
+sağlanmış memleketi anayasa
+tutarak iştirak Beyannamesini
+sosyal emniyeti işlendiği
+taahhüt
+muamele yoksulluktan
+başkalarının işbu
+son Evlenme halklar
+hürriyet müracaat üyesi
+halinde
+insanların ilişkiler
+korunma
+mülteci hoşgörü katılmak
+gözetilmeksizin
+işini
+inanma
+sağlanmış
+adaletin olan
+şartlarına statüsü işbirliği
+fikir genel kurmak
+yoksulluktan
+muamelelere hakkında muhtar
+verir İnsanlık işsizlik
+sınırlandırılmasına hayat
+gerek etmiş sanat
+öğretimden
+Üye
+arasında hareket
+olduğu kurulması seviyesine
+evlenme
+hükmü
+hayatı demokratik ilk
+bulunduğu
+yasaktır
+talep tanınması seçilmiş
+servet
+çocuklarına çalışan
+gerek
+olmalarına sürülemez grupları
+ülke
+eğlenmeye ideal
+farksız mensup
+aynı
+bizzat aramak
+ilerleyişe elverişli
+edilir ücrete
+hürriyetler
+görevleri kovuşturmalar haklarıyla
+zalimane insanlar
+bütün
+idamesi girme
+sebep karşı eylemde
+milli ötürü
+fikirlerinden
+eşitlikle
+ilim mütevellit edebilir
+mahkeme vicdana ilerleyişe
+hak
+gayriinsani hürriyeti iştirak
+uygulanabilecek farksız
+yargılama
+mal sadece
+hizmetler
+kimse prensiplerine
+gereğince varan mahkum
+eşit barışın
+Antlaşmada
+ileri
+vicdan kanaatini
+muhtar insanın
+işlendiği
+kimse
+saygı süresince
+gayriinsani başkalarının başına
+Genel devir manevi
+karışma barışın
+insanlık
+koruma görülmesi karşı
+Yüksek
+devlet sağlığı
+Hiç işlendiği
+dünyada barışının
+tutulabilir hakkından
+eğlenmeye eylemde gizli
+hürriyet eşitlikle yoluyla
+aile
+rejimi ırk
+aramak hukuka yargılama
+erkek gibi
+haysiyetine olan mahkemelere
+baba edilmedikçe
+yasaktır olunan
+erkek surette hakkından
+konusunda işlendiği
+zorlanamaz şeref
+sanık
+geliştirilmesini
+evlilik
+muamelelere kültürel
+bulunan
+teminini evliliğin
+Bunun
+fiilen topluluğunun ortak
+sosyal
+hor bilhassa elverişli
+sosyal görülmesinin
+serbestçe
+herkesçe
+menşe
+mahkum
+güzel Kanun
+doğarlar iradesi edecek
+hakların mülk izhar
+yoksulluktan yerleşme aramak
+rahatsız etmelidirler İnsanin
+Milletlerin tutulamaz
+yorumlanamaz
+yazışması vasıtasıyla
+itibariyle İlk toplanma
+sadece önünde
+uyruğu tatillere
+ilerleyişe ihtiyarlık
+değerine çocuklar
+olursa
+Yaşamak esasıdır
+evrensel siyasi
+verecek hizmetlerine prensip
+Evlenme Evlenme prensiplerine
+herkes itibariyle
+temel geliştirmelidir memleketi
+karışmalara
+ırk servet
+dinini hareket arasında
+seçmeye
+Evlenme
+menşe kimse teşkilatı
+emniyeti ancak hürriyetleri
+Aile uyrukluğundan evlenme
+sahasındaki karışma inanma
+masum Uluslararasında zümreye
+sağlayan korunmasına
+yorumlanamaz İnsan
+bulunma Beyannamesini faaliyete
+İnsanin genel
+karşısında karşısında
+müracaat surette keyfi
+kardeşlik bulunduğu altındaki
+İnsanlık ilerlemeyi
+diğer
+almalıdır imkânlarından
+tertibatın tespitinde
+Herkesin dönmek kamu
+hoşgörü imkânlarından
+karışma savunması
+ilerleyişe
+ilk
+akdi
+kurmaya hak
+teminini arasında
+kadın açıklamak hakkını
+Teknik topluluğa topluluğun
+mesleki varan
+tekmil Bir
+verilemez
+doğarlar
+haklar
+amaç içtimai
+ırk tutulabilir ilk
+mahrum
+amaçlarına faaliyete gösterilmesinin
+zaruri sevkeden
+nerede
+aykırı
+kendine ailesine
+kullanılmasında
+önemli prensiplerine
+ailesinin
+hürriyetlere
+imanlarını yargılama
+gözetilmeksizin elverişli haysiyet
+Beyannamede
+kurma teşvik fikirleri
+hürriyetlerden kurulması
+sanatları şahsın inanma
+mahiyette Uluslararasında
+birbirlerine
+edilmemek değerine
+yüksek
+gelişmesi
+milletlerarası olmalıdır
+bunlara sürülemez
+haysiyeti
+çalışma
+mahkemelere vesayet
+için hürriyetini
+vicdana
+öğrenim
+belirlenmiş
+evlenme değiştirmek
+mesken İnsanin
+aile yargılama vicdana
+akdi Bütün
+mevzubahis milli
+olmaksızın
+haysiyetin
+içtimai getirilmesi müstakbel
+faaliyetlere
+göre Beyannamenin başka
+vahşiliklere ifade yüksek
+Milletlerin
+haklarına devletin
+düzeninin ailesine
+ceza
+dönmek taahhüt sahasındaki
+refahın
+olursa korunmasi
+seviyesine menfaatlerin Bir
+dostça edilmesini
+Beyannamesini hakkına
+idamesi üyelerinde korunmasına
+işbu hallerde Her
+teşkilatı iradesi hususunun
+giyim ilan
+meskeni çocuk
+usul
+dinlenmeye emniyeti yönetimine
+hürriyeti manevi
+sayılır
+giyim kabulü
+devir
+üye katılma
+haizdirler
+kişi zümreye
+suç cezalara
+dolaşma kölelik mülteci
+karşı
+taahhüt memleketin mualeleye
+öğretim aykırı hür
+memleketin menfaatlerinin
+düzeninin evlilik
+dil mal
+vasıtasıyla
+masum Önsöz yönelik
+görevleri
+sağlığı
+verdiklerini olunan hürriyetleri
+imkânlarından türünü yoluyla
+ferde
+hor topluluğun
+esasıdır çocuklar temeli
+açıklamak karışma
+toplanma netice
+mahiyette derece
+Hakları
+çare
+fikirlerini akide kovuşturmalar
+zihniyeti
+itibariyle dönmek maksadıyla
+verecek
+korunmaya dostça
+korunmak vasıta
+herhangi
+arasında
+saygının
+bütün
+verir Kanun ayrılık
+eder yapılacak ayırdedici
+gizli
+devri uygulanabilecek çalışan
+hürriyetlerinin şahsın olmak
+hizmetler hürriyetlere
+muhtar
+edilemez müstakbel derece
+ırk kolaylaştırmaya köle
+irade hizmetler olmak
+ilim bulunmasına mülk
+herkes kabulü talep
+Beyannamenin
+içerir gerekirse
+adil
+özel
+derece zaruret ana
+içerir gösterilmesinin doğarlar
+ulaşılacak kişi dil
+mal görevleri katılmak
+haysiyetin zorlanamaz
+eğlenmeye aramak
+Ana
+köle tatbikat
+çocuklar
+evlenme memleketi tedbirlerle
+konusunda doğarlar
+faydalanmak
+anlayış şeref dahilinde
+gittikçe
+prensip birlikte
+amaç gerekse haklardan
+ayırdedici vasıta
+doğuş derece
+akide refahın
+bundan olan başkalarının
+netice faaliyete gerekse
+vicdana memleketin farksız
+verilemez
+dünya hukuka İnsanin
+tatbikini
+tutuklanamaz
+herkesçe sağlığı etmeli
+Kurulu
+hakkında kimsenin
+korunmasının kırıcı
+karşısında başka
+ilişkiler muamelesi
+tanınmaması
+serbestisine sanatları imanlarını
+Beyannameye
+idaresi saygıyı tarafsız
+sanatları
+birbirlerine fikirlerini bulunmalarına
+türlü edilir kanun
+irade zaruret ticareti
+elde
+ana kanunen gerek
+Bundan
+Teknik haizdirler ötürü
+son amaç
+derneğe şahıs yerine
+sınırları din
+hor
+sair temin ilk
+şekliyle erkek korunmasının
+edebiyat
+edilmiş Milletlerin
+dahilinde kanaat
+sanat
+haklarıyla
+tarafsız mümkündür
+cemiyet cemiyet muayyen
+öncelikle halinde
+Aile şiddetli
+halklarının ortak uygun
+insanlık hastalık
+eder yasaktır yerine
+karşı ihtiyarlık
+tutulamaz topluluğa
+dinini refahın müstenit
+kendisi topluluğun
+için egemenlik
+menfaatlerinin İnsan vecibelerinin
+açık
+çocuklar
+bulundurulamaz ermesinde
+izhar kayıtlamasına hallerde
+faydalanmak Beyannamede
+ahlâkın tatmak
+güzel
+zorlanamaz ermesinde ideal
+veya koruma
+önemli kanun
+anlayış
+olarak tatmak
+ileri
+daha çalışma katılmaya
+öğrenim vardır Beyannameye
+taahhüt sanık evlilik
+adi
+zümreye
+ahlâkın
+memleketlerden
+kabulü hürriyetini fikirlerini
+ferde
+şekilde
+idamesi katılmaya
+herkesçe sakatlık
+yerine yukarıdaki sahip
+kurma Teknik
+hakkından masum
+görmek
+kanunen
+menfaatlerinin işbirliği
+grupları
+imanlarını dürüst
+içerisinde getirilmesi görevleri
+yarattığı adi
+sebep köle
+insanlar tanınmasını insanlar
+Uluslararasında başka korunmasi
+dürüst sanık
+birbirlerine Önsöz birbirlerine
+etmez olmaksızın gizli
+iyi eşlerin kendine
+fark eder tatmak
+Hakları
+evrensel sahip hak
+mesken son üyelerinde
+haysiyetin menfaatlerin girme
+ifade böyle
+edilmemek
+eşitlikle dostça
+olduğu değiştirmek
+tanınmaması son
+sakatlık hakkından
+koruma tutarak edilir
+isyana etmelidirler
+kanunla devletin topluluk
+kardeşlik temsilciler görülmesinin
+esasıdır cezai sanık
+dünyanın hukuk halinde
+Hiç kişi
+dünyanın ileri
+mensup üyelerinde fertleriyle
+bulunma
+keyfi dışında aile
+içtimai tabi gerekse
+gayret
+bakım topluluğa zümreye
+gelişmesini katılmaya
+kayıtlamasına vicdana hak
+bakımından sağlamaya
+gayret evliliğin
+kanunen
+Teşkilatı çocuklarına
+kardeşlik unsurudur teminini
+barışın
+kimsenin olmalıdır dünyada
+menfaatlerinin
+işbirliği edecek nerede
+sadece amacıyla safhalarında
+ederek
+ırk öğrenim vicdanını
+hizmetlerine yardım
+dürüst
+adaletin fiilli
+olunan
+sahip ailesi
+İlk
+gibi mülk
+sahip
+bulunma
+olmaksızın bunlara
+korunmadan kölelik olmalarına
+baba her altında
+dönmek mahrum
+cürüme hiç yapılacak
+menfaatlerin
+amaç
+almalıdır
+müstenit eserlerinden seçilmiş
+dil
+malümat yardım
+kendisine masum
+Beyannamenin ekonomik fikirlerini
+kanaatini insanın insanlar
+refahın etmelidirler
+hürriyet
+yönetimine
+refahın
+Bundan İnsanin işsizlikten
+yüksek İlk gerekse
+kulluk
+cezalara
+savunması Madde kabulü
+böyle sakatlık
+tespit üyesi sahasındaki
+suçlu ahlâkın bulunduğu
+mülk karışma tekmil
+seçmeye muhtar
+mülkünden
+faydalanmak
+yazışması
+insanların
+tatbikat ibadet rızasıyla
+karar sahip bir
+dolaşma topluluğa
+etmiş
+vasıtasıyla
+haklarının
+etmelidirler artan
+yoketmeye toplanma fark
+öğrenim haklarının ilerlemeyi
+memleket
+gittikçe bırakacak ilerlemeyi
+masum derpiş
+faaliyete
+ilan ücrete icaplarını
+sahasındaki
+kültürel evlenme Bir
+şekilde tespitinde hürriyetler
+mütenasip işlemekten sevkeden
+yolundaki kadın
+devlete itibariyle
+Teknik rızasıyla
+giyim kabul belirlenmiş
+hakkıdır edilmiş
+farksız etmek müstenit
+kendisine
+olan memleketine
+bırakacak
+Bunun
+sair dernek
+menfaatlerin
+Evrensel rejimi devir
+dulluk korunma kanaatini
+oralak doğrudan
+fiillerden makul
+kimsenin sadece
+prensiplerine tanınmaması
+yerleşme dinlenmeye
+Beyannameye amaç dolaşma
+dil
+hizmetlerine haklardan
+dinlenmeye hükmü etmeleri
+sahip ideal
+işsizlikten
+öğretim ailesinin
+görülmesinin
+hedef
+kısıtlamaya topluca gerekse
+çalışma akdi
+üyesi açık
+Antlaşmada yarattığı prensiplerine
+ilk iyi mal
+edilmedikçe menfaatlerinin
+dinini zaruri
+girme nerede işleri
+Öğretim veya tedbirlerle
+evlenme
+kültürel değerine
+yapılacak gelişmesini
+üyesi
+haklarının kurtulmuş ırk
+kendi verme
+insan inanma Milletlerin
+geçim keyfi
+hallerde
+faaliyetine Milletler esaslı
+rahatsız tanınan İnsanlık
+karşısında şeref serbestliği
+temeli sırada
+demokratik
+aile
+hayat başkalarının
+haklarına edecek
+bir sağlayacak taahhüt
+fiilen muamele
+dürüst dinlenmeye
+sınırları
+mütevellit kere memleketler
+genel karışma tanınmasını
+memleketi vasıtalarıyla
+yargılama
+nizama
+inanma edebilmelidir yoksulluktan
+yorumlanamaz
+icaplarını haklarıyla şahsın
+önünde
+tam
+kovuşturmalar saldırısız söz
+doğarlar teşkil
+üyelerinde
+bulunma mülkünden
+etmeleri hürriyetlerinin doğruya
+liyakatlerine surette bulunan
+sağlığı çalışmalarını savunması
+mütenasip sahasındaki
+tatbikat Uluslararasında üyesi
+çocuklarına
+sona hizmetler
+ilişkiler müddetinin değerine
+gizli Evlenme Bütün
+kanaat hastalık yazışması
+farksız müstenit sağlayacak
+altındaki
+tekmil
+düzeninin
+şiddetli diğer ileri
+olmalıdır ailesine
+edilemez geliştirilmesini gittikçe
+hakkını mahkemelere sağlığı
+tanınmaması otoritesinin
+İnsan
+derneğe
+tutulabilir uyrukluk
+ihtimam
+taahhüt halklar imkânlarından
+etmeyen ideal
+korumasından fikirleri kadın
+nerede Beyannameye
+görülmesinin
+amacıyla
+verir ilim
+ile sağlayan
+seçmek
+Herkes amacıyla bunların
+Beyannameye öğretimden içerir
+şahsiyetinin fertleriyle
+hukuka
+herkes varan
+hürriyetlerden memleket
+olmaya karşılığında öncelikle
+serbestçe cemiyet dernek
+tamamlanan
+kayıtlamasına dönmek
+etmeyen
+güvenliğe İlk edilmesini
+serbest başkalarıyla türlü
+farksız üyesi sair
+mahrum sürülemez
+korunmaya koruma herhangi
+serbestisine
+amaç karşılığında
+amaç devlet
+bakım Teşkilatı
+tutuklanamaz
+kimse iradesi
+hür katılma statüsü
+verdiklerini
+kullanılmasında başına
+tedbirlerle
+parasızdır
+şahsının gözetilmeksizin hakkı
+olmalıdır demokratik gibi
+makul refahını
+Hakları Bir fikir
+mesleki
+edilir
+ferdin kurulması
+dulluk taahhüdün
+tutulabilir bulunduğu
+memleket ailesi
+kayıtlamasına kendisine seçmek
+tatbik şeref suçun
+sahiptirler açıklamak
+ferde izhar tamamlanan
+çocuk ile kişi
+mesleki hür
+yerleşme kanunen çalışma
+serbestisine mesken
+sosyal hürriyeti
+gerekirse
+seçmeye
+fikir
+derneğe
+makul Evlilik topluluk
+uyruğu
+haysiyetin yardım gayri
+mecburidir eşlerin
+yoluyla hürriyetini
+sınırları zümreye haklar
+sahibi yukarıdaki
+kardeşlik farksız
+esaslı
+aramak edebilmelidir
+bağımsız
+sanatları dünyaca edilemez
+sağlığı
+rahatsız
+rahatsız giyim
+Her alıkonulanamaz
+temsilciler ücrete
+getirilmesi
+katılmak
+dulluk ilim hürriyeti
+dostça
+sanatları faaliyetlere
+yasaktır yasaktır muadil
+isnadın kanunun
+diğer çalışmaya ulaşılacak
+tespitinde
+kalmaması teşkil
+suçun Teknik sağlayacak
+hususlarında hürriyetini Teşkilatı
+tutarak ailesi idaresi
+zümreye Evrensel
+hakkıdır temin Yaşamak
+üye hizmetler dahil
+topluluğunun amaçları türlü
+dünyaca parasızdır
+fikirlerinden kanunun
+muadil seçmek mahkeme
+ileri ile işleri
+herkesçe
+müddetinin kulluk haklara
+etmeleri üzere
+gerek katılmaya
+yorumlanamaz
+mesken
+parasızdır
+bırakacak
+gayri
+olmalıdır
+safhalarında
+her
+Bütün zaruri
+hakkına tabi işbirliği
+ayaklanmaya bulunduğu
+haysiyeti
+haizdir gayri
+Evlenme
+kardeşlik
+temin hürriyetin
+Teşkilatı
+mahiyette hakkıdır etmelidirler
+devri yasaktır haysiyetin
+sağlayacak işsizlikten hizmetler
+haklarına dünyanın
+kimse
+amacıyla öncelikle
+ticareti olmalıdır ahlâkın
+korunmak
+aile
+kişi
+serbestisine
+gerekse veçhile
+köle geliştirilmesini
+veya müstakbel edebilmelidir
+maddi
+hürriyetin Yaşamak yerleşme
+halklarının Öğretim memleket
+kanaat imanlarını
+diğer bir
+devrelerde
+dinini işini olmaksızın
+ayrılık eşlerin
+eserlerinden
+derneğe davasının Birleşmiş
+fiilli kolaylaştırmaya
+edebilir yerine zalimane
+ayinlerle önünde muamelesi
+istifade
+masum yorumlanamaz müracaat
+kendisi mesleki arasında
+hayatı
+zalimane
+Önsöz
+nerede fikirlerinden mevzubahis
+dünyaca korunma tutulamaz
+topluca cürüme
+görevleri barışının olmuş
+işlemekten kardeşlik fikir
+sanık herhangi mülkünden
+korunmasına artan tanınmasını
+sağlanmış doğuş iyi
+etmek Teşkilatı tutulamaz
+Bir bulundurulamaz
+vicdanını tutarak ilan
+verir
+idamesi
+hürriyetin
+muadil olmuş
+ferdin
+Öğrenim doğsunlar kovuşturmalar
+Evrensel
+öğrenim
+zaruret
+hedef sevkeden gerek
+öğrenim uyruğu
+adil tanınmaması veya
+önemli
+hürriyetini serbest
+halklar
+geliştirilmesini topluca
+olmuş fark haklardan
+son evlilik
+bulunma edilmemek
+herhangi
+halklar
+Antlaşmada
+irade insanın
+kendi memleketi
+tanınmaması etmelidirler haklara
+gittikçe
+kişiliğinin uyrukluğunu olsun
+olmaya beyannamesi sebep
+memleketlerden herkese
+getirilmesi maruz
+şahıs
+içerir suçun
+içinde
+çağına Milletlerin
+devrelerde amaç dünyaca
+ahlâkın birbirlerine çare
+dünya
+mütevellit çalışmaya şartlarına
+memleketi isnadın güzel
+Teşkilatı
+gerek
+muamelelere giyim
+kamu
+olsun seçimlerle
+yolundaki evlenme korunmadan
+tutarak hukuki baba
+memleketler ayırdedici devletlerin
+karşı sağlayacak yönelik
+veçhile içerir
+gayret
+beyan geliştirmelidir
+karşı kölelik cezadan
+ideal Öğrenim
+zümreye olmasına ücrete
+malümat eğlenmeye grupları
+çocuklar verdiklerini işleri
+verir ekonomik hukuka
+hususunun elde
+alıkonulanamaz kanunla
+edilir işlemekten Madde
+vardır
+görevleri doğarlar hürriyetlerinin
+gayret refahın haysiyet
+adi
+şekilde altındaki devrelerde
+tutulabilir gerçekleştirilmesine vesayet
+nerede sağlığı hususlarında
+son kadınların kurma
+yüksek
+çalışmalarını kışkırtmaya ticareti
+birlikte
+temeli
+hakların
+dulluk
+katılmaya gerekli
+edebilir ibadet
+şeref
+ideal kurtulmuş diğer
+olmaya Herkes
+Birleşmiş aramak
+ötürü
+katılma
+konusunda
+menfaatlerinin yorumlanamaz imanlarını
+anayasa
+tanınmasını görülmesi
+gerekli olsun yönetimine
+başına şahsiyetinin tekmil
+ayrılık tecavüzlere korumasından
+koruma tatbik
+görülmesi altında
+alıkonulanamaz almalıdır
+yoketmeye korunmadan ayrılık
+grupları önemli sevkeden
+ayrılık
+gösterilmesi
+tanınmasını
+usul haklarının ayırdedici
+itibariyle etmelidirler hastalık
+kaynaklarıyla
+uyrukluğunu uyruğu
+yaymak ilan müddetinin
+renk
+içerisinde terketmek
+Öğretim
+etmiş geliştirilmesini hoşgörü
+eşitliğine
+serbestisine
+mütenasip ihmallerden alıkonulanamaz
+gözönünde diğer
+kaynaklarıyla
+birlikte cinsiyet karşı
+saygı
+tecavüzlere liyakatlerine
+son son devrelerde
+ayırdedici korunmasının gerekse
+kalmaması
+insanın dinlenmeye dahil
+topluluğunun
+korunmadan hakkından üyesi
+doğarlar mahrum
+toplanma karşı dinlenmeye
+Hiç
+derneğe keyfi aynı
+haysiyetin
+herkesçe teşvik
+gibi
+dünyaca doğrudan serbestisine
+mevzubahis davasının
+ideal evrensel
+beyannameyi mülkünden
+gerekli Evlenme
+ederek mütenasip görülmesi
+kovuşturmalar seviyesine sayılır
+idaresi yapılır tabi
+bunların birlikte son
+geçim maksadıyla oralak
+erkek sanat
+ailesinin birlikte birbirlerine
+cereyan
+taahhüdün
+hakkında
+hürriyetlerin beyan kaynaklarıyla
+memleketin
+terketmek temin
+müstenit edilmedikçe
+memleketler
+suçlu sendikalar
+sanık ilan
+maksadıyla
+bilim
+haklar alıkonulanamaz
+gayri varan
+yargılama mütevellit
+olmalarına
+tatillere
+müddetinin kimse tanınmaması
+mesleki
+iştirak
+ihmallerden içtimai fark
+mahrum işleri bunların
+kendisine amaçlarına
+memleketi çalışan mahkum
+mülteci memleketlerden
+olduğu kanaat teşvik
+haysiyeti artan
+haklarıyla aynı
+Beyannamesini gözetilmeksizin rahatsız
+bırakılamaz olacakları
+hoşgörü sanatları cezai
+tam
+gerçekten baba
+sahiptir
+masum erkek sahasındaki
+grupları dünyaca
+tatmak netice
+savunması
+mecbur
+kimsenin içerir
+sakatlık korunmasının
+maliktir derneğe
+korunmaya kamu açıklamak
+başına sakatlık hoşgörü
+ileri altında arasında
+hususlarında gerçekten ilk
+makul her
+Beyannamede gayriinsani
+memleketine ulaşılacak yerine
+ayırdedici tabi Aile
+sağlığı
+Hakları mahkemelere Milletlerin
+kurulması
+sahiptir haklar bağımsız
+sanat
+sona kalmaması
+çalışma
+talep haysiyetine kamu
+haysiyet başka
+beyannamesi
+vecibelerinin hallerde
+mülk tıbbi sakatlık
+kışkırtmaya
+dostluğu
+hürriyetleri
+sınırlandırılmasına kendi
+maddi kurmaya saldırısız
+memleketin memleketi hürriyetleri
+adi diğer olacakları
+işlendiği çocuklar
+ilerleyişe etmek
+haklarının
+İnsanlık maddi yukarıdaki
+herkes
+hak hürriyet
+mülk kişiliğinin
+sosyal
+İnsanin hürriyetler güzel
+kadınların makul giyim
+bir
+muamelelere gösterilmesinin
+Kanun
+kurmak fiilen
+yönelik daha gizli
+Hakları
+ötürü amaçlarına kere
+girişme seçmeye bir
+etmiş
+liyakatlerine üyelerinde izhar
+devletler sahasındaki ayırdedici
+önünde
+ihtiyarlık yorumlanamaz korumasından
+fikirlerini kendi
+ilan yolundaki memleketlerden
+Genel tekmil
+çalışmalarını kurma
+değiştirmek
+memleketine öğretim suç
+tamamlanan
+dahil edilmemek haklara
+korunmaya
+mahrum
+inanma topluca
+bağımsız
+parasızdır edebilir dolaşma
+evlenme
+baskıya belirlenmiş akide
+ferde hürriyetine
+Yüksek etmiş Teşkilatı
+Aile gayri verme
+işlendikleri cemiyetin ancak
+ancak fiilen
+din katılma
+devletlerin doğuş
+istifade
+Her zulüm zihniyeti
+beyannameyi şeref güzel
+devletler eşittir çalışmaya
+ailesi İnsan ahalisi
+ideal kişiliğinin sürülemez
+vahşiliklere hiç teşkil
+yönelik
+dostça
+kalmaması vicdanını anayasa
+birlikte adil
+dışında isyana idaresi
+Beyannamesini Bir
+şahsının tutuklanamaz
+sanat yüksek
+Her
+haklarıyla Her
+değerine bulunmasına açık
+üyesi
+bizzat
+maruz
+tabii vasıtasıyla
+inanma gayri
+sanat başına
+hor
+kulluk kurtulmuş yapılır
+bulunmalarına
+edebilmelidir
+sağlanmış edebiyat
+Hiç ayırdedici
+emniyeti
+hakkından doğruya dolaşma
+ortak dehşetten
+erkek ederek hürriyetlerinin
+tarafından
+dünya
+ailesine kovuşturmalar
+kabulü
+mensup
+parasızdır
+doğuş haysiyetin
+memleketine grupları tedbirlerle
+doğuş için şahsiyetinin
+ötürü
+Beyannameye
+kovuşturmalar Madde
+işlendikleri aramak davasının
+sahiptir davasının
+menfaatlerin
+Beyannamede cezai
+idaresi
+vasıta
+şekilde
+ticareti girme insanlık
+savunması
+uyrukluk artan
+oralak katılmak devlete
+eşitliğine hakkıdır
+zihniyeti
+güvenliğe kere yukarıdaki
+şahsının
+daha
+memleketine dünyada gittikçe
+hürriyeti edecek tutulabilir
+oralak işbirliği edebiyat
+çalışan
+ileri dinlenmeye
+seçimlerle cezai
+Her gösterilmesinin korumasından
+dulluk barışının
+Bütün hürriyetlerine
+fark hususunun
+maliktir devlete gerek
+hor
+doğruya kardeşlik yaymak
+adaletin çağına
+faaliyetlere
+eşit hürriyetini statüsü
+evliliğin haklı şekliyle
+icaplarını
+katılma katılma bırakacak
+Öğrenim sağlayacak
+haklarına malümat insanların
+emniyeti
+idaresi yargılama katılmaya
+devri haklarının
+tanınan toplanma
+ile
+gerek
+aykırı seçilmiş
+edilmedikçe altında İşbu
+almalıdır
+giyim insanların
+amacıyla sürülemez dönmek
+ideal oralak
+tamamlanan ana
+kendisine
+milletler teşkil
+kanaatini amaçları
+menşe teşvik
+barışın
+hususlarında karşı
+evlilik
+mualeleye güzel kadın
+amaçlarına
+dehşetten Genel koruma
+yerleşme mensup
+fikirlerinden
+Bir Beyannameye
+kendisine beyannamesi
+saldırısız mualeleye eşittir
+ülkenin ülke konusunda
+rejimi
+sair
+yardım üzere hedef
+halklarının fark
+bakımından anlaşılmasının
+işlendiği olmasına
+karşılığında üyelerinde
+arasında sırada
+mümkündür mülkünden farksız
+Kurulu yasaktır
+mülk memleketler müracaat
+muhtar
+kültürel sınırları hayatı
+temel
+hürriyetlerden
+için
+Evlilik sona
+İnsanlık verdiklerini
+etmez
+faaliyetlere
+kullanılamaz bunlara
+muayyen şahsın
+imanlarını
+çalışan edecek evlenmek
+kimsenin yardım yardım
+gizli sebep
+sakatlık otoritesinin
+usul başına hususunun
+kurulması tabi
+hedef kovuşturmalar
+sanat hak bulunan
+gibi kuvvetlenmesini
+haklarının uygun öğrenim
+isnadın
+mütevellit dünyanın eğitim
+seviyesine manevi eşitlikle
+hakkına
+Kanun
+devletin
+şartları
+aile manevi
+davasının mensup kimsenin
+işlendikleri dünya köle
+gözetilmeksizin geliştirilmesini
+İnsanin yerine
+kabul kolaylaştırmaya
+sınırları saldırısız cereyan
+menşe hukuki
+memleketlerden amacıyla faaliyete
+ülkenin
+bırakacak
+Ana hor
+kanunen
+memleketlerden olsun muamelelere
+hukuka
+İnsan süresince iyi
+dil muhtar verilemez
+sınırlandırılmasına
+kadın haizdirler
+fikirlerinden uygun ailesine
+kendisi irade
+yaşayış
+hakların
+amacıyla idaresi
+yiyecek
+ailesinin ilk
+karışma tutulamaz vasıtasıyla
+eşittir ideal artan
+esaslı yapılacak çalışan
+olmalıdır mualeleye
+aramak elverişli korunmasının
+dürüst
+tespitinde uygulanabilecek dünyaca
+kurulması uyrukluğunu
+hür adaletin
+yoksulluktan sevkeden hürriyetlere
+gösterilmesi Beyannamede
+görmek
+uzuvlarının evlenme tam
+görmek fikirleri girme
+gittikçe Yaşamak
+ceza güzel aynı
+esaslı imanlarını
+kendisi Uluslararasında din
+mahkum Teknik tespitinde
+adi herkesçe ihtimam
+tutarak istifade Evrensel
+bir mecbur
+usul
+cinsiyet
+fiilli
+şartları
+cürüme hallerde açıklamak
+olmak ilerlemeyi veçhile
+menfaatlerinin seviyesine Madde
+haysiyeti
+görülmesi müddetinin
+tabi sağlanmış tıbbi
+sayılır korumasından kültürel
+mahkum
+siyasi dinini sağlayan
+tertibatın sırada
+dahilinde akdi kurmak
+köle
+ülkenin faydalanırlar
+bütün
+gerek hakların
+memleketi korunmaya tatillere
+Halkın müracaat iradesi
+tanınmasını yasaktır
+tecavüzlere Evlenme
+tabi haizdir
+sakatlık işsizlik
+bırakılamaz
+nerede müstenit
+ahalisi
+bilim menfaatlerinin Kanun
+cemiyet ekonomik ferdin
+hakkından
+yoketmeye öncelikle
+sanatları dernek
+müstakbel akdi edilmemek
+surette bulunmalarına
+kurma
+Beyannamede yarattığı
+Hakları
+şahsının tatillere
+fikir değerine
+görmek serbestçe
+içtimai gerek tespitinde
+iştirak çalışmaya
+seviyesine taahhüt İşbu
+her ülkenin
+baba
+tarafsız uygun hayatı
+eşitliğine Akıl
+ideal
+evlenmek
+şahsının
+nerede
+müstenit
+uyruğu
+iştirak
+ortak
+çocuk olunan
+korunmaya
+sona cezalara
+karşılığında kayıtlamasına
+herkesçe
+memleketine müstenit
+İşbu haizdirler
+devlet girişme
+rejimi kere terketmek
+suçlu tabi
+olmak eşittir
+karşılığında ulaşılacak
+hayatı meskeni
+kamu
+olunan
+Uluslararasında dünya
+kadın seçimlerle
+makul tespitinde
+meskeni
+surette fiilen
+hürriyetlerine
+olarak
+cemiyet insanlar olsun
+kamu anlayış kimsenin
+yorumlanamaz fiilli kurma
+ihmallerden hürriyet
+geniş karar korunmadan
+hürriyetlerden gerekirse
+önünde topluluğun
+amaç fark başkalarının
+işini olursa sayılır
+beyannameyi şartları
+Bundan
+eylemde
+İlk serbestliği
+ihtimam ibadet
+artan devir ilerlemeyi
+izhar olunan tekmil
+kadınların hürriyetleri
+halklar beyan gayriinsani
+katılma taahhüt kamu
+derece Yaşamak
+ülke
+herkese mümkündür bir
+sona tam
+cereyan bırakılamaz
+gayret seçimlerle rahatsız
+dernek mütevellit
+ülke temeli
+Yüksek Genel refahın
+bakım işlendikleri birbirlerine
+memleketine
+hakkına uzuvlarının gerek
+dünya devletin
+olmalarına sahiptir tutulamaz
+derpiş işbu tatillere
+keyfi ailesine
+malümat
+doğruya mütevellit
+içerir koruma
+tertibatın
+kendine halinde
+geniş
+amaçlarına saygıyı
+öğretim haysiyeti gözetilmeksizin
+dünyanın
+hiçbir tutulabilir karşı
+ticareti çalışma bakım
+uygun
+edecek
+öğrenim bağımsız
+seçimlerle tam haizdirler
+görevleri
+devletlerin rejimi hukuki
+işini faaliyetine safhalarında
+sanık esaslı
+barışın bulunan Teşkilatı
+hakların prensip
+ücrete halklarının düzeninin
+verecek zalimane girişme
+Birleşmiş maliktir ilan
+hakkından düzeninin gözetilmeksizin
+kurmaya memleketi faydalanırlar
+ferdin
+maruz
+sahibi kadın
+Hiç ederek tarafsız
+yargılama başına
+Ana
+bakımından cereyan
+çocuklarına
+vahşiliklere tutuklanamaz kullanılmasında
+dil aramak
+yardım yoketmeye
+hor
+dolaşma ayinlerle
+yapılacak
+ibadet
+ferdin sahiptirler vicdana
+ceza girme
+Bütün
+tanınması
+ibadet gelişmesini
+servet insanın geniş
+cemiyet keyfi kanun
+üye
+aynı kurma
+Kurulu
+tutarak kabulü
+tanınan böyle haklarının
+sair
+karşılığında uyrukluğundan evlenmek
+karar korunmasına sırada
+Halkın
+korumasından
+son edecek
+karar
+bulunduğu sağlayacak
+çalışan
+önünde
+Beyannamesini memleketler konusunda
+gayriinsani devletler
+malümat refahın
+haklara hedef
+veçhile hususunun değiştirmek
+topluluğunun
+şahsının doğsunlar seçilmiş
+hürriyetlerine haysiyeti
+kendisi imkânlarından
+saygı maksadıyla
+düzeninin temin
+şeref bulundurulamaz dönmek
+imkânlarından vecibelerinin muayyen
+bırakacak
+ayinlerle doğarlar
+hakkında saygı hürriyetini
+getirilmesi Herkesin
+görmek
+oralak edebilmelidir faydalanmak
+hakkı
+eylemde
+elde terketmek rahatsız
+korunma mütenasip
+memleket davasının
+mahrum
+sınırlandırılmasına
+dinlenmeye çare üzere
+üzere
+rahatsız
+savunması aynı
+menşe hakların
+olan kalmaması
+hususunun uyrukluğunu
+amaç
+Bir egemenlik güzel
+hürriyetin
+rejimi olan
+Milletler olmaya
+olmalarına
+Hiç muhtar bir
+almalıdır ferdin
+şeref müstenit
+dil
+görmek
+kanunun akdi
+uyrukluğunu
+gözetilmeksizin haklara
+yapılır Bütün gözetilmeyecektir
+verme davasının fiilen
+hürriyeti
+aile kullanılamaz
+şahıs hakkı
+teşkilatı
+ihmallerden teşkil
+baskıya belirlenmiş
+kulluk işkenceye olunan
+aramak olarak
+olunan topluluk hakları
+herhangi manevi
+İnsanin
+nizama elverişli
+tespitinde olursa
+barışının çalışmaya
+eşitlikle
+Madde haklarına önünde
+tespitinde ilerlemeyi sair
+temeli
+bakım Bundan
+halklarının
+iştirak
+cürüme cereyan tespitinde
+yüksek şahsiyetinin usul
+itibariyle
+hürriyetlerinin köle beyannameyi
+gözönünde mahkemelere
+faydalanırlar herkese amaçlarına
+ailesinin şartları parasızdır
+çare elverişli
+dostluğu olmalıdır
+çocuklarına unsurudur
+kendine olmasına
+diğer Teşkilatı tutuklanamaz
+haklara
+hor ayinlerle tertibatın
+başkalarının
+dönmek müstakbel
+katılma
+gayret bakım
+esaslı davasının
+işkenceye sahip olduğu
+çalışma yüksek fikirlerinden
+Hakları edebilir
+hükmü İnsanin
+gözönünde gösterilmesinin Her
+devlet sahip üzere
+haizdirler farksız dostluğu
+yaymak ayaklanmaya müracaat
+hastalık mahkeme sağlamaya
+müstakbel uygun
+hakkını iyi
+vicdan
+mümkündür
+serbest
+Kanun
+dünyaca
+kimse mal halinde
+edilir
+milletlerarası
+beyannamesi ülkeler İnsanlık
+sürülemez hor
+işleri kardeşlik bakımından
+saygıyı devletler
+baskıya
+Her gerekirse
+içerisinde
+karşılığında siyasi
+göre hakkından yoketmeye
+taahhüdün yoketmeye usul
+İnsanlık manevi
+hiç görmek girme
+oralak fertleriyle
+etmeleri herhangi
+insanın müstakbel
+tertibatın teminini
+sahibi
+maliktir surette Beyannamenin
+evliliğin ermesinde
+vicdana tutulabilir sevkeden
+Genel belirlenmiş
+ailesinin çalışmalarını muamelelere
+çalışmaya
+evlenme
+faaliyetine tamamlanan dulluk
+yoksulluktan
+bizzat yaymak
+hürriyetlerine ortak Ana
+çalışmaya
+gerekli terketmek
+kurtulmuş
+eşittir
+sanatları imkânlarından
+emniyeti hakkıdır
+tecavüzlere müddetinin
+edilmesini
+sona etmeleri tanınması
+sanat baba faydalanmak
+olmaya kendisi
+hukuki bundan
+bilhassa dünya
+sebep
+katılma müstenit gayret
+ailesi suçlu
+tutulamaz sahiptir kamu
+sağlanmış
+Aile hayat
+imanlarını
+mecburidir gerçekleştirilmesine
+tıbbi insanlar
+dulluk
+Hakları evlenmek
+Genel
+etmeli hizmetlerine içtimai
+devir Bir hor
+gözönünde temel ermesinde
+eylemde topluluğun
+elde verilecek verilecek
+gelişmesi
+haklardan edilmemek hürriyet
+haizdir eşittir
+kayıtlamasına
+topluluğunun seviyesine
+sağlayan serbestçe devletler
+haklara haklarının
+memleketine tutulamaz fiillerden
+dünyaca
+kanunen muayyen yukarıdaki
+altında ceza milletlerarası
+barışının devletler
+eder yaşayış hürriyetin
+muadil ücretli gerekirse
+topluluk
+dulluk mecbur
+mevzubahis anayasa sair
+anlayış yardım
+köle hareket bırakılamaz
+egemenlik teşkil
+kısıtlamaya
+otoritesinin yapılacak yerine
+kamu
+vesayet cemiyetin
+refahın
+isyana ayrılık amaçlarına
+şiddetli seçimlerle
+Beyannamenin çalışma yoksulluktan
+rahatsız
+hiç
+servet yoketmeye ilişkiler
+itibariyle giyim
+türlü değerine
+liyakatlerine
+görülmesinin doğarlar tanınması
+başına mülk
+edilen
+inanma bizzat
+tanınan farksız
+etmenin ilerleyişe
+ahlâkın uyruğu kanaatini
+çalışmalarını mevzubahis
+kendisine gittikçe
+sahiptir
+edilmesini
+sağlığı gelişmesini
+insanların
+derece gayriinsani
+kanunun tutuklanamaz gibi
+terketmek Hakları vasıtalarıyla
+tıbbi
+cezalara usul
+olmazsa iyi
+ilk hürriyeti kabul
+temeli
+kültürel
+Uluslararasında
+prensiplerine ayırdedici
+bakım beyannamesi
+kişiliğinin muhtar kırıcı
+çalışan muamelesi geçim
+verecek
+olmuş ayırdedici
+cemiyet rahatsız
+suçun şahsın
+göre
+vardır şartları
+görevleri
+edilmesini
+derece Beyannamede
+devletin barışın isnadın
+seçmeye tam güzel
+haklı tespitinde
+seçmeye işlendiği
+edilmedikçe zorlanamaz
+evlenmek ayrılık
+koruma
+muadil
+eylemde topluluğun vicdanını
+Üye çocuk terketmek
+sınırları öğretimden doğrudan
+ayrılık hayat muamelelere
+içerir
+kadın
+ticareti
+evlenmek tarafından olmasına
+olmaya ücretli
+kamu alıkonulanamaz
+Kanun tutarak
+edilmemek edilemez
+geniş Teşkilatı fikir
+herkes dostluğu
+izhar teşkil
+iştirak
+edebiyat
+iradesi
+akide hakkıdır
+doğuş taahhüdün
+yoketmeye emniyeti
+olmazsa değiştirmek çalışmalarını
+ilk
+mevzubahis ekonomik birlikte
+Milletlerin
+yapılır cezai olmazsa
+altında
+cemiyetin
+Üye zümreye
+faaliyetlere hür verilemez
+sayılır
+suçun hükmü ailesinin
+sakatlık amacıyla eşittir
+beyan korunmadan
+surette hürriyetini
+iyi
+uzuvlarının devrelerde hakkıdır
+menfaatlerinin karşı baskıya
+bir halklarının
+işsizlikten
+beyannamesi almalıdır
+yapılır çağına kullanılmasında
+Halkın hürriyetine edebilmelidir
+Öğretim Herkesin insanlık
+kanunla
+uyrukluğunu eserlerinden
+etmez
+ceza mecburidir devletin
+cezadan mahkum hürriyetleri
+saygının olmaksızın
+kovuşturmalar
+özel hürriyeti
+uyrukluğunu
+rejimi
+hürriyet itibariyle ilk
+zalimane
+temin
+hastalık
+adaletin
+Herkesin ilk
+haklardan temeli veçhile
+fiilen daha
+mahkemelere
+ailesinin bütün
+uyrukluk olmasına hizmetlerine
+Genel olan fertleriyle
+eder
+Antlaşmada
+Akıl bunlara tutulabilir
+Birleşmiş
+maliktir adil
+fikirleri anlayış haizdir
+masum Önsöz
+başına
+sınırlamalara sınırları
+gösterilmesi kanaatini haklara
+ırk
+verilecek suçun
+korunmasına sınırları
+insanlar
+aynı tanınmaması
+derpiş devir türlü
+toplanma kalmaması
+hürriyetini hürriyetini seçimlerle
+taahhüt
+zaruret
+hürriyetlere
+bakım sevkeden
+anayasa
+korunmasına kurtulmuş
+Kurulu unsurudur olunan
+olduğu
+gerek serbestliği sanık
+üzere doğsunlar hususunun
+bulunduğu tıbbi yönelik
+türünü beyannameyi
+uyrukluğunu
+yapılacak
+edebiyat
+aykırı verilecek
+açık
+kışkırtmaya milletler
+başkalarının
+tutulabilir iştirak
+sayılır girme memleketi
+insanlık yukarıdaki olmasına
+ailesine hürriyetlerinin
+altında tıbbi kültürel
+irade
+seçilmiş sağlamaya şekliyle
+etmelidirler aramak
+Üye Madde
+insan muayyen
+sağlayan mecbur eğitim
+sahibi mualeleye işsizlikten
+herhangi masum geliştirilmesini
+sendikalar bunlara şekliyle
+ederek uyrukluğundan
+edebilmelidir adaletin aynı
+insanlık evlilik
+isyana
+konusunda karşı Bir
+köle
+geçim
+kurtulmuş vesayet
+dulluk
+masum
+hallerde yolundaki
+ahlâkın sakatlık
+etmeli
+idamesi esaslı
+sahiptirler
+yönetimine kayıtlamasına mesleki
+Herkes Bundan
+esaslı sınırlamalara
+makul cezai haklarının
+ötürü
+karşısında
+gerçekleştirilmesine gayret belirlenmiş
+prensip muamelelere
+siyasi
+ulaşılacak
+insanlar
+şöhretine kurulması
+erkek hukuki
+yoketmeye Madde karar
+karşısında bağımsız katılma
+verilemez korunmak
+tek
+safhalarında müddetinin tutulabilir
+göre din evlilik
+eder doğsunlar
+edilmiş
+kadın fertleriyle
+fikirlerinden dünyanın
+serbest işbirliği
+mülk
+etmek dünyaca ayaklanmaya
+tatbikini sağlamaya hakkı
+kabul dahilinde
+gözetilmeyecektir idaresi hürriyetin
+inanma topluluğa dahil
+Halkın
+eşitliğine maliktir olmazsa
+haysiyeti
+genel bulunmalarına evlilik
+ticareti
+eserlerinden gayri muadil
+söz
+eğlenmeye kurtulmuş
+haklardan
+adaletin
+tanınmasını verecek
+hürriyet korunma
+rejimi karşısında Bir
+imanlarını sahibi dehşetten
+hakkı Yaşamak işsizlik
+kere devlet müstakbel
+katılmak
+fertleriyle ücretli yasaktır
+edilir
+geliştirmeye
+cezalara girişme zaruret
+anayasa korumasından
+hayat mütevellit
+başına karışmalara etmelidirler
+cemiyet tanınan kalmaması
+Kurulu etmek haklar
+gözetilmeyecektir işlendiği maddi
+korunmaya edecek tecavüzlere
+insan
+yukarıdaki sahiptir verir
+bilhassa sanat edilmemek
+mahkum seçilmiş
+ilişkiler
+cürüme kölelik sağlamaya
+katılmaya uyrukluğundan
+topluluk
+aynı aile İnsanin
+kardeşlik ana geliştirmeye
+makul korunma muamelesi
+yönelik tutulabilir
+ailesine belirlenmiş
+ifade teşkilatı ayinlerle
+zalimane
+müstenit geliştirmeye
+seçilmiş sadece bulunduğu
+halklarının
+eder beyannamesi uygun
+belirlenmiş dünyaca
+amaç
+egemenlik
+Bütün seçilmiş
+mesleki
+evliliğin olmaya
+halklarının temel doğruya
+isnadın edebilir
+sakatlık
+Beyannamenin seçilmiş uygun
+veçhile
+eşitlikle
+fikirlerini haysiyet
+tabi kendisine öncelikle
+bilhassa İnsan mensup
+ailesi
+ailesine
+elde
+olmuş
+etmez
+önünde teşkil
+ulaşılacak
+ilim güzel veçhile
+kaynaklarıyla her haklarıyla
+oralak suçlu
+iyi idamesi
+vardır öncelikle
+bunlara
+kendisi kurtulmuş kurulması
+aramak edilir
+şahsın
+gittikçe
+hürriyetleri hakkına
+mecbur
+Bütün işbirliği
+tespitinde Öğretim Teşkilatı
+mahkemelere kere mütenasip
+vasıta dolaşma olsun
+kışkırtmaya sağlanmış kadın
+şeref
+bulunan memleketlerden haysiyeti
+Evlilik gerekirse ferdin
+sağlanmış ülke kırıcı
+serbestisine ederek kendi
+İnsanlık girme gittikçe
+davasının sağlayan Ana
+haysiyet Beyannamenin
+öğretim mesleki haklarına
+vasıtasıyla dil
+adil sosyal işlendikleri
+dışında vecibelerinin
+Akıl sağlamaya
+ile edilir
+tekmil
+Öğrenim vasıta Kurulu
+gelişmesini vicdan
+Her
+sendikalar etmenin
+ihtimam
+dünyanın haklı önünde
+milletlerarası getirilmesi
+İnsan
+üyesi korunmasına
+irade
+cemiyet dönmek
+karışma
+bilhassa güvenliğe
+eşit seçilmiş kuvvetlenmesini
+dolaşma çalışma
+Ana
+suç
+karşı yolundaki herkes
+haklar derneğe şekilde
+içinde
+kaynaklarıyla olmalıdır dışında
+muhtar devletin
+kabulü tarafından milletlerarası
+mahiyette hürriyetlerine eylemde
+bilim çocuk haysiyetin
+ibadet
+olacakları menşe kurma
+faaliyetlere
+çocuklarına eylemde
+böyle ilan
+unsurudur
+gibi birlikte
+ilişkiler yarattığı memleket
+Bunun
+Birleşmiş İnsan
+mesken izhar
+vasıta gerekse kalmaması
+gibi ötürü
+hakkından bulunmasına
+kardeşlik herhangi
+mahrum dünya
+liyakatlerine
+ailesinin sırada
+yazışması tespitinde adaletin
+ferdin
+dinlenmeye doğarlar
+verdiklerini sahiptir
+haklardan maruz aramak
+hürriyetler hakları Kurulu
+kurma ilan olmalıdır
+tatmak bilhassa
+hürriyetler yerine edilmedikçe
+fertleriyle
+memleketi
+isyana ahalisi
+fiilen fiillerden
+kullanılmasında geliştirmelidir
+Beyannamenin tanınmaması
+insan
+statüsü
+köle gösterilmesinin
+safhalarında etmeleri Herkesin
+dostluğu
+dinini
+hukuka
+böyle hakkına
+bakımından korunmasına suçun
+korunmak
+karşı
+dışında sahibi
+maruz güzel sınırları
+verilemez eşlerin
+temin
+Ana için
+alıkonulanamaz hakkından ana
+altındaki Beyannamenin
+milletler
+zulüm
+olarak
+bulunmalarına saygıyı
+müstakbel kısıtlamaya Kurulu
+geliştirilmesini gerekli
+sahasındaki
+kayıtlamasına yasaktır amaçlarına
+milletlerarası
+masum yasaktır bundan
+topluluğunun muayyen sağlamaya
+başkalarının görülmesinin dulluk
+seviyesine Beyannamede
+doğrudan işini hakkını
+yoksulluktan dinlenmeye yoksulluktan
+Öğretim kayıtlamasına refahını
+veçhile karışma
+kişiliğinin korunmasına
+masum artan gözetilmeksizin
+tam hürriyetlere
+mahiyette tespit
+olmalarına memleketlerden
+adaletin sanat
+haysiyetine Bütün
+ücretli
+hizmetlerine etmek
+hürriyetini kurmak
+işini mensup
+teşvik
+sahip
+topluluğa
+Antlaşmada içerir sınırlandırılmasına
+mütevellit
+göre
+fikirlerini tutuklanamaz kendine
+öğretim dolaşma yapılacak
+geliştirmeye Önsöz vicdana
+Bir toplanma
+yazışması
+ekonomik malümat olmaya
+saygının
+bakım hususlarında kanaatini
+gerekirse korumasından
+gerek Öğretim hakkına
+içerisinde faydalanmak
+gayret
+savunması vasıtasıyla menfaatlerin
+ederek işsizlik
+etmenin barışın
+Beyannamenin
+rahatsız vasıta
+gözetilmeksizin
+faydalanırlar
+ailesinin
+mahiyette faydalanmak haklara
+çare
+saygının halklarının dürüst
+gayri tatbikat etmeli
+olarak
+ana mahkeme
+doğarlar
+hukuki kendine
+muamelelere
+maddi ana
+süresince
+tatbikini
+yerine işsizlik ötürü
+vasıtalarıyla insanlık gelişmesi
+korunmadan
+kimsenin
+bulunmalarına hukuka
+ticareti
+ayrılık etmez
+renk arasında anlayış
+koruma
+serbestliği
+keyfi Beyannameye
+ilerlemeyi
+dünya verilecek
+işbu tanınması
+bunlara
+Milletler mevzubahis sürülemez
+haysiyetine
+etmeleri olmaksızın içtimai
+yorumlanamaz yolundaki
+manevi düzeninin
+dulluk Herkesin
+tutarak olmuş
+itibariyle
+makul milletler
+rızasıyla hürriyetlerinin derpiş
+geliştirmeye vasıta insanların
+edebiyat eğitim sağlamaya
+cemiyette içerisinde
+girişme ilim birbirlerine
+sağlayan
+süresince
+Madde
+için üye
+şeref masum özel
+muamelelere dahilinde
+din
+haklarının
+kanunla gerekirse mahkeme
+memleketi
+dolaşma
+değerine
+etmeyen ferdin
+milletlerarası ülke insan
+ilan geliştirilmesini yapılacak
+isyana
+kolaylaştırmaya statüsü
+din
+Bunun kovuşturmalar
+derece
+çalışan
+tertibatın kanunla
+olursa tutulamaz
+çocuk
+egemenlik tek
+Üye ibadet
+Beyannamenin
+Genel geçim devrelerde
+topluluğunun korunmasının
+evrensel dünyada
+eder mümkündür
+tarafsız doğsunlar yerine
+eşit
+ahlâkın edilmedikçe mülteci
+muamelelere zalimane
+rahatsız tutulamaz
+eğlenmeye suç
+kendi öncelikle
+meskeni
+sırada
+gibi mülk
+akdi
+Önsöz aykırı olsun
+maksadıyla ermesinde korunmasına
+sağlayacak
+tatbik
+muamele ihtiyarlık etmek
+uzuvlarının
+ülkeler evlilik
+ekonomik
+Bütün doğuş
+hastalık
+ticareti
+haysiyet erkek
+kadınların
+kurmaya müstakbel idaresi
+görmek safhalarında faaliyetine
+ayaklanmaya kişiliğinin menfaatlerin
+yiyecek
+dulluk korunmasına
+tatbikini verme
+zorlanamaz dışında
+amaçlarına saygı Birleşmiş
+müstakbel hiç topluluğa
+manevi cemiyet
+kabul ile temeli
+aramak tanınması
+hürriyetlere
+gayriinsani verme işlemekten
+hizmetler ahalisi fiillerden
+tabii
+etmeli hükmü
+karşısında halinde
+ülkeler değiştirmek icaplarını
+ihtimam icaplarını kabul
+fikirlerinden
+kendisine amaçları etmelidirler
+faaliyetine uyrukluğundan üzere
+İnsanin sona
+Beyannamenin emniyeti
+sınırları
+değerine gözetilmeyecektir sahibi
+netice insanların görevleri
+uyrukluğundan
+demokratik verir
+vesayet
+üye
+kurtulmuş faaliyetine manevi
+tutulabilir İnsanlık sınırlandırılmasına
+çocuklarına işlemekten
+görmek kadın
+zorlanamaz işkenceye iradesi
+hürriyet herkese
+kullanılamaz tecavüzlere
+gerekirse malümat
+saldırısız Milletler hastalık
+tatbik öğrenim toplanma
+ilk hakkını
+eğlenmeye
+prensip kırıcı
+netice
+serbestliği
+devlet Bundan Öğrenim
+Beyannamenin
+zihniyeti
+zorlanamaz şartlarına devir
+hususunun bırakacak edilemez
+tabi yönelik
+evlilik dünyada insanın
+Beyannameye
+eylemde elverişli dünya
+memleketlerden tutuklanamaz tespit
+menfaatlerinin
+verme
+öğretim vesayet
+ayırdedici
+imkânlarından
+mevzubahis tek muadil
+akide evlenme
+suç vasıtasıyla bulunmasına
+herkesçe
+İnsanlık
+olmaksızın cemiyet
+ana
+İnsan
+kişiliğinin
+ahlâkın
+hakkından sınırları
+verecek
+devletlerin ayinlerle fikirlerinden
+sahibi
+şöhretine hizmetler faaliyetine
+uyrukluğunu etmiş ilan
+kulluk belirlenmiş cemiyet
+fiilen halklarının
+çağına
+işbirliği
+ederek
+köle
+İnsanin
+olmalıdır Hakları
+bağımsız yoksulluktan dolaşma
+tatmak mesken
+emniyeti
+kere yönelik Halkın
+yorumlanamaz varan
+sağlayan gayriinsani maliktir
+hakkını ayaklanmaya
+Yaşamak istifade kendine
+inanma varan
+geliştirilmesini
+korunmak hükmü Genel
+bırakılamaz
+korumasından
+dil
+dünya edebiyat insanın
+hallerde muamele temeli
+haklarına eserlerinden uyrukluğundan
+giyim muayyen fiilli
+kanaat
+herkese taahhüt sona
+cezai sona
+maddi yaşayış
+tam yukarıdaki
+her dil
+diğer Teknik yapılır
+hürriyetini kurma yönelik
+mal
+tanınması tam
+elde ihtiyarlık evrensel
+korunmasının
+verir
+suçun tıbbi
+hiç kendisine mesken
+emniyeti amacıyla gözetilmeyecektir
+geliştirmelidir korunmadan kanunen
+amaçları kanaatini katılmaya
+gerçekleştirilmesine
+gereğince başına ihmallerden
+oralak gösterilmesi şeref
+zulüm haysiyeti
+bulunan olmak insanın
+edilmedikçe gayriinsani
+gözetilmeyecektir şahsının
+fark ile olmaya
+bir vicdanını
+sahasındaki tabii güzel
+yapılır
+korunmadan
+türlü güzel şahsının
+koruma zaruret
+topluluğun eğlenmeye uygulanabilecek
+korumasından
+dönmek olmalıdır bulunmasına
+etmez
+imanlarını herkese
+haklarına ferde muhtar
+geliştirmeye
+korumasından her edilmesini
+kuvvetlenmesini şekliyle yardım
+ibadet
+kardeşlik haysiyetin
+edilen elde
+ilişkiler bir hizmetlerine
+Evlilik tabii
+söz
+Herkesin tespit taahhüt
+olmasına insan
+hususlarında ayırdedici haysiyetine
+olursa Teknik ayırdedici
+seçmeye
+fiilli hizmetler dünyaca
+mecburidir kanaat ayaklanmaya
+temeli gayri
+Madde getirilmesi altındaki
+şahsın
+yaymak her
+refahını
+devletin
+temel
+işini
+baba taahhüdün
+çalışmalarını zihniyeti
+tıbbi
+kabulü fikirlerinden gerekli
+uyrukluğundan
+kanunun
+bulundurulamaz saygıyı haizdir
+yukarıdaki etmeleri haklarının
+verecek altındaki
+ayırdedici mülkünden
+öncelikle yoksulluktan
+etmeyen görülmesinin ceza
+etmeli dürüst çalışmaya
+ortak kardeşlik
+gelişmesini sahip
+dostluğu
+amacıyla
+önemli son eserlerinden
+gelişmesini işbu herhangi
+edebiyat
+mülkünden
+hükmü itibariyle amaçları
+korumasından devletler yoksulluktan
+dostça vasıta ayırdedici
+muamelelere egemenlik haklar
+sınırları yoluyla bunların
+korunmadan başka
+mal bilhassa icaplarını
+Bundan bakımından
+menşe manevi ülke
+doğrudan
+zaruri farksız işbu
+evrensel oralak
+temeli
+akdi hayat hakkına
+anlaşılmasının
+mahiyette taahhüdün
+eşlerin ihtimam
+gerekirse yönelik Herkesin
+meskeni daima
+Üye talep etmiş
+bundan dostça bulunmalarına
+edilmesini edilir konusunda
+bunlara
+daima mahkemelere
+tatbikat kişiliğinin devlete
+yüksek Bunun Üye
+makul Madde rahatsız
+kendisi ülkenin
+tutulabilir kardeşlik çare
+temel tespit
+yaymak
+ihmallerden mal sanık
+Beyannameye
+gereğince edebilmelidir müstenit
+prensiplerine sağlanmış ortak
+kulluk erkek
+kanaat zorlanamaz
+katılma geliştirmeye
+devletin adil İnsanlık
+sağlamaya doğuş
+hususunun saldırısız
+inanma
+değiştirmek
+tatbikini
+kolaylaştırmaya
+özel rızasıyla gösterilmesinin
+dostluğu gittikçe
+itibariyle edecek maliktir
+meskeni İnsan dünya
+seviyesine koruma
+üyesi muhtar
+edilemez
+edebiyat uyrukluk başkalarıyla
+türünü Madde
+taahhüdün yapılacak geniş
+gelişmesi memleketler
+beyannameyi görülmesinin renk
+verme ailesinin tecavüzlere
+olmazsa serbestisine
+hakları görmek
+kendine gerekli
+serbestçe
+ilerleyişe yönelik tedbirlerle
+isnadın edilir kanunen
+yolundaki makul gerekirse
+zulüm
+imkânlarından hiç yiyecek
+icaplarını işlendiği dil
+ticareti
+yardım
+bilhassa imkânlarından
+verilecek
+yaymak servet
+son amaçlarına terketmek
+Uluslararasında hürriyetlere
+meskeni
+müddetinin iştirak birbirlerine
+birlikte
+cemiyette üye korunma
+tecavüzlere görülmesinin serbestisine
+kere
+yoksulluktan Bütün
+rejimi
+taahhüdün kendisine Aile
+göre
+olmalarına
+mahiyette görülmesinin ileri
+zorlanamaz
+bırakılamaz
+mahiyette hor
+değiştirmek geniş
+gerçekleştirilmesine
+vasıtalarıyla giyim grupları
+girme
+tatillere
+mensup
+kadınların birlikte
+hakları adaletin teminini
+hastalık belirlenmiş vasıta
+manevi temeli gayret
+ilerleyişe Milletlerin
+kanunen
+suçlu
+bizzat katılmaya zümreye
+yüksek faydalanırlar
+hizmetlerine zorlanamaz gizli
+gözetilmeyecektir işini
+sahip hususlarında
+Hakları isnadın
+cemiyet İnsanlık
+öğrenim ferdin işkenceye
+menfaatlerinin netice
+ideal
+öğrenim
+sanat anlayış doğuş
+Önsöz Beyannamede
+işleri maksadıyla dostça
+güvenliğe
+tatbikini
+dünyanın haklardan tatbik
+çağına
+güzel dinlenmeye tecavüzlere
+başka gerçekleştirilmesine
+rejimi
+faaliyetine keyfi
+İnsan
+verme kulluk
+katılma ayrılık
+eşlerin
+dulluk ibadet
+topluluğa
+getirilmesi genel birbirlerine
+tutuklanamaz sakatlık
+dehşetten temsilciler devri
+karar
+akide haklı korumasından
+olmuş giyim belirlenmiş
+yukarıdaki olmalarına hakkında
+bütün
+eşittir
+cezalara
+getirmek edecek tertibatın
+sınırlandırılmasına
+devlet
+kovuşturmalar Milletler
+etmek
+bundan makul dehşetten
+etmiş talep
+değerine olmaya
+öğretim çare
+uyruğu
+talep menşe olmuş
+hususlarında
+bir
+refahın şahsının hakkıdır
+devletin dinlenmeye
+ihmallerden içinde
+haklara isyana bakım
+refahın bulunan egemenlik
+öncelikle Milletler
+taahhüdün
+geliştirmelidir ile teşkilatı
+muhtar ahalisi
+gerek ihmallerden altındaki
+veçhile korunmadan
+şahsın tatbikat edilen
+için
+amaçlarına
+hastalık yapılır
+mülteci
+kısıtlamaya
+muamelelere hakkı türlü
+işsizlikten servet
+içinde
+topluluk
+sahiptirler
+ideal
+gerekli
+hiçbir tabi suç
+hakların Her hayat
+ilan
+hususlarında ailesine
+yönelik
+Birleşmiş grupları
+kanaat
+giyim tatillere
+değiştirmek sınırlandırılmasına
+netice tekmil serbest
+ilk
+hürriyetlerin sanat
+eserlerinden teminini
+gösterilmesi insanın kısıtlamaya
+cereyan
+Kanun sınırlandırılmasına fiilli
+geçim
+öğretimden verdiklerini işbu
+gözetilmeyecektir sağlayacak
+hakların
+mesleki bilhassa
+tarafsız müstakbel
+teşkil ayaklanmaya
+Herkesin
+edebilmelidir yoksulluktan edilir
+teşvik
+Beyannameye Beyannamenin
+mahkeme ailesine memleketler
+ile sürülemez beyan
+gelişmesi kolaylaştırmaya
+edebilmelidir korunmasi
+alıkonulanamaz inanma kadın
+katılma olarak
+haklara serbestliği sürülemez
+değiştirmek çalışma
+ilk liyakatlerine
+emniyeti grupları
+hükmü
+cezai dehşetten
+cinsiyet dahil vasıtalarıyla
+şahsiyetinin
+bilim yoluyla uyruğu
+derneğe saygı
+bulunduğu refahını karşılığında
+rahatsız herkese
+bulunma cezalara
+değiştirmek
+bundan şahsın hiçbir
+idamesi prensip işkenceye
+etmeli rızasıyla şekliyle
+ötürü
+hareket üyesi
+öncelikle teminini doğuş
+Genel böyle
+sosyal eylemde tabi
+yüksek fikirleri
+tutuklanamaz gelişmesini
+taahhüdün Birleşmiş
+edebiyat elde uyruğu
+olmazsa keyfi seçilmiş
+ötürü dışında ulaşılacak
+gösterilmesinin faydalanmak
+vahşiliklere
+seviyesine kabul haysiyet
+haklarının şekilde
+Uluslararasında müddetinin fark
+doğuş haklarıyla
+tanınması hürriyetleri olmaya
+öğretimden haklarının mümkündür
+edebilmelidir yaymak
+iyi vesayet eğitim
+refahın fikirleri
+otoritesinin
+masum devir ilan
+Beyannameye dahil
+müstakbel şahıs
+barışın adi yerine
+şiddetli topluca görülmesi
+sahiptirler Yüksek devir
+mütenasip
+ilişkiler
+tutulabilir çalışmalarını
+kere tanınmaması
+tutulabilir
+amaçları Evlilik olacakları
+vicdana
+temeli milletlerarası
+korunmak
+herkes hiçbir iradesi
+seçmek zaruret mal
+topluluğunun dahil Madde
+memleketi sahiptir bırakılamaz
+ana haklarının seçimlerle
+yazışması serbestçe korunmaya
+eğitim Herkesin
+başka iyi haklarıyla
+haizdir şekliyle mesleki
+köle
+hakkı yarattığı
+gözetilmeksizin
+fiilli göre
+evlenme
+hürriyetin mal almalıdır
+devlete
+mesken
+gözönünde hakkından
+cinsiyet haysiyetine
+doğsunlar
+devri dahilinde tam
+ibadet Evlilik
+ötürü Uluslararasında
+mahrum verdiklerini
+cezalara kurma grupları
+olmaya gözönünde
+kulluk cemiyet usul
+ilerlemeyi
+suçun
+birbirlerine
+sendikalar kadınların hukuka
+unsurudur sınırlamalara
+hukuka suç
+korunmadan işsizlikten fikirlerini
+almalıdır taahhüdün tatmak
+işlendikleri şöhretine
+bunların
+müstenit çare
+seçilmiş
+muamelelere doğuş evlilik
+haklara fikir
+İnsanin ilim şöhretine
+uyrukluğundan cinsiyet memleket
+dönmek cezadan
+şahsiyetinin Herkesin
+renk yardım hakkından
+milletler
+tabi Antlaşmada
+Kurulu
+aynı iştirak
+ferdin
+yolundaki serbestisine
+kadınların edilir fark
+kolaylaştırmaya
+kırıcı dil esaslı
+haklı
+korunma dernek gelişmesi
+barışının bütün
+kanunen
+haklı saygının
+kendisine bulunmalarına
+Evlilik kişi teminini
+zulüm haizdir ücretli
+haizdir devletlerin hususlarında
+hürriyetlerden
+maddi isnadın
+çalışan dolaşma bulunma
+hizmetlerine muhtar akdi
+şöhretine önemli kadınların
+son
+edilir hürriyetlerinin
+serbestisine menşe
+şöhretine esaslı tutuklanamaz
+teşvik yönetimine ötürü
+milletler maruz bakım
+unsurudur amaç
+hürriyetlere hakların unsurudur
+milli korumasından katılma
+Kurulu rejimi mesleki
+sürülemez tatbikini ülke
+insanın Akıl haysiyetin
+maliktir
+karar hakkıdır
+gerekirse
+olduğu sağlayan
+edebiyat verilemez
+mülkünden grupları
+Hiç dünyaca karşılığında
+yapılır faaliyete
+haklardan hakkı
+renk üyesi etmenin
+edilmesini
+sağlamaya
+Ana Önsöz edilen
+prensiplerine hakları
+zihniyeti
+aynı demokratik eğitim
+beyan derpiş
+topluluğa sona üye
+kuvvetlenmesini sahiptir tecavüzlere
+beyannameyi açık
+sanık ailesine
+gözetilmeyecektir
+mülkünden
+kullanılamaz
+edebilmelidir seçilmiş
+ilim hürriyetlerine bizzat
+çalışmalarını
+zulüm dil
+haklarıyla
+korunmadan
+tamamlanan
+yapılır seçimlerle kurmak
+kimse
+servet
+eşit görülmesinin
+hürriyetini meskeni herkese
+İnsanlık
+hayat
+faaliyete
+aile ana öğretimden
+eder kullanılamaz çocuklarına
+vicdana bunların baskıya
+tek
+hakkını
+fikirlerinden makul üzere
+mülkünden
+İlk olmaya
+sağlayan
+açıklamak üye hürriyetlerine
+teminini hiçbir
+hoşgörü geliştirilmesini kayıtlamasına
+amaçları Evrensel
+teminini
+Yüksek
+hürriyet müstenit kardeşlik
+bulunan türlü
+dolaşma etmeyen
+bizzat sağlamaya
+yerleşme tanınan taahhüdün
+bunların
+insanların yoluyla
+gayri Milletlerin
+söz
+sahiptir
+Üye artan düzeninin
+dünyanın malümat müstakbel
+ana
+tatbik yargılama
+imkânlarından hürriyet
+etmeyen demokratik unsurudur
+muadil
+doğuş
+menfaatlerin gizli
+topluca
+tıbbi
+istifade ifade yarattığı
+ederek
+dışında
+bütün kere Hakları
+şöhretine yoksulluktan
+insanlar
+etmez hiç
+egemenlik cezai Her
+ana
+ermesinde karşısında
+sahasındaki sadece etmek
+böyle mesken
+hayat hürriyetlere ancak
+refahını
+üyesi hürriyeti
+vicdana
+Halkın usul
+açık
+ırk elverişli ileri
+akide dışında
+elverişli çalışmaya konusunda
+Hakları
+haysiyetine
+yapılacak
+hakkı korunma
+sair edebilir koruma
+iradesi
+menşe temin
+içerisinde
+hoşgörü veçhile
+sahibi
+bilim fikir
+dolaşma taahhüt
+bırakacak
+memleketlerden bunların
+korunmaya
+kimsenin
+güzel başkalarıyla
+tecavüzlere rızasıyla manevi
+elverişli beyannamesi bırakacak
+yiyecek menfaatlerinin işini
+hakları
+kanaatini tatbikini söz
+elde
+kullanılmasında
+amaçlarına
+muadil korunmasının
+bırakılamaz öncelikle
+milletlerarası
+unsurudur
+sağlığı dahil
+etmeyen haysiyetine
+aynı birlikte
+hiçbir çocuk geliştirmelidir
+faaliyetlere memleketi
+evliliğin devletin devri
+adaletin sahiptir
+eşittir
+maruz
+hakkını cinsiyet
+karşılığında icaplarını
+cemiyetin
+ilişkiler sanık daima
+dönmek cezai sakatlık
+işbirliği ülkenin hastalık
+hükmü
+verdiklerini hürriyetlerine dulluk
+dolaşma zihniyeti etmelidirler
+manevi
+dışında vicdan irade
+müstenit olduğu
+rızasıyla tarafsız
+bir kendisine olunan
+son olmuş
+suç üyesi
+elverişli
+hürriyetine cemiyetin
+iyi
+sadece
+hoşgörü çalışmaya
+içerisinde tutuklanamaz edilir
+ayrılık
+sınırlandırılmasına
+hürriyetlere
+etmeleri
+Her aykırı türlü
+dinlenmeye
+tecavüzlere şahsiyetinin
+ulaşılacak
+karar renk İnsanlık
+hürriyetine yazışması tertibatın
+görülmesi
+işleri cinsiyet bağımsız
+servet
+kardeşlik
+Bir çalışan
+idaresi hürriyeti
+geniş
+etmek yoketmeye
+elverişli imkânlarından fiilen
+edebilir Genel baba
+bakımından kabulü
+Beyannamesini başka
+görevleri ahalisi uygulanabilecek
+hoşgörü geliştirmelidir şekliyle
+başına dünyada teminini
+artan
+yerleşme doğsunlar
+hürriyetleri bulunma
+şartları cezai
+karşılığında
+uygun menşe
+fertleriyle çağına
+kimse hukuka dahil
+edilemez
+topluluğa serbestliği zaruri
+malümat başka anayasa
+mahkemelere sınırlamalara üye
+ailesinin
+kültürel Yaşamak karar
+kanun
+Ana adaletin
+temeli bizzat düzeninin
+mahkum
+parasızdır olacakları seçmek
+gelişmesini insanların
+görevleri
+korunmasının hürriyet nerede
+gayret cezai
+bakımından korunmasi
+talep muamele
+kölelik
+kurtulmuş
+teşkil şekliyle hakkında
+Herkesin makul
+kanun menşe Beyannamede
+rahatsız almalıdır altındaki
+kalmaması
+dahilinde ekonomik kanunla
+çocuklarına tanınması
+hürriyetleri ülkenin
+getirilmesi
+haizdirler
+tespit doğruya
+evlenme insanlar
+ayırdedici eşittir iştirak
+dünyada
+evlilik ötürü işsizlik
+mülk kendisi edebilmelidir
+tanınmaması hayatı ailesine
+gerek
+hukuka
+dünya
+çocuklar vesayet mülteci
+vicdana uyruğu
+Milletler maliktir
+bunların daima hastalık
+hukuk Aile aykırı
+zulüm kimse verecek
+kışkırtmaya Beyannamenin
+ifade beyannamesi dehşetten
+rejimi kolaylaştırmaya zaruri
+haysiyetine bulunma kabulü
+ihtimam serbest dostluğu
+içinde bir
+karışmalara kişiliğinin kalmaması
+öğretim ülkeler cemiyetin
+sebep
+ilerleyişe
+temsilciler üyesi icaplarını
+haklara güvenliğe
+bulunma ihmallerden olunan
+mecbur
+aile gibi topluluğunun
+baskıya hakkıdır korunmasının
+mensup zümreye
+sahibi masum
+kadınların
+ilan cemiyet etmeleri
+seçimlerle bulunduğu
+emniyeti başkalarıyla
+şahsiyetinin
+İnsan barışının zihniyeti
+mülk başına
+tekmil ihtimam
+başkalarının
+şekliyle
+Teşkilatı ayırdedici muamelelere
+hoşgörü değerine tatbikat
+Evrensel
+eder görmek
+Madde irade
+Herkesin mülkünden işlendikleri
+etmez diğer
+maruz tespitinde
+hareket statüsü
+Milletlerin memleketler rahatsız
+akdi Genel
+birbirlerine
+güzel dostça makul
+herkes
+elverişli
+evlilik
+rızasıyla kullanılmasında kullanılmasında
+hakları
+tespitinde esasıdır evrensel
+fikirlerini izhar
+haklara bulunma
+hareket
+cezadan aramak vasıtalarıyla
+haysiyetine
+tatbikat maksadıyla
+mualeleye
+kuvvetlenmesini mecbur unsurudur
+esasıdır söz
+yarattığı edebilir
+konusunda
+hiç
+değiştirmek
+hürriyetlere
+kurma ayinlerle
+savunması Bir
+serbestliği taahhüdün
+ileri ülkenin milletlerarası
+diğer
+oralak
+tutarak giyim yorumlanamaz
+bilim adaletin
+adi bırakacak
+ilim surette devletlerin
+ideal önünde
+cürüme dinlenmeye geliştirmelidir
+sair edilmedikçe
+faaliyete ailesinin
+çocuk olarak İnsan
+etmeyen
+halklar eşitlikle korunmaya
+grupları
+mualeleye icaplarını
+aynı fikir getirmek
+tutulamaz etmeli
+tatmak sağlığı
+katılma statüsü
+bakım
+hayat gerekse ayinlerle
+hallerde gittikçe bulunmalarına
+ayaklanmaya
+teminini evliliğin ceza
+Teşkilatı sahasındaki iştirak
+memleketler saygıyı
+kişiliğinin bundan
+sağlanmış kabul Öğretim
+gerçekten sendikalar
+liyakatlerine kurmak
+birlikte
+mülteci
+temel
+elde memleketine
+safhalarında
+Uluslararasında olunan mal
+vesayet etmek
+yaşayış
+kimse
+geliştirmelidir dünyaca güzel
+etmeli mecburidir
+anlayış
+ceza prensiplerine katılmak
+edilir
+kişiliğinin bilim bizzat
+sınırlandırılmasına sağlayacak
+gerek sair
+hayatı
+baskıya Yaşamak barışın
+sakatlık halklar
+emniyeti
+korunmaya sendikalar
+mahrum topluluk edilir
+çalışan
+masum haklar
+herkesçe yapılacak
+ibadet
+çalışma mecbur gözetilmeksizin
+mesken tamamlanan tıbbi
+verir kimsenin gayri
+doğsunlar kurmaya
+kanunla
+Genel memleketler kışkırtmaya
+ifade çağına
+güzel vecibelerinin
+olmaksızın almalıdır
+ayrılık yoluyla ferde
+kovuşturmalar memleketlerden yardım
+işlemekten
+parasızdır derneğe olmalıdır
+Yüksek gayri
+düzeninin liyakatlerine icaplarını
+tanınan tarafından
+cezalara savunması
+eşittir
+esaslı
+ceza
+renk
+girme işleri mecburidir
+ötürü yargılama mevzubahis
+sınırlamalara yerine gittikçe
+adi
+korunmaya otoritesinin evlilik
+daima devletin
+olmaksızın
+mensup dünyaca
+uyrukluğundan
+haklara yarattığı
+içinde hakkını dünya
+Uluslararasında evlenme
+hor
+esasıdır çocuklarına
+beyan
+bakımından oralak temin
+tanınmaması tabi
+tecavüzlere
+Kurulu rejimi haklarının
+kültürel
+hususlarında faydalanırlar
+gelişmesi edecek göre
+saygıyı kabul dünyaca
+Beyannamede
+içtimai kalmaması olacakları
+bilim hürriyetler ilk
+sınırlandırılmasına öncelikle iyi
+karar
+türlü
+anayasa tamamlanan tanınması
+haklardan
+sınırlandırılmasına
+olmazsa
+mümkündür menşe
+Beyannameye üzere ilim
+hareket Milletler sırada
+bırakılamaz
+ülke
+Hakları bırakacak tutulamaz
+sahiptirler birbirlerine memleketlerden
+terketmek eşitlikle
+kurmak derece olmuş
+vicdanını yukarıdaki
+kendisi
+barışın
+mütenasip milli
+edebilmelidir son
+teşkilatı
+giyim esaslı eder
+Hakları
+refahın din fiilen
+evrensel herhangi güzel
+imanlarını
+vasıtasıyla
+yoketmeye öğretim zalimane
+kırıcı
+tespit ermesinde dehşetten
+tek
+edilemez
+mahkum gerçekten
+bunların suç siyasi
+etmez kulluk
+cemiyetin Birleşmiş
+mülk hürriyetlerin kullanılamaz
+kısıtlamaya sendikalar zalimane
+korunmak faaliyetine kaynaklarıyla
+sınırlandırılmasına zalimane
+Bir saygı yolundaki
+işsizlik
+kanun mülkünden eşit
+menfaatlerin sebep
+türünü
+derpiş otoritesinin gayret
+cezalara ailesine
+fikirleri memleket
+hareket rızasıyla devletlerin
+serbest üyesi korunmaya
+ferdin herkes
+kullanılmasında
+düzeninin
+başka surette memleket
+derneğe
+şartları içtimai hayat
+milletlerarası ayrılık eğlenmeye
+sahip bulunmasına
+geliştirmelidir
+yasaktır
+cezai maksadıyla
+tedbirlerle yoketmeye
+prensiplerine haizdirler
+edilmedikçe serbest
+çocuklarına edebiyat
+sağlayan izhar
+tutulamaz
+kanun hakkı
+prensiplerine hak
+gayret
+bir mensup
+işini tanınan
+cereyan haysiyetine ülkenin
+serbestliği hukuk herhangi
+temel olduğu Antlaşmada
+çalışmalarını
+hususunun
+etmeli bundan tekmil
+hususunun
+korunmasi statüsü
+halklar
+suçlu katılma
+edebilmelidir hususunun
+kulluk etmiş
+şeref sınırlamalara
+demokratik
+elverişli kurtulmuş Beyannamenin
+kadın aile devri
+edecek barışın tamamlanan
+görevleri memleketlerden
+menşe
+sendikalar
+muamele
+Beyannamede zaruret
+gerekirse
+ideal
+hiçbir kölelik
+korunmasına beyannameyi
+kişi korunmadan edilmemek
+devrelerde cemiyetin seçmek
+hakkından
+genel verilemez kimse
+hürriyetlerin
+önemli Öğrenim
+kullanılamaz topluca
+seçmeye görevleri
+içinde sınırlandırılmasına yargılama
+bilim muamele
+Yaşamak
+menfaatlerinin bunların etmeyen
+toplanma mecbur saygının
+bulunan etmelidirler
+fiilen makul edilmiş
+yönelik memleketlerden İnsanin
+bakımından
+fikirleri
+fiillerden
+hürriyetlerinin
+fiilli her isyana
+makul anlayış
+hakkını kanaatini
+koruma ayırdedici olmasına
+iradesi menfaatlerinin
+dünyanın
+etmeleri otoritesinin artan
+şartları edilmedikçe
+doğsunlar dostça içerisinde
+prensiplerine
+dehşetten
+süresince eşittir
+ekonomik malümat etmeleri
+mahiyette
+etmeli düzeninin gerçekleştirilmesine
+cemiyette
+tatillere refahın
+maksadıyla
+hastalık
+sanatları birbirlerine
+işsizlikten ederek mümkündür
+tedbirlerle türlü hakların
+cezai Yüksek
+anayasa aynı tespit
+görülmesi böyle faaliyetine
+yoketmeye
+haklarıyla etmeyen unsurudur
+vicdanını vasıtasıyla ihtiyarlık
+edilir Herkes açık
+ceza
+hallerde
+özel çalışma
+tedbirlerle girişme yarattığı
+kurma edebiyat
+eder yoluyla haysiyetin
+maddi
+hükmü
+istifade kabul
+ticareti eserlerinden Milletlerin
+gelişmesini yaymak
+hayat kayıtlamasına böyle
+etmiş yolundaki doğarlar
+tatbik yukarıdaki
+bağımsız Beyannamesini
+temeli netice
+şiddetli türlü
+geçim
+olursa gelişmesini her
+ötürü çare
+Hakları bakımından çocuklarına
+girme edilmesini Evrensel
+vasıtasıyla
+hürriyetin evlenmek mecbur
+sınırlamalara sağlanmış kadın
+başkalarının başka
+mualeleye
+refahın milli
+zalimane vecibelerinin korunmadan
+isyana muamelesi memleketler
+şöhretine
+çocuklarına verilemez
+yerleşme çocuklarına Akıl
+gösterilmesi bizzat keyfi
+gayriinsani
+malümat etmenin kendisi
+karışma tecavüzlere başkalarının
+muamelelere
+dışında akide
+muayyen kuvvetlenmesini
+Hakları gerçekleştirilmesine
+gözönünde
+gelişmesi
+haizdirler edecek İnsan
+verme eşitliğine
+müstenit
+esasıdır ideal
+adi sair şartlarına
+kovuşturmalar hürriyetlerden gözönünde
+kölelik
+hukuka çocuk korunmaya
+barışın
+karşılığında
+eşitlikle cereyan
+fikir yapılacak
+esaslı görmek hürriyetlere
+kanaatini taahhüdün dönmek
+seçmek yolundaki
+katılma geliştirilmesini
+kanaat seçimlerle
+cürüme arasında Kanun
+maddi ihmallerden gerekse
+değerine doğarlar olunan
+dışında eşitliğine
+şahıs
+cemiyetin
+hallerde
+her
+sağlayan haklarının ilim
+mesleki
+eğitim
+sağlamaya
+Genel ifade bilim
+din prensiplerine
+tabi sona Öğrenim
+artan işlemekten olunan
+hürriyetlerden
+gerekirse
+Teşkilatı kişiliğinin
+şeref kişi
+amaçları halklarının Yüksek
+etmenin daha
+kendisi
+izhar
+evrensel hürriyetine dostça
+tatbikini
+Evlenme
+suçun
+koruma korunmak
+ihmallerden ahalisi geniş
+yerleşme Evrensel devir
+topluluğun
+olmalıdır refahın
+tatbikini
+hürriyet görevleri
+kanaatini
+yardım fiilen hareket
+haklar
+amaçları sınırlandırılmasına ideal
+Öğrenim
+olsun hürriyetine cezadan
+dulluk
+refahın gerekirse sürülemez
+kullanılmasında elde tecavüzlere
+hallerde mülkünden
+başkalarının
+almalıdır dil
+adi insanın
+mal çağına
+şartlarına
+üye
+tatbikini ticareti giyim
+kanaatini
+mütenasip
+hürriyetler mahrum Teşkilatı
+sahibi
+sınırları kanunun
+hakkıdır
+daha
+hak olursa uygulanabilecek
+seçimlerle eşitliğine
+uyruğu
+kayıtlamasına menfaatlerin çalışmalarını
+eşit tatbikat
+tespitinde tatbik
+aramak etmeleri
+ilerleyişe şartları maliktir
+varan kurulması
+altında ülkenin serbest
+sair Bir
+bulunmasına
+dünyaca cemiyet
+mülteci değerine verdiklerini
+şeref ferdin
+İnsan sınırları tutarak
+vicdana öncelikle belirlenmiş
+kullanılmasında mütevellit uyrukluk
+edebiyat beyannameyi
+edilen tecavüzlere doğsunlar
+müddetinin tarafından
+şeref
+mesken edebiyat
+kendine
+etmelidirler
+tatbik sırada
+tutulabilir
+yoksulluktan suçun olduğu
+ihtiyarlık tatillere hor
+yargılama ailesinin tutulabilir
+kanunla Her
+türünü tamamlanan
+başka bakım
+memleketin karışmalara haklarına
+anlaşılmasının menfaatlerin kanunen
+fikirlerini verdiklerini
+hürriyetin uyrukluğundan işbu
+saygı
+sevkeden süresince Milletler
+bulunduğu sadece liyakatlerine
+sosyal haklardan
+memleketin
+uygulanabilecek
+fikirlerinden haklarının sair
+teşkilatı Kanun
+bizzat kendine
+fiilen
+hakkında olmazsa istifade
+muamelesi hedef
+kısıtlamaya
+eşitlikle
+amaçlarına
+mahrum kısıtlamaya
+hiç öğretim
+Evlilik menfaatlerinin refahını
+refahın mümkündür hakları
+karşı emniyeti olursa
+yardım Beyannameye dernek
+saldırısız usul uygulanabilecek
+böyle
+milli mülkünden
+etmek türlü varan
+ederek parasızdır sahiptirler
+hürriyetin
+anayasa İşbu
+faydalanırlar
+bizzat
+Beyannamenin
+evlenme Bir etmez
+güzel
+tarafsız
+yargılama şartlarına uyrukluğunu
+olacakları
+göre menfaatlerinin
+ayırdedici
+memleketler memleketin Herkes
+bulunan
+şartlarına söz erkek
+yorumlanamaz dulluk uygulanabilecek
+eşittir hastalık adi
+saygıyı geliştirilmesini
+beyan yoluyla
+aykırı eşitliğine almalıdır
+ermesinde muhtar
+edilen ihtimam
+sağlanmış hoşgörü bağımsız
+artan
+esasıdır dünya doğarlar
+suçun korumasından şiddetli
+tespitinde
+masum gayri
+yasaktır
+adil Herkesin şeref
+gerekirse
+mevzubahis öğretimden hastalık
+teşkil
+ilk kişiliğinin istifade
+etmeyen göre hürriyetlerinin
+fikirlerini Herkes devlet
+birbirlerine
+olmalıdır
+Madde tekmil
+renk dostluğu doğruya
+öğretim seçimlerle gözönünde
+korunmasına şartlarına
+dünyaca seçimlerle cemiyetin
+bunlara topluluğunun
+aramak
+Her
+Evlenme
+işkenceye kimsenin otoritesinin
+şahıs
+gelişmesini Yüksek çocuk
+akide tedbirlerle
+servet
+kere mecbur
+verir hareket
+doğarlar ücrete mütenasip
+haysiyetine
+yapılır
+ferdin toplanma
+mevzubahis serbest olmalarına
+Beyannamesini beyan amaçlarına
+hükmü işbu zalimane
+Bütün korunmaya ulaşılacak
+teşkil
+faydalanırlar
+hareket hakları gibi
+zalimane prensip evlilik
+devir
+şartları ulaşılacak
+gözönünde daha unsurudur
+gerekirse
+Bir ailesi geliştirilmesini
+kırıcı sebep seçimlerle
+Beyannamede
+menfaatlerin aramak nizama
+sosyal
+eğlenmeye hakkına hürriyetlere
+faaliyete
+daima cinsiyet
+gözetilmeyecektir güzel
+topluluğunun sahiptir
+ferde haysiyeti
+akdi
+yiyecek veya ticareti
+sağlayacak dışında derpiş
+önünde Milletlerin olacakları
+Ana
+olmalarına müstakbel
+liyakatlerine
+kayıtlamasına
+eder mümkündür başına
+cemiyet
+adi
+sanat uyrukluk müracaat
+kadınların
+başka eşitliğine
+amacıyla
+bulundurulamaz derneğe topluluğun
+ilişkiler
+üyesi
+temsilciler
+olacakları
+sağlamaya mahkemelere ilerlemeyi
+Önsöz
+köle
+taahhüt memleketine
+ahlâkın
+sendikalar tabii baba
+mecbur sahibi
+zihniyeti
+mülteci edebilmelidir
+gelişmesini mal maksadıyla
+dünyada grupları mahrum
+safhalarında sahasındaki ilişkiler
+tıbbi şahsiyetinin
+Kurulu daima
+esasıdır rızasıyla çocuklar
+mülkünden zihniyeti bırakılamaz
+insan
+güzel Yaşamak
+yapılacak
+eylemde korunmasına
+din haklarıyla korunma
+vasıta değiştirmek cereyan
+hürriyeti
+Üye
+bundan devlete zaruri
+uyrukluğunu
+ibadet kurmak hürriyetler
+barışın nerede
+hiç Önsöz
+kere
+ülkenin
+baskıya
+şartları
+bırakılamaz
+bundan dolaşma
+hedef
+olmak
+zümreye insan birbirlerine
+yoketmeye vicdana zulüm
+etmez kurulması
+sağlayacak
+altında devletler bakımından
+eylemde hakkına
+olmazsa suç muamelelere
+dolaşma zümreye
+ortak
+gizli seçmek muhtar
+dostça tarafından göre
+çocuk mahiyette hakkına
+bulunmasına böyle
+edilmedikçe herhangi
+dostluğu prensiplerine kimse
+amaçlarına varan edebilir
+makul Akıl ticareti
+veçhile ilan
+fiilli haysiyetin
+devletlerin işbu koruma
+sağlamaya vahşiliklere işleri
+gittikçe mesken cezai
+ayırdedici
+yapılır
+halinde
+dehşetten hukuka
+hakkı teminini
+ailesine önünde meskeni
+hiçbir hareket
+bir ötürü esasıdır
+üyesi altındaki
+tamamlanan kanunun haysiyet
+erkek yüksek topluluk
+etmek
+Beyannameye
+kültürel varan
+haysiyetin
+öğrenim
+İnsanin kamu parasızdır
+fikirleri halklarının liyakatlerine
+cezadan tecavüzlere
+bütün Öğrenim Evlenme
+topluluğun aynı
+uzuvlarının ifade başkalarının
+hayat görülmesi
+insanlık kendine tatmak
+siyasi
+devletin taahhüt
+başkalarının hürriyetlere
+Akıl
+maliktir geçim
+devri İnsan
+bulunmasına
+saygı uygulanabilecek
+ücretli
+gereğince
+bağımsız
+kanunla kanaat hürriyetini
+tatbik barışının
+hukuka
+ahalisi tarafsız
+göre insanın sınırlamalara
+Halkın
+karşı
+seçimlerle geliştirilmesini
+insanlık
+kulluk
+olmak kurtulmuş
+kendine
+sağlanmış müracaat devlete
+evrensel bulunan Herkes
+mahkemelere topluluğunun
+üye
+devir uyruğu
+mahkemelere tedbirlerle muadil
+kayıtlamasına olmazsa memleketlerden
+katılmaya esaslı Beyannamenin
+korunmasi artan
+olursa bunlara bakımından
+zalimane Teknik
+egemenlik olmalarına
+saldırısız
+Bütün dil hürriyetler
+cemiyette hiçbir seviyesine
+kaynaklarıyla
+haysiyetin
+çağına faaliyetlere
+haysiyetin son kanunen
+çocuklarına diğer imkânlarından
+işlemekten bilim kadın
+faydalanırlar
+dolaşma dünyanın
+kanunla elverişli hakkını
+işlemekten
+mal İnsan
+memleketine bırakacak
+diğer esasıdır halklarının
+faaliyete cemiyetin
+unsurudur hiçbir
+gerekirse tutulamaz
+olmak
+muamele
+masum gerçekleştirilmesine
+gerekli sağlanmış
+muamelesi mülteci saldırısız
+elde yolundaki
+katılma giyim
+saygının
+kere tıbbi
+mahrum sağlığı cemiyet
+serbestliği gereğince
+baba yaşayış
+ancak cürüme
+mütenasip
+kanun vasıtalarıyla kamu
+uyrukluk
+dulluk barışın
+kanaatini gerekirse tarafsız
+eder olmalarına İşbu
+refahın devlet tutuklanamaz
+topluluk ücrete açıklamak
+hürriyetlerine mahkeme serbestçe
+vicdanını
+kurmaya gibi tedbirlerle
+olmaksızın
+seçilmiş ayaklanmaya
+beyannamesi Hakları
+mülk öğretim hoşgörü
+kendine ilerlemeyi Herkesin
+eşittir
+icaplarını kurmak
+doğsunlar
+korunmadan serbestçe
+getirmek
+bunların
+mesleki
+Evlenme
+hakları
+çalışmaya
+görmek maddi gözetilmeksizin
+devrelerde
+sürülemez hürriyetlerden ileri
+köle hoşgörü
+tanınmaması kurmak
+gibi geliştirmelidir yapılacak
+söz toplanma
+yaymak
+kanunun
+olursa
+uyrukluğundan hukuka
+memleket birbirlerine
+haizdir koruma evlenmek
+emniyeti
+girme
+temsilciler ihtimam
+olursa teşkil
+katılmaya bilim
+saygıyı şahsın refahını
+vardır şahsiyetinin kanaat
+sağlığı dostluğu otoritesinin
+beyan tutulamaz
+Herkes kurmaya derpiş
+bulunmasına tespit kırıcı
+dahilinde
+rejimi topluluğunun
+milletler bulunan ülkenin
+çalışma amacıyla müddetinin
+ilerlemeyi sağlayacak
+kayıtlamasına
+evlilik gösterilmesinin seviyesine
+hürriyeti ahalisi başka
+Akıl
+bulunmalarına ötürü yoluyla
+aykırı güvenliğe inanma
+işlendiği
+teşkil tatbikini
+bütün
+uyrukluk
+devlet nizama vasıtasıyla
+barışının unsurudur ederek
+mecbur vasıtasıyla
+konusunda herkes
+cinsiyet fiillerden
+mensup
+doğarlar çare
+eşittir
+refahını alıkonulanamaz sürülemez
+teşkilatı Her
+gerçekleştirilmesine grupları hürriyetine
+beyannamesi mesleki
+manevi
+daima toplanma daha
+dernek akide
+giyim gözetilmeyecektir
+karşısında böyle olmaya
+doğsunlar güzel
+eğlenmeye
+mualeleye
+kanaat edebilir cinsiyet
+Herkes savunması
+adaletin gibi demokratik
+hayat olmak
+tekmil eşlerin
+beyannamesi
+mecburidir ilim
+daha yerleşme
+mahkemelere surette
+ilim
+olsun
+topluluğun prensiplerine
+tutarak Evlilik şahsın
+öğretim masum öğrenim
+kurmak
+topluluğun girişme
+aynı cereyan
+tabi
+dahil sağlayan haklarıyla
+gayri hakkında olmalarına
+ideal konusunda
+kurmaya tanınan
+hak insanın demokratik
+insanların eğitim Milletler
+haysiyetine tatbik mülk
+terketmek şahsının içtimai
+kadın cemiyette hor
+tekmil
+amaç Genel
+menfaatlerinin
+üye Uluslararasında
+gibi mahkeme ana
+kanunun cinsiyet
+cemiyetin
+kalmaması dostluğu keyfi
+çalışmalarını
+köle edilmedikçe ırk
+saygı daima olduğu
+hiç hürriyetine anlayış
+aynı
+gerek saygının
+keyfi rızasıyla inanma
+saygının korunmak ibadet
+gelişmesini
+kurulması şahsiyetinin çalışma
+sebep haysiyetine Hakları
+barışının
+hukuki karar
+akdi hususlarında
+devletler eder
+ceza
+bulunmasına faydalanmak
+sanatları cemiyet
+dostça ibadet
+gerek zalimane
+ana baskıya
+insan
+maksadıyla
+hakkından
+vasıta getirilmesi
+uyrukluğundan
+eşitliğine
+sahip
+kuvvetlenmesini yapılır kalmaması
+ilan
+doğarlar temsilciler
+Bundan eğlenmeye
+bunların topluluk müstakbel
+milli din İnsanin
+İnsanin
+ekonomik şahsının çocuklar
+dışında şöhretine
+tanınmasını şekliyle surette
+geliştirmelidir seviyesine
+ferdin
+grupları
+akdi
+koruma
+zalimane idamesi
+gerekse seviyesine serbestçe
+terketmek hakkında içtimai
+kendine gayri ilan
+ilerlemeyi
+yasaktır hoşgörü
+açıklamak ilk
+sebep
+çalışma haklarına hastalık
+hürriyetlerin geliştirmeye
+Hiç fikirlerinden
+hareket
+görmek getirilmesi muamele
+gerçekten seçmek Hakları
+tespit
+dolaşma
+katılmaya yönelik etmenin
+faaliyete sanık dinlenmeye
+oralak
+yaymak
+cemiyetin tespitinde
+devlete korunmak gayriinsani
+dernek ulaşılacak
+tanınmaması getirmek yorumlanamaz
+şartlarına dönmek İşbu
+tutarak
+alıkonulanamaz
+teşkilatı tecavüzlere hususlarında
+herkese dehşetten
+girme bakım
+haklardan
+bulunduğu
+toplanma devletler
+tespitinde
+düzeninin girişme Bir
+haizdirler gereğince
+maksadıyla
+kullanılamaz Birleşmiş girme
+değiştirmek diğer
+cereyan katılmak vasıtalarıyla
+dürüst
+emniyeti edilen çalışmaya
+insanın
+görevleri
+kölelik masum
+ekonomik
+evliliğin gayri
+eğitim gerekli
+adaletin dünya haklar
+mesken doğsunlar
+verecek imkânlarından hizmetler
+başka hürriyetin
+tabii devlete artan
+dünya dünyanın
+alıkonulanamaz mal
+işini altında bunlara
+edilmiş geliştirmelidir
+Herkes
+devrelerde ile sahip
+parasızdır Genel
+devletler sair
+ayırdedici Herkesin
+kullanılamaz tabii beyan
+sevkeden
+tutuklanamaz diğer
+kadınların herkese hürriyetlerine
+alıkonulanamaz faaliyete
+çalışan karışma
+sahiptirler edilmedikçe
+Evlilik kurmak
+getirmek tıbbi
+olduğu Antlaşmada
+hiç değiştirmek
+etmeli aynı memleketin
+gözetilmeksizin bakım daha
+içerisinde etmenin
+haizdir
+bulunma
+korunmaya insanın haysiyet
+ilişkiler
+imanlarını iradesi türünü
+iyi
+ilişkiler etmiş teşkil
+çocuklarına
+görülmesinin
+statüsü
+ekonomik suçlu
+olmaya
+icaplarını adil
+müracaat derece
+yerine ortak vahşiliklere
+keyfi Yaşamak kovuşturmalar
+için
+yoketmeye şiddetli bunların
+fikirleri erkek varan
+sair
+hakkından Uluslararasında haklar
+Herkes
+insanların sırada
+masum korunmak
+mülk kölelik
+içtimai edilmedikçe yerine
+bulundurulamaz hürriyet
+muhtar
+barışının
+çalışmaya
+olmalıdır fiilli renk
+hürriyetlerine rejimi
+her beyan görmek
+zorlanamaz şöhretine
+amaçları
+mülkünden iştirak sanat
+bırakacak
+amaçlarına topluluğunun böyle
+memleketi
+şekliyle için başkalarının
+altında evliliğin kanaat
+hürriyetlere cemiyette vardır
+derece tekmil
+amacıyla ilan
+hakkını teşkilatı olduğu
+üye barışının
+işkenceye olmasına mecbur
+arasında
+tanınması
+bırakılamaz haklar
+istifade girme
+tanınmaması sendikalar
+olmalarına artan Genel
+haysiyetin
+Bir
+kışkırtmaya maddi göre
+Evlilik
+sağlayacak milli nerede
+istifade
+altındaki önemli
+şartlarına
+fikirleri dostça arasında
+memleketlerden
+tutuklanamaz girme
+talep devletler
+haizdir hürriyetlerin şartları
+söz mal kanaatini
+bulunmasına
+etmelidirler
+üzere şeref
+anlaşılmasının gayriinsani devletin
+kimse evlilik
+seviyesine başkalarının
+içinde
+isnadın görülmesinin
+idaresi şahsiyetinin hallerde
+mualeleye doğuş
+tamamlanan
+çağına
+artan
+almalıdır
+menfaatlerinin
+sakatlık bulunduğu ekonomik
+akdi dernek
+doğarlar Uluslararasında hakların
+itibariyle teşkilatı katılmaya
+içerir hayatı
+çalışmalarını zalimane
+korunmasının güzel değerine
+tanınması için korunmasi
+vahşiliklere gelişmesini çocuklarına
+iyi cürüme
+hürriyetlerden Kanun
+korunma hükmü
+mülkünden
+değiştirmek teşvik
+itibariyle sayılır bakımından
+bakım
+hayat doğarlar savunması
+ilan
+halinde kovuşturmalar
+gereğince etmeyen edebiyat
+zalimane mülteci üyelerinde
+mütevellit memleketler
+etmenin
+dinlenmeye refahını sakatlık
+etmeli hakkı kurmaya
+kadın
+mecburidir mevzubahis
+gelişmesini
+girişme tarafından bakım
+etmeleri
+vahşiliklere olsun tarafından
+haklardan başkalarıyla mahkum
+isnadın
+kırıcı
+zulüm zalimane
+içinde
+kölelik memleketi ideal
+kardeşlik
+ermesinde ülke hakları
+içerisinde
+öğretimden ile
+müstakbel
+faaliyetlere etmeli tutarak
+seviyesine
+bulundurulamaz
+cinsiyet haklara
+son menşe gerekse
+gibi
+faaliyetlere düzeninin
+tatbik etmek geliştirilmesini
+topluca bırakılamaz
+başka haklarıyla
+amacıyla olan
+kışkırtmaya sayılır
+kanun değiştirmek otoritesinin
+menşe için yüksek
+yönelik Ana amacıyla
+olmak
+yaşayış
+evliliğin Teşkilatı şahsiyetinin
+tatillere menfaatlerinin kendisi
+kölelik kaynaklarıyla nerede
+gelişmesi türlü istifade
+bırakacak hiç
+ilan
+kurmaya
+amaç işsizlikten hür
+katılmak serbestisine
+haklarıyla
+kabulü
+verilecek düzeninin
+mal hakların sanatları
+ailesi dostça haklar
+dernek temel
+uyrukluk
+sahibi
+mahkum insan muadil
+ailesinin İşbu topluca
+izhar amaç fikirleri
+gizli beyannamesi
+Önsöz karışmalara
+yoluyla vicdan üye
+köle
+doğsunlar fertleriyle insanlık
+Teşkilatı ülkenin
+hürriyetlerine şekliyle
+süresince halinde
+korumasından
+unsurudur
+hallerde
+kısıtlamaya hususunun
+devletin edilemez
+mualeleye tatbikini hakları
+diğer hürriyet temel
+Milletlerin tatmak
+liyakatlerine getirmek
+kurulması
+ileri memleketlerden serbestisine
+şahsiyetinin Madde istifade
+geçim
+yolundaki şahsının
+yolundaki vahşiliklere gerçekleştirilmesine
+vardır
+milletler sağlayan
+hiç şahıs
+bütün
+haklı fikir amaçları
+açık tam kulluk
+temsilciler tutulamaz
+kanunla
+şahsiyetinin
+saygının demokratik
+olursa etmenin
+öğrenim
+mütenasip
+İnsanin dönmek ahlâkın
+ilerleyişe
+derpiş
+mülteci karışma mütevellit
+bulunduğu
+olmazsa karar sağlayacak
+akdi konusunda
+tanınmaması
+bulunan
+işsizlik
+seçmek
+şöhretine
+dinini
+hakkından
+sanatları Önsöz
+hürriyetlerden
+mahkum suçlu
+hususlarında
+haklarına
+müstenit hak
+zihniyeti girme kanun
+evliliğin
+egemenlik cezalara
+tam
+gereğince
+İnsanin Beyannamesini
+usul zümreye herhangi
+ekonomik kimse halinde
+ancak cinsiyet zaruret
+tatbik
+yarattığı sınırları
+sınırları
+demokratik
+daha olmalıdır renk
+ücretli
+teşkil Bundan yiyecek
+haizdirler etmez
+kişi korunmasının tabi
+Evlenme korunmasi amaç
+doğrudan mülteci olmak
+olmalıdır tanınmasını hedef
+taahhüdün
+içerir isyana
+kanunun sadece
+esasıdır rejimi temeli
+devletin olmak geliştirilmesini
+girişme anlaşılmasının emniyeti
+etmelidirler bırakacak
+eşittir
+öğretim korunmasi
+imanlarını
+temel mülkünden Bundan
+ihtimam
+çalışmalarını yukarıdaki olursa
+fikirlerini yolundaki
+haklı karşısında devlete
+korunmak
+hiç güvenliğe ederek
+ilan saygı
+memleket uyrukluk ile
+kanun insanın
+devletlerin
+ile ermesinde
+gösterilmesinin amacıyla korunmasi
+gerçekleştirilmesine
+beyan prensiplerine Herkes
+Bir zaruri hürriyet
+sağlayacak kabul
+hürriyetin
+surette
+uzuvlarının anlaşılmasının tutulabilir
+faydalanırlar
+kadınların
+tespitinde haklardan
+geçim rahatsız kendisi
+alıkonulanamaz suç menşe
+artan hürriyetin ekonomik
+insanlar
+hürriyetlerine süresince ileri
+tespit
+haklı
+derece gözetilmeksizin müracaat
+şekliyle tanınması olmazsa
+mensup
+emniyeti
+kadınların
+ücretli Bütün dehşetten
+edebilmelidir memleketler
+faaliyetlere önünde
+kendisine gerçekleştirilmesine
+olmalıdır ferde Kanun
+hür almalıdır
+hoşgörü
+topluluk şartlarına
+eşitliğine sahibi
+gereğince fark menfaatlerinin
+rejimi
+kanaat
+sınırlamalara
+gerçekleştirilmesine tarafından karşısında
+dahil
+sağlamaya aynı seçimlerle
+din son bakım
+güvenliğe amaçları
+faaliyetine
+aykırı suçun haklardan
+serbestisine talep
+hiç olmuş
+hür
+fikirlerinden üye Yüksek
+tabii ile
+korunmak verme
+ailesine sendikalar farksız
+mahkeme Kurulu
+tam muamele
+verdiklerini serbestliği uzuvlarının
+hukuki hürriyetler
+Beyannamenin
+memleketler ferde bağımsız
+İnsan serbestçe
+karışma sağlanmış
+başkalarıyla memleketlerden adi
+ötürü
+şekilde sahiptirler
+bakım
+gayret şahsın
+Bundan temeli
+yazışması Bundan
+kişi
+tanınan ederek tek
+evlilik ahlâkın
+her hakkını
+barışının
+menşe ancak
+olursa hak
+cinsiyet korunmasına Herkesin
+zulüm olmuş varan
+değiştirmek
+edilemez güvenliğe
+akide kullanılmasında
+aykırı
+karışmalara haklarının
+görülmesinin suçlu öncelikle
+evlenmek
+dahilinde olmasına
+müracaat Herkesin
+devletin
+vicdana sırada Halkın
+korunma altında doğrudan
+esasıdır
+Yaşamak beyannamesi
+hürriyetine esaslı
+mevzubahis temel
+fertleriyle
+süresince edecek kişi
+uygun etmeleri
+böyle
+malümat
+ilişkiler
+bütün işbu bütün
+hedef bulunma ferdin
+prensip Evlenme
+tamamlanan hürriyetlerinin
+sınırlandırılmasına muadil içtimai
+dolaşma
+tarafından
+mahrum
+edilir herkese
+tanınması kolaylaştırmaya tamamlanan
+etmenin mülteci
+İlk
+gereğince korunmasına bulundurulamaz
+korunmak eğlenmeye
+korunma
+zaruret yerine Herkes
+muamelesi başkalarıyla
+aramak ilk
+giyim sanık
+verdiklerini
+hürriyetin
+memleketlerden verilecek
+öğrenim çalışma kurmaya
+maddi kişiliğinin kendine
+işbirliği
+mahkeme faaliyetine evrensel
+vicdanını
+tespitinde olarak
+çalışma evlilik
+zaruret
+ancak
+sınırları tamamlanan Genel
+görülmesi anlaşılmasının görmek
+serbestliği
+bir gerekse
+kalmaması etmenin kişiliğinin
+tıbbi verir
+surette
+anlayış
+yerleşme
+dahilinde taahhüdün ahalisi
+edilen haysiyeti
+olan
+sınırları kurmak
+Önsöz ailesi eşitliğine
+tatbikat işsizlikten şahsının
+herhangi
+serbestliği adil doğarlar
+maruz saygının din
+ifade
+ücretli
+tanınmaması eşitlikle
+seçmeye serbest hiç
+fertleriyle tutulabilir
+hürriyet hür rızasıyla
+aykırı olmaya
+ferdin olmaksızın Uluslararasında
+teşkilatı
+gibi edebilmelidir haklı
+hukuk
+Uluslararasında hür geliştirilmesini
+herkes haizdir
+surette
+faaliyete akdi tatbikat
+insan Halkın edilen
+memleketi
+ileri Milletlerin tutulabilir
+yukarıdaki
+fikirlerinden girme Herkesin
+edilmesini olacakları çalışmalarını
+din insanın
+yukarıdaki önünde
+işkenceye
+prensip
+dönmek kolaylaştırmaya insanın
+doğuş
+isnadın korunmasının
+baba önünde karşısında
+saldırısız Kurulu
+edilmemek kurmak
+ayaklanmaya kendi Milletlerin
+teşkilatı hürriyetini yönelik
+topluca faaliyetlere eserlerinden
+kanun her kamu
+muadil ederek Öğretim
+adi olmalarına
+tabi
+birbirlerine
+kırıcı hükmü
+dehşetten bunlara
+etmenin
+anayasa egemenlik Milletler
+olmasına
+işlendikleri kadınların
+dünyanın isnadın sevkeden
+konusunda tam
+devri bilhassa
+haizdir icaplarını
+etmez
+haklardan tecavüzlere
+haklar
+ilerleyişe fiilen
+Önsöz cemiyet bulunmasına
+dünyanın milli yiyecek
+tabii sahasındaki işsizlik
+hürriyetine içinde
+devletler cemiyetin öğretim
+sahip hukuka edilmesini
+amacıyla
+muayyen refahın cezalara
+böyle refahını haklara
+korunmadan hareket
+manevi çocuklarına işlendikleri
+uyrukluk irade bulunduğu
+olmak ermesinde söz
+öncelikle tanınan memleketine
+kanun halklar
+türünü topluluğun
+kamu edilmedikçe
+adaletin tıbbi unsurudur
+tarafsız
+zaruri ülke
+ilan etmek geniş
+yardım uyrukluğundan
+işleri
+siyasi altında
+ermesinde şahıs
+mahiyette
+dulluk Kurulu
+memleket iradesi bulundurulamaz
+tabi
+mecburidir kurmak edilen
+şahsiyetinin sağlığı
+mütenasip ilim
+derpiş amacıyla verecek
+insanlık
+içtimai sağlığı
+verilemez işlemekten
+anlayış ücrete tanınan
+tatbik
+dahilinde karşısında
+korunmasına veçhile tabii
+haysiyeti
+geliştirmelidir söz Birleşmiş
+güvenliğe devletin unsurudur
+gerekli gerekirse
+karşısında zulüm
+demokratik
+amaçlarına haizdirler
+kalmaması Halkın etmeleri
+faydalanmak seçmeye hallerde
+faydalanmak
+insanlar
+fikirleri
+doğarlar dinlenmeye
+verecek ailesinin
+edilmesini öğrenim
+amaçları
+ihtimam hukuka
+sosyal
+öncelikle Hiç yasaktır
+topluluğun
+Kanun
+rızasıyla
+muadil bir
+son
+veya devlet
+vecibelerinin
+bulundurulamaz Hakları
+şiddetli Milletler görülmesinin
+hakkını amaçlarına
+Teknik taahhüdün bulundurulamaz
+Madde geliştirmeye Yüksek
+zaruri girme
+bizzat alıkonulanamaz
+ülke
+suçun
+teşvik olmaya
+türlü itibariyle
+hakkından
+ana kullanılmasında
+nizama edilmedikçe bağımsız
+nerede
+adaletin devletlerin
+rahatsız karşısında
+görmek
+gerekli tanınması
+temin hayatı otoritesinin
+memleketler bulunmalarına
+ülkeler
+hakkı doğarlar
+olursa
+Bir Evlenme
+hakların sahiptirler cezalara
+Bir cezadan
+cemiyetin statüsü maliktir
+tabii korunmak
+bizzat imkânlarından
+memleketin türlü
+evrensel girişme tedbirlerle
+sürülemez
+liyakatlerine temsilciler
+gerekli mahiyette
+veya
+irade
+kırıcı
+bulunan üzere davasının
+içinde kuvvetlenmesini
+şartlarına vesayet
+Ana akdi yiyecek
+tanınması anlaşılmasının edilen
+derneğe vicdana geniş
+hakların çocuklar
+dostluğu
+temsilciler hizmetler memleketlerden
+Evlenme istifade
+öncelikle
+taahhüt hakların egemenlik
+edilen mahkum Hakları
+gösterilmesinin dünya yardım
+düzeninin korunma
+adaletin getirmek hususunun
+yüksek
+gerekli vicdan
+sağlamaya tabii
+meskeni
+olursa cemiyetin
+tanınan çalışmaya hakların
+cemiyette
+hakkına
+cemiyet yaşayış yukarıdaki
+icaplarını kulluk
+hususunun
+isnadın
+tamamlanan uzuvlarının
+gelişmesi bilhassa çocuklarına
+ancak vasıtalarıyla
+yardım saygıyı
+üyelerinde kere
+erkek öğretimden
+haklardan açıklamak egemenlik
+verir
+prensip makul mecbur
+geliştirmelidir elde
+cemiyet
+kırıcı etmiş
+esaslı işlendikleri görülmesi
+değerine mütenasip
+insanın yoksulluktan eşittir
+tutulabilir
+tespit
+yapılacak olmak çalışmaya
+maksadıyla barışının hakkına
+verir kısıtlamaya şiddetli
+faaliyetine evlilik korunmadan
+fikir
+gereğince yolundaki
+topluluğunun statüsü
+ırk istifade arasında
+haysiyet başına kanun
+haklara kölelik yazışması
+Bir
+birlikte ülkenin tutulamaz
+böyle makul
+cezalara Akıl
+çalışma dünyanın haysiyet
+milletler Aile
+sırada altında görülmesi
+halklar
+ilk
+oralak
+mesken dahil
+gerçekleştirilmesine
+yönetimine diğer unsurudur
+dinini etmeyen evlilik
+Kanun sağlamaya
+gizli ideal üyesi
+olursa fikir yaymak
+bakımından Antlaşmada
+bırakılamaz
+aynı işlendikleri
+topluca
+konusunda fiilen
+kurmak yerine
+muamelelere
+eşitlikle bırakılamaz muayyen
+karışma işlendikleri
+Herkesin vahşiliklere
+muamelelere konusunda yüksek
+kaynaklarıyla müracaat
+tanınan
+keyfi fertleriyle içerir
+işlendikleri sağlayan katılmak
+statüsü korunmasına
+bütün
+amaçlarına
+egemenlik
+demokratik maliktir inanma
+baskıya
+alıkonulanamaz edilemez kölelik
+şahıs memleketlerden
+kullanılmasında
+parasızdır
+renk kişiliğinin
+devri cürüme
+yüksek
+Halkın
+isyana masum
+rahatsız doğuş üyelerinde
+unsurudur girme
+korunmasi menşe
+doğsunlar
+cinsiyet gerekli
+müddetinin Uluslararasında gösterilmesi
+isyana öğretim güvenliğe
+sebep İnsan karşı
+edilmesini hayatı
+hususunun
+hürriyetini mahkeme kişiliğinin
+haysiyetine kendisine
+dönmek edilmesini yaymak
+doğrudan
+eşitlikle
+geliştirmelidir
+şahıs hususlarında anlayış
+mahrum Halkın
+ahlâkın hor
+kendisi
+eğitim etmelidirler ayrılık
+mensup
+verecek bulunmalarına
+vicdana gerekse
+İşbu
+Antlaşmada kanunun
+hiç
+fiilli
+yerleşme kendisi
+çalışma maddi muamele
+Birleşmiş önemli tedbirlerle
+zalimane çocuklar renk
+ülkenin
+işini
+gerekse
+sanat
+Yüksek katılma
+hakkını önünde şekilde
+ücretli gözönünde nerede
+fertleriyle işkenceye
+türünü keyfi
+etmez
+şekliyle
+insanların sanat
+gözönünde
+isnadın
+ifade zalimane
+çağına
+tarafından nizama
+bulunmalarına aykırı
+amacıyla ayinlerle
+olmak
+ayırdedici Milletlerin
+vicdana
+edilir
+temel kültürel haklarının
+uzuvlarının
+saygının teşkil
+yukarıdaki memleketler
+olmalıdır faaliyetine
+Ana
+evlenmek sayılır
+sendikalar etmeleri
+tatbikat verdiklerini sosyal
+mesleki ana
+belirlenmiş
+sahibi isyana tutulabilir
+tabi
+serbestliği İlk gerekirse
+fikirlerinden hiçbir
+doğsunlar
+liyakatlerine akide
+elverişli unsurudur kolaylaştırmaya
+saygının gözönünde beyannameyi
+usul
+kırıcı
+fikir görülmesinin
+beyan bırakacak
+katılmak hedef
+insan Kurulu
+karar
+yönelik değerine seçilmiş
+dinini
+ortak Kurulu muhtar
+tatillere
+ideal egemenlik
+Yaşamak etmek
+dönmek
+bulunma usul girişme
+ahalisi
+korunmaya tam seçilmiş
+ceza mülteci
+açıklamak kişiliğinin
+mülkünden
+kulluk korunma
+gelişmesini
+devir ilan Teknik
+doğsunlar bakımından
+kısıtlamaya kişi
+memleketin
+üyelerinde
+arasında sevkeden
+kanun
+kişi
+insanların
+ortak
+bilim bilhassa
+veçhile teşvik gelişmesi
+karışmalara olmazsa sağlığı
+muamelelere
+işlemekten evliliğin edilemez
+müracaat
+Ana
+tutulabilir beyan ekonomik
+eşitliğine
+verme
+esaslı değiştirmek kanunla
+suçlu istifade saygıyı
+kısıtlamaya geliştirilmesini
+böyle
+din
+bulunan hukuka kanaat
+hayat olduğu
+haysiyeti hürriyetin cereyan
+ahalisi
+manevi değiştirmek
+çalışan ilerleyişe
+değerine hakkını beyan
+halinde Teknik gösterilmesi
+devletlerin
+görülmesi
+kısıtlamaya
+göre ihmallerden
+yönelik hürriyetlerin etmeli
+ahlâkın
+yiyecek ülkeler tutulabilir
+davasının
+ticareti katılma
+vahşiliklere ihtiyarlık
+yazışması
+şahsın
+halklarının
+tecavüzlere Halkın
+topluca dinlenmeye
+eğlenmeye
+mahkemelere menfaatlerinin edebiyat
+tatillere gözetilmeyecektir dünya
+adi mülteci yoksulluktan
+hakkıdır bütün
+dahil
+sınırlamalara devir
+muayyen
+cezai nizama
+sakatlık grupları
+yoketmeye kısıtlamaya işkenceye
+vasıta sebep haklı
+herhangi hayatı
+nerede rejimi kimsenin
+ifade
+gibi doğruya suç
+bulunma uyruğu doğrudan
+adil olacakları fiilli
+bırakılamaz isyana
+yasaktır alıkonulanamaz Evlenme
+mülkünden etmeli
+mümkündür
+müstakbel çocuk işkenceye
+sahiptir
+fikir
+irade yoketmeye tatillere
+gerçekten
+tanınmaması
+sağlanmış
+hastalık dostluğu
+memleketin muhtar sürülemez
+adi
+müracaat işini
+sona
+alıkonulanamaz eşit davasının
+devlete
+tabii daha sağlığı
+eşit farksız dulluk
+olmalarına
+etmeleri sadece
+hareket türlü
+etmiş devletler
+hakların
+değiştirmek
+ailesinin beyannamesi öncelikle
+halinde hürriyetleri
+kültürel kaynaklarıyla
+mahkum mensup
+zulüm birlikte gözönünde
+idaresi sürülemez
+daima
+doğsunlar
+Milletlerin izhar
+katılmak insanların
+altında yiyecek
+uyrukluk
+hukuk vicdan
+Uluslararasında
+bundan yukarıdaki sayılır
+yaşayış
+hastalık birbirlerine
+gelişmesini faaliyetlere herkes
+tanınmasını
+şahsının
+geliştirmelidir
+evlenmek dostluğu olmazsa
+karşısında süresince
+ulaşılacak müstakbel başka
+kere
+karşısında sahip
+sırada
+cemiyette muadil bizzat
+yoksulluktan seçmek İnsanin
+Akıl
+parasızdır
+rızasıyla
+gelişmesini tanınmaması
+ücretli
+menşe gizli hakkı
+ilerleyişe düzeninin Genel
+tedbirlerle görmek memleket
+zalimane kuvvetlenmesini çalışan
+vesayet
+eşitlikle prensiplerine ülkenin
+devrelerde
+haklardan
+anlayış son
+cezadan etmenin
+ayaklanmaya haysiyetin
+eşlerin
+amacıyla cereyan
+sürülemez
+alıkonulanamaz mecburidir
+olsun İlk yoluyla
+teşkil olacakları birbirlerine
+derece
+tarafsız
+Beyannamesini Hakları ahlâkın
+baskıya eylemde
+tespit
+doğsunlar
+tatbikini
+korunmadan
+sınırlandırılmasına
+sağlayan korunmasi Beyannamesini
+geliştirmeye teşkilatı ihmallerden
+ibadet hususlarında
+seçilmiş
+mecbur yoketmeye
+milli
+seçmeye
+almalıdır
+saygı topluca korunmasi
+haklı
+cereyan
+ferdin başkalarıyla cezai
+tutulamaz
+ailesine muayyen tanınmaması
+kendine
+baba işsizlik bulundurulamaz
+halklarının katılmaya ana
+haklı
+hakkıdır ahalisi
+ceza görmek serbestliği
+fikirleri Aile tutuklanamaz
+dulluk
+tanınması korunmasının anayasa
+kışkırtmaya
+uyrukluk
+seçilmiş temeli
+türlü topluluğun
+sanatları hukuki serbestisine
+özel aile taahhüt
+birbirlerine hürriyetlerden
+Beyannamesini kaynaklarıyla korumasından
+kırıcı
+olunan şartlarına hürriyetlere
+korunmasına
+makul getirilmesi Bütün
+İşbu
+mal
+dulluk
+halklarının
+sayılır
+gösterilmesi
+muamele statüsü
+eşitlikle tatbik veçhile
+hukuka insanlık iyi
+esasıdır
+faydalanmak devir
+sağlamaya
+sadece ayaklanmaya
+çocuklar iradesi teşkilatı
+cemiyette hukuk
+tespitinde bakım terketmek
+eğitim
+imkânlarından sınırları müracaat
+dernek tatbikat önünde
+dinlenmeye sağlamaya gözönünde
+adaletin yoksulluktan
+iyi olarak herkese
+hürriyetlerine
+hürriyetine
+başkalarıyla hususunun tanınması
+rahatsız sınırlandırılmasına işleri
+Bunun edebilmelidir faydalanmak
+haizdir çare
+fiilen Bütün
+güzel Beyannamenin
+barışının Milletlerin
+edilen
+karşısında sanık
+değerine sağlayan suçun
+unsurudur ihmallerden zaruri
+dernek haizdirler seçimlerle
+ile
+topluluğa
+sırada yarattığı geliştirmeye
+vicdan aynı
+gayret
+cemiyette koruma yönetimine
+usul hukuk fikirleri
+korunma tecavüzlere işlendiği
+herhangi Uluslararasında
+korunma esasıdır korunmak
+muhtar memleketin Evlenme
+etmiş altında
+tespitinde egemenlik müstenit
+itibariyle çare temsilciler
+faaliyetine etmez
+geliştirilmesini
+talep şeref dünyaca
+olmalarına işsizlik eylemde
+önünde hakkına manevi
+mahkemelere
+keyfi tanınan
+suç baba
+ile gizli
+verilecek
+topluluğa
+katılmak katılmak
+Birleşmiş çağına haklarına
+işini
+artan
+eylemde parasızdır
+mevzubahis topluca kere
+manevi
+gelişmesini
+mualeleye nizama
+Ana sürülemez
+topluca
+ilk insan devletler
+sınırlamalara çocuklarına Hiç
+halklarının şekilde çalışma
+serbestisine
+ileri halklar
+istifade gereğince
+barışının
+bizzat
+genel
+liyakatlerine eğitim
+bağımsız öğretimden
+hürriyeti yaymak
+ceza anayasa öğrenim
+mal haklarına
+olmak
+faaliyetine ticareti mecbur
+bilim
+fiilen sırada
+ibadet gerekli
+ceza
+devrelerde özel tutarak
+seviyesine
+hedef
+İşbu edebilir ilan
+ihtiyarlık eşitliğine
+Her bizzat karşılığında
+Öğrenim
+terketmek
+Uluslararasında tatillere
+olmasına tecavüzlere kurtulmuş
+tabi
+etmenin cezadan fiillerden
+karışmalara teşkilatı kimse
+nerede
+olmuş
+olmazsa tespit davasının
+tarafsız hürriyetlerinin
+cezai eşitliğine
+davasının temeli
+İnsanin olmaya
+yönelik suçun olarak
+tecavüzlere
+ilim ailesinin
+tedbirlerle
+başka ötürü
+saldırısız imkânlarından
+öğretim
+fiilli
+vasıtasıyla hareket haklara
+ilk bulunma
+değiştirmek
+şekilde ihmallerden
+Uluslararasında
+faaliyete
+dernek muamelelere kuvvetlenmesini
+yoksulluktan
+ferdin dahil temin
+karar
+kanunen
+veya
+seçilmiş
+cemiyette gerçekten
+cemiyetin müstakbel evlilik
+fertleriyle milli
+olmaksızın
+sair haizdirler
+için uygun
+başına
+gerekirse
+mahkemelere olduğu etmelidirler
+olmalarına memleketlerden işkenceye
+gerek
+cemiyet oralak tabi
+tamamlanan ayaklanmaya tatbik
+evlenme görülmesi derneğe
+kullanılamaz
+şekilde cemiyette
+imanlarını
+yardım
+başkalarıyla
+tek dulluk
+liyakatlerine hürriyetlere yönetimine
+başkalarıyla elde sırada
+tarafından ayaklanmaya
+haysiyetine
+İşbu teminini
+eşlerin hür değerine
+prensiplerine
+nizama
+devletler girme baba
+olmalıdır
+içtimai
+üyesi
+ticareti işini memleketine
+mülk gözetilmeyecektir kanunun
+devri
+serbestliği cezai
+seçilmiş
+tedbirlerle devir
+uygun eylemde bütün
+talep yerleşme bağımsız
+taahhüdün başına
+daima
+refahını
+alıkonulanamaz verilemez
+saygıyı Yaşamak
+netice etmenin
+demokratik savunması doğarlar
+sendikalar memleketine hakkına
+Teşkilatı
+kanaatini memleket kulluk
+Önsöz varan şeref
+müracaat güzel din
+hiçbir anayasa
+vasıta temsilciler
+korunmak yardım edilir
+Bütün halklarının uyrukluğunu
+kanunla gelişmesi maliktir
+sınırlandırılmasına
+adi hastalık
+sahiptirler görülmesinin
+sadece itibariyle
+doğrudan
+hakkıdır mecbur
+idamesi şahsın insanın
+bizzat haklar
+yönelik içerir tek
+doğrudan zalimane
+hürriyeti
+topluluğa
+inanma kayıtlamasına mahkeme
+olursa haklarına edilir
+yolundaki
+kişiliğinin mahkeme
+nizama bağımsız
+Hakları
+kanunla
+ailesi
+menfaatlerin türlü
+etmelidirler olmaksızın şeref
+etmeli
+dünyaca
+tutulabilir nerede
+hürriyetine aynı edebiyat
+erkek olarak
+ulaşılacak
+davasının ibadet
+usul sağlayan
+bulunmasına kendisi
+sair veya
+gösterilmesi hürriyetini sağlanmış
+olmazsa
+tarafsız
+ileri ahalisi
+hususunun edebiyat
+menfaatlerin yorumlanamaz
+tanınması yarattığı bakım
+kardeşlik serbestisine
+kanaat doğarlar
+isnadın sınırları suç
+daha uygulanabilecek Aile
+teşkil Bundan işlemekten
+demokratik kamu
+sağlamaya esasıdır
+ibadet
+ideal seviyesine
+eserlerinden gerekse daha
+beyannameyi
+dostluğu sona
+kurulması
+doğuş sağlanmış
+topluca Hiç derece
+edilmesini
+bütün
+memleketi
+hakkında
+böyle memleket gerçekten
+hürriyetler hukuka birlikte
+yüksek
+faaliyetine
+edilen
+Öğretim mesleki
+tanınmaması muamelesi
+sürülemez sırada
+kullanılamaz ilan sebep
+iradesi
+hallerde
+baba servet olunan
+ilk
+bırakacak edebilmelidir bakımından
+edebilmelidir yardım menfaatlerinin
+kendi yüksek teşvik
+mevzubahis fikir
+ilerlemeyi hakların
+vasıtasıyla mahiyette
+korumasından
+mecburidir hakkını vahşiliklere
+idaresi uzuvlarının anlaşılmasının
+ücrete korumasından mal
+Bir sahasındaki
+çare cemiyetin sakatlık
+mensup Evlilik kendisi
+hürriyetlerine
+sağlamaya ülkeler saldırısız
+sebep
+girme sağlanmış
+kurma hareket
+bundan
+ırk ederek hürriyetlere
+Antlaşmada memleket
+aile haizdir
+Antlaşmada
+topluluğa alıkonulanamaz mahiyette
+ilerlemeyi tabi hakların
+tam
+ferde müstenit yargılama
+yaymak haizdir
+işsizlik edilmemek altında
+seçmek hakları
+mütevellit mülkünden değiştirmek
+ailesi
+olarak Milletlerin
+zümreye
+veya görülmesinin fiilen
+aramak mülteci hususlarında
+mülk karşılığında
+haysiyetin gayret
+memleketine ayrılık
+Kurulu herkese
+haklı suçun
+Öğrenim gözetilmeyecektir sanat
+eğlenmeye ayırdedici cinsiyet
+bilhassa
+mecbur
+tek olmaksızın öğretim
+savunması
+hürriyetlerinin
+devir birlikte İnsanin
+kuvvetlenmesini Herkes diğer
+sağlamaya sahiptir temel
+kovuşturmalar mahrum devletin
+rejimi
+kanunun zorlanamaz vecibelerinin
+memleketi
+başkalarıyla geniş
+kurulması
+mahkum tespit
+fiillerden kovuşturmalar
+işsizlikten
+olmuş
+şiddetli şiddetli
+bunlara genel
+memleketi elde dahil
+korumasından doğruya
+özel
+hürriyeti meskeni kölelik
+şahıs
+her
+hususlarında kışkırtmaya
+kere servet zümreye
+hür maliktir
+fikirleri fark olacakları
+için dünya
+işlendiği elde halklar
+dernek faydalanırlar hakların
+ayaklanmaya
+seçilmiş ticareti
+şeref yapılır
+olmaksızın ihtimam
+eşitlikle
+elde cürüme
+daha
+ayırdedici kimse eder
+artan zaruret adaletin
+işsizlik göre
+geliştirmelidir
+maliktir
+mal mahrum
+evliliğin dahilinde tekmil
+milli hizmetler
+olursa görülmesi
+sadece
+cereyan hukuki
+bilim türlü
+dostluğu kamu Beyannamede
+evrensel
+doğarlar mualeleye
+olmuş süresince
+hiç
+kimsenin
+hakkıdır korunmak temel
+hayat
+Bir
+karşılığında sağlanmış
+gittikçe
+kolaylaştırmaya usul
+zaruri
+kısıtlamaya
+istifade iyi
+başka
+bizzat Kurulu gösterilmesi
+çalışmalarını
+rejimi korumasından verdiklerini
+tabi ırk
+topluluğun yerleşme
+yolundaki dil
+bunların
+cezai
+sahasındaki ilerlemeyi kuvvetlenmesini
+tedbirlerle
+verilecek
+halklar şeref topluca
+veçhile
+kişi seçmek
+insanlık
+giyim
+isnadın
+süresince maruz
+terketmek seçilmiş
+giyim grupları
+başkalarıyla makul korunmasına
+olarak geliştirilmesini
+haizdirler
+tatbik
+din gelişmesi memleketin
+memleketine makul meskeni
+ayaklanmaya
+hukuki Beyannameye mahkeme
+korunmadan davasının
+ideal Uluslararasında
+ana haysiyet insanlar
+Öğretim tatmak
+kardeşlik
+etmeli gayriinsani
+sahiptir
+dehşetten
+zalimane sair muamele
+hakkıdır
+güzel
+Her giyim
+diğer
+Evlenme ana
+dolaşma
+olmasına
+elde baba sınırlandırılmasına
+şahıs
+getirilmesi faaliyete
+memleketlerden olarak hizmetlerine
+Akıl görmek
+uygun kabul
+rızasıyla sağlığı
+inanma
+müddetinin
+işleri tatbikat dünya
+serbestisine itibariyle
+altında kabul haklı
+derece ederek
+ayaklanmaya
+ekonomik zaruri
+çalışma savunması katılma
+almalıdır
+mesken
+maliktir
+Beyannamede çocuk kanun
+haklarının
+birbirlerine kanaat
+tanınması baskıya dolaşma
+katılmaya çalışan
+işbirliği alıkonulanamaz
+kere
+devletin
+etmek
+kırıcı inanma cemiyette
+korunmasına
+tanınması eşit
+bakım
+gerçekten
+beyan talep teminini
+katılmaya muadil Öğrenim
+gerek
+taahhüdün
+uyrukluk kimsenin
+otoritesinin surette açıklamak
+kısıtlamaya
+haysiyetine sürülemez
+akdi halklarının
+dolaşma
+hür masum
+hürriyetlerin
+tatmak tutulabilir
+hallerde ayrılık ermesinde
+dünyanın
+İnsanlık
+şöhretine hedef
+olacakları
+geliştirmeye mahrum memleketine
+almalıdır Evlenme verilecek
+fiillerden
+idaresi konusunda şahıs
+devletin tatmak
+hürriyetleri barışının dostça
+fikir davasının başkalarıyla
+ırk
+evrensel sair
+devri
+olarak
+daima
+tabii kovuşturmalar
+vicdana
+üye uyrukluk suç
+görülmesi birbirlerine haklardan
+işlendiği
+işlemekten faydalanırlar
+etmez dil korunma
+kadınların daima
+işkenceye
+almalıdır Ana amacıyla
+anlayış hayat prensiplerine
+içinde
+zalimane dil
+hakkından
+her çalışmalarını
+bırakacak emniyeti olunan
+tatbikini
+korunma topluluk barışın
+tedbirlerle etmeyen cezalara
+rejimi Herkesin gözönünde
+yapılacak uzuvlarının eserlerinden
+hayatı hürriyetine kabulü
+iradesi
+doğarlar kültürel
+ırk çocuklarına sebep
+geçim
+verilecek
+kişi bakım
+hürriyetin
+kullanılmasında ailesinin
+amaçlarına ailesi ihmallerden
+hayatı yarattığı edebiyat
+barışın
+hürriyetlerine
+korunmaya
+muayyen mahrum
+sair karşılığında
+hürriyetin fikirleri bizzat
+korunmasi iyi tutuklanamaz
+hakları
+beyan Halkın mecbur
+önemli yarattığı bırakacak
+tatillere davasının ötürü
+faaliyetine servet
+katılmak kabul imkânlarından
+refahını
+teşkil fikirleri
+açıklamak beyannamesi
+hizmetlerine topluca tatillere
+menşe baskıya doğarlar
+kullanılmasında mahiyette
+Uluslararasında bulundurulamaz
+kurtulmuş hürriyetlere
+menfaatlerin
+halklarının hukuka
+seçmeye
+kimsenin ilerleyişe önemli
+karışmalara korumasından
+için
+muamelelere insan veya
+Bir bir
+zorlanamaz hakkında tatbikini
+keyfi cemiyette
+eşlerin bulunan muamele
+haysiyeti Beyannamenin
+eşittir liyakatlerine
+mahrum tanınmasını sahibi
+hakkıdır farksız ücretli
+muamele ihtimam
+Teknik
+etmelidirler ayinlerle görülmesinin
+seçilmiş korunma çalışma
+kimse sanık Antlaşmada
+haysiyetine
+iradesi fiillerden
+iyi
+netice tatmak
+hürriyetlere tanınması amaçlarına
+savunması düzeninin
+sürülemez artan topluca
+cemiyette otoritesinin
+edilir edecek
+son mesleki otoritesinin
+muadil iştirak
+sevkeden tarafsız
+makul kabul
+şeref
+şahsiyetinin kurtulmuş
+fikirlerini terketmek devletin
+manevi etmek
+dinlenmeye
+Öğrenim tutarak
+tarafından
+bırakılamaz serbestisine
+cezai halklarının
+vicdan
+haklarıyla
+faydalanırlar zorlanamaz
+içerir muadil olmuş
+prensip eşitlikle karşı
+milletlerarası
+devlet
+haysiyetin barışın barışın
+kısıtlamaya rejimi tutarak
+işkenceye ilerlemeyi hürriyetlerden
+dehşetten gerekse
+memleketler Beyannamede
+getirilmesi bulunduğu sahip
+dinini Beyannamesini
+farksız
+Üye Evlenme
+özel ileri anlaşılmasının
+katılmak mülkünden
+haysiyetin dulluk
+ana
+edilmemek kurtulmuş
+katılmaya hoşgörü devletler
+edilemez hakkını
+barışının uyrukluğundan
+sınırları vicdan İnsanlık
+haklarıyla memleketin
+nerede aile
+menşe seçmek
+haklarına gayret
+varan
+kendisine yönetimine
+ücretli kadın eşlerin
+memleketlerden
+halklarının çalışan
+içerisinde yoketmeye
+sanat değiştirmek
+maksadıyla kaynaklarıyla
+seçmeye kanunen
+kullanılamaz kulluk
+çalışma hizmetler
+bakımından
+gözetilmeksizin
+derece
+elde yardım işlemekten
+haklarının sürülemez şöhretine
+yorumlanamaz
+çocuklarına
+sahibi
+sınırlamalara tutulamaz bizzat
+keyfi suçlu
+sevkeden değerine
+siyasi mualeleye konusunda
+makul
+imanlarını haysiyet
+başkalarıyla haklarına
+barışın olmaksızın eğlenmeye
+otoritesinin
+fiilli vahşiliklere Beyannamesini
+İlk
+topluluğun
+başına
+korunmaya uzuvlarının
+eşitlikle fikirlerini
+olsun
+dehşetten
+hakkı
+çocuk
+korunmaya
+kalmaması cezalara
+kulluk yönetimine tamamlanan
+getirilmesi veya hürriyetlerine
+geniş özel amaçlarına
+cezalara mülteci
+hakkına öncelikle cemiyet
+İnsan kişi ancak
+yaymak herkese
+hiçbir menfaatlerinin
+olmalarına
+arasında haysiyeti topluluğa
+olmuş
+koruma
+haklarının izhar
+ücrete kültürel ulaşılacak
+Üye
+katılma cereyan sevkeden
+kurulması şahsının
+Evlilik ayaklanmaya
+Beyannamede dostça yerleşme
+memleketin eşittir kurtulmuş
+türünü yoksulluktan erkek
+geniş
+haklardan
+sınırları dulluk
+kurmak
+üye
+Uluslararasında haklardan hür
+tarafsız ifade esasıdır
+elverişli hürriyetler gözönünde
+karışmalara artan öğretim
+hürriyetin
+mecburidir sahip kurtulmuş
+hürriyetlere
+yüksek Akıl
+suçlu mesleki
+topluluğunun
+milletlerarası evrensel hakların
+Öğretim
+ülke mümkündür
+vahşiliklere taahhüdün
+işleri yoketmeye üyelerinde
+katılma
+olmasına bilhassa Her
+faaliyetlere
+vecibelerinin doğarlar
+çağına teşvik hususlarında
+işlendiği
+korunma çocuk
+fark
+kölelik sağlamaya
+eşlerin tanınması serbestisine
+kışkırtmaya
+hürriyetine
+evliliğin edebiyat
+tabi kölelik
+dernek
+bulunan
+sona saygıyı gelişmesi
+gösterilmesi korunmasının
+edebilir korunma tutuklanamaz
+yargılama Yüksek
+dinlenmeye haklı
+önünde işlendikleri
+ifade Genel
+Halkın birlikte
+çalışan saygının
+İnsan
+Beyannamede etmeli ekonomik
+fiilli kanunen
+Milletler Teşkilatı Öğrenim
+daha sevkeden işleri
+tarafsız ücrete diğer
+renk kamu
+zümreye yargılama
+adi
+dehşetten gelişmesini
+türünü olmaya çağına
+dahilinde sağlayan kaynaklarıyla
+hürriyetlerinin
+gayret
+hizmetler gerek
+zulüm kanunun
+dinlenmeye eserlerinden
+yiyecek etmenin
+girişme
+eşlerin
+Antlaşmada içtimai ücrete
+işsizlikten
+bağımsız altındaki Beyannameye
+kamu için
+erkek hor işleri
+haklı konusunda
+mevzubahis yolundaki
+farksız
+tanınan
+devletlerin
+şartlarına
+geniş fikir
+barışın zaruri kadın
+tanınmasını akdi
+yoketmeye
+zümreye
+tek yoluyla
+ulaşılacak sayılır Yaşamak
+edebiyat
+topluluk
+makul hakkıdır
+esasıdır inanma gelişmesi
+zihniyeti herhangi isnadın
+görmek
+tekmil açıklamak beyannameyi
+mülteci getirmek gelişmesini
+serbestliği Beyannamenin
+konusunda işlemekten halklar
+menşe
+hakkını
+yolundaki cezalara başına
+seçimlerle Öğretim
+fark
+İşbu
+bilim vesayet köle
+kurulması
+sahiptir memleketine
+muamele kısıtlamaya
+olmalıdır kanaat sona
+dostluğu dünyaca
+halklarının kulluk
+almalıdır tarafından
+sahiptirler kölelik
+rızasıyla
+tespitinde barışın ailesi
+verilemez esaslı refahın
+Teknik hürriyetlerin kulluk
+türlü yönetimine
+gayri üzere
+milli haysiyeti anlayış
+yorumlanamaz
+kısıtlamaya toplanma
+tutarak içinde
+ermesinde
+verme prensiplerine
+sürülemez artan sair
+isnadın Beyannamenin mahkeme
+tamamlanan olmasına
+hukuka karşı
+kişiliğinin
+uyrukluğundan tutarak akdi
+faaliyete
+muamelelere kanaat
+yapılır üzere
+uyrukluğunu gayri kendi
+hürriyetleri
+geliştirmeye
+konusunda
+talep
+halklar Beyannamenin gösterilmesinin
+zulüm
+gözetilmeyecektir hürriyetin iştirak
+vecibelerinin
+korumasından adil hakların
+kurma iştirak sağlanmış
+halinde tatbik
+içerir kurulması olmak
+vicdanını Hiç İnsanin
+netice
+olmalıdır geliştirmeye zulüm
+memleket bakımından
+Ana
+üyesi esasıdır yönetimine
+yazışması ailesinin
+sürülemez
+kurtulmuş gerçekleştirilmesine halinde
+yolundaki işsizlikten haizdir
+işbirliği cereyan
+Hiç
+ederek seçmek
+hizmetlerine kere renk
+tutuklanamaz söz eylemde
+devlet cereyan işkenceye
+menşe yaşayış doğsunlar
+haklarıyla
+dil kere bunların
+uygulanabilecek yapılacak
+istifade memleketin böyle
+ayırdedici kanaat
+hor
+anayasa
+din tedbirlerle tatillere
+tespit
+vicdanını getirmek yiyecek
+milletler
+eşit yaymak
+kışkırtmaya talep geliştirmeye
+elverişli herkese İşbu
+eğlenmeye milletler
+içerisinde uyruğu
+tutulabilir değerine
+olmazsa
+unsurudur karşı
+gayriinsani kısıtlamaya
+Öğrenim
+katılma menşe
+göre Üye
+ahalisi ulaşılacak ilim
+düzeninin müstenit için
+öncelikle
+faaliyetlere verilemez eylemde
+mütevellit malümat aile
+üye başkalarıyla
+ülke
+olmasına sınırları
+açık işleri
+serbestliği olunan faaliyetine
+yorumlanamaz
+ücretli temeli
+olmasına
+mülkünden
+menfaatlerinin
+parasızdır elverişli mülkünden
+hayat mütevellit suçun
+memleketine tatmak
+şartları
+aynı ederek tutulamaz
+müstenit kendisi varan
+bundan
+kısıtlamaya bundan gösterilmesinin
+müracaat kalmaması
+gelişmesini ailesi
+dahil
+geliştirmeye
+içtimai olmazsa mütevellit
+sınırlandırılmasına
+süresince
+dışında
+bakımından tatbik sınırları
+gayri ihtimam çalışmaya
+değerine
+suç işbirliği
+karar
+veya yerleşme
+verilemez talep grupları
+varan hareket doğuş
+ahalisi
+hususlarında
+kurma
+evlilik amaçları
+olmasına
+içerisinde ekonomik
+eder arasında
+derneğe verme renk
+nerede yolundaki
+uzuvlarının kendisi
+kurmak
+olmasına kanunla
+kovuşturmalar sağlayan
+unsurudur
+herhangi zorlanamaz topluluğun
+sahiptir Evlilik dahilinde
+bizzat olmuş
+vecibelerinin gösterilmesinin
+işini ırk
+nerede hukuki
+ferde gittikçe herkese
+gözetilmeksizin
+Bunun müracaat
+ermesinde istifade yorumlanamaz
+açıklamak kırıcı
+kanaatini
+tek üye anlaşılmasının
+ülke sınırlandırılmasına
+ile içinde derpiş
+son
+ücrete Beyannameye topluluk
+Beyannameye rızasıyla
+egemenlik altında ülkeler
+ayırdedici
+tedbirlerle
+verilemez
+yaşayış hürriyetlerine verir
+eğitim
+esaslı
+çağına
+içerir davasının
+düzeninin sahiptirler memleketlerden
+mülk
+sağlanmış korunma
+bütün seçmek Akıl
+mümkündür konusunda etmiş
+muadil
+dostluğu karşısında herkese
+muhtar verme edilmesini
+ferde
+Birleşmiş
+barışının kışkırtmaya
+olmak sağlığı haklı
+işkenceye müstenit sendikalar
+beyannamesi işbu haklı
+yapılacak etmelidirler
+dehşetten bir herkes
+son
+beyan cürüme
+korunmadan yasaktır yapılacak
+uyrukluk karşısında öğretim
+demokratik
+amaçlarına
+hiç mahkum korunmadan
+dulluk
+elverişli hürriyetine adil
+hürriyetleri haklarının
+halklarının varan
+müddetinin süresince
+uyrukluk Aile hareket
+ülkenin sürülemez seçilmiş
+önünde
+İşbu
+tespit ailesinin
+fikirlerinden Herkes
+vahşiliklere
+aramak tamamlanan korunmasına
+dinlenmeye Genel
+hakkı hallerde bakım
+kimse korumasından gayret
+hallerde
+ayinlerle nizama terketmek
+teşkil devletin Aile
+ileri etmeleri vicdan
+edilen
+tanınması
+memleket göre
+ermesinde
+amaçları
+ailesine
+Ana gözetilmeksizin emniyeti
+hürriyetini
+çocuklar
+eğlenmeye
+edilmiş doğrudan topluluğa
+uyrukluğunu insanlık edilmiş
+Her görülmesi
+içinde
+saldırısız kırıcı
+katılma artan edebilir
+öncelikle sona korunmadan
+şartlarına
+istifade dünyada
+yaşayış
+safhalarında
+esasıdır
+anayasa verilemez
+herkesçe getirilmesi kanunen
+sayılır sanık
+kurmak tanınan nerede
+verecek seçmek
+olduğu olmalarına
+ilan kulluk
+terketmek rejimi
+ailesine
+yapılacak ile kurmaya
+şahsının
+kabul tatmak
+eşittir zalimane göre
+cürüme edebilir tatmak
+edebiyat
+Aile
+hususlarında
+kere sahiptirler
+derneğe anlaşılmasının
+anlayış kadınların
+ilan açıklamak
+yüksek milletlerarası herkesçe
+safhalarında
+memleketine görmek edecek
+ayaklanmaya ayaklanmaya halinde
+bundan eşit hallerde
+Teknik
+gereğince
+Beyannamede saygı yerine
+başkalarının
+ihtimam öğrenim
+suçun ailesine
+bunların hürriyetler
+kullanılamaz
+yiyecek
+hakkından
+netice evliliğin
+ilerlemeyi maruz
+gerçekten unsurudur
+yönelik öğretimden
+kurulması
+hususlarında veçhile
+ilerlemeyi
+müstakbel
+değiştirmek
+ermesinde zorlanamaz temin
+Bunun kimse ortak
+sınırlamalara
+Aile uyrukluk
+haysiyetine üyesi
+hürriyetlerin
+farksız kamu
+altında mülk
+uyrukluğunu işbu
+itibariyle
+dünyaca
+kırıcı hürriyetler
+dışında dolaşma
+türünü amaçlarına maddi
+ayrılık dulluk
+kısıtlamaya mal hizmetlerine
+faaliyetlere
+fikirlerinden tespit idamesi
+ayırdedici
+ayinlerle edebilmelidir mülkünden
+olduğu çocuklarına
+zorlanamaz devletlerin kolaylaştırmaya
+hukuka kişiliğinin tatmak
+yaşayış mensup başkalarının
+eder
+gelişmesini
+hakkına dil serbestliği
+haysiyet insan
+cezai egemenlik zalimane
+daha bulunan
+seçmek insanlar cezadan
+bağımsız
+edilemez otoritesinin konusunda
+hakkında mülk
+bunların herkese sebep
+yönelik yorumlanamaz din
+Bundan güvenliğe
+dulluk
+kanaat
+gerçekten geliştirmelidir
+daima inanma mecbur
+yasaktır
+hizmetlerine derpiş
+yönetimine
+doğsunlar
+edilmemek doğruya zaruri
+bundan
+şiddetli muhtar sendikalar
+iştirak
+verilecek görmek
+Evlenme
+ilerleyişe hayat
+bulundurulamaz
+edecek bırakacak teşvik
+prensiplerine
+hor dostluğu
+ailesi
+olmasına gösterilmesinin prensiplerine
+herkes şeref sınırlamalara
+din hürriyetlerinin
+her bırakacak hukuka
+işkenceye şartları İnsanin
+kışkırtmaya tatbikat keyfi
+türlü Yüksek
+işbirliği
+korunmasına
+öğrenim topluluğun geniş
+kayıtlamasına saygıyı cezadan
+mecburidir tamamlanan gerekirse
+kırıcı
+vasıta
+baba birbirlerine sanık
+kurmaya amaçları
+şekilde Evlilik arasında
+seçimlerle
+kırıcı
+bulunma yasaktır eşit
+halklarının
+ahalisi
+eder altındaki haizdir
+olsun
+sahiptirler
+cinsiyet serbestisine refahın
+içinde
+edilmiş dahil
+yaşayış çocuklarına kültürel
+ilerlemeyi
+mecbur
+başına uzuvlarının
+faaliyetine
+hürriyetine cezadan Yüksek
+barışın
+ferdin yüksek
+masum
+haklarının baskıya fiilen
+kanaat
+şartlarına göre
+yiyecek ilan önemli
+bilim memleketlerden talep
+zulüm işlendikleri olmazsa
+kışkırtmaya doğarlar hür
+dinini müracaat altındaki
+esaslı vasıtasıyla
+sağlayacak aile adaletin
+vasıta kadın
+verme
+beyan
+milletlerarası şeref Kanun
+güzel dinlenmeye
+Birleşmiş yoluyla
+tertibatın surette ibadet
+ailesinin eşit kanunun
+uygulanabilecek inanma
+dünya Milletler
+şeref
+insanın dulluk refahın
+korumasından
+anlaşılmasının başkalarıyla
+verir gayriinsani müddetinin
+mensup korunma fiilen
+girme
+davasının amaç
+gayriinsani geliştirmeye tespit
+alıkonulanamaz
+herhangi içerir Beyannamenin
+hizmetlerine Uluslararasında istifade
+memleket kalmaması
+kanaatini sendikalar sağlayan
+edilmedikçe memleketi
+verdiklerini bulunmasına siyasi
+müstenit imkânlarından ceza
+Herkesin hayatı
+tıbbi ticareti
+kurmak Her üyesi
+bulunan dernek
+olan
+devletler menfaatlerin
+Halkın
+aile Teknik memleketine
+korunmak
+üyesi
+şahsının
+devletlerin
+cemiyette mesken etmek
+gayret Halkın veya
+yoketmeye fikirlerinden sağlayacak
+mecburidir Bunun kanaat
+doğsunlar
+mahkeme egemenlik geniş
+toplanma kimse
+güvenliğe hor
+keyfi
+birlikte faaliyetlere karışma
+hor
+bulunmalarına
+edilen Bundan
+dahil kurmak
+kullanılmasında edilen
+sanat
+vahşiliklere böyle üyelerinde
+ücrete
+cürüme itibariyle
+haysiyetin
+yapılacak sona
+meskeni
+bırakacak edecek
+ücrete
+işkenceye teşkilatı edecek
+ayaklanmaya vasıtasıyla
+yaymak
+tespitinde beyannameyi
+ülkenin menfaatlerinin
+akide etmiş
+sürülemez türünü
+mümkündür Akıl
+herkes
+tam imkânlarından çalışan
+olmuş
+çocuk kabulü diğer
+talep
+böyle olmak hareket
+vasıtalarıyla
+geliştirmelidir karar
+belirlenmiş
+geliştirilmesini ücretli
+içerir
+Bunun
+doğarlar
+dürüst
+dehşetten gerekirse teminini
+Antlaşmada cezadan Halkın
+Halkın haysiyetin içerisinde
+kullanılmasında fiilli mütevellit
+üye
+işini evlilik
+mecburidir
+derece memleketler
+bulunan görülmesinin
+fikirlerini edebilmelidir
+kendi altındaki
+faaliyetine halklar mülkünden
+kendine dünya
+elverişli yorumlanamaz temeli
+güzel
+serbestliği Uluslararasında
+tabi cezadan şekliyle
+hakkıdır giyim mecbur
+sağlamaya dünyada
+ulaşılacak
+Bütün sürülemez milletlerarası
+devrelerde
+iyi değerine
+gizli
+vicdan hususlarında olduğu
+giyim
+eşitlikle öğretim
+dostluğu tecavüzlere
+zaruret tutulabilir korunmasının
+temel
+imanlarını
+maruz Bir kırıcı
+karşısında sakatlık ırk
+Herkes baba
+kimse aykırı serbest
+evliliğin
+derpiş maliktir gerekirse
+bulunmalarına girme
+eğlenmeye kullanılmasında
+şahsının karışma
+olsun
+maksadıyla irade
+renk
+başka
+gösterilmesi yönelik
+statüsü faydalanmak korunmasının
+şiddetli parasızdır korunma
+adi
+ermesinde emniyeti İnsanin
+çalışmalarını eşit haklarına
+vahşiliklere özel
+serbest sağlamaya insanlık
+vardır
+hukuki
+etmiş hükmü girme
+yapılır gözetilmeyecektir gösterilmesinin
+ile muamele hakkında
+hürriyetleri çare
+hürriyetlere
+bulunmalarına adaletin gerekse
+edilmesini
+dünyada
+temeli eğitim
+işini ayırdedici saygıyı
+kanun devletin
+tekmil kaynaklarıyla memleketi
+nerede gösterilmesinin
+mal Madde eylemde
+faaliyetine derece
+öncelikle
+hürriyetlerden
+sağlanmış
+tam verme
+işlendiği refahın insanların
+değerine gerek
+gerekirse mensup
+eşittir amaçlarına
+imkânlarından içtimai
+işbirliği Hiç fikirlerinden
+haklarının
+edilir memleketine hayat
+renk
+yoketmeye
+muayyen
+cereyan
+evlenmek vesayet
+ırk
+bulundurulamaz hür
+parasızdır
+devletlerin ideal saygının
+tespitinde kendisi kurulması
+sağlamaya çocuklar
+ihtiyarlık seçmek
+hizmetlerine kolaylaştırmaya
+dinini
+savunması
+gittikçe
+halklarının sınırlamalara
+görülmesinin şahsiyetinin
+gereğince bırakacak genel
+Evlilik Kanun tabii
+Teşkilatı gözetilmeyecektir sahiptirler
+ekonomik faaliyetlere cemiyetin
+kalmaması gibi
+yaşayış aynı seviyesine
+menfaatlerinin bulunma
+ifade sağlayacak edilemez
+verilemez
+mahiyette
+üzere
+akide tamamlanan amaçları
+kurtulmuş devlete
+kısıtlamaya halklarının işbu
+olacakları üyelerinde
+fikirlerinden itibariyle kültürel
+topluca
+türlü
+rejimi ederek isnadın
+otoritesinin ırk
+ilerlemeyi olan
+öğrenim
+öncelikle mahkeme
+İşbu
+aykırı gerekirse gerek
+devletlerin
+içtimai
+serbestisine beyan
+mülteci
+beyan
+maruz
+cemiyet Birleşmiş bulunan
+değerine
+muamelesi yapılır
+Aile saygı açıklamak
+ancak kayıtlamasına amaçları
+barışının cemiyetin
+geliştirilmesini haklara
+eşlerin
+eşitliğine
+sağlığı vesayet
+gibi ilk ifade
+teşvik
+kışkırtmaya kalmaması
+bağımsız korunmadan
+ücrete kanunen
+mahkemelere
+devrelerde iştirak
+Yaşamak
+ileri
+üyelerinde
+hükmü işsizlikten türlü
+aykırı
+teminini
+Antlaşmada
+cereyan ileri haizdirler
+hareket yerine
+ferde zalimane
+maddi almalıdır
+ermesinde korunma
+surette işbu
+edebilmelidir ilk
+gerekli
+ailesi bakımından edilmiş
+hakkıdır sakatlık verilemez
+hürriyetini kurmaya
+görevleri
+kurma idamesi
+korumasından saygının
+yiyecek genel çağına
+Öğretim haklara
+topluca
+eşittir beyannamesi
+gerçekten cemiyette
+fiilli dürüst
+cereyan fark
+için şahsın
+faydalanmak anayasa hakkına
+cezai ayırdedici veçhile
+katılma kendi halinde
+sebep gibi karar
+uzuvlarının
+tutarak
+Kurulu gerekli Genel
+işlendikleri seçmeye
+yaşayış
+maliktir şekliyle
+serbest gözetilmeyecektir
+talep
+geniş
+hukuki
+hukuk söz
+yapılır
+hürriyetlerine çare
+rahatsız parasızdır
+haklarına
+dünyanın
+talep ekonomik
+haklarıyla
+milletlerarası sebep yerine
+uygulanabilecek
+Halkın gözönünde
+mümkündür gözetilmeksizin
+müracaat anlayış ermesinde
+geliştirilmesini dünyaca
+isnadın yerine hürriyetini
+fikirlerinden ülkenin etmeyen
+din farksız ilim
+hastalık
+mal talep elde
+unsurudur cezalara giyim
+suç muadil Madde
+bulunduğu
+tekmil terketmek
+Üye
+imkânlarından
+tespit
+için imanlarını gerekli
+teşkilatı karışmalara
+İnsanlık açık kullanılmasında
+yiyecek
+sürülemez suçun herkesçe
+yönetimine dostça yarattığı
+yaymak
+üyelerinde
+ailesi kölelik ancak
+açıklamak
+sadece ana faaliyete
+kanaat
+ayinlerle
+geliştirmelidir haizdir
+sayılır
+tanınan dünyaca yüksek
+Evlenme
+ekonomik
+cinsiyet
+belirlenmiş oralak sağlamaya
+Akıl rızasıyla içerisinde
+faydalanırlar cemiyet
+taahhüt
+yaymak güvenliğe
+hiç sanat
+verdiklerini
+serbestisine
+sona adi
+din usul zümreye
+istifade suç korunmadan
+olsun anayasa
+mümkündür edecek karşısında
+öğrenim devrelerde
+evrensel muadil imanlarını
+çocuklarına cemiyet
+evlenme fark tespit
+uzuvlarının
+olmak
+gayriinsani kolaylaştırmaya bunların
+eşlerin
+insanlar isyana menşe
+Beyannamesini yüksek çocuklarına
+ücretli üyesi yerleşme
+sağlamaya tatillere düzeninin
+elverişli
+fertleriyle
+görülmesi Önsöz böyle
+Teşkilatı amaçlarına
+mahiyette çalışan tatbikat
+hak sadece ifade
+cemiyette
+tertibatın bakımından hukuki
+gözetilmeyecektir önemli aramak
+devlete baskıya
+edilemez işlemekten haklarının
+her
+erkek
+olmazsa isnadın devlet
+korunmak Bir
+yasaktır
+yönelik memleketler talep
+evlenmek Bir
+çalışmalarını
+sendikalar gerekse
+egemenlik grupları
+şahsının eşlerin
+Uluslararasında cemiyette
+milletler suçlu köle
+baskıya mülteci
+yapılacak seçmeye
+kısıtlamaya hoşgörü
+imanlarını yönelik
+eğlenmeye zihniyeti
+bulunan işbirliği
+uyrukluğundan
+daha dünyada nizama
+başına mecburidir verecek
+ayrılık
+yorumlanamaz korunmasına müstakbel
+serbest
+kanunun
+Beyannamesini
+kullanılamaz tecavüzlere gösterilmesinin
+sınırlamalara ülkenin
+mahiyette parasızdır
+hiç bilhassa
+iştirak Herkes mümkündür
+son topluca usul
+kanunen halklarının özel
+eşittir etmeli
+ihtimam Akıl gerekli
+tamamlanan statüsü ülkenin
+arasında işini
+evlenmek memleket icaplarını
+idaresi
+işsizlikten bulunmalarına doğsunlar
+İnsanlık kalmaması sınırlamalara
+bulundurulamaz
+haklarıyla
+yazışması
+olmalarına
+düzeninin
+gelişmesi
+veçhile göre
+görülmesinin muamelelere
+korunma amaçları usul
+sağlığı türünü menşe
+dürüst
+yukarıdaki kere katılma
+davasının
+evlilik
+kimsenin muamelesi
+alıkonulanamaz zorlanamaz
+Akıl katılmaya
+#
+# Data Statistics:
+#   Number of Unique Words              [711]
+#   Word Length (min/max/avg)           [3 / 20 / 7.76]
+#   Word Count per Phrase (min/max/avg) [1 / 3 / 2.01]
+#   Phrase Length (min/max/avg)         [3 / 50 / 16.70]
+#

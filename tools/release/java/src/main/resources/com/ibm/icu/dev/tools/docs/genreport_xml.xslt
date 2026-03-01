@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 * © 2017 and later: Unicode, Inc. and others.
-* License & terms of use: http://www.unicode.org/copyright.html#License
+* License & terms of use: http://www.unicode.org/copyright.html
 -->
 <!--
 /*
@@ -24,12 +24,12 @@
   <xsl:param name="dateTime" />
   <xsl:param name="nul" />
 
-  <xsl:param name="ourYear" />
+  <!-- <xsl:param name="ourYear" /> -->
   
 
   <xsl:template match="/">
     <xsl:comment>
-      Copyright © <xsl:value-of select="$ourYear" />: Unicode, Inc. and others.
+      Copyright © 2017 and later: Unicode, Inc. and others.
       License &amp; terms of use: http://www.unicode.org/copyright.html
     </xsl:comment>
     <changeReport>

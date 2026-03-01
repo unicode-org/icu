@@ -1,5 +1,5 @@
 // © 2018 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.number;
 
 import java.io.Externalizable;
@@ -12,7 +12,9 @@ import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParsePosition;
 
-import com.ibm.icu.number.FormattedNumber;
+import com.ibm.icu.impl.FormattedStringBuilder;
+import com.ibm.icu.impl.FormattedValueStringBuilderImpl;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.number.LocalizedNumberFormatter;
 import com.ibm.icu.number.NumberFormatter;
 import com.ibm.icu.util.ULocale;
@@ -46,16 +48,18 @@ public class LocalizedNumberFormatterAsFormat extends Format {
         if (!(obj instanceof Number)) {
             throw new IllegalArgumentException();
         }
-        FormattedNumber result = formatter.format((Number) obj);
+        DecimalQuantity dq = new DecimalQuantity_DualStorageBCD((Number) obj);
+        FormattedStringBuilder string = new FormattedStringBuilder();
+        formatter.formatImpl(dq, string);
         // always return first occurrence:
         pos.setBeginIndex(0);
         pos.setEndIndex(0);
-        boolean found = result.nextFieldPosition(pos);
+        boolean found = FormattedValueStringBuilderImpl.nextFieldPosition(string, pos);
         if (found && toAppendTo.length() != 0) {
             pos.setBeginIndex(pos.getBeginIndex() + toAppendTo.length());
             pos.setEndIndex(pos.getEndIndex() + toAppendTo.length());
         }
-        result.appendTo(toAppendTo);
+        Utility.appendTo(string, toAppendTo);
         return toAppendTo;
     }
 

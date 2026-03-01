@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 bs_Cyrl{
     %%Parent{"root"}
     AuxExemplarCharacters{"[]"}
@@ -22,99 +23,63 @@ bs_Cyrl{
                 decimalFormat{
                     1000{
                         few{"0"}
-                        many{"0"}
                         one{"0"}
                         other{"0"}
-                        two{"0"}
-                        zero{"0"}
                     }
                     10000{
                         few{"00 хиљ"}
-                        many{"00 хиљ"}
                         one{"00 хиљ"}
                         other{"00 хиљ"}
-                        two{"00 хиљ"}
-                        zero{"00 хиљ"}
                     }
                     100000{
                         few{"000 хиљ"}
-                        many{"000 хиљ"}
                         one{"000 хиљ"}
                         other{"000 хиљ"}
-                        two{"000 хиљ"}
-                        zero{"000 хиљ"}
                     }
                     1000000{
                         few{"0 мил"}
-                        many{"0 мил"}
                         one{"0 мил"}
                         other{"0 мил"}
-                        two{"0 мил"}
-                        zero{"0 мил"}
                     }
                     10000000{
                         few{"00 мил"}
-                        many{"00 мил"}
                         one{"00 мил"}
                         other{"00 мил"}
-                        two{"00 мил"}
-                        zero{"00 мил"}
                     }
                     100000000{
                         few{"000 мил"}
-                        many{"000 мил"}
                         one{"000 мил"}
                         other{"000 мил"}
-                        two{"000 мил"}
-                        zero{"000 мил"}
                     }
                     1000000000{
                         few{"0 млрд"}
-                        many{"0 млрд"}
                         one{"0 млрд"}
                         other{"0 млрд"}
-                        two{"0 млрд"}
-                        zero{"0 млрд"}
                     }
                     10000000000{
                         few{"00 млрд"}
-                        many{"00 млрд"}
                         one{"00 млрд"}
                         other{"00 млрд"}
-                        two{"00 млрд"}
-                        zero{"00 млрд"}
                     }
                     100000000000{
                         few{"000 млрд"}
-                        many{"000 млрд"}
                         one{"000 млрд"}
                         other{"000 млрд"}
-                        two{"000 млрд"}
-                        zero{"000 млрд"}
                     }
                     1000000000000{
                         few{"0 бил"}
-                        many{"0 бил"}
                         one{"0 бил"}
                         other{"0 бил"}
-                        two{"0 бил"}
-                        zero{"0 бил"}
                     }
                     10000000000000{
                         few{"00 бил"}
-                        many{"00 бил"}
                         one{"00 бил"}
                         other{"00 бил"}
-                        two{"00 бил"}
-                        zero{"00 бил"}
                     }
                     100000000000000{
                         few{"000 бил"}
-                        many{"000 бил"}
                         one{"000 бил"}
                         other{"000 бил"}
-                        two{"000 бил"}
-                        zero{"000 бил"}
                     }
                 }
             }
@@ -184,99 +149,63 @@ bs_Cyrl{
                 decimalFormat{
                     1000{
                         few{"0"}
-                        many{"0"}
                         one{"0"}
                         other{"0"}
-                        two{"0"}
-                        zero{"0"}
                     }
                     10000{
                         few{"00 хиљ"}
-                        many{"00 хиљ"}
                         one{"00 хиљ"}
                         other{"00 хиљ"}
-                        two{"00 хиљ"}
-                        zero{"00 хиљ"}
                     }
                     100000{
                         few{"000 хиљ"}
-                        many{"000 хиљ"}
                         one{"000 хиљ"}
                         other{"000 хиљ"}
-                        two{"000 хиљ"}
-                        zero{"000 хиљ"}
                     }
                     1000000{
                         few{"0 мил"}
-                        many{"0 мил"}
                         one{"0 мил"}
                         other{"0 мил"}
-                        two{"0 мил"}
-                        zero{"0 мил"}
                     }
                     10000000{
                         few{"00 мил"}
-                        many{"00 мил"}
                         one{"00 мил"}
                         other{"00 мил"}
-                        two{"00 мил"}
-                        zero{"00 мил"}
                     }
                     100000000{
                         few{"000 мил"}
-                        many{"000 мил"}
                         one{"000 мил"}
                         other{"000 мил"}
-                        two{"000 мил"}
-                        zero{"000 мил"}
                     }
                     1000000000{
                         few{"0 млрд"}
-                        many{"0 млрд"}
                         one{"0 млрд"}
                         other{"0 млрд"}
-                        two{"0 млрд"}
-                        zero{"0 млрд"}
                     }
                     10000000000{
                         few{"00 млрд"}
-                        many{"00 млрд"}
                         one{"00 млрд"}
                         other{"00 млрд"}
-                        two{"00 млрд"}
-                        zero{"00 млрд"}
                     }
                     100000000000{
                         few{"000 млрд"}
-                        many{"000 млрд"}
                         one{"000 млрд"}
                         other{"000 млрд"}
-                        two{"000 млрд"}
-                        zero{"000 млрд"}
                     }
                     1000000000000{
                         few{"0 бил"}
-                        many{"0 бил"}
                         one{"0 бил"}
                         other{"0 бил"}
-                        two{"0 бил"}
-                        zero{"0 бил"}
                     }
                     10000000000000{
                         few{"00 бил"}
-                        many{"00 бил"}
                         one{"00 бил"}
                         other{"00 бил"}
-                        two{"00 бил"}
-                        zero{"00 бил"}
                     }
                     100000000000000{
                         few{"000 бил"}
-                        many{"000 бил"}
                         one{"000 бил"}
                         other{"000 бил"}
-                        two{"000 бил"}
-                        zero{"000 бил"}
                     }
                 }
             }
@@ -305,7 +234,6 @@ bs_Cyrl{
             }
         }
     }
-    Version{"36"}
     calendar{
         buddhist{
             eras{
@@ -371,6 +299,16 @@ bs_Cyrl{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEdd",
+                "GyMMMMdd",
+                "GyMMdd",
+                "GGGGGyMd",
             }
             availableFormats{
                 Ed{"E, d."}
@@ -520,6 +458,16 @@ bs_Cyrl{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "yMMMMEEEEdd",
+                "yMMMMdd",
+                "yMMdd",
+                "yyMd",
             }
             availableFormats{
                 Ed{"E, d."}
@@ -939,6 +887,16 @@ bs_Cyrl{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEdd",
+                "GyMMMMdd",
+                "GyMMdd",
+                "GyMMdd",
+            }
             availableFormats{
                 Ed{"E, dd."}
                 Hm{"HH:mm"}
@@ -1002,6 +960,16 @@ bs_Cyrl{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GyyMd",
             }
             eras{
                 abbreviated{

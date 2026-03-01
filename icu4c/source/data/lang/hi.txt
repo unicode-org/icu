@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 hi{
     Keys{
         calendar{"कैलेंडर"}
@@ -152,6 +153,7 @@ hi{
         eu{"बास्क"}
         ewo{"इवोन्डो"}
         fa{"फ़ारसी"}
+        fa_AF{"दारी"}
         fan{"फैन्ग"}
         fat{"फन्टी"}
         ff{"फुलाह"}
@@ -336,7 +338,7 @@ hi{
         myv{"एर्ज़या"}
         mzn{"माज़न्देरानी"}
         na{"नाउरू"}
-        nan{"nan"}
+        nan{"मिन नान"}
         nap{"नीपोलिटन"}
         naq{"नामा"}
         nb{"नॉर्वेजियाई बोकमाल"}
@@ -403,7 +405,6 @@ hi{
         ro_MD{"मोलडावियन"}
         rof{"रोम्बो"}
         rom{"रोमानी"}
-        root{"रूट"}
         ru{"रूसी"}
         rup{"अरोमानियन"}
         rw{"किन्यारवांडा"}
@@ -544,6 +545,8 @@ hi{
         zh_Hant{"पारंपरिक मैंडेरिन चीनी"}
     }
     Languages%menu{
+        ars{"अरबी, नज्दी"}
+        ckb{"कुर्दी, सोरानी"}
         yue{"चीनी, कैंटोनीज़"}
         zh{"चीनी, मैंडेरिन"}
     }
@@ -557,6 +560,7 @@ hi{
     }
     Scripts{
         Arab{"अरबी"}
+        Aran{"नस्तालीक़"}
         Armi{"इम्पिरियल आर्मेनिक"}
         Armn{"आर्मेनियाई"}
         Avst{"अवेस्तन"}
@@ -650,6 +654,7 @@ hi{
         Phnx{"फोनिशियन"}
         Plrd{"पॉलार्ड फोनेटिक"}
         Prti{"इंस्क्रिपश्नल पार्थियन"}
+        Qaag{"ज़ौजी"}
         Rjng{"रीजांग"}
         Roro{"रोन्गोरोन्गो"}
         Runr{"रूनिक"}
@@ -845,11 +850,12 @@ hi{
         AREVELA{"पूर्वी अर्मेनियाई"}
         MONOTON{"एकस्वरीय"}
         NJIVA{"जीवा बोली"}
+        PINYIN{"पिनयिन रोमनाइज़ेशन"}
         POLYTON{"बहुस्वरीय"}
         POSIX{"कम्प्यूटर"}
         REVISED{"संशोधित वर्तनी"}
+        WADEGILE{"वेड-जाइल्स रोमनाइज़ेशन"}
     }
-    Version{"36"}
     characterLabelPattern{
         all{"{0} — सभी"}
         category-list{"{0}: {1}"}
@@ -864,6 +870,8 @@ hi{
             one{"{0} स्ट्रोक"}
             other{"{0} स्ट्रोक"}
         }
+        subscript{"सबस्क्रिप्ट {0}"}
+        superscript{"सुपरस्क्रिप्ट {0}"}
     }
     codePatterns{
         language{"भाषा: {0}"}

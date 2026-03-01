@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 pa{
-    Version{"36"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -14,7 +14,7 @@ pa{
                 one{"{0} ਗੁਰੂਤਾਕਰਸ਼ਣ ਬਲ"}
                 other{"{0} ਗੁਰੂਤਾਕਰਸ਼ਣ ਬਲ"}
             }
-            meter-per-second-squared{
+            meter-per-square-second{
                 dnam{"ਮੀਟਰ ਪ੍ਰਤੀ ਵਰਗ ਸਕਿੰਟ"}
                 one{"{0} ਮੀਟਰ ਪ੍ਰਤੀ ਵਰਗ ਸਕਿੰਟ"}
                 other{"{0} ਮੀਟਰ ਪ੍ਰਤੀ ਵਰਗ ਸਕਿੰਟ"}
@@ -105,7 +105,59 @@ pa{
             }
         }
         compound{
+            1024p1{"ਕੀਬੀ{0}"}
+            1024p2{"ਮੇਬੀ{0}"}
+            1024p3{"ਗੀਬੀ{0}"}
+            1024p4{"ਟੇਬੀ{0}"}
+            1024p5{"ਪੇਬੀ{0}"}
+            1024p6{"ਐਕਸਬੀ{0}"}
+            1024p7{"ਜ਼ੇਬੀ{0}"}
+            1024p8{"ਯੋਬ{0}"}
+            10p-1{"ਡੈਸੀ{0}"}
+            10p-12{"ਪਿਕੋ{0}"}
+            10p-15{"ਫੈਮਟੋ{0}"}
+            10p-18{"ਐੱਟੋ{0}"}
+            10p-2{"ਸੈਂਟੀ{0}"}
+            10p-21{"ਜ਼ੈਪਟੋ{0}"}
+            10p-24{"ਯੋਕਟੋ{0}"}
+            10p-3{"ਮਿਲੀ{0}"}
+            10p-6{"ਮਾਈਕ੍ਰੋ{0}"}
+            10p-9{"ਨੈਨੋ{0}"}
+            10p1{"ਡੇਕਾ{0}"}
+            10p12{"ਟੈਰਾ{0}"}
+            10p15{"ਪੇਟਾ{0}"}
+            10p18{"ਐਕਸਾ{0}"}
+            10p2{"ਹੈਕਟੋ{0}"}
+            10p21{"ਜ਼ੀਟਾ{0}"}
+            10p24{"ਯੋਟਾ{0}"}
+            10p3{"ਕਿਲੋ{0}"}
+            10p6{"ਮੈਗਾ{0}"}
+            10p9{"ਗੀਗਾ{0}"}
             per{"{0} ਪ੍ਰਤੀ {1}"}
+            power2{
+                one{
+                    _{
+                        _{"ਵਰਗ{0}"}
+                    }
+                }
+                other{
+                    _{
+                        _{"ਵਰਗ{0}"}
+                    }
+                }
+            }
+            power3{
+                one{
+                    _{
+                        _{"ਘਣ{0}"}
+                    }
+                }
+                other{
+                    _{
+                        _{"ਘਣ{0}"}
+                    }
+                }
+            }
         }
         concentr{
             karat{
@@ -113,7 +165,7 @@ pa{
                 one{"{0} ਕੇਰਟ"}
                 other{"{0} ਕੇਰਟ"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"ਮਿਲੀਗ੍ਰਾਮ ਪ੍ਰਤੀ ਡੈਸੀਲਿਟਰ"}
                 one{"{0} ਮਿਲੀਗ੍ਰਾਮ ਪ੍ਰਤੀ ਡੈਸੀਲਿਟਰ"}
                 other{"{0} ਮਿਲੀਗ੍ਰਾਮ ਪ੍ਰਤੀ ਡੈਸੀਲਿਟਰ"}
@@ -128,11 +180,6 @@ pa{
                 one{"{0} ਮੋਲ"}
                 other{"{0} ਮੋਲ"}
             }
-            part-per-million{
-                dnam{"ਹਿੱਸੇ ਪ੍ਰਤੀ ਮਿਲੀਅਨ"}
-                one{"{0} ਹਿੱਸਾ ਪ੍ਰਤੀ ਮਿਲੀਅਨ"}
-                other{"{0} ਹਿੱਸੇ ਪ੍ਰਤੀ ਮਿਲੀਅਨ"}
-            }
             percent{
                 dnam{"ਪ੍ਰਤੀਸ਼ਤ"}
                 one{"{0} ਪ੍ਰਤੀਸ਼ਤ"}
@@ -143,6 +190,11 @@ pa{
                 one{"{0} ਪਰਮਾਈਲ"}
                 other{"{0} ਪਰਮਾਈਲ"}
             }
+            permillion{
+                dnam{"ਹਿੱਸੇ ਪ੍ਰਤੀ ਮਿਲੀਅਨ"}
+                one{"{0} ਹਿੱਸਾ ਪ੍ਰਤੀ ਮਿਲੀਅਨ"}
+                other{"{0} ਹਿੱਸੇ ਪ੍ਰਤੀ ਮਿਲੀਅਨ"}
+            }
             permyriad{
                 dnam{"ਪ੍ਰਤੀ ਦਸ ਹਜ਼ਾਰ"}
                 one{"{0} ਪ੍ਰਤੀ ਦਸ ਹਜ਼ਾਰ"}
@@ -150,7 +202,7 @@ pa{
             }
         }
         consumption{
-            liter-per-100kilometers{
+            liter-per-100-kilometer{
                 dnam{"ਲਿਟਰ ਪ੍ਰਤੀ 100 ਕਿਲੋਮੀਟਰ"}
                 one{"{0} ਲਿਟਰ ਪ੍ਰਤੀ 100 ਕਿਲੋਮੀਟਰ"}
                 other{"{0} ਲਿਟਰ ਪ੍ਰਤੀ 100 ਕਿਲੋਮੀਟਰ"}
@@ -406,6 +458,11 @@ pa{
             }
         }
         graphics{
+            dot{
+                dnam{"ਡਾਟ"}
+                one{"{0} ਡਾਟ"}
+                other{"{0} ਡਾਟ"}
+            }
             dot-per-centimeter{
                 dnam{"ਡਾਟ ਪ੍ਰਤੀ ਸੈਂਟੀਮੀਟਰ"}
                 one{"{0} ਡਾਟ ਪ੍ਰਤੀ ਸੈਂਟੀਮੀਟਰ"}
@@ -458,6 +515,11 @@ pa{
                 dnam{"ਡੈਸੀਮੀਟਰ"}
                 one{"{0} ਡੈਸੀਮੀਟਰ"}
                 other{"{0} ਡੈਸੀਮੀਟਰ"}
+            }
+            earth-radius{
+                dnam{"ਧਰਤੀ ਦਾ ਘੇਰਾ"}
+                one{"{0} ਧਰਤੀ ਦਾ ਘੇਰਾ"}
+                other{"{0} ਧਰਤੀ ਦਾ ਘੇਰਾ"}
             }
             fathom{
                 dnam{"ਫ਼ੈਦਮ"}
@@ -555,6 +617,16 @@ pa{
             }
         }
         light{
+            candela{
+                dnam{"ਕੈਂਡੇਲਾ"}
+                one{"{0} ਕੈਂਡੇਲਾ"}
+                other{"{0} ਕੈਂਡੇਲਾ"}
+            }
+            lumen{
+                dnam{"ਲੁਮੇਨ"}
+                one{"{0} ਲੁਮੇਨ"}
+                other{"{0} ਲੁਮੇਨ"}
+            }
             lux{
                 dnam{"ਲਕਸ"}
                 one{"{0} ਲਕਸ"}
@@ -581,6 +653,11 @@ pa{
                 dnam{"ਅਰਥ ਮਾਸ"}
                 one{"{0} ਅਰਥ ਮਾਸ"}
                 other{"{0} ਅਰਥ ਮਾਸ"}
+            }
+            grain{
+                dnam{"ਗ੍ਰੇਨ"}
+                one{"{0} ਗ੍ਰੇਨ"}
+                other{"{0} ਗ੍ਰੇਨ"}
             }
             gram{
                 dnam{"ਗ੍ਰਾਮ"}
@@ -637,9 +714,9 @@ pa{
                 other{"{0} ਸਟੋਨ"}
             }
             ton{
-                dnam{"ਟਨ"}
-                one{"{0} ਟਨ"}
-                other{"{0} ਟਨ"}
+                dnam{"ਅਮਰੀਕੀ ਟਨ"}
+                one{"{0} ਅਮਰੀਕੀ ਟਨ"}
+                other{"{0} ਅਮਰੀਕੀ ਟਨ"}
             }
         }
         power{
@@ -690,7 +767,7 @@ pa{
                 one{"{0} ਹੈਕਟੋਪਾਸਕਲ"}
                 other{"{0} ਹੈਕਟੋਪਾਸਕਲ"}
             }
-            inch-hg{
+            inch-ofhg{
                 dnam{"ਇੰਚ ਪਾਰਾ"}
                 one{"{0} ਇੰਚ ਪਾਰਾ"}
                 other{"{0} ਇੰਚ ਪਾਰਾ"}
@@ -710,7 +787,7 @@ pa{
                 one{"{0} ਮਿਲੀਬਾਰ"}
                 other{"{0} ਮਿਲੀਬਾਰ"}
             }
-            millimeter-of-mercury{
+            millimeter-ofhg{
                 dnam{"ਮਿਲੀਮੀਟਰ ਪਾਰਾ"}
                 one{"{0} ਮਿਲੀਮੀਟਰ ਪਾਰਾ"}
                 other{"{0} ਮਿਲੀਮੀਟਰ ਪਾਰਾ"}
@@ -720,7 +797,7 @@ pa{
                 one{"{0} ਪੈਸਕਲ"}
                 other{"{0} ਪੈਸਕਲ"}
             }
-            pound-per-square-inch{
+            pound-force-per-square-inch{
                 dnam{"ਪੌਂਡ ਪ੍ਰਤੀ ਵਰਗ ਇੰਚ"}
                 one{"{0} ਪੌਂਡ ਪ੍ਰਤੀ ਵਰਗ ਇੰਚ"}
                 other{"{0} ਪੌਂਡ ਪ੍ਰਤੀ ਵਰਗ ਇੰਚ"}
@@ -776,9 +853,9 @@ pa{
                 one{"{0} ਨਿਊਟਨ-ਮੀਟਰ"}
                 other{"{0} ਨਿਊਟਨ-ਮੀਟਰ"}
             }
-            pound-foot{
+            pound-force-foot{
                 dnam{"ਪੌਂਡ-ਫੁੱਟ"}
-                one{"{0} ਪੌਂਡ-ਫੁੱਟ"}
+                one{"{0} ਪੌਂਡ-ਬਲ-ਫੁੱਟ"}
                 other{"{0} ਪੌਂਡ-ਫੁੱਟ"}
             }
         }
@@ -855,6 +932,26 @@ pa{
                 one{"{0} ਡੈਸੀਲਿਟਰ"}
                 other{"{0} ਡੈਸੀਲਿਟਰ"}
             }
+            dessert-spoon{
+                dnam{"ਡੈਜ਼ਰਟ ਸਪੂਨ"}
+                one{"{0} ਡੈਜ਼ਰਟ ਸਪੂਨ"}
+                other{"{0} ਡੈਜ਼ਰਟ ਸਪੂਨ"}
+            }
+            dessert-spoon-imperial{
+                dnam{"ਇੰਪੀਰੀਅਲ ਡੈਜ਼ਰਟ ਸਪੂਨ"}
+                one{"{0} ਇੰਪੀਰੀਅਲ ਡੈਜ਼ਰਟ ਸਪੂਨ"}
+                other{"{0} ਇੰਪੀਰੀਅਲ ਡੈਜ਼ਰਟ ਸਪੂਨ"}
+            }
+            dram{
+                dnam{"ਚੁਸਕੀ"}
+                one{"{0} ਚੁਸਕੀ"}
+                other{"{0} ਚੁਸਕੀ"}
+            }
+            drop{
+                dnam{"ਬੂੰਦ"}
+                one{"{0} ਬੂੰਦ"}
+                other{"{0} ਬੂੰਦ"}
+            }
             fluid-ounce{
                 dnam{"ਤਰਲ ਔਂਸ"}
                 one{"{0} ਤਰਲ ਔਂਸ"}
@@ -882,6 +979,11 @@ pa{
                 one{"{0} ਹੈਕਟੋਲਿਟਰ"}
                 other{"{0} ਹੈਕਟੋਲਿਟਰ"}
             }
+            jigger{
+                dnam{"ਚੱਕਾ"}
+                one{"{0} ਚੱਕਾ"}
+                other{"{0} ਚੱਕਾ"}
+            }
             liter{
                 dnam{"ਲਿਟਰ"}
                 one{"{0} ਲਿਟਰ"}
@@ -898,6 +1000,11 @@ pa{
                 one{"{0} ਮਿਲੀਲਿਟਰ"}
                 other{"{0} ਮਿਲੀਲਿਟਰ"}
             }
+            pinch{
+                dnam{"ਚੁਟਕੀ"}
+                one{"{0} ਚੁਟਕੀ"}
+                other{"{0} ਚੁਟਕੀ"}
+            }
             pint{
                 dnam{"ਪਿੰਟ"}
                 one{"{0} ਪਿੰਟ"}
@@ -912,6 +1019,11 @@ pa{
                 dnam{"ਕੁਆਟ"}
                 one{"{0} ਕੁਆਟ"}
                 other{"{0} ਕੁਆਟ"}
+            }
+            quart-imperial{
+                dnam{"ਇੰਪੀਰੀਅਲ ਚੁਥਾਈ ਗੈਲਨ"}
+                one{"{0} ਇੰਪੀਰੀਅਲ ਚੁਥਾਈ ਗੈਲਨ"}
+                other{"{0} ਇੰਪੀਰੀਅਲ ਚੁਥਾਈ ਗੈਲਨ"}
             }
             tablespoon{
                 dnam{"ਟੇਬਲ ਸਪੂਨ"}
@@ -931,7 +1043,7 @@ pa{
                 one{"{0}G"}
                 other{"{0}Gs"}
             }
-            meter-per-second-squared{
+            meter-per-square-second{
                 one{"{0}ਮੀ/ਸ²"}
                 other{"{0}ਮੀ/ਸ²"}
             }
@@ -993,7 +1105,58 @@ pa{
             }
         }
         compound{
+            1024p1{"ਕੀ{0}"}
+            1024p2{"ਮੀ{0}"}
+            1024p3{"ਗੀ{0}"}
+            1024p4{"ਟੀ{0}"}
+            1024p5{"ਪੀ{0}"}
+            1024p6{"ਈ{0}"}
+            1024p7{"ਜ਼ੀ{0}"}
+            1024p8{"ਯੀ{0}"}
+            10p-1{"ਡੈ.{0}"}
+            10p-12{"ਪਿ.{0}"}
+            10p-15{"ਫੈ.{0}"}
+            10p-18{"ਐੱ.{0}"}
+            10p-2{"ਸੈਂ.{0}"}
+            10p-21{"ਜ਼ੈ.{0}"}
+            10p-24{"ਯੋ.{0}"}
+            10p-3{"ਮਿ.{0}"}
+            10p-6{"ਮਾ.{0}"}
+            10p-9{"ਨੈ.{0}"}
+            10p1{"ਡੇ.{0}"}
+            10p15{"ਪੇਟਾ{0}"}
+            10p18{"ਐਕਸਾ{0}"}
+            10p2{"ਹੈ.{0}"}
+            10p21{"ਜ਼ੀਟਾ{0}"}
+            10p24{"ਯੋਟਾ{0}"}
+            10p3{"ਕਿ.{0}"}
+            10p6{"ਮੈ.{0}"}
+            10p9{"ਗੀਗਾ{0}"}
             per{"{0}/{1}"}
+            power2{
+                one{
+                    _{
+                        _{"{0}²"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0}²"}
+                    }
+                }
+            }
+            power3{
+                one{
+                    _{
+                        _{"{0}³"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0}³"}
+                    }
+                }
+            }
         }
         concentr{
             karat{
@@ -1007,7 +1170,7 @@ pa{
             }
         }
         consumption{
-            liter-per-100kilometers{
+            liter-per-100-kilometer{
                 dnam{"ਲਿ./100ਕਿ.ਮੀ."}
             }
             liter-per-kilometer{
@@ -1087,6 +1250,8 @@ pa{
             }
             millisecond{
                 dnam{"ਮਿਲੀਸਕਿੰਟ"}
+                one{"{0} ਮਿ.ਸ."}
+                other{"{0} ਮਿ.ਸ."}
             }
             minute{
                 dnam{"ਮਿੰਟ"}
@@ -1237,8 +1402,8 @@ pa{
             }
             micrometer{
                 dnam{"ਮਾਇਕ੍ਰੋ. ਮੀ."}
-                one{"{0} µm"}
-                other{"{0} µm"}
+                one{"{0} μm"}
+                other{"{0} μm"}
             }
             mile{
                 dnam{"ਮੀਲ"}
@@ -1352,7 +1517,7 @@ pa{
                 one{"{0} ਹੈ.ਪਾ."}
                 other{"{0} ਹੈ.ਪਾ."}
             }
-            inch-hg{
+            inch-ofhg{
                 dnam{"ਇੰਚ ਪਾਰਾ"}
                 one{"{0}\u0022 ਪਾਰਾ"}
                 other{"{0}\u0022 ਪਾਰਾ"}
@@ -1362,12 +1527,12 @@ pa{
                 one{"{0} ਮਿ.ਬਾ."}
                 other{"{0} ਮਿ.ਬਾ."}
             }
-            millimeter-of-mercury{
+            millimeter-ofhg{
                 dnam{"ਮਿ.ਮੀ. ਪਾਰਾ"}
                 one{"{0} ਮਿ.ਮੀ. ਪਾਰਾ"}
                 other{"{0} ਮਿ.ਮੀ. ਪਾਰਾ"}
             }
-            pound-per-square-inch{
+            pound-force-per-square-inch{
                 dnam{"ਪੌਂ.ਵ.ਇੰਚ"}
                 one{"{0} ਪੌਂ.ਵ.ਇੰਚ"}
                 other{"{0} ਪੌਂ.ਵ.ਇੰਚ"}
@@ -1503,7 +1668,7 @@ pa{
                 one{"{0} G"}
                 other{"{0} G"}
             }
-            meter-per-second-squared{
+            meter-per-square-second{
                 dnam{"ਮੀਟਰ/ਸਕਿੰਟ²"}
                 one{"{0} ਮੀ/ਸ²"}
                 other{"{0} ਮੀ/ਸ²"}
@@ -1594,7 +1759,59 @@ pa{
             }
         }
         compound{
+            1024p1{"ਕੀ{0}"}
+            1024p2{"ਮੀ{0}"}
+            1024p3{"ਗੀ{0}"}
+            1024p4{"ਟੀ{0}"}
+            1024p5{"ਪੀ{0}"}
+            1024p6{"ਈ{0}"}
+            1024p7{"ਜ਼ੀ{0}"}
+            1024p8{"ਯੀ{0}"}
+            10p-1{"ਡੈ.{0}"}
+            10p-12{"ਪਿ.{0}"}
+            10p-15{"ਫੈ.{0}"}
+            10p-18{"ਐੱ.{0}"}
+            10p-2{"ਸੈਂ.{0}"}
+            10p-21{"ਜ਼ੈ.{0}"}
+            10p-24{"ਯੋ.{0}"}
+            10p-3{"ਮਿ.{0}"}
+            10p-6{"ਮਾ.{0}"}
+            10p-9{"ਨੈ.{0}"}
+            10p1{"ਡੇ.{0}"}
+            10p12{"ਟੈ.{0}"}
+            10p15{"ਪੇਟਾ{0}"}
+            10p18{"ਐਕਸਾ{0}"}
+            10p2{"ਹੈ.{0}"}
+            10p21{"ਜ਼ੀਟਾ{0}"}
+            10p24{"ਯੋਟਾ{0}"}
+            10p3{"ਕਿ.{0}"}
+            10p6{"ਮੈ.{0}"}
+            10p9{"ਗੀਗਾ{0}"}
             per{"{0}/{1}"}
+            power2{
+                one{
+                    _{
+                        _{"{0}²"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0}²"}
+                    }
+                }
+            }
+            power3{
+                one{
+                    _{
+                        _{"{0}³"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0}³"}
+                    }
+                }
+            }
             times{"{0}⋅{1}"}
         }
         concentr{
@@ -1603,7 +1820,7 @@ pa{
                 one{"{0} ਕੇਰਟ"}
                 other{"{0} ਕੇਰਟ"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"ਮਿ.ਗ੍ਰਾ./ਡੈ.ਲਿ."}
                 one{"{0}ਮਿਗ੍ਰਾ/ਡੈ.ਲਿ"}
                 other{"{0}ਮਿਗ੍ਰਾ/ਡੈ.ਲਿ"}
@@ -1618,11 +1835,6 @@ pa{
                 one{"{0} ਮੋਲ"}
                 other{"{0} ਮੋਲ"}
             }
-            part-per-million{
-                dnam{"ਹਿੱਸੇ/ਮਿਲੀਅਨ"}
-                one{"{0} ppm"}
-                other{"{0} ppm"}
-            }
             percent{
                 dnam{"ਪ੍ਰਤੀਸ਼ਤ"}
                 one{"{0}%"}
@@ -1633,12 +1845,17 @@ pa{
                 one{"{0}‰"}
                 other{"{0}‰"}
             }
+            permillion{
+                dnam{"ਹਿੱਸੇ/ਮਿਲੀਅਨ"}
+                one{"{0} ppm"}
+                other{"{0} ppm"}
+            }
             permyriad{
                 dnam{"ਪ੍ਰਤੀ ਦਸ ਹਜ਼ਾਰ"}
             }
         }
         consumption{
-            liter-per-100kilometers{
+            liter-per-100-kilometer{
                 dnam{"ਲਿ./100ਕਿ.ਮੀ."}
                 one{"{0}ਲਿ/100 ਕਿਮੀ"}
                 other{"{0}ਲਿ/100 ਕਿਮੀ"}
@@ -1853,8 +2070,8 @@ pa{
             }
             therm-us{
                 dnam{"US therm"}
-                one{"{0} US therm"}
-                other{"{0} US therm"}
+                one{"{0} ਯੂ.ਐਸ. ਥੈਰਮ"}
+                other{"{0} ਯੂ.ਐਸ. ਥੈਰਮ"}
             }
         }
         force{
@@ -1890,14 +2107,19 @@ pa{
             }
         }
         graphics{
+            dot{
+                dnam{"ਡਾਟ"}
+                one{"{0} ਡਾਟ"}
+                other{"{0} ਡਾਟ"}
+            }
             dot-per-centimeter{
                 dnam{"dpcm"}
-                one{"{0} dpcm"}
+                one{"{0} ppcm"}
                 other{"{0} dpcm"}
             }
             dot-per-inch{
                 dnam{"dpi"}
-                one{"{0} dpi"}
+                one{"{0} ppi"}
                 other{"{0} dpi"}
             }
             em{
@@ -1984,8 +2206,8 @@ pa{
             }
             micrometer{
                 dnam{"ਮਾਈਕਰੋਮੀਟਰ"}
-                one{"{0} µm"}
-                other{"{0} µm"}
+                one{"{0} μm"}
+                other{"{0} μm"}
             }
             mile{
                 dnam{"ਮੀਲ"}
@@ -2037,6 +2259,11 @@ pa{
             }
         }
         light{
+            lumen{
+                dnam{"ਲੁਮੇਨ"}
+                one{"{0} ਲੁਮੇਨ"}
+                other{"{0} ਲੁਮੇਨ"}
+            }
             lux{
                 dnam{"ਲਕਸ"}
                 one{"{0} ਲਕਸ"}
@@ -2060,6 +2287,11 @@ pa{
             earth-mass{
                 dnam{"ਅਰਥ ਮਾਸ"}
             }
+            grain{
+                dnam{"ਗ੍ਰੇਨ"}
+                one{"{0} ਗ੍ਰੇਨ"}
+                other{"{0} ਗ੍ਰੇਨ"}
+            }
             gram{
                 dnam{"ਗ੍ਰਾਮ"}
                 one{"{0} ਗ੍ਰਾ."}
@@ -2078,9 +2310,9 @@ pa{
                 other{"{0} t"}
             }
             microgram{
-                dnam{"µg"}
-                one{"{0} µg"}
-                other{"{0} µg"}
+                dnam{"μg"}
+                one{"{0} μg"}
+                other{"{0} μg"}
             }
             milligram{
                 dnam{"ਮਿ.ਗ੍ਰਾ."}
@@ -2113,9 +2345,9 @@ pa{
                 other{"{0} ਸਟੋਨ"}
             }
             ton{
-                dnam{"ਟਨ"}
-                one{"{0} ਟਨ"}
-                other{"{0} ਟਨ"}
+                dnam{"ਅਮਰੀਕੀ ਟਨ"}
+                one{"{0} ਅਮਰੀਕੀ ਟਨ"}
+                other{"{0} ਅਮਰੀਕੀ ਟਨ"}
             }
         }
         power{
@@ -2166,7 +2398,7 @@ pa{
                 one{"{0} ਹੈ.ਪਾ."}
                 other{"{0} ਹੈ.ਪਾ."}
             }
-            inch-hg{
+            inch-ofhg{
                 dnam{"ਇੰਚ ਪਾਰਾ"}
                 one{"{0} ਇੰਚ ਪਾਰਾ"}
                 other{"{0} ਇੰਚ ਪਾਰਾ"}
@@ -2186,7 +2418,7 @@ pa{
                 one{"{0} ਮਿਲੀਬਾਰ"}
                 other{"{0} ਮਿਲੀਬਾਰ"}
             }
-            millimeter-of-mercury{
+            millimeter-ofhg{
                 dnam{"ਮਿ.ਮੀ. ਪਾਰਾ"}
                 one{"{0} ਮਿ.ਮੀ. ਪਾਰਾ"}
                 other{"{0} ਮਿ.ਮੀ. ਪਾਰਾ"}
@@ -2196,7 +2428,7 @@ pa{
                 one{"{0} Pa"}
                 other{"{0} Pa"}
             }
-            pound-per-square-inch{
+            pound-force-per-square-inch{
                 dnam{"ਪੌਂ.ਵ.ਇੰਚ"}
                 one{"{0} ਪੌਂ.ਵ.ਇੰਚ"}
                 other{"{0} ਪੌਂ.ਵ.ਇੰਚ"}
@@ -2326,10 +2558,35 @@ pa{
                 one{"{0} ਡੈ.ਲਿ."}
                 other{"{0} ਡੈ.ਲਿ."}
             }
+            dessert-spoon{
+                dnam{"ਡੈਜ਼ਰਟ ਸਪੂਨ"}
+                one{"{0} ਡੈਜ਼ਰਟ ਸਪੂਨ"}
+                other{"{0} ਡੈਜ਼ਰਟ ਸਪੂਨ"}
+            }
+            dessert-spoon-imperial{
+                dnam{"ਇੰਪੀਰੀਅਲ ਡੈਜ਼ਰਟ ਸਪੂਨ"}
+                one{"{0} ਇੰਪ. ਡੈ. ਸ."}
+                other{"{0} ਇੰਪ. ਡੈ. ਸ."}
+            }
+            dram{
+                dnam{"ਚੁਸਕੀ ਭਰ"}
+                one{"{0} ਚੁਸਕੀ ਭਰ"}
+                other{"{0} ਚੁਸਕੀ ਭਰ"}
+            }
+            drop{
+                dnam{"ਬੂੰਦ"}
+                one{"{0} ਬੂੰਦ"}
+                other{"{0} ਬੂੰਦ"}
+            }
             fluid-ounce{
                 dnam{"ਤ. ਔਂਸ"}
                 one{"{0} ਤ. ਔਂਸ"}
                 other{"{0} ਤ. ਔਂਸ"}
+            }
+            fluid-ounce-imperial{
+                dnam{"ਇੰਪ. ਫਲੂ. ਔ."}
+                one{"{0} ਫਲੂ. ਔ. ਇੰਪ."}
+                other{"{0} ਫਲੂ. ਔ. ਇੰਪ."}
             }
             gallon{
                 dnam{"ਗੈਲਨ"}
@@ -2348,6 +2605,11 @@ pa{
                 one{"{0} ਹੈ.ਲਿ."}
                 other{"{0} ਹੈ.ਲਿ."}
             }
+            jigger{
+                dnam{"ਚੱਕਾ"}
+                one{"{0} ਚੱਕਾ"}
+                other{"{0} ਚੱਕਾ"}
+            }
             liter{
                 dnam{"ਲਿਟਰ"}
                 one{"{0} ਲਿ."}
@@ -2364,6 +2626,11 @@ pa{
                 one{"{0} ਮਿ.ਲਿ."}
                 other{"{0} ਮਿ.ਲਿ."}
             }
+            pinch{
+                dnam{"ਚੁਟਕੀ"}
+                one{"{0} ਚੁਟਕੀ"}
+                other{"{0} ਚੁਟਕੀ"}
+            }
             pint{
                 dnam{"ਪਿੰਟ"}
                 one{"{0} ਪਿੰਟ"}
@@ -2378,6 +2645,11 @@ pa{
                 dnam{"ਕੁਆਟ"}
                 one{"{0} ਕੁਆਟ"}
                 other{"{0} ਕੁਆਟ"}
+            }
+            quart-imperial{
+                dnam{"ਇੰਪੀਰੀਅਲ ਚੁਥਾਈ ਗੈਲਨ"}
+                one{"{0} ਇੰਪ. ਚੁ. ਗੈ."}
+                other{"{0} ਇੰਪ. ਚੁ. ਗੈ."}
             }
             tablespoon{
                 dnam{"ਟੇਬਲ ਸਪੂਨ"}

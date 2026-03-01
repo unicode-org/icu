@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 chr{
-    Version{"36"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -14,7 +14,7 @@ chr{
                 one{"{0} ᎠᏓᎾᏌᏁᏍᎩ-ᎦᏌᏙᏯᏍᏗ"}
                 other{"{0} ᎠᏓᎾᏌᏁᏍᎩ-ᎦᏌᏙᏯᏍᏗ"}
             }
-            meter-per-second-squared{
+            meter-per-square-second{
                 dnam{"ᏗᏟᎶᏗ ᎠᏎᏢ ᎢᏳᏓᎵ ᏅᎩ ᏧᏅᏏᎩ"}
                 one{"{0} ᎠᏟᎶᏗ ᎠᏎᏢ ᎢᏳᏓᎵ ᏅᎩ ᏧᏅᏏᎩ"}
                 other{"{0} ᏗᏟᎶᏗ ᎠᏎᏢ ᎢᏳᏓᎵ ᏅᎩ ᏧᏅᏏᎩ"}
@@ -105,7 +105,51 @@ chr{
             }
         }
         compound{
+            10p-1{"deci{0}"}
+            10p-12{"pico{0}"}
+            10p-15{"femto{0}"}
+            10p-18{"atto{0}"}
+            10p-2{"centi{0}"}
+            10p-21{"zepto{0}"}
+            10p-24{"yocto{0}"}
+            10p-3{"milli{0}"}
+            10p-6{"micro{0}"}
+            10p-9{"nano{0}"}
+            10p1{"deka{0}"}
+            10p12{"tera{0}"}
+            10p15{"peta{0}"}
+            10p18{"exa{0}"}
+            10p2{"hecto{0}"}
+            10p21{"zetta{0}"}
+            10p24{"yotta{0}"}
+            10p3{"kilo{0}"}
+            10p6{"mega{0}"}
+            10p9{"giga{0}"}
             per{"{0} ᎾᎿ {1}"}
+            power2{
+                one{
+                    _{
+                        _{"ᏅᎩ ᏧᏅᏏᏱ {0}"}
+                    }
+                }
+                other{
+                    _{
+                        _{"ᏅᎩ ᏧᏅᏏᏱ {0}"}
+                    }
+                }
+            }
+            power3{
+                one{
+                    _{
+                        _{"ᏣᏁᎳ ᏧᏅᏏᏱ {0}"}
+                    }
+                }
+                other{
+                    _{
+                        _{"ᏣᏁᎳ ᏧᏅᏏᏱ {0}"}
+                    }
+                }
+            }
         }
         concentr{
             karat{
@@ -113,7 +157,7 @@ chr{
                 one{"{0} ᎧᏇᏓ"}
                 other{"{0} ᏗᎧᏇᏓ"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"ᏌᏉ ᎢᏯᎦᎨᎵᏁᎢ ᎤᏍᏗ ᏂᏚᏓᎨᏒ ᏌᏉ ᎢᏳᎾᏓᎢ ᏍᎪᎯ ᎵᏔᎢ ᎢᏳᏓᎵ"}
                 one{"{0} ᏌᏉ ᎢᏯᎦᎨᎵᏁᎢ ᎤᏍᏗ ᎤᏓᎨᏒ ᏌᏉ ᎢᏳᎾᏓᎢ ᏍᎪᎯ ᎵᏔᎢ ᎢᏳᏓᎵ"}
                 other{"{0} ᏌᏉ ᎢᏯᎦᎨᎵᏁᎢ ᎤᏍᏗ ᏂᏚᏓᎨᏒ ᏌᏉ ᎢᏳᎾᏓᎢ ᏍᎪᎯ ᎵᏔᎢ ᎢᏳᏓᎵ"}
@@ -128,11 +172,6 @@ chr{
                 one{"{0} ᎼᎴ"}
                 other{"{0} ᎼᎴᏍ"}
             }
-            part-per-million{
-                dnam{"ᏚᏙᏢᏒ ᎢᏳᏆᏗᏅᏛ ᎢᏳᏓᎵ"}
-                one{"{0} ᎤᏙᏢᏒ ᎢᏳᏆᏗᏅᏛ ᎢᏳᏓᎵ"}
-                other{"{0} ᏚᏙᏢᏒ ᎢᏳᏆᏗᏅᏛ ᎢᏳᏓᎵ"}
-            }
             percent{
                 dnam{"ᏓᎬᏩᎶᏛ"}
                 one{"{0} ᏓᎬᏩᎶᏛ"}
@@ -143,6 +182,11 @@ chr{
                 one{"{0} ᏈᎻᎴ"}
                 other{"{0} ᏈᎻᎴ"}
             }
+            permillion{
+                dnam{"ᏚᏙᏢᏒ ᎢᏳᏆᏗᏅᏛ ᎢᏳᏓᎵ"}
+                one{"{0} ᎤᏙᏢᏒ ᎢᏳᏆᏗᏅᏛ ᎢᏳᏓᎵ"}
+                other{"{0} ᏚᏙᏢᏒ ᎢᏳᏆᏗᏅᏛ ᎢᏳᏓᎵ"}
+            }
             permyriad{
                 dnam{"ᏋᎻᎵᎠᏗ"}
                 one{"{0} ᏋᎻᎵᎠᏗ"}
@@ -150,7 +194,7 @@ chr{
             }
         }
         consumption{
-            liter-per-100kilometers{
+            liter-per-100-kilometer{
                 dnam{"ᏗᎵᏔᎢ 100 ᎠᎦᏴᎵ ᏗᏟᎶᏍᏗ ᎢᏳᏓᎵ"}
                 one{"{0} ᎵᏔᎢ 100 ᎠᎦᏴᎵ ᏗᏟᎶᏍᏗ ᎢᏳᏓᎵ"}
                 other{"{0} ᏗᎵᏔᎢ 100 ᎠᎦᏴᎵ ᏗᏟᎶᏍᏗ ᎢᏳᏓᎵ"}
@@ -675,7 +719,7 @@ chr{
                 one{"{0} ᎮᏔ ᏆᏌᎵ"}
                 other{"{0} ᎮᏔ ᏗᏆᏌᎵ"}
             }
-            inch-hg{
+            inch-ofhg{
                 dnam{"ᎢᏏᏔᏗᏍᏗ ᎾᎿ ᎹᎫᎢ"}
                 one{"{0} ᎢᏗᎳᏏᏗ ᎾᎿ ᎹᎫᎢ"}
                 other{"{0} ᎢᏏᏔᏗᏍᏗ ᎾᎿ ᎹᎫᎢ"}
@@ -695,7 +739,7 @@ chr{
                 one{"{0} ᎢᎦᎦᏴᎵ ᎦᎾᎸᎢ"}
                 other{"{0} ᎢᏯᎦᏴᎵ ᏕᎦᎾᎸᎢ"}
             }
-            millimeter-of-mercury{
+            millimeter-ofhg{
                 dnam{"ᏌᏉ ᎢᏯᎦᎨᎵᏁᎢ ᏗᏟᎶᏗ ᎾᎿ ᎹᎫᎢ"}
                 one{"{0} ᏌᏉ ᎢᏯᎦᎨᎵᏁᎢ ᎠᏟᎶᏗ ᎾᎿ ᎹᎫᎢ"}
                 other{"{0} ᏌᏉ ᎢᏯᎦᎨᎵᏁᎢ ᏗᏟᎶᏗ ᎾᎿ ᎹᎫᎢ"}
@@ -705,7 +749,7 @@ chr{
                 one{"{0} ᏆᏌᎵ"}
                 other{"{0} ᏗᏆᏌᎵ"}
             }
-            pound-per-square-inch{
+            pound-force-per-square-inch{
                 dnam{"ᎢᏧᏓᎨᏓ ᏅᎩ ᏧᏅᏏᎩ ᎢᏏᏔᏗᏍᏗ ᎢᏳᏓᎵ"}
                 one{"{0} ᏑᏓᎨᏓ ᏅᎩ ᏧᏅᏏᎩ ᎢᏏᏔᏗᏍᏗ ᎢᏳᏓᎵ"}
                 other{"{0} ᎢᏧᏓᎨᏓ ᏅᎩ ᏧᏅᏏᎩ ᎢᏏᏔᏗᏍᏗ ᎢᏳᏓᎵ"}
@@ -761,7 +805,7 @@ chr{
                 one{"{0} ᏄᏛᏅ-ᎠᏟᎶᏍᏗ"}
                 other{"{0} ᏄᏛᏅ-ᎠᏟᎶᏍᏗ"}
             }
-            pound-foot{
+            pound-force-foot{
                 dnam{"ᏑᏓᎨᏓ-ᏧᎳᏏᏕᏂ"}
                 one{"{0} ᏑᏓᎨᏓ-ᎤᎳᏏᏕᏂ"}
                 other{"{0} ᏑᏓᎨᏓ-ᏧᎳᏏᏕᏂ"}
@@ -917,7 +961,7 @@ chr{
             }
         }
         consumption{
-            liter-per-100kilometers{
+            liter-per-100-kilometer{
                 dnam{"L/100km"}
                 one{"{0}L/100km"}
                 other{"{0}L/100km"}
@@ -1039,7 +1083,7 @@ chr{
                 one{"{0} G"}
                 other{"{0} G"}
             }
-            meter-per-second-squared{
+            meter-per-square-second{
                 dnam{"ᏗᏟᎶᏍᏗ/sec²"}
                 one{"{0} m/s²"}
                 other{"{0} m/s²"}
@@ -1138,7 +1182,7 @@ chr{
                 one{"{0} kt"}
                 other{"{0} kt"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dL"}
                 one{"{0} mg/dL"}
                 other{"{0} mg/dL"}
@@ -1153,11 +1197,6 @@ chr{
                 one{"{0} mol"}
                 other{"{0} mol"}
             }
-            part-per-million{
-                dnam{"ᏚᏙᏢᏒ/ᎢᏳᏆᏗᏅᏛ"}
-                one{"{0} ppm"}
-                other{"{0} ppm"}
-            }
             percent{
                 dnam{"ᏓᎬᏩᎶᏛ"}
                 one{"{0}%"}
@@ -1168,6 +1207,11 @@ chr{
                 one{"{0}‰"}
                 other{"{0}‰"}
             }
+            permillion{
+                dnam{"ᏚᏙᏢᏒ/ᎢᏳᏆᏗᏅᏛ"}
+                one{"{0} ppm"}
+                other{"{0} ppm"}
+            }
             permyriad{
                 dnam{"ᏋᎻᎵᎠᏗ"}
                 one{"{0}‱"}
@@ -1175,7 +1219,7 @@ chr{
             }
         }
         consumption{
-            liter-per-100kilometers{
+            liter-per-100-kilometer{
                 dnam{"L/100km"}
                 one{"{0} L/100km"}
                 other{"{0} L/100km"}
@@ -1487,9 +1531,9 @@ chr{
                 per{"{0}/ᎠᏟ"}
             }
             micrometer{
-                dnam{"µm"}
-                one{"{0} µm"}
-                other{"{0} µm"}
+                dnam{"μm"}
+                one{"{0} μm"}
+                other{"{0} μm"}
             }
             mile{
                 dnam{"ᎢᏳᏟᎶᏓ"}
@@ -1588,9 +1632,9 @@ chr{
                 other{"{0} t"}
             }
             microgram{
-                dnam{"µg"}
-                one{"{0} µg"}
-                other{"{0} µg"}
+                dnam{"μg"}
+                one{"{0} μg"}
+                other{"{0} μg"}
             }
             milligram{
                 dnam{"mg"}
@@ -1668,7 +1712,7 @@ chr{
                 one{"{0} hPa"}
                 other{"{0} hPa"}
             }
-            inch-hg{
+            inch-ofhg{
                 dnam{"inHg"}
                 one{"{0} inHg"}
                 other{"{0} inHg"}
@@ -1688,12 +1732,12 @@ chr{
                 one{"{0} mbar"}
                 other{"{0} mbar"}
             }
-            millimeter-of-mercury{
+            millimeter-ofhg{
                 dnam{"mmHg"}
                 one{"{0} mmHg"}
                 other{"{0} mmHg"}
             }
-            pound-per-square-inch{
+            pound-force-per-square-inch{
                 dnam{"psi"}
                 one{"{0} psi"}
                 other{"{0} psi"}
@@ -1749,7 +1793,7 @@ chr{
                 one{"{0} N⋅m"}
                 other{"{0} N⋅m"}
             }
-            pound-foot{
+            pound-force-foot{
                 dnam{"lbf⋅ft"}
                 one{"{0} lbf⋅ft"}
                 other{"{0} lbf⋅ft"}

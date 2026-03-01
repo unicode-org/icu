@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 bn{
     Keys{
         calendar{"ক্যালেন্ডার"}
@@ -151,6 +152,7 @@ bn{
         eu{"বাস্ক"}
         ewo{"ইওন্ডো"}
         fa{"ফার্সি"}
+        fa_AF{"দারি"}
         fan{"ফ্যাঙ্গ"}
         fat{"ফান্তি"}
         ff{"ফুলাহ্"}
@@ -351,7 +353,7 @@ bn{
         nl{"ওলন্দাজ"}
         nl_BE{"ফ্লেমিশ"}
         nmg{"কোয়াসিও"}
-        nn{"নরওয়েজীয়ান নিনর্স্ক"}
+        nn{"নরওয়েজিয়ান নিনর্স্ক"}
         nnh{"নিঙ্গেম্বুন"}
         no{"নরওয়েজীয়"}
         nog{"নোগাই"}
@@ -403,7 +405,6 @@ bn{
         ro_MD{"মলদাভিয়"}
         rof{"রম্বো"}
         rom{"রোমানি"}
-        root{"মূল"}
         ru{"রুশ"}
         rup{"আরমেনিয়ান"}
         rw{"কিনয়ারোয়ান্ডা"}
@@ -553,6 +554,7 @@ bn{
         en_US{"যুক্তরাষ্ট্রের ইংরেজি"}
     }
     Languages%variant{
+        ckb{"কুর্দিশ, সোরানি"}
         ps{"পুশতো"}
     }
     Scripts{
@@ -879,7 +881,6 @@ bn{
             wara{"ওয়ারেং সিটি সংখ্যা"}
         }
     }
-    Version{"36"}
     characterLabelPattern{
         all{"{0} — সমস্ত"}
         category-list{"{0}: {1}"}
@@ -894,6 +895,8 @@ bn{
             one{"{0} স্ট্রোক"}
             other{"{0} স্ট্রোক"}
         }
+        subscript{"সাবস্ক্রিপ্ট {0}"}
+        superscript{"সুপারস্ক্রিপ্ট {0}"}
     }
     codePatterns{
         language{"ভাষা: {0}"}

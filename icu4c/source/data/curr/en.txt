@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 en{
     Currencies{
         ADP{
@@ -799,7 +800,7 @@ en{
             "Papua New Guinean Kina",
         }
         PHP{
-            "PHP",
+            "₱",
             "Philippine Piso",
         }
         PKR{
@@ -1119,7 +1120,7 @@ en{
             "French UIC-Franc",
         }
         XOF{
-            "CFA",
+            "F CFA",
             "West African CFA Franc",
         }
         XPD{
@@ -2433,5 +2434,4 @@ en{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"36"}
 }

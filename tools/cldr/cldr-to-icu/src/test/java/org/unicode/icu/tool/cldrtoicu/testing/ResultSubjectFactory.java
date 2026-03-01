@@ -2,10 +2,11 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package org.unicode.icu.tool.cldrtoicu.testing;
 
+import org.unicode.icu.tool.cldrtoicu.PathValueTransformer.Result;
+
 import com.google.common.truth.FailureMetadata;
 import com.google.common.truth.Subject;
 import com.google.common.truth.Truth;
-import org.unicode.icu.tool.cldrtoicu.PathValueTransformer.Result;
 
 /** Truth subject for asserting about transformation results (makes tests much more readable). */
 public class ResultSubjectFactory implements Subject.Factory<ResultSubject, Result> {

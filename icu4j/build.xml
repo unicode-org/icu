@@ -1,6 +1,6 @@
 <!--
 * © 2016 and later: Unicode, Inc. and others.
-* License & terms of use: http://www.unicode.org/copyright.html#License
+* License & terms of use: http://www.unicode.org/copyright.html
 *******************************************************************************
 * Copyright (C) 1997-2016, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
@@ -110,6 +110,34 @@
         <matches string="${java.version}" pattern="12((-.|\.\d).*)?"/>
     </condition>
 
+    <condition property="is.java13">
+        <matches string="${java.version}" pattern="13((-.|\.\d).*)?"/>
+    </condition>
+
+    <condition property="is.java14">
+        <matches string="${java.version}" pattern="14((-.|\.\d).*)?"/>
+    </condition>
+
+    <condition property="is.java15">
+        <matches string="${java.version}" pattern="15((-.|\.\d).*)?"/>
+    </condition>
+
+    <condition property="is.java16">
+        <matches string="${java.version}" pattern="16((-.|\.\d).*)?"/>
+    </condition>
+
+    <condition property="is.java17">
+        <matches string="${java.version}" pattern="17((-.|\.\d).*)?"/>
+    </condition>
+
+    <condition property="is.java18">
+        <matches string="${java.version}" pattern="18((-.|\.\d).*)?"/>
+    </condition>
+
+    <condition property="is.java19">
+        <matches string="${java.version}" pattern="19((-.|\.\d).*)?"/>
+    </condition>
+
     <condition property="is.java8.plus">
         <or>
             <isset property="is.java8"/>
@@ -117,6 +145,13 @@
             <isset property="is.java10"/>
             <isset property="is.java11"/>
             <isset property="is.java12"/>
+            <isset property="is.java13"/>
+            <isset property="is.java14"/>
+            <isset property="is.java15"/>
+            <isset property="is.java16"/>
+            <isset property="is.java17"/>
+            <isset property="is.java18"/>
+            <isset property="is.java19"/>
         </or>
     </condition>
 
@@ -183,13 +218,6 @@
         <delete dir="${out.dir}"/>
         <delete dir="${module.dir}"/>
         <delete dir="${cldr.release.dir}"/>
-
-        <available file="eclipse-build" type="dir" property="eclipse-build.dir.present"/>
-        <antcall target="_clean.eclipse-build"/>
-    </target>
-
-    <target name="_clean.eclipse-build" if="eclipse-build.dir.present">
-        <ant dir="eclipse-build" target="clean" inheritAll="false"/>
     </target>
 
     <target name="ivy-clean">
@@ -197,7 +225,7 @@
     </target>
 
     <!-- Ivy Targets -->
-    <property name="ivy.install.version" value="2.1.0-rc2" />
+    <property name="ivy.install.version" value="2.5.0" />
     <condition property="ivy.home" value="${env.IVY_HOME}">
         <isset property="env.IVY_HOME" />
     </condition>
@@ -266,7 +294,10 @@
             <delete dir="${junit.out.dir}/checkTest"/>
             <mkdir dir="${junit.out.dir}/checkTest"/>
 
-            <junit printsummary="yes">
+            <junit printsummary="yes" fork="yes">
+                <jvmarg value="-ea"/>
+                <jvmarg value="-Djava.awt.headless=true"/>
+                <jvmarg value="-DICU.exhaustive=10"/>
                 <classpath>
                     <path refid="junit.jars"/>
                     <path refid="junit.icu.jars"/>
@@ -429,7 +460,7 @@
 
     <target name="secure" depends="icu4jJar" description="(Deprecated)Build ICU4J API and test classes for running the ICU4J test suite with Java security manager enabled"/>
 
-    <!-- Check to see if JVM_OPTIONS enviroment variable is set. This can be use to set the heap size. -->
+    <!-- Check to see if JVM_OPTIONS environment variable is set. This can be use to set the heap size. -->
     <property name="env.JVM_OPTIONS" value=""/>
     <property name="jvm_options" value="${env.JVM_OPTIONS}"/>
 
@@ -720,7 +751,7 @@
         </jar>
     </target>
 
-    <target name="icu4jtestsJar" depends="info, tests" description="Build ICU4J all-in-one test jar">
+    <target name="icu4jtestsJar" depends="info, tests, tools" description="Build ICU4J all-in-one test jar">
         <jar jarfile="${icu4jtests.jar.file}"
                 compress="true">
             <fileset dir="${icu4j.test-framework.dir}/${bin.dir}" includes="**/*"/>
@@ -728,6 +759,7 @@
             <fileset dir="${icu4j.collate-tests.dir}/${bin.dir}" includes="**/*"/>
             <fileset dir="${icu4j.translit-tests.dir}/${bin.dir}" includes="**/*"/>
             <fileset dir="${icu4j.charset-tests.dir}/${bin.dir}" includes="**/*"/>
+            <fileset dir="${icu4j.tools.dir}/${bin.dir}" includes="com/ibm/icu/dev/tool/locale/**"/>
         </jar>
     </target>
 
@@ -1612,7 +1644,8 @@
                 <include name="com/ibm/icu/util/**"/>
             </packageset>
             <packageset dir="${icu4j.collate.dir}/src">
-                <include name="com/ibm/icu/**"/>
+                <include name="com/ibm/icu/text/**"/>
+                <include name="com/ibm/icu/util/**"/>
             </packageset>
             <packageset dir="${icu4j.charset.dir}/src">
                 <include name="com/ibm/icu/charset/**"/>
@@ -1779,43 +1812,6 @@
             <arg value="${out.dir}/draftAPIs.tsv"/>
             <arg value="-t"/>
             <arg value="${out.dir}/icu4j${api.report.version}.api3.gz" />
-        </java>
-    </target>
-
-    <target name="swatDeprecated" depends="build-tools" description="Convert @deprecated @draft tags to @provisional">
-        <antcall target="_runSwatDeprecated">
-            <param name="swat.deprecated.opt" value="-dep"/>
-        </antcall>
-    </target>
-
-    <target name="swatProvisional" depends="build-tools" description="Convert @provisional tags to @deprecated @draft">
-        <antcall target="_runSwatDeprecated">
-            <param name="swat.deprecated.opt" value="-prov"/>
-        </antcall>
-    </target>
-
-    <target name="_runSwatDeprecated">
-        <java classname="com.ibm.icu.dev.tool.docs.SwatDeprecated"
-                classpath="${icu4j.build-tools.jar}"
-                failonerror="true">
-            <arg value="${swat.deprecated.opt}"/>
-            <arg value="-src"/>
-            <arg value="${icu4j.core.dir}/src"/>
-            <arg value="-dst"/>
-            <arg value="${icu4j.core.dir}/src"/>
-            <arg value="-overwrite"/>
-            <arg value="-verbose"/>
-        </java>
-        <java classname="com.ibm.icu.dev.tool.docs.SwatDeprecated"
-                classpath="${icu4j.build-tools.jar}"
-                failonerror="true">
-            <arg value="${swat.deprecated.opt}"/>
-            <arg value="-src"/>
-            <arg value="${icu4j.charset.dir}/src"/>
-            <arg value="-dst"/>
-            <arg value="${icu4j.charset.dir}/src"/>
-            <arg value="-overwrite"/>
-            <arg value="-verbose"/>
         </java>
     </target>
 

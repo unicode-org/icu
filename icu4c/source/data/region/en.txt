@@ -1,8 +1,9 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 en{
     Countries{
-        001{"World"}
+        001{"world"}
         002{"Africa"}
         003{"North America"}
         005{"South America"}
@@ -311,10 +312,10 @@ en{
         CD{"Congo (DRC)"}
         CG{"Congo (Republic)"}
         CI{"Ivory Coast"}
+        CV{"Cabo Verde"}
         CZ{"Czech Republic"}
         FK{"Falkland Islands (Islas Malvinas)"}
         SZ{"Swaziland"}
         TL{"East Timor"}
     }
-    Version{"36"}
 }

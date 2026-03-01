@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 sv{
-    Version{"36"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidjan"}
@@ -955,7 +955,7 @@ sv{
             ec{"Sydney"}
         }
         "Etc:UTC"{
-            ls{"Koordinerad universell tid"}
+            ls{"koordinerad universell tid"}
             ss{"UTC"}
         }
         "Etc:Unknown"{
@@ -1768,7 +1768,9 @@ sv{
             ls{"Niuetid"}
         }
         "meta:Norfolk"{
-            ls{"Norfolköns tid"}
+            ld{"Norfolköns, sommartid"}
+            lg{"Norfolköns tid"}
+            ls{"Norfolköns, normaltid"}
         }
         "meta:Noronha"{
             ld{"Fernando de Noronha, sommartid"}

@@ -96,7 +96,7 @@ public:
     /* Internal subroutine used by TestIsBoundary() */ 
     void doBoundaryTest(BreakIterator& bi, UnicodeString& text, int32_t *boundaries);
 
-    /*Internal subroutine used for comparision of expected and acquired results */
+    /*Internal subroutine used for comparison of expected and acquired results */
     void doTest(UnicodeString& testString, int32_t start, int32_t gotoffset, int32_t expectedOffset, const char* expected);
 
 

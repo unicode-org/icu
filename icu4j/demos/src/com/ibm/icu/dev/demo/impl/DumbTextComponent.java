@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 1996-2010, International Business Machines Corporation and    *
@@ -730,7 +730,7 @@ public class DumbTextComponent extends Canvas
         if (visibleWidth(fMtr, subject) <= width)
           return len;
 
-        // LIU: Remainder of this method rewritten to accomodate lines
+        // LIU: Remainder of this method rewritten to accommodate lines
         // longer than the component width by first trying to break
         // into lines; then words; finally chars.
         int n = findFittingBreak(fMtr, subject, width, lineBreaker);

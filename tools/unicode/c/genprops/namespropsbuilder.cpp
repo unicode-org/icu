@@ -466,7 +466,7 @@ NamesPropsBuilder::setAlgNamesRange(UChar32 start, UChar32 end,
         errorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
-    int32_t paddingLength=paddingLength=rangeSize&3;
+    int32_t paddingLength=rangeSize&3;
     if(paddingLength) {
         paddingLength=4-paddingLength;
         rangeSize+=paddingLength;
@@ -495,7 +495,7 @@ compress(UErrorCode &errorCode) {
 
     /* sort the words in reverse order by weight */
     uprv_sortArray(words, wordCount, sizeof(Word),
-                   compareWords, NULL, FALSE, &errorCode);
+                   compareWords, NULL, false, &errorCode);
 
     /* remove the words that do not save anything */
     while(wordCount>0 && words[wordCount-1].weight<1) {
@@ -543,7 +543,7 @@ compress(UErrorCode &errorCode) {
         /* sort these words in reverse order by weight */
         errorCode=U_ZERO_ERROR;
         uprv_sortArray(words+tokenCount, wordCount-tokenCount, sizeof(Word),
-                        compareWords, NULL, FALSE, &errorCode);
+                        compareWords, NULL, false, &errorCode);
 
         /* remove the words that do not save anything */
         while(wordCount>0 && words[wordCount-1].weight<1) {

@@ -63,8 +63,9 @@ DateFormatRegressionTest::runIndexedTest( int32_t index, UBool exec, const char*
         CASE(30,TestT10334)
         CASE(31,TestT10619)
         CASE(32,TestT10855)
-        CASE(33,TestT10906)
-        CASE(34,TestT13380)
+        CASE(33,TestT10858)
+        CASE(34,TestT10906)
+        CASE(35,TestT13380)
         default: name = ""; break;
     }
 }
@@ -1759,6 +1760,45 @@ void DateFormatRegressionTest::TestT13380(void) {
     LocalPointer<DateFormat> tgFmt(DateFormat::createDateInstance(DateFormat::kShort, Locale("tg")), errorCode);
     if (U_FAILURE(errorCode)) {
         errln("failure creating 'tg' DateFormat");
+    }
+}
+
+void DateFormatRegressionTest::TestT10858(void) {
+    // test for assignment operator on instances with the same locale but different TimeZoneFormat
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString pattern("VVVV");
+    Locale loc("en_US");
+
+    // Make two identical Formats
+    SimpleDateFormat fmt_rhs(pattern, loc, status);
+    SimpleDateFormat fmt_lhs(pattern, loc, status);
+
+    // Setup a custom TimeZoneFormat
+    TimeZoneFormat* tzFmt = TimeZoneFormat::createInstance(Locale("de_DE"), status);
+    tzFmt->setGMTPattern(UnicodeString("UTC{0}"), status);
+    tzFmt->setGMTZeroFormat(UnicodeString("UTC"), status);
+
+    // Set custom TimeZoneFormat in fmt1 before assignment. Use
+    // adoptTimeZoneFormat instead of setTimeZoneFormat to delegate
+    // cleanup of tzFmt to SimpleDateFormat
+    fmt_rhs.adoptTimeZoneFormat(tzFmt);
+
+    // Make sure TimeZoneFormat is DIFFERENT between fmt_lhs & fmt_rhs at this point.
+    // Direct comparison with TimeZoneFormat::operator== does not suffice as it only
+    // checks for 'semantically equal' rather than 'identical' -- compare results of
+    // SimpleDateFormat::format() instead
+    UnicodeString res_rhs; fmt_rhs.format(0.0, res_rhs);
+    UnicodeString res_lhs_pre_assign; fmt_lhs.format(0.0, res_lhs_pre_assign);
+    if (res_lhs_pre_assign == res_rhs) {
+        errln(UnicodeString("Error: adoptTimeZoneFormat failed to set custom TimeZoneFormat into 'fmt_rhs'"));
+    }
+
+    // Invoke assignment operator and make sure formatted outputs from both objects are
+    // now identical (i.e. TimeZoneFormat, among other members, is correctly copied to LHS)
+    fmt_lhs = fmt_rhs;
+    UnicodeString res_lhs_post_assign; fmt_lhs.format(0.0, res_lhs_post_assign);
+    if (res_lhs_post_assign != res_rhs) {
+        errln(UnicodeString("Error: assigned instance did not take up TimeZoneFormat from original"));
     }
 }
 

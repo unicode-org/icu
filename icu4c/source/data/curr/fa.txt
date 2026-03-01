@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 fa{
     Currencies{
         ADP{
@@ -454,6 +455,10 @@ fa{
             "LTL",
             "لیتاس لیتوانی",
         }
+        LTT{
+            "LTT",
+            "تالوناس لیتوانی",
+        }
         LUF{
             "LUF",
             "فرانک لوکزامبورگ",
@@ -879,7 +884,7 @@ fa{
             "فرانک طلای فرانسه",
         }
         XOF{
-            "CFA",
+            "F CFA",
             "فرانک CFA غرب افریقا",
         }
         XPD{
@@ -1898,5 +1903,4 @@ fa{
             other{"کواچای زامبیا"}
         }
     }
-    Version{"36"}
 }

@@ -317,7 +317,7 @@ inline uint16_t initializePatternCETable(UStringSearch *strsrch,
         uprv_free(pattern->ces);
     }
 
-    uint16_t  offset      = 0;
+    uint32_t  offset      = 0;
     uint16_t  result      = 0;
     int32_t   ce;
 
@@ -388,7 +388,7 @@ inline uint16_t initializePatternPCETable(UStringSearch *strsrch,
         uprv_free(pattern->pces);
     }
 
-    uint16_t  offset = 0;
+    uint32_t  offset = 0;
     uint16_t  result = 0;
     int64_t   pce;
 
@@ -987,7 +987,7 @@ UBool hasAccentsBeforeMatch(const UStringSearch *strsrch, int32_t start,
 * Note this is the initial boundary check. If the potential match
 * starts or ends with composite characters, the accents in those
 * characters will be determined later.
-* Not doing backwards iteration here, since discontiguos contraction for
+* Not doing backwards iteration here, since discontiguous contraction for
 * backwards collation element iterator, use up too many characters.
 * E.g. looking for \u030A ring in \u01FA A ring above and acute,
 * should fail since there is a acute at the end of \u01FA
@@ -4061,7 +4061,7 @@ U_CAPI UBool U_EXPORT2 usearch_search(UStringSearch  *strsrch,
         // * do NOT require that match limit be on a breakIter boundary
 
         //  Advance the match end position to the first acceptable match boundary.
-        //    This advances the index over any combining charcters.
+        //    This advances the index over any combining characters.
         mLimit = maxLimit;
         if (minLimit < maxLimit) {
             // When the last CE's low index is same with its high index, the CE is likely

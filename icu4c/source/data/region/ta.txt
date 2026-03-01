@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 ta{
     Countries{
         001{"உலகம்"}
@@ -311,8 +312,6 @@ ta{
         CI{"ஐவரி கோஸ்ட்"}
         CZ{"செக் குடியரசு"}
         FK{"ஃபாக்லாந்து தீவுகள் (இஸ்லாஸ் மால்வினஸ்)"}
-        SZ{"எஸ்வாட்டீனி"}
         TL{"கிழக்கு தைமூர்"}
     }
-    Version{"36"}
 }

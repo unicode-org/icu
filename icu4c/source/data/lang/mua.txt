@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 mua{
     Languages{
         ak{"akaŋ"}
@@ -39,7 +40,6 @@ mua{
         so{"Somaliya"}
         sv{"Swedia"}
         ta{"Tamul"}
-        th{"th"}
         tr{"Turk"}
         uk{"Ukrainia"}
         ur{"Urdu"}
@@ -48,5 +48,4 @@ mua{
         zh{"zah Syiŋ"}
         zu{"Zulu"}
     }
-    Version{"36"}
 }

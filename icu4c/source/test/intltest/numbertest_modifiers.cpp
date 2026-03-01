@@ -25,11 +25,11 @@ void ModifiersTest::runIndexedTest(int32_t index, UBool exec, const char *&name,
 
 void ModifiersTest::testConstantAffixModifier() {
     UErrorCode status = U_ZERO_ERROR;
-    ConstantAffixModifier mod0(u"", u"", UNUM_PERCENT_FIELD, true);
+    ConstantAffixModifier mod0(u"", u"", {UFIELD_CATEGORY_NUMBER, UNUM_PERCENT_FIELD}, true);
     assertModifierEquals(mod0, 0, true, u"|", u"n", status);
     assertSuccess("Spot 1", status);
 
-    ConstantAffixModifier mod1(u"a📻", u"b", UNUM_PERCENT_FIELD, true);
+    ConstantAffixModifier mod1(u"a📻", u"b", {UFIELD_CATEGORY_NUMBER, UNUM_PERCENT_FIELD}, true);
     assertModifierEquals(mod1, 3, true, u"a📻|b", u"%%%n%", status);
     assertSuccess("Spot 2", status);
 }
@@ -42,8 +42,8 @@ void ModifiersTest::testConstantMultiFieldModifier() {
     assertModifierEquals(mod1, 0, true, u"|", u"n", status);
     assertSuccess("Spot 1", status);
 
-    prefix.append(u"a📻", UNUM_PERCENT_FIELD, status);
-    suffix.append(u"b", UNUM_CURRENCY_FIELD, status);
+    prefix.append(u"a📻", {UFIELD_CATEGORY_NUMBER, UNUM_PERCENT_FIELD}, status);
+    suffix.append(u"b", {UFIELD_CATEGORY_NUMBER, UNUM_CURRENCY_FIELD}, status);
     ConstantMultiFieldModifier mod2(prefix, suffix, false, true);
     assertModifierEquals(mod2, 3, true, u"a📻|b", u"%%%n$", status);
     assertSuccess("Spot 2", status);
@@ -80,7 +80,7 @@ void ModifiersTest::testSimpleModifier() {
         const UnicodeString pattern(patterns[i]);
         SimpleFormatter compiledFormatter(pattern, 1, 1, status);
         assertSuccess("Spot 1", status);
-        SimpleModifier mod(compiledFormatter, UNUM_PERCENT_FIELD, false);
+        SimpleModifier mod(compiledFormatter, {UFIELD_CATEGORY_NUMBER, UNUM_PERCENT_FIELD}, false);
         assertModifierEquals(
                 mod, prefixLens[i], false, expectedCharFields[i][0], expectedCharFields[i][1], status);
         assertSuccess("Spot 2", status);
@@ -88,7 +88,7 @@ void ModifiersTest::testSimpleModifier() {
         // Test strange insertion positions
         for (int32_t j = 0; j < NUM_OUTPUTS; j++) {
             FormattedStringBuilder output;
-            output.append(outputs[j].baseString, UNUM_FIELD_COUNT, status);
+            output.append(outputs[j].baseString, kUndefinedField, status);
             mod.apply(output, outputs[j].leftIndex, outputs[j].rightIndex, status);
             UnicodeString expected = expecteds[j][i];
             UnicodeString actual = output.toUnicodeString();
@@ -112,7 +112,7 @@ void ModifiersTest::testCurrencySpacingEnabledModifier() {
     assertModifierEquals(mod1, 0, true, u"|", u"n", status);
     assertSuccess("Spot 3", status);
 
-    prefix.append(u"USD", UNUM_CURRENCY_FIELD, status);
+    prefix.append(u"USD", {UFIELD_CATEGORY_NUMBER, UNUM_CURRENCY_FIELD}, status);
     assertSuccess("Spot 4", status);
     CurrencySpacingEnabledModifier mod2(prefix, suffix, false, true, symbols, status);
     assertSuccess("Spot 5", status);
@@ -121,7 +121,7 @@ void ModifiersTest::testCurrencySpacingEnabledModifier() {
 
     // Test the default currency spacing rules
     FormattedStringBuilder sb;
-    sb.append("123", UNUM_INTEGER_FIELD, status);
+    sb.append("123", {UFIELD_CATEGORY_NUMBER, UNUM_INTEGER_FIELD}, status);
     assertSuccess("Spot 7", status);
     FormattedStringBuilder sb1(sb);
     assertModifierEquals(mod2, sb1, 3, true, u"USD\u00A0123", u"$$$niii", status);
@@ -129,7 +129,7 @@ void ModifiersTest::testCurrencySpacingEnabledModifier() {
 
     // Compare with the unsafe code path
     FormattedStringBuilder sb2(sb);
-    sb2.insert(0, "USD", UNUM_CURRENCY_FIELD, status);
+    sb2.insert(0, "USD", {UFIELD_CATEGORY_NUMBER, UNUM_CURRENCY_FIELD}, status);
     assertSuccess("Spot 9", status);
     CurrencySpacingEnabledModifier::applyCurrencySpacing(sb2, 0, 3, 6, 0, symbols, status);
     assertSuccess("Spot 10", status);
@@ -138,7 +138,7 @@ void ModifiersTest::testCurrencySpacingEnabledModifier() {
     // Test custom patterns
     // The following line means that the last char of the number should be a | (rather than a digit)
     symbols.setPatternForCurrencySpacing(UNUM_CURRENCY_SURROUNDING_MATCH, true, u"[|]");
-    suffix.append("XYZ", UNUM_CURRENCY_FIELD, status);
+    suffix.append("XYZ", {UFIELD_CATEGORY_NUMBER, UNUM_CURRENCY_FIELD}, status);
     assertSuccess("Spot 11", status);
     CurrencySpacingEnabledModifier mod3(prefix, suffix, false, true, symbols, status);
     assertSuccess("Spot 12", status);
@@ -150,7 +150,7 @@ void ModifiersTest::assertModifierEquals(const Modifier &mod, int32_t expectedPr
                                          bool expectedStrong, UnicodeString expectedChars,
                                          UnicodeString expectedFields, UErrorCode &status) {
     FormattedStringBuilder sb;
-    sb.appendCodePoint('|', UNUM_FIELD_COUNT, status);
+    sb.appendCodePoint('|', kUndefinedField, status);
     assertModifierEquals(
             mod, sb, expectedPrefixLength, expectedStrong, expectedChars, expectedFields, status);
 

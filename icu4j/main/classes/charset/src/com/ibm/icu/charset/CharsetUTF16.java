@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /**
  *******************************************************************************
  * Copyright (C) 2006-2011, International Business Machines Corporation and    *
@@ -17,7 +17,6 @@ import java.nio.charset.CoderResult;
 
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
-import com.ibm.icu.util.VersionInfo;
 
 /**
  * @author Niti Hantaweepant
@@ -65,13 +64,10 @@ class CharsetUTF16 extends CharsetICU {
             this.endianXOR = ENDIAN_XOR_LE;
         }
 
-        /* UnicodeBig and UnicodeLittle requires maxBytesPerChar set to 4 in Java 5 or less */
-        if ((VersionInfo.javaVersion().getMajor() == 1 && VersionInfo.javaVersion().getMinor() <= 5)
-                && (isEndianSpecified && version == 1)) {
-            maxBytesPerChar = 4;
-        } else {
-            maxBytesPerChar = 2;
-        }
+        // UnicodeBig and UnicodeLittle used to require maxBytesPerChar set to 4 in Java 5 or less,
+        // but it's no longer necessary for newer Java versions. Java 5 or older runtime is no
+        // longer supported.
+        maxBytesPerChar = 2;
 
         minBytesPerChar = 2;
         maxCharsPerByte = 1;
@@ -214,7 +210,7 @@ class CharsetUTF16 extends CharsetICU {
             char trail = (char) (((toUBytesArray[2 ^ actualEndianXOR] & UConverterConstants.UNSIGNED_BYTE_MASK) << 8) | ((toUBytesArray[3 ^ actualEndianXOR] & UConverterConstants.UNSIGNED_BYTE_MASK)));
 
             if (!UTF16.isTrailSurrogate(trail)) {
-                // pretend like we didnt read the last 2 bytes
+                // pretend like we didn't read the last 2 bytes
                 toULength = 2;
                 source.position(source.position() - 2);
 

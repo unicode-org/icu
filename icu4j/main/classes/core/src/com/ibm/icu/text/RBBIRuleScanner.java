@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 2003-2016, International Business Machines Corporation and others. All Rights Reserved.
@@ -73,7 +73,7 @@ class RBBIRuleScanner {
     RBBISymbolTable            fSymbolTable;         // symbol table, holds definitions of
                                                      //   $variable symbols.
 
-    HashMap<String, RBBISetTableEl> fSetTable = new HashMap<String, RBBISetTableEl>(); // UnicocodeSet hash table, holds indexes to
+    HashMap<String, RBBISetTableEl> fSetTable = new HashMap<>(); // UnicocodeSet hash table, holds indexes to
                                                                                        //   the sets created while parsing rules.
                                                                                        //   The key is the string used for creating
                                                                                        //   the set.
@@ -209,7 +209,7 @@ class RBBIRuleScanner {
             break;
 
         case RBBIRuleParseTable.doEndAssign: {
-            // We have reached the end of an assignement statement.
+            // We have reached the end of an assignment statement.
             //   Current scan char is the ';' that terminates the assignment.
 
             // Terminate expression, leaves expression parse tree rooted in TOS
@@ -697,16 +697,14 @@ class RBBIRuleScanner {
     static String stripRules(String rules) {
         StringBuilder strippedRules = new StringBuilder();
         int rulesLength = rules.length();
-        boolean skippingSpaces = false;
 
         for (int idx = 0; idx < rulesLength; idx = rules.offsetByCodePoints(idx, 1)) {
             int cp = rules.codePointAt(idx);
             boolean whiteSpace = UCharacter.hasBinaryProperty(cp, UProperty.PATTERN_WHITE_SPACE);
-            if (skippingSpaces && whiteSpace) {
+            if (whiteSpace) {
                 continue;
             }
             strippedRules.appendCodePoint(cp);
-            skippingSpaces = whiteSpace;
         }
         return strippedRules.toString();
     }
@@ -725,6 +723,9 @@ class RBBIRuleScanner {
             return -1;
         }
         ch = UTF16.charAt(fRB.fRules, fNextIndex);
+        if (Character.isBmpCodePoint(ch) && Character.isSurrogate((char)ch)) {
+            error(RBBIRuleBuilder.U_ILLEGAL_CHAR_FOUND);
+        }
         fNextIndex = UTF16.moveCodePointOffset(fRB.fRules, fNextIndex, 1);
 
         if (ch == '\r' ||
@@ -822,19 +823,18 @@ class RBBIRuleScanner {
 
             //
             //  check for backslash escaped characters.
-            //  Use String.unescapeAt() to handle them.
             //
             if (c.fChar == '\\') {
                 c.fEscaped = true;
-                int[] unescapeIndex = new int[1];
-                unescapeIndex[0] = fNextIndex;
-                c.fChar = Utility.unescapeAt(fRB.fRules, unescapeIndex);
-                if (unescapeIndex[0] == fNextIndex) {
+                int cpAndLength = Utility.unescapeAndLengthAt(fRB.fRules, fNextIndex);
+                if (cpAndLength < 0) {
                     error(RBBIRuleBuilder.U_BRK_HEX_DIGITS_EXPECTED);
                 }
+                c.fChar = Utility.cpFromCodePointAndLength(cpAndLength);
+                int length = Utility.lengthFromCodePointAndLength(cpAndLength);
 
-                fCharNum += unescapeIndex[0] - fNextIndex;
-                fNextIndex = unescapeIndex[0];
+                fCharNum += length;
+                fNextIndex += length;
             }
         }
         // putc(c.fChar, stdout);
@@ -933,7 +933,7 @@ class RBBIRuleScanner {
             // Perform any action specified  by this row in the state table.
             if (doParseActions(tableEl.fAction) == false) {
                 // Break out of the state machine loop if the
-                //   the action signalled some kind of error, or
+                //   the action signaled some kind of error, or
                 //   the action was to exit, occurs on normal end-of-rules-input.
                 break;
             }
@@ -1070,7 +1070,7 @@ class RBBIRuleScanner {
             error(RBBIRuleBuilder.U_BRK_RULE_EMPTY_SET);
         }
 
-        // Advance the RBBI parse postion over the UnicodeSet pattern.
+        // Advance the RBBI parse position over the UnicodeSet pattern.
         //   Don't just set fScanIndex because the line/char positions maintained
         //   for error reporting would be thrown off.
         i = pos.getIndex();
@@ -1089,12 +1089,17 @@ class RBBIRuleScanner {
         n.fText = fRB.fRules.substring(n.fFirstPos, n.fLastPos);
         //  findSetFor() serves several purposes here:
         //     - Adopts storage for the UnicodeSet, will be responsible for deleting.
-        //     - Mantains collection of all sets in use, needed later for establishing
+        //     - Maintains collection of all sets in use, needed later for establishing
         //          character categories for run time engine.
-        //     - Eliminates mulitiple instances of the same set.
+        //     - Eliminates multiple instances of the same set.
         //     - Creates a new uset node if necessary (if this isn't a duplicate.)
         findSetFor(n.fText, n, uset);
     }
 
+    /**
+     * @return  the number of rules that have been seen.
+     */
+    int numRules() {
+        return fRuleNum;
+    }
 }
-

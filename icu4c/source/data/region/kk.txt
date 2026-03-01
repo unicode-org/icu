@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 kk{
     Countries{
         001{"Әлем"}
@@ -259,7 +260,7 @@ kk{
         TD{"Чад"}
         TF{"Францияның оңтүстік аймақтары"}
         TG{"Того"}
-        TH{"Тайланд"}
+        TH{"Таиланд"}
         TJ{"Тәжікстан"}
         TK{"Токелау"}
         TL{"Тимор-Лесте"}
@@ -298,7 +299,6 @@ kk{
         ZZ{"Белгісіз аймақ"}
     }
     Countries%short{
-        GB{"Ұлыбритания"}
         HK{"Сянган"}
         MO{"Макао"}
         PS{"Палестина"}
@@ -308,11 +308,8 @@ kk{
     Countries%variant{
         CD{"Конго Демократиялық Республикасы"}
         CG{"Конго Республикасы"}
-        CI{"Кот-д’Ивуар"}
         CZ{"Чех Республикасы"}
         FK{"Фолкленд аралдары (Мальвин аралдары)"}
-        SZ{"Свазиленд"}
         TL{"Шығыс Тимор"}
     }
-    Version{"36"}
 }

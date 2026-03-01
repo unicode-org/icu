@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 ksh{
     Countries{
         001{"de Ääd"}
@@ -292,9 +293,6 @@ ksh{
         ZZ{"- Jähjend onbikannt -"}
     }
     Countries%short{
-        GB{"Jruußbrettannije"}
-        HK{"Hongkong"}
-        MO{"Makau"}
         US{"USA"}
     }
     Countries%variant{
@@ -303,5 +301,4 @@ ksh{
         CI{"de Älfebeijnköß"}
         FK{"de malleviinesche Enselle"}
     }
-    Version{"36"}
 }

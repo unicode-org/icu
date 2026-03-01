@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 ku{
     Keys{
         calendar{"salname"}
@@ -36,7 +37,6 @@ ku{
         br{"bretonî"}
         bs{"bosnî"}
         bug{"bugî"}
-        byn{"byn"}
         ca{"katalanî"}
         ce{"çeçenî"}
         ceb{"sebwanoyî"}
@@ -74,7 +74,6 @@ ku{
         fy{"frîsî"}
         ga{"îrî"}
         gd{"gaelîka skotî"}
-        gez{"gez"}
         gil{"kîrîbatî"}
         gl{"galîsî"}
         gn{"guwaranî"}
@@ -238,9 +237,6 @@ ku{
         zu{"zuluyî"}
         zza{"zazakî"}
     }
-    Languages%short{
-        az{"azerî"}
-    }
     Scripts{
         Arab{"erebî"}
         Armn{"ermenî"}
@@ -273,7 +269,6 @@ ku{
             roman{"hejmarên romî"}
         }
     }
-    Version{"36"}
     codePatterns{
         language{"ziman: {0}"}
         script{"nivîs: {0}"}

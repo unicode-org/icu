@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 1996-2011, International Business Machines Corporation and    *
@@ -185,7 +185,7 @@ public class IndianCalendar extends Calendar {
      * @stable ICU 3.8
      */
     public IndianCalendar(Locale aLocale) {
-        this(TimeZone.getDefault(), aLocale);
+        this(TimeZone.forLocaleOrDefault(aLocale), aLocale);
     }
 
     /**
@@ -196,7 +196,7 @@ public class IndianCalendar extends Calendar {
      * @stable ICU 3.8
      */
     public IndianCalendar(ULocale locale) {
-       this(TimeZone.getDefault(), locale);
+        this(TimeZone.forULocaleOrDefault(locale), locale);
     }
 
     /**
@@ -341,7 +341,7 @@ public class IndianCalendar extends Calendar {
             month = remainder[0];
         }
 
-        if(isGregorianLeap(extendedYear + INDIAN_ERA_START) && month == 0) {
+        if(isGregorianLeapYear(extendedYear + INDIAN_ERA_START) && month == 0) {
             return 31;
         }
 
@@ -359,20 +359,20 @@ public class IndianCalendar extends Calendar {
     protected void handleComputeFields(int julianDay){
         double jdAtStartOfGregYear;
         int leapMonth, IndianYear, yday, IndianMonth, IndianDayOfMonth, mday;
-        int[] gregorianDay;          // Stores gregorian date corresponding to Julian day;
+        computeGregorianFields(julianDay);
+        int gregorianYear = getGregorianYear(); // Stores gregorian date corresponding to Julian day;
+        IndianYear = gregorianYear - INDIAN_ERA_START;            // Year in Saka era
 
-        gregorianDay = jdToGregorian(julianDay);                    // Gregorian date for Julian day
-        IndianYear = gregorianDay[0] - INDIAN_ERA_START;            // Year in Saka era
-        jdAtStartOfGregYear = gregorianToJD(gregorianDay[0], 1, 1); // JD at start of Gregorian year
+        jdAtStartOfGregYear = gregorianToJD(gregorianYear, 0 /* first month in 0 base */, 1); // JD at start of Gregorian year
         yday = (int)(julianDay - jdAtStartOfGregYear);              // Day number in Gregorian year (starting from 0)
 
         if (yday < INDIAN_YEAR_START) {
             //  Day is at the end of the preceding Saka year
             IndianYear -= 1;
-            leapMonth = isGregorianLeap(gregorianDay[0] - 1) ? 31 : 30; // Days in leapMonth this year, previous Gregorian year
+            leapMonth = isGregorianLeapYear(gregorianYear - 1) ? 31 : 30; // Days in leapMonth this year, previous Gregorian year
             yday += leapMonth + (31 * 5) + (30 * 3) + 10;
         } else {
-            leapMonth = isGregorianLeap(gregorianDay[0]) ? 31 : 30; // Days in leapMonth this year
+            leapMonth = isGregorianLeapYear(gregorianYear) ? 31 : 30; // Days in leapMonth this year
             yday -= INDIAN_YEAR_START;
         }
 
@@ -465,19 +465,19 @@ public class IndianCalendar extends Calendar {
      * @param month  The month according to Indian calendar (between 1 to 12)
      * @param date   The date in month 
      */
-    private static double IndianToJD(int year, int month, int date) {
+    private double IndianToJD(int year, int month, int date) {
        int leapMonth, gyear, m;
        double start, jd;
 
        gyear = year + INDIAN_ERA_START;
 
 
-       if(isGregorianLeap(gyear)) {
+       if(isGregorianLeapYear(gyear)) {
           leapMonth = 31;
-          start = gregorianToJD(gyear, 3, 21);
+          start = gregorianToJD(gyear, 2 /* third month in 0 based */, 21);
        } else {
           leapMonth = 30;
-          start = gregorianToJD(gyear, 3, 22);
+          start = gregorianToJD(gyear, 2 /* third month in 0 based */, 22);
        }
 
        if (month == 1) {
@@ -504,74 +504,10 @@ public class IndianCalendar extends Calendar {
      * @param month  The month according to Gregorian calendar (between 0 to 11)
      * @param date   The date in month 
      */
-    private static double gregorianToJD(int year, int month, int date) {
-       double JULIAN_EPOCH = 1721425.5;
-       int y = year - 1;
-       int result = (365 * y)
-                  + (y / 4)
-                  - (y / 100)
-                  + (y / 400)
-                  + (((367 * month) - 362) / 12)
-                  + ((month <= 2) ? 0 : (isGregorianLeap(year) ? -1 : -2))
-                  + date;
-       return result - 1 + JULIAN_EPOCH;
-    }
-    
-    /*
-     * The following function is not needed for basic calendar functioning.
-     * This routine converts a julian day (jd) to the corresponding date in Gregorian calendar"
-     * @param jd The Julian date in Julian Calendar which is to be converted to Indian date"
-     */
-    private static int[] jdToGregorian(double jd) {
-       double JULIAN_EPOCH = 1721425.5;
-       double wjd, depoch, quadricent, dqc, cent, dcent, quad, dquad, yindex, yearday, leapadj;
-       int year, month, day;
-       
-       wjd = Math.floor(jd - 0.5) + 0.5;
-       depoch = wjd - JULIAN_EPOCH;
-       quadricent = Math.floor(depoch / 146097);
-       dqc = depoch % 146097;
-       cent = Math.floor(dqc / 36524);
-       dcent = dqc % 36524;
-       quad = Math.floor(dcent / 1461);
-       dquad = dcent % 1461;
-       yindex = Math.floor(dquad / 365);
-       year = (int)((quadricent * 400) + (cent * 100) + (quad * 4) + yindex);
-       
-       if (!((cent == 4) || (yindex == 4))) {
-          year++;
-       }
-       
-       yearday = wjd - gregorianToJD(year, 1, 1);
-       leapadj = ((wjd < gregorianToJD(year, 3, 1)) ? 0
-             :
-             (isGregorianLeap(year) ? 1 : 2)
-             );
-       
-       month = (int)Math.floor((((yearday + leapadj) * 12) + 373) / 367);
-       day = (int)(wjd - gregorianToJD(year, month, 1)) + 1;
-
-       int[] julianDate = new int[3];
-       
-       julianDate[0] = year;
-       julianDate[1] = month;
-       julianDate[2] = day;
-       
-       return julianDate;
-    }
-    
-    /*
-     * The following function is not needed for basic calendar functioning.
-     * This routine checks if the Gregorian year is a leap year"
-     * @param year      The year in Gregorian Calendar
-     */
-    private static boolean isGregorianLeap(int year)
-    {
-       return ((year % 4) == 0) &&
-          (!(((year % 100) == 0) && ((year % 400) != 0)));
+    private double gregorianToJD(int year, int month, int date) {
+       return computeGregorianMonthStart(year, month) + date - 0.5;
     }
 
-    
     /**
      * {@inheritDoc}
      * @stable ICU 3.8

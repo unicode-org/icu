@@ -73,6 +73,9 @@
     <ClCompile Include="dictbe.cpp">
       <Filter>break iteration</Filter>
     </ClCompile>
+    <ClCompile Include="lstmbe.cpp">
+      <Filter>break iteration</Filter>
+    </ClCompile>
     <ClCompile Include="rbbi.cpp">
       <Filter>break iteration</Filter>
     </ClCompile>
@@ -651,6 +654,9 @@
     <ClInclude Include="dictbe.h">
       <Filter>break iteration</Filter>
     </ClInclude>
+    <ClInclude Include="lstmbe.h">
+      <Filter>break iteration</Filter>
+    </ClInclude>
     <ClInclude Include="rbbidata.h">
       <Filter>break iteration</Filter>
     </ClInclude>
@@ -838,6 +844,12 @@
       <Filter>locales &amp; resources</Filter>
     </ClInclude>
     <ClInclude Include="locdistance.h">
+      <Filter>locales &amp; resources</Filter>
+    </ClInclude>
+    <ClInclude Include="charstrmap.h">
+      <Filter>locales &amp; resources</Filter>
+    </ClInclude>
+    <ClInclude Include="uniquecharstr.h">
       <Filter>locales &amp; resources</Filter>
     </ClInclude>
     <ClInclude Include="loclikelysubtags.h">

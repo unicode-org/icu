@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 kkj{
     AuxExemplarCharacters{"[q x z]"}
     ExemplarCharacters{
@@ -24,7 +25,6 @@ kkj{
         }
         native{"latn"}
     }
-    Version{"36"}
     calendar{
         generic{
             DateTimePatterns{
@@ -41,6 +41,16 @@ kkj{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEdd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyMMdd",
             }
             availableFormats{
                 Ed{"E d"}
@@ -75,6 +85,16 @@ kkj{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "yMMMMEEEEdd",
+                "yMMMMd",
+                "yMMMd",
+                "yMMdd",
             }
             availableFormats{
                 Ed{"E d"}
@@ -184,7 +204,7 @@ kkj{
                         "fɛ",
                         "njapi",
                         "nyukul",
-                        "11",
+                        "M11",
                         "ɓulɓusɛ",
                     }
                 }
@@ -200,7 +220,7 @@ kkj{
                         "fɛ",
                         "njapi",
                         "nyukul",
-                        "11",
+                        "M11",
                         "ɓulɓusɛ",
                     }
                 }

@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 ku{
     Countries{
         001{"Cîhan"}
@@ -149,7 +150,6 @@ ku{
         MC{"Monako"}
         MD{"Moldova"}
         ME{"Montenegro"}
-        MF{"MF"}
         MG{"Madagaskar"}
         MH{"Giravên Marşal"}
         MK{"Makedonya"}
@@ -265,5 +265,4 @@ ku{
         FK{"Giravên Falkland"}
         TL{"Tîmora Rojhilat"}
     }
-    Version{"36"}
 }

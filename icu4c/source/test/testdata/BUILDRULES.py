@@ -5,13 +5,13 @@ from icutools.databuilder import *
 from icutools.databuilder.request_types import *
 
 
-def generate(config, glob, common_vars):
+def generate(config, io, common_vars):
     requests = []
-    requests += generate_rb(config, glob, common_vars)
-    requests += generate_sprep(config, glob, common_vars)
-    requests += generate_conv(config, glob, common_vars)
-    requests += generate_other(config, glob, common_vars)
-    requests += generate_copy(config, glob, common_vars)
+    requests += generate_rb(config, io, common_vars)
+    requests += generate_sprep(config, io, common_vars)
+    requests += generate_conv(config, io, common_vars)
+    requests += generate_other(config, io, common_vars)
+    requests += generate_copy(config, io, common_vars)
 
     requests += [
         ListRequest(
@@ -25,7 +25,7 @@ def generate(config, glob, common_vars):
     return requests
 
 
-def generate_rb(config, glob, common_vars):
+def generate_rb(config, io, common_vars):
     basenames = [
         "calendar",
         "casing",
@@ -44,6 +44,10 @@ def generate_rb(config, glob, common_vars):
         "testaliases",
         "testempty",
         "testtypes",
+        # LSTM models
+        "Thai_graphclust_model4_heavy",
+        "Thai_codepoints_exclusive_model5_heavy",
+        "Burmese_graphclust_model5_heavy"
         # "metaZones",
         # "timezoneTypes",
         # "windowsZones",
@@ -95,7 +99,7 @@ def generate_rb(config, glob, common_vars):
     ]
 
 
-def generate_sprep(config, glob, common_vars):
+def generate_sprep(config, io, common_vars):
     return [
         SingleExecutionRequest(
             name = "nfscsi",
@@ -145,7 +149,7 @@ def generate_sprep(config, glob, common_vars):
     ]
 
 
-def generate_conv(config, glob, common_vars):
+def generate_conv(config, io, common_vars):
     basenames = [
         "test1",
         "test1bmp",
@@ -169,8 +173,7 @@ def generate_conv(config, glob, common_vars):
         )
     ]
 
-
-def generate_copy(config, glob, common_vars):
+def generate_copy(config, io, common_vars):
     return [
         CopyRequest(
             name = "nam_typ",
@@ -190,7 +193,7 @@ def generate_copy(config, glob, common_vars):
     ]
 
 
-def generate_other(config, glob, common_vars):
+def generate_other(config, io, common_vars):
     return [
         SingleExecutionRequest(
             name = "testnorm",

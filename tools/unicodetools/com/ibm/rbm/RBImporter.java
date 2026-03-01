@@ -277,7 +277,7 @@ public class RBImporter extends JDialog {
         return markTranslatedCheck.isSelected();
     }
 	
-    // Returns whether or not a group of name non-existant in the active bundle is created
+    // Returns whether or not a group of name non-existent in the active bundle is created
 	
     protected boolean getDefaultGroupCreation() {
         return createGroupsCheck.isSelected();

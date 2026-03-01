@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 vai_Latn{
     %%Parent{"root"}
     Currencies{
@@ -208,7 +209,7 @@ vai_Latn{
             "Áfíríka Tɛ Sifa",
         }
         XOF{
-            "CFA",
+            "F CFA",
             "Áfíríka Tele Jíí Sifa",
         }
         ZAR{
@@ -228,5 +229,4 @@ vai_Latn{
             "Zimbhabhuwe Dala",
         }
     }
-    Version{"36"}
 }

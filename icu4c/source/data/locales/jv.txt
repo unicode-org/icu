@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 jv{
     AuxExemplarCharacters{"[f q v x z]"}
     Ellipsis{
@@ -29,51 +30,39 @@ jv{
             patternsLong{
                 decimalFormat{
                     1000{
-                        one{"0È"}
                         other{"0 èwu"}
                     }
                     10000{
-                        one{"00È"}
                         other{"00 èwu"}
                     }
                     100000{
-                        one{"000È"}
                         other{"000 èwu"}
                     }
                     1000000{
-                        one{"0Y"}
                         other{"0 yuta"}
                     }
                     10000000{
-                        one{"00Y"}
                         other{"00 yuta"}
                     }
                     100000000{
-                        one{"000Y"}
                         other{"000 yuta"}
                     }
                     1000000000{
-                        one{"0M"}
                         other{"0 milyar"}
                     }
                     10000000000{
-                        one{"00M"}
                         other{"00 milyar"}
                     }
                     100000000000{
-                        one{"000M"}
                         other{"000 milyar"}
                     }
                     1000000000000{
-                        one{"0T"}
                         other{"0 trilyun"}
                     }
                     10000000000000{
-                        one{"00T"}
                         other{"00 trilyun"}
                     }
                     100000000000000{
-                        one{"000T"}
                         other{"000 trilyun"}
                     }
                 }
@@ -119,39 +108,30 @@ jv{
                 }
                 decimalFormat{
                     1000{
-                        one{"0È"}
                         other{"0È"}
                     }
                     10000{
-                        one{"00È"}
                         other{"00È"}
                     }
                     100000{
-                        one{"000È"}
                         other{"000È"}
                     }
                     1000000{
-                        one{"0Y"}
                         other{"0Y"}
                     }
                     10000000{
-                        one{"00Y"}
                         other{"00Y"}
                     }
                     100000000{
-                        one{"000Y"}
                         other{"000Y"}
                     }
                     1000000000{
-                        one{"0M"}
                         other{"0M"}
                     }
                     10000000000{
-                        one{"00M"}
                         other{"00M"}
                     }
                     100000000000{
-                        one{"000M"}
                         other{"000M"}
                     }
                 }
@@ -177,7 +157,6 @@ jv{
         }
         native{"java"}
     }
-    Version{"36"}
     calendar{
         generic{
             DateTimePatterns{
@@ -194,6 +173,16 @@ jv{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyMMdd",
             }
             availableFormats{
                 E{"ccc"}
@@ -363,6 +352,16 @@ jv{
                 "{1}, {0}",
                 "{1}, {0}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMMMd",
+                "yMMdd",
+            }
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -373,10 +372,9 @@ jv{
                 Ed{"E, d"}
                 Ehm{"E h:mm a"}
                 Ehms{"E h:mm:ss a"}
-                Gy{"y G"}
-                GyMMM{"MMM y G"}
-                GyMMMEd{"E, d MMM y G"}
-                GyMMMd{"d MMM y G"}
+                GyMMM{"MMM G y"}
+                GyMMMEd{"E, d MMM G y"}
+                GyMMMd{"d MMM G y"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -526,44 +524,6 @@ jv{
                 }
             }
             intervalFormats{
-                Gy{
-                    G{"y G– y G"}
-                    y{"y–y G"}
-                }
-                GyM{
-                    G{"M/y GGGGG – M/y GGGGG"}
-                    M{"M/y – M/y GGGGG"}
-                    y{"M/y – M/y GGGGG"}
-                }
-                GyMEd{
-                    G{"E, d/M/y GGGGG – E, d/M/y GGGGG"}
-                    M{"E, d/M/y – E, d/M/y GGGGG"}
-                    d{"E, d/M/y – E, d/M/y GGGGG"}
-                    y{"E, d/M/y – E, d/M/y GGGGG"}
-                }
-                GyMMM{
-                    G{"MMM y G – MMM y G"}
-                    M{"MMM – MMM y G"}
-                    y{"MMM y – MMM y G"}
-                }
-                GyMMMEd{
-                    G{"E, d MMM, y G – E, d MMM, y G"}
-                    M{"E, d MMM – E, d MMM, y G"}
-                    d{"E, d MMM – E, d MMM, y G"}
-                    y{"E, d MMM y – E, d MMM y G"}
-                }
-                GyMMMd{
-                    G{"d MMM, y G – d MMM, y G"}
-                    M{"d MMM – d MMM, y G"}
-                    d{"d – d MMM, y G"}
-                    y{"d MMM, y – d MMM, y G"}
-                }
-                GyMd{
-                    G{"d/M/y GGGGG – d/M/y GGGGG"}
-                    M{"d/M/y – d/M/y GGGGG"}
-                    d{"d/M/y – d/M/y GGGGG"}
-                    y{"d/M/y – d/M/y GGGGG"}
-                }
                 H{
                     H{"HH – HH"}
                 }
@@ -1490,7 +1450,7 @@ jv{
         number{
             lenient{
                 "[\\-‒⁻₋−➖﹣－]",
-                "[,،٫、︐︑﹐﹑，､]",
+                "[,،٫⹁、︐︑﹐﹑，､]",
                 "[+⁺₊➕﬩﹢＋]",
             }
         }

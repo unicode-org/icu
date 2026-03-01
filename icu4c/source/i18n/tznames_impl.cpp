@@ -1194,7 +1194,7 @@ TimeZoneNamesImpl::getReferenceZoneID(const UnicodeString& mzID, const char* reg
     return TimeZoneNamesImpl::_getReferenceZoneID(mzID, region, tzID);
 }
 
-// static implementaion of getReferenceZoneID
+// static implementation of getReferenceZoneID
 UnicodeString&
 TimeZoneNamesImpl::_getReferenceZoneID(const UnicodeString& mzID, const char* region, UnicodeString& tzID) {
     ZoneMeta::getZoneIdByMetazone(mzID, UnicodeString(region, -1, US_INV), tzID);

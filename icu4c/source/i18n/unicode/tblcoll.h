@@ -99,20 +99,20 @@ class UVector64;
  * table-based collation.
  * <p>
  * For more information about the collation service see
- * <a href="http://userguide.icu-project.org/collation">the User Guide</a>.
+ * <a href="https://unicode-org.github.io/icu/userguide/collation">the User Guide</a>.
  * <p>
  * Collation service provides correct sorting orders for most locales supported in ICU.
  * If specific data for a locale is not available, the orders eventually falls back
  * to the <a href="http://www.unicode.org/reports/tr35/tr35-collation.html#Root_Collation">CLDR root sort order</a>.
  * <p>
  * Sort ordering may be customized by providing your own set of rules. For more on
- * this subject see the <a href="http://userguide.icu-project.org/collation/customization">
+ * this subject see the <a href="https://unicode-org.github.io/icu/userguide/collation/customization">
  * Collation Customization</a> section of the User Guide.
  * <p>
  * Note, RuleBasedCollator is not to be subclassed.
  * @see        Collator
  */
-class U_I18N_API RuleBasedCollator : public Collator {
+class U_I18N_API RuleBasedCollator U_FINAL : public Collator {
 public:
     /**
      * RuleBasedCollator constructor. This takes the table rules and builds a
@@ -391,6 +391,7 @@ public:
      */
     virtual int32_t hashCode() const;
 
+#ifndef U_FORCE_HIDE_DEPRECATED_API
     /**
     * Gets the locale of the Collator
     * @param type can be either requested, valid or actual locale. For more
@@ -402,6 +403,7 @@ public:
     * @deprecated ICU 2.8 likely to change in ICU 3.0, based on feedback
     */
     virtual Locale getLocale(ULocDataLocaleType type, UErrorCode& status) const;
+#endif  // U_FORCE_HIDE_DEPRECATED_API
 
     /**
      * Gets the tailoring rules for this collator.
@@ -493,7 +495,7 @@ public:
      * just the tailoring.
      *
      * getRules(void) should normally be used instead.
-     * See http://userguide.icu-project.org/collation/customization#TOC-Building-on-Existing-Locales
+     * See https://unicode-org.github.io/icu/userguide/collation/customization#building-on-existing-locales
      * @param delta one of UCOL_TAILORING_ONLY, UCOL_FULL_RULES.
      * @param buffer UnicodeString to store the result rules
      * @stable ICU 2.2
@@ -547,6 +549,7 @@ public:
      */
     virtual UColReorderCode getMaxVariable() const;
 
+#ifndef U_FORCE_HIDE_DEPRECATED_API
     /**
      * Sets the variable top to the primary weight of the specified string.
      *
@@ -594,6 +597,7 @@ public:
      * @deprecated ICU 53 Call setMaxVariable() instead.
      */
     virtual void setVariableTop(uint32_t varTop, UErrorCode &status);
+#endif  // U_FORCE_HIDE_DEPRECATED_API
 
     /**
      * Gets the variable top value of a Collator.
@@ -698,7 +702,7 @@ public:
      *  This string will be normalized.
      *  The structure and the syntax of the string is defined in the "Naming collators"
      *  section of the users guide:
-     *  http://userguide.icu-project.org/collation/concepts#TOC-Collator-naming-scheme
+     *  https://unicode-org.github.io/icu/userguide/collation/concepts#collator-naming-scheme
      *  This function supports preflighting.
      *
      *  This is internal, and intended to be used with delegate converters.
@@ -748,7 +752,7 @@ public:
      * Implements ucol_getContractionsAndExpansions().
      * Gets this collator's sets of contraction strings and/or
      * characters and strings that map to multiple collation elements (expansions).
-     * If addPrefixes is TRUE, then contractions that are expressed as
+     * If addPrefixes is true, then contractions that are expressed as
      * prefix/pre-context rules are included.
      * @param contractions if not NULL, the set to hold the contractions
      * @param expansions if not NULL, the set to hold the expansions
@@ -853,7 +857,7 @@ private:
      * Tests whether a character is "unsafe" for use as a collation starting point.
      *
      * @param c code point or code unit
-     * @return TRUE if c is unsafe
+     * @return true if c is unsafe
      * @see CollationElementIterator#setOffset(int)
      */
     UBool isUnsafe(UChar32 c) const;

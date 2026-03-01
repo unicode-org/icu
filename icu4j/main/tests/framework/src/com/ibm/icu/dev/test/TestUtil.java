@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /**
  *******************************************************************************
  * Copyright (C) 2001-2015, International Business Machines Corporation and
@@ -15,6 +15,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Locale;
+import java.util.MissingResourceException;
+
+import com.ibm.icu.impl.breakiter.LSTMBreakEngine;
+import com.ibm.icu.lang.UScript;
 
 public final class TestUtil {
     /**
@@ -278,5 +282,29 @@ public final class TestUtil {
             }
         }
         return ver;
+    }
+
+    private static boolean lstmDataIsBuilt() {
+        try {
+            LSTMBreakEngine.createData(UScript.THAI);
+            return true;
+        } catch (MissingResourceException e) {
+            // do nothing
+        }
+        try {
+            LSTMBreakEngine.createData(UScript.MYANMAR);
+            return true;
+        } catch (MissingResourceException e) {
+            // do nothing
+        }
+        return false;
+    }
+
+    public static boolean skipLSTMTest() {
+        return ! lstmDataIsBuilt();
+    }
+
+    public static boolean skipDictionaryTest() {
+        return lstmDataIsBuilt();
     }
 }

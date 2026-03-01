@@ -1462,7 +1462,7 @@ void TestMessageFormat::testCopyConstructor2() {
 }
 
 /**
- * Verify that MessageFormat accomodates more than 10 arguments and
+ * Verify that MessageFormat accommodates more than 10 arguments and
  * more than 10 subformats.
  */
 void TestMessageFormat::TestUnlimitedArgsAndSubformats() {

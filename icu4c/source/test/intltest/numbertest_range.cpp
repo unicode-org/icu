@@ -51,6 +51,7 @@ void NumberRangeFormatterTest::runIndexedTest(int32_t index, UBool exec, const c
         TESTCASE_AUTO(testFieldPositions);
         TESTCASE_AUTO(testCopyMove);
         TESTCASE_AUTO(toObject);
+        TESTCASE_AUTO(testGetDecimalNumbers);
     TESTCASE_AUTO_END;
 }
 
@@ -739,18 +740,19 @@ void NumberRangeFormatterTest::testFieldPositions() {
             3000,
             5000,
             expectedString);
-        static const UFieldPosition expectedFieldPositions[] = {
-            // field, begin index, end index
-            {UNUM_INTEGER_FIELD, 0, 1},
-            {UNUM_COMPACT_FIELD, 1, 2},
-            {UNUM_INTEGER_FIELD, 5, 6},
-            {UNUM_COMPACT_FIELD, 6, 7},
-            {UNUM_MEASURE_UNIT_FIELD, 8, 9}};
-        checkFormattedValue(
+        static const UFieldPositionWithCategory expectedFieldPositions[] = {
+            // category, field, begin index, end index
+            {UFIELD_CATEGORY_NUMBER_RANGE_SPAN, 0, 0, 2},
+            {UFIELD_CATEGORY_NUMBER, UNUM_INTEGER_FIELD, 0, 1},
+            {UFIELD_CATEGORY_NUMBER, UNUM_COMPACT_FIELD, 1, 2},
+            {UFIELD_CATEGORY_NUMBER_RANGE_SPAN, 1, 5, 7},
+            {UFIELD_CATEGORY_NUMBER, UNUM_INTEGER_FIELD, 5, 6},
+            {UFIELD_CATEGORY_NUMBER, UNUM_COMPACT_FIELD, 6, 7},
+            {UFIELD_CATEGORY_NUMBER, UNUM_MEASURE_UNIT_FIELD, 8, 9}};
+        checkMixedFormattedValue(
             message,
             result,
             expectedString,
-            UFIELD_CATEGORY_NUMBER,
             expectedFieldPositions,
             UPRV_LENGTHOF(expectedFieldPositions));
     }
@@ -764,19 +766,20 @@ void NumberRangeFormatterTest::testFieldPositions() {
             87654321,
             98765432,
             expectedString);
-        static const UFieldPosition expectedFieldPositions[] = {
-            // field, begin index, end index
-            {UNUM_GROUPING_SEPARATOR_FIELD, 2, 3},
-            {UNUM_GROUPING_SEPARATOR_FIELD, 6, 7},
-            {UNUM_INTEGER_FIELD, 0, 10},
-            {UNUM_GROUPING_SEPARATOR_FIELD, 13, 14},
-            {UNUM_GROUPING_SEPARATOR_FIELD, 17, 18},
-            {UNUM_INTEGER_FIELD, 11, 21}};
-        checkFormattedValue(
+        static const UFieldPositionWithCategory expectedFieldPositions[] = {
+            // category, field, begin index, end index
+            {UFIELD_CATEGORY_NUMBER_RANGE_SPAN, 0, 0, 10},
+            {UFIELD_CATEGORY_NUMBER, UNUM_GROUPING_SEPARATOR_FIELD, 2, 3},
+            {UFIELD_CATEGORY_NUMBER, UNUM_GROUPING_SEPARATOR_FIELD, 6, 7},
+            {UFIELD_CATEGORY_NUMBER, UNUM_INTEGER_FIELD, 0, 10},
+            {UFIELD_CATEGORY_NUMBER_RANGE_SPAN, 1, 11, 21},
+            {UFIELD_CATEGORY_NUMBER, UNUM_GROUPING_SEPARATOR_FIELD, 13, 14},
+            {UFIELD_CATEGORY_NUMBER, UNUM_GROUPING_SEPARATOR_FIELD, 17, 18},
+            {UFIELD_CATEGORY_NUMBER, UNUM_INTEGER_FIELD, 11, 21}};
+        checkMixedFormattedValue(
             message,
             result,
             expectedString,
-            UFIELD_CATEGORY_NUMBER,
             expectedFieldPositions,
             UPRV_LENGTHOF(expectedFieldPositions));
     }
@@ -857,6 +860,48 @@ void NumberRangeFormatterTest::toObject() {
     // make sure no memory leaks
     {
         NumberRangeFormatter::with().clone();
+    }
+}
+
+void NumberRangeFormatterTest::testGetDecimalNumbers() {
+    IcuTestErrorCode status(*this, "testGetDecimalNumbers");
+
+    LocalizedNumberRangeFormatter lnf = NumberRangeFormatter::withLocale("en")
+        .numberFormatterBoth(NumberFormatter::with().unit(USD));
+
+    // Range of numbers
+    {
+        FormattedNumberRange range = lnf.formatFormattableRange(1, 5, status);
+        assertEquals("Range: Formatted string should be as expected",
+            u"$1.00 \u2013 $5.00",
+            range.toString(status));
+        auto decimalNumbers = range.getDecimalNumbers<std::string>(status);
+        // TODO(ICU-21281): DecNum doesn't retain trailing zeros. Is that a problem?
+        if (logKnownIssue("ICU-21281")) {
+            assertEquals("First decimal number", "1", decimalNumbers.first.c_str());
+            assertEquals("Second decimal number", "5", decimalNumbers.second.c_str());
+        } else {
+            assertEquals("First decimal number", "1.00", decimalNumbers.first.c_str());
+            assertEquals("Second decimal number", "5.00", decimalNumbers.second.c_str());
+        }
+    }
+
+    // Identity fallback
+    {
+        FormattedNumberRange range = lnf.formatFormattableRange(3, 3, status);
+        assertEquals("Identity: Formatted string should be as expected",
+            u"~$3.00",
+            range.toString(status));
+        auto decimalNumbers = range.getDecimalNumbers<std::string>(status);
+        // NOTE: DecNum doesn't retain trailing zeros. Is that a problem?
+        // TODO(ICU-21281): DecNum doesn't retain trailing zeros. Is that a problem?
+        if (logKnownIssue("ICU-21281")) {
+            assertEquals("First decimal number", "3", decimalNumbers.first.c_str());
+            assertEquals("Second decimal number", "3", decimalNumbers.second.c_str());
+        } else {
+            assertEquals("First decimal number", "3.00", decimalNumbers.first.c_str());
+            assertEquals("Second decimal number", "3.00", decimalNumbers.second.c_str());
+        }
     }
 }
 

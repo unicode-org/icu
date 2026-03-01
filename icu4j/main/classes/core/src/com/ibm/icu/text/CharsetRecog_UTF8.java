@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /**
 *******************************************************************************
 * Copyright (C) 2005 - 2014, International Business Machines Corporation and  *
@@ -90,7 +90,7 @@ class CharsetRecog_UTF8 extends CharsetRecognizer {
             // TODO: add plain ASCII as an explicitly detected type.
             confidence = 15;
         } else if (numValid > numInvalid*10) {
-            // Probably corruput utf-8 data.  Valid sequences aren't likely by chance.
+            // Probably corrupt utf-8 data.  Valid sequences aren't likely by chance.
             confidence = 25;
         }
         return confidence == 0 ? null : new CharsetMatch(det, this, confidence);

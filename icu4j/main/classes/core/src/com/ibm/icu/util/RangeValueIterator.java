@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 ******************************************************************************
 * Copyright (C) 1996-2016, International Business Machines Corporation and   *
@@ -53,7 +53,7 @@ public interface RangeValueIterator
 
     /**
     * Return result wrapper for com.ibm.icu.util.RangeValueIterator.
-    * Stores the start and limit of the continous result range and the
+    * Stores the start and limit of the continuous result range and the
     * common value all integers between [start, limit - 1] has.
     * @stable ICU 2.6
     */
@@ -74,7 +74,7 @@ public interface RangeValueIterator
         */
         public int limit;
         /**
-        * Gets the common value of the continous result range
+        * Gets the common value of the continuous result range
         * @stable ICU 2.6
         */
         public int value;

@@ -325,7 +325,7 @@ IntlTestNumberFormatAPI::testRegistration()
     LocalUNumberFormatPointer uf5(unum_open(UNUM_CURRENCY, NULL, 0, SRC_LOC.getName(), NULL, &status));
 
     if (U_FAILURE(status)) {
-        dataerrln("Error creating instanaces.");
+        dataerrln("Error creating instances.");
         return;
     } else {
         float n = 1234.567f;

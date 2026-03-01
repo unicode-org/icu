@@ -3035,7 +3035,7 @@ static void TestJ1968(void) {
 
     err = U_ZERO_ERROR;
     myConvName[UCNV_MAX_CONVERTER_NAME_LENGTH-1] = ',';
-    strncpy(myConvName + UCNV_MAX_CONVERTER_NAME_LENGTH, "locale=", 7);
+    memcpy(myConvName + UCNV_MAX_CONVERTER_NAME_LENGTH, "locale=", 7);
     cnv = ucnv_open(myConvName, &err);
     if (cnv || err != U_ILLEGAL_ARGUMENT_ERROR) {
         log_err("4) Didn't get U_ILLEGAL_ARGUMENT_ERROR as expected %s\n", u_errorName(err));

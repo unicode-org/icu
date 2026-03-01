@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 cs{
     AuxExemplarCharacters{"[à ă â å ä ã ā æ ç è ĕ ê ë ē ì ĭ î ï ī ľ ł ñ ò ŏ ô ö ø ō œ ŕ ù ŭ û ü ū ÿ]"}
     Ellipsis{
@@ -161,96 +162,72 @@ cs{
                         many{"0 tisíce"}
                         one{"0 tisíc"}
                         other{"0 tisíc"}
-                        two{"0 tis'.'"}
-                        zero{"0 tis'.'"}
                     }
                     10000{
                         few{"00 tisíc"}
                         many{"00 tisíce"}
                         one{"00 tisíc"}
                         other{"00 tisíc"}
-                        two{"00 tis'.'"}
-                        zero{"00 tis'.'"}
                     }
                     100000{
                         few{"000 tisíc"}
                         many{"000 tisíce"}
                         one{"000 tisíc"}
                         other{"000 tisíc"}
-                        two{"000 tis'.'"}
-                        zero{"000 tis'.'"}
                     }
                     1000000{
                         few{"0 miliony"}
                         many{"0 milionu"}
                         one{"0 milion"}
                         other{"0 milionů"}
-                        two{"0 mil'.'"}
-                        zero{"0 mil'.'"}
                     }
                     10000000{
                         few{"00 milionů"}
                         many{"00 milionu"}
                         one{"00 milionů"}
                         other{"00 milionů"}
-                        two{"00 mil'.'"}
-                        zero{"00 mil'.'"}
                     }
                     100000000{
                         few{"000 milionů"}
                         many{"000 milionu"}
                         one{"000 milionů"}
                         other{"000 milionů"}
-                        two{"000 mil'.'"}
-                        zero{"000 mil'.'"}
                     }
                     1000000000{
                         few{"0 miliardy"}
                         many{"0 miliardy"}
                         one{"0 miliarda"}
                         other{"0 miliard"}
-                        two{"0 mld'.'"}
-                        zero{"0 mld'.'"}
                     }
                     10000000000{
                         few{"00 miliard"}
                         many{"00 miliardy"}
                         one{"00 miliard"}
                         other{"00 miliard"}
-                        two{"00 mld'.'"}
-                        zero{"00 mld'.'"}
                     }
                     100000000000{
                         few{"000 miliard"}
                         many{"000 miliardy"}
                         one{"000 miliard"}
                         other{"000 miliard"}
-                        two{"000 mld'.'"}
-                        zero{"000 mld'.'"}
                     }
                     1000000000000{
                         few{"0 biliony"}
                         many{"0 bilionu"}
                         one{"0 bilion"}
                         other{"0 bilionů"}
-                        two{"0 bil'.'"}
-                        zero{"0 bil'.'"}
                     }
                     10000000000000{
                         few{"00 bilionů"}
                         many{"00 bilionu"}
                         one{"00 bilionů"}
                         other{"00 bilionů"}
-                        two{"00 bil'.'"}
-                        zero{"00 bil'.'"}
                     }
                     100000000000000{
                         few{"000 bilionů"}
                         many{"000 bilionu"}
                         one{"000 bilionů"}
                         other{"000 bilionů"}
-                        two{"000 bil'.'"}
-                        zero{"000 bil'.'"}
                     }
                 }
             }
@@ -335,100 +312,77 @@ cs{
                         many{"0 tis'.'"}
                         one{"0 tis'.'"}
                         other{"0 tis'.'"}
-                        two{"0 tis'.'"}
-                        zero{"0 tis'.'"}
                     }
                     10000{
                         few{"00 tis'.'"}
                         many{"00 tis'.'"}
                         one{"00 tis'.'"}
                         other{"00 tis'.'"}
-                        two{"00 tis'.'"}
-                        zero{"00 tis'.'"}
                     }
                     100000{
                         few{"000 tis'.'"}
                         many{"000 tis'.'"}
                         one{"000 tis'.'"}
                         other{"000 tis'.'"}
-                        two{"000 tis'.'"}
-                        zero{"000 tis'.'"}
                     }
                     1000000{
                         few{"0 mil'.'"}
                         many{"0 mil'.'"}
                         one{"0 mil'.'"}
                         other{"0 mil'.'"}
-                        two{"0 mil'.'"}
-                        zero{"0 mil'.'"}
                     }
                     10000000{
                         few{"00 mil'.'"}
                         many{"00 mil'.'"}
                         one{"00 mil'.'"}
                         other{"00 mil'.'"}
-                        two{"00 mil'.'"}
-                        zero{"00 mil'.'"}
                     }
                     100000000{
                         few{"000 mil'.'"}
                         many{"000 mil'.'"}
                         one{"000 mil'.'"}
                         other{"000 mil'.'"}
-                        two{"000 mil'.'"}
-                        zero{"000 mil'.'"}
                     }
                     1000000000{
                         few{"0 mld'.'"}
                         many{"0 mld'.'"}
                         one{"0 mld'.'"}
                         other{"0 mld'.'"}
-                        two{"0 mld'.'"}
-                        zero{"0 mld'.'"}
                     }
                     10000000000{
                         few{"00 mld'.'"}
                         many{"00 mld'.'"}
                         one{"00 mld'.'"}
                         other{"00 mld'.'"}
-                        two{"00 mld'.'"}
-                        zero{"00 mld'.'"}
                     }
                     100000000000{
                         few{"000 mld'.'"}
                         many{"000 mld'.'"}
                         one{"000 mld'.'"}
                         other{"000 mld'.'"}
-                        two{"000 mld'.'"}
-                        zero{"000 mld'.'"}
                     }
                     1000000000000{
                         few{"0 bil'.'"}
                         many{"0 bil'.'"}
                         one{"0 bil'.'"}
                         other{"0 bil'.'"}
-                        two{"0 bil'.'"}
-                        zero{"0 bil'.'"}
                     }
                     10000000000000{
                         few{"00 bil'.'"}
                         many{"00 bil'.'"}
                         one{"00 bil'.'"}
                         other{"00 bil'.'"}
-                        two{"00 bil'.'"}
-                        zero{"00 bil'.'"}
                     }
                     100000000000000{
                         few{"000 bil'.'"}
                         many{"000 bil'.'"}
                         one{"000 bil'.'"}
                         other{"000 bil'.'"}
-                        two{"000 bil'.'"}
-                        zero{"000 bil'.'"}
                     }
                 }
             }
             symbols{
+                approximatelySign{"~"}
                 decimal{","}
                 exponential{"E"}
                 group{" "}
@@ -567,7 +521,6 @@ cs{
             }
         }
     }
-    Version{"36"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -584,6 +537,16 @@ cs{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMd",
+                "GGGGGyyMMdd",
             }
             availableFormats{
                 E{"ccc"}
@@ -739,6 +702,16 @@ cs{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "yMEEEEd",
+                "yMd",
+                "yMd",
+                "yMd",
             }
             cyclicNameSets{
                 dayParts{
@@ -1454,6 +1427,16 @@ cs{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMd",
+                "GGGGGyyMMdd",
             }
             availableFormats{
                 E{"ccc"}
@@ -2494,6 +2477,16 @@ cs{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMd",
+                "GGGGGyyMMdd",
+            }
             availableFormats{
                 E{"ccc"}
                 Ed{"E d."}
@@ -2748,6 +2741,16 @@ cs{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMd",
+                "GGGGGyyMMdd",
+            }
             availableFormats{
                 Bh{"h B"}
                 Bhm{"h:mm B"}
@@ -2967,6 +2970,16 @@ cs{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMd",
+                "yyMMdd",
+            }
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -3179,10 +3192,6 @@ cs{
             }
             eras{
                 abbreviated{
-                    "př. n. l.",
-                    "n. l.",
-                }
-                abbreviated%variant{
                     "př. n. l.",
                     "n. l.",
                 }
@@ -3490,6 +3499,16 @@ cs{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMd",
+                "GGGGGyyMMdd",
+            }
             availableFormats{
                 E{"ccc"}
                 Ed{"E d."}
@@ -3747,6 +3766,16 @@ cs{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMd",
+                "GGGGGyyMMdd",
+            }
             availableFormats{
                 E{"ccc"}
                 Ed{"E d."}
@@ -3992,6 +4021,16 @@ cs{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMd",
+                "GGGGGyyMMdd",
+            }
             availableFormats{
                 E{"ccc"}
                 Ed{"E d."}
@@ -4236,6 +4275,16 @@ cs{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMd",
+                "GGGGGyyMMdd",
             }
             availableFormats{
                 E{"ccc"}
@@ -5100,6 +5149,16 @@ cs{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMd",
+                "GGGGGyyMMdd",
+            }
             availableFormats{
                 E{"ccc"}
                 Ed{"E d."}
@@ -5344,6 +5403,16 @@ cs{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMd",
+                "GGGGGyyMMdd",
             }
             eras{
                 abbreviated{
@@ -6517,6 +6586,18 @@ cs{
             middle{"{0}, {1}"}
             start{"{0}, {1}"}
         }
+        or-narrow{
+            2{"{0} nebo {1}"}
+            end{"{0} nebo {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        or-short{
+            2{"{0} nebo {1}"}
+            end{"{0} nebo {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
         standard{
             2{"{0} a {1}"}
             end{"{0} a {1}"}
@@ -6556,37 +6637,5 @@ cs{
         UK{"Velká Británie"}
         US{"USA"}
         metric{"metrický"}
-    }
-    parse{
-        date{
-            lenient{
-                "[\\--/]",
-                "[\\:∶]",
-            }
-        }
-        general{
-            lenient{
-                "[.․。︒﹒．｡]",
-                "['ʼ՚᾽᾿’＇]",
-                "[%٪﹪％]",
-                "[؉‰]",
-                "[\$﹩＄$]",
-                "[£₤]",
-                "[¥￥]",
-                "[₩￦]",
-                "[₨₹{Rp}{Rs}]",
-            }
-        }
-        number{
-            lenient{
-                "[\\-‒⁻₋−➖﹣－]",
-                "[,،٫、︐︑﹐﹑，､]",
-                "[+⁺₊➕﬩﹢＋]",
-            }
-            stricter{
-                "[,٫︐﹐，]",
-                "[.․﹒．｡]",
-            }
-        }
     }
 }

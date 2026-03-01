@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 2007-2016, International Business Machines Corporation and
@@ -760,9 +760,15 @@ public class PluralFormat extends UFormat {
 
             String currArg = pattern.substring(partStart.getLimit(), partLimit.getIndex());
             if (scanner != null) {
-                // If lenient parsing is turned ON, we've got some time consuming parsing ahead of us.
-                int[] scannerMatchResult = scanner.findText(source, currArg, startingAt);
-                currMatchIndex = scannerMatchResult[0];
+                // Check if non-lenient rule finds the text before call lenient parsing
+                int tempPos = source.indexOf(currArg, startingAt);
+                if (tempPos >= 0) {
+                    currMatchIndex = tempPos;
+                } else {
+                    // If lenient parsing is turned ON, we've got some time consuming parsing ahead of us.
+                    int[] scannerMatchResult = scanner.findText(source, currArg, startingAt);
+                    currMatchIndex = scannerMatchResult[0];
+                }
             }
             else {
                 currMatchIndex = source.indexOf(currArg, startingAt);

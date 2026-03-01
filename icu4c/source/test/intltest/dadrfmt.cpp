@@ -330,7 +330,7 @@ void DataDrivenFormatTest::processTest(TestData *testData) {
     //Format *cal= NULL;
     //const UChar *arguments= NULL;
     //int32_t argLen = 0;
-    char testType[256];
+    char testType[256] = "";
     const DataMap *settings= NULL;
     //const UChar *type= NULL;
     UErrorCode status = U_ZERO_ERROR;

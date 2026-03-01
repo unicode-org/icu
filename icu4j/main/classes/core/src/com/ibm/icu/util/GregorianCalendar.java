@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  * Copyright (C) 1996-2016, International Business Machines
  * Corporation and others.  All Rights Reserved.
@@ -358,7 +358,7 @@ public class GregorianCalendar extends Calendar {
      * @stable ICU 2.0
      */
     public GregorianCalendar(Locale aLocale) {
-        this(TimeZone.getDefault(), aLocale);
+        this(TimeZone.forLocaleOrDefault(aLocale), aLocale);
     }
 
     /**
@@ -368,7 +368,7 @@ public class GregorianCalendar extends Calendar {
      * @stable ICU 3.2
      */
     public GregorianCalendar(ULocale locale) {
-        this(TimeZone.getDefault(), locale);
+        this(TimeZone.forULocaleOrDefault(locale), locale);
     }
 
     /**
@@ -703,7 +703,7 @@ public class GregorianCalendar extends Calendar {
 //////////////////////
 
     /**
-     * Return true if the current time for this Calendar is in Daylignt
+     * Return true if the current time for this Calendar is in Daylight
      * Savings Time.
      */
     boolean inDaylightTime() {
@@ -777,7 +777,7 @@ public class GregorianCalendar extends Calendar {
             // with 8 AD.  Before 8 AD the spacing is irregular; every 3 years
             // from 45 BC to 9 BC, and then none until 8 AD.  However, we don't
             // implement this historical detail; instead, we implement the
-            // computatinally cleaner proleptic calendar, which assumes
+            // computationally cleaner proleptic calendar, which assumes
             // consistent 4-year cycles throughout time.
             boolean isLeap = ((eyear&0x3) == 0); // equiv. to (eyear%4 == 0)
             

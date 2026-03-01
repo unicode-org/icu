@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  ***********************************************************************
  *
@@ -45,7 +45,7 @@ public class EUCTool {
     int        fileSize;
 
     boolean    option_d = false;    // data option.  Produce exportable data
-    boolean    option_v = true;     // verbose informaional output.
+    boolean    option_v = true;     // verbose informational output.
 
 
 

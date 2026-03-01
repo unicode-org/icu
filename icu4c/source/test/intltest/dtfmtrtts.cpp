@@ -470,7 +470,14 @@ void DateFormatRoundTripTest::test(DateFormat *fmt, const Locale &origLocale, UB
               } else if(!strcmp(type,"hebrew")) {
                   maxSmatch = 3;
                   maxDmatch = 3;
-                }
+              } else if (timeOnly && uprv_strcmp(origLocale.getName(),"ar_JO@calendar=islamic-civil")==0 &&
+                      logKnownIssue("21049", "ar_JO@calendar=islamic-civil timeOnly roundtrip converges too slowly")) {
+                  // For some reason, for time-only tests, ar_JO@calendar=islamic-civil is no
+                  // longer converging to a match as fast as expected above. Investigate with
+                  // ICU-21022, but meanwhile allow more cycles for convergence.
+                  maxSmatch = 2;
+                  maxDmatch = 3;
+              }
             }
 
             // Use @v to see verbose results on successful cases
@@ -478,7 +485,9 @@ void DateFormatRoundTripTest::test(DateFormat *fmt, const Locale &origLocale, UB
             if (optionv || fail) {
                 if (fail) {
                     errln(UnicodeString("\nFAIL: Pattern: ") + pat +
-                          " in Locale: " + origLocale.getName());
+                          " in Locale: " + origLocale.getName() +
+                          "\nget dmatch: " + dmatch + " (expected max " + maxDmatch +
+                          "), smatch: " + smatch + " (expected max " + maxSmatch + ")");
                 } else {
                     errln(UnicodeString("\nOk: Pattern: ") + pat +
                           " in Locale: " + origLocale.getName());

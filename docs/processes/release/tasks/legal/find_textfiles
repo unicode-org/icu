@@ -1,0 +1,131 @@
+#!/usr/bin/perl -w 
+#
+# Copyright (C) 2012, 2017: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+#
+#####################################################################
+# Name          : find_textfiles                                    #
+# Full path     : /home/umesh/bin/find_textfiles                    #
+# Type          : Perl Script. Needs Perl 5.                        #
+# Description   : Finds the text files under a directory            #
+#                 Prunes CVS directories if -nocvs is provided      #
+#                 Prunes RCS directories if -norcs is provided      #
+#                 Prunes SCCS directories if -nosccs is provided    #
+# Author        : Umesh Nair (umesh@google.com)                     #
+#                                                                   #
+#-------------------------------------------------------------------#
+# Maintenance Block:                                                #
+# Date            Changed by        Description                     #
+# ----            ----------        -----------                     #
+# May 2000        Umesh Nair        Initial version of the script   #
+# Mar 2002        Umesh Nair        Added -h option                 #
+# May 2008        Umesh Nair        Added -nosvn and -novc          #
+#                                                                   #
+#####################################################################
+
+use strict;
+use File::Find;
+
+my ($skipCvs, $skipRcs, $skipSccs, $skipSvn, $skipVc, $skipEclipse) = (0, 0, 0, 0, 0);
+my $help = 0;
+
+while ((defined $ARGV[0]) and ($ARGV[0] =~ /\A\-/)) {
+   my $option = shift;
+   chomp $option;
+   ($skipCvs = 1) if ($option =~ /nocvs/);
+   ($skipSccs = 1) if ($option =~ /nosccs/);
+   ($skipSvn = 1) if ($option =~ /nosvn/);
+   ($skipVc = 1) if ($option =~ /novc/);
+   ($skipEclipse = 1) if ($option =~ /noeclipse/);
+   ($help = 1) if ($option =~ /h/);
+}
+
+if ($help) {
+    exec "pod2man $0 | nroff -man |". ($ENV{"PAGER"} || 'more -s');
+}
+
+if (@ARGV == 0) {
+   find (\&wanted, '.');
+} else {
+   find (\&wanted, @ARGV);
+}
+
+sub wanted {
+  unless (($skipVc and (/\.vcproj$/ or /\.vcxproj$/ or /\.sln$/ or /\.dsp$/ or /\.dsw$/ or /\.filters$/))
+    or ($skipEclipse and (/\.project$/ or /\.classpath$/ or /\.prefs$/ or /\.launch$/))) {
+    print "$File::Find::name\n" if (-f and -T );
+  }
+  ($File::Find::prune = 1) 
+    if (
+        ($skipCvs and /^CVS$/) or
+        ($skipRcs and /^RCS$/) or
+        ($skipSccs and /^SCCS$/) or
+        ($skipSvn and /^\.svn$/) 
+       );
+}
+
+__END__
+
+=head1 NAME
+
+find_textfiles - Finds the text files under a directory
+
+=head1 SYNOPSIS
+
+find_textfiles [C<-nocvs>] [C<-norcs>] [C<-nosccs>]  [C<-nosvn>]  [C<-novc>] [C<-noeclipse>] [ dir1 [ dir2 ] .... ]
+
+find_textfiles [C<-h>]
+
+=head1 DESCRIPTION
+
+This script recursively searches the specified directories (current
+directory if no parameter is passed) for text files, and lists the
+filenames on the standard output, one file per line.
+
+The directories named 'CVS', 'RCS' and 'SCCS' may be skipped by
+specifying the switches -nocvs, -norcs and -nosccs respectively.
+
+=head1 OPTIONS
+
+=over 4
+
+=item C<-h> 
+
+Displays this help document.
+
+=item C<-nocvs>
+
+Prunes all directories named 'CVS' and everything under that.
+
+=item C<-norcs>
+
+Prunes all directories named 'RCS' and everything under that.
+
+=item C<-nosccs>
+
+Prunes all directories named 'SCCS' and everything under that.
+
+=item C<-nosvn>
+
+Prunes all directories named '.svn' and everything under that.
+
+=item C<-novc>
+
+Excludes all VC++ files, i.e., *.vcproj, *vcxproj, *.dsw, *.dsp, *.filters.
+
+=item C<-noeclipse>
+
+Excludes all Eclipse files, i.e., .project, .classpath, *.prefs, *.launch.
+
+=back
+
+=head1 SEE ALSO
+
+find_binaries
+
+=head1 AUTHOR
+
+Umesh Nair, 2000.
+
+=cut
+

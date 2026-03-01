@@ -1,5 +1,5 @@
 // © 2018 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.number.range;
 
 /**
@@ -26,5 +26,9 @@ public class PrefixInfixSuffixLengthHelper {
 
     public int index3() {
         return lengthPrefix + length1 + lengthInfix + length2;
+    }
+
+    public int index4() {
+        return lengthPrefix + length1 + lengthInfix + length2 + lengthSuffix;
     }
 }

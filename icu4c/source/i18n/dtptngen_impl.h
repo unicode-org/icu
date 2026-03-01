@@ -195,7 +195,7 @@ public:
     void getQuoteLiteral(UnicodeString& quote, int32_t *itemIndex);
     UBool isPatternSeparator(const UnicodeString& field) const;
     static UBool isQuoteLiteral(const UnicodeString& s);
-    static int32_t getCanonicalIndex(const UnicodeString& s) { return getCanonicalIndex(s, TRUE); }
+    static int32_t getCanonicalIndex(const UnicodeString& s) { return getCanonicalIndex(s, true); }
     static int32_t getCanonicalIndex(const UnicodeString& s, UBool strict);
 
 private:
@@ -238,6 +238,7 @@ public:
     int32_t getDistance(const DateTimeMatcher& other, int32_t includeMask, DistanceInfo& distanceInfo) const;
     DateTimeMatcher();
     DateTimeMatcher(const DateTimeMatcher& other);
+    DateTimeMatcher& operator=(const DateTimeMatcher& other);
     virtual ~DateTimeMatcher();
     int32_t getFieldMask() const;
 };

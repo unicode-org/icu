@@ -2894,6 +2894,43 @@ exit:
    return;
 }
 
+static void TestUInt16Overflow(void) {
+    const int32_t uint16_overflow = UINT16_MAX + 1;
+    UChar* pattern = (UChar*)uprv_malloc(uint16_overflow * sizeof(UChar));
+    if (pattern == NULL)
+    {
+        log_err("Err: uprv_malloc returned NULL\n");
+        return;
+    }
+    u_memset(pattern, 'A', uint16_overflow);
+    UChar text[] = { 'B' };
+
+    UErrorCode errorCode = U_ZERO_ERROR;
+    UStringSearch* usearch = usearch_open(pattern, uint16_overflow, text, 1, "en-US", NULL, &errorCode);
+
+    if (U_SUCCESS(errorCode))
+    {
+        int32_t match = usearch_first(usearch, &errorCode);
+
+        if (U_SUCCESS(errorCode))
+        {
+            if (match != USEARCH_DONE)
+            {
+                log_err("Err: match was not expected, got %d\n", match);
+            }
+        }
+        else
+        {
+            log_err("usearch_first error %s\n", u_errorName(errorCode));
+        }
+        usearch_close(usearch);
+    }
+    else
+    {
+        log_err("usearch_open error %s\n", u_errorName(errorCode));
+    }
+    uprv_free(pattern);
+}
 
 static void TestPCEBuffer_100df(void) {
   UChar search[] =
@@ -3070,6 +3107,7 @@ void addSearchTest(TestNode** root)
     addTest(root, &TestPCEBuffer_2surr, "tscoll/usrchtst/TestPCEBuffer/2_dfff");
     addTest(root, &TestMatchFollowedByIgnorables, "tscoll/usrchtst/TestMatchFollowedByIgnorables");
     addTest(root, &TestIndicPrefixMatch, "tscoll/usrchtst/TestIndicPrefixMatch");
+    addTest(root, &TestUInt16Overflow, "tscoll/usrchtst/TestUInt16Overflow");
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */

@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 az{
     Keys{
         calendar{"Təqvim"}
@@ -142,6 +143,7 @@ az{
         eu{"bask"}
         ewo{"evondo"}
         fa{"fars"}
+        fa_AF{"dari"}
         fan{"fang"}
         fat{"fanti"}
         ff{"fula"}
@@ -391,7 +393,6 @@ az{
         ro_MD{"moldav"}
         rof{"rombo"}
         rom{"roman"}
-        root{"rut"}
         ru{"rus"}
         rup{"aroman"}
         rw{"kinyarvanda"}
@@ -531,11 +532,15 @@ az{
         zh_Hant{"ənənəvi mandarin çincəsi"}
     }
     Languages%menu{
+        ckb{"Kürdcə, mərkəzi"}
         yue{"Çin, kanton"}
         zh{"Çin, mandarin"}
     }
     Languages%short{
         az{"azəri"}
+    }
+    Languages%variant{
+        ckb{"Kürdcə, sorani"}
     }
     Scripts{
         Arab{"ərəb"}
@@ -751,7 +756,6 @@ az{
             tibt{"Tibet Rəqəmləri"}
         }
     }
-    Version{"36"}
     characterLabelPattern{
         all{"{0} — Bütün"}
         category-list{"{0}: {1}"}
@@ -766,6 +770,8 @@ az{
             one{"{0} Vurğu"}
             other{"{0} Vurğu"}
         }
+        subscript{"indeks {0}"}
+        superscript{"üst indeks {0}"}
     }
     codePatterns{
         language{"Dil: {0}"}

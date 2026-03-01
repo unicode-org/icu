@@ -28,6 +28,10 @@ public:
 
     void TestBuddhist(void);
     void TestBuddhistFormat(void);
+    void TestBug21043Indian(void);
+    void TestBug21044Hebrew(void);
+    void TestBug21045Islamic(void);
+    void TestBug21046IslamicUmalqura(void);
 
     void TestTaiwan(void);
 
@@ -39,10 +43,31 @@ public:
     void TestPersian(void);
     void TestPersianFormat(void);
 
+    void TestConsistencyGregorian(void);
+    void TestConsistencyCoptic(void);
+    void TestConsistencyEthiopic(void);
+    void TestConsistencyROC(void);
+    void TestConsistencyChinese(void);
+    void TestConsistencyDangi(void);
+    void TestConsistencyBuddhist(void);
+    void TestConsistencyEthiopicAmeteAlem(void);
+    void TestConsistencyHebrew(void);
+    void TestConsistencyIndian(void);
+    void TestConsistencyIslamic(void);
+    void TestConsistencyIslamicCivil(void);
+    void TestConsistencyIslamicRGSA(void);
+    void TestConsistencyIslamicTBLA(void);
+    void TestConsistencyIslamicUmalqura(void);
+    void TestConsistencyPersian(void);
+    void TestConsistencyJapanese(void);
+
  protected:
     // Test a Gregorian-Like calendar
     void quasiGregorianTest(Calendar& cal, const Locale& gregoLocale, const int32_t *data);
     void simpleTest(const Locale& loc, const UnicodeString& expect, UDate expectDate, UErrorCode& status);
+    void checkConsistency(const char* locale);
+
+    int32_t daysToCheckInConsistency;
  
 public: // package
     // internal routine for checking date

@@ -8,7 +8,7 @@
 *
 *  uspoof_impl.h
 *
-*    Implemenation header for spoof detection
+*    Implementation header for spoof detection
 *
 */
 
@@ -157,7 +157,7 @@ public:
 //
 //    String Table:
 //       The strings table contains all of the value strings (those of length two or greater)
-//       concatentated together into one long UChar (UTF-16) array.
+//       concatenated together into one long UChar (UTF-16) array.
 //
 //       There is no nul character or other mark between adjacent strings.
 //
@@ -222,7 +222,7 @@ class SpoofData: public UMemory {
     SpoofData(const void *serializedData, int32_t length, UErrorCode &status);
 
     //  Check raw Spoof Data Version compatibility.
-    //  Return TRUE it looks good.
+    //  Return true it looks good.
     UBool validateDataVersion(UErrorCode &status) const;
 
     ~SpoofData();                    // Destructor not normally used.
@@ -301,7 +301,7 @@ struct SpoofDataHeader {
     int32_t       fMagic;                // (0x3845fdef)
     uint8_t       fFormatVersion[4];     // Data Format. Same as the value in struct UDataInfo
                                          //   if there is one associated with this data.
-    int32_t       fLength;               // Total lenght in bytes of this spoof data,
+    int32_t       fLength;               // Total length in bytes of this spoof data,
                                          //   including all sections, not just the header.
 
     // The following four sections refer to data representing the confusable data

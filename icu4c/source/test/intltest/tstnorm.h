@@ -47,7 +47,8 @@ public:
     void TestCustomComp();
     void TestCustomFCC();
     void TestFilteredNormalizer2Coverage();
-    void TestNormalizeUTF8WithEdits();
+    void TestComposeUTF8WithEdits();
+    void TestDecomposeUTF8WithEdits();
     void TestLowMappingToEmpty_D();
     void TestLowMappingToEmpty_FCD();
     void TestNormalizeIllFormedText();
