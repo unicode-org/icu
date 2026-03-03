@@ -8,7 +8,13 @@
  */
 package com.ibm.icu.dev.test.util;
 
-import java.util.ArrayList;
+import com.ibm.icu.dev.test.CoreTestFmwk;
+import com.ibm.icu.impl.ICUData;
+import com.ibm.icu.util.Currency;
+import com.ibm.icu.util.MeasureUnit;
+import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.UResourceBundle;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -18,22 +24,13 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.CoreTestFmwk;
-import com.ibm.icu.impl.ICUData;
-import com.ibm.icu.util.Currency;
-import com.ibm.icu.util.MeasureUnit;
-import com.ibm.icu.util.TimeZone;
-import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.UResourceBundle;
-import com.ibm.icu.util.VersionInfo;
-
 /**
- * Concurrency hammer tests for modernization effort (ULocale, Currency, TimeZone, MeasureUnit, ResourceCache).
+ * Concurrency hammer tests for modernization effort (ULocale, Currency, TimeZone, MeasureUnit,
+ * ResourceCache).
  */
 @RunWith(JUnit4.class)
 public class ConcurrencyTest extends CoreTestFmwk {
@@ -54,26 +51,30 @@ public class ConcurrencyTest extends CoreTestFmwk {
         ExecutorService exec = Executors.newFixedThreadPool(NUM_THREADS);
         try {
             for (int i = 0; i < NUM_THREADS; i++) {
-                exec.submit(() -> {
-                    try {
-                        startLatch.await();
-                        for (int j = 0; j < ITERATIONS; j++) {
-                            for (ULocale loc : allLocales) {
-                                // ICUResourceBundle.getBundleInstance hits the ResourceCache
-                                UResourceBundle rb = UResourceBundle.getBundleInstance(
-                                        ICUData.ICU_BASE_NAME,
-                                        loc);
-                                if (rb == null) {
-                                    throw new AssertionError("ResourceCache returned null bundle for locale: " + loc);
+                exec.submit(
+                        () -> {
+                            try {
+                                startLatch.await();
+                                for (int j = 0; j < ITERATIONS; j++) {
+                                    for (ULocale loc : allLocales) {
+                                        // ICUResourceBundle.getBundleInstance hits the
+                                        // ResourceCache
+                                        UResourceBundle rb =
+                                                UResourceBundle.getBundleInstance(
+                                                        ICUData.ICU_BASE_NAME, loc);
+                                        if (rb == null) {
+                                            throw new AssertionError(
+                                                    "ResourceCache returned null bundle for locale: "
+                                                            + loc);
+                                        }
+                                    }
                                 }
+                            } catch (Throwable t) {
+                                exceptions.add(t);
+                            } finally {
+                                endLatch.countDown();
                             }
-                        }
-                    } catch (Throwable t) {
-                        exceptions.add(t);
-                    } finally {
-                        endLatch.countDown();
-                    }
-                });
+                        });
             }
             startLatch.countDown();
             if (!endLatch.await(120, TimeUnit.SECONDS)) {
@@ -97,20 +98,21 @@ public class ConcurrencyTest extends CoreTestFmwk {
         ExecutorService exec = Executors.newFixedThreadPool(NUM_THREADS);
         try {
             for (int i = 0; i < NUM_THREADS; i++) {
-                exec.submit(() -> {
-                    try {
-                        startLatch.await();
-                        for (int j = 0; j < ITERATIONS; j++) {
-                            ULocale.canonicalize("en_US_POSIX");
-                            ULocale.canonicalize("ar_EG");
-                            ULocale.canonicalize("zh_Hans_CN");
-                        }
-                    } catch (Throwable t) {
-                        exceptions.add(t);
-                    } finally {
-                        endLatch.countDown();
-                    }
-                });
+                exec.submit(
+                        () -> {
+                            try {
+                                startLatch.await();
+                                for (int j = 0; j < ITERATIONS; j++) {
+                                    ULocale.canonicalize("en_US_POSIX");
+                                    ULocale.canonicalize("ar_EG");
+                                    ULocale.canonicalize("zh_Hans_CN");
+                                }
+                            } catch (Throwable t) {
+                                exceptions.add(t);
+                            } finally {
+                                endLatch.countDown();
+                            }
+                        });
             }
             startLatch.countDown();
             if (!endLatch.await(60, TimeUnit.SECONDS)) {
@@ -134,22 +136,25 @@ public class ConcurrencyTest extends CoreTestFmwk {
         ExecutorService exec = Executors.newFixedThreadPool(NUM_THREADS);
         try {
             for (int i = 0; i < NUM_THREADS; i++) {
-                exec.submit(() -> {
-                    try {
-                        startLatch.await();
-                        for (int j = 0; j < ITERATIONS; j++) {
-                            boolean avail = Currency.isAvailable("USD", null, null);
-                            String[] codes = Currency.getKeywordValuesForLocale("currency", ULocale.US, false);
-                            if (!avail || codes.length == 0) {
-                                throw new AssertionError("Currency data missing in thread");
+                exec.submit(
+                        () -> {
+                            try {
+                                startLatch.await();
+                                for (int j = 0; j < ITERATIONS; j++) {
+                                    boolean avail = Currency.isAvailable("USD", null, null);
+                                    String[] codes =
+                                            Currency.getKeywordValuesForLocale(
+                                                    "currency", ULocale.US, false);
+                                    if (!avail || codes.length == 0) {
+                                        throw new AssertionError("Currency data missing in thread");
+                                    }
+                                }
+                            } catch (Throwable t) {
+                                exceptions.add(t);
+                            } finally {
+                                endLatch.countDown();
                             }
-                        }
-                    } catch (Throwable t) {
-                        exceptions.add(t);
-                    } finally {
-                        endLatch.countDown();
-                    }
-                });
+                        });
             }
             startLatch.countDown();
             if (!endLatch.await(60, TimeUnit.SECONDS)) {
@@ -173,21 +178,23 @@ public class ConcurrencyTest extends CoreTestFmwk {
         ExecutorService exec = Executors.newFixedThreadPool(NUM_THREADS);
         try {
             for (int i = 0; i < NUM_THREADS; i++) {
-                exec.submit(() -> {
-                    try {
-                        startLatch.await();
-                        for (int j = 0; j < ITERATIONS; j++) {
-                            TimeZone tz = TimeZone.getDefault();
-                            if (tz == null || tz.getID() == null) {
-                                throw new AssertionError("TimeZone.getDefault() returned null or invalid ID");
+                exec.submit(
+                        () -> {
+                            try {
+                                startLatch.await();
+                                for (int j = 0; j < ITERATIONS; j++) {
+                                    TimeZone tz = TimeZone.getDefault();
+                                    if (tz == null || tz.getID() == null) {
+                                        throw new AssertionError(
+                                                "TimeZone.getDefault() returned null or invalid ID");
+                                    }
+                                }
+                            } catch (Throwable t) {
+                                exceptions.add(t);
+                            } finally {
+                                endLatch.countDown();
                             }
-                        }
-                    } catch (Throwable t) {
-                        exceptions.add(t);
-                    } finally {
-                        endLatch.countDown();
-                    }
-                });
+                        });
             }
             startLatch.countDown();
             if (!endLatch.await(60, TimeUnit.SECONDS)) {
@@ -216,24 +223,25 @@ public class ConcurrencyTest extends CoreTestFmwk {
         ExecutorService exec = Executors.newFixedThreadPool(NUM_THREADS);
         try {
             for (int i = 0; i < NUM_THREADS; i++) {
-                exec.submit(() -> {
-                    try {
-                        startLatch.await();
-                        for (int j = 0; j < ITERATIONS; j++) {
-                            Set<MeasureUnit> units = MeasureUnit.getAvailable("length");
-                            for (MeasureUnit u : units) {
-                                if ("meter".equals(u.getSubtype())) {
-                                    meterIdentities.add(u);
-                                    break;
+                exec.submit(
+                        () -> {
+                            try {
+                                startLatch.await();
+                                for (int j = 0; j < ITERATIONS; j++) {
+                                    Set<MeasureUnit> units = MeasureUnit.getAvailable("length");
+                                    for (MeasureUnit u : units) {
+                                        if ("meter".equals(u.getSubtype())) {
+                                            meterIdentities.add(u);
+                                            break;
+                                        }
+                                    }
                                 }
+                            } catch (Throwable t) {
+                                exceptions.add(t);
+                            } finally {
+                                endLatch.countDown();
                             }
-                        }
-                    } catch (Throwable t) {
-                        exceptions.add(t);
-                    } finally {
-                        endLatch.countDown();
-                    }
-                });
+                        });
             }
             startLatch.countDown();
             if (!endLatch.await(60, TimeUnit.SECONDS)) {
@@ -246,7 +254,10 @@ public class ConcurrencyTest extends CoreTestFmwk {
 
             // Critical Assertion: Verify Object Identity.
             // If multiple threads created their own 'meter', size will be > 1.
-            assertEquals("Duplicate MeasureUnit instances created for 'meter'", 1, meterIdentities.size());
+            assertEquals(
+                    "Duplicate MeasureUnit instances created for 'meter'",
+                    1,
+                    meterIdentities.size());
 
             // Verify interning: all subtypes must share the exact same type string instance
             MeasureUnit meter = meterIdentities.iterator().next();

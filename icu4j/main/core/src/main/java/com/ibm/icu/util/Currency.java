@@ -990,7 +990,8 @@ public class Currency extends MeasureUnit {
                 if (all == null) {
                     // Filter out non-tender currencies which have "from" date set to 9999-12-31
                     // CurrencyFilter has "to" value set to 9998-12-31 in order to exclude them
-                    // CurrencyFilter filter = CurrencyFilter.onDateRange(null, new Date(253373299200000L));
+                    // CurrencyFilter filter = CurrencyFilter.onDateRange(null, new
+                    // Date(253373299200000L));
                     CurrencyFilter filter = CurrencyFilter.all();
                     all = Collections.unmodifiableList(getTenderCurrencies(filter));
                     ALL_TENDER_CODES = new SoftReference<>(all);
@@ -1012,7 +1013,9 @@ public class Currency extends MeasureUnit {
                 all = (ref == null) ? null : ref.get();
                 if (all == null) {
                     CurrencyMetaInfo info = CurrencyMetaInfo.getInstance();
-                    all = Collections.unmodifiableSet(new HashSet<>(info.currencies(CurrencyFilter.all())));
+                    all =
+                            Collections.unmodifiableSet(
+                                    new HashSet<>(info.currencies(CurrencyFilter.all())));
                     ALL_CODES_AS_SET = new SoftReference<>(all);
                 }
             }

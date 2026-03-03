@@ -1401,6 +1401,7 @@ public abstract class TimeZone implements Serializable, Cloneable, Freezable<Tim
 
     /** The default time zone, or null if not set. */
     private static volatile TimeZone defaultZone = null;
+
     private static final Object defaultZoneLock = new Object();
 
     /** TimeZone implementation type */

@@ -8,23 +8,19 @@
  */
 package com.ibm.icu.dev.test.impl;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
+import com.ibm.icu.impl.ICUCache;
+import com.ibm.icu.impl.SimpleCache;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.CoreTestFmwk;
-import com.ibm.icu.impl.ICUCache;
-import com.ibm.icu.impl.SimpleCache;
-
-/**
- * Concurrency tests for SimpleCache.
- */
+/** Concurrency tests for SimpleCache. */
 @RunWith(JUnit4.class)
 public class SimpleCacheTest extends CoreTestFmwk {
 
@@ -46,42 +42,51 @@ public class SimpleCacheTest extends CoreTestFmwk {
         try {
             for (int i = 0; i < numThreads; i++) {
                 final int threadId = i;
-                exec.submit(() -> {
-                    try {
-                        startLatch.await();
-                        for (int j = 0; j < numIterations; j++) {
-                            String key = "key" + (j % 50); 
-                            String val = "thread-" + threadId + "-iter-" + j;
-                            cache.put(key, val);
-                            
-                            String cached = cache.get(key);
-                            if (cached != null) {
-                                hits.incrementAndGet();
-                                // Verify that the value returned belongs to the correct key pattern
-                                if (!cached.startsWith("thread-") || !cached.contains("-iter-")) {
-                                    errln("SimpleCache(" + type + ") data corruption: " + cached);
+                exec.submit(
+                        () -> {
+                            try {
+                                startLatch.await();
+                                for (int j = 0; j < numIterations; j++) {
+                                    String key = "key" + (j % 50);
+                                    String val = "thread-" + threadId + "-iter-" + j;
+                                    cache.put(key, val);
+
+                                    String cached = cache.get(key);
+                                    if (cached != null) {
+                                        hits.incrementAndGet();
+                                        // Verify that the value returned belongs to the correct key
+                                        // pattern
+                                        if (!cached.startsWith("thread-")
+                                                || !cached.contains("-iter-")) {
+                                            errln(
+                                                    "SimpleCache("
+                                                            + type
+                                                            + ") data corruption: "
+                                                            + cached);
+                                        }
+                                    } else if (type == ICUCache.SOFT) {
+                                        // SoftReferences should not be cleared in a simple test run
+                                        errln(
+                                                "SimpleCache(SOFT) error: unexpected null for key "
+                                                        + key);
+                                    }
                                 }
-                            } else if (type == ICUCache.SOFT) {
-                                // SoftReferences should not be cleared in a simple test run
-                                errln("SimpleCache(SOFT) error: unexpected null for key " + key);
+                            } catch (Exception e) {
+                                errln("Thread " + threadId + " failed: " + e.getMessage());
+                            } finally {
+                                endLatch.countDown();
                             }
-                        }
-                    } catch (Exception e) {
-                        errln("Thread " + threadId + " failed: " + e.getMessage());
-                    } finally {
-                        endLatch.countDown();
-                    }
-                });
+                        });
             }
 
             startLatch.countDown();
             if (!endLatch.await(10, TimeUnit.SECONDS)) {
                 errln("Concurrency test timed out for cache type " + type);
             }
-            
+
             // Sanity check: ensure we actually tested something non-null
             assertTrue("SimpleCache(" + type + ") was always null", hits.get() > 0);
-            
+
         } finally {
             exec.shutdownNow();
         }

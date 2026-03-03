@@ -2032,6 +2032,7 @@ public final class ULocale implements Serializable, Comparable<ULocale>, Cloneab
     private static boolean isKnownCanonicalizedLocale(String name) {
         return KnownLocalesHolder.KNOWN_LOCALES.contains(name);
     }
+
     /**
      * {@icu} Given a keyword and a value, return a new locale with an updated keyword and value. If
      * the keyword is null, this removes all keywords from the locale id. Otherwise, if the value is

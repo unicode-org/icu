@@ -23,12 +23,11 @@ import java.io.ObjectStreamException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * A unit such as length, mass, volume, currency, etc. A unit is coupled with a numeric amount to
@@ -66,9 +65,7 @@ public class MeasureUnit implements Serializable {
      */
     @Deprecated protected final String subType;
 
-    /**
-     * The cached hash code for this unit.
-     */
+    /** The cached hash code for this unit. */
     private volatile int hashCodeValue;
 
     /**

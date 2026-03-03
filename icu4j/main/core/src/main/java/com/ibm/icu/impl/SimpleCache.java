@@ -12,9 +12,8 @@ package com.ibm.icu.impl;
 import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
-import java.util.Collections;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class SimpleCache<K, V> implements ICUCache<K, V> {
     private static final int DEFAULT_CAPACITY = 16;
