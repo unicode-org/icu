@@ -972,31 +972,50 @@ public class Currency extends MeasureUnit {
         1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000
     };
 
-    private static SoftReference<List<String>> ALL_TENDER_CODES;
-    private static SoftReference<Set<String>> ALL_CODES_AS_SET;
+    private static volatile SoftReference<List<String>> ALL_TENDER_CODES;
+    private static volatile SoftReference<Set<String>> ALL_CODES_AS_SET;
+    private static final Object CURRENCY_LOCK = new Object();
 
     /*
      * Returns an unmodifiable String list including all known tender currency codes.
+     * Uses the double-check idiom for lazy initialization (Effective Java 3rd ed, Item 83).
      */
-    private static synchronized List<String> getAllTenderCurrencies() {
-        List<String> all = (ALL_TENDER_CODES == null) ? null : ALL_TENDER_CODES.get();
+    private static List<String> getAllTenderCurrencies() {
+        SoftReference<List<String>> ref = ALL_TENDER_CODES;
+        List<String> all = (ref == null) ? null : ref.get();
         if (all == null) {
-            // Filter out non-tender currencies which have "from" date set to 9999-12-31
-            // CurrencyFilter has "to" value set to 9998-12-31 in order to exclude them
-            // CurrencyFilter filter = CurrencyFilter.onDateRange(null, new Date(253373299200000L));
-            CurrencyFilter filter = CurrencyFilter.all();
-            all = Collections.unmodifiableList(getTenderCurrencies(filter));
-            ALL_TENDER_CODES = new SoftReference<>(all);
+            synchronized (CURRENCY_LOCK) {
+                ref = ALL_TENDER_CODES;
+                all = (ref == null) ? null : ref.get();
+                if (all == null) {
+                    // Filter out non-tender currencies which have "from" date set to 9999-12-31
+                    // CurrencyFilter has "to" value set to 9998-12-31 in order to exclude them
+                    // CurrencyFilter filter = CurrencyFilter.onDateRange(null, new Date(253373299200000L));
+                    CurrencyFilter filter = CurrencyFilter.all();
+                    all = Collections.unmodifiableList(getTenderCurrencies(filter));
+                    ALL_TENDER_CODES = new SoftReference<>(all);
+                }
+            }
         }
         return all;
     }
 
-    private static synchronized Set<String> getAllCurrenciesAsSet() {
-        Set<String> all = (ALL_CODES_AS_SET == null) ? null : ALL_CODES_AS_SET.get();
+    /*
+     * Uses the double-check idiom for lazy initialization (Effective Java 3rd ed, Item 83).
+     */
+    private static Set<String> getAllCurrenciesAsSet() {
+        SoftReference<Set<String>> ref = ALL_CODES_AS_SET;
+        Set<String> all = (ref == null) ? null : ref.get();
         if (all == null) {
-            CurrencyMetaInfo info = CurrencyMetaInfo.getInstance();
-            all = Collections.unmodifiableSet(new HashSet<>(info.currencies(CurrencyFilter.all())));
-            ALL_CODES_AS_SET = new SoftReference<>(all);
+            synchronized (CURRENCY_LOCK) {
+                ref = ALL_CODES_AS_SET;
+                all = (ref == null) ? null : ref.get();
+                if (all == null) {
+                    CurrencyMetaInfo info = CurrencyMetaInfo.getInstance();
+                    all = Collections.unmodifiableSet(new HashSet<>(info.currencies(CurrencyFilter.all())));
+                    ALL_CODES_AS_SET = new SoftReference<>(all);
+                }
+            }
         }
         return all;
     }
