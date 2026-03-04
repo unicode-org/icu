@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1772305189747,
+  "lastUpdate": 1772652337627,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -43047,6 +43047,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "UnicodeSetContains",
             "value": 1.9859652613273915,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "3ebe56a7f68f54d5305c76aabe95a24990b4001c",
+          "message": "ICU-23328 Add some core Python reusable modules",
+          "timestamp": "2026-03-04T11:16:22-08:00",
+          "tree_id": "b4ba02aa9546791b7f31e5c74d3e26a0710d3d42",
+          "url": "https://github.com/unicode-org/icu/commit/3ebe56a7f68f54d5305c76aabe95a24990b4001c"
+        },
+        "date": 1772651942898,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "UnicodeSetContains",
+            "value": 2.0323201367648727,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
