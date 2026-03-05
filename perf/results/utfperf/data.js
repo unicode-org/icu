@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1772656861871,
+  "lastUpdate": 1772745429718,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -63921,6 +63921,48 @@ window.BENCHMARK_DATA = {
           {
             "name": "FromUTF8",
             "value": 2.2596,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "49699333+dependabot[bot]@users.noreply.github.com",
+            "name": "dependabot[bot]",
+            "username": "dependabot[bot]"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "a80357836a5cc87f922faaacaf58378f0eeae66f",
+          "message": "ICU-23247 Bump the github-actions group with 3 updates",
+          "timestamp": "2026-03-05T12:29:33-08:00",
+          "tree_id": "2e4fd2f081629af659e7a03e5563238302396bc3",
+          "url": "https://github.com/unicode-org/icu/commit/a80357836a5cc87f922faaacaf58378f0eeae66f"
+        },
+        "date": 1772745033792,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Roundtrip",
+            "value": 9.3151,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUnicode",
+            "value": 3.0187,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUTF8",
+            "value": 1.9399,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
