@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1772744180929,
+  "lastUpdate": 1772826419263,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -42867,6 +42867,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 3.589819358368829,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "85f491cbe2cf7fa47f2abb0b628aab2622a1351a",
+          "message": "ICU-23320 CI Jobs to generate Java errorprone and coverage reports",
+          "timestamp": "2026-03-06T11:24:53-08:00",
+          "tree_id": "86c7d8a8f031fc508d46ce51bcad36267c9aca0f",
+          "url": "https://github.com/unicode-org/icu/commit/85f491cbe2cf7fa47f2abb0b628aab2622a1351a"
+        },
+        "date": 1772826026323,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 3.7664597572477123,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
