@@ -821,6 +821,9 @@
 
         rm -fr target/jacoco
 
+        # If somehow the latest version of jacoco becomes incompatible,
+        # use the value of the `jacoco-maven-plugin.version` property.
+        # And consider updating to the latest version.
         mvn dependency:copy \
             -Dartifact=org.jacoco:jacoco:LATEST:zip \
             -DoutputDirectory=target/jacoco \
@@ -829,6 +832,12 @@
 
         unzip -q target/jacoco/jacoco.zip -d target/jacoco
 
+        rm -fr target/jacocoreport
+        mkdir -p target/jacocoreport
+
+        artifact_version="`mvn help:evaluate -Dexpression=project.version -q -DforceStdout`"
+
+        # Sorry, it's hard to copy paste from here, but xml does not allow double-minus in comments
         java -jar target/jacoco/lib/jacococli.jar report \
             icu4j/main/core/target/jacoco.exec \
             icu4j/main/collate/target/jacoco.exec \
@@ -836,13 +845,13 @@
             icu4j/main/framework/target/jacoco.exec \
             icu4j/main/translit/target/jacoco.exec \
             icu4j/main/charset/target/jacoco.exec \
-            \-\-classfiles icu4j/main/core/target/core-79.0.1-SNAPSHOT.jar \
-            \-\-classfiles icu4j/main/collate/target/collate-79.0.1-SNAPSHOT.jar \
-            \-\-classfiles icu4j/main/currdata/target/currdata-79.0.1-SNAPSHOT.jar \
-            \-\-classfiles icu4j/main/langdata/target/langdata-79.0.1-SNAPSHOT.jar \
-            \-\-classfiles icu4j/main/regiondata/target/regiondata-79.0.1-SNAPSHOT.jar \
-            \-\-classfiles icu4j/main/translit/target/translit-79.0.1-SNAPSHOT.jar \
-            \-\-classfiles icu4j/main/charset/target/icu4j-charset-79.0.1-SNAPSHOT.jar \
+            \-\-classfiles icu4j/main/core/target/core-${artifact_version}.jar \
+            \-\-classfiles icu4j/main/collate/target/collate-${artifact_version}.jar \
+            \-\-classfiles icu4j/main/currdata/target/currdata-${artifact_version}.jar \
+            \-\-classfiles icu4j/main/langdata/target/langdata-${artifact_version}.jar \
+            \-\-classfiles icu4j/main/regiondata/target/regiondata-${artifact_version}.jar \
+            \-\-classfiles icu4j/main/translit/target/translit-${artifact_version}.jar \
+            \-\-classfiles icu4j/main/charset/target/icu4j-charset-${artifact_version}.jar \
             \-\-sourcefiles icu4j/main/core/src/main/java \
             \-\-sourcefiles icu4j/main/collate/src/main/java \
             \-\-sourcefiles icu4j/main/currdata/src/main/java \

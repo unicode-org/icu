@@ -1,0 +1,206 @@
+# Copyright (C) 2023 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+#
+# Note: the workflow here is based on the Github Actions workflow used
+# by the Jekyll theme we are using:
+# https://github.com/just-the-docs/just-the-docs/blob/main/.github/workflows/deploy.yml
+#
+# The Jekyll theme (just-the-docs) configured its Github CI to manually run the Jekyll
+# build instead of relying on the default behavior from
+# https://github.com/actions/jekyll-build-pages . The default behavior of 
+# actions/jekyll-build-pages seems to be causing errors with this theme.
+#
+# Also, since the deployment to GitHub Pages is atomic, anything else that touches
+# them should be here. The pattern is: run several jobs, each publishing an artifact,
+# and then the artifacts get merged into one before deploying.
+
+name: Deploy GitHub Pages
+
+on:
+  # Runs on pushes targeting the default branch and only if in the `docs/` directory
+  push:
+    branches: ["main"]
+    paths: ["docs/**"]
+
+  schedule:
+    - cron: '0 2 * * 6' # every Saturday at 2 a.m.
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+env:
+  # The _ROOT will become the root of the artifact zip file
+  REPORT_ROOT_DIR: '${{ github.workspace }}/artifacts_reports_root'
+  # The report folder includes the relative path, matching path we want to see on the generated website.
+  # We will generate the reports in the relative folder, so that when we merge the Jekyll generated
+  # artifact with the ones from the reports, they all come together where they should.
+  REPORT_SITE_RELATIVE_DIR: 'userguide/dev/reports'
+
+permissions:
+  contents: read
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # Jekyll build job
+  # Keep in sync with docs test workflow in `icu_docs.yml`
+  buildsite:
+    runs-on: ubuntu-22.04  # Updated in BRS
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@09a7688d3b55cf0e976497ff046b70949eeaccfd # v1.288.0
+        with:
+          ruby-version: '2.7.4' # Not needed with a .ruby-version file
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+          cache-version: 0 # Increment this number if you need to re-download cached gems
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5.0.0
+        with:
+          generator_config_file: docs/_config.yml
+      - name: Build with Jekyll
+        # Outputs to the './_site' directory by default
+        run: |
+          cd docs  # root directory of markdown, also contains Jekyll configs, etc.
+          bundle install
+          # The baseurl arg is parsed from the `baseurl` field of _config.yml.
+          bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
+        env:
+          JEKYLL_ENV: production
+      - name: Upload artifact
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        with:
+          name: site-artifact
+          path: docs/_site
+          retention-days: 3
+
+  # Generate a complete Errorprone report, with all checks enabled, without failing
+  errorprone:
+    runs-on: ubuntu-22.04  # Updated in BRS
+    steps:
+      - name: Checkout repo files
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Set up JDK
+        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+      - name: Run tests with errorprone enabled
+        run: mvn clean test -DskipTests -DskipITs -l /tmp/errorprone_all.log -P errorprone-all
+      - name: Generate html pages from the errorprone report
+        env:
+          REPORT_FOLDER_ERRORPRONE: ${{ env.REPORT_ROOT_DIR }}/${{ env.REPORT_SITE_RELATIVE_DIR }}/icu4j_errorprone
+        run: |
+          mkdir -p ${REPORT_FOLDER_ERRORPRONE}
+          mvn exec:java \
+            -f icu4j/tools/build/ \
+            -P errorprone_report \
+            -DlogFile=/tmp/errorprone_all.log \
+            -DoutDir=${REPORT_FOLDER_ERRORPRONE}
+      - name: Upload artifact
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        with:
+          name: errorprone-artifact
+          path: ${{ env.REPORT_ROOT_DIR }}
+          retention-days: 3
+
+  # Generate a JaCoCo coverage report
+  coverage:
+    runs-on: ubuntu-22.04  # Updated in BRS
+    steps:
+      - name: Checkout repo files
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Set up JDK
+        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+      - name: Run tests with coverage enabled
+        run: mvn clean install site site:stage -P coverage
+      - name: Setup JaCoCo CLI
+        run: |
+          rm -fr target/jacoco
+          # Download jacoco CLI
+          mvn dependency:copy \
+              -Dartifact=org.jacoco:jacoco:LATEST:zip \
+              -DoutputDirectory=target/jacoco \
+              -Dmdep.stripVersion=true \
+              -q -ntp
+          unzip -q target/jacoco/jacoco.zip -d target/jacoco
+      - name: Generate JaCoCo report merged from all modules
+        env:
+          REPORT_FOLDER_COVERAGE: ${{ env.REPORT_ROOT_DIR }}/${{ env.REPORT_SITE_RELATIVE_DIR }}/icu4j_coverage
+        run: |
+          artifact_version="`mvn help:evaluate -Dexpression=project.version -q -DforceStdout`"
+          mkdir -p ${REPORT_FOLDER_COVERAGE}
+          java -jar target/jacoco/lib/jacococli.jar report \
+              icu4j/main/core/target/jacoco.exec \
+              icu4j/main/collate/target/jacoco.exec \
+              icu4j/main/common_tests/target/jacoco.exec \
+              icu4j/main/framework/target/jacoco.exec \
+              icu4j/main/translit/target/jacoco.exec \
+              icu4j/main/charset/target/jacoco.exec \
+              --classfiles icu4j/main/core/target/core-${artifact_version}.jar \
+              --classfiles icu4j/main/collate/target/collate-${artifact_version}.jar \
+              --classfiles icu4j/main/currdata/target/currdata-${artifact_version}.jar \
+              --classfiles icu4j/main/langdata/target/langdata-${artifact_version}.jar \
+              --classfiles icu4j/main/regiondata/target/regiondata-${artifact_version}.jar \
+              --classfiles icu4j/main/translit/target/translit-${artifact_version}.jar \
+              --classfiles icu4j/main/charset/target/icu4j-charset-${artifact_version}.jar \
+              --sourcefiles icu4j/main/core/src/main/java \
+              --sourcefiles icu4j/main/collate/src/main/java \
+              --sourcefiles icu4j/main/currdata/src/main/java \
+              --sourcefiles icu4j/main/langdata/src/main/java \
+              --sourcefiles icu4j/main/regiondata/src/main/java \
+              --sourcefiles icu4j/main/translit/src/main/java \
+              --sourcefiles icu4j/main/charset/src/main/java \
+              --encoding utf-8 \
+              --csv ${REPORT_FOLDER_COVERAGE}/jacoco.csv \
+              --xml ${REPORT_FOLDER_COVERAGE}/jacoco.xml \
+              --html ${REPORT_FOLDER_COVERAGE}/html
+      - name: Upload artifact
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        with:
+          name: coverage-artifact
+          path: ${{ env.REPORT_ROOT_DIR }}
+          retention-days: 3
+
+  # Merge the artifacts from several jobs into one, for deployment
+  merge_artifacts:
+    permissions:
+      pages: write # to deploy to Pages
+      id-token: write # to verify the deployment originates from an appropriate source
+    runs-on: ubuntu-22.04  # Updated in BRS
+    needs: [buildsite, errorprone, coverage]
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 # v8.0.0
+        with:  # not using a name, so than all artifacts of the  run are downloaded, then merged
+          path: docs/_site
+          merge-multiple: true
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4.0.0
+        with:
+          path: docs/_site
+          retention-days: 3
+
+  # Deployment job
+  deploy:
+    permissions:
+      pages: write # to deploy to Pages
+      id-token: write # to verify the deployment originates from an appropriate source
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-22.04  # Updated in BRS
+    needs: merge_artifacts
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5

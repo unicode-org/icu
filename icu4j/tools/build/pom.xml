@@ -16,6 +16,7 @@
   <properties>
     <!-- Arguments for the errorprone report generation -->
     <logFile>/tmp/errorprone.log</logFile>
+    <outDir>${project.build.directory}/errorprone_report</outDir>
     <srcBaseUrl>https://github.com/unicode-org/icu/blob/main/</srcBaseUrl>
   </properties>
 
@@ -66,6 +67,8 @@
                 <argument>${logFile}</argument>
                 <argument>--srcBaseUrl</argument>
                 <argument>${srcBaseUrl}</argument>
+                <argument>--outDir</argument>
+                <argument>${outDir}</argument>
               </arguments>
             </configuration>
           </plugin>
