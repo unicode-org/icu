@@ -22,6 +22,12 @@ Fuzzing | [![Fuzzing Status](https://oss-fuzz-build-logs.storage.googleapis.com/
 OpenSSF Scorecard | [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/unicode-org/icu/badge)](https://securityscorecards.dev/viewer/?uri=github.com/unicode-org/icu)
 
 
+### Quality Reports (main branch)
+
+* Java static analysis: [Errorprone](https://unicode-org.github.io/icu/userguide/dev/reports/icu4j_errorprone/errorprone2.html)
+* Java code coverage: [JaCoCo](https://unicode-org.github.io/icu/userguide/dev/reports/icu4j_coverage/html)
+* All reports, various formats, [here](https://mihnita.github.io/icu/userguide/dev/reports.html)
+
 
 ### Subdirectories and Information
 
