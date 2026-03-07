@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1772827496341,
+  "lastUpdate": 1772847875964,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -52413,6 +52413,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 49.965,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "ec8f153ad6a7e390f1b86f721c508f4cae004cdf",
+          "message": "ICU-23320 Add main page links to Errorprone and JaCoCo reports",
+          "timestamp": "2026-03-06T17:24:32-08:00",
+          "tree_id": "a32a92403b6f644cb2954af7588986e1cda2fa5b",
+          "url": "https://github.com/unicode-org/icu/commit/ec8f153ad6a7e390f1b86f721c508f4cae004cdf"
+        },
+        "date": 1772847488472,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 22.2415,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 49.983,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
