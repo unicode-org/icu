@@ -30,6 +30,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Multimaps;
 import com.google.common.collect.SetMultimap;
 import com.google.common.collect.Sets;
 import com.google.common.io.CharStreams;
@@ -287,7 +288,8 @@ public final class LdmlConverter {
         Map<IcuLocaleDir, DependencyGraph> graphMetadata = new HashMap<>();
         splitDirs.forEach(d -> graphMetadata.put(d, new DependencyGraph(cldrVersion)));
 
-        SetMultimap<IcuLocaleDir, String> writtenLocaleIds = HashMultimap.create();
+        SetMultimap<IcuLocaleDir, String> writtenLocaleIds =
+                Multimaps.synchronizedSetMultimap(HashMultimap.create());
         Path baseDir = config.getOutputDir();
 
         System.out.println("processing standard ldml files");
@@ -650,7 +652,12 @@ public final class LdmlConverter {
         try {
             Files.createDirectories(dir);
         } catch (IOException e) {
-            throw new RuntimeException("cannot create directory: " + dir, e);
+            // On Windows, concurrent directory creation by parallel threads can transiently
+            // produce AccessDeniedException even when the directory already exists. If the
+            // directory is now present (created by another thread), treat it as success.
+            if (!Files.isDirectory(dir)) {
+                throw new RuntimeException("cannot create directory: " + dir, e);
+            }
         }
         return dir;
     }

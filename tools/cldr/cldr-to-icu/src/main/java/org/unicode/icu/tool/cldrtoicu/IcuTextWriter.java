@@ -46,7 +46,16 @@ final class IcuTextWriter {
             IcuData icuData, Path outDir, List<String> header, boolean allowOverwrite) {
 
         try {
-            Files.createDirectories(outDir);
+            try {
+                Files.createDirectories(outDir);
+            } catch (IOException e) {
+                // On Windows, concurrent directory creation by parallel threads can transiently
+                // produce AccessDeniedException even when the directory already exists. If the
+                // directory is now present (created by another thread), treat it as success.
+                if (!Files.isDirectory(outDir)) {
+                    throw e;
+                }
+            }
             Path file = outDir.resolve(icuData.getName() + ".txt");
             OpenOption[] fileOptions = allowOverwrite ? OVERWRITE_FILES : ONLY_NEW_FILES;
             try (Writer w = Files.newBufferedWriter(file, UTF_8, fileOptions);
