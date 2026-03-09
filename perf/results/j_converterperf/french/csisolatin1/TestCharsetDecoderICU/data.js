@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1772847765269,
+  "lastUpdate": 1773084753358,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -42867,6 +42867,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.4754017429442711,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "426cea1b85e82e632dc5c0b35c7d329c0eb4af7b",
+          "message": "ICU-23247 CLDR-to-ICU: using `parallel` sometimes fails on Windows",
+          "timestamp": "2026-03-09T12:12:57-07:00",
+          "tree_id": "260f5cd9c19f6ae4888a391f4eccd1e3039b093c",
+          "url": "https://github.com/unicode-org/icu/commit/426cea1b85e82e632dc5c0b35c7d329c0eb4af7b"
+        },
+        "date": 1773084358806,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.46575641260466916,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
