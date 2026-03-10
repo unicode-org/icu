@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1773133500631,
+  "lastUpdate": 1773148151280,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -52485,6 +52485,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 80.1658,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "cc9ac0cf95595fe835daf64e4f4019a04f440347",
+          "message": "ICU-23247 CLDR-to-ICU: fix bad encoding (Win) and formatting",
+          "timestamp": "2026-03-09T11:54:15-07:00",
+          "tree_id": "5a9eb5142edb221dfb10d4b1c32c6065db7f45a9",
+          "url": "https://github.com/unicode-org/icu/commit/cc9ac0cf95595fe835daf64e4f4019a04f440347"
+        },
+        "date": 1773147759200,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 32.8109,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 80.4592,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
