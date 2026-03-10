@@ -299,7 +299,7 @@ public class DataDrivenUScriptTest extends CoreTestFmwk {
             } else if ((code[0] != expected)) {
                 errln(
                         "Error testing UScript.getCode(). Got: "
-                                + code
+                                + Arrays.toString(code)
                                 + " Expected: "
                                 + expected
                                 + " for locale "

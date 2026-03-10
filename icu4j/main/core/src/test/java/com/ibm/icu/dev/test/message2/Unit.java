@@ -3,6 +3,7 @@
 
 package com.ibm.icu.dev.test.message2;
 
+import java.util.Arrays;
 import java.util.StringJoiner;
 
 // Class corresponding to the json test files.
@@ -56,7 +57,7 @@ class Unit {
             result.add("src=" + src.sources.toString());
         }
         if (params != null) {
-            result.add("params=" + params);
+            result.add("params=" + Arrays.toString(params));
         }
         if (exp != null) {
             result.add("exp=" + escapeString(exp));
