@@ -38,6 +38,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Set;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -188,9 +189,9 @@ public class TimeZoneTest extends CoreTestFmwk {
 
     /** A descriptor for a zone; used to regress the short zone IDs. */
     static class ZoneDescriptor {
-        String id;
-        int offset; // In minutes
-        boolean daylight;
+        final String id;
+        final int offset; // In minutes
+        final boolean daylight;
 
         ZoneDescriptor(TimeZone zone) {
             this.id = zone.getID();
@@ -210,11 +211,22 @@ public class TimeZoneTest extends CoreTestFmwk {
 
         @Override
         public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (!(o instanceof ZoneDescriptor)) {
+                return false;
+            }
             ZoneDescriptor that = (ZoneDescriptor) o;
             return that != null
                     && id.equals(that.id)
                     && offset == that.offset
                     && daylight == that.daylight;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(id, offset, daylight);
         }
 
         @Override

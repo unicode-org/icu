@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -530,13 +531,23 @@ public class IntlTestDecimalFormatAPIC extends CoreTestFmwk {
 
         @Override
         public boolean equals(Object obj) {
-            if (!(obj instanceof FieldContainer)) return false;
+            if (this == obj) {
+                return true;
+            }
+            if (!(obj instanceof FieldContainer)) {
+                return false;
+            }
 
             FieldContainer fc = (FieldContainer) obj;
             return (start == fc.start
                     && end == fc.end
-                    && attribute == fc.attribute
-                    && value.equals(fc.value));
+                    && Objects.equals(attribute, fc.attribute)
+                    && Objects.equals(value, fc.value));
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(start, end, attribute, value);
         }
     }
 

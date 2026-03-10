@@ -34,7 +34,6 @@ import java.awt.im.spi.InputMethod;
 import java.awt.im.spi.InputMethodContext;
 import java.text.AttributedString;
 import java.text.Collator;
-import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -134,7 +133,9 @@ public class TransliteratorInputMethod implements InputMethod {
 
             // get all the ICU Transliterators
             Enumeration en = Transliterator.getAvailableIDs();
-            TreeSet types = new TreeSet(new LabelComparator());
+            final Collator collator = Collator.getInstance();
+            TreeSet<JLabel> types =
+                    new TreeSet<>((obj1, obj2) -> collator.compare(obj1.getText(), obj1.getText()));
 
             while (en.hasMoreElements()) {
                 String id = (String) en.nextElement();
@@ -718,16 +719,5 @@ class NameRenderer extends JLabel implements ListCellRenderer {
         setFont(list.getFont());
         setOpaque(true);
         return this;
-    }
-}
-
-class LabelComparator implements Comparator {
-    public int compare(Object obj1, Object obj2) {
-        Collator collator = Collator.getInstance();
-        return collator.compare(((JLabel) obj1).getText(), ((JLabel) obj2).getText());
-    }
-
-    public boolean equals(Object obj1) {
-        return obj1 instanceof LabelComparator;
     }
 }

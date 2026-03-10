@@ -25,6 +25,7 @@ import com.ibm.icu.util.SimpleTimeZone;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 import java.text.ParsePosition;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -33,6 +34,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 import org.junit.Test;
@@ -853,11 +855,26 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
 
         @Override
         public boolean equals(Object that) {
+            if (this == that) {
+                return true;
+            }
+            if (!(that instanceof DateOrder)) {
+                return false;
+            }
             DateOrder other = (DateOrder) that;
             return monthLength == other.monthLength
                     && fields[0] == other.fields[0]
                     && fields[1] == other.fields[1]
                     && fields[2] == other.fields[2];
+        }
+
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + Arrays.hashCode(fields);
+            result = prime * result + Objects.hash(monthLength);
+            return result;
         }
     }
 

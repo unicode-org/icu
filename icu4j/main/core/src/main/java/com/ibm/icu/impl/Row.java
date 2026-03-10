@@ -15,7 +15,9 @@ import java.util.Objects;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class Row<C0, C1, C2, C3, C4>
-        implements Comparable<Row<C0, C1, C2, C3, C4>>, Cloneable, Freezable<Row<C0, C1, C2, C3, C4>> {
+        implements Comparable<Row<C0, C1, C2, C3, C4>>,
+                Cloneable,
+                Freezable<Row<C0, C1, C2, C3, C4>> {
     protected Object[] items;
     protected volatile boolean frozen;
 

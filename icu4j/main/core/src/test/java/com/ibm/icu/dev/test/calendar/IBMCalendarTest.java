@@ -30,6 +30,7 @@ import java.text.FieldPosition;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Set;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -1473,6 +1474,9 @@ public class IBMCalendarTest extends CalendarTestFmwk {
 
         @Override
         public boolean equals(Object other) {
+            if (this == other) {
+                return true;
+            }
             if (other instanceof CalFields) {
                 CalFields otr = (CalFields) other;
                 return (year == otr.year
@@ -1484,6 +1488,11 @@ public class IBMCalendarTest extends CalendarTestFmwk {
                         && ms == otr.ms);
             }
             return false;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(year, month, day, hour, min, sec, ms);
         }
 
         boolean isEquivalentTo(Calendar cal) {

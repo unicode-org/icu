@@ -21,7 +21,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
@@ -221,18 +220,7 @@ class UnicodeSetCloseOver {
         // Sort the pairs.  They must be ordered by the folded element.
         // Store these as two-character strings, with charAt(0) being
         // the folded member of the pair.
-        TreeSet sortPairs =
-                new TreeSet(
-                        new Comparator() {
-                            public int compare(Object a, Object b) {
-                                return ((int) ((String) a).charAt(0))
-                                        - ((int) ((String) b).charAt(0));
-                            }
-
-                            public boolean equals(Object obj) {
-                                return false;
-                            }
-                        });
+        TreeSet<String> sortPairs = new TreeSet<>((a, b) -> (int) a.charAt(0) - (int) b.charAt(0));
         for (int i = 0; i < pairs.length(); i += 2) {
             String a = String.valueOf(pairs.charAt(i));
             String b = String.valueOf(pairs.charAt(i + 1));
