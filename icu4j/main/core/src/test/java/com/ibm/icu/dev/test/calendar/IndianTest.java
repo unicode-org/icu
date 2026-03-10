@@ -242,7 +242,7 @@ public class IndianTest extends CalendarTestFmwk {
     @Test
     public void TestYearEdge() {
         // Display dates in ISO 8601 format.
-        DateFormat fmt = new SimpleDateFormat("YYYY-MM-dd", ULocale.US);
+        DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd", ULocale.US);
 
         // Instantiate an Indian calendar.
         ULocale locale = ULocale.US.setKeywordValue("calendar", "indian");

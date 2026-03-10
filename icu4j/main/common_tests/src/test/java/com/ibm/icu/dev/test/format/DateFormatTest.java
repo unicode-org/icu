@@ -4535,22 +4535,10 @@ public class DateFormatTest extends CoreTestFmwk {
         expectParse(DATA, new Locale("en", "", ""));
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
+    @SuppressWarnings("MisusedWeekYear")
     public void TestInvalidPattern() {
-        Exception e = null;
-        SimpleDateFormat f = null;
-        String out = null;
-        try {
-            f = new SimpleDateFormat("Yesterday");
-            out = f.format(new Date(0));
-        } catch (IllegalArgumentException e1) {
-            e = e1;
-        }
-        if (e != null) {
-            logln("Ok: Received " + e.getMessage());
-        } else {
-            errln("FAIL: Expected exception, got " + f.toPattern() + "; " + out);
-        }
+        new SimpleDateFormat("Yesterday").format(new Date(0));
     }
 
     @Test
@@ -7732,6 +7720,7 @@ public class DateFormatTest extends CoreTestFmwk {
     }
 
     @Test
+    @SuppressWarnings("MisusedWeekYear")
     public void TestTwoDigitWOY() { // See ICU Ticket #8514
         String dateText = new String("98MON01");
 
