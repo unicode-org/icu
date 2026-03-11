@@ -449,7 +449,6 @@ public class BigDecimal extends java.lang.Number
      */
     public BigDecimal(java.math.BigDecimal bd) {
         this(bd.toString());
-        return;
     }
 
     /**
@@ -469,7 +468,6 @@ public class BigDecimal extends java.lang.Number
      */
     public BigDecimal(java.math.BigInteger bi) {
         this(bi.toString(10));
-        return;
     }
 
     // exp remains 0
@@ -499,7 +497,6 @@ public class BigDecimal extends java.lang.Number
         this(bi.toString(10));
         if (scale < 0) throw new java.lang.NumberFormatException("Negative scale:" + " " + scale);
         exp = -scale; // exponent is -scale
-        return;
     }
 
     /**
@@ -518,7 +515,6 @@ public class BigDecimal extends java.lang.Number
      */
     public BigDecimal(char inchars[]) {
         this(inchars, 0, inchars.length);
-        return;
     }
 
     /**
@@ -731,7 +727,6 @@ public class BigDecimal extends java.lang.Number
             }
         }
         // say 'BD(c[]): mant[0] mantlen exp ind form:' mant[0] mant.length exp ind form
-        return;
     }
 
     /**
@@ -757,7 +752,6 @@ public class BigDecimal extends java.lang.Number
         // so perhaps it should not be deprecated
         // 2000.06.18: no longer deprecated
         this((new java.math.BigDecimal(num)).toString());
-        return;
     }
 
     /**
@@ -836,7 +830,6 @@ public class BigDecimal extends java.lang.Number
                 if (num == 0) break i;
             }
         } /* i */
-        return;
     }
 
     /**
@@ -883,7 +876,6 @@ public class BigDecimal extends java.lang.Number
                 if (num == 0) break i;
             }
         } /* i */
-        return;
     }
 
     /**
@@ -932,14 +924,12 @@ public class BigDecimal extends java.lang.Number
      */
     public BigDecimal(java.lang.String string) {
         this(string.toCharArray(), 0, string.length());
-        return;
     }
 
     /* <sgml> Make a default BigDecimal object for local use. </sgml> */
 
     private BigDecimal() {
         super();
-        return;
     }
 
     /* ---------------------------------------------------------------- */

@@ -679,8 +679,6 @@ class RBBIRuleScanner {
         el.key = s;
         el.val = usetNode;
         fSetTable.put(el.key, el);
-
-        return;
     }
 
     //

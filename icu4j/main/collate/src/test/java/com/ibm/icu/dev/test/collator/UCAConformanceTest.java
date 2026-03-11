@@ -79,7 +79,6 @@ public class UCAConformanceTest extends TestFmwk {
         logln(
                 "This test is currently disabled, as it is impossible to "
                         + "wholly represent fractional UCA using tailoring rules.");
-        return;
         /*
          * initRbUCA(); if(rbUCA == null) { return; }
          *

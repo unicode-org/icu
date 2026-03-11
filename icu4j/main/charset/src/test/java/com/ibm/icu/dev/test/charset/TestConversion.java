@@ -703,8 +703,6 @@ public class TestConversion extends TestFmwk {
             }
             break;
         }
-
-        return;
     }
 
     private int stepToUnicode(ConversionCase cc, CharsetDecoder decoder, int step) {

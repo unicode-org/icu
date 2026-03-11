@@ -1179,8 +1179,6 @@ public class DiagBigDecimalTest extends CoreTestFmwk {
             flag = true;
         } /* checknull */
         TestFmwk.assertTrue("cst301", flag);
-
-        return;
     }
 
     /** Mutation tests (checks that contents of constant objects are unchanged). */
@@ -16705,7 +16703,6 @@ public class DiagBigDecimalTest extends CoreTestFmwk {
             res = "";
         }
         mathtestcheck(test, lhs, rhs, "pow", res, pow);
-        return;
     }
 
     /* mathtestcheck -- check for general mathtest error
@@ -16754,7 +16751,6 @@ public class DiagBigDecimalTest extends CoreTestFmwk {
         testnum = "gen" + right((new com.ibm.icu.math.BigDecimal(test + 1000)).toString(), 3);
 
         TestFmwk.assertTrue(testnum, flag);
-        return;
     }
 
     /* ------------------------------------------------------------------ */

@@ -2090,7 +2090,6 @@ public class SpoofChecker {
 
             // Add the element to the string builder and return.
             appendValueTo(lo, dest);
-            return;
         }
 
         /**

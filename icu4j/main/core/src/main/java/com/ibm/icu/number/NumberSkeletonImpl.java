@@ -1302,7 +1302,6 @@ class NumberSkeletonImpl {
                 throw new SkeletonSyntaxException("Invalid integer stem", segment);
             }
             macros.integerWidth = IntegerWidth.zeroFillTo(offset);
-            return;
         }
 
         /**

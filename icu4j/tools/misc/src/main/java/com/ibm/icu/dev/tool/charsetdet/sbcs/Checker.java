@@ -170,7 +170,5 @@ public class Checker implements NGramParser.NGramParserClient {
         System.out.println();
 
         dataFile.close();
-
-        return;
     }
 }

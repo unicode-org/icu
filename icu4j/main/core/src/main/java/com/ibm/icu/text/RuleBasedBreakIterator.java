@@ -1355,7 +1355,6 @@ public class RuleBasedBreakIterator extends BreakIterator implements Cloneable {
             fDone = (fBufIdx == initialBufIdx);
             fPosition = fTextIdx;
             fRuleStatusIndex = fStatuses[fBufIdx];
-            return;
         }
         ;
 
@@ -1389,7 +1388,6 @@ public class RuleBasedBreakIterator extends BreakIterator implements Cloneable {
                     current();
                 }
             }
-            return;
         }
         ;
 

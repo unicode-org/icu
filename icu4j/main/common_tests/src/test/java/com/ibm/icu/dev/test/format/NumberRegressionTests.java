@@ -79,7 +79,6 @@ public class NumberRegressionTests extends CoreTestFmwk {
 
         if (nf1.equals(nf2)) errln("Test for bug 4074620 failed");
         else logln("Test for bug 4074620 passed.");
-        return;
     }
 
     /** DecimalFormat.format() incorrectly uses maxFractionDigits setting. */
