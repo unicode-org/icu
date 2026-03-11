@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * <p>Integer hash table.
+ * Integer hash table.
  *
  * @author Mark Davis
  */
