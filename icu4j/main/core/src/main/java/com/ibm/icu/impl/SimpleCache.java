@@ -12,9 +12,8 @@ package com.ibm.icu.impl;
 import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class SimpleCache<K, V> implements ICUCache<K, V> {
     private static final int DEFAULT_CAPACITY = 16;
@@ -22,6 +21,7 @@ public class SimpleCache<K, V> implements ICUCache<K, V> {
     private volatile Reference<Map<K, V>> cacheRef = null;
     private int type = ICUCache.SOFT;
     private int capacity = DEFAULT_CAPACITY;
+    private final Object lock = new Object();
 
     public SimpleCache() {}
 
@@ -58,13 +58,23 @@ public class SimpleCache<K, V> implements ICUCache<K, V> {
             map = ref.get();
         }
         if (map == null) {
-            map = Collections.synchronizedMap(new HashMap<K, V>(capacity));
-            if (type == ICUCache.WEAK) {
-                ref = new WeakReference<Map<K, V>>(map);
-            } else {
-                ref = new SoftReference<Map<K, V>>(map);
+            synchronized (lock) {
+                ref = cacheRef;
+                if (ref != null) {
+                    map = ref.get();
+                }
+                if (map == null) {
+                    // ConcurrentHashMap provides significantly better scaling than
+                    // Collections.synchronizedMap() by using lock-striping and CAS.
+                    map = new ConcurrentHashMap<K, V>(capacity);
+                    if (type == ICUCache.WEAK) {
+                        ref = new WeakReference<Map<K, V>>(map);
+                    } else {
+                        ref = new SoftReference<Map<K, V>>(map);
+                    }
+                    cacheRef = ref;
+                }
             }
-            cacheRef = ref;
         }
         map.put(key, value);
     }
