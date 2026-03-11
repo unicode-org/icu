@@ -11,7 +11,7 @@ package com.ibm.icu.dev.test.normalizer;
 import java.util.HashMap;
 import java.util.Map;
 
-/*
+/**
  * <p>Integer hash table.
  *
  * @author Mark Davis
