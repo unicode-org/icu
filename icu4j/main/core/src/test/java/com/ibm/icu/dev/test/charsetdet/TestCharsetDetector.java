@@ -901,7 +901,7 @@ public class TestCharsetDetector extends CoreTestFmwk {
     }
 
     private CharsetMatch _testIBM424_he_ltr(String s) throws Exception {
-        /** transformation of input string to CP420 left to right requires reversing the string */
+        /* transformation of input string to CP420 left to right requires reversing the string */
         StringBuffer ltrStrBuf = new StringBuffer(s);
         ltrStrBuf = ltrStrBuf.reverse();
         byte[] bytes = ltrStrBuf.toString().getBytes("IBM424");

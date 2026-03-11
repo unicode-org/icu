@@ -358,7 +358,7 @@ class CompoundTransliterator extends Transliterator {
          * - limit' is the value of limit after calling handleKT
          */
 
-        /**
+        /*
          * Example: 3 transliterators. This example illustrates the mechanics we need to implement.
          * C, S, and L are the contextStart, start, and limit. gl is the globalLimit. contextLimit
          * is equal to limit throughout.

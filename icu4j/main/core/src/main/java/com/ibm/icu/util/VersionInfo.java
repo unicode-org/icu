@@ -588,7 +588,7 @@ public final class VersionInfo implements Comparable<VersionInfo> {
 
     // static declaration ------------------------------------------------
 
-    /** Initialize versions only after MAP_ has been created */
+    /* Initialize versions only after MAP_ has been created */
     static {
         UNICODE_1_0 = getInstance(1, 0, 0, 0);
         UNICODE_1_0_1 = getInstance(1, 0, 1, 0);

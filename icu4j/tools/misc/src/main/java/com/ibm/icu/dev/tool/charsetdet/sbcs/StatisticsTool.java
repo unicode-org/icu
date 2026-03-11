@@ -388,7 +388,7 @@ public class StatisticsTool implements NGramParser.NGramParserClient, NGramList.
 
         System.out.println();
 
-        /** Checkers */
+        /* Checkers */
         if (run_checker) {
             for (int c = 0; c < file_count; c += 1) {
                 Checker checker = checkers[c];

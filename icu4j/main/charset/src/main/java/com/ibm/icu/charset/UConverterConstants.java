@@ -142,7 +142,7 @@ interface UConverterConstants {
          * < Called when the converter is closed. The callback should release any allocated memory.
          */
         static final int CLONE = 5;
-        /**
+        /*
          * < Called when safeClone() is called on the converter. the pointer available as the
          * 'context' is an alias to the original converters' context pointer. If the context must be
          * owned by the new converter, the callback must clone the data and call setFromUCallback

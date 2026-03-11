@@ -2940,7 +2940,7 @@ public class UnicodeSet extends UnicodeFilter
 
         chars.skipIgnored(opts);
 
-        /**
+        /*
          * Handle global flags (invert, case insensitivity). If this pattern should be compiled
          * case-insensitive, then we need to close over case BEFORE COMPLEMENTING. This makes
          * patterns like /[^abc]/i work.

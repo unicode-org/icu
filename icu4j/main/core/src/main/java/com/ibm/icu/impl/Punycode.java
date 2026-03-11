@@ -217,7 +217,7 @@ public final class Punycode {
                     /* Represent delta as a generalized variable-length integer: */
                     for (q = delta, k = BASE; /* no condition */ ; k += BASE) {
 
-                        /**
+                        /*
                          * RAM: comment out the old code for conformance with
                          * draft-ietf-idn-punycode-03.txt
                          *

@@ -300,7 +300,7 @@ public final class CollationFastLatin /* all static */ {
 
         // Check for supported characters, fetch mini CEs, and compare primaries.
         int leftIndex = startIndex, rightIndex = startIndex;
-        /**
+        /*
          * Single mini CE or a pair. The current mini CE is in the lower 16 bits, the next one is in
          * the upper 16 bits. If there is only one, then it is in the lower bits, and the upper bits
          * are 0.

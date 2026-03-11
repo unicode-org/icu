@@ -571,7 +571,7 @@ public final class LocaleDistanceBuilder {
 
         rmb.build();
 
-        /**
+        /*
          * Used for processing rules. At the start we have a variable setting like $A1=US+CA+MX. We
          * generate a mapping from $A1 to a set of partitions {P1, P2} When we hit a rule that
          * contains a variable, we replace that rule by multiple rules for the partitions.

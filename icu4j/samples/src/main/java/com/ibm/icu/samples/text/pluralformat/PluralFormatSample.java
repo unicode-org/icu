@@ -84,7 +84,7 @@ public class PluralFormatSample {
 
             System.out.printf("%-16s%-16s%-16s\n", num, msgEn, msgSl);
         }
-        /**
+        /*
          * output of the sample code:
          * ******************************************************************* Number English
          * Slovenian 0 0 dogs 0 psov 1 1 dog 1 pes 2 2 dogs 2 psa 3 3 dogs 3 psi 4 4 dogs 4 psi 5 5
