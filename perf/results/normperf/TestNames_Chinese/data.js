@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1773394043460,
+  "lastUpdate": 1773445629319,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -90957,6 +90957,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 22.378,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "aszeto@google.com",
+            "name": "Andrew Szeto",
+            "username": "jabagawee"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "fee8fd9c65e849c864ee30b45eebc43d9b09b6d4",
+          "message": "ICU-23321 Reduce lock contention in ULocale and fix SimpleCache races\n\nSimpleCache: Replace Collections.synchronizedMap with ConcurrentHashMap\nand use double-checked locking for map creation. The old code had a\ncheck-then-act race in put() where two threads could both see a null\nmap, both create new maps, and one would silently overwrite the other's\nentries. ConcurrentHashMap also provides lock-free reads via lock\nstriping, eliminating the global lock on every get().\n\nULocale: Replace the synchronized isKnownCanonicalizedLocale() with the\nInitialization-on-demand Holder idiom (JLS 12.4.2). The old code\nacquired a class-level monitor on every call to canonicalize() just to\ncheck a set membership. The holder class provides thread-safe lazy\ninitialization with zero synchronization overhead after first access.\n\nTests: Add SimpleCacheTest (concurrent put/get stress test for SOFT and\nWEAK cache types) and ULocaleConcurrencyTest (50-thread hammer test for\ncanonicalize). Both are exhaustive-only to avoid adding CI runtime.",
+          "timestamp": "2026-03-13T16:14:27-07:00",
+          "tree_id": "eab56e08699ea9f89e1401d7c875104dcf4b4b9e",
+          "url": "https://github.com/unicode-org/icu/commit/fee8fd9c65e849c864ee30b45eebc43d9b09b6d4"
+        },
+        "date": 1773445242151,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 17.1123,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 17.1657,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 18.3142,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 17.9755,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 17.9763,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 22.1652,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
