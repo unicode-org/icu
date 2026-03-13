@@ -318,15 +318,18 @@
 
 # metaZones.xml - metaZones.txt
 //supplementalData/metaZones/mapTimezones[@type="metazones"]/mapZone[@type="(%A)"][@other="(%W)"][@territory="(%W)"] ; /mapTimezones/$2/$3 ; values=$1
+# if we just have metazone ID, we have a 1-element array with metazone ID
 //supplementalData/metaZones/metazoneInfo/timezone[@type="(%W)"]/usesMetazone[@mzone="(%W)"] ; /metazoneInfo/"$1"/<$2> ; values=$2
+# if we also have from and/or to, then we have a 3-element array, with from/to (possibly default) as the 2nd/3rd elements
 //supplementalData/metaZones/metazoneInfo/timezone[@type="(%W)"]/usesMetazone[@from="(%A)"][@mzone="(%W)"] ; /metazoneInfo/"$1"/<$2> ; values=$3 "$2" "9999-12-31 23:59"
 //supplementalData/metaZones/metazoneInfo/timezone[@type="(%W)"]/usesMetazone[@from="(%A)"][@to="(%A)"][@mzone="(%W)"] ; /metazoneInfo/"$1"/<$2> ; values=$4 "$2" "$3"
 //supplementalData/metaZones/metazoneInfo/timezone[@type="(%W)"]/usesMetazone[@to="(%A)"][@mzone="(%W)"] ; /metazoneInfo/"$1"/<1970-01-01 00:00> ; values=$3 "1970-01-01 00:00" "$2"
-# Ignore any stdOffset/dstOffset values for now, see CLDR-18880.
-//supplementalData/metaZones/metazoneInfo/timezone[@type="(%W)"]/usesMetazone[@from="(%A)"][@mzone="(%W)"][@stdOffset="(%A)"][@dstOffset="(%A)"] ; /metazoneInfo/"$1"/<$2> ; values=$3 "$2" "9999-12-31 23:59"
-//supplementalData/metaZones/metazoneInfo/timezone[@type="(%W)"]/usesMetazone[@from="(%A)"][@to="(%A)"][@mzone="(%W)"][@stdOffset="(%A)"][@dstOffset="(%A)"] ; /metazoneInfo/"$1"/<$2> ; values=$4 "$2" "$3"
-//supplementalData/metaZones/metazoneInfo/timezone[@type="(%W)"]/usesMetazone[@to="(%A)"][@mzone="(%W)"][@stdOffset="(%A)"][@dstOffset="(%A)"] ; /metazoneInfo/"$1"/<1970-01-01 00:00> ; values=$3 "1970-01-01 00:00" "$2"
-#
+# if we have stdOffset and dstOffset, then we have a 5-element array, with from/to (possibly default) as the 2nd/3rd elements, and stdOffset/dstOffset as the 4th/5th
+//supplementalData/metaZones/metazoneInfo/timezone[@type="(%W)"]/usesMetazone[@mzone="(%W)"][@stdOffset="(%A)"][@dstOffset="(%A)"] ; /metazoneInfo/"$1"/<$2> ; values=$2 "1970-01-01 00:00" "9999-12-31 23:59" "$3" "$4"
+//supplementalData/metaZones/metazoneInfo/timezone[@type="(%W)"]/usesMetazone[@from="(%A)"][@mzone="(%W)"][@stdOffset="(%A)"][@dstOffset="(%A)"] ; /metazoneInfo/"$1"/<$2> ; values=$3 "$2" "9999-12-31 23:59" "$4" "$5"
+//supplementalData/metaZones/metazoneInfo/timezone[@type="(%W)"]/usesMetazone[@from="(%A)"][@to="(%A)"][@mzone="(%W)"][@stdOffset="(%A)"][@dstOffset="(%A)"] ; /metazoneInfo/"$1"/<$2> ; values=$4 "$2" "$3" "$5" "$6"
+//supplementalData/metaZones/metazoneInfo/timezone[@type="(%W)"]/usesMetazone[@to="(%A)"][@mzone="(%W)"][@stdOffset="(%A)"][@dstOffset="(%A)"] ; /metazoneInfo/"$1"/<1970-01-01 00:00> ; values=$3 "1970-01-01 00:00" "$2" "$4" "$5"
+#    
 //supplementalData/metaZones/metazoneIds/metazoneId[@shortId="(%A)"][@longId="(%A)"][@deprecated="false"] ; /metazoneIds/$1 ; values=$2
 
 //supplementalData/primaryZones/primaryZone[@iso3166="(%W)"] ; /primaryZones/$1 ; values={value}

@@ -680,10 +680,13 @@ ZoneMeta::createMetazoneMappings(const UnicodeString &tzid) {
                 const char16_t *mz_from = gDefaultFrom;
                 const char16_t *mz_to = gDefaultTo;
 
-                if (ures_getSize(mz) == 3) {
+                if (ures_getSize(mz) >= 3) {
                     mz_from = ures_getStringByIndex(mz, 1, nullptr, &status);
                     mz_to   = ures_getStringByIndex(mz, 2, nullptr, &status);
                 }
+                // if (ures_getSize(mz) >= 5) {
+                //     we have stdOffset and dstOffset, use them: ICU-23338
+                // }
 
                 if(U_FAILURE(status)){
                     status = U_ZERO_ERROR;
