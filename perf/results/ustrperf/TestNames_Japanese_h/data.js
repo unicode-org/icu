@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1773395550715,
+  "lastUpdate": 1773445506492,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -144477,6 +144477,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 39.4855,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "aszeto@google.com",
+            "name": "Andrew Szeto",
+            "username": "jabagawee"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "fee8fd9c65e849c864ee30b45eebc43d9b09b6d4",
+          "message": "ICU-23321 Reduce lock contention in ULocale and fix SimpleCache races\n\nSimpleCache: Replace Collections.synchronizedMap with ConcurrentHashMap\nand use double-checked locking for map creation. The old code had a\ncheck-then-act race in put() where two threads could both see a null\nmap, both create new maps, and one would silently overwrite the other's\nentries. ConcurrentHashMap also provides lock-free reads via lock\nstriping, eliminating the global lock on every get().\n\nULocale: Replace the synchronized isKnownCanonicalizedLocale() with the\nInitialization-on-demand Holder idiom (JLS 12.4.2). The old code\nacquired a class-level monitor on every call to canonicalize() just to\ncheck a set membership. The holder class provides thread-safe lazy\ninitialization with zero synchronization overhead after first access.\n\nTests: Add SimpleCacheTest (concurrent put/get stress test for SOFT and\nWEAK cache types) and ULocaleConcurrencyTest (50-thread hammer test for\ncanonicalize). Both are exhaustive-only to avoid adding CI runtime.",
+          "timestamp": "2026-03-13T16:14:27-07:00",
+          "tree_id": "eab56e08699ea9f89e1401d7c875104dcf4b4b9e",
+          "url": "https://github.com/unicode-org/icu/commit/fee8fd9c65e849c864ee30b45eebc43d9b09b6d4"
+        },
+        "date": 1773445109733,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 19.1345,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 21.2696,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 24.6816,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 27.7829,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 38.3511,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 36.3166,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 27.0722,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 16.0297,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 86.2093,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 21.7223,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 36.4735,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 39.5845,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
