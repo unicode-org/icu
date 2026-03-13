@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1773393733766,
+  "lastUpdate": 1773445248618,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -118479,6 +118479,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 3338.144,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "aszeto@google.com",
+            "name": "Andrew Szeto",
+            "username": "jabagawee"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "fee8fd9c65e849c864ee30b45eebc43d9b09b6d4",
+          "message": "ICU-23321 Reduce lock contention in ULocale and fix SimpleCache races\n\nSimpleCache: Replace Collections.synchronizedMap with ConcurrentHashMap\nand use double-checked locking for map creation. The old code had a\ncheck-then-act race in put() where two threads could both see a null\nmap, both create new maps, and one would silently overwrite the other's\nentries. ConcurrentHashMap also provides lock-free reads via lock\nstriping, eliminating the global lock on every get().\n\nULocale: Replace the synchronized isKnownCanonicalizedLocale() with the\nInitialization-on-demand Holder idiom (JLS 12.4.2). The old code\nacquired a class-level monitor on every call to canonicalize() just to\ncheck a set membership. The holder class provides thread-safe lazy\ninitialization with zero synchronization overhead after first access.\n\nTests: Add SimpleCacheTest (concurrent put/get stress test for SOFT and\nWEAK cache types) and ULocaleConcurrencyTest (50-thread hammer test for\ncanonicalize). Both are exhaustive-only to avoid adding CI runtime.",
+          "timestamp": "2026-03-13T16:14:27-07:00",
+          "tree_id": "eab56e08699ea9f89e1401d7c875104dcf4b4b9e",
+          "url": "https://github.com/unicode-org/icu/commit/fee8fd9c65e849c864ee30b45eebc43d9b09b6d4"
+        },
+        "date": 1773444850619,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 78249.3247,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 167606.115,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.5621,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 10.4681,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 6.3744,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 20011.9723,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 66770.8858,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 3361.8917,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
