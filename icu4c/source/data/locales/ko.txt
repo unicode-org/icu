@@ -1074,6 +1074,14 @@ ko{
                 "오전",
                 "오후",
             }
+            AmPmMarkersAbbr{
+                "오전",
+                "오후",
+            }
+            AmPmMarkersNarrow{
+                "오전",
+                "오후",
+            }
             DateTimePatterns{
                 "a h시 m분 s초 zzzz",
                 "a h시 m분 s초 z",
@@ -1208,6 +1216,14 @@ ko{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        am{"오전"}
+                        pm{"오후"}
+                    }
+                    narrow{
+                        am{"오전"}
+                        pm{"오후"}
+                    }
                     wide{
                         am{"오전"}
                         pm{"오후"}
