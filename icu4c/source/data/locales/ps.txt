@@ -227,6 +227,10 @@ ps{
                 "غ.م.",
                 "غ.و.",
             }
+            AmPmMarkersAbbr{
+                "غ.م.",
+                "غ.و.",
+            }
             AmPmMarkersNarrow{
                 "غ.م.",
                 "غ.و.",
