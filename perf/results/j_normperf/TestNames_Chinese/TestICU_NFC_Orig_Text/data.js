@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1773444279533,
+  "lastUpdate": 1773685370826,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -43017,6 +43017,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFC_Orig_Text",
             "value": 4.227569731650431,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "734fa45b2e2861ee099775653334de7592b9fba2",
+          "message": "ICU-23247 Fix Errorprone MisusedDayOfYear & MisusedWeekYear errors",
+          "timestamp": "2026-03-16T11:12:30-07:00",
+          "tree_id": "72a984602161228b40c204606fc627755de5d874",
+          "url": "https://github.com/unicode-org/icu/commit/734fa45b2e2861ee099775653334de7592b9fba2"
+        },
+        "date": 1773684978703,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 4.272862262294933,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
