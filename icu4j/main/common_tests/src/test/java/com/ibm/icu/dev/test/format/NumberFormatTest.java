@@ -4344,6 +4344,7 @@ public class NumberFormatTest extends CoreTestFmwk {
     }
 
     @Test
+    @SuppressWarnings("SelfEquals")
     public void TestCurrencyAmountCoverage() {
         CurrencyAmount ca, cb;
 

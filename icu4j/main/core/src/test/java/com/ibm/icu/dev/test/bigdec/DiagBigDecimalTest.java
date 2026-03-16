@@ -2166,6 +2166,7 @@ public class DiagBigDecimalTest extends CoreTestFmwk {
     /* ----------------------------------------------------------------- */
     /** Test the {@link com.ibm.icu.math.BigDecimal#compareTo(BigDecimal)} method. */
     @Test
+    @SuppressWarnings("SelfComparison")
     public void diagcompareto() {
         boolean flag = false;
         java.lang.ArithmeticException ae = null;

@@ -4613,6 +4613,7 @@ public class DateFormatTest extends CoreTestFmwk {
     }
 
     @Test
+    @SuppressWarnings({"IdentityBinaryExpression", "SelfEquals"})
     public void TestCoverage() {
         Date now = new Date();
         Calendar cal = new GregorianCalendar();

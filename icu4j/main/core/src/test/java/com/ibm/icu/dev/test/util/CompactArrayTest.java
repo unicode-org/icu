@@ -22,6 +22,7 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public final class CompactArrayTest extends CoreTestFmwk {
     @Test
+    @SuppressWarnings("SelfEquals")
     public void TestByteArrayCoverage() {
         CompactByteArray cba = new CompactByteArray();
         cba.setElementAt((char) 0x5, (byte) 0xdf);
@@ -84,6 +85,7 @@ public final class CompactArrayTest extends CoreTestFmwk {
     }
 
     @Test
+    @SuppressWarnings("SelfEquals")
     public void TestCharArrayCoverage() {
         // v1.8 fails with extensive compaction, so set to false
         final boolean EXTENSIVE = false;

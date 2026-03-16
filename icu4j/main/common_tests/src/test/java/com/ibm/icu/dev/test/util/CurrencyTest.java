@@ -44,6 +44,7 @@ import org.junit.runners.JUnit4;
 public class CurrencyTest extends CoreTestFmwk {
     /** Test of basic API. */
     @Test
+    @SuppressWarnings("SelfEquals")
     public void TestAPI() {
         Currency usd = Currency.getInstance("USD");
         /*int hash = */ usd.hashCode();

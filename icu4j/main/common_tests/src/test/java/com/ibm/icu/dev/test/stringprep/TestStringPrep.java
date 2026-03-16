@@ -301,6 +301,7 @@ public class TestStringPrep extends CoreTestFmwk {
 
     /* Tests the method public boolean equals(Object other) for StringPrepParseException */
     @Test
+    @SuppressWarnings("SelfEquals")
     public void TestStringPrepParseExceptionEquals() {
         StringPrepParseException sppe = new StringPrepParseException("dummy", 0, "dummy", 0, 0);
         StringPrepParseException sppe_clone =

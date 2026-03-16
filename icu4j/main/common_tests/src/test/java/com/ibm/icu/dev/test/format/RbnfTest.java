@@ -65,6 +65,7 @@ public class RbnfTest extends CoreTestFmwk {
                     + "   10: <0</10;\n";
 
     @Test
+    @SuppressWarnings("SelfEquals")
     public void TestCoverage() {
         String durationInSecondsRules =
                 // main rule set for formatting with words
@@ -1469,6 +1470,7 @@ public class RbnfTest extends CoreTestFmwk {
      *      public boolean equals(Object that)
      */
     @Test
+    @SuppressWarnings("SelfEquals")
     public void TestEquals() {
         // Tests when "if (!(that instanceof RuleBasedNumberFormat))" is true
         RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat("dummy");

@@ -180,6 +180,7 @@ public class CalendarRegressionTest extends CoreTestFmwk {
     }
 
     @Test
+    @SuppressWarnings("SelfEquals")
     public void Test4035301() {
 
         try {
