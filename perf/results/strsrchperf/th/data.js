@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1773686063668,
+  "lastUpdate": 1773692985597,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -52629,6 +52629,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 80.3295,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "8ff88ddb21fc30dfa84700c2f45dcb6d50199df3",
+          "message": "ICU-23247 Fix errorprone IdentityBinaryExpression, SelfComparison, SelfEquals",
+          "timestamp": "2026-03-16T13:06:40-07:00",
+          "tree_id": "8e72bceec5366bcc0979eb96bf4616715ad41b77",
+          "url": "https://github.com/unicode-org/icu/commit/8ff88ddb21fc30dfa84700c2f45dcb6d50199df3"
+        },
+        "date": 1773692584703,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 32.805,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 79.9631,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
