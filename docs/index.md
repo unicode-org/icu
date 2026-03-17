@@ -23,7 +23,7 @@ This is the new home of the User Guide (since 2020 August).
 
 ## ICU Site
 
-The official ICU Site is located at https://icu.unicode.org/.
+The official ICU Site is located at <https://icu.unicode.org/>.
 It is the official landing page for the ICU project.
 
 Some of the pages from the ICU Site have been migrated here.
@@ -35,11 +35,13 @@ The [Downloading ICU](download) page has been migrated here.
 
 ### Latest Release
 
-***2025-10-30: [ICU 78](78.md) is now available*** —
-[releases/tag/release-78.1](https://github.com/unicode-org/icu/releases/tag/release-78.1) —
-Maven: [com.ibm.icu / icu4j / version 78.1](https://mvnrepository.com/artifact/com.ibm.icu/icu4j/78.1)
+***2026-03-17: [ICU 78.3](download/78.md) is now available*** —
+[releases/tag/release-78.3](https://github.com/unicode-org/icu/releases/tag/release-78.3) —
+Maven: [com.ibm.icu / icu4j / version 78.3](https://mvnrepository.com/artifact/com.ibm.icu/icu4j/78.3)
 
-ICU 78 updates to
+- This is a maintenance release. It supersedes ICU 78.1 and 78.2.
+
+2025-10-30: [ICU 78](download/78.md) updates to
 [Unicode 17](https://www.unicode.org/versions/Unicode17.0.0/)
 ([blog](https://blog.unicode.org/2025/09/unicode-170-release-announcement.html)),
 including new characters and scripts, emoji, collation & IDNA changes, and corresponding APIs and implementations.
