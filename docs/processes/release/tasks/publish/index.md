@@ -98,6 +98,45 @@ git push -u upstream maint/maint-63
 
 #### Tagging
 
+Creating a Github release can be done through the command line or manually through
+Github's UI.
+It is preferred to use the command line since it makes the work easier and less error prone.
+
+> :point_right: **Note**: The release tag name convention changed with ICU 78.
+Prior, the convention was like `release-63-rc` or `release-63-1`.
+Afterwards, the convention is like `release-63.1rc` or `release-63.1`.
+
+> :point_right: **Note**: The "latest" tag is no longer updated. It was agreed by the ICU-TC to be
+deleted around the 64.2 time-frame, as it doesn't work well with with Git. (You
+need to force-push the new tag, and if somebody has already cloned the
+repository, they might have something different for the "latest" tag).
+A possible future alternative might be a sym-link folder, or HTTP redirect that
+points to the latest release.
+
+> :point_right: **Note**: We no longer need to add the note about Git LFS files, as GitHub now includes
+them in the auto-generated .zip downloads.
+
+##### Command Line Tagging & Release Creation
+
+Run the following command at the command line, adjusting the values for
+the branch, release tag name, and release title accordingly.
+
+```shell
+export BRANCH=maint/maint-78
+export REL_TAG=release-78.3
+export TITLE="ICU 78.3"
+
+gh release create "${REL_TAG}" \
+        --draft \
+        --prerelease \
+        --target "${BRANCH}" \
+        --title "${TITLE}" \
+        --repo unicode-org/icu
+
+```
+
+##### Manual Tagging & Release Creation
+
 Use the GitHub GUI to create both the "release" and the "tag" at the same time:
 
 <https://github.com/unicode-org/icu/releases/new>
@@ -120,19 +159,7 @@ and then to edit the Github release entry's settings.
 which has the effect of converting the release into  a regular release.
     1. The next settings change should check the box that says "Set as the latest release".
 
-Note: The "latest" tag is no longer updated. It was agreed by the ICU-TC to be
-deleted around the 64.2 time-frame, as it doesn't work well with with Git. (You
-need to force-push the new tag, and if somebody has already cloned the
-repository, they might have something different for the "latest" tag).
-A possible future alternative might be a sym-link folder, or HTTP redirect that
-points to the latest release.
 
-Note: We no longer need to add the note about Git LFS files, as GitHub now includes
-them in the auto-generated .zip downloads.
-
-Note: The release tag name convention changed with ICU 78.
-Prior, the convention was like `release-63-rc` or `release-63-1`.
-Afterwards, the convention is like `release-63.1rc` or `release-63.1`.
 
 #### Maintenance release
 
