@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1773781404821,
+  "lastUpdate": 1773792304721,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -43167,6 +43167,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 254.45692319564344,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "6f30a10495046de158b91c8957dfaf5b8b819c1a",
+          "message": "ICU-23248 Update BRS release tag instructions for CLI release creation\n\nSee #3906",
+          "timestamp": "2026-03-17T16:53:53-07:00",
+          "tree_id": "807c8b897ab4492ac9df6b39ce170d7541d5cd42",
+          "url": "https://github.com/unicode-org/icu/commit/6f30a10495046de158b91c8957dfaf5b8b819c1a"
+        },
+        "date": 1773791916964,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 251.850132734488,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
