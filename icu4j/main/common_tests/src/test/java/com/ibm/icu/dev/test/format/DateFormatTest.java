@@ -9409,4 +9409,17 @@ public class DateFormatTest extends CoreTestFmwk {
                 "September 25, 2568 BE at 7:47\u202FPM",
                 "Thu, September 25, 2568 BE at 7:47\u202FPM PDT");
     }
+
+    @Test
+    public void TestDayPeriodFallback() {
+        Locale testLocale = new Locale("nv");
+        DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance(testLocale);
+        SimpleDateFormat sdf = new SimpleDateFormat(dtpg.getBestPattern("Bhm"), testLocale);
+        Date testDate = new Date(99, 9, 13, 23, 58, 59);
+        String formattedDate = sdf.format(testDate);
+
+        if (!formattedDate.equals("11:58 PM")) {
+            errln("FAIL: Wrong formatting result, expected 11:58 PM, got " + formattedDate);
+        }
+    }
 }

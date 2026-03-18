@@ -290,10 +290,13 @@ public final class DayPeriodRules {
         while (ruleSetNum == null) {
             ruleSetNum = DATA.localesToRuleSetNumMap.get(localeCode);
             if (ruleSetNum == null) {
-                localeCode = ULocale.getFallback(localeCode);
-                if (localeCode.isEmpty()) {
-                    // Saves a lookup in the map.
+                if (localeCode.equals("root")) {
                     break;
+                } else {
+                    localeCode = ULocale.getFallback(localeCode);
+                    if (localeCode.isEmpty()) {
+                        localeCode = "root";
+                    }
                 }
             } else {
                 break;

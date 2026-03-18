@@ -1977,24 +1977,6 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
                     // first
                     // loading of an instance) if a relevant pattern character (b or B) is used.
                     DayPeriodRules ruleSet = DayPeriodRules.getInstance(getLocale());
-                    if (ruleSet == null) {
-                        // Data doesn't exist for the locale we're looking for.
-                        // Fall back to am/pm.
-                        // We are passing a different patternCharToOutput because we want to add
-                        // 'B' to field position. This makes this fallback stable when
-                        // there is a data change on locales.
-                        subFormat(
-                                buf,
-                                'a',
-                                count,
-                                beginOffset,
-                                fieldNum,
-                                capitalizationContext,
-                                pos,
-                                'B',
-                                cal);
-                        return;
-                    }
 
                     // Get current display time.
                     int hour = cal.get(Calendar.HOUR_OF_DAY);

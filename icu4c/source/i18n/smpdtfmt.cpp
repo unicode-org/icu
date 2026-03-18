@@ -1956,15 +1956,6 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
             // Data doesn't conform to spec, therefore loading failed.
             break;
         }
-        if (ruleSet == nullptr) {
-            // Data doesn't exist for the locale we're looking for.
-            // Falling back to am/pm.
-            // We are passing a different fieldToOutput because we want to add
-            // 'B' to field position. This makes this fallback stable when
-            // there is a data change on locales.
-            subFormat(appendTo, u'a', count, capitalizationContext, fieldNum, u'B', handler, cal, status);
-            return;
-        }
 
         // Get current display time.
         int32_t hour = cal.get(UCAL_HOUR_OF_DAY, status);

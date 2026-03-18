@@ -142,6 +142,8 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
     TESTCASE_AUTO(TestLongLocale);
     TESTCASE_AUTO(TestChineseCalendar23043);
     TESTCASE_AUTO(TestAmPmLengths23114);
+    
+    TESTCASE_AUTO(TestDayPeriodFallback);
 
     TESTCASE_AUTO_END;
 }
@@ -6035,6 +6037,26 @@ void DateFormatTest::TestAmPmLengths23114() {
     dfs->setAmPmStrings(amPmStrings.data(), 2, ignoredContext, DateFormatSymbols::NARROW);
     borrowedAmPm = dfs->getAmPmStrings(countAmPm, ignoredContext, DateFormatSymbols::NARROW);
     assertEquals("DateFormatSymbols narrow after set", u"am!", borrowedAmPm[0]);
+}
+
+void DateFormatTest::TestDayPeriodFallback() {
+    IcuTestErrorCode status(*this, "TestDayPeriodFallback");
+    
+    Locale locale(Locale::forLanguageTag("nv", status)); // Navajo is used because it doesn't have day period rules
+    status.assertSuccess();
+    
+    LocalPointer<DateTimePatternGenerator> dtpg(
+            DateTimePatternGenerator::createInstance(locale, status));
+    UnicodeString pattern = dtpg->getBestPattern(u"Bhm", status);
+    SimpleDateFormat sdf(pattern, locale, status);
+    
+    UnicodeString formattedDate;
+    UDate sampleDate = LocaleTest::date(99, 9, 13, 23, 58, 59);
+    sdf.format(sampleDate, formattedDate);
+    
+    if (assertSuccess("Failed to set up date formatter", status)) {
+        assertEquals("Wrong formatting result", u"11:58 PM", formattedDate);
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
