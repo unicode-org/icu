@@ -549,4 +549,45 @@ public class NumberSkeletonTest extends CoreTestFmwk {
                     "Wrong result: " + languageTag + ":" + skeleton, expectedResult, actualResult);
         }
     }
+
+    @Test
+    public void unitAliases() {
+        class TestCase {
+            String skeleton;
+            String expectedResult;
+
+            TestCase(String skeleton, String expectedResult) {
+                this.skeleton = skeleton;
+                this.expectedResult = expectedResult;
+            }
+        }
+
+        TestCase[] testCases =
+                new TestCase[] {
+                    new TestCase("measure-unit/concentr-part-per-1e6", "3.14 ppm"),
+                    new TestCase("measure-unit/concentr-part-per-million", "3.14 ppm"),
+                    new TestCase("measure-unit/concentr-permillion", "3.14 ppm"),
+                    new TestCase(
+                            "measure-unit/concentr-milligram-ofglucose-per-deciliter",
+                            "3.14 mg/dL"),
+                    new TestCase("measure-unit/concentr-milligram-per-deciliter", "3.14 mg/dL"),
+                    new TestCase("measure-unit/mass-tonne", "3.14 t"),
+                    new TestCase("measure-unit/mass-metric-ton", "3.14 t"),
+                };
+
+        for (TestCase testCase : testCases) {
+            try {
+                LocalizedNumberFormatter nf =
+                        NumberFormatter.forSkeleton(testCase.skeleton).locale(Locale.US);
+                String actualResult = nf.format(3.14).toString();
+
+                assertEquals(
+                        "Wrong result for " + testCase.skeleton + ":",
+                        testCase.expectedResult,
+                        actualResult);
+            } catch (SkeletonSyntaxException e) {
+                fail(testCase.skeleton);
+            }
+        }
+    }
 }

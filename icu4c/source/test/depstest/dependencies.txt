@@ -890,7 +890,7 @@ library: i18n
     formatting formattable_cnv regex regex_cnv translit
     double_conversion number_representation number_output numberformatter
     number_skeletons number_usageprefs numberparser
-    units_extra unitsformatter
+    units unitsformatter
     universal_time_scale
     uclean_i18n
     display_options
@@ -1055,7 +1055,7 @@ group: number_skeletons
     number_skeletons.o number_capi.o number_asformat.o numrange_capi.o
   deps
     numberformatter
-    units_extra
+    units
 
 group: number_symbolswrapper
     number_symbolswrapper.o
@@ -1126,21 +1126,16 @@ group: sharedbreakiterator
   deps
     breakiterator
 
-group: units_extra
-    measunit_extra.o
-  deps
-    units bytestriebuilder bytestrie resourcebundle uclean_i18n
-    double_conversion
-
 group: units
-    measunit.o currunit.o
+    measunit.o currunit.o measunit_extra.o
   deps
-    stringenumeration errorcode
+    stringenumeration errorcode bytestriebuilder bytestrie resourcebundle uclean_i18n
+    double_conversion
 
 group: unitsformatter
     units_data.o units_converter.o units_complexconverter.o units_router.o
   deps
-    resourcebundle units_extra double_conversion number_representation formattable sort
+    resourcebundle units double_conversion number_representation formattable sort
     number_rounding
 
 group: decnumber

@@ -1076,7 +1076,7 @@ void blueprint_helpers::parseMeasureUnitOption(const StringSegment& segment, Mac
     if (MeasureUnit::validateAndGet(type.toStringPiece(), subType.toStringPiece(), unit)) {
         macros.unit = unit;
         return;
-    } 
+    }
     
     status = U_NUMBER_SKELETON_SYNTAX_ERROR;
 }

@@ -2767,16 +2767,21 @@ StringEnumeration* MeasureUnit::getAvailableTypes(UErrorCode &errorCode) {
 }
 
 bool MeasureUnit::validateAndGet(StringPiece type, StringPiece subtype, MeasureUnit &result) {
-    // Find the type index using binary search
+    // Find the type and subtype indices using binary search
     int32_t typeIdx = binarySearch(gTypes, 0, UPRV_LENGTHOF(gTypes), type);
-    if (typeIdx == -1) {
-        return false;  // Type not found
-    }
+    int32_t subtypeIdx = typeIdx >= 0 ? binarySearch(typeIdx, subtype) : -1;
     
-    // Find the subtype within the type's range using binary search
-    int32_t subtypeIdx = binarySearch(typeIdx, subtype);
-    if (subtypeIdx == -1) {
-        return false;  // Subtype not found
+    if (typeIdx >= 0 && subtypeIdx < 0) {
+        // if we did find the type, but didn't find the subtype, that might be because the sybtype name
+        // is an alias-- try using MeasureUnit::forIdentifier(), which will resolve aliases
+        UErrorCode localStatus = U_ZERO_ERROR;
+        MeasureUnit tempUnit = MeasureUnit::forIdentifier(subtype, localStatus);
+        if (U_SUCCESS(localStatus) && uprv_strcmp(type.data(), tempUnit.getType()) == 0) {
+            subtypeIdx = tempUnit.fSubTypeId + gOffsets[tempUnit.fTypeId];
+        }
+    }
+    if (typeIdx < 0 || subtypeIdx < 0) {
+        return false;
     }
     
     // Create the MeasureUnit and return it

@@ -890,6 +890,23 @@ public class MeasureUnit implements Serializable {
         return units != null ? units.get(subtype) : null;
     }
 
+    @Deprecated
+    public static MeasureUnit validateAndGet(String type, String subtype) {
+        MeasureUnit result = MeasureUnit.getUnit(type, subtype);
+
+        if (result == null) {
+            try {
+                result = MeasureUnit.forIdentifier(subtype);
+                if (!result.getType().equals(type)) {
+                    result = null;
+                }
+            } catch (IllegalArgumentException e) {
+                // leave result as null
+            }
+        }
+        return result;
+    }
+
     static final UnicodeSet ASCII = new UnicodeSet('a', 'z').freeze();
     static final UnicodeSet ASCII_HYPHEN_DIGITS =
             new UnicodeSet('-', '-', '0', '9', 'a', 'z').freeze();

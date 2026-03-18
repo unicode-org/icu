@@ -1094,11 +1094,12 @@ class NumberSkeletonImpl {
             }
             String type = segment.subSequence(0, firstHyphen).toString();
             String subType = segment.subSequence(firstHyphen + 1, segment.length()).toString();
-            MeasureUnit unit = MeasureUnit.getUnit(type, subType);
+            MeasureUnit unit = MeasureUnit.validateAndGet(type, subType);
             if (unit != null) {
                 macros.unit = unit;
                 return;
             }
+
             throw new SkeletonSyntaxException("Unknown measure unit", segment);
         }
 
