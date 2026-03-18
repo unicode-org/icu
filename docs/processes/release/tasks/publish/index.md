@@ -102,20 +102,6 @@ Creating a Github release can be done through the command line or manually throu
 Github's UI.
 It is preferred to use the command line since it makes the work easier and less error prone.
 
-> :point_right: **Note**: The release tag name convention changed with ICU 78.
-Prior, the convention was like `release-63-rc` or `release-63-1`.
-Afterwards, the convention is like `release-63.1rc` or `release-63.1`.
-
-> :point_right: **Note**: The "latest" tag is no longer updated. It was agreed by the ICU-TC to be
-deleted around the 64.2 time-frame, as it doesn't work well with with Git. (You
-need to force-push the new tag, and if somebody has already cloned the
-repository, they might have something different for the "latest" tag).
-A possible future alternative might be a sym-link folder, or HTTP redirect that
-points to the latest release.
-
-> :point_right: **Note**: We no longer need to add the note about Git LFS files, as GitHub now includes
-them in the auto-generated .zip downloads.
-
 ##### Command Line Tagging & Release Creation
 
 Run the following command at the command line, adjusting the values for
@@ -132,7 +118,6 @@ gh release create "${REL_TAG}" \
         --target "${BRANCH}" \
         --title "${TITLE}" \
         --repo unicode-org/icu
-
 ```
 
 ##### Manual Tagging & Release Creation
@@ -159,7 +144,21 @@ and then to edit the Github release entry's settings.
 which has the effect of converting the release into  a regular release.
     1. The next settings change should check the box that says "Set as the latest release".
 
+##### Notes on Tags and Release Pages
 
+> :point_right: **Note**: The release tag name convention changed with ICU 78.
+Prior, the convention was like `release-63-rc` or `release-63-1`.
+Afterwards, the convention is like `release-63.1rc` or `release-63.1`.
+
+> :point_right: **Note**: The "latest" tag is no longer updated. It was agreed by the ICU-TC to be
+deleted around the 64.2 time-frame, as it doesn't work well with with Git. (You
+need to force-push the new tag, and if somebody has already cloned the
+repository, they might have something different for the "latest" tag).
+A possible future alternative might be a sym-link folder, or HTTP redirect that
+points to the latest release.
+
+> :point_right: **Note**: We no longer need to add the note about Git LFS files, as GitHub now includes
+them in the auto-generated .zip downloads.
 
 #### Maintenance release
 
