@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1773864575940,
+  "lastUpdate": 1773939749115,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -82617,6 +82617,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 117206.1052,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "18233294+lennart-k@users.noreply.github.com",
+            "name": "Lennart",
+            "username": "lennart-k"
+          },
+          "committer": {
+            "email": "yumaoka@users.noreply.github.com",
+            "name": "Yoshito Umaoka",
+            "username": "yumaoka"
+          },
+          "distinct": true,
+          "id": "d5db80314c3fa8d97792d950236575d1534b349e",
+          "message": "ICU-23325 fix(vtimezone transition): set RRULE UNTIL to UTC",
+          "timestamp": "2026-03-19T12:06:49-04:00",
+          "tree_id": "ae32429ccebb530e7df80bda039253dc25c2f756",
+          "url": "https://github.com/unicode-org/icu/commit/d5db80314c3fa8d97792d950236575d1534b349e"
+        },
+        "date": 1773939321632,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 576.459,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 586394.6602,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 88467.2769,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 521345.0201,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 117216.7312,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
