@@ -462,24 +462,27 @@ public class JapaneseTest extends CalendarTestFmwk {
         int expectedA[] = {Calendar.ERA, JapaneseCalendar.MEIJI};
         checkExpected(c, expectedA);
 
-        logln("test setting era and year and month and date");
-        c.clear();
-        c.set(Calendar.ERA, JapaneseCalendar.MEIJI);
-        c.set(Calendar.YEAR, 1);
-        c.set(Calendar.MONTH, Calendar.JANUARY);
-        c.set(Calendar.DATE, 1);
+        if (!logKnownIssue(
+                "ICU-23341", "ICU needs to handle removal of data for pre-Meiji Japanese eras")) {
+            logln("test setting era and year and month and date");
+            c.clear();
+            c.set(Calendar.ERA, JapaneseCalendar.MEIJI);
+            c.set(Calendar.YEAR, 1);
+            c.set(Calendar.MONTH, Calendar.JANUARY);
+            c.set(Calendar.DATE, 1);
 
-        int expectedC[] = {Calendar.ERA, JapaneseCalendar.MEIJI - 1};
-        checkExpected(c, expectedC);
+            int expectedC[] = {Calendar.ERA, JapaneseCalendar.MEIJI - 1};
+            checkExpected(c, expectedC);
 
-        logln("test setting  year and month and date THEN era");
-        c.clear();
-        c.set(Calendar.YEAR, 1);
-        c.set(Calendar.MONTH, Calendar.JANUARY);
-        c.set(Calendar.DATE, 1);
-        c.set(Calendar.ERA, JapaneseCalendar.MEIJI);
+            logln("test setting  year and month and date THEN era");
+            c.clear();
+            c.set(Calendar.YEAR, 1);
+            c.set(Calendar.MONTH, Calendar.JANUARY);
+            c.set(Calendar.DATE, 1);
+            c.set(Calendar.ERA, JapaneseCalendar.MEIJI);
 
-        checkExpected(c, expectedC);
+            checkExpected(c, expectedC);
+        }
 
         logln("test setting era and year");
         c.clear();

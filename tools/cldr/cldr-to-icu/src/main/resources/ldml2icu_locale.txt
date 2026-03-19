@@ -112,6 +112,11 @@
 //ldml/characters/exemplarCharacters                         ; /ExemplarCharacters
 
 //ldml/characters/ellipsis[@type="(%A)"]                     ; /Ellipsis/$1
+# For the following (nestedBracketReplacement), note that the bracket attribute can be non-ASCII but
+# ICU resource bundle keys must be invariant characters (ASCII subset) so we cannot use bracket as
+# a bundle key, the normal approach. Instead, create a single nestedBracketReplacements array whose
+# elements consist of bracket followed by replacement, another bracket followed by replacement, etc.
+//ldml/characters/nestedBracketReplacement[@bracket="(%A)"]  ; /nestedBracketReplacements ; values="$1" "{value}"
 //ldml/characters/moreInformation                            ; /MoreInformation
 //ldml/characters/special/icu:scripts/icu:script[@type="%N"] ; /LocaleScript
 

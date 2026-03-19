@@ -2167,6 +2167,10 @@ static const UChar zoneGMT[] = { 0x47,0x4D,0x54,0 };
 void TestAddRollEra0AndEraBounds(void) {
     const EraTestItem * eraTestItemPtr;
     for (eraTestItemPtr = eraTestItems; eraTestItemPtr->locale != NULL; eraTestItemPtr++) {
+        if (uprv_strstr(eraTestItemPtr->locale, "calendar=japanese") != NULL &&
+                log_knownIssue("ICU-23341", "ICU needs to handle removal of data for pre-Meiji Japanese eras")) {
+            continue;
+        }
         UErrorCode status = U_ZERO_ERROR;
         UCalendar *ucalTest = ucal_open(zoneGMT, -1, eraTestItemPtr->locale, UCAL_DEFAULT, &status);
         if ( U_SUCCESS(status) ) {

@@ -318,11 +318,16 @@
 
 # metaZones.xml - metaZones.txt
 //supplementalData/metaZones/mapTimezones[@type="metazones"]/mapZone[@type="(%A)"][@other="(%W)"][@territory="(%W)"] ; /mapTimezones/$2/$3 ; values=$1
+# If we just have metazone ID, we produce a 1-element array with metazone ID
 //supplementalData/metaZones/metazoneInfo/timezone[@type="(%W)"]/usesMetazone[@mzone="(%W)"] ; /metazoneInfo/"$1"/<$2> ; values=$2
+# If we also have from and/or to, then we produce a 3-element array, with from/to (possibly default) as the 2nd/3rd elements.
+# Note that ICU code before version 79 will only handle from/to if the array is exactly 3 elements
 //supplementalData/metaZones/metazoneInfo/timezone[@type="(%W)"]/usesMetazone[@from="(%A)"][@mzone="(%W)"] ; /metazoneInfo/"$1"/<$2> ; values=$3 "$2" "9999-12-31 23:59"
 //supplementalData/metaZones/metazoneInfo/timezone[@type="(%W)"]/usesMetazone[@from="(%A)"][@to="(%A)"][@mzone="(%W)"] ; /metazoneInfo/"$1"/<$2> ; values=$4 "$2" "$3"
 //supplementalData/metaZones/metazoneInfo/timezone[@type="(%W)"]/usesMetazone[@to="(%A)"][@mzone="(%W)"] ; /metazoneInfo/"$1"/<1970-01-01 00:00> ; values=$3 "1970-01-01 00:00" "$2"
-# Ignore any stdOffset/dstOffset values for now, see CLDR-18880.
+# If we have stdOffset and dstOffset, then we produce the same as above (metazone only or plus from/to) and currently just ignore the stdOffset and dstOffset.
+# We cannot add them as 4th/5th elements or the resulting metaZones.txt would not be compatible with ICU versions < 79.
+//supplementalData/metaZones/metazoneInfo/timezone[@type="(%W)"]/usesMetazone[@mzone="(%W)"][@stdOffset="(%A)"][@dstOffset="(%A)"] ; /metazoneInfo/"$1"/<$2> ; values=$2
 //supplementalData/metaZones/metazoneInfo/timezone[@type="(%W)"]/usesMetazone[@from="(%A)"][@mzone="(%W)"][@stdOffset="(%A)"][@dstOffset="(%A)"] ; /metazoneInfo/"$1"/<$2> ; values=$3 "$2" "9999-12-31 23:59"
 //supplementalData/metaZones/metazoneInfo/timezone[@type="(%W)"]/usesMetazone[@from="(%A)"][@to="(%A)"][@mzone="(%W)"][@stdOffset="(%A)"][@dstOffset="(%A)"] ; /metazoneInfo/"$1"/<$2> ; values=$4 "$2" "$3"
 //supplementalData/metaZones/metazoneInfo/timezone[@type="(%W)"]/usesMetazone[@to="(%A)"][@mzone="(%W)"][@stdOffset="(%A)"][@dstOffset="(%A)"] ; /metazoneInfo/"$1"/<1970-01-01 00:00> ; values=$3 "1970-01-01 00:00" "$2"
