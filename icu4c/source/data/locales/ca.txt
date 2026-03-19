@@ -346,7 +346,7 @@ ca{
                 H{"H"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
-                Hv{"H 'h' v"}
+                Hv{"H v"}
                 MEd{"E, d/M"}
                 MMMEd{"E, d MMM"}
                 MMMMEd{"E, d MMMM"}
@@ -562,7 +562,7 @@ ca{
                 Hmsvvvv{"H:mm:ss (vvvv)"}
                 Hmv{"H:mm v"}
                 Hmvvvv{"H:mm (vvvv)"}
-                Hv{"H 'h' v"}
+                Hv{"H v"}
                 MEd{"E d/M"}
                 MMMEd{"E, d MMM"}
                 MMMMEd{"E, d MMMM"}

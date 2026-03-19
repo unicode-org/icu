@@ -487,7 +487,7 @@ cs{
                 H{"H"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
-                Hv{"H 'h' v"}
+                Hv{"H v"}
                 MEd{"E d. M."}
                 MMMEd{"E d. M."}
                 MMMMEd{"E d. MMMM"}
@@ -710,7 +710,7 @@ cs{
                 Hmsvvvv{"H:mm:ss, vvvv"}
                 Hmv{"H:mm v"}
                 Hmvvvv{"H:mm, vvvv"}
-                Hv{"H 'h' v"}
+                Hv{"H v"}
                 MEd{"E d. M."}
                 MMMEd{"E d. M."}
                 MMMMEd{"E d. MMMM"}
@@ -1145,28 +1145,6 @@ cs{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
-            }
-            eras{
-                abbreviated{
-                    11{"Tenpyō-kampō (749-749)"}
-                    12{"Tenpyō-shōhō (749-757)"}
-                    13{"Tenpyō-hōji (757-765)"}
-                    14{"Tenpyō-jingo (765-767)"}
-                    15{"Jingo-keiun (767-770)"}
-                    17{"Ten-ō (781-782)"}
-                    26{"Ten-an (857-859)"}
-                    78{"Ten-ei (1110-1113)"}
-                }
-                narrow{
-                    11{"Tenpyō-kampō (749-749)"}
-                    12{"Tenpyō-shōhō (749-757)"}
-                    13{"Tenpyō-hōji (757-765)"}
-                    14{"Tenpyō-jingo (765-767)"}
-                    15{"Jingo-keiun (767-770)"}
-                    17{"Ten-ō (781-782)"}
-                    26{"Ten-an (857-859)"}
-                    78{"Ten-ei (1110-1113)"}
-                }
             }
         }
         persian{

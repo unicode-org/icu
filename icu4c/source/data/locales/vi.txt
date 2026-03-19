@@ -244,6 +244,7 @@ vi{
                 GyMMMMd{"'ngày' d 'tháng' M 'năm' U r"}
                 GyMMMd{"'ngày' d 'tháng' M 'năm' r"}
                 H{"HH 'giờ'"}
+                Hv{"HH 'giờ' v"}
                 MEd{"E, d/M"}
                 MMMEd{"E, 'ngày' d 'tháng' M"}
                 MMMMd{"'ngày' d 'tháng' M"}
@@ -576,6 +577,7 @@ vi{
                 GyMMMd{"d MMM, y G"}
                 GyMd{"d/M/y GGGGG"}
                 H{"HH 'giờ'"}
+                Hv{"HH 'giờ' v"}
                 MEd{"E, d/M"}
                 MMMEd{"E, d MMM"}
                 MMMMEd{"E, dd MMMM"}
@@ -785,6 +787,7 @@ vi{
                 GyMd{"d/M/y G"}
                 H{"HH 'giờ'"}
                 Hm{"H:mm"}
+                Hv{"HH 'giờ' v"}
                 MEd{"E, d/M"}
                 MMMEd{"E, d MMM"}
                 MMMMEd{"E, d MMMM"}

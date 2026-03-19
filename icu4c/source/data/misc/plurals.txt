@@ -239,7 +239,7 @@ plurals:table(nofallback){
         as{"set64"}
         ast{"set40"}
         az{"set62"}
-        bal{"set42"}
+        bal{"set43"}
         be{"set47"}
         bg{"set66"}
         blo{"set56"}
@@ -255,15 +255,15 @@ plurals:table(nofallback){
         dsb{"set40"}
         el{"set40"}
         en{"set57"}
-        es{"set45"}
+        es{"set42"}
         et{"set40"}
         eu{"set40"}
         fa{"set40"}
         fi{"set40"}
-        fil{"set42"}
-        fr{"set42"}
+        fil{"set43"}
+        fr{"set43"}
         fy{"set40"}
-        ga{"set42"}
+        ga{"set43"}
         gd{"set59"}
         gl{"set40"}
         gsw{"set40"}
@@ -272,8 +272,8 @@ plurals:table(nofallback){
         hi{"set63"}
         hr{"set40"}
         hsb{"set40"}
-        hu{"set43"}
-        hy{"set42"}
+        hu{"set44"}
+        hy{"set43"}
         ia{"set40"}
         id{"set40"}
         ie{"set40"}
@@ -293,18 +293,18 @@ plurals:table(nofallback){
         ky{"set40"}
         lij{"set52"}
         lld{"set51"}
-        lo{"set42"}
+        lo{"set43"}
         lt{"set40"}
         lv{"set40"}
         mk{"set61"}
         ml{"set40"}
         mn{"set40"}
-        mo{"set42"}
+        mo{"set43"}
         mr{"set58"}
-        ms{"set42"}
+        ms{"set43"}
         my{"set40"}
         nb{"set40"}
-        ne{"set44"}
+        ne{"set45"}
         nl{"set40"}
         no{"set40"}
         or{"set65"}
@@ -313,7 +313,7 @@ plurals:table(nofallback){
         prg{"set40"}
         ps{"set40"}
         pt{"set40"}
-        ro{"set42"}
+        ro{"set43"}
         root{"set40"}
         ru{"set40"}
         sc{"set51"}
@@ -331,14 +331,14 @@ plurals:table(nofallback){
         te{"set40"}
         th{"set40"}
         tk{"set49"}
-        tl{"set42"}
+        tl{"set43"}
         tpi{"set40"}
         tr{"set40"}
         uk{"set48"}
         ur{"set40"}
         uz{"set40"}
         vec{"set51"}
-        vi{"set42"}
+        vi{"set43"}
         yue{"set40"}
         zh{"set40"}
         zu{"set40"}
@@ -848,30 +848,27 @@ plurals:table(nofallback){
             other{" @integer 0, 3~17, 100, 1000, 10000, 100000, 1000000, …"}
         }
         set42{
+            one{
+                "n % 10 = 1,3 and n % 100 != 11 @integer 1, 3, 13, 21, 23, 31, 33, 41"
+                ", 101, 1001, …"
+            }
+            other{" @integer 0, 2, 4~12, 14~18, 100, 1000, 10000, 100000, 1000000, …"}
+        }
+        set43{
             one{"n = 1 @integer 1"}
             other{" @integer 0, 2~16, 100, 1000, 10000, 100000, 1000000, …"}
         }
-        set43{
+        set44{
             one{"n = 1,5 @integer 1, 5"}
             other{" @integer 0, 2~4, 6~17, 100, 1000, 10000, 100000, 1000000, …"}
         }
-        set44{
+        set45{
             one{"n = 1..4 @integer 1~4"}
             other{" @integer 0, 5~19, 100, 1000, 10000, 100000, 1000000, …"}
         }
-        set45{
-            one{
-                "n % 10 = 1,3 and n % 100 != 11 @integer 1, 3, 13, 21, 23, 31, 33, 41"
-                ", 43, 51, 53, 101, 103, 1001, 1003, …"
-            }
-            other{" @integer 0, 2, 4~12, 100, 1000, 10000, 100000, 1000000, …"}
-        }
         set46{
-            few{
-                "i % 100 = 2..19 @integer 2~19, 102~119, 202~219, 1002, 10002, 100002"
-                ", 1000002, …"
-            }
-            other{" @integer 0~1, 20~30, 100, 1000, 10000, 100000, 1000000, …"}
+            few{"i % 100 = 2..19 @integer 2~17, 102, 1002, …"}
+            other{" @integer 0, 1, 20~33, 100, 1000, 10000, 100000, 1000000, …"}
         }
         set47{
             few{
@@ -1054,19 +1051,25 @@ plurals:table(nofallback){
         }
         set66{
             few{
-                "i % 10 = 3,4 and i % 100 != 13,14 @integer 3, 4, 23, 24, 33, 34, 103"
-                ", 104, 123, 124, 203, 204, 1003, 1004, …"
+                "i % 10 = 3,4 and i % 100 != 13,14 @integer 3, 4, 23, 24, 33, 34, 43,"
+                " 44, 53, 54, 63, 64, 73, 74, 83, 84, 103, 1003, …"
             }
             many{
-                "i % 10 = 7,8 and i % 100 != 17,18 @integer 7, 8, 27, 28, 107, 108, 2"
-                "07, 208, …"
+                "i % 10 = 7,8 and i % 100 != 17,18 @integer 7, 8, 27, 28, 37, 38, 47,"
+                " 48, 57, 58, 67, 68, 77, 78, 87, 88, 107, 1007, …"
             }
-            one{"i % 10 = 1 and i % 100 != 11 @integer 1, 21, 31, 101, 201, 1001, …"}
-            other{" @integer 5~6, 9~20, 1005, 10005, 100005, 1000005, …"}
-            two{"i % 10 = 2 and i % 100 != 12 @integer 2, 22, 32, 102, 202, 1002, …"}
+            one{
+                "i % 10 = 1 and i % 100 != 11 @integer 1, 21, 31, 41, 51, 61, 71, 81,"
+                " 101, 1001, …"
+            }
+            other{" @integer 0, 5, 6, 9~20, 25, 105, 1005, …"}
+            two{
+                "i % 10 = 2 and i % 100 != 12 @integer 2, 22, 32, 42, 52, 62, 72, 82,"
+                " 102, 1002, …"
+            }
             zero{
-                "i % 100 = 0 and i != 0 @integer 100, 200, 300, 1000, 10000, 100000, "
-                "1000000, …"
+                "i % 100 = 0 and i != 0 @integer 100, 200, 300, 400, 500, 600, 700, 8"
+                "00, 1000, 10000, 100000, 1000000, …"
             }
         }
         set67{

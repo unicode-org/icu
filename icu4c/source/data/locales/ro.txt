@@ -561,7 +561,7 @@ ro{
                 GyMMMEd{"E, d MMM y G"}
                 GyMMMd{"d MMM y G"}
                 GyMd{"dd.MM.y G"}
-                Hv{"'h' HH v"}
+                Hv{"HH v"}
                 MEd{"E, dd.MM"}
                 MMMEd{"E, d MMM"}
                 MMMMEd{"E, d MMMM"}

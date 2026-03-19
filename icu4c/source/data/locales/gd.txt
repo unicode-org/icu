@@ -657,7 +657,7 @@ gd{
                 GyMMMEd{"E, d'mh' MMM y G"}
                 GyMMMd{"d'mh' MMM y G"}
                 GyMd{"d/M/y GGGGG"}
-                Hv{"HH'u' v"}
+                Hv{"HH v"}
                 MEd{"E, d/M"}
                 MMMEd{"E, d MMM"}
                 MMMMd{"d'mh' MMMM"}
@@ -876,7 +876,7 @@ gd{
                 GyMMMEd{"E, d MMM y G"}
                 GyMMMd{"d MMM y G"}
                 GyMd{"d/M/y G"}
-                Hv{"HH'u' v"}
+                Hv{"HH v"}
                 MEd{"E, d/M"}
                 MMMEd{"E, d MMM"}
                 MMMMW{

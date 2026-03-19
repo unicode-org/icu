@@ -431,7 +431,7 @@ uk{
                 GyMMMEd{"E, d MMM y 'р'. G"}
                 GyMMMd{"d MMM y 'р'. G"}
                 GyMd{"dd-MM-y GGGGG"}
-                Hv{"HH 'год' v"}
+                Hv{"HH v"}
                 MEd{"E, dd.MM"}
                 MMMEd{"E, d MMM"}
                 MMMMEd{"E, d MMMM"}
@@ -618,7 +618,7 @@ uk{
                 GyMMMd{"d MMM y 'р'. G"}
                 GyMd{"dd-MM-y GGGGG"}
                 H{"H"}
-                Hv{"HH 'год' v"}
+                Hv{"HH v"}
                 M{"LL"}
                 MEd{"E, dd.MM"}
                 MMMEd{"E, d MMM"}
@@ -768,7 +768,7 @@ uk{
                     H{"HH–HH 'год'"}
                 }
                 Hv{
-                    H{"HH–HH 'год' v"}
+                    H{"HH–HH v"}
                 }
                 M{
                     M{"M–M"}

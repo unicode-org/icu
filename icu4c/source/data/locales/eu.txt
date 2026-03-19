@@ -598,6 +598,7 @@ eu{
                 GyMMMEd{"G. 'aroko' y('e')'ko' MMMM d, EEEE"}
                 GyMMMd{"G. 'aroko' y('e')'ko' MMMM d"}
                 GyMd{"y-MM-dd (GGGGG)"}
+                Hv{"HH (v)"}
                 MEd{"MM/dd, EEEE"}
                 MMMEd{"MMM'k' d, EEEE"}
                 MMMMd{"MMMM'k' d"}
@@ -779,6 +780,7 @@ eu{
                 GyMMM{"G y. 'urteko' MMM"}
                 GyMMMEd{"G y. 'urteko' MMM d('a'), E"}
                 GyMMMd{"G y. 'urteko' MMM d('a')"}
+                Hv{"HH (v)"}
                 MEd{"M/d, E"}
                 MMMEd{"MMM d('a'), E"}
                 MMMMW{

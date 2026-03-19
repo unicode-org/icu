@@ -1711,18 +1711,6 @@ no{
                 "{1} {0}",
                 "{1} {0}",
             }
-            eras{
-                abbreviated{
-                    11{"Tenpyō-kampō (749-749)"}
-                    12{"Tenpyō-shōhō (749-757)"}
-                    13{"Tenpyō-hōji (757-765)"}
-                    14{"Tenpyō-jingo (765-767)"}
-                    15{"Jingo-keiun (767-770)"}
-                    17{"Ten-ō (781-782)"}
-                    26{"Ten-an (857-859)"}
-                    78{"Ten-ei (1110-1113)"}
-                }
-            }
             intervalFormats{
                 h{
                     a{"h a–h a"}

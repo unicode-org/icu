@@ -345,7 +345,7 @@ es{
                 GyMMMMd{"d 'de' MMMM 'de' y G"}
                 GyMMMd{"d MMM y G"}
                 GyMd{"d/M/y GGGGG"}
-                Hv{"H 'h' v"}
+                Hv{"H v"}
                 MEd{"E, d/M"}
                 MMMEd{"E, d MMM"}
                 MMMMEd{"E, d 'de' MMMM"}
@@ -552,7 +552,7 @@ es{
                 Hmsv{"H:mm:ss v"}
                 Hmsvvvv{"H:mm:ss (vvvv)"}
                 Hmv{"H:mm v"}
-                Hv{"H 'h' v"}
+                Hv{"H v"}
                 MEd{"E, d/M"}
                 MMMEd{"E, d MMM"}
                 MMMMEd{"E, d 'de' MMMM"}

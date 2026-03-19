@@ -344,6 +344,7 @@ he{
                 H{"H"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
+                Hv{"H v"}
                 MEd{"E, d/M"}
                 MMMEd{"E, d בMMM"}
                 MMMd{"d בMMM"}
@@ -511,6 +512,7 @@ he{
                 H{"H"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
+                Hv{"H v"}
                 MEd{"E, d.M"}
                 MMMEd{"E, d בMMM"}
                 MMMMW{
@@ -1153,15 +1155,6 @@ he{
                         "ד׳ו אל־קעדה",
                         "ד׳ו אל־חיג׳ה",
                     }
-                }
-            }
-        }
-        japanese{
-            eras{
-                abbreviated{
-                    0{"טאיקה"}
-                    24{"נינג׳ו"}
-                    73{"שוטוקו"}
                 }
             }
         }

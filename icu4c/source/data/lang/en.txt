@@ -544,7 +544,7 @@ en{
         saq{"Samburu"}
         sas{"Sasak"}
         sat{"Santali"}
-        saz{"Saurashtra"}
+        saz{"Sourashtra"}
         sba{"Ngambay"}
         sbp{"Sangu"}
         sc{"Sardinian"}
@@ -747,6 +747,7 @@ en{
         oka{"Colville Salish"}
         pi{"Pāli"}
         ps{"Pushto"}
+        saz{"Saurashtra"}
         ug{"Uighur"}
     }
     Scripts{
@@ -904,7 +905,7 @@ en{
         Samr{"Samaritan"}
         Sara{"Sarati"}
         Sarb{"Old South Arabian"}
-        Saur{"Saurashtra"}
+        Saur{"Sourashtra"}
         Sgnw{"SignWriting"}
         Shaw{"Shavian"}
         Shrd{"Sharada"}
@@ -975,6 +976,7 @@ en{
     }
     Scripts%variant{
         Arab{"Perso-Arabic"}
+        Saur{"Saurashtra"}
     }
     Types{
         calendar{
@@ -1363,7 +1365,7 @@ en{
             rohg{"Hanifi Rohingya digits"}
             roman{"Roman Numerals"}
             romanlow{"Roman Lowercase Numerals"}
-            saur{"Saurashtra Digits"}
+            saur{"Sourashtra Digits"}
             segment{"Segmented Digits"}
             shrd{"Sharada Digits"}
             sind{"Khudawadi Digits"}
@@ -1451,6 +1453,9 @@ en{
     Types%variant{
         calendar{
             iso8601{"ISO 8601 Weeks"}
+        }
+        numbers{
+            saur{"Saurashtra Digits"}
         }
     }
     Variants{

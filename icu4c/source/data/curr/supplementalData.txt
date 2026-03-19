@@ -5139,6 +5139,12 @@ supplementalData:table(nofallback){
             0,
             0,
         }
+        MRU:intvector{
+            2,
+            0,
+            2,
+            20,
+        }
         MUR:intvector{
             2,
             0,

@@ -422,7 +422,7 @@ fi{
                 H{"H"}
                 Hm{"H.mm"}
                 Hms{"H.mm.ss"}
-                Hv{"HH 'h' v"}
+                Hv{"H v"}
                 MEd{"E d.M."}
                 MMMEd{"ccc d. MMM"}
                 MMMMd{"d. MMMM"}
@@ -662,7 +662,7 @@ fi{
                 Hms{"H.mm.ss"}
                 Hmsv{"H.mm.ss v"}
                 Hmv{"H.mm v"}
-                Hv{"H 'h' v"}
+                Hv{"H v"}
                 MEd{"E d.M."}
                 MMMEd{"ccc d.M."}
                 MMMMEd{"ccc d. MMMM"}
