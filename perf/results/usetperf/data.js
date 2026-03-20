@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1773947627561,
+  "lastUpdate": 1773974871492,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -119181,6 +119181,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 3399.6686,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "richard_gillam@apple.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "be00b6b1ae3c52cda144a318b95497daa236624c",
+          "message": "ICU-23322 Fixed DayPeriodRules::getInstance() to fall back onto \"root\" for any locales that don't define their\nown day period rules.  Took out now-unnecessary null check in SimpleDateFormat::subFormat().  Added unit test.",
+          "timestamp": "2026-03-19T19:08:16-07:00",
+          "tree_id": "8304b57917046fc3c03d31156cc932b521312ffa",
+          "url": "https://github.com/unicode-org/icu/commit/be00b6b1ae3c52cda144a318b95497daa236624c"
+        },
+        "date": 1773974440372,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 67681.5748,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 190968.1546,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.5262,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 9.9405,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 7.2645,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 22046.503,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 73022.1904,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 3669.4229,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
