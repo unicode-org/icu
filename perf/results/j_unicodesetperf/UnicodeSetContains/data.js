@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1773949832553,
+  "lastUpdate": 1773972202657,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -43617,6 +43617,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "UnicodeSetContains",
             "value": 2.0298146595308375,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "richard_gillam@apple.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "a7fd0e03aeaba3c1c5352dca854a77f1cfeb6776",
+          "message": "ICU-23265 Fixed parseMeasureUnitOption() so that it correctly handles measurement unit alises.",
+          "timestamp": "2026-03-19T18:43:09-07:00",
+          "tree_id": "71edd36398fa70c80e1f56634252e1a2b873ccf1",
+          "url": "https://github.com/unicode-org/icu/commit/a7fd0e03aeaba3c1c5352dca854a77f1cfeb6776"
+        },
+        "date": 1773971715924,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "UnicodeSetContains",
+            "value": 1.857496232913521,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
