@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1773947991606,
+  "lastUpdate": 1773975185473,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -82941,6 +82941,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2124934.5257,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "richard_gillam@apple.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "be00b6b1ae3c52cda144a318b95497daa236624c",
+          "message": "ICU-23322 Fixed DayPeriodRules::getInstance() to fall back onto \"root\" for any locales that don't define their\nown day period rules.  Took out now-unnecessary null check in SimpleDateFormat::subFormat().  Added unit test.",
+          "timestamp": "2026-03-19T19:08:16-07:00",
+          "tree_id": "8304b57917046fc3c03d31156cc932b521312ffa",
+          "url": "https://github.com/unicode-org/icu/commit/be00b6b1ae3c52cda144a318b95497daa236624c"
+        },
+        "date": 1773974703260,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 142.0729,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 8033509.3858,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 1961261.4381,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 7201795.1274,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2059472.9145,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
