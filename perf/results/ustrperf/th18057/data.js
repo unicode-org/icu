@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1774017033271,
+  "lastUpdate": 1774029706203,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -145917,6 +145917,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 41.9502,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "aszeto@google.com",
+            "name": "Andrew Szeto",
+            "username": "jabagawee"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "daa3f499f5f917af4286cfdfada3eb0cc1745c97",
+          "message": "ICU-23321 ResourceCache: replace synchronized trie with ConcurrentHashMap\n\nReplace the custom synchronized trie in ICUResourceBundleReader.ResourceCache\nwith ConcurrentHashMap, eliminating a heavily contended lock on the resource\nloading path.\n\nResourceCache.get() was synchronized and called on every resource bundle\naccess (getString, getAlias, getArray, getTable). The custom trie (ICU-10932,\n2014) optimized memory via int[]/Object[] arrays to avoid Integer autoboxing,\nbut its sparse power-of-2 allocations waste 94.8% of slots (39KB vs 13KB per\ncache with ConcurrentHashMap).\n\nBenchmark (NumberFormat.getInstance full stack):\n  1 thread:  543 -> 505 ops/ms (slight regression from autoboxing)\n  32 threads: 2,074 -> 4,051 ops/ms (2x improvement from lock elimination)\n\nUses ConcurrentHashMap.compute() in the put path to atomically handle cleared\nSoftReferences (plain putIfAbsent cannot replace a non-null but dead entry).",
+          "timestamp": "2026-03-20T10:28:41-07:00",
+          "tree_id": "9a8977316630a9661ccec8140c3f5120e2a2bc33",
+          "url": "https://github.com/unicode-org/icu/commit/daa3f499f5f917af4286cfdfada3eb0cc1745c97"
+        },
+        "date": 1774029272555,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 20.8567,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 23.4135,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 27.1733,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 29.7055,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 36.1559,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 36.425,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 22.3621,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 16.5132,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 78.8943,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 22.8759,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 36.2328,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 41.5046,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
