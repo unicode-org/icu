@@ -487,8 +487,8 @@ public final class UScriptRun {
     private int scriptLimit;
     private int scriptCode;
 
-    private static int PAREN_STACK_DEPTH = 32;
-    private static ParenStackEntry parenStack[] = new ParenStackEntry[PAREN_STACK_DEPTH];
+    private static final int PAREN_STACK_DEPTH = 32;
+    private ParenStackEntry parenStack[] = new ParenStackEntry[PAREN_STACK_DEPTH];
     private int parenSP = -1;
     private int pushCount = 0;
     private int fixupCount = 0;

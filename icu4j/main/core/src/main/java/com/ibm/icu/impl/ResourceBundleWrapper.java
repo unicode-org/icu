@@ -30,7 +30,7 @@ public final class ResourceBundleWrapper extends UResourceBundle {
     private ResourceBundle bundle = null;
     private String localeID = null;
     private String baseName = null;
-    private List<String> keys = null;
+    private volatile List<String> keys = null;
 
     /** Loader for bundle instances, for caching. */
     private abstract static class Loader {
@@ -105,18 +105,22 @@ public final class ResourceBundleWrapper extends UResourceBundle {
     }
 
     private void initKeysVector() {
+        if (keys != null) {
+            return;
+        }
+        List<String> newKeys = new ArrayList<String>();
         ResourceBundleWrapper current = this;
-        keys = new ArrayList<String>();
         while (current != null) {
             Enumeration<String> e = current.bundle.getKeys();
             while (e.hasMoreElements()) {
                 String elem = e.nextElement();
-                if (!keys.contains(elem)) {
-                    keys.add(elem);
+                if (!newKeys.contains(elem)) {
+                    newKeys.add(elem);
                 }
             }
             current = (ResourceBundleWrapper) current.getParent();
         }
+        keys = newKeys;
     }
 
     @Override

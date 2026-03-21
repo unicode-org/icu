@@ -465,7 +465,7 @@ public final class LocaleData {
         return localeSeparator;
     }
 
-    private static VersionInfo gCLDRVersion = null;
+    private static volatile VersionInfo gCLDRVersion = null;
 
     /**
      * Returns the current CLDR version

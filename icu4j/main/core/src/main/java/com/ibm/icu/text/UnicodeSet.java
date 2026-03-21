@@ -309,7 +309,8 @@ public class UnicodeSet extends UnicodeFilter
      */
     public static final UnicodeSet ALL_CODE_POINTS = new UnicodeSet(0, 0x10FFFF).freeze();
 
-    private static XSymbolTable XSYMBOL_TABLE = null; // for overriding the function processing
+    private static volatile XSymbolTable XSYMBOL_TABLE =
+            null; // for overriding the function processing
 
     private static final int LOW = 0x000000; // LOW <= all valid values. ZERO for codepoints
     private static final int HIGH = 0x110000; // HIGH > all valid values. 10000 for code units.

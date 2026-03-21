@@ -14,7 +14,9 @@ import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.Region;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.UResourceBundle;
 import java.util.Date;
+import java.util.Enumeration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -148,6 +150,31 @@ public class LazyInitConcurrencyTest extends ConcurrencyTest {
                                     "StringPrep should not be null for profile " + profile, prep);
                         } catch (IllegalArgumentException e) {
                             // Some profiles may not be supported
+                        }
+                    }
+                });
+    }
+
+    /**
+     * Concurrent ResourceBundleWrapper.initKeysVector() calls on shared parent bundles could cause
+     * ArrayIndexOutOfBoundsException from concurrent ArrayList.add().
+     *
+     * <p>See https://github.com/eclipse-birt/birt/issues/2394
+     */
+    @Test
+    public void testResourceBundleWrapperConcurrent() throws Exception {
+        String[] locales = {"en", "de", "fr", "ja", "zh", "ko", "es", "it"};
+        runConcurrent(
+                "ResourceBundleWrapper",
+                tid -> {
+                    for (int i = 0; i < ITERATIONS; i++) {
+                        String locale = locales[(tid + i) % locales.length];
+                        UResourceBundle bundle =
+                                UResourceBundle.getBundleInstance(
+                                        "com.ibm.icu.impl.data.HolidayBundle", locale);
+                        Enumeration<String> keys = bundle.getKeys();
+                        while (keys.hasMoreElements()) {
+                            keys.nextElement();
                         }
                     }
                 });

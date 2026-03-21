@@ -51,8 +51,34 @@ class CharsetISCII extends CharsetICU {
     private static final int NO_CHAR_MARKER = 0xfffe;
 
     /* Used for proper conversion to and from Gurmukhi */
-    private static UnicodeSet PNJ_BINDI_TIPPI_SET;
-    private static UnicodeSet PNJ_CONSONANT_SET;
+    private static final class PNJSetsHolder {
+        static final UnicodeSet PNJ_BINDI_TIPPI_SET;
+        static final UnicodeSet PNJ_CONSONANT_SET;
+
+        static {
+            UnicodeSet consonant = new UnicodeSet();
+            consonant.add(0x0a15, 0x0a28);
+            consonant.add(0x0a2a, 0x0a30);
+            consonant.add(0x0a35, 0x0a36);
+            consonant.add(0x0a38, 0x0a39);
+
+            UnicodeSet bindiTippi = new UnicodeSet();
+            bindiTippi.addAll(consonant);
+            bindiTippi.add(0x0a05);
+            bindiTippi.add(0x0a07);
+            bindiTippi.add(0x0a41, 0x0a42);
+            bindiTippi.add(0x0a3f);
+
+            consonant.compact();
+            bindiTippi.compact();
+            consonant.freeze();
+            bindiTippi.freeze();
+
+            PNJ_CONSONANT_SET = consonant;
+            PNJ_BINDI_TIPPI_SET = bindiTippi;
+        }
+    }
+
     private static final short PNJ_BINDI = 0x0a02;
     private static final short PNJ_TIPPI = 0x0a70;
     private static final short PNJ_SIGN_VIRAMA = 0x0a4d;
@@ -1285,32 +1311,6 @@ class CharsetISCII extends CharsetICU {
         int option = Integer.parseInt(icuCanonicalName.substring(14));
 
         extraInfo = new UConverterDataISCII(option);
-
-        initializePNJSets();
-    }
-
-    /* Initialize the two UnicodeSets use for proper Gurmukhi conversion if they have not already been created. */
-    private void initializePNJSets() {
-        if (PNJ_BINDI_TIPPI_SET != null && PNJ_CONSONANT_SET != null) {
-            return;
-        }
-        PNJ_BINDI_TIPPI_SET = new UnicodeSet();
-        PNJ_CONSONANT_SET = new UnicodeSet();
-
-        PNJ_CONSONANT_SET.add(0x0a15, 0x0a28);
-        PNJ_CONSONANT_SET.add(0x0a2a, 0x0a30);
-        PNJ_CONSONANT_SET.add(0x0a35, 0x0a36);
-        PNJ_CONSONANT_SET.add(0x0a38, 0x0a39);
-
-        PNJ_BINDI_TIPPI_SET.addAll(PNJ_CONSONANT_SET);
-        PNJ_BINDI_TIPPI_SET.add(0x0a05);
-        PNJ_BINDI_TIPPI_SET.add(0x0a07);
-
-        PNJ_BINDI_TIPPI_SET.add(0x0a41, 0x0a42);
-        PNJ_BINDI_TIPPI_SET.add(0x0a3f);
-
-        PNJ_CONSONANT_SET.compact();
-        PNJ_BINDI_TIPPI_SET.compact();
     }
 
     /*
@@ -1691,7 +1691,8 @@ class CharsetISCII extends CharsetICU {
                         /* Check to make sure that consonant clusters are handled correctly for Gurmukhi script. */
                         if (data.currentDeltaToUnicode == PNJ_DELTA
                                 && data.prevToUnicodeStatus != 0
-                                && PNJ_CONSONANT_SET.contains(data.prevToUnicodeStatus)
+                                && PNJSetsHolder.PNJ_CONSONANT_SET.contains(
+                                        data.prevToUnicodeStatus)
                                 && (this.toUnicodeStatus + PNJ_DELTA) == PNJ_SIGN_VIRAMA
                                 && (targetUniChar + PNJ_DELTA) == data.prevToUnicodeStatus) {
                             if (offsets != null) {
@@ -1730,7 +1731,7 @@ class CharsetISCII extends CharsetICU {
                              */
                             if (data.currentDeltaToUnicode == PNJ_DELTA
                                     && (targetUniChar + PNJ_DELTA) == PNJ_BINDI
-                                    && PNJ_BINDI_TIPPI_SET.contains(
+                                    && PNJSetsHolder.PNJ_BINDI_TIPPI_SET.contains(
                                             this.toUnicodeStatus + PNJ_DELTA)) {
                                 targetUniChar = PNJ_TIPPI - PNJ_DELTA;
                                 cr =
@@ -1743,7 +1744,7 @@ class CharsetISCII extends CharsetICU {
                                                 PNJ_DELTA);
                             } else if (data.currentDeltaToUnicode == PNJ_DELTA
                                     && (targetUniChar + PNJ_DELTA) == PNJ_SIGN_VIRAMA
-                                    && PNJ_CONSONANT_SET.contains(
+                                    && PNJSetsHolder.PNJ_CONSONANT_SET.contains(
                                             this.toUnicodeStatus + PNJ_DELTA)) {
                                 /* Store the current toUnicodeStatus code point for later handling of consonant cluster in Gurmukhi. */
                                 data.prevToUnicodeStatus = this.toUnicodeStatus + PNJ_DELTA;
@@ -2041,7 +2042,7 @@ class CharsetISCII extends CharsetICU {
                 } // end of switch
                 if (converterData.currentDeltaFromUnicode == PNJ_DELTA
                         && tempContextFromUnicode == PNJ_ADHAK
-                        && PNJ_CONSONANT_SET.contains(sourceChar + PNJ_DELTA)) {
+                        && PNJSetsHolder.PNJ_CONSONANT_SET.contains(sourceChar + PNJ_DELTA)) {
                     /* If the previous codepoint is Adhak and the current codepoint is a consonant, the targetByteUnit should be C + Halant + C. */
                     /* reset context char */
                     converterData.contextCharFromUnicode = 0x0000;

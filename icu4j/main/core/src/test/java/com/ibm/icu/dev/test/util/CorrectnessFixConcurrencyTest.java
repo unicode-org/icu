@@ -2,6 +2,8 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.dev.test.util;
 
+import com.ibm.icu.lang.UScript;
+import com.ibm.icu.lang.UScriptRun;
 import com.ibm.icu.text.DateTimePatternGenerator;
 import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.text.RelativeDateTimeFormatter;
@@ -54,6 +56,31 @@ public class CorrectnessFixConcurrencyTest extends ConcurrencyTest {
                                         RelativeDateTimeFormatter.RelativeUnit.DAYS);
                         assertNotNull("format result should not be null", result);
                         assertFalse("format result should not be empty", result.isEmpty());
+                    }
+                });
+    }
+
+    /**
+     * UScriptRun.parenStack was a static array shared across all instances. Concurrent instances
+     * would corrupt each other's parenthesis tracking, producing wrong script codes.
+     */
+    @Test
+    public void testUScriptRunConcurrent() throws Exception {
+        // Mixed-script text with parentheses to exercise parenStack
+        String latin = "Hello (world) test";
+        String cjk = "\u4e16\u754c(\u4f60\u597d)\u6d4b\u8bd5";
+        runConcurrent(
+                "UScriptRun",
+                tid -> {
+                    String text = (tid % 2 == 0) ? latin : cjk;
+                    for (int i = 0; i < ITERATIONS; i++) {
+                        UScriptRun run = new UScriptRun(text);
+                        while (run.next()) {
+                            int script = run.getScriptCode();
+                            assertTrue(
+                                    "script code should be valid, got " + script,
+                                    script >= 0 && script < UScript.CODE_LIMIT);
+                        }
                     }
                 });
     }

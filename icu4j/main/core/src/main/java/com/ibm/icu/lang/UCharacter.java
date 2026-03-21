@@ -4221,7 +4221,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             return b;
         }
 
-        private static SoftReference<Map<String, UnicodeBlock>> mref;
+        private static volatile SoftReference<Map<String, UnicodeBlock>> mref;
 
         private static String trimBlockName(String name) {
             String upper = name.toUpperCase(Locale.ENGLISH);
