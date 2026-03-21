@@ -3,12 +3,14 @@
 package com.ibm.icu.dev.test.util;
 
 import com.ibm.icu.text.NumberFormat;
+import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.ULocale;
+import java.util.Set;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-/** Concurrency regression tests for ICU4J caches: SimpleCache. */
+/** Concurrency regression tests for ICU4J caches: SimpleCache, MeasureUnit. */
 @RunWith(JUnit4.class)
 public class CacheConcurrencyTest extends ConcurrencyTest {
 
@@ -44,6 +46,24 @@ public class CacheConcurrencyTest extends ConcurrencyTest {
                         ULocale loc = locales[(tid + i) % locales.length];
                         NumberFormat nf = NumberFormat.getCurrencyInstance(loc);
                         assertNotNull("CurrencyInstance should not be null", nf);
+                    }
+                });
+    }
+
+    @Test
+    public void testMeasureUnitConcurrentAccess() throws Exception {
+        runConcurrent(
+                "MeasureUnitAccess",
+                tid -> {
+                    for (int i = 0; i < ITERATIONS; i++) {
+                        Set<String> types = MeasureUnit.getAvailableTypes();
+                        assertFalse(
+                                "Available types should not be empty",
+                                types == null || types.isEmpty());
+                        for (String type : types) {
+                            Set<MeasureUnit> units = MeasureUnit.getAvailable(type);
+                            assertNotNull("Units for type " + type + " should not be null", units);
+                        }
                     }
                 });
     }

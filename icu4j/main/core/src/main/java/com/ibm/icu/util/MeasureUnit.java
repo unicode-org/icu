@@ -23,11 +23,11 @@ import java.io.ObjectStreamException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * A unit such as length, mass, volume, currency, etc. A unit is coupled with a numeric amount to
@@ -41,12 +41,17 @@ import java.util.Set;
 public class MeasureUnit implements Serializable {
     private static final long serialVersionUID = -1839973855554750484L;
 
-    // Cache of MeasureUnits.
-    // All access to the cache or cacheIsPopulated flag must be synchronized on
-    // class MeasureUnit,
-    // i.e. from synchronized static methods. Beware of non-static methods.
-    private static final Map<String, Map<String, MeasureUnit>> cache = new HashMap<>();
-    private static boolean cacheIsPopulated = false;
+    // Cache of MeasureUnits. Both the outer map and all inner maps are ConcurrentHashMap,
+    // allowing lock-free reads after population. populateCache() uses MEASURE_UNIT_LOCK for
+    // one-time initialization. addUnit() uses per-type synchronization on the inner map
+    // for the slow path (new unit creation), with a lock-free fast path for existing units.
+    private static final Map<String, Map<String, MeasureUnit>> cache = new ConcurrentHashMap<>();
+    private static volatile boolean cacheIsPopulated = false;
+    // Re-entrancy guard, only accessed under MEASURE_UNIT_LOCK.
+    // populateCache() -> getBundleInstance() -> addUnit() -> populateCache()
+    // would cause infinite recursion without this.
+    private static boolean cacheIsLoading = false;
+    private static final Object MEASURE_UNIT_LOCK = new Object();
 
     /**
      * If type set to null, measureUnitImpl is in use instead of type and subType.
@@ -811,7 +816,7 @@ public class MeasureUnit implements Serializable {
      *
      * @stable ICU 53
      */
-    public static synchronized Set<MeasureUnit> getAvailable() {
+    public static Set<MeasureUnit> getAvailable() {
         Set<MeasureUnit> result = new HashSet<>();
         for (String type : new HashSet<>(MeasureUnit.getAvailableTypes())) {
             for (MeasureUnit unit : MeasureUnit.getAvailable(type)) {
@@ -925,7 +930,7 @@ public class MeasureUnit implements Serializable {
         MeasureUnit create(String type, String subType);
     }
 
-    private static Factory UNIT_FACTORY =
+    private static final Factory UNIT_FACTORY =
             new Factory() {
                 @Override
                 public MeasureUnit create(String type, String subType) {
@@ -933,7 +938,7 @@ public class MeasureUnit implements Serializable {
                 }
             };
 
-    static Factory CURRENCY_FACTORY =
+    static final Factory CURRENCY_FACTORY =
             new Factory() {
                 @Override
                 public MeasureUnit create(String unusedType, String subType) {
@@ -941,7 +946,7 @@ public class MeasureUnit implements Serializable {
                 }
             };
 
-    static Factory TIMEUNIT_FACTORY =
+    static final Factory TIMEUNIT_FACTORY =
             new Factory() {
                 @Override
                 public MeasureUnit create(String type, String subType) {
@@ -993,36 +998,59 @@ public class MeasureUnit implements Serializable {
      *
      * @internal
      */
-    private static synchronized void populateCache() {
+    private static void populateCache() {
         if (cacheIsPopulated) {
             return;
         }
-        cacheIsPopulated = true;
+        synchronized (MEASURE_UNIT_LOCK) {
+            if (cacheIsPopulated) {
+                return;
+            }
+            // Guard against re-entrant calls during loading:
+            // populateCache() -> getBundleInstance() -> addUnit() -> populateCache().
+            // cacheIsLoading is only accessed under MEASURE_UNIT_LOCK so it doesn't need volatile.
+            // The volatile cacheIsPopulated flag is set AFTER loading completes, ensuring
+            // concurrent readers never see a partially-populated cache.
+            if (cacheIsLoading) {
+                return;
+            }
+            cacheIsLoading = true;
+            try {
+                /*  Schema:
+                 *
+                 *  units{
+                 *    duration{
+                 *      day{
+                 *        one{"{0} ден"}
+                 *        other{"{0} дена"}
+                 *      }
+                 */
 
-        /*  Schema:
-         *
-         *  units{
-         *    duration{
-         *      day{
-         *        one{"{0} ден"}
-         *        other{"{0} дена"}
-         *      }
-         */
+                // Load the unit types.  Use English, since we know that that is a superset.
+                ICUResourceBundle rb1 =
+                        (ICUResourceBundle)
+                                UResourceBundle.getBundleInstance(ICUData.ICU_UNIT_BASE_NAME, "en");
+                rb1.getAllItemsWithFallback("units", new MeasureUnitSink());
 
-        // Load the unit types.  Use English, since we know that that is a superset.
-        ICUResourceBundle rb1 =
-                (ICUResourceBundle)
-                        UResourceBundle.getBundleInstance(ICUData.ICU_UNIT_BASE_NAME, "en");
-        rb1.getAllItemsWithFallback("units", new MeasureUnitSink());
+                // Load the currencies
+                ICUResourceBundle rb2 =
+                        (ICUResourceBundle)
+                                UResourceBundle.getBundleInstance(
+                                        ICUData.ICU_BASE_NAME,
+                                        "currencyNumericCodes",
+                                        ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+                rb2.getAllItemsWithFallback("codeMap", new CurrencyNumericCodeSink());
 
-        // Load the currencies
-        ICUResourceBundle rb2 =
-                (ICUResourceBundle)
-                        UResourceBundle.getBundleInstance(
-                                ICUData.ICU_BASE_NAME,
-                                "currencyNumericCodes",
-                                ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-        rb2.getAllItemsWithFallback("codeMap", new CurrencyNumericCodeSink());
+                // Volatile write AFTER loading completes: ensures concurrent readers
+                // (who skip the synchronized block via the fast path)
+                // never see a partially-populated cache.
+                cacheIsPopulated = true;
+            } finally {
+                // Reset on failure so the next call can retry instead of permanently wedging.
+                // On success, cacheIsPopulated is already true so cacheIsLoading is irrelevant.
+                cacheIsLoading = false;
+            }
+        }
     }
 
     /**
@@ -1030,18 +1058,25 @@ public class MeasureUnit implements Serializable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
-    protected static synchronized MeasureUnit addUnit(
-            String type, String unitName, Factory factory) {
-        Map<String, MeasureUnit> tmp = cache.get(type);
-        if (tmp == null) {
-            cache.put(type, tmp = new HashMap<>());
-        } else {
-            // "intern" the type by setting to first item's type.
-            type = tmp.entrySet().iterator().next().getValue().type;
-        }
+    protected static MeasureUnit addUnit(String type, String unitName, Factory factory) {
+        Map<String, MeasureUnit> tmp = cache.computeIfAbsent(type, k -> new ConcurrentHashMap<>());
+        // Lock-free fast path
         MeasureUnit unit = tmp.get(unitName);
-        if (unit == null) {
-            tmp.put(unitName, unit = factory.create(type, unitName));
+        if (unit != null) {
+            return unit;
+        }
+        // Slow path: per-type lock
+        synchronized (tmp) {
+            unit = tmp.get(unitName);
+            if (unit != null) {
+                return unit;
+            }
+            if (!tmp.isEmpty()) {
+                // "intern" the type by setting to first item's type.
+                type = tmp.values().iterator().next().type;
+            }
+            unit = factory.create(type, unitName);
+            tmp.put(unitName, unit);
         }
         return unit;
     }
