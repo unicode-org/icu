@@ -776,7 +776,10 @@ public final class RelativeDateTimeFormatter {
             ((DecimalFormat) numberFormat).toNumberFormatter().formatImpl(dq, output);
             pluralKeyword = pluralRules.select(dq);
         } else {
-            String result = numberFormat.format(quantity);
+            String result;
+            synchronized (numberFormat) {
+                result = numberFormat.format(quantity);
+            }
             output.append(result, null);
             pluralKeyword = pluralRules.select(quantity);
         }

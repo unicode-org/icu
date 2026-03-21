@@ -3,6 +3,7 @@
 package com.ibm.icu.dev.test.util;
 
 import com.ibm.icu.text.DateTimePatternGenerator;
+import com.ibm.icu.text.RelativeDateTimeFormatter;
 import com.ibm.icu.util.ULocale;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,5 +35,25 @@ public class CorrectnessFixConcurrencyTest extends ConcurrencyTest {
                 });
 
         assertTrue("original must still be frozen after all threads complete", frozen.isFrozen());
+    }
+
+    /** formatImpl() else-branch must synchronize on numberFormat. */
+    @Test
+    public void testRelativeDateTimeFormatterConcurrent() throws Exception {
+        // Share a single instance across threads to exercise the synchronized(numberFormat) fix.
+        RelativeDateTimeFormatter fmt = RelativeDateTimeFormatter.getInstance(ULocale.ENGLISH);
+        runConcurrent(
+                "RelativeDateTimeFormatter",
+                tid -> {
+                    for (int i = 0; i < ITERATIONS; i++) {
+                        String result =
+                                fmt.format(
+                                        i + 1,
+                                        RelativeDateTimeFormatter.Direction.NEXT,
+                                        RelativeDateTimeFormatter.RelativeUnit.DAYS);
+                        assertNotNull("format result should not be null", result);
+                        assertFalse("format result should not be empty", result.isEmpty());
+                    }
+                });
     }
 }
