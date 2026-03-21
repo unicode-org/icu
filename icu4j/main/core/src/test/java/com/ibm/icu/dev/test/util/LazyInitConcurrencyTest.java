@@ -2,11 +2,14 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.dev.test.util;
 
+import com.ibm.icu.lang.CharacterProperties;
+import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.text.LocaleDisplayNames;
 import com.ibm.icu.text.LocaleDisplayNames.DialectHandling;
 import com.ibm.icu.text.MeasureFormat;
 import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.text.SimpleDateFormat;
+import com.ibm.icu.text.StringPrep;
 import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.Region;
@@ -110,6 +113,42 @@ public class LazyInitConcurrencyTest extends ConcurrencyTest {
                         String name = ldn.localeDisplayName(ULocale.US);
                         assertNotNull("Display name should not be null", name);
                         assertFalse("Display name should not be empty", name.isEmpty());
+                    }
+                });
+    }
+
+    @Test
+    public void testCharacterPropertiesConcurrent() throws Exception {
+        runConcurrent(
+                "CharacterProperties",
+                tid -> {
+                    for (int i = 0; i < ITERATIONS; i++) {
+                        int prop = (tid + i) % (UProperty.BINARY_LIMIT);
+                        try {
+                            com.ibm.icu.text.UnicodeSet set =
+                                    CharacterProperties.getBinaryPropertySet(prop);
+                            assertNotNull("getBinaryPropertySet should not return null", set);
+                        } catch (IllegalArgumentException e) {
+                            // Some properties may not be supported
+                        }
+                    }
+                });
+    }
+
+    @Test
+    public void testStringPrepGetInstanceConcurrent() throws Exception {
+        runConcurrent(
+                "StringPrepGetInstance",
+                tid -> {
+                    for (int i = 0; i < ITERATIONS; i++) {
+                        int profile = (tid + i) % 8;
+                        try {
+                            StringPrep prep = StringPrep.getInstance(profile);
+                            assertNotNull(
+                                    "StringPrep should not be null for profile " + profile, prep);
+                        } catch (IllegalArgumentException e) {
+                            // Some profiles may not be supported
+                        }
                     }
                 });
     }

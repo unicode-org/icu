@@ -9,6 +9,7 @@ import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.CodePointMap;
 import com.ibm.icu.util.CodePointTrie;
 import com.ibm.icu.util.MutableCodePointTrie;
+import java.util.concurrent.atomic.AtomicReferenceArray;
 
 /**
  * Sets and maps for Unicode properties. The methods here return an object per property: A set for
@@ -24,9 +25,10 @@ import com.ibm.icu.util.MutableCodePointTrie;
 public final class CharacterProperties {
     private CharacterProperties() {} // all-static
 
-    private static final UnicodeSet sets[] = new UnicodeSet[UProperty.BINARY_LIMIT];
-    private static final CodePointMap maps[] =
-            new CodePointMap[UProperty.INT_LIMIT - UProperty.INT_START];
+    private static final AtomicReferenceArray<UnicodeSet> SETS =
+            new AtomicReferenceArray<>(UProperty.BINARY_LIMIT);
+    private static final AtomicReferenceArray<CodePointMap> MAPS =
+            new AtomicReferenceArray<>(UProperty.INT_LIMIT - UProperty.INT_START);
 
     private static UnicodeSet makeSet(int property) {
         UnicodeSet set = new UnicodeSet();
@@ -128,13 +130,15 @@ public final class CharacterProperties {
             throw new IllegalArgumentException(
                     "" + property + " is not a constant for a UProperty binary property");
         }
-        synchronized (sets) {
-            UnicodeSet set = sets[property];
-            if (set == null) {
-                sets[property] = set = makeSet(property);
+        UnicodeSet set = SETS.get(property);
+        if (set == null) {
+            set = makeSet(property);
+            // Race is benign: frozen UnicodeSet is immutable, duplicate computation is harmless
+            if (!SETS.compareAndSet(property, null, set)) {
+                set = SETS.get(property);
             }
-            return set;
         }
+        return set;
     }
 
     /**
@@ -158,12 +162,15 @@ public final class CharacterProperties {
             throw new IllegalArgumentException(
                     "" + property + " is not a constant for a UProperty int property");
         }
-        synchronized (maps) {
-            CodePointMap map = maps[property - UProperty.INT_START];
-            if (map == null) {
-                maps[property - UProperty.INT_START] = map = makeMap(property);
+        int idx = property - UProperty.INT_START;
+        CodePointMap map = MAPS.get(idx);
+        if (map == null) {
+            map = makeMap(property);
+            // Race is benign: CodePointMap is immutable, duplicate computation is harmless
+            if (!MAPS.compareAndSet(idx, null, map)) {
+                map = MAPS.get(idx);
             }
-            return map;
         }
+        return map;
     }
 }
