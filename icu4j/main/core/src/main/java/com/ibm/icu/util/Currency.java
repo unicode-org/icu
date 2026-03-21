@@ -24,10 +24,8 @@ import com.ibm.icu.text.CurrencyMetaInfo.CurrencyFilter;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.ULocale.Category;
 import java.io.ObjectStreamException;
-import java.lang.ref.SoftReference;
 import java.text.ParsePosition;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -61,8 +59,8 @@ public class Currency extends MeasureUnit {
     private static final boolean DEBUG = ICUDebug.enabled("currency");
 
     // Cache to save currency name trie
-    private static ICUCache<ULocale, List<TextTrieMap<CurrencyStringInfo>>> CURRENCY_NAME_CACHE =
-            new SimpleCache<>();
+    private static final ICUCache<ULocale, List<TextTrieMap<CurrencyStringInfo>>>
+            CURRENCY_NAME_CACHE = new SimpleCache<>();
 
     /**
      * Selector for getName() indicating a symbolic name for a currency, such as "$" for USD.
@@ -972,33 +970,34 @@ public class Currency extends MeasureUnit {
         1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000
     };
 
-    private static SoftReference<List<String>> ALL_TENDER_CODES;
-    private static SoftReference<Set<String>> ALL_CODES_AS_SET;
+    // Holder class idiom (JLS 12.4.2): initialized on first access, thread-safe
+    // without synchronization. Currency data is loaded from ICU resource bundles
+    // and does not change at runtime, so permanent retention is appropriate.
+    // Replaces previous SoftReference-based caching; the data is small (~150 currency
+    // codes) and the simplicity of eliminating all synchronization outweighs the
+    // loss of GC reclaimability.
+    private static final class AllTenderCodesHolder {
+        // Filter out non-tender currencies which have "from" date set to 9999-12-31
+        // CurrencyFilter has "to" value set to 9998-12-31 in order to exclude them
+        // CurrencyFilter filter = CurrencyFilter.onDateRange(null, new Date(253373299200000L));
+        static final List<String> ALL_TENDER_CODES =
+                List.copyOf(getTenderCurrencies(CurrencyFilter.all()));
+    }
+
+    private static final class AllCodesAsSetHolder {
+        static final Set<String> ALL_CODES_AS_SET =
+                Set.copyOf(CurrencyMetaInfo.getInstance().currencies(CurrencyFilter.all()));
+    }
 
     /*
      * Returns an unmodifiable String list including all known tender currency codes.
      */
-    private static synchronized List<String> getAllTenderCurrencies() {
-        List<String> all = (ALL_TENDER_CODES == null) ? null : ALL_TENDER_CODES.get();
-        if (all == null) {
-            // Filter out non-tender currencies which have "from" date set to 9999-12-31
-            // CurrencyFilter has "to" value set to 9998-12-31 in order to exclude them
-            // CurrencyFilter filter = CurrencyFilter.onDateRange(null, new Date(253373299200000L));
-            CurrencyFilter filter = CurrencyFilter.all();
-            all = Collections.unmodifiableList(getTenderCurrencies(filter));
-            ALL_TENDER_CODES = new SoftReference<>(all);
-        }
-        return all;
+    private static List<String> getAllTenderCurrencies() {
+        return AllTenderCodesHolder.ALL_TENDER_CODES;
     }
 
-    private static synchronized Set<String> getAllCurrenciesAsSet() {
-        Set<String> all = (ALL_CODES_AS_SET == null) ? null : ALL_CODES_AS_SET.get();
-        if (all == null) {
-            CurrencyMetaInfo info = CurrencyMetaInfo.getInstance();
-            all = Collections.unmodifiableSet(new HashSet<>(info.currencies(CurrencyFilter.all())));
-            ALL_CODES_AS_SET = new SoftReference<>(all);
-        }
-        return all;
+    private static Set<String> getAllCurrenciesAsSet() {
+        return AllCodesAsSetHolder.ALL_CODES_AS_SET;
     }
 
     /**
