@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1774065822491,
+  "lastUpdate": 1774114711499,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -145821,6 +145821,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 39.737,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "aszeto@google.com",
+            "name": "Andrew Szeto",
+            "username": "jabagawee"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "1659052025f132eabc9b088ffa5dd10f733993c9",
+          "message": "ICU-23321 Fix thread-safety issues found by missing-synchronization audit\n\n- ResourceBundleWrapper.initKeysVector(): concurrent calls on shared parent\n  bundles caused ArrayList corruption (ArrayIndexOutOfBoundsException).\n  Fixed with volatile field + local variable + early return.\n  Reported via https://github.com/eclipse-birt/birt/issues/2394\n- UScriptRun.parenStack: static array shared across all instances, indexed\n  by instance fields. Concurrent instances would corrupt each other. Fixed\n  by making it an instance field.\n- CharsetISCII PNJ sets: lazy init of static UnicodeSet fields without\n  synchronization. Fixed with holder pattern and frozen sets.\n- UCharacter.UnicodeBlock.mref: non-volatile SoftReference. Added volatile.\n- BasicPeriodFormatterService.instance: non-volatile lazy singleton.\n  Converted to holder pattern.\n- LocaleData.gCLDRVersion: non-volatile lazy VersionInfo. Added volatile.\n- UnicodeSet.XSYMBOL_TABLE: non-volatile global config field. Added volatile.",
+          "timestamp": "2026-03-21T10:01:11-07:00",
+          "tree_id": "4e59541dcf7e54378f377e8019b111f78ae82489",
+          "url": "https://github.com/unicode-org/icu/commit/1659052025f132eabc9b088ffa5dd10f733993c9"
+        },
+        "date": 1774114285032,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 19.2597,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 21.7124,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 25.4415,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 26.1658,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 32.171,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 32.7162,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 20.4656,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 14.5458,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 73.1685,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 20.831,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 34.2294,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 39.8072,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
