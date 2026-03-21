@@ -1311,11 +1311,11 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
         }
 
         DateTimePatternGenerator dtpg2 = dtpg.cloneAsThawed();
-        if (dtpg.isFrozen() != false) {
+        if (dtpg.isFrozen() != true) {
             errln(
-                    "DateTimePatternGenerator.isFrozen() is suppose to return false "
-                            + "for a DateTimePatternGenerator object that was just "
-                            + "clone as thawed.");
+                    "DateTimePatternGenerator.isFrozen() is suppose to return true "
+                            + "for the original DateTimePatternGenerator after "
+                            + "cloneAsThawed (the original should remain frozen).");
         }
         if (dtpg2.isFrozen() != false) {
             errln(

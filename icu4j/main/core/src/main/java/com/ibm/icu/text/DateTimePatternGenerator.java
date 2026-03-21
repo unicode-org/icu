@@ -1752,7 +1752,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     @Override
     public DateTimePatternGenerator cloneAsThawed() {
         DateTimePatternGenerator result = this.clone();
-        frozen = false;
+        result.frozen = false;
         return result;
     }
 
