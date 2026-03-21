@@ -3,6 +3,7 @@
 package com.ibm.icu.dev.test.util;
 
 import com.ibm.icu.text.DateTimePatternGenerator;
+import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.text.RelativeDateTimeFormatter;
 import com.ibm.icu.util.ULocale;
 import org.junit.Test;
@@ -53,6 +54,21 @@ public class CorrectnessFixConcurrencyTest extends ConcurrencyTest {
                                         RelativeDateTimeFormatter.RelativeUnit.DAYS);
                         assertNotNull("format result should not be null", result);
                         assertFalse("format result should not be empty", result.isEmpty());
+                    }
+                });
+    }
+
+    /** getLanguageToSet() must use holder pattern for thread-safe lazy initialization. */
+    @Test
+    public void testStandardPluralRangesConcurrent() throws Exception {
+        runConcurrent(
+                "StandardPluralRanges",
+                tid -> {
+                    for (int i = 0; i < ITERATIONS; i++) {
+                        PluralRules rules = PluralRules.forLocale(ULocale.ENGLISH);
+                        assertNotNull("PluralRules should not be null", rules);
+                        String keyword = rules.select(1);
+                        assertNotNull("select() should not return null", keyword);
                     }
                 });
     }
