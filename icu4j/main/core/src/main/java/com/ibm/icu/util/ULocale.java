@@ -1366,7 +1366,6 @@ public final class ULocale implements Serializable, Comparable<ULocale>, Cloneab
 
         public String replace() {
             boolean changed = false;
-            loadAliasData();
             int count = 0;
             while (true) {
                 if (count++ > 10) {
@@ -1443,123 +1442,145 @@ public final class ULocale implements Serializable, Comparable<ULocale>, Cloneab
         }
         ;
 
-        private static boolean aliasDataIsLoaded = false;
-        private static Map<String, String> languageAliasMap = null;
-        private static Map<String, String> scriptAliasMap = null;
-        private static Map<String, List<String>> territoryAliasMap = null;
-        private static Map<String, String> variantAliasMap = null;
-        private static Map<String, String> subdivisionAliasMap = null;
-
-        /*
-         * Initializes the alias data from the ICU resource bundles. The alias
-         * data contains alias of language, country, script and variants.
+        /**
+         * Holds all alias replacement maps, loaded once from ICU resource bundles. Uses the Holder
+         * class idiom (JLS 12.4.2) for thread-safe lazy initialization without synchronization on
+         * the read path.
          *
-         * If the alias data has already loaded, then this method simply
-         * returns without doing anything meaningful.
-         *
+         * <p>Note: If the ICU "metadata" resource bundle is missing or corrupt, class
+         * initialization fails permanently (ExceptionInInitializerError).
          */
-        private static synchronized void loadAliasData() {
-            if (aliasDataIsLoaded) {
-                return;
-            }
-            languageAliasMap = new HashMap<>();
-            scriptAliasMap = new HashMap<>();
-            territoryAliasMap = new HashMap<>();
-            variantAliasMap = new HashMap<>();
-            subdivisionAliasMap = new HashMap<>();
+        private static final class AliasDataHolder {
+            static final Map<String, String> languageAliasMap;
+            static final Map<String, String> scriptAliasMap;
+            static final Map<String, List<String>> territoryAliasMap;
+            static final Map<String, String> variantAliasMap;
+            static final Map<String, String> subdivisionAliasMap;
 
-            UResourceBundle metadata =
-                    UResourceBundle.getBundleInstance(
-                            ICUData.ICU_BASE_NAME,
-                            "metadata",
-                            ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-            UResourceBundle metadataAlias = metadata.get("alias");
-            UResourceBundle languageAlias = metadataAlias.get("language");
-            UResourceBundle scriptAlias = metadataAlias.get("script");
-            UResourceBundle territoryAlias = metadataAlias.get("territory");
-            UResourceBundle variantAlias = metadataAlias.get("variant");
-            UResourceBundle subdivisionAlias = metadataAlias.get("subdivision");
+            static {
+                Map<String, String> languageMap = new HashMap<>();
+                Map<String, String> scriptMap = new HashMap<>();
+                Map<String, List<String>> territoryMap = new HashMap<>();
+                Map<String, String> variantMap = new HashMap<>();
+                Map<String, String> subdivisionMap = new HashMap<>();
 
-            for (int i = 0; i < languageAlias.getSize(); i++) {
-                UResourceBundle res = languageAlias.get(i);
-                String aliasFrom = res.getKey();
-                String aliasTo = res.get("replacement").getString();
-                Locale testLocale = new Locale(aliasFrom);
-                // if there are script in the aliasFrom
-                // or we have both a und as language and a region code.
-                if (!testLocale.getScript().isEmpty()
-                        || (aliasFrom.startsWith("und") && !testLocale.getCountry().isEmpty())) {
-                    throw new IllegalArgumentException(
-                            "key ["
-                                    + aliasFrom
-                                    + "] in alias:language contains unsupported fields combination.");
-                }
-                languageAliasMap.put(aliasFrom, aliasTo);
-            }
-            for (int i = 0; i < scriptAlias.getSize(); i++) {
-                UResourceBundle res = scriptAlias.get(i);
-                String aliasFrom = res.getKey();
-                String aliasTo = res.get("replacement").getString();
-                if (aliasFrom.length() != 4) {
-                    throw new IllegalArgumentException(
-                            "Incorrect key [" + aliasFrom + "] in alias:script.");
-                }
-                scriptAliasMap.put(aliasFrom, aliasTo);
-            }
-            for (int i = 0; i < territoryAlias.getSize(); i++) {
-                UResourceBundle res = territoryAlias.get(i);
-                String aliasFrom = res.getKey();
-                String aliasTo = res.get("replacement").getString();
-                if (aliasFrom.length() < 2 || aliasFrom.length() > 3) {
-                    throw new IllegalArgumentException(
-                            "Incorrect key [" + aliasFrom + "] in alias:territory.");
-                }
-                territoryAliasMap.put(
-                        aliasFrom, new ArrayList<>(Arrays.asList(aliasTo.split(" "))));
-            }
-            for (int i = 0; i < variantAlias.getSize(); i++) {
-                UResourceBundle res = variantAlias.get(i);
-                String aliasFrom = res.getKey();
-                String aliasTo = res.get("replacement").getString();
-                if (aliasFrom.length() < 4
-                        || aliasFrom.length() > 8
-                        || (aliasFrom.length() == 4
-                                && (aliasFrom.charAt(0) < '0' || aliasFrom.charAt(0) > '9'))) {
-                    throw new IllegalArgumentException(
-                            "Incorrect key [" + aliasFrom + "] in alias:variant.");
-                }
-                if (aliasTo.length() < 4
-                        || aliasTo.length() > 8
-                        || (aliasTo.length() == 4
-                                && (aliasTo.charAt(0) < '0' || aliasTo.charAt(0) > '9'))) {
-                    throw new IllegalArgumentException(
-                            "Incorrect variant ["
-                                    + aliasTo
-                                    + "] for the key ["
-                                    + aliasFrom
-                                    + "] in alias:variant.");
-                }
-                variantAliasMap.put(aliasFrom, aliasTo);
-            }
-            for (int i = 0; i < subdivisionAlias.getSize(); i++) {
-                UResourceBundle res = subdivisionAlias.get(i);
-                String aliasFrom = res.getKey();
-                String aliasTo = res.get("replacement").getString().split(" ")[0];
-                if (aliasFrom.length() < 3 || aliasFrom.length() > 8) {
-                    throw new IllegalArgumentException(
-                            "Incorrect key [" + aliasFrom + "] in alias:territory.");
-                }
-                if (aliasTo.length() == 2) {
-                    // Add 'zzzz' based on changes to UTS #35 for CLDR-14312.
-                    aliasTo += "zzzz";
-                } else if (aliasTo.length() < 2 || aliasTo.length() > 8) {
-                    throw new IllegalArgumentException(
-                            "Incorrect value [" + aliasTo + "] in alias:territory.");
-                }
-                subdivisionAliasMap.put(aliasFrom, aliasTo);
-            }
+                UResourceBundle metadata =
+                        UResourceBundle.getBundleInstance(
+                                ICUData.ICU_BASE_NAME,
+                                "metadata",
+                                ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+                UResourceBundle metadataAlias = metadata.get("alias");
+                UResourceBundle languageAlias = metadataAlias.get("language");
+                UResourceBundle scriptAlias = metadataAlias.get("script");
+                UResourceBundle territoryAlias = metadataAlias.get("territory");
+                UResourceBundle variantAlias = metadataAlias.get("variant");
+                UResourceBundle subdivisionAlias = metadataAlias.get("subdivision");
 
-            aliasDataIsLoaded = true;
+                for (int i = 0; i < languageAlias.getSize(); i++) {
+                    UResourceBundle res = languageAlias.get(i);
+                    String aliasFrom = res.getKey();
+                    String aliasTo = res.get("replacement").getString();
+                    Locale testLocale = new Locale(aliasFrom);
+                    // if there are script in the aliasFrom
+                    // or we have both a und as language and a region code.
+                    if (!testLocale.getScript().isEmpty()
+                            || (aliasFrom.startsWith("und")
+                                    && !testLocale.getCountry().isEmpty())) {
+                        throw new IllegalArgumentException(
+                                "key ["
+                                        + aliasFrom
+                                        + "] in alias:language contains unsupported fields combination.");
+                    }
+                    languageMap.put(aliasFrom, aliasTo);
+                }
+                for (int i = 0; i < scriptAlias.getSize(); i++) {
+                    UResourceBundle res = scriptAlias.get(i);
+                    String aliasFrom = res.getKey();
+                    String aliasTo = res.get("replacement").getString();
+                    if (aliasFrom.length() != 4) {
+                        throw new IllegalArgumentException(
+                                "Incorrect key [" + aliasFrom + "] in alias:script.");
+                    }
+                    scriptMap.put(aliasFrom, aliasTo);
+                }
+                for (int i = 0; i < territoryAlias.getSize(); i++) {
+                    UResourceBundle res = territoryAlias.get(i);
+                    String aliasFrom = res.getKey();
+                    String aliasTo = res.get("replacement").getString();
+                    if (aliasFrom.length() < 2 || aliasFrom.length() > 3) {
+                        throw new IllegalArgumentException(
+                                "Incorrect key [" + aliasFrom + "] in alias:territory.");
+                    }
+                    territoryMap.put(aliasFrom, new ArrayList<>(Arrays.asList(aliasTo.split(" "))));
+                }
+                for (int i = 0; i < variantAlias.getSize(); i++) {
+                    UResourceBundle res = variantAlias.get(i);
+                    String aliasFrom = res.getKey();
+                    String aliasTo = res.get("replacement").getString();
+                    if (aliasFrom.length() < 4
+                            || aliasFrom.length() > 8
+                            || (aliasFrom.length() == 4
+                                    && (aliasFrom.charAt(0) < '0' || aliasFrom.charAt(0) > '9'))) {
+                        throw new IllegalArgumentException(
+                                "Incorrect key [" + aliasFrom + "] in alias:variant.");
+                    }
+                    if (aliasTo.length() < 4
+                            || aliasTo.length() > 8
+                            || (aliasTo.length() == 4
+                                    && (aliasTo.charAt(0) < '0' || aliasTo.charAt(0) > '9'))) {
+                        throw new IllegalArgumentException(
+                                "Incorrect variant ["
+                                        + aliasTo
+                                        + "] for the key ["
+                                        + aliasFrom
+                                        + "] in alias:variant.");
+                    }
+                    variantMap.put(aliasFrom, aliasTo);
+                }
+                for (int i = 0; i < subdivisionAlias.getSize(); i++) {
+                    UResourceBundle res = subdivisionAlias.get(i);
+                    String aliasFrom = res.getKey();
+                    String aliasTo = res.get("replacement").getString().split(" ")[0];
+                    if (aliasFrom.length() < 3 || aliasFrom.length() > 8) {
+                        throw new IllegalArgumentException(
+                                "Incorrect key [" + aliasFrom + "] in alias:territory.");
+                    }
+                    if (aliasTo.length() == 2) {
+                        // Add 'zzzz' based on changes to UTS #35 for CLDR-14312.
+                        aliasTo += "zzzz";
+                    } else if (aliasTo.length() < 2 || aliasTo.length() > 8) {
+                        throw new IllegalArgumentException(
+                                "Incorrect value [" + aliasTo + "] in alias:territory.");
+                    }
+                    subdivisionMap.put(aliasFrom, aliasTo);
+                }
+
+                languageAliasMap = Map.copyOf(languageMap);
+                scriptAliasMap = Map.copyOf(scriptMap);
+                territoryAliasMap = Map.copyOf(territoryMap);
+                variantAliasMap = Map.copyOf(variantMap);
+                subdivisionAliasMap = Map.copyOf(subdivisionMap);
+            }
+        }
+
+        private static Map<String, String> languageAliasMap() {
+            return AliasDataHolder.languageAliasMap;
+        }
+
+        private static Map<String, String> scriptAliasMap() {
+            return AliasDataHolder.scriptAliasMap;
+        }
+
+        private static Map<String, List<String>> territoryAliasMap() {
+            return AliasDataHolder.territoryAliasMap;
+        }
+
+        private static Map<String, String> variantAliasMap() {
+            return AliasDataHolder.variantAliasMap;
+        }
+
+        private static Map<String, String> subdivisionAliasMap() {
+            return AliasDataHolder.subdivisionAliasMap;
         }
 
         private static String generateKey(String language, String region, String variant) {
@@ -1612,7 +1633,7 @@ public final class ULocale implements Serializable, Comparable<ULocale>, Cloneab
                     searchVariant = null;
                 }
                 String typeKey = generateKey(searchLanguage, searchRegion, searchVariant);
-                String replacement = languageAliasMap.get(typeKey);
+                String replacement = languageAliasMap().get(typeKey);
                 if (replacement == null) {
                     // Found no replacement data.
                     continue;
@@ -1708,7 +1729,7 @@ public final class ULocale implements Serializable, Comparable<ULocale>, Cloneab
 
         private boolean replaceRegion() {
             if (region == null || region.isEmpty()) return false;
-            List<String> replacement = territoryAliasMap.get(region);
+            List<String> replacement = territoryAliasMap().get(region);
             if (replacement == null) {
                 // Found no replacement data for this region.
                 return false;
@@ -1733,7 +1754,7 @@ public final class ULocale implements Serializable, Comparable<ULocale>, Cloneab
 
         private boolean replaceScript() {
             if (script == null || script.isEmpty()) return false;
-            String replacement = scriptAliasMap.get(script);
+            String replacement = scriptAliasMap().get(script);
             if (replacement == null) {
                 // Found no replacement data for this script.
                 return false;
@@ -1748,7 +1769,7 @@ public final class ULocale implements Serializable, Comparable<ULocale>, Cloneab
             if (variants == null) return false;
             for (int i = 0; i < variants.size(); i++) {
                 String variant = variants.get(i);
-                String replacement = variantAliasMap.get(variant);
+                String replacement = variantAliasMap().get(variant);
                 if (replacement == null) {
                     // Found no replacement data for this variant.
                     continue;
@@ -1773,7 +1794,7 @@ public final class ULocale implements Serializable, Comparable<ULocale>, Cloneab
         }
 
         private String replaceSubdivision(String subdivision) {
-            return subdivisionAliasMap.get(subdivision);
+            return subdivisionAliasMap().get(subdivision);
         }
 
         private String replaceTransformedExtensions(String extensions) {
