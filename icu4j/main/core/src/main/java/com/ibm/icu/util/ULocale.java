@@ -113,7 +113,7 @@ public final class ULocale implements Serializable, Comparable<ULocale>, Cloneab
     // using serialver from jdk1.4.2_05
     private static final long serialVersionUID = 3715177670352309217L;
 
-    private static CacheBase<String, String, Void> nameCache =
+    private static final CacheBase<String, String, Void> nameCache =
             new SoftCache<String, String, Void>() {
                 @Override
                 protected String createInstance(String tmpLocaleID, Void unused) {
@@ -398,7 +398,7 @@ public final class ULocale implements Serializable, Comparable<ULocale>, Cloneab
      * This table lists pairs of locale ids for canonicalization. The 1st item is the normalized id.
      * The 2nd item is the canonicalized id.
      */
-    private static String[][] CANONICALIZE_MAP = {
+    private static final String[][] CANONICALIZE_MAP = {
         {"art__LOJBAN", "jbo"}, /* registered name */
         {"cel__GAULISH", "cel__GAULISH"}, /* registered name */
         {"de__1901", "de__1901"}, /* registered name */
@@ -557,28 +557,46 @@ public final class ULocale implements Serializable, Comparable<ULocale>, Cloneab
     /** Keep our own default ULocale. */
     private static volatile ULocale defaultULocale;
 
-    private static Locale[] defaultCategoryLocales = new Locale[Category.values().length];
-    private static ULocale[] defaultCategoryULocales = new ULocale[Category.values().length];
+    /**
+     * Holds the per-category default Locale and ULocale arrays as a single volatile snapshot. This
+     * avoids the TOCTOU race of reading two separate volatile arrays (one could be swapped between
+     * reads). All writes do copy-on-write: clone arrays, modify, publish new snapshot via volatile
+     * write.
+     */
+    private static final class DefaultCategoryState {
+        final Locale[] locales;
+        final ULocale[] ulocales;
+
+        DefaultCategoryState(Locale[] locales, ULocale[] ulocales) {
+            this.locales = locales;
+            this.ulocales = ulocales;
+        }
+    }
+
+    private static volatile DefaultCategoryState defaultCategoryState;
 
     static {
         Locale defaultLocale = Locale.getDefault();
         defaultULocale = forLocale(defaultLocale);
 
+        Locale[] catLocales = new Locale[Category.values().length];
+        ULocale[] catULocales = new ULocale[Category.values().length];
         if (JDKLocaleHelper.hasLocaleCategories()) {
             for (Category cat : Category.values()) {
                 int idx = cat.ordinal();
-                defaultCategoryLocales[idx] = JDKLocaleHelper.getDefault(cat);
-                defaultCategoryULocales[idx] = forLocale(defaultCategoryLocales[idx]);
+                catLocales[idx] = JDKLocaleHelper.getDefault(cat);
+                catULocales[idx] = forLocale(catLocales[idx]);
             }
         } else {
             // Android API level 21..23 does not have separate category locales,
             // use the non-category default for all.
             for (Category cat : Category.values()) {
                 int idx = cat.ordinal();
-                defaultCategoryLocales[idx] = defaultLocale;
-                defaultCategoryULocales[idx] = defaultULocale;
+                catLocales[idx] = defaultLocale;
+                catULocales[idx] = defaultULocale;
             }
         }
+        defaultCategoryState = new DefaultCategoryState(catLocales, catULocales);
     }
 
     /**
@@ -624,11 +642,14 @@ public final class ULocale implements Serializable, Comparable<ULocale>, Cloneab
                 // Detected Java default Locale change.
                 // We need to update category defaults to match
                 // Java 7's behavior on Android API level 21..23.
+                Locale[] newLocales = new Locale[Category.values().length];
+                ULocale[] newULocales = new ULocale[Category.values().length];
                 for (Category cat : Category.values()) {
                     int idx = cat.ordinal();
-                    defaultCategoryLocales[idx] = currentDefault;
-                    defaultCategoryULocales[idx] = nextULocale;
+                    newLocales[idx] = currentDefault;
+                    newULocales[idx] = nextULocale;
                 }
+                defaultCategoryState = new DefaultCategoryState(newLocales, newULocales);
             }
 
             return defaultULocale = nextULocale;
@@ -669,49 +690,69 @@ public final class ULocale implements Serializable, Comparable<ULocale>, Cloneab
      * @stable ICU 49
      */
     public static ULocale getDefault(Category category) {
-        synchronized (ULocale.class) {
-            int idx = category.ordinal();
-            if (defaultCategoryULocales[idx] == null) {
-                // Just in case this method is called during ULocale class
-                // initialization. Unlike getDefault(), we do not have
-                // cyclic dependency for category default.
-                return ULocale.ROOT;
-            }
-            if (JDKLocaleHelper.hasLocaleCategories()) {
-                Locale currentCategoryDefault = JDKLocaleHelper.getDefault(category);
-                if (!defaultCategoryLocales[idx].equals(currentCategoryDefault)) {
-                    defaultCategoryLocales[idx] = currentCategoryDefault;
-                    defaultCategoryULocales[idx] = forLocale(currentCategoryDefault);
-                }
-            } else {
-                // java.util.Locale.setDefault(Locale) in Java 7 updates
-                // category locale defaults. On Android API level 21..23
-                // ICU4J checks if the default locale has changed and update
-                // category ULocales here if necessary.
-
-                // Note: When java.util.Locale.setDefault(Locale) is called
-                // with a Locale same with the previous one, Java 7 still
-                // updates category locale defaults. On Android API level 21..23
-                // there is no good way to detect the event, ICU4J simply
-                // checks if the default Java Locale has changed since last
-                // time.
-
-                Locale currentDefault = Locale.getDefault();
-                if (!defaultULocale.locale.equals(currentDefault)) {
-                    defaultULocale = forLocale(currentDefault);
-
-                    for (Category cat : Category.values()) {
-                        int tmpIdx = cat.ordinal();
-                        defaultCategoryLocales[tmpIdx] = currentDefault;
-                        defaultCategoryULocales[tmpIdx] = forLocale(currentDefault);
+        int idx = category.ordinal();
+        // Single volatile read: atomic snapshot of both arrays
+        DefaultCategoryState state = defaultCategoryState;
+        if (state == null || state.ulocales[idx] == null) {
+            // Just in case this method is called during ULocale class
+            // initialization. Unlike getDefault(), we do not have
+            // cyclic dependency for category default.
+            return ULocale.ROOT;
+        }
+        if (JDKLocaleHelper.hasLocaleCategories()) {
+            Locale currentCategoryDefault = JDKLocaleHelper.getDefault(category);
+            if (!state.locales[idx].equals(currentCategoryDefault)) {
+                // Rare path: JDK default changed. Take the lock to update.
+                synchronized (ULocale.class) {
+                    state = defaultCategoryState;
+                    if (!state.locales[idx].equals(currentCategoryDefault)) {
+                        Locale[] newLocales = state.locales.clone();
+                        ULocale[] newULocales = state.ulocales.clone();
+                        newLocales[idx] = currentCategoryDefault;
+                        newULocales[idx] = forLocale(currentCategoryDefault);
+                        state = new DefaultCategoryState(newLocales, newULocales);
+                        defaultCategoryState = state;
                     }
                 }
-
-                // No synchronization with JDK Locale, because category default
-                // is not supported in Android API level 21..23.
+                return state.ulocales[idx];
             }
-            return defaultCategoryULocales[idx];
+        } else {
+            // java.util.Locale.setDefault(Locale) in Java 7 updates
+            // category locale defaults. On Android API level 21..23
+            // ICU4J checks if the default locale has changed and update
+            // category ULocales here if necessary.
+
+            // Note: When java.util.Locale.setDefault(Locale) is called
+            // with a Locale same with the previous one, Java 7 still
+            // updates category locale defaults. On Android API level 21..23
+            // there is no good way to detect the event, ICU4J simply
+            // checks if the default Java Locale has changed since last
+            // time.
+
+            Locale currentDefault = Locale.getDefault();
+            if (!defaultULocale.locale.equals(currentDefault)) {
+                synchronized (ULocale.class) {
+                    state = defaultCategoryState;
+                    if (!defaultULocale.locale.equals(currentDefault)) {
+                        defaultULocale = forLocale(currentDefault);
+                        Locale[] newLocales = new Locale[Category.values().length];
+                        ULocale[] newULocales = new ULocale[Category.values().length];
+                        for (Category cat : Category.values()) {
+                            int tmpIdx = cat.ordinal();
+                            newLocales[tmpIdx] = currentDefault;
+                            newULocales[tmpIdx] = forLocale(currentDefault);
+                        }
+                        state = new DefaultCategoryState(newLocales, newULocales);
+                        defaultCategoryState = state;
+                    }
+                }
+                return state.ulocales[idx];
+            }
+
+            // No synchronization with JDK Locale, because category default
+            // is not supported in Android API level 21..23.
         }
+        return state.ulocales[idx];
     }
 
     /**
@@ -729,8 +770,12 @@ public final class ULocale implements Serializable, Comparable<ULocale>, Cloneab
     public static synchronized void setDefault(Category category, ULocale newLocale) {
         Locale newJavaDefault = newLocale.toLocale();
         int idx = category.ordinal();
-        defaultCategoryULocales[idx] = newLocale;
-        defaultCategoryLocales[idx] = newJavaDefault;
+        DefaultCategoryState state = defaultCategoryState;
+        ULocale[] newULocales = state.ulocales.clone();
+        Locale[] newLocales = state.locales.clone();
+        newULocales[idx] = newLocale;
+        newLocales[idx] = newJavaDefault;
+        defaultCategoryState = new DefaultCategoryState(newLocales, newULocales);
         JDKLocaleHelper.setDefault(category, newJavaDefault);
     }
 
