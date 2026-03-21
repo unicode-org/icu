@@ -92,15 +92,11 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
     }
 
     public static LocaleDisplayNames getInstance(ULocale locale, DialectHandling dialectHandling) {
-        synchronized (cache) {
-            return cache.get(locale, dialectHandling);
-        }
+        return cache.get(locale, dialectHandling);
     }
 
     public static LocaleDisplayNames getInstance(ULocale locale, DisplayContext... contexts) {
-        synchronized (cache) {
-            return cache.get(locale, contexts);
-        }
+        return cache.get(locale, contexts);
     }
 
     private final class CapitalizationContextSink extends UResource.Sink {
@@ -821,28 +817,71 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
         return b;
     }
 
+    /**
+     * Single-entry cache using an immutable snapshot for lock-free reads. Race on miss is benign:
+     * worst case, two threads create identical instances.
+     */
     private static class Cache {
-        private ULocale locale;
-        private DialectHandling dialectHandling;
-        private DisplayContext capitalization;
-        private DisplayContext nameLength;
-        private DisplayContext substituteHandling;
-        private LocaleDisplayNames cache;
+        private static class CacheEntry {
+            final ULocale locale;
+            final DialectHandling dialectHandling;
+            final DisplayContext capitalization;
+            final DisplayContext nameLength;
+            final DisplayContext substituteHandling;
+            final LocaleDisplayNames value;
 
-        public LocaleDisplayNames get(ULocale locale, DialectHandling dialectHandling) {
-            if (!(dialectHandling == this.dialectHandling
-                    && DisplayContext.CAPITALIZATION_NONE == this.capitalization
-                    && DisplayContext.LENGTH_FULL == this.nameLength
-                    && DisplayContext.SUBSTITUTE == this.substituteHandling
-                    && locale.equals(this.locale))) {
+            CacheEntry(
+                    ULocale locale,
+                    DialectHandling dialectHandling,
+                    DisplayContext capitalization,
+                    DisplayContext nameLength,
+                    DisplayContext substituteHandling,
+                    LocaleDisplayNames value) {
                 this.locale = locale;
                 this.dialectHandling = dialectHandling;
-                this.capitalization = DisplayContext.CAPITALIZATION_NONE;
-                this.nameLength = DisplayContext.LENGTH_FULL;
-                this.substituteHandling = DisplayContext.SUBSTITUTE;
-                this.cache = new LocaleDisplayNamesImpl(locale, dialectHandling);
+                this.capitalization = capitalization;
+                this.nameLength = nameLength;
+                this.substituteHandling = substituteHandling;
+                this.value = value;
             }
-            return cache;
+
+            boolean matches(
+                    ULocale locale,
+                    DialectHandling dialectHandling,
+                    DisplayContext capitalization,
+                    DisplayContext nameLength,
+                    DisplayContext substituteHandling) {
+                return dialectHandling == this.dialectHandling
+                        && capitalization == this.capitalization
+                        && nameLength == this.nameLength
+                        && substituteHandling == this.substituteHandling
+                        && locale.equals(this.locale);
+            }
+        }
+
+        private volatile CacheEntry entry;
+
+        public LocaleDisplayNames get(ULocale locale, DialectHandling dialectHandling) {
+            CacheEntry e = entry;
+            if (e != null
+                    && e.matches(
+                            locale,
+                            dialectHandling,
+                            DisplayContext.CAPITALIZATION_NONE,
+                            DisplayContext.LENGTH_FULL,
+                            DisplayContext.SUBSTITUTE)) {
+                return e.value;
+            }
+            LocaleDisplayNames result = new LocaleDisplayNamesImpl(locale, dialectHandling);
+            entry =
+                    new CacheEntry(
+                            locale,
+                            dialectHandling,
+                            DisplayContext.CAPITALIZATION_NONE,
+                            DisplayContext.LENGTH_FULL,
+                            DisplayContext.SUBSTITUTE,
+                            result);
+            return result;
         }
 
         public LocaleDisplayNames get(ULocale locale, DisplayContext... contexts) {
@@ -871,19 +910,26 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
                         break;
                 }
             }
-            if (!(dialectHandlingIn == this.dialectHandling
-                    && capitalizationIn == this.capitalization
-                    && nameLengthIn == this.nameLength
-                    && substituteHandling == this.substituteHandling
-                    && locale.equals(this.locale))) {
-                this.locale = locale;
-                this.dialectHandling = dialectHandlingIn;
-                this.capitalization = capitalizationIn;
-                this.nameLength = nameLengthIn;
-                this.substituteHandling = substituteHandling;
-                this.cache = new LocaleDisplayNamesImpl(locale, contexts);
+            CacheEntry e = entry;
+            if (e != null
+                    && e.matches(
+                            locale,
+                            dialectHandlingIn,
+                            capitalizationIn,
+                            nameLengthIn,
+                            substituteHandling)) {
+                return e.value;
             }
-            return cache;
+            LocaleDisplayNames result = new LocaleDisplayNamesImpl(locale, contexts);
+            entry =
+                    new CacheEntry(
+                            locale,
+                            dialectHandlingIn,
+                            capitalizationIn,
+                            nameLengthIn,
+                            substituteHandling,
+                            result);
+            return result;
         }
     }
 }

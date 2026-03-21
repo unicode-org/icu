@@ -1000,26 +1000,48 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
     }
 
     // privates for the default pattern
-    private static ULocale cachedDefaultLocale = null;
-    private static String cachedDefaultPattern = null;
+
+    /**
+     * Immutable snapshot of (locale, pattern) for the default pattern cache. Published via a single
+     * volatile write so readers always see a consistent pair.
+     */
+    private static final class DefaultPatternEntry {
+        final ULocale locale;
+        final String pattern;
+
+        DefaultPatternEntry(ULocale locale, String pattern) {
+            this.locale = locale;
+            this.pattern = pattern;
+        }
+    }
+
+    private static volatile DefaultPatternEntry cachedDefault = null;
     private static final String FALLBACKPATTERN = "yy/MM/dd HH:mm";
 
     /*
      * Returns the default date and time pattern (SHORT) for the default locale.
      * This method is only used by the default SimpleDateFormat constructor.
      */
-    private static synchronized String getDefaultPattern() {
+    private static String getDefaultPattern() {
         ULocale defaultLocale = ULocale.getDefault(Category.FORMAT);
-        if (!defaultLocale.equals(cachedDefaultLocale)) {
-            cachedDefaultLocale = defaultLocale;
-            Calendar cal = Calendar.getInstance(cachedDefaultLocale);
+        DefaultPatternEntry entry = cachedDefault; // single volatile read
+        if (entry != null && defaultLocale.equals(entry.locale)) {
+            return entry.pattern;
+        }
+        synchronized (SimpleDateFormat.class) {
+            entry = cachedDefault;
+            if (entry != null && defaultLocale.equals(entry.locale)) {
+                return entry.pattern;
+            }
+            Calendar cal = Calendar.getInstance(defaultLocale);
+            String pattern;
 
             try {
                 // Load the calendar data directly.
                 ICUResourceBundle rb =
                         (ICUResourceBundle)
                                 UResourceBundle.getBundleInstance(
-                                        ICUData.ICU_BASE_NAME, cachedDefaultLocale);
+                                        ICUData.ICU_BASE_NAME, defaultLocale);
                 String resourcePath = "calendar/" + cal.getType() + "/DateTimePatterns";
                 ICUResourceBundle patternsRb = rb.findWithFallback(resourcePath);
 
@@ -1027,12 +1049,11 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
                     patternsRb = rb.findWithFallback("calendar/gregorian/DateTimePatterns");
                 }
                 if (patternsRb == null || patternsRb.getSize() < 9) {
-                    cachedDefaultPattern = FALLBACKPATTERN;
+                    pattern = FALLBACKPATTERN;
                 } else {
-                    String basePattern =
-                            Calendar.getDateAtTimePattern(cal, cachedDefaultLocale, SHORT);
+                    String basePattern = Calendar.getDateAtTimePattern(cal, defaultLocale, SHORT);
 
-                    cachedDefaultPattern =
+                    pattern =
                             SimpleFormatterImpl.formatRawPattern(
                                     basePattern,
                                     2,
@@ -1041,10 +1062,11 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
                                     patternsRb.getString(SHORT + 4));
                 }
             } catch (MissingResourceException e) {
-                cachedDefaultPattern = FALLBACKPATTERN;
+                pattern = FALLBACKPATTERN;
             }
+            cachedDefault = new DefaultPatternEntry(defaultLocale, pattern);
+            return pattern;
         }
-        return cachedDefaultPattern;
     }
 
     /* Define one-century window into which to disambiguate dates using

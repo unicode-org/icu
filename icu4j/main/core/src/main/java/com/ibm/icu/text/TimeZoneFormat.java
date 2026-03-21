@@ -374,7 +374,7 @@ public class TimeZoneFormat extends UFormat
     // cache if offset hours and minutes are abutting
     private transient boolean _abuttingOffsetHoursAndMinutes;
 
-    private transient String _region;
+    private transient volatile String _region;
 
     private transient volatile boolean _frozen;
 
@@ -1942,14 +1942,21 @@ public class TimeZoneFormat extends UFormat
      *
      * @return the target region
      */
-    private synchronized String getTargetRegion() {
-        if (_region == null) {
-            _region = _locale.getCountry();
-            if (_region.length() == 0) {
-                ULocale tmp = ULocale.addLikelySubtags(_locale);
-                _region = tmp.getCountry();
-                if (_region.length() == 0) {
-                    _region = "001";
+    private String getTargetRegion() {
+        String region = _region;
+        if (region == null) {
+            synchronized (this) {
+                region = _region;
+                if (region == null) {
+                    region = _locale.getCountry();
+                    if (region.length() == 0) {
+                        ULocale tmp = ULocale.addLikelySubtags(_locale);
+                        region = tmp.getCountry();
+                        if (region.length() == 0) {
+                            region = "001";
+                        }
+                    }
+                    _region = region;
                 }
             }
         }
