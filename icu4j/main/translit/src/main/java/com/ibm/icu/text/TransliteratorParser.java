@@ -164,13 +164,14 @@ class TransliteratorParser {
     private static final char ALT_FUNCTION = '\u2206'; // Increment (~Greek Capital Delta)
 
     // Special characters disallowed at the top level
-    private static UnicodeSet ILLEGAL_TOP = new UnicodeSet("[\\)]");
+    private static final UnicodeSet ILLEGAL_TOP = new UnicodeSet("[\\)]").freeze();
 
     // Special characters disallowed within a segment
-    private static UnicodeSet ILLEGAL_SEG = new UnicodeSet("[\\{\\}\\|\\@]");
+    private static final UnicodeSet ILLEGAL_SEG = new UnicodeSet("[\\{\\}\\|\\@]").freeze();
 
     // Special characters disallowed within a function argument
-    private static UnicodeSet ILLEGAL_FUNC = new UnicodeSet("[\\^\\(\\.\\*\\+\\?\\{\\}\\|\\@]");
+    private static final UnicodeSet ILLEGAL_FUNC =
+            new UnicodeSet("[\\^\\(\\.\\*\\+\\?\\{\\}\\|\\@]").freeze();
 
     // ----------------------------------------------------------------------
     // class ParseData

@@ -145,7 +145,7 @@ final class NormalizationTransliterator extends Transliterator {
         offsets.limit = limit;
     }
 
-    static final Map<Normalizer2, SourceTargetUtility> SOURCE_CACHE =
+    static volatile Map<Normalizer2, SourceTargetUtility> SOURCE_CACHE =
             new HashMap<Normalizer2, SourceTargetUtility>();
 
     // TODO Get rid of this if Normalizer2 becomes a Transform
