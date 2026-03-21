@@ -19,11 +19,13 @@ public class SimpleCache<K, V> implements ICUCache<K, V> {
     private static final int DEFAULT_CAPACITY = 16;
 
     private volatile Reference<Map<K, V>> cacheRef = null;
-    private int type = ICUCache.SOFT;
-    private int capacity = DEFAULT_CAPACITY;
+    private final int type;
+    private final int capacity;
     private final Object lock = new Object();
 
-    public SimpleCache() {}
+    public SimpleCache() {
+        this(ICUCache.SOFT, DEFAULT_CAPACITY);
+    }
 
     public SimpleCache(int cacheType) {
         this(cacheType, DEFAULT_CAPACITY);
@@ -32,9 +34,13 @@ public class SimpleCache<K, V> implements ICUCache<K, V> {
     public SimpleCache(int cacheType, int initialCapacity) {
         if (cacheType == ICUCache.WEAK) {
             type = cacheType;
+        } else {
+            type = ICUCache.SOFT;
         }
         if (initialCapacity > 0) {
             capacity = initialCapacity;
+        } else {
+            capacity = DEFAULT_CAPACITY;
         }
     }
 
