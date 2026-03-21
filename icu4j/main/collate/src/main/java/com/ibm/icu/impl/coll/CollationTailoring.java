@@ -119,7 +119,7 @@ public final class CollationTailoring {
     CollationData ownedData;
     Trie2_32 trie;
     UnicodeSet unsafeBackwardSet;
-    public Map<Integer, Integer> maxExpansions;
+    public volatile Map<Integer, Integer> maxExpansions;
 
     /*
      * Not Cloneable: A CollationTailoring cannot be copied.

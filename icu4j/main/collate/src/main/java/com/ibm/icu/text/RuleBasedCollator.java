@@ -264,6 +264,9 @@ public final class RuleBasedCollator extends Collator implements Cloneable {
     }
 
     private final void initMaxExpansions() {
+        if (tailoring.maxExpansions != null) {
+            return;
+        }
         synchronized (tailoring) {
             if (tailoring.maxExpansions == null) {
                 tailoring.maxExpansions =
