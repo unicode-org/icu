@@ -16,8 +16,7 @@ import com.ibm.icu.text.RbnfLenientScanner;
 import com.ibm.icu.text.RbnfLenientScannerProvider;
 import com.ibm.icu.text.RuleBasedCollator;
 import com.ibm.icu.util.ULocale;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Returns RbnfLenientScanners that use the old RuleBasedNumberFormat implementation behind
@@ -29,7 +28,7 @@ import java.util.Map;
 @Deprecated
 public class RbnfScannerProviderImpl implements RbnfLenientScannerProvider {
     private static final boolean DEBUG = ICUDebug.enabled("rbnf");
-    private Map<String, RbnfLenientScanner> cache;
+    private final ConcurrentHashMap<String, RbnfLenientScanner> cache;
 
     /**
      * @internal
@@ -37,7 +36,7 @@ public class RbnfScannerProviderImpl implements RbnfLenientScannerProvider {
      */
     @Deprecated
     public RbnfScannerProviderImpl() {
-        cache = new HashMap<String, RbnfLenientScanner>();
+        cache = new ConcurrentHashMap<>();
     }
 
     /**
@@ -73,17 +72,16 @@ public class RbnfScannerProviderImpl implements RbnfLenientScannerProvider {
     public RbnfLenientScanner get(ULocale locale, String extras) {
         RbnfLenientScanner result = null;
         String key = locale.toString() + "/" + extras;
-        synchronized (cache) {
-            result = cache.get(key);
-            if (result != null) {
-                return result;
-            }
+        // Avoid computeIfAbsent: createScanner() constructs a RuleBasedCollator (expensive)
+        // and would hold the ConcurrentHashMap bin lock for the entire duration. Using
+        // get-then-putIfAbsent allows parallel construction with first-write-wins.
+        result = cache.get(key);
+        if (result != null) {
+            return result;
         }
         result = createScanner(locale, extras);
-        synchronized (cache) {
-            cache.put(key, result);
-        }
-        return result;
+        RbnfLenientScanner existing = cache.putIfAbsent(key, result);
+        return existing != null ? existing : result;
     }
 
     /**

@@ -60,7 +60,15 @@ public abstract class LocaleObjectCache<K, V> {
 
             CacheEntry<K, V> newEntry = new CacheEntry<K, V>(key, newVal, _queue);
             // just replace it
-            _map.put(key, newEntry);
+            CacheEntry<K, V> oldEntry = _map.putIfAbsent(key, newEntry);
+            if (oldEntry != null) {
+                V oldVal = oldEntry.get();
+                if (oldVal != null) {
+                    return oldVal;
+                }
+                // SoftReference was cleared; replace with our new entry
+                _map.put(key, newEntry);
+            }
             // clean recycled SoftReferences again
             cleanStaleEntries();
             return newVal;

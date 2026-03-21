@@ -20,14 +20,13 @@ import com.ibm.icu.util.ULocale.Category;
 import com.ibm.icu.util.UResourceBundle;
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 /**
@@ -2043,8 +2042,7 @@ public abstract class Transliterator implements StringTransform {
         registry = new TransliteratorRegistry();
 
         // The display name cache starts out empty
-        displayNameCache =
-                Collections.synchronizedMap(new HashMap<CaseInsensitiveString, String>());
+        displayNameCache = new ConcurrentHashMap<>();
         /* The following code parses the index table located in
          * icu/data/translit/root.txt.  The index is an n x 4 table
          * that follows this format:

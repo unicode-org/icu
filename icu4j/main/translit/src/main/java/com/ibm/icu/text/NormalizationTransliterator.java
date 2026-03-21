@@ -14,8 +14,7 @@ package com.ibm.icu.text;
 
 import com.ibm.icu.impl.Norm2AllModes;
 import com.ibm.icu.impl.Normalizer2Impl;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Alan Liu, Markus Scherer
@@ -145,8 +144,8 @@ final class NormalizationTransliterator extends Transliterator {
         offsets.limit = limit;
     }
 
-    static volatile Map<Normalizer2, SourceTargetUtility> SOURCE_CACHE =
-            new HashMap<Normalizer2, SourceTargetUtility>();
+    static final ConcurrentHashMap<Normalizer2, SourceTargetUtility> SOURCE_CACHE =
+            new ConcurrentHashMap<>();
 
     // TODO Get rid of this if Normalizer2 becomes a Transform
     static class NormalizingTransform implements Transform<String, String> {
@@ -169,12 +168,16 @@ final class NormalizationTransliterator extends Transliterator {
     public void addSourceTargetSet(
             UnicodeSet inputFilter, UnicodeSet sourceSet, UnicodeSet targetSet) {
         SourceTargetUtility cache;
-        synchronized (SOURCE_CACHE) {
-            // String id = getID();
-            cache = SOURCE_CACHE.get(norm2);
-            if (cache == null) {
-                cache = new SourceTargetUtility(new NormalizingTransform(norm2), norm2);
-                SOURCE_CACHE.put(norm2, cache);
+        // Avoid computeIfAbsent: SourceTargetUtility construction scans the entire Unicode
+        // code point space (expensive) and would hold the ConcurrentHashMap bin lock. Using
+        // get-then-putIfAbsent allows parallel construction with first-write-wins.
+        // String id = getID();
+        cache = SOURCE_CACHE.get(norm2);
+        if (cache == null) {
+            cache = new SourceTargetUtility(new NormalizingTransform(norm2), norm2);
+            SourceTargetUtility existing = SOURCE_CACHE.putIfAbsent(norm2, cache);
+            if (existing != null) {
+                cache = existing;
             }
         }
         cache.addSourceTargetSet(this, inputFilter, sourceSet, targetSet);

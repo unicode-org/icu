@@ -652,83 +652,77 @@ public class MeasureFormat extends UFormat {
     static final int NUMBER_FORMATTER_CURRENCY = 2;
     static final int NUMBER_FORMATTER_INTEGER = 3;
 
-    static class NumberFormatterCacheEntry {
-        int type;
-        MeasureUnit unit;
-        MeasureUnit perUnit;
-        LocalizedNumberFormatter formatter;
+    private static final class NumberFormatterCacheKey {
+        final int type;
+        final MeasureUnit unit;
+        final MeasureUnit perUnit;
+
+        NumberFormatterCacheKey(int type, MeasureUnit unit, MeasureUnit perUnit) {
+            this.type = type;
+            this.unit = unit;
+            this.perUnit = perUnit;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (!(o instanceof NumberFormatterCacheKey)) {
+                return false;
+            }
+            NumberFormatterCacheKey k = (NumberFormatterCacheKey) o;
+            return type == k.type
+                    && unit.equals(k.unit)
+                    && (perUnit == null ? k.perUnit == null : perUnit.equals(k.perUnit));
+        }
+
+        @Override
+        public int hashCode() {
+            return 31 * (31 * type + unit.hashCode()) + (perUnit != null ? perUnit.hashCode() : 0);
+        }
     }
 
-    // formatter1 is most recently used.
-    private transient NumberFormatterCacheEntry formatter1 = null;
-    private transient NumberFormatterCacheEntry formatter2 = null;
-    private transient NumberFormatterCacheEntry formatter3 = null;
+    // ConcurrentHashMap cache for lock-free reads of per-(type, unit, perUnit) formatters.
+    // Bounded in practice by the number of distinct triples actually formatted by this
+    // instance, typically a handful. The transient field is safe because MeasureFormat
+    // uses a serialization proxy (MeasureProxy.readResolve) that constructs a fresh instance.
+    private transient ConcurrentHashMap<NumberFormatterCacheKey, LocalizedNumberFormatter>
+            formatterCache = new ConcurrentHashMap<>();
 
-    private synchronized LocalizedNumberFormatter getUnitFormatterFromCache(
+    private LocalizedNumberFormatter getUnitFormatterFromCache(
             int type, MeasureUnit unit, MeasureUnit perUnit) {
-        if (formatter1 != null) {
-            if (formatter1.type == type
-                    && formatter1.unit == unit
-                    && formatter1.perUnit == perUnit) {
-                return formatter1.formatter;
-            }
-            if (formatter2 != null) {
-                if (formatter2.type == type
-                        && formatter2.unit == unit
-                        && formatter2.perUnit == perUnit) {
-                    return formatter2.formatter;
-                }
-                if (formatter3 != null) {
-                    if (formatter3.type == type
-                            && formatter3.unit == unit
-                            && formatter3.perUnit == perUnit) {
-                        return formatter3.formatter;
+        NumberFormatterCacheKey key = new NumberFormatterCacheKey(type, unit, perUnit);
+        return formatterCache.computeIfAbsent(
+                key,
+                k -> {
+                    if (k.type == NUMBER_FORMATTER_STANDARD) {
+                        return getNumberFormatter()
+                                .unit(k.unit)
+                                .perUnit(k.perUnit)
+                                .unitWidth(formatWidth.unitWidth);
+                    } else if (k.type == NUMBER_FORMATTER_CURRENCY) {
+                        return NumberFormatter.withLocale(getLocale())
+                                .unit(k.unit)
+                                .perUnit(k.perUnit)
+                                .unitWidth(formatWidth.currencyWidth);
+                    } else {
+                        assert k.type == NUMBER_FORMATTER_INTEGER;
+                        return getNumberFormatter()
+                                .unit(k.unit)
+                                .perUnit(k.perUnit)
+                                .unitWidth(formatWidth.unitWidth)
+                                .precision(
+                                        Precision.integer()
+                                                .withMode(
+                                                        RoundingUtils.mathContextUnlimited(
+                                                                RoundingMode.DOWN)));
                     }
-                }
-            }
-        }
-
-        // No hit; create a new formatter.
-        LocalizedNumberFormatter formatter;
-        if (type == NUMBER_FORMATTER_STANDARD) {
-            formatter =
-                    getNumberFormatter()
-                            .unit(unit)
-                            .perUnit(perUnit)
-                            .unitWidth(formatWidth.unitWidth);
-        } else if (type == NUMBER_FORMATTER_CURRENCY) {
-            formatter =
-                    NumberFormatter.withLocale(getLocale())
-                            .unit(unit)
-                            .perUnit(perUnit)
-                            .unitWidth(formatWidth.currencyWidth);
-        } else {
-            assert type == NUMBER_FORMATTER_INTEGER;
-            formatter =
-                    getNumberFormatter()
-                            .unit(unit)
-                            .perUnit(perUnit)
-                            .unitWidth(formatWidth.unitWidth)
-                            .precision(
-                                    Precision.integer()
-                                            .withMode(
-                                                    RoundingUtils.mathContextUnlimited(
-                                                            RoundingMode.DOWN)));
-        }
-        formatter3 = formatter2;
-        formatter2 = formatter1;
-        formatter1 = new NumberFormatterCacheEntry();
-        formatter1.type = type;
-        formatter1.unit = unit;
-        formatter1.perUnit = perUnit;
-        formatter1.formatter = formatter;
-        return formatter;
+                });
     }
 
-    synchronized void clearCache() {
-        formatter1 = null;
-        formatter2 = null;
-        formatter3 = null;
+    void clearCache() {
+        formatterCache.clear();
     }
 
     // Can be overridden by subclasses:

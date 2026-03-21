@@ -22,19 +22,24 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /** Loader for plural rules data. */
 public class PluralRulesLoader extends PluralRules.Factory {
-    // Key is rules set + ranges set
-    private final Map<String, PluralRules> pluralRulesCache;
+    // Key is rules set + ranges set.
+    private final ConcurrentHashMap<String, PluralRules> pluralRulesCache;
     // lazy init, use getLocaleIdToRulesIdMap to access
-    private Map<String, String> localeIdToCardinalRulesId;
-    private Map<String, String> localeIdToOrdinalRulesId;
-    private Map<String, ULocale> rulesIdToEquivalentULocale;
+    private volatile Map<String, String> localeIdToCardinalRulesId;
+    private volatile Map<String, String> localeIdToOrdinalRulesId;
+    private volatile Map<String, ULocale> rulesIdToEquivalentULocale;
+
+    // Dedicated sentinel for ConcurrentHashMap (which doesn't allow null values).
+    // Must not be PluralRules.DEFAULT, which newInternal() can return for empty descriptions.
+    private static final PluralRules NULL_RULES = PluralRules.createRules("other: ");
 
     /** Access through singleton. */
     private PluralRulesLoader() {
-        pluralRulesCache = new HashMap<String, PluralRules>();
+        pluralRulesCache = new ConcurrentHashMap<>();
     }
 
     /** Returns the locales for which we have plurals data. Utility for testing. */
@@ -85,11 +90,13 @@ public class PluralRulesLoader extends PluralRules.Factory {
      * These exactly reflect the contents of the locales resource in plurals.res.
      */
     private void checkBuildRulesIdMaps() {
-        boolean haveMap;
-        synchronized (this) {
-            haveMap = localeIdToCardinalRulesId != null;
+        if (localeIdToCardinalRulesId != null) {
+            return;
         }
-        if (!haveMap) {
+        synchronized (this) {
+            if (localeIdToCardinalRulesId != null) {
+                return;
+            }
             Map<String, String> tempLocaleIdToCardinalRulesId;
             Map<String, String> tempLocaleIdToOrdinalRulesId;
             Map<String, ULocale> tempRulesIdToEquivalentULocale;
@@ -130,13 +137,10 @@ public class PluralRulesLoader extends PluralRules.Factory {
                 tempRulesIdToEquivalentULocale = Collections.emptyMap();
             }
 
-            synchronized (this) {
-                if (localeIdToCardinalRulesId == null) {
-                    localeIdToCardinalRulesId = tempLocaleIdToCardinalRulesId;
-                    localeIdToOrdinalRulesId = tempLocaleIdToOrdinalRulesId;
-                    rulesIdToEquivalentULocale = tempRulesIdToEquivalentULocale;
-                }
-            }
+            rulesIdToEquivalentULocale = tempRulesIdToEquivalentULocale;
+            localeIdToOrdinalRulesId = tempLocaleIdToOrdinalRulesId;
+            // Write cardinal last: it's the flag field read by the fast path
+            localeIdToCardinalRulesId = tempLocaleIdToCardinalRulesId;
         }
     }
 
@@ -166,45 +170,42 @@ public class PluralRulesLoader extends PluralRules.Factory {
         }
         String rangesId = StandardPluralRanges.getSetForLocale(locale);
         String cacheKey = rulesId + "/" + rangesId; // could end with "/null" (this is OK)
-        // synchronize on the map.  release the lock temporarily while we build the rules.
-        PluralRules rules = null;
-        boolean hasRules; // Separate boolean because stored rules can be null.
-        synchronized (pluralRulesCache) {
-            hasRules = pluralRulesCache.containsKey(cacheKey);
-            if (hasRules) {
-                rules = pluralRulesCache.get(cacheKey); // can be null
-            }
-        }
-        if (!hasRules) {
-            try {
-                UResourceBundle pluralb = getPluralBundle();
-                UResourceBundle rulesb = pluralb.get("rules");
-                UResourceBundle setb = rulesb.get(rulesId);
 
-                StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < setb.getSize(); ++i) {
-                    UResourceBundle b = setb.get(i);
-                    if (i > 0) {
-                        sb.append("; ");
-                    }
-                    sb.append(b.getKey());
-                    sb.append(": ");
-                    sb.append(b.getString());
-                }
-                StandardPluralRanges ranges = StandardPluralRanges.forSet(rangesId);
-                rules = PluralRules.newInternal(sb.toString(), ranges);
-            } catch (ParseException e) {
-            } catch (MissingResourceException e) {
-            }
-            synchronized (pluralRulesCache) {
-                if (pluralRulesCache.containsKey(cacheKey)) {
-                    rules = pluralRulesCache.get(cacheKey);
-                } else {
-                    pluralRulesCache.put(cacheKey, rules); // can be null
-                }
-            }
+        PluralRules rules = pluralRulesCache.get(cacheKey);
+        if (rules != null) {
+            return (rules == NULL_RULES) ? null : rules;
         }
-        return rules;
+
+        // Cache miss: parse the rules
+        PluralRules newRules = null;
+        try {
+            UResourceBundle pluralb = getPluralBundle();
+            UResourceBundle rulesb = pluralb.get("rules");
+            UResourceBundle setb = rulesb.get(rulesId);
+
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < setb.getSize(); ++i) {
+                UResourceBundle b = setb.get(i);
+                if (i > 0) {
+                    sb.append("; ");
+                }
+                sb.append(b.getKey());
+                sb.append(": ");
+                sb.append(b.getString());
+            }
+            StandardPluralRanges ranges = StandardPluralRanges.forSet(rangesId);
+            newRules = PluralRules.newInternal(sb.toString(), ranges);
+        } catch (ParseException e) {
+        } catch (MissingResourceException e) {
+        }
+
+        // Store in cache; use sentinel for null since ConcurrentHashMap doesn't allow null values
+        PluralRules toStore = (newRules != null) ? newRules : NULL_RULES;
+        PluralRules existing = pluralRulesCache.putIfAbsent(cacheKey, toStore);
+        if (existing != null) {
+            return (existing == NULL_RULES) ? null : existing;
+        }
+        return newRules;
     }
 
     /**
