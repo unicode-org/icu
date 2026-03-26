@@ -237,49 +237,45 @@ public final class UCharacterName {
             }
         }
 
-        synchronized (m_utilStringBuffer_) {
-            m_utilStringBuffer_.setLength(0);
-            byte b;
-            char token;
-            for (int i = 0; i < length; ) {
-                b = m_groupstring_[index + i];
-                i++;
+        StringBuilder sb = new StringBuilder();
+        byte b;
+        char token;
+        for (int i = 0; i < length; ) {
+            b = m_groupstring_[index + i];
+            i++;
 
-                if (b >= m_tokentable_.length) {
+            if (b >= m_tokentable_.length) {
+                if (b == ';') {
+                    break;
+                }
+                sb.append(b); // implicit letter
+            } else {
+                token = m_tokentable_[b & 0x00ff];
+                if (token == 0xFFFE) {
+                    // this is a lead byte for a double-byte token
+                    token = m_tokentable_[b << 8 | (m_groupstring_[index + i] & 0x00ff)];
+                    i++;
+                }
+                if (token == 0xFFFF) {
                     if (b == ';') {
+                        // skip the semicolon if we are seeking extended
+                        // names and there was no 2.0 name but there
+                        // is a 1.0 name.
+                        if (sb.length() == 0 && choice == UCharacterNameChoice.EXTENDED_CHAR_NAME) {
+                            continue;
+                        }
                         break;
                     }
-                    m_utilStringBuffer_.append(b); // implicit letter
-                } else {
-                    token = m_tokentable_[b & 0x00ff];
-                    if (token == 0xFFFE) {
-                        // this is a lead byte for a double-byte token
-                        token = m_tokentable_[b << 8 | (m_groupstring_[index + i] & 0x00ff)];
-                        i++;
-                    }
-                    if (token == 0xFFFF) {
-                        if (b == ';') {
-                            // skip the semicolon if we are seeking extended
-                            // names and there was no 2.0 name but there
-                            // is a 1.0 name.
-                            if (m_utilStringBuffer_.length() == 0
-                                    && choice == UCharacterNameChoice.EXTENDED_CHAR_NAME) {
-                                continue;
-                            }
-                            break;
-                        }
-                        // explicit letter
-                        m_utilStringBuffer_.append((char) (b & 0x00ff));
-                    } else { // write token word
-                        UCharacterUtility.getNullTermByteSubString(
-                                m_utilStringBuffer_, m_tokenstring_, token);
-                    }
+                    // explicit letter
+                    sb.append((char) (b & 0x00ff));
+                } else { // write token word
+                    UCharacterUtility.getNullTermByteSubString(sb, m_tokenstring_, token);
                 }
             }
+        }
 
-            if (m_utilStringBuffer_.length() > 0) {
-                return m_utilStringBuffer_.toString();
-            }
+        if (sb.length() > 0) {
+            return sb.toString();
         }
         return null;
     }
@@ -336,21 +332,19 @@ public final class UCharacterName {
             } else {
                 result = TYPE_NAMES_[type];
             }
-            synchronized (m_utilStringBuffer_) {
-                m_utilStringBuffer_.setLength(0);
-                m_utilStringBuffer_.append('<');
-                m_utilStringBuffer_.append(result);
-                m_utilStringBuffer_.append('-');
-                String chStr = Integer.toHexString(ch).toUpperCase(Locale.ENGLISH);
-                int zeros = 4 - chStr.length();
-                while (zeros > 0) {
-                    m_utilStringBuffer_.append('0');
-                    zeros--;
-                }
-                m_utilStringBuffer_.append(chStr);
-                m_utilStringBuffer_.append('>');
-                result = m_utilStringBuffer_.toString();
+            StringBuilder sb = new StringBuilder();
+            sb.append('<');
+            sb.append(result);
+            sb.append('-');
+            String chStr = Integer.toHexString(ch).toUpperCase(Locale.ENGLISH);
+            int zeros = 4 - chStr.length();
+            while (zeros > 0) {
+                sb.append('0');
+                zeros--;
             }
+            sb.append(chStr);
+            sb.append('>');
+            result = sb.toString();
         }
         return result;
     }
@@ -458,12 +452,9 @@ public final class UCharacterName {
      * @return algorithmic name of codepoint
      */
     public String getAlgorithmName(int index, int codepoint) {
-        String result = null;
-        synchronized (m_utilStringBuffer_) {
-            m_utilStringBuffer_.setLength(0);
-            m_algorithm_[index].appendName(codepoint, m_utilStringBuffer_);
-            result = m_utilStringBuffer_.toString();
-        }
+        StringBuilder sb = new StringBuilder();
+        m_algorithm_[index].appendName(codepoint, sb);
+        String result = sb.toString();
         return result;
     }
 
@@ -635,14 +626,14 @@ public final class UCharacterName {
         }
 
         /**
-         * Appends algorithm name of code point into StringBuffer. Note this method does not check
+         * Appends algorithm name of code point into StringBuilder. Note this method does not check
          * for validity of code point in Algorithm, result is undefined if code point does not
          * belong in Algorithm.
          *
          * @param ch code point
-         * @param str StringBuffer to append to
+         * @param str StringBuilder to append to
          */
-        void appendName(int ch, StringBuffer str) {
+        void appendName(int ch, StringBuilder str) {
             str.append(m_prefix_);
             switch (m_type_) {
                 case TYPE_0_:
@@ -652,27 +643,24 @@ public final class UCharacterName {
                 case TYPE_1_:
                     // prefix followed by factorized-elements
                     int offset = ch - m_rangestart_;
-                    int indexes[] = m_utilIntBuffer_;
-                    int factor;
 
                     // write elements according to the factors
                     // the factorized elements are determined by modulo
                     // arithmetic
-                    synchronized (m_utilIntBuffer_) {
-                        for (int i = m_variant_ - 1; i > 0; i--) {
-                            factor = m_factor_[i] & 0x00FF;
-                            indexes[i] = offset % factor;
-                            offset /= factor;
-                        }
-
-                        // we don't need to calculate the last modulus because
-                        // start <= code <= end guarantees here that
-                        // code <= factors[0]
-                        indexes[0] = offset;
-
-                        // joining up the factorized strings
-                        str.append(getFactorString(indexes, m_variant_));
+                    int[] indexes = new int[m_variant_];
+                    for (int i = m_variant_ - 1; i > 0; i--) {
+                        int factor = m_factor_[i] & 0x00FF;
+                        indexes[i] = offset % factor;
+                        offset /= factor;
                     }
+
+                    // we don't need to calculate the last modulus because
+                    // start <= code <= end guarantees here that
+                    // code <= factors[0]
+                    indexes[0] = offset;
+
+                    // joining up the factorized strings
+                    str.append(getFactorString(indexes, m_variant_));
                     break;
             }
         }
@@ -705,28 +693,25 @@ public final class UCharacterName {
                     // offset is the character code - start
                     for (int ch = m_rangestart_; ch <= m_rangeend_; ch++) {
                         int offset = ch - m_rangestart_;
-                        int indexes[] = m_utilIntBuffer_;
-                        int factor;
 
                         // write elements according to the factors
                         // the factorized elements are determined by modulo
                         // arithmetic
-                        synchronized (m_utilIntBuffer_) {
-                            for (int i = m_variant_ - 1; i > 0; i--) {
-                                factor = m_factor_[i] & 0x00FF;
-                                indexes[i] = offset % factor;
-                                offset /= factor;
-                            }
+                        int[] indexes = new int[m_variant_];
+                        for (int i = m_variant_ - 1; i > 0; i--) {
+                            int factor = m_factor_[i] & 0x00FF;
+                            indexes[i] = offset % factor;
+                            offset /= factor;
+                        }
 
-                            // we don't need to calculate the last modulus
-                            // because start <= code <= end guarantees here that
-                            // code <= factors[0]
-                            indexes[0] = offset;
+                        // we don't need to calculate the last modulus
+                        // because start <= code <= end guarantees here that
+                        // code <= factors[0]
+                        indexes[0] = offset;
 
-                            // joining up the factorized strings
-                            if (compareFactorString(indexes, m_variant_, name, prefixlen)) {
-                                return ch;
-                            }
+                        // joining up the factorized strings
+                        if (compareFactorString(indexes, m_variant_, name, prefixlen)) {
+                            return ch;
                         }
                     }
             }
@@ -762,19 +747,18 @@ public final class UCharacterName {
                         // name = prefix factorized-elements
                         // get the set and maximum factor suffix length for each
                         // factor
+                        StringBuilder sb = new StringBuilder();
                         for (int i = m_variant_ - 1; i > 0; i--) {
                             int maxfactorlength = 0;
                             int count = 0;
                             for (int factor = m_factor_[i]; factor > 0; --factor) {
-                                synchronized (m_utilStringBuffer_) {
-                                    m_utilStringBuffer_.setLength(0);
-                                    count =
-                                            UCharacterUtility.getNullTermByteSubString(
-                                                    m_utilStringBuffer_, m_factorstring_, count);
-                                    UCharacterName.add(set, m_utilStringBuffer_);
-                                    if (m_utilStringBuffer_.length() > maxfactorlength) {
-                                        maxfactorlength = m_utilStringBuffer_.length();
-                                    }
+                                sb.setLength(0);
+                                count =
+                                        UCharacterUtility.getNullTermByteSubString(
+                                                sb, m_factorstring_, count);
+                                UCharacterName.add(set, sb);
+                                if (sb.length() > maxfactorlength) {
+                                    maxfactorlength = sb.length();
                                 }
                             }
                             length += maxfactorlength;
@@ -799,12 +783,6 @@ public final class UCharacterName {
         private String m_prefix_;
         private byte m_factorstring_[];
 
-        /** Utility StringBuffer */
-        private StringBuffer m_utilStringBuffer_ = new StringBuffer();
-
-        /** Utility int buffer */
-        private int m_utilIntBuffer_[] = new int[256];
-
         // private methods -----------------------------------------------
 
         /**
@@ -820,27 +798,22 @@ public final class UCharacterName {
                 return null;
             }
 
-            synchronized (m_utilStringBuffer_) {
-                m_utilStringBuffer_.setLength(0);
-                int count = 0;
-                int factor;
-                size--;
-                for (int i = 0; i <= size; i++) {
-                    factor = m_factor_[i];
+            StringBuilder sb = new StringBuilder();
+            int count = 0;
+            size--;
+            for (int i = 0; i <= size; i++) {
+                int factor = m_factor_[i];
+                count =
+                        UCharacterUtility.skipNullTermByteSubString(
+                                m_factorstring_, count, index[i]);
+                count = UCharacterUtility.getNullTermByteSubString(sb, m_factorstring_, count);
+                if (i != size) {
                     count =
                             UCharacterUtility.skipNullTermByteSubString(
-                                    m_factorstring_, count, index[i]);
-                    count =
-                            UCharacterUtility.getNullTermByteSubString(
-                                    m_utilStringBuffer_, m_factorstring_, count);
-                    if (i != size) {
-                        count =
-                                UCharacterUtility.skipNullTermByteSubString(
-                                        m_factorstring_, count, factor - index[i] - 1);
-                    }
+                                    m_factorstring_, count, factor - index[i] - 1);
                 }
-                return m_utilStringBuffer_.toString();
             }
+            return sb.toString();
         }
 
         /**
@@ -1011,9 +984,6 @@ public final class UCharacterName {
      */
     private int m_ISOCommentSet_[] = new int[8];
 
-    /** Utility StringBuffer */
-    private StringBuffer m_utilStringBuffer_ = new StringBuffer();
-
     /** Utility int buffer */
     private int m_utilIntBuffer_[] = new int[2];
 
@@ -1102,14 +1072,11 @@ public final class UCharacterName {
         if (choice == UCharacterNameChoice.UNICODE_CHAR_NAME
                 || choice == UCharacterNameChoice.EXTENDED_CHAR_NAME) {
             // index in terms integer index
-            synchronized (m_utilStringBuffer_) {
-                m_utilStringBuffer_.setLength(0);
-
-                for (int index = m_algorithm_.length - 1; index >= 0; index--) {
-                    if (m_algorithm_[index].contains(ch)) {
-                        m_algorithm_[index].appendName(ch, m_utilStringBuffer_);
-                        return m_utilStringBuffer_.toString();
-                    }
+            StringBuilder sb = new StringBuilder();
+            for (int index = m_algorithm_.length - 1; index >= 0; index--) {
+                if (m_algorithm_[index].contains(ch)) {
+                    m_algorithm_[index].appendName(ch, sb);
+                    return sb.toString();
                 }
             }
         }
@@ -1316,25 +1283,9 @@ public final class UCharacterName {
      * calcStringSetLength.
      *
      * @param set set to add all chars of str to
-     * @param str string to add
+     * @param str CharSequence to add
      */
-    private static int add(int set[], String str) {
-        int result = str.length();
-
-        for (int i = result - 1; i >= 0; i--) {
-            add(set, str.charAt(i));
-        }
-        return result;
-    }
-
-    /**
-     * Adds all characters of the argument str and gets the length Equivalent to
-     * calcStringSetLength.
-     *
-     * @param set set to add all chars of str to
-     * @param str string to add
-     */
-    private static int add(int set[], StringBuffer str) {
+    private static int add(int[] set, CharSequence str) {
         int result = str.length();
 
         for (int i = result - 1; i >= 0; i--) {
@@ -1420,12 +1371,9 @@ public final class UCharacterName {
                     // use cached token length
                     byte tlength = tokenlength[b];
                     if (tlength == 0) {
-                        synchronized (m_utilStringBuffer_) {
-                            m_utilStringBuffer_.setLength(0);
-                            UCharacterUtility.getNullTermByteSubString(
-                                    m_utilStringBuffer_, m_tokenstring_, token);
-                            tlength = (byte) add(set, m_utilStringBuffer_);
-                        }
+                        StringBuilder sb = new StringBuilder();
+                        UCharacterUtility.getNullTermByteSubString(sb, m_tokenstring_, token);
+                        tlength = (byte) add(set, sb);
                         tokenlength[b] = tlength;
                     }
                     resultnlength += tlength;
