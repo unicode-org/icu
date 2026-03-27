@@ -684,14 +684,13 @@ public:
         }
 
         // Check if the value is integer.
-        uint64_t int_result = static_cast<uint64_t>(double_result);
         const double kTolerance = 1e-9;
-        if (abs(double_result - int_result) > kTolerance) {
+        if (abs(modf(double_result)) > kTolerance) {
             status = kUnitIdentifierSyntaxError;
             return 0;
         }
 
-        return int_result;
+        return static_cast<uint64_t>(double_result);
     }
 
 private:
