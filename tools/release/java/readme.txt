@@ -19,14 +19,15 @@ Requirements:
 To use the utility:
 1. Put both old and new ICU source trees on your system
 
-2. Run "configure" in both old and new (you can use any mixture of in-source and out-of-source builds). Doxygen must be found during the configure phase, but you do not need to build the standard API docs.
+2. Run "configure" in both old and new (you can use any mixture of in-source and out-of-source builds).
+  Doxygen must be found during the configure phase, but you do not need to build the standard API docs.
 
    ** Then in each directory, run `make doc` to create the doc/ directory.
    
 3. Create a Makefile.local in this readme's directory (tools/release/java/) 
             with just these two lines, for example:
-			OLD_ICU=/xsrl/E/icu-6.7/icu4c/sources
-			NEW_ICU=/xsrl/E/icu-6.8/icu4c/sources
+			OLD_ICU=/xsrl/E/icu-6.7/icu4c/source
+			NEW_ICU=/xsrl/E/icu-6.8/icu4c/source
 
      WARNING: the paths must be absolute paths, and should not use ~ or
      environment variables.
@@ -37,8 +38,8 @@ To use the utility:
 	   
            If your ICU is an out-of-source-build, add these two lines
            indicating the build location:
-                        OLD_ICU_BUILD=/xsrl/E/icu-build-m48/icu4c/sources
-                        NEW_ICU_BUILD=/xsrl/E/icu-build/icu4c/sources
+                        OLD_ICU_BUILD=/xsrl/E/icu-build-m48/icu4c/source
+                        NEW_ICU_BUILD=/xsrl/E/icu-build/icu4c/source
 			
 4. From this directory, (tools/release/java/) run Make to build docs: (the tool will be built automatically)
             make APIChangeReport.html

@@ -47,12 +47,14 @@ for a given version is downloading the zipped sources for the common (`core.zip`
 and tools (`tools.zip`) directory subtrees from the Data column in
 [CLDR Releases/Downloads](https://cldr.unicode.org/index/downloads)
 
-Besides a standard JDK 11+, the process also requires [ant](https://ant.apache.org) and
-[maven](https://maven.apache.org) plus the xml-apis.jar from the
-[Apache xalan package](https://xalan.apache.org/xalan-j/downloads.html) _(Is this
-latter requirement still true?)_.
+Besides a standard JDK 11+, the process also requires [Ant](https://ant.apache.org),
+[Maven](https://maven.apache.org), and Python (https://www.python.org).
 
-If you do CLDR development you can configure maven as documented at
+WARNING: the Ant scripts will soon be REMOVED.
+PLEASE execute all the steps using the new Python workflow.
+REPORT any problems you encounter, and switch back to the Ant if you don't have another choice.
+
+If you do CLDR development you can configure Maven as documented at
 [CLDR Maven setup](http://cldr.unicode.org/development/maven) (non-Eclipse version).
 
 But for the CLDR to ICU data conversion, or for regular ICU development this is not needed.
@@ -106,12 +108,12 @@ ticket and a separate PR:
 
 There are several environment variables that need to be defined.
 
-1. Java-, ant-, and maven-related variables
+1. Java-, Ant- (TO REMOVE), Maven-, and Python-related variables
 
    * `JAVA_HOME`: Path to JDK (a directory, containing e.g. `bin/java`, `bin/javac`,
      etc.); on many systems this can be set using the output of `/usr/libexec/java_home`.
 
-   * `ANT_OPTS`: You may want to set `-Xmx8192m` to give Java more memory; otherwise
+   * `ANT_OPTS`: (TO REMOVE) You may want to set `-Xmx8192m` to give Java more memory; otherwise
      it may run out of heap.
 
    * `MAVEN_ARGS`: You may want to set `--no-transfer-progress` to reduce the noise
@@ -145,9 +147,10 @@ There are several environment variables that need to be defined.
 
 ## 1 Environment variables
 
-1a. Java, ant, and maven variables, adjust for your system
+1a. Java, Ant (TO REMOVE), Maven, and Python variables, adjust for your system
 ```sh
 export JAVA_HOME=/usr/libexec/java_home
+# TO REMOVE
 export ANT_OPTS="-Xmx8192m"
 export MAVEN_ARGS="--no-transfer-progress"
 ```
@@ -172,13 +175,19 @@ export ICU4J_ROOT=$ICU_DIR/icu4j
 export TOOLS_ROOT=$ICU_DIR/tools
 ```
 
-1d. Directory for logs/notes (create if does not exist)
+1d. Python variables
+```sh
+export PYTHONPATH=$ICU_DIR/tools/py
+export PYTHONDONTWRITEBYTECODE=1
+```
+
+1e. Directory for logs/notes (create if does not exist)
 ```sh
 export NOTES=...(some directory)...
 mkdir -p $NOTES
 ```
 
-1e. The name of the icu data directory for Java (for example `icudt74b`)
+1f. The name of the icu data directory for Java (for example `icudt74b`)
 ```sh
 export ICU_DATA_VER=icudt(version)b
 ```
@@ -248,6 +257,22 @@ mvn clean install -pl :cldr-all,:cldr-code -DskipTests -DskipITs
 
 5a. Generate the CLDR production data.
 
+**// NEW PROCESS, Python. Please use this!**
+
+This process uses Python with ICU4C's `data/build.py`
+
+* Running `python build.py --cleanprod` is necessary to clean out the production data directory
+  (usually `$CLDR_TMP_DIR/production`), required if any CLDR data has changed.
+
+```sh
+cd $ICU4C_DIR/source/data
+python build.py --proddata
+```
+
+**// NEW PROCESS - END**
+
+**// TO REMOVE - Don't execute if the above step works.**
+
 This process uses ant with ICU4C's `data/build.xml`
 
 * Running `ant cleanprod` is necessary to clean out the production data directory
@@ -261,6 +286,7 @@ ant cleanprod
 ant setup
 ant proddata 2>&1 | tee $NOTES/cldr-newData-proddataLog.txt
 ```
+**// TO REMOVE - END**
 
 > Note, for CLDR development, at this point tests are sometimes run on the
    production data, see
@@ -299,8 +325,13 @@ java -jar target/cldr-to-icu-1.0-SNAPSHOT-jar-with-dependencies.jar --cldrDataDi
 
 5c. Update the CLDR testData files needed by ICU4C/J tests, ensuring
 they are representative of the newest CLDR data.
+
 ```sh
 cd $ICU_DIR/tools/cldr
+# NEW PROCESS, Python. Please use this!
+python build.py --copy-cldr-testdata
+
+# TO REMOVE. Don't execute if the above step works.
 ant copy-cldr-testdata
 ```
 
@@ -453,7 +484,7 @@ cd $ICU4J_ROOT
 
 ## 13 Rebuild ICU4J with new data, run tests
 
-13a. Run the tests using the maven build
+13a. Run the tests using the Maven build
 ```sh
 cd $ICU4J_ROOT
 mvn clean
@@ -488,7 +519,7 @@ Running a specific test is the same as above:
 mvn install --pl :core -DICU.exhaustive=10 -Dtest=ExhaustiveNumberTest
 ```
 
-## 14 Investigate and fix maven check test failures
+## 14 Investigate and fix Maven check test failures
 
 Fix test cases and repeat from step 13, or fix CLDR data and repeat from
 step 4, as appropriate, until there are no more failures in ICU4C or ICU4J.

@@ -52,7 +52,7 @@ ARM/
 ARM64/
 Debug/
 Generated[!!-~]Files/
-Release/
+Release/**
 __pycache__/
 _site/
 arm/
@@ -63,7 +63,7 @@ doc/
 lib/
 !tools/cldr/lib
 out/
-release/
+release/**
 target/
 !docs/processes/release/
 tmp/
@@ -81,6 +81,7 @@ pkgdataMakefile
 rules.mk
 .DS_Store
 .flattened-pom.xml
+dependency-reduced-pom.xml
 
 !icu4c/source/samples/csdet/Makefile
 

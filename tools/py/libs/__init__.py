@@ -6,7 +6,7 @@ import os
 from . import iculog
 
 HOME_DIR: str = os.path.expanduser('~')
-ICU_DIR: str = os.getenv('ICU_ROOT') 
+ICU_DIR: str = os.getenv('ICU_ROOT', '.')
 
 # Initialize logging
 iculog.init_logging()

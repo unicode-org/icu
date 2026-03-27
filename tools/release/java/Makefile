@@ -13,8 +13,8 @@
 # you can put the OLD_ICU=xx and NEW_ICU=yy in separate lines in Makefile.local
 #
 
-ANT=ant
-ANT_TARGET=apireport
+GEN_REPORT=./build.py
+GEN_REPORT_TARGET=apireport
 DOXYGEN=doxygen
 
 -include Makefile.local
@@ -84,17 +84,17 @@ clean-docs: | check-vars
 
 $(TARGET): check-vars $(OLD_ICU_BUILD)/$(XML) $(NEW_ICU_BUILD)/$(XML)
 	echo "Remember to run the non-ascii file detector if you get errors."
-	$(ANT) -Dolddir="$(OLD_ICU_BUILD)/$(XML)" -Dnewdir="$(NEW_ICU_BUILD)/$(XML)" $(ANT_TARGET)
+	$(GEN_REPORT) --olddir="$(OLD_ICU_BUILD)/$(XML)" --newdir="$(NEW_ICU_BUILD)/$(XML)" --$(GEN_REPORT_TARGET)
 	echo "If you get no-changes, see the readme- may need to add xalan/xerces jars."
 
 # check-vars $(OLD_ICU_BUILD)/$(XML) $(NEW_ICU_BUILD)/$(XML)
 APIChangeReport.xml: $(OLD_ICU_BUILD)/$(XML) $(NEW_ICU_BUILD)/$(XML)
 	echo "Remember to run the non-ascii file detector if you get errors."
-	$(ANT) -Dolddir="$(OLD_ICU_BUILD)/$(XML)" -Dnewdir="$(NEW_ICU_BUILD)/$(XML)" $(ANT_TARGET)_xml
+	$(GEN_REPORT) --olddir="$(OLD_ICU_BUILD)/$(XML)" --newdir="$(NEW_ICU_BUILD)/$(XML)" --$(GEN_REPORT_TARGET)_xml
 
 APIChangeReport.md: $(OLD_ICU_BUILD)/$(XML) $(NEW_ICU_BUILD)/$(XML)
 	echo "Remember to run the non-ascii file detector if you get errors."
-	$(ANT) -Dolddir="$(OLD_ICU_BUILD)/$(XML)" -Dnewdir="$(NEW_ICU_BUILD)/$(XML)" $(ANT_TARGET)_md
+	$(GEN_REPORT) --olddir="$(OLD_ICU_BUILD)/$(XML)" --newdir="$(NEW_ICU_BUILD)/$(XML)" --$(GEN_REPORT_TARGET)_md
 
 %/doc/xml:	%/Doxyfile
 # don't care what GENERATE_XML is set to previously - set it to yes.

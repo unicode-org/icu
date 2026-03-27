@@ -13,7 +13,7 @@ from libs import iculog
 def run_with_logging(
     command: str,
     logfile: str = 'last_run.log',
-    root_dir: str = os.getenv('ICU_ROOT'),
+    root_dir: str = os.getenv('ICU_ROOT', '.'),
     ok_result: list[int]|None = None,
 ) -> subprocess.CompletedProcess[str]:
   """The method that executes the step proper.
@@ -27,8 +27,6 @@ def run_with_logging(
   Returns:
     the result of the subprocess execution.
   """
-  if root_dir is None:
-    root_dir = '.'
   if ok_result is None:
     ok_result = [0]
   iculog.info(f'[execute] {command}\n        logfile: {logfile}')
@@ -38,12 +36,19 @@ def run_with_logging(
     should_check = True
   else:
     should_check = False
+
+  if logfile == '-':
+    stdout_redirect = None  # regular output
+    stderr_redirect = None  # regular output
+  else:
+    stdout_redirect = subprocess.PIPE  # Capture stdout
+    stderr_redirect = subprocess.STDOUT  # Merge stderr into stdout
   try:
     result: subprocess.CompletedProcess[str] = subprocess.run(
         command,
         encoding='utf-8',
-        stdout=subprocess.PIPE,  # Capture stdout
-        stderr=subprocess.STDOUT,  # Merge stderr into stdout
+        stdout=stdout_redirect,
+        stderr=stderr_redirect,
         shell=True,
         check=should_check
     )
@@ -53,9 +58,12 @@ def run_with_logging(
     exit(ex.returncode)
 
   if logfile and root_dir:
-    abs_logdir = os.path.join(root_dir, 'target', 'pylogs')
-    icufs.mkdir(abs_logdir)
-    abs_logfile = os.path.join(abs_logdir, logfile)
+    if os.path.isabs(logfile):
+      abs_logfile = logfile
+    else:
+      abs_logdir = os.path.join(root_dir, 'target', 'pylogs')
+      icufs.mkdir(abs_logdir)
+      abs_logfile = os.path.join(abs_logdir, logfile)
     icufs.rmfile(abs_logfile)
     with open(abs_logfile, 'w', encoding='utf-8') as f:
       f.write('==================\n')
