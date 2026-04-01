@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1774648012451,
+  "lastUpdate": 1775063066332,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -43587,6 +43587,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 313.43605061677306,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "committer": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "distinct": true,
+          "id": "d2a2957947d88380431e9e2605b5100262a10b1f",
+          "message": "ICU-23350 Support name aliases of type correction in UnicodeSet \\N",
+          "timestamp": "2026-04-01T18:49:16+02:00",
+          "tree_id": "ef8c8e0662a156ba9804227609e88167e1bd2f7d",
+          "url": "https://github.com/unicode-org/icu/commit/d2a2957947d88380431e9e2605b5100262a10b1f"
+        },
+        "date": 1775062629517,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 302.77447548597024,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
