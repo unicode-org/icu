@@ -21,6 +21,8 @@ import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.IntBuffer;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -1232,9 +1234,79 @@ public final class ICUResourceBundleReader {
                     });
             return result[0];
         }
+
+        synchronized void deduplicateTableArrays() {
+            Map<CharBuffer, char[]> charMap = new HashMap<>();
+            Map<IntBuffer, int[]> intMap = new HashMap<>();
+            Map<String, String> stringMap = new HashMap<>();
+            for (Map.Entry<Integer, Object> entry : map.entrySet()) {
+                entry.setValue(deduplicateItem(entry.getValue(), charMap, intMap, stringMap));
+            }
+        }
+
+        @SuppressWarnings("unchecked")
+        private static Object deduplicateItem(
+                Object value,
+                Map<CharBuffer, char[]> charMap,
+                Map<IntBuffer, int[]> intMap,
+                Map<String, String> stringMap) {
+            Object item = value;
+            if (item instanceof SoftReference) {
+                item = ((SoftReference<?>) item).get();
+            }
+            if (item instanceof Table) {
+                Table table = (Table) item;
+                if (table.keyOffsets != null) {
+                    CharBuffer cb = CharBuffer.wrap(table.keyOffsets);
+                    char[] existing = charMap.putIfAbsent(cb, table.keyOffsets);
+                    if (existing != null) {
+                        table.keyOffsets = existing;
+                    }
+                }
+                if (table.key32Offsets != null) {
+                    IntBuffer ib = IntBuffer.wrap(table.key32Offsets);
+                    int[] existing = intMap.putIfAbsent(ib, table.key32Offsets);
+                    if (existing != null) {
+                        table.key32Offsets = existing;
+                    }
+                }
+            } else if (item instanceof String) {
+                String s = (String) item;
+                String existing = stringMap.putIfAbsent(s, s);
+                if (existing != null) {
+                    item = existing;
+                }
+                if (value instanceof SoftReference) {
+                    return new SoftReference<>(item);
+                } else {
+                    return item;
+                }
+            }
+            return value;
+        }
     }
 
     private static final String ICU_RESOURCE_SUFFIX = ".res";
+
+    /** Deduplicates the char[] and int[] arrays of Table objects in the cache. */
+    public static void deduplicateTableArrays() {
+        for (Object mapValue : CACHE.getMap().values()) {
+            ICUResourceBundleReader reader = null;
+            if (mapValue instanceof CacheValue) {
+                @SuppressWarnings("unchecked")
+                CacheValue<ICUResourceBundleReader> cv =
+                        (CacheValue<ICUResourceBundleReader>) mapValue;
+                if (!cv.isNull()) {
+                    reader = cv.get();
+                }
+            } else if (mapValue instanceof ICUResourceBundleReader) {
+                reader = (ICUResourceBundleReader) mapValue;
+            }
+            if (reader != null && reader.resourceCache != null) {
+                reader.resourceCache.deduplicateTableArrays();
+            }
+        }
+    }
 
     /** Gets the full name of the resource with suffix. */
     public static String getFullName(String baseName, String localeName) {
