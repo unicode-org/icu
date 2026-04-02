@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1775063719098,
+  "lastUpdate": 1775145404399,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -43677,6 +43677,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 251.58213145726,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "vichang@google.com",
+            "name": "Victor Chang",
+            "username": "gvictor"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "5edcbb637734e0ef3461262daaca42231dfbf13f",
+          "message": "ICU-23354 Remove m_utilIntBuffer_ and m_utilStringBuffer_ from UCharacterName.AlgorithmName\n\nThe `m_utilIntBuffer_` array in `AlgorithmName` is a 1KB `int[256]`\nthat was eagerly initialized, leading to unnecessary memory\nconsumption for instances that never use it (e.g., `TYPE_0_` instances\nor unqueried algorithms).\n\nUse a local variable instead for m_utilIntBuffer_ and\nm_utilStringBuffer_.",
+          "timestamp": "2026-04-02T08:45:56-07:00",
+          "tree_id": "37a6e0de05ab20572e22877bc2e05f20956ad3db",
+          "url": "https://github.com/unicode-org/icu/commit/5edcbb637734e0ef3461262daaca42231dfbf13f"
+        },
+        "date": 1775144963025,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 281.5972201111543,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
