@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1775146037860,
+  "lastUpdate": 1775243438651,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -53169,6 +53169,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 56.9513,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "grhoten@users.noreply.github.com",
+            "name": "George Rhoten",
+            "username": "grhoten"
+          },
+          "committer": {
+            "email": "grhoten@users.noreply.github.com",
+            "name": "George Rhoten",
+            "username": "grhoten"
+          },
+          "distinct": true,
+          "id": "721daf548d76bbf8c7d24a3d6f53cbfc1975ad72",
+          "message": "ICU-23347 Reduce construction time of RuleBasedNumberFormat",
+          "timestamp": "2026-04-03T11:33:13-07:00",
+          "tree_id": "2377a51e0114883c059699198e485564fa925031",
+          "url": "https://github.com/unicode-org/icu/commit/721daf548d76bbf8c7d24a3d6f53cbfc1975ad72"
+        },
+        "date": 1775242993864,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 25.4935,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 58.9476,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
