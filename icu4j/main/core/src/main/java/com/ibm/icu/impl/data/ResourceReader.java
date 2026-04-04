@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * A reader for text resource data in the current package or the package of a given class object.
@@ -95,7 +96,7 @@ public class ResourceReader implements Closeable {
         try {
             InputStreamReader isr =
                     (encoding == null)
-                            ? new InputStreamReader(is)
+                            ? new InputStreamReader(is, StandardCharsets.UTF_8)
                             : new InputStreamReader(is, encoding);
 
             this.reader = new BufferedReader(isr);
@@ -233,7 +234,7 @@ public class ResourceReader implements Closeable {
 
         InputStreamReader isr =
                 (encoding == null)
-                        ? new InputStreamReader(is)
+                        ? new InputStreamReader(is, StandardCharsets.UTF_8)
                         : new InputStreamReader(is, encoding);
         reader = new BufferedReader(isr);
         lineNo = 0;

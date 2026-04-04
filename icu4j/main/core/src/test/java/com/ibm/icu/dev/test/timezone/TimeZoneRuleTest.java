@@ -32,6 +32,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -596,21 +597,24 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
             try {
                 // Write out VTIMEZONE
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                OutputStreamWriter writer = new OutputStreamWriter(baos);
-                vtz_org.write(writer);
-                writer.close();
+                try (OutputStreamWriter writer =
+                        new OutputStreamWriter(baos, StandardCharsets.UTF_8)) {
+                    vtz_org.write(writer);
+                }
                 byte[] vtzdata = baos.toByteArray();
                 // Read VTIMEZONE
-                ByteArrayInputStream bais = new ByteArrayInputStream(vtzdata);
-                InputStreamReader reader = new InputStreamReader(bais);
-                vtz_new = VTimeZone.create(reader);
-                reader.close();
+                try (ByteArrayInputStream bais = new ByteArrayInputStream(vtzdata);
+                        InputStreamReader reader =
+                                new InputStreamReader(bais, StandardCharsets.UTF_8)) {
+                    vtz_new = VTimeZone.create(reader);
+                }
 
                 // Write out VTIMEZONE one more time
                 ByteArrayOutputStream baos1 = new ByteArrayOutputStream();
-                OutputStreamWriter writer1 = new OutputStreamWriter(baos1);
-                vtz_new.write(writer1);
-                writer1.close();
+                try (OutputStreamWriter writer1 =
+                        new OutputStreamWriter(baos1, StandardCharsets.UTF_8)) {
+                    vtz_new.write(writer1);
+                }
                 byte[] vtzdata1 = baos1.toByteArray();
 
                 // Make sure VTIMEZONE data is exactly same with the first one
@@ -690,16 +694,17 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
                 try {
                     // Write out VTIMEZONE
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    OutputStreamWriter writer = new OutputStreamWriter(baos);
-                    vtz_org.write(writer, startTime);
-                    writer.close();
+                    try (OutputStreamWriter writer =
+                            new OutputStreamWriter(baos, StandardCharsets.UTF_8)) {
+                        vtz_org.write(writer, startTime);
+                    }
                     byte[] vtzdata = baos.toByteArray();
                     // Read VTIMEZONE
-                    ByteArrayInputStream bais = new ByteArrayInputStream(vtzdata);
-                    InputStreamReader reader = new InputStreamReader(bais);
-                    vtz_new = VTimeZone.create(reader);
-                    reader.close();
-
+                    try (ByteArrayInputStream bais = new ByteArrayInputStream(vtzdata);
+                            InputStreamReader reader =
+                                    new InputStreamReader(bais, StandardCharsets.UTF_8)) {
+                        vtz_new = VTimeZone.create(reader);
+                    }
                 } catch (IOException ioe) {
                     errln("FAIL: IO error while writing/reading VTIMEZONE data");
                 }
@@ -778,15 +783,17 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
                 try {
                     // Write out VTIMEZONE
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    OutputStreamWriter writer = new OutputStreamWriter(baos);
-                    vtz_org.writeSimple(writer, time);
-                    writer.close();
+                    try (OutputStreamWriter writer =
+                            new OutputStreamWriter(baos, StandardCharsets.UTF_8)) {
+                        vtz_org.writeSimple(writer, time);
+                    }
                     byte[] vtzdata = baos.toByteArray();
                     // Read VTIMEZONE
-                    ByteArrayInputStream bais = new ByteArrayInputStream(vtzdata);
-                    InputStreamReader reader = new InputStreamReader(bais);
-                    vtz_new = VTimeZone.create(reader);
-                    reader.close();
+                    try (ByteArrayInputStream bais = new ByteArrayInputStream(vtzdata);
+                            InputStreamReader reader =
+                                    new InputStreamReader(bais, StandardCharsets.UTF_8)) {
+                        vtz_new = VTimeZone.create(reader);
+                    }
                 } catch (IOException ioe) {
                     errln("FAIL: IO error while writing/reading VTIMEZONE data");
                 }
@@ -825,15 +832,16 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
         try {
             // Write out VTIMEZONE
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            OutputStreamWriter writer = new OutputStreamWriter(baos);
-            vtz.write(writer);
-            writer.close();
+            try (OutputStreamWriter writer = new OutputStreamWriter(baos, StandardCharsets.UTF_8)) {
+                vtz.write(writer);
+            }
             byte[] vtzdata = baos.toByteArray();
             // Read VTIMEZONE
-            ByteArrayInputStream bais = new ByteArrayInputStream(vtzdata);
-            InputStreamReader reader = new InputStreamReader(bais);
-            newvtz1 = VTimeZone.create(reader);
-            reader.close();
+            try (ByteArrayInputStream bais = new ByteArrayInputStream(vtzdata);
+                    InputStreamReader reader =
+                            new InputStreamReader(bais, StandardCharsets.UTF_8)) {
+                newvtz1 = VTimeZone.create(reader);
+            }
 
             // Check if TZURL and LAST-MODIFIED headers are preserved
             if (!(tzurl.equals(newvtz1.getTZURL()))) {
@@ -862,15 +870,16 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
             newvtz1.setTZURL(newtzurl);
             // Write out VTIMEZONE
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            OutputStreamWriter writer = new OutputStreamWriter(baos);
-            newvtz1.write(writer, getUTCMillis(2000, Calendar.JANUARY, 1));
-            writer.close();
+            try (OutputStreamWriter writer = new OutputStreamWriter(baos, StandardCharsets.UTF_8)) {
+                newvtz1.write(writer, getUTCMillis(2000, Calendar.JANUARY, 1));
+            }
             byte[] vtzdata = baos.toByteArray();
             // Read VTIMEZONE
-            ByteArrayInputStream bais = new ByteArrayInputStream(vtzdata);
-            InputStreamReader reader = new InputStreamReader(bais);
-            newvtz2 = VTimeZone.create(reader);
-            reader.close();
+            try (ByteArrayInputStream bais = new ByteArrayInputStream(vtzdata);
+                    InputStreamReader reader =
+                            new InputStreamReader(bais, StandardCharsets.UTF_8)) {
+                newvtz2 = VTimeZone.create(reader);
+            }
 
             // Check if TZURL and LAST-MODIFIED headers are preserved
             if (!(newtzurl.equals(newvtz2.getTZURL()))) {

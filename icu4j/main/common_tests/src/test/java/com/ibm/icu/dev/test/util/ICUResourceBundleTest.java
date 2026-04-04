@@ -27,6 +27,7 @@ import java.net.JarURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -65,17 +66,16 @@ public final class ICUResourceBundleTest extends CoreTestFmwk {
                     JarEntry je = jc.getJarEntry();
                     logln("jar entry: " + je.toString());
                 } else {
-                    BufferedReader br =
-                            new BufferedReader(new InputStreamReader(c.getInputStream()));
-                    logln("input stream:");
-                    try {
+                    try (BufferedReader br =
+                            new BufferedReader(
+                                    new InputStreamReader(
+                                            c.getInputStream(), StandardCharsets.UTF_8))) {
+                        logln("input stream:");
                         String line = null;
                         int n = 0;
                         while ((line = br.readLine()) != null) {
                             logln("  " + ++n + ": " + line);
                         }
-                    } finally {
-                        br.close();
                     }
                 }
             }

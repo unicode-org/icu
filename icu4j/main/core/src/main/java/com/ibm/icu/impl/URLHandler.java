@@ -11,7 +11,6 @@ package com.ibm.icu.impl;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
@@ -19,6 +18,7 @@ import java.lang.reflect.Method;
 import java.net.JarURLConnection;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,63 +33,38 @@ public abstract class URLHandler {
     private static final boolean DEBUG = ICUDebug.enabled("URLHandler");
 
     static {
-        Map<String, Method> h = null;
+        final Map<String, Method> h = new HashMap<>();
 
-        BufferedReader br = null;
-        try {
-            @SuppressWarnings("resource") // Closed by BufferedReader.
-            ClassLoader loader = ClassLoaderUtil.getClassLoader(URLHandler.class);
-            InputStream is = loader.getResourceAsStream(PROPNAME);
-
-            if (is != null) {
-                Class<?>[] params = {URL.class};
-                br = new BufferedReader(new InputStreamReader(is));
-
-                for (String line = br.readLine(); line != null; line = br.readLine()) {
-                    line = line.trim();
-
-                    if (line.length() == 0 || line.charAt(0) == '#') {
-                        continue;
-                    }
-
-                    int ix = line.indexOf('=');
-
-                    if (ix == -1) {
-                        if (DEBUG) System.err.println("bad urlhandler line: '" + line + "'");
-                        break;
-                    }
-
-                    String key = line.substring(0, ix).trim();
-                    String value = line.substring(ix + 1).trim();
-
-                    try {
-                        Class<?> cl = Class.forName(value);
-                        Method m = cl.getDeclaredMethod("get", params);
-
-                        if (h == null) {
-                            h = new HashMap<String, Method>();
-                        }
-
-                        h.put(key, m);
-                    } catch (ClassNotFoundException e) {
-                        if (DEBUG) System.err.println(e);
-                    } catch (NoSuchMethodException e) {
-                        if (DEBUG) System.err.println(e);
-                    } catch (SecurityException e) {
-                        if (DEBUG) System.err.println(e);
-                    }
-                }
-                br.close();
-            }
+        Class<?>[] params = {URL.class};
+        ClassLoader loader = ClassLoaderUtil.getClassLoader(URLHandler.class);
+        try (InputStream is = loader.getResourceAsStream(PROPNAME);
+                InputStreamReader isr = new InputStreamReader(is, StandardCharsets.UTF_8);
+                BufferedReader br = new BufferedReader(isr)) {
+            br.lines()
+                    .map(String::trim)
+                    .filter(line -> !line.isEmpty() && !line.startsWith("#"))
+                    .forEach(
+                            line -> {
+                                int ix = line.indexOf('=');
+                                if (ix == -1) {
+                                    if (DEBUG)
+                                        System.err.println("bad urlhandler line: '" + line + "'");
+                                    return;
+                                }
+                                String key = line.substring(0, ix).trim();
+                                String value = line.substring(ix + 1).trim();
+                                try {
+                                    Class<?> cl = Class.forName(value);
+                                    Method m = cl.getDeclaredMethod("get", params);
+                                    h.put(key, m);
+                                } catch (ClassNotFoundException
+                                        | NoSuchMethodException
+                                        | SecurityException e) {
+                                    if (DEBUG) System.err.println(e);
+                                }
+                            });
         } catch (Throwable t) {
             if (DEBUG) System.err.println(t);
-        } finally {
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException ignored) {
-                }
-            }
         }
 
         handlers = h;
@@ -102,23 +77,19 @@ public abstract class URLHandler {
 
         String protocol = url.getProtocol();
 
-        if (handlers != null) {
-            Method m = handlers.get(protocol);
+        Method m = handlers.get(protocol);
 
-            if (m != null) {
-                try {
-                    URLHandler handler = (URLHandler) m.invoke(null, new Object[] {url});
+        if (m != null) {
+            try {
+                URLHandler handler = (URLHandler) m.invoke(null, new Object[] {url});
 
-                    if (handler != null) {
-                        return handler;
-                    }
-                } catch (IllegalAccessException e) {
-                    if (DEBUG) System.err.println(e);
-                } catch (IllegalArgumentException e) {
-                    if (DEBUG) System.err.println(e);
-                } catch (InvocationTargetException e) {
-                    if (DEBUG) System.err.println(e);
+                if (handler != null) {
+                    return handler;
                 }
+            } catch (IllegalAccessException
+                    | IllegalArgumentException
+                    | InvocationTargetException e) {
+                if (DEBUG) System.err.println(e);
             }
         }
 

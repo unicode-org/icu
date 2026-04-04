@@ -16,6 +16,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -249,9 +250,9 @@ public class DataDrivenNumberFormatTestUtility extends CoreTestFmwk {
                         } else if (!shouldFail && errorMessage != null) {
                             if (err != null) {
                                 ByteArrayOutputStream os = new ByteArrayOutputStream();
-                                PrintStream ps = new PrintStream(os);
+                                PrintStream ps = new PrintStream(os, true, StandardCharsets.UTF_8);
                                 err.printStackTrace(ps);
-                                String stackTrace = os.toString();
+                                String stackTrace = os.toString(StandardCharsets.UTF_8);
                                 showError(
                                         errorMessage
                                                 + "     Stack trace: "
@@ -266,9 +267,9 @@ public class DataDrivenNumberFormatTestUtility extends CoreTestFmwk {
             }
         } catch (Exception e) {
             ByteArrayOutputStream os = new ByteArrayOutputStream();
-            PrintStream ps = new PrintStream(os);
+            PrintStream ps = new PrintStream(os, true, StandardCharsets.UTF_8);
             e.printStackTrace(ps);
-            String stackTrace = os.toString();
+            String stackTrace = os.toString(StandardCharsets.UTF_8);
             showError(
                     "MAJOR ERROR: "
                             + e.toString()

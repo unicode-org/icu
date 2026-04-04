@@ -10,9 +10,13 @@ import com.ibm.icu.util.UResourceBundle;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.charset.StandardCharsets;
 import java.util.MissingResourceException;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
+@RunWith(JUnit4.class)
 public class ResourceBundleWrapperCachingTest {
     @Test
     public void testCacheOnDifferentClassloaders() {
@@ -50,11 +54,11 @@ public class ResourceBundleWrapperCachingTest {
 
             // Making sure that second bundle has `Second` in the localization file (unlike the
             // first one)
-            assertTrue(
-                    new String(
-                                    secondFL.getResourceAsStream("localization.properties")
-                                            .readAllBytes())
-                            .contains("Second=This is a second line"));
+            try (var is = secondFL.getResourceAsStream("localization.properties")) {
+                assertTrue(
+                        new String(is.readAllBytes(), StandardCharsets.UTF_8)
+                                .contains("Second=This is a second line"));
+            }
 
             // Getting the bundle, same as the first one
             var bundle =

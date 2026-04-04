@@ -17,6 +17,7 @@ import com.ibm.icu.text.UTF16;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
+import java.nio.charset.Charset;
 
 public class LigatureTree {
     static class Lignode {
@@ -221,8 +222,7 @@ public class LigatureTree {
     }
 
     public void dump() {
-        PrintWriter pw = new PrintWriter(System.out);
-
+        PrintWriter pw = new PrintWriter(System.out, true, Charset.defaultCharset());
         root.dump(pw, 0);
         pw.flush();
     }

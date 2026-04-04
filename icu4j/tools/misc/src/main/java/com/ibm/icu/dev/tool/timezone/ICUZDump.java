@@ -16,14 +16,14 @@ import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.SimpleTimeZone;
 import com.ibm.icu.util.ULocale;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.lang.reflect.Method;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -310,7 +310,7 @@ public class ICUZDump {
 
         File dirfile = null;
         if (dir == null || dir.length() == 0) {
-            PrintWriter pw = new PrintWriter(System.out);
+            PrintWriter pw = new PrintWriter(System.out, true, Charset.defaultCharset());
             try {
                 for (int i = 0; i < tzids.length; i++) {
                     if (i != 0) {
@@ -329,16 +329,15 @@ public class ICUZDump {
             dirfile = new File(dir);
             dirfile.mkdirs();
 
-            try {
-                for (int i = 0; i < tzids.length; i++) {
-                    FileOutputStream fos =
-                            new FileOutputStream(new File(dirfile, tzids[i].replace('/', '-')));
-                    Writer w = new BufferedWriter(new OutputStreamWriter(fos));
+            for (int i = 0; i < tzids.length; i++) {
+                try (Writer w =
+                        Files.newBufferedWriter(
+                                dirfile.toPath().resolve(tzids[i].replace('/', '-')),
+                                StandardCharsets.UTF_8)) {
                     dumpZone(w, lineSep, tzids[i], low, high, jdk);
-                    w.close();
+                } catch (IOException ioe) {
+                    ioe.printStackTrace();
                 }
-            } catch (IOException ioe) {
-                ioe.printStackTrace();
             }
         }
     }

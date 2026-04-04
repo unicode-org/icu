@@ -11,8 +11,12 @@ package com.ibm.icu.dev.test.format;
 
 import com.ibm.icu.text.NumberFormat;
 import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Locale;
 
 /**
@@ -44,40 +48,38 @@ public class WriteNumberFormatSerialTestData {
         NumberFormat nfp = NumberFormat.getPercentInstance(Locale.US);
         NumberFormat nfsp = NumberFormat.getScientificInstance(Locale.US);
 
-        try {
-            FileOutputStream file = new FileOutputStream("NumberFormatSerialTestData.java");
-            file.write(header.getBytes());
-            write(file, (Object) nf, "generalInstance", "//NumberFormat.getInstance(Locale.US)");
+        try (Writer writer =
+                Files.newBufferedWriter(
+                        Path.of("NumberFormatSerialTestData.java"), StandardCharsets.UTF_8)) {
+            writer.write(header);
+            write(writer, (Object) nf, "generalInstance", "//NumberFormat.getInstance(Locale.US)");
             write(
-                    file,
+                    writer,
                     (Object) nfc,
                     "currencyInstance",
                     "//NumberFormat.getCurrencyInstance(Locale.US)");
             write(
-                    file,
+                    writer,
                     (Object) nfp,
                     "percentInstance",
                     "//NumberFormat.getPercentInstance(Locale.US)");
             write(
-                    file,
+                    writer,
                     (Object) nfsp,
                     "scientificInstance",
                     "//NumberFormat.getScientificInstance(Locale.US)");
-            file.write(footer.getBytes());
-            file.close();
+            writer.write(footer);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
     }
 
-    private static void write(FileOutputStream file, Object o, String name, String comment) {
-        try {
-            ByteArrayOutputStream bts = new ByteArrayOutputStream();
-            ObjectOutputStream os = new ObjectOutputStream(bts);
+    private static void write(Writer writer, Object o, String name, String comment) {
+        ByteArrayOutputStream bts = new ByteArrayOutputStream();
+        try (ObjectOutputStream os = new ObjectOutputStream(bts)) {
             os.writeObject((Object) o);
             os.flush();
-            os.close();
             byte[] myArr = bts.toByteArray();
             // String temp = new String(myArr);
             System.out.println("    " + comment + " :");
@@ -87,21 +89,19 @@ public class WriteNumberFormatSerialTestData {
             System.out.println("maximumFractionDigits : " + (temp.indexOf("maximumFractionDigits")+"maximumFractionDigits".length()));
             */
             // file.write(myArr);
-            file.write(("\n    " + comment).getBytes());
-            file.write(
-                    new String("\n    static byte[] " + name + " = new byte[]{ \n")
-                            .getBytes("UTF-8"));
-            file.write("        ".getBytes());
+            writer.write("\n    " + comment);
+            writer.write("\n    static byte[] " + name + " = new byte[]{ \n");
+            writer.write("        ");
             for (int i = 0; i < myArr.length; i++) {
-                file.write(String.valueOf((int) myArr[i]).getBytes());
-                file.write(", ".getBytes());
+                writer.write(String.valueOf((int) myArr[i]));
+                writer.write(", ");
                 if ((i + 1) % 20 == 0) {
-                    file.write("\n".getBytes());
-                    file.write("        ".getBytes());
+                    writer.write("\n");
+                    writer.write("        ");
                 }
             }
-            file.write(new String("\n    };\n").getBytes("UTF-8"));
-        } catch (Exception e) {
+            writer.write("\n    };\n");
+        } catch (IOException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
