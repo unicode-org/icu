@@ -4649,7 +4649,6 @@ public class DateFormatTest extends CoreTestFmwk {
         Locale foo = new Locale("fu", "FU", "BAR");
         rb = null;
         sym = new DateFormatSymbols(GregorianCalendar.class, foo);
-        sym.equals(null);
 
         sym = new ChineseDateFormatSymbols();
         sym = new ChineseDateFormatSymbols(new Locale("en", "US"));

@@ -74,7 +74,6 @@ public class CompatibilityTest extends CoreTestFmwk {
 
         long a = jdkCal.getTime().getTime();
         Date c = jdkCal.getTime();
-        c.toString();
         long b = c.getTime();
         if (a != b) {
             logln(" " + a + " != " + b);

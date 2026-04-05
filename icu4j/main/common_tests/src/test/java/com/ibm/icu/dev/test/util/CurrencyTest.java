@@ -47,7 +47,6 @@ public class CurrencyTest extends CoreTestFmwk {
     @SuppressWarnings("SelfEquals")
     public void TestAPI() {
         Currency usd = Currency.getInstance("USD");
-        /*int hash = */ usd.hashCode();
         Currency jpy = Currency.getInstance("JPY");
         Currency jpy2 = Currency.getInstance("jpy");
         if (usd.equals(jpy)) {

@@ -672,7 +672,7 @@
                   WARNING: Do not wrap the line below, it will fail on Windows.
                   See https://github.com/google/error-prone/issues/4256
                 -->
-                <arg>-Xplugin:ErrorProne -Xep:UnicodeEscape:OFF -Xep:InvalidBlockTag:OFF -Xep:ReturnValueIgnored:WARN</arg>
+                <arg>-Xplugin:ErrorProne -Xep:UnicodeEscape:OFF -Xep:InvalidBlockTag:OFF</arg>
                 <arg>-Xmaxerrs</arg>
                 <arg>10000</arg>
                 <arg>-Xmaxwarns</arg>

@@ -5742,7 +5742,7 @@ public class NumberFormatTest extends CoreTestFmwk {
 
     @Test
     public void TestNumberFormatTestDataToString() {
-        new DataDrivenNumberFormatTestData().toString();
+        var unused = new DataDrivenNumberFormatTestData().toString();
     }
 
     // Testing for Issue 11805.

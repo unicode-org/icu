@@ -2429,15 +2429,12 @@ public class UnicodeSetTest extends CoreTestFmwk {
                 boolean containsAll = (i & j) == j;
                 boolean equals = i == j;
                 if (containsNone != x.containsNone(y)) {
-                    x.containsNone(y); // repeat for debugging
                     errln("FAILED: " + x + " containsSome " + y);
                 }
                 if (containsAll != x.containsAll(y)) {
-                    x.containsAll(y); // repeat for debugging
                     errln("FAILED: " + x + " containsAll " + y);
                 }
                 if (equals != x.equals(y)) {
-                    x.equals(y); // repeat for debugging
                     errln("FAILED: " + x + " equals " + y);
                 }
             }
