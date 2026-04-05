@@ -142,6 +142,10 @@ void MultithreadTest::runIndexedTest( int32_t index, UBool exec,
 #include "unicode/coll.h"
 #include "unicode/calendar.h"
 #include "ucaconf.h"
+#include "unicode/uclean.h"
+#include "collationroot.h"
+#include "collationtailoring.h"
+#include "collationdata.h"
 
 void SimpleThread::errorFunc() {
     // *(char *)0 = 3;            // Force entry into a debugger via a crash;
@@ -214,6 +218,14 @@ void MultithreadTest::runIndexedTest( int32_t index, UBool exec,
         if (exec) {
             TestUnifiedCache();
         }
+        break;
+    case 9:
+        name = "TestCollationRootCleanupRace";
+#if !UCONFIG_NO_COLLATION
+        if (exec) {
+            TestCollationRootCleanupRace();
+        }
+#endif
         break;
     default:
         name = "";
@@ -1395,11 +1407,146 @@ void MultithreadTest::TestCollators()
 #endif /* #if !UCONFIG_NO_COLLATION */
 
 
+//-------------------------------------------------------------------------------------------
+//
+//   TestCollationRootCleanupRace -- ICU-23352
+//
+//   Test that uprv_collation_root_cleanup() and CollationRoot::getRoot() do not race.
+//   Before the fix, cleanup called SharedObject::clearPtr(rootSingleton) before
+//   initOnce.reset(), allowing a concurrent getRoot() to dereference a freed pointer.
+//   With the fix, initOnce.reset() is called first, so concurrent callers block on
+//   re-initialization instead of accessing a dangling pointer.
+//
+//-------------------------------------------------------------------------------------------
+
+#if !UCONFIG_NO_COLLATION
+
+//
+//  CollationRootGetterThread -- calls CollationRoot::getRoot() in a loop.
+//  Used by TestCollationRootCleanupRace to exercise the race window between
+//  initOnce.reset() and SharedObject::clearPtr(rootSingleton) in the cleanup path.
+//
+static const int kCleanupRaceReaders    = 4;   // # of reader threads
+static const int kCleanupRaceIterations = 100; // # of getRoot() calls per thread per round
+
+class CollationRootGetterThread : public SimpleThread {
+public:
+    CollationRootGetterThread() : fErrors(0), fIterations(0) {}
+    virtual ~CollationRootGetterThread() {}
+
+    int32_t getErrors() const { return fErrors; }
+
+    void setIterations(int32_t n) { fIterations = n; }
+
+    virtual void run() {
+        for (int32_t i = 0; i < fIterations; i++) {
+            UErrorCode status = U_ZERO_ERROR;
+            const CollationTailoring *root = CollationRoot::getRoot(status);
+            if (U_SUCCESS(status) && root != NULL) {
+                // Access the data pointer to verify the object is valid.
+                // Without the fix, this could dereference freed memory.
+                volatile const CollationData *d = root->data;
+                (void)d;
+            } else if (U_FAILURE(status)) {
+                fErrors++;
+            }
+        }
+    }
+
+private:
+    int32_t fErrors;
+    int32_t fIterations;
+};
+
+void MultithreadTest::TestCollationRootCleanupRace() {
+    //
+    // ICU-23352: uprv_collation_root_cleanup() used to call
+    // SharedObject::clearPtr(rootSingleton) before initOnce.reset().
+    // A concurrent getRoot() call could pass through umtx_initOnce() (seeing
+    // initOnce as already done) and then dereference rootSingleton after it
+    // was freed.  The fix reorders the cleanup so that initOnce.reset()
+    // happens first.
+    //
+    // This test exercises the window by spawning threads that call getRoot()
+    // right after u_cleanup() is called.  Under TSAN or ASAN, the old code
+    // would report a data race or use-after-free.
+    //
+
+    // Verify getRoot() works at all before we start.
+    {
+        UErrorCode status = U_ZERO_ERROR;
+        const CollationTailoring *root = CollationRoot::getRoot(status);
+        if (U_FAILURE(status) || root == NULL) {
+            dataerrln("CollationRoot::getRoot() failed: %s", u_errorName(status));
+            return;
+        }
+    }
+
+    logln("Testing CollationRoot cleanup/init race with %d reader threads.", kCleanupRaceReaders);
+
+    int32_t totalErrors = 0;
+
+    // Run several rounds: cleanup on main thread, then immediately spawn
+    // reader threads that race to call getRoot() during re-initialization.
+    for (int32_t round = 0; round < 10; round++) {
+        // Tear down all ICU singletons, including CollationRoot.
+        u_cleanup();
+
+        // Immediately spawn reader threads.  They will call getRoot() which
+        // triggers re-initialization via umtx_initOnce().  Before the fix,
+        // the stale rootSingleton pointer was still visible here.
+        CollationRootGetterThread *readers[kCleanupRaceReaders];
+        int32_t i;
+        for (i = 0; i < kCleanupRaceReaders; i++) {
+            readers[i] = new CollationRootGetterThread();
+            readers[i]->setIterations(kCleanupRaceIterations);
+            readers[i]->start();
+        }
+
+        // Wait for readers to finish (with patience).
+        for (int32_t p = 30; p > 0; p--) {
+            UBool allDone = TRUE;
+            for (i = 0; i < kCleanupRaceReaders; i++) {
+                if (readers[i]->isRunning()) {
+                    allDone = FALSE;
+                    break;
+                }
+            }
+            if (allDone) break;
+            SimpleThread::sleep(500);
+        }
+
+        for (i = 0; i < kCleanupRaceReaders; i++) {
+            totalErrors += readers[i]->getErrors();
+            delete readers[i];
+        }
+    }
+
+    if (totalErrors > 0) {
+        errln("CollationRoot cleanup race: %d errors from reader threads.", totalErrors);
+    } else {
+        logln("All rounds passed, no errors.");
+    }
+
+    // Leave ICU in a usable state for subsequent tests.
+    {
+        UErrorCode status = U_ZERO_ERROR;
+        CollationRoot::getRoot(status);
+    }
+}
+
+#else
+
+void MultithreadTest::TestCollationRootCleanupRace() {
+    // Collation is disabled; nothing to test.
+}
+
+#endif /* #if !UCONFIG_NO_COLLATION */
 
 
 //-------------------------------------------------------------------------------------------
 //
-//   StringThreadTest2 
+//   StringThreadTest2
 //
 //-------------------------------------------------------------------------------------------
 

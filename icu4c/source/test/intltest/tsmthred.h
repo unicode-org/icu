@@ -49,6 +49,7 @@ public:
     void TestAnyTranslit();
     void TestConditionVariables();
     void TestUnifiedCache();
+    void TestCollationRootCleanupRace();
 
 };
 

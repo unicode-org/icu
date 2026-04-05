@@ -38,8 +38,11 @@ static UInitOnce initOnce = U_INITONCE_INITIALIZER;
 U_CDECL_BEGIN
 
 static UBool U_CALLCONV uprv_collation_root_cleanup() {
-    SharedObject::clearPtr(rootSingleton);
+    // Reset initOnce first so that concurrent getRoot()/getRootCacheEntry()
+    // callers will block on re-initialization rather than dereferencing
+    // a rootSingleton that is being (or has been) cleared.
     initOnce.reset();
+    SharedObject::clearPtr(rootSingleton);
     return TRUE;
 }
 
