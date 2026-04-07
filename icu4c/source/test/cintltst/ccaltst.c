@@ -2168,7 +2168,7 @@ void TestAddRollEra0AndEraBounds(void) {
     const EraTestItem * eraTestItemPtr;
     for (eraTestItemPtr = eraTestItems; eraTestItemPtr->locale != NULL; eraTestItemPtr++) {
         if (uprv_strstr(eraTestItemPtr->locale, "calendar=japanese") != NULL &&
-                log_knownIssue("ICU-23341", "ICU needs to handle removal of data for pre-Meiji Japanese eras")) {
+                log_knownIssue("ICU-23108", "ICU needs to implement era inheritance")) {
             continue;
         }
         UErrorCode status = U_ZERO_ERROR;

@@ -2480,9 +2480,7 @@ public class IBMCalendarTest extends CalendarTestFmwk {
         TimeZone zoneGMT = TimeZone.getFrozenTimeZone("GMT");
         for (String localeID : localeIDs) {
             if (localeID.contains("calendar=japanese")
-                    && logKnownIssue(
-                            "ICU-23341",
-                            "ICU needs to handle removal of data for pre-Meiji Japanese eras")) {
+                    && logKnownIssue("ICU-23108", "ICU needs to implement era inheritance")) {
                 continue;
             }
             Calendar ucalTest = Calendar.getInstance(zoneGMT, new ULocale(localeID));

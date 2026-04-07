@@ -462,8 +462,7 @@ public class JapaneseTest extends CalendarTestFmwk {
         int expectedA[] = {Calendar.ERA, JapaneseCalendar.MEIJI};
         checkExpected(c, expectedA);
 
-        if (!logKnownIssue(
-                "ICU-23341", "ICU needs to handle removal of data for pre-Meiji Japanese eras")) {
+        if (!logKnownIssue("ICU-23108", "ICU needs to implement era inheritance")) {
             logln("test setting era and year and month and date");
             c.clear();
             c.set(Calendar.ERA, JapaneseCalendar.MEIJI);
@@ -471,7 +470,7 @@ public class JapaneseTest extends CalendarTestFmwk {
             c.set(Calendar.MONTH, Calendar.JANUARY);
             c.set(Calendar.DATE, 1);
 
-            int expectedC[] = {Calendar.ERA, JapaneseCalendar.MEIJI - 1};
+            int expectedC[] = {Calendar.ERA, JapaneseCalendar.AD};
             checkExpected(c, expectedC);
 
             logln("test setting  year and month and date THEN era");
