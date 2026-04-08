@@ -32,7 +32,7 @@
 #include "uresimp.h"
 #include "util.h"
 #include <limits.h>
-#include <cmath>     // for modf()
+#include <cmath>
 #include <cstdlib>
 U_NAMESPACE_BEGIN
 
