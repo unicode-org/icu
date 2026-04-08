@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1775577663664,
+  "lastUpdate": 1775682353120,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -44037,6 +44037,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFD_Text",
             "value": 3.765598566551942,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "54c37df85b0fb67bdb8734c65d671d7ec4289160",
+          "message": "ICU-23247 Fix Errorprone DefaultCharset error",
+          "timestamp": "2026-04-08T13:55:23-07:00",
+          "tree_id": "37c0b8be5b60ebfd5749a1763e1e098bd97d243d",
+          "url": "https://github.com/unicode-org/icu/commit/54c37df85b0fb67bdb8734c65d671d7ec4289160"
+        },
+        "date": 1775681928285,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 3.778620873836191,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
