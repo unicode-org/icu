@@ -685,7 +685,7 @@ public:
         }
 
         // Check if the value is integer.
-		double integral_result;
+        double integral_result;
         const double kTolerance = 1e-9;
         if (abs(modf(double_result, &integral_result)) > kTolerance) {
             status = kUnitIdentifierSyntaxError;
