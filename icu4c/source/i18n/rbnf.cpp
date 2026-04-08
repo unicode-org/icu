@@ -649,11 +649,13 @@ StringLocalizationInfo::create(const UnicodeString& info, UParseError& perror, U
 }
 
 StringLocalizationInfo::~StringLocalizationInfo() {
-    for (char16_t*** p = data; *p; ++p) {
-        // remaining data is simply pointer into our unicode string data.
-        if (*p) uprv_free(*p);
+    if (data) {
+        for (char16_t*** p = data; *p; ++p) {
+            // remaining data is simply pointer into our unicode string data.
+            if (*p) uprv_free(*p);
+        }
+        uprv_free(data);
     }
-    if (data) uprv_free(data);
     if (info) uprv_free(info);
 }
 
