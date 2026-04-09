@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1775682446131,
+  "lastUpdate": 1775756661274,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -43857,6 +43857,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFD_Text",
             "value": 2.6596717846786424,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "grhoten@users.noreply.github.com",
+            "name": "George Rhoten",
+            "username": "grhoten"
+          },
+          "committer": {
+            "email": "grhoten@users.noreply.github.com",
+            "name": "George Rhoten",
+            "username": "grhoten"
+          },
+          "distinct": true,
+          "id": "b9143894739f04f052d9f62ea6b106f2c044f256",
+          "message": "ICU-23358 Make RBNF lenient parsing of ignorables more consistent between locales",
+          "timestamp": "2026-04-09T10:22:39-07:00",
+          "tree_id": "5e6abc36a2d223567a0781d2ae5ad499c8fe7eef",
+          "url": "https://github.com/unicode-org/icu/commit/b9143894739f04f052d9f62ea6b106f2c044f256"
+        },
+        "date": 1775756232126,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 3.1511279016098768,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
