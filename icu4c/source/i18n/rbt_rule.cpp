@@ -65,7 +65,15 @@ TransliterationRule::TransliterationRule(const UnicodeString& input,
                                          const TransliterationRuleData* theData,
                                          UErrorCode& status) :
     UMemory(),
+    anteContext(nullptr),
+    key(nullptr),
+    postContext(nullptr),
+    output(nullptr),
     segments(nullptr),
+    segmentsCount(0),
+    anteContextLength(0),
+    keyLength(0),
+    flags(0),
     data(theData) {
 
     if (U_FAILURE(status)) {
