@@ -729,6 +729,18 @@ blo{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"naaBYŊAƖ"}
+                    1{"AƖAK"}
+                }
+                wide{
+                    0{"naa Ba Ye Ŋʊm Annabi Ɩsa"}
+                    1{"Annabi Ɩsa Abʊŋʊma Kaŋkǝm"}
+                }
+            }
+        }
     }
     delimiters{
         alternateQuotationEnd{"”"}

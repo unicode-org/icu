@@ -532,6 +532,22 @@ scn{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"p.C."}
+                    1{"d.C."}
+                }
+                narrow{
+                    0{"pC"}
+                    1{"dC"}
+                }
+                wide{
+                    0{"prima di Cristu"}
+                    1{"doppu di Cristu"}
+                }
+            }
+        }
     }
     fields{
         day{

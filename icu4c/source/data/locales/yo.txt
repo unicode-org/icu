@@ -450,6 +450,17 @@ yo{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    1{"AD"}
+                }
+                wide{
+                    0{"Saju Kristi"}
+                    1{"Lehin Kristi"}
+                }
+            }
+        }
     }
     characterLabel{
         activities{"Ise"}

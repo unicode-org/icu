@@ -550,6 +550,14 @@ ccp{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"𑄈𑄳𑄢𑄨𑄌𑄴𑄑𑄴𑄛𑄫𑄢𑄴𑄝𑄧"}
+                    1{"𑄈𑄳𑄢𑄨𑄌𑄴𑄑𑄛𑄴𑄘𑄧"}
+                }
+            }
+        }
     }
     characterLabel{
         activities{"𑄇𑄌𑄴𑄇𑄟𑄴"}

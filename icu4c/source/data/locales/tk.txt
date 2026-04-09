@@ -772,6 +772,18 @@ tk{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"B.e.öň"}
+                    1{"B.e."}
+                }
+                wide{
+                    0{"Isadan öň"}
+                    1{"Isadan soň"}
+                }
+            }
+        }
     }
     characterLabel{
         activities{"işjeňlik"}

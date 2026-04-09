@@ -768,6 +768,18 @@ kk_Arab{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"ب ز د"}
+                    1{"ب ز"}
+                }
+                wide{
+                    0{"ءبىزدىڭ زامانىمىزعا دەيىن"}
+                    1{"ءبىزدىڭ زامانىمىز"}
+                }
+            }
+        }
     }
     characterLabel{
         activities{"ارەكەت"}

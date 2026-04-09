@@ -688,6 +688,18 @@ ceb{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"BC"}
+                    1{"AD"}
+                }
+                wide{
+                    0{"Sa Wala Pa Si Kristo"}
+                    1{"Anno Domini"}
+                }
+            }
+        }
     }
     fields{
         day{

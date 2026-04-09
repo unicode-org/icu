@@ -649,6 +649,18 @@ eo{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"a.n.e."}
+                    1{"n.e."}
+                }
+                wide{
+                    0{"antaŭ nia erao"}
+                    1{"de nia erao"}
+                }
+            }
+        }
     }
     delimiters{
         alternateQuotationEnd{"»"}

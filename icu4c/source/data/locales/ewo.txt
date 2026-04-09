@@ -225,6 +225,18 @@ ewo{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"oyk"}
+                    1{"ayk"}
+                }
+                wide{
+                    0{"osúsúa Yésus kiri"}
+                    1{"ámvus Yésus Kirís"}
+                }
+            }
+        }
     }
     delimiters{
         alternateQuotationEnd{"”"}

@@ -217,6 +217,18 @@ agq{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"SK"}
+                    1{"BK"}
+                }
+                wide{
+                    0{"Sěe Kɨ̀lesto"}
+                    1{"Bǎa Kɨ̀lesto"}
+                }
+            }
+        }
     }
     delimiters{
         alternateQuotationStart{"‚"}

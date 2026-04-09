@@ -1211,6 +1211,20 @@ so{
             }
         }
         japanese{
+            eras{
+                abbreviated{
+                    0{"BC"}
+                    1{"AD"}
+                }
+                narrow{
+                    0{"B"}
+                    1{"A"}
+                }
+                wide{
+                    0{"Ciise Hortii"}
+                    1{"Ciise Dabadii"}
+                }
+            }
             intervalFormats{
                 Bh{
                     B{"h B – h B"}

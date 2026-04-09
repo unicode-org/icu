@@ -1414,6 +1414,20 @@ nl{
                 "{1} {0}",
                 "{1} {0}",
             }
+            eras{
+                abbreviated{
+                    0{"v.Chr."}
+                    1{"n.Chr."}
+                }
+                narrow{
+                    0{"v.C."}
+                    1{"n.C."}
+                }
+                wide{
+                    0{"voor Christus"}
+                    1{"na Christus"}
+                }
+            }
         }
         persian{
             DateTimePatterns{

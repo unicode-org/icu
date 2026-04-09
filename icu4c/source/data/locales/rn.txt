@@ -192,6 +192,18 @@ rn{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"Mb.Y."}
+                    1{"Ny.Y"}
+                }
+                wide{
+                    0{"Mbere ya Yezu"}
+                    1{"Nyuma ya Yezu"}
+                }
+            }
+        }
     }
     delimiters{
         alternateQuotationStart{"’"}

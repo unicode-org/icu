@@ -633,6 +633,18 @@ ky{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"б.з.ч."}
+                    1{"б.з."}
+                }
+                wide{
+                    0{"биздин заманга чейин"}
+                    1{"биздин заман"}
+                }
+            }
+        }
     }
     characterLabel{
         activities{"аракет"}

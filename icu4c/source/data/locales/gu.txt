@@ -845,6 +845,22 @@ gu{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"ઈ.સ.પૂર્વે"}
+                    1{"ઈ.સ."}
+                }
+                narrow{
+                    0{"ઇ સ પુ"}
+                    1{"ઇસ"}
+                }
+                wide{
+                    0{"ઈસવીસન પૂર્વે"}
+                    1{"ઇસવીસન"}
+                }
+            }
+        }
         persian{
             monthNames{
                 format{

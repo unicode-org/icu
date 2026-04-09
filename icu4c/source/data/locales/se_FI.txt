@@ -456,6 +456,18 @@ se_FI{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"oKr."}
+                    1{"mKr."}
+                }
+                wide{
+                    0{"ovdal Kristusa"}
+                    1{"maŋŋel Kristusa"}
+                }
+            }
+        }
     }
     fields{
         day{

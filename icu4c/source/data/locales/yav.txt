@@ -210,6 +210,18 @@ yav{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"k.Y."}
+                    1{"+J.C."}
+                }
+                wide{
+                    0{"katikupíen Yésuse"}
+                    1{"ékélémkúnupíén n"}
+                }
+            }
+        }
     }
     delimiters{
         alternateQuotationEnd{"»"}

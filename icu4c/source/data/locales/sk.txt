@@ -1008,6 +1008,18 @@ sk{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"pred Kr."}
+                    1{"po Kr."}
+                }
+                wide{
+                    0{"pred Kristom"}
+                    1{"po Kristovi"}
+                }
+            }
+        }
         persian{
             monthNames{
                 format{

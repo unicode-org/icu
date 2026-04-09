@@ -780,6 +780,18 @@ rm{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"a.Cr."}
+                    1{"s.C."}
+                }
+                wide{
+                    0{"avant Cristus"}
+                    1{"suenter Cristus"}
+                }
+            }
+        }
     }
     characterLabel{
         activities{"activitads"}

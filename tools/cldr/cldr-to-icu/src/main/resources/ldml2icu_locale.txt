@@ -239,6 +239,17 @@
 //ldml/dates/calendars/calendar[@type="(%A)"]/eras/eraAbbr/era[@type="(%A)"][@alt="(%A)"]   ; /calendar/$1/eras/abbreviated%$3/$2
 //ldml/dates/calendars/calendar[@type="(%A)"]/eras/eraNames/era[@type="(%A)"][@alt="(%A)"]  ; /calendar/$1/eras/wide%$3/$2
 
+# Inherit Gregorian era names into Japanese
+//ldml/dates/calendars/calendar[@type="gregorian"]/eras/eraNarrow/era[@type="(%A)"]
+     ; /calendar/gregorian/eras/narrow/$1
+     ; /calendar/japanese/eras/narrow/$1
+//ldml/dates/calendars/calendar[@type="gregorian"]/eras/eraAbbr/era[@type="(%A)"]
+     ; /calendar/gregorian/eras/abbreviated/$1
+     ; /calendar/japanese/eras/abbreviated/$1
+//ldml/dates/calendars/calendar[@type="gregorian"]/eras/eraNames/era[@type="(%A)"]
+     ; /calendar/gregorian/eras/wide/$1
+     ; /calendar/japanese/eras/wide/$1
+
 //ldml/dates/calendars/calendar[@type="(%A)"]/eras/eraNarrow/era[@type="(%A)"] ; /calendar/$1/eras/narrow/$2
 //ldml/dates/calendars/calendar[@type="(%A)"]/eras/eraAbbr/era[@type="(%A)"]   ; /calendar/$1/eras/abbreviated/$2
 //ldml/dates/calendars/calendar[@type="(%A)"]/eras/eraNames/era[@type="(%A)"]  ; /calendar/$1/eras/wide/$2

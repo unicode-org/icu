@@ -461,6 +461,12 @@ zh_Hant_HK{
                 hm{"ah:mm"}
                 hms{"ah:mm:ss"}
             }
+            eras{
+                abbreviated{
+                    0{"公元前"}
+                    1{"公元"}
+                }
+            }
         }
         roc{
             availableFormats{

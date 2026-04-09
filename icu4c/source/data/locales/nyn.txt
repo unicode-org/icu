@@ -182,6 +182,18 @@ nyn{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"BC"}
+                    1{"AD"}
+                }
+                wide{
+                    0{"Kurisito Atakaijire"}
+                    1{"Kurisito Yaijire"}
+                }
+            }
+        }
     }
     fields{
         day{

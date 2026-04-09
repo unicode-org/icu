@@ -955,6 +955,14 @@ de{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"v. Chr."}
+                    1{"n. Chr."}
+                }
+            }
+        }
         persian{
             monthNames{
                 format{

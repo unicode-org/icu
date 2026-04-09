@@ -1158,6 +1158,21 @@ he{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"לפנה״ס"}
+                    1{"לספירה"}
+                }
+                narrow{
+                    0{"לפני"}
+                    1{"אחריי"}
+                }
+                wide{
+                    0{"לפני הספירה"}
+                }
+            }
+        }
         persian{
             eras{
                 wide{

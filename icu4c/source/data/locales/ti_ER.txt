@@ -68,6 +68,13 @@ ti_ER{
                 "GGGGGyyMMdd",
             }
         }
+        japanese{
+            eras{
+                wide{
+                    0{"ዓመተ ዓለም"}
+                }
+            }
+        }
     }
     delimiters{
         quotationEnd{"’"}

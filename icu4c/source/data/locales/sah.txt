@@ -367,6 +367,14 @@ sah{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"б. э. и."}
+                    1{"б. э"}
+                }
+            }
+        }
     }
     delimiters{
         alternateQuotationEnd{"“"}

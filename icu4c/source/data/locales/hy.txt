@@ -711,6 +711,18 @@ hy{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"մ.թ.ա."}
+                    1{"մ.թ."}
+                }
+                wide{
+                    0{"Քրիստոսից առաջ"}
+                    1{"Քրիստոսից հետո"}
+                }
+            }
+        }
     }
     characterLabel{
         activities{"զբաղմունք"}

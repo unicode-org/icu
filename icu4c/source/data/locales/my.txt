@@ -635,6 +635,18 @@ my{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"ဘီစီ"}
+                    1{"အဒေီ"}
+                }
+                wide{
+                    0{"ခရစ်တော် မပေါ်မီနှစ်"}
+                    1{"ခရစ်နှစ်"}
+                }
+            }
+        }
     }
     characterLabel{
         activities{"လုပ်ဆောင်ချက်"}

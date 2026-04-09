@@ -704,6 +704,18 @@ si{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"ක්‍රි.පූ."}
+                    1{"ක්‍රි.ව."}
+                }
+                wide{
+                    0{"ක්‍රිස්තු පූර්ව"}
+                    1{"ක්‍රිස්තු වර්ෂ"}
+                }
+            }
+        }
     }
     characterLabel{
         activities{"කාර්යය"}

@@ -630,6 +630,18 @@ to{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"KM"}
+                    1{"TS"}
+                }
+                wide{
+                    0{"ki muʻa"}
+                    1{"taʻu ʻo Sīsū"}
+                }
+            }
+        }
     }
     characterLabel{
         activities{"vaʻinga"}

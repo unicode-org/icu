@@ -862,6 +862,18 @@ ga{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"RC"}
+                    1{"AD"}
+                }
+                wide{
+                    0{"Roimh Chríost"}
+                    1{"Anno Domini"}
+                }
+            }
+        }
     }
     characterLabel{
         activities{"gníomhaíocht"}

@@ -574,6 +574,18 @@ xh{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"BC"}
+                    1{"AD"}
+                }
+                wide{
+                    0{"Phambi KoKristu"}
+                    1{"Anno Domino"}
+                }
+            }
+        }
     }
     fields{
         day{

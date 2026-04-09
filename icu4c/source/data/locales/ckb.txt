@@ -244,6 +244,14 @@ ckb{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"پێش زایین"}
+                    1{"زایینی"}
+                }
+            }
+        }
     }
     layout{
         characters{"right-to-left"}

@@ -241,6 +241,14 @@ ii{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"ꃅꋊꂿ"}
+                    1{"ꃅꋊꊂ"}
+                }
+            }
+        }
     }
     fields{
         day{

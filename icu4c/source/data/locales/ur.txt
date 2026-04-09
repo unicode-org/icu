@@ -891,6 +891,14 @@ ur{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"قبل مسیح"}
+                    1{"عیسوی"}
+                }
+            }
+        }
         persian{
             monthNames{
                 format{

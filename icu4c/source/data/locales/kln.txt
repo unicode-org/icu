@@ -192,6 +192,18 @@ kln{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"AM"}
+                    1{"KO"}
+                }
+                wide{
+                    0{"Amait kesich Jesu"}
+                    1{"Kokakesich Jesu"}
+                }
+            }
+        }
     }
     fields{
         day{

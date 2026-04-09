@@ -212,6 +212,18 @@ shi_Latn{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"daɛ"}
+                    1{"dfɛ"}
+                }
+                wide{
+                    0{"dat n ɛisa"}
+                    1{"dffir n ɛisa"}
+                }
+            }
+        }
     }
     delimiters{
         alternateQuotationEnd{"”"}

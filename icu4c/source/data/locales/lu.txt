@@ -222,6 +222,18 @@ lu{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"kmp. Y.K."}
+                    1{"kny. Y. K."}
+                }
+                wide{
+                    0{"Kumpala kwa Yezu Kli"}
+                    1{"Kunyima kwa Yezu Kli"}
+                }
+            }
+        }
     }
     fields{
         day{

@@ -193,6 +193,18 @@ asa{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"KM"}
+                    1{"BM"}
+                }
+                wide{
+                    0{"Kabla yakwe Yethu"}
+                    1{"Baada yakwe Yethu"}
+                }
+            }
+        }
     }
     fields{
         day{

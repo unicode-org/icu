@@ -550,6 +550,18 @@ kxv{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"bc"}
+                    1{"ad"}
+                }
+                wide{
+                    0{"krisṭ purb nki"}
+                    1{"krisṭabd"}
+                }
+            }
+        }
     }
     fields{
         day{

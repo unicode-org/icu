@@ -967,6 +967,18 @@ ta{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"கி.மு."}
+                    1{"கி.பி."}
+                }
+                wide{
+                    0{"கிறிஸ்துவுக்கு முன்"}
+                    1{"அன்னோ டோமினி"}
+                }
+            }
+        }
         persian{
             monthNames{
                 format{

@@ -206,6 +206,18 @@ tn{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"BC"}
+                    1{"AD"}
+                }
+                wide{
+                    0{"Pele ga tsalo ya Morena Jeso"}
+                    1{"Morago ga Leso la Morena Jeso"}
+                }
+            }
+        }
     }
     delimiters{
         alternateQuotationEnd{"”"}

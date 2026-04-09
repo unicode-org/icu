@@ -709,6 +709,16 @@ yrl{
                 "{1} {0}",
                 "{1} {0}",
             }
+            eras{
+                abbreviated{
+                    0{"K.s."}
+                    1{"K.a."}
+                }
+                wide{
+                    0{"Kiristu senũdé"}
+                    1{"Kiristu ariré"}
+                }
+            }
         }
     }
     characterLabel{

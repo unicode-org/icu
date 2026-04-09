@@ -299,6 +299,14 @@ sd_Deva{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"बीसी"}
+                    1{"एडी"}
+                }
+            }
+        }
     }
     fields{
         day{

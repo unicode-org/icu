@@ -965,6 +965,20 @@ hu{
                 "GyMMdd",
                 "GGGGGyMMdd",
             }
+            eras{
+                abbreviated{
+                    0{"i. e."}
+                    1{"i. sz."}
+                }
+                narrow{
+                    0{"ie."}
+                    1{"isz."}
+                }
+                wide{
+                    0{"Krisztus előtt"}
+                    1{"időszámításunk szerint"}
+                }
+            }
         }
         persian{
             monthNames{

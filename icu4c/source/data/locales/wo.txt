@@ -320,6 +320,17 @@ wo{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"JC"}
+                    1{"AD"}
+                }
+                wide{
+                    0{"av. JC"}
+                }
+            }
+        }
     }
     fields{
         day{

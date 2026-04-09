@@ -501,6 +501,18 @@ syr{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"܏ܩܡ‌"}
+                    1{"܏ܫܡ‌"}
+                }
+                wide{
+                    0{"ܩܕܡ ܡܫܝܚܐ"}
+                    1{"ܫܢܬܐ ܡܪܢܝܬܐ"}
+                }
+            }
+        }
     }
     delimiters{
         alternateQuotationEnd{"‘"}

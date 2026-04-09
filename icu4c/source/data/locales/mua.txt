@@ -220,6 +220,18 @@ mua{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"KK"}
+                    1{"PK"}
+                }
+                wide{
+                    0{"KǝPel Kristu"}
+                    1{"Pel Kristu"}
+                }
+            }
+        }
     }
     delimiters{
         alternateQuotationEnd{"”"}

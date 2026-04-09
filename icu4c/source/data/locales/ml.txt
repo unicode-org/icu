@@ -848,6 +848,18 @@ ml{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"ബിസി"}
+                    1{"എഡി"}
+                }
+                wide{
+                    0{"ക്രിസ്‌തുവിന് മുമ്പ്"}
+                    1{"ആന്നോ ഡൊമിനി"}
+                }
+            }
+        }
         persian{
             monthNames{
                 format{

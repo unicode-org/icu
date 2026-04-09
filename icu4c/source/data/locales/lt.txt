@@ -835,9 +835,15 @@ lt{
         japanese{
             eras{
                 abbreviated{
+                    0{"pr. Kr."}
+                    1{"po Kr."}
                     232{"Meidži"}
                     233{"Taišo"}
                     234{"Šova"}
+                }
+                wide{
+                    0{"prieš Kristų"}
+                    1{"po Kristaus"}
                 }
             }
         }

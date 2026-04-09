@@ -181,6 +181,18 @@ mer{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"MK"}
+                    1{"NK"}
+                }
+                wide{
+                    0{"Mbere ya Kristũ"}
+                    1{"Nyuma ya Kristũ"}
+                }
+            }
+        }
     }
     fields{
         day{

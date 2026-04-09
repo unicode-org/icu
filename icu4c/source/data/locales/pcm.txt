@@ -508,6 +508,18 @@ pcm{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"BK"}
+                    1{"KIY"}
+                }
+                wide{
+                    0{"Bifọ́ Kraist"}
+                    1{"Kraist Im Yiẹ"}
+                }
+            }
+        }
     }
     characterLabel{
         activities{"Tins Wé De Hápun"}

@@ -817,6 +817,18 @@ te{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"క్రీపూ"}
+                    1{"క్రీశ"}
+                }
+                wide{
+                    0{"క్రీస్తు పూర్వం"}
+                    1{"క్రీస్తు శకం"}
+                }
+            }
+        }
         persian{
             monthNames{
                 format{

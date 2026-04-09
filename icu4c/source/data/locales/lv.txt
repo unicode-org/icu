@@ -871,6 +871,18 @@ lv{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"p.m.ē."}
+                    1{"m.ē."}
+                }
+                wide{
+                    0{"pirms mūsu ēras"}
+                    1{"mūsu ērā"}
+                }
+            }
+        }
         persian{
             eras{
                 abbreviated{

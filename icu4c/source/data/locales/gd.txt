@@ -1190,6 +1190,22 @@ gd{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"RC"}
+                    1{"AD"}
+                }
+                narrow{
+                    0{"R"}
+                    1{"A"}
+                }
+                wide{
+                    0{"Ro Chrìosta"}
+                    1{"An dèidh Chrìosta"}
+                }
+            }
+        }
         roc{
             eras{
                 abbreviated{

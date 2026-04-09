@@ -1084,9 +1084,13 @@ ast{
             }
             eras{
                 abbreviated{
+                    0{"e.C."}
+                    1{"d.C."}
                     234{"e. Shōwa"}
                 }
                 wide{
+                    0{"enantes de Cristu"}
+                    1{"después de Cristu"}
                     234{"era Shōwa"}
                 }
             }

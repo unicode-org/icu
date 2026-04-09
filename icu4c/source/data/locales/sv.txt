@@ -1227,6 +1227,16 @@ sv{
             }
         }
         japanese{
+            eras{
+                abbreviated{
+                    0{"f.Kr."}
+                    1{"e.Kr."}
+                }
+                wide{
+                    0{"före Kristus"}
+                    1{"efter Kristus"}
+                }
+            }
             intervalFormats{
                 Bh{
                     B{"h B – h B"}

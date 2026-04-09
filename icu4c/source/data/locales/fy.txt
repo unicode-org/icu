@@ -708,6 +708,22 @@ fy{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"f.Kr."}
+                    1{"n.Kr."}
+                }
+                narrow{
+                    0{"f.K."}
+                    1{"n.K."}
+                }
+                wide{
+                    0{"Foar Kristus"}
+                    1{"nei Kristus"}
+                }
+            }
+        }
         roc{
             eras{
                 abbreviated{

@@ -246,6 +246,18 @@ sn{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"BC"}
+                    1{"AD"}
+                }
+                wide{
+                    0{"Kristo asati auya"}
+                    1{"mugore ramambo vedu"}
+                }
+            }
+        }
     }
     delimiters{
         alternateQuotationStart{"’"}

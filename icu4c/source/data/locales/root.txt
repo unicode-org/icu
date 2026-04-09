@@ -2953,6 +2953,8 @@ root{
             dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
             eras{
                 abbreviated{
+                    0{"BCE"}
+                    1{"CE"}
                     232{"Meiji"}
                     233{"Taishō"}
                     234{"Shōwa"}

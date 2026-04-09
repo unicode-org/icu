@@ -399,6 +399,17 @@ doi{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"ई.पू."}
+                    1{"ईसवी"}
+                }
+                wide{
+                    1{"ई. सन्"}
+                }
+            }
+        }
     }
     fields{
         day{

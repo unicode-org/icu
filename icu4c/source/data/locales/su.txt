@@ -234,6 +234,14 @@ su{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"SM"}
+                    1{"M"}
+                }
+            }
+        }
     }
     fields{
         day{

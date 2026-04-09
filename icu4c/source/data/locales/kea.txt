@@ -618,6 +618,18 @@ kea{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"AK"}
+                    1{"DK"}
+                }
+                wide{
+                    0{"antis di Kristu"}
+                    1{"dispos di Kristu"}
+                }
+            }
+        }
     }
     fields{
         day{

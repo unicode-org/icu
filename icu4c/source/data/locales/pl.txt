@@ -967,6 +967,18 @@ pl{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"p.n.e."}
+                    1{"n.e."}
+                }
+                wide{
+                    0{"przed naszą erą"}
+                    1{"naszej ery"}
+                }
+            }
+        }
         persian{
             monthNames{
                 format{

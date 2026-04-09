@@ -218,6 +218,18 @@ nus{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"AY"}
+                    1{"ƐY"}
+                }
+                wide{
+                    0{"A ka̱n Yecu ni dap"}
+                    1{"Ɛ ca Yecu dap"}
+                }
+            }
+        }
     }
     fields{
         day{

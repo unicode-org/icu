@@ -1223,6 +1223,22 @@ fi{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"eKr."}
+                    1{"jKr."}
+                }
+                narrow{
+                    0{"eKr"}
+                    1{"jKr"}
+                }
+                wide{
+                    0{"ennen Kristuksen syntymää"}
+                    1{"jälkeen Kristuksen syntymän"}
+                }
+            }
+        }
         persian{
             eras{
                 wide{

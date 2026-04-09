@@ -188,6 +188,18 @@ saq{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"KK"}
+                    1{"BK"}
+                }
+                wide{
+                    0{"Kabla ya Christo"}
+                    1{"Baada ya Christo"}
+                }
+            }
+        }
     }
     fields{
         day{

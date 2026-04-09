@@ -777,6 +777,16 @@ kgp{
                 "{1} {0}",
                 "{1} {0}",
             }
+            eras{
+                abbreviated{
+                    0{"C.j."}
+                    1{"C.kk."}
+                }
+                wide{
+                    0{"Cristo jo"}
+                    1{"Cristo kar kỹ"}
+                }
+            }
         }
     }
     characterLabel{

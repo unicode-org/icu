@@ -753,6 +753,22 @@ fo{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"f.Kr."}
+                    1{"e.Kr."}
+                }
+                narrow{
+                    0{"fKr"}
+                    1{"eKr"}
+                }
+                wide{
+                    0{"fyri Krist"}
+                    1{"eftir Krist"}
+                }
+            }
+        }
     }
     characterLabel{
         activities{"Virksemi"}

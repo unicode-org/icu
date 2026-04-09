@@ -968,6 +968,18 @@ mr{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"ई. स. पू."}
+                    1{"इ. स."}
+                }
+                wide{
+                    0{"ईसवीसनपूर्व"}
+                    1{"ईसवीसन"}
+                }
+            }
+        }
         persian{
             monthNames{
                 format{

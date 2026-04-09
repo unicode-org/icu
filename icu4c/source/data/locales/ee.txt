@@ -566,6 +566,18 @@ ee{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"HYV"}
+                    1{"Yŋ"}
+                }
+                wide{
+                    0{"Hafi Yesu Va"}
+                    1{"Yesu ŋɔli"}
+                }
+            }
+        }
     }
     fields{
         day{

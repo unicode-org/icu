@@ -353,6 +353,18 @@ kab{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"snd. T.Ɛ"}
+                    1{"sld. T.Ɛ"}
+                }
+                wide{
+                    0{"send talalit n Ɛisa"}
+                    1{"seld talalit n Ɛisa"}
+                }
+            }
+        }
     }
     delimiters{
         alternateQuotationEnd{"”"}

@@ -187,6 +187,18 @@ kde{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"AY"}
+                    1{"NY"}
+                }
+                wide{
+                    0{"Akanapawa Yesu"}
+                    1{"Nankuida Yesu"}
+                }
+            }
+        }
     }
     fields{
         day{

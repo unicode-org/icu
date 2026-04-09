@@ -166,6 +166,18 @@ bem{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"BC"}
+                    1{"AD"}
+                }
+                wide{
+                    0{"Before Yesu"}
+                    1{"After Yesu"}
+                }
+            }
+        }
     }
     fields{
         day{

@@ -421,6 +421,18 @@ kxv_Deva{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"बिसि"}
+                    1{"ए-डि"}
+                }
+                wide{
+                    0{"बिफोर क्राइस्ट"}
+                    1{"अन्नो डोमिनी"}
+                }
+            }
+        }
     }
     fields{
         day{

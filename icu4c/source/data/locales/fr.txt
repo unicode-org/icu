@@ -1112,6 +1112,16 @@ fr{
                 yyyyMEd{"E d/M/y GGGGG"}
                 yyyyMd{"d/M/y GGGGG"}
             }
+            eras{
+                abbreviated{
+                    0{"av. J.-C."}
+                    1{"ap. J.-C."}
+                }
+                wide{
+                    0{"avant Jésus-Christ"}
+                    1{"après Jésus-Christ"}
+                }
+            }
         }
         persian{
             eras{

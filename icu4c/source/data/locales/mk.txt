@@ -1178,6 +1178,18 @@ mk{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"пр. н. е."}
+                    1{"н. е."}
+                }
+                wide{
+                    0{"пред нашата ера"}
+                    1{"од нашата ера"}
+                }
+            }
+        }
         persian{
             eras{
                 abbreviated{

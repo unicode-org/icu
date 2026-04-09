@@ -179,6 +179,14 @@ bo{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"སྤྱི་ལོ་སྔོན་"}
+                    1{"སྤྱི་ལོ་"}
+                }
+            }
+        }
     }
     fields{
         day{

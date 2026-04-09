@@ -201,6 +201,18 @@ zgh{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"ⴷⴰⵄ"}
+                    1{"ⴷⴼⵄ"}
+                }
+                wide{
+                    0{"ⴷⴰⵜ ⵏ ⵄⵉⵙⴰ"}
+                    1{"ⴷⴼⴼⵉⵔ ⵏ ⵄⵉⵙⴰ"}
+                }
+            }
+        }
     }
     delimiters{
         alternateQuotationEnd{"”"}

@@ -694,6 +694,18 @@ or{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"BC"}
+                    1{"AD"}
+                }
+                wide{
+                    0{"ଖ୍ରୀଷ୍ଟପୂର୍ବ"}
+                    1{"ଖ୍ରୀଷ୍ଟାବ୍ଦ"}
+                }
+            }
+        }
     }
     characterLabel{
         activities{"କାର୍ଯ୍ୟକଳାପ"}

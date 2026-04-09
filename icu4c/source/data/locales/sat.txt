@@ -163,6 +163,14 @@ sat{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"ᱵᱤ ᱥᱤ"}
+                    1{"ᱤᱥᱣᱤ"}
+                }
+            }
+        }
     }
     characterLabel{
         activities{"ᱠᱟᱹᱢᱤ"}

@@ -581,6 +581,14 @@ lb{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"v. Chr."}
+                    1{"n. Chr."}
+                }
+            }
+        }
         roc{
             eras{
                 abbreviated{

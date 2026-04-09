@@ -139,6 +139,14 @@ pa_Arab{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"ايساپورو"}
+                    1{"سں"}
+                }
+            }
+        }
     }
     fields{
         day{

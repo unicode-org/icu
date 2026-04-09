@@ -187,6 +187,18 @@ kam{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"MY"}
+                    1{"IY"}
+                }
+                wide{
+                    0{"Mbee wa Yesũ"}
+                    1{"Ĩtina wa Yesũ"}
+                }
+            }
+        }
     }
     fields{
         day{

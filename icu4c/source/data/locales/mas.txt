@@ -175,6 +175,18 @@ mas{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"MY"}
+                    1{"EY"}
+                }
+                wide{
+                    0{"Meínō Yɛ́sʉ"}
+                    1{"Eínō Yɛ́sʉ"}
+                }
+            }
+        }
     }
     fields{
         day{

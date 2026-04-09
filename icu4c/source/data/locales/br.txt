@@ -998,6 +998,18 @@ br{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"a-raok J.K."}
+                    1{"goude J.K."}
+                }
+                wide{
+                    0{"a-raok Jezuz-Krist"}
+                    1{"goude Jezuz-Krist"}
+                }
+            }
+        }
         roc{
             eras{
                 abbreviated{

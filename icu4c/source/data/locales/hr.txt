@@ -978,6 +978,20 @@ hr{
                 yyyyMEd{"E, d. M. y. G"}
                 yyyyMd{"d. M. y. G"}
             }
+            eras{
+                abbreviated{
+                    0{"pr. Kr."}
+                    1{"po. Kr."}
+                }
+                narrow{
+                    0{"pr.n.e."}
+                    1{"AD"}
+                }
+                wide{
+                    0{"prije Krista"}
+                    1{"poslije Krista"}
+                }
+            }
         }
         persian{
             monthNames{

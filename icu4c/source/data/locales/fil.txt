@@ -783,6 +783,18 @@ fil{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"BC"}
+                    1{"AD"}
+                }
+                wide{
+                    0{"Before Christ"}
+                    1{"Anno Domini"}
+                }
+            }
+        }
         roc{
             eras{
                 abbreviated{

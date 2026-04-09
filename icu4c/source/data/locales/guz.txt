@@ -192,6 +192,18 @@ guz{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"YA"}
+                    1{"YK"}
+                }
+                wide{
+                    0{"Yeso ataiborwa"}
+                    1{"Yeso kaiboirwe"}
+                }
+            }
+        }
     }
     fields{
         day{

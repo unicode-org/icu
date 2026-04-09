@@ -642,6 +642,18 @@ as{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"খ্ৰীঃ পূঃ"}
+                    1{"খ্ৰীঃ"}
+                }
+                wide{
+                    0{"খ্ৰীষ্টপূৰ্ব"}
+                    1{"খ্ৰীষ্টাব্দ"}
+                }
+            }
+        }
     }
     characterLabel{
         activities{"ক্ৰিয়া-কলাপ"}

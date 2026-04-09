@@ -99,5 +99,12 @@ sr_Cyrl_ME{
                 }
             }
         }
+        japanese{
+            eras{
+                wide{
+                    0{"прије нове ере"}
+                }
+            }
+        }
     }
 }

@@ -405,6 +405,18 @@ mt{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"QK"}
+                    1{"WK"}
+                }
+                wide{
+                    0{"Qabel Kristu"}
+                    1{"Wara Kristu"}
+                }
+            }
+        }
     }
     fields{
         day{

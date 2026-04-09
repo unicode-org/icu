@@ -120,6 +120,17 @@ bn_IN{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"খ্রিঃপূঃ"}
+                    1{"খ্রিঃ"}
+                }
+                wide{
+                    1{"খ্রিষ্টাব্দ"}
+                }
+            }
+        }
     }
     measurementSystemNames{
         US{"ইউএস"}

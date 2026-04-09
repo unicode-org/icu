@@ -926,6 +926,21 @@ pa{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"ਈ. ਪੂ."}
+                    1{"ਸੰਨ"}
+                }
+                narrow{
+                    0{"ਈ.ਪੂ."}
+                }
+                wide{
+                    0{"ਈਸਵੀ ਪੂਰਵ"}
+                    1{"ਈਸਵੀ ਸੰਨ"}
+                }
+            }
+        }
         persian{
             monthNames{
                 format{

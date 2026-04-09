@@ -883,6 +883,18 @@ sl{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"pr. Kr."}
+                    1{"po Kr."}
+                }
+                wide{
+                    0{"pred Kristusom"}
+                    1{"po Kristusu"}
+                }
+            }
+        }
         roc{
             eras{
                 abbreviated{

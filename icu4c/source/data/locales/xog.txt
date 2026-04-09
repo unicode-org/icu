@@ -188,6 +188,18 @@ xog{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"AZ"}
+                    1{"AF"}
+                }
+                wide{
+                    0{"Kulisto nga azilawo"}
+                    1{"Kulisto nga affile"}
+                }
+            }
+        }
     }
     fields{
         day{

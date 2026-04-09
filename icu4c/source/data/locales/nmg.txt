@@ -209,6 +209,18 @@ nmg{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"BL"}
+                    1{"PB"}
+                }
+                wide{
+                    0{"Bó Lahlɛ̄"}
+                    1{"Pfiɛ Burī"}
+                }
+            }
+        }
     }
     delimiters{
         alternateQuotationEnd{"»"}

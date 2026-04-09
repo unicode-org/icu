@@ -911,6 +911,18 @@ ro{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"î.Hr."}
+                    1{"d.Hr."}
+                }
+                wide{
+                    0{"înainte de Hristos"}
+                    1{"după Hristos"}
+                }
+            }
+        }
         persian{
             eras{
                 abbreviated{

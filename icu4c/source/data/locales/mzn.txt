@@ -59,6 +59,18 @@ mzn{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"پ.م"}
+                    1{"م."}
+                }
+                wide{
+                    0{"قبل میلاد"}
+                    1{"بعد میلاد"}
+                }
+            }
+        }
     }
     delimiters{
         alternateQuotationEnd{"›"}

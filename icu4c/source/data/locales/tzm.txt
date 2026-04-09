@@ -198,6 +198,18 @@ tzm{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"ZƐ"}
+                    1{"ḌƐ"}
+                }
+                wide{
+                    0{"Zdat Ɛisa (TAƔ)"}
+                    1{"Ḍeffir Ɛisa (TAƔ)"}
+                }
+            }
+        }
     }
     fields{
         day{

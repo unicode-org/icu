@@ -1504,6 +1504,22 @@ ku{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"BM"}
+                    1{"PM"}
+                }
+                narrow{
+                    0{"BM"}
+                    1{"PM"}
+                }
+                wide{
+                    0{"Berî Mîladê"}
+                    1{"Piştî Mîladê"}
+                }
+            }
+        }
     }
     characterLabel{
         animal{"heywan"}

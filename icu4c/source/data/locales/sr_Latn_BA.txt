@@ -65,6 +65,13 @@ sr_Latn_BA{
                 }
             }
         }
+        japanese{
+            eras{
+                wide{
+                    0{"prije nove ere"}
+                }
+            }
+        }
     }
     characterLabel{
         body{"tijelo"}

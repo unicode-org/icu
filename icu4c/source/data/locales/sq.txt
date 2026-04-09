@@ -885,6 +885,18 @@ sq{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"p.K."}
+                    1{"mb.K."}
+                }
+                wide{
+                    0{"para Krishtit"}
+                    1{"mbas Krishtit"}
+                }
+            }
+        }
     }
     characterLabel{
         activities{"aktivitete"}

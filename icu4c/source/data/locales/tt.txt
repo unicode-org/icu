@@ -583,6 +583,17 @@ tt{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"б.э.к."}
+                    1{"милади"}
+                }
+                wide{
+                    0{"безнең эрага кадәр"}
+                }
+            }
+        }
     }
     fields{
         day{

@@ -223,6 +223,18 @@ dua{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"ɓ.Ys"}
+                    1{"mb.Ys"}
+                }
+                wide{
+                    0{"ɓoso ɓwá yáɓe lá"}
+                    1{"mbúsa kwédi a Yés"}
+                }
+            }
+        }
     }
     delimiters{
         quotationEnd{"»"}

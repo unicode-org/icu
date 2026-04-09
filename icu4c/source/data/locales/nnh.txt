@@ -131,6 +131,18 @@ nnh{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"m.z.Y."}
+                    1{"m.g.n.Y."}
+                }
+                wide{
+                    0{"mé zyé Yěsô"}
+                    1{"mé gÿo ńzyé Yěsô"}
+                }
+            }
+        }
     }
     delimiters{
         alternateQuotationEnd{"”"}

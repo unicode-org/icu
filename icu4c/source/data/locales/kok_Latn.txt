@@ -803,6 +803,22 @@ kok_Latn{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"KA"}
+                    1{"AD"}
+                }
+                narrow{
+                    0{"K"}
+                    1{"A"}
+                }
+                wide{
+                    0{"Krista Adim"}
+                    1{"Anno Domini"}
+                }
+            }
+        }
     }
     fields{
         day{

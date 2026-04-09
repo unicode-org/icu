@@ -1146,6 +1146,20 @@ cs{
                 "{1} {0}",
                 "{1} {0}",
             }
+            eras{
+                abbreviated{
+                    0{"př. n. l."}
+                    1{"n. l."}
+                }
+                narrow{
+                    0{"př.n.l."}
+                    1{"n.l."}
+                }
+                wide{
+                    0{"před naším letopočtem"}
+                    1{"našeho letopočtu"}
+                }
+            }
         }
         persian{
             monthNames{

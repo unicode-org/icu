@@ -1711,6 +1711,16 @@ no{
                 "{1} {0}",
                 "{1} {0}",
             }
+            eras{
+                abbreviated{
+                    0{"f.Kr."}
+                    1{"e.Kr."}
+                }
+                wide{
+                    0{"før Kristus"}
+                    1{"etter Kristus"}
+                }
+            }
             intervalFormats{
                 h{
                     a{"h a–h a"}

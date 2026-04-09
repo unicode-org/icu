@@ -724,6 +724,18 @@ km{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"មុន គ.ស."}
+                    1{"គ.ស."}
+                }
+                wide{
+                    0{"មុន​គ្រិស្តសករាជ"}
+                    1{"គ្រិស្តសករាជ"}
+                }
+            }
+        }
     }
     characterLabel{
         activities{"សកម្មភាព"}

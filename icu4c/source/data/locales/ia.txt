@@ -671,6 +671,18 @@ ia{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"a.Chr."}
+                    1{"p.Chr."}
+                }
+                wide{
+                    0{"ante Christo"}
+                    1{"post Christo"}
+                }
+            }
+        }
     }
     characterLabel{
         activities{"activitate"}

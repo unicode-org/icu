@@ -556,6 +556,17 @@ xnr{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"ईसा-पैले"}
+                    1{"ईस्वी"}
+                }
+                wide{
+                    1{"ईसवी सन"}
+                }
+            }
+        }
     }
     characterLabel{
         activities{"गतिविधि"}

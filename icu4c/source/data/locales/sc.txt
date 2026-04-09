@@ -1379,6 +1379,16 @@ sc{
                 GyM{"MM/y G"}
                 GyMEd{"E dd/MM/y G"}
             }
+            eras{
+                abbreviated{
+                    0{"a.C."}
+                    1{"p.C."}
+                }
+                wide{
+                    0{"in antis de Cristu"}
+                    1{"a pustis de Cristu"}
+                }
+            }
             intervalFormats{
                 Gy{
                     G{"y G – y G"}

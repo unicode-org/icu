@@ -1665,6 +1665,20 @@ kok{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"क्रिस्तपूर्व"}
+                    1{"क्रि.श."}
+                }
+                narrow{
+                    0{"क्रि.आ."}
+                }
+                wide{
+                    0{"क्रिस्ता आदीं"}
+                }
+            }
+        }
     }
     characterLabel{
         activities{"कृती"}

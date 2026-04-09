@@ -187,6 +187,18 @@ rwk{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"KK"}
+                    1{"BK"}
+                }
+                wide{
+                    0{"Kabla ya Kristu"}
+                    1{"Baada ya Kristu"}
+                }
+            }
+        }
     }
     fields{
         day{

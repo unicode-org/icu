@@ -310,6 +310,18 @@ tyv{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"БЭЧ"}
+                    1{"БЭ"}
+                }
+                wide{
+                    0{"Христос бертинде"}
+                    1{"Христос төрүмелинден"}
+                }
+            }
+        }
     }
     delimiters{
         alternateQuotationEnd{"“"}

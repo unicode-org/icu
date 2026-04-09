@@ -177,6 +177,18 @@ sbp{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"AK"}
+                    1{"PK"}
+                }
+                wide{
+                    0{"Ashanali uKilisito"}
+                    1{"Pamwandi ya Kilisto"}
+                }
+            }
+        }
     }
     fields{
         day{

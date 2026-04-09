@@ -578,6 +578,14 @@ wae{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"v. Chr."}
+                    1{"n. Chr"}
+                }
+            }
+        }
     }
     delimiters{
         alternateQuotationEnd{"›"}

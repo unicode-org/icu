@@ -713,6 +713,18 @@ az{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"e.ə."}
+                    1{"y.e."}
+                }
+                wide{
+                    0{"eramızdan əvvəl"}
+                    1{"yeni era"}
+                }
+            }
+        }
         persian{
             monthNames{
                 format{

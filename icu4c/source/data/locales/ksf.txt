@@ -206,6 +206,18 @@ ksf{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"d.Y."}
+                    1{"k.Y."}
+                }
+                wide{
+                    0{"di Yɛ́sus aká yálɛ"}
+                    1{"cámɛɛn kǝ kǝbɔpka Y"}
+                }
+            }
+        }
     }
     delimiters{
         quotationEnd{"»"}

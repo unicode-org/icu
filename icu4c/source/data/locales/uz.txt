@@ -762,6 +762,17 @@ uz{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"m.a."}
+                    1{"milodiy"}
+                }
+                wide{
+                    0{"miloddan avvalgi"}
+                }
+            }
+        }
         persian{
             eras{
                 abbreviated{

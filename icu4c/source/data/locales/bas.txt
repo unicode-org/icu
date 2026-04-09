@@ -231,6 +231,18 @@ bas{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"b.Y.K"}
+                    1{"m.Y.K"}
+                }
+                wide{
+                    0{"bisū bi Yesù Krǐstò"}
+                    1{"i mbūs Yesù Krǐstò"}
+                }
+            }
+        }
     }
     delimiters{
         alternateQuotationEnd{"“"}

@@ -225,6 +225,18 @@ sg{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"KnK"}
+                    1{"NpK"}
+                }
+                wide{
+                    0{"Kôzo na Krîstu"}
+                    1{"Na pekô tî Krîstu"}
+                }
+            }
+        }
     }
     delimiters{
         alternateQuotationEnd{"”"}

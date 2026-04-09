@@ -413,6 +413,21 @@ qu{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"a.d."}
+                    1{"d.C."}
+                }
+                narrow{
+                    1{"dC"}
+                }
+                wide{
+                    0{"ñawpa cristu"}
+                    1{"chanta cristu"}
+                }
+            }
+        }
     }
     fields{
         day{

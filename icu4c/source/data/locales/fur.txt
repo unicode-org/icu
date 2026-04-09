@@ -357,6 +357,14 @@ fur{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"pdC"}
+                    1{"ddC"}
+                }
+            }
+        }
     }
     delimiters{
         alternateQuotationEnd{"”"}

@@ -1271,6 +1271,19 @@ bs{
                 yMd{"d. M. y. GGGGG"}
                 yQQQ{"QQQ y. GGGGG"}
             }
+            eras{
+                abbreviated{
+                    0{"p. n. e."}
+                    1{"n. e."}
+                }
+                narrow{
+                    0{"p.n.e."}
+                }
+                wide{
+                    0{"prije nove ere"}
+                    1{"nove ere"}
+                }
+            }
         }
         roc{
             availableFormats{

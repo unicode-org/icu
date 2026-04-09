@@ -319,6 +319,14 @@ os{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"н.д.а."}
+                    1{"н.д."}
+                }
+            }
+        }
     }
     delimiters{
         alternateQuotationEnd{"“"}

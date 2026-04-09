@@ -505,6 +505,18 @@ sd{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"ق م"}
+                    1{"ع"}
+                }
+                wide{
+                    0{"قبل مسيح"}
+                    1{"عيسوي کان پهرين"}
+                }
+            }
+        }
     }
     characterLabel{
         activities{"سرگرمي"}

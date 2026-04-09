@@ -1099,6 +1099,16 @@ id{
                 "GyMMMd",
                 "GGGGGyMd",
             }
+            eras{
+                abbreviated{
+                    0{"SM"}
+                    1{"M"}
+                }
+                wide{
+                    0{"Sebelum Masehi"}
+                    1{"Masehi"}
+                }
+            }
         }
         roc{
             DateTimePatterns{

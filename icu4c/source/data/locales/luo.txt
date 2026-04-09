@@ -187,6 +187,18 @@ luo{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"BC"}
+                    1{"AD"}
+                }
+                wide{
+                    0{"Kapok Kristo obiro"}
+                    1{"Ka Kristo osebiro"}
+                }
+            }
+        }
     }
     fields{
         day{

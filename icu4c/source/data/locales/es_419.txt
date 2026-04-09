@@ -483,6 +483,14 @@ es_419{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"a.C."}
+                    1{"d.C."}
+                }
+            }
+        }
         roc{
             eras{
                 abbreviated{

@@ -993,6 +993,18 @@ mn{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"МЭӨ"}
+                    1{"МЭ"}
+                }
+                wide{
+                    0{"манай эриний өмнөх"}
+                    1{"манай эриний"}
+                }
+            }
+        }
     }
     characterLabel{
         activities{"үйл ажиллагаа"}

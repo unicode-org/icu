@@ -88,5 +88,13 @@ gv{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"RC"}
+                    1{"AD"}
+                }
+            }
+        }
     }
 }

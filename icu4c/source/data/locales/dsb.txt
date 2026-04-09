@@ -821,6 +821,18 @@ dsb{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"pś.Chr.n."}
+                    1{"pó Chr.n."}
+                }
+                wide{
+                    0{"pśed Kristusowym naroźenim"}
+                    1{"pó Kristusowem naroźenju"}
+                }
+            }
+        }
     }
     characterLabel{
         activities{"aktiwity"}

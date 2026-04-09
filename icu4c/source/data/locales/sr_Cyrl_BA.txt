@@ -65,6 +65,13 @@ sr_Cyrl_BA{
                 }
             }
         }
+        japanese{
+            eras{
+                wide{
+                    0{"прије нове ере"}
+                }
+            }
+        }
     }
     characterLabel{
         body{"тијело"}

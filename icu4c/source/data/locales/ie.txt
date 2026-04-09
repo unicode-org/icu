@@ -225,6 +225,18 @@ ie{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"a.C."}
+                    1{"e.C."}
+                }
+                wide{
+                    0{"ante Crist"}
+                    1{"era Cristan"}
+                }
+            }
+        }
     }
     delimiters{
         alternateQuotationEnd{"”"}

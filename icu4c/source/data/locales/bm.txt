@@ -220,6 +220,18 @@ bm{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"J.-C. ɲɛ"}
+                    1{"ni J.-C."}
+                }
+                wide{
+                    0{"jezu krisiti ɲɛ"}
+                    1{"jezu krisiti minkɛ"}
+                }
+            }
+        }
     }
     delimiters{
         alternateQuotationEnd{"”"}

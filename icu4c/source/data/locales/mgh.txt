@@ -178,6 +178,18 @@ mgh{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"HY"}
+                    1{"YY"}
+                }
+                wide{
+                    0{"Hinapiya yesu"}
+                    1{"Yopia yesu"}
+                }
+            }
+        }
     }
     fields{
         day{

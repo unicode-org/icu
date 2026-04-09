@@ -499,6 +499,22 @@ ksh{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"v. Chr."}
+                    1{"n. Chr."}
+                }
+                narrow{
+                    0{"vC"}
+                    1{"nC"}
+                }
+                wide{
+                    0{"vür Krestos"}
+                    1{"noh Krestos"}
+                }
+            }
+        }
     }
     delimiters{
         alternateQuotationEnd{"‘"}

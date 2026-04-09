@@ -245,6 +245,14 @@ mni{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"খৃ: মমাং"}
+                    1{"খৃ: মতুং"}
+                }
+            }
+        }
     }
     fields{
         day{

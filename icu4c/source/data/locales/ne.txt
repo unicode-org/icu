@@ -505,6 +505,14 @@ ne{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"ईसा पूर्व"}
+                    1{"सन्"}
+                }
+            }
+        }
     }
     characterLabel{
         activities{"गतिविधिहरू"}

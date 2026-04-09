@@ -748,6 +748,18 @@ et{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"eKr"}
+                    1{"pKr"}
+                }
+                wide{
+                    0{"enne Kristust"}
+                    1{"pärast Kristust"}
+                }
+            }
+        }
     }
     characterLabel{
         activities{"tegevus"}

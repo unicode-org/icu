@@ -52,5 +52,12 @@ om_KE{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"KD"}
+                }
+            }
+        }
     }
 }

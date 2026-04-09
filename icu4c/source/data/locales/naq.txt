@@ -197,6 +197,18 @@ naq{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"BC"}
+                    1{"AD"}
+                }
+                wide{
+                    0{"Xristub aiǃâ"}
+                    1{"Xristub khaoǃgâ"}
+                }
+            }
+        }
     }
     fields{
         day{

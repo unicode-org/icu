@@ -416,6 +416,18 @@ kxv_Orya{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"ବିସି"}
+                    1{"ଏଡି"}
+                }
+                wide{
+                    0{"ବିଫୋର କ୍ରାଇଷ୍ଟ"}
+                    1{"ଆନ୍ନା ଡୋମିନି"}
+                }
+            }
+        }
     }
     fields{
         day{

@@ -688,6 +688,18 @@ vec{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"v.C."}
+                    1{"d.C."}
+                }
+                wide{
+                    0{"vanti Cristo"}
+                    1{"daspò Cristo"}
+                }
+            }
+        }
     }
     fields{
         day{

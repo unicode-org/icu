@@ -179,6 +179,18 @@ lag{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"KSA"}
+                    1{"KA"}
+                }
+                wide{
+                    0{"Kɨrɨsitʉ sɨ anavyaal"}
+                    1{"Kɨrɨsitʉ akavyaalwe"}
+                }
+            }
+        }
     }
     delimiters{
         alternateQuotationStart{"’"}

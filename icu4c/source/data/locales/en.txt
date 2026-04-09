@@ -1796,6 +1796,20 @@ en{
                 yyyyQQQ{"QQQ y G"}
                 yyyyQQQQ{"QQQQ y G"}
             }
+            eras{
+                abbreviated{
+                    0{"BC"}
+                    1{"AD"}
+                }
+                narrow{
+                    0{"B"}
+                    1{"A"}
+                }
+                wide{
+                    0{"Before Christ"}
+                    1{"Anno Domini"}
+                }
+            }
         }
         roc{
             eras{

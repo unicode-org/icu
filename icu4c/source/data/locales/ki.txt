@@ -188,6 +188,18 @@ ki{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"MK"}
+                    1{"TK"}
+                }
+                wide{
+                    0{"Mbere ya Kristo"}
+                    1{"Thutha wa Kristo"}
+                }
+            }
+        }
     }
     fields{
         day{

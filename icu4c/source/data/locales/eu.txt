@@ -1154,6 +1154,20 @@ eu{
             }
         }
         japanese{
+            eras{
+                abbreviated{
+                    0{"K.a."}
+                    1{"K.o."}
+                }
+                narrow{
+                    0{"a"}
+                    1{"o"}
+                }
+                wide{
+                    0{"Kristo aurretik"}
+                    1{"Kristo ondoren"}
+                }
+            }
             intervalFormats{
                 Gy{
                     G{"G y – G y"}

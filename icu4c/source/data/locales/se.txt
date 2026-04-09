@@ -329,6 +329,18 @@ se{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"o.Kr."}
+                    1{"m.Kr."}
+                }
+                wide{
+                    0{"ovdal Kristtusa"}
+                    1{"maŋŋel Kristtusa"}
+                }
+            }
+        }
     }
     delimiters{
         alternateQuotationStart{"’"}

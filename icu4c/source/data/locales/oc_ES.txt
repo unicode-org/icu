@@ -789,6 +789,14 @@ oc_ES{
                 }
             }
         }
+        japanese{
+            eras{
+                narrow{
+                    0{"a. C."}
+                    1{"d. C."}
+                }
+            }
+        }
     }
     fields{
         dayperiod-narrow{

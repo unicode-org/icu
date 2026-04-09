@@ -894,6 +894,16 @@ tr{
                 "GyMMMd",
                 "GyMMd",
             }
+            eras{
+                abbreviated{
+                    0{"MÖ"}
+                    1{"MS"}
+                }
+                wide{
+                    0{"Milattan Önce"}
+                    1{"Milattan Sonra"}
+                }
+            }
         }
         persian{
             monthNames{

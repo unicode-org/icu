@@ -897,6 +897,18 @@ bg{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"пр.Хр."}
+                    1{"сл.Хр."}
+                }
+                wide{
+                    0{"преди Христа"}
+                    1{"след Христа"}
+                }
+            }
+        }
     }
     characterLabel{
         activities{"Дейности"}

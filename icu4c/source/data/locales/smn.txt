@@ -516,6 +516,18 @@ smn{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"oKr."}
+                    1{"mKr."}
+                }
+                wide{
+                    0{"Ovdil Kristus šoddâm"}
+                    1{"maŋa Kristus šoddâm"}
+                }
+            }
+        }
     }
     measurementSystemNames{
         UK{"brittilâš"}

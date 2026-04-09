@@ -610,6 +610,22 @@ om{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"DhKD"}
+                    1{"BA"}
+                }
+                narrow{
+                    0{"Dh"}
+                    1{"B"}
+                }
+                wide{
+                    0{"Dhaloota Kiristoos Dura"}
+                    1{"Bara Araaraa"}
+                }
+            }
+        }
     }
     fields{
         day{

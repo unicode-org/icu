@@ -763,6 +763,18 @@ am{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"ዓ/ዓ"}
+                    1{"ዓ/ም"}
+                }
+                wide{
+                    0{"ዓመተ ዓለም"}
+                    1{"ዓመተ ምሕረት"}
+                }
+            }
+        }
     }
     characterLabel{
         activities{"እንቅስቃሴዎች"}

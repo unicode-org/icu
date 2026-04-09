@@ -228,6 +228,18 @@ ff{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"H-I"}
+                    1{"C-I"}
+                }
+                wide{
+                    0{"Hade Iisa"}
+                    1{"Caggal Iisa"}
+                }
+            }
+        }
     }
     delimiters{
         alternateQuotationStart{"‚"}

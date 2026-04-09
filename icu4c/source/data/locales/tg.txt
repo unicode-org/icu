@@ -746,6 +746,18 @@ tg{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"ПеМ"}
+                    1{"ПаМ"}
+                }
+                wide{
+                    0{"Пеш аз милод"}
+                    1{"Пас аз милод"}
+                }
+            }
+        }
         persian{
             DateTimePatterns{
                 "HH:mm:ss zzzz",

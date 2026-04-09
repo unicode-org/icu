@@ -841,6 +841,22 @@ cy{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"CC"}
+                    1{"OC"}
+                }
+                narrow{
+                    0{"C"}
+                    1{"O"}
+                }
+                wide{
+                    0{"Cyn Crist"}
+                    1{"Oed Crist"}
+                }
+            }
+        }
     }
     characterLabel{
         activities{"gweithgaredd"}

@@ -227,6 +227,18 @@ ln{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"libóso ya"}
+                    1{"nsima ya Y"}
+                }
+                wide{
+                    0{"Yambo ya Yézu Krís"}
+                    1{"Nsima ya Yézu Krís"}
+                }
+            }
+        }
     }
     fields{
         day{

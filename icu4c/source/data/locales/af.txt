@@ -772,6 +772,18 @@ af{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"v.C."}
+                    1{"n.C."}
+                }
+                wide{
+                    0{"voor Christus"}
+                    1{"ná Christus"}
+                }
+            }
+        }
     }
     characterLabel{
         activities{"aktiwiteit"}

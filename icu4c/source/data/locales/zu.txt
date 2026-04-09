@@ -644,6 +644,14 @@ zu{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"BC"}
+                    1{"AD"}
+                }
+            }
+        }
     }
     characterLabel{
         activities{"Activities"}

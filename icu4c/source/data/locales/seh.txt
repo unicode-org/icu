@@ -204,6 +204,18 @@ seh{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"AC"}
+                    1{"AD"}
+                }
+                wide{
+                    0{"Antes de Cristo"}
+                    1{"Anno Domini"}
+                }
+            }
+        }
     }
     fields{
         day{

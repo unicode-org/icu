@@ -835,6 +835,14 @@ ms{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"S.M."}
+                    1{"TM"}
+                }
+            }
+        }
         roc{
             eras{
                 narrow{

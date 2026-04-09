@@ -530,6 +530,18 @@ ps{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"له میلاد وړاندې"}
+                    1{"م."}
+                }
+                wide{
+                    0{"له میلاد څخه وړاندې"}
+                    1{"له میلاد څخه وروسته"}
+                }
+            }
+        }
         persian{
             monthNames{
                 format{

@@ -851,6 +851,18 @@ kk{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"б.з.д."}
+                    1{"б.з."}
+                }
+                wide{
+                    0{"Біздің заманымызға дейін"}
+                    1{"біздің заманымыз"}
+                }
+            }
+        }
         persian{
             monthNames{
                 format{

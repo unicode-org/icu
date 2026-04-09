@@ -915,6 +915,22 @@ is{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"f.Kr."}
+                    1{"e.Kr."}
+                }
+                narrow{
+                    0{"f.k."}
+                    1{"e.k."}
+                }
+                wide{
+                    0{"fyrir Krist"}
+                    1{"eftir Krist"}
+                }
+            }
+        }
         persian{
             monthNames{
                 format{

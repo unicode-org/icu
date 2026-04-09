@@ -99,5 +99,12 @@ sr_Latn_ME{
                 }
             }
         }
+        japanese{
+            eras{
+                wide{
+                    0{"prije nove ere"}
+                }
+            }
+        }
     }
 }

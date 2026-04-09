@@ -141,6 +141,14 @@ jgo{
                 }
             }
         }
+        japanese{
+            eras{
+                wide{
+                    0{"tsɛttsɛt mɛŋguꞌ mi ɛ́ lɛɛnɛ Kɛlísɛtɔ gɔ ńɔ́"}
+                    1{"tsɛttsɛt mɛŋguꞌ mi ɛ́ fúnɛ Kɛlísɛtɔ tɔ́ mɔ́"}
+                }
+            }
+        }
     }
     delimiters{
         alternateQuotationEnd{"›"}

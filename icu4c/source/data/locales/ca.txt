@@ -886,6 +886,18 @@ ca{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"aC"}
+                    1{"dC"}
+                }
+                wide{
+                    0{"abans de Crist"}
+                    1{"després de Crist"}
+                }
+            }
+        }
         roc{
             DateTimePatterns{
                 "H:mm:ss (zzzz)",

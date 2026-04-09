@@ -225,6 +225,18 @@ ses{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"IJ"}
+                    1{"IZ"}
+                }
+                wide{
+                    0{"Isaa jine"}
+                    1{"Isaa zamanoo"}
+                }
+            }
+        }
     }
     fields{
         day{

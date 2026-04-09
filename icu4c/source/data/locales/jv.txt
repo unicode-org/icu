@@ -608,6 +608,18 @@ jv{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"SM"}
+                    1{"M"}
+                }
+                wide{
+                    0{"Sakdurunge Masehi"}
+                    1{"Masehi"}
+                }
+            }
+        }
     }
     characterLabel{
         activities{"aktivitas"}

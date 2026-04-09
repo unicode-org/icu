@@ -339,6 +339,18 @@ az_Cyrl{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"е.ә."}
+                    1{"ј.е."}
+                }
+                wide{
+                    0{"ерамыздан әввәл"}
+                    1{"јени ера"}
+                }
+            }
+        }
     }
     delimiters{
         alternateQuotationEnd{"›"}

@@ -725,6 +725,18 @@ gl{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"a.C."}
+                    1{"d.C."}
+                }
+                wide{
+                    0{"antes de Cristo"}
+                    1{"despois de Cristo"}
+                }
+            }
+        }
     }
     characterLabel{
         activities{"actividades"}

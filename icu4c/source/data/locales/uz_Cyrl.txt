@@ -514,6 +514,17 @@ uz_Cyrl{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"м.а."}
+                    1{"милодий"}
+                }
+                wide{
+                    0{"милоддан аввалги"}
+                }
+            }
+        }
     }
     fields{
         day{

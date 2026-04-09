@@ -851,11 +851,21 @@ sr_Latn{
             }
             eras{
                 abbreviated{
+                    0{"p. n. e."}
+                    1{"n. e."}
                     232{"Meiđi"}
                     233{"Taišo"}
                     234{"Šova"}
                     235{"Haisei"}
                     236{"Reiva"}
+                }
+                narrow{
+                    0{"p.n.e."}
+                    1{"n.e."}
+                }
+                wide{
+                    0{"pre nove ere"}
+                    1{"nove ere"}
                 }
             }
         }

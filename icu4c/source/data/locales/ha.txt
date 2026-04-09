@@ -484,6 +484,18 @@ ha{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"K.H"}
+                    1{"BHAI"}
+                }
+                wide{
+                    0{"Kafin haihuwar annab"}
+                    1{"Bayan haihuwar annab"}
+                }
+            }
+        }
     }
     characterLabel{
         activities{"aiki"}

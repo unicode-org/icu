@@ -1201,6 +1201,19 @@ vi{
                 "GyMMdd",
                 "GyMMdd",
             }
+            eras{
+                abbreviated{
+                    0{"TCN"}
+                    1{"SCN"}
+                }
+                narrow{
+                    1{"CN"}
+                }
+                wide{
+                    0{"Trước Chúa Giáng Sinh"}
+                    1{"Sau Công Nguyên"}
+                }
+            }
             intervalFormats{
                 Bh{
                     B{"h B – h B"}

@@ -721,6 +721,18 @@ kn{
                 }
             }
         }
+        japanese{
+            eras{
+                abbreviated{
+                    0{"ಕ್ರಿ.ಪೂ"}
+                    1{"ಕ್ರಿ.ಶ"}
+                }
+                wide{
+                    0{"ಕ್ರಿಸ್ತ ಪೂರ್ವ"}
+                    1{"ಕ್ರಿಸ್ತ ಶಕ"}
+                }
+            }
+        }
         persian{
             monthNames{
                 format{
