@@ -220,6 +220,20 @@ supplementalData:table(nofallback){
         }
         japanese{
             eras{
+                0{
+                    end:intvector{
+                        0,
+                        12,
+                        31,
+                    }
+                }
+                1{
+                    start:intvector{
+                        1,
+                        1,
+                        1,
+                    }
+                }
                 232{
                     start:intvector{
                         1868,
@@ -256,7 +270,6 @@ supplementalData:table(nofallback){
                     }
                 }
             }
-            inheritEras{"gregorian"}
             system{"solar"}
         }
         persian{
