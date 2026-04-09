@@ -45,13 +45,12 @@ U_NAMESPACE_BEGIN
  * handles this distinction correctly when computing dates.  However, in lenient
  * mode either form of date is acceptable as input. 
  * <p>
- * In modern times, eras have started on January 8, 1868 AD, Gregorian (Meiji),
- * July 30, 1912 (Taisho), December 25, 1926 (Showa), and January 7, 1989 (Heisei).  Constants
- * for these eras, suitable for use in the <code>UCAL_ERA</code> field, are provided
- * in this class.  Note that the <em>number</em> used for each era is more or
- * less arbitrary.  Currently, the era starting in 645 AD is era #0; however this
- * may change in the future.  Use the predefined constants rather than using actual,
- * absolute numbers.
+ * In modern times, eras have started on October 23, 1868 AD, Gregorian (Meiji),
+ * July 30, 1912 (Taisho), December 25, 1926 (Showa), January 8, 1989 (Heisei), and
+ * May 1, 2019 (Reiwa).  Constants for these eras, suitable for use in the
+ * <code>UCAL_ERA</code> field, are provided in this class.  Note that the 
+ * <em>number</em> used for each era is more or less arbitrary. Use the predefined
+ * constants rather than using actual, absolute numbers.
  * <p>
  * Since ICU4C 63, start date of each era is imported from CLDR. CLDR era data
  * may contain tentative era in near future with placeholder names. By default,
@@ -204,7 +203,7 @@ protected:
      */
     virtual int32_t getDefaultDayInMonth(int32_t eyear, int32_t month, UErrorCode& status) override;
 
-    virtual bool isEra0CountingBackward() const override { return false; }
+    virtual bool isEra0CountingBackward() const override { return true; }
 };
 
 U_NAMESPACE_END

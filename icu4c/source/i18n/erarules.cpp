@@ -329,11 +329,7 @@ int32_t EraRules::getEraCode(int32_t year, int32_t month, int32_t day, UErrorCod
         }
     }
     // Linear search from the end, which should hit the most likely eras first.
-    // Also this is the most efficient for any era if we have < 8 or so eras, so only less
-    // efficient for early eras in Japanese calendar (while we still have them). Formerly
-    // this used binary search which would only be better for those early Japanese eras,
-    // but now that is much more difficult since there may be holes in the sorted list.
-    // Note with this change, this no longer uses or depends on currentEra.
+    // Also this is the most efficient for any era if we have < 8 or so eras.
     for (int startIdx = startDatesLength; startIdx > 0;) {
         if (!isSet(startDates[--startIdx])) {
             continue;

@@ -2146,8 +2146,9 @@ static const EraTestItem eraTestItems[] = {
     { "en@calendar=gregorian", true },
     { "en@calendar=roc", true },
     { "en@calendar=coptic", true },
+    /* calendars with non-modern era 0 that goes backwards, max era > 1 */
+    { "en@calendar=japanese", true },
     /* calendars with non-modern era 0 that goes forwards, max era > 1 */
-    { "en@calendar=japanese", false },
     { "en@calendar=chinese", false },
     /* calendars with non-modern era 0 that goes forwards, max era == 1 */
     { "en@calendar=ethiopic", false },
@@ -2167,10 +2168,6 @@ static const UChar zoneGMT[] = { 0x47,0x4D,0x54,0 };
 void TestAddRollEra0AndEraBounds(void) {
     const EraTestItem * eraTestItemPtr;
     for (eraTestItemPtr = eraTestItems; eraTestItemPtr->locale != NULL; eraTestItemPtr++) {
-        if (uprv_strstr(eraTestItemPtr->locale, "calendar=japanese") != NULL &&
-                log_knownIssue("ICU-23108", "ICU needs to implement era inheritance")) {
-            continue;
-        }
         UErrorCode status = U_ZERO_ERROR;
         UCalendar *ucalTest = ucal_open(zoneGMT, -1, eraTestItemPtr->locale, UCAL_DEFAULT, &status);
         if ( U_SUCCESS(status) ) {

@@ -149,6 +149,10 @@ int32_t JapaneseCalendar::getDefaultMonthInYear(int32_t eyear, UErrorCode& statu
 
     int32_t month = 0;
 
+    if (era <= 1) {
+        return month;
+    }
+
     // Find out if we are at the edge of an era
     int32_t eraStart[3] = { 0,0,0 };
     gJapaneseEraRules->getStartDate(era, eraStart, status);
@@ -172,6 +176,10 @@ int32_t JapaneseCalendar::getDefaultDayInMonth(int32_t eyear, int32_t month, UEr
     int32_t era = internalGetEra();
     int32_t day = 1;
 
+    if (era <= 1) {
+        return day;
+    }
+
     int32_t eraStart[3] = { 0,0,0 };
     gJapaneseEraRules->getStartDate(era, eraStart, status);
     if (U_FAILURE(status)) {
@@ -194,14 +202,16 @@ int32_t JapaneseCalendar::handleGetExtendedYear(UErrorCode& status)
     if (U_FAILURE(status)) {
         return 0;
     }
+
+    int32_t era = internalGet(UCAL_ERA, gCurrentEra);
     // EXTENDED_YEAR in JapaneseCalendar is a Gregorian year
     // The default value of EXTENDED_YEAR is 1970 (Showa 45)
 
-    if (newerField(UCAL_EXTENDED_YEAR, UCAL_YEAR) == UCAL_EXTENDED_YEAR &&
-        newerField(UCAL_EXTENDED_YEAR, UCAL_ERA) == UCAL_EXTENDED_YEAR) {
+    if ((newerField(UCAL_EXTENDED_YEAR, UCAL_YEAR) == UCAL_EXTENDED_YEAR &&
+        newerField(UCAL_EXTENDED_YEAR, UCAL_ERA) == UCAL_EXTENDED_YEAR) || era <= 1) {
         return internalGet(UCAL_EXTENDED_YEAR, kGregorianEpoch);
     }
-    int32_t eraStartYear = gJapaneseEraRules->getStartYear(internalGet(UCAL_ERA, gCurrentEra), status);
+    int32_t eraStartYear = gJapaneseEraRules->getStartYear(era, status);
     if (U_FAILURE(status)) {
         return 0;
     }
@@ -224,13 +234,15 @@ void JapaneseCalendar::handleComputeFields(int32_t julianDay, UErrorCode& status
     int32_t year = internalGet(UCAL_EXTENDED_YEAR); // Gregorian year
     int32_t eraCode = gJapaneseEraRules->getEraCode(year, internalGetMonth(status) + 1, internalGet(UCAL_DAY_OF_MONTH), status);
 
-    int32_t startYear = gJapaneseEraRules->getStartYear(eraCode, status) - 1;
-    if (U_FAILURE(status)) {
-        return;
-    }
-    if (uprv_add32_overflow(year, -startYear,  &year)) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return;
+    if (year > 0) {
+        int32_t startYear = gJapaneseEraRules->getStartYear(eraCode, status) - 1;
+        if (U_FAILURE(status)) {
+            return;
+        }
+        if (uprv_add32_overflow(year, -startYear,  &year)) {
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            return;
+        }
     }
     internalSet(UCAL_ERA, eraCode);
     internalSet(UCAL_YEAR, year);

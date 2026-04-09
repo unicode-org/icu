@@ -594,7 +594,7 @@ void IntlCalendarTest::TestJapaneseFormat() {
         status = U_ZERO_ERROR;
         simpleTest(loc, expect, expectDate, status);
     }
-    if (!logKnownIssue("ICU-23108", "ICU needs to implement era inheritance")) {
+    {
         UnicodeString expect = u"西暦1776年7月4日木曜日";
         UDate         expectDate = -6106032422000.0; // 1776-07-04T00:00:00Z-075258
         Locale        loc("ja_JP@calendar=japanese");
@@ -621,7 +621,7 @@ void IntlCalendarTest::TestJapaneseFormat() {
         simpleTest(loc, expect, expectDate, status);    
         
     }
-    if (!logKnownIssue("ICU-23108", "ICU needs to implement era inheritance")) {
+    {
         UnicodeString expect = u"西暦1456年2月29日日曜日";
         UDate         expectDate =  -16214400422000.0;  // 1456-03-09T00:00Z-075258
         Locale        loc("ja_JP@calendar=japanese");
