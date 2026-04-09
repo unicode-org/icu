@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1775684185041,
+  "lastUpdate": 1775758475869,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -146781,6 +146781,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 35.8606,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "grhoten@users.noreply.github.com",
+            "name": "George Rhoten",
+            "username": "grhoten"
+          },
+          "committer": {
+            "email": "grhoten@users.noreply.github.com",
+            "name": "George Rhoten",
+            "username": "grhoten"
+          },
+          "distinct": true,
+          "id": "b9143894739f04f052d9f62ea6b106f2c044f256",
+          "message": "ICU-23358 Make RBNF lenient parsing of ignorables more consistent between locales",
+          "timestamp": "2026-04-09T10:22:39-07:00",
+          "tree_id": "5e6abc36a2d223567a0781d2ae5ad499c8fe7eef",
+          "url": "https://github.com/unicode-org/icu/commit/b9143894739f04f052d9f62ea6b106f2c044f256"
+        },
+        "date": 1775757977669,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 18.9249,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 20.6193,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 23.6869,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 41.4673,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 47.0666,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 32.2838,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 26.0832,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 15.9197,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 70.9327,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 21.0444,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 33.4536,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 35.6474,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
