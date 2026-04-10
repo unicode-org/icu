@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1775765490392,
+  "lastUpdate": 1775858129202,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -92277,6 +92277,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 6.6982,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "aszeto@google.com",
+            "name": "Andrew Szeto",
+            "username": "jabagawee"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "164e249dff24cb680931aedf163000f63745c573",
+          "message": "ICU-23360 Deduplicate subdivision suffix strings in ValiditySet\n\nWhen ValiditySet constructs subdivisionData, it creates a separate String\nobject for each subdivision suffix via substring(). Suffixes like \"01\", \"02\",\n\"zzzz\" repeat across many regions: of ~5,910 expanded entries, only 1,992\nsuffixes are unique, leaving 3,918 duplicate String objects (~195 KB).\n\nFix: call intern() on each suffix string. The JVM's intern pool ensures\nthat identical suffixes share a single String instance.\n\nOn Android, ValidityData is initialized in the zygote process, which is\nforked to launch every app. Deduplicating these strings means the shared\npages backing them are less likely to be copy-on-written post-fork, so the\n~195 KB saving is effectively per-process across every running app.\n\nNo parallel icu4c change needed. The C++ side doesn't have an equivalent\nValidIdentifiers/ValiditySet class; subdivision validity goes through a\ndifferent code path.",
+          "timestamp": "2026-04-10T14:21:15-07:00",
+          "tree_id": "ccbdc11e58369efc08c5758b7d44ae2a7871e638",
+          "url": "https://github.com/unicode-org/icu/commit/164e249dff24cb680931aedf163000f63745c573"
+        },
+        "date": 1775857693597,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 6.8335,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 6.8564,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 6.8577,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 6.202,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 6.1846,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 6.2861,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
