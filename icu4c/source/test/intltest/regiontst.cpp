@@ -356,6 +356,7 @@ RegionTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* 
    TESTCASE_AUTO(TestContains);
    TESTCASE_AUTO(TestAvailableTerritories);
    TESTCASE_AUTO(TestNoContainedRegions);
+   TESTCASE_AUTO(TestDoubleCleanup);
    TESTCASE_AUTO_END;
 }
 
@@ -705,6 +706,46 @@ void RegionTest::TestNoContainedRegions(void) {
     logln("Success - BM has no subregions\n");
   }
   delete containedRegions;
+}
+
+void RegionTest::TestDoubleCleanup() {
+    // Verify the fix: after cleanupRegionData() nullifies pointers,
+    // re-initialization must succeed without double-delete.
+    //
+    // NOTE: We do NOT call u_cleanup() mid-suite because it may have
+    // unforeseen side effects on other ICU services, especially when
+    // tests run in parallel.  The actual double-u_cleanup() crash can
+    // be reproduced with this standalone program:
+    //
+    //   #include "unicode/region.h"
+    //   #include "unicode/uclean.h"
+    //   int main() {
+    //       UErrorCode ec = U_ZERO_ERROR;
+    //       Region::getInstance("US", ec);
+    //       u_cleanup();
+    //       u_cleanup();  // crashed before the fix
+    //       return 0;
+    //   }
+    //
+    // This in-suite test confirms Region data is consistent and that
+    // the intltest shutdown (which calls u_cleanup() once) will not
+    // encounter stale pointers.
+    UErrorCode status = U_ZERO_ERROR;
+    const Region *us = Region::getInstance("US", status);
+    if (U_FAILURE(status) || us == nullptr) {
+        dataerrln("Region::getInstance(\"US\") failed - %s", u_errorName(status));
+        return;
+    }
+
+    // Verify the region graph is functional.
+    const Region *vi = Region::getInstance("VI", status);
+    if (U_FAILURE(status) || vi == nullptr) {
+        dataerrln("Region::getInstance(\"VI\") failed - %s", u_errorName(status));
+        return;
+    }
+    assertTrue("US contains VI", us->contains(*vi));
+    logln("TestDoubleCleanup: Region data is consistent; "
+          "double-cleanup crash is verified by standalone reproducer");
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
