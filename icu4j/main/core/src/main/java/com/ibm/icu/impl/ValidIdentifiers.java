@@ -62,7 +62,7 @@ public class ValidIdentifiers {
                         pos2 = pos = s.charAt(0) < 'A' ? 3 : 2;
                     }
                     final String key = s.substring(0, pos);
-                    final String subdivision = s.substring(pos2);
+                    final String subdivision = s.substring(pos2).intern();
 
                     Set<String> oldSet = _subdivisionData.get(key);
                     if (oldSet == null) {
