@@ -326,19 +326,23 @@ void Region::cleanupRegionData() {
     for (int32_t i = 0 ; i < URGN_LIMIT ; i++ ) {
         if ( availableRegions[i] ) {
             delete availableRegions[i];
+            availableRegions[i] = nullptr;
         }
     }
 
     if (regionAliases) {
         uhash_close(regionAliases);
+        regionAliases = nullptr;
     }
 
     if (numericCodeMap) {
         uhash_close(numericCodeMap);
+        numericCodeMap = nullptr;
     }
 
     if (regionIDMap) {
         uhash_close(regionIDMap);
+        regionIDMap = nullptr;
     }
     gRegionDataInitOnce.reset();
 }
