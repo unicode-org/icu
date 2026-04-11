@@ -10,7 +10,7 @@
  * Since: ICU 3.0
  **********************************************************************
  */
-package com.ibm.icu.impl.data;
+package com.ibm.icu.dev.test.format;
 
 import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.impl.Utility;
@@ -52,7 +52,7 @@ public class TokenIterator {
         if (done) {
             return null;
         }
-        for (; ; ) {
+        while (true) {
             if (line == null) {
                 line = reader.readLineSkippingComments();
                 if (line == null) {

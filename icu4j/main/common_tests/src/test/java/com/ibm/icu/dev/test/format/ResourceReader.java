@@ -6,16 +6,16 @@
  * others. All Rights Reserved.
  *******************************************************************************
  */
-package com.ibm.icu.impl.data;
+package com.ibm.icu.dev.test.format;
 
-import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.PatternProps;
-import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.LineNumberReader;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -30,56 +30,8 @@ import java.nio.charset.StandardCharsets;
  * @author Alan Liu
  */
 public class ResourceReader implements Closeable {
-    private BufferedReader reader = null;
+    private LineNumberReader reader = null;
     private String resourceName;
-    private String encoding; // null for default encoding
-    private Class<?> root;
-
-    /**
-     * The one-based line number. Has the special value -1 before the object is initialized. Has the
-     * special value 0 after initialization but before the first line is read.
-     */
-    private int lineNo;
-
-    /**
-     * Construct a reader object for the text file of the given name in this package, using the
-     * given encoding.
-     *
-     * @param resourceName the name of the text file located in this package's ".data" subpackage.
-     * @param encoding the encoding of the text file; if unsupported an exception is thrown
-     * @exception UnsupportedEncodingException if <code>encoding</code> is not supported by the JDK.
-     */
-    public ResourceReader(String resourceName, String encoding)
-            throws UnsupportedEncodingException {
-        this(ICUData.class, "data/" + resourceName, encoding);
-    }
-
-    /**
-     * Construct a reader object for the text file of the given name in this package, using the
-     * default encoding.
-     *
-     * @param resourceName the name of the text file located in this package's ".data" subpackage.
-     */
-    public ResourceReader(String resourceName) {
-        this(ICUData.class, "data/" + resourceName);
-    }
-
-    /**
-     * Construct a reader object for the text file of the given name in the given class's package,
-     * using the given encoding.
-     *
-     * @param resourceName the name of the text file located in the given class's package.
-     * @param encoding the encoding of the text file; if unsupported an exception is thrown
-     * @exception UnsupportedEncodingException if <code>encoding</code> is not supported by the JDK.
-     */
-    public ResourceReader(Class<?> rootClass, String resourceName, String encoding)
-            throws UnsupportedEncodingException {
-        this.root = rootClass;
-        this.resourceName = resourceName;
-        this.encoding = encoding;
-        lineNo = -1;
-        _reset();
-    }
 
     /**
      * Construct a reader object for the input stream associated with the given resource name.
@@ -87,49 +39,11 @@ public class ResourceReader implements Closeable {
      * @param is the input stream of the resource
      * @param resourceName the name of the resource
      */
-    public ResourceReader(InputStream is, String resourceName, String encoding) {
-        this.root = null;
+    public ResourceReader(InputStream is, String resourceName, Charset cs)
+            throws UnsupportedEncodingException {
         this.resourceName = resourceName;
-        this.encoding = encoding;
-
-        this.lineNo = -1;
-        try {
-            InputStreamReader isr =
-                    (encoding == null)
-                            ? new InputStreamReader(is, StandardCharsets.UTF_8)
-                            : new InputStreamReader(is, encoding);
-
-            this.reader = new BufferedReader(isr);
-            this.lineNo = 0;
-        } catch (UnsupportedEncodingException e) {
-        }
-    }
-
-    /**
-     * Construct a reader object for the input stream associated with the given resource name.
-     *
-     * @param is the input stream of the resource
-     * @param resourceName the name of the resource
-     */
-    public ResourceReader(InputStream is, String resourceName) {
-        this(is, resourceName, null);
-    }
-
-    /**
-     * Construct a reader object for the text file of the given name in the given class's package,
-     * using the default encoding.
-     *
-     * @param resourceName the name of the text file located in the given class's package.
-     */
-    public ResourceReader(Class<?> rootClass, String resourceName) {
-        this.root = rootClass;
-        this.resourceName = resourceName;
-        this.encoding = null;
-        lineNo = -1;
-        try {
-            _reset();
-        } catch (UnsupportedEncodingException e) {
-        }
+        InputStreamReader isr = new InputStreamReader(is, cs == null ? cs : StandardCharsets.UTF_8);
+        this.reader = new LineNumberReader(isr);
     }
 
     /**
@@ -137,16 +51,14 @@ public class ResourceReader implements Closeable {
      * been reached.
      */
     public String readLine() throws IOException {
-        if (lineNo == 0) {
+        if (reader.getLineNumber() == 0) {
             // Remove BOMs
-            ++lineNo;
             String line = reader.readLine();
             if (line != null && (line.charAt(0) == '\uFFEF' || line.charAt(0) == '\uFEFF')) {
                 line = line.substring(1);
             }
             return line;
         }
-        ++lineNo;
         return reader.readLine();
     }
 
@@ -156,7 +68,7 @@ public class ResourceReader implements Closeable {
      * @param trim if true then trim leading Pattern_White_Space.
      */
     public String readLineSkippingComments(boolean trim) throws IOException {
-        for (; ; ) {
+        while (true) {
             String line = readLine();
             if (line == null) {
                 return line;
@@ -187,7 +99,7 @@ public class ResourceReader implements Closeable {
      * otherwise the return value is undefined.
      */
     public int getLineNumber() {
-        return lineNo;
+        return reader.getLineNumber();
     }
 
     /**
@@ -195,49 +107,7 @@ public class ResourceReader implements Closeable {
      * readLineSkippingComments().
      */
     public String describePosition() {
-        return resourceName + ':' + lineNo;
-    }
-
-    /**
-     * Reset this reader so that the next call to <code>readLine()</code> returns the first line of
-     * the file again. This is a somewhat expensive call, however, calling <code>reset()</code>
-     * after calling it the first time does nothing if <code>readLine()</code> has not been called
-     * in between.
-     */
-    public void reset() {
-        try {
-            _reset();
-        } catch (UnsupportedEncodingException e) {
-        }
-        // We swallow this exception, if there is one.  If the encoding is
-        // invalid, the constructor will have thrown this exception already and
-        // the caller shouldn't use the object afterwards.
-    }
-
-    /**
-     * Reset to the start by reconstructing the stream and readers. We could also use mark() and
-     * reset() on the stream or reader, but that would cause them to keep the stream data around in
-     * memory. We don't want that because some of the resource files are large, e.g., 400k.
-     */
-    private void _reset() throws UnsupportedEncodingException {
-        try {
-            close();
-        } catch (IOException e) {
-        }
-        if (lineNo == 0) {
-            return;
-        }
-        InputStream is = ICUData.getStream(root, resourceName);
-        if (is == null) {
-            throw new IllegalArgumentException("Can't open " + resourceName);
-        }
-
-        InputStreamReader isr =
-                (encoding == null)
-                        ? new InputStreamReader(is, StandardCharsets.UTF_8)
-                        : new InputStreamReader(is, encoding);
-        reader = new BufferedReader(isr);
-        lineNo = 0;
+        return resourceName + ':' + reader.getLineNumber();
     }
 
     /**

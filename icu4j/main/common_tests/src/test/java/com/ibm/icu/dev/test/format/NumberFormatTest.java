@@ -19,8 +19,6 @@ import com.ibm.icu.dev.test.format.IntlTestDecimalFormatAPIC.FieldContainer;
 import com.ibm.icu.impl.DontCareFieldPosition;
 import com.ibm.icu.impl.ICUConfig;
 import com.ibm.icu.impl.LocaleUtility;
-import com.ibm.icu.impl.data.ResourceReader;
-import com.ibm.icu.impl.data.TokenIterator;
 import com.ibm.icu.impl.number.PatternStringUtils;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.math.MathContext;
@@ -47,12 +45,14 @@ import com.ibm.icu.util.ULocale;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigInteger;
 import java.math.RoundingMode;
+import java.nio.charset.StandardCharsets;
 import java.text.AttributedCharacterIterator;
 import java.text.FieldPosition;
 import java.text.Format;
@@ -2469,23 +2469,21 @@ public class NumberFormatTest extends CoreTestFmwk {
         /*9*/ "strict=", // true or false
     };
 
-    @SuppressWarnings("resource") // InputStream is will be closed by the ResourceReader.
     @Test
-    public void TestCases() {
+    public void TestCases() throws IOException {
         String caseFileName = "NumberFormatTestCases.txt";
-        java.io.InputStream is = NumberFormatTest.class.getResourceAsStream(caseFileName);
+        try (InputStream is = NumberFormatTest.class.getResourceAsStream(caseFileName);
+                ResourceReader reader =
+                        new ResourceReader(is, caseFileName, StandardCharsets.UTF_8)) {
+            TokenIterator tokens = new TokenIterator(reader);
 
-        ResourceReader reader = new ResourceReader(is, caseFileName, "utf-8");
-        TokenIterator tokens = new TokenIterator(reader);
+            Locale loc = new Locale("en", "US", "");
+            DecimalFormat ref = null, fmt = null;
+            MeasureFormat mfmt = null;
+            String pat = null, str = null, mloc = null;
+            boolean strict = false;
 
-        Locale loc = new Locale("en", "US", "");
-        DecimalFormat ref = null, fmt = null;
-        MeasureFormat mfmt = null;
-        String pat = null, str = null, mloc = null;
-        boolean strict = false;
-
-        try {
-            for (; ; ) {
+            while (true) {
                 String tok = tokens.next();
                 if (tok == null) {
                     break;
@@ -2684,13 +2682,6 @@ public class NumberFormatTest extends CoreTestFmwk {
                         errln("Unknown command \"" + tok + "\" at " + tokens.describePosition());
                         return;
                 }
-            }
-        } catch (java.io.IOException e) {
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                reader.close();
-            } catch (IOException ignored) {
             }
         }
     }
