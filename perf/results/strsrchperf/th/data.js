@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1775857447422,
+  "lastUpdate": 1775874047553,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -53385,6 +53385,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 79.5853,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "committer": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "distinct": true,
+          "id": "3377fe3dc221b9eb090ac407a996bb5d764e0b6b",
+          "message": "ICU-23363 Set Segment::ruleStatus",
+          "timestamp": "2026-04-11T03:58:57+02:00",
+          "tree_id": "4a2e891d6c60e3371ac42cd6297f61fa11e711a0",
+          "url": "https://github.com/unicode-org/icu/commit/3377fe3dc221b9eb090ac407a996bb5d764e0b6b"
+        },
+        "date": 1775873556849,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 33.2607,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 77.9764,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
