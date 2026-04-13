@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1775873477073,
+  "lastUpdate": 1776055068921,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -43527,6 +43527,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 166.70721286540999,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "y.umaoka@gmail.com",
+            "name": "Yoshito Umaoka",
+            "username": "yumaoka"
+          },
+          "committer": {
+            "email": "yumaoka@users.noreply.github.com",
+            "name": "Yoshito Umaoka",
+            "username": "yumaoka"
+          },
+          "distinct": true,
+          "id": "ab879e410131bf9558dca60fad5edda0ff8dc785",
+          "message": "ICU-23325 Add a test case for the VTimeZone RRULE-UNTIL format issue.",
+          "timestamp": "2026-04-13T00:12:23-04:00",
+          "tree_id": "da9e634b7a88766b6b68798eea2098ab246614ef",
+          "url": "https://github.com/unicode-org/icu/commit/ab879e410131bf9558dca60fad5edda0ff8dc785"
+        },
+        "date": 1776054645008,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 180.60138106214532,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
