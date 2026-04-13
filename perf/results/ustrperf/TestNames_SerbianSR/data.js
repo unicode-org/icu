@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1776056261035,
+  "lastUpdate": 1776104112016,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -147165,6 +147165,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 44.5458,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "4706271+robertbastian@users.noreply.github.com",
+            "name": "Robert Bastian",
+            "username": "robertbastian"
+          },
+          "committer": {
+            "email": "4706271+robertbastian@users.noreply.github.com",
+            "name": "Robert Bastian",
+            "username": "robertbastian"
+          },
+          "distinct": true,
+          "id": "5864511f59bd8fe4af08fbadbf30dd67328312b1",
+          "message": "ICU-23341 Update tests",
+          "timestamp": "2026-04-13T19:07:26+02:00",
+          "tree_id": "b90672a5b688db14302f936e6e5e2dcd28204342",
+          "url": "https://github.com/unicode-org/icu/commit/5864511f59bd8fe4af08fbadbf30dd67328312b1"
+        },
+        "date": 1776103660428,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 22.4444,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 25.2854,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 29.86,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 31.4219,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 38.249,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 38.1884,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 23.5817,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 17.4177,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 87.034,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 24.284,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 37.8312,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 44.5436,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
