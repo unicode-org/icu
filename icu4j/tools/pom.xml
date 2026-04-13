@@ -21,4 +21,17 @@
     <module>pmd</module>
   </modules>
 
+  <profiles>
+    <profile>
+      <id>requires_jdk21</id>
+      <activation>
+        <!-- Using ${enforcer.requireJavaToolsVersion} does not work. Bug? -->
+        <jdk>[21,)</jdk>
+      </activation>
+      <modules>
+        <module>errorprone_report</module>
+      </modules>
+    </profile>
+  </profiles>
+
 </project>
