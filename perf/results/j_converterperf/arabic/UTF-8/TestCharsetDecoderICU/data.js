@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1776055653096,
+  "lastUpdate": 1776102520613,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -43617,6 +43617,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 1.4952204579731279,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "4706271+robertbastian@users.noreply.github.com",
+            "name": "Robert Bastian",
+            "username": "robertbastian"
+          },
+          "committer": {
+            "email": "4706271+robertbastian@users.noreply.github.com",
+            "name": "Robert Bastian",
+            "username": "robertbastian"
+          },
+          "distinct": true,
+          "id": "5864511f59bd8fe4af08fbadbf30dd67328312b1",
+          "message": "ICU-23341 Update tests",
+          "timestamp": "2026-04-13T19:07:26+02:00",
+          "tree_id": "b90672a5b688db14302f936e6e5e2dcd28204342",
+          "url": "https://github.com/unicode-org/icu/commit/5864511f59bd8fe4af08fbadbf30dd67328312b1"
+        },
+        "date": 1776102078439,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 1.4112376249115675,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
