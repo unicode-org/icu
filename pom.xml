@@ -53,9 +53,17 @@
         - versions:set-property    https://www.mojohaus.org/versions/versions-maven-plugin/set-property-mojo.html
     -->
 
+    <!-- From the Maven web site, Dec. 2025 (https://maven.apache.org/docs/history.html)
+      "Maven 3.8.9 and before has now reached its end of life and is no longer supported in any way.
+      New plugin releases will require Maven 3.9.0 or later."
+    -->
+    <enforcer.requireMavenVersion>3.9.0</enforcer.requireMavenVersion>
+    <enforcer.requireJavaVersion>[11,)</enforcer.requireJavaVersion>
+    <enforcer.requireJavaToolsVersion>[21,)</enforcer.requireJavaToolsVersion>
+
     <!-- Dependencies versions -->
     <commons-cli.version>1.11.0</commons-cli.version>
-    <error_prone.version>2.25.0</error_prone.version>
+    <error_prone.version>2.49.0</error_prone.version>
     <gson.version>2.13.2</gson.version>
     <guava.version>33.5.0-jre</guava.version>
     <jmh.version>1.37</jmh.version>
@@ -438,14 +446,10 @@
               <configuration>
                 <rules>
                   <requireMavenVersion>
-                    <!-- From the Maven web site, Dec. 2025 (https://maven.apache.org/docs/history.html)
-                      "Maven 3.8.9 and before has now reached its end of life and is no longer supported in any way.
-                       New plugin releases will require Maven 3.9.0 or later."
-                    -->
-                    <version>3.9.0</version>
+                    <version>${enforcer.requireMavenVersion}</version>
                   </requireMavenVersion>
                   <requireJavaVersion>
-                    <version>[11,)</version>
+                    <version>${enforcer.requireJavaVersion}</version>
                   </requireJavaVersion>
                 </rules>
               </configuration>
@@ -656,6 +660,9 @@
            mvn clean test -DskipTests -DskipITs -P errorprone
       -->
       <id>errorprone</id>
+      <properties>
+        <enforcer.requireJavaVersion>${enforcer.requireJavaToolsVersion}</enforcer.requireJavaVersion>
+      </properties>
       <build>
         <plugins>
           <plugin>
@@ -668,11 +675,13 @@
               <!-- Use <compilerArg> to pass flags to errorprone. See https://errorprone.info/docs/flags -->
               <compilerArgs>
                 <arg>-XDcompilePolicy=simple</arg>
+                <arg>-XDaddTypeAnnotationsToSymbol=true</arg>
+                <arg>--should-stop=ifError=FLOW</arg>
                 <!--
                   WARNING: Do not wrap the line below, it will fail on Windows.
                   See https://github.com/google/error-prone/issues/4256
                 -->
-                <arg>-Xplugin:ErrorProne -Xep:UnicodeEscape:OFF -Xep:InvalidBlockTag:OFF</arg>
+                <arg>-Xplugin:ErrorProne -Xep:UnicodeEscape:OFF -Xep:InvalidBlockTag:OFF -Xep:LabelledBreakTarget:WARN</arg>
                 <arg>-Xmaxerrs</arg>
                 <arg>10000</arg>
                 <arg>-Xmaxwarns</arg>
@@ -710,6 +719,9 @@
         You can then inspect the content of the errorprone.log file, or the reports in
         the target folder (errorprone*.html, errorprone.md, errorprone.tsv) -->
       <id>errorprone-all</id>
+      <properties>
+        <enforcer.requireJavaVersion>${enforcer.requireJavaToolsVersion}</enforcer.requireJavaVersion>
+      </properties>
       <build>
         <plugins>
           <plugin>
@@ -723,6 +735,8 @@
               <!-- Use <compilerArg> to pass flags to errorprone. See https://errorprone.info/docs/flags -->
               <compilerArgs>
                 <arg>-XDcompilePolicy=simple</arg>
+                <arg>-XDaddTypeAnnotationsToSymbol=true</arg>
+                <arg>--should-stop=ifError=FLOW</arg>
                 <!--
                   -XepAllErrorsAsWarnings:
                     If we let errors be errors they fail and stop the build, so we don't get a full report.
