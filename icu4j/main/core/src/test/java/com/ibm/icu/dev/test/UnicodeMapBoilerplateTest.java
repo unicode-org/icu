@@ -11,13 +11,14 @@ package com.ibm.icu.dev.test;
 import com.ibm.icu.impl.UnicodeMap;
 import java.util.List;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 /** Moved from UnicodeMapTest */
+@RunWith(JUnit4.class)
 public class UnicodeMapBoilerplateTest extends TestBoilerplate<UnicodeMap<String>> {
 
     private static String[] TEST_VALUES = {"A", "B", "C", "D", "E", "F"};
-
-    public void TestUnicodeMapBoilerplate() throws Exception {}
 
     @Test
     public void test() throws Exception {
