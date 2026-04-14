@@ -20,8 +20,8 @@ import org.apache.commons.cli.Options;
  * generates two user friendly reports in html format.
  *
  * <pre><code>
- * mvn clean test -ntp -DskipTests -DskipITs -l errorprone.log -P errorprone
- * mvn exec:java -f tools/build/ -P errorprone_report
+ * mvn clean test -DskipTests -DskipITs -l errorprone.log -P errorprone
+ * mvn exec:java -f tools/errorprone_report/ -P errorprone_report
  * </code></pre>
  */
 public class Main {
@@ -198,10 +198,6 @@ public class Main {
 
     /** Program entry point. */
     public static void main(String[] args) throws IOException {
-        /*
-         * mvn clean test -ntp -DskipTests -DskipITs -l errorprone.log -P errorprone
-         * mvn exec:java -f tools/build/ -P errorprone_report
-         */
         Main self = new Main();
         self.processArgs(args);
         self.execute();

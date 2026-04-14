@@ -134,8 +134,8 @@ jobs:
             grep '^\[ERROR\] ' /tmp/errorprone.log
             # We need to build this sub-project. If maven fails in a previous sub-project the
             # whole build stops and we never get to build the report tool, so we can't run it.
-            mvn install -f icu4j/tools/build/ -q
-            mvn exec:java -f icu4j/tools/build/ -P errorprone_report -DlogFile=/tmp/errorprone.log
+            mvn install -f icu4j/tools/errorprone_report/ -q
+            mvn exec:java -f icu4j/tools/errorprone_report/ -P errorprone_report -DlogFile=/tmp/errorprone.log
             # Output messages and the error-prone report as workflow job summary
             echo '**Run this command locally and fix all errors:**' >> $GITHUB_STEP_SUMMARY
             echo '```' >> $GITHUB_STEP_SUMMARY

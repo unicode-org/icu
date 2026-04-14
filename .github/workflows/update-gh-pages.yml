@@ -99,7 +99,7 @@ jobs:
         run: |
           mkdir -p ${REPORT_FOLDER_ERRORPRONE}
           mvn exec:java \
-            -f icu4j/tools/build/ \
+            -f icu4j/tools/errorprone_report/ \
             -P errorprone_report \
             -DlogFile=/tmp/errorprone_all.log \
             -DoutDir=${REPORT_FOLDER_ERRORPRONE}

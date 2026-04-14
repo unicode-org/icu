@@ -19,6 +19,7 @@
     <module>misc</module>
     <module>taglets</module>
     <module>pmd</module>
+    <module>errorprone_report</module>
   </modules>
 
 </project>

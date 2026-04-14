@@ -705,7 +705,7 @@
     <profile>
       <!-- Run this in the root of the ICU project:
            mvn clean test -DskipTests -DskipITs -l /tmp/errorprone_all.log -P errorprone-all
-           mvn exec:java -f icu4j/tools/build/ -P errorprone_report -DlogFile=/tmp/errorprone_all.log
+           mvn exec:java -f icu4j/tools/errorprone_report/ -P errorprone_report -DlogFile=/tmp/errorprone_all.log
         On Windows you can use %TEMP%\errorprone_all.log for the temporary folder.
         You can then inspect the content of the errorprone.log file, or the reports in
         the target folder (errorprone*.html, errorprone.md, errorprone.tsv) -->
