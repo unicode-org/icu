@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1776285512997,
+  "lastUpdate": 1776289518218,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -43947,6 +43947,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.028821879684533463,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "7142d7fd3df2ec87c727790d0aa9dbef1f9716e4",
+          "message": "ICU-23340 Show only the major version in the ICU4C apidoc",
+          "timestamp": "2026-04-15T14:12:15-07:00",
+          "tree_id": "6bc0104e4c068679616b53c976e2e96121b64fe3",
+          "url": "https://github.com/unicode-org/icu/commit/7142d7fd3df2ec87c727790d0aa9dbef1f9716e4"
+        },
+        "date": 1776289033785,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.03119014244707218,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
