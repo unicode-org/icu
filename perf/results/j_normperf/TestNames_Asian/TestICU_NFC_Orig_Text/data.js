@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1776116248319,
+  "lastUpdate": 1776284909855,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -44007,6 +44007,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFC_Orig_Text",
             "value": 2.9931310680792063,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "committer": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "distinct": true,
+          "id": "b04af5fcf9ba83e047f9c045323b51d1199c273e",
+          "message": "ICU-23345 Require Range to be a range in UTFStringCodePoints to improve error messages",
+          "timestamp": "2026-04-13T20:54:36+02:00",
+          "tree_id": "1b2c9b410a01bf525d64da5c63d3918019496fec",
+          "url": "https://github.com/unicode-org/icu/commit/b04af5fcf9ba83e047f9c045323b51d1199c273e"
+        },
+        "date": 1776284466572,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 3.2715554920178262,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
