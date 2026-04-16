@@ -33,21 +33,13 @@ final class BreakTransliterator extends Transliterator implements Cloneable {
         this(ID, filter, null, " ");
     }
 
-    /// CLOVER:OFF
-    // The following method is not called by anything and can't be reached
     public String getInsertion() {
         return insertion;
     }
 
-    /// CLOVER:ON
-
-    /// CLOVER:OFF
-    // The following method is not called by anything and can't be reached
     public void setInsertion(String insertion) {
         this.insertion = insertion;
     }
-
-    /// CLOVER:ON
 
     public BreakIterator getBreakIterator() {
         // Defer initialization of BreakIterator because it is slow,
@@ -57,13 +49,9 @@ final class BreakTransliterator extends Transliterator implements Cloneable {
         return bi.clone();
     }
 
-    /// CLOVER:OFF
-    // The following method is not called by anything and can't be reached
     public void setBreakIterator(BreakIterator bi) {
         this.bi = bi;
     }
-
-    /// CLOVER:ON
 
     static final int LETTER_OR_MARK_MASK =
             (1 << Character.UPPERCASE_LETTER)

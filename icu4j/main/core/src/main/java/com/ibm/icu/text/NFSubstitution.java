@@ -76,12 +76,10 @@ abstract class NFSubstitution {
             case '<':
                 if (rule.getBaseValue() == NFRule.NEGATIVE_NUMBER_RULE) {
                     // throw an exception if the rule is a negative number rule
-                    /// CLOVER:OFF
                     // If you look at the call hierarchy of this method, the rule would
                     // never be directly modified by the user and therefore makes the
                     // following pointless unless the user changes the ruleset.
                     throw new IllegalArgumentException("<< not allowed in negative-number rule");
-                    /// CLOVER:ON
                 } else if (rule.getBaseValue() == NFRule.IMPROPER_FRACTION_RULE
                         || rule.getBaseValue() == NFRule.PROPER_FRACTION_RULE
                         || rule.getBaseValue() == NFRule.DEFAULT_RULE) {
@@ -111,12 +109,10 @@ abstract class NFSubstitution {
                 } else if (ruleSet.isFractionSet()) {
                     // if the rule set owning the rule is a fraction rule set,
                     // throw an exception
-                    /// CLOVER:OFF
                     // If you look at the call hierarchy of this method, the rule would
                     // never be directly modified by the user and therefore makes the
                     // following pointless unless the user changes the ruleset.
                     throw new IllegalArgumentException(">> not allowed in fraction rule set");
-                    /// CLOVER:ON
                 } else {
                     // otherwise, return a ModulusSubstitution
                     return new ModulusSubstitution(
@@ -126,12 +122,10 @@ abstract class NFSubstitution {
                 return new SameValueSubstitution(pos, ruleSet, description);
             default:
                 // and if it's anything else, throw an exception
-                /// CLOVER:OFF
                 // If you look at the call hierarchy of this method, the rule would
                 // never be directly modified by the user and therefore makes the
                 // following pointless unless the user changes the ruleset.
                 throw new IllegalArgumentException("Illegal substitution character");
-                /// CLOVER:ON
         }
     }
 

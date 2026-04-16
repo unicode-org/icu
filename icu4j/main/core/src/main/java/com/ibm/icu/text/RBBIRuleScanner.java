@@ -1019,7 +1019,6 @@ class RBBIRuleScanner {
     //  printNodeStack     for debugging...
     //
     // ---------------------------------------------------------------------------------
-    /// CLOVER:OFF
     void printNodeStack(String title) {
         int i;
         System.out.println(title + ".  Dumping node stack...\n");
@@ -1027,8 +1026,6 @@ class RBBIRuleScanner {
             fNodeStack[i].printTree(true);
         }
     }
-
-    /// CLOVER:ON
 
     // ---------------------------------------------------------------------------------
     //

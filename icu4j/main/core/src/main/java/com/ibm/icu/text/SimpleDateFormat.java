@@ -4629,14 +4629,11 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
     private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
         stream.defaultReadObject();
         int capitalizationSettingValue = (serialVersionOnStream > 1) ? stream.readInt() : -1;
-        /// CLOVER:OFF
         // don't have old serial data to test with
         if (serialVersionOnStream < 1) {
             // didn't have defaultCenturyStart field
             defaultCenturyBase = System.currentTimeMillis();
-        }
-        /// CLOVER:ON
-        else {
+        } else {
             // fill in dependent transient field
             parseAmbiguousDatesAsAfter(defaultCenturyStart);
         }

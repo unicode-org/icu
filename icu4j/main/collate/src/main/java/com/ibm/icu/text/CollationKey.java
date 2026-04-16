@@ -120,9 +120,7 @@ public final class CollationKey implements Comparable<CollationKey> {
         @Deprecated public static final int COUNT = 3;
 
         /** Private Constructor */
-        /// CLOVER:OFF
         private BoundMode() {}
-        /// CLOVER:ON
     }
 
     // public constructor ---------------------------------------------------

@@ -127,11 +127,9 @@ class TransliteratorRegistry {
                     }
                 }
             } catch (MissingResourceException e) {
-                /// CLOVER:OFF
                 // The constructor is called from multiple private methods
                 //  that protects an invalid scriptName
                 scriptName = null;
-                /// CLOVER:ON
             }
             // assert(spec != top);
             reset();
@@ -594,11 +592,9 @@ class TransliteratorRegistry {
      */
     private Object[] findInDynamicStore(Spec src, Spec trg, String variant) {
         String ID = TransliteratorIDParser.STVtoID(src.get(), trg.get(), variant);
-        /// CLOVER:OFF
         if (DEBUG) {
             System.out.println("TransliteratorRegistry.findInDynamicStore:" + ID);
         }
-        /// CLOVER:ON
         return registry.get(new CaseInsensitiveString(ID));
     }
 
@@ -611,12 +607,10 @@ class TransliteratorRegistry {
      * not expand the available ID list (or spec DAG).
      */
     private Object[] findInStaticStore(Spec src, Spec trg, String variant) {
-        /// CLOVER:OFF
         if (DEBUG) {
             String ID = TransliteratorIDParser.STVtoID(src.get(), trg.get(), variant);
             System.out.println("TransliteratorRegistry.findInStaticStore:" + ID);
         }
-        /// CLOVER:ON
         Object[] entry = null;
         if (src.isLocale()) {
             entry = findInBundle(src, trg, variant, Transliterator.FORWARD);
@@ -703,9 +697,7 @@ class TransliteratorRegistry {
                 }
 
             } catch (MissingResourceException e) {
-                /// CLOVER:OFF
                 if (DEBUG) System.out.println("missing resource: " + e);
-                /// CLOVER:ON
             }
         }
 

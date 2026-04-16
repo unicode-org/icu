@@ -8125,7 +8125,6 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
-    /// CLOVER:OFF
     public static String getStringPropertyValue(int propertyEnum, int codepoint, int nameChoice) {
         if ((propertyEnum >= UProperty.BINARY_START && propertyEnum < UProperty.BINARY_LIMIT)
                 || (propertyEnum >= UProperty.INT_START && propertyEnum < UProperty.INT_LIMIT)) {
@@ -8166,8 +8165,6 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         }
         throw new IllegalArgumentException("Illegal Property Enum");
     }
-
-    /// CLOVER:ON
 
     /**
      * {@icu} Returns the minimum value for an integer/binary Unicode property type. Can be used
@@ -8989,8 +8986,6 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     private static final int CJK_IDEOGRAPH_HUNDRED_MILLION_ = 0x5104;
 
     // private constructor -----------------------------------------------
-    /// CLOVER:OFF
     /** Private constructor to prevent instantiation */
     private UCharacter() {}
-    /// CLOVER:ON
 }

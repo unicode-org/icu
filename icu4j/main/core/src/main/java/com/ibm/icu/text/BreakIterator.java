@@ -249,9 +249,7 @@ public abstract class BreakIterator implements Cloneable {
         try {
             return (BreakIterator) super.clone();
         } catch (CloneNotSupportedException e) {
-            /// CLOVER:OFF
             throw new ICUCloneNotSupportedException(e);
-            /// CLOVER:ON
         }
     }
 
@@ -851,7 +849,6 @@ public abstract class BreakIterator implements Cloneable {
         // dependencies in getBreakInstance by rewriting part of the
         // LocaleData code, or perhaps by accepting it into the
         // module.
-        /// CLOVER:OFF
         if (shim != null) {
             // Unfortunately, we don't know what is being unregistered
             // -- what `kind' and what locale -- so we flush all
@@ -863,7 +860,6 @@ public abstract class BreakIterator implements Cloneable {
             return shim.unregister(key);
         }
         return false;
-        /// CLOVER:ON
     }
 
     // end of registration
@@ -967,12 +963,10 @@ public abstract class BreakIterator implements Cloneable {
             } catch (MissingResourceException e) {
                 throw e;
             } catch (Exception e) {
-                /// CLOVER:OFF
                 if (DEBUG) {
                     e.printStackTrace();
                 }
                 throw new RuntimeException(e.getMessage());
-                /// CLOVER:ON
             }
         }
         return shim;
@@ -1019,9 +1013,7 @@ public abstract class BreakIterator implements Cloneable {
     final void setLocale(ULocale valid, ULocale actual) {
         // Change the following to an assertion later
         if ((valid == null) != (actual == null)) {
-            /// CLOVER:OFF
             throw new IllegalArgumentException();
-            /// CLOVER:ON
         }
         // Another check we could do is that the actual locale is at
         // the same level or less specific than the valid locale.

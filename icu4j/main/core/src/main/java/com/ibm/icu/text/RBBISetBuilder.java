@@ -481,7 +481,6 @@ class RBBISetBuilder {
     //                              dump out all of the range definitions.
     //
     // ------------------------------------------------------------------------
-    /// CLOVER:OFF
     void printRanges() {
         RangeDescriptor rlRange;
         int i;
@@ -507,15 +506,12 @@ class RBBISetBuilder {
         }
     }
 
-    /// CLOVER:ON
-
     // ------------------------------------------------------------------------
     //
     //           printRangeGroups     A debugging function.
     //                                dump out all of the range groups.
     //
     // ------------------------------------------------------------------------
-    /// CLOVER:OFF
     void printRangeGroups() {
         int i;
 
@@ -563,15 +559,12 @@ class RBBISetBuilder {
         System.out.print("\n");
     }
 
-    /// CLOVER:ON
-
     // ------------------------------------------------------------------------
     //
     //           printSets          A debugging function.
     //                              dump out all of the set definitions.
     //
     // ------------------------------------------------------------------------
-    /// CLOVER:OFF
     void printSets() {
         int i;
         System.out.print("\n\nUnicode Sets List\n------------------\n");
@@ -603,5 +596,4 @@ class RBBISetBuilder {
         }
         System.out.print("\n");
     }
-    /// CLOVER:ON
 }

@@ -142,7 +142,6 @@ public class RuleBasedBreakIterator extends BreakIterator implements Cloneable {
             fRData = RBBIDataWrapper.get(ByteBuffer.wrap(ruleOS.toByteArray()));
             fLookAheadMatches = new int[fRData.fFTable.fLookAheadResultsSize];
         } catch (IOException e) {
-            /// CLOVER:OFF
             // An IO exception can only arrive here if there is a bug in the RBBI Rule compiler,
             //  causing bogus compiled rules to be produced, but with no compile error raised.
             RuntimeException rte =
@@ -150,7 +149,6 @@ public class RuleBasedBreakIterator extends BreakIterator implements Cloneable {
                             "RuleBasedBreakIterator rule compilation internal error: "
                                     + e.getMessage());
             throw rte;
-            /// CLOVER:ON
         }
     }
 

@@ -176,11 +176,9 @@ public final class UTF16 {
 
     // constructor --------------------------------------------------------
 
-    // /CLOVER:OFF
     /** Prevent instance from being created. */
     private UTF16() {}
 
-    // /CLOVER:ON
     // public method ------------------------------------------------------
 
     /**

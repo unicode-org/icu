@@ -473,9 +473,7 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
         try {
             ICU_TZVERSION = TimeZone.getTZDataVersion();
         } catch (MissingResourceException e) {
-            /// CLOVER:OFF
             ICU_TZVERSION = null;
-            /// CLOVER:ON
         }
     }
 
@@ -560,9 +558,7 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
                 return false;
             }
         } catch (IOException ioe) {
-            /// CLOVER:OFF
             return false;
-            /// CLOVER:ON
         }
         return parse();
     }
@@ -577,11 +573,9 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
      * Parse VTIMEZONE data and create a RuleBasedTimeZone
      */
     private boolean parse() {
-        /// CLOVER:OFF
         if (vtzlines == null || vtzlines.size() == 0) {
             return false;
         }
-        /// CLOVER:ON
 
         // timezone ID
         String tzid = null;

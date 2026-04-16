@@ -98,8 +98,6 @@ public final class UCharacterCategory implements ECharacterCategory {
     }
 
     // private constructor -----------------------------------------------
-    /// CLOVER:OFF
     /** Private constructor to prevent initialization */
     private UCharacterCategory() {}
-    /// CLOVER:ON
 }

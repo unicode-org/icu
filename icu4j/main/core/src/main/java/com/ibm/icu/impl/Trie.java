@@ -89,7 +89,6 @@ public abstract class Trie {
      * @param other Trie to check
      * @return true if the argument Trie has the same data as this Trie, false otherwise
      */
-    /// CLOVER:OFF
     @Override
     public boolean equals(Object other) {
         if (other == this) {
@@ -110,8 +109,6 @@ public abstract class Trie {
         assert false : "hashCode not designed";
         return 42;
     }
-
-    /// CLOVER:ON
 
     /**
      * Gets the serialized data file size of the Trie. This is used during trie data reading for

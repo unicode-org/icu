@@ -602,16 +602,12 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
                 Class<?> cls = Class.forName("com.ibm.icu.text.CollatorServiceShim");
                 shim = (ServiceShim) cls.newInstance();
             } catch (MissingResourceException e) {
-                /// CLOVER:OFF
                 throw e;
-                /// CLOVER:ON
             } catch (Exception e) {
-                /// CLOVER:OFF
                 if (DEBUG) {
                     e.printStackTrace();
                 }
                 throw new ICUException(e);
-                /// CLOVER:ON
             }
         }
         return shim;

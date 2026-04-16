@@ -313,6 +313,11 @@
         <plugin>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>${maven-compiler-plugin.version}</version>
+          <configuration>
+            <compilerArgs>
+              <arg>${xlint.dangling-doc-comments}</arg>
+            </compilerArgs>
+          </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
@@ -912,6 +917,17 @@
           </plugin>
         </plugins>
       </build>
+    </profile>
+
+    <profile>
+      <id>if_jdk23</id>
+      <activation>
+        <jdk>[23,)</jdk>
+      </activation>
+      <properties>
+        <!-- This compiler lint flag is defined starting with JDK 23, and fails if used below that -->
+        <xlint.xlint.dangling-doc-comments>-Xlint:dangling-doc-comments</xlint.xlint.dangling-doc-comments>
+      </properties>
     </profile>
 
   </profiles>

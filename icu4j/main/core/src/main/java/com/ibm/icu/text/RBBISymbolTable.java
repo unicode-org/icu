@@ -169,7 +169,6 @@ class RBBISymbolTable implements SymbolTable {
     //
     //  RBBISymbolTable::print    Debugging function, dump out the symbol table contents.
     //
-    /// CLOVER:OFF
     void rbbiSymtablePrint() {
         System.out.print(
                 "Variable Definitions\n"
@@ -195,6 +194,4 @@ class RBBISymbolTable implements SymbolTable {
             System.out.print("\n");
         }
     }
-    /// CLOVER:ON
-
 }

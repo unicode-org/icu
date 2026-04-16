@@ -510,7 +510,6 @@ public abstract class TimeZoneNames implements Serializable {
         }
     }
 
-    /// CLOVER:OFF
     /**
      * The default implementation of <code>TimeZoneNames</code> used by {@link
      * TimeZoneNames#getInstance(ULocale)} when the ICU4J tznamedata component is not available.
@@ -601,5 +600,4 @@ public abstract class TimeZoneNames implements Serializable {
             }
         }
     }
-    /// CLOVER:ON
 }

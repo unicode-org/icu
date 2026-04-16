@@ -1496,13 +1496,11 @@ public final class Normalizer implements Cloneable {
      * @obsolete ICU 3.2
      */
     @Deprecated
-    /// CLOVER:OFF
     public int setIndex(int index) {
         setIndexOnly(index);
         return current();
     }
 
-    /// CLOVER:ON
     /**
      * Retrieve the index of the start of the input text. This is the begin index of the {@code
      * CharacterIterator} or the start (i.e. 0) of the {@code String} over which this {@code

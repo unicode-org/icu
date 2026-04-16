@@ -125,10 +125,7 @@ public final class LocaleData {
     @Deprecated public static final int DELIMITER_COUNT = 4;
 
     // private constructor to prevent default construction
-    /// CLOVER:OFF
     private LocaleData() {}
-
-    /// CLOVER:ON
 
     /**
      * Returns the set of exemplar characters for a locale. Equivalent to calling {@link

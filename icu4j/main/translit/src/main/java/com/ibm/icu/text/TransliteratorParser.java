@@ -428,12 +428,10 @@ class TransliteratorParser {
                 }
                 // HALF_ENDERS is all chars that end a rule half: "<>=;"
                 if (HALF_ENDERS.indexOf(c) >= 0) {
-                    /// CLOVER:OFF
                     // isSegment is always false
                     if (isSegment) {
                         syntaxError("Unclosed segment", rule, start);
                     }
-                    /// CLOVER:ON
                     break main;
                 }
                 if (anchorEnd) {
@@ -650,14 +648,12 @@ class TransliteratorParser {
                         //  $v+     matches  xyxyxy if $v == xy
                         //  (seg)+  matches  segsegseg
                         {
-                            /// CLOVER:OFF
                             // isSegment is always false
                             if (isSegment && buf.length() == bufStart) {
                                 // The */+ immediately follows '('
                                 syntaxError("Misplaced quantifier", rule, start);
                                 break;
                             }
-                            /// CLOVER:ON
 
                             int qstart, qlimit;
                             // The */+ follows an isolated character or quote
@@ -1298,28 +1294,20 @@ class TransliteratorParser {
     }
 
     // (The following method is part of an unimplemented feature.
-    // Remove this clover pragma after the feature is implemented.
     // 2003-06-11 ICU 2.6 Alan)
-    /// CLOVER:OFF
     /** Set the maximum backup to 'backup', in response to a pragma statement. */
     private void pragmaMaximumBackup(int backup) {
         // TODO Finish
         throw new IllegalIcuArgumentException("use maximum backup pragma not implemented yet");
     }
 
-    /// CLOVER:ON
-
     // (The following method is part of an unimplemented feature.
-    // Remove this clover pragma after the feature is implemented.
     // 2003-06-11 ICU 2.6 Alan)
-    /// CLOVER:OFF
     /** Begin normalizing all rules using the given mode, in response to a pragma statement. */
     private void pragmaNormalizeRules(Normalizer.Mode mode) {
         // TODO Finish
         throw new IllegalIcuArgumentException("use normalize rules pragma not implemented yet");
     }
-
-    /// CLOVER:ON
 
     /**
      * Return true if the given rule looks like a pragma.

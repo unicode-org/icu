@@ -482,11 +482,9 @@ public abstract class NumberFormat extends UFormat implements Cloneable {
      * @stable ICU 49
      */
     public CurrencyAmount parseCurrency(CharSequence text, ParsePosition pos) {
-        /// CLOVER:OFF
         // Default implementation only -- subclasses should override
         Number n = parse(text.toString(), pos);
         return n == null ? null : new CurrencyAmount(n, getEffectiveCurrency());
-        /// CLOVER:ON
     }
 
     /**
@@ -1043,15 +1041,12 @@ public abstract class NumberFormat extends UFormat implements Cloneable {
             try {
                 Class<?> cls = Class.forName("com.ibm.icu.text.NumberFormatServiceShim");
                 shim = (NumberFormatShim) cls.newInstance();
-            }
-            /// CLOVER:OFF
-            catch (MissingResourceException e) {
+            } catch (MissingResourceException e) {
                 throw e;
             } catch (Exception e) {
                 // e.printStackTrace();
                 throw new RuntimeException(e.getMessage());
             }
-            /// CLOVER:ON
         }
         return shim;
     }
@@ -1639,7 +1634,6 @@ public abstract class NumberFormat extends UFormat implements Cloneable {
      */
     private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
         stream.defaultReadObject();
-        /// CLOVER:OFF
         // we don't have serialization data for this format
         if (serialVersionOnStream < 1) {
             // Didn't have additional int fields, reassign to use them.
@@ -1652,7 +1646,6 @@ public abstract class NumberFormat extends UFormat implements Cloneable {
             // Didn't have capitalizationSetting, set it to default
             capitalizationSetting = DisplayContext.CAPITALIZATION_NONE;
         }
-        /// CLOVER:ON
         /*Bug 4185761
           Validate the min and max fields [Richard/GCL]
         */

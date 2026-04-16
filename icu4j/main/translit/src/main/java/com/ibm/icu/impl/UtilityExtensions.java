@@ -17,7 +17,6 @@ import com.ibm.icu.text.UnicodeMatcher;
  * @author Ram
  */
 // This class contains utility functions so testing not needed
-/// CLOVER:OFF
 public class UtilityExtensions {
     /**
      * Append the given string to the rule. Calls the single-character version of appendToRule for
@@ -115,4 +114,3 @@ public class UtilityExtensions {
         return formatInput(appendTo, (ReplaceableString) input, pos);
     }
 }
-// CLOVER:ON

@@ -3090,14 +3090,12 @@ public class UnicodeSet extends UnicodeFilter
         int b;
         // TODO: Based on the call hierarchy, polarity of 1 or 2 is never used
         //      so the following if statement will not be called.
-        /// CLOVER:OFF
         if (polarity == 1 || polarity == 2) {
             b = LOW;
             if (other[j] == LOW) { // skip base if already LOW
                 ++j;
                 b = other[j];
             }
-            /// CLOVER:ON
         } else {
             b = other[j++];
         }

@@ -27,7 +27,6 @@ import java.text.CharacterIterator;
  * @deprecated ICU 2.4. Use java.text.StringCharacterIterator instead.
  */
 @Deprecated
-/// CLOVER:OFF
 public final class StringCharacterIterator implements CharacterIterator, Cloneable {
     private String text;
     private int begin;
@@ -299,4 +298,3 @@ public final class StringCharacterIterator implements CharacterIterator, Cloneab
         }
     }
 }
-/// CLOVER:ON

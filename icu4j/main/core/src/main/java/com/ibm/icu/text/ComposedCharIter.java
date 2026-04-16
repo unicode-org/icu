@@ -54,7 +54,6 @@ import com.ibm.icu.impl.Normalizer2Impl;
  * @deprecated ICU 2.2
  */
 @Deprecated
-/// CLOVER:OFF
 public final class ComposedCharIter {
     /**
      * Constant that indicates the iteration has completed. {@link #next} returns this value when

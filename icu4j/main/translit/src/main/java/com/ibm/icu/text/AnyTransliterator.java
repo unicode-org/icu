@@ -275,9 +275,7 @@ class AnyTransliterator extends Transliterator {
             int[] codes = UScript.getCode(name);
             return codes != null ? codes[0] : UScript.INVALID_CODE;
         } catch (MissingResourceException e) {
-            /// CLOVER:OFF
             return UScript.INVALID_CODE;
-            /// CLOVER:ON
         }
     }
 

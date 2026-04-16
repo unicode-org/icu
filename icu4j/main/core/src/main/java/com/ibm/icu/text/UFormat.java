@@ -92,9 +92,7 @@ public abstract class UFormat extends Format {
     final void setLocale(ULocale valid, ULocale actual) {
         // Change the following to an assertion later
         if ((valid == null) != (actual == null)) {
-            /// CLOVER:OFF
             throw new IllegalArgumentException();
-            /// CLOVER:ON
         }
         // Another check we could do is that the actual locale is at
         // the same level or less specific than the valid locale.
