@@ -36,7 +36,7 @@ public:
 
     /*Tests the returned error codes on all the APIs according to the API documentation. */
     void TestTransliteratorErrors();
-    
+
     void TestUnicodeSetErrors();
 
     //void TestUniToHexErrors();
@@ -49,6 +49,7 @@ public:
     //  this class is comparable smaller than other Transliterator*Test classes
     void TestCoverage();
 
+    void test23365Initialization();
 };
 
 #endif /* #if !UCONFIG_NO_TRANSLITERATION */
