@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1776295929741,
+  "lastUpdate": 1776366404473,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -147741,6 +147741,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 33.6947,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "zesheng@tamu.edu",
+            "name": "OwenSanzas",
+            "username": "OwenSanzas"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "5576b074a0cc900ef386c3b390c8030e70cde3cf",
+          "message": "ICU-23365 Initialize pointer members in TransliterationRule constructor\n\nThe main constructor's initializer list did not initialize anteContext,\nkey, postContext, or output. If the constructor returns early (e.g.,\nU_FAILURE(status)), these pointers remain uninitialized. The destructor\nthen calls delete on garbage values, causing a SEGV.\n\nFix: initialize all pointer and scalar members in the initializer list.",
+          "timestamp": "2026-04-16T11:17:53-07:00",
+          "tree_id": "6bb0c865a1181350b8c960178b2a21aecb73ea1f",
+          "url": "https://github.com/unicode-org/icu/commit/5576b074a0cc900ef386c3b390c8030e70cde3cf"
+        },
+        "date": 1776366048342,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 16.2447,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 18.4343,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 21.9728,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 22.307,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 27.5177,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 27.2865,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 17.9143,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 12.7007,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 60.4214,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 17.3443,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 27.732,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 33.464,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
