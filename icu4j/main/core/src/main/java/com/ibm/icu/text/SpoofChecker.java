@@ -352,10 +352,12 @@ public class SpoofChecker {
                             UProperty.IDENTIFIER_TYPE, IdentifierType.RECOMMENDED.ordinal())
                     .freeze();
 
-    /**
+    /*
+     * --------------------------------------------------------------------------------------------
      * Constants for the kinds of checks that USpoofChecker can perform. These values are used both
      * to select the set of checks that will be performed, and to report results from the check
      * function.
+     * --------------------------------------------------------------------------------------------
      */
 
     /**

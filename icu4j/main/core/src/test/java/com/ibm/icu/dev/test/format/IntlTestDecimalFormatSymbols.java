@@ -1,12 +1,13 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
-/*****************************************************************************************
- *
- *   Copyright (C) 1996-2016, International Business Machines
- *   Corporation and others.  All Rights Reserved.
- **/
+/*
+ **************************************************************************
+ * Copyright (C) 1996-2016, International Business Machines Corporation   *
+ * and others. All Rights Reserved.                                       *
+ **************************************************************************
+ */
 
-/**
+/*
  * Port From: JDK 1.4b1 : java.text.Format.IntlTestDecimalFormatSymbols Source File:
  * java/text/format/IntlTestDecimalFormatSymbols.java
  */

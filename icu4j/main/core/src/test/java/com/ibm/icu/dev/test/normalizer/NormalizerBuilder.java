@@ -1,6 +1,6 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
-/**
+/*
  * Builds the normalization tables. This is a separate class so that it can be unloaded once not
  * needed.<br>
  * Copyright (C) 1998-2007 International Business Machines Corporation and Unicode, Inc. All Rights
@@ -27,7 +27,7 @@ class NormalizerBuilder {
 
     // private static final boolean GENERATING = false;
 
-    /** Constants for the data file version to use. */
+    /* Constants for the data file version to use. */
     /*static final boolean NEW_VERSION = true;
     private static final String DIR = "D:\\UnicodeData\\" + (NEW_VERSION ? "WorkingGroups\\" : "");
 

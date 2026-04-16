@@ -7,7 +7,7 @@
  *******************************************************************************
  */
 
-/**
+/*
  * Port From: ICU4C v2.1 : collate/StringSearchTest Source File:
  * $ICU4CRoot/source/test/intltest/srchtest.cpp
  */

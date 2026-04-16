@@ -1,14 +1,12 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
-/********************************************************************
- * Copyright (c) 2002-2014, International Business Machines Corporation and
- * others. All Rights Reserved.
- ********************************************************************/
-
-/**
- * UCAConformanceTest performs conformance tests defined in the data files. ICU ships with stub data
- * files, as the whole test are too long. To do the whole test, download the test files.
+/*
+ **************************************************************************
+ * Copyright (c) 2002-2014, International Business Machines Corporation   *
+ * and others. All Rights Reserved.                                       *
+ **************************************************************************
  */
+
 package com.ibm.icu.dev.test.collator;
 
 import com.ibm.icu.dev.test.TestFmwk;
@@ -27,6 +25,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+/**
+ * UCAConformanceTest performs conformance tests defined in the data files. ICU ships with stub data
+ * files, as the whole test are too long. To do the whole test, download the test files.
+ */
 @RunWith(JUnit4.class)
 public class UCAConformanceTest extends TestFmwk {
 

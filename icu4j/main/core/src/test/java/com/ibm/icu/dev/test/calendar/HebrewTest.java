@@ -377,7 +377,7 @@ public class HebrewTest extends CalendarTestFmwk {
         }
     }
 
-    /** Test handling of ADAR_1. */
+    /* Test handling of ADAR_1. */
     /*
     @Test
     public void TestAdar1() {

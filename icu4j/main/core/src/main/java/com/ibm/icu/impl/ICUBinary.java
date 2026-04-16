@@ -454,21 +454,6 @@ public final class ICUBinary {
      * @param loader Used for loader.getResourceAsStream() unless the data is found elsewhere.
      * @param resourceName Resource name for use with the loader.
      * @param itemPath Relative ICU data item path, for example "root.res" or "coll/ucadata.icu".
-     * @return The data as a read-only ByteBuffer.
-     * @throws MissingResourceException if required==true and the resource could not be found
-     */
-    //    public static ByteBuffer getRequiredData(ClassLoader loader, String resourceName,
-    //            String itemPath) {
-    //        return getData(loader, resourceName, itemPath, true);
-    //    }
-
-    /**
-     * Loads an ICU binary data file and returns it as a ByteBuffer. The buffer contents is normally
-     * read-only, but its position etc. can be modified.
-     *
-     * @param loader Used for loader.getResourceAsStream() unless the data is found elsewhere.
-     * @param resourceName Resource name for use with the loader.
-     * @param itemPath Relative ICU data item path, for example "root.res" or "coll/ucadata.icu".
      * @param required If the resource cannot be found, this method returns null (!required) or
      *     throws an exception (required).
      * @return The data as a read-only ByteBuffer, or null if required==false and the resource could

@@ -32,12 +32,12 @@ import java.math.RoundingMode;
  */
 class NumberSkeletonImpl {
 
-    //////////////////////////////////////////////////////////////////////////////////////////
-    // NOTE: For examples of how to add a new stem to the number skeleton parser, see:      //
-    // https://github.com/unicode-org/icu/commit/a2a7982216b2348070dc71093775ac7195793d73   //
-    // and                                                                                  //
-    // https://github.com/unicode-org/icu/commit/6fe86f3934a8a5701034f648a8f7c5087e84aa28   //
-    //////////////////////////////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////////////////////////
+    // NOTE: For examples of how to add a new stem to the number skeleton parser, see:
+    // https://github.com/unicode-org/icu/commit/a2a7982216b2348070dc71093775ac7195793d73
+    // and
+    // https://github.com/unicode-org/icu/commit/6fe86f3934a8a5701034f648a8f7c5087e84aa28
+    // //////////////////////////////////////////////////////////////////////////////////
 
     /** While parsing a skeleton, this enum records what type of option we expect to find next. */
     static enum ParseState {
@@ -514,7 +514,9 @@ class NumberSkeletonImpl {
         }
     }
 
-    ///// ENTRYPOINT FUNCTIONS /////
+    // ////////////////////
+    // ENTRYPOINT FUNCTIONS
+    // ////////////////////
 
     /** Cache for parsed skeleton strings. */
     private static final CacheBase<String, UnlocalizedNumberFormatter, Void> cache =
@@ -562,7 +564,9 @@ class NumberSkeletonImpl {
         return sb.toString();
     }
 
-    ///// MAIN PARSING FUNCTIONS /////
+    // //////////////////////
+    // MAIN PARSING FUNCTIONS
+    // //////////////////////
 
     /**
      * Converts from a skeleton string to a MacroProps. This method contains the primary parse loop.
@@ -859,7 +863,9 @@ class NumberSkeletonImpl {
     private static ParseState parseOption(
             ParseState stem, StringSegment segment, MacroProps macros) {
 
-        ///// Required options: /////
+        // /////////////////
+        // Required options:
+        // /////////////////
 
         switch (stem) {
             case STATE_CURRENCY_UNIT:
@@ -893,7 +899,9 @@ class NumberSkeletonImpl {
                 break;
         }
 
-        ///// Non-required options: /////
+        // /////////////////////
+        // Non-required options:
+        // /////////////////////
 
         // Scientific options
         switch (stem) {
@@ -937,7 +945,9 @@ class NumberSkeletonImpl {
         throw new SkeletonSyntaxException("Invalid option", segment);
     }
 
-    ///// MAIN SKELETON GENERATION FUNCTION /////
+    // /////////////////////////////////
+    // MAIN SKELETON GENERATION FUNCTION
+    // /////////////////////////////////
 
     /**
      * Main skeleton generator function. Appends the normalized skeleton for the MacroProps to the
@@ -1006,7 +1016,9 @@ class NumberSkeletonImpl {
         }
     }
 
-    ///// BLUEPRINT HELPER FUNCTIONS /////
+    // //////////////////////////
+    // BLUEPRINT HELPER FUNCTIONS
+    // //////////////////////////
 
     /**
      * Utility class for methods for processing stems and options that cannot be interpreted
@@ -1495,7 +1507,9 @@ class NumberSkeletonImpl {
         }
     }
 
-    ///// STEM GENERATION HELPER FUNCTIONS /////
+    // ////////////////////////////////
+    // STEM GENERATION HELPER FUNCTIONS
+    // ////////////////////////////////
 
     /**
      * Utility class for methods for generating a token corresponding to each macro-prop. Each
@@ -1716,7 +1730,9 @@ class NumberSkeletonImpl {
         }
     }
 
-    ///// OTHER UTILITY FUNCTIONS /////
+    // ///////////////////////
+    // OTHER UTILITY FUNCTIONS
+    // ///////////////////////
 
     private static void checkNull(Object value, CharSequence content) {
         if (value != null) {

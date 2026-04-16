@@ -1,11 +1,13 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
-/*****************************************************************************************
- *
- *   Copyright (C) 1996-2009, International Business Machines
- *   Corporation and others.  All Rights Reserved.
- **/
-/**
+/*
+ **************************************************************************
+ * Copyright (C) 1996-2009, International Business Machines Corporation   *
+ * and others. All Rights Reserved.                                       *
+ **************************************************************************
+ */
+
+/*
  * Port From: JDK 1.4b1 : java.text.Format.IntlTestNumberFormatAPI Source File:
  * java/text/format/IntlTestNumberFormatAPI.java
  */

@@ -7,7 +7,7 @@
  *******************************************************************************
  */
 
-/**
+/*
  * Port From: ICU4C v1.8.1 : format : DateFormatMiscTests Source File:
  * $ICU4CRoot/source/test/intltest/miscdtfm.cpp
  */

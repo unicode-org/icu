@@ -551,7 +551,7 @@ public final class ArabicShaping {
      */
     public static final int DIGITS_EN2AN_INIT_AL = 0x80;
 
-    /** Not a valid option value. */
+    /* Not a valid option value. */
     // private static final int DIGITS_RESERVED = 0xa0;
 
     /**
@@ -1122,7 +1122,6 @@ public final class ArabicShaping {
     };
 
     private static int[] convertFEto06 = {
-        /***********0******1******2******3******4******5******6******7******8******9******A******B******C******D******E******F***/
         /*FE7*/ 0x64B,
         0x64B,
         0x64C,

@@ -1,10 +1,11 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
-/********************************************************************
- * COPYRIGHT:
- * Copyright (c) 2001-2016, International Business Machines Corporation and
- * others. All Rights Reserved.
- ********************************************************************/
+/*
+ **************************************************************************
+ * Copyright (c) 2001-2016, International Business Machines Corporation   *
+ * and others. All Rights Reserved.                                       *
+ **************************************************************************
+ */
 
 package com.ibm.icu.text;
 
@@ -305,10 +306,8 @@ class RBBINode {
         System.out.print(s);
     }
 
-    //
     //  Print an int in a fixed size field.
     //  Debugging function.
-    //
     static void printInt(int i, int minWidth) {
         String s = Integer.toString(i);
         printString(s, Math.max(minWidth, s.length() + 1));

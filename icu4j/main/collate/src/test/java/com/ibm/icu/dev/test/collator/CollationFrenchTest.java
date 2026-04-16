@@ -7,7 +7,7 @@
  *******************************************************************************
  */
 
-/**
+/*
  * Port From: ICU4C v2.1 : Collate/CollationFrenchTest Source File:
  * $ICU4CRoot/source/test/intltest/frcoll.cpp
  */

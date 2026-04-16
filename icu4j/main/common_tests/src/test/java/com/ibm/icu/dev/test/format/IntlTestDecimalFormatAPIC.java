@@ -7,7 +7,7 @@
  *******************************************************************************
  */
 
-/**
+/*
  * Port From: ICU4C v1.8.1 : format : IntlTestDecimalFormatAPI Source File:
  * $ICU4CRoot/source/test/intltest/dcfmapts.cpp
  */

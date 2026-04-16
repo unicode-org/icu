@@ -1646,7 +1646,7 @@ public abstract class NumberFormat extends UFormat implements Cloneable {
             // Didn't have capitalizationSetting, set it to default
             capitalizationSetting = DisplayContext.CAPITALIZATION_NONE;
         }
-        /*Bug 4185761
+        /* Bug 4185761
           Validate the min and max fields [Richard/GCL]
         */
         if (minimumIntegerDigits > maximumIntegerDigits

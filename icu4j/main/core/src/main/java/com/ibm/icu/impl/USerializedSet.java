@@ -9,7 +9,7 @@
 
 package com.ibm.icu.impl;
 
-/**
+/*
  * @version 1.1
  * @author Markus W. Scherer Ram: Add documentation, remove unwanted methods, improve coverage.
  */

@@ -388,9 +388,9 @@ public abstract class Precision {
     @Deprecated
     public abstract void apply(DecimalQuantity value);
 
-    //////////////////////////
-    // PACKAGE-PRIVATE APIS //
-    //////////////////////////
+    // ////////////////////
+    // PACKAGE-PRIVATE APIS
+    // ////////////////////
 
     /**
      * @internal
@@ -586,9 +586,9 @@ public abstract class Precision {
         return _multiplier;
     }
 
-    ///////////////
-    // INTERNALS //
-    ///////////////
+    // /////////
+    // INTERNALS
+    // /////////
 
     /**
      * An BogusRounder's MathContext into precision.

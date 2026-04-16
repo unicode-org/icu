@@ -7,7 +7,7 @@
  *******************************************************************************
  */
 
-/**
+/*
  * Port From: ICU4C v2.1 : Collate/CollationDummyTest Source File:
  * $ICU4CRoot/source/test/intltest/allcoll.cpp $ICU4CRoot/source/test/cintltst/callcoll.c
  */

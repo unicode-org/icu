@@ -1,7 +1,6 @@
 // © 2021 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 //
-/** A LSTMBreakEngine */
 package com.ibm.icu.impl.breakiter;
 
 import com.ibm.icu.impl.ICUData;

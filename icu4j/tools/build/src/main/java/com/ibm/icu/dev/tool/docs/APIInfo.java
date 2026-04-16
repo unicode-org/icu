@@ -6,8 +6,6 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
-
-/** Represents the API information on a doc element. */
 package com.ibm.icu.dev.tool.docs;
 
 import java.io.BufferedReader;
@@ -16,6 +14,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Comparator;
 
+/** Represents the API information on a doc element. */
 class APIInfo {
     // version id for the format of the APIInfo data
 

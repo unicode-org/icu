@@ -7,7 +7,7 @@
  *******************************************************************************
  */
 
-/**
+/*
  * Porting From: ICU4C v1.8.1 : format : NumberFormatRoundTripTest Source File:
  * $ICU4CRoot/source/test/intltest/nmfmtrt.cpp
  */

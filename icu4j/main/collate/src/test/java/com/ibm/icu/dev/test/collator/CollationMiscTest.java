@@ -7,7 +7,10 @@
  *******************************************************************************
  */
 
-/** Port From: ICU4C v2.1 : cintltest Source File: $ICU4CRoot/source/test/cintltest/cmsccoll.c */
+/*
+ * Port From: ICU4C v2.1 : cintltest
+ * Source File: $ICU4CRoot/source/test/cintltest/cmsccoll.c
+ */
 package com.ibm.icu.dev.test.collator;
 
 import com.ibm.icu.dev.test.TestFmwk;

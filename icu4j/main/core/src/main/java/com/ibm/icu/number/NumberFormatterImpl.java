@@ -140,8 +140,6 @@ class NumberFormatterImpl {
         return micros;
     }
 
-    //////////
-
     private static boolean unitIsCurrency(MeasureUnit unit) {
         // TODO: Check using "instanceof" operator instead?
         return unit != null && "currency".equals(unit.getType());
@@ -264,9 +262,9 @@ class NumberFormatterImpl {
         }
         ParsedPatternInfo patternInfo = PatternStringParser.parseToPatternInfo(pattern);
 
-        /////////////////////////////////////////////////////////////////////////////////////
-        /// START POPULATING THE DEFAULT MICROPROPS AND BUILDING THE MICROPROPS GENERATOR ///
-        /////////////////////////////////////////////////////////////////////////////////////
+        // /////////////////////////////////////////////////////////////////////////////
+        // START POPULATING THE DEFAULT MICROPROPS AND BUILDING THE MICROPROPS GENERATOR
+        // /////////////////////////////////////////////////////////////////////////////
 
         // Unit Preferences and Conversions as our first step
         UsagePrefsHandler usagePrefsHandler = null;
@@ -487,8 +485,6 @@ class NumberFormatterImpl {
 
         return chain;
     }
-
-    //////////
 
     /** Adds the affixes. Intended to be called immediately after formatNumber. */
     public static int writeAffixes(

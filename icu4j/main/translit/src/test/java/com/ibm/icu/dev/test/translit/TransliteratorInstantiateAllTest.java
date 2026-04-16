@@ -11,13 +11,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-/***********************************************************************
- *
- * This test class uses JUnit parametrization to iterate over all
- * transliterators and to execute a sample operation.
- *
- ***********************************************************************/
-
+/**
+ * This test class uses JUnit parametrization to iterate over all transliterators and to execute a
+ * sample operation.
+ */
 @RunWith(Parameterized.class)
 public class TransliteratorInstantiateAllTest extends TestFmwk {
     private String testTransliteratorID;

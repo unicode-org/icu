@@ -152,23 +152,6 @@ final class BreakTransliterator extends Transliterator implements Cloneable {
         // invariant: begin <= pos <= end
         private int pos;
 
-        /** Constructs an iterator with an initial index of 0. */
-        /*public ReplaceableCharacterIterator(Replaceable text)
-        {
-            this(text, 0);
-        }*/
-
-        /**
-         * Constructs an iterator with the specified initial index.
-         *
-         * @param text The String to be iterated over
-         * @param pos Initial iterator position
-         */
-        /*public ReplaceableCharacterIterator(Replaceable text, int pos)
-        {
-            this(text, 0, text.length(), pos);
-        }*/
-
         /**
          * Constructs an iterator over the given range of the given string, with the index set at
          * the specified position.

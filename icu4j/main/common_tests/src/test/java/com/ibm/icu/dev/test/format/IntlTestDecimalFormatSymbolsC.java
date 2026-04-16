@@ -7,7 +7,7 @@
  *******************************************************************************
  */
 
-/**
+/*
  * Port From: ICU4C v1.8.1 : format : IntlTestDecimalFormatSymbols Source File:
  * $ICU4CRoot/source/test/intltest/tsdcfmsy.cpp
  */

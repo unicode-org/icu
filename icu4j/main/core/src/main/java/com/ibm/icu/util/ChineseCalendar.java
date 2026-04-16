@@ -1,9 +1,10 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
-/*********************************************************************
- * Copyright (C) 2000-2014, International Business Machines
- * Corporation and others. All Rights Reserved.
- *********************************************************************
+/*
+ **************************************************************************
+ * Copyright (C) 2000-2014, International Business Machines Corporation   *
+ * and others. All Rights Reserved.                                       *
+ **************************************************************************
  */
 
 package com.ibm.icu.util;
@@ -325,18 +326,6 @@ public class ChineseCalendar extends Calendar {
         this.zoneAstro = zoneAstroCalc;
         setTimeInMillis(System.currentTimeMillis());
     }
-
-    // ------------------------------------------------------------------
-    // Public constants
-    // ------------------------------------------------------------------
-
-    /**
-     * Field indicating whether or not the current month is a leap month. Should have a value of 0
-     * for non-leap months, and 1 for leap months.
-     *
-     * @stable ICU 2.8
-     */
-    // public static int IS_LEAP_MONTH = BASE_FIELD_COUNT;
 
     // ------------------------------------------------------------------
     // Calendar framework

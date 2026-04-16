@@ -7,7 +7,7 @@
  *******************************************************************************
  */
 
-/**
+/*
  * Port From: ICU4C v1.8.1 : format : NumberFormatTest Source File:
  * $ICU4oot/source/test/intltest/numfmtst.cpp
  */

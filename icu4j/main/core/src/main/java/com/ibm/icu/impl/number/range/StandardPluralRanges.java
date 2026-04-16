@@ -23,8 +23,6 @@ public class StandardPluralRanges {
     /** An empty StandardPluralRanges instance. */
     public static final StandardPluralRanges DEFAULT = new StandardPluralRanges();
 
-    ////////////////////
-
     private static final class PluralRangeSetsDataSink extends UResource.Sink {
 
         Map<String, String> output;
@@ -111,8 +109,6 @@ public class StandardPluralRanges {
         PluralRangesDataSink sink = new PluralRangesDataSink(out);
         resource.getAllItemsWithFallback(key, sink);
     }
-
-    ////////////////////
 
     /** Create a StandardPluralRanges based on locale. */
     public static StandardPluralRanges forLocale(ULocale locale) {

@@ -59,8 +59,9 @@ public final class ICUResourceBundleReader {
      */
     private static final int URES_INDEX_KEYS_TOP = 1;
 
-    /** [2] contains the top of all resources */
-    // ivate static final int URES_INDEX_RESOURCES_TOP    = 2;
+    /* [2] contains the top of all resources */
+    // private static final int URES_INDEX_RESOURCES_TOP    = 2;
+
     /** [3] contains the top of the bundle, in case it were ever different from [2] */
     private static final int URES_INDEX_BUNDLE_TOP = 3;
 
@@ -84,7 +85,7 @@ public final class ICUResourceBundleReader {
     /** [7] checksum of the pool bundle (new in formatVersion 2.0, ICU 4.4) */
     private static final int URES_INDEX_POOL_CHECKSUM = 7;
 
-    // ivate static final int URES_INDEX_TOP              = 8;
+    // private static final int URES_INDEX_TOP              = 8;
 
     /*
      * Nofallback attribute, attribute bit 0 in indexes[URES_INDEX_ATTRIBUTES].

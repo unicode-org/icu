@@ -124,9 +124,9 @@ public class LongNameHandler
         return result;
     }
 
-    //////////////////////////
-    /// BEGIN DATA LOADING ///
-    //////////////////////////
+    // //////////////////
+    // BEGIN DATA LOADING
+    // //////////////////
 
     // Gets the gender of a built-in unit: unit must be a built-in. Returns an empty
     // string both in case of unknown gender and in case of unknown unit.
@@ -661,9 +661,9 @@ public class LongNameHandler
         return val;
     }
 
-    ////////////////////////
-    /// END DATA LOADING ///
-    ////////////////////////
+    // ////////////////
+    // END DATA LOADING
+    // ////////////////
 
     /**
      * Calculates the gender of an arbitrary unit: this is the *second* implementation of an

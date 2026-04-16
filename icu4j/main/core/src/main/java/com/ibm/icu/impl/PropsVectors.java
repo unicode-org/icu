@@ -7,7 +7,7 @@
  ******************************************************************************
  */
 
-/**
+/*
  * Store bits (Unicode character properties) in bit set vectors.
  *
  * <p>This is a port of the C++ class UPropsVectors from ICU4C
