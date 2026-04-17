@@ -495,6 +495,9 @@ class TransliteratorRegistry {
         String[] stv = TransliteratorIDParser.IDtoSTV(ID);
         // Only need to do this if ID.indexOf('-') < 0
         String id = TransliteratorIDParser.STVtoID(stv[0], stv[1], stv[2]);
+        if (ID.equals(id)) {
+            id = ID; // Deduplicate the ids if they are equal.
+        }
         registerEntry(id, stv[0], stv[1], stv[2], entry, visible);
     }
 
