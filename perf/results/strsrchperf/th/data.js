@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1776448795112,
+  "lastUpdate": 1776452276430,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -53781,6 +53781,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 85.2116,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "vichang@google.com",
+            "name": "Victor Chang",
+            "username": "gvictor"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "c5946d703999261571f7ff6da4c55454beca17c1",
+          "message": "ICU-23371 Reduce the memory footprints of TransliteratorRegistry\n\n1. Intern CaseSensitiveString objects for source, target, variant in the registry\n2. Use a default capacity of 1 for variant list. The source-target key is usually linked to 1 variant only.\n3. Use ConcurrentHashMap instead of Collections.synchronizedMap(new HashMap())\n4. Lazily initialize the script code cache in AnyTransliterator.\n\nIn total, it saves ~110 kB.",
+          "timestamp": "2026-04-17T11:35:50-07:00",
+          "tree_id": "9d9be39571b030ff8883ca692c62d20b3fbf5fb7",
+          "url": "https://github.com/unicode-org/icu/commit/c5946d703999261571f7ff6da4c55454beca17c1"
+        },
+        "date": 1776451841398,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 35.9508,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 84.5344,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
