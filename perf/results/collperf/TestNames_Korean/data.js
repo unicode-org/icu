@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1776365879828,
+  "lastUpdate": 1776452577643,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -83859,6 +83859,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 11728914.5593,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "vichang@google.com",
+            "name": "Victor Chang",
+            "username": "gvictor"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "c5946d703999261571f7ff6da4c55454beca17c1",
+          "message": "ICU-23371 Reduce the memory footprints of TransliteratorRegistry\n\n1. Intern CaseSensitiveString objects for source, target, variant in the registry\n2. Use a default capacity of 1 for variant list. The source-target key is usually linked to 1 variant only.\n3. Use ConcurrentHashMap instead of Collections.synchronizedMap(new HashMap())\n4. Lazily initialize the script code cache in AnyTransliterator.\n\nIn total, it saves ~110 kB.",
+          "timestamp": "2026-04-17T11:35:50-07:00",
+          "tree_id": "9d9be39571b030ff8883ca692c62d20b3fbf5fb7",
+          "url": "https://github.com/unicode-org/icu/commit/c5946d703999261571f7ff6da4c55454beca17c1"
+        },
+        "date": 1776452144160,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 223.4598,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 56692021.6164,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 11851575.9038,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 53653438.4395,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 12146304.8458,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
