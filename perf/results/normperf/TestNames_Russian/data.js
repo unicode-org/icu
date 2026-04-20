@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1776453055086,
+  "lastUpdate": 1776689393097,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -93057,6 +93057,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 6.6195,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "zesheng@tamu.edu",
+            "name": "OwenSanzas",
+            "username": "OwenSanzas"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "5576b074a0cc900ef386c3b390c8030e70cde3cf",
+          "message": "ICU-23365 Initialize pointer members in TransliterationRule constructor\n\nThe main constructor's initializer list did not initialize anteContext,\nkey, postContext, or output. If the constructor returns early (e.g.,\nU_FAILURE(status)), these pointers remain uninitialized. The destructor\nthen calls delete on garbage values, causing a SEGV.\n\nFix: initialize all pointer and scalar members in the initializer list.",
+          "timestamp": "2026-04-16T11:17:53-07:00",
+          "tree_id": "6bb0c865a1181350b8c960178b2a21aecb73ea1f",
+          "url": "https://github.com/unicode-org/icu/commit/5576b074a0cc900ef386c3b390c8030e70cde3cf"
+        },
+        "date": 1776688938587,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 4.8241,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 4.1645,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 4.443,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 3.8482,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 3.9214,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 5.3126,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
