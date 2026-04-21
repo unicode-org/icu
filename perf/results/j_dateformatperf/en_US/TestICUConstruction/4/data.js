@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1776783699324,
+  "lastUpdate": 1776787312915,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -44247,6 +44247,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 2089.8691749827653,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "10fc3f3fb4c6684d564d56942880dba3e0c9f97a",
+          "message": "ICU-23365 move zero-init into declaration & add unit test",
+          "timestamp": "2026-04-17T11:02:47-07:00",
+          "tree_id": "2a713508acc6f846d90c681c51ef93098b15cdbe",
+          "url": "https://github.com/unicode-org/icu/commit/10fc3f3fb4c6684d564d56942880dba3e0c9f97a"
+        },
+        "date": 1776786883424,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 2031.9245988140453,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
