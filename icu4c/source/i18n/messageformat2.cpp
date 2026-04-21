@@ -277,6 +277,9 @@ FunctionOptions MessageFormatter::resolveOptions(const Environment& env, const O
     const Operand& rand = expr.getOperand();
     // Format the operand (formatOperand handles the case of a null operand)
     LocalPointer<InternalValue> randVal(formatOperand(fallback, globalEnv, rand, context, status));
+    if (U_FAILURE(status)) {
+        return {};
+    }
 
     FormattedPlaceholder maybeRand = randVal->takeArgument(status);
 

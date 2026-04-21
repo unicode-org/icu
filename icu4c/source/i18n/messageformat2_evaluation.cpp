@@ -170,11 +170,13 @@ PrioritizedVariant::~PrioritizedVariant() {}
     // ---------------- Environments and closures
 
     Environment* Environment::create(const VariableName& var, Closure&& c, Environment* parent, UErrorCode& errorCode) {
-        NULL_ON_ERROR(errorCode);
+        if (U_FAILURE(errorCode)) {
+            return parent;
+        }
         Environment* result = new NonEmptyEnvironment(var, std::move(c), parent);
         if (result == nullptr) {
             errorCode = U_MEMORY_ALLOCATION_ERROR;
-            return nullptr;
+            return parent;
         }
         return result;
     }
