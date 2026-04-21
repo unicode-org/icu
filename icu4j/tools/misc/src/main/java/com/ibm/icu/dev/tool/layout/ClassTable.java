@@ -13,7 +13,7 @@
 package com.ibm.icu.dev.tool.layout;
 
 import com.ibm.icu.impl.Utility;
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class ClassTable implements LookupSubtable {
     static class ClassEntry {
@@ -40,10 +40,10 @@ public class ClassTable implements LookupSubtable {
         //
         // Straight insertion sort from Knuth vol. III, pg. 81
         //
-        public static void sort(ClassEntry[] table, Vector unsorted) {
+        public static void sort(ClassEntry[] table, ArrayList<ClassEntry> unsorted) {
             for (int e = 0; e < table.length; e += 1) {
                 int i;
-                ClassEntry v = (ClassEntry) unsorted.elementAt(e);
+                ClassEntry v = unsorted.get(e);
 
                 for (i = e - 1; i >= 0; i -= 1) {
                     if (v.compareTo(table[i]) >= 0) {
@@ -108,12 +108,12 @@ public class ClassTable implements LookupSubtable {
         }
     }
 
-    private Vector classMap;
+    private ArrayList<ClassEntry> classMap;
     private ClassEntry[] classTable;
     private int snapshotSize;
 
     public ClassTable() {
-        this.classMap = new Vector();
+        this.classMap = new ArrayList<>();
         this.classTable = null;
         this.snapshotSize = -1;
     }
@@ -121,7 +121,7 @@ public class ClassTable implements LookupSubtable {
     public void addMapping(int charID, int classID) {
         ClassEntry entry = new ClassEntry(charID, classID);
 
-        classMap.addElement(entry);
+        classMap.add(entry);
     }
 
     public void addMapping(int startCharID, int endCharID, int classID) {
@@ -152,7 +152,7 @@ public class ClassTable implements LookupSubtable {
     public void writeClassTable(OpenTypeTableWriter writer) {
         snapshot();
 
-        Vector classRanges = new Vector();
+        ArrayList<ClassRangeRecord> classRanges = new ArrayList<>();
         int startIndex = 0;
 
         while (startIndex < classTable.length) {
@@ -175,7 +175,7 @@ public class ClassTable implements LookupSubtable {
             if (classID != 0) {
                 ClassRangeRecord range = new ClassRangeRecord(startID, endID, classID);
 
-                classRanges.addElement(range);
+                classRanges.add(range);
             }
 
             startIndex = endIndex;
@@ -185,7 +185,7 @@ public class ClassTable implements LookupSubtable {
         writer.writeData(classRanges.size()); // class range count
 
         for (int i = 0; i < classRanges.size(); i += 1) {
-            ClassRangeRecord range = (ClassRangeRecord) classRanges.elementAt(i);
+            ClassRangeRecord range = classRanges.get(i);
 
             range.write(writer);
         }

@@ -14,7 +14,7 @@ import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.CanonicalIterator;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class CanonicalCharacterData {
     private static int THRESHOLD = 4;
@@ -24,7 +24,7 @@ public class CanonicalCharacterData {
         Record(int character, int script) {
             String char32 = UCharacter.toString(character);
             CanonicalIterator iterator = new CanonicalIterator(char32);
-            Vector equivs = new Vector();
+            ArrayList<String> equivs = new ArrayList<>();
 
             composed = character;
 
@@ -77,13 +77,13 @@ public class CanonicalCharacterData {
             return equivalents[index];
         }
 
-        private void dumpEquivalents(int character, Vector equivs) {
+        private void dumpEquivalents(int character, ArrayList<String> equivs) {
             int count = equivs.size();
 
             System.out.println(Utility.hex(character, 6) + " - " + count + ":");
 
             for (int i = 0; i < count; i += 1) {
-                String equiv = (String) equivs.elementAt(i);
+                String equiv = equivs.get(i);
                 int codePoints = UTF16.countCodePoint(equiv);
 
                 for (int c = 0; c < codePoints; c += 1) {
@@ -110,13 +110,14 @@ public class CanonicalCharacterData {
 
     public void add(int character) {
         int script = UScript.getScript(character);
-        Vector recordVector = recordVectors[script];
+        ArrayList<Record> records = recordLists.get(script);
 
-        if (recordVector == null) {
-            recordVector = recordVectors[script] = new Vector();
+        if (records == null) {
+            records = new ArrayList<>();
+            recordLists.set(script, records);
         }
 
-        recordVector.add(new Record(character, script));
+        records.add(new Record(character, script));
     }
 
     public int getMaxEquivalents(int script) {
@@ -132,21 +133,21 @@ public class CanonicalCharacterData {
             return null;
         }
 
-        Vector recordVector = recordVectors[script];
+        ArrayList<Record> records = recordLists.get(script);
 
-        if (recordVector == null || index < 0 || index >= recordVector.size()) {
+        if (records == null || index < 0 || index >= records.size()) {
             return null;
         }
 
-        return (Record) recordVector.elementAt(index);
+        return records.get(index);
     }
 
     public int countRecords(int script) {
-        if (script < 0 || script >= UScript.CODE_LIMIT || recordVectors[script] == null) {
+        if (script < 0 || script >= UScript.CODE_LIMIT || recordLists.get(script) == null) {
             return 0;
         }
 
-        return recordVectors[script].size();
+        return recordLists.get(script).size();
     }
 
     public static CanonicalCharacterData factory(UnicodeSet characterSet) {
@@ -176,11 +177,11 @@ public class CanonicalCharacterData {
     //
     // Straight insertion sort from Knuth vol. III, pg. 81
     //
-    private static void sortEquivalents(String[] equivalents, Vector unsorted) {
+    private static void sortEquivalents(String[] equivalents, ArrayList<String> unsorted) {
         int nEquivalents = equivalents.length;
 
         for (int e = 0; e < nEquivalents; e += 1) {
-            String v = (String) unsorted.elementAt(e);
+            String v = unsorted.get(e);
             int i;
 
             for (i = e - 1; i >= 0; i -= 1) {
@@ -195,6 +196,6 @@ public class CanonicalCharacterData {
         }
     }
 
-    private Vector recordVectors[] = new Vector[UScript.CODE_LIMIT];
+    private ArrayList<ArrayList<Record>> recordLists = new ArrayList<>(UScript.CODE_LIMIT);
     private int maxEquivalents[] = new int[UScript.CODE_LIMIT];
 }

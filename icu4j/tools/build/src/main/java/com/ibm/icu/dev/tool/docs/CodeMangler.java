@@ -19,6 +19,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -37,8 +38,8 @@ public class CodeMangler {
     private boolean clean; // true if output is to be cleaned
     private boolean timestamp; // true if we read/write timestamp
     private boolean nonames; // true if no names in header
-    private HashMap map; // defines
-    private ArrayList names; // files/directories to process
+    private Map<String, String> map; // defines
+    private List<String> names; // files/directories to process
     private String header; // sorted list of defines passed in
 
     private boolean verbose; // true if we emit debug output
@@ -79,8 +80,8 @@ public class CodeMangler {
                     + "#define args are 'key [==] value', the '==' is optional.\n";
 
     CodeMangler(String[] args) {
-        map = new HashMap();
-        names = new ArrayList();
+        map = new HashMap<>();
+        names = new ArrayList<>();
         suffix = ".java";
         clean = false;
         timestamp = false;
@@ -228,18 +229,18 @@ public class CodeMangler {
             names.add(".");
         }
 
-        TreeMap sort = new TreeMap(String.CASE_INSENSITIVE_ORDER);
+        TreeMap<String, String> sort = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
         sort.putAll(map);
-        Iterator iter = sort.entrySet().iterator();
+        Iterator<Map.Entry<String, String>> iter = sort.entrySet().iterator();
         StringBuilder buf = new StringBuilder();
         if (!nonames) {
             while (iter.hasNext()) {
-                Map.Entry e = (Map.Entry) iter.next();
+                Map.Entry<String, String> e = iter.next();
                 if (buf.length() > 0) {
                     buf.append(", ");
                 }
                 buf.append(e.getKey());
-                String v = (String) e.getValue();
+                String v = e.getValue();
                 if (v != null && v.length() > 0) {
                     buf.append('=');
                     buf.append(v);
@@ -250,7 +251,7 @@ public class CodeMangler {
     }
 
     public int run() {
-        return process("", (String[]) names.toArray(new String[names.size()]));
+        return process("", names.toArray(new String[names.size()]));
     }
 
     public int process(String path, String[] filenames) {
@@ -348,7 +349,7 @@ public class CodeMangler {
             }
         }
 
-        HashMap oldMap = null;
+        Map<String, String> oldMap = null;
 
         long outModTime = 0;
 
@@ -459,7 +460,7 @@ public class CodeMangler {
                     } else if (key.equals("undef")) {
                         if (state.emit) {
                             if (oldMap == null) {
-                                oldMap = (HashMap) map.clone();
+                                oldMap = new HashMap<>(map);
                             }
                             map.remove(val);
                         }
@@ -472,7 +473,7 @@ public class CodeMangler {
                                 System.out.println("val2: '" + val2 + "' key2: '" + key2 + "'");
                             if (state.emit) {
                                 if (oldMap == null) {
-                                    oldMap = (HashMap) map.clone();
+                                    oldMap = new HashMap<>(map);
                                 }
                                 map.put(key2, val2);
                             }

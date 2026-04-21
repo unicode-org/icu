@@ -20,14 +20,15 @@ import com.ibm.icu.text.UnicodeSet;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.Vector;
 
 /**
  * This class produces the data tables used by the closeOver() method of UnicodeSet.
@@ -75,8 +76,8 @@ class UnicodeSetCloseOver {
      * single-character strings x for which UCharacter.foldCase(x, DEFAULT_CASE_MAP).equals(folded),
      * as well as folded itself.
      */
-    static Map createCaseFoldEquivalencyClasses() {
-        Map equivClasses = new HashMap();
+    static Map<String, Set<String>> createCaseFoldEquivalencyClasses() {
+        Map<String, Set<String>> equivClasses = new HashMap<>();
         for (int i = 0; i <= 0x10FFFF; ++i) {
             int cat = UCharacter.getType(i);
             if (cat == Character.UNASSIGNED || cat == Character.PRIVATE_USE) continue;
@@ -88,9 +89,9 @@ class UnicodeSetCloseOver {
             // At this point, have different case folding.  Add
             // the code point and its folded equivalent into the
             // equivalency class.
-            TreeSet s = (TreeSet) equivClasses.get(folded);
+            Set<String> s = equivClasses.get(folded);
             if (s == null) {
-                s = new TreeSet();
+                s = new TreeSet<>();
                 s.add(folded); // add the case fold result itself
                 equivClasses.put(folded, s);
             }
@@ -123,15 +124,18 @@ class UnicodeSetCloseOver {
      *     "11".
      */
     static void analyzeCaseData(
-            Map equivClasses, StringBuffer pairs, Vector nonpairs, Vector lengths) {
-        Iterator i = new TreeSet(equivClasses.keySet()).iterator();
+            Map<String, Set<String>> equivClasses,
+            StringBuffer pairs,
+            ArrayList<String[]> nonpairs,
+            List<String> lengths) {
+        Iterator<String> i = new TreeSet<>(equivClasses.keySet()).iterator();
         StringBuffer buf = new StringBuffer();
         while (i.hasNext()) {
-            Object key = i.next();
-            Vector v = new Vector((Set) equivClasses.get(key));
+            String key = i.next();
+            ArrayList<String> v = new ArrayList<>(equivClasses.get(key));
             if (v.size() == 2) {
-                String a = (String) v.elementAt(0);
-                String b = (String) v.elementAt(1);
+                String a = v.get(0);
+                String b = v.get(1);
                 if (a.length() == 1 && b.length() == 1) {
                     pairs.append(a).append(b);
                     continue;
@@ -146,14 +150,14 @@ class UnicodeSetCloseOver {
             // Make a string of the lengths, e.g., "111" means 3
             // single code points; "13" means a single code point
             // and a string of length 3.
-            v.clear();
+            ArrayList<Integer> vLengths = new ArrayList<>(v.size());
             for (int j = 0; j < a.length; ++j) {
-                v.add(a[j].length());
+                vLengths.add(a[j].length());
             }
-            Collections.sort(v);
+            Collections.sort(vLengths);
             buf.setLength(0);
-            for (int j = 0; j < v.size(); ++j) {
-                buf.append(String.valueOf(v.elementAt(j)));
+            for (Integer len : vLengths) {
+                buf.append(String.valueOf(len));
             }
             if (!lengths.contains(buf.toString())) {
                 lengths.add(buf.toString());
@@ -164,7 +168,7 @@ class UnicodeSetCloseOver {
     @SuppressWarnings("resource")
     static void generateCaseData() throws IOException {
 
-        Map equivClasses = createCaseFoldEquivalencyClasses();
+        Map<String, Set<String>> equivClasses = createCaseFoldEquivalencyClasses();
 
         // Accumulate equivalency classes that consist of exactly
         // two codepoints here.  This is 83+% of the classes.
@@ -173,8 +177,8 @@ class UnicodeSetCloseOver {
 
         // Accumulate other equivalency classes here, as lists
         // of strings.  E,g, {"st", "\uFB05", "\uFB06"}.
-        Vector nonpairs = new Vector(); // contains String[]
-        Vector lengths = new Vector(); // "111", "12", "22", etc.
+        ArrayList<String[]> nonpairs = new ArrayList<>(); // contains String[]
+        List<String> lengths = new ArrayList<>(); // "111", "12", "22", etc.
 
         analyzeCaseData(equivClasses, pairs, nonpairs, lengths);
 
@@ -190,7 +194,7 @@ class UnicodeSetCloseOver {
         out.println("    // " + WARNING);
         out.println("    private static final String[][] CASE_NONPAIRS = {");
         for (int j = 0; j < nonpairs.size(); ++j) {
-            String[] a = (String[]) nonpairs.elementAt(j);
+            String[] a = nonpairs.get(j);
             out.print("        {");
             for (int k = 0; k < a.length; ++k) {
                 if (k != 0) out.print(", ");
@@ -235,12 +239,12 @@ class UnicodeSetCloseOver {
         // Emit the pairs
         out.println("// " + WARNING);
         out.println("static const UChar CASE_PAIRS[] = {");
-        Iterator it = sortPairs.iterator();
+        Iterator<String> it = sortPairs.iterator();
         while (it.hasNext()) {
             out.print("    ");
             int n = 0;
             while (n++ < 5 && it.hasNext()) {
-                String s = (String) it.next();
+                String s = it.next();
                 // out.print((int) s.charAt(0) + "," +
                 //                 (int) s.charAt(1) + ",");
                 out.print("0x" + Utility.hex(s.charAt(0)) + ",0x" + Utility.hex(s.charAt(1)) + ",");
@@ -266,7 +270,7 @@ class UnicodeSetCloseOver {
         out.println("static const CaseEquivClass CASE_NONPAIRS[] = {");
         for (int j = 0; j < nonpairs.size(); ++j) {
             int len = 0;
-            String[] a = (String[]) nonpairs.elementAt(j);
+            String[] a = nonpairs.get(j);
             out.print("    {");
             // Emit single code points
             for (int k = 0; k < a.length; ++k) {

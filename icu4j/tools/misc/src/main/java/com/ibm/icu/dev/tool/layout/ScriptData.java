@@ -14,7 +14,7 @@ import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSetIterator;
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class ScriptData extends TagValueData {
     public static class Record {
@@ -126,7 +126,7 @@ public class ScriptData extends TagValueData {
     ScriptData() {
         int commonScript = UCharacter.getPropertyValueEnum(UProperty.SCRIPT, "COMMON");
         int scriptCount;
-        Vector rv = new Vector();
+        ArrayList<Record> rv = new ArrayList<>();
 
         fMinScript = UCharacter.getIntPropertyMinValue(UProperty.SCRIPT);
         fMaxScript = UCharacter.getIntPropertyMaxValue(UProperty.SCRIPT);
@@ -149,7 +149,7 @@ public class ScriptData extends TagValueData {
                 while (it.nextRange()) {
                     Record record = new Record(it.codepoint, it.codepointEnd, script);
 
-                    rv.addElement(record);
+                    rv.add(record);
                 }
             }
         }
@@ -157,7 +157,7 @@ public class ScriptData extends TagValueData {
         fRecords = new Record[rv.size()];
 
         for (int i = 0; i < rv.size(); i += 1) {
-            fRecords[i] = (Record) rv.elementAt(i);
+            fRecords[i] = rv.get(i);
         }
 
         System.out.println("Collected " + rv.size() + " records. Sorting...");

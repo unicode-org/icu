@@ -64,10 +64,11 @@ public final class UnicodeMap<T>
 
     public UnicodeMap() {}
 
-    public UnicodeMap(UnicodeMap other) {
+    public UnicodeMap(UnicodeMap<T> other) {
         this.putAll(other);
     }
 
+    @SuppressWarnings("unchecked")
     public UnicodeMap<T> clear() {
         if (locked) {
             throw new UnsupportedOperationException("Attempt to modify locked object");
@@ -134,7 +135,7 @@ public final class UnicodeMap<T>
         that.values = values.clone();
         that.availableValues = new LinkedHashSet<T>(availableValues);
         that.locked = false;
-        that.stringMap = stringMap == null ? null : (TreeMap<String, T>) stringMap.clone();
+        that.stringMap = stringMap == null ? null : new TreeMap<>(stringMap);
         return that;
     }
 
@@ -267,6 +268,7 @@ public final class UnicodeMap<T>
      * @param index
      * @param count
      */
+    @SuppressWarnings("unchecked")
     private void _insertGapAt(int index, int count) {
         int newLength = length + count;
         int[] oldtransitions = transitions;
@@ -393,7 +395,7 @@ public final class UnicodeMap<T>
         return this;
     }
 
-    private UnicodeMap _putAll(int startCodePoint, int endCodePoint, T value) {
+    private UnicodeMap<T> _putAll(int startCodePoint, int endCodePoint, T value) {
         // TODO optimize
         for (int i = startCodePoint; i <= endCodePoint; ++i) {
             _put(i, value);
@@ -608,6 +610,7 @@ public final class UnicodeMap<T>
      * @param result
      * @return result
      */
+    @SuppressWarnings("unchecked")
     public <U extends Collection<T>> U values(U result) {
         if (staleAvailableValues) {
             // collect all the current values
@@ -1004,7 +1007,7 @@ public final class UnicodeMap<T>
         @Override
         public Entry<String, T> next() {
             String key = iterator.next();
-            return new ImmutableEntry(key, get(key));
+            return new ImmutableEntry<>(key, get(key));
         }
 
         /* (non-Javadoc)

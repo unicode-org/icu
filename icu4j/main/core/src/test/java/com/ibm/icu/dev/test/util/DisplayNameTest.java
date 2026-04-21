@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -40,10 +41,11 @@ public class DisplayNameTest extends CoreTestFmwk {
         public String get(ULocale locale, String code, Object context);
     }
 
-    Map<String, String>[] codeToName = new Map[10];
+    static final int CODES_TO_NAME_COUNT = 10;
+    List<Map<String, String>> codeToName = new ArrayList<>(CODES_TO_NAME_COUNT);
 
     {
-        for (int k = 0; k < codeToName.length; ++k) codeToName[k] = new HashMap<>();
+        for (int k = 0; k < CODES_TO_NAME_COUNT; ++k) codeToName.add(new HashMap<>());
     }
 
     static final Object[] zoneFormats = {0, 1, 2, 3, 4, 5, 6, 7};
@@ -402,7 +404,7 @@ public class DisplayNameTest extends CoreTestFmwk {
             Object[] contextList,
             DisplayNameGetter getter) {
         if (contextList == null) contextList = NO_CONTEXT;
-        for (int k = 0; k < contextList.length; ++k) codeToName[k].clear();
+        for (int k = 0; k < contextList.length; ++k) codeToName.get(k).clear();
         for (int j = 0; j < codes.length; ++j) {
             String code = codes[j];
             for (int k = 0; k < contextList.length; ++k) {
@@ -427,7 +429,7 @@ public class DisplayNameTest extends CoreTestFmwk {
                                     + "]");
                     continue;
                 }
-                String otherCode = (String) codeToName[k].get(name);
+                String otherCode = codeToName.get(k).get(name);
                 if (otherCode != null) {
                     errln(
                             "Display Names collide for\t"
@@ -453,7 +455,7 @@ public class DisplayNameTest extends CoreTestFmwk {
                                     + "\t=> "
                                     + name);
                 } else {
-                    codeToName[k].put(name, code);
+                    codeToName.get(k).put(name, code);
                     if (SHOW_ALL)
                         logln(
                                 type

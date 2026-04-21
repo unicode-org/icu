@@ -25,7 +25,8 @@ import java.util.List;
  *     <p>TODO To change the template for this generated type comment go to Window - Preferences -
  *     Java - Code Style - Code Templates
  */
-public class StatisticsTool implements NGramParser.NGramParserClient, NGramList.NGramKeyMapper {
+public class StatisticsTool
+        implements NGramParser.NGramParserClient, NGramList.NGramKeyMapper<String> {
     /* TODO Make this usage string more sane. */
     private static final String usageString =
             "\nUsage: StatisticsTool [OPTIONS] [FILES]\n\n"
@@ -48,7 +49,7 @@ public class StatisticsTool implements NGramParser.NGramParserClient, NGramList.
 
     private InputFile inputFile;
 
-    private NGramList ngrams;
+    private NGramList<String> ngrams;
 
     private static byte[] allBytes = {
         (byte) 0x00, (byte) 0x01, (byte) 0x02, (byte) 0x03, (byte) 0x04, (byte) 0x05, (byte) 0x06,
@@ -157,11 +158,11 @@ public class StatisticsTool implements NGramParser.NGramParserClient, NGramList.
         ngrams.put(key);
     }
 
-    public Object mapKey(String key) {
+    public String mapKey(String key) {
         return key;
     }
 
-    private NGramList dumpNGrams() {
+    private NGramList<Integer> dumpNGrams() {
         String filename = inputFile.getPath();
         int extension = filename.lastIndexOf(".");
         String outputFileName =
@@ -183,16 +184,15 @@ public class StatisticsTool implements NGramParser.NGramParserClient, NGramList.
                         + "/"
                         + ngrams.getTotalNGrams());
 
-        ArrayList array = new ArrayList(ngrams.values());
+        List<NGramList.NGram> array = new ArrayList<>(ngrams.values());
 
         Collections.sort(array);
 
-        NGramList stats = new NGramList(inputFile);
+        NGramList<Integer> stats = new NGramList<>(inputFile);
         int count = 0;
         int totalNGrams = ngrams.getTotalNGrams();
 
-        for (Iterator it = array.iterator(); it.hasNext(); count += 1) {
-            NGramList.NGram ngram = (NGramList.NGram) it.next();
+        for (NGramList.NGram ngram : array) {
             String value = ngram.getValue();
             int refCount = ngram.getRefCount();
             double ratio = (double) refCount / totalNGrams * 100.0;
@@ -212,7 +212,7 @@ public class StatisticsTool implements NGramParser.NGramParserClient, NGramList.
         return stats;
     }
 
-    private void writeStatistics(ArrayList keyList, boolean visual) {
+    private void writeStatistics(List<Integer> keyList, boolean visual) {
         String filename = inputFile.getPath();
         int extension = filename.lastIndexOf(".");
         String outputFileName =
@@ -237,16 +237,15 @@ public class StatisticsTool implements NGramParser.NGramParserClient, NGramList.
             }
         }
 
-        int i = 0;
-
         output.print("    private static int[] ngrams = {");
 
-        for (Iterator it = keyList.iterator(); it.hasNext(); i += 1) {
-            Integer ngram = (Integer) it.next();
+        int i = 0;
+        for (Integer ngram : keyList) {
 
             if (i % 16 == 0) {
                 output.print("\n        ");
             }
+            i++;
 
             output.print("0x" + Utility.hex(ngram.intValue(), 6) + ", ");
         }
@@ -292,7 +291,7 @@ public class StatisticsTool implements NGramParser.NGramParserClient, NGramList.
         output.println("\n    };");
     }
 
-    public NGramList collectStatistics(InputFile file) {
+    public NGramList<Integer> collectStatistics(InputFile file) {
         if (!file.open()) {
             return null;
         }
@@ -301,22 +300,21 @@ public class StatisticsTool implements NGramParser.NGramParserClient, NGramList.
 
         NGramParser parser = new NGramParser(this);
 
-        ngrams = new NGramList(this);
+        ngrams = new NGramList<>(this);
         parser.parse();
 
         file.close();
 
-        NGramList stats = dumpNGrams();
-        ArrayList statKeys = new ArrayList(stats.keys());
+        NGramList<Integer> stats = dumpNGrams();
+        List<Integer> statKeys = new ArrayList<>(stats.keys());
 
         Collections.sort(statKeys);
         writeStatistics(statKeys, false);
 
         if (inputFile.getVisualOrder()) {
-            ArrayList<Integer> reversed = new ArrayList(statKeys.size());
+            ArrayList<Integer> reversed = new ArrayList<>(statKeys.size());
 
-            for (Iterator it = statKeys.iterator(); it.hasNext(); ) {
-                Integer key = (Integer) it.next();
+            for (Integer key : statKeys) {
                 int k = key.intValue();
                 int r = 0;
 
@@ -336,7 +334,7 @@ public class StatisticsTool implements NGramParser.NGramParserClient, NGramList.
     }
 
     public static void main(String[] args) {
-        List list = Arrays.asList(args);
+        List<String> list = Arrays.asList(args);
         InputFile[] input_files = new InputFile[args.length];
         int file_count = 0;
         String encoding = null;
@@ -344,8 +342,8 @@ public class StatisticsTool implements NGramParser.NGramParserClient, NGramList.
         boolean encoding_test = false;
         boolean visual_order = false;
 
-        for (Iterator it = list.iterator(); it.hasNext(); /*anything?*/ ) {
-            String arg = (String) it.next();
+        for (Iterator<String> it = list.iterator(); it.hasNext(); /*anything?*/ ) {
+            String arg = it.next();
 
             if (arg.equals("-v")) {
                 visual_order = true;

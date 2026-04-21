@@ -23,6 +23,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class ModuleWriter {
     private static final String BUILDER_FILE_PATH = "src/com/ibm/icu/dev/tool/layout/";
@@ -102,8 +103,8 @@ public class ModuleWriter {
     protected PrintStream updateFile;
     protected int previousTotalScripts;
     protected int previousTotalLanguages;
-    protected ArrayList scriptVersionNumber = new ArrayList();
-    protected ArrayList languageVersionNumber = new ArrayList();
+    protected List<String> scriptVersionNumber = new ArrayList<>();
+    protected List<String> languageVersionNumber = new ArrayList<>();
 
     public void openScriptAndLanguages(String name) {
         try {

@@ -25,10 +25,9 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.TreeSet;
 
 /** TimeZone transition dump tool. */
 public class ICUZDump {
@@ -240,7 +239,7 @@ public class ICUZDump {
         boolean jdk = false;
         int low = 1902;
         int high = 2038;
-        List idlist = new ArrayList();
+        List<String> idlist = new ArrayList<>();
         boolean all = false;
         String dir = null;
         String newLineMode = null;
@@ -286,17 +285,7 @@ public class ICUZDump {
             } else {
                 tzids = com.ibm.icu.util.TimeZone.getAvailableIDs();
             }
-
-            // sort tzids
-            TreeSet set = new TreeSet();
-            for (int i = 0; i < tzids.length; i++) {
-                set.add(tzids[i]);
-            }
-            Iterator it = set.iterator();
-            int i = 0;
-            while (it.hasNext()) {
-                tzids[i++] = (String) it.next();
-            }
+            Arrays.sort(tzids);
         } else {
             int len = idlist.size();
             if (len == 0) {

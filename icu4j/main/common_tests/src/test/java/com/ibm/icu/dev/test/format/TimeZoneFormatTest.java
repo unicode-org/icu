@@ -679,6 +679,7 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void TestParse() {
         final Object[][] DATA = {
             //   text                   inpos       locale      style

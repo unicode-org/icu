@@ -20,7 +20,6 @@ import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.zip.GZIPInputStream;
@@ -50,7 +49,7 @@ public final class APIData {
             data.base = APIInfo.readToken(br); // base
             br.readLine();
 
-            data.set = new TreeSet(APIInfo.defaultComparator());
+            data.set = new TreeSet<>(APIInfo.defaultComparator());
             for (APIInfo info = new APIInfo(); info.read(br); info = new APIInfo()) {
                 if (internal || !info.isInternal()) {
                     data.set.add(info);
@@ -123,10 +122,7 @@ public final class APIData {
 
         int[] stats = new int[catnames.length * stanames.length];
 
-        Iterator iter = set.iterator();
-        while (iter.hasNext()) {
-            APIInfo info = (APIInfo) iter.next();
-
+        for (APIInfo info : set) {
             if (info.isPublic() || info.isProtected()) {
                 int sta = info.getVal(APIInfo.STA);
                 int cat = info.getVal(APIInfo.CAT);

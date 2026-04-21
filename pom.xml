@@ -315,6 +315,7 @@
           <version>${maven-compiler-plugin.version}</version>
           <configuration>
             <compilerArgs>
+              <arg>-Xlint:unchecked</arg>
               <arg>${xlint.dangling-doc-comments}</arg>
             </compilerArgs>
           </configuration>

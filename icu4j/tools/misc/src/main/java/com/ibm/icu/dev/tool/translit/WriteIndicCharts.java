@@ -16,7 +16,8 @@ import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSetIterator;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author ram
@@ -99,7 +100,7 @@ public class WriteIndicCharts {
             writeIICharts(t8, 0x0D00, 9);
 
             for (int i = 0x00; i <= 0x80; i++) {
-                String[] temp = (String[]) table.get(UTF16.valueOf(i));
+                String[] temp = table.get(UTF16.valueOf(i));
                 boolean write = false;
                 for (int k = 1; k < temp.length && temp[k] != null; k++) {
                     if (UCharacter.getExtendedName(UTF16.charAt(temp[k], 0)).indexOf("unassigned")
@@ -324,7 +325,7 @@ public class WriteIndicCharts {
             writeIICharts(t7, 0x0C80, 8);
             writeIICharts(t8, 0x0D00, 9);
             for (int i = 0x0900; i <= 0x097F; i++) {
-                String[] temp = (String[]) table.get(UTF16.valueOf(i));
+                String[] temp = table.get(UTF16.valueOf(i));
                 boolean write = false;
                 for (int k = 1; k < temp.length; k++) {
                     if (UCharacter.getExtendedName(UTF16.charAt(temp[k], 0)).indexOf("unassigned")
@@ -401,7 +402,7 @@ public class WriteIndicCharts {
         }
     }
 
-    static Hashtable table = new Hashtable();
+    static Map<String, String[]> table = new HashMap<>();
 
     static String getKey(int cp) {
         int delta = cp & 0xFF;
@@ -418,7 +419,7 @@ public class WriteIndicCharts {
             String s1 = inverse.transliterate(cp);
             String s2 = trans.transliterate(s1);
 
-            String[] arr = (String[]) table.get(getKey(start + i));
+            String[] arr = table.get(getKey(start + i));
             if (cp.equals(s2)) {
                 arr[index] = s1;
             } else {
@@ -436,7 +437,7 @@ public class WriteIndicCharts {
             String cp = UTF16.valueOf(iter.codepoint);
             String s1 = trans.transliterate(cp);
             String s2 = inverse.transliterate(s1);
-            String[] arr = (String[]) table.get(UTF16.valueOf(iter.codepoint & 0xFF));
+            String[] arr = table.get(UTF16.valueOf(iter.codepoint & 0xFF));
             if (cp.equals(s1)) {
                 arr[index] =
                         UTF16.valueOf(start + (((byte) iter.codepoint) & 0xFF)) + ":UNASSIGNED";
@@ -468,7 +469,7 @@ public class WriteIndicCharts {
             String s1 = inverse.transliterate(cp);
             String s2 = trans.transliterate(s1);
 
-            String[] arr = (String[]) table.get(getKey(tIter.codepoint));
+            String[] arr = table.get(getKey(tIter.codepoint));
             if (cp.equals(s2)) {
                 arr[index] = cp;
             } else {

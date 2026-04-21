@@ -142,9 +142,9 @@ public class Launcher extends DemoApplet {
                     String demo = demoBase + '.' + demoShort;
                     showStatus(demoShort, "launching");
                     try {
-                        Class c = Class.forName(demo);
+                        Class<?> c = Class.forName(demo);
                         String args[] = new String[0];
-                        Class params[] = new Class[1];
+                        Class<?>[] params = new Class[1];
                         params[0] = args.getClass();
                         Method m = c.getMethod("main", params);
                         Object[] argList = {args};

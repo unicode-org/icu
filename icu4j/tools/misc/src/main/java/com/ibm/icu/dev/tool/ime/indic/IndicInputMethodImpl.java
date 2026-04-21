@@ -377,30 +377,35 @@ class IndicInputMethodImpl {
                     : 0;
         }
 
-        public int getRunStart(Set attributes) {
+        @Override
+        public int getRunStart(Set<? extends AttributedCharacterIterator.Attribute> attributes) {
             return (index >= committed && attributes.contains(TextAttribute.INPUT_METHOD_UNDERLINE))
                     ? committed
                     : 0;
         }
 
+        @Override
         public int getRunLimit() {
             return index < committed ? committed : text.length;
         }
 
+        @Override
         public int getRunLimit(AttributedCharacterIterator.Attribute attribute) {
             return (index < committed && attribute.equals(TextAttribute.INPUT_METHOD_UNDERLINE))
                     ? committed
                     : text.length;
         }
 
-        public int getRunLimit(Set attributes) {
+        @Override
+        public int getRunLimit(Set<? extends AttributedCharacterIterator.Attribute> attributes) {
             return (index < committed && attributes.contains(TextAttribute.INPUT_METHOD_UNDERLINE))
                     ? committed
                     : text.length;
         }
 
-        public Map getAttributes() {
-            HashMap result = new HashMap<>();
+        @Override
+        public Map<AttributedCharacterIterator.Attribute, Object> getAttributes() {
+            Map<AttributedCharacterIterator.Attribute, Object> result = new HashMap<>();
             if (index >= committed && committed < text.length) {
                 result.put(
                         TextAttribute.INPUT_METHOD_UNDERLINE,
@@ -409,6 +414,7 @@ class IndicInputMethodImpl {
             return result;
         }
 
+        @Override
         public Object getAttribute(AttributedCharacterIterator.Attribute attribute) {
             if (index >= committed
                     && committed < text.length
@@ -419,8 +425,9 @@ class IndicInputMethodImpl {
             return null;
         }
 
-        public Set getAllAttributeKeys() {
-            HashSet result = new HashSet();
+        @Override
+        public Set<AttributedCharacterIterator.Attribute> getAllAttributeKeys() {
+            Set<AttributedCharacterIterator.Attribute> result = new HashSet<>();
             if (committed < text.length) {
                 result.add(TextAttribute.INPUT_METHOD_UNDERLINE);
             }

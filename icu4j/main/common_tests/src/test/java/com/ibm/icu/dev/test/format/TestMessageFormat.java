@@ -980,6 +980,7 @@ public class TestMessageFormat extends CoreTestFmwk {
     // This tests parsing formatted messages with named arguments instead of
     // numbers.
     @Test
+    @SuppressWarnings("unchecked")
     public void testParseNamedArguments() {
         String msgFormatString = "{foo} =sep= {bar}";
         MessageFormat msg = new MessageFormat(msgFormatString);

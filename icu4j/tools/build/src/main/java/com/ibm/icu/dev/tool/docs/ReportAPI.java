@@ -133,19 +133,21 @@ public class ReportAPI {
         this.oldData = oldData;
         this.newData = newData;
 
-        removed = (TreeSet<APIInfo>) oldData.set.clone();
+        removed = new TreeSet<>(APIInfo.defaultComparator());
+        removed.addAll(oldData.set);
         removed.removeAll(newData.set);
 
-        added = (TreeSet<APIInfo>) newData.set.clone();
+        added = new TreeSet<>(APIInfo.defaultComparator());
+        added.addAll(newData.set);
         added.removeAll(oldData.set);
 
-        changed = new ArrayList<DeltaInfo>();
+        changed = new ArrayList<>();
         Iterator<APIInfo> ai = added.iterator();
         Iterator<APIInfo> ri = removed.iterator();
         Comparator<APIInfo> c = APIInfo.changedComparator();
 
-        ArrayList<APIInfo> ams = new ArrayList<APIInfo>();
-        ArrayList<APIInfo> rms = new ArrayList<APIInfo>();
+        ArrayList<APIInfo> ams = new ArrayList<>();
+        ArrayList<APIInfo> rms = new ArrayList<>();
         // PrintWriter outpw = new PrintWriter(System.out);
 
         APIInfo a = null, r = null;
@@ -196,21 +198,21 @@ public class ReportAPI {
             removed.remove(di.removed);
         }
 
-        Set<APIInfo> tempAdded = new HashSet<APIInfo>();
+        Set<APIInfo> tempAdded = new HashSet<>();
         tempAdded.addAll(newData.set);
         tempAdded.removeAll(removed);
-        TreeSet<APIInfo> changedAdded = new TreeSet<APIInfo>(APIInfo.defaultComparator());
+        TreeSet<APIInfo> changedAdded = new TreeSet<>(APIInfo.defaultComparator());
         changedAdded.addAll(tempAdded);
 
-        Set<APIInfo> tempRemoved = new HashSet<APIInfo>();
+        Set<APIInfo> tempRemoved = new HashSet<>();
         tempRemoved.addAll(oldData.set);
         tempRemoved.removeAll(added);
-        TreeSet<APIInfo> changedRemoved = new TreeSet<APIInfo>(APIInfo.defaultComparator());
+        TreeSet<APIInfo> changedRemoved = new TreeSet<>(APIInfo.defaultComparator());
         changedRemoved.addAll(tempRemoved);
 
-        promotedStable = new TreeSet<APIInfo>(APIInfo.defaultComparator());
-        promotedDraft = new TreeSet<APIInfo>(APIInfo.defaultComparator());
-        obsoleted = new TreeSet<APIInfo>(APIInfo.defaultComparator());
+        promotedStable = new TreeSet<>(APIInfo.defaultComparator());
+        promotedDraft = new TreeSet<>(APIInfo.defaultComparator());
+        obsoleted = new TreeSet<>(APIInfo.defaultComparator());
         ai = changedAdded.iterator();
         ri = changedRemoved.iterator();
         a = r = null;
@@ -525,7 +527,7 @@ public class ReportAPI {
 
     private static TreeSet<APIInfo> stripAndResort(TreeSet<APIInfo> t) {
         stripClassInfo(t);
-        TreeSet<APIInfo> r = new TreeSet<APIInfo>(APIInfo.classFirstComparator());
+        TreeSet<APIInfo> r = new TreeSet<>(APIInfo.classFirstComparator());
         r.addAll(t);
         return r;
     }

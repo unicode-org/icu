@@ -72,7 +72,7 @@ public class ICUJDKCompare {
     private PrintStream out;
     private String srcPrefix;
     private String trgPrefix;
-    private Class[] classPairs;
+    private Class<?>[] classPairs;
     private String[] namePairs;
     private String[] ignore;
     private boolean swap;
@@ -193,8 +193,8 @@ public class ICUJDKCompare {
     }
 
     private void processPairInfo(String[] names) {
-        ArrayList cl = new ArrayList();
-        ArrayList nl = new ArrayList();
+        List<Class<?>> cl = new ArrayList<>();
+        List<String> nl = new ArrayList<>();
         for (int i = 0; i < names.length; ++i) {
             String name = names[i];
             String srcName = srcPrefix;
@@ -218,8 +218,8 @@ public class ICUJDKCompare {
             }
 
             try {
-                Class jc = Class.forName(srcName);
-                Class ic = Class.forName(trgName);
+                Class<?> jc = Class.forName(srcName);
+                Class<?> ic = Class.forName(trgName);
                 cl.add(ic);
                 cl.add(jc);
                 nl.add(ic.getName());
@@ -228,8 +228,8 @@ public class ICUJDKCompare {
                 if (DEBUG) System.err.println("can't load class: " + e.getMessage());
             }
         }
-        classPairs = (Class[]) cl.toArray(new Class[cl.size()]);
-        namePairs = (String[]) nl.toArray(new String[nl.size()]);
+        classPairs = cl.toArray(new Class[cl.size()]);
+        namePairs = nl.toArray(new String[nl.size()]);
     }
 
     private void println(String s) {
@@ -261,7 +261,7 @@ public class ICUJDKCompare {
         println("ICU and Java API Comparison");
         String ICU_VERSION = "unknown";
         try {
-            Class cls = Class.forName("com.ibm.icu.util.VersionInfo");
+            Class<?> cls = Class.forName("com.ibm.icu.util.VersionInfo");
             Field fld = cls.getField("ICU_VERSION");
             ICU_VERSION = fld.get(null).toString();
         } catch (Exception e) {
@@ -321,7 +321,7 @@ public class ICUJDKCompare {
         }
     }
 
-    private int compare(Class class1, Class class2) throws Exception {
+    private int compare(Class<?> class1, Class<?> class2) throws Exception {
         String n1 = class1.getName();
         String n2 = class2.getName();
 
@@ -330,29 +330,29 @@ public class ICUJDKCompare {
         MorC[] conss1 = getMorCArray(class1.getConstructors());
         MorC[] conss2 = getMorCArray(class2.getConstructors());
 
-        Map cmap1 = getMethodMap(conss1);
-        Map cmap2 = getMethodMap(conss2);
+        Map<String, MethodRecord> cmap1 = getMethodMap(conss1);
+        Map<String, MethodRecord> cmap2 = getMethodMap(conss2);
 
         MorC[] meths1 = getMorCArray(class1.getMethods());
         MorC[] meths2 = getMorCArray(class2.getMethods());
 
-        Map map1 = getMethodMap(meths1);
-        Map map2 = getMethodMap(meths2);
+        Map<String, MethodRecord> map1 = getMethodMap(meths1);
+        Map<String, MethodRecord> map2 = getMethodMap(meths2);
 
         Field[] fields1 = class1.getFields();
         Field[] fields2 = class2.getFields();
 
-        Set set1 = getFieldSet(fields1);
-        Set set2 = getFieldSet(fields2);
+        Set<String> set1 = getFieldSet(fields1);
+        Set<String> set2 = getFieldSet(fields2);
 
         if (n1.indexOf("DecimalFormatSymbols") != -1) {
             out.format("fields in %s: %s%n", n1, set1);
             out.format("fields in %s: %s%n", n2, set2);
         }
 
-        Map diffConss = diffMethodMaps(cmap2, cmap1);
-        Map diffMeths = diffMethodMaps(map2, map1);
-        Set diffFields = diffFieldSets(set2, set1);
+        Map<String, MethodRecord> diffConss = diffMethodMaps(cmap2, cmap1);
+        Map<String, MethodRecord> diffMeths = diffMethodMaps(map2, map1);
+        Set<String> diffFields = diffFieldSets(set2, set1);
 
         diffConss = removeIgnored(n2, diffConss);
         diffMeths = removeIgnored(n2, diffMeths);
@@ -568,12 +568,12 @@ public class ICUJDKCompare {
         return result;
     }
 
-    private Map getMethodMap(MorC[] meths) {
-        Map result = new TreeMap();
+    private Map<String, MethodRecord> getMethodMap(MorC[] meths) {
+        Map<String, MethodRecord> result = new TreeMap<>();
         for (int i = 0; i < meths.length; ++i) {
             MorC m = meths[i];
             String key = m.getName();
-            MethodRecord mr = (MethodRecord) result.get(key);
+            MethodRecord mr = result.get(key);
             if (mr == null) {
                 mr = new MethodRecord(m);
                 result.put(key, mr);
@@ -584,10 +584,9 @@ public class ICUJDKCompare {
         return result;
     }
 
-    private void dumpMethodMap(Map m) {
-        Iterator iter = m.entrySet().iterator();
-        while (iter.hasNext()) {
-            dumpMethodRecord((MethodRecord) ((Map.Entry) iter.next()).getValue());
+    private void dumpMethodMap(Map<String, MethodRecord> m) {
+        for (MethodRecord mr : m.values()) {
+            dumpMethodRecord(mr);
         }
         out.flush();
     }
@@ -596,14 +595,15 @@ public class ICUJDKCompare {
         out.println(mr.toString());
     }
 
-    static Map diffMethodMaps(Map m1, Map m2) {
+    static Map<String, MethodRecord> diffMethodMaps(
+            Map<String, MethodRecord> m1, Map<String, MethodRecord> m2) {
         // get all the methods in m1 that aren't mentioned in m2 at all
-        Map result = (Map) ((TreeMap) m1).clone();
+        Map<String, MethodRecord> result = new TreeMap<>(m1);
         result.keySet().removeAll(m2.keySet());
         return result;
     }
 
-    private Map removeIgnored(String name, Map m1) {
+    private Map<String, MethodRecord> removeIgnored(String name, Map<String, MethodRecord> m1) {
         if (ignore == null) {
             return m1;
         }
@@ -613,12 +613,12 @@ public class ICUJDKCompare {
         name += " "; // to avoid accidental prefix of nested class name
 
         // prune ignore list to relevant items
-        ArrayList il = null;
+        List<String> il = null;
         for (int i = 0; i < ignore.length; ++i) {
             String s = ignore[i];
             if (s.startsWith(name)) {
                 if (il == null) {
-                    il = new ArrayList();
+                    il = new ArrayList<>();
                 }
                 il.add(s);
             }
@@ -627,15 +627,15 @@ public class ICUJDKCompare {
             return m1;
         }
 
-        Map result = new TreeMap(((TreeMap) m1).comparator());
+        Map<String, MethodRecord> result = new TreeMap<>(m1);
         result.putAll(m1);
-        Iterator iter = result.entrySet().iterator();
+        Iterator<Map.Entry<String, MethodRecord>> iter = result.entrySet().iterator();
         loop:
         while (iter.hasNext()) {
-            Map.Entry e = (Map.Entry) iter.next();
-            String key = (String) e.getKey();
+            Map.Entry<String, MethodRecord> e = iter.next();
+            String key = e.getKey();
             for (int i = 0; i < il.size(); ++i) {
-                String ig = (String) il.get(i);
+                String ig = il.get(i);
                 if (ig.indexOf(" " + key) != 0) {
                     iter.remove();
                     continue loop;
@@ -645,7 +645,7 @@ public class ICUJDKCompare {
         return result;
     }
 
-    private Set removeIgnored(String name, Set s1) {
+    private Set<String> removeIgnored(String name, Set<String> s1) {
         if (ignore == null) {
             return s1;
         }
@@ -655,12 +655,12 @@ public class ICUJDKCompare {
         name += " "; // to avoid accidental prefix of nested class name
 
         // prune ignore list to relevant items
-        ArrayList il = null;
+        List<String> il = null;
         for (int i = 0; i < ignore.length; ++i) {
             String s = ignore[i];
             if (s.startsWith(name)) {
                 if (il == null) {
-                    il = new ArrayList();
+                    il = new ArrayList<>();
                 }
                 il.add(s);
             }
@@ -669,14 +669,14 @@ public class ICUJDKCompare {
             return s1;
         }
 
-        Set result = (Set) ((TreeSet) s1).clone();
-        Iterator iter = result.iterator();
+        Set<String> result = new TreeSet<>(s1);
+        Iterator<String> iter = result.iterator();
         loop:
         while (iter.hasNext()) {
-            String key = (String) iter.next();
+            String key = iter.next();
             String fieldname = key.substring(0, key.indexOf(' '));
             for (int i = 0; i < il.size(); ++i) {
-                String ig = (String) il.get(i);
+                String ig = il.get(i);
                 if (ig.indexOf(" " + fieldname) != 0) {
                     iter.remove();
                     continue loop;
@@ -699,7 +699,7 @@ public class ICUJDKCompare {
         {false, false, false, false, false, false, false, false, true}, // void
     };
 
-    static final Class[] prims = {
+    static final Class<?>[] prims = {
         boolean.class,
         char.class,
         byte.class,
@@ -711,7 +711,7 @@ public class ICUJDKCompare {
         void.class
     };
 
-    static int primIndex(Class cls) {
+    static int primIndex(Class<?> cls) {
         for (int i = 0; i < prims.length; ++i) {
             if (cls == prims[i]) {
                 return i;
@@ -720,7 +720,7 @@ public class ICUJDKCompare {
         throw new IllegalStateException("could not find primitive class: " + cls);
     }
 
-    static boolean assignableFrom(Class lhs, Class rhs) {
+    static boolean assignableFrom(Class<?> lhs, Class<?> rhs) {
         if (lhs == rhs) {
             return true;
         }
@@ -748,24 +748,23 @@ public class ICUJDKCompare {
         return buf.toString();
     }
 
-    private Set getFieldSet(Field[] fs) {
-        Set set = new TreeSet();
+    private Set<String> getFieldSet(Field[] fs) {
+        Set<String> set = new TreeSet<>();
         for (int i = 0; i < fs.length; ++i) {
             set.add(toString(fs[i]));
         }
         return set;
     }
 
-    static Set diffFieldSets(Set s1, Set s2) {
-        Set result = (Set) ((TreeSet) s1).clone();
+    static Set<String> diffFieldSets(Set<String> s1, Set<String> s2) {
+        Set<String> result = new TreeSet<>(s1);
         result.removeAll(s2);
         return result;
     }
 
-    private void dumpFieldSet(Set s) {
-        Iterator iter = s.iterator();
-        while (iter.hasNext()) {
-            out.println(iter.next());
+    private void dumpFieldSet(Set<String> s) {
+        for (String item : s) {
+            out.println(item);
         }
         out.flush();
     }

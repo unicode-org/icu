@@ -484,38 +484,30 @@ class APIInfo {
      * The default comparator for APIInfo. This compares packages, class/name (as the info
      * represents a class or other object), category, name, and signature.
      */
-    public static Comparator defaultComparator() {
-        final Comparator c =
-                new Comparator() {
-                    @Override
-                    public int compare(Object lhs, Object rhs) {
-                        APIInfo lhi = (APIInfo) lhs;
-                        APIInfo rhi = (APIInfo) rhs;
-                        int result = lhi.pack.compareTo(rhi.pack);
+    public static Comparator<APIInfo> defaultComparator() {
+        return (APIInfo lhi, APIInfo rhi) -> {
+            int result = lhi.pack.compareTo(rhi.pack);
+            if (result == 0) {
+                result =
+                        (lhi.getVal(CAT) == CAT_CLASS || lhi.getVal(CAT) == CAT_ENUM
+                                        ? lhi.name
+                                        : lhi.cls)
+                                .compareTo(
+                                        rhi.getVal(CAT) == CAT_CLASS || rhi.getVal(CAT) == CAT_ENUM
+                                                ? rhi.name
+                                                : rhi.cls);
+                if (result == 0) {
+                    result = lhi.getVal(CAT) - rhi.getVal(CAT);
+                    if (result == 0) {
+                        result = lhi.name.compareTo(rhi.name);
                         if (result == 0) {
-                            result =
-                                    (lhi.getVal(CAT) == CAT_CLASS || lhi.getVal(CAT) == CAT_ENUM
-                                                    ? lhi.name
-                                                    : lhi.cls)
-                                            .compareTo(
-                                                    rhi.getVal(CAT) == CAT_CLASS
-                                                                    || rhi.getVal(CAT) == CAT_ENUM
-                                                            ? rhi.name
-                                                            : rhi.cls);
-                            if (result == 0) {
-                                result = lhi.getVal(CAT) - rhi.getVal(CAT);
-                                if (result == 0) {
-                                    result = lhi.name.compareTo(rhi.name);
-                                    if (result == 0) {
-                                        result = lhi.sig.compareTo(rhi.sig);
-                                    }
-                                }
-                            }
+                            result = lhi.sig.compareTo(rhi.sig);
                         }
-                        return result;
                     }
-                };
-        return c;
+                }
+            }
+            return result;
+        };
     }
 
     /**
@@ -524,75 +516,56 @@ class APIInfo {
      * comparator is that APIInfos representing classes are considered equal regardless of their
      * signatures (which represent inheritance for classes).
      */
-    public static Comparator changedComparator() {
-        final Comparator c =
-                new Comparator() {
-                    @Override
-                    public int compare(Object lhs, Object rhs) {
-                        APIInfo lhi = (APIInfo) lhs;
-                        APIInfo rhi = (APIInfo) rhs;
-                        int result = lhi.pack.compareTo(rhi.pack);
-                        if (result == 0) {
-                            result =
-                                    (lhi.getVal(CAT) == CAT_CLASS ? lhi.name : lhi.cls)
-                                            .compareTo(
-                                                    rhi.getVal(CAT) == CAT_CLASS
-                                                            ? rhi.name
-                                                            : rhi.cls);
-                            if (result == 0) {
-                                result = lhi.getVal(CAT) - rhi.getVal(CAT);
-                                if (result == 0) {
-                                    result = lhi.name.compareTo(rhi.name);
-                                    if (result == 0 && lhi.getVal(CAT) != CAT_CLASS) {
-                                        // signature change on fields ignored
-                                        if (lhi.getVal(CAT) != CAT_FIELD) {
-                                            result = lhi.sig.compareTo(rhi.sig);
-                                        }
-                                    }
-                                }
+    public static Comparator<APIInfo> changedComparator() {
+        return (APIInfo lhi, APIInfo rhi) -> {
+            int result = lhi.pack.compareTo(rhi.pack);
+            if (result == 0) {
+                result =
+                        (lhi.getVal(CAT) == CAT_CLASS ? lhi.name : lhi.cls)
+                                .compareTo(rhi.getVal(CAT) == CAT_CLASS ? rhi.name : rhi.cls);
+                if (result == 0) {
+                    result = lhi.getVal(CAT) - rhi.getVal(CAT);
+                    if (result == 0) {
+                        result = lhi.name.compareTo(rhi.name);
+                        if (result == 0 && lhi.getVal(CAT) != CAT_CLASS) {
+                            // signature change on fields ignored
+                            if (lhi.getVal(CAT) != CAT_FIELD) {
+                                result = lhi.sig.compareTo(rhi.sig);
                             }
                         }
-                        return result;
                     }
-                };
-        return c;
+                }
+            }
+            return result;
+        };
     }
 
     /**
      * This compares two APIInfos by package, then sorts classes before non-classes, then by
      * class/name, category, name, and signature.
      */
-    public static Comparator classFirstComparator() {
-        final Comparator c =
-                new Comparator() {
-                    @Override
-                    public int compare(Object lhs, Object rhs) {
-                        APIInfo lhi = (APIInfo) lhs;
-                        APIInfo rhi = (APIInfo) rhs;
-                        int result = lhi.pack.compareTo(rhi.pack);
+    public static Comparator<APIInfo> classFirstComparator() {
+        return (APIInfo lhi, APIInfo rhi) -> {
+            int result = lhi.pack.compareTo(rhi.pack);
+            if (result == 0) {
+                boolean lcls = lhi.getVal(CAT) == CAT_CLASS;
+                boolean rcls = rhi.getVal(CAT) == CAT_CLASS;
+                result = lcls == rcls ? 0 : (lcls ? -1 : 1);
+                if (result == 0) {
+                    result = (lcls ? lhi.name : lhi.cls).compareTo(rcls ? rhi.name : rhi.cls);
+                    if (result == 0) {
+                        result = lhi.getVal(CAT) - rhi.getVal(CAT);
                         if (result == 0) {
-                            boolean lcls = lhi.getVal(CAT) == CAT_CLASS;
-                            boolean rcls = rhi.getVal(CAT) == CAT_CLASS;
-                            result = lcls == rcls ? 0 : (lcls ? -1 : 1);
-                            if (result == 0) {
-                                result =
-                                        (lcls ? lhi.name : lhi.cls)
-                                                .compareTo(rcls ? rhi.name : rhi.cls);
-                                if (result == 0) {
-                                    result = lhi.getVal(CAT) - rhi.getVal(CAT);
-                                    if (result == 0) {
-                                        result = lhi.name.compareTo(rhi.name);
-                                        if (result == 0 && !lcls) {
-                                            result = lhi.sig.compareTo(rhi.sig);
-                                        }
-                                    }
-                                }
+                            result = lhi.name.compareTo(rhi.name);
+                            if (result == 0 && !lcls) {
+                                result = lhi.sig.compareTo(rhi.sig);
                             }
                         }
-                        return result;
                     }
-                };
-        return c;
+                }
+            }
+            return result;
+        };
     }
 
     /** Write the data in report format. */

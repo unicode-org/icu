@@ -1481,6 +1481,7 @@ public class PluralRulesTest extends CoreTestFmwk {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void TestKeywords() {
         Set<String> possibleKeywords =
                 new LinkedHashSet<>(Arrays.asList("zero", "one", "two", "few", "many", "other"));
@@ -1955,6 +1956,7 @@ public class PluralRulesTest extends CoreTestFmwk {
         "cy; zero: @integer 0; one: @integer 1; two: @integer 2; few: @integer 3; many: @integer 6; other: @integer 4, 5, 7~20, 100, 1000, 10000, 100000, 1000000, …",
     };
 
+    @SuppressWarnings("unchecked")
     private <T extends Serializable> T serializeAndDeserialize(T original, Output<Integer> size) {
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();

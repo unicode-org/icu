@@ -14,7 +14,6 @@ import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -28,8 +27,8 @@ public class CaseIterator {
     static Transliterator toHex2 = Transliterator.getInstance("[[^\u0021-\u007F]-[,]] Any-Hex");
 
     // global tables (could be precompiled)
-    private static Map fromCaseFold = new HashMap();
-    private static Map toCaseFold = new HashMap();
+    private static Map<String, Set<String>> fromCaseFold = new HashMap<>();
+    private static Map<String, String> toCaseFold = new HashMap<>();
     private static int maxLength = 0;
 
     // This exception list is generated on the console by turning on the GENERATED flag,
@@ -671,13 +670,12 @@ public class CaseIterator {
     // this initializes the data used to generated the case-equivalents
 
     static {
-
         // Gather up the exceptions in a form we can use
 
         if (!GENERATE) {
             for (int i = 0; i < exceptionList.length; ++i) {
                 String[] exception = exceptionList[i];
-                Set s = new HashSet();
+                Set<String> s = new HashSet<>();
                 // there has to be some method to do the following, but I can't find it in the
                 // collections
                 for (int j = 0; j < exception.length; ++j) {
@@ -703,9 +701,9 @@ public class CaseIterator {
 
             // at this point, have different case folding
 
-            Set s = (Set) fromCaseFold.get(mapped);
+            Set<String> s = fromCaseFold.get(mapped);
             if (s == null) {
-                s = new HashSet();
+                s = new HashSet<>();
                 s.add(mapped); // add the case fold result itself
                 fromCaseFold.put(mapped, s);
             }
@@ -720,50 +718,29 @@ public class CaseIterator {
             System.out.println("maxLength = " + maxLength);
 
             System.out.println("\nfromCaseFold:");
-            Iterator it = fromCaseFold.keySet().iterator();
-            while (it.hasNext()) {
-                Object key = it.next();
-                System.out.print(" " + toHex2.transliterate((String) key) + ": ");
-                Set s = (Set) fromCaseFold.get(key);
-                Iterator it2 = s.iterator();
+            for (Map.Entry<String, Set<String>> entry : fromCaseFold.entrySet()) {
+                System.out.print(" " + toHex2.transliterate(entry.getKey()) + ": ");
                 boolean first = true;
-                while (it2.hasNext()) {
+                for (String item : entry.getValue()) {
                     if (first) {
                         first = false;
                     } else {
                         System.out.print(", ");
                     }
-                    System.out.print(toHex2.transliterate((String) it2.next()));
+                    System.out.print(toHex2.transliterate(item));
                 }
                 System.out.println("");
             }
 
             System.out.println("\ntoCaseFold:");
-            it = toCaseFold.keySet().iterator();
-            while (it.hasNext()) {
-                String key = (String) it.next();
-                String value = (String) toCaseFold.get(key);
+            for (Map.Entry<String, String> entry : toCaseFold.entrySet()) {
                 System.out.println(
-                        " " + toHex2.transliterate(key) + ": " + toHex2.transliterate(value));
+                        " "
+                                + toHex2.transliterate(entry.getKey())
+                                + ": "
+                                + toHex2.transliterate(entry.getValue()));
             }
         }
-
-        // Now convert all those sets into linear arrays
-        // We can't do this in place in Java, so make a temporary target array
-
-        // Note: This could be transformed into a single array, with offsets into it.
-        // Might be best choice in C.
-
-        Map fromCaseFold2 = new HashMap();
-        Iterator it = fromCaseFold.keySet().iterator();
-        while (it.hasNext()) {
-            Object key = it.next();
-            Set s = (Set) fromCaseFold.get(key);
-            String[] temp = new String[s.size()];
-            s.toArray(temp);
-            fromCaseFold2.put(key, temp);
-        }
-        fromCaseFold = fromCaseFold2;
 
         // We have processed everything, so the iterator will now work
         // The following is normally OFF.
@@ -775,10 +752,8 @@ public class CaseIterator {
 
             // first get small set of items that have multiple characters
 
-            Set multichars = new TreeSet();
-            it = fromCaseFold.keySet().iterator();
-            while (it.hasNext()) {
-                String key = (String) it.next();
+            Set<String> multichars = new TreeSet<>();
+            for (String key : fromCaseFold.keySet()) {
                 if (UTF16.countCodePoint(key) < 2) continue;
                 multichars.add(key);
             }
@@ -786,10 +761,7 @@ public class CaseIterator {
             // now we will go through each of them.
 
             CaseIterator ci = new CaseIterator();
-            it = multichars.iterator();
-
-            while (it.hasNext()) {
-                String key = (String) it.next();
+            for (String key : multichars) {
 
                 // here is a nasty complication. Take 'ffi' ligature. We
                 // can't just close it, since we would miss the combination
@@ -797,13 +769,11 @@ public class CaseIterator {
                 // so first do a pass through, and add substring combinations
                 // we call this a 'partial closure'
 
-                Set partialClosure = new TreeSet();
+                Set<String> partialClosure = new TreeSet<>();
                 partialClosure.add(key);
 
                 if (UTF16.countCodePoint(key) > 2) {
-                    Iterator multiIt2 = multichars.iterator();
-                    while (multiIt2.hasNext()) {
-                        String otherKey = (String) multiIt2.next();
+                    for (String otherKey : multichars) {
                         if (otherKey.length() >= key.length()) continue;
                         int pos = -1;
                         while (true) {
@@ -816,10 +786,10 @@ public class CaseIterator {
                             int endPos = pos + otherKey.length();
                             // we know we have a proper substring,
                             // so get the combinations
-                            String[] choices = (String[]) fromCaseFold.get(otherKey);
-                            for (int ii = 0; ii < choices.length; ++ii) {
+                            Set<String> choices = fromCaseFold.get(otherKey);
+                            for (String choice : choices) {
                                 String patchwork =
-                                        key.substring(0, pos) + choices[ii] + key.substring(endPos);
+                                        key.substring(0, pos) + choice + key.substring(endPos);
                                 partialClosure.add(patchwork);
                             }
                         }
@@ -829,10 +799,8 @@ public class CaseIterator {
                 // now, for each thing in the partial closure, get its
                 // case closure and add it to the final result.
 
-                Set closure = new TreeSet(); // this will be the real closure
-                Iterator partialIt = partialClosure.iterator();
-                while (partialIt.hasNext()) {
-                    String key2 = (String) partialIt.next();
+                Set<String> closure = new TreeSet<>(); // this will be the real closure
+                for (String key2 : partialClosure) {
                     ci.reset(key2);
                     for (String temp = ci.next(); temp != null; temp = ci.next()) {
                         closure.add(temp);
@@ -851,11 +819,9 @@ public class CaseIterator {
 
                 // print it out, so that it can be cut and pasted back into this document.
 
-                Iterator it2 = closure.iterator();
                 System.out.println("\t// " + toName.transliterate(key));
                 System.out.print("\t{\"" + toHex.transliterate(key) + "\",");
-                while (it2.hasNext()) {
-                    String item = (String) it2.next();
+                for (String item : closure) {
                     System.out.print("\"" + toHex.transliterate(item) + "\",");
                 }
                 System.out.println("},");
@@ -868,7 +834,7 @@ public class CaseIterator {
     // pieces that we will put together
     // is not changed during iteration
     private int count = 0;
-    private String[][] variants;
+    private Set<String>[] variants;
 
     // state information, changes during iteration
     private boolean done = false;
@@ -890,7 +856,7 @@ public class CaseIterator {
         // using length might be slightly too long, but we don't care much
 
         counts = new int[source.length()];
-        variants = new String[source.length()][];
+        variants = (Set<String>[]) new Object[source.length()];
 
         // walk through the source, and break up into pieces
         // each piece becomes an array of equivalent values
@@ -906,13 +872,13 @@ public class CaseIterator {
             if (GENERATE) {
                 // do exactly one CP
                 piece = UTF16.valueOf(source, i);
-                caseFold = (String) toCaseFold.get(piece);
+                caseFold = toCaseFold.get(piece);
             } else {
                 int max = i + maxLength;
                 if (max > source.length()) max = source.length();
                 for (int j = max; j > i; --j) {
                     piece = source.substring(i, j);
-                    caseFold = (String) toCaseFold.get(piece);
+                    caseFold = toCaseFold.get(piece);
                     if (caseFold != null) break;
                 }
             }
@@ -920,9 +886,9 @@ public class CaseIterator {
             // if we fail, pick one code point
             if (caseFold == null) {
                 piece = UTF16.valueOf(source, i);
-                variants[count++] = new String[] {piece}; // single item string
+                variants[count++] = Set.of(piece); // single item string
             } else {
-                variants[count++] = (String[]) fromCaseFold.get(caseFold);
+                variants[count++] = fromCaseFold.get(caseFold);
             }
         }
         reset();
@@ -945,7 +911,6 @@ public class CaseIterator {
     public String next() {
 
         if (done) return null;
-        int i;
 
         // TODO Optimize so we keep the piece before and after the current position
         // so we don't have so much concatenation
@@ -953,15 +918,16 @@ public class CaseIterator {
         // get the result, a concatenation
 
         nextBuffer.setLength(0);
-        for (i = 0; i < count; ++i) {
-            nextBuffer.append(variants[i][counts[i]]);
+        for (Set<String> variant : variants) {
+            nextBuffer.append(variant);
         }
 
         // find the next right set of pieces to concatenate
 
+        int i;
         for (i = count - 1; i >= 0; --i) {
             counts[i]++;
-            if (counts[i] < variants[i].length) break;
+            if (counts[i] < variants[i].size()) break;
             counts[i] = 0;
         }
 

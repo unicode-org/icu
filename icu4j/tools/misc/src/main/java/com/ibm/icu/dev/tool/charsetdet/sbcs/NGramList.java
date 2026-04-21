@@ -18,9 +18,9 @@ import java.util.TreeMap;
  *     <p>TODO To change the template for this generated type comment go to Window - Preferences -
  *     Java - Code Style - Code Templates
  */
-public class NGramList {
-    public interface NGramKeyMapper {
-        Object mapKey(String key);
+public class NGramList<T> {
+    public interface NGramKeyMapper<T> {
+        T mapKey(String key);
     }
 
     public static final class NGram implements Comparable<NGram> {
@@ -58,38 +58,38 @@ public class NGramList {
         }
     }
 
-    protected TreeMap ngrams;
+    protected TreeMap<T, NGram> ngrams;
     protected int totalNGrams;
     protected int uniqueNGrams;
 
     protected final int N_GRAM_SIZE = 3;
 
-    private NGramKeyMapper keyMapper;
+    private NGramKeyMapper<T> keyMapper;
 
     /** */
-    public NGramList(NGramKeyMapper theMapper) {
+    public NGramList(NGramKeyMapper<T> theMapper) {
         keyMapper = theMapper;
 
-        ngrams = new TreeMap();
+        ngrams = new TreeMap<>();
         totalNGrams = uniqueNGrams = 0;
     }
 
-    public void setMapper(NGramKeyMapper nGramKeyMapper) {
+    public void setMapper(NGramKeyMapper<T> nGramKeyMapper) {
         keyMapper = nGramKeyMapper;
     }
 
-    public NGram get(Object mappedKey) {
-        return (NGram) ngrams.get(mappedKey);
+    public NGram get(T mappedKey) {
+        return ngrams.get(mappedKey);
     }
 
     public NGram get(String key) {
-        Object mappedKey = keyMapper.mapKey(key);
+        T mappedKey = keyMapper.mapKey(key);
 
         return get(mappedKey);
     }
 
     public void put(String key) {
-        Object mappedKey = keyMapper.mapKey(key);
+        T mappedKey = keyMapper.mapKey(key);
         NGram ngram = get(mappedKey);
 
         totalNGrams += 1;
@@ -102,11 +102,11 @@ public class NGramList {
         }
     }
 
-    public Collection values() {
+    public Collection<NGram> values() {
         return ngrams.values();
     }
 
-    public Collection keys() {
+    public Collection<T> keys() {
         return ngrams.keySet();
     }
 
