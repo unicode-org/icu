@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1776701014570,
+  "lastUpdate": 1776739083096,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -84075,6 +84075,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5540094.167,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nciric@gmail.com",
+            "name": "Nebojša Ćirić",
+            "username": "nciric"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "486066ebd0baa67f3bb791207104187aac0c34a1",
+          "message": "ICU-23379 Fix potential null pointer dereference in NumberFormat::format",
+          "timestamp": "2026-04-20T18:56:19-07:00",
+          "tree_id": "96c888312a977367930d10aa580eb669c9029fcf",
+          "url": "https://github.com/unicode-org/icu/commit/486066ebd0baa67f3bb791207104187aac0c34a1"
+        },
+        "date": 1776738652712,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 216.2479,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 21205041.982,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5188918.6066,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 20141080.0219,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5257557.2229,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
