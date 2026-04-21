@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1776701300583,
+  "lastUpdate": 1776739220553,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -139497,6 +139497,96 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIsWhiteSpace",
             "value": 4.8996,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nciric@gmail.com",
+            "name": "Nebojša Ćirić",
+            "username": "nciric"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "486066ebd0baa67f3bb791207104187aac0c34a1",
+          "message": "ICU-23379 Fix potential null pointer dereference in NumberFormat::format",
+          "timestamp": "2026-04-20T18:56:19-07:00",
+          "tree_id": "96c888312a977367930d10aa580eb669c9029fcf",
+          "url": "https://github.com/unicode-org/icu/commit/486066ebd0baa67f3bb791207104187aac0c34a1"
+        },
+        "date": 1776738766569,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIsAlpha",
+            "value": 4.2055,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsUpper",
+            "value": 4.5345,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsLower",
+            "value": 4.1994,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsDigit",
+            "value": 4.5147,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsSpace",
+            "value": 4.9186,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsAlphaNumeric",
+            "value": 4.185,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsPrint",
+            "value": 4.2019,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsControl",
+            "value": 4.5163,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestToLower",
+            "value": 5.1634,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestToUpper",
+            "value": 5.1613,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsWhiteSpace",
+            "value": 4.9002,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
