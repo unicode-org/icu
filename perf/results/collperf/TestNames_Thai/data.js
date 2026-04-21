@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1776788624581,
+  "lastUpdate": 1776794115177,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -84453,6 +84453,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 1888530.6017,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "vichang@google.com",
+            "name": "Victor Chang",
+            "username": "gvictor"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "20971256660ab9ae23d19b2a68a21b6a7966e83d",
+          "message": "ICU-23371 Reduce the memory footprint subdivisionData in ValidIdentifiers\n\nHashSet internally uses HashMap requests extra memory footprints for\neach entry. Use Set.copyOf(Set) to avoid the memory overhead\nThe heap dump shows ~351kB reduction.\n\nAlso, use Map.copyOf(map) instead of HashMap. It reduces the memory\nfootprint by ~52kB.",
+          "timestamp": "2026-04-17T11:12:30-07:00",
+          "tree_id": "751dd7af6e70428f5f5a44bcd37b412e7abaa6bb",
+          "url": "https://github.com/unicode-org/icu/commit/20971256660ab9ae23d19b2a68a21b6a7966e83d"
+        },
+        "date": 1776793505892,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 394.5106,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 13342535.7148,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2020076.3615,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 12167259.6337,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 1899439.5266,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
