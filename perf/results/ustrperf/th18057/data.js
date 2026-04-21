@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1776789280794,
+  "lastUpdate": 1776794308264,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -148605,6 +148605,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 33.761,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "vichang@google.com",
+            "name": "Victor Chang",
+            "username": "gvictor"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "20971256660ab9ae23d19b2a68a21b6a7966e83d",
+          "message": "ICU-23371 Reduce the memory footprint subdivisionData in ValidIdentifiers\n\nHashSet internally uses HashMap requests extra memory footprints for\neach entry. Use Set.copyOf(Set) to avoid the memory overhead\nThe heap dump shows ~351kB reduction.\n\nAlso, use Map.copyOf(map) instead of HashMap. It reduces the memory\nfootprint by ~52kB.",
+          "timestamp": "2026-04-17T11:12:30-07:00",
+          "tree_id": "751dd7af6e70428f5f5a44bcd37b412e7abaa6bb",
+          "url": "https://github.com/unicode-org/icu/commit/20971256660ab9ae23d19b2a68a21b6a7966e83d"
+        },
+        "date": 1776793851015,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 21.7739,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 24.3559,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 29.3891,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 31.9853,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 38.8843,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 38.4151,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 24.1095,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 16.5506,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 80.1264,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 24.0791,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 37.0668,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 44.6651,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
