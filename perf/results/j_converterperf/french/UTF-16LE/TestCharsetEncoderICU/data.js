@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1776738164339,
+  "lastUpdate": 1776784221883,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -44127,6 +44127,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 3.908646095966866,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "202e63e97e72030678a6e8bfab7b55dc2226d21a",
+          "message": "ICU-23372 Fix all issues reported by -Xlint:dangling-doc-comments",
+          "timestamp": "2026-04-17T10:25:00-07:00",
+          "tree_id": "282cd3634e64ad3d7cca7158767b5e3e2a0cb688",
+          "url": "https://github.com/unicode-org/icu/commit/202e63e97e72030678a6e8bfab7b55dc2226d21a"
+        },
+        "date": 1776783789650,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 4.2758597197562755,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
