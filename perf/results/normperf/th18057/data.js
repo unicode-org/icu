@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1776788978438,
+  "lastUpdate": 1776793988673,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -93117,6 +93117,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 14.1702,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "vichang@google.com",
+            "name": "Victor Chang",
+            "username": "gvictor"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "20971256660ab9ae23d19b2a68a21b6a7966e83d",
+          "message": "ICU-23371 Reduce the memory footprint subdivisionData in ValidIdentifiers\n\nHashSet internally uses HashMap requests extra memory footprints for\neach entry. Use Set.copyOf(Set) to avoid the memory overhead\nThe heap dump shows ~351kB reduction.\n\nAlso, use Map.copyOf(map) instead of HashMap. It reduces the memory\nfootprint by ~52kB.",
+          "timestamp": "2026-04-17T11:12:30-07:00",
+          "tree_id": "751dd7af6e70428f5f5a44bcd37b412e7abaa6bb",
+          "url": "https://github.com/unicode-org/icu/commit/20971256660ab9ae23d19b2a68a21b6a7966e83d"
+        },
+        "date": 1776793556964,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 14.3299,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 14.3456,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 14.3017,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 14.216,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 14.1425,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 14.0849,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
