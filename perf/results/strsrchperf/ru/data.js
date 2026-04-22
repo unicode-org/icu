@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1776873293624,
+  "lastUpdate": 1776877917596,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -53961,6 +53961,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 50.8292,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "bde916abf0f4c6301b5ccf156c50c485e35ec932",
+          "message": "ICU-23247 Fix all 'InvalidBlockTag' errorprone issues",
+          "timestamp": "2026-04-22T18:40:27+02:00",
+          "tree_id": "f1c20aa580c4391499c7fc92eb973c4888df3773",
+          "url": "https://github.com/unicode-org/icu/commit/bde916abf0f4c6301b5ccf156c50c485e35ec932"
+        },
+        "date": 1776877485487,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 25.541,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 51.9545,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
