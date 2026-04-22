@@ -310,7 +310,7 @@ public final class Period {
      *
      * @param p the period to change
      * @param value the int value as described above.
-     * @eturn the new Period object.
+     * @return the new Period object.
      */
     private Period setTimeUnitInternalValue(TimeUnit unit, int value) {
         int ord = unit.ordinal;

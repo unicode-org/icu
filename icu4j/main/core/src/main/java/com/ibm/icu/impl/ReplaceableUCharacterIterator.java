@@ -181,7 +181,7 @@ public class ReplaceableUCharacterIterator extends UCharacterIterator implements
      * @param currentIndex the currentIndex within the text.
      * @exception IllegalArgumentException is thrown if an invalid currentIndex is supplied. i.e.
      *     currentIndex is out of bounds.
-     * @returns the character at the specified currentIndex or DONE if the specified currentIndex is
+     * @return the character at the specified currentIndex or DONE if the specified currentIndex is
      *     equal to the end of the text.
      */
     @Override

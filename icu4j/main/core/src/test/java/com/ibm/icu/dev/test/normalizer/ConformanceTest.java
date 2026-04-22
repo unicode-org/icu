@@ -477,7 +477,7 @@ public class ConformanceTest extends CoreTestFmwk {
      * @param got value received
      * @param exp expected value
      * @param msg description of this test
-     * @returns true if got == exp
+     * @return true if got == exp
      */
     private boolean assertEqual(
             String op, String op2, String s, String got, String exp, String msg) {

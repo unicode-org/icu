@@ -461,17 +461,18 @@ public class MeasureUnitImpl {
 
     public static class UnitsParser {
 
-        /**
-         * Contains a single unit or a constant.
-         *
-         * @throws IllegalArgumentException when both singleUnit and constant are existing.
-         * @param singleUnit the single unit
-         * @param constant the constant
-         */
+        /** Contains a single unit or a constant. */
         private class SingleUnitOrConstant {
             SingleUnitImpl singleUnit;
             Long constant;
 
+            /**
+             * Creates a SingleUnitOrConstant.
+             *
+             * @throws IllegalArgumentException when both singleUnit and constant are existing.
+             * @param singleUnit the single unit
+             * @param constant the constant
+             */
             SingleUnitOrConstant(SingleUnitImpl singleUnit, Long constant) {
                 if (singleUnit != null && constant != null) {
                     throw new IllegalArgumentException(

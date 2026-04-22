@@ -136,7 +136,7 @@ public final class Trie2_16 extends Trie2 {
      *
      * @param os the stream to which the serialized Trie2 data will be written.
      * @return the number of bytes written.
-     * @throw IOException on an error writing to the OutputStream.
+     * @throws IOException on an error writing to the OutputStream.
      */
     public int serialize(OutputStream os) throws IOException {
         DataOutputStream dos = new DataOutputStream(os);

@@ -97,7 +97,7 @@ class Quantifier implements UnicodeMatcher {
      * this object into the given set.
      *
      * @param toUnionTo the set into which to union the source characters
-     * @returns a reference to toUnionTo
+     * @return a reference to toUnionTo
      */
     @Override
     public void addMatchSetTo(UnicodeSet toUnionTo) {

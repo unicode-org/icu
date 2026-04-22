@@ -14,11 +14,7 @@ import java.math.MathContext;
 import java.text.FieldPosition;
 import java.util.Objects;
 
-/**
- * Represents numbers and digit display properties using Binary Coded Decimal (BCD).
- *
- * @implements {@link DecimalQuantity}
- */
+/** Represents numbers and digit display properties using Binary Coded Decimal (BCD). */
 public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
 
     /**
