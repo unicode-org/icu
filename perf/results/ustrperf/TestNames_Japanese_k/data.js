@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1776794283648,
+  "lastUpdate": 1776874013410,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -148317,6 +148317,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 39.9458,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "vichang@google.com",
+            "name": "Victor Chang",
+            "username": "gvictor"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "3fe5fc9ec2dabd8f97ec1928e57f28e1f4f145e0",
+          "message": "ICU-23371 Deduplicate DayPeriodRulesData\n\nIt saves a few kB in memory.\n\nSome sets uses the same rule, e.g.\n        set1{\n            am{\n                before{\"12:00\"}\n                from{\"00:00\"}\n            }\n            pm{\n                before{\"24:00\"}\n                from{\"12:00\"}\n            }\n        }\n\n        set66{\n            am{\n                before{\"12:00\"}\n                from{\"00:00\"}\n            }\n            pm{\n                before{\"24:00\"}\n                from{\"12:00\"}\n            }\n        }\n\nThe purpose isn't clear, but we can deduplicate them in the runtime.",
+          "timestamp": "2026-04-17T11:24:08-07:00",
+          "tree_id": "4c62591bbb021893a1d77624284593f742fa67f1",
+          "url": "https://github.com/unicode-org/icu/commit/3fe5fc9ec2dabd8f97ec1928e57f28e1f4f145e0"
+        },
+        "date": 1776873511597,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 19.5492,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 22.0516,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 25.8223,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 27.8232,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 33.8388,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 35.2461,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 20.8476,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 15.1849,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 80.6351,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 21.159,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 34.6214,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 39.9816,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
