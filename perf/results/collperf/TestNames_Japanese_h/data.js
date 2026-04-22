@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1776793930244,
+  "lastUpdate": 1776873535748,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -84561,6 +84561,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5284343.2609,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "vichang@google.com",
+            "name": "Victor Chang",
+            "username": "gvictor"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "3fe5fc9ec2dabd8f97ec1928e57f28e1f4f145e0",
+          "message": "ICU-23371 Deduplicate DayPeriodRulesData\n\nIt saves a few kB in memory.\n\nSome sets uses the same rule, e.g.\n        set1{\n            am{\n                before{\"12:00\"}\n                from{\"00:00\"}\n            }\n            pm{\n                before{\"24:00\"}\n                from{\"12:00\"}\n            }\n        }\n\n        set66{\n            am{\n                before{\"12:00\"}\n                from{\"00:00\"}\n            }\n            pm{\n                before{\"24:00\"}\n                from{\"12:00\"}\n            }\n        }\n\nThe purpose isn't clear, but we can deduplicate them in the runtime.",
+          "timestamp": "2026-04-17T11:24:08-07:00",
+          "tree_id": "4c62591bbb021893a1d77624284593f742fa67f1",
+          "url": "https://github.com/unicode-org/icu/commit/3fe5fc9ec2dabd8f97ec1928e57f28e1f4f145e0"
+        },
+        "date": 1776873080629,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 220.7564,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 21283274.99,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5161483.463,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 20103735.7741,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5280109.7133,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
