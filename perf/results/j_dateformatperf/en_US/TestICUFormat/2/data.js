@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1776954754499,
+  "lastUpdate": 1776957704215,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -44157,6 +44157,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 173.52189681493746,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "ab5d9a32d117a6d442e3d558088fd9a580973bd2",
+          "message": "ICU-23247 Fix raw types, other issues reported by -Xlint:unchecked",
+          "timestamp": "2026-04-23T08:08:49-07:00",
+          "tree_id": "4d53a8aa16bc6dc0927f4581821911c4f0e32fd4",
+          "url": "https://github.com/unicode-org/icu/commit/ab5d9a32d117a6d442e3d558088fd9a580973bd2"
+        },
+        "date": 1776957272816,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 172.39920445453075,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
