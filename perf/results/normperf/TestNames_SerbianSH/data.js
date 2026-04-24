@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1777058772744,
+  "lastUpdate": 1777062185488,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -93837,6 +93837,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 5.3162,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "907021a752f82b21714915a6acaa4b9a98b914d2",
+          "message": "ICU-23247 Move errorprone cfg to file and prevent old fixes from returning",
+          "timestamp": "2026-04-24T12:47:44-07:00",
+          "tree_id": "d3d47f590b1551232aabc53155606caec055398c",
+          "url": "https://github.com/unicode-org/icu/commit/907021a752f82b21714915a6acaa4b9a98b914d2"
+        },
+        "date": 1777061687664,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 8.7463,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 5.7614,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 5.8147,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 6.5727,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 7.2459,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 7.2707,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
