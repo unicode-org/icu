@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1776958354279,
+  "lastUpdate": 1776990592934,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -66147,6 +66147,48 @@ window.BENCHMARK_DATA = {
           {
             "name": "FromUTF8",
             "value": 1.7623,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "4706271+robertbastian@users.noreply.github.com",
+            "name": "Robert Bastian",
+            "username": "robertbastian"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "d75ffad5730874aad9032a787ef9deda69e4098e",
+          "message": "ICU-23384 Update to tzdb 2026b",
+          "timestamp": "2026-04-23T16:55:24-07:00",
+          "tree_id": "f8c5e3185797f804a287847f26674ce0e2a40af3",
+          "url": "https://github.com/unicode-org/icu/commit/d75ffad5730874aad9032a787ef9deda69e4098e"
+        },
+        "date": 1776990151955,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Roundtrip",
+            "value": 9.2568,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUnicode",
+            "value": 3.015,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUTF8",
+            "value": 1.7009,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
