@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1776957637976,
+  "lastUpdate": 1776989888870,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -44247,6 +44247,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 3062.0797145489832,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "4706271+robertbastian@users.noreply.github.com",
+            "name": "Robert Bastian",
+            "username": "robertbastian"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "d75ffad5730874aad9032a787ef9deda69e4098e",
+          "message": "ICU-23384 Update to tzdb 2026b",
+          "timestamp": "2026-04-23T16:55:24-07:00",
+          "tree_id": "f8c5e3185797f804a287847f26674ce0e2a40af3",
+          "url": "https://github.com/unicode-org/icu/commit/d75ffad5730874aad9032a787ef9deda69e4098e"
+        },
+        "date": 1776989450859,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 3144.1919769610527,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
