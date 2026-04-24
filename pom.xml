@@ -683,11 +683,7 @@
                 <arg>-XDcompilePolicy=simple</arg>
                 <arg>-XDaddTypeAnnotationsToSymbol=true</arg>
                 <arg>--should-stop=ifError=FLOW</arg>
-                <!--
-                  WARNING: Do not wrap the line below, it will fail on Windows.
-                  See https://github.com/google/error-prone/issues/4256
-                -->
-                <arg>-Xplugin:ErrorProne -Xep:UnicodeEscape:OFF -Xep:InvalidBlockTag:OFF -Xep:LabelledBreakTarget:WARN</arg>
+                <arg>-Xplugin:ErrorProne @${maven.multiModuleProjectDirectory}/errorprone.cfg</arg>
                 <arg>-Xmaxerrs</arg>
                 <arg>10000</arg>
                 <arg>-Xmaxwarns</arg>
@@ -750,7 +746,7 @@
                     The drawback is that there are not errors now, they get mixed with the real warnings.
                     The proper severity level is then restored by the tool generating the reports.
                 -->
-                <arg>-Xplugin:ErrorProne -XepAllErrorsAsWarnings -Xep:UnicodeEscape:OFF</arg>
+                <arg>-Xplugin:ErrorProne -XepAllErrorsAsWarnings @${maven.multiModuleProjectDirectory}/errorprone.cfg</arg>
                 <arg>-Xmaxerrs</arg>
                 <arg>10000</arg>
                 <arg>-Xmaxwarns</arg>

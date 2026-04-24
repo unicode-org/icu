@@ -253,7 +253,7 @@ class ErrorProneReport {
                 hu.openTag("p");
                 first = false;
             } else {
-                hu.text(" \u2022 "); // bullet
+                hu.text(" \u2022\u00A0"); // bullet
             }
             // <a href="#name_error"><code>MissingFail</code></a> [3]
             hu.openTag(
@@ -267,9 +267,9 @@ class ErrorProneReport {
                     .closeTag("a");
             String tags = ErrorProneUtils.getTags(e.getKey());
             if (tags != null) {
-                hu.openTag("span", Map.of("class", "tags")).text(" " + tags).closeTag("span");
+                hu.openTag("span", Map.of("class", "tags")).text("\u00A0" + tags).closeTag("span");
             }
-            hu.text(" (" + e.getValue().size() + ")\n");
+            hu.text("\u00A0(" + e.getValue().size() + ")\n");
         }
         if (!first) {
             hu.closeTag("p").nl();
