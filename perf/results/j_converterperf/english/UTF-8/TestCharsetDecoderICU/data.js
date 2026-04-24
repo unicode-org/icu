@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1776990510237,
+  "lastUpdate": 1777057680108,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -44487,6 +44487,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.3461070101696277,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nciric@gmail.com",
+            "name": "Nebojša Ćirić",
+            "username": "nciric"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "3cd3afff734b99d3e96849fa1064878672abd88b",
+          "message": "ICU-23381 Fix null pointer dereference and memory leak in MessageFormat 2.0",
+          "timestamp": "2026-04-24T11:39:51-07:00",
+          "tree_id": "f8a7a8bfb1cf041e29fefdfa1ba786cd2957f14c",
+          "url": "https://github.com/unicode-org/icu/commit/3cd3afff734b99d3e96849fa1064878672abd88b"
+        },
+        "date": 1777057293641,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.38500064687611685,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
