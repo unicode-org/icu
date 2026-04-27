@@ -131,11 +131,9 @@ public class CollationThaiTest extends TestFmwk {
         int line = 0;
         int failed = 0;
         int wordCount = 0;
-        BufferedReader in = null;
-        try {
-            String fileName = "riwords.txt";
-            in = TestUtil.getUtf8DataReader(fileName);
 
+        String fileName = "riwords.txt";
+        try (BufferedReader in = TestUtil.getUtf8DataReader(fileName)) {
             //
             // Loop through each word in the dictionary and compare it to the previous
             // word. They should be in sorted order.
@@ -197,16 +195,6 @@ public class CollationThaiTest extends TestFmwk {
             }
         } catch (IOException e) {
             errln("IOException " + e.getMessage());
-        } finally {
-            if (in == null) {
-                errln("Error: could not open test file. Aborting test.");
-                return;
-            } else {
-                try {
-                    in.close();
-                } catch (IOException ignored) {
-                }
-            }
         }
 
         if (failed != 0) {

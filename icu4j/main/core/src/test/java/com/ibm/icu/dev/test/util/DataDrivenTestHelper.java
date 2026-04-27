@@ -104,11 +104,7 @@ public abstract class DataDrivenTestHelper {
     }
 
     public DataDrivenTestHelper load(Class<?> classFileIsRelativeTo, String file) {
-        BufferedReader in = null;
-        try {
-            in = FileUtilities.openFile(classFileIsRelativeTo, file);
-            // boolean breakpoint = false;
-
+        try (BufferedReader in = FileUtilities.openFile(classFileIsRelativeTo, file)) {
             while (true) {
                 String line = in.readLine();
                 if (line == null) {
@@ -148,14 +144,6 @@ public abstract class DataDrivenTestHelper {
             }
         } catch (IOException e) {
             throw new ICUUncheckedIOException(e);
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException e) {
-                    throw new ICUUncheckedIOException(e);
-                }
-            }
         }
         lines = Collections.unmodifiableList(lines); // should do deep unmodifiable...
         comments = Collections.unmodifiableList(comments);
