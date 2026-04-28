@@ -269,13 +269,6 @@ public class LSTMBreakEngine extends DictionaryBreakEngine {
         }
     }
 
-    private static void addTo(final float[] a, float[] result) {
-        assert a.length == result.length;
-        for (int i = 0; i < result.length; i++) {
-            result[i] += a[i];
-        }
-    }
-
     private static void hadamardProductTo(final float[] a, float[] result) {
         assert a.length == result.length;
         for (int i = 0; i < result.length; i++) {

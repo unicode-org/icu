@@ -123,14 +123,6 @@ public class HolidayCalendarDemo extends DemoApplet {
             buildGUI();
         }
 
-        // ------------------------------------------------------------
-        // package private
-        // ------------------------------------------------------------
-        void addWithFont(Container container, Component foo, Font font) {
-            if (font != null) foo.setFont(font);
-            container.add(foo);
-        }
-
         /**
          * Called to start the applet. You never need to call this method directly, it is called
          * when the applet's document is visited.
@@ -357,13 +349,6 @@ public class HolidayCalendarDemo extends DemoApplet {
             }
         }
 
-        /** Print out the error message while debugging this program. */
-        public void errorText(String s) {
-            if (DEBUG) {
-                System.out.println(s);
-            }
-        }
-
         protected void processWindowEvent(WindowEvent e) {
             System.out.println("event " + e);
             if (e.getID() == WindowEvent.WINDOW_CLOSING) {
@@ -429,10 +414,6 @@ public class HolidayCalendarDemo extends DemoApplet {
 
         public com.ibm.icu.util.Calendar getCalendar() {
             return fCalendar;
-        }
-
-        public Locale getCalendarLocale() {
-            return fCalendarLocale;
         }
 
         public Locale getDisplayLocale() {

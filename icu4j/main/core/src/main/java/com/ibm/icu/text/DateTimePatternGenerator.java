@@ -24,7 +24,6 @@ import com.ibm.icu.util.ULocale.Category;
 import com.ibm.icu.util.UResourceBundle;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.BitSet;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
@@ -223,18 +222,6 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
             calendarTypeToUse = "gregorian"; // fallback
         }
         return calendarTypeToUse;
-    }
-
-    private void consumeShortTimePattern(String shortTimePattern, PatternInfo returnInfo) {
-        // keep this pattern to populate other time field
-        // combination patterns by hackTimes later in this method.
-        // ICU-20383 No longer set defaultHourFormatChar to the hour format character from
-        // this pattern; instead it is set from LOCALE_TO_ALLOWED_HOUR which now
-        // includes entries for both preferred and allowed formats.
-
-        // some languages didn't add mm:ss or HH:mm, so put in a hack to compute that from the short
-        // time.
-        hackTimes(returnInfo, shortTimePattern);
     }
 
     private class AppendItemFormatsSink extends UResource.Sink {
@@ -535,71 +522,6 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     @Deprecated
     public void setDefaultHourFormatChar(char defaultHourFormatChar) {
         this.defaultHourFormatChar = defaultHourFormatChar;
-    }
-
-    private void hackTimes(PatternInfo returnInfo, String shortTimePattern) {
-        fp.set(shortTimePattern);
-        StringBuilder mmss = new StringBuilder();
-        // to get mm:ss, we strip all but mm literal ss
-        boolean gotMm = false;
-        for (int i = 0; i < fp.items.size(); ++i) {
-            Object item = fp.items.get(i);
-            if (item instanceof String) {
-                if (gotMm) {
-                    mmss.append(fp.quoteLiteral(item.toString()));
-                }
-            } else {
-                char ch = item.toString().charAt(0);
-                if (ch == 'm') {
-                    gotMm = true;
-                    mmss.append(item);
-                } else if (ch == 's') {
-                    if (!gotMm) {
-                        break; // failed
-                    }
-                    mmss.append(item);
-                    addPattern(mmss.toString(), false, returnInfo);
-                    break;
-                } else if (gotMm || ch == 'z' || ch == 'Z' || ch == 'v' || ch == 'V') {
-                    break; // failed
-                }
-            }
-        }
-        // to get hh:mm, we strip (literal ss) and (literal S)
-        // the easiest way to do this is to mark the stuff we want to nuke, then remove it in a
-        // second pass.
-        BitSet variables = new BitSet();
-        BitSet nuke = new BitSet();
-        for (int i = 0; i < fp.items.size(); ++i) {
-            Object item = fp.items.get(i);
-            if (item instanceof VariableField) {
-                variables.set(i);
-                char ch = item.toString().charAt(0);
-                if (ch == 's' || ch == 'S') {
-                    nuke.set(i);
-                    for (int j = i - 1; j >= 0; ++j) {
-                        if (variables.get(j)) break;
-                        nuke.set(i);
-                    }
-                }
-            }
-        }
-        String hhmm = getFilteredPattern(fp, nuke);
-        addPattern(hhmm, false, returnInfo);
-    }
-
-    private static String getFilteredPattern(FormatParser fp, BitSet nuke) {
-        StringBuilder result = new StringBuilder();
-        for (int i = 0; i < fp.items.size(); ++i) {
-            if (nuke.get(i)) continue;
-            Object item = fp.items.get(i);
-            if (item instanceof String) {
-                result.append(fp.quoteLiteral(item.toString()));
-            } else {
-                result.append(item.toString());
-            }
-        }
-        return result.toString();
     }
 
     /*private static int getAppendNameNumber(String string) {

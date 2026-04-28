@@ -863,28 +863,6 @@ public class PluralRules implements Serializable {
         }
 
         /**
-         * @internal CLDR
-         * @deprecated This API is ICU internal only
-         */
-        @Deprecated
-        private FixedDecimal(FixedDecimal other) {
-            // Ugly, but necessary, because constructors must only call other
-            // constructors in the first line of the body, and
-            // FixedDecimal(String) was refactored to support exponents.
-            this.source = other.source;
-            this.visibleDecimalDigitCount = other.visibleDecimalDigitCount;
-            this.visibleDecimalDigitCountWithoutTrailingZeros =
-                    other.visibleDecimalDigitCountWithoutTrailingZeros;
-            this.decimalDigits = other.decimalDigits;
-            this.decimalDigitsWithoutTrailingZeros = other.decimalDigitsWithoutTrailingZeros;
-            this.integerValue = other.integerValue;
-            this.hasIntegerValue = other.hasIntegerValue;
-            this.isNegative = other.isNegative;
-            this.exponent = other.exponent;
-            this.baseFactor = other.baseFactor;
-        }
-
-        /**
          * {@inheritDoc}
          *
          * @internal CLDR
