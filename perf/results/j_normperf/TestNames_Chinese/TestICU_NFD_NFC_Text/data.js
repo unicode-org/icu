@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1777060728434,
+  "lastUpdate": 1777387516879,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -89246,6 +89246,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 3.791652484951566,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "51795b81f84d293ed32698ae7ac78ef7c284e413",
+          "message": "ICU-23247 Fix all 'Finally' errorprone issues",
+          "timestamp": "2026-04-28T07:32:44-07:00",
+          "tree_id": "b00c08da0d9d7139dce1246110dd248ae56dbc1a",
+          "url": "https://github.com/unicode-org/icu/commit/51795b81f84d293ed32698ae7ac78ef7c284e413"
+        },
+        "date": 1777387066088,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 4.2610975791589,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
