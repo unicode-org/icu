@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1777389279027,
+  "lastUpdate": 1777403507540,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -84939,6 +84939,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 13372711.4825,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "7c8c6fbd79de1432823507dbb658cdbdcaa2ff8d",
+          "message": "ICU-23386 Remove com.ibm.icu.dev.tool.index.IndexGenerator",
+          "timestamp": "2026-04-28T20:37:17+02:00",
+          "tree_id": "b031cb59062d3ec9c85b9c5f023ffc24f2cc37a2",
+          "url": "https://github.com/unicode-org/icu/commit/7c8c6fbd79de1432823507dbb658cdbdcaa2ff8d"
+        },
+        "date": 1777403054390,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 302.2161,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 34051459.1295,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 14241195.0106,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 33883975.2468,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 15558407.5648,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
