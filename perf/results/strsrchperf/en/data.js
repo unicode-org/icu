@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1777422543532,
+  "lastUpdate": 1777497481805,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -54321,6 +54321,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 49.4838,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "03e32b49af4115fdfe04cbbce51623aa53d6edd0",
+          "message": "ICU-23248 Add errorprone documentation, including patching",
+          "timestamp": "2026-04-29T13:48:03-07:00",
+          "tree_id": "57875789d0904eea79f01fd678f2245c21367cce",
+          "url": "https://github.com/unicode-org/icu/commit/03e32b49af4115fdfe04cbbce51623aa53d6edd0"
+        },
+        "date": 1777497031067,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 23.1346,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 51.2448,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
