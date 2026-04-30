@@ -93,11 +93,8 @@ mvn clean test -DskipTests -DskipITs -l /tmp/errorprone_all.log -P errorprone-al
 If errorprone knows how to patch the kind of issue you specified, it will update the files.
 
 > :point_right: **Note**: the patches will not always apply cleanly.
->
-> Keep an eye on warnings, and `git status` see if there
-> are any files with an `.orig` or `.rej` extension.
-> Those are patches that didn't apply cleanly, and will need to be checked
-> more carefully, and possibly fixed by hand.
+> 
+> Keep an eye on warnings or errors, you might have to fix some problems "by hand."
 
 ### Test, cleanup
 
