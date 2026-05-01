@@ -5680,17 +5680,17 @@ void CalendarTest::Test22633ChineseOverflow() {
 
     cal->setTime(17000065021099877464213620139773683829419175940649608600213244013003611130029599692535053209683880603725167923910423116397083334648012657787978113960494455603744210944.000000, status);
     cal->add(UCAL_YEAR, 1935762034, status);
-    assertTrue("Should return falure", U_FAILURE(status));
+    assertTrue("Should return failure", U_FAILURE(status));
 
     status = U_ZERO_ERROR;
     cal->set(UCAL_ERA, 1651667877);
     cal->add(UCAL_YEAR, 1935762034, status);
-    assertTrue("Should return falure", U_FAILURE(status));
+    assertTrue("Should return failure", U_FAILURE(status));
 }
 
 void CalendarTest::Test22962BuddhistOverflow() {
     UErrorCode status = U_ZERO_ERROR;
-    LocalPointer<Calendar> cal(Calendar::createInstance(Locale("en@calendar=uddhist"), status), status);
+    LocalPointer<Calendar> cal(Calendar::createInstance(Locale("en@calendar=buddhist"), status), status);
     U_ASSERT(U_SUCCESS(status));
     cal->clear();
     cal->set(UCAL_WEEK_OF_YEAR, 1666136);
@@ -5698,7 +5698,7 @@ void CalendarTest::Test22962BuddhistOverflow() {
     cal->fieldDifference(
         261830011167902373443927125260580558779842815957727840993886210772873194951140935848493861585917165011373697198856398176256.000000,
         UCAL_YEAR_WOY, status);
-    assertTrue("Should return falure", U_FAILURE(status));
+    assertTrue("Should return failure", U_FAILURE(status));
 }
 
 void CalendarTest::Test22962ChineseOverflow() {
@@ -5708,7 +5708,7 @@ void CalendarTest::Test22962ChineseOverflow() {
     cal->add(UCAL_DAY_OF_WEEK_IN_MONTH, 1661092210, status);
     cal->add(UCAL_MINUTE, -1330638081, status);
     cal->add(UCAL_MONTH, 643194, status);
-    assertTrue("Should return falure", U_FAILURE(status));
+    assertTrue("Should return failure", U_FAILURE(status));
 }
 
 void CalendarTest::Test22633IndianOverflow() {
