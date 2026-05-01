@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1777568254795,
+  "lastUpdate": 1777679544737,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -44607,6 +44607,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 1961.5734597602143,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "a011a81db68f099f4b2f9e403b350e3ffa166dfa",
+          "message": "ICU-23248 Errorprone doc: edit errorprone.cfg, not pom.xml",
+          "timestamp": "2026-05-01T16:40:06-07:00",
+          "tree_id": "37926c19bbd5ec2982a77d4513dcd9b02c7ae765",
+          "url": "https://github.com/unicode-org/icu/commit/a011a81db68f099f4b2f9e403b350e3ffa166dfa"
+        },
+        "date": 1777679102397,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 1907.6058102070979,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
