@@ -74,13 +74,13 @@ Always check, visually and by running all tests.
 
 ### Preparation
 
-1. Edit the `pom.xml` in the root of the ICU repo.
-1. Search for the `errorprone-all` profile, and in the `compilerArgs` section of
-  that profile find the `<arg>` element that contains `-Xplugin:ErrorProne`.
-1. After `-Xplugin:ErrorProne` add `-XepPatchChecks:<listOfIssueTypes> -XepPatchLocation:IN_PLACE`.
-  For example `-XepPatchChecks:UnusedMethod`. \
-  You can also specify more than one kind of issues to fix, using comma as a separator,
-  for example `-XepPatchChecks:UnusedMethod,UnusedVariable`.
+1. Edit the `errorprone.cfg` file in the root of the ICU repo.
+1. Add two more flags: `-XepPatchLocation:IN_PLACE` and `-XepPatchChecks:<IssueType>`, on separate lines. \
+    For example:
+    ```
+    -XepPatchLocation:IN_PLACE
+    -XepPatchChecks:UnusedMethod
+    ```
 
 ### Apply the fixes
 
@@ -108,24 +108,24 @@ mvn spotless:apply
 mvn package
 ```
 
-**Visually inspect the changed files** (`git diff` or a GUI git client are handy here). Compare with the initial errorprone report.
+**Visually inspect the changed files** (`git diff` or a GUI git client are handy here).
+Compare with the initial errorprone report.
 
 ### Prepare to submit
 
-Update `errorprone.cfg` to declare the issue you just fix as an error. \
+1. Update `errorprone.cfg` to declare the issue you just fix as an error. \
 That way it will prevent it from coming back in the future.
-In our example add `-Xep:UnusedMethod:ERROR`.
-
-Revert the `pom.xml` changes (`git checkout -- pom.xml`).
-
-Run all the errorprone checks (see [“Running the checks”](#running-the-checks))
-to see that the all issues of that type are fixed.
-
-Run a regular build with testing:
-```sh
-mvn clean package
-```
-
-You might have to go back to [“Test, cleanup”](#test-cleanup) if something fails.
-
-Finally, create a PR, commit, push, send for review.
+    * Change `-XepPatchChecks:<IssueType>` to `-Xep:<IssueType>:ERROR`. \
+      In our example `-XepPatchChecks:UnusedMethod` to `-Xep:UnusedMethod:ERROR`.
+    * Move the `-Xep:<IssueType>:ERROR` together with the other `:ERROR` tags
+      if not there, keeping that block of tags sorted.
+    * Remove `-XepPatchLocation:IN_PLACE`.
+1. Check that everything is fine
+    * Run all the errorprone checks (see [“Running the checks”](#running-the-checks))
+to see that all the issues of that type are fixed.
+    * Run a regular build with testing:
+        ```sh
+        mvn clean package
+        ```
+1. You might have to go back to [“Test, cleanup”](#test-cleanup) if something fails.
+1. Finally, create a PR, commit, push, send for review.
