@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1777568951720,
+  "lastUpdate": 1777680121598,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -54393,6 +54393,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 49.4377,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "a011a81db68f099f4b2f9e403b350e3ffa166dfa",
+          "message": "ICU-23248 Errorprone doc: edit errorprone.cfg, not pom.xml",
+          "timestamp": "2026-05-01T16:40:06-07:00",
+          "tree_id": "37926c19bbd5ec2982a77d4513dcd9b02c7ae765",
+          "url": "https://github.com/unicode-org/icu/commit/a011a81db68f099f4b2f9e403b350e3ffa166dfa"
+        },
+        "date": 1777679665906,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 22.6265,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 49.4231,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
