@@ -2042,6 +2042,21 @@ public class SpoofChecker {
             int CFUStringTableOffset = bytes.getInt();
             int CFUStringTableSize = bytes.getInt();
 
+            // Validate offsets and sizes against total data length.
+            if (dataLength < 36  // minimum header size (9 int32 fields)
+                    || CFUKeysOffset < 0 || CFUKeysOffset > dataLength
+                    || CFUKeysSize < 0 || CFUKeysSize > (dataLength - CFUKeysOffset) / 4
+                    || CFUValuesOffset < 0 || CFUValuesOffset > dataLength
+                    || CFUValuesSize < 0 || CFUValuesSize > (dataLength - CFUValuesOffset) / 2
+                    || CFUStringTableOffset < 0 || CFUStringTableOffset > dataLength
+                    || CFUStringTableSize < 0 || CFUStringTableSize > (dataLength - CFUStringTableOffset) / 2) {
+                throw new java.io.IOException("Bad Spoof Check Data: invalid offsets or sizes.");
+            }
+            // Cross-table consistency: values table must be at least as large as keys table.
+            if (CFUKeysSize > 0 && CFUValuesSize < CFUKeysSize) {
+                throw new java.io.IOException("Bad Spoof Check Data: values table smaller than keys table.");
+            }
+
             // We have now read the file header, and obtained the position for each
             // of the data items. Now read each in turn, first seeking the
             // input stream to the position of the data item.
@@ -2071,6 +2086,10 @@ public class SpoofChecker {
             // The result after the loop will be in lo.
             int lo = 0;
             int hi = length();
+            if (hi == 0 || fCFUKeys == null) {
+                dest.appendCodePoint(inChar);
+                return;
+            }
             do {
                 int mid = (lo + hi) / 2;
                 if (codePointAt(mid) > inChar) {
