@@ -324,6 +324,22 @@ public final class RBBIDataWrapper {
         int pos = DH_SIZE * 4; // offset of end of header, which has DH_SIZE fields, all int32_t (4
         // bytes)
 
+        // Validate all offset+length pairs against the total data length.
+        int totalLen = This.fHeader.fLength;
+        if (totalLen < pos
+                || This.fHeader.fFTable > totalLen
+                || This.fHeader.fFTableLen > totalLen - This.fHeader.fFTable
+                || This.fHeader.fRTable > totalLen
+                || This.fHeader.fRTableLen > totalLen - This.fHeader.fRTable
+                || This.fHeader.fTrie > totalLen
+                || This.fHeader.fTrieLen > totalLen - This.fHeader.fTrie
+                || This.fHeader.fRuleSource > totalLen
+                || This.fHeader.fRuleSourceLen > totalLen - This.fHeader.fRuleSource
+                || This.fHeader.fStatusTable > totalLen
+                || This.fHeader.fStatusTableLen > totalLen - This.fHeader.fStatusTable) {
+            throw new IOException("Break iterator Rule data corrupt");
+        }
+
         //
         // Read in the Forward state transition table as an array of shorts.
         //
