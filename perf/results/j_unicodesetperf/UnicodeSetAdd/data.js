@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1777679386545,
+  "lastUpdate": 1778107036258,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -44877,6 +44877,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "UnicodeSetAdd",
             "value": 9.382060236122685,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "77465f051fd924c8ed9183f6ac7202e3e58b8cbe",
+          "message": "ICU-23399 Temporarily disable windows-msys2-gcc-x86_64 - Run icuinfo from CMD",
+          "timestamp": "2026-05-06T15:18:43-07:00",
+          "tree_id": "b481af6f693382630d575ba143236f9d9d4ab9c0",
+          "url": "https://github.com/unicode-org/icu/commit/77465f051fd924c8ed9183f6ac7202e3e58b8cbe"
+        },
+        "date": 1778106530697,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "UnicodeSetAdd",
+            "value": 7.818684347844938,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
