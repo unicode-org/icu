@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1778194073279,
+  "lastUpdate": 1778198178379,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -85533,6 +85533,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 1583528.6548,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "4ade0ece2ec3de769d060579cad1460a797db8f8",
+          "message": "ICU-23380 ICU: sr-ME should use the sr-Latn-ME collation",
+          "timestamp": "2026-05-07T16:12:11-07:00",
+          "tree_id": "e49f3ab181b8800d9dd19a3fe9d7a2ac1fa8e76e",
+          "url": "https://github.com/unicode-org/icu/commit/4ade0ece2ec3de769d060579cad1460a797db8f8"
+        },
+        "date": 1778197729476,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 381.5438,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 13217656.2022,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2011440.3215,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 11876018.326,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 1865761.2997,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
