@@ -533,6 +533,10 @@ Normalizer2Impl::copyLowPrefixFromNulTerminated(const char16_t *src,
     // data and check the first part of the string.
     // After this prefix, determine the string length to simplify the rest
     // of the code.
+    if(src==nullptr) {
+        errorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return src;
+    }
     const char16_t *prevSrc=src;
     char16_t c;
     while((c=*src++)<minNeedDataCP && c!=0) {}
@@ -1731,6 +1735,9 @@ Normalizer2Impl::composeQuickCheck(const char16_t *src, const char16_t *limit,
     if(limit==nullptr) {
         UErrorCode errorCode=U_ZERO_ERROR;
         src=copyLowPrefixFromNulTerminated(src, minNoMaybeCP, nullptr, errorCode);
+        if (U_FAILURE(errorCode)) {
+            return src;
+        }
         limit=u_strchr(src, 0);
         if (prevBoundary != src) {
             if (hasCompBoundaryAfter(*(src-1), onlyContiguous)) {

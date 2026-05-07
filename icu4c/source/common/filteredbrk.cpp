@@ -603,7 +603,11 @@ SimpleFilteredBreakIteratorBuilder::build(BreakIterator* adoptBreakIterator, UEr
   LocalArray<UnicodeString> ustrs(ustrs_ptr);
 
   LocalMemory<int> partials;
-  partials.allocateInsteadAndReset(subCount);
+  // Check subCount > 0 to distinguish allocation failure from empty set (both return nullptr)
+  if (subCount > 0 && partials.allocateInsteadAndReset(subCount) == nullptr) {
+    status = U_MEMORY_ALLOCATION_ERROR;
+    return nullptr;
+  }
 
   LocalPointer<UCharsTrie>    backwardsTrie; //  i.e. ".srM" for Mrs.
   LocalPointer<UCharsTrie>    forwardsPartialTrie; //  Has ".a" for "a.M."

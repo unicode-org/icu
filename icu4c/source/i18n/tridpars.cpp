@@ -907,6 +907,9 @@ void U_CALLCONV TransliteratorIDParser::init(UErrorCode &status) {
     ucln_i18n_registerCleanup(UCLN_I18N_TRANSLITERATOR, utrans_transliterator_cleanup);
 
     SPECIAL_INVERSES = new Hashtable(true, status);
+    if (U_FAILURE(status)) {
+        return;
+    }
     if (SPECIAL_INVERSES == nullptr) {
     	status = U_MEMORY_ALLOCATION_ERROR;
     	return;

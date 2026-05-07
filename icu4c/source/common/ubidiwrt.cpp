@@ -60,16 +60,12 @@ doWriteForward(const char16_t *src, int32_t srcLength,
                char16_t *dest, int32_t destSize,
                uint16_t options,
                UErrorCode *pErrorCode) {
-    if (srcLength<=0) {
-        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
-    }
     /* optimize for several combinations of options */
     switch(options&(UBIDI_REMOVE_BIDI_CONTROLS|UBIDI_DO_MIRRORING)) {
     case 0: {
         /* simply copy the LTR run to the destination */
         int32_t length=srcLength;
-        if(destSize<length) {
+        if(!destSize || destSize<length) {
             *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
             return srcLength;
         }
@@ -83,7 +79,7 @@ doWriteForward(const char16_t *src, int32_t srcLength,
         int32_t i=0, j=0;
         UChar32 c;
 
-        if(destSize<srcLength) {
+        if(!destSize || destSize<srcLength) {
             *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
             return srcLength;
         }
@@ -178,11 +174,6 @@ doWriteReverse(const char16_t *src, int32_t srcLength,
     int32_t i, j;
     UChar32 c;
 
-    if(srcLength<=0) {
-        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
-    }
-
     /* optimize for several combinations of options */
     switch(options&(UBIDI_REMOVE_BIDI_CONTROLS|UBIDI_DO_MIRRORING|UBIDI_KEEP_BASE_COMBINING)) {
     case 0:
@@ -192,7 +183,7 @@ doWriteReverse(const char16_t *src, int32_t srcLength,
          * and there is no mirroring and no keeping combining characters
          * with their base characters.
          */
-        if(destSize<srcLength) {
+        if(!destSize || destSize<srcLength) {
             *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
             return srcLength;
         }
@@ -220,7 +211,7 @@ doWriteReverse(const char16_t *src, int32_t srcLength,
          * and there is no mirroring.
          * We do need to keep combining characters with their base characters.
          */
-        if(destSize<srcLength) {
+        if(!destSize || destSize<srcLength) {
             *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
             return srcLength;
         }
@@ -269,7 +260,7 @@ doWriteReverse(const char16_t *src, int32_t srcLength,
             src-=srcLength;
         }
 
-        if(destSize<i) {
+        if(!destSize || destSize<i) {
             *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
             return i;
         }

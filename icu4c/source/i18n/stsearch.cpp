@@ -290,6 +290,9 @@ StringSearch * StringSearch::safeClone() const
                                             getCollator(),
                                             m_breakiterator_,
                                             status);
+    if (U_FAILURE(status)) {
+        return nullptr;
+    }
     /* test for nullptr */
     if (result == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;

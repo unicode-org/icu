@@ -843,6 +843,7 @@ _fromUnicodeWithCallback(UConverterFromUnicodeArgs *pArgs, UErrorCode *err) {
     const char16_t *realSource, *realSourceLimit;
     int32_t realSourceIndex;
     UBool realFlush;
+    UBool needRestore=false;
 
     cnv=pArgs->converter;
     s=pArgs->source;
@@ -891,6 +892,7 @@ _fromUnicodeWithCallback(UConverterFromUnicodeArgs *pArgs, UErrorCode *err) {
         pArgs->sourceLimit=replay-cnv->preFromULength;
         pArgs->flush=false;
         sourceIndex=-1;
+        needRestore=true;
 
         cnv->preFromULength=0;
     }
@@ -982,6 +984,7 @@ _fromUnicodeWithCallback(UConverterFromUnicodeArgs *pArgs, UErrorCode *err) {
                     if((sourceIndex+=cnv->preFromULength)<0) {
                         sourceIndex=-1;
                     }
+                    needRestore=true;
 
                     cnv->preFromULength=0;
                 } else {
@@ -1002,7 +1005,7 @@ _fromUnicodeWithCallback(UConverterFromUnicodeArgs *pArgs, UErrorCode *err) {
                      * (continue converting by breaking out of only the inner loop)
                      */
                     break;
-                } else if(realSource!=nullptr) {
+                } else if(needRestore) {
                     /* switch back from replaying to the real source and continue */
                     pArgs->source=realSource;
                     pArgs->sourceLimit=realSourceLimit;
@@ -1010,6 +1013,7 @@ _fromUnicodeWithCallback(UConverterFromUnicodeArgs *pArgs, UErrorCode *err) {
                     sourceIndex=realSourceIndex;
 
                     realSource=nullptr;
+                    needRestore=false;
                     break;
                 } else if(pArgs->flush && cnv->fromUChar32!=0) {
                     /*
@@ -1065,7 +1069,7 @@ _fromUnicodeWithCallback(UConverterFromUnicodeArgs *pArgs, UErrorCode *err) {
                      * copied back into the UConverter
                      * and the real arguments must be restored
                      */
-                    if(realSource!=nullptr) {
+                    if(needRestore) {
                         int32_t length;
 
                         U_ASSERT(cnv->preFromULength==0);
@@ -1079,6 +1083,7 @@ _fromUnicodeWithCallback(UConverterFromUnicodeArgs *pArgs, UErrorCode *err) {
                         pArgs->source=realSource;
                         pArgs->sourceLimit=realSourceLimit;
                         pArgs->flush=realFlush;
+                        needRestore=false;
                     }
 
                     return;

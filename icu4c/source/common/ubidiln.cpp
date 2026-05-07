@@ -364,6 +364,12 @@ ubidi_getVisualRun(UBiDi *pBiDi, int32_t runIndex,
 {
     int32_t start;
     UErrorCode errorCode = U_ZERO_ERROR;
+    if(pLogicalStart!=nullptr) {
+        *pLogicalStart=0;
+    }
+    if(pLength!=nullptr) {
+        *pLength=0;
+    }
     RETURN_IF_NOT_VALID_PARA_OR_LINE(pBiDi, errorCode, UBIDI_LTR);
     ubidi_getRuns(pBiDi, &errorCode);
     if(U_FAILURE(errorCode)) {
@@ -585,6 +591,10 @@ ubidi_getRuns(UBiDi *pBiDi, UErrorCode*) {
             }
         }
 
+        if (runCount==0) {
+            return false;
+        }
+  
         /*
          * We don't need to see if the last run can be merged with a trailing
          * WS run because setTrailingWSStart() would have done that.
@@ -645,6 +655,7 @@ ubidi_getRuns(UBiDi *pBiDi, UErrorCode*) {
                 /* there is a separate WS run */
                 runs[runIndex].logicalStart=limit;
                 runs[runIndex].visualLimit=length-limit;
+                runs[runIndex].insertRemove=0;
                 /* For the trailing WS run, pBiDi->paraLevel is ok even
                    if contextual multiple paragraphs.                   */
                 if(pBiDi->paraLevel<minLevel) {

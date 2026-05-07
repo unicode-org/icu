@@ -329,6 +329,9 @@ unorm_cmpEquivFold(const char16_t *s1, int32_t length1,
                      * the decomposition would replace the entire code point
                      */
                     --s2;
+                    if (s2==fold2) {
+                        return c1-c2;
+                    }
                     c2=*(s2-1);
                 }
             }

@@ -3324,6 +3324,9 @@ int32_t Calendar::computeZoneOffset(double millis, double millisInDay, UErrorCod
             // 6 hour window would be sufficient for this purpose.
             int32_t tmpRaw, tmpDst;
             tz.getOffset(tgmt - 6*60*60*1000, false, tmpRaw, tmpDst, ec);
+            if (U_FAILURE(ec)) {
+                return 0;
+            }
             int32_t offsetDelta = (rawOffset + dstOffset) - (tmpRaw + tmpDst);
 
             U_ASSERT(offsetDelta < -6*60*60*1000);

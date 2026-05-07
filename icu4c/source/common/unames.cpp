@@ -999,6 +999,11 @@ enumAlgNames(AlgorithmicRange *range,
         uint16_t prefixLength, i, idx;
 
         char c;
+        
+        /* guard against invalid data */
+        if(count==0 || count>8) {
+            return true;
+        }
 
         /* name = prefix factorized-elements */
 
@@ -1025,7 +1030,7 @@ enumAlgNames(AlgorithmicRange *range,
         while(++start<limit) {
             /* increment the indexes in lexical order bound by the factors */
             i=count;
-            for (;;) {
+            while (i>0) {
                 idx = static_cast<uint16_t>(indexes[--i] + 1);
                 if(idx<factors[i]) {
                     /* skip one index and its element string */
@@ -1129,6 +1134,11 @@ findAlgName(AlgorithmicRange *range, UCharNameChoice nameChoice, const char *oth
 
         char c;
 
+        /* guard against invalid data */        
+        if(count==0 || count>8) {
+            return true;
+        }
+        
         /* name = prefix factorized-elements */
 
         /* compare prefix */
@@ -1154,7 +1164,7 @@ findAlgName(AlgorithmicRange *range, UCharNameChoice nameChoice, const char *oth
         while(++start<limit) {
             /* increment the indexes in lexical order bound by the factors */
             i=count;
-            for (;;) {
+            while (i>0) {
                 idx = static_cast<uint16_t>(indexes[--i] + 1);
                 if(idx<factors[i]) {
                     /* skip one index and its element string */

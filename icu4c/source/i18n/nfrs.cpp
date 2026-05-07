@@ -604,7 +604,13 @@ NFRuleSet::findFractionRuleSetRule(double number) const
     int64_t numerator;
     {
         for (uint32_t i = 1; i < rules.size(); ++i) {
+            if (leastCommonMultiple == 0) {
+                return nullptr;
+            }
             leastCommonMultiple = util_lcm(leastCommonMultiple, rules[i]->getBaseValue());
+        }
+        if (leastCommonMultiple == 0) {
+            return nullptr;
         }
         numerator = util64_fromDouble(number * static_cast<double>(leastCommonMultiple) + 0.5);
     }

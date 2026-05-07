@@ -1714,6 +1714,10 @@ static int32_t _cmpFold(
                      * the decomposition would replace the entire code point
                      */
                     --s2;
+                    if (s2==fold2) {
+                        cmpRes=c1-c2;
+                        break;
+                    }
                     --m2;
                     c2=*(s2-1);
                 }

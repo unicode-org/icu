@@ -93,6 +93,10 @@ public:
     // If there is an offset equal to delta, it is removed.
     // delta=[1..maxLength]
     void shift(int32_t delta) {
+        // If OffsetList has zero capacity due to setMaxLength memory allocation error.
+        if (capacity == 0) {
+            return;
+        }
         int32_t i=start+delta;
         if(i>=capacity) {
             i-=capacity;
@@ -107,6 +111,10 @@ public:
     // Add an offset. The list must not contain it yet.
     // offset=[1..maxLength]
     void addOffset(int32_t offset) {
+        // If OffsetList has zero capacity due to setMaxLength memory allocation error.
+        if (capacity == 0) {
+            return;
+        }
         int32_t i=start+offset;
         if(i>=capacity) {
             i-=capacity;
@@ -117,6 +125,10 @@ public:
 
     // offset=[1..maxLength]
     UBool containsOffset(int32_t offset) const {
+        // If OffsetList has zero capacity due to setMaxLength memory allocation error.
+        if (capacity == 0) {
+            return false;
+        }
         int32_t i=start+offset;
         if(i>=capacity) {
             i-=capacity;
@@ -128,6 +140,10 @@ public:
     // and reduce all other offsets by this minimum.
     // Returns [1..maxLength].
     int32_t popMinimum() {
+        // If OffsetList has zero capacity due to setMaxLength memory allocation error.
+        if (capacity == 0) {
+            return 0;
+        }
         // Look for the next offset in list[start+1..capacity-1].
         int32_t i=start, result;
         while(++i<capacity) {

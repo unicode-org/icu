@@ -82,6 +82,9 @@ setWeightByte(uint32_t weight, int32_t idx, uint32_t byte) {
 
 static inline uint32_t
 truncateWeight(uint32_t weight, int32_t length) {
+    if (length == 0) {
+        return 0;
+    }
     return static_cast<uint32_t>(weight & (0xffffffff << (8 * (4 - length))));
 }
 

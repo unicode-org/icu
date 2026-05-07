@@ -1512,6 +1512,13 @@ int32_t TransliteratorParser::syntaxError(UErrorCode parseErrorCode,
                                           int32_t pos,
                                           UErrorCode& status)
 {
+    if (pos > rule.length()) {
+        pos = rule.length();
+    }
+    if (pos < 0) {
+        pos = 0;
+    }
+
     parseError.offset = pos;
     parseError.line = 0 ; /* we are not using line numbers */
 

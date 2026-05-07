@@ -534,7 +534,10 @@ LSR LikelySubtags::makeMaximizedLsrFrom(const Locale &locale,
     }
     LSR max = makeMaximizedLsr(locale.getLanguage(), locale.getScript(), locale.getCountry(),
                             locale.getVariant(), returnInputIfUnmatch, errorCode);
-
+    if (!U_SUCCESS(errorCode)) {
+        return LSR(name, "", "", LSR::EXPLICIT_LSR);
+    }
+    
     if (uprv_strlen(max.language) == 0 &&
         uprv_strlen(max.script) == 0 &&
         uprv_strlen(max.region) == 0) {
