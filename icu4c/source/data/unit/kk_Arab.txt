@@ -1,0 +1,1554 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+kk_Arab{
+    %%Parent{"root"}
+    units{
+        angle{
+            steradian{
+                dnam{"ستەراديان"}
+                one{"{0} ستەراديان"}
+                other{"{0} ستەراديان"}
+            }
+        }
+        compound{
+            1024p1{"كيبي{0}"}
+            1024p2{"مەبي{0}"}
+            1024p3{"گيبي{0}"}
+            1024p4{"تەبي{0}"}
+            1024p5{"پەبي{0}"}
+            1024p6{"ەكسبي{0}"}
+            1024p7{"زەبي{0}"}
+            1024p8{"يوبي{0}"}
+            10p-1{"دەسي{0}"}
+            10p-12{"پيكو{0}"}
+            10p-15{"فەمتو{0}"}
+            10p-18{"اتتو{0}"}
+            10p-2{"سانتي{0}"}
+            10p-21{"زەپتو{0}"}
+            10p-24{"يوكتو{0}"}
+            10p-27{"رونتو{0}"}
+            10p-3{"ميلي{0}"}
+            10p-30{"كۆەكتو{0}"}
+            10p-6{"ميكرو{0}"}
+            10p-9{"نانو{0}"}
+            10p1{"دەكا{0}"}
+            10p12{"تەرا{0}"}
+            10p15{"پەتا{0}"}
+            10p18{"ەكسا{0}"}
+            10p2{"گەكتو{0}"}
+            10p21{"زەتا{0}"}
+            10p24{"يوتا{0}"}
+            10p27{"رونا{0}"}
+            10p3{"كيلو{0}"}
+            10p30{"كۋەتا{0}"}
+            10p6{"مەگا{0}"}
+            10p9{"گيگا{0}"}
+            power2{
+                one{
+                    _{
+                        _{"شارشى {0}"}
+                    }
+                }
+                other{
+                    _{
+                        _{"شارشى {0}"}
+                    }
+                }
+            }
+            power3{
+                one{
+                    _{
+                        _{"تەكشە {0}"}
+                    }
+                }
+                other{
+                    _{
+                        _{"تەكشە {0}"}
+                    }
+                }
+            }
+        }
+        concentr{
+            katal{
+                dnam{"كاتال"}
+                one{"{0} كاتال"}
+                other{"{0} كاتال"}
+            }
+            milligram-ofglucose-per-deciliter{
+                one{"{0} ميليگرام/دەسيمەتىر"}
+                other{"{0} ميليگرام/دەسيمەتىر"}
+            }
+            millimole-per-liter{
+                one{"{0} ميليمول/ليتىر"}
+                other{"{0} ميليمول/ليتىر"}
+            }
+            ofglucose{
+                dnam{"گليۋكوزا"}
+                one{"{0} گليۋكوزا"}
+                other{"{0} گليۋكوزا"}
+            }
+            part{
+                dnam{"بولىك"}
+                one{"{0} بولىك"}
+                other{"{0} بولىك"}
+            }
+            part-per-1e6{
+                one{"{0} ميلليوندىق ۇلەس"}
+                other{"{0} ميلليوندىق ۇلەس"}
+            }
+            part-per-1e9{
+                one{"{0} ميللياردتىق ۇلەس"}
+                other{"{0} ميللياردتىق ۇلەس"}
+            }
+            percent{
+                one{"{0} پايىز"}
+                other{"{0} پايىز"}
+            }
+            permille{
+                one{"{0} پروميللە"}
+                other{"{0} پروميللە"}
+            }
+            permyriad{
+                one{"{0} پروميرياد"}
+                other{"{0} پروميرياد"}
+            }
+        }
+        consumption{
+            liter-per-100-kilometer{
+                one{"{0} ليتىر/100 كيلومەتىر"}
+                other{"{0} ليتىر/100 كيلومەتىر"}
+            }
+            liter-per-kilometer{
+                one{"{0} ليتىر/كيلومەتىر"}
+                other{"{0} ليتىر/كيلومەتىر"}
+            }
+        }
+        coordinate{
+            dnam{"نەگىزگى باعىت"}
+            east{"{0} شىعىس"}
+            north{"{0} سولتۇستىك"}
+            south{"{0} وڭتۇستىك"}
+            west{"{0} باتىس"}
+        }
+        digital{
+            bit{
+                one{"{0} بيت"}
+                other{"{0} بيت"}
+            }
+            byte{
+                one{"{0} بايت"}
+                other{"{0} بايت"}
+            }
+            gigabit{
+                one{"{0} گيگابيت"}
+                other{"{0} گيگابيت"}
+            }
+            gigabyte{
+                one{"{0} گيگابايت"}
+                other{"{0} گيگابايت"}
+            }
+            kilobit{
+                one{"{0} كيلوبيت"}
+                other{"{0} كيلوبيت"}
+            }
+            kilobyte{
+                one{"{0} كيلوبايت"}
+                other{"{0} كيلوبايت"}
+            }
+            megabit{
+                one{"{0} مەگابيت"}
+                other{"{0} مەگابيت"}
+            }
+            megabyte{
+                one{"{0} مەگابايت"}
+                other{"{0} مەگابايت"}
+            }
+            petabyte{
+                one{"{0} پەتابايت"}
+                other{"{0} پەتابايت"}
+            }
+            terabit{
+                one{"{0} تەرابيت"}
+                other{"{0} تەرابيت"}
+            }
+            terabyte{
+                one{"{0} تەرابايت"}
+                other{"{0} تەرابايت"}
+            }
+        }
+        duration{
+            day{
+                per{"كۇنىنە {0}"}
+            }
+            hour{
+                per{"ساعاتىنا {0}"}
+            }
+            minute{
+                per{"مينۋتىنا {0}"}
+            }
+            month{
+                per{"ايىنا {0}"}
+            }
+            second{
+                per{"سەكۋندىنا {0}"}
+            }
+            week{
+                per{"اپتاسىنا {0}"}
+            }
+        }
+        electric{
+            coulomb{
+                dnam{"كۋلون"}
+                one{"{0} كۋلون"}
+                other{"{0} كۋلون"}
+            }
+            farad{
+                dnam{"فاراد"}
+                one{"{0} فاراد"}
+                other{"{0} فاراد"}
+            }
+            henry{
+                dnam{"حەنري"}
+                one{"{0} حەنري"}
+                other{"{0} حەنري"}
+            }
+            siemens{
+                dnam{"سيمەنس"}
+                one{"{0} سيمەنس"}
+                other{"{0} سيمەنس"}
+            }
+        }
+        energy{
+            becquerel{
+                dnam{"بەككەرەل"}
+                one{"{0} بەككەرەل"}
+                other{"{0} بەككەرەل"}
+            }
+            calorie-it{
+                dnam{"كالو."}
+                one{"{0} كالو."}
+                other{"{0} كالو."}
+            }
+            gray{
+                dnam{"گىرەي"}
+                one{"{0} گىرەي"}
+                other{"{0} گىرەي"}
+            }
+            sievert{
+                dnam{"زيۆەرت"}
+                one{"{0} زيۆەرت"}
+                other{"{0} زيۆەرت"}
+            }
+        }
+        force{
+            kilogram-force{
+                dnam{"كيلوگرام-كۇش"}
+                one{"{0} كيلوگرام-كۇش"}
+                other{"{0} كيلوگرام-كۇش"}
+            }
+            kilowatt-hour-per-100-kilometer{
+                one{"{0} كيلوۆات-ساعات/100 كيلومەتىر"}
+                other{"{0} كيلوۆات-ساعات/100 كيلومەتىر"}
+            }
+            newton{
+                one{"{0} نيۋتون"}
+                other{"{0} نيۋتون"}
+            }
+        }
+        graphics{
+            em{
+                dnam{"باسپالىق em"}
+            }
+            megapixel{
+                dnam{"مەگاپيكسەل"}
+            }
+            pixel{
+                dnam{"پيكسەل"}
+            }
+            pixel-per-centimeter{
+                dnam{"پيكسەل/سانتيمەتىر"}
+            }
+            pixel-per-inch{
+                dnam{"پيكسەل/ديۋيم"}
+            }
+        }
+        light{
+            candela{
+                one{"{0} كاندەلا"}
+                other{"{0} كاندەلا"}
+            }
+            lumen{
+                one{"{0} ليۋمەن"}
+                other{"{0} ليۋمەن"}
+            }
+            lux{
+                one{"{0} ليۋكس"}
+                other{"{0} ليۋكس"}
+            }
+        }
+        magnetic{
+            tesla{
+                dnam{"ت"}
+                one{"{0} تەسلا"}
+                other{"{0} تەسلا"}
+            }
+            weber{
+                dnam{"ۋەبەر"}
+                one{"{0} ۋەبەر"}
+                other{"{0} ۋەبەر"}
+            }
+        }
+        mass{
+            gram{
+                per{"{0}/g"}
+            }
+            pound{
+                dnam{"lb"}
+            }
+            tonne{
+                one{"{0} مەتىرلىك توننا"}
+                other{"{0} مەتىرلىك توننا"}
+            }
+        }
+        pressure{
+            ofhg{
+                dnam{"مەركۋري ءديۋيمى"}
+                one{"{0} مەركۋري ءديۋيمى"}
+                other{"{0} مەركۋري ءديۋيمى"}
+            }
+        }
+        temperature{
+            celsius{
+                one{"{0} سەلسي گرادۋسى"}
+                other{"{0} سەلسي گرادۋسى"}
+            }
+            fahrenheit{
+                one{"{0} فارانگەيت گرادۋسى"}
+                other{"{0} فارانگەيت گرادۋسى"}
+            }
+            generic{
+                dnam{"تەمپەراتۋرا گرادۋسى"}
+                one{"{0} گرادۋس"}
+                other{"{0} گرادۋس"}
+            }
+            kelvin{
+                one{"{0} كەلۆين"}
+                other{"{0} كەلۆين"}
+            }
+        }
+        torque{
+            newton-meter{
+                one{"{0} نيۋتون-مەتىر"}
+                other{"{0} نيۋتون-مەتىر"}
+            }
+        }
+        volume{
+            fluid-ounce-imperial{
+                one{"يمپ سۇيىق ۋنسيا"}
+                other{"{0} يمپ سۇيىق ۋنسيا"}
+            }
+            fluid-ounce-metric{
+                dnam{"سۇ. ۋن."}
+                one{"{0} سۇ. ۋن."}
+                other{"{0} سۇ. ۋن."}
+            }
+        }
+    }
+    unitsNarrow{
+        concentr{
+            katal{
+                dnam{"كاتال"}
+                one{"{0} كاتال"}
+                other{"{0} كاتال"}
+            }
+            ofglucose{
+                dnam{"گليۋكوزا"}
+                one{"{0} گليۋكوزا"}
+                other{"{0} گليۋكوزا"}
+            }
+            part{
+                dnam{"بولىك"}
+                one{"{0} بولىك"}
+                other{"{0} بولىك"}
+            }
+            part-per-1e6{
+                one{"{0} ميلليوندىق ۇلەس"}
+                other{"{0} ميلليوندىق ۇلەس"}
+            }
+            part-per-1e9{
+                one{"{0} ميللياردتىق ۇلەس"}
+                other{"{0} ميللياردتىق ۇلەس"}
+            }
+        }
+        digital{
+            byte{
+                dnam{"B"}
+            }
+        }
+        electric{
+            coulomb{
+                dnam{"كۋلون"}
+                one{"{0} كۋلون"}
+                other{"{0} كۋلون"}
+            }
+            farad{
+                dnam{"فاراد"}
+                one{"{0} فاراد"}
+                other{"{0} فاراد"}
+            }
+            henry{
+                dnam{"حەنري"}
+                one{"{0} حەنري"}
+                other{"{0} حەنري"}
+            }
+        }
+        energy{
+            becquerel{
+                dnam{"بەككەرەل"}
+                one{"{0} بك"}
+                other{"{0} بك"}
+            }
+            calorie-it{
+                dnam{"كالو."}
+                one{"{0} كالو."}
+                other{"{0} كالو."}
+            }
+            gray{
+                dnam{"گىرەي"}
+                one{"{0} گىرەي"}
+                other{"{0} گىرەي"}
+            }
+            sievert{
+                dnam{"زيۆەرت"}
+                one{"{0} زيۆەرت"}
+                other{"{0} زيۆەرت"}
+            }
+        }
+        force{
+            kilogram-force{
+                dnam{"كيلوگرام-كۇش"}
+                one{"{0} كيلوگرام-كۇش"}
+                other{"{0} كيلوگرام-كۇش"}
+            }
+        }
+        magnetic{
+            tesla{
+                dnam{"ت"}
+                one{"{0} ت"}
+                other{"{0} ت"}
+            }
+            weber{
+                dnam{"ۋەبەر"}
+                one{"{0} ۋەبەر"}
+                other{"{0} ۋەبەر"}
+            }
+        }
+        mass{
+            carat{
+                one{"{0}CD"}
+                other{"{0}CD"}
+            }
+            dalton{
+                dnam{"Da"}
+                one{"{0}Da"}
+                other{"{0}Da"}
+            }
+            earth-mass{
+                dnam{"M⊕"}
+                one{"{0}M⊕"}
+                other{"{0}M⊕"}
+            }
+            grain{
+                dnam{"gr"}
+                one{"{0}gr"}
+                other{"{0}gr"}
+            }
+            gram{
+                one{"{0}g"}
+                other{"{0}g"}
+                per{"{0}/g"}
+            }
+            kilogram{
+                dnam{"kg"}
+                one{"{0}kg"}
+                other{"{0}kg"}
+                per{"{0}‎/kg"}
+            }
+            microgram{
+                one{"{0}μg"}
+                other{"{0}μg"}
+            }
+            milligram{
+                dnam{"mg"}
+                one{"{0}mg"}
+                other{"{0}mg"}
+            }
+            ounce{
+                dnam{"oz"}
+                one{"{0}oz"}
+                other{"{0}oz"}
+                per{"{0}/oz"}
+            }
+            ounce-troy{
+                dnam{"oz t"}
+                one{"{0}oz t"}
+                other{"{0}oz t"}
+            }
+            pound{
+                dnam{"lb"}
+                one{"{0}lb"}
+                other{"{0}lb"}
+            }
+            solar-mass{
+                dnam{"M☉"}
+                one{"{0}M☉"}
+                other{"{0}M☉"}
+            }
+            ton{
+                one{"{0}tn"}
+                other{"{0}tn"}
+            }
+        }
+        pressure{
+            ofhg{
+                dnam{"مەركۋري ءديۋيمى"}
+                one{"{0} مەركۋري ءديۋيمى"}
+                other{"{0} مەركۋري ءديۋيمى"}
+            }
+        }
+        volume{
+            fluid-ounce-metric{
+                dnam{"سۇ. ۋن."}
+                one{"{0} سۇ. ۋن."}
+                other{"{0} سۇ. ۋن."}
+            }
+        }
+    }
+    unitsShort{
+        acceleration{
+            g-force{
+                dnam{"تارتىلىس كۇشى"}
+                one{"{0} تارتىلىس كۇشى"}
+                other{"{0} تارتىلىس كۇشى"}
+            }
+            meter-per-square-second{
+                dnam{"مەتىر/شارشى سەكۋند"}
+                one{"{0} مەتىر/شارشى سەكۋند"}
+                other{"{0} مەتىر/شارشى سەكۋند"}
+            }
+        }
+        angle{
+            arc-minute{
+                dnam{"اركمينۋت"}
+                one{"{0} اركمينۋت"}
+                other{"{0} اركمينۋت"}
+            }
+            arc-second{
+                dnam{"اركسەكۋند"}
+                one{"{0} اركسەكۋند"}
+                other{"{0} اركسەكۋند"}
+            }
+            degree{
+                dnam{"گرادۋس"}
+                one{"{0} گرادۋس"}
+                other{"{0} گرادۋس"}
+            }
+            radian{
+                dnam{"راديان"}
+                one{"{0} راديان"}
+                other{"{0} راديان"}
+            }
+            revolution{
+                dnam{"اينالىم"}
+                one{"{0} اينالىم"}
+                other{"{0} اينالىم"}
+            }
+            steradian{
+                dnam{"ستەراديان"}
+                one{"{0} sr"}
+                other{"{0} sr"}
+            }
+        }
+        area{
+            acre{
+                dnam{"اكر"}
+                one{"{0} اكر"}
+                other{"{0} اكر"}
+            }
+            dunam{
+                dnam{"دۋنام"}
+                one{"{0} دۋنام"}
+                other{"{0} دۋنام"}
+            }
+            hectare{
+                dnam{"گەكتار"}
+                one{"{0} گەكتار"}
+                other{"{0} گەكتار"}
+            }
+            square-centimeter{
+                dnam{"شارشى سانتيمەتىر"}
+                one{"{0} شارشى سانتيمەتىر"}
+                other{"{0} شارشى سانتيمەتىر"}
+                per{"{0}/شارشى سانتيمەتىر"}
+            }
+            square-foot{
+                dnam{"شارشى فۋت"}
+                one{"{0} شارشى فۋت"}
+                other{"{0} شارشى فۋت"}
+            }
+            square-inch{
+                dnam{"شارشى ديۋيم"}
+                one{"{0} شارشى ديۋيم"}
+                other{"{0} شارشى ديۋيم"}
+                per{"{0} شارشى ديۋيم"}
+            }
+            square-kilometer{
+                dnam{"شارشى كيلومەتىر"}
+                one{"{0}/شارشى كيلومەتىر"}
+                other{"{0}/شارشى كيلومەتىر"}
+                per{"{0}/شارشى كيلومەتىر"}
+            }
+            square-meter{
+                dnam{"شارشى مەتىر"}
+                one{"{0} شارشى مەتىر"}
+                other{"{0} شارشى مەتىر"}
+                per{"{0}/شارشى مەتىر"}
+            }
+            square-mile{
+                dnam{"شارشى ميل"}
+                one{"{0} شارشى ميل"}
+                other{"{0} شارشى ميل"}
+                per{"{0}/شارشى ميل"}
+            }
+            square-yard{
+                dnam{"شارشى يارد"}
+                one{"{0} شارشى يارد"}
+                other{"{0} شارشى يارد"}
+            }
+        }
+        compound{
+            1024p1{"كي{0}"}
+            1024p2{"مب{0}"}
+            1024p3{"گي{0}"}
+            1024p4{"تب{0}"}
+            1024p5{"پب{0}"}
+            1024p6{"ەب{0}"}
+            1024p7{"زب{0}"}
+            1024p8{"يب{0}"}
+            10p-1{"د{0}"}
+            10p-12{"پ{0}"}
+            10p-15{"ف{0}"}
+            10p-18{"ا{0}"}
+            10p-2{"س{0}"}
+            10p-21{"ز{0}"}
+            10p-24{"ي{0}"}
+            10p-27{"ر{0}"}
+            10p-3{"مل{0}"}
+            10p-30{"ك{0}"}
+            10p-6{"مك{0}"}
+            10p-9{"ن{0}"}
+            10p1{"دا{0}"}
+            10p12{"ت{0}"}
+            10p15{"پت{0}"}
+            10p18{"ە{0}"}
+            10p2{"گ{0}"}
+            10p21{"زت{0}"}
+            10p24{"يت{0}"}
+            10p27{"رن{0}"}
+            10p3{"كل{0}"}
+            10p30{"كت{0}"}
+            10p6{"مگ{0}"}
+            10p9{"گگ{0}"}
+        }
+        concentr{
+            item{
+                dnam{"ەلەمەنت"}
+                one{"{0} ەلەمەنت"}
+                other{"{0} ەلەمەنت"}
+            }
+            karat{
+                dnam{"كارات"}
+                one{"{0} كارات"}
+                other{"{0} كارات"}
+            }
+            katal{
+                dnam{"كاتال"}
+                one{"{0} كاتال"}
+                other{"{0} كاتال"}
+            }
+            milligram-ofglucose-per-deciliter{
+                dnam{"ميليگرام/دەسيليتىر"}
+            }
+            millimole-per-liter{
+                dnam{"ميليمول/ليتىر"}
+            }
+            mole{
+                dnam{"مول"}
+                one{"{0} مول"}
+                other{"{0} مول"}
+            }
+            ofglucose{
+                dnam{"گليۋكوزا"}
+                one{"{0} گليۋكوزا"}
+                other{"{0} گليۋكوزا"}
+            }
+            part{
+                dnam{"بولىك"}
+                one{"{0} بولىك"}
+                other{"{0} بولىك"}
+            }
+            part-per-1e6{
+                dnam{"ميلليوندىق ۇلەس"}
+                one{"{0} ميلليوندىق ۇلەس"}
+                other{"{0} ميلليوندىق ۇلەس"}
+            }
+            part-per-1e9{
+                dnam{"ميللياردتىق ۇلەس"}
+                one{"{0} ميللياردتىق ۇلەس"}
+                other{"{0} ميللياردتىق ۇلەس"}
+            }
+            percent{
+                dnam{"پايىز"}
+            }
+            permille{
+                dnam{"پروميللە"}
+            }
+            permyriad{
+                dnam{"پروميرياد"}
+            }
+        }
+        consumption{
+            liter-per-100-kilometer{
+                dnam{"ليتىر/100 كيلومەتىر"}
+            }
+            liter-per-kilometer{
+                dnam{"ليتىر/كيلومەتىر"}
+            }
+            mile-per-gallon{
+                dnam{"ميل/گاللون"}
+                one{"{0} ميل/گاللون"}
+                other{"{0} ميل/گاللون"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"ميل/يمپ گاللون"}
+                one{"{0} ميل/يمپ گاللون"}
+                other{"{0} ميل/يمپ گاللون"}
+            }
+        }
+        coordinate{
+            dnam{"باعىت"}
+            east{"{0} ش"}
+            north{"{0} س"}
+            south{"{0} و"}
+            west{"{0} ب"}
+        }
+        digital{
+            bit{
+                dnam{"بيت"}
+            }
+            byte{
+                dnam{"بايت"}
+            }
+            gigabit{
+                dnam{"گيگابيت"}
+            }
+            gigabyte{
+                dnam{"گيگابايت"}
+            }
+            kilobit{
+                dnam{"كيلوبيت"}
+            }
+            kilobyte{
+                dnam{"كيلوبايت"}
+            }
+            megabit{
+                dnam{"مەگابيت"}
+            }
+            megabyte{
+                dnam{"مەگابايت"}
+            }
+            petabyte{
+                dnam{"پەتابايت"}
+            }
+            terabit{
+                dnam{"تەرابيت"}
+            }
+            terabyte{
+                dnam{"تەرابايت"}
+            }
+        }
+        duration{
+            century{
+                dnam{"عاسىر"}
+                one{"{0} عاسىر"}
+                other{"{0} عاسىر"}
+            }
+            day{
+                dnam{"كۇن"}
+                one{"{0} كۇن"}
+                other{"{0} كۇن"}
+                per{"{0}/كۇن"}
+            }
+            decade{
+                dnam{"ون جىلدىق"}
+                one{"{0} ون جىلدىق"}
+                other{"{0} ون جىلدىق"}
+            }
+            hour{
+                dnam{"ساعات"}
+                one{"{0} ساعات"}
+                other{"{0} ساعات"}
+                per{"{0}/ساعات"}
+            }
+            microsecond{
+                dnam{"ميكروسەكۋند"}
+                one{"{0} ميكروسەكۋند"}
+                other{"{0} ميكروسەكۋند"}
+            }
+            millisecond{
+                dnam{"ميليسەكۋند"}
+                one{"{0} ميليسەكۋند"}
+                other{"{0} ميليسەكۋند"}
+            }
+            minute{
+                dnam{"مينۋت"}
+                one{"{0} مينۋت"}
+                other{"{0} مينۋت"}
+                per{"{0}/مينۋت"}
+            }
+            month{
+                dnam{"اي"}
+                one{"{0} اي"}
+                other{"{0} اي"}
+                per{"{0}/اي"}
+            }
+            nanosecond{
+                dnam{"نانوسەكۋند"}
+                one{"{0} نانوسەكۋند"}
+                other{"{0} نانوسەكۋند"}
+            }
+            night{
+                dnam{"ءتۇن"}
+                one{"{0} ءتۇن"}
+                other{"{0} ءتۇن"}
+                per{"{0}/ءتۇن"}
+            }
+            quarter{
+                dnam{"توقسان"}
+                one{"{0} توقسان"}
+                other{"{0} توقسان"}
+                per{"{0}/توقسان"}
+            }
+            second{
+                dnam{"سەكۋند"}
+                one{"{0} سەكۋند"}
+                other{"{0} سەكۋند"}
+                per{"{0}/سەكۋند"}
+            }
+            week{
+                dnam{"اپتا"}
+                one{"{0} اپتا"}
+                other{"{0} اپتا"}
+                per{"{0}/اپتا"}
+            }
+            year{
+                dnam{"جىل"}
+                one{"{0} جىل"}
+                other{"{0} جىل"}
+                per{"جىلىنا {0}"}
+            }
+        }
+        electric{
+            ampere{
+                dnam{"امپەر"}
+                one{"{0} امپەر"}
+                other{"{0} امپەر"}
+            }
+            coulomb{
+                dnam{"كۋلون"}
+                one{"{0} كۋلون"}
+                other{"{0} كۋلون"}
+            }
+            farad{
+                dnam{"فاراد"}
+                one{"{0} فاراد"}
+                other{"{0} فاراد"}
+            }
+            henry{
+                dnam{"حەنري"}
+                one{"{0} حەنري"}
+                other{"{0} حەنري"}
+            }
+            milliampere{
+                dnam{"ميليامپەر"}
+                one{"{0} ميليامپەر"}
+                other{"{0} ميليامپەر"}
+            }
+            ohm{
+                dnam{"وم"}
+                one{"{0} وم"}
+                other{"{0} وم"}
+            }
+            siemens{
+                dnam{"سيمەنس"}
+                one{"{0} S"}
+                other{"{0} S"}
+            }
+            volt{
+                dnam{"ۆولت"}
+                one{"{0} ۆولت"}
+                other{"{0} ۆولت"}
+            }
+        }
+        energy{
+            becquerel{
+                dnam{"بەككەرەل"}
+                one{"{0} بك"}
+                other{"{0} بك"}
+            }
+            british-thermal-unit{
+                dnam{"بريتاندىق جىلۋ بىرلىگى"}
+                one{"{0} بريتاندىق جىلۋ بىرلىگى"}
+                other{"{0} بريتاندىق جىلۋ بىرلىگى"}
+            }
+            calorie{
+                dnam{"كالوريا"}
+                one{"{0} كالوريا"}
+                other{"{0} كالوريا"}
+            }
+            calorie-it{
+                dnam{"كالو."}
+                one{"{0} كالو."}
+                other{"{0} كالو."}
+            }
+            electronvolt{
+                dnam{"ەلەكتونۆولت"}
+                one{"{0} ەلەكترونۆولت"}
+                other{"{0} ەلەكترونۆولت"}
+            }
+            gray{
+                dnam{"گىرەي"}
+                one{"{0} گىرەي"}
+                other{"{0} گىرەي"}
+            }
+            joule{
+                dnam{"جوۋل"}
+                one{"{0} جوۋل"}
+                other{"{0} جوۋل"}
+            }
+            kilocalorie{
+                dnam{"كيلوكالوريا"}
+                one{"{0} كيلوكالوريا"}
+                other{"{0} كيلوكالوريا"}
+            }
+            kilojoule{
+                dnam{"كيلوجوۋل"}
+                one{"{0} كىلوجوۋل"}
+                other{"{0} كىلوجوۋل"}
+            }
+            kilowatt-hour{
+                dnam{"كيلوۆات-ساعات"}
+                one{"{0} كيلوۆات-ساعات"}
+                other{"{0} كيلوۆات-ساعات"}
+            }
+            sievert{
+                dnam{"زيۆەرت"}
+                one{"{0} زيۆەرت"}
+                other{"{0} زيۆەرت"}
+            }
+            therm-us{
+                dnam{"ا ق ش تەرمى"}
+                one{"{0} ا ق ش تەرمى"}
+                other{"{0} ا ق ش تەرمى"}
+            }
+        }
+        force{
+            kilogram-force{
+                dnam{"كيلوگرام-كۇش"}
+                one{"{0} كيلوگرام-كۇش"}
+                other{"{0} كيلوگرام-كۇش"}
+            }
+            kilowatt-hour-per-100-kilometer{
+                dnam{"كيلوۆات-ساعات/100 كيلومەتىر"}
+            }
+            newton{
+                dnam{"نيۋتون"}
+            }
+            pound-force{
+                dnam{"فۋنت-كۇش"}
+                one{"{0} فۋنت-كۇش"}
+                other{"{0} فۋنت-كۇش"}
+            }
+        }
+        frequency{
+            gigahertz{
+                dnam{"گيگاگەرس"}
+                one{"{0} گيگاگەرس"}
+                other{"{0} گيگاگەرس"}
+            }
+            hertz{
+                dnam{"گەرس"}
+                one{"{0} گەرس"}
+                other{"{0} گەرس"}
+            }
+            kilohertz{
+                dnam{"كيلوگەرس"}
+                one{"{0} كيلوگەرس"}
+                other{"{0} كيلوگەرس"}
+            }
+            megahertz{
+                dnam{"مەگاگەرس"}
+                one{"{0} مەگاگەرس"}
+                other{"{0} مەگاگەرس"}
+            }
+        }
+        length{
+            astronomical-unit{
+                dnam{"استرونوميالىق بىرلىك"}
+                one{"{0} استرونوميالىق بىرلىك"}
+                other{"{0} استرونوميالىق بىرلىك"}
+            }
+            centimeter{
+                dnam{"سانتيمەتىر"}
+                one{"{0}/سانتيمەتىر"}
+                other{"{0}/سانتيمەتىر"}
+                per{"{0}/سانتيمەتىر"}
+            }
+            decimeter{
+                dnam{"دەسيمەتىر"}
+                one{"{0}/دەسيمەتىر"}
+                other{"{0}/دەسيمەتىر"}
+            }
+            earth-radius{
+                dnam{"جەر راديۋسى"}
+                one{"{0} جەر راديۋسى"}
+                other{"{0} جەر راديۋسى"}
+            }
+            fathom{
+                dnam{"فاتوم"}
+                one{"{0} فاتوم"}
+                other{"{0} فاتوم"}
+            }
+            foot{
+                dnam{"فۋت"}
+                one{"{0}/فۋت"}
+                other{"{0}/فۋت"}
+                per{"{0}/فۋت"}
+            }
+            furlong{
+                dnam{"فۋرلوڭ"}
+                one{"{0} فۋرلوڭ"}
+                other{"{0} فۋرلوڭ"}
+            }
+            inch{
+                dnam{"ديۋيم"}
+                one{"{0} ديۋيم"}
+                other{"{0} ديۋيم"}
+                per{"{0}/ديۋيم"}
+            }
+            kilometer{
+                dnam{"كيلومەتىر"}
+                one{"{0} كيلومەتىر"}
+                other{"{0} كيلومەتىر"}
+                per{"{0}/كيلومەتىر"}
+            }
+            light-year{
+                dnam{"جارىق جىلى"}
+                one{"{0} جارىق جىلى"}
+                other{"{0} جارىق جىلى"}
+            }
+            meter{
+                dnam{"مەتىر"}
+                one{"{0}/مەتىر"}
+                other{"{0}/مەتىر"}
+                per{"{0}/مەتىر"}
+            }
+            micrometer{
+                dnam{"ميكرومەتىر"}
+                one{"{0} ميكرومەتىر"}
+                other{"{0} ميكرومەتىر"}
+            }
+            mile{
+                dnam{"ميل"}
+                one{"{0} ميل"}
+                other{"{0} ميل"}
+            }
+            mile-scandinavian{
+                dnam{"سكانديناۆيالىق ميل"}
+                one{"{0} سكانديناۆيالىق ميلى"}
+                other{"{0} سكانديناۆيالىق ميلى"}
+            }
+            millimeter{
+                dnam{"ميليمەتىر"}
+                one{"{0} ميليمەتىر"}
+                other{"{0} ميليمەتىر"}
+            }
+            nanometer{
+                dnam{"نانومەتىر"}
+                one{"{0} نانومەتىر"}
+                other{"{0} نانومەتىر"}
+            }
+            nautical-mile{
+                dnam{"تەڭىز ميلى"}
+                one{"{0} تەڭىز ميلى"}
+                other{"{0} تەڭىز ميلى"}
+            }
+            parsec{
+                dnam{"پارسەك"}
+                one{"{0} پارسەك"}
+                other{"{0} پارسەك"}
+            }
+            picometer{
+                dnam{"پيكومەتىر"}
+                one{"{0} پيكومەتىر"}
+                other{"{0} پيكومەتىر"}
+            }
+            point{
+                dnam{"پۋنكت"}
+                one{"{0} پۋنكت"}
+                other{"{0} پۋنكت"}
+            }
+            solar-radius{
+                dnam{"كۇن راديۋسى"}
+                one{"{0} كۇن راديۋسى"}
+                other{"{0} كۇن راديۋسى"}
+            }
+            yard{
+                dnam{"يارد"}
+                one{"{0} يارد"}
+                other{"{0} يارد"}
+            }
+        }
+        light{
+            candela{
+                dnam{"كاندەلا"}
+            }
+            lumen{
+                dnam{"ليۋمەن"}
+            }
+            lux{
+                dnam{"ليۋكس"}
+            }
+            solar-luminosity{
+                dnam{"كۇن جارىقتىعى"}
+                one{"{0} كۇن جارىقتىعى"}
+                other{"{0} كۇن جارىقتىعى"}
+            }
+        }
+        magnetic{
+            tesla{
+                dnam{"ت"}
+                one{"{0} تەسلا"}
+                other{"{0} تەسلا"}
+            }
+            weber{
+                dnam{"ۋەبەر"}
+                one{"{0} ۋەبەر"}
+                other{"{0} ۋەبەر"}
+            }
+        }
+        mass{
+            carat{
+                dnam{"كارات"}
+                one{"{0} كارات"}
+                other{"{0} كارات"}
+            }
+            dalton{
+                dnam{"دالتون"}
+                one{"{0} دالتون"}
+                other{"{0} دالتون"}
+            }
+            earth-mass{
+                dnam{"جەر ماسساسى"}
+                one{"{0} M⊕"}
+                other{"{0} M⊕"}
+            }
+            grain{
+                dnam{"گران"}
+                one{"{0} گران"}
+                other{"{0} گران"}
+            }
+            gram{
+                dnam{"گرام"}
+                one{"{0} گرام"}
+                other{"{0} گرام"}
+            }
+            kilogram{
+                dnam{"كيلوگرام"}
+                one{"{0} كگ"}
+                other{"{0} كگ"}
+                per{"{0}‎/kg"}
+            }
+            microgram{
+                dnam{"ميكروگرام"}
+                one{"{0} ميكروگرام"}
+                other{"{0} ميكروگرام"}
+            }
+            milligram{
+                one{"{0} ميليگرام"}
+                other{"{0} ميليگرام"}
+            }
+            ounce{
+                dnam{"ۋنسيا"}
+                one{"{0} ۋنسيا"}
+                other{"{0} ۋنسيا"}
+                per{"{0}/ۋنسيا"}
+            }
+            ounce-troy{
+                dnam{"تروي ۋنسياسى"}
+                one{"{0} تروۋ ۋنسياسى"}
+                other{"{0} تروۋ ۋنسياسى"}
+            }
+            pound{
+                one{"{0} فۋنت"}
+                other{"{0} فۋنت"}
+                per{"{0}/فۋنت"}
+            }
+            solar-mass{
+                dnam{"كۇن ماسساسى"}
+                one{"{0} M☉"}
+                other{"{0} M☉"}
+            }
+            stone{
+                dnam{"ستوۋن"}
+                one{"{0} ستوۋن"}
+                other{"{0} ستوۋن"}
+            }
+            ton{
+                dnam{"توننا"}
+                one{"{0} تن"}
+                other{"{0} تن"}
+            }
+            tonne{
+                dnam{"مەتىرلىك توننا"}
+                one{"{0} توننا"}
+                other{"{0} توننا"}
+            }
+        }
+        power{
+            gigawatt{
+                dnam{"گيگاۆات"}
+                one{"{0} گيگاۆات"}
+                other{"{0} گيگاۆات"}
+            }
+            horsepower{
+                dnam{"ات كۇشى"}
+                one{"{0} ات كۇشى"}
+                other{"{0} ات كۇشى"}
+            }
+            kilowatt{
+                dnam{"كيلوۆات"}
+                one{"{0} كيلوۆات"}
+                other{"{0} كيلوۆات"}
+            }
+            megawatt{
+                dnam{"مەگاۆات"}
+                one{"{0} مەگاۆات"}
+                other{"{0} مەگاۆات"}
+            }
+            milliwatt{
+                dnam{"ميليۆات"}
+                one{"{0} ميليۆات"}
+                other{"{0} ميليۆات"}
+            }
+            watt{
+                dnam{"ۆات"}
+                one{"{0} ۆات"}
+                other{"{0} ۆات"}
+            }
+        }
+        pressure{
+            atmosphere{
+                dnam{"اتموسفەرا"}
+                one{"{0} اتموسفەرا"}
+                other{"{0} اتموسفەرا"}
+            }
+            bar{
+                dnam{"بار"}
+                one{"{0} بار"}
+                other{"{0} بار"}
+            }
+            hectopascal{
+                dnam{"گەكتوپاسكال"}
+                one{"{0} گەكتوپاسكال"}
+                other{"{0} گەكتوپاسكال"}
+            }
+            inch-ofhg{
+                dnam{"ديۋيم سىناپ باعاناسى"}
+                one{"{0} ديۋيم سىناپ باعاناسى"}
+                other{"{0} ديۋيم سىناپ باعاناسى"}
+            }
+            kilopascal{
+                dnam{"كيلوپاسكال"}
+                one{"{0} كيلوپاسكال"}
+                other{"{0} كيلوپاسكال"}
+            }
+            megapascal{
+                dnam{"مەگاپاسكال"}
+                one{"{0} مەگاپاسكال"}
+                other{"{0} مەگاپاسكال"}
+            }
+            millibar{
+                dnam{"ميليبار"}
+                one{"{0} ميليبار"}
+                other{"{0} ميليبار"}
+            }
+            millimeter-ofhg{
+                dnam{"ميليمەتىر سىناپ باعاناسى"}
+                one{"{0} ميليمەتىر سىناپ باعاناسى"}
+                other{"{0} ميليمەتىر سىناپ باعاناسى"}
+            }
+            ofhg{
+                dnam{"مەركۋري ءديۋيمى"}
+                one{"{0} مەركۋري ءديۋيمى"}
+                other{"{0} مەركۋري ءديۋيمى"}
+            }
+            pascal{
+                dnam{"پاسكال"}
+                one{"{0} پاسكال"}
+                other{"{0} پاسكال"}
+            }
+            pound-force-per-square-inch{
+                dnam{"فۋنت-كۇش/شارشى ديۋيم"}
+                one{"{0} فۋنت-كۇش/شارشى ديۋيم"}
+                other{"{0} فۋنت-كۇش/شارشى ديۋيم"}
+            }
+        }
+        speed{
+            beaufort{
+                dnam{"بوفورت"}
+                one{"{0} بوفورت"}
+                other{"{0} بوفورت"}
+            }
+            kilometer-per-hour{
+                dnam{"كيلومەتىر/ساعات"}
+                one{"{0} كيلومەتىر/ساعات"}
+                other{"{0} كيلومەتىر/ساعات"}
+            }
+            knot{
+                dnam{"ءتۇيىن"}
+                one{"{0} ءتۇيىن"}
+                other{"{0} ءتۇيىن"}
+            }
+            light-speed{
+                dnam{"جارىق"}
+                one{"{0} جارىق"}
+                other{"{0} جارىق"}
+            }
+            meter-per-second{
+                dnam{"مەتىر/سەكۋند"}
+                one{"{0} مەتىر/سەكۋند"}
+                other{"{0} مەتىر/سەكۋند"}
+            }
+            mile-per-hour{
+                dnam{"ميل/ساعات"}
+                one{"{0} ميل/ساعات"}
+                other{"{0} ميل/ساعات"}
+            }
+        }
+        temperature{
+            celsius{
+                dnam{"سەلسي گرادۋسى"}
+            }
+            fahrenheit{
+                dnam{"فارانگەيت گرادۋسى"}
+            }
+            kelvin{
+                dnam{"كەلۆين"}
+            }
+        }
+        torque{
+            newton-meter{
+                dnam{"نيۋتون-مەتىر"}
+            }
+            pound-force-foot{
+                dnam{"فۋنت-كۇش-فۋت"}
+                one{"{0} فۋنت-كۇش-فۋت"}
+                other{"{0} فۋنت-كۇش-فۋت"}
+            }
+        }
+        volume{
+            acre-foot{
+                dnam{"اكر-فۋت"}
+                one{"{0} اكر-فۋت"}
+                other{"{0} اكر-فۋت"}
+            }
+            barrel{
+                dnam{"باررەل"}
+                one{"{0} باررەل"}
+                other{"{0} باررەل"}
+            }
+            bushel{
+                dnam{"بۋشەل"}
+                one{"{0} بۋشەل"}
+                other{"{0} بۋشەل"}
+            }
+            centiliter{
+                dnam{"سانتيليتىر"}
+                one{"{0} سانتيليتىر"}
+                other{"{0} سانتيليتىر"}
+            }
+            cubic-centimeter{
+                dnam{"تەكشە سانتيمەتىر"}
+                one{"{0} تەكشە سانتيمەتىر"}
+                other{"{0} تەكشە سانتيمەتىر"}
+                per{"{0}/تەكشە سانتيمەتىر"}
+            }
+            cubic-foot{
+                dnam{"تەكشە فۋت"}
+                one{"{0} تەكشە فۋت"}
+                other{"{0} تەكشە فۋت"}
+            }
+            cubic-inch{
+                dnam{"تەكشە ديۋيم"}
+                one{"{0} تەكشە ديۋيم"}
+                other{"{0} تەكشە ديۋيم"}
+            }
+            cubic-kilometer{
+                dnam{"تەكشە كيلومەتىر"}
+                one{"{0} تەكشە كيلومەتىر"}
+                other{"{0} تەكشە كيلومەتىر"}
+            }
+            cubic-meter{
+                dnam{"تەكشە مەتىر"}
+                one{"{0} تەكشە مەتىر"}
+                other{"{0} تەكشە مەتىر"}
+                per{"{0}/تەكشە مەتىر"}
+            }
+            cubic-mile{
+                dnam{"تەكشە ميل"}
+                one{"{0} تەكشە ميل"}
+                other{"{0} تەكشە ميل"}
+            }
+            cubic-yard{
+                dnam{"تەكشە يارد"}
+                one{"{0} تەكشە يارد"}
+                other{"{0} تەكشە يارد"}
+            }
+            cup{
+                dnam{"كەسە"}
+                one{"{0} كەسە"}
+                other{"{0} كەسە"}
+            }
+            cup-metric{
+                dnam{"مەتىرلىك كەسە"}
+                one{"{0} مەتىرلىك كەسە"}
+                other{"{0} مەتىرلىك كەسە"}
+            }
+            deciliter{
+                dnam{"دەسيليتىر"}
+                one{"{0} دەسيليتىر"}
+                other{"{0} دەسيليتىر"}
+            }
+            dessert-spoon{
+                dnam{"دەسەرت قاسىعى"}
+                one{"{0} دەسەرت قاسىعى"}
+                other{"{0} دەسەرت قاسىعى"}
+            }
+            dessert-spoon-imperial{
+                dnam{"يمپ دەسەرت قاسىعى"}
+                one{"{0} يمپ دەسەرت قاسىعى"}
+                other{"{0} يمپ دەسەرت قاسىعى"}
+            }
+            dram{
+                dnam{"دراحما"}
+                one{"{0} دراحما"}
+                other{"{0} دراحما"}
+            }
+            drop{
+                dnam{"تامشى"}
+                one{"{0} تامشى"}
+                other{"{0} تامشى"}
+            }
+            fluid-ounce{
+                dnam{"سۇيىق ۋنسيا"}
+                one{"{0} سۇيىق ۋنسيا"}
+                other{"{0} سۇيىق ۋنسيا"}
+            }
+            fluid-ounce-imperial{
+                dnam{"يمپ سۇيىق ۋنسيا"}
+                one{"{0} يمپ سۇيىق ۋنسيا"}
+                other{"{0} يمپ سۇيىق ۋنسيا"}
+            }
+            fluid-ounce-metric{
+                dnam{"سۇ. ۋن."}
+                one{"{0} سۇ. ۋن."}
+                other{"{0} سۇ. ۋن."}
+            }
+            gallon{
+                dnam{"گاللون"}
+                one{"{0} گاللون"}
+                other{"{0} گاللون"}
+                per{"{0}/گاللون"}
+            }
+            gallon-imperial{
+                dnam{"يمپ گاللون"}
+                one{"{0} يمپ گاللون"}
+                other{"{0} يمپ گاللون"}
+                per{"{0} يمپ گاللون"}
+            }
+            hectoliter{
+                dnam{"گەكتوليتىر"}
+                one{"{0} گەكتوليرىر"}
+                other{"{0} گەكتوليرىر"}
+            }
+            jigger{
+                dnam{"جيگگەر"}
+                one{"{0} جيگگەر"}
+                other{"{0} جيگگەر"}
+            }
+            liter{
+                dnam{"ليتىر"}
+                one{"{0} ليتىر"}
+                other{"{0} ليتىر"}
+                per{"{0}/ليتىر"}
+            }
+            megaliter{
+                dnam{"مەگاليتر"}
+                one{"{0} مەگاليتر"}
+                other{"{0} مەگاليتر"}
+            }
+            milliliter{
+                dnam{"ميليليتىر"}
+                one{"{0} ميليليتىر"}
+                other{"{0} ميليليتىر"}
+            }
+            pinch{
+                dnam{"شوكىم"}
+                one{"{0} شوكىم"}
+                other{"{0} شوكىم"}
+            }
+            pint{
+                dnam{"پينتا"}
+                one{"{0} پينتا"}
+                other{"{0} پينتا"}
+            }
+            pint-metric{
+                dnam{"مەتىرلىك پينتا"}
+                one{"{0} مەتىرلىك پينتا"}
+                other{"{0} مەتىرلىك پينتا"}
+            }
+            quart{
+                dnam{"كۆارتا"}
+                one{"{0} كۆارتا"}
+                other{"{0} كۆارتا"}
+            }
+            quart-imperial{
+                dnam{"يمپ كۆارتا"}
+                one{"{0} يمپ كۆارتا"}
+                other{"{0} يمپ كۆارتا"}
+            }
+            tablespoon{
+                dnam{"اس قاسىق"}
+                one{"{0} اس قاسىق"}
+                other{"{0} اس قاسىق"}
+            }
+            teaspoon{
+                dnam{"شاي قاسىق"}
+                one{"{0} شاي قاسىق"}
+                other{"{0} شاي قاسىق"}
+            }
+        }
+    }
+}

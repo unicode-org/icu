@@ -1,0 +1,140 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+de_CH{
+    ExemplarCharacters{"[aä b c d e f g h i j k l m n oö p q r s t uü v w x y z]"}
+    ExemplarCharactersNumbers{"[\\- ‑ . ’ % ‰ + 0 1 2 3 4 5 6 7 8 9]"}
+    NumberElements{
+        latn{
+            patterns{
+                accountingFormat%alphaNextToNumber{"¤ #,##0.00;¤-#,##0.00"}
+                accountingFormat%noCurrency{"#,##0.00"}
+                currencyFormat{"¤ #,##0.00;¤-#,##0.00"}
+                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤-#,##0.00"}
+                currencyFormat%noCurrency{"#,##0.00"}
+                percentFormat{"#,##0%"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000000{
+                        one{"¤ 0 Mio'.'"}
+                        other{"¤ 0 Mio'.'"}
+                    }
+                    10000000{
+                        one{"¤ 00 Mio'.'"}
+                        other{"¤ 00 Mio'.'"}
+                    }
+                    100000000{
+                        one{"¤ 000 Mio'.'"}
+                        other{"¤ 000 Mio'.'"}
+                    }
+                    1000000000{
+                        one{"¤ 0 Mrd'.'"}
+                        other{"¤ 0 Mrd'.'"}
+                    }
+                    10000000000{
+                        one{"¤ 00 Mrd'.'"}
+                        other{"¤ 00 Mrd'.'"}
+                    }
+                    100000000000{
+                        one{"¤ 000 Mrd'.'"}
+                        other{"¤ 000 Mrd'.'"}
+                    }
+                    1000000000000{
+                        one{"¤ 0 Bio'.'"}
+                        other{"¤ 0 Bio'.'"}
+                    }
+                    10000000000000{
+                        one{"¤ 00 Bio'.'"}
+                        other{"¤ 00 Bio'.'"}
+                    }
+                    100000000000000{
+                        one{"¤ 000 Bio'.'"}
+                        other{"¤ 000 Bio'.'"}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
+                    100000{
+                        one{"0"}
+                        other{"0"}
+                    }
+                }
+            }
+            symbols{
+                decimal{"."}
+                group{"'"}
+            }
+        }
+    }
+    calendar{
+        gregorian{
+            availableFormats{
+                GyM{"M/y G"}
+                GyMEd{"E, MM.dd.Y G"}
+                GyMd{"dd.MM.y GGGGG"}
+            }
+            dayNames{
+                format{
+                    short{
+                        "So",
+                        "Mo",
+                        "Di",
+                        "Mi",
+                        "Do",
+                        "Fr",
+                        "Sa",
+                    }
+                }
+            }
+            intervalFormats{
+                M{
+                    M{"M – M"}
+                }
+            }
+        }
+    }
+    fields{
+        dayOfYear-short{
+            dn{"Tag d. J."}
+        }
+        era-narrow{
+            dn{"Epoche"}
+        }
+        weekOfMonth{
+            dn{"Woche im Monat"}
+        }
+        weekOfMonth-narrow{
+            dn{"W. i. Mon."}
+        }
+        weekOfMonth-short{
+            dn{"Wo. i. M."}
+        }
+        weekday-narrow{
+            dn{"Wochentag"}
+        }
+        weekdayOfMonth{
+            dn{"Wochentag im Monat"}
+        }
+        weekdayOfMonth-narrow{
+            dn{"Wochent. i. Mon."}
+        }
+        weekdayOfMonth-short{
+            dn{"Wochent. i. Mo."}
+        }
+    }
+    parse{
+        general{
+            lenient{
+                "[.．․﹒ 。｡︒]",
+                "['＇’ ՚ ᾽᾿ ʼ]",
+                "[%％﹪ ٪]",
+                "[‰ ؉]",
+                "[\$＄﹩]",
+                "[£￡ ₤]",
+                "[¥￥]",
+                "[₩￦]",
+                "[₹ {Rp} {Rs}₨]",
+            }
+        }
+    }
+}

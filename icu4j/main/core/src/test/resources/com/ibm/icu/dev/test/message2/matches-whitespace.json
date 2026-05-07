@@ -1,0 +1,19 @@
+{
+  "scenario": "Matches with whitespace",
+  "description": "Tests for valid match constructs with whitespace in various places",
+  "defaultTestProperties": {
+    "locale": "en-US"
+  },
+  "tests": [
+    { "src": ".local $one = {1 :string} .local $bar = {bar :string} .match $one $bar one * {{one}} * * {{other}}",
+      "exp": "other" },
+    { "src": ".local $foo = {foo :string} .local $bar = {bar :string} .match $foo $bar one * {{one}}* * {{other}}",
+      "exp": "other" },
+    { "src": ".local $foo = {foo :string} .local $bar = {bar :string} .match $foo $bar one *{{one}} * * {{foo}}",
+      "exp": "foo"
+    },
+    { "src": ".local $foo = {foo :string} .local $bar = {bar :string} .match $foo $bar one *  {{one}} * * {{foo}}",
+      "exp": "foo" }
+  ]
+}
+

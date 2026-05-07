@@ -1,0 +1,47 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+en_CA{
+    zoneStrings{
+        "America:St_Barthelemy"{
+            ec{"Saint-Barthélemy"}
+        }
+        "America:St_Johns"{
+            ec{"Saint John’s"}
+        }
+        "America:St_Kitts"{
+            ec{"Saint Kitts"}
+        }
+        "America:St_Lucia"{
+            ec{"Saint Lucia"}
+        }
+        "America:St_Thomas"{
+            ec{"Saint Thomas"}
+        }
+        "America:St_Vincent"{
+            ec{"Saint Vincent"}
+        }
+        "Atlantic:St_Helena"{
+            ec{"Saint Helena"}
+        }
+        "meta:French_Southern"{
+            ls{"French Southern and Antarctic Time"}
+        }
+        "meta:Newfoundland"{
+            sd{"NDT"}
+            sg{"NT"}
+            ss{"NST"}
+        }
+        "meta:Pierre_Miquelon"{
+            ld{"Saint-Pierre-et-Miquelon Daylight Time"}
+            lg{"Saint-Pierre-et-Miquelon Time"}
+            ls{"Saint-Pierre-et-Miquelon Standard Time"}
+            sd{"PMDT"}
+            sg{"PMT"}
+            ss{"PMST"}
+        }
+        "meta:Wallis"{
+            ls{"Wallis and Futuna Time"}
+        }
+    }
+}

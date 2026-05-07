@@ -1,0 +1,17 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+kk_Arab{
+    %%Parent{"root"}
+    collations{
+        standard{
+            Sequence{
+                "[reorder Arab]"
+                "&ا<ە<ب"
+                "&ك<گ<ڭ<ل"
+                "&ھ<و<ۇ<ۆ<ۋ<ى<ي"
+            }
+            Version{"49"}
+        }
+    }
+}

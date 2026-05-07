@@ -1,0 +1,78 @@
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+ *******************************************************************************
+ * Copyright (C) 2008, International Business Machines Corporation and         *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ */
+package com.ibm.icu.dev.test.lang;
+
+import com.ibm.icu.dev.test.CoreTestFmwk;
+import com.ibm.icu.lang.UCharacter;
+import java.util.ArrayList;
+import java.util.List;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
+
+/**
+ * @author aheninger
+ */
+@RunWith(JUnit4.class)
+public class UCharacterThreadTest extends CoreTestFmwk {
+    // constructor -----------------------------------------------------------
+
+    /** Private constructor to prevent initialization */
+    public UCharacterThreadTest() {}
+
+    // public methods --------------------------------------------------------
+
+    //
+    //  Test multi-threaded parallel calls to UCharacter.getName(codePoint)
+    //  Regression test for ticket 6264.
+    //
+    @Test
+    public void TestUCharactersGetName() throws InterruptedException {
+        List<GetNameThread> threads = new ArrayList<>();
+        for (int t = 0; t < 20; t++) {
+            int codePoint = 47 + t;
+            String correctName = UCharacter.getName(codePoint);
+            GetNameThread thread = new GetNameThread(codePoint, correctName);
+            thread.start();
+            threads.add(thread);
+        }
+        for (GetNameThread thread : threads) {
+            thread.join();
+            if (!thread.correctName.equals(thread.actualName)) {
+                errln(
+                        "FAIL, expected \""
+                                + thread.correctName
+                                + "\", got \""
+                                + thread.actualName
+                                + "\"");
+            }
+        }
+    }
+
+    private static class GetNameThread extends Thread {
+        private final int codePoint;
+        private final String correctName;
+        private String actualName;
+
+        GetNameThread(int codePoint, String correctName) {
+            this.codePoint = codePoint;
+            this.correctName = correctName;
+        }
+
+        @Override
+        public void run() {
+            for (int i = 0; i < 10000; i++) {
+                actualName = UCharacter.getName(codePoint);
+                if (!correctName.equals(actualName)) {
+                    break;
+                }
+            }
+        }
+    }
+}

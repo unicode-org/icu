@@ -1,0 +1,111 @@
+{
+  "scenario": "Function tests 2",
+  "description": "More tests for ICU-specific formatting behavior.",
+  "defaultTestProperties": {
+    "locale": "en-US"
+  },
+  "tests": [
+    {
+      "src": "Format {123456789.9876 :number} number",
+      "locale": "en-IN",
+      "exp": "Format 12,34,56,789.9876 number",
+      "comment": "From ICU4J tests, with explicit formatter added"
+    },
+    {
+      "src": "Format {|3.1416| :number} number",
+      "locale": "ar-AR-u-nu-latn",
+      "exp": "Format 3.1416 number",
+      "comment": "From ICU4J tests, with explicit formatter added"
+    },
+    {
+      "src": "Format {|3.1416| :number} number",
+      "locale": "ar-AR-u-nu-arab",
+      "exp": "Format ٣٫١٤١٦ number",
+      "comment": "From ICU4J tests, with explicit formatter added"
+    },
+    {
+      "src": [".local $dateStr = {$date :datetime}\n",
+               "{{Testing date formatting: {$dateStr :datetime}.}}"],
+      "exp": "Testing date formatting: mie., 23 nov. 2022, 19:42.",
+      "locale": "ro",
+      "params": [{ "name": "date", "value": { "date": 1669261357000 }}]
+    },
+    {
+      "src": [".local $num = {|42| :number}\n",
+               "{{Testing date formatting: {$num :datetime}}}"],
+      "exp": "Testing date formatting: {|42|}",
+      "expErrors": [{"type": "bad-operand"}]
+    },
+    {
+      "src": "From literal: {|123456789,531| :number}!",
+      "exp": "From literal: {|123456789,531|}!",
+      "locale": "en-IN",
+      "params": [{ "name": "val", "value": 1234567890.97531 }],
+      "expErrors": [{"type": "bad-operand"}],
+      "comment": "Should fail because number literals are not treated as localized numbers",
+      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+    },
+    {
+      "src": "From literal: {|123456789.531| :number}!",
+      "exp": "From literal: \u1041\u1042\u1043,\u1044\u1045\u1046,\u1047\u1048\u1049.\u1045\u1043\u1041!",
+      "locale": "my",
+      "params": [{ "name": "val", "value": 1234567890.97531 }]
+    },
+    {
+      "src": "Default double: {$val}!",
+      "exp": "Default double: 1,23,45,67,890.97531!",
+      "locale": "en-IN",
+      "params": [{ "name": "val", "value": 1234567890.97531 }],
+      "comment": "The next few tests check that numeric variables are formatted without specifying :number"
+    },
+    {
+      "src": "Default double: {$val}!",
+      "exp": "Default double: 1.234.567.890,97531!",
+      "locale": "ro",
+      "params": [{ "name": "val", "value": 1234567890.97531 }]
+    },
+    {
+      "src": "Default float: {$val}!",
+      "exp": "Default float: 3,141593!",
+      "locale": "ro",
+      "params": [{"name": "val", "value": 3.1415926535}]
+    },
+    {
+      "src": "Default int64: {$val}!",
+      "exp": "Default int64: 1.234.567.890.123.456.789!",
+      "locale": "ro",
+      "params": [{ "name": "val", "value": {"decimal": "1234567890123456789"} }],
+      "comment": "Rounded due to JSON not supporting full 64-bit ints"
+    },
+    {
+      "src": "Default number: {$val}!",
+      "exp": "Default number: 1.234.567.890.123.456.789,987654!",
+      "locale": "ro",
+      "params": [{ "name": "val", "value": {"decimal": "1234567890123456789.987654321"} }]
+    }
+  ],
+    "datetime_extra": [
+    {
+      "srcs": [".local $d = {|2024-07-02T19:23:45Z| :datetime timeStyle=long}\n",
+               "{{Expires at {$d} or {$d :datetime timeStyle=full}}}"],
+      "exp": "Expires at 7:23:45\u202FPM GMT or 7:23:45\u202FPM Greenwich Mean Time",
+      "comment": "This checks that the return value of :datetime preserves the time zone offset if specified"
+    },
+    {
+      "srcs": [".local $d = {|2024-07-02T19:23:45+03:30| :datetime timeStyle=long}\n",
+               "{{Expires at {$d} or {$d :datetime timeStyle=full}}}"],
+      "exp": "Expires at 7:23:45\u202FPM GMT+3:30 or 7:23:45\u202FPM GMT+03:30",
+      "comment": "This checks that the return value of :datetime preserves the time zone offset if specified"
+    },
+    {
+      "src": "{$d :datetime timeStyle=full}",
+      "exp": "7:23:45\u202FPM GMT+03:30",
+      "params": {"d": "2024-07-02T19:23:45+03:30"},
+      "comment": "This checks that an argument can be a date literal string."
+    },
+    {
+      "src": "{|2006-01-02T15:04:06| :datetime dateStyle=long} / {|2006-01-03| :datetime dateStyle=medium}",
+      "exp": "January 2, 2006 / Jan 3, 2006"
+    }
+  ]
+}

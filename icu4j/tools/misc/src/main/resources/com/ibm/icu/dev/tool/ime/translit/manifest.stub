@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+
+Extension-Name: com.ibm.icu.dev.tool.ime.translit
+Implementation-Vendor: Unicode, Inc.
+Implementation-Version: 1.0
+Implementation-Title: ICU Transliterator IME
+Specification-Vendor: Unicode, Inc.
+Specification-Version: 1.0
+Specification-Title: ICU Transliterator IME
+Name: com/ibm/icu/dev/tool/ime/translit
+Copyright-Info: @COPYRIGHT@

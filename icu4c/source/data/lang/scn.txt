@@ -1,0 +1,411 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+scn{
+    Keys{
+        calendar{"Calannariu"}
+        ms{"Sistema di misura"}
+        numbers{"Nùmmari"}
+    }
+    Languages{
+        aa{"afar"}
+        ab{"abkhasu"}
+        af{"afrikaans"}
+        agq{"aghem"}
+        ak{"akan"}
+        am{"amàricu"}
+        an{"aragunisi"}
+        apc{"àrabbu livantinu di tramuntana"}
+        ar{"àrabbu"}
+        ar_001{"àrabbu nadaru mudernu"}
+        arn{"mapuche"}
+        as{"assamisi"}
+        asa{"asu"}
+        ast{"asturianu"}
+        az{"azzeru"}
+        ba{"bashkir"}
+        bal{"baluchi"}
+        bas{"basaa"}
+        be{"belurrussu"}
+        bem{"bemba"}
+        bew{"betawi"}
+        bez{"bena"}
+        bg{"bùrgaru"}
+        bgc{"haryanvi"}
+        bho{"bhojipuri"}
+        blo{"anii"}
+        bm{"bambara"}
+        bn{"bangladisi"}
+        br{"brètuni"}
+        brx{"bodu"}
+        bs{"busnìacu"}
+        bss{"akoose"}
+        byn{"blin"}
+        ca{"catalanu"}
+        cad{"caddu"}
+        cch{"atsam"}
+        ccp{"chakma"}
+        ce{"cicenu"}
+        ceb{"cebbuanu"}
+        cgg{"chiga"}
+        cho{"choctaw"}
+        chr{"cherokee"}
+        cic{"chickasaw"}
+        ckb{"curdu cintrali"}
+        co{"corsu"}
+        cs{"cecu"}
+        csw{"swampy cree"}
+        cu{"slavu dâ cresia"}
+        cv{"ciuvasciu"}
+        cy{"gallisi"}
+        da{"danisi"}
+        de{"tidiscu"}
+        de_AT{"tidiscu austrìacu"}
+        de_CH{"tidiscu autu sbìzziru"}
+        doi{"dogri"}
+        dsb{"sòrabbu suttanu"}
+        dua{"duala"}
+        dv{"divehi"}
+        dyo{"jola-fonyi"}
+        dz{"dzongkha"}
+        ebu{"embu"}
+        ee{"ewe"}
+        el{"grecu"}
+        en{"ngrisi"}
+        en_AU{"ngrisi australianu"}
+        en_CA{"ngrisi canadisi"}
+        en_GB{"ngrisi britànnicu"}
+        en_US{"ngrisi miricanu"}
+        eo{"spirantu"}
+        es{"spagnolu"}
+        es_419{"spagnolu dâ mèrica latina"}
+        es_ES{"spagnolu eurupeu"}
+        es_MX{"spagnolu missicanu"}
+        et{"èstuni"}
+        eu{"bascu"}
+        ewo{"ewondo"}
+        fa{"pirsianu"}
+        ff{"fula"}
+        fi{"fillannisi"}
+        fil{"filippinu"}
+        fo{"faruisi"}
+        fr{"francisi"}
+        fr_CA{"francisi canadisi"}
+        fr_CH{"francisi sbìzziru"}
+        frc{"francisi Cajun"}
+        fur{"friulanu"}
+        fy{"frìsuni uccidintali"}
+        ga{"irlannisi"}
+        gaa{"ga"}
+        gd{"gaèlicu scuzzisi"}
+        gez{"geez"}
+        gl{"galizzianu"}
+        gn{"guarani"}
+        gsw{"tidiscu sbìzziru"}
+        gu{"gujarati"}
+        guz{"gusii"}
+        gv{"mannisi"}
+        ha{"hausa"}
+        haw{"hawaiianu"}
+        he{"ebbràicu"}
+        hi{"innianu"}
+        hnj{"hmong njua"}
+        hr{"cruatu"}
+        hsb{"sòrabbu supranu"}
+        ht{"criolu d’Haiti"}
+        hu{"unghirisi"}
+        hy{"armenu"}
+        ia{"ntirlingua"}
+        id{"innunisianu"}
+        ie{"ntirlingui"}
+        ig{"igbo"}
+        io{"idu"}
+        is{"islannisi"}
+        it{"italianu"}
+        iu{"inuktitut"}
+        ja{"giappunisi"}
+        jbo{"lojban"}
+        jgo{"ngomba"}
+        jmc{"machame"}
+        jv{"giavanisi"}
+        ka{"giurgianu"}
+        kaa{"kara-kalpak"}
+        kab{"kabyle"}
+        kaj{"jiu"}
+        kam{"kamba"}
+        kde{"makonde"}
+        kea{"capuvirdianu"}
+        ken{"kenyang"}
+        kgp{"kaingang"}
+        khq{"koyra chiini"}
+        ki{"kikuyu"}
+        kk{"kazzaku"}
+        kkj{"kako"}
+        kl{"kalaallisut"}
+        kln{"kalenjin"}
+        km{"khmer"}
+        kn{"kannada"}
+        ko{"curianu"}
+        kok{"konkani"}
+        kpe{"kpelle"}
+        ks{"kashmiri"}
+        ksf{"bafia"}
+        ksh{"culunisi"}
+        ku{"curdu"}
+        kw{"còrnicu"}
+        kxv{"kuvi"}
+        ky{"kirghizzu"}
+        la{"latinu"}
+        lag{"langi"}
+        lb{"lussimmurghisi"}
+        lg{"ganda"}
+        lij{"lìguri"}
+        lkt{"lakota"}
+        lld{"ild"}
+        lmo{"lummardu"}
+        ln{"lingala"}
+        lo{"lau"}
+        lou{"criolu dâ Louisiana"}
+        lt{"lituanu"}
+        ltg{"latgallisi"}
+        lu{"luba-katanga"}
+        luy{"luyia"}
+        lv{"lèttuni"}
+        mai{"maithili"}
+        mas{"masai"}
+        mdf{"moksha"}
+        mer{"meru"}
+        mfe{"murisianu"}
+        mg{"margasciu"}
+        mgh{"makhuwa-meetto"}
+        mgo{"metaʼ"}
+        mhn{"muchenu"}
+        mi{"māori"}
+        mic{"mi'kmaw"}
+        mk{"macèduni"}
+        ml{"malayalam"}
+        mn{"mòngulu"}
+        mni{"manipuri"}
+        moh{"mohawk"}
+        mr{"marathi"}
+        ms{"malisi"}
+        mt{"mautisi"}
+        mua{"mundang"}
+        mul{"assai lingui"}
+        mus{"muscogee"}
+        my{"burmisi"}
+        myv{"erzya"}
+        mzn{"mazanderani"}
+        naq{"nama"}
+        nb{"nurviggisi Bokmål"}
+        nds{"tidiscu suttanu"}
+        nds_NL{"sàssuni suttanu"}
+        ne{"nipalisi"}
+        nl{"ulannisi"}
+        nl_BE{"ciammingu"}
+        nmg{"kwasio"}
+        nn{"nurbiggisi Nynorsk"}
+        nnh{"ngiemboon"}
+        no{"nurbiggisi"}
+        nqo{"n’ko"}
+        nso{"sothu di tramuntana"}
+        nv{"navajo"}
+        oc{"uccitanu"}
+        or{"orìa"}
+        pa{"punjabi"}
+        pcm{"pidgin niggirianu"}
+        pl{"pulaccu"}
+        prg{"prussianu"}
+        ps{"pashto"}
+        pt{"purtughisi"}
+        pt_BR{"purtughisi brasilianu"}
+        pt_PT{"purtughisi eurupeu"}
+        qu{"quechua"}
+        quc{"kʼicheʼ"}
+        raj{"rajasthani"}
+        rm{"rumanciu"}
+        ro{"rumenu"}
+        ro_MD{"murdavu"}
+        ru{"russu"}
+        rw{"kinyarwanda"}
+        sa{"sàscritu"}
+        sah{"yakut"}
+        sat{"santali"}
+        sc{"sardu"}
+        scn{"sicilianu"}
+        sd{"sindhi"}
+        ses{"koyraboro senni"}
+        si{"singalisi"}
+        sk{"sluvaccu"}
+        sl{"sluvenu"}
+        smj{"lule sami"}
+        smn{"inari sami"}
+        so{"sòmalu"}
+        sq{"arbanisi"}
+        sr{"serbu"}
+        su{"sunnanisi"}
+        sv{"svidisi"}
+        sw{"swahili"}
+        syr{"sirìacu"}
+        szl{"silisianu"}
+        ta{"tamil"}
+        te{"telugu"}
+        tg{"tajik"}
+        th{"tailannisi"}
+        ti{"tigrinya"}
+        tk{"turkmenu"}
+        to{"tunganu"}
+        tr{"turcu"}
+        tt{"tàtaru"}
+        tzm{"tamazight di l’Atlanti Cintrali"}
+        ug{"uyghur"}
+        uk{"ucrainu"}
+        und{"lingua scanusciuta"}
+        ur{"urdu"}
+        uz{"uzbeku"}
+        vec{"vènitu"}
+        vi{"vietnamisi"}
+        vmw{"makhuwa"}
+        vo{"volapük"}
+        wo{"wolof"}
+        xh{"xhosa"}
+        xnr{"kangri"}
+        yo{"yoruba"}
+        yrl{"nheengatu"}
+        yue{"cantunisi"}
+        za{"zhuang"}
+        zh{"cinisi"}
+        zh_Hans{"cinisi simprificatu"}
+        zh_Hant{"cinisi tradizziunali"}
+        zu{"zulu"}
+        zxx{"nuḍḍu cuntinutu linguìsticu"}
+    }
+    Languages%core{
+        ku{"curdu"}
+    }
+    Languages%extension{
+        ku{"kurmanji"}
+    }
+    Languages%long{
+        zh_Hans{"cinisi mannarinu simprificatu"}
+        zh_Hant{"cinisi mannarinu tradizziunali"}
+    }
+    Languages%menu{
+        yue{"cinisi cantunisi"}
+        zh{"cinisi, mannarinu"}
+    }
+    Languages%short{
+        en_GB{"ngrisi dû RJ"}
+        en_US{"ngrisi dî SJ"}
+    }
+    Languages%variant{
+        ckb{"curdu Sorani"}
+        hi_Latn{"innianu ngrisi"}
+    }
+    Scripts{
+        Adlm{"adlam"}
+        Arab{"àrabbu"}
+        Aran{"nastaliq"}
+        Armn{"armenu"}
+        Bali{"balinisi"}
+        Beng{"bangla"}
+        Bopo{"bopomofo"}
+        Brai{"braille"}
+        Cakm{"chakma"}
+        Cans{"sillabbazzioni nurmalizzata di l’abburìggini canadisi"}
+        Cher{"cherokee"}
+        Cyrl{"cirìllicu"}
+        Deva{"devanagari"}
+        Ethi{"etìupi"}
+        Geor{"giurgianu"}
+        Grek{"grecu"}
+        Gujr{"gujarati"}
+        Guru{"gurmukhi"}
+        Hanb{"Han cu bopomofo"}
+        Hang{"Hangul"}
+        Hani{"Han"}
+        Hans{"simprificatu"}
+        Hant{"tradizziunali"}
+        Hebr{"ebbràicu"}
+        Hira{"hiragana"}
+        Hrkt{"sillabbari giappunisi"}
+        Jamo{"jamo"}
+        Jpan{"giappunisi"}
+        Kana{"katakana"}
+        Khmr{"khmer"}
+        Knda{"kannada"}
+        Kore{"curianu"}
+        Laoo{"lao"}
+        Latn{"latinu"}
+        Mlym{"malayalam"}
+        Mong{"mòngulu"}
+        Mtei{"meitei mayek"}
+        Mymr{"birmanu"}
+        Nkoo{"n’ko"}
+        Olck{"ol chiki"}
+        Orya{"orìa"}
+        Rohg{"hanifi"}
+        Sinh{"singalisi"}
+        Sund{"sunnanisi"}
+        Syrc{"sirìacu"}
+        Taml{"tamil"}
+        Telu{"telugu"}
+        Tfng{"tifinagh"}
+        Thaa{"thaana"}
+        Thai{"tailannisi"}
+        Tibt{"tibbitanu"}
+        Vaii{"vai"}
+        Yiii{"yi"}
+        Zmth{"nutazzioni matimàtica"}
+        Zsye{"emoji"}
+        Zsym{"sìmmuli"}
+        Zxxx{"nun scrittu"}
+        Zyyy{"cumuni"}
+        Zzzz{"scrittura scanusciuta"}
+    }
+    Scripts%stand-alone{
+        Hans{"Han simprificatu"}
+        Hant{"Han tradizziunali"}
+    }
+    Types{
+        calendar{
+            buddhist{"Calannariu buddista"}
+            chinese{"Calannariu cinisi"}
+            coptic{"Calannariu coptu"}
+            dangi{"Calannariu dangi"}
+            ethiopic{"Calannariu etìupi"}
+            ethiopic-amete-alem{"Calannariu etìupi Amete-Alem"}
+            gregorian{"Calannariu grigurianu"}
+            hebrew{"Calannariu ebbràicu"}
+            islamic{"Calannariu slàmicu"}
+            islamic-civil{"Calannariu slàmicu civili"}
+            islamic-umalqura{"Calannariu slàmicu Umm Al-Qura"}
+            iso8601{"Calannariu grigurianu (prima l’annu)"}
+            japanese{"Calannariu giappunisi"}
+            persian{"Calannariu pirsianu"}
+            roc{"Calannariu minguo"}
+        }
+        calendar%core{
+            gregorian{"Grigurianu"}
+        }
+        collation{
+            standard{"Arringu pridifinutu"}
+        }
+        collation%core{
+            standard{"Pridifinutu"}
+        }
+        ms{
+            metric{"Sistema mètricu"}
+            uksystem{"Sistema mpiriali"}
+            ussystem{"Sistema miricanu"}
+        }
+        numbers{
+            latn{"Nùmmari di Punenti"}
+        }
+    }
+    codePatterns{
+        language{"Lingua: {0}"}
+        script{"Scrittura: {0}"}
+        territory{"Riggiuni: {0}"}
+    }
+}

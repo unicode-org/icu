@@ -1,0 +1,37 @@
+/*
+ * Copyright (C) 2016 and later: Unicode, Inc. and others.
+ * License & terms of use: http://www.unicode.org/copyright.html
+ *
+ * (C) Copyright IBM Corp. 1998-2016. All Rights Reserved.
+ *
+ * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS
+ * YOU REALLY KNOW WHAT YOU'RE DOING.
+ *
+ * Generated on: 05/10/2016 11:13:24 AM PDT
+ */
+
+ICU Version=58
+Total Script=174
+Total Language=71
+Scripts={
+	 ICU_2.2=40
+	 ICUCanadian_2.6=1
+	 ICUCanadian_2.2=5
+	 ICU_2.6=8
+	 ICU_3.0=1
+	 ICU_3.4=7
+	 ICU_3.6=42
+	 ICU_3.8=12
+	 ICU_4.0=14
+         ICU_4.4=4
+         ICU_4.6=13
+         ICU_4.8=9
+         ICU_49=3
+         ICU_52=2
+         ICU_54=6
+         ICU_58=8
+        }
+Languages={
+	   ICU_2.6=30
+	   ICU_4.0=42
+          }

@@ -1,0 +1,845 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+rm{
+    zoneStrings{
+        "Africa:Addis_Ababa"{
+            ec{"Addis Abeba"}
+        }
+        "Africa:Algiers"{
+            ec{"Algier"}
+        }
+        "Africa:Dar_es_Salaam"{
+            ec{"Daressalam"}
+        }
+        "Africa:Djibouti"{
+            ec{"Dschibuti"}
+        }
+        "Africa:Khartoum"{
+            ec{"Khartum"}
+        }
+        "Africa:Mogadishu"{
+            ec{"Mogadischu"}
+        }
+        "Africa:Tripoli"{
+            ec{"Tripolis"}
+        }
+        "America:Cayman"{
+            ec{"Inslas Cayman"}
+        }
+        "America:Guadeloupe"{
+            ec{"Guadalupa"}
+        }
+        "America:Havana"{
+            ec{"Havanna"}
+        }
+        "America:Jamaica"{
+            ec{"Giamaica"}
+        }
+        "America:Martinique"{
+            ec{"Martinica"}
+        }
+        "America:Mexico_City"{
+            ec{"Citad dal Mexico"}
+        }
+        "America:Miquelon"{
+            ec{"Saint Pierre"}
+        }
+        "America:North_Dakota:Beulah"{
+            ec{"Beulah, Dakota dal Nord"}
+        }
+        "America:North_Dakota:Center"{
+            ec{"Center, Dakota dal Nord"}
+        }
+        "America:North_Dakota:New_Salem"{
+            ec{"New Salem, Dakota dal Nord"}
+        }
+        "America:St_Barthelemy"{
+            ec{"Son Barthélemy"}
+        }
+        "America:St_Kitts"{
+            ec{"Saint Kitts"}
+        }
+        "America:St_Lucia"{
+            ec{"Sontga Lucia"}
+        }
+        "America:St_Thomas"{
+            ec{"Saint Thomas"}
+        }
+        "America:St_Vincent"{
+            ec{"Son Vincenz"}
+        }
+        "Asia:Ashgabat"{
+            ec{"Aşgabat"}
+        }
+        "Asia:Baghdad"{
+            ec{"Bagdad"}
+        }
+        "Asia:Bishkek"{
+            ec{"Bischkek"}
+        }
+        "Asia:Calcutta"{
+            ec{"Calcutta"}
+        }
+        "Asia:Chita"{
+            ec{"Tschita"}
+        }
+        "Asia:Dushanbe"{
+            ec{"Duschanbe"}
+        }
+        "Asia:Hong_Kong"{
+            ec{"Hongkong"}
+        }
+        "Asia:Kamchatka"{
+            ec{"Kamtschatka"}
+        }
+        "Asia:Karachi"{
+            ec{"Karatschi"}
+        }
+        "Asia:Khandyga"{
+            ec{"Chandyga"}
+        }
+        "Asia:Krasnoyarsk"{
+            ec{"Krasnojarsk"}
+        }
+        "Asia:Muscat"{
+            ec{"Mascat"}
+        }
+        "Asia:Pyongyang"{
+            ec{"Pjöngjang"}
+        }
+        "Asia:Qostanay"{
+            ec{"Qostanai"}
+        }
+        "Asia:Qyzylorda"{
+            ec{"Qysylorda"}
+        }
+        "Asia:Riyadh"{
+            ec{"Riad"}
+        }
+        "Asia:Saigon"{
+            ec{"Citad da Ho Chi Minh"}
+        }
+        "Asia:Sakhalin"{
+            ec{"Sachalin"}
+        }
+        "Asia:Samarkand"{
+            ec{"Samarcanda"}
+        }
+        "Asia:Shanghai"{
+            ec{"Schanghai"}
+        }
+        "Asia:Singapore"{
+            ec{"Singapur"}
+        }
+        "Asia:Tashkent"{
+            ec{"Taschkent"}
+        }
+        "Asia:Tbilisi"{
+            ec{"Tiflis"}
+        }
+        "Asia:Tehran"{
+            ec{"Teheran"}
+        }
+        "Asia:Tokyo"{
+            ec{"Tokio"}
+        }
+        "Asia:Yakutsk"{
+            ec{"Jakutsk"}
+        }
+        "Asia:Yekaterinburg"{
+            ec{"Jekaterinburg"}
+        }
+        "Asia:Yerevan"{
+            ec{"Jerevan"}
+        }
+        "Atlantic:Azores"{
+            ec{"Azoras"}
+        }
+        "Atlantic:Bermuda"{
+            ec{"Bermudas"}
+        }
+        "Atlantic:Canary"{
+            ec{"Inslas Canarias"}
+        }
+        "Atlantic:Cape_Verde"{
+            ec{"Cap Verd"}
+        }
+        "Atlantic:Faeroe"{
+            ec{"Inslas Feroe"}
+        }
+        "Atlantic:Reykjavik"{
+            ec{"Reykjavík"}
+        }
+        "Atlantic:South_Georgia"{
+            ec{"Georgia dal Sid"}
+        }
+        "Atlantic:St_Helena"{
+            ec{"Sontg’elena"}
+        }
+        "Etc:UTC"{
+            ls{"temp universal coordinà"}
+        }
+        "Etc:Unknown"{
+            ec{"lieu nunenconuschent"}
+        }
+        "Europe:Astrakhan"{
+            ec{"Astrachan"}
+        }
+        "Europe:Athens"{
+            ec{"Athen"}
+        }
+        "Europe:Belgrade"{
+            ec{"Belgrad"}
+        }
+        "Europe:Brussels"{
+            ec{"Brüssel"}
+        }
+        "Europe:Bucharest"{
+            ec{"Bucarest"}
+        }
+        "Europe:Dublin"{
+            ld{"temp da stad da l’Irlanda"}
+        }
+        "Europe:Isle_of_Man"{
+            ec{"Insla da Man"}
+        }
+        "Europe:Kiev"{
+            ec{"Kiev"}
+        }
+        "Europe:Lisbon"{
+            ec{"Lissabon"}
+        }
+        "Europe:London"{
+            ec{"Londra"}
+            ld{"temp da stad da la Gronda Britannia"}
+        }
+        "Europe:Luxembourg"{
+            ec{"Luxemburg"}
+        }
+        "Europe:Moscow"{
+            ec{"Moscau"}
+        }
+        "Europe:Prague"{
+            ec{"Prag"}
+        }
+        "Europe:Rome"{
+            ec{"Roma"}
+        }
+        "Europe:Warsaw"{
+            ec{"Varsovia"}
+        }
+        "Europe:Zurich"{
+            ec{"Turitg"}
+        }
+        "Indian:Christmas"{
+            ec{"Insla da Nadal"}
+        }
+        "Indian:Cocos"{
+            ec{"Inslas Cocos"}
+        }
+        "Indian:Comoro"{
+            ec{"Comoras"}
+        }
+        "Indian:Maldives"{
+            ec{"Maledivas"}
+        }
+        "Pacific:Easter"{
+            ec{"Insla da Pasca"}
+        }
+        "Pacific:Fiji"{
+            ec{"Fidschi"}
+        }
+        "Pacific:Norfolk"{
+            ec{"Insla Norfolk"}
+        }
+        "meta:Afghanistan"{
+            ls{"temp da l’Afganistan"}
+        }
+        "meta:Africa_Central"{
+            ls{"temp da l’Africa Centrala"}
+        }
+        "meta:Africa_Eastern"{
+            ls{"temp da l’Africa Orientala"}
+        }
+        "meta:Africa_Southern"{
+            ls{"temp normal da l’Africa Meridiunala"}
+        }
+        "meta:Africa_Western"{
+            ls{"temp da l’Africa Occidentala"}
+        }
+        "meta:Alaska"{
+            ld{"temp da stad da l’Alasca"}
+            lg{"temp da l’Alasca"}
+            ls{"temp normal da l’Alasca"}
+        }
+        "meta:Amazon"{
+            ld{"temp da stad da l’Amazonas"}
+            lg{"temp da l’Amazonas"}
+            ls{"temp normal da l’Amazonas"}
+        }
+        "meta:America_Central"{
+            ld{"temp da stad dal center USA"}
+            lg{"temp dal center USA"}
+            ls{"temp normal dal center USA"}
+        }
+        "meta:America_Eastern"{
+            ld{"temp da stad da l’ost USA"}
+            lg{"temp da l’ost USA"}
+            ls{"temp normal da l’ost USA"}
+        }
+        "meta:America_Mountain"{
+            ld{"temp da stad dals Rocky Mountains"}
+            lg{"temp dals Rocky Mountains"}
+            ls{"temp normal dals Rocky Mountains"}
+        }
+        "meta:America_Pacific"{
+            ld{"temp da stad dal Pacific USA"}
+            lg{"temp dal Pacific USA"}
+            ls{"temp normal dal Pacific USA"}
+        }
+        "meta:Apia"{
+            ld{"temp da stad da la Samoa"}
+            lg{"temp da la Samoa"}
+            ls{"temp normal da la Samoa"}
+        }
+        "meta:Arabian"{
+            ld{"temp da stad arab"}
+            lg{"temp arab"}
+            ls{"temp normal arab"}
+        }
+        "meta:Argentina"{
+            ld{"temp da stad da l’Argentina"}
+            lg{"temp da l’Argentina"}
+            ls{"temp normal da l’Argentina"}
+        }
+        "meta:Argentina_Western"{
+            ld{"temp da stad da l’Argentina occidentala"}
+            lg{"temp da l’Argentina occidentala"}
+            ls{"temp normal da l’Argentina occidentala"}
+        }
+        "meta:Armenia"{
+            ld{"temp da stad da l’Armenia"}
+            lg{"temp da l’Armenia"}
+            ls{"temp normal da l’Armenia"}
+        }
+        "meta:Atlantic"{
+            ld{"temp da stad da l’Atlantic USA"}
+            lg{"temp da l’Atlantic USA"}
+            ls{"temp normal da l’Atlantic USA"}
+        }
+        "meta:Australia_Central"{
+            ld{"temp da stad dal center da l’Australia"}
+            lg{"temp dal center da l’Australia"}
+            ls{"temp normal dal center da l’Australia"}
+        }
+        "meta:Australia_CentralWestern"{
+            ld{"temp da stad dal center-vest da l’Australia"}
+            lg{"temp dal center-vest da l’Australia"}
+            ls{"temp normal dal center-vest da l’Australia"}
+        }
+        "meta:Australia_Eastern"{
+            ld{"temp da stad da l’ost da l’Australia"}
+            lg{"temp da l’ost da l’Australia"}
+            ls{"temp normal da l’ost da l’Australia"}
+        }
+        "meta:Australia_Western"{
+            ld{"temp da stad dal vest da l’Australia"}
+            lg{"temp dal vest da l’Australia"}
+            ls{"temp normal dal vest da l’Australia"}
+        }
+        "meta:Azerbaijan"{
+            ld{"temp da stad da l’Aserbaidschan"}
+            lg{"temp da l’Aserbaidschan"}
+            ls{"temp normal da l’Aserbaidschan"}
+        }
+        "meta:Azores"{
+            ld{"temp da stad da las Azoras"}
+            lg{"temp da las Azoras"}
+            ls{"temp normal da las Azoras"}
+        }
+        "meta:Bangladesh"{
+            ld{"temp da stad dal Bangladesch"}
+            lg{"temp dal Bangladesch"}
+            ls{"temp normal dal Bangladesch"}
+        }
+        "meta:Bhutan"{
+            ls{"temp dal Butan"}
+        }
+        "meta:Bolivia"{
+            ls{"temp da la Bolivia"}
+        }
+        "meta:Brasilia"{
+            ld{"temp da stad da la Brasilia"}
+            lg{"temp da la Brasilia"}
+            ls{"temp normal da la Brasilia"}
+        }
+        "meta:Brunei"{
+            ls{"temp dal Brunei"}
+        }
+        "meta:Cape_Verde"{
+            ld{"temp da stad dal Cap Verd"}
+            lg{"temp dal Cap Verd"}
+            ls{"temp normal dal Cap Verd"}
+        }
+        "meta:Chamorro"{
+            ls{"temp dals Chamorro"}
+        }
+        "meta:Chatham"{
+            ld{"temp da stad da las Inslas Chatham"}
+            lg{"temp da las Inslas Chatham"}
+            ls{"temp normal da las Inslas Chatham"}
+        }
+        "meta:Chile"{
+            ld{"temp da stad dal Chile"}
+            lg{"temp dal Chile"}
+            ls{"temp normal dal Chile"}
+        }
+        "meta:China"{
+            ld{"temp da stad da la China"}
+            lg{"temp da la China"}
+            ls{"temp normal da la China"}
+        }
+        "meta:Christmas"{
+            ls{"temp da l’Insla da Nadal"}
+        }
+        "meta:Cocos"{
+            ls{"temp da las Inslas Cocos"}
+        }
+        "meta:Colombia"{
+            ld{"temp da stad da la Columbia"}
+            lg{"temp da la Columbia"}
+            ls{"temp normal da la Columbia"}
+        }
+        "meta:Cook"{
+            ld{"temp da stad da las Inslas Cook"}
+            lg{"temp da las Inslas Cook"}
+            ls{"temp normal da las Inslas Cook"}
+        }
+        "meta:Cuba"{
+            ld{"temp da stad da la Cuba"}
+            lg{"temp da la Cuba"}
+            ls{"temp normal da la Cuba"}
+        }
+        "meta:Davis"{
+            ls{"temp da Davis"}
+        }
+        "meta:DumontDUrville"{
+            ls{"temp da Dumont d’Urville"}
+        }
+        "meta:East_Timor"{
+            ls{"temp dal Timor da l’Ost"}
+        }
+        "meta:Easter"{
+            ld{"temp da stad da l’Insla da Pasca"}
+            lg{"temp da l’Insla da Pasca"}
+            ls{"temp normal da l’Insla da Pasca"}
+        }
+        "meta:Ecuador"{
+            ls{"temp da l’Ecuador"}
+        }
+        "meta:Europe_Central"{
+            ld{"temp da stad da l’Europa Centrala"}
+            lg{"temp da l’Europa Centrala"}
+            ls{"temp normal da l’Europa Centrala"}
+        }
+        "meta:Europe_Eastern"{
+            ld{"temp da stad da l’Europa Orientala"}
+            lg{"temp da l’Europa Orientala"}
+            ls{"temp normal da l’Europa Orientala"}
+        }
+        "meta:Europe_Further_Eastern"{
+            ls{"temp da l’extrem orient da l’Europa"}
+        }
+        "meta:Europe_Western"{
+            ld{"temp da stad da l’Europa dal Vest"}
+            lg{"temp da l’Europa dal Vest"}
+            ls{"temp normal da l’Europa dal Vest"}
+        }
+        "meta:Falkland"{
+            ld{"temp da stad da las Inslas Falkland"}
+            lg{"temp da las Inslas Falkland"}
+            ls{"temp normal da las Inslas Falkland"}
+        }
+        "meta:Fiji"{
+            ld{"temp da stad dal Fidschi"}
+            lg{"temp dal Fidschi"}
+            ls{"temp normal dal Fidschi"}
+        }
+        "meta:French_Guiana"{
+            ls{"temp da la Guyana Franzosa"}
+        }
+        "meta:French_Southern"{
+            ls{"temp dals Territoris Franzos Meridiunals ed Antarctics"}
+        }
+        "meta:GMT"{
+            ls{"temp dal meridian da Greenwich"}
+        }
+        "meta:Galapagos"{
+            ls{"temp da las Inslas Galápagos"}
+        }
+        "meta:Gambier"{
+            ls{"temp da las Inslas Gambier"}
+        }
+        "meta:Georgia"{
+            ld{"temp da stad da la Georgia"}
+            lg{"temp da la Georgia"}
+            ls{"temp normal da la Georgia"}
+        }
+        "meta:Gilbert_Islands"{
+            ls{"temp da las Inslas Gilbert"}
+        }
+        "meta:Greenland_Eastern"{
+            ld{"temp da stad da la Grönlanda orientala"}
+            lg{"temp da la Grönlanda orientala"}
+            ls{"temp normal da la Grönlanda orientala"}
+        }
+        "meta:Greenland_Western"{
+            ld{"temp da stad da la Grönlanda occidentala"}
+            lg{"temp da la Grönlanda occidentala"}
+            ls{"temp normal da la Grönlanda occidentala"}
+        }
+        "meta:Gulf"{
+            ls{"temp normal dal Golf"}
+        }
+        "meta:Guyana"{
+            ls{"temp da la Guyana"}
+        }
+        "meta:Hawaii"{
+            ls{"temp normal dal Hawai e las Aleutinas"}
+        }
+        "meta:Hawaii_Aleutian"{
+            ld{"temp da stad dal Hawai e da las Aleutinas"}
+            lg{"temp dal Hawai e las Aleutinas"}
+            ls{"temp normal dal Hawai e las Aleutinas"}
+        }
+        "meta:Hong_Kong"{
+            ld{"temp da stad dal Hongkong"}
+            lg{"temp dal Hongkong"}
+            ls{"temp normal dal Hongkong"}
+        }
+        "meta:Hovd"{
+            ld{"temp da stad da Hovd"}
+            lg{"temp da Hovd"}
+            ls{"temp normal da Hovd"}
+        }
+        "meta:India"{
+            ls{"temp normal da l’India"}
+        }
+        "meta:Indian_Ocean"{
+            ls{"temp da l’Ocean Indic"}
+        }
+        "meta:Indochina"{
+            ls{"temp da l’Indochina"}
+        }
+        "meta:Indonesia_Central"{
+            ls{"temp dal center da l’Indonesia"}
+        }
+        "meta:Indonesia_Eastern"{
+            ls{"temp da l’ost da l’Indonesia"}
+        }
+        "meta:Indonesia_Western"{
+            ls{"temp dal vest da l’Indonesia"}
+        }
+        "meta:Iran"{
+            ld{"temp da stad da l’Iran"}
+            lg{"temp da l’Iran"}
+            ls{"temp normal da l’Iran"}
+        }
+        "meta:Irkutsk"{
+            ld{"temp da stad dad Irkutsk"}
+            lg{"temp dad Irkutsk"}
+            ls{"temp normal dad Irkutsk"}
+        }
+        "meta:Israel"{
+            ld{"temp da stad da l’Israel"}
+            lg{"temp da l’Israel"}
+            ls{"temp normal da l’Israel"}
+        }
+        "meta:Japan"{
+            ld{"temp da stad dal Giapun"}
+            lg{"temp dal Giapun"}
+            ls{"temp normal dal Giapun"}
+        }
+        "meta:Kazakhstan"{
+            ls{"temp dal Kasachstan"}
+        }
+        "meta:Kazakhstan_Eastern"{
+            ls{"temp dal Kasachstan oriental"}
+        }
+        "meta:Kazakhstan_Western"{
+            ls{"temp dal Kasachstan occidental"}
+        }
+        "meta:Korea"{
+            ld{"temp da stad da la Corea"}
+            lg{"temp da la Corea"}
+            ls{"temp normal da la Corea"}
+        }
+        "meta:Kosrae"{
+            ls{"temp da Kosrae"}
+        }
+        "meta:Krasnoyarsk"{
+            ld{"temp da stad da Krasnojarsk"}
+            lg{"temp da Krasnojarsk"}
+            ls{"temp normal da Krasnojarsk"}
+        }
+        "meta:Kyrgystan"{
+            ls{"temp dal Kirghistan"}
+        }
+        "meta:Line_Islands"{
+            ls{"temp da las Inslas da la Lingia"}
+        }
+        "meta:Lord_Howe"{
+            ld{"temp da stad da Lord Howe"}
+            lg{"temp da Lord Howe"}
+            ls{"temp normal da Lord Howe"}
+        }
+        "meta:Magadan"{
+            ld{"temp da stad da Magadan"}
+            lg{"temp da Magadan"}
+            ls{"temp normal da Magadan"}
+        }
+        "meta:Malaysia"{
+            ls{"temp da la Malaisia"}
+        }
+        "meta:Maldives"{
+            ls{"temp da las Maledivas"}
+        }
+        "meta:Marquesas"{
+            ls{"temp da las Inslas Marquesas"}
+        }
+        "meta:Marshall_Islands"{
+            ls{"temp da las Inslas da Marshall"}
+        }
+        "meta:Mauritius"{
+            ld{"temp da stad dal Mauritius"}
+            lg{"temp dal Mauritius"}
+            ls{"temp normal dal Mauritius"}
+        }
+        "meta:Mawson"{
+            ls{"temp da Mawson"}
+        }
+        "meta:Mexico_Pacific"{
+            ld{"temp da stad mexican dal Pacific"}
+            lg{"temp mexican dal Pacific"}
+            ls{"temp normal mexican dal Pacific"}
+        }
+        "meta:Mongolia"{
+            ld{"temp da stad dad Ulaanbaatar"}
+            lg{"temp dad Ulaanbaatar"}
+            ls{"temp normal dad Ulaanbaatar"}
+        }
+        "meta:Moscow"{
+            ld{"temp da stad da Moscau"}
+            lg{"temp da Moscau"}
+            ls{"temp normal da Moscau"}
+        }
+        "meta:Myanmar"{
+            ls{"temp dal Myanmar"}
+        }
+        "meta:Nauru"{
+            ls{"temp da Nauru"}
+        }
+        "meta:Nepal"{
+            ls{"temp dal Nepal"}
+        }
+        "meta:New_Caledonia"{
+            ld{"temp da stad da la Nova Caledonia"}
+            lg{"temp da la Nova Caledonia"}
+            ls{"temp normal da la Nova Caledonia"}
+        }
+        "meta:New_Zealand"{
+            ld{"temp da stad da la Nova Zelanda"}
+            lg{"temp da la Nova Zelanda"}
+            ls{"temp normal da la Nova Zelanda"}
+        }
+        "meta:Newfoundland"{
+            ld{"temp da stad da la Terranova"}
+            lg{"temp da la Terranova"}
+            ls{"temp normal da la Terranova"}
+        }
+        "meta:Niue"{
+            ls{"temp da Niue"}
+        }
+        "meta:Norfolk"{
+            ld{"temp da stad da l’Insla Norfolk"}
+            lg{"temp da l’Insla Norfolk"}
+            ls{"temp normal da l’Insla Norfolk"}
+        }
+        "meta:Noronha"{
+            ld{"temp da stad da Fernando de Noronha"}
+            lg{"temp da Fernando de Noronha"}
+            ls{"temp normal da Fernando de Noronha"}
+        }
+        "meta:Novosibirsk"{
+            ld{"temp da stad da Novosibirsk"}
+            lg{"temp da Novosibirsk"}
+            ls{"temp normal da Novosibirsk"}
+        }
+        "meta:Omsk"{
+            ld{"temp da stad dad Omsk"}
+            lg{"temp dad Omsk"}
+            ls{"temp normal dad Omsk"}
+        }
+        "meta:Pakistan"{
+            ld{"temp da stad dal Pakistan"}
+            lg{"temp dal Pakistan"}
+            ls{"temp normal dal Pakistan"}
+        }
+        "meta:Palau"{
+            ls{"temp da Palau"}
+        }
+        "meta:Papua_New_Guinea"{
+            ls{"temp da la Papua Nova Guinea"}
+        }
+        "meta:Paraguay"{
+            ld{"temp da stad dal Paraguai"}
+            lg{"temp dal Paraguai"}
+            ls{"temp normal dal Paraguai"}
+        }
+        "meta:Peru"{
+            ld{"temp da stad dal Peru"}
+            lg{"temp dal Peru"}
+            ls{"temp normal dal Peru"}
+        }
+        "meta:Philippines"{
+            ld{"temp da stad da las Filippinas"}
+            lg{"temp da las Filippinas"}
+            ls{"temp normal da las Filippinas"}
+        }
+        "meta:Phoenix_Islands"{
+            ls{"temp da las Inslas Fenix"}
+        }
+        "meta:Pierre_Miquelon"{
+            ld{"temp da stad da Saint Pierre e Miquelon"}
+            lg{"temp da Saint Pierre e Miquelon"}
+            ls{"temp normal da Saint Pierre e Miquelon"}
+        }
+        "meta:Pitcairn"{
+            ls{"temp da las Inslas Pitcairn"}
+        }
+        "meta:Ponape"{
+            ls{"temp da Pohnpei"}
+        }
+        "meta:Pyongyang"{
+            ls{"temp da la Corea dal Nord"}
+        }
+        "meta:Reunion"{
+            ls{"temp da la Réunion"}
+        }
+        "meta:Rothera"{
+            ls{"temp da Rothera"}
+        }
+        "meta:Sakhalin"{
+            ld{"temp da stad da Sachalin"}
+            lg{"temp da Sachalin"}
+            ls{"temp normal da Sachalin"}
+        }
+        "meta:Samoa"{
+            ld{"temp da stad da la Samoa Americana"}
+            lg{"temp da la Samoa Americana"}
+            ls{"temp normal da la Samoa Americana"}
+        }
+        "meta:Seychelles"{
+            ls{"temp da las Seychellas"}
+        }
+        "meta:Singapore"{
+            ls{"temp normal dal Singapur"}
+        }
+        "meta:Solomon"{
+            ls{"temp da las Inslas da Salomon"}
+        }
+        "meta:South_Georgia"{
+            ls{"temp da la Georgia dal Sid"}
+        }
+        "meta:Suriname"{
+            ls{"temp dal Surinam"}
+        }
+        "meta:Syowa"{
+            ls{"temp da Shōwa"}
+        }
+        "meta:Tahiti"{
+            ls{"temp da Tahiti"}
+        }
+        "meta:Taipei"{
+            ld{"temp da stad dal Taiwan"}
+            lg{"temp dal Taiwan"}
+            ls{"temp normal dal Taiwan"}
+        }
+        "meta:Tajikistan"{
+            ls{"temp dal Tadschikistan"}
+        }
+        "meta:Tokelau"{
+            ls{"temp da Tokelau"}
+        }
+        "meta:Tonga"{
+            ld{"temp da stad da Tonga"}
+            lg{"temp da Tonga"}
+            ls{"temp normal da Tonga"}
+        }
+        "meta:Truk"{
+            ls{"temp da Chuuk"}
+        }
+        "meta:Turkmenistan"{
+            ld{"temp da stad dal Turkmenistan"}
+            lg{"temp dal Turkmenistan"}
+            ls{"temp normal dal Turkmenistan"}
+        }
+        "meta:Tuvalu"{
+            ls{"temp da las Inslas da Tuvalu"}
+        }
+        "meta:Uruguay"{
+            ld{"temp da stad da l’Uruguai"}
+            lg{"temp da l’Uruguai"}
+            ls{"temp normal da l’Uruguai"}
+        }
+        "meta:Uzbekistan"{
+            ld{"temp da stad da l’Usbekistan"}
+            lg{"temp da l’Usbekistan"}
+            ls{"temp normal da l’Usbekistan"}
+        }
+        "meta:Vanuatu"{
+            ld{"temp da stad dal Vanuatu"}
+            lg{"temp dal Vanuatu"}
+            ls{"temp normal dal Vanuatu"}
+        }
+        "meta:Venezuela"{
+            ls{"temp da la Venezuela"}
+        }
+        "meta:Vladivostok"{
+            ld{"temp da stad da Vladivostok"}
+            lg{"temp da Vladivostok"}
+            ls{"temp normal da Vladivostok"}
+        }
+        "meta:Volgograd"{
+            ld{"temp da stad da Volgograd"}
+            lg{"temp da Volgograd"}
+            ls{"temp normal da Volgograd"}
+        }
+        "meta:Vostok"{
+            ls{"temp da Vostok"}
+        }
+        "meta:Wake"{
+            ls{"temp da l’Insla Wake"}
+        }
+        "meta:Wallis"{
+            ls{"temp da Wallis e Futuna"}
+        }
+        "meta:Yakutsk"{
+            ld{"temp da stad da Jakutsk"}
+            lg{"temp da Jakutsk"}
+            ls{"temp normal da Jakutsk"}
+        }
+        "meta:Yekaterinburg"{
+            ld{"temp da stad da Jekaterinburg"}
+            lg{"temp da Jekaterinburg"}
+            ls{"temp normal da Jekaterinburg"}
+        }
+        "meta:Yukon"{
+            ls{"temp dal Yukon"}
+        }
+        regionFormat{"{0} (temp local)"}
+        regionFormatDaylight{"{0} (temp da stad)"}
+        regionFormatStandard{"{0} (temp normal)"}
+    }
+}

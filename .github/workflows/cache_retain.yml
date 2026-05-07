@@ -1,0 +1,61 @@
+# Copyright (C) 2023 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+#
+# This workflow is designed to keep specific caches on the main
+# branch from getting evicted according to the Github Actions policy
+# (currently in 2023: 7 days) in cases where the cost to construct
+# the cache is high, especially in cases where there is flakiness
+# (ex: network loss / throttling when downloading artifacts) involved in
+# constructing the cache.
+#
+# Preventing a cache from eviction using this workflow requires that:
+#  - the cache is not too big that it starves other caches 
+#    from using the shared cache quota for the repository
+#  - the cache key is specific enough to avoid cache collisions, according
+#    to good cache key design
+#  - the cache key is not overly specific to cause unnecessary cache misses
+#    (resulting in duplicate caches values, thereby wasting space), according
+#    to good cache key design
+#  - For more details, see: https://docs.github.com/en/actions/using-workflows/caching-dependencies-to-speed-up-workflows
+
+name: Retain Specific Caches
+
+on:
+  schedule:
+    # Because the Github Actions cache eviction policy is every 7 days,
+    # this cron schedule is set to run every 6 days to ensure retention
+    - cron: '0 12 */6 * *'
+
+env:
+  SHARED_MVN_ARGS: '--show-version --no-transfer-progress'
+
+permissions:
+  contents: read
+
+jobs:
+  retain-maven-cache:
+    name: Run all tests with Maven
+    runs-on: ubuntu-24.04  # Updated in BRS
+    # Only run this on the upstream repo. Otherwise, running in a personal fork will cause
+    # Github to disable the personal fork copy of the workflow
+    # (Github complains about running a scheduled workflow on a repo with > 60 days of inactivity)
+    if: github.ref == 'refs/heads/main' && github.repository == 'unicode-org/unicodetools'
+    steps:
+      - name: Checkout and setup
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+      - name: Restore read-only cache of local Maven repository
+        uses: actions/cache/restore@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
+        id: cache
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Run Maven unit & integration tests
+        run: |
+          cd icu4j;
+          mvn ${SHARED_MVN_ARGS} verify

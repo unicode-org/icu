@@ -1,0 +1,120 @@
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+ ***********************************************************************
+ * Copyright (C) 2005-2006, International Business Machines            *
+ * Corporation and others. All Rights Reserved.                        *
+ ***********************************************************************
+ *
+ */
+
+package com.ibm.icu.dev.tool.charsetdet.sbcs;
+
+import java.util.Collection;
+import java.util.TreeMap;
+
+/**
+ * @author emader
+ *     <p>TODO To change the template for this generated type comment go to Window - Preferences -
+ *     Java - Code Style - Code Templates
+ */
+public class NGramList<T> {
+    public interface NGramKeyMapper<T> {
+        T mapKey(String key);
+    }
+
+    public static final class NGram implements Comparable<NGram> {
+        private String value;
+        private int refCount;
+
+        public NGram(String theValue, int theRefCount) {
+            value = theValue;
+            refCount = theRefCount;
+        }
+
+        public NGram(String theValue) {
+            this(theValue, 1);
+        }
+
+        public NGram(NGram other) {
+            this(other.getValue(), other.getRefCount());
+        }
+
+        public final String getValue() {
+            return value;
+        }
+
+        public final int getRefCount() {
+            return refCount;
+        }
+
+        public final void incrementRefCount() {
+            refCount += 1;
+        }
+
+        // Note: This makes higher refCounts come *before* lower refCounts...
+        public int compareTo(NGram o) {
+            return o.getRefCount() - refCount;
+        }
+    }
+
+    protected TreeMap<T, NGram> ngrams;
+    protected int totalNGrams;
+    protected int uniqueNGrams;
+
+    protected final int N_GRAM_SIZE = 3;
+
+    private NGramKeyMapper<T> keyMapper;
+
+    /** */
+    public NGramList(NGramKeyMapper<T> theMapper) {
+        keyMapper = theMapper;
+
+        ngrams = new TreeMap<>();
+        totalNGrams = uniqueNGrams = 0;
+    }
+
+    public void setMapper(NGramKeyMapper<T> nGramKeyMapper) {
+        keyMapper = nGramKeyMapper;
+    }
+
+    public NGram get(T mappedKey) {
+        return ngrams.get(mappedKey);
+    }
+
+    public NGram get(String key) {
+        T mappedKey = keyMapper.mapKey(key);
+
+        return get(mappedKey);
+    }
+
+    public void put(String key) {
+        T mappedKey = keyMapper.mapKey(key);
+        NGram ngram = get(mappedKey);
+
+        totalNGrams += 1;
+
+        if (ngram == null) {
+            uniqueNGrams += 1;
+            ngrams.put(mappedKey, new NGram(key));
+        } else {
+            ngram.incrementRefCount();
+        }
+    }
+
+    public Collection<NGram> values() {
+        return ngrams.values();
+    }
+
+    public Collection<T> keys() {
+        return ngrams.keySet();
+    }
+
+    public int getTotalNGrams() {
+        return totalNGrams;
+    }
+
+    public int getUniqueNGrams() {
+        return uniqueNGrams;
+    }
+}

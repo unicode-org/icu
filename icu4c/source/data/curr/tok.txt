@@ -1,0 +1,55 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+tok{
+    CurrencyPlurals{
+        AFN{
+            other{"mani Akan"}
+        }
+        AUD{
+            other{"mani Oseja"}
+        }
+        BDT{
+            other{"mani Panla"}
+        }
+        IDR{
+            other{"mani Intonesija"}
+        }
+        INR{
+            other{"mani Palata"}
+        }
+        IRR{
+            other{"mani Ilan"}
+        }
+        KHR{
+            other{"mani Kame"}
+        }
+        LKR{
+            other{"mani Lanka"}
+        }
+        MMK{
+            other{"mani Mijama"}
+        }
+        MYR{
+            other{"mani Malesija"}
+        }
+        NZD{
+            other{"mani Awatejalowa"}
+        }
+        PHP{
+            other{"mani Pilipina"}
+        }
+        PKR{
+            other{"mani Pakitan"}
+        }
+        SGD{
+            other{"mani Sinkapo"}
+        }
+        THB{
+            other{"mani Tawi"}
+        }
+        VND{
+            other{"mani Wije"}
+        }
+    }
+}

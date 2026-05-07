@@ -1,0 +1,91 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+ceb{
+    Languages{
+        ar{"Arabic"}
+        ar_001{"Modernong Standard nga Arabic"}
+        bn{"Bangla"}
+        ceb{"Cebuano"}
+        de{"German"}
+        de_CH{"Swiss High German"}
+        en{"English"}
+        en_GB{"English (British)"}
+        en_US{"English (America)"}
+        es{"Espanyol"}
+        es_419{"Spanish (Latin America)"}
+        es_ES{"Spanish (Europe)"}
+        es_MX{"Spanish (Mexico)"}
+        fr{"French"}
+        fr_CA{"French (Canada)"}
+        fr_CH{"French (Switzerland)"}
+        hi{"Hindi"}
+        id{"Indonesian"}
+        it{"Italian"}
+        ja{"Japanese"}
+        ko{"Korean"}
+        nl{"Dutch"}
+        nl_BE{"Flemish"}
+        pl{"Polish"}
+        pt{"Portuguese"}
+        ru{"Russian"}
+        th{"Thai"}
+        tr{"Turkish"}
+        und{"Wala mailhi nga pinulongan"}
+        zh{"Chinese"}
+        zh_Hans{"Pinasimple nga Chinese"}
+        zh_Hant{"Tradisyonal nga Chinese"}
+    }
+    Languages%long{
+        zh_Hans{"Pinasimple nga Mandarin Chinese"}
+        zh_Hant{"Tradisyonal nga Mandarin Chinese"}
+    }
+    Languages%menu{
+        zh{"Chinese, Mandarin"}
+    }
+    Languages%short{
+        en_GB{"English (UK)"}
+        en_US{"English (US)"}
+    }
+    Languages%variant{
+        hi_Latn{"Hinglish"}
+    }
+    Scripts{
+        Arab{"Arabic"}
+        Cyrl{"Cyrillic"}
+        Hans{"Pinasimple"}
+        Hant{"Tradisyonal"}
+        Jpan{"Japanese"}
+        Kore{"Korean"}
+        Latn{"Latin"}
+        Zxxx{"Dili Sinulat"}
+        Zzzz{"Wala Mailhing Script"}
+    }
+    Scripts%stand-alone{
+        Hans{"Pinasimple nga Han"}
+        Hant{"Tradisyonal nga Han"}
+    }
+    Types{
+        calendar{
+            gregorian{"Gregorian nga Kalendaryo"}
+            iso8601{"Gregorian nga Kalendaryo (Tuig Una)"}
+        }
+        calendar%core{
+            gregorian{"Gregorian"}
+        }
+        collation{
+            standard{"Standard nga Paagi sa Paghan-ay"}
+        }
+        collation%core{
+            standard{"Standard"}
+        }
+        numbers{
+            latn{"Mga Western Digit"}
+        }
+    }
+    codePatterns{
+        language{"Pinulongan: {0}"}
+        script{"Script: {0}"}
+        territory{"Rehiyon: {0}"}
+    }
+}

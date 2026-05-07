@@ -1,0 +1,54 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+es_EC{
+    %%Parent{"es_419"}
+    NumberElements{
+        latn{
+            patterns{
+                accountingFormat%alphaNextToNumber{"¤ #,##0.00;¤-#,##0.00"}
+                accountingFormat%noCurrency{"#,##0.00"}
+                currencyFormat{"¤#,##0.00;¤-#,##0.00"}
+                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤-#,##0.00"}
+                currencyFormat%noCurrency{"#,##0.00"}
+            }
+            symbols{
+                decimal{","}
+                group{"."}
+            }
+        }
+    }
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "a. m.",
+                "p. m.",
+            }
+            AmPmMarkersAbbr{
+                "a. m.",
+                "p. m.",
+            }
+            dayPeriod{
+                stand-alone{
+                    abbreviated{
+                        am{"a. m."}
+                        pm{"p. m."}
+                    }
+                    narrow{
+                        am{"a. m."}
+                        pm{"p. m."}
+                    }
+                    wide{
+                        am{"a. m."}
+                        pm{"p. m."}
+                    }
+                }
+            }
+        }
+    }
+    fields{
+        dayperiod{
+            dn{"a. m./p. m."}
+        }
+    }
+}

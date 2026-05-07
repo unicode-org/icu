@@ -1,0 +1,22 @@
+{
+  "scenario": "Reserved and private annotations",
+  "description": "Tests for old unsupported expression (reserved/private) syntax -- these are now syntax errors",
+  "defaultTestProperties": {
+    "locale": "en-US",
+    "expErrors": [
+        {
+        "type": "syntax-error"
+      }
+    ]
+  },
+  "tests": [
+      { "src" : "\\\\{   ?   󗟋   𫓜|@}   |}" },
+      { "src" : "\\\\{   ?   󗟋   𫓜|@}   |   \\}   @𠟅򑚎𥪙𽧫=||   @򒘒򳷦㥞򉊷=$򸚶񽱆񅗽񤕞   @𰺱:񎫛񢶛򶈎񄮒}" },
+      { "src" : "{  $iFN  ^  @USh  =$u  @l}" },
+      { "src" : ".local $dS ={ $p4 ^ |.| \\\\ @g:FV = $kd}{{@}}" },
+      { "src" : ".D. \\\\ ||{1}{{}} " },
+      { "src" : ".cIT  ||{|@|  %  \\}  }  {  *󔜫񥘃󸇀  }{{}}" },
+      { "src" : ".򱋿󠆿 . |@| {$󛒁񓝖 & \\{ . @𯼼򋼡= $򵀀񓞈}{{\\\\}}" }
+  ]
+}
+

@@ -1,0 +1,45 @@
+{
+  "$schema": "../../schemas/v0/tests.schema.json",
+  "scenario": "Percent function",
+  "description": "The built-in formatter and selector for percent values.",
+  "defaultTestProperties": {
+    "tags": [":percent"],
+    "bidiIsolation": "none",
+    "locale": "en-US",
+    "expErrors": []
+  },
+  "tests": [
+    {
+      "src": "{:percent}",
+      "expErrors": [{ "type": "bad-operand" }],
+      "exp": "{:percent}"
+    },
+    {
+      "src": "{foo :percent}",
+      "expErrors": [{ "type": "bad-operand" }],
+      "exp": "{|foo|}"
+    },
+    { "src": "{1 :percent}" },
+    { "src": ".local $n = {0.42 :number} {{{$n :percent}}}" },
+    { "src": ".local $n = {42 :integer} {{{$n :percent}}}" },
+    { "src": ".local $n = {0.01 :percent} {{{$n :percent}}}" },
+    { "src": "{0.12345678 :percent}" },
+    { "src": "{0.12345678 :percent maximumFractionDigits=1}" },
+    { "src": "{0.12 :percent minimumFractionDigits=1}" },
+    { "src": "{0.12 :percent minimumSignificantDigits=1}" },
+    {
+      "src": "{$x :percent}",
+      "params": [{ "name": "x", "value": 0.99 }]
+    },
+    {
+      "src": ".input {$n :percent} .match $n one {{one}} * {{other}}",
+      "params": [{ "name": "n", "value": 0.01 }],
+      "exp": "one"
+    },
+    {
+      "src": ".input {$n :percent} .match $n one {{one}} * {{other}}",
+      "params": [{ "name": "n", "value": 1 }],
+      "exp": "other"
+    }
+  ]
+}

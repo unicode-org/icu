@@ -1,0 +1,26 @@
+name: scons
+
+on: push
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04  # Updated in BRS
+
+    steps:
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install scons
+
+      - name: Build
+        run: |
+          make
+
+      - name: Test
+        run: |
+          make test

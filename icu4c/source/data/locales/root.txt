@@ -1,0 +1,3622 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+root{
+    AuxExemplarCharacters{"[]"}
+    Ellipsis{
+        final{"{0}…"}
+        initial{"…{0}"}
+        medial{"{0}…{1}"}
+        word-final{"{0} …"}
+        word-initial{"… {0}"}
+        word-medial{"{0} … {1}"}
+    }
+    ExemplarCharacters{"[]"}
+    ExemplarCharactersNumbers{"[\\- ‑ , . % ‰ + − 0 1 2 3 4 5 6 7 8 9]"}
+    ExemplarCharactersPunctuation{"[\\- ‐‑ , ; \\: ! ? . ( ) \\[ \\] \\{ \\}]"}
+    MoreInformation{"?"}
+    NumberElements{
+        adlm{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        ahom{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        arab{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                accountingFormat:alias{"/LOCALE/NumberElements/arab/patterns/currencyFormat"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%noCurrency{"#,##0.00"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat{"#,##0%"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols{
+                approximatelySign{"~"}
+                decimal{"٫"}
+                exponential{"اس"}
+                group{"٬"}
+                infinity{"∞"}
+                list{"؛"}
+                minusSign{"؜-"}
+                nan{"NaN"}
+                perMille{"؉"}
+                percentSign{"٪؜"}
+                plusSign{"؜+"}
+                superscriptingExponent{"×"}
+                timeSeparator{":"}
+            }
+        }
+        arabext{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols{
+                approximatelySign{"~"}
+                decimal{"٫"}
+                exponential{"×۱۰^"}
+                group{"٬"}
+                infinity{"∞"}
+                list{"؛"}
+                minusSign{"‎-‎"}
+                nan{"NaN"}
+                perMille{"؉"}
+                percentSign{"٪"}
+                plusSign{"‎+‎"}
+                superscriptingExponent{"×"}
+                timeSeparator{"٫"}
+            }
+        }
+        bali{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        beng{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        bhks{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        brah{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        cakm{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        cham{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        default{"latn"}
+        deva{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        diak{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        fullwide{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        gara{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        gong{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        gonm{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        gujr{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        gukh{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        guru{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        hanidec{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        hmng{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        hmnp{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        java{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        kali{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        kawi{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        khmr{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        knda{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        krai{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        lana{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        lanatham{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        laoo{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        latn{
+            miscPatterns{
+                approximately{"~{0}"}
+                atLeast{"≥{0}"}
+                atMost{"≤{0}"}
+                range{"{0}–{1}"}
+            }
+            patterns{
+                accountingFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                currencyFormat{"¤ #,##0.00"}
+                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
+                currencyFormat%noCurrency{"#,##0.00"}
+                currencyPatternAppendISO{"{0} ¤¤"}
+                decimalFormat{"#,##0.###"}
+                percentFormat{"#,##0%"}
+                scientificFormat{"#E0"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"¤ 0K"}
+                    }
+                    10000{
+                        other{"¤ 00K"}
+                    }
+                    100000{
+                        other{"¤ 000K"}
+                    }
+                    1000000{
+                        other{"¤ 0M"}
+                    }
+                    10000000{
+                        other{"¤ 00M"}
+                    }
+                    100000000{
+                        other{"¤ 000M"}
+                    }
+                    1000000000{
+                        other{"¤ 0G"}
+                    }
+                    10000000000{
+                        other{"¤ 00G"}
+                    }
+                    100000000000{
+                        other{"¤ 000G"}
+                    }
+                    1000000000000{
+                        other{"¤ 0T"}
+                    }
+                    10000000000000{
+                        other{"¤ 00T"}
+                    }
+                    100000000000000{
+                        other{"¤ 000T"}
+                    }
+                }
+                decimalFormat{
+                    1000{
+                        other{"0K"}
+                    }
+                    10000{
+                        other{"00K"}
+                    }
+                    100000{
+                        other{"000K"}
+                    }
+                    1000000{
+                        other{"0M"}
+                    }
+                    10000000{
+                        other{"00M"}
+                    }
+                    100000000{
+                        other{"000M"}
+                    }
+                    1000000000{
+                        other{"0G"}
+                    }
+                    10000000000{
+                        other{"00G"}
+                    }
+                    100000000000{
+                        other{"000G"}
+                    }
+                    1000000000000{
+                        other{"0T"}
+                    }
+                    10000000000000{
+                        other{"00T"}
+                    }
+                    100000000000000{
+                        other{"000T"}
+                    }
+                }
+            }
+            rationalFormats{
+                integerAndRationalPattern{"{0} {1}"}
+                rationalPattern{"{0}⁄{1}"}
+                rationalUsage{"sometimes"}
+            }
+            symbols{
+                approximatelySign{"~"}
+                decimal{"."}
+                exponential{"E"}
+                group{","}
+                infinity{"∞"}
+                list{";"}
+                minusSign{"-"}
+                nan{"NaN"}
+                perMille{"‰"}
+                percentSign{"%"}
+                plusSign{"+"}
+                superscriptingExponent{"×"}
+                timeSeparator{":"}
+            }
+        }
+        lepc{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        limb{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        mathbold{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        mathdbl{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        mathmono{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        mathsanb{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        mathsans{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        minimalPairs{
+            ordinal{
+                other{"{0}?"}
+            }
+            plural{
+                other{"{0}?"}
+            }
+        }
+        minimumGroupingDigits{"1"}
+        mlym{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        modi{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        mong{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        mroo{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        mtei{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        mymr{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        mymrepka{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        mymrpao{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        mymrshan{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        mymrtlng{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        nagm{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        native{"latn"}
+        newa{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        nkoo{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        olck{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        onao{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        orya{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        osma{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        outlined{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        rohg{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        saur{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        segment{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        shrd{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        sind{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        sinh{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        sora{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        sund{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        sunu{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        takr{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        talu{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        tamldec{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        telu{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        thai{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        tibt{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        tirh{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        tnsa{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        tols{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        vaii{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        wara{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+        wcho{
+            miscPatterns:alias{"/LOCALE/NumberElements/latn/miscPatterns"}
+            patterns{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patterns/decimalFormat"}
+                percentFormat:alias{"/LOCALE/NumberElements/latn/patterns/percentFormat"}
+                scientificFormat:alias{"/LOCALE/NumberElements/latn/patterns/scientificFormat"}
+            }
+            patternsShort{
+                currencyFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/currencyFormat"}
+                decimalFormat:alias{"/LOCALE/NumberElements/latn/patternsShort/decimalFormat"}
+            }
+            symbols:alias{"/LOCALE/NumberElements/latn/symbols"}
+        }
+    }
+    Version{"49"}
+    calendar{
+        buddhist{
+            AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
+            AmPmMarkersNarrow:alias{"/LOCALE/calendar/gregorian/AmPmMarkersNarrow"}
+            DateTimePatterns:alias{"/LOCALE/calendar/generic/DateTimePatterns"}
+            NoonMarker:alias{"/LOCALE/calendar/gregorian/NoonMarker"}
+            NoonMarkerNarrow:alias{"/LOCALE/calendar/gregorian/NoonMarkerNarrow"}
+            appendItems:alias{"/LOCALE/calendar/generic/appendItems"}
+            availableFormats:alias{"/LOCALE/calendar/generic/availableFormats"}
+            dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
+            eras{
+                abbreviated{
+                    0{"BE"}
+                }
+                narrow:alias{"/LOCALE/calendar/buddhist/eras/abbreviated"}
+                wide:alias{"/LOCALE/calendar/buddhist/eras/abbreviated"}
+            }
+            intervalFormats:alias{"/LOCALE/calendar/generic/intervalFormats"}
+            monthNames:alias{"/LOCALE/calendar/gregorian/monthNames"}
+            quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
+        }
+        chinese{
+            AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
+            AmPmMarkersNarrow:alias{"/LOCALE/calendar/gregorian/AmPmMarkersNarrow"}
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "r(U) MMMM d, EEEE",
+                "r(U) MMMM d",
+                "r MMM d",
+                "r-MM-dd",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "rMMMMEEEEd",
+                "rMMMMd",
+                "rMMMd",
+                "rMMdd",
+            }
+            NoonMarker:alias{"/LOCALE/calendar/gregorian/NoonMarker"}
+            NoonMarkerNarrow:alias{"/LOCALE/calendar/gregorian/NoonMarkerNarrow"}
+            appendItems{
+                Day{"{0} ({2}: {1})"}
+                Day-Of-Week{"{0} {1}"}
+                Era{"{1} {0}"}
+                Hour{"{0} ({2}: {1})"}
+                Minute{"{0} ({2}: {1})"}
+                Month{"{0} ({2}: {1})"}
+                Quarter{"{0} ({2}: {1})"}
+                Second{"{0} ({2}: {1})"}
+                Timezone{"{0} {1}"}
+                Week{"{0} ({2}: {1})"}
+                Year{"{1} {0}"}
+            }
+            availableFormats{
+                Bh{"h B"}
+                Bhm{"h:mm B"}
+                Bhms{"h:mm:ss B"}
+                E{"ccc"}
+                EBh{"E h B"}
+                EBhm{"E h:mm B"}
+                EBhms{"E h:mm:ss B"}
+                Ed{"d, E"}
+                Gy{"r U"}
+                GyMMM{"r MMM"}
+                GyMMMEd{"r MMM d, E"}
+                GyMMMM{"r(U) MMMM"}
+                GyMMMMEd{"r(U) MMMM d, E"}
+                GyMMMMd{"r(U) MMMM d"}
+                GyMMMd{"r MMM d"}
+                H{"HH"}
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+                Hv{"HH v"}
+                M{"L"}
+                MEd{"MM-dd, E"}
+                MMM{"LLL"}
+                MMMEd{"MMM d, E"}
+                MMMMd{"MMMM d"}
+                MMMd{"MMM d"}
+                Md{"MM-dd"}
+                UM{"U MM"}
+                UMMM{"U MMM"}
+                UMMMd{"U MMM d"}
+                UMd{"U MM-d"}
+                d{"d"}
+                h{"h a"}
+                hm{"h:mm a"}
+                hms{"h:mm:ss a"}
+                hv{"h a v"}
+                ms{"mm:ss"}
+                y{"r(U)"}
+                yyyy{"r(U)"}
+                yyyyM{"r-MM"}
+                yyyyMEd{"r-MM-dd, E"}
+                yyyyMMM{"r MMM"}
+                yyyyMMMEd{"r MMM d, E"}
+                yyyyMMMM{"r(U) MMMM"}
+                yyyyMMMMEd{"r(U) MMMM d, E"}
+                yyyyMMMMd{"r(U) MMMM d"}
+                yyyyMMMd{"r MMM d"}
+                yyyyMd{"r-MM-dd"}
+                yyyyQQQ{"r(U) QQQ"}
+                yyyyQQQQ{"r(U) QQQQ"}
+            }
+            cyclicNameSets{
+                dayParts{
+                    format{
+                        abbreviated{
+                            "zi",
+                            "chou",
+                            "yin",
+                            "mao",
+                            "chen",
+                            "si",
+                            "wu",
+                            "wei",
+                            "shen",
+                            "you",
+                            "xu",
+                            "hai",
+                        }
+                        narrow:alias{"/LOCALE/calendar/chinese/cyclicNameSets/dayParts/format/abbreviated"}
+                        wide:alias{"/LOCALE/calendar/chinese/cyclicNameSets/dayParts/format/abbreviated"}
+                    }
+                }
+                days:alias{"/LOCALE/calendar/chinese/cyclicNameSets/years"}
+                months:alias{"/LOCALE/calendar/chinese/cyclicNameSets/years"}
+                solarTerms{
+                    format{
+                        abbreviated{
+                            "spring begins",
+                            "rain water",
+                            "insects awaken",
+                            "spring equinox",
+                            "bright and clear",
+                            "grain rain",
+                            "summer begins",
+                            "grain full",
+                            "grain in ear",
+                            "summer solstice",
+                            "minor heat",
+                            "major heat",
+                            "autumn begins",
+                            "end of heat",
+                            "white dew",
+                            "autumn equinox",
+                            "cold dew",
+                            "frost descends",
+                            "winter begins",
+                            "minor snow",
+                            "major snow",
+                            "winter solstice",
+                            "minor cold",
+                            "major cold",
+                        }
+                        narrow:alias{
+                            "/LOCALE/calendar/chinese/cyclicNameSets/solarTerms/format/abbreviate"
+                            "d"
+                        }
+                        wide:alias{
+                            "/LOCALE/calendar/chinese/cyclicNameSets/solarTerms/format/abbreviate"
+                            "d"
+                        }
+                    }
+                }
+                years{
+                    format{
+                        abbreviated{
+                            "jia-zi",
+                            "yi-chou",
+                            "bing-yin",
+                            "ding-mao",
+                            "wu-chen",
+                            "ji-si",
+                            "geng-wu",
+                            "xin-wei",
+                            "ren-shen",
+                            "gui-you",
+                            "jia-xu",
+                            "yi-hai",
+                            "bing-zi",
+                            "ding-chou",
+                            "wu-yin",
+                            "ji-mao",
+                            "geng-chen",
+                            "xin-si",
+                            "ren-wu",
+                            "gui-wei",
+                            "jia-shen",
+                            "yi-you",
+                            "bing-xu",
+                            "ding-hai",
+                            "wu-zi",
+                            "ji-chou",
+                            "geng-yin",
+                            "xin-mao",
+                            "ren-chen",
+                            "gui-si",
+                            "jia-wu",
+                            "yi-wei",
+                            "bing-shen",
+                            "ding-you",
+                            "wu-xu",
+                            "ji-hai",
+                            "geng-zi",
+                            "xin-chou",
+                            "ren-yin",
+                            "gui-mao",
+                            "jia-chen",
+                            "yi-si",
+                            "bing-wu",
+                            "ding-wei",
+                            "wu-shen",
+                            "ji-you",
+                            "geng-xu",
+                            "xin-hai",
+                            "ren-zi",
+                            "gui-chou",
+                            "jia-yin",
+                            "yi-mao",
+                            "bing-chen",
+                            "ding-si",
+                            "wu-wu",
+                            "ji-wei",
+                            "geng-shen",
+                            "xin-you",
+                            "ren-xu",
+                            "gui-hai",
+                        }
+                        narrow:alias{"/LOCALE/calendar/chinese/cyclicNameSets/years/format/abbreviated"}
+                        wide:alias{"/LOCALE/calendar/chinese/cyclicNameSets/years/format/abbreviated"}
+                    }
+                }
+                zodiacs{
+                    format{
+                        abbreviated:alias{"/LOCALE/calendar/chinese/cyclicNameSets/dayParts/format/abbreviated"}
+                        narrow:alias{"/LOCALE/calendar/chinese/cyclicNameSets/zodiacs/format/abbreviated"}
+                        wide:alias{"/LOCALE/calendar/chinese/cyclicNameSets/zodiacs/format/abbreviated"}
+                    }
+                }
+            }
+            dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
+            intervalFormats{
+                Bh{
+                    B{"h B – h B"}
+                    h{"h–h B"}
+                }
+                Bhm{
+                    B{"h:mm B – h:mm B"}
+                    h{"h:mm–h:mm B"}
+                    m{"h:mm–h:mm B"}
+                }
+                H{
+                    H{"HH–HH"}
+                }
+                Hm{
+                    H{"HH:mm–HH:mm"}
+                    m{"HH:mm–HH:mm"}
+                }
+                Hmv{
+                    H{"HH:mm–HH:mm v"}
+                    m{"HH:mm–HH:mm v"}
+                }
+                Hv{
+                    H{"HH–HH v"}
+                }
+                M{
+                    M{"MM–MM"}
+                }
+                MEd{
+                    M{"MM-dd, E – MM-dd, E"}
+                    d{"MM-dd, E – MM-dd, E"}
+                }
+                MMM{
+                    M{"LLL–LLL"}
+                }
+                MMMEd{
+                    M{"MMM d, E – MMM d, E"}
+                    d{"MMM d, E – MMM d, E"}
+                }
+                MMMd{
+                    M{"MMM d – MMM d"}
+                    d{"MMM d–d"}
+                }
+                Md{
+                    M{"MM-dd – MM-dd"}
+                    d{"MM-dd – MM-dd"}
+                }
+                d{
+                    d{"d–d"}
+                }
+                fallback{"{0} – {1}"}
+                h{
+                    a{"h a – h a"}
+                    h{"h–h a"}
+                }
+                hm{
+                    a{"h:mm a – h:mm a"}
+                    h{"h:mm–h:mm a"}
+                    m{"h:mm–h:mm a"}
+                }
+                hmv{
+                    a{"h:mm a – h:mm a v"}
+                    h{"h:mm–h:mm a v"}
+                    m{"h:mm–h:mm a v"}
+                }
+                hv{
+                    a{"h a – h a v"}
+                    h{"h–h a v"}
+                }
+                y{
+                    y{"U–U"}
+                }
+                yM{
+                    M{"y-MM – y-MM"}
+                    y{"y-MM – y-MM"}
+                }
+                yMEd{
+                    M{"y-MM-dd, E – y-MM-dd, E"}
+                    d{"y-MM-dd, E – y-MM-dd, E"}
+                    y{"y-MM-dd, E – y-MM-dd, E"}
+                }
+                yMMM{
+                    M{"U MMM–MMM"}
+                    y{"U MMM – U MMM"}
+                }
+                yMMMEd{
+                    M{"U MMM d, E – MMM d, E"}
+                    d{"U MMM d, E – MMM d, E"}
+                    y{"U MMM d, E – U MMM d, E"}
+                }
+                yMMMM{
+                    M{"U MMMM–MMMM"}
+                    y{"U MMMM – U MMMM"}
+                }
+                yMMMd{
+                    M{"U MMM d – MMM d"}
+                    d{"U MMM d–d"}
+                    y{"U MMM d – U MMM d"}
+                }
+                yMd{
+                    M{"y-MM-dd – y-MM-dd"}
+                    d{"y-MM-dd – y-MM-dd"}
+                    y{"y-MM-dd – y-MM-dd"}
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated:alias{"/LOCALE/calendar/chinese/monthNames/format/wide"}
+                    narrow:alias{"/LOCALE/calendar/chinese/monthNames/stand-alone/narrow"}
+                    wide{
+                        "M01",
+                        "M02",
+                        "M03",
+                        "M04",
+                        "M05",
+                        "M06",
+                        "M07",
+                        "M08",
+                        "M09",
+                        "M10",
+                        "M11",
+                        "M12",
+                    }
+                }
+                stand-alone{
+                    abbreviated:alias{"/LOCALE/calendar/chinese/monthNames/format/abbreviated"}
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    wide:alias{"/LOCALE/calendar/chinese/monthNames/format/wide"}
+                }
+            }
+            monthPatterns{
+                format{
+                    abbreviated:alias{"/LOCALE/calendar/chinese/monthPatterns/format/wide"}
+                    narrow:alias{"/LOCALE/calendar/chinese/monthPatterns/stand-alone/narrow"}
+                    wide{
+                        leap{"{0}bis"}
+                    }
+                }
+                numeric{
+                    all{
+                        leap{"{0}bis"}
+                    }
+                }
+                stand-alone{
+                    abbreviated:alias{"/LOCALE/calendar/chinese/monthPatterns/format/abbreviated"}
+                    narrow{
+                        leap{"{0}b"}
+                    }
+                    wide:alias{"/LOCALE/calendar/chinese/monthPatterns/format/wide"}
+                }
+            }
+            quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
+        }
+        coptic{
+            AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
+            AmPmMarkersNarrow:alias{"/LOCALE/calendar/gregorian/AmPmMarkersNarrow"}
+            DateTimePatterns:alias{"/LOCALE/calendar/generic/DateTimePatterns"}
+            NoonMarker:alias{"/LOCALE/calendar/gregorian/NoonMarker"}
+            NoonMarkerNarrow:alias{"/LOCALE/calendar/gregorian/NoonMarkerNarrow"}
+            appendItems:alias{"/LOCALE/calendar/generic/appendItems"}
+            availableFormats:alias{"/LOCALE/calendar/generic/availableFormats"}
+            dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
+            eras{
+                abbreviated{
+                    1{"AM"}
+                }
+                narrow:alias{"/LOCALE/calendar/coptic/eras/abbreviated"}
+                wide:alias{"/LOCALE/calendar/coptic/eras/abbreviated"}
+            }
+            intervalFormats:alias{"/LOCALE/calendar/generic/intervalFormats"}
+            monthNames{
+                format{
+                    abbreviated:alias{"/LOCALE/calendar/coptic/monthNames/format/wide"}
+                    narrow:alias{"/LOCALE/calendar/coptic/monthNames/stand-alone/narrow"}
+                    wide{
+                        "Tout",
+                        "Baba",
+                        "Hator",
+                        "Kiahk",
+                        "Toba",
+                        "Amshir",
+                        "Baramhat",
+                        "Baramouda",
+                        "Bashans",
+                        "Paona",
+                        "Epep",
+                        "Mesra",
+                        "Nasie",
+                    }
+                }
+                stand-alone{
+                    abbreviated:alias{"/LOCALE/calendar/coptic/monthNames/format/abbreviated"}
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                        "13",
+                    }
+                    wide:alias{"/LOCALE/calendar/coptic/monthNames/format/wide"}
+                }
+            }
+            quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
+        }
+        dangi{
+            AmPmMarkers:alias{"/LOCALE/calendar/chinese/AmPmMarkers"}
+            AmPmMarkersNarrow:alias{"/LOCALE/calendar/chinese/AmPmMarkersNarrow"}
+            DateTimePatterns:alias{"/LOCALE/calendar/chinese/DateTimePatterns"}
+            NoonMarker:alias{"/LOCALE/calendar/chinese/NoonMarker"}
+            NoonMarkerNarrow:alias{"/LOCALE/calendar/chinese/NoonMarkerNarrow"}
+            appendItems:alias{"/LOCALE/calendar/chinese/appendItems"}
+            availableFormats:alias{"/LOCALE/calendar/chinese/availableFormats"}
+            cyclicNameSets:alias{"/LOCALE/calendar/chinese/cyclicNameSets"}
+            dayNames:alias{"/LOCALE/calendar/chinese/dayNames"}
+            intervalFormats:alias{"/LOCALE/calendar/chinese/intervalFormats"}
+            monthNames:alias{"/LOCALE/calendar/chinese/monthNames"}
+            monthPatterns:alias{"/LOCALE/calendar/chinese/monthPatterns"}
+            quarters:alias{"/LOCALE/calendar/chinese/quarters"}
+        }
+        default{"gregorian"}
+        ethiopic{
+            AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
+            AmPmMarkersNarrow:alias{"/LOCALE/calendar/gregorian/AmPmMarkersNarrow"}
+            DateTimePatterns:alias{"/LOCALE/calendar/generic/DateTimePatterns"}
+            NoonMarker:alias{"/LOCALE/calendar/gregorian/NoonMarker"}
+            NoonMarkerNarrow:alias{"/LOCALE/calendar/gregorian/NoonMarkerNarrow"}
+            appendItems:alias{"/LOCALE/calendar/generic/appendItems"}
+            availableFormats:alias{"/LOCALE/calendar/generic/availableFormats"}
+            dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
+            eras{
+                abbreviated{
+                    0{"AA"}
+                    1{"AM"}
+                }
+                narrow:alias{"/LOCALE/calendar/ethiopic/eras/abbreviated"}
+                wide:alias{"/LOCALE/calendar/ethiopic/eras/abbreviated"}
+            }
+            intervalFormats:alias{"/LOCALE/calendar/generic/intervalFormats"}
+            monthNames{
+                format{
+                    abbreviated:alias{"/LOCALE/calendar/ethiopic/monthNames/format/wide"}
+                    narrow:alias{"/LOCALE/calendar/ethiopic/monthNames/stand-alone/narrow"}
+                    wide{
+                        "Meskerem",
+                        "Tekemt",
+                        "Hedar",
+                        "Tahsas",
+                        "Ter",
+                        "Yekatit",
+                        "Megabit",
+                        "Miazia",
+                        "Genbot",
+                        "Sene",
+                        "Hamle",
+                        "Nehasse",
+                        "Pagumen",
+                    }
+                }
+                stand-alone{
+                    abbreviated:alias{"/LOCALE/calendar/ethiopic/monthNames/format/abbreviated"}
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                        "13",
+                    }
+                    wide:alias{"/LOCALE/calendar/ethiopic/monthNames/format/wide"}
+                }
+            }
+            quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
+        }
+        ethiopic-amete-alem{
+            AmPmMarkers:alias{"/LOCALE/calendar/ethiopic/AmPmMarkers"}
+            AmPmMarkersNarrow:alias{"/LOCALE/calendar/ethiopic/AmPmMarkersNarrow"}
+            DateTimePatterns:alias{"/LOCALE/calendar/ethiopic/DateTimePatterns"}
+            NoonMarker:alias{"/LOCALE/calendar/ethiopic/NoonMarker"}
+            NoonMarkerNarrow:alias{"/LOCALE/calendar/ethiopic/NoonMarkerNarrow"}
+            appendItems:alias{"/LOCALE/calendar/ethiopic/appendItems"}
+            availableFormats:alias{"/LOCALE/calendar/ethiopic/availableFormats"}
+            dayNames:alias{"/LOCALE/calendar/ethiopic/dayNames"}
+            eras{
+                abbreviated{
+                    0{"AA"}
+                }
+                narrow:alias{"/LOCALE/calendar/ethiopic-amete-alem/eras/abbreviated"}
+                wide:alias{"/LOCALE/calendar/ethiopic-amete-alem/eras/abbreviated"}
+            }
+            intervalFormats:alias{"/LOCALE/calendar/ethiopic/intervalFormats"}
+            monthNames:alias{"/LOCALE/calendar/ethiopic/monthNames"}
+            quarters:alias{"/LOCALE/calendar/ethiopic/quarters"}
+        }
+        generic{
+            AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
+            AmPmMarkersNarrow:alias{"/LOCALE/calendar/gregorian/AmPmMarkersNarrow"}
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "G y MMMM d, EEEE",
+                "G y MMMM d",
+                "G y MMM d",
+                "G y-MM-dd",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyMMdd",
+            }
+            NoonMarker:alias{"/LOCALE/calendar/gregorian/NoonMarker"}
+            NoonMarkerNarrow:alias{"/LOCALE/calendar/gregorian/NoonMarkerNarrow"}
+            appendItems{
+                Day{"{0} ({2}: {1})"}
+                Day-Of-Week{"{0} {1}"}
+                Era{"{1} {0}"}
+                Hour{"{0} ({2}: {1})"}
+                Minute{"{0} ({2}: {1})"}
+                Month{"{0} ({2}: {1})"}
+                Quarter{"{0} ({2}: {1})"}
+                Second{"{0} ({2}: {1})"}
+                Timezone{"{0} {1}"}
+                Week{"{0} ({2}: {1})"}
+                Year{"{1} {0}"}
+            }
+            availableFormats{
+                Bh{"h B"}
+                Bhm{"h:mm B"}
+                Bhms{"h:mm:ss B"}
+                E{"ccc"}
+                EBh{"E h B"}
+                EBhm{"E h:mm B"}
+                EBhms{"E h:mm:ss B"}
+                EHm{"E HH:mm"}
+                EHms{"E HH:mm:ss"}
+                Ed{"d, E"}
+                Eh{"E h a"}
+                Ehm{"E h:mm a"}
+                Ehms{"E h:mm:ss a"}
+                Gy{"G y"}
+                GyM{"G y-MM"}
+                GyMEd{"G y-MM-dd, E"}
+                GyMMM{"G y MMM"}
+                GyMMMEd{"G y MMM d, E"}
+                GyMMMd{"G y MMM d"}
+                GyMd{"G y-MM-dd"}
+                H{"HH"}
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+                Hv{"HH v"}
+                M{"L"}
+                MEd{"MM-dd, E"}
+                MMM{"LLL"}
+                MMMEd{"MMM d, E"}
+                MMMMd{"MMMM d"}
+                MMMd{"MMM d"}
+                Md{"MM-dd"}
+                d{"d"}
+                h{"h a"}
+                hm{"h:mm a"}
+                hms{"h:mm:ss a"}
+                hv{"h a v"}
+                ms{"mm:ss"}
+                y{"G y"}
+                yyyy{"G y"}
+                yyyyM{"G y-MM"}
+                yyyyMEd{"G y-MM-dd, E"}
+                yyyyMMM{"G y MMM"}
+                yyyyMMMEd{"G y MMM d, E"}
+                yyyyMMMM{"G y MMMM"}
+                yyyyMMMd{"G y MMM d"}
+                yyyyMd{"G y-MM-dd"}
+                yyyyQQQ{"G y QQQ"}
+                yyyyQQQQ{"G y QQQQ"}
+            }
+            dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
+            eras{
+                abbreviated{
+                    0{"ERA0"}
+                    1{"ERA1"}
+                }
+                narrow:alias{"/LOCALE/calendar/generic/eras/abbreviated"}
+                wide:alias{"/LOCALE/calendar/generic/eras/abbreviated"}
+            }
+            intervalFormats{
+                Bh{
+                    B{"h B – h B"}
+                    h{"h–h B"}
+                }
+                Bhm{
+                    B{"h:mm B – h:mm B"}
+                    h{"h:mm–h:mm B"}
+                    m{"h:mm–h:mm B"}
+                }
+                Gy{
+                    G{"G y – G y"}
+                    y{"G y–y"}
+                }
+                GyM{
+                    G{"G y-MM – G y-MM"}
+                    M{"G y-MM – y-MM"}
+                    y{"G y-MM – y-MM"}
+                }
+                GyMEd{
+                    G{"G y-MM-dd, E – G y-MM-dd, E"}
+                    M{"G y-MM-dd, E – y-MM-dd, E"}
+                    d{"G y-MM-dd, E – y-MM-dd, E"}
+                    y{"G y-MM-dd, E – y-MM-dd, E"}
+                }
+                GyMMM{
+                    G{"G y MMM – G y MMM"}
+                    M{"G y MMM–MMM"}
+                    y{"G y MMM – y MMM"}
+                }
+                GyMMMEd{
+                    G{"G y MMM d, E – G y MMM d, E"}
+                    M{"G y MMM d, E – MMM d, E"}
+                    d{"G y MMM d, E – MMM d, E"}
+                    y{"G y MMM d, E – y MMM d, E"}
+                }
+                GyMMMd{
+                    G{"G y MMM d – G y MMM d"}
+                    M{"G y MMM d – MMM d"}
+                    d{"G y MMM d–d"}
+                    y{"G y MMM d – y MMM d"}
+                }
+                GyMd{
+                    G{"G y-MM-dd – G y-MM-dd"}
+                    M{"G y-MM-dd – y-MM-dd"}
+                    d{"G y-MM-dd – y-MM-dd"}
+                    y{"G y-MM-dd – y-MM-dd"}
+                }
+                H{
+                    H{"HH–HH"}
+                }
+                Hm{
+                    H{"HH:mm–HH:mm"}
+                    m{"HH:mm–HH:mm"}
+                }
+                Hmv{
+                    H{"HH:mm–HH:mm v"}
+                    m{"HH:mm–HH:mm v"}
+                }
+                Hv{
+                    H{"HH–HH v"}
+                }
+                M{
+                    M{"MM–MM"}
+                }
+                MEd{
+                    M{"MM-dd, E – MM-dd, E"}
+                    d{"MM-dd, E – MM-dd, E"}
+                }
+                MMM{
+                    M{"LLL–LLL"}
+                }
+                MMMEd{
+                    M{"MMM d, E – MMM d, E"}
+                    d{"MMM d, E – MMM d, E"}
+                }
+                MMMd{
+                    M{"MMM d – MMM d"}
+                    d{"MMM d–d"}
+                }
+                Md{
+                    M{"MM-dd – MM-dd"}
+                    d{"MM-dd – MM-dd"}
+                }
+                d{
+                    d{"d–d"}
+                }
+                fallback{"{0} – {1}"}
+                h{
+                    a{"h a – h a"}
+                    h{"h–h a"}
+                }
+                hm{
+                    a{"h:mm a – h:mm a"}
+                    h{"h:mm–h:mm a"}
+                    m{"h:mm–h:mm a"}
+                }
+                hmv{
+                    a{"h:mm a – h:mm a v"}
+                    h{"h:mm–h:mm a v"}
+                    m{"h:mm–h:mm a v"}
+                }
+                hv{
+                    a{"h a – h a v"}
+                    h{"h–h a v"}
+                }
+                y{
+                    y{"G y–y"}
+                }
+                yM{
+                    M{"G y-MM – y-MM"}
+                    y{"G y-MM – y-MM"}
+                }
+                yMEd{
+                    M{"G y-MM-dd, E – y-MM-dd, E"}
+                    d{"G y-MM-dd, E – y-MM-dd, E"}
+                    y{"G y-MM-dd, E – y-MM-dd, E"}
+                }
+                yMMM{
+                    M{"G y MMM–MMM"}
+                    y{"G y MMM – y MMM"}
+                }
+                yMMMEd{
+                    M{"G y MMM d, E – MMM d, E"}
+                    d{"G y MMM d, E – MMM d, E"}
+                    y{"G y MMM d, E – y MMM d, E"}
+                }
+                yMMMM{
+                    M{"G y MMMM–MMMM"}
+                    y{"G y MMMM – y MMMM"}
+                }
+                yMMMd{
+                    M{"G y MMM d – MMM d"}
+                    d{"G y MMM d–d"}
+                    y{"G y MMM d – y MMM d"}
+                }
+                yMd{
+                    M{"G y-MM-dd – y-MM-dd"}
+                    d{"G y-MM-dd – y-MM-dd"}
+                    y{"G y-MM-dd – y-MM-dd"}
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated:alias{"/LOCALE/calendar/generic/monthNames/format/wide"}
+                    narrow:alias{"/LOCALE/calendar/generic/monthNames/stand-alone/narrow"}
+                    wide{
+                        "M01",
+                        "M02",
+                        "M03",
+                        "M04",
+                        "M05",
+                        "M06",
+                        "M07",
+                        "M08",
+                        "M09",
+                        "M10",
+                        "M11",
+                        "M12",
+                    }
+                }
+                stand-alone{
+                    abbreviated:alias{"/LOCALE/calendar/generic/monthNames/format/abbreviated"}
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    wide:alias{"/LOCALE/calendar/generic/monthNames/format/wide"}
+                }
+            }
+            quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
+        }
+        gregorian{
+            AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkersAbbr"}
+            AmPmMarkersAbbr{
+                "AM",
+                "PM",
+            }
+            AmPmMarkersNarrow:alias{"/LOCALE/calendar/gregorian/AmPmMarkersAbbr"}
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "y MMMM d, EEEE",
+                "y MMMM d",
+                "y MMM d",
+                "y-MM-dd",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMMMd",
+                "yMMdd",
+            }
+            appendItems{
+                Day{"{0} ({2}: {1})"}
+                Day-Of-Week{"{0} {1}"}
+                Era{"{1} {0}"}
+                Hour{"{0} ({2}: {1})"}
+                Minute{"{0} ({2}: {1})"}
+                Month{"{0} ({2}: {1})"}
+                Quarter{"{0} ({2}: {1})"}
+                Second{"{0} ({2}: {1})"}
+                Timezone{"{0} {1}"}
+                Week{"{0} ({2}: {1})"}
+                Year{"{1} {0}"}
+            }
+            availableFormats{
+                Bh{"h B"}
+                Bhm{"h:mm B"}
+                Bhms{"h:mm:ss B"}
+                E{"ccc"}
+                EBh{"E h B"}
+                EBhm{"E h:mm B"}
+                EBhms{"E h:mm:ss B"}
+                EHm{"E HH:mm"}
+                EHms{"E HH:mm:ss"}
+                Ed{"d, E"}
+                Eh{"E h a"}
+                Ehm{"E h:mm a"}
+                Ehms{"E h:mm:ss a"}
+                Gy{"G y"}
+                GyM{"G y-MM"}
+                GyMEd{"G y-MM-dd, E"}
+                GyMMM{"G y MMM"}
+                GyMMMEd{"G y MMM d, E"}
+                GyMMMd{"G y MMM d"}
+                GyMd{"G y-MM-dd"}
+                H{"HH"}
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+                Hmsv{"HH:mm:ss v"}
+                Hmv{"HH:mm v"}
+                Hv{"HH v"}
+                M{"L"}
+                MEd{"MM-dd, E"}
+                MMM{"LLL"}
+                MMMEd{"MMM d, E"}
+                MMMMW{
+                    other{"'week' W 'of' MMMM"}
+                }
+                MMMMd{"MMMM d"}
+                MMMd{"MMM d"}
+                Md{"MM-dd"}
+                d{"d"}
+                h{"h a"}
+                hm{"h:mm a"}
+                hms{"h:mm:ss a"}
+                hmsv{"h:mm:ss a v"}
+                hmv{"h:mm a v"}
+                hv{"h a v"}
+                ms{"mm:ss"}
+                y{"y"}
+                yM{"y-MM"}
+                yMEd{"y-MM-dd, E"}
+                yMMM{"y MMM"}
+                yMMMEd{"y MMM d, E"}
+                yMMMM{"y MMMM"}
+                yMMMd{"y MMM d"}
+                yMd{"y-MM-dd"}
+                yQQQ{"y QQQ"}
+                yQQQQ{"y QQQQ"}
+                yw{
+                    other{"'week' w 'of' Y"}
+                }
+            }
+            dayNames{
+                format{
+                    abbreviated:alias{"/LOCALE/calendar/gregorian/dayNames/format/wide"}
+                    narrow:alias{"/LOCALE/calendar/gregorian/dayNames/stand-alone/narrow"}
+                    short:alias{"/LOCALE/calendar/gregorian/dayNames/format/abbreviated"}
+                    wide{
+                        "Sun",
+                        "Mon",
+                        "Tue",
+                        "Wed",
+                        "Thu",
+                        "Fri",
+                        "Sat",
+                    }
+                }
+                stand-alone{
+                    abbreviated:alias{"/LOCALE/calendar/gregorian/dayNames/format/abbreviated"}
+                    narrow{
+                        "S",
+                        "M",
+                        "T",
+                        "W",
+                        "T",
+                        "F",
+                        "S",
+                    }
+                    short:alias{"/LOCALE/calendar/gregorian/dayNames/format/short"}
+                    wide:alias{"/LOCALE/calendar/gregorian/dayNames/format/wide"}
+                }
+            }
+            eras{
+                abbreviated{
+                    0{"BCE"}
+                    1{"CE"}
+                }
+                narrow:alias{"/LOCALE/calendar/gregorian/eras/abbreviated"}
+                wide:alias{"/LOCALE/calendar/gregorian/eras/abbreviated"}
+            }
+            intervalFormats{
+                Bh{
+                    B{"h B – h B"}
+                    h{"h–h B"}
+                }
+                Bhm{
+                    B{"h:mm B – h:mm B"}
+                    h{"h:mm–h:mm B"}
+                    m{"h:mm–h:mm B"}
+                }
+                Gy{
+                    G{"G y – G y"}
+                    y{"G y–y"}
+                }
+                GyM{
+                    G{"G y-MM – G y-MM"}
+                    M{"G y-MM – y-MM"}
+                    y{"G y-MM – y-MM"}
+                }
+                GyMEd{
+                    G{"G y-MM-dd, E – G y-MM-dd, E"}
+                    M{"G y-MM-dd, E – y-MM-dd, E"}
+                    d{"G y-MM-dd, E – y-MM-dd, E"}
+                    y{"G y-MM-dd, E – y-MM-dd, E"}
+                }
+                GyMMM{
+                    G{"G y MMM – G y MMM"}
+                    M{"G y MMM–MMM"}
+                    y{"G y MMM – y MMM"}
+                }
+                GyMMMEd{
+                    G{"G y MMM d, E – G y MMM d, E"}
+                    M{"G y MMM d, E – MMM d, E"}
+                    d{"G y MMM d, E – MMM d, E"}
+                    y{"G y MMM d, E – y MMM d, E"}
+                }
+                GyMMMd{
+                    G{"G y MMM d – G y MMM d"}
+                    M{"G y MMM d – MMM d"}
+                    d{"G y MMM d–d"}
+                    y{"G y MMM d – y MMM d"}
+                }
+                GyMd{
+                    G{"G y-MM-dd – G y-MM-dd"}
+                    M{"G y-MM-dd – y-MM-dd"}
+                    d{"G y-MM-dd – y-MM-dd"}
+                    y{"G y-MM-dd – y-MM-dd"}
+                }
+                H{
+                    H{"HH–HH"}
+                }
+                Hm{
+                    H{"HH:mm–HH:mm"}
+                    m{"HH:mm–HH:mm"}
+                }
+                Hmv{
+                    H{"HH:mm–HH:mm v"}
+                    m{"HH:mm–HH:mm v"}
+                }
+                Hv{
+                    H{"HH–HH v"}
+                }
+                M{
+                    M{"MM–MM"}
+                }
+                MEd{
+                    M{"MM-dd, E – MM-dd, E"}
+                    d{"MM-dd, E – MM-dd, E"}
+                }
+                MMM{
+                    M{"LLL–LLL"}
+                }
+                MMMEd{
+                    M{"MMM d, E – MMM d, E"}
+                    d{"MMM d, E – MMM d, E"}
+                }
+                MMMd{
+                    M{"MMM d – MMM d"}
+                    d{"MMM d–d"}
+                }
+                Md{
+                    M{"MM-dd – MM-dd"}
+                    d{"MM-dd – MM-dd"}
+                }
+                d{
+                    d{"d–d"}
+                }
+                fallback{"{0} – {1}"}
+                h{
+                    a{"h a – h a"}
+                    h{"h–h a"}
+                }
+                hm{
+                    a{"h:mm a – h:mm a"}
+                    h{"h:mm–h:mm a"}
+                    m{"h:mm–h:mm a"}
+                }
+                hmv{
+                    a{"h:mm a – h:mm a v"}
+                    h{"h:mm–h:mm a v"}
+                    m{"h:mm–h:mm a v"}
+                }
+                hv{
+                    a{"h a – h a v"}
+                    h{"h–h a v"}
+                }
+                y{
+                    y{"y–y"}
+                }
+                yM{
+                    M{"y-MM – y-MM"}
+                    y{"y-MM – y-MM"}
+                }
+                yMEd{
+                    M{"y-MM-dd, E – y-MM-dd, E"}
+                    d{"y-MM-dd, E – y-MM-dd, E"}
+                    y{"y-MM-dd, E – y-MM-dd, E"}
+                }
+                yMMM{
+                    M{"y MMM–MMM"}
+                    y{"y MMM – y MMM"}
+                }
+                yMMMEd{
+                    M{"y MMM d, E – MMM d, E"}
+                    d{"y MMM d, E – MMM d, E"}
+                    y{"y MMM d, E – y MMM d, E"}
+                }
+                yMMMM{
+                    M{"y MMMM–MMMM"}
+                    y{"y MMMM – y MMMM"}
+                }
+                yMMMd{
+                    M{"y MMM d – MMM d"}
+                    d{"y MMM d–d"}
+                    y{"y MMM d – y MMM d"}
+                }
+                yMd{
+                    M{"y-MM-dd – y-MM-dd"}
+                    d{"y-MM-dd – y-MM-dd"}
+                    y{"y-MM-dd – y-MM-dd"}
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated:alias{"/LOCALE/calendar/gregorian/monthNames/format/wide"}
+                    narrow:alias{"/LOCALE/calendar/gregorian/monthNames/stand-alone/narrow"}
+                    wide{
+                        "M01",
+                        "M02",
+                        "M03",
+                        "M04",
+                        "M05",
+                        "M06",
+                        "M07",
+                        "M08",
+                        "M09",
+                        "M10",
+                        "M11",
+                        "M12",
+                    }
+                }
+                stand-alone{
+                    abbreviated:alias{"/LOCALE/calendar/gregorian/monthNames/format/abbreviated"}
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    wide:alias{"/LOCALE/calendar/gregorian/monthNames/format/wide"}
+                }
+            }
+            quarters{
+                format{
+                    abbreviated:alias{"/LOCALE/calendar/gregorian/quarters/format/wide"}
+                    narrow:alias{"/LOCALE/calendar/gregorian/quarters/stand-alone/narrow"}
+                    wide{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
+                    }
+                }
+                stand-alone{
+                    abbreviated:alias{"/LOCALE/calendar/gregorian/quarters/format/abbreviated"}
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
+                    wide:alias{"/LOCALE/calendar/gregorian/quarters/format/wide"}
+                }
+            }
+        }
+        hebrew{
+            AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
+            AmPmMarkersNarrow:alias{"/LOCALE/calendar/gregorian/AmPmMarkersNarrow"}
+            DateTimePatterns:alias{"/LOCALE/calendar/generic/DateTimePatterns"}
+            NoonMarker:alias{"/LOCALE/calendar/gregorian/NoonMarker"}
+            NoonMarkerNarrow:alias{"/LOCALE/calendar/gregorian/NoonMarkerNarrow"}
+            appendItems:alias{"/LOCALE/calendar/generic/appendItems"}
+            availableFormats:alias{"/LOCALE/calendar/generic/availableFormats"}
+            dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
+            eras{
+                abbreviated{
+                    0{"AM"}
+                }
+                narrow:alias{"/LOCALE/calendar/hebrew/eras/abbreviated"}
+                wide:alias{"/LOCALE/calendar/hebrew/eras/abbreviated"}
+            }
+            intervalFormats:alias{"/LOCALE/calendar/generic/intervalFormats"}
+            monthNames{
+                format{
+                    abbreviated:alias{"/LOCALE/calendar/hebrew/monthNames/format/wide"}
+                    narrow:alias{"/LOCALE/calendar/hebrew/monthNames/stand-alone/narrow"}
+                    wide{
+                        "Tishri",
+                        "Heshvan",
+                        "Kislev",
+                        "Tevet",
+                        "Shevat",
+                        "Adar I",
+                        "Adar",
+                        "Nisan",
+                        "Iyar",
+                        "Sivan",
+                        "Tamuz",
+                        "Av",
+                        "Elul",
+                        "Adar II",
+                    }
+                }
+                stand-alone{
+                    abbreviated:alias{"/LOCALE/calendar/hebrew/monthNames/format/abbreviated"}
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                        "13",
+                        "7",
+                    }
+                    wide:alias{"/LOCALE/calendar/hebrew/monthNames/format/wide"}
+                }
+            }
+            quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
+        }
+        indian{
+            AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
+            AmPmMarkersNarrow:alias{"/LOCALE/calendar/gregorian/AmPmMarkersNarrow"}
+            DateTimePatterns:alias{"/LOCALE/calendar/generic/DateTimePatterns"}
+            NoonMarker:alias{"/LOCALE/calendar/gregorian/NoonMarker"}
+            NoonMarkerNarrow:alias{"/LOCALE/calendar/gregorian/NoonMarkerNarrow"}
+            appendItems:alias{"/LOCALE/calendar/generic/appendItems"}
+            availableFormats:alias{"/LOCALE/calendar/generic/availableFormats"}
+            dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
+            eras{
+                abbreviated{
+                    0{"Śaka"}
+                }
+                narrow:alias{"/LOCALE/calendar/indian/eras/abbreviated"}
+                wide:alias{"/LOCALE/calendar/indian/eras/abbreviated"}
+            }
+            intervalFormats:alias{"/LOCALE/calendar/generic/intervalFormats"}
+            monthNames{
+                format{
+                    abbreviated:alias{"/LOCALE/calendar/indian/monthNames/format/wide"}
+                    narrow:alias{"/LOCALE/calendar/indian/monthNames/stand-alone/narrow"}
+                    wide{
+                        "Chaitra",
+                        "Vaisakha",
+                        "Jyaistha",
+                        "Asadha",
+                        "Sravana",
+                        "Bhadra",
+                        "Asvina",
+                        "Kartika",
+                        "Agrahayana",
+                        "Pausa",
+                        "Magha",
+                        "Phalguna",
+                    }
+                }
+                stand-alone{
+                    abbreviated:alias{"/LOCALE/calendar/indian/monthNames/format/abbreviated"}
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    wide:alias{"/LOCALE/calendar/indian/monthNames/format/wide"}
+                }
+            }
+            quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
+        }
+        islamic{
+            AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
+            AmPmMarkersNarrow:alias{"/LOCALE/calendar/gregorian/AmPmMarkersNarrow"}
+            DateTimePatterns:alias{"/LOCALE/calendar/generic/DateTimePatterns"}
+            NoonMarker:alias{"/LOCALE/calendar/gregorian/NoonMarker"}
+            NoonMarkerNarrow:alias{"/LOCALE/calendar/gregorian/NoonMarkerNarrow"}
+            appendItems:alias{"/LOCALE/calendar/generic/appendItems"}
+            availableFormats:alias{"/LOCALE/calendar/generic/availableFormats"}
+            dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
+            eras{
+                abbreviated{
+                    0{"AH"}
+                    1{"BH"}
+                }
+                narrow:alias{"/LOCALE/calendar/islamic/eras/abbreviated"}
+                wide:alias{"/LOCALE/calendar/islamic/eras/abbreviated"}
+            }
+            intervalFormats:alias{"/LOCALE/calendar/generic/intervalFormats"}
+            monthNames{
+                format{
+                    abbreviated{
+                        "Muh.",
+                        "Saf.",
+                        "Rab. I",
+                        "Rab. II",
+                        "Jum. I",
+                        "Jum. II",
+                        "Raj.",
+                        "Sha.",
+                        "Ram.",
+                        "Shaw.",
+                        "Dhuʻl-Q.",
+                        "Dhuʻl-H.",
+                    }
+                    narrow:alias{"/LOCALE/calendar/islamic/monthNames/stand-alone/narrow"}
+                    wide{
+                        "Muharram",
+                        "Safar",
+                        "Rabiʻ I",
+                        "Rabiʻ II",
+                        "Jumada I",
+                        "Jumada II",
+                        "Rajab",
+                        "Shaʻban",
+                        "Ramadan",
+                        "Shawwal",
+                        "Dhuʻl-Qiʻdah",
+                        "Dhuʻl-Hijjah",
+                    }
+                }
+                stand-alone{
+                    abbreviated:alias{"/LOCALE/calendar/islamic/monthNames/format/abbreviated"}
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    wide:alias{"/LOCALE/calendar/islamic/monthNames/format/wide"}
+                }
+            }
+            quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
+        }
+        islamic-civil{
+            AmPmMarkers:alias{"/LOCALE/calendar/islamic/AmPmMarkers"}
+            AmPmMarkersNarrow:alias{"/LOCALE/calendar/islamic/AmPmMarkersNarrow"}
+            DateTimePatterns:alias{"/LOCALE/calendar/islamic/DateTimePatterns"}
+            NoonMarker:alias{"/LOCALE/calendar/islamic/NoonMarker"}
+            NoonMarkerNarrow:alias{"/LOCALE/calendar/islamic/NoonMarkerNarrow"}
+            appendItems:alias{"/LOCALE/calendar/islamic/appendItems"}
+            availableFormats:alias{"/LOCALE/calendar/islamic/availableFormats"}
+            dayNames:alias{"/LOCALE/calendar/islamic/dayNames"}
+            eras:alias{"/LOCALE/calendar/islamic/eras"}
+            intervalFormats:alias{"/LOCALE/calendar/islamic/intervalFormats"}
+            monthNames:alias{"/LOCALE/calendar/islamic/monthNames"}
+            quarters:alias{"/LOCALE/calendar/islamic/quarters"}
+        }
+        islamic-rgsa{
+            AmPmMarkers:alias{"/LOCALE/calendar/islamic/AmPmMarkers"}
+            AmPmMarkersNarrow:alias{"/LOCALE/calendar/islamic/AmPmMarkersNarrow"}
+            DateTimePatterns:alias{"/LOCALE/calendar/islamic/DateTimePatterns"}
+            NoonMarker:alias{"/LOCALE/calendar/islamic/NoonMarker"}
+            NoonMarkerNarrow:alias{"/LOCALE/calendar/islamic/NoonMarkerNarrow"}
+            appendItems:alias{"/LOCALE/calendar/islamic/appendItems"}
+            availableFormats:alias{"/LOCALE/calendar/islamic/availableFormats"}
+            dayNames:alias{"/LOCALE/calendar/islamic/dayNames"}
+            eras:alias{"/LOCALE/calendar/islamic/eras"}
+            intervalFormats:alias{"/LOCALE/calendar/islamic/intervalFormats"}
+            monthNames:alias{"/LOCALE/calendar/islamic/monthNames"}
+            quarters:alias{"/LOCALE/calendar/islamic/quarters"}
+        }
+        islamic-tbla{
+            AmPmMarkers:alias{"/LOCALE/calendar/islamic/AmPmMarkers"}
+            AmPmMarkersNarrow:alias{"/LOCALE/calendar/islamic/AmPmMarkersNarrow"}
+            DateTimePatterns:alias{"/LOCALE/calendar/islamic/DateTimePatterns"}
+            NoonMarker:alias{"/LOCALE/calendar/islamic/NoonMarker"}
+            NoonMarkerNarrow:alias{"/LOCALE/calendar/islamic/NoonMarkerNarrow"}
+            appendItems:alias{"/LOCALE/calendar/islamic/appendItems"}
+            availableFormats:alias{"/LOCALE/calendar/islamic/availableFormats"}
+            dayNames:alias{"/LOCALE/calendar/islamic/dayNames"}
+            eras:alias{"/LOCALE/calendar/islamic/eras"}
+            intervalFormats:alias{"/LOCALE/calendar/islamic/intervalFormats"}
+            monthNames:alias{"/LOCALE/calendar/islamic/monthNames"}
+            quarters:alias{"/LOCALE/calendar/islamic/quarters"}
+        }
+        islamic-umalqura{
+            AmPmMarkers:alias{"/LOCALE/calendar/islamic/AmPmMarkers"}
+            AmPmMarkersNarrow:alias{"/LOCALE/calendar/islamic/AmPmMarkersNarrow"}
+            DateTimePatterns:alias{"/LOCALE/calendar/islamic/DateTimePatterns"}
+            NoonMarker:alias{"/LOCALE/calendar/islamic/NoonMarker"}
+            NoonMarkerNarrow:alias{"/LOCALE/calendar/islamic/NoonMarkerNarrow"}
+            appendItems:alias{"/LOCALE/calendar/islamic/appendItems"}
+            availableFormats:alias{"/LOCALE/calendar/islamic/availableFormats"}
+            dayNames:alias{"/LOCALE/calendar/islamic/dayNames"}
+            eras:alias{"/LOCALE/calendar/islamic/eras"}
+            intervalFormats:alias{"/LOCALE/calendar/islamic/intervalFormats"}
+            monthNames:alias{"/LOCALE/calendar/islamic/monthNames"}
+            quarters:alias{"/LOCALE/calendar/islamic/quarters"}
+        }
+        iso8601{
+            AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
+            AmPmMarkersNarrow:alias{"/LOCALE/calendar/gregorian/AmPmMarkersNarrow"}
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "y MMMM d, EEEE",
+                "y MMMM d",
+                "y MMM d",
+                "y-MM-dd",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMMMd",
+                "yMMdd",
+            }
+            NoonMarker:alias{"/LOCALE/calendar/gregorian/NoonMarker"}
+            NoonMarkerNarrow:alias{"/LOCALE/calendar/gregorian/NoonMarkerNarrow"}
+            appendItems{
+                Day{"{0} ({2}: {1})"}
+                Day-Of-Week{"{0} {1}"}
+                Era{"{1} {0}"}
+                Hour{"{0} ({2}: {1})"}
+                Minute{"{0} ({2}: {1})"}
+                Month{"{0} ({2}: {1})"}
+                Quarter{"{0} ({2}: {1})"}
+                Second{"{0} ({2}: {1})"}
+                Timezone{"{0} {1}"}
+                Week{"{0} ({2}: {1})"}
+                Year{"{1} {0}"}
+            }
+            availableFormats{
+                Bh{"h B"}
+                Bhm{"h:mm B"}
+                Bhms{"h:mm:ss B"}
+                E{"ccc"}
+                EBhm{"E h:mm B"}
+                EBhms{"E h:mm:ss B"}
+                EHm{"E HH:mm"}
+                EHms{"E HH:mm:ss"}
+                Ed{"d, E"}
+                Ehm{"E h:mm a"}
+                Ehms{"E h:mm:ss a"}
+                Gy{"G y"}
+                GyMMM{"G y MMM"}
+                GyMMMEd{"G y MMM d, E"}
+                GyMMMd{"G y MMM d"}
+                GyMd{"G y-MM-dd"}
+                H{"HH"}
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+                Hmsv{"HH:mm:ss v"}
+                Hmv{"HH:mm v"}
+                M{"L"}
+                MEd{"MM-dd, E"}
+                MMM{"LLL"}
+                MMMEd{"MMM d, E"}
+                MMMMW{
+                    other{"MMMM 'week' W"}
+                }
+                MMMMd{"MMMM d"}
+                MMMd{"MMM d"}
+                Md{"MM-dd"}
+                d{"d"}
+                h{"h a"}
+                hm{"h:mm a"}
+                hms{"h:mm:ss a"}
+                hmsv{"h:mm:ss a v"}
+                hmv{"h:mm a v"}
+                ms{"mm:ss"}
+                y{"y"}
+                yM{"y-MM"}
+                yMEd{"y-MM-dd, E"}
+                yMMM{"y MMM"}
+                yMMMEd{"y MMM d, E"}
+                yMMMM{"y MMMM"}
+                yMMMd{"y MMM d"}
+                yMd{"y-MM-dd"}
+                yQQQ{"y QQQ"}
+                yQQQQ{"y QQQQ"}
+                yw{
+                    other{"Y 'week' w"}
+                }
+            }
+            dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
+            eras:alias{"/LOCALE/calendar/gregorian/eras"}
+            intervalFormats{
+                Bh{
+                    B{"h B – h B"}
+                    h{"h–h B"}
+                }
+                Bhm{
+                    B{"h:mm B – h:mm B"}
+                    h{"h:mm–h:mm B"}
+                    m{"h:mm–h:mm B"}
+                }
+                Gy{
+                    G{"G y – G y"}
+                    y{"y–y"}
+                }
+                GyM{
+                    G{"G y-MM – G y-MM"}
+                    M{"G y-MM – y-MM"}
+                    y{"G y-MM – y-MM"}
+                }
+                GyMEd{
+                    G{"G y-MM-dd, E – G y-MM-dd, E"}
+                    M{"G y-MM-dd, E – y-MM-dd, E"}
+                    d{"G y-MM-dd, E – y-MM-dd, E"}
+                    y{"G y-MM-dd, E – y-MM-dd, E"}
+                }
+                GyMMM{
+                    G{"G y MMM – G y MMM"}
+                    M{"G y MMM–MMM"}
+                    y{"G y MMM – y MMM"}
+                }
+                GyMMMEd{
+                    G{"G y MMM d, E – G y MMM d, E"}
+                    M{"G y MMM d, E – MMM d, E"}
+                    d{"G y MMM d, E – MMM d, E"}
+                    y{"G y MMM d, E – y MMM d, E"}
+                }
+                GyMMMd{
+                    G{"G y MMM d – G y MMM d"}
+                    M{"G y MMM d – MMM d"}
+                    d{"G y MMM d–d"}
+                    y{"G y MMM d – y MMM d"}
+                }
+                GyMd{
+                    G{"G y-MM-dd – G y-MM-dd"}
+                    M{"G y-MM-dd – y-MM-dd"}
+                    d{"G y-MM-dd – y-MM-dd"}
+                    y{"G y-MM-dd – y-MM-dd"}
+                }
+                H{
+                    H{"HH–HH"}
+                }
+                Hm{
+                    H{"HH:mm–HH:mm"}
+                    m{"HH:mm–HH:mm"}
+                }
+                Hmv{
+                    H{"HH:mm–HH:mm v"}
+                    m{"HH:mm–HH:mm v"}
+                }
+                Hv{
+                    H{"HH–HH v"}
+                }
+                M{
+                    M{"MM–MM"}
+                }
+                MEd{
+                    M{"MM-dd, E – MM-dd, E"}
+                    d{"MM-dd, E – MM-dd, E"}
+                }
+                MMM{
+                    M{"LLL–LLL"}
+                }
+                MMMEd{
+                    M{"MMM d, E – MMM d, E"}
+                    d{"MMM d, E – MMM d, E"}
+                }
+                MMMd{
+                    M{"MMM d – MMM d"}
+                    d{"MMM d–d"}
+                }
+                Md{
+                    M{"MM-dd – MM-dd"}
+                    d{"MM-dd – MM-dd"}
+                }
+                d{
+                    d{"d–d"}
+                }
+                fallback{"{0} – {1}"}
+                h{
+                    a{"h a – h a"}
+                    h{"h–h a"}
+                }
+                hm{
+                    a{"h:mm a – h:mm a"}
+                    h{"h:mm–h:mm a"}
+                    m{"h:mm–h:mm a"}
+                }
+                hmv{
+                    a{"h:mm a – h:mm a v"}
+                    h{"h:mm–h:mm a v"}
+                    m{"h:mm–h:mm a v"}
+                }
+                hv{
+                    a{"h a – h a v"}
+                    h{"h–h a v"}
+                }
+                y{
+                    y{"y–y"}
+                }
+                yM{
+                    M{"y-MM – y-MM"}
+                    y{"y-MM – y-MM"}
+                }
+                yMEd{
+                    M{"y-MM-dd, E – y-MM-dd, E"}
+                    d{"y-MM-dd, E – y-MM-dd, E"}
+                    y{"y-MM-dd, E – y-MM-dd, E"}
+                }
+                yMMM{
+                    M{"y MMM–MMM"}
+                    y{"y MMM – y MMM"}
+                }
+                yMMMEd{
+                    M{"y MMM d, E – MMM d, E"}
+                    d{"y MMM d, E – MMM d, E"}
+                    y{"y MMM d, E – y MMM d, E"}
+                }
+                yMMMM{
+                    M{"y MMMM–MMMM"}
+                    y{"y MMMM – y MMMM"}
+                }
+                yMMMd{
+                    M{"y MMM d – MMM d"}
+                    d{"y MMM d–d"}
+                    y{"y MMM d – y MMM d"}
+                }
+                yMd{
+                    M{"y-MM-dd – y-MM-dd"}
+                    d{"y-MM-dd – y-MM-dd"}
+                    y{"y-MM-dd – y-MM-dd"}
+                }
+            }
+            monthNames:alias{"/LOCALE/calendar/gregorian/monthNames"}
+            quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
+        }
+        japanese{
+            AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
+            AmPmMarkersNarrow:alias{"/LOCALE/calendar/gregorian/AmPmMarkersNarrow"}
+            DateTimePatterns:alias{"/LOCALE/calendar/generic/DateTimePatterns"}
+            NoonMarker:alias{"/LOCALE/calendar/gregorian/NoonMarker"}
+            NoonMarkerNarrow:alias{"/LOCALE/calendar/gregorian/NoonMarkerNarrow"}
+            appendItems:alias{"/LOCALE/calendar/generic/appendItems"}
+            availableFormats:alias{"/LOCALE/calendar/generic/availableFormats"}
+            dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
+            eras{
+                abbreviated{
+                    232{"Meiji"}
+                    233{"Taishō"}
+                    234{"Shōwa"}
+                    235{"Heisei"}
+                    236{"Reiwa"}
+                }
+                narrow{
+                    232{"M"}
+                    233{"T"}
+                    234{"S"}
+                    235{"H"}
+                    236{"R"}
+                }
+                wide:alias{"/LOCALE/calendar/japanese/eras/abbreviated"}
+            }
+            intervalFormats:alias{"/LOCALE/calendar/generic/intervalFormats"}
+            monthNames:alias{"/LOCALE/calendar/gregorian/monthNames"}
+            quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
+        }
+        persian{
+            AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
+            AmPmMarkersNarrow:alias{"/LOCALE/calendar/gregorian/AmPmMarkersNarrow"}
+            DateTimePatterns:alias{"/LOCALE/calendar/generic/DateTimePatterns"}
+            NoonMarker:alias{"/LOCALE/calendar/gregorian/NoonMarker"}
+            NoonMarkerNarrow:alias{"/LOCALE/calendar/gregorian/NoonMarkerNarrow"}
+            appendItems:alias{"/LOCALE/calendar/generic/appendItems"}
+            availableFormats:alias{"/LOCALE/calendar/generic/availableFormats"}
+            dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
+            eras{
+                abbreviated{
+                    0{"AP"}
+                }
+                narrow:alias{"/LOCALE/calendar/persian/eras/abbreviated"}
+                wide:alias{"/LOCALE/calendar/persian/eras/abbreviated"}
+            }
+            intervalFormats:alias{"/LOCALE/calendar/generic/intervalFormats"}
+            monthNames{
+                format{
+                    abbreviated:alias{"/LOCALE/calendar/persian/monthNames/format/wide"}
+                    narrow:alias{"/LOCALE/calendar/persian/monthNames/stand-alone/narrow"}
+                    wide{
+                        "Farvardin",
+                        "Ordibehesht",
+                        "Khordad",
+                        "Tir",
+                        "Mordad",
+                        "Shahrivar",
+                        "Mehr",
+                        "Aban",
+                        "Azar",
+                        "Dey",
+                        "Bahman",
+                        "Esfand",
+                    }
+                }
+                stand-alone{
+                    abbreviated:alias{"/LOCALE/calendar/persian/monthNames/format/abbreviated"}
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    wide:alias{"/LOCALE/calendar/persian/monthNames/format/wide"}
+                }
+            }
+            quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
+        }
+        roc{
+            AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
+            AmPmMarkersNarrow:alias{"/LOCALE/calendar/gregorian/AmPmMarkersNarrow"}
+            DateTimePatterns:alias{"/LOCALE/calendar/generic/DateTimePatterns"}
+            NoonMarker:alias{"/LOCALE/calendar/gregorian/NoonMarker"}
+            NoonMarkerNarrow:alias{"/LOCALE/calendar/gregorian/NoonMarkerNarrow"}
+            appendItems:alias{"/LOCALE/calendar/generic/appendItems"}
+            availableFormats:alias{"/LOCALE/calendar/generic/availableFormats"}
+            dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
+            eras{
+                abbreviated{
+                    0{"BROC"}
+                    1{"ROC"}
+                }
+                narrow:alias{"/LOCALE/calendar/roc/eras/abbreviated"}
+                wide:alias{"/LOCALE/calendar/roc/eras/abbreviated"}
+            }
+            intervalFormats:alias{"/LOCALE/calendar/generic/intervalFormats"}
+            monthNames:alias{"/LOCALE/calendar/gregorian/monthNames"}
+            quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
+        }
+    }
+    characterLabel{
+        activities{"activity"}
+        african_scripts{"African script"}
+        american_scripts{"American script"}
+        animal{"animal"}
+        animals_nature{"animal or nature"}
+        arrows{"arrow"}
+        body{"body"}
+        box_drawing{"box drawing"}
+        braille{"braille"}
+        building{"building"}
+        bullets_stars{"bullet or star"}
+        consonantal_jamo{"consonantal jamo"}
+        currency_symbols{"currency symbol"}
+        dash_connector{"dash or connector"}
+        digits{"digit"}
+        dingbats{"dingbat"}
+        divination_symbols{"divination symbol"}
+        downwards_arrows{"downwards arrow"}
+        downwards_upwards_arrows{"downwards upwards arrow"}
+        east_asian_scripts{"East Asian script"}
+        emoji{"emoji"}
+        european_scripts{"European script"}
+        female{"female"}
+        flag{"flag"}
+        flags{"flags"}
+        food_drink{"food & drink"}
+        format{"format"}
+        format_whitespace{"format & whitespace"}
+        full_width_form_variant{"full-width variant"}
+        geometric_shapes{"geometric shape"}
+        half_width_form_variant{"half-width variant"}
+        han_characters{"Han character"}
+        han_radicals{"Han radical"}
+        hanja{"hanja"}
+        hanzi_simplified{"Hanzi (simplified)"}
+        hanzi_traditional{"Hanzi (traditional)"}
+        heart{"heart"}
+        historic_scripts{"historic script"}
+        ideographic_desc_characters{"ideographic desc. character"}
+        japanese_kana{"Japanese kana"}
+        kanbun{"kanbun"}
+        kanji{"kanji"}
+        keycap{"keycap"}
+        leftwards_arrows{"leftwards arrow"}
+        leftwards_rightwards_arrows{"leftwards rightwards arrow"}
+        letterlike_symbols{"letterlike symbol"}
+        limited_use{"limited-use"}
+        male{"male"}
+        math_symbols{"math symbol"}
+        middle_eastern_scripts{"Middle Eastern script"}
+        miscellaneous{"miscellaneous"}
+        modern_scripts{"modern script"}
+        modifier{"modifier"}
+        musical_symbols{"musical symbol"}
+        nature{"nature"}
+        nonspacing{"nonspacing"}
+        numbers{"numbers"}
+        objects{"object"}
+        other{"other"}
+        paired{"paired"}
+        person{"person"}
+        phonetic_alphabet{"phonetic alphabet"}
+        pictographs{"pictograph"}
+        place{"place"}
+        plant{"plant"}
+        punctuation{"punctuation"}
+        rightwards_arrows{"rightwards arrow"}
+        sign_standard_symbols{"sign or symbol"}
+        small_form_variant{"small variants"}
+        smiley{"smiley"}
+        smileys_people{"smiley or person"}
+        south_asian_scripts{"South Asian script"}
+        southeast_asian_scripts{"Southeast Asian script"}
+        spacing{"spacing"}
+        sport{"sport"}
+        symbols{"symbol"}
+        technical_symbols{"technical symbol"}
+        tone_marks{"tone mark"}
+        travel{"travel"}
+        travel_places{"travel or place"}
+        upwards_arrows{"upwards arrows"}
+        variant_forms{"variant"}
+        vocalic_jamo{"vocalic jamo"}
+        weather{"weather"}
+        western_asian_scripts{"Western Asian script"}
+        whitespace{"whitespace"}
+    }
+    delimiters{
+        alternateQuotationEnd{"’"}
+        alternateQuotationStart{"‘"}
+        quotationEnd{"”"}
+        quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Day"}
+            relative{
+                "-1"{"yesterday"}
+                "0"{"today"}
+                "1"{"tomorrow"}
+            }
+            relativeTime{
+                future{
+                    other{"+{0} d"}
+                }
+                past{
+                    other{"-{0} d"}
+                }
+            }
+        }
+        day-narrow:alias{"/LOCALE/fields/day-short"}
+        day-short:alias{"/LOCALE/fields/day"}
+        dayOfYear{
+            dn{"Day Of Year"}
+        }
+        dayOfYear-narrow:alias{"/LOCALE/fields/dayOfYear-short"}
+        dayOfYear-short:alias{"/LOCALE/fields/dayOfYear"}
+        dayperiod{
+            dn{"Dayperiod"}
+        }
+        dayperiod-narrow:alias{"/LOCALE/fields/dayperiod-short"}
+        dayperiod-short:alias{"/LOCALE/fields/dayperiod"}
+        era{
+            dn{"Era"}
+        }
+        era-narrow:alias{"/LOCALE/fields/era-short"}
+        era-short:alias{"/LOCALE/fields/era"}
+        fri{
+            relative{
+                "-1"{"last Friday"}
+                "0"{"this Friday"}
+                "1"{"next Friday"}
+            }
+            relativeTime{
+                future{
+                    other{"+{0} Fridays"}
+                }
+                past{
+                    other{"-{0} Fridays"}
+                }
+            }
+        }
+        fri-narrow:alias{"/LOCALE/fields/fri-short"}
+        fri-short:alias{"/LOCALE/fields/fri"}
+        hour{
+            dn{"Hour"}
+            relative{
+                "0"{"this hour"}
+            }
+            relativeTime{
+                future{
+                    other{"+{0} h"}
+                }
+                past{
+                    other{"-{0} h"}
+                }
+            }
+        }
+        hour-narrow:alias{"/LOCALE/fields/hour-short"}
+        hour-short:alias{"/LOCALE/fields/hour"}
+        minute{
+            dn{"Minute"}
+            relative{
+                "0"{"this minute"}
+            }
+            relativeTime{
+                future{
+                    other{"+{0} min"}
+                }
+                past{
+                    other{"-{0} min"}
+                }
+            }
+        }
+        minute-narrow:alias{"/LOCALE/fields/minute-short"}
+        minute-short:alias{"/LOCALE/fields/minute"}
+        mon{
+            relative{
+                "-1"{"last Monday"}
+                "0"{"this Monday"}
+                "1"{"next Monday"}
+            }
+            relativeTime{
+                future{
+                    other{"+{0} Mondays"}
+                }
+                past{
+                    other{"-{0} Mondays"}
+                }
+            }
+        }
+        mon-narrow:alias{"/LOCALE/fields/mon-short"}
+        mon-short:alias{"/LOCALE/fields/mon"}
+        month{
+            dn{"Month"}
+            relative{
+                "-1"{"last month"}
+                "0"{"this month"}
+                "1"{"next month"}
+            }
+            relativeTime{
+                future{
+                    other{"+{0} m"}
+                }
+                past{
+                    other{"-{0} m"}
+                }
+            }
+        }
+        month-narrow:alias{"/LOCALE/fields/month-short"}
+        month-short:alias{"/LOCALE/fields/month"}
+        quarter{
+            dn{"Quarter"}
+            relative{
+                "-1"{"last quarter"}
+                "0"{"this quarter"}
+                "1"{"next quarter"}
+            }
+            relativeTime{
+                future{
+                    other{"+{0} Q"}
+                }
+                past{
+                    other{"-{0} Q"}
+                }
+            }
+        }
+        quarter-narrow:alias{"/LOCALE/fields/quarter-short"}
+        quarter-short:alias{"/LOCALE/fields/quarter"}
+        sat{
+            relative{
+                "-1"{"last Saturday"}
+                "0"{"this Saturday"}
+                "1"{"next Saturday"}
+            }
+            relativeTime{
+                future{
+                    other{"+{0} Saturdays"}
+                }
+                past{
+                    other{"-{0} Saturdays"}
+                }
+            }
+        }
+        sat-narrow:alias{"/LOCALE/fields/sat-short"}
+        sat-short:alias{"/LOCALE/fields/sat"}
+        second{
+            dn{"Second"}
+            relative{
+                "0"{"now"}
+            }
+            relativeTime{
+                future{
+                    other{"+{0} s"}
+                }
+                past{
+                    other{"-{0} s"}
+                }
+            }
+        }
+        second-narrow:alias{"/LOCALE/fields/second-short"}
+        second-short:alias{"/LOCALE/fields/second"}
+        sun{
+            relative{
+                "-1"{"last Sunday"}
+                "0"{"this Sunday"}
+                "1"{"next Sunday"}
+            }
+            relativeTime{
+                future{
+                    other{"+{0} Sundays"}
+                }
+                past{
+                    other{"-{0} Sundays"}
+                }
+            }
+        }
+        sun-narrow:alias{"/LOCALE/fields/sun-short"}
+        sun-short:alias{"/LOCALE/fields/sun"}
+        thu{
+            relative{
+                "-1"{"last Thursday"}
+                "0"{"this Thursday"}
+                "1"{"next Thursday"}
+            }
+            relativeTime{
+                future{
+                    other{"+{0} Thursdays"}
+                }
+                past{
+                    other{"-{0} Thursdays"}
+                }
+            }
+        }
+        thu-narrow:alias{"/LOCALE/fields/thu-short"}
+        thu-short:alias{"/LOCALE/fields/thu"}
+        tue{
+            relative{
+                "-1"{"last Tuesday"}
+                "0"{"this Tuesday"}
+                "1"{"next Tuesday"}
+            }
+            relativeTime{
+                future{
+                    other{"+{0} Tuesdays"}
+                }
+                past{
+                    other{"-{0} Tuesdays"}
+                }
+            }
+        }
+        tue-narrow:alias{"/LOCALE/fields/tue-short"}
+        tue-short:alias{"/LOCALE/fields/tue"}
+        wed{
+            relative{
+                "-1"{"last Wednesday"}
+                "0"{"this Wednesday"}
+                "1"{"next Wednesday"}
+            }
+            relativeTime{
+                future{
+                    other{"+{0} Wednesdays"}
+                }
+                past{
+                    other{"-{0} Wednesdays"}
+                }
+            }
+        }
+        wed-narrow:alias{"/LOCALE/fields/wed-short"}
+        wed-short:alias{"/LOCALE/fields/wed"}
+        week{
+            dn{"Week"}
+            relative{
+                "-1"{"last week"}
+                "0"{"this week"}
+                "1"{"next week"}
+            }
+            relativePeriod{"the week of {0}"}
+            relativeTime{
+                future{
+                    other{"+{0} w"}
+                }
+                past{
+                    other{"-{0} w"}
+                }
+            }
+        }
+        week-narrow:alias{"/LOCALE/fields/week-short"}
+        week-short:alias{"/LOCALE/fields/week"}
+        weekOfMonth{
+            dn{"Week Of Month"}
+        }
+        weekOfMonth-narrow:alias{"/LOCALE/fields/weekOfMonth-short"}
+        weekOfMonth-short:alias{"/LOCALE/fields/weekOfMonth"}
+        weekday{
+            dn{"Day of the Week"}
+        }
+        weekday-narrow:alias{"/LOCALE/fields/weekday-short"}
+        weekday-short:alias{"/LOCALE/fields/weekday"}
+        weekdayOfMonth{
+            dn{"Weekday Of Month"}
+        }
+        weekdayOfMonth-narrow:alias{"/LOCALE/fields/weekdayOfMonth-short"}
+        weekdayOfMonth-short:alias{"/LOCALE/fields/weekdayOfMonth"}
+        year{
+            dn{"Year"}
+            relative{
+                "-1"{"last year"}
+                "0"{"this year"}
+                "1"{"next year"}
+            }
+            relativeTime{
+                future{
+                    other{"+{0} y"}
+                }
+                past{
+                    other{"-{0} y"}
+                }
+            }
+        }
+        year-narrow:alias{"/LOCALE/fields/year-short"}
+        year-short:alias{"/LOCALE/fields/year"}
+        zone{
+            dn{"Zone"}
+        }
+        zone-narrow:alias{"/LOCALE/fields/zone-short"}
+        zone-short:alias{"/LOCALE/fields/zone"}
+    }
+    layout{
+        characters{"left-to-right"}
+        lines{"top-to-bottom"}
+    }
+    listPattern{
+        or{
+            2{"{0} or {1}"}
+            end{"{0}, or {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        or-narrow{
+            2:alias{"/LOCALE/listPattern/or-short/2"}
+            end:alias{"/LOCALE/listPattern/or-short/end"}
+            middle:alias{"/LOCALE/listPattern/or-short/middle"}
+            start:alias{"/LOCALE/listPattern/or-short/start"}
+        }
+        or-short{
+            2:alias{"/LOCALE/listPattern/or/2"}
+            end:alias{"/LOCALE/listPattern/or/end"}
+            middle:alias{"/LOCALE/listPattern/or/middle"}
+            start:alias{"/LOCALE/listPattern/or/start"}
+        }
+        standard{
+            2{"{0}, {1}"}
+            end{"{0}, {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        standard-narrow{
+            2:alias{"/LOCALE/listPattern/standard-short/2"}
+            end:alias{"/LOCALE/listPattern/standard-short/end"}
+            middle:alias{"/LOCALE/listPattern/standard-short/middle"}
+            start:alias{"/LOCALE/listPattern/standard-short/start"}
+        }
+        standard-short{
+            2:alias{"/LOCALE/listPattern/standard/2"}
+            end:alias{"/LOCALE/listPattern/standard/end"}
+            middle:alias{"/LOCALE/listPattern/standard/middle"}
+            start:alias{"/LOCALE/listPattern/standard/start"}
+        }
+        unit{
+            2:alias{"/LOCALE/listPattern/unit-short/2"}
+            end:alias{"/LOCALE/listPattern/unit-short/end"}
+            middle:alias{"/LOCALE/listPattern/unit-short/middle"}
+            start:alias{"/LOCALE/listPattern/unit-short/start"}
+        }
+        unit-narrow{
+            2:alias{"/LOCALE/listPattern/unit-short/2"}
+            end:alias{"/LOCALE/listPattern/unit-short/end"}
+            middle:alias{"/LOCALE/listPattern/unit-short/middle"}
+            start:alias{"/LOCALE/listPattern/unit-short/start"}
+        }
+        unit-short{
+            2:alias{"/LOCALE/listPattern/standard/2"}
+            end:alias{"/LOCALE/listPattern/standard/end"}
+            middle:alias{"/LOCALE/listPattern/standard/middle"}
+            start:alias{"/LOCALE/listPattern/standard/start"}
+        }
+    }
+    measurementSystemNames{
+        UK{"UK"}
+        US{"US"}
+        metric{"Metric"}
+    }
+    nestedBracketReplacements{
+        "(",
+        "[",
+        "（",
+        "［",
+        ")",
+        "]",
+        "）",
+        "］",
+    }
+    parse{
+        date{
+            lenient{
+                "[\\- ‑ . /]",
+                "[\\:：﹕︓ ∶]",
+            }
+        }
+        general{
+            lenient{
+                "[.．․﹒ 。｡︒]",
+                "['＇’ ՚ ᾽᾿ ʼ]",
+                "[%％﹪ ٪]",
+                "[‰ ؉]",
+                "[\$＄﹩]",
+                "[£￡ ₤]",
+                "[¥￥]",
+                "[₩￦]",
+                "[₹ {Rp} {Rs}₨]",
+            }
+        }
+        number{
+            lenient{
+                "[\\-－﹣ ‐‑ ‒ – −⁻₋ ➖]",
+                "[,，﹐︐ ⹁ ، ٫ 、﹑､︑]",
+                "[+＋﬩﹢⁺₊ ➕]",
+            }
+            stricter{
+                "[,，﹐︐ ⹁ ٫]",
+                "[.．․﹒ ｡]",
+            }
+        }
+    }
+    personNames{
+        foreignSpaceReplacement{" "}
+        initialPattern{
+            initial{"{0}."}
+            initialSequence{"{0} {1}"}
+        }
+        nameOrderLocales{
+            givenFirst{"und"}
+            surnameFirst{
+                "ja",
+                "ko",
+                "vi",
+                "yue",
+                "zh",
+            }
+        }
+        namePattern{
+            givenFirst-long-addressing-formal:alias{"/LOCALE/personNames/namePattern/givenFirst-long-referring-formal"}
+            givenFirst-long-addressing-informal:alias{"/LOCALE/personNames/namePattern/givenFirst-long-referring-formal"}
+            givenFirst-long-monogram-formal{
+                "{given-monogram-allCaps}{given2-monogram-allCaps}{surname-monogram-a"
+                "llCaps}"
+            }
+            givenFirst-long-monogram-informal:alias{"/LOCALE/personNames/namePattern/givenFirst-long-monogram-formal"}
+            givenFirst-long-referring-formal{"{title} {given} {given2} {surname} {surname2} {credentials}"}
+            givenFirst-long-referring-informal:alias{"/LOCALE/personNames/namePattern/givenFirst-long-referring-formal"}
+            givenFirst-medium-addressing-formal:alias{"/LOCALE/personNames/namePattern/givenFirst-long-referring-formal"}
+            givenFirst-medium-addressing-informal:alias{"/LOCALE/personNames/namePattern/givenFirst-long-referring-formal"}
+            givenFirst-medium-monogram-formal:alias{"/LOCALE/personNames/namePattern/givenFirst-long-monogram-formal"}
+            givenFirst-medium-monogram-informal:alias{"/LOCALE/personNames/namePattern/givenFirst-long-monogram-formal"}
+            givenFirst-medium-referring-formal:alias{"/LOCALE/personNames/namePattern/givenFirst-long-referring-formal"}
+            givenFirst-medium-referring-informal:alias{"/LOCALE/personNames/namePattern/givenFirst-long-referring-formal"}
+            givenFirst-short-addressing-formal:alias{"/LOCALE/personNames/namePattern/givenFirst-long-referring-formal"}
+            givenFirst-short-addressing-informal:alias{"/LOCALE/personNames/namePattern/givenFirst-long-referring-formal"}
+            givenFirst-short-monogram-formal:alias{"/LOCALE/personNames/namePattern/givenFirst-long-monogram-formal"}
+            givenFirst-short-monogram-informal:alias{"/LOCALE/personNames/namePattern/givenFirst-long-monogram-formal"}
+            givenFirst-short-referring-formal:alias{"/LOCALE/personNames/namePattern/givenFirst-long-referring-formal"}
+            givenFirst-short-referring-informal:alias{"/LOCALE/personNames/namePattern/givenFirst-long-referring-formal"}
+            sorting-long-referring-formal{"{surname} {surname2}, {title} {given} {given2} {credentials}"}
+            sorting-long-referring-informal:alias{"/LOCALE/personNames/namePattern/sorting-long-referring-formal"}
+            sorting-medium-referring-formal:alias{"/LOCALE/personNames/namePattern/sorting-long-referring-formal"}
+            sorting-medium-referring-informal:alias{"/LOCALE/personNames/namePattern/sorting-long-referring-formal"}
+            sorting-short-referring-formal:alias{"/LOCALE/personNames/namePattern/sorting-long-referring-formal"}
+            sorting-short-referring-informal:alias{"/LOCALE/personNames/namePattern/sorting-long-referring-formal"}
+            surnameFirst-long-addressing-formal:alias{"/LOCALE/personNames/namePattern/surnameFirst-long-referring-formal"}
+            surnameFirst-long-addressing-informal:alias{"/LOCALE/personNames/namePattern/surnameFirst-long-referring-formal"}
+            surnameFirst-long-monogram-formal{
+                "{surname-monogram-allCaps}{given-monogram-allCaps}{given2-monogram-a"
+                "llCaps}"
+            }
+            surnameFirst-long-monogram-informal:alias{"/LOCALE/personNames/namePattern/surnameFirst-long-monogram-formal"}
+            surnameFirst-long-referring-formal{"{surname} {surname2} {title} {given} {given2} {credentials}"}
+            surnameFirst-long-referring-informal:alias{"/LOCALE/personNames/namePattern/surnameFirst-long-referring-formal"}
+            surnameFirst-medium-addressing-formal:alias{"/LOCALE/personNames/namePattern/surnameFirst-long-referring-formal"}
+            surnameFirst-medium-addressing-informal:alias{"/LOCALE/personNames/namePattern/surnameFirst-long-referring-formal"}
+            surnameFirst-medium-monogram-formal:alias{"/LOCALE/personNames/namePattern/surnameFirst-long-monogram-formal"}
+            surnameFirst-medium-monogram-informal:alias{"/LOCALE/personNames/namePattern/surnameFirst-long-monogram-formal"}
+            surnameFirst-medium-referring-formal:alias{"/LOCALE/personNames/namePattern/surnameFirst-long-referring-formal"}
+            surnameFirst-medium-referring-informal:alias{"/LOCALE/personNames/namePattern/surnameFirst-long-referring-formal"}
+            surnameFirst-short-addressing-formal:alias{"/LOCALE/personNames/namePattern/surnameFirst-long-referring-formal"}
+            surnameFirst-short-addressing-informal:alias{"/LOCALE/personNames/namePattern/surnameFirst-long-referring-formal"}
+            surnameFirst-short-monogram-formal:alias{"/LOCALE/personNames/namePattern/surnameFirst-long-monogram-formal"}
+            surnameFirst-short-monogram-informal:alias{"/LOCALE/personNames/namePattern/surnameFirst-long-monogram-formal"}
+            surnameFirst-short-referring-formal:alias{"/LOCALE/personNames/namePattern/surnameFirst-long-referring-formal"}
+            surnameFirst-short-referring-informal:alias{"/LOCALE/personNames/namePattern/surnameFirst-long-referring-formal"}
+        }
+        nativeSpaceReplacement{" "}
+        parameterDefault{
+            formality{"formal"}
+            length{"medium"}
+        }
+    }
+}

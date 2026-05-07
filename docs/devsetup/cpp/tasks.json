@@ -1,0 +1,37 @@
+// © 2020 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Makefile", // You can choose your own label.
+            "type": "shell",
+            "command": "make",
+            // Make this the default build command.
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always"
+            },
+            // You can pass all the building arguments here.
+            "args": [
+                "all",
+                "--debug", // Enable debug mode.
+                "-j24", // Launch no more than 24 jobs in parallel
+                "-l20" // Stop launching jobs if system load average is too high
+            ]
+        },
+        {
+            "label": "buildTest", // for building test cases before running it.
+            "command": "make", // Could be any other shell command
+            "args": [
+                "tests",
+                "-j24", // Launch no more than 24 jobs in parallel
+                "-l20" // Stop launching jobs if system load average is too high
+            ],
+            "type": "shell"
+        }
+    ]
+}

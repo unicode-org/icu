@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ Copyright (C) 2016 and later: Unicode, Inc. and others.
+ License & terms of use: http://www.unicode.org/copyright.html
+ Copyright (c) 2013-2015 International Business Machines Corporation and others. All rights reserved.
+-->
+<!DOCTYPE ldml SYSTEM "../../dtd/cldr/common/dtd/ldml.dtd">
+<ldml>
+	<identity>
+		<version number="$Revision$"/>
+		<language type="ga"/>
+	</identity>
+    <rbnf>
+        <rulesetGrouping type="DurationRules">
+            <rbnfRules><![CDATA[
+%with-words:
+0: =0= soicind;
+60/60: <%%min<[, >>];
+3600/60: <%%hr<[, >>>];
+%%min:
+0: =0= nóiméad;
+%%hr:
+0: =0= uair;
+3: =0= huaire;
+5: =0= uaire;
+6: =0= huaire;
+7: =0= n-uaire;
+10: =0= n-uair;
+11: =0= >%%uaire>;
+20: =0= uair; =0= >%%uaire>;
+%%uaire:
+1: uair;
+3: huaire;
+5: uaire;
+6: huaire;
+7: n-uaire;
+%hms:
+0: :=00=;
+60/60: <00<>>>
+3600/60: <#,##0<>>>;
+%in-numerals:
+0: =0= sec.;
+60: =%%min-sec=;
+3600: =%%hr-min-sec=;
+%%min-sec:
+0: :=00=;
+60/60: <0<>>;
+%%hr-min-sec:
+0: :=00=;
+60/60: <00<>>;
+3600/60: <#,##0<:>>>;
+%duration:
+0: =%in-numerals=;
+]]></rbnfRules>
+        </rulesetGrouping>
+    </rbnf>
+</ldml>

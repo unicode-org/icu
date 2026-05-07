@@ -1,0 +1,22 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+en_AU{
+    %%Parent{"en_001"}
+    Countries{
+        001{"World"}
+        AG{"Antigua and Barbuda"}
+        BA{"Bosnia and Herzegovina"}
+        EA{"Ceuta and Melilla"}
+        GS{"South Georgia and South Sandwich Islands"}
+        HM{"Heard Island and McDonald Islands"}
+        KN{"St Kitts and Nevis"}
+        PM{"St Pierre and Miquelon"}
+        SJ{"Svalbard and Jan Mayen"}
+        ST{"São Tomé and Príncipe"}
+        TC{"Turks and Caicos Islands"}
+        TT{"Trinidad and Tobago"}
+        VC{"St Vincent and the Grenadines"}
+        WF{"Wallis and Futuna"}
+    }
+}

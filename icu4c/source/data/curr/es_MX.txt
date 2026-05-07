@@ -1,0 +1,78 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+es_MX{
+    %%Parent{"es_419"}
+    Currencies{
+        BTN{
+            "BTN",
+            "ngultrum butanés",
+        }
+        MRO{
+            "MRU",
+            "uguiya (1973–2017)",
+        }
+        MRU{
+            "UM",
+            "uguiya mauritano",
+        }
+        MVR{
+            "MVR",
+            "rupia de Maldivas",
+        }
+        MXN{
+            "$",
+            "peso mexicano",
+        }
+        THB{
+            "THB",
+            "baht tailandés",
+        }
+        ZMW{
+            "ZMW",
+            "kwacha zambiano",
+        }
+    }
+    Currencies%narrow{
+        BYN{"p."}
+        FKP{"£"}
+        RON{"lei"}
+        SSP{"£"}
+        SYP{"£"}
+        VEF{"Bs"}
+    }
+    CurrencyPlurals{
+        BTN{
+            one{"ngultrum butanés"}
+            other{"ngultrums butaneses"}
+        }
+        LVL{
+            one{"lats letón"}
+            other{"lats letones"}
+        }
+        MVR{
+            one{"rupia de Maldivas"}
+            other{"rupias de Maldivas"}
+        }
+        RON{
+            one{"leu rumano"}
+            other{"lei rumanos"}
+        }
+        THB{
+            one{"baht tailandés"}
+            other{"bahts tailandeses"}
+        }
+        VES{
+            one{"bolívar venezolano"}
+            other{"bolivares venezolanos"}
+        }
+        XXX{
+            one{"(moneda desconocida)"}
+            other{"(moneda desconocida)"}
+        }
+        ZMW{
+            one{"kwacha zambiano"}
+            other{"kwachas zambianos"}
+        }
+    }
+}

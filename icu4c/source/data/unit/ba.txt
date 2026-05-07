@@ -1,0 +1,2880 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+ba{
+    durationUnits{
+        hm{"hh:mm"}
+        hms{"hh:mm:ss"}
+        ms{"mm:ss"}
+    }
+    units{
+        acceleration{
+            g-force{
+                dnam{"g-көс"}
+                other{"{0} g-көс"}
+            }
+            meter-per-square-second{
+                dnam{"квадрат секундҡа метр"}
+                other{"{0} квадрат секундҡа метр"}
+            }
+        }
+        angle{
+            arc-minute{
+                dnam{"минуттар"}
+                other{"{0} минут"}
+            }
+            arc-second{
+                dnam{"секундтар"}
+                other{"{0} секунд"}
+            }
+            degree{
+                dnam{"градустар"}
+                other{"{0} градус"}
+            }
+            radian{
+                dnam{"радиандар"}
+                other{"{0} радиан"}
+            }
+            revolution{
+                dnam{"әйләнештәр"}
+                other{"{0} әйләнеш"}
+            }
+            steradian{
+                dnam{"стерадиандар"}
+                other{"{0} стерадиан"}
+            }
+        }
+        area{
+            acre{
+                dnam{"акрҙар"}
+                other{"{0} акр"}
+            }
+            bu-jp{
+                dnam{"бу [JP]"}
+                other{"{0} бу [JP]"}
+            }
+            cho{
+                dnam{"чо [JP]"}
+                other{"{0} чо [JP]"}
+            }
+            dunam{
+                dnam{"дунамдар"}
+                other{"{0} дунам"}
+            }
+            hectare{
+                dnam{"гектарҙар"}
+                other{"{0} гектар"}
+            }
+            se-jp{
+                dnam{"се [JP]"}
+                other{"{0} се [JP]"}
+            }
+            square-centimeter{
+                dnam{"квадрат сантиметрҙар"}
+                other{"{0} квадрат сантиметр"}
+                per{"квадрат сантиметрға {0}"}
+            }
+            square-foot{
+                dnam{"квадрат футтар"}
+                other{"{0} квадрат фут"}
+            }
+            square-inch{
+                dnam{"квадрат дюймдар"}
+                other{"{0} квадрат дюйм"}
+                per{"{0} квадрат дюймға"}
+            }
+            square-kilometer{
+                dnam{"квадрат километрҙар"}
+                other{"{0} квадрат километр"}
+                per{"квадрат километрға {0}"}
+            }
+            square-meter{
+                dnam{"квадрат метрҙар"}
+                other{"{0} квадрат метр"}
+                per{"квадрат метрға {0}"}
+            }
+            square-mile{
+                dnam{"квадрат милдәр"}
+                other{"{0} квадрат миль"}
+                per{"квадрат милгә {0}"}
+            }
+            square-yard{
+                dnam{"квадрат ярдтар"}
+                other{"{0} квадрат ярд"}
+            }
+        }
+        compound{
+            1024p1{"киби{0}"}
+            1024p2{"меби{0}"}
+            1024p3{"гиби{0}"}
+            1024p4{"теби{0}"}
+            1024p5{"пеби{0}"}
+            1024p6{"эксби{0}"}
+            1024p7{"зеби{0}"}
+            1024p8{"йоби{0}"}
+            10p-1{"деци{0}"}
+            10p-12{"пико{0}"}
+            10p-15{"фемто{0}"}
+            10p-18{"атто{0}"}
+            10p-2{"санти{0}"}
+            10p-21{"зепто{0}"}
+            10p-24{"иокто{0}"}
+            10p-27{"ронто{0}"}
+            10p-3{"милли{0}"}
+            10p-30{"квекто{0}"}
+            10p-6{"микро{0}"}
+            10p-9{"нано{0}"}
+            10p1{"дека{0}"}
+            10p12{"тера{0}"}
+            10p15{"пета{0}"}
+            10p18{"экса{0}"}
+            10p2{"гекто{0}"}
+            10p21{"зетта{0}"}
+            10p24{"иотта{0}"}
+            10p27{"ронна{0}"}
+            10p3{"кило{0}"}
+            10p30{"кветта{0}"}
+            10p6{"мега{0}"}
+            10p9{"гига{0}"}
+            power2{
+                other{
+                    _{
+                        _{"квадрат {0}"}
+                    }
+                }
+            }
+            power3{
+                other{
+                    _{
+                        _{"куб {0}"}
+                    }
+                }
+            }
+        }
+        concentr{
+            item{
+                dnam{"әйберҙәр"}
+                other{"{0} әйбер"}
+            }
+            karat{
+                dnam{"караттар"}
+                other{"{0} карат"}
+            }
+            katal{
+                dnam{"каталдар"}
+                other{"{0} катал"}
+            }
+            milligram-ofglucose-per-deciliter{
+                dnam{"децилитрға миллиграмм"}
+                other{"{0} миллиграмм децилитрға"}
+            }
+            millimole-per-liter{
+                dnam{"литрға миллимоль"}
+                other{"{0} миллимоль литрға"}
+            }
+            mole{
+                dnam{"молдәр"}
+                other{"{0} моль"}
+            }
+            ofglucose{
+                dnam{"глюкоза"}
+                other{"{0} глюкоза"}
+            }
+            part{
+                dnam{"өлөштәр"}
+                other{"{0} өлөш"}
+            }
+            part-per-1e6{
+                dnam{"миллионға өлөш"}
+                other{"{0} өлөш/млн"}
+            }
+            part-per-1e9{
+                dnam{"миллиардҡа өлөш"}
+                other{"{0} өлөш миллиардҡа"}
+            }
+            percent{
+                dnam{"процент"}
+                other{"{0} процент"}
+            }
+            permille{
+                dnam{"промилле"}
+                other{"{0} промилле"}
+            }
+            permyriad{
+                dnam{"промириад"}
+                other{"{0} промириад"}
+            }
+        }
+        consumption{
+            liter-per-100-kilometer{
+                dnam{"100 километрға литр"}
+                other{"{0} литр 100 километрға"}
+            }
+            liter-per-kilometer{
+                dnam{"километрға литр"}
+                other{"{0} литр километрға"}
+            }
+            mile-per-gallon{
+                dnam{"галлонға милдәр"}
+                other{"{0} галлонға миль"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"Империя галлонына милдәр"}
+                other{"{0} Империя галлонына миль"}
+            }
+        }
+        coordinate{
+            dnam{"кардиналь йүнәлеш"}
+            east{"{0} көнсығыш оҙонлоҡ"}
+            north{"{0} төньяҡ киңлек"}
+            south{"{0} көньяҡ киңлек"}
+            west{"{0} көнбайыш оҙонлоҡ"}
+        }
+        digital{
+            bit{
+                dnam{"биттар"}
+                other{"{0} бит"}
+            }
+            byte{
+                dnam{"байттар"}
+                other{"{0} байт"}
+            }
+            gigabit{
+                dnam{"гигабиттар"}
+                other{"{0} гигабит"}
+            }
+            gigabyte{
+                dnam{"гигабайттар"}
+                other{"{0} гигабайт"}
+            }
+            kilobit{
+                dnam{"килобиттар"}
+                other{"{0} килобит"}
+            }
+            kilobyte{
+                dnam{"килобайттар"}
+                other{"{0} килобайт"}
+            }
+            megabit{
+                dnam{"мегабиттар"}
+                other{"{0} мегабит"}
+            }
+            megabyte{
+                dnam{"мегабайттар"}
+                other{"{0} мегабайт"}
+            }
+            petabyte{
+                dnam{"петабайттар"}
+                other{"{0} петабайт"}
+            }
+            terabit{
+                dnam{"терабиттар"}
+                other{"{0} терабит"}
+            }
+            terabyte{
+                dnam{"терабайттар"}
+                other{"{0} терабайт"}
+            }
+        }
+        duration{
+            century{
+                dnam{"быуаттар"}
+                other{"{0} быуат"}
+            }
+            day{
+                dnam{"көндәр"}
+                other{"{0} көн"}
+                per{"{0}/көн"}
+            }
+            decade{
+                dnam{"йыл тиҫтәләре"}
+                other{"{0} йыл тиҫтәһе"}
+            }
+            fortnight{
+                dnam{"фортнайттар"}
+                other{"{0} фортнайт"}
+            }
+            hour{
+                dnam{"сәғәт"}
+                other{"{0} сәғәт"}
+                per{"{0}/сәғәт"}
+            }
+            microsecond{
+                dnam{"микросекундтар"}
+                other{"{0} микросекунд"}
+            }
+            millisecond{
+                dnam{"миллисекундтар"}
+                other{"{0} миллисекунд"}
+            }
+            minute{
+                dnam{"минуттар"}
+                other{"{0} минут"}
+                per{"{0}/минут"}
+            }
+            month{
+                dnam{"айҙар"}
+                other{"{0} ай"}
+                per{"{0} айына"}
+            }
+            nanosecond{
+                dnam{"наносекундтар"}
+                other{"{0} наносекунд"}
+            }
+            night{
+                dnam{"төндәр"}
+                other{"{0} төн"}
+                per{"{0}/төн"}
+            }
+            quarter{
+                dnam{"кварталдар"}
+                other{"{0} квартал"}
+                per{"{0}/квартал"}
+            }
+            second{
+                dnam{"секундтар"}
+                other{"{0} секунд"}
+                per{"{0}/секунд"}
+            }
+            week{
+                dnam{"аҙналар"}
+                other{"{0} аҙна"}
+                per{"{0}/аҙна"}
+            }
+            year{
+                dnam{"йылдар"}
+                other{"{0} йыл"}
+                per{"{0}/йыл"}
+            }
+        }
+        electric{
+            ampere{
+                dnam{"амперҙар"}
+                other{"{0} ампер"}
+            }
+            coulomb{
+                dnam{"кулондар"}
+                other{"{0} кулон"}
+            }
+            farad{
+                dnam{"фарадтар"}
+                other{"{0} фарад"}
+            }
+            henry{
+                dnam{"генри"}
+                other{"{0} генри"}
+            }
+            milliampere{
+                dnam{"миллиамперҙар"}
+                other{"{0} миллиампер"}
+            }
+            ohm{
+                dnam{"омдар"}
+                other{"{0} Ом"}
+            }
+            siemens{
+                dnam{"сименстар"}
+                other{"{0} сименс"}
+            }
+            volt{
+                dnam{"вольттар"}
+                other{"{0} вольт"}
+            }
+        }
+        energy{
+            becquerel{
+                dnam{"беккерелдәр"}
+                other{"{0} беккерель"}
+            }
+            british-thermal-unit{
+                dnam{"Британия йылылыҡ берәмектәре"}
+                other{"{0} Британия йылылыҡ берәмеге"}
+            }
+            british-thermal-unit-it{
+                dnam{"Британия йылылыҡ берәмектәре [IT]"}
+                other{"{0} Британия йылылыҡ берәмеге [IT]"}
+            }
+            calorie{
+                dnam{"калориялар"}
+                other{"{0} калория"}
+            }
+            calorie-it{
+                dnam{"халыҡ-ара калориялар"}
+                other{"{0} халыҡ-ара калория"}
+            }
+            electronvolt{
+                dnam{"электронвольттар"}
+                other{"{0} электронвольт"}
+            }
+            gray{
+                dnam{"грейҙар"}
+                other{"{0} грей"}
+            }
+            joule{
+                dnam{"джоулдәр"}
+                other{"{0} джоуль"}
+            }
+            kilocalorie{
+                dnam{"килокалориялар"}
+                other{"{0} килокалория"}
+            }
+            kilojoule{
+                dnam{"килоджоулдәр"}
+                other{"{0} килоджоуль"}
+            }
+            kilowatt-hour{
+                dnam{"киловатт-сәғәттәр"}
+                other{"{0} киловатт-сәғәт"}
+            }
+            sievert{
+                dnam{"зиверттар"}
+                other{"{0} зиверт"}
+            }
+            therm-us{
+                dnam{"АҠШ термдары"}
+                other{"{0} АҠШ термы"}
+            }
+        }
+        force{
+            kilogram-force{
+                dnam{"килограмм-көс"}
+                other{"{0} килограмм-көс"}
+            }
+            kilowatt-hour-per-100-kilometer{
+                dnam{"100 километрға киловатт-сәғәт"}
+                other{"{0} киловатт-сәғәт 100 километрға"}
+            }
+            newton{
+                dnam{"ньютондар"}
+                other{"{0} ньютон"}
+            }
+            pound-force{
+                dnam{"фунт-көс"}
+                other{"{0} фунт-көс"}
+            }
+        }
+        frequency{
+            gigahertz{
+                dnam{"гигагерцтар"}
+                other{"{0} гигагерц"}
+            }
+            hertz{
+                dnam{"герцтар"}
+                other{"{0} герц"}
+            }
+            kilohertz{
+                dnam{"килогерцтар"}
+                other{"{0} килогерц"}
+            }
+            megahertz{
+                dnam{"мегагерцтар"}
+                other{"{0} мегагерц"}
+            }
+        }
+        graphics{
+            em{
+                dnam{"типографик эм"}
+                other{"{0} эм"}
+            }
+            megapixel{
+                dnam{"мегапикселдәр"}
+                other{"{0} мегапиксел"}
+            }
+            pixel{
+                dnam{"пикселдәр"}
+                other{"{0} пиксел"}
+            }
+            pixel-per-centimeter{
+                dnam{"сантиметрға пикселдар"}
+                other{"{0} пиксел сантиметрға"}
+            }
+            pixel-per-inch{
+                dnam{"дюймға пикселдар"}
+                other{"{0} пиксел дюймға"}
+            }
+        }
+        length{
+            astronomical-unit{
+                dnam{"астрономик берәмектәр"}
+                other{"{0} астрономик берәмек"}
+            }
+            centimeter{
+                dnam{"сантиметрҙар"}
+                other{"{0} сантиметр"}
+                per{"{0}/см"}
+            }
+            chain{
+                dnam{"сылбырҙар"}
+                other{"{0} сылбыр"}
+            }
+            decimeter{
+                dnam{"дециметрҙар"}
+                other{"{0} дециметр"}
+            }
+            earth-radius{
+                dnam{"ер радиусы"}
+                other{"{0} ер радиусы"}
+            }
+            fathom{
+                other{"{0} сажин"}
+            }
+            foot{
+                dnam{"футтар"}
+                other{"{0} фут"}
+                per{"футҡа {0}"}
+            }
+            inch{
+                dnam{"дюймдар"}
+                other{"{0} дюйм"}
+                per{"дюймға {0}"}
+            }
+            jo-jp{
+                dnam{"джо [JP]"}
+                other{"{0} джо [JP]"}
+            }
+            ken{
+                dnam{"кен [JP]"}
+                other{"{0} кен [JP]"}
+            }
+            kilometer{
+                dnam{"километрҙар"}
+                other{"{0} километр"}
+                per{"километрға {0}"}
+            }
+            light-year{
+                dnam{"яҡтылыҡ йылдары"}
+                other{"{0} яҡтылыҡ йылы"}
+            }
+            meter{
+                dnam{"метрҙар"}
+                other{"{0} метр"}
+                per{"метрға {0}"}
+            }
+            micrometer{
+                dnam{"микрометрҙар"}
+                other{"{0} микрометр"}
+            }
+            mile{
+                dnam{"милдәр"}
+                other{"{0} миль"}
+            }
+            mile-scandinavian{
+                dnam{"скандинав милдәре"}
+                other{"{0} скандинав миле"}
+            }
+            millimeter{
+                dnam{"миллиметрҙар"}
+                other{"{0} миллиметр"}
+            }
+            nanometer{
+                dnam{"нанометрҙар"}
+                other{"{0} нанометр"}
+            }
+            nautical-mile{
+                dnam{"диңгеҙ милдәре"}
+                other{"{0} диңгеҙ миле"}
+            }
+            parsec{
+                dnam{"парсектар"}
+                other{"{0} парсек"}
+            }
+            picometer{
+                dnam{"пикометрҙар"}
+                other{"{0} пикометр"}
+            }
+            point{
+                dnam{"пункттар"}
+                other{"{0} пункт"}
+            }
+            ri-jp{
+                dnam{"ри [JP]"}
+                other{"{0} ри [JP]"}
+            }
+            rin{
+                dnam{"рин [JP]"}
+            }
+            rod{
+                dnam{"родтар"}
+                other{"{0} род"}
+            }
+            shaku-cloth{
+                dnam{"шаку [туҡыма, JP]"}
+                other{"{0} шаку [туҡыма, JP]"}
+            }
+            shaku-length{
+                dnam{"шаку [JP]"}
+                other{"{0} шаку [JP]"}
+            }
+            solar-radius{
+                dnam{"ҡояш радиустары"}
+                other{"{0} ҡояш радиусы"}
+            }
+            sun{
+                dnam{"сун [JP]"}
+                other{"{0} сун [JP]"}
+            }
+            yard{
+                dnam{"ярдтар"}
+                other{"{0} ярд"}
+            }
+        }
+        light{
+            candela{
+                dnam{"канделалар"}
+                other{"{0} кандела"}
+            }
+            lumen{
+                dnam{"люмен"}
+                other{"{0} люмен"}
+            }
+            lux{
+                dnam{"люкстар"}
+                other{"{0} люкс"}
+            }
+            solar-luminosity{
+                dnam{"ҡояш яҡтылыҡтары"}
+                other{"{0} ҡояш яҡтылығы"}
+            }
+        }
+        magnetic{
+            tesla{
+                dnam{"теслалар"}
+                other{"{0} тесла"}
+            }
+            weber{
+                dnam{"веберҙар"}
+                other{"{0} вебер"}
+            }
+        }
+        mass{
+            carat{
+                dnam{"караттар"}
+                other{"{0} карат"}
+            }
+            dalton{
+                dnam{"дальтондар"}
+                other{"{0} дальтон"}
+            }
+            earth-mass{
+                dnam{"Ер массалары"}
+                other{"{0} Ер массаһы"}
+            }
+            fun{
+                dnam{"фун [JP]"}
+                other{"{0} фун [JP]"}
+            }
+            grain{
+                dnam{"грандар"}
+                other{"{0} гран"}
+            }
+            gram{
+                dnam{"граммдар"}
+                other{"{0} грамм"}
+                per{"{0} граммға"}
+            }
+            kilogram{
+                dnam{"килограммдар"}
+                other{"{0} килограмм"}
+                per{"{0} килограммға"}
+            }
+            microgram{
+                dnam{"микрограммдар"}
+                other{"{0} микрограмм"}
+            }
+            milligram{
+                dnam{"миллиграммдар"}
+                other{"{0} миллиграмм"}
+            }
+            ounce{
+                dnam{"унциялар"}
+                other{"{0} унция"}
+                per{"{0} унцияға"}
+            }
+            ounce-troy{
+                dnam{"трой унциялары"}
+                other{"{0} трой унцияһы"}
+            }
+            pound{
+                dnam{"фунттар"}
+                other{"{0} фунт"}
+                per{"{0} фунтҡа"}
+            }
+            slug{
+                dnam{"слагтар"}
+                other{"{0} слаг"}
+            }
+            solar-mass{
+                dnam{"ҡояш массалары"}
+                other{"{0} ҡояш массаһы"}
+            }
+            stone{
+                dnam{"стоундар"}
+                other{"{0} стоун"}
+            }
+            ton{
+                dnam{"тонналар"}
+                other{"{0} тонна"}
+            }
+            tonne{
+                dnam{"тонналар"}
+                other{"{0} т"}
+            }
+        }
+        power{
+            gigawatt{
+                dnam{"гигаваттар"}
+                other{"{0} гигаватт"}
+            }
+            horsepower{
+                dnam{"ат көсө"}
+                other{"{0} ат көсө"}
+            }
+            kilowatt{
+                dnam{"киловаттар"}
+                other{"{0} киловатт"}
+            }
+            megawatt{
+                dnam{"мегаваттар"}
+                other{"{0} мегаватт"}
+            }
+            milliwatt{
+                dnam{"милливаттар"}
+                other{"{0} милливатт"}
+            }
+            watt{
+                dnam{"ватттар"}
+                other{"{0} ватт"}
+            }
+        }
+        pressure{
+            atmosphere{
+                dnam{"атмосфералар"}
+                other{"{0} атмосфера"}
+            }
+            bar{
+                dnam{"барҙар"}
+                other{"{0} бар"}
+            }
+            gasoline-energy-density{
+                dnam{"бензин эквиваленты"}
+                other{"{0} бензин эквиваленты"}
+            }
+            hectopascal{
+                dnam{"гектопаскалдәр"}
+                other{"{0} гектопаскаль"}
+            }
+            inch-ofhg{
+                dnam{"терегөмөш бағанаһы дюймдары"}
+                other{"{0} терегөмөш бағанаһы дюймдары"}
+            }
+            kilopascal{
+                dnam{"килопаскалдәр"}
+                other{"{0} килопаскаль"}
+            }
+            megapascal{
+                dnam{"мегапаскалдәр"}
+                other{"{0} мегапаскаль"}
+            }
+            millibar{
+                dnam{"миллибарҙар"}
+                other{"{0} миллибар"}
+            }
+            millimeter-ofhg{
+                dnam{"терегөмөш бағанаһы миллиметрҙары"}
+                other{"{0} терегөмөш бағанаһы миллиметры"}
+            }
+            ofhg{
+                dnam{"терегөмөш бағанаһы"}
+                other{"{0} тер. бағ."}
+            }
+            pascal{
+                dnam{"паскалдәр"}
+                other{"{0} паскаль"}
+            }
+            pound-force-per-square-inch{
+                dnam{"квадрат дюймға фунт-көс"}
+                other{"{0} квадрат дюймға фунт-көс"}
+            }
+        }
+        speed{
+            beaufort{
+                dnam{"Бофорт"}
+                other{"Бофорт {0}"}
+            }
+            kilometer-per-hour{
+                dnam{"сәғәтенә километр"}
+                other{"{0} сәғәтенә километр"}
+            }
+            knot{
+                dnam{"төйөндәр"}
+                other{"{0} төйөн"}
+            }
+            light-speed{
+                dnam{"яҡтылыҡ"}
+                other{"{0} яҡтылыҡ"}
+            }
+            meter-per-second{
+                dnam{"секундҡа метр"}
+                other{"{0} секундҡа метр"}
+            }
+            mile-per-hour{
+                dnam{"сәғәтенә миль"}
+                other{"{0} сәғәтенә миль"}
+            }
+        }
+        temperature{
+            celsius{
+                dnam{"Цельсий градустары"}
+                other{"{0} Цельсий градусы"}
+            }
+            fahrenheit{
+                dnam{"Фаренгейт градустары"}
+                other{"{0} Фаренгейт градусы"}
+            }
+            generic{
+                dnam{"температура градустары"}
+                other{"{0} градус"}
+            }
+            kelvin{
+                dnam{"кельвиндар"}
+                other{"{0} кельвин"}
+            }
+            rankine{
+                dnam{"ранкиндар"}
+                other{"{0} ранкин"}
+            }
+        }
+        torque{
+            newton-meter{
+                dnam{"ньютон-метрҙар"}
+                other{"{0} ньютон-метр"}
+            }
+            pound-force-foot{
+                dnam{"фунт-фут"}
+                other{"{0} фунт-фут"}
+            }
+        }
+        volume{
+            acre-foot{
+                dnam{"акр-футтар"}
+                other{"{0} акр-фут"}
+            }
+            barrel{
+                dnam{"баррелдәр"}
+                other{"{0} баррель"}
+            }
+            bushel{
+                dnam{"бушелдәр"}
+                other{"{0} бушель"}
+            }
+            centiliter{
+                dnam{"сантилитрҙар"}
+                other{"{0} сантилитр"}
+            }
+            cubic-centimeter{
+                dnam{"куб сантиметрҙар"}
+                other{"{0} куб сантиметр"}
+                per{"{0} куб сантиметрға"}
+            }
+            cubic-foot{
+                dnam{"куб футтар"}
+                other{"{0} куб фут"}
+            }
+            cubic-inch{
+                dnam{"куб дюймдар"}
+                other{"{0} куб дюйм"}
+            }
+            cubic-kilometer{
+                dnam{"куб километрҙар"}
+                other{"{0} куб километр"}
+            }
+            cubic-meter{
+                dnam{"куб метрҙар"}
+                other{"{0} куб метр"}
+                per{"{0} куб метрға"}
+            }
+            cubic-mile{
+                dnam{"куб милдәр"}
+                other{"{0} куб миль"}
+            }
+            cubic-yard{
+                dnam{"куб ярдтар"}
+                other{"{0} куб ярд"}
+            }
+            cup{
+                dnam{"сынаяҡтар"}
+                other{"{0} сынаяҡ"}
+            }
+            cup-jp{
+                dnam{"сынаяҡ [JP]"}
+                other{"{0} сынаяҡ [JP]"}
+            }
+            cup-metric{
+                dnam{"метрик сынаяҡтар"}
+                other{"{0} метрик сынаяҡ"}
+            }
+            deciliter{
+                dnam{"децилитрҙар"}
+                other{"{0} децилитр"}
+            }
+            dessert-spoon{
+                dnam{"десерт ҡалаҡтары"}
+                other{"{0} десерт ҡалағы"}
+            }
+            dessert-spoon-imperial{
+                dnam{"империя десерт ҡалаҡтары"}
+                other{"{0} империя десерт ҡалағы"}
+            }
+            dram{
+                dnam{"драхмалар"}
+                other{"{0} драхма"}
+            }
+            drop{
+                dnam{"тамсылар"}
+                other{"{0} тамсы"}
+            }
+            fluid-ounce{
+                dnam{"шыйыҡ унциялар"}
+                other{"{0} шыйыҡ унция"}
+            }
+            fluid-ounce-imperial{
+                dnam{"империя шыйыҡ унциялары"}
+                other{"{0} империя шыйыҡ унцияһы"}
+            }
+            fluid-ounce-metric{
+                dnam{"метрик шыйыҡ унциялар"}
+                other{"{0} метрик шыйыҡ унция"}
+            }
+            gallon{
+                dnam{"галлондар"}
+                other{"{0} галлон"}
+                per{"галлонға {0}"}
+            }
+            gallon-imperial{
+                dnam{"империя галлондары"}
+                other{"{0} империя галлоны"}
+                per{"{0} империя галлонына"}
+            }
+            hectoliter{
+                dnam{"гектолитрҙар"}
+                other{"{0} гектолитр"}
+            }
+            jigger{
+                dnam{"джиггерҙар"}
+                other{"{0} джиггер"}
+            }
+            koku{
+                dnam{"коку [JP]"}
+                other{"{0} коку [JP]"}
+            }
+            kosaji{
+                dnam{"косажи [JP]"}
+                other{"{0} косажи [JP]"}
+            }
+            liter{
+                dnam{"литрҙар"}
+                other{"{0} литр"}
+                per{"{0} литрға"}
+            }
+            megaliter{
+                dnam{"мегалитрҙар"}
+                other{"{0} мегалитр"}
+            }
+            milliliter{
+                dnam{"миллилитрҙар"}
+                other{"{0} миллилитр"}
+            }
+            osaji{
+                dnam{"осажи [JP]"}
+                other{"{0} осажи [JP]"}
+            }
+            pinch{
+                dnam{"семтемдәр"}
+                other{"{0} семтем"}
+            }
+            pint{
+                dnam{"пинталар"}
+                other{"{0} пинта"}
+            }
+            pint-imperial{
+                dnam{"Империя пинталары"}
+                other{"{0} Империя пинтаһы"}
+            }
+            pint-metric{
+                dnam{"метрик пинталар"}
+                other{"{0} метрик пинта"}
+            }
+            quart{
+                dnam{"кварталар"}
+                other{"{0} кварта"}
+            }
+            quart-imperial{
+                dnam{"Империя кварталары"}
+                other{"{0} империя квартаһы"}
+            }
+            sai{
+                dnam{"сай [JP]"}
+                other{"{0} сай [JP]"}
+            }
+            shaku{
+                dnam{"шаку [күләм, JP]"}
+                other{"{0} шаку [күләм, JP]"}
+            }
+            tablespoon{
+                dnam{"аш ҡалаҡтары"}
+                other{"{0} аш ҡалағы"}
+            }
+            teaspoon{
+                dnam{"сәй ҡалаҡтары"}
+                other{"{0} сәй ҡалағы"}
+            }
+            to-jp{
+                dnam{"то [JP]"}
+                other{"{0} то [JP]"}
+            }
+        }
+    }
+    unitsNarrow{
+        acceleration{
+            g-force{
+                dnam{"g-көс"}
+                other{"{0}Gs"}
+            }
+            meter-per-square-second{
+                dnam{"м/с²"}
+                other{"{0} м/с²"}
+            }
+        }
+        angle{
+            arc-minute{
+                dnam{"мин"}
+            }
+            arc-second{
+                dnam{"сек"}
+            }
+            degree{
+                dnam{"гр."}
+            }
+            radian{
+                dnam{"рад"}
+                other{"{0} рад"}
+            }
+            revolution{
+                dnam{"әйләнеш"}
+                other{"{0} әйләнеш"}
+            }
+            steradian{
+                dnam{"ср"}
+                other{"{0}ср"}
+            }
+        }
+        area{
+            acre{
+                dnam{"акр"}
+                other{"{0} акр"}
+            }
+            dunam{
+                dnam{"дун."}
+                other{"{0} дунам"}
+            }
+            hectare{
+                dnam{"га"}
+                other{"{0} гектар"}
+            }
+            square-centimeter{
+                dnam{"см²"}
+                other{"{0} см²"}
+                per{"{0}/см²"}
+            }
+            square-foot{
+                dnam{"фут²"}
+                other{"{0} фут²"}
+            }
+            square-inch{
+                dnam{"дюйм²"}
+                other{"{0} дюйм²"}
+                per{"{0}/дюйм²"}
+            }
+            square-kilometer{
+                dnam{"км²"}
+                other{"{0} км²"}
+                per{"{0}/км²"}
+            }
+            square-meter{
+                dnam{"м²"}
+                other{"{0} м²"}
+                per{"{0}/м²"}
+            }
+            square-mile{
+                dnam{"ми²"}
+                other{"{0} ми²"}
+                per{"{0}/ми²"}
+            }
+            square-yard{
+                dnam{"ярд²"}
+                other{"{0} ярд²"}
+            }
+        }
+        compound{
+            1024p1{"Ки{0}"}
+            1024p2{"Ми{0}"}
+            1024p3{"Ги{0}"}
+            1024p4{"Ти{0}"}
+            1024p5{"Пи{0}"}
+            1024p6{"Эи{0}"}
+            1024p7{"Зи{0}"}
+            1024p8{"Йи{0}"}
+            10p-1{"д{0}"}
+            10p-12{"п{0}"}
+            10p-15{"ф{0}"}
+            10p-18{"а{0}"}
+            10p-2{"с{0}"}
+            10p-21{"з{0}"}
+            10p-24{"и{0}"}
+            10p-27{"р{0}"}
+            10p-3{"м{0}"}
+            10p-30{"кв{0}"}
+            10p-6{"мк{0}"}
+            10p-9{"н{0}"}
+            10p1{"да{0}"}
+            10p12{"Т{0}"}
+            10p15{"П{0}"}
+            10p18{"Э{0}"}
+            10p2{"г{0}"}
+            10p21{"З{0}"}
+            10p24{"И{0}"}
+            10p27{"Р{0}"}
+            10p3{"к{0}"}
+            10p30{"Кв{0}"}
+            10p6{"М{0}"}
+            10p9{"Г{0}"}
+        }
+        concentr{
+            item{
+                dnam{"әйбер"}
+                other{"{0} әйбер"}
+            }
+            karat{
+                dnam{"кар"}
+                other{"{0} карат"}
+            }
+            katal{
+                dnam{"кат"}
+                other{"{0}кат"}
+            }
+            milligram-ofglucose-per-deciliter{
+                dnam{"мг/дл"}
+                other{"{0} мг/дл"}
+            }
+            millimole-per-liter{
+                dnam{"ммоль/л"}
+                other{"{0} ммоль/л"}
+            }
+            mole{
+                dnam{"моль"}
+                other{"{0} моль"}
+            }
+            ofglucose{
+                dnam{"глюкоза"}
+            }
+            part{
+                dnam{"өлөш"}
+                other{"{0} өлөш"}
+            }
+            part-per-1e6{
+                dnam{"өлөш/млн"}
+                other{"{0} өлөш/млн"}
+            }
+            part-per-1e9{
+                dnam{"өлөш/млрд"}
+                other{"{0} өлөш/млрд"}
+            }
+        }
+        consumption{
+            liter-per-100-kilometer{
+                dnam{"л/100 км"}
+                other{"{0} л/100 км"}
+            }
+            liter-per-kilometer{
+                dnam{"л/км"}
+                other{"{0} л/км"}
+            }
+            mile-per-gallon{
+                dnam{"миль/гал"}
+                other{"{0} галлонға миль"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"миль/имп. гал"}
+                other{"{0} миль/имп. гал"}
+            }
+        }
+        coordinate{
+            dnam{"йүн."}
+            east{"{0} көнсығыш"}
+            north{"{0} төньяҡ"}
+            south{"{0} көньяҡ"}
+            west{"{0} көнбайыш"}
+        }
+        digital{
+            bit{
+                dnam{"бит"}
+                other{"{0} бит"}
+            }
+            byte{
+                dnam{"Б"}
+                other{"{0} Б"}
+            }
+            gigabit{
+                dnam{"Гбит"}
+                other{"{0} Гбит"}
+            }
+            gigabyte{
+                dnam{"ГБ"}
+                other{"{0} ГБ"}
+            }
+            kilobit{
+                dnam{"кбит"}
+                other{"{0} кбит"}
+            }
+            kilobyte{
+                dnam{"кБ"}
+                other{"{0} кБ"}
+            }
+            megabit{
+                dnam{"Мбит"}
+                other{"{0} Мбит"}
+            }
+            megabyte{
+                dnam{"МБ"}
+                other{"{0} МБ"}
+            }
+            petabyte{
+                dnam{"ПБ"}
+                other{"{0} ПБ"}
+            }
+            terabit{
+                dnam{"Тбит"}
+                other{"{0} Тбит"}
+            }
+            terabyte{
+                dnam{"ТБ"}
+                other{"{0} ТБ"}
+            }
+        }
+        duration{
+            century{
+                dnam{"б."}
+                other{"{0} б."}
+            }
+            day{
+                dnam{"көн."}
+                other{"{0} көн"}
+                per{"{0}/көн"}
+            }
+            decade{
+                dnam{"й. тиҫт."}
+                other{"{0} йыл тиҫтәһе"}
+            }
+            fortnight{
+                dnam{"фртнт."}
+                other{"{0} фортнайт"}
+            }
+            hour{
+                dnam{"сәғ."}
+                other{"{0} сәғ."}
+                per{"{0}/сәғ"}
+            }
+            microsecond{
+                dnam{"мкс"}
+                other{"{0} мкс"}
+            }
+            millisecond{
+                dnam{"мс"}
+                other{"{0} мс"}
+            }
+            minute{
+                dnam{"мин"}
+                other{"{0} мин."}
+                per{"{0}/мин"}
+            }
+            month{
+                dnam{"ай."}
+                other{"{0} ай"}
+                per{"{0}/ай"}
+            }
+            nanosecond{
+                dnam{"нс"}
+                other{"{0} нс"}
+            }
+            night{
+                dnam{"төндәр"}
+                other{"{0} төн"}
+                per{"{0}/төн"}
+            }
+            quarter{
+                dnam{"кварт."}
+                other{"{0} кварт."}
+                per{"{0}/кв"}
+            }
+            second{
+                dnam{"с"}
+                other{"{0} с"}
+                per{"{0}/с"}
+            }
+            week{
+                dnam{"аҙн."}
+                other{"{0} аҙна"}
+                per{"{0}/аҙна"}
+            }
+            year{
+                dnam{"й."}
+                other{"{0} й."}
+                per{"{0}/й"}
+            }
+        }
+        electric{
+            ampere{
+                dnam{"А"}
+                other{"{0} А"}
+            }
+            coulomb{
+                dnam{"Кл"}
+                other{"{0} Кл"}
+            }
+            farad{
+                dnam{"Ф"}
+                other{"{0} Ф"}
+            }
+            henry{
+                dnam{"Гн"}
+                other{"{0} Гн"}
+            }
+            milliampere{
+                dnam{"мА"}
+                other{"{0} мА"}
+            }
+            ohm{
+                dnam{"Ом"}
+                other{"{0} Ом"}
+            }
+            siemens{
+                dnam{"См"}
+                other{"{0} См"}
+            }
+            volt{
+                dnam{"В"}
+                other{"{0} В"}
+            }
+        }
+        energy{
+            becquerel{
+                dnam{"Бк"}
+                other{"{0} Бк"}
+            }
+            british-thermal-unit{
+                dnam{"БТЕ"}
+                other{"{0} БТЕ"}
+            }
+            calorie{
+                dnam{"кал"}
+                other{"{0} кал"}
+            }
+            calorie-it{
+                dnam{"х.а.кал."}
+                other{"{0} х.а.кал."}
+            }
+            electronvolt{
+                dnam{"эВ"}
+                other{"{0} эВ"}
+            }
+            gray{
+                dnam{"Гр"}
+                other{"{0} Гр"}
+            }
+            joule{
+                dnam{"Дж"}
+                other{"{0} Дж"}
+            }
+            kilocalorie{
+                dnam{"ккал"}
+                other{"{0} ккал"}
+            }
+            kilojoule{
+                dnam{"кДж"}
+                other{"{0} кДж"}
+            }
+            kilowatt-hour{
+                dnam{"кВт⋅сәғ"}
+                other{"{0} кВт⋅сәғ"}
+            }
+            sievert{
+                dnam{"Зв"}
+                other{"{0} Зв"}
+            }
+            therm-us{
+                dnam{"АҠШ термы"}
+                other{"{0} АҠШ термы"}
+            }
+        }
+        force{
+            kilogram-force{
+                dnam{"кгк"}
+                other{"{0} кгк"}
+            }
+            kilowatt-hour-per-100-kilometer{
+                dnam{"кВт⋅сәғ/100 км"}
+                other{"{0} кВт⋅сәғ/100 км"}
+            }
+            newton{
+                dnam{"Н"}
+                other{"{0}Н"}
+            }
+            pound-force{
+                dnam{"фунт-көс"}
+                other{"{0} фунт-көс"}
+            }
+        }
+        frequency{
+            gigahertz{
+                dnam{"ГГц"}
+                other{"{0} ГГц"}
+            }
+            hertz{
+                dnam{"Гц"}
+                other{"{0} Гц"}
+            }
+            kilohertz{
+                dnam{"кГц"}
+                other{"{0} кГц"}
+            }
+            megahertz{
+                dnam{"МГц"}
+                other{"{0} МГц"}
+            }
+        }
+        graphics{
+            em{
+                dnam{"эм"}
+                other{"{0} эм"}
+            }
+            megapixel{
+                dnam{"Мпкс"}
+                other{"{0} Мпкс"}
+            }
+            pixel{
+                dnam{"пкс"}
+                other{"{0} пкс"}
+            }
+            pixel-per-centimeter{
+                dnam{"пкс/см"}
+                other{"{0} пкс/см"}
+            }
+            pixel-per-inch{
+                dnam{"пкс/дюйм"}
+                other{"{0} пкс/дюйм"}
+            }
+        }
+        length{
+            astronomical-unit{
+                dnam{"а. е."}
+                other{"{0} а. б."}
+            }
+            centimeter{
+                dnam{"см"}
+                other{"{0} см"}
+                per{"{0}/см"}
+            }
+            decimeter{
+                dnam{"дм"}
+                other{"{0} дм"}
+            }
+            earth-radius{
+                dnam{"ер радиусы"}
+            }
+            fathom{
+                dnam{"саж."}
+            }
+            foot{
+                dnam{"фут"}
+                other{"{0} фут"}
+                per{"{0}/фут"}
+            }
+            furlong{
+                dnam{"фрл"}
+                other{"{0} фрл"}
+            }
+            inch{
+                dnam{"дюйм"}
+                other{"{0} дюйм"}
+                per{"{0}/дюйм"}
+            }
+            jo-jp{
+                dnam{"джо [JP]"}
+                other{"{0} jo [JP]"}
+            }
+            ken{
+                dnam{"кен [JP]"}
+            }
+            kilometer{
+                dnam{"км"}
+                other{"{0} км"}
+                per{"{0}/км"}
+            }
+            light-year{
+                dnam{"яҡт. й."}
+                other{"{0} яҡт. й."}
+            }
+            meter{
+                dnam{"м"}
+                other{"{0} м"}
+                per{"{0}/м"}
+            }
+            micrometer{
+                dnam{"мкм"}
+                other{"{0} мкм"}
+            }
+            mile{
+                dnam{"миль"}
+                other{"{0} миля"}
+            }
+            mile-scandinavian{
+                dnam{"ск. ми"}
+                other{"{0} ск. ми"}
+            }
+            millimeter{
+                dnam{"мм"}
+                other{"{0} мм"}
+            }
+            nanometer{
+                dnam{"нм"}
+                other{"{0} нм"}
+            }
+            nautical-mile{
+                dnam{"диңгеҙ миле"}
+                other{"{0} диңгеҙ миле"}
+            }
+            parsec{
+                dnam{"пк"}
+                other{"{0} пк"}
+            }
+            picometer{
+                dnam{"пм"}
+                other{"{0} пм"}
+            }
+            point{
+                dnam{"пкт"}
+                other{"{0} пкт"}
+            }
+            rin{
+                dnam{"рин [JP]"}
+            }
+            rod{
+                dnam{"род"}
+            }
+            shaku-cloth{
+                dnam{"шаку [туҡыма, JP]"}
+            }
+            shaku-length{
+                dnam{"шаку [JP]"}
+            }
+            solar-radius{
+                dnam{"ҡояш радиустары"}
+            }
+            sun{
+                dnam{"сун [JP]"}
+            }
+            yard{
+                dnam{"ярд"}
+                other{"{0} ярд"}
+            }
+        }
+        light{
+            candela{
+                dnam{"кд"}
+                other{"{0}кд"}
+            }
+            lumen{
+                dnam{"лм"}
+                other{"{0}лм"}
+            }
+            lux{
+                dnam{"лк"}
+                other{"{0}лк"}
+            }
+            solar-luminosity{
+                dnam{"ҡояш яҡтылыҡтары"}
+            }
+        }
+        magnetic{
+            tesla{
+                dnam{"Тл"}
+                other{"{0} Тл"}
+            }
+            weber{
+                dnam{"Вб"}
+                other{"{0} Вб"}
+            }
+        }
+        mass{
+            carat{
+                dnam{"кар"}
+                other{"{0} карат"}
+            }
+            dalton{
+                dnam{"дальтон"}
+                other{"{0} Да"}
+            }
+            earth-mass{
+                dnam{"Ер массалары"}
+                other{"{0}M⊕"}
+            }
+            fun{
+                dnam{"фун [JP]"}
+            }
+            grain{
+                dnam{"гран"}
+                other{"{0} гран"}
+            }
+            gram{
+                dnam{"г"}
+                other{"{0} г"}
+                per{"{0}/г"}
+            }
+            kilogram{
+                dnam{"кг"}
+                other{"{0} кг"}
+                per{"{0}/кг"}
+            }
+            microgram{
+                dnam{"мкг"}
+                other{"{0} мкг"}
+            }
+            milligram{
+                dnam{"мг"}
+                other{"{0} мг"}
+            }
+            ounce{
+                dnam{"унц."}
+                other{"{0} унция"}
+                per{"{0}/унц."}
+            }
+            ounce-troy{
+                dnam{"тр. унц."}
+                other{"{0} тр. унц."}
+            }
+            pound{
+                dnam{"фнт"}
+                other{"{0} фнт"}
+                per{"{0}/фнт"}
+            }
+            slug{
+                dnam{"слаг"}
+                other{"{0} слаг"}
+            }
+            solar-mass{
+                dnam{"ҡояш массалары"}
+                other{"{0}M☉"}
+            }
+            stone{
+                dnam{"стн"}
+                other{"{0} стоун"}
+            }
+            ton{
+                dnam{"т"}
+                other{"{0} амер. тонна"}
+            }
+            tonne{
+                dnam{"т"}
+                other{"{0} т"}
+            }
+        }
+        power{
+            gigawatt{
+                dnam{"ГВт"}
+                other{"{0} ГВт"}
+            }
+            horsepower{
+                dnam{"ат көсө"}
+                other{"{0} ат көсө"}
+            }
+            kilowatt{
+                dnam{"кВт"}
+                other{"{0} кВт"}
+            }
+            megawatt{
+                dnam{"МВт"}
+                other{"{0} МВт"}
+            }
+            milliwatt{
+                dnam{"мВт"}
+                other{"{0} мВт"}
+            }
+            watt{
+                dnam{"Вт"}
+                other{"{0} Вт"}
+            }
+        }
+        pressure{
+            atmosphere{
+                dnam{"атм"}
+                other{"{0} атм"}
+            }
+            bar{
+                dnam{"бар"}
+                other{"{0} бар"}
+            }
+            gasoline-energy-density{
+                dnam{"бензин эквиваленты"}
+                other{"{0} газ эквиваленты"}
+            }
+            hectopascal{
+                dnam{"гПа"}
+                other{"{0} гПа"}
+            }
+            inch-ofhg{
+                dnam{"тер. бағ. д."}
+                other{"{0} тер. бағ. д."}
+            }
+            kilopascal{
+                dnam{"кПа"}
+                other{"{0} кПа"}
+            }
+            megapascal{
+                dnam{"МПа"}
+                other{"{0} МПа"}
+            }
+            millibar{
+                dnam{"мбар"}
+                other{"{0} мбар"}
+            }
+            millimeter-ofhg{
+                dnam{"тер. бағ. мм"}
+                other{"{0} тер. бағ. мм"}
+            }
+            ofhg{
+                dnam{"тер. бағ."}
+                other{"{0} тер. бағ."}
+            }
+            pascal{
+                dnam{"Па"}
+                other{"{0} Па"}
+            }
+            pound-force-per-square-inch{
+                dnam{"ф/дюйм²"}
+                other{"{0} ф/дюйм²"}
+            }
+        }
+        speed{
+            beaufort{
+                dnam{"Бфт"}
+                other{"{0} Бфт"}
+            }
+            kilometer-per-hour{
+                dnam{"км/сәғ"}
+                other{"{0} км/сәғ"}
+            }
+            knot{
+                dnam{"төйөн"}
+                other{"{0} төйөн"}
+            }
+            light-speed{
+                dnam{"яҡтылыҡ"}
+                other{"{0} яҡтылыҡ"}
+            }
+            meter-per-second{
+                dnam{"м/с"}
+                other{"{0} м/с"}
+            }
+            mile-per-hour{
+                dnam{"ми/сәғ."}
+                other{"{0} ми/сәғ"}
+            }
+        }
+        temperature{
+            celsius{
+                other{"{0} °C"}
+            }
+            generic{
+                dnam{"градустар"}
+            }
+            kelvin{
+                dnam{"К"}
+                other{"{0} К"}
+            }
+        }
+        torque{
+            newton-meter{
+                dnam{"Н⋅м"}
+                other{"{0}Н⋅м"}
+            }
+            pound-force-foot{
+                dnam{"фунт-фут"}
+                other{"{0} фунт-фут"}
+            }
+        }
+        volume{
+            acre-foot{
+                dnam{"акр-фут"}
+                other{"{0} акрофут"}
+            }
+            barrel{
+                dnam{"барр."}
+                other{"{0} баррель"}
+            }
+            bushel{
+                dnam{"буш."}
+                other{"{0} бушель"}
+            }
+            centiliter{
+                dnam{"сл"}
+                other{"{0} сл"}
+            }
+            cubic-centimeter{
+                dnam{"см³"}
+                other{"{0} см³"}
+                per{"{0}/см³"}
+            }
+            cubic-foot{
+                dnam{"фут³"}
+                other{"{0} фут³"}
+            }
+            cubic-inch{
+                dnam{"дюйм³"}
+                other{"{0} дюйм³"}
+            }
+            cubic-kilometer{
+                dnam{"км³"}
+                other{"{0} км³"}
+            }
+            cubic-meter{
+                dnam{"м³"}
+                other{"{0} м³"}
+                per{"{0}/м³"}
+            }
+            cubic-mile{
+                dnam{"миль³"}
+                other{"{0} миль³"}
+            }
+            cubic-yard{
+                dnam{"ярд³"}
+                other{"{0} ярд³"}
+            }
+            cup{
+                dnam{"сынаяҡ"}
+                other{"{0} сынаяҡ"}
+            }
+            cup-metric{
+                dnam{"м. сынаяҡ"}
+                other{"{0} м. сынаяҡ"}
+            }
+            deciliter{
+                dnam{"дл"}
+                other{"{0} дл"}
+            }
+            dessert-spoon{
+                dnam{"дес. ҡ."}
+                other{"{0} десерт ҡалағы"}
+            }
+            dessert-spoon-imperial{
+                dnam{"империя дес. ҡ."}
+                other{"{0} имп. десерт ҡалағы"}
+            }
+            dram{
+                dnam{"шыйыҡ драхма"}
+                other{"{0} шыйыҡ драхма"}
+            }
+            drop{
+                dnam{"тамсы"}
+                other{"{0} тамсы"}
+            }
+            fluid-ounce{
+                dnam{"шыйыҡ унция"}
+                other{"{0} шыйыҡ унция"}
+            }
+            fluid-ounce-imperial{
+                dnam{"имп. ш. унцияһы"}
+                other{"{0} имп. ш. унция"}
+            }
+            fluid-ounce-metric{
+                dnam{"м.ш.у."}
+                other{"{0} м.ш.у."}
+            }
+            gallon{
+                dnam{"гал."}
+                other{"{0} галлон"}
+                per{"{0}/галлон"}
+            }
+            gallon-imperial{
+                dnam{"имп. галл."}
+                other{"{0} имп. галл."}
+                per{"{0}/имп. галл."}
+            }
+            hectoliter{
+                dnam{"гл"}
+                other{"{0} гл"}
+            }
+            jigger{
+                dnam{"джиггер"}
+                other{"{0} джиггер"}
+            }
+            koku{
+                dnam{"коку [JP]"}
+            }
+            kosaji{
+                dnam{"косажи [JP]"}
+            }
+            liter{
+                dnam{"л"}
+                other{"{0} л"}
+                per{"{0}/л"}
+            }
+            megaliter{
+                dnam{"Мл"}
+                other{"{0} Мл"}
+            }
+            milliliter{
+                dnam{"мл"}
+                other{"{0} мл"}
+            }
+            osaji{
+                dnam{"осажи [JP]"}
+            }
+            pinch{
+                dnam{"семтем"}
+                other{"{0} семтем"}
+            }
+            pint{
+                dnam{"пинт."}
+                other{"{0} пинта"}
+            }
+            pint-metric{
+                dnam{"мпт"}
+                other{"{0} мпт"}
+            }
+            quart{
+                dnam{"кварт."}
+                other{"{0} кварта"}
+            }
+            quart-imperial{
+                dnam{"имп. кварта"}
+                other{"{0} имп. кварта"}
+            }
+            sai{
+                dnam{"сай [JP]"}
+            }
+            shaku{
+                dnam{"шаку [күләм, JP]"}
+            }
+            tablespoon{
+                dnam{"аш ҡ."}
+                other{"{0} аш ҡалағы"}
+            }
+            teaspoon{
+                dnam{"сәй ҡ."}
+                other{"{0} сәй ҡалағы"}
+            }
+            to-jp{
+                dnam{"то [JP]"}
+            }
+        }
+    }
+    unitsShort{
+        acceleration{
+            g-force{
+                dnam{"g-көс"}
+            }
+            meter-per-square-second{
+                dnam{"м/с²"}
+                other{"{0} м/с²"}
+            }
+        }
+        angle{
+            arc-minute{
+                dnam{"мин"}
+            }
+            arc-second{
+                dnam{"сек"}
+            }
+            degree{
+                dnam{"градустар"}
+            }
+            radian{
+                dnam{"радиан"}
+                other{"{0} рад"}
+            }
+            revolution{
+                dnam{"әйләнеш"}
+                other{"{0} әйләнеш"}
+            }
+            steradian{
+                dnam{"ср"}
+                other{"{0} ср"}
+            }
+        }
+        area{
+            acre{
+                dnam{"акр"}
+                other{"{0} акр"}
+            }
+            dunam{
+                dnam{"дунамдар"}
+                other{"{0} дунам"}
+            }
+            hectare{
+                dnam{"гектарҙар"}
+                other{"{0} гектар"}
+            }
+            square-centimeter{
+                dnam{"см²"}
+                other{"{0} см²"}
+                per{"{0}/см²"}
+            }
+            square-foot{
+                dnam{"фут²"}
+                other{"{0} фут²"}
+            }
+            square-inch{
+                dnam{"дюйм²"}
+                other{"{0} дюйм²"}
+                per{"{0}/дюйм²"}
+            }
+            square-kilometer{
+                dnam{"км²"}
+                other{"{0} км²"}
+                per{"{0}/км²"}
+            }
+            square-meter{
+                dnam{"м²"}
+                other{"{0} м²"}
+                per{"{0}/м²"}
+            }
+            square-mile{
+                dnam{"кв. милдәр"}
+                other{"{0} кв. миль"}
+                per{"{0}/ми²"}
+            }
+            square-yard{
+                dnam{"ярд²"}
+                other{"{0} ярд²"}
+            }
+        }
+        compound{
+            1024p1{"Ки{0}"}
+            1024p2{"Ми{0}"}
+            1024p3{"Ги{0}"}
+            1024p4{"Ти{0}"}
+            1024p5{"Пи{0}"}
+            1024p6{"Эи{0}"}
+            1024p7{"Зи{0}"}
+            1024p8{"Йи{0}"}
+            10p-1{"д{0}"}
+            10p-12{"п{0}"}
+            10p-15{"ф{0}"}
+            10p-18{"а{0}"}
+            10p-2{"с{0}"}
+            10p-21{"з{0}"}
+            10p-24{"и{0}"}
+            10p-27{"р{0}"}
+            10p-3{"м{0}"}
+            10p-30{"кв{0}"}
+            10p-6{"мк{0}"}
+            10p-9{"н{0}"}
+            10p1{"да{0}"}
+            10p12{"Т{0}"}
+            10p15{"П{0}"}
+            10p18{"Э{0}"}
+            10p2{"г{0}"}
+            10p21{"З{0}"}
+            10p24{"И{0}"}
+            10p27{"Р{0}"}
+            10p3{"к{0}"}
+            10p30{"Кв{0}"}
+            10p6{"М{0}"}
+            10p9{"Г{0}"}
+        }
+        concentr{
+            item{
+                dnam{"әйбер"}
+                other{"{0} әйбер"}
+            }
+            karat{
+                dnam{"кар"}
+                other{"{0} кар"}
+            }
+            katal{
+                dnam{"кат"}
+                other{"{0} кат"}
+            }
+            milligram-ofglucose-per-deciliter{
+                dnam{"мг/дл"}
+                other{"{0} мг/дл"}
+            }
+            millimole-per-liter{
+                dnam{"ммоль/л"}
+                other{"{0} ммоль/л"}
+            }
+            mole{
+                dnam{"моль"}
+                other{"{0} моль"}
+            }
+            ofglucose{
+                dnam{"глюкоза"}
+            }
+            part{
+                dnam{"өлөш"}
+                other{"{0} өлөш"}
+            }
+            part-per-1e6{
+                dnam{"өлөш/миллион"}
+                other{"{0} өлөш/млн"}
+            }
+            part-per-1e9{
+                dnam{"өлөш/млрд"}
+                other{"{0} өлөш/млрд"}
+            }
+        }
+        consumption{
+            liter-per-100-kilometer{
+                dnam{"л/100 км"}
+                other{"{0} л/100 км"}
+            }
+            liter-per-kilometer{
+                dnam{"л/км"}
+                other{"{0} л/км"}
+            }
+            mile-per-gallon{
+                dnam{"милдәр/галлон"}
+                other{"{0} галлонға миль"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"милдәр/имп. галлон"}
+                other{"{0} миль/имп. гал"}
+            }
+        }
+        coordinate{
+            dnam{"йүнәлеш"}
+            east{"{0} көнсығыш"}
+            north{"{0} төньяҡ"}
+            south{"{0} көньяҡ"}
+            west{"{0} көнбайыш"}
+        }
+        digital{
+            bit{
+                dnam{"бит"}
+                other{"{0} бит"}
+            }
+            byte{
+                dnam{"байт"}
+                other{"{0} Б"}
+            }
+            gigabit{
+                dnam{"Гбит"}
+                other{"{0} Гбит"}
+            }
+            gigabyte{
+                dnam{"ГБ"}
+                other{"{0} ГБ"}
+            }
+            kilobit{
+                dnam{"кбит"}
+                other{"{0} кбит"}
+            }
+            kilobyte{
+                dnam{"кБ"}
+                other{"{0} кБ"}
+            }
+            megabit{
+                dnam{"Мбит"}
+                other{"{0} Мбит"}
+            }
+            megabyte{
+                dnam{"МБ"}
+                other{"{0} МБ"}
+            }
+            petabyte{
+                dnam{"ПБ"}
+                other{"{0} ПБ"}
+            }
+            terabit{
+                dnam{"Тбит"}
+                other{"{0} Тбит"}
+            }
+            terabyte{
+                dnam{"ТБ"}
+                other{"{0} ТБ"}
+            }
+        }
+        duration{
+            century{
+                dnam{"б."}
+                other{"{0} б."}
+            }
+            day{
+                dnam{"көндәр"}
+                other{"{0} көн"}
+                per{"{0}/көн"}
+            }
+            decade{
+                dnam{"йый тиҫт."}
+                other{"{0} йыл тиҫтәһе"}
+            }
+            fortnight{
+                dnam{"фртнт."}
+                other{"{0} фортнайт"}
+            }
+            hour{
+                dnam{"сәғәт"}
+                other{"{0} сәғәт"}
+                per{"{0}/сәғ"}
+            }
+            microsecond{
+                dnam{"мкс"}
+                other{"{0} мкс"}
+            }
+            millisecond{
+                dnam{"мс"}
+                other{"{0} мс"}
+            }
+            minute{
+                dnam{"мин"}
+                other{"{0} мин"}
+                per{"{0}/мин"}
+            }
+            month{
+                dnam{"айҙар"}
+                other{"{0} ай"}
+                per{"{0}/ай"}
+            }
+            nanosecond{
+                dnam{"нс"}
+                other{"{0} нс"}
+            }
+            night{
+                dnam{"төндәр"}
+                other{"{0} төн"}
+                per{"{0}/төн"}
+            }
+            quarter{
+                dnam{"кварт."}
+                other{"{0} кварт."}
+                per{"{0}/кв"}
+            }
+            second{
+                dnam{"сек"}
+                other{"{0} с"}
+                per{"{0}/с"}
+            }
+            week{
+                dnam{"аҙн."}
+                other{"{0} аҙна"}
+                per{"{0}/аҙна"}
+            }
+            year{
+                dnam{"йылдар"}
+                other{"{0} йыл"}
+                per{"{0}/й"}
+            }
+        }
+        electric{
+            ampere{
+                dnam{"А"}
+                other{"{0} А"}
+            }
+            coulomb{
+                dnam{"Кл"}
+                other{"{0} Кл"}
+            }
+            farad{
+                dnam{"Ф"}
+                other{"{0} Ф"}
+            }
+            henry{
+                dnam{"Гн"}
+                other{"{0} Гн"}
+            }
+            milliampere{
+                dnam{"мА"}
+                other{"{0} мА"}
+            }
+            ohm{
+                dnam{"Ом"}
+                other{"{0} Ом"}
+            }
+            siemens{
+                dnam{"См"}
+                other{"{0} См"}
+            }
+            volt{
+                dnam{"В"}
+                other{"{0} В"}
+            }
+        }
+        energy{
+            becquerel{
+                dnam{"Бк"}
+                other{"{0} Бк"}
+            }
+            british-thermal-unit{
+                dnam{"БТЕ"}
+                other{"{0} БТЕ"}
+            }
+            calorie{
+                dnam{"кал"}
+                other{"{0} кал"}
+            }
+            calorie-it{
+                dnam{"халыҡ-ара кал."}
+                other{"{0} х.а.кал."}
+            }
+            electronvolt{
+                dnam{"эВ"}
+                other{"{0} эВ"}
+            }
+            gray{
+                dnam{"Гр"}
+                other{"{0} Гр"}
+            }
+            joule{
+                dnam{"джоуль"}
+                other{"{0} Дж"}
+            }
+            kilocalorie{
+                dnam{"ккал"}
+                other{"{0} ккал"}
+            }
+            kilojoule{
+                dnam{"килоджоуль"}
+                other{"{0} кДж"}
+            }
+            kilowatt-hour{
+                dnam{"кВт⋅сәғ"}
+                other{"{0} кВт⋅сәғ"}
+            }
+            sievert{
+                dnam{"Зв"}
+                other{"{0} Зв"}
+            }
+            therm-us{
+                dnam{"АҠШ термаһы"}
+                other{"{0} АҠШ термы"}
+            }
+        }
+        force{
+            kilogram-force{
+                dnam{"кгк"}
+                other{"{0} кгк"}
+            }
+            kilowatt-hour-per-100-kilometer{
+                dnam{"кВт⋅сәғ/100 км"}
+                other{"{0} кВт⋅сәғ/100 км"}
+            }
+            newton{
+                dnam{"ньютон"}
+                other{"{0} Н"}
+            }
+            pound-force{
+                dnam{"фунт-көс"}
+                other{"{0} фнт-көс"}
+            }
+        }
+        frequency{
+            gigahertz{
+                dnam{"ГГц"}
+                other{"{0} ГГц"}
+            }
+            hertz{
+                dnam{"Гц"}
+                other{"{0} Гц"}
+            }
+            kilohertz{
+                dnam{"кГц"}
+                other{"{0} кГц"}
+            }
+            megahertz{
+                dnam{"МГц"}
+                other{"{0} МГц"}
+            }
+        }
+        graphics{
+            em{
+                dnam{"эм"}
+                other{"{0} эм"}
+            }
+            megapixel{
+                dnam{"Мпкс"}
+                other{"{0} Мпкс"}
+            }
+            pixel{
+                dnam{"пкс"}
+                other{"{0} пкс"}
+            }
+            pixel-per-centimeter{
+                dnam{"пкс/см"}
+                other{"{0} пкс/см"}
+            }
+            pixel-per-inch{
+                dnam{"пкс/дюйм"}
+                other{"{0} пкс/дюйм"}
+            }
+        }
+        length{
+            astronomical-unit{
+                dnam{"а. б."}
+                other{"{0} а. б."}
+            }
+            centimeter{
+                dnam{"см"}
+                other{"{0} см"}
+                per{"{0}/см"}
+            }
+            chain{
+                other{"{0} сылбыр"}
+            }
+            decimeter{
+                dnam{"дм"}
+                other{"{0} дм"}
+            }
+            earth-radius{
+                dnam{"ер радиусы"}
+            }
+            foot{
+                dnam{"фут"}
+                other{"{0} фут"}
+                per{"{0}/фут"}
+            }
+            furlong{
+                dnam{"фурлонг"}
+                other{"{0} фурлонг"}
+            }
+            inch{
+                dnam{"дюйм"}
+                other{"{0} дюйм"}
+                per{"{0}/дюйм"}
+            }
+            kilometer{
+                dnam{"км"}
+                other{"{0} км"}
+                per{"{0}/км"}
+            }
+            light-year{
+                dnam{"яҡтылыҡ йылдары"}
+                other{"{0} яҡт. й."}
+            }
+            meter{
+                dnam{"м"}
+                other{"{0} м"}
+                per{"{0}/м"}
+            }
+            micrometer{
+                dnam{"мкм"}
+                other{"{0} мкм"}
+            }
+            mile{
+                dnam{"милдәр"}
+                other{"{0} миль"}
+            }
+            mile-scandinavian{
+                dnam{"ск. ми"}
+                other{"{0} ск. ми"}
+            }
+            millimeter{
+                dnam{"мм"}
+                other{"{0} мм"}
+            }
+            nanometer{
+                dnam{"нм"}
+                other{"{0} нм"}
+            }
+            nautical-mile{
+                dnam{"диңгеҙ милдәре"}
+                other{"{0} диңгеҙ миле"}
+            }
+            parsec{
+                dnam{"парсек"}
+                other{"{0} пк"}
+            }
+            picometer{
+                dnam{"пм"}
+                other{"{0} пм"}
+            }
+            point{
+                dnam{"пкт"}
+                other{"{0} пкт"}
+            }
+            rod{
+                dnam{"род"}
+                other{"{0} род"}
+            }
+            solar-radius{
+                dnam{"ҡояш радиустары"}
+            }
+            yard{
+                dnam{"ярд"}
+                other{"{0} ярд"}
+            }
+        }
+        light{
+            candela{
+                dnam{"кд"}
+                other{"{0} кд"}
+            }
+            lumen{
+                dnam{"лм"}
+                other{"{0} лм"}
+            }
+            lux{
+                dnam{"лк"}
+                other{"{0} лк"}
+            }
+            solar-luminosity{
+                dnam{"ҡояш яҡтылыҡтары"}
+            }
+        }
+        magnetic{
+            tesla{
+                dnam{"Тл"}
+                other{"{0} Тл"}
+            }
+            weber{
+                dnam{"Вб"}
+                other{"{0} Вб"}
+            }
+        }
+        mass{
+            carat{
+                dnam{"карат"}
+                other{"{0} кар"}
+            }
+            dalton{
+                dnam{"дальтон"}
+                other{"{0} Да"}
+            }
+            earth-mass{
+                dnam{"Ер массалары"}
+            }
+            grain{
+                dnam{"гран"}
+                other{"{0} гран"}
+            }
+            gram{
+                dnam{"грам"}
+                other{"{0} г"}
+                per{"{0}/г"}
+            }
+            kilogram{
+                dnam{"кг"}
+                other{"{0} кг"}
+                per{"{0}/кг"}
+            }
+            microgram{
+                dnam{"мкг"}
+                other{"{0} мкг"}
+            }
+            milligram{
+                dnam{"мг"}
+                other{"{0} мг"}
+            }
+            ounce{
+                dnam{"унц."}
+                other{"{0} унция"}
+                per{"{0}/унц."}
+            }
+            ounce-troy{
+                dnam{"тр. унц."}
+                other{"{0} тр. унц."}
+            }
+            pound{
+                dnam{"фунттар"}
+                other{"{0} фнт"}
+                per{"{0}/фнт"}
+            }
+            slug{
+                dnam{"слаг"}
+                other{"{0} слаг"}
+            }
+            solar-mass{
+                dnam{"ҡояш массалары"}
+            }
+            stone{
+                dnam{"стоун"}
+                other{"{0} стоун"}
+            }
+            ton{
+                dnam{"АҠШ тоннаһы"}
+                other{"{0} амер. т"}
+            }
+            tonne{
+                dnam{"т"}
+                other{"{0} т"}
+            }
+        }
+        power{
+            gigawatt{
+                dnam{"ГВт"}
+                other{"{0} ГВт"}
+            }
+            horsepower{
+                dnam{"ат көсө"}
+                other{"{0} ат көсө"}
+            }
+            kilowatt{
+                dnam{"кВт"}
+                other{"{0} кВт"}
+            }
+            megawatt{
+                dnam{"МВт"}
+                other{"{0} МВт"}
+            }
+            milliwatt{
+                dnam{"мВт"}
+                other{"{0} мВт"}
+            }
+            watt{
+                dnam{"ватттар"}
+                other{"{0} Вт"}
+            }
+        }
+        pressure{
+            atmosphere{
+                dnam{"атм"}
+                other{"{0} атм"}
+            }
+            bar{
+                dnam{"бар"}
+                other{"{0} бар"}
+            }
+            gasoline-energy-density{
+                dnam{"газ эквиваленты"}
+                other{"{0} газ эквиваленты"}
+            }
+            hectopascal{
+                dnam{"гПа"}
+                other{"{0} гПа"}
+            }
+            inch-ofhg{
+                dnam{"тер. бағ. дюймдары"}
+                other{"{0} тер. бағ. д."}
+            }
+            kilopascal{
+                dnam{"кПа"}
+                other{"{0} кПа"}
+            }
+            megapascal{
+                dnam{"МПа"}
+                other{"{0} МПа"}
+            }
+            millibar{
+                dnam{"мбар"}
+                other{"{0} мбар"}
+            }
+            millimeter-ofhg{
+                dnam{"тер. бағ. мм"}
+                other{"{0} тер. бағ. мм"}
+            }
+            ofhg{
+                dnam{"тер. бағ."}
+                other{"{0} тер. бағ."}
+            }
+            pascal{
+                dnam{"Па"}
+                other{"{0} Па"}
+            }
+            pound-force-per-square-inch{
+                dnam{"ф/дюйм²"}
+                other{"{0} ф/дюйм²"}
+            }
+        }
+        speed{
+            beaufort{
+                dnam{"Бфт"}
+                other{"{0} Бфт"}
+            }
+            kilometer-per-hour{
+                dnam{"км/сәғ"}
+                other{"{0} км/сәғ"}
+            }
+            knot{
+                dnam{"төйөн"}
+                other{"{0} төйөн"}
+            }
+            light-speed{
+                dnam{"яҡтылыҡ"}
+                other{"{0} яҡтылыҡ"}
+            }
+            meter-per-second{
+                dnam{"м/с"}
+                other{"{0} м/с"}
+            }
+            mile-per-hour{
+                dnam{"миль/сәғ."}
+                other{"{0} миль/сәғ"}
+            }
+        }
+        temperature{
+            generic{
+                dnam{"градустар"}
+            }
+            kelvin{
+                dnam{"К"}
+                other{"{0} К"}
+            }
+        }
+        torque{
+            newton-meter{
+                dnam{"Н⋅м"}
+                other{"{0} Н⋅м"}
+            }
+            pound-force-foot{
+                dnam{"фунт-фут"}
+                other{"{0} фунт-фут"}
+            }
+        }
+        volume{
+            acre-foot{
+                dnam{"акрофут"}
+                other{"{0} акрофут"}
+            }
+            barrel{
+                dnam{"баррель"}
+                other{"{0} барр."}
+            }
+            bushel{
+                dnam{"бушель"}
+                other{"{0} буш."}
+            }
+            centiliter{
+                dnam{"сл"}
+                other{"{0} сл"}
+            }
+            cubic-centimeter{
+                dnam{"см³"}
+                other{"{0} см³"}
+                per{"{0}/см³"}
+            }
+            cubic-foot{
+                dnam{"фут³"}
+                other{"{0} фут³"}
+            }
+            cubic-inch{
+                dnam{"дюйм³"}
+                other{"{0} дюйм³"}
+            }
+            cubic-kilometer{
+                dnam{"км³"}
+                other{"{0} км³"}
+            }
+            cubic-meter{
+                dnam{"м³"}
+                other{"{0} м³"}
+                per{"{0}/м³"}
+            }
+            cubic-mile{
+                dnam{"миль³"}
+                other{"{0} миль³"}
+            }
+            cubic-yard{
+                dnam{"ярд³"}
+                other{"{0} ярд³"}
+            }
+            cup{
+                dnam{"сынаяҡ"}
+                other{"{0} сынаяҡ"}
+            }
+            cup-metric{
+                dnam{"м. сынаяҡтар"}
+                other{"{0} м. сынаяҡ"}
+            }
+            deciliter{
+                dnam{"дл"}
+                other{"{0} дл"}
+            }
+            dessert-spoon{
+                dnam{"десерт ҡалағы"}
+                other{"{0} десерт ҡалағы"}
+            }
+            dessert-spoon-imperial{
+                dnam{"имп. десерт ҡалағы"}
+                other{"{0} имп. десерт ҡалағы"}
+            }
+            dram{
+                dnam{"драхмалар"}
+                other{"{0} драхма"}
+            }
+            drop{
+                dnam{"тамсы"}
+                other{"{0} тамсы"}
+            }
+            fluid-ounce{
+                dnam{"шыйыҡ унциялар"}
+                other{"{0} шыйыҡ унция"}
+            }
+            fluid-ounce-imperial{
+                dnam{"империя ш. унциялары"}
+                other{"{0} имп. шыйыҡ унция"}
+            }
+            fluid-ounce-metric{
+                dnam{"м.ш.у."}
+                other{"{0} м.ш.у."}
+            }
+            gallon{
+                dnam{"галлон"}
+                other{"{0} галлон"}
+                per{"{0}/галлон"}
+            }
+            gallon-imperial{
+                dnam{"империя галлондары"}
+                other{"{0} имп. галл."}
+                per{"{0}/имп. галл."}
+            }
+            hectoliter{
+                dnam{"гл"}
+                other{"{0} гл"}
+            }
+            jigger{
+                dnam{"джиггер"}
+                other{"{0} джиггер"}
+            }
+            liter{
+                dnam{"литрҙар"}
+                other{"{0} л"}
+                per{"{0}/л"}
+            }
+            megaliter{
+                dnam{"Мл"}
+                other{"{0} Мл"}
+            }
+            milliliter{
+                dnam{"мл"}
+                other{"{0} мл"}
+            }
+            pinch{
+                dnam{"семтем"}
+                other{"{0} семтем"}
+            }
+            pint{
+                dnam{"пинта"}
+                other{"{0} пинта"}
+            }
+            pint-metric{
+                dnam{"мпт"}
+                other{"{0} мпт"}
+            }
+            quart{
+                dnam{"кварталар"}
+                other{"{0} кварта"}
+            }
+            quart-imperial{
+                dnam{"имп. кварта"}
+                other{"{0} имп. кварт."}
+            }
+            tablespoon{
+                dnam{"аш ҡалағы"}
+                other{"{0} аш ҡалағы"}
+            }
+            teaspoon{
+                dnam{"сәй ҡалағы"}
+                other{"{0} сәй ҡалағы"}
+            }
+        }
+    }
+}

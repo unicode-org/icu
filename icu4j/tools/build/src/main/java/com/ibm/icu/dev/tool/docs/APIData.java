@@ -1,0 +1,176 @@
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+ *******************************************************************************
+ * Copyright (C) 2004-2015, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ */
+
+/* Represent a file of APIInfo records. */
+package com.ibm.icu.dev.tool.docs;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+
+public final class APIData {
+    int version;
+    String name;
+    String base;
+    TreeSet<APIInfo> set;
+
+    static APIData read(BufferedReader br, boolean internal) {
+        try {
+            APIData data = new APIData();
+
+            data.version = Integer.parseInt(APIInfo.readToken(br)); // version
+            if (data.version > APIInfo.VERSION) {
+                throw new IllegalArgumentException(
+                        "data version "
+                                + data.version
+                                + " is newer than current version ("
+                                + APIInfo.VERSION
+                                + ")");
+            }
+            data.name = APIInfo.readToken(br);
+            data.base = APIInfo.readToken(br); // base
+            br.readLine();
+
+            data.set = new TreeSet<>(APIInfo.defaultComparator());
+            for (APIInfo info = new APIInfo(); info.read(br); info = new APIInfo()) {
+                if (internal || !info.isInternal()) {
+                    data.set.add(info);
+                }
+            }
+            // System.out.println("read " + data.set.size() + " record(s)");
+            return data;
+        } catch (IOException e) {
+            RuntimeException re = new RuntimeException("error reading api data");
+            re.initCause(e);
+            throw re;
+        }
+    }
+
+    private static APIData read(InputStream is, boolean internal) throws IOException {
+        try (InputStreamReader isr = new InputStreamReader(is, StandardCharsets.UTF_8);
+                BufferedReader br = new BufferedReader(isr)) {
+            return read(br, internal);
+        }
+    }
+
+    public static APIData read(File file, boolean internal) {
+        String fileName = file.getName();
+        try {
+            if (fileName.endsWith(".zip")) {
+                try (ZipFile zf = new ZipFile(file)) {
+                    Enumeration<? extends ZipEntry> entryEnum = zf.entries();
+                    if (entryEnum.hasMoreElements()) {
+                        ZipEntry entry = entryEnum.nextElement();
+                        // we only handle one!!!
+                        try (InputStream is = zf.getInputStream(entry)) {
+                            return read(is, internal);
+                        }
+                    } else {
+                        throw new IOException("zip file is empty");
+                    }
+                }
+            } else if (fileName.endsWith(".gz")) {
+                try (InputStream fis = new FileInputStream(file);
+                        InputStream is = new GZIPInputStream(fis)) {
+                    return read(is, internal);
+                }
+            } else {
+                try (InputStream is = new FileInputStream(file)) {
+                    return read(is, internal);
+                }
+            }
+        } catch (IOException e) {
+            RuntimeException re =
+                    new RuntimeException("error getting info stream: " + file.getName(), e);
+            throw re;
+        }
+    }
+
+    static APIData read(String fileName, boolean internal) {
+        return read(new File(fileName), internal);
+    }
+
+    private static final String[] stanames = {
+        "draft", "stable", "deprecated", "obsolete", "internal"
+    };
+    private static final String[] catnames = {"classes", "fields", "constructors", "methods"};
+
+    public void printStats(PrintStream ps) {
+        // classes, methods, fields
+        // draft, stable, other
+
+        int[] stats = new int[catnames.length * stanames.length];
+
+        for (APIInfo info : set) {
+            if (info.isPublic() || info.isProtected()) {
+                int sta = info.getVal(APIInfo.STA);
+                int cat = info.getVal(APIInfo.CAT);
+                stats[cat * stanames.length + sta] += 1;
+            }
+        }
+
+        int tt = 0;
+        for (int cat = 0; cat < catnames.length; ++cat) {
+            ps.println(catnames[cat]);
+            int t = 0;
+            for (int sta = 0; sta < stanames.length; ++sta) {
+                int v = stats[cat * stanames.length + sta];
+                t += v;
+                ps.println("   " + stanames[sta] + ": " + v);
+            }
+            tt += t;
+            ps.println("total: " + t);
+            ps.println();
+        }
+        ps.println("total apis: " + tt);
+    }
+
+    public Set<APIInfo> getAPIInfoSet() {
+        return Collections.unmodifiableSet(set);
+    }
+
+    public static void main(String[] args) {
+        PrintStream out = System.out;
+
+        boolean internal = false;
+        String path = "src/com/ibm/icu/dev/tool/docs/";
+
+        String fn = "icu4j52.api3.gz";
+        if (args.length == 0) {
+            args = new String[] {"-file", fn};
+        }
+
+        for (int i = 0; i < args.length; ++i) {
+            String arg = args[i];
+            if (arg.equals("-path:")) {
+                path = args[++i];
+            } else if (arg.equals("-internal:")) {
+                internal = args[++i].toLowerCase().charAt(0) == 't';
+            } else if (arg.equals("-file")) {
+                fn = args[++i];
+
+                File f = new File(path, fn);
+                read(f, internal).printStats(out);
+                out.flush();
+            }
+        }
+    }
+}

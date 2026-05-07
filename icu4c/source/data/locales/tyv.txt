@@ -1,0 +1,416 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+tyv{
+    ExemplarCharacters{"[а б в г д её ж з и й к л м н ң о ө п р с т у ү ф х ц ч ш щ ъ ы ь э ю я]"}
+    ExemplarCharactersIndex{"[А Б В Г Д ЕЁ Ж З И Й К Л М Н Ң О Ө П Р С Т У Ү Ф Х Ц Ч Ш Щ Ъ Ы Ь Э Ю Я]"}
+    ExemplarCharactersPunctuation{
+        "[\\- ‐‑ – — , ; \\: ! ? . … '‘’ \u0022“” « » ( ) \\[ \\] § @ * / \\& # † ‡ ′"
+        " ″]"
+    }
+    NumberElements{
+        latn{
+            symbols{
+                group{" "}
+            }
+        }
+    }
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "y'ч' MMMM d, EEEE",
+                "y'ч' MMMM d",
+                "y'ч' MMM d",
+                "y-MM-dd",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
+            DateTimePatterns%atTime{
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
+            DateTimePatterns%relative{
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
+            availableFormats{
+                EBh{"E, h B"}
+                EBhm{"E, h:mm B"}
+                EBhms{"E, h:mm:ss B"}
+                Eh{"E, h a"}
+                Ehm{"E, h:mm a"}
+                Ehms{"E, h:mm:ss a"}
+                H{"HH'ш'"}
+                Hv{"HH'ш' v"}
+                MMMMW{
+                    other{"MMMM, W 'чедилик'"}
+                }
+                hv{"h a, v"}
+                yMMM{"y'ч' MMM"}
+                yMMMEd{"y'ч' MMM d, E"}
+                yMMMM{"y'ч' MMMM"}
+                yMMMd{"y'ч' MMM d"}
+                yQQQ{"y'ч' QQQ"}
+                yQQQQ{"y'ч' QQQQ"}
+                yw{
+                    other{"Y'ч', w 'чедилик'"}
+                }
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "УХ",
+                        "ПН",
+                        "ВТ",
+                        "СР",
+                        "ЧТ",
+                        "ПТ",
+                        "СБ",
+                    }
+                    narrow{
+                        "У",
+                        "П",
+                        "В",
+                        "С",
+                        "Ч",
+                        "П",
+                        "С",
+                    }
+                    short{
+                        "УХ",
+                        "ПН",
+                        "ВТ",
+                        "СР",
+                        "ЧТ",
+                        "ПТ",
+                        "СБ",
+                    }
+                    wide{
+                        "Улуг-хүн",
+                        "Понедельник",
+                        "Вторник",
+                        "Среда",
+                        "Четверг",
+                        "Пятница",
+                        "Суббота",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "УХ",
+                        "ПН",
+                        "ВТ",
+                        "СР",
+                        "ЧТ",
+                        "ПТ",
+                        "СБ",
+                    }
+                    narrow{
+                        "У",
+                        "П",
+                        "В",
+                        "С",
+                        "Ч",
+                        "П",
+                        "С",
+                    }
+                    short{
+                        "УХ",
+                        "ПН",
+                        "ВТ",
+                        "СР",
+                        "ЧТ",
+                        "ПТ",
+                        "СБ",
+                    }
+                    wide{
+                        "Улуг-хүн",
+                        "Понедельник",
+                        "Вторник",
+                        "Среда",
+                        "Четверг",
+                        "Пятница",
+                        "Суббота",
+                    }
+                }
+            }
+            eras{
+                abbreviated{
+                    0{"БЭЧ"}
+                    1{"БЭ"}
+                }
+                wide{
+                    0{"Христос бертинде"}
+                    1{"Христос төрүмелинден"}
+                }
+                wide%variant{
+                    0{"Бистиң Эрага чедир"}
+                    1{"Бистиң эрада"}
+                }
+            }
+            intervalFormats{
+                Gy{
+                    G{"G y'ч' – G y'ч'"}
+                    y{"G y–y'чч'"}
+                }
+                H{
+                    H{"HH–HH'ш'"}
+                }
+                Hv{
+                    H{"HH–HH'ш' v"}
+                }
+                yMMM{
+                    M{"y'ч' MMM–MMM"}
+                    y{"y'ч' MMM – y'ч' MMM"}
+                }
+                yMMMEd{
+                    M{"y'ч' MMM d, E – MMM d, E"}
+                    d{"y'ч' MMM d, E – MMM d, E"}
+                    y{"y'ч' MMM d, E – y'ч' MMM d, E"}
+                }
+                yMMMM{
+                    M{"y'ч' MMMM–MMMM"}
+                    y{"y'ч' MMMM – y'ч' MMMM"}
+                }
+                yMMMd{
+                    M{"y'ч' MMM d – MMM d"}
+                    d{"y'ч' MMM d–d"}
+                    y{"y'ч' MMM d – y'ч' MMM d"}
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Янв.",
+                        "Февр.",
+                        "Мар.",
+                        "Апр.",
+                        "Май",
+                        "Июн.",
+                        "Июл.",
+                        "Авг.",
+                        "Сент.",
+                        "Окт.",
+                        "Нояб.",
+                        "Дек.",
+                    }
+                    narrow{
+                        "Я",
+                        "Ф",
+                        "М",
+                        "А",
+                        "М",
+                        "И",
+                        "И",
+                        "А",
+                        "С",
+                        "О",
+                        "Н",
+                        "Д",
+                    }
+                    wide{
+                        "Январь",
+                        "Февраль",
+                        "Март",
+                        "Апрель",
+                        "Май",
+                        "Июнь",
+                        "Июль",
+                        "Август",
+                        "Сентябрь",
+                        "Октябрь",
+                        "Ноябрь",
+                        "Декабрь",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "Янв.",
+                        "Февр.",
+                        "Мар.",
+                        "Апр.",
+                        "Май",
+                        "Июн.",
+                        "Июл.",
+                        "Авг.",
+                        "Сент.",
+                        "Окт.",
+                        "Нояб.",
+                        "Дек.",
+                    }
+                    narrow{
+                        "Я",
+                        "Ф",
+                        "М",
+                        "А",
+                        "М",
+                        "И",
+                        "И",
+                        "А",
+                        "С",
+                        "О",
+                        "Н",
+                        "Д",
+                    }
+                    wide{
+                        "Январь",
+                        "Февраль",
+                        "Март",
+                        "Апрель",
+                        "Май",
+                        "Июнь",
+                        "Июль",
+                        "Август",
+                        "Сентябрь",
+                        "Октябрь",
+                        "Ноябрь",
+                        "Декабрь",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "1ги кв.",
+                        "2ги кв.",
+                        "3кү кв.",
+                        "4кү кв.",
+                    }
+                    wide{
+                        "1ги квартал",
+                        "2ги квартал",
+                        "3кү квартал",
+                        "4кү квартал",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "1ги кв.",
+                        "2ги кв.",
+                        "3кү кв.",
+                        "4кү кв.",
+                    }
+                    wide{
+                        "1ги квартал",
+                        "2ги квартал",
+                        "3кү квартал",
+                        "4кү квартал",
+                    }
+                }
+            }
+        }
+    }
+    delimiters{
+        alternateQuotationEnd{"“"}
+        alternateQuotationStart{"„"}
+        quotationEnd{"»"}
+        quotationStart{"«"}
+    }
+    fields{
+        day{
+            dn{"хүн"}
+        }
+        day-narrow{
+            dn{"х."}
+        }
+        day-short{
+            dn{"х."}
+        }
+        dayperiod{
+            dn{"AM/PM"}
+        }
+        era{
+            dn{"эра"}
+        }
+        hour{
+            dn{"шак"}
+        }
+        hour-narrow{
+            dn{"ш."}
+        }
+        hour-short{
+            dn{"ш."}
+        }
+        minute{
+            dn{"минута"}
+        }
+        minute-narrow{
+            dn{"мин"}
+        }
+        minute-short{
+            dn{"мин."}
+        }
+        month{
+            dn{"ай"}
+        }
+        month-narrow{
+            dn{"ай"}
+        }
+        month-short{
+            dn{"ай"}
+        }
+        quarter{
+            dn{"квартал"}
+        }
+        quarter-narrow{
+            dn{"кв."}
+        }
+        quarter-short{
+            dn{"кв."}
+        }
+        second{
+            dn{"секунда"}
+        }
+        second-narrow{
+            dn{"с"}
+        }
+        second-short{
+            dn{"сек."}
+        }
+        week{
+            dn{"чедилик"}
+        }
+        week-narrow{
+            dn{"чед."}
+        }
+        week-short{
+            dn{"чед."}
+        }
+        weekday{
+            dn{"чедилик хүнү"}
+        }
+        year{
+            dn{"чыл"}
+            relative{
+                "-1"{"эрткен чыл"}
+                "0"{"амгы чыл"}
+                "1"{"келир чыл"}
+            }
+        }
+        year-narrow{
+            dn{"ч."}
+        }
+        year-short{
+            dn{"ч."}
+        }
+        zone{
+            dn{"шак куржаа"}
+        }
+    }
+    measurementSystemNames{
+        UK{"Англи"}
+        US{"Американ"}
+        metric{"Метрик"}
+    }
+}

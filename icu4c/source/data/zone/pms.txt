@@ -1,0 +1,13 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+pms{
+    zoneStrings{
+        "meta:GMT"{
+            ls{"Ora dë Greenwich"}
+        }
+        regionFormat{"Ora {0}"}
+        regionFormatDaylight{"Ora legal: {0}"}
+        regionFormatStandard{"Ora stàndar: {0}"}
+    }
+}

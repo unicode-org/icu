@@ -1,0 +1,197 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+tok{
+    Keys{
+        calendar{"nasin tenpo"}
+        cf{"nasin mani"}
+        collation{"nasin nimi"}
+        currency{"mani"}
+        ms{"nasin nanpa pi suli ijo"}
+        numbers{"sitelen nanpa"}
+    }
+    Languages{
+        af{"toki Apikan"}
+        am{"toki Amali"}
+        ar{"toki Alapi"}
+        bn{"toki Panla"}
+        bs{"toki Posuna"}
+        ceb{"toki Supo"}
+        de{"toki Tosi"}
+        el{"toki Elin"}
+        en{"toki Inli"}
+        en_AU{"toki Inli pi ma Oseja"}
+        en_CA{"toki Inli pi ma Kanata"}
+        en_GB{"toki Inli pi ma Juke"}
+        eo{"toki Epelanto"}
+        es{"toki Epanjo"}
+        es_419{"toki Epanjo pi ma Amelika"}
+        es_ES{"toki Epanjo pi ma Epanja"}
+        es_MX{"toki Epanjo pi ma Mesiko"}
+        eu{"toki Esuka"}
+        fa{"toki Pasi"}
+        fa_AF{"toki Pasi pi ma Akan"}
+        fi{"toki Sumi"}
+        fil{"toki Takalo"}
+        fr{"toki Kanse"}
+        fr_CA{"toki Kanse pi ma Kanata"}
+        fy{"toki Lise"}
+        gu{"toki Kusalasi"}
+        he{"toki Iwi"}
+        hi{"toki Insi"}
+        hr{"toki Kowata"}
+        hu{"toki Maja"}
+        ia{"toki Intelinwa"}
+        id{"toki Intonesija"}
+        io{"toki Ito"}
+        it{"toki Italija"}
+        ja{"toki Nijon"}
+        jbo{"toki Losupan"}
+        jv{"toki Sowa"}
+        km{"toki Kame"}
+        ko{"toki Anku"}
+        kw{"toki Kenuwe"}
+        la{"toki Lasina"}
+        mas{"toki Ma"}
+        mi{"toki Majoli"}
+        mr{"toki Malasi"}
+        ms{"toki Melaju"}
+        mul{"toki mute"}
+        my{"toki Mijama"}
+        nan{"toki Pan pi ma seli"}
+        nb{"toki Nosiki lipu"}
+        nl{"toki Netelan"}
+        nn{"toki Nosiki sin"}
+        no{"toki Nosiki"}
+        pl{"toki Posuka"}
+        pt{"toki Potuke"}
+        ru{"toki Lusi"}
+        so{"toki Somali"}
+        sr{"toki Sepi"}
+        ss{"toki Suwasi"}
+        sv{"toki Sensa"}
+        sw{"toki Suwawili"}
+        sw_CD{"toki Suwawili pi ma Konko"}
+        ta{"toki Tami"}
+        te{"toki Teluku"}
+        th{"toki Tawi"}
+        tn{"toki Suwana"}
+        tok{"toki pona"}
+        tr{"toki Tuki"}
+        ts{"toki Sonka"}
+        uk{"toki Ukawina"}
+        ur{"toki Utu"}
+        uz{"toki Opeki"}
+        ve{"toki Wenta"}
+        vi{"toki Wije"}
+        vo{"toki Olapu"}
+        xh{"toki Kosa"}
+        yo{"toki Jolupa"}
+        yue{"toki Ju"}
+        zh{"toki Sonko"}
+        zh_Hans{"toki Sonko pi linja lili"}
+        zh_Hant{"toki Sonko pi linja mute"}
+        zu{"toki Sulu"}
+        zxx{"toki ala"}
+    }
+    Languages%long{
+        zh_Hans{"toki An pi linja lili"}
+        zh_Hant{"toki An pi linja mute"}
+    }
+    Languages%menu{
+        yue{"toki Konton"}
+        zh{"toki Sonko kulupu"}
+    }
+    Scripts{
+        Arab{"sitelen Alapi"}
+        Beng{"sitelen Panla"}
+        Cyrl{"sitelen Kililisa"}
+        Grek{"sitelen Elin"}
+        Gujr{"sitelen Kusalasi"}
+        Hang{"sitelen Anku"}
+        Hani{"sitelen An"}
+        Hans{"linja lili"}
+        Hant{"linja mute"}
+        Hebr{"sitelen Iwi"}
+        Java{"sitelen Sowa"}
+        Jpan{"sitelen Nijon"}
+        Khmr{"sitelen Kame"}
+        Latn{"sitelen Lasina"}
+        Mymr{"sitelen Mijama"}
+        Telu{"sitelen Teluku"}
+        Thai{"sitelen Tawi"}
+        Zinh{"sitelen poka"}
+        Zmth{"sitelen nanpa"}
+        Zsye{"sitelen Emosi"}
+        Zsym{"sitelen ijo"}
+        Zxxx{"sitelen ala"}
+        Zyyy{"sitelen ale"}
+        Zzzz{"sitelen ante"}
+    }
+    Scripts%stand-alone{
+        Hans{"sitelen Sonko pi linja lili"}
+        Hant{"sitelen Sonko pi linja mute"}
+    }
+    Types{
+        calendar{
+            japanese{"nasin tenpo Nijon"}
+        }
+        calendar%core{
+            japanese{"nasin Nijon"}
+        }
+        collation{
+            ducet{"nasin nimi Juniko"}
+            emoji{"nasin nimi Emosi"}
+            pinyin{"nasin nimi Pinin"}
+        }
+        collation%core{
+            ducet{"nasin Juniko"}
+            pinyin{"nasin Pinin"}
+        }
+        em%core{
+            default{"nasin sitelen"}
+            emoji{"nasin sitelen Emosi"}
+            text{"nasin sitelen Emosi ala"}
+        }
+        ms{
+            metric{"nasin nanpa pi kulupu SI"}
+            uksystem{"nasin nanpa pi ma Juke"}
+            ussystem{"nasin nanpa pi ma Mewika"}
+        }
+        ms%core{
+            metric{"nasin SI"}
+            uksystem{"nasin Juke"}
+            ussystem{"nasin Mewika"}
+        }
+        numbers{
+            arab{"nasin nanpa Alapi"}
+            beng{"sitelen nanpa Panla"}
+            grek{"sitelen nanpa Elin"}
+            gujr{"sitelen nanpa Kusalasi"}
+            hanidec{"sitelen nanpa Sonko"}
+            hans{"sitelen nanpa Sonko pi linja lili"}
+            hansfin{"sitelen nanpa mani Sonko pi linja lili"}
+            hant{"sitelen nanpa Sonko pi linja mute"}
+            hantfin{"sitelen nanpa mani Sonko pi linja mute"}
+            hebr{"sitelen nanpa Iwi"}
+            java{"sitelen nanpa Sowa"}
+            jpan{"sitelen nanpa Nijon"}
+            jpanfin{"sitelen nanpa mani Nijon"}
+            knda{"sitelen nanpa Kanata"}
+            latn{"sitelen nanpa Lasina"}
+            mymr{"sitelen nanpa Mijama"}
+            telu{"sitelen nanpa Teluku"}
+            thai{"sitelen nanpa Tawi"}
+            tibt{"sitelen nanpa Po"}
+        }
+    }
+    Variants{
+        FONIPA{"sitelen IPA"}
+        FONUPA{"sitelen UPA"}
+    }
+    codePatterns{
+        language{"toki: {0}"}
+        script{"sitelen: {0}"}
+        territory{"ma: {0}"}
+    }
+}

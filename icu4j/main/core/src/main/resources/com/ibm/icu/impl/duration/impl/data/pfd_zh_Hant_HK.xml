@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+******************************************************************************
+* Copyright (C) 2016 and later: Unicode, Inc. and others.                    *
+* License & terms of use: http://www.unicode.org/copyright.html      *
+******************************************************************************
+******************************************************************************
+* Copyright (C) 2007-2008 International Business Machines Corporation and    *
+* others. All Rights Reserved.                                               *
+******************************************************************************
+-->
+<DataRecord>
+    <pl>NONE</pl>
+    <pluralNameTable>
+        <pluralNameList>
+            <pluralName>年</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>月</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>週</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>天</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>小時</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>分</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>秒</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>毫秒</pluralName>
+        </pluralNameList>
+    </pluralNameTable>
+    <measureList>
+        <measure>Null</measure>
+        <measure>個</measure>
+        <measure>Null</measure>
+        <measure>Null</measure>
+        <measure>Null</measure>
+        <measure>Null</measure>
+        <measure>Null</measure>
+        <measure>Null</measure>
+    </measureList>
+    <rqdSuffixList>
+        <rqdSuffix>Null</rqdSuffix>
+        <rqdSuffix>Null</rqdSuffix>
+        <rqdSuffix>Null</rqdSuffix>
+        <rqdSuffix>Null</rqdSuffix>
+        <rqdSuffix>Null</rqdSuffix>
+        <rqdSuffix>鐘</rqdSuffix>
+        <rqdSuffix>Null</rqdSuffix>
+        <rqdSuffix>Null</rqdSuffix>
+    </rqdSuffixList>
+    <halvesList>
+        <halves>半</halves>
+        <halves>半</halves>
+    </halvesList>
+    <halfPlacementList>
+        <halfPlacement>PREFIX</halfPlacement>
+        <halfPlacement>AFTER_FIRST</halfPlacement>
+    </halfPlacementList>
+    <requiresDigitSeparator>false</requiresDigitSeparator>
+    <countSep></countSep>
+    <numberSystem>DEFAULT</numberSystem>
+    <zero>0</zero>
+    <decimalSep>.</decimalSep>
+    <omitSingularCount>false</omitSingularCount>
+    <omitDualCount>true</omitDualCount>
+    <decimalHandling>DPLURAL</decimalHandling>
+    <fractionHandling>FSINGULAR_PLURAL</fractionHandling>
+    <allowZero>true</allowZero>
+    <weeksAloneOnly>false</weeksAloneOnly>
+    <useMilliseconds>YES</useMilliseconds>
+    <ScopeDataList>
+        <ScopeData>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix>之前</suffix>
+        </ScopeData>
+        <ScopeData>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix>之後</suffix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>少於</prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix>以內</suffix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>即時起</prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix>以內</suffix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>超過</prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>超過</prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix>之前</suffix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>即時起</prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix>之後</suffix>
+        </ScopeData>
+    </ScopeDataList>
+</DataRecord>

@@ -1,0 +1,612 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+kok_Latn{
+    %%Parent{"root"}
+    units{
+        angle{
+            degree{
+                dnam{"onx"}
+                one{"{0} onx"}
+                other{"{0} onx"}
+            }
+        }
+        area{
+            square-centimeter{
+                dnam{"choukon centimiter"}
+                one{"{0} choukon centimiter"}
+                other{"{0} choukon centimiter"}
+                per{"{0} dor choukon centimiter"}
+            }
+            square-foot{
+                dnam{"choukon fut"}
+                one{"{0} choukon fut"}
+                other{"{0} choukon fut"}
+            }
+            square-inch{
+                dnam{"choukon inch"}
+                one{"{0} choukon inch"}
+                other{"{0} choukon inch"}
+                per{"{0} dor choukon inch"}
+            }
+            square-kilometer{
+                dnam{"choukon kilomiter"}
+                one{"{0} choukon kilomiter"}
+                other{"{0} choukon kilomiter"}
+                per{"{0} dor choukon kilomiter"}
+            }
+            square-meter{
+                dnam{"choukon miter"}
+                one{"{0} choukon miter"}
+                other{"{0} choukon miter"}
+                per{"{0} dor choukon miter"}
+            }
+            square-mile{
+                dnam{"choukon mil"}
+                one{"{0} choukon mil"}
+                other{"{0} choukon mil"}
+                per{"{0} dor choukon mil"}
+            }
+            square-yard{
+                dnam{"choukon yard"}
+                one{"{0} choukon yard"}
+                other{"{0} choukon yard"}
+            }
+        }
+        compound{
+            10p-6{"maikro{0}"}
+            per{"{0} dor {1}"}
+            power2{
+                one{
+                    _{
+                        _{"choukon {0}"}
+                    }
+                }
+                other{
+                    _{
+                        _{"choukon {0}"}
+                    }
+                }
+            }
+            power3{
+                one{
+                    _{
+                        _{"ghon {0}"}
+                    }
+                }
+                other{
+                    _{
+                        _{"ghon {0}"}
+                    }
+                }
+            }
+            times{"{0}-{1}"}
+        }
+        coordinate{
+            dnam{"mukhel dixa"}
+            east{"{0} udent"}
+            north{"{0} ut’tor"}
+            south{"{0} dokxin"}
+            west{"{0} Ostont"}
+        }
+        digital{
+            byte{
+                dnam{"bayt"}
+                one{"{0} bayt"}
+                other{"{0} bayt"}
+            }
+            gigabit{
+                one{"{0} gigabit"}
+            }
+            gigabyte{
+                dnam{"gigabayt"}
+                one{"{0} gigabayt"}
+                other{"{0} gigabayt"}
+            }
+            kilobit{
+                one{"{0} kilobit"}
+            }
+            kilobyte{
+                dnam{"kilobayt"}
+                one{"{0} kilobayt"}
+                other{"{0} kilobayt"}
+            }
+            megabit{
+                one{"{0} megabit"}
+            }
+            megabyte{
+                dnam{"megabayt"}
+                one{"{0} megabayt"}
+                other{"{0} megabayt"}
+            }
+            petabyte{
+                dnam{"petabayt"}
+                one{"{0} petabayt"}
+                other{"{0} petabayt"}
+            }
+            terabit{
+                one{"{0} terabit"}
+            }
+            terabyte{
+                dnam{"terabayt"}
+                one{"{0} terabayt"}
+                other{"{0} terabayt"}
+            }
+        }
+        duration{
+            century{
+                dnam{"xekdde"}
+                one{"{0} xekddo"}
+                other{"{0} xekdde"}
+            }
+            day{
+                per{"dor disa {0}"}
+            }
+            decade{
+                dnam{"doskam"}
+                one{"{0} dosok"}
+                other{"{0} doskam"}
+            }
+            fortnight{
+                dnam{"pondros"}
+                one{"{0} pondros"}
+                other{"{0} pondros"}
+            }
+            hour{
+                one{"{0} vor"}
+                other{"{0} voram"}
+                per{"dor vora {0}"}
+            }
+            microsecond{
+                dnam{"maikrosekond"}
+                one{"{0} maikrosekond"}
+                other{"{0} maikrosekond"}
+            }
+            millisecond{
+                dnam{"milisekond"}
+                one{"{0} milisekond"}
+                other{"{0} milisekond"}
+            }
+            minute{
+                dnam{"mintam"}
+                one{"{0} minut"}
+                other{"{0} mintam"}
+                per{"dor minut {0}"}
+            }
+            month{
+                dnam{"mhoine"}
+                one{"{0} mhoino"}
+                other{"{0} mhoine"}
+                per{"dor mhoino {0}"}
+            }
+            nanosecond{
+                dnam{"nanosekond"}
+                one{"{0} nanosekond"}
+                other{"{0} nanosekond"}
+            }
+            night{
+                one{"{0} rat"}
+                other{"{0} rati"}
+                per{"dor rat {0}"}
+            }
+            quarter{
+                dnam{"timhoinalle"}
+                one{"{0} timhoinallem"}
+                other{"{0} timhoinalle"}
+                per{"{0}/timhoinallem"}
+            }
+            second{
+                dnam{"sekond"}
+                one{"{0} sekond"}
+                other{"{0} sekond"}
+                per{"dor sekond {0}"}
+            }
+            week{
+                per{"dor sumanak {0}"}
+            }
+            year{
+                one{"{0} voros"}
+                other{"{0} vorsam"}
+                per{"dor voros {0}"}
+            }
+        }
+        graphics{
+            megapixel{
+                dnam{"mega-chitr-totvam"}
+                one{"{0} mega-chitr-totv"}
+                other{"{0} mega-chitr-totvam"}
+            }
+            pixel{
+                dnam{"chitr-totvam"}
+                one{"{0} chitr-totv"}
+                other{"{0} chitr-totvam"}
+            }
+            pixel-per-centimeter{
+                dnam{"dor centimiterak chitr-totvam"}
+                one{"{0} dor centimiterak chitr-totv"}
+                other{"{0} dor centimiterak chitr-totvam"}
+            }
+            pixel-per-inch{
+                dnam{"dor inchak chitr-totvam"}
+                one{"{0} dor inchak chitr-totv"}
+                other{"{0} dor inchak chitr-totvam"}
+            }
+        }
+        length{
+            centimeter{
+                dnam{"centimiter"}
+                one{"{0} centimiter"}
+                other{"{0} centimiter"}
+                per{"{0} dor centimiter"}
+            }
+            decimeter{
+                dnam{"decimiter"}
+                one{"{0} decimiter"}
+                other{"{0} decimiter"}
+            }
+            kilometer{
+                dnam{"kilomiter"}
+                one{"{0} kilomiter"}
+                other{"{0} kilomiter"}
+                per{"{0} dor kilomiter"}
+            }
+            meter{
+                dnam{"miter"}
+                one{"{0} miter"}
+                other{"{0} miter"}
+                per{"{0} per miter"}
+            }
+            micrometer{
+                dnam{"maikromiter"}
+                one{"{0} maikromiter"}
+                other{"{0} maikromiter"}
+            }
+            mile{
+                dnam{"mil"}
+                one{"{0} mil"}
+                other{"{0} mil"}
+            }
+            millimeter{
+                dnam{"millimiter"}
+                one{"{0} millimiter"}
+                other{"{0} millimiter"}
+            }
+            nanometer{
+                dnam{"nanomiter"}
+                one{"{0} nanomiter"}
+                other{"{0} nanomiter"}
+            }
+            picometer{
+                dnam{"picomiter"}
+                one{"{0} picomiter"}
+                other{"{0} picomiter"}
+            }
+        }
+        pressure{
+            pound-force-per-square-inch{
+                dnam{"paund dor choukon inch"}
+                one{"{0} paund dor choukon inch"}
+                other{"{0} paund dor choukon inch"}
+            }
+        }
+        temperature{
+            celsius{
+                dnam{"onx Celsius"}
+                one{"{0} onx Celsius"}
+                other{"{0} onx Celsius"}
+            }
+            fahrenheit{
+                dnam{"onx Fahrenheit"}
+                one{"{0} onx Fahrenheit"}
+                other{"{0} onx Fahrenheit"}
+            }
+            generic{
+                dnam{"onx tapman"}
+                one{"{0} onx tapman"}
+                other{"{0} onx tapman"}
+            }
+        }
+        volume{
+            cubic-centimeter{
+                dnam{"ghon centimiter"}
+                one{"{0} ghon centimiter"}
+                other{"{0} ghon centimiter"}
+                per{"{0} dor ghon centimiter"}
+            }
+            cubic-foot{
+                dnam{"ghon fut"}
+                one{"{0} ghon fut"}
+                other{"{0} ghon fut"}
+            }
+            cubic-inch{
+                dnam{"ghon inch"}
+                one{"{0} ghon inch"}
+                other{"{0} ghon inch"}
+            }
+            cubic-kilometer{
+                dnam{"ghon kilomiter"}
+                one{"{0} ghon kilomiter"}
+                other{"{0} ghon kilomiter"}
+            }
+            cubic-meter{
+                dnam{"ghon miter"}
+                one{"{0} ghon miter"}
+                other{"{0} ghon miter"}
+                per{"{0} dor ghon miter"}
+            }
+            cubic-mile{
+                dnam{"ghon mil"}
+                one{"{0} ghon mil"}
+                other{"{0} ghon mil"}
+            }
+            cubic-yard{
+                dnam{"ghon yard"}
+                one{"{0} ghon yard"}
+                other{"{0} ghon yard"}
+            }
+        }
+    }
+    unitsNarrow{
+        angle{
+            degree{
+                dnam{"onx"}
+            }
+        }
+        coordinate{
+            dnam{"dixa"}
+            east{"{0}UD"}
+            north{"{0}UT"}
+            south{"{0}DO"}
+            west{"{0}OS"}
+        }
+        digital{
+            bit{
+                one{"{0}bit"}
+                other{"{0}bit"}
+            }
+            byte{
+                dnam{"B"}
+                one{"{0}B"}
+                other{"{0}B"}
+            }
+            gigabyte{
+                dnam{"GBayt"}
+            }
+            kilobyte{
+                dnam{"kBayt"}
+            }
+            megabyte{
+                dnam{"MBayt"}
+            }
+            petabyte{
+                dnam{"PBayt"}
+            }
+            terabyte{
+                dnam{"TBayt"}
+            }
+        }
+        duration{
+            century{
+                one{"{0}x"}
+                other{"{0}x"}
+            }
+            day{
+                dnam{"d"}
+                one{"{0}d"}
+                other{"{0}d"}
+                per{"{0}/d"}
+            }
+            decade{
+                one{"{0}dos"}
+                other{"{0}dos"}
+            }
+            fortnight{
+                dnam{"pondr"}
+                one{"{0} pondr"}
+                other{"{0} pondr"}
+            }
+            hour{
+                dnam{"vor"}
+                one{"{0}vor"}
+                other{"{0}vor"}
+            }
+            microsecond{
+                one{"{0}μsek"}
+                other{"{0}μsek"}
+            }
+            millisecond{
+                one{"{0}msek"}
+                other{"{0}msek"}
+            }
+            minute{
+                one{"{0}min"}
+                other{"{0}min"}
+            }
+            month{
+                one{"{0}mho"}
+                other{"{0}mho"}
+            }
+            nanosecond{
+                dnam{"nsek"}
+                one{"{0}nsek"}
+                other{"{0}nsek"}
+            }
+            night{
+                one{"{0}rat"}
+                other{"{0}rati"}
+            }
+            quarter{
+                one{"{0}timho"}
+                other{"{0}timho"}
+            }
+            second{
+                one{"{0}sek"}
+                other{"{0}sek"}
+            }
+            week{
+                dnam{"sum"}
+                one{"{0}sum"}
+                other{"{0}sum"}
+                per{"{0}/sum"}
+            }
+            year{
+                one{"{0}voros"}
+                other{"{0}vorsam"}
+            }
+        }
+    }
+    unitsShort{
+        angle{
+            degree{
+                dnam{"onx"}
+                one{"{0} onx"}
+                other{"{0} onx"}
+            }
+        }
+        coordinate{
+            dnam{"dixa"}
+            east{"{0} UD"}
+            north{"{0} UT"}
+            south{"{0} DO"}
+            west{"{0} OS"}
+        }
+        digital{
+            byte{
+                dnam{"bayt"}
+                one{"{0} bayt"}
+                other{"{0} bayt"}
+            }
+            gigabit{
+                dnam{"Gbit"}
+            }
+            gigabyte{
+                dnam{"GBayt"}
+            }
+            kilobit{
+                dnam{"kbit"}
+            }
+            kilobyte{
+                dnam{"kBayt"}
+            }
+            megabit{
+                dnam{"Mbit"}
+            }
+            megabyte{
+                dnam{"MBayt"}
+            }
+            petabyte{
+                dnam{"PBayt"}
+            }
+            terabit{
+                dnam{"Tbit"}
+            }
+            terabyte{
+                dnam{"TBayt"}
+            }
+        }
+        duration{
+            century{
+                dnam{"x"}
+                one{"{0} x"}
+                other{"{0} x"}
+            }
+            day{
+                dnam{"dis"}
+                one{"{0} dis"}
+                other{"{0} dis"}
+                per{"{0}/dis"}
+            }
+            decade{
+                dnam{"dos"}
+                one{"{0} dos"}
+                other{"{0} dos"}
+            }
+            fortnight{
+                dnam{"pondr"}
+                one{"{0} pondr"}
+                other{"{0} pondr"}
+            }
+            hour{
+                dnam{"voram"}
+                one{"{0} vor"}
+                other{"{0} vor"}
+                per{"{0}/vor"}
+            }
+            microsecond{
+                dnam{"μsek"}
+                one{"{0} μsek"}
+                other{"{0} μsek"}
+            }
+            millisecond{
+                dnam{"msek"}
+                one{"{0} msek"}
+                other{"{0} msek"}
+            }
+            month{
+                dnam{"mho"}
+                one{"{0} mho"}
+                other{"{0} mho"}
+                per{"{0}/mho"}
+            }
+            nanosecond{
+                dnam{"nanosek"}
+                one{"{0} nsek"}
+                other{"{0} nsek"}
+            }
+            night{
+                dnam{"rati"}
+                one{"{0} rat"}
+                other{"{0} rati"}
+                per{"{0}/rat"}
+            }
+            quarter{
+                dnam{"timho"}
+                one{"{0} timho"}
+                other{"{0} timho"}
+                per{"{0}/timho"}
+            }
+            second{
+                dnam{"sek"}
+                one{"{0} sek"}
+                other{"{0} sek"}
+                per{"{0}/sek"}
+            }
+            week{
+                dnam{"suman"}
+                one{"{0} suman"}
+                other{"{0} suman"}
+                per{"{0}/suman"}
+            }
+            year{
+                dnam{"vorsam"}
+                one{"{0} voros"}
+                other{"{0} vorsam"}
+                per{"{0}/voros"}
+            }
+        }
+        graphics{
+            megapixel{
+                dnam{"mega-chitr-totvam"}
+            }
+            pixel{
+                dnam{"chitr-totvam"}
+            }
+        }
+        length{
+            mile{
+                dnam{"mil"}
+            }
+        }
+        temperature{
+            celsius{
+                dnam{"onx C"}
+            }
+            fahrenheit{
+                dnam{"onx F"}
+            }
+            generic{
+                dnam{"onx tapman"}
+            }
+        }
+    }
+}

@@ -1,0 +1,247 @@
+{
+  "$schema": "https://raw.githubusercontent.com/unicode-org/message-format-wg/main/test/schemas/v0/tests.schema.json",
+  "scenario": "Syntax errors",
+  "description": "Strings that produce syntax errors when parsed.",
+  "defaultTestProperties": {
+    "locale": "en-US",
+    "expErrors": [
+      {
+        "type": "syntax-error"
+      }
+    ]
+  },
+  "tests": [
+    {
+      "src": "."
+    },
+    {
+      "src": "{"
+    },
+    {
+      "src": "}"
+    },
+    {
+      "src": "{}"
+    },
+    {
+      "src": "{{"
+    },
+    {
+      "src": "{{}"
+    },
+    {
+      "src": "{{}}}"
+    },
+    {
+      "src": "{|foo| #markup}"
+    },
+    {
+      "src": "{{missing end brace}"
+    },
+    {
+      "src": "{{missing end braces"
+    },
+    {
+      "src": "{{missing end {$braces"
+    },
+    {
+      "src": "{{extra}} content"
+    },
+    {
+      "src": "empty { } placeholder"
+    },
+    {
+      "src": "missing space {42:func}"
+    },
+    {
+      "src": "missing space {|foo|:func}"
+    },
+    {
+      "src": "missing space {|foo|@bar}"
+    },
+    {
+      "src": "missing space {:func@bar}"
+    },
+    {
+      "src": "missing space {:func @bar@baz}"
+    },
+    {
+      "src": "missing space {:func @bar=42@baz}"
+    },
+    {
+      "src": "missing space {+reserved@bar}"
+    },
+    {
+      "src": "missing space {&private@bar}"
+    },
+    {
+      "src": "bad {:} placeholder"
+    },
+    {
+      "src": "bad {\\u0000placeholder}"
+    },
+    {
+      "src": "no-equal {|42| :number minimumFractionDigits 2}"
+    },
+    {
+      "src": "bad {:placeholder option=}"
+    },
+    {
+      "src": "bad {:placeholder option value}"
+    },
+    {
+      "src": "bad {:placeholder option:value}"
+    },
+    {
+      "src": "bad {:placeholder option}"
+    },
+    {
+      "src": "bad {:placeholder:}"
+    },
+    {
+      "src": "bad {::placeholder}"
+    },
+    {
+      "src": "bad {:placeholder::foo}"
+    },
+    {
+      "src": "bad {:placeholder option:=x}"
+    },
+    {
+      "src": "bad {:placeholder :option=x}"
+    },
+    {
+      "src": "bad {:placeholder option::x=y}"
+    },
+    {
+      "src": "bad {$placeholder option}"
+    },
+    {
+      "src": "bad {:placeholder @attribute=}"
+    },
+    {
+      "src": "bad {:placeholder @attribute=@foo}"
+    },
+    {
+      "src": "bad {:placeholder @attribute=$foo}"
+    },
+    {
+      "src": "{ @misplaced = attribute }"
+    },
+    {
+      "src": "no {placeholder end"
+    },
+    {
+      "src": "no {$placeholder end"
+    },
+    {
+      "src": "no {:placeholder end"
+    },
+    {
+      "src": "no {|placeholder| end"
+    },
+    {
+      "src": "no {|literal} end"
+    },
+    {
+      "src": "no {|literal or placeholder end"
+    },
+    {
+      "src": ".local bar = {|foo|} {{_}}"
+    },
+    {
+      "src": ".local #bar = {|foo|} {{_}}"
+    },
+    {
+      "src": ".local $bar {|foo|} {{_}}"
+    },
+    {
+      "src": ".local $bar = |foo| {{_}}"
+    },
+    { "src": ".match {{foo}}" },
+    { "src": ".match * {{foo}}" },
+    { "src": ".match x * {{foo}}" },
+    { "src": ".match |x| * {{foo}}" },
+    { "src": ".match :x * {{foo}}" },
+    { "src": ".match {$foo} * {{foo}}" },
+    { "src": ".match {#foo} * {{foo}}" },
+    { "src": ".input {$x :x} .match {$x} * {{foo}}" },
+    { "src": ".input {$x :x} .match$x * {{foo}}" },
+    { "src": ".input {$x :x} .match $x* {{foo}}" },
+    { "src": ".input {$x :x} .match $x|x| {{foo}} * {{foo}}" },
+    { "src": ".input {$x :x} .local $y = {y :y} .match $x$y * * {{foo}}" },
+    { "src": ".input {$x :x} .local $y = {y :y} .match $x $y ** {{foo}}" },
+    { "src": ".input {$x :x} .match $x" },
+    { "src": ".input {$x :x} .match $x *" },
+    { "src": ".input {$x :x} .match $x * foo" },
+    { "src": ".input {$x :x} .match $x * {{foo}} extra" },
+    { "src": ".n{a}{{}}" },
+    { "src": "{^}" },
+    { "src": "{!}" },
+    { "src": ".n .{a}{{}}" },
+    { "src": ".n. {a}{{}}" },
+    { "src": ".n.{a}{b}{{}}" },
+    { "src": "{!.}" },
+    { "src": "{! .}" },
+    { "src": "{%}" },
+    { "src": "{*}" },
+    { "src": "{<}" },
+    { "src": "{>}" },
+    { "src": "{?}" },
+    { "src": "{~}" },
+    { "src": "{^.}" },
+    { "src": "{^ .}" },
+    { "src": "{&}" },
+    { "src": "{\ud800}" },
+    { "src": "{\ufdd0}" },
+    { "src": "{\ufffe}" },
+    { "src": "{!.\\{}" },
+    { "src": "{!. \\{}" },
+    { "src": "{!|a|}" },
+    { "src": "foo {&private}" },
+    { "src": "foo {?reserved @a @b=c}" },
+    { "src": ".foo {42} {{bar}}" },
+    { "src": ".foo{42}{{bar}}" },
+    { "src": ".foo |}lit{| {42}{{bar}}" },
+    { "src": ".i {1} {{}}" },
+    { "src": ".l $y = {|bar|} {{}}" },
+    { "src": ".l $x.y = {|bar|} {{}}" },
+    { "src": "hello {|4.2| %number}" },
+    { "src": "hello {|4.2| %n|um|ber}"  },
+    { "src": "hello {|4.2| &num|be|r}"  },
+    { "src": "hello {|4.2| ^num|be|r}"  },
+    { "src": "hello {|4.2| +num|be|r}"  },
+    { "src": "hello {|4.2| ?num|be||r|s}"  },
+    { "src": "hello {|foo| !number}"  },
+    { "src": "hello {|foo| *number}"  },
+    { "src": "hello {?number}"  },
+    { "src": "{<tag}"  },
+    { "src": ".local $bar = {$none ~plural} .match {foo :string}  * {{{$bar}}}"  },
+    { "src": "hello {|4.2| %num\\\\ber}"  },
+    { "src": "hello {|4.2| %num\\{be\\|r}"  },
+    { "src": "hello {|4.2| %num\\\\\\}ber}"  },
+    { "src": "hello {|4.2| !}"  },
+    { "src": "hello {|4.2| %}"  },
+    { "src": "hello {|4.2| *}"  },
+    { "src": "hello {|4.2| ^abc|123||5|\\\\}"  },
+    { "src": "hello {|4.2| ^ abc|123||5|\\\\}"  },
+    { "src": "hello {|4.2| ^ abc|123||5|\\\\ \\|def |3.14||2|}"  },
+    { "src": "hello {|4.2| ? }"  },
+    { "src": "hello {|4.2| %xyzz }"  },
+    { "src": "hello {|4.2| >xyzz   }"  },
+    { "src": "hello {$foo ~xyzz }"  },
+    { "src": "hello {$x   <xyzz   }"  },
+    { "src": "{>xyzz }"  },
+    { "src": "{  !xyzz   }"  },
+    { "src": "{~xyzz }"  },
+    { "src": "{ <xyzz   }"  },
+    { "src": "hello {|4.2| !xy z z }"  },
+    { "src": "hello {|4.2| *num \\\\ b er}"  },
+    { "src": "hello {|4.2| %num \\\\ b |3.14| r    }"  },
+    { "src": "hello {|4.2|    +num xx \\\\ b |3.14| r  }"  },
+    { "src": "hello {$foo    +num x \\\\ abcde |3.14| r  }"  },
+    { "src": "hello {$foo    >num x \\\\ abcde |aaa||3.14||42| r  }"  },
+    { "src": "hello {$foo    >num x \\\\ abcde |aaa||3.14| |42| r  }"  },
+    { "src" : ".input{ $n ~ }{{{$n}}}" }
+  ]
+}

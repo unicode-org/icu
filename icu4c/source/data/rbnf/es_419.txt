@@ -1,0 +1,26 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+es_419{
+    RBNFRules{
+        OrdinalRules{
+            "%digits-ordinal-masculine-adjective:"
+            "-x: \u2212>>;"
+            "0: =#,##0=$(ordinal,one{\u1D49\u02B3}other{\u00BA})$.;"
+            "%digits-ordinal-masculine:"
+            "-x: \u2212>>;"
+            "0: =#,##0=\u00BA.;"
+            "%digits-ordinal-feminine:"
+            "-x: \u2212>>;"
+            "0: =#,##0=\u00AA.;"
+            "%digits-ordinal-masculine-plural:"
+            "-x: \u2212>>;"
+            "0: =#,##0=\u1D52\u02E2.;"
+            "%digits-ordinal-feminine-plural:"
+            "-x: \u2212>>;"
+            "0: =#,##0=\u1D43\u02E2.;"
+            "%digits-ordinal:"
+            "0: =%digits-ordinal-masculine=;"
+        }
+    }
+}

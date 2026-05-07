@@ -1,0 +1,28 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+en_GB{
+    %%Parent{"en_001"}
+    Keys{
+        lw{"Line Breaks Within Words"}
+    }
+    Languages{
+        ff{"Fulah"}
+    }
+    Scripts{
+        Hrkt{"Japanese Syllabaries"}
+    }
+    Types{
+        numbers%core{
+            armnlow{"Armenian Lowercase"}
+            fullwide{"Full-Width"}
+            greklow{"Greek Lowercase"}
+            hansfin{"Simplified Chinese Financial"}
+            hantfin{"Traditional Chinese Financial"}
+            jpanfin{"Japanese Financial"}
+            native{"Native Digits"}
+            roman{"Roman Uppercase"}
+            romanlow{"Roman Lowercase"}
+        }
+    }
+}

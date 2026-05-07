@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+
+Main-Class: com.ibm.icu.dev.tool.localeconverter.XLIFF2ICUConverter
+Name: com/ibm/icu/dev/tool/localeconverter
+Specification-Title: XLIFF to ICU conversion tool
+Specification-Version: 1.1
+Specification-Vendor: Unicode, Inc.
+Implementation-Title: XLIFF to ICU Converter
+Implementation-Version: 1.1.0
+Implementation-Vendor: Unicode, Inc.
+Implementation-Vendor-Id: org.unicode
+Copyright-Info: @COPYRIGHT@
+Sealed: false

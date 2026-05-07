@@ -1,0 +1,18 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+st{
+    Languages{
+        cy{"Sewelsh"}
+        en{"Senyesemane"}
+        st{"Sesotho"}
+    }
+    Scripts{
+        Latn{"Selatine"}
+    }
+    codePatterns{
+        language{"Puo: {0}"}
+        script{"Skripte: {0}"}
+        territory{"Tikoloho: {0}"}
+    }
+}

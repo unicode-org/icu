@@ -1,0 +1,23 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+kok_Latn{
+    %%Parent{"root"}
+    zoneStrings{
+        "Asia:Calcutta"{
+            ec{"Kolkata, Bombaim, Ponnji"}
+        }
+        "Etc:UTC"{
+            ls{"Vixvacho Somonvoyit Vell"}
+        }
+        "Etc:Unknown"{
+            ec{"Onollkhi Zago"}
+        }
+        "meta:GMT"{
+            ls{"Greenwich Promann Vell"}
+        }
+        regionFormat{"{0} Vell"}
+        regionFormatDaylight{"{0} Dis-uzvadd Vachovp Vell"}
+        regionFormatStandard{"{0} Promann Vell"}
+    }
+}

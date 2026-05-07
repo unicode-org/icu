@@ -1,0 +1,424 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+oc{
+    AuxExemplarCharacters{"[ăâåäãā æ ĕêëē ìĭîī ñ ŏôöøō œ ùŭûū ÿ]"}
+    ExemplarCharacters{"[aáà b cç d eéè f g h iíï j k l m n oóò p q r s t uúü v w x y z]"}
+    ExemplarCharactersPunctuation{"[\\- ‐‑ – — , ; \\: ! ? . … ’ \u0022“” « » ( ) \\[ \\] § @ * / \\& # † ‡ ⋅]"}
+    NumberElements{
+        adlm{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        arabext{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        bali{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        beng{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        brah{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        cakm{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        cham{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        deva{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        fullwide{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        gong{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        gonm{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        gujr{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        guru{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        hanidec{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        java{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        kali{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        khmr{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        knda{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        lana{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        lanatham{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        laoo{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        latn{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat{"#,##0.00¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+                percentFormat{"#,##0 %"}
+            }
+            patternsShort{
+                currencyFormat%alphaNextToNumber{
+                    1000{
+                        other{"0K ¤"}
+                    }
+                    10000{
+                        other{"00K ¤"}
+                    }
+                    100000{
+                        other{"000K ¤"}
+                    }
+                    1000000{
+                        other{"0M ¤"}
+                    }
+                    10000000{
+                        other{"00M ¤"}
+                    }
+                    100000000{
+                        other{"000M ¤"}
+                    }
+                    1000000000{
+                        other{"0G ¤"}
+                    }
+                    10000000000{
+                        other{"00G ¤"}
+                    }
+                    100000000000{
+                        other{"000G ¤"}
+                    }
+                    1000000000000{
+                        other{"0T ¤"}
+                    }
+                    10000000000000{
+                        other{"00T ¤"}
+                    }
+                    100000000000000{
+                        other{"000T ¤"}
+                    }
+                }
+            }
+            symbols{
+                decimal{","}
+                group{" "}
+            }
+        }
+        lepc{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        limb{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        mlym{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        mong{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        mtei{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        mymr{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        mymrshan{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        nkoo{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        olck{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        orya{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        osma{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        rohg{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        saur{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        shrd{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        sora{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        sund{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        takr{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        talu{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        tamldec{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        telu{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        thai{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        tibt{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        vaii{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+    }
+    calendar{
+        gregorian{
+            availableFormats{
+                Hm{"HH'h'mm"}
+                Hms{"HH'h'mm ss 'seg'."}
+                Hmsv{"HH'h'mm ss 'seg'. v"}
+                hm{"h'h'mm a"}
+                hms{"h'h'mm:ss a"}
+                yMMMd{"d MMM y"}
+                yMd{"dd/MM/y"}
+            }
+            dayNames{
+                format{
+                    wide{
+                        "dimenge",
+                        "diluns",
+                        "dimars",
+                        "dimècres",
+                        "dijòus",
+                        "divendres",
+                        "dissabte",
+                    }
+                }
+            }
+            monthNames{
+                format{
+                    wide{
+                        "de genièr",
+                        "de febrièr",
+                        "de març",
+                        "d’abril",
+                        "de mai",
+                        "de junh",
+                        "de julhet",
+                        "d’agost",
+                        "de setembre",
+                        "d’octòbre",
+                        "de novembre",
+                        "de decembre",
+                    }
+                }
+            }
+        }
+    }
+    delimiters{
+        alternateQuotationEnd{"»"}
+        alternateQuotationStart{"«"}
+        quotationEnd{"»"}
+        quotationStart{"«"}
+    }
+    measurementSystemNames{
+        UK{"anglosajon"}
+        US{"estadounidenc"}
+    }
+}

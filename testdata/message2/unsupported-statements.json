@@ -1,0 +1,27 @@
+{
+  "scenario": "Reserved statements",
+  "description": "Tests for unsupported statements (now syntax errors)",
+  "defaultTestProperties": {
+    "locale": "en-US",
+    "expErrors": [
+      {
+        "type": "syntax-error"
+      }
+    ]
+  },
+  "tests": [
+    { "src" : ".i {1} {{}}" },
+    { "src" : ".l $y = {|bar|} {{}}" },
+    { "src" : ".l $x.y = {|bar|} {{}}" },
+    { "src": ".matc {-1} {{hello}}" },
+    { "src": ".m {-1} {{hello}}" },
+    { "src": ".n{a}{{}}" },
+    { "src": ".foo {42} {{bar}}" },
+    { "src": ".foo{42}{{bar}}" },
+    { "src": ".foo |}lit{| {42}{{bar}}" },
+    { "src": ".n .{a}{{}}" },
+    { "src": ".n. {a}{{}}" },
+    { "src": ".n.{a}{b}{{}}" }
+  ]
+}
+

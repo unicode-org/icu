@@ -1,0 +1,18 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+scn{
+    durationUnits{
+        hm{"hh:mm"}
+        hms{"hh:mm:ss"}
+        ms{"mm:ss"}
+    }
+    unitsShort{
+        coordinate{
+            dnam{"dirizzioni"}
+            east{"{0}L"}
+            north{"{0}T"}
+            west{"{0}P"}
+        }
+    }
+}

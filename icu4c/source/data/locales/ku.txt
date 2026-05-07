@@ -1,0 +1,2324 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+ku{
+    AuxExemplarCharacters{"[áàăâåäãā æ èĕëē é ìĭïī í ñ óòŏôøō œ ß ŭū úù ÿ]"}
+    ExemplarCharacters{"[a b c ç d e ê f g h i î j k l m n o p q r s ş t u û v w x y z]"}
+    ExemplarCharactersIndex{"[A B C Ç D E Ê F G H I Î J K L M N O P Q R S Ş T U Û V W X Y Z]"}
+    ExemplarCharactersPunctuation{"[\\- ‐‑ – — , ; \\: ! ? . … '‘’ \u0022“” ( ) \\[ \\] § @ * / \\& # † ‡ ′ ″]"}
+    NumberElements{
+        adlm{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        ahom{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        arabext{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        bali{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        beng{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        bhks{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        brah{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        cakm{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        cham{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        deva{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        diak{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        fullwide{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        gara{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        gong{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        gonm{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        gujr{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        gukh{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        guru{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        hanidec{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        hmng{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        hmnp{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        java{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        kali{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        kawi{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        khmr{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        knda{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        krai{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        lana{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        lanatham{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        laoo{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        latn{
+            miscPatterns{
+                atLeast{"⩾{0}"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+                percentFormat{"%#,##0"}
+            }
+            patternsLong{
+                decimalFormat{
+                    1000{
+                        one{"0 hezar"}
+                        other{"0 hezar"}
+                    }
+                    10000{
+                        one{"00 hezar"}
+                        other{"00 hezar"}
+                    }
+                    100000{
+                        one{"000 hezar"}
+                        other{"000 hezar"}
+                    }
+                    1000000{
+                        one{"0 milyon"}
+                        other{"0 milyon"}
+                    }
+                    10000000{
+                        one{"00 milyon"}
+                        other{"00 milyon"}
+                    }
+                    100000000{
+                        one{"000 milyon"}
+                        other{"000 milyon"}
+                    }
+                    1000000000{
+                        one{"0 milyar"}
+                        other{"0 milyar"}
+                    }
+                    10000000000{
+                        one{"00 milyar"}
+                        other{"00 milyar"}
+                    }
+                    100000000000{
+                        one{"000 milyar"}
+                        other{"000 milyar"}
+                    }
+                    1000000000000{
+                        one{"0 trilyon"}
+                        other{"0 trilyon"}
+                    }
+                    10000000000000{
+                        one{"00 trilyon"}
+                        other{"00 trilyon"}
+                    }
+                    100000000000000{
+                        one{"000 trilyon"}
+                        other{"000 trilyon"}
+                    }
+                }
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        one{"0H ¤"}
+                        other{"0H ¤"}
+                    }
+                    10000{
+                        one{"00H ¤"}
+                        other{"00H ¤"}
+                    }
+                    100000{
+                        one{"000H ¤"}
+                        other{"000H ¤"}
+                    }
+                    1000000{
+                        one{"0MN ¤"}
+                        other{"0MN ¤"}
+                    }
+                    10000000{
+                        one{"00MN ¤"}
+                        other{"00MN ¤"}
+                    }
+                    100000000{
+                        one{"000MN ¤"}
+                        other{"000MN ¤"}
+                    }
+                    1000000000{
+                        one{"0MR ¤"}
+                        other{"0MR ¤"}
+                    }
+                    10000000000{
+                        one{"00MR ¤"}
+                        other{"00MR ¤"}
+                    }
+                    100000000000{
+                        one{"000MR ¤"}
+                        other{"000MR ¤"}
+                    }
+                    1000000000000{
+                        one{"0TN ¤"}
+                        other{"0TN ¤"}
+                    }
+                    10000000000000{
+                        one{"00TN ¤"}
+                        other{"00TN ¤"}
+                    }
+                    100000000000000{
+                        one{"000TN ¤"}
+                        other{"000TN ¤"}
+                    }
+                }
+                decimalFormat{
+                    1000{
+                        one{"0H"}
+                        other{"0H"}
+                    }
+                    10000{
+                        one{"00H"}
+                        other{"00H"}
+                    }
+                    100000{
+                        one{"000H"}
+                        other{"000H"}
+                    }
+                    1000000{
+                        one{"0MN"}
+                        other{"0MN"}
+                    }
+                    10000000{
+                        one{"00MN"}
+                        other{"00MN"}
+                    }
+                    100000000{
+                        one{"000MN"}
+                        other{"000MN"}
+                    }
+                    1000000000{
+                        one{"0MR"}
+                        other{"0MR"}
+                    }
+                    10000000000{
+                        one{"00MR"}
+                        other{"00MR"}
+                    }
+                    100000000000{
+                        one{"000MR"}
+                        other{"000MR"}
+                    }
+                    1000000000000{
+                        one{"0TN"}
+                        other{"0TN"}
+                    }
+                    10000000000000{
+                        one{"00TN"}
+                        other{"00TN"}
+                    }
+                    100000000000000{
+                        one{"000TN"}
+                        other{"000TN"}
+                    }
+                }
+            }
+            symbols{
+                decimal{","}
+                group{"."}
+            }
+        }
+        lepc{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        limb{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        mathbold{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        mathdbl{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        mathmono{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        mathsanb{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        mathsans{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        minimalPairs{
+            ordinal{
+                other{"Ji milê rastê yê {0}em bizîvire."}
+            }
+            plural{
+                one{"rojek"}
+                other{"{0} roj"}
+            }
+        }
+        mlym{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        modi{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        mong{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        mroo{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        mtei{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        mymr{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        mymrepka{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        mymrpao{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        mymrshan{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        mymrtlng{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        nagm{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        newa{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        nkoo{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        olck{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        onao{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        orya{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        osma{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        outlined{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        rohg{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        saur{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        segment{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        shrd{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        sind{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        sinh{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        sora{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        sund{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        sunu{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        takr{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        talu{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        tamldec{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        telu{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        thai{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        tibt{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        tirh{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        tnsa{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        tols{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        vaii{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        wara{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+        wcho{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+        }
+    }
+    calendar{
+        buddhist{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "G d'ê' MMMM'a' y'an' EEEE",
+                "G d'ê' MMMM'a' y'an'",
+                "G d'ê' MMM'a' y'an'",
+                "G dd.MM.y",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                GyM{"G MM.y"}
+                GyMEd{"G dd.MM.y, E"}
+                GyMd{"G dd.MM.y"}
+                yyyyMEd{"G d/M/y, E"}
+                yyyyMd{"G d/M/y"}
+            }
+        }
+        coptic{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "G d'ê' MMMM'a' y'an' EEEE",
+                "G d'ê' MMMM'a' y'an'",
+                "G d'ê' MMM'a' y'an'",
+                "G dd.MM.y",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                GyM{"G MM.y"}
+                GyMEd{"G dd.MM.y, E"}
+                GyMMMEd{"G d'ê' MMM'a' y'an', E"}
+                GyMd{"G dd.MM.y"}
+                yyyyM{"G MM.y"}
+                yyyyMEd{"G d.M.y, E"}
+                yyyyMd{"G dd.MM.y"}
+            }
+            intervalFormats{
+                Bhm{
+                    h{"h:mm – h:mm B"}
+                    m{"h:mm – h:mm B"}
+                }
+                Gy{
+                    y{"G y – y"}
+                }
+                GyM{
+                    G{"G MM.y – G MM.y"}
+                    M{"G MM.y – MM.y"}
+                    y{"G MM.y – MM.y"}
+                }
+                GyMEd{
+                    G{"G dd.MM.y, E – G dd.MM.y, E"}
+                    M{"G dd.MM.y, E – dd.MM.y, E"}
+                    d{"G dd.MM.y, E – dd.MM.y, E"}
+                    y{"G dd.MM.y, E – dd.MM.y, E"}
+                }
+                GyMMM{
+                    G{"G MMM y – G MMM y"}
+                    y{"G MMM y – MMM y"}
+                }
+                GyMMMEd{
+                    G{"G d'ê' MMM'a' y'an' E – G d'ê' MMM'a' y'an', E"}
+                }
+                GyMMMd{
+                    d{"G d – d MMM, y"}
+                }
+                GyMd{
+                    G{"G dd.MM.y – G dd.MM.y"}
+                    M{"G dd.MM.y – dd.MM.y"}
+                    d{"G dd.MM.y – dd.MM.y"}
+                    y{"G dd.MM.y – dd.MM.y"}
+                }
+                H{
+                    H{"HH – HH's'"}
+                }
+                Hm{
+                    H{"HH:mm – HH:mm"}
+                    m{"HH:mm – HH:mm"}
+                }
+                Hmv{
+                    H{"HH:mm – HH:mm v"}
+                }
+                Hv{
+                    H{"HH – HH's' v"}
+                }
+                M{
+                    M{"M – M"}
+                }
+                MEd{
+                    M{"dd.MM, E – dd.MM, E"}
+                    d{"dd.MM, E – dd.MM, E"}
+                }
+                MMM{
+                    M{"MMM – MMM"}
+                }
+                d{
+                    d{"d – d"}
+                }
+                h{
+                    h{"h – h a"}
+                }
+                hm{
+                    a{"h:mm a – h:mm a"}
+                    h{"h:mm – h:mm a"}
+                    m{"h:mm – h:mm a"}
+                }
+                hmv{
+                    a{"h:mm a – h:mm a v"}
+                    h{"h:mm – h:mm a v"}
+                    m{"h:mm – h:mm a v"}
+                }
+                hv{
+                    h{"h – h a v"}
+                }
+                y{
+                    y{"G y – y"}
+                }
+                yM{
+                    M{"G MM.y – MM.y"}
+                    y{"G MM.y – MM.y"}
+                }
+                yMEd{
+                    M{"G dd.MM.y, E – dd.MM.y, E"}
+                    d{"G dd.MM.y, E – dd.MM.y, E"}
+                    y{"G dd.MM.y, E – dd.MM.y, E"}
+                }
+                yMMM{
+                    M{"G MMM – MMM y"}
+                    y{"G MMM y – MMM y"}
+                }
+                yMMMEd{
+                    M{"G d MMM, E – d MMM y, E"}
+                    d{"G d MMM, E – d MMM y, E"}
+                    y{"G d MMM y, E – d MMM y, E"}
+                }
+                yMMMM{
+                    M{"MMMM – MMMM y G"}
+                    y{"G MMMM y – MMMM y"}
+                }
+                yMMMd{
+                    M{"G d MMM – d MMM, y"}
+                    d{"G d – d MMM, y"}
+                    y{"G d MMM, y – d MMM, y"}
+                }
+                yMd{
+                    M{"G dd.MM.y – dd.MM.y"}
+                    d{"G dd.MM.y – dd.MM.y"}
+                    y{"G dd.MM.y – dd.MM.y"}
+                }
+            }
+        }
+        ethiopic{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "G d'ê' MMMM'a' y'an' EEEE",
+                "G d'ê' MMMM'a' y'an'",
+                "G d'ê' MMM'a' y'an'",
+                "G dd.MM.y",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                GyM{"G MM.y"}
+                GyMEd{"G dd.MM.y, E"}
+                GyMMMEd{"G d'ê' MMM'a' y'an', E"}
+                GyMd{"G dd.MM.y"}
+                yyyyM{"G MM.y"}
+                yyyyMEd{"G d.M.y, E"}
+                yyyyMd{"G dd.MM.y"}
+            }
+            intervalFormats{
+                Bhm{
+                    h{"h:mm – h:mm B"}
+                    m{"h:mm – h:mm B"}
+                }
+                Gy{
+                    y{"G y – y"}
+                }
+                GyM{
+                    G{"G MM.y – G MM.y"}
+                    M{"G MM.y – MM.y"}
+                    y{"G MM.y – MM.y"}
+                }
+                GyMEd{
+                    G{"G dd.MM.y, E – G dd.MM.y, E"}
+                    M{"G dd.MM.y, E – dd.MM.y, E"}
+                    d{"G dd.MM.y, E – dd.MM.y, E"}
+                    y{"G dd.MM.y, E – dd.MM.y, E"}
+                }
+                GyMMM{
+                    G{"G MMM y – G MMM y"}
+                    y{"G MMM y – MMM y"}
+                }
+                GyMMMEd{
+                    G{"G d'ê' MMM'a' y'an' E – G d'ê' MMM'a' y'an', E"}
+                }
+                GyMMMd{
+                    d{"G d – d MMM, y"}
+                }
+                GyMd{
+                    G{"G dd.MM.y – G dd.MM.y"}
+                    M{"G dd.MM.y – dd.MM.y"}
+                    d{"G dd.MM.y – dd.MM.y"}
+                    y{"G dd.MM.y – dd.MM.y"}
+                }
+                H{
+                    H{"HH – HH's'"}
+                }
+                Hm{
+                    H{"HH:mm – HH:mm"}
+                    m{"HH:mm – HH:mm"}
+                }
+                Hmv{
+                    H{"HH:mm – HH:mm v"}
+                }
+                Hv{
+                    H{"HH – HH's' v"}
+                }
+                M{
+                    M{"M – M"}
+                }
+                MEd{
+                    M{"dd.MM, E – dd.MM, E"}
+                    d{"dd.MM, E – dd.MM, E"}
+                }
+                MMM{
+                    M{"MMM – MMM"}
+                }
+                d{
+                    d{"d – d"}
+                }
+                h{
+                    h{"h – h a"}
+                }
+                hm{
+                    a{"h:mm a – h:mm a"}
+                    h{"h:mm – h:mm a"}
+                    m{"h:mm – h:mm a"}
+                }
+                hmv{
+                    a{"h:mm a – h:mm a v"}
+                    h{"h:mm – h:mm a v"}
+                    m{"h:mm – h:mm a v"}
+                }
+                hv{
+                    h{"h – h a v"}
+                }
+                y{
+                    y{"G y – y"}
+                }
+                yM{
+                    M{"G MM.y – MM.y"}
+                    y{"G MM.y – MM.y"}
+                }
+                yMEd{
+                    M{"G dd.MM.y, E – dd.MM.y, E"}
+                    d{"G dd.MM.y, E – dd.MM.y, E"}
+                    y{"G dd.MM.y, E – dd.MM.y, E"}
+                }
+                yMMM{
+                    M{"G MMM – MMM y"}
+                    y{"G MMM y – MMM y"}
+                }
+                yMMMEd{
+                    M{"G d MMM, E – d MMM y, E"}
+                    d{"G d MMM, E – d MMM y, E"}
+                    y{"G d MMM y, E – d MMM y, E"}
+                }
+                yMMMM{
+                    M{"MMMM – MMMM y G"}
+                    y{"G MMMM y – MMMM y"}
+                }
+                yMMMd{
+                    M{"G d MMM – d MMM, y"}
+                    d{"G d – d MMM, y"}
+                    y{"G d MMM, y – d MMM, y"}
+                }
+                yMd{
+                    M{"G dd.MM.y – dd.MM.y"}
+                    d{"G dd.MM.y – dd.MM.y"}
+                    y{"G dd.MM.y – dd.MM.y"}
+                }
+            }
+        }
+        generic{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "G d'ê' MMMM'a' y'an' EEEE",
+                "G d'ê' MMMM'a' y'an'",
+                "G d'ê' MMM'a' y'an'",
+                "G dd.MM.y",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                EHm{"HH:mm, E"}
+                EHms{"HH:mm:ss, E"}
+                Eh{"h a, E"}
+                Ehm{"h:mm a, E"}
+                Ehms{"h:mm:ss a, E"}
+                GyM{"G MM.y"}
+                GyMEd{"G dd.MM.y, E"}
+                GyMMM{"G MMM'a' y'an'"}
+                GyMMMEd{"G d'ê' MMM'a' y'an', E"}
+                GyMMMd{"G d'ê' MMM'a' y'an'"}
+                GyMd{"G dd.MM.y"}
+                H{"HH's'"}
+                MEd{"dd/MM, E"}
+                MMMEd{"d'ê' MMM'ê', E"}
+                MMMMd{"d'ê' MMMM'ê'"}
+                MMMd{"d'ê' MMM'ê'"}
+                Md{"dd/MM"}
+                hm{"h:mm a"}
+                hms{"h:mm:ss a"}
+                yyyyM{"G MM.y"}
+                yyyyMEd{"G d.M.y, E"}
+                yyyyMMM{"G MMM'a' y'an'"}
+                yyyyMMMEd{"G d'ê' MMM'a' y'an' E"}
+                yyyyMMMM{"G MMMM'a' y'an'"}
+                yyyyMMMd{"G d'ê' MMM'a' y'an'"}
+                yyyyMd{"G dd.MM.y"}
+                yyyyQQQ{"G y/QQQ"}
+                yyyyQQQQ{"G y/QQQQ"}
+            }
+            intervalFormats{
+                Bhm{
+                    h{"h:mm – h:mm B"}
+                    m{"h:mm – h:mm B"}
+                }
+                Gy{
+                    y{"G y – y"}
+                }
+                GyM{
+                    G{"G MM.y – G MM.y"}
+                    M{"G MM.y – MM.y"}
+                    y{"G MM.y – MM.y"}
+                }
+                GyMEd{
+                    G{"G dd.MM.y, E – G dd.MM.y, E"}
+                    M{"G dd.MM.y, E – dd.MM.y, E"}
+                    d{"G dd.MM.y, E – dd.MM.y, E"}
+                    y{"G dd.MM.y, E – dd.MM.y, E"}
+                }
+                GyMMM{
+                    G{"G MMM y – G MMM y"}
+                    M{"G MMM–MMM y"}
+                    y{"G MMM y – MMM y"}
+                }
+                GyMMMEd{
+                    G{"G d'ê' MMM'a' y'an' E – G d'ê' MMM'a' y'an', E"}
+                    M{"G d'ê' MMM'ê' E – d'ê' MMM'ê' E y"}
+                    d{"G d'ê' MMM'ê' E – d'ê' MMM'ê' E y"}
+                    y{"G d'ê' MMM'a' y'an' E – d'ê' MMM'a' y'an' E"}
+                }
+                GyMMMd{
+                    G{"G d'ê' MMM'a' y'an' – G d'ê' MMM'a' y'an'"}
+                    M{"G d'ê' MMM'ê' – d'ê' MMM'ê' y"}
+                    d{"G d – d MMM, y"}
+                    y{"G d'ê' MMM'a' y'an' – d'ê' MMM'a' y'an'"}
+                }
+                GyMd{
+                    G{"G dd.MM.y – G dd.MM.y"}
+                    M{"G dd.MM.y – dd.MM.y"}
+                    d{"G dd.MM.y – dd.MM.y"}
+                    y{"G dd.MM.y – dd.MM.y"}
+                }
+                H{
+                    H{"HH – HH's'"}
+                }
+                Hm{
+                    H{"HH:mm – HH:mm"}
+                    m{"HH:mm – HH:mm"}
+                }
+                Hmv{
+                    H{"HH:mm – HH:mm v"}
+                }
+                Hv{
+                    H{"HH – HH's' v"}
+                }
+                M{
+                    M{"M – M"}
+                }
+                MEd{
+                    M{"dd.MM, E – dd.MM, E"}
+                    d{"dd.MM, E – dd.MM, E"}
+                }
+                MMM{
+                    M{"MMM – MMM"}
+                }
+                MMMEd{
+                    M{"d'ê' MMM'ê', E – d'ê' MMM'ê', E"}
+                    d{"d'ê' MMM'ê', E – d'ê' MMM'ê', E"}
+                }
+                MMMd{
+                    M{"d'ê' MMM'ê' – d'ê' MMM'ê'"}
+                    d{"d – d'ê' MMM'ê'"}
+                }
+                Md{
+                    M{"d.M – d.M"}
+                    d{"d.M – d.M"}
+                }
+                d{
+                    d{"d – d"}
+                }
+                h{
+                    h{"h – h a"}
+                }
+                hm{
+                    a{"h:mm a – h:mm a"}
+                    h{"h:mm – h:mm a"}
+                    m{"h:mm – h:mm a"}
+                }
+                hmv{
+                    a{"h:mm a – h:mm a v"}
+                    h{"h:mm – h:mm a v"}
+                    m{"h:mm – h:mm a v"}
+                }
+                hv{
+                    h{"h – h a v"}
+                }
+                y{
+                    y{"G y – y"}
+                }
+                yM{
+                    M{"G MM.y – MM.y"}
+                    y{"G MM.y – MM.y"}
+                }
+                yMEd{
+                    M{"G dd.MM.y, E – dd.MM.y, E"}
+                    d{"G dd.MM.y, E – dd.MM.y, E"}
+                    y{"G dd.MM.y, E – dd.MM.y, E"}
+                }
+                yMMM{
+                    M{"G MMM – MMM y"}
+                    y{"G MMM y – MMM y"}
+                }
+                yMMMEd{
+                    M{"G d MMM, E – d MMM y, E"}
+                    d{"G d MMM, E – d MMM y, E"}
+                    y{"G d MMM y, E – d MMM y, E"}
+                }
+                yMMMM{
+                    M{"MMMM – MMMM y G"}
+                    y{"G MMMM y – MMMM y"}
+                }
+                yMMMd{
+                    M{"G d MMM – d MMM, y"}
+                    d{"G d – d MMM, y"}
+                    y{"G d MMM, y – d MMM, y"}
+                }
+                yMd{
+                    M{"G dd.MM.y – dd.MM.y"}
+                    d{"G dd.MM.y – dd.MM.y"}
+                    y{"G dd.MM.y – dd.MM.y"}
+                }
+            }
+        }
+        gregorian{
+            AmPmMarkersAbbr{
+                "BN",
+                "PN",
+            }
+            AmPmMarkersNarrow{
+                "bn",
+                "pn",
+            }
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, d'ê' MMMM'a' y'an'",
+                "d'ê' MMMM'a' y'an'",
+                "d MMM, y",
+                "dd.MM.y",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Ehm{"E h:mm a"}
+                Ehms{"E h:mm:ss a"}
+                GyM{"G M/y"}
+                GyMEd{"G d/M/y, E"}
+                GyMMM{"G MMM y"}
+                GyMMMEd{"G d MMM y, E"}
+                GyMMMd{"G d MMM, y"}
+                GyMd{"G d/M/y"}
+                MEd{"d/M, E"}
+                MMMEd{"d MMM, E"}
+                MMMMW{
+                    one{"'hefteya' W'an' 'ya' MMMM'ê'"}
+                    other{"'hefteya' W'an' 'ya' MMMM'ê'"}
+                }
+                MMMMd{"d'ê' MMMM'ê'"}
+                MMMd{"d MMM"}
+                Md{"dd.MM"}
+                hm{"h:mm a"}
+                hms{"h:mm:ss a"}
+                hmsv{"h:mm:ss a v"}
+                hmv{"h:mm a v"}
+                yM{"MM.y"}
+                yMEd{"dd.MM.y, E"}
+                yMMM{"MMM, y"}
+                yMMMEd{"d MMM y, E"}
+                yMMMM{"MMMM'a' y'an'"}
+                yMMMd{"d MMM, y"}
+                yMd{"dd.MM.y"}
+                yQQQ{"QQQ, y"}
+                yQQQQ{"QQQQ 'ya' y'an'"}
+                yw{
+                    one{"'hefteya' w'an' 'ya' Y'an'"}
+                    other{"'hefteya' w'an' 'ya' Y'an'"}
+                }
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "yşm",
+                        "dşm",
+                        "sşm",
+                        "çşm",
+                        "pşm",
+                        "înî",
+                        "şem",
+                    }
+                    short{
+                        "yş",
+                        "dş",
+                        "sş",
+                        "çş",
+                        "pş",
+                        "în",
+                        "şm",
+                    }
+                    wide{
+                        "yekşem",
+                        "duşem",
+                        "sêşem",
+                        "çarşem",
+                        "pêncşem",
+                        "înî",
+                        "şemî",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "Y",
+                        "D",
+                        "S",
+                        "Ç",
+                        "P",
+                        "Î",
+                        "Ş",
+                    }
+                }
+            }
+            eras{
+                abbreviated{
+                    0{"BM"}
+                    1{"PM"}
+                }
+                narrow{
+                    0{"BM"}
+                    1{"PM"}
+                }
+                wide{
+                    0{"Berî Mîladê"}
+                    1{"Piştî Mîladê"}
+                }
+                wide%variant{
+                    0{"Berî Mîladê"}
+                    1{"Piştî Mîladê"}
+                }
+            }
+            intervalFormats{
+                GyM{
+                    G{"M/y G – M/y G"}
+                    M{"G M/y – M/y"}
+                    y{"G M/y – M/y"}
+                }
+                GyMEd{
+                    G{"G d/M/y, E – G d/M/y, E"}
+                    M{"G d/M/y, E – G d/M/y, E"}
+                    d{"G d/M/y, E – G d/M/y, E"}
+                    y{"G d/M/y – d/M/y, E"}
+                }
+                GyMMM{
+                    G{"G MMM y – G MMM y"}
+                    M{"G MMM–MMM y"}
+                    y{"G MMM y – MMM y"}
+                }
+                GyMMMEd{
+                    G{"G d MMM y, E – G d MMM y, E"}
+                    M{"G d MMM – d MMM y, E"}
+                    d{"G d MMM, E – G d MMM y, E"}
+                    y{"G d MMM y, E – d MMM y, E"}
+                }
+                GyMMMd{
+                    G{"G d MMM, y – G d MMM, y"}
+                    M{"G d MMM – d MMM, y"}
+                    d{"G d – d MMM, y"}
+                    y{"G d MMM, y – G d MMM, y"}
+                }
+                GyMd{
+                    G{"G d/M/y – G d/M/y"}
+                    M{"G d/M/y – d/M/y"}
+                    d{"G d/M/y – d/M/y"}
+                    y{"G d/M/y – d/M/y"}
+                }
+                H{
+                    H{"HH – HH's'"}
+                }
+                Hm{
+                    H{"HH:mm – HH:mm"}
+                    m{"HH:mm – HH:mm"}
+                }
+                Hmv{
+                    H{"HH:mm – HH:mm v"}
+                    m{"HH:mm – HH:mm v"}
+                }
+                Hv{
+                    H{"HH – HH'h' v"}
+                }
+                M{
+                    M{"M – M"}
+                }
+                MEd{
+                    M{"d/M, E – d/M, E"}
+                    d{"d/M, E – d/M, E"}
+                }
+                MMM{
+                    M{"MMM – MMM"}
+                }
+                MMMEd{
+                    M{"d MMM, E – d MMM, E"}
+                    d{"d MMM, E – d MMM, E"}
+                }
+                MMMd{
+                    M{"d MMM – d MMM"}
+                    d{"d – d MMM"}
+                }
+                Md{
+                    M{"d/M – d/M"}
+                    d{"d/M – d/M"}
+                }
+                h{
+                    h{"h – h a"}
+                }
+                hm{
+                    a{"h:mm a – h:mm a"}
+                    h{"h:mm – h:mm a"}
+                    m{"h:mm – h:mm a"}
+                }
+                hmv{
+                    a{"h:mm a – h:mm a v"}
+                    h{"h:mm – h:mm a v"}
+                    m{"h:mm – h:mm a v"}
+                }
+                hv{
+                    h{"h – h a v"}
+                }
+                y{
+                    y{"y – y"}
+                }
+                yM{
+                    M{"M/y – M/y"}
+                    y{"M/y – M/y"}
+                }
+                yMEd{
+                    M{"d/M/y, E – d/M/y, E"}
+                    d{"d/M/y, E – d/M/y, E"}
+                    y{"d/M/y, E – d/M/y, E"}
+                }
+                yMMM{
+                    M{"MMM – MMM y"}
+                    y{"MMM y – MMM y"}
+                }
+                yMMMEd{
+                    M{"d MMM, E – d MMM y, E"}
+                    d{"d MMM, E – d MMM y, E"}
+                    y{"d MMM y, E – d MMM y, E"}
+                }
+                yMMMM{
+                    M{"MMMM – MMMM y"}
+                    y{"MMMM y – MMMM y"}
+                }
+                yMMMd{
+                    M{"d MMM – d MMM, y"}
+                    d{"d – d MMM, y"}
+                    y{"d MMM, y – d MMM, y"}
+                }
+                yMd{
+                    M{"d/M/y – d/M/y"}
+                    d{"d/M/y – d/M/y"}
+                    y{"d/M/y – d/M/y"}
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "rbn",
+                        "sbt",
+                        "adr",
+                        "nsn",
+                        "gln",
+                        "hzr",
+                        "trm",
+                        "tbx",
+                        "îln",
+                        "cot",
+                        "mjd",
+                        "brf",
+                    }
+                    wide{
+                        "rêbendan",
+                        "sibat",
+                        "adar",
+                        "nîsan",
+                        "gulan",
+                        "hezîran",
+                        "tîrmeh",
+                        "tebax",
+                        "îlon",
+                        "cotmeh",
+                        "mijdar",
+                        "berfanbar",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "R",
+                        "S",
+                        "A",
+                        "N",
+                        "G",
+                        "H",
+                        "T",
+                        "T",
+                        "Î",
+                        "C",
+                        "M",
+                        "B",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "Ç1",
+                        "Ç2",
+                        "Ç3",
+                        "Ç4",
+                    }
+                    wide{
+                        "çaryeka 1ê",
+                        "çaryeka 2an",
+                        "çaryeka 3an",
+                        "çaryeka 4an",
+                    }
+                }
+                stand-alone{
+                    wide{
+                        "çaryeka 1ê",
+                        "çaryeka 2an",
+                        "çaryeka 3an",
+                        "çaryeka 4an",
+                    }
+                }
+            }
+        }
+        hebrew{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "G d'ê' MMMM'a' y'an' EEEE",
+                "G d'ê' MMMM'a' y'an'",
+                "G d'ê' MMM'a' y'an'",
+                "G dd.MM.y",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                GyM{"G MM.y"}
+                GyMEd{"G dd.MM.y, E"}
+                GyMMMEd{"G d'ê' MMM'a' y'an', E"}
+                GyMd{"G dd.MM.y"}
+            }
+        }
+        islamic{
+            eras{
+                abbreviated{
+                    0{"Hicrî"}
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "muh.",
+                        "sef.",
+                        "reb. Iem",
+                        "reb. IIyem",
+                        "cmz. Iem",
+                        "cmz. IIyem",
+                        "rcb.",
+                        "şbn.",
+                        "rmz.",
+                        "şwl.",
+                        "zqd.",
+                        "zhc.",
+                    }
+                    wide{
+                        "muherem",
+                        "sefer",
+                        "rebîʿulewel",
+                        "rebîʿulaxer",
+                        "cemazîyelewel",
+                        "cemazîyelaxer",
+                        "receb",
+                        "şeʿban",
+                        "remezan",
+                        "şewal",
+                        "zîlqeʿde",
+                        "zilhece",
+                    }
+                }
+            }
+        }
+    }
+    characterLabel{
+        animal{"heywan"}
+        animals_nature{"heywan an xweza"}
+        building{"avahî"}
+        currency_symbols{"sembola pereyan"}
+        digits{"reqam"}
+        female{"jin"}
+        flag{"ala"}
+        flags{"ala"}
+        food_drink{"xwarin û vexwarin"}
+        format_whitespace{"format û valahî"}
+        heart{"dil"}
+        male{"mêr"}
+        numbers{"reqam"}
+        punctuation{"niqteşanî"}
+        sport{"spor"}
+        symbols{"sembol"}
+        travel{"seyahat"}
+        weather{"hewa"}
+    }
+    fields{
+        day{
+            dn{"roj"}
+            relative{
+                "-1"{"duh"}
+                "0"{"îro"}
+                "1"{"sibê"}
+            }
+            relativeTime{
+                future{
+                    one{"piştî {0} rojê"}
+                    other{"piştî {0} rojan"}
+                }
+                past{
+                    one{"berî {0} rojê"}
+                    other{"berî {0} rojan"}
+                }
+            }
+        }
+        day-narrow{
+            relativeTime{
+                future{
+                    one{"piştî {0} rojê"}
+                    other{"piştî {0} rojan"}
+                }
+                past{
+                    one{"berî {0} rojê"}
+                    other{"berî {0} rojan"}
+                }
+            }
+        }
+        day-short{
+            relativeTime{
+                future{
+                    one{"piştî {0} rojê"}
+                    other{"piştî {0} rojan"}
+                }
+                past{
+                    one{"berî {0} rojê"}
+                    other{"berî {0} rojan"}
+                }
+            }
+        }
+        dayOfYear{
+            dn{"roja salê"}
+        }
+        dayperiod{
+            dn{"BN/PN"}
+        }
+        era{
+            dn{"çax"}
+        }
+        era-narrow{
+            dn{"çax"}
+        }
+        era-short{
+            dn{"çax"}
+        }
+        fri{
+            relative{
+                "-1"{"înîya borî"}
+                "0"{"ev înî"}
+                "1"{"înîya were"}
+            }
+            relativeTime{
+                future{
+                    one{"piştî {0} înîyê"}
+                    other{"piştî {0} înîyan"}
+                }
+                past{
+                    one{"berî {0} înîyê"}
+                    other{"berî {0} înîyan"}
+                }
+            }
+        }
+        fri-narrow{
+            relative{
+                "-1"{"înîya borî"}
+                "0"{"ev înî"}
+                "1"{"înîya were"}
+            }
+            relativeTime{
+                future{
+                    one{"piştî {0} înîyê"}
+                    other{"piştî {0} înîyan"}
+                }
+                past{
+                    one{"berî {0} înîyê"}
+                    other{"berî {0} înîyan"}
+                }
+            }
+        }
+        fri-short{
+            relative{
+                "-1"{"înîya borî"}
+                "0"{"ev înî"}
+                "1"{"înîya were"}
+            }
+            relativeTime{
+                future{
+                    one{"piştî {0} înîyê"}
+                    other{"piştî {0} înîyan"}
+                }
+                past{
+                    one{"berî {0} înîyê"}
+                    other{"berî {0} înîyan"}
+                }
+            }
+        }
+        hour{
+            dn{"saet"}
+            relative{
+                "0"{"ev saet"}
+            }
+            relativeTime{
+                future{
+                    one{"piştî {0} saetê"}
+                    other{"piştî {0} saetan"}
+                }
+                past{
+                    one{"berî {0} saetê"}
+                    other{"berî {0} saetan"}
+                }
+            }
+        }
+        hour-narrow{
+            relative{
+                "0"{"ev saet"}
+            }
+            relativeTime{
+                future{
+                    one{"piştî {0} saetê"}
+                    other{"piştî {0} saetan"}
+                }
+                past{
+                    one{"berî {0} saetê"}
+                    other{"berî {0} saetan"}
+                }
+            }
+        }
+        hour-short{
+            dn{"sa."}
+            relative{
+                "0"{"ev saet"}
+            }
+            relativeTime{
+                future{
+                    one{"piştî {0} saetê"}
+                    other{"piştî {0} saetan"}
+                }
+                past{
+                    one{"berî {0} saetê"}
+                    other{"berî {0} saetan"}
+                }
+            }
+        }
+        minute{
+            dn{"deqîqe"}
+            relative{
+                "0"{"ev deqîqe"}
+            }
+            relativeTime{
+                future{
+                    one{"piştî {0} deqîqeyê"}
+                    other{"piştî {0} deqîqeyan"}
+                }
+                past{
+                    one{"berî {0} deqîqeyê"}
+                    other{"berî {0} deqîqeyan"}
+                }
+            }
+        }
+        minute-narrow{
+            relative{
+                "0"{"ev deqîqe"}
+            }
+            relativeTime{
+                future{
+                    one{"piştî {0} dq."}
+                    other{"piştî {0} dq."}
+                }
+            }
+        }
+        minute-short{
+            dn{"dq."}
+            relative{
+                "0"{"ev deqîqe"}
+            }
+            relativeTime{
+                future{
+                    one{"piştî {0} dq."}
+                    other{"piştî {0} dq."}
+                }
+                past{
+                    one{"berî {0} dq."}
+                    other{"berî {0} dq."}
+                }
+            }
+        }
+        mon{
+            relative{
+                "-1"{"duşema borî"}
+                "0"{"ev duşem"}
+                "1"{"duşema were"}
+            }
+            relativeTime{
+                future{
+                    one{"piştî {0} duşemê"}
+                    other{"piştî {0} duşeman"}
+                }
+                past{
+                    one{"berî {0} duşemê"}
+                    other{"berî {0} duşeman"}
+                }
+            }
+        }
+        mon-narrow{
+            relative{
+                "-1"{"dşm. borî"}
+                "0"{"ev dşm."}
+                "1"{"dşm. were"}
+            }
+            relativeTime{
+                future{
+                    one{"piştî {0} dşm."}
+                    other{"piştî {0} dşm."}
+                }
+                past{
+                    one{"berî {0} dşm."}
+                    other{"berî {0} dşm."}
+                }
+            }
+        }
+        mon-short{
+            relative{
+                "-1"{"dşm. borî"}
+                "0"{"ev dşm."}
+                "1"{"dşm. were"}
+            }
+            relativeTime{
+                future{
+                    one{"piştî {0} dşm."}
+                    other{"piştî {0} dşm."}
+                }
+                past{
+                    one{"berî {0} dşm."}
+                    other{"berî {0} dşm."}
+                }
+            }
+        }
+        month{
+            dn{"meh"}
+            relative{
+                "-1"{"meha borî"}
+                "0"{"ev meh"}
+                "1"{"meha were"}
+            }
+            relativeTime{
+                future{
+                    one{"piştî {0} mehê"}
+                    other{"piştî {0} mehan"}
+                }
+                past{
+                    one{"berî {0} mehê"}
+                    other{"berî {0} mehan"}
+                }
+            }
+        }
+        month-narrow{
+            relative{
+                "-1"{"meha borî"}
+                "0"{"ev meh"}
+                "1"{"meha were"}
+            }
+            relativeTime{
+                future{
+                    one{"piştî {0} mehê"}
+                    other{"piştî {0} mehan"}
+                }
+                past{
+                    one{"berî {0} mehê"}
+                    other{"berî {0} mehan"}
+                }
+            }
+        }
+        month-short{
+            relative{
+                "-1"{"meha borî"}
+                "0"{"ev meh"}
+                "1"{"meha were"}
+            }
+            relativeTime{
+                future{
+                    one{"piştî {0} mehê"}
+                    other{"piştî {0} mehan"}
+                }
+                past{
+                    one{"berî {0} mehê"}
+                    other{"berî {0} mehan"}
+                }
+            }
+        }
+        quarter{
+            dn{"çaryek"}
+            relative{
+                "-1"{"çaryeka dawî"}
+                "0"{"ev çaryek"}
+                "1"{"çaryeka were"}
+            }
+            relativeTime{
+                future{
+                    one{"piştî {0} çaryekê"}
+                    other{"piştî {0} çaryekan"}
+                }
+                past{
+                    one{"berî {0} çaryekê"}
+                    other{"berî {0} çaryekan"}
+                }
+            }
+        }
+        quarter-narrow{
+            relativeTime{
+                future{
+                    one{"piştî {0} çaryekê"}
+                    other{"piştî {0} çaryekan"}
+                }
+                past{
+                    one{"berî {0} çaryekê"}
+                    other{"berî {0} çaryekan"}
+                }
+            }
+        }
+        quarter-short{
+            dn{"çrk."}
+            relativeTime{
+                future{
+                    one{"piştî {0} çaryekê"}
+                    other{"piştî {0} çaryekan"}
+                }
+                past{
+                    one{"berî {0} çaryekê"}
+                    other{"berî {0} çaryekan"}
+                }
+            }
+        }
+        sat{
+            relative{
+                "-1"{"şemîya borî"}
+                "0"{"ev şemî"}
+                "1"{"şemîya were"}
+            }
+            relativeTime{
+                future{
+                    one{"piştî {0} şemîyê"}
+                    other{"piştî {0} şemîyan"}
+                }
+                past{
+                    one{"berî {0} şemîyê"}
+                    other{"berî {0} şemîyan"}
+                }
+            }
+        }
+        sat-narrow{
+            relative{
+                "-1"{"şemîya borî"}
+                "0"{"ev şemî"}
+                "1"{"şemîya were"}
+            }
+            relativeTime{
+                future{
+                    one{"piştî {0} şemîyê"}
+                    other{"piştî {0} şemîyan"}
+                }
+                past{
+                    one{"berî {0} şemîyê"}
+                    other{"berî {0} şemîyan"}
+                }
+            }
+        }
+        sat-short{
+            relative{
+                "-1"{"şemîya borî"}
+                "0"{"ev şemî"}
+                "1"{"şemîya were"}
+            }
+            relativeTime{
+                future{
+                    one{"piştî {0} şemîyê"}
+                    other{"piştî {0} şemîyan"}
+                }
+                past{
+                    one{"berî {0} şemîyê"}
+                    other{"berî {0} şemîyan"}
+                }
+            }
+        }
+        second{
+            dn{"sanîye"}
+            relative{
+                "0"{"niha"}
+            }
+            relativeTime{
+                future{
+                    one{"piştî {0} saniyeyê"}
+                    other{"piştî {0} saniyeyan"}
+                }
+                past{
+                    one{"berî {0} saniyeyê"}
+                    other{"berî {0} saniyeyan"}
+                }
+            }
+        }
+        second-narrow{
+            relative{
+                "0"{"niha"}
+            }
+            relativeTime{
+                future{
+                    one{"piştî {0} sn."}
+                    other{"piştî {0} sn."}
+                }
+                past{
+                    one{"berî {0} sn."}
+                    other{"berî {0} sn."}
+                }
+            }
+        }
+        second-short{
+            dn{"sn."}
+            relative{
+                "0"{"niha"}
+            }
+            relativeTime{
+                future{
+                    one{"piştî {0} sn."}
+                    other{"piştî {0} sn."}
+                }
+                past{
+                    one{"berî {0} sn."}
+                    other{"berî {0} sn."}
+                }
+            }
+        }
+        sun{
+            relative{
+                "-1"{"yekşema borî"}
+                "0"{"ev yekşem"}
+                "1"{"yekşema were"}
+            }
+            relativeTime{
+                future{
+                    one{"piştî {0} yekşemê"}
+                    other{"piştî {0} yekşeman"}
+                }
+                past{
+                    one{"berî {0} yekşemê"}
+                    other{"berî {0} yekşeman"}
+                }
+            }
+        }
+        sun-narrow{
+            relative{
+                "-1"{"yşm. borî"}
+                "0"{"ev yşm."}
+                "1"{"yşm. were"}
+            }
+            relativeTime{
+                future{
+                    one{"piştî {0} yşm."}
+                    other{"piştî {0} yşm."}
+                }
+                past{
+                    one{"berî {0} yşm."}
+                    other{"berî {0} yşm."}
+                }
+            }
+        }
+        sun-short{
+            relative{
+                "-1"{"yşm. borî"}
+                "0"{"ev yşm."}
+                "1"{"yşm. were"}
+            }
+            relativeTime{
+                future{
+                    one{"piştî {0} yşm."}
+                    other{"piştî {0} yşm."}
+                }
+                past{
+                    one{"berî {0} yşm."}
+                    other{"berî {0} yşm."}
+                }
+            }
+        }
+        thu{
+            relative{
+                "-1"{"pêncşema borî"}
+                "0"{"ev pêncşem"}
+                "1"{"pêncşema were"}
+            }
+            relativeTime{
+                future{
+                    one{"piştî {0} pêncşemê"}
+                    other{"piştî {0} pêncşeman"}
+                }
+                past{
+                    one{"berî {0} pêncşemê"}
+                    other{"berî {0} pêncşeman"}
+                }
+            }
+        }
+        thu-narrow{
+            relative{
+                "-1"{"pşm. borî"}
+                "0"{"ev pşm."}
+                "1"{"pşm. were"}
+            }
+            relativeTime{
+                future{
+                    one{"piştî {0} pşm."}
+                    other{"piştî {0} pşm."}
+                }
+                past{
+                    one{"berî {0} pşm."}
+                    other{"berî {0} pşm."}
+                }
+            }
+        }
+        thu-short{
+            relative{
+                "-1"{"pşm. borî"}
+                "0"{"ev pşm."}
+                "1"{"pşm. were"}
+            }
+            relativeTime{
+                future{
+                    one{"piştî {0} pşm."}
+                    other{"piştî {0} pşm."}
+                }
+                past{
+                    one{"berî {0} pşm."}
+                    other{"berî {0} pşm."}
+                }
+            }
+        }
+        tue{
+            relative{
+                "-1"{"sêşema borî"}
+                "0"{"ev sêşem"}
+                "1"{"sêşema were"}
+            }
+            relativeTime{
+                future{
+                    one{"piştî {0} sêşemê"}
+                    other{"piştî {0} sêşeman"}
+                }
+                past{
+                    one{"berî {0} sêşemê"}
+                    other{"berî {0} sêşeman"}
+                }
+            }
+        }
+        tue-narrow{
+            relative{
+                "-1"{"sşm. borî"}
+                "0"{"ev sşm."}
+                "1"{"sşm. were"}
+            }
+            relativeTime{
+                future{
+                    one{"piştî {0} sşm."}
+                    other{"piştî {0} sşm."}
+                }
+                past{
+                    one{"berî {0} sşm."}
+                    other{"berî {0} sşm."}
+                }
+            }
+        }
+        tue-short{
+            relative{
+                "-1"{"sşm. borî"}
+                "0"{"ev sşm."}
+                "1"{"sşm. were"}
+            }
+            relativeTime{
+                future{
+                    one{"piştî {0} sşm."}
+                    other{"piştî {0} sşm."}
+                }
+                past{
+                    one{"berî {0} sşm."}
+                    other{"berî {0} sşm."}
+                }
+            }
+        }
+        wed{
+            relative{
+                "-1"{"çarşema borî"}
+                "0"{"ev çarşem"}
+                "1"{"çarşema were"}
+            }
+            relativeTime{
+                future{
+                    one{"piştî {0} çarşemê"}
+                    other{"piştî {0} çarşeman"}
+                }
+                past{
+                    one{"berî {0} çarşemê"}
+                    other{"berî {0} çarşeman"}
+                }
+            }
+        }
+        wed-narrow{
+            relative{
+                "-1"{"çşm. borî"}
+                "0"{"ev çşm."}
+                "1"{"çşm. were"}
+            }
+            relativeTime{
+                future{
+                    one{"piştî {0} çşm."}
+                    other{"piştî {0} çşm."}
+                }
+                past{
+                    one{"berî {0} çşm."}
+                    other{"berî {0} çşm."}
+                }
+            }
+        }
+        wed-short{
+            relative{
+                "-1"{"çşm. borî"}
+                "0"{"ev çşm."}
+                "1"{"çşm. were"}
+            }
+            relativeTime{
+                future{
+                    one{"piştî {0} çşm."}
+                    other{"piştî {0} çşm."}
+                }
+                past{
+                    one{"berî {0} çşm."}
+                    other{"berî {0} çşm."}
+                }
+            }
+        }
+        week{
+            dn{"hefte"}
+            relative{
+                "-1"{"hefteya borî"}
+                "0"{"ev hefte"}
+                "1"{"hefteya were"}
+            }
+            relativePeriod{"hefteya {0}"}
+            relativeTime{
+                future{
+                    one{"piştî {0} hefteyê"}
+                    other{"piştî {0} hefteyan"}
+                }
+                past{
+                    one{"berî {0} hefteyê"}
+                    other{"berî {0} hefteyan"}
+                }
+            }
+        }
+        week-narrow{
+            dn{"hf"}
+            relative{
+                "-1"{"hft. borî"}
+                "0"{"ev hft."}
+                "1"{"hft. were"}
+            }
+            relativeTime{
+                future{
+                    one{"piştî {0} hefteyê"}
+                    other{"piştî {0} hefteyan"}
+                }
+                past{
+                    one{"berî {0} hefteyê"}
+                    other{"berî {0} hefteyan"}
+                }
+            }
+        }
+        week-short{
+            dn{"hf."}
+            relative{
+                "-1"{"hft. borî"}
+                "0"{"ev hft."}
+                "1"{"hft. were"}
+            }
+            relativeTime{
+                future{
+                    one{"piştî {0} hefteyê"}
+                    other{"piştî {0} hefteyan"}
+                }
+                past{
+                    one{"berî {0} hefteyê"}
+                    other{"berî {0} hefteyan"}
+                }
+            }
+        }
+        weekOfMonth{
+            dn{"hefteya mehê"}
+        }
+        weekday{
+            dn{"roja hefteyê"}
+        }
+        weekdayOfMonth{
+            dn{"roja mehê"}
+        }
+        year{
+            dn{"sal"}
+            relative{
+                "-1"{"sala borî"}
+                "0"{"îsal"}
+                "1"{"sala were"}
+            }
+            relativeTime{
+                future{
+                    one{"di {0} salê de"}
+                    other{"di {0} salan de"}
+                }
+                past{
+                    one{"berî {0} salê"}
+                    other{"berî {0} salan"}
+                }
+            }
+        }
+        year-narrow{
+            relative{
+                "-1"{"sala borî"}
+                "0"{"îsal"}
+                "1"{"sala were"}
+            }
+            relativeTime{
+                future{
+                    one{"piştî {0} salê"}
+                    other{"piştî {0} salan"}
+                }
+                past{
+                    one{"berî {0} salê"}
+                    other{"berî {0} salan"}
+                }
+            }
+        }
+        year-short{
+            relative{
+                "-1"{"sala borî"}
+                "0"{"îsal"}
+                "1"{"sala were"}
+            }
+            relativeTime{
+                future{
+                    one{"piştî {0} salê"}
+                    other{"piştî {0} salan"}
+                }
+            }
+        }
+        zone{
+            dn{"qada saetê"}
+        }
+        zone-short{
+            dn{"qad"}
+        }
+    }
+    listPattern{
+        or{
+            2{"{0} an {1}"}
+            end{"{0} an {1}"}
+        }
+        standard{
+            2{"{0} û {1}"}
+            end{"{0} û {1}"}
+        }
+        unit-narrow{
+            2{"{0} {1}"}
+            end{"{0} {1}"}
+            middle{"{0} {1}"}
+            start{"{0} {1}"}
+        }
+    }
+    measurementSystemNames{
+        UK{"îngilîzî"}
+        US{"amerîkî"}
+        metric{"metrîk"}
+    }
+    parse{
+        number{
+            lenient{
+                "[\\-－﹣ ‑ ‒ −⁻₋ ➖]",
+                "[,，﹐︐ ⹁ ، ٫ 、﹑､︑]",
+                "[+＋﬩﹢⁺₊ ➕]",
+            }
+        }
+    }
+}

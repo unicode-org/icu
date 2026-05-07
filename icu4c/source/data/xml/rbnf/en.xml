@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ Copyright (C) 2016 and later: Unicode, Inc. and others.
+ License & terms of use: http://www.unicode.org/copyright.html
+ Copyright (c) 2013-2016 International Business Machines Corporation and others. All rights reserved.
+-->
+<!DOCTYPE ldml SYSTEM "../../dtd/cldr/common/dtd/ldml.dtd">
+<ldml>
+	<identity>
+		<version number="$Revision$"/>
+		<language type="en"/>
+	</identity>
+    <rbnf>
+        <rulesetGrouping type="DurationRules">
+            <rbnfRules><![CDATA[
+%with-words:
+0: 0 seconds; 1 second; =0= seconds;
+60/60: <%%min<[, >>];
+3600/60: <%%hr<[, >>>];
+%%min:
+0: 0 minutes; 1 minute; =0= minutes;
+%%hr:
+0: 0 hours; 1 hour; =0= hours;
+%in-numerals:
+0: =0= sec.;
+60: =%%min-sec=;
+3600: =%%hr-min-sec=;
+%%min-sec:
+0: :=00=;
+60/60: <0<>>;
+%%hr-min-sec:
+0: :=00=;
+60/60: <00<>>;
+3600/60: <#,##0<:>>>;
+%duration:
+0: =%in-numerals=;
+]]></rbnfRules>
+        </rulesetGrouping>
+   </rbnf>
+</ldml>

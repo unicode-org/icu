@@ -1,0 +1,5825 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+ba{
+    ExemplarCharacters{
+        "[а ә б в г ғ д ҙ её ж з и й к ҡ л м н ң о ө п р с ҫ т у ү ф х һ ц ч ш щ ъ ы "
+        "ь э ю я]"
+    }
+    ExemplarCharactersIndex{
+        "[А Ә Б В Г Ғ Д Ҙ ЕЁ Ж З И Й К Ҡ Л М Н Ң О Ө П Р С Ҫ Т У Ү Ф Х Һ Ц Ч Ш Щ Ъ Ы "
+        "Ь Э Ю Я]"
+    }
+    ExemplarCharactersPunctuation{
+        "[\\- ‐‑ – — , ; \\: ! ? . … '‘‚ \u0022“„ « » ( ) \\[ \\] \\{ \\} § @ * / \\&"
+        " #]"
+    }
+    NumberElements{
+        adlm{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        ahom{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        arab{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+        }
+        arabext{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+        }
+        bali{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        beng{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        bhks{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        brah{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        cakm{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        cham{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        deva{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        diak{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        fullwide{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        gara{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        gong{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        gonm{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        gujr{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        gukh{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        guru{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        hanidec{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        hmng{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        hmnp{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        java{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        kali{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        kawi{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        khmr{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        knda{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        krai{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        lana{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        lanatham{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        laoo{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        latn{
+            patterns{
+                accountingFormat{"#,##0.00 ¤"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsLong{
+                decimalFormat{
+                    1000{
+                        other{"0 мең"}
+                    }
+                    10000{
+                        other{"00 мең"}
+                    }
+                    100000{
+                        other{"000 мең"}
+                    }
+                    1000000{
+                        other{"0 миллион"}
+                    }
+                    10000000{
+                        other{"00 миллион"}
+                    }
+                    100000000{
+                        other{"000 миллион"}
+                    }
+                    1000000000{
+                        other{"0 миллиард"}
+                    }
+                    10000000000{
+                        other{"00 миллиард"}
+                    }
+                    100000000000{
+                        other{"000 миллиард"}
+                    }
+                    1000000000000{
+                        other{"0 триллион"}
+                    }
+                    10000000000000{
+                        other{"00 триллион"}
+                    }
+                    100000000000000{
+                        other{"000 триллион"}
+                    }
+                }
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+                decimalFormat{
+                    1000{
+                        other{"0 мең"}
+                    }
+                    10000{
+                        other{"00 мең"}
+                    }
+                    100000{
+                        other{"000 мең"}
+                    }
+                    1000000{
+                        other{"0 млн"}
+                    }
+                    10000000{
+                        other{"00 млн"}
+                    }
+                    100000000{
+                        other{"000 млн"}
+                    }
+                    1000000000{
+                        other{"0 млрд"}
+                    }
+                    10000000000{
+                        other{"00 млрд"}
+                    }
+                    100000000000{
+                        other{"000 млрд"}
+                    }
+                    1000000000000{
+                        other{"0 трлн"}
+                    }
+                    10000000000000{
+                        other{"00 трлн"}
+                    }
+                    100000000000000{
+                        other{"000 трлн"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        lepc{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        limb{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        mathbold{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        mathdbl{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        mathmono{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        mathsanb{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        mathsans{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        minimalPairs{
+            ordinal{
+                other{"{0} уңға боролоғоҙ."}
+            }
+            plural{
+                other{"{0} көн"}
+            }
+        }
+        mlym{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        modi{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        mong{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        mroo{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        mtei{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        mymr{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        mymrepka{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        mymrpao{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        mymrshan{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        mymrtlng{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        nagm{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        newa{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        nkoo{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        olck{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        onao{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        orya{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        osma{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        outlined{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        rohg{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        saur{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        segment{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        shrd{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        sind{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        sinh{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        sora{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        sund{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        sunu{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        takr{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        talu{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        tamldec{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        telu{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        thai{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        tibt{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        tirh{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        tnsa{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        tols{
+            symbols{
+                group{" "}
+            }
+        }
+        vaii{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        wara{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+        wcho{
+            miscPatterns{
+                atLeast{"{0}+"}
+            }
+            patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        other{"0 мең ¤"}
+                    }
+                    10000{
+                        other{"00 мең ¤"}
+                    }
+                    100000{
+                        other{"000 мең ¤"}
+                    }
+                    1000000{
+                        other{"0 млн ¤"}
+                    }
+                    10000000{
+                        other{"00 млн ¤"}
+                    }
+                    100000000{
+                        other{"000 млн ¤"}
+                    }
+                    1000000000{
+                        other{"0 млрд ¤"}
+                    }
+                    10000000000{
+                        other{"00 млрд ¤"}
+                    }
+                    100000000000{
+                        other{"000 млрд ¤"}
+                    }
+                    1000000000000{
+                        other{"0 трлн ¤"}
+                    }
+                    10000000000000{
+                        other{"00 трлн ¤"}
+                    }
+                    100000000000000{
+                        other{"000 трлн ¤"}
+                    }
+                }
+            }
+            symbols{
+                group{" "}
+            }
+        }
+    }
+    calendar{
+        generic{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, d MMMM y 'й'. G",
+                "d MMMM y 'й'. G",
+                "d MMM y 'й'. G",
+                "dd.MM.y G",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                EHm{"E, HH:mm"}
+                EHms{"E, HH:mm:ss"}
+                Eh{"E, h a"}
+                Ehm{"E, h:mm a"}
+                Ehms{"E hh:mm:ss a"}
+                Gy{"y 'й'. G"}
+                GyMMM{"MMM y 'й'. G"}
+                GyMMMEd{"E, d MMM y 'й'. G"}
+                GyMMMd{"d MMM y 'й'. G"}
+                GyMd{"dd.MM.y G"}
+                H{"HH 'сәғ'."}
+                Hv{"HH 'сәғ'. v"}
+                MEd{"E, dd.MM"}
+                MMMEd{"E, d MMM"}
+                MMMMd{"d MMMM"}
+                MMMd{"d MMM"}
+                Md{"dd.MM"}
+                hm{"hh:mm a"}
+                hms{"hh:mm:ss a"}
+                yyyyM{"MM.y GGGGG"}
+                yyyyMEd{"E, dd.MM.y GGGGG"}
+                yyyyMMM{"MMM y 'й'. G"}
+                yyyyMMMEd{"E, d MMM y 'й'. G"}
+                yyyyMMMM{"MMMM y 'й'. G"}
+                yyyyMMMd{"d MMM y 'й'. G"}
+                yyyyMd{"dd.MM.y GGGGG"}
+                yyyyQQQ{"QQQ y 'й'. G"}
+                yyyyQQQQ{"QQQQ y 'й'. G"}
+            }
+            intervalFormats{
+                Bh{
+                    B{"h B – h B"}
+                }
+                Bhm{
+                    B{"h:mm B – h:mm B"}
+                }
+                Gy{
+                    G{"y G – y G"}
+                    y{"y – y G"}
+                }
+                GyM{
+                    G{"MM.y GGGGG – MM.y GGGGG"}
+                    M{"MM.y – MM.y GGGGG"}
+                    y{"MM.y – MM.y GGGGG"}
+                }
+                GyMEd{
+                    G{"E, dd.MM.y G – E, dd.MM.y GGGGG"}
+                    M{"E, dd.MM.y G – E, dd.MM.y GGGGG"}
+                    d{"E, dd.MM.y – E, dd.MM.y GGGGG"}
+                    y{"E, dd.MM.y G – E, dd.MM.y GGGGG"}
+                }
+                GyMMM{
+                    G{"MMM y 'й'. G – MMM y 'й'. G"}
+                    M{"MMM – MMM y 'й'. G"}
+                    y{"MMM y – MMM y 'йй'. G"}
+                }
+                GyMMMEd{
+                    G{"E, d MMM y 'й'. G – E, d MMM y 'й'. G"}
+                    M{"E, d MMM – E, d MMM y 'й'. G"}
+                    d{"E, d MMM – E, d MMM y 'й'. G"}
+                    y{"E, d MMM y – E, d MMM y 'йй'. G"}
+                }
+                GyMMMd{
+                    G{"d MMM y 'й'. G – d MMM y 'й'. G"}
+                    M{"d MMM – d MMM y 'й'. G"}
+                    d{"d–d MMM y 'й'. G"}
+                    y{"d MMM y – d MMM y 'йй'. G"}
+                }
+                GyMd{
+                    G{"dd.MM.y GGGGG – dd.MM.y GGGGG"}
+                    M{"dd.MM.y – dd.MM.y GGGGG"}
+                    d{"dd.MM.y – dd.MM.y GGGGG"}
+                    y{"dd.MM.y – dd.MM.y GGGGG"}
+                }
+                H{
+                    H{"HH–HH 'сәғ'."}
+                }
+                Hv{
+                    H{"HH–HH 'сәғ'. v"}
+                }
+                MEd{
+                    M{"E, dd.MM – E, dd.MM"}
+                    d{"E, dd.MM – E, dd.MM"}
+                }
+                MMMEd{
+                    M{"E, d MMM – E, d MMM"}
+                    d{"E, d MMM – E, d MMM"}
+                }
+                MMMd{
+                    M{"d MMM – d MMM"}
+                    d{"d–d MMM"}
+                }
+                Md{
+                    M{"dd.MM – dd.MM"}
+                    d{"dd.MM – dd.MM"}
+                }
+                fallback{"{0} – {1}"}
+                y{
+                    y{"y – y G"}
+                }
+                yM{
+                    M{"MM.y – MM.y GGGGG"}
+                    y{"MM.y – MM.y GGGGG"}
+                }
+                yMEd{
+                    M{"E, dd.MM.y – E, dd.MM.y GGGGG"}
+                    d{"E, dd.MM.y – E, dd.MM.y GGGGG"}
+                    y{"E, dd.MM.y – E, dd.MM.y GGGGG"}
+                }
+                yMMM{
+                    M{"MMM – MMM y 'й'. G"}
+                    y{"MMM y 'й'. – MMM y 'й'. G"}
+                }
+                yMMMEd{
+                    M{"E, d MMM – E, d MMM y 'й'. G"}
+                    d{"E, d MMM – E, d MMM y 'й'. G"}
+                    y{"E, d MMM y 'й'. – E, d MMM y 'й'. G"}
+                }
+                yMMMM{
+                    M{"MMMM – MMMM y 'й'. G"}
+                    y{"MMMM y 'й'. – MMMM y 'й'. G"}
+                }
+                yMMMd{
+                    M{"d MMM – d MMM y 'й'. G"}
+                    d{"d–d MMM y 'й'. G"}
+                    y{"d MMM y 'й'. – d MMM y 'й'. G"}
+                }
+                yMd{
+                    M{"dd.MM.y – dd.MM.y GGGGG"}
+                    d{"dd.MM.y – dd.MM.y GGGGG"}
+                    y{"dd.MM.y – dd.MM.y GGGGG"}
+                }
+            }
+        }
+        gregorian{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "d MMMM, EEEE, y 'й'.",
+                "d MMMM, y 'й'.",
+                "d MMM, y 'й'.",
+                "dd.MM.y",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
+            DateTimePatterns%atTime{
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
+            DateTimePatterns%relative{
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
+            availableFormats{
+                EBh{"E, h B"}
+                EHm{"E, HH:mm"}
+                EHms{"E, HH:mm:ss"}
+                Eh{"E, h a"}
+                Ehm{"E h:mm a"}
+                Ehms{"E h:mm:ss a"}
+                Gy{"G y 'й'."}
+                GyM{"G MM.y"}
+                GyMMM{"MMM, G y 'й'."}
+                GyMMMEd{"d MMM, E, G y 'й'."}
+                GyMMMd{"d MMM, G y 'й'."}
+                GyMd{"G dd.MM.y"}
+                H{"HH 'сәғ'."}
+                Hv{"HH 'сәғ'. v"}
+                MEd{"dd.MM, E"}
+                MMMEd{"d MMM, E"}
+                MMMMW{
+                    other{"MMMM 'айының' W 'аҙнаһы'"}
+                }
+                MMMMd{"d MMMM"}
+                MMMd{"d MMM"}
+                Md{"dd.MM"}
+                hm{"h:mm a"}
+                hms{"h:mm:ss a"}
+                hmsv{"h:mm:ss a v"}
+                hmv{"h:mm a v"}
+                yMEd{"dd.MM.y, E"}
+                yMMM{"MMM, y 'й'."}
+                yMMMEd{"d MMM, E, y 'й'."}
+                yMMMM{"MMMM, y 'й'."}
+                yMMMd{"d MMM, y 'й'."}
+                yMd{"dd.MM.y"}
+                yQQQ{"QQQ, y 'й'."}
+                yQQQQ{"QQQQ, y 'й'."}
+                yw{
+                    other{"Y 'йылдың' w 'аҙнаһы'"}
+                }
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "йәк.",
+                        "дүш.",
+                        "шиш.",
+                        "шар.",
+                        "кес.",
+                        "йом.",
+                        "шәм.",
+                    }
+                    narrow{
+                        "Й",
+                        "Д",
+                        "Ш",
+                        "Ш",
+                        "К",
+                        "Й",
+                        "Ш",
+                    }
+                    short{
+                        "йш",
+                        "дш",
+                        "шш",
+                        "шр",
+                        "кс",
+                        "йм",
+                        "шб",
+                    }
+                    wide{
+                        "йәкшәмбе",
+                        "дүшәмбе",
+                        "шишәмбе",
+                        "шаршамбы",
+                        "кесаҙна",
+                        "йома",
+                        "шәмбе",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "йәк.",
+                        "дүш.",
+                        "шиш.",
+                        "шар.",
+                        "кес.",
+                        "йом.",
+                        "шәм.",
+                    }
+                    narrow{
+                        "Й",
+                        "Д",
+                        "Ш",
+                        "Ш",
+                        "К",
+                        "Й",
+                        "Ш",
+                    }
+                    short{
+                        "йш",
+                        "дш",
+                        "шш",
+                        "шр",
+                        "кс",
+                        "йм",
+                        "шб",
+                    }
+                    wide{
+                        "йәкшәмбе",
+                        "дүшәмбе",
+                        "шишәмбе",
+                        "шаршамбы",
+                        "кесаҙна",
+                        "йома",
+                        "шәмбе",
+                    }
+                }
+            }
+            eras{
+                abbreviated{
+                    0{"б.э.т."}
+                    1{"б.э."}
+                }
+                narrow{
+                    0{"б.э.т."}
+                    1{"б.э."}
+                }
+                narrow%variant{
+                    0{"б.э.т."}
+                    1{"б.э."}
+                }
+                wide{
+                    0{"беҙҙең эраға тиклем"}
+                    1{"беҙҙең эра"}
+                }
+                wide%variant{
+                    0{"беҙҙең эраға тиклем"}
+                    1{"беҙҙең эра"}
+                }
+            }
+            intervalFormats{
+                Bh{
+                    B{"h B – h B"}
+                }
+                Bhm{
+                    B{"h:mm B – h:mm B"}
+                }
+                Gy{
+                    G{"G y 'й'. – G y 'й'."}
+                    y{"G y – y 'йй'."}
+                }
+                GyM{
+                    G{"G y.MM – G y.MM"}
+                    M{"G MM.y – MM.y"}
+                    y{"G MM.y – MM.y"}
+                }
+                GyMEd{
+                    G{"G dd.MM.y, E – G dd.MM.y, E"}
+                    M{"G dd.MM.y, E – dd.MM.y, E"}
+                    d{"G dd.MM.y, E – dd.MM.y, E"}
+                    y{"G dd.MM.y, E – dd.MM.y, E"}
+                }
+                GyMMM{
+                    G{"MMM, G y 'й'. – MMM, G y 'й'."}
+                    M{"MMM–MMM, G y 'й'."}
+                    y{"MMM, G y 'й'. – MMM, G y 'й'."}
+                }
+                GyMMMEd{
+                    G{"d MMM, E, G y 'й'. – d MMM, E, G y 'й'."}
+                    M{"d MMM, E – d MMM, E, G y 'й'."}
+                    d{"d MMM, E, G y 'й'. – d MMM, E, G y 'й'."}
+                    y{"d MMM, E, G y 'й'. – d MMM, E, G y 'й'."}
+                }
+                GyMMMd{
+                    G{"d MMM, G y 'й'. – d MMM, G y 'й'."}
+                    M{"d MMM – d MMM, G y 'й'."}
+                    d{"d–d MMM, G y 'й'."}
+                    y{"d MMM, G y 'й'. – d MMM, G y 'й'."}
+                }
+                GyMd{
+                    G{"G dd.MM.y – G dd.MM.y"}
+                    M{"G dd.MM.y – dd.MM.y"}
+                    d{"G dd.MM.y – dd.MM.y"}
+                    y{"G dd.MM.y – dd.MM.y"}
+                }
+                MEd{
+                    M{"dd.MM, E – dd.MM, E"}
+                    d{"dd.MM, E – dd.MM, E"}
+                }
+                MMMEd{
+                    M{"d MMM, E – d MMM, E"}
+                    d{"d MMM, E – d MMM, E"}
+                }
+                MMMd{
+                    M{"d MMM – d MMM"}
+                    d{"d–d MMM"}
+                }
+                Md{
+                    M{"dd.MM – dd.MM"}
+                    d{"dd.MM – dd.MM"}
+                }
+                fallback{"{0} – {1}"}
+                h{
+                    a{"h a – h a"}
+                }
+                hm{
+                    a{"h:mm a – h:mm a"}
+                    h{"h:mm–h:mm a"}
+                    m{"h:mm–h:mm a"}
+                }
+                hmv{
+                    a{"h:mm a – h:mm a v"}
+                    h{"h:mm–h:mm a v"}
+                    m{"h:mm–h:mm a v"}
+                }
+                hv{
+                    a{"h a – h a v"}
+                }
+                yM{
+                    M{"MM.y – MM.y"}
+                    y{"MM.y – MM.y"}
+                }
+                yMEd{
+                    M{"dd.MM.y, E – dd.MM.y, E"}
+                    d{"dd.MM.y, E – dd.MM.y, E"}
+                    y{"dd.MM.y, E – dd.MM.y, E"}
+                }
+                yMMM{
+                    M{"MMM–MMM, y 'й'."}
+                    y{"y 'й'., MMM – y 'й'., MMM"}
+                }
+                yMMMEd{
+                    M{"d MMM, E, – d MMM, E, y 'й'."}
+                    d{"d MMM, E – d MMM, E, y 'й'."}
+                    y{"d MMM, E, y 'й'. – d MMM, E, y 'й'."}
+                }
+                yMMMM{
+                    M{"MMMM–MMMM, y 'й'."}
+                    y{"MMMM, y 'й'. – MMMM, y 'й'."}
+                }
+                yMMMd{
+                    M{"d MMM – d MMM, y 'й'."}
+                    d{"d–d MMM, y 'й'."}
+                    y{"d MMM, y 'й'. – d MMM, y 'й'."}
+                }
+                yMd{
+                    M{"dd.MM.y – dd.MM.y"}
+                    d{"dd.MM.y – dd.MM.y"}
+                    y{"dd.MM.y – dd.MM.y"}
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "ғин.",
+                        "фев.",
+                        "мар.",
+                        "апр.",
+                        "май",
+                        "июн.",
+                        "июл.",
+                        "авг.",
+                        "сент.",
+                        "окт.",
+                        "нояб.",
+                        "дек.",
+                    }
+                    narrow{
+                        "Ғ",
+                        "Ф",
+                        "М",
+                        "А",
+                        "М",
+                        "И",
+                        "И",
+                        "А",
+                        "С",
+                        "О",
+                        "Н",
+                        "Д",
+                    }
+                    wide{
+                        "ғинуар",
+                        "февраль",
+                        "март",
+                        "апрель",
+                        "май",
+                        "июнь",
+                        "июль",
+                        "август",
+                        "сентябрь",
+                        "октябрь",
+                        "ноябрь",
+                        "декабрь",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "ғин.",
+                        "фев.",
+                        "мар.",
+                        "апр.",
+                        "май",
+                        "июн.",
+                        "июл.",
+                        "авг.",
+                        "сент.",
+                        "окт.",
+                        "нояб.",
+                        "дек.",
+                    }
+                    narrow{
+                        "Ғ",
+                        "Ф",
+                        "М",
+                        "А",
+                        "М",
+                        "И",
+                        "И",
+                        "А",
+                        "С",
+                        "О",
+                        "Н",
+                        "Д",
+                    }
+                    wide{
+                        "ғинуар",
+                        "февраль",
+                        "март",
+                        "апрель",
+                        "май",
+                        "июнь",
+                        "июль",
+                        "август",
+                        "сентябрь",
+                        "октябрь",
+                        "ноябрь",
+                        "декабрь",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "1-се кв.",
+                        "2-се кв.",
+                        "3-сө кв.",
+                        "4-се кв.",
+                    }
+                    wide{
+                        "1-се квартал",
+                        "2-се квартал",
+                        "3-сө квартал",
+                        "4-се квартал",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "1-се кв.",
+                        "2-се кв.",
+                        "3-сө кв.",
+                        "4-се кв.",
+                    }
+                    wide{
+                        "1-се квартал",
+                        "2-се квартал",
+                        "3-сө квартал",
+                        "4-се квартал",
+                    }
+                }
+            }
+        }
+        islamic{
+            eras{
+                wide{
+                    0{"Һижрәттән һуң"}
+                    1{"Һижрәткә тиклем"}
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "мөх.",
+                        "сәф.",
+                        "раб. I",
+                        "раб. II",
+                        "йом. I",
+                        "йом. II",
+                        "рәж.",
+                        "шәғ.",
+                        "рам.",
+                        "шәү.",
+                        "зөлҡ.",
+                        "зөлх.",
+                    }
+                    wide{
+                        "мөхәррәм",
+                        "сәфәр",
+                        "рабиғүл әүүәл",
+                        "рабиғүл ахыр",
+                        "йомадиәл әүүәл",
+                        "йомадиәл ахыр",
+                        "рәжәб",
+                        "шәғбан",
+                        "рамаҙан",
+                        "шәүүәл",
+                        "зөлҡәғиҙә",
+                        "зөлхизә",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "мөх.",
+                        "сәф.",
+                        "раб. I",
+                        "раб. II",
+                        "йом. I",
+                        "йом. II",
+                        "рәж.",
+                        "шәғ.",
+                        "рам.",
+                        "шәү.",
+                        "зөлҡ.",
+                        "зөлх.",
+                    }
+                    wide{
+                        "мөхәррәм",
+                        "сәфәр",
+                        "рабиғүл әүүәл",
+                        "рабиғүл ахыр",
+                        "йомадиәл әүүәл",
+                        "йомадиәл ахыр",
+                        "рәжәб",
+                        "шәғбан",
+                        "рамаҙан",
+                        "шәүүәл",
+                        "зөлҡәғиҙә",
+                        "зөлхизә",
+                    }
+                }
+            }
+        }
+    }
+    characterLabel{
+        activities{"эшмәкәрлек"}
+        african_scripts{"Африка яҙмаһы"}
+        american_scripts{"Америка яҙмаһы"}
+        animal{"хайуан"}
+        animals_nature{"хайуан йәки тәбиғәт"}
+        arrows{"уҡтар"}
+        body{"тән"}
+        box_drawing{"ҡумта һыҙмаһы"}
+        braille{"Брайль шрифты"}
+        building{"бина"}
+        bullets_stars{"маркер йәки йондоҙ"}
+        consonantal_jamo{"тартынҡы джамо"}
+        currency_symbols{"валюта символы"}
+        dash_connector{"һыҙыҡ йәки тоташтырғыс"}
+        digits{"һан"}
+        dingbats{"дингбат"}
+        divination_symbols{"күрәҙәлек символы"}
+        downwards_arrows{"аҫҡа табан уҡ"}
+        downwards_upwards_arrows{"аҫҡа-өҫкә табан уҡ"}
+        east_asian_scripts{"Көнсығыш Азия яҙмаһы"}
+        emoji{"эмодзи"}
+        european_scripts{"Европа яҙмаһы"}
+        female{"ҡатын-ҡыҙ"}
+        flag{"флаг"}
+        flags{"флагтар"}
+        food_drink{"аҙыҡ-түлек һәм эсемлектәр"}
+        format{"формат"}
+        format_whitespace{"формат һәм буш урындар"}
+        full_width_form_variant{"тулы киңлектәге вариант"}
+        geometric_shapes{"геометрик форма"}
+        half_width_form_variant{"ярты киңлектәге вариант"}
+        han_characters{"Хан иероглифы"}
+        han_radicals{"Хан радикалдары"}
+        hanja{"ханча"}
+        hanzi_simplified{"Ханзи (ябайлаштырылған)"}
+        hanzi_traditional{"Ханзи (традицион)"}
+        heart{"йөрәк"}
+        historic_scripts{"тарихи яҙма"}
+        ideographic_desc_characters{"идеографик тасуирлау символы"}
+        japanese_kana{"япон канаһы"}
+        kanbun{"канбун"}
+        kanji{"кандзи"}
+        keycap{"клавиша"}
+        leftwards_arrows{"һулға табан уҡ"}
+        leftwards_rightwards_arrows{"һулға-уңға табан уҡ"}
+        letterlike_symbols{"хәрефкә оҡшаш символ"}
+        limited_use{"сикләнгән ҡулланыу"}
+        male{"ир-ат"}
+        math_symbols{"математик символ"}
+        middle_eastern_scripts{"Урта Көнсығыш яҙмаһы"}
+        miscellaneous{"төрлө"}
+        modern_scripts{"заманса яҙма"}
+        modifier{"модификаторҙар"}
+        musical_symbols{"музыкаль символ"}
+        nature{"тәбиғәт"}
+        nonspacing{"арауыҡһыҙ символдар"}
+        numbers{"һандар"}
+        objects{"объект"}
+        other{"башҡа"}
+        paired{"парлы"}
+        person{"кеше"}
+        phonetic_alphabet{"фонетик алфавит"}
+        pictographs{"пиктограмма"}
+        place{"урын"}
+        plant{"үҫемлек"}
+        punctuation{"тыныш билдәләре"}
+        rightwards_arrows{"уңға табан уҡ"}
+        sign_standard_symbols{"билдә йәки символ"}
+        small_form_variant{"бәләкәй варианттар"}
+        smiley{"смайлик"}
+        smileys_people{"смайлик йәки кеше"}
+        south_asian_scripts{"Көньяҡ Азия яҙмаһы"}
+        southeast_asian_scripts{"Көньяҡ-Көнсығыш Азия яҙмаһы"}
+        spacing{"арауыҡтар"}
+        sport{"спорт"}
+        symbols{"символ"}
+        technical_symbols{"техник символ"}
+        tone_marks{"тон билдәһе"}
+        travel{"сәйәхәт"}
+        travel_places{"сәйәхәт йәки урын"}
+        upwards_arrows{"өҫкә табан уҡтар"}
+        variant_forms{"вариант"}
+        vocalic_jamo{"һуҙынҡы джамо"}
+        weather{"һауа торошо"}
+        western_asian_scripts{"Көнбайыш Азия яҙмаһы"}
+        whitespace{"буш урындар"}
+    }
+    fields{
+        day{
+            dn{"көн"}
+            relative{
+                "-1"{"кисә"}
+                "0"{"бөгөн"}
+                "1"{"иртәгә"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} көндән"}
+                }
+                past{
+                    other{"{0} көн элек"}
+                }
+            }
+        }
+        day-narrow{
+            dn{"көн"}
+            relative{
+                "-1"{"кисә"}
+                "0"{"бөгөн"}
+                "1"{"иртәгә"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} көндән"}
+                }
+                past{
+                    other{"{0} көн элек"}
+                }
+            }
+        }
+        day-short{
+            dn{"көн"}
+            relative{
+                "-1"{"кисә"}
+                "0"{"бөгөн"}
+                "1"{"иртәгә"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} көндән"}
+                }
+                past{
+                    other{"{0} көн элек"}
+                }
+            }
+        }
+        dayOfYear{
+            dn{"йыл көнө"}
+        }
+        dayOfYear-narrow{
+            dn{"йыл көнө"}
+        }
+        dayOfYear-short{
+            dn{"йыл көнө"}
+        }
+        dayperiod{
+            dn{"AM/PM"}
+        }
+        dayperiod-narrow{
+            dn{"AM/PM"}
+        }
+        dayperiod-short{
+            dn{"AM/PM"}
+        }
+        era{
+            dn{"эра"}
+        }
+        era-narrow{
+            dn{"эра"}
+        }
+        era-short{
+            dn{"эра"}
+        }
+        fri{
+            relative{
+                "-1"{"үткән йомала"}
+                "0"{"был йомала"}
+                "1"{"киләһе йомала"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} йоманан һуң"}
+                }
+                past{
+                    other{"{0} йома элек"}
+                }
+            }
+        }
+        fri-narrow{
+            relative{
+                "-1"{"үткән йм"}
+                "0"{"был йм"}
+                "1"{"киләһе йм"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} йм һуң"}
+                }
+                past{
+                    other{"{0} йм элек"}
+                }
+            }
+        }
+        fri-short{
+            relative{
+                "-1"{"үткән йом."}
+                "0"{"был йом."}
+                "1"{"киләһе йом."}
+            }
+            relativeTime{
+                future{
+                    other{"{0} йом. һуң"}
+                }
+                past{
+                    other{"{0} йом. элек"}
+                }
+            }
+        }
+        hour{
+            dn{"сәғәт"}
+            relative{
+                "0"{"был сәғәттә"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} сәғәттән"}
+                }
+                past{
+                    other{"{0} сәғәт элек"}
+                }
+            }
+        }
+        hour-narrow{
+            dn{"сәғ"}
+            relative{
+                "0"{"был сәғәттә"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} сәғәттән"}
+                }
+                past{
+                    other{"{0} сәғ. элек"}
+                }
+            }
+        }
+        hour-short{
+            dn{"сәғ."}
+            relative{
+                "0"{"был сәғәттә"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} сәғәттән"}
+                }
+                past{
+                    other{"{0} сәғ. элек"}
+                }
+            }
+        }
+        minute{
+            dn{"минут"}
+            relative{
+                "0"{"был минутта"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} минуттан"}
+                }
+                past{
+                    other{"{0} минут элек"}
+                }
+            }
+        }
+        minute-narrow{
+            dn{"мин"}
+            relative{
+                "0"{"был минутта"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} минуттан"}
+                }
+                past{
+                    other{"{0} мин. элек"}
+                }
+            }
+        }
+        minute-short{
+            dn{"мин."}
+            relative{
+                "0"{"был минутта"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} минуттан"}
+                }
+                past{
+                    other{"{0} мин. элек"}
+                }
+            }
+        }
+        mon{
+            relative{
+                "-1"{"үткән дүшәмбелә"}
+                "0"{"был дүшәмбелә"}
+                "1"{"киләһе дүшәмбелә"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} дүшәмбенән һуң"}
+                }
+                past{
+                    other{"{0} дүшәмбе элек"}
+                }
+            }
+        }
+        mon-narrow{
+            relative{
+                "-1"{"үткән дш"}
+                "0"{"был дш"}
+                "1"{"киләһе дш"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} дш һуң"}
+                }
+                past{
+                    other{"{0} дш элек"}
+                }
+            }
+        }
+        mon-short{
+            relative{
+                "-1"{"үткән дүш."}
+                "0"{"был дүш."}
+                "1"{"киләһе дүш."}
+            }
+            relativeTime{
+                future{
+                    other{"{0} дүш. һуң"}
+                }
+                past{
+                    other{"{0} дүш. элек"}
+                }
+            }
+        }
+        month{
+            dn{"ай"}
+            relative{
+                "-1"{"үткән айҙа"}
+                "0"{"был айҙа"}
+                "1"{"киләһе айҙа"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} айҙан"}
+                }
+                past{
+                    other{"{0} ай элек"}
+                }
+            }
+        }
+        month-narrow{
+            dn{"ай"}
+            relative{
+                "-1"{"үткән айҙа"}
+                "0"{"был айҙа"}
+                "1"{"киләһе айҙа"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} айҙан"}
+                }
+                past{
+                    other{"{0} ай элек"}
+                }
+            }
+        }
+        month-short{
+            dn{"ай"}
+            relative{
+                "-1"{"үткән айҙа"}
+                "0"{"был айҙа"}
+                "1"{"киләһе айҙа"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} айҙан"}
+                }
+                past{
+                    other{"{0} ай элек"}
+                }
+            }
+        }
+        quarter{
+            dn{"квартал"}
+            relative{
+                "-1"{"үткән кварталда"}
+                "0"{"был кварталда"}
+                "1"{"киләһе кварталда"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} кварталдан"}
+                }
+                past{
+                    other{"{0} квартал элек"}
+                }
+            }
+        }
+        quarter-narrow{
+            dn{"кв."}
+            relative{
+                "-1"{"үткән кв."}
+                "0"{"был кв."}
+                "1"{"киләһе кв."}
+            }
+            relativeTime{
+                future{
+                    other{"{0} кв. һуң"}
+                }
+                past{
+                    other{"{0} кв. элек"}
+                }
+            }
+        }
+        quarter-short{
+            dn{"кв."}
+            relative{
+                "-1"{"үткән кв."}
+                "0"{"был кв."}
+                "1"{"киләһе кв."}
+            }
+            relativeTime{
+                future{
+                    other{"{0} кв. һуң"}
+                }
+                past{
+                    other{"{0} кв. элек"}
+                }
+            }
+        }
+        sat{
+            relative{
+                "-1"{"үткән шәмбелә"}
+                "0"{"был шәмбелә"}
+                "1"{"киләһе шәмбелә"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} шәмбенән һуң"}
+                }
+                past{
+                    other{"{0} шәмбе элек"}
+                }
+            }
+        }
+        sat-narrow{
+            relative{
+                "-1"{"үткән шб"}
+                "0"{"был шб"}
+                "1"{"киләһе шб"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} шб һуң"}
+                }
+                past{
+                    other{"{0} шб элек"}
+                }
+            }
+        }
+        sat-short{
+            relative{
+                "-1"{"үткән шәм."}
+                "0"{"был шәм."}
+                "1"{"киләһе шәм."}
+            }
+            relativeTime{
+                future{
+                    other{"{0} шәм. һуң"}
+                }
+                past{
+                    other{"{0} шәм. элек"}
+                }
+            }
+        }
+        second{
+            dn{"секунд"}
+            relative{
+                "0"{"хәҙер"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} секундтан"}
+                }
+                past{
+                    other{"{0} секунд элек"}
+                }
+            }
+        }
+        second-narrow{
+            dn{"сек"}
+            relative{
+                "0"{"хәҙер"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} секундтан"}
+                }
+                past{
+                    other{"{0} сек. элек"}
+                }
+            }
+        }
+        second-short{
+            dn{"сек."}
+            relative{
+                "0"{"хәҙер"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} секундтан"}
+                }
+                past{
+                    other{"{0} сек. элек"}
+                }
+            }
+        }
+        sun{
+            relative{
+                "-1"{"үткән йәкшәмбелә"}
+                "0"{"был йәкшәмбелә"}
+                "1"{"киләһе йәкшәмбелә"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} йәкшәмбенән һуң"}
+                }
+                past{
+                    other{"{0} йәкшәмбе элек"}
+                }
+            }
+        }
+        sun-narrow{
+            relative{
+                "-1"{"үткән йш"}
+                "0"{"был йш"}
+                "1"{"киләһе йш"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} йш һуң"}
+                }
+                past{
+                    other{"{0} йш элек"}
+                }
+            }
+        }
+        sun-short{
+            relative{
+                "-1"{"үткән йәк."}
+                "0"{"был йәк."}
+                "1"{"киләһе йәк."}
+            }
+            relativeTime{
+                future{
+                    other{"{0} йәк. һуң"}
+                }
+                past{
+                    other{"{0} йәк. элек"}
+                }
+            }
+        }
+        thu{
+            relative{
+                "-1"{"үткән кесаҙнала"}
+                "0"{"был кесаҙнала"}
+                "1"{"киләһе кесаҙнала"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} кесаҙнанан һуң"}
+                }
+                past{
+                    other{"{0} кесаҙна элек"}
+                }
+            }
+        }
+        thu-narrow{
+            relative{
+                "-1"{"үткән кс"}
+                "0"{"был кс"}
+                "1"{"киләһе кс"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} кс һуң"}
+                }
+                past{
+                    other{"{0} кс элек"}
+                }
+            }
+        }
+        thu-short{
+            relative{
+                "-1"{"үткән кес."}
+                "0"{"был кес."}
+                "1"{"киләһе кес."}
+            }
+            relativeTime{
+                future{
+                    other{"{0} кес. һуң"}
+                }
+                past{
+                    other{"{0} кес. элек"}
+                }
+            }
+        }
+        tue{
+            relative{
+                "-1"{"үткән шишәмбелә"}
+                "0"{"был шишәмбелә"}
+                "1"{"киләһе шишәмбелә"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} шишәмбенән һуң"}
+                }
+                past{
+                    other{"{0} шишәмбелә элек"}
+                }
+            }
+        }
+        tue-narrow{
+            relative{
+                "-1"{"үткән шш"}
+                "0"{"был шш"}
+                "1"{"киләһе шш"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} шш һуң"}
+                }
+                past{
+                    other{"{0} шш элек"}
+                }
+            }
+        }
+        tue-short{
+            relative{
+                "-1"{"үткән шиш."}
+                "0"{"был шиш."}
+                "1"{"киләһе шиш."}
+            }
+            relativeTime{
+                future{
+                    other{"{0} шиш. һуң"}
+                }
+                past{
+                    other{"{0} шиш. элек"}
+                }
+            }
+        }
+        wed{
+            relative{
+                "-1"{"үткән шаршамбыла"}
+                "0"{"был шаршамбыла"}
+                "1"{"киләһе шаршамбыла"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} шаршамбынан һуң"}
+                }
+                past{
+                    other{"{0} шаршамбы элек"}
+                }
+            }
+        }
+        wed-narrow{
+            relative{
+                "-1"{"үткән шр"}
+                "0"{"был шр"}
+                "1"{"киләһе шр"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} шр һуң"}
+                }
+                past{
+                    other{"{0} шр элек"}
+                }
+            }
+        }
+        wed-short{
+            relative{
+                "-1"{"үткән шар."}
+                "0"{"был шар."}
+                "1"{"киләһе шар."}
+            }
+            relativeTime{
+                future{
+                    other{"{0} шар. һуң"}
+                }
+                past{
+                    other{"{0} шар. элек"}
+                }
+            }
+        }
+        week{
+            dn{"аҙна"}
+            relative{
+                "-1"{"үткән аҙнала"}
+                "0"{"был аҙнала"}
+                "1"{"киләһе аҙнала"}
+            }
+            relativePeriod{"{0} аҙнаһында"}
+            relativeTime{
+                future{
+                    other{"{0} аҙнанан"}
+                }
+                past{
+                    other{"{0} аҙна элек"}
+                }
+            }
+        }
+        week-narrow{
+            dn{"аҙна"}
+            relative{
+                "-1"{"үткән аҙнала"}
+                "0"{"был аҙнала"}
+                "1"{"киләһе аҙнала"}
+            }
+            relativePeriod{"{0} аҙнаһында"}
+            relativeTime{
+                future{
+                    other{"{0} аҙнанан"}
+                }
+                past{
+                    other{"{0} аҙна элек"}
+                }
+            }
+        }
+        week-short{
+            dn{"аҙна"}
+            relative{
+                "-1"{"үткән аҙнала"}
+                "0"{"был аҙнала"}
+                "1"{"киләһе аҙнала"}
+            }
+            relativePeriod{"{0} аҙнаһында"}
+            relativeTime{
+                future{
+                    other{"{0} аҙнанан"}
+                }
+                past{
+                    other{"{0} аҙн. элек"}
+                }
+            }
+        }
+        weekOfMonth{
+            dn{"ай аҙнаһы"}
+        }
+        weekOfMonth-narrow{
+            dn{"ай аҙн."}
+        }
+        weekOfMonth-short{
+            dn{"ай аҙн."}
+        }
+        weekday{
+            dn{"аҙна көнө"}
+        }
+        weekday-narrow{
+            dn{"аҙна көнө"}
+        }
+        weekday-short{
+            dn{"аҙна көнө"}
+        }
+        weekdayOfMonth{
+            dn{"айҙың аҙна көнө"}
+        }
+        weekdayOfMonth-narrow{
+            dn{"айҙ. аҙн. к."}
+        }
+        weekdayOfMonth-short{
+            dn{"айҙ. аҙн. к."}
+        }
+        year{
+            dn{"йыл"}
+            relative{
+                "-1"{"былтыр"}
+                "0"{"быйыл"}
+                "1"{"киләһе йылда"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} йылдан"}
+                }
+                past{
+                    other{"{0} йыл элек"}
+                }
+            }
+        }
+        year-narrow{
+            dn{"й."}
+            relative{
+                "-1"{"былтыр"}
+                "0"{"быйыл"}
+                "1"{"киләһе йылда"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} йылдан"}
+                }
+                past{
+                    other{"{0} йыл элек"}
+                }
+            }
+        }
+        year-short{
+            dn{"й."}
+            relative{
+                "-1"{"былтыр"}
+                "0"{"быйыл"}
+                "1"{"киләһе йылда"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} йылдан"}
+                }
+                past{
+                    other{"{0} йыл элек"}
+                }
+            }
+        }
+        zone{
+            dn{"сәғәт бүлкәте"}
+        }
+        zone-narrow{
+            dn{"бүлкәт"}
+        }
+        zone-short{
+            dn{"бүлкәт"}
+        }
+    }
+    listPattern{
+        or{
+            2{"{0} йәки {1}"}
+            end{"{0} йәки {1}"}
+        }
+        or-narrow{
+            2{"{0} йәки {1}"}
+            end{"{0} йәки {1}"}
+        }
+        or-short{
+            2{"{0} йәки {1}"}
+            end{"{0} йәки {1}"}
+        }
+        standard{
+            2{"{0} һәм {1}"}
+            end{"{0} һәм {1}"}
+        }
+        standard-narrow{
+            2{"{0} һәм {1}"}
+            end{"{0} һәм {1}"}
+        }
+        standard-short{
+            2{"{0} һәм {1}"}
+            end{"{0} һәм {1}"}
+        }
+        unit{
+            2{"{0} һәм {1}"}
+            end{"{0} һәм {1}"}
+        }
+        unit-narrow{
+            2{"{0} һәм {1}"}
+            end{"{0} һәм {1}"}
+        }
+        unit-short{
+            2{"{0} һәм {1}"}
+            end{"{0} һәм {1}"}
+        }
+    }
+    measurementSystemNames{
+        UK{"Бөйөк Британия"}
+        US{"АҠШ"}
+        metric{"метрик"}
+    }
+    personNames{
+        initialPattern{
+            initialSequence{"{0}{1}"}
+        }
+        nameOrderLocales{
+            givenFirst{
+                "und",
+                "ba",
+            }
+        }
+        namePattern{
+            givenFirst-long-addressing-formal{"{title} {surname}"}
+            givenFirst-long-addressing-informal{"{given-informal}"}
+            givenFirst-long-monogram-informal{"{given-informal-monogram-allCaps}{surname-monogram-allCaps}"}
+            givenFirst-long-referring-formal{"{title} {given} {given2} {surname} {generation}, {credentials}"}
+            givenFirst-long-referring-informal{"{given-informal} {surname}"}
+            givenFirst-medium-addressing-formal{"{title} {surname}"}
+            givenFirst-medium-addressing-informal{"{given-informal}"}
+            givenFirst-medium-monogram-formal{"{surname-monogram-allCaps}"}
+            givenFirst-medium-monogram-informal{"{given-informal-monogram-allCaps}"}
+            givenFirst-medium-referring-formal{"{given} {given2-initial} {surname} {generation}, {credentials}"}
+            givenFirst-medium-referring-informal{"{given-informal} {surname}"}
+            givenFirst-short-addressing-formal{"{title} {surname}"}
+            givenFirst-short-addressing-informal{"{given-informal}"}
+            givenFirst-short-monogram-formal{"{surname-monogram-allCaps}"}
+            givenFirst-short-monogram-informal{"{given-informal-monogram-allCaps}"}
+            givenFirst-short-referring-formal{"{given-initial}{given2-initial} {surname}"}
+            givenFirst-short-referring-informal{"{given-informal} {surname-initial}"}
+            sorting-long-referring-formal{"{surname-core}, {given} {given2} {surname-prefix}"}
+            sorting-long-referring-informal{"{surname}, {given-informal}"}
+            sorting-medium-referring-formal{"{surname-core}, {given} {given2-initial} {surname-prefix}"}
+            sorting-medium-referring-informal{"{surname}, {given-informal}"}
+            sorting-short-referring-formal{"{surname-core}, {given-initial}{given2-initial} {surname-prefix}"}
+            sorting-short-referring-informal{"{surname}, {given-informal}"}
+            surnameFirst-long-addressing-formal{"{title} {surname}"}
+            surnameFirst-long-addressing-informal{"{given-informal}"}
+            surnameFirst-long-monogram-informal{"{surname-monogram-allCaps}{given-informal-monogram-allCaps}"}
+            surnameFirst-long-referring-formal{"{surname} {title} {given} {given2} {generation}, {credentials}"}
+            surnameFirst-long-referring-informal{"{surname} {given-informal}"}
+            surnameFirst-medium-addressing-formal{"{title} {surname}"}
+            surnameFirst-medium-addressing-informal{"{given-informal}"}
+            surnameFirst-medium-monogram-formal{"{surname-monogram-allCaps}"}
+            surnameFirst-medium-monogram-informal{"{given-informal-monogram-allCaps}"}
+            surnameFirst-medium-referring-formal{"{surname} {given} {given2-initial} {generation}, {credentials}"}
+            surnameFirst-medium-referring-informal{"{surname} {given-informal}"}
+            surnameFirst-short-addressing-formal{"{title} {surname}"}
+            surnameFirst-short-addressing-informal{"{given-informal}"}
+            surnameFirst-short-monogram-formal{"{surname-monogram-allCaps}"}
+            surnameFirst-short-monogram-informal{"{given-informal-monogram-allCaps}"}
+            surnameFirst-short-referring-formal{"{surname} {given-initial}{given2-initial}"}
+            surnameFirst-short-referring-informal{"{surname} {given-initial}"}
+        }
+    }
+}

@@ -1,0 +1,19 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+pms{
+    Languages{
+        ar{"arabich"}
+        ar_001{"arabich modern stàndar"}
+        en{"inglèis"}
+        pms{"piemontèis"}
+    }
+    Scripts{
+        Latn{"latin"}
+    }
+    codePatterns{
+        language{"Lingua: {0}"}
+        script{"Scritura: {0}"}
+        territory{"Region: {0}"}
+    }
+}

@@ -1,0 +1,223 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+de_CH{
+    units{
+        angle{
+            steradian{
+                one{"{0} Steradiant"}
+                other{"{0} Steradianten"}
+            }
+        }
+        area{
+            square-foot{
+                case{
+                    genitive{
+                        one{"{0} Quadratfusses"}
+                        other{"{0} Quadratfuss"}
+                    }
+                }
+                dnam{"Quadratfuss"}
+                one{"{0} Quadratfuss"}
+                other{"{0} Quadratfuss"}
+            }
+        }
+        concentr{
+            mole{
+                case{
+                    accusative{
+                        one{"{0} Mol"}
+                        other{"{0} Mole"}
+                    }
+                    dative{
+                        one{"{0} Mol"}
+                        other{"{0} Molen"}
+                    }
+                    genitive{
+                        one{"{0} Mol"}
+                        other{"{0} Mole"}
+                    }
+                }
+            }
+            ofglucose{
+                dnam{"Glucose"}
+                one{"{0} Glucose"}
+                other{"{0} Glucose"}
+            }
+            part{
+                dnam{"Punkte"}
+                one{"{0} Punkt"}
+                other{"{0} Punkte"}
+            }
+        }
+        duration{
+            quarter{
+                dnam{"Quartal"}
+            }
+        }
+        electric{
+            coulomb{
+                dnam{"Coulombs"}
+                one{"{0} Coulomb"}
+                other{"{0} Coulombs"}
+            }
+        }
+        energy{
+            calorie-it{
+                dnam{"Kalorie [IT]"}
+                one{"{0} Kalorie [IT]"}
+                other{"{0} Kalorien [IT]"}
+            }
+        }
+        force{
+            kilogram-force{
+                dnam{"Kilogrammkraft"}
+                one{"{0} Kilogrammkraft"}
+                other{"{0} Kilogrammkraft"}
+            }
+        }
+        length{
+            foot{
+                case{
+                    genitive{
+                        one{"{0} Fusses"}
+                        other{"{0} Fuss"}
+                    }
+                }
+                one{"{0} Fuss"}
+                other{"{0} Fuss"}
+                per{"{0} pro Fuss"}
+            }
+        }
+        pressure{
+            ofhg{
+                dnam{"Quecksilbersäule"}
+                one{"{0} Quecksilbersäule"}
+                other{"{0} Quecksilbersäule"}
+            }
+        }
+        speed{
+            beaufort{
+                one{"{0} Beaufort"}
+                other{"{0} Beaufort"}
+            }
+        }
+        volume{
+            cubic-foot{
+                case{
+                    accusative{
+                        one{"{0} Kubikfuss"}
+                        other{"{0} Kubikfuss"}
+                    }
+                    dative{
+                        one{"{0} Kubikfuss"}
+                        other{"{0} Kubikfuss"}
+                    }
+                    genitive{
+                        one{"{0} Kubikfusses"}
+                        other{"{0} Kubikfuss"}
+                    }
+                }
+                dnam{"Kubikfuss"}
+                one{"{0} Kubikfuss"}
+                other{"{0} Kubikfuss"}
+            }
+        }
+    }
+    unitsNarrow{
+        concentr{
+            katal{
+                one{"{0} kat"}
+                other{"{0} kat"}
+            }
+            part{
+                dnam{"Punkt"}
+                one{"{0} Punkt"}
+                other{"{0} Punkte"}
+            }
+        }
+        energy{
+            calorie-it{
+                dnam{"kcal [IT]"}
+                one{"{0} kcal [IT]"}
+                other{"{0} kcal [IT]"}
+            }
+        }
+        volume{
+            fluid-ounce-metric{
+                one{"{0} m. fl. oz."}
+                other{"{0} m. fl. oz."}
+            }
+        }
+    }
+    unitsShort{
+        concentr{
+            katal{
+                one{"{0} kat"}
+                other{"{0} kat"}
+            }
+            ofglucose{
+                one{"{0} Glc"}
+                other{"{0} Glc"}
+            }
+            part{
+                dnam{"Punkt"}
+                one{"{0} Punkt"}
+                other{"{0} Punkte"}
+            }
+        }
+        duration{
+            quarter{
+                dnam{"Quartal"}
+            }
+        }
+        energy{
+            becquerel{
+                one{"{0} Bq"}
+                other{"{0} Bq"}
+            }
+            calorie-it{
+                dnam{"kcal [IT]"}
+                one{"{0} kcal [IT]"}
+                other{"{0} kcal [IT]"}
+            }
+        }
+        length{
+            foot{
+                dnam{"Fuss"}
+            }
+        }
+        pressure{
+            ofhg{
+                one{"{0} Hg"}
+                other{"{0} Hg"}
+            }
+        }
+        speed{
+            beaufort{
+                one{"{0} Bft"}
+                other{"{0} Bft"}
+            }
+        }
+        volume{
+            dram{
+                dnam{"Dram"}
+                one{"{0} dr."}
+                other{"{0} dr."}
+            }
+            fluid-ounce-metric{
+                one{"{0} m. fl. oz."}
+                other{"{0} m. fl. oz."}
+            }
+            jigger{
+                dnam{"Schuss"}
+                one{"{0} Schuss"}
+                other{"{0} Schuss"}
+            }
+            pinch{
+                one{"{0} Prise"}
+                other{"{0} Prise"}
+            }
+        }
+    }
+}

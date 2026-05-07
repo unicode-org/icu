@@ -1,0 +1,2675 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+shn{
+    AuxExemplarCharacters{"[၀႐ ၁႑ ၂႒ ၃႓ ၄႔ ၅႕ ၆႖ ၇႗ ၈႘ ၉႙ ၚ ၐ ၑ ၥ ၒ ၓ ၔ ၕ ဨ ဳ ၖ ၗ ၘ ၙ ဴ]"}
+    ExemplarCharacters{
+        "[ံး ႞ ႟ ၵ ၶ ၷ ꧠ င ၸ ꩡ ၺ ꩦ ꩧ ꩨ ꩩ ꧣ တ ထ ၻ ꩪ ၼ ပ ၽ ၾ ၿ ꧤ မ ယ ျ ရ ြ လ ဝ ွ ႂ ႀ သ "
+        "ႁ ꩮ ဢ ႃ ိ ီ ု ူ ေ ႄ ဵ ႅ ႆ ၢ ꧥ ် ႇ ႈ ႉ ႊ]"
+    }
+    ExemplarCharactersIndex{"[႞ ႟ ၵ ၶ ၷ ꧠ င ၸ ꩡ ၺ ꧣ တ ထ ၻ ꩪ ၼ ပ ၽ ၾ ၿ မ ယ ရ လ ဝ ႀ သ ႁ ꩮ ဢ]"}
+    ExemplarCharactersNumbers{"[\\- ‑ , . % ‰ + 0၀႐ 1၁႑ 2၂႒ 3၃႓ 4၄႔ 5၅႕ 6၆႖ 7၇႗ 8၈႘ 9၉႙]"}
+    ExemplarCharactersPunctuation{"[\\- ‐‑ – — … ၊ ။ ‘’ “” ( ) \\[ \\] \\{ \\} @ * / #]"}
+    NumberElements{
+        latn{
+            patternsLong{
+                decimalFormat{
+                    1000{
+                        other{"0 ႁဵင်"}
+                    }
+                    10000{
+                        other{"0 မိုၼ်ႇ"}
+                    }
+                    100000{
+                        other{"0 သႅၼ်"}
+                    }
+                    1000000{
+                        other{"0 လၢၼ်ႉ"}
+                    }
+                    10000000{
+                        other{"00 လၢၼ်ႉ"}
+                    }
+                    100000000{
+                        other{"000 လၢၼ်ႉ"}
+                    }
+                    1000000000{
+                        other{"0 ႁဵင်လၢၼ်ႉ"}
+                    }
+                    10000000000{
+                        other{"0 မိုၼ်ႇလၢၼ်ႉ"}
+                    }
+                    100000000000{
+                        other{"0 သႅၼ်လၢၼ်ႉ"}
+                    }
+                    1000000000000{
+                        other{"0 လၢၼ်ႉလၢၼ်ႉ"}
+                    }
+                    10000000000000{
+                        other{"00 လၢၼ်ႉလၢၼ်ႉ"}
+                    }
+                    100000000000000{
+                        other{"000 လၢၼ်ႉလၢၼ်ႉ"}
+                    }
+                }
+            }
+        }
+        minimalPairs{
+            ordinal{
+                other{"ငွၵ်းၶႂႃ တီႈငွၵ်း ထိ {0}"}
+            }
+            plural{
+                other{"{0} ဝၼ်း"}
+            }
+        }
+    }
+    calendar{
+        buddhist{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "G y MMMM d - EEEE",
+                "G y MMMM d",
+                "G y MMM d",
+                "GGGGG y-MM-dd",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            DateTimePatterns%atTime{
+                "{1} ၶၢဝ်းယၢမ်း {0}",
+                "{1} ၶၢဝ်းယၢမ်း {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Ed{"d - E"}
+                GyMEd{"G y-MM-dd - E"}
+                GyMMMEd{"G y MMM d - E"}
+                GyMd{"GGGGG y-MM-dd"}
+                MEd{"MM-dd - E"}
+                MMMEd{"MMM d - E"}
+                yyyyM{"GGGGG y-MM"}
+                yyyyMEd{"GGGGG y-MM-dd - E"}
+                yyyyMMMEd{"G y MMM d - E"}
+                yyyyMd{"GGGGG y-MM-dd"}
+            }
+            eras{
+                abbreviated{
+                    0{"ပ.သ."}
+                }
+                narrow{
+                    0{"ပ.သ."}
+                }
+                wide{
+                    0{"ပီသႃႇသၼႃႇ"}
+                }
+            }
+            intervalFormats{
+                GyM{
+                    G{"GGGGG y-MM – GGGGG y-MM"}
+                    M{"GGGGG y-MM – y-MM"}
+                    y{"GGGGG y-MM – y-MM"}
+                }
+                GyMEd{
+                    G{"GGGGG y-MM-dd - E – GGGGG y-MM-dd - E"}
+                    M{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                    d{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                    y{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                }
+                GyMMMEd{
+                    G{"G y MMM d - E – G y MMM d - E"}
+                    M{"G y MMM d - E – MMM d - E"}
+                    d{"G y MMM d - E – MMM d - E"}
+                    y{"G y MMM d - E – y MMM d - E"}
+                }
+                GyMd{
+                    G{"GGGGG y-MM-dd – GGGGG y-MM-dd"}
+                    M{"GGGGG y-MM-dd – y-MM-dd"}
+                    d{"GGGGG y-MM-dd – y-MM-dd"}
+                    y{"GGGGG y-MM-dd – y-MM-dd"}
+                }
+                MEd{
+                    M{"MM-dd - E – MM-dd - E"}
+                    d{"MM-dd - E – MM-dd - E"}
+                }
+                MMMEd{
+                    M{"MMM d - E – MMM d - E"}
+                    d{"MMM d - E – MMM d - E"}
+                }
+                yM{
+                    M{"GGGGG y-MM – y-MM"}
+                    y{"GGGGG y-MM – y-MM"}
+                }
+                yMEd{
+                    M{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                    d{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                    y{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                }
+                yMMMEd{
+                    M{"G y MMM d - E – MMM d - E"}
+                    d{"G y MMM d - E – MMM d - E"}
+                    y{"G y MMM d - E – y MMM d - E"}
+                }
+                yMd{
+                    M{"GGGGG y-MM-dd – y-MM-dd"}
+                    d{"GGGGG y-MM-dd – y-MM-dd"}
+                    y{"GGGGG y-MM-dd – y-MM-dd"}
+                }
+            }
+        }
+        chinese{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "r(U) MMMM d - EEEE",
+                "r(U) MMMM d",
+                "r MMM d",
+                "r-MM-dd",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Ed{"d - E"}
+                GyMMMEd{"r MMM d - E"}
+                GyMMMMEd{"r(U) MMMM d - E"}
+                MEd{"MM-dd - E"}
+                MMMEd{"MMM d - E"}
+                yyyyMEd{"r-MM-dd - E"}
+                yyyyMMMEd{"r MMM d - E"}
+                yyyyMMMMEd{"r(U) MMMM d - E"}
+            }
+            intervalFormats{
+                MEd{
+                    M{"MM-dd - E – MM-dd - E"}
+                    d{"MM-dd - E – MM-dd - E"}
+                }
+                MMMEd{
+                    M{"MMM d - E – MMM d - E"}
+                    d{"MMM d - E – MMM d - E"}
+                }
+                yMEd{
+                    M{"y-MM-dd - E – y-MM-dd - E"}
+                    d{"y-MM-dd - E – y-MM-dd - E"}
+                    y{"y-MM-dd - E – y-MM-dd - E"}
+                }
+                yMMMEd{
+                    M{"U MMM d၊ E – MMM d - E"}
+                    d{"U MMM d၊ E – MMM d - E"}
+                    y{"U MMM d၊ E – U MMM d - E"}
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "လိူၼ်ထူၼ်ႈၼိုင်ႈ",
+                        "လိူၼ်ထူၼ်ႈသွင်",
+                        "လိူၼ်ထူၼ်ႈသၢမ်",
+                        "လိူၼ်ထူၼ်ႈသီႇ",
+                        "လိူၼ်ထူၼ်ႈႁႃႈ",
+                        "လိူၼ်ထူၼ်ႈႁူၵ်း",
+                        "လိူၼ်ထူၼ်ႈၸဵတ်း",
+                        "လိူၼ်ထူၼ်ႈပႅတ်ႇ",
+                        "လိူၼ်ထူၼ်ႈၵဝ်ႈ",
+                        "လိူၼ်ထူၼ်ႈသိပ်း",
+                        "လိူၼ်ထူၼ်ႈသိပ်းဢဵတ်း",
+                        "လိူၼ်ထူၼ်ႈသိပ်းသွင်",
+                    }
+                    wide{
+                        "လိူၼ်ထူၼ်ႈၼိုင်ႈ",
+                        "လိူၼ်ထူၼ်ႈသွင်",
+                        "လိူၼ်ထူၼ်ႈသၢမ်",
+                        "လိူၼ်ထူၼ်ႈသီႇ",
+                        "လိူၼ်ထူၼ်ႈႁႃႈ",
+                        "လိူၼ်ထူၼ်ႈႁူၵ်း",
+                        "လိူၼ်ထူၼ်ႈၸဵတ်း",
+                        "လိူၼ်ထူၼ်ႈပႅတ်ႇ",
+                        "လိူၼ်ထူၼ်ႈၵဝ်ႈ",
+                        "လိူၼ်ထူၼ်ႈသိပ်း",
+                        "လိူၼ်ထူၼ်ႈသိပ်းဢဵတ်း",
+                        "လိူၼ်ထူၼ်ႈသိပ်းသွင်",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "လိူၼ်ထူၼ်ႈၼိုင်ႈ",
+                        "လိူၼ်ထူၼ်ႈသွင်",
+                        "လိူၼ်ထူၼ်ႈသၢမ်",
+                        "လိူၼ်ထူၼ်ႈသီႇ",
+                        "လိူၼ်ထူၼ်ႈႁႃႈ",
+                        "လိူၼ်ထူၼ်ႈႁူၵ်း",
+                        "လိူၼ်ထူၼ်ႈၸဵတ်း",
+                        "လိူၼ်ထူၼ်ႈပႅတ်ႇ",
+                        "လိူၼ်ထူၼ်ႈၵဝ်ႈ",
+                        "လိူၼ်ထူၼ်ႈသိပ်း",
+                        "လိူၼ်ထူၼ်ႈသိပ်းဢဵတ်း",
+                        "လိူၼ်ထူၼ်ႈသိပ်းသွင်",
+                    }
+                    wide{
+                        "လိူၼ်ထူၼ်ႈၼိုင်ႈ",
+                        "လိူၼ်ထူၼ်ႈသွင်",
+                        "လိူၼ်ထူၼ်ႈသၢမ်",
+                        "လိူၼ်ထူၼ်ႈသီႇ",
+                        "လိူၼ်ထူၼ်ႈႁႃႈ",
+                        "လိူၼ်ထူၼ်ႈႁူၵ်း",
+                        "လိူၼ်ထူၼ်ႈၸဵတ်း",
+                        "လိူၼ်ထူၼ်ႈပႅတ်ႇ",
+                        "လိူၼ်ထူၼ်ႈၵဝ်ႈ",
+                        "လိူၼ်ထူၼ်ႈသိပ်း",
+                        "လိူၼ်ထူၼ်ႈသိပ်းဢဵတ်း",
+                        "လိူၼ်ထူၼ်ႈသိပ်းသွင်",
+                    }
+                }
+            }
+        }
+        coptic{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "G y MMMM d - EEEE",
+                "G y MMMM d",
+                "G y MMM d",
+                "GGGGG y-MM-dd",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            DateTimePatterns%atTime{
+                "{1} ၶၢဝ်းယၢမ်း {0}",
+                "{1} ၶၢဝ်းယၢမ်း {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Ed{"d - E"}
+                GyMEd{"G y-MM-dd - E"}
+                GyMMMEd{"G y MMM d - E"}
+                GyMd{"GGGGG y-MM-dd"}
+                MEd{"MM-dd - E"}
+                MMMEd{"MMM d - E"}
+                yyyyM{"GGGGG y-MM"}
+                yyyyMEd{"GGGGG y-MM-dd - E"}
+                yyyyMMMEd{"G y MMM d - E"}
+                yyyyMd{"GGGGG y-MM-dd"}
+            }
+            intervalFormats{
+                GyM{
+                    G{"GGGGG y-MM – GGGGG y-MM"}
+                    M{"GGGGG y-MM – y-MM"}
+                    y{"GGGGG y-MM – y-MM"}
+                }
+                GyMEd{
+                    G{"GGGGG y-MM-dd - E – GGGGG y-MM-dd - E"}
+                    M{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                    d{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                    y{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                }
+                GyMMMEd{
+                    G{"G y MMM d - E – G y MMM d - E"}
+                    M{"G y MMM d - E – MMM d - E"}
+                    d{"G y MMM d - E – MMM d - E"}
+                    y{"G y MMM d - E – y MMM d - E"}
+                }
+                GyMd{
+                    G{"GGGGG y-MM-dd – GGGGG y-MM-dd"}
+                    M{"GGGGG y-MM-dd – y-MM-dd"}
+                    d{"GGGGG y-MM-dd – y-MM-dd"}
+                    y{"GGGGG y-MM-dd – y-MM-dd"}
+                }
+                H{
+                    H{"HH–HH"}
+                }
+                Hv{
+                    H{"HH–HHမ v"}
+                }
+                MEd{
+                    M{"MM-dd - E – MM-dd - E"}
+                    d{"MM-dd - E – MM-dd - E"}
+                }
+                MMMEd{
+                    M{"MMM d - E – MMM d - E"}
+                    d{"MMM d - E – MMM d - E"}
+                }
+                yM{
+                    M{"GGGGG y-MM – y-MM"}
+                    y{"GGGGG y-MM – y-MM"}
+                }
+                yMEd{
+                    M{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                    d{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                    y{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                }
+                yMMMEd{
+                    M{"G y MMM d - E – MMM d - E"}
+                    d{"G y MMM d - E – MMM d - E"}
+                    y{"G y MMM d - E – y MMM d - E"}
+                }
+                yMd{
+                    M{"GGGGG y-MM-dd – y-MM-dd"}
+                    d{"GGGGG y-MM-dd – y-MM-dd"}
+                    y{"GGGGG y-MM-dd – y-MM-dd"}
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "ထွၵ်ႉ",
+                        "ပႃႇပႃႇ",
+                        "ႁတ်ႉထေႃး",
+                        "ၵိၶ်",
+                        "တူဝ်ႇပႃႇ",
+                        "ဢႅမ်းသႄးရ်",
+                        "ပရမ်ႇႁတ်ႉ",
+                        "ပႃႇရႃႇမူဝ်ႇတႃႇ",
+                        "ပႃႇသၢၼ်ႇ",
+                        "ပဝ်းၼႃး",
+                        "ဢႅပ်ႉပႅပ်ႉ",
+                        "မႅတ်ႉသရႃႇ",
+                        "ၼႃႇသီႇ",
+                    }
+                    wide{
+                        "ထွၵ်ႉ",
+                        "ပႃႇပႃႇ",
+                        "ႁတ်ႉထေႃး",
+                        "ၵိၶ်",
+                        "တူဝ်ႇပႃႇ",
+                        "ဢႅမ်းသႄးရ်",
+                        "ပရမ်ႇႁတ်ႉ",
+                        "ပႃႇရႃႇမူဝ်ႇတႃႇ",
+                        "ပႃႇသၢၼ်ႇ",
+                        "ပဝ်းၼႃး",
+                        "ဢႅပ်ႉပႅပ်ႉ",
+                        "မႅတ်ႉသရႃႇ",
+                        "ၼႃႇသီႇ",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "ထွၵ်ႉ",
+                        "ပႃႇပႃႇ",
+                        "ႁတ်ႉထေႃး",
+                        "ၵိၶ်",
+                        "တူဝ်ႇပႃႇ",
+                        "ဢႅမ်းသႄးရ်",
+                        "ပရမ်ႇႁတ်ႉ",
+                        "ပႃႇရႃႇမူဝ်ႇတႃႇ",
+                        "ပႃႇသၢၼ်ႇ",
+                        "ပဝ်းၼႃး",
+                        "ဢႅပ်ႉပႅပ်ႉ",
+                        "မႅတ်ႉသရႃႇ",
+                        "ၼႃႇသီႇ",
+                    }
+                    wide{
+                        "ထွၵ်ႉ",
+                        "ပႃႇပႃႇ",
+                        "ႁတ်ႉထေႃး",
+                        "ၵိၶ်",
+                        "တူဝ်ႇပႃႇ",
+                        "ဢႅမ်းသႄးရ်",
+                        "ပရမ်ႇႁတ်ႉ",
+                        "ပႃႇရႃႇမူဝ်ႇတႃႇ",
+                        "ပႃႇသၢၼ်ႇ",
+                        "ပဝ်းၼႃး",
+                        "ဢႅပ်ႉပႅပ်ႉ",
+                        "မႅတ်ႉသရႃႇ",
+                        "ၼႃႇသီႇ",
+                    }
+                }
+            }
+        }
+        dangi{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "r(U) MMMM d - EEEE",
+                "r(U) MMMM d",
+                "r MMM d",
+                "r-MM-dd",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Ed{"d - E"}
+                GyMMMEd{"r MMM d - E"}
+                GyMMMMEd{"r(U) MMMM d - E"}
+                MEd{"MM-dd - E"}
+                MMMEd{"MMM d - E"}
+                yyyyMEd{"r-MM-dd - E"}
+                yyyyMMMEd{"r MMM d - E"}
+                yyyyMMMMEd{"r(U) MMMM d - E"}
+            }
+            intervalFormats{
+                MEd{
+                    M{"MM-dd - E – MM-dd - E"}
+                    d{"MM-dd - E – MM-dd - E"}
+                }
+                MMMEd{
+                    M{"MMM d - E – MMM d - E"}
+                    d{"MMM d - E – MMM d - E"}
+                }
+                yMEd{
+                    M{"y-MM-dd - E – y-MM-dd - E"}
+                    d{"y-MM-dd - E – y-MM-dd - E"}
+                    y{"y-MM-dd - E – y-MM-dd - E"}
+                }
+                yMMMEd{
+                    M{"U MMM d၊ E – MMM d - E"}
+                    d{"U MMM d၊ E – MMM d - E"}
+                    y{"U MMM d၊ E – U MMM d - E"}
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "လိူၼ်ထူၼ်ႈၼိုင်ႈ",
+                        "လိူၼ်ထူၼ်ႈသွင်",
+                        "လိူၼ်ထူၼ်ႈသၢမ်",
+                        "လိူၼ်ထူၼ်ႈသီႇ",
+                        "လိူၼ်ထူၼ်ႈႁႃႈ",
+                        "လိူၼ်ထူၼ်ႈႁူၵ်း",
+                        "လိူၼ်ထူၼ်ႈၸဵတ်း",
+                        "လိူၼ်ထူၼ်ႈပႅတ်ႇ",
+                        "လိူၼ်ထူၼ်ႈၵဝ်ႈ",
+                        "လိူၼ်ထူၼ်ႈသိပ်း",
+                        "လိူၼ်ထူၼ်ႈသိပ်းဢဵတ်း",
+                        "လိူၼ်ထူၼ်ႈသိပ်းသွင်",
+                    }
+                    wide{
+                        "လိူၼ်ထူၼ်ႈၼိုင်ႈ",
+                        "လိူၼ်ထူၼ်ႈသွင်",
+                        "လိူၼ်ထူၼ်ႈသၢမ်",
+                        "လိူၼ်ထူၼ်ႈသီႇ",
+                        "လိူၼ်ထူၼ်ႈႁႃႈ",
+                        "လိူၼ်ထူၼ်ႈႁူၵ်း",
+                        "လိူၼ်ထူၼ်ႈၸဵတ်း",
+                        "လိူၼ်ထူၼ်ႈပႅတ်ႇ",
+                        "လိူၼ်ထူၼ်ႈၵဝ်ႈ",
+                        "လိူၼ်ထူၼ်ႈသိပ်း",
+                        "လိူၼ်ထူၼ်ႈသိပ်းဢဵတ်း",
+                        "လိူၼ်ထူၼ်ႈသိပ်းသွင်",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "လိူၼ်ထူၼ်ႈၼိုင်ႈ",
+                        "လိူၼ်ထူၼ်ႈသွင်",
+                        "လိူၼ်ထူၼ်ႈသၢမ်",
+                        "လိူၼ်ထူၼ်ႈသီႇ",
+                        "လိူၼ်ထူၼ်ႈႁႃႈ",
+                        "လိူၼ်ထူၼ်ႈႁူၵ်း",
+                        "လိူၼ်ထူၼ်ႈၸဵတ်း",
+                        "လိူၼ်ထူၼ်ႈပႅတ်ႇ",
+                        "လိူၼ်ထူၼ်ႈၵဝ်ႈ",
+                        "လိူၼ်ထူၼ်ႈသိပ်း",
+                        "လိူၼ်ထူၼ်ႈသိပ်းဢဵတ်း",
+                        "လိူၼ်ထူၼ်ႈသိပ်းသွင်",
+                    }
+                    wide{
+                        "လိူၼ်ထူၼ်ႈၼိုင်ႈ",
+                        "လိူၼ်ထူၼ်ႈသွင်",
+                        "လိူၼ်ထူၼ်ႈသၢမ်",
+                        "လိူၼ်ထူၼ်ႈသီႇ",
+                        "လိူၼ်ထူၼ်ႈႁႃႈ",
+                        "လိူၼ်ထူၼ်ႈႁူၵ်း",
+                        "လိူၼ်ထူၼ်ႈၸဵတ်း",
+                        "လိူၼ်ထူၼ်ႈပႅတ်ႇ",
+                        "လိူၼ်ထူၼ်ႈၵဝ်ႈ",
+                        "လိူၼ်ထူၼ်ႈသိပ်း",
+                        "လိူၼ်ထူၼ်ႈသိပ်းဢဵတ်း",
+                        "လိူၼ်ထူၼ်ႈသိပ်းသွင်",
+                    }
+                }
+            }
+        }
+        ethiopic{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "G y MMMM d - EEEE",
+                "G y MMMM d",
+                "G y MMM d",
+                "G y-MM-dd",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            DateTimePatterns%atTime{
+                "{1} ၶၢဝ်းယၢမ်း {0}",
+                "{1} ၶၢဝ်းယၢမ်း {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Ed{"d - E"}
+                GyMEd{"G y-MM-dd - E"}
+                GyMMMEd{"G y MMM d - E"}
+                MEd{"MM-dd - E"}
+                MMMEd{"MMM d - E"}
+                yyyyMEd{"GGGGG y-MM-dd - E"}
+                yyyyMMMEd{"G y MMM d - E"}
+            }
+            intervalFormats{
+                GyMEd{
+                    G{"GGGGG y-MM-dd - E – GGGGG y-MM-dd - E"}
+                    M{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                    d{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                    y{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                }
+                GyMMMEd{
+                    G{"G y MMM d - E – G y MMM d - E"}
+                    M{"G y MMM d - E – MMM d - E"}
+                    d{"G y MMM d - E – MMM d - E"}
+                    y{"G y MMM d - E – y MMM d - E"}
+                }
+                MEd{
+                    M{"MM-dd - E – MM-dd - E"}
+                    d{"MM-dd - E – MM-dd - E"}
+                }
+                MMMEd{
+                    M{"MMM d - E – MMM d - E"}
+                    d{"MMM d - E – MMM d - E"}
+                }
+                yMEd{
+                    M{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                    d{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                    y{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                }
+                yMMMEd{
+                    M{"G y MMM d - E – MMM d - E"}
+                    d{"G y MMM d - E – MMM d - E"}
+                    y{"G y MMM d - E – y MMM d - E"}
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "မႅတ်ႉသ်ရႅမ်ႇ",
+                        "တႅၵ်ႉၵမ်ႇ",
+                        "ႁႄႇတႃႇ",
+                        "တႃးသတ်ႉသ်",
+                        "တႄးလ်",
+                        "ယေႇၵတိတ်ႉ",
+                        "မႅၵ်ႇၵႃႇပိတ်ႉ",
+                        "မိယႃႇၸီႇယႃႇ",
+                        "ၵႅၼ်ႇပၢတ်ႉ",
+                        "သိၼ်း",
+                        "ႁႅမ်းလႄး",
+                        "ၼႁၢတ်ႉသ်",
+                        "ပႃႇၵူႇမႅၼ်ႇ",
+                    }
+                    wide{
+                        "မႅတ်ႉသ်ရႅမ်ႇ",
+                        "တႅၵ်ႉၵမ်ႇ",
+                        "ႁႄႇတႃႇ",
+                        "တႃးသတ်ႉသ်",
+                        "တႄးလ်",
+                        "ယေႇၵတိတ်ႉ",
+                        "မႅၵ်ႇၵႃႇပိတ်ႉ",
+                        "မိယႃႇၸီႇယႃႇ",
+                        "ၵႅၼ်ႇပၢတ်ႉ",
+                        "သိၼ်း",
+                        "ႁႅမ်းလႄး",
+                        "ၼႁၢတ်ႉသ်",
+                        "ပႃႇၵူႇမႅၼ်ႇ",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "မႅတ်ႉသ်ရႅမ်ႇ",
+                        "တႅၵ်ႉၵမ်ႇ",
+                        "ႁႄႇတႃႇ",
+                        "တႃးသတ်ႉသ်",
+                        "တႄးလ်",
+                        "ယေႇၵတိတ်ႉ",
+                        "မႅၵ်ႇၵႃႇပိတ်ႉ",
+                        "မိယႃႇၸီႇယႃႇ",
+                        "ၵႅၼ်ႇပၢတ်ႉ",
+                        "သိၼ်း",
+                        "ႁႅမ်းလႄး",
+                        "ၼႁၢတ်ႉသ်",
+                        "ပႃႇၵူႇမႅၼ်ႇ",
+                    }
+                    wide{
+                        "မႅတ်ႉသ်ရႅမ်ႇ",
+                        "တႅၵ်ႉၵမ်ႇ",
+                        "ႁႄႇတႃႇ",
+                        "တႃးသတ်ႉသ်",
+                        "တႄးလ်",
+                        "ယေႇၵတိတ်ႉ",
+                        "မႅၵ်ႇၵႃႇပိတ်ႉ",
+                        "မိယႃႇၸီႇယႃႇ",
+                        "ၵႅၼ်ႇပၢတ်ႉ",
+                        "သိၼ်း",
+                        "ႁႅမ်းလႄး",
+                        "ၼႁၢတ်ႉသ်",
+                        "ပႃႇၵူႇမႅၼ်ႇ",
+                    }
+                }
+            }
+        }
+        generic{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "G y MMMM d - EEEE",
+                "G y MMMM d",
+                "G y MMM d",
+                "G y-MM-dd",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            DateTimePatterns%atTime{
+                "{1} ၶၢဝ်းယၢမ်း {0}",
+                "{1} ၶၢဝ်းယၢမ်း {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Ed{"d - E"}
+                GyMEd{"G y-MM-dd - E"}
+                GyMMMEd{"G y MMM d - E"}
+                MEd{"MM-dd - E"}
+                MMMEd{"MMM d - E"}
+                yyyyMEd{"GGGGG y-MM-dd - E"}
+                yyyyMMMEd{"G y MMM d - E"}
+            }
+            intervalFormats{
+                GyMEd{
+                    G{"GGGGG y-MM-dd - E – GGGGG y-MM-dd - E"}
+                    M{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                    d{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                    y{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                }
+                GyMMMEd{
+                    G{"G y MMM d - E – G y MMM d - E"}
+                    M{"G y MMM d - E – MMM d - E"}
+                    d{"G y MMM d - E – MMM d - E"}
+                    y{"G y MMM d - E – y MMM d - E"}
+                }
+                MEd{
+                    M{"MM-dd - E – MM-dd - E"}
+                    d{"MM-dd - E – MM-dd - E"}
+                }
+                MMMEd{
+                    M{"MMM d - E – MMM d - E"}
+                    d{"MMM d - E – MMM d - E"}
+                }
+                yMEd{
+                    M{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                    d{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                    y{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                }
+                yMMMEd{
+                    M{"G y MMM d - E – MMM d - E"}
+                    d{"G y MMM d - E – MMM d - E"}
+                    y{"G y MMM d - E – y MMM d - E"}
+                }
+            }
+        }
+        gregorian{
+            AmPmMarkers{
+                "တွၼ်ႈၸဝ်ႉ",
+                "တွၼ်ႈလႃႈ",
+            }
+            AmPmMarkersAbbr{
+                "တၸ.",
+                "တလ.",
+            }
+            AmPmMarkersNarrow{
+                "ၸ.",
+                "လ.",
+            }
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "y MMMM d - EEEE",
+                "y MMMM d",
+                "y MMM d",
+                "y-MM-dd",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Ed{"d - E"}
+                GyMEd{"G y-MM-dd - E"}
+                GyMMMEd{"G y MMM d - E"}
+                MEd{"MM-dd - E"}
+                MMMEd{"MMM d - E"}
+                MMMMW{
+                    other{"ဝူင်ႈထူၼ်ႈ W ၶွင်လိူၼ် MMMM"}
+                }
+                yMEd{"y-MM-dd - E"}
+                yMMMEd{"y MMM d - E"}
+                yw{
+                    other{"ဝူင်ႈထူၼ်ႈ w ၶွင်ပီ Y"}
+                }
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "တိတ်ႉ",
+                        "ၸၼ်",
+                        "ၵၢၼ်း",
+                        "ပုတ်ႉ",
+                        "ၽတ်း",
+                        "သုၵ်း",
+                        "သဝ်",
+                    }
+                    narrow{
+                        "တိ.",
+                        "ၸ.",
+                        "ၵ.",
+                        "ပု.",
+                        "ၽ.",
+                        "သု.",
+                        "သ.",
+                    }
+                    short{
+                        "တိတ်ႉ",
+                        "ၸၼ်",
+                        "ၵၢၼ်း",
+                        "ပုတ်ႉ",
+                        "ၽတ်း",
+                        "သုၵ်း",
+                        "သဝ်",
+                    }
+                    wide{
+                        "ဝၼ်းဢႃးတိတ်ႉ",
+                        "ဝၼ်းၸၼ်",
+                        "ဝၼ်းဢင်းၵၢၼ်း",
+                        "ဝၼ်းပုတ်ႉ",
+                        "ဝၼ်းၽတ်း",
+                        "ဝၼ်းသုၵ်း",
+                        "ဝၼ်းသဝ်",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "တိတ်ႉ",
+                        "ၸၼ်",
+                        "ၵၢၼ်း",
+                        "ပုတ်ႉ",
+                        "ၽတ်း",
+                        "သုၵ်း",
+                        "သဝ်",
+                    }
+                    narrow{
+                        "တိ.",
+                        "ၸ.",
+                        "ၵ.",
+                        "ပု.",
+                        "ၽ.",
+                        "သု.",
+                        "သ.",
+                    }
+                    short{
+                        "တိတ်ႉ",
+                        "ၸၼ်",
+                        "ၵၢၼ်း",
+                        "ပုတ်ႉ",
+                        "ၽတ်း",
+                        "သုၵ်း",
+                        "သဝ်",
+                    }
+                    wide{
+                        "တိတ်ႉ",
+                        "ၸၼ်",
+                        "ၵၢၼ်း",
+                        "ပုတ်ႉ",
+                        "ၽတ်း",
+                        "သုၵ်း",
+                        "သဝ်",
+                    }
+                }
+            }
+            dayPeriod{
+                stand-alone{
+                    abbreviated{
+                        am{"တၸ."}
+                        pm{"တလ."}
+                    }
+                    narrow{
+                        am{"တၸ."}
+                        pm{"တလ."}
+                    }
+                    wide{
+                        am{"တွၼ်ႈၸဝ်ႉ"}
+                        pm{"တွၼ်ႈလႃႈ"}
+                    }
+                }
+            }
+            eras{
+                abbreviated{
+                    0{"ပီႇၸီႇ"}
+                    1{"ဢေႇတီႇ"}
+                }
+                abbreviated%variant{
+                    0{"ပီႇၸီႇဢီး"}
+                    1{"ၸီႇဢီး"}
+                }
+                narrow{
+                    0{"ပီႇၸီႇ"}
+                    1{"ဢေႇတီႇ"}
+                }
+                narrow%variant{
+                    0{"ပီႇၸီႇဢီး"}
+                    1{"ၸီႇဢီး"}
+                }
+                wide{
+                    0{"ဢွၼ်ၼႃႈၸဝ်ႈၶရိတ်ႉ"}
+                    1{"ပီၶရိတ်ႉ"}
+                }
+                wide%variant{
+                    0{"ဢွၼ်ၼႃႈပၢၼ်ၵၢင်လၢႆ"}
+                    1{"ပၢၼ်ၵၢင်လၢႆ"}
+                }
+            }
+            intervalFormats{
+                GyMEd{
+                    G{"GGGGG y-MM-dd - E – GGGGG y-MM-dd - E"}
+                    M{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                    d{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                    y{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                }
+                GyMMMEd{
+                    G{"G y MMM d - E – G y MMM d - E"}
+                    M{"G y MMM d - E – MMM d - E"}
+                    d{"G y MMM d - E – MMM d - E"}
+                    y{"G y MMM d - E – y MMM d - E"}
+                }
+                MEd{
+                    M{"MM-dd - E – MM-dd - E"}
+                    d{"MM-dd - E – MM-dd - E"}
+                }
+                MMMEd{
+                    M{"MMM d - E – MMM d - E"}
+                    d{"MMM d - E – MMM d - E"}
+                }
+                yMEd{
+                    M{"y-MM-dd - E – y-MM-dd - E"}
+                    d{"y-MM-dd - E – y-MM-dd - E"}
+                    y{"y-MM-dd - E – y-MM-dd - E"}
+                }
+                yMMMEd{
+                    M{"y MMM d - E – MMM d - E"}
+                    d{"y MMM d - E – MMM d - E"}
+                    y{"y MMM d - E – y MMM d - E"}
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "ၸၼ်ႇ",
+                        "ၾႅပ်ႇ",
+                        "မၢတ်ႉၶ်ျ",
+                        "ဢေႇ",
+                        "မေႇ",
+                        "ၸုၼ်ႇ",
+                        "ၸူႇ",
+                        "ဢေႃး",
+                        "သႅပ်ႇ",
+                        "ဢွၵ်ႇ",
+                        "ၼူဝ်ႇ",
+                        "တီႇ",
+                    }
+                    narrow{
+                        "ၸ.",
+                        "ၾ.",
+                        "မ.",
+                        "ဢ.",
+                        "မ.",
+                        "ၸ.",
+                        "ၸ.",
+                        "ဢ.",
+                        "သ.",
+                        "ဢ.",
+                        "ၼ.",
+                        "တ.",
+                    }
+                    wide{
+                        "ၸၼ်ႇဝႃႇရီႇ",
+                        "ၾႅပ်ႇဝႃႇရီႇ",
+                        "မၢတ်ႉၶ်ျ",
+                        "ဢေႇပရႄႇ",
+                        "မေႇ",
+                        "ၸုၼ်ႇ",
+                        "ၸူႇလၢႆႇ",
+                        "ဢေႃးၵၢတ်ႉ",
+                        "သႅပ်ႇထႅမ်ႇပႃႇ",
+                        "ဢွၵ်ႇထူဝ်ႇပႃႇ",
+                        "ၼူဝ်ႇဝႅမ်ႇပႃႇ",
+                        "တီႇသႅမ်ႇပႃႇ",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "ၸၼ်ႇ",
+                        "ၾႅပ်ႇ",
+                        "မၢတ်ႉၶ်ျ",
+                        "ဢေႇ",
+                        "မေႇ",
+                        "ၸုၼ်ႇ",
+                        "ၸူႇ",
+                        "ဢေႃး",
+                        "သႅပ်ႇ",
+                        "ဢွၵ်ႇ",
+                        "ၼူဝ်ႇ",
+                        "တီႇ",
+                    }
+                    narrow{
+                        "ၸ.",
+                        "ၾ.",
+                        "မ.",
+                        "ဢ.",
+                        "မ.",
+                        "ၸ.",
+                        "ၸ.",
+                        "ဢ.",
+                        "သ.",
+                        "ဢ.",
+                        "ၼ.",
+                        "တ.",
+                    }
+                    wide{
+                        "ၸၼ်ႇဝႃႇရီႇ",
+                        "ၾႅပ်ႇဝႃႇရီႇ",
+                        "မၢတ်ႉၶ်ျ",
+                        "ဢေႇပရႄႇ",
+                        "မေႇ",
+                        "ၸုၼ်ႇ",
+                        "ၸူႇလၢႆႇ",
+                        "ဢေႃးၵၢတ်ႉ",
+                        "သႅပ်ႇထႅမ်ႇပႃႇ",
+                        "ဢွၵ်ႇထူဝ်ႇပႃႇ",
+                        "ၼူဝ်ႇဝႅမ်ႇပႃႇ",
+                        "တီႇသႅမ်ႇပႃႇ",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "သၢမ်လိူၼ်ႁွပ်ႈ 1",
+                        "သၢမ်လိူၼ်ႁွပ်ႈ 2",
+                        "သၢမ်လိူၼ်ႁွပ်ႈ 3",
+                        "သၢမ်လိူၼ်ႁွပ်ႈ 4",
+                    }
+                    wide{
+                        "သၢမ်လိူၼ်ႁွပ်ႈ 1",
+                        "သၢမ်လိူၼ်ႁွပ်ႈ 2",
+                        "သၢမ်လိူၼ်ႁွပ်ႈ 3",
+                        "သၢမ်လိူၼ်ႁွပ်ႈ 4",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "ႁွပ်ႈ1",
+                        "ႁွပ်ႈ2",
+                        "ႁွပ်ႈ3",
+                        "ႁွပ်ႈ4",
+                    }
+                    wide{
+                        "သၢမ်လိူၼ်ႁွပ်ႈ 1",
+                        "သၢမ်လိူၼ်ႁွပ်ႈ 2",
+                        "သၢမ်လိူၼ်ႁွပ်ႈ 3",
+                        "သၢမ်လိူၼ်ႁွပ်ႈ 4",
+                    }
+                }
+            }
+        }
+        hebrew{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "G y MMMM d - EEEE",
+                "G y MMMM d",
+                "G y MMM d",
+                "G y-MM-dd",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            DateTimePatterns%atTime{
+                "{1} ၶၢဝ်းယၢမ်း {0}",
+                "{1} ၶၢဝ်းယၢမ်း {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Ed{"d - E"}
+                GyMEd{"G y-MM-dd - E"}
+                GyMMMEd{"G y MMM d - E"}
+                MEd{"MM-dd - E"}
+                MMMEd{"MMM d - E"}
+                yyyyMEd{"GGGGG y-MM-dd - E"}
+                yyyyMMMEd{"G y MMM d - E"}
+            }
+            eras{
+                abbreviated{
+                    0{"တ.ၸ."}
+                }
+                narrow{
+                    0{"တ.ၸ."}
+                }
+                wide{
+                    0{"တ.ၸ."}
+                }
+            }
+            intervalFormats{
+                GyMEd{
+                    G{"GGGGG y-MM-dd - E – GGGGG y-MM-dd - E"}
+                    M{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                    d{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                    y{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                }
+                GyMMMEd{
+                    G{"G y MMM d - E – G y MMM d - E"}
+                    M{"G y MMM d - E – MMM d - E"}
+                    d{"G y MMM d - E – MMM d - E"}
+                    y{"G y MMM d - E – y MMM d - E"}
+                }
+                MEd{
+                    M{"MM-dd - E – MM-dd - E"}
+                    d{"MM-dd - E – MM-dd - E"}
+                }
+                MMMEd{
+                    M{"MMM d - E – MMM d - E"}
+                    d{"MMM d - E – MMM d - E"}
+                }
+                yMEd{
+                    M{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                    d{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                    y{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                }
+                yMMMEd{
+                    M{"G y MMM d - E – MMM d - E"}
+                    d{"G y MMM d - E – MMM d - E"}
+                    y{"G y MMM d - E – y MMM d - E"}
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "တိသျရိ",
+                        "ႁေႇသျဝၼ်ႇ",
+                        "ၶိတ်ႉသလႅပ်ႉ",
+                        "တႄႇဝႅတ်ႉ",
+                        "သျေႇဝတ်ႉ",
+                        "ဢႃႇတႃႇ I",
+                        "ဢႃႇတႃႇ",
+                        "ၼီႇသၢၼ်း",
+                        "ဢီႇယႃႇ",
+                        "သီႇဝၼ်ႇ",
+                        "တမ်ႇမုတ်ႉၸ်",
+                        "ဢၢပ်ႉၾ်",
+                        "ဢႄႇလူးလ်",
+                        "ဢႃႇတႃႇ II",
+                    }
+                    wide{
+                        "တိသျရိ",
+                        "ႁေႇသျဝၼ်ႇ",
+                        "ၶိတ်ႉသလႅပ်ႉ",
+                        "တႄႇဝႅတ်ႉ",
+                        "သျေႇဝတ်ႉ",
+                        "ဢႃႇတႃႇ I",
+                        "ဢႃႇတႃႇ",
+                        "ၼီႇသၢၼ်း",
+                        "ဢီႇယႃႇ",
+                        "သီႇဝၼ်ႇ",
+                        "တမ်ႇမုတ်ႉၸ်",
+                        "ဢၢပ်ႉၾ်",
+                        "ဢႄႇလူးလ်",
+                        "ဢႃႇတႃႇ II",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "တိသျရိ",
+                        "ႁေႇသျဝၼ်ႇ",
+                        "ၶိတ်ႉသလႅပ်ႉ",
+                        "တႄႇဝႅတ်ႉ",
+                        "သျေႇဝတ်ႉ",
+                        "ဢႃႇတႃႇ I",
+                        "ဢႃႇတႃႇ",
+                        "ၼီႇသၢၼ်း",
+                        "ဢီႇယႃႇ",
+                        "သီႇဝၼ်ႇ",
+                        "တမ်ႇမုတ်ႉၸ်",
+                        "ဢၢပ်ႉၾ်",
+                        "ဢႄႇလူးလ်",
+                        "ဢႃႇတႃႇ II",
+                    }
+                    wide{
+                        "တိသျရိ",
+                        "ႁေႇသျဝၼ်ႇ",
+                        "ၶိတ်ႉသလႅပ်ႉ",
+                        "တႄႇဝႅတ်ႉ",
+                        "သျေႇဝတ်ႉ",
+                        "ဢႃႇတႃႇ I",
+                        "ဢႃႇတႃႇ",
+                        "ၼီႇသၢၼ်း",
+                        "ဢီႇယႃႇ",
+                        "သီႇဝၼ်ႇ",
+                        "တမ်ႇမုတ်ႉၸ်",
+                        "ဢၢပ်ႉၾ်",
+                        "ဢႄႇလူးလ်",
+                        "ဢႃႇတႃႇ II",
+                    }
+                }
+            }
+        }
+        indian{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "G y MMMM d - EEEE",
+                "G y MMMM d",
+                "G y MMM d",
+                "G y-MM-dd",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            DateTimePatterns%atTime{
+                "{1} ၶၢဝ်းယၢမ်း {0}",
+                "{1} ၶၢဝ်းယၢမ်း {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Ed{"d - E"}
+                GyMEd{"G y-MM-dd - E"}
+                GyMMMEd{"G y MMM d - E"}
+                MEd{"MM-dd - E"}
+                MMMEd{"MMM d - E"}
+                yyyyMEd{"GGGGG y-MM-dd - E"}
+                yyyyMMMEd{"G y MMM d - E"}
+            }
+            eras{
+                abbreviated{
+                    0{"သၵ်ႉၵႃႇ"}
+                }
+                narrow{
+                    0{"သၵ်ႉၵႃႇ"}
+                }
+                wide{
+                    0{"သၵ်ႉၵႃႇ"}
+                }
+            }
+            intervalFormats{
+                GyMEd{
+                    G{"GGGGG y-MM-dd - E – GGGGG y-MM-dd - E"}
+                    M{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                    d{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                    y{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                }
+                GyMMMEd{
+                    G{"G y MMM d - E – G y MMM d - E"}
+                    M{"G y MMM d - E – MMM d - E"}
+                    d{"G y MMM d - E – MMM d - E"}
+                    y{"G y MMM d - E – y MMM d - E"}
+                }
+                MEd{
+                    M{"MM-dd - E – MM-dd - E"}
+                    d{"MM-dd - E – MM-dd - E"}
+                }
+                MMMEd{
+                    M{"MMM d - E – MMM d - E"}
+                    d{"MMM d - E – MMM d - E"}
+                }
+                yMEd{
+                    M{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                    d{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                    y{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                }
+                yMMMEd{
+                    M{"G y MMM d - E – MMM d - E"}
+                    d{"G y MMM d - E – MMM d - E"}
+                    y{"G y MMM d - E – y MMM d - E"}
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "ၵျၢႆးတရႃႇ",
+                        "ဝၢႆးသႃၶႃႇ",
+                        "ၵျႅတ်ႉသ်ထႃႇ",
+                        "ဢသႃထႃ",
+                        "သရဝၼ",
+                        "ၽႃႇတရႃႇ",
+                        "ဢသဝိၼႃႇ",
+                        "ၵႃတိၵႃႇ",
+                        "ဢၵရႃႇႁႃယႃၼႃႇ",
+                        "​ပေႃးသႃႇ",
+                        "မႃႇၵႃႇ",
+                        "ၽႃလ်ၵူၼႃႇ",
+                    }
+                    wide{
+                        "ၵျၢႆးတရႃႇ",
+                        "ဝၢႆးသႃၶႃႇ",
+                        "ၵျႅတ်ႉသ်ထႃႇ",
+                        "ဢသႃထႃ",
+                        "သရဝၼ",
+                        "ၽႃႇတရႃႇ",
+                        "ဢသဝိၼႃႇ",
+                        "ၵႃတိၵႃႇ",
+                        "ဢၵရႃႇႁႃယႃၼႃႇ",
+                        "​ပေႃးသႃႇ",
+                        "မႃႇၵႃႇ",
+                        "ၽႃလ်ၵူၼႃႇ",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "ၵျၢႆးတရႃႇ",
+                        "ဝၢႆးသႃၶႃႇ",
+                        "ၵျႅတ်ႉသ်ထႃႇ",
+                        "ဢသႃထႃ",
+                        "သရဝၼ",
+                        "ၽႃႇတရႃႇ",
+                        "ဢသဝိၼႃႇ",
+                        "ၵႃတိၵႃႇ",
+                        "ဢၵရႃႇႁႃယႃၼႃႇ",
+                        "​ပေႃးသႃႇ",
+                        "မႃႇၵႃႇ",
+                        "ၽႃလ်ၵူၼႃႇ",
+                    }
+                    wide{
+                        "ၵျၢႆးတရႃႇ",
+                        "ဝၢႆးသႃၶႃႇ",
+                        "ၵျႅတ်ႉသ်ထႃႇ",
+                        "ဢသႃထႃ",
+                        "သရဝၼ",
+                        "ၽႃႇတရႃႇ",
+                        "ဢသဝိၼႃႇ",
+                        "ၵႃတိၵႃႇ",
+                        "ဢၵရႃႇႁႃယႃၼႃႇ",
+                        "​ပေႃးသႃႇ",
+                        "မႃႇၵႃႇ",
+                        "ၽႃလ်ၵူၼႃႇ",
+                    }
+                }
+            }
+        }
+        islamic{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "G y MMMM d - EEEE",
+                "G y MMMM d",
+                "G y MMM d",
+                "G y-MM-dd",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            DateTimePatterns%atTime{
+                "{1} ၶၢဝ်းယၢမ်း {0}",
+                "{1} ၶၢဝ်းယၢမ်း {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Ed{"d - E"}
+                GyMEd{"G y-MM-dd - E"}
+                GyMMMEd{"G y MMM d - E"}
+                MEd{"MM-dd - E"}
+                MMMEd{"MMM d - E"}
+                yyyyMEd{"GGGGG y-MM-dd - E"}
+                yyyyMMMEd{"G y MMM d - E"}
+            }
+            eras{
+                abbreviated{
+                    0{"ပ.ႁ."}
+                    1{"ဢ.ႁ."}
+                }
+                narrow{
+                    0{"ပ.ႁ."}
+                    1{"ဢ.ႁ."}
+                }
+                wide{
+                    0{"ပီႁေးၵျိရႃႇ"}
+                    1{"ဢွၼ်ၼႃႈ ႁေးၵျိရႃႇ"}
+                }
+            }
+            intervalFormats{
+                GyMEd{
+                    G{"GGGGG y-MM-dd - E – GGGGG y-MM-dd - E"}
+                    M{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                    d{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                    y{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                }
+                GyMMMEd{
+                    G{"G y MMM d - E – G y MMM d - E"}
+                    M{"G y MMM d - E – MMM d - E"}
+                    d{"G y MMM d - E – MMM d - E"}
+                    y{"G y MMM d - E – y MMM d - E"}
+                }
+                MEd{
+                    M{"MM-dd - E – MM-dd - E"}
+                    d{"MM-dd - E – MM-dd - E"}
+                }
+                MMMEd{
+                    M{"MMM d - E – MMM d - E"}
+                    d{"MMM d - E – MMM d - E"}
+                }
+                yMEd{
+                    M{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                    d{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                    y{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                }
+                yMMMEd{
+                    M{"G y MMM d - E – MMM d - E"}
+                    d{"G y MMM d - E – MMM d - E"}
+                    y{"G y MMM d - E – y MMM d - E"}
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "မူႇ.",
+                        "သႃႇ.",
+                        "ရႃႇ. I",
+                        "ရႃႇ. II",
+                        "ၵျူႇ. I",
+                        "ၵျူႇ. II",
+                        "ရႃႇၸ်.",
+                        "သျႃး.",
+                        "ရႃ.",
+                        "သျေႃး.",
+                        "ၻူဝ်ႇလ်.ၵ.",
+                        "ၻူဝ်ႇလ်.ႁ.",
+                    }
+                    wide{
+                        "မူႇႁႃႇရမ်ႇ",
+                        "သႃႇၾႃႇ",
+                        "ရႃႇပီႇ I",
+                        "ရႃႇပီႇ II",
+                        "ၵျူႇမႃႇတႃႇ I",
+                        "ၵျူႇမႃႇတႃႇ II",
+                        "ရႃႇၸၢပ်ႉ",
+                        "သျႃးပၢၼ်ႇ",
+                        "ရႃႇမႃႇတၢၼ်ႇ",
+                        "သျေႃးဝႃႇလ်",
+                        "ၻူဝ်ႇလ်-ၵိတ",
+                        "ၻူဝ်ႇလ်ႁိတ်ႉၸႃႇ",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "မူႇ.",
+                        "သႃႇ.",
+                        "ရႃႇ. I",
+                        "ရႃႇ. II",
+                        "ၵျူႇ. I",
+                        "ၵျူႇ. II",
+                        "ရႃႇၸ်.",
+                        "သျႃး.",
+                        "ရႃ.",
+                        "သျေႃး.",
+                        "ၻူဝ်ႇလ်.ၵ.",
+                        "ၻူဝ်ႇလ်.ႁ.",
+                    }
+                    wide{
+                        "မူႇႁႃႇရမ်ႇ",
+                        "သႃႇၾႃႇ",
+                        "ရႃႇပီႇ I",
+                        "ရႃႇပီႇ II",
+                        "ၵျူႇမႃႇတႃႇ I",
+                        "ၵျူႇမႃႇတႃႇ II",
+                        "ရႃႇၸၢပ်ႉ",
+                        "သျႃးပၢၼ်ႇ",
+                        "ရႃႇမႃႇတၢၼ်ႇ",
+                        "သျေႃးဝႃႇလ်",
+                        "ၻူဝ်ႇလ်-ၵိတ",
+                        "ၻူဝ်ႇလ်ႁိတ်ႉၸႃႇ",
+                    }
+                }
+            }
+        }
+        japanese{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "G y MMMM d - EEEE",
+                "G y MMMM d",
+                "G y MMM d",
+                "G y-MM-dd",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            DateTimePatterns%atTime{
+                "{1} ၶၢဝ်းယၢမ်း {0}",
+                "{1} ၶၢဝ်းယၢမ်း {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Ed{"d - E"}
+                GyMEd{"G y-MM-dd - E"}
+                GyMMMEd{"G y MMM d - E"}
+                MEd{"MM-dd - E"}
+                MMMEd{"MMM d - E"}
+                yyyyMEd{"GGGGG y-MM-dd - E"}
+                yyyyMMMEd{"G y MMM d - E"}
+            }
+            eras{
+                abbreviated{
+                    232{"မေးၸီႇ"}
+                    233{"တႆးသျူဝ်ႇ"}
+                    234{"သျူဝ်းဝႃႇ"}
+                    235{"ႁေးသီႇ"}
+                    236{"ရေးဝႃႇ"}
+                }
+                wide{
+                    232{"မေးၸီႇ"}
+                    233{"တႆးသျူဝ်ႇ"}
+                    234{"သျူဝ်းဝႃႇ"}
+                    235{"ႁေးသႄႇ"}
+                    236{"ရေးဝႃႇ"}
+                }
+            }
+            intervalFormats{
+                GyMEd{
+                    G{"GGGGG y-MM-dd - E – GGGGG y-MM-dd - E"}
+                    M{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                    d{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                    y{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                }
+                GyMMMEd{
+                    G{"G y MMM d - E – G y MMM d - E"}
+                    M{"G y MMM d - E – MMM d - E"}
+                    d{"G y MMM d - E – MMM d - E"}
+                    y{"G y MMM d - E – y MMM d - E"}
+                }
+                MEd{
+                    M{"MM-dd - E – MM-dd - E"}
+                    d{"MM-dd - E – MM-dd - E"}
+                }
+                MMMEd{
+                    M{"MMM d - E – MMM d - E"}
+                    d{"MMM d - E – MMM d - E"}
+                }
+                yMEd{
+                    M{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                    d{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                    y{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                }
+                yMMMEd{
+                    M{"G y MMM d - E – MMM d - E"}
+                    d{"G y MMM d - E – MMM d - E"}
+                    y{"G y MMM d - E – y MMM d - E"}
+                }
+            }
+        }
+        persian{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "G y MMMM d - EEEE",
+                "G y MMMM d",
+                "G y MMM d",
+                "G y-MM-dd",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            DateTimePatterns%atTime{
+                "{1} ၶၢဝ်းယၢမ်း {0}",
+                "{1} ၶၢဝ်းယၢမ်း {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Ed{"d - E"}
+                GyMEd{"G y-MM-dd - E"}
+                GyMMMEd{"G y MMM d - E"}
+                MEd{"MM-dd - E"}
+                MMMEd{"MMM d - E"}
+                yyyyMEd{"GGGGG y-MM-dd - E"}
+                yyyyMMMEd{"G y MMM d - E"}
+            }
+            eras{
+                abbreviated{
+                    0{"ပီပႃႇသျႃး"}
+                }
+                narrow{
+                    0{"ပီပႃႇသျႃး"}
+                }
+                wide{
+                    0{"ပီပႃႇသျႃး"}
+                }
+            }
+            intervalFormats{
+                GyMEd{
+                    G{"GGGGG y-MM-dd - E – GGGGG y-MM-dd - E"}
+                    M{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                    d{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                    y{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                }
+                GyMMMEd{
+                    G{"G y MMM d - E – G y MMM d - E"}
+                    M{"G y MMM d - E – MMM d - E"}
+                    d{"G y MMM d - E – MMM d - E"}
+                    y{"G y MMM d - E – y MMM d - E"}
+                }
+                MEd{
+                    M{"MM-dd - E – MM-dd - E"}
+                    d{"MM-dd - E – MM-dd - E"}
+                }
+                MMMEd{
+                    M{"MMM d - E – MMM d - E"}
+                    d{"MMM d - E – MMM d - E"}
+                }
+                yMEd{
+                    M{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                    d{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                    y{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                }
+                yMMMEd{
+                    M{"G y MMM d - E – MMM d - E"}
+                    d{"G y MMM d - E – MMM d - E"}
+                    y{"G y MMM d - E – y MMM d - E"}
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "ၾႃႇဝႃႇတိၼ်ႇ",
+                        "ဢေႃးတီႇပႄႇႁႅတ်ႉ",
+                        "ၶူဝ်ႇရၢတ်ႉ",
+                        "တီးရ်",
+                        "မေႃႇတတ်ႉ",
+                        "သျႃးရိဝႃႇ",
+                        "မႄးႁႃႇ",
+                        "ဢပၢၼ်ႇ",
+                        "ဢႃႇၸႃႇ",
+                        "တေႇ",
+                        "ပႃႇမၢၼ်ႇ",
+                        "ဢႅတ်ႉၾႅၼ်ႇ",
+                    }
+                    wide{
+                        "ၾႃႇဝႃႇတိၼ်ႇ",
+                        "ဢေႃးတီႇပႄႇႁႅတ်ႉ",
+                        "ၶူဝ်ႇရၢတ်ႉ",
+                        "တီးရ်",
+                        "မေႃႇတတ်ႉ",
+                        "သျႃးရိဝႃႇ",
+                        "မႄးႁႃႇ",
+                        "ဢပၢၼ်ႇ",
+                        "ဢႃႇၸႃႇ",
+                        "တေႇ",
+                        "ပႃႇမၢၼ်ႇ",
+                        "ဢႅတ်ႉၾႅၼ်ႇ",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "ၾႃႇဝႃႇတိၼ်ႇ",
+                        "ဢေႃးတီႇပႄႇႁႅတ်ႉ",
+                        "ၶူဝ်ႇရၢတ်ႉ",
+                        "တီးရ်",
+                        "မေႃႇတတ်ႉ",
+                        "သျႃးရိဝႃႇ",
+                        "မႄးႁႃႇ",
+                        "ဢပၢၼ်ႇ",
+                        "ဢႃႇၸႃႇ",
+                        "တေႇ",
+                        "ပႃႇမၢၼ်ႇ",
+                        "ဢႅတ်ႉၾႅၼ်ႇ",
+                    }
+                    wide{
+                        "ၾႃႇဝႃႇတိၼ်ႇ",
+                        "ဢေႃးတီႇပႄႇႁႅတ်ႉ",
+                        "ၶူဝ်ႇရၢတ်ႉ",
+                        "တီးရ်",
+                        "မေႃႇတတ်ႉ",
+                        "သျႃးရိဝႃႇ",
+                        "မႄးႁႃႇ",
+                        "ဢပၢၼ်ႇ",
+                        "ဢႃႇၸႃႇ",
+                        "တေႇ",
+                        "ပႃႇမၢၼ်ႇ",
+                        "ဢႅတ်ႉၾႅၼ်ႇ",
+                    }
+                }
+            }
+        }
+        roc{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "G y MMMM d - EEEE",
+                "G y MMMM d",
+                "G y MMM d",
+                "G y-MM-dd",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            DateTimePatterns%atTime{
+                "{1} ၶၢဝ်းယၢမ်း {0}",
+                "{1} ၶၢဝ်းယၢမ်း {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Ed{"d - E"}
+                GyMEd{"G y-MM-dd - E"}
+                GyMMMEd{"G y MMM d - E"}
+                MEd{"MM-dd - E"}
+                MMMEd{"MMM d - E"}
+                yyyyMEd{"GGGGG y-MM-dd - E"}
+                yyyyMMMEd{"G y MMM d - E"}
+            }
+            eras{
+                abbreviated{
+                    0{"ပဢတ. ထၢႆႇဝၢၼ်း"}
+                    1{"ထၢႆႇဝၢၼ်း"}
+                }
+                narrow{
+                    0{"ပဢတ. ထၢႆႇဝၢၼ်း"}
+                    1{"ထၢႆႇဝၢၼ်း"}
+                }
+                wide{
+                    0{"ပီဢွၼ်တၢင်းထၢႆႇဝၢၼ်း"}
+                    1{"ထၢႆႇဝၢၼ်း"}
+                }
+            }
+            intervalFormats{
+                GyMEd{
+                    G{"GGGGG y-MM-dd - E – GGGGG y-MM-dd - E"}
+                    M{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                    d{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                    y{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                }
+                GyMMMEd{
+                    G{"G y MMM d - E – G y MMM d - E"}
+                    M{"G y MMM d - E – MMM d - E"}
+                    d{"G y MMM d - E – MMM d - E"}
+                    y{"G y MMM d - E – y MMM d - E"}
+                }
+                MEd{
+                    M{"MM-dd - E – MM-dd - E"}
+                    d{"MM-dd - E – MM-dd - E"}
+                }
+                MMMEd{
+                    M{"MMM d - E – MMM d - E"}
+                    d{"MMM d - E – MMM d - E"}
+                }
+                yMEd{
+                    M{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                    d{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                    y{"GGGGG y-MM-dd - E – y-MM-dd - E"}
+                }
+                yMMMEd{
+                    M{"G y MMM d - E – MMM d - E"}
+                    d{"G y MMM d - E – MMM d - E"}
+                    y{"G y MMM d - E – y MMM d - E"}
+                }
+            }
+        }
+    }
+    characterLabel{
+        activities{"လွင်ႈတူင်ႉၼိုင်"}
+        african_scripts{"သၶရိပ်ႉဢႃႇၾရိၵၢၼ်ႇ"}
+        american_scripts{"သၶရိပ်ႉဢမႄႇရိၵၢၼ်ႇ"}
+        animal{"သတ်း"}
+        animals_nature{"သတ်း ႁိုဝ် သၽႃႇဝ"}
+        arrows{"ပိုၼ်ၵၢင်ႇ"}
+        body{"တူဝ်ၶိင်း"}
+        box_drawing{"ၸၼ်ႁၢင်ႈတိူၵ်ႈ"}
+        braille{"လိၵ်ႈတႃမွတ်ႇ"}
+        building{"ႁူင်းၵေႃႇသၢင်ႈ"}
+        bullets_stars{"ပူးလႅတ်ႉ ႁိုဝ် လၢဝ်"}
+        consonantal_jamo{"တူဝ်မႄႈလိၵ်ႈၵၢဝ်းလီ"}
+        currency_symbols{"တူဝ်မၢႆငိုၼ်း"}
+        dash_connector{"ၶိတ်ႇၵၢင် ႁိုဝ် တူဝ်ၵွင်ႉသၢၼ်"}
+        digits{"တူဝ်ၼပ်ႉ"}
+        dingbats{"တိင်းပႅတ်ႉ"}
+        divination_symbols{"တူဝ်မၢႆၵႃႇလႃး"}
+        downwards_arrows{"ပိုၼ်ၸီႉလူင်း"}
+        downwards_upwards_arrows{"ပိုၼ်ၸီႉၶိုၼ်ႈၸီႉလူင်း"}
+        east_asian_scripts{"သၶရိပ်ႉ ၸၢဝ်းဢေးသျႃးပွတ်းဢွၵ်ႇ"}
+        emoji{"ဢီႇမူဝ်းၵျိ"}
+        european_scripts{"သၶရိပ်ႉယူးရူပ်ႉ"}
+        female{"ယိင်း"}
+        flag{"ၸွမ်ပိဝ်"}
+        flags{"ၸွမ်ပိဝ်"}
+        food_drink{"တၢင်းၵိၼ်တၢင်းယႅမ်ႉ"}
+        format{"ပိူင်တမ်း"}
+        format_whitespace{"ပိူင်တမ်း လႄႈ လွၵ်းပဝ်ႇ"}
+        full_width_form_variant{"ပိူင်ပႅၵ်ႇတူဝ်တဵမ်"}
+        geometric_shapes{"ၽၢင်ႁၢင်ႈၵျေႃႇမႅတ်ႇထရီႇ"}
+        half_width_form_variant{"ပိူင်ပႅၵ်ႇၶိုင်ႈတူဝ်"}
+        han_characters{"တူဝ်မႄႈလိၵ်ႈႁၢၼ်ႉ"}
+        han_radicals{"ငိူၼ်ႈငဝ်ႈႁၢၼ်ႉ"}
+        hanja{"ႁၢၼ်ႉၸႃႉ"}
+        hanzi_simplified{"ႁၢၼ်ႉၸိုဝ်ႉ (ပၢၼ်မႂ်ႇ)"}
+        hanzi_traditional{"ႁၢၼ်ႉၸိုဝ်ႉ (ပၢၼ်ၵဝ်ႇ)"}
+        heart{"ႁူဝ်ၸႂ်"}
+        historic_scripts{"သၶရိပ်ႉၵိုၵ်းပိုၼ်း"}
+        ideographic_desc_characters{"ဢၵ်ႉၶရႃႇၸိူဝ်းပဵၼ်တူဝ်တႅၼ်း ပၢႆးဝူၼ်ႉ"}
+        japanese_kana{"ၶႃႉၼႃႉၵျႃႇပၢၼ်ႇ"}
+        kanbun{"ၶၢၼ်းပုၼ်"}
+        kanji{"ၶၢၼ်းၵျိ"}
+        keycap{"ၼဵၼ်ၼဵၵ်း"}
+        leftwards_arrows{"ပိုၼ်ဝၢႆႇသၢႆႉ"}
+        leftwards_rightwards_arrows{"ပိုၼ်ဝၢႆႇသၢႆႉဝၢႆႇၶႂႃ"}
+        letterlike_symbols{"တူဝ်မၢႆမိူၼ်တူဝ်လိၵ်ႈ"}
+        limited_use{"ၸႂ်ႉတိုဝ်းဢၼ်မၵ်းၶၼ်ႈ"}
+        male{"ၸၢႆး"}
+        math_symbols{"တူဝ်မၢႆပၢႆးၼပ်ႉ"}
+        middle_eastern_scripts{"တူဝ်လိၵ်ႈပွတ်းဢွၵ်ႇတွၼ်ႈၵၢင်"}
+        miscellaneous{"တိတေႃႉ"}
+        modern_scripts{"သၶရိပ်ႉပၢၼ်မႂ်ႇ"}
+        modifier{"တူဝ်ၵမ်ႉ"}
+        musical_symbols{"တူဝ်မၢႆၽဵင်း"}
+        nature{"သၽႃႇဝ"}
+        nonspacing{"ဢမ်ႇၶႅၼ်ႈပဝ်ႇ"}
+        numbers{"မၢႆၼပ်ႉ"}
+        objects{"ၶူဝ်းၶွင်"}
+        other{"တၢင်ႇၸိူဝ်း"}
+        paired{"ဢၼ်ၵွင်ႉၵၼ်ဝႆႉ"}
+        person{"ၵူၼ်း"}
+        phonetic_alphabet{"ဢၵ်ႉၶရႃႇ ပၢႆးသဵင်"}
+        pictographs{"ၵရပ်ႉၼႄႁၢင်ႈ"}
+        place{"ဢွင်ႈတီႈ"}
+        plant{"တူၼ်ႈမႆႉ"}
+        punctuation{"တူဝ်တႅပ်းၶေႃႈၵႂၢမ်း"}
+        rightwards_arrows{"ပိုၼ်ဝၢႆႇၶႂႃ"}
+        sign_standard_symbols{"တီႈမၢႆတွင်း ႁိုဝ် တူဝ်မၢႆ"}
+        small_form_variant{"ပိူင်ပႅၵ်ႇဢွၼ်ႇ"}
+        smiley{"ႁၢင်ႈၼႃႈယုမ်ႉ"}
+        smileys_people{"ႁၢင်ႈၼႃႈယုမ်ႉ ႁိုဝ် ၵူၼ်း"}
+        south_asian_scripts{"သၶရိပ်ႉ ၸၢဝ်းဢေးသျႃးပွတ်းၸၢၼ်း"}
+        southeast_asian_scripts{"သၶရိပ်ႉ ၸၢဝ်းဢေးသျႃးၸဵင်ႇၸၢၼ်းဝၼ်းဢွၵ်ႇ"}
+        spacing{"ၶႅၼ်ႈပဝ်ႇ"}
+        sport{"ၵၢၼ်လဵၼ်ႈႁႅင်း"}
+        symbols{"တူဝ်မၢႆ"}
+        technical_symbols{"တူဝ်မၢႆ ပၢႆးထႅၵ်ႉၼိၵ်ႉ"}
+        tone_marks{"မၢႆတူၼ်းသဵင်"}
+        travel{"ဢွၵ်ႇတၢင်း"}
+        travel_places{"ဢွၵ်ႇတၢင်း ႁိုဝ် ဢွင်ႈတီႈ"}
+        upwards_arrows{"ပိုၼ်ဝၢႆႇၼိူဝ်"}
+        variant_forms{"ပိူင်ပႅၵ်ႇ"}
+        vocalic_jamo{"မႄႈၵပ်းငဝ်ႈၸမူဝ်ႇ"}
+        weather{"သၢႆငၢႆၾႃႉၽူၼ်"}
+        western_asian_scripts{"သၶရိပ်ႉ ၸၢဝ်းဢေးသျႃးပွတ်းတူၵ်း"}
+        whitespace{"လွၵ်းပဝ်ႇ"}
+    }
+    fields{
+        day{
+            dn{"ဝၼ်း"}
+            relative{
+                "-1"{"မိူဝ်ႈဝႃး"}
+                "0"{"မိူဝ်ႈၼႆႉ"}
+                "1"{"မိူဝ်ႈၽုၵ်ႈ"}
+            }
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} ဝၼ်း"}
+                }
+                past{
+                    other{"{0} ဝၼ်းပူၼ်ႉမႃး"}
+                }
+            }
+        }
+        day-narrow{
+            dn{"ဝၼ်း"}
+            relative{
+                "-1"{"မိူဝ်ႈဝႃး"}
+                "0"{"မိူဝ်ႈၼႆႉ"}
+                "1"{"မိူဝ်ႈၽုၵ်ႈ"}
+            }
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} ဝၼ်း"}
+                }
+                past{
+                    other{"{0} ဝၼ်းပူၼ်ႉမႃး"}
+                }
+            }
+        }
+        day-short{
+            dn{"ဝၼ်း"}
+            relative{
+                "-1"{"မိူဝ်ႈဝႃး"}
+                "0"{"မိူဝ်ႈၼႆႉ"}
+                "1"{"မိူဝ်ႈၽုၵ်ႈ"}
+            }
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} ဝၼ်း"}
+                }
+                past{
+                    other{"{0} ဝၼ်းပူၼ်ႉမႃး"}
+                }
+            }
+        }
+        dayOfYear{
+            dn{"ဝၼ်းၶွင်ပီ"}
+        }
+        dayOfYear-narrow{
+            dn{"ဝၼ်းၶွင်ပီ"}
+        }
+        dayOfYear-short{
+            dn{"ဝၼ်းၶွင်ပီ"}
+        }
+        dayperiod{
+            dn{"ၶၢဝ်းယၢမ်းဝၼ်း"}
+        }
+        dayperiod-narrow{
+            dn{"ၶၢဝ်းယၢမ်းဝၼ်း"}
+        }
+        dayperiod-short{
+            dn{"ၶၢဝ်းယၢမ်းဝၼ်း"}
+        }
+        era{
+            dn{"ပၢၼ်"}
+        }
+        era-narrow{
+            dn{"ပၢၼ်"}
+        }
+        era-short{
+            dn{"ပၢၼ်"}
+        }
+        fri{
+            relative{
+                "-1"{"ဝၼ်းသုၵ်းပူၼ်ႉမႃး"}
+                "0"{"ဝၼ်းသုၵ်းၼႆႉ"}
+                "1"{"ဝၼ်းသုၵ်းတေမႃး"}
+            }
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} ဝၼ်းသုၵ်း"}
+                }
+                past{
+                    other{"{0} ဝၼ်းသုၵ်းပူၼ်ႉမႃး"}
+                }
+            }
+        }
+        fri-narrow{
+            relative{
+                "-1"{"ဝၼ်းသုၵ်းပူၼ်ႉမႃး"}
+                "0"{"ဝၼ်းသုၵ်းၼႆႉ"}
+                "1"{"ဝၼ်းသုၵ်းတေမႃး"}
+            }
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} ဝၼ်းသုၵ်း"}
+                }
+                past{
+                    other{"{0} ဝၼ်းသုၵ်းပူၼ်ႉမႃး"}
+                }
+            }
+        }
+        fri-short{
+            relative{
+                "-1"{"ဝၼ်းသုၵ်းပူၼ်ႉမႃး"}
+                "0"{"ဝၼ်းသုၵ်းၼႆႉ"}
+                "1"{"ဝၼ်းသုၵ်းတေမႃး"}
+            }
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} ဝၼ်းသုၵ်း"}
+                }
+                past{
+                    other{"{0} ဝၼ်းသုၵ်းပူၼ်ႉမႃး"}
+                }
+            }
+        }
+        hour{
+            dn{"မူင်း"}
+            relative{
+                "0"{"ၸူဝ်ႈမူင်းၼႆႉ"}
+            }
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} ၸူဝ်ႈမူင်း"}
+                }
+                past{
+                    other{"{0} ၸူဝ်ႈမူင်းပူၼ်ႉမႃး"}
+                }
+            }
+        }
+        hour-narrow{
+            dn{"မူင်း"}
+            relative{
+                "0"{"ၸူဝ်ႈမူင်းၼႆႉ"}
+            }
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} ၸူဝ်ႈမူင်း"}
+                }
+                past{
+                    other{"{0} ၸူဝ်ႈမူင်းပူၼ်ႉမႃး"}
+                }
+            }
+        }
+        hour-short{
+            dn{"မူင်း"}
+            relative{
+                "0"{"ၸူဝ်ႈမူင်းၼႆႉ"}
+            }
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} ၸူဝ်ႈမူင်း"}
+                }
+                past{
+                    other{"{0} ၸူဝ်ႈမူင်းပူၼ်ႉမႃး"}
+                }
+            }
+        }
+        minute{
+            dn{"မိၼိတ်ႉ"}
+            relative{
+                "0"{"မိၼိတ်ႉ"}
+            }
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} မိၼိတ်ႉ"}
+                }
+                past{
+                    other{"{0} မိၼိတ်ႉပူၼ်ႉမႃး"}
+                }
+            }
+        }
+        minute-narrow{
+            dn{"မိၼိတ်ႉ"}
+            relative{
+                "0"{"မိၼိတ်ႉ"}
+            }
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} မိၼိတ်ႉ"}
+                }
+                past{
+                    other{"{0} မိၼိတ်ႉပူၼ်ႉမႃး"}
+                }
+            }
+        }
+        minute-short{
+            dn{"မိၼိတ်ႉ"}
+            relative{
+                "0"{"မိၼိတ်ႉ"}
+            }
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} မိၼိတ်ႉ"}
+                }
+                past{
+                    other{"{0} မိၼိတ်ႉပူၼ်ႉမႃး"}
+                }
+            }
+        }
+        mon{
+            relative{
+                "-1"{"ဝၼ်းၸၼ်ပူၼ်ႉမႃး"}
+                "0"{"ဝၼ်းၸၼ်ၼႆႉ"}
+                "1"{"ဝၼ်းၸၼ်တေမႃး"}
+            }
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} ဝၼ်းၸၼ်"}
+                }
+                past{
+                    other{"{0} ဝၼ်းၸၼ်ပူၼ်ႉမႃး"}
+                }
+            }
+        }
+        mon-narrow{
+            relative{
+                "-1"{"ဝၼ်းၸၼ်ပူၼ်ႉမႃး"}
+                "0"{"ဝၼ်းၸၼ်ၼႆႉ"}
+                "1"{"ဝၼ်းၸၼ်တေမႃး"}
+            }
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} ဝၼ်းၸၼ်"}
+                }
+                past{
+                    other{"{0} ဝၼ်းၸၼ်ပူၼ်ႉမႃး"}
+                }
+            }
+        }
+        mon-short{
+            relative{
+                "-1"{"ဝၼ်းၸၼ်ပူၼ်ႉမႃး"}
+                "0"{"ဝၼ်းၸၼ်ၼႆႉ"}
+                "1"{"ဝၼ်းၸၼ်တေမႃး"}
+            }
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} ဝၼ်းၸၼ်"}
+                }
+                past{
+                    other{"{0} ဝၼ်းၸၼ်ပူၼ်ႉမႃး"}
+                }
+            }
+        }
+        month{
+            dn{"လိူၼ်"}
+            relative{
+                "-1"{"လိူၼ်ပူၼ်ႉမႃး"}
+                "0"{"လိူၼ်ၼႆႉ"}
+                "1"{"လိူၼ်ၼႃႈ"}
+            }
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} လိူၼ်"}
+                }
+                past{
+                    other{"{0} လိူၼ်ပူၼ်ႉမႃး"}
+                }
+            }
+        }
+        month-narrow{
+            dn{"လိူၼ်"}
+            relative{
+                "-1"{"လိူၼ်ပူၼ်ႉမႃး"}
+                "0"{"လိူၼ်ၼႆႉ"}
+                "1"{"လိူၼ်ၼႃႈ"}
+            }
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} လိူၼ်"}
+                }
+                past{
+                    other{"{0} လိူၼ်ပူၼ်ႉမႃး"}
+                }
+            }
+        }
+        month-short{
+            dn{"လိူၼ်"}
+            relative{
+                "-1"{"လိူၼ်ပူၼ်ႉမႃး"}
+                "0"{"လိူၼ်ၼႆႉ"}
+                "1"{"လိူၼ်ၼႃႈ"}
+            }
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} လိူၼ်"}
+                }
+                past{
+                    other{"{0} လိူၼ်ပူၼ်ႉမႃး"}
+                }
+            }
+        }
+        quarter{
+            dn{"သၢမ်လိူၼ်ႁွပ်ႈ"}
+            relative{
+                "-1"{"သၢမ်လိူၼ်ႁွပ်ႈ လိုၼ်းသုတ်း"}
+                "0"{"သၢမ်လိူၼ်ႁွမ်ႈၼႆႉ"}
+                "1"{"သၢမ်လိူၼ်ႁွပ်ႈၼႃႈ"}
+            }
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} သၢမ်လိူၼ်ႁွပ်ႈ"}
+                }
+                past{
+                    other{"{0} သၢမ်လိူၼ်ႁွပ်ႈ ပူၼ်ႉမႃး"}
+                }
+            }
+        }
+        quarter-narrow{
+            dn{"သၢမ်လိူၼ်ႁွပ်ႈ"}
+            relative{
+                "-1"{"သလႁ. လိုၼ်းသုတ်း"}
+                "0"{"သၢမ်လိူၼ်ႁွပ်ႈၼႆႉ"}
+                "1"{"သလႁ. ၼႃႈ"}
+            }
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} သလႁ."}
+                }
+                past{
+                    other{"{0} သလႁ. ပူၼ်ႉမႃး"}
+                }
+            }
+        }
+        quarter-short{
+            dn{"သၢမ်လိူၼ်ႁွပ်ႈ"}
+            relative{
+                "-1"{"သလႁ. လိုၼ်းသုတ်း"}
+                "0"{"သလႁ. ၼႆႉ"}
+                "1"{"သလႁ. ၼႃႈ"}
+            }
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} သလႁ."}
+                }
+                past{
+                    other{"{0} သလႁ. ပူၼ်ႉမႃး"}
+                }
+            }
+        }
+        sat{
+            relative{
+                "-1"{"ဝၼ်းသဝ်ပူၼ်ႉမႃး"}
+                "0"{"ဝၼ်းသဝ်ၼႆႉ"}
+                "1"{"ဝၼ်းသဝ်တေမႃး"}
+            }
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} ဝၼ်းသဝ်"}
+                }
+                past{
+                    other{"{0} ဝၼ်းသဝ်ပူၼ်ႉမႃး"}
+                }
+            }
+        }
+        sat-narrow{
+            relative{
+                "-1"{"ဝၼ်းသဝ်ပူၼ်ႉမႃး"}
+                "0"{"ဝၼ်းသဝ်ၼႆႉ"}
+                "1"{"ဝၼ်းသဝ်တေမႃး"}
+            }
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} ဝၼ်းသဝ်"}
+                }
+                past{
+                    other{"{0} ဝၼ်းသဝ်ပူၼ်ႉမႃး"}
+                }
+            }
+        }
+        sat-short{
+            relative{
+                "-1"{"ဝၼ်းသဝ်ပူၼ်ႉမႃး"}
+                "0"{"ဝၼ်းသဝ်ၼႆႉ"}
+                "1"{"ဝၼ်းသဝ်တေမႃး"}
+            }
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} ဝၼ်းသဝ်"}
+                }
+                past{
+                    other{"{0} ဝၼ်းသဝ်ပူၼ်ႉမႃး"}
+                }
+            }
+        }
+        second{
+            dn{"သႅၵ်ႉၵၢၼ်ႉ"}
+            relative{
+                "0"{"ယၢမ်းလဵဝ်"}
+            }
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} ၸႅၵ်ႉၵၢၼ်ႉ"}
+                }
+                past{
+                    other{"{0} ၸႅၵ်ၵၢၼ်ႉပူၼ်ႉမႃး"}
+                }
+            }
+        }
+        second-narrow{
+            dn{"သႅၵ်ႉၵၢၼ်ႉ"}
+            relative{
+                "0"{"ယၢမ်းလဵဝ်"}
+            }
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} ၸႅၵ်ႉၵၢၼ်ႉ"}
+                }
+                past{
+                    other{"{0} ၸႅၵ်ၵၢၼ်ႉပူၼ်ႉမႃး"}
+                }
+            }
+        }
+        second-short{
+            dn{"သႅၵ်ႉၵၢၼ်ႉ"}
+            relative{
+                "0"{"ယၢမ်းလဵဝ်"}
+            }
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} ၸႅၵ်ႉၵၢၼ်ႉ"}
+                }
+                past{
+                    other{"{0} ၸႅၵ်ၵၢၼ်ႉပူၼ်ႉမႃး"}
+                }
+            }
+        }
+        sun{
+            relative{
+                "-1"{"ဝၼ်းဢႃးတိတ်ႉပူၼ်ႉမႃး"}
+                "0"{"ဝၼ်းဢႃးတိတ်ႉၼႆႉ"}
+                "1"{"ဝၼ်းဢႃးတိတ်ႉတေမႃး"}
+            }
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} ဝၼ်းဢႃးတိတ်ႉ"}
+                }
+                past{
+                    other{"{0} ဝၼ်းဢႃးတိတ်ႉပူၼ်ႉမႃး"}
+                }
+            }
+        }
+        sun-narrow{
+            relative{
+                "-1"{"ဝၼ်းဢႃးတိတ်ႉပူၼ်ႉမႃး"}
+                "0"{"ဝၼ်းဢႃးတိတ်ႉၼႆႉ"}
+                "1"{"ဝၼ်းဢႃးတိတ်ႉတေမႃး"}
+            }
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} ဝၼ်းဢႃးတိတ်ႉ"}
+                }
+                past{
+                    other{"{0} ဝၼ်းဢႃးတိတ်ႉပူၼ်ႉမႃး"}
+                }
+            }
+        }
+        sun-short{
+            relative{
+                "-1"{"ဝၼ်းဢႃးတိတ်ႉပူၼ်ႉမႃး"}
+                "0"{"ဝၼ်းဢႃးတိတ်ႉၼႆႉ"}
+                "1"{"ဝၼ်းဢႃးတိတ်ႉတေမႃး"}
+            }
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} ဝၼ်းဢႃးတိတ်ႉ"}
+                }
+                past{
+                    other{"{0} ဝၼ်းဢႃးတိတ်ႉပူၼ်ႉမႃး"}
+                }
+            }
+        }
+        thu{
+            relative{
+                "-1"{"ဝၼ်းၽတ်းပူၼ်ႉမႃး"}
+                "0"{"ဝၼ်းၽတ်းၼႆႉ"}
+                "1"{"ဝၼ်းၽတ်းတေမႃး"}
+            }
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} ဝၼ်းၽတ်း"}
+                }
+                past{
+                    other{"{0} ဝၼ်းၽတ်းပူၼ်ႉမႃး"}
+                }
+            }
+        }
+        thu-narrow{
+            relative{
+                "-1"{"ဝၼ်းၽတ်းပူၼ်ႉမႃး"}
+                "0"{"ဝၼ်းၽတ်းၼႆႉ"}
+                "1"{"ဝၼ်းၽတ်းတေမႃး"}
+            }
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} ဝၼ်းၽတ်း"}
+                }
+                past{
+                    other{"{0} ဝၼ်းၽတ်းပူၼ်ႉမႃး"}
+                }
+            }
+        }
+        thu-short{
+            relative{
+                "-1"{"ဝၼ်းၽတ်းပူၼ်ႉမႃး"}
+                "0"{"ဝၼ်းၽတ်းၼႆႉ"}
+                "1"{"ဝၼ်းၽတ်းတေမႃး"}
+            }
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} ဝၼ်းၽတ်း"}
+                }
+                past{
+                    other{"{0} ဝၼ်းၽတ်းပူၼ်ႉမႃး"}
+                }
+            }
+        }
+        tue{
+            relative{
+                "-1"{"ဝၼ်းဢင်းၵၢၼ်းပူၼ်ႉမႃး"}
+                "0"{"ဝၼ်းဢင်းၵၢၼ်းၼႆႉ"}
+                "1"{"ဝၼ်းဢင်းၵၢၼ်းတေမႃး"}
+            }
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} ဝၼ်းဢင်းၵၢၼ်း"}
+                }
+                past{
+                    other{"{0} ဝၼ်းဢင်းၵၢၼ်းပူၼ်ႉမႃး"}
+                }
+            }
+        }
+        tue-narrow{
+            relative{
+                "-1"{"ဝၼ်းဢင်းၵၢၼ်းပူၼ်ႉမႃး"}
+                "0"{"ဝၼ်းဢင်းၵၢၼ်းၼႆႉ"}
+                "1"{"ဝၼ်းဢင်းၵၢၼ်းတေမႃး"}
+            }
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} ဝၼ်းဢင်းၵၢၼ်း"}
+                }
+                past{
+                    other{"{0} ဝၼ်းဢင်းၵၢၼ်းပူၼ်ႉမႃး"}
+                }
+            }
+        }
+        tue-short{
+            relative{
+                "-1"{"ဝၼ်းဢင်းၵၢၼ်းပူၼ်ႉမႃး"}
+                "0"{"ဝၼ်းဢင်းၵၢၼ်းၼႆႉ"}
+                "1"{"ဝၼ်းဢင်းၵၢၼ်းတေမႃး"}
+            }
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} ဝၼ်းဢင်းၵၢၼ်း"}
+                }
+                past{
+                    other{"{0} ဝၼ်းဢင်းၵၢၼ်းပူၼ်ႉမႃး"}
+                }
+            }
+        }
+        wed{
+            relative{
+                "-1"{"ဝၼ်းပုတ်ႉပူၼ်ႉမႃး"}
+                "0"{"ဝၼ်းပုတ်ႉၼႆႉ"}
+                "1"{"ဝၼ်းပုတ်ႉတေမႃး"}
+            }
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} ဝၼ်းပုတ်ႉ"}
+                }
+                past{
+                    other{"{0} ဝၼ်းပုတ်ႉပူၼ်ႉမႃး"}
+                }
+            }
+        }
+        wed-narrow{
+            relative{
+                "-1"{"ဝၼ်းပုတ်ႉပူၼ်ႉမႃး"}
+                "0"{"ဝၼ်းပုတ်ႉၼႆႉ"}
+                "1"{"ဝၼ်းပုတ်ႉတေမႃး"}
+            }
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} ဝၼ်းပုတ်ႉ"}
+                }
+                past{
+                    other{"{0} ဝၼ်းပုတ်ႉပူၼ်ႉမႃး"}
+                }
+            }
+        }
+        wed-short{
+            relative{
+                "-1"{"ဝၼ်းပုတ်ႉပူၼ်ႉမႃး"}
+                "0"{"ဝၼ်းပုတ်ႉၼႆႉ"}
+                "1"{"ဝၼ်းပုတ်ႉတေမႃး"}
+            }
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} ဝၼ်းပုတ်ႉ"}
+                }
+                past{
+                    other{"{0} ဝၼ်းပုတ်ႉပူၼ်ႉမႃး"}
+                }
+            }
+        }
+        week{
+            dn{"ဝူင်ႈ"}
+            relative{
+                "-1"{"ဝူင်ႈပူၼ်ႉမႃး"}
+                "0"{"ဝူင်ႈၼႆႉ"}
+                "1"{"ဝူင်ႈၼႃႈ"}
+            }
+            relativePeriod{"ဝူင်ႈ {0}"}
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} ဝူင်ႈ"}
+                }
+                past{
+                    other{"{0} ဝူင်ႈပူၼ်ႉမႃး"}
+                }
+            }
+        }
+        week-narrow{
+            dn{"ဝူင်ႈ"}
+            relative{
+                "-1"{"ဝူင်ႈပူၼ်ႉမႃး"}
+                "0"{"ဝူင်ႈၼႆႉ"}
+                "1"{"ဝူင်ႈၼႃႈ"}
+            }
+            relativePeriod{"ဝူင်ႈ {0}"}
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} ဝူင်ႈ"}
+                }
+                past{
+                    other{"{0} ဝူင်ႈပူၼ်မႃး"}
+                }
+            }
+        }
+        week-short{
+            dn{"ဝူင်ႈ"}
+            relative{
+                "-1"{"ဝူင်ႈပူၼ်ႉမႃး"}
+                "0"{"ဝူင်ႈၼႆႉ"}
+                "1"{"ဝူင်ႈၼႃႈ"}
+            }
+            relativePeriod{"ဝူင်ႈ {0}"}
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} ဝူင်ႈ"}
+                }
+                past{
+                    other{"{0} ဝူင်ႈပူၼ်မႃး"}
+                }
+            }
+        }
+        weekOfMonth{
+            dn{"ဝူင်ႈၶွင်လိူၼ်"}
+        }
+        weekOfMonth-narrow{
+            dn{"ဝူင်ႈၶွင်လိူၼ်"}
+        }
+        weekOfMonth-short{
+            dn{"ဝူင်ႈၶွင်လိူၼ်"}
+        }
+        weekday{
+            dn{"ဝၼ်းၶွင်ဝူင်ႈ"}
+        }
+        weekday-narrow{
+            dn{"ဝၼ်းၶွင်ဝူင်ႈ"}
+        }
+        weekday-short{
+            dn{"ဝၼ်းၶွင်ဝူင်ႈ"}
+        }
+        weekdayOfMonth{
+            dn{"ဝၼ်းၼႂ်းဝူင်ႈၶွင်လိူၼ်"}
+        }
+        weekdayOfMonth-narrow{
+            dn{"ဝၼ်းၼႂ်းဝူင်ႈၶွင်လိူၼ်"}
+        }
+        weekdayOfMonth-short{
+            dn{"ဝၼ်းၼႂ်းဝူင်ႈၶွင်လိူၼ်"}
+        }
+        year{
+            dn{"ပီ"}
+            relative{
+                "-1"{"ပီၵၢႆ"}
+                "0"{"ပီၼႆႉ"}
+                "1"{"ပီၼႃႈ"}
+            }
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} ပီ"}
+                }
+                past{
+                    other{"{0} ပီ ပူၼ်ႉမႃး"}
+                }
+            }
+        }
+        year-narrow{
+            dn{"ပီ"}
+            relative{
+                "-1"{"ပီၵၢႆ"}
+                "0"{"ပီၼႆႉ"}
+                "1"{"ပီၼႃႈ"}
+            }
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} ပီ"}
+                }
+                past{
+                    other{"{0} ပီ ပူၼ်ႉမႃး"}
+                }
+            }
+        }
+        year-short{
+            dn{"ပီ"}
+            relative{
+                "-1"{"ပီၵၢႆ"}
+                "0"{"ပီၼႆႉ"}
+                "1"{"ပီၼႃႈ"}
+            }
+            relativeTime{
+                future{
+                    other{"ၼႂ်းၶၢဝ်းတၢင်း {0} ပီ"}
+                }
+                past{
+                    other{"{0} ပီ ပူၼ်ႉမႃး"}
+                }
+            }
+        }
+        zone{
+            dn{"ၸူၼ်ႇၶၢဝ်းယၢမ်း"}
+        }
+        zone-narrow{
+            dn{"ၸူၼ်ႇ"}
+        }
+        zone-short{
+            dn{"ၸူၼ်ႇ"}
+        }
+    }
+    listPattern{
+        or{
+            2{"{0} ႁိုဝ် {1}"}
+            end{"{0}၊ ႁိုဝ် {1}"}
+            middle{"{0}၊ {1}"}
+            start{"{0}၊ {1}"}
+        }
+        or-narrow{
+            2{"{0} ႁိုဝ် {1}"}
+            end{"{0}၊ ႁိုဝ် {1}"}
+            middle{"{0}၊ {1}"}
+            start{"{0}၊ {1}"}
+        }
+        or-short{
+            2{"{0} ႁိုဝ် {1}"}
+            end{"{0}၊ ႁိုဝ် {1}"}
+            middle{"{0}၊ {1}"}
+            start{"{0}၊ {1}"}
+        }
+        standard{
+            2{"{0} လႄႈ {1}"}
+            end{"{0} လႄႈ {1}"}
+            middle{"{0}၊ {1}"}
+            start{"{0}၊ {1}"}
+        }
+        standard-narrow{
+            2{"{0} လႄႈ {1}"}
+            end{"{0} လႄႈ {1}"}
+            middle{"{0}၊ {1}"}
+            start{"{0}၊ {1}"}
+        }
+        standard-short{
+            2{"{0} လႄႈ {1}"}
+            end{"{0} လႄႈ {1}"}
+            middle{"{0}၊ {1}"}
+            start{"{0}၊ {1}"}
+        }
+        unit{
+            2{"{0} လႄႈ {1}"}
+            end{"{0} လႄႈ {1}"}
+            middle{"{0}၊ {1}"}
+            start{"{0}၊ {1}"}
+        }
+        unit-narrow{
+            2{"{0} လႄႈ {1}"}
+            end{"{0} လႄႈ {1}"}
+            middle{"{0}၊ {1}"}
+            start{"{0}၊ {1}"}
+        }
+        unit-short{
+            2{"{0} လႄႈ {1}"}
+            end{"{0} လႄႈ {1}"}
+            middle{"{0}၊ {1}"}
+            start{"{0}၊ {1}"}
+        }
+    }
+    measurementSystemNames{
+        UK{"ယူႇၶေႇ"}
+        US{"ယူႇဢႅတ်ႉသ်"}
+        metric{"မႅတ်ႉထရိတ်ႉ"}
+    }
+    personNames{
+        nameOrderLocales{
+            givenFirst{
+                "und",
+                "shn",
+            }
+        }
+    }
+}

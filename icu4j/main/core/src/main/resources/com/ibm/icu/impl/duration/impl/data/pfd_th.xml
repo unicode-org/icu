@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+******************************************************************************
+* Copyright (C) 2016 and later: Unicode, Inc. and others.                    *
+* License & terms of use: http://www.unicode.org/copyright.html      *
+******************************************************************************
+******************************************************************************
+* Copyright (C) 2007-2008 International Business Machines Corporation and    *
+* others. All Rights Reserved.                                               *
+******************************************************************************
+-->
+<DataRecord>
+    <pl>NONE</pl>
+    <pluralNameTable>
+        <pluralNameList>
+            <pluralName>ปี</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>เดือน</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>อาทิตย์</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>วัน</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>ชั่วโมง</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>นาที</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>วินาที</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>มิลลิวินาที</pluralName>
+        </pluralNameList>
+    </pluralNameTable>
+    <mediumNameList>
+        <mediumName>Null</mediumName>
+        <mediumName>Null</mediumName>
+        <mediumName>Null</mediumName>
+        <mediumName>Null</mediumName>
+        <mediumName>ชม.</mediumName>
+        <mediumName>Null</mediumName>
+        <mediumName>Null</mediumName>
+        <mediumName>Null</mediumName>
+    </mediumNameList>
+    <halvesList>
+        <halves>ครึ่ง</halves>
+        <halves>ครึ่ง</halves>
+    </halvesList>
+    <halfPlacementList>
+        <halfPlacement>PREFIX</halfPlacement>
+        <halfPlacement>LAST</halfPlacement>
+    </halfPlacementList>
+    <halfSupportList>
+        <halfSupport>YES</halfSupport>
+        <halfSupport>YES</halfSupport>
+        <halfSupport>YES</halfSupport>
+        <halfSupport>YES</halfSupport>
+        <halfSupport>YES</halfSupport>
+        <halfSupport>YES</halfSupport>
+        <halfSupport>NO</halfSupport>
+        <halfSupport>NO</halfSupport>
+    </halfSupportList>
+    <requiresDigitSeparator>true</requiresDigitSeparator>
+    <digitPrefix></digitPrefix>
+    <countSep></countSep>
+    <shortUnitSep></shortUnitSep>
+    <numberSystem>DEFAULT</numberSystem>
+    <zero>0</zero>
+    <decimalSep>.</decimalSep>
+    <omitSingularCount>false</omitSingularCount>
+    <omitDualCount>false</omitDualCount>
+    <decimalHandling>DPLURAL</decimalHandling>
+    <fractionHandling>FPLURAL</fractionHandling>
+    <allowZero>true</allowZero>
+    <weeksAloneOnly>false</weeksAloneOnly>
+    <useMilliseconds>NO</useMilliseconds>
+    <ScopeDataList>
+        <ScopeData>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix>ที่แล้ว</suffix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>อีก</prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>น้อยกว่า</prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>น้อยกว่า</prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix>ที่แล้ว</suffix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>ไม่ถึงอีก</prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>มากกว่า</prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>มากกว่า</prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix>ที่แล้ว</suffix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>อีัก</prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix>กว่าๆ</suffix>
+        </ScopeData>
+    </ScopeDataList>
+</DataRecord>

@@ -1,0 +1,30 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+ie{
+    zoneStrings{
+        "Etc:Unknown"{
+            ec{"ínconosset loc"}
+        }
+        "Europe:Isle_of_Man"{
+            ec{"Insul de Man"}
+        }
+        "Pacific:Wake"{
+            ec{"Insul Wake"}
+        }
+        "meta:Cook"{
+            ld{"témpor demíestival del Insules Cook"}
+            lg{"témpor del Insules Cook"}
+            ls{"témpor standard del Insules Cook"}
+        }
+        "meta:GMT"{
+            ls{"témpore medial de Greenwich"}
+        }
+        gmtFormat{"TMG{0}"}
+        gmtUnknownFormat{"TMG+?"}
+        gmtZeroFormat{"TMG"}
+        regionFormat{"témpor de {0}"}
+        regionFormatDaylight{"témpor estival de {0}"}
+        regionFormatStandard{"témpor standard de {0}"}
+    }
+}

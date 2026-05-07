@@ -1,0 +1,40 @@
+# Copyright (C) 2016 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+#
+# GitHub Actions workflow to ensure all required checks pass when they are attempted.
+# In other words, many checks are conditionally run, so use this workflow as a workaround
+# to a limitation in Github Actions in how required checks are enforced. Instead of 
+# Github's naive behavior currently, this workflow only asserts that status=passing on
+# checks when they are run.
+
+name: Wait for Required Checks
+
+on:
+  pull_request:
+    branches: '**'
+
+permissions:
+  contents: read
+
+jobs:
+  enforce-all-checks:
+    runs-on: ubuntu-24.04  # Updated in BRS
+    permissions:
+      checks: read
+    steps:
+    - name: Wait for Triggered Required GH Checks
+      uses: poseidon/wait-for-status-checks@899c768d191b56eef585c18f8558da19e1f3e707 # v0.6.0
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        # This regex matches everything since almost all (if not all) CI checks are required.
+        match_pattern: ".*"
+        # For Azure Pipelines, each pipeline displays a check that represents the complete success of the pipeline.
+        # It won't pass until all of the pipeline's checks pass.
+        # For the ICU4J and ICU4C pipelines, this is called `CI-ICU4J` and `CI-ICU4C`.
+        # These checks will return a "neutral" status, which this GH Action interprets as a failure.
+        # ClusterFuzzLite/CIFuzz appears to be spawned after a CIFuzz job finishes, but its status of
+        # "neutral" is interpreted by this action as a failure.
+        # Since the jobs are superfluous, they can be ignored.
+        ignore: "CI-ICU4C,CI-ICU4J,ClusterFuzzLite/CIFuzz"
+        # Wait for 2 minutes before this action begins its work by polling Github for job/check status
+        delay: 120s

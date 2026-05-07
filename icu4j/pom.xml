@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+* © 2016 and later: Unicode, Inc. and others.
+* License & terms of use: http://www.unicode.org/copyright.html
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.ibm.icu</groupId>
+    <artifactId>icu-root</artifactId>
+    <version>79.0.1-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>icu4j-root</artifactId>
+  <packaging>pom</packaging>
+  <name>${proj-title} (${project.artifactId})</name>
+
+  <modules>
+    <module>main</module>
+    <module>demos</module>
+    <module>samples</module>
+    <module>tools</module>
+    <module>perf-tests</module>
+  </modules>
+
+  <profiles>
+
+    <!-- This is used to create the *-sources.jar for individual modules -->
+    <profile>
+      <id>with_sources</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-source-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <goals>
+                  <goal>jar-no-fork</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <excludes>
+                <exclude>/com/ibm/icu/impl/data/icudata/**</exclude>
+                <exclude>/com/ibm/icu/impl/duration/impl/data/*.xml</exclude>
+                <exclude>/com/ibm/icu/impl/duration/impl/data/*.xml.escaped</exclude>
+                <exclude>/com/ibm/icu/impl/duration/impl/data/*.txt</exclude>
+                <exclude>/com/ibm/icu/ICUConfig.properties</exclude>
+                <exclude>/**/package.html</exclude>
+              </excludes>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <!-- This is used to create the *-javadoc.jar for individual modules -->
+    <profile>
+      <id>with_javadoc</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
+      <id>with_signature</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+                <configuration>
+                  <keyname>${gpg-keyname}</keyname>
+                  <passphraseServerId>${gpg-keyname}</passphraseServerId>
+                  <gpgArguments>
+                    <arg>--pinentry-mode</arg>
+                    <arg>loopback</arg>
+                  </gpgArguments>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <!-- This is used to create "merged" javadoc for all modules combined.
+      Matches what is posted on a website (where icu4j / charset are all in one).
+      That's why you need to run this with `site`, but build the artifacts first (for the taglets):
+        mvn install -DskipTests -DskipITs
+        mvn site -DskipTests -DskipITs -P with_full_javadoc
+    -->
+    <profile>
+      <id>with_full_javadoc</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>aggregate</id>
+                <phase>site</phase>
+                <goals>
+                  <goal>aggregate</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <!-- This is used to gather API data used to generate API reports
+      (regular, draft, deprecated, status consistency, etc.)
+      To run it:
+        mvn install -DskipITs -DskipTests
+        mvn site -DskipITs -DskipTests -P gatherapi
+    -->
+    <profile>
+      <id>gatherapi</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>aggregate</id>
+                <phase>site</phase>
+                <goals>
+                  <goal>aggregate</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <!-- For incomplete doc tags javadoc fails with:
+                  ```
+                  Error while creating javadoc report:
+                  Exit code: 1
+                  Command line was: ...
+                  Refer to the generated Javadoc files in '...' dir.
+                  ```
+                But in most cases these are not related to what we do here, which is API reporting.
+                We ignore them so that we can progess with what we really care.
+              -->
+              <failOnError>false</failOnError>
+              <useStandardDocletOptions>false</useStandardDocletOptions>
+              <doclet>com.ibm.icu.dev.tool.docs.GatherAPIData</doclet>
+              <docletArtifact>
+                <groupId>com.ibm.icu</groupId>
+                <artifactId>tools_build</artifactId>
+                <version>${project.version}</version>
+              </docletArtifact>
+              <additionalOptions>
+                <additionalOption>-name 'ICU4J ${mf.Implementation-Version}'</additionalOption>
+                <additionalOption>-output ${project.build.directory}/icu4j${icu4j.api.report.version}.api3</additionalOption>
+                <additionalOption>-internal</additionalOption>
+                <additionalOption>-version</additionalOption>
+                <additionalOption>-gzip</additionalOption>
+              </additionalOptions>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <!-- This is used to check that all API are properly tagged
+      (regular, draft, deprecated, status consistency, etc.)
+      To run it:
+        mvn install -DskipITs -DskipTests
+        mvn site -DskipITs -DskipTests -P checktags
+    -->
+    <profile>
+      <id>checktags</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>aggregate</id>
+                <phase>site</phase>
+                <goals>
+                  <goal>aggregate</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <failOnError>false</failOnError>
+              <useStandardDocletOptions>false</useStandardDocletOptions>
+              <doclet>com.ibm.icu.dev.tool.docs.CheckTags</doclet>
+              <docletArtifact>
+                <groupId>com.ibm.icu</groupId>
+                <artifactId>tools_build</artifactId>
+                <version>${project.version}</version>
+              </docletArtifact>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
+      <id>release_files</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <configuration>
+              <outputDirectory>${release.directory}</outputDirectory>
+              <overWriteReleases>true</overWriteReleases>
+              <overWriteSnapshots>true</overWriteSnapshots>
+              <artifactItems>
+                <!-- icu4j -->
+                <artifactItem>
+                  <groupId>com.ibm.icu</groupId>
+                  <artifactId>icu4j</artifactId>
+                  <version>${project.version}</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>com.ibm.icu</groupId>
+                  <artifactId>icu4j</artifactId>
+                  <version>${project.version}</version>
+                  <classifier>sources</classifier>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>com.ibm.icu</groupId>
+                  <artifactId>icu4j</artifactId>
+                  <version>${project.version}</version>
+                  <classifier>javadoc</classifier>
+                </artifactItem>
+                <!-- icu4j-charset -->
+                <artifactItem>
+                  <groupId>com.ibm.icu</groupId>
+                  <artifactId>icu4j-charset</artifactId>
+                  <version>${project.version}</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>com.ibm.icu</groupId>
+                  <artifactId>icu4j-charset</artifactId>
+                  <version>${project.version}</version>
+                  <classifier>sources</classifier>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>com.ibm.icu</groupId>
+                  <artifactId>icu4j-charset</artifactId>
+                  <version>${project.version}</version>
+                  <classifier>javadoc</classifier>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <reportSets>
+          <reportSet>
+            <id>aggregate</id>
+            <inherited>false</inherited>
+            <reports>
+              <report>aggregate</report>
+            </reports>
+          </reportSet>
+          <reportSet>
+            <id>default</id>
+            <reports>
+              <report>javadoc</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+    </plugins>
+  </reporting>
+
+</project>

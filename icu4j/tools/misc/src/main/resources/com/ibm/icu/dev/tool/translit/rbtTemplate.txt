@@ -1,0 +1,30 @@
+/**********************************************************************
+* Copyright (C) 2016 and later: Unicode, Inc. and others.
+* License & terms of use: http://www.unicode.org/copyright.html
+***********************************************************************
+***********************************************************************
+* Copyright (c) 2000, International Business Machines Corporation
+* and others.  All Rights Reserved.
+***********************************************************************
+* > THIS FILE WAS MACHINE GENERATED <
+* >       DO NOT EDIT BY HAND       <
+* >      RUN TOOL TO REGENERATE     <
+* Tool: $TOOL
+* Creation date: $DATE
+*/
+package com.ibm.text.resources;
+
+import java.util.ListResourceBundle;
+
+public class TransliterationRule_$SCRIPTFROM_$SCRIPTTO extends ListResourceBundle {
+    /**
+     * Overrides ListResourceBundle
+     */
+    public Object[][] getContents() {
+        return new Object[][] {
+            { "Rule",
+              $RULES
+            }
+        };
+    }
+}

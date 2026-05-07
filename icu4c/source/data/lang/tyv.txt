@@ -1,0 +1,91 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+tyv{
+    Languages{
+        ar{"Араб"}
+        ar_001{"Амгы стандарт араб"}
+        bn{"Бенгал"}
+        de{"Немец"}
+        de_AT{"Немец (AT)"}
+        de_CH{"Немец (CH)"}
+        en{"Англи"}
+        en_AU{"Англи (AU)"}
+        en_CA{"Англи (CA)"}
+        en_GB{"Англи (GB)"}
+        en_US{"Англи (US)"}
+        es{"Испан"}
+        es_419{"Латин Америкада Испан"}
+        es_ES{"Европей Испан"}
+        es_MX{"Мексикан Испан"}
+        fr{"Француз"}
+        fr_CA{"Француз (CA)"}
+        fr_CH{"Француз (CH)"}
+        hi_Latn{"Хинди (латин)"}
+        id{"Индонези"}
+        it{"Итали"}
+        ja{"Япон"}
+        ko{"Көрей"}
+        nl{"Нидерланд"}
+        nl_BE{"Фламанд"}
+        pl{"Поляк"}
+        pt{"Португал"}
+        pt_BR{"Бразилияда Португал"}
+        pt_PT{"Европей Португал"}
+        ru{"Орус"}
+        th{"Тай"}
+        tr{"Турк"}
+        tyv{"Тыва"}
+        zh{"Кыдат"}
+        zh_Hans{"Кыдат (бөдүүнчүткен)"}
+        zh_Hant{"Кыдат (чаңчылчаан)"}
+    }
+    Languages%long{
+        zh_Hans{"Кыдат Мандарин (бөдүүнчүткен)"}
+        zh_Hant{"Кыдат Мандарин (чаңчылчаан)"}
+    }
+    Languages%menu{
+        zh{"Кыдат Мандарин"}
+    }
+    Languages%variant{
+        hi_Latn{"Хинглиш"}
+    }
+    Scripts{
+        Arab{"Арабица"}
+        Cyrl{"Кириллица"}
+        Hans{"Бөдүүнчүткен"}
+        Hant{"Чаңчылчаан"}
+        Jpan{"Япон"}
+        Kore{"Көрей"}
+        Latn{"Латиница"}
+        Zxxx{"Бижик чок"}
+        Zzzz{"Билдинмес Бижик"}
+    }
+    Scripts%stand-alone{
+        Hans{"Бөдүүнчүткен Кыдат"}
+        Hant{"Чаңчылчаан Кыдат"}
+    }
+    Types{
+        calendar{
+            gregorian{"Григориан Календарь"}
+            iso8601{"Календарь ISO-8601"}
+        }
+        calendar%core{
+            gregorian{"Григориан"}
+        }
+        collation{
+            standard{"Стандарт сортал"}
+        }
+        collation%core{
+            standard{"Стандарт"}
+        }
+        numbers{
+            latn{"араб чурагайлар"}
+        }
+    }
+    codePatterns{
+        language{"Дыл: {0}"}
+        script{"Бижимел: {0}"}
+        territory{"Регион: {0}"}
+    }
+}

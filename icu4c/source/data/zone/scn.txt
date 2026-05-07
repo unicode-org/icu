@@ -1,0 +1,944 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+scn{
+    zoneStrings{
+        "Africa:Algiers"{
+            ec{"Algeri"}
+        }
+        "Africa:Cairo"{
+            ec{"Cairu"}
+        }
+        "Africa:Casablanca"{
+            ec{"Casabblanca"}
+        }
+        "Africa:Ceuta"{
+            ec{"Cèuta"}
+        }
+        "Africa:Djibouti"{
+            ec{"Gibbuti"}
+        }
+        "Africa:Mogadishu"{
+            ec{"Mugadisciu"}
+        }
+        "Africa:Nairobi"{
+            ec{"Nairobbi"}
+        }
+        "Africa:Tripoli"{
+            ec{"Trìpuli"}
+        }
+        "Africa:Tunis"{
+            ec{"Tùnisi"}
+        }
+        "America:Belize"{
+            ec{"Bilisi"}
+        }
+        "America:Campo_Grande"{
+            ec{"Campu Granni"}
+        }
+        "America:Cordoba"{
+            ec{"Còrduba"}
+        }
+        "America:Costa_Rica"{
+            ec{"Custa Rica"}
+        }
+        "America:Detroit"{
+            ec{"Ditroit"}
+        }
+        "America:Dominica"{
+            ec{"Dumìnica"}
+        }
+        "America:Guadeloupe"{
+            ec{"Guadalupa"}
+        }
+        "America:Guatemala"{
+            ec{"Guatimala"}
+        }
+        "America:Guyana"{
+            ec{"Guiana"}
+        }
+        "America:Jamaica"{
+            ec{"Giamaica"}
+        }
+        "America:Martinique"{
+            ec{"Martinica"}
+        }
+        "America:Mexico_City"{
+            ec{"Cità dû Mèssicu"}
+        }
+        "America:Monterrey"{
+            ec{"Muntirrei"}
+        }
+        "America:Montserrat"{
+            ec{"Munzirratu"}
+        }
+        "America:New_York"{
+            ec{"Nova Jorca"}
+        }
+        "America:North_Dakota:Beulah"{
+            ec{"Beulah, Dakota di Tramuntana"}
+        }
+        "America:North_Dakota:Center"{
+            ec{"Centru, Dakota di Tramuntana"}
+        }
+        "America:North_Dakota:New_Salem"{
+            ec{"New Salem, Dakota di Tramuntana"}
+        }
+        "America:Panama"{
+            ec{"Pànama"}
+        }
+        "America:Port_of_Spain"{
+            ec{"Portu di Spagna"}
+        }
+        "America:Puerto_Rico"{
+            ec{"Portu Ricu"}
+        }
+        "America:Regina"{
+            ec{"Riggina"}
+        }
+        "America:Santo_Domingo"{
+            ec{"Santu Dumingu"}
+        }
+        "America:Sao_Paulo"{
+            ec{"San Paulu"}
+        }
+        "America:St_Lucia"{
+            ec{"Santa Lucìa"}
+        }
+        "America:Toronto"{
+            ec{"Turontu"}
+        }
+        "Antarctica:Casey"{
+            ec{"Basi Casey"}
+        }
+        "Antarctica:DumontDUrville"{
+            ec{"Basi Dumont d’Urville"}
+        }
+        "Antarctica:Mawson"{
+            ec{"Basi Mawson"}
+        }
+        "Antarctica:McMurdo"{
+            ec{"Basi McMurdo"}
+        }
+        "Antarctica:Palmer"{
+            ec{"Terra di Palmer"}
+        }
+        "Antarctica:Rothera"{
+            ec{"Basi Rothera"}
+        }
+        "Antarctica:Syowa"{
+            ec{"Basi Showa"}
+        }
+        "Antarctica:Troll"{
+            ec{"Basi Troll"}
+        }
+        "Antarctica:Vostok"{
+            ec{"Basi Vostok"}
+        }
+        "Asia:Amman"{
+            ec{"Ammàn"}
+        }
+        "Asia:Calcutta"{
+            ec{"Kurkata"}
+        }
+        "Asia:Colombo"{
+            ec{"Culummu"}
+        }
+        "Asia:Damascus"{
+            ec{"Damascu"}
+        }
+        "Asia:Dubai"{
+            ec{"Dubbai"}
+        }
+        "Asia:Gaza"{
+            ec{"Gazza"}
+        }
+        "Asia:Jakarta"{
+            ec{"Giacarta"}
+        }
+        "Asia:Jerusalem"{
+            ec{"Girusalemmi"}
+        }
+        "Asia:Macau"{
+            ec{"Macau"}
+        }
+        "Asia:Muscat"{
+            ec{"Mascati"}
+        }
+        "Asia:Nicosia"{
+            ec{"Nicusìa"}
+        }
+        "Asia:Samarkand"{
+            ec{"Samarcanna"}
+        }
+        "Asia:Seoul"{
+            ec{"Siul"}
+        }
+        "Asia:Singapore"{
+            ec{"Singapuri"}
+        }
+        "Asia:Vladivostok"{
+            ec{"Vladìvustok"}
+        }
+        "Asia:Yekaterinburg"{
+            ec{"Yekatirimmurgu"}
+        }
+        "Atlantic:Azores"{
+            ec{"Azzorri"}
+        }
+        "Atlantic:Bermuda"{
+            ec{"Birmuda"}
+        }
+        "Atlantic:Canary"{
+            ec{"Canari"}
+        }
+        "Atlantic:Cape_Verde"{
+            ec{"Capu Virdi"}
+        }
+        "Atlantic:South_Georgia"{
+            ec{"Giorgia di sciroccu"}
+        }
+        "Atlantic:St_Helena"{
+            ec{"Sant’Èlina"}
+        }
+        "Australia:Adelaide"{
+            ec{"Adilaidi"}
+        }
+        "Etc:UTC"{
+            ls{"Ura Curdinata Univirsali"}
+        }
+        "Etc:Unknown"{
+            ec{"Scanusciutu"}
+        }
+        "Europe:Athens"{
+            ec{"Ateni"}
+        }
+        "Europe:Belgrade"{
+            ec{"Belgradu"}
+        }
+        "Europe:Berlin"{
+            ec{"Birlinu"}
+        }
+        "Europe:Brussels"{
+            ec{"Bruselli"}
+        }
+        "Europe:Dublin"{
+            ec{"Dubblinu"}
+            ld{"Ura sulari Irlannisi"}
+        }
+        "Europe:Gibraltar"{
+            ec{"Gibbirterra"}
+        }
+        "Europe:Helsinki"{
+            ec{"Hèlsinki"}
+        }
+        "Europe:Isle_of_Man"{
+            ec{"Ìsula di Man"}
+        }
+        "Europe:Istanbul"{
+            ec{"Ìstanbul"}
+        }
+        "Europe:Kiev"{
+            ec{"Kiev"}
+        }
+        "Europe:Lisbon"{
+            ec{"Lisbona"}
+        }
+        "Europe:London"{
+            ec{"Lònnira"}
+            ld{"Ura ligali Britànnica"}
+        }
+        "Europe:Luxembourg"{
+            ec{"Lussimmurgu"}
+        }
+        "Europe:Malta"{
+            ec{"Mauta"}
+        }
+        "Europe:Monaco"{
+            ec{"Mònacu"}
+        }
+        "Europe:Moscow"{
+            ec{"Mosca"}
+        }
+        "Europe:Paris"{
+            ec{"Pariggi"}
+        }
+        "Europe:Prague"{
+            ec{"Praga"}
+        }
+        "Europe:Rome"{
+            ec{"Roma"}
+        }
+        "Europe:San_Marino"{
+            ec{"San Marinu"}
+        }
+        "Europe:Sarajevo"{
+            ec{"Sarajevu"}
+        }
+        "Europe:Stockholm"{
+            ec{"Stuccorma"}
+        }
+        "Europe:Vatican"{
+            ec{"Vaticanu"}
+        }
+        "Europe:Volgograd"{
+            ec{"Vòlgugrad"}
+        }
+        "Europe:Warsaw"{
+            ec{"Varsavia"}
+        }
+        "Europe:Zagreb"{
+            ec{"Zagabbria"}
+        }
+        "Europe:Zurich"{
+            ec{"Zurigu"}
+        }
+        "Indian:Christmas"{
+            ec{"Natali"}
+        }
+        "Indian:Maldives"{
+            ec{"Mardivi"}
+        }
+        "Pacific:Easter"{
+            ec{"Ìsula di Pasca"}
+        }
+        "Pacific:Fiji"{
+            ec{"Figi"}
+        }
+        "Pacific:Galapagos"{
+            ec{"Galàpagos"}
+        }
+        "Pacific:Marquesas"{
+            ec{"Ìsuli Marchesi"}
+        }
+        "Pacific:Midway"{
+            ec{"Atollu Midway"}
+        }
+        "Pacific:Pitcairn"{
+            ec{"Ìsuli Pitcairn"}
+        }
+        "Pacific:Wake"{
+            ec{"Ìsula Wake"}
+        }
+        "Pacific:Wallis"{
+            ec{"Wallis e Futuna"}
+        }
+        "meta:Afghanistan"{
+            ls{"Ura di l’Afghànistan"}
+        }
+        "meta:Africa_Central"{
+            ls{"Ura di l’Àfrica Cintrali"}
+        }
+        "meta:Africa_Eastern"{
+            ls{"Ura di l’Àfrica di Livanti"}
+        }
+        "meta:Africa_Southern"{
+            ls{"Ura Nurmali di l’Àfrica di Sciroccu"}
+        }
+        "meta:Africa_Western"{
+            ls{"Ura di l’Àfrica di Punenti"}
+        }
+        "meta:Alaska"{
+            ld{"Ura ligali di l’Alaska"}
+            lg{"Ura di l’Alaska"}
+            ls{"Ura sulari di l’Alaska"}
+            sd{"AKDT"}
+            sg{"AKT"}
+            ss{"AKST"}
+        }
+        "meta:Amazon"{
+            ld{"Ura ligali di l’Amazzonia"}
+            lg{"Ura di l’Amazzonia"}
+            ls{"Ura sulari di l’Amazzonia"}
+        }
+        "meta:America_Central"{
+            ld{"Ura ligali cintrali"}
+            lg{"Ura cintrali"}
+            ls{"Ura sulari cintrali"}
+            sd{"CDT"}
+            sg{"CT"}
+            ss{"CST"}
+        }
+        "meta:America_Eastern"{
+            ld{"Ura ligali livantina"}
+            lg{"Ura livantina"}
+            ls{"Ura sulari livantina"}
+            sd{"EDT"}
+            sg{"ET"}
+            ss{"EST"}
+        }
+        "meta:America_Mountain"{
+            ld{"Ura ligali dî muntagni"}
+            lg{"Ura dî muntagni"}
+            ls{"Ura sulari dî muntagni"}
+            sd{"MDT"}
+            sg{"MT"}
+            ss{"MST"}
+        }
+        "meta:America_Pacific"{
+            ld{"Ura ligali dû Pacìficu"}
+            lg{"Ura dû Pacìficu"}
+            ls{"Ura sulari dû Pacìficu"}
+            sd{"PDT"}
+            sg{"PT"}
+            ss{"PST"}
+        }
+        "meta:Apia"{
+            ld{"Ura ligali di Samoa"}
+            lg{"Ura di Samoa"}
+            ls{"Ura sulari di Samoa"}
+        }
+        "meta:Arabian"{
+            ld{"Ura ligali Àrabba"}
+            lg{"Ura Àrabba"}
+            ls{"Ura sulari Àrabba"}
+        }
+        "meta:Argentina"{
+            ld{"Ura ligali di l’Argintina"}
+            lg{"Ura di l’Argintina"}
+            ls{"Ura sulari di l’Argintina"}
+        }
+        "meta:Argentina_Western"{
+            ld{"Ura ligali di l’Argintina di punenti"}
+            lg{"Ura di l’Argintina di punenti"}
+            ls{"Ura sulari di l’Argintina di punenti"}
+        }
+        "meta:Armenia"{
+            ld{"Ura ligali di l’Armenia"}
+            lg{"Ura di l’Armenia"}
+            ls{"Ura sulari di l’Armenia"}
+        }
+        "meta:Atlantic"{
+            ld{"Ura ligali di l’Atlànticu"}
+            lg{"Ura di l’Atlànticu"}
+            ls{"Ura sulari di l’Atlànticu"}
+            sd{"ADT"}
+            sg{"AT"}
+            ss{"AST"}
+        }
+        "meta:Australia_Central"{
+            ld{"Ura ligali di l’Australia cintrali"}
+            lg{"Ura di l’Australia cintrali"}
+            ls{"Ura sulari di l’Australia cintrali"}
+        }
+        "meta:Australia_CentralWestern"{
+            ld{"Ura ligali di l’Australia cintrali di punenti"}
+            lg{"Ura di l’Australia cintrali di punenti"}
+            ls{"Ura sulari di l’Australia cintrali di punenti"}
+        }
+        "meta:Australia_Eastern"{
+            ld{"Ura ligali di l’Australia di livanti"}
+            lg{"Ura di l’Australia di livanti"}
+            ls{"Ura sulari di l’Australia di livanti"}
+        }
+        "meta:Australia_Western"{
+            ld{"Ura ligali di l’Australia di punenti"}
+            lg{"Ura di l’Australia di punenti"}
+            ls{"Ura sulari di l’Australia di punenti"}
+        }
+        "meta:Azerbaijan"{
+            ld{"Ura ligali di l’Azerbaijan"}
+            lg{"Ura di l’Azerbaijan"}
+            ls{"Ura sulari di l’Azerbaijan"}
+        }
+        "meta:Azores"{
+            ld{"Ura ligali di l’Azzorri"}
+            lg{"Ura di l’Azzorri"}
+            ls{"Ura sulari di l’Azzorri"}
+        }
+        "meta:Bangladesh"{
+            ld{"Ura ligali dû Bàngladesh"}
+            lg{"Ura dû Bàngladesh"}
+            ls{"Ura sulari dû Bàngladesh"}
+        }
+        "meta:Bhutan"{
+            ls{"Ura dû Bhutan"}
+        }
+        "meta:Bolivia"{
+            ls{"Ura dâ Bulivia"}
+        }
+        "meta:Brasilia"{
+            ld{"Ura ligali di Brasilia"}
+            lg{"Ura di Brasilia"}
+            ls{"Ura sulari di Brasilia"}
+        }
+        "meta:Brunei"{
+            ls{"Ura dû Brunei"}
+        }
+        "meta:Cape_Verde"{
+            ld{"Ura ligali di Capu Virdi"}
+            lg{"Ura di Capu Virdi"}
+            ls{"Ura sulari di Capu Virdi"}
+        }
+        "meta:Chamorro"{
+            ls{"Ura di Chamorro"}
+        }
+        "meta:Chatham"{
+            ld{"Ura ligali di Chatham"}
+            lg{"Ura di Chatham"}
+            ls{"Ura sulari di Chatham"}
+        }
+        "meta:Chile"{
+            ld{"Ura ligali dû Cili"}
+            lg{"Ura dû Cili"}
+            ls{"Ura sulari dû Cili"}
+        }
+        "meta:China"{
+            ld{"Ura ligali dâ Cina"}
+            lg{"Ura dâ Cina"}
+            ls{"Ura sulari dâ Cina"}
+        }
+        "meta:Christmas"{
+            ls{"Ura di l’Ìsula di Natali"}
+        }
+        "meta:Cocos"{
+            ls{"Ura di l’Ìsuli Cocos"}
+        }
+        "meta:Colombia"{
+            ld{"Ura ligali dâ Culommia"}
+            lg{"Ura dâ Culommia"}
+            ls{"Ura sulari dâ Culommia"}
+        }
+        "meta:Cook"{
+            ld{"Ura ligali di l’Ìsuli Cook"}
+            lg{"Ura di l’Ìsuli Cook"}
+            ls{"Ura sulari di l’Ìsuli Cook"}
+        }
+        "meta:Cuba"{
+            ld{"Ura ligali di Cubba"}
+            lg{"Ura di Cubba"}
+            ls{"Ura sulari di Cubba"}
+            sd{"CuDT"}
+            sg{"CuT"}
+            ss{"CuST"}
+        }
+        "meta:Davis"{
+            ls{"Ura di Davis"}
+        }
+        "meta:DumontDUrville"{
+            ls{"Ura di Dumont d’Urville"}
+        }
+        "meta:East_Timor"{
+            ls{"Ura di Timor di Livanti"}
+        }
+        "meta:Easter"{
+            ld{"Ura ligali di l’Ìsula di Pasca"}
+            lg{"Ura di l’Ìsula di Pasca"}
+            ls{"Ura sulari di l’Ìsula di Pasca"}
+        }
+        "meta:Ecuador"{
+            ls{"Ura di l’Ècuador"}
+        }
+        "meta:Europe_Central"{
+            ld{"Ura ligali Cintrali Eurupea"}
+            lg{"Ura Cintrali Eurupea"}
+            ls{"Ura sulari Cintrali Eurupea"}
+        }
+        "meta:Europe_Eastern"{
+            ld{"Ura ligali di l’Europa di Livanti"}
+            lg{"Ura di l’Europa di Livanti"}
+            ls{"Ura sulari di l’Europa di Livanti"}
+        }
+        "meta:Europe_Further_Eastern"{
+            ls{"Ura di l’Europa cchiù a Livanti"}
+        }
+        "meta:Europe_Western"{
+            ld{"Ura ligali di l’Europa di Punenti"}
+            lg{"Ura di l’Europa di Punenti"}
+            ls{"Ura sulari di l’Europa di Punenti"}
+        }
+        "meta:Falkland"{
+            ld{"Ura ligali di l’Ìsuli Falkland"}
+            lg{"Ura di l’Ìsuli Falkland"}
+            ls{"Ura sulari di l’Ìsuli Falkland"}
+        }
+        "meta:Fiji"{
+            ld{"Ura ligali dî Figi"}
+            lg{"Ura dî Figi"}
+            ls{"Ura sulari dî Figi"}
+        }
+        "meta:French_Guiana"{
+            ls{"Ura dâ Guiana Francisi"}
+        }
+        "meta:French_Southern"{
+            ls{"Ura Francisi di Sciroccu e di l’Antàrtidi"}
+        }
+        "meta:GMT"{
+            ls{"Ura Minzana di Greenwich"}
+        }
+        "meta:Galapagos"{
+            ls{"Ura dî Galàpagos"}
+        }
+        "meta:Gambier"{
+            ls{"Ura di Gambier"}
+        }
+        "meta:Georgia"{
+            ld{"Ura ligali dâ Giorgia"}
+            lg{"Ura dâ Giorgia"}
+            ls{"Ura sulari dâ Giorgia"}
+        }
+        "meta:Gilbert_Islands"{
+            ls{"Ura di l’Ìsuli Gilbert"}
+        }
+        "meta:Greenland"{
+            ld{"Ura ligali dâ Gruillannia"}
+            lg{"Ura dâ Gruillannia"}
+            ls{"Ura sulari dâ Gruillannia"}
+        }
+        "meta:Greenland_Eastern"{
+            ld{"Ura livantina dâ Gruillannia livantina"}
+            lg{"Ura dâ Gruillannia livantina"}
+            ls{"Ura sulari dâ Gruillannia livantina"}
+        }
+        "meta:Greenland_Western"{
+            ld{"Ura ligali dâ Gruillannia punintina"}
+            lg{"Ura dâ Gruillannia punintina"}
+            ls{"Ura sulari dâ Gruillannia punintina"}
+        }
+        "meta:Gulf"{
+            ls{"Ura Nurmali dû Gurfu"}
+        }
+        "meta:Guyana"{
+            ls{"Ura dâ Guiana"}
+        }
+        "meta:Hawaii"{
+            ls{"Ura sulari di l’Hawaai"}
+            ss{"HAST"}
+        }
+        "meta:Hawaii_Aleutian"{
+            ld{"Ura ligali di l’Hawaai"}
+            lg{"Ura di l’Hawaai"}
+            ls{"Ura sulari di l’Hawaai"}
+            sd{"HADT"}
+            sg{"HAT"}
+            ss{"HAST"}
+        }
+        "meta:Hong_Kong"{
+            ld{"Ura ligali di Hong Kong"}
+            lg{"Ura di Hong Kong"}
+            ls{"Ura sulari di Hong Kong"}
+        }
+        "meta:Hovd"{
+            ld{"Ura ligali di Khovd"}
+            lg{"Ura di Khovd"}
+            ls{"Ura sulari di Khovd"}
+        }
+        "meta:India"{
+            ls{"Ura sulari di l’Ìnnia"}
+        }
+        "meta:Indian_Ocean"{
+            ls{"Ura di l’Ucianu Innianu"}
+        }
+        "meta:Indochina"{
+            ls{"Ura di l’Innucina"}
+        }
+        "meta:Indonesia_Central"{
+            ls{"Ura di l’Innunesia cintrali"}
+        }
+        "meta:Indonesia_Eastern"{
+            ls{"Ura di l’Innunesia di livanti"}
+        }
+        "meta:Indonesia_Western"{
+            ls{"Ura di l’Innunesia di punenti"}
+        }
+        "meta:Iran"{
+            ld{"Ura ligali di l’Iran"}
+            lg{"Ura di l’Iran"}
+            ls{"Ura sulari di l’Iran"}
+        }
+        "meta:Irkutsk"{
+            ld{"Ura ligali di Irtkutsk"}
+            lg{"Ura di Irtkutsk"}
+            ls{"Ura sulari di Irtkutsk"}
+        }
+        "meta:Israel"{
+            ld{"Ura ligali di Isdraeli"}
+            lg{"Ura di Isdraeli"}
+            ls{"Ura sulari di Isdraeli"}
+        }
+        "meta:Japan"{
+            ld{"Ura ligali dû Giappuni"}
+            lg{"Ura dû Giappuni"}
+            ls{"Ura sulari dû Giappuni"}
+        }
+        "meta:Kazakhstan"{
+            ls{"Ura dû Kazzàkistan"}
+        }
+        "meta:Kazakhstan_Eastern"{
+            ls{"Ura dû Kazzàkistan di Livanti"}
+        }
+        "meta:Kazakhstan_Western"{
+            ls{"Ura dû Kazzàkistan di Punenti"}
+        }
+        "meta:Korea"{
+            ld{"Ura ligali dâ Curìa"}
+            lg{"Ura dâ Curìa"}
+            ls{"Ura sulari dâ Curìa"}
+        }
+        "meta:Kosrae"{
+            ls{"Ura di Kosrae"}
+        }
+        "meta:Krasnoyarsk"{
+            ld{"Ura ligali di Krasnoyarsk"}
+            lg{"Ura di Krasnoyarsk"}
+            ls{"Ura sulari di Krasnoyarsk"}
+        }
+        "meta:Kyrgystan"{
+            ls{"Ura dû Kirghìzzistan"}
+        }
+        "meta:Line_Islands"{
+            ls{"Ura di l’Ìsuli Line"}
+        }
+        "meta:Lord_Howe"{
+            ld{"Ura ligali di Lord Howe"}
+            lg{"Ura di Lord Howe"}
+            ls{"Ura sulari di Lord Howe"}
+        }
+        "meta:Magadan"{
+            ld{"Ura ligali di Magdan"}
+            lg{"Ura di Magdan"}
+            ls{"Ura sulari di Magdan"}
+        }
+        "meta:Malaysia"{
+            ls{"Ura dâ Malisia"}
+        }
+        "meta:Maldives"{
+            ls{"Ura dî Mardivi"}
+        }
+        "meta:Marquesas"{
+            ls{"Ura dî Marchesi"}
+        }
+        "meta:Marshall_Islands"{
+            ls{"Ura di l’Ìsuli Marshall"}
+        }
+        "meta:Mauritius"{
+            ld{"Ura ligali di Mauritius"}
+            lg{"Ura di Mauritius"}
+            ls{"Ura sulari di Mauritius"}
+        }
+        "meta:Mawson"{
+            ls{"Ura di Mawson"}
+        }
+        "meta:Mexico_Pacific"{
+            ld{"Ura ligali dû Mèssicu Pacìficu"}
+            lg{"Ura dû Mèssicu Pacìficu"}
+            ls{"Ura sulari dû Mèssicu Pacìficu"}
+        }
+        "meta:Mongolia"{
+            ld{"Ura ligali di Ulaanbaatar"}
+            lg{"Ura di Ulaanbaatar"}
+            ls{"Ura sulari di Ulaanbaatar"}
+        }
+        "meta:Moscow"{
+            ld{"Ura ligali di Mosca"}
+            lg{"Ura di Mosca"}
+            ls{"Ura sulari di Mosca"}
+        }
+        "meta:Myanmar"{
+            ls{"Ura di Myanmar"}
+        }
+        "meta:Nauru"{
+            ls{"Ura di Nauru"}
+        }
+        "meta:Nepal"{
+            ls{"Ura dû Nepal"}
+        }
+        "meta:New_Caledonia"{
+            ld{"Ura ligali dâ Nova Calidonia"}
+            lg{"Ura dâ Nova Calidonia"}
+            ls{"Ura sulari dâ Nova Calidonia"}
+        }
+        "meta:New_Zealand"{
+            ld{"Ura ligali dâ Nova Zilannia"}
+            lg{"Ura dâ Nova Zilannia"}
+            ls{"Ura sulari dâ Nova Zilannia"}
+        }
+        "meta:Newfoundland"{
+            ld{"Ura ligali di Tirranova"}
+            lg{"Ura di Tirranova"}
+            ls{"Ura sulari di Tirranova"}
+        }
+        "meta:Niue"{
+            ls{"Ura di Niue"}
+        }
+        "meta:Norfolk"{
+            ld{"Ura ligali di l’Ìsula Norfolk"}
+            lg{"Ura di l’Ìsula Norfolk"}
+            ls{"Ura sulari di l’Ìsula Norfolk"}
+        }
+        "meta:Noronha"{
+            ld{"Ura ligali di Fernando di Noronha"}
+            lg{"Ura di Fernando di Noronha"}
+            ls{"Ura sulari di Fernando di Noronha"}
+        }
+        "meta:Novosibirsk"{
+            ld{"Ura ligali di Novosibirsk"}
+            lg{"Ura di Novosibirsk"}
+            ls{"Ura sulari di Novosibirsk"}
+        }
+        "meta:Omsk"{
+            ld{"Ura ligali di Omsk"}
+            lg{"Ura di Omsk"}
+            ls{"Ura sulari di Omsk"}
+        }
+        "meta:Pakistan"{
+            ld{"Ura ligali dû Pàkistan"}
+            lg{"Ura dû Pàkistan"}
+            ls{"Ura sulari dû Pàkistan"}
+        }
+        "meta:Palau"{
+            ls{"Ura di Palau"}
+        }
+        "meta:Papua_New_Guinea"{
+            ls{"Ura dâ Papua Nova Guinìa"}
+        }
+        "meta:Paraguay"{
+            ld{"Ura ligali dû Paraguay"}
+            lg{"Ura dû Paraguay"}
+            ls{"Ura sulari dû Paraguay"}
+        }
+        "meta:Peru"{
+            ld{"Ura ligali dû Pirù"}
+            lg{"Ura dû Pirù"}
+            ls{"Ura sulari dû Pirù"}
+        }
+        "meta:Philippines"{
+            ld{"Ura ligali dî Filippini"}
+            lg{"Ura dî Filippini"}
+            ls{"Ura sulari dî Filippini"}
+        }
+        "meta:Phoenix_Islands"{
+            ls{"Ura di l’Ìsuli Phoenix"}
+        }
+        "meta:Pierre_Miquelon"{
+            ld{"Ura ligali di S. Pierre e Miquelon"}
+            lg{"Ura di S. Pierre e Miquelon"}
+            ls{"Ura sulari di S. Pierre e Miquelon"}
+        }
+        "meta:Pitcairn"{
+            ls{"Ura di Pitcairn"}
+        }
+        "meta:Ponape"{
+            ls{"Ura di Pohnpei"}
+        }
+        "meta:Pyongyang"{
+            ls{"Ura dâ Curia di Tramuntana"}
+        }
+        "meta:Reunion"{
+            ls{"Ura di Réunion"}
+        }
+        "meta:Rothera"{
+            ls{"Ura di Rothera"}
+        }
+        "meta:Sakhalin"{
+            ld{"Ura ligali di Sakhalin"}
+            lg{"Ura di Sakhalin"}
+            ls{"Ura sulari di Sakhalin"}
+        }
+        "meta:Samoa"{
+            ld{"Ura ligali dî Samoa miricani"}
+            lg{"Ura dî Samoa miricani"}
+            ls{"Ura sulari dî Samoa miricani"}
+        }
+        "meta:Seychelles"{
+            ls{"Ura dî Seychelles"}
+        }
+        "meta:Singapore"{
+            ls{"Ura di Singapuri"}
+        }
+        "meta:Solomon"{
+            ls{"Ura di l’Ìsuli Salumuni"}
+        }
+        "meta:South_Georgia"{
+            ls{"Ura dâ Giorgia di sciroccu"}
+        }
+        "meta:Suriname"{
+            ls{"Ura dû Surinami"}
+        }
+        "meta:Syowa"{
+            ls{"Ura di Syowa"}
+        }
+        "meta:Tahiti"{
+            ls{"Ura di Tahiti"}
+        }
+        "meta:Taipei"{
+            ld{"Ura ligali di Taiwan"}
+            lg{"Ura di Taiwan"}
+            ls{"Ura sulari di Taiwan"}
+        }
+        "meta:Tajikistan"{
+            ls{"Ura dû Taggìkistan"}
+        }
+        "meta:Tokelau"{
+            ls{"Ura di Tukilau"}
+        }
+        "meta:Tonga"{
+            ld{"Ura ligali di Tonga"}
+            lg{"Ura di Tonga"}
+            ls{"Ura sulari di Tonga"}
+        }
+        "meta:Truk"{
+            ls{"Ura di Chuuk"}
+        }
+        "meta:Turkmenistan"{
+            ld{"Ura ligali dû Turkmènistan"}
+            lg{"Ura dû Turkmènistan"}
+            ls{"Ura sulari dû Turkmènistan"}
+        }
+        "meta:Tuvalu"{
+            ls{"Ura di Tuvalu"}
+        }
+        "meta:Uruguay"{
+            ld{"Ura ligali di l’Uruguay"}
+            lg{"Ura di l’Uruguay"}
+            ls{"Ura sulari di l’Uruguay"}
+        }
+        "meta:Uzbekistan"{
+            ld{"Ura ligali di l’Uzbèkistan"}
+            lg{"Ura di l’Uzbèkistan"}
+            ls{"Ura sulari di l’Uzbèkistan"}
+        }
+        "meta:Vanuatu"{
+            ld{"Ura ligali di Vanuatu"}
+            lg{"Ura di Vanuatu"}
+            ls{"Ura sulari di Vanuatu"}
+        }
+        "meta:Venezuela"{
+            ls{"Ura dû Vinizzuela"}
+        }
+        "meta:Vladivostok"{
+            ld{"Ura ligali di Vladìvustok"}
+            lg{"Ura di Vladìvustok"}
+            ls{"Ura sulari di Vladìvustok"}
+        }
+        "meta:Volgograd"{
+            ld{"Ura ligali di Vòlgugrad"}
+            lg{"Ura di Vòlgugrad"}
+            ls{"Ura sulari di Vòlgugrad"}
+        }
+        "meta:Vostok"{
+            ls{"Ura di Vostok"}
+        }
+        "meta:Wake"{
+            ls{"Ura di l’Ìsula Wake"}
+        }
+        "meta:Wallis"{
+            ls{"Ura di Wallis e Futuna"}
+        }
+        "meta:Yakutsk"{
+            ld{"Ura ligali di Yakutsk"}
+            lg{"Ura di Yakutsk"}
+            ls{"Ura sulari di Yakutsk"}
+        }
+        "meta:Yekaterinburg"{
+            ld{"Ura ligali di Yekatirimmurgu"}
+            lg{"Ura di Yekatirimmurgu"}
+            ls{"Ura sulari di Yekatirimmurgu"}
+        }
+        "meta:Yukon"{
+            ls{"Ura dû Yukon"}
+        }
+        regionFormatDaylight{"{0} (ura ligali)"}
+        regionFormatStandard{"{0} (ura sulari)"}
+    }
+}

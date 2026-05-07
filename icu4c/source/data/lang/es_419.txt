@@ -1,0 +1,119 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+es_419{
+    Keys{
+        colNormalization{"orden normalizado"}
+        em{"presentación de emojis"}
+        lw{"saltos de línea entre palabras"}
+    }
+    Languages{
+        ady{"adigeo"}
+        alt{"altái del sur"}
+        arp{"arapajó"}
+        ars{"árabe de Néyed"}
+        bla{"siksiká"}
+        eu{"vasco"}
+        goh{"alemán de la alta edad antigua"}
+        grc{"griego clásico"}
+        ht{"haitiano"}
+        kbd{"cabardiano"}
+        krc{"karachái-bálkaro"}
+        lij{"genovés"}
+        ml{"malabar"}
+        mni{"manipuri"}
+        nr{"ndebele del sur"}
+        nso{"sesotho del norte"}
+        prg{"prusiano antiguo"}
+        rm{"retorrománico"}
+        sd{"sindhi"}
+        shu{"árabe (Chad)"}
+        sma{"sami del sur"}
+        st{"sesotho del sur"}
+        sw_CD{"swahili (Congo)"}
+        syr{"siríaco"}
+        tet{"tetun"}
+        tyv{"tuvano"}
+        vec{"véneto"}
+        wal{"walamo"}
+        wuu{"wu"}
+        xal{"calmuco"}
+        zun{"zuni"}
+    }
+    Languages%extension{
+        ku{"kurmanyi"}
+    }
+    Languages%variant{
+        ps{"pashtún"}
+        ug{"uighur"}
+    }
+    Scripts{
+        Gujr{"gujarati"}
+        Hrkt{"katakana o hiragana"}
+        Laoo{"lao"}
+        Latn{"latín"}
+        Mlym{"malabar"}
+        Mtei{"manipuri"}
+        Syrc{"siríaco"}
+    }
+    Types{
+        calendar{
+            islamic-rgsa{"calendario islámico (Arabia Saudita)"}
+            islamic-tbla{"calendario islámico tabular"}
+        }
+        calendar%core{
+            roc{"calendario chino"}
+        }
+        colAlternate{
+            non-ignorable{"ordenar símbolos"}
+            shifted{"ordenar ignorando símbolos"}
+        }
+        colBackwards{
+            no{"ordenar acentos normalmente"}
+            yes{"ordenar acentos con inversión"}
+        }
+        colCaseFirst{
+            lower{"ordenar empezando por minúsculas"}
+            no{"ordenar siguiendo orden normal de mayúsculas y minúsculas"}
+            upper{"ordenar empezando por mayúsculas"}
+        }
+        colCaseLevel{
+            no{"ordenar sin distinguir entre mayúsculas y minúsculas"}
+            yes{"ordenar distinguiendo entre mayúsculas y minúsculas"}
+        }
+        collation{
+            eor{"reglas de orden europeas"}
+            phonebook{"orden de agenda telefónica"}
+        }
+        collation%core{
+            ducet{"unicode predeterminado"}
+            phonebook{"agenda telefónica"}
+            phonetic{"fonética"}
+            stroke{"trazo"}
+            unihan{"trazo radical"}
+        }
+        lw%core{
+            breakall{"introducir saltos"}
+            keepall{"conservar todos"}
+            phrase{"conservar en frases"}
+        }
+        numbers{
+            tirh{"dígitos en tirh"}
+            traditional{"números traducionales"}
+            wara{"dígitos en Warang Citi"}
+        }
+        ss%core{
+            none{"no"}
+            standard{"sí"}
+        }
+    }
+    characterLabelPattern{
+        enclosed{"{0} — Adjunto"}
+        extended{"{0} — Extendido"}
+        historic{"{0} — Histórico"}
+        miscellaneous{"{0} — Miscelánea"}
+    }
+    codePatterns{
+        script{"Alfabeto: {0}"}
+    }
+}

@@ -1,0 +1,70 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+en_IN{
+    %%Parent{"en_001"}
+    Currencies{
+        KGS{
+            "KGS",
+            "Kyrgyzstani Som",
+        }
+        USD{
+            "$",
+            "US Dollar",
+        }
+        VEF{
+            "VEF",
+            "Venezuelan Bolívar",
+        }
+        XCG{
+            "Cg.",
+            "Caribbean Guilder",
+        }
+    }
+    CurrencyPlurals{
+        ANG{
+            one{"Netherlands Antillean Guilder"}
+            other{"Netherlands Antillean Guilders"}
+        }
+        KGS{
+            one{"Kyrgyzstani Som"}
+            other{"Kyrgyzstani Soms"}
+        }
+        KZT{
+            one{"Kazakhstani Tenge"}
+            other{"Kazakhstani Tenges"}
+        }
+        SLE{
+            one{"Sierra Leonean Leone"}
+            other{"Sierra Leonean Leones"}
+        }
+        TJS{
+            one{"Tajikistani Somoni"}
+            other{"Tajikistani Somonis"}
+        }
+        TMT{
+            one{"Turkmenistani Manat"}
+            other{"Turkmenistani Manat"}
+        }
+        UZS{
+            one{"Uzbekistani Som"}
+            other{"Uzbekistani Som"}
+        }
+        VEF{
+            one{"Venezuelan bolívar"}
+            other{"Venezuelan bolívars"}
+        }
+        VES{
+            one{"Venezuelan Bolívar"}
+            other{"Venezuelan Bolívars"}
+        }
+        XCG{
+            one{"Caribbean Guilder"}
+            other{"Caribbean Guilders"}
+        }
+        ZWG{
+            one{"Zimbabwean Gold"}
+            other{"Zimbabwean Gold"}
+        }
+    }
+}

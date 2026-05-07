@@ -1,0 +1,26 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+tt{
+    units{
+        compound{
+            per{"{0} һәр {1}"}
+        }
+        coordinate{
+            dnam{"кардиналь юнәлеш"}
+            east{"{0} көнчыгыш"}
+            north{"{0} төньяк"}
+            south{"{0} көньяк"}
+            west{"{0} көнбатыш"}
+        }
+    }
+    unitsShort{
+        coordinate{
+            dnam{"юнәлеш"}
+            east{"{0} көнчыгыш"}
+            north{"{0} төньяк"}
+            south{"{0} көньяк"}
+            west{"{0} көнбатыш"}
+        }
+    }
+}

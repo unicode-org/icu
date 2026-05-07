@@ -1,0 +1,114 @@
+<!--
+* © 2017 and later: Unicode, Inc. and others.
+* License & terms of use: http://www.unicode.org/copyright.html
+-->
+<!--
+/*
+*******************************************************************************
+* Copyright (C) 2006-2013, International Business Machines Corporation and    *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+* This is the ant build file for ICU tools.
+*/
+-->
+<project name="release-tools" default="tools" basedir="." >
+    <target name="init">
+        <tstamp/>
+        <property file="api-report.properties" />
+        <property name="apireport.jar" location="target/icu4c-apireport.jar"/>
+        <property name="rsrc.dir" location="${basedir}/src/main/resources"/>
+        <echo message="java home: ${java.home}"/>
+        <echo message="java version: ${java.version}"/>
+        <echo message="java vendor: ${java.vm.vendor}"/>
+        <echo message="ant java version: ${ant.java.version}"/>
+        <echo message="${ant.version}"/>
+        <echo message="tools jar=${apireport.jar}" />
+        <echo message="${basedir}"/>
+        <condition property="apireport.jar.exists">
+          <available file="${apireport.jar}" type="file"/>
+        </condition>
+    </target>
+
+    <target name="tools"  depends="init" description="compile release tools" unless="apireport.jar.exists">
+      <exec executable="mvn" searchpath="true">
+        <arg value="package"/>
+      </exec>
+    </target>
+
+    <target name="clean" depends="init" description="remove all build targets">
+      <exec executable="mvn" searchpath="true">
+        <arg value="clean"/>
+      </exec>
+    </target>
+
+    <target name="apireport" depends="tools">
+        <java jar="${apireport.jar}" fork="yes" failonerror="true">
+
+            <arg value = "--olddir"/>
+            <arg value = "${olddir}"/>
+
+            <arg value = "--newdir"/>
+            <arg value = "${newdir}"/>
+
+            <arg value = "--cppxslt"/>
+            <arg value = "${rsrc.dir}/com/ibm/icu/dev/tools/docs/dumpAllCppFunc.xslt"/>
+
+            <arg value = "--cxslt"/>
+            <arg value = "${rsrc.dir}/com/ibm/icu/dev/tools/docs/dumpAllCFunc.xslt"/>
+
+            <arg value = "--reportxslt"/>
+            <arg value = "${rsrc.dir}/com/ibm/icu/dev/tools/docs/genReport.xslt"/>
+
+            <arg value = "--resultfile"/>
+            <arg value = "${basedir}/APIChangeReport.html"/>
+
+        </java>
+    </target>
+
+    <target name="apireport_md" depends="tools">
+        <java jar="${apireport.jar}" fork="yes" failonerror="true">
+
+            <arg value = "--olddir"/>
+            <arg value = "${olddir}"/>
+
+            <arg value = "--newdir"/>
+            <arg value = "${newdir}"/>
+
+            <arg value = "--cppxslt"/>
+            <arg value = "${rsrc.dir}/com/ibm/icu/dev/tools/docs/dumpAllCppFunc.xslt"/>
+
+            <arg value = "--cxslt"/>
+            <arg value = "${rsrc.dir}/com/ibm/icu/dev/tools/docs/dumpAllCFunc.xslt"/>
+
+            <arg value = "--reportxslt"/>
+            <arg value = "${rsrc.dir}/com/ibm/icu/dev/tools/docs/genReport_md.xslt"/>
+
+            <arg value = "--resultfile"/>
+            <arg value = "${basedir}/APIChangeReport.md"/>
+
+        </java>
+    </target>
+    <target name="apireport_xml" depends="tools">
+        <java jar="${apireport.jar}" fork="yes" failonerror="true">
+
+            <arg value = "--olddir"/>
+            <arg value = "${olddir}"/>
+
+            <arg value = "--newdir"/>
+            <arg value = "${newdir}"/>
+
+            <arg value = "--cppxslt"/>
+            <arg value = "${rsrc.dir}/com/ibm/icu/dev/tools/docs/dumpAllCppFunc_xml.xslt"/>
+
+            <arg value = "--cxslt"/>
+            <arg value = "${rsrc.dir}/com/ibm/icu/dev/tools/docs/dumpAllCFunc_xml.xslt"/>
+
+            <arg value = "--reportxslt"/>
+            <arg value = "${rsrc.dir}/com/ibm/icu/dev/tools/docs/genreport_xml.xslt"/>
+
+            <arg value = "--resultfile"/>
+            <arg value = "${basedir}/APIChangeReport.xml"/>
+
+        </java>
+    </target>
+</project>

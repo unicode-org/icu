@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+******************************************************************************
+* Copyright (C) 2016 and later: Unicode, Inc. and others.                    *
+* License & terms of use: http://www.unicode.org/copyright.html      *
+******************************************************************************
+******************************************************************************
+* Copyright (C) 2007-2008 International Business Machines Corporation and    *
+* others. All Rights Reserved.                                               *
+******************************************************************************
+-->
+<DataRecord>
+    <pl>NONE</pl>
+    <pluralNameTable>
+        <pluralNameList>
+            <pluralName>年</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>月</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>週間</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>日</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>時間</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>分</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>秒</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>ミリ秒</pluralName>
+        </pluralNameList>
+    </pluralNameTable>
+    <measureList>
+        <measure>Null</measure>
+        <measure>か</measure>
+        <measure>Null</measure>
+        <measure>Null</measure>
+        <measure>Null</measure>
+        <measure>Null</measure>
+        <measure>Null</measure>
+        <measure>Null</measure>
+    </measureList>
+    <halvesList>
+        <halves>半</halves>
+        <halves>半</halves>
+    </halvesList>
+    <halfPlacementList>
+        <halfPlacement>PREFIX</halfPlacement>
+        <halfPlacement>LAST</halfPlacement>
+    </halfPlacementList>
+    <halfSupportList>
+        <halfSupport>YES</halfSupport>
+        <halfSupport>YES</halfSupport>
+        <halfSupport>NO</halfSupport>
+        <halfSupport>YES</halfSupport>
+        <halfSupport>YES</halfSupport>
+        <halfSupport>ONE_PLUS</halfSupport>
+        <halfSupport>YES</halfSupport>
+        <halfSupport>NO</halfSupport>
+    </halfSupportList>
+    <requiresDigitSeparator>false</requiresDigitSeparator>
+    <countSep></countSep>
+    <requiresSkipMarkerList>
+        <requiresSkipMarker>false</requiresSkipMarker>
+        <requiresSkipMarker>false</requiresSkipMarker>
+        <requiresSkipMarker>true</requiresSkipMarker>
+        <requiresSkipMarker>false</requiresSkipMarker>
+        <requiresSkipMarker>false</requiresSkipMarker>
+        <requiresSkipMarker>false</requiresSkipMarker>
+        <requiresSkipMarker>false</requiresSkipMarker>
+        <requiresSkipMarker>false</requiresSkipMarker>
+    </requiresSkipMarkerList>
+    <numberSystem>DEFAULT</numberSystem>
+    <zero>0</zero>
+    <decimalSep>.</decimalSep>
+    <omitSingularCount>false</omitSingularCount>
+    <omitDualCount>true</omitDualCount>
+    <decimalHandling>DPLURAL</decimalHandling>
+    <fractionHandling>FSINGULAR_PLURAL</fractionHandling>
+    <skippedUnitMarker>と</skippedUnitMarker>
+    <allowZero>false</allowZero>
+    <weeksAloneOnly>true</weeksAloneOnly>
+    <useMilliseconds>WITH_SECONDS</useMilliseconds>
+    <ScopeDataList>
+        <ScopeData>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix>前</suffix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>今から</prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix>後</suffix>
+        </ScopeData>
+        <ScopeData>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix>以内</suffix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>過去</prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix>以内</suffix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>今から</prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix>以内</suffix>
+        </ScopeData>
+        <ScopeData>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix>以上</suffix>
+        </ScopeData>
+        <ScopeData>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix>以上前</suffix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>今から</prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix>以上後</suffix>
+        </ScopeData>
+    </ScopeDataList>
+</DataRecord>

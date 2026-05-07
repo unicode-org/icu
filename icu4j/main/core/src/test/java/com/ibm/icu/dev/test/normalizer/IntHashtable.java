@@ -1,0 +1,41 @@
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+ *******************************************************************************
+ * Copyright (C) 1998-2010, International Business Machines Corporation and    *
+ * Unicode, Inc. All Rights Reserved.                                          *
+ *******************************************************************************
+ */
+package com.ibm.icu.dev.test.normalizer;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Integer hash table.
+ *
+ * @author Mark Davis
+ */
+public class IntHashtable {
+
+    public IntHashtable(int defaultValue) {
+        this.defaultValue = defaultValue;
+    }
+
+    public void put(int key, int value) {
+        if (value == defaultValue) {
+            table.remove(key);
+        } else {
+            table.put(key, value);
+        }
+    }
+
+    public int get(int key) {
+        Integer value = table.get(key);
+        if (value == null) return defaultValue;
+        return value.intValue();
+    }
+
+    private int defaultValue;
+    private Map<Integer, Integer> table = new HashMap<Integer, Integer>();
+}

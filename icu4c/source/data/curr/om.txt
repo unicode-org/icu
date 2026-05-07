@@ -1,0 +1,81 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+om{
+    Currencies{
+        BMD{
+            "BMD",
+            "Doolaara Beermudaa",
+        }
+        BRL{
+            "R$",
+            "Brazilian Real",
+        }
+        BZD{
+            "BZD",
+            "Doolaara Beliizee",
+        }
+        CAD{
+            "CA$",
+            "Doolaara Kanaadaa",
+        }
+        CNY{
+            "CN¥",
+            "Chinese Yuan Renminbi",
+        }
+        CRC{
+            "CRC",
+            "Koloonii Kostaa Rikaa",
+        }
+        ETB{
+            "Br",
+            "Itoophiyaa Birrii",
+        }
+        EUR{
+            "€",
+            "Euro",
+        }
+        GBP{
+            "£",
+            "British Pound",
+        }
+        INR{
+            "₹",
+            "Indian Rupee",
+        }
+        JPY{
+            "JP¥",
+            "Japanese Yen",
+        }
+        RUB{
+            "RUB",
+            "Russian Ruble",
+        }
+        USD{
+            "US$",
+            "Doolaara Ameerikaa",
+        }
+    }
+    CurrencyPlurals{
+        BMD{
+            one{"Doolaara Beermudaa"}
+            other{"Doolaarota Beermudaa"}
+        }
+        BZD{
+            one{"Doolaara Beliizee"}
+            other{"Doolaarota Beliizee"}
+        }
+        CAD{
+            one{"Doolaara Kanaadaa"}
+            other{"Doolaarota Kanaadaa"}
+        }
+        CRC{
+            one{"Koloonii Kostaa Rikaa"}
+            other{"Koloonota Kostaa Rikaa"}
+        }
+        USD{
+            one{"Doolaara Ameerikaa"}
+            other{"Doolarota Ameerikaa"}
+        }
+    }
+}

@@ -1,0 +1,336 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+ie{
+    AuxExemplarCharacters{"[àăâåäãā æ ç èĕêëē ìĭîïī {lʼ} ñ {nʼ} òŏôöøō œ ùŭûüū ýÿ]"}
+    ExemplarCharacters{"[aá b c d eé f g h ií j k l m n oó p q r s t uú v w x y z]"}
+    ExemplarCharactersNumbers{"[\\- ‑ , ' % ‰ + 0 1 2 3 4 5 6 7 8 9]"}
+    ExemplarCharactersPunctuation{"[\\- ‐‑ – — , ; \\: ! ? . … '‘’ \u0022“”„ « » ( ) \\[ \\] § @ * / \\& † ‡]"}
+    NumberElements{
+        latn{
+            patterns{
+                accountingFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
+                accountingFormat%noCurrency{"#,##0.00"}
+                currencyFormat{"¤ #,##0.00;¤ -#,##0.00"}
+                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
+                currencyFormat%noCurrency{"#,##0.00"}
+            }
+            symbols{
+                decimal{","}
+                group{" "}
+            }
+        }
+        minimalPairs{
+            ordinal{
+                other{"Li {0}-im edition"}
+            }
+        }
+        minimumGroupingDigits{"2"}
+    }
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "ante midí",
+                "pos midí",
+            }
+            AmPmMarkersAbbr{
+                "a.m.",
+                "p.m.",
+            }
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE d MMMM y",
+                "d MMMM y",
+                "d MMM y",
+                "d.M.yy",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            DateTimePatterns%atTime{
+                "{1} 'ye' {0}",
+                "{1} 'ye' {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Ed{"E d"}
+                Gy{"y G"}
+                GyMMM{"LLL y G"}
+                GyMMMEd{"E d MMM y G"}
+                GyMMMd{"d MMM y G"}
+                GyMd{"d.M.y G"}
+                H{"H 'h'."}
+                Hv{"HH 'h'. 'de' v"}
+                MEd{"E d.M"}
+                MMMEd{"E d MMM"}
+                MMMMd{"d MMMM"}
+                MMMd{"d MMM"}
+                Md{"d.M"}
+                d{"d."}
+                yM{"M.y"}
+                yMEd{"E d.M.y"}
+                yMMM{"MMM y"}
+                yMMMEd{"EEEE d MMM y"}
+                yMMMM{"LLLL y"}
+                yMMMd{"d MMM y"}
+                yMd{"d.M.y"}
+                yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "sol.",
+                        "lun.",
+                        "mar.",
+                        "mer.",
+                        "jov.",
+                        "ven.",
+                        "sat.",
+                    }
+                    short{
+                        "So",
+                        "Lu",
+                        "Ma",
+                        "Me",
+                        "Jo",
+                        "Ve",
+                        "Sa",
+                    }
+                    wide{
+                        "soledí",
+                        "lunedí",
+                        "mardí",
+                        "mercurdí",
+                        "jovedí",
+                        "venerdí",
+                        "saturdí",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "S",
+                        "L",
+                        "M",
+                        "M",
+                        "J",
+                        "V",
+                        "S",
+                    }
+                }
+            }
+            dayPeriod{
+                stand-alone{
+                    wide{
+                        am{"ante midí"}
+                        pm{"pos midí"}
+                    }
+                }
+            }
+            eras{
+                abbreviated{
+                    0{"a.C."}
+                    1{"e.C."}
+                }
+                abbreviated%variant{
+                    0{"a.e.c."}
+                    1{"e.c."}
+                }
+                wide{
+                    0{"ante Crist"}
+                    1{"era Cristan"}
+                }
+                wide%variant{
+                    0{"ante era comun"}
+                    1{"era comun"}
+                }
+            }
+            intervalFormats{
+                H{
+                    H{"H – H 'h'."}
+                }
+                M{
+                    M{"M – M"}
+                }
+                d{
+                    d{"d. – d."}
+                }
+                fallback{"{0} til {1}"}
+                y{
+                    y{"y – y"}
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "jan.",
+                        "febr.",
+                        "mar.",
+                        "apr.",
+                        "may",
+                        "jun.",
+                        "julí",
+                        "aug.",
+                        "sept.",
+                        "oct.",
+                        "nov.",
+                        "dec.",
+                    }
+                    wide{
+                        "januar",
+                        "februar",
+                        "marte",
+                        "april",
+                        "may",
+                        "junio",
+                        "julí",
+                        "august",
+                        "septembre",
+                        "octobre",
+                        "novembre",
+                        "decembre",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "J",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
+                        "J",
+                        "J",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    wide{
+                        "1-m trimestre",
+                        "2-m trimestre",
+                        "3-m trimestre",
+                        "4-m trimestre",
+                    }
+                }
+            }
+        }
+    }
+    delimiters{
+        alternateQuotationEnd{"”"}
+        alternateQuotationStart{"“"}
+        quotationEnd{"»"}
+        quotationStart{"«"}
+    }
+    fields{
+        day{
+            dn{"die"}
+            relative{
+                "-1"{"yer"}
+                "-2"{"anteyer"}
+                "0"{"hodie"}
+                "1"{"deman"}
+                "2"{"posdeman"}
+            }
+        }
+        day-narrow{
+            dn{"d"}
+        }
+        dayperiod{
+            dn{"midídie"}
+        }
+        era{
+            dn{"era"}
+        }
+        hour{
+            dn{"hor"}
+        }
+        hour-narrow{
+            dn{"h"}
+        }
+        minute{
+            dn{"minute"}
+        }
+        minute-narrow{
+            dn{"m"}
+        }
+        minute-short{
+            dn{"min"}
+        }
+        month{
+            dn{"mensu"}
+            relative{
+                "-1"{"ultim mensu"}
+                "0"{"ho-mensu"}
+                "1"{"sequent mensu"}
+            }
+        }
+        month-narrow{
+            dn{"mn"}
+        }
+        month-short{
+            dn{"mn."}
+        }
+        quarter{
+            dn{"trimestre"}
+        }
+        quarter-narrow{
+            dn{"tr"}
+        }
+        second{
+            dn{"seconde"}
+        }
+        second-narrow{
+            dn{"s"}
+        }
+        second-short{
+            dn{"sec"}
+        }
+        week{
+            dn{"semane"}
+        }
+        week-narrow{
+            dn{"sem"}
+        }
+        week-short{
+            dn{"sem."}
+        }
+        weekday{
+            dn{"die del semane"}
+        }
+        year{
+            dn{"annu"}
+            relative{
+                "-1"{"ultim annu"}
+                "0"{"ho-annu"}
+                "1"{"sequent annu"}
+            }
+        }
+        year-narrow{
+            dn{"a"}
+        }
+        zone{
+            dn{"zone horari"}
+        }
+    }
+    listPattern{
+        standard{
+            2{"{0} e {1}"}
+        }
+    }
+    measurementSystemNames{
+        UK{"anglesi"}
+        US{"american"}
+        metric{"metric"}
+    }
+}

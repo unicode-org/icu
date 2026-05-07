@@ -1,0 +1,47 @@
+{
+  "scenario": "Bad options for built-in functions",
+  "description": "Tests for the bad-option error; only run in ICU4C for now",
+  "defaultTestProperties": {
+    "locale": "en-US",
+    "expErrors": [
+      {
+        "type": "bad-option"
+      }
+    ]
+  },
+  "tests": [
+    { "comment": "Neither impl validates options right now; see https://github.com/unicode-org/message-format-wg/issues/738",
+      "src": ".local $foo = {1 :number minimumIntegerDigits=-1} {{bar {$foo}}}",
+      "ignoreCpp": "ICU4C doesn't validate options",
+      "ignoreJava": "ICU4J doesn't validate options"
+    },
+    { "src": ".local $foo = {1 :number minimumIntegerDigits=foo} {{bar {$foo}}}",
+      "ignoreCpp": "ICU4C doesn't validate options",
+      "ignoreJava": "ICU4J doesn't validate options"
+    },
+    { "src": ".local $foo = {1 :number minimumFractionDigits=foo} {{bar {$foo}}}",
+      "ignoreCpp": "ICU4C doesn't validate options",
+      "ignoreJava": "ICU4J doesn't validate options"
+    },
+    { "src": ".local $foo = {1 :number maximumFractionDigits=foo} {{bar {$foo}}}",
+      "ignoreCpp": "ICU4C doesn't validate options",
+      "ignoreJava": "ICU4J doesn't validate options"
+    },
+    { "src": ".local $foo = {1 :number minimumSignificantDigits=foo} {{bar {$foo}}}",
+      "ignoreCpp": "ICU4C doesn't validate options",
+      "ignoreJava": "ICU4J doesn't validate options"
+    },
+    { "src": ".local $foo = {1 :number maximumSignificantDigits=foo} {{bar {$foo}}}",
+      "ignoreCpp": "ICU4C doesn't validate options",
+      "ignoreJava": "ICU4J doesn't validate options"
+    },
+    { "src": ".local $foo = {1 :integer minimumIntegerDigits=foo} {{bar {$foo}}}",
+      "ignoreCpp": "ICU4C doesn't validate options",
+      "ignoreJava": "ICU4J doesn't validate options"
+    },
+    { "src": ".local $foo = {1 :integer maximumSignificantDigits=foo} {{bar {$foo}}}",
+      "ignoreCpp": "ICU4C doesn't validate options",
+      "ignoreJava": "ICU4J doesn't validate options"
+    }
+  ]
+}

@@ -1,0 +1,2180 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+he{
+    AuxExemplarCharacters{"[ֽ ׄ\u200E\u200F ְ ֱ ֲ ֳ ִ ֵ ֶ ַ ָ ֹ ֻ ׂ ׁ ּ ֿ ״]"}
+    ExemplarCharacters{"[א ב ג ד ה ו ז ח ט י כך ל מם נן ס ע פף צץ ק ר ש ת]"}
+    ExemplarCharactersIndex{"[א ב ג ד ה ו ז ח ט י כ ל מ נ ס ע פ צ ק ר ש ת]"}
+    ExemplarCharactersNumbers{"[\u200E \\- ‑ , . % ‰ + 0 1 2 3 4 5 6 7 8 9]"}
+    ExemplarCharactersPunctuation{"[\\- ‐‑ – — , ; \\: ! ? . '׳ \u0022״ ( ) \\[ \\] / ־]"}
+    NumberElements{
+        latn{
+            patterns{
+                accountingFormat%alphaNextToNumber{"‏#,##0.00 ‏¤;‏-#,##0.00 ‏¤"}
+                accountingFormat%noCurrency{"‏#,##0.00 ‏;‏-#,##0.00 ‏"}
+                currencyFormat{"‏#,##0.00 ‏¤;‏-#,##0.00 ‏¤"}
+                currencyFormat%alphaNextToNumber{"‏#,##0.00 ‏¤;‏-#,##0.00 ‏¤"}
+                currencyFormat%noCurrency{"‏#,##0.00 ‏;‏-#,##0.00 ‏"}
+            }
+            patternsLong{
+                decimalFormat{
+                    1000{
+                        many{"‏0 אלף"}
+                        one{"‏0 אלף"}
+                        other{"‏0 אלף"}
+                        two{"‏0 אלף"}
+                    }
+                    10000{
+                        many{"‏00 אלף"}
+                        one{"‏00 אלף"}
+                        other{"‏00 אלף"}
+                        two{"‏00 אלף"}
+                    }
+                    100000{
+                        many{"‏000 אלף"}
+                        one{"‏000 אלף"}
+                        other{"‏000 אלף"}
+                        two{"‏000 אלף"}
+                    }
+                    1000000{
+                        many{"‏0 מיליון"}
+                        one{"‏0 מיליון"}
+                        other{"‏0 מיליון"}
+                        two{"‏0 מיליון"}
+                    }
+                    10000000{
+                        many{"‏00 מיליון"}
+                        one{"‏00 מיליון"}
+                        other{"‏00 מיליון"}
+                        two{"‏00 מיליון"}
+                    }
+                    100000000{
+                        many{"‏000 מיליון"}
+                        one{"‏000 מיליון"}
+                        other{"‏000 מיליון"}
+                        two{"‏000 מיליון"}
+                    }
+                    1000000000{
+                        many{"‏0 מיליארד"}
+                        one{"‏0 מיליארד"}
+                        other{"‏0 מיליארד"}
+                        two{"‏0 מיליארד"}
+                    }
+                    10000000000{
+                        many{"‏00 מיליארד"}
+                        one{"‏00 מיליארד"}
+                        other{"‏00 מיליארד"}
+                        two{"‏00 מיליארד"}
+                    }
+                    100000000000{
+                        many{"‏000 מיליארד"}
+                        one{"‏000 מיליארד"}
+                        other{"‏000 מיליארד"}
+                        two{"‏000 מיליארד"}
+                    }
+                    1000000000000{
+                        many{"‏0 טריליון"}
+                        one{"‏0 טריליון"}
+                        other{"‏0 טריליון"}
+                        two{"‏0 טריליון"}
+                    }
+                    10000000000000{
+                        many{"‏00 טריליון"}
+                        one{"‏00 טריליון"}
+                        other{"‏00 טריליון"}
+                        two{"‏00 טריליון"}
+                    }
+                    100000000000000{
+                        many{"‏000 טריליון"}
+                        one{"‏000 טריליון"}
+                        other{"‏000 טריליון"}
+                        two{"‏000 טריליון"}
+                    }
+                }
+            }
+            patternsShort{
+                currencyFormat{
+                    1000{
+                        many{"‏0K‏ ‏¤"}
+                        one{"‏0K‏ ‏¤"}
+                        other{"‏0K‏ ‏¤"}
+                        two{"‏0K‏ ‏¤"}
+                    }
+                    10000{
+                        many{"‏00K‏ ‏¤"}
+                        one{"‏00K‏ ‏¤"}
+                        other{"‏00K‏ ‏¤"}
+                        two{"‏00K‏ ‏¤"}
+                    }
+                    100000{
+                        many{"‏000K‏ ‏¤"}
+                        one{"‏000K‏ ‏¤"}
+                        other{"‏000K‏ ‏¤"}
+                        two{"‏000K‏ ‏¤"}
+                    }
+                    1000000{
+                        many{"‏0M‏ ‏¤"}
+                        one{"‏0M‏ ‏¤"}
+                        other{"‏0M‏ ‏¤"}
+                        two{"‏0M‏ ‏¤"}
+                    }
+                    10000000{
+                        many{"‏00M‏ ‏¤"}
+                        one{"‏00M‏ ‏¤"}
+                        other{"‏00M‏ ‏¤"}
+                        two{"‏00M‏ ‏¤"}
+                    }
+                    100000000{
+                        many{"‏000M‏ ‏¤"}
+                        one{"‏000M‏ ‏¤"}
+                        other{"‏000M‏ ‏¤"}
+                        two{"‏000M‏ ‏¤"}
+                    }
+                    1000000000{
+                        many{"‏0B‏ ‏¤"}
+                        one{"‏0B‏ ‏¤"}
+                        other{"‏0B‏ ‏¤"}
+                        two{"‏0B‏ ‏¤"}
+                    }
+                    10000000000{
+                        many{"‏00B‏ ‏¤"}
+                        one{"‏00B‏ ‏¤"}
+                        other{"‏00B‏ ‏¤"}
+                        two{"‏00B‏ ‏¤"}
+                    }
+                    100000000000{
+                        many{"‏000B‏ ‏¤"}
+                        one{"‏000B‏ ‏¤"}
+                        other{"‏000B‏ ‏¤"}
+                        two{"‏000B‏ ‏¤"}
+                    }
+                    1000000000000{
+                        many{"‏0T‏ ‏¤"}
+                        one{"‏0T‏ ‏¤"}
+                        other{"‏0T‏ ‏¤"}
+                        two{"‏0T‏ ‏¤"}
+                    }
+                    10000000000000{
+                        many{"‏00T‏ ‏¤"}
+                        one{"‏00T‏ ‏¤"}
+                        other{"‏00T‏ ‏¤"}
+                        two{"‏00T‏ ‏¤"}
+                    }
+                    100000000000000{
+                        many{"‏000T‏ ‏¤"}
+                        one{"‏000T‏ ‏¤"}
+                        other{"‏000T‏ ‏¤"}
+                        two{"‏000T‏ ‏¤"}
+                    }
+                }
+                decimalFormat{
+                    1000{
+                        one{"0K‏"}
+                        other{"0K‏"}
+                    }
+                    10000{
+                        one{"00K‏"}
+                        other{"00K‏"}
+                    }
+                    100000{
+                        one{"000K‏"}
+                        other{"000K‏"}
+                    }
+                    1000000{
+                        one{"0M‏"}
+                        other{"0M‏"}
+                    }
+                    10000000{
+                        one{"00M‏"}
+                        other{"00M‏"}
+                    }
+                    100000000{
+                        one{"000M‏"}
+                        other{"000M‏"}
+                    }
+                    1000000000{
+                        one{"0B‏"}
+                        other{"0B‏"}
+                    }
+                    10000000000{
+                        one{"00B‏"}
+                        other{"00B‏"}
+                    }
+                    100000000000{
+                        one{"000B‏"}
+                        other{"000B‏"}
+                    }
+                    1000000000000{
+                        one{"0T‏"}
+                        other{"0T‏"}
+                    }
+                    10000000000000{
+                        one{"00T‏"}
+                        other{"00T‏"}
+                    }
+                    100000000000000{
+                        one{"000T‏"}
+                        other{"000T‏"}
+                    }
+                }
+            }
+            symbols{
+                minusSign{"‎-"}
+                plusSign{"‎+"}
+            }
+        }
+        minimalPairs{
+            gender{
+                feminine{"ה{0} הראשונה היא הקובעת"}
+                masculine{"ה{0} הראשון הוא הקובע"}
+            }
+            ordinal{
+                other{"פנו ימינה בפנייה ה-{0}"}
+            }
+            plural{
+                many{"{0} יום"}
+                one{"יום"}
+                other{"{0} ימים"}
+                two{"יומיים"}
+            }
+        }
+        traditional{"hebr"}
+    }
+    calendar{
+        buddhist{
+            eras{
+                wide{
+                    0{"הספירה הבודהיסטית"}
+                }
+            }
+            intervalFormats{
+                yMMMEd{
+                    d{"E, d בMMM – E, d בMMM y G"}
+                    y{"E, d, בMMM, y – E, d בMMM, y G"}
+                }
+                yMMMd{
+                    M{"d בMMM – d בMMM y G"}
+                    d{"d–d בMMM y G"}
+                    y{"d בMMM y – d בMMM y G"}
+                }
+            }
+        }
+        coptic{
+            monthNames{
+                format{
+                    wide{
+                        "טאוט",
+                        "בבה",
+                        "הטור",
+                        "קיאק",
+                        "טובה",
+                        "אמשיר",
+                        "ברמהט",
+                        "ברמודה",
+                        "בשאנס",
+                        "פאונה",
+                        "אפיפ",
+                        "מסרה",
+                        "נאסי",
+                    }
+                }
+            }
+        }
+        ethiopic{
+            monthNames{
+                format{
+                    wide{
+                        "מסקרם",
+                        "טקמת",
+                        "הדר",
+                        "תהסס",
+                        "טר",
+                        "יכתית",
+                        "מגבית",
+                        "מיאזיה",
+                        "גנבות",
+                        "סאנה",
+                        "המלה",
+                        "נהסה",
+                        "פגומן",
+                    }
+                }
+            }
+        }
+        generic{
+            DateTimePatterns{
+                "H:mm:ss zzzz",
+                "H:mm:ss z",
+                "H:mm:ss",
+                "H:mm",
+                "EEEE, d בMMMM y G",
+                "d בMMMM y G",
+                "d בMMM y G",
+                "d.M.y GGGGG",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
+            DateTimePatterns%atTime{
+                "{1} בשעה {0}",
+                "{1} בשעה {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyMd",
+            }
+            availableFormats{
+                Ed{"E ה-d"}
+                Gy{"y G"}
+                GyM{"MM-y G"}
+                GyMMM{"MMM y G"}
+                GyMMMEd{"E, d בMMM y G"}
+                GyMMMd{"d בMMM y G"}
+                GyMd{"d/M/y GGGGG"}
+                H{"H"}
+                Hm{"H:mm"}
+                Hms{"H:mm:ss"}
+                Hv{"H v"}
+                MEd{"E, d/M"}
+                MMMEd{"E, d בMMM"}
+                MMMd{"d בMMM"}
+                Md{"d.M"}
+                h{"‏h a"}
+                y{"y G"}
+                yyyy{"y G"}
+                yyyyM{"M.y G"}
+                yyyyMEd{"E, d/M/y G"}
+                yyyyMM{"MM/y G"}
+                yyyyMMM{"MMM y G"}
+                yyyyMMMEd{"E, d בMMM y G"}
+                yyyyMMMd{"d בMMM y G"}
+                yyyyMd{"d.M.y G"}
+            }
+            intervalFormats{
+                Gy{
+                    G{"y G – y G"}
+                }
+                GyMEd{
+                    G{"E, d.M.y GGGGG – E, d.M.y GGGGG"}
+                    M{"E, d.M.y – E, d.M.y GGGGG"}
+                    d{"E, d.M.y – E, d.M.y GGGGG"}
+                    y{"E, d.M.y – E, d.M.y GGGGG"}
+                }
+                GyMMM{
+                    G{"MMM y G – MMM y G"}
+                    M{"MMM – MMM y G"}
+                    y{"MMM y – MMM y G"}
+                }
+                GyMMMEd{
+                    G{"E, d בMMM y G – E, d בMMM y G"}
+                    M{"E, d בMMM – E, d בMMM y G"}
+                    d{"E, d בMMM – E, d בMMM y G"}
+                    y{"E, d בMMM y – E, d בMMM y G"}
+                }
+                GyMMMd{
+                    G{"d בMMM y G – d בMMM y G"}
+                    M{"d בMMM – d בMMM y G"}
+                    d{"d – d בMMM y G"}
+                    y{"d בMMM y – d בMMM y G"}
+                }
+                GyMd{
+                    M{"d.M.y – d.M.y GGGGG"}
+                    y{"d.M.y – d.M.y GGGGG"}
+                }
+                H{
+                    H{"H–H"}
+                }
+                Hm{
+                    H{"H:mm–H:mm"}
+                    m{"H:mm–H:mm"}
+                }
+                Hmv{
+                    H{"H:mm–H:mm v"}
+                    m{"H:mm–H:mm v"}
+                }
+                Hv{
+                    H{"H–H v"}
+                }
+                M{
+                    M{"M–M"}
+                }
+                MEd{
+                    M{"EEEE dd/MM – EEEE dd/MM"}
+                    d{"EEEE dd/MM – EEEE dd/MM"}
+                }
+                MMM{
+                    M{"MMM–MMM"}
+                }
+                MMMEd{
+                    M{"EEEE d MMM – EEEE d MMM"}
+                    d{"EEEE d MMM – EEEE d MMM"}
+                }
+                MMMM{
+                    M{"LLLL–LLLL"}
+                }
+                MMMd{
+                    M{"d MMM – d MMM"}
+                    d{"d–d MMM"}
+                }
+                Md{
+                    M{"dd/MM – dd/MM"}
+                    d{"dd/MM – dd/MM"}
+                }
+                fallback{"{0} – {1}"}
+                y{
+                    y{"y–y"}
+                }
+                yM{
+                    M{"MM/y – MM/y"}
+                    y{"MM/y – MM/y"}
+                }
+                yMEd{
+                    M{"EEEE dd/MM/y – EEEE dd/MM/y"}
+                    d{"EEEE dd/MM/y – EEEE dd/MM/y"}
+                    y{"EEEE dd/MM/y – EEEE dd/MM/y"}
+                }
+                yMMM{
+                    M{"MMM–MMM y"}
+                    y{"MMM y – MMM y"}
+                }
+                yMMMEd{
+                    M{"EEEE d MMM – EEEE d MMM y"}
+                    d{"EEEE d MMM – EEEE d MMM y"}
+                    y{"EEEE d MMM y – EEEE d MMM y"}
+                }
+                yMMMM{
+                    M{"MMMM – MMMM y G"}
+                    y{"MMMM y–MMMM y"}
+                }
+                yMMMd{
+                    M{"d MMM – d MMM y"}
+                    d{"d–d MMM y"}
+                    y{"d MMM y – d MMM y"}
+                }
+                yMd{
+                    M{"dd/MM/y – dd/MM/y"}
+                    d{"dd/MM/y – dd/MM/y"}
+                    y{"dd/MM/y – dd/MM/y"}
+                }
+            }
+        }
+        gregorian{
+            DateTimePatterns{
+                "H:mm:ss zzzz",
+                "H:mm:ss z",
+                "H:mm:ss",
+                "H:mm",
+                "EEEE, d בMMMM y",
+                "d בMMMM y",
+                "d בMMM y",
+                "d.M.y",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
+            DateTimePatterns%atTime{
+                "{1} בשעה {0}",
+                "{1} בשעה {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMMMd",
+                "yMd",
+            }
+            availableFormats{
+                EHm{"E H:mm"}
+                EHms{"E H:mm:ss"}
+                Ed{"E ה-d"}
+                Gy{"y G"}
+                GyMMM{"MMM y G"}
+                GyMMMEd{"E, d בMMM y G"}
+                GyMMMd{"d בMMM y G"}
+                GyMd{"d/M/y G"}
+                H{"H"}
+                Hm{"H:mm"}
+                Hms{"H:mm:ss"}
+                Hv{"H v"}
+                MEd{"E, d.M"}
+                MMMEd{"E, d בMMM"}
+                MMMMW{
+                    one{"שבוע W בMMMM"}
+                    other{"שבוע W בMMMM"}
+                    two{"שבוע W בMMMM"}
+                }
+                MMMMd{"d בMMMM"}
+                MMMd{"d בMMM"}
+                Md{"d.M"}
+                h{"‏h a"}
+                yM{"M.y"}
+                yMEd{"E, d.M.y"}
+                yMM{"M.y"}
+                yMMM{"MMM y"}
+                yMMMEd{"E, d בMMM y"}
+                yMMMM{"MMMM y"}
+                yMMMd{"d בMMM y"}
+                yMd{"d.M.y"}
+                yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
+                yw{
+                    one{"שבוע w בשנת Y"}
+                    other{"שבוע w בשנת Y"}
+                    two{"שבוע w בשנת Y"}
+                }
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "יום א׳",
+                        "יום ב׳",
+                        "יום ג׳",
+                        "יום ד׳",
+                        "יום ה׳",
+                        "יום ו׳",
+                        "שבת",
+                    }
+                    short{
+                        "א׳",
+                        "ב׳",
+                        "ג׳",
+                        "ד׳",
+                        "ה׳",
+                        "ו׳",
+                        "ש׳",
+                    }
+                    wide{
+                        "יום ראשון",
+                        "יום שני",
+                        "יום שלישי",
+                        "יום רביעי",
+                        "יום חמישי",
+                        "יום שישי",
+                        "יום שבת",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "א׳",
+                        "ב׳",
+                        "ג׳",
+                        "ד׳",
+                        "ה׳",
+                        "ו׳",
+                        "ש׳",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    abbreviated{
+                        afternoon1{"צהריים"}
+                        afternoon2{"אחר הצהריים"}
+                        evening1{"ערב"}
+                        midnight{"חצות"}
+                        morning1{"בוקר"}
+                        night1{"לילה"}
+                        night2{"לפנות בוקר"}
+                    }
+                    narrow{
+                        afternoon1{"בצהריים"}
+                        afternoon2{"אחה״צ"}
+                        evening1{"בערב"}
+                        midnight{"חצות"}
+                        morning1{"בבוקר"}
+                        night1{"בלילה"}
+                        night2{"לפנות בוקר"}
+                    }
+                    wide{
+                        afternoon1{"בצהריים"}
+                        afternoon2{"אחר הצהריים"}
+                        evening1{"בערב"}
+                        midnight{"חצות"}
+                        morning1{"בבוקר"}
+                        night1{"בלילה"}
+                        night2{"לפנות בוקר"}
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        afternoon1{"צהריים"}
+                        afternoon2{"אחה״צ"}
+                        evening1{"ערב"}
+                        morning1{"בוקר"}
+                        night1{"לילה"}
+                        night2{"לפנות בוקר"}
+                    }
+                    narrow{
+                        am{"לפנה״צ"}
+                        pm{"אחה״צ"}
+                    }
+                    wide{
+                        afternoon1{"צהריים"}
+                        afternoon2{"אחר הצהריים"}
+                        evening1{"ערב"}
+                        morning1{"בוקר"}
+                        night1{"לילה"}
+                        night2{"לפנות בוקר"}
+                    }
+                }
+            }
+            eras{
+                abbreviated{
+                    0{"לפנה״ס"}
+                    1{"לספירה"}
+                }
+                abbreviated%variant{
+                    0{"BCE"}
+                    1{"CE"}
+                }
+                narrow{
+                    0{"לפני"}
+                    1{"אחריי"}
+                }
+                wide{
+                    0{"לפני הספירה"}
+                }
+                wide%variant{
+                    0{"לפנה״ס"}
+                }
+            }
+            intervalFormats{
+                Gy{
+                    G{"y G – y G"}
+                    y{"y – y G"}
+                }
+                GyM{
+                    G{"M.y GGGGG – M.y GGGGG"}
+                    M{"M.y – M.y G"}
+                    y{"M.y – M.y G"}
+                }
+                GyMEd{
+                    G{"E, d.M.y G – E, d.M.y G"}
+                    M{"E, d.M.y – E, d.M.y G"}
+                    d{"E, d.M.y – E, d.M.y G"}
+                    y{"E, d.M.y – E, d.M.y GGGGG"}
+                }
+                GyMMM{
+                    G{"MMM y G – MMM y G"}
+                    M{"MMM – MMM y G"}
+                    y{"MMM y – MMM y G"}
+                }
+                GyMMMEd{
+                    G{"E, d בMMM y G – E, d בMMM y G"}
+                    M{"E, d בMMM – E, d בMMM y G"}
+                    d{"E, d בMMM – E, d בMMM y G"}
+                    y{"E, d בMMM y – E, d בMMM y G"}
+                }
+                GyMMMd{
+                    G{"d בMMM y G – d בMMM y G"}
+                    M{"d בMMM – d בMMM y G"}
+                    d{"d – d בMMM y G"}
+                    y{"d בMMM y – d בMMM y G"}
+                }
+                GyMd{
+                    G{"d.M.y G – d.M.y G"}
+                    M{"d.M.y – d.M.y G"}
+                    d{"d.M.y – d.M.y G"}
+                    y{"d.M.y – d.M.y G"}
+                }
+                H{
+                    H{"H–H"}
+                }
+                Hm{
+                    H{"H:mm–H:mm"}
+                    m{"H:mm–H:mm"}
+                }
+                Hmv{
+                    H{"H:mm–H:mm v"}
+                    m{"H:mm–H:mm v"}
+                }
+                Hv{
+                    H{"H–H v"}
+                }
+                M{
+                    M{"M–M"}
+                }
+                MEd{
+                    M{"EEEE d.M – EEEE d.M"}
+                    d{"EEEE d.M–EEEE d.M"}
+                }
+                MMM{
+                    M{"MMM–MMM"}
+                }
+                MMMEd{
+                    M{"EEEE, d בMMM – EEEE, d בMMM"}
+                    d{"EEEE, d בMMM – EEEE, d בMMM"}
+                }
+                MMMM{
+                    M{"LLLL–LLLL"}
+                }
+                MMMd{
+                    M{"d בMMM–d בMMM"}
+                    d{"d–d בMMM"}
+                }
+                Md{
+                    M{"d.M–d.M"}
+                    d{"d.M–d.M"}
+                }
+                fallback{"{0} – {1}"}
+                yM{
+                    M{"M.y–M.y"}
+                    y{"M.y‏–M.y"}
+                }
+                yMEd{
+                    M{"EEEE d.M.y – EEEE d.M.y"}
+                    d{"EEEE d.M.y – EEEE d.M.y"}
+                    y{"EEEE d.M.y – EEEE d.M.y"}
+                }
+                yMMM{
+                    M{"MMM–MMM y"}
+                    y{"MMM y – MMM y"}
+                }
+                yMMMEd{
+                    M{"EEEE d MMM – EEEE d MMM y"}
+                    d{"EEEE d MMM – EEEE d MMM y"}
+                    y{"EEEE d MMM y – EEEE d MMM y"}
+                }
+                yMMMM{
+                    M{"MMMM–MMMM y"}
+                    y{"MMMM y–MMMM y"}
+                }
+                yMMMd{
+                    M{"d MMM – d MMM y"}
+                    d{"d–d בMMM y"}
+                    y{"d MMM y – d MMM y"}
+                }
+                yMd{
+                    M{"d.M.y – d.M.y"}
+                    d{"dd.M.y – dd.M.y"}
+                    y{"d.M.y – d.M.y"}
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "ינו׳",
+                        "פבר׳",
+                        "מרץ",
+                        "אפר׳",
+                        "מאי",
+                        "יוני",
+                        "יולי",
+                        "אוג׳",
+                        "ספט׳",
+                        "אוק׳",
+                        "נוב׳",
+                        "דצמ׳",
+                    }
+                    wide{
+                        "ינואר",
+                        "פברואר",
+                        "מרץ",
+                        "אפריל",
+                        "מאי",
+                        "יוני",
+                        "יולי",
+                        "אוגוסט",
+                        "ספטמבר",
+                        "אוקטובר",
+                        "נובמבר",
+                        "דצמבר",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
+                    }
+                    wide{
+                        "רבעון 1",
+                        "רבעון 2",
+                        "רבעון 3",
+                        "רבעון 4",
+                    }
+                }
+            }
+        }
+        hebrew{
+            DateTimePatterns{
+                "H:mm:ss zzzz",
+                "H:mm:ss z",
+                "H:mm:ss",
+                "H:mm",
+                {
+                    "EEEE, d בMMMM y",
+                    "hebr",
+                }
+                {
+                    "d בMMMM y",
+                    "hebr",
+                }
+                {
+                    "d בMMMM y",
+                    "hebr",
+                }
+                {
+                    "d בMMMM y",
+                    "hebr",
+                }
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                {
+                    "yMMMMEEEEd",
+                    "hebr",
+                }
+                {
+                    "yMMMMd",
+                    "hebr",
+                }
+                {
+                    "yMMMMd",
+                    "hebr",
+                }
+                {
+                    "yMMMMd",
+                    "hebr",
+                }
+            }
+            availableFormats{
+                Ed{"E d"}
+                GyMMM{"MMMM y G"}
+                GyMMMEd{"E, d בMMMM y G"}
+                GyMMMd{"d בMMMM y G"}
+                M{"MMMM"}
+                MEd{"E, d בMMMM"}
+                MMM{"MMMM"}
+                MMMEd{"E, d בMMMM"}
+                MMMMEd{"E, d בMMMM"}
+                MMMMd{"d בMMMM"}
+                MMMd{"d בMMMM"}
+                Md{"d בMMMM"}
+                y{"y"}
+                yyyyM{"MMMM y"}
+                yyyyMEd{"E, d בMMMM y"}
+                yyyyMMM{"MMMM y"}
+                yyyyMMMEd{"E, d בMMMM y"}
+                yyyyMMMM{"MMMM y"}
+                yyyyMMMd{"d בMMMM y"}
+                yyyyMd{"d בMMMM y"}
+                yyyyQQQ{"QQQ y בשעה G"}
+                yyyyQQQQ{"QQQQ y בשעה G"}
+            }
+            eras{
+                wide{
+                    0{"לבריאת העולם"}
+                }
+            }
+            intervalFormats{
+                Bh{
+                    B{"h בB – h בB"}
+                    h{"h–h בB"}
+                }
+                Gy{
+                    y{"y – y G"}
+                }
+                Hm{
+                    H{"HH:mm – HH:mm"}
+                    m{"HH:mm – HH:mm"}
+                }
+                M{
+                    M{"MMM – MMM"}
+                }
+                MEd{
+                    M{"E d בMMM – E d בMMM"}
+                    d{"E d בMMM – E d בMMM"}
+                }
+                MMMEd{
+                    M{"E d בMMM – E d בMMM"}
+                    d{"E d בMMM – E d בMMM"}
+                }
+                MMMd{
+                    M{"d בMMM – d בMMM"}
+                    d{"d–d בMMM"}
+                }
+                Md{
+                    M{"d בMMM – d בMMM"}
+                    d{"d – d בMMM"}
+                }
+                h{
+                    h{"h – h a"}
+                }
+                hm{
+                    m{"h:mm – h:mm a"}
+                }
+                hmv{
+                    h{"h:mm – h:mm a v"}
+                    m{"h:mm – h:mm a v"}
+                }
+                hv{
+                    h{"h – h a v"}
+                }
+                yM{
+                    M{"MMM y – MMM y"}
+                    y{"MMM y – MMM y"}
+                }
+                yMEd{
+                    M{"E d בMMM – E d בMMM y"}
+                    d{"E d בMMM – E d בMMM y"}
+                    y{"E d בMMM y – E d בMMM y"}
+                }
+                yMMMEd{
+                    M{"E d בMMM – E d בMMM y"}
+                    d{"E d בMMM – E d בMMM y"}
+                    y{"E d בMMM y – E d בMMM y"}
+                }
+                yMMMM{
+                    M{"MMMM–MMMM y"}
+                    y{"MMMM y – MMMM y"}
+                }
+                yMMMd{
+                    M{"d בMMM – d בMMM y"}
+                    d{"d–d בMMM y"}
+                    y{"d בMMM y – d בMMM y"}
+                }
+                yMd{
+                    M{"d בMMMM – d בMMMM y"}
+                    d{"d – d בMMM y"}
+                    y{"d בMMM y – d בMMM y"}
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "תשרי",
+                        "חשון",
+                        "כסלו",
+                        "טבת",
+                        "שבט",
+                        "אדר א׳",
+                        "אדר",
+                        "ניסן",
+                        "אייר",
+                        "סיון",
+                        "תמוז",
+                        "אב",
+                        "אלול",
+                        "אדר ב׳",
+                    }
+                    wide{
+                        "תשרי",
+                        "חשוון",
+                        "כסלו",
+                        "טבת",
+                        "שבט",
+                        "אדר א׳",
+                        "אדר",
+                        "ניסן",
+                        "אייר",
+                        "סיוון",
+                        "תמוז",
+                        "אב",
+                        "אלול",
+                        "אדר ב׳",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "תש׳",
+                        "חש׳",
+                        "כס׳",
+                        "טב׳",
+                        "שב׳",
+                        "א״א",
+                        "אד׳",
+                        "ני׳",
+                        "אי׳",
+                        "סי׳",
+                        "תמ׳",
+                        "אב",
+                        "אל׳",
+                        "א״ב",
+                    }
+                }
+            }
+        }
+        indian{
+            eras{
+                abbreviated{
+                    0{"סאקא"}
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "צ׳ייטרה",
+                        "וייסקהה",
+                        "ג׳יאסטהה",
+                        "אשדהה",
+                        "סראוואנה",
+                        "בהרדה",
+                        "אסווינה",
+                        "קרטיקה",
+                        "אגרהיאנה",
+                        "פאוסה",
+                        "מאגהה",
+                        "פלגונה",
+                    }
+                    wide{
+                        "צ׳ייטרה",
+                        "וייסקהה",
+                        "ג׳יאסטהה",
+                        "אשדהה",
+                        "סראוואנה",
+                        "בהרדה",
+                        "אסווינה",
+                        "קרטיקה",
+                        "אגרהיאנה",
+                        "פאוסה",
+                        "מאגהה",
+                        "פאלגונה",
+                    }
+                }
+            }
+        }
+        islamic{
+            DateTimePatterns{
+                "H:mm:ss zzzz",
+                "H:mm:ss z",
+                "H:mm:ss",
+                "H:mm",
+                "EEEE, d בMMMM y G",
+                "d בMMMM y G",
+                "d בMMM y G",
+                "dd/MM/yy GGGGG",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyyMMdd",
+            }
+            availableFormats{
+                GyM{"MM-y G"}
+                MMMMd{"d בMMMM"}
+                Md{"d/M"}
+                h{"h a"}
+                yyyyM{"M/y"}
+                yyyyMEd{"E, d.M.y"}
+                yyyyMMM{"MMM y"}
+                yyyyMMMEd{"E, d בMMM y"}
+                yyyyMMMd{"d בMMM y"}
+                yyyyQQQ{"QQQ y"}
+                yyyyQQQQ{"QQQQ y"}
+            }
+            eras{
+                abbreviated{
+                    0{"הג׳רה"}
+                }
+                wide{
+                    0{"שנת היג׳רה"}
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "מוחרם",
+                        "צפר",
+                        "רביע א׳",
+                        "רביע ב׳",
+                        "ג׳ומאדא א׳",
+                        "ג׳ומאדא ב׳",
+                        "רג׳ב",
+                        "שעבאן",
+                        "רמדאן",
+                        "שוואל",
+                        "ד׳ו אל־קעדה",
+                        "ד׳ו אל־חיג׳ה",
+                    }
+                    wide{
+                        "מוחרם",
+                        "צפר",
+                        "רביע אל-אוול",
+                        "רביע א-ת׳אני",
+                        "ג׳ומאדא אל-אולא",
+                        "ג׳ומאדא א-ת׳אניה",
+                        "רג׳ב",
+                        "שעבאן",
+                        "רמדאן",
+                        "שוואל",
+                        "ד׳ו אל־קעדה",
+                        "ד׳ו אל־חיג׳ה",
+                    }
+                }
+                stand-alone{
+                    wide{
+                        "מוחרם",
+                        "צפר",
+                        "רביע אל־אוול",
+                        "רביע א־ת׳אני",
+                        "ג׳ומאדא אל־אולא",
+                        "ג׳ומאדא א־ת׳אניה",
+                        "רג׳ב",
+                        "שעבאן",
+                        "רמדאן",
+                        "שוואל",
+                        "ד׳ו אל־קעדה",
+                        "ד׳ו אל־חיג׳ה",
+                    }
+                }
+            }
+        }
+        persian{
+            eras{
+                wide{
+                    0{"הספירה הפרסית"}
+                }
+            }
+            monthNames{
+                format{
+                    wide{
+                        "פרורדין",
+                        "ארדיבהשת",
+                        "ח׳רדאד",
+                        "תיר",
+                        "מרדאד",
+                        "שהריור",
+                        "מהר",
+                        "אבאן",
+                        "אד׳ר",
+                        "די",
+                        "בהמן",
+                        "אספנד",
+                    }
+                }
+            }
+        }
+        roc{
+            eras{
+                abbreviated{
+                    0{"לפני R.O.C"}
+                }
+                wide{
+                    0{"לפני הרפובליקה של סין"}
+                    1{"לספירת הרפובליקה של סין"}
+                }
+            }
+        }
+    }
+    characterLabel{
+        activities{"פעילויות"}
+        african_scripts{"כתב של שפות אפריקאיות"}
+        american_scripts{"כתב של שפות אמריקאיות"}
+        animal{"חיות"}
+        animals_nature{"בעלי חיים וטבע"}
+        arrows{"חצים"}
+        body{"גוף"}
+        box_drawing{"ציור תיבה"}
+        braille{"ברייל"}
+        building{"בניין"}
+        bullets_stars{"תבליטים או כוכבים"}
+        consonantal_jamo{"ג׳אמו עיצורי"}
+        currency_symbols{"סמלי מטבעות"}
+        dash_connector{"קו מפריד/מחבר"}
+        digits{"ספרות"}
+        dingbats{"תווי Dingbat"}
+        divination_symbols{"סמלי חיזוי עתידות"}
+        downwards_arrows{"חצים כלפי מטה"}
+        downwards_upwards_arrows{"חצים כלפי מעלה ומטה"}
+        east_asian_scripts{"כתב של שפות מזרח אסיה"}
+        emoji{"אמוג׳י"}
+        european_scripts{"כתב של שפות אירופיות"}
+        female{"אישה"}
+        flag{"דגל"}
+        flags{"דגלים"}
+        food_drink{"מזון ומשקאות"}
+        format{"פורמט"}
+        format_whitespace{"פורמט ורווחים לבנים"}
+        full_width_form_variant{"משתנה ברוחב מלא"}
+        geometric_shapes{"צורות גאומטריות"}
+        half_width_form_variant{"משתנה בחצי רוחב"}
+        han_characters{"תווי האן"}
+        han_radicals{"רדיקלים של האן"}
+        hanja{"האנג׳ה"}
+        hanzi_simplified{"האנזי (פשוטה)"}
+        hanzi_traditional{"האנזי (מסורתית)"}
+        heart{"לב"}
+        historic_scripts{"מערכות כתב היסטוריות"}
+        ideographic_desc_characters{"תווי תיאור אידיאוגרפי"}
+        japanese_kana{"קאנה יפנית"}
+        kanbun{"קאנבון"}
+        kanji{"קאנג׳י"}
+        keycap{"מקש"}
+        leftwards_arrows{"חצים שמאלה"}
+        leftwards_rightwards_arrows{"חצים שמאלה וימינה"}
+        letterlike_symbols{"סמלים דמויי אותיות"}
+        limited_use{"לשימוש מוגבל"}
+        male{"גבר"}
+        math_symbols{"סמלים מתמטיים"}
+        middle_eastern_scripts{"מערכות כתב של המזרח התיכון"}
+        miscellaneous{"שונות"}
+        modern_scripts{"מערכות כתב מודרניות"}
+        modifier{"סימן מחליף"}
+        musical_symbols{"סמלים מוזיקליים"}
+        nature{"טבע"}
+        nonspacing{"ללא ריווח"}
+        numbers{"מספרים"}
+        objects{"אובייקטים"}
+        other{"אחר"}
+        paired{"זוגות תווים"}
+        person{"אנשים"}
+        phonetic_alphabet{"אלפבית פונטי"}
+        pictographs{"כתבי ציורים"}
+        place{"מקום"}
+        plant{"צמח"}
+        punctuation{"סימני פיסוק"}
+        rightwards_arrows{"חצים ימינה"}
+        sign_standard_symbols{"סימנים סטנדרטיים"}
+        small_form_variant{"משתני צורות קטנות"}
+        smiley{"סמלי סמיילי"}
+        smileys_people{"סמיילי או אנשים"}
+        south_asian_scripts{"מערכות כתב דרום אסייתיות"}
+        southeast_asian_scripts{"מערכות כתב דרום מזרח אסיה"}
+        spacing{"ריווח"}
+        sport{"ספורט"}
+        symbols{"סמלים"}
+        technical_symbols{"סמלים טכניים"}
+        tone_marks{"סימנים טונאליים"}
+        travel{"נסיעות"}
+        travel_places{"נסיעות ומקומות"}
+        upwards_arrows{"חצים כלפי מעלה"}
+        variant_forms{"חלופות"}
+        vocalic_jamo{"ג׳אמו ווקאלי"}
+        weather{"מזג אוויר"}
+        western_asian_scripts{"מערכות כתב מערב אסיה"}
+        whitespace{"רווח לבן"}
+    }
+    delimiters{
+        alternateQuotationStart{"’"}
+        quotationStart{"”"}
+    }
+    fields{
+        day{
+            dn{"יום"}
+            relative{
+                "-1"{"אתמול"}
+                "-2"{"שלשום"}
+                "0"{"היום"}
+                "1"{"מחר"}
+                "2"{"מחרתיים"}
+            }
+            relativeTime{
+                future{
+                    one{"בעוד יום ({0})"}
+                    other{"בעוד {0} ימים"}
+                    two{"בעוד יומיים ({0})"}
+                }
+                past{
+                    one{"לפני יום אחד ({0})"}
+                    other{"לפני {0} ימים"}
+                    two{"לפני יומיים ({0})"}
+                }
+            }
+        }
+        day-narrow{
+            relativeTime{
+                future{
+                    one{"בעוד יום אחד ({0})"}
+                    other{"בעוד {0} ימים"}
+                    two{"בעוד יומיים ({0})"}
+                }
+                past{
+                    one{"לפני יום אחד ({0})"}
+                    other{"לפני {0} ימים"}
+                    two{"לפני יומיים ({0})"}
+                }
+            }
+        }
+        day-short{
+            relativeTime{
+                future{
+                    one{"בעוד יום אחד ({0})"}
+                    other{"בעוד {0} ימים"}
+                    two{"בעוד יומיים ({0})"}
+                }
+                past{
+                    one{"לפני יום אחד ({0})"}
+                    other{"לפני {0} ימים"}
+                    two{"לפני יומיים ({0})"}
+                }
+            }
+        }
+        dayOfYear{
+            dn{"יום בשנה"}
+        }
+        dayperiod{
+            dn{"לפנה״צ/אחה״צ"}
+        }
+        dayperiod-short{
+            dn{"AM/PM"}
+        }
+        era{
+            dn{"תקופה"}
+        }
+        fri{
+            relative{
+                "-1"{"יום שישי שעבר"}
+                "0"{"יום שישי"}
+                "1"{"יום שישי הבא"}
+            }
+            relativeTime{
+                future{
+                    one{"בעוד יום שישי אחד ({0})"}
+                    other{"בעוד {0} ימי שישי"}
+                    two{"בעוד {0} ימי שישי"}
+                }
+                past{
+                    one{"לפני יום שישי אחד ({0})"}
+                    other{"לפני {0} ימי שישי"}
+                    two{"לפני {0} ימי שישי"}
+                }
+            }
+        }
+        fri-narrow{
+            relativeTime{
+                future{
+                    many{"בעוד {0} ימי ו׳"}
+                    one{"בעוד יום ו׳ אחד ({0})"}
+                    other{"בעוד {0} ימי ו׳"}
+                    two{"בעוד {0} ימי ו׳"}
+                }
+                past{
+                    many{"לפני {0} ימי ו׳"}
+                    one{"לפני יום ו׳ אחד ({0})"}
+                    other{"לפני {0} ימי ו׳"}
+                    two{"לפני {0} ימי ו׳"}
+                }
+            }
+        }
+        fri-short{
+            relative{
+                "-1"{"יום ו׳ שעבר"}
+                "0"{"יום ו׳"}
+                "1"{"יום ו׳ הבא"}
+            }
+            relativeTime{
+                future{
+                    many{"בעוד {0} ימי ו׳"}
+                    one{"בעוד יום ו׳ אחד ({0})"}
+                    other{"בעוד {0} ימי ו׳"}
+                    two{"בעוד {0} ימי ו׳"}
+                }
+                past{
+                    many{"לפני {0} ימי ו׳"}
+                    one{"לפני יום ו׳ אחד ({0})"}
+                    other{"לפני {0} ימי ו׳"}
+                    two{"לפני {0} ימי ו׳"}
+                }
+            }
+        }
+        hour{
+            dn{"שעה"}
+            relative{
+                "0"{"בשעה זו"}
+            }
+            relativeTime{
+                future{
+                    one{"בעוד שעה ({0})"}
+                    other{"בעוד {0} שעות"}
+                    two{"בעוד שעתיים ({0})"}
+                }
+                past{
+                    one{"לפני שעה ({0})"}
+                    other{"לפני {0} שעות"}
+                    two{"לפני שעתיים ({0})"}
+                }
+            }
+        }
+        hour-narrow{
+            dn{"שע׳"}
+            relativeTime{
+                future{
+                    one{"בעוד שעה ({0})"}
+                    other{"בעוד {0} שע׳"}
+                    two{"בעוד שעתיים ({0})"}
+                }
+                past{
+                    one{"לפני שע׳ ({0})"}
+                    other{"לפני {0} שע׳"}
+                    two{"לפני שעתיים ({0})"}
+                }
+            }
+        }
+        hour-short{
+            relativeTime{
+                future{
+                    many{"בעוד {0} שע׳"}
+                    one{"בעוד שעה ({0})"}
+                    other{"בעוד {0} שע׳"}
+                    two{"בעוד שעתיים ({0})"}
+                }
+                past{
+                    many{"לפני {0} שע׳"}
+                    one{"לפני שע׳ ({0})"}
+                    other{"לפני {0} שע׳"}
+                    two{"לפני שעתיים ({0})"}
+                }
+            }
+        }
+        minute{
+            dn{"דקה"}
+            relative{
+                "0"{"בדקה זו"}
+            }
+            relativeTime{
+                future{
+                    one{"בעוד דקה ({0})"}
+                    other{"בעוד {0} דקות"}
+                    two{"בעוד {0} דקות"}
+                }
+                past{
+                    one{"לפני דקה ({0})"}
+                    other{"לפני {0} דקות"}
+                    two{"לפני {0} דקות"}
+                }
+            }
+        }
+        minute-short{
+            dn{"דק׳"}
+            relative{
+                "0"{"דקה זו"}
+            }
+            relativeTime{
+                future{
+                    many{"בעוד {0} דק׳"}
+                    one{"בעוד דק׳ ({0})"}
+                    other{"בעוד {0} דק׳"}
+                    two{"בעוד {0} דק׳"}
+                }
+                past{
+                    many{"לפני {0} דק׳"}
+                    one{"לפני דק׳ ({0})"}
+                    other{"לפני {0} דק׳"}
+                    two{"לפני {0} דק׳"}
+                }
+            }
+        }
+        mon{
+            relative{
+                "-1"{"יום שני שעבר"}
+                "0"{"יום שני"}
+                "1"{"יום שני הבא"}
+            }
+            relativeTime{
+                future{
+                    one{"בעוד יום שני אחד ({0})"}
+                    other{"בעוד {0} ימי שני"}
+                    two{"בעוד {0} ימי שני"}
+                }
+                past{
+                    one{"לפני יום שני אחד ({0})"}
+                    other{"לפני {0} ימי שני"}
+                    two{"לפני {0} ימי שני"}
+                }
+            }
+        }
+        mon-narrow{
+            relativeTime{
+                future{
+                    many{"בעוד {0} ימי ב׳"}
+                    one{"בעוד יום ב׳ אחד ({0})"}
+                    other{"בעוד {0} ימי ב׳"}
+                    two{"בעוד {0} ימי ב׳"}
+                }
+                past{
+                    many{"לפני {0} ימי ב׳"}
+                    one{"לפני יום ב׳ אחד ({0})"}
+                    other{"לפני {0} ימי ב׳"}
+                    two{"לפני {0} ימי ב׳"}
+                }
+            }
+        }
+        mon-short{
+            relative{
+                "-1"{"יום ב׳ שעבר"}
+                "0"{"יום ב׳"}
+                "1"{"יום ב׳ הבא"}
+            }
+            relativeTime{
+                future{
+                    many{"בעוד {0} ימי ב׳"}
+                    one{"בעוד יום ב׳ אחד ({0})"}
+                    other{"בעוד {0} ימי ב׳"}
+                    two{"בעוד {0} ימי ב׳"}
+                }
+                past{
+                    many{"לפני {0} ימי ב׳"}
+                    one{"לפני יום ב׳ אחד ({0})"}
+                    other{"לפני {0} ימי ב׳"}
+                    two{"לפני {0} ימי ב׳"}
+                }
+            }
+        }
+        month{
+            dn{"חודש"}
+            relative{
+                "-1"{"החודש שעבר"}
+                "0"{"החודש"}
+                "1"{"החודש הבא"}
+            }
+            relativeTime{
+                future{
+                    one{"בעוד חודש ({0})"}
+                    other{"בעוד {0} חודשים"}
+                    two{"בעוד חודשיים ({0})"}
+                }
+                past{
+                    one{"לפני חודש ({0})"}
+                    other{"לפני {0} חודשים"}
+                    two{"לפני חודשיים ({0})"}
+                }
+            }
+        }
+        month-narrow{
+            relativeTime{
+                future{
+                    many{"בעוד {0} חו׳"}
+                    one{"בעוד חו׳"}
+                    other{"בעוד {0} חו׳"}
+                    two{"בעוד חודשיים ({0})"}
+                }
+                past{
+                    many{"לפני {0} חו׳"}
+                    one{"לפני חו׳ ({0})"}
+                    other{"לפני {0} חו׳"}
+                    two{"לפני חודשיים ({0})"}
+                }
+            }
+        }
+        month-short{
+            dn{"חו׳"}
+        }
+        quarter{
+            dn{"רבעון"}
+            relative{
+                "-1"{"הרבעון הקודם"}
+                "0"{"הרבעון הזה"}
+                "1"{"הרבעון הבא"}
+            }
+            relativeTime{
+                future{
+                    one{"בעוד רבעון אחד ({0})"}
+                    other{"בעוד {0} רבעונים"}
+                    two{"בעוד שני רבעונים"}
+                }
+                past{
+                    one{"לפני רבעון אחד ({0})"}
+                    other{"לפני {0} רבעונים"}
+                    two{"לפני {0} רבעונים"}
+                }
+            }
+        }
+        quarter-narrow{
+            relativeTime{
+                future{
+                    one{"בעוד רבע׳ אחד ({0})"}
+                    other{"בעוד {0} רבע׳"}
+                    two{"בעוד {0} רבע׳"}
+                }
+                past{
+                    one{"לפני רבע׳ אחד ({0})"}
+                    other{"לפני {0} רבע׳"}
+                    two{"לפני {0} רבע׳"}
+                }
+            }
+        }
+        quarter-short{
+            dn{"רבע׳"}
+            relativeTime{
+                future{
+                    many{"בעוד {0} רבע׳"}
+                    one{"בעוד רבע׳ אחד ({0})"}
+                    other{"בעוד {0} רבע׳"}
+                    two{"בעוד {0} רבע׳"}
+                }
+                past{
+                    many{"לפני {0} רבע׳"}
+                    one{"לפני רבע׳ אחד ({0})"}
+                    other{"לפני {0} רבע׳"}
+                    two{"לפני {0} רבע׳"}
+                }
+            }
+        }
+        sat{
+            relative{
+                "-1"{"יום שבת שעבר"}
+                "0"{"יום שבת"}
+                "1"{"יום שבת הבא"}
+            }
+            relativeTime{
+                future{
+                    one{"בעוד שבת אחת ({0})"}
+                    other{"בעוד {0} שבתות"}
+                    two{"בעוד {0} שבתות"}
+                }
+                past{
+                    one{"לפני שבת אחת ({0})"}
+                    other{"לפני {0} שבתות"}
+                    two{"לפני {0} שבתות"}
+                }
+            }
+        }
+        sat-narrow{
+            relativeTime{
+                future{
+                    one{"בעוד שבת אחת ({0})"}
+                    other{"בעוד {0} שבתות"}
+                    two{"בעוד {0} שבתות"}
+                }
+                past{
+                    one{"לפני שבת אחת ({0})"}
+                    other{"לפני {0} שבתות"}
+                    two{"לפני {0} שבתות"}
+                }
+            }
+        }
+        sat-short{
+            relative{
+                "-1"{"שבת שעברה"}
+                "0"{"שבת"}
+                "1"{"שבת הבאה"}
+            }
+            relativeTime{
+                future{
+                    one{"בעוד שבת אחת ({0})"}
+                    other{"בעוד {0} שבתות"}
+                    two{"בעוד {0} שבתות"}
+                }
+                past{
+                    one{"לפני שבת אחת ({0})"}
+                    other{"לפני {0} שבתות"}
+                    two{"לפני {0} שבתות"}
+                }
+            }
+        }
+        second{
+            dn{"שנייה"}
+            relative{
+                "0"{"עכשיו"}
+            }
+            relativeTime{
+                future{
+                    one{"בעוד שנייה ({0})"}
+                    other{"בעוד {0} שניות"}
+                    two{"בעוד שתי שניות"}
+                }
+                past{
+                    one{"לפני שנייה"}
+                    other{"לפני {0} שניות"}
+                    two{"לפני שתי שניות"}
+                }
+            }
+        }
+        second-narrow{
+            relativeTime{
+                future{
+                    one{"בעוד שנ׳ ({0})"}
+                    other{"בעוד {0} שנ׳"}
+                    two{"בעוד {0} שנ׳"}
+                }
+                past{
+                    one{"לפני שנ׳ ({0})"}
+                    other{"לפני {0} שנ׳"}
+                    two{"לפני שתי שנ׳"}
+                }
+            }
+        }
+        second-short{
+            dn{"שנ׳"}
+            relativeTime{
+                future{
+                    many{"בעוד {0} שנ׳"}
+                    one{"בעוד שנ׳ ({0})"}
+                    other{"בעוד {0} שנ׳"}
+                    two{"בעוד {0} שנ׳"}
+                }
+                past{
+                    many{"לפני {0} שנ׳"}
+                    one{"לפני שנ׳ ({0})"}
+                    other{"לפני {0} שנ׳"}
+                    two{"לפני שתי שנ׳"}
+                }
+            }
+        }
+        sun{
+            relative{
+                "-1"{"ביום ראשון שעבר"}
+                "0"{"ביום ראשון הזה"}
+                "1"{"ביום ראשון הבא"}
+            }
+            relativeTime{
+                future{
+                    one{"בעוד יום ראשון {0}"}
+                    other{"בעוד {0} ימי ראשון"}
+                    two{"בעוד {0} ימי ראשון"}
+                }
+                past{
+                    one{"לפני יום ראשון {0}"}
+                    other{"לפני {0} ימי ראשון"}
+                    two{"לפני {0} ימי ראשון"}
+                }
+            }
+        }
+        sun-narrow{
+            relativeTime{
+                future{
+                    many{"בעוד {0} ימי א׳"}
+                    one{"בעוד יום א׳ אחד ({0})"}
+                    other{"בעוד {0} ימי א׳"}
+                    two{"בעוד {0} ימי א׳"}
+                }
+                past{
+                    many{"לפני {0} ימי א׳"}
+                    one{"לפני יום א׳ אחד ({0})"}
+                    other{"לפני {0} ימי א׳"}
+                    two{"לפני {0} ימי א׳"}
+                }
+            }
+        }
+        sun-short{
+            relative{
+                "-1"{"יום א׳ שעבר"}
+                "0"{"יום א׳"}
+                "1"{"יום א׳ הבא"}
+            }
+            relativeTime{
+                future{
+                    many{"בעוד {0} ימי א׳"}
+                    one{"בעוד יום א׳ אחד ({0})"}
+                    other{"בעוד {0} ימי א׳"}
+                    two{"בעוד {0} ימי א׳"}
+                }
+                past{
+                    many{"לפני {0} ימי א׳"}
+                    one{"לפני יום א׳ אחד ({0})"}
+                    other{"לפני {0} ימי א׳"}
+                    two{"לפני {0} ימי א׳"}
+                }
+            }
+        }
+        thu{
+            relative{
+                "-1"{"יום חמישי שעבר"}
+                "0"{"יום חמישי"}
+                "1"{"יום חמישי הבא"}
+            }
+            relativeTime{
+                future{
+                    one{"בעוד יום חמישי אחד ({0})"}
+                    other{"בעוד {0} ימי חמישי"}
+                    two{"בעוד {0} ימי חמישי"}
+                }
+                past{
+                    one{"לפני יום חמישי אחד ({0})"}
+                    other{"לפני {0} ימי חמישי"}
+                    two{"לפני {0} ימי חמישי"}
+                }
+            }
+        }
+        thu-narrow{
+            relativeTime{
+                future{
+                    many{"בעוד {0} ימי ה׳"}
+                    one{"בעוד יום ה׳ אחד ({0})"}
+                    other{"בעוד {0} ימי ה׳"}
+                    two{"בעוד {0} ימי ה׳"}
+                }
+                past{
+                    many{"לפני {0} ימי ה׳"}
+                    one{"לפני יום ה׳ אחד ({0})"}
+                    other{"לפני {0} ימי ה׳"}
+                    two{"לפני {0} ימי ה׳"}
+                }
+            }
+        }
+        thu-short{
+            relative{
+                "-1"{"יום ה׳ שעבר"}
+                "0"{"יום ה׳"}
+                "1"{"יום ה׳ הבא"}
+            }
+            relativeTime{
+                future{
+                    many{"בעוד {0} ימי ה׳"}
+                    one{"בעוד יום ה׳ אחד ({0})"}
+                    other{"בעוד {0} ימי ה׳"}
+                    two{"בעוד {0} ימי ה׳"}
+                }
+                past{
+                    many{"לפני {0} ימי ה׳"}
+                    one{"לפני יום ה׳ אחד ({0})"}
+                    other{"לפני {0} ימי ה׳"}
+                    two{"לפני {0} ימי ה׳"}
+                }
+            }
+        }
+        tue{
+            relative{
+                "-1"{"יום שלישי שעבר"}
+                "0"{"יום שלישי"}
+                "1"{"יום שלישי הבא"}
+            }
+            relativeTime{
+                future{
+                    one{"בעוד יום שלישי אחד ({0})"}
+                    other{"בעוד {0} ימי שלישי"}
+                    two{"בעוד {0} ימי שלישי"}
+                }
+                past{
+                    one{"לפני יום שלישי אחד ({0})"}
+                    other{"לפני {0} ימי שלישי"}
+                    two{"לפני {0} ימי שלישי"}
+                }
+            }
+        }
+        tue-narrow{
+            relativeTime{
+                future{
+                    many{"בעוד {0} ימי ג׳"}
+                    one{"בעוד יום ג׳ אחד ({0})"}
+                    other{"בעוד {0} ימי ג׳"}
+                    two{"בעוד {0} ימי ג׳"}
+                }
+                past{
+                    many{"לפני {0} ימי ג׳"}
+                    one{"לפני יום ג׳ אחד ({0})"}
+                    other{"לפני {0} ימי ג׳"}
+                    two{"לפני {0} ימי ג׳"}
+                }
+            }
+        }
+        tue-short{
+            relative{
+                "-1"{"יום ג׳ שעבר"}
+                "0"{"יום ג׳"}
+                "1"{"יום ג׳ הבא"}
+            }
+            relativeTime{
+                future{
+                    many{"בעוד {0} ימי ג׳"}
+                    one{"בעוד יום ג׳ אחד ({0})"}
+                    other{"בעוד {0} ימי ג׳"}
+                    two{"בעוד {0} ימי ג׳"}
+                }
+                past{
+                    many{"לפני {0} ימי ג׳"}
+                    one{"לפני יום ג׳ אחד ({0})"}
+                    other{"לפני {0} ימי ג׳"}
+                    two{"לפני {0} ימי ג׳"}
+                }
+            }
+        }
+        wed{
+            relative{
+                "-1"{"יום רביעי שעבר"}
+                "0"{"יום רביעי"}
+                "1"{"יום רביעי הבא"}
+            }
+            relativeTime{
+                future{
+                    one{"בעוד יום רביעי אחד ({0})"}
+                    other{"בעוד {0} ימי רביעי"}
+                    two{"בעוד {0} ימי רביעי"}
+                }
+                past{
+                    one{"לפני יום רביעי אחד ({0})"}
+                    other{"לפני {0} ימי רביעי"}
+                    two{"לפני {0} ימי רביעי"}
+                }
+            }
+        }
+        wed-narrow{
+            relativeTime{
+                future{
+                    many{"בעוד {0} ימי ד׳"}
+                    one{"בעוד יום ד׳ אחד ({0})"}
+                    other{"בעוד {0} ימי ד׳"}
+                    two{"בעוד {0} ימי ד׳"}
+                }
+                past{
+                    many{"לפני {0} ימי ד׳"}
+                    one{"לפני יום ד׳ אחד ({0})"}
+                    other{"לפני {0} ימי ד׳"}
+                    two{"לפני {0} ימי ד׳"}
+                }
+            }
+        }
+        wed-short{
+            relative{
+                "-1"{"יום ד׳ שעבר"}
+                "0"{"יום ד׳"}
+                "1"{"יום ד׳ הבא"}
+            }
+            relativeTime{
+                future{
+                    many{"בעוד {0} ימי ד׳"}
+                    one{"בעוד יום ד׳ אחד ({0})"}
+                    other{"בעוד {0} ימי ד׳"}
+                    two{"בעוד {0} ימי ד׳"}
+                }
+                past{
+                    many{"לפני {0} ימי ד׳"}
+                    one{"לפני יום ד׳ אחד ({0})"}
+                    other{"לפני {0} ימי ד׳"}
+                    two{"לפני {0} ימי ד׳"}
+                }
+            }
+        }
+        week{
+            dn{"שבוע"}
+            relative{
+                "-1"{"השבוע שעבר"}
+                "0"{"השבוע"}
+                "1"{"השבוע הבא"}
+            }
+            relativePeriod{"השבוע של {0}"}
+            relativeTime{
+                future{
+                    one{"בעוד שבוע ({0})"}
+                    other{"בעוד {0} שבועות"}
+                    two{"בעוד שבועיים ({0})"}
+                }
+                past{
+                    one{"לפני שבוע ({0})"}
+                    other{"לפני {0} שבועות"}
+                    two{"לפני שבועיים ({0})"}
+                }
+            }
+        }
+        week-narrow{
+            relativeTime{
+                past{
+                    one{"לפני שב׳ ({0})"}
+                    other{"לפני {0} שב׳"}
+                    two{"לפני שבועיים ({0})"}
+                }
+            }
+        }
+        week-short{
+            dn{"שב׳"}
+            relativeTime{
+                future{
+                    many{"בעוד {0} שב׳"}
+                    one{"בעוד שב׳ ({0})"}
+                    other{"בעוד {0} שב׳"}
+                    two{"בעוד שבועיים ({0})"}
+                }
+                past{
+                    many{"לפני {0} שב׳"}
+                    one{"לפני שב׳ ({0})"}
+                    other{"לפני {0} שב׳"}
+                    two{"לפני שבועיים ({0})"}
+                }
+            }
+        }
+        weekOfMonth{
+            dn{"השבוע בחודש"}
+        }
+        weekday{
+            dn{"יום בשבוע"}
+        }
+        weekdayOfMonth{
+            dn{"יום חול בחודש"}
+        }
+        weekdayOfMonth-short{
+            dn{"יום בחודש"}
+        }
+        year{
+            dn{"שנה"}
+            relative{
+                "-1"{"השנה שעברה"}
+                "0"{"השנה"}
+                "1"{"השנה הבאה"}
+            }
+            relativeTime{
+                future{
+                    one{"בעוד שנה"}
+                    other{"בעוד {0} שנים"}
+                    two{"בעוד שנתיים"}
+                }
+                past{
+                    one{"לפני שנה"}
+                    other{"לפני {0} שנים"}
+                    two{"לפני שנתיים"}
+                }
+            }
+        }
+        year-narrow{
+            relativeTime{
+                future{
+                    one{"בעוד שנה ({0})"}
+                    other{"בעוד {0} שנים"}
+                    two{"בעוד שנתיים ({0})"}
+                }
+                past{
+                    one{"לפני שנה ({0})"}
+                    other{"לפני {0} שנים"}
+                    two{"לפני שנתיים ({0})"}
+                }
+            }
+        }
+        year-short{
+            dn{"שנ׳"}
+            relativeTime{
+                future{
+                    one{"בעוד שנה"}
+                    other{"בעוד {0} שנים"}
+                    two{"בעוד שנתיים ({0})"}
+                }
+                past{
+                    one{"לפני שנה ({0})"}
+                    other{"לפני {0} שנים"}
+                    two{"לפני שנתיים ({0})"}
+                }
+            }
+        }
+        zone{
+            dn{"אזור זמן"}
+        }
+        zone-short{
+            dn{"אזור"}
+        }
+    }
+    layout{
+        characters{"right-to-left"}
+    }
+    listPattern{
+        or{
+            2{"{0} או {1}"}
+            end{"{0} או {1}"}
+        }
+        standard{
+            2{"{0} ו{1}"}
+            end{"{0} ו{1}"}
+        }
+        unit{
+            end{"{0} ו-{1}"}
+        }
+        unit-narrow{
+            2{"{0} {1}"}
+            end{"{0} {1}"}
+            middle{"{0} {1}"}
+            start{"{0} {1}"}
+        }
+        unit-short{
+            2{"{0}, {1}"}
+            end{"{0}, {1}"}
+        }
+    }
+    measurementSystemNames{
+        UK{"אימפריאלי"}
+        US{"ארה״ב"}
+        metric{"מטרי"}
+    }
+    parse{
+        date{
+            lenient{
+                "[\\- ‑ . /]",
+                "[\\: ∶]",
+            }
+        }
+        number{
+            lenient{
+                "[\\-－﹣ ‑ ‒ −⁻₋ ➖]",
+                "[,，﹐︐ ، ٫ 、﹑､︑]",
+                "[+＋﬩﹢⁺₊ ➕]",
+            }
+            stricter{
+                "[,，﹐︐ ٫]",
+                "[.．․﹒ ｡]",
+            }
+        }
+    }
+    personNames{
+        nameOrderLocales{
+            givenFirst{
+                "und",
+                "he",
+            }
+            surnameFirst{
+                "ko",
+                "vi",
+                "yue",
+                "zh",
+            }
+        }
+        namePattern{
+            givenFirst-long-addressing-formal{"{title} {surname}"}
+            givenFirst-long-addressing-informal{"{given-informal}"}
+            givenFirst-long-monogram-formal{
+                "{given-monogram-allCaps}״{surname-monogram-allCaps}",
+                "{given-monogram-allCaps}{given2-monogram-allCaps}״{surname-monogram-allCaps}",
+            }
+            givenFirst-long-referring-informal{"{given-informal} {surname}"}
+            givenFirst-medium-addressing-formal{"{title} {surname}"}
+            givenFirst-medium-addressing-informal{"{given-informal}"}
+            givenFirst-medium-referring-informal{"{given-informal} {surname}"}
+            givenFirst-short-addressing-formal{"{title} {surname}"}
+            givenFirst-short-addressing-informal{"{given-informal}"}
+            givenFirst-short-referring-formal{"{title} {given-initial} {surname}"}
+            givenFirst-short-referring-informal{"{given-informal} {surname-initial}"}
+            sorting-medium-referring-formal{"{surname-core}, {given} {given2-initial} {surname-prefix}"}
+            sorting-medium-referring-informal{"{surname}, {given-informal}"}
+            sorting-short-referring-formal{"{surname-core}, {given-initial} {given2-initial} {surname-prefix}"}
+            sorting-short-referring-informal{"{surname}, {given-informal}"}
+            surnameFirst-long-addressing-formal{"{title} {surname}"}
+            surnameFirst-long-addressing-informal{"{given-informal}"}
+            surnameFirst-medium-addressing-formal{"{title} {surname}"}
+            surnameFirst-medium-addressing-informal{"{given-informal}"}
+            surnameFirst-medium-monogram-formal{"{surname-monogram-allCaps}"}
+            surnameFirst-medium-monogram-informal{"{given-informal-monogram-allCaps}"}
+            surnameFirst-medium-referring-formal{"{surname} {given} {given2-initial} {credentials}"}
+            surnameFirst-medium-referring-informal{"{surname} {given-informal}"}
+            surnameFirst-short-addressing-formal{"{surname}, {title}"}
+            surnameFirst-short-addressing-informal{"{given-informal}"}
+            surnameFirst-short-monogram-formal{"{surname-monogram-allCaps}"}
+            surnameFirst-short-monogram-informal{"{given-informal-monogram-allCaps}"}
+            surnameFirst-short-referring-formal{"{surname} {given-initial} {given2-initial}"}
+            surnameFirst-short-referring-informal{"{surname} {given-initial}"}
+        }
+    }
+}

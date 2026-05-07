@@ -1,0 +1,2482 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+he{
+    units{
+        acceleration{
+            g-force{
+                gender{"masculine"}
+                many{"{0} כוחות ג׳י"}
+                one{"כוח ג׳י אחד"}
+                other{"{0} כוחות ג׳י"}
+                two{"שני כוחות ג׳י"}
+            }
+            meter-per-square-second{
+                dnam{"מטר לשנייה בריבוע"}
+                gender{"masculine"}
+                many{"{0} מטר לשנייה בריבוע"}
+                one{"{0} מטר לשנייה בריבוע"}
+                other{"{0} מטר לשנייה בריבוע"}
+                two{"{0} מטר לשנייה בריבוע"}
+            }
+        }
+        angle{
+            arc-minute{
+                dnam{"דקות קשת"}
+                gender{"feminine"}
+                many{"{0} דקות קשת"}
+                one{"{0} דקת קשת"}
+                other{"{0} דקות קשת"}
+                two{"{0} דקות קשת"}
+            }
+            arc-second{
+                dnam{"שניות קשת"}
+                gender{"feminine"}
+                many{"{0} שניות קשת"}
+                one{"{0} שניית קשת"}
+                other{"{0} שניות קשת"}
+                two{"{0} שניות קשת"}
+            }
+            degree{
+                gender{"feminine"}
+                many{"{0} מעלות"}
+                one{"מעלה אחת"}
+                other{"{0} מעלות"}
+                two{"שתי מעלות"}
+            }
+            radian{
+                gender{"masculine"}
+                many{"{0} רדיאנים"}
+                one{"רדיאן אחד"}
+                other{"{0} רדיאנים"}
+                two{"שני רדיאנים"}
+            }
+            revolution{
+                dnam{"סיבוב"}
+                gender{"masculine"}
+                many{"{0} סיבובים"}
+                one{"סיבוב {0}"}
+                other{"{0} סיבובים"}
+                two{"{0} סיבובים"}
+            }
+            steradian{
+                dnam{"סטרדיאן"}
+                one{"{0} סטרדיאן"}
+                other{"{0} סטרדיאן"}
+                two{"{0} סטרדיאן"}
+            }
+        }
+        area{
+            hectare{
+                gender{"masculine"}
+                many{"{0} הקטאר"}
+                one{"{0} הקטאר"}
+                other{"{0} הקטאר"}
+                two{"{0} הקטאר"}
+            }
+            square-centimeter{
+                dnam{"סנטימטר רבוע"}
+                gender{"masculine"}
+                many{"{0} סנטימטר רבוע"}
+                one{"{0} סנטימטר רבוע"}
+                other{"{0} סנטימטר רבוע"}
+                per{"{0} לסנטימטר רבוע"}
+                two{"{0} סנטימטר רבוע"}
+            }
+            square-foot{
+                dnam{"רגל רבועה"}
+                many{"{0} רגל רבועה"}
+                one{"{0} רגל רבועה"}
+                other{"{0} רגל רבועה"}
+                two{"{0} רגל רבועה"}
+            }
+            square-inch{
+                dnam{"אינץ׳ רבוע"}
+                many{"{0} אינץ׳ רבוע"}
+                one{"{0} אינץ׳ רבוע"}
+                other{"{0} אינץ׳ רבוע"}
+                per{"{0} לאינץ׳ רבוע"}
+                two{"{0} אינץ׳ רבוע"}
+            }
+            square-kilometer{
+                dnam{"קילומטר רבוע"}
+                gender{"masculine"}
+                many{"{0} קילומטר רבוע"}
+                one{"{0} קילומטר רבוע"}
+                other{"{0} קילומטר רבוע"}
+                per{"{0} לקילומטר רבוע"}
+                two{"{0} קילומטר רבוע"}
+            }
+            square-meter{
+                dnam{"מטר רבוע"}
+                gender{"masculine"}
+                many{"{0} מטר רבוע"}
+                one{"{0} מטר רבוע"}
+                other{"{0} מטר רבוע"}
+                per{"{0} למטר רבוע"}
+                two{"{0} מטר רבוע"}
+            }
+            square-mile{
+                many{"{0} מייל רבוע"}
+                one{"{0} מייל רבוע"}
+                other{"{0} מייל רבוע"}
+                per{"{0} למייל רבוע"}
+                two{"{0} מייל רבוע"}
+            }
+            square-yard{
+                dnam{"יארד רבוע"}
+                many{"{0} יארד רבוע"}
+                one{"{0} יארד רבוע"}
+                other{"{0} יארד רבוע"}
+                two{"{0} יארד רבוע"}
+            }
+        }
+        compound{
+            1024p1{"קיבי{0}"}
+            1024p2{"מבי{0}"}
+            1024p3{"ג׳יבי{0}"}
+            1024p4{"טבי{0}"}
+            1024p5{"פבי{0}"}
+            1024p6{"אקסבי{0}"}
+            1024p7{"זבי{0}"}
+            1024p8{"יובא{0}"}
+            10p-6{"מיקרו{0}"}
+            10p18{"אקסה{0}"}
+            10p27{"רונא{0}"}
+            10p30{"קווטא{0}"}
+            per{"{0} ל{1}"}
+            power2{
+                many{
+                    _{
+                        _{"{0} בריבוע"}
+                    }
+                }
+                one{
+                    _{
+                        _{"{0} בריבוע"}
+                    }
+                    feminine{
+                        _{"{0} בריבוע"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0} בריבוע"}
+                    }
+                    feminine{
+                        _{"{0} בריבוע"}
+                    }
+                }
+                two{
+                    _{
+                        _{"{0} בריבוע"}
+                    }
+                    feminine{
+                        _{"{0} בריבוע"}
+                    }
+                }
+            }
+            power3{
+                many{
+                    _{
+                        _{"{0} מעוקב"}
+                    }
+                }
+                one{
+                    _{
+                        _{"{0} מעוקב"}
+                    }
+                    feminine{
+                        _{"{0} מעוקב"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0} מעוקב"}
+                    }
+                    feminine{
+                        _{"{0} מעוקב"}
+                    }
+                }
+                two{
+                    _{
+                        _{"{0} מעוקב"}
+                    }
+                    feminine{
+                        _{"{0} מעוקב"}
+                    }
+                }
+            }
+        }
+        concentr{
+            item{
+                dnam{"פריטים"}
+                gender{"masculine"}
+            }
+            karat{
+                dnam{"קראט"}
+                gender{"masculine"}
+                many{"{0} קראט"}
+                one{"{0} קראט"}
+                other{"{0} קראט"}
+                two{"{0} קראט"}
+            }
+            katal{
+                dnam{"קטאל"}
+                one{"{0} קטאל"}
+                other{"{0} קטאל"}
+                two{"{0} קטאל"}
+            }
+            milligram-ofglucose-per-deciliter{
+                dnam{"מיליגרם/דציליטר"}
+                gender{"masculine"}
+                many{"{0} מיליגרם/דציליטר"}
+                one{"{0} מיליגרם/דציליטר"}
+                other{"{0} מיליגרם/דציליטר"}
+                two{"{0} מיליגרם/דציליטר"}
+            }
+            millimole-per-liter{
+                dnam{"מילימול/ליטר"}
+                gender{"masculine"}
+                many{"{0} מילימול/ליטר"}
+                one{"{0} מילימול/ליטר"}
+                other{"{0} מילימול/ליטר"}
+                two{"{0} מילימול/ליטר"}
+            }
+            mole{
+                dnam{"מול"}
+                gender{"masculine"}
+                many{"{0} מול"}
+                one{"{0} מול"}
+                other{"{0} מול"}
+                two{"{0} מול"}
+            }
+            ofglucose{
+                dnam{"גלוקוז"}
+                one{"{0} גלוקוז"}
+                other{"{0} גלוקוז"}
+                two{"{0} גלוקוז"}
+            }
+            part{
+                dnam{"חלקים"}
+                one{"{0} חלק"}
+                other{"{0} חלקים"}
+                two{"{0} חלקים"}
+            }
+            part-per-1e6{
+                dnam{"חלקים למיליון"}
+                gender{"masculine"}
+                many{"{0} חלקים למיליון"}
+                one{"{0} חלקים למיליון"}
+                other{"{0} חלקים למיליון"}
+                two{"{0} חלקים למיליון"}
+            }
+            part-per-1e9{
+                dnam{"חלקים למיליארד"}
+                gender{"masculine"}
+                one{"{0} חלקים למיליארד"}
+                other{"{0} חלקים למיליארד"}
+                two{"{0} חלקים למיליארד"}
+            }
+            percent{
+                dnam{"אחוז"}
+                gender{"masculine"}
+                many{"{0} אחוז"}
+                one{"{0} אחוז"}
+                other{"{0} אחוז"}
+                two{"{0} אחוז"}
+            }
+            permille{
+                dnam{"פרומיל"}
+                gender{"masculine"}
+                many{"{0} פרומיל"}
+                one{"{0} פרומיל"}
+                other{"{0} פרומיל"}
+                two{"{0} פרומיל"}
+            }
+            permyriad{
+                dnam{"רבבית"}
+                gender{"feminine"}
+                many{"{0} רבביות"}
+                one{"{0} רבבית"}
+                other{"{0} רבביות"}
+                two{"{0} רבביות"}
+            }
+        }
+        consumption{
+            liter-per-100-kilometer{
+                dnam{"ליטר/100 ק״מ"}
+                gender{"masculine"}
+                many{"{0} ליטר/100 ק״מ"}
+                one{"ליטר/100 ק״מ"}
+                other{"{0} ליטר/100 ק״מ"}
+                two{"{0} ליטר/100 ק״מ"}
+            }
+            liter-per-kilometer{
+                dnam{"ליטרים/קילומטר"}
+                gender{"masculine"}
+                many{"{0} ליטרים/קילומטר"}
+                one{"{0} ליטר/קילומטר"}
+                other{"{0} ליטרים/קילומטר"}
+                two{"{0} ליטרים/קילומטר"}
+            }
+            mile-per-gallon{
+                many{"{0} מייל/גלון"}
+                one{"{0} מייל/גלון"}
+                other{"{0} מייל/גלון"}
+                two{"{0} מייל/גלון"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"מייל/גלון אימפריאלי"}
+                many{"{0} מייל/גלון אימפריאלי"}
+                one{"{0} מייל/גלון אימפריאלי"}
+                other{"{0} מייל/גלון אימפריאלי"}
+                two{"{0} מייל/גלון אימפריאלי"}
+            }
+        }
+        coordinate{
+            dnam{"רוחות השמיים"}
+            east{"{0} מזרח"}
+            north{"{0} צפון"}
+            south{"{0} דרום"}
+            west{"{0} מערב"}
+        }
+        digital{
+            bit{
+                gender{"masculine"}
+            }
+            byte{
+                gender{"masculine"}
+            }
+            gigabit{
+                dnam{"ג׳יגה-ביט"}
+                gender{"masculine"}
+                many{"{0} ג׳יגה-ביט"}
+                one{"{0} ג׳יגה-ביט"}
+                other{"{0} ג׳יגה-ביט"}
+                two{"{0} ג׳יגה-ביט"}
+            }
+            gigabyte{
+                dnam{"ג׳יגה-בייט"}
+                gender{"masculine"}
+                many{"{0} ג׳יגה-בייט"}
+                one{"{0} ג׳יגה-בייט"}
+                other{"{0} ג׳יגה-בייט"}
+                two{"{0} ג׳יגה-בייט"}
+            }
+            kilobit{
+                dnam{"קילוביט"}
+                gender{"masculine"}
+                many{"{0} קילוביט"}
+                one{"{0} קילוביט"}
+                other{"{0} קילוביט"}
+                two{"{0} קילוביט"}
+            }
+            kilobyte{
+                dnam{"קילו-בייט"}
+                gender{"masculine"}
+                many{"{0} קילו-בייט"}
+                one{"{0} קילו-בייט"}
+                other{"{0} קילו-בייט"}
+                two{"{0} קילו-בייט"}
+            }
+            megabit{
+                dnam{"מגה-ביט"}
+                gender{"masculine"}
+                many{"{0} מגה-ביט"}
+                one{"{0} מגה-ביט"}
+                other{"{0} מגה-ביט"}
+                two{"{0} מגה-ביט"}
+            }
+            megabyte{
+                dnam{"מגה-בייט"}
+                gender{"masculine"}
+                many{"{0} מגה-בייט"}
+                one{"{0} מגה-בייט"}
+                other{"{0} מגה-בייט"}
+                two{"{0} מגה-בייט"}
+            }
+            petabyte{
+                dnam{"פטה-בייט"}
+                gender{"masculine"}
+                many{"{0} פטה-בייט"}
+                one{"{0} פטה-בייט"}
+                other{"{0} פטה-בייט"}
+                two{"{0} פטה-בייט"}
+            }
+            terabit{
+                dnam{"טרה-ביט"}
+                gender{"masculine"}
+                many{"{0} טרה-ביט"}
+                one{"{0} טרה-ביט"}
+                other{"{0} טרה-ביט"}
+                two{"{0} טרה-ביט"}
+            }
+            terabyte{
+                dnam{"טרה-בייט"}
+                gender{"masculine"}
+                many{"{0} טרה-בייט"}
+                one{"{0} טרה-בייט"}
+                other{"{0} טרה-בייט"}
+                two{"{0} טרה-בייט"}
+            }
+        }
+        duration{
+            century{
+                gender{"feminine"}
+            }
+            day{
+                gender{"masculine"}
+                many{"{0} יום"}
+                one{"{0} יום"}
+                other{"{0} ימים"}
+                two{"יומיים"}
+            }
+            day-person{
+                gender{"masculine"}
+            }
+            decade{
+                dnam{"עשורים"}
+                gender{"masculine"}
+            }
+            hour{
+                dnam{"שעות"}
+                gender{"feminine"}
+                many{"{0} שעות"}
+                one{"{0} שעה"}
+                other{"{0} שעות"}
+                per{"{0} לשעה"}
+                two{"שעתיים"}
+            }
+            microsecond{
+                dnam{"מיליוניות שנייה"}
+                gender{"feminine"}
+                many{"{0} מיליוניות שנייה"}
+                one{"{0} מיליונית שנייה"}
+                other{"{0} מיליוניות שנייה"}
+                two{"{0} מיליוניות שנייה"}
+            }
+            millisecond{
+                dnam{"אלפיות השניה"}
+                gender{"feminine"}
+                many{"{0} אלפיות שנייה"}
+                one{"{0} אלפית שנייה"}
+                other{"{0} אלפיות שנייה"}
+                two{"{0} אלפיות שנייה"}
+            }
+            minute{
+                dnam{"דקות"}
+                gender{"feminine"}
+                many{"{0} דקות"}
+                one{"{0} דקה"}
+                other{"{0} דקות"}
+                per{"{0}/דקה"}
+                two{"שתי דקות"}
+            }
+            month{
+                gender{"masculine"}
+                many{"{0} חודשים"}
+                one{"{0} חודש"}
+                other{"{0} חודשים"}
+                per{"{0} לחודש"}
+                two{"חודשיים"}
+            }
+            nanosecond{
+                gender{"feminine"}
+                many{"{0} ננו שניות"}
+                one{"{0} ננו שנייה"}
+                other{"{0} ננו שניות"}
+                two{"{0} ננו שניות"}
+            }
+            night{
+                gender{"masculine"}
+            }
+            quarter{
+                gender{"masculine"}
+                many{"{0} רבעונים"}
+                one{"{0} רבעון"}
+                other{"{0} רבעונים"}
+                two{"{0} רבעונים"}
+            }
+            second{
+                dnam{"שניות"}
+                gender{"feminine"}
+                many{"{0} שניות"}
+                one{"{0} שניה"}
+                other{"{0} שניות"}
+                per{"{0} לשניה"}
+                two{"שתי שניות"}
+            }
+            week{
+                gender{"masculine"}
+            }
+            year{
+                gender{"feminine"}
+                per{"{0} לשנה"}
+            }
+        }
+        electric{
+            ampere{
+                dnam{"אמפר"}
+                gender{"masculine"}
+                many{"{0} אמפר"}
+                one{"{0} אמפר"}
+                other{"{0} אמפר"}
+                two{"{0} אמפר"}
+            }
+            coulomb{
+                dnam{"קולון"}
+            }
+            farad{
+                dnam{"פאראד"}
+            }
+            henry{
+                dnam{"הנרי"}
+            }
+            milliampere{
+                dnam{"מיליאמפר"}
+                gender{"masculine"}
+                many{"{0} מיליאמפר"}
+                one{"{0} מיליאמפר"}
+                other{"{0} מיליאמפר"}
+                two{"{0} מיליאמפר"}
+            }
+            ohm{
+                dnam{"אוהם"}
+                gender{"masculine"}
+                many{"{0} אוהם"}
+                one{"{0} אוהם"}
+                other{"{0} אוהם"}
+                two{"{0} אוהם"}
+            }
+            siemens{
+                dnam{"סימנס"}
+            }
+            volt{
+                gender{"masculine"}
+                many{"{0} וולט"}
+                one{"{0} וולט"}
+                other{"{0} וולט"}
+                two{"{0} וולט"}
+            }
+        }
+        energy{
+            becquerel{
+                dnam{"בקרל"}
+                one{"{0} בקרל"}
+                other{"{0} בקרל"}
+                two{"{0} בקרל"}
+            }
+            british-thermal-unit{
+                dnam{"יחידות תרמיות בריטיות"}
+                many{"{0} יחידות תרמיות בריטיות"}
+                one{"{0} יחידה תרמית בריטית"}
+                other{"{0} יחידות תרמיות בריטיות"}
+                two{"{0} יחידות תרמיות בריטיות"}
+            }
+            calorie{
+                dnam{"קלוריות"}
+                gender{"feminine"}
+                many{"{0} קלוריות"}
+                one{"{0} קלוריה"}
+                other{"{0} קלוריות"}
+                two{"{0} קלוריות"}
+            }
+            calorie-it{
+                dnam{"קלוריה-IT"}
+            }
+            electronvolt{
+                dnam{"אלקטרון וולט"}
+                many{"{0} אלקטרון וולט"}
+                one{"{0} אלקטרון וולט"}
+                other{"{0} אלקטרון וולט"}
+                two{"{0} אלקטרון וולט"}
+            }
+            foodcalorie{
+                dnam{"קלוריות"}
+                many{"{0} קלוריות"}
+                one{"{0} קלוריה"}
+                other{"{0} קלוריות"}
+                two{"{0} קלוריות"}
+            }
+            joule{
+                gender{"masculine"}
+                many{"{0} ג׳אול"}
+                one{"{0} ג׳אול"}
+                other{"{0} ג׳אול"}
+                two{"{0} ג׳אול"}
+            }
+            kilocalorie{
+                dnam{"קילו קלוריות"}
+                gender{"feminine"}
+                many{"{0} קילו קלוריות"}
+                one{"{0} קילו קלוריה"}
+                other{"{0} קילו קלוריות"}
+                two{"{0} קילו קלוריות"}
+            }
+            kilojoule{
+                gender{"masculine"}
+                many{"{0} קילו ג׳אול"}
+                one{"{0} קילו ג׳אול"}
+                other{"{0} קילו ג׳אול"}
+                two{"{0} קילו ג׳אול"}
+            }
+            kilowatt-hour{
+                dnam{"קילוואט־שעה"}
+                gender{"masculine"}
+                many{"{0} קילוואט-שעה"}
+                one{"{0} קילוואט־שעה"}
+                other{"{0} קילוואט-שעה"}
+                two{"{0} קילוואט-שעה"}
+            }
+            therm-us{
+                dnam{"יחידה תרמית בארה״ב"}
+            }
+        }
+        force{
+            kilogram-force{
+                dnam{"קילוגרם כוח"}
+                one{"{0} קילוגרם כוח"}
+                other{"{0} קילוגרם כוח"}
+                two{"{0} קילוגרם כוח"}
+            }
+            kilowatt-hour-per-100-kilometer{
+                dnam{"קילוואט/שעה ל-100 קילומטר"}
+                gender{"masculine"}
+                many{"{0} קילוואט/שעה ל-100 קילומטר"}
+                one{"{0} קילוואט/שעה ל-100 קילומטר"}
+                other{"{0} קילוואט/שעה ל-100 קילומטר"}
+                two{"{0} קילוואט/שעה ל-100 קילומטר"}
+            }
+            newton{
+                dnam{"ניוטון"}
+                gender{"masculine"}
+                many{"{0} ניוטון"}
+                one{"{0} ניוטון"}
+                other{"{0} ניוטון"}
+                two{"{0} ניוטון"}
+            }
+            pound-force{
+                dnam{"ליברת-כוח"}
+                many{"{0} ליברות-כוח"}
+                one{"{0} ליברת-כוח"}
+                other{"{0} ליברות-כוח"}
+                two{"{0} ליברות-כוח"}
+            }
+        }
+        frequency{
+            gigahertz{
+                dnam{"ג׳יגה-הרץ"}
+                gender{"masculine"}
+                many{"{0} ג׳יגה-הרץ"}
+                one{"{0} ג׳יגה-הרץ"}
+                other{"{0} ג׳יגה-הרץ"}
+                two{"{0} ג׳יגה-הרץ"}
+            }
+            hertz{
+                dnam{"הרץ"}
+                gender{"masculine"}
+                many{"{0} הרץ"}
+                one{"{0} הרץ"}
+                other{"{0} הרץ"}
+                two{"{0} הרץ"}
+            }
+            kilohertz{
+                dnam{"קילו-הרץ"}
+                gender{"masculine"}
+                many{"{0} קילו-הרץ"}
+                one{"{0} קילו-הרץ"}
+                other{"{0} קילו-הרץ"}
+                two{"{0} קילו-הרץ"}
+            }
+            megahertz{
+                dnam{"מגה-הרץ"}
+                gender{"masculine"}
+                many{"{0} מגה-הרץ"}
+                one{"{0} מגה-הרץ"}
+                other{"{0} מגה-הרץ"}
+                two{"{0} מגה-הרץ"}
+            }
+        }
+        graphics{
+            dot{
+                dnam{"נקודות קטנות"}
+                many{"{0} נקודות קטנות"}
+                one{"נקודה קטנה אחת ({0})"}
+                other{"{0} נקודות קטנות"}
+                two{"{0} נקודות קטנות"}
+            }
+            dot-per-centimeter{
+                dnam{"נקודות לסנטימטר"}
+                many{"{0} נקודות לסנטימטר"}
+                one{"{0} נקודות לסנטימטר"}
+                other{"{0} נקודות לסנטימטר"}
+                two{"{0} נקודות לסנטימטר"}
+            }
+            dot-per-inch{
+                dnam{"נקודות לאינץ׳"}
+                one{"{0} נק׳ לאינץ׳"}
+                other{"{0} נק׳ לאינץ׳"}
+                two{"dpi ‏{0}"}
+            }
+            em{
+                dnam{"קו מפריד מסוג em"}
+                gender{"masculine"}
+            }
+            megapixel{
+                dnam{"מגה-פיקסל"}
+                gender{"masculine"}
+            }
+            pixel{
+                dnam{"פיקסלים"}
+                gender{"masculine"}
+                one{"px ‏{0}"}
+                other{"px ‏{0}"}
+                two{"px ‏{0}"}
+            }
+            pixel-per-centimeter{
+                dnam{"פיקסלים לסנטימטר"}
+                gender{"masculine"}
+                many{"ppcm ‏{0}"}
+                one{"ppcm ‏{0}"}
+                other{"ppcm ‏{0}"}
+                two{"ppcm ‏{0}"}
+            }
+            pixel-per-inch{
+                dnam{"פיקסלים לאינץ׳"}
+                many{"{0} פיקסלים לאינץ'"}
+                one{"{0} פיקסל לאינץ'"}
+                other{"{0} פיקסלים לאינץ'"}
+                two{"{0} פיקסלים לאינץ'"}
+            }
+        }
+        length{
+            astronomical-unit{
+                dnam{"יחידות אסטרונומיות"}
+                many{"{0} יחידות אסטרונומיות"}
+                one{"{0} יחידה אסטרונומית"}
+                other{"{0} יחידות אסטרונומיות"}
+                two{"{0} יחידות אסטרונומיות"}
+            }
+            centimeter{
+                dnam{"סנטימטרים"}
+                gender{"masculine"}
+                many{"{0} סנטימטרים"}
+                one{"{0} סנטימטר"}
+                other{"{0} סנטימטרים"}
+                per{"{0} לסנטימטר"}
+                two{"{0} סנטימטרים"}
+            }
+            decimeter{
+                dnam{"דצימטר"}
+                gender{"masculine"}
+                many{"{0} דצימטרים"}
+                one{"{0} דצימטר"}
+                other{"{0} דצימטרים"}
+                two{"{0} דצימטרים"}
+            }
+            earth-radius{
+                dnam{"רדיוס כדור-הארץ"}
+                many{"{0} רדיוס כדור-הארץ"}
+                one{"{0} רדיוס כדור-הארץ"}
+                other{"{0} רדיוס כדור-הארץ"}
+                two{"{0} רדיוס כדור-הארץ"}
+            }
+            fathom{
+                dnam{"פתום"}
+                many{"{0} פתום"}
+                one{"{0} פתום"}
+                other{"{0} פתום"}
+                two{"{0} פתום"}
+            }
+            foot{
+                many{"{0} רגל"}
+                one{"{0} רגל"}
+                other{"{0} רגל"}
+                per{"{0} לרגל"}
+                two{"{0} רגל"}
+            }
+            furlong{
+                dnam{"פורלונג"}
+                many{"{0} פורלונג"}
+                one{"{0} פורלונג"}
+                other{"{0} פורלונג"}
+                two{"{0} פורלונג"}
+            }
+            inch{
+                many{"{0} אינץ׳"}
+                one{"{0} אינץ׳"}
+                other{"{0} אינץ׳"}
+                per{"{0} לאינץ׳"}
+                two{"{0} אינץ׳"}
+            }
+            kilometer{
+                dnam{"קילומטרים"}
+                gender{"masculine"}
+                many{"{0} קילומטרים"}
+                one{"{0} קילומטר"}
+                other{"{0} קילומטרים"}
+                per{"{0} לקילומטר"}
+                two{"{0} קילומטרים"}
+            }
+            meter{
+                gender{"masculine"}
+                many{"{0} מטרים"}
+                one{"{0} מטר"}
+                other{"{0} מטרים"}
+                per{"{0} למטר"}
+                two{"{0} מטרים"}
+            }
+            micrometer{
+                dnam{"מיקרומטרים"}
+                gender{"masculine"}
+                many{"{0} מיקרומטרים"}
+                one{"{0} מיקרומטר"}
+                other{"{0} מיקרומטרים"}
+                two{"{0} מיקרומטרים"}
+            }
+            mile-scandinavian{
+                dnam{"מייל-סקנדינביה"}
+                gender{"masculine"}
+                many{"{0} מייל-סקנדינביה"}
+                one{"{0} מייל-סקנדינביה"}
+                other{"{0} מייל-סקנדינביה"}
+                two{"{0} מייל-סקנדינביה"}
+            }
+            millimeter{
+                dnam{"מילימטרים"}
+                gender{"masculine"}
+                many{"{0} מילימטרים"}
+                one{"{0} מילימטר"}
+                other{"{0} מילימטרים"}
+                two{"{0} מילימטרים"}
+            }
+            nanometer{
+                dnam{"ננומטרים"}
+                gender{"masculine"}
+                many{"{0} ננומטרים"}
+                one{"{0} ננומטר"}
+                other{"{0} ננומטרים"}
+                two{"{0} ננומטרים"}
+            }
+            nautical-mile{
+                dnam{"מייל ימי"}
+                many{"{0} מייל ימי"}
+                one{"{0} מייל ימי"}
+                other{"{0} מייל ימי"}
+                two{"{0} מייל ימי"}
+            }
+            parsec{
+                dnam{"פארסק"}
+                many{"{0} פארסק"}
+                one{"{0} פארסק"}
+                other{"{0} פארסק"}
+                two{"{0} פארסק"}
+            }
+            picometer{
+                dnam{"פיקומטרים"}
+                gender{"masculine"}
+                many{"{0} פיקומטרים"}
+                one{"{0} פיקומטר"}
+                other{"{0} פיקומטרים"}
+                two{"{0} פיקומטרים"}
+            }
+            point{
+                gender{"feminine"}
+                many{"{0} נקודות"}
+                one{"נקודה אחת ({0})"}
+                other{"{0} נקודות"}
+                two{"{0} נקודות"}
+            }
+            solar-radius{
+                dnam{"רדיוס סולרי"}
+                many{"{0} רדיוס סולרי"}
+                one{"{0} רדיוס סולרי"}
+                other{"{0} רדיוס סולרי"}
+                two{"{0} רדיוס סולרי"}
+            }
+        }
+        light{
+            candela{
+                dnam{"קנדלה"}
+                gender{"feminine"}
+                many{"{0} קנדלה"}
+                one{"{0} קנדלה"}
+                other{"{0} קנדלה"}
+                two{"{0} קנדלה"}
+            }
+            lumen{
+                dnam{"לומן"}
+                gender{"masculine"}
+                many{"{0} לומן"}
+                one{"{0} לומן"}
+                other{"{0} לומן"}
+                two{"{0} לומן"}
+            }
+            lux{
+                dnam{"לוקס"}
+                gender{"masculine"}
+                many{"{0} לוקס"}
+                one{"{0} לוקס"}
+                other{"{0} לוקס"}
+                two{"{0} לוקס"}
+            }
+            solar-luminosity{
+                dnam{"אנרגיה סולארית ביחידת זמן"}
+            }
+        }
+        magnetic{
+            tesla{
+                dnam{"טסלה"}
+                one{"{0} טסלה"}
+                other{"{0} טסלה"}
+                two{"{0} טסלה"}
+            }
+            weber{
+                dnam{"ובר"}
+                one{"{0} ובר"}
+                other{"{0} ובר"}
+                two{"{0} ובר"}
+            }
+        }
+        mass{
+            carat{
+                gender{"masculine"}
+                many{"{0} קרט"}
+                one{"{0} קרט"}
+                other{"{0} קרט"}
+                two{"{0} קרט"}
+            }
+            dalton{
+                dnam{"דלטון"}
+                many{"{0} דלטון"}
+                one{"{0} דלטון"}
+                other{"{0} דלטון"}
+                two{"{0} דלטון"}
+            }
+            earth-mass{
+                dnam{"מסת כדור הארץ"}
+                many{"{0} מסות כדור הארץ"}
+                one{"{0} מסת כדור הארץ"}
+                other{"{0} מסות כדור הארץ"}
+                two{"{0} מסות כדור הארץ"}
+            }
+            gram{
+                gender{"masculine"}
+                many{"{0} גרם"}
+                one{"{0} גרם"}
+                other{"{0} גרם"}
+                per{"{0}/גרם"}
+                two{"{0} גרם"}
+            }
+            kilogram{
+                dnam{"קילוגרם"}
+                gender{"masculine"}
+                many{"{0} קילוגרם"}
+                one{"{0} קילוגרם"}
+                other{"{0} קילוגרם"}
+                per{"{0}/קילוגרם"}
+                two{"{0} קילוגרם"}
+            }
+            microgram{
+                dnam{"מיקרוגרם"}
+                gender{"masculine"}
+                many{"{0} מיקרוגרם"}
+                one{"{0} מיקרוגרם"}
+                other{"{0} מיקרוגרם"}
+                two{"{0} מיקרוגרם"}
+            }
+            milligram{
+                dnam{"מיליגרם"}
+                gender{"masculine"}
+                many{"{0} מיליגרם"}
+                one{"{0} מיליגרם"}
+                other{"{0} מיליגרם"}
+                two{"{0} מיליגרם"}
+            }
+            ounce{
+                dnam{"אונקיות"}
+                many{"{0} אונקיות"}
+                one{"{0} אונקיה"}
+                other{"{0} אונקיות"}
+                per{"{0}/אונקיה"}
+                two{"{0} אונקיות"}
+            }
+            ounce-troy{
+                dnam{"אונקיות טרוי"}
+                many{"{0} אונקיות טרוי"}
+                one{"{0} אונקיית טרוי"}
+                other{"{0} אונקיות טרוי"}
+                two{"{0} אונקיות טרוי"}
+            }
+            pound{
+                many{"{0} פאונד"}
+                one{"{0} פאונד"}
+                other{"{0} פאונד"}
+                per{"{0}/פאונד"}
+                two{"{0} פאונד"}
+            }
+            solar-mass{
+                dnam{"מסת השמש"}
+                many{"{0} מסות שמש"}
+                one{"{0} מסת השמש"}
+                other{"{0} מסות שמש"}
+                two{"{0} מסות שמש"}
+            }
+            ton{
+                dnam{"טונות"}
+                many{"{0} טונות"}
+                one{"{0} טונה"}
+                other{"{0} טונות"}
+                two{"{0} טונות"}
+            }
+            tonne{
+                dnam{"טון מטרי"}
+                gender{"masculine"}
+                many{"{0} טון מטרי"}
+                one{"{0} טון מטרי"}
+                other{"{0} טון מטרי"}
+                two{"{0} טון מטרי"}
+            }
+        }
+        power{
+            gigawatt{
+                dnam{"ג׳יגה ואט"}
+                gender{"masculine"}
+                many{"{0} ג׳יגה ואט"}
+                one{"{0} ג׳יגה ואט"}
+                other{"{0} ג׳יגה ואט"}
+                two{"{0} ג׳יגה ואט"}
+            }
+            horsepower{
+                dnam{"כוח סוס"}
+                many{"{0} כוח סוס"}
+                one{"{0} כוח סוס"}
+                other{"{0} כוח סוס"}
+                two{"{0} כוח סוס"}
+            }
+            kilowatt{
+                dnam{"קילוואט"}
+                gender{"masculine"}
+                many{"{0} קילוואט"}
+                one{"{0} קילוואט"}
+                other{"{0} קילוואט"}
+                two{"{0} קילוואט"}
+            }
+            megawatt{
+                dnam{"מגה ואט"}
+                gender{"masculine"}
+                many{"{0} מגה ואט"}
+                one{"{0} מגה ואט"}
+                other{"{0} מגה ואט"}
+                two{"{0} מגה ואט"}
+            }
+            milliwatt{
+                dnam{"מיליוואט"}
+                gender{"masculine"}
+                many{"{0} מיליוואט"}
+                one{"{0} מיליוואט"}
+                other{"{0} מיליוואט"}
+                two{"{0} מיליוואט"}
+            }
+            watt{
+                gender{"masculine"}
+                many{"{0} ואט"}
+                one{"{0} ואט"}
+                other{"{0} ואט"}
+                two{"{0} ואט"}
+            }
+        }
+        pressure{
+            atmosphere{
+                dnam{"אטמוספירות"}
+                gender{"feminine"}
+                many{"{0} אטמוספרה"}
+                one{"{0} אטמוספרה"}
+                other{"{0} אטמוספרות"}
+                two{"{0} אטמוספרה"}
+            }
+            bar{
+                gender{"masculine"}
+            }
+            hectopascal{
+                dnam{"הקטופסקל"}
+                gender{"masculine"}
+                many{"{0} הקטופסקל"}
+                one{"{0} הקטופסקל"}
+                other{"{0} הקטופסקל"}
+                two{"{0} הקטופסקל"}
+            }
+            inch-ofhg{
+                dnam{"אינץ׳ כספית"}
+                many{"{0} אינץ׳ כספית"}
+                one{"{0} אינץ׳ כספית"}
+                other{"{0} אינץ׳ כספית"}
+                two{"{0} אינץ׳ כספית"}
+            }
+            kilopascal{
+                dnam{"קילו-פסקל"}
+                gender{"masculine"}
+                many{"{0} קילו-פסקל"}
+                one{"{0} קילו-פסקל"}
+                other{"{0} קילו-פסקל"}
+                two{"{0} קילו-פסקל"}
+            }
+            megapascal{
+                dnam{"מגה-פסקל"}
+                gender{"masculine"}
+                many{"{0} מגה-פסקל"}
+                one{"{0} מגה-פסקל"}
+                other{"{0} מגה-פסקל"}
+                two{"{0} מגה-פסקל"}
+            }
+            millibar{
+                dnam{"מיליבר"}
+                gender{"masculine"}
+                many{"{0} מיליבר"}
+                one{"{0} מיליבר"}
+                other{"{0} מיליבר"}
+                two{"{0} מיליבר"}
+            }
+            millimeter-ofhg{
+                dnam{"מילימטר כספית"}
+                gender{"masculine"}
+                many{"{0} מילימטר כספית"}
+                one{"{0} מילימטר כספית"}
+                other{"{0} מילימטר כספית"}
+                two{"{0} מילימטר כספית"}
+            }
+            ofhg{
+                dnam{"כספית"}
+                one{"{0} כספית"}
+                other{"{0} כספית"}
+                two{"{0} כספית"}
+            }
+            pascal{
+                dnam{"פסקל"}
+                gender{"masculine"}
+                many{"{0} פסקל"}
+                one{"{0} פסקל"}
+                other{"{0} פסקל"}
+                two{"{0} פסקל"}
+            }
+            pound-force-per-square-inch{
+                dnam{"פאונד לאינץ׳ רבוע"}
+                many{"{0} פאונד לאינץ׳ רבוע"}
+                one{"פאונד {0} לאינץ׳ רבוע"}
+                other{"{0} פאונד לאינץ׳ רבוע"}
+                two{"{0} פאונד לאינץ׳ רבוע"}
+            }
+        }
+        speed{
+            beaufort{
+                dnam{"בופורט"}
+                one{"{0} בופורט"}
+                other{"{0} בופורט"}
+                two{"{0} בופורט"}
+            }
+            kilometer-per-hour{
+                dnam{"קילומטר לשעה"}
+                gender{"masculine"}
+                many{"{0} קילומטר לשעה"}
+                one{"{0} קילומטר לשעה"}
+                other{"{0} קילומטר לשעה"}
+                two{"{0} קילומטר לשעה"}
+            }
+            knot{
+                dnam{"קשר"}
+                many{"{0} קשר"}
+                one{"{0} קשר"}
+                other{"{0} קשר"}
+                two{"{0} קשר"}
+            }
+            light-speed{
+                gender{"masculine"}
+            }
+            meter-per-second{
+                dnam{"מטר לשנייה"}
+                gender{"masculine"}
+                many{"{0} מטר לשנייה"}
+                one{"{0} מטר לשנייה"}
+                other{"{0} מטר לשנייה"}
+                two{"{0} מטר לשנייה"}
+            }
+            mile-per-hour{
+                dnam{"מייל לשעה"}
+                many{"{0} מייל לשעה"}
+                one{"{0} מייל לשעה"}
+                other{"{0} מייל לשעה"}
+                two{"{0} מייל לשעה"}
+            }
+        }
+        temperature{
+            celsius{
+                dnam{"מעלות צלזיוס"}
+                gender{"feminine"}
+                many{"{0} מעלות צלזיוס"}
+                one{"{0} מעלת צלזיוס"}
+                other{"{0} מעלות צלזיוס"}
+                two{"{0} מעלות צלזיוס"}
+            }
+            fahrenheit{
+                dnam{"מעלות פרנהייט"}
+                many{"{0} מעלות פרנהייט"}
+                one{"{0} מעלת פרנהייט"}
+                other{"{0} מעלות פרנהייט"}
+                two{"{0} מעלות פרנהייט"}
+            }
+            generic{
+                dnam{"מעלת טמפרטורה"}
+                gender{"feminine"}
+            }
+            kelvin{
+                dnam{"מעלות קלווין"}
+                gender{"feminine"}
+                many{"{0} קלווין"}
+                one{"{0} קלווין"}
+                other{"{0} קלווין"}
+                two{"{0} קלווין"}
+            }
+        }
+        torque{
+            newton-meter{
+                dnam{"ניוטון-מטר"}
+                gender{"masculine"}
+                many{"{0} ניוטון-מטר"}
+                one{"{0} ניוטון-מטר"}
+                other{"{0} ניוטון-מטר"}
+                two{"{0} ניוטון-מטר"}
+            }
+            pound-force-foot{
+                dnam{"רגל-פאונד"}
+                many{"{0} רגל-פאונד"}
+                one{"{0} רגל-פאונד"}
+                other{"{0} רגל-פאונד"}
+                two{"{0} רגל-פאונד"}
+            }
+        }
+        volume{
+            acre-foot{
+                dnam{"אקר-רגל"}
+                many{"{0} אקר-רגל"}
+                one{"{0} אקר-רגל"}
+                other{"{0} אקר-רגל"}
+                two{"{0} אקר-רגל"}
+            }
+            barrel{
+                dnam{"חביות"}
+                many{"{0} חביות"}
+                one{"{0} חבית"}
+                other{"{0} חביות"}
+                two{"{0} חביות"}
+            }
+            bushel{
+                dnam{"בושל"}
+                many{"{0} בושל"}
+                one{"{0} בושל"}
+                other{"{0} בושל"}
+                two{"{0} בושל"}
+            }
+            centiliter{
+                dnam{"סנטיליטר"}
+                gender{"masculine"}
+                many{"{0} סנטיליטר"}
+                one{"{0} סנטיליטר"}
+                other{"{0} סנטיליטר"}
+                two{"{0} סנטיליטר"}
+            }
+            cubic-centimeter{
+                dnam{"סנטימטר מעוקב"}
+                gender{"masculine"}
+                many{"{0} סנטימטר מעוקב"}
+                one{"{0} סנטימטר מעוקב"}
+                other{"{0} סנטימטר מעוקב"}
+                per{"{0}/סנטימטר מעוקב"}
+                two{"{0} סנטימטר מעוקב"}
+            }
+            cubic-foot{
+                dnam{"רגל מעוקב"}
+                many{"{0} רגל מעוקב"}
+                one{"{0} רגל מעוקב"}
+                other{"{0} רגל מעוקב"}
+                two{"{0} רגל מעוקב"}
+            }
+            cubic-inch{
+                dnam{"אינץ׳ מעוקב"}
+                many{"{0} אינץ׳ מעוקב"}
+                one{"{0} אינץ׳ מעוקב"}
+                other{"{0} אינץ׳ מעוקב"}
+                two{"{0} אינץ׳ מעוקב"}
+            }
+            cubic-kilometer{
+                dnam{"קילומטר מעוקב"}
+                gender{"masculine"}
+                many{"{0} קילומטר מעוקב"}
+                one{"{0} קילומטר מעוקב"}
+                other{"{0} קילומטר מעוקב"}
+                two{"{0} קילומטר מעוקב"}
+            }
+            cubic-meter{
+                dnam{"מטר מעוקב"}
+                gender{"masculine"}
+                many{"{0} מטר מעוקב"}
+                one{"{0} מטר מעוקב"}
+                other{"{0} מטר מעוקב"}
+                per{"{0}/מטר מעוקב"}
+                two{"{0} מטר מעוקב"}
+            }
+            cubic-mile{
+                dnam{"מייל מעוקב"}
+                many{"{0} מייל מעוקב"}
+                one{"{0} מייל מעוקב"}
+                other{"{0} מייל מעוקב"}
+                two{"{0} מייל מעוקב"}
+            }
+            cubic-yard{
+                dnam{"יארד מעוקב"}
+                many{"{0} יארד מעוקב"}
+                one{"{0} יארד מעוקב"}
+                other{"{0} יארד מעוקב"}
+                two{"{0} יארד מעוקב"}
+            }
+            cup{
+                many{"{0} כוסות"}
+                one{"{0} כוס"}
+                other{"{0} כוסות"}
+                two{"{0} כוסות"}
+            }
+            cup-metric{
+                dnam{"כוס מידה מטרית"}
+                gender{"feminine"}
+                many{"{0} כ׳ מידה מטרית"}
+                one{"{0} כוס מידה מטרית"}
+                other{"{0} כ׳ מידה מטרית"}
+                two{"{0} כ׳ מידה מטרית"}
+            }
+            deciliter{
+                dnam{"דציליטר"}
+                gender{"masculine"}
+                many{"{0} דציליטר"}
+                one{"{0} דציליטר"}
+                other{"{0} דציליטר"}
+                two{"{0} דציליטר"}
+            }
+            dessert-spoon{
+                dnam{"כפית קינוחים"}
+                many{"{0} כפיות קינוחים"}
+                one{"{0} כפית קינוחים"}
+                other{"{0} כפיות קינוחים"}
+                two{"{0} כפיות קינוחים"}
+            }
+            dessert-spoon-imperial{
+                dnam{"כפית קינוחים בארה״ב"}
+                many{"{0} כפיות קינוחים בארה\u0022ב"}
+                one{"{0} כפית קינוחים בארה״ב"}
+                other{"{0} כפיות קינוחים בארה\u0022ב"}
+                two{"{0} כפיות קינוחים בארה\u0022ב"}
+            }
+            dram{
+                dnam{"דראם אלכוהול"}
+                many{"{0} דראם אלכוהול"}
+                one{"{0} דראם אלכוהול"}
+                other{"{0} דראם אלכוהול"}
+                two{"{0} דראם אלכוהול"}
+            }
+            drop{
+                dnam{"טיפות"}
+            }
+            fluid-ounce{
+                dnam{"אונקיות נוזלים"}
+                many{"{0} אונקיות נוזלים"}
+                one{"{0} אונקיית נוזלים"}
+                other{"{0} אונקיות נוזלים"}
+                two{"{0} אונקיות נוזלים"}
+            }
+            fluid-ounce-imperial{
+                dnam{"אונקיית נוזלים אימפריאלית"}
+                many{"{0} אונקיית נוזלים אימפריאלית"}
+                one{"{0} אונקיית נוזלים אימפריאלית"}
+                other{"{0} אונקיית נוזלים אימפריאלית"}
+                two{"{0} אונקיית נוזלים אימפריאלית"}
+            }
+            fluid-ounce-metric{
+                dnam{"אונקיית נוזל"}
+                one{"{0} אונקיית נוזל"}
+                other{"{0} אונקיית נוזל"}
+                two{"{0} fl oz m."}
+            }
+            gallon{
+                many{"{0} גלונים"}
+                one{"{0} גלון"}
+                other{"{0} גלונים"}
+                per{"{0}/גלון"}
+                two{"{0} גלונים"}
+            }
+            gallon-imperial{
+                dnam{"גלון אימפריאלי"}
+                many{"{0} גלון אימפריאלי"}
+                one{"{0} גלון אימפריאלי"}
+                other{"{0} גלון אימפריאלי"}
+                per{"{0}/גלון אימפריאלי"}
+                two{"{0} גלון אימפריאלי"}
+            }
+            hectoliter{
+                dnam{"הקטוליטר"}
+                gender{"masculine"}
+                many{"{0} הקטוליטר"}
+                one{"{0} הקטוליטר"}
+                other{"{0} הקטוליטר"}
+                two{"{0} הקטוליטר"}
+            }
+            jigger{
+                dnam{"ג׳יגר"}
+                many{"{0} ג'יגר"}
+                one{"{0} ג׳יגר"}
+                other{"{0} ג'יגר"}
+                two{"{0} ג'יגר"}
+            }
+            liter{
+                gender{"masculine"}
+                many{"{0} ליטר"}
+                one{"{0} ליטר"}
+                other{"{0} ליטר"}
+                per{"{0}/ליטר"}
+                two{"{0} ליטר"}
+            }
+            megaliter{
+                dnam{"מגה ליטר"}
+                gender{"masculine"}
+                many{"{0} מגה ליטר"}
+                one{"{0} מגה ליטר"}
+                other{"{0} מגה ליטר"}
+                two{"{0} מגה ליטר"}
+            }
+            milliliter{
+                dnam{"מיליליטר"}
+                gender{"masculine"}
+                many{"{0} מיליליטר"}
+                one{"{0} מיליליטר"}
+                other{"{0} מיליליטר"}
+                two{"{0} מיליליטר"}
+            }
+            pinch{
+                one{"{0} פינץ׳"}
+                other{"{0} פינץ'"}
+                two{"{0} פינץ'"}
+            }
+            pint{
+                many{"{0} פינט"}
+                one{"{0} פינט"}
+                other{"{0} פינט"}
+                two{"{0} פינט"}
+            }
+            pint-metric{
+                dnam{"פינט מטרי"}
+                gender{"masculine"}
+                many{"{0} פינט מטרי"}
+                one{"{0} פינט מטרי"}
+                other{"{0} פינט מטרי"}
+                two{"{0} פינט מטרי"}
+            }
+            quart{
+                dnam{"קווארטות"}
+                many{"{0} קווארטות"}
+                one{"{0} קווארטה"}
+                other{"{0} קווארטות"}
+                two{"{0} קווארטות"}
+            }
+            quart-imperial{
+                dnam{"קווארט אימפריאלי"}
+                many{"{0} קווארטות אימפריאליות"}
+                one{"{0} קווארט אימפריאלי"}
+                other{"{0} קווארטות אימפריאליות"}
+                two{"{0} קווארטות אימפריאליות"}
+            }
+            tablespoon{
+                many{"{0} כפות"}
+                one{"{0} כפ׳"}
+                other{"{0} כפות"}
+                two{"{0} כפות"}
+            }
+            teaspoon{
+                dnam{"כפיות"}
+                many{"{0} כפיות"}
+                one{"{0} כפית"}
+                other{"{0} כפיות"}
+                two{"{0} כפיות"}
+            }
+        }
+    }
+    unitsNarrow{
+        angle{
+            arc-minute{
+                many{"{0} דקות"}
+                one{"{0} דקה"}
+                other{"{0} דקות"}
+                two{"{0} דקות"}
+            }
+            arc-second{
+                many{"{0} שנ׳"}
+                one{"{0} שנ׳"}
+                other{"{0} שנ׳"}
+                two{"{0} שנ׳"}
+            }
+        }
+        compound{
+            10p27{"רונא{0}"}
+            10p30{"קווטא{0}"}
+        }
+        concentr{
+            item{
+                many{"{0} פר'"}
+                one{"{0} פריט"}
+                other{"{0} פר'"}
+                two{"{0} פר'"}
+            }
+            ofglucose{
+                dnam{"גלוקוז"}
+                one{"{0} גלוקוז"}
+                other{"{0} Glc"}
+                two{"{0} Glc"}
+            }
+            part{
+                dnam{"חלק"}
+                one{"{0} חלק"}
+                other{"{0} חלקים"}
+                two{"{0} חלקים"}
+            }
+        }
+        consumption{
+            liter-per-100-kilometer{
+                dnam{"ל׳/100ק״מ"}
+                many{"{0}ל׳/100ק״מ"}
+                one{"{0}ל׳/100ק״מ"}
+                other{"{0}ל׳/100ק״מ"}
+                two{"{0}ל׳/100ק״מ"}
+            }
+        }
+        digital{
+            bit{
+                one{"bit‏{0}"}
+                other{"{0} ביט"}
+                two{"{0} ביט"}
+            }
+            byte{
+                many{"B‏{0}"}
+                one{"B‏{0}"}
+                other{"B‏{0}"}
+                two{"B‏{0}"}
+            }
+            gigabyte{
+                one{"GB‏{0}"}
+                other{"{0} GB"}
+                two{"{0} GB"}
+            }
+            kilobyte{
+                one{"kB‏{0}"}
+                other{"{0} kB"}
+                two{"{0} kB"}
+            }
+            megabit{
+                one{"Mb‏{0}"}
+                other{"{0} Mb"}
+                two{"{0} Mb"}
+            }
+            megabyte{
+                one{"MB‏{0}"}
+                other{"{0} MB"}
+                two{"{0} MB"}
+            }
+            petabyte{
+                many{"PB‏{0}"}
+                one{"PB‏{0}"}
+                other{"PB‏{0}"}
+                two{"PB‏{0}"}
+            }
+            terabit{
+                many{"Tb‏{0}"}
+                one{"Tb‏{0}"}
+                other{"Tb‏{0}"}
+                two{"Tb‏{0}"}
+            }
+            terabyte{
+                many{"TB‏{0}"}
+                one{"TB‏{0}"}
+                other{"TB‏{0}"}
+                two{"TB‏{0}"}
+            }
+        }
+        duration{
+            day{
+                dnam{"יום"}
+                many{"{0} י׳"}
+                one{"{0} י׳"}
+                other{"{0} י׳"}
+                two{"{0} י׳"}
+            }
+            hour{
+                one{"{0} שע׳"}
+                other{"{0} שע׳"}
+                per{"{0}/שע׳"}
+                two{"{0} שע׳"}
+            }
+            month{
+                dnam{"ח׳"}
+            }
+            nanosecond{
+                dnam{"ns"}
+            }
+            week{
+                dnam{"שבוע"}
+                many{"{0} ש′"}
+                one{"{0} ש′"}
+                other{"{0} ש′"}
+                per{"{0}/שב׳"}
+                two{"{0} ש′"}
+            }
+            year{
+                dnam{"ש׳"}
+                many{"{0} ש′"}
+                one{"{0} ש′"}
+                other{"{0} ש′"}
+                two{"{0} ש′"}
+            }
+        }
+        electric{
+            ohm{
+                dnam{"אוהם"}
+            }
+        }
+        energy{
+            calorie-it{
+                dnam{"קל׳-IT"}
+            }
+            foodcalorie{
+                dnam{"קל׳"}
+            }
+        }
+        force{
+            kilogram-force{
+                dnam{"ק״ג-כוח"}
+                one{"{0} ק\u0022ג כוח"}
+                other{"{0} ק\u0022ג כוח"}
+                two{"{0} ק\u0022ג כוח"}
+            }
+            kilowatt-hour-per-100-kilometer{
+                dnam{"kWh/100km"}
+                many{"{0} kWh/100km"}
+                one{"{0} kWh/100km"}
+                other{"{0} kWh"}
+                two{"{0} kWh/100km"}
+            }
+        }
+        graphics{
+            dot{
+                dnam{"נקודה"}
+                many{"{0} נק' קטנות"}
+                one{"נק' קטנה אחת ({0})"}
+                other{"{0} נק' קטנות"}
+                two{"{0} נק' קטנות"}
+            }
+            dot-per-centimeter{
+                dnam{"dpcm"}
+                many{"‎dpcm‏{0}"}
+                one{"‎dpcm‏{0}"}
+                other{"‎dpcm‏{0}"}
+                two{"‎dpcm‏{0}"}
+            }
+            megapixel{
+                many{"MP ‏{0}"}
+                one{"MP ‏{0}"}
+                other{"MP ‏{0}"}
+                two{"MP ‏{0}"}
+            }
+            pixel{
+                many{"px ‏{0}"}
+                one{"px ‏{0}"}
+                other{"px ‏{0}"}
+                two{"px ‏{0}"}
+            }
+            pixel-per-centimeter{
+                many{"ppcm‏{0}"}
+                one{"ppcm‏{0}"}
+                other{"ppcm‏{0}"}
+                two{"ppcm‏{0}"}
+            }
+            pixel-per-inch{
+                many{"ppi ‏{0}"}
+                one{"ppi ‏{0}"}
+                other{"ppi ‏{0}"}
+                two{"ppi ‏{0}"}
+            }
+        }
+        length{
+            inch{
+                dnam{"in"}
+            }
+            meter{
+                dnam{"מטר"}
+            }
+            point{
+                dnam{"נק׳"}
+            }
+        }
+        mass{
+            gram{
+                many{"{0}g"}
+                one{"{0}g"}
+                other{"{0}g"}
+                two{"{0}g"}
+            }
+            kilogram{
+                many{"{0}kg"}
+                one{"{0}kg"}
+                other{"{0}kg"}
+                two{"{0}kg"}
+            }
+            pound{
+                dnam{"lb"}
+            }
+            tonne{
+                many{"{0} t"}
+                one{"{0} t"}
+                other{"{0} t"}
+                two{"{0} t"}
+            }
+        }
+        pressure{
+            millibar{
+                dnam{"מ״ב"}
+                many{"{0} מ″ב"}
+                one{"{0} מ″ב"}
+                other{"{0} מ″ב"}
+                two{"{0} מ″ב"}
+            }
+        }
+        speed{
+            beaufort{
+                one{"{0} B"}
+                other{"{0} B"}
+                two{"{0} B"}
+            }
+        }
+        volume{
+            cubic-meter{
+                many{"{0} מ\u0022ק"}
+                one{"{0} מ\u0022ק"}
+                other{"{0} מ\u0022ק"}
+                two{"{0} מ\u0022ק"}
+            }
+            dessert-spoon-imperial{
+                many{"{0}dsp-Imp"}
+                one{"{0}dsp-Imp"}
+                other{"{0}dsp-Imp"}
+                two{"{0}dsp-Imp"}
+            }
+            gallon-imperial{
+                many{"{0}/galIm"}
+                one{"{0}/galIm"}
+                other{"{0}/galIm"}
+                per{"{0}/galIm"}
+                two{"{0}/galIm"}
+            }
+        }
+    }
+    unitsShort{
+        acceleration{
+            g-force{
+                dnam{"כוח ג׳י"}
+            }
+        }
+        angle{
+            arc-minute{
+                dnam{"דק׳ קשת"}
+                one{"{0} ד׳ קשת"}
+                other{"{0} דק׳ קשת"}
+                two{"{0} דק׳ קשת"}
+            }
+            arc-second{
+                dnam{"שנ׳ קשת"}
+                one{"{0} שנ׳ קשת"}
+                other{"{0} שנ׳ קשת"}
+                two{"{0} שנ׳ קשת"}
+            }
+            degree{
+                dnam{"מעלות"}
+            }
+            radian{
+                dnam{"רדיאנים"}
+                one{"{0} π"}
+                other{"{0} π"}
+                two{"{0} π"}
+            }
+            revolution{
+                dnam{"ס׳"}
+                one{"{0} ס׳"}
+                other{"{0} ס׳"}
+                two{"{0} ס׳"}
+            }
+        }
+        area{
+            acre{
+                dnam{"אקר"}
+                one{"{0} אקר"}
+                other{"{0} אקר"}
+                two{"{0} אקר"}
+            }
+            dunam{
+                dnam{"דונם"}
+                one{"{0} דונם"}
+                other{"{0} דונם"}
+                two{"{0} דונם"}
+            }
+            hectare{
+                dnam{"הקטאר"}
+            }
+            square-centimeter{
+                dnam{"סמ״ר"}
+                one{"{0} סמ״ר"}
+                other{"{0} סמ״ר"}
+                per{"{0}/סמ״ר"}
+                two{"{0} סמ״ר"}
+            }
+            square-foot{
+                one{"{0} sq ft"}
+                other{"{0} sq ft"}
+                two{"{0} sq ft"}
+            }
+            square-kilometer{
+                dnam{"קמ״ר"}
+                one{"{0} קמ״ר"}
+                other{"{0} קמ״ר"}
+                per{"{0}/קמ״ר"}
+                two{"{0} קמ״ר"}
+            }
+            square-meter{
+                dnam{"מ״ר"}
+                one{"{0} מ״ר"}
+                other{"{0} מ״ר"}
+                per{"{0}/מ״ר"}
+                two{"{0} מ״ר"}
+            }
+            square-mile{
+                dnam{"מייל רבוע"}
+                one{"{0} sq mi"}
+                other{"{0} sq mi"}
+                two{"{0} sq mi"}
+            }
+            square-yard{
+                dnam{"yards²"}
+            }
+        }
+        compound{
+            10p-1{"דצי{0}"}
+            10p-12{"פיקו{0}"}
+            10p-15{"פמטו{0}"}
+            10p-18{"אטו{0}"}
+            10p-2{"סנטי{0}"}
+            10p-21{"זפטו{0}"}
+            10p-24{"יוקטו{0}"}
+            10p-27{"רונטו{0}"}
+            10p-3{"מילי{0}"}
+            10p-30{"קווקטו{0}"}
+            10p-9{"ננו{0}"}
+            10p1{"דקא{0}"}
+            10p12{"טרה{0}"}
+            10p15{"פטא{0}"}
+            10p18{"אקס{0}"}
+            10p2{"הקטו{0}"}
+            10p21{"זטא{0}"}
+            10p24{"יוטא{0}"}
+            10p3{"קילו{0}"}
+            10p6{"מגה{0}"}
+            10p9{"גיגה{0}"}
+        }
+        concentr{
+            item{
+                dnam{"פריט"}
+                one{"{0} פריט"}
+                other{"{0} פריטים"}
+                two{"{0} פריטים"}
+            }
+            ofglucose{
+                dnam{"גלוקוז"}
+                one{"{0} גלוקוז"}
+                other{"{0} Glc"}
+                two{"{0} Glc"}
+            }
+            part{
+                dnam{"חלק"}
+                one{"{0} חלק"}
+                other{"{0} חלק"}
+                two{"{0} חלקים"}
+            }
+        }
+        consumption{
+            liter-per-100-kilometer{
+                dnam{"ל׳/100 ק״מ"}
+                one{"{0} ל׳/100 ק״מ"}
+                other{"{0} ל׳/100 ק״מ"}
+                two{"{0} ל׳/100 ק״מ"}
+            }
+            liter-per-kilometer{
+                dnam{"ליטרים/ק״מ"}
+                one{"{0} ל׳/ק״מ"}
+                other{"{0} ל׳/ק״מ"}
+                two{"{0} ל׳/ק״מ"}
+            }
+            mile-per-gallon{
+                dnam{"מייל/גלון"}
+                one{"{0} mpg"}
+                other{"{0} mpg"}
+                two{"{0} mpg"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"miles/gal Imp."}
+            }
+        }
+        coordinate{
+            dnam{"כיוון"}
+            east{"{0} מז׳"}
+            north{"{0} צפ׳"}
+            south{"{0} דר׳"}
+            west{"{0} מע׳"}
+        }
+        digital{
+            bit{
+                dnam{"ביט"}
+                one{"{0} ביט"}
+                other{"{0} ביט"}
+                two{"{0} ביט"}
+            }
+            byte{
+                dnam{"בייט"}
+                one{"{0} בייט"}
+                other{"{0} בייט"}
+                two{"{0} בייט"}
+            }
+            gigabit{
+                dnam{"Gbit"}
+                one{"Gb‏{0}"}
+                other{"{0} Gb"}
+                two{"{0} Gb"}
+            }
+            gigabyte{
+                one{"GB‏{0}"}
+                other{"{0} GB"}
+                two{"{0} GB"}
+            }
+            kilobit{
+                one{"kb‏{0}"}
+                other{"{0} kb"}
+                two{"{0} kb"}
+            }
+            kilobyte{
+                one{"kB‏{0}"}
+                other{"{0} kB"}
+                two{"{0} kB"}
+            }
+            megabit{
+                dnam{"Mbit"}
+                one{"Mb‏{0}"}
+                other{"{0} Mb"}
+                two{"{0} Mb"}
+            }
+            megabyte{
+                one{"MB‏{0}"}
+                other{"{0} MB"}
+                two{"{0} MB"}
+            }
+            petabyte{
+                many{"PB‏{0}"}
+                one{"PB‏{0}"}
+                other{"PB‏{0}"}
+                two{"PB‏{0}"}
+            }
+            terabit{
+                many{"Tb‏{0}"}
+                one{"Tb‏{0}"}
+                other{"Tb‏{0}"}
+                two{"Tb‏{0}"}
+            }
+            terabyte{
+                one{"TB‏{0}"}
+                other{"{0} TB"}
+                two{"{0} TB"}
+            }
+        }
+        duration{
+            century{
+                dnam{"מאות"}
+                one{"{0} מאה"}
+                other{"{0} מאות"}
+                two{"{0} מאות"}
+            }
+            day{
+                dnam{"ימים"}
+                one{"{0} יום"}
+                other{"{0} ימ׳"}
+                per{"{0}/יום"}
+                two{"יומיים"}
+            }
+            decade{
+                dnam{"עשור"}
+                one{"{0} עשור"}
+                other{"{0} עשורים"}
+                two{"{0} עשורים"}
+            }
+            hour{
+                dnam{"שע׳"}
+                one{"{0} שעה"}
+                other{"{0} שע׳"}
+                per{"{0}/שעה"}
+                two{"שעתיים"}
+            }
+            microsecond{
+                dnam{"μsecs"}
+            }
+            minute{
+                dnam{"דק׳"}
+                one{"{0} דק׳"}
+                other{"{0} דק׳"}
+                per{"{0}/ד׳"}
+                two{"{0} דק׳"}
+            }
+            month{
+                dnam{"חודשים"}
+                one{"{0} ח׳"}
+                other{"{0} ח׳"}
+                per{"{0}/חודש"}
+                two{"{0} ח׳"}
+            }
+            nanosecond{
+                dnam{"ננו שניות"}
+            }
+            night{
+                dnam{"לילות"}
+                one{"{0} לילה"}
+                other{"{0} לילות"}
+                per{"{0}/לילה"}
+                two{"{0} לילות"}
+            }
+            quarter{
+                dnam{"רבעונים"}
+            }
+            second{
+                dnam{"שנ׳"}
+                one{"{0} שנ׳"}
+                other{"{0} שנ׳"}
+                per{"{0}/שנ׳"}
+                two{"{0} שנ׳"}
+            }
+            week{
+                dnam{"שבועות"}
+                one{"{0} שבוע"}
+                other{"{0} שבועות"}
+                per{"{0}/שבוע"}
+                two{"שבועיים"}
+            }
+            year{
+                dnam{"שנים"}
+                one{"{0} שנה"}
+                other{"{0} שנים"}
+                per{"{0}/שנה"}
+                two{"{0} שנים"}
+            }
+        }
+        electric{
+            ampere{
+                dnam{"amps"}
+            }
+            ohm{
+                dnam{"אוהם"}
+            }
+            volt{
+                dnam{"וולט"}
+            }
+        }
+        energy{
+            british-thermal-unit{
+                dnam{"BTU"}
+            }
+            calorie-it{
+                dnam{"קלוריה-IT"}
+            }
+            foodcalorie{
+                dnam{"קלו׳"}
+                many{"{0} קלו׳"}
+                one{"{0} קלו׳"}
+                other{"{0} קלו׳"}
+                two{"{0} קלו׳"}
+            }
+            joule{
+                dnam{"ג׳אול"}
+            }
+            kilojoule{
+                dnam{"קילו ג׳אול"}
+            }
+            kilowatt-hour{
+                dnam{"קוט״ש"}
+                one{"{0} קוט״ש"}
+                other{"{0} קוט״ש"}
+                two{"{0} קוט״ש"}
+            }
+        }
+        force{
+            kilogram-force{
+                dnam{"ק״ג-כוח"}
+                one{"{0} ק\u0022ג כוח"}
+                other{"{0} ק\u0022ג כוח"}
+                two{"{0} ק\u0022ג כוח"}
+            }
+            kilowatt-hour-per-100-kilometer{
+                dnam{"קוט״ש/100 ק״מ"}
+                one{"{0} קוט״ש/100 ק״מ"}
+                other{"{0} קוט״ש/100 ק״מ"}
+                two{"{0} קוט״ש/100 ק״מ"}
+            }
+        }
+        graphics{
+            dot{
+                dnam{"נקודה קטנה"}
+                many{"{0} נק' קטנות"}
+                one{"נק' קטנה אחת ({0})"}
+                other{"{0} נק' קטנות"}
+                two{"{0} נק' קטנות"}
+            }
+            dot-per-centimeter{
+                dnam{"dpcm"}
+                many{"dpcm‏ {0}"}
+                one{"dpcm‏ {0}"}
+                other{"dpcm‏ {0}"}
+                two{"dpcm‏ {0}"}
+            }
+            dot-per-inch{
+                dnam{"dpi"}
+                many{"dpi ‏{0}"}
+                one{"ppi ‏{0}"}
+                other{"dpi ‏{0}"}
+                two{"dpi ‏{0}"}
+            }
+            megapixel{
+                one{"MP ‏{0}"}
+                other{"MP ‏{0}"}
+                two{"MP ‏{0}"}
+            }
+            pixel{
+                one{"px ‏{0}"}
+                other{"px ‏{0}"}
+                two{"px ‏{0}"}
+            }
+            pixel-per-centimeter{
+                many{"ppcm ‏{0}"}
+                one{"ppcm ‏{0}"}
+                other{"ppcm ‏{0}"}
+                two{"ppcm ‏{0}"}
+            }
+            pixel-per-inch{
+                many{"ppi ‏{0}"}
+                one{"ppi ‏{0}"}
+                other{"ppi ‏{0}"}
+                two{"ppi ‏{0}"}
+            }
+        }
+        length{
+            centimeter{
+                dnam{"ס״מ"}
+                one{"{0} ס״מ"}
+                other{"{0} ס״מ"}
+                per{"{0}/ס״מ"}
+                two{"{0} ס״מ"}
+            }
+            decimeter{
+                dnam{"ד״מ"}
+                one{"{0} ד״מ"}
+                other{"{0} ד״מ"}
+                two{"{0} ד״מ"}
+            }
+            foot{
+                dnam{"רגל"}
+                per{"{0} ‎/ft"}
+            }
+            inch{
+                dnam{"אינץ׳"}
+                per{"{0} ‎/in"}
+            }
+            kilometer{
+                dnam{"ק״מ"}
+                one{"{0} ק״מ"}
+                other{"{0} ק״מ"}
+                per{"{0}/ק״מ"}
+                two{"{0} ק״מ"}
+            }
+            light-year{
+                dnam{"שנות אור"}
+                one{"{0} שנת אור"}
+                other{"{0} שנות אור"}
+                two{"{0} שנות אור"}
+            }
+            meter{
+                dnam{"מטרים"}
+                one{"{0} מ׳"}
+                other{"{0} מ׳"}
+                per{"{0}/מ׳"}
+                two{"{0} מ׳"}
+            }
+            mile{
+                dnam{"מייל"}
+                one{"{0} מייל"}
+                other{"{0} מייל"}
+                two{"{0} מייל"}
+            }
+            millimeter{
+                dnam{"מ״מ"}
+                one{"{0} מ″מ"}
+                other{"{0} מ״מ"}
+                two{"{0} מ״מ"}
+            }
+            nautical-mile{
+                dnam{"מ״י"}
+                one{"מ״י אחד"}
+                other{"{0} מ״י"}
+                two{"שני מ״י"}
+            }
+            picometer{
+                dnam{"פ״מ"}
+                one{"{0} פ“מ"}
+                other{"{0} פ\u0022מ"}
+                two{"{0} פ״מ"}
+            }
+            point{
+                dnam{"נקודות"}
+                one{"{0} נק׳"}
+                other{"{0} נק'"}
+                two{"{0} נק׳"}
+            }
+            solar-radius{
+                one{"{0} R☉‎"}
+                other{"{0} R☉‎"}
+                two{"{0} R☉‎"}
+            }
+            yard{
+                dnam{"יארד"}
+                one{"{0} יארד"}
+                other{"{0} יארד"}
+                two{"{0} יארד"}
+            }
+        }
+        light{
+            lux{
+                dnam{"lux"}
+            }
+        }
+        mass{
+            carat{
+                dnam{"קרט"}
+            }
+            grain{
+                dnam{"גרעין"}
+                one{"{0} גרעין"}
+                other{"{0} גרעינים"}
+                two{"{0} גרעינים"}
+            }
+            gram{
+                dnam{"גרם"}
+                one{"{0} גר׳"}
+                other{"{0} גר׳"}
+                per{"{0}/גר׳"}
+                two{"{0} גר׳"}
+            }
+            kilogram{
+                dnam{"ק״ג"}
+                one{"{0} ק״ג"}
+                other{"{0} ק״ג"}
+                per{"{0}/ק״ג"}
+                two{"{0} ק״ג"}
+            }
+            microgram{
+                dnam{"מק״ג"}
+                one{"{0} מק״ג"}
+                other{"{0} מק״ג"}
+                two{"{0} מק״ג"}
+            }
+            milligram{
+                dnam{"מ״ג"}
+                one{"{0} מ״ג"}
+                other{"{0} מ״ג"}
+                two{"{0} מ״ג"}
+            }
+            pound{
+                dnam{"פאונד"}
+                one{"{0} lb"}
+                other{"{0} lbs"}
+                two{"{0} lbs"}
+            }
+            stone{
+                dnam{"סטון"}
+                one{"{0} סטון"}
+                other{"{0} סטון"}
+                two{"{0} סטון"}
+            }
+            ton{
+                dnam{"טונה"}
+                one{"{0} ט׳"}
+                other{"{0} ט׳"}
+                two{"{0} ט׳"}
+            }
+            tonne{
+                dnam{"טון מ׳"}
+                one{"{0} טון מ׳"}
+                other{"{0} טון מ׳"}
+                two{"{0} טון מ׳"}
+            }
+        }
+        power{
+            horsepower{
+                dnam{"כ״ס"}
+                one{"{0} כ״ס"}
+                other{"{0} כ״ס"}
+                two{"{0} כ״ס"}
+            }
+            watt{
+                dnam{"ואט"}
+            }
+        }
+        pressure{
+            bar{
+                dnam{"בר"}
+                one{"{0} בר"}
+                other{"{0} בר"}
+                two{"{0} בר"}
+            }
+            inch-ofhg{
+                dnam{"in Hg"}
+            }
+        }
+        speed{
+            kilometer-per-hour{
+                dnam{"קמ״ש"}
+                one{"{0} קמ״ש"}
+                other{"{0} קמ״ש"}
+                two{"{0} קמ״ש"}
+            }
+            light-speed{
+                dnam{"אור"}
+                one{"{0} אור"}
+                other{"{0} אור"}
+                two{"{0} אור"}
+            }
+            meter-per-second{
+                dnam{"מ׳/שנ׳"}
+                one{"{0} מ׳/שנ׳"}
+                other{"{0} מ׳/שנ׳"}
+                two{"{0} מ׳/שנ׳"}
+            }
+            mile-per-hour{
+                dnam{"mph"}
+                one{"{0} mph"}
+                other{"{0} mph"}
+                two{"{0} mph"}
+            }
+        }
+        volume{
+            cubic-centimeter{
+                dnam{"סמ״ק"}
+                one{"{0} סמ״ק"}
+                other{"{0} סמ״ק"}
+                per{"{0}/סמ״ק"}
+                two{"{0} סמ״ק"}
+            }
+            cubic-foot{
+                dnam{"feet³"}
+            }
+            cubic-kilometer{
+                dnam{"קמ״ק"}
+                one{"{0} קמ״ק"}
+                other{"{0} קמ״ק"}
+                two{"{0} קמ״ק"}
+            }
+            cubic-meter{
+                many{"{0} מ\u0022ק"}
+                one{"{0} מ\u0022ק"}
+                other{"{0} מ\u0022ק"}
+                two{"{0} מ\u0022ק"}
+            }
+            cup{
+                dnam{"כוסות"}
+                one{"{0} כ׳"}
+                other{"{0} כ׳"}
+                two{"{0} כ׳"}
+            }
+            deciliter{
+                dnam{"דצ״ל"}
+                one{"{0} דצ״ל"}
+                other{"{0} דצ״ל"}
+                two{"{0} דצ״ל"}
+            }
+            drop{
+                dnam{"טיפה"}
+                one{"טיפה"}
+                other{"{0} טיפות"}
+                two{"{0} טיפות"}
+            }
+            fluid-ounce{
+                dnam{"fl oz"}
+                one{"{0} fl oz"}
+                other{"{0} fl oz"}
+                two{"{0} fl oz"}
+            }
+            gallon{
+                dnam{"גלון"}
+                one{"{0} גל׳"}
+                other{"{0} גל׳"}
+                per{"{0}/גל׳"}
+                two{"{0} גל׳"}
+            }
+            gallon-imperial{
+                dnam{"גלון בריטי"}
+                one{"{0} גלון בריטי"}
+                other{"{0} גלון בריטי"}
+                per{"{0}/גלון בריטי"}
+                two{"{0} גלון בריטי"}
+            }
+            liter{
+                dnam{"ליטר"}
+                one{"{0} ל׳"}
+                other{"{0} ל׳"}
+                per{"{0}/ל׳"}
+                two{"{0} ל׳"}
+            }
+            milliliter{
+                dnam{"מ״ל"}
+                one{"{0} מ״ל"}
+                other{"{0} מ״ל"}
+                two{"{0} מ״ל"}
+            }
+            pinch{
+                dnam{"פינץ׳"}
+                one{"{0} פינץ'"}
+                other{"{0} פינץ'"}
+                two{"{0} פינץ'"}
+            }
+            pint{
+                dnam{"פינט"}
+            }
+            quart{
+                dnam{"qts"}
+            }
+            tablespoon{
+                dnam{"כפות"}
+                one{"{0} כפ׳"}
+                other{"{0} כפ׳"}
+                two{"{0} כפ׳"}
+            }
+            teaspoon{
+                dnam{"כפית"}
+                one{"{0} כפי׳"}
+                other{"{0} כפי׳"}
+                two{"{0} כפי׳"}
+            }
+        }
+    }
+}

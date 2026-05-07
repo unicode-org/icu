@@ -1,0 +1,1917 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+shn{
+    zoneStrings{
+        "Africa:Abidjan"{
+            ec{"ဢႃႇပီႇၸၢၼ်ႇ"}
+        }
+        "Africa:Accra"{
+            ec{"ဢၵ်ႉၵရႃႇ"}
+        }
+        "Africa:Addis_Ababa"{
+            ec{"ဢႅတ်ႉတိတ်ႉသ်ဢႃႇပႃႇပႃႇ"}
+        }
+        "Africa:Algiers"{
+            ec{"ဢႄးလ်ၸီႇယႃႇ"}
+        }
+        "Africa:Asmera"{
+            ec{"ဢတ်ႉသ်မႃႇရႃႇ"}
+        }
+        "Africa:Bamako"{
+            ec{"ပႃႇမႃႇၵူဝ်ႇ"}
+        }
+        "Africa:Bangui"{
+            ec{"ပင်ၵီႈ"}
+        }
+        "Africa:Banjul"{
+            ec{"ပၼ်ႇၸူႇလ်"}
+        }
+        "Africa:Bissau"{
+            ec{"ပိတ်ႈသၢဝ်ႇ"}
+        }
+        "Africa:Blantyre"{
+            ec{"ပလႅၼ်ႇတၢႆႇ"}
+        }
+        "Africa:Brazzaville"{
+            ec{"ပရႃၸဝီးလ်"}
+        }
+        "Africa:Bujumbura"{
+            ec{"ပူၸုမ်ပူရႃႇ"}
+        }
+        "Africa:Cairo"{
+            ec{"ၶၢႆႇရူဝ်ႇ"}
+        }
+        "Africa:Casablanca"{
+            ec{"ၶႃႇသႃႇပလၼ်ႇၵႃႇ"}
+        }
+        "Africa:Ceuta"{
+            ec{"သူးတ"}
+        }
+        "Africa:Conakry"{
+            ec{"ၶူဝ်ႇၼႃႇၵရီႇ"}
+        }
+        "Africa:Dakar"{
+            ec{"တၢၵ်ႇၵႃႇ"}
+        }
+        "Africa:Dar_es_Salaam"{
+            ec{"တႃႇဢႅတ်ႉသႃႇလမ်ႇ"}
+        }
+        "Africa:Djibouti"{
+            ec{"ၵျီႇပူးတီႇ"}
+        }
+        "Africa:Douala"{
+            ec{"တူဝ်ႇဢႃႇလႃႇ"}
+        }
+        "Africa:El_Aaiun"{
+            ec{"ဢႄးလ်ဢၢႆႈယုၼ်း"}
+        }
+        "Africa:Freetown"{
+            ec{"ၾရီးတၢဝ်း"}
+        }
+        "Africa:Gaborone"{
+            ec{"ၵႃႇပူဝ်ႇရူဝ်ႇၼႄႇ"}
+        }
+        "Africa:Harare"{
+            ec{"ႁႃႇရႃႇရႄႇ"}
+        }
+        "Africa:Johannesburg"{
+            ec{"ၵျူဝ်ႇႁၼ်ႇၼႅတ်ႉသ်ပၢၵ်ႉ"}
+        }
+        "Africa:Juba"{
+            ec{"ယူးပႃး"}
+        }
+        "Africa:Kampala"{
+            ec{"ၵမ်ႇပႃႇလႃႇ"}
+        }
+        "Africa:Khartoum"{
+            ec{"ၶႃးတုမ်း"}
+        }
+        "Africa:Kigali"{
+            ec{"ၵိၵႃႇလီႇ"}
+        }
+        "Africa:Kinshasa"{
+            ec{"ၶိၼ်သျႃးသႃႇ"}
+        }
+        "Africa:Lagos"{
+            ec{"လႃႇၵွတ်ႉသ်"}
+        }
+        "Africa:Libreville"{
+            ec{"လီပရႄႇဝီးလ်"}
+        }
+        "Africa:Lome"{
+            ec{"​လူဝ်ႇမႄႇ"}
+        }
+        "Africa:Luanda"{
+            ec{"လူႇဢၼ်ႇတႃႇ"}
+        }
+        "Africa:Lubumbashi"{
+            ec{"လူႇပုမ်ႇပႃႇသျီႇ"}
+        }
+        "Africa:Lusaka"{
+            ec{"လူႇသႃႇၵႃႇ"}
+        }
+        "Africa:Malabo"{
+            ec{"မႃႇလႃႇပူဝ်ႇ"}
+        }
+        "Africa:Maputo"{
+            ec{"မႃႇပူႇတူဝ်ႇ"}
+        }
+        "Africa:Maseru"{
+            ec{"မႃႇသႄႇရူႇ"}
+        }
+        "Africa:Mbabane"{
+            ec{"ပႃပႃၼႄႇ"}
+        }
+        "Africa:Mogadishu"{
+            ec{"မူဝ်ၵႃတီးသျူး"}
+        }
+        "Africa:Monrovia"{
+            ec{"မွၼ်ႇရူဝ်ႇဝီႇယႃႇ"}
+        }
+        "Africa:Nairobi"{
+            ec{"ၼၢႆႇရူဝ်ႇပီႇ"}
+        }
+        "Africa:Ndjamena"{
+            ec{"ဢႅၼ်ႇၸႃႇမႅၼ်ႇၼႃႇ"}
+        }
+        "Africa:Niamey"{
+            ec{"ၼီးယႃးမေႇ"}
+        }
+        "Africa:Nouakchott"{
+            ec{"ၼူဝ်ႇဢႅၵ်ႉၸွတ်ႉ"}
+        }
+        "Africa:Ouagadougou"{
+            ec{"ဢူဝ်ႇၵႃႇတူဝ်ႇၵူဝ်ႇ"}
+        }
+        "Africa:Porto-Novo"{
+            ec{"ပူဝ်ႇတူဝ်ႇ-ၼူဝ်ႇဝူဝ်ႇ"}
+        }
+        "Africa:Sao_Tome"{
+            ec{"သူၼ်ႇတူဝ်ႇမေး"}
+        }
+        "Africa:Tripoli"{
+            ec{"ထရီႇပူဝ်ႇလီႇ"}
+        }
+        "Africa:Tunis"{
+            ec{"တူးၼိတ်ႉသ်"}
+        }
+        "Africa:Windhoek"{
+            ec{"ဝိၼ်းႁွၵ်ႉ"}
+        }
+        "America:Adak"{
+            ec{"ဢတၵ်ႉ"}
+        }
+        "America:Anchorage"{
+            ec{"ဢႅၼ်ႇၶျူဝ်ႇရဵတ်ႉ"}
+        }
+        "America:Anguilla"{
+            ec{"ဢႅၼ်ႇၵုၺ်ႇလႃႇ"}
+        }
+        "America:Antigua"{
+            ec{"ဢႅၼ်ႇထီႇၵႂႃႇ"}
+        }
+        "America:Araguaina"{
+            ec{"ဢႃႇရႃႇၵႂႃႇဢီႇၼႃႇ"}
+        }
+        "America:Argentina:La_Rioja"{
+            ec{"လႃႇရီႇယူဝ်ႇႁႃႇ"}
+        }
+        "America:Argentina:Rio_Gallegos"{
+            ec{"ရီႇယူဝ်ၵႃလႄႇၵူဝ်ႇ"}
+        }
+        "America:Argentina:Salta"{
+            ec{"သႃႇလ်တႃႇ"}
+        }
+        "America:Argentina:San_Juan"{
+            ec{"သႅၼ်းႁွၼ်ႇ"}
+        }
+        "America:Argentina:San_Luis"{
+            ec{"သႅၼ်းလူးဝိတ်ႉ"}
+        }
+        "America:Argentina:Tucuman"{
+            ec{"တူႇၵူဝ်ႇမၢၼ်ႈ"}
+        }
+        "America:Argentina:Ushuaia"{
+            ec{"ဢူသဝၢႆးဢႃႇ"}
+        }
+        "America:Aruba"{
+            ec{"ဢႃႇရူးပႃး"}
+        }
+        "America:Asuncion"{
+            ec{"ဢႃးသုၼ်းသီႇဢွၼ်ႇ"}
+        }
+        "America:Bahia"{
+            ec{"ပႁီးယႃႇ"}
+        }
+        "America:Bahia_Banderas"{
+            ec{"ပႃႇႁီးယႃး တႄႇ ပၼ်ႇတႄႇရႅတ်ႉ"}
+        }
+        "America:Barbados"{
+            ec{"ပႃးပေႇတူတ်ႈ"}
+        }
+        "America:Belem"{
+            ec{"ပႄႇလႅမ်း"}
+        }
+        "America:Belize"{
+            ec{"ပႄႇလိတ်ႈ"}
+        }
+        "America:Blanc-Sablon"{
+            ec{"ပလၼ်ႇ-သႅပ်ႉပလုၼ်ႇ"}
+        }
+        "America:Boa_Vista"{
+            ec{"ပူဝ်ႇဢႃႇဝီႇသတႃႇ"}
+        }
+        "America:Bogota"{
+            ec{"ပူဝ်ႇၵူဝ်ႇတႃႇ"}
+        }
+        "America:Boise"{
+            ec{"ပွႆးသီႇ"}
+        }
+        "America:Buenos_Aires"{
+            ec{"ပူၺ်းၼူဝ်ႇဢၢႆးရႅတ်ႉ"}
+        }
+        "America:Cambridge_Bay"{
+            ec{"ၶႅမ်းပရိတ်ႉပေး"}
+        }
+        "America:Campo_Grande"{
+            ec{"ၶႅမ်ႇပူဝ်ႇၵရႅၼ်ႇတီႇ"}
+        }
+        "America:Cancun"{
+            ec{"ၵႅၼ်ႇၵူၼ်ႇ"}
+        }
+        "America:Caracas"{
+            ec{"ၶႃႇရႃႇၵႅတ်ႉသ်"}
+        }
+        "America:Catamarca"{
+            ec{"ၶႃႇတႃႇမႃႇၵႃႇ"}
+        }
+        "America:Cayenne"{
+            ec{"ၶႃယႅၼ်ႈ"}
+        }
+        "America:Cayman"{
+            ec{"ၶေးမႅၼ်း"}
+        }
+        "America:Chicago"{
+            ec{"ၶျီႇၵႃႇၵူဝ်ႇ"}
+        }
+        "America:Chihuahua"{
+            ec{"ၶျီႇဝႃႇဝႃႇ"}
+        }
+        "America:Ciudad_Juarez"{
+            ec{"သီႇယူဝ်ႇတတ်ႉ ၸူဝ်ႇရႅတ်ႉ"}
+        }
+        "America:Coral_Harbour"{
+            ec{"ဢႃႇတီႇၵူဝ်ႇၵၼ်ႇ"}
+        }
+        "America:Cordoba"{
+            ec{"ၶူဝ်ႇတူဝ်ႇပႃႇ"}
+        }
+        "America:Costa_Rica"{
+            ec{"ၵေႃးသတႃႇရိၵႃႇ"}
+        }
+        "America:Coyhaique"{
+            ec{"ၵူဝ်ႇႁႆၵေး"}
+        }
+        "America:Creston"{
+            ec{"ၶရႅတ်ႉသတၼ်ႇ"}
+        }
+        "America:Cuiaba"{
+            ec{"ၶူယႃးပႃႇ"}
+        }
+        "America:Curacao"{
+            ec{"ၵူးရႃႇသၢဝ်ႇ"}
+        }
+        "America:Danmarkshavn"{
+            ec{"တႅၼ်းမၢၵ်ႈသျၼ်ႇ"}
+        }
+        "America:Dawson"{
+            ec{"တေႃးသၼ်ႇ"}
+        }
+        "America:Dawson_Creek"{
+            ec{"တေႃးသၼ်ႇၶရိၵ်ႉ"}
+        }
+        "America:Denver"{
+            ec{"တႅၼ်ႇဝႃႇ"}
+        }
+        "America:Detroit"{
+            ec{"တီးတရွႆႉ"}
+        }
+        "America:Dominica"{
+            ec{"တူဝ်ႇမီႇၼိၵ"}
+        }
+        "America:Edmonton"{
+            ec{"ဢႅတ်ႉမွၼ်ႇတွၼ်ႇ"}
+        }
+        "America:Eirunepe"{
+            ec{"ဢီရူၼႄပႄႇ"}
+        }
+        "America:El_Salvador"{
+            ec{"ဢႄႇသႃႇဝႃႇတေႃႇ"}
+        }
+        "America:Fort_Nelson"{
+            ec{"ၾူတ်ႉၼႄႇလ်သၼ်ႇ"}
+        }
+        "America:Fortaleza"{
+            ec{"ၾူတ်ႉတလႄၸႃႇ"}
+        }
+        "America:Glace_Bay"{
+            ec{"ၵလဵတ်ႉသ်ပေး"}
+        }
+        "America:Godthab"{
+            ec{"ၼုၵ်ႉ"}
+        }
+        "America:Goose_Bay"{
+            ec{"ၵုတ်ႉသ်ပေး"}
+        }
+        "America:Grand_Turk"{
+            ec{"ၵရႅၼ်းထိူၵ်ႉ"}
+        }
+        "America:Grenada"{
+            ec{"ၵရႄႇၼႃႇတႃႇ"}
+        }
+        "America:Guadeloupe"{
+            ec{"ၵႂႃးတီႇလုပ်ႈ"}
+        }
+        "America:Guatemala"{
+            ec{"ၵႂႃႇတမႃႇလႃႇ"}
+        }
+        "America:Guayaquil"{
+            ec{"ၵူဝ်ႇယႃႇၶိဝ်း"}
+        }
+        "America:Guyana"{
+            ec{"ၵၢႆႇယႃးၼႃႇ"}
+        }
+        "America:Halifax"{
+            ec{"ႁႄႇလီႇၾႅၵ်ႉ"}
+        }
+        "America:Havana"{
+            ec{"ႁႃႇဝႃးၼႃး"}
+        }
+        "America:Hermosillo"{
+            ec{"ဢႄ​ရမူဝ်သီးလူဝ်ႇ"}
+        }
+        "America:Indiana:Knox"{
+            ec{"ၼွၵ်ႉသ်၊ ဢိၼ်းတီးယႃးၼႃး"}
+        }
+        "America:Indiana:Marengo"{
+            ec{"မရႅၼ်းၵူဝ်ႇ၊ ဢိၼ်းတီးယႃးၼႃး"}
+        }
+        "America:Indiana:Petersburg"{
+            ec{"ပီႇတႃႇသ်ပၢၵ်ႉ၊ ဢိၼ်းတီးယႃးၼႃး"}
+        }
+        "America:Indiana:Tell_City"{
+            ec{"တႄးလ်သီးတီး၊ ဢိၼ်းတီးယႃးၼႃး"}
+        }
+        "America:Indiana:Vevay"{
+            ec{"ဝီးဝီႇ၊ ဢိၼ်းတီးယႃးၼႃး"}
+        }
+        "America:Indiana:Vincennes"{
+            ec{"ဝိၼ်းသႅၼ်ႉ၊ ဢိၼ်းတီးယႃးၼႃး"}
+        }
+        "America:Indiana:Winamac"{
+            ec{"ဝီႇၼႃႇမႅၵ်ႉ၊ ဢိၼ်းတီးယႃးၼႃး"}
+        }
+        "America:Indianapolis"{
+            ec{"ဢိၼ်းတီးယႃးၼႃးပူဝ်ႇလိတ်ႉသ်"}
+        }
+        "America:Inuvik"{
+            ec{"ဢီႇၼူးဝိၵ်ႉ"}
+        }
+        "America:Iqaluit"{
+            ec{"ဢီႇၶႃးလူးဝိတ်ႉ"}
+        }
+        "America:Jamaica"{
+            ec{"ၵျႃႇမေႇၵႃႇ"}
+        }
+        "America:Jujuy"{
+            ec{"ႁူႁုၺ်း"}
+        }
+        "America:Juneau"{
+            ec{"ၸူႇၼူဝ်ႇ"}
+        }
+        "America:Kentucky:Monticello"{
+            ec{"မွၼ်ႇတီႇသႄႇလူဝ်ႇ၊ ၶႅၼ်ႇတၢၵ်ႇၵီႇ"}
+        }
+        "America:Kralendijk"{
+            ec{"ၶရႃးလႅၼ်းတႅၵ်ႉ"}
+        }
+        "America:La_Paz"{
+            ec{"လႃႉပႃႇ"}
+        }
+        "America:Lima"{
+            ec{"လိမႃႇ"}
+        }
+        "America:Los_Angeles"{
+            ec{"လွတ်ႉသ်ဢႅၼ်းၵျႄးလႄႉသ်"}
+        }
+        "America:Louisville"{
+            ec{"လူးဝိတ်ႉဝီးလ်"}
+        }
+        "America:Lower_Princes"{
+            ec{"လူဝ်းဝႃးပရိၼ်ႉသ်ၶႂႃႇတႃး"}
+        }
+        "America:Maceio"{
+            ec{"မႃးသေးဢူဝ်ႇ"}
+        }
+        "America:Managua"{
+            ec{"မၼႃးၵႂႃႇ"}
+        }
+        "America:Manaus"{
+            ec{"မၼၢဝ်းသ်"}
+        }
+        "America:Marigot"{
+            ec{"မႃႇရိၵူတ်ႉ"}
+        }
+        "America:Martinique"{
+            ec{"မႃးတိၼ်ႇၼိၵ်ႈ"}
+        }
+        "America:Matamoros"{
+            ec{"မႃႇတႃႇမေႃးရူဝ်ႉသ်"}
+        }
+        "America:Mazatlan"{
+            ec{"မႃႇၸတ်ႇလၼ်း"}
+        }
+        "America:Mendoza"{
+            ec{"မႅၼ်ႇတူဝ်ႇၸႃႇ"}
+        }
+        "America:Menominee"{
+            ec{"မႄၼွမ်းမၼီႇ"}
+        }
+        "America:Merida"{
+            ec{"မႄႇရီႇတႃႇ"}
+        }
+        "America:Metlakatla"{
+            ec{"မႅတ်ႉလၶႅတ်ႉလႃႇ"}
+        }
+        "America:Mexico_City"{
+            ec{"ဝဵင်းလူင်မႅၵ်ႇသီႇၵူဝ်ႇ"}
+        }
+        "America:Miquelon"{
+            ec{"သဵင်ႉပီႇယႃႇ"}
+        }
+        "America:Moncton"{
+            ec{"မွၼ်ႉတွၼ်ႇ"}
+        }
+        "America:Monterrey"{
+            ec{"မွၼ်ႇတႄႇရီႇ"}
+        }
+        "America:Montevideo"{
+            ec{"မွၼ်ႇတီႇဝီးတႄးဢူဝ်ႇ"}
+        }
+        "America:Montserrat"{
+            ec{"မွၼ်ႇသႄးရႅတ်ႉ"}
+        }
+        "America:Nassau"{
+            ec{"ၼၢတ်ႉသ်သေႃ"}
+        }
+        "America:New_York"{
+            ec{"ၼိဝ်းယွၵ်ႉ"}
+        }
+        "America:Nome"{
+            ec{"ၼူမ်း"}
+        }
+        "America:Noronha"{
+            ec{"ၾႃႇၼႅၼ်ႇတူဝ်ႇ တႄႇၼူဝ်ႇရွၼ်ႇႁႃႇ"}
+        }
+        "America:North_Dakota:Beulah"{
+            ec{"ပႄႇယူဝ်ႇလႃႇ၊ တႃႇၵူဝ်ႇတႃႇႁွင်ႇ"}
+        }
+        "America:North_Dakota:Center"{
+            ec{"ပွတ်းၵၢင်၊ တႃႇၵူဝ်ႇတႃႇႁွင်ႇ"}
+        }
+        "America:North_Dakota:New_Salem"{
+            ec{"ၼိဝ်းသႄႇလမ်ႇ၊ တႃႇၵူဝ်ႇတႃႇႁွင်ႇ"}
+        }
+        "America:Ojinaga"{
+            ec{"ဢူဝ်ႇၸီႇၼႃႇၵႃႇ"}
+        }
+        "America:Panama"{
+            ec{"ပႃႈၼႃးမႃး"}
+        }
+        "America:Paramaribo"{
+            ec{"ပႃႇရႃႇမႃႇရီႇပူဝ်ႇ"}
+        }
+        "America:Phoenix"{
+            ec{"ၽီးၼိၵ်ႉ"}
+        }
+        "America:Port-au-Prince"{
+            ec{"ၽူတ်ႉဢူဝ်ပရိၼ်ႉၸ်"}
+        }
+        "America:Port_of_Spain"{
+            ec{"တႃႈႁိူဝ်းသပဵၼ်ႇ"}
+        }
+        "America:Porto_Velho"{
+            ec{"ပွတ်ႈတူဝ်းဝႄႇႁူဝ်ႇ"}
+        }
+        "America:Puerto_Rico"{
+            ec{"ပေႃႇတူဝ်ႇရီးၵူဝ်း"}
+        }
+        "America:Punta_Arenas"{
+            ec{"ပုၼ်းတႃႉဢရႅၼ်ႇၼတ်ႉသ်"}
+        }
+        "America:Rankin_Inlet"{
+            ec{"ရၼ်ၵိၼ်းဢိၼ်းလႅတ်ႉ"}
+        }
+        "America:Recife"{
+            ec{"ရႅတ်ႉသီႇၾီႇ"}
+        }
+        "America:Regina"{
+            ec{"ရီႇၵျိၼ်ႇၼႃႇ"}
+        }
+        "America:Resolute"{
+            ec{"ရႅတ်ႉသူဝ်ႇလုတ်ႉ"}
+        }
+        "America:Rio_Branco"{
+            ec{"ရီႇယူဝ်ႇပရၼ်ႇၵူဝ်ႇ"}
+        }
+        "America:Santarem"{
+            ec{"သၼ်ႇတႃႇရႅမ်ႇ"}
+        }
+        "America:Santiago"{
+            ec{"သႅၼ်ႇတီႇယႃႇၵူဝ်ႇ"}
+        }
+        "America:Santo_Domingo"{
+            ec{"သႅၼ်ႇတူဝ်ႇ တူဝ်ႇမိၼ်ႇၵူဝ်ႇ"}
+        }
+        "America:Sao_Paulo"{
+            ec{"သၢဝ်ပၢဝ်းလူဝ်ႇ"}
+        }
+        "America:Scoresbysund"{
+            ec{"ဢိတ်ႉတူဝ်ၵူဝ်တူဝ်မိတ်ႉ"}
+        }
+        "America:Sitka"{
+            ec{"သိတ်ႉၵႃႇ"}
+        }
+        "America:St_Barthelemy"{
+            ec{"သဵင်ႉပၢတ်ႉထႄးလႄးမီႇ"}
+        }
+        "America:St_Johns"{
+            ec{"သဵင်ႉၵျွၼ်ႇ"}
+        }
+        "America:St_Kitts"{
+            ec{"သဵင်ႉၶိတ်ႈ"}
+        }
+        "America:St_Lucia"{
+            ec{"သဵင်ႉလူႉသျႃႇ"}
+        }
+        "America:St_Thomas"{
+            ec{"သဵင်ႉထေႃးမတ်ႉသ်"}
+        }
+        "America:St_Vincent"{
+            ec{"သဵင်ႉဝိၼ်ႇသႅၼ်ႇ"}
+        }
+        "America:Swift_Current"{
+            ec{"သဝိတ်ႉၶႃးရႅၼ်ႉ"}
+        }
+        "America:Tegucigalpa"{
+            ec{"တေႇၵူႇသီႇၵႃႇပႃႇ"}
+        }
+        "America:Thule"{
+            ec{"ထူႇလႄႇ"}
+        }
+        "America:Tijuana"{
+            ec{"တီႇႁူဝ်ႇၼႃႇ"}
+        }
+        "America:Toronto"{
+            ec{"တူဝ်ႇရွၼ်ႇတူဝ်ႇ"}
+        }
+        "America:Tortola"{
+            ec{"တူဝ်ႇတူဝ်ႇလႃႇ"}
+        }
+        "America:Vancouver"{
+            ec{"ဝႅၼ်ႇၵူဝ်ႇဝႃႇ"}
+        }
+        "America:Whitehorse"{
+            ec{"ဝၢႆႉႁွတ်ႉ"}
+        }
+        "America:Winnipeg"{
+            ec{"ဝိၼ်းၼီႇပႅၵ်ႉ"}
+        }
+        "America:Yakutat"{
+            ec{"ယႃႇၵုတတ်ႉ"}
+        }
+        "Antarctica:Casey"{
+            ec{"တႃႈ ၶေႇသီႇ"}
+        }
+        "Antarctica:Davis"{
+            ec{"တေးဝိတ်ႉ"}
+        }
+        "Antarctica:DumontDUrville"{
+            ec{"တႃႈ တူႇမွၼ်ႉ တဝီႇလ်"}
+        }
+        "Antarctica:Macquarie"{
+            ec{"မႅၵ်ႉၶႂႃရီႇ"}
+        }
+        "Antarctica:Mawson"{
+            ec{"တႃႈ မေႃသၼ်ႇ"}
+        }
+        "Antarctica:McMurdo"{
+            ec{"တႃႈ မႅၵ်ႉမူႇတူဝ်ႇ"}
+        }
+        "Antarctica:Palmer"{
+            ec{"ပၢမ်းမႃႇ"}
+        }
+        "Antarctica:Rothera"{
+            ec{"တႃႈ ရူဝ်ႇထႄႇရႃႇ"}
+        }
+        "Antarctica:Syowa"{
+            ec{"တႃႈ သျူဝ်းဝႃႇ"}
+        }
+        "Antarctica:Troll"{
+            ec{"တႃႈ ထရူဝ်း"}
+        }
+        "Antarctica:Vostok"{
+            ec{"တႃႈ ဝေႃႉသ်တွၵ်ႉ"}
+        }
+        "Arctic:Longyearbyen"{
+            ec{"လွင်းယီးယႃးပဵၼ်း"}
+        }
+        "Asia:Aden"{
+            ec{"ဢေႇတႅၼ်ႇ"}
+        }
+        "Asia:Almaty"{
+            ec{"ဢႄးလ်မႃႇတီႇ"}
+        }
+        "Asia:Amman"{
+            ec{"ဢမ်မၢၼ်ႈ"}
+        }
+        "Asia:Anadyr"{
+            ec{"ဢႃႇၼႃႇတီႇယႃႇ"}
+        }
+        "Asia:Aqtau"{
+            ec{"ဢႅၵ်ႉတၢဝ်ႉ"}
+        }
+        "Asia:Aqtobe"{
+            ec{"ဢႅၵ်ႉတူဝ်ႇပီႇ"}
+        }
+        "Asia:Ashgabat"{
+            ec{"ဢႅတ်ႉသ်ၵႃႇပတ်ႉ"}
+        }
+        "Asia:Atyrau"{
+            ec{"ဢႃႇတီးရၢဝ်း"}
+        }
+        "Asia:Baghdad"{
+            ec{"ပႅၵ်ႉတႅၵ်ႉ"}
+        }
+        "Asia:Bahrain"{
+            ec{"ပႃႇႁဵၼ်း"}
+        }
+        "Asia:Baku"{
+            ec{"ပႃၵူႇ"}
+        }
+        "Asia:Bangkok"{
+            ec{"ၵုင်းထဵပ်ႈ"}
+        }
+        "Asia:Barnaul"{
+            ec{"ပႃႇၼေႃး"}
+        }
+        "Asia:Beirut"{
+            ec{"ပႄႇရုတ်ႉ"}
+        }
+        "Asia:Bishkek"{
+            ec{"ပိတ်ႉသၵႅၵ်ႉ"}
+        }
+        "Asia:Brunei"{
+            ec{"ပရူႇၼၢႆး"}
+        }
+        "Asia:Calcutta"{
+            ec{"ၵူဝ်ႇၵႃႇတႃႇ"}
+        }
+        "Asia:Chita"{
+            ec{"ၶျိတ်ႉတႃႇ"}
+        }
+        "Asia:Colombo"{
+            ec{"ၵူဝ်ႇလမ်ႇပူဝ်ႇ"}
+        }
+        "Asia:Damascus"{
+            ec{"တမ်ႇမတ်ႉသၵတ်ႉ"}
+        }
+        "Asia:Dhaka"{
+            ec{"ၻႃႇၵႃႇ"}
+        }
+        "Asia:Dili"{
+            ec{"တီႇလီႇ"}
+        }
+        "Asia:Dubai"{
+            ec{"တူႇပၢႆး"}
+        }
+        "Asia:Dushanbe"{
+            ec{"တူႇသျႅၼ်ႇပႄႇ"}
+        }
+        "Asia:Famagusta"{
+            ec{"ၾႃႇမႃႇၵူးသတႃႇ"}
+        }
+        "Asia:Gaza"{
+            ec{"ၵႃႇၸႃႇ"}
+        }
+        "Asia:Hebron"{
+            ec{"ႁႄႇပရွၼ်ႇ"}
+        }
+        "Asia:Hong_Kong"{
+            ec{"ႁွင်းၵွင်း"}
+        }
+        "Asia:Hovd"{
+            ec{"ၶူဝ်ဝေတေး"}
+        }
+        "Asia:Irkutsk"{
+            ec{"ဢိရၶုတ်ႉသ်ၶ်"}
+        }
+        "Asia:Jakarta"{
+            ec{"ၵျႃႇၵႃႇတႃႇ"}
+        }
+        "Asia:Jayapura"{
+            ec{"ၵျႃႉယပူႇရ"}
+        }
+        "Asia:Jerusalem"{
+            ec{"ယေႇရုသလႅမ်ႇ"}
+        }
+        "Asia:Kabul"{
+            ec{"ၵႃႇပူး"}
+        }
+        "Asia:Kamchatka"{
+            ec{"ၵမ်းၶျၢတ်ႉၵႃႇ"}
+        }
+        "Asia:Karachi"{
+            ec{"ၵႃႇရႃႇၶျီႇ"}
+        }
+        "Asia:Katmandu"{
+            ec{"ၵၢတ်ႈမၢၼ်ႈတူႇ"}
+        }
+        "Asia:Khandyga"{
+            ec{"ၶၼ်ႇတီႇၵႃႇ"}
+        }
+        "Asia:Krasnoyarsk"{
+            ec{"ၶရတ်ႉၼူဝ်ႇယႃႇသ်ၶ်"}
+        }
+        "Asia:Kuala_Lumpur"{
+            ec{"ၵႂႃႇလႃႇလုမ်းပူႈ"}
+        }
+        "Asia:Kuching"{
+            ec{"ၵူႇၶျိင်း"}
+        }
+        "Asia:Kuwait"{
+            ec{"ၶူႇဝဵတ်ႈ"}
+        }
+        "Asia:Macau"{
+            ec{"မႃႇၵၢဝ်ႈ"}
+        }
+        "Asia:Magadan"{
+            ec{"မႃႇၵႃႇတၢၼ်ႇ"}
+        }
+        "Asia:Makassar"{
+            ec{"မႃႇၵႃႇသႃႇ"}
+        }
+        "Asia:Manila"{
+            ec{"မၼီႇလႃႇ"}
+        }
+        "Asia:Muscat"{
+            ec{"မတ်ႉသၵႅတ်ႉ"}
+        }
+        "Asia:Nicosia"{
+            ec{"ၼိၵူဝ်ႇသျႃး"}
+        }
+        "Asia:Novokuznetsk"{
+            ec{"ၼူဝ်ဝူဝ်ၵုတ်ႉၸ်ၼႅတ်ႉသ်ၶ်"}
+        }
+        "Asia:Novosibirsk"{
+            ec{"ၼူဝ်ႇဝူဝ်ႇသီႇပၢတ်ႉသ်ၶ်"}
+        }
+        "Asia:Omsk"{
+            ec{"ဢူမ်းသ်ၶ်"}
+        }
+        "Asia:Oral"{
+            ec{"ဢေႃႇရႄႇလ်"}
+        }
+        "Asia:Phnom_Penh"{
+            ec{"ၽၼူမ်းပဵၼ်"}
+        }
+        "Asia:Pontianak"{
+            ec{"ပွၼ်းတီႇယႃႇၼၵ်ႉ"}
+        }
+        "Asia:Pyongyang"{
+            ec{"ၽျွင်းယၢင်း"}
+        }
+        "Asia:Qatar"{
+            ec{"ၶႃႇတႃႇ"}
+        }
+        "Asia:Qostanay"{
+            ec{"ၶူတ်ႉသတၼ်ႇၼေႇ"}
+        }
+        "Asia:Qyzylorda"{
+            ec{"ၶုၺ်ႇၸီးလူဝ်ႇတႃႇ"}
+        }
+        "Asia:Rangoon"{
+            ec{"တႃႈၵုင်ႈ"}
+        }
+        "Asia:Riyadh"{
+            ec{"ရီႇယၢတ်ႉ"}
+        }
+        "Asia:Saigon"{
+            ec{"ႁူဝ်ၶျီမိၼ်း"}
+        }
+        "Asia:Sakhalin"{
+            ec{"သႃႇၶႃႇလိၼ်ႇ"}
+        }
+        "Asia:Samarkand"{
+            ec{"သႃႇမႃႇၶႅၼ်ႇ"}
+        }
+        "Asia:Seoul"{
+            ec{"သူဝ်းလ်"}
+        }
+        "Asia:Shanghai"{
+            ec{"သျၢင်ႉႁၢႆး"}
+        }
+        "Asia:Singapore"{
+            ec{"သိင်ႇၵႃႇပူဝ်ႇ"}
+        }
+        "Asia:Srednekolymsk"{
+            ec{"သရႅတ်ႉၼႄၵူဝ်ႇလိမ်ႇသ်ၶ်"}
+        }
+        "Asia:Taipei"{
+            ec{"ထၢႆးပႄႉ"}
+        }
+        "Asia:Tashkent"{
+            ec{"တၢတ်ႉသၵႅၼ်ႇ"}
+        }
+        "Asia:Tbilisi"{
+            ec{"တပီႇလီႇသီႇ"}
+        }
+        "Asia:Tehran"{
+            ec{"တႁႃႇရၢၼ်ႇ"}
+        }
+        "Asia:Thimphu"{
+            ec{"ထိမ်းၽူး"}
+        }
+        "Asia:Tokyo"{
+            ec{"တူဝ်ႇၵျူဝ်ႇ"}
+        }
+        "Asia:Tomsk"{
+            ec{"တွမ်းသ်ၶ်"}
+        }
+        "Asia:Ulaanbaatar"{
+            ec{"ဢူလၼ်ပႃတႃ"}
+        }
+        "Asia:Urumqi"{
+            ec{"ဢူႇရုမ်ၶီႇ"}
+        }
+        "Asia:Ust-Nera"{
+            ec{"ယူးဢိတ်ႉသ်ၼႄႇရႃႇ"}
+        }
+        "Asia:Vientiane"{
+            ec{"ဝဵင်းၸၼ်"}
+        }
+        "Asia:Vladivostok"{
+            ec{"ဝလႃႇတီႇဝူဝ်ႇသတွၵ်ႉ"}
+        }
+        "Asia:Yakutsk"{
+            ec{"ယၵုတ်ႉသ်ၶ်"}
+        }
+        "Asia:Yekaterinburg"{
+            ec{"ယေႇၵႃႇတႄႇရိၼ်ႇပၢၵ်ႉ"}
+        }
+        "Asia:Yerevan"{
+            ec{"ယႄႇရႄႇဝၼ်ႇ"}
+        }
+        "Atlantic:Azores"{
+            ec{"ဢႃႇၸူဝ်ႇရႅတ်ႉ"}
+        }
+        "Atlantic:Bermuda"{
+            ec{"ပႃႇမိဝ်းတႃး"}
+        }
+        "Atlantic:Canary"{
+            ec{"ၶႅၼ်ႇၼႃႇရီႇ"}
+        }
+        "Atlantic:Cape_Verde"{
+            ec{"ၶဵပ်ႉဝႄႇတီႇ"}
+        }
+        "Atlantic:Faeroe"{
+            ec{"ၾႃႇရူဝ်ႇ"}
+        }
+        "Atlantic:Madeira"{
+            ec{"မႃႇတီႇရႃႇ"}
+        }
+        "Atlantic:Reykjavik"{
+            ec{"ရီႇၵျႃႇဝိၵ်ႉ"}
+        }
+        "Atlantic:South_Georgia"{
+            ec{"ၵျေႃႇၵျႃႇ ပွတ်းၸၢၼ်း"}
+        }
+        "Atlantic:St_Helena"{
+            ec{"သဵင်ႉႁႄးလႄးၼႃႇ"}
+        }
+        "Atlantic:Stanley"{
+            ec{"သတႅၼ်းလီႇ"}
+        }
+        "Australia:Adelaide"{
+            ec{"ဢတႄလဵတ်ႉ"}
+        }
+        "Australia:Brisbane"{
+            ec{"ပရိတ်ႉသပႅၼ်ႇ"}
+        }
+        "Australia:Broken_Hill"{
+            ec{"ပရူၵ်ႉၵႅၼ်းႁေးလ်"}
+        }
+        "Australia:Darwin"{
+            ec{"တႃႇဝိၼ်ႇ"}
+        }
+        "Australia:Eucla"{
+            ec{"ဢိဝ်းၵလႃး"}
+        }
+        "Australia:Hobart"{
+            ec{"ႁူဝ်ပၢတ်ႉ"}
+        }
+        "Australia:Lindeman"{
+            ec{"လိၼ်ႇတီႇမႅၼ်ႇ"}
+        }
+        "Australia:Lord_Howe"{
+            ec{"ၵုၼ်လွတ်ႉႁၢဝ်း"}
+        }
+        "Australia:Melbourne"{
+            ec{"မႄးလ်ပူၼ်း"}
+        }
+        "Australia:Perth"{
+            ec{"ၽိူတ်ႉ"}
+        }
+        "Australia:Sydney"{
+            ec{"သိတ်ႇတၼီႇ"}
+        }
+        "Etc:UTC"{
+            ls{"ၶၢဝ်းယၢမ်းလုမ်ႈၾႃႉ"}
+        }
+        "Etc:Unknown"{
+            ec{"ဢမ်ႇႁူႉ ဢွင်ႈတီႈ"}
+        }
+        "Europe:Amsterdam"{
+            ec{"ဢႅမ်ႇသတႃႇတမ်ႇ"}
+        }
+        "Europe:Andorra"{
+            ec{"ဢႅၼ်ႇတူဝ်ႇရႃႇ"}
+        }
+        "Europe:Astrakhan"{
+            ec{"ဢႅတ်ႉသထရႃႇၶၢၼ်ႇ"}
+        }
+        "Europe:Athens"{
+            ec{"ဢေႇတိၼ်ႇ"}
+        }
+        "Europe:Belgrade"{
+            ec{"ပႄႇလ်ၵရဵတ်ႉ"}
+        }
+        "Europe:Berlin"{
+            ec{"ပႃႇလိၼ်ႇ"}
+        }
+        "Europe:Bratislava"{
+            ec{"ပရႃႇတိတ်ႉသလႃႇဝႃႇ"}
+        }
+        "Europe:Brussels"{
+            ec{"ပရတ်ႈသႄးလ်"}
+        }
+        "Europe:Bucharest"{
+            ec{"ပူႇၶႃႇရႅတ်ႉ"}
+        }
+        "Europe:Budapest"{
+            ec{"ပူႇတႃႇပႅတ်ႉ"}
+        }
+        "Europe:Busingen"{
+            ec{"ပူႇသိင်ႇၵႅၼ်ႇ"}
+        }
+        "Europe:Chisinau"{
+            ec{"ၶိသိၼေႃႇ"}
+        }
+        "Europe:Copenhagen"{
+            ec{"ၵူဝ်ႇပႅၼ်ႇႁေႇၵႅၼ်ႇ"}
+        }
+        "Europe:Dublin"{
+            ec{"တၢပ်ႇလိၼ်ႇ"}
+            ld{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ဢၢႆးရိတ်ႉ"}
+        }
+        "Europe:Gibraltar"{
+            ec{"ၵျီႇပရေႃးတႃး"}
+        }
+        "Europe:Guernsey"{
+            ec{"ၵႂၢၼ်းသီ"}
+        }
+        "Europe:Helsinki"{
+            ec{"ႁႄႇလ်သိင်းၵီႇ"}
+        }
+        "Europe:Isle_of_Man"{
+            ec{"ၵုၼ်မႅၼ်း"}
+        }
+        "Europe:Istanbul"{
+            ec{"ဢိတ်ႉသတၼ်ႇပူး"}
+        }
+        "Europe:Jersey"{
+            ec{"ၵျႃႇသီႇ"}
+        }
+        "Europe:Kaliningrad"{
+            ec{"ၵလိၼ်းဢိၼ်းၵရတ်ႉ"}
+        }
+        "Europe:Kiev"{
+            ec{"ၶိပ်ႉၾ်"}
+        }
+        "Europe:Kirov"{
+            ec{"ၶီးႁွပ်ႇၾ်"}
+        }
+        "Europe:Lisbon"{
+            ec{"လိတ်ႉသ်ပွၼ်ႇ"}
+        }
+        "Europe:Ljubljana"{
+            ec{"လူႇပလီႇယႃႇၼႃႇ"}
+        }
+        "Europe:London"{
+            ec{"လၼ်ႇတၼ်ႇ"}
+            ld{"ၶၢဝ်းယၢမ်း ၶၢဝ်းမႆႈ ဢိင်းၵလဵတ်ႈ"}
+        }
+        "Europe:Luxembourg"{
+            ec{"လၢၵ်ႈၸိမ်ႇပၢၵ်ႈ"}
+        }
+        "Europe:Madrid"{
+            ec{"မတ်ႉတရိတ်ႉ"}
+        }
+        "Europe:Malta"{
+            ec{"မေႃးတႃႇ"}
+        }
+        "Europe:Mariehamn"{
+            ec{"မႃႇရီႇႁၢမ်ႇ"}
+        }
+        "Europe:Minsk"{
+            ec{"မိၼ်ႉသ်ၶ်"}
+        }
+        "Europe:Monaco"{
+            ec{"မူဝ်ႇၼႃႉၶူဝ်ႇ"}
+        }
+        "Europe:Moscow"{
+            ec{"မွတ်ႉသ်ၵူဝ်ႇ"}
+        }
+        "Europe:Oslo"{
+            ec{"ဢွတ်ႉသလူဝ်ႇ"}
+        }
+        "Europe:Paris"{
+            ec{"ၽႄးရိတ်ႉသ်"}
+        }
+        "Europe:Podgorica"{
+            ec{"ပူဝ်ႇၵူဝ်ႇရီႇၵႃႇ"}
+        }
+        "Europe:Prague"{
+            ec{"ပရၢၵ်ႉ"}
+        }
+        "Europe:Riga"{
+            ec{"ရီႇၵႃႇ"}
+        }
+        "Europe:Rome"{
+            ec{"ရူမ်း"}
+        }
+        "Europe:Samara"{
+            ec{"သႃႇမႃႇရႃႇ"}
+        }
+        "Europe:San_Marino"{
+            ec{"သၼ်းမႃႇရီႇၼေႃႇ"}
+        }
+        "Europe:Sarajevo"{
+            ec{"သႃႇရႃႇယေႇဝူဝ်ႇ"}
+        }
+        "Europe:Saratov"{
+            ec{"သႃႇရႃႇတၢပ်ႈ"}
+        }
+        "Europe:Simferopol"{
+            ec{"သိမ်ႇၾႃႇရူဝ်ႇပူဝ်ႇ"}
+        }
+        "Europe:Skopje"{
+            ec{"သၵူပ်ႉပီႇယႃႇ"}
+        }
+        "Europe:Sofia"{
+            ec{"သူဝ်ႇၾီႇယႃႇ"}
+        }
+        "Europe:Stockholm"{
+            ec{"သတွၵ်ႉႁွမ်း"}
+        }
+        "Europe:Tallinn"{
+            ec{"တႃႇလိၼ်ႇ"}
+        }
+        "Europe:Tirane"{
+            ec{"တီႇရႃႇၼႃႇ"}
+        }
+        "Europe:Ulyanovsk"{
+            ec{"ဢူလီယႃၼူဝ်ႇသ်ၶ်"}
+        }
+        "Europe:Vaduz"{
+            ec{"ဝႃႇတူႇၸ်"}
+        }
+        "Europe:Vatican"{
+            ec{"ဝႃႇတီႇၵၼ်ႇ"}
+        }
+        "Europe:Vienna"{
+            ec{"ဝီႇယႅၼ်ႇၼႃႇ"}
+        }
+        "Europe:Vilnius"{
+            ec{"ဝီးလ်ၼီးယႅတ်ႉသ်"}
+        }
+        "Europe:Volgograd"{
+            ec{"ဝူဝ်ႇၵူဝ်ႇၵရၢတ်ႉ"}
+        }
+        "Europe:Warsaw"{
+            ec{"ဝေႃးသေႃး"}
+        }
+        "Europe:Zagreb"{
+            ec{"ၸႃႇၵရႅပ်ႉ"}
+        }
+        "Europe:Zurich"{
+            ec{"ၸူႇရိတ်ႉ"}
+        }
+        "Indian:Antananarivo"{
+            ec{"ဢႅၼ်ႇတၼႃႇၼႃႇရီႇဝူဝ်ႇ"}
+        }
+        "Indian:Chagos"{
+            ec{"ၵုၼ်ၶျႃးၵူဝ်ႉသ်"}
+        }
+        "Indian:Christmas"{
+            ec{"မူႇၵုၼ် ၶရိတ်ႉသမၢတ်ႉ"}
+        }
+        "Indian:Cocos"{
+            ec{"မူႇၵုၼ် ၵူဝ်ႇၵူဝ်းသ်"}
+        }
+        "Indian:Comoro"{
+            ec{"ၶူဝ်ႇမူဝ်ႇရူတ်ႈ"}
+        }
+        "Indian:Kerguelen"{
+            ec{"မူႇၵုၼ်ၶိူဝ်ႇၵူႇလႅၼ်ႇ"}
+        }
+        "Indian:Mahe"{
+            ec{"မႁေႇ"}
+        }
+        "Indian:Maldives"{
+            ec{"မေႃႇတိပ်ႈ"}
+        }
+        "Indian:Mauritius"{
+            ec{"မေႃးရီႇသႃႇ"}
+        }
+        "Indian:Mayotte"{
+            ec{"မႃႇယူတ်ႈ"}
+        }
+        "Indian:Reunion"{
+            ec{"ရေႇၼီႇယၼ်ႇ"}
+        }
+        "Pacific:Apia"{
+            ec{"ဢႃပီယႃႇ"}
+        }
+        "Pacific:Auckland"{
+            ec{"ဢွၵ်ႉလႅၼ်ႇ"}
+        }
+        "Pacific:Bougainville"{
+            ec{"ပူးၵိၼ်ဝႄႇလ်"}
+        }
+        "Pacific:Chatham"{
+            ec{"မူႇၵုၼ် ၶျႅတ်ႉထမ်ႇ"}
+        }
+        "Pacific:Easter"{
+            ec{"ၵုၼ်ဢီႇသတႃႇ"}
+        }
+        "Pacific:Efate"{
+            ec{"ဢီႇၾႃးတႄႇ"}
+        }
+        "Pacific:Enderbury"{
+            ec{"ၵုၼ်ၶႅၼ်းတွၼ်ႇ"}
+        }
+        "Pacific:Fakaofo"{
+            ec{"ၾႃးၵဝ်ႇၾူဝ်ႇ"}
+        }
+        "Pacific:Fiji"{
+            ec{"ၾီႇၵျီႇ"}
+        }
+        "Pacific:Funafuti"{
+            ec{"ၾူၼႃၾူးတီႇ"}
+        }
+        "Pacific:Galapagos"{
+            ec{"ၵုၼ်ၵႃလႃပၵူဝ်ႉ"}
+        }
+        "Pacific:Gambier"{
+            ec{"ၵမ်ႇပီႇယႃႇ"}
+        }
+        "Pacific:Guadalcanal"{
+            ec{"ၵႂႃးတႄႇလ်ၶႅၼ်ႇၼႄးလ်"}
+        }
+        "Pacific:Guam"{
+            ec{"ၵႂၢမ်ႇ"}
+        }
+        "Pacific:Kiritimati"{
+            ec{"ၶိရိတ်ႉတိမႃႇတီႇ"}
+        }
+        "Pacific:Kosrae"{
+            ec{"ၵွတ်ႉသ်ရေး"}
+        }
+        "Pacific:Kwajalein"{
+            ec{"ၶႂႃးၵျလၢႆး"}
+        }
+        "Pacific:Majuro"{
+            ec{"မၵျူးရူဝ်ႇ"}
+        }
+        "Pacific:Marquesas"{
+            ec{"မႃၶေးသႅတ်ႉသ်"}
+        }
+        "Pacific:Midway"{
+            ec{"မိတ်ႉဝေး"}
+        }
+        "Pacific:Nauru"{
+            ec{"ၼၢဝ်ရူး"}
+        }
+        "Pacific:Niue"{
+            ec{"ၼီးဝႄႇ"}
+        }
+        "Pacific:Norfolk"{
+            ec{"ၵုၼ်ၼေႃႇၾုၵ်ႉ"}
+        }
+        "Pacific:Noumea"{
+            ec{"ၼူမေးယႃႇ"}
+        }
+        "Pacific:Pago_Pago"{
+            ec{"ပႃးၵူဝ်းပႃးၵူဝ်း"}
+        }
+        "Pacific:Palau"{
+            ec{"ပႃႇလၢဝ်း"}
+        }
+        "Pacific:Pitcairn"{
+            ec{"ၽိတ်ႉၶႅၼ်ႇ"}
+        }
+        "Pacific:Ponape"{
+            ec{"ပူၼ်းပေႇ"}
+        }
+        "Pacific:Port_Moresby"{
+            ec{"ပွတ်ႉမွတ်ႉသ်ပီႇ"}
+        }
+        "Pacific:Rarotonga"{
+            ec{"ရႃရူဝ်ထွင်းၵႃႇ"}
+        }
+        "Pacific:Saipan"{
+            ec{"သၢႆပၼ်ႇ"}
+        }
+        "Pacific:Tahiti"{
+            ec{"တႁီႇတီႇ"}
+        }
+        "Pacific:Tarawa"{
+            ec{"တႃႇရႃႇဝႃႇ"}
+        }
+        "Pacific:Tongatapu"{
+            ec{"ထွင်းၵႃႇတႃႇပူႇ"}
+        }
+        "Pacific:Truk"{
+            ec{"ၶျူၵ်ႉ"}
+        }
+        "Pacific:Wake"{
+            ec{"ဝဵၵ်ႉ"}
+        }
+        "Pacific:Wallis"{
+            ec{"ဝႃးလိတ်ႈ လႄႈ ၾူႇတူးၼႃး"}
+        }
+        "meta:Acre"{
+            ld{"ၶၢဝ်းယၢမ်း ၶၢဝ်းမႆႈ ဢေႇၵႃႇ"}
+            lg{"ၶၢဝ်းယၢမ်း ဢေႇၵႃႇ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ဢေႇၵႃႇ"}
+        }
+        "meta:Afghanistan"{
+            ls{"ၶၢဝ်းယၢမ်း ဢႃႇၾၵၢၼ်ႇၼီႇသတၢၼ်ႇ"}
+        }
+        "meta:Africa_Central"{
+            ls{"ၶၢဝ်းယၢမ်း ဢႃႇၾရိၵ ပွတ်းၵၢင်"}
+        }
+        "meta:Africa_Eastern"{
+            ls{"ၶၢဝ်းယၢမ်း ဢႃႇၾရိၵ ပွတ်းဢွၵ်ႇ"}
+        }
+        "meta:Africa_Southern"{
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ဢႃႇၾရိၵၸၢၼ်း"}
+        }
+        "meta:Africa_Western"{
+            ls{"ၶၢဝ်းယၢမ်း ဢႃႇၾရိၵ ပွတ်းတူၵ်း"}
+        }
+        "meta:Alaska"{
+            ld{"ၶၢဝ်းယၢမ်းၵၢင်ဝၼ်း ဢလႅတ်ႉသၵႃႇ"}
+            lg{"ၶၢဝ်းယၢမ်း ဢလႅတ်ႉသၵႃႇ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ဢလႅတ်ႉသၵႃႇ"}
+        }
+        "meta:Almaty"{
+            ld{"ၶၢဝ်းယၢမ်း ၶၢဝ်းမႆႈ ဢႄးလ်မႃႇတီႇ"}
+            lg{"ၶၢဝ်းယၢမ်း ဢႄးလ်မႃႇတီႇ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ဢႄးလ်မႃႇတီႇ"}
+        }
+        "meta:Amazon"{
+            ld{"ၶၢဝ်းယၢမ်း ၵၢင်ဝၼ်း ဢမၸွၼ်ႇ"}
+            lg{"ၶၢဝ်းယၢမ်း ဢမၸွၼ်ႇ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ဢမၸွၼ်ႇ"}
+        }
+        "meta:America_Central"{
+            ld{"ၶၢဝ်းယၢမ်း ၵၢင်ဝၼ်း ပွတ်းၵၢင်"}
+            lg{"ၶၢဝ်းယၢမ်း ပွတ်းၵၢင်"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ပွတ်းၵၢင်"}
+        }
+        "meta:America_Eastern"{
+            ld{"ၶၢဝ်းယၢမ်း ၵၢင်ဝၼ်း ပွတ်းဢွၵ်ႇ"}
+            lg{"ၶၢဝ်းယၢမ်း ပွတ်းဢွၵ်ႇ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ပွတ်းဢွၵ်ႇ"}
+        }
+        "meta:America_Mountain"{
+            ld{"ၶၢဝ်းယၢမ်း ၵၢင်ဝၼ်း သၼ်လွႆ"}
+            lg{"ၶၢဝ်းယၢမ်း သၼ်လွႆ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း သၼ်လွႆ"}
+        }
+        "meta:America_Pacific"{
+            ld{"ၶၢဝ်းယၢမ်း ၵၢင်ဝၼ်း ပၸိၾိၵ်ႉ"}
+            lg{"ၶၢဝ်းယၢမ်း ပၸိၾိၵ်ႉ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ပၸိၾိၵ်ႉ"}
+        }
+        "meta:Anadyr"{
+            ld{"ၶၢဝ်းယၢမ်း ၶၢဝ်းမႆႈ ဢႃႇၼႃႇတီႇယႃႇ"}
+            lg{"ၶၢဝ်းယၢမ်း ဢႃႇၼႃႇတီႇယႃႇ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ဢႃႇၼႃႇတီႇယႃႇ"}
+        }
+        "meta:Apia"{
+            ld{"ၶၢဝ်းယၢမ်း ၵၢင်ဝၼ်း သႃႇမူဝ်းဝႃႇ"}
+            lg{"ၶၢဝ်းယၢမ်း သႃႇမူဝ်းဝႃႇ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း သႃႇမူဝ်းဝႃႇ"}
+        }
+        "meta:Aqtau"{
+            ld{"ၶၢဝ်းယၢမ်း ၶၢဝ်းမႆႈ ဢႅၵ်ႉတၢဝ်ႉ"}
+            lg{"ၶၢဝ်းယၢမ်း ဢႅၵ်ႉတၢဝ်ႉ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ဢႅၵ်ႉတၢဝ်ႉ"}
+        }
+        "meta:Aqtobe"{
+            ld{"ၶၢဝ်းယၢမ်း ၶၢဝ်းမႆႈ ဢႅၵ်ႉတူဝ်ႇပီႇ"}
+            lg{"ၶၢဝ်းယၢမ်း ဢႅၵ်ႉတူဝ်ႇပီႇ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ဢႅၵ်ႉတူဝ်ႇပီႇ"}
+        }
+        "meta:Arabian"{
+            ld{"ၶၢဝ်းယၢမ်း ၵၢင်ဝၼ်း ဢႃႇရၢပ်ႈ"}
+            lg{"ၶၢဝ်းယၢမ်း ဢႃႇရၢပ်ႈ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ဢႃႇရၢပ်ႈ"}
+        }
+        "meta:Argentina"{
+            ld{"ၶၢဝ်းယၢမ်း ၵၢင်ဝၼ်း ဢႃႇၵျႅၼ်ႇတီးၼႃး"}
+            lg{"ၶၢဝ်းယၢမ်း ဢႃႇၵျႅၼ်ႇတီးၼႃး"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ဢႃႇၵျႅၼ်ႇတီးၼႃး"}
+        }
+        "meta:Argentina_Western"{
+            ld{"ၶၢဝ်းယၢမ်း ၵၢင်ဝၼ်း ဢႃႇၵျႅၼ်ႇတီးၼႃး ပွတ်းတူၵ်း"}
+            lg{"ၶၢဝ်းယၢမ်း ဢႃႇၵျႅၼ်ႇတီးၼႃး ပွတ်းတူၵ်း"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ဢႃႇၵျႅၼ်ႇတီးၼႃး ပွတ်းတူၵ်း"}
+        }
+        "meta:Armenia"{
+            ld{"ၶၢဝ်းယၢမ်း ၶၢဝ်းမႆႈ ဢႃႇမေးၼီးယႃး"}
+            lg{"ၶၢဝ်းယၢမ်း ဢႃႇမေးၼီးယႃး"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ဢႃႇမေးၼီးယႃး"}
+        }
+        "meta:Atlantic"{
+            ld{"ၶၢဝ်းယၢမ်း ၵၢင်ဝၼ်း ဢႅတ်ႉလႅၼ်းတိၵ်ႉ"}
+            lg{"ၶၢဝ်းယၢမ်း ဢႅတ်ႉလႅၼ်းတိၵ်ႉ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ဢႅတ်ႉလႅၼ်းတိၵ်ႉ"}
+        }
+        "meta:Australia_Central"{
+            ld{"ၶၢဝ်းယၢမ်း ၵၢင်ဝၼ်း ဢေႃႉသထရေးလီးယႃး"}
+            lg{"ၶၢဝ်းယၢမ်း ဢေႃႉသထရေးလီးယႃး ပွတ်းၵၢင်"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ဢေႃႉသထရေးလီးယႃး"}
+        }
+        "meta:Australia_CentralWestern"{
+            ld{"ၶၢဝ်းယၢမ်း ပွတ်းတူၵ်း တွၼ်ႈၵၢင် ၶၢဝ်းမႆႈ ဢေႃႉသထရေးလီးယႃး"}
+            lg{"ၶၢဝ်းယၢမ်း ပွတ်းတူၵ်း တွၼ်ႈၵၢင် ဢေႃႉသထရေးလီးယႃး"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ပွတ်းတူၵ်း တွၼ်ႈၵၢင် ဢေႃႉသထရေးလီးယႃး"}
+        }
+        "meta:Australia_Eastern"{
+            ld{"ၶၢဝ်းယၢမ်း ပွတ်းဢွၵ်ႇ ၵၢင်ဝၼ်း ဢေႃႉသထရေးလီးယႃး"}
+            lg{"ၶၢဝ်းယၢမ်း ပွတ်းဢွၵ်ႇ ဢေႃႉသထရေးလီးယႃး"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ပွတ်းဢွၵ်ႇ ဢေႃႉသထရေးလီးယႃး"}
+        }
+        "meta:Australia_Western"{
+            ld{"ၶၢဝ်းယၢမ်း ပွတ်းတူၵ်း ၵၢင်ဝၼ်း ဢေႃႉသထရေးလီးယႃး"}
+            lg{"ၶၢဝ်းယၢမ်း ပွတ်းတူၵ်း ဢေႃႉသထရေးလီးယႃး"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ပွတ်းတူၵ်း ဢေႃႉသထရေးလီးယႃး"}
+        }
+        "meta:Azerbaijan"{
+            ld{"ၶၢဝ်းယၢမ်း ၶၢဝ်းမႆႈ ဢႃႇၸႃႇပၢႆႇၸၼ်ႇ"}
+            lg{"ၶၢဝ်းယၢမ်း ဢႃႇၸႃႇပၢႆႇၸၼ်ႇ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ဢႃႇၸႃႇပၢႆႇၸၼ်ႇ"}
+        }
+        "meta:Azores"{
+            ld{"ၶၢဝ်းယၢမ်း ၶၢဝ်းမႆႈ ဢႃႇၸူဝ်ႇရႅတ်ႉ"}
+            lg{"ၶၢဝ်းယၢမ်း ဢႃႇၸူဝ်ႇရႅတ်ႉ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ဢႃႇၸူဝ်ႇရႅတ်ႉ"}
+        }
+        "meta:Bangladesh"{
+            ld{"ၶၢဝ်းယၢမ်း ၶၢဝ်းမႆႈ ပင်းၵလႃးတဵတ်ႈ"}
+            lg{"ၶၢဝ်းယၢမ်း ပင်းၵလႃးတဵတ်ႈ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ပင်းၵလႃးတဵတ်ႈ"}
+        }
+        "meta:Bhutan"{
+            ls{"ၶၢဝ်းယၢမ်း ၽူႇတၢၼ်ႇ"}
+        }
+        "meta:Bolivia"{
+            ls{"ၶၢဝ်းယၢမ်း ပူဝ်ႇလီးပီးယႃး"}
+        }
+        "meta:Brasilia"{
+            ld{"ၶၢဝ်းယၢမ်း ၵၢင်ဝၼ်း ပရႃႇၸီးလီးယႃး"}
+            lg{"ၶၢဝ်းယၢမ်း ပရႃႇၸီးလီးယႃး"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ပရႃႇၸီးလီးယႃး"}
+        }
+        "meta:Brunei"{
+            ls{"ၶၢဝ်းယၢမ်း ပရူႇၼၢႆး"}
+        }
+        "meta:Cape_Verde"{
+            ld{"ၶၢဝ်းယၢမ်း ၶၢဝ်းမႆႈ ၶဵပ်ႉဝႄႇတီႇ"}
+            lg{"ၶၢဝ်းယၢမ်း ၶဵပ်ႉဝႄႇတီႇ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ၶဵပ်ႉဝႄႇတီႇ"}
+        }
+        "meta:Casey"{
+            ls{"ၶၢဝ်းယၢမ်း ၶေႇသီႇ"}
+        }
+        "meta:Chamorro"{
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ၶျမ်ႇမူဝ်ႇရူဝ်ႇ"}
+        }
+        "meta:Chatham"{
+            ld{"ၶၢဝ်းယၢမ်း ၵၢင်ဝၼ်း ၶျႅတ်ႉထမ်ႇ"}
+            lg{"ၶၢဝ်းယၢမ်း ၶျႅတ်ႉထမ်ႇ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ၶျႅတ်ႉထမ်ႇ"}
+        }
+        "meta:Chile"{
+            ld{"ၶၢဝ်းယၢမ်း ၵၢင်ဝၼ်း ၶျီႇလီႇ"}
+            lg{"ၶၢဝ်းယၢမ်း ၶျီႇလီႇ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ၶျီႇလီႇ"}
+        }
+        "meta:China"{
+            ld{"ၶၢဝ်းယၢမ်း ၵၢင်ဝၼ်း ၶႄႇ"}
+            lg{"ၶၢဝ်းယၢမ်း ၶႄႇ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ၶႄႇ"}
+        }
+        "meta:Christmas"{
+            ls{"ၶၢဝ်းယၢမ်း ၵုၼ်ၶရိတ်ႉသမၢတ်ႉ"}
+        }
+        "meta:Cocos"{
+            ls{"ၶၢဝ်းယၢမ်း မူႇၵုၼ်ၵူဝ်ႇၵူဝ်းသ်"}
+        }
+        "meta:Colombia"{
+            ld{"ၶၢဝ်းယၢမ်း ၵၢင်ဝၼ်း ၵူဝ်ႇလမ်ႇပီႇယႃႇ"}
+            lg{"ၶၢဝ်းယၢမ်း ၵူဝ်ႇလမ်ႇပီႇယႃႇ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ၵူဝ်ႇလမ်ႇပီႇယႃႇ"}
+        }
+        "meta:Cook"{
+            ld{"ၶၢဝ်းယၢမ်း ၶၢဝ်းမႆႈ မူႇၵုၼ်ၶုၵ်ႈ"}
+            lg{"ၶၢဝ်းယၢမ်း မူႇၵုၼ်ၶုၵ်ႈ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း မူႇၵုၼ်ၶုၵ်ႈ"}
+        }
+        "meta:Cuba"{
+            ld{"ၶၢဝ်းယၢမ်း ၵၢင်ဝၼ်း ၵူးပႃး"}
+            lg{"ၶၢဝ်းယၢမ်း ၵူးပႃး"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ၵူးပႃး"}
+        }
+        "meta:Davis"{
+            ls{"ၶၢဝ်းယၢမ်း တေးဝိတ်ႉ"}
+        }
+        "meta:DumontDUrville"{
+            ls{"ၶၢဝ်းယၢမ်း တူႇမွၼ်ႉ တဝီႇလ်"}
+        }
+        "meta:East_Timor"{
+            ls{"ၶၢဝ်းယၢမ်း တီႇမေႃးလႅတ်ႉသ်တႄး"}
+        }
+        "meta:Easter"{
+            ld{"ၶၢဝ်းယၢမ်း ၵၢင်ဝၼ်း ၵုၼ်ဢီႇသတႃႇ"}
+            lg{"ၶၢဝ်းယၢမ်း ၵုၼ်ဢီႇသတႃႇ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ၵုၼ်ဢီႇသတႃႇ"}
+        }
+        "meta:Ecuador"{
+            ls{"ၶၢဝ်းယၢမ်း ဢေႇၵႂႃႇတေႃႇ"}
+        }
+        "meta:Europe_Central"{
+            ld{"ၶၢဝ်းယၢမ်း ၶၢဝ်းမႆႈ ယူးရူပ်ႉ ပွတ်းၵၢင်"}
+            lg{"ၶၢဝ်းယၢမ်း ယူးရူပ်ႉ ပွတ်းၵၢင်"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ယူးရူပ်ႉ ပွတ်းၵၢင်"}
+        }
+        "meta:Europe_Eastern"{
+            ld{"ၶၢဝ်းယၢမ်း ၶၢဝ်းမႆႈ ယူးရူပ်ႉ ပွတ်းဢွၵ်ႇ"}
+            lg{"ၶၢဝ်းယၢမ်း ယူးရူပ်ႉ ပွတ်းဢွၵ်ႇ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ယူးရူပ်ႉ ပွတ်းဢွၵ်ႇ"}
+        }
+        "meta:Europe_Further_Eastern"{
+            ls{"ၶၢဝ်းယၢမ်း ယူးရူပ်ႉ ပွတ်းဢွၵ်ႇ ဢၼ်ၵႆတိူဝ်း"}
+        }
+        "meta:Europe_Western"{
+            ld{"ၶၢဝ်းယၢမ်း ၶၢဝ်းမႆႈ ယူးရူပ်ႉ ပွတ်းတူၵ်း"}
+            lg{"ၶၢဝ်းယၢမ်း ယူးရူပ်ႉ ပွတ်းတူၵ်း"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ယူးရူပ်ႉ ပွတ်းတူၵ်း"}
+        }
+        "meta:Falkland"{
+            ld{"ၶၢဝ်းယၢမ်း ၵၢင်ဝၼ်း မူႇၵုၼ် ၾွၵ်ႉလႅၼ်ႇ"}
+            lg{"ၶၢဝ်းယၢမ်း မူႇၵုၼ် ၾွၵ်ႉလႅၼ်ႇ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း မူႇၵုၼ် ၾွၵ်ႉလႅၼ်ႇ"}
+        }
+        "meta:Fiji"{
+            ld{"ၶၢဝ်းယၢမ်း ၶၢဝ်းမႆႈ ၾီႇၵျီႇ"}
+            lg{"ၶၢဝ်းယၢမ်း ၾီႇၵျီႇ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ၾီႇၵျီႇ"}
+        }
+        "meta:French_Guiana"{
+            ls{"ၶၢဝ်းယၢမ်း ၵုၺ်ႇယႃႇၼႃႇ ၶွင် ၾရၢင်ႇသဵတ်ႈ"}
+        }
+        "meta:French_Southern"{
+            ls{"ၶၢဝ်းယၢမ်း ၾရၢင်ႇသဵတ်ႈ ပွတ်းၸၢၼ်း လႄႈ ဢႅၼ်ႇတၢၵ်ႈတီးၵႃႈ"}
+        }
+        "meta:GMT"{
+            ls{"ၶၢဝ်းယၢမ်း ၽတ်ႉၽဵင်ႇ ၵရိၼ်းဝိတ်ႉ"}
+        }
+        "meta:Galapagos"{
+            ls{"ၶၢဝ်းယၢမ်း ၵႃႇလႃႇပၵူဝ်ႉသ်"}
+        }
+        "meta:Gambier"{
+            ls{"ၶၢဝ်းယၢမ်း ၵမ်ႇပီႇယႃႇ"}
+        }
+        "meta:Georgia"{
+            ld{"ၶၢဝ်းယၢမ်း ၶၢဝ်းမႆႈ ၵျေႃႇၵျႃႇ"}
+            lg{"ၶၢဝ်းယၢမ်း ၵျေႃႇၵျႃႇ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ၵျေႃႇၵျႃႇ"}
+        }
+        "meta:Gilbert_Islands"{
+            ls{"ၶၢဝ်းယၢမ်း ၵိလ်ပႅတ်ႉ"}
+        }
+        "meta:Greenland"{
+            ld{"ၶၢဝ်းယၢမ်း ၶၢဝ်းမႆႈ ၵရိၼ်းလႅၼ်း"}
+            lg{"ၶၢဝ်းယၢမ်း ၵရိၼ်းလႅၼ်း"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ၵရိၼ်းလႅၼ်း"}
+        }
+        "meta:Greenland_Eastern"{
+            ld{"ၶၢဝ်းယၢမ်း ၵၢင်ဝၼ်း ၵရိၼ်းလႅၼ်း ပွတ်းဢွၵ်ႇ"}
+            lg{"ၶၢဝ်းယၢမ်း ၵရိၼ်းလႅၼ်း ပွတ်းဢွၵ်ႇ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ၵရိၼ်းလႅၼ်း ပွတ်းဢွၵ်ႇ"}
+        }
+        "meta:Greenland_Western"{
+            ld{"ၶၢဝ်းယၢမ်း ၵၢင်ဝၼ်း ၵရိၼ်းလႅၼ်း ပွတ်းတူၵ်း"}
+            lg{"ၶၢဝ်းယၢမ်း ၵရိၼ်းလႅၼ်း ပွတ်းတူၵ်း"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ၵရိၼ်းလႅၼ်း ပွတ်းတူၵ်း"}
+        }
+        "meta:Guam"{
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ၵႂၢမ်ႇ"}
+        }
+        "meta:Gulf"{
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ဢၢဝ်ႇ"}
+        }
+        "meta:Guyana"{
+            ls{"ၶၢဝ်းယၢမ်း ၵၢႆႇယႃးၼႃႇ"}
+        }
+        "meta:Hawaii"{
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ႁႃႇဝၢႆးဢီး-ဢလူးသျၼ်ႇ"}
+        }
+        "meta:Hawaii_Aleutian"{
+            ld{"ၶၢဝ်းယၢမ်း ၵၢင်ဝၼ်း ႁႃႇဝၢႆးဢီး-ဢလူးသျၼ်ႇ"}
+            lg{"ၶၢဝ်းယၢမ်း ႁႃႇဝၢႆးဢီး-ဢလူးသျၼ်ႇ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ႁႃႇဝၢႆးဢီး-ဢလူးသျၼ်ႇ"}
+        }
+        "meta:Hong_Kong"{
+            ld{"ၶၢဝ်းယၢမ်း ၶၢဝ်းမႆႈ ႁွင်းၵွင်း"}
+            lg{"ၶၢဝ်းယၢမ်း ႁွင်းၵွင်း"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ႁွင်းၵွင်း"}
+        }
+        "meta:Hovd"{
+            ld{"ၶၢဝ်းယၢမ်း ၶၢဝ်းမႆႈ ၶူဝ်ဝေတေး"}
+            lg{"ၶၢဝ်းယၢမ်း ၶူဝ်ဝေတေး"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ၶူဝ်ဝေတေး"}
+        }
+        "meta:India"{
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ဢိၼ်းတီးယႃး"}
+        }
+        "meta:Indian_Ocean"{
+            ls{"ၶၢဝ်းယၢမ်း သမုၵ်ႉတရႃႇဢိၼ်းတီးယႃး"}
+        }
+        "meta:Indochina"{
+            ls{"ၶၢဝ်းယၢမ်း ဢိၼ်ႇတူဝ်ႇၶႄႇ"}
+        }
+        "meta:Indonesia_Central"{
+            ls{"ၶၢဝ်းယၢမ်း ဢိၼ်ႇတူဝ်ႇၼီးသျႃး ပွတ်းၵၢင်"}
+        }
+        "meta:Indonesia_Eastern"{
+            ls{"ၶၢဝ်းယၢမ်း ဢိၼ်ႇတူဝ်ႇၼီးသျႃး ပွတ်းဢွၵ်ႇ"}
+        }
+        "meta:Indonesia_Western"{
+            ls{"ၶၢဝ်းယၢမ်း ဢိၼ်ႇတူဝ်ႇၼီးသျႃး ပွတ်းတူၵ်း"}
+        }
+        "meta:Iran"{
+            ld{"ၶၢဝ်းယၢမ်း ၵၢင်ဝၼ်း ဢီႇရၢၼ်း"}
+            lg{"ၶၢဝ်းယၢမ်း ဢီႇရၢၼ်း"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ဢီႇရၢၼ်း"}
+        }
+        "meta:Irkutsk"{
+            ld{"ၶၢဝ်းယၢမ်း ၶၢဝ်းမႆႈ ဢိရၶုတ်ႉသ်ၶ်"}
+            lg{"ၶၢဝ်းယၢမ်း ဢိရၶုတ်ႉသ်ၶ်"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ဢိရၶုတ်ႉသ်ၶ်"}
+        }
+        "meta:Israel"{
+            ld{"ၶၢဝ်းယၢမ်း ၵၢင်ဝၼ်း ဢိတ်ႇသရေး"}
+            lg{"ၶၢဝ်းယၢမ်း ဢိတ်ႇသရေး"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ဢိတ်ႇသရေး"}
+        }
+        "meta:Japan"{
+            ld{"ၶၢဝ်းယၢမ်း ၵၢင်ဝၼ်း ၵျႃႇပၢၼ်ႇ"}
+            lg{"ၶၢဝ်းယၢမ်း ၵျႃႇပၢၼ်ႇ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ၵျႃႇပၢၼ်ႇ"}
+        }
+        "meta:Kamchatka"{
+            ld{"ၶၢဝ်းယၢမ်း ၶၢဝ်းမႆႈ ၵမ်ႇၶျတ်ႉၵႃႇ"}
+            lg{"ၶၢဝ်းယၢမ်း ၵမ်ႇၶျတ်ႉၵႃႇ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ၵမ်ႇၶျတ်ႉၵႃႇ"}
+        }
+        "meta:Kazakhstan"{
+            ls{"ၶၢဝ်းယၢမ်း ၵႃႇၸၢၵ်ႈသတၼ်ႇ"}
+        }
+        "meta:Kazakhstan_Eastern"{
+            ls{"ၶၢဝ်းယၢမ်း ၵႃႇၸၢၵ်ႈသတၼ်ႇ ပွတ်းဢွၵ်ႇ"}
+        }
+        "meta:Kazakhstan_Western"{
+            ls{"ၶၢဝ်းယၢမ်း ၵႃႇၸၢၵ်ႈသတၼ်ႇ ပွတ်းတူၵ်း"}
+        }
+        "meta:Korea"{
+            ld{"ၶၢဝ်းယၢမ်း ၵၢင်ဝၼ်း ၵၢဝ်းလီ"}
+            lg{"ၶၢဝ်းယၢမ်း ၵၢဝ်းလီ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ၵၢဝ်းလီ"}
+        }
+        "meta:Kosrae"{
+            ls{"ၶၢဝ်းယၢမ်း ၵွတ်ႉသ်ရေး"}
+        }
+        "meta:Krasnoyarsk"{
+            ld{"ၶၢဝ်းယၢမ်း ၶၢဝ်းမႆႈ ၶရတ်ႉၼူဝ်ႇယႃႇသ်ၶ်"}
+            lg{"ၶၢဝ်းယၢမ်း ၶရတ်ႉၼူဝ်ႇယႃႇသ်ၶ်"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ၶရတ်ႉၼူဝ်ႇယႃႇသ်ၶ်"}
+        }
+        "meta:Kyrgystan"{
+            ls{"ၶၢဝ်းယၢမ်း ၵႃႇၵိတ်ႈသတၼ်ႇ"}
+        }
+        "meta:Lanka"{
+            ls{"ၶၢဝ်းယၢမ်း လင်းၵႃ"}
+        }
+        "meta:Line_Islands"{
+            ls{"ၶၢဝ်းယၢမ်း မူႇၵုၼ်လၢႆး"}
+        }
+        "meta:Lord_Howe"{
+            ld{"ၶၢဝ်းယၢမ်း ၵၢင်ဝၼ်း လွတ်ႉႁၢဝ်း"}
+            lg{"ၶၢဝ်းယၢမ်း လွတ်ႉႁၢဝ်း"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း လွတ်ႉႁၢဝ်း"}
+        }
+        "meta:Macau"{
+            ld{"ၶၢဝ်းယၢမ်း ၶၢဝ်းမႆႈ မႃႇၵၢဝ်ႈ"}
+            lg{"ၶၢဝ်းယၢမ်း မႃႇၵၢဝ်ႈ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း မႃႇၵၢဝ်ႈ"}
+        }
+        "meta:Magadan"{
+            ld{"ၶၢဝ်းယၢမ်း ၶၢဝ်းမႆႈ မႃႇၵႃႇတၢၼ်ႇ"}
+            lg{"ၶၢဝ်းယၢမ်း မႃႇၵႃႇတၢၼ်ႇ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း မႃႇၵႃႇတၢၼ်ႇ"}
+        }
+        "meta:Malaysia"{
+            ls{"ၶၢဝ်းယၢမ်း မလေးသျႃး"}
+        }
+        "meta:Maldives"{
+            ls{"ၶၢဝ်းယၢမ်း မေႃႇတိပ်ႈ"}
+        }
+        "meta:Marquesas"{
+            ls{"ၶၢဝ်းယၢမ်း မႃၶေးသႅတ်ႉသ်"}
+        }
+        "meta:Marshall_Islands"{
+            ls{"ၶၢဝ်းယၢမ်း မူႇၵုၼ်မႃးသျႄႇ"}
+        }
+        "meta:Mauritius"{
+            ld{"ၶၢဝ်းယၢမ်း ၶၢဝ်းမႆႈ မေႃးရီႇသႃႇ"}
+            lg{"ၶၢဝ်းယၢမ်း မေႃးရီႇသႃႇ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း မေႃးရီႇသႃႇ"}
+        }
+        "meta:Mawson"{
+            ls{"ၶၢဝ်းယၢမ်း မေႃသၼ်ႇ"}
+        }
+        "meta:Mexico_Pacific"{
+            ld{"ၶၢဝ်းယၢမ်း ၵၢင်ဝၼ်း မႅၵ်ႇသီႇၵူဝ်ႇ ပၸိၾိၵ်ႉ"}
+            lg{"ၶၢဝ်းယၢမ်း မႅၵ်ႇသီႇၵူဝ်ႇ ပၸိၾိၵ်ႉ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း မႅၵ်ႇသီႇၵူဝ်ႇ ပၸိၾိၵ်ႉ"}
+        }
+        "meta:Mongolia"{
+            ld{"ၶၢဝ်းယၢမ်း ၶၢဝ်းမႆႈ ဢူလၼ်ပႃတႃ"}
+            lg{"ၶၢဝ်းယၢမ်း ဢူလၼ်ပႃတႃ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ဢူလၼ်ပႃတႃ"}
+        }
+        "meta:Moscow"{
+            ld{"ၶၢဝ်းယၢမ်း ၶၢဝ်းမႆႈ မွတ်ႉသ်ၵူဝ်ႇ"}
+            lg{"ၶၢဝ်းယၢမ်း မွတ်ႉသ်ၵူဝ်ႇ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း မွတ်ႉသ်ၵူဝ်ႇ"}
+        }
+        "meta:Myanmar"{
+            ls{"ၶၢဝ်းယၢမ်း မျၢၼ်ႇမႃႇ"}
+            ss{"MMT"}
+        }
+        "meta:Nauru"{
+            ls{"ၶၢဝ်းယၢမ်း ၼၢဝ်ရူး"}
+        }
+        "meta:Nepal"{
+            ls{"ၶၢဝ်းယၢမ်း ၼေႇပေႃး"}
+        }
+        "meta:New_Caledonia"{
+            ld{"ၶၢဝ်းယၢမ်း ၶၢဝ်းမႆႈ ၼိဝ်းၶႄႇလီႇတူဝ်းၼီးယႃး"}
+            lg{"ၶၢဝ်းယၢမ်း ၼိဝ်းၶႄႇလီႇတူဝ်းၼီးယႃး"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ၼိဝ်းၶႄႇလီႇတူဝ်းၼီးယႃး"}
+        }
+        "meta:New_Zealand"{
+            ld{"ၶၢဝ်းယၢမ်း ၵၢင်ဝၼ်း ၼိဝ်းၸီႇလႅၼ်ႇ"}
+            lg{"ၶၢဝ်းယၢမ်း ၼိဝ်းၸီႇလႅၼ်ႇ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ၼိဝ်းၸီႇလႅၼ်ႇ"}
+        }
+        "meta:Newfoundland"{
+            ld{"ၶၢဝ်းယၢမ်း ၵၢင်ဝၼ်း ၼိဝ်းၾွမ်ႇလႅၼ်ႇ"}
+            lg{"ၶၢဝ်းယၢမ်း ၼိဝ်းၾွမ်ႇလႅၼ်ႇ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ၼိဝ်းၾွမ်ႇလႅၼ်ႇ"}
+        }
+        "meta:Niue"{
+            ls{"ၶၢဝ်းယၢမ်း ၼီးဝႄႇ"}
+        }
+        "meta:Norfolk"{
+            ld{"ၶၢဝ်းယၢမ်း ၵၢင်ဝၼ်း ၵုၼ်ၼေႃႇၾုၵ်ႉ"}
+            lg{"ၶၢဝ်းယၢမ်း ၵုၼ်ၼေႃႇၾုၵ်ႉ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ၵုၼ်ၼေႃႇၾုၵ်ႉ"}
+        }
+        "meta:Noronha"{
+            ld{"ၶၢဝ်းယၢမ်း ၵၢင်ဝၼ်း ၾႃႇၼႅၼ်ႇတူဝ်ႇ တႄႇ တီႇၼူဝ်ႇရွၼ်ႇႁႃႇ"}
+            lg{"ၶၢဝ်းယၢမ်း ၾႃႇၼႅၼ်ႇတူဝ်ႇ တႄႇ တီႇၼူဝ်ႇရွၼ်ႇႁႃႇ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ၾႃႇၼႅၼ်ႇတူဝ်ႇ တႄႇ တီႇၼူဝ်ႇရွၼ်ႇႁႃႇ"}
+        }
+        "meta:North_Mariana"{
+            ls{"ၶၢဝ်းယၢမ်း မူႇၵုၼ်မႃႇရီႇယႃႇၼႃႇ ပွတ်းႁွင်ႇ"}
+        }
+        "meta:Novosibirsk"{
+            ld{"ၶၢဝ်းယၢမ်း ၶၢဝ်းမႆႈ ၼူဝ်ႇဝူဝ်ႇသီႇပၢတ်ႉသ်ၶ်"}
+            lg{"ၶၢဝ်းယၢမ်း ၼူဝ်ႇဝူဝ်ႇသီႇပၢတ်ႉသ်ၶ်"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ၼူဝ်ႇဝူဝ်ႇသီႇပၢတ်ႉသ်ၶ်"}
+        }
+        "meta:Omsk"{
+            ld{"ၶၢဝ်းယၢမ်း ၶၢဝ်းမႆႈ ဢူမ်းသ်ၶ်"}
+            lg{"ၶၢဝ်းယၢမ်း ဢူမ်းသ်ၶ်"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ဢူမ်းသ်ၶ်"}
+        }
+        "meta:Pakistan"{
+            ld{"ၶၢဝ်းယၢမ်း ၶၢဝ်းမႆႈ ပႃႇၵိတ်ႈသတၼ်ႇ"}
+            lg{"ၶၢဝ်းယၢမ်း ပႃႇၵိတ်ႈသတၼ်ႇ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ပႃႇၵိတ်ႈသတၼ်ႇ"}
+        }
+        "meta:Palau"{
+            ls{"ၶၢဝ်းယၢမ်း ပႃႇလၢဝ်း"}
+        }
+        "meta:Papua_New_Guinea"{
+            ls{"ၶၢဝ်းယၢမ်း ပႃးပႂႃႇၼိဝ်းၵီးၼီး"}
+        }
+        "meta:Paraguay"{
+            ld{"ၶၢဝ်းယၢမ်း ၵၢင်ဝၼ်း ပႃႇရႃႇၵူၺ်း"}
+            lg{"ၶၢဝ်းယၢမ်း ပႃႇရႃႇၵူၺ်း"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ပႃႇရႃႇၵူၺ်း"}
+        }
+        "meta:Peru"{
+            ld{"ၶၢဝ်းယၢမ်း ၵၢင်ဝၼ်း ပေႇရူႉ"}
+            lg{"ၶၢဝ်းယၢမ်း ပေႇရူႉ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ပေႇရူႉ"}
+        }
+        "meta:Philippines"{
+            ld{"ၶၢဝ်းယၢမ်း ၶၢဝ်းမႆႈ ၾီလိပ်ႈပိၼ်း"}
+            lg{"ၶၢဝ်းယၢမ်း ၾီလိပ်ႈပိၼ်း"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ၾီလိပ်ႈပိၼ်း"}
+        }
+        "meta:Phoenix_Islands"{
+            ls{"ၶၢဝ်းယၢမ်း မူႇၵုၼ်ၽီးၼိၵ်ႉ"}
+        }
+        "meta:Pierre_Miquelon"{
+            ld{"ၶၢဝ်းယၢမ်း ၵၢင်ဝၼ်း သဵင်ႉပီးယႃး လႄႈ မိၵ်ႈၵွႆႇလွၼ်ႇ"}
+            lg{"ၶၢဝ်းယၢမ်း သဵင်ႉပီးယႃး လႄႈ မိၵ်ႈၵွႆႇလွၼ်ႇ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း သဵင်ႉပီးယႃး လႄႈ မိၵ်ႈၵွႆႇလွၼ်ႇ"}
+        }
+        "meta:Pitcairn"{
+            ls{"ၶၢဝ်းယၢမ်း ၽိတ်ႉၶႅၼ်ႇ"}
+        }
+        "meta:Ponape"{
+            ls{"ၶၢဝ်းယၢမ်း ပူၼ်းပေႇ"}
+        }
+        "meta:Pyongyang"{
+            ls{"ၶၢဝ်းယၢမ်း ၵၢဝ်းလီႁွင်ႇ"}
+        }
+        "meta:Qyzylorda"{
+            ld{"ၶၢဝ်းယၢမ်း ၶၢဝ်းမႆႈ ၶုၺ်ႇၸီးလူဝ်ႇတႃႇ"}
+            lg{"ၶၢဝ်းယၢမ်း ၶုၺ်ႇၸီးလူဝ်ႇတႃႇ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ၶုၺ်ႇၸီးလူဝ်ႇတႃႇ"}
+        }
+        "meta:Reunion"{
+            ls{"ၶၢဝ်းယၢမ်း ရေႇၼီႇယၼ်ႇ"}
+        }
+        "meta:Rothera"{
+            ls{"ၶၢဝ်းယၢမ်း ရူဝ်ႇထႄႇရႃႇ"}
+        }
+        "meta:Sakhalin"{
+            ld{"ၶၢဝ်းယၢမ်း ၶၢဝ်းမႆႈ သႃႇၶႃႇလိၼ်ႇ"}
+            lg{"ၶၢဝ်းယၢမ်း သႃႇၶႃႇလိၼ်ႇ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း သႃႇၶႃႇလိၼ်ႇ"}
+        }
+        "meta:Samara"{
+            ld{"ၶၢဝ်းယၢမ်း ၶၢဝ်းမႆႈ သႃႇမႃႇရႃႇ"}
+            lg{"ၶၢဝ်းယၢမ်း သႃႇမႃႇရႃႇ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း သႃႇမႃႇရႃႇ"}
+        }
+        "meta:Samoa"{
+            ld{"ၶၢဝ်းယၢမ်း ၵၢင်ဝၼ်း သႃႇမူဝ်းဝႃႇ ၶွ​င် ဢမႄႇရိၵၢၼ်ႇ"}
+            lg{"ၶၢဝ်းယၢမ်း သႃႇမူဝ်းဝႃႇ ၶွ​င် ဢမႄႇရိၵၢၼ်ႇ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း သႃႇမူဝ်းဝႃႇ ၶွ​င် ဢမႄႇရိၵၢၼ်ႇ"}
+        }
+        "meta:Seychelles"{
+            ls{"ၶၢဝ်းယၢမ်း သေးသျႄႇ"}
+        }
+        "meta:Singapore"{
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း သိင်ႇၵႃႇပူဝ်ႇ"}
+        }
+        "meta:Solomon"{
+            ls{"ၶၢဝ်းယၢမ်း မူႇၵုၼ်သေႃႇလေႃႇမၼ်ႇ"}
+        }
+        "meta:South_Georgia"{
+            ls{"ၶၢဝ်းယၢမ်း ၵျေႃႇၵျႃႇ ပွတ်းၸၢၼ်း"}
+        }
+        "meta:Suriname"{
+            ls{"ၶၢဝ်းယၢမ်း သျူးရီးၼႃႇမႄႇ"}
+        }
+        "meta:Syowa"{
+            ls{"ၶၢဝ်းယၢမ်း သၢႆးဢူဝ်ႇဝႃႇ"}
+        }
+        "meta:Tahiti"{
+            ls{"ၶၢဝ်းယၢမ်း တႁီႇတီႇ"}
+        }
+        "meta:Taipei"{
+            ld{"ၶၢဝ်းယၢမ်း ၵၢင်ဝၼ်း ထၢႆႇဝၢၼ်း"}
+            lg{"ၶၢဝ်းယၢမ်း ထၢႆႇဝၢၼ်း"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ထၢႆႇဝၢၼ်း"}
+        }
+        "meta:Tajikistan"{
+            ls{"ၶၢဝ်းယၢမ်း တႃႇၵျီႇၵီႇသတၼ်ႇ"}
+        }
+        "meta:Tokelau"{
+            ls{"ၶၢဝ်းယၢမ်း ထူဝ်းၵေႇလၢဝ်ႇ"}
+        }
+        "meta:Tonga"{
+            ld{"ၶၢဝ်းယၢမ်း ၶၢဝ်းမႆႈ ထွင်းၵႃႇ"}
+            lg{"ၶၢဝ်းယၢမ်း ထွင်းၵႃႇ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ထွင်းၵႃႇ"}
+        }
+        "meta:Truk"{
+            ls{"ၶၢဝ်းယၢမ်း ၶျူၵ်ႉ"}
+        }
+        "meta:Turkmenistan"{
+            ld{"ၶၢဝ်းယၢမ်း ၶၢဝ်းမႆႈ တၢၵ်ႈမႅၼ်ႇၼီႇသတၼ်ႇ"}
+            lg{"ၶၢဝ်းယၢမ်း တၢၵ်ႈမႅၼ်ႇၼီႇသတၼ်ႇ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း တၢၵ်ႈမႅၼ်ႇၼီႇသတၼ်ႇ"}
+        }
+        "meta:Tuvalu"{
+            ls{"ၶၢဝ်းယၢမ်း ထူးဝႃႇလူႇ"}
+        }
+        "meta:Uruguay"{
+            ld{"ၶၢဝ်းယၢမ်း ၵၢင်ဝၼ်း ဢုရုၵူၺ်း"}
+            lg{"ၶၢဝ်းယၢမ်း ဢုရုၵူၺ်း"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ဢုရုၵူၺ်း"}
+        }
+        "meta:Uzbekistan"{
+            ld{"ၶၢဝ်းယၢမ်း ၶၢဝ်းမႆႈ ဢူႇၸပႄႉၵိတ်ႇသတၼ်ႇ"}
+            lg{"ၶၢဝ်းယၢမ်း ဢူႇၸပႄႉၵိတ်ႇသတၼ်ႇ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ဢူႇၸပႄႉၵိတ်ႇသတၼ်ႇ"}
+        }
+        "meta:Vanuatu"{
+            ld{"ၶၢဝ်းယၢမ်း ၶၢဝ်းမႆႈ ဝႅၼ်ႇၼူးဝႃႇထူႇ"}
+            lg{"ၶၢဝ်းယၢမ်း ဝႅၼ်ႇၼူးဝႃႇထူႇ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ဝႅၼ်ႇၼူးဝႃႇထူႇ"}
+        }
+        "meta:Venezuela"{
+            ls{"ၶၢဝ်းယၢမ်း ဝႄႇၼေႇၸွႆးလႃး"}
+        }
+        "meta:Vladivostok"{
+            ld{"ၶၢဝ်းယၢမ်း ၶၢဝ်းမႆႈ ဝလႃႇတီႇဝူဝ်ႇသတွၵ်ႉ"}
+            lg{"ၶၢဝ်းယၢမ်း ဝလႃႇတီႇဝူဝ်ႇသတွၵ်ႉ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ဝလႃႇတီႇဝူဝ်ႇသတွၵ်ႉ"}
+        }
+        "meta:Volgograd"{
+            ld{"ၶၢဝ်းယၢမ်း ၶၢဝ်းမႆႈ ဝူဝ်ႇၵူဝ်ႇၵရၢတ်ႉ"}
+            lg{"ၶၢဝ်းယၢမ်း ဝူဝ်ႇၵူဝ်ႇၵရၢတ်ႉ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ဝူဝ်ႇၵူဝ်ႇၵရၢတ်ႉ"}
+        }
+        "meta:Vostok"{
+            ls{"ၶၢဝ်းယၢမ်း ဝေႃႉသ်တွၵ်ႉ"}
+        }
+        "meta:Wake"{
+            ls{"ၶၢဝ်းယၢမ်း ၵုၼ်ဝဵၵ်ႉ"}
+        }
+        "meta:Wallis"{
+            ls{"ၶၢဝ်းယၢမ်း ဝႃးလိတ်ႈ လႄႈ ၾူႇတူးၼႃး"}
+        }
+        "meta:Yakutsk"{
+            ld{"ၶၢဝ်းယၢမ်း ၶၢဝ်းမႆႈ ယၵုတ်ႉသ်ၶ်"}
+            lg{"ၶၢဝ်းယၢမ်း ယၵုတ်ႉသ်ၶ်"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ယၵုတ်ႉသ်ၶ်"}
+        }
+        "meta:Yekaterinburg"{
+            ld{"ၶၢဝ်းယၢမ်း ၶၢဝ်းမႆႈ ယေႇၵႃႇတႄႇရိၼ်ႇပၢၵ်ႉ"}
+            lg{"ၶၢဝ်းယၢမ်း ယေႇၵႃႇတႄႇရိၼ်ႇပၢၵ်ႉ"}
+            ls{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း ယေႇၵႃႇတႄႇရိၼ်ႇပၢၵ်ႉ"}
+        }
+        "meta:Yukon"{
+            ls{"ၶၢဝ်းယၢမ်း ယူးၵွၼ်ႇ"}
+        }
+        regionFormat{"ၶၢဝ်းယၢမ်း {0}"}
+        regionFormatDaylight{"ၶၢဝ်းယၢမ်း ၵၢင်ဝၼ်း {0}"}
+        regionFormatStandard{"လၵ်းၸဵင် ၶၢဝ်းယၢမ်း {0}"}
+    }
+}

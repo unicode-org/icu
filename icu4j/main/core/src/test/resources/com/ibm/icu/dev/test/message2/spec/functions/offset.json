@@ -1,0 +1,77 @@
+{
+  "$schema": "../../schemas/v0/tests.schema.json",
+  "scenario": "Offset function",
+  "description": "The built-in formatter and selector for addition and subtraction.",
+  "defaultTestProperties": {
+    "bidiIsolation": "none",
+    "locale": "en-US"
+  },
+  "tests": [
+    {
+      "src": "{:offset add=13}",
+      "expErrors": [{ "type": "bad-operand" }]
+    },
+    {
+      "src": "{foo :offset add=13}",
+      "expErrors": [{ "type": "bad-operand" }]
+    },
+    {
+      "src": "{42 :offset}",
+      "expErrors": [{ "type": "bad-option" }]
+    },
+    {
+      "src": "{42 :offset add=foo}",
+      "expErrors": [{ "type": "bad-option" }]
+    },
+    {
+      "src": "{42 :offset subtract=foo}",
+      "expErrors": [{ "type": "bad-option" }]
+    },
+    {
+      "src": "{42 :offset foo=13}",
+      "expErrors": [{ "type": "bad-option" }]
+    },
+    {
+      "src": "{42 :offset add=13 subtract=13}",
+      "expErrors": [{ "type": "bad-option" }]
+    },
+    {
+      "src": "{41 :offset add=1}",
+      "exp": "42"
+    },
+    {
+      "src": "{52 :offset subtract=10}",
+      "exp": "42"
+    },
+    {
+      "src": "{41 :offset add=1 foo=13}",
+      "exp": "42"
+    },
+    {
+      "src": ".local $x = {41 :integer signDisplay=always} {{{$x :offset add=1}}}",
+      "exp": "+42"
+    },
+    {
+      "src": ".local $x = {52 :number signDisplay=always} {{{$x :offset subtract=10}}}",
+      "exp": "+42"
+    },
+    {
+      "src": "{$x :offset add=1}",
+      "params": [{ "name": "x", "value": 41 }],
+      "exp": "42"
+    },
+    {
+      "src": "{$x :offset subtract=10}",
+      "params": [{ "name": "x", "value": 52 }],
+      "exp": "42"
+    },
+    {
+      "src": ".local $x = {1 :offset add=1} .match $x 1 {{=1}} 2 {{=2}} * {{other}}",
+      "exp": "=2"
+    },
+    {
+      "src": ".local $x = {10 :integer} .local $y = {$x :offset subtract=6} .match $y 10 {{=10}} 4 {{=4}} * {{other}}",
+      "exp": "=4"
+    }
+  ]
+}

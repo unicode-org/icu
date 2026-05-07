@@ -1,0 +1,312 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+kok_Latn{
+    %%Parent{"root"}
+    Countries{
+        001{"sonvsar"}
+        002{"Afrika"}
+        003{"Ut’tor Amerika"}
+        005{"Dokxinn Amerika"}
+        009{"Oxiania"}
+        011{"Ostonti Afrika"}
+        013{"Modlo America"}
+        014{"Udenti Afrika"}
+        015{"Ut’tori Amerika"}
+        017{"Modlo Afrika"}
+        018{"Dokxinni Afrika"}
+        019{"Purai Amerika"}
+        021{"Ut’tori Amerika"}
+        029{"Caribean"}
+        030{"Udenti Asia"}
+        034{"Dokxinni Asia"}
+        035{"Dokxinn-udent Asia"}
+        039{"Dokxinni Yerop"}
+        053{"Australasia"}
+        054{"Melanesia"}
+        057{"Micronesia Prant"}
+        061{"Polinesia"}
+        142{"Asia"}
+        143{"Modlo Asia"}
+        145{"Ostonti Asia"}
+        150{"Yerop"}
+        151{"Udenti Yerop"}
+        154{"Ut’tori Yerop"}
+        155{"Ostonti Yerop"}
+        202{"Saharache Dokxinnek Afrika"}
+        419{"Latin Amerika"}
+        AC{"Ascensanv Zunvo"}
+        AD{"Andorra"}
+        AE{"Sõyukt Orbi Emirat"}
+        AF{"Afghanistan"}
+        AG{"Antigua ani Barbuda"}
+        AI{"Anguila"}
+        AL{"Albania"}
+        AM{"Armenia"}
+        AO{"Angola"}
+        AQ{"Antarktika"}
+        AR{"Argentina"}
+        AS{"Amerikecho Samoa"}
+        AT{"Austria"}
+        AU{"Australia"}
+        AW{"Aruba"}
+        AX{"Oland Zunve"}
+        AZ{"Azerbaijan"}
+        BA{"Bosnia ani Herzegovina"}
+        BB{"Barbados"}
+        BD{"Bangladex"}
+        BE{"Beljiom"}
+        BF{"Burkina Faso"}
+        BG{"Bulgaria"}
+        BH{"Bahrain"}
+        BI{"Burundi"}
+        BJ{"Benin"}
+        BL{"São Bartolomev"}
+        BM{"Bermudas"}
+        BN{"Brunei"}
+        BO{"Bolivia"}
+        BQ{"Caribean Netherlands"}
+        BR{"Brazil"}
+        BS{"Bahamas"}
+        BT{"Bhutan"}
+        BV{"Bouve Zunvo"}
+        BW{"Botswana"}
+        BY{"Belarus"}
+        BZ{"Belize"}
+        CA{"Canada"}
+        CC{"Cocos (Keeling) Zunve"}
+        CD{"Congo - Kinshasa"}
+        CF{"Modlem Afriki Porjeraj"}
+        CG{"Congo - Brazzavil"}
+        CH{"Switzerland"}
+        CI{"Costa do Marfim"}
+        CK{"Cook Zunve"}
+        CL{"Chili"}
+        CM{"Camaroon"}
+        CN{"Chin"}
+        CO{"Colombia"}
+        CP{"Clipperton Zunvo"}
+        CQ{"Sark"}
+        CR{"Costa Rica"}
+        CU{"Cuba"}
+        CV{"Cabo Verde"}
+        CW{"Curaçao"}
+        CX{"Christmas Zunvo"}
+        CY{"Siprus"}
+        CZ{"Chekia"}
+        DE{"Jermon"}
+        DG{"Diego Garcia"}
+        DJ{"Djibuti"}
+        DK{"Denmark"}
+        DM{"Dominika"}
+        DO{"Dominican Porjeraj"}
+        DZ{"Algeria"}
+        EA{"Ceuta ani Meliya"}
+        EC{"Equador"}
+        EE{"Estonia"}
+        EG{"Ejipt"}
+        EH{"Ostonti Sahara"}
+        ER{"Eritrea"}
+        ES{"Ispania"}
+        ET{"Ethiopia"}
+        EU{"Yeropi Ekvott"}
+        EZ{"Yuro kxetr"}
+        FI{"Finland"}
+        FJ{"Fiji"}
+        FK{"Fokland Zunve"}
+        FM{"Maicronesia"}
+        FO{"Fero Zunve"}
+        FR{"Frans"}
+        GA{"Gabon"}
+        GB{"Sõyukt Razvott"}
+        GD{"Grenada"}
+        GE{"Georgia"}
+        GF{"Fransez Guiana"}
+        GG{"Guernzy"}
+        GH{"Ghana"}
+        GI{"Gibraltar"}
+        GL{"Greenland"}
+        GM{"Gambia"}
+        GN{"Gini"}
+        GP{"Guadalup"}
+        GQ{"Bhuinmodlogitacho Gini"}
+        GR{"Gres"}
+        GS{"Dokxinn Georgia ani Dokxinn Sandwich Zunve"}
+        GT{"Guatemala"}
+        GU{"Guam"}
+        GW{"Gini-Bissau"}
+        GY{"Guiana"}
+        HK{"Hong Kong"}
+        HM{"Heard ani McDonald Zunve"}
+        HN{"Honduras"}
+        HR{"Croaxia"}
+        HT{"Haiti"}
+        HU{"Hungary"}
+        IC{"Canarias Zunve"}
+        ID{"Indonesia"}
+        IE{"Ayerland"}
+        IL{"Israel"}
+        IM{"Menacho Zunvo"}
+        IN{"Bharot"}
+        IO{"Britanacho Hindi Mahasagor Prant"}
+        IQ{"Irak"}
+        IR{"Iran"}
+        IS{"Aysland"}
+        IT{"Italia"}
+        JE{"Jersy"}
+        JM{"Jamaica"}
+        JO{"Jordan"}
+        JP{"Japan"}
+        KE{"Kenya"}
+        KG{"Kyrgyzstan"}
+        KH{"Cambodia"}
+        KI{"Kiribas"}
+        KM{"Comoros"}
+        KN{"São Cristovão ani Nevis"}
+        KP{"Ut’tor Korea"}
+        KR{"Dokxinn Korea"}
+        KW{"Kuwait"}
+        KY{"Cayman Zunve"}
+        KZ{"Kazakhstan"}
+        LA{"Laos"}
+        LB{"Lebanon"}
+        LC{"Santa Lucia"}
+        LI{"Lixtenstain"}
+        LK{"Sri Lanka"}
+        LR{"Laibiria"}
+        LS{"Lesotho"}
+        LT{"Lithuania"}
+        LU{"Luksemborg"}
+        LV{"Latvia"}
+        LY{"Libia"}
+        MA{"Morokko"}
+        MC{"Monaco"}
+        MD{"Moldova"}
+        ME{"Montenegro"}
+        MF{"São Martinho (Frans)"}
+        MG{"Madagascar"}
+        MH{"Marxal Zunve"}
+        MK{"Ut’tor Masedonia"}
+        ML{"Mali"}
+        MM{"Myanmar"}
+        MN{"Mongolia"}
+        MO{"Macao"}
+        MP{"Ut’tori Mariana Zunvo"}
+        MQ{"Martinik"}
+        MR{"Mauritania"}
+        MS{"Montserrat"}
+        MT{"Malta"}
+        MU{"Maurixos"}
+        MV{"Maldiv"}
+        MW{"Malawi"}
+        MX{"Meksiko"}
+        MY{"Malayxia"}
+        MZ{"Mozambique"}
+        NA{"Namibia"}
+        NC{"Novo Caledonia"}
+        NE{"Naiger"}
+        NF{"Norfok Zunvo"}
+        NG{"Naigeria"}
+        NI{"Nicaragua"}
+        NL{"Netherlands"}
+        NO{"Norway"}
+        NP{"Nepal"}
+        NR{"Nauru"}
+        NU{"Niue"}
+        NZ{"Novo Zeeland"}
+        OM{"Oman"}
+        PA{"Panama"}
+        PE{"Peru"}
+        PF{"Fransez Polinesia"}
+        PG{"Papua Novo Gini"}
+        PH{"Phillipines"}
+        PK{"Pakistan"}
+        PL{"Poland"}
+        PM{"São Pedro ani Miquelão"}
+        PN{"Pitcairn Zunve"}
+        PR{"Porto Rico"}
+        PS{"Palestin"}
+        PT{"Portugal"}
+        PW{"Palau"}
+        PY{"Paraguay"}
+        QA{"Qatar"}
+        QO{"Poixilo Oxiania"}
+        RE{"Reunião"}
+        RO{"Romenia"}
+        RS{"Serbia"}
+        RU{"Roxya"}
+        RW{"Ruanda"}
+        SA{"Saudi Orob"}
+        SB{"Solomon Zunve"}
+        SC{"Seyxels"}
+        SD{"Sudan"}
+        SE{"Sweeden"}
+        SG{"Singapur"}
+        SH{"Santa Helena"}
+        SI{"Slovenia"}
+        SJ{"Svalbard ani Yan Mayen"}
+        SK{"Slovakia"}
+        SL{"Serra Leõ"}
+        SM{"San Marino"}
+        SN{"Senegal"}
+        SO{"Somalia"}
+        SR{"Surinam"}
+        SS{"Dokxinn Sudan"}
+        ST{"São Tomé ani Príncipe"}
+        SV{"El Salvador"}
+        SX{"São Martinho (Netherlands)"}
+        SY{"Siria"}
+        SZ{"Eswatini"}
+        TA{"Tristão da Cunha"}
+        TC{"Turk ani Caicos Zunve"}
+        TD{"Chad"}
+        TF{"Fransez Dokxinni Prant"}
+        TG{"Togo"}
+        TH{"Thailand"}
+        TJ{"Tajikistan"}
+        TK{"Tokolau"}
+        TL{"Timor-Leste"}
+        TM{"Turkmenistan"}
+        TN{"Tunisia"}
+        TO{"Tonga"}
+        TR{"Turkiya"}
+        TT{"Trindade ani Tobag"}
+        TV{"Tuvalu"}
+        TW{"Taiwan"}
+        TZ{"Tanzania"}
+        UA{"Yukrain"}
+        UG{"Yuganda"}
+        UM{"Sõyukt Rajyanche Poixile Dhaktte Zunve"}
+        UN{"Sõyukt Raxttram"}
+        US{"Amerikechim Sõyukt Rajyam"}
+        UY{"Uruguay"}
+        UZ{"Uzbekistan"}
+        VA{"Vatikan Xar"}
+        VC{"São Vicent ani Granadinas"}
+        VE{"Venezuela"}
+        VG{"Britanache Virgin Zunve"}
+        VI{"Sõyukt Rajyanche Virgin Zunve"}
+        VN{"Vietnam"}
+        VU{"Vanuatu"}
+        WF{"Wollis ani Futuna"}
+        WS{"Samoa"}
+        XK{"Kosovo"}
+        YE{"Yemen"}
+        YT{"Mayott"}
+        ZA{"Dokxinn Afrika"}
+        ZM{"Zambia"}
+        ZW{"Zimbabwe"}
+        ZZ{"Onollkhi Prant"}
+    }
+    Countries%chagos{
+        IO{"Xagos Zunve"}
+    }
+    Countries%short{
+        PS{"Palestini Prant"}
+    }
+    Countries%variant{
+        FK{"Malvinas Zunve"}
+        NZ{"Aoteroa"}
+        TL{"Udent Timor"}
+    }
+}

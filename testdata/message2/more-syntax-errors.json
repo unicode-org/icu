@@ -1,0 +1,21 @@
+{
+  "$schema": "https://raw.githubusercontent.com/unicode-org/message-format-wg/main/test/schemas/v0/tests.schema.json",
+  "scenario": "Syntax errors",
+  "description": "Strings that produce syntax errors when parsed.",
+  "defaultTestProperties": {
+    "locale": "en-US",
+    "expErrors": [
+      {
+        "type": "syntax-error"
+      }
+    ]
+  },
+  "tests": [
+    {
+      "src": "{\u0000/\u0000g }\u0000\u0000\u0000\u0000\u000c"
+    },
+    {
+      "src": ".\u0000$\u0000.\u0000\u00ca$\u0000\u0000\u00f9\u00f9{\u0000{\u0000{\u0000/\u0000\u00ff$\u00ff\u00ff\u00ff\u00ff"
+    }
+  ]
+}

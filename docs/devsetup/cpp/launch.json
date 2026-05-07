@@ -1,0 +1,102 @@
+// © 2020 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "intltest Launch",
+            "type": "cppdbg",
+            "request": "launch",
+            "targetArchitecture": "x64",
+            "program": "${workspaceFolder}/test/intltest/intltest",
+            "environment": [
+                {
+                    "name": "LD_LIBRARY_PATH", // Use "DYLD_LIBRARY_PATH" for mac osx.
+                    "value": "${workspaceRoot}/lib:${workspaceRoot}/stubdata:${workspaceRoot}/tools/ctestfw"
+                },
+                {
+                    "name": "ICU_DATA",
+                    "value": "${workspaceRoot}/data/out"
+                }
+            ],
+            "args": [ // Here you add which test cases you want to run, leaving it empty will run all the test cases.
+                // Examples:
+                // "rbbi/RBBITest",
+                // "format/NumberFormatTest"
+            ],
+            "stopAtEntry": false, // If you want to add a break point in the beginning of the program (i.e. test cases).
+            "cwd": "${workspaceFolder}/test/intltest",
+            "externalConsole": false, //set to true to see output in an external terminal instead
+            "MIMode": "gdb", // Use "lldb" for mac osx.
+            "logging": {
+                "trace": true,
+                "traceResponse": true,
+                "engineLogging": true,
+                "programOutput": true
+            },
+            "preLaunchTask": "buildTest"
+        },
+        {
+            "name": "cintltst Launch",
+            "type": "cppdbg",
+            "request": "launch",
+            "targetArchitecture": "x64",
+            "program": "${workspaceFolder}/test/cintltst/cintltst",
+            "environment": [
+                {
+                    "name": "LD_LIBRARY_PATH", // Use "DYLD_LIBRARY_PATH" for mac osx.
+                    "value": "${workspaceRoot}/lib:${workspaceRoot}/stubdata:${workspaceRoot}/tools/ctestfw"
+                },
+                {
+                    "name": "ICU_DATA",
+                    "value": "${workspaceRoot}/data/out"
+                }
+            ],
+            "args": [ // Here you add which test cases you want to run, leaving it empty will run all the test cases.
+                // "/tsutil/cstrcase" // Just for example.
+            ],
+            "stopAtEntry": false, // If you want to add a break point in the beginning of the program (i.e. test cases).
+            "cwd": "${workspaceFolder}",
+            "externalConsole": false, //set to true to see output in an external terminal instead
+            "MIMode": "gdb", // Use "lldb" for mac osx.
+            "logging": {
+                "trace": true,
+                "traceResponse": true,
+                "engineLogging": true,
+                "programOutput": true
+            },
+            "preLaunchTask": "buildTest"
+        },
+        {
+            "name": "iotest Launch",
+            "type": "cppdbg",
+            "request": "launch",
+            "targetArchitecture": "x64",
+            "program": "${workspaceFolder}/test/iotest/iotest",
+            "environment": [
+                {
+                    "name": "LD_LIBRARY_PATH", // Use "DYLD_LIBRARY_PATH" for mac osx.
+                    "value": "${workspaceRoot}/lib:${workspaceRoot}/stubdata:${workspaceRoot}/tools/ctestfw"
+                },
+                {
+                    "name": "ICU_DATA",
+                    "value": "${workspaceRoot}/data/out"
+                }
+            ],
+            "args": [ // Here you add which test cases you want to run, leaving it empty will run all the test cases.
+                // "/datadriv" // Just for example.
+            ],
+            "stopAtEntry": false, // If you want to add a break point in the beginning of the program (i.e. test cases).
+            "cwd": "${workspaceFolder}",
+            "externalConsole": false, //set to true to see output in an external terminal instead
+            "MIMode": "gdb", // Use "lldb" for mac osx.
+            "logging": {
+                "trace": true,
+                "traceResponse": true,
+                "engineLogging": true,
+                "programOutput": true
+            },
+            "preLaunchTask": "buildTest"
+        }
+    ]
+}

@@ -1,0 +1,168 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+bua{
+    AuxExemplarCharacters{"[{а́} {е́} {и́} {о́} {у́} {ы́} {э́} {ю́} {я́}]"}
+    ExemplarCharacters{"[а б в г д её ж з и й к л м н о ө п р с т у ү ф х һ ц ч ш щ ъ ы ь э ю я]"}
+    ExemplarCharactersPunctuation{
+        "[\\- ‐‑ – — , ; \\: ! ? . … '‘‚ \u0022“„ « » ( ) \\[ \\] \\{ \\} § @ * / \\&"
+        " #]"
+    }
+    NumberElements{
+        latn{
+            patterns{
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
+                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
+                percentFormat{"#,##0 %"}
+            }
+            symbols{
+                decimal{","}
+                group{" "}
+            }
+        }
+    }
+    calendar{
+        gregorian{
+            availableFormats{
+                GyMMMEd{"G y MM 'һарын' d, E"}
+                GyMMMd{"G y MM 'һарын' d"}
+                MMMEd{"E, MM 'һарын' d"}
+                MMMMd{"MM 'һарын' d"}
+                MMMd{"MM 'һарын' d"}
+                yMMMEd{"y 'оной' MM 'һарын' d, E"}
+                yMMMM{"y 'оной' MMMM"}
+                yMMMd{"y 'оной' MM 'һарын' d"}
+                yMd{"dd.MM.y"}
+            }
+            dayNames{
+                format{
+                    narrow{
+                        "Ни",
+                        "Да",
+                        "Ми",
+                        "Һа",
+                        "Пү",
+                        "Ба",
+                        "Би",
+                    }
+                    wide{
+                        "нима",
+                        "дабаа",
+                        "мигмар",
+                        "һарба",
+                        "пүрбэ",
+                        "баасан",
+                        "бимба",
+                    }
+                }
+            }
+            intervalFormats{
+                GyMMMEd{
+                    G{"G y MM 'һарын' d, E – G y MM 'һарын' d, E"}
+                    M{"G y MM 'һарын' d, E – MM 'һарын' d, E"}
+                    d{"G y MM 'һарын' d, E – MM 'һарын' d, E"}
+                    y{"G y MM 'һарын' d, E – y MM 'һарын' d, E"}
+                }
+                GyMMMd{
+                    G{"G y MM 'һарын' d – G y MM 'һарын' d"}
+                    M{"G y MM 'һарын' d – MM 'һарын' d"}
+                    d{"G y MM 'һарын' d–d"}
+                    y{"G y MM 'һарын' d – y MM 'һарын' d"}
+                }
+                MMMEd{
+                    M{"MM 'һарын' d, E – MM 'һарын' d, E"}
+                    d{"MM 'һарын' d, E – MM 'һарын' d, E"}
+                }
+                MMMd{
+                    M{"MM 'һарын' d – MM 'һарын' d"}
+                    d{"MM 'һарын' d – d"}
+                }
+                fallback{"{0} – {1}"}
+                yMMM{
+                    M{"y MMM – MMM"}
+                }
+                yMMMEd{
+                    M{"E, MM 'һарын' d – E, MM 'һарын' d, y"}
+                    d{"y 'оной' MM 'һарын' d, E – y 'оной' MM 'һарын' d, E"}
+                    y{"E, MM 'һарын' d, y – E, MM 'һарын' d, y"}
+                }
+                yMMMM{
+                    M{"y 'оной' MMMM – MMMM"}
+                    y{"y 'оной' MMMM – y 'оной' MMMM"}
+                }
+                yMMMd{
+                    M{"y 'оной' MM 'һарын' d – MM 'һарын' d"}
+                    d{"y 'оной' MMM d – d"}
+                    y{"y 'оной' MMMM d – y 'оной' MMMM d"}
+                }
+            }
+            monthNames{
+                format{
+                    wide{
+                        "нэгэдүгээр һара",
+                        "хоёрдугаар һара",
+                        "гурбадугаар һара",
+                        "дүрбэдүгээр һара",
+                        "табадугаар һара",
+                        "зургадугаар һара",
+                        "долодугаар һара",
+                        "наймадугаар һара",
+                        "юһэдүгээр һара",
+                        "арбадугаар һара",
+                        "арбан нэгэдүгээр һара",
+                        "арбан хоёрдугаар һара",
+                    }
+                }
+            }
+        }
+    }
+    delimiters{
+        alternateQuotationEnd{"“"}
+        alternateQuotationStart{"„"}
+        quotationEnd{"»"}
+        quotationStart{"«"}
+    }
+    fields{
+        day{
+            relative{
+                "-1"{"үсэгэлдэр"}
+                "0"{"мүнөө"}
+                "1"{"үглөөдэр"}
+            }
+        }
+        month{
+            relative{
+                "-1"{"үнгэрэгшэ һара"}
+                "0"{"энэ һара"}
+                "1"{"хойто һара"}
+            }
+        }
+        sun{
+            relative{
+                "-1"{"үнгэрэгшэ нима"}
+                "0"{"энэ нима"}
+                "1"{"хойто нима"}
+            }
+        }
+        week{
+            relative{
+                "-1"{"үнгэрэгшэ долоон хоног"}
+                "0"{"энэ долоон хоног"}
+                "1"{"хойто долоон хоног"}
+            }
+        }
+        year{
+            relative{
+                "-1"{"үнгэрэгшэ жэл"}
+                "0"{"энэ жэл"}
+                "1"{"хойто жэл"}
+            }
+        }
+    }
+    measurementSystemNames{
+        UK{"ЕБ"}
+        US{"АНУ"}
+        metric{"Мэтрик"}
+    }
+}

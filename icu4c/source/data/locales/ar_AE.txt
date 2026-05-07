@@ -1,0 +1,30 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+ar_AE{
+    NumberElements{
+        default{"latn"}
+        default_latn{"latn"}
+    }
+    calendar{
+        gregorian{
+            eras{
+                abbreviated%variant{
+                    0{"ق.م"}
+                }
+                wide%variant{
+                    0{"قبل الميلاد"}
+                }
+            }
+        }
+    }
+    fields{
+        year{
+            relative{
+                "-1"{"السنة الماضية"}
+                "0"{"هذه السنة"}
+                "1"{"السنة التالية"}
+            }
+        }
+    }
+}

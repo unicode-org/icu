@@ -1,0 +1,160 @@
+{
+  "scenario": "Bidi support",
+  "description": "Tests for correct parsing of messages with bidirectional marks and isolates",
+  "defaultTestProperties": {
+    "locale": "en-US"
+  },
+  "tests": [
+    {
+        "comment": "simple-message    = o [simple-start pattern]",
+        "src": "  \u061C Hello world!",
+        "exp": "  \u061C Hello world!"
+    },
+    {
+        "comment": "complex-message   = o *(declaration o) complex-body o",
+        "src": "\u200E .local $x = {1} {{ {$x}}}",
+        "exp": " 1"
+    },
+    {
+        "comment": "complex-message   = o *(declaration o) complex-body o",
+        "src": ".local $x = {1} \u200F {{ {$x}}}",
+        "exp": " 1"
+    },
+    {
+        "comment": "complex-message   = o *(declaration o) complex-body o",
+        "src": ".local $x = {1} {{ {$x}}} \u2066",
+        "exp": " 1"
+    },
+    {
+        "comment": "input-declaration = input o variable-expression",
+        "src": ".input \u2067 {$x :number} {{hello}}",
+        "params": [{"name": "x", "value": "1"}],
+        "exp": "hello"
+    },
+    {
+        "comment": "local s variable o \"=\" o expression",
+        "src": ".local $x \u2068 = \u2069 {1} {{hello}}",
+        "exp": "hello"
+    },
+    {
+        "comment": "local s variable o \"=\" o expression",
+        "src": ".local \u2067 $x = {1} {{hello}}",
+        "exp": "hello"
+    },
+    {
+        "comment": "local s variable o \"=\" o expression",
+        "src": ".local\u2067 $x = {1} {{hello}}",
+        "exp": "hello"
+    },
+    {
+        "comment": "o \"{{\" pattern \"}}\"",
+        "src": "\u2067 {{hello}}",
+        "exp": "hello"
+    },
+    {
+        "comment": "match-statement s variant *(o variant)",
+        "src": [".local $x = {1 :number}\n",
+                ".match $x\n",
+                "1 {{one}}\n",
+                "\u061C * {{other}}"],
+        "exp": "one"
+    },
+    {
+        "comment": "match-statement s variant *(o variant)",
+        "src": [".local $x = {1 :number}",
+                ".match $x \u061c",
+                "1 {{one}}",
+                "* {{other}}"],
+        "exp": "one"
+    },
+    {
+        "comment": "match-statement s variant *(o variant)",
+        "src": [".local $x = {1 :number}",
+                ".match $x \u061c",
+                "1 {{one}}",
+                "* {{other}}"],
+        "exp": "one"
+    },
+    {
+        "comment": "variant = key *(s key) quoted-pattern",
+        "src": [".local $x = {1 :number} .local $y = {$x :number}",
+                ".match $x $y\n",
+                "1 \u200E 1 {{one}}",
+                "* * {{other}}"],
+        "exp": "one"
+    },
+    {
+        "comment": "variant = key *(s key) quoted-pattern",
+        "src": [".local $x = {1 :number} .local $y = {$x :number}",
+                ".match $x $y\n",
+                "1\u200E 1 {{one}}",
+                "* * {{other}}"],
+        "exp": "one"
+    },
+    {
+        "comment": "literal-expression  = \"{\" o literal [s function] *(s attribute) o \"}\"",
+        "src": "{\u200E hello \u200F}",
+        "exp": "hello"
+    },
+    {
+        "comment": "variable-expression = \"{\" o variable [s function] *(s attribute) o \"}\"",
+        "src": ".local $x = {1} {{ {\u200E $x \u200F} }}",
+        "exp": " 1 "
+    },
+    {
+        "comment": "function-expression = \"{\" o function *(s attribute) o \"}\"",
+        "src": "{1 \u200E :number \u200F}",
+        "exp": "1"
+    },
+    {
+        "comment": "markup = \"{\" o \"#\" identifier *(s option) *(s attribute) o [\"/\"] \"}\"",
+        "src": "{\u200F #b \u200E }",
+        "exp": ""
+    },
+    {
+        "comment": "markup = \"{\" o \"/\" identifier *(s option) *(s attribute) o \"}\"",
+        "src": "{\u200F /b \u200E }",
+        "exp": ""
+    },
+    {
+        "comment": "option = identifier o \"=\" o (literal / variable)",
+        "src": "{1 :number minimumFractionDigits\u200F=\u200E1 }",
+        "exp": "1.0"
+    },
+    {
+        "comment": "attribute      = \"@\" identifier [o \"=\" o (literal / variable)]",
+        "src": "{1 :number @locale\u200F=\u200Een }",
+        "exp": "1"
+    },
+    {
+        "comment":  " name... excludes U+FFFD and U+061C -- this pases as name -> [bidi] name-start *name-char",
+        "src": ".local $\u061Cfoo = {1} {{ {$\u061Cfoo} }}",
+        "exp": " 1 "
+    },
+    {
+        "comment":  " name matches https://www.w3.org/TR/REC-xml-names/#NT-NCName but excludes U+FFFD and U+061C",
+        "src": ".local $foo\u061Cbar = {2} {{ }}",
+        "expErrors": [{"type": "syntax-error"}]
+    },
+    {
+        "comment":  "name       = [bidi] name-start *name-char [bidi]",
+        "src": ".local $\u200Efoo\u200F = {3} {{{$\u200Efoo\u200F}}}",
+        "exp": "3"
+    },
+    {
+        "comment":  "name       = [bidi] name-start *name-char [bidi]",
+        "src": ".local $foo = {4} {{{$\u200Efoo\u200F}}}",
+        "exp": "4"
+    },
+    {
+        "comment":  "name       = [bidi] name-start *name-char [bidi]",
+        "src": ".local $\u200Efoo\u200F = {5} {{{$foo}}}",
+        "exp": "5"
+    },
+    {
+        "comment":  "name       = [bidi] name-start *name-char [bidi]",
+        "src": ".local $foo\u200Ebar = {6} {{{$foo\u200Ebar}}}",
+        "expErrors": [{"type": "syntax-error"}]
+    }
+  ]
+}

@@ -1,0 +1,306 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+tok{
+    AuxExemplarCharacters{"[b c d f g h q r v x y z]"}
+    ExemplarCharacters{"[a e i j k l m n o p s t u w]"}
+    ExemplarCharactersIndex{"[A E I J K L M N O P S T U W]"}
+    ExemplarCharactersNumbers{"[\\- ‑ / # % + 0 1 2 3 4 5 6 7 8 9]"}
+    ExemplarCharactersPunctuation{"[\\- ‑ , ; \\: ! ? . '‘’ \u0022“” ( ) \\[ \\] @ * / #]"}
+    NumberElements{
+        latn{
+            patterns{
+                accountingFormat%alphaNextToNumber{"¤ #,#0.00"}
+                accountingFormat%noCurrency{"#,#0.00"}
+                currencyFormat{"¤#,#0.00"}
+                currencyFormat%alphaNextToNumber{"¤ #,#0.00"}
+                currencyFormat%noCurrency{"#,#0.00"}
+                decimalFormat{"#,#0.###"}
+            }
+            symbols{
+                decimal{","}
+                group{" "}
+            }
+        }
+        minimalPairs{
+            plural{
+                other{"tenpo suno {0}"}
+            }
+        }
+    }
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "pi open suno",
+                "pi pini suno",
+            }
+            DateTimePatterns{
+                "zzzz 'la' HH:mm:ss",
+                "z 'la' HH:mm:ss",
+                "HH:mm:ss",
+                "HH:mm",
+                "'sike' #y 'la' MMM 'la' 'suno' #d",
+                "'tenpo' 'sike' #y 'la' 'tenpo' MMMM 'la' 'tenpo' 'suno' #d",
+                "'sike' #y 'la' MMM 'la' 'suno' #d",
+                "y-MM-dd",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Bh{"'tenpo' 'ilo' #h B"}
+                Hm{"#HH:mm"}
+                Hms{"#HH:mm:ss"}
+                Hmsv{"#HH:mm:ss 'lon' v"}
+                MMMMW{
+                    other{"MMMM 'la' 'sike' 'esun' #W"}
+                }
+                d{"#d"}
+                h{"'tenpo' 'ilo' #h a"}
+                hm{"#h:mm a"}
+                hms{"#h:mm:ss a"}
+                hmsv{"#h:mm:ss a 'lon' v"}
+                hmv{"#h:mm a 'lon' v"}
+                y{"#y"}
+                yMMMM{"#y 'la' MMMM"}
+                yMMMd{"'sike' #y ) #M ) #d"}
+                yMd{"#y)#M)#d"}
+                yQQQ{"#y 'la' QQQ"}
+                yQQQQ{"#y 'la' QQQQ"}
+                yw{
+                    other{"Y 'la' 'sike' 'esun' #w"}
+                }
+            }
+            dayNames{
+                format{
+                    narrow{
+                        "7",
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                    }
+                    wide{
+                        "suno esun #7",
+                        "suno esun #1",
+                        "suno esun #2",
+                        "suno esun #3",
+                        "suno esun #4",
+                        "suno esun #5",
+                        "suno esun #6",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "7",
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                    }
+                }
+            }
+            dayPeriod{
+                stand-alone{
+                    wide{
+                        am{"open suno"}
+                        pm{"pini suno"}
+                    }
+                }
+            }
+            monthNames{
+                format{
+                    wide{
+                        "tenpo mun #1",
+                        "tenpo mun #2",
+                        "tenpo mun #3",
+                        "tenpo mun #4",
+                        "tenpo mun #5",
+                        "tenpo mun #6",
+                        "tenpo mun #7",
+                        "tenpo mun #8",
+                        "tenpo mun #9",
+                        "tenpo mun #10",
+                        "tenpo mun #11",
+                        "tenpo mun #12",
+                    }
+                }
+            }
+        }
+    }
+    fields{
+        day{
+            dn{"tenpo suno"}
+            relative{
+                "-1"{"tenpo suno pini"}
+                "0"{"tenpo suno ni"}
+                "1"{"tenpo suno kama"}
+            }
+            relativeTime{
+                future{
+                    other{"tenpo suno kama {0}"}
+                }
+                past{
+                    other{"tenpo suno pini {0}"}
+                }
+            }
+        }
+        day-narrow{
+            dn{"suno"}
+        }
+        day-short{
+            dn{"suno"}
+        }
+        era{
+            dn{"tenpo"}
+        }
+        fri{
+            relative{
+                "-1"{"tenpo esun #5 pini"}
+                "0"{"tenpo esun #5 ni"}
+                "1"{"tenpo esun #5 kama"}
+            }
+        }
+        hour{
+            dn{"tenpo ilo"}
+            relative{
+                "0"{"tenpo ilo ni"}
+            }
+            relativeTime{
+                future{
+                    other{"tenpo ilo kama {0}"}
+                }
+                past{
+                    other{"tenpo ilo pini {0}"}
+                }
+            }
+        }
+        mon{
+            relative{
+                "-1"{"tenpo esun #1 pini"}
+                "0"{"tenpo esun #1 ni"}
+                "1"{"tenpo esun #1 kama"}
+            }
+        }
+        month{
+            dn{"tenpo mun"}
+            relative{
+                "-1"{"tenpo mun pini"}
+                "0"{"tenpo mun ni"}
+                "1"{"tenpo mun kama"}
+            }
+            relativeTime{
+                future{
+                    other{"tenpo mun kama {0}"}
+                }
+                past{
+                    other{"tenpo mun pini {0}"}
+                }
+            }
+        }
+        month-narrow{
+            dn{"mun"}
+        }
+        month-short{
+            dn{"mun"}
+        }
+        sat{
+            relative{
+                "-1"{"tenpo esun #6 pini"}
+                "0"{"tenpo esun #6 ni"}
+                "1"{"tenpo esun #6 kama"}
+            }
+        }
+        sun{
+            relative{
+                "-1"{"tenpo esun #7 pini"}
+                "0"{"tenpo esun #7 ni"}
+                "1"{"tenpo esun #7 kama"}
+            }
+        }
+        thu{
+            relative{
+                "-1"{"tenpo esun #4 pini"}
+                "0"{"tenpo esun #4 ni"}
+                "1"{"tenpo esun #4 kama"}
+            }
+        }
+        tue{
+            relative{
+                "-1"{"tenpo esun #2 pini"}
+                "0"{"tenpo esun #2 ni"}
+                "1"{"tenpo esun #2 kama"}
+            }
+        }
+        wed{
+            relative{
+                "-1"{"tenpo esun #3 pini"}
+                "0"{"tenpo esun #3 ni"}
+                "1"{"tenpo esun #3 kama"}
+            }
+        }
+        week{
+            dn{"tenpo esun"}
+            relative{
+                "-1"{"tenpo esun pini"}
+                "0"{"tenpo esun ni"}
+                "1"{"tenpo esun kama"}
+            }
+            relativeTime{
+                future{
+                    other{"tenpo esun kama {0}"}
+                }
+                past{
+                    other{"tenpo esun pini {0}"}
+                }
+            }
+        }
+        week-narrow{
+            dn{"esun"}
+        }
+        week-short{
+            dn{"esun"}
+        }
+        year{
+            dn{"tenpo sike"}
+            relative{
+                "-1"{"tenpo sike pini"}
+                "0"{"tenpo sike ni"}
+                "1"{"tenpo sike wan"}
+            }
+            relativeTime{
+                future{
+                    other{"tenpo sike kama {0}"}
+                }
+                past{
+                    other{"tenpo sike pini {0}"}
+                }
+            }
+        }
+        year-narrow{
+            dn{"sike"}
+        }
+        year-short{
+            dn{"sike"}
+        }
+        zone{
+            dn{"nasin tenpo"}
+        }
+    }
+    measurementSystemNames{
+        UK{"nasin pi ma Juke"}
+        US{"nasin pi ma Mewika"}
+        metric{"nasin pi ma ale"}
+    }
+    personNames{
+        parameterDefault{
+            formality{"informal"}
+        }
+    }
+}
