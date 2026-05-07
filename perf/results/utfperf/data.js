@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1778108334089,
+  "lastUpdate": 1778113757342,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -66567,6 +66567,48 @@ window.BENCHMARK_DATA = {
           {
             "name": "FromUTF8",
             "value": 1.7603,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "72534b53ee3926fdc8c685f8c11bad9efe10e72b",
+          "message": "ICU-23248 Add Javadoc package documentation for Segmenter",
+          "timestamp": "2026-05-06T16:52:47-07:00",
+          "tree_id": "134c3a66069c34fc19b23339dffe59f6f2bb9fd8",
+          "url": "https://github.com/unicode-org/icu/commit/72534b53ee3926fdc8c685f8c11bad9efe10e72b"
+        },
+        "date": 1778113291154,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Roundtrip",
+            "value": 8.5713,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUnicode",
+            "value": 2.8538,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUTF8",
+            "value": 1.542,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
