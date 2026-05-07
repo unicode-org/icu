@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1778112323210,
+  "lastUpdate": 1778116698917,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -89726,6 +89726,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 3.793059026991545,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "ed649ab7594c2a4f220da4cacecf4556a262f7d2",
+          "message": "ICU-23247 Bump the github-actions group with 6 updates",
+          "timestamp": "2026-05-06T17:53:46-07:00",
+          "tree_id": "883a1aa7cfc42d627161a85d5befa321fe925b18",
+          "url": "https://github.com/unicode-org/icu/commit/ed649ab7594c2a4f220da4cacecf4556a262f7d2"
+        },
+        "date": 1778116271764,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 3.768915747303133,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
