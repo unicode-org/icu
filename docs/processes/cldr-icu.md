@@ -484,7 +484,22 @@ cd $ICU4J_ROOT
 
 ## 13 Rebuild ICU4J with new data, run tests
 
-13a. Run the tests using the Maven build
+13a. Re-format the generated Java files
+
+In some cases the previous steps will generate Java code
+(for example `LocaleFallbackData.java`, `ResourceFallbackCodeGenerator.java`,
+`DebugUtilitiesData.java`).
+
+We try to generate code that is already formatted correctly, but some edge
+cases can't be handled easily.
+So it is best to format automatically:
+
+```sh
+cd $ICU4J_ROOT
+mvn spotless:apply
+```
+
+13b. Run the tests using the Maven build
 ```sh
 cd $ICU4J_ROOT
 mvn clean
@@ -502,7 +517,7 @@ or (example of using module path, class name, one method):
 mvn install -pl main/common_tests -Dtest=MeasureUnitTest#TestGreek
 ```
 
-13b. Optionally run the tests in exhaustive mode
+13c. Optionally run the tests in exhaustive mode
 
 Optionally run exhaustive tests locally before committing changes:
 ```sh
