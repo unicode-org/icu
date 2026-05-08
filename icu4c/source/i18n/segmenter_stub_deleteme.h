@@ -20,6 +20,7 @@ namespace segmenter {
     class SegmenterStubDeleteme {
         public:
             SegmenterStubDeleteme();
+            int32_t returnZero();
         
     };
 

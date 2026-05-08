@@ -14,8 +14,11 @@
 
 namespace segmenter {  // icu::segmenter
 
-SegmenterStubDeleteme::SegmenterStubDeleteme() : {
+SegmenterStubDeleteme::SegmenterStubDeleteme() {
+}
 
+int32_t SegmenterStubDeleteme::returnZero() {
+    return 0;
 }
 
 }  // namespace segmenter
