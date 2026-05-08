@@ -3,7 +3,7 @@
 
 #include "unicode/utypes.h"
 
-#if !UCONFIG_NO_FORMATTING
+#if !UCONFIG_NO_FORMATTING // TODO: copy NO BREAKITERATOR instead
 
 #if U_SHOW_CPLUSPLUS_API
 
@@ -15,6 +15,7 @@
 #include "segmenter.h"
 
 U_NAMESPACE_BEGIN
+
 namespace segmenter {
 
     class SegmenterStubDeleteme {
@@ -26,6 +27,7 @@ namespace segmenter {
 
 
 }  // namespace segmenter
+
 U_NAMESPACE_END
 
 #endif //__SEGMENTER_STUB_DELETEME_H__

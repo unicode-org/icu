@@ -12,7 +12,9 @@
 #include "segmenter.h"
 #include "segmenter_stub_deleteme.h"
 
-namespace segmenter {  // icu::segmenter
+U_NAMESPACE_BEGIN
+
+namespace segmenter {
 
 SegmenterStubDeleteme::SegmenterStubDeleteme() {
 }
@@ -22,6 +24,8 @@ int32_t SegmenterStubDeleteme::returnZero() {
 }
 
 }  // namespace segmenter
+
+U_NAMESPACE_END
 
 #endif // U_HIDE_DRAFT_API
 
