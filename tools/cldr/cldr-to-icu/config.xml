@@ -133,8 +133,6 @@
             <forcedAlias source="yue_CN" target="zh_Hans"/>
             <forcedAlias source="yue_Hans" target="zh_Hans"/>
             <forcedAlias source="yue_Hans_CN" target="zh_Hans"/>
-            <!-- TODO: Find out and document this properly. -->
-            <forcedAlias source="sr_ME" target="sr_Cyrl_ME"/>
 
             <localeIds>
                 root,

@@ -1,6 +1,9 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/
-sr_ME{
-    "%%ALIAS"{"sr_Latn_ME"}
+/**
+ * generated alias target
+ */
+sr_Latn_ME{
+    ___{""}
 }

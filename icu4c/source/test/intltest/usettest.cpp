@@ -4715,10 +4715,24 @@ void UnicodeSetTest::TestToPatternOutput() {
             {u"[{a}-z]", u"[a-z]"},
             {uR"([\N{PRESENTATION FORM FOR VERTICAL RIGHT WHITE LENTICULAR BRAKCET}])", u"[︘]"},
             {uR"([\N{bell}])", u"[🔔]"},
-            // Ill-formed in ICU 78 and earlier:
+            // Ill-formed in ICU 78 and earlier, made well-formed by ICU-23350:
             {uR"([\N{PRESENTATION FORM FOR VERTICAL RIGHT WHITE LENTICULAR BRACKET}])", u"[︘]"},
+            // Loose matching: These were ill-formed in ICU 78 and earlier, and were
+            // made well-formed by ICU-3736.
+            {uR"([\N{Latin small ligature o-e}])", u"[œ]"},
             {uR"([\N{Hangul jungseong O-E}])", u"[ᆀ]"},
+            {uR"([\N{Hangul jungseong O -E}])", u"[ᆀ]"},
             {uR"([\N{Hangul jungseong OE}])", u"[ᅬ]"},
+            {uR"([\N{Tibetan letter -a}])", u"[འ]"},
+            {uR"([\N{Tibetan letter - a}])", u"[འ]"},
+            {uR"([\N{TIBETAN_LETTER_-A}])", u"[འ]"},
+            {uR"([\N{TIBETAN LETTER-A}])", u"[ཨ]"},
+            {uR"([\N{Tibetan mark BKA- SHOG YIG MGO}])", u"[༊]"},
+            {uR"([\N{Tibetan mark BKA -SHOG-YIG-MGO}])", u"[༊]"},
+            {uR"([\N{CJK UNIFIED IDEOGRAPH-55B5}])", u"[喵]"},
+            {uR"([\N{CJK unified ideograph 5-5-b-5}])", u"[喵]"},
+            {uR"([{\N{Hangul syllable YA}\N{Hangul syllable ONG}}])", u"[{야옹}]"},
+            {uR"([{\N{Hangul-syllable-y-a}\N{Hangul-syllable-o-ng}}])", u"[{야옹}]"},
         }) {
         UErrorCode errorCode = U_ZERO_ERROR;
         const UnicodeSet set(expression, errorCode);
@@ -4840,8 +4854,12 @@ void UnicodeSetTest::TestParseErrors() {
             u"[:^Noncharacter_Code_Point≠No:]",
             // This should be [\a]; tracked by ICU-8963.
             uR"([\N{BEL}])",
-            // This should be [œ]; tracked by ICU-3736.
-            uR"([\N{Latin small ligature o-e}])",
+            // The leading hyphen does not match the medial hyphen in the real character name.
+            uR"([\N{CJK UNIFIED IDEOGRAPH -55B5}])",
+            // A medial hyphen does not match the trailing hyphen in BKA-.
+            uR"([\N{Tibetan mark BKA-SHOG-YIG-MGO}])",
+            // With -- in the query, neither hyphen is medial, and two hyphens do not match one.
+            uR"([\N{Tibetan mark BKA--SHOG-YIG-MGO}])",
         }) {
         UErrorCode errorCode = U_ZERO_ERROR;
         const UnicodeSet set(expression, errorCode);

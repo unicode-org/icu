@@ -144,49 +144,12 @@ isPOSIXClose(const UnicodeString &pattern, int32_t pos) {
 // memory leak checker tools
 #define _dbgct(me)
 
-// Strips leading and trailing spaces and turns runs of spaces into single spaces.
-// This should be replaced by UAX44-LM1 and UAX44-LM2 skeletonizations as part of ICU-3736.
-template<typename CharT>
-UBool mungeCharName(std::basic_string_view<CharT> src, char* dst, int32_t dstCapacity) {
-    int32_t j = 0;
-    --dstCapacity; /* make room for term. zero */
-    if constexpr (!std::is_same_v<CharT, char>) {
-        if (!uprv_isInvariantUString(src.data(), static_cast<int32_t>(src.size()))) {
-            return false;
-        }
-    }
-    for (CharT uch : src) {
-        char ch;
-        if constexpr (std::is_same_v<CharT, char>) {
-            ch = uch;
-        } else {
-            // This would want to be UCHAR_TO_CHAR but that is defined in uinvchar.cpp. This function
-            // should not last long anyway (famous last words)…
-            u_UCharsToChars(&uch, &ch, 1);
-        }
-        if (ch == ' ' && (j == 0 || (j > 0 && dst[j - 1] == ' '))) {
-            continue;
-        }
-        if (j >= dstCapacity) return false;
-        dst[j++] = ch;
-    }
-    if (j > 0 && dst[j-1] == ' ') --j;
-    dst[j] = 0;
-    return true;
-}
-
 // Returns the character with the given name or name alias, or U_SENTINEL if no such character
 // exists.
-template<typename CharT>
-UChar32 getCharacterByName(const std::basic_string_view<CharT> name) {
-    // Must munge name, since u_charFromName() does not do 'loose' matching.
-    char buf[128]; // it suffices that this be > uprv_getMaxCharNameLength
-    if (!mungeCharName(name, buf, sizeof(buf))) {
-        return U_SENTINEL;
-    }
+UChar32 getCharacterByName(const CharString& name) {
     for (const UCharNameChoice nameChoice : std::array{U_EXTENDED_CHAR_NAME, U_CHAR_NAME_ALIAS}) {
         UErrorCode ec = U_ZERO_ERROR;
-        UChar32 ch = u_charFromName(nameChoice, buf, &ec);
+        UChar32 ch = u_charFromName(nameChoice, name.data(), &ec);
         if (U_SUCCESS(ec)) {
             return ch;
         }
@@ -704,8 +667,15 @@ class UnicodeSet::Lexer {
                     }
                     start = parsePosition_.getIndex();
                 } else if (last == u'}') {
-                    const UChar32 result = getCharacterByName(std::u16string_view(pattern_).substr(
-                        start, parsePosition_.getIndex() - 1 - start));
+                    const std::u16string_view u16name = std::u16string_view(pattern_).substr(
+                        start, parsePosition_.getIndex() - 1 - start);
+                    const UChar32 result = getCharacterByName(CharString().appendInvariantChars(
+                        u16name.data(), static_cast<int32_t>(u16name.length()), errorCode));
+                    if (!U_SUCCESS(errorCode)) {
+                        // Convert U_INVARIANT_CONVERSION_ERROR to U_ILLEGAL_ARGUMENT_ERROR.
+                        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+                        return {};
+                    }
                     if (result < 0 || (hex.has_value() && result != hex) ||
                             (literal.has_value() && result != literal)) {
                         errorCode = U_ILLEGAL_ARGUMENT_ERROR;
@@ -1477,8 +1447,7 @@ UnicodeSet::applyPropertyAlias(const UnicodeString& prop,
                 }
             case UCHAR_NAME:
                 {
-                    const UChar32 ch =
-                        getCharacterByName<char>(std::string_view(vname.data(), vname.length()));
+                    const UChar32 ch = getCharacterByName(vname);
                     if (ch < 0) {
                         FAIL(ec);
                     }
@@ -1491,14 +1460,8 @@ UnicodeSet::applyPropertyAlias(const UnicodeString& prop,
                 FAIL(ec);
             case UCHAR_AGE:
                 {
-                    // Must munge name, since u_versionFromString() does not do
-                    // 'loose' matching.
-                    char buf[128];
-                    if (!mungeCharName(std::string_view(vname.data(), vname.length()), buf,
-                                       sizeof(buf)))
-                        FAIL(ec);
                     UVersionInfo version;
-                    u_versionFromString(version, buf);
+                    u_versionFromString(version, vname.data());
                     applyFilter(versionFilter, &version,
                                 CharacterProperties::getInclusionsForProperty(p, ec), ec);
                     return *this;
