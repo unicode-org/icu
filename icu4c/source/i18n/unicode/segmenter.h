@@ -1,15 +1,20 @@
 // © 2026 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-#ifndef __SEGEMENTER_H__
-#define __SEGEMENTER_H__
-
 #include "unicode/utypes.h"
-#include "unicode/unistr.h"
+
+#if !UCONFIG_NO_FORMATTING
 
 #if U_SHOW_CPLUSPLUS_API
 
-#ifndef U_HIDE_INTERNAL_API
+#ifndef U_HIDE_DRAFT_API
+
+#ifndef __SEGEMENTER_H__
+#define __SEGEMENTER_H__
+
+#include "unicode/unistr.h"
+
+using namespace icu;
 
 namespace segmenter {  // icu::segmenter
 
@@ -24,8 +29,10 @@ class Segments {
 
 }  // namespace segmenter
 
-#endif // U_HIDE_INTERNAL_API
+#endif // __SEGEMENTER_H__
+
+#endif // U_HIDE_DRAFT_API
 
 #endif /* U_SHOW_CPLUSPLUS_API */
 
-#endif // __SEGEMENTER_H__
+#endif /* #if !UCONFIG_NO_FORMATTING */
