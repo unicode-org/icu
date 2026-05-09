@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1778198178379,
+  "lastUpdate": 1778290299070,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -85587,6 +85587,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 1865761.2997,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "cjchapman@unicode.org",
+            "name": "Chris Chapman",
+            "username": "cjchapman"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "91a22c372aa31bbd29b8aa96908471673aee627b",
+          "message": "ICU-23393 fix calendar keyword in Test22962BuddhistOverflow",
+          "timestamp": "2026-05-08T17:52:53-07:00",
+          "tree_id": "4e435e18ac853ba128aef56c8eb111bb883cfe3a",
+          "url": "https://github.com/unicode-org/icu/commit/91a22c372aa31bbd29b8aa96908471673aee627b"
+        },
+        "date": 1778289848513,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 381.516,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 13267869.645,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 1997945.4004,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 11889683.8632,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 1861437.9754,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
