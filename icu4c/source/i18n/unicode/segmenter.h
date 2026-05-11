@@ -1,19 +1,40 @@
 // © 2026 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-#include "unicode/utypes.h"
-
-#if !UCONFIG_NO_FORMATTING
-
-#if U_SHOW_CPLUSPLUS_API
-
-#ifndef U_HIDE_DRAFT_API
-
 // TODO: rewrite file to match brkiter.h
 #ifndef __SEGEMENTER_H__
 #define __SEGEMENTER_H__
 
+/**
+ * \file
+ * \brief C++ API: Segmenter base class.
+ */
+
+#include "unicode/utypes.h"
+
+#if U_SHOW_CPLUSPLUS_API
+
+#if UCONFIG_NO_BREAK_ITERATION
+
+U_NAMESPACE_BEGIN
+
+/*
+ * Allow the declaration of APIs with pointers to BreakIterator
+ * and Segmenter
+ * even when break iteration is removed from the build.
+ */
+class BreakIterator;
+class Segmenter;
+
+U_NAMESPACE_END
+
+#else
+
+#include "unicode/uobject.h"
 #include "unicode/unistr.h"
+#include "unicode/chariter.h"
+
+#ifndef U_HIDE_DRAFT_API
 
 U_NAMESPACE_BEGIN
 
@@ -39,10 +60,10 @@ class Segment {
 
 U_NAMESPACE_END
 
-#endif // __SEGEMENTER_H__
-
 #endif // U_HIDE_DRAFT_API
+
+#endif /* #if !UCONFIG_NO_BREAK_ITERATION */
 
 #endif /* U_SHOW_CPLUSPLUS_API */
 
-#endif /* #if !UCONFIG_NO_FORMATTING */
+#endif // __SEGEMENTER_H__
