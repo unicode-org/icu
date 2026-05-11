@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1778289865668,
+  "lastUpdate": 1778535190987,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -44937,6 +44937,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 3.1087420041103506,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "ef1789e1a5e10504f5e54b486595a7bb55df5ff6",
+          "message": "ICU-23247 Ignore Appveyor in CI checks\n\nSee #3974",
+          "timestamp": "2026-05-11T14:06:18-07:00",
+          "tree_id": "f3810c1a82a303e09813c61a904c23766640d461",
+          "url": "https://github.com/unicode-org/icu/commit/ef1789e1a5e10504f5e54b486595a7bb55df5ff6"
+        },
+        "date": 1778534738002,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 2.94071950093222,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
