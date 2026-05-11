@@ -36,5 +36,5 @@ jobs:
         # "neutral" is interpreted by this action as a failure.
         # Since the jobs are superfluous, they can be ignored.
         ignore: "CI-ICU4C,CI-ICU4J,ClusterFuzzLite/CIFuzz"
-        # Wait for 2 minutes before this action begins its work by polling Github for job/check status
-        delay: 120s
+        # Wait for 1 minute before this action begins its work by polling Github for job/check status
+        delay: 60s
