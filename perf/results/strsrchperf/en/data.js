@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1778535796855,
+  "lastUpdate": 1778548506603,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -54717,6 +54717,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 49.5397,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "c53759673ee1f325d18583f3766a56e891b7a896",
+          "message": "ICU-23247 Update doc and code about generated .java code formatting",
+          "timestamp": "2026-05-11T17:30:10-07:00",
+          "tree_id": "90736173fd2d5a35d98b6bf42e0c2d80f9bfbabd",
+          "url": "https://github.com/unicode-org/icu/commit/c53759673ee1f325d18583f3766a56e891b7a896"
+        },
+        "date": 1778548034133,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 23.0103,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 52.9172,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
