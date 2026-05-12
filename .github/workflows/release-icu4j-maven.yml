@@ -72,7 +72,7 @@ jobs:
     - name: Build javadoc taglets
       run: |
         # Really important to do this first because we need `tools/build` for the javadoc applets
-        mvn install --file icu4j/tools/build \
+        mvn install --file icu4j/tools/taglets \
           ${SHARED_MVN_ARGS} \
           -DskipTests -DskipITs
 

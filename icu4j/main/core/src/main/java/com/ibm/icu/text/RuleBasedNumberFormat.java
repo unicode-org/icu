@@ -1224,8 +1224,7 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
     }
 
     /**
-     * <strong style="font-family: helvetica; color: red;">NEW</strong> Implement
-     * com.ibm.icu.text.NumberFormat: Format a BigInteger.
+     * Implement {@link com.ibm.icu.text.NumberFormat}: format a {@link BigDecimal}.
      *
      * @stable ICU 2.0
      */
@@ -1235,8 +1234,7 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
     }
 
     /**
-     * <strong style="font-family: helvetica; color: red;">NEW</strong> Implement
-     * com.ibm.icu.text.NumberFormat: Format a BigDecimal.
+     * Implement {@link com.ibm.icu.text.NumberFormat}: format a {@link BigDecimal}.
      *
      * @stable ICU 2.0
      */
@@ -1252,8 +1250,7 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
             com.ibm.icu.math.BigDecimal.valueOf(Long.MIN_VALUE);
 
     /**
-     * <strong style="font-family: helvetica; color: red;">NEW</strong> Implement
-     * com.ibm.icu.text.NumberFormat: Format a BigDecimal.
+     * Implement {@link com.ibm.icu.text.NumberFormat}: format a {@link BigDecimal}.
      *
      * @stable ICU 2.0
      */
