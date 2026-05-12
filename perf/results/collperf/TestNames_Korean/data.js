@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1778548943071,
+  "lastUpdate": 1778622369188,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -85479,6 +85479,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 12135042.5825,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "mbanck@debian.org",
+            "name": "Michael Banck",
+            "username": "mbanck"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "7de130650c4698af5f46d0bd30c3ce0b7783919e",
+          "message": "ICU-23402 Fix build on 64bit GNU/Hurd",
+          "timestamp": "2026-05-12T14:02:06-07:00",
+          "tree_id": "5416ea047156a0812aa74f599e106303db948671",
+          "url": "https://github.com/unicode-org/icu/commit/7de130650c4698af5f46d0bd30c3ce0b7783919e"
+        },
+        "date": 1778621900142,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 220.0143,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 58984097.1393,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 12560184.6267,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 53215783.2179,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 13104033.2038,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
