@@ -5,6 +5,7 @@
 #if !UCONFIG_NO_BREAK_ITERATION
 
 
+#include "unicode/segmenter.h"
 #include "segmenter_segments_test.h"
 
 #include <iostream>
@@ -47,7 +48,6 @@ SegmentsTest::~SegmentsTest() {
 
 void SegmentsTest::TestHelloWorld() {
     std::cout << "hello" << std::endl;
-    int x = 0 / 0;
     assertEquals("this assertion should fail", 0, 1);
 }
 

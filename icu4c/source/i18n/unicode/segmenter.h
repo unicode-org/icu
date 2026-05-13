@@ -40,6 +40,9 @@ U_NAMESPACE_BEGIN
 
 namespace segmenter {  // icu::segmenter
 
+class Segments;
+class Segment;
+
 class U_COMMON_API_CLASS Segmenter : public UObject {
 public:
     ~Segmenter() override;
@@ -48,12 +51,15 @@ public:
 
 };
 
-class Segments {
+class U_COMMON_API_CLASS Segments {
     virtual bool isBoundary(int32_t offset) = 0;
 };
 
-class Segment {
-
+class U_COMMON_API_CLASS Segment {
+public:
+    const int32_t start;
+    const int32_t limit;
+    const int32_t ruleStatus;
 };
 
 }  // namespace segmenter
