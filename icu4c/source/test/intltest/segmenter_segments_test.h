@@ -18,6 +18,8 @@ public:
 
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = nullptr ) override;
 
+    void TestHelloWorld();
+
 private:
     // Test parameters, from the test framework and test invocation.
     const char* fTestParams;
