@@ -24,6 +24,7 @@
 #include "rbbiapts.h"
 #include "rbbitst.h"
 #include "rbbimonkeytest.h"
+#include "segmenter_segments_test.h"
 
 
 void IntlTestRBBI::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
@@ -38,6 +39,7 @@ void IntlTestRBBI::runIndexedTest( int32_t index, UBool exec, const char* &name,
     TESTCASE_AUTO_CLASS(RBBIMonkeyTest);
 #endif
     TESTCASE_AUTO_CLASS(LSTMBETest);
+    TESTCASE_AUTO_CLASS(SegmentsTest);
     TESTCASE_AUTO_END;
 }
 
