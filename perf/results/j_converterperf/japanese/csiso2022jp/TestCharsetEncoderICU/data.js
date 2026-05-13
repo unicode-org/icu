@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1778635781768,
+  "lastUpdate": 1778692703252,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -44757,6 +44757,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 25.268595850386625,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "f3862f69b47ea0cdadf430dcc06946f0140443b8",
+          "message": "ICU-23247 ICU-TC 2026-02-12: ColumnLimit=100 (not 105)",
+          "timestamp": "2026-05-13T09:50:00-07:00",
+          "tree_id": "0aabaaeb748872d80298510dcd1184ed840a91da",
+          "url": "https://github.com/unicode-org/icu/commit/f3862f69b47ea0cdadf430dcc06946f0140443b8"
+        },
+        "date": 1778692224875,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 25.269350145216833,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
