@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1778621856025,
+  "lastUpdate": 1778636046441,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -54789,6 +54789,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 53.0172,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "4689a6f4ed185766f38defaf4ca0422aaf38010c",
+          "message": "ICU-23248 Remove 'NEW' tag on very old methods, remove bgcolor",
+          "timestamp": "2026-05-12T17:56:00-07:00",
+          "tree_id": "437c3fc7d2a90d1431668941f79c0054415e1832",
+          "url": "https://github.com/unicode-org/icu/commit/4689a6f4ed185766f38defaf4ca0422aaf38010c"
+        },
+        "date": 1778635528725,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 19.9059,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 42.0703,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
