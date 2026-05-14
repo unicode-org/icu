@@ -20,6 +20,7 @@ import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.RuleBasedTransliterator.Data;
 import com.ibm.icu.util.CaseInsensitiveString;
 import com.ibm.icu.util.UResourceBundle;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -32,6 +33,7 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
 class TransliteratorRegistry {
@@ -69,7 +71,13 @@ class TransliteratorRegistry {
     /** Vector of public full IDs (CaseInsensitiveString objects). */
     private final Set<CaseInsensitiveString> availableIDs;
 
-    private final Map<String, CaseInsensitiveString> stvStringPool;
+    /**
+     * CaseInsensitiveString refers to the key here, and thus according to the API doc of
+     * WeakHashMap, the value needs to be a WeakReference. We currently can't use
+     * `CaseInsensitiveString` as the key because IDEnumeration returns unfolded string, and we need
+     * to preserve the unfolded value of CaseInsensitiveString.
+     */
+    private final Map<String, WeakReference<CaseInsensitiveString>> stvStringPool;
 
     // ----------------------------------------------------------------------
     // class Spec
@@ -882,7 +890,19 @@ class TransliteratorRegistry {
     }
 
     private CaseInsensitiveString toInternedSTVString(String key) {
-        return stvStringPool.computeIfAbsent(key, CaseInsensitiveString::new);
+        AtomicReference<CaseInsensitiveString> ref = new AtomicReference<>();
+        stvStringPool.compute(
+                key,
+                (k, holder) -> {
+                    CaseInsensitiveString newValue;
+                    if (holder == null || (newValue = holder.get()) == null) {
+                        newValue = new CaseInsensitiveString(k);
+                        holder = new WeakReference<>(newValue);
+                    }
+                    ref.set(newValue);
+                    return holder;
+                });
+        return ref.get();
     }
 }
 
