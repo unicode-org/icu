@@ -228,6 +228,7 @@ public final class LdmlConverter {
                         readLinesFromResource("/ldml2icu_supplemental.txt"),
                         IcuFunctions.ALGORITHM_FN,
                         IcuFunctions.DATE_FN,
+                        IcuFunctions.DATE_ROUND_SEC_FN,
                         IcuFunctions.DAY_NUMBER_FN,
                         IcuFunctions.EXP_FN,
                         IcuFunctions.YMD_FN);
