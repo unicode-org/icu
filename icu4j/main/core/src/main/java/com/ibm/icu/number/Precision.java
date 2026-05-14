@@ -346,6 +346,10 @@ public abstract class Precision {
      * @stable ICU 69
      */
     public Precision trailingZeroDisplay(TrailingZeroDisplay trailingZeroDisplay) {
+        // Question: Should we avoid cloning if one is null and the other is AUTO?
+        if (this.trailingZeroDisplay == trailingZeroDisplay) {
+            return this;
+        }
         Precision result = this.createCopy();
         result.trailingZeroDisplay = trailingZeroDisplay;
         return result;

@@ -37,8 +37,9 @@ public abstract class CurrencyPrecision extends Precision {
     public Precision withCurrency(Currency currency) {
         if (currency != null) {
             Precision retval = constructFromCurrency(this, currency);
-            retval.trailingZeroDisplay = trailingZeroDisplay;
-            return retval;
+            // trailingZeroDisplay returns a clone if trailingZeroDisplay differs,
+            // preventing data races on shared static instances (e.g. FIXED_FRAC_0).
+            return retval.trailingZeroDisplay(trailingZeroDisplay);
         } else {
             throw new IllegalArgumentException("Currency must not be null");
         }

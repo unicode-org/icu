@@ -6960,4 +6960,43 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
         FormattedValueTest.checkFormattedValue(
                 message, result, result.toString(), expectedFieldPositions);
     }
+
+    @Test
+    public void testCurrencyPrecisionCacheMutation() {
+        Currency usd = Currency.getInstance("USD");
+
+        // Precision gets cached, we want to make sure the cache isn't overwritten.
+
+        // 1. Format using the cached Precision as is
+        String actual1 =
+                NumberFormatter.with()
+                        .precision(Precision.currency(CurrencyUsage.STANDARD))
+                        .locale(Locale.US)
+                        .unit(usd)
+                        .format(123.0)
+                        .toString();
+        assertEquals("Initial formatting with cached Precision", "$123.00", actual1);
+
+        // 2. Format modifying the Precision's trailingZeroDisplay
+        String actual2 =
+                NumberFormatter.with()
+                        .precision(
+                                Precision.currency(CurrencyUsage.STANDARD)
+                                        .trailingZeroDisplay(TrailingZeroDisplay.HIDE_IF_WHOLE))
+                        .locale(Locale.US)
+                        .unit(usd)
+                        .format(123.0)
+                        .toString();
+        assertEquals("Formatting with modified trailingZeroDisplay", "$123", actual2);
+
+        // 3. Format like the first time again, expect the same result
+        String actual3 =
+                NumberFormatter.with()
+                        .precision(Precision.currency(CurrencyUsage.STANDARD))
+                        .locale(Locale.US)
+                        .unit(usd)
+                        .format(123.0)
+                        .toString();
+        assertEquals("Subsequent formatting with cached Precision", "$123.00", actual3);
+    }
 }
