@@ -255,7 +255,7 @@ public abstract class TimeZone implements Serializable, Cloneable, Freezable<Tim
     public static final TimeZone GMT_ZONE = new ConstantZone(0, GMT_ZONE_ID).freeze();
 
     /**
-     * {@icu} System time zone type constants used by filtering zones in {@link
+     * {@icu _usage_} System time zone type constants used by filtering zones in {@link
      * TimeZone#getAvailableIDs(SystemTimeZoneType, String, Integer)}
      *
      * @stable ICU 4.8

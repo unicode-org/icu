@@ -331,6 +331,11 @@ public abstract class UResourceBundle extends ResourceBundle {
         return getULocale().toLocale();
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @stable ICU 3.0
+     */
     @Override
     public String toString() {
         return "UResourceBundle{name=" + getBaseBundleName() + ", locale=" + getLocale() + '}';

@@ -204,7 +204,7 @@
               </execution>
             </executions>
             <configuration>
-              <failOnError>false</failOnError>
+              <failOnError>true</failOnError>
               <useStandardDocletOptions>false</useStandardDocletOptions>
               <doclet>com.ibm.icu.dev.tool.docs.CheckTags</doclet>
               <docletArtifact>

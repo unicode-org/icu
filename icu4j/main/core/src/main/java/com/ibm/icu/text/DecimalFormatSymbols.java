@@ -1072,6 +1072,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * Internal API for NumberFormat
      *
      * @return String currency pattern string
+     * @internal
      * @deprecated This API is for ICU internal use only
      */
     @Deprecated

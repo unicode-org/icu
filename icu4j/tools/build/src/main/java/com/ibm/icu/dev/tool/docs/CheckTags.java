@@ -173,6 +173,14 @@ public class CheckTags implements Doclet {
 
             this.newline = newline;
         }
+
+        int getErrorCount() {
+            int errorCount = 0;
+            if (stack != null && stack.length > 0) {
+                errorCount = stack[0].errorCount;
+            }
+            return errorCount;
+        }
     }
 
     @Override
@@ -233,7 +241,8 @@ public class CheckTags implements Doclet {
                         .filter(e -> e.getKind().isClass())
                         .collect(Collectors.toList());
         doElements(allClasses, "Package", true);
-        return true;
+        int errorCount = stack != null ? stack.getErrorCount() : 0;
+        return (errorCount == 0);
     }
 
     boolean newline = false;
@@ -277,7 +286,6 @@ public class CheckTags implements Doclet {
                         + JavadocHelper.position(elements, docTrees, element, tag)
                         + "]");
     }
-    ;
 
     void tagErr(Element element, BlockTagTree tag) {
         tagErr("", element, tag);
@@ -350,8 +358,6 @@ public class CheckTags implements Doclet {
     /** Return true if sub-elements of this element should be checked */
     boolean doTags(Element element) {
         boolean foundRequiredTag = false;
-        boolean foundDraftTag = false;
-        boolean foundProvisionalTag = false;
         boolean foundDeprecatedTag = false;
         boolean foundObsoleteTag = false;
         boolean foundInternalTag = false;
@@ -369,8 +375,13 @@ public class CheckTags implements Doclet {
             switch (tagKind) {
                 case ICU:
                     {
-                        if (JavadocHelper.isKindClassOrInterface(element)) {
-                            tagErr("tag should appear only in member elements", element, tag);
+                        if ((JavadocHelper.isKindClassOrInterface(element)
+                                        || JavadocHelper.isKindEnum(element))
+                                && !text.equals("_usage_")) {
+                            tagErr(
+                                    "tag should appear only in member elements other than '_usage_'",
+                                    element,
+                                    tag);
                         }
                     }
                     break;
@@ -419,7 +430,6 @@ public class CheckTags implements Doclet {
 
                 case DRAFT:
                     foundRequiredTag = true;
-                    foundDraftTag = true;
                     if (tagText.indexOf("ICU 2.8") != -1
                             && tagText.indexOf("(retain")
                                     == -1) { // catch both retain and retainAll
@@ -434,7 +444,8 @@ public class CheckTags implements Doclet {
                     break;
 
                 case PROVISIONAL:
-                    foundProvisionalTag = true;
+                    // We no longer use @provisional
+                    errln("@provisional is no longer used");
                     break;
 
                 case DEPRECATED:
@@ -497,9 +508,6 @@ public class CheckTags implements Doclet {
         }
         if (foundInternalTag && !foundDeprecatedTag) {
             errln("internal tag missing deprecated");
-        }
-        if (foundDraftTag && !(foundDeprecatedTag || foundProvisionalTag)) {
-            errln("draft tag missing deprecated or provisional");
         }
         if (foundObsoleteTag && !foundDeprecatedTag) {
             errln("obsolete tag missing deprecated");

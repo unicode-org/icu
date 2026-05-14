@@ -2235,7 +2235,7 @@ public class DecimalFormat extends NumberFormat implements Cloneable {
      * Always returns 1000, the default prior to ICU 59.
      *
      * @category Parsing
-     * @deprecated Setting max parse digits has no effect since ICU4J 59.
+     * @deprecated ICU 59 Setting max parse digits has no effect since ICU4J 59.
      */
     @Deprecated
     public int getParseMaxDigits() {
@@ -2246,7 +2246,7 @@ public class DecimalFormat extends NumberFormat implements Cloneable {
      * @param maxDigits Prior to ICU 59, the maximum number of digits in the output number after
      *     exponential notation is applied.
      * @category Parsing
-     * @deprecated Setting max parse digits has no effect since ICU4J 59.
+     * @deprecated ICU 59 Setting max parse digits has no effect since ICU4J 59.
      */
     @Deprecated
     public void setParseMaxDigits(int maxDigits) {}
