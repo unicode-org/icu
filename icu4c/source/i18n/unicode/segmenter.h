@@ -1,7 +1,6 @@
 // © 2026 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-// TODO: rewrite file to match brkiter.h
 #ifndef __SEGEMENTER_H__
 #define __SEGEMENTER_H__
 
@@ -38,7 +37,7 @@ U_NAMESPACE_END
 
 U_NAMESPACE_BEGIN
 
-namespace segmenter {  // icu::segmenter
+namespace segmenter {
 
 class Segments;
 class Segment;
@@ -47,7 +46,7 @@ class U_COMMON_API_CLASS Segmenter : public UObject {
 public:
     ~Segmenter() override;
     // TODO: discuss if we want to take input type of UnicodeString or std::u16string_view
-    virtual Segments segment(const UnicodeString &s) = 0;
+    virtual Segments segment(const std::u16string_view &s) = 0;
 
 };
 
