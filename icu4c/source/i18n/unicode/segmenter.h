@@ -40,18 +40,34 @@ U_NAMESPACE_BEGIN
 namespace segmenter {
 
 class Segments;
+class SegmentsUtf8;
 class Segment;
 
 class U_COMMON_API_CLASS Segmenter : public UObject {
 public:
     ~Segmenter() override;
     // TODO: discuss if we want to take input type of UnicodeString or std::u16string_view
+    // Note: std::u16string_view is mentioned in the design doc, FWIW
+    // Note: whether taking a pointer or a 
     virtual Segments segment(const std::u16string_view &s) = 0;
+    // Note: this API also is mentioned in the design doc
+    virtual SegmentsUtf8 segment(const char &s) = 0;
 
 };
 
-class U_COMMON_API_CLASS Segments {
+class U_COMMON_API_CLASS Segments : public UObject {
     virtual bool isBoundary(int32_t offset) = 0;
+};
+
+// Note: this class is mentioned in the design doc as describing
+// an iterator of `char*`, but no details, such as whether there should be
+// a templated class based on the encoding form / code unit size
+class U_COMMON_API_CLASS SegmentsUtf8 {
+    virtual bool isBoundary(int32_t offset) = 0;
+
+    // all other APIs the same as Segments
+    //
+    // (if the class is templated, then that automatically becomes true)
 };
 
 class U_COMMON_API_CLASS Segment {
