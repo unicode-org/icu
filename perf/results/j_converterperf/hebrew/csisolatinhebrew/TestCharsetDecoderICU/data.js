@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1778873335371,
+  "lastUpdate": 1778886606324,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -44817,6 +44817,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.006225572803904116,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "01e5b1660bab3b016ef39bc95d379da309ba73cc",
+          "message": "ICU-23339 Change the MessageFormat.format argument to Map<String,?>",
+          "timestamp": "2026-05-15T15:47:56-07:00",
+          "tree_id": "1a96d2e2c4c689405a8f1a1a0f7f7f890978b8c5",
+          "url": "https://github.com/unicode-org/icu/commit/01e5b1660bab3b016ef39bc95d379da309ba73cc"
+        },
+        "date": 1778886140408,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.006619323503319995,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
