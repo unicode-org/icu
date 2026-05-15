@@ -31,21 +31,20 @@ public class CustomFunctionMessageRefTest extends CoreTestFmwk {
     static class ResourceManagerFactory implements FunctionFactory {
 
         @Override
-        public Function create(Locale locale, Map<String, Object> fixedOptions) {
+        public Function create(Locale locale, Map<String, ?> fixedOptions) {
             return new ResourceManagerFunctionImpl(locale, fixedOptions);
         }
 
         static class ResourceManagerFunctionImpl implements Function {
-            final Map<String, Object> options;
+            final Map<String, ?> options;
 
             @SuppressWarnings("unused")
-            ResourceManagerFunctionImpl(Locale locale, Map<String, Object> options) {
+            ResourceManagerFunctionImpl(Locale locale, Map<String, ?> options) {
                 this.options = options;
             }
 
             @Override
-            public FormattedPlaceholder format(
-                    Object toFormat, Map<String, Object> variableOptions) {
+            public FormattedPlaceholder format(Object toFormat, Map<String, ?> variableOptions) {
                 String result = null;
                 Object oProps = options.get("resbundle");
                 // If it was not in the fixed options, try in the variable ones
@@ -63,7 +62,7 @@ public class CustomFunctionMessageRefTest extends CoreTestFmwk {
             }
 
             @Override
-            public String formatToString(Object toFormat, Map<String, Object> variableOptions) {
+            public String formatToString(Object toFormat, Map<String, ?> variableOptions) {
                 return format(toFormat, variableOptions).toString();
             }
         }
@@ -93,19 +92,19 @@ public class CustomFunctionMessageRefTest extends CoreTestFmwk {
     public void testSimpleGrammarSelection() {
         MessageFormatter mf =
                 MessageFormatter.builder().setPattern(PROPERTIES.getProperty("firefox")).build();
-        assertEquals("cust-grammar", "Firefox", mf.formatToString(Args.of("gcase", "whatever")));
-        assertEquals("cust-grammar", "Firefoxin", mf.formatToString(Args.of("gcase", "genitive")));
+        assertEquals("cust-grammar", "Firefox", mf.formatToString(Map.of("gcase", "whatever")));
+        assertEquals("cust-grammar", "Firefoxin", mf.formatToString(Map.of("gcase", "genitive")));
 
         mf = MessageFormatter.builder().setPattern(PROPERTIES.getProperty("chrome")).build();
-        assertEquals("cust-grammar", "Chrome", mf.formatToString(Args.of("gcase", "whatever")));
-        assertEquals("cust-grammar", "Chromen", mf.formatToString(Args.of("gcase", "genitive")));
+        assertEquals("cust-grammar", "Chrome", mf.formatToString(Map.of("gcase", "whatever")));
+        assertEquals("cust-grammar", "Chromen", mf.formatToString(Map.of("gcase", "genitive")));
     }
 
     @Test
     public void test() {
         StringBuffer browser = new StringBuffer();
-        Map<String, Object> arguments =
-                Args.of(
+        Map<String, ?> arguments =
+                Map.of(
                         "browser", browser,
                         "res", PROPERTIES);
 

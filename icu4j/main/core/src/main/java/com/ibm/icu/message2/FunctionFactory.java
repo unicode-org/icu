@@ -29,5 +29,5 @@ public interface FunctionFactory {
      * @deprecated This API is for technology preview only.
      */
     @Deprecated
-    Function create(Locale locale, Map<String, Object> fixedOptions);
+    Function create(Locale locale, Map<String, ?> fixedOptions);
 }

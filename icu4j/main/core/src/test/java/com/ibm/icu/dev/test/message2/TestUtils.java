@@ -102,7 +102,7 @@ public class TestUtils {
             Param pair = params[i];
             if (pair.value instanceof Map<?, ?>) {
                 @SuppressWarnings("unchecked")
-                Map<String, Object> innerMap = (Map<String, Object>) pair.value;
+                Map<String, ?> innerMap = (Map<String, ?>) pair.value;
                 if (innerMap.size() == 1
                         && innerMap.containsKey("date")
                         && innerMap.get("date") instanceof Double) {
@@ -123,7 +123,7 @@ public class TestUtils {
             Param pair = params[i];
             if (pair.value instanceof Map<?, ?>) {
                 @SuppressWarnings("unchecked")
-                Map<String, Object> innerMap = (Map<String, Object>) pair.value;
+                Map<String, ?> innerMap = (Map<String, ?>) pair.value;
                 if (innerMap.size() == 1
                         && innerMap.containsKey("decimal")
                         && innerMap.get("decimal") instanceof String) {
@@ -134,11 +134,11 @@ public class TestUtils {
         }
     }
 
-    static Map<String, Object> paramsToMap(Param[] params) {
+    static Map<String, ?> paramsToMap(Param[] params) {
         if (params == null) {
             return null;
         }
-        TreeMap<String, Object> result = new TreeMap<String, Object>();
+        Map<String, Object> result = new TreeMap<>();
         for (Param pair : params) {
             result.put(pair.name, pair.value);
         }

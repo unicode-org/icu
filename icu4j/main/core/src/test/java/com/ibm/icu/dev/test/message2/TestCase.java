@@ -15,7 +15,7 @@ import java.util.StringJoiner;
 class TestCase {
     final String message;
     final Locale locale;
-    final Map<String, Object> arguments;
+    final Map<String, ?> arguments;
     final String expected;
     final boolean ignore;
     final String ignoreReason;
@@ -41,7 +41,7 @@ class TestCase {
                 (builder.localeId == null)
                         ? Locale.getDefault(Category.FORMAT)
                         : Locale.forLanguageTag(builder.localeId);
-        this.arguments = builder.arguments == null ? Args.NONE : builder.arguments;
+        this.arguments = builder.arguments == null ? Map.of() : builder.arguments;
         this.expected = builder.expected == null ? "" : builder.expected;
         this.errors = builder.errors == null ? new ArrayList<>() : builder.errors;
         this.ignoreReason = builder.ignoreReason == null ? "" : builder.ignoreReason;
@@ -50,7 +50,7 @@ class TestCase {
     static class Builder {
         private String pattern;
         private String localeId;
-        private Map<String, Object> arguments;
+        private Map<String, ?> arguments;
         private String expected;
         private boolean ignore = false;
         private String ignoreReason;
@@ -71,7 +71,7 @@ class TestCase {
             return this;
         }
 
-        public TestCase.Builder arguments(Map<String, Object> arguments) {
+        public TestCase.Builder arguments(Map<String, ?> arguments) {
             this.arguments = arguments;
             return this;
         }

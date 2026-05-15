@@ -60,7 +60,7 @@ class OptUtils {
         return null;
     }
 
-    static Integer getInteger(Map<String, Object> options, boolean reportErrors, String key) {
+    static Integer getInteger(Map<String, ?> options, boolean reportErrors, String key) {
         Object value = options.get(key);
         if (value == null) {
             return null;
@@ -72,7 +72,7 @@ class OptUtils {
         return null;
     }
 
-    static String getString(Map<String, Object> options, String key, String defaultVal) {
+    static String getString(Map<String, ?> options, String key, String defaultVal) {
         Object value = options.get(key);
         if (value instanceof CharSequence) {
             return value.toString();
@@ -80,21 +80,20 @@ class OptUtils {
         return defaultVal;
     }
 
-    static String getString(Map<String, Object> options, String key) {
+    static String getString(Map<String, ?> options, String key) {
         return getString(options, key, null);
     }
 
-    static boolean reportErrors(Map<String, Object> options) {
+    static boolean reportErrors(Map<String, ?> options) {
         String reportErrors = getString(options, "icu:impl:errorPolicy");
         return Objects.equals(reportErrors, "STRICT");
     }
 
-    static boolean reportErrors(
-            Map<String, Object> fixedOptions, Map<String, Object> variableOptions) {
+    static boolean reportErrors(Map<String, ?> fixedOptions, Map<String, ?> variableOptions) {
         return reportErrors(fixedOptions) || reportErrors(variableOptions);
     }
 
-    static Locale getBestLocale(Map<String, Object> options, Locale defaultValue) {
+    static Locale getBestLocale(Map<String, ?> options, Locale defaultValue) {
         Locale result = null;
         String localeOverride = getString(options, "u:locale");
         if (localeOverride != null) {
@@ -117,12 +116,12 @@ class OptUtils {
         return result;
     }
 
-    static Directionality getBestDirectionality(Map<String, Object> options, Locale locale) {
+    static Directionality getBestDirectionality(Map<String, ?> options, Locale locale) {
         Directionality result = getDirectionality(options);
         return result == Directionality.UNKNOWN ? Directionality.of(locale) : result;
     }
 
-    static Directionality getDirectionality(Map<String, Object> options) {
+    static Directionality getDirectionality(Map<String, ?> options) {
         String value = getString(options, "u:dir");
         if (value == null) {
             return Directionality.UNKNOWN;
@@ -148,7 +147,7 @@ class OptUtils {
         return result;
     }
 
-    static String getUId(Map<String, Object> options) {
+    static String getUId(Map<String, ?> options) {
         return getString(options, "u:id");
     }
 }

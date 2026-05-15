@@ -29,7 +29,7 @@ public class TestFunctionFactory implements FunctionFactory {
     }
 
     @Override
-    public Function create(Locale locale, Map<String, Object> fixedOptions) {
+    public Function create(Locale locale, Map<String, ?> fixedOptions) {
         return new TestFunctionImpl(kind, fixedOptions);
     }
 
@@ -38,13 +38,13 @@ public class TestFunctionFactory implements FunctionFactory {
         private final String kind;
         private final ParsedOptions parsedOptions;
 
-        public TestFunctionImpl(String kind, Map<String, Object> fixedOptions) {
+        public TestFunctionImpl(String kind, Map<String, ?> fixedOptions) {
             this.kind = kind;
             this.parsedOptions = ParsedOptions.of(fixedOptions);
         }
 
         @Override
-        public String formatToString(Object toFormat, Map<String, Object> variableOptions) {
+        public String formatToString(Object toFormat, Map<String, ?> variableOptions) {
             if (!Objects.equals(kind, "select") && parsedOptions.failsFormat) {
                 throw new InvalidParameterException("ALWAYS FAIL");
             }
@@ -52,13 +52,13 @@ public class TestFunctionFactory implements FunctionFactory {
         }
 
         @Override
-        public FormattedPlaceholder format(Object toFormat, Map<String, Object> variableOptions) {
+        public FormattedPlaceholder format(Object toFormat, Map<String, ?> variableOptions) {
             return TestFunctionFactory.formatImpl(toFormat, parsedOptions);
         }
 
         @Override
         public List<String> matches(
-                Object value, List<String> keys, Map<String, Object> variableOptions) {
+                Object value, List<String> keys, Map<String, ?> variableOptions) {
             //            ParsedOptions parsedOptions = ParsedOptions.of(variableOptions);
             if (Objects.equals(kind, "format")) {
                 // Can't do selection on the `format` only function
@@ -120,7 +120,7 @@ public class TestFunctionFactory implements FunctionFactory {
             this.reportErrors = reportErrors;
         }
 
-        static ParsedOptions of(Map<String, Object> options) {
+        static ParsedOptions of(Map<String, ?> options) {
             boolean reportErrors = false;
             // fail = "never" (default)
             boolean failsFormat = false;
@@ -175,8 +175,7 @@ public class TestFunctionFactory implements FunctionFactory {
         }
     }
 
-    private static String getStringOption(
-            Map<String, Object> options, String key, String defaultVal) {
+    private static String getStringOption(Map<String, ?> options, String key, String defaultVal) {
         if (options == null) {
             return defaultVal;
         }

@@ -25,7 +25,7 @@ public interface Function {
      * @deprecated This API is for technology preview only.
      */
     @Deprecated
-    String formatToString(Object toFormat, Map<String, Object> variableOptions);
+    String formatToString(Object toFormat, Map<String, ?> variableOptions);
 
     /**
      * A method that takes the object to format and returns the i18n-aware formatted placeholder.
@@ -37,7 +37,7 @@ public interface Function {
      * @deprecated This API is for technology preview only.
      */
     @Deprecated
-    FormattedPlaceholder format(Object toFormat, Map<String, Object> variableOptions);
+    FormattedPlaceholder format(Object toFormat, Map<String, ?> variableOptions);
 
     /**
      * A method that is invoked for the object to match on each key.
@@ -53,8 +53,7 @@ public interface Function {
      * @deprecated This API is for technology preview only.
      */
     @Deprecated
-    default List<String> matches(
-            Object value, List<String> keys, Map<String, Object> variableOptions) {
+    default List<String> matches(Object value, List<String> keys, Map<String, ?> variableOptions) {
         /* Options considered:
          * - return null (which will end up selecting `*`) => current solution
          * - throw (not something that ICU usually does)

@@ -614,10 +614,9 @@ class MFDataModelFormatter {
     static class ResolvedExpression implements Expression {
         final Object argument;
         final String functionName;
-        final Map<String, Object> options;
+        final Map<String, ?> options;
 
-        public ResolvedExpression(
-                Object argument, String functionName, Map<String, Object> options) {
+        public ResolvedExpression(Object argument, String functionName, Map<String, ?> options) {
             this.argument = argument;
             this.functionName = StringUtils.toNfc(functionName);
             this.options = options;
@@ -682,7 +681,7 @@ class MFDataModelFormatter {
     private static class MapWithNfcKeys {
         private final Map<String, Object> theMap = new HashMap<>();
 
-        Map<String, Object> getMap() {
+        Map<String, ?> getMap() {
             return theMap;
         }
 
@@ -708,7 +707,7 @@ class MFDataModelFormatter {
             return theMap.put(StringUtils.toNfc(key), value);
         }
 
-        public void putAll(Map<? extends String, ? extends Object> m) {
+        public void putAll(Map<? extends String, ?> m) {
             theMap.putAll(m);
         }
 

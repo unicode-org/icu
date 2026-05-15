@@ -46,7 +46,7 @@ public class CustomFunctionPersonTest extends CoreTestFmwk {
 
     private static class PersonNameFunctionFactory implements FunctionFactory {
         @Override
-        public Function create(Locale locale, Map<String, Object> fixedOptions) {
+        public Function create(Locale locale, Map<String, ?> fixedOptions) {
             return new PersonNameFunctionImpl(
                     fixedOptions.get("formality"), fixedOptions.get("length"));
         }
@@ -61,15 +61,14 @@ public class CustomFunctionPersonTest extends CoreTestFmwk {
             }
 
             @Override
-            public String formatToString(Object toFormat, Map<String, Object> variableOptions) {
+            public String formatToString(Object toFormat, Map<String, ?> variableOptions) {
                 return format(toFormat, variableOptions).toString();
             }
 
             // Very-very primitive implementation of the "CLDR Person Name Formatting" spec:
             // https://docs.google.com/document/d/1uvv6gdkuFwtbNV26Pk7ddfZult4unYwR6DnnKYbujUo/
             @Override
-            public FormattedPlaceholder format(
-                    Object toFormat, Map<String, Object> variableOptions) {
+            public FormattedPlaceholder format(Object toFormat, Map<String, ?> variableOptions) {
                 String result;
                 if (toFormat instanceof Person) {
                     Person person = (Person) toFormat;
@@ -111,14 +110,14 @@ public class CustomFunctionPersonTest extends CoreTestFmwk {
         TestUtils.runTestCase(
                 new TestCase.Builder()
                         .pattern("Hello {$name :person formality=formal}")
-                        .arguments(Args.of("name", who))
+                        .arguments(Map.of("name", who))
                         .expected("Hello {$name}")
                         .build());
 
         TestUtils.runTestCase(
                 new TestCase.Builder()
                         .pattern("Hello {$name :person formality=informal}")
-                        .arguments(Args.of("name", who))
+                        .arguments(Map.of("name", who))
                         .expected("Hello {$name}")
                         .build());
 
@@ -126,35 +125,35 @@ public class CustomFunctionPersonTest extends CoreTestFmwk {
                 CUSTOM_FUNCTION_REGISTRY,
                 new TestCase.Builder()
                         .pattern("Hello {$name :person formality=formal}")
-                        .arguments(Args.of("name", who))
+                        .arguments(Map.of("name", who))
                         .expected("Hello Mr. Doe")
                         .build());
         TestUtils.runTestCase(
                 CUSTOM_FUNCTION_REGISTRY,
                 new TestCase.Builder()
                         .pattern("Hello {$name :person formality=informal}")
-                        .arguments(Args.of("name", who))
+                        .arguments(Map.of("name", who))
                         .expected("Hello John")
                         .build());
         TestUtils.runTestCase(
                 CUSTOM_FUNCTION_REGISTRY,
                 new TestCase.Builder()
                         .pattern("Hello {$name :person formality=formal length=long}")
-                        .arguments(Args.of("name", who))
+                        .arguments(Map.of("name", who))
                         .expected("Hello Mr. John Doe")
                         .build());
         TestUtils.runTestCase(
                 CUSTOM_FUNCTION_REGISTRY,
                 new TestCase.Builder()
                         .pattern("Hello {$name :person formality=formal length=medium}")
-                        .arguments(Args.of("name", who))
+                        .arguments(Map.of("name", who))
                         .expected("Hello John Doe")
                         .build());
         TestUtils.runTestCase(
                 CUSTOM_FUNCTION_REGISTRY,
                 new TestCase.Builder()
                         .pattern("Hello {$name :person formality=formal length=short}")
-                        .arguments(Args.of("name", who))
+                        .arguments(Map.of("name", who))
                         .expected("Hello Mr. Doe")
                         .build());
     }
@@ -194,7 +193,7 @@ public class CustomFunctionPersonTest extends CoreTestFmwk {
                 new TestCase.Builder()
                         .pattern(message)
                         .arguments(
-                                Args.of(
+                                Map.of(
                                         "hostGender",
                                         "female",
                                         "host",
@@ -211,7 +210,7 @@ public class CustomFunctionPersonTest extends CoreTestFmwk {
                 new TestCase.Builder()
                         .pattern(message)
                         .arguments(
-                                Args.of(
+                                Map.of(
                                         "hostGender",
                                         "female",
                                         "host",
@@ -228,7 +227,7 @@ public class CustomFunctionPersonTest extends CoreTestFmwk {
                 new TestCase.Builder()
                         .pattern(message)
                         .arguments(
-                                Args.of(
+                                Map.of(
                                         "hostGender",
                                         "female",
                                         "host",
@@ -244,7 +243,7 @@ public class CustomFunctionPersonTest extends CoreTestFmwk {
                 new TestCase.Builder()
                         .pattern(message)
                         .arguments(
-                                Args.of(
+                                Map.of(
                                         "hostGender",
                                         "male",
                                         "host",
@@ -261,7 +260,7 @@ public class CustomFunctionPersonTest extends CoreTestFmwk {
                 new TestCase.Builder()
                         .pattern(message)
                         .arguments(
-                                Args.of(
+                                Map.of(
                                         "hostGender",
                                         "unknown",
                                         "host",

@@ -17,7 +17,7 @@ import java.util.Objects;
 class TextFunctionFactory implements FunctionFactory {
     /** {@inheritDoc} */
     @Override
-    public Function create(Locale locale, Map<String, Object> fixedOptions) {
+    public Function create(Locale locale, Map<String, ?> fixedOptions) {
         return new TextFunctionImpl(OptUtils.getDirectionality(fixedOptions));
     }
 
@@ -30,13 +30,13 @@ class TextFunctionFactory implements FunctionFactory {
 
         /** {@inheritDoc} */
         @Override
-        public String formatToString(Object toFormat, Map<String, Object> variableOptions) {
+        public String formatToString(Object toFormat, Map<String, ?> variableOptions) {
             return format(toFormat, variableOptions).toString();
         }
 
         /** {@inheritDoc} */
         @Override
-        public FormattedPlaceholder format(Object toFormat, Map<String, Object> variableOptions) {
+        public FormattedPlaceholder format(Object toFormat, Map<String, ?> variableOptions) {
             return new FormattedPlaceholder(
                     toFormat,
                     new PlainStringFormattedValue(Objects.toString(toFormat)),
@@ -47,7 +47,7 @@ class TextFunctionFactory implements FunctionFactory {
         /** {@inheritDoc} */
         @Override
         public List<String> matches(
-                Object value, List<String> keys, Map<String, Object> variableOptions) {
+                Object value, List<String> keys, Map<String, ?> variableOptions) {
             List<String> result = new ArrayList<>();
             if (value == null) {
                 if (OptUtils.reportErrors(variableOptions)) {

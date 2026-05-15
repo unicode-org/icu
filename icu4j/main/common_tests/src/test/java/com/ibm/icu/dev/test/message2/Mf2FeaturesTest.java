@@ -32,7 +32,7 @@ public class Mf2FeaturesTest extends CoreTestFmwk {
     @Test
     public void testEmptyMessage() {
         TestUtils.runTestCase(
-                new TestCase.Builder().pattern("").arguments(Args.NONE).expected("").build());
+                new TestCase.Builder().pattern("").arguments(Map.of()).expected("").build());
     }
 
     @Test
@@ -40,7 +40,7 @@ public class Mf2FeaturesTest extends CoreTestFmwk {
         TestUtils.runTestCase(
                 new TestCase.Builder()
                         .pattern("Hello World!")
-                        .arguments(Args.NONE)
+                        .arguments(Map.of())
                         .expected("Hello World!")
                         .build());
     }
@@ -50,7 +50,7 @@ public class Mf2FeaturesTest extends CoreTestFmwk {
         TestUtils.runTestCase(
                 new TestCase.Builder()
                         .pattern("Hello, {$userName}!")
-                        .arguments(Args.of("userName", "John"))
+                        .arguments(Map.of("userName", "John"))
                         .expected("Hello, John!")
                         .build());
     }
@@ -65,25 +65,25 @@ public class Mf2FeaturesTest extends CoreTestFmwk {
         TestUtils.runTestCase(
                 new TestCase.Builder()
                         .pattern(message)
-                        .arguments(Args.of("name", "John", "today", TEST_DATE))
+                        .arguments(Map.of("name", "John", "today", TEST_DATE))
                         .expected("Hello John, today is Wednesday, November 23, 2022.")
                         .build());
         TestUtils.runTestCase(
                 new TestCase.Builder()
                         .pattern(message)
-                        .arguments(Args.of("name", "John"))
+                        .arguments(Map.of("name", "John"))
                         .expected("Hello John, today is {$today}.")
                         .build());
         TestUtils.runTestCase(
                 new TestCase.Builder()
                         .pattern(message)
-                        .arguments(Args.of("today", TEST_DATE))
+                        .arguments(Map.of("today", TEST_DATE))
                         .expected("Hello {$name}, today is Wednesday, November 23, 2022.")
                         .build());
         TestUtils.runTestCase(
                 new TestCase.Builder()
                         .pattern(message)
-                        .arguments(Args.NONE)
+                        .arguments(Map.of())
                         .expected("Hello {$name}, today is {$today}.")
                         .build());
     }
@@ -93,7 +93,7 @@ public class Mf2FeaturesTest extends CoreTestFmwk {
         String message = "Date: {$date :date fields=year-month-day-weekday length=long}.";
         String expectedEn = "Date: Wednesday, November 23, 2022.";
         String expectedRo = "Date: miercuri, 23 noiembrie 2022.";
-        Map<String, Object> arguments = Args.of("date", TEST_DATE);
+        Map<String, Object> arguments = Map.of("date", TEST_DATE);
 
         TestUtils.runTestCase(
                 new TestCase.Builder()
@@ -134,7 +134,7 @@ public class Mf2FeaturesTest extends CoreTestFmwk {
                 new TestCase.Builder()
                         .pattern("Testing date formatting: {$date}.")
                         .locale("ro")
-                        .arguments(Args.of("date", TEST_DATE))
+                        .arguments(Map.of("date", TEST_DATE))
                         .expected("Testing date formatting: mie., 23 nov. 2022, 19:42.")
                         .build());
         // Default options
@@ -142,7 +142,7 @@ public class Mf2FeaturesTest extends CoreTestFmwk {
                 new TestCase.Builder()
                         .pattern("Testing date formatting: {$date :datetime}.")
                         .locale("ro")
-                        .arguments(Args.of("date", TEST_DATE))
+                        .arguments(Map.of("date", TEST_DATE))
                         .expected("Testing date formatting: mie., 23 nov. 2022, 19:42.")
                         .build());
 
@@ -151,21 +151,21 @@ public class Mf2FeaturesTest extends CoreTestFmwk {
                         .pattern(
                                 "Testing date formatting: {$date :date fields=year-month-day length=long}.")
                         .locale("ro-RO")
-                        .arguments(Args.of("date", TEST_DATE))
+                        .arguments(Map.of("date", TEST_DATE))
                         .expected("Testing date formatting: 23 noiembrie 2022.")
                         .build());
         TestUtils.runTestCase(
                 new TestCase.Builder()
                         .pattern("Testing date formatting: {$date :datetime timePrecision=minute}.")
                         .locale("ro-RO")
-                        .arguments(Args.of("date", TEST_DATE))
+                        .arguments(Map.of("date", TEST_DATE))
                         .expected("Testing date formatting: 19:42.")
                         .build());
         TestUtils.runTestCase(
                 new TestCase.Builder()
                         .pattern(
                                 "Testing date formatting: {$date :date fields=year-month-day length=medium}.")
-                        .arguments(Args.of("date", TEST_DATE))
+                        .arguments(Map.of("date", TEST_DATE))
                         .expected("Testing date formatting: Nov 23, 2022.")
                         .build());
 
@@ -174,13 +174,13 @@ public class Mf2FeaturesTest extends CoreTestFmwk {
                 new TestCase.Builder()
                         .pattern(
                                 "Testing date formatting: {$date :datetime icu:skeleton=yMMMdjms}.")
-                        .arguments(Args.of("date", TEST_DATE))
+                        .arguments(Map.of("date", TEST_DATE))
                         .expected("Testing date formatting: Nov 23, 2022, 7:42:37\u202FPM.")
                         .build());
         TestUtils.runTestCase(
                 new TestCase.Builder()
                         .pattern("Testing date formatting: {$date :datetime timePrecision=minute}.")
-                        .arguments(Args.of("date", TEST_DATE))
+                        .arguments(Map.of("date", TEST_DATE))
                         .expected("Testing date formatting: 7:42\u202FPM.")
                         .build());
 
@@ -189,40 +189,40 @@ public class Mf2FeaturesTest extends CoreTestFmwk {
                 new TestCase.Builder()
                         .pattern(
                                 "Testing date formatting: {$date :datetime dateFields=year-month-day dateLength=long}.")
-                        .arguments(Args.of("date", TEST_DATE))
+                        .arguments(Map.of("date", TEST_DATE))
                         .expected("Testing date formatting: November 23, 2022.")
                         .build());
         TestUtils.runTestCase(
                 new TestCase.Builder()
                         .pattern(
                                 "Testing date formatting: {$date :datetime dateFields=year-month-day dateLength=medium}.")
-                        .arguments(Args.of("date", TEST_DATE))
+                        .arguments(Map.of("date", TEST_DATE))
                         .expected("Testing date formatting: Nov 23, 2022.")
                         .build());
         TestUtils.runTestCase(
                 new TestCase.Builder()
                         .pattern(
                                 "Testing date formatting: {$date :datetime dateFields=year-month-day dateLength=short}.")
-                        .arguments(Args.of("date", TEST_DATE))
+                        .arguments(Map.of("date", TEST_DATE))
                         .expected("Testing date formatting: 11/23/2022.")
                         .build());
         TestUtils.runTestCase(
                 new TestCase.Builder()
                         .pattern(
                                 "Testing date formatting: {$date :datetime timePrecision=second timeZoneStyle=short}.")
-                        .arguments(Args.of("date", TEST_DATE))
+                        .arguments(Map.of("date", TEST_DATE))
                         .expected("Testing date formatting: 7:42:37\u202FPM PST.")
                         .build());
         TestUtils.runTestCase(
                 new TestCase.Builder()
                         .pattern("Testing date formatting: {$date :datetime timePrecision=second}.")
-                        .arguments(Args.of("date", TEST_DATE))
+                        .arguments(Map.of("date", TEST_DATE))
                         .expected("Testing date formatting: 7:42:37\u202FPM.")
                         .build());
         TestUtils.runTestCase(
                 new TestCase.Builder()
                         .pattern("Testing date formatting: {$date :datetime timePrecision=minute}.")
-                        .arguments(Args.of("date", TEST_DATE))
+                        .arguments(Map.of("date", TEST_DATE))
                         .expected("Testing date formatting: 7:42\u202FPM.")
                         .build());
     }
@@ -236,21 +236,21 @@ public class Mf2FeaturesTest extends CoreTestFmwk {
                 new TestCase.Builder()
                         .pattern("From literal: {123456789 :number}!")
                         .locale("ro")
-                        .arguments(Args.of("val", value))
+                        .arguments(Map.of("val", value))
                         .expected("From literal: 123.456.789!")
                         .build());
         TestUtils.runTestCase(
                 new TestCase.Builder()
                         .pattern("From literal: {|123456789.531| :number}!")
                         .locale("ro")
-                        .arguments(Args.of("val", value))
+                        .arguments(Map.of("val", value))
                         .expected("From literal: 123.456.789,531!")
                         .build());
         TestUtils.runTestCase(
                 new TestCase.Builder()
                         .pattern("From literal: {123456789.531 :number}!")
                         .locale("my")
-                        .arguments(Args.of("val", value))
+                        .arguments(Map.of("val", value))
                         .expected(
                                 "From literal: \u1041\u1042\u1043,\u1044\u1045\u1046,\u1047\u1048\u1049.\u1045\u1043\u1041!")
                         .build());
@@ -260,35 +260,35 @@ public class Mf2FeaturesTest extends CoreTestFmwk {
                 new TestCase.Builder()
                         .pattern("Default double: {$val}!")
                         .locale("en-IN")
-                        .arguments(Args.of("val", value))
+                        .arguments(Map.of("val", value))
                         .expected("Default double: 1,23,45,67,890.97531!")
                         .build());
         TestUtils.runTestCase(
                 new TestCase.Builder()
                         .pattern("Default double: {$val}!")
                         .locale("ro")
-                        .arguments(Args.of("val", value))
+                        .arguments(Map.of("val", value))
                         .expected("Default double: 1.234.567.890,97531!")
                         .build());
         TestUtils.runTestCase(
                 new TestCase.Builder()
                         .pattern("Default float: {$val}!")
                         .locale("ro")
-                        .arguments(Args.of("val", 3.1415926535))
+                        .arguments(Map.of("val", 3.1415926535))
                         .expected("Default float: 3,141593!")
                         .build());
         TestUtils.runTestCase(
                 new TestCase.Builder()
                         .pattern("Default long: {$val}!")
                         .locale("ro")
-                        .arguments(Args.of("val", 1234567890123456789L))
+                        .arguments(Map.of("val", 1234567890123456789L))
                         .expected("Default long: 1.234.567.890.123.456.789!")
                         .build());
         TestUtils.runTestCase(
                 new TestCase.Builder()
                         .pattern("Default number: {$val}!")
                         .locale("ro")
-                        .arguments(Args.of("val", new BigDecimal("1234567890123456789.987654321")))
+                        .arguments(Map.of("val", new BigDecimal("1234567890123456789.987654321")))
                         .expected("Default number: 1.234.567.890.123.456.789,987654!")
                         .build());
         TestUtils.runTestCase(
@@ -296,7 +296,7 @@ public class Mf2FeaturesTest extends CoreTestFmwk {
                         .pattern("Price: {$val}")
                         .locale("de")
                         .arguments(
-                                Args.of(
+                                Map.of(
                                         "val",
                                         new CurrencyAmount(1234.56, Currency.getInstance("EUR"))))
                         .expected("Price: 1.234,56\u00A0\u20AC")
@@ -307,14 +307,14 @@ public class Mf2FeaturesTest extends CoreTestFmwk {
                 new TestCase.Builder()
                         .pattern("Option, minFraction: {$val :number minimumFractionDigits=8}!")
                         .locale("ro")
-                        .arguments(Args.of("val", value))
+                        .arguments(Map.of("val", value))
                         .expected("Option, minFraction: 1.234.567.890,97531000!")
                         .build());
         TestUtils.runTestCase(
                 new TestCase.Builder()
                         .pattern("Option, maxFraction: {$val :number maximumFractionDigits=3}!")
                         .locale("ro")
-                        .arguments(Args.of("val", value))
+                        .arguments(Map.of("val", value))
                         .expected("Option, maxFraction: 1.234.567.890,975!")
                         .build());
         // Currency
@@ -322,7 +322,7 @@ public class Mf2FeaturesTest extends CoreTestFmwk {
                 new TestCase.Builder()
                         .pattern("Skeletons, currency: {$val :number icu:skeleton=|currency/EUR|}!")
                         .locale("de")
-                        .arguments(Args.of("val", value))
+                        .arguments(Map.of("val", value))
                         .expected("Skeletons, currency: 1.234.567.890,98\u00A0\u20AC!")
                         .build());
         // Currency as a parameter
@@ -330,14 +330,14 @@ public class Mf2FeaturesTest extends CoreTestFmwk {
                 new TestCase.Builder()
                         .pattern("Skeletons, currency: {$val :number icu:skeleton=$skel}!")
                         .locale("de")
-                        .arguments(Args.of("val", value, "skel", "currency/EUR"))
+                        .arguments(Map.of("val", value, "skel", "currency/EUR"))
                         .expected("Skeletons, currency: 1.234.567.890,98\u00A0\u20AC!")
                         .build());
         TestUtils.runTestCase(
                 new TestCase.Builder()
                         .pattern("Skeletons, currency: {$val :number icu:skeleton=$skel}!")
                         .locale("de")
-                        .arguments(Args.of("val", value, "skel", "currency/JPY"))
+                        .arguments(Map.of("val", value, "skel", "currency/JPY"))
                         .expected("Skeletons, currency: 1.234.567.891\u00A0\u00A5!")
                         .build());
 
@@ -351,14 +351,14 @@ public class Mf2FeaturesTest extends CoreTestFmwk {
                                         + ".local $us = {$valF :number icu:skeleton=|unit/fahrenheit|}\n"
                                         + "{{Temperature: {$intl} ({$us})}}")
                         .locale("ro")
-                        .arguments(Args.of("valC", celsius, "valF", celsius * 9 / 5 + 32))
+                        .arguments(Map.of("valC", celsius, "valF", celsius * 9 / 5 + 32))
                         .expected("Temperature: 27 \u00B0C (80,6 \u00B0F)")
                         .build());
         TestUtils.runTestCase(
                 new TestCase.Builder()
                         .pattern("Height: {$len :number icu:skeleton=|unit/meter|}")
                         .locale("ro")
-                        .arguments(Args.of("len", 1.75))
+                        .arguments(Map.of("len", 1.75))
                         .expected("Height: 1,75 m")
                         .build());
 
@@ -366,7 +366,7 @@ public class Mf2FeaturesTest extends CoreTestFmwk {
                 new TestCase.Builder()
                         .pattern("Skeletons, currency: {$val :number icu:skeleton=|currency/EUR|}!")
                         .locale("de")
-                        .arguments(Args.of("val", value))
+                        .arguments(Map.of("val", value))
                         .expected("Skeletons, currency: 1.234.567.890,98\u00A0\u20AC!")
                         .build());
     }
@@ -383,7 +383,7 @@ public class Mf2FeaturesTest extends CoreTestFmwk {
                 new TestCase.Builder()
                         .pattern(message)
                         .locale("en-US")
-                        .arguments(Args.of("count", 1))
+                        .arguments(Map.of("count", 1))
                         .expected("I have 1 dollar.")
                         .build());
         message =
@@ -395,7 +395,7 @@ public class Mf2FeaturesTest extends CoreTestFmwk {
                 new TestCase.Builder()
                         .pattern(message)
                         .locale("en-US")
-                        .arguments(Args.of("count", 1))
+                        .arguments(Map.of("count", 1))
                         .expected("I have 1.00 dollars.")
                         .build());
     }
@@ -406,14 +406,14 @@ public class Mf2FeaturesTest extends CoreTestFmwk {
                 new TestCase.Builder()
                         .pattern("Testing date formatting: {$date}.")
                         .locale("ro")
-                        .arguments(Args.of("date", TEST_DATE))
+                        .arguments(Map.of("date", TEST_DATE))
                         .expected("Testing date formatting: mie., 23 nov. 2022, 19:42.")
                         .build());
         TestUtils.runTestCase(
                 new TestCase.Builder()
                         .pattern("Testing date formatting: {$date :datetime}.")
                         .locale("ro")
-                        .arguments(Args.of("date", TEST_DATE))
+                        .arguments(Map.of("date", TEST_DATE))
                         .expected("Testing date formatting: mie., 23 nov. 2022, 19:42.")
                         .build());
     }
@@ -429,13 +429,13 @@ public class Mf2FeaturesTest extends CoreTestFmwk {
         TestUtils.runTestCase(
                 new TestCase.Builder()
                         .pattern(message)
-                        .arguments(Args.of("count", 1))
+                        .arguments(Map.of("count", 1))
                         .expected("You have one notification.")
                         .build());
         TestUtils.runTestCase(
                 new TestCase.Builder()
                         .pattern(message)
-                        .arguments(Args.of("count", 42))
+                        .arguments(Map.of("count", 42))
                         .expected("You have 42 notifications.")
                         .build());
     }
@@ -458,7 +458,7 @@ public class Mf2FeaturesTest extends CoreTestFmwk {
                 new TestCase.Builder()
                         .pattern(message)
                         .arguments(
-                                Args.of(
+                                Map.of(
                                         "photoCount",
                                         1,
                                         "userGender",
@@ -471,7 +471,7 @@ public class Mf2FeaturesTest extends CoreTestFmwk {
                 new TestCase.Builder()
                         .pattern(message)
                         .arguments(
-                                Args.of(
+                                Map.of(
                                         "photoCount",
                                         1,
                                         "userGender",
@@ -484,7 +484,7 @@ public class Mf2FeaturesTest extends CoreTestFmwk {
                 new TestCase.Builder()
                         .pattern(message)
                         .arguments(
-                                Args.of(
+                                Map.of(
                                         "photoCount",
                                         1,
                                         "userGender",
@@ -498,7 +498,7 @@ public class Mf2FeaturesTest extends CoreTestFmwk {
                 new TestCase.Builder()
                         .pattern(message)
                         .arguments(
-                                Args.of(
+                                Map.of(
                                         "photoCount",
                                         13,
                                         "userGender",
@@ -511,7 +511,7 @@ public class Mf2FeaturesTest extends CoreTestFmwk {
                 new TestCase.Builder()
                         .pattern(message)
                         .arguments(
-                                Args.of(
+                                Map.of(
                                         "photoCount",
                                         13,
                                         "userGender",
@@ -524,7 +524,7 @@ public class Mf2FeaturesTest extends CoreTestFmwk {
                 new TestCase.Builder()
                         .pattern(message)
                         .arguments(
-                                Args.of(
+                                Map.of(
                                         "photoCount",
                                         13,
                                         "userGender",
@@ -545,7 +545,7 @@ public class Mf2FeaturesTest extends CoreTestFmwk {
                                 ""
                                         + ".local $exp = {$expDate :datetime dateFields=year-month-day-weekday dateLength=short}\n"
                                         + "{{Your tickets expire on {$exp}.}}")
-                        .arguments(Args.of("count", 1, "expDate", TEST_DATE))
+                        .arguments(Map.of("count", 1, "expDate", TEST_DATE))
                         .expected("Your tickets expire on We, 11/23/2022.")
                         .build());
     }
@@ -563,13 +563,13 @@ public class Mf2FeaturesTest extends CoreTestFmwk {
         TestUtils.runTestCase(
                 new TestCase.Builder()
                         .pattern(message)
-                        .arguments(Args.of("count", 1, "expDate", TEST_DATE))
+                        .arguments(Map.of("count", 1, "expDate", TEST_DATE))
                         .expected("Your ticket expires on Wed, Nov 23, 2022.")
                         .build());
         TestUtils.runTestCase(
                 new TestCase.Builder()
                         .pattern(message)
-                        .arguments(Args.of("count", 3, "expDate", TEST_DATE))
+                        .arguments(Map.of("count", 3, "expDate", TEST_DATE))
                         .expected("Your 3 tickets expire on Wed, Nov 23, 2022.")
                         .build());
     }

@@ -28,14 +28,14 @@ public class CustomFunctionListTest extends CoreTestFmwk {
     static class ListFunctionFactory implements FunctionFactory {
 
         @Override
-        public Function create(Locale locale, Map<String, Object> fixedOptions) {
+        public Function create(Locale locale, Map<String, ?> fixedOptions) {
             return new ListFunctionImpl(locale, fixedOptions);
         }
 
         static class ListFunctionImpl implements Function {
             private final ListFormatter lf;
 
-            ListFunctionImpl(Locale locale, Map<String, Object> fixedOptions) {
+            ListFunctionImpl(Locale locale, Map<String, ?> fixedOptions) {
                 Object oType = fixedOptions.get("type");
                 Type type =
                         oType == null
@@ -50,13 +50,12 @@ public class CustomFunctionListTest extends CoreTestFmwk {
             }
 
             @Override
-            public String formatToString(Object toFormat, Map<String, Object> variableOptions) {
+            public String formatToString(Object toFormat, Map<String, ?> variableOptions) {
                 return format(toFormat, variableOptions).toString();
             }
 
             @Override
-            public FormattedPlaceholder format(
-                    Object toFormat, Map<String, Object> variableOptions) {
+            public FormattedPlaceholder format(Object toFormat, Map<String, ?> variableOptions) {
                 String result;
                 if (toFormat instanceof Object[]) {
                     result = lf.format((Object[]) toFormat);
@@ -83,7 +82,7 @@ public class CustomFunctionListTest extends CoreTestFmwk {
                 REGISTRY,
                 new TestCase.Builder()
                         .pattern("I know {$languages :listformat type=AND}!")
-                        .arguments(Args.of("languages", progLanguages))
+                        .arguments(Map.of("languages", progLanguages))
                         .expected("I know C/C++, Java, and Python!")
                         .build());
 
@@ -91,7 +90,7 @@ public class CustomFunctionListTest extends CoreTestFmwk {
                 REGISTRY,
                 new TestCase.Builder()
                         .pattern("You are allowed to use {$languages :listformat type=OR}!")
-                        .arguments(Args.of("languages", Arrays.asList(progLanguages)))
+                        .arguments(Map.of("languages", Arrays.asList(progLanguages)))
                         .expected("You are allowed to use C/C++, Java, or Python!")
                         .build());
     }

@@ -54,7 +54,7 @@ class NumberFunctionFactory implements FunctionFactory {
 
     /** {@inheritDoc} */
     @Override
-    public Function create(Locale locale, Map<String, Object> fixedOptions) {
+    public Function create(Locale locale, Map<String, ?> fixedOptions) {
         boolean reportErrors = OptUtils.reportErrors(fixedOptions);
         String type = OptUtils.getString(fixedOptions, "select", "");
         PluralType pluralType;
@@ -84,13 +84,13 @@ class NumberFunctionFactory implements FunctionFactory {
     static class NumberFunctionImpl implements Function {
         private static final String NO_MATCH = "\uFFFDNO_MATCH\uFFFE"; // Unlikely to show in a key
         private final Locale locale;
-        private final Map<String, Object> fixedOptions;
+        private final Map<String, ?> fixedOptions;
         private final LocalizedNumberFormatter icuFormatter;
         private final String kind;
         private final PluralRules rules;
 
         NumberFunctionImpl(
-                Locale locale, PluralRules rules, Map<String, Object> fixedOptions, String kind) {
+                Locale locale, PluralRules rules, Map<String, ?> fixedOptions, String kind) {
             this.locale = OptUtils.getBestLocale(fixedOptions, locale);
             this.fixedOptions = new HashMap<>(fixedOptions);
             String skeleton = OptUtils.getString(fixedOptions, "icu:skeleton");
@@ -106,13 +106,13 @@ class NumberFunctionFactory implements FunctionFactory {
 
         /** {@inheritDoc} */
         @Override
-        public String formatToString(Object toFormat, Map<String, Object> variableOptions) {
+        public String formatToString(Object toFormat, Map<String, ?> variableOptions) {
             return format(toFormat, variableOptions).toString();
         }
 
         /** {@inheritDoc} */
         @Override
-        public FormattedPlaceholder format(Object toFormat, Map<String, Object> variableOptions) {
+        public FormattedPlaceholder format(Object toFormat, Map<String, ?> variableOptions) {
             LocalizedNumberFormatter realFormatter;
 
             Map<String, Object> mergedOptions = new HashMap<>(fixedOptions);
@@ -160,7 +160,7 @@ class NumberFunctionFactory implements FunctionFactory {
         /** {@inheritDoc} */
         @Override
         public List<String> matches(
-                Object value, List<String> keys, Map<String, Object> variableOptions) {
+                Object value, List<String> keys, Map<String, ?> variableOptions) {
             if (kind.equals("currency")) {
                 // Can't do selection on `currency`
                 return null;
@@ -214,7 +214,7 @@ class NumberFunctionFactory implements FunctionFactory {
             return o1.compareTo(o2);
         }
 
-        private boolean matches(Object value, String key, Map<String, Object> variableOptions) {
+        private boolean matches(Object value, String key, Map<String, ?> variableOptions) {
             if (CatchallKey.isCatchAll(key)) {
                 return true;
             }
@@ -258,7 +258,7 @@ class NumberFunctionFactory implements FunctionFactory {
             return match.equals(key);
         }
 
-        private Number resolveValue(Object toFormat, Map<String, Object> variableOptions) {
+        private Number resolveValue(Object toFormat, Map<String, ?> variableOptions) {
             Map<String, Object> mergedOptions = new HashMap<>(fixedOptions);
             if (!variableOptions.isEmpty()) {
                 mergedOptions.putAll(variableOptions);
@@ -368,7 +368,7 @@ class NumberFunctionFactory implements FunctionFactory {
             Pattern.compile("^[A-Z][A-Z][A-Z]$", Pattern.CASE_INSENSITIVE);
 
     private static LocalizedNumberFormatter functionForOptions(
-            Locale locale, Map<String, Object> fixedOptions, String kind) {
+            Locale locale, Map<String, ?> fixedOptions, String kind) {
         boolean reportErrors = OptUtils.reportErrors(fixedOptions);
 
         UnlocalizedNumberFormatter nf;
@@ -529,7 +529,7 @@ class NumberFunctionFactory implements FunctionFactory {
         return nf.locale(locale);
     }
 
-    static String getCurrency(Map<String, Object> options) {
+    static String getCurrency(Map<String, ?> options) {
         String value = OptUtils.getString(options, "currency", null);
         if (value != null) {
             if (CURRENCY_ISO_CODE.matcher(value).find()) {
@@ -553,7 +553,7 @@ class NumberFunctionFactory implements FunctionFactory {
             this.reportErrors = reportErrors;
         }
 
-        static ResolvedOffsetOptions of(Map<String, Object> options) {
+        static ResolvedOffsetOptions of(Map<String, ?> options) {
             boolean reportErrors = OptUtils.reportErrors(options);
 
             int operand = 0;
