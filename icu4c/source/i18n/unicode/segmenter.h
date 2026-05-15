@@ -31,7 +31,8 @@ U_NAMESPACE_END
 
 #include "unicode/uobject.h"
 #include "unicode/unistr.h"
-// #include "unicode/chariter.h"
+
+#include <memory>
 
 #ifndef U_HIDE_DRAFT_API
 
@@ -50,12 +51,12 @@ public:
     // Note: std::u16string_view is mentioned in the design doc, FWIW
     // Note: Should we take a pointer or a reference?
     //   -> UnicodeString take by const reference; [u16]string_view by value
-    virtual Segments segment(std::u16string_view s, UErrorCode &errorCode);
+    virtual std::unique_ptr<Segments> segment(std::u16string_view s, UErrorCode &errorCode);
     // Note: this API also is mentioned in the design doc
     //  -> For UTF-8, we should either take ICU StringPiece or C++ string_view
     //     Let's use StringPiece for now.
     //     // TODO: discuss whether StringPiece or string_view
-    virtual SegmentsUTF8 segment(StringPiece s, UErrorCode &errorCode);
+    virtual std::unique_ptr<SegmentsUTF8> segment(StringPiece s, UErrorCode &errorCode);
     // TODO: need to return a pointer,
     // so that we don't just return a copy of the
     // base class *slice* of the implementation.
@@ -64,20 +65,6 @@ public:
     // LocalPointer<Segments> or std::unique_ptr<Segments> for explicit ownership.
 };
 
-LocalPointer<Collator> coll(new RuleBasedCollator(u"rule string", errorCode), errorCode);
-if (U_FAILURE(errorCode)) {
-    return;
-}
-// in segmenter.cpp:
-Segmenter::~Segmenter() {}
-
-Segmenter::segment(std::u16string_view /*s*/, UErrorCode &errorCode) {
-    if (U_SUCCESS(errorCode)) {
-        errorCode = U_UNSUPPORTED_ERROR;
-    }
-}
-
-
 class U_COMMON_API_CLASS Segments : public UObject {
     virtual bool isBoundary(int32_t offset) = 0;
 };
@@ -85,7 +72,7 @@ class U_COMMON_API_CLASS Segments : public UObject {
 // Note: this class is mentioned in the design doc as describing
 // an iterator of `char*`, but no details, such as whether there should be
 // a templated class based on the encoding form / code unit size
-class U_COMMON_API_CLASS SegmentsUTF8 {
+class U_COMMON_API_CLASS SegmentsUTF8 : public UObject {
     virtual bool isBoundary(int32_t offset) = 0;
 
     // all other APIs the same as Segments
