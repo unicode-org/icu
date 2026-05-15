@@ -41,16 +41,15 @@
 
     <!--
       Report dependencies and plugins that have updates:
-        mvn versions:display-property-updates -Dmaven.version.ignore=".*alpha.*,.*beta.*,.*rc.*" | grep " -> " | sort -u
-
-      Please update the maven.version.ignore if some other non-release versions show up.
+        mvn versions:display-property-updates | grep " -> " | sort -u
 
       If you are happy with the updates you can apply them all in one command:
-        mvn versions:update-properties -Dmaven.version.ignore=".*alpha.*,.*beta.*,.*rc.*" -DgenerateBackupPoms=false
+        mvn versions:update-properties -DgenerateBackupPoms=false
 
-      You can also update one single property:
-        - versions:update-property https://www.mojohaus.org/versions/versions-maven-plugin/update-property-mojo.html
-        - versions:set-property    https://www.mojohaus.org/versions/versions-maven-plugin/set-property-mojo.html
+      You can also update one single property (in this example exec-maven-plugin.version):
+        mvn versions:update-property -Dproperty=exec-maven-plugin.version
+      Or set one single property to any value you want:
+        mvn versions:set-property -Dproperty=exec-maven-plugin.version -DnewVersion=1.2.3
     -->
 
     <!-- From the Maven web site, Dec. 2025 (https://maven.apache.org/docs/history.html)
@@ -108,6 +107,7 @@
     -->
     <plexus-io.version>3.6.0</plexus-io.version>
     <spotless-maven-plugin.version>3.1.0</spotless-maven-plugin.version>
+    <versions-maven-plugin.version>2.21.0</versions-maven-plugin.version>
     <!-- Plugin versions - END -->
 
     <proj-title>International Components for Unicode for Java</proj-title>
@@ -642,6 +642,22 @@
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>
           <version>${jacoco-maven-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>versions-maven-plugin</artifactId>
+          <version>${versions-maven-plugin.version}</version>
+          <configuration>
+            <!-- https://www.mojohaus.org/versions/versions-maven-plugin/version-rules.html#Using_the_ruleSet_element_in_the_POM -->
+            <ruleSet>
+              <ignoreVersions>
+                <ignoreVersion>
+                  <type>regex</type>
+                  <version>.+-(alpha|beta|rc|RC|M\d).*</version>
+                </ignoreVersion>
+              </ignoreVersions>
+            </ruleSet>
+          </configuration>
         </plugin>
       </plugins>
     </pluginManagement>
