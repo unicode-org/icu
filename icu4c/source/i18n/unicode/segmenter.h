@@ -77,6 +77,15 @@ public:
     const int32_t ruleStatus;
 };
 
+class U_COMMON_API_CLASS SegmentIterator {
+public:
+    SegmentIterator(const SegmentIterator &other) = default;
+    bool operator==(const SegmentIterator &other) const;
+    bool operator!=(const SegmentIterator &other) const;
+    Segment operator*() const;
+    SegmentIterator &operator++();
+};
+
 }  // namespace segmenter
 
 U_NAMESPACE_END
