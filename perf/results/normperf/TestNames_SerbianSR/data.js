@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1778865824930,
+  "lastUpdate": 1778874080890,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -95037,6 +95037,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 6.134,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "y.umaoka@gmail.com",
+            "name": "Yoshito Umaoka",
+            "username": "yumaoka"
+          },
+          "committer": {
+            "email": "yumaoka@users.noreply.github.com",
+            "name": "Yoshito Umaoka",
+            "username": "yumaoka"
+          },
+          "distinct": true,
+          "id": "79ee36b3ea80017d3d2738aa394199c5ae40cc75",
+          "message": "ICU-22436 Update TestShortZoneID test case data for ART and remove logKnownIssue",
+          "timestamp": "2026-05-15T14:52:16-04:00",
+          "tree_id": "f2f2aade4aa723a182bd22315b913cfbc66e6bb4",
+          "url": "https://github.com/unicode-org/icu/commit/79ee36b3ea80017d3d2738aa394199c5ae40cc75"
+        },
+        "date": 1778873612483,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 6.7374,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 6.8095,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 6.8517,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 6.254,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 6.2406,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 6.3168,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
