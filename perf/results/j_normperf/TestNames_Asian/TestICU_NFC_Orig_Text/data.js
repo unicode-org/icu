@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1778708368892,
+  "lastUpdate": 1778864426330,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -45177,6 +45177,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFC_Orig_Text",
             "value": 3.212791969628724,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "y.umaoka@gmail.com",
+            "name": "Yoshito Umaoka",
+            "username": "yumaoka"
+          },
+          "committer": {
+            "email": "yumaoka@users.noreply.github.com",
+            "name": "Yoshito Umaoka",
+            "username": "yumaoka"
+          },
+          "distinct": true,
+          "id": "957fa1c2af3e251883d886aa1b6c843c1fd95c8c",
+          "message": "ICU-23317 Rounding seconds in metazone mapping date data in cldr-to-icu",
+          "timestamp": "2026-05-15T12:46:01-04:00",
+          "tree_id": "32b3a20a55a5b896a528804f86512a03ba0c710b",
+          "url": "https://github.com/unicode-org/icu/commit/957fa1c2af3e251883d886aa1b6c843c1fd95c8c"
+        },
+        "date": 1778863909771,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 2.7040632917936076,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
