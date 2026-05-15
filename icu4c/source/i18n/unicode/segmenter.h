@@ -1,8 +1,8 @@
 // © 2026 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-#ifndef __SEGEMENTER_H__
-#define __SEGEMENTER_H__
+#ifndef __SEGMENTER_H__
+#define __SEGMENTER_H__
 
 /**
  * \file
@@ -31,7 +31,7 @@ U_NAMESPACE_END
 
 #include "unicode/uobject.h"
 #include "unicode/unistr.h"
-#include "unicode/chariter.h"
+// #include "unicode/chariter.h"
 
 #ifndef U_HIDE_DRAFT_API
 
@@ -40,7 +40,7 @@ U_NAMESPACE_BEGIN
 namespace segmenter {
 
 class Segments;
-class SegmentsUtf8;
+class SegmentsUTF8;
 class Segment;
 
 class U_COMMON_API_CLASS Segmenter : public UObject {
@@ -48,12 +48,35 @@ public:
     ~Segmenter() override;
     // TODO: discuss if we want to take input type of UnicodeString or std::u16string_view
     // Note: std::u16string_view is mentioned in the design doc, FWIW
-    // Note: whether taking a pointer or a 
-    virtual Segments segment(const std::u16string_view &s) = 0;
+    // Note: Should we take a pointer or a reference?
+    //   -> UnicodeString take by const reference; [u16]string_view by value
+    virtual Segments segment(std::u16string_view s, UErrorCode &errorCode);
     // Note: this API also is mentioned in the design doc
-    virtual SegmentsUtf8 segment(const char &s) = 0;
-
+    //  -> For UTF-8, we should either take ICU StringPiece or C++ string_view
+    //     Let's use StringPiece for now.
+    //     // TODO: discuss whether StringPiece or string_view
+    virtual SegmentsUTF8 segment(StringPiece s, UErrorCode &errorCode);
+    // TODO: need to return a pointer,
+    // so that we don't just return a copy of the
+    // base class *slice* of the implementation.
+    // Classic ICU: return a pointer, and by convention the caller takes ownership.
+    // We *could* do something new and return a
+    // LocalPointer<Segments> or std::unique_ptr<Segments> for explicit ownership.
 };
+
+LocalPointer<Collator> coll(new RuleBasedCollator(u"rule string", errorCode), errorCode);
+if (U_FAILURE(errorCode)) {
+    return;
+}
+// in segmenter.cpp:
+Segmenter::~Segmenter() {}
+
+Segmenter::segment(std::u16string_view /*s*/, UErrorCode &errorCode) {
+    if (U_SUCCESS(errorCode)) {
+        errorCode = U_UNSUPPORTED_ERROR;
+    }
+}
+
 
 class U_COMMON_API_CLASS Segments : public UObject {
     virtual bool isBoundary(int32_t offset) = 0;
@@ -62,7 +85,7 @@ class U_COMMON_API_CLASS Segments : public UObject {
 // Note: this class is mentioned in the design doc as describing
 // an iterator of `char*`, but no details, such as whether there should be
 // a templated class based on the encoding form / code unit size
-class U_COMMON_API_CLASS SegmentsUtf8 {
+class U_COMMON_API_CLASS SegmentsUTF8 {
     virtual bool isBoundary(int32_t offset) = 0;
 
     // all other APIs the same as Segments
@@ -96,4 +119,4 @@ U_NAMESPACE_END
 
 #endif /* U_SHOW_CPLUSPLUS_API */
 
-#endif // __SEGEMENTER_H__
+#endif // __SEGMENTER_H__
