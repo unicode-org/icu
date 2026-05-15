@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1778865517922,
+  "lastUpdate": 1778873914119,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -123783,6 +123783,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 3560.5167,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "y.umaoka@gmail.com",
+            "name": "Yoshito Umaoka",
+            "username": "yumaoka"
+          },
+          "committer": {
+            "email": "yumaoka@users.noreply.github.com",
+            "name": "Yoshito Umaoka",
+            "username": "yumaoka"
+          },
+          "distinct": true,
+          "id": "79ee36b3ea80017d3d2738aa394199c5ae40cc75",
+          "message": "ICU-22436 Update TestShortZoneID test case data for ART and remove logKnownIssue",
+          "timestamp": "2026-05-15T14:52:16-04:00",
+          "tree_id": "f2f2aade4aa723a182bd22315b913cfbc66e6bb4",
+          "url": "https://github.com/unicode-org/icu/commit/79ee36b3ea80017d3d2738aa394199c5ae40cc75"
+        },
+        "date": 1778873430408,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 67084.937,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 190282.5664,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.5026,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 9.9319,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 7.2388,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 21416.2537,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 70501.5261,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 3568.4747,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
