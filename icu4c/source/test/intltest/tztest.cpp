@@ -918,7 +918,7 @@ void TimeZoneTest::TestShortZoneIDs()
         {"ECT", 60, true},    // ICU Link - Europe/Paris
         {"MET", 60, true},    // Olson europe 1:00 C-Eur
         {"CAT", 120, false},  // ICU Link - Africa/Maputo
-        {"ART", 120, false},  // ICU Link - Africa/Cairo
+        {"ART", 120, true},   // ICU Link - Africa/Cairo - observes DST since 2023
         {"EET", 120, true},   // Olson europe 2:00 EU
         {"EAT", 180, false},  // ICU Link - Africa/Addis_Ababa
         {"NET", 240, false},  // ICU Link - Asia/Yerevan
@@ -968,11 +968,6 @@ void TimeZoneTest::TestShortZoneIDs()
         if (usesDaylight != kReferenceList[i].daylight) {
             if (!isDevelopmentBuild) {
                 logln("Warning: Time Zone " + itsID + " use daylight is " +
-                      (usesDaylight?"true":"false") +
-                      " but it should be " +
-                      ((kReferenceList[i].daylight)?"true":"false"));
-            } else if (!(itsID==UnicodeString(u"ART",-1) && logKnownIssue("ICU-22436", "Wrong DST status for time zone ART"))) {
-                dataerrln("FAIL: Time Zone " + itsID + " use daylight is " +
                       (usesDaylight?"true":"false") +
                       " but it should be " +
                       ((kReferenceList[i].daylight)?"true":"false"));
