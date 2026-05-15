@@ -955,8 +955,7 @@ public class TestMessageFormat extends CoreTestFmwk {
     // This tests passing named arguments instead of numbers to format().
     @Test
     public void testFormatNamedArguments() {
-        Map<String, Object> arguments = new HashMap<>();
-        arguments.put("startDate", new Date(871068000000L));
+        var arguments = Map.of("startDate", new Date(871068000000L));
 
         StringBuffer result = new StringBuffer();
 
@@ -1621,11 +1620,7 @@ public class TestMessageFormat extends CoreTestFmwk {
 
         Object[] args0 = new Object[] {"tmp", new Date(1184777888000L), 15, 2};
 
-        HashMap<String, Object> args1 = new HashMap<>();
-        args1.put("arg0", "tmp");
-        args1.put("arg1", new Date(1184777888000L));
-        args1.put("arg2", 15);
-        args1.put("arg3", 2);
+        var args1 = Map.of("arg0", "tmp", "arg1", new Date(1184777888000L), "arg2", 15, "arg3", 2);
 
         Object[] args2 = new Object[] {34};
 

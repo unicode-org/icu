@@ -105,7 +105,7 @@ class MFDataModelFormatter {
                         .build();
     }
 
-    String format(Map<String, Object> arguments) {
+    String format(Map<String, ?> arguments) {
         MFDataModel.Pattern patternToRender = null;
         MapWithNfcKeys nfcArguments = new MapWithNfcKeys(arguments);
 
@@ -695,10 +695,10 @@ class MFDataModelFormatter {
             theMap.putAll(org.getMap());
         }
 
-        MapWithNfcKeys(Map<String, Object> orgMap) {
+        MapWithNfcKeys(Map<String, ?> orgMap) {
             super();
             if (orgMap != null) {
-                for (Map.Entry<String, Object> e : orgMap.entrySet()) {
+                for (Map.Entry<String, ?> e : orgMap.entrySet()) {
                     this.put(StringUtils.toNfc(e.getKey()), e.getValue());
                 }
             }
