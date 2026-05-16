@@ -799,6 +799,36 @@ For example, here is how an API might be tagged in various versions:
   f(xbase, y)
   ```
 
+#### Tagging JDK overrides
+
+At times an ICU class might override a method that comes from the
+JDK itself and is already implemented by a class which ICU extends, or even
+by `Object` itself (for example `clone()` or `toString()`).
+
+These overrides should still have javadoc and be annotated with an ICU status
+and version.
+
+Because the method already existed (implemented by JDK) when the ICU class was
+created, it means that the status and ICU version in the method annotation
+should be the same as the ICU annotation of the class:
+
+  ```java
+  /**
+   * ...
+   * @draft ICU 78
+   */
+  public static final class SomeIcuClass {
+      /**
+       * {@inheritDoc}
+       *
+       * @draft ICU 78
+       */
+      @Override public String toString() {
+          ...
+      }
+  }
+  ```
+
 ### ICU Binary Compatibility
 
 *Using ICU as an Operating System Level Library*

@@ -77,9 +77,7 @@ public class APIStatusConsistencyChecker {
     // to handle these as exceptions, or update our policy.
     static final String[][] CONSISTENCY_EXCEPTIONS = {
         // {"<class>", "<method>"},
-        {"com.ibm.icu.text.Normalizer", "clone"},
-        {"com.ibm.icu.text.PersonNameFormatter", "toString"},
-        {"com.ibm.icu.text.SimplePersonName", "toString"},
+        // For example: {"com.ibm.icu.text.SimplePersonName", "toString"},
     };
 
     public void checkConsistency() {
@@ -150,7 +148,14 @@ public class APIStatusConsistencyChecker {
                                     + fullClassName
                                     + " (included in the exception list)");
                 } else {
-                    pw.println("## Error ## " + methodName + " in " + fullClassName);
+                    pw.printf(
+                            "## Error ## %s.%s, class:%s:%s != method:%s:%s%n",
+                            fullClassName,
+                            methodName,
+                            APIInfo.getTypeValName(APIInfo.STA, classStatus).trim(),
+                            classVer,
+                            APIInfo.getTypeValName(APIInfo.STA, methodStatus).trim(),
+                            methodVer);
                     errCount++;
                 }
             }

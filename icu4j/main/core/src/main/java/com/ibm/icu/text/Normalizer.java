@@ -15,6 +15,7 @@ import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.util.ICUCloneNotSupportedException;
 import java.nio.CharBuffer;
 import java.text.CharacterIterator;
+import java.util.Objects;
 
 /**
  * Old Unicode normalization API.
@@ -453,6 +454,19 @@ public final class Normalizer implements Cloneable {
         // private int resultValue;
         private QuickCheckResult(int value) {
             // resultValue=value;
+        }
+
+        /**
+         * {@inheritDoc}
+         *
+         * @stable ICU 2.8
+         */
+        @Override
+        public String toString() {
+            if (this == NO) return "NO";
+            if (this == YES) return "YES";
+            if (this == MAYBE) return "MAYBE";
+            return "Unknown QuickCheckResult: " + Objects.toString(this);
         }
     }
 

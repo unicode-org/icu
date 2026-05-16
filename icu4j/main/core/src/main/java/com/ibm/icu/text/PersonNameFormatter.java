@@ -400,11 +400,11 @@ public class PersonNameFormatter {
     }
 
     /**
-     * @internal For debugging only!
-     * @deprecated This API is for debugging only.
+     * {@inheritDoc}
+     *
+     * @stable ICU 73
      */
     @Override
-    @Deprecated
     public String toString() {
         return impl.toString();
     }

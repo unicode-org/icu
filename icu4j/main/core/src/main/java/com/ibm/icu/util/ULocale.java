@@ -2870,6 +2870,18 @@ public final class ULocale implements Serializable, Comparable<ULocale>, Cloneab
      */
     public static final class Type {
         private Type() {}
+
+        /**
+         * {@inheritDoc}
+         *
+         * @draft ICU 2.8
+         */
+        @Override
+        public String toString() {
+            if (this == ULocale.ACTUAL_LOCALE) return "ACTUAL_LOCALE";
+            if (this == ULocale.VALID_LOCALE) return "VALID_LOCALE";
+            return ("Unknown Type: " + Objects.toString(this));
+        }
     }
 
     /**

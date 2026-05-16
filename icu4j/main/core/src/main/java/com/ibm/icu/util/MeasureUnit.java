@@ -896,6 +896,12 @@ public class MeasureUnit implements Serializable {
     }
 
     /**
+     * Returns the MeasureUnit instance if the given type and subtype combination is valid, or null
+     * otherwise.
+     *
+     * @param type the unit type (e.g., "length", "mass", "volume")
+     * @param subtype the unit subtype (e.g., "meter", "kilogram", "liter")
+     * @return the MeasureUnit if valid, otherwise null
      * @internal
      * @deprecated This API is ICU internal only.
      */
