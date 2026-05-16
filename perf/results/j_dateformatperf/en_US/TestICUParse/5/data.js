@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1778891090915,
+  "lastUpdate": 1778892114477,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -45057,6 +45057,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 307.08458772818443,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "5650473015e30aeee29200cc1edd43c7a63c95fa",
+          "message": "ICU-23247 Fix all 'ObjectToString' errorprone issues",
+          "timestamp": "2026-05-15T17:29:59-07:00",
+          "tree_id": "f357c8bd1811aabf5f5bb6bef585647a9aba8345",
+          "url": "https://github.com/unicode-org/icu/commit/5650473015e30aeee29200cc1edd43c7a63c95fa"
+        },
+        "date": 1778891644708,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 308.390815303309,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
