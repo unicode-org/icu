@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1778892643220,
+  "lastUpdate": 1779110669373,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -45057,6 +45057,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 1.4054328309974937,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "62dffee19ded8bc7c3f6cc142268a33df7abd3c9",
+          "message": "ICU-23339 Cleanup implementation and Args helper class",
+          "timestamp": "2026-05-15T17:07:21-07:00",
+          "tree_id": "0b34c3bcfb6e01630ea94f4274dfaf53bd4838d7",
+          "url": "https://github.com/unicode-org/icu/commit/62dffee19ded8bc7c3f6cc142268a33df7abd3c9"
+        },
+        "date": 1779110211715,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 1.4952911153280108,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
