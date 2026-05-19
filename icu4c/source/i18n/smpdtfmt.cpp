@@ -56,6 +56,7 @@
 #include "unicode/brkiter.h"
 #include "unicode/rbnf.h"
 #include "unicode/dtptngen.h"
+#include "unicode/plurrule.h"
 #include "uresimp.h"
 #include "olsontz.h"
 #include "patternprops.h"
@@ -80,6 +81,7 @@
 #include "chnsecal.h"
 #include "dangical.h"
 #include "japancal.h"
+#include "standardplural.h"
 #include <typeinfo>
 
 #if defined( U_DEBUG_CALSVC ) || defined (U_DEBUG_CAL)
@@ -339,6 +341,7 @@ SimpleDateFormat::~SimpleDateFormat()
     }
     delete fTimeZoneFormat;
     delete fSimpleNumberFormatter;
+    delete fOrdinalPluralRules;
 
 #if !UCONFIG_NO_BREAK_ITERATION
     delete fCapitalizationBrkIter;
@@ -565,6 +568,12 @@ SimpleDateFormat& SimpleDateFormat::operator=(const SimpleDateFormat& other)
     fPattern = other.fPattern;
     fHasMinute = other.fHasMinute;
     fHasSecond = other.fHasSecond;
+
+    delete fOrdinalPluralRules;
+    fOrdinalPluralRules = nullptr;
+    if (other.fOrdinalPluralRules != nullptr) {
+        fOrdinalPluralRules = other.fOrdinalPluralRules->clone();
+    }
 
     fLocale = other.fLocale;
 
@@ -2035,6 +2044,46 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
 
         break;
     }
+
+    case UDAT_DATE_FIELD:
+        if (count >= 3 && value >= 1) {
+            UnicodeString dayStr;
+            // day of month name: First check if there's a "type" element for the current date and use it if there is
+            int32_t cardinalCount = 0;
+            const UnicodeString* cardinalNames = fSymbols->getDayOfMonthCardinalNames(
+                cardinalCount, DateFormatSymbols::FORMAT, DateFormatSymbols::ABBREVIATED);
+            if (cardinalNames != nullptr && value >= 1 && value < cardinalCount && !cardinalNames[value].isEmpty()) {
+                dayStr += cardinalNames[value];
+            } else {
+                // if there was no "type" element, look up the date's ordinal plural category and use the appropriate
+                // "ordinal" element if there is one, or the "other" element if there isn't (the "ordinal" strings
+                // are SimpleFormat patterns, where {0} gets filled in with the day number)
+                const UnicodeString* ordNames = fSymbols->getDayOfMonthOrdinalNames(
+                    DateFormatSymbols::FORMAT, DateFormatSymbols::ABBREVIATED);
+                if (ordNames != nullptr && fOrdinalPluralRules != nullptr) {
+                    UnicodeString keyword = fOrdinalPluralRules->select(value);
+                    StandardPlural::Form form = StandardPlural::orOtherFromString(keyword);
+                    UnicodeString pattern = ordNames[(int32_t)form];
+                    if (pattern.isEmpty()) {
+                        pattern = ordNames[(int32_t)StandardPlural::OTHER];
+                    }
+                    if (!pattern.isEmpty()) {
+                        UnicodeString dayNum;
+                        zeroPaddingNumber(currentNumberFormat, dayNum, value, 1, maxIntCount);
+                        SimpleFormatter(pattern, status).format(dayNum, dayStr, status);
+                    }
+                }
+            }
+            // if we didn't find any relevant dayOfMonths resources, treat "ddd" the same as "d"
+            if (dayStr.isEmpty()) {
+                zeroPaddingNumber(currentNumberFormat, dayStr, value, 1, maxIntCount);
+            }
+            appendTo += dayStr;
+        } else {
+            // and, of course, handle "d" and "dd" the way we were before we added "ddd"...
+            zeroPaddingNumber(currentNumberFormat, appendTo, value, count, maxIntCount);
+        }
+        break;
 
     // all of the other pattern symbols can be formatted as simple numbers with
     // appropriate zero padding
@@ -3813,6 +3862,55 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, ch
         return -start;
     }
 
+    case UDAT_DATE_FIELD:
+        if (count >= 3) {
+            // Try to match cardinal day-of-month names (e.g., 初一, 初二, ... for Chinese calendar)
+            int32_t cardinalCount = 0;
+            const UnicodeString* cardinalNames = fSymbols->getDayOfMonthCardinalNames(
+                cardinalCount, DateFormatSymbols::FORMAT, DateFormatSymbols::ABBREVIATED);
+            if (cardinalNames != nullptr && cardinalCount > 0) {
+                int32_t newStart = matchString(text, start, UCAL_DATE, cardinalNames, cardinalCount, nullptr, cal);
+                if (newStart > 0) {
+                    return newStart;
+                }
+            }
+            // Try to parse as ordinal: match prefix, parse number, match suffix
+            const UnicodeString* ordNames = fSymbols->getDayOfMonthOrdinalNames(
+                DateFormatSymbols::FORMAT, DateFormatSymbols::ABBREVIATED);
+            if (ordNames != nullptr) {
+                for (int32_t i = 0; i < StandardPlural::COUNT; i++) {
+                    if (ordNames[i].isEmpty()) {
+                        continue;
+                    }
+                    int32_t placeholderPos = ordNames[i].indexOf(UnicodeString(u"{0}"));
+                    if (placeholderPos < 0) {
+                        continue;
+                    }
+                    UnicodeString prefix(ordNames[i], 0, placeholderPos);
+                    UnicodeString suffix(ordNames[i], placeholderPos + 3);
+                    // Match prefix
+                    if (prefix.length() > 0 && matchStringWithOptionalDot(text, start, prefix) == start + prefix.length()) {
+                        continue;
+                    }
+                    // Parse number after prefix
+                    int32_t numStart = start + prefix.length();
+                    ParsePosition numPos(numStart);
+                    parseInt(text, number, numPos, allowNegative, currentNumberFormat);
+                    if (numPos.getIndex() <= numStart) {
+                        continue;
+                    }
+                    // Match suffix
+                    int32_t numEnd = numPos.getIndex();
+                    if (suffix.length() > 0 && matchStringWithOptionalDot(text, numEnd, suffix) == numEnd + suffix.length()) {
+                        continue;
+                    }
+                    cal.set(UCAL_DATE, number.getLong());
+                    return numEnd + suffix.length();
+                }
+            }
+        }
+        break;
+
     default:
         // Handle "generic" fields
         // this is now handled below, outside the switch block
@@ -4400,9 +4498,12 @@ void SimpleDateFormat::parsePattern() {
     fHasMinute = false;
     fHasSecond = false;
     fHasHanYearChar = false;
+    delete fOrdinalPluralRules;
+    fOrdinalPluralRules = nullptr;
 
     int len = fPattern.length();
     UBool inQuote = false;
+    int32_t dCount = 0;
     for (int32_t i = 0; i < len; ++i) {
         char16_t ch = fPattern[i];
         if (ch == QUOTE) {
@@ -4417,6 +4518,15 @@ void SimpleDateFormat::parsePattern() {
             }
             if (ch == 0x73) {  // 0x73 == 's'
                 fHasSecond = true;
+            }
+            if (ch == 0x64) {  // 'd'
+                dCount++;
+                if (dCount >= 3 && fOrdinalPluralRules == nullptr) {
+                    UErrorCode localStatus = U_ZERO_ERROR;
+                    fOrdinalPluralRules = PluralRules::forLocale(fLocale, UPLURAL_TYPE_ORDINAL, localStatus);
+                }
+            } else {
+                dCount = 0;
             }
         }
     }

@@ -18,6 +18,7 @@ import com.ibm.icu.impl.JavaTimeConverters;
 import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.impl.SimpleFormatterImpl;
+import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.TimeZoneFormat.Style;
 import com.ibm.icu.text.TimeZoneFormat.TimeType;
@@ -721,6 +722,12 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
      * DateFormat pattern contains the Han year character \u5E74=年, => non-numeric E Asian format.
      */
     private transient boolean hasHanYearChar;
+
+    /**
+     * Cached ordinal-form PluralRules for the formatter's locale, used by the "ddd" pattern.
+     * Created lazily by {@link #parsePattern()} when the pattern contains 3+ consecutive 'd' chars.
+     */
+    private transient PluralRules ordinalPluralRules;
 
     /*
      *  Capitalization setting, introduced in ICU 50
@@ -2090,6 +2097,17 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
             case 37: // TIME SEPARATOR (no pattern character currently defined, we should
                 // not get here but leave support in for future definition.
                 buf.append(formatData.getTimeSeparatorString());
+                break;
+            case 3: // 'd' - DATE
+                if (count >= 3 && value >= 1) {
+                    String dayStr =
+                            formatDayOfMonthName(value, currentNumberFormat, count, maxIntCount);
+                    if (dayStr != null) {
+                        buf.append(dayStr);
+                        break;
+                    }
+                }
+                zeroPaddingNumber(currentNumberFormat, buf, value, count, maxIntCount);
                 break;
             default:
                 // case 3: // 'd' - DATE
@@ -4274,6 +4292,15 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
                     return newStart;
                 }
 
+            case 3: // 'd' - DATE
+                if (count >= 3) {
+                    int newStart = parseDayOfMonthName(text, start, cal);
+                    if (newStart > 0) {
+                        return newStart;
+                    }
+                }
+            // fall through to numeric parsing in default
+
             default:
                 // case 3: // 'd' - DATE
                 // case 5: // 'H' - HOUR_OF_DAY (0..23)
@@ -5155,8 +5182,10 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
         hasMinute = false;
         hasSecond = false;
         hasHanYearChar = false;
+        ordinalPluralRules = null;
 
         boolean inQuote = false;
+        int dCount = 0;
         for (int i = 0; i < pattern.length(); ++i) {
             char ch = pattern.charAt(i);
             if (ch == '\'') {
@@ -5172,7 +5201,126 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
                 if (ch == 's') {
                     hasSecond = true;
                 }
+                if (ch == 'd') {
+                    dCount++;
+                    if (dCount >= 3 && ordinalPluralRules == null) {
+                        ordinalPluralRules =
+                                PluralRules.forLocale(
+                                        getLocale(ULocale.VALID_LOCALE),
+                                        PluralRules.PluralType.ORDINAL);
+                    }
+                } else {
+                    dCount = 0;
+                }
             }
         }
+    }
+
+    /**
+     * Formats the day-of-month {@code value} using the locale's ordinal-form day-of-month names
+     * (the pattern contains "ddd" or longer). Returns null if no relevant data is available \u2014
+     * the caller should fall back to numeric formatting.
+     */
+    private String formatDayOfMonthName(
+            int value, NumberFormat currentNumberFormat, int count, int maxIntCount) {
+        // First check for a cardinal element (e.g., Chinese hanidays "\u521D\u4E00",
+        // "\u5341\u4E94").
+        String[] cardinalNames =
+                formatData.getDayOfMonthCardinalNames(
+                        DateFormatSymbols.FORMAT, DateFormatSymbols.ABBREVIATED);
+        if (cardinalNames != null
+                && value >= 1
+                && value < cardinalNames.length
+                && cardinalNames[value] != null
+                && !cardinalNames[value].isEmpty()) {
+            return cardinalNames[value];
+        }
+
+        // Fall back to ordinal patterns selected by plural form (e.g., English "{0}st", "{0}nd").
+        String[] ordNames =
+                formatData.getDayOfMonthOrdinalNames(
+                        DateFormatSymbols.FORMAT, DateFormatSymbols.ABBREVIATED);
+        if (ordNames == null || ordinalPluralRules == null) {
+            return null;
+        }
+        String keyword = ordinalPluralRules.select(value);
+        StandardPlural form = StandardPlural.orOtherFromString(keyword);
+        String pat = ordNames[form.ordinal()];
+        if (pat == null || pat.isEmpty()) {
+            pat = ordNames[StandardPlural.OTHER.ordinal()];
+        }
+        if (pat == null || pat.isEmpty()) {
+            return null;
+        }
+        StringBuffer dayNum = new StringBuffer();
+        zeroPaddingNumber(currentNumberFormat, dayNum, value, 1, maxIntCount);
+        return SimpleFormatter.compile(pat).format(dayNum.toString());
+    }
+
+    /**
+     * Tries to parse {@code text} starting at {@code start} as an ordinal day-of-month name (the
+     * pattern contains "ddd" or longer). Sets {@link Calendar#DATE} on {@code cal} and returns the
+     * new position on success; returns -1 otherwise (so the caller can fall through to numeric
+     * parsing).
+     */
+    private int parseDayOfMonthName(String text, int start, Calendar cal) {
+        // Try cardinal names first (e.g., Chinese hanidays).
+        String[] cardinalNames =
+                formatData.getDayOfMonthCardinalNames(
+                        DateFormatSymbols.FORMAT, DateFormatSymbols.ABBREVIATED);
+        if (cardinalNames != null) {
+            int bestLen = 0;
+            int bestDay = -1;
+            for (int day = 1; day < cardinalNames.length; day++) {
+                String name = cardinalNames[day];
+                if (name == null || name.isEmpty()) {
+                    continue;
+                }
+                if (name.length() > bestLen
+                        && regionMatchesWithOptionalDot(text, 0, name, name.length()) >= 0) {
+                    bestLen = name.length();
+                    bestDay = day;
+                }
+            }
+            if (bestDay > 0) {
+                cal.set(Calendar.DATE, bestDay);
+                return start + bestLen;
+            }
+        }
+
+        // Try ordinal patterns: match prefix, parse number, match suffix.
+        String[] ordNames =
+                formatData.getDayOfMonthOrdinalNames(
+                        DateFormatSymbols.FORMAT, DateFormatSymbols.ABBREVIATED);
+        if (ordNames == null) {
+            return -1;
+        }
+        for (String pat : ordNames) {
+            if (pat == null || pat.isEmpty()) {
+                continue;
+            }
+            int placeholderPos = pat.indexOf("{0}");
+            if (placeholderPos < 0) {
+                continue;
+            }
+            String prefix = pat.substring(0, placeholderPos);
+            String suffix = pat.substring(placeholderPos + 3);
+            if (regionMatchesWithOptionalDot(text, start, prefix, prefix.length()) < 0) {
+                continue;
+            }
+            int numStart = start + prefix.length();
+            ParsePosition numPos = new ParsePosition(numStart);
+            Number n = parseInt(text, numPos, false, getNumberFormat('d'));
+            if (n == null || numPos.getIndex() <= numStart) {
+                continue;
+            }
+            int numEnd = numPos.getIndex();
+            if (regionMatchesWithOptionalDot(text, numEnd, suffix, suffix.length()) < 0) {
+                continue;
+            }
+            cal.set(Calendar.DATE, n.intValue());
+            return numEnd + suffix.length();
+        }
+        return -1;
     }
 }

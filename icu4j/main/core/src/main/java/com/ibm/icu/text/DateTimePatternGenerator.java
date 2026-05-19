@@ -2800,6 +2800,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         {'e', WEEKDAY, NARROW - DELTA, 5},
         {'e', WEEKDAY, SHORTER - DELTA, 6},
         {'d', DAY, NUMERIC, 1, 2},
+        {'d', DAY, SHORT, 3},
         {'g', DAY, NUMERIC + DELTA, 1, 20}, // really internal use, so we don't care
         {'D', DAY_OF_YEAR, NUMERIC, 1, 3},
         {'F', DAY_OF_WEEK_IN_MONTH, NUMERIC, 1},

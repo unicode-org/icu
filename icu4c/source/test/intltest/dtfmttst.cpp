@@ -142,9 +142,10 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
     TESTCASE_AUTO(TestLongLocale);
     TESTCASE_AUTO(TestChineseCalendar23043);
     TESTCASE_AUTO(TestAmPmLengths23114);
-    
+
     TESTCASE_AUTO(TestDayPeriodFallback);
     TESTCASE_AUTO(TestInvalidStyles);
+    TESTCASE_AUTO(TestDayNames);
 
     TESTCASE_AUTO_END;
 }
@@ -591,7 +592,7 @@ void DateFormatTest::TestFieldPosition() {
         "",
 #endif
 
-        "Anno Domini", "1997", "August", "0013", "0014", "0014", "0034", "0012", "5130", "Wednesday",
+        "Anno Domini", "1997", "August", "13th", "0014", "0014", "0034", "0012", "5130", "Wednesday",
         "0225", "0002", "0033", "0003", "PM", "0002", "0002", "Pacific Daylight Time", "1997", "Wednesday",
         "1997", "2450674", "52452513", "GMT-07:00", "Pacific Time",  "Wednesday", "August", "3rd quarter", "3rd quarter", "Los Angeles Time",
         "1997", "GMT-07:00", "-0700", "-0700", "1997", "PM", "in the afternoon",
@@ -6077,6 +6078,98 @@ void DateFormatTest::TestInvalidStyles() {
     if (df3 != nullptr) {
         errln("FAIL: createDateTimeInstance with invalid styles should return nullptr");
         delete df3;
+    }
+}
+
+void DateFormatTest::TestDayNames() {
+    UErrorCode status = U_ZERO_ERROR;
+
+    struct TestCase {
+        const char* locale;
+        const char16_t* skeleton;
+        int32_t year;
+        int32_t month;
+        int32_t day;
+        const char16_t* expected;
+    } testCases[] = {
+        // test ordinal dates in English
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  1,  u"Jan 1st, 2026"  },
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  2,  u"Jan 2nd, 2026"  },
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  3,  u"Jan 3rd, 2026"  },
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  4,  u"Jan 4th, 2026"  },
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  5,  u"Jan 5th, 2026"  },
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  7,  u"Jan 7th, 2026"  },
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  9,  u"Jan 9th, 2026"  },
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  11, u"Jan 11th, 2026" },
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  12, u"Jan 12th, 2026" },
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  13, u"Jan 13th, 2026" },
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  21, u"Jan 21st, 2026" },
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  22, u"Jan 22nd, 2026" },
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  23, u"Jan 23rd, 2026" },
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  30, u"Jan 30th, 2026" },
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  31, u"Jan 31st, 2026" },
+        // double-check that "dddd" and "ddddd" work the same as "ddd"
+        { "en", u"yMMMdddd",  2026, UCAL_JANUARY,  31, u"Jan 31st, 2026" },
+        { "en", u"yMMMddddd", 2026, UCAL_JANUARY,  31, u"Jan 31st, 2026" },
+    };
+
+    for (int32_t i = 0; i < UPRV_LENGTHOF(testCases); i++) {
+        status = U_ZERO_ERROR;
+        LocalPointer<DateTimePatternGenerator> dtpg(
+            DateTimePatternGenerator::createInstance(testCases[i].locale, status));
+        if (!assertSuccess("Creating DTPG", status, true)) {
+            continue;
+        }
+        UnicodeString pattern = dtpg->getBestPattern(UnicodeString(testCases[i].skeleton), status);
+        SimpleDateFormat sdf(pattern, Locale(testCases[i].locale), status);
+        if (!assertSuccess("Creating SimpleDateFormat", status, true)) {
+            continue;
+        }
+        sdf.setTimeZone(*TimeZone::getGMT());
+
+        Calendar* cal = Calendar::createInstance(*TimeZone::getGMT(), Locale(testCases[i].locale), status);
+        if (!assertSuccess("Creating Calendar", status, true)) {
+            continue;
+        }
+        cal->clear();
+        cal->set(UCAL_EXTENDED_YEAR, testCases[i].year);
+        cal->set(UCAL_MONTH, testCases[i].month);
+        cal->set(UCAL_DATE, testCases[i].day);
+        UDate date = cal->getTime(status);
+        delete cal;
+
+        UnicodeString result;
+        sdf.format(date, result, status);
+
+        if (assertSuccess("Formatting date", status)) {
+            CharString msg;
+            msg.append("Wrong formatting result for ", status);
+            msg.append(testCases[i].locale, status);
+            msg.append(" ", status);
+            msg.appendNumber(testCases[i].year, status);
+            msg.append("/", status);
+            msg.appendNumber(testCases[i].month + 1, status);
+            msg.append("/", status);
+            msg.appendNumber(testCases[i].day, status);
+            assertEquals(msg.data(), testCases[i].expected, result);
+
+            // uppercase the result to make sure parsing is case-insensitive
+            result.toUpper();
+            
+            // parse the formatted result back and verify it round-trips
+            ParsePosition parsePos(0);
+            UDate parsedDate = sdf.parse(result, parsePos);
+            msg.clear();
+            msg.append("Round-trip parse failed for ", status);
+            msg.append(testCases[i].locale, status);
+            msg.append(" ", status);
+            msg.appendNumber(testCases[i].year, status);
+            msg.append("/", status);
+            msg.appendNumber(testCases[i].month + 1, status);
+            msg.append("/", status);
+            msg.appendNumber(testCases[i].day, status);
+            assertTrue(msg.data(), parsedDate == date);
+        }
     }
 }
 

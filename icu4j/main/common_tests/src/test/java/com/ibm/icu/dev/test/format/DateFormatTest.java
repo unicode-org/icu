@@ -531,7 +531,7 @@ public class DateFormatTest extends CoreTestFmwk {
             "Anno Domini",
             "1997",
             "August",
-            "0013",
+            "13th",
             "0014",
             "0014",
             "0034",
@@ -621,7 +621,7 @@ public class DateFormatTest extends CoreTestFmwk {
                 "3", "33", "1997", "1997"
             },
             {
-                "PM", "0013", "Wednesday", "0002", "0225",
+                "PM", "13th", "Wednesday", "0002", "0225",
                 "Wednesday", "Anno Domini", "1997", "0014", "0014",
                 "0002", "0002", "2450674", "5130", "52452513",
                 "0034", "August", "3rd quarter", "0012", "Pacific Daylight Time",
@@ -6948,12 +6948,12 @@ public class DateFormatTest extends CoreTestFmwk {
             "yyyyyyyyyyy.M.dddddddddd",
             "fp",
             "2010 04 01",
-            "00000002010.4.0000000001",
+            "00000002010.4.1st",
             "2010 04 01",
             "y.M.ddddddddddd",
             "fp",
             "2010 10 11",
-            "2010.10.00000000011",
+            "2010.10.11th",
             "2010 10 11",
         };
         expect(DATA, new Locale("en", "", ""));
@@ -9419,6 +9419,96 @@ public class DateFormatTest extends CoreTestFmwk {
 
         if (!formattedDate.equals("11:58 PM")) {
             errln("FAIL: Wrong formatting result, expected 11:58 PM, got " + formattedDate);
+        }
+    }
+
+    @Test
+    public void TestDayNames() {
+        // English ordinal rules: one (1,21,31) -> "{0}st", two (2,22) -> "{0}nd",
+        // few (3,23) -> "{0}rd", other -> "{0}th".
+        Object[][] testCases = {
+            {"en", "yMMMddd", 2026, Calendar.JANUARY, 1, "Jan 1st, 2026"},
+            {"en", "yMMMddd", 2026, Calendar.JANUARY, 2, "Jan 2nd, 2026"},
+            {"en", "yMMMddd", 2026, Calendar.JANUARY, 3, "Jan 3rd, 2026"},
+            {"en", "yMMMddd", 2026, Calendar.JANUARY, 4, "Jan 4th, 2026"},
+            {"en", "yMMMddd", 2026, Calendar.JANUARY, 5, "Jan 5th, 2026"},
+            {"en", "yMMMddd", 2026, Calendar.JANUARY, 7, "Jan 7th, 2026"},
+            {"en", "yMMMddd", 2026, Calendar.JANUARY, 9, "Jan 9th, 2026"},
+            {"en", "yMMMddd", 2026, Calendar.JANUARY, 11, "Jan 11th, 2026"},
+            {"en", "yMMMddd", 2026, Calendar.JANUARY, 12, "Jan 12th, 2026"},
+            {"en", "yMMMddd", 2026, Calendar.JANUARY, 13, "Jan 13th, 2026"},
+            {"en", "yMMMddd", 2026, Calendar.JANUARY, 21, "Jan 21st, 2026"},
+            {"en", "yMMMddd", 2026, Calendar.JANUARY, 22, "Jan 22nd, 2026"},
+            {"en", "yMMMddd", 2026, Calendar.JANUARY, 23, "Jan 23rd, 2026"},
+            {"en", "yMMMddd", 2026, Calendar.JANUARY, 30, "Jan 30th, 2026"},
+            {"en", "yMMMddd", 2026, Calendar.JANUARY, 31, "Jan 31st, 2026"},
+            // double-check that "dddd" and "ddddd" do the same thing as "ddd"
+            {"en", "yMMMdddd", 2026, Calendar.JANUARY, 31, "Jan 31st, 2026"},
+            {"en", "yMMMddddd", 2026, Calendar.JANUARY, 31, "Jan 31st, 2026"},
+        };
+
+        for (Object[] tc : testCases) {
+            String localeID = (String) tc[0];
+            String skeleton = (String) tc[1];
+            int year = (Integer) tc[2];
+            int month = (Integer) tc[3];
+            int day = (Integer) tc[4];
+            String expected = (String) tc[5];
+
+            ULocale locale = new ULocale(localeID);
+            DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance(locale);
+            String pattern = dtpg.getBestPattern(skeleton);
+            SimpleDateFormat sdf = new SimpleDateFormat(pattern, locale);
+            sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+
+            Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"), locale);
+            cal.clear();
+            cal.set(Calendar.EXTENDED_YEAR, year);
+            cal.set(Calendar.MONTH, month);
+            cal.set(Calendar.DAY_OF_MONTH, day);
+            Date date = cal.getTime();
+
+            String result = sdf.format(date);
+            String label =
+                    "Wrong formatting result for "
+                            + localeID
+                            + " "
+                            + year
+                            + "/"
+                            + (month + 1)
+                            + "/"
+                            + day;
+            assertEquals(label, expected, result);
+
+            // uppercase the formatting result to make sure parsing is case-insensitive
+            result = result.toUpperCase();
+
+            // Round-trip parse.
+            ParsePosition parsePos = new ParsePosition(0);
+            Date parsedDate = sdf.parse(result, parsePos);
+            assertNotNull(
+                    "Round-trip parse returned null for "
+                            + localeID
+                            + " "
+                            + year
+                            + "/"
+                            + (month + 1)
+                            + "/"
+                            + day,
+                    parsedDate);
+            if (parsedDate != null) {
+                assertEquals(
+                        "Round-trip parse mismatch for "
+                                + localeID
+                                + " "
+                                + year
+                                + "/"
+                                + (month + 1)
+                                + "/"
+                                + day,
+                        date,
+                        parsedDate);
+            }
         }
     }
 }

@@ -56994,6 +56994,16 @@ structLocale:table(nofallback){
                 yyMd{""}
                 yyQQQQ{""}
             }
+            dayOfMonthNames{
+                format{
+                    abbreviated{
+                        few{""}
+                        one{""}
+                        other{""}
+                        two{""}
+                    }
+                }
+            }
             intervalFormats{
                 Bh{
                     B{""}
@@ -57405,6 +57415,16 @@ structLocale:table(nofallback){
                         "",
                         "",
                         "",
+                    }
+                }
+            }
+            dayOfMonthNames{
+                format{
+                    abbreviated{
+                        few{""}
+                        one{""}
+                        other{""}
+                        two{""}
                     }
                 }
             }

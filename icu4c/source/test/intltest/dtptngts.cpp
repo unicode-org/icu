@@ -1594,6 +1594,28 @@ void IntlTestDateTimePatternGeneratorAPI::testBestPattern() {
         // ICU-20992: Bad patterns for missing fields
         { "ckb_IR",     "mmSSS",       u"mm:ss\u066bSSS"     },
         { "ckb_IR",     "BSSS",        u"SSS \u251c'Dayperiod': B\u2524" },
+        // ddd (ordinal day-of-month) vs d (numeric) produce different patterns
+        { "en",         "yMMMd",       u"MMM d, y"        },
+        { "en",         "yMMMddd",     u"MMM ddd, y"      },
+        { "en",         "yMMMEd",      u"EEE, MMM d, y"   },
+        { "en",         "yMMMEddd",    u"EEE, MMM ddd, y" },
+        { "en",         "MMMd",        u"MMM d"           },
+        { "en",         "MMMddd",      u"MMM ddd"         },
+        { "en",         "MMMMddd",     u"MMMM ddd"        },
+        { "en",         "MMMMEddd",    u"EEE, MMMM ddd"   },
+        // French has no ddd availableFormats of its own, so it
+        // inherits root's patterns (which use English-style MMM-before-day order).
+        { "fr",         "yMMMd",       u"d MMM y"         },
+        { "fr",         "yMMMddd",     u"y MMM ddd"       },
+        { "fr",         "MMMd",        u"d MMM"           },
+        { "fr",         "MMMddd",      u"MMM ddd"         },
+		// We also have to make sure that the presence of new "ddd" patterns didn't
+		// mess up the handling of skeletons that contain "dd"-- if we don't treat
+		// "ddd" correctly, "dd" in the skeleton will match a "ddd" skeleton in
+		// the parent locale instead of a "d" skeleton in the requested locale,
+		// potentially messing up the field order.
+		{ "de",         "MMMd",        u"d. MMM"          },
+		{ "de",         "MMMdd",       u"dd. MMM"         },
     };
     
     for (int32_t i = 0; i < UPRV_LENGTHOF(testCases); i++) {

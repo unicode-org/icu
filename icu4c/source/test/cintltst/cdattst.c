@@ -53,6 +53,7 @@ static void TestParseTooStrict(void);
 static void TestHourCycle(void);
 static void TestLocaleNameCrash(void);
 static void TestInvalidStyles(void);
+static void TestDayNames(void);
 
 void addDateForTest(TestNode** root);
 
@@ -80,6 +81,7 @@ void addDateForTest(TestNode** root)
     TESTCASE(TestHourCycle);
     TESTCASE(TestLocaleNameCrash);
     TESTCASE(TestInvalidStyles);
+    TESTCASE(TestDayNames);
 }
 /* Testing the DateFormat API */
 static void TestDateFormat(void)
@@ -2170,6 +2172,74 @@ static void TestInvalidStyles(void) {
         log_err("FAIL: udat_open with invalid styles should set status to U_ILLEGAL_ARGUMENT_ERROR, but got %s\n", u_errorName(status));
     } else {
         log_verbose("PASS: udat_open with invalid styles returned NULL and set status to U_ILLEGAL_ARGUMENT_ERROR\n");
+    }
+}
+
+static void TestDayNames(void) {
+    struct TestCase {
+        const char* locale;
+        const UChar* skeleton;
+        int32_t year;
+        int32_t month;
+        int32_t day;
+        const UChar* expectedResult;
+    } testCases[] = {
+        // test ordinal dates in English
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  1,  u"Jan 1st, 2026"  },
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  2,  u"Jan 2nd, 2026"  },
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  3,  u"Jan 3rd, 2026"  },
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  4,  u"Jan 4th, 2026"  },
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  5,  u"Jan 5th, 2026"  },
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  7,  u"Jan 7th, 2026"  },
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  9,  u"Jan 9th, 2026"  },
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  11, u"Jan 11th, 2026" },
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  12, u"Jan 12th, 2026" },
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  13, u"Jan 13th, 2026" },
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  21, u"Jan 21st, 2026" },
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  22, u"Jan 22nd, 2026" },
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  23, u"Jan 23rd, 2026" },
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  30, u"Jan 30th, 2026" },
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  31, u"Jan 31st, 2026" },
+    };
+
+    for (int32_t i = 0; i < UPRV_LENGTHOF(testCases); i++) {
+        UErrorCode err = U_ZERO_ERROR;
+        UCalendar* cal = ucal_open(u"GMT", -1, testCases[i].locale, UCAL_DEFAULT, &err);
+        ucal_clear(cal);
+        ucal_set(cal, UCAL_EXTENDED_YEAR, testCases[i].year);
+        ucal_set(cal, UCAL_MONTH, testCases[i].month);
+        ucal_set(cal, UCAL_DAY_OF_MONTH, testCases[i].day);
+        UDate date = ucal_getMillis(cal, &err);
+        ucal_close(cal);
+
+        UDateTimePatternGenerator* dtpg = udatpg_open(testCases[i].locale, &err);
+        UChar pattern[200];
+        udatpg_getBestPattern(dtpg, testCases[i].skeleton, -1, pattern, 200, &err);
+        UDateFormat* df = udat_open(UDAT_PATTERN, UDAT_PATTERN, testCases[i].locale,
+                                    u"GMT", -1, pattern, -1, &err);
+        if (assertSuccess("Error creating date formatter", &err)) {
+            UChar result[200];
+            udat_format(df, date, result, 200, NULL, &err);
+            if (assertSuccess("Error formatting date", &err)) {
+                char errorMessage[200];
+                snprintf(errorMessage, 200, "Wrong formatting result for %s/%s %d/%d/%d",
+                         testCases[i].locale, austrdup(testCases[i].skeleton),
+                         testCases[i].year, testCases[i].month + 1, testCases[i].day);
+                assertUEquals(errorMessage, testCases[i].expectedResult, result);
+
+                // parse the formatted result back and verify it round-trips
+                int32_t parsePos = 0;
+                UDate parsedDate = udat_parse(df, result, -1, &parsePos, &err);
+                if (assertSuccess("Error parsing date", &err)) {
+                    snprintf(errorMessage, 200, "Round-trip parse failed for %s/%s %d/%d/%d",
+                             testCases[i].locale, austrdup(testCases[i].skeleton),
+                             testCases[i].year, testCases[i].month + 1, testCases[i].day);
+                    assertTrue(errorMessage, parsedDate == date);
+                }
+            }
+            udat_close(df);
+        }
+        udatpg_close(dtpg);
     }
 }
 

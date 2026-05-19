@@ -694,6 +694,19 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      */
     String standaloneNarrowDayPeriods[] = null;
 
+    /**
+     * Day-of-month ordinal name format patterns, indexed by StandardPlural ordinal. For example,
+     * English has {@code "{0}st"}, {@code "{0}nd"}, {@code "{0}rd"}, {@code "{0}th"}. Length is
+     * always {@link com.ibm.icu.impl.StandardPlural#COUNT} when non-null.
+     */
+    String dayOfMonthOrdinalNames[] = null;
+
+    /**
+     * Day-of-month cardinal name strings, indexed by day number 1-32 (length 33; index 0 unused).
+     * An empty/null entry means no cardinal override for that day number.
+     */
+    String dayOfMonthCardinalNames[] = null;
+
     /* use serialVersionUID from JDK 1.1.4 for interoperability */
     private static final long serialVersionUID = -5987973545549424702L;
 
@@ -1254,6 +1267,35 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
+     * Gets day-of-month ordinal name format patterns by width and context. The returned array is
+     * indexed by {@link com.ibm.icu.impl.StandardPlural} ordinal; its length is {@link
+     * com.ibm.icu.impl.StandardPlural#COUNT}. An empty entry means no data for that plural
+     * category. Currently only FORMAT context and ABBREVIATED width are supported; other
+     * combinations return null.
+     *
+     * @param context The formatting context. Currently only FORMAT is supported.
+     * @param width The width. Currently only ABBREVIATED is supported.
+     * @return the day-of-month ordinal name strings, or null if not available.
+     */
+    String[] getDayOfMonthOrdinalNames(int context, int width) {
+        return dayOfMonthOrdinalNames == null ? null : duplicate(dayOfMonthOrdinalNames);
+    }
+
+    /**
+     * Gets day-of-month cardinal name strings by width and context. The returned array has length
+     * 33 and is indexed by day-of-month (1-32); index 0 is unused. An empty entry means no cardinal
+     * override for that day number. Currently only FORMAT context and ABBREVIATED width are
+     * supported; other combinations return null.
+     *
+     * @param context The formatting context. Currently only FORMAT is supported.
+     * @param width The width. Currently only ABBREVIATED is supported.
+     * @return the day-of-month cardinal strings, or null if not available.
+     */
+    String[] getDayOfMonthCardinalNames(int context, int width) {
+        return dayOfMonthCardinalNames == null ? null : duplicate(dayOfMonthCardinalNames);
+    }
+
+    /**
      * Returns the appropriate leapMonthPattern if the calendar has them, for example: "{0}bis"
      *
      * @param context The usage context: FORMAT, STANDALONE, NUMERIC.
@@ -1606,6 +1648,8 @@ public class DateFormatSymbols implements Serializable, Cloneable {
                         standaloneAbbreviatedDayPeriods, that.standaloneAbbreviatedDayPeriods)
                 && Utility.arrayEquals(standaloneWideDayPeriods, that.standaloneWideDayPeriods)
                 && Utility.arrayEquals(standaloneNarrowDayPeriods, that.standaloneNarrowDayPeriods)
+                && Utility.arrayEquals(dayOfMonthOrdinalNames, that.dayOfMonthOrdinalNames)
+                && Utility.arrayEquals(dayOfMonthCardinalNames, that.dayOfMonthCardinalNames)
                 && Utility.arrayEquals(timeSeparator, that.timeSeparator)
                 && arrayOfArrayEquals(zoneStrings, that.zoneStrings)
                 // getDiplayName maps deprecated country and language codes to the current ones
@@ -1700,6 +1744,8 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         this.standaloneAbbreviatedDayPeriods = dfs.standaloneAbbreviatedDayPeriods;
         this.standaloneWideDayPeriods = dfs.standaloneWideDayPeriods;
         this.standaloneNarrowDayPeriods = dfs.standaloneNarrowDayPeriods;
+        this.dayOfMonthOrdinalNames = dfs.dayOfMonthOrdinalNames;
+        this.dayOfMonthCardinalNames = dfs.dayOfMonthCardinalNames;
 
         this.zoneStrings = dfs.zoneStrings; // always null at initialization time for now
         this.localPatternChars = dfs.localPatternChars;
@@ -1804,7 +1850,8 @@ public class DateFormatSymbols implements Serializable, Cloneable {
                         || keyString.equals("quarters")
                         || keyString.equals("dayPeriod")
                         || keyString.equals("monthPatterns")
-                        || keyString.equals("cyclicNameSets")) {
+                        || keyString.equals("cyclicNameSets")
+                        || keyString.equals("dayOfMonthNames")) {
                     processResource(keyString, key, value);
                 }
             }
@@ -2214,6 +2261,8 @@ public class DateFormatSymbols implements Serializable, Cloneable {
                 loadDayPeriodStrings(
                         maps.get("dayPeriod/stand-alone/narrow"), standaloneAbbreviatedDayPeriods);
 
+        loadDayOfMonthNames(maps.get("dayOfMonthNames/format/abbreviated"));
+
         for (int i = 0; i < DT_MONTH_PATTERN_COUNT; i++) {
             String monthPatternPath = LEAP_MONTH_PATTERNS_PATHS[i];
             if (monthPatternPath != null) {
@@ -2361,6 +2410,52 @@ public class DateFormatSymbols implements Serializable, Cloneable {
                 }
             }
             return strings;
+        }
+    }
+
+    /**
+     * Loads day-of-month name resources into {@link #dayOfMonthOrdinalNames} and {@link
+     * #dayOfMonthCardinalNames}. The CLDR resource is a single map whose entries are either
+     * plural-keyword keys ("zero", "one", "two", "few", "many", "other") carrying ordinal patterns
+     * like "{0}st", or numeric keys ("1"-"32") carrying cardinal overrides for that day number.
+     */
+    private void loadDayOfMonthNames(Map<String, String> resourceMap) {
+        if (resourceMap == null) {
+            return;
+        }
+        String[] ordinal = new String[com.ibm.icu.impl.StandardPlural.COUNT];
+        String[] cardinal = new String[33]; // indices 1-32; index 0 unused
+        boolean haveOrdinal = false;
+        boolean haveCardinal = false;
+        for (Map.Entry<String, String> e : resourceMap.entrySet()) {
+            String key = e.getKey();
+            String value = e.getValue();
+            if (key == null || value == null || key.isEmpty()) {
+                continue;
+            }
+            char first = key.charAt(0);
+            if (first >= '0' && first <= '9') {
+                try {
+                    int day = Integer.parseInt(key);
+                    if (day >= 1 && day < cardinal.length) {
+                        cardinal[day] = value;
+                        haveCardinal = true;
+                    }
+                } catch (NumberFormatException ignored) {
+                    // Skip malformed numeric keys.
+                }
+            } else {
+                com.ibm.icu.impl.StandardPlural form =
+                        com.ibm.icu.impl.StandardPlural.orOtherFromString(key);
+                ordinal[form.ordinal()] = value;
+                haveOrdinal = true;
+            }
+        }
+        if (haveOrdinal) {
+            dayOfMonthOrdinalNames = ordinal;
+        }
+        if (haveCardinal) {
+            dayOfMonthCardinalNames = cardinal;
         }
     }
 

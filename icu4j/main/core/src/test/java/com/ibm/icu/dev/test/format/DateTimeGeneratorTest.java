@@ -2587,4 +2587,37 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
         String bestPattern = dtpg.getBestPattern("GyMEd");
         assertEquals("Should not substitute numeric for alpha", "EEE, MMM d, y G", bestPattern);
     }
+
+    @Test
+    public void TestDayOfMonthSkeleton() {
+        // ddd (ordinal day-of-month) vs d (numeric) produce different patterns.
+        String[][] testCases = {
+            {"en", "yMMMd", "MMM d, y"},
+            {"en", "yMMMddd", "MMM ddd, y"},
+            {"en", "yMMMEd", "EEE, MMM d, y"},
+            {"en", "yMMMEddd", "EEE, MMM ddd, y"},
+            {"en", "MMMd", "MMM d"},
+            {"en", "MMMddd", "MMM ddd"},
+            {"en", "MMMMddd", "MMMM ddd"},
+            {"en", "MMMMEddd", "EEE, MMMM ddd"},
+            // French has no ddd availableFormats of its own, so it inherits root's
+            // patterns (which use English-style MMM-before-day order).
+            {"fr", "yMMMd", "d MMM y"},
+            {"fr", "yMMMddd", "y MMM ddd"},
+            {"fr", "MMMd", "d MMM"},
+            {"fr", "MMMddd", "MMM ddd"},
+            // We also have to make sure that the presence of new "ddd" patterns didn't
+            // mess up the handling of skeletons that contain "dd"-- if we don't treat
+            // "ddd" correctly, "dd" in the skeleton will match a "ddd" skeleton in
+            // the parent locale instead of a "d" skeleton in the requested locale,
+            // potentially messing up the field order.
+            {"de", "MMMd", "d. MMM"},
+            {"de", "MMMdd", "dd. MMM"},
+        };
+        for (String[] tc : testCases) {
+            DateTimePatternGenerator gen = DateTimePatternGenerator.getInstance(new ULocale(tc[0]));
+            String got = gen.getBestPattern(tc[1]);
+            assertEquals(tc[0] + " " + tc[1], tc[2], got);
+        }
+    }
 }

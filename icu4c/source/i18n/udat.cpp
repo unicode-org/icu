@@ -1299,7 +1299,7 @@ udat_setSymbols(    UDateFormat             *format,
     default:
         *status = U_UNSUPPORTED_ERROR;
         break;
-        
+
     }
 }
 

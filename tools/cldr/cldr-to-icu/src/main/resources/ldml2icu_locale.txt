@@ -64,6 +64,18 @@
 //ldml/dates/calendars/calendar[@type="(%A)"]/(day|month)s/\2Context[@type="(%W)"]/\2Width[@type="(%W)"]/alias[@source="locale"][@path="../../\2Context[@type='(%W)']/\2Width[@type='(%A)']"]
      ; /calendar/$1/$2Names/$3/$4:alias ; values=/LOCALE/calendar/$1/$2Names/$5/$6
 
+//ldml/dates/calendars/calendar[@type="(%A)"]/dayOfMonths/alias[@source="locale"][@path="../../%W[@type='(%A)']/%W"]
+     ; /calendar/$1/dayOfMonthNames:alias ; values=/LOCALE/calendar/$2/dayOfMonthNames
+//ldml/dates/calendars/calendar[@type="(%A)"]/dayOfMonths/dayOfMonthContext[@type="(%W)"]/dayOfMonthWidth[@type="(%W)"]/alias[@source="locale"][@path="../dayOfMonthWidth[@type='(%A)']"]
+     ; /calendar/$1/dayOfMonthNames/$2/$3:alias ; values=/LOCALE/calendar/$1/dayOfMonthNames/$2/$4
+//ldml/dates/calendars/calendar[@type="(%A)"]/dayOfMonths/dayOfMonthContext[@type="(%W)"]/dayOfMonthWidth[@type="(%W)"]/alias[@source="locale"][@path="../../dayOfMonthContext[@type='(%W)']/dayOfMonthWidth[@type='(%A)']"]
+     ; /calendar/$1/dayOfMonthNames/$2/$3:alias ; values=/LOCALE/calendar/$1/dayOfMonthNames/$4/$5
+
+//ldml/dates/calendars/calendar[@type="(%A)"]/dayOfMonths/dayOfMonthContext[@type="(%A)"]/dayOfMonthWidth[@type="(%A)"]/dayOfMonth[@ordinal="(%A)"]
+     ; /calendar/$1/dayOfMonthNames/$2/$3/$4
+//ldml/dates/calendars/calendar[@type="(%A)"]/dayOfMonths/dayOfMonthContext[@type="(%A)"]/dayOfMonthWidth[@type="(%A)"]/dayOfMonth[@type="(%A)"]
+     ; /calendar/$1/dayOfMonthNames/$2/$3/$4
+
 //ldml/dates/calendars/calendar[@type="(%A)"]/(monthPattern|quarter)s/\2Context[@type="(%W)"]/\2Width[@type="(%W)"]/alias[@source="locale"][@path="../\2Width[@type='(%A)']"]
      ; /calendar/$1/$2s/$3/$4:alias ; values=/LOCALE/calendar/$1/$2s/$3/$5
 

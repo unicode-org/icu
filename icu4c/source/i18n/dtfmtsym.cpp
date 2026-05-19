@@ -52,6 +52,7 @@
 #include "shareddateformatsymbols.h"
 #include "unicode/calendar.h"
 #include "unifiedcache.h"
+#include "standardplural.h"
 
 // *****************************************************************************
 // class DateFormatSymbols
@@ -257,6 +258,7 @@ static const char gNumberElementsTag[]="NumberElements";
 static const char gSymbolsTag[]="symbols";
 static const char gTimeSeparatorTag[]="timeSeparator";
 static const char gDayPeriodTag[]="dayPeriod";
+static const char gDayOfMonthNamesTag[]="dayOfMonthNames";
 
 // static const char gZoneStringsTag[]="zoneStrings";
 
@@ -443,6 +445,13 @@ DateFormatSymbols::copyData(const DateFormatSymbols& other) {
                 other.fStandaloneNarrowDayPeriods, other.fStandaloneNarrowDayPeriodsCount);
     assignArray(fStandaloneAbbreviatedDayPeriods, fStandaloneAbbreviatedDayPeriodsCount,
                 other.fStandaloneAbbreviatedDayPeriods, other.fStandaloneAbbreviatedDayPeriodsCount);
+    {
+        int32_t unusedCount = 0;
+        int32_t srcCount = other.fDayOfMonthOrdinalNames != nullptr ? StandardPlural::COUNT : 0;
+        assignArray(fDayOfMonthOrdinalNames, unusedCount, other.fDayOfMonthOrdinalNames, srcCount);
+    }
+    assignArray(fDayOfMonthCardinalNames, fDayOfMonthCardinalNamesCount,
+                other.fDayOfMonthCardinalNames, other.fDayOfMonthCardinalNamesCount);
     if (other.fLeapMonthPatterns != nullptr) {
         assignArray(fLeapMonthPatterns, fLeapMonthPatternsCount, other.fLeapMonthPatterns, other.fLeapMonthPatternsCount);
     } else {
@@ -536,6 +545,8 @@ void DateFormatSymbols::dispose()
     delete[] fStandaloneAbbreviatedDayPeriods;
     delete[] fStandaloneWideDayPeriods;
     delete[] fStandaloneNarrowDayPeriods;
+    delete[] fDayOfMonthOrdinalNames;
+    delete[] fDayOfMonthCardinalNames;
 
     actualLocale = Locale::getRoot();
     validLocale = Locale::getRoot();
@@ -619,6 +630,8 @@ DateFormatSymbols::operator==(const DateFormatSymbols& other) const
         fStandaloneAbbreviatedDayPeriodsCount == other.fStandaloneAbbreviatedDayPeriodsCount &&
         fStandaloneWideDayPeriodsCount == other.fStandaloneWideDayPeriodsCount &&
         fStandaloneNarrowDayPeriodsCount == other.fStandaloneNarrowDayPeriodsCount &&
+        (fDayOfMonthOrdinalNames == nullptr) == (other.fDayOfMonthOrdinalNames == nullptr) &&
+        fDayOfMonthCardinalNamesCount == other.fDayOfMonthCardinalNamesCount &&
         (uprv_memcmp(fCapitalization, other.fCapitalization, sizeof(fCapitalization))==0))
     {
         // Now compare the arrays themselves
@@ -660,7 +673,12 @@ DateFormatSymbols::operator==(const DateFormatSymbols& other) const
             arrayCompare(fStandaloneWideDayPeriods, other.fStandaloneWideDayPeriods,
                          fStandaloneWideDayPeriodsCount) &&
             arrayCompare(fStandaloneNarrowDayPeriods, other.fStandaloneNarrowDayPeriods,
-                         fStandaloneWideDayPeriodsCount))
+                         fStandaloneWideDayPeriodsCount)
+            && arrayCompare(fDayOfMonthOrdinalNames, other.fDayOfMonthOrdinalNames,
+                            fDayOfMonthOrdinalNames != nullptr ? StandardPlural::COUNT : 0)
+            && arrayCompare(fDayOfMonthCardinalNames, other.fDayOfMonthCardinalNames,
+                            fDayOfMonthCardinalNamesCount)
+            )
         {
             // Compare the contents of fZoneStrings
             if (fZoneStrings == nullptr && other.fZoneStrings == nullptr) {
@@ -1298,6 +1316,20 @@ DateFormatSymbols::setAmPmStrings(const UnicodeString* amPmsArray, int32_t count
     *targetCount = count;
 }
 
+const UnicodeString*
+DateFormatSymbols::getDayOfMonthOrdinalNames(DtContextType /*context*/,
+                                             DtWidthType /*width*/) const {
+    return fDayOfMonthOrdinalNames;
+}
+
+const UnicodeString*
+DateFormatSymbols::getDayOfMonthCardinalNames(int32_t& count,
+                                              DtContextType /*context*/,
+                                              DtWidthType /*width*/) const {
+    count = fDayOfMonthCardinalNamesCount;
+    return fDayOfMonthCardinalNames;
+}
+
 void
 DateFormatSymbols::setTimeSeparatorString(const UnicodeString& newTimeSeparator)
 {
@@ -1668,7 +1700,9 @@ struct CalendarDataSink : public ResourceSink {
                        || uprv_strcmp(key, gQuartersTag) == 0
                        || uprv_strcmp(key, gDayPeriodTag) == 0
                        || uprv_strcmp(key, gMonthPatternsTag) == 0
-                       || uprv_strcmp(key, gCyclicNameSetsTag) == 0) {
+                       || uprv_strcmp(key, gCyclicNameSetsTag) == 0
+                       || uprv_strcmp(key, gDayOfMonthNamesTag) == 0
+                       ) {
                 processResource(keyUString, key, value, errorCode);
             }
         }
@@ -2137,6 +2171,56 @@ UnicodeString* loadDayPeriodStrings(CalendarDataSink &sink, CharString &path,
     return strings;
 }
 
+static const int32_t kDayOfMonthCardinalNamesCount = 33; // indices 1-32; index 0 unused
+
+static void loadDayOfMonthNames(CalendarDataSink &sink, CharString &path,
+                                UnicodeString *&ordinalNames,
+                                UnicodeString *&cardinalNames, int32_t &cardinalCount,
+                                UErrorCode &status) {
+    if (U_FAILURE(status)) { return; }
+
+    UnicodeString pathUString(path.data(), -1, US_INV);
+    Hashtable *map = static_cast<Hashtable*>(sink.maps.get(pathUString));
+    if (map == nullptr) { return; } // resource not found; leave fields nullptr
+
+    // Allocate both arrays up front so LocalArray cleans up both on any failure.
+    // UnicodeString default-constructs to empty string, which serves as the
+    // "no data" sentinel (empty is never a valid day name or pattern).
+    LocalArray<UnicodeString> ordinal(new UnicodeString[StandardPlural::COUNT], status);
+    LocalArray<UnicodeString> cardinal(new UnicodeString[kDayOfMonthCardinalNamesCount], status);
+    if (U_FAILURE(status)) { return; }
+
+    // Push: iterate over the table entries and dispatch each to the right array.
+    int32_t pos = UHASH_FIRST;
+    const UHashElement *e;
+    while ((e = map->nextElement(pos)) != nullptr) {
+        const UnicodeString *key   = static_cast<const UnicodeString*>(e->key.pointer);
+        const UnicodeString *value = static_cast<const UnicodeString*>(e->value.pointer);
+        if (key == nullptr || value == nullptr) { continue; }
+
+        if (key->charAt(0) >= u'0' && key->charAt(0) <= u'9') {
+            // Cardinal entry: key is a day number string ("1"–"32").
+            char numBuf[4];
+            if (key->length() >= (int32_t)sizeof(numBuf)) { continue; }
+            key->extract(0, key->length(), numBuf, sizeof(numBuf), US_INV);
+            numBuf[key->length()] = '\0';
+            char *endPtr;
+            long day = uprv_strtol(numBuf, &endPtr, 10);
+            if (*endPtr == '\0' && day >= 1 && day < kDayOfMonthCardinalNamesCount) {
+                cardinal[(int32_t)day].fastCopyFrom(*value);
+            }
+        } else {
+            // Ordinal entry: key is a plural category name.
+            StandardPlural::Form form = StandardPlural::orOtherFromString(*key);
+            ordinal[(int32_t)form].fastCopyFrom(*value);
+        }
+    }
+
+    ordinalNames = ordinal.orphan();
+    cardinalNames = cardinal.orphan();
+    cardinalCount = kDayOfMonthCardinalNamesCount;
+}
+
 
 void
 DateFormatSymbols::initializeData(const Locale& locale, const char *type, UErrorCode& status, UBool useLastResortData)
@@ -2218,6 +2302,9 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
     fStandaloneWideDayPeriodsCount = 0;
     fStandaloneNarrowDayPeriods = nullptr;
     fStandaloneNarrowDayPeriodsCount = 0;
+    fDayOfMonthOrdinalNames = nullptr;
+    fDayOfMonthCardinalNames = nullptr;
+    fDayOfMonthCardinalNamesCount = 0;
     uprv_memset(fCapitalization, 0, sizeof(fCapitalization));
 
     // We need to preserve the requested locale for
@@ -2403,6 +2490,12 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
     fStandaloneNarrowDayPeriods = loadDayPeriodStrings(calendarSink,
                             buildResourcePath(path, gDayPeriodTag, gNamesStandaloneTag, gNamesNarrowTag, status),
                             fStandaloneNarrowDayPeriodsCount, status);
+
+    loadDayOfMonthNames(calendarSink,
+                        buildResourcePath(path, gDayOfMonthNamesTag, gNamesFormatTag, gNamesAbbrTag, status),
+                        fDayOfMonthOrdinalNames,
+                        fDayOfMonthCardinalNames, fDayOfMonthCardinalNamesCount,
+                        status);
 
     // Fill in for missing/bogus items (dayPeriods are a map so single items might be missing)
     if (U_SUCCESS(status)) {

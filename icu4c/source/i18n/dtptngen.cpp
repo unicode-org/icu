@@ -197,6 +197,7 @@ static const dtTypeElem dtTypes[] = {
     {LOW_E, UDATPG_WEEKDAY_FIELD, DT_SHORTER - DT_DELTA, 6, 0},
 
     {LOW_D, UDATPG_DAY_FIELD, DT_NUMERIC, 1, 2},
+    {LOW_D, UDATPG_DAY_FIELD, DT_SHORT, 3, 0},
     {LOW_G, UDATPG_DAY_FIELD, DT_NUMERIC + DT_DELTA, 1, 20}, // really internal use, so we don't care
 
     {CAP_D, UDATPG_DAY_OF_YEAR_FIELD, DT_NUMERIC, 1, 3},

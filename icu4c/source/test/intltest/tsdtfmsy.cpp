@@ -240,42 +240,42 @@ void IntlTestDateFormatSymbols::TestSymbols(/* char *par */)
 
     const UnicodeString *wideMonths = en.getMonths(count,DateFormatSymbols::FORMAT,DateFormatSymbols::WIDE);
     fr2.setMonths(wideMonths, count, DateFormatSymbols::FORMAT,DateFormatSymbols::WIDE);
-    if( *en.getMonths(count,DateFormatSymbols::FORMAT,DateFormatSymbols::WIDE) != 
+    if( *en.getMonths(count,DateFormatSymbols::FORMAT,DateFormatSymbols::WIDE) !=
         *fr2.getMonths(count,DateFormatSymbols::FORMAT,DateFormatSymbols::WIDE )) {
         errln("ERROR: setMonths(FORMAT,WIDE) failed");
     }
 
     const UnicodeString *abbrMonths = en.getMonths(count,DateFormatSymbols::FORMAT,DateFormatSymbols::ABBREVIATED);
     fr2.setMonths(abbrMonths, count, DateFormatSymbols::FORMAT,DateFormatSymbols::ABBREVIATED);
-    if( *en.getMonths(count,DateFormatSymbols::FORMAT,DateFormatSymbols::ABBREVIATED) != 
+    if( *en.getMonths(count,DateFormatSymbols::FORMAT,DateFormatSymbols::ABBREVIATED) !=
         *fr2.getMonths(count,DateFormatSymbols::FORMAT,DateFormatSymbols::ABBREVIATED )) {
         errln("ERROR: setMonths(FORMAT,ABBREVIATED) failed");
     }
 
     const UnicodeString *narrowMonths = en.getMonths(count,DateFormatSymbols::FORMAT,DateFormatSymbols::NARROW);
     fr.setMonths(narrowMonths, count, DateFormatSymbols::FORMAT,DateFormatSymbols::NARROW);
-    if( *en.getMonths(count,DateFormatSymbols::FORMAT,DateFormatSymbols::NARROW) != 
+    if( *en.getMonths(count,DateFormatSymbols::FORMAT,DateFormatSymbols::NARROW) !=
         *fr.getMonths(count,DateFormatSymbols::FORMAT,DateFormatSymbols::NARROW )) {
         errln("ERROR: setMonths(FORMAT,NARROW) failed");
     }
 
     const UnicodeString *standaloneWideMonths = en.getMonths(count,DateFormatSymbols::STANDALONE,DateFormatSymbols::WIDE);
     fr.setMonths(standaloneWideMonths, count, DateFormatSymbols::STANDALONE,DateFormatSymbols::WIDE);
-    if( *en.getMonths(count,DateFormatSymbols::STANDALONE,DateFormatSymbols::WIDE) != 
+    if( *en.getMonths(count,DateFormatSymbols::STANDALONE,DateFormatSymbols::WIDE) !=
         *fr.getMonths(count,DateFormatSymbols::STANDALONE,DateFormatSymbols::WIDE )) {
         errln("ERROR: setMonths(STANDALONE,WIDE) failed");
     }
 
     const UnicodeString *standaloneShortMonths = en.getMonths(count,DateFormatSymbols::STANDALONE,DateFormatSymbols::ABBREVIATED);
     fr.setMonths(standaloneShortMonths, count, DateFormatSymbols::STANDALONE,DateFormatSymbols::ABBREVIATED);
-    if( *en.getMonths(count,DateFormatSymbols::STANDALONE,DateFormatSymbols::ABBREVIATED) != 
+    if( *en.getMonths(count,DateFormatSymbols::STANDALONE,DateFormatSymbols::ABBREVIATED) !=
         *fr.getMonths(count,DateFormatSymbols::STANDALONE,DateFormatSymbols::ABBREVIATED )) {
         errln("ERROR: setMonths(STANDALONE,ABBREVIATED) failed");
     }
 
     const UnicodeString *standaloneNarrowMonths = en.getMonths(count,DateFormatSymbols::STANDALONE,DateFormatSymbols::NARROW);
     fr.setMonths(standaloneNarrowMonths, count, DateFormatSymbols::STANDALONE,DateFormatSymbols::NARROW);
-    if( *en.getMonths(count,DateFormatSymbols::STANDALONE,DateFormatSymbols::NARROW) != 
+    if( *en.getMonths(count,DateFormatSymbols::STANDALONE,DateFormatSymbols::NARROW) !=
         *fr.getMonths(count,DateFormatSymbols::STANDALONE,DateFormatSymbols::NARROW )) {
         errln("ERROR: setMonths(STANDALONE,NARROW) failed");
     }
@@ -294,84 +294,84 @@ void IntlTestDateFormatSymbols::TestSymbols(/* char *par */)
 
     const UnicodeString *wideWeekdays = en.getWeekdays(count,DateFormatSymbols::FORMAT,DateFormatSymbols::WIDE);
     fr2.setWeekdays(wideWeekdays, count, DateFormatSymbols::FORMAT,DateFormatSymbols::WIDE);
-    if( *en.getWeekdays(count,DateFormatSymbols::FORMAT,DateFormatSymbols::WIDE) != 
+    if( *en.getWeekdays(count,DateFormatSymbols::FORMAT,DateFormatSymbols::WIDE) !=
         *fr2.getWeekdays(count,DateFormatSymbols::FORMAT,DateFormatSymbols::WIDE )) {
         errln("ERROR: setWeekdays(FORMAT,WIDE) failed");
     }
 
     const UnicodeString *abbrWeekdays = en.getWeekdays(count,DateFormatSymbols::FORMAT,DateFormatSymbols::ABBREVIATED);
     fr2.setWeekdays(abbrWeekdays, count, DateFormatSymbols::FORMAT,DateFormatSymbols::ABBREVIATED);
-    if( *en.getWeekdays(count,DateFormatSymbols::FORMAT,DateFormatSymbols::ABBREVIATED) != 
+    if( *en.getWeekdays(count,DateFormatSymbols::FORMAT,DateFormatSymbols::ABBREVIATED) !=
         *fr2.getWeekdays(count,DateFormatSymbols::FORMAT,DateFormatSymbols::ABBREVIATED )) {
         errln("ERROR: setWeekdays(FORMAT,ABBREVIATED) failed");
     }
 
     const UnicodeString *narrowWeekdays = en.getWeekdays(count,DateFormatSymbols::FORMAT,DateFormatSymbols::NARROW);
     fr.setWeekdays(narrowWeekdays, count, DateFormatSymbols::FORMAT,DateFormatSymbols::NARROW);
-    if( *en.getWeekdays(count,DateFormatSymbols::FORMAT,DateFormatSymbols::NARROW) != 
+    if( *en.getWeekdays(count,DateFormatSymbols::FORMAT,DateFormatSymbols::NARROW) !=
         *fr.getWeekdays(count,DateFormatSymbols::FORMAT,DateFormatSymbols::NARROW )) {
         errln("ERROR: setWeekdays(FORMAT,NARROW) failed");
     }
 
     const UnicodeString *standaloneWideWeekdays = en.getWeekdays(count,DateFormatSymbols::STANDALONE,DateFormatSymbols::WIDE);
     fr.setWeekdays(standaloneWideWeekdays, count, DateFormatSymbols::STANDALONE,DateFormatSymbols::WIDE);
-    if( *en.getWeekdays(count,DateFormatSymbols::STANDALONE,DateFormatSymbols::WIDE) != 
+    if( *en.getWeekdays(count,DateFormatSymbols::STANDALONE,DateFormatSymbols::WIDE) !=
         *fr.getWeekdays(count,DateFormatSymbols::STANDALONE,DateFormatSymbols::WIDE )) {
         errln("ERROR: setWeekdays(STANDALONE,WIDE) failed");
     }
 
     const UnicodeString *standaloneShortWeekdays = en.getWeekdays(count,DateFormatSymbols::STANDALONE,DateFormatSymbols::ABBREVIATED);
     fr.setWeekdays(standaloneShortWeekdays, count, DateFormatSymbols::STANDALONE,DateFormatSymbols::ABBREVIATED);
-    if( *en.getWeekdays(count,DateFormatSymbols::STANDALONE,DateFormatSymbols::ABBREVIATED) != 
+    if( *en.getWeekdays(count,DateFormatSymbols::STANDALONE,DateFormatSymbols::ABBREVIATED) !=
         *fr.getWeekdays(count,DateFormatSymbols::STANDALONE,DateFormatSymbols::ABBREVIATED )) {
         errln("ERROR: setWeekdays(STANDALONE,ABBREVIATED) failed");
     }
 
     const UnicodeString *standaloneNarrowWeekdays = en.getWeekdays(count,DateFormatSymbols::STANDALONE,DateFormatSymbols::NARROW);
     fr.setWeekdays(standaloneNarrowWeekdays, count, DateFormatSymbols::STANDALONE,DateFormatSymbols::NARROW);
-    if( *en.getWeekdays(count,DateFormatSymbols::STANDALONE,DateFormatSymbols::NARROW) != 
+    if( *en.getWeekdays(count,DateFormatSymbols::STANDALONE,DateFormatSymbols::NARROW) !=
         *fr.getWeekdays(count,DateFormatSymbols::STANDALONE,DateFormatSymbols::NARROW )) {
         errln("ERROR: setWeekdays(STANDALONE,NARROW) failed");
     }
 
     const UnicodeString *wideQuarters = en.getQuarters(count,DateFormatSymbols::FORMAT, DateFormatSymbols::WIDE);
     fr2.setQuarters(wideQuarters, count, DateFormatSymbols::FORMAT, DateFormatSymbols::WIDE);
-    if( *en.getQuarters(count,DateFormatSymbols::FORMAT, DateFormatSymbols::WIDE) != 
+    if( *en.getQuarters(count,DateFormatSymbols::FORMAT, DateFormatSymbols::WIDE) !=
         *fr2.getQuarters(count,DateFormatSymbols::FORMAT, DateFormatSymbols::WIDE )) {
         errln("ERROR: setQuarters(FORMAT, WIDE) failed");
     }
 
     const UnicodeString *abbrQuarters = en.getQuarters(count,DateFormatSymbols::FORMAT, DateFormatSymbols::ABBREVIATED);
     fr2.setQuarters(abbrQuarters, count, DateFormatSymbols::FORMAT, DateFormatSymbols::ABBREVIATED);
-    if( *en.getQuarters(count,DateFormatSymbols::FORMAT, DateFormatSymbols::ABBREVIATED) != 
+    if( *en.getQuarters(count,DateFormatSymbols::FORMAT, DateFormatSymbols::ABBREVIATED) !=
         *fr2.getQuarters(count,DateFormatSymbols::FORMAT ,DateFormatSymbols::ABBREVIATED )) {
         errln("ERROR: setQuarters(FORMAT, ABBREVIATED) failed");
     }
 
     const UnicodeString *narrowQuarters = en.getQuarters(count,DateFormatSymbols::FORMAT, DateFormatSymbols::NARROW);
     fr2.setQuarters(narrowQuarters, count, DateFormatSymbols::FORMAT, DateFormatSymbols::NARROW);
-    if( *en.getQuarters(count,DateFormatSymbols::FORMAT, DateFormatSymbols::NARROW) != 
+    if( *en.getQuarters(count,DateFormatSymbols::FORMAT, DateFormatSymbols::NARROW) !=
         *fr2.getQuarters(count,DateFormatSymbols::FORMAT ,DateFormatSymbols::NARROW )) {
         errln("ERROR: setQuarters(FORMAT, NARROW) failed");
     }
 
     const UnicodeString *standaloneWideQuarters = en.getQuarters(count,DateFormatSymbols::STANDALONE, DateFormatSymbols::WIDE);
     fr.setQuarters(standaloneWideQuarters, count, DateFormatSymbols::STANDALONE, DateFormatSymbols::WIDE);
-    if( *en.getQuarters(count,DateFormatSymbols::STANDALONE, DateFormatSymbols::WIDE) != 
+    if( *en.getQuarters(count,DateFormatSymbols::STANDALONE, DateFormatSymbols::WIDE) !=
         *fr.getQuarters(count,DateFormatSymbols::STANDALONE, DateFormatSymbols::WIDE )) {
         errln("ERROR: setQuarters(STANDALONE, WIDE) failed");
     }
 
     const UnicodeString *standaloneShortQuarters = en.getQuarters(count,DateFormatSymbols::STANDALONE, DateFormatSymbols::ABBREVIATED);
     fr.setQuarters(standaloneShortQuarters, count, DateFormatSymbols::STANDALONE, DateFormatSymbols::ABBREVIATED);
-    if( *en.getQuarters(count,DateFormatSymbols::STANDALONE, DateFormatSymbols::ABBREVIATED) != 
+    if( *en.getQuarters(count,DateFormatSymbols::STANDALONE, DateFormatSymbols::ABBREVIATED) !=
         *fr.getQuarters(count,DateFormatSymbols::STANDALONE, DateFormatSymbols::ABBREVIATED )) {
         errln("ERROR: setQuarters(STANDALONE, ABBREVIATED) failed");
     }
 
     const UnicodeString *standaloneNarrowQuarters = en.getQuarters(count,DateFormatSymbols::STANDALONE, DateFormatSymbols::NARROW);
     fr2.setQuarters(standaloneNarrowQuarters, count, DateFormatSymbols::STANDALONE, DateFormatSymbols::NARROW);
-    if( *en.getQuarters(count,DateFormatSymbols::STANDALONE, DateFormatSymbols::NARROW) != 
+    if( *en.getQuarters(count,DateFormatSymbols::STANDALONE, DateFormatSymbols::NARROW) !=
         *fr2.getQuarters(count,DateFormatSymbols::STANDALONE ,DateFormatSymbols::NARROW )) {
         errln("ERROR: setQuarters(STANDALONE, NARROW) failed");
     }
