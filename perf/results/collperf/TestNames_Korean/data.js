@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1779126204597,
+  "lastUpdate": 1779298782997,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -86073,6 +86073,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 12071620.2259,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "committer": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "distinct": true,
+          "id": "6f0e464b1e50f2dd4ccd655db238fb1741e30902",
+          "message": "ICU-23397 UBA: fail on ridiculously large numbers of runs.",
+          "timestamp": "2026-05-20T18:57:36+02:00",
+          "tree_id": "112e207517b40fb9dc52e4d25c0b8514e9021757",
+          "url": "https://github.com/unicode-org/icu/commit/6f0e464b1e50f2dd4ccd655db238fb1741e30902"
+        },
+        "date": 1779298307755,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 228.8091,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 58457371.5161,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 12600124.8284,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 53566886.6201,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 13119924.9642,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
