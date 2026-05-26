@@ -273,4 +273,31 @@ public class ArabicShapingRegTest extends CoreTestFmwk {
                 "ArabicShaping.isYehHamzaChar(char) failed.",
                 getStaticCharacterHelperFunctionValue("isYehHamzaChar", (char) 0xfe89));
     }
+
+    /**
+     * ICU-23395: Verify that u_shapeArabic does not read past the buffer
+     * when the last character is a lam-alef ligature.
+     * Tests both the stack buffer path (length=300) and heap buffer path (length=301).
+     */
+    @Test
+    public void TestExpandCompositCharAtNearOOB() throws Exception {
+        ArabicShaping shaper =
+                new ArabicShaping(LETTERS_UNSHAPE | LENGTH_FIXED_SPACES_NEAR | TEXT_DIRECTION_LOGICAL);
+
+        // Stack buffer path: 299 spaces + U+FEF5
+        char[] source300 = new char[300];
+        java.util.Arrays.fill(source300, 0, 299, ' ');
+        source300[299] = '\uFEF5';
+        char[] dest300 = new char[300];
+        int len300 = shaper.shape(source300, 0, 300, dest300, 0, 300);
+        assertEquals("ICU-23395 stack buffer path: unexpected length", 300, len300);
+
+        // Heap buffer path: 300 spaces + U+FEF5
+        char[] source301 = new char[301];
+        java.util.Arrays.fill(source301, 0, 300, ' ');
+        source301[300] = '\uFEF5';
+        char[] dest301 = new char[301];
+        int len301 = shaper.shape(source301, 0, 301, dest301, 0, 301);
+        assertEquals("ICU-23395 heap buffer path: unexpected length", 301, len301);
+    }
 }
