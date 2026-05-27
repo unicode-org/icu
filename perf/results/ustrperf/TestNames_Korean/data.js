@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1779470243317,
+  "lastUpdate": 1779842292966,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -152349,6 +152349,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 42.8509,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "manishsmail@gmail.com",
+            "name": "Manish Goregaokar",
+            "username": "Manishearth"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "ff5ffa0645181300e7a341ba418e1b0e65fe8780",
+          "message": "ICU-23403 agent-driven: Fix data race in CurrencyPrecision.withCurrency\n\n- Update Precision.trailingZeroDisplay to return `this` directly if the requested\n  trailingZeroDisplay setting is already satisfied (treating null and AUTO as\n  equivalent).\n- Update CurrencyPrecision.withCurrency to use trailingZeroDisplay. This ensures\n  that we only clone the underlying shared static Precision instance (e.g.\n  FIXED_FRAC_0) when trailingZeroDisplay differs, preventing data races while\n  avoiding unnecessary allocations.\n- Add testCurrencyPrecisionCacheMutation to NumberFormatterApiTest.java to\n  verify that modifying trailingZeroDisplay does not mutate shared static cache\n  instances.",
+          "timestamp": "2026-05-26T16:57:01-07:00",
+          "tree_id": "fc8f6011e1ff6e3ad914228c70f9d3f0a8410e78",
+          "url": "https://github.com/unicode-org/icu/commit/ff5ffa0645181300e7a341ba418e1b0e65fe8780"
+        },
+        "date": 1779841808699,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 20.4735,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 23.3125,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 27.8766,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 28.0141,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 34.2926,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 33.9842,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 22.6151,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 15.5406,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 79.0489,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 21.8906,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 34.793,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 42.4297,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
