@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1779469010870,
+  "lastUpdate": 1779840558271,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -45237,6 +45237,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 0.5106726920277608,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "manishsmail@gmail.com",
+            "name": "Manish Goregaokar",
+            "username": "Manishearth"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "ff5ffa0645181300e7a341ba418e1b0e65fe8780",
+          "message": "ICU-23403 agent-driven: Fix data race in CurrencyPrecision.withCurrency\n\n- Update Precision.trailingZeroDisplay to return `this` directly if the requested\n  trailingZeroDisplay setting is already satisfied (treating null and AUTO as\n  equivalent).\n- Update CurrencyPrecision.withCurrency to use trailingZeroDisplay. This ensures\n  that we only clone the underlying shared static Precision instance (e.g.\n  FIXED_FRAC_0) when trailingZeroDisplay differs, preventing data races while\n  avoiding unnecessary allocations.\n- Add testCurrencyPrecisionCacheMutation to NumberFormatterApiTest.java to\n  verify that modifying trailingZeroDisplay does not mutate shared static cache\n  instances.",
+          "timestamp": "2026-05-26T16:57:01-07:00",
+          "tree_id": "fc8f6011e1ff6e3ad914228c70f9d3f0a8410e78",
+          "url": "https://github.com/unicode-org/icu/commit/ff5ffa0645181300e7a341ba418e1b0e65fe8780"
+        },
+        "date": 1779840082438,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 0.4912845384245732,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
