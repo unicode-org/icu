@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1779469723504,
+  "lastUpdate": 1779841489447,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -86505,6 +86505,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 16822734.614,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "manishsmail@gmail.com",
+            "name": "Manish Goregaokar",
+            "username": "Manishearth"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "ff5ffa0645181300e7a341ba418e1b0e65fe8780",
+          "message": "ICU-23403 agent-driven: Fix data race in CurrencyPrecision.withCurrency\n\n- Update Precision.trailingZeroDisplay to return `this` directly if the requested\n  trailingZeroDisplay setting is already satisfied (treating null and AUTO as\n  equivalent).\n- Update CurrencyPrecision.withCurrency to use trailingZeroDisplay. This ensures\n  that we only clone the underlying shared static Precision instance (e.g.\n  FIXED_FRAC_0) when trailingZeroDisplay differs, preventing data races while\n  avoiding unnecessary allocations.\n- Add testCurrencyPrecisionCacheMutation to NumberFormatterApiTest.java to\n  verify that modifying trailingZeroDisplay does not mutate shared static cache\n  instances.",
+          "timestamp": "2026-05-26T16:57:01-07:00",
+          "tree_id": "fc8f6011e1ff6e3ad914228c70f9d3f0a8410e78",
+          "url": "https://github.com/unicode-org/icu/commit/ff5ffa0645181300e7a341ba418e1b0e65fe8780"
+        },
+        "date": 1779841091004,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 241.1466,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 29079142.8233,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 12367391.7141,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 27825518.3522,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 13813139.3943,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
