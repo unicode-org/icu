@@ -1,11 +1,15 @@
 // © 2026 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-#include "segmenter.h"
+#include "unicode/segmenter.h"
 
 U_NAMESPACE_BEGIN
 
 namespace segmenter {
+
+//----------
+// Segmenter
+//----------
 
 Segmenter::~Segmenter() {}
 
@@ -23,6 +27,18 @@ std::unique_ptr<SegmentsUTF8> Segmenter::segment(StringPiece /*s*/, UErrorCode &
 
     return nullptr;
 }
+
+//----------
+// Segment
+//----------
+
+Segment::~Segment() {}
+
+Segment::Segment()
+:start(-1),
+limit(-1),
+ruleStatus(-1)
+{}
 
 }  // namespace segmenter
 

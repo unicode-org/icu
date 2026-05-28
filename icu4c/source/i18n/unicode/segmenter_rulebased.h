@@ -23,6 +23,8 @@ class U_COMMON_API_CLASS RuleBasedSegmenter : public Segmenter {
 public:
     ~RuleBasedSegmenter() override;
 
+    RuleBasedSegmenter();
+
     // Segments segment(const std::u16string_view &s) override;
     
 };

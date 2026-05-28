@@ -180,6 +180,8 @@ rulebasedcollator.cpp
 scientificnumberformatter.cpp
 scriptset.cpp
 search.cpp
+segmenter.cpp
+segmenter_rulebased.cpp
 selfmt.cpp
 sharedbreakiterator.cpp
 simpletz.cpp

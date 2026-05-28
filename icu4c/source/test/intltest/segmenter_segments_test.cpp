@@ -6,9 +6,11 @@
 
 
 #include "unicode/segmenter.h"
+#include "unicode/segmenter_rulebased.h"
 #include "segmenter_segments_test.h"
 
 #include <iostream>
+#include <memory>
 
 //---------------------------------------------
 //
@@ -48,6 +50,14 @@ SegmentsTest::~SegmentsTest() {
 
 void SegmentsTest::TestHelloWorld() {
     std::cout << "hello" << std::endl;
+
+    // UErrorCode  errorCode = U_ZERO_ERROR;
+
+    std::unique_ptr<icu::segmenter::Segment> segment(new icu::segmenter::Segment());
+
+    // TODO: modify signature to match ICU4J Segmenter API design
+    std::unique_ptr<icu::segmenter::Segmenter> rbSegmenter(new icu::segmenter::RuleBasedSegmenter());
+
     assertEquals("this assertion should fail", 0, 1);
 }
 

@@ -80,14 +80,16 @@ class U_COMMON_API_CLASS SegmentsUTF8 : public UObject {
     // (if the class is templated, then that automatically becomes true)
 };
 
-class U_COMMON_API_CLASS Segment {
+class U_COMMON_API_CLASS Segment : public UObject {
 public:
+    Segment();
+    ~Segment() override;
     const int32_t start;
     const int32_t limit;
     const int32_t ruleStatus;
 };
 
-class U_COMMON_API_CLASS SegmentIterator {
+class U_COMMON_API_CLASS SegmentIterator : public UObject {
 public:
     SegmentIterator(const SegmentIterator &other) = default;
     bool operator==(const SegmentIterator &other) const;
