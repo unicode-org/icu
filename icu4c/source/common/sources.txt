@@ -70,6 +70,8 @@ resource.cpp
 restrace.cpp
 ruleiter.cpp
 schriter.cpp
+segmenter.cpp
+segmenter_rulebased.cpp
 serv.cpp
 servlk.cpp
 servlkf.cpp
