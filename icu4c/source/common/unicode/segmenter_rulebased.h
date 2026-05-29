@@ -29,6 +29,20 @@ public:
     
 };
 
+class U_COMMON_API_CLASS RuleBasedSegmenterBuilder : public UObject {
+public:
+    RuleBasedSegmenterBuilder();
+
+    virtual ~RuleBasedSegmenterBuilder();
+
+    RuleBasedSegmenterBuilder& setRules(std::u16string_view rules);
+
+    RuleBasedSegmenter build(UErrorCode& status);
+
+private:
+    std::u16string_view rules;
+};
+
 }  // namespace segmenter
 
 U_NAMESPACE_END

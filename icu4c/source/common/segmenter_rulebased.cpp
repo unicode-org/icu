@@ -7,10 +7,24 @@ U_NAMESPACE_BEGIN
 
 namespace segmenter {
 
+RuleBasedSegmenter::RuleBasedSegmenter() {}
+
 RuleBasedSegmenter::~RuleBasedSegmenter() {}
 
+RuleBasedSegmenterBuilder::RuleBasedSegmenterBuilder() :
+    UObject(),
+    rules(u"")
+{
 
-RuleBasedSegmenter::RuleBasedSegmenter() {}
+}
+
+RuleBasedSegmenterBuilder::~RuleBasedSegmenterBuilder() {}
+
+RuleBasedSegmenterBuilder& RuleBasedSegmenterBuilder::setRules(std::u16string_view rules) {
+    this->rules = rules;
+
+    return *this;
+}
 
 }  // namespace segmenter
 
