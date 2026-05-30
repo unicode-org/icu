@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1779841474370,
+  "lastUpdate": 1780100480952,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -86343,6 +86343,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 12121880.9987,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "committer": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "distinct": true,
+          "id": "69619a44a403d128d869acdec149ff6f7c693c77",
+          "message": "ICU-23404 Dictionary break opportunities before a hard break should not be hard breaks\n\nCo-authored-by: Markus Scherer <markus.icu@gmail.com>",
+          "timestamp": "2026-05-30T01:33:26+02:00",
+          "tree_id": "81df9b2ea26f92b6ba2c696afb57863ef255d9ca",
+          "url": "https://github.com/unicode-org/icu/commit/69619a44a403d128d869acdec149ff6f7c693c77"
+        },
+        "date": 1780100004669,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 219.2593,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 58334630.5892,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 12615909.6018,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 53733159.7558,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 13089621.1344,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
