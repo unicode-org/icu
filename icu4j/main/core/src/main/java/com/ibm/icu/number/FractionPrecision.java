@@ -3,6 +3,8 @@
 package com.ibm.icu.number;
 
 import com.ibm.icu.impl.number.RoundingUtils;
+import com.ibm.icu.number.NumberFormatter.TrailingZeroDisplay;
+import java.math.MathContext;
 
 /**
  * A class that defines a rounding strategy based on a number of fraction places and optionally
@@ -16,6 +18,10 @@ import com.ibm.icu.impl.number.RoundingUtils;
 public abstract class FractionPrecision extends Precision {
 
     /* package-private */ FractionPrecision() {}
+
+    /* package-private */ FractionPrecision(MathContext mc, TrailingZeroDisplay tzd) {
+        super(mc, tzd);
+    }
 
     /**
      * Override maximum fraction digits with maximum significant digits depending on the magnitude

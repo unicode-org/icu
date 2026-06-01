@@ -25,11 +25,17 @@ import java.math.MathContext;
  */
 public abstract class Precision {
 
-    /* package-private final */ MathContext mathContext;
-    /* package-private final */ TrailingZeroDisplay trailingZeroDisplay;
+    /* package-private */ final MathContext mathContext;
+    /* package-private */ final TrailingZeroDisplay trailingZeroDisplay;
 
     /* package-private */ Precision() {
-        mathContext = RoundingUtils.DEFAULT_MATH_CONTEXT_UNLIMITED;
+        this(RoundingUtils.DEFAULT_MATH_CONTEXT_UNLIMITED, null);
+    }
+
+    /* package-private */ Precision(
+            MathContext mathContext, TrailingZeroDisplay trailingZeroDisplay) {
+        this.mathContext = mathContext;
+        this.trailingZeroDisplay = trailingZeroDisplay;
     }
 
     /**
@@ -350,9 +356,7 @@ public abstract class Precision {
         if (this.trailingZeroDisplay == trailingZeroDisplay) {
             return this;
         }
-        Precision result = this.createCopy();
-        result.trailingZeroDisplay = trailingZeroDisplay;
-        return result;
+        return this.createCopy(this.mathContext, trailingZeroDisplay);
     }
 
     /**
@@ -366,24 +370,11 @@ public abstract class Precision {
         if (this.mathContext.equals(mathContext)) {
             return this;
         }
-        Precision other = createCopy();
-        other.mathContext = mathContext;
-        return other;
+        return this.createCopy(mathContext, this.trailingZeroDisplay);
     }
 
     /** Package-private clone method */
-    abstract Precision createCopy();
-
-    /**
-     * Call this function to copy the fields from the Precision base class.
-     *
-     * <p>Note: It would be nice if this returned the copy, but most impls return the child class,
-     * not Precision.
-     */
-    /* package-private */ void createCopyHelper(Precision copy) {
-        copy.mathContext = mathContext;
-        copy.trailingZeroDisplay = trailingZeroDisplay;
-    }
+    abstract Precision createCopy(MathContext mc, TrailingZeroDisplay tzd);
 
     /**
      * @internal
@@ -611,6 +602,10 @@ public abstract class Precision {
         @Deprecated
         public BogusRounder() {}
 
+        private BogusRounder(MathContext mc, TrailingZeroDisplay tzd) {
+            super(mc, tzd);
+        }
+
         /**
          * {@inheritDoc}
          *
@@ -624,10 +619,8 @@ public abstract class Precision {
         }
 
         @Override
-        BogusRounder createCopy() {
-            BogusRounder copy = new BogusRounder();
-            createCopyHelper(copy);
-            return copy;
+        BogusRounder createCopy(MathContext mc, TrailingZeroDisplay tzd) {
+            return new BogusRounder(mc, tzd);
         }
 
         /**
@@ -638,15 +631,17 @@ public abstract class Precision {
          */
         @Deprecated
         public Precision into(Precision precision) {
-            Precision copy = precision.createCopy();
-            createCopyHelper(copy);
-            return copy;
+            return precision.createCopy(this.mathContext, this.trailingZeroDisplay);
         }
     }
 
     static class InfiniteRounderImpl extends Precision {
 
         public InfiniteRounderImpl() {}
+
+        public InfiniteRounderImpl(MathContext mc, TrailingZeroDisplay tzd) {
+            super(mc, tzd);
+        }
 
         @Override
         public void apply(DecimalQuantity value) {
@@ -655,10 +650,8 @@ public abstract class Precision {
         }
 
         @Override
-        InfiniteRounderImpl createCopy() {
-            InfiniteRounderImpl copy = new InfiniteRounderImpl();
-            createCopyHelper(copy);
-            return copy;
+        InfiniteRounderImpl createCopy(MathContext mc, TrailingZeroDisplay tzd) {
+            return new InfiniteRounderImpl(mc, tzd);
         }
     }
 
@@ -671,6 +664,13 @@ public abstract class Precision {
             this.maxFrac = maxFrac;
         }
 
+        public FractionRounderImpl(
+                int minFrac, int maxFrac, MathContext mc, TrailingZeroDisplay tzd) {
+            super(mc, tzd);
+            this.minFrac = minFrac;
+            this.maxFrac = maxFrac;
+        }
+
         @Override
         public void apply(DecimalQuantity value) {
             value.roundToMagnitude(getRoundingMagnitudeFraction(maxFrac), mathContext);
@@ -678,10 +678,8 @@ public abstract class Precision {
         }
 
         @Override
-        FractionRounderImpl createCopy() {
-            FractionRounderImpl copy = new FractionRounderImpl(minFrac, maxFrac);
-            createCopyHelper(copy);
-            return copy;
+        FractionRounderImpl createCopy(MathContext mc, TrailingZeroDisplay tzd) {
+            return new FractionRounderImpl(minFrac, maxFrac, mc, tzd);
         }
     }
 
@@ -690,6 +688,13 @@ public abstract class Precision {
         final int maxSig;
 
         public SignificantRounderImpl(int minSig, int maxSig) {
+            this.minSig = minSig;
+            this.maxSig = maxSig;
+        }
+
+        public SignificantRounderImpl(
+                int minSig, int maxSig, MathContext mc, TrailingZeroDisplay tzd) {
+            super(mc, tzd);
             this.minSig = minSig;
             this.maxSig = maxSig;
         }
@@ -715,10 +720,8 @@ public abstract class Precision {
         }
 
         @Override
-        SignificantRounderImpl createCopy() {
-            SignificantRounderImpl copy = new SignificantRounderImpl(minSig, maxSig);
-            createCopyHelper(copy);
-            return copy;
+        SignificantRounderImpl createCopy(MathContext mc, TrailingZeroDisplay tzd) {
+            return new SignificantRounderImpl(minSig, maxSig, mc, tzd);
         }
     }
 
@@ -737,6 +740,24 @@ public abstract class Precision {
                 int maxSig,
                 RoundingPriority priority,
                 boolean retain) {
+            this.minFrac = minFrac;
+            this.maxFrac = maxFrac;
+            this.minSig = minSig;
+            this.maxSig = maxSig;
+            this.priority = priority;
+            this.retain = retain;
+        }
+
+        public FracSigRounderImpl(
+                int minFrac,
+                int maxFrac,
+                int minSig,
+                int maxSig,
+                RoundingPriority priority,
+                boolean retain,
+                MathContext mc,
+                TrailingZeroDisplay tzd) {
+            super(mc, tzd);
             this.minFrac = minFrac;
             this.maxFrac = maxFrac;
             this.minSig = minSig;
@@ -790,11 +811,9 @@ public abstract class Precision {
         }
 
         @Override
-        FracSigRounderImpl createCopy() {
-            FracSigRounderImpl copy =
-                    new FracSigRounderImpl(minFrac, maxFrac, minSig, maxSig, priority, retain);
-            createCopyHelper(copy);
-            return copy;
+        FracSigRounderImpl createCopy(MathContext mc, TrailingZeroDisplay tzd) {
+            return new FracSigRounderImpl(
+                    minFrac, maxFrac, minSig, maxSig, priority, retain, mc, tzd);
         }
     }
 
@@ -806,6 +825,11 @@ public abstract class Precision {
             this.increment = increment;
         }
 
+        public IncrementRounderImpl(BigDecimal increment, MathContext mc, TrailingZeroDisplay tzd) {
+            super(mc, tzd);
+            this.increment = increment;
+        }
+
         @Override
         public void apply(DecimalQuantity value) {
             value.roundToIncrement(increment, mathContext);
@@ -813,10 +837,8 @@ public abstract class Precision {
         }
 
         @Override
-        IncrementRounderImpl createCopy() {
-            IncrementRounderImpl copy = new IncrementRounderImpl(increment);
-            createCopyHelper(copy);
-            return copy;
+        IncrementRounderImpl createCopy(MathContext mc, TrailingZeroDisplay tzd) {
+            return new IncrementRounderImpl(increment, mc, tzd);
         }
     }
 
@@ -835,6 +857,17 @@ public abstract class Precision {
             this.maxFrac = maxFrac;
         }
 
+        public IncrementOneRounderImpl(
+                BigDecimal increment,
+                int minFrac,
+                int maxFrac,
+                MathContext mc,
+                TrailingZeroDisplay tzd) {
+            super(increment, mc, tzd);
+            this.minFrac = minFrac;
+            this.maxFrac = maxFrac;
+        }
+
         @Override
         public void apply(DecimalQuantity value) {
             value.roundToMagnitude(-maxFrac, mathContext);
@@ -842,10 +875,8 @@ public abstract class Precision {
         }
 
         @Override
-        IncrementOneRounderImpl createCopy() {
-            IncrementOneRounderImpl copy = new IncrementOneRounderImpl(increment, minFrac, maxFrac);
-            createCopyHelper(copy);
-            return copy;
+        IncrementOneRounderImpl createCopy(MathContext mc, TrailingZeroDisplay tzd) {
+            return new IncrementOneRounderImpl(increment, minFrac, maxFrac, mc, tzd);
         }
     }
 
@@ -860,6 +891,17 @@ public abstract class Precision {
             this.maxFrac = maxFrac;
         }
 
+        public IncrementFiveRounderImpl(
+                BigDecimal increment,
+                int minFrac,
+                int maxFrac,
+                MathContext mc,
+                TrailingZeroDisplay tzd) {
+            super(increment, mc, tzd);
+            this.minFrac = minFrac;
+            this.maxFrac = maxFrac;
+        }
+
         @Override
         public void apply(DecimalQuantity value) {
             value.roundToNickel(-maxFrac, mathContext);
@@ -867,11 +909,8 @@ public abstract class Precision {
         }
 
         @Override
-        IncrementFiveRounderImpl createCopy() {
-            IncrementFiveRounderImpl copy =
-                    new IncrementFiveRounderImpl(increment, minFrac, maxFrac);
-            createCopyHelper(copy);
-            return copy;
+        IncrementFiveRounderImpl createCopy(MathContext mc, TrailingZeroDisplay tzd) {
+            return new IncrementFiveRounderImpl(increment, minFrac, maxFrac, mc, tzd);
         }
     }
 
@@ -882,6 +921,11 @@ public abstract class Precision {
             this.usage = usage;
         }
 
+        public CurrencyRounderImpl(CurrencyUsage usage, MathContext mc, TrailingZeroDisplay tzd) {
+            super(mc, tzd);
+            this.usage = usage;
+        }
+
         @Override
         public void apply(DecimalQuantity value) {
             // Call .withCurrency() before .apply()!
@@ -889,10 +933,8 @@ public abstract class Precision {
         }
 
         @Override
-        CurrencyRounderImpl createCopy() {
-            CurrencyRounderImpl copy = new CurrencyRounderImpl(usage);
-            createCopyHelper(copy);
-            return copy;
+        CurrencyRounderImpl createCopy(MathContext mc, TrailingZeroDisplay tzd) {
+            return new CurrencyRounderImpl(usage, mc, tzd);
         }
     }
 

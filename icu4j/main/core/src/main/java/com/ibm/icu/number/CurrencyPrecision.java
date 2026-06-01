@@ -2,7 +2,9 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.number;
 
+import com.ibm.icu.number.NumberFormatter.TrailingZeroDisplay;
 import com.ibm.icu.util.Currency;
+import java.math.MathContext;
 
 /**
  * A class that defines a rounding strategy parameterized by a currency to be used when formatting
@@ -16,6 +18,10 @@ import com.ibm.icu.util.Currency;
 public abstract class CurrencyPrecision extends Precision {
 
     /* package-private */ CurrencyPrecision() {}
+
+    /* package-private */ CurrencyPrecision(MathContext mc, TrailingZeroDisplay tzd) {
+        super(mc, tzd);
+    }
 
     /**
      * Associates a currency with this rounding strategy.
