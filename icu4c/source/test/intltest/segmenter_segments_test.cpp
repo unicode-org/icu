@@ -25,7 +25,7 @@ void SegmentsTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
 
     TESTCASE_AUTO_BEGIN;
 
-    TESTCASE_AUTO(TestHelloWorld);
+    TESTCASE_AUTO(testHelloWorld);
 
     TESTCASE_AUTO_END;
 }
@@ -48,15 +48,20 @@ SegmentsTest::~SegmentsTest() {
 //
 //---------------------------------------------
 
-void SegmentsTest::TestHelloWorld() {
+void SegmentsTest::testHelloWorld() {
     std::cout << "hello" << std::endl;
 
-    // UErrorCode  errorCode = U_ZERO_ERROR;
+    IcuTestErrorCode errorCode(*this, "testHelloWorld");
 
     std::unique_ptr<icu::segmenter::Segment> segment(new icu::segmenter::Segment());
 
     // TODO: modify signature to match ICU4J Segmenter API design
-    std::unique_ptr<icu::segmenter::Segmenter> rbSegmenter(new icu::segmenter::RuleBasedSegmenter());
+    icu::segmenter::RuleBasedSegmenterBuilder builder;
+    icu::segmenter::RuleBasedSegmenter rbSegmenter = builder.build(errorCode);
+
+    errorCode.errIfFailureAndReset();
+
+    auto someSegmenter = std::make_unique<icu::segmenter::Segmenter>(builder.build(errorCode));
 
     assertEquals("this assertion should fail", 0, 1);
 }

@@ -18,15 +18,19 @@ U_NAMESPACE_BEGIN
 
 namespace segmenter {
 
+class U_COMMON_API_CLASS RuleBasedSegmenterBuilder;
+
 class U_COMMON_API_CLASS RuleBasedSegmenter : public Segmenter {
+
+friend RuleBasedSegmenterBuilder;
 
 public:
     ~RuleBasedSegmenter() override;
 
-    RuleBasedSegmenter();
-
     // Segments segment(const std::u16string_view &s) override;
-    
+
+private:
+    RuleBasedSegmenter();
 };
 
 class U_COMMON_API_CLASS RuleBasedSegmenterBuilder : public UObject {
@@ -37,10 +41,14 @@ public:
 
     RuleBasedSegmenterBuilder& setRules(std::u16string_view rules);
 
-    RuleBasedSegmenter build(UErrorCode& status);
+    RuleBasedSegmenter build(UErrorCode& errorCode);
 
 private:
-    std::u16string_view rules;
+    std::u16string_view rules_;
+
+    RuleBasedSegmenter makeEmptySegmenter();
+
+    UErrorCode errorCode_;
 };
 
 }  // namespace segmenter

@@ -13,7 +13,7 @@ RuleBasedSegmenter::~RuleBasedSegmenter() {}
 
 RuleBasedSegmenterBuilder::RuleBasedSegmenterBuilder() :
     UObject(),
-    rules(u"")
+    rules_(u"")
 {
 
 }
@@ -21,9 +21,29 @@ RuleBasedSegmenterBuilder::RuleBasedSegmenterBuilder() :
 RuleBasedSegmenterBuilder::~RuleBasedSegmenterBuilder() {}
 
 RuleBasedSegmenterBuilder& RuleBasedSegmenterBuilder::setRules(std::u16string_view rules) {
-    this->rules = rules;
+    this->rules_ = rules;
 
     return *this;
+}
+
+RuleBasedSegmenter RuleBasedSegmenterBuilder::makeEmptySegmenter() {
+    icu::segmenter::RuleBasedSegmenter empty;
+    return empty;
+}
+
+RuleBasedSegmenter RuleBasedSegmenterBuilder::build(UErrorCode& errorCode) {
+    if (U_FAILURE(errorCode)) {
+        return makeEmptySegmenter();
+    }
+    if (U_FAILURE(errorCode_)) {
+        errorCode = errorCode_;
+        return makeEmptySegmenter();
+    }
+
+    // TODO: implement builder validation logic here & remove
+    // placeholder return statement
+
+    return makeEmptySegmenter();
 }
 
 }  // namespace segmenter
