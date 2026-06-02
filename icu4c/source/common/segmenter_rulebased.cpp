@@ -2,6 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 
 #include "unicode/segmenter_rulebased.h"
+#include "unicode/utypes.h"
 
 U_NAMESPACE_BEGIN
 
@@ -13,12 +14,14 @@ RuleBasedSegmenter::~RuleBasedSegmenter() {}
 
 RuleBasedSegmenterBuilder::RuleBasedSegmenterBuilder() :
     UObject(),
-    rules_(u"")
+    rules_(u""),
+    errorCode_(U_ZERO_ERROR)
 {
 
 }
 
-RuleBasedSegmenterBuilder::~RuleBasedSegmenterBuilder() {}
+RuleBasedSegmenterBuilder::~RuleBasedSegmenterBuilder()
+{}
 
 RuleBasedSegmenterBuilder& RuleBasedSegmenterBuilder::setRules(std::u16string_view rules) {
     this->rules_ = rules;
