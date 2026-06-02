@@ -185,7 +185,7 @@ public class CompatibilityTest extends CoreTestFmwk {
             jarFile = conn.getJarFile();
             Enumeration<JarEntry> entries = jarFile.entries();
             while (entries.hasMoreElements()) {
-                JarEntry entry = (JarEntry) entries.nextElement();
+                JarEntry entry = entries.nextElement();
                 if (!entry.isDirectory()) {
                     String entryName = entry.getName();
 
