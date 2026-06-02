@@ -371,6 +371,8 @@ public:
         TESTCASE_AUTO(testCommonContiguousRange);
 #endif
 
+        TESTCASE_AUTO(testBaseFrontBack);
+
         TESTCASE_AUTO(testAllCodePoints);
         TESTCASE_AUTO(testAllScalarValues);
 
@@ -838,6 +840,79 @@ public:
                                       std::u32string_view(U"𒀭𒊺𒉀​𒍠𒊩")));
     }
 #endif
+
+    void testBaseFrontBack() {
+        // Mostly API tests. Code is also covered by internal usage of base(),
+        // and by front() and back() calling well-tested functions.
+        {
+            // UTF-16 validating
+            auto sv = u"ç🚂カ.🚴"sv;
+            auto cpRange = utfStringCodePoints<UChar32, UTF_BEHAVIOR_NEGATIVE>(sv);
+            assertEquals("cpRange16.front()", u'ç', cpRange.front().codePoint());
+            assertTrue("cpRange16.back()", u"🚴"sv == cpRange.back().stringView());
+            auto early = cpRange.begin();
+            assertTrue("cpRange16.begin().base()", early.base() == sv.begin());
+            ++ ++ ++early;
+            assertTrue("cpRange16.begin()+3.base()", early.base() == sv.begin() + 4);
+            // Internally moves the code unit iterator but keeps base() as is.
+            assertEquals("cpRange16.begin()+3.*", u'.', early->codePoint());
+            assertTrue("cpRange16.begin()+3.*.base()", early.base() == sv.begin() + 4);
+
+            auto late = cpRange.end();
+            assertTrue("cpRange16.end().base()", late.base() == sv.end());
+            -- --late;
+            assertTrue("cpRange16.end()-2.base()", late.base() == early.base());
+
+            // reverse iterators
+            auto rEarly = cpRange.rbegin();
+            assertTrue("cpRange16.rbegin().base()", rEarly.base() == cpRange.end());
+            ++ ++rEarly;
+            assertTrue("cpRange16.rbegin()+2.base()", rEarly.base() == early);
+            auto rLate = cpRange.rend();
+            assertTrue("cpRange16.rend().base()", rLate.base() == cpRange.begin());
+            -- -- --rLate;
+            assertTrue("cpRange16.rend()-3.base()", rLate.base() == late);
+            // Internally moves the code unit iterator but keeps base() as is.
+            assertEquals("cpRange16.rend()-3.*", u'カ', rLate->codePoint());
+            assertTrue("cpRange16.rend()-3.*.base()", rLate.base() == late);
+            // Reverse base() looks forward.
+            assertEquals("cpRange16.rend()-3.*.base().*", u'.', rLate.base()->codePoint());
+        }
+        {
+            // UTF-8 unsafe, adjusted offsets, otherwise same code
+            auto sv = u8"ç🚂カ.🚴"sv;
+            auto cpRange = unsafeUTFStringCodePoints<UChar32>(sv);
+            assertEquals("cpRange8.front()", u'ç', cpRange.front().codePoint());
+            assertTrue("cpRange8.back()", u8"🚴"sv == cpRange.back().stringView());
+            auto early = cpRange.begin();
+            assertTrue("cpRange8.begin().base()", early.base() == sv.begin());
+            ++ ++ ++early;
+            assertTrue("cpRange8.begin()+3.base()", early.base() == sv.begin() + 9);
+            // Internally moves the code unit iterator but keeps base() as is.
+            assertEquals("cpRange8.begin()+3.*", u'.', early->codePoint());
+            assertTrue("cpRange8.begin()+3.*.base()", early.base() == sv.begin() + 9);
+
+            auto late = cpRange.end();
+            assertTrue("cpRange8.end().base()", late.base() == sv.end());
+            -- --late;
+            assertTrue("cpRange8.end()-2.base()", late.base() == early.base());
+
+            // reverse iterators
+            auto rEarly = cpRange.rbegin();
+            assertTrue("cpRange8.rbegin().base()", rEarly.base() == cpRange.end());
+            ++ ++rEarly;
+            assertTrue("cpRange8.rbegin()+2.base()", rEarly.base() == early);
+            auto rLate = cpRange.rend();
+            assertTrue("cpRange8.rend().base()", rLate.base() == cpRange.begin());
+            -- -- --rLate;
+            assertTrue("cpRange8.rend()-3.base()", rLate.base() == late);
+            // Internally moves the code unit iterator but keeps base() as is.
+            assertEquals("cpRange8.rend()-3.*", u'カ', rLate->codePoint());
+            assertTrue("cpRange8.rend()-3.*.base()", rLate.base() == late);
+            // Reverse base() looks forward.
+            assertEquals("cpRange8.rend()-3.*.base().*", u'.', rLate.base()->codePoint());
+        }
+    }
 
     // implementation code coverage ---------------------------------------- ***
 

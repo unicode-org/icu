@@ -1198,7 +1198,7 @@ public:
      * @draft ICU 78
      */
     U_FORCE_INLINE bool operator==(const UTFIterator &other) const {
-        return getLogicalPosition() == other.getLogicalPosition();
+        return base() == other.base();
     }
     /**
      * @param other Another iterator
@@ -1220,7 +1220,7 @@ public:
         !std::is_same_v<Sentinel, UTFIterator> && !std::is_same_v<Sentinel, UnitIter>,
         bool>
     operator==(const UTFIterator &iter, const Sentinel &s) {
-        return iter.getLogicalPosition() == s;
+        return iter.base() == s;
     }
 
 #if U_CPLUSPLUS_VERSION < 20
@@ -1239,7 +1239,7 @@ public:
         !std::is_same_v<Sentinel, UTFIterator> && !std::is_same_v<Sentinel, UnitIter>,
         bool>
     operator==(const Sentinel &s, const UTFIterator &iter) {
-        return iter.getLogicalPosition() == s;
+        return iter.base() == s;
     }
     /**
      * @param iter A UTFIterator
@@ -1264,6 +1264,18 @@ public:
         bool>
     operator!=(const Sentinel &s, const UTFIterator &iter) { return !(iter == s); }
 #endif  // C++17
+
+    /**
+     * Returns the current position as a code unit iterator.
+     * Similar to iter->begin() but also works at the exclusive end().
+     *
+     * @return current position as a code unit iterator
+     * @draft ICU 79
+     */
+    U_FORCE_INLINE UnitIter base() const {
+        // Return the logical position.
+        return state_ <= 0 ? p_ : units_.begin();
+    }
 
     /**
      * Decodes the code unit sequence at the current position.
@@ -1385,10 +1397,6 @@ public:
 
 private:
     friend class std::reverse_iterator<UTFIterator<CP32, behavior, UnitIter>>;
-
-    U_FORCE_INLINE UnitIter getLogicalPosition() const {
-        return state_ <= 0 ? p_ : units_.begin();
-    }
 
     // operator*() etc. are logically const.
     mutable UnitIter p_;
@@ -1568,7 +1576,7 @@ public:
     using iterator_category = std::bidirectional_iterator_tag;
 
     U_FORCE_INLINE explicit reverse_iterator(U_HEADER_ONLY_NAMESPACE::UTFIterator<CP32, behavior, UnitIter> iter) :
-            p_(iter.getLogicalPosition()), start_(iter.start_), limit_(iter.limit_),
+            p_(iter.base()), start_(iter.start_), limit_(iter.limit_),
             units_(0, 0, false, p_, p_) {}
     U_FORCE_INLINE reverse_iterator() : p_{}, start_{}, limit_{}, units_(0, 0, false, p_, p_) {}
 
@@ -1582,6 +1590,11 @@ public:
         return getLogicalPosition() == other.getLogicalPosition();
     }
     U_FORCE_INLINE bool operator!=(const reverse_iterator &other) const { return !operator==(other); }
+
+    U_FORCE_INLINE U_HEADER_ONLY_NAMESPACE::UTFIterator<CP32, behavior, UnitIter> base() const {
+        return U_HEADER_ONLY_NAMESPACE::UTFIterator<CP32, behavior, UnitIter>(
+            start_, getLogicalPosition(), limit_);
+    }
 
     U_FORCE_INLINE CodeUnits_ operator*() const {
         if (state_ == 0) {
@@ -1894,6 +1907,28 @@ public:
         return std::make_reverse_iterator(begin());
     }
 
+    /**
+     * Returns the CodeUnits for the first character/code point.
+     * Requires that the range is not empty.
+     *
+     * @return the CodeUnits for the first character/code point.
+     * @draft ICU 79
+     */
+    auto front() const {
+        return *begin();
+    }
+
+    /**
+     * Returns the CodeUnits for the last character/code point.
+     * Requires that the range is not empty.
+     *
+     * @return the CodeUnits for the last character/code point.
+     * @draft ICU 79
+     */
+    auto back() const {
+        return *(--end());
+    }
+
 private:
     Range unitRange;
 };
@@ -2029,7 +2064,7 @@ public:
      * @draft ICU 78
      */
     U_FORCE_INLINE bool operator==(const UnsafeUTFIterator &other) const {
-        return getLogicalPosition() == other.getLogicalPosition();
+        return base() == other.base();
     }
     /**
      * @param other Another iterator
@@ -2049,7 +2084,7 @@ public:
         !std::is_same_v<Sentinel, UnsafeUTFIterator> && !std::is_same_v<Sentinel, UnitIter>,
         bool>
     operator==(const UnsafeUTFIterator &iter, const Sentinel &s) {
-        return iter.getLogicalPosition() == s;
+        return iter.base() == s;
     }
 
 #if U_CPLUSPLUS_VERSION < 20
@@ -2064,7 +2099,7 @@ public:
         !std::is_same_v<Sentinel, UnsafeUTFIterator> && !std::is_same_v<Sentinel, UnitIter>,
         bool>
     operator==(const Sentinel &s, const UnsafeUTFIterator &iter) {
-        return iter.getLogicalPosition() == s;
+        return iter.base() == s;
     }
     /**
      * @param iter An UnsafeUTFIterator
@@ -2089,6 +2124,18 @@ public:
         bool>
     operator!=(const Sentinel &s, const UnsafeUTFIterator &iter) { return !(iter == s); }
 #endif  // C++17
+
+    /**
+     * Returns the current position as a code unit iterator.
+     * Similar to iter->begin() but also works at the exclusive end().
+     *
+     * @return current position as a code unit iterator
+     * @draft ICU 79
+     */
+    U_FORCE_INLINE UnitIter base() const {
+        // Return the logical position.
+        return state_ <= 0 ? p_ : units_.begin();
+    }
 
     /**
      * Decodes the code unit sequence at the current position.
@@ -2210,10 +2257,6 @@ public:
 
 private:
     friend class std::reverse_iterator<UnsafeUTFIterator<CP32, UnitIter>>;
-
-    U_FORCE_INLINE UnitIter getLogicalPosition() const {
-        return state_ <= 0 ? p_ : units_.begin();
-    }
 
     // operator*() etc. are logically const.
     mutable UnitIter p_;
@@ -2382,7 +2425,7 @@ public:
     using iterator_category = std::bidirectional_iterator_tag;
 
     U_FORCE_INLINE explicit reverse_iterator(U_HEADER_ONLY_NAMESPACE::UnsafeUTFIterator<CP32, UnitIter> iter) :
-            p_(iter.getLogicalPosition()), units_(0, 0, p_, p_) {}
+            p_(iter.base()), units_(0, 0, p_, p_) {}
     U_FORCE_INLINE reverse_iterator() : p_{}, units_(0, 0, p_, p_) {}
 
     U_FORCE_INLINE reverse_iterator(reverse_iterator &&src) noexcept = default;
@@ -2395,6 +2438,11 @@ public:
         return getLogicalPosition() == other.getLogicalPosition();
     }
     U_FORCE_INLINE bool operator!=(const reverse_iterator &other) const { return !operator==(other); }
+
+    U_FORCE_INLINE U_HEADER_ONLY_NAMESPACE::UnsafeUTFIterator<CP32, UnitIter> base() const {
+        return U_HEADER_ONLY_NAMESPACE::UnsafeUTFIterator<CP32, UnitIter>(
+            getLogicalPosition());
+    }
 
     U_FORCE_INLINE UnsafeCodeUnits_ operator*() const {
         if (state_ == 0) {
@@ -2630,6 +2678,28 @@ public:
      */
     auto rend() const {
         return std::make_reverse_iterator(begin());
+    }
+
+    /**
+     * Returns the CodeUnits for the first character/code point.
+     * Requires that the range is not empty.
+     *
+     * @return the CodeUnits for the first character/code point.
+     * @draft ICU 79
+     */
+    auto front() const {
+        return *begin();
+    }
+
+    /**
+     * Returns the CodeUnits for the last character/code point.
+     * Requires that the range is not empty.
+     *
+     * @return the CodeUnits for the last character/code point.
+     * @draft ICU 79
+     */
+    auto back() const {
+        return *(--end());
     }
 
 private:
