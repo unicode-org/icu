@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1780327878133,
+  "lastUpdate": 1780404501498,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -91346,6 +91346,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 4.176302154976703,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "committer": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "distinct": true,
+          "id": "69619a44a403d128d869acdec149ff6f7c693c77",
+          "message": "ICU-23404 Dictionary break opportunities before a hard break should not be hard breaks\n\nCo-authored-by: Markus Scherer <markus.icu@gmail.com>",
+          "timestamp": "2026-05-30T01:33:26+02:00",
+          "tree_id": "81df9b2ea26f92b6ba2c696afb57863ef255d9ca",
+          "url": "https://github.com/unicode-org/icu/commit/69619a44a403d128d869acdec149ff6f7c693c77"
+        },
+        "date": 1780404013438,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 3.7805170005059625,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
