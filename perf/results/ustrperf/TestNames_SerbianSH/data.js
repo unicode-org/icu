@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1780405754611,
+  "lastUpdate": 1780434745773,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -152445,6 +152445,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 44.9193,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "committer": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "distinct": true,
+          "id": "1a7d00ae6820e2433ec49a28ecbce1046e7f622d",
+          "message": "ICU-23403 Make fields final in Precision and ScientificNotation\n\nMake fields final in Precision and ScientificNotation to improve immutability.\nRefactor constructors and fluent setters to support this.\nApply PR feedback to revert no-op changes and inline method calls.\n\nCo-authored-by: Gemini <176961590+gemini-code-assist[bot]@users.noreply.github.com>",
+          "timestamp": "2026-06-02T13:23:06-07:00",
+          "tree_id": "80d98500906936d147f27bdb7611085bcf3ab1dc",
+          "url": "https://github.com/unicode-org/icu/commit/1a7d00ae6820e2433ec49a28ecbce1046e7f622d"
+        },
+        "date": 1780434257630,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 21.1063,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 23.5773,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 26.8383,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 29.6018,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 36.2999,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 35.4007,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 21.8264,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 16.0907,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 86.4113,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 22.4045,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 36.6364,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 42.2629,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
