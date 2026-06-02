@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1780406046595,
+  "lastUpdate": 1780435029118,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -96117,6 +96117,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 11.3298,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "committer": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "distinct": true,
+          "id": "1a7d00ae6820e2433ec49a28ecbce1046e7f622d",
+          "message": "ICU-23403 Make fields final in Precision and ScientificNotation\n\nMake fields final in Precision and ScientificNotation to improve immutability.\nRefactor constructors and fluent setters to support this.\nApply PR feedback to revert no-op changes and inline method calls.\n\nCo-authored-by: Gemini <176961590+gemini-code-assist[bot]@users.noreply.github.com>",
+          "timestamp": "2026-06-02T13:23:06-07:00",
+          "tree_id": "80d98500906936d147f27bdb7611085bcf3ab1dc",
+          "url": "https://github.com/unicode-org/icu/commit/1a7d00ae6820e2433ec49a28ecbce1046e7f622d"
+        },
+        "date": 1780434388615,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 13.3252,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 10.1556,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 10.1463,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 10.3816,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 11.3248,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 11.3077,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
