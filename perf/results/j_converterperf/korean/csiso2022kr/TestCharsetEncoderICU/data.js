@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1780604722640,
+  "lastUpdate": 1780608081010,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -45717,6 +45717,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 17.739046492273445,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "49699333+dependabot[bot]@users.noreply.github.com",
+            "name": "dependabot[bot]",
+            "username": "dependabot[bot]"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "2b066d672b4e2246b6d79930bdb0941e18b393d5",
+          "message": "ICU-23247 Bump the github-actions group with 3 updates",
+          "timestamp": "2026-06-04T13:41:27-07:00",
+          "tree_id": "ddd19c4025e81af9fa15e2f76ccb4e571dc2b4aa",
+          "url": "https://github.com/unicode-org/icu/commit/2b066d672b4e2246b6d79930bdb0941e18b393d5"
+        },
+        "date": 1780607584524,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 17.700575588012487,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
