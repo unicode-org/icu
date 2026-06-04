@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1780597058954,
+  "lastUpdate": 1780604904589,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -45687,6 +45687,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 1.7577447715811785,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "8a74ef0a308e395af0710f84f86f79d53aa84d4e",
+          "message": "ICU-23421 code point iterators & ranges: add base(), front(), back()",
+          "timestamp": "2026-06-04T12:55:18-07:00",
+          "tree_id": "9c472c3fdf57222d2f2b58493e6d92fe5e65e37b",
+          "url": "https://github.com/unicode-org/icu/commit/8a74ef0a308e395af0710f84f86f79d53aa84d4e"
+        },
+        "date": 1780604358305,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 1.6885683097103963,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
