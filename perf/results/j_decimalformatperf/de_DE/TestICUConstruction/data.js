@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1780492936584,
+  "lastUpdate": 1780596326339,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -46017,6 +46017,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 507.0779589488072,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "bf9857b7ec1708ea6c20db4d4e6c5a07d9b5b523",
+          "message": "ICU-22148 deprecate ICUUncheckedIOException, now is-an UncheckedIOException\n\ndeserialize old objects",
+          "timestamp": "2026-06-04T10:52:49-07:00",
+          "tree_id": "15ef3be3ed9f01b6a240e3d6f08ae89554bb1f08",
+          "url": "https://github.com/unicode-org/icu/commit/bf9857b7ec1708ea6c20db4d4e6c5a07d9b5b523"
+        },
+        "date": 1780595853548,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 501.02628116073254,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
