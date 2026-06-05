@@ -24,9 +24,10 @@ OpenSSF Scorecard | [![OpenSSF Scorecard](https://api.securityscorecards.dev/pro
 
 ### Quality Reports (main branch)
 
-* Java static analysis: [Errorprone](https://unicode-org.github.io/icu/userguide/dev/reports/icu4j_errorprone/errorprone2.html)
-* Java code coverage: [JaCoCo](https://unicode-org.github.io/icu/userguide/dev/reports/icu4j_coverage/html)
-* All reports, various formats, [here](https://mihnita.github.io/icu/userguide/dev/reports.html)
+- Java static analysis: [Errorprone](https://unicode-org.github.io/icu/userguide/dev/reports/icu4j_errorprone/errorprone2.html)
+- Java code coverage: [JaCoCo](https://unicode-org.github.io/icu/userguide/dev/reports/icu4j_coverage/html)
+- API Comparison: [ICU4J](https://unicode-org.github.io/icu/userguide/dev/reports/api_changes/icu4j_api_compare.html)
+- All reports, various formats, [here](https://unicode-org.github.io/icu/userguide/dev/reports.html)
 
 
 ### Subdirectories and Information

@@ -35,3 +35,5 @@ Some of these produce reports that can be accessed here.
     * [XML report, for tooling](reports/icu4j_coverage/jacoco.xml) \
       WARNING, this is big, and will take a long time if opened in browser.
     * [CSV report, for tooling or importing into a spreadsheet application](reports/icu4j_coverage/jacoco.csv)
+  * ICU4J API Comparison
+    * [HTML report](reports/api_changes/icu4j_api_compare.html)

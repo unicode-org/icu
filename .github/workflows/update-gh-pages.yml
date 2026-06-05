@@ -171,13 +171,39 @@ jobs:
           path: ${{ env.REPORT_ROOT_DIR }}
           retention-days: 3
 
+  # Generate API changes report
+  api_changes:
+    runs-on: ubuntu-22.04  # Updated in BRS
+    steps:
+      - name: Checkout repo files
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Set up JDK
+        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+      - name: Generate the API report
+        env:
+          REPORT_FOLDER_API: ${{ env.REPORT_ROOT_DIR }}/${{ env.REPORT_SITE_RELATIVE_DIR }}/api_changes
+        run: |
+          cd icu4j
+          ./releases_tools/api_reports.sh
+          mkdir -p ${REPORT_FOLDER_API}
+          cp target/icu4j_compare_*.html ${REPORT_FOLDER_API}/icu4j_api_compare.html
+      - name: Upload artifact
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: api-changes-artifact
+          path: ${{ env.REPORT_ROOT_DIR }}
+          retention-days: 3
+
   # Merge the artifacts from several jobs into one, for deployment
   merge_artifacts:
     permissions:
       pages: write # to deploy to Pages
       id-token: write # to verify the deployment originates from an appropriate source
     runs-on: ubuntu-22.04  # Updated in BRS
-    needs: [buildsite, errorprone, coverage]
+    needs: [buildsite, errorprone, coverage, api_changes]
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
