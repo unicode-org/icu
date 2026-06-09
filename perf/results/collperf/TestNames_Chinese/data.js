@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1780692009491,
+  "lastUpdate": 1781042811185,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -87207,6 +87207,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2234782.2597,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "39b6cf72488c010a8690c5bae817f6ed9b915452",
+          "message": "ICU-22939 MF2: Re-implement resolved values and implement bidi default strategy\n\nImplement the changes to resolved values necessary to implement function\ncomposition.\n\nImplement lazy/call-by-need evaluation (instead of lazy-call-by-name\nevaluation).\n\nImplement the default bidi strategy and APIs for controlling it.\nFunctions implementing the bidi strategy are added to common/ so that\nthey can potentially be reused for areas other than MessageFormat.\n\nUpdate spec tests to those from the current version of the\nmessage-format-wg repo, except for currency and math tests (these\nfunctions are not yet implemented).",
+          "timestamp": "2026-06-09T14:21:07-07:00",
+          "tree_id": "5c9b3ca8a55cff20bc6dd8b48b6d27f2d989cf28",
+          "url": "https://github.com/unicode-org/icu/commit/39b6cf72488c010a8690c5bae817f6ed9b915452"
+        },
+        "date": 1781042314280,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 153.5894,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 8865201.0099,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2089298.755,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 7833769.3173,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2026800.8178,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
