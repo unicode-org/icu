@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1780692292643,
+  "lastUpdate": 1781043532187,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -153213,6 +153213,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 45.8721,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "39b6cf72488c010a8690c5bae817f6ed9b915452",
+          "message": "ICU-22939 MF2: Re-implement resolved values and implement bidi default strategy\n\nImplement the changes to resolved values necessary to implement function\ncomposition.\n\nImplement lazy/call-by-need evaluation (instead of lazy-call-by-name\nevaluation).\n\nImplement the default bidi strategy and APIs for controlling it.\nFunctions implementing the bidi strategy are added to common/ so that\nthey can potentially be reused for areas other than MessageFormat.\n\nUpdate spec tests to those from the current version of the\nmessage-format-wg repo, except for currency and math tests (these\nfunctions are not yet implemented).",
+          "timestamp": "2026-06-09T14:21:07-07:00",
+          "tree_id": "5c9b3ca8a55cff20bc6dd8b48b6d27f2d989cf28",
+          "url": "https://github.com/unicode-org/icu/commit/39b6cf72488c010a8690c5bae817f6ed9b915452"
+        },
+        "date": 1781043042904,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 22.6835,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 25.2113,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 28.5298,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 43.106,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 50.0364,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 33.589,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 23.9639,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 17.2929,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 89.189,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 23.8163,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 37.7632,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 48.5146,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
