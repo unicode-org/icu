@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1780692424270,
+  "lastUpdate": 1781043077878,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -96117,6 +96117,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 3.2894,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "39b6cf72488c010a8690c5bae817f6ed9b915452",
+          "message": "ICU-22939 MF2: Re-implement resolved values and implement bidi default strategy\n\nImplement the changes to resolved values necessary to implement function\ncomposition.\n\nImplement lazy/call-by-need evaluation (instead of lazy-call-by-name\nevaluation).\n\nImplement the default bidi strategy and APIs for controlling it.\nFunctions implementing the bidi strategy are added to common/ so that\nthey can potentially be reused for areas other than MessageFormat.\n\nUpdate spec tests to those from the current version of the\nmessage-format-wg repo, except for currency and math tests (these\nfunctions are not yet implemented).",
+          "timestamp": "2026-06-09T14:21:07-07:00",
+          "tree_id": "5c9b3ca8a55cff20bc6dd8b48b6d27f2d989cf28",
+          "url": "https://github.com/unicode-org/icu/commit/39b6cf72488c010a8690c5bae817f6ed9b915452"
+        },
+        "date": 1781042590093,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 3.2736,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 3.2599,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 3.2444,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 2.9311,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 2.9373,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 2.9357,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
