@@ -13,8 +13,6 @@
 
 #include "itrbnfp.h"
 
-#include "unicode/umachine.h"
-
 #include "unicode/tblcoll.h"
 #include "unicode/coleitr.h"
 #include "unicode/ures.h"

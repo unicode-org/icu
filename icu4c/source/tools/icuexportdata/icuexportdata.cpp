@@ -6,10 +6,9 @@
 #include <cstdio>
 #include <iostream>
 #include "unicode/localpointer.h"
-#include "unicode/umachine.h"
 #include "unicode/unistr.h"
-#include "unicode/urename.h"
 #include "unicode/uset.h"
+#include "unicode/utypes.h"
 #include <vector>
 #include <algorithm>
 #include "toolutil.h"
