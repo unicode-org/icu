@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1780690528755,
+  "lastUpdate": 1781041737423,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -45807,6 +45807,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFC_NFC_Text",
             "value": 1.5332373474086374,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "39b6cf72488c010a8690c5bae817f6ed9b915452",
+          "message": "ICU-22939 MF2: Re-implement resolved values and implement bidi default strategy\n\nImplement the changes to resolved values necessary to implement function\ncomposition.\n\nImplement lazy/call-by-need evaluation (instead of lazy-call-by-name\nevaluation).\n\nImplement the default bidi strategy and APIs for controlling it.\nFunctions implementing the bidi strategy are added to common/ so that\nthey can potentially be reused for areas other than MessageFormat.\n\nUpdate spec tests to those from the current version of the\nmessage-format-wg repo, except for currency and math tests (these\nfunctions are not yet implemented).",
+          "timestamp": "2026-06-09T14:21:07-07:00",
+          "tree_id": "5c9b3ca8a55cff20bc6dd8b48b6d27f2d989cf28",
+          "url": "https://github.com/unicode-org/icu/commit/39b6cf72488c010a8690c5bae817f6ed9b915452"
+        },
+        "date": 1781041208294,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 1.9430704507762446,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
