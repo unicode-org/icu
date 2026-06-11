@@ -316,7 +316,7 @@ bool validateNumberLiteral(const UnicodeString& s) {
     // Parse integer digits
     // (%x30 / (%x31-39 *DIGIT))
     if (s[i] == '0') {
-        if (!inBounds(s, i + 1) || s[i + 1] != PERIOD) {
+        if (inBounds(s, i + 1) && s[i + 1] != PERIOD) {
             return false;
         }
         i++;
@@ -1688,10 +1688,11 @@ static void setFailsFromFunctionValue(const FunctionValue& optionValue,
         input = formattableToNumber(arg.unwrap(), status);
         if (U_FAILURE(status)) {
             // 7. Else,
-            // 7i. Emit "bad-input" Resolution Error.
+            // 7i. Emit "bad-operand" Resolution Error.
             status = U_MF_OPERAND_MISMATCH_ERROR;
             // 7ii. Use a fallback value as the resolved value of the expression.
             // Further steps of this algorithm are not followed.
+            return;
         }
     }
 
@@ -1795,7 +1796,9 @@ UnicodeString StandardFunctions::TestFunctionValue::formatToString(UErrorCode& s
     if (U_FAILURE(status)) {
         return {};
     }
-    if (!canFormat || failsFormat) {
+    if (failsFormat) {
+        status = U_MF_BAD_OPTION;
+    } else if (!canFormat) {
         status = U_MF_FORMATTING_ERROR;
     }
     if (!canFormat) {

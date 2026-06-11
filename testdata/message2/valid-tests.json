@@ -152,6 +152,10 @@
     {
       "src" : "{{􍅲}}",
       "exp" : "􍅲"
+    },
+    {
+      "src": ".local $x = {foo} {{{$x :string} bar}}",
+      "exp": "foo bar"
     }
   ]
 }

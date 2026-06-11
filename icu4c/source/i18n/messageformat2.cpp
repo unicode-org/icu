@@ -463,10 +463,13 @@ void MessageFormatter::formatPattern(MessageContext& context,
                   // register an error directly
                   if (status == U_MF_FORMATTING_ERROR) {
                       status = U_ZERO_ERROR;
-                      // TODO: The name of the formatter that failed is unavailable.
+                      // The name of the formatter that failed is unavailable.
                       // Not ideal, but it's hard for `formatToString()`
                       // to pass along more detailed diagnostics
                       context.getErrors().setFormattingError(status);
+                  } else if (status == U_MF_BAD_OPTION) {
+                      status = U_ZERO_ERROR;
+                      context.getErrors().setBadOption(status);
                   }
               }
         }

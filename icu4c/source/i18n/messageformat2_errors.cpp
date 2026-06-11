@@ -33,6 +33,10 @@ namespace message2 {
         addError(DynamicError(DynamicErrorType::BadOptionError, formatterName), status);
     }
 
+    void DynamicErrors::setBadOption(UErrorCode& status) {
+        addError(DynamicError(DynamicErrorType::BadOptionError, UnicodeString("unknown formatter")), status);
+    }
+
     void DynamicErrors::setOperandMismatchError(const FunctionName& formatterName, UErrorCode& status) {
         addError(DynamicError(DynamicErrorType::OperandMismatchError, formatterName), status);
     }

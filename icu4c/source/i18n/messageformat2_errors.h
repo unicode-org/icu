@@ -131,6 +131,8 @@ namespace message2 {
         // Used when the name of the offending formatter is unknown
         void setFormattingError(UErrorCode&);
         void setBadOption(const FunctionName&, UErrorCode&);
+        // Used when the name of the offending formatter is unknown
+        void setBadOption(UErrorCode&);
         void setOperandMismatchError(const FunctionName&, UErrorCode&);
         bool hasDataModelError() const { return staticErrors.hasDataModelError(); }
         bool hasFormattingError() const { return formattingError; }
