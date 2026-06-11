@@ -206,10 +206,6 @@ static void runValidTest(TestMessageFormat2& icuTest,
         if (errorType.length() <= 0) {
             errorType = errors[0]["name"];
         }
-//        // See TODO(options); ignore these tests for now
-//        if (errorType == "bad-option") {
-//            return;
-//        }
         test.setExpectedError(getExpectedRuntimeErrorFromString(errorType));
         expectedError = true;
     } else if (defaultError.length() > 0) {
@@ -365,7 +361,7 @@ void TestMessageFormat2::jsonTestsFromFiles(IcuTestErrorCode& errorCode) {
     runTestsFromJsonFile(*this, "icu-test-selectors.json", errorCode);
     runTestsFromJsonFile(*this, "icu-test-previous-release.json", errorCode);
 
-    // TODO (not yet implemented): currency, math (but math might be removed?)
+    // TODO(ICU-23429) (not yet implemented): currency and offset
 }
 
 #endif /* #if !UCONFIG_NO_MF2 */

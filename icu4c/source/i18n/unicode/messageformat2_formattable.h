@@ -275,8 +275,12 @@ namespace message2 {
                 // Can't return a reference since FormattableObject
                 // is an abstract class
                 if (getType() == UFMT_OBJECT) {
-                    return *std::get_if<const FormattableObject*>(&contents);
-                    // TODO: should assert that if type is object, object is non-null
+                    auto result = std::get_if<const FormattableObject*>(&contents);
+                    // It would be better to U_ASSERT(result != nullptr) here, but
+                    // this is a public header file so we can't include uassert.h
+                    if (result != nullptr) {
+                        return *result;
+                    }
                 }
                 status = U_ILLEGAL_ARGUMENT_ERROR;
             }

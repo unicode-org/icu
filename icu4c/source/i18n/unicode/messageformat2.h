@@ -417,7 +417,7 @@ namespace message2 {
             U_I18N_API virtual ~Builder();
         }; // class MessageFormatter::Builder
 
-        // TODO: Shouldn't be public; only used for testing
+        // TODO(ICU-23428): Shouldn't be public; only used for testing
         /**
          * Returns a string consisting of the input with optional spaces removed.
          *

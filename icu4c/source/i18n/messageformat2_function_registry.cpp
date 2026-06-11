@@ -178,9 +178,6 @@ static void strToDouble(const UnicodeString& s, double& result, UErrorCode& erro
 
     // Using en-US locale because it happens to correspond to the spec:
     // https://github.com/unicode-org/message-format-wg/blob/main/spec/registry.md#number-operands
-    // Ideally, this should re-use the code for parsing number literals (Parser::parseUnquotedLiteral())
-    // It's hard to reuse the same code because of how parse errors work.
-    // TODO: Refactor
     LocalPointer<NumberFormat> numberFormat(NumberFormat::createInstance(Locale("en-US"), errorCode));
     CHECK_ERROR(errorCode);
     icu::Formattable asNumber;
@@ -1235,7 +1232,7 @@ StandardFunctions::DateTimeValue::DateTimeValue(DateTime::DateTimeType type,
             }
         }
         /*
-          TODO
+          TODO(ICU-22754)
           fractionalSecondDigits
           hourCycle
           timeZoneName
