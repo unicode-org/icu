@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1781216288290,
+  "lastUpdate": 1781270643126,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -87045,6 +87045,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2021520.2987,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "distinct": true,
+          "id": "f0eec0b223ef8b2ac67c6cc6891ae4b7456587eb",
+          "message": "ICU-23430 MessageFormat: Clean up TODO comments\n\n* Remove obsolete TODOs\n* Add Jira issue numbers for remaining TODOs\n* Fix one issue that was a TODO (adding an assertion)",
+          "timestamp": "2026-06-11T14:31:59-07:00",
+          "tree_id": "8f2980cf177a3792dae4b89455b1e2e0998299da",
+          "url": "https://github.com/unicode-org/icu/commit/f0eec0b223ef8b2ac67c6cc6891ae4b7456587eb"
+        },
+        "date": 1781270159281,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 152.6685,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 8988930.9937,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2260336.9922,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 7726008.9132,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2193582.8164,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
