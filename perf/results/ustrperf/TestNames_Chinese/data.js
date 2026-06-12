@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1781216559771,
+  "lastUpdate": 1781271241259,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -153309,6 +153309,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 31.8931,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "distinct": true,
+          "id": "f0eec0b223ef8b2ac67c6cc6891ae4b7456587eb",
+          "message": "ICU-23430 MessageFormat: Clean up TODO comments\n\n* Remove obsolete TODOs\n* Add Jira issue numbers for remaining TODOs\n* Fix one issue that was a TODO (adding an assertion)",
+          "timestamp": "2026-06-11T14:31:59-07:00",
+          "tree_id": "8f2980cf177a3792dae4b89455b1e2e0998299da",
+          "url": "https://github.com/unicode-org/icu/commit/f0eec0b223ef8b2ac67c6cc6891ae4b7456587eb"
+        },
+        "date": 1781270690108,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 13.8608,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 15.5828,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 18.2117,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 19.5629,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 45.4153,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 25.2333,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 15.6239,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 10.3205,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 67.6893,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 15.669,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 29.5294,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 31.7982,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
