@@ -400,7 +400,7 @@ jobs:
           - test_flags: 'x86 Debug'
             build_flags: '/p:Configuration=Debug /p:Platform=Win32'
           - test_flags: 'arm Release'
-            build_flags: '/p:Configuration=Release /p:Platform=ARM'
+            build_flags: '/p:Configuration=Release /p:Platform=ARM64'
           - test_flags: 'x64 Release cpplatest'
             build_flags: '/p:OverrideLanguageStandard=stdcpplatest /p:Configuration=Release /p:Platform=x64'
           - test_flags: 'x64 Release'
@@ -498,7 +498,7 @@ jobs:
         # Extract ICU version from the release tag
         $releaseTag = '${{ inputs.gitReleaseTag }}'.replace('release-','')
         # Determine the new file name based on the version
-        $newZipName = "icu4c-${releaseTag}-${{ matrix.win_ver }}-MSVC2022"
+        $newZipName = "icu4c-${releaseTag}-${{ matrix.win_ver }}-MSVC2026"
         # Debugging: Print the new zip name
         Write-Host "New Zip Name: $newZipName"
         # Rename the existing zip file
