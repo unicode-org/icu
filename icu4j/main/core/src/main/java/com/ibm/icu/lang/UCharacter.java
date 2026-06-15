@@ -1982,13 +1982,55 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          */
         public static final int TOLONG_SIKI_ID = 346; /*[11DB0]*/
 
+        // New blocks in Unicode 18.0.0
+
+        /**
+         * @stable ICU 79
+         */
+        public static final int ARCHAIC_CUNEIFORM_NUMERALS_ID = 347; /*[12550]*/
+
+        /**
+         * @stable ICU 79
+         */
+        public static final int BENGALI_SUPPLEMENT_ID = 348; /*[11DF0]*/
+
+        /**
+         * @stable ICU 79
+         */
+        public static final int CHISOI_ID = 349; /*[16D80]*/
+
+        /**
+         * @stable ICU 79
+         */
+        public static final int JURCHEN_ID = 350; /*[18E00]*/
+
+        /**
+         * @stable ICU 79
+         */
+        public static final int JURCHEN_RADICALS_ID = 351; /*[191A0]*/
+
+        /**
+         * @stable ICU 79
+         */
+        public static final int MISCELLANEOUS_SYMBOLS_AND_ARROWS_EXTENDED_ID = 352; /*[1DB00]*/
+
+        /**
+         * @stable ICU 79
+         */
+        public static final int MUSICAL_SYMBOLS_SUPPLEMENT_ID = 353; /*[1D250]*/
+
+        /**
+         * @stable ICU 79
+         */
+        public static final int SEAL_ID = 354; /*[3D000]*/
+
         /**
          * One more than the highest normal UnicodeBlock value. The highest value is available via
          * UCharacter.getIntPropertyMaxValue(UProperty.BLOCK).
          *
          * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
          */
-        @Deprecated public static final int COUNT = 347;
+        @Deprecated public static final int COUNT = 355;
 
         // blocks objects ---------------------------------------------------
 
@@ -4136,6 +4178,55 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         public static final UnicodeBlock TOLONG_SIKI =
                 new UnicodeBlock("TOLONG_SIKI", TOLONG_SIKI_ID);
 
+        // New blocks in Unicode 18.0.0
+
+        /**
+         * @stable ICU 79
+         */
+        public static final UnicodeBlock ARCHAIC_CUNEIFORM_NUMERALS =
+                new UnicodeBlock("ARCHAIC_CUNEIFORM_NUMERALS", ARCHAIC_CUNEIFORM_NUMERALS_ID);
+
+        /**
+         * @stable ICU 79
+         */
+        public static final UnicodeBlock BENGALI_SUPPLEMENT =
+                new UnicodeBlock("BENGALI_SUPPLEMENT", BENGALI_SUPPLEMENT_ID);
+
+        /**
+         * @stable ICU 79
+         */
+        public static final UnicodeBlock CHISOI = new UnicodeBlock("CHISOI", CHISOI_ID);
+
+        /**
+         * @stable ICU 79
+         */
+        public static final UnicodeBlock JURCHEN = new UnicodeBlock("JURCHEN", JURCHEN_ID);
+
+        /**
+         * @stable ICU 79
+         */
+        public static final UnicodeBlock JURCHEN_RADICALS =
+                new UnicodeBlock("JURCHEN_RADICALS", JURCHEN_RADICALS_ID);
+
+        /**
+         * @stable ICU 79
+         */
+        public static final UnicodeBlock MISCELLANEOUS_SYMBOLS_AND_ARROWS_EXTENDED =
+                new UnicodeBlock(
+                        "MISCELLANEOUS_SYMBOLS_AND_ARROWS_EXTENDED",
+                        MISCELLANEOUS_SYMBOLS_AND_ARROWS_EXTENDED_ID);
+
+        /**
+         * @stable ICU 79
+         */
+        public static final UnicodeBlock MUSICAL_SYMBOLS_SUPPLEMENT =
+                new UnicodeBlock("MUSICAL_SYMBOLS_SUPPLEMENT", MUSICAL_SYMBOLS_SUPPLEMENT_ID);
+
+        /**
+         * @stable ICU 79
+         */
+        public static final UnicodeBlock SEAL = new UnicodeBlock("SEAL", SEAL_ID);
+
         /**
          * @stable ICU 2.4
          */
@@ -5010,12 +5101,62 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         public static final int THIN_NOON = 105;
 
         /**
+         * @stable ICU 79
+         */
+        public static final int CROWN_AIN = 106;
+
+        /**
+         * @stable ICU 79
+         */
+        public static final int CROWN_BEH = 107;
+
+        /**
+         * @stable ICU 79
+         */
+        public static final int CROWN_FEH = 108;
+
+        /**
+         * @stable ICU 79
+         */
+        public static final int CROWN_HAH = 109;
+
+        /**
+         * @stable ICU 79
+         */
+        public static final int CROWN_HEH = 110;
+
+        /**
+         * @stable ICU 79
+         */
+        public static final int CROWN_KAF = 111;
+
+        /**
+         * @stable ICU 79
+         */
+        public static final int CROWN_MEEM = 112;
+
+        /**
+         * @stable ICU 79
+         */
+        public static final int CROWN_SAD = 113;
+
+        /**
+         * @stable ICU 79
+         */
+        public static final int CROWN_SEEN = 114;
+
+        /**
+         * @stable ICU 79
+         */
+        public static final int CROWN_TAH = 115;
+
+        /**
          * One more than the highest normal JoiningGroup value. The highest value is available via
          * UCharacter.getIntPropertyMaxValue(UProperty.JoiningGroup).
          *
          * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
          */
-        @Deprecated public static final int COUNT = 106;
+        @Deprecated public static final int COUNT = 116;
     }
 
     /**

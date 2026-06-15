@@ -409,7 +409,7 @@ void TestUScriptCodeAPI(void){
             "Loma", "Mende_Kikakui", "Meroitic_Cursive",
             "Old_North_Arabian", "Nabataean", "Palmyrene", "Khudawadi", "Warang_Citi",
             /* new in ICU 4.8 */
-            "Afak", "Jurc", "Mro", "Nushu", "Sharada", "Sora_Sompeng", "Takri", "Tangut", "Wole",
+            "Afak", "Jurchen", "Mro", "Nushu", "Sharada", "Sora_Sompeng", "Takri", "Tangut", "Wole",
             /* new in ICU 49 */
             "Anatolian_Hieroglyphs", "Khojki", "Tirhuta",
             /* new in ICU 52 */
@@ -437,6 +437,8 @@ void TestUScriptCodeAPI(void){
             "Garay", "Gurung_Khema", "Kirat_Rai", "Ol_Onal", "Sunuwar", "Todhri", "Tulu_Tigalari",
             // new in ICU 78
             "Beria_Erfe", "Sidetic", "Tai_Yo", "Tolong_Siki", "Hntl",
+            // new in ICU 79
+            "Chisoi", "Proto_Cuneiform", "Seal",
         };
         static const char* expectedShort[] = {
             "Bali", "Batk", "Blis", "Brah", "Cham", "Cirt", "Cyrs", "Egyd", "Egyh", "Egyp",
@@ -483,6 +485,8 @@ void TestUScriptCodeAPI(void){
             "Gara", "Gukh", "Krai", "Onao", "Sunu", "Todr", "Tutg",
             // new in ICU 78
             "Berf", "Sidt", "Tayo", "Tols", "Hntl",
+            // new in ICU 79
+            "Chis", "Pcun", "Seal",
         };
         int32_t j = 0;
         if(UPRV_LENGTHOF(expectedLong)!=(USCRIPT_CODE_LIMIT-USCRIPT_BALINESE)) {

@@ -63,7 +63,7 @@ https://unicode-org.atlassian.net/browse/CLDR-19339 BRS Unicode 18
 Markus:
 
 export UNIDATA_ROOT=~/unidata
-export UNICODE_DATA=$UNIDATA_ROOT/uni18/final
+export UNICODE_DATA=$UNIDATA_ROOT/uni18/beta
 export CLDR_SRC=~/cldr/uni/src
 export ICU_ROOT=~/icu/uni
 export ICU_SRC=$ICU_ROOT/src
@@ -77,7 +77,7 @@ export UNICODE_TOOLS=~/unitools/mine/src
 Elango:
 
 export UNIDATA_ROOT=~/oss/unidata
-export UNICODE_DATA=$UNIDATA_ROOT/uni18/final
+export UNICODE_DATA=$UNIDATA_ROOT/uni18/beta
 export CLDR_SRC=~/oss/cldr/mine/src
 export ICU_ROOT=~/oss/icu
 export ICU_SRC=$ICU_ROOT
@@ -114,8 +114,8 @@ export UNICODE_TOOLS=~/oss/unicodetools/mine/src
   https://github.com/unicode-org/unicodetools/blob/main/docs/inputdata.md
 - mkdir -p $UNICODE_DATA
 - download Unicode files into $UNICODE_DATA
-  + use an FTP client; anonymous FTP from www.unicode.org at /Public/draft
-  + subfolders: emoji, idna, security, ucd, uca
+  + use an FTP client; anonymous FTP from ftp.unicode.org at /Public/draft
+  + subfolders: emoji, idna, security, uca, ucd
   + for pre-release (alpha, beta) data files:
     ~ if one of us produces the alpha.zip or beta.zip collection of data files for publication,
       then we can use its contents directly (no FTP from unicode.org necessary)
@@ -143,26 +143,32 @@ export UNICODE_TOOLS=~/oss/unicodetools/mine/src
 
 * new constants for new property values
 - preparseucd.py error:
-    ValueError: missing uchar.h enum constants for some property values: [('blk', {'Tangut_Components_Sup', 'Misc_Symbols_Sup', 'CJK_Ext_J', 'Tai_Yo', 'Chisoi', 'Sharada_Sup', 'Beria_Erfe', 'Tolong_Siki', 'Sidetic'}), ('jg', {'Thin_Noon'}), ('lb', {'HH'}), ('sc', {'Chis', 'Sidt', 'Tols', 'Berf', 'Tayo'})]
+    ValueError: missing uchar.h enum constants for some property values: [('blk', {'Jurchen', 'Archaic_Cuneiform_Numerals', 'Chisoi', 'Seal', 'Music_Sup', 'Misc_Arrows_Ext', 'Jurchen_Radicals', 'Bengali_Sup'}), ('jg', {'Crown_Sad', 'Crown_Tah', 'Crown_Feh', 'Crown_Ain', 'Crown_Heh', 'Crown_Seen', 'Crown_Kaf', 'Crown_Beh', 'Crown_Hah', 'Crown_Meem'}), ('sc', {'Chis', 'Seal', 'Pcun'})]
   = PropertyValueAliases.txt new property values (diff old & new .txt files)
-    (cd $UNIDATA_ROOT && diff -u uni16/final/UCD/ucd/PropertyValueAliases.txt uni17/beta/ucd/PropertyValueAliases.txt | egrep '^[-+][a-zA-Z]')
-    +age; 17.0                             ; V17_0
-    +blk; Beria_Erfe                       ; Beria_Erfe
+    (cd $UNIDATA_ROOT && diff -u uni17/final/ucd/PropertyValueAliases.txt uni18/beta/ucd/PropertyValueAliases.txt | egrep '^[-+][a-zA-Z]')
+    +age; 18.0                             ; V18_0
+    +blk; Archaic_Cuneiform_Numerals       ; Archaic_Cuneiform_Numerals
+    +blk; Bengali_Sup                      ; Bengali_Supplement
     +blk; Chisoi                           ; Chisoi
-    +blk; CJK_Ext_J                        ; CJK_Unified_Ideographs_Extension_J
-    +blk; Misc_Symbols_Sup                 ; Miscellaneous_Symbols_Supplement
-    +blk; Sharada_Sup                      ; Sharada_Supplement
-    +blk; Sidetic                          ; Sidetic
-    +blk; Tai_Yo                           ; Tai_Yo
-    +blk; Tangut_Components_Sup            ; Tangut_Components_Supplement
-    +blk; Tolong_Siki                      ; Tolong_Siki
-    +jg ; Thin_Noon                        ; Thin_Noon
-    +lb ; HH                               ; Unambiguous_Hyphen
-    +sc ; Berf                             ; Beria_Erfe
+    +blk; Jurchen                          ; Jurchen
+    +blk; Jurchen_Radicals                 ; Jurchen_Radicals
+    +blk; Misc_Arrows_Ext                  ; Miscellaneous_Symbols_And_Arrows_Extended
+    +blk; Music_Sup                        ; Musical_Symbols_Supplement
+    +blk; Seal                             ; Seal
+    +jg ; Crown_Ain                        ; Crown_Ain
+    +jg ; Crown_Beh                        ; Crown_Beh
+    +jg ; Crown_Feh                        ; Crown_Feh
+    +jg ; Crown_Hah                        ; Crown_Hah
+    +jg ; Crown_Heh                        ; Crown_Heh
+    +jg ; Crown_Kaf                        ; Crown_Kaf
+    +jg ; Crown_Meem                       ; Crown_Meem
+    +jg ; Crown_Sad                        ; Crown_Sad
+    +jg ; Crown_Seen                       ; Crown_Seen
+    +jg ; Crown_Tah                        ; Crown_Tah
     +sc ; Chis                             ; Chisoi
-    +sc ; Sidt                             ; Sidetic
-    +sc ; Tayo                             ; Tai_Yo
-    +sc ; Tols                             ; Tolong_Siki
+    +sc ; Jurc                             ; Jurchen
+    +sc ; Pcun                             ; Proto_Cuneiform
+    +sc ; Seal                             ; Seal
   + copy new API constants from the preparseucd.py output into the .h/.java files,
     add/adjust comments, wrap lines, and set numeric values
   + (ignore Age: no API constants for that)
@@ -183,10 +189,14 @@ export UNICODE_TOOLS=~/oss/unicodetools/mine/src
     (not strictly necessary for NOT_ENCODED scripts)
   $ICU_SRC/tools/unicode$ py/parsescriptmetadata.py $ICU_SRC/icu4c/source/common/unicode/uscript.h $CLDR_SRC/common/properties/scriptMetadata.txt
 
+* ICU4J: run spotless
+
 * build ICU
   to make sure that there are no syntax errors
 
   $ICU_OUT/icu4c$ echo;echo; date; make -j20 tests &> out.txt ; tail -n 30 out.txt ; date
+
+TODO
 
 * Bazel build process
 

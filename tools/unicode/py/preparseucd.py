@@ -48,7 +48,7 @@ _scripts_only_in_iso15924 = (
     "Afak", "Aran", "Blis", "Cirt", "Cyrs",
     "Egyd", "Egyh", "Geok",
     "Hanb", "Hans", "Hant", "Hntl",
-    "Inds", "Jamo", "Jpan", "Jurc", "Kore", "Kpel", "Latf", "Latg", "Loma",
+    "Inds", "Jamo", "Jpan", "Kore", "Kpel", "Latf", "Latg", "Loma",
     "Maya", "Moon", "Nkgb", "Phlv", "Roro",
     "Sara", "Syre", "Syrj", "Syrn",
     "Teng", "Visp", "Wole", "Zmth", "Zsye", "Zsym", "Zxxx"
