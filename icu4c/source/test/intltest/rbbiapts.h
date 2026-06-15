@@ -46,6 +46,11 @@ public:
      * Tests the method hashCode() of RuleBasedBreakIterator
      **/
     void TestHashCode();
+    /**
+     * Tests cloning and assignment for phrase-based RBBIs
+     */
+    void TestPhraseBreakingClone();
+    void TestPhraseBreakingAssignment();
      /**
       * Tests the methods getText() and setText() of RuleBasedBreakIterator
       **/

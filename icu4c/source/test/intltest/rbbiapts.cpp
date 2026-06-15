@@ -1450,6 +1450,8 @@ void RBBIAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
     TESTCASE_AUTO(TestCloneEquals);
     TESTCASE_AUTO(TestgetRules);
     TESTCASE_AUTO(TestHashCode);
+    TESTCASE_AUTO(TestPhraseBreakingClone);
+    TESTCASE_AUTO(TestPhraseBreakingAssignment);
     TESTCASE_AUTO(TestGetSetAdoptText);
     TESTCASE_AUTO(TestIteration);
 #endif
@@ -1512,6 +1514,69 @@ void RBBIAPITest::doTest(UnicodeString& testString, int32_t start, int32_t gotof
          errln(prettify(UnicodeString("ERROR:****selected \"") + selected + "\" instead of \"" + expected + "\""));
     else
         logln(prettify("****selected \"" + selected + "\""));
+}
+
+void RBBIAPITest::TestPhraseBreakingClone() {
+    IcuTestErrorCode status(*this, "TestPhraseBreakingClone");
+    UnicodeString text(u"９月に東京から友達が遊びに来た");
+
+    LocalPointer<BreakIterator> bi1(
+        BreakIterator::createLineInstance(Locale("ja-u-lw-phrase"), status), status);
+    if (status.errIfFailureAndReset()) {
+        return;
+    }
+
+    bi1->setText(text);
+
+    LocalPointer<BreakIterator> bi2(bi1->clone());
+
+    assertTrue("cloned phrase-breaking iterator should be equal to original", *bi1 == *bi2);
+
+    for (int32_t pos1 = bi1->first(), pos2 = bi2->first();
+         pos1 != BreakIterator::DONE || pos2 != BreakIterator::DONE;
+         pos1 = bi1->next(), pos2 = bi2->next()) {
+        if(!assertEquals("phrase-breaking behavior mismatch after clone", pos1, pos2)) {
+            break;
+        }
+    }
+}
+
+void RBBIAPITest::TestPhraseBreakingAssignment() {
+    IcuTestErrorCode status(*this, "TestPhraseBreakingAssignment");
+    UnicodeString text(u"９月に東京から友達が遊びに来た");
+
+    LocalPointer<BreakIterator> bi1(
+        BreakIterator::createLineInstance(Locale("ja-u-lw-phrase"), status), status);
+    LocalPointer<BreakIterator> bi2(
+        BreakIterator::createLineInstance(Locale("ja"), status), status);
+    if (status.errIfFailureAndReset()) {
+        return;
+    }
+
+    RuleBasedBreakIterator *rbbi1 = dynamic_cast<RuleBasedBreakIterator *>(bi1.getAlias());
+    if (!assertTrue("dynamic_cast(bi1) failed", rbbi1 != nullptr)) {
+        return;
+    }
+    RuleBasedBreakIterator *rbbi2 = dynamic_cast<RuleBasedBreakIterator *>(bi2.getAlias());
+    if (!assertTrue("dynamic_cast(bi2) failed", rbbi2 != nullptr)) {
+        return;
+    }
+
+    rbbi1->setText(text);
+    rbbi2->setText(text);
+
+    assertFalse("phrase-breaking iterator and standard iterator should not be equal", *rbbi1 == *rbbi2);
+
+    *rbbi2 = *rbbi1;
+    assertTrue("assigned phrase-breaking iterator should be equal to source", *rbbi1 == *rbbi2);
+
+    for (int32_t pos1 = rbbi1->first(), pos2 = rbbi2->first();
+         pos1 != BreakIterator::DONE || pos2 != BreakIterator::DONE;
+         pos1 = rbbi1->next(), pos2 = rbbi2->next()) {
+        if(!assertEquals("phrase-breaking behavior mismatch after assignment", pos1, pos2)) {
+            break;
+        }
+    }
 }
 
 #endif /* #if !UCONFIG_NO_BREAK_ITERATION */
