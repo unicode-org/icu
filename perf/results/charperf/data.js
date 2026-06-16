@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1781541420506,
+  "lastUpdate": 1781620606520,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -144627,6 +144627,96 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIsWhiteSpace",
             "value": 4.3087,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "distinct": true,
+          "id": "185bfdcd785746b98f5944375414fd4942ba1ddc",
+          "message": "ICU-23426 MessageFormat: Update spec tests and fix accompanying bugs\n\nThis commit updates the spec test suite to the contents of\nhttps://github.com/unicode-org/message-format-wg/tree/main/test\nas of commit 54e77bdfac36cca2ad6e42d2913e4208b7b6bc0d\n\nThe following bugs, exposed by new spec tests, are fixed:\n- Handle bad option errors correctly in formatPattern()\n- Validate \"0\" number literal correctly in implementation of test functions\n- For test functions, return bad option error when format=fails (matching the spec for test functions)\n- Add test for using :string as a formatter (this is not in the spec test suite yet)",
+          "timestamp": "2026-06-11T14:31:39-07:00",
+          "tree_id": "30eb52a359c94fb8e5f09f964036ce7012b1707a",
+          "url": "https://github.com/unicode-org/icu/commit/185bfdcd785746b98f5944375414fd4942ba1ddc"
+        },
+        "date": 1781620201701,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIsAlpha",
+            "value": 3.2577,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsUpper",
+            "value": 3.5029,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsLower",
+            "value": 3.2597,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsDigit",
+            "value": 3.5174,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsSpace",
+            "value": 4.3434,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsAlphaNumeric",
+            "value": 4.0348,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsPrint",
+            "value": 3.2593,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsControl",
+            "value": 3.5171,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestToLower",
+            "value": 4.0313,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestToUpper",
+            "value": 4.0173,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsWhiteSpace",
+            "value": 3.2618,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
