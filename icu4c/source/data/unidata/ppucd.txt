@@ -30039,9 +30039,10 @@ cp;11F59;-Alpha;gc=Nd;InCB=None;InSC=Number;lb=AS;na=KAWI DIGIT NINE;nt=De;nv=9;
 cp;11F5A;age=16.0;-Alpha;bc=NSM;CI;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InCB=Extend;InPC=Top;InSC=Nukta;jt=T;lb=CM;na=KAWI SIGN NUKTA;SB=EX;WB=Extend;-XIDS
 unassigned;11F5B..11F5F
 
-block;11FB0..11FBF;age=13.0;Alpha;blk=Lisu_Sup;gc=Lo;Gr_Base;IDC;IDS;ID_Type=Limited_Use;lb=AL;na=LISU LETTER YHA;SB=LE;sc=Lisu;WB=LE;XIDC;XIDS
+block;11FB0..11FBF;age=13.0;Alpha;blk=Lisu_Sup;gc=Lo;Gr_Base;IDC;IDS;ID_Type=Limited_Use;lb=AL;SB=LE;sc=Lisu;WB=LE;XIDC;XIDS
 # 11FB0..11FBF Lisu Supplement
 # Letter
+cp;11FB0;na=LISU LETTER YHA
 unassigned;11FB1..11FBF
 
 block;11FC0..11FFF;age=12.0;bc=ON;blk=Tamil_Sup;gc=So;Gr_Base;ID_Type=Not_XID;lb=AL;sc=Taml
