@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1781540902728,
+  "lastUpdate": 1781620101893,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -87099,6 +87099,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 12817663.8285,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "distinct": true,
+          "id": "185bfdcd785746b98f5944375414fd4942ba1ddc",
+          "message": "ICU-23426 MessageFormat: Update spec tests and fix accompanying bugs\n\nThis commit updates the spec test suite to the contents of\nhttps://github.com/unicode-org/message-format-wg/tree/main/test\nas of commit 54e77bdfac36cca2ad6e42d2913e4208b7b6bc0d\n\nThe following bugs, exposed by new spec tests, are fixed:\n- Handle bad option errors correctly in formatPattern()\n- Validate \"0\" number literal correctly in implementation of test functions\n- For test functions, return bad option error when format=fails (matching the spec for test functions)\n- Add test for using :string as a formatter (this is not in the spec test suite yet)",
+          "timestamp": "2026-06-11T14:31:39-07:00",
+          "tree_id": "30eb52a359c94fb8e5f09f964036ce7012b1707a",
+          "url": "https://github.com/unicode-org/icu/commit/185bfdcd785746b98f5944375414fd4942ba1ddc"
+        },
+        "date": 1781619623629,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 208.3614,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 57963420.0443,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 12710440.418,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 53067022.4951,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 13150974.3061,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
