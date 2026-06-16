@@ -61,7 +61,7 @@ $L ($L | $V | $LV | $LVT);
 $Prepend [^$Control $CR $LF];
 
 # GB 9c
-$InCBConsonant [ $InCBExtend $InCBLinker ]* $InCBLinker [ $InCBExtend $InCBLinker ]* $InCBConsonant;
+$InCBLinker $InCBExtend* $InCBConsonant;
 
 # GB 11 Do not break within emoji modifier sequences or emoji zwj sequences.
 $Extended_Pict $Extend* $ZWJ $Extended_Pict;

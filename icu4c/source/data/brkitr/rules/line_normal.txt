@@ -189,9 +189,9 @@ $GL $CM* .;
 
 #
 # LB 12a  Do not break before NBSP and related characters ...
-#            [^SP BA HY HH] x GL
+#            [^SP HY HH] x GL
 #
-[[$LB8NonBreaks] - [$SP $BA $HY $HH]] $CM* $GL;
+[[$LB8NonBreaks] - [$SP $HY $HH]] $CM* $GL;
 ^$CM+ $GL;
 
 
