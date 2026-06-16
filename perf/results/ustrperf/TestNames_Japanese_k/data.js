@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1781541700100,
+  "lastUpdate": 1781620397275,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -153405,6 +153405,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 44.8282,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "distinct": true,
+          "id": "185bfdcd785746b98f5944375414fd4942ba1ddc",
+          "message": "ICU-23426 MessageFormat: Update spec tests and fix accompanying bugs\n\nThis commit updates the spec test suite to the contents of\nhttps://github.com/unicode-org/message-format-wg/tree/main/test\nas of commit 54e77bdfac36cca2ad6e42d2913e4208b7b6bc0d\n\nThe following bugs, exposed by new spec tests, are fixed:\n- Handle bad option errors correctly in formatPattern()\n- Validate \"0\" number literal correctly in implementation of test functions\n- For test functions, return bad option error when format=fails (matching the spec for test functions)\n- Add test for using :string as a formatter (this is not in the spec test suite yet)",
+          "timestamp": "2026-06-11T14:31:39-07:00",
+          "tree_id": "30eb52a359c94fb8e5f09f964036ce7012b1707a",
+          "url": "https://github.com/unicode-org/icu/commit/185bfdcd785746b98f5944375414fd4942ba1ddc"
+        },
+        "date": 1781619800224,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 14.4059,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 15.9229,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 18.9226,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 21.2881,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 32.5034,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 29.3901,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 16.0845,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 10.7819,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 74.003,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 16.1032,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 30.1253,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 32.558,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
