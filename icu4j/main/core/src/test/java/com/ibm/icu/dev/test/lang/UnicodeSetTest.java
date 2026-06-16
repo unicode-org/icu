@@ -1257,7 +1257,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
             "abcd\u0300\u0301\u00c0\u00c5",
             "[:Assigned:]",
             "A\\uE000\\uF8FF\\uFDC7\\U00010000\\U0010FFFD",
-            "\\u0558\\uFDD3\\uFFFE\\U00050005",
+            "\\u0557\\uFDD3\\uFFFE\\U00050005",
 
             // Script_Extensions, new in Unicode 6.0
             "[:scx=Arab:]",
@@ -1400,11 +1400,12 @@ public class UnicodeSetTest extends CoreTestFmwk {
             // selector, input, output
             CASE,
             "[aq\u00DF{Bc}{bC}{Fi}]",
-            "[aAqQ\u00DF\u1E9E\uFB01{ss}{bc}{fi}]", // U+1E9E LATIN CAPITAL LETTER SHARP S is new in
-            // Unicode 5.1
+            // U+1E9E LATIN CAPITAL LETTER SHARP S is new in Unicode 5.1.
+            // U+1DF95 LATIN SMALL LIGATURE LONG S WITH DESCENDER S is new in Unicode 18.
+            "[aAqQ\u00DF\u1E9E\uD837\uDF95\uFB01{ss}{bc}{fi}]",
             SIMPLE_CASE_INSENSITIVE,
             "[aq\u00DF{Bc}{bC}{Fi}]",
-            "[aAqQ\u00DF\u1E9E{bc}{fi}]",
+            "[aAqQ\u00DF\u1E9E\uD837\uDF95{bc}{fi}]",
             CASE,
             "[\u01F1]", // 'DZ'
             "[\u01F1\u01F2\u01F3]",
