@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1781541090682,
+  "lastUpdate": 1781620394670,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -125733,6 +125733,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 3528.7606,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "distinct": true,
+          "id": "185bfdcd785746b98f5944375414fd4942ba1ddc",
+          "message": "ICU-23426 MessageFormat: Update spec tests and fix accompanying bugs\n\nThis commit updates the spec test suite to the contents of\nhttps://github.com/unicode-org/message-format-wg/tree/main/test\nas of commit 54e77bdfac36cca2ad6e42d2913e4208b7b6bc0d\n\nThe following bugs, exposed by new spec tests, are fixed:\n- Handle bad option errors correctly in formatPattern()\n- Validate \"0\" number literal correctly in implementation of test functions\n- For test functions, return bad option error when format=fails (matching the spec for test functions)\n- Add test for using :string as a formatter (this is not in the spec test suite yet)",
+          "timestamp": "2026-06-11T14:31:39-07:00",
+          "tree_id": "30eb52a359c94fb8e5f09f964036ce7012b1707a",
+          "url": "https://github.com/unicode-org/icu/commit/185bfdcd785746b98f5944375414fd4942ba1ddc"
+        },
+        "date": 1781619903488,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 75776.4904,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 189679.2885,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.5562,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 9.4559,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 7.49,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 19774.7073,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 64716.5928,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 3356.6003,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
