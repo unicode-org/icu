@@ -234,11 +234,6 @@ copying that version number into the $ICU_SRC/.bazeliskrc config file.
 
 TODO
 
-* NOTE: propsVectorsTrie_index in uprops.icu / uchar_props_data.h
-  (and a bit of propsVectors)
-  increased by some 22kB, probably mostly due to the revised Identifier_Type data,
-  especially for Unified_Ideograph characters.
-
 * run & fix ICU4C tests
 - Note: Some of the collation data and test data will be updated below,
   so at this time we might get some collation test failures.
