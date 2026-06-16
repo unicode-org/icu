@@ -300,6 +300,11 @@ NamesPropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
         return;
     }
 
+    if(props.start!=props.end) {
+        fprintf(stderr,
+                "names: unexpected range U+%04lX..U+%04lX\n",
+                (long)props.start, (long)props.end);
+    }
     U_ASSERT(props.start==props.end);
 
     const char *names[4]={ nullptr, nullptr, nullptr, nullptr };

@@ -21,6 +21,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string>
 #include "unicode/utypes.h"
 #include "unicode/localpointer.h"
 #include "unicode/uchar.h"
@@ -28,6 +29,7 @@
 #include "unicode/uniset.h"
 #include "unicode/usetiter.h"
 #include "unicode/ustring.h"
+#include "unicode/utfiterator.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "genprops.h"
@@ -212,6 +214,8 @@ The table is sorted by its first column. Values in the first column are unique.
 
 U_NAMESPACE_USE
 
+using icu::header::utfStringCodePoints;
+
 /* UDataInfo cf. udata.h */
 static UDataInfo dataInfo={
     sizeof(UDataInfo),
@@ -262,7 +266,7 @@ struct ExcProps {
  */
 enum {
     UGENCASE_UNFOLD_STRING_WIDTH=3,
-    UGENCASE_UNFOLD_CP_WIDTH=2,
+    UGENCASE_UNFOLD_CP_WIDTH=4,
     UGENCASE_UNFOLD_WIDTH=UGENCASE_UNFOLD_STRING_WIDTH+UGENCASE_UNFOLD_CP_WIDTH
 };
 
@@ -325,14 +329,20 @@ CasePropsBuilder::CasePropsBuilder(UErrorCode &errorCode)
         add(UCHAR_UPPERCASE_MAPPING).
         add(PPUCD_CONDITIONAL_CASE_MAPPINGS).
         add(PPUCD_TURKIC_CASE_FOLDING);
+
     // Write "unfold" meta data into the first row. Must be UGENCASE_UNFOLD_WIDTH UChars.
     unfold.
+        // number of rows, to be set later
         append(0).
+        // number of UChars per row
         append((char16_t)UGENCASE_UNFOLD_WIDTH).
-        append((char16_t)UGENCASE_UNFOLD_STRING_WIDTH).
-        append(0).
-        append(0);
+        // number of UChars in the left (folding string) column
+        append((char16_t)UGENCASE_UNFOLD_STRING_WIDTH);
+    while(unfold.length()<UGENCASE_UNFOLD_WIDTH) {
+        unfold.append(0);
+    }
     U_ASSERT(unfold.length()==UGENCASE_UNFOLD_WIDTH);
+
     pTrie=utrie2_open(0, 0, &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "genprops error: casepropsbuilder utrie2_open() failed - %s\n",
@@ -380,8 +390,10 @@ CasePropsBuilder::addUnfolding(UChar32 c, const UnicodeString &s, UErrorCode &er
     }
 
     unfold.append(c);
-    if(U16_LENGTH(c)<UGENCASE_UNFOLD_CP_WIDTH) {
+    length+=U16_LENGTH(c);
+    while(length<UGENCASE_UNFOLD_WIDTH) {
         unfold.append(0);
+        ++length;
     }
 
     U_ASSERT((unfold.length()%UGENCASE_UNFOLD_WIDTH)==0);
@@ -647,12 +659,23 @@ CasePropsBuilder::makeUnfoldData(UErrorCode &errorCode) {
             /* concatenate code point columns */
             q=p+UGENCASE_UNFOLD_STRING_WIDTH;
             for(j=1; j<UGENCASE_UNFOLD_CP_WIDTH && q[j]!=0; ++j) {}
+            std::u16string cpString(q, j);  // for error output
             for(k=0; k<UGENCASE_UNFOLD_CP_WIDTH && q[UGENCASE_UNFOLD_WIDTH+k]!=0; ++j, ++k) {
-                q[j]=q[UGENCASE_UNFOLD_WIDTH+k];
+                char16_t c=q[UGENCASE_UNFOLD_WIDTH+k];
+                cpString.push_back(c);
+                if(j<UGENCASE_UNFOLD_CP_WIDTH) {  // avoid overflow
+                    q[j]=c;
+                }
             }
             if(j>UGENCASE_UNFOLD_CP_WIDTH) {
-                fprintf(stderr, "genprops error: too many code points in unfold[]: %ld>%d=UGENCASE_UNFOLD_CP_WIDTH\n",
+                fprintf(stderr,
+                        "genprops error: too many code point code units in unfold[]: "
+                        "%ld>%d=UGENCASE_UNFOLD_CP_WIDTH\n",
                         (long)j, UGENCASE_UNFOLD_CP_WIDTH);
+                for(auto units : utfStringCodePoints<UChar32, UTF_BEHAVIOR_SURROGATE>(cpString)) {
+                    fprintf(stderr, "  U+%04lX", (long)units.codePoint());
+                }
+                fprintf(stderr, "\n");
                 errorCode=U_BUFFER_OVERFLOW_ERROR;
                 return;
             }
@@ -1003,14 +1026,19 @@ CasePropsBuilder::makeException(UChar32 c, uint32_t value, ExcProps &ep, UErrorC
     /* length of case closure */
     UnicodeString closureString;
     if(!ep.closure.isEmpty()) {
-        UnicodeSetIterator iter(ep.closure);
-        while(iter.next()) { closureString.append(iter.getCodepoint()); }
+        for(UChar32 cc : ep.closure.codePoints()) {
+            closureString.append(cc);
+        }
         int32_t length=closureString.length();
         if(length>UCASE_CLOSURE_MAX_LENGTH) {
             fprintf(stderr,
                     "genprops error: case closure for U+%04lX has length %d "
                     "which exceeds UCASE_CLOSURE_MAX_LENGTH=%d\n",
                     (long)c, (int)length, (int)UCASE_CLOSURE_MAX_LENGTH);
+            UnicodeString pattern;
+            ep.closure.toPattern(pattern, true);
+            std::string pattern8;
+            fprintf(stderr, "    closure set: %s\n", pattern.toUTF8String(pattern8).c_str());
             errorCode=U_BUFFER_OVERFLOW_ERROR;
             return 0;
         }
