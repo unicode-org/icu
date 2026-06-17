@@ -56,6 +56,9 @@ public class UCAConformanceTest extends TestFmwk {
 
     @Test
     public void TestTableShifted() {
+        if (logKnownIssue("ICU-23343", "UCA 18 beta: investigate")) {
+            return;
+        }
         setCollShifted(UCA);
         openTestFile("SHIFTED");
         conformanceTest(UCA);

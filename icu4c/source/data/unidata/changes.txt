@@ -232,8 +232,6 @@ copying that version number into the $ICU_SRC/.bazeliskrc config file.
 - For debugging:
     bazelisk build -c dbg <target>
 
-TODO
-
 * run & fix ICU4C tests
 - Note: Some of the collation data and test data will be updated below,
   so at this time we might get some collation test failures.
@@ -241,7 +239,7 @@ TODO
 - Some properties are hardcoded in the ICU libraries because they apply to
   few characters or ranges, and are not expected to change often.
   They are tested at least in C++ intltest (e.g., against ppucd.txt).
-  If these tests fail, then update the implementation and the tests.
+  If these tests fail, then update the implementation and the tests, in both C++ & Java.
 - Robin or Andy helps with RBBI & spoof check test failures
 
 * collation: CLDR collation root, UCA DUCET
@@ -275,10 +273,13 @@ TODO
   to
     $ICU_SRC/icu4j/main/collate/src/main/java/com/ibm/icu/impl/coll/CollationFCD.java
 - generate data files, as above (generate.sh), now to pick up new collation data
+    icu4c/source/data/unidata/generate.sh
 - rebuild ICU4C (make clean, make check, as usual)
 - run gencolusb for Unicode updates
   + https://github.com/markusicu/icu/blob/main/icu4c/source/tools/gencolusb/README.md
   + until ICU-12062 is done
+  + currently wants its own configure line; make clean, configure, build, generate
+  + configure again using the command line in this file
   + rebuild ICU4C (make clean, make check, as usual)
 
 * Unihan collators
@@ -288,10 +289,11 @@ TODO
 - generate ICU zh collation data
     Follow the tools/cldr/cldr-to-icu/README.md file.
   + setup:
-    export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+    export JAVA_HOME=/usr/local/google/home/mscherer/java/jdk21
         (didn't work without setting JAVA_HOME,
          nor with the Google default of /usr/local/buildtools/java/jdk
          [Google security limitations in the XML parser])
+        (example source: https://adoptium.net/temurin/releases/?version=21)
     export PATH=$JAVA_HOME/bin:$PATH
     export TOOLS_ROOT=$ICU_SRC/tools
     export ICU_DIR=$ICU_SRC
@@ -318,6 +320,10 @@ TODO
 - note on intltest: if collate/UCAConformanceTest fails, then
   utility/MultithreadTest/TestCollators will fail as well;
   fix the conformance test before looking into the multi-thread test
+
+TODO: investigate UCA-shifted conformance test failures
+
+TODO
 
 * update Java data files
 - refresh just the UCD/UCA-related/derived files, just to be safe
