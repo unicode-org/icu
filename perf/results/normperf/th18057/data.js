@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1781689603398,
+  "lastUpdate": 1781740768699,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -96537,6 +96537,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 13.8336,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "fmalita@gmail.com",
+            "name": "Florin Malita",
+            "username": "fmalita"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "4ff7238b06d7f941450e243499ca366e7885c66d",
+          "message": "ICU-23438 Fix RuleBasedBreakIterator cloning for phrase-breaking\n\nRuleBasedBreakIterator::operator= and operator== were missing the\nfIsPhraseBreaking configuration field. This caused cloned or assigned\niterators to lose their phrase-breaking setting and fall back to\nstandard line breaking.\n\nThis change adds fIsPhraseBreaking to the assignment and equality\noperators and adds unit tests in RBBIAPITest to verify that the\nsetting is correctly preserved during clone and assignment.",
+          "timestamp": "2026-06-17T16:10:14-07:00",
+          "tree_id": "847997f95903660c9711b0c7cf779f4128f134fc",
+          "url": "https://github.com/unicode-org/icu/commit/4ff7238b06d7f941450e243499ca366e7885c66d"
+        },
+        "date": 1781740275667,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 14.2295,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 14.1475,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 14.0978,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 13.832,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 13.7527,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 13.6398,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
