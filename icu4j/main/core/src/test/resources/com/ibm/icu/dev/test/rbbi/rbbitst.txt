@@ -1661,6 +1661,8 @@ Bangkok)<100></data>
 
 #     •no brk before 2010                                 •
 <data>•\u3042\u2010•\u0031\u0020•\u0061\u2010•\u0031\u0020<100></data>
+#     •nor 2013                                           •
+<data>•\u3042\u2013•\u0031\u0020•\u0061\u2010•\u0031\u0020<100></data>
 
 <locale ja@lb=loose>
 <line>
@@ -1669,6 +1671,8 @@ Bangkok)<100></data>
 
 #     •no brk before 2010 except ok after ID               •
 <data>•\u3042•\u2010•\u0031\u0020•\u0061\u2010•\u0031\u0020<100></data>
+#     •same for 2013                                       •
+<data>•\u3042•\u2013•\u0031\u0020•\u0061\u2013•\u0031\u0020<100></data>
 
 <locale en@lb=strict>
 <line>
