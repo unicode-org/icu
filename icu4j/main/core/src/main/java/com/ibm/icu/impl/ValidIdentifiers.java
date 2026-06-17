@@ -53,6 +53,7 @@ public class ValidIdentifiers {
 
         public ValiditySet(Set<String> plainData, boolean makeMap) {
             if (makeMap) {
+                Map<String, String> uniqueSubdivisions = new HashMap<String, String>();
                 HashMap<String, Set<String>> _subdivisionData = new HashMap<String, Set<String>>();
                 for (String s : plainData) {
                     int pos = s.indexOf('-'); // read v28 data also
@@ -61,7 +62,8 @@ public class ValidIdentifiers {
                         pos2 = pos = s.charAt(0) < 'A' ? 3 : 2;
                     }
                     final String key = s.substring(0, pos);
-                    final String subdivision = s.substring(pos2).intern();
+                    String subdivision =
+                            uniqueSubdivisions.computeIfAbsent(s.substring(pos2), k -> k);
 
                     Set<String> oldSet = _subdivisionData.get(key);
                     if (oldSet == null) {
