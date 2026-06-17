@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1781689434402,
+  "lastUpdate": 1781740518642,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -125967,6 +125967,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 3554.4832,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "fmalita@gmail.com",
+            "name": "Florin Malita",
+            "username": "fmalita"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "4ff7238b06d7f941450e243499ca366e7885c66d",
+          "message": "ICU-23438 Fix RuleBasedBreakIterator cloning for phrase-breaking\n\nRuleBasedBreakIterator::operator= and operator== were missing the\nfIsPhraseBreaking configuration field. This caused cloned or assigned\niterators to lose their phrase-breaking setting and fall back to\nstandard line breaking.\n\nThis change adds fIsPhraseBreaking to the assignment and equality\noperators and adds unit tests in RBBIAPITest to verify that the\nsetting is correctly preserved during clone and assignment.",
+          "timestamp": "2026-06-17T16:10:14-07:00",
+          "tree_id": "847997f95903660c9711b0c7cf779f4128f134fc",
+          "url": "https://github.com/unicode-org/icu/commit/4ff7238b06d7f941450e243499ca366e7885c66d"
+        },
+        "date": 1781740001830,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 67043.6987,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 190281.6068,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.5325,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 9.6437,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 7.2353,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 20419.9789,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 68489.5717,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 3407.9201,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
